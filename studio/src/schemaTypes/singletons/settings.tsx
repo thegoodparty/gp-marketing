@@ -15,6 +15,24 @@ export const settings = defineType({
   icon: CogIcon,
   fields: [
     defineField({
+      name: 'logo',
+      title: 'Site Logo',
+      type: 'image',
+      description: 'The main logo for the site. Will be displayed in the header.',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alternative text',
+          type: 'string',
+          initialValue: 'GoodParty.org',
+          validation: (rule) => rule.required(),
+        }),
+      ],
+    }),
+    defineField({
       name: 'title',
       description: 'This field is the title of your blog.',
       title: 'Title',

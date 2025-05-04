@@ -3,7 +3,7 @@ import React from 'react';
 import Cta from '@/app/components/Cta';
 import Info from '@/app/components/InfoSection';
 import { dataAttr } from '@/sanity/lib/utils';
-
+import PageHero from '@/app/components/PageHero';
 type BlocksType = {
   [key: string]: React.FC<any>;
 };
@@ -23,6 +23,7 @@ type BlockProps = {
 const Blocks: BlocksType = {
   callToAction: Cta,
   infoSection: Info,
+  pageHero: PageHero,
 };
 
 /**

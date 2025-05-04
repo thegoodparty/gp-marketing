@@ -11,6 +11,8 @@ interface NavCategoryProps {
 }
 
 export default function NavCategory({ category, isOpen, onToggle }: NavCategoryProps) {
+  console.log('============================================');
+  console.log('category', category?.links);
   return (
     <div className="lg:ml-2 xl:ml-4 mr-8 relative cursor-pointer">
       <div onClick={onToggle}>

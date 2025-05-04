@@ -512,7 +512,7 @@ export type AllSanitySchemaTypes =
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./sanity/lib/queries.ts
 // Variable: settingsQuery
-// Query: *[_type == "settings"][0]
+// Query: *[_type == "settings"][0]{    ...,    navigation {      ...,      items[] {        ...,        _type == "link" => {          ...,          "page": page->{ "slug": slug.current }        },        _type == "category" => {          ...,          links[] {            ...,            "page": page->{ "slug": slug.current }          }        }      }    }  }
 export type SettingsQueryResult = {
   _id: string;
   _type: 'settings';
@@ -551,6 +551,7 @@ export type SettingsQueryResult = {
     metadataBase?: string;
     _type: 'image';
   };
+  navigation: null;
 } | null;
 // Variable: getPageQuery
 // Query: *[_type == 'page' && slug.current == $slug][0]{    _id,    _type,    name,    slug,    heading,    subheading,    "pageBuilder": pageBuilder[]{      ...,      _type == "callToAction" => {          link {      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }      },      },      _type == "infoSection" => {        content[]{          ...,          markDefs[]{            ...,              _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }          }        }      },    },  }
@@ -772,7 +773,7 @@ export type PagesSlugsResult = Array<{
 import '@sanity/client';
 declare module '@sanity/client' {
   interface SanityQueries {
-    '*[_type == "settings"][0]': SettingsQueryResult;
+    '\n  *[_type == "settings"][0]{\n    ...,\n    navigation {\n      ...,\n      items[] {\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->{ "slug": slug.current }\n        },\n        _type == "category" => {\n          ...,\n          links[] {\n            ...,\n            "page": page->{ "slug": slug.current }\n          }\n        }\n      }\n    }\n  }\n': SettingsQueryResult;
     '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    heading,\n    subheading,\n    "pageBuilder": pageBuilder[]{\n      ...,\n      _type == "callToAction" => {\n        \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n,\n      },\n      _type == "infoSection" => {\n        content[]{\n          ...,\n          markDefs[]{\n            ...,\n            \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n          }\n        }\n      },\n    },\n  }\n': GetPageQueryResult;
     '\n  *[_type == "page" || _type == "post" && defined(slug.current)] | order(_type asc) {\n    "slug": slug.current,\n    _type,\n    _updatedAt,\n  }\n': SitemapDataResult;
     '\n  *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': AllPostsQueryResult;

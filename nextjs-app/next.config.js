@@ -1,6 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // ... other config
+  images: {
+    remotePatterns: [
+      {
+        hostname: 'cdn.sanity.io',
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;

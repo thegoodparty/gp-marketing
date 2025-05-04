@@ -8,8 +8,8 @@ interface NavLinkProps {
 }
 
 export default function NavLink({ link }: NavLinkProps) {
-  const href = link.type === 'internal' ? `/${link.page?.slug}` : link.url;
   const isExternal = link.type === 'external';
+  const href = link.type === 'internal' ? `/${link.page?.slug}` : link.url;
 
   return (
     <Link

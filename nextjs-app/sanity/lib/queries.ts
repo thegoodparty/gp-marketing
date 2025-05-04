@@ -1,6 +1,34 @@
 import { defineQuery } from 'next-sanity';
 
-export const settingsQuery = defineQuery(`*[_type == "settings"][0]`);
+const linkReference = /* groq */ `
+  _type == "link" => {
+    "page": page->slug.current,
+    "post": post->slug.current
+  }
+`;
+
+export const settingsQuery = defineQuery(`
+  *[_type == "settings"][0]{
+    ...,
+    navigation {
+      ...,
+      items[] {
+        ...,
+        _type == "link" => {
+          ...,
+          "page": page->{ "slug": slug.current }
+        },
+        _type == "category" => {
+          ...,
+          links[] {
+            ...,
+            "page": page->{ "slug": slug.current }
+          }
+        }
+      }
+    }
+  }
+`);
 
 const postFields = /* groq */ `
   _id,
@@ -11,13 +39,6 @@ const postFields = /* groq */ `
   coverImage,
   "date": coalesce(date, _updatedAt),
   "author": author->{firstName, lastName, picture},
-`;
-
-const linkReference = /* groq */ `
-  _type == "link" => {
-    "page": page->slug.current,
-    "post": post->slug.current
-  }
 `;
 
 const linkFields = /* groq */ `

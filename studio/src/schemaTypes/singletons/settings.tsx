@@ -15,20 +15,192 @@ export const settings = defineType({
   icon: CogIcon,
   fields: [
     defineField({
-      name: 'logo',
-      title: 'Site Logo',
-      type: 'image',
-      description: 'The main logo for the site. Will be displayed in the header.',
-      options: {
-        hotspot: true,
-      },
+      name: 'navigation',
+      title: 'Navigation',
+      type: 'object',
       fields: [
         defineField({
-          name: 'alt',
-          title: 'Alternative text',
-          type: 'string',
-          initialValue: 'GoodParty.org',
-          validation: (rule) => rule.required(),
+          name: 'logo',
+          title: 'Site Logo',
+          type: 'image',
+          description: 'The main logo for the site. Will be displayed in the header.',
+          options: {
+            hotspot: true,
+          },
+          fields: [
+            defineField({
+              name: 'alt',
+              title: 'Alternative text',
+              type: 'string',
+              initialValue: 'GoodParty.org',
+              validation: (rule) => rule.required(),
+            }),
+          ],
+        }),
+        defineField({
+          name: 'items',
+          title: 'Navigation Items',
+          type: 'array',
+          of: [
+            defineArrayMember({
+              type: 'object',
+              name: 'category',
+              title: 'Category',
+              fields: [
+                defineField({
+                  name: 'title',
+                  title: 'Category Title',
+                  type: 'string',
+                  validation: (rule) => rule.required(),
+                }),
+                defineField({
+                  name: 'links',
+                  title: 'Links',
+                  type: 'array',
+                  of: [
+                    defineArrayMember({
+                      type: 'object',
+                      fields: [
+                        defineField({
+                          name: 'title',
+                          title: 'Link Title',
+                          type: 'string',
+                          validation: (rule) => rule.required(),
+                        }),
+                        defineField({
+                          name: 'icon',
+                          title: 'Link Icon',
+                          type: 'string',
+                          description: 'Enter the Material Design icon name (e.g., MdHome, MdSettings, MdLink). Must start with "Md". See https://react-icons.github.io/react-icons/icons?name=md for available icons.',
+                          validation: (rule) => rule.custom((value) => {
+                            if (!value) return true;
+                            if (!value.startsWith('Md')) {
+                              return 'Icon name must start with "Md" for Material Design icons';
+                            }
+                            return true;
+                          }),
+                        }),
+                        defineField({
+                          name: 'type',
+                          title: 'Link Type',
+                          type: 'string',
+                          options: {
+                            list: [
+                              { title: 'Internal Page', value: 'internal' },
+                              { title: 'External URL', value: 'external' },
+                            ],
+                          },
+                          validation: (rule) => rule.required(),
+                        }),
+                        defineField({
+                          name: 'page',
+                          title: 'Internal Page',
+                          type: 'reference',
+                          to: [{ type: 'page' }],
+                          hidden: ({ parent }) => parent?.type !== 'internal',
+                        }),
+                        defineField({
+                          name: 'url',
+                          title: 'External URL',
+                          type: 'url',
+                          hidden: ({ parent }) => parent?.type !== 'external',
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            defineArrayMember({
+              type: 'object',
+              name: 'link',
+              title: 'Single Link',
+              fields: [
+                defineField({
+                  name: 'title',
+                  title: 'Link Title',
+                  type: 'string',
+                  validation: (rule) => rule.required(),
+                }),
+                defineField({
+                  name: 'icon',
+                  title: 'Link Icon',
+                  type: 'string',
+                  description: 'Enter the Material Design icon name (e.g., MdHome, MdSettings, MdLink). Must start with "Md". See https://react-icons.github.io/react-icons/icons?name=md for available icons.',
+                  validation: (rule) => rule.custom((value) => {
+                    if (!value) return true;
+                    if (!value.startsWith('Md')) {
+                      return 'Icon name must start with "Md" for Material Design icons';
+                    }
+                    return true;
+                  }),
+                }),
+                defineField({
+                  name: 'type',
+                  title: 'Link Type',
+                  type: 'string',
+                  options: {
+                    list: [
+                      { title: 'Internal Page', value: 'internal' },
+                      { title: 'External URL', value: 'external' },
+                    ],
+                  },
+                  validation: (rule) => rule.required(),
+                }),
+                defineField({
+                  name: 'page',
+                  title: 'Internal Page',
+                  type: 'reference',
+                  to: [{ type: 'page' }],
+                  hidden: ({ parent }) => parent?.type !== 'internal',
+                }),
+                defineField({
+                  name: 'url',
+                  title: 'External URL',
+                  type: 'url',
+                  hidden: ({ parent }) => parent?.type !== 'external',
+                }),
+              ],
+            }),
+          ],
+        }),
+        defineField({
+          name: 'rightSideCTA',
+          title: 'Right Side CTA',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'title',
+              title: 'Button Text',
+              type: 'string',
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: 'url',
+              title: 'URL',
+              type: 'url',
+              validation: (rule) => rule.required(),
+            }),
+          ],
+        }),
+        defineField({
+          name: 'rightSideSecondaryLink',
+          title: 'Right Side Secondary Link',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'title',
+              title: 'Link Text',
+              type: 'string',
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: 'url',
+              title: 'URL',
+              type: 'url',
+              validation: (rule) => rule.required(),
+            }),
+          ],
         }),
       ],
     }),

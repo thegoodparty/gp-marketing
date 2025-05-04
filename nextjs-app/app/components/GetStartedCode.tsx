@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function GetStartedCode() {
   const [showTooltip, setShowTooltip] = useState(false);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(
-      "npm create sanity@latest -- --template sanity-io/sanity-template-nextjs-clean",
+      'npm create sanity@latest -- --template sanity-io/sanity-template-nextjs-clean'
     );
     setShowTooltip(true);
     setTimeout(() => setShowTooltip(false), 2000);
@@ -16,9 +16,9 @@ export default function GetStartedCode() {
   return (
     <div className="inline-flex rounded-full shadow-xl md:whitespace-nowrap bg-gray-900 px-4 py-2 lg:pl-6 lg-pr:5 md:py-4 text-white text-sm lg:text-base mt-6 font-mono gap-4 items-center">
       <span>
-        <span className="text-cyan-500 font-bold">npm</span>{" "}
-        <span className="text-red-500 font-bold">create</span> sanity@latest --
-        --template sanity-io/sanity-template-nextjs-clean
+        <span className="text-cyan-500 font-bold">npm</span>{' '}
+        <span className="text-red-500 font-bold">create</span> sanity@latest -- --template
+        sanity-io/sanity-template-nextjs-clean
       </span>
       <button className="text-red-500 relative" onClick={handleCopy}>
         <svg
@@ -31,7 +31,7 @@ export default function GetStartedCode() {
         </svg>
         <span
           className={`absolute bottom-full left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 transition-opacity duration-300 ${
-            showTooltip ? "opacity-100" : "opacity-0 pointer-events-none"
+            showTooltip ? 'opacity-100' : 'opacity-0 pointer-events-none'
           }`}
         >
           Copied!

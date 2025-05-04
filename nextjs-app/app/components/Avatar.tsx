@@ -1,7 +1,7 @@
-import { Image } from "next-sanity/image";
+import { Image } from 'next-sanity/image';
 
-import { urlForImage } from "@/sanity/lib/utils";
-import DateComponent from "@/app/components/Date";
+import { urlForImage } from '@/sanity/lib/utils';
+import DateComponent from '@/app/components/Date';
 
 type Props = {
   person: {
@@ -20,17 +20,11 @@ export default function Avatar({ person, date }: Props) {
       {picture?.asset?._ref ? (
         <div className="mr-4 h-9 w-9">
           <Image
-            alt={picture?.alt || ""}
+            alt={picture?.alt || ''}
             className="h-full rounded-full object-cover"
             height={48}
             width={48}
-            src={
-              urlForImage(picture)
-                ?.height(96)
-                .width(96)
-                .fit("crop")
-                .url() as string
-            }
+            src={urlForImage(picture)?.height(96).width(96).fit('crop').url() as string}
           />
         </div>
       ) : (

@@ -8,9 +8,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "format": "prettier --write .",
     "typegen": "sanity typegen generate"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@iconify/react": "^6.0.0",
+    "@mui/material": "^7.0.2",
     "@sanity/client": "^6.27.2",
     "@sanity/image-url": "^1.1.0",
     "@sanity/uuid": "^3.0.2",
@@ -18,10 +23,12 @@
     "@vercel/speed-insights": "^1.1.0",
     "autoprefixer": "^10.4.20",
     "date-fns": "^3.6.0",
+    "hamburger-react": "^2.5.2",
     "next": "^15.1.6",
     "next-sanity": "^9.8.42",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
     "sanity": "^3.74.0",
     "sonner": "^1.7.0",
     "styled-components": "^6.1.13"
@@ -32,7 +39,10 @@
     "@types/react-dom": "^18.3.5",
     "eslint": "^8.57.0",
     "eslint-config-next": "^15.1.6",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.3.1",
     "postcss": "^8.4.49",
+    "prettier": "^3.5.3",
     "tailwindcss": "^3.4.15",
     "typescript": "5.6.3"
   }

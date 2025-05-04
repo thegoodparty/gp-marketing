@@ -1,5 +1,5 @@
 import React from 'react';
-import * as MdIcons from 'react-icons/fa';
+import * as FaIcons from 'react-icons/fa';
 
 interface DynamicIconProps {
   iconName: string;
@@ -24,13 +24,13 @@ const DynamicIcon: React.FC<DynamicIconProps> = ({
 }) => {
   if (!iconName) return null;
 
-  // Ensure the icon name starts with Md
-  if (!iconName.startsWith('Md')) {
-    console.error(`Icon ${iconName} must start with 'Md' for Material Design icons`);
+  // Ensure the icon name starts with Fa
+  if (!iconName.startsWith('Fa')) {
+    console.error(`Icon ${iconName} must start with 'Fa' for Material Design icons`);
     return null;
   }
 
-  const Icon = MdIcons[iconName as keyof typeof MdIcons] as IconComponent;
+  const Icon = FaIcons[iconName as keyof typeof FaIcons] as IconComponent;
 
   if (!Icon) {
     console.error(`Icon ${iconName} not found in Material Design icons`);

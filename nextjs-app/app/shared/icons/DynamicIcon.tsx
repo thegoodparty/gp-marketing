@@ -1,5 +1,5 @@
 import React from 'react';
-import * as MdIcons from 'react-icons/md';
+import * as MdIcons from 'react-icons/fa';
 
 interface DynamicIconProps {
   iconName: string;

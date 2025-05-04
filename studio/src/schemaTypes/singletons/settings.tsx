@@ -71,11 +71,11 @@ export const settings = defineType({
                           name: 'icon',
                           title: 'Link Icon',
                           type: 'string',
-                          description: 'Enter the Material Design icon name (e.g., MdHome, MdSettings, MdLink). Must start with "Md". See https://react-icons.github.io/react-icons/icons?name=md for available icons.',
+                          description: 'Enter the FontAwesome icon name (e.g., FaHome, FaSettings, FaLink). Must start with "Fa". See https://react-icons.github.io/react-icons/icons?name=fa for available icons.',
                           validation: (rule) => rule.custom((value) => {
                             if (!value) return true;
-                            if (!value.startsWith('Md')) {
-                              return 'Icon name must start with "Md" for Material Design icons';
+                            if (!value.startsWith('Fa')) {
+                              return 'Icon name must start with "Fa" for Material Design icons';
                             }
                             return true;
                           }),

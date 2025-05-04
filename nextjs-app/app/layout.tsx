@@ -10,6 +10,7 @@ import { Toaster } from 'sonner';
 import DraftModeToast from '@/app/components/DraftModeToast';
 import Footer from '@/app/components/Footer';
 import Header from '@/app/components/header/Header';
+import { Settings } from '@/app/types/navigation';
 import * as demo from '@/sanity/lib/demo';
 import { sanityFetch, SanityLive } from '@/sanity/lib/live';
 import { settingsQuery } from '@/sanity/lib/queries';
@@ -83,7 +84,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         )}
         {/* The <SanityLive> component is responsible for making all sanityFetch calls in your application live, so should always be rendered. */}
         <SanityLive onError={handleError} />
-        <Header settings={settings} />
+        <Header settings={settings as Settings} />
         <main className="">{children}</main>
         <Footer />
         <SpeedInsights />

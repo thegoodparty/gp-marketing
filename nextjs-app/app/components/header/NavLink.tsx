@@ -20,7 +20,7 @@ export default function NavLink({ link }: NavLinkProps) {
     >
       <div className="flex items-center">
         {link.icon && <DynamicIcon iconName={link.icon} className="w-5 h-5 mr-2" />}
-        <div className="ml-3">{link.title}</div>
+        <div className="ml-3 outfit">{link.title}</div>
       </div>
       {isExternal && <BiLinkExternal />}
     </Link>

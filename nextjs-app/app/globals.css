@@ -20,4 +20,12 @@
   h6 {
     font-family: var(--font-heading);
   }
+
+  .outfit {
+    font-family: 'Outfit', sans-serif;
+  }
+
+  .open-sans {
+    font-family: 'Open Sans', sans-serif;
+  }
 }

@@ -84,7 +84,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         )}
         {/* The <SanityLive> component is responsible for making all sanityFetch calls in your application live, so should always be rendered. */}
         <SanityLive onError={handleError} />
-        <Header settings={settings as Settings} />
+        <Header
+          settings={
+            {
+              ...settings,
+              navigation: settings?.navigation || {
+                logo: { _type: 'image', asset: { _ref: '', _type: 'reference' }, alt: '' },
+                items: [],
+              },
+            } as Settings
+          }
+        />
         <main className="">{children}</main>
         <Footer />
         <SpeedInsights />

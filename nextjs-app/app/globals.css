@@ -1,4 +1,5 @@
 @tailwind base;
+@import "goodparty-styleguide/dist/index.css";
 @tailwind components;
 @tailwind utilities;
 

@@ -25,6 +25,11 @@ export default function PageHero({ block }: PageHeroProps) {
   const bgImageUrl = block.backgroundImage ? urlForImage(block.backgroundImage)?.url() : undefined;
   const mainImageUrl = block.mainImage ? urlForImage(block.mainImage)?.url() : undefined;
 
+  // Debug logging to see what we're getting
+  console.log('PageHero block:', block);
+  console.log('mainImage:', block.mainImage);
+  console.log('mainImageUrl:', mainImageUrl);
+
   return (
     <section
       className={`relative w-full overflow-hidden ${
@@ -78,8 +83,8 @@ export default function PageHero({ block }: PageHeroProps) {
             )}
           </div>
         </div>
-        {/* Right: Main Image */}
-        {mainImageUrl && (
+        {/* Right: Main Image - Only render if image exists and URL is valid */}
+        {mainImageUrl && typeof mainImageUrl === 'string' && mainImageUrl.length > 0 && (
           <div className="flex-1 flex items-center justify-center mb-8 md:mb-0">
             <Image
               priority

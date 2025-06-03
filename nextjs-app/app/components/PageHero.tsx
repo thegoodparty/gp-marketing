@@ -25,11 +25,6 @@ export default function PageHero({ block }: PageHeroProps) {
   const bgImageUrl = block.backgroundImage ? urlForImage(block.backgroundImage)?.url() : undefined;
   const mainImageUrl = block.mainImage ? urlForImage(block.mainImage)?.url() : undefined;
 
-  // Debug logging to see what we're getting
-  console.log('PageHero block:', block);
-  console.log('mainImage:', block.mainImage);
-  console.log('mainImageUrl:', mainImageUrl);
-
   return (
     <section
       className={`relative w-full overflow-hidden ${

@@ -1,8 +1,8 @@
-import React from 'react'
+import React from 'react';
 
 interface CaptionProps {
-  children: React.ReactNode
-  className?: string
+  children: React.ReactNode;
+  className?: string;
 }
 
 export default function Caption({ children, className = '' }: CaptionProps) {
@@ -10,5 +10,5 @@ export default function Caption({ children, className = '' }: CaptionProps) {
     <div className={`font-semibold font-sfpro text-xs ${className}`}>
       {children}
     </div>
-  )
+  );
 }

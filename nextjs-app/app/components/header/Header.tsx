@@ -1,10 +1,10 @@
-import HeaderLogo from './HeaderLogo'
-import NavCategories from './NavCategories'
-import RightSide from './RightSide'
-import { Settings } from '@/app/types/navigation'
-import MobileMenu from './MobileMenu'
+import HeaderLogo from './HeaderLogo';
+import NavCategories from './NavCategories';
+import RightSide from './RightSide';
+import { Settings } from '@/app/types/navigation';
+import MobileMenu from './MobileMenu';
 interface HeaderProps {
-  settings: Settings
+  settings: Settings;
 }
 
 export default function Header({ settings }: HeaderProps) {
@@ -27,5 +27,5 @@ export default function Header({ settings }: HeaderProps) {
       <MobileMenu settings={settings} />
       <div className="h-14 relative">&nbsp;</div>
     </>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-import RightSideCTA from './RightSideCTA'
-import RightSideSecondaryLink from './RightSideSecondaryLink'
-import { Settings } from '@/app/types/navigation'
+import RightSideCTA from './RightSideCTA';
+import RightSideSecondaryLink from './RightSideSecondaryLink';
+import { Settings } from '@/app/types/navigation';
 
 interface RightSideProps {
-  settings: Settings
+  settings: Settings;
 }
 
 export default function RightSide({ settings }: RightSideProps) {
@@ -14,5 +14,5 @@ export default function RightSide({ settings }: RightSideProps) {
       />
       <RightSideCTA cta={settings?.navigation?.rightSideCTA} />
     </div>
-  )
+  );
 }

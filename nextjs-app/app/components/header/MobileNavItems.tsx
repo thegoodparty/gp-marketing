@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import { NavigationItem } from '@/app/types/navigation'
-import DynamicIcon from '@/app/shared/icons/DynamicIcon'
-import Link from 'next/link'
-import { BiLinkExternal } from 'react-icons/bi'
-import Caption from '@/app/shared/typography/Caption'
+import { NavigationItem } from '@/app/types/navigation';
+import DynamicIcon from '@/app/shared/icons/DynamicIcon';
+import Link from 'next/link';
+import { BiLinkExternal } from 'react-icons/bi';
+import Caption from '@/app/shared/typography/Caption';
 
 interface MobileNavItemsProps {
-  items: NavigationItem[]
-  onClose: () => void
+  items: NavigationItem[];
+  onClose: () => void;
 }
 
 export default function MobileNavItems({
@@ -27,8 +27,8 @@ export default function MobileNavItems({
               <Caption className="py-2">{item.title}</Caption>
               {item.links.map((link) => {
                 const href =
-                  link.type === 'internal' ? `/${link.page?.slug}` : link.url
-                const isExternal = link.type === 'external'
+                  link.type === 'internal' ? `/${link.page?.slug}` : link.url;
+                const isExternal = link.type === 'external';
                 return (
                   <Link
                     href={href || '#'}
@@ -49,14 +49,14 @@ export default function MobileNavItems({
                     </div>
                     {isExternal && <BiLinkExternal size={14} />}
                   </Link>
-                )
+                );
               })}
             </div>
-          )
+          );
         } else if (item._type === 'link') {
           const href =
-            item.type === 'internal' ? `/${item.page?.slug}` : item.url
-          const isExternal = item.type === 'external'
+            item.type === 'internal' ? `/${item.page?.slug}` : item.url;
+          const isExternal = item.type === 'external';
           return (
             <Link
               href={href || '#'}
@@ -74,10 +74,10 @@ export default function MobileNavItems({
               </div>
               {isExternal && <BiLinkExternal size={14} />}
             </Link>
-          )
+          );
         }
-        return null
+        return null;
       })}
     </>
-  )
+  );
 }

@@ -1,19 +1,19 @@
-import type { Metadata, ResolvingMetadata } from 'next'
-import { notFound } from 'next/navigation'
-import { type PortableTextBlock } from 'next-sanity'
-import { Suspense } from 'react'
+import type { Metadata, ResolvingMetadata } from 'next';
+import { notFound } from 'next/navigation';
+import { type PortableTextBlock } from 'next-sanity';
+import { Suspense } from 'react';
 
-import Avatar from '@/app/components/Avatar'
-import CoverImage from '@/app/components/CoverImage'
-import { MorePosts } from '@/app/components/Posts'
-import PortableText from '@/app/components/PortableText'
-import { sanityFetch } from '@/sanity/lib/live'
-import { postPagesSlugs, postQuery } from '@/sanity/lib/queries'
-import { resolveOpenGraphImage } from '@/sanity/lib/utils'
+import Avatar from '@/app/components/Avatar';
+import CoverImage from '@/app/components/CoverImage';
+import { MorePosts } from '@/app/components/Posts';
+import PortableText from '@/app/components/PortableText';
+import { sanityFetch } from '@/sanity/lib/live';
+import { postPagesSlugs, postQuery } from '@/sanity/lib/queries';
+import { resolveOpenGraphImage } from '@/sanity/lib/utils';
 
 type Props = {
-  params: Promise<{ slug: string }>
-}
+  params: Promise<{ slug: string }>;
+};
 
 /**
  * Generate the static params for the page.
@@ -25,8 +25,8 @@ export async function generateStaticParams() {
     // Use the published perspective in generateStaticParams
     perspective: 'published',
     stega: false,
-  })
-  return data
+  });
+  return data;
 }
 
 /**
@@ -37,15 +37,15 @@ export async function generateMetadata(
   props: Props,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const params = await props.params
+  const params = await props.params;
   const { data: post } = await sanityFetch({
     query: postQuery,
     params,
     // Metadata should never contain stega
     stega: false,
-  })
-  const previousImages = (await parent).openGraph?.images || []
-  const ogImage = resolveOpenGraphImage(post?.coverImage)
+  });
+  const previousImages = (await parent).openGraph?.images || [];
+  const ogImage = resolveOpenGraphImage(post?.coverImage);
 
   return {
     authors:
@@ -57,17 +57,17 @@ export async function generateMetadata(
     openGraph: {
       images: ogImage ? [ogImage, ...previousImages] : previousImages,
     },
-  } satisfies Metadata
+  } satisfies Metadata;
 }
 
 export default async function PostPage(props: Props) {
-  const params = await props.params
+  const params = await props.params;
   const [{ data: post }] = await Promise.all([
     sanityFetch({ query: postQuery, params }),
-  ])
+  ]);
 
   if (!post?._id) {
-    return notFound()
+    return notFound();
   }
 
   return (
@@ -111,5 +111,5 @@ export default async function PostPage(props: Props) {
         </div>
       </div>
     </>
-  )
+  );
 }

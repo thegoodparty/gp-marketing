@@ -1,14 +1,14 @@
-import Button from '../../shared/buttons/Button'
+import Button from '../../shared/buttons/Button';
 
 interface RightSideCTAProps {
   cta?: {
-    title: string
-    url: string
-  }
+    title: string;
+    url: string;
+  };
 }
 
 export default function RightSideCTA({ cta }: RightSideCTAProps) {
-  if (!cta) return null
+  if (!cta) return null;
 
   return (
     <Button
@@ -19,5 +19,5 @@ export default function RightSideCTA({ cta }: RightSideCTAProps) {
     >
       {cta.title}
     </Button>
-  )
+  );
 }

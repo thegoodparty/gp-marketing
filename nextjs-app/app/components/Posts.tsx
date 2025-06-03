@@ -1,13 +1,13 @@
-import Link from 'next/link'
+import Link from 'next/link';
 
-import { sanityFetch } from '@/sanity/lib/live'
-import { morePostsQuery, allPostsQuery } from '@/sanity/lib/queries'
-import { Post as PostType } from '@/sanity.types'
-import DateComponent from '@/app/components/Date'
-import OnBoarding from '@/app/components/Onboarding'
+import { sanityFetch } from '@/sanity/lib/live';
+import { morePostsQuery, allPostsQuery } from '@/sanity/lib/queries';
+import { Post as PostType } from '@/sanity.types';
+import DateComponent from '@/app/components/Date';
+import OnBoarding from '@/app/components/Onboarding';
 
 const Post = ({ post }: { post: PostType }) => {
-  const { _id, title, slug, excerpt, date } = post
+  const { _id, title, slug, excerpt, date } = post;
 
   return (
     <article
@@ -30,17 +30,17 @@ const Post = ({ post }: { post: PostType }) => {
         {excerpt}
       </p>
     </article>
-  )
-}
+  );
+};
 
 const Posts = ({
   children,
   heading,
   subHeading,
 }: {
-  children: React.ReactNode
-  heading?: string
-  subHeading?: string
+  children: React.ReactNode;
+  heading?: string;
+  subHeading?: string;
 }) => (
   <div>
     {heading && (
@@ -55,36 +55,36 @@ const Posts = ({
       {children}
     </div>
   </div>
-)
+);
 
 export const MorePosts = async ({
   skip,
   limit,
 }: {
-  skip: string
-  limit: number
+  skip: string;
+  limit: number;
 }) => {
   const { data } = await sanityFetch({
     query: morePostsQuery,
     params: { skip, limit },
-  })
+  });
 
   if (!data || data.length === 0) {
-    return null
+    return null;
   }
 
   return (
     <Posts heading={`Recent Posts (${data?.length})`}>
       {data?.map((post: any) => <Post key={post._id} post={post} />)}
     </Posts>
-  )
-}
+  );
+};
 
 export const AllPosts = async () => {
-  const { data } = await sanityFetch({ query: allPostsQuery })
+  const { data } = await sanityFetch({ query: allPostsQuery });
 
   if (!data || data.length === 0) {
-    return <OnBoarding />
+    return <OnBoarding />;
   }
 
   return (
@@ -96,5 +96,5 @@ export const AllPosts = async () => {
         <Post key={post._id} post={post} />
       ))}
     </Posts>
-  )
-}
+  );
+};

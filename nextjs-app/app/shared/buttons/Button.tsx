@@ -1,24 +1,24 @@
-import Link from 'next/link'
-import { forwardRef, ReactNode, ForwardedRef } from 'react'
+import Link from 'next/link';
+import { forwardRef, ReactNode, ForwardedRef } from 'react';
 
-export type ButtonColor = keyof typeof COLOR_CLASSES
-export type ButtonVariant = keyof typeof VARIANT_CLASSES
-export type ButtonSize = keyof typeof SIZE_CLASSES
+export type ButtonColor = keyof typeof COLOR_CLASSES;
+export type ButtonVariant = keyof typeof VARIANT_CLASSES;
+export type ButtonSize = keyof typeof SIZE_CLASSES;
 
-type ColorClasses = Record<ButtonColor, string>
-type VariantClasses = Record<ButtonVariant, ColorClasses>
+type ColorClasses = Record<ButtonColor, string>;
+type VariantClasses = Record<ButtonVariant, ColorClasses>;
 
 export interface ButtonProps {
-  href?: string
-  target?: string
-  nativeLink?: boolean
-  size?: ButtonSize
-  variant?: ButtonVariant
-  color?: ButtonColor
-  children?: ReactNode
-  className?: string
-  disabled?: boolean
-  [key: string]: any
+  href?: string;
+  target?: string;
+  nativeLink?: boolean;
+  size?: ButtonSize;
+  variant?: ButtonVariant;
+  color?: ButtonColor;
+  children?: ReactNode;
+  className?: string;
+  disabled?: boolean;
+  [key: string]: any;
 }
 
 export const COLOR_CLASSES = {
@@ -40,7 +40,7 @@ export const COLOR_CLASSES = {
   // WIP: only contained style for now
   white:
     'text-black bg-white hover:[&:not([disabled])]:bg-[#d6d6d6] focus-visible:outline-white/40 active:outline-white/40',
-}
+};
 
 const OUTLINED_COLOR_CLASSES = {
   primary:
@@ -58,7 +58,7 @@ const OUTLINED_COLOR_CLASSES = {
     'text-success-dark !border-success-main/50 hover:[&:not([disabled])]:bg-success-main/[0.08] focus-visible:!bg-success-main/[0.12] active:!bg-success-main/[0.12]',
   neutral:
     'text-neutral-dark !border-neutral-main/60 hover:[&:not([disabled])]:bg-neutral-main/[0.16] focus-visible:!bg-neutral-main/[0.24] active:!bg-neutral-main/[0.24]',
-}
+};
 
 const TEXT_COLOR_CLASSES = {
   primary:
@@ -76,19 +76,19 @@ const TEXT_COLOR_CLASSES = {
     'text-success-dark hover:[&:not([disabled])]:bg-success-main/[0.08] focus-visible:!bg-success-main/[0.12] active:!bg-success-main/[0.12]',
   neutral:
     'text-neutral-dark hover:[&:not([disabled])]:bg-neutral-main/[0.16] focus-visible:!bg-neutral-main/[0.24] active:!bg-neutral-main/[0.24]',
-}
+};
 
 export const VARIANT_CLASSES = {
   contained: COLOR_CLASSES,
   outlined: OUTLINED_COLOR_CLASSES,
   text: TEXT_COLOR_CLASSES,
-}
+};
 
 export const SIZE_CLASSES = {
   small: 'text-xs py-2 px-3',
   medium: 'text-sm py-3 px-5',
   large: 'text-base py-3 px-6 leading-6',
-}
+};
 
 const Button = (
   {
@@ -106,19 +106,19 @@ const Button = (
   ref: ForwardedRef<HTMLButtonElement | HTMLAnchorElement>,
 ) => {
   let baseClasses =
-    'rounded-full text-center disabled:opacity-50 disabled:cursor-not-allowed transition-colors no-underline outline-offset-0 inline-block'
+    'rounded-full text-center disabled:opacity-50 disabled:cursor-not-allowed transition-colors no-underline outline-offset-0 inline-block';
 
-  if (variant !== 'text') baseClasses += ' border-2 border-transparent '
+  if (variant !== 'text') baseClasses += ' border-2 border-transparent ';
 
   if (variant === 'contained')
-    baseClasses += ' outline outline-4 outline-transparent'
+    baseClasses += ' outline outline-4 outline-transparent';
 
   const variantClasses =
-    (VARIANT_CLASSES as VariantClasses)[variant] || VARIANT_CLASSES.contained
-  const colorClasses = variantClasses[color] || variantClasses.primary
-  const sizeClasses = SIZE_CLASSES[size] || SIZE_CLASSES.medium
+    (VARIANT_CLASSES as VariantClasses)[variant] || VARIANT_CLASSES.contained;
+  const colorClasses = variantClasses[color] || variantClasses.primary;
+  const sizeClasses = SIZE_CLASSES[size] || SIZE_CLASSES.medium;
 
-  const compiledClassName = `${baseClasses} ${sizeClasses} ${colorClasses} ${className || ''}`
+  const compiledClassName = `${baseClasses} ${sizeClasses} ${colorClasses} ${className || ''}`;
 
   // render a disabled button instead of link if disabled = true
   if (href && !disabled) {
@@ -134,7 +134,7 @@ const Button = (
         >
           {children}
         </a>
-      )
+      );
     }
     return (
       <Link
@@ -146,7 +146,7 @@ const Button = (
       >
         {children}
       </Link>
-    )
+    );
   }
 
   return (
@@ -159,9 +159,9 @@ const Button = (
     >
       {children}
     </button>
-  )
-}
+  );
+};
 
 export default forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
   Button,
-)
+);

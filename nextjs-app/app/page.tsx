@@ -1,8 +1,8 @@
-import { Suspense } from 'react'
-import Link from 'next/link'
+import { Suspense } from 'react';
+import Link from 'next/link';
 
-import { AllPosts } from '@/app/components/Posts'
-import GetStartedCode from '@/app/components/GetStartedCode'
+import { AllPosts } from '@/app/components/Posts';
+import GetStartedCode from '@/app/components/GetStartedCode';
 
 export default async function Page() {
   return (
@@ -65,5 +65,5 @@ export default async function Page() {
         </div>
       </div>
     </>
-  )
+  );
 }

@@ -1,32 +1,32 @@
-import React from 'react'
+import React from 'react';
 
-import Cta from '@/app/components/Cta'
-import Info from '@/app/components/InfoSection'
-import { dataAttr } from '@/sanity/lib/utils'
-import PageHero from '@/app/components/PageHero'
-import ProblemSection from '@/app/components/ProblemSection'
+import Cta from '@/app/components/Cta';
+import Info from '@/app/components/InfoSection';
+import { dataAttr } from '@/sanity/lib/utils';
+import PageHero from '@/app/components/PageHero';
+import ProblemSection from '@/app/components/ProblemSection';
 type BlocksType = {
-  [key: string]: React.FC<any>
-}
+  [key: string]: React.FC<any>;
+};
 
 type BlockType = {
-  _type: string
-  _key: string
-}
+  _type: string;
+  _key: string;
+};
 
 type BlockProps = {
-  index: number
-  block: BlockType
-  pageId: string
-  pageType: string
-}
+  index: number;
+  block: BlockType;
+  pageId: string;
+  pageType: string;
+};
 
 const Blocks: BlocksType = {
   callToAction: Cta,
   infoSection: Info,
   pageHero: PageHero,
   problemSection: ProblemSection,
-}
+};
 
 /**
  * Used by the <PageBuilder>, this component renders a the component that matches the block type.
@@ -54,7 +54,7 @@ export default function BlockRenderer({
           index: index,
         })}
       </div>
-    )
+    );
   }
   // Block doesn't exist yet
   return React.createElement(
@@ -64,5 +64,5 @@ export default function BlockRenderer({
       </div>
     ),
     { key: block._key },
-  )
+  );
 }

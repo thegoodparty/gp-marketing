@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { FaChevronDown } from 'react-icons/fa'
-import NavLink from './NavLink'
-import { NavigationCategory } from '@/app/types/navigation'
+import { FaChevronDown } from 'react-icons/fa';
+import NavLink from './NavLink';
+import { NavigationCategory } from '@/app/types/navigation';
 
 interface NavCategoryProps {
-  category: NavigationCategory
-  isOpen: boolean
-  onToggle: () => void
+  category: NavigationCategory;
+  isOpen: boolean;
+  onToggle: () => void;
 }
 
 export default function NavCategory({
@@ -15,8 +15,8 @@ export default function NavCategory({
   isOpen,
   onToggle,
 }: NavCategoryProps) {
-  console.log('============================================')
-  console.log('category', category?.links)
+  console.log('============================================');
+  console.log('category', category?.links);
   return (
     <div className="lg:ml-2 xl:ml-4 mr-8 relative cursor-pointer">
       <div onClick={onToggle}>
@@ -42,5 +42,5 @@ export default function NavCategory({
         </>
       )}
     </div>
-  )
+  );
 }

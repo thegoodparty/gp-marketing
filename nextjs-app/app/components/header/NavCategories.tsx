@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import NavCategory from './NavCategory'
-import NavLink from './NavLink'
-import { Settings, NavigationItem } from '@/app/types/navigation'
+import { useState } from 'react';
+import NavCategory from './NavCategory';
+import NavLink from './NavLink';
+import { Settings, NavigationItem } from '@/app/types/navigation';
 
 interface NavCategoriesProps {
-  settings: Settings
+  settings: Settings;
 }
 
 export default function NavCategories({ settings }: NavCategoriesProps) {
-  const [openCategoryKey, setOpenCategoryKey] = useState<string | null>(null)
-  const items = settings?.navigation?.items
-  if (!items) return null
+  const [openCategoryKey, setOpenCategoryKey] = useState<string | null>(null);
+  const items = settings?.navigation?.items;
+  if (!items) return null;
 
   const handleCategoryToggle = (key: string) => {
-    setOpenCategoryKey(openCategoryKey === key ? null : key)
-  }
+    setOpenCategoryKey(openCategoryKey === key ? null : key);
+  };
 
   return (
     <div className="items-center hidden lg:flex">
@@ -29,12 +29,12 @@ export default function NavCategories({ settings }: NavCategoriesProps) {
               isOpen={openCategoryKey === item._key}
               onToggle={() => handleCategoryToggle(item._key)}
             />
-          )
+          );
         } else if (item._type === 'link') {
-          return <NavLink key={item._key} link={item} />
+          return <NavLink key={item._key} link={item} />;
         }
-        return null
+        return null;
       })}
     </div>
-  )
+  );
 }

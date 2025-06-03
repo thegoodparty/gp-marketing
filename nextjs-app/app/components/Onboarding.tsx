@@ -1,30 +1,30 @@
-'use client'
+'use client';
 
 /**
  * This file is used for onboarding when you don't have content yet and are using the template for the first time.
  * Once you have provided a url for the environment variable NEXT_PUBLIC_SANITY_STUDIO_URL, and have content, you can delete this file.
  */
 
-import Link from 'next/link'
-import { useIsPresentationTool } from 'next-sanity/hooks'
-import { createDataAttribute } from 'next-sanity'
-import { uuid } from '@sanity/uuid'
+import Link from 'next/link';
+import { useIsPresentationTool } from 'next-sanity/hooks';
+import { createDataAttribute } from 'next-sanity';
+import { uuid } from '@sanity/uuid';
 
-import { studioUrl } from '@/sanity/lib/api'
+import { studioUrl } from '@/sanity/lib/api';
 
 type OnboardingMessageProps = {
   message: {
-    title: string
-    description: string
-  }
+    title: string;
+    description: string;
+  };
   link: {
-    title: string
-    href: string
-    showIcon?: boolean
-  }
-  type?: string
-  path?: string
-}
+    title: string;
+    href: string;
+    showIcon?: boolean;
+  };
+  type?: string;
+  path?: string;
+};
 
 const OnboardingMessage = ({
   message,
@@ -32,7 +32,7 @@ const OnboardingMessage = ({
   type,
   path,
 }: OnboardingMessageProps) => {
-  const isPresentation = useIsPresentationTool()
+  const isPresentation = useIsPresentationTool();
 
   return (
     <>
@@ -84,8 +84,8 @@ const OnboardingMessage = ({
         )}
       </div>
     </>
-  )
-}
+  );
+};
 
 export default function Onboarding() {
   return (
@@ -128,7 +128,7 @@ export default function Onboarding() {
         path="title"
       />
     </div>
-  )
+  );
 }
 
 export function PageOnboarding() {
@@ -172,5 +172,5 @@ export function PageOnboarding() {
         path="name"
       />
     </div>
-  )
+  );
 }

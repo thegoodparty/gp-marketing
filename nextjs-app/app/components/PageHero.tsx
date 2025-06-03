@@ -1,38 +1,38 @@
-import { urlForImage } from '@/sanity/lib/utils'
-import CustomPortableText from '@/app/components/PortableText'
-import ResolvedLink from '@/app/components/ResolvedLink'
-import Image from 'next/image'
+import { urlForImage } from '@/sanity/lib/utils';
+import CustomPortableText from '@/app/components/PortableText';
+import ResolvedLink from '@/app/components/ResolvedLink';
+import Image from 'next/image';
 
 interface HeroCta {
-  label: string
-  url: string
+  label: string;
+  url: string;
 }
 
 interface PageHeroProps {
   block: {
-    color: 'dark' | 'light'
-    backgroundImage?: any
-    mainImage?: any
-    heading: string
-    subheading?: any
-    mainCta?: HeroCta
-    secondaryCta?: HeroCta
-  }
+    color: 'dark' | 'light';
+    backgroundImage?: any;
+    mainImage?: any;
+    heading: string;
+    subheading?: any;
+    mainCta?: HeroCta;
+    secondaryCta?: HeroCta;
+  };
 }
 
 export default function PageHero({ block }: PageHeroProps) {
-  const isDark = block.color === 'dark'
+  const isDark = block.color === 'dark';
   const bgImageUrl = block.backgroundImage
     ? urlForImage(block.backgroundImage)?.url()
-    : undefined
+    : undefined;
   const mainImageUrl = block.mainImage
     ? urlForImage(block.mainImage)?.url()
-    : undefined
+    : undefined;
 
   // Debug logging to see what we're getting
-  console.log('PageHero block:', block)
-  console.log('mainImage:', block.mainImage)
-  console.log('mainImageUrl:', mainImageUrl)
+  console.log('PageHero block:', block);
+  console.log('mainImage:', block.mainImage);
+  console.log('mainImageUrl:', mainImageUrl);
 
   return (
     <section
@@ -110,5 +110,5 @@ export default function PageHero({ block }: PageHeroProps) {
         <div className="absolute inset-0 bg-black opacity-40 pointer-events-none" />
       )}
     </section>
-  )
+  );
 }

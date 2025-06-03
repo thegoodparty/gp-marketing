@@ -1,6 +1,34 @@
 import React from 'react';
-import { Button } from 'goodparty-styleguide';
 import * as LucideIcons from 'lucide-react';
+import styles from './ProblemSection.module.css';
+
+// Custom Button component
+interface ButtonProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+  className?: string;
+  variant?: 'default' | 'outline';
+}
+
+const Button: React.FC<ButtonProps> = ({
+  children,
+  onClick,
+  className = '',
+  variant = 'default',
+}) => {
+  const baseClasses =
+    'inline-flex items-center justify-center px-6 py-3 text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
+  const variantClasses =
+    variant === 'outline'
+      ? 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-gray-500'
+      : 'bg-gray-900 text-white hover:bg-gray-800 focus:ring-gray-900';
+
+  return (
+    <button onClick={onClick} className={`${baseClasses} ${variantClasses} ${className}`}>
+      {children}
+    </button>
+  );
+};
 
 interface ListItem {
   icon: string;
@@ -38,16 +66,16 @@ export default function ProblemSection({ block }: ProblemSectionProps) {
   }
 
   return (
-    <section className="py-12 px-4">
-      <div className="container mx-auto max-w-6xl">
-        <div className="flex flex-col lg:flex-row gap-6">
+    <section className="py-12 px-4 w-full">
+      <div className="mx-auto" style={{ maxWidth: '1200px' }}>
+        <div className="grid gap-6 md:grid-cols-2">
           {columns.map((column, index) => {
             const ButtonIcon = column.button?.icon ? getLucideIcon(column.button.icon) : null;
-            
+
             return (
               <div
                 key={index}
-                className="flex-1 rounded-3xl p-8 lg:p-12"
+                className="rounded-3xl p-10 lg:p-12"
                 style={{ backgroundColor: column.backgroundColor }}
               >
                 {/* Column Title */}
@@ -59,19 +87,17 @@ export default function ProblemSection({ block }: ProblemSectionProps) {
                 <div className="space-y-6 mb-8">
                   {column.items.map((item, itemIndex) => {
                     const ItemIcon = getLucideIcon(item.icon);
-                    
+
                     return (
                       <div key={itemIndex} className="flex items-start gap-4">
                         {/* Icon Container */}
-                        <div className="flex-shrink-0 w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                          <ItemIcon className="w-5 h-5 text-gray-700" />
+                        <div className="flex-shrink-0 w-12 h-12 bg-white rounded-full flex items-center justify-center">
+                          <ItemIcon className="w-6 h-6 text-gray-700" />
                         </div>
-                        
+
                         {/* Text Content */}
                         <div className="flex-1 pt-1">
-                          <p className="text-gray-900 leading-relaxed">
-                            {item.text}
-                          </p>
+                          <p className="text-gray-900 leading-relaxed">{item.text}</p>
                         </div>
                       </div>
                     );
@@ -81,10 +107,10 @@ export default function ProblemSection({ block }: ProblemSectionProps) {
                 {/* CTA Button */}
                 {column.button && column.button.label && column.button.url && (
                   <div className="mt-8">
-                    <Button 
-                      variant="default" 
+                    <Button
+                      variant="default"
                       onClick={() => window.open(column.button!.url, '_blank')}
-                      className="w-full lg:w-auto"
+                      className={`${styles.gpBtn} !bg-gray-900 !text-white hover:!bg-gray-800`}
                     >
                       {ButtonIcon && <ButtonIcon className="mr-2 h-4 w-4" />}
                       {column.button.label}

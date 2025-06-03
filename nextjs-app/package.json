@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
     "format": "prettier --write .",
     "typegen": "sanity typegen generate"
   },
@@ -43,6 +44,7 @@
     "eslint-config-next": "^15.1.6",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.3.1",
+    "eslint-plugin-unused-imports": "^4.1.4",
     "postcss": "^8.4.49",
     "prettier": "^3.5.3",
     "tailwindcss": "^3.4.4",

@@ -1,40 +1,40 @@
-import React from 'react';
-import { Button } from 'goodparty-styleguide';
-import * as LucideIcons from 'lucide-react';
+import React from 'react'
+import { Button } from 'goodparty-styleguide'
+import * as LucideIcons from 'lucide-react'
 
 interface ListItem {
-  icon: string;
-  text: string;
+  icon: string
+  text: string
 }
 
 interface Column {
-  title: string;
-  backgroundColor: string;
-  items: ListItem[];
+  title: string
+  backgroundColor: string
+  items: ListItem[]
   button?: {
-    label: string;
-    url: string;
-    icon?: string;
-  };
+    label: string
+    url: string
+    icon?: string
+  }
 }
 
 interface ProblemSectionProps {
   block: {
-    columns: Column[];
-  };
+    columns: Column[]
+  }
 }
 
 // Helper to get Lucide icon component
 const getLucideIcon = (iconName: string) => {
-  const IconComponent = (LucideIcons as any)[iconName];
-  return IconComponent || LucideIcons.HelpCircle; // Fallback icon
-};
+  const IconComponent = (LucideIcons as any)[iconName]
+  return IconComponent || LucideIcons.HelpCircle // Fallback icon
+}
 
 export default function ProblemSection({ block }: ProblemSectionProps) {
-  const { columns } = block;
+  const { columns } = block
 
   if (!columns || columns.length !== 2) {
-    return null;
+    return null
   }
 
   return (
@@ -42,7 +42,9 @@ export default function ProblemSection({ block }: ProblemSectionProps) {
       <div className="container mx-auto max-w-6xl">
         <div className="flex flex-col lg:flex-row gap-6">
           {columns.map((column, index) => {
-            const ButtonIcon = column.button?.icon ? getLucideIcon(column.button.icon) : null;
+            const ButtonIcon = column.button?.icon
+              ? getLucideIcon(column.button.icon)
+              : null
 
             return (
               <div
@@ -58,7 +60,7 @@ export default function ProblemSection({ block }: ProblemSectionProps) {
                 {/* List Items */}
                 <div className="space-y-6 mb-8">
                   {column.items.map((item, itemIndex) => {
-                    const ItemIcon = getLucideIcon(item.icon);
+                    const ItemIcon = getLucideIcon(item.icon)
 
                     return (
                       <div key={itemIndex} className="flex items-start gap-4">
@@ -69,10 +71,12 @@ export default function ProblemSection({ block }: ProblemSectionProps) {
 
                         {/* Text Content */}
                         <div className="flex-1 pt-1">
-                          <p className="text-gray-900 leading-relaxed">{item.text}</p>
+                          <p className="text-gray-900 leading-relaxed">
+                            {item.text}
+                          </p>
                         </div>
                       </div>
-                    );
+                    )
                   })}
                 </div>
 
@@ -89,10 +93,10 @@ export default function ProblemSection({ block }: ProblemSectionProps) {
                   </div>
                 )}
               </div>
-            );
+            )
           })}
         </div>
       </div>
     </section>
-  );
+  )
 }

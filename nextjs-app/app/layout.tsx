@@ -1,21 +1,21 @@
-import './globals.css';
+import './globals.css'
 
-import { SpeedInsights } from '@vercel/speed-insights/next';
-import type { Metadata } from 'next';
-import { Open_Sans, Outfit } from 'next/font/google';
-import { draftMode } from 'next/headers';
-import { VisualEditing, toPlainText } from 'next-sanity';
-import { Toaster } from 'sonner';
+import { SpeedInsights } from '@vercel/speed-insights/next'
+import type { Metadata } from 'next'
+import { Open_Sans, Outfit } from 'next/font/google'
+import { draftMode } from 'next/headers'
+import { VisualEditing, toPlainText } from 'next-sanity'
+import { Toaster } from 'sonner'
 
-import DraftModeToast from '@/app/components/DraftModeToast';
-import Footer from '@/app/components/Footer';
-import Header from '@/app/components/header/Header';
-import { Settings } from '@/app/types/navigation';
-import * as demo from '@/sanity/lib/demo';
-import { sanityFetch, SanityLive } from '@/sanity/lib/live';
-import { settingsQuery } from '@/sanity/lib/queries';
-import { resolveOpenGraphImage } from '@/sanity/lib/utils';
-import { handleError } from './client-utils';
+import DraftModeToast from '@/app/components/DraftModeToast'
+import Footer from '@/app/components/Footer'
+import Header from '@/app/components/header/Header'
+import { Settings } from '@/app/types/navigation'
+import * as demo from '@/sanity/lib/demo'
+import { sanityFetch, SanityLive } from '@/sanity/lib/live'
+import { settingsQuery } from '@/sanity/lib/queries'
+import { resolveOpenGraphImage } from '@/sanity/lib/utils'
+import { handleError } from './client-utils'
 
 /**
  * Generate metadata for the page.
@@ -26,16 +26,16 @@ export async function generateMetadata(): Promise<Metadata> {
     query: settingsQuery,
     // Metadata should never contain stega
     stega: false,
-  });
-  const title = settings?.title || demo.title;
-  const description = settings?.description || demo.description;
+  })
+  const title = settings?.title || demo.title
+  const description = settings?.description || demo.description
 
-  const ogImage = resolveOpenGraphImage(settings?.ogImage);
-  let metadataBase: URL | undefined = undefined;
+  const ogImage = resolveOpenGraphImage(settings?.ogImage)
+  let metadataBase: URL | undefined = undefined
   try {
     metadataBase = settings?.ogImage?.metadataBase
       ? new URL(settings.ogImage.metadataBase)
-      : undefined;
+      : undefined
   } catch {
     // ignore
   }
@@ -49,29 +49,36 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       images: ogImage ? [ogImage] : [],
     },
-  };
+  }
 }
 
 const openSans = Open_Sans({
   variable: '--font-open-sans',
   subsets: ['latin'],
   display: 'swap',
-});
+})
 
 const outfit = Outfit({
   variable: '--font-outfit',
   subsets: ['latin'],
   display: 'swap',
-});
+})
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const { isEnabled: isDraftMode } = await draftMode();
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  const { isEnabled: isDraftMode } = await draftMode()
   const { data: settings } = await sanityFetch({
     query: settingsQuery,
-  });
+  })
 
   return (
-    <html lang="en" className={`${openSans.variable} ${outfit.variable} bg-white text-black`}>
+    <html
+      lang="en"
+      className={`${openSans.variable} ${outfit.variable} bg-white text-black`}
+    >
       <body>
         {/* The <Toaster> component is responsible for rendering toast notifications used in /app/client-utils.ts and /app/components/DraftModeToast.tsx */}
         <Toaster />
@@ -89,7 +96,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             {
               ...settings,
               navigation: settings?.navigation || {
-                logo: { _type: 'image', asset: { _ref: '', _type: 'reference' }, alt: '' },
+                logo: {
+                  _type: 'image',
+                  asset: { _ref: '', _type: 'reference' },
+                  alt: '',
+                },
                 items: [],
               },
             } as Settings
@@ -100,5 +111,5 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <SpeedInsights />
       </body>
     </html>
-  );
+  )
 }

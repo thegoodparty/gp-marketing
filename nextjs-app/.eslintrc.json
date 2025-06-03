@@ -6,10 +6,7 @@
     "tsconfigRootDir": ".",
     "sourceType": "module"
   },
-  "plugins": [
-    "@typescript-eslint",
-    "unused-imports"
-  ],
+  "plugins": ["@typescript-eslint", "unused-imports"],
   "extends": [
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended",
@@ -39,4 +36,4 @@
       }
     ]
   }
-} 
+}

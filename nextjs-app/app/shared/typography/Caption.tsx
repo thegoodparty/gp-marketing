@@ -6,9 +6,5 @@ interface CaptionProps {
 }
 
 export default function Caption({ children, className = '' }: CaptionProps) {
-  return (
-    <div className={`font-semibold font-sfpro text-xs ${className}`}>
-      {children}
-    </div>
-  );
+  return <div className={`font-semibold font-sfpro text-xs ${className}`}>{children}</div>;
 }

@@ -103,18 +103,16 @@ const Button = (
     disabled,
     ...restProps
   }: ButtonProps,
-  ref: ForwardedRef<HTMLButtonElement | HTMLAnchorElement>,
+  ref: ForwardedRef<HTMLButtonElement | HTMLAnchorElement>
 ) => {
   let baseClasses =
     'rounded-full text-center disabled:opacity-50 disabled:cursor-not-allowed transition-colors no-underline outline-offset-0 inline-block';
 
   if (variant !== 'text') baseClasses += ' border-2 border-transparent ';
 
-  if (variant === 'contained')
-    baseClasses += ' outline outline-4 outline-transparent';
+  if (variant === 'contained') baseClasses += ' outline outline-4 outline-transparent';
 
-  const variantClasses =
-    (VARIANT_CLASSES as VariantClasses)[variant] || VARIANT_CLASSES.contained;
+  const variantClasses = (VARIANT_CLASSES as VariantClasses)[variant] || VARIANT_CLASSES.contained;
   const colorClasses = variantClasses[color] || variantClasses.primary;
   const sizeClasses = SIZE_CLASSES[size] || SIZE_CLASSES.medium;
 
@@ -162,6 +160,4 @@ const Button = (
   );
 };
 
-export default forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
-  Button,
-);
+export default forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(Button);

@@ -22,12 +22,8 @@ interface PageHeroProps {
 
 export default function PageHero({ block }: PageHeroProps) {
   const isDark = block.color === 'dark';
-  const bgImageUrl = block.backgroundImage
-    ? urlForImage(block.backgroundImage)?.url()
-    : undefined;
-  const mainImageUrl = block.mainImage
-    ? urlForImage(block.mainImage)?.url()
-    : undefined;
+  const bgImageUrl = block.backgroundImage ? urlForImage(block.backgroundImage)?.url() : undefined;
+  const mainImageUrl = block.mainImage ? urlForImage(block.mainImage)?.url() : undefined;
 
   // Debug logging to see what we're getting
   console.log('PageHero block:', block);
@@ -73,37 +69,33 @@ export default function PageHero({ block }: PageHeroProps) {
                 {block.mainCta.label}
               </ResolvedLink>
             )}
-            {block.secondaryCta &&
-              block.secondaryCta.label &&
-              block.secondaryCta.url && (
-                <ResolvedLink
-                  link={{ href: block.secondaryCta.url }}
-                  className={`rounded-full flex gap-2 items-center justify-center font-semibold py-3 px-6 text-lg border transition-colors duration-200 w-full sm:w-auto ${
-                    isDark
-                      ? 'border-white text-white hover:bg-white hover:text-[#10182B]'
-                      : 'border-[#10182B] text-[#10182B] hover:bg-[#10182B] hover:text-white'
-                  }`}
-                >
-                  {block.secondaryCta.label}
-                </ResolvedLink>
-              )}
+            {block.secondaryCta && block.secondaryCta.label && block.secondaryCta.url && (
+              <ResolvedLink
+                link={{ href: block.secondaryCta.url }}
+                className={`rounded-full flex gap-2 items-center justify-center font-semibold py-3 px-6 text-lg border transition-colors duration-200 w-full sm:w-auto ${
+                  isDark
+                    ? 'border-white text-white hover:bg-white hover:text-[#10182B]'
+                    : 'border-[#10182B] text-[#10182B] hover:bg-[#10182B] hover:text-white'
+                }`}
+              >
+                {block.secondaryCta.label}
+              </ResolvedLink>
+            )}
           </div>
         </div>
         {/* Right: Main Image - Only render if image exists and URL is valid */}
-        {mainImageUrl &&
-          typeof mainImageUrl === 'string' &&
-          mainImageUrl.length > 0 && (
-            <div className="flex-1 flex items-center justify-center mb-8 md:mb-0">
-              <Image
-                priority
-                src={mainImageUrl}
-                alt={block.heading}
-                className="w-full object-contain"
-                width={1000}
-                height={1000}
-              />
-            </div>
-          )}
+        {mainImageUrl && typeof mainImageUrl === 'string' && mainImageUrl.length > 0 && (
+          <div className="flex-1 flex items-center justify-center mb-8 md:mb-0">
+            <Image
+              priority
+              src={mainImageUrl}
+              alt={block.heading}
+              className="w-full object-contain"
+              width={1000}
+              height={1000}
+            />
+          </div>
+        )}
       </div>
       {/* Optional overlay for dark mode background image */}
       {isDark && bgImageUrl && (

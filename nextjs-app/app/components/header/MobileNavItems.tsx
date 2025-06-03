@@ -11,23 +11,16 @@ interface MobileNavItemsProps {
   onClose: () => void;
 }
 
-export default function MobileNavItems({
-  items,
-  onClose,
-}: MobileNavItemsProps) {
+export default function MobileNavItems({ items, onClose }: MobileNavItemsProps) {
   return (
     <>
       {items.map((item: NavigationItem) => {
         if (item._type === 'category') {
           return (
-            <div
-              key={item._key}
-              className="border-b border-indigo-400 pb-3 mb-3"
-            >
+            <div key={item._key} className="border-b border-indigo-400 pb-3 mb-3">
               <Caption className="py-2">{item.title}</Caption>
-              {item.links.map((link) => {
-                const href =
-                  link.type === 'internal' ? `/${link.page?.slug}` : link.url;
+              {item.links.map(link => {
+                const href = link.type === 'internal' ? `/${link.page?.slug}` : link.url;
                 const isExternal = link.type === 'external';
                 return (
                   <Link
@@ -39,12 +32,7 @@ export default function MobileNavItems({
                     onClick={onClose}
                   >
                     <div className="flex items-center">
-                      {link.icon && (
-                        <DynamicIcon
-                          iconName={link.icon}
-                          className="w-5 h-5 mr-2"
-                        />
-                      )}
+                      {link.icon && <DynamicIcon iconName={link.icon} className="w-5 h-5 mr-2" />}
                       <div className="ml-3">{link.title}</div>
                     </div>
                     {isExternal && <BiLinkExternal size={14} />}
@@ -54,8 +42,7 @@ export default function MobileNavItems({
             </div>
           );
         } else if (item._type === 'link') {
-          const href =
-            item.type === 'internal' ? `/${item.page?.slug}` : item.url;
+          const href = item.type === 'internal' ? `/${item.page?.slug}` : item.url;
           const isExternal = item.type === 'external';
           return (
             <Link
@@ -67,9 +54,7 @@ export default function MobileNavItems({
               onClick={onClose}
             >
               <div className="flex items-center">
-                {item.icon && (
-                  <DynamicIcon iconName={item.icon} className="w-5 h-5 mr-2" />
-                )}
+                {item.icon && <DynamicIcon iconName={item.icon} className="w-5 h-5 mr-2" />}
                 <div className="ml-3">{item.title}</div>
               </div>
               {isExternal && <BiLinkExternal size={14} />}

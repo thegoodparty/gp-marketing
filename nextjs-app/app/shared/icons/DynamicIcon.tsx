@@ -26,9 +26,7 @@ const DynamicIcon: React.FC<DynamicIconProps> = ({
 
   // Ensure the icon name starts with Fa
   if (!iconName.startsWith('Fa')) {
-    console.error(
-      `Icon ${iconName} must start with 'Fa' for Material Design icons`,
-    );
+    console.error(`Icon ${iconName} must start with 'Fa' for Material Design icons`);
     return null;
   }
 

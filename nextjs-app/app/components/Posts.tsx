@@ -10,25 +10,17 @@ const Post = ({ post }: { post: PostType }) => {
   const { _id, title, slug, excerpt, date } = post;
 
   return (
-    <article
-      key={_id}
-      className="flex max-w-xl flex-col items-start justify-between"
-    >
+    <article key={_id} className="flex max-w-xl flex-col items-start justify-between">
       <div className="text-gray-500 text-sm">
         <DateComponent dateString={date} />
       </div>
 
       <h3 className="mt-3 text-2xl font-semibold">
-        <Link
-          className="hover:text-red-500 underline transition-colors"
-          href={`/posts/${slug}`}
-        >
+        <Link className="hover:text-red-500 underline transition-colors" href={`/posts/${slug}`}>
           {title}
         </Link>
       </h3>
-      <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">
-        {excerpt}
-      </p>
+      <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">{excerpt}</p>
     </article>
   );
 };
@@ -48,22 +40,12 @@ const Posts = ({
         {heading}
       </h2>
     )}
-    {subHeading && (
-      <p className="mt-2 text-lg leading-8 text-gray-600">{subHeading}</p>
-    )}
-    <div className="mt-6 pt-6 space-y-12 border-t border-gray-200">
-      {children}
-    </div>
+    {subHeading && <p className="mt-2 text-lg leading-8 text-gray-600">{subHeading}</p>}
+    <div className="mt-6 pt-6 space-y-12 border-t border-gray-200">{children}</div>
   </div>
 );
 
-export const MorePosts = async ({
-  skip,
-  limit,
-}: {
-  skip: string;
-  limit: number;
-}) => {
+export const MorePosts = async ({ skip, limit }: { skip: string; limit: number }) => {
   const { data } = await sanityFetch({
     query: morePostsQuery,
     params: { skip, limit },

@@ -64,21 +64,14 @@ const outfit = Outfit({
   display: 'swap',
 });
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled: isDraftMode } = await draftMode();
   const { data: settings } = await sanityFetch({
     query: settingsQuery,
   });
 
   return (
-    <html
-      lang="en"
-      className={`${openSans.variable} ${outfit.variable} bg-white text-black`}
-    >
+    <html lang="en" className={`${openSans.variable} ${outfit.variable} bg-white text-black`}>
       <body>
         {/* The <Toaster> component is responsible for rendering toast notifications used in /app/client-utils.ts and /app/components/DraftModeToast.tsx */}
         <Toaster />

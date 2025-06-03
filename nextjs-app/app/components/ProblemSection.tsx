@@ -42,9 +42,7 @@ export default function ProblemSection({ block }: ProblemSectionProps) {
       <div className="container mx-auto max-w-6xl">
         <div className="flex flex-col lg:flex-row gap-6">
           {columns.map((column, index) => {
-            const ButtonIcon = column.button?.icon
-              ? getLucideIcon(column.button.icon)
-              : null;
+            const ButtonIcon = column.button?.icon ? getLucideIcon(column.button.icon) : null;
 
             return (
               <div
@@ -71,9 +69,7 @@ export default function ProblemSection({ block }: ProblemSectionProps) {
 
                         {/* Text Content */}
                         <div className="flex-1 pt-1">
-                          <p className="text-gray-900 leading-relaxed">
-                            {item.text}
-                          </p>
+                          <p className="text-gray-900 leading-relaxed">{item.text}</p>
                         </div>
                       </div>
                     );

@@ -9,9 +9,7 @@ interface RightSideProps {
 export default function RightSide({ settings }: RightSideProps) {
   return (
     <div className="hidden lg:flex items-center gap-4">
-      <RightSideSecondaryLink
-        link={settings?.navigation?.rightSideSecondaryLink}
-      />
+      <RightSideSecondaryLink link={settings?.navigation?.rightSideSecondaryLink} />
       <RightSideCTA cta={settings?.navigation?.rightSideCTA} />
     </div>
   );

@@ -23,20 +23,9 @@ export default function MobileMenu({ settings }: MobileMenuProps) {
       <div
         className={`z-[1300] fixed top-1 right-0 flex items-center ${isOpen ? 'text-white' : ''}`}
       >
-        <Hamburger
-          toggled={isOpen}
-          toggle={setOpen}
-          hideOutline={false}
-          rounded
-          size={24}
-        />
+        <Hamburger toggled={isOpen} toggle={setOpen} hideOutline={false} rounded size={24} />
       </div>
-      <SwipeableDrawer
-        open={isOpen}
-        onClose={closeMenu}
-        anchor="right"
-        onOpen={() => {}}
-      >
+      <SwipeableDrawer open={isOpen} onClose={closeMenu} anchor="right" onOpen={() => {}}>
         <div className="flex flex-col w-[270px] bg-primary-dark text-white h-screen relative">
           <div className="grow overflow-auto px-4 pt-24 pb-60">
             <MobileNavItems items={items} onClose={closeMenu} />

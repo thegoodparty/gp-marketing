@@ -7,9 +7,7 @@ interface RightSideSecondaryLinkProps {
   };
 }
 
-export default function RightSideSecondaryLink({
-  link,
-}: RightSideSecondaryLinkProps) {
+export default function RightSideSecondaryLink({ link }: RightSideSecondaryLinkProps) {
   if (!link) return null;
 
   return (

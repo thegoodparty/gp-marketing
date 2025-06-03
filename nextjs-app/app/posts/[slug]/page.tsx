@@ -33,10 +33,7 @@ export async function generateStaticParams() {
  * Generate metadata for the page.
  * Learn more: https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function
  */
-export async function generateMetadata(
-  props: Props,
-  parent: ResolvingMetadata,
-): Promise<Metadata> {
+export async function generateMetadata(props: Props, parent: ResolvingMetadata): Promise<Metadata> {
   const params = await props.params;
   const { data: post } = await sanityFetch({
     query: postQuery,
@@ -62,9 +59,7 @@ export async function generateMetadata(
 
 export default async function PostPage(props: Props) {
   const params = await props.params;
-  const [{ data: post }] = await Promise.all([
-    sanityFetch({ query: postQuery, params }),
-  ]);
+  const [{ data: post }] = await Promise.all([sanityFetch({ query: postQuery, params })]);
 
   if (!post?._id) {
     return notFound();
@@ -82,11 +77,9 @@ export default async function PostPage(props: Props) {
                 </h2>
               </div>
               <div className="max-w-3xl flex gap-4 items-center">
-                {post.author &&
-                  post.author.firstName &&
-                  post.author.lastName && (
-                    <Avatar person={post.author} date={post.date} />
-                  )}
+                {post.author && post.author.firstName && post.author.lastName && (
+                  <Avatar person={post.author} date={post.date} />
+                )}
               </div>
             </div>
             <article className="gap-6 grid max-w-4xl">
@@ -94,10 +87,7 @@ export default async function PostPage(props: Props) {
                 <CoverImage image={post.coverImage} priority />
               </div>
               {post.content?.length && (
-                <PortableText
-                  className="max-w-2xl"
-                  value={post.content as PortableTextBlock[]}
-                />
+                <PortableText className="max-w-2xl" value={post.content as PortableTextBlock[]} />
               )}
             </article>
           </div>

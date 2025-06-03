@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import Button from '../../shared/buttons/Button'
 
 interface RightSideSecondaryLinkProps {

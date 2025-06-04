@@ -19,10 +19,33 @@ export const problemSection = defineType({
           title: 'Column',
           fields: [
             defineField({
+              name: 'columnType',
+              title: 'Column Type',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'Content', value: 'content' },
+                  { title: 'Image', value: 'image' },
+                ],
+                layout: 'radio',
+              },
+              initialValue: 'content',
+              validation: (Rule) => Rule.required(),
+            }),
+            // Content column fields
+            defineField({
               name: 'title',
               title: 'Column Title',
               type: 'string',
-              validation: (Rule) => Rule.required(),
+              hidden: ({ parent }) => parent?.columnType === 'image',
+              validation: (Rule) =>
+                Rule.custom((value, context) => {
+                  const parent = context.parent as { columnType?: string }
+                  if (parent?.columnType === 'content' && !value) {
+                    return 'Title is required for content columns'
+                  }
+                  return true
+                }),
             }),
             defineField({
               name: 'backgroundColor',
@@ -30,19 +53,45 @@ export const problemSection = defineType({
               type: 'string',
               options: {
                 list: [
-                  { title: 'Pink', value: '#FDCDCD' },
+                  { title: 'Red', value: '#FDCDCD' },
+                  { title: 'Blue', value: '#D1E7FE' },
+                  { title: 'Yellow', value: '#FFEEB7' },
+                  { title: 'Orange', value: '#FFEEB7' },
+                  { title: 'Lavender', value: '#F1E5FF' },
+                  { title: 'Wax Flower', value: '#FFF1C9' },
                   { title: 'Green', value: '#CCEADD' },
                 ],
                 layout: 'radio',
               },
               initialValue: '#FDCDCD',
-              validation: (Rule) => Rule.required(),
+              hidden: ({ parent }) => parent?.columnType === 'image',
+              validation: (Rule) =>
+                Rule.custom((value, context) => {
+                  const parent = context.parent as { columnType?: string }
+                  if (parent?.columnType === 'content' && !value) {
+                    return 'Background color is required for content columns'
+                  }
+                  return true
+                }),
             }),
             defineField({
               name: 'items',
               title: 'List Items',
               type: 'array',
-              validation: (Rule) => Rule.min(1).max(4),
+              validation: (Rule) =>
+                Rule.custom((value, context) => {
+                  const parent = context.parent as { columnType?: string }
+                  if (parent?.columnType === 'content') {
+                    if (!value || value.length === 0) {
+                      return 'At least one item is required for content columns'
+                    }
+                    if (value.length > 4) {
+                      return 'Maximum 4 items allowed'
+                    }
+                  }
+                  return true
+                }),
+              hidden: ({ parent }) => parent?.columnType === 'image',
               of: [
                 {
                   type: 'object',
@@ -84,6 +133,7 @@ export const problemSection = defineType({
               name: 'button',
               title: 'Call to Action Button',
               type: 'object',
+              hidden: ({ parent }) => parent?.columnType === 'image',
               fields: [
                 defineField({
                   name: 'label',
@@ -113,17 +163,61 @@ export const problemSection = defineType({
                   return true
                 }),
             }),
+            // Image column fields
+            defineField({
+              name: 'image',
+              title: 'Image',
+              type: 'image',
+              options: {
+                hotspot: true,
+              },
+              fields: [
+                defineField({
+                  name: 'alt',
+                  title: 'Alt Text',
+                  type: 'string',
+                  description: 'Descriptive text for accessibility',
+                  validation: (Rule) => Rule.required(),
+                }),
+              ],
+              hidden: ({ parent }) => parent?.columnType === 'content',
+              validation: (Rule) =>
+                Rule.custom((value, context) => {
+                  const parent = context.parent as { columnType?: string }
+                  if (parent?.columnType === 'image' && !value) {
+                    return 'Image is required for image columns'
+                  }
+                  return true
+                }),
+            }),
           ],
           preview: {
             select: {
+              columnType: 'columnType',
               title: 'title',
               backgroundColor: 'backgroundColor',
               itemCount: 'items.length',
+              image: 'image',
             },
-            prepare({ title, backgroundColor, itemCount }) {
-              const colorName = backgroundColor === '#FDCDCD' ? 'Pink' : 'Green'
+            prepare({ columnType, title, backgroundColor, itemCount, image }) {
+              if (columnType === 'image') {
+                return {
+                  title: 'Image Column',
+                  subtitle: 'Image',
+                  media: image,
+                }
+              }
+
+              const colorName = 
+                backgroundColor === '#FDCDCD' ? 'Red' : 
+                backgroundColor === '#D1E7FE' ? 'Blue' : 
+                backgroundColor === '#FFEEB7' ? 'Yellow/Orange' : 
+                backgroundColor === '#F1E5FF' ? 'Lavender' : 
+                backgroundColor === '#FFF1C9' ? 'Wax Flower' : 
+                backgroundColor === '#CCEADD' ? 'Green' : 'Unknown'
+              
               return {
-                title: title || 'Untitled column',
+                title: title || 'Content Column',
                 subtitle: `${colorName} • ${itemCount || 0} items`,
               }
             },
@@ -134,13 +228,18 @@ export const problemSection = defineType({
   ],
   preview: {
     select: {
-      column1: 'columns.0.title',
-      column2: 'columns.1.title',
+      column1Type: 'columns.0.columnType',
+      column1Title: 'columns.0.title',
+      column2Type: 'columns.1.columnType',
+      column2Title: 'columns.1.title',
     },
-    prepare({ column1, column2 }) {
+    prepare({ column1Type, column1Title, column2Type, column2Title }) {
+      const column1Label = column1Type === 'image' ? 'Image' : (column1Title || 'Content')
+      const column2Label = column2Type === 'image' ? 'Image' : (column2Title || 'Content')
+      
       return {
         title: 'Problem Section',
-        subtitle: `${column1 || 'Column 1'} vs ${column2 || 'Column 2'}`,
+        subtitle: `${column1Label} vs ${column2Label}`,
       }
     },
   },

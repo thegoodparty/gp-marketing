@@ -1,9 +1,9 @@
 import { defineField, defineType } from 'sanity'
 import { ComponentIcon } from '@sanity/icons'
 
-export const problemSection = defineType({
-  name: 'problemSection',
-  title: 'Problem Section',
+export const valueProposition = defineType({
+  name: 'valueProposition',
+  title: 'Value Proposition',
   type: 'object',
   icon: ComponentIcon,
   fields: [
@@ -69,7 +69,11 @@ export const problemSection = defineType({
               validation: (Rule) =>
                 Rule.custom((value, context) => {
                   const parent = context.parent as { columnType?: string }
-                  if ((parent?.columnType === 'content' || parent?.columnType === 'testimonial') && !value) {
+                  if (
+                    (parent?.columnType === 'content' ||
+                      parent?.columnType === 'testimonial') &&
+                    !value
+                  ) {
                     return 'Background color is required for content and testimonial columns'
                   }
                   return true
@@ -273,7 +277,16 @@ export const problemSection = defineType({
               authorName: 'authorName',
               authorImage: 'authorImage',
             },
-            prepare({ columnType, title, backgroundColor, itemCount, image, quote, authorName, authorImage }) {
+            prepare({
+              columnType,
+              title,
+              backgroundColor,
+              itemCount,
+              image,
+              quote,
+              authorName,
+              authorImage,
+            }) {
               if (columnType === 'image') {
                 return {
                   title: 'Image Column',
@@ -290,15 +303,23 @@ export const problemSection = defineType({
                 }
               }
 
-              const colorName = 
-                backgroundColor === '#FDCDCD' ? 'Red' : 
-                backgroundColor === '#D1E7FE' ? 'Blue' : 
-                backgroundColor === '#FFEEB7' ? 'Yellow' : 
-                backgroundColor === '#F1E5FF' ? 'Lavender' : 
-                backgroundColor === '#FFF1C9' ? 'Wax Flower' : 
-                backgroundColor === '#CCEADD' ? 'Green' : 
-                backgroundColor === '#FFFFFF' ? 'White' : 'Unknown'
-              
+              const colorName =
+                backgroundColor === '#FDCDCD'
+                  ? 'Red'
+                  : backgroundColor === '#D1E7FE'
+                    ? 'Blue'
+                    : backgroundColor === '#FFEEB7'
+                      ? 'Yellow'
+                      : backgroundColor === '#F1E5FF'
+                        ? 'Lavender'
+                        : backgroundColor === '#FFF1C9'
+                          ? 'Wax Flower'
+                          : backgroundColor === '#CCEADD'
+                            ? 'Green'
+                            : backgroundColor === '#FFFFFF'
+                              ? 'White'
+                              : 'Unknown'
+
               return {
                 title: title || 'Content Column',
                 subtitle: `${colorName} • ${itemCount || 0} items`,
@@ -318,8 +339,19 @@ export const problemSection = defineType({
       column2Title: 'columns.1.title',
       column2AuthorName: 'columns.1.authorName',
     },
-    prepare({ column1Type, column1Title, column1AuthorName, column2Type, column2Title, column2AuthorName }) {
-      const getColumnLabel = (type: string, title?: string, authorName?: string) => {
+    prepare({
+      column1Type,
+      column1Title,
+      column1AuthorName,
+      column2Type,
+      column2Title,
+      column2AuthorName,
+    }) {
+      const getColumnLabel = (
+        type: string,
+        title?: string,
+        authorName?: string,
+      ) => {
         switch (type) {
           case 'image':
             return 'Image'
@@ -329,12 +361,20 @@ export const problemSection = defineType({
             return title || 'Content'
         }
       }
-      
-      const column1Label = getColumnLabel(column1Type, column1Title, column1AuthorName)
-      const column2Label = getColumnLabel(column2Type, column2Title, column2AuthorName)
-      
+
+      const column1Label = getColumnLabel(
+        column1Type,
+        column1Title,
+        column1AuthorName,
+      )
+      const column2Label = getColumnLabel(
+        column2Type,
+        column2Title,
+        column2AuthorName,
+      )
+
       return {
-        title: 'Problem Section',
+        title: 'Value Proposition',
         subtitle: `${column1Label} vs ${column2Label}`,
       }
     },

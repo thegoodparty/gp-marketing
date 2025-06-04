@@ -58,7 +58,7 @@ export const TestimonialCard: React.FC<TestimonialCardProps> = ({
 
         <div className="mb-8">
           <p className="text-[18px] font-normal lg:text-[24px] lg:font-semibold text-gray-900 leading-relaxed">
-            "{quote}"
+            &ldquo;{quote}&rdquo;
           </p>
         </div>
       </div>
@@ -77,11 +77,9 @@ export const TestimonialCard: React.FC<TestimonialCardProps> = ({
           <p className="text-[16px] font-semibold lg:text-[20px] lg:font-semibold text-gray-900">
             {authorName}
           </p>
-          <p className="text-[12px] font-normal text-gray-900">
-            {authorTitle}
-          </p>
+          <p className="text-[12px] font-normal text-gray-900">{authorTitle}</p>
         </div>
       </div>
     </div>
   )
-} 
+}

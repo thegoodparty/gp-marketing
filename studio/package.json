@@ -12,7 +12,9 @@
     "deploy": "sanity deploy",
     "extract-types": "sanity schema extract --enforce-required-fields",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix"
   },
   "keywords": [
     "sanity"

@@ -70,7 +70,7 @@ interface TestimonialColumn {
 
 type Column = ContentColumn | ImageColumn | TestimonialColumn
 
-interface ProblemSectionProps {
+interface ValuePropositionProps {
   block: {
     columns: Column[]
   }
@@ -88,7 +88,7 @@ const getLucideIcon = (iconName: string): LucideIcon => {
   return IconComponent || LucideIcons.HelpCircle
 }
 
-export default function ProblemSection({ block }: ProblemSectionProps) {
+export default function ValueProposition({ block }: ValuePropositionProps) {
   const { columns } = block
 
   if (!columns || columns.length !== 2) {

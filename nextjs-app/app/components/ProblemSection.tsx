@@ -80,7 +80,8 @@ export default function ProblemSection({ block }: ProblemSectionProps) {
                 {column.button && column.button.label && column.button.url && (
                   <div className="mt-8">
                     <Button
-                      variant="default"
+                      iconPosition="right"
+                      variant="secondary"
                       onClick={() => window.open(column.button!.url, '_blank')}
                     >
                       {ButtonIcon && <ButtonIcon className="mr-2 h-4 w-4" />}

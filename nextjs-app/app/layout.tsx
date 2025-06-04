@@ -89,7 +89,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             {
               ...settings,
               navigation: settings?.navigation || {
-                logo: { _type: 'image', asset: { _ref: '', _type: 'reference' }, alt: '' },
+                logo: {
+                  _type: 'image',
+                  asset: { _ref: '', _type: 'reference' },
+                  alt: '',
+                },
                 items: [],
               },
             } as Settings

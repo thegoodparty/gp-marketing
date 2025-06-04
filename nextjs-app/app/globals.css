@@ -1,3 +1,6 @@
+@import '../../node_modules/goodparty-styleguide/dist/design-tokens.css';
+@import '../../node_modules/goodparty-styleguide/dist/tailwind-theme.css';
+@import '../../node_modules/goodparty-styleguide/dist/typography.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

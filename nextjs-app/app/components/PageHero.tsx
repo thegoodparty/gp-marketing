@@ -78,8 +78,8 @@ export default function PageHero({ block }: PageHeroProps) {
             )}
           </div>
         </div>
-        {/* Right: Main Image */}
-        {mainImageUrl && (
+        {/* Right: Main Image - Only render if image exists and URL is valid */}
+        {mainImageUrl && typeof mainImageUrl === 'string' && mainImageUrl.length > 0 && (
           <div className="flex-1 flex items-center justify-center mb-8 md:mb-0">
             <Image
               priority

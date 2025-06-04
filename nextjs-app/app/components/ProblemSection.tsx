@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button } from 'goodparty-styleguide';
+import Link from 'next/link';
 import * as LucideIcons from 'lucide-react';
+import { type LucideIcon } from 'lucide-react';
 
 interface ListItem {
   icon: string;
@@ -24,10 +26,16 @@ interface ProblemSectionProps {
   };
 }
 
-// Helper to get Lucide icon component
-const getLucideIcon = (iconName: string) => {
-  const IconComponent = (LucideIcons as any)[iconName];
-  return IconComponent || LucideIcons.HelpCircle; // Fallback icon
+const getIconFromModule = <T extends Record<string, unknown>>(
+  iconModule: T,
+  iconName: string
+): LucideIcon | undefined => {
+  return iconModule[iconName] as LucideIcon | undefined;
+};
+
+const getLucideIcon = (iconName: string): LucideIcon => {
+  const IconComponent = getIconFromModule(LucideIcons, iconName);
+  return IconComponent || LucideIcons.HelpCircle;
 };
 
 export default function ProblemSection({ block }: ProblemSectionProps) {
@@ -50,24 +58,20 @@ export default function ProblemSection({ block }: ProblemSectionProps) {
                 className="flex-1 rounded-3xl p-8 lg:p-12"
                 style={{ backgroundColor: column.backgroundColor }}
               >
-                {/* Column Title */}
                 <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-8 leading-tight">
                   {column.title}
                 </h2>
 
-                {/* List Items */}
                 <div className="space-y-6 mb-8">
                   {column.items.map((item, itemIndex) => {
                     const ItemIcon = getLucideIcon(item.icon);
 
                     return (
                       <div key={itemIndex} className="flex items-start gap-4">
-                        {/* Icon Container */}
                         <div className="flex-shrink-0 w-10 h-10 bg-white rounded-full flex items-center justify-center">
                           <ItemIcon className="w-5 h-5 text-gray-700" />
                         </div>
 
-                        {/* Text Content */}
                         <div className="flex-1 pt-1">
                           <p className="text-gray-900 leading-relaxed">{item.text}</p>
                         </div>
@@ -76,17 +80,21 @@ export default function ProblemSection({ block }: ProblemSectionProps) {
                   })}
                 </div>
 
-                {/* CTA Button */}
                 {column.button && column.button.label && column.button.url && (
                   <div className="mt-8">
-                    <Button
-                      iconPosition="right"
-                      variant="secondary"
-                      onClick={() => window.open(column.button!.url, '_blank')}
+                    <Link
+                      href={column.button.url}
+                      target="_blank"
+                      className="inline-block"
                     >
-                      {ButtonIcon && <ButtonIcon className="mr-2 h-4 w-4" />}
-                      {column.button.label}
-                    </Button>
+                      <Button
+                        iconPosition="right"
+                        variant="secondary"
+                      >
+                        {ButtonIcon && <ButtonIcon className="mr-2 h-4 w-4" />}
+                        {column.button.label}
+                      </Button>
+                    </Link>
                   </div>
                 )}
               </div>

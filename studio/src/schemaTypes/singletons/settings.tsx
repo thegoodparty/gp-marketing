@@ -1,5 +1,5 @@
-import {CogIcon} from '@sanity/icons'
-import {defineArrayMember, defineField, defineType} from 'sanity'
+import { CogIcon } from '@sanity/icons'
+import { defineArrayMember, defineField, defineType } from 'sanity'
 
 import * as demo from '../../lib/initialValues'
 
@@ -23,7 +23,8 @@ export const settings = defineType({
           name: 'logo',
           title: 'Site Logo',
           type: 'image',
-          description: 'The main logo for the site. Will be displayed in the header.',
+          description:
+            'The main logo for the site. Will be displayed in the header.',
           options: {
             hotspot: true,
           },
@@ -71,14 +72,16 @@ export const settings = defineType({
                           name: 'icon',
                           title: 'Link Icon',
                           type: 'string',
-                          description: 'Enter the FontAwesome icon name (e.g., FaHome, FaSettings, FaLink). Must start with "Fa". See https://react-icons.github.io/react-icons/icons?name=fa for available icons.',
-                          validation: (rule) => rule.custom((value) => {
-                            if (!value) return true;
-                            if (!value.startsWith('Fa')) {
-                              return 'Icon name must start with "Fa" for Material Design icons';
-                            }
-                            return true;
-                          }),
+                          description:
+                            'Enter the FontAwesome icon name (e.g., FaHome, FaSettings, FaLink). Must start with "Fa". See https://react-icons.github.io/react-icons/icons?name=fa for available icons.',
+                          validation: (rule) =>
+                            rule.custom((value) => {
+                              if (!value) return true
+                              if (!value.startsWith('Fa')) {
+                                return 'Icon name must start with "Fa" for Material Design icons'
+                              }
+                              return true
+                            }),
                         }),
                         defineField({
                           name: 'type',
@@ -126,14 +129,16 @@ export const settings = defineType({
                   name: 'icon',
                   title: 'Link Icon',
                   type: 'string',
-                  description: 'Enter the Material Design icon name (e.g., MdHome, MdSettings, MdLink). Must start with "Md". See https://react-icons.github.io/react-icons/icons?name=md for available icons.',
-                  validation: (rule) => rule.custom((value) => {
-                    if (!value) return true;
-                    if (!value.startsWith('Md')) {
-                      return 'Icon name must start with "Md" for Material Design icons';
-                    }
-                    return true;
-                  }),
+                  description:
+                    'Enter the Material Design icon name (e.g., MdHome, MdSettings, MdLink). Must start with "Md". See https://react-icons.github.io/react-icons/icons?name=md for available icons.',
+                  validation: (rule) =>
+                    rule.custom((value) => {
+                      if (!value) return true
+                      if (!value.startsWith('Md')) {
+                        return 'Icon name must start with "Md" for Material Design icons'
+                      }
+                      return true
+                    }),
                 }),
                 defineField({
                   name: 'type',
@@ -214,7 +219,8 @@ export const settings = defineType({
     }),
     defineField({
       name: 'description',
-      description: 'Used both for the <meta> description tag for SEO, and the blog subheader.',
+      description:
+        'Used both for the <meta> description tag for SEO, and the blog subheader.',
       title: 'Description',
       type: 'array',
       initialValue: demo.description,

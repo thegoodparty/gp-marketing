@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity';
+import { defineField, defineType } from 'sanity'
 
 export const pageHero = defineType({
   name: 'pageHero',
@@ -11,31 +11,32 @@ export const pageHero = defineType({
       type: 'string',
       options: {
         list: [
-          {title: 'Dark', value: 'dark'},
-          {title: 'Light', value: 'light'},
+          { title: 'Dark', value: 'dark' },
+          { title: 'Light', value: 'light' },
         ],
         layout: 'radio',
       },
-      validation: Rule => Rule.required(),
-      description: 'Choose between a dark or light color scheme for the hero section.',
+      validation: (Rule) => Rule.required(),
+      description:
+        'Choose between a dark or light color scheme for the hero section.',
     }),
     defineField({
       name: 'backgroundImage',
       title: 'Background Image',
       type: 'image',
-      options: {hotspot: true},
+      options: { hotspot: true },
     }),
     defineField({
       name: 'mainImage',
       title: 'Main Image',
       type: 'image',
-      options: {hotspot: true},
+      options: { hotspot: true },
     }),
     defineField({
       name: 'heading',
       title: 'Heading (H1)',
       type: 'string',
-      validation: Rule => Rule.required(),
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'subheading',
@@ -48,8 +49,18 @@ export const pageHero = defineType({
       title: 'Main CTA',
       type: 'object',
       fields: [
-        {name: 'label', title: 'Label', type: 'string', validation: Rule => Rule.required()},
-        {name: 'url', title: 'URL', type: 'url', validation: Rule => Rule.required()},
+        {
+          name: 'label',
+          title: 'Label',
+          type: 'string',
+          validation: (Rule) => Rule.required(),
+        },
+        {
+          name: 'url',
+          title: 'URL',
+          type: 'url',
+          validation: (Rule) => Rule.required(),
+        },
       ],
     }),
     defineField({
@@ -57,9 +68,9 @@ export const pageHero = defineType({
       title: 'Secondary CTA',
       type: 'object',
       fields: [
-        {name: 'label', title: 'Label', type: 'string'},
-        {name: 'url', title: 'URL', type: 'url'},
+        { name: 'label', title: 'Label', type: 'string' },
+        { name: 'url', title: 'URL', type: 'url' },
       ],
     }),
   ],
-});
+})

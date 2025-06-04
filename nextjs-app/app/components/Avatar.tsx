@@ -1,19 +1,19 @@
-import { Image } from 'next-sanity/image';
+import { Image } from 'next-sanity/image'
 
-import { urlForImage } from '@/sanity/lib/utils';
-import DateComponent from '@/app/components/Date';
+import { urlForImage } from '@/sanity/lib/utils'
+import DateComponent from '@/app/components/Date'
 
 type Props = {
   person: {
-    firstName: string | null;
-    lastName: string | null;
-    picture?: any;
-  };
-  date: string;
-};
+    firstName: string | null
+    lastName: string | null
+    picture?: any
+  }
+  date: string
+}
 
 export default function Avatar({ person, date }: Props) {
-  const { firstName, lastName, picture } = person;
+  const { firstName, lastName, picture } = person
 
   return (
     <div className="flex items-center">
@@ -24,7 +24,13 @@ export default function Avatar({ person, date }: Props) {
             className="h-full rounded-full object-cover"
             height={48}
             width={48}
-            src={urlForImage(picture)?.height(96).width(96).fit('crop').url() as string}
+            src={
+              urlForImage(picture)
+                ?.height(96)
+                .width(96)
+                .fit('crop')
+                .url() as string
+            }
           />
         </div>
       ) : (
@@ -41,5 +47,5 @@ export default function Avatar({ person, date }: Props) {
         </div>
       </div>
     </div>
-  );
+  )
 }

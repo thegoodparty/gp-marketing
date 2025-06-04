@@ -1,5 +1,5 @@
-import { defineField, defineType } from 'sanity';
-import { ComponentIcon } from '@sanity/icons';
+import { defineField, defineType } from 'sanity'
+import { ComponentIcon } from '@sanity/icons'
 
 export const problemSection = defineType({
   name: 'problemSection',
@@ -53,7 +53,8 @@ export const problemSection = defineType({
                       name: 'icon',
                       title: 'Icon',
                       type: 'string',
-                      description: 'Lucide icon name (e.g., "BarChart3", "Users", "TrendingUp")',
+                      description:
+                        'Lucide icon name (e.g., "BarChart3", "Users", "TrendingUp")',
                       validation: (Rule) => Rule.required(),
                     }),
                     defineField({
@@ -73,7 +74,7 @@ export const problemSection = defineType({
                       return {
                         title: title || 'Untitled item',
                         subtitle: `Icon: ${subtitle || 'None'}`,
-                      };
+                      }
                     },
                   },
                 },
@@ -98,17 +99,18 @@ export const problemSection = defineType({
                   name: 'icon',
                   title: 'Button Icon',
                   type: 'string',
-                  description: 'Lucide icon name (e.g., "ArrowRight", "Download", "ExternalLink")',
+                  description:
+                    'Lucide icon name (e.g., "ArrowRight", "Download", "ExternalLink")',
                 }),
               ],
               validation: (Rule) =>
                 Rule.custom((button) => {
-                  if (!button) return true; // Button is optional
-                  const { label, url } = button;
+                  if (!button) return true // Button is optional
+                  const { label, url } = button
                   if ((label && !url) || (!label && url)) {
-                    return 'Both label and URL are required if button is provided';
+                    return 'Both label and URL are required if button is provided'
                   }
-                  return true;
+                  return true
                 }),
             }),
           ],
@@ -119,11 +121,11 @@ export const problemSection = defineType({
               itemCount: 'items.length',
             },
             prepare({ title, backgroundColor, itemCount }) {
-              const colorName = backgroundColor === '#FDCDCD' ? 'Pink' : 'Green';
+              const colorName = backgroundColor === '#FDCDCD' ? 'Pink' : 'Green'
               return {
                 title: title || 'Untitled column',
                 subtitle: `${colorName} • ${itemCount || 0} items`,
-              };
+              }
             },
           },
         },
@@ -139,7 +141,7 @@ export const problemSection = defineType({
       return {
         title: 'Problem Section',
         subtitle: `${column1 || 'Column 1'} vs ${column2 || 'Column 2'}`,
-      };
+      }
     },
   },
-});
+})

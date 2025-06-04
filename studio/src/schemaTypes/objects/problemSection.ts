@@ -26,6 +26,7 @@ export const problemSection = defineType({
                 list: [
                   { title: 'Content', value: 'content' },
                   { title: 'Image', value: 'image' },
+                  { title: 'Testimonial', value: 'testimonial' },
                 ],
                 layout: 'radio',
               },
@@ -37,7 +38,7 @@ export const problemSection = defineType({
               name: 'title',
               title: 'Column Title',
               type: 'string',
-              hidden: ({ parent }) => parent?.columnType === 'image',
+              hidden: ({ parent }) => parent?.columnType !== 'content',
               validation: (Rule) =>
                 Rule.custom((value, context) => {
                   const parent = context.parent as { columnType?: string }
@@ -56,10 +57,10 @@ export const problemSection = defineType({
                   { title: 'Red', value: '#FDCDCD' },
                   { title: 'Blue', value: '#D1E7FE' },
                   { title: 'Yellow', value: '#FFEEB7' },
-                  { title: 'Orange', value: '#FFEEB7' },
                   { title: 'Lavender', value: '#F1E5FF' },
                   { title: 'Wax Flower', value: '#FFF1C9' },
                   { title: 'Green', value: '#CCEADD' },
+                  { title: 'White', value: '#FFFFFF' },
                 ],
                 layout: 'radio',
               },
@@ -68,8 +69,8 @@ export const problemSection = defineType({
               validation: (Rule) =>
                 Rule.custom((value, context) => {
                   const parent = context.parent as { columnType?: string }
-                  if (parent?.columnType === 'content' && !value) {
-                    return 'Background color is required for content columns'
+                  if ((parent?.columnType === 'content' || parent?.columnType === 'testimonial') && !value) {
+                    return 'Background color is required for content and testimonial columns'
                   }
                   return true
                 }),
@@ -91,7 +92,7 @@ export const problemSection = defineType({
                   }
                   return true
                 }),
-              hidden: ({ parent }) => parent?.columnType === 'image',
+              hidden: ({ parent }) => parent?.columnType !== 'content',
               of: [
                 {
                   type: 'object',
@@ -133,7 +134,7 @@ export const problemSection = defineType({
               name: 'button',
               title: 'Call to Action Button',
               type: 'object',
-              hidden: ({ parent }) => parent?.columnType === 'image',
+              hidden: ({ parent }) => parent?.columnType !== 'content',
               fields: [
                 defineField({
                   name: 'label',
@@ -180,12 +181,82 @@ export const problemSection = defineType({
                   validation: (Rule) => Rule.required(),
                 }),
               ],
-              hidden: ({ parent }) => parent?.columnType === 'content',
+              hidden: ({ parent }) => parent?.columnType !== 'image',
               validation: (Rule) =>
                 Rule.custom((value, context) => {
                   const parent = context.parent as { columnType?: string }
                   if (parent?.columnType === 'image' && !value) {
                     return 'Image is required for image columns'
+                  }
+                  return true
+                }),
+            }),
+            // Testimonial column fields
+            defineField({
+              name: 'quote',
+              title: 'Quote Text',
+              type: 'text',
+              rows: 4,
+              hidden: ({ parent }) => parent?.columnType !== 'testimonial',
+              validation: (Rule) =>
+                Rule.custom((value, context) => {
+                  const parent = context.parent as { columnType?: string }
+                  if (parent?.columnType === 'testimonial' && !value) {
+                    return 'Quote is required for testimonial columns'
+                  }
+                  return true
+                }),
+            }),
+            defineField({
+              name: 'authorName',
+              title: 'Author Name',
+              type: 'string',
+              hidden: ({ parent }) => parent?.columnType !== 'testimonial',
+              validation: (Rule) =>
+                Rule.custom((value, context) => {
+                  const parent = context.parent as { columnType?: string }
+                  if (parent?.columnType === 'testimonial' && !value) {
+                    return 'Author name is required for testimonial columns'
+                  }
+                  return true
+                }),
+            }),
+            defineField({
+              name: 'authorTitle',
+              title: 'Author Title',
+              type: 'string',
+              hidden: ({ parent }) => parent?.columnType !== 'testimonial',
+              validation: (Rule) =>
+                Rule.custom((value, context) => {
+                  const parent = context.parent as { columnType?: string }
+                  if (parent?.columnType === 'testimonial' && !value) {
+                    return 'Author title is required for testimonial columns'
+                  }
+                  return true
+                }),
+            }),
+            defineField({
+              name: 'authorImage',
+              title: 'Author Image',
+              type: 'image',
+              options: {
+                hotspot: true,
+              },
+              fields: [
+                defineField({
+                  name: 'alt',
+                  title: 'Alt Text',
+                  type: 'string',
+                  description: 'Descriptive text for accessibility',
+                  validation: (Rule) => Rule.required(),
+                }),
+              ],
+              hidden: ({ parent }) => parent?.columnType !== 'testimonial',
+              validation: (Rule) =>
+                Rule.custom((value, context) => {
+                  const parent = context.parent as { columnType?: string }
+                  if (parent?.columnType === 'testimonial' && !value) {
+                    return 'Author image is required for testimonial columns'
                   }
                   return true
                 }),
@@ -198,8 +269,11 @@ export const problemSection = defineType({
               backgroundColor: 'backgroundColor',
               itemCount: 'items.length',
               image: 'image',
+              quote: 'quote',
+              authorName: 'authorName',
+              authorImage: 'authorImage',
             },
-            prepare({ columnType, title, backgroundColor, itemCount, image }) {
+            prepare({ columnType, title, backgroundColor, itemCount, image, quote, authorName, authorImage }) {
               if (columnType === 'image') {
                 return {
                   title: 'Image Column',
@@ -208,13 +282,22 @@ export const problemSection = defineType({
                 }
               }
 
+              if (columnType === 'testimonial') {
+                return {
+                  title: 'Testimonial Column',
+                  subtitle: authorName || 'Unnamed author',
+                  media: authorImage,
+                }
+              }
+
               const colorName = 
                 backgroundColor === '#FDCDCD' ? 'Red' : 
                 backgroundColor === '#D1E7FE' ? 'Blue' : 
-                backgroundColor === '#FFEEB7' ? 'Yellow/Orange' : 
+                backgroundColor === '#FFEEB7' ? 'Yellow' : 
                 backgroundColor === '#F1E5FF' ? 'Lavender' : 
                 backgroundColor === '#FFF1C9' ? 'Wax Flower' : 
-                backgroundColor === '#CCEADD' ? 'Green' : 'Unknown'
+                backgroundColor === '#CCEADD' ? 'Green' : 
+                backgroundColor === '#FFFFFF' ? 'White' : 'Unknown'
               
               return {
                 title: title || 'Content Column',
@@ -230,12 +313,25 @@ export const problemSection = defineType({
     select: {
       column1Type: 'columns.0.columnType',
       column1Title: 'columns.0.title',
+      column1AuthorName: 'columns.0.authorName',
       column2Type: 'columns.1.columnType',
       column2Title: 'columns.1.title',
+      column2AuthorName: 'columns.1.authorName',
     },
-    prepare({ column1Type, column1Title, column2Type, column2Title }) {
-      const column1Label = column1Type === 'image' ? 'Image' : (column1Title || 'Content')
-      const column2Label = column2Type === 'image' ? 'Image' : (column2Title || 'Content')
+    prepare({ column1Type, column1Title, column1AuthorName, column2Type, column2Title, column2AuthorName }) {
+      const getColumnLabel = (type: string, title?: string, authorName?: string) => {
+        switch (type) {
+          case 'image':
+            return 'Image'
+          case 'testimonial':
+            return authorName ? `Testimonial (${authorName})` : 'Testimonial'
+          default:
+            return title || 'Content'
+        }
+      }
+      
+      const column1Label = getColumnLabel(column1Type, column1Title, column1AuthorName)
+      const column2Label = getColumnLabel(column2Type, column2Title, column2AuthorName)
       
       return {
         title: 'Problem Section',

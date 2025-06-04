@@ -5,6 +5,7 @@ import * as LucideIcons from 'lucide-react'
 import { type LucideIcon } from 'lucide-react'
 import { urlForImage } from '@/sanity/lib/utils'
 import Image from 'next/image'
+import { TestimonialCard } from './TestimonialCard'
 
 interface ListItem {
   icon: string
@@ -43,7 +44,31 @@ interface ImageColumn {
   }
 }
 
-type Column = ContentColumn | ImageColumn
+interface TestimonialColumn {
+  columnType: 'testimonial'
+  backgroundColor: string
+  quote: string
+  authorName: string
+  authorTitle: string
+  authorImage: {
+    asset: {
+      _ref: string
+    }
+    alt: string
+    hotspot?: {
+      x: number
+      y: number
+    }
+    crop?: {
+      top: number
+      bottom: number
+      left: number
+      right: number
+    }
+  }
+}
+
+type Column = ContentColumn | ImageColumn | TestimonialColumn
 
 interface ProblemSectionProps {
   block: {
@@ -98,6 +123,20 @@ export default function ProblemSection({ block }: ProblemSectionProps) {
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 624px"
                     />
                   </div>
+                </div>
+              )
+            }
+
+            if (column.columnType === 'testimonial') {
+              return (
+                <div key={index} className="flex-1">
+                  <TestimonialCard
+                    quote={column.quote}
+                    authorName={column.authorName}
+                    authorTitle={column.authorTitle}
+                    authorImage={column.authorImage}
+                    backgroundColor={column.backgroundColor}
+                  />
                 </div>
               )
             }

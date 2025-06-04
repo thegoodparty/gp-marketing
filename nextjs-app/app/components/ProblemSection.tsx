@@ -82,15 +82,8 @@ export default function ProblemSection({ block }: ProblemSectionProps) {
 
                 {column.button && column.button.label && column.button.url && (
                   <div className="mt-8">
-                    <Link
-                      href={column.button.url}
-                      target="_blank"
-                      className="inline-block"
-                    >
-                      <Button
-                        iconPosition="right"
-                        variant="secondary"
-                      >
+                    <Link href={column.button.url} target="_blank" className="inline-block">
+                      <Button iconPosition="right" variant="secondary">
                         {ButtonIcon && <ButtonIcon className="mr-2 h-4 w-4" />}
                         {column.button.label}
                       </Button>

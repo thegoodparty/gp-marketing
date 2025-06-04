@@ -8,16 +8,20 @@
  *
  */
 
-import { PortableText, type PortableTextComponents, type PortableTextBlock } from 'next-sanity';
+import {
+  PortableText,
+  type PortableTextComponents,
+  type PortableTextBlock,
+} from 'next-sanity'
 
-import ResolvedLink from '@/app/components/ResolvedLink';
+import ResolvedLink from '@/app/components/ResolvedLink'
 
 export default function CustomPortableText({
   className,
   value,
 }: {
-  className?: string;
-  value: PortableTextBlock[];
+  className?: string
+  value: PortableTextBlock[]
 }) {
   const components: PortableTextComponents = {
     block: {
@@ -71,19 +75,23 @@ export default function CustomPortableText({
               </svg>
             </a>
           </h2>
-        );
+        )
       },
     },
     marks: {
       link: ({ children, value: link }) => {
-        return <ResolvedLink link={link}>{children}</ResolvedLink>;
+        return <ResolvedLink link={link}>{children}</ResolvedLink>
       },
     },
-  };
+  }
 
   return (
-    <div className={['prose prose-a:text-red-500', className].filter(Boolean).join(' ')}>
+    <div
+      className={['prose prose-a:text-red-500', className]
+        .filter(Boolean)
+        .join(' ')}
+    >
       <PortableText components={components} value={value} />
     </div>
-  );
+  )
 }

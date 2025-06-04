@@ -1,15 +1,15 @@
-import Link from 'next/link';
-import { NavigationLink, NavigationSingleLink } from '@/app/types/navigation';
-import DynamicIcon from '../../shared/icons/DynamicIcon';
-import { BiLinkExternal } from 'react-icons/bi';
+import Link from 'next/link'
+import { NavigationLink, NavigationSingleLink } from '@/app/types/navigation'
+import DynamicIcon from '../../shared/icons/DynamicIcon'
+import { BiLinkExternal } from 'react-icons/bi'
 
 interface NavLinkProps {
-  link: NavigationLink | NavigationSingleLink;
+  link: NavigationLink | NavigationSingleLink
 }
 
 export default function NavLink({ link }: NavLinkProps) {
-  const isExternal = link.type === 'external';
-  const href = link.type === 'internal' ? `/${link.page?.slug}` : link.url;
+  const isExternal = link.type === 'external'
+  const href = link.type === 'internal' ? `/${link.page?.slug}` : link.url
 
   return (
     <Link
@@ -19,10 +19,12 @@ export default function NavLink({ link }: NavLinkProps) {
       target={isExternal ? '_blank' : ''}
     >
       <div className="flex items-center">
-        {link.icon && <DynamicIcon iconName={link.icon} className="w-5 h-5 mr-2" />}
+        {link.icon && (
+          <DynamicIcon iconName={link.icon} className="w-5 h-5 mr-2" />
+        )}
         <div className="ml-3 outfit">{link.title}</div>
       </div>
       {isExternal && <BiLinkExternal />}
     </Link>
-  );
+  )
 }

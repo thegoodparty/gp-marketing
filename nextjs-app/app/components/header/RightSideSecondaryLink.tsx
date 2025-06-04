@@ -1,14 +1,16 @@
-import Button from '../../shared/buttons/Button';
+import Button from '../../shared/buttons/Button'
 
 interface RightSideSecondaryLinkProps {
   link?: {
-    title: string;
-    url: string;
-  };
+    title: string
+    url: string
+  }
 }
 
-export default function RightSideSecondaryLink({ link }: RightSideSecondaryLinkProps) {
-  if (!link) return null;
+export default function RightSideSecondaryLink({
+  link,
+}: RightSideSecondaryLinkProps) {
+  if (!link) return null
 
   return (
     <Button
@@ -20,5 +22,5 @@ export default function RightSideSecondaryLink({ link }: RightSideSecondaryLinkP
     >
       {link.title}
     </Button>
-  );
+  )
 }

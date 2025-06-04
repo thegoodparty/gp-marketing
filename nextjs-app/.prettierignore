@@ -1,2 +1,21 @@
 # Ignoring generated files
 ./sanity.types.ts
+
+# Generated files
+next-env.d.ts
+
+# Build output
+/.next
+/out
+
+# Sanity generated
+/.sanity
+
+# Dependencies
+/node_modules
+
+# Logs
+*.log
+
+# Coverage reports
+/coverage

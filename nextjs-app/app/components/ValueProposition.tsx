@@ -1,11 +1,15 @@
 import React from 'react'
-import { Button } from 'goodparty-styleguide'
-import Link from 'next/link'
-import * as LucideIcons from 'lucide-react'
-import { type LucideIcon } from 'lucide-react'
 import { urlForImage } from '@/sanity/lib/utils'
 import Image from 'next/image'
-import { GoodPartyOrgLogo } from './icons/GoodPartyOrgLogo'
+import { GoodPartyOrgLogo } from 'goodparty-styleguide'
+import { getLucideIcon } from '../utils/icons'
+import { LinkButton } from './LinkButton'
+
+enum ValuePropositionColumnType {
+  CONTENT = 'content',
+  IMAGE = 'image',
+  TESTIMONIAL = 'testimonial',
+}
 
 interface InlineTestimonialCardProps {
   quote: string
@@ -94,7 +98,7 @@ interface ListItem {
 }
 
 interface ContentColumn {
-  columnType: 'content'
+  columnType: ValuePropositionColumnType.CONTENT
   title: string
   backgroundColor: string
   items: ListItem[]
@@ -106,7 +110,7 @@ interface ContentColumn {
 }
 
 interface ImageColumn {
-  columnType: 'image'
+  columnType: ValuePropositionColumnType.IMAGE
   image: {
     asset: {
       _ref: string
@@ -126,7 +130,7 @@ interface ImageColumn {
 }
 
 interface TestimonialColumn {
-  columnType: 'testimonial'
+  columnType: ValuePropositionColumnType.TESTIMONIAL
   backgroundColor: string
   quote: string
   authorName: string
@@ -157,18 +161,6 @@ interface ValuePropositionProps {
   }
 }
 
-const getIconFromModule = <T extends Record<string, unknown>>(
-  iconModule: T,
-  iconName: string,
-): LucideIcon | undefined => {
-  return iconModule[iconName] as LucideIcon | undefined
-}
-
-const getLucideIcon = (iconName: string): LucideIcon => {
-  const IconComponent = getIconFromModule(LucideIcons, iconName)
-  return IconComponent || LucideIcons.HelpCircle
-}
-
 export default function ValueProposition({ block }: ValuePropositionProps) {
   const { columns } = block
 
@@ -181,7 +173,7 @@ export default function ValueProposition({ block }: ValuePropositionProps) {
       <div className="container mx-auto max-w-6xl">
         <div className="flex flex-col lg:flex-row gap-6">
           {columns.map((column, index) => {
-            if (column.columnType === 'image') {
+            if (column.columnType === ValuePropositionColumnType.IMAGE) {
               const imageUrl = urlForImage(column.image)
                 ?.width(624)
                 .height(466)
@@ -208,7 +200,7 @@ export default function ValueProposition({ block }: ValuePropositionProps) {
               )
             }
 
-            if (column.columnType === 'testimonial') {
+            if (column.columnType === ValuePropositionColumnType.TESTIMONIAL) {
               return (
                 <div key={index} className="flex-1">
                   <InlineTestimonialCard
@@ -221,10 +213,6 @@ export default function ValueProposition({ block }: ValuePropositionProps) {
                 </div>
               )
             }
-
-            const ButtonIcon = column.button?.icon
-              ? getLucideIcon(column.button.icon)
-              : null
 
             return (
               <div
@@ -258,16 +246,13 @@ export default function ValueProposition({ block }: ValuePropositionProps) {
 
                 {column.button && column.button.label && column.button.url && (
                   <div className="mt-8">
-                    <Link
-                      href={column.button.url}
-                      target="_blank"
-                      className="inline-block"
-                    >
-                      <Button iconPosition="right" variant="secondary">
-                        {ButtonIcon && <ButtonIcon className="mr-2 h-4 w-4" />}
-                        {column.button.label}
-                      </Button>
-                    </Link>
+                    <LinkButton
+                      label={column.button.label}
+                      url={column.button.url}
+                      icon={column.button.icon}
+                      variant="secondary"
+                      iconPosition="right"
+                    />
                   </div>
                 )}
               </div>

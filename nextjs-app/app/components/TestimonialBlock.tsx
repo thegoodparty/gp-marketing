@@ -1,9 +1,7 @@
 import React from 'react'
-import { Button } from 'goodparty-styleguide'
-import Link from 'next/link'
-import * as LucideIcons from 'lucide-react'
-import { type LucideIcon } from 'lucide-react'
 import { TestimonialCard } from './TestimonialCard'
+import { type ButtonVariant } from '../types/ui'
+import { LinkButton } from './LinkButton'
 
 interface TestimonialBlockProps {
   block: {
@@ -15,27 +13,13 @@ interface TestimonialBlockProps {
         label: string
         url: string
         icon?: string
-        variant?:
-          | 'default'
-          | 'secondary'
-          | 'destructive'
-          | 'outline'
-          | 'ghost'
-          | 'whiteGhost'
-          | 'whiteOutline'
+        variant?: ButtonVariant
       }
       secondaryButton?: {
         label: string
         url: string
         icon?: string
-        variant?:
-          | 'default'
-          | 'secondary'
-          | 'destructive'
-          | 'outline'
-          | 'ghost'
-          | 'whiteGhost'
-          | 'whiteOutline'
+        variant?: ButtonVariant
       }
     }
     testimonials: Array<{
@@ -63,18 +47,6 @@ interface TestimonialBlockProps {
   }
 }
 
-const getIconFromModule = <T extends Record<string, unknown>>(
-  iconModule: T,
-  iconName: string,
-): LucideIcon | undefined => {
-  return iconModule[iconName] as LucideIcon | undefined
-}
-
-const getLucideIcon = (iconName: string): LucideIcon => {
-  const IconComponent = getIconFromModule(LucideIcons, iconName)
-  return IconComponent || LucideIcons.HelpCircle
-}
-
 export default function TestimonialBlock({ block }: TestimonialBlockProps) {
   const { header, testimonials } = block
 
@@ -91,16 +63,14 @@ export default function TestimonialBlock({ block }: TestimonialBlockProps) {
   ) => {
     if (!button?.label || !button?.url) return null
 
-    const ButtonIcon = button.icon ? getLucideIcon(button.icon) : null
-    const variant = button.variant || 'default'
-
     return (
-      <Link href={button.url} target="_blank" className="inline-block">
-        <Button iconPosition="right" variant={variant as any}>
-          {ButtonIcon && <ButtonIcon className="mr-2 h-4 w-4" />}
-          {button.label}
-        </Button>
-      </Link>
+      <LinkButton
+        label={button.label}
+        url={button.url}
+        icon={button.icon}
+        variant={button.variant}
+        iconPosition="right"
+      />
     )
   }
 
@@ -138,7 +108,7 @@ export default function TestimonialBlock({ block }: TestimonialBlockProps) {
   }
 
   return (
-    <section className="relative w-full" style={{ backgroundColor: '#0B1529' }}>
+    <section className="relative w-full bg-brand-secondary">
       <div className="flex flex-col items-center w-full">
         <div className="box-border flex flex-col gap-12 items-center justify-start px-20 py-32 w-full">
           {header && (

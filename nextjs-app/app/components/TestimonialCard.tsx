@@ -1,6 +1,6 @@
 import React from 'react'
 import { urlForImage } from '@/sanity/lib/utils'
-import { GoodPartyOrgLogo } from './icons/GoodPartyOrgLogo'
+import { GoodPartyOrgLogo } from 'goodparty-styleguide'
 
 interface TestimonialCardProps {
   quote: string
@@ -60,7 +60,7 @@ export const TestimonialCard: React.FC<TestimonialCardProps> = ({
 
               <div className="relative shrink-0 w-full">
                 <div className="box-border flex flex-col gap-8 items-start justify-start p-0 relative w-full">
-                  <div className="open-sans font-regular leading-none relative shrink-0 text-[#0b1529] text-lg text-left w-full">
+                  <div className="open-sans font-regular leading-none relative shrink-0 text-brand-secondary text-lg text-left w-full">
                     <p className="leading-relaxed">&ldquo;{quote}&rdquo;</p>
                   </div>
                 </div>
@@ -78,7 +78,7 @@ export const TestimonialCard: React.FC<TestimonialCardProps> = ({
 
                 <div className="flex flex-row items-center self-stretch">
                   <div className="h-full relative shrink-0 w-[210px]">
-                    <div className="box-border flex flex-col gap-1 h-full items-start justify-center leading-none p-0 relative text-[#1e1f20] text-left w-[210px]">
+                    <div className="box-border flex flex-col gap-1 h-full items-start justify-center leading-none p-0 relative text-grayscale-950 text-left w-[210px]">
                       <div className="font-heading font-semibold relative shrink-0 text-base w-full leading-tight">
                         {authorName}
                       </div>

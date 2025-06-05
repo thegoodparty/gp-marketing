@@ -1,6 +1,16 @@
 import { defineField, defineType } from 'sanity'
 import { ComponentIcon } from '@sanity/icons'
 
+const BUTTON_VARIANT_OPTIONS = [
+  { title: 'Default', value: 'default' },
+  { title: 'Secondary', value: 'secondary' },
+  { title: 'Destructive', value: 'destructive' },
+  { title: 'Outline', value: 'outline' },
+  { title: 'Ghost', value: 'ghost' },
+  { title: 'White Ghost', value: 'whiteGhost' },
+  { title: 'White Outline', value: 'whiteOutline' },
+]
+
 export const testimonialBlock = defineType({
   name: 'testimonialBlock',
   title: 'Testimonial Block',
@@ -51,15 +61,7 @@ export const testimonialBlock = defineType({
               title: 'Button Variant',
               type: 'string',
               options: {
-                list: [
-                  { title: 'Default', value: 'default' },
-                  { title: 'Secondary', value: 'secondary' },
-                  { title: 'Destructive', value: 'destructive' },
-                  { title: 'Outline', value: 'outline' },
-                  { title: 'Ghost', value: 'ghost' },
-                  { title: 'White Ghost', value: 'whiteGhost' },
-                  { title: 'White Outline', value: 'whiteOutline' },
-                ],
+                list: BUTTON_VARIANT_OPTIONS,
                 layout: 'dropdown',
               },
               initialValue: 'default',
@@ -102,15 +104,7 @@ export const testimonialBlock = defineType({
               title: 'Button Variant',
               type: 'string',
               options: {
-                list: [
-                  { title: 'Default', value: 'default' },
-                  { title: 'Secondary', value: 'secondary' },
-                  { title: 'Destructive', value: 'destructive' },
-                  { title: 'Outline', value: 'outline' },
-                  { title: 'Ghost', value: 'ghost' },
-                  { title: 'White Ghost', value: 'whiteGhost' },
-                  { title: 'White Outline', value: 'whiteOutline' },
-                ],
+                list: BUTTON_VARIANT_OPTIONS,
                 layout: 'dropdown',
               },
               initialValue: 'secondary',
@@ -125,7 +119,7 @@ export const testimonialBlock = defineType({
           ],
           validation: (Rule) =>
             Rule.custom((button) => {
-              if (!button) return true // Button is optional
+              if (!button) return true 
               const { label, url } = button
               if ((label && !url) || (!label && url)) {
                 return 'Both label and URL are required if button is provided'

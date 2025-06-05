@@ -113,27 +113,24 @@ export default function TestimonialBlock({ block }: TestimonialBlockProps) {
 
     if (!hasPrimary && !hasSecondary) return null
 
-    // Single button - center it
     if (hasPrimary && !hasSecondary) {
       return (
-        <div className="flex justify-center items-center mt-8">
+        <div className="flex justify-center items-center">
           {renderButton(primaryButton)}
         </div>
       )
     }
 
-    // Single secondary button - center it
     if (!hasPrimary && hasSecondary) {
       return (
-        <div className="flex justify-center items-center mt-8">
+        <div className="flex justify-center items-center">
           {renderButton(secondaryButton)}
         </div>
       )
     }
 
-    // Both buttons - side by side on desktop, stacked on mobile
     return (
-      <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
+      <div className="flex flex-row gap-4 justify-center items-center">
         {renderButton(primaryButton)}
         {renderButton(secondaryButton)}
       </div>
@@ -141,70 +138,93 @@ export default function TestimonialBlock({ block }: TestimonialBlockProps) {
   }
 
   return (
-    <section
-      className="py-[60px] px-5 lg:py-20 lg:px-4"
-      style={{ backgroundColor: '#0B1529' }}
-    >
-      <div className="container mx-auto max-w-6xl">
-        {/* Header Section */}
-        {header && (
-          <div className="text-center mb-12 lg:mb-16">
-            {header.overline && (
-              <p className="text-lg text-white mb-2">{header.overline}</p>
-            )}
-            <h2 className="text-[48px] font-semibold text-white mb-4 leading-tight">
-              {header.heading}
-            </h2>
-            {header.subhead && (
-              <p className="text-lg text-white">{header.subhead}</p>
-            )}
-            {renderButtons()}
-          </div>
-        )}
-
-        {/* Desktop: Grid layout */}
-        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {testimonials.map((testimonial, index) => (
-            <div key={index} className="h-full">
-              <TestimonialCard
-                quote={testimonial.quote}
-                authorName={testimonial.authorName}
-                authorTitle={testimonial.authorTitle}
-                authorImage={testimonial.authorImage}
-                backgroundColor={testimonial.backgroundColor}
-                className="h-full"
-              />
-            </div>
-          ))}
-        </div>
-
-        {/* Mobile: Slider/Carousel */}
-        <div className="md:hidden">
-          <div
-            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4"
-            style={{ scrollBehavior: 'smooth' }}
-          >
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="flex-none w-[85vw] snap-center">
-                <TestimonialCard
-                  quote={testimonial.quote}
-                  authorName={testimonial.authorName}
-                  authorTitle={testimonial.authorTitle}
-                  authorImage={testimonial.authorImage}
-                  backgroundColor={testimonial.backgroundColor}
-                />
+    <section className="relative w-full" style={{ backgroundColor: '#0B1529' }}>
+      <div className="flex flex-col items-center w-full">
+        <div className="box-border flex flex-col gap-12 items-center justify-start px-20 py-32 w-full">
+          {header && (
+            <div className="w-full">
+              <div className="box-border flex flex-col gap-6 items-center justify-start p-0 w-full">
+                <div className="w-full">
+                  <div className="box-border flex flex-col gap-4 items-center justify-start leading-none p-0 text-white w-full">
+                    {header.overline && (
+                      <div className="font-heading font-medium text-lg text-center whitespace-nowrap leading-tight">
+                        {header.overline}
+                      </div>
+                    )}
+                    <div className="font-heading font-semibold text-6xl text-center w-full leading-tight">
+                      {header.heading}
+                    </div>
+                    {header.subhead && (
+                      <div className="open-sans font-regular text-lg text-center w-full leading-relaxed">
+                        {header.subhead}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {renderButtons()}
               </div>
-            ))}
-          </div>
+            </div>
+          )}
 
-          {/* Pagination dots */}
-          <div className="flex justify-center gap-2 mt-6">
-            {testimonials.map((_, index) => (
+          <div className="w-full">
+            <div className="hidden lg:flex flex-wrap gap-8 items-start justify-center w-full">
+              {testimonials.map((testimonial, index) => (
+                <div key={index} className="flex-none">
+                  <TestimonialCard
+                    quote={testimonial.quote}
+                    authorName={testimonial.authorName}
+                    authorTitle={testimonial.authorTitle}
+                    authorImage={testimonial.authorImage}
+                    backgroundColor={testimonial.backgroundColor}
+                    className="w-[350px] h-[400px]"
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="hidden md:grid lg:hidden grid-cols-2 gap-6 justify-items-center w-full">
+              {testimonials.map((testimonial, index) => (
+                <div key={index} className="w-full max-w-[350px]">
+                  <TestimonialCard
+                    quote={testimonial.quote}
+                    authorName={testimonial.authorName}
+                    authorTitle={testimonial.authorTitle}
+                    authorImage={testimonial.authorImage}
+                    backgroundColor={testimonial.backgroundColor}
+                    className="h-[400px]"
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="md:hidden">
               <div
-                key={index}
-                className="w-2 h-2 rounded-full bg-white opacity-30"
-              />
-            ))}
+                className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4"
+                style={{ scrollBehavior: 'smooth' }}
+              >
+                {testimonials.map((testimonial, index) => (
+                  <div key={index} className="flex-none w-[85vw] snap-center">
+                    <TestimonialCard
+                      quote={testimonial.quote}
+                      authorName={testimonial.authorName}
+                      authorTitle={testimonial.authorTitle}
+                      authorImage={testimonial.authorImage}
+                      backgroundColor={testimonial.backgroundColor}
+                      className="h-[400px]"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex justify-center gap-2 mt-6">
+                {testimonials.map((_, index) => (
+                  <div
+                    key={index}
+                    className="w-2 h-2 rounded-full bg-white opacity-30"
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>

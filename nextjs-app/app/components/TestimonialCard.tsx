@@ -1,5 +1,4 @@
 import React from 'react'
-import Image from 'next/image'
 import { urlForImage } from '@/sanity/lib/utils'
 import { GoodPartyOrgLogo } from './icons/GoodPartyOrgLogo'
 
@@ -48,36 +47,50 @@ export const TestimonialCard: React.FC<TestimonialCardProps> = ({
 
   return (
     <div
-      className={`rounded-3xl p-5 lg:p-12 flex flex-col h-full ${className}`}
+      className={`relative rounded-2xl shrink-0 w-[350px] h-[400px] min-h-[400px] max-w-[350px] ${className}`}
       style={{ backgroundColor }}
     >
-      <div className="flex-grow">
-        <div className="mb-8">
-          <GoodPartyOrgLogo />
-        </div>
+      <div className="relative w-full h-full">
+        <div className="box-border flex flex-col h-[400px] items-start justify-between w-[350px] p-6 relative">
+          <div className="relative shrink-0 w-full">
+            <div className="box-border flex flex-col gap-4 items-start justify-start p-0 relative w-full">
+              <div className="h-7 relative shrink-0 w-[34px]">
+                <GoodPartyOrgLogo />
+              </div>
 
-        <div className="mb-8">
-          <p className="text-[18px] font-normal lg:text-[24px] lg:font-semibold text-gray-900 leading-relaxed">
-            &ldquo;{quote}&rdquo;
-          </p>
-        </div>
-      </div>
+              <div className="relative shrink-0 w-full">
+                <div className="box-border flex flex-col gap-8 items-start justify-start p-0 relative w-full">
+                  <div className="open-sans font-regular leading-none relative shrink-0 text-[#0b1529] text-lg text-left w-full">
+                    <p className="leading-relaxed">&ldquo;{quote}&rdquo;</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-      <div className="flex items-center gap-4 mt-auto">
-        <div className="relative w-[48px] h-[48px] lg:w-[80px] lg:h-[80px] rounded-full overflow-hidden flex-shrink-0">
-          <Image
-            src={authorImageUrl}
-            alt={authorImage.alt}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 48px, 80px"
-          />
-        </div>
-        <div>
-          <p className="text-[16px] font-semibold lg:text-[20px] lg:font-semibold text-gray-900">
-            {authorName}
-          </p>
-          <p className="text-[12px] font-normal text-gray-900">{authorTitle}</p>
+          <div className="relative shrink-0">
+            <div className="flex flex-row items-center relative w-full">
+              <div className="box-border flex flex-row gap-4 items-center justify-start pl-0 pr-6 py-0 relative w-full">
+                <div
+                  className="bg-cover bg-center bg-no-repeat rounded-[32px] shrink-0 w-12 h-12"
+                  style={{ backgroundImage: `url('${authorImageUrl}')` }}
+                />
+
+                <div className="flex flex-row items-center self-stretch">
+                  <div className="h-full relative shrink-0 w-[210px]">
+                    <div className="box-border flex flex-col gap-1 h-full items-start justify-center leading-none p-0 relative text-[#1e1f20] text-left w-[210px]">
+                      <div className="font-heading font-semibold relative shrink-0 text-base w-full leading-tight">
+                        {authorName}
+                      </div>
+                      <div className="open-sans font-regular relative shrink-0 text-xs w-full leading-normal">
+                        {authorTitle}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

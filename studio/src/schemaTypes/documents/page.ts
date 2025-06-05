@@ -47,6 +47,7 @@ export const page = defineType({
       of: [
         { type: 'pageHero' },
         { type: 'valueProposition' },
+        { type: 'testimonialBlock' },
         { type: 'callToAction' },
         { type: 'infoSection' },
       ],

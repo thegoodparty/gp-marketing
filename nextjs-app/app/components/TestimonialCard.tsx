@@ -41,10 +41,6 @@ export const TestimonialCard: React.FC<TestimonialCardProps> = ({
     .crop('center')
     .url()
 
-  if (!authorImageUrl) {
-    return null
-  }
-
   return (
     <div
       className={`relative rounded-2xl shrink-0 w-[350px] h-[400px] min-h-[400px] max-w-[350px] ${className}`}

@@ -2,6 +2,7 @@ import React from 'react'
 import { TestimonialCard } from './TestimonialCard'
 import { type ButtonVariant } from '../types/ui'
 import { LinkButton } from './LinkButton'
+import styles from './TestimonialBlock.module.css'
 
 interface TestimonialBlockProps {
   block: {
@@ -137,43 +138,22 @@ export default function TestimonialBlock({ block }: TestimonialBlockProps) {
           )}
 
           <div className="w-full">
-            <div className="hidden lg:flex flex-wrap gap-8 items-start justify-center w-full">
-              {testimonials.map((testimonial, index) => (
-                <div key={index} className="flex-none">
-                  <TestimonialCard
-                    quote={testimonial.quote}
-                    authorName={testimonial.authorName}
-                    authorTitle={testimonial.authorTitle}
-                    authorImage={testimonial.authorImage}
-                    backgroundColor={testimonial.backgroundColor}
-                    className="w-[350px] h-[400px]"
-                  />
-                </div>
-              ))}
-            </div>
-
-            <div className="hidden md:grid lg:hidden grid-cols-2 gap-6 justify-items-center w-full">
-              {testimonials.map((testimonial, index) => (
-                <div key={index} className="w-full max-w-[350px]">
-                  <TestimonialCard
-                    quote={testimonial.quote}
-                    authorName={testimonial.authorName}
-                    authorTitle={testimonial.authorTitle}
-                    authorImage={testimonial.authorImage}
-                    backgroundColor={testimonial.backgroundColor}
-                    className="h-[400px]"
-                  />
-                </div>
-              ))}
-            </div>
-
             <div className="md:hidden">
               <div
-                className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4"
+                className={`flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 ${
+                  testimonials.length === 1 ? 'justify-center' : ''
+                }`}
                 style={{ scrollBehavior: 'smooth' }}
               >
                 {testimonials.map((testimonial, index) => (
-                  <div key={index} className="flex-none w-[85vw] snap-center">
+                  <div
+                    key={index}
+                    className={`flex-none snap-center ${
+                      testimonials.length === 1
+                        ? 'w-[85vw] max-w-[350px]'
+                        : 'w-[85vw]'
+                    }`}
+                  >
                     <TestimonialCard
                       quote={testimonial.quote}
                       authorName={testimonial.authorName}
@@ -194,6 +174,23 @@ export default function TestimonialBlock({ block }: TestimonialBlockProps) {
                   />
                 ))}
               </div>
+            </div>
+
+            <div
+              className={`hidden md:grid gap-6 lg:gap-8 justify-items-center justify-center mx-auto w-full ${styles.testimonialGrid}`}
+            >
+              {testimonials.map((testimonial, index) => (
+                <div key={index} className="w-full">
+                  <TestimonialCard
+                    quote={testimonial.quote}
+                    authorName={testimonial.authorName}
+                    authorTitle={testimonial.authorTitle}
+                    authorImage={testimonial.authorImage}
+                    backgroundColor={testimonial.backgroundColor}
+                    className="h-[400px]"
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>

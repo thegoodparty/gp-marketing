@@ -1,95 +1,14 @@
 import React from 'react'
 import { urlForImage } from '@/sanity/lib/utils'
 import Image from 'next/image'
-import { GoodPartyOrgLogo } from 'goodparty-styleguide'
 import { getLucideIcon } from '../utils/icons'
 import { LinkButton } from './LinkButton'
+import { ValuePropositionTestimonial } from './ValuePropositionTestimonial'
 
 enum ValuePropositionColumnType {
   CONTENT = 'content',
   IMAGE = 'image',
   TESTIMONIAL = 'testimonial',
-}
-
-interface InlineTestimonialCardProps {
-  quote: string
-  authorName: string
-  authorTitle: string
-  authorImage: {
-    asset: {
-      _ref: string
-    }
-    alt: string
-    hotspot?: {
-      x: number
-      y: number
-    }
-    crop?: {
-      top: number
-      bottom: number
-      left: number
-      right: number
-    }
-  }
-  backgroundColor?: string
-  className?: string
-}
-
-const InlineTestimonialCard: React.FC<InlineTestimonialCardProps> = ({
-  quote,
-  authorName,
-  authorTitle,
-  authorImage,
-  backgroundColor = '#FFFFFF',
-  className = '',
-}) => {
-  const authorImageUrl = urlForImage(authorImage)
-    ?.width(160)
-    .height(160)
-    .fit('crop')
-    .crop('center')
-    .url()
-
-  if (!authorImageUrl) {
-    return null
-  }
-
-  return (
-    <div
-      className={`rounded-3xl p-5 lg:p-12 flex flex-col h-full ${className}`}
-      style={{ backgroundColor }}
-    >
-      <div className="flex-grow">
-        <div className="mb-8">
-          <GoodPartyOrgLogo />
-        </div>
-
-        <div className="mb-8">
-          <p className="text-[18px] font-normal lg:text-[24px] lg:font-semibold text-gray-900 leading-relaxed">
-            &ldquo;{quote}&rdquo;
-          </p>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-4 mt-auto">
-        <div className="relative w-[48px] h-[48px] lg:w-[80px] lg:h-[80px] rounded-full overflow-hidden flex-shrink-0">
-          <Image
-            src={authorImageUrl}
-            alt={authorImage.alt}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 48px, 80px"
-          />
-        </div>
-        <div>
-          <p className="text-[16px] font-semibold lg:text-[20px] lg:font-semibold text-gray-900">
-            {authorName}
-          </p>
-          <p className="text-[12px] font-normal text-gray-900">{authorTitle}</p>
-        </div>
-      </div>
-    </div>
-  )
 }
 
 interface ListItem {
@@ -203,7 +122,7 @@ export default function ValueProposition({ block }: ValuePropositionProps) {
             if (column.columnType === ValuePropositionColumnType.TESTIMONIAL) {
               return (
                 <div key={index} className="flex-1">
-                  <InlineTestimonialCard
+                  <ValuePropositionTestimonial
                     quote={column.quote}
                     authorName={column.authorName}
                     authorTitle={column.authorTitle}

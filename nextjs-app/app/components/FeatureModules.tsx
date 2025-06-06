@@ -8,6 +8,7 @@ import {
   BACKGROUND_COLOR_MAP,
   TEXT_COLOR_MAP,
 } from '../types/design-tokens'
+import { IconPosition } from '../types/ui'
 import styles from './FeatureModules.module.css'
 
 interface FeatureModulesProps {
@@ -67,7 +68,7 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
         url={button.url}
         icon={button.icon}
         variant={button.variant}
-        iconPosition="right"
+        iconPosition={IconPosition.RIGHT}
       />
     )
   }

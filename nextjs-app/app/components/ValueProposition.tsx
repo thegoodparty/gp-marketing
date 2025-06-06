@@ -4,6 +4,8 @@ import Image from 'next/image'
 import { getLucideIcon } from '../utils/icons'
 import { LinkButton } from './LinkButton'
 import { ValuePropositionTestimonial } from './ValuePropositionTestimonial'
+import { ButtonVariant } from '../types/design-tokens'
+import { IconPosition } from '../types/ui'
 
 enum ValuePropositionColumnType {
   CONTENT = 'content',
@@ -169,8 +171,8 @@ export default function ValueProposition({ block }: ValuePropositionProps) {
                       label={column.button.label}
                       url={column.button.url}
                       icon={column.button.icon}
-                      variant="secondary"
-                      iconPosition="right"
+                      variant={ButtonVariant.SECONDARY}
+                      iconPosition={IconPosition.RIGHT}
                     />
                   </div>
                 )}

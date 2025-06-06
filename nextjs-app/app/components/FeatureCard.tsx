@@ -5,8 +5,9 @@ import {
   IconContainerColor,
   DesignTokens,
   ICON_CONTAINER_COLORS,
-  GHOST_BUTTON_VARIANT,
+  ButtonVariant,
 } from '../types/design-tokens'
+import { IconPosition } from '../types/ui'
 
 interface FeatureCardProps {
   icon: string
@@ -70,8 +71,8 @@ export default function FeatureCard({
               label={button.label}
               url={button.url}
               icon={button.icon || 'ArrowUpRight'}
-              variant={GHOST_BUTTON_VARIANT}
-              iconPosition="right"
+              variant={ButtonVariant.GHOST}
+              iconPosition={IconPosition.RIGHT}
             />
           </div>
         )}

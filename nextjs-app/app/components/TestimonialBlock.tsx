@@ -1,6 +1,7 @@
 import React from 'react'
 import { TestimonialCard } from './TestimonialCard'
 import { type ButtonVariant } from '../types/design-tokens'
+import { IconPosition } from '../types/ui'
 import { LinkButton } from './LinkButton'
 import styles from './TestimonialBlock.module.css'
 
@@ -70,7 +71,7 @@ export default function TestimonialBlock({ block }: TestimonialBlockProps) {
         url={button.url}
         icon={button.icon}
         variant={button.variant}
-        iconPosition="right"
+        iconPosition={IconPosition.RIGHT}
       />
     )
   }

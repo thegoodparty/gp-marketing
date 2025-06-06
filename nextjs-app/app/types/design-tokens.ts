@@ -41,14 +41,6 @@ export enum DesignTokens {
   COLOR_GRAYSCALE_950 = 'var(--color-grayscale-950)',
 }
 
-export const DEFAULT_BUTTON_VARIANT = ButtonVariant.DEFAULT
-export const SECONDARY_BUTTON_VARIANT = ButtonVariant.SECONDARY
-export const DESTRUCTIVE_BUTTON_VARIANT = ButtonVariant.DESTRUCTIVE
-export const OUTLINE_BUTTON_VARIANT = ButtonVariant.OUTLINE
-export const GHOST_BUTTON_VARIANT = ButtonVariant.GHOST
-export const WHITE_GHOST_BUTTON_VARIANT = ButtonVariant.WHITE_GHOST
-export const WHITE_OUTLINE_BUTTON_VARIANT = ButtonVariant.WHITE_OUTLINE
-
 export const ICON_CONTAINER_COLORS: Record<IconContainerColor, DesignTokens> = {
   [IconContainerColor.RED]: DesignTokens.COLOR_RED_200,
   [IconContainerColor.BLUE]: DesignTokens.COLOR_BLUE_200,

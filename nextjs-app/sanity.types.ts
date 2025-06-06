@@ -16,6 +16,7 @@
 export type FeatureModules = {
   _type: 'featureModules'
   backgroundColor: 'dark' | 'creme' | 'white'
+  headerAlignment?: 'center' | 'left'
   header?: {
     overline?: string
     heading: string
@@ -59,6 +60,20 @@ export type FeatureModules = {
       | 'haloGreen-200'
     heading: string
     body: string
+    image?: {
+      asset?: {
+        _ref: string
+        _type: 'reference'
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      caption?: string
+      _type: 'image'
+    }
     button?: {
       label?: string
       url?: string
@@ -778,6 +793,7 @@ export type GetPageQueryResult = {
         _key: string
         _type: 'featureModules'
         backgroundColor: 'creme' | 'dark' | 'white'
+        headerAlignment?: 'center' | 'left'
         header?: {
           overline?: string
           heading: string
@@ -821,6 +837,20 @@ export type GetPageQueryResult = {
             | 'waxFlower-200'
           heading: string
           body: string
+          image?: {
+            asset?: {
+              _ref: string
+              _type: 'reference'
+              _weak?: boolean
+              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+            }
+            media?: unknown
+            hotspot?: SanityImageHotspot
+            crop?: SanityImageCrop
+            alt?: string
+            caption?: string
+            _type: 'image'
+          }
           button?: {
             label?: string
             url?: string

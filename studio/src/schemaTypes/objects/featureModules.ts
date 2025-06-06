@@ -12,7 +12,7 @@ const BUTTON_VARIANT_OPTIONS = [
   { title: 'White Outline', value: 'whiteOutline' },
 ]
 
-// Matches BackgroundTheme enum in nextjs-app/app/types/design-tokens.ts  
+// Matches BackgroundTheme enum in nextjs-app/app/types/design-tokens.ts
 const BACKGROUND_THEME_OPTIONS = [
   { title: 'Dark', value: 'dark' },
   { title: 'Creme', value: 'creme' },
@@ -46,6 +46,20 @@ export const featureModules = defineType({
       },
       initialValue: 'creme',
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'headerAlignment',
+      title: 'Header Alignment',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Centered', value: 'center' },
+          { title: 'Left Aligned', value: 'left' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'center',
+      description: 'Choose how to align the header content',
     }),
     defineField({
       name: 'header',
@@ -203,6 +217,29 @@ export const featureModules = defineType({
               validation: (Rule) => Rule.required(),
             }),
             defineField({
+              name: 'image',
+              title: 'Image',
+              type: 'image',
+              description: 'Optional image to display below the text content',
+              options: {
+                hotspot: true,
+              },
+              fields: [
+                defineField({
+                  name: 'alt',
+                  title: 'Alt Text',
+                  type: 'string',
+                  description: 'Important for accessibility and SEO',
+                }),
+                defineField({
+                  name: 'caption',
+                  title: 'Caption',
+                  type: 'string',
+                  description: 'Optional caption text below the image',
+                }),
+              ],
+            }),
+            defineField({
               name: 'button',
               title: 'CTA Button',
               type: 'object',
@@ -282,4 +319,4 @@ export const featureModules = defineType({
       }
     },
   },
-}) 
+})

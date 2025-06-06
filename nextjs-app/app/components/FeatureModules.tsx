@@ -14,6 +14,7 @@ import styles from './FeatureModules.module.css'
 interface FeatureModulesProps {
   block: {
     backgroundColor: BackgroundTheme
+    headerAlignment?: 'center' | 'left'
     header?: {
       overline?: string
       heading: string
@@ -36,6 +37,14 @@ interface FeatureModulesProps {
       iconContainerColor: IconContainerColor
       heading: string
       body: string
+      image?: {
+        asset: {
+          _ref: string
+          _type: 'reference'
+        }
+        alt?: string
+        caption?: string
+      }
       button?: {
         label: string
         url: string
@@ -46,7 +55,12 @@ interface FeatureModulesProps {
 }
 
 export default function FeatureModules({ block }: FeatureModulesProps) {
-  const { header, features, backgroundColor } = block
+  const {
+    header,
+    features,
+    backgroundColor,
+    headerAlignment = 'center',
+  } = block
 
   if (!features || features.length < 3) {
     return null
@@ -54,6 +68,14 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
 
   const bgColor = BACKGROUND_COLOR_MAP[backgroundColor]
   const textColor = TEXT_COLOR_MAP[backgroundColor]
+
+  // Header alignment classes
+  const isLeftAligned = headerAlignment === 'left'
+  const alignmentClasses = {
+    container: isLeftAligned ? 'items-start' : 'items-center',
+    text: isLeftAligned ? 'text-left' : 'text-center',
+    buttons: isLeftAligned ? 'justify-start' : 'justify-center',
+  }
 
   const renderButton = (
     button:
@@ -84,7 +106,7 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
 
     if (hasPrimary && !hasSecondary) {
       return (
-        <div className="flex justify-center items-center">
+        <div className={`flex ${alignmentClasses.buttons} items-center`}>
           {renderButton(primaryButton)}
         </div>
       )
@@ -92,14 +114,16 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
 
     if (!hasPrimary && hasSecondary) {
       return (
-        <div className="flex justify-center items-center">
+        <div className={`flex ${alignmentClasses.buttons} items-center`}>
           {renderButton(secondaryButton)}
         </div>
       )
     }
 
     return (
-      <div className="flex flex-row gap-4 justify-center items-center">
+      <div
+        className={`flex flex-row gap-4 ${alignmentClasses.buttons} items-center`}
+      >
         {renderButton(primaryButton)}
         {renderButton(secondaryButton)}
       </div>
@@ -112,26 +136,30 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
         <div className="box-border flex flex-col gap-12 lg:gap-20 items-center justify-start px-5 lg:px-20 py-12 lg:py-20 w-full">
           {header && (
             <div className="w-full">
-              <div className="box-border flex flex-col gap-6 items-center justify-start p-0 w-full">
+              <div
+                className={`box-border flex flex-col gap-6 ${alignmentClasses.container} justify-start p-0 w-full`}
+              >
                 <div className="w-full">
-                  <div className="box-border flex flex-col gap-4 items-center justify-start leading-none p-0 w-full">
+                  <div
+                    className={`box-border flex flex-col gap-4 ${alignmentClasses.container} justify-start leading-none p-0 w-full`}
+                  >
                     {header.overline && (
                       <div
-                        className="text-large text-center whitespace-nowrap leading-tight"
+                        className={`text-large ${alignmentClasses.text} whitespace-nowrap leading-tight`}
                         style={{ color: textColor }}
                       >
                         {header.overline}
                       </div>
                     )}
                     <div
-                      className="text-6xl font-semibold text-center w-full leading-tight"
+                      className={`text-6xl font-semibold ${alignmentClasses.text} w-full leading-tight`}
                       style={{ color: textColor }}
                     >
                       {header.heading}
                     </div>
                     {header.subhead && (
                       <div
-                        className="text-lead text-center w-full leading-relaxed"
+                        className={`text-lead ${alignmentClasses.text} w-full leading-relaxed`}
                         style={{ color: textColor }}
                       >
                         {header.subhead}
@@ -156,6 +184,7 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
                   iconContainerColor={feature.iconContainerColor}
                   heading={feature.heading}
                   body={feature.body}
+                  image={feature.image}
                   button={feature.button}
                   textColor={textColor}
                 />
@@ -171,6 +200,7 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
                   iconContainerColor={feature.iconContainerColor}
                   heading={feature.heading}
                   body={feature.body}
+                  image={feature.image}
                   button={feature.button}
                   textColor={textColor}
                   className="w-full max-w-[400px]"

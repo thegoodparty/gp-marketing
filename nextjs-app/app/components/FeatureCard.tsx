@@ -1,4 +1,6 @@
 import React from 'react'
+import Image from 'next/image'
+import { urlForImage } from '@/sanity/lib/utils'
 import { getLucideIcon } from '../utils/icons'
 import { LinkButton } from './LinkButton'
 import {
@@ -14,6 +16,14 @@ interface FeatureCardProps {
   iconContainerColor: IconContainerColor
   heading: string
   body: string
+  image?: {
+    asset: {
+      _ref: string
+      _type: 'reference'
+    }
+    alt?: string
+    caption?: string
+  }
   button?: {
     label: string
     url: string
@@ -28,6 +38,7 @@ export default function FeatureCard({
   iconContainerColor,
   heading,
   body,
+  image,
   button,
   textColor,
   className = '',
@@ -63,6 +74,27 @@ export default function FeatureCard({
               {body}
             </p>
           </div>
+
+          {/* Image section */}
+          {image && (
+            <div className="w-full">
+              <Image
+                src={urlForImage(image)?.width(400).height(240).url() as string}
+                alt={image.alt || ''}
+                width={400}
+                height={240}
+                className="w-full h-auto rounded-lg object-cover"
+              />
+              {image.caption && (
+                <p
+                  className="text-sm mt-2 opacity-80"
+                  style={{ color: textColor }}
+                >
+                  {image.caption}
+                </p>
+              )}
+            </div>
+          )}
         </div>
 
         {button && (

@@ -1,6 +1,6 @@
 import React from 'react'
 import { TestimonialCard } from './TestimonialCard'
-import { type ButtonVariant } from '../types/ui'
+import { type ButtonVariant } from '../types/design-tokens'
 import { LinkButton } from './LinkButton'
 import styles from './TestimonialBlock.module.css'
 

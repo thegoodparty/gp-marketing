@@ -13,59 +13,181 @@
  */
 
 // Source: schema.json
-export type SanityImagePaletteSwatch = {
-  _type: 'sanity.imagePaletteSwatch'
-  background?: string
-  foreground?: string
-  population?: number
-  title?: string
+export type FeatureModules = {
+  _type: 'featureModules'
+  backgroundColor: 'dark' | 'creme' | 'white'
+  header?: {
+    overline?: string
+    heading: string
+    subhead?: string
+    primaryButton?: {
+      label?: string
+      url?: string
+      variant?:
+        | 'default'
+        | 'secondary'
+        | 'destructive'
+        | 'outline'
+        | 'ghost'
+        | 'whiteGhost'
+        | 'whiteOutline'
+      icon?: string
+    }
+    secondaryButton?: {
+      label?: string
+      url?: string
+      variant?:
+        | 'default'
+        | 'secondary'
+        | 'destructive'
+        | 'outline'
+        | 'ghost'
+        | 'whiteGhost'
+        | 'whiteOutline'
+      icon?: string
+    }
+  }
+  features?: Array<{
+    icon: string
+    iconContainerColor:
+      | 'red-200'
+      | 'blue-200'
+      | 'brightYellow-200'
+      | 'orange-200'
+      | 'lavender-200'
+      | 'waxFlower-200'
+      | 'haloGreen-200'
+    heading: string
+    body: string
+    button?: {
+      label?: string
+      url?: string
+      icon?: string
+    }
+    _type: 'featureCard'
+    _key: string
+  }>
 }
 
-export type SanityImagePalette = {
-  _type: 'sanity.imagePalette'
-  darkMuted?: SanityImagePaletteSwatch
-  lightVibrant?: SanityImagePaletteSwatch
-  darkVibrant?: SanityImagePaletteSwatch
-  vibrant?: SanityImagePaletteSwatch
-  dominant?: SanityImagePaletteSwatch
-  lightMuted?: SanityImagePaletteSwatch
-  muted?: SanityImagePaletteSwatch
+export type TestimonialBlock = {
+  _type: 'testimonialBlock'
+  header?: {
+    overline?: string
+    heading: string
+    subhead?: string
+    primaryButton?: {
+      label?: string
+      url?: string
+      variant?:
+        | 'default'
+        | 'secondary'
+        | 'destructive'
+        | 'outline'
+        | 'ghost'
+        | 'whiteGhost'
+        | 'whiteOutline'
+      icon?: string
+    }
+    secondaryButton?: {
+      label?: string
+      url?: string
+      variant?:
+        | 'default'
+        | 'secondary'
+        | 'destructive'
+        | 'outline'
+        | 'ghost'
+        | 'whiteGhost'
+        | 'whiteOutline'
+      icon?: string
+    }
+  }
+  testimonials?: Array<{
+    backgroundColor:
+      | '#FDCDCD'
+      | '#D1E7FE'
+      | '#FFEEB7'
+      | '#F1E5FF'
+      | '#FFF1C9'
+      | '#CCEADD'
+      | '#FFFFFF'
+    quote: string
+    authorName: string
+    authorTitle: string
+    authorImage: {
+      asset?: {
+        _ref: string
+        _type: 'reference'
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt: string
+      _type: 'image'
+    }
+    _type: 'testimonial'
+    _key: string
+  }>
 }
 
-export type SanityImageDimensions = {
-  _type: 'sanity.imageDimensions'
-  height?: number
-  width?: number
-  aspectRatio?: number
-}
-
-export type SanityFileAsset = {
-  _id: string
-  _type: 'sanity.fileAsset'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  originalFilename?: string
-  label?: string
-  title?: string
-  description?: string
-  altText?: string
-  sha1hash?: string
-  extension?: string
-  mimeType?: string
-  size?: number
-  assetId?: string
-  uploadId?: string
-  path?: string
-  url?: string
-  source?: SanityAssetSourceData
-}
-
-export type Geopoint = {
-  _type: 'geopoint'
-  lat?: number
-  lng?: number
-  alt?: number
+export type ValueProposition = {
+  _type: 'valueProposition'
+  columns?: Array<{
+    columnType: 'content' | 'image' | 'testimonial'
+    title?: string
+    backgroundColor?:
+      | '#FDCDCD'
+      | '#D1E7FE'
+      | '#FFEEB7'
+      | '#F1E5FF'
+      | '#FFF1C9'
+      | '#CCEADD'
+      | '#FFFFFF'
+    items?: Array<{
+      icon: string
+      text: string
+      _type: 'listItem'
+      _key: string
+    }>
+    button?: {
+      label?: string
+      url?: string
+      icon?: string
+    }
+    image?: {
+      asset?: {
+        _ref: string
+        _type: 'reference'
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt: string
+      _type: 'image'
+    }
+    quote?: string
+    authorName?: string
+    authorTitle?: string
+    authorImage?: {
+      asset?: {
+        _ref: string
+        _type: 'reference'
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt: string
+      _type: 'image'
+    }
+    _type: 'column'
+    _key: string
+  }>
 }
 
 export type CallToAction = {
@@ -319,6 +441,15 @@ export type Page = {
       } & PageHero)
     | ({
         _key: string
+      } & ValueProposition)
+    | ({
+        _key: string
+      } & TestimonialBlock)
+    | ({
+        _key: string
+      } & FeatureModules)
+    | ({
+        _key: string
       } & CallToAction)
     | ({
         _key: string
@@ -381,10 +512,38 @@ export type Person = {
   }
 }
 
-export type Slug = {
-  _type: 'slug'
-  current: string
-  source?: string
+export type SanityImagePaletteSwatch = {
+  _type: 'sanity.imagePaletteSwatch'
+  background?: string
+  foreground?: string
+  population?: number
+  title?: string
+}
+
+export type SanityImagePalette = {
+  _type: 'sanity.imagePalette'
+  darkMuted?: SanityImagePaletteSwatch
+  lightVibrant?: SanityImagePaletteSwatch
+  darkVibrant?: SanityImagePaletteSwatch
+  vibrant?: SanityImagePaletteSwatch
+  dominant?: SanityImagePaletteSwatch
+  lightMuted?: SanityImagePaletteSwatch
+  muted?: SanityImagePaletteSwatch
+}
+
+export type SanityImageDimensions = {
+  _type: 'sanity.imageDimensions'
+  height?: number
+  width?: number
+  aspectRatio?: number
+}
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x?: number
+  y?: number
+  height?: number
+  width?: number
 }
 
 export type SanityImageCrop = {
@@ -395,12 +554,26 @@ export type SanityImageCrop = {
   right?: number
 }
 
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x?: number
-  y?: number
-  height?: number
-  width?: number
+export type SanityFileAsset = {
+  _id: string
+  _type: 'sanity.fileAsset'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  originalFilename?: string
+  label?: string
+  title?: string
+  description?: string
+  altText?: string
+  sha1hash?: string
+  extension?: string
+  mimeType?: string
+  size?: number
+  assetId?: string
+  uploadId?: string
+  path?: string
+  url?: string
+  source?: SanityAssetSourceData
 }
 
 export type SanityImageAsset = {
@@ -426,13 +599,6 @@ export type SanityImageAsset = {
   source?: SanityAssetSourceData
 }
 
-export type SanityAssetSourceData = {
-  _type: 'sanity.assetSourceData'
-  name?: string
-  id?: string
-  url?: string
-}
-
 export type SanityImageMetadata = {
   _type: 'sanity.imageMetadata'
   location?: Geopoint
@@ -444,12 +610,30 @@ export type SanityImageMetadata = {
   isOpaque?: boolean
 }
 
+export type Geopoint = {
+  _type: 'geopoint'
+  lat?: number
+  lng?: number
+  alt?: number
+}
+
+export type Slug = {
+  _type: 'slug'
+  current: string
+  source?: string
+}
+
+export type SanityAssetSourceData = {
+  _type: 'sanity.assetSourceData'
+  name?: string
+  id?: string
+  url?: string
+}
+
 export type AllSanitySchemaTypes =
-  | SanityImagePaletteSwatch
-  | SanityImagePalette
-  | SanityImageDimensions
-  | SanityFileAsset
-  | Geopoint
+  | FeatureModules
+  | TestimonialBlock
+  | ValueProposition
   | CallToAction
   | Link
   | InfoSection
@@ -459,12 +643,17 @@ export type AllSanitySchemaTypes =
   | Page
   | Post
   | Person
-  | Slug
-  | SanityImageCrop
+  | SanityImagePaletteSwatch
+  | SanityImagePalette
+  | SanityImageDimensions
   | SanityImageHotspot
+  | SanityImageCrop
+  | SanityFileAsset
   | SanityImageAsset
-  | SanityAssetSourceData
   | SanityImageMetadata
+  | Geopoint
+  | Slug
+  | SanityAssetSourceData
 export declare const internalGroqTypeReferenceTo: unique symbol
 // Source: ./sanity/lib/queries.ts
 // Variable: settingsQuery
@@ -587,6 +776,62 @@ export type GetPageQueryResult = {
       }
     | {
         _key: string
+        _type: 'featureModules'
+        backgroundColor: 'creme' | 'dark' | 'white'
+        header?: {
+          overline?: string
+          heading: string
+          subhead?: string
+          primaryButton?: {
+            label?: string
+            url?: string
+            variant?:
+              | 'default'
+              | 'destructive'
+              | 'ghost'
+              | 'outline'
+              | 'secondary'
+              | 'whiteGhost'
+              | 'whiteOutline'
+            icon?: string
+          }
+          secondaryButton?: {
+            label?: string
+            url?: string
+            variant?:
+              | 'default'
+              | 'destructive'
+              | 'ghost'
+              | 'outline'
+              | 'secondary'
+              | 'whiteGhost'
+              | 'whiteOutline'
+            icon?: string
+          }
+        }
+        features?: Array<{
+          icon: string
+          iconContainerColor:
+            | 'blue-200'
+            | 'brightYellow-200'
+            | 'haloGreen-200'
+            | 'lavender-200'
+            | 'orange-200'
+            | 'red-200'
+            | 'waxFlower-200'
+          heading: string
+          body: string
+          button?: {
+            label?: string
+            url?: string
+            icon?: string
+          }
+          _type: 'featureCard'
+          _key: string
+        }>
+      }
+    | {
+        _key: string
         _type: 'infoSection'
         heading?: string
         subheading?: string
@@ -659,6 +904,127 @@ export type GetPageQueryResult = {
           label?: string
           url?: string
         }
+      }
+    | {
+        _key: string
+        _type: 'testimonialBlock'
+        header?: {
+          overline?: string
+          heading: string
+          subhead?: string
+          primaryButton?: {
+            label?: string
+            url?: string
+            variant?:
+              | 'default'
+              | 'destructive'
+              | 'ghost'
+              | 'outline'
+              | 'secondary'
+              | 'whiteGhost'
+              | 'whiteOutline'
+            icon?: string
+          }
+          secondaryButton?: {
+            label?: string
+            url?: string
+            variant?:
+              | 'default'
+              | 'destructive'
+              | 'ghost'
+              | 'outline'
+              | 'secondary'
+              | 'whiteGhost'
+              | 'whiteOutline'
+            icon?: string
+          }
+        }
+        testimonials?: Array<{
+          backgroundColor:
+            | '#CCEADD'
+            | '#D1E7FE'
+            | '#F1E5FF'
+            | '#FDCDCD'
+            | '#FFEEB7'
+            | '#FFF1C9'
+            | '#FFFFFF'
+          quote: string
+          authorName: string
+          authorTitle: string
+          authorImage: {
+            asset?: {
+              _ref: string
+              _type: 'reference'
+              _weak?: boolean
+              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+            }
+            media?: unknown
+            hotspot?: SanityImageHotspot
+            crop?: SanityImageCrop
+            alt: string
+            _type: 'image'
+          }
+          _type: 'testimonial'
+          _key: string
+        }>
+      }
+    | {
+        _key: string
+        _type: 'valueProposition'
+        columns?: Array<{
+          columnType: 'content' | 'image' | 'testimonial'
+          title?: string
+          backgroundColor?:
+            | '#CCEADD'
+            | '#D1E7FE'
+            | '#F1E5FF'
+            | '#FDCDCD'
+            | '#FFEEB7'
+            | '#FFF1C9'
+            | '#FFFFFF'
+          items?: Array<{
+            icon: string
+            text: string
+            _type: 'listItem'
+            _key: string
+          }>
+          button?: {
+            label?: string
+            url?: string
+            icon?: string
+          }
+          image?: {
+            asset?: {
+              _ref: string
+              _type: 'reference'
+              _weak?: boolean
+              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+            }
+            media?: unknown
+            hotspot?: SanityImageHotspot
+            crop?: SanityImageCrop
+            alt: string
+            _type: 'image'
+          }
+          quote?: string
+          authorName?: string
+          authorTitle?: string
+          authorImage?: {
+            asset?: {
+              _ref: string
+              _type: 'reference'
+              _weak?: boolean
+              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+            }
+            media?: unknown
+            hotspot?: SanityImageHotspot
+            crop?: SanityImageCrop
+            alt: string
+            _type: 'image'
+          }
+          _type: 'column'
+          _key: string
+        }>
       }
   > | null
 } | null

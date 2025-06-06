@@ -6,6 +6,7 @@ import { dataAttr } from '@/sanity/lib/utils'
 import PageHero from '@/app/components/PageHero'
 import ValueProposition from '@/app/components/ValueProposition'
 import TestimonialBlock from '@/app/components/TestimonialBlock'
+import FeatureModules from '@/app/components/FeatureModules'
 type BlocksType = {
   [key: string]: React.FC<any>
 }
@@ -28,6 +29,7 @@ const Blocks: BlocksType = {
   pageHero: PageHero,
   valueProposition: ValueProposition,
   testimonialBlock: TestimonialBlock,
+  featureModules: FeatureModules,
 }
 
 /**

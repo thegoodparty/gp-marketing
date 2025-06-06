@@ -1,7 +1,10 @@
 import React from 'react'
 import { Button } from 'goodparty-styleguide'
 import Link from 'next/link'
-import { type ButtonVariant, DEFAULT_BUTTON_VARIANT } from '../types/ui'
+import {
+  type ButtonVariant,
+  DEFAULT_BUTTON_VARIANT,
+} from '../types/design-tokens'
 import { getLucideIcon } from '../utils/icons'
 
 interface LinkButtonProps {

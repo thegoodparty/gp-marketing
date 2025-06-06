@@ -7,7 +7,8 @@ import { settings } from './singletons/settings'
 import { link } from './objects/link'
 import { blockContent } from './objects/blockContent'
 import { pageHero } from './objects/pageHero'
-import { problemSection } from './objects/problemSection'
+import { valueProposition } from './objects/valueProposition'
+import { testimonialBlock } from './objects/testimonialBlock'
 
 // Export an array of all the schema types.  This is used in the Sanity Studio configuration. https://www.sanity.io/docs/schema-types
 
@@ -24,5 +25,6 @@ export const schemaTypes = [
   infoSection,
   callToAction,
   link,
-  problemSection,
+  valueProposition,
+  testimonialBlock,
 ]

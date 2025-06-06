@@ -13,6 +13,27 @@
  */
 
 // Source: schema.json
+export type CtaCardBlock = {
+  _type: 'ctaCardBlock'
+  cards?: Array<{
+    overline?: string
+    heading: string
+    backgroundColor:
+      | 'red-200'
+      | 'blue-200'
+      | 'brightYellow-200'
+      | 'orange-200'
+      | 'lavender-200'
+      | 'waxFlower-200'
+      | 'haloGreen-200'
+    url: string
+    linkTarget?: '_blank' | '_self'
+    icon?: string
+    _type: 'ctaCard'
+    _key: string
+  }>
+}
+
 export type FeatureModules = {
   _type: 'featureModules'
   backgroundColor: 'dark' | 'creme' | 'white'
@@ -465,6 +486,9 @@ export type Page = {
       } & FeatureModules)
     | ({
         _key: string
+      } & CtaCardBlock)
+    | ({
+        _key: string
       } & CallToAction)
     | ({
         _key: string
@@ -646,6 +670,7 @@ export type SanityAssetSourceData = {
 }
 
 export type AllSanitySchemaTypes =
+  | CtaCardBlock
   | FeatureModules
   | TestimonialBlock
   | ValueProposition
@@ -788,6 +813,27 @@ export type GetPageQueryResult = {
           post: string | null
           openInNewTab?: boolean
         } | null
+      }
+    | {
+        _key: string
+        _type: 'ctaCardBlock'
+        cards?: Array<{
+          overline?: string
+          heading: string
+          backgroundColor:
+            | 'blue-200'
+            | 'brightYellow-200'
+            | 'haloGreen-200'
+            | 'lavender-200'
+            | 'orange-200'
+            | 'red-200'
+            | 'waxFlower-200'
+          url: string
+          linkTarget?: '_blank' | '_self'
+          icon?: string
+          _type: 'ctaCard'
+          _key: string
+        }>
       }
     | {
         _key: string

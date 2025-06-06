@@ -49,6 +49,7 @@ export const page = defineType({
         { type: 'valueProposition' },
         { type: 'testimonialBlock' },
         { type: 'featureModules' },
+        { type: 'ctaCardBlock' },
         { type: 'callToAction' },
         { type: 'infoSection' },
       ],

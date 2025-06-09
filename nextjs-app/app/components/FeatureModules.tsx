@@ -1,6 +1,5 @@
 import React from 'react'
 import FeatureCard from './FeatureCard'
-import FeatureImageCard from './FeatureImageCard'
 import { BlockHeaderSection } from './BlockHeaderSection'
 import {
   BackgroundTheme,
@@ -74,24 +73,20 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
     index: number,
     className?: string,
   ) => {
-    const cardProps = {
-      icon: feature.icon,
-      iconContainerColor: feature.iconContainerColor,
-      heading: feature.heading,
-      body: feature.body,
-      button: feature.button,
-      textColor: textColor,
-      className: className,
-      backgroundColor: backgroundColor,
-    }
-
-    if (feature.image) {
-      return (
-        <FeatureImageCard key={index} {...cardProps} image={feature.image} />
-      )
-    }
-
-    return <FeatureCard key={index} {...cardProps} />
+    return (
+      <FeatureCard
+        key={index}
+        icon={feature.icon}
+        iconContainerColor={feature.iconContainerColor}
+        heading={feature.heading}
+        body={feature.body}
+        image={feature.image}
+        button={feature.button}
+        textColor={textColor}
+        className={className}
+        backgroundColor={backgroundColor}
+      />
+    )
   }
 
   const numFeatures = features.length

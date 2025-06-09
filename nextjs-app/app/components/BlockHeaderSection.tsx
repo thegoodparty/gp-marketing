@@ -49,7 +49,7 @@ export const BlockHeaderSection: React.FC<BlockHeaderSectionProps> = ({
   const secondaryButton = header.secondaryButton
   const hasPrimary = primaryButton?.label && primaryButton?.url
   const hasSecondary = secondaryButton?.label && secondaryButton?.url
-  const isDarkBackground = backgroundColor === BackgroundTheme.DARK
+  const hasDarkBackground = backgroundColor === BackgroundTheme.DARK
 
   return (
     <div className={`w-full ${className}`}>
@@ -103,7 +103,7 @@ export const BlockHeaderSection: React.FC<BlockHeaderSectionProps> = ({
                 url={secondaryButton.url}
                 icon={secondaryButton.icon}
                 variant={
-                  isDarkBackground
+                  hasDarkBackground
                     ? ButtonVariant.WHITE_OUTLINE
                     : secondaryButton.variant
                 }

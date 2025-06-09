@@ -2,12 +2,11 @@ import React from 'react'
 import Image from 'next/image'
 import { urlForImage } from '@/sanity/lib/utils'
 import { getLucideIcon } from '../utils/icons'
-import { LinkButton } from './LinkButton'
+import { LinkText } from './LinkText'
 import {
   IconContainerColor,
   DesignTokens,
   ICON_CONTAINER_COLORS,
-  ButtonVariant,
   BackgroundTheme,
 } from '../types/design-tokens'
 import { IconPosition } from '../types/ui'
@@ -85,14 +84,12 @@ export default function FeatureImageCard({
 
           {button && (
             <div>
-              <LinkButton
+              <LinkText
                 label={button.label}
                 url={button.url}
                 icon={button.icon || 'ArrowUpRight'}
-                variant={
-                  isDarkMode ? ButtonVariant.WHITE_GHOST : ButtonVariant.GHOST
-                }
                 iconPosition={IconPosition.RIGHT}
+                className={isDarkMode ? 'text-white' : 'text-black'}
               />
             </div>
           )}

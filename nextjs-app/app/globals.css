@@ -9,6 +9,22 @@
   :root {
     --font-sans: var(--font-open-sans);
     --font-heading: var(--font-outfit);
+
+    /* Fix for missing whiteOutline button variant */
+    --component-button-whiteOutline-background: transparent;
+    --component-button-whiteOutline-backgroundHover: rgba(255, 255, 255, 0.1);
+    --component-button-whiteOutline-backgroundDisabled: transparent;
+    --component-button-whiteOutline-text: white;
+    --component-button-whiteOutline-border: white;
+    --component-button-whiteOutline-borderFocus: white;
+
+    /* Fix for missing whiteGhost button variant */
+    --component-button-whiteGhost-background: transparent;
+    --component-button-whiteGhost-backgroundHover: rgba(255, 255, 255, 0.1);
+    --component-button-whiteGhost-backgroundDisabled: transparent;
+    --component-button-whiteGhost-text: white;
+    --component-button-whiteGhost-border: transparent;
+    --component-button-whiteGhost-borderFocus: rgba(255, 255, 255, 0.5);
   }
 
   body {

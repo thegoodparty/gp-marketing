@@ -105,13 +105,14 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
     button:
       | NonNullable<FeatureModulesProps['block']['header']>['primaryButton']
       | NonNullable<FeatureModulesProps['block']['header']>['secondaryButton'],
+    isPrimary = false,
   ) => {
     if (!button?.label || !button?.url) return null
 
     const isDarkMode = backgroundColor === BackgroundTheme.DARK
-    let buttonVariant = button.variant
 
-    if (isDarkMode && button.variant === ButtonVariant.SECONDARY) {
+    let buttonVariant = button.variant
+    if (!isPrimary && isDarkMode) {
       buttonVariant = ButtonVariant.WHITE_OUTLINE
     }
 
@@ -138,7 +139,7 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
     if (hasPrimary && !hasSecondary) {
       return (
         <div className={`flex ${alignmentClasses.buttons} items-center`}>
-          {renderButton(primaryButton)}
+          {renderButton(primaryButton, true)}
         </div>
       )
     }
@@ -146,7 +147,7 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
     if (!hasPrimary && hasSecondary) {
       return (
         <div className={`flex ${alignmentClasses.buttons} items-center`}>
-          {renderButton(secondaryButton)}
+          {renderButton(secondaryButton, false)}
         </div>
       )
     }
@@ -155,8 +156,8 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
       <div
         className={`flex flex-row gap-4 ${alignmentClasses.buttons} items-center`}
       >
-        {renderButton(primaryButton)}
-        {renderButton(secondaryButton)}
+        {renderButton(primaryButton, true)}
+        {renderButton(secondaryButton, false)}
       </div>
     )
   }

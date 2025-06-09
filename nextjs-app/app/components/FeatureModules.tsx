@@ -1,7 +1,7 @@
 import React from 'react'
-import { LinkButton } from './LinkButton'
 import FeatureCard from './FeatureCard'
 import FeatureImageCard from './FeatureImageCard'
+import { BlockHeaderSection } from './BlockHeaderSection'
 import {
   BackgroundTheme,
   IconContainerColor,
@@ -9,7 +9,7 @@ import {
   BACKGROUND_COLOR_MAP,
   TEXT_COLOR_MAP,
 } from '../types/design-tokens'
-import { Alignment, IconPosition } from '../types/ui'
+import { Alignment } from '../types/ui'
 
 interface FeatureModulesProps {
   block: {
@@ -69,13 +69,6 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
   const bgColor = BACKGROUND_COLOR_MAP[backgroundColor]
   const textColor = TEXT_COLOR_MAP[backgroundColor]
 
-  const isLeftAligned = headerAlignment === 'left'
-  const alignmentClasses = {
-    container: isLeftAligned ? 'items-start' : 'items-center',
-    text: isLeftAligned ? 'text-left' : 'text-center',
-    buttons: isLeftAligned ? 'justify-start' : 'justify-center',
-  }
-
   const renderFeatureCard = (
     feature: (typeof features)[0],
     index: number,
@@ -99,67 +92,6 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
     }
 
     return <FeatureCard key={index} {...cardProps} />
-  }
-
-  const renderButton = (
-    button:
-      | NonNullable<FeatureModulesProps['block']['header']>['primaryButton']
-      | NonNullable<FeatureModulesProps['block']['header']>['secondaryButton'],
-    isPrimary = false,
-  ) => {
-    if (!button?.label || !button?.url) return null
-
-    const isDarkMode = backgroundColor === BackgroundTheme.DARK
-
-    let buttonVariant = button.variant
-    if (!isPrimary && isDarkMode) {
-      buttonVariant = ButtonVariant.WHITE_OUTLINE
-    }
-
-    return (
-      <LinkButton
-        label={button.label}
-        url={button.url}
-        icon={button.icon}
-        variant={buttonVariant}
-        iconPosition={IconPosition.RIGHT}
-      />
-    )
-  }
-
-  const renderButtons = () => {
-    const primaryButton = header?.primaryButton
-    const secondaryButton = header?.secondaryButton
-
-    const hasPrimary = primaryButton?.label && primaryButton?.url
-    const hasSecondary = secondaryButton?.label && secondaryButton?.url
-
-    if (!hasPrimary && !hasSecondary) return null
-
-    if (hasPrimary && !hasSecondary) {
-      return (
-        <div className={`flex ${alignmentClasses.buttons} items-center`}>
-          {renderButton(primaryButton, true)}
-        </div>
-      )
-    }
-
-    if (!hasPrimary && hasSecondary) {
-      return (
-        <div className={`flex ${alignmentClasses.buttons} items-center`}>
-          {renderButton(secondaryButton, false)}
-        </div>
-      )
-    }
-
-    return (
-      <div
-        className={`flex flex-row gap-4 ${alignmentClasses.buttons} items-center`}
-      >
-        {renderButton(primaryButton, true)}
-        {renderButton(secondaryButton, false)}
-      </div>
-    )
   }
 
   const numFeatures = features.length
@@ -191,41 +123,11 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
       <div className="flex flex-col items-center w-full">
         <div className="box-border flex flex-col gap-12 lg:gap-20 items-center justify-start px-5 lg:px-20 py-12 lg:py-20 w-full">
           {header && (
-            <div className="w-full">
-              <div
-                className={`box-border flex flex-col gap-6 ${alignmentClasses.container} justify-start p-0 w-full`}
-              >
-                <div className="w-full">
-                  <div
-                    className={`box-border flex flex-col gap-4 ${alignmentClasses.container} justify-start leading-none p-0 w-full`}
-                  >
-                    {header.overline && (
-                      <div
-                        className={`text-large ${alignmentClasses.text} whitespace-nowrap leading-tight`}
-                        style={{ color: textColor }}
-                      >
-                        {header.overline}
-                      </div>
-                    )}
-                    <div
-                      className={`text-6xl font-semibold ${alignmentClasses.text} w-full leading-tight`}
-                      style={{ color: textColor }}
-                    >
-                      {header.heading}
-                    </div>
-                    {header.subhead && (
-                      <div
-                        className={`text-lead ${alignmentClasses.text} w-full leading-relaxed`}
-                        style={{ color: textColor }}
-                      >
-                        {header.subhead}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                {renderButtons()}
-              </div>
-            </div>
+            <BlockHeaderSection
+              header={header}
+              backgroundColor={backgroundColor}
+              headerAlignment={headerAlignment}
+            />
           )}
 
           <div className="w-full">

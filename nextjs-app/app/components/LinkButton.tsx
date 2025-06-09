@@ -28,7 +28,7 @@ export const LinkButton: React.FC<LinkButtonProps> = ({
 
   return (
     <Link href={url} target={target} className={`inline-block ${className}`}>
-      <Button iconPosition={iconPosition} variant={variant as any}>
+      <Button iconPosition={iconPosition} variant={variant}>
         {ButtonIcon && <ButtonIcon className="mr-2 h-4 w-4" />}
         {label}
       </Button>

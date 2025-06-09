@@ -170,7 +170,7 @@ export default function ValueProposition({ block }: ValuePropositionProps) {
                     <LinkButton
                       label={column.button.label}
                       url={column.button.url}
-                      icon={column.button.icon}
+                      icon={column.button.icon || 'ArrowUpRight'}
                       variant={ButtonVariant.SECONDARY}
                       iconPosition={IconPosition.RIGHT}
                     />

@@ -102,15 +102,11 @@ export default function ValueProposition({ block }: ValuePropositionProps) {
                 .crop('center')
                 .url()
 
-              if (!imageUrl) {
-                return null
-              }
-
               return (
                 <div key={index} className="flex-1 rounded-3xl overflow-hidden">
                   <div className="relative w-full h-[300px] lg:h-[466px]">
                     <Image
-                      src={imageUrl}
+                      src={imageUrl || ''}
                       alt={column.image.alt}
                       fill
                       className="object-cover"

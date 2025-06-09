@@ -10,6 +10,7 @@
     --font-sans: var(--font-open-sans);
     --font-heading: var(--font-outfit);
 
+    /* TODO: Fix this in the Styleguide */
     /* Fix for missing whiteOutline button variant */
     --component-button-whiteOutline-background: transparent;
     --component-button-whiteOutline-backgroundHover: rgba(255, 255, 255, 0.1);

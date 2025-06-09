@@ -61,10 +61,6 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
     headerAlignment = Alignment.CENTER,
   } = block
 
-  if (!features || features.length < 3) {
-    return null
-  }
-
   const bgColor = BACKGROUND_COLOR_MAP[backgroundColor]
   const textColor = TEXT_COLOR_MAP[backgroundColor]
 
@@ -89,9 +85,9 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
     )
   }
 
-  const numFeatures = features.length
-  const desktopColumnCount = 3
-  const tabletColumnCount = 2
+  const numFeatures = features?.length || 0
+  const desktopColumnCount = Math.min(3, numFeatures)
+  const tabletColumnCount = Math.min(2, numFeatures)
   const desktopItemsPerCol = Math.ceil(numFeatures / desktopColumnCount)
   const tabletItemsPerCol = Math.ceil(numFeatures / tabletColumnCount)
 
@@ -99,7 +95,7 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
   for (let i = 0; i < desktopColumnCount; i++) {
     const start = i * desktopItemsPerCol
     const end = start + desktopItemsPerCol
-    if (start < numFeatures) {
+    if (start < numFeatures && features) {
       desktopColumns.push(features.slice(start, end))
     }
   }
@@ -108,7 +104,7 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
   for (let i = 0; i < tabletColumnCount; i++) {
     const start = i * tabletItemsPerCol
     const end = start + tabletItemsPerCol
-    if (start < numFeatures) {
+    if (start < numFeatures && features) {
       tabletColumns.push(features.slice(start, end))
     }
   }
@@ -125,35 +121,37 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
             />
           )}
 
-          <div className="w-full">
-            <div className="hidden lg:flex flex-row gap-8 w-full">
-              {desktopColumns.map((column, i) => (
-                <div key={i} className="flex flex-col gap-8 w-full flex-1">
-                  {column.map((feature) => {
-                    const originalIndex = features.indexOf(feature)
-                    return renderFeatureCard(feature, originalIndex, 'w-full')
-                  })}
-                </div>
-              ))}
-            </div>
+          {features && features.length > 0 && (
+            <div className="w-full">
+              <div className="hidden lg:flex flex-row gap-8 w-full">
+                {desktopColumns.map((column, i) => (
+                  <div key={i} className="flex flex-col gap-8 w-full flex-1">
+                    {column.map((feature) => {
+                      const originalIndex = features.indexOf(feature)
+                      return renderFeatureCard(feature, originalIndex, 'w-full')
+                    })}
+                  </div>
+                ))}
+              </div>
 
-            <div className="hidden md:flex lg:hidden flex-row gap-6 w-full">
-              {tabletColumns.map((column, i) => (
-                <div key={i} className="flex flex-col gap-6 w-full flex-1">
-                  {column.map((feature) => {
-                    const originalIndex = features.indexOf(feature)
-                    return renderFeatureCard(feature, originalIndex, 'w-full')
-                  })}
-                </div>
-              ))}
-            </div>
+              <div className="hidden md:flex lg:hidden flex-row gap-6 w-full">
+                {tabletColumns.map((column, i) => (
+                  <div key={i} className="flex flex-col gap-6 w-full flex-1">
+                    {column.map((feature) => {
+                      const originalIndex = features.indexOf(feature)
+                      return renderFeatureCard(feature, originalIndex, 'w-full')
+                    })}
+                  </div>
+                ))}
+              </div>
 
-            <div className="md:hidden flex flex-col gap-6 items-center w-full">
-              {features.map((feature, index) =>
-                renderFeatureCard(feature, index, 'w-full max-w-[500px]'),
-              )}
+              <div className="md:hidden flex flex-col gap-6 items-center w-full">
+                {features.map((feature, index) =>
+                  renderFeatureCard(feature, index, 'w-full max-w-[500px]'),
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </section>

@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { IconPosition, LinkTarget } from '../types/ui'
+import { IconPosition, LinkTarget, TextSize, FontWeight } from '../types/ui'
 import { getLucideIcon } from '../utils/icons'
 
 interface LinkTextProps {
@@ -10,8 +10,8 @@ interface LinkTextProps {
   iconPosition?: IconPosition
   target?: LinkTarget
   className?: string
-  textSize?: 'sm' | 'base' | 'lg' | 'xl'
-  fontWeight?: 'regular' | 'medium' | 'semibold'
+  textSize?: TextSize
+  fontWeight?: FontWeight
 }
 
 export const LinkText: React.FC<LinkTextProps> = ({
@@ -21,8 +21,8 @@ export const LinkText: React.FC<LinkTextProps> = ({
   iconPosition = IconPosition.LEFT,
   target = LinkTarget.BLANK,
   className = '',
-  textSize = 'base',
-  fontWeight = 'medium',
+  textSize = TextSize.BASE,
+  fontWeight = FontWeight.MEDIUM,
 }) => {
   const ButtonIcon = icon ? getLucideIcon(icon) : null
 

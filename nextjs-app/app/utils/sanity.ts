@@ -33,6 +33,6 @@ export const getLinkUrl = (
     return ''
   }
 
-  console.warn('Could not resolve link:', linkObj)
+  console.error('Could not resolve link:', linkObj)
   return ''
 }

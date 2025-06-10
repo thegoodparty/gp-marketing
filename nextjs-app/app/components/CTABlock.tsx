@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { urlForImage } from '../../sanity/lib/utils'
 import { BlockHeaderSection } from './BlockHeaderSection'
 import {
-  ICON_CONTAINER_COLOR_HEX,
+  ICON_CONTAINER_COLORS,
   IconContainerColor,
   CtaVariant,
   BackgroundTheme,
@@ -40,10 +40,9 @@ interface CtaProps {
 }
 
 export default function CTA({ block }: CtaProps) {
-  const backgroundColor = ICON_CONTAINER_COLOR_HEX[block.backgroundColor]
-  const isTextImageVariant = block.variant === CtaVariant.TEXT_IMAGE
-
+  const backgroundColor = ICON_CONTAINER_COLORS[block.backgroundColor]
   const backgroundTheme = BackgroundTheme.WHITE
+  const isTextImageVariant = block.variant === CtaVariant.TEXT_IMAGE
 
   const headerConfig = {
     overline: block.overline,
@@ -68,24 +67,19 @@ export default function CTA({ block }: CtaProps) {
   }
 
   return (
-    <section
-      className="py-16 px-4 lg:py-20 lg:px-8"
-      style={{ backgroundColor }}
-    >
+    <section className="py-20 px-5 lg:px-20" style={{ backgroundColor }}>
       <div className="container mx-auto max-w-7xl">
         {isTextImageVariant ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <div className="order-2 lg:order-1">
-              <BlockHeaderSection
-                header={headerConfig}
-                backgroundColor={backgroundTheme}
-                headerAlignment={Alignment.LEFT}
-                className="lg:pr-8"
-              />
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <BlockHeaderSection
+              header={headerConfig}
+              backgroundColor={backgroundTheme}
+              headerAlignment={Alignment.LEFT}
+              className="lg:pr-8"
+            />
 
             {block.image && (
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden order-1 lg:order-2">
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden order-first lg:order-last">
                 <Image
                   src={
                     urlForImage(block.image)

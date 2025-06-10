@@ -114,23 +114,6 @@ export const BACKGROUND_THEME_OPTIONS = [
   { title: 'White', value: BackgroundTheme.WHITE },
 ] as const
 
-export const ICON_CONTAINER_COLOR_HEX: Record<IconContainerColor, string> = {
-  [IconContainerColor.RED]: '#FCB5B5',
-  [IconContainerColor.BLUE]: '#B3D9FF',
-  [IconContainerColor.BRIGHT_YELLOW]: '#FFE385',
-  [IconContainerColor.ORANGE]: '#FFD700',
-  [IconContainerColor.LAVENDER]: '#E6CCFF',
-  [IconContainerColor.WAX_FLOWER]: '#FFF1C9',
-  [IconContainerColor.HALO_GREEN]: '#A8E6B8',
-  [IconContainerColor.RED_100]: '#FDCDCD',
-  [IconContainerColor.BLUE_100]: '#D1E7FE',
-  [IconContainerColor.BRIGHT_YELLOW_100]: '#FFEEB7',
-  [IconContainerColor.ORANGE_100]: '#FDE19A',
-  [IconContainerColor.LAVENDER_100]: '#F1E5FF',
-  [IconContainerColor.WAX_FLOWER_100]: '#FFF1C9',
-  [IconContainerColor.HALO_GREEN_100]: '#CCEADD',
-}
-
 export const LIGHT_BACKGROUND_COLOR_OPTIONS = [
   { title: 'Red', value: IconContainerColor.RED_100 },
   { title: 'Blue', value: IconContainerColor.BLUE_100 },

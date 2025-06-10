@@ -1,23 +1,11 @@
 import React from 'react'
 import Link from 'next/link'
-import * as LucideIcons from 'lucide-react'
-import { type LucideIcon } from 'lucide-react'
 import { type CtaCardBlock } from '@/sanity.types'
-import {
-  IconContainerColor,
-  ICON_CONTAINER_COLORS,
-} from '../types/design-tokens'
+import { getLucideIcon } from '../utils/icons'
+import { mapSanityColorToDesignToken } from '../utils/color-mapping'
 
 interface CTACardBlockProps {
   block: CtaCardBlock
-}
-
-// Icon helper function (reused pattern from other blocks)
-const getLucideIcon = (iconName: string): LucideIcon => {
-  const IconComponent = LucideIcons[
-    iconName as keyof typeof LucideIcons
-  ] as LucideIcon
-  return IconComponent || LucideIcons.ArrowRight
 }
 
 const CTACard = ({
@@ -30,19 +18,7 @@ const CTACard = ({
 }: NonNullable<CtaCardBlock['cards']>[0]) => {
   const IconComponent = getLucideIcon(icon || 'ArrowRight')
 
-  // Map backgroundColor string to IconContainerColor enum key
-  const colorMap: Record<string, IconContainerColor> = {
-    'red-200': IconContainerColor.RED,
-    'blue-200': IconContainerColor.BLUE,
-    'brightYellow-200': IconContainerColor.BRIGHT_YELLOW,
-    'orange-200': IconContainerColor.ORANGE,
-    'lavender-200': IconContainerColor.LAVENDER,
-    'waxFlower-200': IconContainerColor.WAX_FLOWER,
-    'haloGreen-200': IconContainerColor.HALO_GREEN,
-  }
-
-  const colorKey = colorMap[backgroundColor] || IconContainerColor.BLUE
-  const bgColor = ICON_CONTAINER_COLORS[colorKey]
+  const bgColor = mapSanityColorToDesignToken(backgroundColor)
 
   return (
     <Link

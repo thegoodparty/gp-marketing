@@ -9,9 +9,9 @@ import {
   BackgroundTheme,
   TEXT_COLOR_MAP,
   ButtonVariant,
-  LinkType,
 } from '@/app/types/design-tokens'
 import { Alignment } from '@/app/types/ui'
+import { SanityImage, SanityLink, LinkType } from '@/app/utils/sanity-types'
 
 interface CtaProps {
   block: {
@@ -20,56 +20,16 @@ interface CtaProps {
     overline?: string
     heading: string
     subhead?: string
-    image?: {
-      asset: {
-        _ref: string
-        _type: 'reference'
-      }
-      alt?: string
-      hotspot?: {
-        x: number
-        y: number
-      }
-      crop?: {
-        top: number
-        bottom: number
-        left: number
-        right: number
-      }
-    }
+    image?: SanityImage
     primaryCta: {
       label: string
-      url: {
-        linkType?: LinkType
-        href?: string
-        page?: {
-          _ref: string
-          _type: 'reference'
-        }
-        post?: {
-          _ref: string
-          _type: 'reference'
-        }
-        openInNewTab?: boolean
-      }
+      url: SanityLink
       icon?: string
       variant?: ButtonVariant
     }
     secondaryCta?: {
       label: string
-      url: {
-        linkType?: LinkType
-        href?: string
-        page?: {
-          _ref: string
-          _type: 'reference'
-        }
-        post?: {
-          _ref: string
-          _type: 'reference'
-        }
-        openInNewTab?: boolean
-      }
+      url: SanityLink
       icon?: string
       variant?: ButtonVariant
     }

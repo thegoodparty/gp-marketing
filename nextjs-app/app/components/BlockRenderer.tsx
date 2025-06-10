@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Cta from '@/app/components/Cta'
+import Cta from '@/app/components/CTABlock'
 import Info from '@/app/components/InfoSection'
 import { dataAttr } from '@/sanity/lib/utils'
 import PageHero from '@/app/components/PageHero'

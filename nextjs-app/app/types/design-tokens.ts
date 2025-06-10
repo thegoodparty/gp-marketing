@@ -1,3 +1,5 @@
+import { LinkType } from '@/app/utils/sanity-types'
+
 export enum IconContainerColor {
   RED = 'red-200',
   BLUE = 'blue-200',
@@ -148,12 +150,6 @@ export const CTA_VARIANT_OPTIONS = [
   { title: 'Text + Image', value: CtaVariant.TEXT_IMAGE },
   { title: 'Centered Content', value: CtaVariant.CENTERED },
 ] as const
-
-export enum LinkType {
-  HREF = 'href',
-  PAGE = 'page',
-  POST = 'post',
-}
 
 export const LINK_TYPE_OPTIONS = [
   { title: 'URL', value: LinkType.HREF },

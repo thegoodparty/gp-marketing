@@ -1,4 +1,4 @@
-import { LinkType } from '@/app/utils/sanity-types'
+import { LinkType } from './sanity'
 
 export enum IconContainerColor {
   RED = 'red-200',

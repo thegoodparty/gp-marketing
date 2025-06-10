@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
-import { urlForImage } from '@/sanity/lib/utils'
-import { BlockHeaderSection } from '@/app/components/BlockHeaderSection'
+import { urlForImage } from '../../sanity/lib/utils'
+import { BlockHeaderSection } from './BlockHeaderSection'
 import {
   ICON_CONTAINER_COLOR_HEX,
   IconContainerColor,
@@ -9,9 +9,10 @@ import {
   BackgroundTheme,
   TEXT_COLOR_MAP,
   ButtonVariant,
-} from '@/app/types/design-tokens'
-import { Alignment } from '@/app/types/ui'
-import { SanityImage, SanityLink, LinkType } from '@/app/utils/sanity-types'
+} from '../types/design-tokens'
+import { Alignment } from '../types/ui'
+import { SanityImage, SanityLink } from '../types/sanity'
+import { getLinkUrl } from '../utils/sanity'
 
 interface CtaProps {
   block: {
@@ -44,18 +45,6 @@ export default function CTA({ block }: CtaProps) {
 
   const backgroundTheme = BackgroundTheme.WHITE
 
-  const getLinkUrl = (
-    linkObj: CtaProps['block']['primaryCta']['url'],
-  ): string => {
-    if (linkObj.linkType === LinkType.HREF && linkObj.href) {
-      return linkObj.href
-    }
-    // For page/post references, we'd need additional logic to resolve them
-    // This would typically involve resolving the reference to get the slug
-    // For now, return empty string - this would need to be handled properly
-    return ''
-  }
-
   const headerConfig = {
     overline: block.overline,
     heading: block.heading,
@@ -79,19 +68,24 @@ export default function CTA({ block }: CtaProps) {
   }
 
   return (
-    <section className="py-20 px-5 lg:px-20" style={{ backgroundColor }}>
+    <section
+      className="py-16 px-4 lg:py-20 lg:px-8"
+      style={{ backgroundColor }}
+    >
       <div className="container mx-auto max-w-7xl">
         {isTextImageVariant ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <BlockHeaderSection
-              header={headerConfig}
-              backgroundColor={backgroundTheme}
-              headerAlignment={Alignment.LEFT}
-              className="lg:pr-8"
-            />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div className="order-2 lg:order-1">
+              <BlockHeaderSection
+                header={headerConfig}
+                backgroundColor={backgroundTheme}
+                headerAlignment={Alignment.LEFT}
+                className="lg:pr-8"
+              />
+            </div>
 
             {block.image && (
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden order-first lg:order-last">
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden order-1 lg:order-2">
                 <Image
                   src={
                     urlForImage(block.image)

@@ -1,20 +1,6 @@
 import { defineField, defineType } from 'sanity'
 import { ComponentIcon } from '@sanity/icons'
-
-const ICON_CONTAINER_COLOR_OPTIONS = [
-  { title: 'Red', value: 'red-200' },
-  { title: 'Blue', value: 'blue-200' },
-  { title: 'Bright Yellow', value: 'brightYellow-200' },
-  { title: 'Orange', value: 'orange-200' },
-  { title: 'Lavender', value: 'lavender-200' },
-  { title: 'Wax Flower', value: 'waxFlower-200' },
-  { title: 'Halo Green', value: 'haloGreen-200' },
-]
-
-const LINK_TARGET_OPTIONS = [
-  { title: 'New Tab', value: '_blank' },
-  { title: 'Same Tab', value: '_self' },
-]
+import { ICON_CONTAINER_COLOR_OPTIONS, LINK_TARGET_OPTIONS } from '../../lib/shared-constants'
 
 export const ctaCardBlock = defineType({
   name: 'ctaCardBlock',

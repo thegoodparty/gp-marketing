@@ -1,34 +1,10 @@
 import { defineField, defineType } from 'sanity'
 import { ComponentIcon } from '@sanity/icons'
-
-// Matches ButtonVariant enum in nextjs-app/app/types/design-tokens.ts
-const BUTTON_VARIANT_OPTIONS = [
-  { title: 'Default', value: 'default' },
-  { title: 'Secondary', value: 'secondary' },
-  { title: 'Destructive', value: 'destructive' },
-  { title: 'Outline', value: 'outline' },
-  { title: 'Ghost', value: 'ghost' },
-  { title: 'White Ghost', value: 'whiteGhost' },
-  { title: 'White Outline', value: 'whiteOutline' },
-]
-
-// Matches BackgroundTheme enum in nextjs-app/app/types/design-tokens.ts
-const BACKGROUND_THEME_OPTIONS = [
-  { title: 'Dark', value: 'dark' },
-  { title: 'Creme', value: 'creme' },
-  { title: 'White', value: 'white' },
-]
-
-// Matches IconContainerColor enum in nextjs-app/app/types/design-tokens.ts
-const ICON_CONTAINER_COLOR_OPTIONS = [
-  { title: 'Red', value: 'red-200' },
-  { title: 'Blue', value: 'blue-200' },
-  { title: 'Bright Yellow', value: 'brightYellow-200' },
-  { title: 'Orange', value: 'orange-200' },
-  { title: 'Lavender', value: 'lavender-200' },
-  { title: 'Wax Flower', value: 'waxFlower-200' },
-  { title: 'Halo Green', value: 'haloGreen-200' },
-]
+import { 
+  BUTTON_VARIANT_OPTIONS, 
+  BACKGROUND_THEME_OPTIONS, 
+  ICON_CONTAINER_COLOR_OPTIONS 
+} from '../../lib/shared-constants'
 
 export const featureModules = defineType({
   name: 'featureModules',

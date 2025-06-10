@@ -60,14 +60,14 @@ const config: Config = {
             border: 'var(--component-button-ghost-border)',
           },
           whiteOutline: {
-            background: 'var(--component-button-whiteOutline-background)',
-            text: 'var(--component-button-whiteOutline-text)',
-            border: 'var(--component-button-whiteOutline-border)',
+            background: 'var(--component-button-white-outline-background)',
+            text: 'var(--component-button-white-outline-text)',
+            border: 'var(--component-button-white-outline-border)',
           },
           whiteGhost: {
-            background: 'var(--component-button-whiteGhost-background)',
-            text: 'var(--component-button-whiteGhost-text)',
-            border: 'var(--component-button-whiteGhost-border)',
+            background: 'var(--component-button-white-ghost-background)',
+            text: 'var(--component-button-white-ghost-text)',
+            border: 'var(--component-button-white-ghost-border)',
           },
         },
         brand: {

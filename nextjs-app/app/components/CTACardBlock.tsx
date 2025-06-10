@@ -20,30 +20,18 @@ const getLucideIcon = (iconName: string): LucideIcon => {
   return IconComponent || LucideIcons.ArrowRight
 }
 
-// Type for the backgroundColor from Sanity
-type SanityBackgroundColor =
-  | 'red-200'
-  | 'blue-200'
-  | 'brightYellow-200'
-  | 'orange-200'
-  | 'lavender-200'
-  | 'waxFlower-200'
-  | 'haloGreen-200'
+const CTACard = ({
+  overline,
+  heading,
+  backgroundColor,
+  url,
+  icon,
+  linkTarget,
+}: NonNullable<CtaCardBlock['cards']>[0]) => {
+  const IconComponent = getLucideIcon(icon || 'ArrowRight')
 
-interface CTACardProps {
-  overline?: string
-  heading: string
-  backgroundColor: SanityBackgroundColor
-  url: string
-  icon?: string
-  linkTarget?: '_blank' | '_self'
-}
-
-// Convert Sanity color strings to IconContainerColor enum values
-const mapSanityColorToEnum = (
-  sanityColor: SanityBackgroundColor,
-): IconContainerColor => {
-  const colorMap: Record<SanityBackgroundColor, IconContainerColor> = {
+  // Map backgroundColor string to IconContainerColor enum key
+  const colorMap: Record<string, IconContainerColor> = {
     'red-200': IconContainerColor.RED,
     'blue-200': IconContainerColor.BLUE,
     'brightYellow-200': IconContainerColor.BRIGHT_YELLOW,
@@ -52,22 +40,9 @@ const mapSanityColorToEnum = (
     'waxFlower-200': IconContainerColor.WAX_FLOWER,
     'haloGreen-200': IconContainerColor.HALO_GREEN,
   }
-  return colorMap[sanityColor] || IconContainerColor.BLUE
-}
 
-const CTACard = ({
-  overline,
-  heading,
-  backgroundColor,
-  url,
-  icon,
-  linkTarget,
-}: CTACardProps) => {
-  const IconComponent = getLucideIcon(icon || 'ArrowRight')
-
-  // Convert Sanity color string to enum and get the CSS custom property
-  const colorEnum = mapSanityColorToEnum(backgroundColor)
-  const bgColor = ICON_CONTAINER_COLORS[colorEnum]
+  const colorKey = colorMap[backgroundColor] || IconContainerColor.BLUE
+  const bgColor = ICON_CONTAINER_COLORS[colorKey]
 
   return (
     <Link

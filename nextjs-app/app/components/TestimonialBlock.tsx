@@ -1,7 +1,7 @@
 import React from 'react'
 import { TestimonialCard } from './TestimonialCard'
-import { type ButtonVariant } from '../types/ui'
-import { LinkButton } from './LinkButton'
+import { BlockHeaderSection } from './BlockHeaderSection'
+import { type ButtonVariant, BackgroundTheme } from '../types/design-tokens'
 import styles from './TestimonialBlock.module.css'
 
 interface TestimonialBlockProps {
@@ -55,86 +55,15 @@ export default function TestimonialBlock({ block }: TestimonialBlockProps) {
     return null
   }
 
-  const renderButton = (
-    button:
-      | NonNullable<TestimonialBlockProps['block']['header']>['primaryButton']
-      | NonNullable<
-          TestimonialBlockProps['block']['header']
-        >['secondaryButton'],
-  ) => {
-    if (!button?.label || !button?.url) return null
-
-    return (
-      <LinkButton
-        label={button.label}
-        url={button.url}
-        icon={button.icon}
-        variant={button.variant}
-        iconPosition="right"
-      />
-    )
-  }
-
-  const renderButtons = () => {
-    const primaryButton = header?.primaryButton
-    const secondaryButton = header?.secondaryButton
-
-    const hasPrimary = primaryButton?.label && primaryButton?.url
-    const hasSecondary = secondaryButton?.label && secondaryButton?.url
-
-    if (!hasPrimary && !hasSecondary) return null
-
-    if (hasPrimary && !hasSecondary) {
-      return (
-        <div className="flex justify-center items-center">
-          {renderButton(primaryButton)}
-        </div>
-      )
-    }
-
-    if (!hasPrimary && hasSecondary) {
-      return (
-        <div className="flex justify-center items-center">
-          {renderButton(secondaryButton)}
-        </div>
-      )
-    }
-
-    return (
-      <div className="flex flex-row gap-4 justify-center items-center">
-        {renderButton(primaryButton)}
-        {renderButton(secondaryButton)}
-      </div>
-    )
-  }
-
   return (
     <section className="relative w-full bg-brand-secondary">
       <div className="flex flex-col items-center w-full">
         <div className="box-border flex flex-col gap-12 items-center justify-start px-20 py-32 w-full">
           {header && (
-            <div className="w-full">
-              <div className="box-border flex flex-col gap-6 items-center justify-start p-0 w-full">
-                <div className="w-full">
-                  <div className="box-border flex flex-col gap-4 items-center justify-start leading-none p-0 text-white w-full">
-                    {header.overline && (
-                      <div className="font-heading font-medium text-lg text-center whitespace-nowrap leading-tight">
-                        {header.overline}
-                      </div>
-                    )}
-                    <div className="font-heading font-semibold text-6xl text-center w-full leading-tight">
-                      {header.heading}
-                    </div>
-                    {header.subhead && (
-                      <div className="open-sans font-regular text-lg text-center w-full leading-relaxed">
-                        {header.subhead}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                {renderButtons()}
-              </div>
-            </div>
+            <BlockHeaderSection
+              header={header}
+              backgroundColor={BackgroundTheme.DARK}
+            />
           )}
 
           <div className="w-full">

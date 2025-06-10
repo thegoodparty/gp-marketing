@@ -1,26 +1,28 @@
-export type ButtonVariant =
-  | 'default'
-  | 'secondary'
-  | 'destructive'
-  | 'outline'
-  | 'ghost'
-  | 'whiteGhost'
-  | 'whiteOutline'
+export enum Alignment {
+  LEFT = 'left',
+  RIGHT = 'right',
+  CENTER = 'center',
+}
 
-/**
- * Default button variant constant
- */
-export const DEFAULT_BUTTON_VARIANT: ButtonVariant = 'default'
+export enum IconPosition {
+  LEFT = 'left',
+  RIGHT = 'right',
+}
 
-/**
- * Button variant options for use in forms, schemas, etc.
- */
-export const BUTTON_VARIANT_OPTIONS = [
-  { title: 'Default', value: 'default' as ButtonVariant },
-  { title: 'Secondary', value: 'secondary' as ButtonVariant },
-  { title: 'Destructive', value: 'destructive' as ButtonVariant },
-  { title: 'Outline', value: 'outline' as ButtonVariant },
-  { title: 'Ghost', value: 'ghost' as ButtonVariant },
-  { title: 'White Ghost', value: 'whiteGhost' as ButtonVariant },
-  { title: 'White Outline', value: 'whiteOutline' as ButtonVariant },
-] as const
+export enum LinkTarget {
+  BLANK = '_blank',
+  SELF = '_self',
+}
+
+export enum TextSize {
+  SM = 'sm',
+  BASE = 'base',
+  LG = 'lg',
+  XL = 'xl',
+}
+
+export enum FontWeight {
+  REGULAR = 'regular',
+  MEDIUM = 'medium',
+  SEMIBOLD = 'semibold',
+}

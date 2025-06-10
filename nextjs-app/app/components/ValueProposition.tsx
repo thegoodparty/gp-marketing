@@ -4,6 +4,8 @@ import Image from 'next/image'
 import { getLucideIcon } from '../utils/icons'
 import { LinkButton } from './LinkButton'
 import { ValuePropositionTestimonial } from './ValuePropositionTestimonial'
+import { ButtonVariant } from '../types/design-tokens'
+import { IconPosition } from '../types/ui'
 
 enum ValuePropositionColumnType {
   CONTENT = 'content',
@@ -100,15 +102,11 @@ export default function ValueProposition({ block }: ValuePropositionProps) {
                 .crop('center')
                 .url()
 
-              if (!imageUrl) {
-                return null
-              }
-
               return (
                 <div key={index} className="flex-1 rounded-3xl overflow-hidden">
                   <div className="relative w-full h-[300px] lg:h-[466px]">
                     <Image
-                      src={imageUrl}
+                      src={imageUrl || ''}
                       alt={column.image.alt}
                       fill
                       className="object-cover"
@@ -168,9 +166,9 @@ export default function ValueProposition({ block }: ValuePropositionProps) {
                     <LinkButton
                       label={column.button.label}
                       url={column.button.url}
-                      icon={column.button.icon}
-                      variant="secondary"
-                      iconPosition="right"
+                      icon={column.button.icon || 'ArrowUpRight'}
+                      variant={ButtonVariant.SECONDARY}
+                      iconPosition={IconPosition.RIGHT}
                     />
                   </div>
                 )}

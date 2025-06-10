@@ -119,7 +119,7 @@ export const testimonialBlock = defineType({
           ],
           validation: (Rule) =>
             Rule.custom((button) => {
-              if (!button) return true 
+              if (!button) return true
               const { label, url } = button
               if ((label && !url) || (!label && url)) {
                 return 'Both label and URL are required if button is provided'
@@ -205,7 +205,13 @@ export const testimonialBlock = defineType({
               backgroundColor: 'backgroundColor',
               authorImage: 'authorImage',
             },
-            prepare({ quote, authorName, authorTitle, backgroundColor, authorImage }) {
+            prepare({
+              quote,
+              authorName,
+              authorTitle,
+              backgroundColor,
+              authorImage,
+            }) {
               const colorName =
                 backgroundColor === '#FDCDCD'
                   ? 'Red'
@@ -255,4 +261,4 @@ export const testimonialBlock = defineType({
       }
     },
   },
-}) 
+})

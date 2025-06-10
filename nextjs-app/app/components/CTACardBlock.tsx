@@ -3,6 +3,10 @@ import Link from 'next/link'
 import * as LucideIcons from 'lucide-react'
 import { type LucideIcon } from 'lucide-react'
 import { type CtaCardBlock } from '@/sanity.types'
+import {
+  IconContainerColor,
+  ICON_CONTAINER_COLORS,
+} from '../types/design-tokens'
 
 interface CTACardBlockProps {
   block: CtaCardBlock
@@ -16,20 +20,39 @@ const getLucideIcon = (iconName: string): LucideIcon => {
   return IconComponent || LucideIcons.ArrowRight
 }
 
+// Type for the backgroundColor from Sanity
+type SanityBackgroundColor =
+  | 'red-200'
+  | 'blue-200'
+  | 'brightYellow-200'
+  | 'orange-200'
+  | 'lavender-200'
+  | 'waxFlower-200'
+  | 'haloGreen-200'
+
 interface CTACardProps {
   overline?: string
   heading: string
-  backgroundColor:
-    | 'red-200'
-    | 'blue-200'
-    | 'brightYellow-200'
-    | 'orange-200'
-    | 'lavender-200'
-    | 'waxFlower-200'
-    | 'haloGreen-200'
+  backgroundColor: SanityBackgroundColor
   url: string
   icon?: string
   linkTarget?: '_blank' | '_self'
+}
+
+// Convert Sanity color strings to IconContainerColor enum values
+const mapSanityColorToEnum = (
+  sanityColor: SanityBackgroundColor,
+): IconContainerColor => {
+  const colorMap: Record<SanityBackgroundColor, IconContainerColor> = {
+    'red-200': IconContainerColor.RED,
+    'blue-200': IconContainerColor.BLUE,
+    'brightYellow-200': IconContainerColor.BRIGHT_YELLOW,
+    'orange-200': IconContainerColor.ORANGE,
+    'lavender-200': IconContainerColor.LAVENDER,
+    'waxFlower-200': IconContainerColor.WAX_FLOWER,
+    'haloGreen-200': IconContainerColor.HALO_GREEN,
+  }
+  return colorMap[sanityColor] || IconContainerColor.BLUE
 }
 
 const CTACard = ({
@@ -42,18 +65,9 @@ const CTACard = ({
 }: CTACardProps) => {
   const IconComponent = getLucideIcon(icon || 'ArrowRight')
 
-  // Map backgroundColor to CSS custom properties from goodparty-styleguide
-  const colorMap: Record<string, string> = {
-    'red-200': 'var(--color-red-200)',
-    'blue-200': 'var(--color-blue-200)',
-    'brightYellow-200': 'var(--color-bright-yellow-200)',
-    'orange-200': 'var(--color-orange-200)',
-    'lavender-200': 'var(--color-lavender-200)',
-    'waxFlower-200': 'var(--color-waxflower-200)',
-    'haloGreen-200': 'var(--color-halogreen-200)',
-  }
-
-  const bgColor = colorMap[backgroundColor] || 'var(--color-blue-200)'
+  // Convert Sanity color string to enum and get the CSS custom property
+  const colorEnum = mapSanityColorToEnum(backgroundColor)
+  const bgColor = ICON_CONTAINER_COLORS[colorEnum]
 
   return (
     <Link

@@ -29,7 +29,7 @@ const CTACard = ({
     <Link
       href={url}
       target={linkTarget || LinkTarget.BLANK}
-      className="block rounded-3xl p-[40px] transition-all duration-300 hover:scale-105 group h-full"
+      className="block rounded-3xl p-[40px] h-full"
       style={{ backgroundColor: bgColor }}
     >
       <div className="flex flex-col gap-40 items-start justify-start h-full">
@@ -38,7 +38,7 @@ const CTACard = ({
         )}
         <div className="flex flex-row items-center justify-between w-full">
           <h2 className="text-6xl font-semibold leading-none">{heading}</h2>
-          <IconComponent className="w-14 h-14 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+          <IconComponent className="w-14 h-14" />
         </div>
       </div>
     </Link>

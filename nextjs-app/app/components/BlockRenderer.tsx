@@ -7,6 +7,7 @@ import PageHero from '@/app/components/PageHero'
 import ValueProposition from '@/app/components/ValueProposition'
 import TestimonialBlock from '@/app/components/TestimonialBlock'
 import FeatureModules from '@/app/components/FeatureModules'
+import CTACardBlock from '@/app/components/CTACardBlock'
 type BlocksType = {
   [key: string]: React.FC<any>
 }
@@ -30,6 +31,7 @@ const Blocks: BlocksType = {
   valueProposition: ValueProposition,
   testimonialBlock: TestimonialBlock,
   featureModules: FeatureModules,
+  ctaCardBlock: CTACardBlock,
 }
 
 /**

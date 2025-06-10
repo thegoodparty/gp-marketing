@@ -27,4 +27,19 @@ export const BACKGROUND_THEME_OPTIONS = [
 export const LINK_TARGET_OPTIONS = [
   { title: 'New Tab', value: '_blank' },
   { title: 'Same Tab', value: '_self' },
-] 
+]
+
+export const LIGHT_BACKGROUND_COLOR_OPTIONS = [
+  { title: 'Red', value: 'red-100' },
+  { title: 'Blue', value: 'blue-100' },
+  { title: 'Bright Yellow', value: 'brightYellow-100' },
+  { title: 'Orange', value: 'orange-100' },
+  { title: 'Lavender', value: 'lavender-100' },
+  { title: 'Wax Flower', value: 'waxFlower-100' },
+  { title: 'Halo Green', value: 'haloGreen-100' },
+]
+
+export const CTA_VARIANT_OPTIONS = [
+  { title: 'Text + Image', value: 'textImage' },
+  { title: 'Centered Content', value: 'centered' },
+]

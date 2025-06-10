@@ -32,9 +32,11 @@ const CTACard = ({
       className="block rounded-3xl p-[40px] h-full"
       style={{ backgroundColor: bgColor }}
     >
-      <div className="flex flex-col gap-40 items-start justify-start h-full">
-        {overline && (
+      <div className="flex flex-col gap-44 items-start justify-start h-full">
+        {overline ? (
           <div className="text-lg font-medium leading-[28px]">{overline}</div>
+        ) : (
+          <div className="flex-grow" />
         )}
         <div className="flex flex-row items-center justify-between w-full">
           <h2 className="text-6xl font-semibold leading-none">{heading}</h2>

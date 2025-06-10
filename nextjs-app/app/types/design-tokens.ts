@@ -1,3 +1,5 @@
+import { LinkType } from './sanity'
+
 export enum IconContainerColor {
   RED = 'red-200',
   BLUE = 'blue-200',
@@ -6,6 +8,13 @@ export enum IconContainerColor {
   LAVENDER = 'lavender-200',
   WAX_FLOWER = 'waxFlower-200',
   HALO_GREEN = 'haloGreen-200',
+  RED_100 = 'red-100',
+  BLUE_100 = 'blue-100',
+  BRIGHT_YELLOW_100 = 'brightYellow-100',
+  ORANGE_100 = 'orange-100',
+  LAVENDER_100 = 'lavender-100',
+  WAX_FLOWER_100 = 'waxFlower-100',
+  HALO_GREEN_100 = 'haloGreen-100',
 }
 
 export enum BackgroundTheme {
@@ -25,7 +34,7 @@ export enum ButtonVariant {
 }
 
 export enum DesignTokens {
-  // Icon container colors
+  // Icon container colors (-200 variants)
   COLOR_RED_200 = 'var(--color-red-200)',
   COLOR_BLUE_200 = 'var(--color-blue-200)',
   COLOR_BRIGHT_YELLOW_200 = 'var(--color-bright-yellow-200)',
@@ -33,6 +42,15 @@ export enum DesignTokens {
   COLOR_LAVENDER_200 = 'var(--color-lavender-200)',
   COLOR_WAXFLOWER_200 = 'var(--color-waxflower-200)',
   COLOR_HALOGREEN_200 = 'var(--color-halogreen-200)',
+
+  // Icon container colors (-100 variants)
+  COLOR_RED_100 = 'var(--color-red-100)',
+  COLOR_BLUE_100 = 'var(--color-blue-100)',
+  COLOR_BRIGHT_YELLOW_100 = 'var(--color-bright-yellow-100)',
+  COLOR_ORANGE_100 = 'var(--color-orange-100)',
+  COLOR_LAVENDER_100 = 'var(--color-lavender-100)',
+  COLOR_WAXFLOWER_100 = 'var(--color-waxflower-100)',
+  COLOR_HALOGREEN_100 = 'var(--color-halogreen-100)',
 
   // Background colors
   COLOR_BRAND_SECONDARY = 'var(--color-brand-secondary)',
@@ -49,6 +67,13 @@ export const ICON_CONTAINER_COLORS: Record<IconContainerColor, DesignTokens> = {
   [IconContainerColor.LAVENDER]: DesignTokens.COLOR_LAVENDER_200,
   [IconContainerColor.WAX_FLOWER]: DesignTokens.COLOR_WAXFLOWER_200,
   [IconContainerColor.HALO_GREEN]: DesignTokens.COLOR_HALOGREEN_200,
+  [IconContainerColor.RED_100]: DesignTokens.COLOR_RED_100,
+  [IconContainerColor.BLUE_100]: DesignTokens.COLOR_BLUE_100,
+  [IconContainerColor.BRIGHT_YELLOW_100]: DesignTokens.COLOR_BRIGHT_YELLOW_100,
+  [IconContainerColor.ORANGE_100]: DesignTokens.COLOR_ORANGE_100,
+  [IconContainerColor.LAVENDER_100]: DesignTokens.COLOR_LAVENDER_100,
+  [IconContainerColor.WAX_FLOWER_100]: DesignTokens.COLOR_WAXFLOWER_100,
+  [IconContainerColor.HALO_GREEN_100]: DesignTokens.COLOR_HALOGREEN_100,
 }
 
 export const BACKGROUND_COLOR_MAP: Record<BackgroundTheme, DesignTokens> = {
@@ -87,4 +112,30 @@ export const BACKGROUND_THEME_OPTIONS = [
   { title: 'Dark', value: BackgroundTheme.DARK },
   { title: 'Creme', value: BackgroundTheme.CREME },
   { title: 'White', value: BackgroundTheme.WHITE },
+] as const
+
+export const LIGHT_BACKGROUND_COLOR_OPTIONS = [
+  { title: 'Red', value: IconContainerColor.RED_100 },
+  { title: 'Blue', value: IconContainerColor.BLUE_100 },
+  { title: 'Bright Yellow', value: IconContainerColor.BRIGHT_YELLOW_100 },
+  { title: 'Orange', value: IconContainerColor.ORANGE_100 },
+  { title: 'Lavender', value: IconContainerColor.LAVENDER_100 },
+  { title: 'Wax Flower', value: IconContainerColor.WAX_FLOWER_100 },
+  { title: 'Halo Green', value: IconContainerColor.HALO_GREEN_100 },
+] as const
+
+export enum CtaVariant {
+  TEXT_IMAGE = 'textImage',
+  CENTERED = 'centered',
+}
+
+export const CTA_VARIANT_OPTIONS = [
+  { title: 'Text + Image', value: CtaVariant.TEXT_IMAGE },
+  { title: 'Centered Content', value: CtaVariant.CENTERED },
+] as const
+
+export const LINK_TYPE_OPTIONS = [
+  { title: 'URL', value: LinkType.HREF },
+  { title: 'Page', value: LinkType.PAGE },
+  { title: 'Post', value: LinkType.POST },
 ] as const

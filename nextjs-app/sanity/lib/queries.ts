@@ -59,7 +59,7 @@ export const getPageQuery = defineQuery(`
     "pageBuilder": pageBuilder[]{
       ...,
       _type == "callToAction" => {
-        ${linkFields},
+        ...,
       },
       _type == "infoSection" => {
         content[]{

@@ -3,10 +3,6 @@ import {
   ICON_CONTAINER_COLORS,
 } from '../types/design-tokens'
 
-/**
- * Maps Sanity color string values to design token colors
- * This is the single source of truth for color mapping in components
- */
 export const mapSanityColorToDesignToken = (sanityColor: string): string => {
   const colorMap: Record<string, IconContainerColor> = {
     'red-200': IconContainerColor.RED,

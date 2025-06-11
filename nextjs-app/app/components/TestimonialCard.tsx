@@ -43,11 +43,11 @@ export const TestimonialCard: React.FC<TestimonialCardProps> = ({
 
   return (
     <div
-      className={`relative rounded-2xl shrink-0 w-[350px] h-[400px] min-h-[400px] max-w-[350px] ${className}`}
+      className={`relative rounded-2xl shrink-0 h-[400px] min-h-[400px] w-full max-w-full ${className}`}
       style={{ backgroundColor }}
     >
       <div className="relative w-full h-full">
-        <div className="box-border flex flex-col h-[400px] items-start justify-between w-[350px] p-6 relative">
+        <div className="box-border flex flex-col h-[400px] items-start justify-between w-full p-6 relative">
           <div className="relative shrink-0 w-full">
             <div className="box-border flex flex-col gap-4 items-start justify-start p-0 relative w-full">
               <div className="h-7 relative shrink-0 w-[34px]">

@@ -8,10 +8,6 @@ export interface AccordionItem {
   defaultOpen?: boolean
 }
 
-/**
- * Accessible accordion used by the FAQBlock component.
- * Does not rely on external dependencies and follows the WAI-ARIA accordion pattern.
- */
 export default function Accordion({
   question,
   answer,
@@ -31,7 +27,7 @@ export default function Accordion({
         className="flex w-full items-center justify-between gap-4 p-6 md:p-8"
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        <h3 className="text-[20px] md:text-[24px] font-semibold text-[#0b1529] text-left flex-1">
+        <h3 className="text-[20px] md:text-[24px] font-semibold text-brand-secondary text-left flex-1">
           {question}
         </h3>
         {isOpen ? (
@@ -45,7 +41,7 @@ export default function Accordion({
           id={`faq-content-${question.replace(/\s+/g, '-')}`}
           className="px-6 pb-6 md:px-8 md:pb-8"
         >
-          <p className="text-base md:text-[18px] leading-relaxed text-[#0b1529]">
+          <p className="text-base md:text-[18px] leading-relaxed text-brand-secondary">
             {answer}
           </p>
         </div>

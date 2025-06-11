@@ -50,6 +50,7 @@ export const page = defineType({
         { type: 'testimonialBlock' },
         { type: 'featureModules' },
         { type: 'ctaCardBlock' },
+        { type: 'faqBlock' },
         { type: 'callToAction' },
         { type: 'infoSection' },
       ],

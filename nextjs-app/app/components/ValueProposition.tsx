@@ -85,15 +85,11 @@ interface ValuePropositionProps {
 export default function ValueProposition({ block }: ValuePropositionProps) {
   const { columns } = block
 
-  if (!columns || columns.length !== 2) {
-    return null
-  }
-
   return (
-    <section className="py-[60px] px-5 lg:py-12 lg:px-4">
-      <div className="container mx-auto max-w-6xl">
-        <div className="flex flex-col lg:flex-row gap-6">
-          {columns.map((column, index) => {
+    <section className="py-10 xl:py-20 px-5 sm:px-10 xl:px-20 2xl:px-[clamp(20px,4vw,160px)]">
+      <div className="mx-auto w-full max-w-[1376px]">
+        <div className="flex flex-col lg:flex-row gap-8 items-stretch">
+          {columns && columns.length > 0 && columns.map((column, index) => {
             if (column.columnType === ValuePropositionColumnType.IMAGE) {
               const imageUrl = urlForImage(column.image)
                 ?.width(624)
@@ -103,7 +99,7 @@ export default function ValueProposition({ block }: ValuePropositionProps) {
                 .url()
 
               return (
-                <div key={index} className="flex-1 rounded-3xl overflow-hidden">
+                <div key={index} className="flex-1 basis-1/2 rounded-3xl overflow-hidden">
                   <div className="relative w-full h-[300px] lg:h-[466px]">
                     <Image
                       src={imageUrl || ''}
@@ -119,7 +115,7 @@ export default function ValueProposition({ block }: ValuePropositionProps) {
 
             if (column.columnType === ValuePropositionColumnType.TESTIMONIAL) {
               return (
-                <div key={index} className="flex-1">
+                <div key={index} className="flex-1 basis-1/2">
                   <ValuePropositionTestimonial
                     quote={column.quote}
                     authorName={column.authorName}
@@ -134,7 +130,7 @@ export default function ValueProposition({ block }: ValuePropositionProps) {
             return (
               <div
                 key={index}
-                className="flex-1 rounded-3xl p-5 lg:p-12"
+                className="flex-1 basis-1/2 rounded-3xl p-5 sm:p-8 xl:p-12"
                 style={{ backgroundColor: column.backgroundColor }}
               >
                 <h3 className="text-[40px] font-semibold text-gray-900 mb-8 leading-tight">

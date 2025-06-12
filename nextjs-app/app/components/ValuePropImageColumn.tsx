@@ -34,4 +34,4 @@ export const ValuePropImageColumn: React.FC<ValuePropImageColumnProps> = ({
       </div>
     </div>
   )
-} 
+}

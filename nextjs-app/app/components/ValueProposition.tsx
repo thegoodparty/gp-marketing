@@ -89,23 +89,18 @@ export default function ValueProposition({ block }: ValuePropositionProps) {
             columns.length > 0 &&
             columns.map((column, index) => {
               if (column.columnType === ValuePropositionColumnType.IMAGE) {
+                return <ValuePropImageColumn key={index} column={column} />
+              }
+
+              if (
+                column.columnType === ValuePropositionColumnType.TESTIMONIAL
+              ) {
                 return (
-                  <ValuePropImageColumn key={index} column={column} />
+                  <ValuePropTestimonialColumn key={index} column={column} />
                 )
               }
 
-              if (column.columnType === ValuePropositionColumnType.TESTIMONIAL) {
-                return (
-                  <ValuePropTestimonialColumn
-                    key={index}
-                    column={column}
-                  />
-                )
-              }
-
-              return (
-                <ValuePropDefaultColumn key={index} column={column} />
-              )
+              return <ValuePropDefaultColumn key={index} column={column} />
             })}
         </div>
       </div>

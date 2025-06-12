@@ -4,6 +4,7 @@ import { BackgroundTheme } from '../types/design-tokens'
 import { BlockHeaderSection } from './BlockHeaderSection'
 import Accordion from './Accordion'
 import { generateFaqJsonLd } from '../utils/seo'
+import JsonLd from '../shared/utility/JsonLd'
 
 interface FaqBlockProps {
   block: {
@@ -53,12 +54,7 @@ export default function FAQBlock({ block }: FaqBlockProps) {
         </div>
       </div>
 
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: generateFaqJsonLd(items, heading),
-        }}
-      />
+      <JsonLd json={generateFaqJsonLd(items, heading)} />
     </section>
   )
 }

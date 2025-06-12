@@ -8,6 +8,8 @@ import ValueProposition from '@/app/components/ValueProposition'
 import TestimonialBlock from '@/app/components/TestimonialBlock'
 import FeatureModules from '@/app/components/FeatureModules'
 import CTACardBlock from '@/app/components/CTACardBlock'
+import FAQBlock from '@/app/components/FAQBlock'
+
 type BlocksType = {
   [key: string]: React.FC<any>
 }
@@ -32,6 +34,7 @@ const Blocks: BlocksType = {
   testimonialBlock: TestimonialBlock,
   featureModules: FeatureModules,
   ctaCardBlock: CTACardBlock,
+  faqBlock: FAQBlock,
 }
 
 /**

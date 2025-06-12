@@ -70,6 +70,20 @@ export const getPageQuery = defineQuery(`
           }
         }
       },
+      _type == "stepperBlock" => {
+        ...,
+        blockHeader,
+        backgroundMode,
+        animateOnScroll,
+        steps[]{
+          index,
+          variant,
+          cardHeader,
+          image,
+          items,
+          iconContainerColor
+        }
+      },
     },
   }
 `)

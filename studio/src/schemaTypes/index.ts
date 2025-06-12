@@ -12,6 +12,9 @@ import { testimonialBlock } from './objects/testimonialBlock'
 import { featureModules } from './objects/featureModules'
 import { ctaCardBlock } from './objects/ctaCardBlock'
 import { faqBlock } from './objects/faqBlock'
+import { blockHeader } from './objects/blockHeader'
+import { stepperStep } from './objects/stepperStep'
+import { stepperBlock } from './objects/stepperBlock'
 
 // Export an array of all the schema types.  This is used in the Sanity Studio configuration. https://www.sanity.io/docs/schema-types
 
@@ -33,4 +36,7 @@ export const schemaTypes = [
   featureModules,
   ctaCardBlock,
   faqBlock,
+  blockHeader,
+  stepperStep,
+  stepperBlock,
 ]

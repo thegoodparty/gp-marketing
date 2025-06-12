@@ -1,6 +1,9 @@
 import { defineField, defineType } from 'sanity'
 import { ComponentIcon } from '@sanity/icons'
-import { ICON_CONTAINER_COLOR_OPTIONS, LINK_TARGET_OPTIONS } from '../../lib/shared-constants'
+import {
+  ICON_CONTAINER_COLOR_OPTIONS,
+  LINK_TARGET_OPTIONS,
+} from '../../lib/shared-constants'
 
 export const ctaCardBlock = defineType({
   name: 'ctaCardBlock',
@@ -62,7 +65,8 @@ export const ctaCardBlock = defineType({
               name: 'icon',
               title: 'Arrow Icon',
               type: 'string',
-              description: 'Lucide icon name (e.g., "ArrowRight", "ArrowUpRight", "ExternalLink")',
+              description:
+                'Lucide icon name (e.g., "ArrowRight", "ArrowUpRight", "ExternalLink")',
               initialValue: 'ArrowRight',
             }),
           ],
@@ -74,13 +78,14 @@ export const ctaCardBlock = defineType({
               url: 'url',
             },
             prepare({ heading, overline, backgroundColor, url }) {
-              const colorName = ICON_CONTAINER_COLOR_OPTIONS.find(
-                option => option.value === backgroundColor
-              )?.title || 'Unknown'
+              const colorName =
+                ICON_CONTAINER_COLOR_OPTIONS.find(
+                  (option) => option.value === backgroundColor,
+                )?.title || 'Unknown'
 
               const title = heading || 'Untitled Card'
-              const subtitle = overline 
-                ? `${colorName} • ${overline}` 
+              const subtitle = overline
+                ? `${colorName} • ${overline}`
                 : `${colorName} • ${url}`
 
               return {
@@ -101,9 +106,10 @@ export const ctaCardBlock = defineType({
     },
     prepare({ cardCount, firstHeading, secondHeading }) {
       const title = 'CTA Card Block'
-      const subtitle = cardCount === 2
-        ? `"${firstHeading || 'Untitled'}" + "${secondHeading || 'Untitled'}"`
-        : `${cardCount || 0} cards`
+      const subtitle =
+        cardCount === 2
+          ? `"${firstHeading || 'Untitled'}" + "${secondHeading || 'Untitled'}"`
+          : `${cardCount || 0} cards`
 
       return {
         title,
@@ -111,4 +117,4 @@ export const ctaCardBlock = defineType({
       }
     },
   },
-}) 
+})

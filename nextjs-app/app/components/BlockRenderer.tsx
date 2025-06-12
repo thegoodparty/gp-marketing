@@ -9,6 +9,7 @@ import TestimonialBlock from '@/app/components/TestimonialBlock'
 import FeatureModules from '@/app/components/FeatureModules'
 import CTACardBlock from '@/app/components/CTACardBlock'
 import FAQBlock from '@/app/components/FAQBlock'
+import StepperBlock from '@/app/components/StepperBlock'
 
 type BlocksType = {
   [key: string]: React.FC<any>
@@ -35,6 +36,7 @@ const Blocks: BlocksType = {
   featureModules: FeatureModules,
   ctaCardBlock: CTACardBlock,
   faqBlock: FAQBlock,
+  stepperBlock: StepperBlock,
 }
 
 /**

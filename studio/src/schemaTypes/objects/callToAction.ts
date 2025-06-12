@@ -1,9 +1,9 @@
 import { defineField, defineType } from 'sanity'
 import { BulbOutlineIcon } from '@sanity/icons'
-import { 
-  CTA_VARIANT_OPTIONS, 
+import {
+  CTA_VARIANT_OPTIONS,
   LIGHT_BACKGROUND_COLOR_OPTIONS,
-  BUTTON_VARIANT_OPTIONS 
+  BUTTON_VARIANT_OPTIONS,
 } from '../../lib/shared-constants'
 
 /**
@@ -182,11 +182,11 @@ export const callToAction = defineType({
     prepare(selection) {
       const { title, variant, backgroundColor } = selection
       const variantLabel = variant === 'textImage' ? 'Text + Image' : 'Centered'
-      
+
       return {
         title: title || 'Call to Action',
         subtitle: `${variantLabel} • ${backgroundColor}`,
       }
     },
   },
-}) 
+})

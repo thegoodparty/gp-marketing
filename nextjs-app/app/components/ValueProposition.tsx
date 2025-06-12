@@ -1,24 +1,20 @@
 import React from 'react'
-import { urlForImage } from '@/sanity/lib/utils'
-import Image from 'next/image'
-import { getLucideIcon } from '../utils/icons'
-import { LinkButton } from './LinkButton'
-import { ValuePropositionTestimonial } from './ValuePropositionTestimonial'
-import { ButtonVariant } from '../types/design-tokens'
-import { IconPosition } from '../types/ui'
+import { ValuePropImageColumn } from './ValuePropImageColumn'
+import { ValuePropDefaultColumn } from './ValuePropDefaultColumn'
+import { ValuePropTestimonialColumn } from './ValuePropTestimonialColumn'
 
-enum ValuePropositionColumnType {
+export enum ValuePropositionColumnType {
   CONTENT = 'content',
   IMAGE = 'image',
   TESTIMONIAL = 'testimonial',
 }
 
-interface ListItem {
+export interface ListItem {
   icon: string
   text: string
 }
 
-interface ContentColumn {
+export interface ContentColumn {
   columnType: ValuePropositionColumnType.CONTENT
   title: string
   backgroundColor: string
@@ -30,7 +26,7 @@ interface ContentColumn {
   }
 }
 
-interface ImageColumn {
+export interface ImageColumn {
   columnType: ValuePropositionColumnType.IMAGE
   image: {
     asset: {
@@ -50,7 +46,7 @@ interface ImageColumn {
   }
 }
 
-interface TestimonialColumn {
+export interface TestimonialColumn {
   columnType: ValuePropositionColumnType.TESTIMONIAL
   backgroundColor: string
   quote: string
@@ -74,7 +70,7 @@ interface TestimonialColumn {
   }
 }
 
-type Column = ContentColumn | ImageColumn | TestimonialColumn
+export type Column = ContentColumn | ImageColumn | TestimonialColumn
 
 interface ValuePropositionProps {
   block: {
@@ -93,91 +89,22 @@ export default function ValueProposition({ block }: ValuePropositionProps) {
             columns.length > 0 &&
             columns.map((column, index) => {
               if (column.columnType === ValuePropositionColumnType.IMAGE) {
-                const imageUrl = urlForImage(column.image)
-                  ?.width(624)
-                  .height(466)
-                  .fit('crop')
-                  .crop('center')
-                  .url()
-
                 return (
-                  <div
-                    key={index}
-                    className="flex-1 basis-1/2 rounded-3xl overflow-hidden"
-                  >
-                    <div className="relative w-full h-[300px] lg:h-[466px]">
-                      <Image
-                        src={imageUrl || ''}
-                        alt={column.image.alt}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 624px"
-                      />
-                    </div>
-                  </div>
+                  <ValuePropImageColumn key={index} column={column} />
                 )
               }
 
-              if (
-                column.columnType === ValuePropositionColumnType.TESTIMONIAL
-              ) {
+              if (column.columnType === ValuePropositionColumnType.TESTIMONIAL) {
                 return (
-                  <div key={index} className="flex-1 basis-1/2">
-                    <ValuePropositionTestimonial
-                      quote={column.quote}
-                      authorName={column.authorName}
-                      authorTitle={column.authorTitle}
-                      authorImage={column.authorImage}
-                      backgroundColor={column.backgroundColor}
-                    />
-                  </div>
+                  <ValuePropTestimonialColumn
+                    key={index}
+                    column={column}
+                  />
                 )
               }
 
               return (
-                <div
-                  key={index}
-                  className="flex-1 basis-1/2 rounded-3xl p-5 sm:p-8 xl:p-12"
-                  style={{ backgroundColor: column.backgroundColor }}
-                >
-                  <h3 className="text-[40px] font-semibold text-gray-900 mb-8 leading-tight">
-                    {column.title}
-                  </h3>
-
-                  <div className="space-y-6 mb-8">
-                    {column.items.map((item, itemIndex) => {
-                      const ItemIcon = getLucideIcon(item.icon)
-
-                      return (
-                        <div key={itemIndex} className="flex items-start gap-4">
-                          <div className="flex-shrink-0 w-12 h-12 bg-white rounded-full flex items-center justify-center">
-                            <ItemIcon className="w-5 h-5 text-gray-700" />
-                          </div>
-
-                          <div className="flex-1 pt-1">
-                            <p className="text-lead text-[20px] text-gray-900 leading-relaxed">
-                              {item.text}
-                            </p>
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-
-                  {column.button &&
-                    column.button.label &&
-                    column.button.url && (
-                      <div className="mt-8">
-                        <LinkButton
-                          label={column.button.label}
-                          url={column.button.url}
-                          icon={column.button.icon || 'ArrowUpRight'}
-                          variant={ButtonVariant.SECONDARY}
-                          iconPosition={IconPosition.RIGHT}
-                        />
-                      </div>
-                    )}
-                </div>
+                <ValuePropDefaultColumn key={index} column={column} />
               )
             })}
         </div>

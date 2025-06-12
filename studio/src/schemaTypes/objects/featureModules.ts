@@ -1,9 +1,9 @@
 import { defineField, defineType } from 'sanity'
 import { ComponentIcon } from '@sanity/icons'
-import { 
-  BUTTON_VARIANT_OPTIONS, 
-  BACKGROUND_THEME_OPTIONS, 
-  ICON_CONTAINER_COLOR_OPTIONS 
+import {
+  BUTTON_VARIANT_OPTIONS,
+  BACKGROUND_THEME_OPTIONS,
+  ICON_CONTAINER_COLOR_OPTIONS,
 } from '../../lib/shared-constants'
 
 export const featureModules = defineType({

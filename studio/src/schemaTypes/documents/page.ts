@@ -53,6 +53,7 @@ export const page = defineType({
         { type: 'faqBlock' },
         { type: 'callToAction' },
         { type: 'infoSection' },
+        { type: 'stepperBlock' },
       ],
       options: {
         insertMenu: {

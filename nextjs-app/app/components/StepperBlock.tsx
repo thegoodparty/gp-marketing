@@ -20,7 +20,31 @@ interface StepperBlockProps {
 }
 
 export default function StepperBlock({ block }: StepperBlockProps) {
-  const header = block.blockHeader
+  const headerRaw = block.blockHeader
+
+  // TODO(goodparty/web-4238): BlockHeaderSection takes string URLs, while Sanity returns `SanityLink` objects.
+  // In a future refactor, I'll update BlockHeaderSection (and components using it) to accept `SanityLink`
+  // directly so this mapping logic can be removed.
+  const resolveLink = (link: any) =>
+    typeof link === 'string' ? link : getLinkUrl(link)
+
+  const header = headerRaw
+    ? {
+        ...headerRaw,
+        primaryButton: headerRaw.primaryButton
+          ? {
+              ...headerRaw.primaryButton,
+              url: resolveLink(headerRaw.primaryButton.url),
+            }
+          : undefined,
+        secondaryButton: headerRaw.secondaryButton
+          ? {
+              ...headerRaw.secondaryButton,
+              url: resolveLink(headerRaw.secondaryButton.url),
+            }
+          : undefined,
+      }
+    : undefined
 
   return (
     <section className="py-20 px-5 sm:px-10 lg:px-20 xl:px-20 2xl:px-[clamp(20px,4vw,160px)] bg-[var(--color-gp-cream)]">
@@ -33,38 +57,40 @@ export default function StepperBlock({ block }: StepperBlockProps) {
           />
         )}
 
-        {block.steps &&
-          block.steps.map((step, idx) => (
-            <StepperCard
-              key={idx}
-              card={
-                {
-                  ...step,
-                  index: idx,
-                  iconContainerColor: step.iconContainerColor,
-                  cardHeader: {
-                    ...step.cardHeader,
-                    primaryButton: step.cardHeader.primaryButton
-                      ? {
-                          ...step.cardHeader.primaryButton,
-                          url: getLinkUrl(
-                            step.cardHeader.primaryButton.url as any,
-                          ),
-                        }
-                      : undefined,
-                    secondaryButton: step.cardHeader.secondaryButton
-                      ? {
-                          ...step.cardHeader.secondaryButton,
-                          url: getLinkUrl(
-                            step.cardHeader.secondaryButton.url as any,
-                          ),
-                        }
-                      : undefined,
-                  },
-                } as StepperCardData
-              }
-            />
-          ))}
+        {block.steps.map((step, idx) => (
+          <section key={idx} className="min-h-screen pointer-events-none">
+            <div
+              className={`sticky top-20 z-[${10 + idx}] pointer-events-auto`}
+            >
+              <StepperCard
+                card={
+                  {
+                    ...step,
+                    index: idx,
+                    iconContainerColor: step.iconContainerColor,
+                    cardHeader: {
+                      ...step.cardHeader,
+                      primaryButton: step.cardHeader.primaryButton
+                        ? {
+                            ...step.cardHeader.primaryButton,
+                            url: resolveLink(step.cardHeader.primaryButton.url),
+                          }
+                        : undefined,
+                      secondaryButton: step.cardHeader.secondaryButton
+                        ? {
+                            ...step.cardHeader.secondaryButton,
+                            url: resolveLink(
+                              step.cardHeader.secondaryButton.url,
+                            ),
+                          }
+                        : undefined,
+                    },
+                  } as StepperCardData
+                }
+              />
+            </div>
+          </section>
+        ))}
       </div>
     </section>
   )

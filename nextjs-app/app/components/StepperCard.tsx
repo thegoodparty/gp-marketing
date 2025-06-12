@@ -1,7 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
 import { LinkButton } from './LinkButton'
-import { IconPosition } from '../types/ui'
 import {
   BackgroundTheme,
   ButtonVariant,
@@ -9,8 +8,9 @@ import {
   IconContainerColor,
   TEXT_COLOR_MAP,
 } from '../types/design-tokens'
-import { urlForImage } from '../../sanity/lib/utils'
+import { IconPosition } from '../types/ui'
 import { getLucideIcon } from '../utils/icons'
+import { urlForImage } from '../../sanity/lib/utils'
 
 export enum StepperCardVariant {
   IMAGE = 'image',

@@ -150,8 +150,8 @@ export const StepperCard: React.FC<{ card: StepperCardData }> = ({ card }) => {
           )}
         </div>
 
-        <div className={`relative ${mediaColOrder}`}>
-          {card.image && (
+        {card.image && (
+          <div className={`relative ${mediaColOrder}`}>
             <div className="aspect-square h-full w-full">
               <Image
                 src={
@@ -166,8 +166,8 @@ export const StepperCard: React.FC<{ card: StepperCardData }> = ({ card }) => {
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   )

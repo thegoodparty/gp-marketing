@@ -58,7 +58,7 @@ export default function TestimonialBlock({ block }: TestimonialBlockProps) {
   return (
     <section className="relative w-full bg-brand-secondary">
       <div className="flex flex-col items-center w-full">
-        <div className="box-border flex flex-col gap-12 items-center justify-start px-20 py-32 w-full">
+        <div className="box-border flex flex-col gap-12 items-center justify-start px-5 py-8 sm:px-10 sm:py-16 xl:px-20 xl:py-32 w-full max-w-[1376px] mx-auto">
           {header && (
             <BlockHeaderSection
               header={header}
@@ -67,9 +67,9 @@ export default function TestimonialBlock({ block }: TestimonialBlockProps) {
           )}
 
           <div className="w-full">
-            <div className="md:hidden">
+            <div className="xl:hidden">
               <div
-                className={`flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 ${
+                className={`flex gap-12 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 ${
                   testimonials.length === 1 ? 'justify-center' : ''
                 }`}
                 style={{ scrollBehavior: 'smooth' }}
@@ -77,11 +77,7 @@ export default function TestimonialBlock({ block }: TestimonialBlockProps) {
                 {testimonials.map((testimonial, index) => (
                   <div
                     key={index}
-                    className={`flex-none snap-center ${
-                      testimonials.length === 1
-                        ? 'w-[85vw] max-w-[350px]'
-                        : 'w-[85vw]'
-                    }`}
+                    className="flex-none snap-center w-[320px] sm:w-[380px]"
                   >
                     <TestimonialCard
                       quote={testimonial.quote}
@@ -106,7 +102,7 @@ export default function TestimonialBlock({ block }: TestimonialBlockProps) {
             </div>
 
             <div
-              className={`hidden md:grid gap-6 lg:gap-8 justify-items-center justify-center mx-auto w-full ${styles.testimonialGrid}`}
+              className={`hidden xl:grid gap-12 justify-items-center justify-center mx-auto w-full ${styles.testimonialGrid}`}
             >
               {testimonials.map((testimonial, index) => (
                 <div key={index} className="w-full">

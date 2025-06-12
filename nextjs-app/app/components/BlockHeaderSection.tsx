@@ -51,6 +51,9 @@ export const BlockHeaderSection: React.FC<BlockHeaderSectionProps> = ({
   const hasSecondary = secondaryButton?.label && secondaryButton?.url
   const hasDarkBackground = backgroundColor === BackgroundTheme.DARK
 
+  const buttonMobileBase = 'w-full flex sm:w-auto'
+  const buttonMobileJustify = isLeftAligned ? 'justify-start' : 'justify-center'
+
   return (
     <div className={`w-full ${className}`}>
       <div
@@ -86,7 +89,7 @@ export const BlockHeaderSection: React.FC<BlockHeaderSectionProps> = ({
         </div>
         {(hasPrimary || hasSecondary) && (
           <div
-            className={`flex ${hasPrimary && hasSecondary ? 'flex-row gap-4' : ''} ${alignmentClasses.buttons} items-center`}
+            className={`flex ${hasPrimary && hasSecondary ? 'flex-col gap-4 sm:flex-row' : ''} ${alignmentClasses.buttons} ${alignmentClasses.container}`}
           >
             {hasPrimary && (
               <LinkButton
@@ -95,6 +98,7 @@ export const BlockHeaderSection: React.FC<BlockHeaderSectionProps> = ({
                 icon={primaryButton.icon}
                 variant={primaryButton.variant}
                 iconPosition={IconPosition.RIGHT}
+                className={`${buttonMobileBase} ${buttonMobileJustify}`}
               />
             )}
             {hasSecondary && (
@@ -108,6 +112,7 @@ export const BlockHeaderSection: React.FC<BlockHeaderSectionProps> = ({
                     : secondaryButton.variant
                 }
                 iconPosition={IconPosition.RIGHT}
+                className={`${buttonMobileBase} ${buttonMobileJustify}`}
               />
             )}
           </div>

@@ -112,7 +112,7 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
   return (
     <section className="relative w-full" style={{ backgroundColor: bgColor }}>
       <div className="flex flex-col items-center w-full">
-        <div className="box-border flex flex-col gap-12 lg:gap-20 items-center justify-start px-5 lg:px-20 py-12 lg:py-20 w-full">
+        <div className="box-border flex flex-col gap-12 items-center justify-start px-5 sm:px-10 xl:px-20 2xl:px-[clamp(20px,4vw,160px)] py-8 sm:py-16 xl:py-32 w-full max-w-[1376px] mx-auto">
           {header && (
             <BlockHeaderSection
               header={header}
@@ -123,9 +123,9 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
 
           {features && features.length > 0 && (
             <div className="w-full">
-              <div className="hidden lg:flex flex-row gap-8 w-full">
+              <div className="hidden lg:flex flex-row gap-12 w-full">
                 {desktopColumns.map((column, i) => (
-                  <div key={i} className="flex flex-col gap-8 w-full flex-1">
+                  <div key={i} className="flex flex-col gap-12 w-full flex-1">
                     {column.map((feature) => {
                       const originalIndex = features.indexOf(feature)
                       return renderFeatureCard(feature, originalIndex, 'w-full')
@@ -134,9 +134,9 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
                 ))}
               </div>
 
-              <div className="hidden md:flex lg:hidden flex-row gap-6 w-full">
+              <div className="hidden md:flex lg:hidden flex-row gap-12 w-full">
                 {tabletColumns.map((column, i) => (
-                  <div key={i} className="flex flex-col gap-6 w-full flex-1">
+                  <div key={i} className="flex flex-col gap-12 w-full flex-1">
                     {column.map((feature) => {
                       const originalIndex = features.indexOf(feature)
                       return renderFeatureCard(feature, originalIndex, 'w-full')
@@ -145,7 +145,7 @@ export default function FeatureModules({ block }: FeatureModulesProps) {
                 ))}
               </div>
 
-              <div className="md:hidden flex flex-col gap-6 items-center w-full">
+              <div className="md:hidden flex flex-col gap-12 items-center w-full">
                 {features.map((feature, index) =>
                   renderFeatureCard(feature, index, 'w-full max-w-[500px]'),
                 )}

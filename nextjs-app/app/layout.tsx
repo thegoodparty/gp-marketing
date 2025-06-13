@@ -8,7 +8,7 @@ import { VisualEditing, toPlainText } from 'next-sanity'
 import { Toaster } from 'sonner'
 
 import DraftModeToast from '@/app/components/DraftModeToast'
-import Footer from '@/app/components/Footer'
+import Footer from '@/app/components/footer/Footer'
 import Header from '@/app/components/header/Header'
 import { Settings } from '@/app/types/navigation'
 import * as demo from '@/sanity/lib/demo'

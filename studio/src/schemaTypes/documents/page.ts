@@ -54,6 +54,7 @@ export const page = defineType({
         { type: 'callToAction' },
         { type: 'infoSection' },
         { type: 'stepperBlock' },
+        { type: 'pricingBlock' },
       ],
       options: {
         insertMenu: {

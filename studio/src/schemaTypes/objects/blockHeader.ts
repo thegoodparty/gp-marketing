@@ -26,7 +26,7 @@ export const blockHeader = defineType({
           name: 'url',
           type: 'link',
           title: 'URL',
-          validation: (Rule) => Rule.required(),
+          initialValue: { linkType: '' },
         }),
         defineField({
           name: 'variant',
@@ -39,10 +39,11 @@ export const blockHeader = defineType({
       validation: (Rule) =>
         Rule.custom((btn) => {
           if (!btn) return true
-          const { label, url } = btn
-          if ((label && !url) || (!label && url)) {
-            return 'Both label and URL are required if button is provided'
-          }
+          const { label, url } = btn as any
+          const urlEmpty = !url || Object.values(url).every((v) => !v)
+          if (!label && urlEmpty) return true
+          if (label && urlEmpty) return 'URL is required when label is provided'
+          if (!label && !urlEmpty) return 'Label is required when URL is provided'
           return true
         }),
     }),
@@ -52,7 +53,12 @@ export const blockHeader = defineType({
       type: 'object',
       fields: [
         defineField({ name: 'label', type: 'string', title: 'Label' }),
-        defineField({ name: 'url', type: 'link', title: 'URL' }),
+        defineField({
+          name: 'url',
+          type: 'link',
+          title: 'URL',
+          initialValue: { linkType: '' },
+        }),
         defineField({
           name: 'variant',
           type: 'string',
@@ -64,10 +70,11 @@ export const blockHeader = defineType({
       validation: (Rule) =>
         Rule.custom((btn) => {
           if (!btn) return true
-          const { label, url } = btn
-          if ((label && !url) || (!label && url)) {
-            return 'Both label and URL are required if button is provided'
-          }
+          const { label, url } = btn as any
+          const urlEmpty = !url || Object.values(url).every((v) => !v)
+          if (!label && urlEmpty) return true
+          if (label && urlEmpty) return 'URL is required when label is provided'
+          if (!label && !urlEmpty) return 'Label is required when URL is provided'
           return true
         }),
     }),

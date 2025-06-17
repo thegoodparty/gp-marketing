@@ -110,7 +110,9 @@ export const HeroBlock: React.FC<HeroBlockProps> = ({ block }) => {
             </div>
           )}
           <div className="relative z-10 flex items-center justify-center min-h-[500px] px-10 md:px-20 py-20">
-            <div className={`w-full max-w-4xl ${layoutEnum === HeroLayout.IMAGE_CONTAINED ? 'max-[1100px]:px-5' : ''}`}>
+            <div
+              className={`w-full max-w-4xl ${layoutEnum === HeroLayout.IMAGE_CONTAINED ? 'max-[1100px]:px-5' : ''}`}
+            >
               <BlockHeaderSection
                 header={transformedHeader}
                 backgroundColor={BackgroundTheme.DARK}

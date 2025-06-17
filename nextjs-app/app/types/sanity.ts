@@ -65,3 +65,35 @@ export interface SanityDocument {
   _updatedAt: string
   _rev: string
 }
+
+// HeroBlock related interfaces
+export interface BlockHeader {
+  overline?: string
+  heading: string
+  subhead?: string
+  primaryButton?: {
+    label: string
+    url: SanityLink
+    icon?: string
+    variant?: string
+  }
+  secondaryButton?: {
+    label: string
+    url: SanityLink
+    icon?: string
+    variant?: string
+  }
+}
+
+export interface HeroBlockProps {
+  block: {
+    _key: string
+    _type: 'heroBlock'
+    header: BlockHeader
+    headerAlignment: string
+    backgroundTheme: string
+    layout: string
+    image?: SanityImage
+    imageContained?: boolean
+  }
+}

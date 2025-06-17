@@ -26,7 +26,7 @@ interface BlockHeaderSectionProps {
     }
   }
   backgroundColor?: BackgroundTheme
-  headerAlignment?: Alignment.CENTER | Alignment.LEFT
+  headerAlignment?: Alignment.CENTER | Alignment.LEFT | Alignment.RIGHT
   className?: string
 }
 
@@ -38,11 +38,24 @@ export const BlockHeaderSection: React.FC<BlockHeaderSectionProps> = ({
 }) => {
   const textColor = TEXT_COLOR_MAP[backgroundColor]
   const isLeftAligned = headerAlignment === Alignment.LEFT
+  const isRightAligned = headerAlignment === Alignment.RIGHT
 
   const alignmentClasses = {
-    container: isLeftAligned ? 'items-start' : 'items-center',
-    text: isLeftAligned ? 'text-left' : 'text-center',
-    buttons: isLeftAligned ? 'justify-start' : 'justify-center',
+    container: isLeftAligned
+      ? 'items-start'
+      : isRightAligned
+        ? 'items-end'
+        : 'items-center',
+    text: isLeftAligned
+      ? 'text-left'
+      : isRightAligned
+        ? 'text-right'
+        : 'text-center',
+    buttons: isLeftAligned
+      ? 'justify-start'
+      : isRightAligned
+        ? 'justify-end'
+        : 'justify-center',
   }
 
   const primaryButton = header.primaryButton
@@ -52,7 +65,11 @@ export const BlockHeaderSection: React.FC<BlockHeaderSectionProps> = ({
   const hasDarkBackground = backgroundColor === BackgroundTheme.DARK
 
   const buttonMobileBase = 'w-full flex sm:w-auto'
-  const buttonMobileJustify = isLeftAligned ? 'justify-start' : 'justify-center'
+  const buttonMobileJustify = isLeftAligned
+    ? 'justify-start'
+    : isRightAligned
+      ? 'justify-end'
+      : 'justify-center'
 
   return (
     <div className={`w-full ${className}`}>

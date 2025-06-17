@@ -1,3 +1,5 @@
+import { ButtonVariant } from './design-tokens'
+
 export enum SanityType {
   REFERENCE = 'reference',
   DOCUMENT = 'document',
@@ -82,6 +84,24 @@ export interface BlockHeader {
     url: SanityLink
     icon?: string
     variant?: string
+  }
+}
+
+export interface TransformedHeader {
+  overline?: string
+  heading: string
+  subhead?: string
+  primaryButton?: {
+    label: string
+    url: string
+    icon?: string
+    variant?: ButtonVariant
+  }
+  secondaryButton?: {
+    label: string
+    url: string
+    icon?: string
+    variant?: ButtonVariant
   }
 }
 

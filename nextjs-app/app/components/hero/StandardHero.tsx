@@ -31,7 +31,9 @@ export const StandardHero: React.FC<{
   <div className={`${horizontalPaddingClasses} ${standardPadding}`}>
     <div className="mx-auto w-full max-w-[1376px]">
       <div className={`${layoutClasses}`}>
-        <div className={`${layoutEnum === HeroLayout.TWO_COLUMN_IMAGE_RIGHT ? 'lg:order-2' : ''} ${headerMargin}`}>
+        <div
+          className={`${layoutEnum === HeroLayout.TWO_COLUMN_IMAGE_RIGHT ? 'lg:order-2' : ''} ${headerMargin}`}
+        >
           <BlockHeaderSection
             header={transformedHeader}
             backgroundColor={backgroundEnum}
@@ -39,11 +41,13 @@ export const StandardHero: React.FC<{
           />
         </div>
         {hasImage && image && (
-          <div className={`${layoutEnum === HeroLayout.TWO_COLUMN_IMAGE_LEFT ? 'lg:order-1' : ''}`}>
+          <div
+            className={`${layoutEnum === HeroLayout.TWO_COLUMN_IMAGE_LEFT ? 'lg:order-1' : ''}`}
+          >
             <HeroImage image={image} layout={layoutEnum} />
           </div>
         )}
       </div>
     </div>
   </div>
-) 
+)

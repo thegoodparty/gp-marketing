@@ -5,7 +5,7 @@ import {
   ButtonVariant,
 } from '../../types/design-tokens'
 import { HeroLayout, Alignment } from '../../types/ui'
-import { HeroBlockProps, SanityImage, TransformedHeader } from '../../types/sanity'
+import { HeroBlockProps, TransformedHeader } from '../../types/sanity'
 import { OverlayHero } from './OverlayHero'
 import { StandardHero } from './StandardHero'
 

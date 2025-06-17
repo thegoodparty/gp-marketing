@@ -35,4 +35,4 @@ export const OverlayHero: React.FC<{
       </div>
     </div>
   </div>
-) 
+)

@@ -46,6 +46,7 @@ export const page = defineType({
       type: 'array',
       of: [
         { type: 'pageHero' },
+        { type: 'heroBlock' },
         { type: 'valueProposition' },
         { type: 'testimonialBlock' },
         { type: 'featureModules' },
@@ -54,6 +55,7 @@ export const page = defineType({
         { type: 'callToAction' },
         { type: 'infoSection' },
         { type: 'stepperBlock' },
+        { type: 'pricingBlock' },
       ],
       options: {
         insertMenu: {

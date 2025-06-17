@@ -1,0 +1,20 @@
+.pricingGrid {
+  display: grid;
+  place-items: center;
+  gap: 3rem; /* 48px - same as gap-12 */
+  grid-template-columns: 1fr; /* Single column by default */
+}
+
+@media (min-width: 954px) {
+  .pricingGrid.twoCards {
+    grid-template-columns: 405px 405px;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 1406px) {
+  .pricingGrid.threeCards {
+    grid-template-columns: 405px 405px 405px;
+    justify-content: center;
+  }
+}

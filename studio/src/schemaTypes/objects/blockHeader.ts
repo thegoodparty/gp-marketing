@@ -26,7 +26,7 @@ export const blockHeader = defineType({
           name: 'url',
           type: 'link',
           title: 'URL',
-          validation: (Rule) => Rule.required(),
+          initialValue: { linkType: '' },
         }),
         defineField({
           name: 'variant',
@@ -36,15 +36,6 @@ export const blockHeader = defineType({
         }),
         defineField({ name: 'icon', type: 'string', title: 'Icon' }),
       ],
-      validation: (Rule) =>
-        Rule.custom((btn) => {
-          if (!btn) return true
-          const { label, url } = btn
-          if ((label && !url) || (!label && url)) {
-            return 'Both label and URL are required if button is provided'
-          }
-          return true
-        }),
     }),
     defineField({
       name: 'secondaryButton',
@@ -52,7 +43,12 @@ export const blockHeader = defineType({
       type: 'object',
       fields: [
         defineField({ name: 'label', type: 'string', title: 'Label' }),
-        defineField({ name: 'url', type: 'link', title: 'URL' }),
+        defineField({
+          name: 'url',
+          type: 'link',
+          title: 'URL',
+          initialValue: { linkType: '' },
+        }),
         defineField({
           name: 'variant',
           type: 'string',
@@ -61,15 +57,6 @@ export const blockHeader = defineType({
         }),
         defineField({ name: 'icon', type: 'string', title: 'Icon' }),
       ],
-      validation: (Rule) =>
-        Rule.custom((btn) => {
-          if (!btn) return true
-          const { label, url } = btn
-          if ((label && !url) || (!label && url)) {
-            return 'Both label and URL are required if button is provided'
-          }
-          return true
-        }),
     }),
   ],
   preview: {

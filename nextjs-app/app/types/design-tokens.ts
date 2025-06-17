@@ -139,3 +139,15 @@ export const LINK_TYPE_OPTIONS = [
   { title: 'Page', value: LinkType.PAGE },
   { title: 'Post', value: LinkType.POST },
 ] as const
+
+export enum PricingCardBackground {
+  BRAND_SECONDARY = 'brandSecondary',
+  LAVENDER_100 = 'lavender100',
+  BRIGHT_YELLOW_300 = 'brightYellow300',
+}
+
+export const PRICING_CARD_BG_MAP: Record<PricingCardBackground, string> = {
+  [PricingCardBackground.BRAND_SECONDARY]: DesignTokens.COLOR_BRAND_SECONDARY,
+  [PricingCardBackground.LAVENDER_100]: DesignTokens.COLOR_LAVENDER_100,
+  [PricingCardBackground.BRIGHT_YELLOW_300]: 'var(--color-bright-yellow-300)',
+}

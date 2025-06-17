@@ -13,6 +13,7 @@ interface LinkButtonProps {
   iconPosition?: IconPosition
   target?: LinkTarget
   className?: string
+  buttonClassName?: string
 }
 
 export const LinkButton: React.FC<LinkButtonProps> = ({
@@ -23,12 +24,17 @@ export const LinkButton: React.FC<LinkButtonProps> = ({
   iconPosition = IconPosition.LEFT,
   target = LinkTarget.BLANK,
   className = '',
+  buttonClassName = '',
 }) => {
   const ButtonIcon = icon ? getLucideIcon(icon) : null
 
   return (
     <Link href={url} target={target} className={`inline-block ${className}`}>
-      <Button iconPosition={iconPosition} variant={variant}>
+      <Button
+        iconPosition={iconPosition}
+        variant={variant}
+        className={buttonClassName}
+      >
         {ButtonIcon && <ButtonIcon className="mr-2 h-4 w-4" />}
         {label}
       </Button>

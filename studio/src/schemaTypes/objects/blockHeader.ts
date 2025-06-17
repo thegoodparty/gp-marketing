@@ -36,16 +36,6 @@ export const blockHeader = defineType({
         }),
         defineField({ name: 'icon', type: 'string', title: 'Icon' }),
       ],
-      validation: (Rule) =>
-        Rule.custom((btn) => {
-          if (!btn) return true
-          const { label, url } = btn as any
-          const urlEmpty = !url || Object.values(url).every((v) => !v)
-          if (!label && urlEmpty) return true
-          if (label && urlEmpty) return 'URL is required when label is provided'
-          if (!label && !urlEmpty) return 'Label is required when URL is provided'
-          return true
-        }),
     }),
     defineField({
       name: 'secondaryButton',
@@ -67,16 +57,6 @@ export const blockHeader = defineType({
         }),
         defineField({ name: 'icon', type: 'string', title: 'Icon' }),
       ],
-      validation: (Rule) =>
-        Rule.custom((btn) => {
-          if (!btn) return true
-          const { label, url } = btn as any
-          const urlEmpty = !url || Object.values(url).every((v) => !v)
-          if (!label && urlEmpty) return true
-          if (label && urlEmpty) return 'URL is required when label is provided'
-          if (!label && !urlEmpty) return 'Label is required when URL is provided'
-          return true
-        }),
     }),
   ],
   preview: {

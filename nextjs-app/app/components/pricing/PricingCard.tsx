@@ -85,6 +85,7 @@ export const PricingCard: React.FC<{ plan: PricingCardPlan }> = ({ plan }) => {
             iconPosition={IconPosition.RIGHT}
             target={plan.ctaButton.target}
             className="w-full"
+            buttonClassName="w-full"
           />
         </div>
       )}

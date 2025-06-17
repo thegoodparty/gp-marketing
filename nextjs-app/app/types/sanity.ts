@@ -1,3 +1,5 @@
+import { ButtonVariant } from './design-tokens'
+
 export enum SanityType {
   REFERENCE = 'reference',
   DOCUMENT = 'document',
@@ -64,4 +66,54 @@ export interface SanityDocument {
   _createdAt: string
   _updatedAt: string
   _rev: string
+}
+
+// HeroBlock related interfaces
+export interface BlockHeader {
+  overline?: string
+  heading: string
+  subhead?: string
+  primaryButton?: {
+    label: string
+    url: SanityLink
+    icon?: string
+    variant?: string
+  }
+  secondaryButton?: {
+    label: string
+    url: SanityLink
+    icon?: string
+    variant?: string
+  }
+}
+
+export interface TransformedHeader {
+  overline?: string
+  heading: string
+  subhead?: string
+  primaryButton?: {
+    label: string
+    url: string
+    icon?: string
+    variant?: ButtonVariant
+  }
+  secondaryButton?: {
+    label: string
+    url: string
+    icon?: string
+    variant?: ButtonVariant
+  }
+}
+
+export interface HeroBlockProps {
+  block: {
+    _key: string
+    _type: 'heroBlock'
+    header: BlockHeader
+    headerAlignment: string
+    backgroundTheme: string
+    layout: string
+    image?: SanityImage
+    imageContained?: boolean
+  }
 }

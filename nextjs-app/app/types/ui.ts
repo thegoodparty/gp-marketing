@@ -26,3 +26,22 @@ export enum FontWeight {
   MEDIUM = 'medium',
   SEMIBOLD = 'semibold',
 }
+
+export enum HeroLayout {
+  HEADER_ONLY = 'headerOnly',
+  TWO_COLUMN_IMAGE_LEFT = 'twoColumnImageLeft',
+  TWO_COLUMN_IMAGE_RIGHT = 'twoColumnImageRight',
+  IMAGE_FULL_WIDTH = 'imageFullWidth',
+  IMAGE_CONTAINED = 'imageContained',
+}
+
+export const HERO_LAYOUT_OPTIONS = [
+  { title: 'Header Only', value: HeroLayout.HEADER_ONLY },
+  { title: 'Two Column - Image Left', value: HeroLayout.TWO_COLUMN_IMAGE_LEFT },
+  {
+    title: 'Two Column - Image Right',
+    value: HeroLayout.TWO_COLUMN_IMAGE_RIGHT,
+  },
+  { title: 'Image Full Width', value: HeroLayout.IMAGE_FULL_WIDTH },
+  { title: 'Image Contained', value: HeroLayout.IMAGE_CONTAINED },
+] as const

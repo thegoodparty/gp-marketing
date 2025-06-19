@@ -30,9 +30,12 @@ export default function CandidatesBanner({ block }: CandidatesBannerProps) {
     <section className="py-10 px-5 sm:px-10 md:px-20 bg-white">
       <div className="mx-auto max-w-[1376px] bg-brand-secondary rounded-xl px-16 [@media(max-width:360px)]:px-8 py-12">
         <div className="flex items-center justify-center gap-9 [@media(max-width:360px)]:flex-col">
-          <div className="flex -space-x-10 [@media(max-width:360px)]:space-x-0 justify-center">
+          <div className="flex -space-x-10 justify-center">
             {block.profiles?.map((img, i) => (
-              <div key={`${img.asset?._ref || 'img'}-${i}`} className="relative size-16 rounded-full overflow-hidden">
+              <div
+                key={`${img.asset?._ref || 'img'}-${i}`}
+                className="relative size-16 rounded-full overflow-hidden"
+              >
                 <Image
                   src={urlForImage(img)?.width(128).height(128).url() as string}
                   alt={img.alt || 'Candidate headshot'}
@@ -41,15 +44,13 @@ export default function CandidatesBanner({ block }: CandidatesBannerProps) {
                 />
 
                 <span
-                  className={
-                    `${styles.avatarWrapper} ${
-                      BORDER_CLASS_MAP[
-                        CANDIDATE_BORDER_COLOR_VALUES[
-                          i % CANDIDATE_BORDER_COLOR_VALUES.length
-                        ]
+                  className={`${styles.avatarWrapper} ${
+                    BORDER_CLASS_MAP[
+                      CANDIDATE_BORDER_COLOR_VALUES[
+                        i % CANDIDATE_BORDER_COLOR_VALUES.length
                       ]
-                    }`
-                  }
+                    ]
+                  }`}
                 />
               </div>
             ))}
@@ -62,4 +63,4 @@ export default function CandidatesBanner({ block }: CandidatesBannerProps) {
       </div>
     </section>
   )
-} 
+}

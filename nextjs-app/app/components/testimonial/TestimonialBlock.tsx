@@ -1,7 +1,7 @@
 import React from 'react'
 import { TestimonialCard } from './TestimonialCard'
-import { BlockHeaderSection } from './BlockHeaderSection'
-import { type ButtonVariant, BackgroundTheme } from '../types/design-tokens'
+import { BlockHeaderSection } from '../BlockHeaderSection'
+import { type ButtonVariant, BackgroundTheme } from '../../types/design-tokens'
 import styles from './TestimonialBlock.module.css'
 
 interface TestimonialBlockProps {

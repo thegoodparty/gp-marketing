@@ -13,6 +13,7 @@ import StepperBlock from '@/app/components/StepperBlock'
 import PricingBlock from '@/app/components/pricing/PricingBlock'
 import HeroBlock from '@/app/components/hero/HeroBlock'
 import CandidatesBanner from '@/app/components/CandidatesBanner'
+import CTABanner from '@/app/components/CTABanner'
 
 type BlocksType = {
   [key: string]: React.FC<any>
@@ -31,18 +32,19 @@ type BlockProps = {
 }
 
 const Blocks: BlocksType = {
+  candidatesBanner: CandidatesBanner,
   callToAction: Cta,
-  infoSection: Info,
-  pageHero: PageHero,
-  valueProposition: ValueProposition,
-  testimonialBlock: TestimonialBlock,
-  featureModules: FeatureModules,
+  ctaBanner: CTABanner,
   ctaCardBlock: CTACardBlock,
   faqBlock: FAQBlock,
-  stepperBlock: StepperBlock,
-  pricingBlock: PricingBlock,
+  featureModules: FeatureModules,
   heroBlock: HeroBlock,
-  candidatesBanner: CandidatesBanner,
+  infoSection: Info,
+  pageHero: PageHero,
+  pricingBlock: PricingBlock,
+  stepperBlock: StepperBlock,
+  testimonialBlock: TestimonialBlock,
+  valueProposition: ValueProposition,
 }
 
 /**

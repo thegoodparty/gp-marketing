@@ -12,6 +12,7 @@ import FAQBlock from '@/app/components/FAQBlock'
 import StepperBlock from '@/app/components/StepperBlock'
 import PricingBlock from '@/app/components/pricing/PricingBlock'
 import HeroBlock from '@/app/components/hero/HeroBlock'
+import CandidatesBanner from '@/app/components/CandidatesBanner'
 
 type BlocksType = {
   [key: string]: React.FC<any>
@@ -41,6 +42,7 @@ const Blocks: BlocksType = {
   stepperBlock: StepperBlock,
   pricingBlock: PricingBlock,
   heroBlock: HeroBlock,
+  candidatesBanner: CandidatesBanner,
 }
 
 /**

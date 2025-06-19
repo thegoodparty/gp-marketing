@@ -4,14 +4,16 @@ import Cta from '@/app/components/CTABlock'
 import Info from '@/app/components/InfoSection'
 import { dataAttr } from '@/sanity/lib/utils'
 import PageHero from '@/app/components/PageHero'
-import ValueProposition from '@/app/components/ValueProposition'
-import TestimonialBlock from '@/app/components/TestimonialBlock'
+import ValueProposition from '@/app/components/valueProp/ValueProposition'
+import TestimonialBlock from '@/app/components/testimonial/TestimonialBlock'
 import FeatureModules from '@/app/components/FeatureModules'
 import CTACardBlock from '@/app/components/CTACardBlock'
 import FAQBlock from '@/app/components/FAQBlock'
 import StepperBlock from '@/app/components/StepperBlock'
 import PricingBlock from '@/app/components/pricing/PricingBlock'
 import HeroBlock from '@/app/components/hero/HeroBlock'
+import CandidatesBanner from '@/app/components/candidatesBanner/CandidatesBanner'
+import CTABanner from '@/app/components/CTABanner'
 
 type BlocksType = {
   [key: string]: React.FC<any>
@@ -30,17 +32,19 @@ type BlockProps = {
 }
 
 const Blocks: BlocksType = {
+  candidatesBanner: CandidatesBanner,
   callToAction: Cta,
-  infoSection: Info,
-  pageHero: PageHero,
-  valueProposition: ValueProposition,
-  testimonialBlock: TestimonialBlock,
-  featureModules: FeatureModules,
+  ctaBanner: CTABanner,
   ctaCardBlock: CTACardBlock,
   faqBlock: FAQBlock,
-  stepperBlock: StepperBlock,
-  pricingBlock: PricingBlock,
+  featureModules: FeatureModules,
   heroBlock: HeroBlock,
+  infoSection: Info,
+  pageHero: PageHero,
+  pricingBlock: PricingBlock,
+  stepperBlock: StepperBlock,
+  testimonialBlock: TestimonialBlock,
+  valueProposition: ValueProposition,
 }
 
 /**

@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import { urlForImage } from '../../sanity/lib/utils'
+import { urlForImage } from '../../../sanity/lib/utils'
 import type { ImageColumn } from './ValueProposition'
 
 interface ValuePropImageColumnProps {

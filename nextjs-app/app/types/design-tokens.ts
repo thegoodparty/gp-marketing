@@ -88,6 +88,21 @@ export const TEXT_COLOR_MAP: Record<BackgroundTheme, DesignTokens> = {
   [BackgroundTheme.WHITE]: DesignTokens.COLOR_GRAYSCALE_950,
 }
 
+export enum TextColor {
+  WHITE = 'white',
+  BLACK = 'black',
+}
+
+export const TEXT_COLOR_VALUE_MAP: Record<TextColor, DesignTokens> = {
+  [TextColor.WHITE]: DesignTokens.COLOR_GRAYSCALE_WHITE,
+  [TextColor.BLACK]: DesignTokens.COLOR_GRAYSCALE_950,
+}
+
+export const TEXT_COLOR_OPTIONS = [
+  { title: 'White', value: TextColor.WHITE },
+  { title: 'Black', value: TextColor.BLACK },
+] as const
+
 export const BUTTON_VARIANT_OPTIONS = [
   { title: 'Default', value: ButtonVariant.DEFAULT },
   { title: 'Secondary', value: ButtonVariant.SECONDARY },

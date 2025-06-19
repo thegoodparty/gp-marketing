@@ -1,5 +1,5 @@
 import React from 'react'
-import { urlForImage } from '../../sanity/lib/utils'
+import { urlForImage } from '../../../sanity/lib/utils'
 import Image from 'next/image'
 import { GoodPartyOrgLogo } from 'goodparty-styleguide'
 import type { TestimonialColumn } from './ValueProposition'

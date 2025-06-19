@@ -57,6 +57,7 @@ export const page = defineType({
         { type: 'stepperBlock' },
         { type: 'pricingBlock' },
         { type: 'candidatesBanner' },
+        { type: 'ctaBanner' },
       ],
       options: {
         insertMenu: {

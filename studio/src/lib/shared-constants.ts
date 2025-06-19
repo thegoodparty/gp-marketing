@@ -43,3 +43,8 @@ export const CTA_VARIANT_OPTIONS = [
   { title: 'Text + Image', value: 'textImage' },
   { title: 'Centered Content', value: 'centered' },
 ]
+
+export const TEXT_COLOR_OPTIONS = [
+  { title: 'White', value: 'white' },
+  { title: 'Black', value: 'black' },
+]

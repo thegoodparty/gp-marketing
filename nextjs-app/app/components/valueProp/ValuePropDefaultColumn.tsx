@@ -1,8 +1,8 @@
 import React from 'react'
-import { getLucideIcon } from '../utils/icons'
-import { LinkButton } from './LinkButton'
-import { ButtonVariant } from '../types/design-tokens'
-import { IconPosition } from '../types/ui'
+import { getLucideIcon } from '../../utils/icons'
+import { LinkButton } from '../LinkButton'
+import { ButtonVariant } from '../../types/design-tokens'
+import { IconPosition } from '../../types/ui'
 import type { ContentColumn } from './ValueProposition'
 
 interface ValuePropDefaultColumnProps {

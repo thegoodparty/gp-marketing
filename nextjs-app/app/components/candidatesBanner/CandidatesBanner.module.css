@@ -1,0 +1,16 @@
+.avatarWrapper {
+  @apply absolute inset-0 rounded-full border-[3px] border-solid pointer-events-none;
+  box-shadow: 0 0 10px rgba(11, 21, 41, 0.7);
+}
+
+.borderBlue {
+  border-color: var(--color-blue-200);
+}
+
+.borderLavender {
+  border-color: var(--color-lavender-100);
+}
+
+.borderWaxflower {
+  border-color: var(--color-waxflower-100);
+}

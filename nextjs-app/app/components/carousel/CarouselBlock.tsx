@@ -8,6 +8,11 @@ import { useHorizontalScroll } from '@/app/hooks/useHorizontalScroll'
 import { CarouselCandidateCard } from './CarouselCandidateCard'
 import { BACKGROUND_COLOR_MAP } from '../../types/design-tokens'
 
+export enum CarouselCardType {
+  TESTIMONIALS = 'testimonials',
+  CANDIDATES = 'candidates',
+}
+
 interface CarouselBlockProps {
   block: {
     header?: {
@@ -15,7 +20,7 @@ interface CarouselBlockProps {
       heading: string
       subhead?: string
     }
-    variant: 'testimonials' | 'candidates'
+    variant: CarouselCardType
     background?: BackgroundTheme
     testimonials?: Array<{
       backgroundColor: string
@@ -98,34 +103,37 @@ export default function CarouselBlock({ block }: CarouselBlockProps) {
               className="flex gap-8 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 w-full"
               style={{ scrollBehavior: 'smooth' }}
             >
-              {(variant === 'testimonials' ? testimonials : candidates).map(
-                (item, index) => (
-                  <div
-                    key={index}
-                    className="flex-none snap-center w-[320px] sm:w-[380px]"
-                  >
-                    {variant === 'testimonials' ? (
+              {variant === CarouselCardType.TESTIMONIALS
+                ? testimonials.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex-none snap-center w-[320px] sm:w-[380px]"
+                    >
                       <TestimonialCard
-                        quote={(item as any).quote}
-                        authorName={(item as any).authorName}
-                        authorTitle={(item as any).authorTitle}
-                        authorImage={(item as any).authorImage}
-                        backgroundColor={(item as any).backgroundColor}
+                        quote={item.quote}
+                        authorName={item.authorName}
+                        authorTitle={item.authorTitle}
+                        authorImage={item.authorImage}
+                        backgroundColor={item.backgroundColor}
                         className="h-[400px]"
                       />
-                    ) : (
+                    </div>
+                  ))
+                : candidates.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex-none snap-center w-[320px] sm:w-[380px]"
+                    >
                       <CarouselCandidateCard
-                        quote={(item as any).quote}
-                        candidateName={(item as any).candidateName}
-                        candidateTitle={(item as any).candidateTitle}
-                        candidateImage={(item as any).candidateImage}
-                        backgroundColor={(item as any).backgroundColor}
+                        quote={item.quote}
+                        candidateName={item.candidateName}
+                        candidateTitle={item.candidateTitle}
+                        candidateImage={item.candidateImage}
+                        backgroundColor={item.backgroundColor}
                         className="h-[400px]"
                       />
-                    )}
-                  </div>
-                ),
-              )}
+                    </div>
+                  ))}
             </div>
           </div>
         </div>

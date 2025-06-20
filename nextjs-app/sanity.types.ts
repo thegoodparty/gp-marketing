@@ -804,9 +804,6 @@ export type Page = {
   pageBuilder?: Array<
     | ({
         _key: string
-      } & PageHero)
-    | ({
-        _key: string
       } & HeroBlock)
     | ({
         _key: string
@@ -845,25 +842,6 @@ export type Page = {
         _key: string
       } & CarouselBlock)
   >
-}
-
-export type Link = {
-  _type: 'link'
-  linkType?: 'href' | 'page' | 'post'
-  href?: string
-  page?: {
-    _ref: string
-    _type: 'reference'
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: 'page'
-  }
-  post?: {
-    _ref: string
-    _type: 'reference'
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: 'post'
-  }
-  openInNewTab?: boolean
 }
 
 export type Post = {
@@ -919,6 +897,25 @@ export type Person = {
     alt?: string
     _type: 'image'
   }
+}
+
+export type Link = {
+  _type: 'link'
+  linkType?: 'href' | 'page' | 'post'
+  href?: string
+  page?: {
+    _ref: string
+    _type: 'reference'
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: 'page'
+  }
+  post?: {
+    _ref: string
+    _type: 'reference'
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: 'post'
+  }
+  openInNewTab?: boolean
 }
 
 export type SanityImagePaletteSwatch = {
@@ -1060,9 +1057,9 @@ export type AllSanitySchemaTypes =
   | PageHero
   | Settings
   | Page
-  | Link
   | Post
   | Person
+  | Link
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -1555,45 +1552,6 @@ export type GetPageQueryResult = {
           _type: 'block'
           _key: string
         }> | null
-      }
-    | {
-        _key: string
-        _type: 'pageHero'
-        color: 'dark' | 'light'
-        backgroundImage?: {
-          asset?: {
-            _ref: string
-            _type: 'reference'
-            _weak?: boolean
-            [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
-          }
-          media?: unknown
-          hotspot?: SanityImageHotspot
-          crop?: SanityImageCrop
-          _type: 'image'
-        }
-        mainImage?: {
-          asset?: {
-            _ref: string
-            _type: 'reference'
-            _weak?: boolean
-            [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
-          }
-          media?: unknown
-          hotspot?: SanityImageHotspot
-          crop?: SanityImageCrop
-          _type: 'image'
-        }
-        heading: string
-        subheading?: BlockContent
-        mainCta?: {
-          label: string
-          url: string
-        }
-        secondaryCta?: {
-          label?: string
-          url?: string
-        }
       }
     | {
         _key: string

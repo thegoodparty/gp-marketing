@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 import { urlForImage } from '@/sanity/lib/utils'
 import { GoodPartyOrgLogo } from 'goodparty-styleguide'
 
@@ -50,9 +51,11 @@ export const CarouselCandidateCard: React.FC<CarouselCandidateCardProps> = ({
         <div className="relative w-48 h-48 flex items-center justify-center">
           <div className="rounded-full overflow-hidden w-full h-full bg-[#DDF2E8] flex items-center justify-center">
             {avatarUrl && (
-              <img
+              <Image
                 src={avatarUrl}
                 alt={candidateImage.alt || candidateName}
+                width={192}
+                height={192}
                 className="object-cover w-full h-full"
               />
             )}

@@ -14,6 +14,7 @@ import PricingBlock from '@/app/components/pricing/PricingBlock'
 import HeroBlock from '@/app/components/hero/HeroBlock'
 import CandidatesBanner from '@/app/components/candidatesBanner/CandidatesBanner'
 import CTABanner from '@/app/components/CTABanner'
+import CarouselBlock from '@/app/components/carousel/CarouselBlock'
 
 type BlocksType = {
   [key: string]: React.FC<any>
@@ -36,6 +37,7 @@ const Blocks: BlocksType = {
   callToAction: Cta,
   ctaBanner: CTABanner,
   ctaCardBlock: CTACardBlock,
+  carouselBlock: CarouselBlock,
   faqBlock: FAQBlock,
   featureModules: FeatureModules,
   heroBlock: HeroBlock,

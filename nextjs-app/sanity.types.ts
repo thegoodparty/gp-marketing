@@ -13,6 +13,99 @@
  */
 
 // Source: schema.json
+export type CarouselBlock = {
+  _type: 'carouselBlock'
+  header?: {
+    overline?: string
+    heading: string
+    subhead?: string
+    primaryButton?: {
+      label?: string
+      url?: string
+      variant?:
+        | 'default'
+        | 'secondary'
+        | 'destructive'
+        | 'outline'
+        | 'ghost'
+        | 'whiteGhost'
+        | 'whiteOutline'
+      icon?: string
+    }
+    secondaryButton?: {
+      label?: string
+      url?: string
+      variant?:
+        | 'default'
+        | 'secondary'
+        | 'destructive'
+        | 'outline'
+        | 'ghost'
+        | 'whiteGhost'
+        | 'whiteOutline'
+      icon?: string
+    }
+  }
+  testimonials?: Array<{
+    backgroundColor:
+      | '#FDCDCD'
+      | '#D1E7FE'
+      | '#FFEEB7'
+      | '#F1E5FF'
+      | '#FFF1C9'
+      | '#CCEADD'
+      | '#FFFFFF'
+    quote: string
+    authorName: string
+    authorTitle: string
+    authorImage: {
+      asset?: {
+        _ref: string
+        _type: 'reference'
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt: string
+      _type: 'image'
+    }
+    _type: 'slide'
+    _key: string
+  }>
+  background?: 'dark' | 'creme' | 'white'
+  variant: 'testimonials' | 'candidates'
+  candidates?: Array<{
+    backgroundColor:
+      | '#FDCDCD'
+      | '#D1E7FE'
+      | '#FFEEB7'
+      | '#F1E5FF'
+      | '#FFF1C9'
+      | '#CCEADD'
+      | '#FFFFFF'
+    quote: string
+    candidateName: string
+    candidateTitle: string
+    candidateImage: {
+      asset?: {
+        _ref: string
+        _type: 'reference'
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt: string
+      _type: 'image'
+    }
+    _type: 'candidate'
+    _key: string
+  }>
+}
+
 export type CtaBanner = {
   _type: 'ctaBanner'
   headline: string
@@ -711,7 +804,7 @@ export type Page = {
   pageBuilder?: Array<
     | ({
         _key: string
-      } & PageHero)
+      } & HeroBlock)
     | ({
         _key: string
       } & HeroBlock)
@@ -748,6 +841,9 @@ export type Page = {
     | ({
         _key: string
       } & CtaBanner)
+    | ({
+        _key: string
+      } & CarouselBlock)
   >
 }
 
@@ -823,6 +919,25 @@ export type Person = {
     alt?: string
     _type: 'image'
   }
+}
+
+export type Link = {
+  _type: 'link'
+  linkType?: 'href' | 'page' | 'post'
+  href?: string
+  page?: {
+    _ref: string
+    _type: 'reference'
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: 'page'
+  }
+  post?: {
+    _ref: string
+    _type: 'reference'
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: 'post'
+  }
+  openInNewTab?: boolean
 }
 
 export type SanityImagePaletteSwatch = {
@@ -944,6 +1059,7 @@ export type SanityAssetSourceData = {
 }
 
 export type AllSanitySchemaTypes =
+  | CarouselBlock
   | CtaBanner
   | CandidatesBanner
   | HeroBlock
@@ -966,6 +1082,7 @@ export type AllSanitySchemaTypes =
   | Link
   | Post
   | Person
+  | Link
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -1152,6 +1269,99 @@ export type GetPageQueryResult = {
           hotspot?: SanityImageHotspot
           crop?: SanityImageCrop
           _type: 'image'
+          _key: string
+        }>
+      }
+    | {
+        _key: string
+        _type: 'carouselBlock'
+        header?: {
+          overline?: string
+          heading: string
+          subhead?: string
+          primaryButton?: {
+            label?: string
+            url?: string
+            variant?:
+              | 'default'
+              | 'destructive'
+              | 'ghost'
+              | 'outline'
+              | 'secondary'
+              | 'whiteGhost'
+              | 'whiteOutline'
+            icon?: string
+          }
+          secondaryButton?: {
+            label?: string
+            url?: string
+            variant?:
+              | 'default'
+              | 'destructive'
+              | 'ghost'
+              | 'outline'
+              | 'secondary'
+              | 'whiteGhost'
+              | 'whiteOutline'
+            icon?: string
+          }
+        }
+        testimonials?: Array<{
+          backgroundColor:
+            | '#CCEADD'
+            | '#D1E7FE'
+            | '#F1E5FF'
+            | '#FDCDCD'
+            | '#FFEEB7'
+            | '#FFF1C9'
+            | '#FFFFFF'
+          quote: string
+          authorName: string
+          authorTitle: string
+          authorImage: {
+            asset?: {
+              _ref: string
+              _type: 'reference'
+              _weak?: boolean
+              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+            }
+            media?: unknown
+            hotspot?: SanityImageHotspot
+            crop?: SanityImageCrop
+            alt: string
+            _type: 'image'
+          }
+          _type: 'slide'
+          _key: string
+        }>
+        background?: 'creme' | 'dark' | 'white'
+        variant: 'candidates' | 'testimonials'
+        candidates?: Array<{
+          backgroundColor:
+            | '#CCEADD'
+            | '#D1E7FE'
+            | '#F1E5FF'
+            | '#FDCDCD'
+            | '#FFEEB7'
+            | '#FFF1C9'
+            | '#FFFFFF'
+          quote: string
+          candidateName: string
+          candidateTitle: string
+          candidateImage: {
+            asset?: {
+              _ref: string
+              _type: 'reference'
+              _weak?: boolean
+              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+            }
+            media?: unknown
+            hotspot?: SanityImageHotspot
+            crop?: SanityImageCrop
+            alt: string
+            _type: 'image'
+          }
+          _type: 'candidate'
           _key: string
         }>
       }
@@ -1368,42 +1578,54 @@ export type GetPageQueryResult = {
       }
     | {
         _key: string
-        _type: 'pageHero'
-        color: 'dark' | 'light'
-        backgroundImage?: {
-          asset?: {
-            _ref: string
-            _type: 'reference'
-            _weak?: boolean
-            [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+        _type: 'pricingBlock'
+        header?: BlockHeader
+        layout?: 'threeColumn' | 'twoColumn'
+        plans?: Array<
+          {
+            _key: string
+          } & PricingPlan
+        >
+      }
+    | {
+        _key: string
+        _type: 'stepperBlock'
+        backgroundMode: 'creme' | 'dark' | 'white' | null
+        animateOnScroll: boolean | null
+        blockHeader: BlockHeader | null
+        steps: Array<{
+          index: null
+          variant: null
+          cardHeader: BlockHeader
+          image: {
+            asset?: {
+              _ref: string
+              _type: 'reference'
+              _weak?: boolean
+              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+            }
+            media?: unknown
+            hotspot?: SanityImageHotspot
+            crop?: SanityImageCrop
+            _type: 'image'
           }
-          media?: unknown
-          hotspot?: SanityImageHotspot
-          crop?: SanityImageCrop
-          _type: 'image'
-        }
-        mainImage?: {
-          asset?: {
-            _ref: string
-            _type: 'reference'
-            _weak?: boolean
-            [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
-          }
-          media?: unknown
-          hotspot?: SanityImageHotspot
-          crop?: SanityImageCrop
-          _type: 'image'
-        }
-        heading: string
-        subheading?: BlockContent
-        mainCta?: {
-          label: string
-          url: string
-        }
-        secondaryCta?: {
-          label?: string
-          url?: string
-        }
+          items: Array<{
+            icon: string
+            title: string
+            body?: string
+            _type: 'item'
+            _key: string
+          }> | null
+          iconContainerColor:
+            | 'blue-200'
+            | 'brightYellow-200'
+            | 'haloGreen-200'
+            | 'lavender-200'
+            | 'orange-200'
+            | 'red-200'
+            | 'waxFlower-200'
+            | null
+        }> | null
       }
     | {
         _key: string

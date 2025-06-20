@@ -45,7 +45,6 @@ export const page = defineType({
       title: 'Page builder',
       type: 'array',
       of: [
-        { type: 'pageHero' },
         { type: 'heroBlock' },
         { type: 'valueProposition' },
         { type: 'testimonialBlock' },
@@ -58,6 +57,7 @@ export const page = defineType({
         { type: 'pricingBlock' },
         { type: 'candidatesBanner' },
         { type: 'ctaBanner' },
+        { type: 'carouselBlock' },
       ],
       options: {
         insertMenu: {

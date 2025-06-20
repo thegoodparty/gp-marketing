@@ -48,8 +48,16 @@ export const CarouselControl: React.FC<CarouselControlProps> = ({
 }) => {
   return (
     <div className={`flex gap-4 shrink-0 ${className}`}>
-      <ArrowButton direction={Direction.LEFT} onClick={onPrev} isDark={isDark} />
-      <ArrowButton direction={Direction.RIGHT} onClick={onNext} isDark={isDark} />
+      <ArrowButton
+        direction={Direction.LEFT}
+        onClick={onPrev}
+        isDark={isDark}
+      />
+      <ArrowButton
+        direction={Direction.RIGHT}
+        onClick={onNext}
+        isDark={isDark}
+      />
     </div>
   )
-} 
+}

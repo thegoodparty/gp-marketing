@@ -77,4 +77,4 @@ export const CarouselCandidateCard: React.FC<CarouselCandidateCardProps> = ({
       </div>
     </div>
   )
-} 
+}

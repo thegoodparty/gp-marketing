@@ -62,8 +62,11 @@ export default function CarouselBlock({ block }: CarouselBlockProps) {
     testimonials = [],
     candidates = [],
   } = block
-  const { ref: scrollContainerRef, scrollLeft, scrollRight } =
-    useHorizontalScroll()
+  const {
+    ref: scrollContainerRef,
+    scrollLeft,
+    scrollRight,
+  } = useHorizontalScroll()
 
   return (
     <section
@@ -95,36 +98,38 @@ export default function CarouselBlock({ block }: CarouselBlockProps) {
               className="flex gap-8 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 w-full"
               style={{ scrollBehavior: 'smooth' }}
             >
-              {(variant === 'testimonials' ? testimonials : candidates).map((item, index) => (
-                <div
-                  key={index}
-                  className="flex-none snap-center w-[320px] sm:w-[380px]"
-                >
-                  {variant === 'testimonials' ? (
-                    <TestimonialCard
-                      quote={(item as any).quote}
-                      authorName={(item as any).authorName}
-                      authorTitle={(item as any).authorTitle}
-                      authorImage={(item as any).authorImage}
-                      backgroundColor={(item as any).backgroundColor}
-                      className="h-[400px]"
-                    />
-                  ) : (
-                    <CarouselCandidateCard
-                      quote={(item as any).quote}
-                      candidateName={(item as any).candidateName}
-                      candidateTitle={(item as any).candidateTitle}
-                      candidateImage={(item as any).candidateImage}
-                      backgroundColor={(item as any).backgroundColor}
-                      className="h-[400px]"
-                    />
-                  )}
-                </div>
-              ))}
+              {(variant === 'testimonials' ? testimonials : candidates).map(
+                (item, index) => (
+                  <div
+                    key={index}
+                    className="flex-none snap-center w-[320px] sm:w-[380px]"
+                  >
+                    {variant === 'testimonials' ? (
+                      <TestimonialCard
+                        quote={(item as any).quote}
+                        authorName={(item as any).authorName}
+                        authorTitle={(item as any).authorTitle}
+                        authorImage={(item as any).authorImage}
+                        backgroundColor={(item as any).backgroundColor}
+                        className="h-[400px]"
+                      />
+                    ) : (
+                      <CarouselCandidateCard
+                        quote={(item as any).quote}
+                        candidateName={(item as any).candidateName}
+                        candidateTitle={(item as any).candidateTitle}
+                        candidateImage={(item as any).candidateImage}
+                        backgroundColor={(item as any).backgroundColor}
+                        className="h-[400px]"
+                      />
+                    )}
+                  </div>
+                ),
+              )}
             </div>
           </div>
         </div>
       </div>
     </section>
   )
-} 
+}

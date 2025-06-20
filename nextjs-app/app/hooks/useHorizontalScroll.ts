@@ -12,4 +12,4 @@ export const useHorizontalScroll = (amount: number = 400) => {
   }
 
   return { ref, scrollLeft, scrollRight }
-} 
+}

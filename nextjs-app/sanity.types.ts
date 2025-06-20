@@ -807,6 +807,9 @@ export type Page = {
       } & HeroBlock)
     | ({
         _key: string
+      } & HeroBlock)
+    | ({
+        _key: string
       } & ValueProposition)
     | ({
         _key: string
@@ -842,6 +845,25 @@ export type Page = {
         _key: string
       } & CarouselBlock)
   >
+}
+
+export type Link = {
+  _type: 'link'
+  linkType?: 'href' | 'page' | 'post'
+  href?: string
+  page?: {
+    _ref: string
+    _type: 'reference'
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: 'page'
+  }
+  post?: {
+    _ref: string
+    _type: 'reference'
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: 'post'
+  }
+  openInNewTab?: boolean
 }
 
 export type Post = {
@@ -1057,6 +1079,7 @@ export type AllSanitySchemaTypes =
   | PageHero
   | Settings
   | Page
+  | Link
   | Post
   | Person
   | Link
@@ -1551,6 +1574,57 @@ export type GetPageQueryResult = {
           level?: number
           _type: 'block'
           _key: string
+        }> | null
+      }
+    | {
+        _key: string
+        _type: 'pricingBlock'
+        header?: BlockHeader
+        layout?: 'threeColumn' | 'twoColumn'
+        plans?: Array<
+          {
+            _key: string
+          } & PricingPlan
+        >
+      }
+    | {
+        _key: string
+        _type: 'stepperBlock'
+        backgroundMode: 'creme' | 'dark' | 'white' | null
+        animateOnScroll: boolean | null
+        blockHeader: BlockHeader | null
+        steps: Array<{
+          index: null
+          variant: null
+          cardHeader: BlockHeader
+          image: {
+            asset?: {
+              _ref: string
+              _type: 'reference'
+              _weak?: boolean
+              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+            }
+            media?: unknown
+            hotspot?: SanityImageHotspot
+            crop?: SanityImageCrop
+            _type: 'image'
+          }
+          items: Array<{
+            icon: string
+            title: string
+            body?: string
+            _type: 'item'
+            _key: string
+          }> | null
+          iconContainerColor:
+            | 'blue-200'
+            | 'brightYellow-200'
+            | 'haloGreen-200'
+            | 'lavender-200'
+            | 'orange-200'
+            | 'red-200'
+            | 'waxFlower-200'
+            | null
         }> | null
       }
     | {

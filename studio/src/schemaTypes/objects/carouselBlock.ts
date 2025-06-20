@@ -3,11 +3,12 @@ import { ComponentIcon } from '@sanity/icons'
 import {
   BUTTON_VARIANT_OPTIONS,
   BACKGROUND_COLOR_OPTIONS,
+  BACKGROUND_THEME_OPTIONS,
 } from '../shared/constants'
 
-export const testimonialBlock = defineType({
-  name: 'testimonialBlock',
-  title: 'Testimonial Block',
+export const carouselBlock = defineType({
+  name: 'carouselBlock',
+  title: 'Carousel Block',
   type: 'object',
   icon: ComponentIcon,
   fields: [
@@ -40,37 +41,25 @@ export const testimonialBlock = defineType({
           title: 'Primary Button',
           type: 'object',
           fields: [
-            defineField({
-              name: 'label',
-              title: 'Button Label',
-              type: 'string',
-            }),
-            defineField({
-              name: 'url',
-              title: 'Button URL',
-              type: 'url',
-            }),
+            defineField({ name: 'label', title: 'Button Label', type: 'string' }),
+            defineField({ name: 'url', title: 'Button URL', type: 'url' }),
             defineField({
               name: 'variant',
               title: 'Button Variant',
               type: 'string',
-              options: {
-                list: [...BUTTON_VARIANT_OPTIONS],
-                layout: 'dropdown',
-              },
+              options: { list: [...BUTTON_VARIANT_OPTIONS], layout: 'dropdown' },
               initialValue: 'default',
             }),
             defineField({
               name: 'icon',
               title: 'Button Icon',
               type: 'string',
-              description:
-                'Lucide icon name (e.g., "ArrowRight", "Download", "ExternalLink")',
+              description: 'Lucide icon name (e.g., "ArrowRight")',
             }),
           ],
           validation: (Rule) =>
             Rule.custom((button) => {
-              if (!button) return true // Button is optional
+              if (!button) return true
               const { label, url } = button
               if ((label && !url) || (!label && url)) {
                 return 'Both label and URL are required if button is provided'
@@ -83,32 +72,20 @@ export const testimonialBlock = defineType({
           title: 'Secondary Button',
           type: 'object',
           fields: [
-            defineField({
-              name: 'label',
-              title: 'Button Label',
-              type: 'string',
-            }),
-            defineField({
-              name: 'url',
-              title: 'Button URL',
-              type: 'url',
-            }),
+            defineField({ name: 'label', title: 'Button Label', type: 'string' }),
+            defineField({ name: 'url', title: 'Button URL', type: 'url' }),
             defineField({
               name: 'variant',
               title: 'Button Variant',
               type: 'string',
-              options: {
-                list: [...BUTTON_VARIANT_OPTIONS],
-                layout: 'dropdown',
-              },
+              options: { list: [...BUTTON_VARIANT_OPTIONS], layout: 'dropdown' },
               initialValue: 'secondary',
             }),
             defineField({
               name: 'icon',
               title: 'Button Icon',
               type: 'string',
-              description:
-                'Lucide icon name (e.g., "ArrowRight", "Download", "ExternalLink")',
+              description: 'Lucide icon name (e.g., "ArrowRight")',
             }),
           ],
           validation: (Rule) =>
@@ -123,16 +100,18 @@ export const testimonialBlock = defineType({
         }),
       ],
     }),
+
     defineField({
       name: 'testimonials',
       title: 'Testimonials',
       type: 'array',
-      validation: (Rule) => Rule.min(3).max(12),
+      hidden: ({ parent }) => parent?.variant === 'candidates',
+      validation: (Rule) => Rule.min(1).max(20),
       of: [
         {
           type: 'object',
-          name: 'testimonial',
-          title: 'Testimonial',
+          name: 'slide',
+          title: 'Slide',
           fields: [
             defineField({
               name: 'backgroundColor',
@@ -168,66 +147,80 @@ export const testimonialBlock = defineType({
               name: 'authorImage',
               title: 'Author Image',
               type: 'image',
-              options: {
-                hotspot: true,
-              },
+              options: { hotspot: true },
               fields: [
                 defineField({
                   name: 'alt',
                   title: 'Alt Text',
                   type: 'string',
-                  description: 'Descriptive text for accessibility',
                   validation: (Rule) => Rule.required(),
                 }),
               ],
               validation: (Rule) => Rule.required(),
             }),
           ],
-          preview: {
-            select: {
-              quote: 'quote',
-              authorName: 'authorName',
-              authorTitle: 'authorTitle',
-              backgroundColor: 'backgroundColor',
-              authorImage: 'authorImage',
-            },
-            prepare({
-              quote,
-              authorName,
-              authorTitle,
-              backgroundColor,
-              authorImage,
-            }) {
-              const colorName =
-                backgroundColor === '#FDCDCD'
-                  ? 'Red'
-                  : backgroundColor === '#D1E7FE'
-                    ? 'Blue'
-                    : backgroundColor === '#FFEEB7'
-                      ? 'Yellow'
-                      : backgroundColor === '#F1E5FF'
-                        ? 'Lavender'
-                        : backgroundColor === '#FFF1C9'
-                          ? 'Wax Flower'
-                          : backgroundColor === '#CCEADD'
-                            ? 'Green'
-                            : backgroundColor === '#FFFFFF'
-                              ? 'White'
-                              : 'Unknown'
+        },
+      ],
+    }),
 
-              const truncatedQuote = quote
-                ? quote.length > 60
-                  ? quote.substring(0, 60) + '...'
-                  : quote
-                : 'No quote'
+    defineField({
+      name: 'background',
+      title: 'Background Color',
+      type: 'string',
+      options: {
+        list: [...BACKGROUND_THEME_OPTIONS],
+        layout: 'radio',
+      },
+      initialValue: 'dark',
+    }),
 
-              return {
-                title: authorName || 'Unnamed author',
-                subtitle: `${colorName} • ${truncatedQuote}`,
-                media: authorImage,
-              }
-            },
-          },
+    defineField({
+      name: 'variant',
+      title: 'Variant',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Testimonials', value: 'testimonials' },
+          { title: 'Candidates', value: 'candidates' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'testimonials',
+      validation: (Rule) => Rule.required(),
+    }),
+
+    defineField({
+      name: 'candidates',
+      title: 'Candidates',
+      type: 'array',
+      hidden: ({ parent }) => parent?.variant !== 'candidates',
+      validation: (Rule) => Rule.min(1).max(20),
+      of: [
+        {
+          type: 'object',
+          name: 'candidate',
+          title: 'Candidate',
+          fields: [
+            defineField({
+              name: 'backgroundColor',
+              title: 'Background Color',
+              type: 'string',
+              options: { list: [...BACKGROUND_COLOR_OPTIONS], layout: 'radio' },
+              initialValue: '#CCEADD',
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({ name: 'quote', title: 'Quote', type: 'text', rows: 4, validation: (Rule) => Rule.required() }),
+            defineField({ name: 'candidateName', title: 'Candidate Name', type: 'string', validation: (Rule) => Rule.required() }),
+            defineField({ name: 'candidateTitle', title: 'Candidate Title', type: 'string', validation: (Rule) => Rule.required() }),
+            defineField({
+              name: 'candidateImage',
+              title: 'Candidate Image',
+              type: 'image',
+              options: { hotspot: true },
+              fields: [defineField({ name: 'alt', title: 'Alt', type: 'string', validation: (Rule) => Rule.required() })],
+              validation: (Rule) => Rule.required(),
+            }),
+          ],
         },
       ],
     }),
@@ -235,16 +228,13 @@ export const testimonialBlock = defineType({
   preview: {
     select: {
       heading: 'header.heading',
-      testimonialCount: 'testimonials.length',
-      firstAuthor: 'testimonials.0.authorName',
+      slideCount: 'testimonials.length',
     },
-    prepare({ heading, testimonialCount, firstAuthor }) {
+    prepare({ heading, slideCount }) {
       return {
-        title: 'Testimonial Block',
-        subtitle: heading
-          ? `"${heading}" • ${testimonialCount || 0} testimonials`
-          : `${testimonialCount || 0} testimonials`,
+        title: heading || 'Carousel Block',
+        subtitle: `${slideCount || 0} Testimonial${slideCount === 1 ? '' : 's'}`,
       }
     },
   },
-})
+}) 

@@ -804,7 +804,7 @@ export type Page = {
   pageBuilder?: Array<
     | ({
         _key: string
-      } & HeroBlock)
+      } & PageHero)
     | ({
         _key: string
       } & HeroBlock)
@@ -919,25 +919,6 @@ export type Person = {
     alt?: string
     _type: 'image'
   }
-}
-
-export type Link = {
-  _type: 'link'
-  linkType?: 'href' | 'page' | 'post'
-  href?: string
-  page?: {
-    _ref: string
-    _type: 'reference'
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: 'page'
-  }
-  post?: {
-    _ref: string
-    _type: 'reference'
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: 'post'
-  }
-  openInNewTab?: boolean
 }
 
 export type SanityImagePaletteSwatch = {
@@ -1082,7 +1063,6 @@ export type AllSanitySchemaTypes =
   | Link
   | Post
   | Person
-  | Link
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -1578,54 +1558,42 @@ export type GetPageQueryResult = {
       }
     | {
         _key: string
-        _type: 'pricingBlock'
-        header?: BlockHeader
-        layout?: 'threeColumn' | 'twoColumn'
-        plans?: Array<
-          {
-            _key: string
-          } & PricingPlan
-        >
-      }
-    | {
-        _key: string
-        _type: 'stepperBlock'
-        backgroundMode: 'creme' | 'dark' | 'white' | null
-        animateOnScroll: boolean | null
-        blockHeader: BlockHeader | null
-        steps: Array<{
-          index: null
-          variant: null
-          cardHeader: BlockHeader
-          image: {
-            asset?: {
-              _ref: string
-              _type: 'reference'
-              _weak?: boolean
-              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
-            }
-            media?: unknown
-            hotspot?: SanityImageHotspot
-            crop?: SanityImageCrop
-            _type: 'image'
+        _type: 'pageHero'
+        color: 'dark' | 'light'
+        backgroundImage?: {
+          asset?: {
+            _ref: string
+            _type: 'reference'
+            _weak?: boolean
+            [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
           }
-          items: Array<{
-            icon: string
-            title: string
-            body?: string
-            _type: 'item'
-            _key: string
-          }> | null
-          iconContainerColor:
-            | 'blue-200'
-            | 'brightYellow-200'
-            | 'haloGreen-200'
-            | 'lavender-200'
-            | 'orange-200'
-            | 'red-200'
-            | 'waxFlower-200'
-            | null
-        }> | null
+          media?: unknown
+          hotspot?: SanityImageHotspot
+          crop?: SanityImageCrop
+          _type: 'image'
+        }
+        mainImage?: {
+          asset?: {
+            _ref: string
+            _type: 'reference'
+            _weak?: boolean
+            [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+          }
+          media?: unknown
+          hotspot?: SanityImageHotspot
+          crop?: SanityImageCrop
+          _type: 'image'
+        }
+        heading: string
+        subheading?: BlockContent
+        mainCta?: {
+          label: string
+          url: string
+        }
+        secondaryCta?: {
+          label?: string
+          url?: string
+        }
       }
     | {
         _key: string

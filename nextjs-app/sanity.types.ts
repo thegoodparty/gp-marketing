@@ -134,7 +134,7 @@ export type CtaBanner = {
   }
   cta: {
     label: string
-    url: Link_2
+    url: Link
     icon?: string
     variant?:
       | 'default'
@@ -273,7 +273,7 @@ export type BlockHeader = {
   subhead?: string
   primaryButton?: {
     label?: string
-    url?: Link_2
+    url?: Link
     variant?:
       | 'default'
       | 'secondary'
@@ -286,7 +286,7 @@ export type BlockHeader = {
   }
   secondaryButton?: {
     label?: string
-    url?: Link_2
+    url?: Link
     variant?:
       | 'default'
       | 'secondary'
@@ -556,7 +556,7 @@ export type CallToAction = {
   }
   primaryCta: {
     label: string
-    url: Link_2
+    url: Link
     icon?: string
     variant?:
       | 'default'
@@ -569,7 +569,7 @@ export type CallToAction = {
   }
   secondaryCta?: {
     label?: string
-    url?: Link_2
+    url?: Link
     icon?: string
     variant?:
       | 'default'
@@ -804,7 +804,7 @@ export type Page = {
   pageBuilder?: Array<
     | ({
         _key: string
-      } & HeroBlock)
+      } & PageHero)
     | ({
         _key: string
       } & HeroBlock)
@@ -919,25 +919,6 @@ export type Person = {
     alt?: string
     _type: 'image'
   }
-}
-
-export type Link_2 = {
-  _type: 'link'
-  linkType?: 'href' | 'page' | 'post'
-  href?: string
-  page?: {
-    _ref: string
-    _type: 'reference'
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: 'page'
-  }
-  post?: {
-    _ref: string
-    _type: 'reference'
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: 'post'
-  }
-  openInNewTab?: boolean
 }
 
 export type SanityImagePaletteSwatch = {
@@ -1082,7 +1063,6 @@ export type AllSanitySchemaTypes =
   | Link
   | Post
   | Person
-  | Link_2
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -1228,7 +1208,7 @@ export type GetPageQueryResult = {
         }
         primaryCta: {
           label: string
-          url: Link_2
+          url: Link
           icon?: string
           variant?:
             | 'default'
@@ -1241,7 +1221,7 @@ export type GetPageQueryResult = {
         }
         secondaryCta?: {
           label?: string
-          url?: Link_2
+          url?: Link
           icon?: string
           variant?:
             | 'default'
@@ -1394,7 +1374,7 @@ export type GetPageQueryResult = {
         }
         cta: {
           label: string
-          url: Link_2
+          url: Link
           icon?: string
           variant?:
             | 'default'
@@ -1575,6 +1555,45 @@ export type GetPageQueryResult = {
           _type: 'block'
           _key: string
         }> | null
+      }
+    | {
+        _key: string
+        _type: 'pageHero'
+        color: 'dark' | 'light'
+        backgroundImage?: {
+          asset?: {
+            _ref: string
+            _type: 'reference'
+            _weak?: boolean
+            [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+          }
+          media?: unknown
+          hotspot?: SanityImageHotspot
+          crop?: SanityImageCrop
+          _type: 'image'
+        }
+        mainImage?: {
+          asset?: {
+            _ref: string
+            _type: 'reference'
+            _weak?: boolean
+            [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+          }
+          media?: unknown
+          hotspot?: SanityImageHotspot
+          crop?: SanityImageCrop
+          _type: 'image'
+        }
+        heading: string
+        subheading?: BlockContent
+        mainCta?: {
+          label: string
+          url: string
+        }
+        secondaryCta?: {
+          label?: string
+          url?: string
+        }
       }
     | {
         _key: string

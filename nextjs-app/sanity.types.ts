@@ -134,7 +134,7 @@ export type CtaBanner = {
   }
   cta: {
     label: string
-    url: Link
+    url: Link_2
     icon?: string
     variant?:
       | 'default'
@@ -273,7 +273,7 @@ export type BlockHeader = {
   subhead?: string
   primaryButton?: {
     label?: string
-    url?: Link
+    url?: Link_2
     variant?:
       | 'default'
       | 'secondary'
@@ -286,7 +286,7 @@ export type BlockHeader = {
   }
   secondaryButton?: {
     label?: string
-    url?: Link
+    url?: Link_2
     variant?:
       | 'default'
       | 'secondary'
@@ -556,7 +556,7 @@ export type CallToAction = {
   }
   primaryCta: {
     label: string
-    url: Link
+    url: Link_2
     icon?: string
     variant?:
       | 'default'
@@ -569,7 +569,7 @@ export type CallToAction = {
   }
   secondaryCta?: {
     label?: string
-    url?: Link
+    url?: Link_2
     icon?: string
     variant?:
       | 'default'
@@ -921,7 +921,7 @@ export type Person = {
   }
 }
 
-export type Link = {
+export type Link_2 = {
   _type: 'link'
   linkType?: 'href' | 'page' | 'post'
   href?: string
@@ -1082,7 +1082,7 @@ export type AllSanitySchemaTypes =
   | Link
   | Post
   | Person
-  | Link
+  | Link_2
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -1228,7 +1228,7 @@ export type GetPageQueryResult = {
         }
         primaryCta: {
           label: string
-          url: Link
+          url: Link_2
           icon?: string
           variant?:
             | 'default'
@@ -1241,7 +1241,7 @@ export type GetPageQueryResult = {
         }
         secondaryCta?: {
           label?: string
-          url?: Link
+          url?: Link_2
           icon?: string
           variant?:
             | 'default'
@@ -1394,7 +1394,7 @@ export type GetPageQueryResult = {
         }
         cta: {
           label: string
-          url: Link
+          url: Link_2
           icon?: string
           variant?:
             | 'default'
@@ -1574,57 +1574,6 @@ export type GetPageQueryResult = {
           level?: number
           _type: 'block'
           _key: string
-        }> | null
-      }
-    | {
-        _key: string
-        _type: 'pricingBlock'
-        header?: BlockHeader
-        layout?: 'threeColumn' | 'twoColumn'
-        plans?: Array<
-          {
-            _key: string
-          } & PricingPlan
-        >
-      }
-    | {
-        _key: string
-        _type: 'stepperBlock'
-        backgroundMode: 'creme' | 'dark' | 'white' | null
-        animateOnScroll: boolean | null
-        blockHeader: BlockHeader | null
-        steps: Array<{
-          index: null
-          variant: null
-          cardHeader: BlockHeader
-          image: {
-            asset?: {
-              _ref: string
-              _type: 'reference'
-              _weak?: boolean
-              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
-            }
-            media?: unknown
-            hotspot?: SanityImageHotspot
-            crop?: SanityImageCrop
-            _type: 'image'
-          }
-          items: Array<{
-            icon: string
-            title: string
-            body?: string
-            _type: 'item'
-            _key: string
-          }> | null
-          iconContainerColor:
-            | 'blue-200'
-            | 'brightYellow-200'
-            | 'haloGreen-200'
-            | 'lavender-200'
-            | 'orange-200'
-            | 'red-200'
-            | 'waxFlower-200'
-            | null
         }> | null
       }
     | {

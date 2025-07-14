@@ -1,4 +1,4 @@
-import { ButtonVariant } from './design-tokens'
+import { ButtonVariant, BackgroundTheme } from './design-tokens'
 
 export enum SanityType {
   REFERENCE = 'reference',
@@ -116,4 +116,12 @@ export interface HeroBlockProps {
     image?: SanityImage
     imageContained?: boolean
   }
+}
+
+export interface EmbedBlock {
+  _type: 'embedBlock'
+  embedCode: string
+  outerBackground?: BackgroundTheme
+  width?: string
+  height?: string
 }

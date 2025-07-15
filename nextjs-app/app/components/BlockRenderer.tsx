@@ -16,6 +16,7 @@ import CandidatesBanner from '@/app/components/candidatesBanner/CandidatesBanner
 import CTABanner from '@/app/components/CTABanner'
 import CarouselBlock from '@/app/components/carousel/CarouselBlock'
 import { EmbedBlock } from '@/app/components/EmbedBlock'
+import { EmbedFullWidthBlock } from '@/app/components/EmbedFullWidthBlock'
 
 type BlocksType = {
   [key: string]: React.FC<any>
@@ -40,6 +41,7 @@ const Blocks: BlocksType = {
   ctaCardBlock: CTACardBlock,
   carouselBlock: CarouselBlock,
   embedBlock: EmbedBlock,
+  embedFullWidthBlock: EmbedFullWidthBlock,
   faqBlock: FAQBlock,
   featureModules: FeatureModules,
   heroBlock: HeroBlock,

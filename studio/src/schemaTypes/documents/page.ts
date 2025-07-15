@@ -60,6 +60,7 @@ export const page = defineType({
         { type: 'ctaBanner' },
         { type: 'carouselBlock' },
         { type: 'embedBlock' },
+        { type: 'embedFullWidthBlock' },
       ],
       options: {
         insertMenu: {

@@ -1,4 +1,5 @@
 import { ButtonVariant, BackgroundTheme } from './design-tokens'
+import { EmbedVariant } from './ui'
 
 export enum SanityType {
   REFERENCE = 'reference',
@@ -124,4 +125,14 @@ export interface EmbedBlock {
   outerBackground?: BackgroundTheme
   width?: string
   height?: string
+}
+
+export interface EmbedFullWidthBlock {
+  _type: 'embedFullWidthBlock'
+  embedCode: string
+  variant?: EmbedVariant
+  height?: string
+  outerBackground?: BackgroundTheme
+  mobileMessage?: string
+  mobileVideo?: string
 }

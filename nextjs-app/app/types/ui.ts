@@ -45,3 +45,13 @@ export const HERO_LAYOUT_OPTIONS = [
   { title: 'Image Full Width', value: HeroLayout.IMAGE_FULL_WIDTH },
   { title: 'Image Contained', value: HeroLayout.IMAGE_CONTAINED },
 ] as const
+
+export enum EmbedVariant {
+  FULL_WIDTH = 'fullWidth',
+  CONTAINED = 'contained',
+}
+
+export const EMBED_VARIANT_OPTIONS = [
+  { title: 'Full Width', value: EmbedVariant.FULL_WIDTH },
+  { title: 'Contained', value: EmbedVariant.CONTAINED },
+] as const

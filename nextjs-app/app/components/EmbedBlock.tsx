@@ -55,4 +55,4 @@ export const EmbedBlock: React.FC<EmbedBlockProps> = ({ block }) => {
       />
     </section>
   )
-} 
+}

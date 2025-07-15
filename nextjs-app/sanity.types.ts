@@ -13,6 +13,24 @@
  */
 
 // Source: schema.json
+export type EmbedFullWidthBlock = {
+  _type: 'embedFullWidthBlock'
+  embedCode: string
+  variant?: 'fullPage' | 'contained'
+  outerBackground?: 'dark' | 'creme' | 'white'
+  height?: string
+  mobileMessage?: string
+  mobileVideo?: string
+}
+
+export type EmbedBlock = {
+  _type: 'embedBlock'
+  embedCode: string
+  outerBackground?: 'dark' | 'creme' | 'white'
+  width?: string
+  height?: string
+}
+
 export type CarouselBlock = {
   _type: 'carouselBlock'
   header?: {
@@ -844,6 +862,9 @@ export type Page = {
     | ({
         _key: string
       } & CarouselBlock)
+    | ({
+        _key: string
+      } & EmbedBlock)
   >
 }
 
@@ -1040,6 +1061,8 @@ export type SanityAssetSourceData = {
 }
 
 export type AllSanitySchemaTypes =
+  | EmbedFullWidthBlock
+  | EmbedBlock
   | CarouselBlock
   | CtaBanner
   | CandidatesBanner
@@ -1406,6 +1429,14 @@ export type GetPageQueryResult = {
           _type: 'ctaCard'
           _key: string
         }>
+      }
+    | {
+        _key: string
+        _type: 'embedBlock'
+        embedCode: string
+        outerBackground?: 'creme' | 'dark' | 'white'
+        width?: string
+        height?: string
       }
     | {
         _key: string

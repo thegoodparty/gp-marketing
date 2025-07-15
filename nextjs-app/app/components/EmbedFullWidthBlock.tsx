@@ -25,7 +25,7 @@ export const EmbedFullWidthBlock: React.FC<Props> = ({ block }) => {
     if (isMobile || !ref.current || !embedCode) return
 
     let content = embedCode
-    
+
     // If it's just a URL, wrap it in an iframe
     if (!embedCode.startsWith('<')) {
       content = `<iframe src="${embedCode}" style="border:none;width:100%;height:${height};" allow="fullscreen"></iframe>`

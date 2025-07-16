@@ -47,7 +47,7 @@ export const HERO_LAYOUT_OPTIONS = [
 ] as const
 
 export enum EmbedVariant {
-  FULL_WIDTH = 'fullWidth',
+  FULL_WIDTH = 'fullPage',
   CONTAINED = 'contained',
 }
 

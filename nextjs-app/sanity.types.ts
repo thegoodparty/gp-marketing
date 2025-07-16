@@ -17,8 +17,8 @@ export type EmbedFullWidthBlock = {
   _type: 'embedFullWidthBlock'
   embedCode: string
   variant?: 'fullPage' | 'contained'
-  outerBackground?: 'dark' | 'creme' | 'white'
   height?: string
+  outerBackground?: 'dark' | 'creme' | 'white'
   mobileMessage?: string
   mobileVideo?: string
 }
@@ -865,6 +865,9 @@ export type Page = {
     | ({
         _key: string
       } & EmbedBlock)
+    | ({
+        _key: string
+      } & EmbedFullWidthBlock)
   >
 }
 
@@ -1437,6 +1440,16 @@ export type GetPageQueryResult = {
         outerBackground?: 'creme' | 'dark' | 'white'
         width?: string
         height?: string
+      }
+    | {
+        _key: string
+        _type: 'embedFullWidthBlock'
+        embedCode: string
+        variant?: 'contained' | 'fullPage'
+        height?: string
+        outerBackground?: 'creme' | 'dark' | 'white'
+        mobileMessage?: string
+        mobileVideo?: string
       }
     | {
         _key: string

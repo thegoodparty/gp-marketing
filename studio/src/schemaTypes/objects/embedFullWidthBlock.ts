@@ -1,7 +1,7 @@
 import { defineField, defineType } from 'sanity'
 import { CodeIcon } from '@sanity/icons'
-import { BACKGROUND_THEME_OPTIONS } from '../../../../nextjs-app/app/types/design-tokens'
-import { EMBED_VARIANT_OPTIONS } from '../../../../nextjs-app/app/types/ui'
+import { BACKGROUND_THEME_OPTIONS, BackgroundTheme } from '../../../../nextjs-app/app/types/design-tokens'
+import { EMBED_VARIANT_OPTIONS, EmbedVariant } from '../../../../nextjs-app/app/types/ui'
 
 export const embedFullWidthBlock = defineType({
   name: 'embedFullWidthBlock',
@@ -21,7 +21,7 @@ export const embedFullWidthBlock = defineType({
       title: 'Embed Variant',
       type: 'string',
       options: { list: [...EMBED_VARIANT_OPTIONS], layout: 'radio' },
-      initialValue: 'contained',
+      initialValue: EmbedVariant.CONTAINED,
     }),
     defineField({
       name: 'height',
@@ -35,7 +35,7 @@ export const embedFullWidthBlock = defineType({
       title: 'Background Theme',
       type: 'string',
       options: { list: [...BACKGROUND_THEME_OPTIONS], layout: 'radio' },
-      initialValue: 'white',
+      initialValue: BackgroundTheme.WHITE,
     }),
     defineField({
       name: 'mobileMessage',

@@ -1,6 +1,6 @@
 import { defineField, defineType } from 'sanity'
 import { CodeIcon } from '@sanity/icons'
-import { BACKGROUND_THEME_OPTIONS } from '../../../../nextjs-app/app/types/design-tokens'
+import { BACKGROUND_THEME_OPTIONS, BackgroundTheme } from '../../../../nextjs-app/app/types/design-tokens'
 
 export const embedBlock = defineType({
   name: 'embedBlock',
@@ -23,7 +23,7 @@ export const embedBlock = defineType({
         list: [...BACKGROUND_THEME_OPTIONS],
         layout: 'radio',
       },
-      initialValue: 'white',
+      initialValue: BackgroundTheme.WHITE,
     }),
     defineField({
       name: 'width',

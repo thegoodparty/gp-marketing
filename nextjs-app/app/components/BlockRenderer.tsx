@@ -15,8 +15,8 @@ import HeroBlock from '@/app/components/hero/HeroBlock'
 import CandidatesBanner from '@/app/components/candidatesBanner/CandidatesBanner'
 import CTABanner from '@/app/components/CTABanner'
 import CarouselBlock from '@/app/components/carousel/CarouselBlock'
-import { EmbedBlock } from '@/app/components/EmbedBlock'
-import { EmbedFullWidthBlock } from '@/app/components/EmbedFullWidthBlock'
+import { EmbedBlock } from '@/app/components/embed/EmbedBlock'
+import { EmbedFullWidthBlock } from '@/app/components/embed/EmbedFullWidthBlock'
 
 type BlocksType = {
   [key: string]: React.FC<any>

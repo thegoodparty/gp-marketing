@@ -39,8 +39,8 @@ export const EmbedContainer: React.FC<EmbedContainerProps> = ({
 
   return (
     <>
-      <section 
-        style={{ backgroundColor }} 
+      <section
+        style={{ backgroundColor }}
         className="block md:hidden py-10 text-center"
       >
         {mobileVideo ? (

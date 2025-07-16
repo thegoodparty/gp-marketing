@@ -3,9 +3,8 @@ import {
   BackgroundTheme,
   BACKGROUND_COLOR_MAP,
 } from '../../types/design-tokens'
-import { EmbedVariant } from '../../types/ui'
-import { useEmbed } from '../../hooks/use-embed'
-import { EMBED_DIMENSIONS } from '../../utils/embed-utils'
+import { EmbedVariant, EMBED_DIMENSIONS } from '../../types/ui'
+import { useProcessedEmbedCode } from '../../hooks/useEmbed'
 
 interface EmbedContainerProps {
   embedCode: string
@@ -28,13 +27,12 @@ export const EmbedContainer: React.FC<EmbedContainerProps> = ({
 }) => {
   const backgroundColor = BACKGROUND_COLOR_MAP[outerBackground]
 
-  const containerRef = useEmbed({
+  const processedEmbedCode = useProcessedEmbedCode({
     embedCode,
     height:
       height === EMBED_DIMENSIONS.HEIGHT.AUTO
         ? EMBED_DIMENSIONS.HEIGHT.DEFAULT
         : height,
-    disabled: false, // Always enable, let CSS handle responsive behavior
   })
 
   return (
@@ -52,7 +50,10 @@ export const EmbedContainer: React.FC<EmbedContainerProps> = ({
 
       {variant === EmbedVariant.FULL_WIDTH ? (
         <section className="hidden md:block w-full">
-          <div ref={containerRef} className="w-full overflow-hidden" />
+          <div
+            dangerouslySetInnerHTML={{ __html: processedEmbedCode }}
+            className="w-full overflow-hidden"
+          />
         </section>
       ) : (
         <section
@@ -60,9 +61,9 @@ export const EmbedContainer: React.FC<EmbedContainerProps> = ({
           style={{ backgroundColor }}
         >
           <div
+            dangerouslySetInnerHTML={{ __html: processedEmbedCode }}
             className="relative mx-auto max-w-[1376px] rounded-xl overflow-hidden"
             style={{ width, height }}
-            ref={containerRef}
           />
         </section>
       )}

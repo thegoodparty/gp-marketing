@@ -55,3 +55,13 @@ export const EMBED_VARIANT_OPTIONS = [
   { title: 'Full Width', value: EmbedVariant.FULL_WIDTH },
   { title: 'Contained', value: EmbedVariant.CONTAINED },
 ] as const
+
+export const EMBED_DIMENSIONS = {
+  HEIGHT: {
+    AUTO: 'auto',
+    DEFAULT: '600px',
+  },
+  WIDTH: {
+    FULL: '100%',
+  },
+} as const

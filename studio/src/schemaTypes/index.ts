@@ -21,6 +21,8 @@ import { heroBlock } from './objects/heroBlock'
 import { candidatesBanner } from './objects/candidatesBanner'
 import { ctaBanner } from './objects/ctaBanner'
 import { carouselBlock } from './objects/carouselBlock'
+import { embedBlock } from './objects/embedBlock'
+import { embedFullWidthBlock } from './objects/embedFullWidthBlock'
 
 // Export an array of all the schema types.  This is used in the Sanity Studio configuration. https://www.sanity.io/docs/schema-types
 
@@ -51,4 +53,6 @@ export const schemaTypes = [
   candidatesBanner,
   ctaBanner,
   carouselBlock,
+  embedBlock,
+  embedFullWidthBlock,
 ]

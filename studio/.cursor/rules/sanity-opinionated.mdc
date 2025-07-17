@@ -1,11 +1,6 @@
 ---
-description: 
-globs: 
-alwaysApply: false
----
----
 description: Opinionated guidance for configuring Sanity Studio and authoring content
-globs: **/*.{ts,tsx,js,jsx}
+globs: studio/**/*.ts,studio/**/*.tsx,studio/**/*.js,studio/**/*.jsx
 alwaysApply: false
 ---
 ## Positive affirmation

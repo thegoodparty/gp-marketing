@@ -59,6 +59,8 @@ export const page = defineType({
         { type: 'candidatesBanner' },
         { type: 'ctaBanner' },
         { type: 'carouselBlock' },
+        { type: 'embedBlock' },
+        { type: 'embedFullWidthBlock' },
       ],
       options: {
         insertMenu: {

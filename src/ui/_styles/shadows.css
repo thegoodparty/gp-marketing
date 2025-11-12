@@ -1,0 +1,78 @@
+:root {
+	/* shadow / 2xs */
+	--shadow-2xs-offset-x: 0px;
+	--shadow-2xs-offset-y: 1px;
+	--shadow-2xs-blur-radius: 0px;
+	--shadow-2xs-spread-radius: 0px;
+	--shadow-2xs-color: rgba(0, 0, 0, 0.05);
+
+	/* shadow / xs */
+	--shadow-xs-offset-x: 0px;
+	--shadow-xs-offset-y: 1px;
+	--shadow-xs-blur-radius: 2px;
+	--shadow-xs-spread-radius: 0px;
+	--shadow-xs-color: rgba(0, 0, 0, 0.05);
+
+	/* shadow / sm / 1 */
+	--shadow-sm-1-offset-x: 0px;
+	--shadow-sm-1-offset-y: 1px;
+	--shadow-sm-1-blur-radius: 3px;
+	--shadow-sm-1-spread-radius: 0px;
+	--shadow-sm-1-color: rgba(0, 0, 0, 0.1);
+
+	/* shadow / sm / 2 */
+	--shadow-sm-2-offset-x: 0px;
+	--shadow-sm-2-offset-y: 1px;
+	--shadow-sm-2-blur-radius: 2px;
+	--shadow-sm-2-spread-radius: -1px;
+	--shadow-sm-2-color: rgba(0, 0, 0, 0.1);
+
+	/* shadow / md / 1 */
+	--shadow-md-1-offset-x: 0px;
+	--shadow-md-1-offset-y: 4px;
+	--shadow-md-1-blur-radius: 6px;
+	--shadow-md-1-spread-radius: -1px;
+	--shadow-md-1-color: rgba(0, 0, 0, 0.1);
+
+	/* shadow / md / 2 */
+	--shadow-md-2-offset-x: 0px;
+	--shadow-md-2-offset-y: 2px;
+	--shadow-md-2-blur-radius: 4px;
+	--shadow-md-2-spread-radius: -2px;
+	--shadow-md-2-color: rgba(0, 0, 0, 0.1);
+
+	/* shadow / lg / 1 */
+	--shadow-lg-1-offset-x: 0px;
+	--shadow-lg-1-offset-y: 10px;
+	--shadow-lg-1-blur-radius: 15px;
+	--shadow-lg-1-spread-radius: -3px;
+	--shadow-lg-1-color: rgba(0, 0, 0, 0.1);
+
+	/* shadow / lg / 2 */
+	--shadow-lg-2-offset-x: 0px;
+	--shadow-lg-2-offset-y: 4px;
+	--shadow-lg-2-blur-radius: 6px;
+	--shadow-lg-2-spread-radius: -4px;
+	--shadow-lg-2-color: rgba(0, 0, 0, 0.1);
+
+	/* shadow / xl / 1 */
+	--shadow-xl-1-offset-x: 0px;
+	--shadow-xl-1-offset-y: 20px;
+	--shadow-xl-1-blur-radius: 25px;
+	--shadow-xl-1-spread-radius: -5px;
+	--shadow-xl-1-color: rgba(0, 0, 0, 0.1);
+
+	/* shadow / xl / 2 */
+	--shadow-xl-2-offset-x: 0px;
+	--shadow-xl-2-offset-y: 8px;
+	--shadow-xl-2-blur-radius: 10px;
+	--shadow-xl-2-spread-radius: -6px;
+	--shadow-xl-2-color: rgba(0, 0, 0, 0.1);
+
+	/* shadow / 2xl */
+	--shadow-2xl-offset-x: 0px;
+	--shadow-2xl-offset-y: 25px;
+	--shadow-2xl-blur-radius: 50px;
+	--shadow-2xl-spread-radius: -12px;
+	--shadow-2xl-color: rgba(0, 0, 0, 0.25);
+}

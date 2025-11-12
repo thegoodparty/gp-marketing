@@ -1,0 +1,23 @@
+
+export const list_pricingPlans = {
+  name: 'list_pricingPlans',
+  title: 'Pricing Plans',
+  description: "Choose which plans you'd like to display.",
+  options: {
+    collapsible: false,
+  },
+  validation: (R) => R.custom(async (_, ctx) => typeof ctx.type?.hidden === "function" && ctx.type.hidden(ctx) ? true : R["error"]("Max 3").max(3).validate(_, ctx).then((e) => e.length === 0 ? true : e[0].item?.message || "Invalid")),
+  type: 'array',
+  of: [
+    {
+      name: 'ref_pricingPlan',
+      type: 'reference',
+      to: {
+        type: 'pricingPlan',
+      },
+      options: {
+        filter: (ctx) => ({           filter: "!(_id in $existing)",           params: {             existing: ctx.parent.flatMap((i) => ("_ref" in i) ? i._ref : [])           }         }),
+      },
+    },
+  ],
+}

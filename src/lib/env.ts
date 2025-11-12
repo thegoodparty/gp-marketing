@@ -2,7 +2,7 @@ export const apiVersion = process.env.SANITY_STUDIO_CLI_QUERY_API_VERSION || '20
 
 export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
 
-export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '5sl5v1jh';
+export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '3rbseux7';
 
 // This is always an empty string client side and is only used server side
 export const token = process.env.SANITY_STUDIO_API_TOKEN || undefined;

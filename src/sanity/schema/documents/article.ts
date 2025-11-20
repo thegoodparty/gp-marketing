@@ -122,9 +122,10 @@ const infer = {
   options: {
     pathParams: {
       slug: 'editorialOverview.field_slug',
+      category: 'editorialContentTags.ref_catgories->tagOverview.field_slug',
     },
     channels: {
-      goodpartyOrg: '/blog/:slug',
+      goodpartyOrg: '/blog/:category/:slug',
     },
     documentSlugs: [
       {

@@ -54,11 +54,17 @@ export default defineConfig({
 									url: {
 										origin: siteData.url,
 										draftMode: '/api/draft-mode/enable',
-										preview(doc) {
+										async preview(doc) {
 											let refinedPath = `${siteData.url}${String(path)}`;
 											if ('pathParams' in type.options && Object.keys(type.options.pathParams).length > 0) {
 												for (const [param, paramPath] of Object.entries(type.options.pathParams)) {
-													refinedPath = refinedPath.replaceAll(`:${param}`, String(get(doc, String(paramPath))));
+													if(String(paramPath).includes('->')) {
+														const refValue = await ctx.getClient({apiVersion: defaultApiVersion}).fetch<{value?: string}|null>(`*[_id == $id][0]{"value":${paramPath}}`,{id: doc?._id})
+														refinedPath = refinedPath.replaceAll(`:${param}`, refValue?.value || 'draft');
+													}
+													else {
+														refinedPath = refinedPath.replaceAll(`:${param}`, String(get(doc, String(paramPath))));
+													}
 												}
 											}
 											return refinedPath;

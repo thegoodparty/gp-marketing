@@ -4,7 +4,7 @@ import { defineLocations, presentationTool, type DocumentResolver } from 'sanity
 import { media, mediaAssetSource } from 'sanity-plugin-media';
 import { muxInput } from 'sanity-plugin-mux-input';
 import { default as DocumentsPane } from 'sanity-plugin-documents-pane';
-import { Iframe, type IframeOptions } from 'sanity-plugin-iframe-pane';
+import { Iframe, type IframeOptions, type UrlResolver } from 'sanity-plugin-iframe-pane';
 
 import { assist } from '@sanity/assist';
 import { table } from '@sanity/table';
@@ -51,15 +51,19 @@ export default defineConfig({
 								.options({
 									key: ctx.documentId,
 									reload: { button: true },
-									url(doc) {
-										let refinedPath = `${siteData.url}${String(path)}`;
-										if ('pathParams' in type.options && Object.keys(type.options.pathParams).length > 0) {
-											for (const [param, paramPath] of Object.entries(type.options.pathParams)) {
-												refinedPath = refinedPath.replaceAll(`:${param}`, String(get(doc, String(paramPath))));
+									url: {
+										origin: siteData.url,
+										draftMode: '/api/draft-mode/enable',
+										preview(doc) {
+											let refinedPath = `${siteData.url}${String(path)}`;
+											if ('pathParams' in type.options && Object.keys(type.options.pathParams).length > 0) {
+												for (const [param, paramPath] of Object.entries(type.options.pathParams)) {
+													refinedPath = refinedPath.replaceAll(`:${param}`, String(get(doc, String(paramPath))));
+												}
 											}
-										}
-										return refinedPath;
-									},
+											return refinedPath;
+										},
+									}
 								} satisfies IframeOptions),
 						);
 					}

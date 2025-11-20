@@ -4,7 +4,7 @@ import { defineLocations, presentationTool, type DocumentResolver } from 'sanity
 import { media, mediaAssetSource } from 'sanity-plugin-media';
 import { muxInput } from 'sanity-plugin-mux-input';
 import { default as DocumentsPane } from 'sanity-plugin-documents-pane';
-import { Iframe, type IframeOptions, type UrlResolver } from 'sanity-plugin-iframe-pane';
+import { Iframe, type IframeOptions } from 'sanity-plugin-iframe-pane';
 
 import { assist } from '@sanity/assist';
 import { table } from '@sanity/table';

@@ -2,6 +2,7 @@ import type { BlogCardProps } from '~/ui/BlogCard';
 import type { SanityImage } from '~/ui/types';
 import type { TopicsQueryResult } from '~/sanity/groq';
 import { format } from 'date-fns';
+import { stegaClean } from 'next-sanity';
 
 export function resolveBlogCard(
 	item: NonNullable<NonNullable<NonNullable<TopicsQueryResult>['topicRelatedArticles']>['articles']>[number],
@@ -15,9 +16,9 @@ export function resolveBlogCard(
 								item.editorialOverview?.field_publishedDate || item.editorialOverview?.field_lastUpdated
 									? [
 											item.editorialOverview?.field_lastUpdated
-												? `Updated: ${format(new Date(item.editorialOverview?.field_lastUpdated), 'MMM dd, yyyy')}`
+												? `Updated: ${format(new Date(stegaClean(item.editorialOverview?.field_lastUpdated)), 'MMM dd, yyyy')}`
 												: item.editorialOverview?.field_publishedDate
-													? format(new Date(item.editorialOverview?.field_publishedDate), 'MMM dd, yyyy')
+													? format(new Date(stegaClean(item.editorialOverview?.field_publishedDate)), 'MMM dd, yyyy')
 													: '',
 										]
 									: undefined,

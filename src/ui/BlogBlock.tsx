@@ -167,9 +167,9 @@ function LoadMoreButton(props: {
 }
 
 function articlesWithPaginationFetchGroq(props: { topic: string; start: number; end: number }): string {
-	return `*[_type=="article"&&("${props.topic}" in editorialContentTags.list_topics[]._ref)] | order(editorialOverview.field_publishedDate desc)[${props.start}...${props.end}]{${articleCardGroq}}`;
+	return `*[_type=="article"&&("${props.topic}" in editorialContentTags.list_topics[]._ref)] | order(coalesce(editorialOverview.field_lastUpdated,editorialOverview.field_publishedDate) desc)[${props.start}...${props.end}]{${articleCardGroq}}`;
 }
 
 function articlesByCategoryWithPaginationFetchGroq(props: { category: string; start: number; end: number }): string {
-	return `*[_type=="article"&&(editorialContentTags.ref_catgories._ref=="${props.category}")] | order(editorialOverview.field_publishedDate desc)[${props.start}...${props.end}]{${articleCardGroq}}`;
+	return `*[_type=="article"&&(editorialContentTags.ref_catgories._ref=="${props.category}")] | order(coalesce(editorialOverview.field_lastUpdated,editorialOverview.field_publishedDate) desc)[${props.start}...${props.end}]{${articleCardGroq}}`;
 }

@@ -1,6 +1,7 @@
 import type { BlogCardProps } from '~/ui/BlogCard';
 import type { SanityImage } from '~/ui/types';
 import type { TopicsQueryResult } from '~/sanity/groq';
+import { format } from 'date-fns';
 
 export function resolveBlogCard(
 	item: NonNullable<NonNullable<NonNullable<TopicsQueryResult>['topicRelatedArticles']>['articles']>[number],
@@ -10,9 +11,16 @@ export function resolveBlogCard(
 				author: item.editorialOverview?.ref_author?.personOverview?.field_personName
 					? {
 							image: item.editorialOverview?.ref_author?.personOverview?.img_profilePicture as unknown as SanityImage,
-							meta: item.editorialOverview?.ref_author?.personOverview?.field_jobTitleOrRole
-								? [item.editorialOverview?.ref_author?.personOverview.field_jobTitleOrRole]
-								: undefined,
+							meta:
+								item.editorialOverview?.field_publishedDate || item.editorialOverview?.field_lastUpdated
+									? [
+											item.editorialOverview?.field_lastUpdated
+												? `Updated: ${format(new Date(item.editorialOverview?.field_lastUpdated), 'MMM dd, yyyy')}`
+												: item.editorialOverview?.field_publishedDate
+													? format(new Date(item.editorialOverview?.field_publishedDate), 'MMM dd, yyyy')
+													: '',
+										]
+									: undefined,
 							name: item.editorialOverview?.ref_author?.personOverview?.field_personName,
 						}
 					: undefined,

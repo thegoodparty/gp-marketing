@@ -10,7 +10,7 @@ const styles = tv({
 		base: 'py-(--container-padding)',
 		card: 'flex max-md:flex-col max-md:text-center p-6 md:py-12 md:px-16 rounded-lg gap-6 md:gap-10 justify-center items-center',
 		avatarStack: 'flex -space-x-3',
-		avatar: 'outline-white outline-3 [&_img]:aspect-square [&_img]:max-h-[4rem]',
+		avatar: 'outline-white outline-3',
 	},
 	variants: {
 		backgroundColor: {

@@ -7,6 +7,7 @@ import { resolveStats } from '~/ui/_lib/resolveStats';
 import { StatsBlock } from '~/ui/StatsBlock';
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { stegaClean } from 'next-sanity';
+import { RichData } from '~/ui/RichData';
 
 export function StatsBlockSection(section: Extract<Sections, { _type: 'component_statsBlock' }>) {
 	const backgroundColor = section.statsBlockDesignSettings?.field_blockColorCreamMidnight
@@ -23,6 +24,7 @@ export function StatsBlockSection(section: Extract<Sections, { _type: 'component
 					caption: section.summaryInfo?.field_caption,
 					buttons: transformButtons(section.summaryInfo?.list_buttons),
 					layout: 'left',
+					copy: <RichData value={section.summaryInfo?.block_summaryText} />,
 				}}
 				stats={resolveStats(section.stats?.list_stats)}
 				layout={resolveLayoutStackedSideBySide(section.statsBlockDesignSettings?.field_layoutStackedSideBySide)}

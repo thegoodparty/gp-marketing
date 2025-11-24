@@ -19,7 +19,11 @@ export function ImageContentSectionGroup(section: Extract<ArticleSections, { _ty
 				'flex flex-col gap-4 items-center w-full',
 			)}
 		>
-			<Media image={section.img_image} aspectRatio={stegaClean(section.field_aspectRatio)} className='w-full' />
+			<Media
+				image={section.img_image}
+				aspectRatio={stegaClean(section.field_aspectRatio)}
+				className='w-full rounded-[0.75rem] overflow-hidden'
+			/>
 			{section.field_caption && <Caption>{section.field_caption}</Caption>}
 		</section>
 	);

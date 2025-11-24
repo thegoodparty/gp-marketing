@@ -1268,6 +1268,43 @@
     }
   },
   {
+    "name": "field_aspectRatio",
+    "type": "type",
+    "value": {
+      "type": "union",
+      "of": [
+        {
+          "type": "string",
+          "value": "1:1"
+        },
+        {
+          "type": "string",
+          "value": "16:9"
+        },
+        {
+          "type": "string",
+          "value": "9:16"
+        },
+        {
+          "type": "string",
+          "value": "5:4"
+        },
+        {
+          "type": "string",
+          "value": "4:5"
+        },
+        {
+          "type": "string",
+          "value": "4:3"
+        },
+        {
+          "type": "string",
+          "value": "3:4"
+        }
+      ]
+    }
+  },
+  {
     "name": "list_collectionFaQs",
     "type": "type",
     "value": {
@@ -2684,7 +2721,16 @@
             "type": "objectAttribute",
             "value": {
               "type": "union",
-              "of": []
+              "of": [
+                {
+                  "type": "string",
+                  "value": "bullet"
+                },
+                {
+                  "type": "string",
+                  "value": "number"
+                }
+              ]
             },
             "optional": true
           },
@@ -6306,6 +6352,14 @@
           "value": {
             "type": "inline",
             "name": "field_inlineMediaAlignmentRightLeft"
+          },
+          "optional": true
+        },
+        "field_aspectRatio": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_aspectRatio"
           },
           "optional": true
         }
@@ -15481,6 +15535,14 @@
           "value": {
             "type": "inline",
             "name": "field_publishedDate"
+          },
+          "optional": true
+        },
+        "field_lastUpdated": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_lastUpdated"
           },
           "optional": true
         }

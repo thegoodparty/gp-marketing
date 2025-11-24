@@ -10,7 +10,7 @@ export function ImageContentSectionGroup(section: Extract<ArticleSections, { _ty
 		<section
 			data-group='ImageContentSectionGroup'
 			className={cn(
-				stegaClean(section.field_displayInline) && 'md:max-w-[55%] xxl:max-w-[40%]',
+				stegaClean(section.field_displayInline) && 'md:max-w-[55%] xxl:max-w-[40%] mb-6',
 				stegaClean(section.field_displayInline)
 					? stegaClean(section.field_inlineMediaAlignmentRightLeft) === 'Right'
 						? 'float-right ml-8'

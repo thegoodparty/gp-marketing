@@ -20,24 +20,19 @@ import { Author } from '~/ui/Author';
 import { client } from '~/lib/client';
 
 export async function generateStaticParams() {
-	const entries = await client.fetch<Array<{ categories: string; article: string }>>(
-		'*[_type == "article"]{"categories":editorialContentTags.ref_catgories->tagOverview.field_slug,"article":editorialOverview.field_slug}',
-	);
+	const entries = await client.fetch<Array<{ slug: string }>>('*[_type == "article"][0..99].editorialOverview.field_slug');
 	return entries.map(entry => ({
-		categories: entry.categories,
-		article: entry.article,
+		slug: entry,
 	}));
 }
 
 export default async function Page(props: any) {
-	const slug = (await props.params)['article'];
-	const category = (await props.params)['categories'];
+	const slug = (await props.params)['slug'];
 
 	const page = await sanityFetch({
 		query: articleQuery,
 		params: {
 			slug,
-			category,
 		},
 	});
 
@@ -49,8 +44,11 @@ export default async function Page(props: any) {
 
 	const breadcrumbs = [
 		{ href: '/blog', label: 'Blog' },
-		{ href: `/blog/${category}`, label: category },
-		{ href: `/blog/${category}/${slug}`, label: page.editorialOverview?.field_editorialTitle ?? '' },
+		{
+			href: `/blog/section/${page.editorialContentTags?.category?.tagOverview?.field_slug}`,
+			label: page.editorialContentTags?.category?.tagOverview?.field_name ?? '',
+		},
+		{ href: `/blog/article/${slug}`, label: page.editorialOverview?.field_editorialTitle ?? '' },
 	];
 
 	return (
@@ -100,15 +98,13 @@ export default async function Page(props: any) {
 }
 
 export async function generateMetadata(props: Params, parent: ResolvingMetadata): Promise<Metadata> {
-	const slug = (await props.params)['article'];
-	const category = (await parent)['category'];
+	const slug = (await props.params)['slug'];
 
 	const parentMetadata = await parent;
 	const page = await sanityFetch({
 		query: articleQuery,
 		params: {
 			slug: slug,
-			category: category,
 		},
 	});
 

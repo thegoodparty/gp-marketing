@@ -23,7 +23,7 @@ export async function generateStaticParams() {
 }
 
 export default async function Page(props: any) {
-	const slug = (await props.params)['categories'];
+	const slug = (await props.params)['slug'];
 	const page = await sanityFetch({
 		query: categoriesQuery,
 		params: {
@@ -93,7 +93,7 @@ export default async function Page(props: any) {
 }
 
 export async function generateMetadata(props: Params, parent: ResolvingMetadata): Promise<Metadata> {
-	const slug = (await props.params)['categories'];
+	const slug = (await props.params)['slug'];
 
 	const parentMetadata = await parent;
 	const page = await sanityFetch({

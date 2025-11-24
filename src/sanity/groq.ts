@@ -3,15 +3,15 @@ import { defineQuery } from 'next-sanity';
 /* language=textmate */
 export const anchorIdGroq = `+select(defined(field_anchorId)=>"#"+field_anchorId,"")`;
 /*language=textmate*/
-export const categoriesHrefGroq = `_type=="categories"=>{"href":"/blog/"+coalesce(tagOverview.field_slug,_id)}`;
+export const categoriesHrefGroq = `_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)}`;
 /*language=textmate*/
-export const articleHrefGroq = `_type=="article"=>{"href":"/blog/"+coalesce(editorialContentTags.ref_catgories->tagOverview.field_slug,editorialContentTags.ref_catgories->_id)+"/"+coalesce(editorialOverview.field_slug,_id)}`;
+export const articleHrefGroq = `_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)}`;
 /*language=textmate*/
 export const homeHrefGroq = `_type=="goodpartyOrg_home"=>{"href":"/"}`;
 /*language=textmate*/
 export const allArticlesHrefGroq = `_type=="goodpartyOrg_allArticles"=>{"href":"/blog"}`;
 /*language=textmate*/
-export const topicsHrefGroq = `_type=="topics"=>{"href":"/blog/topic/"+coalesce(tagOverview.field_slug,_id)}`;
+export const topicsHrefGroq = `_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)}`;
 /*language=textmate*/
 export const landingPagesHrefGroq = `_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)}`;
 /*language=textmate*/
@@ -236,7 +236,7 @@ export const imageCtaGroq = `field_componentColor6Colors,"image":coalesce(ctaAss
 export const articleSectionsGroq = `_key,_type,_type=="block"||_type=="imageContentSection"||_type=="tableGroup"=>{...},_type=="videoSection"=>{field_caption,img_fallbackImage,"shortLoopingVideo":field_shortLoopingVideo.asset->,"video":field_video.asset->},_type=="imageCta"=>{${imageCtaGroq}},_type=="ctaSection"=>{${imageCtaGroq}},_type=="inlineQuoteSection"=>{...,ref_quoteBy->},_type=="button"=>{${buttonGroq}},_type=="faqs"=>{...,list_faQs[]->{${faQGroq}}},_type=="callout"=>{...,block_summaryText[]{...,${textBlockGroq}}}`;
 /*language=textmate*/
 export const articleQuery = defineQuery(
-	`*[_type=="article"&&editorialOverview.field_slug==$slug&&editorialContentTags.ref_catgories->tagOverview.field_slug==$category][0]{...,editorialOverview{...,ref_author->},relatedArticles{...,ref_stickyRelatedArticle->{${relatedArticlesGroq}},list_relatedArticles[]->{${relatedArticlesGroq}}},ctaSection{...,${imageCtaGroq}},editorialContentTags{"topics":list_topics[]->{...,${topicsHrefGroq}},"category":ref_catgories->{${categoryLinkGroq}}},contentSections{...,block_editorialContentSections[]{${articleSectionsGroq},${textBlockGroq}},${hrefGroq}},${articleHrefGroq}}`,
+	`*[_type=="article"&&editorialOverview.field_slug==$slug][0]{...,editorialOverview{...,ref_author->},relatedArticles{...,ref_stickyRelatedArticle->{${relatedArticlesGroq}},list_relatedArticles[]->{${relatedArticlesGroq}}},ctaSection{...,${imageCtaGroq}},editorialContentTags{"topics":list_topics[]->{...,${topicsHrefGroq}},"category":ref_catgories->{${categoryLinkGroq}}},contentSections{...,block_editorialContentSections[]{${articleSectionsGroq},${textBlockGroq}},${hrefGroq}},${articleHrefGroq}}`,
 );
 /*language=textmate*/
 export const allArticlesForSearchGroq = `*[_type=="article"] | order(editorialOverview.field_editorialTitle asc)[]{_id,"title":editorialOverview.field_editorialTitle,${articleHrefGroq}}`;

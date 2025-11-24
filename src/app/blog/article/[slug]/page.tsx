@@ -18,6 +18,7 @@ import { EditorialLayout } from '~/components/EditorialLayout';
 import { resolveArticleNavigation } from '~/lib/resolveArticleNavigation';
 import { Author } from '~/ui/Author';
 import { client } from '~/lib/client';
+import { format } from 'date-fns';
 
 export async function generateStaticParams() {
 	const entries = await client.fetch<Array<{ slug: string }>>('*[_type == "article"][0..99].editorialOverview.field_slug');
@@ -59,7 +60,16 @@ export default async function Page(props: any) {
 				author={{
 					name: page.editorialOverview?.ref_author?.personOverview?.field_personName,
 					image: page.editorialOverview?.ref_author?.personOverview?.img_profilePicture as unknown as SanityImage,
-					meta: [page.editorialOverview?.ref_author?.personOverview?.field_jobTitleOrRole],
+					meta:
+						page.editorialOverview?.field_publishedDate || page.editorialOverview?.field_lastUpdated
+							? [
+									page.editorialOverview?.field_lastUpdated
+										? `Updated: ${format(new Date(page.editorialOverview?.field_lastUpdated), 'MMM dd, yyyy')}`
+										: page.editorialOverview?.field_publishedDate
+											? format(new Date(page.editorialOverview?.field_publishedDate), 'MMM dd, yyyy')
+											: '',
+								]
+							: undefined,
 				}}
 				image={page.editorialAssets?.img_featuredImage as unknown as SanityImage}
 				breadcrumbs={breadcrumbs}

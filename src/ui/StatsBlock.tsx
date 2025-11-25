@@ -9,7 +9,7 @@ const styles = tv({
 	slots: {
 		base: 'py-(--container-padding)',
 		wrapper: 'grid gap-6',
-		stats: 'grid gap-4',
+		stats: 'grid gap-4 w-full',
 	},
 	variants: {
 		backgroundColor: {
@@ -19,11 +19,9 @@ const styles = tv({
 		layout: {
 			stacked: {
 				wrapper: 'md:gap-16',
-				stats: 'md:grid-cols-4',
 			},
 			'side-by-side': {
 				wrapper: 'gap-8 md:grid-cols-2',
-				stats: 'md:grid-cols-2',
 			},
 		},
 	},
@@ -42,12 +40,14 @@ export const StatsBlock = (props: StatsBlockProps) => {
 
 	const { base, stats, wrapper } = styles({ backgroundColor, layout });
 
+	const statsColumns = (props.stats?.length ?? 1) >= 4 ? 4 : (props.stats?.length ?? 1);
+
 	return (
 		<article className={base()} data-component='StatsBlock'>
 			<Container size='xl'>
 				<div className={wrapper()}>
 					<HeaderBlock {...props.header} backgroundColor={backgroundColor} />
-					<div className={stats()}>
+					<div className={`${stats()} ${layout === 'stacked' ? `md:grid-cols-${statsColumns}` : 'md:grid-cols-2'}`}>
 						{props.stats?.map(stat => (
 							<Stat key={stat._key} {...stat} />
 						))}

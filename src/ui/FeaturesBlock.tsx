@@ -63,6 +63,7 @@ export type FeaturesBlockItemProps = {
 	title?: string;
 	isHighlighted?: boolean;
 	image?: any;
+	showFullImage?: boolean;
 	button?: any;
 };
 
@@ -113,7 +114,9 @@ export function FeaturesBlock(props: FeaturesBlockProps) {
 											/>
 										)}
 									</div>
-									{item.image && <Media image={item.image} aspectRatio='1:1' />}
+									{item.image && (
+										<Media image={item.image} aspectRatio='1:1' objectFit={item.showFullImage ? 'contain' : 'cover'} className='w-full' />
+									)}
 								</li>
 							))}
 						</ul>
@@ -147,7 +150,14 @@ export function FeaturesBlock(props: FeaturesBlockProps) {
 									/>
 								)}
 							</div>
-							{highlighted.image && <Media aspectRatio='1:1' image={highlighted.image} />}
+							{highlighted.image && (
+								<Media
+									aspectRatio='1:1'
+									image={highlighted.image}
+									objectFit={highlighted.showFullImage ? 'contain' : 'cover'}
+									className='w-full'
+								/>
+							)}
 						</li>
 						<li>
 							<ul className={stackGrid()}>
@@ -171,7 +181,9 @@ export function FeaturesBlock(props: FeaturesBlockProps) {
 												/>
 											)}
 										</div>
-										{item.image && <Media aspectRatio='1:1' image={item.image} />}
+										{item.image && (
+											<Media aspectRatio='1:1' image={item.image} objectFit={item.showFullImage ? 'contain' : 'cover'} className='w-full' />
+										)}
 									</li>
 								))}
 							</ul>

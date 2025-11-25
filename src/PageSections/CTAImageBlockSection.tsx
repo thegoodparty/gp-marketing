@@ -41,10 +41,11 @@ export async function CTAImageBlockSection(section: Extract<Sections, { _type: '
 			<CTAImageBlock
 				color={componentColor}
 				image={section.image?.img_featuredImage}
-				label={section['overview'].field_label}
-				title={section['overview'].field_title}
-				copy={<RichData value={section['overview'].block_summaryText} />}
-				caption={section['overview'].field_caption}
+				showFullImage={section.image?.showFullImage}
+				label={section['overview']?.field_label}
+				title={section['overview']?.field_title}
+				copy={<RichData value={section['overview']?.block_summaryText} />}
+				caption={section['overview']?.field_caption}
 				primaryButton={transformButtons([section['primaryCTA']])?.[0]}
 				secondaryButton={transformButtons([section['primaryCTA'], section['secondaryCTA']])?.[0]}
 			/>

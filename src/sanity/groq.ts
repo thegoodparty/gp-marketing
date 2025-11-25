@@ -3,15 +3,15 @@ import { defineQuery } from 'next-sanity';
 /* language=textmate */
 export const anchorIdGroq = `+select(defined(field_anchorId)=>"#"+field_anchorId,"")`;
 /*language=textmate*/
-export const categoriesHrefGroq = `_type=="categories"=>{"href":"/blog/"+coalesce(tagOverview.field_slug,_id)}`;
+export const categoriesHrefGroq = `_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)}`;
 /*language=textmate*/
-export const articleHrefGroq = `_type=="article"=>{"href":"/blog/"+coalesce(editorialContentTags.ref_catgories->tagOverview.field_slug,editorialContentTags.ref_catgories->_id)+"/"+coalesce(editorialOverview.field_slug,_id)}`;
+export const articleHrefGroq = `_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)}`;
 /*language=textmate*/
 export const homeHrefGroq = `_type=="goodpartyOrg_home"=>{"href":"/"}`;
 /*language=textmate*/
 export const allArticlesHrefGroq = `_type=="goodpartyOrg_allArticles"=>{"href":"/blog"}`;
 /*language=textmate*/
-export const topicsHrefGroq = `_type=="topics"=>{"href":"/blog/topic/"+coalesce(tagOverview.field_slug,_id)}`;
+export const topicsHrefGroq = `_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)}`;
 /*language=textmate*/
 export const landingPagesHrefGroq = `_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)}`;
 /*language=textmate*/
@@ -28,10 +28,6 @@ export const allComponentsHrefGroq = `_type=="goodpartyOrg_allComponents"=>{"hre
 export const notFoundHrefGroq = `_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}`;
 /*language=textmate*/
 export const hrefGroq = `${homeHrefGroq},${allArticlesHrefGroq},${articleHrefGroq},${categoriesHrefGroq},${topicsHrefGroq},${landingPagesHrefGroq},${glossaryHrefGroq},${glossaryTermHrefGroq},${contactHrefGroq},${policyHrefGroq},${allComponentsHrefGroq},${notFoundHrefGroq}`;
-
-// This link had a full page preview resolve if we need it again
-// export const internalLinkGroq = `{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),"slug":coalesce(detailPageOverviewNoHero.field_slug,editorialOverview.field_slug,tagOverview.field_slug,glossaryTermOverview.field_slug,policyOverview.field_slug,null),"copy":coalesce(singlePageOverview.field_summaryDescription,policyOverview.field_policySummary,null),"featuredImage":coalesce(singlePageOverviewNoHero.img_featuredImage,editorialAssets.img_featuredImage,null),"publishedDate":coalesce(editorialOverview.field_publishedDate,null),"author":coalesce(editorialOverview.ref_author->{...},null),"topics":coalesce(editorialContentTags.list_topics[]->{_id,_type,"title":tagOverview.field_name,"slug":tagOverview.field_slug},null),"category":coalesce(editorialContentTags.ref_catgories->{_id,_type,"title":tagOverview.field_name,"slug":tagOverview.field_slug},null),${hrefGroq}}}`;
-
 /*language=textmate*/
 export const internalLinkGroq = `{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),${hrefGroq}}}`;
 /*language=textmate*/
@@ -53,7 +49,7 @@ export const tagsGroq = `...,list_tags[]->`;
 /*language=textmate*/
 export const quoteGroq = `...,generalContentTags{${tagsGroq}},quote{...,ref_quoteBy->}`;
 /*language=textmate*/
-export const featureGroq = `field_featureOptions,field_featureOptions=="Custom"=>{defined(customFeature)=>{...customFeature{...,ctaActionWithShared{${buttonGroq}}}},defined(customFeatureWithImage)=>{...customFeatureWithImage{...,ctaActionWithShared{${buttonGroq}}}}},field_featureOptions=="Reference"=>{...ref_chooseAFeature->{...featureAssets,...featureOverview{...,ctaActionWithShared{${buttonGroq}}}}}`;
+export const featureGroq = `field_featureOptions,showFullImage,field_featureOptions=="Custom"=>{defined(customFeature)=>{...customFeature{...,ctaActionWithShared{${buttonGroq}}}},defined(customFeatureWithImage)=>{...customFeatureWithImage{...,ctaActionWithShared{${buttonGroq}}}}},field_featureOptions=="Reference"=>{...ref_chooseAFeature->{...featureAssets,...featureOverview{...,ctaActionWithShared{${buttonGroq}}}}}`;
 /*language=textmate*/
 export const quotesContentCollectionGroq = `field_quotesContentOptions,"quotes":null,field_quotesContentOptions=="Manual"=>{"quotes":list_chooseQuotes[]->{${quoteGroq}}},field_quotesContentOptions=="Collection"=>{"quotes":ref_quoteCollection->quoteCollectionContent.list_chooseQuotes[]->{${quoteGroq}}}`;
 /*language=textmate*/
@@ -101,11 +97,11 @@ export const articlesByCategoryUnlimitedForLoadMoreGroq = `*[_type=="article"&&e
 /*language=textmate*/
 export const articlesByTopicUnlimitedForLoadMoreGroq = `*[_type=="article"&&(^.blogBlockContent.ref_selectATopic._ref in editorialContentTags.list_topics[]._ref)][]._id`;
 /*language=textmate*/
-export const allLatestArticlesLimitedGroq = `*[_type=="article"] | order(editorialOverview.field_publishedDate desc)[0...3]{${articleCardGroq}}`;
+export const allLatestArticlesLimitedGroq = `*[_type=="article"] | order(coalesce(editorialOverview.field_lastUpdated,editorialOverview.field_publishedDate) desc)[0...3]{${articleCardGroq}}`;
 /*language=textmate*/
-export const articlesByCategoryLimitedGroq = `*[_type=="article"&&editorialContentTags.ref_catgories._ref==^.blogBlockContent.ref_selectACategory._ref] | order(editorialOverview.field_publishedDate desc)[0...3]{${articleCardGroq}}`;
+export const articlesByCategoryLimitedGroq = `*[_type=="article"&&editorialContentTags.ref_catgories._ref==^.blogBlockContent.ref_selectACategory._ref] | order(coalesce(editorialOverview.field_lastUpdated,editorialOverview.field_publishedDate) desc)[0...3]{${articleCardGroq}}`;
 /*language=textmate*/
-export const articlesByTopicLimitedGroq = `*[_type=="article"&&(^.blogBlockContent.ref_selectATopic._ref in editorialContentTags.list_topics[]._ref)] | order(editorialOverview.field_publishedDate desc)[0...3]{${articleCardGroq}}`;
+export const articlesByTopicLimitedGroq = `*[_type=="article"&&(^.blogBlockContent.ref_selectATopic._ref in editorialContentTags.list_topics[]._ref)] | order(coalesce(editorialOverview.field_lastUpdated,editorialOverview.field_publishedDate) desc)[0...3]{${articleCardGroq}}`;
 /*language=textmate*/
 export const component_blogBlock = `_type=="component_blogBlock"=>{...,blogBlockSummaryInfo{${summaryInfoGroq}},"items": null, "itemsCount": 0, "loadMoreHref": null,
 blogBlockContent.field_blogBlockContentOptions=="AllLatest"=>{"items":${allLatestArticlesLimitedGroq},"itemsCount":count(${allLatestArticlesUnlimitedForLoadMoreGroq}),"loadMoreHref":"/blog"},
@@ -113,11 +109,11 @@ blogBlockContent.field_blogBlockContentOptions=="Category"=>{"items":${articlesB
 blogBlockContent.field_blogBlockContentOptions=="Topic"=>{"items":${articlesByTopicLimitedGroq},"itemsCount":count(${articlesByTopicUnlimitedForLoadMoreGroq}),"loadMoreHref":blogBlockContent.ref_selectATopic->{${topicsHrefGroq}}.href}}`;
 
 export const topicRelatedArticlesFirstFetchGroq = `*[][0]{
-"articles":*[_type=="article"&&(^.^._id in editorialContentTags.list_topics[]._ref)] | order(editorialOverview.field_publishedDate desc)[0...12]{${articleCardGroq}},
+"articles":*[_type=="article"&&(^.^._id in editorialContentTags.list_topics[]._ref)] | order(coalesce(editorialOverview.field_lastUpdated,editorialOverview.field_publishedDate) desc)[0...12]{${articleCardGroq}},
 "itemsCount":count(*[_type=="article"&&(^.^._id in editorialContentTags.list_topics[]._ref)]),
 }`;
 export const categoryRelatedArticlesFirstFetchGroq = `*[][0]{
-	"articles":*[_type=="article"&&(editorialContentTags.ref_catgories._ref==^.^._id)] | order(editorialOverview.field_publishedDate desc)[0...12]{${articleCardGroq}},
+	"articles":*[_type=="article"&&(editorialContentTags.ref_catgories._ref==^.^._id)] | order(coalesce(editorialOverview.field_lastUpdated,editorialOverview.field_publishedDate) desc)[0...12]{${articleCardGroq}},
 	"itemsCount":count(*[_type=="article"&&(editorialContentTags.ref_catgories._ref==^.^._id)]),
 	}`;
 /**
@@ -236,7 +232,7 @@ export const imageCtaGroq = `field_componentColor6Colors,"image":coalesce(ctaAss
 export const articleSectionsGroq = `_key,_type,_type=="block"||_type=="imageContentSection"||_type=="tableGroup"=>{...},_type=="videoSection"=>{field_caption,img_fallbackImage,"shortLoopingVideo":field_shortLoopingVideo.asset->,"video":field_video.asset->},_type=="imageCta"=>{${imageCtaGroq}},_type=="ctaSection"=>{${imageCtaGroq}},_type=="inlineQuoteSection"=>{...,ref_quoteBy->},_type=="button"=>{${buttonGroq}},_type=="faqs"=>{...,list_faQs[]->{${faQGroq}}},_type=="callout"=>{...,block_summaryText[]{...,${textBlockGroq}}}`;
 /*language=textmate*/
 export const articleQuery = defineQuery(
-	`*[_type=="article"&&editorialOverview.field_slug==$slug&&editorialContentTags.ref_catgories->tagOverview.field_slug==$category][0]{...,editorialOverview{...,ref_author->},relatedArticles{...,ref_stickyRelatedArticle->{${relatedArticlesGroq}},list_relatedArticles[]->{${relatedArticlesGroq}}},ctaSection{...,${imageCtaGroq}},editorialContentTags{"topics":list_topics[]->{...,${topicsHrefGroq}},"category":ref_catgories->{${categoryLinkGroq}}},contentSections{...,block_editorialContentSections[]{${articleSectionsGroq},${textBlockGroq}},${hrefGroq}},${articleHrefGroq}}`,
+	`*[_type=="article"&&editorialOverview.field_slug==$slug][0]{...,editorialOverview{...,ref_author->},relatedArticles{...,ref_stickyRelatedArticle->{${relatedArticlesGroq}},list_relatedArticles[]->{${relatedArticlesGroq}}},ctaSection{...,${imageCtaGroq}},editorialContentTags{"topics":list_topics[]->{...,${topicsHrefGroq}},"category":ref_catgories->{${categoryLinkGroq}}},contentSections{...,block_editorialContentSections[]{${articleSectionsGroq},${textBlockGroq}},${hrefGroq}},${articleHrefGroq}}`,
 );
 /*language=textmate*/
 export const allArticlesForSearchGroq = `*[_type=="article"] | order(editorialOverview.field_editorialTitle asc)[]{_id,"title":editorialOverview.field_editorialTitle,${articleHrefGroq}}`;

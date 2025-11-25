@@ -6,6 +6,7 @@ import { isValidRichText } from '~/ui/_lib/isValidRichText';
 
 export type ImageContentCardProps = {
 	image?: SanityImage;
+	showFullImage?: boolean;
 	subtitle?: string;
 	title?: string;
 	copy?: ReactNode;
@@ -14,7 +15,12 @@ export type ImageContentCardProps = {
 export function ImageContentCard(props: ImageContentCardProps) {
 	return (
 		<div className='flex flex-col gap-[1.5rem] p-[0.5rem]'>
-			<Media image={props.image} aspectRatio='1:1' className='rounded-[1rem] overflow-hidden' />
+			<Media
+				image={props.image}
+				aspectRatio='1:1'
+				className='rounded-[1rem] overflow-hidden'
+				objectFit={props.showFullImage ? 'contain' : 'cover'}
+			/>
 			<div className='flex flex-col gap-[0.5rem] text-center'>
 				<Text as='h3' styleType='heading-sm'>
 					{props.title}

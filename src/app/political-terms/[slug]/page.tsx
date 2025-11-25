@@ -16,6 +16,7 @@ import { transformButtons, type ButtonType } from '~/lib/buttonTransformer';
 import type { GlossaryTermCta } from 'sanity.types';
 import { toPlainText } from '@portabletext/toolkit';
 import { client } from '~/lib/client';
+import { cn } from '~/ui/_lib/utils';
 
 export async function generateStaticParams() {
 	const entries = await client.fetch<Array<{ _id: string; title: string; slug: string }>>(
@@ -81,6 +82,7 @@ export default async function Page(props: any) {
 						className='py-(--container-padding)'
 						color={'bright-yellow'}
 						image={hero?.cta?.ctaAssets?.img_featuredImage}
+						showFullImage={hero?.cta?.ctaAssets?.showFullImage}
 						label={hero?.cta?.overview?.field_label}
 						title={hero?.cta?.overview?.field_title}
 						copy={<RichData value={hero?.cta?.overview?.block_summaryText} />}
@@ -121,7 +123,14 @@ export default async function Page(props: any) {
 				<Text as='h1' styleType='heading-xl'>
 					{`What is ${page.glossaryTermOverview?.field_glossaryTerm}?`}
 				</Text>
-				<Text as='div' styleType='body-1' className='flex flex-col gap-6 max-w-[43.75rem]'>
+				<Text
+					as='div'
+					styleType='body-1'
+					className={cn(
+						'flex flex-col gap-6 max-w-[43.75rem]',
+						`[&_ul:not([class])]:pl-8 [&_ul:not([class])]:list-disc [&_ul:not([class])_ul]:mt-2 [&_ul:not([class])_li]:mb-[0.5em] [&_ol:not([class])]:list-none [&_ol:not([class])]:[counter-reset:section] [&_ol:not([class])_ol]:mt-2 [&_ol:not([class])_li]:pl-8 [&_ol:not([class])_li]:mb-[0.5em] [&_ol:not([class])_li]:[counter-increment:section] [&_ol:not([class])_li]:before:[content:counters(section,'.')] [&_ol:not([class])_li]:before:mr-3 [&_ol:not([class])_li]:before:font-medium`,
+					)}
+				>
 					<RichData value={page.glossaryTermOverview?.block_glossaryTermDefinition} />
 				</Text>
 			</Container>
@@ -130,6 +139,7 @@ export default async function Page(props: any) {
 					className='py-(--container-padding)'
 					color={'bright-yellow'}
 					image={cta.ctaAssets?.img_featuredImage}
+					showFullImage={cta.ctaAssets?.showFullImage}
 					label={cta.overview?.field_label}
 					title={cta.overview?.field_title}
 					copy={<RichData value={cta.overview?.block_summaryText} />}

@@ -1,3 +1,4 @@
+import { stegaClean } from 'next-sanity';
 import type { ArticleSections } from '~/RichTextContentSections';
 
 import { cn } from '~/ui/_lib/utils';
@@ -9,11 +10,20 @@ export function ImageContentSectionGroup(section: Extract<ArticleSections, { _ty
 		<section
 			data-group='ImageContentSectionGroup'
 			className={cn(
-				section.field_displayInline && 'float-left aspect-3/2 max-md:w-full md:h-[17rem] mr-8',
-				'flex flex-col gap-4 items-center',
+				stegaClean(section.field_displayInline) && 'md:max-w-[55%] xxl:max-w-[40%] mb-6',
+				stegaClean(section.field_displayInline)
+					? stegaClean(section.field_inlineMediaAlignmentRightLeft) === 'Right'
+						? 'float-right ml-8'
+						: 'float-left mr-8'
+					: '',
+				'flex flex-col gap-4 items-center w-full',
 			)}
 		>
-			<Media image={section.img_image} />
+			<Media
+				image={section.img_image}
+				aspectRatio={stegaClean(section.field_aspectRatio)}
+				className='w-full rounded-[0.75rem] overflow-hidden'
+			/>
 			{section.field_caption && <Caption>{section.field_caption}</Caption>}
 		</section>
 	);

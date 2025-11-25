@@ -9,7 +9,7 @@ import { Text } from './Text.tsx';
 const styles = tv({
 	slots: {
 		base: 'flex flex-col gap-4 p-6 rounded-lg min-h-[400px] justify-between',
-		quote: 'font-secondary!',
+		quote: 'font-secondary! quote-open quote-close',
 	},
 	variants: {
 		color: {
@@ -21,6 +21,11 @@ const styles = tv({
 			lavender: 'bg-lavender-100',
 			midnight: 'bg-midnight-900',
 			cream: 'bg-goodparty-cream',
+			white: 'bg-white',
+		},
+		quoteStyleType: {
+			'text-lg': { quote: '' },
+			'text-3xl': { quote: 'italic font-semibold!' },
 		},
 	},
 });
@@ -28,13 +33,15 @@ const styles = tv({
 export type TestimonialProps = {
 	author?: AuthorProps;
 	className?: string;
-	color?: Exclude<(typeof componentColorValues)[number], 'inverse'>;
+	color?: Exclude<(typeof componentColorValues)[number], 'inverse'> | 'white';
 	copy?: ReactNode;
+	quoteStyleType?: 'text-lg' | 'text-3xl';
 };
 
 export function Testimonial(props: TestimonialProps) {
 	const color = props.color ?? 'red';
-	const { base, quote } = styles({ color });
+	const quoteStyleType = props.quoteStyleType ?? 'text-lg';
+	const { base, quote } = styles({ color, quoteStyleType });
 
 	return (
 		<article className={cn(base(), props.className)} data-component='CTACard'>
@@ -55,8 +62,8 @@ export function Testimonial(props: TestimonialProps) {
 						fill='#0048C2'
 					/>
 				</svg>
-				<Text as='blockquote' className={quote()} styleType='text-lg'>
-					{props.copy}
+				<Text as='blockquote' className={quote()} styleType={quoteStyleType}>
+					{quoteStyleType === 'text-3xl' ? `"${props.copy}"` : props.copy}
 				</Text>
 			</div>
 			{props.author && (

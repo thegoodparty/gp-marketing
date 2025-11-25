@@ -4,52 +4,57 @@ import { transformButtons } from '~/lib/buttonTransformer';
 import { resolveTwoUpCardBlockCardType } from '~/ui/_lib/resolveTwoUpCardBlockCardType';
 import { resolveComponentColor } from '~/ui/_lib/resolveComponentColor';
 
-import { TwoUpCardBlock } from '~/ui/TwoUpCardBlock';
+import { TwoUpCardBlock, type TwoUpCardBlockCardProps } from '~/ui/TwoUpCardBlock';
 import { stegaClean } from 'next-sanity';
+import { RichData } from '~/ui/RichData';
+import type { SanityImage } from '~/ui/types';
+import { resolveTestimonials } from '~/ui/_lib/resolveTestimonials';
 
 export function TwoUpCardBlockSection(section: Extract<Sections, { _type: 'component_twoUpCardBlock' }>) {
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Two Up Card Block'>
 			<TwoUpCardBlock
-				card1={
-					section.twoUpCardBlockOne &&
-					({
-						title: section.twoUpCardBlockOne.valuePropositionCard?.field_title,
-						type:
-							section.twoUpCardBlockOne.field_twoUpCardBlockCardType &&
-							resolveTwoUpCardBlockCardType(stegaClean(section.twoUpCardBlockOne.field_twoUpCardBlockCardType)),
-						color:
-							section.twoUpCardBlockOne.valuePropositionCard?.field_componentColor6ColorsInverse &&
-							resolveComponentColor(stegaClean(section.twoUpCardBlockOne.valuePropositionCard.field_componentColor6ColorsInverse)),
-						list: section.twoUpCardBlockOne.valuePropositionCard?.list_valuePropositionCardItems?.map(item => {
-							return {
-								title: item.block_summaryText,
-								icon: item.field_icon,
-							};
-						}),
-						button: transformButtons([section.twoUpCardBlockOne?.valuePropositionCard?.button as any])?.[0],
-					} as any)
-				}
-				card2={
-					section.twoUpCardBlockTwo &&
-					({
-						title: section.twoUpCardBlockTwo.valuePropositionCard?.field_title,
-						type:
-							section.twoUpCardBlockTwo.field_twoUpCardBlockCardType &&
-							resolveTwoUpCardBlockCardType(stegaClean(section.twoUpCardBlockTwo.field_twoUpCardBlockCardType)),
-						color:
-							section.twoUpCardBlockTwo.valuePropositionCard?.field_componentColor6ColorsInverse &&
-							resolveComponentColor(stegaClean(section.twoUpCardBlockTwo.valuePropositionCard.field_componentColor6ColorsInverse)),
-						list: section.twoUpCardBlockTwo.valuePropositionCard?.list_valuePropositionCardItems?.map(item => {
-							return {
-								title: item.block_summaryText,
-								icon: item.field_icon,
-							};
-						}),
-						button: transformButtons([section.twoUpCardBlockTwo?.valuePropositionCard?.button as any])?.[0],
-					} as any)
-				}
+				card1={resolveTwoUpCardBlockCard(section.twoUpCardBlockOne)}
+				card2={resolveTwoUpCardBlockCard(section.twoUpCardBlockTwo)}
 			/>
 		</section>
 	);
+}
+
+function resolveTwoUpCardBlockCard(
+	card: Extract<Sections, { _type: 'component_twoUpCardBlock' }>['twoUpCardBlockOne' | 'twoUpCardBlockTwo'],
+): TwoUpCardBlockCardProps | undefined {
+	if (!card || !card.field_twoUpCardBlockCardType) return undefined;
+
+	const cardType = resolveTwoUpCardBlockCardType(stegaClean(card.field_twoUpCardBlockCardType));
+
+	switch (cardType) {
+		case 'value-prop':
+			return {
+				title: card.valuePropositionCard?.field_title ?? '',
+				type: 'value-prop',
+				color: card.valuePropositionCard?.field_componentColor6ColorsInverse
+					? resolveComponentColor(stegaClean(card.valuePropositionCard.field_componentColor6ColorsInverse))
+					: undefined,
+				list: card.valuePropositionCard?.list_valuePropositionCardItems?.map(item => {
+					return {
+						title: <RichData value={item.block_summaryText} />,
+						icon: item.field_icon,
+					};
+				}),
+				button: transformButtons([card?.valuePropositionCard?.button as any])?.[0],
+			};
+		case 'testimonial':
+			const testimonials = card.ref_quoteReference ? resolveTestimonials({ quotes: [card.ref_quoteReference] })?.[0] : undefined;
+			return testimonials ? { ...testimonials, type: 'testimonial' } : undefined;
+		case 'image':
+			return card.img_twoUpCardBlockCardImage
+				? {
+						type: 'image',
+						image: card.img_twoUpCardBlockCardImage as unknown as SanityImage,
+					}
+				: undefined;
+		default:
+			return undefined;
+	}
 }

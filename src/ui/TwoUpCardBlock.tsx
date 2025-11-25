@@ -31,7 +31,7 @@ export type TwoUpCardBlockCardProps =
 export type TwoUpCardBlockProps = {
 	backgroundColor?: (typeof backgroundTypeValues)[number];
 	card1?: TwoUpCardBlockCardProps;
-	card2: TwoUpCardBlockCardProps;
+	card2?: TwoUpCardBlockCardProps;
 	className?: string;
 };
 
@@ -44,7 +44,7 @@ export function TwoUpCardBlock(props: TwoUpCardBlockProps) {
 			case 'value-prop':
 				return <TwoUpCard {...card} backgroundColor={backgroundColor} />;
 			case 'testimonial':
-				return <Testimonial {...card} color='cream' />;
+				return <Testimonial {...card} color='white' quoteStyleType='text-3xl' />;
 			case 'image':
 				return <Media className='rounded-lg overflow-hidden' image={card.image} />;
 			default:

@@ -56,6 +56,7 @@ export const twoUpCardBlockOne = {
 			const title = resolveValue('title', twoUpCardBlockOne.preview.select, x);
 			const subtitle = resolveValue('subtitle', twoUpCardBlockOne.preview.select, x);
 			const media = resolveValue('media', twoUpCardBlockOne.preview.select, x);
+
 			return handleReplacements(
 				{
 					title: infer.singletonTitle || title || undefined,

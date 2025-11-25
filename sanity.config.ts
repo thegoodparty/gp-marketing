@@ -51,15 +51,27 @@ export default defineConfig({
 								.options({
 									key: ctx.documentId,
 									reload: { button: true },
-									url(doc) {
-										let refinedPath = `${siteData.url}${String(path)}`;
-										if ('pathParams' in type.options && Object.keys(type.options.pathParams).length > 0) {
-											for (const [param, paramPath] of Object.entries(type.options.pathParams)) {
-												refinedPath = refinedPath.replaceAll(`:${param}`, String(get(doc, String(paramPath))));
+									url: {
+										origin: siteData.url,
+										draftMode: '/api/draft-mode/enable',
+										async preview(doc) {
+											let refinedPath = String(path);
+											// If the type has dynamic parts of its URL, we'll loop over and replace the params here
+											if ('pathParams' in type.options && Object.keys(type.options.pathParams).length > 0) {
+												for (const [param, paramPath] of Object.entries(type.options.pathParams)) {
+													// If the path has a reference, we'll need to resolve the ref via a fetch at this point
+													if(String(paramPath).includes('->')) {
+														const refValue = await ctx.getClient({apiVersion: defaultApiVersion}).fetch<{value?: string}|null>(`*[_id == $id][0]{"value":${paramPath}}`,{id: doc?._id})
+														refinedPath = refinedPath.replaceAll(`:${param}`, refValue?.value || 'draft');
+													}
+													else {
+														refinedPath = refinedPath.replaceAll(`:${param}`, String(get(doc, String(paramPath))));
+													}
+												}
 											}
-										}
-										return refinedPath;
-									},
+											return refinedPath;
+										},
+									}
 								} satisfies IframeOptions),
 						);
 					}

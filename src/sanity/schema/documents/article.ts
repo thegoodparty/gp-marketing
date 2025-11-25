@@ -136,7 +136,7 @@ export const article = {
 			slug: 'editorialOverview.field_slug',
 		},
 		channels: {
-			goodpartyOrg: '/blog/article/:slug',
+      goodpartyOrg: '/blog/article/:slug',
 		},
 		documentSlugs: [
 			{

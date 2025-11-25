@@ -15,7 +15,7 @@ export async function generateStaticParams() {
 	const entries = await client.fetch<Array<string>>(
 		'*[_type in ["goodpartyOrg_landingPages","policy"]][0..99]{"slug": select(_type == "goodpartyOrg_landingPages" => detailPageOverviewNoHero.field_slug,_type == "policy" => policyOverview.field_slug)}.slug',
 	);
-	return entries.map(entry => ({
+	return entries.filter(Boolean).map(entry => ({
 		slug: entry,
 	}));
 }

@@ -3,9 +3,9 @@ import type { DocumentLocationResolverObject, DocumentLocationResolvers, Documen
 export const routeMap = {
 	goodpartyOrg_home: '/',
 	goodpartyOrg_allArticles: '/blog',
-	articles: '/blog/:articles',
-	categories: '/blog/:categories',
-	topics: '/blog/:topics',
+	articles: '/blog/article/:articles',
+	categories: '/blog/section/:categories',
+	topics: '/blog/tag/:topics',
 	goodpartyOrg_glossary: '/political-terms',
 	glossary: '/political-terms/:glossary',
 	goodpartyOrg_contact: '/contact',

@@ -15,25 +15,25 @@ const styles = tv({
 	variants: {
 		aspectRatio: {
 			'1:1': {
-				base: 'aspect-1/1',
+				base: 'aspect-1/1 overflow-hidden object-cover',
 			},
 			'16:9': {
-				base: 'aspect-16/9',
+				base: 'aspect-16/9 overflow-hidden object-cover',
 			},
 			'9:16': {
-				base: 'aspect-9/16',
+				base: 'aspect-9/16 overflow-hidden object-cover',
 			},
 			'5:4': {
-				base: 'aspect-5/4',
+				base: 'aspect-5/4 overflow-hidden object-cover',
 			},
 			'4:5': {
-				base: 'aspect-4/5',
+				base: 'aspect-4/5 overflow-hidden object-cover',
 			},
 			'4:3': {
-				base: 'aspect-4/3',
+				base: 'aspect-4/3 overflow-hidden object-cover',
 			},
 			'3:4': {
-				base: 'aspect-3/4',
+				base: 'aspect-3/4 overflow-hidden object-cover',
 			},
 			default: {},
 		},

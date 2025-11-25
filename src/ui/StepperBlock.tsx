@@ -38,6 +38,7 @@ const styles = tv({
 
 type StepperItemProps = {
 	_key?: string;
+	showFullImage?: boolean;
 	title?: string;
 	caption?: string;
 	layout?: 'media-left' | 'media-right';
@@ -77,7 +78,7 @@ export function StepperBlock(props: StepperBlockProps) {
 								}}
 							>
 								<div className={media()}>
-									<Media aspectRatio='1:1' image={item.image} />
+									<Media aspectRatio='1:1' image={item.image} objectFit={item.showFullImage ? 'contain' : 'cover'} />
 								</div>
 								<div className={content()}>
 									<div className='flex flex-col gap-3 md:gap-4'>

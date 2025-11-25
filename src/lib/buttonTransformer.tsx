@@ -81,9 +81,9 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 						href: button.anchor,
 						buttonProps: {
 							styleType: button.hierarchy
-								? button.hierarchy === 'Primary'
+								? stegaClean(button.hierarchy) === 'Primary'
 									? 'primary'
-									: button.hierarchy === 'Secondary'
+									: stegaClean(button.hierarchy) === 'Secondary'
 										? 'secondary'
 										: 'ghost'
 								: undefined,
@@ -99,9 +99,9 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 						href: button.ref_download.file?.url,
 						buttonProps: {
 							styleType: button.hierarchy
-								? button.hierarchy === 'Primary'
+								? stegaClean(button.hierarchy) === 'Primary'
 									? 'primary'
-									: button.hierarchy === 'Secondary'
+									: stegaClean(button.hierarchy) === 'Secondary'
 										? 'secondary'
 										: 'ghost'
 								: undefined,
@@ -115,9 +115,9 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 					buttonType: 'login',
 					buttonProps: {
 						styleType: button.hierarchy
-							? button.hierarchy === 'Primary'
+							? stegaClean(button.hierarchy) === 'Primary'
 								? 'primary'
-								: button.hierarchy === 'Secondary'
+								: stegaClean(button.hierarchy) === 'Secondary'
 									? 'secondary'
 									: 'ghost'
 							: undefined,
@@ -131,9 +131,9 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 					label: button.text,
 					buttonProps: {
 						styleType: button.hierarchy
-							? button.hierarchy === 'Primary'
+							? stegaClean(button.hierarchy) === 'Primary'
 								? 'primary'
-								: button.hierarchy === 'Secondary'
+								: stegaClean(button.hierarchy) === 'Secondary'
 									? 'secondary'
 									: 'ghost'
 							: undefined,

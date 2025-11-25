@@ -30,6 +30,7 @@ export function StepperBlockSection(section: Extract<Sections, { _type: 'compone
 			copy: <RichData value={item.summaryInfo?.block_summaryText} />,
 			buttons: transformButtons(item.summaryInfo?.list_buttons),
 			image: item.stepperBlockItemMedia?.img_image,
+			showFullImage: item.stepperBlockItemMedia?.showFullImage,
 			layout:
 				item.stepperBlockItemDesignSettings?.field_mediaAlignmentRightLeft &&
 				resolveStepperBlockLayout(stegaClean(item.stepperBlockItemDesignSettings.field_mediaAlignmentRightLeft)),

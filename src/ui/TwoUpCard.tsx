@@ -5,7 +5,6 @@ import { resolveInverseButtonStyleType } from './_lib/resolveButtonStyleType.ts'
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { Text } from './Text.tsx';
 import { IconResolver } from './IconResolver.tsx';
-import { RichData } from './RichData.tsx';
 import type { ReactNode } from 'react';
 
 const styles = tv({
@@ -47,7 +46,7 @@ export type TwoUpCardProps = {
 	button?: ComponentButtonProps;
 	className?: string;
 	color?: Exclude<(typeof componentColorValues)[number], 'inverse'>;
-	list?: { title: ReactNode; icon: string }[];
+	list?: { title: ReactNode; icon?: string }[];
 	title: string;
 };
 
@@ -73,9 +72,9 @@ export function TwoUpCard(props: TwoUpCardProps) {
 					{props.list.map((item, index) => (
 						<Text as='li' className='flex gap-4 md:items-center' key={index} styleType='body-2'>
 							<div className='rounded-full bg-white min-w-12 h-12 flex items-center justify-center'>
-								<IconResolver icon={item.icon} />
+								{item.icon && <IconResolver icon={item.icon} />}
 							</div>
-							<RichData value={item.title} />
+							{item.title}
 						</Text>
 					))}
 				</ul>

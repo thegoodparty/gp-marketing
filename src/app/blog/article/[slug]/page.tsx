@@ -1,0 +1,127 @@
+import type { Metadata, ResolvingMetadata } from 'next';
+import { notFound } from 'next/navigation';
+
+import { articleQuery } from '~/sanity/groq';
+import { sanityFetch } from '~/sanity/sanityClient';
+
+import { StructureMetaData } from '~/components/StructureMetadata';
+
+import type { Params } from '~/lib/types';
+
+import { BlogArticleHero } from '~/ui/BlogArticleHero';
+import type { SanityImage } from '~/ui/types';
+
+import { RichTextContentSections } from '~/RichTextContentSections';
+import { BlogArticleTags } from '~/ui/BlogArticleTags';
+import { resolveEditorialContentTags } from '~/ui/_lib/resolveEditorialContentTags';
+import { EditorialLayout } from '~/components/EditorialLayout';
+import { resolveArticleNavigation } from '~/lib/resolveArticleNavigation';
+import { Author } from '~/ui/Author';
+import { client } from '~/lib/client';
+import { format } from 'date-fns';
+import { stegaClean } from 'next-sanity';
+
+export async function generateStaticParams() {
+	const entries = await client.fetch<Array<{ slug: string }>>('*[_type == "article"][0..99].editorialOverview.field_slug');
+	return entries.map(entry => ({
+		slug: entry,
+	}));
+}
+
+export default async function Page(props: any) {
+	const slug = (await props.params)['slug'];
+
+	const page = await sanityFetch({
+		query: articleQuery,
+		params: {
+			slug,
+		},
+	});
+
+	if (!page) {
+		notFound();
+	}
+
+	const articleNavigation = resolveArticleNavigation(page.contentSections?.block_editorialContentSections);
+
+	const breadcrumbs = [
+		{ href: '/blog', label: 'Blog' },
+		{
+			href: `/blog/section/${page.editorialContentTags?.category?.tagOverview?.field_slug}`,
+			label: page.editorialContentTags?.category?.tagOverview?.field_name ?? '',
+		},
+		{ href: `/blog/article/${slug}`, label: page.editorialOverview?.field_editorialTitle ?? '' },
+	];
+
+	return (
+		<>
+			<BlogArticleHero
+				title={page.editorialOverview?.field_editorialTitle}
+				tagline={page.editorialContentTags?.category?.tagOverview?.field_name}
+				author={{
+					name: page.editorialOverview?.ref_author?.personOverview?.field_personName,
+					image: page.editorialOverview?.ref_author?.personOverview?.img_profilePicture as unknown as SanityImage,
+					meta:
+						page.editorialOverview?.field_publishedDate || page.editorialOverview?.field_lastUpdated
+							? [
+									page.editorialOverview?.field_lastUpdated
+										? `Updated: ${format(new Date(stegaClean(page.editorialOverview?.field_lastUpdated)), 'MMM dd, yyyy')}`
+										: page.editorialOverview?.field_publishedDate
+											? format(new Date(stegaClean(page.editorialOverview?.field_publishedDate)), 'MMM dd, yyyy')
+											: '',
+								]
+							: undefined,
+				}}
+				image={page.editorialAssets?.img_featuredImage as unknown as SanityImage}
+				breadcrumbs={breadcrumbs}
+			/>
+			<EditorialLayout
+				navigation={articleNavigation}
+				stickyRelatedArticle={
+					page.relatedArticles?.ref_stickyRelatedArticle?.href &&
+					page.relatedArticles?.ref_stickyRelatedArticle.editorialOverview?.field_editorialTitle
+						? {
+								title: page.relatedArticles.ref_stickyRelatedArticle.editorialOverview?.field_editorialTitle,
+								image: page.relatedArticles.ref_stickyRelatedArticle.editorialAssets?.img_featuredImage as unknown as SanityImage,
+								buttons: [
+									{
+										label: 'Read More',
+										href: page.relatedArticles.ref_stickyRelatedArticle?.href,
+										buttonType: 'internal',
+									},
+								],
+							}
+						: undefined
+				}
+			>
+				<RichTextContentSections contentSections={page.contentSections?.block_editorialContentSections} />
+				<div className='flex flex-col gap-12 pt-12'>
+					<BlogArticleTags tags={resolveEditorialContentTags(page.editorialContentTags)} />
+					<Author
+						name={page.editorialOverview?.ref_author?.personOverview?.field_personName}
+						image={page.editorialOverview?.ref_author?.personOverview?.img_profilePicture as unknown as SanityImage}
+						meta={[page.editorialOverview?.ref_author?.personOverview?.field_jobTitleOrRole]}
+					/>
+				</div>
+			</EditorialLayout>
+		</>
+	);
+}
+
+export async function generateMetadata(props: Params, parent: ResolvingMetadata): Promise<Metadata> {
+	const slug = (await props.params)['slug'];
+
+	const parentMetadata = await parent;
+	const page = await sanityFetch({
+		query: articleQuery,
+		params: {
+			slug: slug,
+		},
+	});
+
+	return StructureMetaData(parentMetadata, {
+		name: page?.editorialOverview?.field_editorialTitle,
+		seo: page?.seo ?? undefined,
+		url: page?.href ?? undefined,
+	});
+}

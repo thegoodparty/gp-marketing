@@ -15,6 +15,7 @@ export function HeroBlockSection(section: Extract<Sections, { _type: 'component_
 				copy={<RichData value={section.summaryInfo?.block_summaryText} />}
 				buttons={transformButtons(section.summaryInfo?.list_buttons)}
 				image={section.heroImage?.img_image}
+				showFullImage={section.heroImage?.showFullImage}
 				layout={resolveHeroLayout({
 					imagePosition: stegaClean(section.heroDesignSettings?.field_imagePosition),
 					imageSize: stegaClean(section.heroDesignSettings?.field_heroImageSize),

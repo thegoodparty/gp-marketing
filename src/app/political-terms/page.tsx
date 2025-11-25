@@ -53,6 +53,7 @@ export default async function Page() {
 					className='py-(--container-padding)'
 					color={'bright-yellow'}
 					image={page.glossaryPageCta.ctaAssets?.img_featuredImage}
+					showFullImage={page.glossaryPageCta.ctaAssets?.showFullImage}
 					label={page.glossaryPageCta.overview?.field_label}
 					title={page.glossaryPageCta.overview?.field_title}
 					copy={<RichData value={page.glossaryPageCta.overview?.block_summaryText} />}

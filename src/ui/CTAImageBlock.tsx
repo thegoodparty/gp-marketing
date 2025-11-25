@@ -84,6 +84,7 @@ export type CTAImageBlockProps = {
 	color?: Exclude<(typeof componentColorValues)[number], 'inverse'>;
 	copy?: ReactNode;
 	image?: any;
+	showFullImage?: boolean;
 	label?: string;
 	mediaAlignment?: (typeof leftRightValues)[number];
 	title: string;
@@ -107,7 +108,7 @@ export function CTAImageBlock(props: CTAImageBlockProps) {
 			<Container size={layout === 'blog' ? 'unset' : 'xl'}>
 				<div className='group relative'>
 					<div className={wrapper()}>
-						<Media aspectRatio='4:3' className={media()} image={props.image} />
+						<Media aspectRatio='4:3' className={media()} image={props.image} objectFit={props.showFullImage ? 'contain' : 'cover'} />
 						<div className={content()}>
 							<div className='flex flex-col gap-3 md:gap-4'>
 								{props.label && (

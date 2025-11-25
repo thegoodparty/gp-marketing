@@ -33,6 +33,7 @@ type TabbedImageBlockProps = {
 		copy?: string;
 		button?: ComponentButtonProps;
 		image?: SanityImage;
+		showFullImage?: boolean;
 	}[];
 };
 
@@ -103,7 +104,12 @@ export function TabbedImageBlock(props: TabbedImageBlockProps) {
 							exit={{ opacity: 0 }}
 							transition={{ duration: 0.4, ease: 'easeInOut' }}
 						>
-							<Media image={props.items[activeItem]?.image} aspectRatio='4:3' className='overflow-hidden' />
+							<Media
+								image={props.items[activeItem]?.image}
+								aspectRatio='4:3'
+								className='overflow-hidden'
+								objectFit={props.items[activeItem]?.showFullImage ? 'contain' : 'cover'}
+							/>
 						</motion.div>
 					</AnimatePresence>
 				</div>

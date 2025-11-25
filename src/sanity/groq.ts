@@ -49,7 +49,7 @@ export const tagsGroq = `...,list_tags[]->`;
 /*language=textmate*/
 export const quoteGroq = `...,generalContentTags{${tagsGroq}},quote{...,ref_quoteBy->}`;
 /*language=textmate*/
-export const featureGroq = `field_featureOptions,field_featureOptions=="Custom"=>{defined(customFeature)=>{...customFeature{...,ctaActionWithShared{${buttonGroq}}}},defined(customFeatureWithImage)=>{...customFeatureWithImage{...,ctaActionWithShared{${buttonGroq}}}}},field_featureOptions=="Reference"=>{...ref_chooseAFeature->{...featureAssets,...featureOverview{...,ctaActionWithShared{${buttonGroq}}}}}`;
+export const featureGroq = `field_featureOptions,showFullImage,field_featureOptions=="Custom"=>{defined(customFeature)=>{...customFeature{...,ctaActionWithShared{${buttonGroq}}}},defined(customFeatureWithImage)=>{...customFeatureWithImage{...,ctaActionWithShared{${buttonGroq}}}}},field_featureOptions=="Reference"=>{...ref_chooseAFeature->{...featureAssets,...featureOverview{...,ctaActionWithShared{${buttonGroq}}}}}`;
 /*language=textmate*/
 export const quotesContentCollectionGroq = `field_quotesContentOptions,"quotes":null,field_quotesContentOptions=="Manual"=>{"quotes":list_chooseQuotes[]->{${quoteGroq}}},field_quotesContentOptions=="Collection"=>{"quotes":ref_quoteCollection->quoteCollectionContent.list_chooseQuotes[]->{${quoteGroq}}}`;
 /*language=textmate*/

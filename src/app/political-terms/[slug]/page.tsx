@@ -82,6 +82,7 @@ export default async function Page(props: any) {
 						className='py-(--container-padding)'
 						color={'bright-yellow'}
 						image={hero?.cta?.ctaAssets?.img_featuredImage}
+						showFullImage={hero?.cta?.ctaAssets?.showFullImage}
 						label={hero?.cta?.overview?.field_label}
 						title={hero?.cta?.overview?.field_title}
 						copy={<RichData value={hero?.cta?.overview?.block_summaryText} />}
@@ -138,6 +139,7 @@ export default async function Page(props: any) {
 					className='py-(--container-padding)'
 					color={'bright-yellow'}
 					image={cta.ctaAssets?.img_featuredImage}
+					showFullImage={cta.ctaAssets?.showFullImage}
 					label={cta.overview?.field_label}
 					title={cta.overview?.field_title}
 					copy={<RichData value={cta.overview?.block_summaryText} />}

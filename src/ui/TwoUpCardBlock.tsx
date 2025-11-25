@@ -26,7 +26,7 @@ const styles = tv({
 export type TwoUpCardBlockCardProps =
 	| ({ type: 'value-prop' } & TwoUpCardProps)
 	| ({ type: 'testimonial' } & TestimonialProps)
-	| { type: 'image'; image: SanityImage };
+	| { type: 'image'; image: SanityImage; showFullImage?: boolean };
 
 export type TwoUpCardBlockProps = {
 	backgroundColor?: (typeof backgroundTypeValues)[number];
@@ -46,7 +46,7 @@ export function TwoUpCardBlock(props: TwoUpCardBlockProps) {
 			case 'testimonial':
 				return <Testimonial {...card} color='white' quoteStyleType='text-3xl' />;
 			case 'image':
-				return <Media className='rounded-lg overflow-hidden' image={card.image} />;
+				return <Media className='rounded-lg overflow-hidden' image={card.image} objectFit={card.showFullImage ? 'contain' : 'cover'} />;
 			default:
 				return null;
 		}

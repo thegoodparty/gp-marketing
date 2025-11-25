@@ -21,12 +21,14 @@ export function resolveFeaturesBlockItems(items?: Group_featuresBlockContent) {
 
 	if (items.list_featureBlockHighlightedFeature) {
 		items.list_featureBlockHighlightedFeature?.map((item: any) => {
+			console.log(item);
 			featuredBlockItems.push({
 				title: item.field_featureName,
 				icon: item.field_icon,
 				description: item.field_featureDescription,
 				isHighlighted: true,
 				image: item.img_featureImage,
+				showFullImage: item.showFullImage,
 				button: transformButtons([item.ctaActionWithShared as unknown as ButtonType])?.[0],
 			});
 		});

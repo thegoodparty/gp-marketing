@@ -25,6 +25,7 @@ export function ImageContentBlockSection(section: Extract<Sections, { _type: 'co
 				columns={resolveColumns(stegaClean(section.imageContentBlockDesignSettings?.field_columnLayout234Columns))}
 				items={section.imageContentBlockItems?.list_imageContentItems?.map(item => ({
 					image: item.img_image,
+					showFullImage: item.showFullImage,
 					title: item.field_title,
 					subtitle: item.field_subTitle,
 					copy: <RichData value={item.block_summaryText} />,

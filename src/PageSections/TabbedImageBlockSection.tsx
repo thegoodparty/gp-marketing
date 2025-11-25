@@ -18,6 +18,7 @@ export function TabbedImageBlockSection(section: Extract<Sections, { _type: 'com
 						title: item.field_title,
 						copy: item.field_summaryDescription,
 						image: item.img_image,
+						showFullImage: item.showFullImage,
 						button: item.ctaActionWithShared?.action
 							? transformButtons([{ ...item.ctaActionWithShared, _key: item._key + 'TabbedImageBlockButton' }])?.[0]
 							: undefined,

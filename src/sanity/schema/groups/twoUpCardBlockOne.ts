@@ -35,8 +35,8 @@ export const twoUpCardBlockOne = {
 		},
 		{
 			title: 'Image',
-			name: 'img_twoUpCardBlockCardImage',
-			type: 'img_twoUpCardBlockCardImage',
+			name: 'twoUpCardBlockCardImage',
+			type: 'twoUpCardBlockCardImage',
 			hidden: function (ctx) {
 				return !['Image'].includes(ctx.parent?.field_twoUpCardBlockCardType);
 			},

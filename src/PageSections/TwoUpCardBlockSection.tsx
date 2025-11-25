@@ -48,10 +48,11 @@ function resolveTwoUpCardBlockCard(
 			const testimonials = card.ref_quoteReference ? resolveTestimonials({ quotes: [card.ref_quoteReference] })?.[0] : undefined;
 			return testimonials ? { ...testimonials, type: 'testimonial' } : undefined;
 		case 'image':
-			return card.img_twoUpCardBlockCardImage
+			return card.twoUpCardBlockCardImage?.img_twoUpCardBlockCardImage
 				? {
 						type: 'image',
-						image: card.img_twoUpCardBlockCardImage as unknown as SanityImage,
+						image: card.twoUpCardBlockCardImage.img_twoUpCardBlockCardImage as unknown as SanityImage,
+						showFullImage: card.twoUpCardBlockCardImage.showFullImage,
 					}
 				: undefined;
 		default:

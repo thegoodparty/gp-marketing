@@ -14,6 +14,7 @@ export function HeroWithSubscribeBlockSection(section: Extract<Sections, { _type
 				title={section.summaryInfoNoButtons?.field_title ?? ''}
 				copy={<RichData value={section.summaryInfoNoButtons?.block_summaryText} />}
 				image={section.heroImage?.img_image}
+				showFullImage={section.heroImage?.showFullImage}
 				layout={resolveHeroLayout({
 					imagePosition: stegaClean(section.heroDesignSettings?.field_imagePosition),
 					imageSize: stegaClean(section.heroDesignSettings?.field_heroImageSize),

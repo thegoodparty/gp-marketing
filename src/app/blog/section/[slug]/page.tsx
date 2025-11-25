@@ -17,7 +17,7 @@ import { client } from '~/lib/client';
 
 export async function generateStaticParams() {
 	const entries = await client.fetch<Array<string>>('*[_type=="categories"][0..99].tagOverview.field_slug');
-	return entries.map(entry => ({
+	return entries.filter(Boolean).map(entry => ({
 		categories: entry,
 	}));
 }

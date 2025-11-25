@@ -24,7 +24,7 @@ export async function generateStaticParams() {
 	);
 	const letters = searchTermsToABCD(entries as any);
 	const paths = [...letters.map(letter => letter.href), ...entries.map(entry => entry.slug)];
-	return paths.map(entry => ({
+	return paths.filter(Boolean).map(entry => ({
 		slug: entry,
 	}));
 }

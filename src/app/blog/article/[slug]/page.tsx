@@ -23,7 +23,7 @@ import { stegaClean } from 'next-sanity';
 
 export async function generateStaticParams() {
 	const entries = await client.fetch<Array<{ slug: string }>>('*[_type == "article"][0..99].editorialOverview.field_slug');
-	return entries.map(entry => ({
+	return entries.filter(Boolean).map(entry => ({
 		slug: entry,
 	}));
 }

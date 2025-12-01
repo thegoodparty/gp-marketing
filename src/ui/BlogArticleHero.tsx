@@ -10,7 +10,10 @@ import { Breadcrumbs } from './Breadcrumbs';
 interface BlogArticleHeroProps {
 	title?: string;
 	author?: AuthorProps;
-	tagline?: string;
+	tagline?: {
+		label?: string;
+		href?: string;
+	};
 	image?: SanityImage;
 	breadcrumbs?: { href: string; label: string }[];
 }
@@ -22,7 +25,7 @@ export const BlogArticleHero = (props: BlogArticleHeroProps) => {
 				<Breadcrumbs items={props.breadcrumbs} />
 				<div className='grid lg:grid-cols-2 items-center max-lg:gap-8'>
 					<div className='flex flex-col gap-6'>
-						{props.tagline && <Tagline copy={props.tagline} />}
+						{props.tagline && <Tagline {...props.tagline} />}
 						{props.title && (
 							<Text styleType='heading-lg' as='h1'>
 								{props.title}

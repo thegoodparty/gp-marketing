@@ -7,6 +7,7 @@ import { Anchor } from './Anchor.tsx';
 import { CircleIcon } from './CircleIcon.tsx';
 import { FeatureTooltip } from './FeatureTooltip.tsx';
 import { ResponsiveImage } from './ResponsiveImage.tsx';
+import { IconResolver } from './IconResolver.tsx';
 
 export function isRecord(value: unknown): value is Record<string, unknown> {
 	return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
@@ -72,6 +73,9 @@ const additionalMarks = {
 				<span className='underline cursor-pointer'>{mark.children}</span>
 			</FeatureTooltip>
 		);
+	},
+	highlight(mark) {
+		return <span className='bg-yellow-200 px-1 rounded text-dark'>{mark.children}</span>;
 	},
 };
 
@@ -155,6 +159,20 @@ export function RichData({ isInline, value }: { isInline?: boolean; value: Porta
 				types: types(),
 				marks: marks(),
 				block: block({ isInline }),
+				list: {
+					bullet: ({ children }) => <ul className='list-disc pl-6'>{children}</ul>,
+					number: ({ children }) => <ol className='list-decimal pl-6'>{children}</ol>,
+				},
+				listItem: {
+					bullet: ({ children }) => <li>{children}</li>,
+					number: ({ children }) => <li>{children}</li>,
+					checked: ({ children }) => (
+						<li className='flex gap-2'>
+							<IconResolver icon='check' />
+							<div>{children}</div>
+						</li>
+					),
+				},
 				hardBreak: () => (isInline ? false : <br />),
 			}}
 		/>

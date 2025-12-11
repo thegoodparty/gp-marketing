@@ -10,7 +10,7 @@ import { IconResolver } from './IconResolver.tsx';
 
 const styles = tv({
 	slots: {
-		base: 'flex flex-col gap-4 p-6 rounded-lg h-fit w-full lg:w-[400px]',
+		base: 'flex flex-col gap-4 p-6 rounded-lg w-full lg:w-[400px]',
 	},
 	variants: {
 		color: {

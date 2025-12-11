@@ -21,7 +21,7 @@ export function ImageCTAGroup(section: Extract<ArticleSections, { _type: 'imageC
 				color={componentColor}
 				image={section.image?.img_featuredImage}
 				showFullImage={section.image?.showFullImage}
-				label={section['overview'].field_label}
+				label={section['overview']?.field_label}
 				title={section['overview'].field_title}
 				copy={<RichData value={section['overview'].block_summaryText} />}
 				caption={section['overview'].field_caption}

@@ -23,7 +23,7 @@ export function ImageCTAGroup(section: Extract<ArticleSections, { _type: 'imageC
 				showFullImage={section.image?.showFullImage}
 				label={section['overview']?.field_label}
 				title={section['overview'].field_title}
-				copy={<RichData value={section['overview'].block_summaryText} />}
+				copy={<RichData value={section['overview']?.block_summaryText} />}
 				caption={section['overview'].field_caption}
 				primaryButton={transformButtons([section['primaryCTA']])?.[0]}
 				secondaryButton={transformButtons([section['secondaryCTA']])?.[0]}

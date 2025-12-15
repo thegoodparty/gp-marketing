@@ -24,6 +24,7 @@ const styles = tv({
 			white: 'bg-white',
 		},
 		quoteStyleType: {
+			'text-md': { quote: '' },
 			'text-lg': { quote: '' },
 			'text-3xl': { quote: 'italic font-semibold!' },
 		},
@@ -35,12 +36,12 @@ export type TestimonialProps = {
 	className?: string;
 	color?: Exclude<(typeof componentColorValues)[number], 'inverse'> | 'white';
 	copy?: ReactNode;
-	quoteStyleType?: 'text-lg' | 'text-3xl';
+	quoteStyleType?: 'text-md' | 'text-lg' | 'text-3xl';
 };
 
 export function Testimonial(props: TestimonialProps) {
 	const color = props.color ?? 'red';
-	const quoteStyleType = props.quoteStyleType ?? 'text-lg';
+	const quoteStyleType = props.quoteStyleType ?? 'text-md';
 	const { base, quote } = styles({ color, quoteStyleType });
 
 	return (

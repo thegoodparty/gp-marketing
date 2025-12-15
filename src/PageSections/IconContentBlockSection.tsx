@@ -27,7 +27,7 @@ export function IconContentBlockSection(section: Extract<Sections, { _type: 'com
 				items={section.iconContentBlockItems?.list_iconContentItems?.map(item => ({
 					copy: <RichData value={item.block_summaryText} />,
 					icon: item.field_icon,
-					title: item.field_title,
+					title: item?.field_title,
 				}))}
 			/>
 		</section>

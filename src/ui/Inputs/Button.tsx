@@ -135,9 +135,10 @@ export type ComponentButtonProps = {
 );
 
 export const ComponentButton = (props: ComponentButtonProps) => {
+	const isPrimary = props.buttonProps?.styleType === 'primary' || props.buttonProps?.styleType === 'secondary';
+
 	switch (props.buttonType) {
 		case 'internal':
-		case 'anchor':
 			return (
 				<ButtonLink
 					parent='ComponentButton'
@@ -146,6 +147,22 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ?? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />
+					}
+					{...props.buttonProps}
+				>
+					{props.label}
+				</ButtonLink>
+			);
+		case 'anchor':
+			return (
+				<ButtonLink
+					parent='ComponentButton'
+					className={props.className}
+					href={props.href}
+					iconLeft={props.iconLeft}
+					iconRight={
+						props.iconRight ??
+						(isPrimary ? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' /> : undefined)
 					}
 					{...props.buttonProps}
 				>
@@ -202,7 +219,9 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					parent='ComponentButton'
 					className={props.className}
 					iconLeft={props.iconLeft}
-					iconRight={props.iconRight}
+					iconRight={
+						props.iconRight ?? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />
+					}
 					{...props.buttonProps}
 				>
 					{props.label}
@@ -214,7 +233,9 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					parent='ComponentButton'
 					className={props.className}
 					iconLeft={props.iconLeft}
-					iconRight={props.iconRight}
+					iconRight={
+						props.iconRight ?? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />
+					}
 					{...props.buttonProps}
 				>
 					{props.label}

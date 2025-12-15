@@ -38,7 +38,7 @@ function resolveComparisonBlockTableCard(
 ) {
 	if (!table) return undefined;
 	return {
-		title: table.field_title,
+		title: table?.field_title,
 		list: table.list_comparisonBlockTableItems
 			?.map(item => {
 				return item.block_summaryText?.[0]?.children && item.block_summaryText?.[0]?.children?.length > 0

@@ -21,6 +21,7 @@ const styles = tv({
 		media: '',
 		overline: 'text-neutral-500',
 		buttons: 'flex flex-wrap gap-4',
+		text: 'max-w-[50rem]',
 	},
 	variants: {
 		backgroundColor: {
@@ -128,7 +129,7 @@ export type HeroBlockProps = {
 export function HeroBlock(props: HeroBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
 	const layout = props.layout ?? 'no-media';
-	const { base, wrapper, container, media, content, overline, buttons } = styles({ backgroundColor, layout });
+	const { base, wrapper, container, media, content, overline, buttons, text } = styles({ backgroundColor, layout });
 
 	return (
 		<article className={cn(base(), props.className)} data-component='HeroBlock'>
@@ -154,7 +155,11 @@ export function HeroBlock(props: HeroBlockProps) {
 										{props.title}
 									</Text>
 								)}
-								{isValidRichText(props.copy) && <Text styleType='body-1'>{props.copy}</Text>}
+								{isValidRichText(props.copy) && (
+									<Text className={text()} styleType='body-1'>
+										{props.copy}
+									</Text>
+								)}
 							</div>
 							{props.form?.provider === 'Hubspot' && props.form.formId && <Newsletter formId={props.form.formId} />}
 							{props.buttons && props.buttons.length > 0 && (

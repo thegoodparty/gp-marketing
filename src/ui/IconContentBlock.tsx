@@ -53,7 +53,7 @@ export function IconContentBlock(props: IconContentBlockProps) {
 		<div className={base()}>
 			<Container size='xl'>
 				<div className={wrapper()}>
-					<HeaderBlock {...props.header} backgroundColor={backgroundColor} />
+					{props.header && <HeaderBlock {...props.header} backgroundColor={backgroundColor} />}
 					<div className={containerClasses}>
 						{props.items?.map((item, index) => (
 							<IconContent

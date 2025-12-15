@@ -1,3 +1,5 @@
+import { stegaClean } from 'next-sanity';
+
 import type { Sections } from '~/PageSections';
 
 import { transformButtons } from '~/lib/buttonTransformer';
@@ -5,10 +7,11 @@ import { transformButtons } from '~/lib/buttonTransformer';
 import type { componentColorValues } from '~/ui/_lib/designTypesStore';
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { resolveComponentColor } from '~/ui/_lib/resolveComponentColor';
+import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
+
 import { ComparisonBlock } from '~/ui/ComparisonBlock';
 import type { ComparisonTableCardProps } from '~/ui/ComparisonTableCard';
 import { RichData } from '~/ui/RichData';
-import { stegaClean } from 'next-sanity';
 
 export function ComparisonBlockSection(section: Extract<Sections, { _type: 'component_comparisonBlock' }>) {
 	const backgroundColor = section.comparisonBlockDesignSettings?.field_blockColorCreamMidnight
@@ -25,6 +28,7 @@ export function ComparisonBlockSection(section: Extract<Sections, { _type: 'comp
 					caption: section.summaryInfo?.field_caption,
 					copy: <RichData value={section.summaryInfo?.block_summaryText} />,
 					buttons: transformButtons(section.summaryInfo?.list_buttons),
+					textSize: resolveTextSize(section.summaryInfo?.field_textSize),
 				}}
 				tableOne={resolveComparisonBlockTableCard(section.comparisonBlockTableOne)}
 				tableTwo={resolveComparisonBlockTableCard(section.comparisonBlockTableTwo)}

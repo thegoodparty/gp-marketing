@@ -5,12 +5,13 @@ import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
 import { isValidRichText } from './_lib/isValidRichText.ts';
 import type { FormProps } from './_lib/resolveForm.ts';
 import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
+import { resolveTextSize, type ResolvedTextSize } from '~/ui/_lib/resolveTextSize.ts';
 
-import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { Container } from './Container.tsx';
+import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { Media } from './Media.tsx';
-import { Text } from './Text.tsx';
 import { Newsletter } from './Form/Newsletter.tsx';
+import { Text } from './Text.tsx';
 
 const styles = tv({
 	slots: {
@@ -124,11 +125,14 @@ export type HeroBlockProps = {
 	subscribe?: boolean;
 	title?: string;
 	form?: FormProps;
+	textSize?: ResolvedTextSize;
 };
 
 export function HeroBlock(props: HeroBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
 	const layout = props.layout ?? 'no-media';
+	const textSize = props.textSize ?? resolveTextSize('Medium');
+
 	const { base, wrapper, container, media, content, overline, buttons, text } = styles({ backgroundColor, layout });
 
 	return (
@@ -151,12 +155,12 @@ export function HeroBlock(props: HeroBlockProps) {
 									</span>
 								)}
 								{props.title && (
-									<Text as='h1' styleType='heading-lg'>
+									<Text as='h1' styleType={textSize.heading}>
 										{props.title}
 									</Text>
 								)}
 								{isValidRichText(props.copy) && (
-									<Text className={text()} styleType='body-1'>
+									<Text className={text()} styleType={textSize.body}>
 										{props.copy}
 									</Text>
 								)}

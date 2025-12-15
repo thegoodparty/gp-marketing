@@ -46,7 +46,7 @@ export const StatsBlock = (props: StatsBlockProps) => {
 		<article className={base()} data-component='StatsBlock'>
 			<Container size='xl'>
 				<div className={wrapper()}>
-					<HeaderBlock {...props.header} backgroundColor={backgroundColor} />
+					{props.header && <HeaderBlock {...props.header} backgroundColor={backgroundColor} />}
 					<div className={`${stats()} ${layout === 'stacked' ? `md:grid-cols-${statsColumns}` : 'md:grid-cols-2'}`}>
 						{props.stats?.map(stat => (
 							<Stat key={stat._key} {...stat} />

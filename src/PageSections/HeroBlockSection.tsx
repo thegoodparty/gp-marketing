@@ -1,10 +1,15 @@
-import { transformButtons } from '~/lib/buttonTransformer';
-import type { Sections } from '~/PageSections';
-import { resolveBg } from '~/ui/_lib/resolveBg';
-import { resolveHeroLayout } from '~/ui/_lib/resolveHeroLayout';
-import { HeroBlock } from '~/ui/HeroBlock';
-import { RichData } from '~/ui/RichData';
 import { stegaClean } from 'next-sanity';
+
+import type { Sections } from '~/PageSections';
+
+import { transformButtons } from '~/lib/buttonTransformer';
+import { HeroBlock } from '~/ui/HeroBlock';
+
+import { RichData } from '~/ui/RichData';
+
+import { resolveHeroLayout } from '~/ui/_lib/resolveHeroLayout';
+import { resolveBg } from '~/ui/_lib/resolveBg';
+import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 
 export function HeroBlockSection(section: Extract<Sections, { _type: 'component_hero' }>) {
 	return (
@@ -24,6 +29,7 @@ export function HeroBlockSection(section: Extract<Sections, { _type: 'component_
 					section.heroDesignSettings?.field_blockColorCreamMidnight &&
 					resolveBg(stegaClean(section.heroDesignSettings.field_blockColorCreamMidnight))
 				}
+				textSize={resolveTextSize(section.summaryInfo?.field_textSize)}
 			/>
 		</section>
 	);

@@ -40,7 +40,7 @@ export function TestimonialBlock(props: TestimonialBlockProps) {
 		<article className={base()} data-component='TestimonialBlock'>
 			<Container size='xl'>
 				<div className={wrapper()}>
-					<HeaderBlock {...props.header} backgroundColor={backgroundColor} />
+					{props.header && <HeaderBlock {...props.header} backgroundColor={backgroundColor} />}
 					{props.items && props.items.length > 0 && (
 						<div className='flex flex-wrap justify-center gap-6 lg:gap-8'>
 							{props.items?.map((item, index) => {

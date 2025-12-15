@@ -1,8 +1,12 @@
 import { stegaClean } from 'next-sanity';
-import { transformButtons } from '~/lib/buttonTransformer';
+
 import type { Sections } from '~/PageSections';
+
+import { transformButtons } from '~/lib/buttonTransformer';
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { resolveIconColor } from '~/ui/_lib/resolveComponentColor';
+import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
+
 import { IconContentBlock } from '~/ui/IconContentBlock';
 import { RichData } from '~/ui/RichData';
 
@@ -21,6 +25,7 @@ export function IconContentBlockSection(section: Extract<Sections, { _type: 'com
 					caption: section.summaryInfo?.field_caption,
 					copy: <RichData value={section.summaryInfo?.block_summaryText} />,
 					buttons: transformButtons(section.summaryInfo?.list_buttons),
+					textSize: resolveTextSize(section.summaryInfo?.field_textSize),
 				}}
 				columns={resolveColumns(stegaClean(section.iconContentBlockDesignSettings?.field_columnLayout234Columns))}
 				color={resolveIconColor(stegaClean(section.iconContentBlockDesignSettings?.field_iconColor6ColorsWhiteMixed))}

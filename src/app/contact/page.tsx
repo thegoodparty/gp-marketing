@@ -8,6 +8,7 @@ import { StructureMetaData } from '~/components/StructureMetadata';
 
 import { HeaderBlock } from '~/ui/HeaderBlock';
 import { Container } from '~/ui/Container';
+import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 
 import { PageSections } from '~/PageSections';
 
@@ -26,6 +27,7 @@ export default async function Page() {
 					title={page['contactPageOverview']?.field_pageTitle}
 					copy={page['contactPageOverview']?.field_summaryDescription}
 					layout='left'
+					textSize={resolveTextSize('Large')}
 				/>
 				{/* Contact form goes here */}
 			</Container>

@@ -48,7 +48,7 @@ export function TeamBlock(props: TeamBlockProps) {
 	return (
 		<article className={cn(base(), props.className)} data-component='TeamBlock'>
 			<Container className={container()} size='xl'>
-				<HeaderBlock {...props.header} backgroundColor={backgroundColor} layout='left' />
+				{props.header && <HeaderBlock {...props.header} backgroundColor={backgroundColor} layout='left' />}
 				{props.items && props.items.length > 0 && (
 					<div className={layout()}>
 						{props.items?.map((item, index) => {

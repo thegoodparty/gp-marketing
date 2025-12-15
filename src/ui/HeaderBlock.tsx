@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { cn, tv } from './_lib/utils.ts';
 import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
 import { isValidRichText } from './_lib/isValidRichText.ts';
+import { resolveTextSize, type ResolvedTextSize } from './_lib/resolveTextSize.ts';
 
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { Text } from './Text.tsx';
@@ -47,11 +48,14 @@ export type HeaderBlockProps = {
 	layout?: 'left' | 'right' | 'center';
 	backgroundColor?: 'cream' | 'midnight';
 	caption?: string;
+	textSize?: ResolvedTextSize;
 };
 
 export function HeaderBlock(props: HeaderBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
 	const layout = props.layout ?? 'center';
+	const textSize = props.textSize ?? resolveTextSize('Medium');
+
 	const { base, content, overline } = styles({ backgroundColor, layout });
 
 	return (
@@ -66,11 +70,11 @@ export function HeaderBlock(props: HeaderBlockProps) {
 						</span>
 					)}
 					{props.title && (
-						<Text as='h2' styleType='heading-lg'>
+						<Text as='h2' styleType={textSize.heading}>
 							{props.title}
 						</Text>
 					)}
-					{isValidRichText(props.copy) && <Text styleType='body-1'>{props.copy}</Text>}
+					{isValidRichText(props.copy) && <Text styleType={textSize.body}>{props.copy}</Text>}
 				</div>
 				{props.buttons && props.buttons.length > 0 && (
 					<div className={`flex flex-wrap gap-4 max-sm:w-full w-fit`}>

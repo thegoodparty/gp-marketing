@@ -8,6 +8,7 @@ import { transformButtons } from '~/lib/buttonTransformer';
 import { PricingBlock } from '~/ui/PricingBlock';
 import { RichData } from '~/ui/RichData';
 import { resolvePricingPlans } from '~/ui/_lib/resolvePricingPlans';
+import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 
 export function PricingBlockSection(section: Extract<Sections, { _type: 'component_pricingBlock' }>) {
 	return (
@@ -19,6 +20,7 @@ export function PricingBlockSection(section: Extract<Sections, { _type: 'compone
 					copy: <RichData value={section.summaryInfo?.block_summaryText} />,
 					caption: section.summaryInfo?.field_caption,
 					buttons: transformButtons(section.summaryInfo?.list_buttons),
+					textSize: resolveTextSize(section.summaryInfo?.field_textSize),
 				}}
 				items={resolvePricingPlans(section.plans?.list_pricingPlans as unknown as PricingPlan[])}
 			/>

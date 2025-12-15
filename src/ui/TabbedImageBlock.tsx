@@ -25,7 +25,7 @@ const styles = tv({
 });
 
 type TabbedImageBlockProps = {
-	header: HeaderBlockProps;
+	header?: HeaderBlockProps;
 	backgroundColor?: 'cream' | 'midnight';
 	items: {
 		_key?: string;
@@ -67,7 +67,7 @@ export function TabbedImageBlock(props: TabbedImageBlockProps) {
 	return (
 		<div className={base()}>
 			<Container ref={ref} className='flex flex-col gap-[3rem] md:gap-[5rem] py-[calc(var(--container-padding))]' size='xl'>
-				<HeaderBlock {...props.header} backgroundColor={backgroundColor} />
+				{props.header && <HeaderBlock {...props.header} backgroundColor={backgroundColor} />}
 				<div className='grid md:grid-cols-2 gap-[2.5rem]'>
 					<div className='flex flex-col gap-4'>
 						{props.items?.map((item, index) => {

@@ -23,7 +23,7 @@ export function PricingBlock(props: PricingBlockProps) {
 	return (
 		<article className={cn(base(), props.className)} data-component='PricingBlock'>
 			<Container className={container()} size='xl'>
-				<HeaderBlock {...props.header} backgroundColor='midnight' />
+				{props.header && <HeaderBlock {...props.header} backgroundColor='midnight' />}
 				{props.items && props.items.length > 0 && (
 					<div className='flex max-lg:flex-col gap-6 lg:gap-8 justify-center'>
 						{props.items?.map((item, index) => {

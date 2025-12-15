@@ -83,6 +83,27 @@
     }
   },
   {
+    "name": "field_textSize",
+    "type": "type",
+    "value": {
+      "type": "union",
+      "of": [
+        {
+          "type": "string",
+          "value": "Large"
+        },
+        {
+          "type": "string",
+          "value": "Medium"
+        },
+        {
+          "type": "string",
+          "value": "Small"
+        }
+      ]
+    }
+  },
+  {
     "name": "field_slug",
     "type": "type",
     "value": {
@@ -2729,6 +2750,10 @@
                 {
                   "type": "string",
                   "value": "number"
+                },
+                {
+                  "type": "string",
+                  "value": "checked"
                 }
               ]
             },
@@ -2895,7 +2920,20 @@
                 "type": "objectAttribute",
                 "value": {
                   "type": "union",
-                  "of": []
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "bullet"
+                    },
+                    {
+                      "type": "string",
+                      "value": "number"
+                    },
+                    {
+                      "type": "string",
+                      "value": "checked"
+                    }
+                  ]
                 },
                 "optional": true
               },
@@ -3113,6 +3151,10 @@
                     {
                       "type": "string",
                       "value": "number"
+                    },
+                    {
+                      "type": "string",
+                      "value": "checked"
                     }
                   ]
                 },
@@ -3332,6 +3374,10 @@
                     {
                       "type": "string",
                       "value": "number"
+                    },
+                    {
+                      "type": "string",
+                      "value": "checked"
                     }
                   ]
                 },
@@ -3668,6 +3714,10 @@
                 {
                   "type": "string",
                   "value": "number"
+                },
+                {
+                  "type": "string",
+                  "value": "checked"
                 }
               ]
             },
@@ -3796,7 +3846,20 @@
             "type": "objectAttribute",
             "value": {
               "type": "union",
-              "of": []
+              "of": [
+                {
+                  "type": "string",
+                  "value": "bullet"
+                },
+                {
+                  "type": "string",
+                  "value": "number"
+                },
+                {
+                  "type": "string",
+                  "value": "checked"
+                }
+              ]
             },
             "optional": true
           },
@@ -11600,6 +11663,14 @@
           "type": "objectAttribute",
           "value": {
             "type": "string"
+          },
+          "optional": true
+        },
+        "field_textSize": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_textSize"
           },
           "optional": true
         }

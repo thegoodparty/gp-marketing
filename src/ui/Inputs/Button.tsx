@@ -38,7 +38,7 @@ export const btnStyles = tv({
 				base: 'text-white! bg-midnight-900 hover:bg-[#3C4454] focus:ring-midnight-300/50',
 			},
 			outline: {
-				base: 'border border-black hover:bg-[#F5F5F5] focus:ring-[#A3A3A3]/50',
+				base: 'border border-black hover:bg-black/5 focus:ring-[#A3A3A3]/50',
 			},
 			'outline-inverse': {
 				base: 'text-white! border border-white hover:bg-white/10 focus:ring-white/50',

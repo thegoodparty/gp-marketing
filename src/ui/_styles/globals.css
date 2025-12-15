@@ -8,6 +8,9 @@
 @source '../../';
 
 @theme {
+	--header-height: 5rem;
+	--preview-header-height: 2.5rem;
+
 	--ease-smooth: cubic-bezier(0.165, 0.84, 0.44, 1);
 
 	--container-max-xl: 85rem;

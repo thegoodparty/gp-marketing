@@ -360,15 +360,15 @@
       "of": [
         {
           "type": "string",
-          "value": "AllLatest"
+          "value": "Latest by All"
         },
         {
           "type": "string",
-          "value": "Category"
+          "value": "Latest by Category"
         },
         {
           "type": "string",
-          "value": "Topic"
+          "value": "Latest by Topic"
         }
       ]
     }

@@ -105,8 +105,8 @@ export const articlesByTopicLimitedGroq = `*[_type=="article"&&(^.blogBlockConte
 /*language=textmate*/
 export const component_blogBlock = `_type=="component_blogBlock"=>{...,blogBlockSummaryInfo{${summaryInfoGroq}},"items": null, "itemsCount": 0, "loadMoreHref": null,
 blogBlockContent.field_blogBlockContentOptions=="Latest by All"=>{"items":${allLatestArticlesLimitedGroq},"itemsCount":count(${allLatestArticlesUnlimitedForLoadMoreGroq}),"loadMoreHref":"/blog"},
-blogBlockContent.field_blogBlockContentOptions=="Category"=>{"items":${articlesByCategoryLimitedGroq},"itemsCount":count(${articlesByCategoryUnlimitedForLoadMoreGroq}),"loadMoreHref":blogBlockContent.ref_selectACategory->{${categoriesHrefGroq}}.href},
-blogBlockContent.field_blogBlockContentOptions=="Topic"=>{"items":${articlesByTopicLimitedGroq},"itemsCount":count(${articlesByTopicUnlimitedForLoadMoreGroq}),"loadMoreHref":blogBlockContent.ref_selectATopic->{${topicsHrefGroq}}.href}}`;
+blogBlockContent.field_blogBlockContentOptions=="Latest by Category"=>{"items":${articlesByCategoryLimitedGroq},"itemsCount":count(${articlesByCategoryUnlimitedForLoadMoreGroq}),"loadMoreHref":blogBlockContent.ref_selectACategory->{${categoriesHrefGroq}}.href},
+blogBlockContent.field_blogBlockContentOptions=="Latest by Topic"=>{"items":${articlesByTopicLimitedGroq},"itemsCount":count(${articlesByTopicUnlimitedForLoadMoreGroq}),"loadMoreHref":blogBlockContent.ref_selectATopic->{${topicsHrefGroq}}.href}}`;
 
 export const topicRelatedArticlesFirstFetchGroq = `*[][0]{
 "articles":*[_type=="article"&&(^.^._id in editorialContentTags.list_topics[]._ref)] | order(coalesce(editorialOverview.field_lastUpdated,editorialOverview.field_publishedDate) desc)[0...12]{${articleCardGroq}},

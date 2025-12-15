@@ -22,10 +22,10 @@ const styles = tv({
 		},
 		columns: {
 			3: {
-				layout: 'md:grid-cols-3',
+				layout: 'lg:grid-cols-3',
 			},
 			4: {
-				layout: 'md:grid-cols-4',
+				layout: 'lg:grid-cols-4',
 			},
 		},
 	},

@@ -54,7 +54,10 @@ export function TwoUpCardBlock(props: TwoUpCardBlockProps) {
 
 	return (
 		<article className={cn(base(), props.className)} data-component='TwoUpCardBlock'>
-			<Container className='flex flex-col gap-6 md:grid md:grid-cols-2 md:gap-10' size='xl'>
+			<Container
+				className={`flex flex-col gap-6 md:grid ${props.card1?.type && props.card2?.type ? 'md:grid-cols-2' : '*:w-1/2 *:mx-auto'} md:gap-10`}
+				size='xl'
+			>
 				{props.card1 && renderCard(props.card1)}
 				{props.card2 && renderCard(props.card2)}
 			</Container>

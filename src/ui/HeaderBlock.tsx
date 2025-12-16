@@ -27,7 +27,7 @@ const styles = tv({
 		layout: {
 			center: {
 				base: 'justify-center text-center',
-				content: 'items-center',
+				content: 'items-center max-w-[50rem] mx-auto',
 			},
 			left: {
 				base: '',

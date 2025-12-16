@@ -138,6 +138,32 @@ export const marks = () => ({
 	...additionalMarks,
 });
 
+export const list = () => ({
+	bullet(list) {
+		return <ul className='list-disc pl-6'>{list.children}</ul>;
+	},
+	number(list) {
+		return <ol className='list-decimal pl-6'>{list.children}</ol>;
+	},
+});
+
+export const listItem = () => ({
+	bullet(listItem) {
+		return <li className='font-secondary'>{listItem.children}</li>;
+	},
+	number(listItem) {
+		return <li className='font-secondary'>{listItem.children}</li>;
+	},
+	checked(listItem) {
+		return (
+			<li className='flex gap-2 font-secondary'>
+				<IconResolver icon='check' />
+				<div>{listItem.children}</div>
+			</li>
+		);
+	},
+});
+
 export function RichData({ isInline, value }: { isInline?: boolean; value: PortableTextProps['value'] | ReactNode }) {
 	if (!value) {
 		return null;
@@ -159,20 +185,8 @@ export function RichData({ isInline, value }: { isInline?: boolean; value: Porta
 				types: types(),
 				marks: marks(),
 				block: block({ isInline }),
-				list: {
-					bullet: ({ children }) => <ul className='list-disc pl-6'>{children}</ul>,
-					number: ({ children }) => <ol className='list-decimal pl-6'>{children}</ol>,
-				},
-				listItem: {
-					bullet: ({ children }) => <li>{children}</li>,
-					number: ({ children }) => <li>{children}</li>,
-					checked: ({ children }) => (
-						<li className='flex gap-2'>
-							<IconResolver icon='check' />
-							<div>{children}</div>
-						</li>
-					),
-				},
+				list: list(),
+				listItem: listItem(),
 				hardBreak: () => (isInline ? false : <br />),
 			}}
 		/>

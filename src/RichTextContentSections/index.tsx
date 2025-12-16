@@ -9,7 +9,7 @@ import { ImageContentSectionGroup } from '~/RichTextContentSections/ImageContent
 import { InlineQuoteSectionGroup } from '~/RichTextContentSections/InlineQuoteSectionGroup';
 import { ButtonSectionGroup } from '~/RichTextContentSections/ButtonSectionGroup';
 import { FAQsSectionGroup } from '~/RichTextContentSections/FAQsSectionGroup';
-import { block, marks } from '~/ui/RichData';
+import { block, marks, list, listItem } from '~/ui/RichData';
 import { CalloutSectionGroup } from '~/RichTextContentSections/CalloutSectionGroup';
 import { Typography } from '~/ui/Typography';
 
@@ -98,6 +98,8 @@ export function RichTextContentSections(props: Props) {
 					},
 					marks: marks(),
 					block: block({ isInline: false }),
+					list: list(),
+					listItem: listItem(),
 					hardBreak: () => false,
 				}}
 			/>

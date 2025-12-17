@@ -40,7 +40,7 @@ export async function sanityFetch<Q extends QueryKey>({
 		token: token,
 		stega: {
 			enabled: true,
-			studioUrl: 'https://goodparty-studio.vercel.app/studio/main',
+			studioUrl: 'https://goodparty-marketing.sanity.studio/studio/main',
 		},
 	});
 }

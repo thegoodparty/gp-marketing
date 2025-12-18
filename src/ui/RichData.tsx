@@ -70,7 +70,7 @@ const additionalMarks = {
 				description={overview?.field_featureDescription}
 				icon={<CircleIcon icon={overview?.field_icon} iconBg={resolveComponentColor(feature.planColor)} />}
 			>
-				<span className='underline hover:decoration-dotted cursor-pointer'>{mark.children}</span>
+				<span className='underline decoration-dotted cursor-pointer'>{mark.children}</span>
 			</FeatureTooltip>
 		);
 	},

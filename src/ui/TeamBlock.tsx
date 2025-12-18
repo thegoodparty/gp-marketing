@@ -9,7 +9,7 @@ const styles = tv({
 	slots: {
 		base: 'py-(--container-padding)',
 		container: 'flex flex-col gap-12 md:gap-20',
-		layout: 'grid gap-8 md:gap-4',
+		layout: 'grid gap-8 md:gap-4 md:grid-cols-2',
 	},
 	variants: {
 		backgroundColor: {

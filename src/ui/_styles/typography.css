@@ -3,7 +3,7 @@
 	--text-*: initial;
 
 	/* Heading */
-	--text-heading-xl: clamp(3rem, 2.736rem + 1.127vw, 3.75rem);
+	--text-heading-xl: clamp(2.5rem, 2.083rem + 1.852vw, 3.75rem);
 	--text-heading-xl--line-height: 125%;
 	--text-heading-xl--letter-spacing: 0;
 	--text-heading-xl--font-weight: 600;

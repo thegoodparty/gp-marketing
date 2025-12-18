@@ -14,6 +14,7 @@ export function resolvePricingPlans(plans?: PricingPlan[]): PricingCardProps[] {
 			name: plan.pricingPlanOverview?.field_pricingPlanName,
 			price: plan.pricingPlanOverview?.field_pricingPlanPrice,
 			billingPeriod: plan.pricingPlanOverview?.field_billingPeriod,
+			hideIcon: Boolean(plan.pricingPlanOverview?.hideGoodPartyHeartIcon),
 			listTitle: plan.pricingPlanFeatures?.field_featureListTitle,
 			list: plan.pricingPlanFeatures?.list_pricingPlanFeatureListItems?.map(item => (
 				<RichData value={item.block_pricingPlanFeatureItemText} />

@@ -13785,6 +13785,13 @@
             "name": "field_billingPeriod"
           },
           "optional": true
+        },
+        "hideGoodPartyHeartIcon": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "boolean"
+          },
+          "optional": true
         }
       }
     }

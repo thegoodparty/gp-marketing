@@ -7447,6 +7447,14 @@
             "name": "ref_sharedCta"
           },
           "optional": true
+        },
+        "field_componentColor6ColorsInverse": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_componentColor6ColorsInverse"
+          },
+          "optional": true
         }
       }
     }
@@ -8435,6 +8443,14 @@
           "value": {
             "type": "inline",
             "name": "ref_sharedCta"
+          },
+          "optional": true
+        },
+        "field_componentColor6ColorsInverse": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_componentColor6ColorsInverse"
           },
           "optional": true
         }

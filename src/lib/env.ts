@@ -12,11 +12,3 @@ export const revalidateSecret = 'NS';
 
 // Used by `sanity-plugin-iframe-pane` to verify that draft mode was initiated by a valid Studio session
 export const urlSecretId = `preview.secret`;
-
-function assertValue<T>(v: T | undefined, errorMessage: string): T {
-	if (v === undefined) {
-		throw new Error(errorMessage);
-	}
-
-	return v;
-}

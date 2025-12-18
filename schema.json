@@ -11476,6 +11476,14 @@
             "name": "field_caption"
           },
           "optional": true
+        },
+        "field_textSize": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_textSize"
+          },
+          "optional": true
         }
       }
     }
@@ -11663,14 +11671,6 @@
           "type": "objectAttribute",
           "value": {
             "type": "string"
-          },
-          "optional": true
-        },
-        "field_textSize": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "inline",
-            "name": "field_textSize"
           },
           "optional": true
         }

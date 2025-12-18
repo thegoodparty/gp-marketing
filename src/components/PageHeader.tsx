@@ -4,6 +4,7 @@ import { Nav } from '~/ui/Nav';
 import { cn } from '~/ui/_lib/utils';
 import { transformButtons, type ButtonType } from '~/lib/buttonTransformer';
 import { Text } from '~/ui/Text';
+import { Anchor } from '~/ui/Anchor';
 
 export async function PageHeader(props: { className?: string; isDraftMode: boolean }) {
 	const navigation = await sanityFetch({ query: goodpartyOrg_navigationQuery });
@@ -45,6 +46,7 @@ export async function PageHeader(props: { className?: string; isDraftMode: boole
 					})),
 				};
 			}
+			return null
 		})
 		.filter(Boolean);
 
@@ -64,9 +66,9 @@ export async function PageHeader(props: { className?: string; isDraftMode: boole
 					</div>
 
 					<div className='flex items-center gap-2'>
-						<a className='underline cursor-pointer' href='/api/draft-mode/disable'>
+						<Anchor className='underline cursor-pointer' href='/api/draft-mode/disable'>
 							Exit preview
-						</a>
+						</Anchor>
 						👋
 					</div>
 				</div>

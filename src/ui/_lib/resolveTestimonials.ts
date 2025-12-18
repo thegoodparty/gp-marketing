@@ -1,4 +1,4 @@
-import type { TestimonialProps } from '../Testimonial';
+import type { TestimonialProps } from '../TestimonialCard';
 
 export function resolveTestimonials(item: any): TestimonialProps[] {
 	let testimonials: TestimonialProps[] = [];
@@ -10,9 +10,7 @@ export function resolveTestimonials(item: any): TestimonialProps[] {
 					quote?.quote?.ref_quoteBy?.personOverview?.field_personName ||
 					quote?.quote?.ref_quoteBy?.organisationOverview?.field_organisationName,
 				meta: [quote?.quote?.ref_quoteBy?.personOverview?.field_jobTitleOrRole],
-				image:
-					quote?.quote?.ref_quoteBy?.personOverview?.img_profilePicture ||
-					quote?.quote?.ref_quoteBy?.organisationOverview?.img_logo,
+				image: quote?.quote?.ref_quoteBy?.personOverview?.img_profilePicture || quote?.quote?.ref_quoteBy?.organisationOverview?.img_logo,
 			},
 			copy: quote.quote.field_quote,
 		});

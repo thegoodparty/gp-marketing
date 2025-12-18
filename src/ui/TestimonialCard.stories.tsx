@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { imageJpg } from './_data/media.tsx';
-import { Testimonial } from './Testimonial.tsx';
+import { TestimonialCard } from './TestimonialCard.tsx';
 import { Container } from './Container.tsx';
 
-const meta: Meta<typeof Testimonial> = {
-	title: 'Molecules/Testimonial',
-	component: Testimonial,
+const meta: Meta<typeof TestimonialCard> = {
+	title: 'Molecules/TestimonialCard',
+	component: TestimonialCard,
 	render: args => (
 		<Container size='xs'>
-			<Testimonial {...args} />
+			<TestimonialCard {...args} />
 		</Container>
 	),
 };

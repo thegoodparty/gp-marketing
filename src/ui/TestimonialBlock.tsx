@@ -3,7 +3,7 @@ import { tv } from './_lib/utils.ts';
 import { colorTypeValues, type backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 import { Container } from './Container.tsx';
-import { Testimonial, type TestimonialProps } from './Testimonial.tsx';
+import { TestimonialCard, type TestimonialCardProps } from './TestimonialCard.tsx';
 import { HeaderBlock, type HeaderBlockProps } from './HeaderBlock.tsx';
 import { shuffleArray } from '~/ui/_lib/shuffleArray.ts';
 
@@ -22,7 +22,7 @@ const styles = tv({
 
 export type TestimonialBlockProps = {
 	backgroundColor?: (typeof backgroundTypeValues)[number];
-	items: TestimonialProps[];
+	items: TestimonialCardProps[];
 	header?: HeaderBlockProps;
 };
 
@@ -47,7 +47,7 @@ export function TestimonialBlock(props: TestimonialBlockProps) {
 								const isTwoItems = props.items.length === 2;
 
 								return (
-									<Testimonial
+									<TestimonialCard
 										{...item}
 										key={index}
 										color={colors[index]}

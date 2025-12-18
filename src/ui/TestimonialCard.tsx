@@ -8,7 +8,7 @@ import { Text } from './Text.tsx';
 
 const styles = tv({
 	slots: {
-		base: 'flex flex-col gap-4 p-6 rounded-lg min-h-[400px] justify-between',
+		base: 'flex flex-col gap-4 p-6 rounded-lg md:min-h-[400px] justify-between',
 		quote: 'font-secondary! quote-open quote-close',
 	},
 	variants: {
@@ -31,7 +31,7 @@ const styles = tv({
 	},
 });
 
-export type TestimonialProps = {
+export type TestimonialCardProps = {
 	author?: AuthorProps;
 	className?: string;
 	color?: Exclude<(typeof componentColorValues)[number], 'inverse'> | 'white';
@@ -39,7 +39,7 @@ export type TestimonialProps = {
 	quoteStyleType?: 'text-md' | 'text-lg' | 'text-3xl';
 };
 
-export function Testimonial(props: TestimonialProps) {
+export function TestimonialCard(props: TestimonialCardProps) {
 	const color = props.color ?? 'red';
 	const quoteStyleType = props.quoteStyleType ?? 'text-md';
 	const { base, quote } = styles({ color, quoteStyleType });

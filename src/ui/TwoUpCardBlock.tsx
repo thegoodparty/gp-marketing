@@ -4,7 +4,7 @@ import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 import type { SanityImage } from './types.ts';
 import { Container } from './Container.tsx';
 import { Media } from './Media.tsx';
-import { Testimonial, type TestimonialProps } from './Testimonial.tsx';
+import { TestimonialCard, type TestimonialCardProps } from './TestimonialCard.tsx';
 import { TwoUpCard, type TwoUpCardProps } from './TwoUpCard.tsx';
 
 const styles = tv({
@@ -25,7 +25,7 @@ const styles = tv({
 
 export type TwoUpCardBlockCardProps =
 	| ({ type: 'value-prop' } & TwoUpCardProps)
-	| ({ type: 'testimonial' } & TestimonialProps)
+	| ({ type: 'testimonial' } & TestimonialCardProps)
 	| { type: 'image'; image: SanityImage; showFullImage?: boolean };
 
 export type TwoUpCardBlockProps = {
@@ -44,7 +44,7 @@ export function TwoUpCardBlock(props: TwoUpCardBlockProps) {
 			case 'value-prop':
 				return <TwoUpCard {...card} backgroundColor={backgroundColor} />;
 			case 'testimonial':
-				return <Testimonial {...card} color='white' quoteStyleType='text-3xl' />;
+				return <TestimonialCard {...card} color='white' quoteStyleType='text-3xl' />;
 			case 'image':
 				return <Media className='rounded-lg overflow-hidden' image={card.image} objectFit={card.showFullImage ? 'contain' : 'cover'} />;
 			default:

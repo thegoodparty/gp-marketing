@@ -3,7 +3,7 @@ import type { TagProps } from '../Tag';
 export function resolveEditorialContentTags(items?: any) {
 	const tags: TagProps[] = [];
 
-	if (items.category) {
+	if (items?.category) {
 		tags.push({
 			id: items.category._id,
 			name: items.category.tagOverview.field_name,
@@ -11,7 +11,7 @@ export function resolveEditorialContentTags(items?: any) {
 		});
 	}
 
-	if (items.topics) {
+	if (items?.topics) {
 		items.topics.map(topic => {
 			tags.push({
 				id: topic._id,

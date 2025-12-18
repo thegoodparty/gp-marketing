@@ -7,6 +7,9 @@ interface TaglineProps {
 }
 
 export const Tagline = (props: TaglineProps) => {
+	if (!props?.href) {
+		return null
+	}
 	return (
 		<Link href={props.href} className='w-fit text-black py-1 px-2.5 shadow-xs border border-grey rounded-sm bg-white'>
 			<Text styleType='text-sm'>{props.label}</Text>

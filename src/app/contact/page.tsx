@@ -27,7 +27,6 @@ export default async function Page() {
 					title={page['contactPageOverview']?.field_pageTitle}
 					copy={page['contactPageOverview']?.field_summaryDescription}
 					layout='left'
-					textSize={resolveTextSize('Large')}
 				/>
 				{/* Contact form goes here */}
 			</Container>

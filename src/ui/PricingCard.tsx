@@ -47,7 +47,6 @@ export function PricingCard(props: PricingCardProps) {
 	const { base } = styles({ color });
 	const resolvedStyle = resolveInverseButtonStyleType(props.button?.buttonProps?.styleType ?? 'primary', backgroundColor, color);
 
-	console.log('hideIcon', props.hideIcon);
 	return (
 		<article className={cn(base(), props.className)} data-component='PricingCard'>
 			<div className='flex justify-between items-center'>

@@ -27,7 +27,7 @@ export function HeroWithSubscribeBlockSection(section: Extract<Sections, { _type
 					resolveBg(stegaClean(section.heroDesignSettings.field_blockColorCreamMidnight))
 				}
 				form={resolveForm(stegaClean(section.heroSubscribeForm?.ref_formUsed ?? undefined))}
-				textSize={resolveTextSize('Medium')} // TODO?: https://app.productive.io/24499-evensix/tasks/15242872
+				textSize={resolveTextSize(section.summaryInfoNoButtons?.field_textSize)}
 			/>
 		</section>
 	);

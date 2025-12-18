@@ -8149,6 +8149,14 @@
             "name": "field_caption"
           },
           "optional": true
+        },
+        "field_textSize": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_textSize"
+          },
+          "optional": true
         }
       }
     }

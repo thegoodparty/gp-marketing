@@ -1,3 +1,5 @@
+import { stegaClean } from 'next-sanity';
+
 import type { Sections } from '~/PageSections';
 
 import { transformButtons } from '~/lib/buttonTransformer';
@@ -6,10 +8,10 @@ import { resolveBg } from '~/ui/_lib/resolveBg';
 import { resolveFeaturesBlockItems } from '~/ui/_lib/resolveFeaturesBlockItems';
 import { resolveHighlightedFeatureAlignment } from '~/ui/_lib/resolveHighlightedFeatureAlignment';
 import { resolveIconBg } from '~/ui/_lib/resolveIconBg';
+import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 
 import { FeaturesBlock } from '~/ui/FeaturesBlock';
 import { RichData } from '~/ui/RichData';
-import { stegaClean } from 'next-sanity';
 
 export function FeaturesBlockSection(section: Extract<Sections, { _type: 'component_featuresBlock' }>) {
 	const backgroundColor = section.featureBlockDesignSettings?.field_blockColorCreamMidnight
@@ -26,6 +28,7 @@ export function FeaturesBlockSection(section: Extract<Sections, { _type: 'compon
 					copy: <RichData value={section.summaryInfo?.block_summaryText} />,
 					backgroundColor,
 					buttons: transformButtons(section.summaryInfo?.list_buttons),
+					textSize: resolveTextSize(section.summaryInfo?.field_textSize),
 				}}
 				backgroundColor={backgroundColor}
 				items={section.featuresBlockContent ? resolveFeaturesBlockItems(section.featuresBlockContent) : []}

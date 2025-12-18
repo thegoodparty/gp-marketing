@@ -31,7 +31,7 @@ export function ComparisonBlock(props: ComparisonBlockProps) {
 		<div className={base()}>
 			<Container size='xl'>
 				<div className={wrapper()}>
-					<HeaderBlock {...props.header} backgroundColor={backgroundColor} />
+					{props.header && <HeaderBlock {...props.header} backgroundColor={backgroundColor} />}
 					<div className='grid gap-[1.5rem] md:gap-[2.5rem] md:grid-cols-2'>
 						{props.tableOne && <ComparisonTableCard {...props.tableOne} />}
 						{props.tableTwo && <ComparisonTableCard {...props.tableTwo} />}

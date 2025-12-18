@@ -105,6 +105,7 @@ import { field_linkIcon } from './field_linkIcon.ts';
 import { field_heroImageSize } from './field_heroImageSize.ts';
 import { field_slug } from './field_slug.ts';
 import { field_aspectRatio } from './field_aspectRatio.ts';
+import { field_textSize } from './field_textSize.ts';
 
 export const fieldSchema = [
 	field_aspectRatio,
@@ -214,4 +215,5 @@ export const fieldSchema = [
 	field_linkIcon,
 	field_heroImageSize,
 	field_slug,
+	field_textSize,
 ];

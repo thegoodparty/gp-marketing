@@ -7,6 +7,7 @@ import { Anchor } from './Anchor.tsx';
 import { CircleIcon } from './CircleIcon.tsx';
 import { FeatureTooltip } from './FeatureTooltip.tsx';
 import { ResponsiveImage } from './ResponsiveImage.tsx';
+import { IconResolver } from './IconResolver.tsx';
 
 export function isRecord(value: unknown): value is Record<string, unknown> {
 	return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
@@ -69,9 +70,12 @@ const additionalMarks = {
 				description={overview?.field_featureDescription}
 				icon={<CircleIcon icon={overview?.field_icon} iconBg={resolveComponentColor(feature.planColor)} />}
 			>
-				<span className='underline cursor-pointer'>{mark.children}</span>
+				<span className='underline decoration-dotted cursor-pointer'>{mark.children}</span>
 			</FeatureTooltip>
 		);
+	},
+	highlight(mark) {
+		return <span className='bg-yellow-200 px-1 rounded text-dark'>{mark.children}</span>;
 	},
 };
 
@@ -134,6 +138,32 @@ export const marks = () => ({
 	...additionalMarks,
 });
 
+export const list = () => ({
+	bullet(list) {
+		return <ul className='list-disc pl-6'>{list.children}</ul>;
+	},
+	number(list) {
+		return <ol className='list-decimal pl-6'>{list.children}</ol>;
+	},
+});
+
+export const listItem = () => ({
+	bullet(listItem) {
+		return <li className='font-secondary'>{listItem.children}</li>;
+	},
+	number(listItem) {
+		return <li className='font-secondary'>{listItem.children}</li>;
+	},
+	checked(listItem) {
+		return (
+			<li className='flex gap-2 font-secondary'>
+				<IconResolver icon='check' />
+				<div>{listItem.children}</div>
+			</li>
+		);
+	},
+});
+
 export function RichData({ isInline, value }: { isInline?: boolean; value: PortableTextProps['value'] | ReactNode }) {
 	if (!value) {
 		return null;
@@ -155,6 +185,8 @@ export function RichData({ isInline, value }: { isInline?: boolean; value: Porta
 				types: types(),
 				marks: marks(),
 				block: block({ isInline }),
+				list: list(),
+				listItem: listItem(),
 				hardBreak: () => (isInline ? false : <br />),
 			}}
 		/>

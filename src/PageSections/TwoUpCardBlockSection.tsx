@@ -9,11 +9,16 @@ import { stegaClean } from 'next-sanity';
 import { RichData } from '~/ui/RichData';
 import type { SanityImage } from '~/ui/types';
 import { resolveTestimonials } from '~/ui/_lib/resolveTestimonials';
+import { resolveBg } from '~/ui/_lib/resolveBg';
 
 export function TwoUpCardBlockSection(section: Extract<Sections, { _type: 'component_twoUpCardBlock' }>) {
+	const backgroundColor = section.twoUpCardBlockDesignSettings?.field_blockColorCreamMidnight
+		? resolveBg(stegaClean(section.twoUpCardBlockDesignSettings.field_blockColorCreamMidnight))
+		: 'cream';
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Two Up Card Block'>
 			<TwoUpCardBlock
+				backgroundColor={backgroundColor}
 				card1={resolveTwoUpCardBlockCard(section.twoUpCardBlockOne)}
 				card2={resolveTwoUpCardBlockCard(section.twoUpCardBlockTwo)}
 			/>

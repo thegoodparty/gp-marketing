@@ -1,0 +1,8 @@
+.custom-list-checked::before {
+	color: #a78bfa;
+	content: '✔';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translate(50%, -50%);
+}

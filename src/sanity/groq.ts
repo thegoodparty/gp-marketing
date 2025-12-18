@@ -1,7 +1,7 @@
 import { defineQuery } from 'next-sanity';
 
 /* language=textmate */
-export const anchorIdGroq = `+select(defined(field_anchorId)=>"#"+field_anchorId,"")`;
+export const anchorIdGroq = `select(defined(field_anchorId)=>"#"+field_anchorId,"")`;
 /*language=textmate*/
 export const categoriesHrefGroq = `_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)}`;
 /*language=textmate*/
@@ -37,9 +37,9 @@ const textBlockGroq = `markDefs[]{...,_type=="inlineInternalLink"=>{field_intern
 /*language=textmate*/
 const planFeatureGroq = `markDefs[]{...,ref_inlineFeaturesItem->{...,"planColor":^.^.^.^.^.pricingPlanDesignSettings.field_componentColor6ColorsMidnight}}`;
 /*language=textmate*/
-export const globalCtaPrimaryButtonGroq = `"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink${internalLinkGroq},field_externalLink,"anchor":field_internalLink${internalLinkGroq}.href${anchorIdGroq},ref_download->{${downloadGroq}}`;
+export const globalCtaPrimaryButtonGroq = `"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink${internalLinkGroq},field_externalLink,"anchor":${anchorIdGroq},ref_download->{${downloadGroq}}`;
 /*language=textmate*/
-export const buttonGroq = `_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":field_internalLink${internalLinkGroq},field_externalLink,"anchor":field_internalLink${internalLinkGroq}.href${anchorIdGroq},ref_download->{${downloadGroq}},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{${globalCtaPrimaryButtonGroq}}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText)`;
+export const buttonGroq = `_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":field_internalLink${internalLinkGroq},field_externalLink,"anchor":${anchorIdGroq},ref_download->{${downloadGroq}},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{${globalCtaPrimaryButtonGroq}}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText)`;
 /*language=textmate*/
 export const ctaBaseGroq = `"overview":ctaMessaging{...,block_summaryText[]{...,${textBlockGroq}}},"primaryCTA":{...ctaAction{${globalCtaPrimaryButtonGroq}}},"secondaryCTA":secondaryCta.ctaActionWithShared{${buttonGroq}}`;
 /*language=textmate*/
@@ -104,9 +104,9 @@ export const articlesByCategoryLimitedGroq = `*[_type=="article"&&editorialConte
 export const articlesByTopicLimitedGroq = `*[_type=="article"&&(^.blogBlockContent.ref_selectATopic._ref in editorialContentTags.list_topics[]._ref)] | order(coalesce(editorialOverview.field_lastUpdated,editorialOverview.field_publishedDate) desc)[0...3]{${articleCardGroq}}`;
 /*language=textmate*/
 export const component_blogBlock = `_type=="component_blogBlock"=>{...,blogBlockSummaryInfo{${summaryInfoGroq}},"items": null, "itemsCount": 0, "loadMoreHref": null,
-blogBlockContent.field_blogBlockContentOptions=="AllLatest"=>{"items":${allLatestArticlesLimitedGroq},"itemsCount":count(${allLatestArticlesUnlimitedForLoadMoreGroq}),"loadMoreHref":"/blog"},
-blogBlockContent.field_blogBlockContentOptions=="Category"=>{"items":${articlesByCategoryLimitedGroq},"itemsCount":count(${articlesByCategoryUnlimitedForLoadMoreGroq}),"loadMoreHref":blogBlockContent.ref_selectACategory->{${categoriesHrefGroq}}.href},
-blogBlockContent.field_blogBlockContentOptions=="Topic"=>{"items":${articlesByTopicLimitedGroq},"itemsCount":count(${articlesByTopicUnlimitedForLoadMoreGroq}),"loadMoreHref":blogBlockContent.ref_selectATopic->{${topicsHrefGroq}}.href}}`;
+blogBlockContent.field_blogBlockContentOptions=="Latest by All"=>{"items":${allLatestArticlesLimitedGroq},"itemsCount":count(${allLatestArticlesUnlimitedForLoadMoreGroq}),"loadMoreHref":"/blog"},
+blogBlockContent.field_blogBlockContentOptions=="Latest by Category"=>{"items":${articlesByCategoryLimitedGroq},"itemsCount":count(${articlesByCategoryUnlimitedForLoadMoreGroq}),"loadMoreHref":blogBlockContent.ref_selectACategory->{${categoriesHrefGroq}}.href},
+blogBlockContent.field_blogBlockContentOptions=="Latest by Topic"=>{"items":${articlesByTopicLimitedGroq},"itemsCount":count(${articlesByTopicUnlimitedForLoadMoreGroq}),"loadMoreHref":blogBlockContent.ref_selectATopic->{${topicsHrefGroq}}.href}}`;
 
 export const topicRelatedArticlesFirstFetchGroq = `*[][0]{
 "articles":*[_type=="article"&&(^.^._id in editorialContentTags.list_topics[]._ref)] | order(coalesce(editorialOverview.field_lastUpdated,editorialOverview.field_publishedDate) desc)[0...12]{${articleCardGroq}},

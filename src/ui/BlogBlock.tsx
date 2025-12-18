@@ -50,7 +50,7 @@ export function BlogBlock(props: BlogBlockProps) {
 				{props.header &&
 					(props.header.label || props.header.title || props.header.copy || (props.header.buttons && props.header.buttons.length > 0)) && (
 						<div className={content()}>
-							<div className={`flex flex-col gap-3 md:gap-4`}>
+							<div className={`flex flex-col gap-3 md:gap-4 max-w-[50rem]`}>
 								{props.header.label && (
 									<span className='text-neutral-500'>
 										<Text as='span' styleType='overline'>

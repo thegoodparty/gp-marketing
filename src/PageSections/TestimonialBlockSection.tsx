@@ -1,12 +1,14 @@
+import { stegaClean } from 'next-sanity';
+
 import type { Sections } from '~/PageSections';
 
 import { transformButtons, type ButtonType } from '~/lib/buttonTransformer';
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { resolveTestimonials } from '~/ui/_lib/resolveTestimonials';
+import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 
 import { RichData } from '~/ui/RichData';
 import { TestimonialBlock } from '~/ui/TestimonialBlock';
-import { stegaClean } from 'next-sanity';
 
 export function TestimonialBlockSection(section: Extract<Sections, { _type: 'component_testimonialBlock' }>) {
 	const backgroundColor = section.testimonialBlockDesignSettings?.field_blockColorCreamMidnight
@@ -23,6 +25,7 @@ export function TestimonialBlockSection(section: Extract<Sections, { _type: 'com
 					caption: section.summaryInfo?.field_caption,
 					copy: <RichData value={section.summaryInfo?.block_summaryText} />,
 					buttons: transformButtons(section.summaryInfo?.list_buttons as unknown as ButtonType[]),
+					textSize: resolveTextSize(section.summaryInfo?.field_textSize),
 				}}
 				items={resolveTestimonials(section.quotesContentCollection)}
 			/>

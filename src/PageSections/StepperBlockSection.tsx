@@ -1,26 +1,33 @@
+import { stegaClean } from 'next-sanity';
+
 import type { Sections } from '~/PageSections';
 
 import { transformButtons } from '~/lib/buttonTransformer';
 
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { resolveStepperBlockLayout } from '~/ui/_lib/resolveStepperBlockLayout';
+import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
+
 import { RichData } from '~/ui/RichData';
 import { StepperBlock } from '~/ui/StepperBlock';
-import { stegaClean } from 'next-sanity';
 
 export function StepperBlockSection(section: Extract<Sections, { _type: 'component_stepperBlock' }>) {
 	const backgroundColor = section.stepperBlockDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(stegaClean(section.stepperBlockDesignSettings.field_blockColorCreamMidnight))
 		: 'cream';
+	const summary = section.summaryInfo;
 
-	const header = {
-		label: section.summaryInfo?.field_label,
-		title: section.summaryInfo?.field_title,
-		copy: <RichData value={section.summaryInfo?.block_summaryText} />,
-		buttons: transformButtons(section.summaryInfo?.list_buttons),
-		caption: section.summaryInfo?.field_caption,
-		backgroundColor,
-	};
+	const header = summary
+		? {
+				label: summary.field_label,
+				title: summary.field_title,
+				copy: <RichData value={summary.block_summaryText} />,
+				buttons: transformButtons(summary.list_buttons),
+				caption: summary.field_caption,
+				backgroundColor,
+				textSize: resolveTextSize(summary.field_textSize),
+			}
+		: undefined;
 
 	const items =
 		section.stepperBlockItems?.list_stepperBlockItems?.map(item => ({
@@ -35,6 +42,7 @@ export function StepperBlockSection(section: Extract<Sections, { _type: 'compone
 				item.stepperBlockItemDesignSettings?.field_mediaAlignmentRightLeft &&
 				resolveStepperBlockLayout(stegaClean(item.stepperBlockItemDesignSettings.field_mediaAlignmentRightLeft)),
 			caption: item.summaryInfo?.field_caption,
+			textSize: resolveTextSize(item.summaryInfo?.field_textSize),
 		})) ?? [];
 
 	return (

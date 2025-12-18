@@ -21,9 +21,9 @@ export function EditorialLayout(props: EditorialLayoutProps) {
 			as='div'
 			className='relative grid lg:grid-cols-[1.1fr_3fr] gap-16 py-(--container-padding) bg-goodparty-cream '
 		>
-			<div data-group='EditorialLayoutSidebar'>
+			<div data-group='EditorialLayoutSidebar' className='flex flex-col gap-8'>
+				{props.navigation && props.navigation.length > 0 && <Navigation navigation={props.navigation} />}
 				<div className='sticky top-28 flex flex-col gap-8'>
-					{props.navigation && props.navigation.length > 0 && <Navigation navigation={props.navigation} />}
 					<ShareLinks />
 					{props.stickyRelatedArticle && props.stickyRelatedArticle.title && <StickyRelatedArticle {...props.stickyRelatedArticle} />}
 				</div>

@@ -73,10 +73,10 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 					});
 				break;
 			case 'Anchor':
-				if ('anchor' in button && button.anchor && button.link && 'href' in button.link)
+				if (button.anchor)
 					transformedButtons.push({
 						_key: button._key,
-						label: button.text ?? button.link.title ?? button.link.name,
+						label: button.text,
 						buttonType: 'anchor',
 						href: button.anchor,
 						buttonProps: {

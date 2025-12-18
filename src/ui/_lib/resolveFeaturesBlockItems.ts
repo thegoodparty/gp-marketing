@@ -21,7 +21,6 @@ export function resolveFeaturesBlockItems(items?: Group_featuresBlockContent) {
 
 	if (items.list_featureBlockHighlightedFeature) {
 		items.list_featureBlockHighlightedFeature?.map((item: any) => {
-			console.log(item);
 			featuredBlockItems.push({
 				title: item.field_featureName,
 				icon: item.field_icon,

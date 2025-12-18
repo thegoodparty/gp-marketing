@@ -32,7 +32,7 @@ export function ImageContentBlock(props: ImageContentBlockProps) {
 		<div className={base()}>
 			<Container size='xl'>
 				<div className={wrapper()}>
-					<HeaderBlock {...props.header} backgroundColor={backgroundColor} />
+					{props.header && <HeaderBlock {...props.header} backgroundColor={backgroundColor} />}
 					<div
 						className={cn(
 							'grid grid-cols-1 gap-[2rem] px-0',

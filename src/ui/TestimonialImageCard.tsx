@@ -7,7 +7,7 @@ import { PlainText } from '~/ui/PlainText.tsx';
 
 const styles = tv({
 	slots: {
-		base: 'rounded-[2rem] flex flex-col gap-[2rem] p-[1.5rem] md:p-[3rem] h-full',
+		base: 'rounded-[2rem] flex flex-col gap-[2rem] p-[1.5rem] md:p-[3rem] h-full justify-between',
 		media: 'rounded-full overflow-hidden w-[14rem] h-[14rem] md:w-64 md:h-64',
 	},
 	variants: {

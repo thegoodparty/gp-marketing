@@ -45,7 +45,7 @@ export function TestimonialCard(props: TestimonialCardProps) {
 	const { base, quote } = styles({ color, quoteStyleType });
 
 	return (
-		<article className={cn(base(), props.className)} data-component='CTACard'>
+		<article className={cn(base(), props.className)} data-component='TestimonialCard'>
 			<div className='flex flex-col gap-4'>
 				<svg width='50' height='37' fill='none' xmlns='http://www.w3.org/2000/svg'>
 					<path

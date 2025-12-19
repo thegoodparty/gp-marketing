@@ -12,6 +12,7 @@ import { GlossaryHero } from '~/ui/GlossaryHero';
 import { transformButtons, type ButtonType } from '~/lib/buttonTransformer';
 import { CTAImageBlock } from '~/ui/CTAImageBlock';
 import { toPlainText } from '@portabletext/react';
+import { resolveComponentColor } from '~/ui/_lib/resolveComponentColor';
 
 export default async function Page() {
 	const page = await sanityFetch({
@@ -48,24 +49,24 @@ export default async function Page() {
 					})
 					.filter(Boolean)}
 			/>
-			{page.glossaryPageCta && 'overview' in page.glossaryPageCta && page.glossaryPageCta.overview?.field_title && (
+			{page.glossaryPageCta && page.glossaryPageCta.ref_sharedCta?.overview?.field_title && (
 				<CTAImageBlock
 					className='py-(--container-padding)'
-					color={'bright-yellow'}
-					image={page.glossaryPageCta.ctaAssets?.img_featuredImage}
-					showFullImage={page.glossaryPageCta.ctaAssets?.showFullImage}
-					label={page.glossaryPageCta.overview?.field_label}
-					title={page.glossaryPageCta.overview?.field_title}
-					copy={<RichData value={page.glossaryPageCta.overview?.block_summaryText} />}
-					caption={page.glossaryPageCta.overview?.field_caption}
+					color={resolveComponentColor(page.glossaryPageCta.field_componentColor6ColorsInverse)}
+					image={page.glossaryPageCta.ref_sharedCta.ctaAssets?.img_featuredImage}
+					showFullImage={page.glossaryPageCta.ref_sharedCta.ctaAssets?.showFullImage}
+					label={page.glossaryPageCta.ref_sharedCta.overview.field_label}
+					title={page.glossaryPageCta.ref_sharedCta.overview.field_title}
+					copy={<RichData value={page.glossaryPageCta.ref_sharedCta.overview.block_summaryText} />}
+					caption={page.glossaryPageCta.ref_sharedCta.overview.field_caption}
 					primaryButton={
-						page.glossaryPageCta.primaryCTA
-							? transformButtons([page.glossaryPageCta.primaryCTA] as unknown as ButtonType[])?.[0]
+						page.glossaryPageCta.ref_sharedCta.primaryCTA
+							? transformButtons([page.glossaryPageCta.ref_sharedCta.primaryCTA] as unknown as ButtonType[])?.[0]
 							: undefined
 					}
 					secondaryButton={
-						page.glossaryPageCta.secondaryCTA
-							? transformButtons([page.glossaryPageCta.secondaryCTA] as unknown as ButtonType[])?.[0]
+						page.glossaryPageCta.ref_sharedCta.secondaryCTA
+							? transformButtons([page.glossaryPageCta.ref_sharedCta.secondaryCTA] as unknown as ButtonType[])?.[0]
 							: undefined
 					}
 					mediaAlignment='right'

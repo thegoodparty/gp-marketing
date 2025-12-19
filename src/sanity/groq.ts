@@ -174,16 +174,16 @@ export const glossaryByLetterArrayQuery = defineQuery(
 );
 /*language=textmate*/
 export const glossaryHeroGroq = defineQuery(
-	`*[_type=="goodpartyOrg_glossary"][0]{...,glossaryOverview,"cta":glossaryPageCta.ref_sharedCta->{ctaAssets,${ctaBaseGroq}}}`,
+	`*[_type=="goodpartyOrg_glossary"][0]{...,glossaryOverview,"cta":glossaryPageCta{...,ref_sharedCta->{ctaAssets,${ctaBaseGroq}}}}`,
 );
 
 /*language=textmate*/
 export const glossaryQuery = defineQuery(
-	`*[_type=="glossary"&&glossaryTermOverview.field_slug==$slug][0]{...,glossaryTermOverview{...,block_glossaryTermDefinition[]{...,${textBlockGroq}}},glossaryTermCta{...ref_sharedCta->{ctaAssets,${ctaBaseGroq}}},${glossaryTermHrefGroq}}`,
+	`*[_type=="glossary"&&glossaryTermOverview.field_slug==$slug][0]{...,glossaryTermOverview{...,block_glossaryTermDefinition[]{...,${textBlockGroq}}},glossaryTermCta{...,ref_sharedCta->{ctaAssets,${ctaBaseGroq}}},${glossaryTermHrefGroq}}`,
 );
 /*language=textmate*/
 export const goodpartyOrg_glossaryQuery = defineQuery(
-	`*[_type=="goodpartyOrg_glossary"][0]{...,glossaryPageCta{...ref_sharedCta->{ctaAssets,${ctaBaseGroq}}},"aTerms":*[_type=="glossary"&&string::startsWith(lower(glossaryTermOverview.field_glossaryTerm),"a")] | order(glossaryTermOverview.field_glossaryTerm asc)[]{${glossaryItemBaseGroq}},${glossaryHrefGroq}}`,
+	`*[_type=="goodpartyOrg_glossary"][0]{...,glossaryPageCta{...,ref_sharedCta->{ctaAssets,${ctaBaseGroq}}},"aTerms":*[_type=="glossary"&&string::startsWith(lower(glossaryTermOverview.field_glossaryTerm),"a")] | order(glossaryTermOverview.field_glossaryTerm asc)[]{${glossaryItemBaseGroq}},${glossaryHrefGroq}}`,
 );
 /*language=textmate*/
 export const goodpartyOrg_contactQuery = defineQuery(

@@ -10,6 +10,7 @@ import { PageSections } from '~/PageSections';
 import { HeaderBlock } from '~/ui/HeaderBlock';
 import { Container } from '~/ui/Container';
 import { client } from '~/lib/client';
+import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 
 export async function generateStaticParams() {
 	const entries = await client.fetch<Array<string>>(

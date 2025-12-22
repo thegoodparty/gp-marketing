@@ -43,7 +43,10 @@ export default async function RootLayout({ children }: Props) {
 				<ComponentErrorBoundary componentName='Header'>
 					<PageHeader className='shrink-0' isDraftMode={(await draftMode()).isEnabled} />
 				</ComponentErrorBoundary>
-				<main role='main' className={'bg-goodparty-cream flex-1 basis-0 pt-[5rem]'}>
+				<main
+					role='main'
+					className={`bg-goodparty-cream flex-1 basis-0 ${(await draftMode()).isEnabled ? 'pt-[calc(var(--header-height)+var(--preview-header-height))]' : 'pt-(--header-height)'}`}
+				>
 					{children}
 				</main>
 				<ComponentErrorBoundary componentName='Footer'>

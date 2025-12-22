@@ -17,6 +17,7 @@ import type { GlossaryTermCta } from 'sanity.types';
 import { toPlainText } from '@portabletext/toolkit';
 import { client } from '~/lib/client';
 import { cn } from '~/ui/_lib/utils';
+import { resolveComponentColor } from '~/ui/_lib/resolveComponentColor';
 
 export async function generateStaticParams() {
 	const entries = await client.fetch<Array<{ _id: string; title: string; slug: string }>>(
@@ -77,19 +78,25 @@ export default async function Page(props: any) {
 						.filter(Boolean)}
 				/>
 
-				{hero?.cta?.overview?.field_title && (
+				{hero?.cta?.ref_sharedCta?.overview?.field_title && (
 					<CTAImageBlock
 						className='py-(--container-padding)'
-						color={'bright-yellow'}
-						image={hero?.cta?.ctaAssets?.img_featuredImage}
-						showFullImage={hero?.cta?.ctaAssets?.showFullImage}
-						label={hero?.cta?.overview?.field_label}
-						title={hero?.cta?.overview?.field_title}
-						copy={<RichData value={hero?.cta?.overview?.block_summaryText} />}
-						caption={hero?.cta?.overview?.field_caption}
-						primaryButton={hero?.cta?.primaryCTA ? transformButtons([hero.cta.primaryCTA] as unknown as ButtonType[])?.[0] : undefined}
+						color={resolveComponentColor(hero.cta.field_componentColor6ColorsInverse)}
+						image={hero.cta.ref_sharedCta.ctaAssets?.img_featuredImage}
+						showFullImage={hero.cta.ref_sharedCta.ctaAssets?.showFullImage}
+						label={hero.cta.ref_sharedCta.overview.field_label}
+						title={hero.cta.ref_sharedCta.overview.field_title}
+						copy={<RichData value={hero.cta.ref_sharedCta.overview?.block_summaryText} />}
+						caption={hero.cta?.ref_sharedCta.overview.field_caption}
+						primaryButton={
+							hero.cta.ref_sharedCta.primaryCTA
+								? transformButtons([hero.cta.ref_sharedCta.primaryCTA] as unknown as ButtonType[])?.[0]
+								: undefined
+						}
 						secondaryButton={
-							hero?.cta?.secondaryCTA ? transformButtons([hero.cta.secondaryCTA] as unknown as ButtonType[])?.[0] : undefined
+							hero.cta.ref_sharedCta.secondaryCTA
+								? transformButtons([hero.cta.ref_sharedCta.secondaryCTA] as unknown as ButtonType[])?.[0]
+								: undefined
 						}
 						mediaAlignment='right'
 					/>
@@ -110,7 +117,7 @@ export default async function Page(props: any) {
 
 	let cta = page.glossaryTermCta;
 
-	if (!cta || !('overview' in cta && cta.overview?.field_title)) {
+	if (!cta || !cta.ref_sharedCta?.overview?.field_title) {
 		const hero = await sanityFetch({
 			query: glossaryHeroGroq,
 		});
@@ -134,18 +141,24 @@ export default async function Page(props: any) {
 					<RichData value={page.glossaryTermOverview?.block_glossaryTermDefinition} />
 				</Text>
 			</Container>
-			{cta && 'overview' in cta && cta.overview?.field_title && (
+			{cta && cta.ref_sharedCta?.overview?.field_title && (
 				<CTAImageBlock
 					className='py-(--container-padding)'
-					color={'bright-yellow'}
-					image={cta.ctaAssets?.img_featuredImage}
-					showFullImage={cta.ctaAssets?.showFullImage}
-					label={cta.overview?.field_label}
-					title={cta.overview?.field_title}
-					copy={<RichData value={cta.overview?.block_summaryText} />}
-					caption={cta.overview?.field_caption}
-					primaryButton={cta.primaryCTA ? transformButtons([cta.primaryCTA] as unknown as ButtonType[])?.[0] : undefined}
-					secondaryButton={cta.secondaryCTA ? transformButtons([cta.secondaryCTA] as unknown as ButtonType[])?.[0] : undefined}
+					color={resolveComponentColor(cta.field_componentColor6ColorsInverse)}
+					image={cta.ref_sharedCta.ctaAssets?.img_featuredImage}
+					showFullImage={cta.ref_sharedCta.ctaAssets?.showFullImage}
+					label={cta.ref_sharedCta.overview.field_label}
+					title={cta.ref_sharedCta.overview.field_title}
+					copy={<RichData value={cta.ref_sharedCta.overview.block_summaryText} />}
+					caption={cta.ref_sharedCta.overview.field_caption}
+					primaryButton={
+						cta.ref_sharedCta?.primaryCTA ? transformButtons([cta.ref_sharedCta?.primaryCTA] as unknown as ButtonType[])?.[0] : undefined
+					}
+					secondaryButton={
+						cta.ref_sharedCta?.secondaryCTA
+							? transformButtons([cta.ref_sharedCta?.secondaryCTA] as unknown as ButtonType[])?.[0]
+							: undefined
+					}
 					mediaAlignment='right'
 				/>
 			)}

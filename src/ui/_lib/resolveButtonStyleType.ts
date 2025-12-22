@@ -43,6 +43,7 @@ export function resolveInverseButtonStyleType(
 		}
 	} else {
 		if (backgroundColor === 'midnight') {
+			if (base === 'primary' && color !== 'cream') return 'secondary';
 			if (base === 'secondary') return 'outline';
 			if (base === 'ghost') return 'ghost';
 			return base;

@@ -8,6 +8,7 @@ import { StructureMetaData } from '~/components/StructureMetadata';
 
 import { HeaderBlock } from '~/ui/HeaderBlock';
 import { Container } from '~/ui/Container';
+import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 
 import { PageSections } from '~/PageSections';
 

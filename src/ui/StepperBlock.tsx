@@ -4,6 +4,7 @@ import { cn, tv } from './_lib/utils.ts';
 import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
 import { isValidRichText } from './_lib/isValidRichText.ts';
 import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
+import type { ResolvedTextSize } from './_lib/resolveTextSize.ts';
 
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { Media } from './Media.tsx';
@@ -46,6 +47,7 @@ type StepperItemProps = {
 	image?: any;
 	label?: string;
 	buttons?: ComponentButtonProps[];
+	textSize: ResolvedTextSize;
 };
 
 export type StepperBlockProps = {
@@ -63,7 +65,7 @@ export function StepperBlock(props: StepperBlockProps) {
 		<article className={cn(base(), props.className)} data-component='StepperBlock'>
 			<Container size='xl'>
 				<div className={wrapper()}>
-					<HeaderBlock {...props.header} backgroundColor={props.backgroundColor} />
+					{props.header && <HeaderBlock {...props.header} backgroundColor={props.backgroundColor} />}
 					{props.items?.map((item, index) => {
 						const layout = item.layout ?? 'media-left';
 						const { container, media, content } = styles({ backgroundColor, layout });
@@ -90,11 +92,11 @@ export function StepperBlock(props: StepperBlockProps) {
 											</span>
 										)}
 										{item.title && (
-											<Text as='h2' styleType='heading-md'>
+											<Text as='h2' styleType={item.textSize.heading}>
 												{item.title}
 											</Text>
 										)}
-										{isValidRichText(item.copy) && <Text styleType='body-2'>{item.copy}</Text>}
+										{isValidRichText(item.copy) && <Text styleType={item.textSize.body}>{item.copy}</Text>}
 									</div>
 									{item.buttons && item.buttons.length > 0 && (
 										<div className={`flex flex-wrap gap-4 w-full max-md:justify-center`}>

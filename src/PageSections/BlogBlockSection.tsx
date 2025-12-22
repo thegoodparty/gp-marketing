@@ -25,9 +25,9 @@ export function BlogBlockSection(section: Extract<Sections, { _type: 'component_
 										link: {
 											_id: '38975309',
 											_type:
-												section.blogBlockContent?.field_blogBlockContentOptions === 'AllLatest'
+												section.blogBlockContent?.field_blogBlockContentOptions === 'Latest by All'
 													? 'goodpartyOrg_allArticles'
-													: section.blogBlockContent?.field_blogBlockContentOptions === 'Category'
+													: section.blogBlockContent?.field_blogBlockContentOptions === 'Latest by Category'
 														? 'categories'
 														: 'topics',
 											name: null,

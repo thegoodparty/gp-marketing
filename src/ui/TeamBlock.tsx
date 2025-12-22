@@ -9,7 +9,7 @@ const styles = tv({
 	slots: {
 		base: 'py-(--container-padding)',
 		container: 'flex flex-col gap-12 md:gap-20',
-		layout: 'grid gap-8 md:gap-4',
+		layout: 'grid gap-8 md:gap-4 md:grid-cols-2',
 	},
 	variants: {
 		backgroundColor: {
@@ -22,10 +22,10 @@ const styles = tv({
 		},
 		columns: {
 			3: {
-				layout: 'md:grid-cols-3',
+				layout: 'lg:grid-cols-3',
 			},
 			4: {
-				layout: 'md:grid-cols-4',
+				layout: 'lg:grid-cols-4',
 			},
 		},
 	},
@@ -48,7 +48,7 @@ export function TeamBlock(props: TeamBlockProps) {
 	return (
 		<article className={cn(base(), props.className)} data-component='TeamBlock'>
 			<Container className={container()} size='xl'>
-				<HeaderBlock {...props.header} backgroundColor={backgroundColor} layout='left' />
+				{props.header && <HeaderBlock {...props.header} backgroundColor={backgroundColor} layout='left' />}
 				{props.items && props.items.length > 0 && (
 					<div className={layout()}>
 						{props.items?.map((item, index) => {

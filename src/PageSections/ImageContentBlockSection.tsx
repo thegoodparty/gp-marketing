@@ -1,8 +1,12 @@
 import { stegaClean } from 'next-sanity';
-import { transformButtons } from '~/lib/buttonTransformer';
+
 import type { Sections } from '~/PageSections';
 import { resolveColumns } from '~/PageSections/IconContentBlockSection';
+
+import { transformButtons } from '~/lib/buttonTransformer';
 import { resolveBg } from '~/ui/_lib/resolveBg';
+import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
+
 import { ImageContentBlock } from '~/ui/ImageContentBlock';
 import { RichData } from '~/ui/RichData';
 
@@ -21,6 +25,7 @@ export function ImageContentBlockSection(section: Extract<Sections, { _type: 'co
 					caption: section.summaryInfo?.field_caption,
 					copy: <RichData value={section.summaryInfo?.block_summaryText} />,
 					buttons: transformButtons(section.summaryInfo?.list_buttons),
+					textSize: resolveTextSize(section.summaryInfo?.field_textSize),
 				}}
 				columns={resolveColumns(stegaClean(section.imageContentBlockDesignSettings?.field_columnLayout234Columns))}
 				items={section.imageContentBlockItems?.list_imageContentItems?.map(item => ({

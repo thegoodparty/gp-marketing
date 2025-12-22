@@ -1,10 +1,14 @@
+import { stegaClean } from 'next-sanity';
+
+import type { Sections } from '~/PageSections';
+
 import { transformButtons } from '~/lib/buttonTransformer';
 import { resolveAuthor } from '~/ui/_lib/resolveAuthor';
-import type { Sections } from '~/PageSections';
 import { resolveBg } from '~/ui/_lib/resolveBg';
+import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
+
 import { Carousel } from '~/ui/Carousel';
 import { RichData } from '~/ui/RichData';
-import { stegaClean } from 'next-sanity';
 
 export function CarouselBlockSection(section: Extract<Sections, { _type: 'component_carouselBlock' }>) {
 	const backgroundColor = section.carouselBlockDesignSettings?.field_blockColorCreamMidnight
@@ -29,6 +33,7 @@ export function CarouselBlockSection(section: Extract<Sections, { _type: 'compon
 					buttons: transformButtons(section.summaryInfo?.list_buttons),
 					layout: 'left',
 					backgroundColor,
+					textSize: resolveTextSize(section.summaryInfo?.field_textSize),
 				}}
 			/>
 		</section>

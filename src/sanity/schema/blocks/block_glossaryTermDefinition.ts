@@ -1,3 +1,7 @@
+import * as React from 'react';
+
+import { getIcon } from '../../../sanity/utils/getIcon';
+
 export const block_glossaryTermDefinition = {
 	name: 'block_glossaryTermDefinition',
 	title: 'Glossary Term Definition',
@@ -11,18 +15,47 @@ export const block_glossaryTermDefinition = {
 			type: 'block',
 			styles: [],
 			lists: [
+				{ title: 'Bullet', value: 'bullet' },
+				{ title: 'Numbered', value: 'number' },
 				{
-					title: 'Bullet',
-					value: 'bullet',
-				},
-				{
-					title: 'Numbered',
-					value: 'number',
+					title: 'Checked',
+					value: 'checked',
+					icon: getIcon('ListChecked'),
+					component: function CheckedDecorator(props) {
+						return React.createElement(
+							'span',
+							{
+								className: 'custom-list-checked',
+							},
+							props.children,
+						);
+					},
 				},
 			],
 			of: [],
 			marks: {
-				decorators: [],
+				decorators: [
+					{ title: 'Strong', value: 'strong' },
+					{ title: 'Emphasis', value: 'em' },
+					{ title: 'Underline', value: 'underline' },
+					{ title: 'Strike', value: 'strike-through' },
+					{
+						title: 'Highlight',
+						value: 'highlight',
+						icon: getIcon('PaintBrushAlt'),
+						component: function HighlightDecorator(props) {
+							return React.createElement(
+								'span',
+								{
+									style: {
+										backgroundColor: '#fff3a0',
+									},
+								},
+								props.children,
+							);
+						},
+					},
+				],
 				annotations: [
 					{
 						type: 'inlineInternalLink',

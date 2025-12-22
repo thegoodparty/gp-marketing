@@ -52,7 +52,7 @@ function parseFrList(value: string): number[] {
 	return tokens.map(t => {
 		const m = t.match(/^([0-9.]+)fr$/);
 		if (!m) throw new Error(`Only 'fr' units supported: "${t}"`);
-		return parseFloat(m[1]);
+		return parseFloat(m[1]!);
 	});
 }
 
@@ -62,7 +62,7 @@ function resolveMaxWidthFromClass(cls: string | null, vw: number, bps: Breakpoin
 
 	const arb = raw.match(/^max-w-\[(.+?)\]$/);
 	if (arb) {
-		const val = arb[1];
+		const val = arb[1]!;
 		if (/^\d+(\.\d+)?px$/.test(val)) return parseFloat(val);
 		if (/^\d+(\.\d+)?rem$/.test(val)) return parseFloat(val) * root;
 		if (/^\d+(\.\d+)?$/.test(val)) return parseFloat(val) * 4; // Tailwind spacing unit
@@ -74,7 +74,7 @@ function resolveMaxWidthFromClass(cls: string | null, vw: number, bps: Breakpoin
 
 	const tok = raw.match(/^max-w-([A-Za-z0-9-]+)$/);
 	if (tok) {
-		const key = tok[1];
+		const key = tok[1]!;
 		const v = MAX_W_TOKENS_PX[key];
 		if (v === 'none') return Number.POSITIVE_INFINITY;
 		if (v === 'full' || v === undefined) return vw;
@@ -101,7 +101,7 @@ export function computeIntendedSecondColWidthForElement(
 
 	// 1) Active grid template (may not exist before lg)
 	const gridClass = pickActiveClass(classList, vw, bps, /^grid-cols-\[(.+?)\]$/, bp => new RegExp(`^${bp}:grid-cols-\\[(.+?)\\]$`));
-	const frs = gridClass ? parseFrList(gridClass.match(/\[(.+?)\]$/)![1]) : [1]; // default: one column
+	const frs = gridClass ? parseFrList(gridClass.match(/\[(.+?)\]$/)![1]!) : [1]; // default: one column
 	const cols = frs.length;
 
 	// 2) Active max-w
@@ -133,5 +133,5 @@ export function computeIntendedSecondColWidthForElement(
 
 	// 6) Otherwise, fr-share for column 2
 	const sumFr = frs.reduce((a, b) => a + b, 0);
-	return Math.floor((frs[1] / sumFr) * contentWidth);
+	return Math.floor((frs[1]! / sumFr) * contentWidth);
 }

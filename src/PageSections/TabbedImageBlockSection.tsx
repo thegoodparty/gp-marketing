@@ -1,7 +1,11 @@
 import { stegaClean } from 'next-sanity';
-import { transformButtons } from '~/lib/buttonTransformer';
+
 import type { Sections } from '~/PageSections';
+
+import { transformButtons } from '~/lib/buttonTransformer';
 import { resolveBg } from '~/ui/_lib/resolveBg';
+import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
+
 import { RichData } from '~/ui/RichData';
 import { TabbedImageBlock } from '~/ui/TabbedImageBlock';
 
@@ -40,6 +44,7 @@ export function TabbedImageBlockSection(section: Extract<Sections, { _type: 'com
 					buttons: transformButtons(section.summaryInfo?.list_buttons),
 					layout: 'left',
 					backgroundColor,
+					textSize: resolveTextSize(section.summaryInfo?.field_textSize),
 				}}
 				items={items}
 			/>

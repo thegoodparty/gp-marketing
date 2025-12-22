@@ -1,18 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import MuxPlayer from '@mux/mux-player-react';
-
 import { cn, tv } from './_lib/utils.ts';
-
 import { IconResolver } from './IconResolver.tsx';
 
 const styles = tv({
 	slots: {
+		wrapper: 'relative h-full group',
 		videoWrapper: 'relative h-full w-full aspect-video',
 		video: 'w-full max-w-none h-full object-cover',
-		playButton:
-			'absolute top-1/2 left-1/2 -translate-1/2 rounded-full bg-white p-5 h-16 w-16 flex items-center justify-center absolute bottom-0 z-2',
+		buttonBase:
+			'absolute top-1/2 left-1/2 -translate-1/2 rounded-full bg-white p-5 h-16 w-16 flex items-center justify-center transition-opacity duration-200',
 	},
 });
 
@@ -25,28 +24,28 @@ export type VideoPlayerProps = {
 export function Video(props: VideoPlayerProps) {
 	const playButtonText = props.playButtonText ?? 'Play';
 
-	const [videoPlaying, setVideoPlaying] = useState(true);
+	const [videoPlaying, setVideoPlaying] = useState(false);
 
-	const { videoWrapper, video, playButton } = styles();
+	if (!props.video) return null;
 
-	const videoSettings = {
-		// autoPlay: videoPlaying,
-		paused: !videoPlaying,
-		// playsInline: false,
-		// loop: false,
-		// muted: true,
-	};
+	const { wrapper, videoWrapper, video, buttonBase } = styles();
 
-	if (!props.video) {
-		return;
-	}
+	const muxUiStyle: CSSProperties = {
+		'--center-controls': 'none',
+		'--play-button': 'none',
+	} as CSSProperties;
 
 	return (
-		<div className={cn('h-full relative', props.className)} data-component='VideoPlayer' data-mode='dark'>
+		<div className={cn(wrapper(), props.className)} data-component='VideoPlayer' data-mode='dark'>
 			<div className={videoWrapper()}>
-				<MuxPlayer className={video()} {...videoSettings} playbackId={props.video} />
+				<MuxPlayer className={video()} playbackId={props.video} paused={!videoPlaying} style={muxUiStyle} />
 			</div>
-			<button aria-label={playButtonText} className={playButton()} onClick={() => setVideoPlaying(!videoPlaying)}>
+
+			<button
+				aria-label={playButtonText}
+				onClick={() => setVideoPlaying(!videoPlaying)}
+				className={cn(buttonBase(), videoPlaying ? 'opacity-0 group-hover:opacity-100' : 'opacity-100')}
+			>
 				{videoPlaying ? <IconResolver icon='pause' /> : <IconResolver icon='play' />}
 			</button>
 		</div>

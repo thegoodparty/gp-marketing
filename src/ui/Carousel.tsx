@@ -27,7 +27,7 @@ const styles = tv({
 });
 
 export type CarouselProps = {
-	header: HeaderBlockProps;
+	header?: HeaderBlockProps;
 	backgroundColor?: 'cream' | 'midnight';
 	cards: TestimonialImageCardProps[];
 	options?: EmblaOptionsType;
@@ -57,7 +57,7 @@ export function Carousel(props: CarouselProps) {
 	return (
 		<div className={base()}>
 			<Container ref={containerRef} size='xl' className='flex flex-col md:flex-row gap-[2rem] justify-between'>
-				<HeaderBlock {...props.header} backgroundColor={backgroundColor} />
+				{props.header && <HeaderBlock {...props.header} backgroundColor={backgroundColor} />}
 				<div className={cn(text(), 'flex gap-4 items-end justify-end')}>
 					<PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} backgroundColor={backgroundColor} />
 					<NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} backgroundColor={backgroundColor} />

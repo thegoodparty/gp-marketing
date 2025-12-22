@@ -5,6 +5,7 @@ import { transformButtons } from '~/lib/buttonTransformer';
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { resolveColumnLayout } from '~/ui/_lib/resolveColumnLayout';
 import { resolveTeams } from '~/ui/_lib/resolveTeams';
+import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 
 import { RichData } from '~/ui/RichData';
 import { TeamBlock } from '~/ui/TeamBlock';
@@ -25,6 +26,7 @@ export function TeamBlockSection(section: Extract<Sections, { _type: 'component_
 					copy: <RichData value={section.summaryInfo?.block_summaryText} />,
 					caption: section.summaryInfo?.field_caption,
 					buttons: transformButtons(section.summaryInfo?.list_buttons),
+					textSize: resolveTextSize(section.summaryInfo?.field_textSize),
 				}}
 				items={resolveTeams(section.people?.list_people)}
 				columns={resolveColumnLayout(stegaClean(section.teamBlockDesignSettings?.field_columnLayout34Columns))}

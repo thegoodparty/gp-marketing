@@ -57,7 +57,7 @@ export default async function Page(props: any) {
 		<>
 			<BlogArticleHero
 				title={page.editorialOverview?.field_editorialTitle}
-				tagline={page.editorialContentTags?.category?.tagOverview?.field_name}
+				tagline={{ label: page.editorialContentTags?.category?.tagOverview?.field_name, href: page.editorialContentTags?.category?.href }}
 				author={{
 					name: page.editorialOverview?.ref_author?.personOverview?.field_personName,
 					image: page.editorialOverview?.ref_author?.personOverview?.img_profilePicture as unknown as SanityImage,

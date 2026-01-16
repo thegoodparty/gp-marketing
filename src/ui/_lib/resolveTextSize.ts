@@ -1,3 +1,5 @@
+import { stegaClean } from 'next-sanity';
+
 import type { Field_textSize } from 'sanity.types';
 
 export const TEXT_SIZE_MAP = {
@@ -20,5 +22,5 @@ export type HeadingStyle = ResolvedTextSize['heading'];
 export type BodyStyle = ResolvedTextSize['body'];
 
 export function resolveTextSize(textSize?: Field_textSize): ResolvedTextSize {
-	return TEXT_SIZE_MAP[textSize ?? 'Medium'];
+	return TEXT_SIZE_MAP[stegaClean(textSize) ?? 'Medium'];
 }

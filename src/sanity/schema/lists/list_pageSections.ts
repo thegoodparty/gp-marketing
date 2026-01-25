@@ -239,5 +239,9 @@ export const list_pageSections = {
       title: 'Blog Topic Tags Block',
       type: 'component_blogTopicTagsBlock',
     },
+    {
+      title: 'Featured Cities Block',
+      type: 'component_featuredCitiesBlock',
+    },
   ],
 }

@@ -141,7 +141,9 @@ export const component_ctaCardsBlock = `_type=="component_ctaCardsBlock"=>{...,c
 /*language=textmate*/
 export const component_blogTopicTagsBlock = `_type=="component_blogTopicTagsBlock"=>{...,"topics":*[_type=="topics"][]{_id,_type,tagOverview,${topicsHrefGroq}}}`;
 /*language=textmate*/
-export const sectionsGroq = `_key,_type,${component_pricingBlockGroq},${component_heroGroq},${component_comparisonBlock},${component_stepperBlockGroq},${component_iconContentBlock},${component_imageContentBlock},${component_statsBlock},${component_tabbedImageBlock},${component_featuresBlock},${component_twoUpCardBlock},${component_carouselBlock},${component_testimonialBlock},${component_faqBlock},${component_blogBlock},${component_bannerBlock},${component_teamBlock},${component_featuredBlogBlock},${component_allCtaBlocks},${component_ctaBannerBlock},${component_heroWithSubscribe},${component_newsletterBlock},${component_ctaCardsBlock},${component_blogTopicTagsBlock}`;
+export const component_featuredCitiesBlock = `_type=="component_featuredCitiesBlock"=>{...,featuredCitiesBlockHeader{${summaryInfoGroq}}}`;
+/*language=textmate*/
+export const sectionsGroq = `_key,_type,${component_pricingBlockGroq},${component_heroGroq},${component_comparisonBlock},${component_stepperBlockGroq},${component_iconContentBlock},${component_imageContentBlock},${component_statsBlock},${component_tabbedImageBlock},${component_featuresBlock},${component_twoUpCardBlock},${component_carouselBlock},${component_testimonialBlock},${component_faqBlock},${component_blogBlock},${component_bannerBlock},${component_teamBlock},${component_featuredBlogBlock},${component_allCtaBlocks},${component_ctaBannerBlock},${component_heroWithSubscribe},${component_newsletterBlock},${component_ctaCardsBlock},${component_blogTopicTagsBlock},${component_featuredCitiesBlock}`;
 /*language=textmate*/
 export const allCategoriesLinksGroq = `*[_type=="categories"][]{_id,"title":tagOverview.field_name,${categoriesHrefGroq}}`;
 /*language=textmate*/

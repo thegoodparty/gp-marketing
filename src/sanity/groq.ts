@@ -143,7 +143,9 @@ export const component_blogTopicTagsBlock = `_type=="component_blogTopicTagsBloc
 /*language=textmate*/
 export const component_featuredCitiesBlock = `_type=="component_featuredCitiesBlock"=>{...,featuredCitiesBlockHeader{${summaryInfoGroq}}}`;
 /*language=textmate*/
-export const sectionsGroq = `_key,_type,${component_pricingBlockGroq},${component_heroGroq},${component_comparisonBlock},${component_stepperBlockGroq},${component_iconContentBlock},${component_imageContentBlock},${component_statsBlock},${component_tabbedImageBlock},${component_featuresBlock},${component_twoUpCardBlock},${component_carouselBlock},${component_testimonialBlock},${component_faqBlock},${component_blogBlock},${component_bannerBlock},${component_teamBlock},${component_featuredBlogBlock},${component_allCtaBlocks},${component_ctaBannerBlock},${component_heroWithSubscribe},${component_newsletterBlock},${component_ctaCardsBlock},${component_blogTopicTagsBlock},${component_featuredCitiesBlock}`;
+export const component_locationFactsBlock = `_type=="component_locationFactsBlock"=>{...,locationFactsBlockHeader{${summaryInfoGroq}}}`;
+/*language=textmate*/
+export const sectionsGroq = `_key,_type,${component_pricingBlockGroq},${component_heroGroq},${component_comparisonBlock},${component_stepperBlockGroq},${component_iconContentBlock},${component_imageContentBlock},${component_statsBlock},${component_tabbedImageBlock},${component_featuresBlock},${component_twoUpCardBlock},${component_carouselBlock},${component_testimonialBlock},${component_faqBlock},${component_blogBlock},${component_bannerBlock},${component_teamBlock},${component_featuredBlogBlock},${component_allCtaBlocks},${component_ctaBannerBlock},${component_heroWithSubscribe},${component_newsletterBlock},${component_ctaCardsBlock},${component_blogTopicTagsBlock},${component_featuredCitiesBlock},${component_locationFactsBlock}`;
 /*language=textmate*/
 export const allCategoriesLinksGroq = `*[_type=="categories"][]{_id,"title":tagOverview.field_name,${categoriesHrefGroq}}`;
 /*language=textmate*/

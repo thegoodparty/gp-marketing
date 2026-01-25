@@ -25,6 +25,7 @@ import { TeamBlockSection } from '~/PageSections/TeamBlockSection';
 import { TestimonialBlockSection } from '~/PageSections/TestimonialBlockSection';
 import { TwoUpCardBlockSection } from '~/PageSections/TwoUpCardBlockSection';
 import { FeaturedCitiesBlockSection } from '~/PageSections/FeaturedCitiesBlockSection';
+import { LocationFactsBlockSection } from '~/PageSections/LocationFactsBlockSection';
 import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
 
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
@@ -186,13 +187,19 @@ export function PageSections(props: Props) {
 								<TwoUpCardBlockSection {...section} />
 							</ComponentErrorBoundary>
 						);
-					case 'component_featuredCitiesBlock':
-						return (
-							<ComponentErrorBoundary key={section._key} componentName='Featured Cities Block'>
-								<FeaturedCitiesBlockSection {...section} />
-							</ComponentErrorBoundary>
-						);
-					default:
+				case 'component_featuredCitiesBlock':
+					return (
+						<ComponentErrorBoundary key={section._key} componentName='Featured Cities Block'>
+							<FeaturedCitiesBlockSection {...section} />
+						</ComponentErrorBoundary>
+					);
+				case 'component_locationFactsBlock':
+					return (
+						<ComponentErrorBoundary key={section._key} componentName='Location Facts Block'>
+							<LocationFactsBlockSection {...section} />
+						</ComponentErrorBoundary>
+					);
+				default:
 						console.warn('unknown section._type', section['_type']);
 						return <Fragment key={`unknown section._type' ${i}`} />;
 				}

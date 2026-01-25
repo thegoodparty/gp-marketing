@@ -243,5 +243,9 @@ export const list_pageSections = {
       title: 'Featured Cities Block',
       type: 'component_featuredCitiesBlock',
     },
+    {
+      title: 'Location Facts Block',
+      type: 'component_locationFactsBlock',
+    },
   ],
 }

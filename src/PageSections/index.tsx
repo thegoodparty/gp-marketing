@@ -3,6 +3,7 @@ import type { GoodpartyOrg_homeQueryResult } from 'sanity.types';
 import { BannerBlockSection } from '~/PageSections/BannerBlockSection';
 import { BlogBlockSection } from '~/PageSections/BlogBlockSection';
 import { BlogTopicTagsBlockSection } from '~/PageSections/BlogTopicTagsBlockSection';
+import { CandidatesBlockSection } from '~/PageSections/CandidatesBlockSection';
 import { CarouselBlockSection } from '~/PageSections/CarouselBlockSection';
 import { ComparisonBlockSection } from '~/PageSections/ComparisonBlockSection';
 import { CTABannerBlockSection } from '~/PageSections/CTABannerBlockSection';
@@ -53,13 +54,19 @@ export function PageSections(props: Props) {
 								<BlogBlockSection {...section} />
 							</ComponentErrorBoundary>
 						);
-					case 'component_blogTopicTagsBlock':
-						return (
-							<ComponentErrorBoundary key={section._key} componentName='Blog Topic Tags Block'>
-								<BlogTopicTagsBlockSection {...section} />
-							</ComponentErrorBoundary>
-						);
-					case 'component_carouselBlock':
+				case 'component_blogTopicTagsBlock':
+					return (
+						<ComponentErrorBoundary key={section._key} componentName='Blog Topic Tags Block'>
+							<BlogTopicTagsBlockSection {...section} />
+						</ComponentErrorBoundary>
+					);
+				case 'component_candidatesBlock':
+					return (
+						<ComponentErrorBoundary key={section._key} componentName='Candidates Block'>
+							<CandidatesBlockSection {...section} />
+						</ComponentErrorBoundary>
+					);
+				case 'component_carouselBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Carousel Block'>
 								<CarouselBlockSection {...section} />

@@ -84,6 +84,7 @@ export const list_pageSections = {
             'component_testimonialBlock',
             'component_faqBlock',
             'component_blogBlock',
+            'component_candidatesBlock',
           ],
         },
         {
@@ -238,6 +239,10 @@ export const list_pageSections = {
     {
       title: 'Blog Topic Tags Block',
       type: 'component_blogTopicTagsBlock',
+    },
+    {
+      title: 'Candidates Block',
+      type: 'component_candidatesBlock',
     },
   ],
 }

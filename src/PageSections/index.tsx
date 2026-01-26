@@ -4,6 +4,7 @@ import { BannerBlockSection } from '~/PageSections/BannerBlockSection';
 import { BlogBlockSection } from '~/PageSections/BlogBlockSection';
 import { BlogTopicTagsBlockSection } from '~/PageSections/BlogTopicTagsBlockSection';
 import { CarouselBlockSection } from '~/PageSections/CarouselBlockSection';
+import { ClaimProfileBlockSection } from '~/PageSections/ClaimProfileBlockSection';
 import { ComparisonBlockSection } from '~/PageSections/ComparisonBlockSection';
 import { CTABannerBlockSection } from '~/PageSections/CTABannerBlockSection';
 import { CTABlockSection } from '~/PageSections/CTABlockSection';
@@ -59,13 +60,19 @@ export function PageSections(props: Props) {
 								<BlogTopicTagsBlockSection {...section} />
 							</ComponentErrorBoundary>
 						);
-					case 'component_carouselBlock':
-						return (
-							<ComponentErrorBoundary key={section._key} componentName='Carousel Block'>
-								<CarouselBlockSection {...section} />
-							</ComponentErrorBoundary>
-						);
-					case 'component_comparisonBlock':
+				case 'component_carouselBlock':
+					return (
+						<ComponentErrorBoundary key={section._key} componentName='Carousel Block'>
+							<CarouselBlockSection {...section} />
+						</ComponentErrorBoundary>
+					);
+				case 'component_claimProfileBlock':
+					return (
+						<ComponentErrorBoundary key={section._key} componentName='Claim Profile Block'>
+							<ClaimProfileBlockSection {...section} />
+						</ComponentErrorBoundary>
+					);
+				case 'component_comparisonBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Comparison Block'>
 								<ComparisonBlockSection {...section} />

@@ -127,6 +127,7 @@ export const list_pageSections = {
             'component_ctaImageBlock',
             'component_ctaCardsBlock',
             'component_newsletterBlock',
+            'component_claimProfileBlock',
           ],
         },
         {
@@ -238,6 +239,10 @@ export const list_pageSections = {
     {
       title: 'Blog Topic Tags Block',
       type: 'component_blogTopicTagsBlock',
+    },
+    {
+      title: 'Claim Profile Block',
+      type: 'component_claimProfileBlock',
     },
   ],
 }

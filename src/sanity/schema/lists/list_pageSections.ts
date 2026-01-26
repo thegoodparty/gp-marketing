@@ -24,6 +24,7 @@ export const list_pageSections = {
           of: [
             'component_hero',
             'component_heroWithSubscribe',
+            'component_electionsPositionHero',
           ],
         },
         {
@@ -238,6 +239,10 @@ export const list_pageSections = {
     {
       title: 'Blog Topic Tags Block',
       type: 'component_blogTopicTagsBlock',
+    },
+    {
+      title: 'Elections Position Hero',
+      type: 'component_electionsPositionHero',
     },
   ],
 }

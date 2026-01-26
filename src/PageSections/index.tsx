@@ -14,6 +14,7 @@ import { FeaturedBlogBlockSection } from '~/PageSections/FeaturedBlogBlockSectio
 import { FeaturesBlockSection } from '~/PageSections/FeaturesBlockSection';
 import { HeroBlockSection } from '~/PageSections/HeroBlockSection';
 import { HeroWithSubscribeBlockSection } from '~/PageSections/HeroWithSubscribeBlockSection';
+import { ProfileHeroSection } from '~/PageSections/ProfileHeroSection';
 import { IconContentBlockSection } from '~/PageSections/IconContentBlockSection';
 import { ImageContentBlockSection } from '~/PageSections/ImageContentBlockSection';
 import { NewsletterBlockSection } from '~/PageSections/NewsletterBlockSection';
@@ -119,13 +120,19 @@ export function PageSections(props: Props) {
 								<HeroBlockSection {...section} />
 							</ComponentErrorBoundary>
 						);
-					case 'component_heroWithSubscribe':
-						return (
-							<ComponentErrorBoundary key={section._key} componentName='Hero With Subscribe Block'>
-								<HeroWithSubscribeBlockSection {...section} />
-							</ComponentErrorBoundary>
-						);
-					case 'component_iconContentBlock':
+				case 'component_heroWithSubscribe':
+					return (
+						<ComponentErrorBoundary key={section._key} componentName='Hero With Subscribe Block'>
+							<HeroWithSubscribeBlockSection {...section} />
+						</ComponentErrorBoundary>
+					);
+				case 'component_profileHero':
+					return (
+						<ComponentErrorBoundary key={section._key} componentName='Profile Hero'>
+							<ProfileHeroSection {...section} />
+						</ComponentErrorBoundary>
+					);
+				case 'component_iconContentBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Icon Content Block'>
 								<IconContentBlockSection {...section} />

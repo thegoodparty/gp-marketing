@@ -24,6 +24,7 @@ export const list_pageSections = {
           of: [
             'component_hero',
             'component_heroWithSubscribe',
+            'component_profileHero',
           ],
         },
         {
@@ -150,6 +151,10 @@ export const list_pageSections = {
     {
       title: 'Hero With Subscribe',
       type: 'component_heroWithSubscribe',
+    },
+    {
+      title: 'Profile Hero',
+      type: 'component_profileHero',
     },
     {
       title: 'Banner Block',

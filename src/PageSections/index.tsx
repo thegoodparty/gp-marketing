@@ -16,6 +16,7 @@ import { HeroBlockSection } from '~/PageSections/HeroBlockSection';
 import { HeroWithSubscribeBlockSection } from '~/PageSections/HeroWithSubscribeBlockSection';
 import { IconContentBlockSection } from '~/PageSections/IconContentBlockSection';
 import { ImageContentBlockSection } from '~/PageSections/ImageContentBlockSection';
+import { LocationLandingPageHeroSection } from '~/PageSections/LocationLandingPageHeroSection';
 import { NewsletterBlockSection } from '~/PageSections/NewsletterBlockSection';
 import { PricingBlockSection } from '~/PageSections/PricingBlockSection';
 import { StatsBlockSection } from '~/PageSections/StatsBlockSection';
@@ -183,6 +184,12 @@ export function PageSections(props: Props) {
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Two Up Card Block'>
 								<TwoUpCardBlockSection {...section} />
+							</ComponentErrorBoundary>
+						);
+					case 'component_locationLandingPageHero':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Location Landing Page Hero'>
+								<LocationLandingPageHeroSection {...section} />
 							</ComponentErrorBoundary>
 						);
 					default:

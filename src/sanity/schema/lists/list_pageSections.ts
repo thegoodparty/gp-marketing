@@ -94,6 +94,7 @@ export const list_pageSections = {
             'component_iconContentBlock',
             'component_imageContentBlock',
             'component_featuresBlock',
+            'component_electionsIndexBlock',
           ],
         },
         {
@@ -238,6 +239,10 @@ export const list_pageSections = {
     {
       title: 'Blog Topic Tags Block',
       type: 'component_blogTopicTagsBlock',
+    },
+    {
+      title: 'Elections Index Block',
+      type: 'component_electionsIndexBlock',
     },
   ],
 }

@@ -6,6 +6,7 @@ import { BlogTopicTagsBlockSection } from '~/PageSections/BlogTopicTagsBlockSect
 import { BreadcrumbBlockSection } from '~/PageSections/BreadcrumbBlockSection';
 import { CandidatesBlockSection } from '~/PageSections/CandidatesBlockSection';
 import { CarouselBlockSection } from '~/PageSections/CarouselBlockSection';
+import { ClaimProfileBlockSection } from '~/PageSections/ClaimProfileBlockSection';
 import { ComparisonBlockSection } from '~/PageSections/ComparisonBlockSection';
 import { CTABannerBlockSection } from '~/PageSections/CTABannerBlockSection';
 import { CTABlockSection } from '~/PageSections/CTABlockSection';
@@ -79,6 +80,12 @@ export function PageSections(props: Props) {
 								<CarouselBlockSection {...section} />
 							</ComponentErrorBoundary>
 						);
+				case 'component_claimProfileBlock':
+					return (
+						<ComponentErrorBoundary key={section._key} componentName='Claim Profile Block'>
+							<ClaimProfileBlockSection {...section} />
+						</ComponentErrorBoundary>
+					);
 					case 'component_comparisonBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Comparison Block'>

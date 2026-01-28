@@ -128,6 +128,7 @@ export const list_pageSections = {
             'component_ctaImageBlock',
             'component_ctaCardsBlock',
             'component_newsletterBlock',
+            'component_claimProfileBlock',
           ],
         },
         {
@@ -247,6 +248,10 @@ export const list_pageSections = {
     {
       title: 'Candidates Block',
       type: 'component_candidatesBlock',
+    },
+    {
+      title: 'Claim Profile Block',
+      type: 'component_claimProfileBlock',
     },
   ],
 }

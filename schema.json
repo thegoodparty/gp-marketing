@@ -2924,6 +2924,7 @@
               "type": "inline",
               "name": "component_breadcrumbBlock"
               "name": "component_candidatesBlock"
+              "name": "component_claimProfileBlock"
             }
           }
         ]
@@ -4823,6 +4824,7 @@
   },
   {
     "name": "component_candidatesBlock",
+    "name": "component_claimProfileBlock",
     "type": "type",
     "value": {
       "type": "object",
@@ -4843,6 +4845,10 @@
           "optional": true
         },
         "candidatesBlockFilterSettings": {
+            "value": "component_claimProfileBlock"
+          }
+        },
+        "claimProfileBlockContent": {
           "type": "objectAttribute",
           "value": {
             "type": "object",
@@ -4851,6 +4857,54 @@
                 "type": "objectAttribute",
                 "value": {
                   "type": "boolean"
+              "field_headline": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_body": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "exampleCard": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "object",
+                  "attributes": {
+                    "field_name": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "string"
+                      },
+                      "optional": true
+                    },
+                    "field_partyAffiliation": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "string"
+                      },
+                      "optional": true
+                    },
+                    "field_secondaryText": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "string"
+                      },
+                      "optional": true
+                    },
+                    "field_showBadge": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "boolean"
+                      },
+                      "optional": true
+                    }
+                  }
                 },
                 "optional": true
               }
@@ -4859,6 +4913,7 @@
           "optional": true
         },
         "candidatesBlockOptionalButton": {
+        "ctaAction": {
           "type": "objectAttribute",
           "value": {
             "type": "inline",
@@ -4867,6 +4922,7 @@
           "optional": true
         },
         "candidatesBlockDesignSettings": {
+        "claimProfileBlockDesignSettings": {
           "type": "objectAttribute",
           "value": {
             "type": "object",

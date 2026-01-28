@@ -1,6 +1,7 @@
 import {list_footerLegalNavigation} from './list_footerLegalNavigation.ts'
 import {list_faQs} from './list_faQs.ts'
 import {list_topics} from './list_topics.ts'
+import {list_pledgeCards} from './list_pledgeCards.ts'
 import {list_featureBlockFeatures} from './list_featureBlockFeatures.ts'
 import {list_navigationGroups} from './list_navigationGroups.ts'
 import {list_stepperBlockItems} from './list_stepperBlockItems.ts'
@@ -33,6 +34,7 @@ export const listSchema = [
 list_footerLegalNavigation,
 list_faQs,
 list_topics,
+list_pledgeCards,
 list_featureBlockFeatures,
 list_navigationGroups,
 list_stepperBlockItems,

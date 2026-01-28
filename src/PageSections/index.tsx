@@ -24,6 +24,7 @@ import { TabbedImageBlockSection } from '~/PageSections/TabbedImageBlockSection'
 import { TeamBlockSection } from '~/PageSections/TeamBlockSection';
 import { TestimonialBlockSection } from '~/PageSections/TestimonialBlockSection';
 import { TwoUpCardBlockSection } from '~/PageSections/TwoUpCardBlockSection';
+import { GoodPartyOrgPledgeSection } from '~/PageSections/GoodPartyOrgPledgeSection';
 import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
 
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
@@ -183,6 +184,12 @@ export function PageSections(props: Props) {
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Two Up Card Block'>
 								<TwoUpCardBlockSection {...section} />
+							</ComponentErrorBoundary>
+						);
+					case 'component_goodPartyOrgPledge':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='GoodParty.org Pledge'>
+								<GoodPartyOrgPledgeSection {...section} />
 							</ComponentErrorBoundary>
 						);
 					default:

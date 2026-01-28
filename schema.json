@@ -2909,6 +2909,21 @@
               "type": "inline",
               "name": "component_blogTopicTagsBlock"
             }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_goodPartyOrgPledge"
+            }
           }
         ]
       }
@@ -3392,6 +3407,28 @@
         "rest": {
           "type": "inline",
           "name": "featureBlockItem"
+        }
+      }
+    }
+  },
+  {
+    "name": "list_pledgeCards",
+    "type": "type",
+    "value": {
+      "type": "array",
+      "of": {
+        "type": "object",
+        "attributes": {
+          "_key": {
+            "type": "objectAttribute",
+            "value": {
+              "type": "string"
+            }
+          }
+        },
+        "rest": {
+          "type": "inline",
+          "name": "pledgeCardItem"
         }
       }
     }
@@ -4801,6 +4838,54 @@
               }
             }
           }
+        }
+      }
+    }
+  },
+  {
+    "name": "component_goodPartyOrgPledge",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_goodPartyOrgPledge"
+          }
+        },
+        "summaryInfo": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "summaryInfo"
+          },
+          "optional": true
+        },
+        "goodPartyOrgPledgeItems": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "goodPartyOrgPledgeItems"
+          },
+          "optional": true
+        },
+        "goodPartyOrgPledgeDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "goodPartyOrgPledgeDesignSettings"
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
         }
       }
     }
@@ -10848,6 +10933,110 @@
           "value": {
             "type": "inline",
             "name": "twoUpCardBlockCardImage"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "pledgeCardItem",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "pledgeCardItem"
+          }
+        },
+        "field_icon": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_icon"
+          },
+          "optional": true
+        },
+        "field_title": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_title"
+          },
+          "optional": true
+        },
+        "block_summaryText": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "block_summaryText"
+          },
+          "optional": true
+        },
+        "ctaActionWithShared": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "ctaActionWithShared"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "goodPartyOrgPledgeItems",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "goodPartyOrgPledgeItems"
+          }
+        },
+        "list_pledgeCards": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "list_pledgeCards"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "goodPartyOrgPledgeDesignSettings",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "goodPartyOrgPledgeDesignSettings"
+          }
+        },
+        "field_iconColor6ColorsWhiteMixed": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_iconColor6ColorsWhiteMixed"
+          },
+          "optional": true
+        },
+        "field_blockColorCreamMidnight": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_blockColorCreamMidnight"
           },
           "optional": true
         }

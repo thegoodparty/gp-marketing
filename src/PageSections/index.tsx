@@ -19,6 +19,7 @@ import { HeroBlockSection } from '~/PageSections/HeroBlockSection';
 import { HeroWithSubscribeBlockSection } from '~/PageSections/HeroWithSubscribeBlockSection';
 import { IconContentBlockSection } from '~/PageSections/IconContentBlockSection';
 import { ImageContentBlockSection } from '~/PageSections/ImageContentBlockSection';
+import { LocationLandingPageHeroSection } from '~/PageSections/LocationLandingPageHeroSection';
 import { NewsletterBlockSection } from '~/PageSections/NewsletterBlockSection';
 import { PricingBlockSection } from '~/PageSections/PricingBlockSection';
 import { StatsBlockSection } from '~/PageSections/StatsBlockSection';
@@ -242,6 +243,10 @@ case 'component_twoUpCardBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='GoodParty.org Pledge'>
 								<GoodPartyOrgPledgeSection {...section} />
+					case 'component_locationLandingPageHero':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Location Landing Page Hero'>
+								<LocationLandingPageHeroSection {...section} />
 							</ComponentErrorBoundary>
 						);
 					default:

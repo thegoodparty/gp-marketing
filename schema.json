@@ -2592,6 +2592,21 @@
             },
             "rest": {
               "type": "inline",
+              "name": "component_locationLandingPageHero"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
               "name": "component_bannerBlock"
             }
           },
@@ -4853,6 +4868,7 @@
     "name": "component_electionsIndexBlock",
     "name": "component_electionsPositionHero",
     "name": "component_goodPartyOrgPledge",
+    "name": "component_locationLandingPageHero",
     "type": "type",
     "value": {
       "type": "object",
@@ -4885,6 +4901,10 @@
           }
         },
         "claimProfileBlockContent": {
+            "value": "component_locationLandingPageHero"
+          }
+        },
+        "locationLandingPageHeroContent": {
           "type": "objectAttribute",
           "value": {
             "type": "object",
@@ -4894,6 +4914,7 @@
                 "value": {
                   "type": "boolean"
               "field_headline": {
+              "field_bodyCopy": {
                 "type": "objectAttribute",
                 "value": {
                   "type": "string"
@@ -4901,6 +4922,7 @@
                 "optional": true
               },
               "field_body": {
+              "field_searchPlaceholder": {
                 "type": "objectAttribute",
                 "value": {
                   "type": "string"
@@ -4963,6 +4985,7 @@
         "candidatesBlockDesignSettings": {
         "claimProfileBlockDesignSettings": {
         "electionsIndexBlockDesignSettings": {
+        "locationLandingPageHeroDesignSettings": {
           "type": "objectAttribute",
           "value": {
             "type": "object",
@@ -5031,6 +5054,8 @@
           "value": {
             "type": "inline",
             "name": "goodPartyOrgPledgeDesignSettings"
+              }
+            }
           },
           "optional": true
         },

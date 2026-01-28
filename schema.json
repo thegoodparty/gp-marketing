@@ -2925,6 +2925,7 @@
               "name": "component_breadcrumbBlock"
               "name": "component_candidatesBlock"
               "name": "component_claimProfileBlock"
+              "name": "component_electionsIndexBlock"
             }
           }
         ]
@@ -4825,6 +4826,7 @@
   {
     "name": "component_candidatesBlock",
     "name": "component_claimProfileBlock",
+    "name": "component_electionsIndexBlock",
     "type": "type",
     "value": {
       "type": "object",
@@ -4837,6 +4839,10 @@
           }
         },
         "candidatesBlockHeader": {
+            "value": "component_electionsIndexBlock"
+          }
+        },
+        "electionsIndexBlockHeader": {
           "type": "objectAttribute",
           "value": {
             "type": "inline",
@@ -4923,6 +4929,7 @@
         },
         "candidatesBlockDesignSettings": {
         "claimProfileBlockDesignSettings": {
+        "electionsIndexBlockDesignSettings": {
           "type": "objectAttribute",
           "value": {
             "type": "object",
@@ -4941,6 +4948,34 @@
                       "value": "midnight"
                     }
                   ]
+                },
+                "optional": true
+              },
+              "field_showSearch": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "boolean"
+                },
+                "optional": true
+              },
+              "field_searchPlaceholder": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_initialDisplayCount": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "number"
+                },
+                "optional": true
+              },
+              "field_ctaLabel": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
                 },
                 "optional": true
               }

@@ -95,6 +95,7 @@ export const list_pageSections = {
             'component_iconContentBlock',
             'component_imageContentBlock',
             'component_featuresBlock',
+            'component_electionsIndexBlock',
           ],
         },
         {
@@ -252,6 +253,8 @@ export const list_pageSections = {
     {
       title: 'Claim Profile Block',
       type: 'component_claimProfileBlock',
+      title: 'Elections Index Block',
+      type: 'component_electionsIndexBlock',
     },
   ],
 }

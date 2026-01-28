@@ -266,5 +266,9 @@ export const list_pageSections = {
       title: 'GoodParty.org Pledge',
       type: 'component_goodPartyOrgPledge',
     },
+    {
+      title: 'Location Facts Block',
+      type: 'component_locationFactsBlock',
+    },
   ],
 }

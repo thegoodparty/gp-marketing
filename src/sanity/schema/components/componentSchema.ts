@@ -29,6 +29,7 @@ import {component_electionsIndexBlock} from './component_electionsIndexBlock.ts'
 import {component_electionsPositionHero} from './component_electionsPositionHero.ts'
 import {component_electionsSearchHero} from './component_electionsSearchHero.ts'
 import {component_featuredCitiesBlock} from './component_featuredCitiesBlock.ts'
+import {component_goodPartyOrgPledge} from './component_goodPartyOrgPledge.ts'
 
 export const componentSchema = [
 component_featuresBlock,
@@ -62,4 +63,5 @@ component_electionsIndexBlock
 component_electionsPositionHero
 component_electionsSearchHero
 component_featuredCitiesBlock
+component_goodPartyOrgPledge
 ];

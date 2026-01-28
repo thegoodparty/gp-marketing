@@ -31,6 +31,7 @@ import { ElectionsIndexBlockSection } from '~/PageSections/ElectionsIndexBlockSe
 import { ElectionsPositionHeroSection } from '~/PageSections/ElectionsPositionHeroSection';
 import { ElectionsSearchHeroSection } from '~/PageSections/ElectionsSearchHeroSection';
 import { FeaturedCitiesBlockSection } from '~/PageSections/FeaturedCitiesBlockSection';
+import { GoodPartyOrgPledgeSection } from '~/PageSections/GoodPartyOrgPledgeSection';
 import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
 
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
@@ -236,6 +237,10 @@ case 'component_twoUpCardBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Featured Cities Block'>
 								<FeaturedCitiesBlockSection {...section} />
+					case 'component_goodPartyOrgPledge':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='GoodParty.org Pledge'>
+								<GoodPartyOrgPledgeSection {...section} />
 							</ComponentErrorBoundary>
 						);
 					default:

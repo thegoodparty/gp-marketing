@@ -263,6 +263,8 @@ export const list_pageSections = {
       type: 'component_electionsSearchHero',
       title: 'Featured Cities Block',
       type: 'component_featuredCitiesBlock',
+      title: 'GoodParty.org Pledge',
+      type: 'component_goodPartyOrgPledge',
     },
   ],
 }

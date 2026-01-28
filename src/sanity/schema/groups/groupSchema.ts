@@ -1,6 +1,9 @@
 import { pricingPlanDesignSettings } from './pricingPlanDesignSettings.ts';
 import { stepperBlockItem } from './stepperBlockItem.ts';
 import { twoUpCardBlockOne } from './twoUpCardBlockOne.ts';
+import { goodPartyOrgPledgeDesignSettings } from './goodPartyOrgPledgeDesignSettings.ts';
+import { goodPartyOrgPledgeItems } from './goodPartyOrgPledgeItems.ts';
+import { pledgeCardItem } from './pledgeCardItem.ts';
 import { faQsContentCollection } from './faQsContentCollection.ts';
 import { faqs } from './faqs.ts';
 import { featureAssets } from './featureAssets.ts';
@@ -143,6 +146,9 @@ export const groupSchema = [
 	twoUpCardBlockCardImage,
 	pricingPlanDesignSettings,
 	stepperBlockItem,
+	goodPartyOrgPledgeDesignSettings,
+	goodPartyOrgPledgeItems,
+	pledgeCardItem,
 	twoUpCardBlockOne,
 	faQsContentCollection,
 	faqs,

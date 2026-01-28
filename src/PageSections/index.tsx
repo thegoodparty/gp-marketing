@@ -3,6 +3,7 @@ import type { GoodpartyOrg_homeQueryResult } from 'sanity.types';
 import { BannerBlockSection } from '~/PageSections/BannerBlockSection';
 import { BlogBlockSection } from '~/PageSections/BlogBlockSection';
 import { BlogTopicTagsBlockSection } from '~/PageSections/BlogTopicTagsBlockSection';
+import { BreadcrumbBlockSection } from '~/PageSections/BreadcrumbBlockSection';
 import { CarouselBlockSection } from '~/PageSections/CarouselBlockSection';
 import { ComparisonBlockSection } from '~/PageSections/ComparisonBlockSection';
 import { CTABannerBlockSection } from '~/PageSections/CTABannerBlockSection';
@@ -45,6 +46,12 @@ export function PageSections(props: Props) {
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Banner Block'>
 								<BannerBlockSection {...section} />
+							</ComponentErrorBoundary>
+						);
+					case 'component_breadcrumbBlock':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Breadcrumb Block'>
+								<BreadcrumbBlockSection {...section} />
 							</ComponentErrorBoundary>
 						);
 					case 'component_blogBlock':

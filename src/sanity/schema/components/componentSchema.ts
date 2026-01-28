@@ -28,6 +28,7 @@ import {component_claimProfileBlock} from './component_claimProfileBlock.ts'
 import {component_electionsIndexBlock} from './component_electionsIndexBlock.ts'
 import {component_electionsPositionHero} from './component_electionsPositionHero.ts'
 import {component_electionsSearchHero} from './component_electionsSearchHero.ts'
+import {component_featuredCitiesBlock} from './component_featuredCitiesBlock.ts'
 
 export const componentSchema = [
 component_featuresBlock,
@@ -60,4 +61,5 @@ component_claimProfileBlock
 component_electionsIndexBlock
 component_electionsPositionHero
 component_electionsSearchHero
+component_featuredCitiesBlock
 ];

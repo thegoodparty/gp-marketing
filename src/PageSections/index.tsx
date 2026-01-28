@@ -30,6 +30,7 @@ import { TwoUpCardBlockSection } from '~/PageSections/TwoUpCardBlockSection';
 import { ElectionsIndexBlockSection } from '~/PageSections/ElectionsIndexBlockSection';
 import { ElectionsPositionHeroSection } from '~/PageSections/ElectionsPositionHeroSection';
 import { ElectionsSearchHeroSection } from '~/PageSections/ElectionsSearchHeroSection';
+import { FeaturedCitiesBlockSection } from '~/PageSections/FeaturedCitiesBlockSection';
 import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
 
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
@@ -225,6 +226,19 @@ case 'component_twoUpCardBlock':
 						</ComponentErrorBoundary>
 					);
 				default:
+					case 'component_twoUpCardBlock':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Two Up Card Block'>
+								<TwoUpCardBlockSection {...section} />
+							</ComponentErrorBoundary>
+						);
+					case 'component_featuredCitiesBlock':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Featured Cities Block'>
+								<FeaturedCitiesBlockSection {...section} />
+							</ComponentErrorBoundary>
+						);
+					default:
 						console.warn('unknown section._type', section['_type']);
 						return <Fragment key={`unknown section._type' ${i}`} />;
 				}

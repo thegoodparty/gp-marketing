@@ -1,5 +1,5 @@
 export const primaryButton = {
-	label: 'Primary Button',
+	label: 'Primary CTA',
 	href: '/',
 	buttonProps: {
 		styleType: 'primary' as const,
@@ -8,7 +8,7 @@ export const primaryButton = {
 };
 
 export const secondaryButton = {
-	label: 'Secondary Button',
+	label: 'Secondary CTA',
 	href: '/',
 	buttonProps: {
 		styleType: 'secondary' as const,

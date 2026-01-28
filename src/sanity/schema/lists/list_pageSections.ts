@@ -261,6 +261,8 @@ export const list_pageSections = {
       type: 'component_electionsPositionHero',
       title: 'Elections Search Hero',
       type: 'component_electionsSearchHero',
+      title: 'Featured Cities Block',
+      type: 'component_featuredCitiesBlock',
     },
   ],
 }

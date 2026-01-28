@@ -2593,6 +2593,7 @@
             "rest": {
               "type": "inline",
               "name": "component_locationLandingPageHero"
+              "name": "component_profileHero"
             }
           },
           {
@@ -5408,6 +5409,56 @@
           "value": {
             "type": "inline",
             "name": "blogTopicTagsBlockOverview"
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "component_profileHero",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_profileHero"
+          }
+        },
+        "profileHeroDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_blockColorCreamMidnight": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "Cream"
+                    },
+                    {
+                      "type": "string",
+                      "value": "MidnightDark"
+                    }
+                  ]
+                },
+                "optional": true
+              }
+            }
           },
           "optional": true
         },

@@ -16,6 +16,7 @@ import {component_ctaCardsBlock} from './component_ctaCardsBlock.ts'
 import {component_faqBlock} from './component_faqBlock.ts'
 import {component_carouselBlock} from './component_carouselBlock.ts'
 import {component_hero} from './component_hero.ts'
+import {component_profileHero} from './component_profileHero.ts'
 import {component_blogTopicTagsBlock} from './component_blogTopicTagsBlock.ts'
 import {component_heroWithSubscribe} from './component_heroWithSubscribe.ts'
 import {component_imageContentBlock} from './component_imageContentBlock.ts'
@@ -52,6 +53,7 @@ component_ctaCardsBlock,
 component_faqBlock,
 component_carouselBlock,
 component_hero,
+component_profileHero,
 component_blogTopicTagsBlock,
 component_heroWithSubscribe,
 component_imageContentBlock,

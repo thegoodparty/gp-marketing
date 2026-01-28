@@ -63,6 +63,8 @@ export const component_pricingBlockGroq = `_type=="component_pricingBlock"=>{...
 /*language=textmate*/
 export const component_heroGroq = `_type=="component_hero"=>{...,summaryInfo{${summaryInfoGroq}}}`;
 /*language=textmate*/
+export const component_profileHeroGroq = `_type=="component_profileHero"=>{...}`;
+/*language=textmate*/
 export const component_comparisonBlock = `_type=="component_comparisonBlock"=>{...,summaryInfo{${summaryInfoGroq}},comparisonBlockTableOne{...,list_comparisonBlockTableItems[]{...,block_summaryText[]{...,${textBlockGroq}}}},comparisonBlockTableTwo{...,list_comparisonBlockTableItems[]{...,block_summaryText[]{...,${textBlockGroq}}}}}`;
 /*language=textmate*/
 export const component_stepperBlockGroq = `_type=="component_stepperBlock"=>{...,summaryInfo{${summaryInfoGroq}},stepperBlockItems{...,list_stepperBlockItems[]{...,summaryInfo{${summaryInfoGroq}}}}}`;
@@ -169,6 +171,7 @@ export const sectionsGroq = `_key,_type,${component_pricingBlockGroq},${componen
 export const component_locationLandingPageHero = `_type=="component_locationLandingPageHero"=>{...}`;
 /*language=textmate*/
 export const sectionsGroq = `_key,_type,${component_pricingBlockGroq},${component_heroGroq},${component_comparisonBlock},${component_stepperBlockGroq},${component_iconContentBlock},${component_imageContentBlock},${component_statsBlock},${component_tabbedImageBlock},${component_featuresBlock},${component_twoUpCardBlock},${component_carouselBlock},${component_testimonialBlock},${component_faqBlock},${component_blogBlock},${component_bannerBlock},${component_teamBlock},${component_featuredBlogBlock},${component_allCtaBlocks},${component_ctaBannerBlock},${component_heroWithSubscribe},${component_newsletterBlock},${component_ctaCardsBlock},${component_blogTopicTagsBlock},${component_locationLandingPageHero}`;
+export const sectionsGroq = `_key,_type,${component_pricingBlockGroq},${component_heroGroq},${component_profileHeroGroq},${component_comparisonBlock},${component_stepperBlockGroq},${component_iconContentBlock},${component_imageContentBlock},${component_statsBlock},${component_tabbedImageBlock},${component_featuresBlock},${component_twoUpCardBlock},${component_carouselBlock},${component_testimonialBlock},${component_faqBlock},${component_blogBlock},${component_bannerBlock},${component_teamBlock},${component_featuredBlogBlock},${component_allCtaBlocks},${component_ctaBannerBlock},${component_heroWithSubscribe},${component_newsletterBlock},${component_ctaCardsBlock},${component_blogTopicTagsBlock}`;
 /*language=textmate*/
 export const allCategoriesLinksGroq = `*[_type=="categories"][]{_id,"title":tagOverview.field_name,${categoriesHrefGroq}}`;
 /*language=textmate*/

@@ -27,6 +27,7 @@ export const list_pageSections = {
             'component_electionsPositionHero',
             'component_electionsSearchHero',
             'component_locationLandingPageHero',
+            'component_profileHero',
           ],
         },
         {
@@ -160,6 +161,8 @@ export const list_pageSections = {
     {
       title: 'Location Landing Page Hero',
       type: 'component_locationLandingPageHero',
+      title: 'Profile Hero',
+      type: 'component_profileHero',
     },
     {
       title: 'Banner Block',

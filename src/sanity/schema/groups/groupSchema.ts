@@ -137,6 +137,7 @@ import { glossaryOverview } from './glossaryOverview.ts';
 import { footerNavigationGroup } from './footerNavigationGroup.ts';
 import { footer } from './footer.ts';
 import { twoUpCardBlockCardImage } from './twoUpCardBlockCardImage.ts';
+import { electionsPositionHeroDesignSettings } from './electionsPositionHeroDesignSettings.ts';
 
 export const groupSchema = [
 	twoUpCardBlockCardImage,
@@ -278,4 +279,5 @@ export const groupSchema = [
 	glossaryOverview,
 	footerNavigationGroup,
 	footer,
+	electionsPositionHeroDesignSettings,
 ];

@@ -2926,6 +2926,7 @@
               "name": "component_candidatesBlock"
               "name": "component_claimProfileBlock"
               "name": "component_electionsIndexBlock"
+              "name": "component_electionsPositionHero"
             }
           }
         ]
@@ -4827,6 +4828,7 @@
     "name": "component_candidatesBlock",
     "name": "component_claimProfileBlock",
     "name": "component_electionsIndexBlock",
+    "name": "component_electionsPositionHero",
     "type": "type",
     "value": {
       "type": "object",
@@ -4919,6 +4921,9 @@
           "optional": true
         },
         "candidatesBlockOptionalButton": {
+            "value": "component_electionsPositionHero"
+          }
+        },
         "ctaAction": {
           "type": "objectAttribute",
           "value": {
@@ -4980,6 +4985,11 @@
                 "optional": true
               }
             }
+        "electionsPositionHeroDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "electionsPositionHeroDesignSettings"
           },
           "optional": true
         },
@@ -6222,6 +6232,30 @@
           "value": {
             "type": "inline",
             "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "electionsPositionHeroDesignSettings",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "electionsPositionHeroDesignSettings"
+          }
+        },
+        "field_blockColorCreamMidnight": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_blockColorCreamMidnight"
           },
           "optional": true
         }

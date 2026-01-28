@@ -24,6 +24,7 @@ export const list_pageSections = {
           of: [
             'component_hero',
             'component_heroWithSubscribe',
+            'component_electionsPositionHero',
           ],
         },
         {
@@ -255,6 +256,8 @@ export const list_pageSections = {
       type: 'component_claimProfileBlock',
       title: 'Elections Index Block',
       type: 'component_electionsIndexBlock',
+      title: 'Elections Position Hero',
+      type: 'component_electionsPositionHero',
     },
   ],
 }

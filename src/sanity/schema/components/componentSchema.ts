@@ -26,6 +26,7 @@ import {component_ctaBannerBlock} from './component_ctaBannerBlock.ts'
 import {component_candidatesBlock} from './component_candidatesBlock.ts'
 import {component_claimProfileBlock} from './component_claimProfileBlock.ts'
 import {component_electionsIndexBlock} from './component_electionsIndexBlock.ts'
+import {component_electionsPositionHero} from './component_electionsPositionHero.ts'
 
 export const componentSchema = [
 component_featuresBlock,
@@ -56,4 +57,5 @@ component_ctaBannerBlock,
 component_candidatesBlock
 component_claimProfileBlock
 component_electionsIndexBlock
+component_electionsPositionHero
 ];

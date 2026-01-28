@@ -25,6 +25,7 @@ export const list_pageSections = {
             'component_hero',
             'component_heroWithSubscribe',
             'component_electionsPositionHero',
+            'component_electionsSearchHero',
           ],
         },
         {
@@ -258,6 +259,8 @@ export const list_pageSections = {
       type: 'component_electionsIndexBlock',
       title: 'Elections Position Hero',
       type: 'component_electionsPositionHero',
+      title: 'Elections Search Hero',
+      type: 'component_electionsSearchHero',
     },
   ],
 }

@@ -29,6 +29,7 @@ import { TestimonialBlockSection } from '~/PageSections/TestimonialBlockSection'
 import { TwoUpCardBlockSection } from '~/PageSections/TwoUpCardBlockSection';
 import { ElectionsIndexBlockSection } from '~/PageSections/ElectionsIndexBlockSection';
 import { ElectionsPositionHeroSection } from '~/PageSections/ElectionsPositionHeroSection';
+import { ElectionsSearchHeroSection } from '~/PageSections/ElectionsSearchHeroSection';
 import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
 
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
@@ -217,6 +218,10 @@ case 'component_twoUpCardBlock':
 					return (
 						<ComponentErrorBoundary key={section._key} componentName='Elections Position Hero'>
 							<ElectionsPositionHeroSection {...section} />
+				case 'component_electionsSearchHero':
+					return (
+						<ComponentErrorBoundary key={section._key} componentName='Elections Search Hero'>
+							<ElectionsSearchHeroSection {...section} />
 						</ComponentErrorBoundary>
 					);
 				default:

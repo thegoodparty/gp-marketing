@@ -84,6 +84,7 @@ export const list_pageSections = {
             'component_testimonialBlock',
             'component_faqBlock',
             'component_blogBlock',
+            'component_candidatesBlock',
           ],
         },
         {
@@ -242,6 +243,10 @@ export const list_pageSections = {
     {
       title: 'Breadcrumb Block',
       type: 'component_breadcrumbBlock',
+    },
+    {
+      title: 'Candidates Block',
+      type: 'component_candidatesBlock',
     },
   ],
 }

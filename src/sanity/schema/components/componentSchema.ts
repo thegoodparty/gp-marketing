@@ -23,6 +23,7 @@ import {component_tabbedImageBlock} from './component_tabbedImageBlock.ts'
 import {component_comparisonBlock} from './component_comparisonBlock.ts'
 import {component_teamBlock} from './component_teamBlock.ts'
 import {component_ctaBannerBlock} from './component_ctaBannerBlock.ts'
+import {component_candidatesBlock} from './component_candidatesBlock.ts'
 
 export const componentSchema = [
 component_featuresBlock,
@@ -49,5 +50,6 @@ component_imageContentBlock,
 component_tabbedImageBlock,
 component_comparisonBlock,
 component_teamBlock,
-component_ctaBannerBlock
+component_ctaBannerBlock,
+component_candidatesBlock
 ];

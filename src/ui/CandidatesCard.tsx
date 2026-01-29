@@ -49,8 +49,9 @@ export function CandidatesCard(props: CandidatesCardProps) {
 						<svg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'>
 							<path
 								d='M7 1.16667L8.855 4.91667L13 5.54167L10 8.45833L10.71 12.5833L7 10.6417L3.29 12.5833L4 8.45833L1 5.54167L5.145 4.91667L7 1.16667Z'
-								fill='#EF4444'
-								stroke='#EF4444'
+								fill='currentColor'
+								className='text-goodparty-red'
+								stroke='currentColor'
 								strokeWidth='1.5'
 								strokeLinecap='round'
 								strokeLinejoin='round'

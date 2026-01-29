@@ -7,7 +7,7 @@ import { IconResolver } from './IconResolver.tsx';
 
 const styles = tv({
 	slots: {
-		base: 'flex items-center gap-4 p-4 bg-white rounded-lg border border-black/8 transition-shadow duration-normal hover:shadow-md',
+		base: 'flex items-end justify-between gap-4 p-6 bg-white rounded-xl border border-black/8 transition-shadow duration-normal hover:shadow-md',
 		content: 'flex flex-col gap-1 flex-1 min-w-0',
 		link: 'flex items-center gap-2 text-nowrap shrink-0',
 	},
@@ -37,9 +37,9 @@ export function CandidatesCard1(props: CandidatesCard1Props) {
 	return (
 		<article className={cn(base(), props.className)} data-component='CandidatesCard1'>
 			{props.avatar ? (
-				<Avatar image={props.avatar} size='lg' />
+				<Avatar image={props.avatar} size='xl' />
 			) : (
-				<div className='flex items-center justify-center size-20 rounded-full bg-indigo-100 text-indigo-600 font-bold text-text-xl'>
+				<div className='flex items-center justify-center size-24 rounded-full bg-gray-200 text-gray-700 font-bold text-2xl'>
 					{initials}
 				</div>
 			)}

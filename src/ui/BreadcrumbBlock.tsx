@@ -37,7 +37,7 @@ export function BreadcrumbBlock(props: BreadcrumbBlockProps) {
 	return (
 		<section className={cn(base(), props.className)} data-component='BreadcrumbBlock'>
 			<Container size='xl'>
-				<Breadcrumbs items={props.breadcrumbs} />
+				<Breadcrumbs items={props.breadcrumbs} backgroundColor={backgroundColor} />
 			</Container>
 		</section>
 	);

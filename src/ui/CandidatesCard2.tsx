@@ -7,9 +7,11 @@ import { IconResolver } from './IconResolver.tsx';
 
 const styles = tv({
 	slots: {
-		base: 'flex items-center gap-4 p-4 bg-indigo-50 rounded-lg border-l-4 border-indigo-600 transition-shadow duration-normal hover:shadow-md',
+		base: 'flex items-end justify-between gap-4 p-6 bg-white rounded-xl border border-bright-yellow-600 transition-shadow duration-normal hover:shadow-md',
+		avatarWrapper: 'relative',
+		badge: 'absolute -bottom-1 -right-1 w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-sm',
 		content: 'flex flex-col gap-1 flex-1 min-w-0',
-		empowered: 'text-indigo-600',
+		empowered: 'text-goodparty-blue',
 		link: 'flex items-center gap-2 text-nowrap shrink-0',
 	},
 });
@@ -24,7 +26,7 @@ export type CandidatesCard2Props = {
 };
 
 export function CandidatesCard2(props: CandidatesCard2Props) {
-	const { base, content, empowered, link } = styles();
+	const { base, avatarWrapper, badge, content, empowered, link } = styles();
 
 	// Generate initials from name if no avatar
 	const initials = props.avatar
@@ -38,13 +40,28 @@ export function CandidatesCard2(props: CandidatesCard2Props) {
 
 	return (
 		<article className={cn(base(), props.className)} data-component='CandidatesCard2'>
-			{props.avatar ? (
-				<Avatar image={props.avatar} size='lg' />
-			) : (
-				<div className='flex items-center justify-center size-20 rounded-full bg-indigo-100 text-indigo-600 font-bold text-text-xl'>
-					{initials}
+			<div className={avatarWrapper()}>
+				{props.avatar ? (
+					<Avatar image={props.avatar} size='xl' />
+				) : (
+					<div className='flex items-center justify-center size-24 rounded-full bg-gray-200 text-gray-700 font-bold text-2xl'>
+						{initials}
+					</div>
+				)}
+				<div className={badge()}>
+					<svg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'>
+						<path
+							d='M7 1.16667L8.855 4.91667L13 5.54167L10 8.45833L10.71 12.5833L7 10.6417L3.29 12.5833L4 8.45833L1 5.54167L5.145 4.91667L7 1.16667Z'
+							fill='currentColor'
+							className='text-goodparty-red'
+							stroke='currentColor'
+							strokeWidth='1.5'
+							strokeLinecap='round'
+							strokeLinejoin='round'
+						/>
+					</svg>
 				</div>
-			)}
+			</div>
 
 			<div className={content()}>
 				<Text as='h3' styleType='heading-xs'>

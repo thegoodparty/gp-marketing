@@ -7,8 +7,8 @@ import { IconResolver } from './IconResolver.tsx';
 
 const styles = tv({
 	slots: {
-		base: 'flex items-end justify-between gap-4 p-6 bg-white rounded-xl border border-bright-yellow-600 transition-shadow duration-normal hover:shadow-md',
-		avatarWrapper: 'relative',
+		base: 'flex flex-col gap-4 p-4 bg-white rounded-xl border border-bright-yellow-600 transition-shadow duration-normal hover:shadow-md md:flex-row md:items-end md:justify-between md:p-6',
+		avatarWrapper: 'relative flex-shrink-0 size-24 overflow-visible',
 		badge: 'absolute -bottom-1 -right-1 w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-sm',
 		content: 'flex flex-col gap-1 flex-1 min-w-0',
 		empowered: 'text-goodparty-blue',

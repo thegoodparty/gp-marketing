@@ -7,7 +7,7 @@ import { IconResolver } from './IconResolver.tsx';
 
 const styles = tv({
 	slots: {
-		base: 'flex items-end justify-between gap-4 p-6 bg-white rounded-xl border border-black/8 transition-shadow duration-normal hover:shadow-md',
+		base: 'flex flex-col gap-4 p-4 bg-white rounded-xl border border-black/8 transition-shadow duration-normal hover:shadow-md md:flex-row md:items-end md:justify-between md:p-6',
 		content: 'flex flex-col gap-1 flex-1 min-w-0',
 		link: 'flex items-center gap-2 text-nowrap shrink-0',
 	},

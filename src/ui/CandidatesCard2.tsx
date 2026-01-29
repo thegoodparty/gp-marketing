@@ -4,12 +4,13 @@ import { Avatar } from './Avatar.tsx';
 import { Text } from './Text.tsx';
 import { Anchor } from './Anchor.tsx';
 import { IconResolver } from './IconResolver.tsx';
+import { Logo } from '~/sanity/utils/Logo.tsx';
 
 const styles = tv({
 	slots: {
 		base: 'flex flex-col gap-4 p-4 bg-white rounded-xl border border-bright-yellow-600 transition-shadow duration-normal hover:shadow-md md:flex-row md:items-end md:justify-between md:p-6',
 		avatarWrapper: 'relative flex-shrink-0 size-24 overflow-visible',
-		badge: 'absolute -bottom-1 -right-1 w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-sm',
+		badge: 'absolute left-[65px] bottom-[0px]  flex items-center justify-center',
 		content: 'flex flex-col gap-1 flex-1 min-w-0',
 		empowered: 'text-goodparty-blue',
 		link: 'flex items-center gap-2 text-nowrap shrink-0',
@@ -49,17 +50,7 @@ export function CandidatesCard2(props: CandidatesCard2Props) {
 					</div>
 				)}
 				<div className={badge()}>
-					<svg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'>
-						<path
-							d='M7 1.16667L8.855 4.91667L13 5.54167L10 8.45833L10.71 12.5833L7 10.6417L3.29 12.5833L4 8.45833L1 5.54167L5.145 4.91667L7 1.16667Z'
-							fill='currentColor'
-							className='text-goodparty-red'
-							stroke='currentColor'
-							strokeWidth='1.5'
-							strokeLinecap='round'
-							strokeLinejoin='round'
-						/>
-					</svg>
+					<Logo width={35} height={28} />
 				</div>
 			</div>
 

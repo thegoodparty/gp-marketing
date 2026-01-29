@@ -214,62 +214,55 @@ export function PageSections(props: Props) {
 								<TestimonialBlockSection {...section} />
 							</ComponentErrorBoundary>
 						);
-case 'component_twoUpCardBlock':
-				case 'component_twoUpCardBlock':
-					return (
-						<ComponentErrorBoundary key={section._key} componentName='Two Up Card Block'>
-							<TwoUpCardBlockSection {...section} />
-						</ComponentErrorBoundary>
-					);
-				case 'component_electionsIndexBlock':
-					return (
-						<ComponentErrorBoundary key={section._key} componentName='Elections Index Block'>
-							<ElectionsIndexBlockSection {...section} />
-				case 'component_electionsPositionHero':
-					return (
-						<ComponentErrorBoundary key={section._key} componentName='Elections Position Hero'>
-							<ElectionsPositionHeroSection {...section} />
-				case 'component_electionsSearchHero':
-					return (
-						<ComponentErrorBoundary key={section._key} componentName='Elections Search Hero'>
-							<ElectionsSearchHeroSection {...section} />
-						</ComponentErrorBoundary>
-					);
-				default:
 					case 'component_twoUpCardBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Two Up Card Block'>
 								<TwoUpCardBlockSection {...section} />
 							</ComponentErrorBoundary>
 						);
+					case 'component_electionsIndexBlock':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Elections Index Block'>
+								<ElectionsIndexBlockSection {...section} />
+							</ComponentErrorBoundary>
+						);
+					case 'component_electionsPositionHero':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Elections Position Hero'>
+								<ElectionsPositionHeroSection {...section} />
+							</ComponentErrorBoundary>
+						);
+					case 'component_electionsSearchHero':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Elections Search Hero'>
+								<ElectionsSearchHeroSection {...section} />
+							</ComponentErrorBoundary>
+						);
 					case 'component_featuredCitiesBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Featured Cities Block'>
 								<FeaturedCitiesBlockSection {...section} />
+							</ComponentErrorBoundary>
+						);
 					case 'component_goodPartyOrgPledge':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='GoodParty.org Pledge'>
 								<GoodPartyOrgPledgeSection {...section} />
+							</ComponentErrorBoundary>
+						);
 					case 'component_locationLandingPageHero':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Location Landing Page Hero'>
 								<LocationLandingPageHeroSection {...section} />
 							</ComponentErrorBoundary>
 						);
+					case 'component_locationFactsBlock':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Location Facts Block'>
+								<LocationFactsBlockSection {...section} />
+							</ComponentErrorBoundary>
+						);
 					default:
-				case 'component_featuredCitiesBlock':
-					return (
-						<ComponentErrorBoundary key={section._key} componentName='Featured Cities Block'>
-							<FeaturedCitiesBlockSection {...section} />
-						</ComponentErrorBoundary>
-					);
-				case 'component_locationFactsBlock':
-					return (
-						<ComponentErrorBoundary key={section._key} componentName='Location Facts Block'>
-							<LocationFactsBlockSection {...section} />
-						</ComponentErrorBoundary>
-					);
-				default:
 						console.warn('unknown section._type', section['_type']);
 						return <Fragment key={`unknown section._type' ${i}`} />;
 				}

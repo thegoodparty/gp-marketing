@@ -8,7 +8,7 @@ import { Logo } from '~/sanity/utils/Logo.tsx';
 
 const styles = tv({
 	slots: {
-		base: 'flex flex-col gap-4 p-4 bg-white rounded-xl border border-bright-yellow-600 transition-shadow duration-normal hover:shadow-md md:flex-row md:items-end md:justify-between md:p-6',
+		base: 'flex flex-col gap-4 p-4 bg-white rounded-xl border border-bright-yellow-600 transition-[shadow,background-color] duration-normal hover:shadow-md hover:bg-bright-yellow-50 md:flex-row md:items-end md:justify-between md:p-6',
 		avatarWrapper: 'relative flex-shrink-0 size-24 overflow-visible',
 		badge: 'absolute bottom-0 right-0 w-[50px] h-[35px] flex items-center justify-center',
 		content: 'flex flex-col gap-1 flex-1 min-w-0',

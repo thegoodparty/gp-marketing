@@ -4,7 +4,7 @@ import { RichData } from './RichData.tsx';
 import { buttons } from './_data/content.tsx';
 
 const meta: Meta<typeof GoodPartyOrgPledge> = {
-	title: 'Page Sections/GoodParty.org Pledge',
+	title: 'New Components/Page Sections/GoodParty.org Pledge',
 	component: GoodPartyOrgPledge,
 	render: args => <GoodPartyOrgPledge {...args} />,
 };

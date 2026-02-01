@@ -56,7 +56,7 @@ const US_STATES = [
 ];
 
 const meta: Meta<typeof ElectionsSearchHero> = {
-	title: 'Page Sections/Elections Search Hero',
+	title: 'New Components/Page Sections/Elections Search Hero',
 	component: ElectionsSearchHero,
 	render: args => <ElectionsSearchHero {...args} />,
 };

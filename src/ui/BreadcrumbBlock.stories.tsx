@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { BreadcrumbBlock } from './BreadcrumbBlock';
 
 const meta: Meta<typeof BreadcrumbBlock> = {
-	title: 'Page Sections/Breadcrumb Block',
+	title: 'New Components/Page Sections/Breadcrumb Block',
 	component: BreadcrumbBlock,
 	render: args => <BreadcrumbBlock {...args} />,
 };

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ClaimProfileBlock } from './ClaimProfileBlock.tsx';
 
 const meta: Meta<typeof ClaimProfileBlock> = {
-	title: 'Page Sections/Claim Profile Block',
+	title: 'New Components/Page Sections/Claim Profile Block',
 	component: ClaimProfileBlock,
 	render: args => <ClaimProfileBlock {...args} />,
 };

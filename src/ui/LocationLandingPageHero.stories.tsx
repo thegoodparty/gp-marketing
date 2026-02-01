@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { LocationLandingPageHero } from './LocationLandingPageHero.tsx';
 
 const meta: Meta<typeof LocationLandingPageHero> = {
-	title: 'Page Sections/Location Landing Page Hero',
+	title: 'New Components/Page Sections/Location Landing Page Hero',
 	component: LocationLandingPageHero,
 	parameters: {
 		design: {

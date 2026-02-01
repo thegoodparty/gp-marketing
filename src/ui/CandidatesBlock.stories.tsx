@@ -5,7 +5,7 @@ import { primaryButton } from './_data/content.tsx';
 import { imageJpg, imageJpgAlt } from './_data/media.tsx';
 
 const meta: Meta<typeof CandidatesBlock> = {
-	title: 'Page Sections/Candidates Block',
+	title: 'New Components/Page Sections/Candidates Block',
 	component: CandidatesBlock,
 	render: args => <CandidatesBlock {...args} />,
 	parameters: {

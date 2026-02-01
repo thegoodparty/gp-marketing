@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ElectionsPositionHero } from './ElectionsPositionHero.tsx';
 
 const meta: Meta<typeof ElectionsPositionHero> = {
-	title: 'Page Sections/Elections Position Hero',
+	title: 'New Components/Page Sections/Elections Position Hero',
 	component: ElectionsPositionHero,
 	render: args => <ElectionsPositionHero {...args} />,
 };

@@ -4,7 +4,7 @@ import { CandidatesCard2 } from './CandidatesCard2.tsx';
 import { imageJpg } from './_data/media.tsx';
 
 const meta: Meta<typeof CandidatesCard2> = {
-	title: 'UI/Candidates Card 2',
+	title: 'New Components/UI/Candidates Card 2',
 	component: CandidatesCard2,
 	render: args => <CandidatesCard2 {...args} />,
 	parameters: {

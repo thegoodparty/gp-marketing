@@ -3,7 +3,7 @@ import { ProfileHero } from './ProfileHero.tsx';
 import { avatarJpg } from './_data/media.tsx';
 
 const meta: Meta<typeof ProfileHero> = {
-	title: 'Page Sections/Profile Hero',
+	title: 'New Components/Page Sections/Profile Hero',
 	component: ProfileHero,
 	render: args => <ProfileHero {...args} />,
 };

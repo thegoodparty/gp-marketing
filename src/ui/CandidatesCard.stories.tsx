@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { CandidatesCard } from './CandidatesCard.tsx';
 
 const meta: Meta<typeof CandidatesCard> = {
-	title: 'Components/Candidates Card',
+	title: 'New Components/Components/Candidates Card',
 	component: CandidatesCard,
 	render: args => <CandidatesCard {...args} />,
 };

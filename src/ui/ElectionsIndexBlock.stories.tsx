@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ElectionsIndexBlock } from './ElectionsIndexBlock.tsx';
 
 const meta: Meta<typeof ElectionsIndexBlock> = {
-	title: 'Page Sections/Elections Index Block',
+	title: 'New Components/Page Sections/Elections Index Block',
 	component: ElectionsIndexBlock,
 	render: args => <ElectionsIndexBlock {...args} />,
 	parameters: {

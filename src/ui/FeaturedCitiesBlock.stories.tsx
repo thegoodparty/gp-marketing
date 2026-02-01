@@ -4,7 +4,7 @@ import { FeaturedCitiesBlock } from './FeaturedCitiesBlock.tsx';
 import { buttons } from './_data/content.tsx';
 
 const meta: Meta<typeof FeaturedCitiesBlock> = {
-	title: 'Page Sections/Featured Cities Block',
+	title: 'New Components/Page Sections/Featured Cities Block',
 	component: FeaturedCitiesBlock,
 	render: args => <FeaturedCitiesBlock {...args} />,
 	parameters: {

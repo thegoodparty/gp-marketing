@@ -4,7 +4,7 @@ import { LocationFactsBlock } from './LocationFactsBlock.tsx';
 import { buttons } from './_data/content.tsx';
 
 const meta: Meta<typeof LocationFactsBlock> = {
-	title: 'Page Sections/Location Facts Block',
+	title: 'New Components/Page Sections/Location Facts Block',
 	component: LocationFactsBlock,
 	render: args => <LocationFactsBlock {...args} />,
 	parameters: {

@@ -51,6 +51,7 @@ export const list_pageSections = {
             'component_tabbedImageBlock',
             'component_featuresBlock',
             'component_faqBlock',
+            'component_profileContentBlock',
           ],
         },
         {
@@ -89,6 +90,7 @@ export const list_pageSections = {
             'component_faqBlock',
             'component_blogBlock',
             'component_candidatesBlock',
+            'component_profileContentBlock',
           ],
         },
         {
@@ -161,6 +163,8 @@ export const list_pageSections = {
     {
       title: 'Location Landing Page Hero',
       type: 'component_locationLandingPageHero',
+    },
+    {
       title: 'Profile Hero',
       type: 'component_profileHero',
     },
@@ -263,20 +267,34 @@ export const list_pageSections = {
     {
       title: 'Claim Profile Block',
       type: 'component_claimProfileBlock',
+    },
+    {
       title: 'Elections Index Block',
       type: 'component_electionsIndexBlock',
+    },
+    {
       title: 'Elections Position Hero',
       type: 'component_electionsPositionHero',
+    },
+    {
       title: 'Elections Search Hero',
       type: 'component_electionsSearchHero',
+    },
+    {
       title: 'Featured Cities Block',
       type: 'component_featuredCitiesBlock',
+    },
+    {
       title: 'GoodParty.org Pledge',
       type: 'component_goodPartyOrgPledge',
     },
     {
       title: 'Location Facts Block',
       type: 'component_locationFactsBlock',
+    },
+    {
+      title: 'Profile Content Block',
+      type: 'component_profileContentBlock',
     },
   ],
 }

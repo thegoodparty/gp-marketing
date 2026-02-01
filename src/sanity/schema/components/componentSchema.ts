@@ -33,6 +33,7 @@ import {component_featuredCitiesBlock} from './component_featuredCitiesBlock.ts'
 import {component_goodPartyOrgPledge} from './component_goodPartyOrgPledge.ts'
 import {component_locationFactsBlock} from './component_locationFactsBlock.ts'
 import {component_locationLandingPageHero} from './component_locationLandingPageHero.ts'
+import {component_profileContentBlock} from './component_profileContentBlock.ts'
 
 export const componentSchema = [
 component_featuresBlock,
@@ -69,5 +70,6 @@ component_electionsSearchHero,
 component_featuredCitiesBlock,
 component_goodPartyOrgPledge,
 component_locationFactsBlock,
-component_locationLandingPageHero
+component_locationLandingPageHero,
+component_profileContentBlock
 ];

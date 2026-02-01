@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ProfileContentBlock } from './ProfileContentBlock.tsx';
 
 const meta: Meta<typeof ProfileContentBlock> = {
-	title: 'Page Sections/Profile Content Block',
+	title: 'New Components/Page Sections/Profile Content Block',
 	component: ProfileContentBlock,
 	render: args => <ProfileContentBlock {...args} />,
 	parameters: {

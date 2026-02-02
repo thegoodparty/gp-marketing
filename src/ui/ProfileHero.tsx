@@ -19,7 +19,7 @@ const styles = tv({
 		content: 'flex flex-col gap-3 md:gap-4 text-center z-10',
 		heading: '',
 		office: '',
-		attribution: 'flex items-center gap-2 justify-center mt-2',
+		attribution: 'flex items-center justify-center mt-2',
 		attributionIcon: 'w-[37px] h-[28px]',
 		attributionText: 'text-sm',
 	},

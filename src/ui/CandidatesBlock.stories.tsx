@@ -71,6 +71,7 @@ export const Default: Story = {
 			label: 'Meet the Candidates',
 			title: 'Candidates',
 			copy: 'Browse independent candidates running for office in your area.',
+			layout: 'left',
 		},
 		candidates: mockCandidates,
 		hasFilters: false,
@@ -83,6 +84,7 @@ export const WithCTAButton: Story = {
 		header: {
 			title: 'Candidates',
 			copy: 'Browse independent candidates running for office.',
+			layout: 'left',
 		},
 		candidates: mockCandidates,
 		hasFilters: false,
@@ -99,6 +101,7 @@ export const WithFilters: Story = {
 		backgroundColor: 'cream',
 		header: {
 			title: 'Candidates',
+			layout: 'left',
 		},
 		candidates: mockCandidates,
 		hasFilters: true,
@@ -116,6 +119,7 @@ export const MidnightBackground: Story = {
 		header: {
 			title: 'Candidates',
 			copy: 'Browse independent candidates running for office.',
+			layout: 'left',
 		},
 		candidates: mockCandidates,
 		hasFilters: false,
@@ -134,6 +138,7 @@ export const LargeCandidateList: Story = {
 			label: 'All Candidates',
 			title: 'Independent Candidates',
 			copy: 'Explore a diverse group of candidates who are committed to serving their communities.',
+			layout: 'left',
 		},
 		candidates: [...mockCandidates, ...mockCandidates, ...mockCandidates],
 		hasFilters: true,
@@ -141,5 +146,47 @@ export const LargeCandidateList: Story = {
 			currentPage: 2,
 			totalPages: 10,
 		},
+	},
+};
+
+export const HeaderLayoutLeft: Story = {
+	args: {
+		backgroundColor: 'cream',
+		header: {
+			label: 'Header Layout',
+			title: 'Left Aligned Header',
+			copy: 'This header is aligned to the left, which is now the default layout.',
+			layout: 'left',
+		},
+		candidates: mockCandidates,
+		hasFilters: false,
+	},
+};
+
+export const HeaderLayoutCenter: Story = {
+	args: {
+		backgroundColor: 'cream',
+		header: {
+			label: 'Header Layout',
+			title: 'Center Aligned Header',
+			copy: 'This header is centered, demonstrating the center layout option.',
+			layout: 'center',
+		},
+		candidates: mockCandidates,
+		hasFilters: false,
+	},
+};
+
+export const HeaderLayoutRight: Story = {
+	args: {
+		backgroundColor: 'cream',
+		header: {
+			label: 'Header Layout',
+			title: 'Right Aligned Header',
+			copy: 'This header is aligned to the right, demonstrating the right layout option.',
+			layout: 'right',
+		},
+		candidates: mockCandidates,
+		hasFilters: false,
 	},
 };

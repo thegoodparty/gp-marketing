@@ -8,7 +8,7 @@ import { CandidatesCard, type CandidatesCardProps } from './CandidatesCard.tsx';
 
 const styles = tv({
 	slots: {
-		base: 'py-(--container-padding)',
+		base: 'p-12 border border-bright-yellow-600 rounded-3xl',
 		content: 'flex flex-col lg:flex-row gap-8 items-center',
 		textSection: 'flex-1 flex flex-col gap-6',
 		cardSection: 'flex-1 w-full lg:w-auto',
@@ -16,11 +16,14 @@ const styles = tv({
 	variants: {
 		backgroundColor: {
 			midnight: {
-				base: 'bg-midnight-900',
+				base: 'bg-midnight-900 border-midnight-700',
 				textSection: 'text-white',
 			},
 			cream: {
-				base: 'bg-goodparty-cream',
+				base: 'bg-goodparty-cream border-bright-yellow-600',
+			},
+			'bright-yellow': {
+				base: 'bg-bright-yellow-100 border-bright-yellow-600',
 			},
 		},
 	},
@@ -28,7 +31,7 @@ const styles = tv({
 
 export type ClaimProfileBlockProps = {
 	className?: string;
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: (typeof backgroundTypeValues)[number] | 'bright-yellow';
 	headline?: string;
 	body?: ReactNode;
 	claimButton: ComponentButtonProps;
@@ -41,7 +44,7 @@ export function ClaimProfileBlock(props: ClaimProfileBlockProps) {
 
 	return (
 		<article className={cn(base(), props.className)} data-component='ClaimProfileBlock'>
-			<Container size='xl'>
+			<Container size='xl' className='px-0!'>
 				<div className={content()}>
 					<div className={textSection()}>
 						{props.headline && (
@@ -50,7 +53,16 @@ export function ClaimProfileBlock(props: ClaimProfileBlockProps) {
 							</Text>
 						)}
 						{props.body && <Text styleType='body-1'>{props.body}</Text>}
-						<ComponentButton {...props.claimButton} />
+						<ComponentButton
+							{...props.claimButton}
+							buttonProps={{
+								...props.claimButton.buttonProps,
+								styleSize: props.claimButton.buttonProps?.styleSize ?? 'md',
+								styleType:
+									props.claimButton.buttonProps?.styleType ??
+									(backgroundColor === 'bright-yellow' ? 'secondary' : 'primary'),
+							}}
+						/>
 					</div>
 					<div className={cardSection()}>
 						<CandidatesCard {...props.exampleCard} />

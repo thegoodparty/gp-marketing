@@ -56,7 +56,7 @@ export function CandidatesBlock(props: CandidatesBlockProps) {
 		<article className={cn(base(), props.className)} data-component='CandidatesBlock'>
 			<Container size='xl'>
 				<div className={wrapper()}>
-					{props.header && <HeaderBlock {...props.header} backgroundColor={backgroundColor} layout='center' />}
+					{props.header && <HeaderBlock {...props.header} backgroundColor={backgroundColor} layout={props.header.layout ?? 'left'} />}
 
 					{props.hasFilters && (
 						<div className={filterPlaceholder()}>

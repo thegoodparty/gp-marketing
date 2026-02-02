@@ -45,6 +45,13 @@ export const MidnightBackground: Story = {
 	},
 };
 
+export const BrightYellowBackground: Story = {
+	args: {
+		...Default.args,
+		backgroundColor: 'bright-yellow',
+	},
+};
+
 export const WithLongText: Story = {
 	args: {
 		...Default.args,

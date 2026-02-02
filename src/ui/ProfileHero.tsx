@@ -8,28 +8,33 @@ import { Logo } from '~/sanity/utils/Logo.tsx';
 
 const styles = tv({
 	slots: {
-		base: 'py-12 md:py-16 lg:py-20',
-		container: 'flex flex-col items-center gap-8 md:flex-row md:gap-12 lg:gap-16',
-		imageWrapper: 'relative flex-shrink-0',
-		image: 'rounded-full overflow-hidden ring-4 ring-red-500 w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64',
-		badge: 'absolute bottom-0 right-0 w-16 h-12 md:w-20 md:h-15 lg:w-24 lg:h-18',
-		content: 'flex flex-col gap-3 md:gap-4 text-center md:text-left',
+		base: 'relative py-12 md:py-16 lg:py-20 overflow-hidden',
+		backgroundWrapper: 'absolute inset-0',
+		topSection: 'absolute top-0 left-0 right-0 h-[60%]',
+		bottomSection: 'absolute bottom-0 left-0 right-0 h-[40%] bg-grey',
+		container: 'relative z-10 flex flex-col items-center gap-8 md:flex-row md:items-start md:gap-12 lg:gap-16',
+		imageWrapper: 'relative flex-shrink-0 z-20 md:-mt-16 lg:-mt-20',
+		image: 'rounded-full overflow-hidden w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64',
+		badge: 'absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 w-16 h-12 md:w-20 md:h-14 lg:w-24 lg:h-16 z-30',
+		content: 'flex flex-col gap-3 md:gap-4 text-center z-10',
 		heading: '',
 		office: '',
-		attribution: 'flex items-center gap-2 justify-center md:justify-start mt-2',
+		attribution: 'flex items-center gap-2 justify-center mt-2',
 		attributionIcon: 'w-5 h-5 flex-shrink-0',
 		attributionText: 'text-sm',
 	},
 	variants: {
 		backgroundColor: {
 			midnight: {
-				base: 'bg-midnight-900 text-white',
+				base: 'text-white',
+				topSection: 'bg-midnight-900',
 				heading: 'text-white',
 				office: 'text-white',
 				attributionText: 'text-white',
 			},
 			cream: {
-				base: 'bg-goodparty-cream text-midnight-900',
+				base: 'text-midnight-900',
+				topSection: 'bg-goodparty-cream',
 				heading: 'text-midnight-900',
 				office: 'text-midnight-900',
 				attributionText: 'text-midnight-900',
@@ -48,10 +53,14 @@ export type ProfileHeroProps = {
 
 export function ProfileHero(props: ProfileHeroProps) {
 	const backgroundColor = props.backgroundColor ?? 'midnight';
-	const { base, container, imageWrapper, image, badge, content, heading, office, attribution, attributionIcon, attributionText } = styles({ backgroundColor });
+	const { base, backgroundWrapper, topSection, bottomSection, container, imageWrapper, image, badge, content, heading, office, attribution, attributionIcon, attributionText } = styles({ backgroundColor });
 
 	return (
 		<section className={cn(base(), props.className)} data-component="ProfileHero">
+			<div className={backgroundWrapper()}>
+				<div className={topSection()} />
+				<div className={bottomSection()} />
+			</div>
 			<Container size="xl">
 				<div className={container()}>
 					{props.profileImage && (

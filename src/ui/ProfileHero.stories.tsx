@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ProfileHero } from './ProfileHero.tsx';
-import { avatarJpg } from './_data/media.tsx';
+import { customProfileImage } from './_data/media.tsx';
 
 const meta: Meta<typeof ProfileHero> = {
 	title: 'New Components/Page Sections/Profile Hero',
@@ -15,9 +15,9 @@ type Story = StoryObj<typeof meta>;
 const Default = {
 	args: {
 		backgroundColor: 'midnight' as const,
-		candidateName: 'Jane Doe',
+		candidateName: 'Jhon Doe',
 		office: 'Mayor of Chicago',
-		profileImage: avatarJpg(),
+		profileImage: customProfileImage(),
 	},
 	parameters: {
 		design: {

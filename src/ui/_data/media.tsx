@@ -104,4 +104,24 @@ export function avatarJpg(crop?: SanityImage['crop'], hotspot?: SanityImage['hot
 	};
 }
 
+export function customProfileImage(crop?: SanityImage['crop'], hotspot?: SanityImage['hotspot']): SanityImage {
+	return {
+		crop,
+		hotspot,
+		asset: {
+			metadata: {
+				hasAlpha: true,
+				isOpaque: false,
+				dimensions: {
+					width: 96,
+					height: 96,
+					aspectRatio: 1,
+				},
+			},
+			mimeType: 'image/png',
+			url: '/images/profile-hero-avatar.png',
+		},
+	};
+}
+
 export const muxVideo = 'Ojz11wN2KWh7mz2Mgc2nvatL9KwYHP3M';

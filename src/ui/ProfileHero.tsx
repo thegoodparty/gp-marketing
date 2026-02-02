@@ -11,7 +11,7 @@ const styles = tv({
 		base: 'relative py-12 md:py-16 lg:py-20 overflow-hidden',
 		backgroundWrapper: 'absolute top-0 bottom-0 max-md:-left-[var(--container-padding)] max-md:-right-[var(--container-padding)] md:inset-0',
 		topSection: 'absolute top-0 left-0 right-0 h-[60%]',
-		bottomSection: 'absolute bottom-0 left-0 right-0 h-[40%] md:bg-grey',
+		bottomSection: 'absolute bottom-0 left-0 right-0 h-[40%]',
 		container: 'relative z-10 flex flex-col items-start gap-8 md:flex-row md:items-start md:gap-12 lg:gap-16',
 		imageWrapper: 'relative flex-shrink-0 z-20 mt-0 md:mt-16 lg:mt-20',
 		image: 'rounded-full overflow-hidden w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64',
@@ -28,7 +28,7 @@ const styles = tv({
 			midnight: {
 				base: 'text-white',
 				topSection: 'bg-midnight-900',
-				bottomSection: 'bg-midnight-900',
+				bottomSection: 'max-md:bg-midnight-900',
 				heading: 'text-white',
 				office: 'text-white',
 				attributionText: 'text-white',
@@ -36,7 +36,7 @@ const styles = tv({
 			cream: {
 				base: 'text-midnight-900',
 				topSection: 'bg-goodparty-cream',
-				bottomSection: 'bg-goodparty-cream',
+				bottomSection: 'max-md:bg-goodparty-cream',
 				heading: 'text-midnight-900',
 				office: 'text-midnight-900',
 				attributionText: 'text-midnight-900',

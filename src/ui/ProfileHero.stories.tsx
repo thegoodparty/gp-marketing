@@ -47,16 +47,6 @@ export const CreamBackground: Story = {
 	},
 };
 
-export const NoImage: Story = {
-	args: {
-		...Default.args,
-		profileImage: undefined,
-	},
-	parameters: {
-		...Default.parameters,
-	},
-};
-
 export const LongName: Story = {
 	args: {
 		...Default.args,
@@ -65,5 +55,30 @@ export const LongName: Story = {
 	},
 	parameters: {
 		...Default.parameters,
+	},
+};
+
+export const Mobile: Story = {
+	args: {
+		...Default.args,
+	},
+	parameters: {
+		...Default.parameters,
+	},
+	globals: {
+		viewport: { value: 'iphone', isRotated: false },
+	},
+};
+
+export const MobileCreamBackground: Story = {
+	args: {
+		...Default.args,
+		backgroundColor: 'cream',
+	},
+	parameters: {
+		...Default.parameters,
+	},
+	globals: {
+		viewport: { value: 'iphone', isRotated: false },
 	},
 };

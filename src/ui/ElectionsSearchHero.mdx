@@ -21,19 +21,53 @@ Use this component when:
 
 ## Variants
 
+### Default (Most Common)
+
 <Canvas of={ElectionsSearchHeroStories.Default} />
+
+The default variant uses a midnight background color and includes all standard features: logo, header text, body copy, state dropdown, and search button. This is the primary variant used in production.
+
+### With Background Image
+
+<Canvas of={ElectionsSearchHeroStories.WithBackgroundImage} />
+
+Displays a custom background image with an overlay. The background color variant is ignored when an image is provided.
+
+### Without Logo
 
 <Canvas of={ElectionsSearchHeroStories.WithoutLogo} />
 
-<Canvas of={ElectionsSearchHeroStories.WithoutBackgroundImage} />
+Minimal variant without the logo, useful for embedded contexts or when logo is handled elsewhere.
 
-<Canvas of={ElectionsSearchHeroStories.CreamBackground} />
+### With Custom Logo
 
-<Canvas of={ElectionsSearchHeroStories.WithSecondaryButton} />
+<Canvas of={ElectionsSearchHeroStories.WithCustomLogo} />
+
+Uses a custom logo image instead of the default GoodParty logo.
+
+### With Default State Selected
 
 <Canvas of={ElectionsSearchHeroStories.WithDefaultState} />
 
-<Canvas of={ElectionsSearchHeroStories.MinimalContent} />
+Pre-selects a state value (e.g., "CA" for California) when the component loads.
+
+### With Custom CTA
+
+<Canvas of={ElectionsSearchHeroStories.WithCustomCTA} />
+
+Uses a custom CTA button configuration with different label and style.
+
+### Minimal
+
+<Canvas of={ElectionsSearchHeroStories.Minimal} />
+
+Stripped-down version with no logo and minimal text, focusing on the search functionality.
+
+### Long Body Copy
+
+<Canvas of={ElectionsSearchHeroStories.LongBodyCopy} />
+
+Demonstrates how the component handles longer body copy text.
 
 ## Props
 
@@ -168,7 +202,7 @@ Logo options:
 
 ## Design Reference
 
-[View in Figma](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23671-22349)
+[View in Figma](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=22892-255964)
 
 ## Related Components
 

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { imageJpg } from './_data/media.tsx';
+import { imageJpg, logoSVG } from './_data/media.tsx';
 import { ElectionsSearchHero } from './ElectionsSearchHero.tsx';
 
 const US_STATES = [
@@ -82,13 +82,21 @@ const baseArgs = {
 export const Default: Story = {
 	args: {
 		...baseArgs,
-		backgroundImage: imageJpg(),
+		backgroundColor: 'midnight',
 	},
 	parameters: {
 		design: {
 			type: 'figma',
-			url: 'https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23671-22349',
+			url: 'https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=22892-255964',
 		},
+	},
+};
+
+export const WithBackgroundImage: Story = {
+	args: {
+		...baseArgs,
+		backgroundColor: 'midnight',
+		backgroundImage: imageJpg(),
 	},
 };
 
@@ -96,87 +104,60 @@ export const WithoutLogo: Story = {
 	args: {
 		...baseArgs,
 		showLogo: false,
-		backgroundImage: imageJpg(),
-	},
-	parameters: {
-		design: {
-			type: 'figma',
-			url: 'https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23671-22349',
-		},
-	},
-};
-
-export const WithoutBackgroundImage: Story = {
-	args: {
-		...baseArgs,
 		backgroundColor: 'midnight',
 	},
-	parameters: {
-		design: {
-			type: 'figma',
-			url: 'https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23671-22349',
-		},
-	},
 };
 
-export const CreamBackground: Story = {
+export const WithCustomLogo: Story = {
 	args: {
 		...baseArgs,
-		backgroundColor: 'cream',
-	},
-	parameters: {
-		design: {
-			type: 'figma',
-			url: 'https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23671-22349',
-		},
-	},
-};
-
-export const WithSecondaryButton: Story = {
-	args: {
-		...baseArgs,
-		backgroundImage: imageJpg(),
-		cta: {
-			buttonType: 'button' as const,
-			label: 'Find Elections',
-			buttonProps: {
-				styleType: 'secondary' as const,
-			},
-		},
-	},
-	parameters: {
-		design: {
-			type: 'figma',
-			url: 'https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23671-22349',
-		},
+		logoImage: logoSVG(),
+		backgroundColor: 'midnight',
 	},
 };
 
 export const WithDefaultState: Story = {
 	args: {
 		...baseArgs,
-		backgroundImage: imageJpg(),
+		backgroundColor: 'midnight',
 		defaultStateValue: 'CA',
 	},
-	parameters: {
-		design: {
-			type: 'figma',
-			url: 'https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23671-22349',
+};
+
+export const WithCustomCTA: Story = {
+	args: {
+		...baseArgs,
+		backgroundColor: 'midnight',
+		cta: {
+			buttonType: 'button' as const,
+			label: 'Find My Elections',
+			buttonProps: {
+				styleType: 'secondary' as const,
+			},
 		},
 	},
 };
 
-export const MinimalContent: Story = {
+export const Minimal: Story = {
 	args: {
 		showLogo: false,
-		headerText: 'Search Elections',
+		headerText: 'Find Elections',
 		states: US_STATES,
-		backgroundImage: imageJpg(),
-	},
-	parameters: {
-		design: {
-			type: 'figma',
-			url: 'https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23671-22349',
+		backgroundColor: 'midnight',
+		cta: {
+			buttonType: 'button' as const,
+			label: 'Search',
+			buttonProps: {
+				styleType: 'primary' as const,
+			},
 		},
+	},
+};
+
+export const LongBodyCopy: Story = {
+	args: {
+		...baseArgs,
+		backgroundColor: 'midnight',
+		bodyCopy: 'Search for elections in your area and discover local candidates running for office. Learn about their platforms, voting records, and policy positions. Make informed decisions about who represents you at every level of government.',
 	},
 };

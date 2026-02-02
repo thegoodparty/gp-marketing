@@ -83,17 +83,7 @@ export function ProfileHero(props: ProfileHeroProps) {
 						</div>
 						{props.isEmpowered && (
 							<div className={attribution()}>
-								<svg
-									className={attributionIcon()}
-									viewBox="0 0 20 20"
-									fill="none"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path
-										d="M10.001 16.316c3.27-.589 5.44-2.373 6.548-4.202.933-1.552 1.053-3.059.462-4.306-.536-1.127-1.616-1.931-2.872-2.144-1.339-.222-2.697.25-3.768 1.423L10 7.494l-.379-.407c-1.08-1.173-2.438-1.645-3.768-1.423-1.247.203-2.337 1.016-2.872 2.144-.591 1.238-.471 2.754.462 4.306 1.108 1.83 3.279 3.613 6.548 4.202h.018Z"
-										fill="currentColor"
-									/>
-								</svg>
+								<Logo width={20} height={15} className={attributionIcon()} />
 								<Text as="span" styleType="body-2" className={attributionText()}>
 									Empowered by GoodParty.org
 								</Text>

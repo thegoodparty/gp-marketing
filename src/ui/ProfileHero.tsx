@@ -13,9 +13,9 @@ const styles = tv({
 		topSection: 'absolute top-0 left-0 right-0 h-[60%]',
 		bottomSection: 'absolute bottom-0 left-0 right-0 h-[40%] bg-grey',
 		container: 'relative z-10 flex flex-col items-center gap-8 md:flex-row md:items-start md:gap-12 lg:gap-16',
-		imageWrapper: 'relative flex-shrink-0 z-20 md:-mt-16 lg:-mt-20',
+		imageWrapper: 'relative flex-shrink-0 z-20 mt-14 md:mt-16 lg:mt-20',
 		image: 'rounded-full overflow-hidden w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64',
-		badge: 'absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 w-16 h-12 md:w-20 md:h-14 lg:w-24 lg:h-16 z-30',
+		badge: 'absolute bottom-0 right-0 translate-x-[25%] translate-y-1/4 w-32 h-24 md:w-40 md:h-28 lg:w-48 lg:h-32 z-30',
 		content: 'flex flex-col gap-0 text-center z-10 -mt-4 md:-mt-4',
 		heading: '',
 		office: '',
@@ -69,7 +69,7 @@ export function ProfileHero(props: ProfileHeroProps) {
 							<div className={image()}>
 								<ResponsiveImage image={props.profileImage} />
 							</div>
-							<Logo width={100} height={75} className={badge()} />
+							<Logo width={200} height={150} className={badge()} />
 						</div>
 					)}
 					<div className={content()}>

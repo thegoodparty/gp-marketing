@@ -12,7 +12,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
-		backgroundColor: 'cream',
+		backgroundColor: 'midnight',
 		breadcrumbs: [
 			{ href: '/elections', label: 'Elections' },
 			{ href: '/elections/illinois', label: 'Illinois' },
@@ -29,9 +29,9 @@ export const Default: Story = {
 	},
 };
 
-export const MidnightBackground: Story = {
+export const LightBackground: Story = {
 	args: {
-		backgroundColor: 'midnight',
+		backgroundColor: 'cream',
 		breadcrumbs: [
 			{ href: '/elections', label: 'Elections' },
 			{ href: '/elections/california', label: 'California' },
@@ -50,7 +50,7 @@ export const MidnightBackground: Story = {
 
 export const ShortBreadcrumb: Story = {
 	args: {
-		backgroundColor: 'cream',
+		backgroundColor: 'midnight',
 		breadcrumbs: [
 			{ href: '/elections', label: 'Elections' },
 			{ href: '/elections/texas', label: 'Texas' },

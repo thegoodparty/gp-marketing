@@ -94,3 +94,33 @@ export const CustomSearchPlaceholder: Story = {
 		searchPlaceholder: 'Search by city or county name',
 	},
 };
+
+export const LeftAligned: Story = {
+	args: {
+		locationLevel: 'state',
+		stateName: 'Illinois',
+		bodyCopy: 'Explore elections in this state',
+		backgroundColor: 'midnight',
+		textAlign: 'left',
+	},
+};
+
+export const CenterAligned: Story = {
+	args: {
+		locationLevel: 'state',
+		stateName: 'Illinois',
+		bodyCopy: 'Explore elections in this state',
+		backgroundColor: 'midnight',
+		textAlign: 'center',
+	},
+};
+
+export const RightAligned: Story = {
+	args: {
+		locationLevel: 'state',
+		stateName: 'Illinois',
+		bodyCopy: 'Explore elections in this state',
+		backgroundColor: 'midnight',
+		textAlign: 'right',
+	},
+};

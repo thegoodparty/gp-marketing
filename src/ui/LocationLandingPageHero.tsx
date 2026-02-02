@@ -9,14 +9,14 @@ import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 const styles = tv({
 	slots: {
 		base: 'py-8 md:py-40',
-		content: 'flex flex-col gap-6 text-center justify-center md:items-center',
+		content: 'flex flex-col gap-6',
 		headline: '',
 		bodyCopy: 'text-white/80 max-w-[50rem]',
 		searchWrapper: 'w-full max-w-[28rem] mt-2',
 		searchContainer: 'relative w-full',
 		searchIcon: 'absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60 pointer-events-none',
 		searchInput:
-			'w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/40 transition-all',
+			'w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder:text-white focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/40 transition-all font-secondary text-[14px] font-normal leading-[20px] overflow-hidden text-ellipsis',
 	},
 	variants: {
 		backgroundColor: {
@@ -30,6 +30,17 @@ const styles = tv({
 			midnight: {
 				base: 'bg-midnight-900 text-white',
 				bodyCopy: 'text-white/80',
+			},
+		},
+		textAlign: {
+			left: {
+				content: 'text-left items-start',
+			},
+			center: {
+				content: 'text-center justify-center md:items-center',
+			},
+			right: {
+				content: 'text-right items-end',
 			},
 		},
 	},
@@ -46,6 +57,7 @@ export type LocationLandingPageHeroProps = {
 	bodyCopy?: ReactNode;
 	backgroundColor?: (typeof backgroundTypeValues)[number];
 	searchPlaceholder?: string;
+	textAlign?: 'left' | 'center' | 'right';
 };
 
 function buildHeadline(props: LocationLandingPageHeroProps): string {
@@ -75,11 +87,12 @@ function buildBodyCopy(props: LocationLandingPageHeroProps): string {
 
 export function LocationLandingPageHero(props: LocationLandingPageHeroProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
+	const textAlign = props.textAlign ?? 'left';
 	const headline = buildHeadline(props);
 	const bodyCopyText = buildBodyCopy(props);
 	const searchPlaceholder = props.searchPlaceholder ?? 'Search elections by county and city';
 
-	const { base, content, headline: headlineStyle, bodyCopy, searchWrapper, searchContainer, searchIcon, searchInput } = styles({ backgroundColor });
+	const { base, content, headline: headlineStyle, bodyCopy, searchWrapper, searchContainer, searchIcon, searchInput } = styles({ backgroundColor, textAlign });
 
 	return (
 		<section className={cn(base(), props.className)} data-component='LocationLandingPageHero'>

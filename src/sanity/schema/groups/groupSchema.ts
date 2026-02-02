@@ -141,6 +141,7 @@ import { footerNavigationGroup } from './footerNavigationGroup.ts';
 import { footer } from './footer.ts';
 import { twoUpCardBlockCardImage } from './twoUpCardBlockCardImage.ts';
 import { electionsPositionHeroDesignSettings } from './electionsPositionHeroDesignSettings.ts';
+import { officeItem } from './officeItem.ts';
 
 export const groupSchema = [
 	twoUpCardBlockCardImage,
@@ -286,4 +287,5 @@ export const groupSchema = [
 	footerNavigationGroup,
 	footer,
 	electionsPositionHeroDesignSettings,
+	officeItem,
 ];

@@ -296,5 +296,9 @@ export const list_pageSections = {
       title: 'Profile Content Block',
       type: 'component_profileContentBlock',
     },
+    {
+      title: 'List of Offices Block',
+      type: 'component_listOfOfficesBlock',
+    },
   ],
 }

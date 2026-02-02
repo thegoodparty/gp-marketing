@@ -36,6 +36,7 @@ import { FeaturedCitiesBlockSection } from '~/PageSections/FeaturedCitiesBlockSe
 import { GoodPartyOrgPledgeSection } from '~/PageSections/GoodPartyOrgPledgeSection';
 import { LocationFactsBlockSection } from '~/PageSections/LocationFactsBlockSection';
 import { ProfileContentBlockSection } from '~/PageSections/ProfileContentBlockSection';
+import { ListOfOfficesBlockSection } from '~/PageSections/ListOfOfficesBlockSection';
 import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
 
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
@@ -267,6 +268,12 @@ export function PageSections(props: Props) {
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Profile Content Block'>
 								<ProfileContentBlockSection {...section} />
+							</ComponentErrorBoundary>
+						);
+					case 'component_listOfOfficesBlock':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='List of Offices Block'>
+								<ListOfOfficesBlockSection {...section} />
 							</ComponentErrorBoundary>
 						);
 					default:

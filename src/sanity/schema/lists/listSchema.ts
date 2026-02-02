@@ -29,6 +29,7 @@ import {list_tags} from './list_tags.ts'
 import {list_socialChannels} from './list_socialChannels.ts'
 import {list_pricingPlans} from './list_pricingPlans.ts'
 import {list_collectionFaQs} from './list_collectionFaQs.ts'
+import {list_officeItems} from './list_officeItems.ts'
 
 export const listSchema = [
 list_footerLegalNavigation,
@@ -61,5 +62,6 @@ list_iconContentItems,
 list_tags,
 list_socialChannels,
 list_pricingPlans,
-list_collectionFaQs
+	list_collectionFaQs,
+	list_officeItems
 ];

@@ -34,6 +34,7 @@ import {component_goodPartyOrgPledge} from './component_goodPartyOrgPledge.ts'
 import {component_locationFactsBlock} from './component_locationFactsBlock.ts'
 import {component_locationLandingPageHero} from './component_locationLandingPageHero.ts'
 import {component_profileContentBlock} from './component_profileContentBlock.ts'
+import {component_listOfOfficesBlock} from './component_listOfOfficesBlock.ts'
 
 export const componentSchema = [
 component_featuresBlock,
@@ -71,5 +72,6 @@ component_featuredCitiesBlock,
 component_goodPartyOrgPledge,
 component_locationFactsBlock,
 component_locationLandingPageHero,
-component_profileContentBlock
+	component_profileContentBlock,
+	component_listOfOfficesBlock
 ];

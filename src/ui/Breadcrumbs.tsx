@@ -10,6 +10,7 @@ const styles = tv({
 		nav: 'flex items-center flex-wrap gap-1 text-sm',
 		link: '',
 		current: '',
+		separator: 'flex-shrink-0',
 	},
 	variants: {
 		backgroundColor: {
@@ -17,11 +18,13 @@ const styles = tv({
 				nav: 'text-neutral-400',
 				link: 'hover:text-white',
 				current: 'text-white',
+				separator: 'text-neutral-400',
 			},
 			cream: {
 				nav: 'text-neutral-500',
 				link: 'hover:text-black',
 				current: 'text-black',
+				separator: 'text-neutral-500',
 			},
 		},
 	},
@@ -33,13 +36,13 @@ export const Breadcrumbs = (props: {
 }) => {
 	const crumbs = props.items ?? [];
 	const backgroundColor = props.backgroundColor ?? 'midnight';
-	const { nav, link, current } = styles({ backgroundColor });
+	const { nav, link, current, separator } = styles({ backgroundColor });
 
 	return (
 		<nav className={nav()}>
 			{crumbs.map((crumb, i) => (
 				<Fragment key={crumb.href}>
-					{i > 0 && <IconResolver icon='chevron-right' />}
+					{i > 0 && <IconResolver icon='chevron-right' className={separator()} />}
 					{i === crumbs.length - 1 ? (
 						<span className={current()}>{crumb.label}</span>
 					) : (

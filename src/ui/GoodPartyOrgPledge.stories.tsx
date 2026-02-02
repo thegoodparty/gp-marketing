@@ -37,9 +37,8 @@ const pledgeCard = {
 		/>
 	),
 	button: {
-		buttonProps: {
-			label: 'Button',
-		},
+		buttonType: 'button' as const,
+		label: 'Button',
 	},
 };
 
@@ -75,7 +74,7 @@ const defaultArgs = {
 export const Default: Story = {
 	args: {
 		...defaultArgs,
-		backgroundColor: 'cream',
+		backgroundColor: 'midnight',
 	},
 	parameters: {
 		design: {
@@ -85,10 +84,10 @@ export const Default: Story = {
 	},
 };
 
-export const Midnight: Story = {
+export const Cream: Story = {
 	args: {
 		...defaultArgs,
-		backgroundColor: 'midnight',
+		backgroundColor: 'cream',
 	},
 	parameters: {
 		design: {
@@ -101,7 +100,7 @@ export const Midnight: Story = {
 export const WithHeaderButtons: Story = {
 	args: {
 		...defaultArgs,
-		backgroundColor: 'cream',
+		backgroundColor: 'midnight',
 		header: {
 			...defaultArgs.header,
 			buttons: buttons(),
@@ -118,7 +117,7 @@ export const WithHeaderButtons: Story = {
 export const RedIcons: Story = {
 	args: {
 		...defaultArgs,
-		backgroundColor: 'cream',
+		backgroundColor: 'midnight',
 		iconBg: 'red',
 	},
 	parameters: {

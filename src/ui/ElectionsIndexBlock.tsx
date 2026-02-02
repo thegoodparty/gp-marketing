@@ -17,12 +17,12 @@ const styles = tv({
 	slots: {
 		base: 'py-(--container-padding)',
 		wrapper: 'flex flex-col gap-12 md:gap-16',
-		searchWrapper: 'w-full max-w-xl mx-auto',
+		searchWrapper: 'w-full max-w-xl mx-auto flex flex-col gap-4',
 		searchInput:
-			'w-full px-4 py-3 pr-12 rounded-lg font-secondary text-text-md transition-colors focus:outline-none focus:ring-2',
+			'w-full px-3 py-6 border-0 border-b bg-transparent font-secondary text-body-1 transition-all focus:outline-none',
 		searchContainer: 'relative',
-		searchIcon: 'absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5',
-		resultCount: 'text-center',
+		searchIcon: 'absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none',
+		resultCount: 'text-left',
 		grid: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3',
 		locationLink: 'font-secondary text-text-md py-1 transition-colors hover:opacity-70',
 		footer: 'flex justify-center',
@@ -33,14 +33,14 @@ const styles = tv({
 			midnight: {
 				base: 'bg-midnight-900 text-white',
 				searchInput:
-					'bg-midnight-800 border border-midnight-700 text-white placeholder:text-neutral-400 focus:ring-white/30',
+					'border-neutral-400 text-white placeholder:text-neutral-400 focus:border-white',
 				searchIcon: 'text-neutral-400',
 				locationLink: 'text-white',
 			},
 			cream: {
 				base: 'bg-goodparty-cream',
 				searchInput:
-					'bg-white border border-neutral-300 text-black placeholder:text-neutral-500 focus:ring-blue-500/30',
+					'border-neutral-500 text-black placeholder:text-neutral-500 focus:border-blue-500',
 				searchIcon: 'text-neutral-500',
 				locationLink: 'text-black',
 			},
@@ -167,15 +167,14 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 								/>
 								<IconResolver icon="search" className={searchIcon()} />
 							</div>
+							{/* Result Count */}
+							<div className={resultCount()}>
+								<Text as="span" styleType="body-2">
+									{totalCount.toLocaleString()} Available Results
+								</Text>
+							</div>
 						</div>
 					)}
-
-					{/* Result Count */}
-					<div className={resultCount()}>
-						<Text as="span" styleType="body-2">
-							{totalCount.toLocaleString()} Available Results
-						</Text>
-					</div>
 
 					{/* Elections Grid */}
 					{displayedElections.length > 0 ? (

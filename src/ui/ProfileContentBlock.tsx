@@ -15,6 +15,7 @@ const styles = tv({
 		backgroundColor: {
 			midnight: {
 				base: 'bg-midnight-900',
+				content: 'text-white',
 			},
 			cream: {
 				base: 'bg-goodparty-cream',
@@ -43,7 +44,7 @@ export function ProfileContentBlock(props: ProfileContentBlockProps) {
 							<ElectionsSidebar {...props.sidebar} />
 						</aside>
 					)}
-					<div className={content()}>
+					<div className={cn(content())}>
 						{props.contentCards.map((card, index) => (
 							<ProfileContentCard key={index} {...card} />
 						))}

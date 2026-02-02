@@ -22,7 +22,7 @@ const styles = tv({
 			'w-full px-4 py-8 border-0 border-b bg-transparent font-primary text-text-4xl font-light leading-[130%] overflow-hidden text-ellipsis transition-all focus:outline-none',
 		searchContainer: 'relative',
 		searchIcon: 'absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 pointer-events-none',
-		resultCount: 'text-left',
+		resultCount: 'text-left font-secondary text-[14px] font-normal leading-[14px]',
 		grid: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3',
 		locationLink: 'font-secondary text-text-md py-1 transition-colors hover:opacity-70',
 		footer: 'flex justify-center',
@@ -35,6 +35,7 @@ const styles = tv({
 				searchInput:
 					'border-neutral-400 text-white placeholder:text-white/50 focus:border-white',
 				searchIcon: 'text-neutral-400',
+				resultCount: 'text-white',
 				locationLink: 'text-white',
 			},
 			cream: {
@@ -42,6 +43,7 @@ const styles = tv({
 				searchInput:
 					'border-neutral-500 text-black placeholder:text-black/50 focus:border-blue-500',
 				searchIcon: 'text-neutral-500',
+				resultCount: 'text-black',
 				locationLink: 'text-black',
 			},
 		},
@@ -169,9 +171,9 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 							</div>
 							{/* Result Count */}
 							<div className={resultCount()}>
-								<Text as="span" styleType="body-2">
+								<span>
 									{totalCount.toLocaleString()} Available Results
-								</Text>
+								</span>
 							</div>
 						</div>
 					)}

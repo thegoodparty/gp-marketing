@@ -12,9 +12,10 @@ export type ProfileData = {
 };
 
 export type OfficeData = {
-	officeName?: string;
-	filingPeriodStart?: string;
-	filingPeriodEnd?: string;
+	links?: Array<{ label: string; icon?: string; href: string }>;
+	aboutOffice?: string;
+	termLength?: string;
+	electionDate?: string;
 	ctaHref?: string;
 	ctaLabel?: string;
 };
@@ -50,14 +51,21 @@ function getProfileContentCards(profileData: ProfileData): ProfileContentCardPro
 }
 
 function getSidebarData(officeData: OfficeData): ElectionsSidebarProps | undefined {
-	if (!officeData.officeName && !officeData.filingPeriodStart && !officeData.filingPeriodEnd) {
+	if (
+		!officeData.links?.length &&
+		!officeData.aboutOffice &&
+		!officeData.termLength &&
+		!officeData.electionDate &&
+		!officeData.ctaHref
+	) {
 		return undefined;
 	}
 
 	return {
-		officeName: officeData.officeName,
-		filingPeriodStart: officeData.filingPeriodStart,
-		filingPeriodEnd: officeData.filingPeriodEnd,
+		links: officeData.links,
+		aboutOffice: officeData.aboutOffice,
+		termLength: officeData.termLength,
+		electionDate: officeData.electionDate,
 		cta:
 			officeData.ctaHref && officeData.ctaLabel
 				? {

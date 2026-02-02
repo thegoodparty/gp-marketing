@@ -16,7 +16,8 @@ The ProfileContentBlock component displays a two-column layout with an optional 
 Use this component when:
 - Displaying candidate profile content sections
 - Showing multiple content cards (About Me, Why Running, Top Issues, etc.)
-- Providing election filing period information in a sidebar
+- Providing contact links (Website, Facebook, Email) in a sidebar
+- Displaying office information (About Office, Term Length, Election Date) in a sidebar
 - Creating a sticky sidebar for navigation or key information
 
 ## Variants
@@ -53,9 +54,10 @@ ElectionsSidebar configuration. When provided, displays a sticky sidebar on the 
 **Type:** `ElectionsSidebarProps`
 
 Sidebar can include:
-- `officeName` - Office title
-- `filingPeriodStart` - Start date of filing period
-- `filingPeriodEnd` - End date of filing period
+- `links` - Array of link objects with label, optional icon, and href (e.g., Website, Facebook, Email)
+- `aboutOffice` - Text describing the office position
+- `termLength` - Text describing the term length
+- `electionDate` - Text showing the election date
 - `cta` - Optional CTA button (e.g., "Run for Office")
 
 #### `backgroundColor` (optional)
@@ -86,7 +88,9 @@ The component uses a responsive grid layout:
 When the sidebar is present:
 - Uses `sticky top-4 self-start` positioning
 - Stays visible while scrolling through content cards
-- Provides quick access to filing period information and CTA
+- Provides quick access to contact links, office information, and CTA
+- Displays links with icons (Website, Facebook, Email, etc.)
+- Shows office details (About Office, Term Length, Election Date) with separators
 
 ## Content Cards
 

@@ -20,15 +20,20 @@ export const Default: Story = {
 	args: {
 		backgroundColor: 'cream',
 		sidebar: {
-			officeName: 'Mayor',
-			filingPeriodStart: 'January 1, 2024',
-			filingPeriodEnd: 'March 15, 2024',
+			links: [
+				{ label: 'Website', icon: 'globe', href: 'https://www.website.com' },
+				{ label: 'Facebook', icon: 'facebook', href: 'https://www.facebook.com/' },
+				{ label: 'Email', icon: 'mail', href: 'mailto:hello@example.com' },
+			],
+			aboutOffice: 'Body text here',
+			termLength: 'Body text here',
+			electionDate: 'Body text here',
 			cta: {
 				buttonType: 'internal',
 				href: '/run',
 				label: 'Run for Office',
 				buttonProps: {
-					styleType: 'primary',
+					styleType: 'secondary',
 				},
 			},
 		},
@@ -74,9 +79,14 @@ export const MidnightBackground: Story = {
 	args: {
 		backgroundColor: 'midnight',
 		sidebar: {
-			officeName: 'City Council Member',
-			filingPeriodStart: 'January 1, 2024',
-			filingPeriodEnd: 'March 15, 2024',
+			links: [
+				{ label: 'Website', icon: 'globe', href: 'https://www.website.com' },
+				{ label: 'Facebook', icon: 'facebook', href: 'https://www.facebook.com/' },
+				{ label: 'Email', icon: 'mail', href: 'mailto:hello@example.com' },
+			],
+			aboutOffice: 'Body text here',
+			termLength: 'Body text here',
+			electionDate: 'Body text here',
 			cta: {
 				buttonType: 'internal',
 				href: '/run',
@@ -100,9 +110,13 @@ export const MultipleCards: Story = {
 	args: {
 		backgroundColor: 'cream',
 		sidebar: {
-			officeName: 'Mayor',
-			filingPeriodStart: 'January 1, 2024',
-			filingPeriodEnd: 'March 15, 2024',
+			links: [
+				{ label: 'Website', icon: 'globe', href: 'https://www.website.com' },
+				{ label: 'Email', icon: 'mail', href: 'mailto:hello@example.com' },
+			],
+			aboutOffice: 'Body text here',
+			termLength: 'Body text here',
+			electionDate: 'Body text here',
 		},
 		contentCards: [
 			{

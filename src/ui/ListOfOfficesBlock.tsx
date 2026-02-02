@@ -46,7 +46,7 @@ const styles = tv({
 		officeCard: 'bg-neutral-50 rounded-lg p-4 border border-neutral-200 hover:border-lavender-600 transition-colors',
 		cardContent: 'flex items-start justify-between gap-4',
 		cardLeft: 'flex-1 flex flex-col gap-2',
-		cardRight: 'flex-shrink-0',
+		cardRight: 'flex-shrink-0 self-end',
 		desktopTable: 'hidden md:block',
 	},
 	variants: {

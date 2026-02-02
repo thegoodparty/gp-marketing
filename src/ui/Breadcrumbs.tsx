@@ -18,7 +18,7 @@ const styles = tv({
 				nav: 'text-neutral-400',
 				link: 'hover:text-white',
 				current: 'text-white',
-				separator: 'text-neutral-400',
+				separator: 'text-white',
 			},
 			cream: {
 				nav: 'text-neutral-500',

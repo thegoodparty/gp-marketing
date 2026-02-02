@@ -9,6 +9,7 @@ import { Text } from './Text.tsx';
 import { Media } from './Media.tsx';
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { IconResolver } from './IconResolver.tsx';
+import { Logo } from '~/sanity/utils/Logo.tsx';
 import type { SanityImage } from './types.ts';
 import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 
@@ -63,7 +64,7 @@ export type ElectionsSearchHeroProps = {
 	headerText?: string;
 	bodyCopy?: ReactNode;
 	cta?: ComponentButtonProps;
-	backgroundImage?: SanityImage;
+	backgroundImage?: SanityImage | string;
 	backgroundColor?: (typeof backgroundTypeValues)[number];
 	states?: StateOption[];
 	defaultStateValue?: string;
@@ -72,13 +73,14 @@ export type ElectionsSearchHeroProps = {
 };
 
 export function ElectionsSearchHero(props: ElectionsSearchHeroProps) {
-	const backgroundColor = props.backgroundColor ?? 'midnight';
-	const hasBackgroundImage = !!props.backgroundImage;
+	const backgroundImage = props.backgroundImage ?? '/images/unites-states.svg';
+	const hasBackgroundImage = true;
+	const isStaticImage = typeof backgroundImage === 'string';
 
 	const [selectedState, setSelectedState] = useState(props.defaultStateValue ?? '');
 
 	const { base, wrapper, media, content, logo, textContainer, searchContainer, selectWrapper, select, selectIcon, buttons } =
-		styles({ backgroundColor: hasBackgroundImage ? undefined : backgroundColor });
+		styles({ backgroundColor: undefined });
 
 	const handleStateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const value = e.target.value;
@@ -98,7 +100,11 @@ export function ElectionsSearchHero(props: ElectionsSearchHeroProps) {
 				<div className={wrapper()}>
 					{hasBackgroundImage && (
 						<div className={media()}>
-							<Media image={props.backgroundImage} objectFit='cover' />
+							{isStaticImage ? (
+								<img src={backgroundImage} alt="" className="h-full w-full object-cover" />
+							) : (
+								<Media image={backgroundImage} objectFit='cover' />
+							)}
 						</div>
 					)}
 					<div className={content()}>
@@ -107,7 +113,7 @@ export function ElectionsSearchHero(props: ElectionsSearchHeroProps) {
 								{props.logoImage ? (
 									<Media image={props.logoImage} className='h-12 w-auto' />
 								) : (
-									<IconResolver icon='goodparty-logo' className='h-12 w-auto' />
+									<Logo width={96} height={72} />
 								)}
 							</div>
 						)}

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Logo } from './Logo.tsx';
 
 const meta: Meta<typeof Logo> = {
-	title: 'Icons/Logo',
+	title: 'New Components/Icons/Logo',
 	component: Logo,
 	render: args => (
 		<div className="flex items-center gap-4 p-4">

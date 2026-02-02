@@ -5,7 +5,6 @@ import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { isValidRichText } from './_lib/isValidRichText.ts';
-import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
 
 const styles = tv({
 	slots: {
@@ -13,6 +12,7 @@ const styles = tv({
 		grid: 'grid lg:grid-cols-[1fr_1fr] gap-8',
 		card: 'bg-white rounded-lg p-6 md:p-8 lg:p-10 flex flex-col gap-4 md:gap-6',
 		cardContent: 'flex flex-col gap-4',
+		buttonContainer: 'w-fit',
 		rightContent: 'flex flex-col gap-8',
 		topHeadline: '',
 		gridSection: 'grid md:grid-cols-3 gap-6 md:gap-8',
@@ -64,11 +64,11 @@ export type ElectionsPositionContentBlockProps = {
 
 export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
-	const { base, grid, card, cardContent, rightContent, topHeadline, gridSection, gridItem, separator, bottomSection, bottomItem } =
+	const { base, grid, card, cardContent, buttonContainer, rightContent, topHeadline, gridSection, gridItem, separator, bottomSection, bottomItem } =
 		styles({ backgroundColor });
 
 	const resolvedButtonStyle = props.card?.primaryCTA
-		? resolveButtonStyleType(props.card.primaryCTA.buttonProps?.styleType ?? 'primary', backgroundColor)
+		? props.card.primaryCTA.buttonProps?.styleType ?? 'secondary'
 		: undefined;
 
 	return (
@@ -101,10 +101,12 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 								) : null}
 							</div>
 							{props.card.primaryCTA && (
-								<ComponentButton
-									{...props.card.primaryCTA}
-									buttonProps={{ ...(props.card.primaryCTA.buttonProps ?? {}), styleType: resolvedButtonStyle }}
-								/>
+								<div className={buttonContainer()}>
+									<ComponentButton
+										{...props.card.primaryCTA}
+										buttonProps={{ ...(props.card.primaryCTA.buttonProps ?? {}), styleType: resolvedButtonStyle }}
+									/>
+								</div>
 							)}
 						</div>
 					)}

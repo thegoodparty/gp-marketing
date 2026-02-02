@@ -25,7 +25,7 @@ export const Default: Story = {
 				href: '/action',
 				label: 'Primary CTA',
 				buttonProps: {
-					styleType: 'primary',
+					styleType: 'secondary',
 				},
 			},
 		},
@@ -81,7 +81,7 @@ export const MidnightBackground: Story = {
 				href: '/action',
 				label: 'Primary CTA',
 				buttonProps: {
-					styleType: 'primary',
+					styleType: 'secondary',
 				},
 			},
 		},
@@ -152,7 +152,7 @@ export const WithoutGridItems: Story = {
 				href: '/action',
 				label: 'Primary CTA',
 				buttonProps: {
-					styleType: 'primary',
+					styleType: 'secondary',
 				},
 			},
 		},
@@ -182,7 +182,7 @@ export const WithoutBottomItems: Story = {
 				href: '/action',
 				label: 'Primary CTA',
 				buttonProps: {
-					styleType: 'primary',
+					styleType: 'secondary',
 				},
 			},
 		},
@@ -233,7 +233,7 @@ export const SingleBodyCopy: Story = {
 				href: '/action',
 				label: 'Primary CTA',
 				buttonProps: {
-					styleType: 'primary',
+					styleType: 'secondary',
 				},
 			},
 		},
@@ -273,7 +273,7 @@ export const ExternalButton: Story = {
 				href: 'https://example.com',
 				label: 'Visit External Site',
 				buttonProps: {
-					styleType: 'primary',
+					styleType: 'secondary',
 				},
 			},
 		},

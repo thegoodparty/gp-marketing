@@ -1,0 +1,96 @@
+import { Meta, Story, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import * as BreadcrumbBlockStories from './BreadcrumbBlock.stories';
+
+<Meta of={BreadcrumbBlockStories} />
+
+# Breadcrumb Block
+
+<Description of={BreadcrumbBlockStories.Default} />
+
+## Overview
+
+The BreadcrumbBlock component displays a navigation breadcrumb trail to help users understand their location within the site hierarchy. It wraps the Breadcrumbs component in a Container and supports different background color variants.
+
+## Usage
+
+Use this component when:
+- Displaying hierarchical navigation paths (e.g., Elections > State > County > City > Office)
+- Users need to understand their current location in the site structure
+- Providing quick navigation back to parent pages
+
+## Variants
+
+### Background Colors
+
+The component supports two background color variants:
+
+- **`cream`** (default) - Light background with dark text
+- **`midnight`** - Dark background with light text
+
+<Canvas of={BreadcrumbBlockStories.Default} />
+
+<Canvas of={BreadcrumbBlockStories.MidnightBackground} />
+
+### Breadcrumb Length
+
+The component adapts to different breadcrumb trail lengths:
+
+<Canvas of={BreadcrumbBlockStories.ShortBreadcrumb} />
+
+<Canvas of={BreadcrumbBlockStories.LongBreadcrumb} />
+
+## Props
+
+<Controls of={BreadcrumbBlockStories.Default} />
+
+### Prop Details
+
+#### `breadcrumbs` (required)
+
+Array of breadcrumb items, each containing:
+- `href` (string) - The URL path for the breadcrumb link
+- `label` (string) - The display text for the breadcrumb
+
+**Type:** `BreadcrumbItem[]`
+
+**Example:**
+```tsx
+breadcrumbs={[
+  { href: '/elections', label: 'Elections' },
+  { href: '/elections/illinois', label: 'Illinois' },
+  { href: '/elections/illinois/cook-county', label: 'Cook County' },
+]}
+```
+
+The last item in the array is displayed as non-clickable text (current page indicator).
+
+#### `backgroundColor` (optional)
+
+Background color variant for the block.
+
+**Type:** `'cream' | 'midnight'`
+
+**Default:** `'cream'`
+
+#### `className` (optional)
+
+Additional CSS classes to apply to the component.
+
+**Type:** `string`
+
+## Accessibility
+
+- Uses semantic `<nav>` element with proper ARIA landmarks
+- Last breadcrumb item is marked as current page (non-clickable `<span>`)
+- All breadcrumb links are keyboard accessible
+- Chevron separators are provided via IconResolver for visual clarity
+- Color contrast meets WCAG standards for both background variants
+
+## Design Reference
+
+[View in Figma](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=24089-25143&t=e6w52MjiSjms8Cyt-0)
+
+## Related Components
+
+- `Breadcrumbs` - The underlying breadcrumb navigation component
+- `Container` - Used for consistent page width and padding

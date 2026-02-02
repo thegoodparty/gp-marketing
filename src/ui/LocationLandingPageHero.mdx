@@ -1,0 +1,146 @@
+import { Meta, Story, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import * as LocationLandingPageHeroStories from './LocationLandingPageHero.stories';
+
+<Meta of={LocationLandingPageHeroStories} />
+
+# Location Landing Page Hero
+
+<Description of={LocationLandingPageHeroStories.StateLevel} />
+
+## Overview
+
+The LocationLandingPageHero component displays a hero section for location landing pages (state, county, or city). It dynamically generates the headline based on the location level and includes a search input for finding elections. The component adapts its styling based on the background color variant.
+
+## Usage
+
+Use this component when:
+- Creating hero sections for state, county, or city landing pages
+- Providing search functionality for elections
+- Displaying location-specific headlines
+- Setting the tone for location-based election browsing
+
+## Variants
+
+<Canvas of={LocationLandingPageHeroStories.StateLevel} />
+
+<Canvas of={LocationLandingPageHeroStories.StateLevelCream} />
+
+<Canvas of={LocationLandingPageHeroStories.CountyLevel} />
+
+<Canvas of={LocationLandingPageHeroStories.CityLevel} />
+
+<Canvas of={LocationLandingPageHeroStories.CustomBodyCopy} />
+
+<Canvas of={LocationLandingPageHeroStories.CustomSearchPlaceholder} />
+
+## Props
+
+<Controls of={LocationLandingPageHeroStories.StateLevel} />
+
+### Prop Details
+
+#### `locationLevel` (required)
+
+The level of location being displayed. Determines headline format.
+
+**Type:** `'state' | 'county' | 'city'`
+
+#### `stateName` (required)
+
+The state name.
+
+**Type:** `string`
+
+#### `countyName` (optional)
+
+The county name (required for county and city levels).
+
+**Type:** `string`
+
+#### `cityName` (optional)
+
+The city name (required for city level).
+
+**Type:** `string`
+
+#### `bodyCopy` (optional)
+
+Custom body copy text. If not provided, defaults to text based on location level (e.g., "Explore elections in this state").
+
+**Type:** `ReactNode`
+
+#### `searchPlaceholder` (optional)
+
+Placeholder text for the search input.
+
+**Type:** `string`
+
+**Default:** `'Search elections by county and city'`
+
+#### `backgroundColor` (optional)
+
+Background color variant for the hero section.
+
+**Type:** `'cream' | 'midnight'`
+
+**Default:** `'cream'`
+
+#### `className` (optional)
+
+Additional CSS classes to apply to the component.
+
+**Type:** `string`
+
+## Dynamic Headline Generation
+
+The component builds the headline based on `locationLevel`:
+
+- **State**: Uses `stateName` only (e.g., "Illinois")
+- **County**: Uses `countyName` followed by `stateName` (e.g., "Cook County, Illinois")
+- **City**: Uses `cityName` followed by `stateName` (e.g., "Chicago, Illinois")
+
+If required names are missing, falls back to available names.
+
+## Body Copy
+
+If `bodyCopy` is not provided, the component generates default text:
+- State: "Explore elections in this state"
+- County: "Explore elections in this county"
+- City: "Explore elections in this city"
+
+## Search Input
+
+The search input:
+- Uses a search icon (left side)
+- Placeholder text is customizable
+- Styling adapts to background color variant
+- Currently non-functional (placeholder for future implementation)
+
+## Background Variants
+
+**Midnight (default):**
+- Dark background with white text
+- Search input: White/transparent with white text
+- Search icon: White/60 opacity
+
+**Cream:**
+- Light background with dark text
+- Search input: Neutral background with dark text
+- Search icon: Neutral-500 color
+
+## Accessibility
+
+- Uses semantic `<section>` element
+- Main heading uses `heading-xl` style type
+- Search input includes proper `aria-label`
+- Search icon is decorative (pointer-events-none)
+
+## Design Reference
+
+[View in Figma](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23657-17212&t=6DQyxTAl7Ola6AF3-0)
+
+## Related Components
+
+- `ElectionsIndexBlock` - Index block that follows this hero
+- `FeaturedCitiesBlock` - Featured cities section
+- `LocationFactsBlock` - Location facts section

@@ -1,0 +1,167 @@
+import { Meta, Story, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import * as CandidatesBlockStories from './CandidatesBlock.stories';
+
+<Meta of={CandidatesBlockStories} />
+
+# Candidates Block
+
+<Description of={CandidatesBlockStories.Default} />
+
+## Overview
+
+The CandidatesBlock component displays a grid of candidate cards with optional header, filters, pagination, and CTA button. It automatically selects between CandidatesCard1 (standard) and CandidatesCard2 (GoodParty) based on the `isGoodPartyCandidate` property in each candidate object.
+
+## Usage
+
+Use this component when:
+- Displaying lists of candidates on election pages
+- Showing candidate grids with optional filtering and pagination
+- Providing a call-to-action for users to become candidates
+- Mixing standard and GoodParty-empowered candidates in the same list
+
+## Variants
+
+<Canvas of={CandidatesBlockStories.Default} />
+
+<Canvas of={CandidatesBlockStories.WithCTAButton} />
+
+<Canvas of={CandidatesBlockStories.WithFilters} />
+
+<Canvas of={CandidatesBlockStories.MidnightBackground} />
+
+<Canvas of={CandidatesBlockStories.LargeCandidateList} />
+
+## Props
+
+<Controls of={CandidatesBlockStories.Default} />
+
+### Prop Details
+
+#### `candidates` (required)
+
+Array of candidate objects. Each candidate can be either a `CandidatesCard1Props` or `CandidatesCard2Props` object.
+
+**Type:** `CandidateCard[]`
+
+**Card Type Selection:**
+- If `isGoodPartyCandidate` is `true`, renders `CandidatesCard2`
+- Otherwise, renders `CandidatesCard1`
+
+**Example:**
+```tsx
+candidates={[
+  {
+    _key: '1',
+    name: 'Jane Smith',
+    partyAffiliation: 'Independent',
+    href: '/candidates/jane-smith',
+  },
+  {
+    _key: '2',
+    name: 'John Doe',
+    partyAffiliation: 'Democratic Party',
+    href: '/candidates/john-doe',
+    isGoodPartyCandidate: true, // Renders as CandidatesCard2
+  },
+]}
+```
+
+#### `header` (optional)
+
+HeaderBlock configuration for the section title and description.
+
+**Type:** `HeaderBlockProps`
+
+#### `hasFilters` (optional)
+
+Whether to display filter UI (currently shows placeholder).
+
+**Type:** `boolean`
+
+**Default:** `false`
+
+#### `filters` (optional)
+
+Filter configuration object (placeholder for future implementation).
+
+**Type:** `object`
+
+#### `pagination` (optional)
+
+Pagination configuration. Only displayed when `hasFilters` is `true`.
+
+**Type:** `{ currentPage: number; totalPages: number }`
+
+#### `optionalButton` (optional)
+
+CTA button displayed at the bottom when `hasFilters` is `false`. Typically used for "Become a Candidate" actions.
+
+**Type:** `ComponentButtonProps`
+
+#### `backgroundColor` (optional)
+
+Background color variant for the block.
+
+**Type:** `'cream' | 'midnight'`
+
+**Default:** `'cream'`
+
+#### `className` (optional)
+
+Additional CSS classes to apply to the component.
+
+**Type:** `string`
+
+## Card Type Selection Logic
+
+The component automatically determines which card variant to render:
+
+```tsx
+const isGoodPartyCard = 'isGoodPartyCandidate' in candidate && candidate.isGoodPartyCandidate;
+
+return isGoodPartyCard ? (
+  <CandidatesCard2 {...candidate} />
+) : (
+  <CandidatesCard1 {...candidate} />
+);
+```
+
+## Grid Layout
+
+The candidates are displayed in a responsive grid:
+- **Mobile**: Single column
+- **Desktop**: 2 columns (`md:grid-cols-2`)
+- Gap: `gap-6` between cards
+
+## Filter and Pagination Placeholders
+
+When `hasFilters` is `true`, placeholder UI is displayed:
+- Filter placeholder appears above the candidate grid
+- Pagination placeholder appears below the grid (only if `pagination` prop is provided)
+- These are placeholders for future implementation
+
+## Conditional Button Display
+
+The `optionalButton` is only displayed when:
+- `hasFilters` is `false`
+- `optionalButton` prop is provided
+
+This ensures the button doesn't conflict with pagination controls.
+
+## Accessibility
+
+- Uses semantic `<article>` element
+- Grid uses proper list structure for candidate cards
+- HeaderBlock provides proper heading hierarchy
+- Filter and pagination placeholders include descriptive text
+
+## Design Reference
+
+[View in Figma](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=24609-38132&t=e6w52MjiSjms8Cyt-0)
+
+## Related Components
+
+- `CandidatesCard1` - Standard candidate card variant
+- `CandidatesCard2` - GoodParty candidate card variant
+- `HeaderBlock` - Header section component
+- `ComponentButton` - CTA button component

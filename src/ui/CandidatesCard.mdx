@@ -1,0 +1,107 @@
+import { Meta, Story, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import * as CandidatesCardStories from './CandidatesCard.stories';
+
+<Meta of={CandidatesCardStories} />
+
+# Candidates Card
+
+<Description of={CandidatesCardStories.Default} />
+
+## Overview
+
+The CandidatesCard component displays a candidate's basic information in a horizontal card layout. It supports optional avatar images, party affiliation, secondary text, and an optional GoodParty badge. The card can be wrapped in a link when an `href` prop is provided.
+
+## Usage
+
+Use this component when:
+- Displaying candidate information in lists or grids
+- Showing candidate details with optional badge indicators
+- Creating clickable candidate cards that link to profile pages
+
+## Variants
+
+<Canvas of={CandidatesCardStories.Default} />
+
+<Canvas of={CandidatesCardStories.WithLink} />
+
+<Canvas of={CandidatesCardStories.WithAvatar} />
+
+<Canvas of={CandidatesCardStories.NoBadge} />
+
+<Canvas of={CandidatesCardStories.MinimalInfo} />
+
+## Props
+
+<Controls of={CandidatesCardStories.Default} />
+
+### Prop Details
+
+#### `name` (required)
+
+The candidate's full name.
+
+**Type:** `string`
+
+#### `partyAffiliation` (optional)
+
+The candidate's party affiliation or role title.
+
+**Type:** `string`
+
+#### `secondaryText` (optional)
+
+Additional text displayed below the party affiliation (e.g., district number, zone).
+
+**Type:** `string`
+
+#### `avatarUrl` (optional)
+
+URL to the candidate's profile image. If not provided, no avatar is displayed.
+
+**Type:** `string`
+
+#### `href` (optional)
+
+If provided, the entire card becomes a clickable link wrapping the content.
+
+**Type:** `string`
+
+#### `showBadge` (optional)
+
+Whether to display the GoodParty badge icon in the bottom-right corner of the avatar.
+
+**Type:** `boolean`
+
+**Default:** `false`
+
+#### `className` (optional)
+
+Additional CSS classes to apply to the component.
+
+**Type:** `string`
+
+## Link Behavior
+
+When `href` is provided, the card content is wrapped in an `Anchor` component, making the entire card clickable. When `href` is not provided, the card renders as a non-interactive `<article>` element.
+
+## Avatar Handling
+
+- If `avatarUrl` is provided, the image is displayed
+- If `avatarUrl` is not provided, no avatar placeholder is shown (unlike CandidatesCard1 and CandidatesCard2 which show initials)
+
+## Accessibility
+
+- Uses semantic `<article>` element when not linked
+- Uses `Anchor` component for accessible link behavior when `href` is provided
+- Avatar images include proper `alt` attributes
+- Badge icon is decorative (no additional ARIA labels needed)
+
+## Design Reference
+
+[View in Figma](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23684-24346&t=6DQyxTAl7Ola6AF3-0)
+
+## Related Components
+
+- `CandidatesCard1` - Standard candidate card with initials fallback
+- `CandidatesCard2` - GoodParty candidate card with badge and "Empowered by" text
+- `CandidatesBlock` - Container component that uses candidate cards in a grid

@@ -1,0 +1,178 @@
+import { Meta, Story, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import * as ElectionsSearchHeroStories from './ElectionsSearchHero.stories';
+
+<Meta of={ElectionsSearchHeroStories} />
+
+# Elections Search Hero
+
+<Description of={ElectionsSearchHeroStories.Default} />
+
+## Overview
+
+The ElectionsSearchHero component is a client-side hero section that displays a state selection dropdown, optional logo, header text, body copy, and CTA button. It supports background images with overlay effects and manages state selection through React hooks. The component calls optional callbacks when the state changes or search is triggered.
+
+## Usage
+
+Use this component when:
+- Creating the main hero section for election search pages
+- Providing state selection functionality
+- Displaying branded hero sections with background images
+- Creating call-to-action flows for finding elections
+
+## Variants
+
+<Canvas of={ElectionsSearchHeroStories.Default} />
+
+<Canvas of={ElectionsSearchHeroStories.WithoutLogo} />
+
+<Canvas of={ElectionsSearchHeroStories.WithoutBackgroundImage} />
+
+<Canvas of={ElectionsSearchHeroStories.CreamBackground} />
+
+<Canvas of={ElectionsSearchHeroStories.WithSecondaryButton} />
+
+<Canvas of={ElectionsSearchHeroStories.WithDefaultState} />
+
+<Canvas of={ElectionsSearchHeroStories.MinimalContent} />
+
+## Props
+
+<Controls of={ElectionsSearchHeroStories.Default} />
+
+### Prop Details
+
+#### `states` (optional)
+
+Array of state options for the dropdown.
+
+**Type:** `StateOption[]`
+
+Each `StateOption` contains:
+- `value` (string) - State abbreviation (e.g., "CA", "NY")
+- `label` (string) - State name (e.g., "California", "New York")
+
+#### `onStateChange` (optional)
+
+Callback function called when the selected state changes.
+
+**Type:** `(stateValue: string) => void`
+
+#### `onSearch` (optional)
+
+Callback function called when the search button is clicked.
+
+**Type:** `(stateValue: string) => void`
+
+#### `defaultStateValue` (optional)
+
+Initial selected state value.
+
+**Type:** `string`
+
+#### `showLogo` (optional)
+
+Whether to display the GoodParty logo.
+
+**Type:** `boolean`
+
+#### `logoImage` (optional)
+
+Custom logo image. If not provided, uses IconResolver with 'goodparty-logo'.
+
+**Type:** `SanityImage`
+
+#### `headerText` (optional)
+
+Main heading text for the hero.
+
+**Type:** `string`
+
+#### `bodyCopy` (optional)
+
+Body copy text explaining the search functionality.
+
+**Type:** `ReactNode`
+
+#### `cta` (optional)
+
+CTA button configuration. If provided, replaces the default "Search Elections" button.
+
+**Type:** `ComponentButtonProps`
+
+#### `backgroundImage` (optional)
+
+Background image displayed behind the content with an overlay.
+
+**Type:** `SanityImage`
+
+#### `backgroundColor` (optional)
+
+Background color variant. Only used when `backgroundImage` is not provided.
+
+**Type:** `'cream' | 'midnight'`
+
+**Default:** `'midnight'`
+
+#### `className` (optional)
+
+Additional CSS classes to apply to the component.
+
+**Type:** `string`
+
+## Client-Side Behavior
+
+This component uses `'use client'` and React hooks:
+- `useState` for managing selected state value
+- State persists across re-renders
+- Handles user interactions (dropdown selection, button clicks)
+
+## Background Image Overlay
+
+When `backgroundImage` is provided:
+- Image fills the entire hero area (`absolute inset-0`)
+- Dark overlay applied (`after:bg-[#0A0A0A]/60` for midnight, `after:bg-white/20` for cream)
+- Content is positioned above the image with `z-index`
+- Background color variant is ignored when image is present
+
+## State Dropdown
+
+The state dropdown:
+- Uses native `<select>` element with custom styling
+- Includes "Select state" placeholder option
+- Styled to match background variant (white/transparent on image, colored on solid background)
+- Includes chevron-down icon on the right
+- Full width on mobile, auto width on desktop
+
+## Search Button
+
+The search button:
+- Only triggers `onSearch` if a state is selected
+- Full width on mobile (`w-full`), auto width on desktop (`sm:w-auto`)
+- If `cta` prop is provided, uses that button configuration
+- If `cta` is not provided, shows default "Search Elections" button
+
+## Logo Display
+
+Logo options:
+- If `showLogo` is true and `logoImage` is provided, displays the custom logo
+- If `showLogo` is true and `logoImage` is not provided, displays GoodParty logo icon
+- Logo size: `h-12 w-auto`
+
+## Accessibility
+
+- Uses semantic `<article>` element
+- State dropdown includes proper `aria-label`
+- Buttons are keyboard accessible
+- Background image overlay doesn't interfere with content readability
+- Text contrast meets WCAG standards for both variants
+
+## Design Reference
+
+[View in Figma](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23671-22349)
+
+## Related Components
+
+- `ElectionsIndexBlock` - Index page that follows search
+- `ElectionsPositionHero` - Hero for specific election positions
+- `Media` - Background image component
+- `ComponentButton` - CTA button component

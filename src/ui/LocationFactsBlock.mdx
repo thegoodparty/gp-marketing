@@ -1,0 +1,129 @@
+import { Meta, Story, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import * as LocationFactsBlockStories from './LocationFactsBlock.stories';
+
+<Meta of={LocationFactsBlockStories} />
+
+# Location Facts Block
+
+<Description of={LocationFactsBlockStories.Default} />
+
+## Overview
+
+The LocationFactsBlock component displays a grid of FactsCard components showing key statistics about a location (state, county, or city). It includes an optional header and returns null if no facts cards are provided.
+
+## Usage
+
+Use this component when:
+- Displaying location statistics (population, density, income, etc.)
+- Showing key facts about states, counties, or cities
+- Providing context about a location's demographics
+- Creating visual fact cards in a grid layout
+
+## Variants
+
+<Canvas of={LocationFactsBlockStories.Default} />
+
+<Canvas of={LocationFactsBlockStories.WithRealContent} />
+
+<Canvas of={LocationFactsBlockStories.BackgroundMidnight} />
+
+<Canvas of={LocationFactsBlockStories.LeftAlignedHeader} />
+
+<Canvas of={LocationFactsBlockStories.ThreeCards} />
+
+<Canvas of={LocationFactsBlockStories.SixCards} />
+
+<Canvas of={LocationFactsBlockStories.CountyExample} />
+
+## Props
+
+<Controls of={LocationFactsBlockStories.Default} />
+
+### Prop Details
+
+#### `factsCards` (required)
+
+Array of FactsCard objects to display in the grid.
+
+**Type:** `FactsCardProps[]`
+
+Each FactsCard contains:
+- `factType` (required) - Type of fact (used for icon mapping)
+- `label` (required) - Fact label (e.g., "Population", "Median Income")
+- `value` (required) - Fact value (e.g., "39,538,223", "$78,672")
+- `icon` (optional) - Custom icon name (overrides factType icon mapping)
+
+#### `header` (optional)
+
+HeaderBlock configuration for the section title and description.
+
+**Type:** `HeaderBlockProps`
+
+#### `backgroundColor` (optional)
+
+Background color variant for the block.
+
+**Type:** `'cream' | 'midnight'`
+
+**Default:** `'cream'`
+
+#### `className` (optional)
+
+Additional CSS classes to apply to the component.
+
+**Type:** `string`
+
+## Conditional Rendering
+
+The component returns `null` if:
+- `factsCards` is not provided
+- `factsCards` is an empty array
+
+This prevents rendering empty sections.
+
+## Grid Layout
+
+The facts cards are displayed in a responsive grid:
+- **Mobile**: Single column
+- **Tablet** (`sm:`): 2 columns (`sm:grid-cols-2`)
+- **Desktop** (`md:`): 2 columns (`md:gap-6`)
+- **Large Desktop** (`lg:`): 3 columns (`lg:grid-cols-3`)
+- Gap: `gap-4` on mobile, `gap-6` on desktop
+
+## Icon Mapping
+
+FactsCard automatically maps `factType` to icons if `icon` prop is not provided:
+
+- `'largest-city'` → `'building-2'`
+- `'population'` → `'users'`
+- `'density'` → `'accessibility'`
+- `'median-income'` → `'banknote'`
+- `'unemployment-rate'` → `'clipboard-list'`
+- `'average-home-value'` → `'home'`
+- Default → `'info'`
+
+## FactsCard Structure
+
+Each FactsCard displays:
+- Icon in a circular lavender background
+- Label (subtitle-2 style, bold)
+- Value (body-1 style, neutral-400 color)
+- Centered alignment
+
+## Accessibility
+
+- Uses semantic `<article>` element
+- Grid uses semantic `<ul>` and `<li>` structure
+- Icons are decorative (no additional ARIA labels needed)
+- HeaderBlock provides proper heading hierarchy
+- Text content is accessible and readable
+
+## Design Reference
+
+[View in Figma](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23671-32419&t=egVvXVFVcxPfgkND-0)
+
+## Related Components
+
+- `FactsCard` - Individual fact card component
+- `FeaturedCitiesBlock` - Similar grid layout for cities
+- `LocationLandingPageHero` - Hero section for location pages

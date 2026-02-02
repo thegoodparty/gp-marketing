@@ -1,0 +1,113 @@
+import { Meta, Story, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import * as ProfileContentBlockStories from './ProfileContentBlock.stories';
+
+<Meta of={ProfileContentBlockStories} />
+
+# Profile Content Block
+
+<Description of={ProfileContentBlockStories.Default} />
+
+## Overview
+
+The ProfileContentBlock component displays a two-column layout with an optional sticky sidebar (ElectionsSidebar) on the left and a vertical stack of ProfileContentCard components on the right. It's designed for candidate profile pages to show detailed information about the candidate.
+
+## Usage
+
+Use this component when:
+- Displaying candidate profile content sections
+- Showing multiple content cards (About Me, Why Running, Top Issues, etc.)
+- Providing election filing period information in a sidebar
+- Creating a sticky sidebar for navigation or key information
+
+## Variants
+
+<Canvas of={ProfileContentBlockStories.Default} />
+
+<Canvas of={ProfileContentBlockStories.WithoutSidebar} />
+
+<Canvas of={ProfileContentBlockStories.MidnightBackground} />
+
+<Canvas of={ProfileContentBlockStories.MultipleCards} />
+
+## Props
+
+<Controls of={ProfileContentBlockStories.Default} />
+
+### Prop Details
+
+#### `contentCards` (required)
+
+Array of ProfileContentCard objects to display in the main content area.
+
+**Type:** `ProfileContentCardProps[]`
+
+Each card can have:
+- `cardType` (optional) - `'about-me' | 'why-running' | 'top-issues'`
+- `heading` (optional) - Card heading text
+- `content` (optional) - Card content (ReactNode, supports rich text)
+
+#### `sidebar` (optional)
+
+ElectionsSidebar configuration. When provided, displays a sticky sidebar on the left.
+
+**Type:** `ElectionsSidebarProps`
+
+Sidebar can include:
+- `officeName` - Office title
+- `filingPeriodStart` - Start date of filing period
+- `filingPeriodEnd` - End date of filing period
+- `cta` - Optional CTA button (e.g., "Run for Office")
+
+#### `backgroundColor` (optional)
+
+Background color variant for the block.
+
+**Type:** `'cream' | 'midnight'`
+
+**Default:** `'cream'`
+
+#### `className` (optional)
+
+Additional CSS classes to apply to the component.
+
+**Type:** `string`
+
+## Layout
+
+The component uses a responsive grid layout:
+- **Mobile**: Single column (sidebar appears above content if present)
+- **Desktop** (`lg:`): Two-column grid with fixed sidebar width
+  - Sidebar: `300px` fixed width
+  - Content: Remaining space (`1fr`)
+  - Gap: `gap-8` between columns
+
+## Sticky Sidebar
+
+When the sidebar is present:
+- Uses `sticky top-4 self-start` positioning
+- Stays visible while scrolling through content cards
+- Provides quick access to filing period information and CTA
+
+## Content Cards
+
+Content cards are displayed in a vertical stack:
+- Gap: `gap-8` between cards
+- Each card uses ProfileContentCard component
+- Cards support rich text content via `isValidRichText` helper
+
+## Accessibility
+
+- Uses semantic `<article>` element
+- Sidebar uses semantic `<aside>` element
+- Content cards use semantic `<article>` elements
+- Proper heading hierarchy maintained through ProfileContentCard headings
+
+## Design Reference
+
+[View in Figma](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23711-25268&t=6DQyxTAl7Ola6AF3-0)
+
+## Related Components
+
+- `ProfileContentCard` - Individual content card component
+- `ElectionsSidebar` - Sidebar component with filing period info
+- `ProfileHero` - Hero section that typically precedes this component

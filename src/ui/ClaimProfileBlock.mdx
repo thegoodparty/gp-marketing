@@ -1,0 +1,117 @@
+import { Meta, Story, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import * as ClaimProfileBlockStories from './ClaimProfileBlock.stories';
+
+<Meta of={ClaimProfileBlockStories} />
+
+# Claim Profile Block
+
+<Description of={ClaimProfileBlockStories.Default} />
+
+## Overview
+
+The ClaimProfileBlock component displays a two-column layout with text content (headline, body copy, and CTA button) on one side and an example candidate card on the other. It's designed for profile claiming flows where candidates can claim their profiles.
+
+## Usage
+
+Use this component when:
+- Encouraging candidates to claim their profiles
+- Showing an example of what a claimed profile looks like
+- Providing a call-to-action for profile claiming
+- Explaining the profile claiming process
+
+## Variants
+
+<Canvas of={ClaimProfileBlockStories.Default} />
+
+<Canvas of={ClaimProfileBlockStories.MidnightBackground} />
+
+<Canvas of={ClaimProfileBlockStories.WithLongText} />
+
+<Canvas of={ClaimProfileBlockStories.MinimalContent} />
+
+## Props
+
+<Controls of={ClaimProfileBlockStories.Default} />
+
+### Prop Details
+
+#### `claimButton` (required)
+
+The CTA button configuration for the claim action.
+
+**Type:** `ComponentButtonProps`
+
+#### `exampleCard` (required)
+
+Example candidate card to display. Uses CandidatesCard component.
+
+**Type:** `CandidatesCardProps`
+
+#### `headline` (optional)
+
+Main heading text for the section.
+
+**Type:** `string`
+
+#### `body` (optional)
+
+Body copy explaining the claim process. Can be a ReactNode for rich text support.
+
+**Type:** `ReactNode`
+
+#### `backgroundColor` (optional)
+
+Background color variant for the block.
+
+**Type:** `'cream' | 'midnight'`
+
+**Default:** `'cream'`
+
+#### `className` (optional)
+
+Additional CSS classes to apply to the component.
+
+**Type:** `string`
+
+## Layout
+
+The component uses a responsive two-column layout:
+- **Mobile**: Vertical stack (text section, then card section)
+- **Desktop** (`lg:`): Horizontal layout with text on left, card on right
+- Both columns are equal width (`flex-1`) on desktop
+- Card section has `w-full lg:w-auto` to allow natural card sizing
+
+## Text Section
+
+The text section contains:
+- Optional headline (using `heading-lg` style type)
+- Optional body copy (using `body-1` style type)
+- Required CTA button
+
+Text section adapts color based on background:
+- Midnight background: White text
+- Cream background: Default text color
+
+## Card Section
+
+The card section displays a CandidatesCard component as an example:
+- Shows what a claimed profile card looks like
+- Demonstrates the card structure and styling
+- Uses the `exampleCard` prop to configure the card content
+
+## Accessibility
+
+- Uses semantic `<article>` element
+- Headline uses proper heading hierarchy
+- CTA button is keyboard accessible
+- Example card maintains accessibility features from CandidatesCard
+
+## Design Reference
+
+[View in Figma](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23684-24346&t=6DQyxTAl7Ola6AF3-0)
+
+## Related Components
+
+- `CandidatesCard` - Example card component displayed in the card section
+- `ComponentButton` - CTA button component
+- `Text` - Text component for headline and body copy

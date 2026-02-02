@@ -55,9 +55,10 @@ export function ClaimProfileBlock(props: ClaimProfileBlockProps) {
 						{props.body && <Text styleType='body-1'>{props.body}</Text>}
 						<ComponentButton
 							{...props.claimButton}
+							className={cn('w-fit', props.claimButton.className)}
 							buttonProps={{
 								...props.claimButton.buttonProps,
-								styleSize: props.claimButton.buttonProps?.styleSize ?? 'md',
+								styleSize: props.claimButton.buttonProps?.styleSize ?? 'sm',
 								styleType:
 									props.claimButton.buttonProps?.styleType ??
 									(backgroundColor === 'bright-yellow' ? 'secondary' : 'primary'),

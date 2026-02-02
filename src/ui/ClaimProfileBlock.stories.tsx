@@ -20,7 +20,7 @@ const exampleCard = {
 
 export const Default: Story = {
 	args: {
-		backgroundColor: 'cream',
+		backgroundColor: 'bright-yellow',
 		headline: 'See Their Policy Position',
 		body: 'View detailed policy positions and political claims from candidates in your district',
 		claimButton: {
@@ -45,10 +45,10 @@ export const MidnightBackground: Story = {
 	},
 };
 
-export const BrightYellowBackground: Story = {
+export const CreamBackground: Story = {
 	args: {
 		...Default.args,
-		backgroundColor: 'bright-yellow',
+		backgroundColor: 'cream',
 	},
 };
 
@@ -62,7 +62,7 @@ export const WithLongText: Story = {
 
 export const MinimalContent: Story = {
 	args: {
-		backgroundColor: 'cream',
+		backgroundColor: 'bright-yellow',
 		headline: 'Review Policy Positions',
 		claimButton: {
 			buttonType: 'internal',

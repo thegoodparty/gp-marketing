@@ -15,7 +15,7 @@ import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 const styles = tv({
 	slots: {
-		base: 'relative',
+		base: 'relative bg-midnight-900',
 		wrapper: 'relative',
 		media: 'absolute inset-0 [&>div]:h-full [&>div]:w-full after:absolute after:inset-0 after:z-0 after:bg-[#0A0A0A]/60',
 		content: 'relative z-1 flex flex-col gap-6 py-16 px-4 text-center text-white md:items-center lg:min-h-[36rem] lg:justify-center',
@@ -25,13 +25,12 @@ const styles = tv({
 		searchContainer: 'flex flex-col gap-4 w-full max-w-md mx-auto sm:flex-row sm:items-center',
 		selectWrapper: 'relative w-full',
 		select: [
-			'w-full appearance-none rounded-lg border border-white/30 bg-white/10 px-4 py-3 pr-10',
-			'text-white placeholder:text-white/70',
-			'focus:border-white focus:outline-none focus:ring-2 focus:ring-white/30',
+			'w-full appearance-none rounded-lg border border-black/30 bg-white px-4 py-3 pr-10',
+			'text-black placeholder:text-black/70',
+			'focus:border-black focus:outline-none focus:ring-2 focus:ring-black/30',
 			'cursor-pointer font-secondary text-[0.875rem]',
-			'backdrop-blur-sm',
 		],
-		selectIcon: 'absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-white',
+		selectIcon: 'absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-black',
 		buttons: 'flex flex-wrap gap-4 justify-center',
 	},
 	variants: {
@@ -76,6 +75,7 @@ export function ElectionsSearchHero(props: ElectionsSearchHeroProps) {
 	const backgroundImage = props.backgroundImage ?? '/images/unites-states.svg';
 	const hasBackgroundImage = true;
 	const isStaticImage = typeof backgroundImage === 'string';
+	const isDefaultImage = props.backgroundImage === undefined;
 
 	const [selectedState, setSelectedState] = useState(props.defaultStateValue ?? '');
 
@@ -101,7 +101,11 @@ export function ElectionsSearchHero(props: ElectionsSearchHeroProps) {
 					{hasBackgroundImage && (
 						<div className={media()}>
 							{isStaticImage ? (
-								<img src={backgroundImage} alt="" className="h-full w-full object-cover" />
+								<img 
+									src={backgroundImage} 
+									alt="" 
+									className={cn("h-full w-full object-cover")} 
+								/>
 							) : (
 								<Media image={backgroundImage} objectFit='cover' />
 							)}
@@ -136,6 +140,7 @@ export function ElectionsSearchHero(props: ElectionsSearchHeroProps) {
 									value={selectedState}
 									onChange={handleStateChange}
 									aria-label='Select a state'
+									style={{ color: 'black' }}
 								>
 									<option value=''>Select state</option>
 									{props.states?.map(state => (

@@ -29,11 +29,14 @@ const styles = tv({
 		yearSelectIcon: 'absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500',
 		tableWrapper: 'overflow-x-auto',
 		table: 'w-full border-collapse',
-		tableHeader: 'border-b border-neutral-200',
-		tableHeaderCell: 'py-3 px-4 text-left font-secondary text-subtitle-2 text-neutral-600',
+		tableHeader: 'flex items-center gap-4 px-4 py-3 mb-2',
+		tableHeaderCell: 'font-secondary text-subtitle-2 text-neutral-600 font-semibold',
+		headerPositionCell: 'ml-2',
+		headerDateCell: 'ml-auto',
 		tableBody: 'flex flex-col gap-3',
 		tableRow: 'bg-white rounded-lg border border-neutral-200 hover:border-lavender-600 transition-colors flex items-center gap-4 px-4 py-4',
 		tableCell: 'flex items-center',
+		positionCell: 'flex items-center ml-2',
 		typeTag: 'inline-block px-3 py-1 rounded-full bg-goodparty-blue text-white font-secondary text-sm font-semibold uppercase whitespace-nowrap',
 		positionText: 'font-secondary text-body-2 text-neutral-900',
 		dateText: 'font-secondary text-body-2 text-neutral-600',
@@ -114,12 +117,14 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 		yearSelect,
 		yearSelectIcon,
 		tableWrapper,
-		table,
 		tableHeader,
 		tableHeaderCell,
+		headerPositionCell,
+		headerDateCell,
 		tableBody,
 		tableRow,
 		tableCell,
+		positionCell,
 		typeTag,
 		positionText,
 		dateText,
@@ -194,16 +199,12 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 							<>
 								<div className={desktopTable()}>
 									<div className={tableWrapper()}>
-										<table className={table()}>
-											<thead className={tableHeader()}>
-												<tr>
-													<th className={tableHeaderCell()}>Type</th>
-													<th className={tableHeaderCell()}>Position</th>
-													<th className={tableHeaderCell()}>Next Election Date</th>
-													<th className={tableHeaderCell()} aria-label="Actions"></th>
-												</tr>
-											</thead>
-										</table>
+										<div className={tableHeader()}>
+											<div className={tableHeaderCell()}>Type</div>
+											<div className={cn(tableHeaderCell(), headerPositionCell())}>Position</div>
+											<div className={cn(tableHeaderCell(), headerDateCell())}>Next Election Date</div>
+											<div className={tableHeaderCell()} aria-label="Actions"></div>
+										</div>
 										<div className={tableBody()}>
 											{filteredOffices.map(office => {
 												const RowContent = (
@@ -211,7 +212,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 														<div className={tableCell()}>
 															<span className={typeTag()}>{office.type}</span>
 														</div>
-														<div className={tableCell()}>
+														<div className={positionCell()}>
 															<Text styleType="body-2" className={positionText()}>{office.position}</Text>
 														</div>
 													<div className={dateCell()}>

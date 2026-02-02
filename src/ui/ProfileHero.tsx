@@ -16,11 +16,11 @@ const styles = tv({
 		imageWrapper: 'relative flex-shrink-0 z-20 mt-14 md:mt-16 lg:mt-20',
 		image: 'rounded-full overflow-hidden w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64',
 		badge: 'absolute bottom-0 right-0 translate-x-[25%] translate-y-1/4 w-32 h-24 md:w-40 md:h-28 lg:w-48 lg:h-32 z-30',
-		content: 'flex flex-col gap-0 text-center z-10 -mt-4 md:-mt-4',
+		content: 'flex flex-col gap-3 md:gap-4 text-center z-10',
 		heading: '',
 		office: '',
-		attribution: 'flex items-center gap-2 justify-center',
-		attributionIcon: 'w-5 h-5 flex-shrink-0',
+		attribution: 'flex items-center gap-2 justify-center mt-2',
+		attributionIcon: 'w-[37px] h-[28px]',
 		attributionText: 'text-sm',
 	},
 	variants: {
@@ -82,12 +82,12 @@ export function ProfileHero(props: ProfileHeroProps) {
 							</Text>
 						</div>
 						{props.isEmpowered && (
-							<div className={attribution()}>
-								<Logo width={20} height={15} className={attributionIcon()} />
-								<Text as="span" styleType="body-2" className={attributionText()}>
-									Empowered by GoodParty.org
-								</Text>
-							</div>
+						<div className={attribution()}>
+							<Logo className={attributionIcon()} />
+							<Text as="span" styleType="body-2" className={attributionText()}>
+								Empowered by GoodParty.org
+							</Text>
+						</div>
 						)}
 					</div>
 				</div>

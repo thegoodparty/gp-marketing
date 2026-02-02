@@ -18,6 +18,7 @@ const Default = {
 		candidateName: 'Jhon Doe',
 		office: 'Mayor of Chicago',
 		profileImage: customProfileImage(),
+		isEmpowered: true,
 	},
 	parameters: {
 		design: {

@@ -10,10 +10,10 @@ const styles = tv({
 	slots: {
 		base: 'py-(--container-padding)',
 		grid: 'grid lg:grid-cols-[1fr_1fr] gap-8',
-		card: 'bg-white rounded-lg p-6 md:p-8 lg:p-10 flex flex-col gap-4 md:gap-6',
+		card: 'bg-white rounded-lg p-6 md:p-8 lg:p-10 flex flex-col gap-4 md:gap-6 order-2 lg:order-1',
 		cardContent: 'flex flex-col gap-4',
 		buttonContainer: 'w-fit',
-		rightContent: 'flex flex-col gap-8',
+		rightContent: 'flex flex-col gap-8 order-1 lg:order-2',
 		topHeadline: '',
 		gridSection: 'grid md:grid-cols-3 gap-6 md:gap-8',
 		gridItem: 'flex flex-col gap-3',

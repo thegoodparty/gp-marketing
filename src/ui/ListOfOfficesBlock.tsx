@@ -31,13 +31,14 @@ const styles = tv({
 		table: 'w-full border-collapse',
 		tableHeader: 'border-b border-neutral-200',
 		tableHeaderCell: 'py-3 px-4 text-left font-secondary text-subtitle-2 text-neutral-600',
-		tableBody: '',
-		tableRow: 'border-b border-neutral-100 hover:bg-neutral-50 transition-colors',
-		tableCell: 'py-4 px-4',
-		typeTag: 'inline-block px-3 py-1 rounded bg-goodparty-blue text-white font-secondary text-sm font-semibold',
+		tableBody: 'flex flex-col gap-3',
+		tableRow: 'bg-white rounded-lg border border-neutral-200 hover:border-lavender-600 transition-colors flex items-center gap-4 px-4 py-4',
+		tableCell: 'flex items-center',
+		typeTag: 'inline-block px-3 py-1 rounded-full bg-goodparty-blue text-white font-secondary text-sm font-semibold uppercase whitespace-nowrap',
 		positionText: 'font-secondary text-body-2 text-neutral-900',
-		dateText: 'font-secondary text-body-2 text-neutral-700',
-		arrowIcon: 'text-neutral-400',
+		dateText: 'font-secondary text-body-2 text-neutral-600',
+		dateCell: 'flex items-center ml-auto',
+		arrowIcon: 'text-neutral-900',
 		cardList: 'flex flex-col gap-3 md:hidden',
 		officeCard: 'bg-neutral-50 rounded-lg p-4 border border-neutral-200 hover:border-lavender-600 transition-colors',
 		cardContent: 'flex items-start justify-between gap-4',
@@ -122,6 +123,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 		typeTag,
 		positionText,
 		dateText,
+		dateCell,
 		arrowIcon,
 		cardList,
 		officeCard,
@@ -201,55 +203,45 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 													<th className={tableHeaderCell()} aria-label="Actions"></th>
 												</tr>
 											</thead>
-											<tbody className={tableBody()}>
-												{filteredOffices.map(office => {
-													return (
-														<tr
-															key={office.id}
-															className={cn(tableRow(), office.href && 'cursor-pointer')}
-															onClick={office.href ? () => handleOfficeClick(office) : undefined}
-														>
-															<td className={tableCell()}>
-																{office.href ? (
-																	<Anchor href={office.href} className="block">
-																		<span className={typeTag()}>{office.type}</span>
-																	</Anchor>
-																) : (
-																	<span className={typeTag()}>{office.type}</span>
-																)}
-															</td>
-															<td className={tableCell()}>
-																{office.href ? (
-																	<Anchor href={office.href} className="block">
-																		<Text styleType="body-2" className={positionText()}>{office.position}</Text>
-																	</Anchor>
-																) : (
-																	<Text styleType="body-2" className={positionText()}>{office.position}</Text>
-																)}
-															</td>
-															<td className={tableCell()}>
-																{office.href ? (
-																	<Anchor href={office.href} className="block">
-																		<Text styleType="body-2" className={dateText()}>{office.nextElectionDate}</Text>
-																	</Anchor>
-																) : (
-																	<Text styleType="body-2" className={dateText()}>{office.nextElectionDate}</Text>
-																)}
-															</td>
-															<td className={tableCell()}>
-																{office.href ? (
-																	<Anchor href={office.href} className="block">
-																		<IconResolver icon="chevron-right" className={arrowIcon()} />
-																	</Anchor>
-																) : (
-																	<IconResolver icon="chevron-right" className={arrowIcon()} />
-																)}
-															</td>
-														</tr>
-													);
-												})}
-											</tbody>
 										</table>
+										<div className={tableBody()}>
+											{filteredOffices.map(office => {
+												const RowContent = (
+													<>
+														<div className={tableCell()}>
+															<span className={typeTag()}>{office.type}</span>
+														</div>
+														<div className={tableCell()}>
+															<Text styleType="body-2" className={positionText()}>{office.position}</Text>
+														</div>
+													<div className={dateCell()}>
+														<Text styleType="body-2" className={dateText()}>{office.nextElectionDate}</Text>
+													</div>
+														<div className={tableCell()}>
+															<IconResolver icon="chevron-right" className={arrowIcon()} />
+														</div>
+													</>
+												);
+
+												return office.href ? (
+													<Anchor
+														key={office.id}
+														href={office.href}
+														className={cn(tableRow(), 'cursor-pointer')}
+														onClick={() => handleOfficeClick(office)}
+													>
+														{RowContent}
+													</Anchor>
+												) : (
+													<div
+														key={office.id}
+														className={tableRow()}
+													>
+														{RowContent}
+													</div>
+												);
+											})}
+										</div>
 									</div>
 								</div>
 

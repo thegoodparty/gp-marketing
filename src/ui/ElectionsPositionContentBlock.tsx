@@ -9,13 +9,13 @@ import { isValidRichText } from './_lib/isValidRichText.ts';
 const styles = tv({
 	slots: {
 		base: 'py-(--container-padding)',
-		grid: 'grid lg:grid-cols-[1fr_1fr] gap-8',
-		card: 'bg-white rounded-lg p-6 md:p-8 lg:p-10 flex flex-col gap-4 md:gap-6 order-2 lg:order-1',
-		cardContent: 'flex flex-col gap-4',
+		grid: 'grid lg:grid-cols-[auto_1fr] gap-8',
+		card: 'bg-white rounded-lg p-4 md:p-6 lg:p-8 flex flex-col gap-3 md:gap-4 order-2 lg:order-1 w-fit self-start',
+		cardContent: 'flex flex-col gap-3',
 		buttonContainer: 'w-fit',
 		rightContent: 'flex flex-col gap-8 order-1 lg:order-2',
 		topHeadline: '',
-		gridSection: 'grid md:grid-cols-3 gap-6 md:gap-8',
+		gridSection: 'grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 min-[1600px]:grid-cols-3',
 		gridItem: 'flex flex-col gap-3',
 		separator: 'border-t border-neutral-200',
 		bottomSection: 'flex flex-col gap-6',

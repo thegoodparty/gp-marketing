@@ -7,6 +7,10 @@ const meta: Meta<typeof ElectionsPositionContentBlock> = {
 	render: args => <ElectionsPositionContentBlock {...args} />,
 	parameters: {
 		layout: 'fullscreen',
+		design: {
+			type: 'figma',
+			url: 'https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=22621-2&p=f&t=e9DZpFivIUul02My-0',
+		},
 	},
 };
 

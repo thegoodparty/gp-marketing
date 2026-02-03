@@ -1,0 +1,211 @@
+import { Meta, Story, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import * as FAQLinksBlockStories from './FAQLinksBlock.stories';
+
+<Meta of={FAQLinksBlockStories} />
+
+# FAQ Links Block
+
+<Description of={FAQLinksBlockStories.Default} />
+
+## Overview
+
+The FAQLinksBlock component displays a header section and a vertical list of clickable FAQ links. Each link item features rounded corners, a light background, text content, and a right-pointing chevron icon. The component supports both cream and midnight background variants and provides an optional header section using HeaderBlock.
+
+## Usage
+
+Use this component when:
+- Displaying lists of frequently asked questions as clickable links
+- Creating FAQ directories or question indexes
+- Providing quick navigation to detailed FAQ answers
+- Building question-and-answer navigation pages
+
+## Design Features
+
+- **Card Container**: Rounded card with cream or midnight background
+- **Link Items**: Individual clickable items with:
+  - White/neutral background (on cream) or dark background (on midnight)
+  - Rounded corners
+  - Border that changes color on hover (lavender-600)
+  - Right-aligned chevron icon
+- **Header Section**: Optional HeaderBlock with title and body copy
+- **Responsive Design**: Consistent spacing and layout across screen sizes
+- **Empty State**: Graceful handling when no links are provided
+
+## Variants
+
+<Canvas of={FAQLinksBlockStories.Default} />
+
+<Canvas of={FAQLinksBlockStories.MidnightBackground} />
+
+<Canvas of={FAQLinksBlockStories.WithHeader} />
+
+<Canvas of={FAQLinksBlockStories.WithoutHeader} />
+
+<Canvas of={FAQLinksBlockStories.EmptyState} />
+
+<Canvas of={FAQLinksBlockStories.SingleItem} />
+
+<Canvas of={FAQLinksBlockStories.ManyItems} />
+
+<Canvas of={FAQLinksBlockStories.WithoutLinks} />
+
+<Canvas of={FAQLinksBlockStories.VariedContent} />
+
+## Props
+
+<Controls of={FAQLinksBlockStories.Default} />
+
+### Prop Details
+
+#### `items` (required)
+
+Array of FAQ link items to display.
+
+**Type:** `FAQLinkItem[]`
+
+Each `FAQLinkItem` contains:
+- `id` (string) - Unique identifier for the link
+- `label` (string) - Text content displayed for the FAQ link
+- `href` (string, optional) - Link destination URL. When omitted, the item is not clickable but still displays
+
+#### `header` (optional)
+
+HeaderBlock configuration for the section title and description.
+
+**Type:** `HeaderBlockProps`
+
+The header supports:
+- `title` (string) - Main heading text
+- `copy` (ReactNode) - Body copy/description text
+- `label` (string) - Optional label/overline text
+- `caption` (string) - Optional caption text
+- `buttons` (ComponentButtonProps[]) - Optional array of CTA buttons
+- `layout` (`'left' | 'right' | 'center'`) - Layout alignment (defaults to 'left' for this component)
+
+#### `backgroundColor` (optional)
+
+Background color variant for the block.
+
+**Type:** `'cream' | 'midnight'`
+
+**Default:** `'cream'`
+
+**Cream Variant:**
+- Light cream background (`bg-goodparty-cream`)
+- White link item backgrounds
+- Dark text colors
+- Neutral borders
+
+**Midnight Variant:**
+- Dark midnight background (`bg-midnight-900`)
+- Dark neutral link item backgrounds (`bg-neutral-800`)
+- Light text colors
+- Lavender accent borders
+
+#### `onLinkClick` (optional)
+
+Callback function called when a link item is clicked.
+
+**Type:** `(item: FAQLinkItem) => void`
+
+Useful for tracking analytics or performing additional actions when links are clicked.
+
+#### `className` (optional)
+
+Additional CSS classes to apply to the component root element.
+
+**Type:** `string`
+
+## Link Item Styling
+
+### Default (Cream Background)
+- Background: White (`bg-white`)
+- Border: Neutral-200 (`border-neutral-200`)
+- Text: Neutral-900 (`text-neutral-900`)
+- Hover Border: Lavender-600 (`hover:border-lavender-600`)
+
+### Midnight Background
+- Background: Neutral-800 (`bg-neutral-800`)
+- Border: Neutral-700 (`border-neutral-700`)
+- Text: White (`text-white`)
+- Hover Border: Lavender-400 (`hover:border-lavender-400`)
+
+### Common Styles
+- Padding: `px-4 py-4`
+- Border radius: `rounded-lg`
+- Gap between items: `gap-3`
+- Flex layout: `flex items-center justify-between`
+- Transition: `transition-colors` for smooth hover effects
+
+## Icon
+
+Each link item displays a right-pointing chevron icon:
+- Icon: `chevron-right` from IconResolver
+- Position: Right-aligned within the link item
+- Color: Matches text color (neutral-900 on cream, white on midnight)
+- Size: Default icon size from IconResolver
+
+## Clickable Behavior
+
+When a link item has an `href`:
+- Entire item becomes clickable via Anchor component
+- Hover state changes border color
+- Cursor changes to pointer
+- `onLinkClick` callback is triggered on click
+- Navigates to the specified href
+
+When a link item has no `href`:
+- Item still displays with all styling
+- Chevron icon still visible
+- Not clickable (no Anchor wrapper)
+- `onLinkClick` callback still triggered if item is clicked (via onClick handler)
+
+## Empty State
+
+When `items` array is empty:
+- Displays centered message: "No FAQ links available"
+- Uses neutral text color for visibility
+- Maintains card container structure
+- Message uses body-2 text style
+
+## Responsive Design
+
+The component is fully responsive:
+- Card padding: `p-6` on mobile, `md:p-8` on desktop
+- Consistent spacing between link items across all screen sizes
+- Header section adapts based on HeaderBlock layout prop
+- Link items maintain proper touch targets on mobile
+
+## Accessibility
+
+- Uses semantic `<article>` element for the root
+- Uses semantic `<ul>` and `<li>` elements for the link list
+- Anchor components provide proper link semantics
+- Keyboard navigation supported for all clickable items
+- Focus states for interactive elements
+- Proper heading hierarchy when header is provided
+
+## Client-Side Features
+
+This component uses `'use client'` directive:
+- Enables interactive features
+- Supports onClick handlers
+- Allows for future interactive enhancements
+
+## Design Reference
+
+The component matches the design system specifications with:
+- Cream/midnight background variants
+- Rounded card container
+- Consistent spacing and typography
+- Chevron-right icons for navigation
+- Hover states for interactivity
+- Proper color contrast for accessibility
+
+## Related Components
+
+- `FAQBlock` - Accordion-style FAQ component with expandable answers
+- `HeaderBlock` - Header section component used for title and copy
+- `ListOfOfficesBlock` - Similar list component with table/card layout
+- `ElectionsIndexBlock` - Index page component with searchable lists
+- `Anchor` - Link component used for navigation

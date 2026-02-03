@@ -36,8 +36,14 @@ export const styles = tv({
 			'body-1': {
 				base: 'font-secondary text-body-1 ',
 			},
+			'body-xl': {
+				base: 'font-secondary text-body-xl',
+			},
 			'body-2': {
 				base: 'font-secondary text-body-2',
+			},
+			'body-large': {
+				base: 'font-secondary text-body-large',
 			},
 			overline: {
 				base: 'text-overline',

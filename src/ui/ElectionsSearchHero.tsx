@@ -17,7 +17,7 @@ const styles = tv({
 	slots: {
 		base: 'relative bg-midnight-900',
 		wrapper: 'relative',
-		media: 'absolute inset-0 [&>div]:h-full [&>div]:w-full after:absolute after:inset-0 after:z-0 after:bg-[#0A0A0A]/60',
+		media: 'absolute inset-0 [&>div]:h-full [&>div]:w-full after:absolute after:inset-0 after:z-0',
 		content: 'relative z-1 flex flex-col gap-6 py-16 px-4 text-center text-white md:items-center lg:min-h-[36rem] lg:justify-center',
 		logo: 'mb-4 flex justify-center',
 		logoImage: 'h-12 w-auto',

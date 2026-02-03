@@ -15,7 +15,7 @@ const styles = tv({
 		buttonContainer: 'w-fit',
 		rightContent: 'flex flex-col gap-8 order-1 lg:order-2',
 		topHeadline: '',
-		gridSection: 'grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 min-[1600px]:grid-cols-3',
+		gridSection: 'grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:grid-cols-3',
 		gridItem: 'flex flex-col gap-3',
 		separator: 'border-t border-neutral-200',
 		bottomSection: 'flex flex-col gap-6',

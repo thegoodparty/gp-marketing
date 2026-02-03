@@ -91,7 +91,7 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 								{Array.isArray(props.card.bodyCopy) ? (
 									props.card.bodyCopy.map((copy, index) =>
 										isValidRichText(copy) ? (
-											<Text key={index} styleType='body-1'>
+											<Text key={index} styleType='body-2'>
 												{copy}
 											</Text>
 										) : null,
@@ -126,7 +126,7 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 											</Text>
 										)}
 										{isValidRichText(item.bodyCopy) && (
-											<Text styleType='body-1'>{item.bodyCopy}</Text>
+											<Text styleType='body-2'>{item.bodyCopy}</Text>
 										)}
 									</div>
 								))}
@@ -145,7 +145,7 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 											</Text>
 										)}
 										{isValidRichText(item.bodyCopy) && (
-											<Text styleType='body-1'>{item.bodyCopy}</Text>
+											<Text styleType='body-2'>{item.bodyCopy}</Text>
 										)}
 									</div>
 								))}

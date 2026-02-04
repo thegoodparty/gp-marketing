@@ -1,0 +1,130 @@
+import { Meta, Story, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import * as StateIconStories from './StateIcon.stories';
+
+<Meta of={StateIconStories} />
+
+# State Icon
+
+<Description of={StateIconStories.Default} />
+
+## Overview
+
+The StateIcon component renders SVG icons for US states based on their two-letter state code. It displays state shape icons from the `/icons/states/` directory with customizable dimensions and supports all standard image element props.
+
+## Usage
+
+Use this component when:
+- Displaying state-specific icons or badges
+- Showing state information in location cards or profiles
+- Creating state selection interfaces
+- Adding state context to content or navigation
+
+## Variants
+
+<Canvas of={StateIconStories.Default} />
+
+<Canvas of={StateIconStories.California} />
+
+<Canvas of={StateIconStories.NewYork} />
+
+<Canvas of={StateIconStories.Florida} />
+
+<Canvas of={StateIconStories.Small} />
+
+<Canvas of={StateIconStories.Medium} />
+
+<Canvas of={StateIconStories.Large} />
+
+<Canvas of={StateIconStories.CustomSize} />
+
+<Canvas of={StateIconStories.MultipleStates} />
+
+## Props
+
+<Controls of={StateIconStories.Default} />
+
+### Prop Details
+
+#### `stateCode` (required)
+
+The two-letter state code (e.g., "TX", "CA", "NY"). The component will automatically convert it to lowercase to match the SVG file name.
+
+**Type:** `string`
+
+**Example:** `"TX"`, `"CA"`, `"NY"`
+
+#### `width` (optional)
+
+The width of the state icon.
+
+**Type:** `number | string`
+
+**Default:** `24`
+
+#### `height` (optional)
+
+The height of the state icon.
+
+**Type:** `number | string`
+
+**Default:** `24`
+
+#### `className` (optional)
+
+Additional CSS classes to apply to the image element.
+
+**Type:** `string`
+
+#### Image Props
+
+The component accepts all standard HTML image element props via spread props, allowing for full customization of the image element's attributes.
+
+**Type:** `Omit<ImgHTMLAttributes<HTMLImageElement>, 'src' | 'width' | 'height'>`
+
+## State Codes
+
+The component supports all 50 US states plus DC (District of Columbia). State codes are case-insensitive and will be normalized to lowercase for file lookup.
+
+**Supported States:** AL, AK, AZ, AR, CA, CO, CT, DE, DC, FL, GA, HI, ID, IL, IN, IA, KS, KY, LA, ME, MD, MA, MI, MN, MS, MO, MT, NE, NV, NH, NJ, NM, NY, NC, ND, OH, OK, OR, PA, RI, SC, SD, TN, TX, UT, VT, VA, WA, WV, WI, WY
+
+## Common Use Cases
+
+### Basic Usage
+```tsx
+<StateIcon stateCode="TX" />
+```
+
+### Custom Size
+```tsx
+<StateIcon stateCode="CA" width={48} height={48} />
+```
+
+### With Styling
+```tsx
+<StateIcon stateCode="NY" width={32} height={32} className="opacity-75 hover:opacity-100" />
+```
+
+### Multiple States
+```tsx
+<div className="flex gap-2">
+  <StateIcon stateCode="TX" width={24} height={24} />
+  <StateIcon stateCode="CA" width={24} height={24} />
+  <StateIcon stateCode="NY" width={24} height={24} />
+</div>
+```
+
+## Accessibility
+
+- The component automatically includes an `alt` attribute with the format `"{STATE_CODE} state icon"`
+- For decorative use cases, you can override the alt text with an empty string: `alt=""`
+- Ensure proper ARIA labels are provided when used in interactive contexts
+
+## File Structure
+
+State SVG files are located in `/public/icons/states/` and follow the naming convention: `{state-code}.svg` (lowercase, two-letter code).
+
+## Related Components
+
+- Similar to `Logo` component - Both provide icon rendering with customizable dimensions
+- Can be used with `LocationCard` - Display state context for locations
+- Can be used with `ProfileHero` - Show state information for profiles

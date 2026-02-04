@@ -30,7 +30,7 @@ export function ProfileContentCard(props: ProfileContentCardProps) {
 			)}
 			{isValidRichText(props.content) && (
 				<div className={content()}>
-					<Text styleType='body-1'>{props.content}</Text>
+					<Text styleType='body-2'>{props.content}</Text>
 				</div>
 			)}
 		</article>

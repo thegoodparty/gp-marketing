@@ -16,8 +16,8 @@ const styles = tv({
 	slots: {
 		base: 'py-[calc(var(--container-padding))]',
 		wrapper: 'flex flex-col gap-12 md:gap-20',
-		grid: 'grid gap-6 md:grid-cols-2',
-		card: 'flex flex-col gap-4',
+		grid: 'grid gap-8 md:grid-cols-2',
+		card: 'flex flex-col items-start gap-8 min-w-80 p-6 flex-1',
 	},
 	variants: {
 		backgroundColor: {

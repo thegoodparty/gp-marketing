@@ -127,3 +127,42 @@ export const RedIcons: Story = {
 		},
 	},
 };
+
+export const MultiColorIcons: Story = {
+	args: {
+		...defaultArgs,
+		backgroundColor: 'midnight',
+		pledgeCards: [
+			{
+				...pledgeCard,
+				icon: 'heart',
+				title: 'People-Powered',
+				iconBg: 'red',
+			},
+			{
+				...pledgeCard,
+				icon: 'shield',
+				title: 'Accountable',
+				iconBg: 'blue',
+			},
+			{
+				...pledgeCard,
+				icon: 'users',
+				title: 'Transparent',
+				iconBg: 'halo-green',
+			},
+			{
+				...pledgeCard,
+				icon: 'star',
+				title: 'Independent',
+				iconBg: 'waxflower',
+			},
+		],
+	},
+	parameters: {
+		design: {
+			type: 'figma',
+			url: 'https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23714-25633&t=Y3gXgfteJfMmhQjG-0',
+		},
+	},
+};

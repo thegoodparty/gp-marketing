@@ -36,6 +36,7 @@ export type PledgeCard = {
 	title?: string;
 	content?: ReactNode;
 	button?: ComponentButtonProps;
+	iconBg?: Exclude<(typeof componentColorValues)[number], 'inverse'>;
 };
 
 export type GoodPartyOrgPledgeProps = {
@@ -62,7 +63,7 @@ export function GoodPartyOrgPledge(props: GoodPartyOrgPledgeProps) {
 						{props.pledgeCards?.map((pledgeCard, index) => (
 							<div key={`pledge-${index}`} className={card()}>
 								<div className='flex flex-col gap-4'>
-									{pledgeCard.icon && <CircleIcon icon={pledgeCard.icon} iconBg={iconBg} />}
+									{pledgeCard.icon && <CircleIcon icon={pledgeCard.icon} iconBg={pledgeCard.iconBg ?? iconBg} />}
 									{pledgeCard.title && (
 										<Text as='h3' styleType='subtitle-1'>
 											{pledgeCard.title}

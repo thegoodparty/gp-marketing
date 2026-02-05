@@ -49,7 +49,7 @@ export const component_electionsIndexBlock = {
 					title: 'Initial Display Count',
 					name: 'field_initialDisplayCount',
 					type: 'number',
-					description: 'Number of items to show before "Show more" (default: 24)',
+					description: 'Number of items to show before "Show more"',
 					initialValue: 24,
 				},
 				{

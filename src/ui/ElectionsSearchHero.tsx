@@ -104,6 +104,7 @@ export function ElectionsSearchHero(props: ElectionsSearchHeroProps) {
 								<img 
 									src={backgroundImage} 
 									alt="" 
+									aria-hidden="true"
 									className={cn("h-full w-full object-cover")} 
 								/>
 							) : (

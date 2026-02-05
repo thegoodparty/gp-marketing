@@ -1,6 +1,7 @@
 'use client';
 import { useState, useMemo } from 'react';
 
+import { DEFAULT_DISPLAY_COUNT } from '~/constants/display';
 import { cn, tv } from './_lib/utils.ts';
 import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
 import { isValidRichText } from './_lib/isValidRichText.ts';
@@ -94,7 +95,7 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 	}
 
 	const backgroundColor = props.backgroundColor ?? 'midnight';
-	const initialDisplayCount = props.initialDisplayCount ?? 24;
+	const initialDisplayCount = props.initialDisplayCount ?? DEFAULT_DISPLAY_COUNT;
 	const showSearch = props.showSearch ?? true;
 	const searchPlaceholder = props.searchPlaceholder ?? 'Search by county or municipality';
 

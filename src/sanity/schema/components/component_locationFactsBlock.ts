@@ -1,3 +1,4 @@
+import type { Rule } from 'sanity';
 import {resolveValue} from "../../utils/resolveValue.ts";
 import {handleReplacements} from "../../utils/handleReplacements.ts";
 import {getIcon} from "../../utils/getIcon.tsx";
@@ -74,7 +75,7 @@ export const component_locationFactsBlock = {
       title: 'locationFactsBlockHeader.field_title',
       _type: '_type',
     },
-    prepare: (x: any) => {
+    prepare: (x: Record<string, unknown>) => {
       const infer = {
         singletonTitle: null,
         icon: getIcon('BarChart'),

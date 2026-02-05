@@ -1,3 +1,4 @@
+import type { Rule } from 'sanity';
 import {resolveValue} from "../../utils/resolveValue.ts";
 import {handleReplacements} from "../../utils/handleReplacements.ts";
 import {getIcon} from "../../utils/getIcon.tsx";
@@ -32,20 +33,20 @@ export const component_featuredCitiesBlock = {
                   title: 'City Name',
                   name: 'field_cityName',
                   type: 'string',
-                  validation: (Rule: any) => Rule.required(),
+                  validation: (R: Rule) => R.required(),
                 },
                 {
                   title: 'State Abbreviation',
                   name: 'field_stateAbbreviation',
                   type: 'string',
                   description: '2-letter state code (e.g., TN, TX, FL)',
-                  validation: (Rule: any) => Rule.required().length(2).uppercase(),
+                  validation: (R: Rule) => R.required().length(2).uppercase(),
                 },
                 {
                   title: 'Link',
                   name: 'field_href',
                   type: 'url',
-                  validation: (Rule: any) => Rule.required().uri({
+                  validation: (R: Rule) => R.required().uri({
                     allowRelative: true,
                   }),
                 },
@@ -96,7 +97,7 @@ export const component_featuredCitiesBlock = {
       title: 'featuredCitiesBlockHeader.field_title',
       _type: '_type',
     },
-    prepare: (x: any) => {
+    prepare: (x: Record<string, unknown>) => {
       const infer = {
         singletonTitle: null,
         icon: getIcon('MapPin'),

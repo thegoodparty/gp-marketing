@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { cn, tv } from './_lib/utils.ts';
 import type { SanityImage } from './types.ts';
 import { Avatar } from './Avatar.tsx';
@@ -5,6 +6,7 @@ import { Text } from './Text.tsx';
 import { Anchor } from './Anchor.tsx';
 import { IconResolver } from './IconResolver.tsx';
 import { Logo } from '~/sanity/utils/Logo.tsx';
+import { getInitials } from '~/utils/getInitials';
 
 const styles = tv({
 	slots: {
@@ -26,18 +28,11 @@ export type CandidatesCard2Props = {
 	isGoodPartyCandidate?: boolean;
 };
 
-export function CandidatesCard2(props: CandidatesCard2Props) {
+export const CandidatesCard2 = memo(function CandidatesCard2(props: CandidatesCard2Props) {
 	const { base, avatarWrapper, badge, content, empowered, link } = styles();
 
 	// Generate initials from name if no avatar
-	const initials = props.avatar
-		? undefined
-		: props.name
-				.split(' ')
-				.map(n => n[0])
-				.join('')
-				.toUpperCase()
-				.slice(0, 2);
+	const initials = props.avatar ? undefined : getInitials(props.name);
 
 	return (
 		<article className={cn(base(), props.className)} data-component='CandidatesCard2'>
@@ -74,4 +69,4 @@ export function CandidatesCard2(props: CandidatesCard2Props) {
 			</Anchor>
 		</article>
 	);
-}
+});

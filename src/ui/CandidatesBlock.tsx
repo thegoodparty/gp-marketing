@@ -60,6 +60,7 @@ export function CandidatesBlock(props: CandidatesBlockProps) {
 
 					{props.hasFilters && (
 						<div className={filterPlaceholder()}>
+							{/* TODO: Implement filter UI - Feature deferred for future implementation */}
 							<p>Filter UI - To be implemented</p>
 						</div>
 					)}
@@ -79,6 +80,7 @@ export function CandidatesBlock(props: CandidatesBlockProps) {
 
 					{props.hasFilters && props.pagination && (
 						<div className={paginationPlaceholder()}>
+							{/* TODO: Implement pagination UI - Feature deferred for future implementation */}
 							<p>
 								Pagination UI - Page {props.pagination.currentPage} of {props.pagination.totalPages}
 							</p>

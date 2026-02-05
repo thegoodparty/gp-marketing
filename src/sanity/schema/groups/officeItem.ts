@@ -1,3 +1,4 @@
+import type { Rule } from 'sanity';
 import { getIcon } from '../../utils/getIcon.tsx';
 
 export const officeItem = {
@@ -18,21 +19,21 @@ export const officeItem = {
 				],
 			},
 			initialValue: 'STATE',
-			validation: (R: any) => R.required(),
+			validation: (R: Rule) => R.required(),
 		},
 		{
 			title: 'Position',
 			name: 'field_position',
 			type: 'string',
 			description: 'Name of the office position',
-			validation: (R: any) => R.required(),
+			validation: (R: Rule) => R.required(),
 		},
 		{
 			title: 'Next Election Date',
 			name: 'field_nextElectionDate',
 			type: 'date',
 			description: 'Date of the next election',
-			validation: (R: any) => R.required(),
+			validation: (R: Rule) => R.required(),
 		},
 		{
 			title: 'Link',

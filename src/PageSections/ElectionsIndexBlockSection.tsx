@@ -2,6 +2,7 @@ import { stegaClean } from 'next-sanity';
 
 import type { Sections } from '~/PageSections';
 import { transformButtons } from '~/lib/buttonTransformer';
+import { DEFAULT_DISPLAY_COUNT } from '~/constants/display';
 import { ElectionsIndexBlock } from '~/ui/ElectionsIndexBlock';
 import { RichData } from '~/ui/RichData';
 
@@ -37,7 +38,7 @@ export function ElectionsIndexBlockSection(section: ElectionsIndexBlockSectionPr
 					section.electionsIndexBlockDesignSettings?.field_searchPlaceholder ??
 					'Search by county or municipality'
 				}
-				initialDisplayCount={section.electionsIndexBlockDesignSettings?.field_initialDisplayCount ?? 24}
+				initialDisplayCount={section.electionsIndexBlockDesignSettings?.field_initialDisplayCount ?? DEFAULT_DISPLAY_COUNT}
 				ctaLabel={section.electionsIndexBlockDesignSettings?.field_ctaLabel ?? 'Browse CTA'}
 			/>
 		</section>

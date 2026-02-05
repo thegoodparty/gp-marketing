@@ -111,3 +111,21 @@ export const MultipleStates: Story = {
 	),
 	...defaultParams,
 };
+
+export const InvalidStateCode: Story = {
+	args: {
+		stateCode: 'XX',
+		width: 24,
+		height: 24,
+	},
+	...defaultParams,
+};
+
+export const FallbackState: Story = {
+	args: {
+		stateCode: 'INVALID',
+		width: 24,
+		height: 24,
+	},
+	...defaultParams,
+};

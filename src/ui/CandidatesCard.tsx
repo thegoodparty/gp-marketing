@@ -1,94 +1,90 @@
+import { memo } from 'react';
 import { cn, tv } from './_lib/utils.ts';
+import type { SanityImage } from './types.ts';
+import { Avatar } from './Avatar.tsx';
 import { Text } from './Text.tsx';
 import { Anchor } from './Anchor.tsx';
+import { IconResolver } from './IconResolver.tsx';
+import { Logo } from '~/sanity/utils/Logo.tsx';
+import { getInitials } from '~/utils/getInitials';
 
 const styles = tv({
 	slots: {
-		base: 'flex items-center gap-4 p-6 bg-white rounded-2xl',
-		avatarContainer: 'relative flex-shrink-0',
-		avatar: 'w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden',
-		badge: 'absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-sm',
-		content: 'flex-1 flex flex-col gap-1',
+		base: [
+			'flex flex-col gap-2 p-6 bg-white rounded-xl border transition-shadow duration-normal hover:shadow-md',
+			'md:flex-row md:items-start md:gap-6',
+		],
+		baseStandard: 'border-black/8',
+		baseGoodParty: 'border-bright-yellow-600 hover:bg-bright-yellow-50',
+		avatarWrapper: 'relative flex-shrink-0 size-20 md:size-24 overflow-visible',
+		contentWrapper: 'flex flex-col flex-1 min-w-0 gap-2 md:gap-1',
+		content: 'flex flex-col gap-1',
+		name: 'whitespace-nowrap md:whitespace-normal',
+		empowered: 'text-neutral-500',
+		link: 'flex items-center gap-2 text-nowrap shrink-0',
+		badge: 'absolute -bottom-0.5 -right-0.5 w-[50px] h-[35px] flex items-center justify-center',
 	},
 });
 
 export type CandidatesCardProps = {
 	className?: string;
+	avatar?: SanityImage | string;
 	name: string;
-	partyAffiliation?: string;
-	secondaryText?: string;
-	avatarUrl?: string;
-	href?: string;
-	showBadge?: boolean;
+	partyAffiliation: string;
+	href: string;
+	isGoodPartyCandidate?: boolean;
+	_key?: string;
 };
 
-export function CandidatesCard(props: CandidatesCardProps) {
-	const { base, avatarContainer, avatar, badge, content } = styles();
+export const CandidatesCard = memo(function CandidatesCard(props: CandidatesCardProps) {
+	const isGoodParty = props.isGoodPartyCandidate === true;
+	const { base, baseStandard, baseGoodParty, avatarWrapper, contentWrapper, content, name, empowered, link, badge } = styles();
 
-	const cardContent = (
-		<>
-			<div className={avatarContainer()}>
-				<div className={avatar()}>
-					{props.avatarUrl ? (
-						<img src={props.avatarUrl} alt={props.name} className='w-full h-full object-cover' />
-					) : (
-						<svg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'>
-							<path
-								d='M16 16C19.3137 16 22 13.3137 22 10C22 6.68629 19.3137 4 16 4C12.6863 4 10 6.68629 10 10C10 13.3137 12.6863 16 16 16Z'
-								fill='#9CA3AF'
-							/>
-							<path
-								d='M16 18C10.4772 18 6 22.4772 6 28H26C26 22.4772 21.5228 18 16 18Z'
-								fill='#9CA3AF'
-							/>
-						</svg>
-					)}
-				</div>
-				{props.showBadge && (
+	// Generate initials from name if no avatar
+	const initials = props.avatar ? undefined : getInitials(props.name);
+
+	return (
+		<article
+			className={cn(base(), isGoodParty ? baseGoodParty() : baseStandard(), props.className)}
+			data-component='CandidatesCard'
+		>
+			<div className={avatarWrapper()}>
+				{props.avatar ? (
+					<Avatar image={props.avatar} className='size-20 md:size-24' />
+				) : (
+					<div className='flex items-center justify-center size-20 md:size-24 rounded-full bg-gray-200 text-gray-700 font-bold text-2xl'>
+						{initials}
+					</div>
+				)}
+				{isGoodParty && (
 					<div className={badge()}>
-						<svg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'>
-							<path
-								d='M7 1.16667L8.855 4.91667L13 5.54167L10 8.45833L10.71 12.5833L7 10.6417L3.29 12.5833L4 8.45833L1 5.54167L5.145 4.91667L7 1.16667Z'
-								fill='currentColor'
-								className='text-goodparty-red'
-								stroke='currentColor'
-								strokeWidth='1.5'
-								strokeLinecap='round'
-								strokeLinejoin='round'
-							/>
-						</svg>
+						<Logo width={100} height={75} />
 					</div>
 				)}
 			</div>
-			<div className={content()}>
-				<Text as='h3' styleType='heading-xs'>
-					{props.name}
-				</Text>
-				{props.partyAffiliation && (
-					<Text as='span' styleType='body-2'>
+
+			<div className={contentWrapper()}>
+				<div className={content()}>
+					<Text as='h3' styleType='heading-xs' className={name()}>
+						{props.name}
+					</Text>
+					<Text as='p' styleType='body-2' className='text-foreground-secondary'>
 						{props.partyAffiliation}
 					</Text>
-				)}
-				{props.secondaryText && (
-					<Text as='span' styleType='caption'>
-						{props.secondaryText}
+					{isGoodParty && (
+						<Text as='p' styleType='caption' className={empowered()}>
+							Empowered by goodparty.org
+						</Text>
+					)}
+				</div>
+
+				<Anchor href={props.href} className={link()}>
+					<Text as='span' styleType='body-2' className='font-medium'>
+						View profile
 					</Text>
-				)}
+					<IconResolver icon='arrow-up-right' className='min-w-4 min-h-4 w-4 h-4 max-w-4 max-h-4' />
+				</Anchor>
 			</div>
-		</>
-	);
-
-	if (props.href) {
-		return (
-			<Anchor href={props.href} className={cn(base(), props.className)} data-component='CandidatesCard'>
-				{cardContent}
-			</Anchor>
-		);
-	}
-
-	return (
-		<article className={cn(base(), props.className)} data-component='CandidatesCard'>
-			{cardContent}
 		</article>
 	);
-}
+});

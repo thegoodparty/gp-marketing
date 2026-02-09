@@ -12,7 +12,7 @@ const styles = tv({
 	slots: {
 		base: [
 			'flex flex-col gap-2 p-6 bg-white rounded-xl border transition-shadow duration-normal hover:shadow-md',
-			'md:flex-row md:items-start md:gap-6',
+			'md:flex-row md:flex-wrap md:items-start md:gap-6',
 		],
 		baseStandard: 'border-black/8',
 		baseGoodParty: 'border-bright-yellow-600 hover:bg-bright-yellow-50',
@@ -21,6 +21,7 @@ const styles = tv({
 		content: 'flex flex-col gap-1',
 		name: 'whitespace-nowrap md:whitespace-normal',
 		empowered: 'text-neutral-500',
+		footerWrapper: 'flex flex-col w-full gap-2 md:w-full md:flex-row md:items-center md:justify-between md:gap-4',
 		link: 'flex items-center gap-2 text-nowrap shrink-0',
 		badge: 'absolute -bottom-0.5 -right-0.5 w-[50px] h-[35px] flex items-center justify-center',
 	},
@@ -38,7 +39,7 @@ export type CandidatesCardProps = {
 
 export const CandidatesCard = memo(function CandidatesCard(props: CandidatesCardProps) {
 	const isGoodParty = props.isGoodPartyCandidate === true;
-	const { base, baseStandard, baseGoodParty, avatarWrapper, contentWrapper, content, name, empowered, link, badge } = styles();
+	const { base, baseStandard, baseGoodParty, avatarWrapper, contentWrapper, content, name, empowered, footerWrapper, link, badge } = styles();
 
 	// Generate initials from name if no avatar
 	const initials = props.avatar ? undefined : getInitials(props.name);
@@ -71,13 +72,15 @@ export const CandidatesCard = memo(function CandidatesCard(props: CandidatesCard
 					<Text as='p' styleType='body-2' className='text-foreground-secondary'>
 						{props.partyAffiliation}
 					</Text>
-					{isGoodParty && (
-						<Text as='p' styleType='caption' className={empowered()}>
-							Empowered by goodparty.org
-						</Text>
-					)}
 				</div>
+			</div>
 
+			<div className={footerWrapper()}>
+				{isGoodParty && (
+					<Text as='p' styleType='caption' className={empowered()}>
+						Empowered by goodparty.org
+					</Text>
+				)}
 				<Anchor href={props.href} className={link()}>
 					<Text as='span' styleType='body-2' className='font-medium'>
 						View profile

@@ -14,7 +14,7 @@ const styles = tv({
 			'flex flex-col gap-2 p-6 bg-white rounded-xl border transition-shadow duration-normal hover:shadow-md',
 			'md:flex-row md:flex-wrap md:items-start md:gap-6',
 		],
-		baseStandard: 'border-black/8',
+		baseStandard: 'border-black/8 hover:bg-[var(--base-muted,#F5F5F5)]',
 		baseGoodParty: 'border-bright-yellow-600 hover:bg-bright-yellow-50',
 		avatarWrapper: 'relative flex-shrink-0 size-20 md:size-24 overflow-visible',
 		contentWrapper: 'flex flex-col flex-1 min-w-0 gap-2 md:gap-1',
@@ -76,10 +76,12 @@ export const CandidatesCard = memo(function CandidatesCard(props: CandidatesCard
 			</div>
 
 			<div className={footerWrapper()}>
-				{isGoodParty && (
+				{isGoodParty ? (
 					<Text as='p' styleType='caption' className={empowered()}>
 						Empowered by goodparty.org
 					</Text>
+				) : (
+					<div />
 				)}
 				<Anchor href={props.href} className={link()}>
 					<Text as='span' styleType='body-2' className='font-medium'>

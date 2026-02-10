@@ -7,7 +7,7 @@ import { ProfileContentCard, type ProfileContentCardProps } from './ProfileConte
 const styles = tv({
 	slots: {
 		base: 'py-(--container-padding)',
-		grid: 'grid lg:grid-cols-[300px_1fr] gap-20',
+		grid: 'grid lg:grid-cols-[minmax(400px,auto)_1fr] gap-[80px]',
 		sidebar: 'sticky top-4 self-start',
 		content: 'flex flex-col gap-8 bg-white rounded-xl p-6',
 	},

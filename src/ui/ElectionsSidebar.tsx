@@ -6,7 +6,7 @@ import { Anchor } from './Anchor.tsx';
 
 const styles = tv({
 	slots: {
-		base: 'flex flex-col gap-6',
+		base: 'min-w-[400px] flex flex-col gap-6',
 		card: 'flex flex-col gap-4 p-6 bg-white rounded-xl',
 		linkItem: 'flex items-start gap-3 py-3 border-b border-gray-200 last:border-b-0',
 		linkIcon: 'min-w-5 min-h-5 w-5 h-5 max-w-5 max-h-5 flex-shrink-0',

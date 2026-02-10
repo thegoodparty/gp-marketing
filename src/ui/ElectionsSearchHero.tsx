@@ -19,7 +19,7 @@ const styles = tv({
 		wrapper: 'relative',
 		media: 'absolute inset-0 [&>div]:h-full [&>div]:w-full after:absolute after:inset-0 after:z-0',
 		content: 'relative z-1 flex flex-col gap-6 py-16 px-4 text-center text-white md:items-center lg:min-h-[36rem] lg:justify-center',
-		logo: 'mb-4 flex justify-center',
+		logo: 'flex justify-center',
 		logoImage: 'h-12 w-auto',
 		textContainer: 'flex flex-col gap-3 md:gap-4 max-w-[50rem] mx-auto',
 		searchContainer: 'flex flex-col gap-4 w-full max-w-md mx-auto sm:flex-row sm:items-center',
@@ -96,7 +96,7 @@ export function ElectionsSearchHero(props: ElectionsSearchHeroProps) {
 
 	return (
 		<article className={cn(base(), props.className)} data-component='ElectionsSearchHero'>
-			<Container size='xl'>
+			<Container size='unset'>
 				<div className={wrapper()}>
 					{hasBackgroundImage && (
 						<div className={media()}>
@@ -118,7 +118,7 @@ export function ElectionsSearchHero(props: ElectionsSearchHeroProps) {
 								{props.logoImage ? (
 									<Media image={props.logoImage} className='h-12 w-auto' />
 								) : (
-									<Logo width={96} height={72} />
+									<Logo width={150} height={150} />
 								)}
 							</div>
 						)}

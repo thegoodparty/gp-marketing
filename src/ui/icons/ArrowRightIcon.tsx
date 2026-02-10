@@ -7,6 +7,11 @@ export type ArrowRightIconProps = SVGProps<SVGSVGElement> & {
 	 * @default 32
 	 */
 	size?: number;
+	/**
+	 * Additional class applied to the inner group (the arrow path).
+	 * Use with group-hover:animate-slide-in-right on the parent for hover animation.
+	 */
+	innerClassName?: string;
 };
 
 /**
@@ -33,7 +38,7 @@ export type ArrowRightIconProps = SVGProps<SVGSVGElement> & {
  * </Anchor>
  * ```
  */
-export function ArrowRightIcon({ size = 32, className, ...props }: ArrowRightIconProps) {
+export function ArrowRightIcon({ size = 32, className, innerClassName, ...props }: ArrowRightIconProps) {
 	return (
 		<svg
 			width={size}
@@ -44,10 +49,12 @@ export function ArrowRightIcon({ size = 32, className, ...props }: ArrowRightIco
 			className={cn(className)}
 			{...props}
 		>
-			<path
-				d="M23.057 9.72256C23.5777 9.20186 24.4217 9.20186 24.9424 9.72256L30.2757 15.0559C30.7964 15.5766 30.7964 16.4206 30.2757 16.9413L24.9424 22.2746C24.4217 22.7953 23.5777 22.7953 23.057 22.2746C22.5363 21.7539 22.5363 20.9099 23.057 20.3892L26.1143 17.3319H2.66634C1.92996 17.3319 1.33301 16.735 1.33301 15.9986C1.33301 15.2622 1.92996 14.6653 2.66634 14.6653H26.1143L23.057 11.608C22.5363 11.0873 22.5363 10.2433 23.057 9.72256Z"
-				fill="currentColor"
-			/>
+			<g className={cn(innerClassName)}>
+				<path
+					d="M23.057 9.72256C23.5777 9.20186 24.4217 9.20186 24.9424 9.72256L30.2757 15.0559C30.7964 15.5766 30.7964 16.4206 30.2757 16.9413L24.9424 22.2746C24.4217 22.7953 23.5777 22.7953 23.057 22.2746C22.5363 21.7539 22.5363 20.9099 23.057 20.3892L26.1143 17.3319H2.66634C1.92996 17.3319 1.33301 16.735 1.33301 15.9986C1.33301 15.2622 1.92996 14.6653 2.66634 14.6653H26.1143L23.057 11.608C22.5363 11.0873 22.5363 10.2433 23.057 9.72256Z"
+					fill="currentColor"
+				/>
+			</g>
 		</svg>
 	);
 }

@@ -36,7 +36,7 @@ const styles = tv({
 		headerPositionCell: 'ml-8',
 		headerDateCell: 'ml-auto',
 		tableBody: 'flex flex-col gap-3',
-		tableRow: 'bg-white rounded-lg border border-neutral-200 hover:border-goodparty-blue transition-colors flex items-center gap-4 px-4 py-4',
+		tableRow: 'group bg-white rounded-lg border border-neutral-200 hover:border-goodparty-blue transition-colors flex items-center gap-4 px-4 py-4',
 		tableCell: 'flex items-center',
 		positionCell: 'flex items-center ml-2',
 		typeTag: 'inline-block px-3 py-1 rounded-sm bg-goodparty-blue text-white font-secondary text-text-xs font-semibold uppercase whitespace-nowrap',
@@ -45,7 +45,7 @@ const styles = tv({
 		dateCell: 'flex items-center ml-auto',
 		arrowIcon: 'text-neutral-900',
 		cardList: 'flex flex-col gap-3 md:hidden',
-		officeCard: 'bg-neutral-50 rounded-lg p-4 border border-neutral-200 hover:border-goodparty-blue transition-colors',
+		officeCard: 'group bg-neutral-50 rounded-lg p-4 border border-neutral-200 hover:border-goodparty-blue transition-colors',
 		cardContent: 'flex items-start justify-between gap-4',
 		cardLeft: 'flex-1 flex flex-col gap-2',
 		cardRight: 'flex-shrink-0 self-end',
@@ -221,7 +221,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 														<Text styleType="body-2" className={dateText()}>{office.nextElectionDate}</Text>
 													</div>
 													<div className={tableCell()}>
-														<ArrowRightIcon size={32} className={arrowIcon()} />
+														<ArrowRightIcon size={32} className={arrowIcon()} innerClassName="group-hover:animate-slide-in-right" />
 													</div>
 													</>
 												);
@@ -259,7 +259,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 													<Text styleType="body-2" className={dateText()}>{office.nextElectionDate}</Text>
 												</div>
 												<div className={cardRight()}>
-													<ArrowRightIcon size={32} className={arrowIcon()} />
+													<ArrowRightIcon size={32} className={arrowIcon()} innerClassName="group-hover:animate-slide-in-right" />
 												</div>
 											</div>
 										);

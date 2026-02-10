@@ -66,3 +66,17 @@ export const WithCustomClassName: Story = {
 	},
 	...defaultParams,
 };
+
+export const AnimatedOnHover: Story = {
+	args: {
+		size: 32,
+		innerClassName: 'group-hover:animate-slide-in-right',
+	},
+	render: args => (
+		<div className="group flex items-center justify-between gap-4 p-4 rounded-lg border border-neutral-200 w-64 cursor-pointer hover:bg-neutral-50">
+			<span>Hover to animate</span>
+			<ArrowRightIcon {...args} />
+		</div>
+	),
+	...defaultParams,
+};

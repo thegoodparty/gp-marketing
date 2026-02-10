@@ -18,7 +18,7 @@ const styles = tv({
 		headline: 'font-primary text-heading-md md:text-heading-lg',
 		linksList: 'flex flex-col gap-3',
 		linkItem: [
-			'bg-neutral-50 rounded-lg',
+			'group bg-neutral-50 rounded-lg',
 			'hover:border-lavender-600 transition-colors',
 			'flex items-center justify-between gap-4 px-4 py-4',
 			'cursor-pointer',
@@ -35,8 +35,8 @@ const styles = tv({
 				card: 'bg-neutral-900 border-lavender-500',
 				headline: 'text-white',
 				linkItem: 'bg-white border-neutral-700 hover:border-lavender-400',
-				linkText: 'text-white',
-				linkIcon: 'text-white',
+				linkText: 'text-neutral-900',
+				linkIcon: 'text-neutral-900',
 				emptyStateText: 'text-neutral-300',
 			},
 			cream: {
@@ -117,7 +117,7 @@ export function FAQLinksBlock(props: FAQLinksBlockProps) {
 											<Text styleType="body-2" className={linkText()}>
 												{item.label}
 											</Text>
-											<ArrowRightIcon size={32} className={linkIcon()} />
+											<ArrowRightIcon size={32} className={linkIcon()} innerClassName="group-hover:animate-slide-in-right" />
 										</>
 									);
 

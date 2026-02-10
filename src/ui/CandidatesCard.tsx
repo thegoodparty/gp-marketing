@@ -59,7 +59,7 @@ export const CandidatesCard = memo(function CandidatesCard(props: CandidatesCard
 				)}
 				{isGoodParty && (
 					<div className={badge()}>
-						<Logo width={100} height={75} />
+						<Logo width={85} height={24} />
 					</div>
 				)}
 			</div>

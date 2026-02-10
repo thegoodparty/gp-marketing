@@ -61,7 +61,7 @@ const styles = tv({
 				yearSelect: 'bg-neutral-800 border-neutral-600 text-white focus:border-lavender-400',
 				yearSelectIcon: 'text-neutral-400',
 				tableHeaderCell: 'text-neutral-300',
-				positionText: 'text-white',
+				positionText: 'text-neutral-900',
 				dateText: 'text-neutral-300',
 				officeCard: 'bg-neutral-800 border-neutral-700',
 			},

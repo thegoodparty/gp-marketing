@@ -118,7 +118,7 @@ export function ElectionsSearchHero(props: ElectionsSearchHeroProps) {
 								{props.logoImage ? (
 									<Media image={props.logoImage} className='h-12 w-auto' />
 								) : (
-									<Logo width={150} height={150} />
+									<Logo width={96} height={72} />
 								)}
 							</div>
 						)}

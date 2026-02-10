@@ -39,7 +39,7 @@ const styles = tv({
 		tableRow: 'bg-white rounded-lg border border-neutral-200 hover:border-lavender-600 transition-colors flex items-center gap-4 px-4 py-4',
 		tableCell: 'flex items-center',
 		positionCell: 'flex items-center ml-2',
-		typeTag: 'inline-block px-3 py-1 rounded-sm bg-goodparty-blue text-white font-secondary text-sm font-semibold uppercase whitespace-nowrap',
+		typeTag: 'inline-block px-3 py-1 rounded-sm bg-goodparty-blue text-white font-secondary text-text-xs font-semibold uppercase whitespace-nowrap',
 		positionText: 'font-secondary text-body-2 text-neutral-900',
 		dateText: 'font-secondary text-body-2 text-neutral-600',
 		dateCell: 'flex items-center ml-auto',

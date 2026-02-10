@@ -74,7 +74,12 @@ export function ElectionsSidebar(props: ElectionsSidebarProps) {
 			{(props.aboutOffice || props.termLength || props.electionDate || props.cta) && (
 				<div className={card()}>
 					{props.aboutOffice && (
-						<div className={infoItem()}>
+						<div
+							className={cn(
+								infoItem(),
+								props.cta && !props.termLength && !props.electionDate && 'border-b-0',
+							)}
+						>
 							<Text as='dt' styleType='subtitle-2' className={label()}>
 								About Office
 							</Text>
@@ -84,7 +89,12 @@ export function ElectionsSidebar(props: ElectionsSidebarProps) {
 						</div>
 					)}
 					{props.termLength && (
-						<div className={infoItem()}>
+						<div
+							className={cn(
+								infoItem(),
+								props.cta && !props.electionDate && 'border-b-0',
+							)}
+						>
 							<Text as='dt' styleType='subtitle-2' className={label()}>
 								Term Length
 							</Text>
@@ -94,7 +104,7 @@ export function ElectionsSidebar(props: ElectionsSidebarProps) {
 						</div>
 					)}
 					{props.electionDate && (
-						<div className={infoItem()}>
+						<div className={cn(infoItem(), props.cta && 'border-b-0')}>
 							<Text as='dt' styleType='subtitle-2' className={label()}>
 								Election Date
 							</Text>

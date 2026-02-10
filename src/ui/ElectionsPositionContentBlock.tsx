@@ -83,22 +83,26 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 										{props.card.headline}
 									</Text>
 								)}
-								{props.card.subhead && (
-									<Text as='h3' styleType='overline'>
-										{props.card.subhead}
-									</Text>
-								)}
-								{Array.isArray(props.card.bodyCopy) ? (
-									props.card.bodyCopy.map((copy, index) =>
-										isValidRichText(copy) ? (
-											<Text key={index} styleType='body-1'>
-												{copy}
-											</Text>
-										) : null,
-									)
-								) : isValidRichText(props.card.bodyCopy) ? (
-									<Text styleType='body-1'>{props.card.bodyCopy}</Text>
-								) : null}
+								<div className='flex flex-col gap-2'>
+									{props.card.subhead && (
+										<Text as='h3' styleType='overline'>
+											{props.card.subhead}
+										</Text>
+									)}
+										{Array.isArray(props.card.bodyCopy) ? (
+										<div className='flex flex-col gap-8'>
+											{props.card.bodyCopy.map((copy, index) =>
+												isValidRichText(copy) ? (
+													<Text key={index} styleType='body-1'>
+														{copy}
+													</Text>
+												) : null,
+											)}
+										</div>
+									) : isValidRichText(props.card.bodyCopy) ? (
+										<Text styleType='body-1'>{props.card.bodyCopy}</Text>
+									) : null}
+								</div>
 							</div>
 							{props.card.primaryCTA && (
 								<div className={buttonContainer()}>

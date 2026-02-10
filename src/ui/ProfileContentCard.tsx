@@ -24,7 +24,7 @@ export function ProfileContentCard(props: ProfileContentCardProps) {
 	return (
 		<article className={cn(base(), props.className)} data-component='ProfileContentCard'>
 			{props.heading && (
-				<Text as='h2' styleType='heading-md' className={heading()}>
+				<Text as='h2' styleType='subtitle-1' className={heading()}>
 					{props.heading}
 				</Text>
 			)}

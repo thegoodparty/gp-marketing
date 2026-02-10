@@ -3,6 +3,7 @@ import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 import { Container } from './Container.tsx';
 import { ElectionsSidebar, type ElectionsSidebarProps } from './ElectionsSidebar.tsx';
 import { ProfileContentCard, type ProfileContentCardProps } from './ProfileContentCard.tsx';
+import { Text } from './Text.tsx';
 
 const styles = tv({
 	slots: {
@@ -10,6 +11,7 @@ const styles = tv({
 		grid: 'grid lg:grid-cols-[minmax(400px,auto)_1fr] gap-[80px]',
 		sidebar: 'sticky top-4 self-start',
 		content: 'flex flex-col gap-8 bg-white rounded-xl p-6',
+		title: 'border-b border-gray-200 ',
 	},
 	variants: {
 		backgroundColor: {
@@ -28,12 +30,13 @@ export type ProfileContentBlockProps = {
 	className?: string;
 	backgroundColor?: (typeof backgroundTypeValues)[number];
 	sidebar?: ElectionsSidebarProps;
+	title?: string;
 	contentCards: ProfileContentCardProps[];
 };
 
 export function ProfileContentBlock(props: ProfileContentBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
-	const { base, grid, sidebar, content } = styles({ backgroundColor });
+	const { base, grid, sidebar, content, title: titleSlot } = styles({ backgroundColor });
 
 	return (
 		<article className={cn(base(), props.className)} data-component='ProfileContentBlock'>
@@ -45,6 +48,11 @@ export function ProfileContentBlock(props: ProfileContentBlockProps) {
 						</aside>
 					)}
 					<div className={cn(content())}>
+						{props.title && (
+							<Text as="h2" styleType="heading-sm" className={titleSlot()}>
+								{props.title}
+							</Text>
+						)}
 						{props.contentCards.map((card, index) => (
 							<ProfileContentCard key={index} {...card} />
 						))}

@@ -80,7 +80,7 @@ export function ElectionsSidebar(props: ElectionsSidebarProps) {
 								props.cta && !props.termLength && !props.electionDate && 'border-b-0',
 							)}
 						>
-							<Text as='dt' styleType='subtitle-2' className={label()}>
+							<Text as='dt' styleType='subtitle-1' className={label()}>
 								About Office
 							</Text>
 							<Text as='dd' styleType='body-2' className={value()}>

@@ -5,7 +5,7 @@ import { isValidRichText } from './_lib/isValidRichText.ts';
 
 const styles = tv({
 	slots: {
-		base: 'flex flex-col gap-6',
+		base: 'flex flex-col gap-6 border-b border-gray-200 last:border-b-0',
 		heading: '',
 		content: '',
 	},

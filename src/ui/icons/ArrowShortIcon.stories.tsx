@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ArrowRightIcon } from './ArrowRightIcon.tsx';
+import { ArrowShortIcon } from './ArrowShortIcon.tsx';
 
-const meta: Meta<typeof ArrowRightIcon> = {
-	title: 'New Components/Icons/Arrow Right Icon',
-	component: ArrowRightIcon,
+const meta: Meta<typeof ArrowShortIcon> = {
+	title: 'New Components/Icons/Arrow Short Icon',
+	component: ArrowShortIcon,
 	render: args => (
 		<div className="flex items-center gap-4 p-4">
-			<ArrowRightIcon {...args} />
+			<ArrowShortIcon {...args} />
 		</div>
 	),
 };
@@ -75,7 +75,7 @@ export const AnimatedOnHover: Story = {
 	render: args => (
 		<div className="group flex items-center justify-between gap-4 p-4 rounded-lg border border-neutral-200 w-64 cursor-pointer hover:bg-neutral-50">
 			<span>Hover to animate</span>
-			<ArrowRightIcon {...args} />
+			<ArrowShortIcon {...args} />
 		</div>
 	),
 	...defaultParams,

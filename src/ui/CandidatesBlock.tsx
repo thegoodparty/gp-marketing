@@ -1,8 +1,7 @@
 import { cn, tv } from './_lib/utils.ts';
 import { Container } from './Container.tsx';
 import { HeaderBlock, type HeaderBlockProps } from './HeaderBlock.tsx';
-import { CandidatesCard1, type CandidatesCard1Props } from './CandidatesCard1.tsx';
-import { CandidatesCard2, type CandidatesCard2Props } from './CandidatesCard2.tsx';
+import { CandidatesCard, type CandidatesCardProps } from './CandidatesCard.tsx';
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 
@@ -27,7 +26,7 @@ const styles = tv({
 	},
 });
 
-export type CandidateCard = (CandidatesCard1Props | CandidatesCard2Props) & {
+export type CandidateCard = CandidatesCardProps & {
 	_key?: string;
 };
 
@@ -66,16 +65,9 @@ export function CandidatesBlock(props: CandidatesBlockProps) {
 					)}
 
 					<div className={grid()}>
-						{props.candidates.map((candidate, index) => {
-							// Determine which card type to use based on isGoodPartyCandidate prop
-							const isGoodPartyCard = 'isGoodPartyCandidate' in candidate && candidate.isGoodPartyCandidate;
-
-							return isGoodPartyCard ? (
-								<CandidatesCard2 key={candidate._key ?? index} {...(candidate as CandidatesCard2Props)} />
-							) : (
-								<CandidatesCard1 key={candidate._key ?? index} {...(candidate as CandidatesCard1Props)} />
-							);
-						})}
+						{props.candidates.map((candidate, index) => (
+							<CandidatesCard key={candidate._key ?? index} {...candidate} />
+						))}
 					</div>
 
 					{props.hasFilters && props.pagination && (

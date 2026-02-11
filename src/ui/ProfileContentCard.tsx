@@ -5,7 +5,7 @@ import { isValidRichText } from './_lib/isValidRichText.ts';
 
 const styles = tv({
 	slots: {
-		base: 'flex flex-col gap-6',
+		base: 'flex flex-col gap-6 border-b border-gray-200 last:border-b-0 pb-[16px]',
 		heading: '',
 		content: '',
 	},
@@ -24,7 +24,7 @@ export function ProfileContentCard(props: ProfileContentCardProps) {
 	return (
 		<article className={cn(base(), props.className)} data-component='ProfileContentCard'>
 			{props.heading && (
-				<Text as='h2' styleType='heading-md' className={heading()}>
+				<Text as='h2' styleType='subtitle-1' className={heading()}>
 					{props.heading}
 				</Text>
 			)}

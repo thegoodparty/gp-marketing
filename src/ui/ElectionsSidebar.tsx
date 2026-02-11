@@ -6,8 +6,8 @@ import { Anchor } from './Anchor.tsx';
 
 const styles = tv({
 	slots: {
-		base: 'flex flex-col gap-6 p-6 bg-white rounded-xl',
-		section: 'flex flex-col gap-4',
+		base: 'min-w-[400px] flex flex-col gap-6',
+		card: 'flex flex-col gap-4 p-6 bg-white rounded-xl',
 		linkItem: 'flex items-start gap-3 py-3 border-b border-gray-200 last:border-b-0',
 		linkIcon: 'min-w-5 min-h-5 w-5 h-5 max-w-5 max-h-5 flex-shrink-0',
 		linkText: 'flex-1 flex flex-col gap-1',
@@ -44,12 +44,12 @@ export type ElectionsSidebarProps = {
 };
 
 export function ElectionsSidebar(props: ElectionsSidebarProps) {
-	const { base, section, linkItem, linkIcon, linkText, linkLabel, linkUrlContainer, linkUrl, infoItem, label, value } = styles();
+	const { base, card, linkItem, linkIcon, linkText, linkLabel, linkUrlContainer, linkUrl, infoItem, label, value } = styles();
 
 	return (
 		<aside className={cn(base(), props.className)} data-component='ElectionsSidebar'>
 			{props.links && props.links.length > 0 && (
-				<div className={section()}>
+				<div className={card()}>
 					{props.links.map((link, index) => (
 						<div key={index} className={linkItem()}>
 							<div className={linkText()}>
@@ -72,10 +72,15 @@ export function ElectionsSidebar(props: ElectionsSidebarProps) {
 				</div>
 			)}
 			{(props.aboutOffice || props.termLength || props.electionDate || props.cta) && (
-				<div className={section()}>
+				<div className={card()}>
 					{props.aboutOffice && (
-						<div className={infoItem()}>
-							<Text as='dt' styleType='subtitle-2' className={label()}>
+						<div
+							className={cn(
+								infoItem(),
+								props.cta && !props.termLength && !props.electionDate && 'border-b-0',
+							)}
+						>
+							<Text as='dt' styleType='subtitle-1' className={label()}>
 								About Office
 							</Text>
 							<Text as='dd' styleType='body-2' className={value()}>
@@ -84,7 +89,12 @@ export function ElectionsSidebar(props: ElectionsSidebarProps) {
 						</div>
 					)}
 					{props.termLength && (
-						<div className={infoItem()}>
+						<div
+							className={cn(
+								infoItem(),
+								props.cta && !props.electionDate && 'border-b-0',
+							)}
+						>
 							<Text as='dt' styleType='subtitle-2' className={label()}>
 								Term Length
 							</Text>
@@ -94,7 +104,7 @@ export function ElectionsSidebar(props: ElectionsSidebarProps) {
 						</div>
 					)}
 					{props.electionDate && (
-						<div className={infoItem()}>
+						<div className={cn(infoItem(), props.cta && 'border-b-0')}>
 							<Text as='dt' styleType='subtitle-2' className={label()}>
 								Election Date
 							</Text>

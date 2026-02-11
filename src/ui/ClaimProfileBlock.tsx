@@ -48,14 +48,14 @@ export function ClaimProfileBlock(props: ClaimProfileBlockProps) {
 				<div className={content()}>
 					<div className={textSection()}>
 						{props.headline && (
-							<Text as='h2' styleType='heading-lg'>
+							<Text as='h2' styleType='heading-md'>
 								{props.headline}
 							</Text>
 						)}
 						{props.body && <Text styleType='body-1'>{props.body}</Text>}
 						<ComponentButton
 							{...props.claimButton}
-							className={cn('w-fit', props.claimButton.className)}
+							className={cn('w-fit p-8', props.claimButton.className)}
 							buttonProps={{
 								...props.claimButton.buttonProps,
 								styleSize: props.claimButton.buttonProps?.styleSize ?? 'sm',

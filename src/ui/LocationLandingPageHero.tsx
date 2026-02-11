@@ -8,7 +8,7 @@ import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 const styles = tv({
 	slots: {
-		base: 'py-8 md:py-40',
+		base: 'py-6 md:py-20',
 		content: 'flex flex-col gap-6',
 		headline: '',
 		bodyCopy: 'text-white/80 max-w-[50rem]',

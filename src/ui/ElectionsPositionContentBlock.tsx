@@ -9,9 +9,9 @@ import { isValidRichText } from './_lib/isValidRichText.ts';
 const styles = tv({
 	slots: {
 		base: 'py-(--container-padding)',
-		grid: 'grid lg:grid-cols-[auto_1fr] gap-8',
-		card: 'bg-white rounded-lg p-4 md:p-6 lg:p-8 flex flex-col gap-3 md:gap-4 order-2 lg:order-1 w-fit self-start',
-		cardContent: 'flex flex-col gap-3',
+		grid: 'grid lg:grid-cols-[auto_1fr] gap-20',
+		card: 'bg-white rounded-lg border border-neutral-200 p-4 md:p-6 lg:p-8 flex flex-col gap-3 md:gap-4 order-2 lg:order-1 w-fit self-start min-w-[400px]',
+		cardContent: 'flex flex-col gap-8',
 		buttonContainer: 'w-fit',
 		rightContent: 'flex flex-col gap-8 order-1 lg:order-2',
 		topHeadline: '',
@@ -79,26 +79,30 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 						<div className={card()}>
 							<div className={cardContent()}>
 								{props.card.headline && (
-									<Text as='h2' styleType='heading-lg'>
+									<Text as='h2' styleType='heading-md'>
 										{props.card.headline}
 									</Text>
 								)}
-								{props.card.subhead && (
-									<Text as='h3' styleType='heading-md'>
-										{props.card.subhead}
-									</Text>
-								)}
-								{Array.isArray(props.card.bodyCopy) ? (
-									props.card.bodyCopy.map((copy, index) =>
-										isValidRichText(copy) ? (
-											<Text key={index} styleType='body-2'>
-												{copy}
-											</Text>
-										) : null,
-									)
-								) : isValidRichText(props.card.bodyCopy) ? (
-									<Text styleType='body-1'>{props.card.bodyCopy}</Text>
-								) : null}
+								<div className='flex flex-col gap-2'>
+									{props.card.subhead && (
+										<Text as='h3' styleType='overline'>
+											{props.card.subhead}
+										</Text>
+									)}
+										{Array.isArray(props.card.bodyCopy) ? (
+										<div className='flex flex-col gap-8'>
+											{props.card.bodyCopy.map((copy, index) =>
+												isValidRichText(copy) ? (
+													<Text key={index} styleType='body-1'>
+														{copy}
+													</Text>
+												) : null,
+											)}
+										</div>
+									) : isValidRichText(props.card.bodyCopy) ? (
+										<Text styleType='body-1'>{props.card.bodyCopy}</Text>
+									) : null}
+								</div>
 							</div>
 							{props.card.primaryCTA && (
 								<div className={buttonContainer()}>
@@ -112,7 +116,7 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 					)}
 					<div className={cn(rightContent())}>
 						{props.topHeadline && (
-							<Text as='h2' styleType='heading-lg' className={topHeadline()}>
+							<Text as='h2' styleType='subtitle-1' className={topHeadline()}>
 								{props.topHeadline}
 							</Text>
 						)}
@@ -121,7 +125,7 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 								{props.gridItems.map((item, index) => (
 									<div key={index} className={gridItem()}>
 										{item.subhead && (
-											<Text as='h3' styleType='heading-md'>
+											<Text as='h3' styleType='overline'>
 												{item.subhead}
 											</Text>
 										)}
@@ -140,7 +144,7 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 								{props.bottomItems.map((item, index) => (
 									<div key={index} className={bottomItem()}>
 										{item.headline && (
-											<Text as='h2' styleType='heading-md'>
+											<Text as='h2' styleType='subtitle-1'>
 												{item.headline}
 											</Text>
 										)}

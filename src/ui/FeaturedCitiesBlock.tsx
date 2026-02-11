@@ -45,7 +45,10 @@ export function FeaturedCitiesBlock(props: FeaturedCitiesBlockProps) {
 					<ul className={grid()}>
 						{props.locationCards.map((card, index) => (
 							<li key={`location-card-${index}`}>
-								<LocationCard {...card} />
+								<LocationCard
+									{...card}
+									className={cn(backgroundColor === 'midnight' && 'ring-1 ring-neutral-500')}
+								/>
 							</li>
 						))}
 					</ul>

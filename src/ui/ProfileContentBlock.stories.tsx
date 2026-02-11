@@ -37,6 +37,7 @@ export const Default: Story = {
 				},
 			},
 		},
+		title: 'Candidate Name',
 		contentCards: [
 			{
 				cardType: 'about-me',

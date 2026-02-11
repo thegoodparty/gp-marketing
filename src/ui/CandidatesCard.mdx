@@ -5,34 +5,37 @@ import * as CandidatesCardStories from './CandidatesCard.stories';
 
 # Candidates Card
 
-<Description of={CandidatesCardStories.Default} />
+<Description of={CandidatesCardStories.Standard} />
 
 ## Overview
 
-The CandidatesCard component displays a candidate's basic information in a horizontal card layout. It supports optional avatar images, party affiliation, secondary text, and an optional GoodParty badge. The card can be wrapped in a link when an `href` prop is provided.
+The CandidatesCard component is a unified candidate card that displays candidate information with responsive layouts for mobile and desktop. It supports both standard candidates and GoodParty-empowered candidates through conditional styling and content rendering. The component automatically handles avatar fallback with initials and includes proper spacing and alignment per Figma specifications.
 
 ## Usage
 
 Use this component when:
-- Displaying candidate information in lists or grids
-- Showing candidate details with optional badge indicators
-- Creating clickable candidate cards that link to profile pages
+- Displaying candidate information in CandidatesBlock grids
+- Showing both standard and GoodParty-empowered candidates
+- Creating responsive candidate cards that match Figma design specifications
+- Building candidate listings with consistent styling
 
 ## Variants
 
-<Canvas of={CandidatesCardStories.Default} />
+<Canvas of={CandidatesCardStories.Standard} />
 
-<Canvas of={CandidatesCardStories.WithLink} />
+<Canvas of={CandidatesCardStories.StandardWithPhoto} />
 
-<Canvas of={CandidatesCardStories.WithAvatar} />
+<Canvas of={CandidatesCardStories.StandardWithInitials} />
 
-<Canvas of={CandidatesCardStories.NoBadge} />
+<Canvas of={CandidatesCardStories.GoodParty} />
 
-<Canvas of={CandidatesCardStories.MinimalInfo} />
+<Canvas of={CandidatesCardStories.GoodPartyWithPhoto} />
+
+<Canvas of={CandidatesCardStories.GoodPartyWithInitials} />
 
 ## Props
 
-<Controls of={CandidatesCardStories.Default} />
+<Controls of={CandidatesCardStories.Standard} />
 
 ### Prop Details
 
@@ -42,33 +45,31 @@ The candidate's full name.
 
 **Type:** `string`
 
-#### `partyAffiliation` (optional)
+#### `partyAffiliation` (required)
 
 The candidate's party affiliation or role title.
 
 **Type:** `string`
 
-#### `secondaryText` (optional)
+#### `href` (required)
 
-Additional text displayed below the party affiliation (e.g., district number, zone).
-
-**Type:** `string`
-
-#### `avatarUrl` (optional)
-
-URL to the candidate's profile image. If not provided, no avatar is displayed.
+The URL path to the candidate's profile page.
 
 **Type:** `string`
 
-#### `href` (optional)
+#### `avatar` (optional)
 
-If provided, the entire card becomes a clickable link wrapping the content.
+The candidate's profile image. Can be a SanityImage object or a string URL.
 
-**Type:** `string`
+**Type:** `SanityImage | string`
 
-#### `showBadge` (optional)
+#### `isGoodPartyCandidate` (optional)
 
-Whether to display the GoodParty badge icon in the bottom-right corner of the avatar.
+Flag indicating this is a GoodParty-empowered candidate. When `true`, the card displays:
+- Yellow border (`border-bright-yellow-600`)
+- Yellow hover background (`hover:bg-bright-yellow-50`)
+- GoodParty logo badge overlay on avatar
+- "Empowered by goodparty.org" text in gray
 
 **Type:** `boolean`
 
@@ -80,28 +81,76 @@ Additional CSS classes to apply to the component.
 
 **Type:** `string`
 
-## Link Behavior
+#### `_key` (optional)
 
-When `href` is provided, the card content is wrapped in an `Anchor` component, making the entire card clickable. When `href` is not provided, the card renders as a non-interactive `<article>` element.
+Internal key used by CandidatesBlock for React list rendering.
 
-## Avatar Handling
+**Type:** `string`
 
-- If `avatarUrl` is provided, the image is displayed
-- If `avatarUrl` is not provided, no avatar placeholder is shown (unlike CandidatesCard1 and CandidatesCard2 which show initials)
+## Layout Specifications
+
+### Mobile (below md breakpoint)
+- Vertical layout (`flex-col`)
+- Padding: `p-6` (24px)
+- Gap between elements: `gap-2` (8px)
+- Avatar size: `size-20` (80px)
+- Name: Single line (`whitespace-nowrap`)
+- "View profile" link: Right-aligned at bottom
+
+### Desktop (md breakpoint and above)
+- Horizontal layout (`md:flex-row`)
+- Padding: `p-6` (24px)
+- Gap between avatar and content: `md:gap-6` (24px)
+- Alignment: Top-aligned (`md:items-start`)
+- Avatar size: `md:size-24` (96px)
+- Name: Allows wrapping (`md:whitespace-normal`) for long names
+- "View profile" link: Right-aligned, vertically centered
+
+## Styling Variants
+
+### Standard Candidate (`isGoodPartyCandidate` false/undefined)
+- Border: `border-black/8` (gray)
+- Hover: Shadow only (`hover:shadow-md`)
+- No badge overlay
+- No "Empowered by" text
+
+### GoodParty Candidate (`isGoodPartyCandidate` true)
+- Border: `border-bright-yellow-600` (yellow)
+- Hover: Shadow and yellow background (`hover:shadow-md hover:bg-bright-yellow-50`)
+- Badge: GoodParty logo positioned `absolute -bottom-0.5 -right-0.5` on avatar
+- "Empowered by goodparty.org": Displayed in `text-neutral-500` (gray), `caption` styleType
+
+## Avatar Fallback
+
+When no `avatar` is provided, the component automatically generates initials from the candidate's name:
+- Takes the first letter of each word in the name
+- Converts to uppercase
+- Displays up to 2 characters
+- Shows in a gray circular background (`bg-gray-200`)
+
+**Example:** "Jane Smith" → "JS", "Maria Hernandez-Rodriguez" → "MH"
+
+## Badge Overlay
+
+For GoodParty candidates, the logo badge:
+- Size: 50px × 35px (`w-[50px] h-[35px]`)
+- Position: `absolute -bottom-0.5 -right-0.5` (extends slightly outside avatar boundary)
+- Contains: GoodParty Logo component (`width={100} height={75}`)
 
 ## Accessibility
 
-- Uses semantic `<article>` element when not linked
-- Uses `Anchor` component for accessible link behavior when `href` is provided
-- Avatar images include proper `alt` attributes
-- Badge icon is decorative (no additional ARIA labels needed)
+- Uses semantic `<article>` element
+- Avatar images include proper alt text via Avatar component
+- "View profile" link is keyboard accessible
+- Arrow icon provides visual indication of external navigation
+- Attribution text provides context about GoodParty empowerment
 
 ## Design Reference
 
-[View in Figma](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23684-24346&t=6DQyxTAl7Ola6AF3-0)
+[View in Figma](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=24609-38132&t=e6w52MjiSjms8Cyt-0)
 
 ## Related Components
 
-- `CandidatesCard1` - Standard candidate card with initials fallback
-- `CandidatesCard2` - GoodParty candidate card with badge and "Empowered by" text
-- `CandidatesBlock` - Container component that uses candidate cards in a grid
+- `CandidatesBlock` - Container component that uses CandidatesCard in a grid layout
+- `Avatar` - Avatar component used for candidate images
+- `Logo` - GoodParty logo component used in badge overlay

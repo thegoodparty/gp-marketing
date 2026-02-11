@@ -3,6 +3,7 @@ import { useState, useMemo } from 'react';
 
 import { DEFAULT_DISPLAY_COUNT } from '~/constants/display';
 import { cn, tv } from './_lib/utils.ts';
+import { useMediaQuery } from './_lib/useMediaQuery.ts';
 import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
 import { isValidRichText } from './_lib/isValidRichText.ts';
 import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
@@ -97,7 +98,9 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'midnight';
 	const initialDisplayCount = props.initialDisplayCount ?? DEFAULT_DISPLAY_COUNT;
 	const showSearch = props.showSearch ?? true;
-	const searchPlaceholder = props.searchPlaceholder ?? 'Search by county or municipality';
+	const fullPlaceholder = props.searchPlaceholder ?? 'Search by county or municipality';
+	const isMdOrLarger = useMediaQuery('(min-width: 768px)');
+	const searchPlaceholder = isMdOrLarger ? fullPlaceholder : 'Search';
 
 	const {
 		base,

@@ -90,4 +90,15 @@
 			transform: translateX(100%);
 		}
 	}
+
+	--animate-slide-in-right: slide-in-right 100ms ease-out both;
+
+	@keyframes slide-in-right {
+		0% {
+			transform: translateX(-12px);
+		}
+		100% {
+			transform: translateX(0);
+		}
+	}
 }

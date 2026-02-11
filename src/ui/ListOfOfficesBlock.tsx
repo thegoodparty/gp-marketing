@@ -25,7 +25,7 @@ const styles = tv({
 		yearLabel: 'font-secondary text-subtitle-2 text-neutral-600',
 		yearSelect: [
 			'appearance-none rounded-lg border border-neutral-300 bg-white px-4 py-2 pr-10',
-			'text-black focus:border-lavender-600 focus:outline-none focus:ring-2 focus:ring-lavender-600/30',
+			'text-black focus:border-goodparty-blue focus:outline-none focus:ring-2 focus:ring-goodparty-blue/30',
 			'cursor-pointer font-secondary text-body-2 min-w-[120px]',
 		],
 		yearSelectIcon: 'absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500',
@@ -36,16 +36,16 @@ const styles = tv({
 		headerPositionCell: 'ml-8',
 		headerDateCell: 'ml-auto',
 		tableBody: 'flex flex-col gap-3',
-		tableRow: 'bg-white rounded-lg border border-neutral-200 hover:border-lavender-600 transition-colors flex items-center gap-4 px-4 py-4',
+		tableRow: 'group bg-white rounded-lg border border-neutral-200 hover:border-goodparty-blue transition-colors flex items-center gap-4 px-4 py-4',
 		tableCell: 'flex items-center',
 		positionCell: 'flex items-center ml-2',
-		typeTag: 'inline-block px-3 py-1 rounded-sm bg-goodparty-blue text-white font-secondary text-sm font-semibold uppercase whitespace-nowrap',
+		typeTag: 'inline-block px-3 py-1 rounded-sm bg-goodparty-blue text-white font-secondary text-text-xs font-semibold uppercase whitespace-nowrap',
 		positionText: 'font-secondary text-body-2 text-neutral-900',
 		dateText: 'font-secondary text-body-2 text-neutral-600',
 		dateCell: 'flex items-center ml-auto',
 		arrowIcon: 'text-neutral-900',
 		cardList: 'flex flex-col gap-3 md:hidden',
-		officeCard: 'bg-neutral-50 rounded-lg p-4 border border-neutral-200 hover:border-lavender-600 transition-colors',
+		officeCard: 'group bg-neutral-50 rounded-lg p-4 border border-neutral-200 hover:border-goodparty-blue transition-colors',
 		cardContent: 'flex items-start justify-between gap-4',
 		cardLeft: 'flex-1 flex flex-col gap-2',
 		cardRight: 'flex-shrink-0 self-end',
@@ -61,7 +61,7 @@ const styles = tv({
 				yearSelect: 'bg-neutral-800 border-neutral-600 text-white focus:border-lavender-400',
 				yearSelectIcon: 'text-neutral-400',
 				tableHeaderCell: 'text-neutral-300',
-				positionText: 'text-white',
+				positionText: 'text-neutral-900',
 				dateText: 'text-neutral-300',
 				officeCard: 'bg-neutral-800 border-neutral-700',
 			},
@@ -221,7 +221,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 														<Text styleType="body-2" className={dateText()}>{office.nextElectionDate}</Text>
 													</div>
 													<div className={tableCell()}>
-														<ArrowRightIcon size={32} className={arrowIcon()} />
+														<ArrowRightIcon size={32} className={arrowIcon()} innerClassName="group-hover:animate-slide-in-right" />
 													</div>
 													</>
 												);
@@ -259,7 +259,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 													<Text styleType="body-2" className={dateText()}>{office.nextElectionDate}</Text>
 												</div>
 												<div className={cardRight()}>
-													<ArrowRightIcon size={32} className={arrowIcon()} />
+													<ArrowRightIcon size={32} className={arrowIcon()} innerClassName="group-hover:animate-slide-in-right" />
 												</div>
 											</div>
 										);

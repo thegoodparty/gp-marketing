@@ -1,57 +1,96 @@
 import type { Meta, StoryObj } from '@storybook/react';
+
 import { CandidatesCard } from './CandidatesCard.tsx';
+import { imageJpg } from './_data/media.tsx';
 
 const meta: Meta<typeof CandidatesCard> = {
-	title: 'New Components/Components/Candidates Card',
+	title: 'New Components/UI/Candidates Card',
 	component: CandidatesCard,
 	render: args => <CandidatesCard {...args} />,
+	parameters: {
+		design: {
+			type: 'figma',
+			url: 'https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=24609-38132&t=e6w52MjiSjms8Cyt-0',
+		},
+	},
 };
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Standard: Story = {
 	args: {
 		name: 'Firstname Lastname',
-		partyAffiliation: 'City Council Member',
-		secondaryText: 'District 5',
-		showBadge: true,
-	},
-	parameters: {
-		design: {
-			type: 'figma',
-			url: 'https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23684-24346&t=6DQyxTAl7Ola6AF3-0',
-		},
+		partyAffiliation: 'Party Affiliation',
+		href: '/candidates/firstname-lastname',
+		isGoodPartyCandidate: false,
 	},
 };
 
-export const WithLink: Story = {
+export const StandardWithPhoto: Story = {
 	args: {
-		...Default.args,
-		href: '/profile/firstname-lastname',
+		name: 'Firstname Lastname',
+		partyAffiliation: 'Party Affiliation',
+		avatar: imageJpg(),
+		href: '/candidates/firstname-lastname',
+		isGoodPartyCandidate: false,
 	},
 };
 
-export const NoBadge: Story = {
+export const StandardWithInitials: Story = {
 	args: {
 		name: 'Jane Smith',
-		partyAffiliation: 'School Board Member',
-		secondaryText: 'Zone 3',
-		showBadge: false,
+		partyAffiliation: 'Independent',
+		href: '/candidates/jane-smith',
+		isGoodPartyCandidate: false,
 	},
 };
 
-export const MinimalInfo: Story = {
+export const GoodParty: Story = {
 	args: {
-		name: 'John Doe',
-		partyAffiliation: 'County Commissioner',
+		name: 'Firstname Lastname',
+		partyAffiliation: 'Party Affiliation',
+		href: '/candidates/firstname-lastname',
+		isGoodPartyCandidate: true,
 	},
 };
 
-export const WithAvatar: Story = {
+export const GoodPartyWithPhoto: Story = {
 	args: {
-		...Default.args,
-		avatarUrl: 'https://i.pravatar.cc/150?img=1',
+		name: 'Firstname Lastname',
+		partyAffiliation: 'Party Affiliation',
+		avatar: imageJpg(),
+		href: '/candidates/firstname-lastname',
+		isGoodPartyCandidate: true,
+	},
+};
+
+export const GoodPartyWithInitials: Story = {
+	args: {
+		name: 'Jane Smith',
+		partyAffiliation: 'Independent',
+		href: '/candidates/jane-smith',
+		isGoodPartyCandidate: true,
+	},
+};
+
+export const LongPartyName: Story = {
+	args: {
+		name: 'Alexandria Martinez',
+		partyAffiliation: 'Democratic Party',
+		avatar: imageJpg(),
+		href: '/candidates/alexandria-martinez',
+		isGoodPartyCandidate: false,
+	},
+};
+
+export const LongPartyNameGoodParty: Story = {
+	args: {
+		name: 'Alexandria Martinez',
+		partyAffiliation: 'Democratic Party',
+		avatar: imageJpg(),
+		href: '/candidates/alexandria-martinez',
+		isGoodPartyCandidate: true,
 	},
 };

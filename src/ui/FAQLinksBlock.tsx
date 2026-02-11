@@ -7,7 +7,7 @@ import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
 import { Anchor } from './Anchor.tsx';
 import type { HeaderBlockProps } from './HeaderBlock.tsx';
-import { ArrowRightIcon } from './icons/ArrowRightIcon.tsx';
+import { ArrowShortIcon } from './icons/ArrowShortIcon.tsx';
 
 const styles = tv({
 	slots: {
@@ -117,7 +117,7 @@ export function FAQLinksBlock(props: FAQLinksBlockProps) {
 											<Text styleType="body-2" className={linkText()}>
 												{item.label}
 											</Text>
-											<ArrowRightIcon size={32} className={linkIcon()} innerClassName="group-hover:animate-slide-in-right" />
+											<ArrowShortIcon size={32} className={linkIcon()} innerClassName="group-hover:animate-slide-in-right" />
 										</>
 									);
 

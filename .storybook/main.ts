@@ -1,5 +1,6 @@
 import { defineMain } from '@storybook/nextjs/node';
 import type { FrameworkOptions } from '@storybook/nextjs-vite';
+import { mergeConfig } from 'vite';
 
 export default defineMain({
 	stories: [
@@ -27,4 +28,21 @@ export default defineMain({
 	staticDirs: [
 		"../public"
 	],
+	async viteFinal(config) {
+		const storybookHost = process.env.STORYBOOK_HOST || 'localhost';
+		const isCustomHost = storybookHost !== 'localhost';
+
+		return mergeConfig(config, {
+			server: {
+				host: '0.0.0.0', // listen on all interfaces
+				...(isCustomHost && {
+					hmr: {
+						host: storybookHost,
+						clientPort: 443, // HTTPS port for tunneling services
+					},
+					origin: `https://${storybookHost}`, // HTTPS origin for tunneling services
+				}),
+			},
+		});
+	},
 });

@@ -48,7 +48,8 @@ const styles = tv({
 		hexagonOthers: 'bg-[#9747FF] text-white',
 		hexagonIcon: 'mb-2',
 		hexagonLabel: 'text-sm font-medium mb-1',
-		hexagonValue: 'text-2xl font-bold',
+		hexagonValue:
+			'text-center text-[#FFF] font-primary text-[32px] font-medium leading-[110%] [font-feature-settings:\'liga\'_0,\'clig\'_0]',
 		hexagonSub: 'text-sm opacity-90 mt-0.5',
 		hexagonDetail: 'text-xs mt-2 opacity-80',
 		vsBadge:
@@ -220,9 +221,7 @@ export function CalculatorTextBlock(props: CalculatorTextBlockProps) {
 								<div className={hexagonIcon()}>
 									<Logo width={24} height={24} className='min-w-6 min-h-6' />
 								</div>
-								<Text as='span' styleType='caption' className={hexagonLabel()}>
-									{props.calculator?.goodPartyLabel ?? 'GoodParty.org'}
-								</Text>
+
 								<Text as='span' styleType='heading-md' className={hexagonValue()}>
 									{formatCurrency(goodPartyCost)}
 								</Text>

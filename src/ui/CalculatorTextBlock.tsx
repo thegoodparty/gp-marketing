@@ -31,13 +31,13 @@ const styles = tv({
 			'flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 cursor-pointer transition-colors',
 		sliderSection: 'flex flex-col gap-2',
 		sliderLabels: 'flex justify-between text-sm text-neutral-500',
-		sliderWrapper: 'relative w-full pt-12',
+		sliderWrapper: 'relative w-full pt-14',
 		slider: [
 			'w-full h-2 appearance-none cursor-pointer rounded-full',
-			'bg-midnight-200 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5',
-			'[&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#9747FF] [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-white',
-			'[&::-webkit-slider-thumb]:shadow [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full',
-			'[&::-moz-range-thumb]:bg-[#9747FF] [&::-moz-range-thumb]:border-4 [&::-moz-range-thumb]:border-white',
+			'[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-8 [&::-webkit-slider-thumb]:h-8',
+			'[&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-[4px] [&::-webkit-slider-thumb]:border-lavender-800',
+			'[&::-webkit-slider-thumb]:shadow-md [&::-moz-range-thumb]:w-8 [&::-moz-range-thumb]:h-8 [&::-moz-range-thumb]:rounded-full',
+			'[&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-[4px] [&::-moz-range-thumb]:border-lavender-800 [&::-moz-range-thumb]:shadow-md',
 		],
 		recordsLabel:
 			'absolute -top-1 transform -translate-x-1/2 px-3 py-1.5 bg-white border border-neutral-200 rounded shadow-sm text-sm font-medium text-neutral-900 flex flex-col items-center leading-tight',
@@ -200,6 +200,9 @@ export function CalculatorTextBlock(props: CalculatorTextBlockProps) {
 									value={records}
 									onChange={e => setRecords(Number(e.target.value))}
 									className={slider()}
+									style={{
+										background: `linear-gradient(to right, var(--lavender-800) 0%, var(--lavender-800) ${thumbPercent}%, var(--lavender-200) ${thumbPercent}%, var(--lavender-200) 100%)`,
+									}}
 									aria-label='Number of voter records'
 								/>
 							</div>

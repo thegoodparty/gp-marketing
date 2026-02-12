@@ -25,7 +25,7 @@ const styles = tv({
 		base: 'py-(--container-padding)',
 		wrapper: 'grid gap-8 md:grid-cols-2 md:gap-12',
 		calculator:
-			'flex flex-col gap-6 p-(--container-padding) bg-white rounded-xl shadow-sm',
+			'flex flex-col gap-6 p-(--container-padding) bg-white rounded-xl shadow-sm border border-neutral-200',
 		calculatorHeader: 'flex flex-col items-center gap-2 text-center',
 		tryItLink:
 			'flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 cursor-pointer transition-colors',

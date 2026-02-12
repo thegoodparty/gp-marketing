@@ -4,7 +4,7 @@ import { CalculatorTextBlock } from './CalculatorTextBlock.tsx';
 import { resolveTextSize } from './_lib/resolveTextSize.ts';
 
 const meta: Meta<typeof CalculatorTextBlock> = {
-	title: 'Page Sections/Calculator Text Block',
+	title: 'New Components/Page Sections/Calculator Text Block',
 	component: CalculatorTextBlock,
 	render: args => <CalculatorTextBlock {...args} />,
 };

@@ -31,7 +31,7 @@ const styles = tv({
 			'flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 cursor-pointer transition-colors',
 		sliderSection: 'flex flex-col gap-2',
 		sliderLabels: 'flex justify-between text-sm text-neutral-500',
-		sliderWrapper: 'relative w-full pt-8',
+		sliderWrapper: 'relative w-full pt-12',
 		slider: [
 			'w-full h-2 appearance-none cursor-pointer rounded-full',
 			'bg-midnight-200 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5',
@@ -40,7 +40,7 @@ const styles = tv({
 			'[&::-moz-range-thumb]:bg-[#9747FF] [&::-moz-range-thumb]:border-4 [&::-moz-range-thumb]:border-white',
 		],
 		recordsLabel:
-			'absolute -top-1 transform -translate-x-1/2 px-3 py-1.5 bg-white border border-neutral-200 rounded shadow-sm text-sm font-medium text-neutral-900 whitespace-nowrap',
+			'absolute -top-1 transform -translate-x-1/2 px-3 py-1.5 bg-white border border-neutral-200 rounded shadow-sm text-sm font-medium text-neutral-900 flex flex-col items-center leading-tight',
 		comparisonRow: 'flex items-stretch gap-2',
 		hexagon:
 			'flex-1 flex flex-col items-center justify-center p-6 border border-white min-h-[10rem]',
@@ -189,7 +189,8 @@ export function CalculatorTextBlock(props: CalculatorTextBlockProps) {
 									className={recordsLabel()}
 									style={{ left: `${thumbPercent}%` }}
 								>
-									{formatNumber(records)} records
+									<span>{formatNumber(records)}</span>
+									<span>records</span>
 								</div>
 								<input
 									type='range'

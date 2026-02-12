@@ -12,7 +12,7 @@ import type { ResolvedTextSize } from './_lib/resolveTextSize.ts';
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
-import { IconResolver } from './IconResolver.tsx';
+import { CurvedArrowDownLeftIcon } from './icons/CurvedArrowDownLeftIcon.tsx';
 import { Logo } from '../sanity/utils/Logo.tsx';
 
 const RECORDS_MIN = 0;
@@ -26,7 +26,7 @@ const styles = tv({
 		wrapper: 'grid gap-8 md:grid-cols-2 md:gap-12',
 		calculator:
 			'flex flex-col gap-6 p-(--container-padding) bg-white rounded-xl shadow-sm',
-		calculatorHeader: 'flex items-center justify-between',
+		calculatorHeader: 'flex flex-col items-center gap-2 text-center',
 		tryItLink:
 			'flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 cursor-pointer transition-colors',
 		sliderSection: 'flex flex-col gap-2',
@@ -175,17 +175,10 @@ export function CalculatorTextBlock(props: CalculatorTextBlockProps) {
 									{props.calculator.heading}
 								</Text>
 							)}
-							<button
-								type='button'
-								className={tryItLink()}
-								onClick={handleTryIt}
-								aria-label='Reset calculator'
-							>
-								<Text as='span' styleType='caption'>
-									{props.calculator?.tryItText ?? 'Try it yourself'}
-								</Text>
-								<IconResolver icon='refresh-cw' className='min-w-4 min-h-4 w-4 h-4' />
-							</button>
+							<Text as='span' styleType='caption'>
+								<CurvedArrowDownLeftIcon size={16} className={tryItLink()} onClick={handleTryIt} />
+								{props.calculator?.tryItText ?? 'Try it yourself'}
+							</Text>
 						</div>
 
 						<div className={sliderSection()}>

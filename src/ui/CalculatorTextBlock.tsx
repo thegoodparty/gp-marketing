@@ -46,12 +46,12 @@ const styles = tv({
 			'flex-1 flex flex-col items-center justify-center p-6 border border-white min-h-[10rem]',
 		hexagonGoodparty: 'bg-lavender-100',
 		hexagonOthers: 'bg-[#9747FF] text-white',
-		hexagonIcon: 'mb-2',
-		hexagonLabel: 'text-sm font-medium mb-1',
+		hexagonIcon: 'mb-6',
+		hexagonLabel: 'text-sm font-medium mb-7',
 		hexagonValue:
 			'text-center text-[#FFF] font-primary text-[32px] font-medium leading-[110%] [font-feature-settings:\'liga\'_0,\'clig\'_0]',
 		hexagonSub: 'text-sm opacity-90 mt-0.5',
-		hexagonDetail: 'text-xs mt-2 opacity-80',
+		hexagonDetail: 'text-xs mt-[29.5px] opacity-80',
 		vsBadge:
 			'flex-shrink-0 w-10 h-10 rounded-full bg-white border border-neutral-200 flex items-center justify-center text-sm font-semibold text-neutral-700 z-10 self-center drop-shadow-[0_4px_9px_rgba(56,21,153,0.30)]',
 		content: 'flex flex-col gap-6 p-(--container-padding) md:self-center',

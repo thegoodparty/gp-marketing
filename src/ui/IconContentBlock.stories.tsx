@@ -31,6 +31,23 @@ const defaultParams = {
 	},
 };
 
+const defaultParamsNoCta = {
+	args: {
+		columns: '3' as const,
+		header: {
+			label: 'Test label',
+			title: 'This is a test title',
+			copy: 'This is a test of the summary description',
+		},
+	},
+	parameters: {
+		design: {
+			type: 'figma',
+			url: '',
+		},
+	},
+};
+
 const item = {
 	title: 'Headline',
 	copy: (
@@ -86,6 +103,18 @@ export const ContentCream: Story = {
 	},
 };
 
+export const ContentCreamNoCta: Story = {
+	args: {
+		...defaultParamsNoCta.args,
+		items: Array(10).fill(item),
+		color: 'mixed',
+		backgroundColor: 'cream',
+	},
+	parameters: {
+		...defaultParamsNoCta.parameters,
+	},
+};
+
 export const ContentMidnight: Story = {
 	args: {
 		...defaultParams.args,
@@ -95,6 +124,18 @@ export const ContentMidnight: Story = {
 	},
 	parameters: {
 		...defaultParams.parameters,
+	},
+};
+
+export const ContentMidnightNoCta: Story = {
+	args: {
+		...defaultParamsNoCta.args,
+		items: Array(10).fill(item),
+		color: 'mixed',
+		backgroundColor: 'midnight',
+	},
+	parameters: {
+		...defaultParamsNoCta.parameters,
 	},
 };
 

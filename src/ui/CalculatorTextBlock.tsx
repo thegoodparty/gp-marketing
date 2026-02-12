@@ -175,10 +175,12 @@ export function CalculatorTextBlock(props: CalculatorTextBlockProps) {
 									{props.calculator.heading}
 								</Text>
 							)}
-							<Text as='span' styleType='caption'>
-								<CurvedArrowDownLeftIcon size={16} className={tryItLink()} onClick={handleTryIt} />
-								{props.calculator?.tryItText ?? 'Try it yourself'}
-							</Text>
+							<span className={tryItLink()} onClick={handleTryIt}>
+								<CurvedArrowDownLeftIcon size={16} />
+								<Text as='span' styleType='caption'>
+									{props.calculator?.tryItText ?? 'Try it yourself'}
+								</Text>
+							</span>
 						</div>
 
 						<div className={sliderSection()}>

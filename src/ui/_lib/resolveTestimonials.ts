@@ -1,7 +1,7 @@
-import type { TestimonialProps } from '../TestimonialCard';
+import type { TestimonialCardProps } from '../TestimonialCard';
 
-export function resolveTestimonials(item: any): TestimonialProps[] {
-	let testimonials: TestimonialProps[] = [];
+export function resolveTestimonials(item: any): TestimonialCardProps[] {
+	let testimonials: TestimonialCardProps[] = [];
 
 	item.quotes.map(quote => {
 		testimonials.push({

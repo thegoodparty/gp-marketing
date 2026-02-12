@@ -9,6 +9,7 @@ import { shuffleArray } from '~/ui/_lib/shuffleArray.ts';
 import { tv } from 'tailwind-variants';
 import { colorTypeValues } from '~/ui/_lib/designTypesStore';
 import { TestimonialImageCard, type TestimonialImageCardProps } from '~/ui/TestimonialImageCard';
+import { TestimonialCard, type TestimonialCardProps } from '~/ui/TestimonialCard';
 import { IconResolver } from '~/ui/IconResolver';
 import { cn } from '~/ui/_lib/utils';
 import { CarouselIndicator } from '~/ui/CarouselIndicator';
@@ -29,12 +30,15 @@ const styles = tv({
 export type CarouselProps = {
 	header?: HeaderBlockProps;
 	backgroundColor?: 'cream' | 'midnight';
-	cards: TestimonialImageCardProps[];
+	/** Use 'card' for TestimonialCard (Logo + quote), 'image' for TestimonialImageCard (photo + quote). Default: 'image'. */
+	cardVariant?: 'image' | 'card';
+	cards: TestimonialImageCardProps[] | TestimonialCardProps[];
 	options?: EmblaOptionsType;
 };
 
 export function Carousel(props: CarouselProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
+	const cardVariant = props.cardVariant ?? 'image';
 	const [emblaRef, emblaApi] = useEmblaCarousel({
 		align: 'start',
 	});
@@ -45,14 +49,15 @@ export function Carousel(props: CarouselProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const rect = useRectTracker(containerRef);
 
+	const cardsCount = props.cards?.length ?? 0;
 	const colors = useMemo(() => {
 		const colors = shuffleArray(colorTypeValues.filter(color => color !== 'inverse'));
 
-		while (colors.length < (props.cards?.length ?? 0)) {
+		while (colors.length < cardsCount) {
 			colors.push(...colors);
 		}
 		return colors;
-	}, [props.cards?.length]);
+	}, [cardsCount]);
 
 	return (
 		<div className={base()}>
@@ -76,7 +81,16 @@ export function Carousel(props: CarouselProps) {
 								}}
 							>
 								<div className='embla__slide__number h-full'>
-									<TestimonialImageCard {...card} color={colors[index]} className='text-black' />
+									{cardVariant === 'card' ? (
+										<TestimonialCard
+											{...(card as TestimonialCardProps)}
+											color={colors[index] as TestimonialCardProps['color']}
+											quoteStyleType={(card as TestimonialCardProps).quoteStyleType ?? 'text-lg'}
+											className='text-black'
+										/>
+									) : (
+										<TestimonialImageCard {...(card as TestimonialImageCardProps)} color={colors[index]} className='text-black' />
+									)}
 								</div>
 							</div>
 						))}

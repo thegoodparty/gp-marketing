@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { buttons } from './_data/content.tsx';
+import { buttons, primaryButton } from './_data/content.tsx';
 import { IconContentBlock } from './IconContentBlock.tsx';
 import { RichData } from '~/ui/RichData.tsx';
 
@@ -91,10 +91,27 @@ const item = {
 	icon: 'hand-heart',
 };
 
+const itemWithCta = {
+	...item,
+	button: primaryButton,
+};
+
 export const ContentCream: Story = {
 	args: {
 		...defaultParams.args,
 		items: Array(10).fill(item),
+		color: 'mixed',
+		backgroundColor: 'cream',
+	},
+	parameters: {
+		...defaultParams.parameters,
+	},
+};
+
+export const ContentCreamWithItemCta: Story = {
+	args: {
+		...defaultParams.args,
+		items: Array(10).fill(itemWithCta),
 		color: 'mixed',
 		backgroundColor: 'cream',
 	},
@@ -115,6 +132,18 @@ export const ContentCreamNoCta: Story = {
 	},
 };
 
+export const ContentCreamNoHeaderCtaWithItemCta: Story = {
+	args: {
+		...defaultParamsNoCta.args,
+		items: Array(10).fill(itemWithCta),
+		color: 'mixed',
+		backgroundColor: 'cream',
+	},
+	parameters: {
+		...defaultParamsNoCta.parameters,
+	},
+};
+
 export const ContentMidnight: Story = {
 	args: {
 		...defaultParams.args,
@@ -127,10 +156,34 @@ export const ContentMidnight: Story = {
 	},
 };
 
+export const ContentMidnightWithItemCta: Story = {
+	args: {
+		...defaultParams.args,
+		items: Array(10).fill(itemWithCta),
+		color: 'mixed',
+		backgroundColor: 'midnight',
+	},
+	parameters: {
+		...defaultParams.parameters,
+	},
+};
+
 export const ContentMidnightNoCta: Story = {
 	args: {
 		...defaultParamsNoCta.args,
 		items: Array(10).fill(item),
+		color: 'mixed',
+		backgroundColor: 'midnight',
+	},
+	parameters: {
+		...defaultParamsNoCta.parameters,
+	},
+};
+
+export const ContentMidnightNoHeaderCtaWithItemCta: Story = {
+	args: {
+		...defaultParamsNoCta.args,
+		items: Array(10).fill(itemWithCta),
 		color: 'mixed',
 		backgroundColor: 'midnight',
 	},

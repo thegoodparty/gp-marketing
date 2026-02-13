@@ -33,6 +33,9 @@ export function IconContentBlockSection(section: Extract<Sections, { _type: 'com
 					copy: <RichData value={item.block_summaryText} />,
 					icon: item.field_icon,
 					title: item?.field_title,
+					button: item.ctaActionWithShared?.action
+						? transformButtons([{ ...item.ctaActionWithShared, _key: `${item._key ?? ''}-icon-cta` }])?.[0]
+						: undefined,
 				}))}
 			/>
 		</section>

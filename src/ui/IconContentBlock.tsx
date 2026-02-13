@@ -59,6 +59,7 @@ export function IconContentBlock(props: IconContentBlockProps) {
 							<IconContent
 								key={`icon-content-${index}-${item.title}-${item.copy?.toString().slice(0, 10) ?? ''}-${item.icon}`}
 								{...item}
+								backgroundColor={backgroundColor}
 								color={props.color !== 'mixed' ? props.color : colors[index]}
 								className={itemClasses}
 							/>

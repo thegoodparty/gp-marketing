@@ -27,6 +27,11 @@ export const iconBlockItem = {
       name: 'block_summaryText',
       type: 'block_summaryText',
     },
+    {
+      title: 'CTA Button',
+      name: 'ctaActionWithShared',
+      type: 'ctaActionWithShared',
+    },
   ],
   preview: {
     select: {

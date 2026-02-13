@@ -69,7 +69,7 @@ export const component_comparisonBlock = `_type=="component_comparisonBlock"=>{.
 /*language=textmate*/
 export const component_stepperBlockGroq = `_type=="component_stepperBlock"=>{...,summaryInfo{${summaryInfoGroq}},stepperBlockItems{...,list_stepperBlockItems[]{...,summaryInfo{${summaryInfoGroq}}}}}`;
 /*language=textmate*/
-export const component_iconContentBlock = `_type=="component_iconContentBlock"=>{...,summaryInfo{${summaryInfoGroq}}}`;
+export const component_iconContentBlock = `_type=="component_iconContentBlock"=>{...,summaryInfo{${summaryInfoGroq}},iconContentBlockItems{...,list_iconContentItems[]{...,ctaActionWithShared{${buttonGroq}}}}}`;
 /*language=textmate*/
 export const component_imageContentBlock = `_type=="component_imageContentBlock"=>{...,summaryInfo{${summaryInfoGroq}}}`;
 /*language=textmate*/

@@ -43,6 +43,7 @@ export const list_pageSections = {
           title: 'Text',
           of: [
             'component_bannerBlock',
+            'component_calculatorTextBlock',
             'component_twoUpCardBlock',
             'component_comparisonBlock',
             'component_stepperBlock',
@@ -167,6 +168,10 @@ export const list_pageSections = {
     {
       title: 'Profile Hero',
       type: 'component_profileHero',
+    },
+    {
+      title: 'Calculator Text Block',
+      type: 'component_calculatorTextBlock',
     },
     {
       title: 'Banner Block',

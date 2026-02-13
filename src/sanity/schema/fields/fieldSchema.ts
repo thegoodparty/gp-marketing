@@ -44,6 +44,7 @@ import { field_buttonHierarchy } from './field_buttonHierarchy.ts';
 import { field_featureName } from './field_featureName.ts';
 import { field_pricingPlanPrice } from './field_pricingPlanPrice.ts';
 import { field_quote } from './field_quote.ts';
+import { field_calculatorLayout } from './field_calculatorLayout.ts';
 import { field_caption } from './field_caption.ts';
 import { field_defaultMetaTitle } from './field_defaultMetaTitle.ts';
 import { field_telephoneNumber } from './field_telephoneNumber.ts';
@@ -123,6 +124,7 @@ export const fieldSchema = [
 	field_title,
 	field_bannerText,
 	field_blockColorCreamMidnight,
+	field_calculatorLayout,
 	field_formProvider,
 	field_internalLink,
 	field_publishedDate,

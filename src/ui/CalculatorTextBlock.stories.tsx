@@ -6,7 +6,14 @@ import { resolveTextSize } from './_lib/resolveTextSize.ts';
 const meta: Meta<typeof CalculatorTextBlock> = {
 	title: 'New Components/Page Sections/Calculator Text Block',
 	component: CalculatorTextBlock,
-	render: args => <CalculatorTextBlock {...args} />,
+	render: args => {
+		const bg = args.backgroundColor === 'midnight' ? 'bg-midnight-900' : undefined;
+		return (
+			<div className={bg}>
+				<CalculatorTextBlock {...args} />
+			</div>
+		);
+	},
 };
 
 export default meta;

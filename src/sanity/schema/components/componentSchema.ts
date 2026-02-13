@@ -2,6 +2,7 @@ import {component_featuresBlock} from './component_featuresBlock.ts'
 import {component_stepperBlock} from './component_stepperBlock.ts'
 import {component_statsBlock} from './component_statsBlock.ts'
 import {component_bannerBlock} from './component_bannerBlock.ts'
+import {component_calculatorTextBlock} from './component_calculatorTextBlock.ts'
 import {component_breadcrumbBlock} from './component_breadcrumbBlock.ts'
 import {component_newsletterBlock} from './component_newsletterBlock.ts'
 import {component_ctaImageBlock} from './component_ctaImageBlock.ts'
@@ -40,8 +41,9 @@ export const componentSchema = [
 component_featuresBlock,
 component_stepperBlock,
 component_statsBlock,
-component_bannerBlock,
-component_breadcrumbBlock,
+	component_bannerBlock,
+	component_calculatorTextBlock,
+	component_breadcrumbBlock,
 component_newsletterBlock,
 component_ctaImageBlock,
 component_testimonialBlock,

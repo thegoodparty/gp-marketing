@@ -2014,6 +2014,23 @@
     }
   },
   {
+    "name": "field_calculatorLayout",
+    "type": "type",
+    "value": {
+      "type": "union",
+      "of": [
+        {
+          "type": "string",
+          "value": "CalculatorLeft"
+        },
+        {
+          "type": "string",
+          "value": "CalculatorRight"
+        }
+      ]
+    }
+  },
+  {
     "name": "field_blockColorCreamMidnight",
     "type": "type",
     "value": {
@@ -2179,6 +2196,28 @@
           "value": "9:16"
         }
       ]
+    }
+  },
+  {
+    "name": "list_officeItems",
+    "type": "type",
+    "value": {
+      "type": "array",
+      "of": {
+        "type": "object",
+        "attributes": {
+          "_key": {
+            "type": "objectAttribute",
+            "value": {
+              "type": "string"
+            }
+          }
+        },
+        "rest": {
+          "type": "inline",
+          "name": "officeItem"
+        }
+      }
     }
   },
   {
@@ -2608,6 +2647,21 @@
             "rest": {
               "type": "inline",
               "name": "component_profileHero"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_calculatorTextBlock"
             }
           },
           {
@@ -3088,6 +3142,21 @@
             "rest": {
               "type": "inline",
               "name": "component_profileContentBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_listOfOfficesBlock"
             }
           }
         ]
@@ -5003,6 +5072,95 @@
               }
             }
           }
+        }
+      }
+    }
+  },
+  {
+    "name": "component_listOfOfficesBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_listOfOfficesBlock"
+          }
+        },
+        "field_heading": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "field_headline": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "field_defaultYear": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "number"
+          },
+          "optional": true
+        },
+        "field_availableYears": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "array",
+            "of": {
+              "type": "number"
+            }
+          },
+          "optional": true
+        },
+        "list_offices": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "list_officeItems"
+          },
+          "optional": true
+        },
+        "listOfOfficesBlockDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_blockColorCreamMidnight": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "cream"
+                    },
+                    {
+                      "type": "string",
+                      "value": "midnight"
+                    }
+                  ]
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
         }
       }
     }
@@ -7083,6 +7241,46 @@
     }
   },
   {
+    "name": "component_calculatorTextBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_calculatorTextBlock"
+          }
+        },
+        "summaryInfo": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "summaryInfo"
+          },
+          "optional": true
+        },
+        "calculatorTextBlockDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "calculatorTextBlockDesignSettings"
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
     "name": "component_bannerBlock",
     "type": "type",
     "value": {
@@ -7260,6 +7458,64 @@
           "value": {
             "type": "inline",
             "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "officeItem",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "officeItem"
+          }
+        },
+        "field_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "STATE"
+              },
+              {
+                "type": "string",
+                "value": "COUNTY"
+              },
+              {
+                "type": "string",
+                "value": "CITY"
+              }
+            ]
+          },
+          "optional": true
+        },
+        "field_position": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "field_nextElectionDate": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "field_href": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
           },
           "optional": true
         }
@@ -8953,6 +9209,14 @@
           "value": {
             "type": "inline",
             "name": "block_summaryText"
+          },
+          "optional": true
+        },
+        "ctaActionWithShared": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "ctaActionWithShared"
           },
           "optional": true
         }
@@ -12348,6 +12612,38 @@
           "type": "objectAttribute",
           "value": {
             "type": "boolean"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "calculatorTextBlockDesignSettings",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "calculatorTextBlockDesignSettings"
+          }
+        },
+        "field_blockColorCreamMidnight": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_blockColorCreamMidnight"
+          },
+          "optional": true
+        },
+        "field_calculatorLayout": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_calculatorLayout"
           },
           "optional": true
         }

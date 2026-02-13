@@ -58,8 +58,8 @@ const styles = tv({
 	},
 	variants: {
 		backgroundColor: {
-			cream: 'bg-goodparty-cream',
-			midnight: 'bg-midnight-900',
+			cream: { base: '' },
+			midnight: { base: '' },
 		},
 		layout: {
 			'calculator-left': {},

@@ -100,6 +100,7 @@ import { pricingPlanFeatureListItem } from './pricingPlanFeatureListItem.ts';
 import { stepperBlockItemMedia } from './stepperBlockItemMedia.ts';
 import { newsletterBlockMessaging } from './newsletterBlockMessaging.ts';
 import { glossaryTermCta } from './glossaryTermCta.ts';
+import { calculatorTextBlockDesignSettings } from './calculatorTextBlockDesignSettings.ts';
 import { bannerBlockContent } from './bannerBlockContent.ts';
 import { ctaOverview } from './ctaOverview.ts';
 import { people } from './people.ts';
@@ -144,6 +145,7 @@ import { electionsPositionHeroDesignSettings } from './electionsPositionHeroDesi
 import { officeItem } from './officeItem.ts';
 
 export const groupSchema = [
+	calculatorTextBlockDesignSettings,
 	twoUpCardBlockCardImage,
 	pricingPlanDesignSettings,
 	stepperBlockItem,

@@ -4,6 +4,7 @@ import { BannerBlockSection } from '~/PageSections/BannerBlockSection';
 import { BlogBlockSection } from '~/PageSections/BlogBlockSection';
 import { BlogTopicTagsBlockSection } from '~/PageSections/BlogTopicTagsBlockSection';
 import { BreadcrumbBlockSection } from '~/PageSections/BreadcrumbBlockSection';
+import { CalculatorTextBlockSection } from '~/PageSections/CalculatorTextBlockSection';
 import { CandidatesBlockSection } from '~/PageSections/CandidatesBlockSection';
 import { CarouselBlockSection } from '~/PageSections/CarouselBlockSection';
 import { ClaimProfileBlockSection } from '~/PageSections/ClaimProfileBlockSection';
@@ -82,6 +83,12 @@ export function PageSections(props: Props) {
 					return (
 						<ComponentErrorBoundary key={section._key} componentName='Candidates Block'>
 							<CandidatesBlockSection {...section} />
+						</ComponentErrorBoundary>
+					);
+				case 'component_calculatorTextBlock':
+					return (
+						<ComponentErrorBoundary key={section._key} componentName='Calculator Text Block'>
+							<CalculatorTextBlockSection {...section} />
 						</ComponentErrorBoundary>
 					);
 				case 'component_carouselBlock':

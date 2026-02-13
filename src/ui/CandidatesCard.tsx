@@ -12,7 +12,8 @@ const styles = tv({
 	slots: {
 		base: [
 			'flex flex-col gap-2 p-6 bg-white rounded-xl border transition-shadow duration-normal hover:shadow-md',
-			'md:flex-row md:flex-wrap md:items-start md:gap-6',
+			'max-md:min-w-[260px]',
+			'md:flex-row md:flex-wrap md:items-center md:gap-6',
 		],
 		baseStandard: 'border-black/8 hover:bg-[var(--base-muted,#F5F5F5)]',
 		baseGoodParty: 'border-bright-yellow-600 hover:bg-bright-yellow-50',
@@ -21,8 +22,8 @@ const styles = tv({
 		contentWrapper: 'flex flex-col gap-1',
 		content: 'flex flex-col gap-1',
 		name: 'whitespace-nowrap md:whitespace-normal',
-		empowered: 'text-neutral-500',
-		footerWrapper: 'flex flex-col w-full gap-2 md:w-full md:flex-row md:items-center md:justify-between md:gap-4',
+		empowered: 'text-neutral-500 min-w-0',
+		footerWrapper: 'flex flex-col w-full gap-2 md:w-full md:flex-row md:flex-wrap md:items-center md:justify-between md:gap-4',
 		link: 'flex items-center gap-2 text-nowrap shrink-0',
 		badge: 'absolute -bottom-0.5 -right-0.5 w-[50px] h-[35px] flex items-center justify-center',
 	},

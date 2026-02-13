@@ -76,7 +76,7 @@ export function ProfileHero(props: ProfileHeroProps) {
 					)}
 					<div className={content()}>
 						<div>
-							<Text as="h1" styleType="heading-lg" className={heading()}>
+							<Text as="h1" styleType={props.candidateName.length > 28 ? 'heading-md' : 'heading-lg'} className={heading()}>
 								{props.candidateName}
 							</Text>
 							<Text as="p" styleType="subtitle-1" className={office()}>

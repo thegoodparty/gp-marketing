@@ -5,7 +5,7 @@ import type { Component_calculatorTextBlock } from 'sanity.types';
 import { CalculatorTextBlockSection } from './CalculatorTextBlockSection.tsx';
 
 const meta: Meta<typeof CalculatorTextBlockSection> = {
-	title: 'Page Sections/Calculator Text Block Section',
+	title: 'New Components/Page Sections/Calculator Text Block Section',
 	component: CalculatorTextBlockSection,
 };
 

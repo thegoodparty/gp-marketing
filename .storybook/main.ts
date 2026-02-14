@@ -5,6 +5,7 @@ import { mergeConfig } from 'vite';
 export default defineMain({
 	stories: [
 		'../src/ui/**/*.@(mdx|stories.@(js|jsx|ts|tsx))',
+		'../src/PageSections/**/*.@(mdx|stories.@(js|jsx|ts|tsx))',
 		'../src/stories/*.@(mdx|stories.@(js|jsx|ts|tsx))',
 		'../src/sanity/**/*.@(mdx|stories.@(js|jsx|ts|tsx))',
 	],

@@ -10,11 +10,6 @@ import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 import { CalculatorTextBlock } from '~/ui/CalculatorTextBlock';
 import { RichData } from '~/ui/RichData';
 
-const bgClass = {
-	cream: 'bg-goodparty-cream',
-	midnight: 'bg-midnight-900',
-} as const;
-
 export function CalculatorTextBlockSection(
 	section: Extract<Sections, { _type: 'component_calculatorTextBlock' }>,
 ) {
@@ -30,7 +25,7 @@ export function CalculatorTextBlockSection(
 		<section
 			id={stegaClean(section.componentSettings?.field_anchorId)}
 			data-section="Calculator Text Block"
-			className={bgClass[backgroundColor]}
+			style={{ background: '#F1E5FF' }}
 		>
 			<CalculatorTextBlock
 				backgroundColor={backgroundColor}

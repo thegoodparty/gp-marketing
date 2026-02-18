@@ -166,7 +166,25 @@ export function CalculatorTextBlock(props: CalculatorTextBlockProps) {
 					</clipPath>
 				</defs>
 			</svg>
-			<Container size='xl' className='max-md:p-0'>
+			<div
+				className='relative overflow-hidden rounded-2xl mx-(--container-padding)'
+				style={{ background: '#F1E5FF' }}
+			>
+				<img
+					src="/svg/calculator-bg-stroke.svg"
+					alt=""
+					aria-hidden
+					className="pointer-events-none"
+					style={{
+						width: 1037.854,
+						height: 307.724,
+						position: 'absolute',
+						left: -328.001,
+						top: 0,
+						transform: 'rotate(-60deg)',
+					}}
+				/>
+				<Container size='xl' className='max-md:p-0'>
 				<div className={wrapper()}>
 					<div className={calculator()}>
 						<div className={calculatorHeader()}>
@@ -285,6 +303,7 @@ export function CalculatorTextBlock(props: CalculatorTextBlockProps) {
 					</div>
 				</div>
 			</Container>
+			</div>
 		</article>
 	);
 }

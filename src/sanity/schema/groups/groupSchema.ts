@@ -35,6 +35,7 @@ import { videoSection } from './videoSection.ts';
 import { downloadOverview } from './downloadOverview.ts';
 import { heroDesignSettings } from './heroDesignSettings.ts';
 import { detailPageOverviewNoHero } from './detailPageOverviewNoHero.ts';
+import { embedPageOverview } from './embedPageOverview.ts';
 import { teamBlockDesignSettings } from './teamBlockDesignSettings.ts';
 import { comparisonBlockTableTwo } from './comparisonBlockTableTwo.ts';
 import { ctaSection } from './ctaSection.ts';
@@ -177,6 +178,7 @@ export const groupSchema = [
 	downloadOverview,
 	heroDesignSettings,
 	detailPageOverviewNoHero,
+	embedPageOverview,
 	teamBlockDesignSettings,
 	comparisonBlockTableTwo,
 	ctaSection,

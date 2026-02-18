@@ -18,6 +18,7 @@ import {registeredCompany} from './registeredCompany.ts'
 import {goodpartyOrg_home} from './goodpartyOrg_home.ts'
 import {goodpartyOrg_allComponents} from './goodpartyOrg_allComponents.ts'
 import {goodpartyOrg_contact} from './goodpartyOrg_contact.ts'
+import {goodpartyOrg_embedPage} from './goodpartyOrg_embedPage.ts'
 import {goodpartyOrg_glossary} from './goodpartyOrg_glossary.ts'
 import {goodpartyOrg_allArticles} from './goodpartyOrg_allArticles.ts'
 import {goodpartyOrg_landingPages} from './goodpartyOrg_landingPages.ts'
@@ -49,6 +50,7 @@ registeredCompany,
 goodpartyOrg_home,
 goodpartyOrg_allComponents,
 goodpartyOrg_contact,
+goodpartyOrg_embedPage,
 goodpartyOrg_glossary,
 goodpartyOrg_allArticles,
 goodpartyOrg_landingPages,

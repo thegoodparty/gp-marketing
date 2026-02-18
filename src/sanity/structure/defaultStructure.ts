@@ -52,6 +52,7 @@ export function defaultStructure(S: StructureBuilder) {
         items: [
           item('goodpartyOrg_home'),
           item('goodpartyOrg_landingPages'),
+          item('goodpartyOrg_embedPage'),
           S.divider(),
           group({
             id: 'goodpartyOrg_allArticles',

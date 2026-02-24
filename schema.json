@@ -2014,6 +2014,23 @@
     }
   },
   {
+    "name": "field_calculatorLayout",
+    "type": "type",
+    "value": {
+      "type": "union",
+      "of": [
+        {
+          "type": "string",
+          "value": "CalculatorLeft"
+        },
+        {
+          "type": "string",
+          "value": "CalculatorRight"
+        }
+      ]
+    }
+  },
+  {
     "name": "field_blockColorCreamMidnight",
     "type": "type",
     "value": {
@@ -2179,6 +2196,28 @@
           "value": "9:16"
         }
       ]
+    }
+  },
+  {
+    "name": "list_officeItems",
+    "type": "type",
+    "value": {
+      "type": "array",
+      "of": {
+        "type": "object",
+        "attributes": {
+          "_key": {
+            "type": "objectAttribute",
+            "value": {
+              "type": "string"
+            }
+          }
+        },
+        "rest": {
+          "type": "inline",
+          "name": "officeItem"
+        }
+      }
     }
   },
   {
@@ -2592,6 +2631,51 @@
             },
             "rest": {
               "type": "inline",
+              "name": "component_locationLandingPageHero"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_profileHero"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_calculatorTextBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
               "name": "component_bannerBlock"
             }
           },
@@ -2908,6 +2992,171 @@
             "rest": {
               "type": "inline",
               "name": "component_blogTopicTagsBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_breadcrumbBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_candidatesBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_claimProfileBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_electionsIndexBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_electionsPositionHero"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_electionsSearchHero"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_featuredCitiesBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_goodPartyOrgPledge"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_locationFactsBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_profileContentBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_listOfOfficesBlock"
             }
           }
         ]
@@ -3392,6 +3641,28 @@
         "rest": {
           "type": "inline",
           "name": "featureBlockItem"
+        }
+      }
+    }
+  },
+  {
+    "name": "list_pledgeCards",
+    "type": "type",
+    "value": {
+      "type": "array",
+      "of": {
+        "type": "object",
+        "attributes": {
+          "_key": {
+            "type": "objectAttribute",
+            "value": {
+              "type": "string"
+            }
+          }
+        },
+        "rest": {
+          "type": "inline",
+          "name": "pledgeCardItem"
         }
       }
     }
@@ -4806,6 +5077,1070 @@
     }
   },
   {
+    "name": "component_listOfOfficesBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_listOfOfficesBlock"
+          }
+        },
+        "field_heading": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "field_headline": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "field_defaultYear": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "number"
+          },
+          "optional": true
+        },
+        "field_availableYears": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "array",
+            "of": {
+              "type": "number"
+            }
+          },
+          "optional": true
+        },
+        "list_offices": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "list_officeItems"
+          },
+          "optional": true
+        },
+        "listOfOfficesBlockDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_blockColorCreamMidnight": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "cream"
+                    },
+                    {
+                      "type": "string",
+                      "value": "midnight"
+                    }
+                  ]
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "component_profileContentBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_profileContentBlock"
+          }
+        },
+        "profileContentBlockDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_blockColorCreamMidnight": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "Cream"
+                    },
+                    {
+                      "type": "string",
+                      "value": "MidnightDark"
+                    }
+                  ]
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "component_locationLandingPageHero",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_locationLandingPageHero"
+          }
+        },
+        "locationLandingPageHeroContent": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_bodyCopy": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_searchPlaceholder": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "locationLandingPageHeroDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_blockColorCreamMidnight": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "cream"
+                    },
+                    {
+                      "type": "string",
+                      "value": "midnight"
+                    }
+                  ]
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "component_locationFactsBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_locationFactsBlock"
+          }
+        },
+        "locationFactsBlockHeader": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "summaryInfo"
+          },
+          "optional": true
+        },
+        "locationFactsBlockCards": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "list_factTypes": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "array",
+                  "of": {
+                    "type": "union",
+                    "of": [
+                      {
+                        "type": "string",
+                        "value": "largest-city"
+                      },
+                      {
+                        "type": "string",
+                        "value": "population"
+                      },
+                      {
+                        "type": "string",
+                        "value": "density"
+                      },
+                      {
+                        "type": "string",
+                        "value": "median-income"
+                      },
+                      {
+                        "type": "string",
+                        "value": "unemployment-rate"
+                      },
+                      {
+                        "type": "string",
+                        "value": "average-home-value"
+                      }
+                    ]
+                  }
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "locationFactsBlockDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_blockColorCreamMidnight": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "Cream"
+                    },
+                    {
+                      "type": "string",
+                      "value": "MidnightDark"
+                    }
+                  ]
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "component_goodPartyOrgPledge",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_goodPartyOrgPledge"
+          }
+        },
+        "summaryInfo": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "summaryInfo"
+          },
+          "optional": true
+        },
+        "goodPartyOrgPledgeItems": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "goodPartyOrgPledgeItems"
+          },
+          "optional": true
+        },
+        "goodPartyOrgPledgeDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "goodPartyOrgPledgeDesignSettings"
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "component_featuredCitiesBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_featuredCitiesBlock"
+          }
+        },
+        "featuredCitiesBlockHeader": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "summaryInfo"
+          },
+          "optional": true
+        },
+        "featuredCitiesBlockCards": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "list_locationCards": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "array",
+                  "of": {
+                    "type": "object",
+                    "attributes": {
+                      "field_cityName": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "string"
+                        },
+                        "optional": true
+                      },
+                      "field_stateAbbreviation": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "string"
+                        },
+                        "optional": true
+                      },
+                      "field_href": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "string"
+                        },
+                        "optional": true
+                      }
+                    },
+                    "rest": {
+                      "type": "object",
+                      "attributes": {
+                        "_key": {
+                          "type": "objectAttribute",
+                          "value": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "featuredCitiesBlockDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_blockColorCreamMidnight": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "Cream"
+                    },
+                    {
+                      "type": "string",
+                      "value": "MidnightDark"
+                    }
+                  ]
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "component_electionsSearchHero",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_electionsSearchHero"
+          }
+        },
+        "logoSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "showLogo": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "boolean"
+                },
+                "optional": true
+              },
+              "img_logoImage": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "object",
+                  "attributes": {
+                    "asset": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "object",
+                        "attributes": {
+                          "_ref": {
+                            "type": "objectAttribute",
+                            "value": {
+                              "type": "string"
+                            }
+                          },
+                          "_type": {
+                            "type": "objectAttribute",
+                            "value": {
+                              "type": "string",
+                              "value": "reference"
+                            }
+                          },
+                          "_weak": {
+                            "type": "objectAttribute",
+                            "value": {
+                              "type": "boolean"
+                            },
+                            "optional": true
+                          }
+                        },
+                        "dereferencesTo": "sanity.imageAsset"
+                      },
+                      "optional": true
+                    },
+                    "media": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "unknown"
+                      },
+                      "optional": true
+                    },
+                    "hotspot": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "inline",
+                        "name": "sanity.imageHotspot"
+                      },
+                      "optional": true
+                    },
+                    "crop": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "inline",
+                        "name": "sanity.imageCrop"
+                      },
+                      "optional": true
+                    },
+                    "_type": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "string",
+                        "value": "image"
+                      }
+                    }
+                  }
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "electionsSearchHeroContent": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_headerText": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_bodyCopy": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "ctaAction": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_buttonText": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_buttonStyle": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "primary"
+                    },
+                    {
+                      "type": "string",
+                      "value": "secondary"
+                    },
+                    {
+                      "type": "string",
+                      "value": "outline"
+                    }
+                  ]
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "electionsSearchHeroDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "img_backgroundImage": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "object",
+                  "attributes": {
+                    "asset": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "object",
+                        "attributes": {
+                          "_ref": {
+                            "type": "objectAttribute",
+                            "value": {
+                              "type": "string"
+                            }
+                          },
+                          "_type": {
+                            "type": "objectAttribute",
+                            "value": {
+                              "type": "string",
+                              "value": "reference"
+                            }
+                          },
+                          "_weak": {
+                            "type": "objectAttribute",
+                            "value": {
+                              "type": "boolean"
+                            },
+                            "optional": true
+                          }
+                        },
+                        "dereferencesTo": "sanity.imageAsset"
+                      },
+                      "optional": true
+                    },
+                    "media": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "unknown"
+                      },
+                      "optional": true
+                    },
+                    "hotspot": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "inline",
+                        "name": "sanity.imageHotspot"
+                      },
+                      "optional": true
+                    },
+                    "crop": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "inline",
+                        "name": "sanity.imageCrop"
+                      },
+                      "optional": true
+                    },
+                    "_type": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "string",
+                        "value": "image"
+                      }
+                    }
+                  }
+                },
+                "optional": true
+              },
+              "field_backgroundColor": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "cream"
+                    },
+                    {
+                      "type": "string",
+                      "value": "midnight"
+                    }
+                  ]
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "component_electionsPositionHero",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_electionsPositionHero"
+          }
+        },
+        "ctaAction": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "ctaActionWithShared"
+          },
+          "optional": true
+        },
+        "electionsPositionHeroDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "electionsPositionHeroDesignSettings"
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "component_electionsIndexBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_electionsIndexBlock"
+          }
+        },
+        "electionsIndexBlockHeader": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "summaryInfo"
+          },
+          "optional": true
+        },
+        "electionsIndexBlockDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_blockColorCreamMidnight": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "cream"
+                    },
+                    {
+                      "type": "string",
+                      "value": "midnight"
+                    }
+                  ]
+                },
+                "optional": true
+              },
+              "field_showSearch": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "boolean"
+                },
+                "optional": true
+              },
+              "field_searchPlaceholder": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_initialDisplayCount": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "number"
+                },
+                "optional": true
+              },
+              "field_ctaLabel": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "component_claimProfileBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_claimProfileBlock"
+          }
+        },
+        "claimProfileBlockContent": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_headline": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_body": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "exampleCard": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "object",
+                  "attributes": {
+                    "field_name": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "string"
+                      },
+                      "optional": true
+                    },
+                    "field_partyAffiliation": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "string"
+                      },
+                      "optional": true
+                    },
+                    "field_secondaryText": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "string"
+                      },
+                      "optional": true
+                    },
+                    "field_showBadge": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "boolean"
+                      },
+                      "optional": true
+                    }
+                  }
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "ctaAction": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "ctaActionWithShared"
+          },
+          "optional": true
+        },
+        "claimProfileBlockDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_blockColorCreamMidnight": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "cream"
+                    },
+                    {
+                      "type": "string",
+                      "value": "midnight"
+                    }
+                  ]
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "component_candidatesBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_candidatesBlock"
+          }
+        },
+        "candidatesBlockHeader": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "summaryInfo"
+          },
+          "optional": true
+        },
+        "candidatesBlockFilterSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_enableFilters": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "boolean"
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "candidatesBlockOptionalButton": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "ctaActionWithShared"
+          },
+          "optional": true
+        },
+        "candidatesBlockDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_blockColorCreamMidnight": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "cream"
+                    },
+                    {
+                      "type": "string",
+                      "value": "midnight"
+                    }
+                  ]
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
     "name": "component_ctaBannerBlock",
     "type": "type",
     "value": {
@@ -5143,6 +6478,56 @@
           "value": {
             "type": "inline",
             "name": "blogTopicTagsBlockOverview"
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "component_profileHero",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_profileHero"
+          }
+        },
+        "profileHeroDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_blockColorCreamMidnight": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "Cream"
+                    },
+                    {
+                      "type": "string",
+                      "value": "MidnightDark"
+                    }
+                  ]
+                },
+                "optional": true
+              }
+            }
           },
           "optional": true
         },
@@ -5806,6 +7191,96 @@
     }
   },
   {
+    "name": "component_breadcrumbBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_breadcrumbBlock"
+          }
+        },
+        "breadcrumbBlockDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_blockColorCreamMidnight": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "Cream"
+                    },
+                    {
+                      "type": "string",
+                      "value": "MidnightDark"
+                    }
+                  ]
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "component_calculatorTextBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_calculatorTextBlock"
+          }
+        },
+        "summaryInfo": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "summaryInfo"
+          },
+          "optional": true
+        },
+        "calculatorTextBlockDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "calculatorTextBlockDesignSettings"
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
     "name": "component_bannerBlock",
     "type": "type",
     "value": {
@@ -5983,6 +7458,88 @@
           "value": {
             "type": "inline",
             "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "officeItem",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "officeItem"
+          }
+        },
+        "field_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "STATE"
+              },
+              {
+                "type": "string",
+                "value": "COUNTY"
+              },
+              {
+                "type": "string",
+                "value": "CITY"
+              }
+            ]
+          },
+          "optional": true
+        },
+        "field_position": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "field_nextElectionDate": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "field_href": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "electionsPositionHeroDesignSettings",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "electionsPositionHeroDesignSettings"
+          }
+        },
+        "field_blockColorCreamMidnight": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_blockColorCreamMidnight"
           },
           "optional": true
         }
@@ -7652,6 +9209,14 @@
           "value": {
             "type": "inline",
             "name": "block_summaryText"
+          },
+          "optional": true
+        },
+        "ctaActionWithShared": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "ctaActionWithShared"
           },
           "optional": true
         }
@@ -10855,6 +12420,110 @@
     }
   },
   {
+    "name": "pledgeCardItem",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "pledgeCardItem"
+          }
+        },
+        "field_icon": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_icon"
+          },
+          "optional": true
+        },
+        "field_title": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_title"
+          },
+          "optional": true
+        },
+        "block_summaryText": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "block_summaryText"
+          },
+          "optional": true
+        },
+        "ctaActionWithShared": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "ctaActionWithShared"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "goodPartyOrgPledgeItems",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "goodPartyOrgPledgeItems"
+          }
+        },
+        "list_pledgeCards": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "list_pledgeCards"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "goodPartyOrgPledgeDesignSettings",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "goodPartyOrgPledgeDesignSettings"
+          }
+        },
+        "field_iconColor6ColorsWhiteMixed": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_iconColor6ColorsWhiteMixed"
+          },
+          "optional": true
+        },
+        "field_blockColorCreamMidnight": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_blockColorCreamMidnight"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
     "name": "stepperBlockItem",
     "type": "type",
     "value": {
@@ -10943,6 +12612,38 @@
           "type": "objectAttribute",
           "value": {
             "type": "boolean"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "calculatorTextBlockDesignSettings",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "calculatorTextBlockDesignSettings"
+          }
+        },
+        "field_blockColorCreamMidnight": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_blockColorCreamMidnight"
+          },
+          "optional": true
+        },
+        "field_calculatorLayout": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_calculatorLayout"
           },
           "optional": true
         }

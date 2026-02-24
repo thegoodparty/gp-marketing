@@ -1,0 +1,145 @@
+import type { Meta, StoryObj } from '@storybook/react';
+import { ProfileContentBlock } from './ProfileContentBlock.tsx';
+
+const meta: Meta<typeof ProfileContentBlock> = {
+	title: 'New Components/Page Sections/Profile Content Block',
+	component: ProfileContentBlock,
+	render: args => <ProfileContentBlock {...args} />,
+	parameters: {
+		design: {
+			type: 'figma',
+			url: 'https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23711-25268&t=6DQyxTAl7Ola6AF3-0',
+		},
+	},
+};
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+	args: {
+		backgroundColor: 'cream',
+		sidebar: {
+			links: [
+				{ label: 'Website', icon: 'globe', href: 'https://www.website.com' },
+				{ label: 'Facebook', icon: 'facebook', href: 'https://www.facebook.com/' },
+				{ label: 'Email', icon: 'mail', href: 'mailto:hello@example.com' },
+			],
+			aboutOffice: 'Body text here',
+			termLength: 'Body text here',
+			electionDate: 'Body text here',
+			cta: {
+				buttonType: 'internal',
+				href: '/run',
+				label: 'Run for Office',
+				buttonProps: {
+					styleType: 'secondary',
+				},
+			},
+		},
+		title: 'Candidate Name',
+		contentCards: [
+			{
+				cardType: 'about-me',
+				heading: 'About Me',
+				content: 'I am a dedicated public servant with over 10 years of experience in local government. My commitment to transparency and community engagement has driven my work throughout my career.',
+			},
+			{
+				cardType: 'why-running',
+				heading: 'Why I am Running',
+				content: 'I am running because I believe our community deserves leadership that listens, acts with integrity, and puts the needs of residents first. Together, we can build a brighter future for our city.',
+			},
+			{
+				cardType: 'top-issues',
+				heading: 'Top Issues',
+				content: 'My top priorities include improving public transportation, expanding affordable housing options, and strengthening our local economy through small business support and job creation.',
+			},
+		],
+	},
+};
+
+export const WithoutSidebar: Story = {
+	args: {
+		backgroundColor: 'cream',
+		contentCards: [
+			{
+				cardType: 'about-me',
+				heading: 'About Me',
+				content: 'I am a dedicated public servant with over 10 years of experience in local government.',
+			},
+			{
+				cardType: 'why-running',
+				heading: 'Why I am Running',
+				content: 'I am running because I believe our community deserves leadership that listens and acts with integrity.',
+			},
+		],
+	},
+};
+
+export const MidnightBackground: Story = {
+	args: {
+		backgroundColor: 'midnight',
+		sidebar: {
+			links: [
+				{ label: 'Website', icon: 'globe', href: 'https://www.website.com' },
+				{ label: 'Facebook', icon: 'facebook', href: 'https://www.facebook.com/' },
+				{ label: 'Email', icon: 'mail', href: 'mailto:hello@example.com' },
+			],
+			aboutOffice: 'Body text here',
+			termLength: 'Body text here',
+			electionDate: 'Body text here',
+			cta: {
+				buttonType: 'internal',
+				href: '/run',
+				label: 'Run for Office',
+				buttonProps: {
+					styleType: 'primary',
+				},
+			},
+		},
+		contentCards: [
+			{
+				cardType: 'about-me',
+				heading: 'About Me',
+				content: 'I am a dedicated public servant with over 10 years of experience in local government.',
+			},
+		],
+	},
+};
+
+export const MultipleCards: Story = {
+	args: {
+		backgroundColor: 'cream',
+		sidebar: {
+			links: [
+				{ label: 'Website', icon: 'globe', href: 'https://www.website.com' },
+				{ label: 'Email', icon: 'mail', href: 'mailto:hello@example.com' },
+			],
+			aboutOffice: 'Body text here',
+			termLength: 'Body text here',
+			electionDate: 'Body text here',
+		},
+		contentCards: [
+			{
+				cardType: 'about-me',
+				heading: 'About Me',
+				content: 'First card content.',
+			},
+			{
+				cardType: 'why-running',
+				heading: 'Why I am Running',
+				content: 'Second card content.',
+			},
+			{
+				cardType: 'top-issues',
+				heading: 'Top Issues',
+				content: 'Third card content.',
+			},
+			{
+				cardType: 'about-me',
+				heading: 'Additional Section',
+				content: 'Fourth card content.',
+			},
+		],
+	},
+};

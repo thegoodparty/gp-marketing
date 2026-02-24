@@ -32,9 +32,10 @@ const styles = tv({
 			left: {
 				base: '',
 			},
-			right: {
-				base: '',
-			},
+		right: {
+			base: 'justify-end text-right',
+			content: 'items-end',
+		},
 		},
 	},
 });

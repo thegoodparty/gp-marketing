@@ -37,8 +37,14 @@ const meta = preview.meta({
 					<Text as='div' style={{ marginBottom: '1rem' }} styleType='body-1'>
 						Body 1
 					</Text>
+					<Text as='div' style={{ marginBottom: '1rem' }} styleType='body-xl'>
+						Body XL
+					</Text>
 					<Text as='div' style={{ marginBottom: '1rem' }} styleType='body-2'>
 						Body 2
+					</Text>
+					<Text as='div' style={{ marginBottom: '1rem' }} styleType='body-large'>
+						Body Large
 					</Text>
 				</div>
 				<div style={{ marginBottom: '5rem' }}>

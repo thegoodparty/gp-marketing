@@ -1,0 +1,193 @@
+import { Meta, Story, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import * as ElectionsIndexBlockStories from './ElectionsIndexBlock.stories';
+
+<Meta of={ElectionsIndexBlockStories} />
+
+# Elections Index Block
+
+<Description of={ElectionsIndexBlockStories.StateLevel} />
+
+## Overview
+
+The ElectionsIndexBlock component is a client-side component that displays a searchable, paginated list of election locations (counties or cities). It includes search functionality, result count display, and "Show More" pagination. The component returns `null` when rendered on city pages (when `citySlug` is provided).
+
+## Usage
+
+Use this component when:
+- Displaying lists of counties on state pages
+- Displaying lists of cities on county pages
+- Providing search functionality for election locations
+- Creating paginated location listings
+
+## Important: Conditional Rendering
+
+**This component returns `null` when `citySlug` is provided.** City pages should not display this component as there are no child locations below the city level.
+
+## Variants
+
+<Canvas of={ElectionsIndexBlockStories.StateLevel} />
+
+<Canvas of={ElectionsIndexBlockStories.CountyLevel} />
+
+<Canvas of={ElectionsIndexBlockStories.CreamBackground} />
+
+<Canvas of={ElectionsIndexBlockStories.LargeResultSet} />
+
+<Canvas of={ElectionsIndexBlockStories.EmptyResults} />
+
+<Canvas of={ElectionsIndexBlockStories.CityLevel} />
+
+<Canvas of={ElectionsIndexBlockStories.WithoutSearch} />
+
+<Canvas of={ElectionsIndexBlockStories.MinimalHeader} />
+
+## Props
+
+<Controls of={ElectionsIndexBlockStories.StateLevel} />
+
+### Prop Details
+
+#### `elections` (required)
+
+Array of election location items to display.
+
+**Type:** `ElectionItem[]`
+
+Each `ElectionItem` contains:
+- `name` (string) - Location name (e.g., "Cook County", "Chicago")
+- `href` (string) - Link to location's elections page
+- `level` (`'county' | 'city'`) - Location level
+
+#### `stateSlug` (required)
+
+State slug for the current page (e.g., "illinois", "california").
+
+**Type:** `string`
+
+#### `countySlug` (optional)
+
+County slug for county-level pages.
+
+**Type:** `string`
+
+#### `citySlug` (optional)
+
+City slug. **When provided, component returns `null`.**
+
+**Type:** `string`
+
+#### `header` (optional)
+
+HeaderBlock configuration for the section title and description.
+
+**Type:** `HeaderBlockProps`
+
+#### `showSearch` (optional)
+
+Whether to display the search input.
+
+**Type:** `boolean`
+
+**Default:** `true`
+
+#### `searchPlaceholder` (optional)
+
+Placeholder text for the search input.
+
+**Type:** `string`
+
+**Default:** `'Search by county or municipality'`
+
+#### `initialDisplayCount` (optional)
+
+Number of items to display initially.
+
+**Type:** `number`
+
+**Default:** `24`
+
+#### `ctaLabel` (optional)
+
+Label for the "Show More" / "Browse All" button.
+
+**Type:** `string`
+
+**Default:** `'Browse CTA'` (when pagination available) or `'Browse All'` (when no pagination)
+
+#### `ctaHref` (optional)
+
+Link for the "Browse All" button (shown when all items are displayed).
+
+**Type:** `string`
+
+#### `backgroundColor` (optional)
+
+Background color variant for the block.
+
+**Type:** `'cream' | 'midnight'`
+
+**Default:** `'midnight'`
+
+#### `className` (optional)
+
+Additional CSS classes to apply to the component.
+
+**Type:** `string`
+
+## Client-Side Features
+
+This component uses `'use client'` and React hooks:
+- `useState` for search query and display count
+- `useMemo` for filtering and sorting elections
+- Search resets pagination when query changes
+- "Show More" increments display count by `initialDisplayCount`
+
+## Search Functionality
+
+The search:
+- Filters elections by name (case-insensitive)
+- Sorts results alphabetically
+- Resets pagination when search query changes
+- Shows result count ("X Available Results")
+- Displays empty state when no results found
+
+## Pagination
+
+The component uses "Show More" pagination:
+- Initially displays `initialDisplayCount` items
+- "Show More" button adds `initialDisplayCount` more items
+- Button disappears when all items are displayed
+- If `ctaHref` is provided and all items shown, displays "Browse All" link instead
+
+## Grid Layout
+
+Elections are displayed in a responsive grid:
+- **Mobile**: Single column
+- **Tablet** (`sm:`): 2 columns (`sm:grid-cols-2`)
+- **Desktop** (`lg:`): 3 columns (`lg:grid-cols-3`)
+- Gap: `gap-x-6 gap-y-3`
+
+## Empty State
+
+When no results are found:
+- Displays centered message
+- Shows search query if one was entered
+- Message format: `"No results found for \"{searchQuery}\""` or `"No locations found"`
+
+## Accessibility
+
+- Uses semantic `<article>` element
+- Search input includes proper `aria-label`
+- Grid uses semantic `<nav>` with `aria-label="Elections by location"`
+- Links are keyboard accessible
+- Result count provides context for screen readers
+
+## Design Reference
+
+[View in Figma](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=22896-253869)
+
+## Related Components
+
+- `ElectionsSearchHero` - Search hero that precedes this component
+- `ElectionsPositionHero` - Hero for specific election positions
+- `HeaderBlock` - Header section component

@@ -1,0 +1,219 @@
+import { Meta, Story, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import * as ListOfOfficesBlockStories from './ListOfOfficesBlock.stories';
+
+<Meta of={ListOfOfficesBlockStories} />
+
+# List of Offices Block
+
+<Description of={ListOfOfficesBlockStories.Default} />
+
+## Overview
+
+The ListOfOfficesBlock component displays a list of office positions with filtering by year. It features a responsive design with a table layout on desktop and a card-based list on mobile. The component includes a year selector dropdown, purple dashed border card styling, and blue office type tags.
+
+## Usage
+
+Use this component when:
+- Displaying lists of available office positions
+- Filtering offices by election year
+- Creating browsable office directories
+- Showing upcoming election information
+
+## Design Features
+
+- **Purple Dashed Border**: Card with `border-dashed border-lavender-600` styling
+- **Blue Type Tags**: Office types (STATE, COUNTY, CITY) displayed as blue tags
+- **Year Filtering**: Dropdown selector with calendar icon to filter by election year
+- **Responsive Layout**: Table on desktop, card list on mobile
+- **Clickable Rows**: Each office row/card is clickable when href is provided
+
+## Variants
+
+<Canvas of={ListOfOfficesBlockStories.Default} />
+
+<Canvas of={ListOfOfficesBlockStories.MidnightBackground} />
+
+<Canvas of={ListOfOfficesBlockStories.MixedOfficeTypes} />
+
+<Canvas of={ListOfOfficesBlockStories.YearFiltering} />
+
+<Canvas of={ListOfOfficesBlockStories.WithoutHeading} />
+
+<Canvas of={ListOfOfficesBlockStories.WithoutHeadline} />
+
+<Canvas of={ListOfOfficesBlockStories.EmptyState} />
+
+<Canvas of={ListOfOfficesBlockStories.SingleOffice} />
+
+<Canvas of={ListOfOfficesBlockStories.ManyOffices} />
+
+<Canvas of={ListOfOfficesBlockStories.WithoutLinks} />
+
+## Props
+
+<Controls of={ListOfOfficesBlockStories.Default} />
+
+### Prop Details
+
+#### `offices` (required)
+
+Array of office items to display.
+
+**Type:** `OfficeItem[]`
+
+Each `OfficeItem` contains:
+- `id` (string) - Unique identifier for the office
+- `type` (string) - Office type (e.g., "STATE", "COUNTY", "CITY")
+- `position` (string) - Name of the office position
+- `nextElectionDate` (string) - Formatted election date (e.g., "November 5, 2028")
+- `href` (string, optional) - Link to office detail page
+
+#### `heading` (optional)
+
+Heading text displayed above the card with a diamond icon. Defaults to "List of Offices" if not provided but headline is present.
+
+**Type:** `string`
+
+#### `headline` (optional)
+
+Headline text displayed inside the card, positioned to the left of the year selector.
+
+**Type:** `string`
+
+#### `defaultYear` (optional)
+
+Default year to display in the dropdown selector.
+
+**Type:** `number`
+
+**Default:** Current year + 1
+
+#### `availableYears` (optional)
+
+Array of years available in the dropdown selector.
+
+**Type:** `number[]`
+
+**Default:** `[currentYear - 4, currentYear - 3, currentYear - 2, currentYear - 1, currentYear, currentYear + 1]`
+
+#### `onYearChange` (optional)
+
+Callback function called when the year selection changes.
+
+**Type:** `(year: number) => void`
+
+#### `onOfficeClick` (optional)
+
+Callback function called when an office row/card is clicked.
+
+**Type:** `(office: OfficeItem) => void`
+
+#### `backgroundColor` (optional)
+
+Background color variant for the block.
+
+**Type:** `'cream' | 'midnight'`
+
+**Default:** `'cream'`
+
+#### `className` (optional)
+
+Additional CSS classes to apply to the component.
+
+**Type:** `string`
+
+## Responsive Behavior
+
+### Desktop Layout (md: breakpoint and above)
+
+- **Table Layout**: Offices displayed in a table with columns:
+  - Type (blue tag)
+  - Position (office name)
+  - Next Election Date
+  - Arrow icon (right-aligned)
+- **Header Row**: Headline and year selector displayed side-by-side
+- **Hover States**: Rows have hover effects when clickable
+
+### Mobile Layout (below md: breakpoint)
+
+- **Card Layout**: Offices displayed as individual cards in a vertical list
+- **Card Structure**: Each card contains:
+  - Blue type tag
+  - Office position name
+  - Election date
+  - Right arrow icon
+- **Header Row**: Headline and year selector stack vertically
+
+## Year Filtering
+
+The component filters offices by the selected year:
+- Extracts the year from each office's `nextElectionDate`
+- Only displays offices matching the selected year
+- Shows empty state message when no offices match: `"No offices found for {year}"`
+- Year selector includes calendar icon
+
+## Office Type Tags
+
+Office types are displayed as blue rectangular tags:
+- Background: `bg-goodparty-blue`
+- Text color: White
+- Font: Secondary font, small size, semibold weight
+- Padding: `px-3 py-1`
+- Border radius: Rounded corners
+
+## Date Formatting
+
+Dates should be formatted as "Month Day, Year" (e.g., "November 5, 2028"). The component expects pre-formatted date strings in the `nextElectionDate` field.
+
+## Clickable Behavior
+
+When an office has an `href`:
+- **Desktop**: Entire table row becomes clickable
+- **Mobile**: Entire card becomes clickable
+- Arrow icon indicates clickability
+- Hover states provide visual feedback
+- Click handlers call `onOfficeClick` callback if provided
+
+When an office has no `href`:
+- Rows/cards are not clickable
+- Arrow icon still displays for visual consistency
+- No hover effects applied
+
+## Empty State
+
+When no offices match the selected year:
+- Displays centered message
+- Message format: `"No offices found for {selectedYear}"`
+- Uses neutral text color for visibility
+
+## Accessibility
+
+- Uses semantic `<article>` element
+- Table includes proper `<thead>` and `<tbody>` structure
+- Year selector includes `aria-label`
+- Table header includes empty header cell with `aria-label="Actions"` for arrow column
+- Clickable rows/cards are keyboard accessible
+- Focus states for interactive elements
+
+## Client-Side Features
+
+This component uses `'use client'` and React hooks:
+- `useState` for selected year
+- `useMemo` for filtering offices by year
+- Year changes trigger re-filtering of offices
+
+## Design Reference
+
+The component matches the design system specifications with:
+- Purple dashed border (`border-2 border-dashed border-lavender-600`)
+- Blue office type tags (`bg-goodparty-blue`)
+- Calendar icon for year selector
+- Right arrow icons for navigation
+- Proper spacing and typography
+
+## Related Components
+
+- `ElectionsIndexBlock` - Index page component for election locations
+- `ElectionsPositionHero` - Hero section for specific positions
+- `ElectionsSearchHero` - Search hero for finding elections
+- `HeaderBlock` - Header section component

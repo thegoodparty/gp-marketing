@@ -63,11 +63,13 @@ export const component_pricingBlockGroq = `_type=="component_pricingBlock"=>{...
 /*language=textmate*/
 export const component_heroGroq = `_type=="component_hero"=>{...,summaryInfo{${summaryInfoGroq}}}`;
 /*language=textmate*/
+export const component_profileHeroGroq = `_type=="component_profileHero"=>{...}`;
+/*language=textmate*/
 export const component_comparisonBlock = `_type=="component_comparisonBlock"=>{...,summaryInfo{${summaryInfoGroq}},comparisonBlockTableOne{...,list_comparisonBlockTableItems[]{...,block_summaryText[]{...,${textBlockGroq}}}},comparisonBlockTableTwo{...,list_comparisonBlockTableItems[]{...,block_summaryText[]{...,${textBlockGroq}}}}}`;
 /*language=textmate*/
 export const component_stepperBlockGroq = `_type=="component_stepperBlock"=>{...,summaryInfo{${summaryInfoGroq}},stepperBlockItems{...,list_stepperBlockItems[]{...,summaryInfo{${summaryInfoGroq}}}}}`;
 /*language=textmate*/
-export const component_iconContentBlock = `_type=="component_iconContentBlock"=>{...,summaryInfo{${summaryInfoGroq}}}`;
+export const component_iconContentBlock = `_type=="component_iconContentBlock"=>{...,summaryInfo{${summaryInfoGroq}},iconContentBlockItems{...,list_iconContentItems[]{...,ctaActionWithShared{${buttonGroq}}}}}`;
 /*language=textmate*/
 export const component_imageContentBlock = `_type=="component_imageContentBlock"=>{...,summaryInfo{${summaryInfoGroq}}}`;
 /*language=textmate*/
@@ -123,6 +125,10 @@ export const categoryRelatedArticlesFirstFetchGroq = `*[][0]{
 /*language=textmate*/
 export const component_bannerBlock = `_type=="component_bannerBlock"=>{...,bannerBlockContent{...,list_Choose3People[]->}}`;
 /*language=textmate*/
+export const component_calculatorTextBlock = `_type=="component_calculatorTextBlock"=>{...,summaryInfo{${summaryInfoGroq}},calculatorTextBlockDesignSettings,componentSettings}`;
+/*language=textmate*/
+export const component_breadcrumbBlock = `_type=="component_breadcrumbBlock"=>{...}`;
+/*language=textmate*/
 export const component_teamBlock = `_type=="component_teamBlock"=>{...,people{...,list_people[]->},summaryInfo{${summaryInfoGroq}}}`;
 /*language=textmate*/
 export const component_ctaBannerBlock = `_type=="component_ctaBannerBlock"=>{...,_key,_type,field_ctaType,"ref_promotion":campaignPromotion.ref_promotion->,field_ctaType=="Reference"=>{"cta":campaignPromotion.ref_promotion->{"primaryCTA":{...ctaAction{${globalCtaPrimaryButtonGroq}}},"secondaryCTA":secondaryCta.ctaActionWithShared{${buttonGroq}}}}.cta,field_ctaType=="Manual"=>{"cta":{"primaryCTA":{...ctaAction{${globalCtaPrimaryButtonGroq}}},"secondaryCTA":secondaryCta.ctaActionWithShared{${buttonGroq}}}}.cta,"title":coalesce(smallCtaMessaging.field_title,campaignPromotion.ref_promotion->ctaMessaging.field_title),"block_summaryText":coalesce(smallCtaMessaging.block_summaryText[]{...,${textBlockGroq}},campaignPromotion.ref_promotion->ctaMessaging.block_summaryText[]{...,${textBlockGroq}})}`;
@@ -141,7 +147,19 @@ export const component_ctaCardsBlock = `_type=="component_ctaCardsBlock"=>{...,c
 /*language=textmate*/
 export const component_blogTopicTagsBlock = `_type=="component_blogTopicTagsBlock"=>{...,"topics":*[_type=="topics"][]{_id,_type,tagOverview,${topicsHrefGroq}}}`;
 /*language=textmate*/
-export const sectionsGroq = `_key,_type,${component_pricingBlockGroq},${component_heroGroq},${component_comparisonBlock},${component_stepperBlockGroq},${component_iconContentBlock},${component_imageContentBlock},${component_statsBlock},${component_tabbedImageBlock},${component_featuresBlock},${component_twoUpCardBlock},${component_carouselBlock},${component_testimonialBlock},${component_faqBlock},${component_blogBlock},${component_bannerBlock},${component_teamBlock},${component_featuredBlogBlock},${component_allCtaBlocks},${component_ctaBannerBlock},${component_heroWithSubscribe},${component_newsletterBlock},${component_ctaCardsBlock},${component_blogTopicTagsBlock}`;
+export const component_candidatesBlock = `_type=="component_candidatesBlock"=>{...,candidatesBlockHeader{${summaryInfoGroq}},candidatesBlockOptionalButton{${buttonGroq}}}`;
+/*language=textmate*/
+export const component_claimProfileBlock = `_type=="component_claimProfileBlock"=>{...,claimProfileBlockContent,ctaAction{${buttonGroq}},claimProfileBlockDesignSettings}`;
+export const component_electionsIndexBlock = `_type=="component_electionsIndexBlock"=>{...,electionsIndexBlockHeader{${summaryInfoGroq}}}`;
+export const component_electionsPositionHero = `_type=="component_electionsPositionHero"=>{...,ctaAction{${buttonGroq}}}`;
+export const component_electionsSearchHero = `_type=="component_electionsSearchHero"=>{...}`;
+export const component_featuredCitiesBlock = `_type=="component_featuredCitiesBlock"=>{...,featuredCitiesBlockHeader{${summaryInfoGroq}}}`;
+export const component_goodPartyOrgPledge = `_type=="component_goodPartyOrgPledge"=>{...,summaryInfo{${summaryInfoGroq}},goodPartyOrgPledgeItems{...,list_pledgeCards[]{...,ctaActionWithShared{${buttonGroq}}}}}`;
+export const component_locationFactsBlock = `_type=="component_locationFactsBlock"=>{...,locationFactsBlockHeader{${summaryInfoGroq}}}`;
+export const component_locationLandingPageHero = `_type=="component_locationLandingPageHero"=>{...}`;
+export const component_profileContentBlock = `_type=="component_profileContentBlock"=>{...,profileContentBlockDesignSettings,componentSettings}`;
+/*language=textmate*/
+export const sectionsGroq = `_key,_type,${component_pricingBlockGroq},${component_heroGroq},${component_profileHeroGroq},${component_comparisonBlock},${component_stepperBlockGroq},${component_iconContentBlock},${component_imageContentBlock},${component_statsBlock},${component_tabbedImageBlock},${component_featuresBlock},${component_twoUpCardBlock},${component_carouselBlock},${component_testimonialBlock},${component_faqBlock},${component_blogBlock},${component_bannerBlock},${component_calculatorTextBlock},${component_breadcrumbBlock},${component_teamBlock},${component_featuredBlogBlock},${component_allCtaBlocks},${component_ctaBannerBlock},${component_heroWithSubscribe},${component_newsletterBlock},${component_ctaCardsBlock},${component_blogTopicTagsBlock},${component_candidatesBlock},${component_claimProfileBlock},${component_electionsIndexBlock},${component_electionsPositionHero},${component_electionsSearchHero},${component_featuredCitiesBlock},${component_goodPartyOrgPledge},${component_locationFactsBlock},${component_locationLandingPageHero},${component_profileContentBlock}`;
 /*language=textmate*/
 export const allCategoriesLinksGroq = `*[_type=="categories"][]{_id,"title":tagOverview.field_name,${categoriesHrefGroq}}`;
 /*language=textmate*/

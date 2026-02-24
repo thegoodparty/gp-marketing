@@ -1,0 +1,115 @@
+import { Meta, Story, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import * as LogoStories from './Logo.stories';
+
+<Meta of={LogoStories} />
+
+# Logo
+
+<Description of={LogoStories.Default} />
+
+## Overview
+
+The Logo component is an SVG-based logo component for GoodParty.org. It displays the organization's logo with customizable dimensions and supports all standard SVG props. The logo features a heart icon with a star badge, rendered in the brand colors (red, blue, and white).
+
+## Usage
+
+Use this component when:
+- Displaying the GoodParty.org logo in headers, footers, or branding sections
+- Showing the logo at different sizes for various contexts
+- Adding logo badges or attribution to content
+- Creating branded elements that require the official logo
+
+## Variants
+
+<Canvas of={LogoStories.Default} />
+
+<Canvas of={LogoStories.Small20x20} />
+
+<Canvas of={LogoStories.Small35x26} />
+
+<Canvas of={LogoStories.Medium36x30} />
+
+<Canvas of={LogoStories.Medium48x36} />
+
+<Canvas of={LogoStories.Medium50x37} />
+
+<Canvas of={LogoStories.Large100x75} />
+
+## Props
+
+<Controls of={LogoStories.Default} />
+
+### Prop Details
+
+#### `width` (optional)
+
+The width of the logo SVG.
+
+**Type:** `number | string`
+
+**Default:** `200`
+
+#### `height` (optional)
+
+The height of the logo SVG.
+
+**Type:** `number | string`
+
+**Default:** `200`
+
+#### `className` (optional)
+
+Additional CSS classes to apply to the SVG element.
+
+**Type:** `string`
+
+#### SVG Props
+
+The component accepts all standard SVG element props via spread props, allowing for full customization of the SVG element's attributes.
+
+**Type:** `SVGProps<SVGSVGElement>`
+
+## Logo Design
+
+The logo consists of three main elements:
+1. **Heart Shape** - The primary white heart icon with red outline
+2. **Star Badge** - A blue star icon positioned on the heart
+3. **Brand Colors** - Uses GoodParty.org brand colors (red: `#DC1438`, blue: `#0048C2`, white)
+
+## ViewBox
+
+The SVG uses a viewBox of `0 0 200 200`, which means the logo is designed to scale proportionally while maintaining its aspect ratio.
+
+## Common Use Cases
+
+### Header Logo
+```tsx
+<Logo width={35} height={26} />
+```
+
+### Footer Logo
+```tsx
+<Logo width={48} height={36} />
+```
+
+### Badge/Attribution
+```tsx
+<Logo width={20} height={20} className="opacity-75" />
+```
+
+### Large Display
+```tsx
+<Logo width={200} height={200} />
+```
+
+## Accessibility
+
+- The SVG is decorative by default (no text content)
+- For accessibility, consider adding `aria-label` or `aria-hidden="true"` depending on context
+- When used as a link, ensure proper ARIA labels are provided on the parent anchor element
+
+## Related Components
+
+- Used in `ProfileHero` - Displays logo badge on profile images
+- Used in `sanity.config.ts` - Sanity Studio branding
+- Can be used with any component requiring GoodParty.org branding

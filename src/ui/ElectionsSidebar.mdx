@@ -1,0 +1,171 @@
+import { Meta, Story, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import * as ElectionsSidebarStories from './ElectionsSidebar.stories';
+
+<Meta of={ElectionsSidebarStories} />
+
+# Elections Sidebar
+
+<Description of={ElectionsSidebarStories.Default} />
+
+## Overview
+
+The ElectionsSidebar component is a sidebar widget that displays contact links, office information, and a call-to-action button. It's designed to be used alongside profile content blocks to provide quick access to candidate information and contact methods. The component supports optional sections for links (with icons), office details, and a CTA button.
+
+## Usage
+
+Use this component when:
+- Displaying candidate contact information (website, social media, email)
+- Showing office details (about office, term length, election date)
+- Providing a prominent call-to-action button
+- Creating sidebar content for profile pages
+- Building election-related information displays
+
+## Variants
+
+### Default (Most Common)
+
+<Canvas of={ElectionsSidebarStories.Default} />
+
+The default variant includes all sections: links with icons, office information fields, and a CTA button. This is the primary variant used in production.
+
+### With Links Only
+
+<Canvas of={ElectionsSidebarStories.WithLinksOnly} />
+
+Displays only the links section with icons. Useful when you only need to show contact information without office details.
+
+### With Info Only
+
+<Canvas of={ElectionsSidebarStories.WithInfoOnly} />
+
+Shows only the office information section and CTA button. Useful when contact links are handled elsewhere or not available.
+
+### Minimal
+
+<Canvas of={ElectionsSidebarStories.Minimal} />
+
+Minimal variant with a single link and one info field. Demonstrates the component's flexibility with partial data.
+
+### Without CTA
+
+<Canvas of={ElectionsSidebarStories.WithoutCTA} />
+
+Full sidebar without the CTA button. Useful when the call-to-action is handled elsewhere on the page.
+
+## Props
+
+<Controls of={ElectionsSidebarStories.Default} />
+
+### Prop Details
+
+#### `links` (optional)
+
+Array of link objects to display in the links section. Each link includes a label, optional icon, and href.
+
+**Type:** `SidebarLink[]`
+
+Each `SidebarLink` contains:
+- `label` (string) - Display text for the link
+- `icon` (string, optional) - Icon name from Lucide icon set (e.g., 'globe', 'mail', 'facebook')
+- `href` (string) - URL or mailto link
+
+**Example:**
+```typescript
+links: [
+  { label: 'Website', icon: 'globe', href: 'https://www.example.com' },
+  { label: 'Email', icon: 'mail', href: 'mailto:contact@example.com' },
+]
+```
+
+#### `aboutOffice` (optional)
+
+Text content describing the office position.
+
+**Type:** `string`
+
+#### `termLength` (optional)
+
+Text describing the length of the term for the office.
+
+**Type:** `string`
+
+#### `electionDate` (optional)
+
+Text showing the election date.
+
+**Type:** `string`
+
+#### `cta` (optional)
+
+CTA button configuration. If provided, renders a button at the bottom of the info section.
+
+**Type:** `ComponentButtonProps`
+
+The button defaults to `styleType: 'secondary'` (black background) if not specified.
+
+#### `className` (optional)
+
+Additional CSS classes to apply to the component.
+
+**Type:** `string`
+
+## Icon Support
+
+The component uses the Lucide icon set through `IconResolver`. Common icon names include:
+
+- `globe` - Website/URL icon
+- `mail` - Email icon
+- `facebook` - Facebook social icon
+- `link` - Generic link icon
+- `twitter` - Twitter/X icon
+- `linkedin` - LinkedIn icon
+
+Icons are optional - links will render without icons if the `icon` property is omitted.
+
+## Styling
+
+### Border Separators
+
+- Links section: Each link item has a bottom border (`border-b border-gray-200`) except the last item
+- Info section: Each info field has a bottom border except the last item
+- CTA button: Has padding-top (`pt-4`) to separate it from info fields
+
+### Spacing
+
+- Sections are separated by `gap-6` (1.5rem)
+- Link items have `py-3` vertical padding
+- Info items have `py-4` vertical padding and `gap-2` between label and value
+- Icons are sized at `w-5 h-5` (1.25rem)
+
+### Layout
+
+- Component uses flexbox column layout
+- Links are displayed horizontally with icon on the left
+- Info fields use definition list structure (`<dt>` and `<dd>`)
+- CTA button spans full width (`w-full`)
+
+## Accessibility
+
+- Uses semantic `<aside>` element for sidebar content
+- Links section uses proper anchor tags with `href` attributes
+- Info section uses definition list (`<dl>`, `<dt>`, `<dd>`) for semantic structure
+- Icons are decorative and don't require alt text (text labels provide context)
+- Button is keyboard accessible
+- All text uses appropriate text styles for hierarchy
+
+## Conditional Rendering
+
+The component conditionally renders sections based on prop presence:
+
+- Links section: Only renders if `links` array exists and has items
+- Info section: Only renders if at least one info field or CTA is provided
+- Individual info fields: Only render if their respective props are provided
+- CTA button: Only renders if `cta` prop is provided
+
+## Related Components
+
+- `ProfileContentBlock` - Parent component that uses ElectionsSidebar
+- `ProfileContentBlockSection` - Page section that integrates the sidebar
+- `ComponentButton` - CTA button component used in the sidebar
+- `IconResolver` - Icon rendering component
+- `Anchor` - Link component for navigation

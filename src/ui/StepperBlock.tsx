@@ -3,9 +3,11 @@ import type { ReactNode } from 'react';
 import { cn, tv } from './_lib/utils.ts';
 import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
 import { isValidRichText } from './_lib/isValidRichText.ts';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
+import type { backgroundTypeValues, componentColorValues } from './_lib/designTypesStore.ts';
 import type { ResolvedTextSize } from './_lib/resolveTextSize.ts';
+import type { IconType } from './IconResolver.tsx';
 
+import { CircleIcon } from './CircleIcon.tsx';
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { Media } from './Media.tsx';
 import { Text } from './Text.tsx';
@@ -37,11 +39,20 @@ const styles = tv({
 	},
 });
 
+export type StepperIconItem = {
+	_key?: string;
+	icon: IconType;
+	iconBg?: Exclude<(typeof componentColorValues)[number], 'inverse'>;
+	subhead: string;
+	body: string;
+};
+
 type StepperItemProps = {
 	_key?: string;
 	showFullImage?: boolean;
 	title?: string;
 	caption?: string;
+	iconItems?: StepperIconItem[];
 	layout?: 'media-left' | 'media-right';
 	copy?: ReactNode;
 	image?: any;
@@ -113,7 +124,24 @@ export function StepperBlock(props: StepperBlockProps) {
 											})}
 										</div>
 									)}
-									{item.caption && <Text styleType='caption'>{item.caption}</Text>}
+									{item.caption ? (
+										<Text styleType='caption'>{item.caption}</Text>
+									) : (
+										item.iconItems &&
+										item.iconItems.length > 0 && (
+											<div className='flex flex-col gap-6 mt-4'>
+												{item.iconItems.map((iconItem, iconIndex) => (
+													<div key={iconItem._key ?? `icon-item-${iconIndex}`} className='flex flex-col gap-3'>
+														<CircleIcon icon={iconItem.icon} iconBg={iconItem.iconBg ?? 'blue'} />
+														<Text as='h3' styleType='subtitle-2'>
+															{iconItem.subhead}
+														</Text>
+														<Text styleType='body-2'>{iconItem.body}</Text>
+													</div>
+												))}
+											</div>
+										)
+									)}
 								</div>
 							</div>
 						);

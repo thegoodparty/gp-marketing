@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react';
-import type { iconColorValues } from '~/ui/_lib/designTypesStore';
+import type { backgroundTypeValues, iconColorValues } from '~/ui/_lib/designTypesStore';
 import { cn, tv } from '~/ui/_lib/utils';
+import { resolveButtonStyleType } from '~/ui/_lib/resolveButtonStyleType';
+import { ComponentButton, type ComponentButtonProps } from '~/ui/Inputs/Button';
 import { IconResolver } from '~/ui/IconResolver';
 import { Text } from '~/ui/Text';
 
@@ -37,15 +39,18 @@ const styles = tv({
 });
 
 export type IconContentProps = {
+	button?: ComponentButtonProps;
 	className?: string;
-	title?: string;
+	color?: Exclude<(typeof iconColorValues)[number], 'mixed'>;
 	copy?: ReactNode;
 	icon?: string;
-	color?: Exclude<(typeof iconColorValues)[number], 'mixed'>;
+	title?: string;
+	backgroundColor?: (typeof backgroundTypeValues)[number];
 };
 
 export function IconContent(props: IconContentProps) {
 	const color = props.color ?? 'red';
+	const backgroundColor = props.backgroundColor ?? 'cream';
 	const { base, icon } = styles({ color });
 
 	return (
@@ -64,6 +69,16 @@ export function IconContent(props: IconContentProps) {
 				<Text as='div' styleType='body-2'>
 					{props.copy}
 				</Text>
+			)}
+			{props.button && (
+				<ComponentButton
+					{...props.button}
+					buttonProps={{
+						...(props.button.buttonProps ?? {}),
+						styleType: resolveButtonStyleType(props.button.buttonProps?.styleType ?? 'primary', backgroundColor),
+					}}
+					className='max-sm:w-full'
+				/>
 			)}
 		</div>
 	);

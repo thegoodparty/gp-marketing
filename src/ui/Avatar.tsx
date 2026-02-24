@@ -13,8 +13,9 @@ const styles = tv({
 	},
 	variants: {
 		size: {
-			lg: 'size-20',
 			sm: 'size-12',
+			lg: 'size-20',
+			xl: 'size-24',
 		},
 	},
 });
@@ -24,7 +25,7 @@ export type AvatarProps = Omit<MediaProps, 'image'> & {
 	className?: string;
 	image?: SanityImage | string;
 	imageFit?: 'contain' | 'cover';
-	size?: (typeof smallLargeValues)[number];
+	size?: 'sm' | 'lg' | 'xl';
 };
 
 export const Avatar: FC<AvatarProps> = props => {

@@ -1,6 +1,9 @@
 import { pricingPlanDesignSettings } from './pricingPlanDesignSettings.ts';
 import { stepperBlockItem } from './stepperBlockItem.ts';
 import { twoUpCardBlockOne } from './twoUpCardBlockOne.ts';
+import { goodPartyOrgPledgeDesignSettings } from './goodPartyOrgPledgeDesignSettings.ts';
+import { goodPartyOrgPledgeItems } from './goodPartyOrgPledgeItems.ts';
+import { pledgeCardItem } from './pledgeCardItem.ts';
 import { faQsContentCollection } from './faQsContentCollection.ts';
 import { faqs } from './faqs.ts';
 import { featureAssets } from './featureAssets.ts';
@@ -97,6 +100,7 @@ import { pricingPlanFeatureListItem } from './pricingPlanFeatureListItem.ts';
 import { stepperBlockItemMedia } from './stepperBlockItemMedia.ts';
 import { newsletterBlockMessaging } from './newsletterBlockMessaging.ts';
 import { glossaryTermCta } from './glossaryTermCta.ts';
+import { calculatorTextBlockDesignSettings } from './calculatorTextBlockDesignSettings.ts';
 import { bannerBlockContent } from './bannerBlockContent.ts';
 import { ctaOverview } from './ctaOverview.ts';
 import { people } from './people.ts';
@@ -137,11 +141,17 @@ import { glossaryOverview } from './glossaryOverview.ts';
 import { footerNavigationGroup } from './footerNavigationGroup.ts';
 import { footer } from './footer.ts';
 import { twoUpCardBlockCardImage } from './twoUpCardBlockCardImage.ts';
+import { electionsPositionHeroDesignSettings } from './electionsPositionHeroDesignSettings.ts';
+import { officeItem } from './officeItem.ts';
 
 export const groupSchema = [
+	calculatorTextBlockDesignSettings,
 	twoUpCardBlockCardImage,
 	pricingPlanDesignSettings,
 	stepperBlockItem,
+	goodPartyOrgPledgeDesignSettings,
+	goodPartyOrgPledgeItems,
+	pledgeCardItem,
 	twoUpCardBlockOne,
 	faQsContentCollection,
 	faqs,
@@ -278,4 +288,6 @@ export const groupSchema = [
 	glossaryOverview,
 	footerNavigationGroup,
 	footer,
+	electionsPositionHeroDesignSettings,
+	officeItem,
 ];

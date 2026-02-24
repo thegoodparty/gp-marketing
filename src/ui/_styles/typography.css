@@ -45,10 +45,20 @@
 	--text-body-1--letter-spacing: 0;
 	--text-body-1--font-weight: 400;
 
+	--text-body-xl: 1.25rem;
+	--text-body-xl--line-height: 140%;
+	--text-body-xl--letter-spacing: 0;
+	--text-body-xl--font-weight: 400;
+
 	--text-body-2: clamp(1rem, 0.956rem + 0.188vw, 1.125rem);
 	--text-body-2--line-height: 140%;
 	--text-body-2--letter-spacing: 0;
 	--text-body-2--font-weight: 400;
+
+	--text-body-large: 1.125rem;
+	--text-body-large--line-height: 155.556%;
+	--text-body-large--letter-spacing: 0;
+	--text-body-large--font-weight: 400;
 
 	/* Overline */
 	--text-overline: clamp(1rem, 0.956rem + 0.188vw, 1.125rem);

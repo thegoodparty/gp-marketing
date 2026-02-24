@@ -1,0 +1,109 @@
+import { Meta, Story, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import * as ProfileHeroStories from './ProfileHero.stories';
+
+<Meta of={ProfileHeroStories} />
+
+# Profile Hero
+
+<Description of={ProfileHeroStories.DefaultStory} />
+
+## Overview
+
+The ProfileHero component displays a candidate's profile header with their name, office title, profile image (with optional GoodParty badge overlay), and "Empowered by GoodParty.org" attribution. It's designed for candidate profile pages.
+
+## Usage
+
+Use this component when:
+- Displaying the hero section on candidate profile pages
+- Showing candidate information with GoodParty branding
+- Providing visual identification of GoodParty-empowered candidates
+
+## Variants
+
+<Canvas of={ProfileHeroStories.DefaultStory} />
+
+<Canvas of={ProfileHeroStories.CreamBackground} />
+
+<Canvas of={ProfileHeroStories.LongName} />
+
+## Props
+
+<Controls of={ProfileHeroStories.DefaultStory} />
+
+### Prop Details
+
+#### `candidateName` (required)
+
+The candidate's full name displayed as the main heading.
+
+**Type:** `string`
+
+#### `office` (required)
+
+The office or position the candidate is running for or holds.
+
+**Type:** `string`
+
+#### `profileImage` (optional)
+
+The candidate's profile image. Can be a SanityImage object.
+
+**Type:** `SanityImage`
+
+#### `backgroundColor` (optional)
+
+Background color variant for the hero section.
+
+**Type:** `'cream' | 'midnight'`
+
+**Default:** `'midnight'`
+
+#### `className` (optional)
+
+Additional CSS classes to apply to the component.
+
+**Type:** `string`
+
+## Layout
+
+The component uses a responsive flex layout:
+- **Mobile**: Vertical stack (image, then content)
+- **Desktop**: Horizontal layout with image on left, content on right
+- Image is centered on mobile, left-aligned on desktop
+
+## Avatar and Badge
+
+When `profileImage` is provided:
+- Image is displayed in a circular container with a red ring border (`ring-4 ring-red-500`)
+- GoodParty logo badge is positioned absolutely at bottom-right of avatar
+- Badge size is responsive: `w-16 h-12` on mobile, `w-20 md:h-15` on tablet, `w-24 lg:h-18` on desktop
+- Avatar size is responsive: `w-48 h-48` on mobile, `w-56 md:h-56` on tablet, `w-64 lg:h-64` on desktop
+
+## Attribution
+
+The component always displays "Empowered by GoodParty.org" text with a heart icon:
+- Positioned below the office title
+- Includes an SVG heart icon
+- Text color adapts to background variant (white on midnight, dark on cream)
+
+## Image Fallback
+
+If `profileImage` is not provided, the avatar section is not rendered. Only the text content (name, office, attribution) is displayed.
+
+## Accessibility
+
+- Uses semantic `<section>` element
+- Main heading uses `heading-lg` style type
+- Office title uses `subtitle-1` style type
+- Attribution text uses `body-2` style type
+- Image includes proper alt text handling via ResponsiveImage component
+
+## Design Reference
+
+[View in Figma](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=24614-15150&t=6DQyxTAl7Ola6AF3-0)
+
+## Related Components
+
+- `ProfileContentBlock` - Content section that follows ProfileHero
+- `ResponsiveImage` - Image component used for profile images
+- `Logo` - GoodParty logo component used for badge

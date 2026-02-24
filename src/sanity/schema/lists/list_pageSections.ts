@@ -24,6 +24,10 @@ export const list_pageSections = {
           of: [
             'component_hero',
             'component_heroWithSubscribe',
+            'component_electionsPositionHero',
+            'component_electionsSearchHero',
+            'component_locationLandingPageHero',
+            'component_profileHero',
           ],
         },
         {
@@ -39,6 +43,7 @@ export const list_pageSections = {
           title: 'Text',
           of: [
             'component_bannerBlock',
+            'component_calculatorTextBlock',
             'component_twoUpCardBlock',
             'component_comparisonBlock',
             'component_stepperBlock',
@@ -47,6 +52,7 @@ export const list_pageSections = {
             'component_tabbedImageBlock',
             'component_featuresBlock',
             'component_faqBlock',
+            'component_profileContentBlock',
           ],
         },
         {
@@ -84,6 +90,8 @@ export const list_pageSections = {
             'component_testimonialBlock',
             'component_faqBlock',
             'component_blogBlock',
+            'component_candidatesBlock',
+            'component_profileContentBlock',
           ],
         },
         {
@@ -94,6 +102,7 @@ export const list_pageSections = {
             'component_iconContentBlock',
             'component_imageContentBlock',
             'component_featuresBlock',
+            'component_electionsIndexBlock',
           ],
         },
         {
@@ -127,6 +136,7 @@ export const list_pageSections = {
             'component_ctaImageBlock',
             'component_ctaCardsBlock',
             'component_newsletterBlock',
+            'component_claimProfileBlock',
           ],
         },
         {
@@ -150,6 +160,18 @@ export const list_pageSections = {
     {
       title: 'Hero With Subscribe',
       type: 'component_heroWithSubscribe',
+    },
+    {
+      title: 'Location Landing Page Hero',
+      type: 'component_locationLandingPageHero',
+    },
+    {
+      title: 'Profile Hero',
+      type: 'component_profileHero',
+    },
+    {
+      title: 'Calculator Text Block',
+      type: 'component_calculatorTextBlock',
     },
     {
       title: 'Banner Block',
@@ -238,6 +260,50 @@ export const list_pageSections = {
     {
       title: 'Blog Topic Tags Block',
       type: 'component_blogTopicTagsBlock',
+    },
+    {
+      title: 'Breadcrumb Block',
+      type: 'component_breadcrumbBlock',
+    },
+    {
+      title: 'Candidates Block',
+      type: 'component_candidatesBlock',
+    },
+    {
+      title: 'Claim Profile Block',
+      type: 'component_claimProfileBlock',
+    },
+    {
+      title: 'Elections Index Block',
+      type: 'component_electionsIndexBlock',
+    },
+    {
+      title: 'Elections Position Hero',
+      type: 'component_electionsPositionHero',
+    },
+    {
+      title: 'Elections Search Hero',
+      type: 'component_electionsSearchHero',
+    },
+    {
+      title: 'Featured Cities Block',
+      type: 'component_featuredCitiesBlock',
+    },
+    {
+      title: 'GoodParty.org Pledge',
+      type: 'component_goodPartyOrgPledge',
+    },
+    {
+      title: 'Location Facts Block',
+      type: 'component_locationFactsBlock',
+    },
+    {
+      title: 'Profile Content Block',
+      type: 'component_profileContentBlock',
+    },
+    {
+      title: 'List of Offices Block',
+      type: 'component_listOfOfficesBlock',
     },
   ],
 }

@@ -3,7 +3,11 @@ import type { GoodpartyOrg_homeQueryResult } from 'sanity.types';
 import { BannerBlockSection } from '~/PageSections/BannerBlockSection';
 import { BlogBlockSection } from '~/PageSections/BlogBlockSection';
 import { BlogTopicTagsBlockSection } from '~/PageSections/BlogTopicTagsBlockSection';
+import { BreadcrumbBlockSection } from '~/PageSections/BreadcrumbBlockSection';
+import { CalculatorTextBlockSection } from '~/PageSections/CalculatorTextBlockSection';
+import { CandidatesBlockSection } from '~/PageSections/CandidatesBlockSection';
 import { CarouselBlockSection } from '~/PageSections/CarouselBlockSection';
+import { ClaimProfileBlockSection } from '~/PageSections/ClaimProfileBlockSection';
 import { ComparisonBlockSection } from '~/PageSections/ComparisonBlockSection';
 import { CTABannerBlockSection } from '~/PageSections/CTABannerBlockSection';
 import { CTABlockSection } from '~/PageSections/CTABlockSection';
@@ -14,8 +18,10 @@ import { FeaturedBlogBlockSection } from '~/PageSections/FeaturedBlogBlockSectio
 import { FeaturesBlockSection } from '~/PageSections/FeaturesBlockSection';
 import { HeroBlockSection } from '~/PageSections/HeroBlockSection';
 import { HeroWithSubscribeBlockSection } from '~/PageSections/HeroWithSubscribeBlockSection';
+import { ProfileHeroSection } from '~/PageSections/ProfileHeroSection';
 import { IconContentBlockSection } from '~/PageSections/IconContentBlockSection';
 import { ImageContentBlockSection } from '~/PageSections/ImageContentBlockSection';
+import { LocationLandingPageHeroSection } from '~/PageSections/LocationLandingPageHeroSection';
 import { NewsletterBlockSection } from '~/PageSections/NewsletterBlockSection';
 import { PricingBlockSection } from '~/PageSections/PricingBlockSection';
 import { StatsBlockSection } from '~/PageSections/StatsBlockSection';
@@ -24,6 +30,14 @@ import { TabbedImageBlockSection } from '~/PageSections/TabbedImageBlockSection'
 import { TeamBlockSection } from '~/PageSections/TeamBlockSection';
 import { TestimonialBlockSection } from '~/PageSections/TestimonialBlockSection';
 import { TwoUpCardBlockSection } from '~/PageSections/TwoUpCardBlockSection';
+import { ElectionsIndexBlockSection } from '~/PageSections/ElectionsIndexBlockSection';
+import { ElectionsPositionHeroSection } from '~/PageSections/ElectionsPositionHeroSection';
+import { ElectionsSearchHeroSection } from '~/PageSections/ElectionsSearchHeroSection';
+import { FeaturedCitiesBlockSection } from '~/PageSections/FeaturedCitiesBlockSection';
+import { GoodPartyOrgPledgeSection } from '~/PageSections/GoodPartyOrgPledgeSection';
+import { LocationFactsBlockSection } from '~/PageSections/LocationFactsBlockSection';
+import { ProfileContentBlockSection } from '~/PageSections/ProfileContentBlockSection';
+import { ListOfOfficesBlockSection } from '~/PageSections/ListOfOfficesBlockSection';
 import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
 
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
@@ -47,24 +61,48 @@ export function PageSections(props: Props) {
 								<BannerBlockSection {...section} />
 							</ComponentErrorBoundary>
 						);
+					case 'component_breadcrumbBlock':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Breadcrumb Block'>
+								<BreadcrumbBlockSection {...section} />
+							</ComponentErrorBoundary>
+						);
 					case 'component_blogBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Blog Block'>
 								<BlogBlockSection {...section} />
 							</ComponentErrorBoundary>
 						);
-					case 'component_blogTopicTagsBlock':
-						return (
-							<ComponentErrorBoundary key={section._key} componentName='Blog Topic Tags Block'>
-								<BlogTopicTagsBlockSection {...section} />
-							</ComponentErrorBoundary>
-						);
-					case 'component_carouselBlock':
+				case 'component_blogTopicTagsBlock':
+					return (
+						<ComponentErrorBoundary key={section._key} componentName='Blog Topic Tags Block'>
+							<BlogTopicTagsBlockSection {...section} />
+						</ComponentErrorBoundary>
+					);
+				case 'component_candidatesBlock':
+					return (
+						<ComponentErrorBoundary key={section._key} componentName='Candidates Block'>
+							<CandidatesBlockSection {...section} />
+						</ComponentErrorBoundary>
+					);
+				case 'component_calculatorTextBlock':
+					return (
+						<ComponentErrorBoundary key={section._key} componentName='Calculator Text Block'>
+							<CalculatorTextBlockSection {...section} />
+						</ComponentErrorBoundary>
+					);
+				case 'component_carouselBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Carousel Block'>
 								<CarouselBlockSection {...section} />
 							</ComponentErrorBoundary>
 						);
+				case 'component_claimProfileBlock':
+					return (
+						<ComponentErrorBoundary key={section._key} componentName='Claim Profile Block'>
+							<ClaimProfileBlockSection {...section} />
+						</ComponentErrorBoundary>
+					);
 					case 'component_comparisonBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Comparison Block'>
@@ -119,13 +157,19 @@ export function PageSections(props: Props) {
 								<HeroBlockSection {...section} />
 							</ComponentErrorBoundary>
 						);
-					case 'component_heroWithSubscribe':
-						return (
-							<ComponentErrorBoundary key={section._key} componentName='Hero With Subscribe Block'>
-								<HeroWithSubscribeBlockSection {...section} />
-							</ComponentErrorBoundary>
-						);
-					case 'component_iconContentBlock':
+				case 'component_heroWithSubscribe':
+					return (
+						<ComponentErrorBoundary key={section._key} componentName='Hero With Subscribe Block'>
+							<HeroWithSubscribeBlockSection {...section} />
+						</ComponentErrorBoundary>
+					);
+				case 'component_profileHero':
+					return (
+						<ComponentErrorBoundary key={section._key} componentName='Profile Hero'>
+							<ProfileHeroSection {...section} />
+						</ComponentErrorBoundary>
+					);
+				case 'component_iconContentBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Icon Content Block'>
 								<IconContentBlockSection {...section} />
@@ -183,6 +227,60 @@ export function PageSections(props: Props) {
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Two Up Card Block'>
 								<TwoUpCardBlockSection {...section} />
+							</ComponentErrorBoundary>
+						);
+					case 'component_electionsIndexBlock':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Elections Index Block'>
+								<ElectionsIndexBlockSection {...section} />
+							</ComponentErrorBoundary>
+						);
+					case 'component_electionsPositionHero':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Elections Position Hero'>
+								<ElectionsPositionHeroSection {...section} />
+							</ComponentErrorBoundary>
+						);
+					case 'component_electionsSearchHero':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Elections Search Hero'>
+								<ElectionsSearchHeroSection {...section} />
+							</ComponentErrorBoundary>
+						);
+					case 'component_featuredCitiesBlock':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Featured Cities Block'>
+								<FeaturedCitiesBlockSection {...section} />
+							</ComponentErrorBoundary>
+						);
+					case 'component_goodPartyOrgPledge':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='GoodParty.org Pledge'>
+								<GoodPartyOrgPledgeSection {...section} />
+							</ComponentErrorBoundary>
+						);
+					case 'component_locationLandingPageHero':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Location Landing Page Hero'>
+								<LocationLandingPageHeroSection {...section} />
+							</ComponentErrorBoundary>
+						);
+					case 'component_locationFactsBlock':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Location Facts Block'>
+								<LocationFactsBlockSection {...section} />
+							</ComponentErrorBoundary>
+						);
+					case 'component_profileContentBlock':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Profile Content Block'>
+								<ProfileContentBlockSection {...section} />
+							</ComponentErrorBoundary>
+						);
+					case 'component_listOfOfficesBlock':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='List of Offices Block'>
+								<ListOfOfficesBlockSection {...section} />
 							</ComponentErrorBoundary>
 						);
 					default:

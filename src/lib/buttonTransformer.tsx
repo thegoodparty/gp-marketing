@@ -112,7 +112,8 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 				transformedButtons.push({
 					_key: button._key,
 					label: button.text,
-					buttonType: 'login',
+					buttonType: 'external',
+					href: 'https://app.goodparty.org/login',
 					buttonProps: {
 						styleType: button.hierarchy
 							? stegaClean(button.hierarchy) === 'Primary'
@@ -127,8 +128,9 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 			case 'SignUp':
 				transformedButtons.push({
 					_key: button._key,
-					buttonType: 'signup',
 					label: button.text,
+					buttonType: 'external',
+					href: 'https://app.goodparty.org/sign-up',
 					buttonProps: {
 						styleType: button.hierarchy
 							? stegaClean(button.hierarchy) === 'Primary'

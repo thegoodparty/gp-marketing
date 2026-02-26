@@ -78,13 +78,13 @@ const styles = tv({
 			},
 			'embed-right': {
 				base: 'py-(--container-padding)',
-				container: 'grid gap-8 md:gap-12 lg:grid-cols-[1fr_2fr] md:items-center',
+				container: 'grid gap-8 md:gap-12 lg:grid-cols-[2fr_3fr] md:items-start',
 				media: 'order-2',
 				content: 'order-1',
 			},
 			'embed-left': {
 				base: 'py-(--container-padding)',
-				container: 'grid max-md:gap-6 md:grid-cols-[2fr_1fr] md:items-center',
+				container: 'grid max-md:gap-6 md:grid-cols-[3fr_2fr] md:items-start',
 				content: 'max-md:py-6 max-md:text-center md:px-12 xl:px-20',
 			},
 		},

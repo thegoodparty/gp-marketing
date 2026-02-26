@@ -34,6 +34,9 @@ const sampleEmbedCode = `<div style="border: 2px dashed #6c63ff; border-radius: 
 	<div style="font-size: 14px; color: #666; max-width: 300px;">This placeholder represents embedded HTML content such as a HubSpot meeting scheduler.</div>
 </div>`;
 
+const hubspotEmbedCode = `<div class="meetings-iframe-container" data-src="https://meetings.hubspot.com/example-meeting"></div>
+<script charset="utf-8" type="text/javascript" src="https://static.hsappstatic.net/MeetingsEmbed/ex/MeetingsEmbedCode.js"></script>`;
+
 export const NoMedia: Story = {
 	args: {
 		...Default.args,
@@ -289,6 +292,18 @@ export const EmbedRightMidnight: Story = {
 		layout: 'embed-right',
 		backgroundColor: 'midnight',
 		embedCode: sampleEmbedCode,
+	},
+	parameters: {
+		...Default.parameters,
+	},
+};
+
+export const EmbedHubSpotMeeting: Story = {
+	args: {
+		...Default.args,
+		image: undefined,
+		layout: 'embed-right',
+		embedCode: hubspotEmbedCode,
 	},
 	parameters: {
 		...Default.parameters,

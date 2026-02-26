@@ -10,6 +10,7 @@ const ALLOWED_EMBED_HOSTS = [
 	'www.youtube.com',
 	'player.vimeo.com',
 	'calendly.com',
+	'capture.navattic.com',
 ];
 
 function isAllowedUrl(raw: string): boolean {
@@ -86,7 +87,7 @@ export function EmbedHtml({ html, className }: { html: string; className?: strin
 				style={{ width: '100%', height: 900, border: 'none' }}
 				scrolling="no"
 				loading="lazy"
-				allow="microphone; camera"
+				allow="microphone; camera; fullscreen"
 			/>
 		);
 	}

@@ -20,5 +20,5 @@ export type HeadingStyle = ResolvedTextSize['heading'];
 export type BodyStyle = ResolvedTextSize['body'];
 
 export function resolveTextSize(textSize?: Field_textSize): ResolvedTextSize {
-	return TEXT_SIZE_MAP[textSize ?? 'Medium'];
+	return TEXT_SIZE_MAP[textSize ?? 'Medium'] ?? TEXT_SIZE_MAP['Medium'];
 }

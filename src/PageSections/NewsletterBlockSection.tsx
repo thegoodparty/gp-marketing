@@ -11,6 +11,7 @@ export function NewsletterBlockSection(section: Extract<Sections, { _type: 'comp
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Newsletter Block'>
 			<CTABlock
+				className='pt-0 pb-(--container-padding)'
 				id={section._key}
 				label={section.newsletterBlockMessaging?.field_label}
 				title={section.newsletterBlockMessaging?.field_title}

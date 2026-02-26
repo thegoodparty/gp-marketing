@@ -36,6 +36,21 @@ export const heroImage = {
 				return ![true].includes(ctx.parent?.field_displayVideo);
 			},
 		},
+		{
+			title: 'Display Embed Code',
+			name: 'field_displayEmbed',
+			type: 'boolean',
+			initialValue: false,
+			description: 'Toggle on to display embedded HTML instead of an image.',
+		},
+		{
+			title: 'Embed Code',
+			name: 'field_embedCode',
+			type: 'field_embedCode',
+			hidden: function (ctx) {
+				return ![true].includes(ctx.parent?.field_displayEmbed);
+			},
+		},
 	],
 	preview: {
 		select: {

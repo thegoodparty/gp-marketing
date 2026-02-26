@@ -1149,6 +1149,13 @@
     }
   },
   {
+    "name": "field_embedCode",
+    "type": "type",
+    "value": {
+      "type": "string"
+    }
+  },
+  {
     "name": "field_videoEmbedCode",
     "type": "type",
     "value": {
@@ -8626,6 +8633,21 @@
           "value": {
             "type": "inline",
             "name": "autoplayVideo"
+          },
+          "optional": true
+        },
+        "field_displayEmbed": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "boolean"
+          },
+          "optional": true
+        },
+        "field_embedCode": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_embedCode"
           },
           "optional": true
         }

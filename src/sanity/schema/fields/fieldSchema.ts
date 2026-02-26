@@ -82,6 +82,7 @@ import { field_footerMessage } from './field_footerMessage.ts';
 import { field_quotesContentOptions } from './field_quotesContentOptions.ts';
 import { field_icon } from './field_icon.ts';
 import { field_videoEmbedCode } from './field_videoEmbedCode.ts';
+import { field_embedCode } from './field_embedCode.ts';
 import { field_blogBlockContentOptions } from './field_blogBlockContentOptions.ts';
 import { field_maxNumberToDisplay } from './field_maxNumberToDisplay.ts';
 import { field_anchorId } from './field_anchorId.ts';
@@ -194,6 +195,7 @@ export const fieldSchema = [
 	field_quotesContentOptions,
 	field_icon,
 	field_videoEmbedCode,
+	field_embedCode,
 	field_blogBlockContentOptions,
 	field_maxNumberToDisplay,
 	field_anchorId,

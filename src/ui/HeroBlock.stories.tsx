@@ -29,6 +29,14 @@ const Default = {
 	},
 };
 
+const sampleEmbedCode = `<div style="border: 2px dashed #6c63ff; border-radius: 12px; padding: 40px 24px; text-align: center; background: #f8f7ff; min-height: 280px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
+	<div style="font-size: 32px; color: #6c63ff; font-weight: 700;">Embedded Widget</div>
+	<div style="font-size: 14px; color: #666; max-width: 300px;">This placeholder represents embedded HTML content such as a HubSpot meeting scheduler.</div>
+</div>`;
+
+const hubspotEmbedCode = `<div class="meetings-iframe-container" data-src="https://meetings.hubspot.com/example-meeting"></div>
+<script charset="utf-8" type="text/javascript" src="https://static.hsappstatic.net/MeetingsEmbed/ex/MeetingsEmbedCode.js"></script>`;
+
 export const NoMedia: Story = {
 	args: {
 		...Default.args,
@@ -247,6 +255,55 @@ export const MediaCenterFullSubscribe: Story = {
 		...Default.args,
 		layout: 'media-center-full',
 		subscribe: true,
+	},
+	parameters: {
+		...Default.parameters,
+	},
+};
+
+export const EmbedRight: Story = {
+	args: {
+		...Default.args,
+		image: undefined,
+		layout: 'embed-right',
+		embedCode: sampleEmbedCode,
+	},
+	parameters: {
+		...Default.parameters,
+	},
+};
+
+export const EmbedLeft: Story = {
+	args: {
+		...Default.args,
+		image: undefined,
+		layout: 'embed-left',
+		embedCode: sampleEmbedCode,
+	},
+	parameters: {
+		...Default.parameters,
+	},
+};
+
+export const EmbedRightMidnight: Story = {
+	args: {
+		...Default.args,
+		image: undefined,
+		layout: 'embed-right',
+		backgroundColor: 'midnight',
+		embedCode: sampleEmbedCode,
+	},
+	parameters: {
+		...Default.parameters,
+	},
+};
+
+export const EmbedHubSpotMeeting: Story = {
+	args: {
+		...Default.args,
+		image: undefined,
+		layout: 'embed-right',
+		embedCode: hubspotEmbedCode,
 	},
 	parameters: {
 		...Default.parameters,

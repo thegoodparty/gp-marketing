@@ -42,6 +42,7 @@
         "@tailwindcss/postcss": "^4.1.14",
         "@tailwindcss/typography": "^0.5.19",
         "@total-typescript/ts-reset": "^0.6.1",
+        "@types/dompurify": "^3.0.5",
         "@types/luxon": "^3.4.2",
         "@types/node": "^24.7.0",
         "@types/qs": "^6.14.0",
@@ -52,6 +53,7 @@
         "babel-plugin-react-compiler": "^1.0.0",
         "chromatic": "^14.0.0--canary.1188.15686730781.0",
         "clsx": "^2.1.1",
+        "dompurify": "^3.3.1",
         "embla-carousel": "^8.6.0",
         "embla-carousel-react": "^8.6.0",
         "jotai": "^2.15.0",
@@ -1436,6 +1438,8 @@
     "@types/doctrine": ["@types/doctrine@0.0.9", "", {}, "sha512-eOIHzCUSH7SMfonMG1LsC2f8vxBFtho6NGBznK41R84YzPuvSBzrhEps33IsQiOW9+VL6NQ9DbjQJznk/S4uRA=="],
 
     "@types/dom-speech-recognition": ["@types/dom-speech-recognition@0.0.1", "", {}, "sha512-udCxb8DvjcDKfk1WTBzDsxFbLgYxmQGKrE/ricoMqHRNjSlSUCcamVTA5lIQqzY10mY5qCY0QDwBfFEwhfoDPw=="],
+
+    "@types/dompurify": ["@types/dompurify@3.2.0", "", { "dependencies": { "dompurify": "*" } }, "sha512-Fgg31wv9QbLDA0SpTOXO3MaxySc4DKGLi8sna4/Utjo4r3ZRPdCt4UQee8BWr+Q5z21yifghREPJGYaEOEIACg=="],
 
     "@types/eslint": ["@types/eslint@9.6.1", "", { "dependencies": { "@types/estree": "*", "@types/json-schema": "*" } }, "sha512-FXx2pKgId/WyYo2jXw63kk7/+TY7u7AziEJxJAnSFzHlqTAS3Ync6SvgYAN/k4/PQpnnVuzoMuVnByKK2qp0ag=="],
 

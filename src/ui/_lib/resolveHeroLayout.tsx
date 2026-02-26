@@ -6,11 +6,21 @@ import type { HeroBlockProps } from '../HeroBlock';
 export function resolveHeroLayout({
 	imagePosition,
 	imageSize,
+	hasEmbed,
 }: {
 	imagePosition?: Field_imagePosition;
 	imageSize?: string;
+	hasEmbed?: boolean;
 }): HeroBlockProps['layout'] {
 	if (!imagePosition || imagePosition === 'NoImage') return 'no-media';
+
+	if (hasEmbed) {
+		const embedMap: Partial<Record<Exclude<Field_imagePosition, 'NoImage'>, HeroBlockProps['layout']>> = {
+			Left: 'embed-left',
+			Right: 'embed-right',
+		};
+		return embedMap[stegaClean(imagePosition)] ?? 'embed-right';
+	}
 
 	const isFull = imageSize === 'Large';
 

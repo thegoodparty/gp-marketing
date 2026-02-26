@@ -9,6 +9,7 @@ import { resolveTextSize, type ResolvedTextSize } from '~/ui/_lib/resolveTextSiz
 
 import { Container } from './Container.tsx';
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
+import { EmbedHtml } from './EmbedHtml.tsx';
 import { Media } from './Media.tsx';
 import { Newsletter } from './Form/Newsletter.tsx';
 import { Text } from './Text.tsx';
@@ -75,6 +76,17 @@ const styles = tv({
 				content: 'text-center py-24 px-6 relative z-1 max-w-[50rem] mx-auto md:items-center lg:min-h-[38rem] lg:justify-center',
 				buttons: 'max-md:justify-center',
 			},
+			'embed-right': {
+				base: 'py-(--container-padding)',
+				container: 'grid gap-8 md:gap-12 lg:grid-cols-[1fr_2fr] md:items-center',
+				media: 'order-2',
+				content: 'order-1',
+			},
+			'embed-left': {
+				base: 'py-(--container-padding)',
+				container: 'grid max-md:gap-6 md:grid-cols-[2fr_1fr] md:items-center',
+				content: 'max-md:py-6 max-md:text-center md:px-12 xl:px-20',
+			},
 		},
 	},
 	compoundVariants: [
@@ -121,7 +133,8 @@ export type HeroBlockProps = {
 	image?: any;
 	showFullImage?: boolean;
 	label?: string;
-	layout?: 'no-media' | 'media-left' | 'media-right' | 'media-center' | 'media-left-full' | 'media-right-full' | 'media-center-full';
+	layout?: 'no-media' | 'media-left' | 'media-right' | 'media-center' | 'media-left-full' | 'media-right-full' | 'media-center-full' | 'embed-right' | 'embed-left';
+	embedCode?: string;
 	subscribe?: boolean;
 	title?: string;
 	form?: FormProps;
@@ -140,11 +153,15 @@ export function HeroBlock(props: HeroBlockProps) {
 			<Container size={layout.includes('center-full') ? 'unset' : 'xl'}>
 				<div className={wrapper()}>
 					<div className={container()}>
-						{layout !== 'no-media' && (
-							<div className={media()}>
+					{layout !== 'no-media' && (
+						<div className={media()}>
+							{props.embedCode ? (
+								<EmbedHtml html={props.embedCode} />
+							) : (
 								<Media aspectRatio='5:4' image={props.image} objectFit={props.showFullImage ? 'contain' : 'cover'} />
-							</div>
-						)}
+							)}
+						</div>
+					)}
 						<div className={content()}>
 							<div className='flex flex-col gap-3 md:gap-4'>
 								{props.label && (

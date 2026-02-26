@@ -18,11 +18,11 @@ export function HeroWithSubscribeBlockSection(section: Extract<Sections, { _type
 				copy={<RichData value={section.summaryInfoNoButtons?.block_summaryText} />}
 				image={section.heroImage?.img_image}
 				showFullImage={section.heroImage?.showFullImage}
-				embedCode={section.heroImage?.field_embedCode}
+				embedCode={section.heroImage?.field_displayEmbed ? section.heroImage?.field_embedCode : undefined}
 				layout={resolveHeroLayout({
 					imagePosition: stegaClean(section.heroDesignSettings?.field_imagePosition),
 					imageSize: stegaClean(section.heroDesignSettings?.field_heroImageSize),
-					hasEmbed: !!section.heroImage?.field_embedCode,
+					hasEmbed: !!section.heroImage?.field_displayEmbed && !!section.heroImage?.field_embedCode,
 				})}
 				backgroundColor={
 					section.heroDesignSettings?.field_blockColorCreamMidnight &&

@@ -3,6 +3,7 @@ import { AnimatePresence, cubicBezier, motion } from 'motion/react';
 import { usePathname } from 'next/navigation';
 import { Fragment } from 'react';
 import { useState } from 'react';
+import { cn } from '~/ui/_lib/utils.ts';
 import { Anchor } from '~/ui/Anchor';
 import { IconResolver } from '~/ui/IconResolver';
 import { ComponentButton } from '~/ui/Inputs/Button';
@@ -33,9 +34,19 @@ export function MobileNav(props: NavProps) {
 				</Anchor>
 				<div className='flex flex-row gap-[1rem] items-center justify-center w-fit'>
 					{props.secondaryCTA && (
-						<ComponentButton {...props.secondaryCTA} buttonProps={{ styleType: 'outline-inverse', styleSize: 'md' }} />
+						<ComponentButton
+							{...props.secondaryCTA}
+							buttonProps={{ styleType: 'outline-inverse', styleSize: 'md' }}
+							className={cn(props.secondaryCTA?.className, 'max-[400px]:[&>*:last-child]:hidden')}
+						/>
 					)}
-					{props.primaryCTA && <ComponentButton {...props.primaryCTA} buttonProps={{ styleType: 'primary', styleSize: 'md' }} />}
+					{props.primaryCTA && (
+						<ComponentButton
+							{...props.primaryCTA}
+							buttonProps={{ styleType: 'primary', styleSize: 'md' }}
+							className={cn(props.primaryCTA?.className, 'max-[400px]:[&>*:last-child]:hidden')}
+						/>
+					)}
 
 					<button
 						type='button'

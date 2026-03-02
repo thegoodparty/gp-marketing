@@ -1,4 +1,5 @@
 import type { Sections } from '~/PageSections';
+import type { EmbeddedBlockProps } from '~/ui/EmbeddedBlock';
 import { EmbeddedBlock } from '~/ui/EmbeddedBlock';
 
 export function EmbeddedBlockSection(section: Extract<Sections, { _type: 'component_embeddedBlock' }>) {
@@ -6,7 +7,12 @@ export function EmbeddedBlockSection(section: Extract<Sections, { _type: 'compon
 
 	return (
 		<section data-section="Embedded Block">
-			<EmbeddedBlock html={section.field_embedCode} />
+			<EmbeddedBlock
+				html={section.field_embedCode}
+				height={section.field_embedHeight}
+				fullPage={section.field_embedFullPage}
+				maxWidth={section.field_embedMaxWidth as EmbeddedBlockProps['maxWidth']}
+			/>
 		</section>
 	);
 }

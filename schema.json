@@ -5117,6 +5117,45 @@
             "type": "string"
           },
           "optional": true
+        },
+        "field_embedHeight": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "number"
+          },
+          "optional": true
+        },
+        "field_embedFullPage": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "boolean"
+          },
+          "optional": true
+        },
+        "field_embedMaxWidth": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "unset"
+              },
+              {
+                "type": "string",
+                "value": "xl"
+              },
+              {
+                "type": "string",
+                "value": "lg"
+              },
+              {
+                "type": "string",
+                "value": "md"
+              }
+            ]
+          },
+          "optional": true
         }
       }
     }

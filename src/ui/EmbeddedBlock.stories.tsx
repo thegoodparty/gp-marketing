@@ -47,3 +47,24 @@ export const VimeoEmbed: Story = {
 		html: '<iframe src="https://player.vimeo.com/video/76979871" title="Vimeo video" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>',
 	},
 };
+
+export const NavatticFullPage: Story = {
+	args: {
+		html: '<iframe src="https://capture.navattic.com/clnkk83pm00m208l76gq2arcm" data-navattic-demo-id="clnkk83pm00m208l76gq2arcm" allow="fullscreen"></iframe>',
+		fullPage: true,
+	},
+};
+
+export const CustomHeight: Story = {
+	args: {
+		html: '<div class="meetings-iframe-container" data-src="https://meetings.hubspot.com/example"></div>',
+		height: 600,
+	},
+};
+
+export const NarrowWidth: Story = {
+	args: {
+		html: '<iframe width="560" height="315" src="https://www.youtube.com/embed/3riK4DWWhbw?si=aePwoSQRC5AXsqa4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+		maxWidth: 'md',
+	},
+};

@@ -18,6 +18,7 @@ export function resolveHeroLayout({
 		const embedMap: Partial<Record<Exclude<Field_imagePosition, 'NoImage'>, HeroBlockProps['layout']>> = {
 			Left: 'embed-left',
 			Right: 'embed-right',
+			Center: 'embed-center',
 		};
 		return embedMap[stegaClean(imagePosition)] ?? 'embed-right';
 	}

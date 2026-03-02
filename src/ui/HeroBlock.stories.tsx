@@ -285,6 +285,31 @@ export const EmbedLeft: Story = {
 	},
 };
 
+export const EmbedCenter: Story = {
+	args: {
+		...Default.args,
+		image: undefined,
+		layout: 'embed-center',
+		embedCode: sampleEmbedCode,
+	},
+	parameters: {
+		...Default.parameters,
+	},
+};
+
+export const EmbedCenterMidnight: Story = {
+	args: {
+		...Default.args,
+		image: undefined,
+		layout: 'embed-center',
+		backgroundColor: 'midnight',
+		embedCode: sampleEmbedCode,
+	},
+	parameters: {
+		...Default.parameters,
+	},
+};
+
 export const EmbedRightMidnight: Story = {
 	args: {
 		...Default.args,

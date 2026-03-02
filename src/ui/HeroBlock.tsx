@@ -87,6 +87,12 @@ const styles = tv({
 				container: 'grid max-md:gap-6 md:grid-cols-[3fr_2fr] md:items-start',
 				content: 'max-md:py-6 max-md:text-center md:px-12 xl:px-20',
 			},
+			'embed-center': {
+				base: 'py-8 md:py-20',
+				container: 'flex flex-col items-center gap-8',
+				content: 'text-center justify-center md:items-center order-1',
+				media: 'order-2 w-full',
+			},
 		},
 	},
 	compoundVariants: [
@@ -133,7 +139,7 @@ export type HeroBlockProps = {
 	image?: any;
 	showFullImage?: boolean;
 	label?: string;
-	layout?: 'no-media' | 'media-left' | 'media-right' | 'media-center' | 'media-left-full' | 'media-right-full' | 'media-center-full' | 'embed-right' | 'embed-left';
+	layout?: 'no-media' | 'media-left' | 'media-right' | 'media-center' | 'media-left-full' | 'media-right-full' | 'media-center-full' | 'embed-right' | 'embed-left' | 'embed-center';
 	embedCode?: string;
 	subscribe?: boolean;
 	title?: string;

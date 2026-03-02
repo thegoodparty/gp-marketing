@@ -6,7 +6,9 @@ import type { ReactNode } from 'react';
 import type { Params } from '~/lib/types';
 // @ts-ignore
 import '~/ui/_styles/globals.css';
+import { FacebookPixel } from '~/ui/FacebookPixel';
 import { GTM } from '~/ui/GTM';
+import { VWOScript } from 'vwo-smartcode-nextjs';
 import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
 import { PageHeader } from '~/components/PageHeader';
 import { PageFooter } from '~/components/PageFooter';
@@ -37,8 +39,10 @@ export default async function RootLayout({ children }: Props) {
 			lang='en-US'
 			className={`bg-background-primary ${primaryFont.variable} ${primaryFont.className} ${secondaryFont.variable} ${secondaryFont.className}`}
 		>
+			<VWOScript accountId='757033' />
 			<body className='flex min-h-screen flex-col'>
 				<GTM />
+				<FacebookPixel />
 				{(await draftMode()).isEnabled && <VisualEditing />}
 				<ComponentErrorBoundary componentName='Header'>
 					<PageHeader className='shrink-0' isDraftMode={(await draftMode()).isEnabled} />
@@ -53,6 +57,11 @@ export default async function RootLayout({ children }: Props) {
 					<PageFooter className='shrink-0' />
 				</ComponentErrorBoundary>
 				<Script id='hubspot-forms' src='//js.hsforms.net/forms/embed/v2.js' strategy='beforeInteractive' />
+				<Script
+					id='hs-script-loader'
+					src='//js.hs-scripts.com/21589597.js'
+					strategy='afterInteractive'
+				/>
 			</body>
 		</html>
 	);

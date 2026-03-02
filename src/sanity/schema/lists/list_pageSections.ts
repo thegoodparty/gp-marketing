@@ -305,5 +305,9 @@ export const list_pageSections = {
       title: 'List of Offices Block',
       type: 'component_listOfOfficesBlock',
     },
+    {
+      title: 'Embedded Block',
+      type: 'component_embeddedBlock',
+    },
   ],
 }

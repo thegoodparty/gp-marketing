@@ -10,6 +10,7 @@ const ALLOWED_EMBED_HOSTS = [
 	'www.youtube.com',
 	'player.vimeo.com',
 	'calendly.com',
+	'capture.navattic.com',
 ];
 
 function isAllowedUrl(raw: string): boolean {
@@ -54,7 +55,21 @@ function parseEmbed(html: string, DOMPurify: typeof import('dompurify').default)
 	return clean ? { type: 'html', sanitized: clean } : null;
 }
 
-export function EmbedHtml({ html, className }: { html: string; className?: string }) {
+export type EmbedHtmlProps = {
+	html: string;
+	className?: string;
+	height?: number | string;
+	width?: number | string;
+	fullPage?: boolean;
+};
+
+export function EmbedHtml({
+	html,
+	className,
+	height = 900,
+	width = '100%',
+	fullPage = false,
+}: EmbedHtmlProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [iframeSrc, setIframeSrc] = useState<string | null>(null);
 
@@ -78,15 +93,19 @@ export function EmbedHtml({ html, className }: { html: string; className?: strin
 		};
 	}, [html]);
 
+	const iframeStyle: React.CSSProperties = fullPage
+		? { width: '100%', height: '100dvh', border: 'none' }
+		: { width, height, border: 'none' };
+
 	if (iframeSrc) {
 		return (
 			<iframe
 				src={iframeSrc}
 				className={className}
-				style={{ width: '100%', height: 900, border: 'none' }}
+				style={iframeStyle}
 				scrolling="no"
 				loading="lazy"
-				allow="microphone; camera"
+				allow="microphone; camera; fullscreen"
 			/>
 		);
 	}

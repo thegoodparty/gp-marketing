@@ -137,6 +137,7 @@ export type HeroBlockProps = {
 	className?: string;
 	copy?: ReactNode;
 	image?: any;
+	priority?: boolean;
 	showFullImage?: boolean;
 	label?: string;
 	layout?: 'no-media' | 'media-left' | 'media-right' | 'media-center' | 'media-left-full' | 'media-right-full' | 'media-center-full' | 'embed-right' | 'embed-left' | 'embed-center';
@@ -164,7 +165,7 @@ export function HeroBlock(props: HeroBlockProps) {
 							{props.embedCode ? (
 								<EmbedHtml html={props.embedCode} />
 							) : (
-								<Media aspectRatio='5:4' image={props.image} objectFit={props.showFullImage ? 'contain' : 'cover'} />
+								<Media aspectRatio='5:4' image={props.image} objectFit={props.showFullImage ? 'contain' : 'cover'} priority={props.priority} />
 							)}
 						</div>
 					)}

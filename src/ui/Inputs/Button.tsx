@@ -222,9 +222,10 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					iconRight={
 						props.iconRight ?? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />
 					}
+					aria-label={props.label ? undefined : 'Login'}
 					{...props.buttonProps}
 				>
-					{props.label}
+					{props.label ?? 'Login'}
 				</Button>
 			);
 		case 'signup':
@@ -236,9 +237,10 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					iconRight={
 						props.iconRight ?? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />
 					}
+					aria-label={props.label ? undefined : 'Sign up'}
 					{...props.buttonProps}
 				>
-					{props.label}
+					{props.label ?? 'Sign up'}
 				</Button>
 			);
 		case 'button':
@@ -263,6 +265,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 export const Button = forwardRef<HTMLButtonElement, PropsWithChildren<ButtonTypeProps>>(function Button(props, ref) {
 	const { iconOnly, iconLeft, iconRight, isLoading, styleType, styleSize, ...attr } = props;
 	const isIconOnly = !!iconOnly;
+	const hasAccessibleName = props['aria-label'] || (props.children && String(props.children).trim());
 
 	const type = styleType ?? 'primary';
 	const size = styleSize ?? 'lg';
@@ -274,6 +277,7 @@ export const Button = forwardRef<HTMLButtonElement, PropsWithChildren<ButtonType
 			disabled={props.disabled}
 			ref={ref}
 			className={base({ className: props.className })}
+			aria-label={attr['aria-label'] ?? (isIconOnly && !hasAccessibleName ? 'Button' : undefined)}
 			onClick={e => {
 				props.onClick && props.onClick(e);
 			}}
@@ -302,6 +306,7 @@ export type ButtonLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'hre
 export const ButtonLink = forwardRef<HTMLAnchorElement, PropsWithChildren<ButtonLinkProps>>(function ButtonLink(props, ref) {
 	const { iconOnly, parent, iconLeft, iconRight, isLoading, styleType, styleSize, ...attr } = props;
 	const isIconOnly = !!iconOnly;
+	const hasAccessibleName = attr['aria-label'] || (props.children && String(props.children).trim());
 	const type = styleType ?? 'primary';
 	const size = styleSize ?? 'lg';
 	const { base, loader } = btnStyles({ type, iconOnly: isIconOnly, size });
@@ -310,6 +315,7 @@ export const ButtonLink = forwardRef<HTMLAnchorElement, PropsWithChildren<Button
 			{...attr}
 			className={base({ className: props.className })}
 			ref={ref}
+			aria-label={attr['aria-label'] ?? (isIconOnly && !hasAccessibleName ? 'Link' : undefined)}
 			onClick={e => {
 				props.onClick && props.onClick(e);
 			}}

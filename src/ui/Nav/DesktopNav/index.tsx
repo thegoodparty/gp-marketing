@@ -1,6 +1,6 @@
 'use client';
 import { usePathname } from 'next/navigation';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { Anchor } from '~/ui/Anchor';
 import { IconResolver } from '~/ui/IconResolver';
 import { ComponentButton } from '~/ui/Inputs/Button';
@@ -44,11 +44,11 @@ export function DesktopNav(props: NavProps) {
 					</Anchor>
 
 					<ul className={'flex flex-row gap-[1.5rem]'}>
-						{props.nav?.map((item, i) => (
-							<Fragment key={`nav-desktop-button-${String(i)}.${item.label?.toString().slice(0, 10)}`}>
-								{'group' in item && item.group ? (
-									<NavDropdown {...item} index={i} navState={navState} setNavState={setNavState} />
-								) : (
+						{props.nav?.map((item, i) =>
+							'group' in item && item.group ? (
+								<NavDropdown key={`nav-desktop-button-${String(i)}.${item.label?.toString().slice(0, 10)}`} {...item} index={i} navState={navState} setNavState={setNavState} />
+							) : (
+								<li key={`nav-desktop-button-${String(i)}.${item.label?.toString().slice(0, 10)}`}>
 									<NavLink
 										{...item}
 										onClick={() => {
@@ -58,10 +58,16 @@ export function DesktopNav(props: NavProps) {
 											});
 										}}
 									/>
-								)}
-							</Fragment>
-						))}
+								</li>
+							),
+						)}
 					</ul>
+					{navState.isOpen && (
+						<div
+							className='fixed inset-0 z-30'
+							onClick={() => setNavState({ isOpen: false, activeDropdownIndex: null })}
+						/>
+					)}
 				</div>
 				<div className='flex flex-row gap-[1rem] items-center justify-center w-fit '>
 					{props.secondaryCTA && <ComponentButton {...props.secondaryCTA} buttonProps={{ styleType: 'outline-inverse' }} />}

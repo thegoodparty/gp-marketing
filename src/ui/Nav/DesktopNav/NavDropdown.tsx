@@ -35,38 +35,30 @@ export function NavDropdown(
 	};
 
 	return (
-		<>
-			<li key={`nav-link-${props.label}`} onClick={handleMouseEnter}>
-				<div className={cn(link(), 'cursor-pointer')}>
-					<Text styleType='text-md' className='font-semibold'>
-						{props.label}
-					</Text>
-					<IconResolver
-						icon='chevron-down'
-						className='ml-2 transition-transform duration-[0.25s] ease-smooth'
-						style={{ transform: isActive ? 'rotate(180deg)' : 'rotate(0deg)' }}
-					/>
-				</div>
+		<li key={`nav-link-${props.label}`} onClick={handleMouseEnter}>
+			<div className={cn(link(), 'cursor-pointer')}>
+				<Text styleType='text-md' className='font-semibold'>
+					{props.label}
+				</Text>
+				<IconResolver
+					icon='chevron-down'
+					className='ml-2 transition-transform duration-[0.25s] ease-smooth'
+					style={{ transform: isActive ? 'rotate(180deg)' : 'rotate(0deg)' }}
+				/>
+			</div>
 
-				<NavDropdownContent
-					{...props}
-					handleMouseEnter={handleMouseEnter}
-					navState={props.navState}
-					onClick={() => {
-						props.setNavState({
-							isOpen: false,
-							activeDropdownIndex: null,
-						});
-					}}
-				/>
-			</li>
-			{isActive && (
-				<div
-					className='absolute top-0 left-0 w-full h-full -z-1'
-					onClick={() => props.setNavState({ isOpen: false, activeDropdownIndex: null })}
-				/>
-			)}
-		</>
+			<NavDropdownContent
+				{...props}
+				handleMouseEnter={handleMouseEnter}
+				navState={props.navState}
+				onClick={() => {
+					props.setNavState({
+						isOpen: false,
+						activeDropdownIndex: null,
+					});
+				}}
+			/>
+		</li>
 	);
 }
 

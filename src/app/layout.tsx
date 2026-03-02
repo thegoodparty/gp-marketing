@@ -1,4 +1,4 @@
-// import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Script from 'next/script';
 import { draftMode } from 'next/headers';
 import { VisualEditing } from 'next-sanity/visual-editing';
@@ -7,6 +7,8 @@ import type { Params } from '~/lib/types';
 // @ts-ignore
 import '~/ui/_styles/globals.css';
 import { Amplitude } from '~/ui/Amplitude';
+import { PageSchema } from '~/ui/PageSchema';
+import { getBaseUrl } from '~/lib/url';
 import { FacebookPixel } from '~/ui/FacebookPixel';
 import { GTM } from '~/ui/GTM';
 import { Segment } from '~/ui/Segment';
@@ -35,6 +37,27 @@ type Props = Params & {
 	children: ReactNode;
 };
 
+export const metadata: Metadata = {
+	title: 'GoodParty.org | Empowering independents to run, win and serve.',
+	description:
+		'GoodParty.org empowers independent candidates to run, win and serve. Access campaign tools, voter data, and support to level the playing field without deep pockets.',
+	openGraph: {
+		type: 'website',
+		siteName: 'GoodParty.org',
+	},
+	twitter: {
+		card: 'summary_large_image',
+	},
+};
+
+const organizationSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'Organization',
+	name: 'GoodParty.org',
+	url: getBaseUrl(),
+	logo: `${getBaseUrl()}/favicon.ico`,
+};
+
 export default async function RootLayout({ children }: Props) {
 	return (
 		<html
@@ -43,6 +66,7 @@ export default async function RootLayout({ children }: Props) {
 		>
 			<VWOScript accountId='757033' />
 			<body className='flex min-h-screen flex-col'>
+				<PageSchema schema={organizationSchema} />
 				<GTM />
 				<FacebookPixel />
 				<Segment />

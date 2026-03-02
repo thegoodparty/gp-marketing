@@ -111,7 +111,7 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 			case 'LogIn':
 				transformedButtons.push({
 					_key: button._key,
-					label: button.text,
+					label: button.text ?? 'Login',
 					buttonType: 'external',
 					href: 'https://app.goodparty.org/login',
 					buttonProps: {
@@ -128,7 +128,7 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 			case 'SignUp':
 				transformedButtons.push({
 					_key: button._key,
-					label: button.text,
+					label: button.text ?? 'Sign up',
 					buttonType: 'external',
 					href: 'https://app.goodparty.org/sign-up',
 					buttonProps: {

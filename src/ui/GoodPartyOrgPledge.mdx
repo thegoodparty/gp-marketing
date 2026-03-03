@@ -1,0 +1,124 @@
+import { Meta, Story, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import * as GoodPartyOrgPledgeStories from './GoodPartyOrgPledge.stories';
+
+<Meta of={GoodPartyOrgPledgeStories} />
+
+# GoodParty.org Pledge
+
+<Description of={GoodPartyOrgPledgeStories.Default} />
+
+## Overview
+
+The GoodPartyOrgPledge component displays a grid of pledge cards, each containing an icon, title, content, and optional button. It's used to communicate GoodParty.org's core values and commitments to democracy and transparent governance.
+
+## Usage
+
+Use this component when:
+- Explaining GoodParty.org's values and commitments
+- Displaying organizational pledges or principles
+- Showing multiple related value propositions in a grid layout
+- Providing information about GoodParty.org's mission
+
+## Variants
+
+<Canvas of={GoodPartyOrgPledgeStories.Default} />
+
+<Canvas of={GoodPartyOrgPledgeStories.Cream} />
+
+<Canvas of={GoodPartyOrgPledgeStories.WithHeaderButtons} />
+
+<Canvas of={GoodPartyOrgPledgeStories.RedIcons} />
+
+## Props
+
+<Controls of={GoodPartyOrgPledgeStories.Default} />
+
+### Prop Details
+
+#### `pledgeCards` (optional)
+
+Array of pledge card objects to display in the grid.
+
+**Type:** `PledgeCard[]`
+
+Each `PledgeCard` contains:
+- `icon` (optional) - Icon type for CircleIcon component
+- `title` (optional) - Card title text
+- `content` (optional) - Card content (ReactNode, supports rich text)
+- `button` (optional) - Optional CTA button configuration
+
+#### `header` (optional)
+
+HeaderBlock configuration for the section title and description.
+
+**Type:** `HeaderBlockProps`
+
+#### `iconBg` (optional)
+
+Background color for the icon circles. Excludes 'inverse' option.
+
+**Type:** `Exclude<componentColorValues, 'inverse'>`
+
+**Default:** `'blue'`
+
+#### `backgroundColor` (optional)
+
+Background color variant for the block.
+
+**Type:** `'cream' | 'midnight'`
+
+**Default:** `'cream'`
+
+#### `className` (optional)
+
+Additional CSS classes to apply to the component.
+
+**Type:** `string`
+
+## Grid Layout
+
+The pledge cards are displayed in a responsive grid:
+- **Mobile**: Single column
+- **Desktop** (`md:`): 2 columns (`md:grid-cols-2`)
+- Gap: `gap-6` between cards
+
+## Card Structure
+
+Each pledge card contains:
+1. **Icon** (optional) - CircleIcon component with configurable background color
+2. **Title** (optional) - Subtitle-1 style type heading
+3. **Content** (optional) - Body-2 style type text (supports rich text via RichData)
+4. **Button** (optional) - CTA button with resolved style type based on background
+
+## Icon Background Colors
+
+The `iconBg` prop controls the background color of the CircleIcon components:
+- Available colors: All `componentColorValues` except `'inverse'`
+- Default: `'blue'`
+- Common options: `'blue'`, `'red'`, `'green'`, etc.
+
+## Button Style Resolution
+
+When a pledge card includes a button, the button style is automatically resolved:
+- Uses `resolveButtonStyleType('min-ghost', backgroundColor)`
+- Ensures buttons match the block's background color variant
+- Buttons are positioned at the bottom of each card
+
+## Accessibility
+
+- Uses semantic `<article>` element
+- HeaderBlock provides proper heading hierarchy
+- Icons are decorative (no additional ARIA labels needed)
+- Buttons are keyboard accessible
+- Content supports rich text with proper semantic markup
+
+## Design Reference
+
+[View in Figma](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23714-25633&t=Y3gXgfteJfMmhQjG-0)
+
+## Related Components
+
+- `CircleIcon` - Icon component used in pledge cards
+- `HeaderBlock` - Header section component
+- `ComponentButton` - CTA button component
+- `RichData` - Rich text content component

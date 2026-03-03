@@ -1,0 +1,245 @@
+import { Meta, Story, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import * as ElectionsPositionContentBlockStories from './ElectionsPositionContentBlock.stories';
+
+<Meta of={ElectionsPositionContentBlockStories} />
+
+# Elections Position Content Block
+
+<Description of={ElectionsPositionContentBlockStories.Default} />
+
+## Overview
+
+The ElectionsPositionContentBlock component displays a two-column layout with a white card on the left containing headline, subhead, body copy, and a primary CTA button. The right side features a top headline, a three-column grid of subhead/body copy pairs, and optional bottom headline/body copy sections separated by a horizontal line.
+
+## Usage
+
+Use this component when:
+- Displaying election position information with a prominent call-to-action
+- Showing structured content in a grid layout
+- Creating content sections with multiple related items
+- Presenting information that benefits from a card-based left column and grid-based right column
+
+## Design Features
+
+- **Left Card**: White card with rounded corners containing headline, subhead, body copy, and primary CTA
+- **Right Content**: Flexible content area with top headline, grid items, and bottom items
+- **Three-Column Grid**: Responsive grid that displays subhead/body copy pairs
+- **Horizontal Separator**: Visual separator between grid items and bottom items
+- **Responsive Layout**: Two-column layout on desktop, stacks on mobile
+
+## Variants
+
+<Canvas of={ElectionsPositionContentBlockStories.Default} />
+
+<Canvas of={ElectionsPositionContentBlockStories.MidnightBackground} />
+
+<Canvas of={ElectionsPositionContentBlockStories.WithoutCard} />
+
+<Canvas of={ElectionsPositionContentBlockStories.WithoutGridItems} />
+
+<Canvas of={ElectionsPositionContentBlockStories.WithoutBottomItems} />
+
+<Canvas of={ElectionsPositionContentBlockStories.MinimalContent} />
+
+<Canvas of={ElectionsPositionContentBlockStories.SingleBodyCopy} />
+
+<Canvas of={ElectionsPositionContentBlockStories.ExternalButton} />
+
+## Props
+
+<Controls of={ElectionsPositionContentBlockStories.Default} />
+
+### Prop Details
+
+#### `card` (optional)
+
+Left side card configuration with headline, subhead, body copy, and primary CTA.
+
+**Type:** `ElectionsPositionContentBlockCardProps`
+
+Card properties:
+- `headline` (optional) - Large heading text (heading-lg)
+- `subhead` (optional) - Medium heading text (heading-md)
+- `bodyCopy` (optional) - Body text content, can be a single ReactNode or array of ReactNodes
+- `primaryCTA` (optional) - Primary call-to-action button configuration
+
+#### `topHeadline` (optional)
+
+Headline text displayed at the top of the right content area.
+
+**Type:** `string`
+
+Uses `heading-lg` text style.
+
+#### `gridItems` (optional)
+
+Array of items to display in the three-column grid on the right side.
+
+**Type:** `ElectionsPositionContentBlockGridItem[]`
+
+Each grid item contains:
+- `subhead` (optional) - Subheading text (heading-md)
+- `bodyCopy` (optional) - Body text content (body-1)
+
+#### `bottomItems` (optional)
+
+Array of items to display below the grid section, separated by a horizontal line.
+
+**Type:** `ElectionsPositionContentBlockBottomItem[]`
+
+Each bottom item contains:
+- `headline` (optional) - Heading text (heading-md)
+- `bodyCopy` (optional) - Body text content (body-1)
+
+#### `backgroundColor` (optional)
+
+Background color variant for the block.
+
+**Type:** `'cream' | 'midnight'`
+
+**Default:** `'cream'`
+
+When set to `'midnight'`:
+- Background becomes `bg-midnight-900`
+- Right content text becomes white
+- Card remains white
+- Separator border becomes `border-neutral-700`
+
+#### `className` (optional)
+
+Additional CSS classes to apply to the component.
+
+**Type:** `string`
+
+## Layout
+
+The component uses a responsive grid layout:
+- **Mobile**: Single column (card appears above content)
+- **Desktop** (`lg:`): Two-column grid
+  - Left: Card with fixed width (`1fr`)
+  - Right: Content area (`1fr`)
+  - Gap: `gap-8` between columns
+
+### Card Layout
+
+The left card features:
+- White background (`bg-white`)
+- Rounded corners (`rounded-lg`)
+- Responsive padding: `p-6` (mobile), `p-8` (tablet), `p-10` (desktop)
+- Vertical flex layout with gap: `gap-4` (mobile), `gap-6` (desktop)
+- Content section with `gap-4` between elements
+
+### Grid Layout
+
+The right side grid:
+- **Mobile**: Single column
+- **Desktop** (`md:`): Three-column grid
+- Gap: `gap-6` (mobile), `gap-8` (desktop)
+- Each grid item has vertical flex layout with `gap-3`
+
+### Separator
+
+The horizontal separator:
+- Only displays when both `gridItems` and `bottomItems` are present
+- Border: `border-t border-neutral-200` (cream background)
+- Border: `border-t border-neutral-700` (midnight background)
+
+## Typography
+
+- **Headline**: `heading-lg` - Large, bold heading
+- **Subhead**: `heading-md` - Medium, bold heading
+- **Body Copy**: `body-1` - Regular body text
+
+## Button Styling
+
+The primary CTA button uses `resolveButtonStyleType` to automatically adjust its style based on the background color:
+- **Cream background**: Uses the specified button style type
+- **Midnight background**: Automatically adjusts for dark background visibility
+
+Button types supported:
+- `internal` - Internal navigation link
+- `external` - External link
+- `anchor` - Anchor link
+- `download` - Download link
+- `contact` - Contact link
+- `login` - Login action
+- `signup` - Signup action
+- `button` - Button with onClick handler
+
+## Rich Text Support
+
+Body copy fields support rich text content via the `isValidRichText` helper:
+- Validates content before rendering
+- Supports ReactNode content types
+- Handles empty or null content gracefully
+
+## Content Structure Examples
+
+### Full Content Block
+
+```tsx
+<ElectionsPositionContentBlock
+  card={{
+    headline: 'Headline',
+    subhead: 'Subhead',
+    bodyCopy: ['Body copy', 'Body copy'],
+    primaryCTA: {
+      buttonType: 'internal',
+      href: '/action',
+      label: 'Primary CTA',
+    },
+  }}
+  topHeadline="Headline"
+  gridItems={[
+    { subhead: 'Subhead', bodyCopy: 'Body copy' },
+    { subhead: 'Subhead', bodyCopy: 'Body copy' },
+    { subhead: 'Subhead', bodyCopy: 'Body copy' },
+  ]}
+  bottomItems={[
+    { headline: 'Headline', bodyCopy: 'Body copy' },
+    { headline: 'Headline', bodyCopy: 'Body copy' },
+  ]}
+/>
+```
+
+### Card Only
+
+```tsx
+<ElectionsPositionContentBlock
+  card={{
+    headline: 'Headline',
+    bodyCopy: 'Body copy',
+    primaryCTA: {
+      buttonType: 'internal',
+      href: '/action',
+      label: 'Primary CTA',
+    },
+  }}
+/>
+```
+
+### Grid Only
+
+```tsx
+<ElectionsPositionContentBlock
+  topHeadline="Headline"
+  gridItems={[
+    { subhead: 'Subhead', bodyCopy: 'Body copy' },
+    { subhead: 'Subhead', bodyCopy: 'Body copy' },
+  ]}
+/>
+```
+
+## Accessibility
+
+- Uses semantic `<article>` element
+- Proper heading hierarchy maintained
+- Button components include proper ARIA attributes
+- Text components support semantic HTML elements
+
+## Related Components
+
+- `ProfileContentBlock` - Similar two-column layout with sidebar
+- `Container` - Wrapper component for consistent spacing
+- `Text` - Typography component used throughout
+- `ComponentButton` - Button component for CTAs

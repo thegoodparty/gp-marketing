@@ -1,4 +1,0 @@
-.testimonialGrid {
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  max-width: 1376px;
-}

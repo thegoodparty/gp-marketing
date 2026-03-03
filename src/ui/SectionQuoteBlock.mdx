@@ -1,0 +1,71 @@
+import { Meta, Story, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import * as SectionQuoteBlockStories from './SectionQuoteBlock.stories';
+
+<Meta of={SectionQuoteBlockStories} />
+
+# Section Quote Block
+
+<Description of={SectionQuoteBlockStories.Default} />
+
+## Overview
+
+The SectionQuoteBlock displays a grid of quote cards with optional header. Each card shows a quote with author attribution (avatar, name, secondary text). Designed for blog quote sections and testimonial-style content.
+
+## Usage
+
+Use this component when:
+- Displaying testimonial quotes in a blog or marketing page
+- Showing candidate or user success stories in a grid layout
+- Presenting multiple quotes with author attribution
+
+## Variants
+
+<Canvas of={SectionQuoteBlockStories.Default} />
+
+<Canvas of={SectionQuoteBlockStories.FourQuotes} />
+
+<Canvas of={SectionQuoteBlockStories.WithFullHeader} />
+
+<Canvas of={SectionQuoteBlockStories.MidnightBackground} />
+
+## Props
+
+<Controls of={SectionQuoteBlockStories.Default} />
+
+### Prop Details
+
+#### `items` (required)
+
+Array of SectionQuoteCard props. Each item has `copy` (quote text), `author` (name, meta, image).
+
+**Type:** `SectionQuoteCardProps[]`
+
+#### `header` (optional)
+
+HeaderBlock configuration. Use `label: 'Blog Quote'` for the section overline.
+
+**Type:** `HeaderBlockProps`
+
+#### `backgroundColor` (optional)
+
+Background color variant.
+
+**Type:** `'cream' | 'midnight'`
+
+**Default:** `'cream'`
+
+## Grid Layout
+
+- **Mobile**: Single column
+- **Desktop**: 2 columns (`md:grid-cols-2`)
+- Gap: `gap-6` between cards
+
+## Design Reference
+
+[View in Figma](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=22954-17112&m=dev)
+
+## Related Components
+
+- `SectionQuoteCard` - Individual quote card
+- `HeaderBlock` - Section header
+- `Author` - Author attribution with avatar

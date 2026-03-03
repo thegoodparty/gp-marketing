@@ -1,0 +1,146 @@
+import { Meta, Story, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import * as ElectionsPositionHeroStories from './ElectionsPositionHero.stories';
+
+<Meta of={ElectionsPositionHeroStories} />
+
+# Elections Position Hero
+
+<Description of={ElectionsPositionHeroStories.Default} />
+
+## Overview
+
+The ElectionsPositionHero component displays a hero section for specific election positions, showing the office name, location hierarchy (city, county, state), election date, filing deadline, and a CTA button. It dynamically builds the location string based on provided location props.
+
+## Usage
+
+Use this component when:
+- Displaying hero sections for specific election positions
+- Showing key election information (dates, filing deadlines)
+- Providing location context for an election
+- Creating a call-to-action for running for office
+
+## Variants
+
+<Canvas of={ElectionsPositionHeroStories.Default} />
+
+<Canvas of={ElectionsPositionHeroStories.CreamBackground} />
+
+<Canvas of={ElectionsPositionHeroStories.StateOnly} />
+
+<Canvas of={ElectionsPositionHeroStories.StateAndCounty} />
+
+<Canvas of={ElectionsPositionHeroStories.AllLocations} />
+
+## Props
+
+<Controls of={ElectionsPositionHeroStories.Default} />
+
+### Prop Details
+
+#### `officeName` (required)
+
+The name of the office or position (e.g., "Mayor", "City Council Member", "Governor").
+
+**Type:** `string`
+
+#### `stateName` (required)
+
+The state name where the election is taking place.
+
+**Type:** `string`
+
+#### `countyName` (optional)
+
+The county name (for county or city-level elections).
+
+**Type:** `string`
+
+#### `cityName` (optional)
+
+The city name (for city-level elections).
+
+**Type:** `string`
+
+#### `electionDate` (required)
+
+The date of the election.
+
+**Type:** `string`
+
+#### `filingDate` (required)
+
+The filing deadline or filing period for the election.
+
+**Type:** `string`
+
+#### `cta` (required)
+
+CTA button configuration, typically for "Run for Office" actions.
+
+**Type:** `ComponentButtonProps`
+
+#### `backgroundColor` (optional)
+
+Background color variant for the hero section.
+
+**Type:** `'cream' | 'midnight'`
+
+**Default:** `'midnight'`
+
+#### `className` (optional)
+
+Additional CSS classes to apply to the component.
+
+**Type:** `string`
+
+## Location String Building
+
+The component dynamically builds the header text by combining location parts:
+
+**Format:** Uses `officeName` followed by "in" and location parts (`cityName`, `countyName`, `stateName`)
+
+- Filters out `undefined` values
+- Only includes provided location parts
+- Examples:
+  - State only: "Governor in California"
+  - State + County: "County Clerk in Harris County, Texas"
+  - All locations: "City Council Member in Brooklyn, Kings County, New York"
+
+## Info Grid
+
+The election and filing dates are displayed in a responsive grid:
+- **Mobile**: Single column
+- **Desktop** (`sm:`): 2 columns (`sm:grid-cols-2`)
+- Uses `<dl>` (description list) for semantic structure
+- Max width: `max-w-[34rem]` to prevent excessive width
+
+## Date Display
+
+Each date item uses:
+- `<dt>` (term): Label (e.g., "Election date", "Filing deadline")
+- `<dd>` (description): Date value
+- Style types: `subtitle-2` for labels, `body-2` for values
+
+## CTA Button
+
+The CTA button:
+- Full width on mobile (`max-sm:w-full`)
+- Fits content width on desktop (`w-fit`)
+- Typically used for "Run for Office" actions
+
+## Accessibility
+
+- Uses semantic `<section>` element
+- Main heading uses `heading-xl` style type
+- Date information uses semantic `<dl>`, `<dt>`, `<dd>` elements
+- CTA button is keyboard accessible
+
+## Design Reference
+
+[View in Figma](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23655-16933&t=6DQyxTAl7Ola6AF3-0)
+
+## Related Components
+
+- `ElectionsIndexBlock` - Index page component that lists elections
+- `ElectionsSearchHero` - Search hero for finding elections
+- `ComponentButton` - CTA button component

@@ -17,7 +17,6 @@ export default defineMain({
 		"@storybook/addon-links",
 		"@storybook/addon-docs",
 		"@storybook/addon-vitest",
-		"storybook-addon-tag-badges",
 		// "@chromatic-com/storybook"
 	],
 	framework: {

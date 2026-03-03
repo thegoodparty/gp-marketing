@@ -57,6 +57,11 @@ export const button = {
       type: 'ref_sharedCta',
       hidden: function (ctx ) { return !['Reference'].includes(ctx.parent?.field_ctaActionWithShared) },
     },
+    {
+      title: 'Form ID',
+      name: 'field_formId',
+      type: 'field_formId',
+    },
   ],
   preview: {
     select: {

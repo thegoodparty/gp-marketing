@@ -1,8 +1,9 @@
 import type { MetadataRoute } from 'next';
+import { getBaseUrl } from '~/lib/url';
 
 export default function robots(): MetadataRoute.Robots {
-	const site = String(process.env.NEXT_PUBLIC_SITE_URL) || String(process.env.VERCEL_URL);
-	const isStaging = site.includes('staging') || site.includes('e6.digital');
+	const baseUrl = getBaseUrl();
+	const isStaging = baseUrl.includes('staging') || baseUrl.includes('e6.digital');
 
 	if (isStaging) {
 		return {
@@ -26,6 +27,6 @@ export default function robots(): MetadataRoute.Robots {
 				allow: ['/'],
 			},
 		],
-		sitemap: `${site}/sitemap.xml`,
+		sitemap: `${baseUrl}/sitemap.xml`,
 	};
 }

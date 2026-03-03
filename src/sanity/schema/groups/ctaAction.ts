@@ -47,6 +47,11 @@ export const ctaAction = {
       type: 'ref_download',
       hidden: function (ctx ) { return !['Download'].includes(ctx.parent?.field_ctaAction) },
     },
+    {
+      title: 'Form ID',
+      name: 'field_formId',
+      type: 'field_formId',
+    },
   ],
   preview: {
     select: {

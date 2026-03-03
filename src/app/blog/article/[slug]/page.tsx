@@ -20,6 +20,8 @@ import { Author } from '~/ui/Author';
 import { client } from '~/lib/client';
 import { format } from 'date-fns';
 import { stegaClean } from 'next-sanity';
+import { PageSchema } from '~/ui/PageSchema';
+import { DEFAULT_SHARE_IMAGE, getBaseUrl, getSanityImageUrl } from '~/lib/url';
 
 export async function generateStaticParams() {
 	const entries = await client.fetch<Array<{ slug: string }>>('*[_type == "article"][0..99].editorialOverview.field_slug');
@@ -53,8 +55,33 @@ export default async function Page(props: any) {
 		{ href: `/blog/article/${slug}`, label: page.editorialOverview?.field_editorialTitle ?? '' },
 	];
 
+	const baseUrl = getBaseUrl();
+	const articleUrl = `${baseUrl}/blog/article/${slug}`;
+	const imageUrl =
+		getSanityImageUrl(page.editorialAssets?.img_featuredImage as { asset?: { _ref?: string; url?: string } } | undefined) ??
+		DEFAULT_SHARE_IMAGE;
+	const publishedDate = page.editorialOverview?.field_publishedDate;
+	const updatedDate = page.editorialOverview?.field_lastUpdated;
+
+	const articleSchema = {
+		'@context': 'https://schema.org',
+		'@type': 'Article',
+		headline: page.editorialOverview?.field_editorialTitle ? stegaClean(page.editorialOverview.field_editorialTitle) : undefined,
+		...(page.editorialOverview?.ref_author?.personOverview?.field_personName && {
+			author: {
+				'@type': 'Person',
+				name: stegaClean(page.editorialOverview.ref_author.personOverview.field_personName),
+			},
+		}),
+		...(publishedDate && { datePublished: new Date(stegaClean(publishedDate)).toISOString() }),
+		...(updatedDate && { dateModified: new Date(stegaClean(updatedDate)).toISOString() }),
+		image: imageUrl,
+		url: articleUrl,
+	};
+
 	return (
 		<>
+			<PageSchema schema={articleSchema} />
 			<BlogArticleHero
 				title={page.editorialOverview?.field_editorialTitle}
 				tagline={{ label: page.editorialContentTags?.category?.tagOverview?.field_name, href: page.editorialContentTags?.category?.href }}

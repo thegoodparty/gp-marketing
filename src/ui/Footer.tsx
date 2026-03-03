@@ -25,7 +25,9 @@ export function Footer(props: FooterProps) {
 							</Text>
 							<ul className='flex flex-col gap-6'>
 								{group.list_footerNavigationGroup?.map(link => (
-									<NavLink key={link._key} {...link} />
+									<li key={link._key}>
+										<NavLink {...link} />
+									</li>
 								))}
 							</ul>
 						</div>
@@ -39,7 +41,9 @@ export function Footer(props: FooterProps) {
 					{props.legalNav?.length && (
 						<ul className='flex gap-3 items-center [&>li]:flex [&>li:not(:last-child)]:after:content-["|"] [&>li:not(:last-child)]:after:ml-3 [&>li:not(:last-child)]:after:font-semibold'>
 							{props.legalNav.map(link => (
-								<NavLink textStyleType='text-xs' key={link._key} {...link} />
+								<li key={link._key}>
+									<NavLink textStyleType='text-xs' {...link} />
+								</li>
 							))}
 						</ul>
 					)}

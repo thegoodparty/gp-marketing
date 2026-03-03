@@ -14,6 +14,13 @@ import { Anchor, type AnchorProps } from '../Anchor.tsx';
 import { IconResolver } from '../IconResolver.tsx';
 import type { buttonStyleTypeValues } from '../_lib/designTypesStore.ts';
 
+function hasReadableText(children: ReactNode): boolean {
+	if (children == null) return false;
+	if (typeof children === 'string') return children.trim().length > 0;
+	if (typeof children === 'number') return true;
+	return false;
+}
+
 export const btnStyles = tv({
 	slots: {
 		base: [
@@ -98,6 +105,7 @@ export const btnStyles = tv({
 export type ButtonProps = {
 	animation?: 'down';
 	className?: string;
+	formId?: string;
 	iconOnly?: boolean;
 	iconLeft?: ReactElement;
 	iconRight?: ReactElement;
@@ -119,6 +127,7 @@ export type MainButtonProps = {
 export type ComponentButtonProps = {
 	_key?: string;
 	className?: string;
+	formId?: string;
 	buttonProps?: MainButtonProps;
 	label?: ReactNode;
 	iconLeft?: ReactElement;
@@ -143,6 +152,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 				<ButtonLink
 					parent='ComponentButton'
 					className={props.className}
+					formId={props.formId}
 					href={props.href}
 					iconLeft={props.iconLeft}
 					iconRight={
@@ -158,6 +168,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 				<ButtonLink
 					parent='ComponentButton'
 					className={props.className}
+					formId={props.formId}
 					href={props.href}
 					iconLeft={props.iconLeft}
 					iconRight={
@@ -174,6 +185,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 				<ButtonLink
 					parent='ComponentButton'
 					className={props.className}
+					formId={props.formId}
 					href={props.href}
 					iconLeft={props.iconLeft}
 					iconRight={
@@ -191,6 +203,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 				<ButtonLink
 					parent='ComponentButton'
 					className={props.className}
+					formId={props.formId}
 					href={props.href}
 					target='_blank'
 					iconLeft={props.iconLeft}
@@ -205,6 +218,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 				<ButtonLink
 					parent='ComponentButton'
 					className={props.className}
+					formId={props.formId}
 					href={props.href}
 					iconLeft={props.iconLeft ?? <IconResolver icon='user-round' className='min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5' />}
 					iconRight={props.iconRight}
@@ -218,13 +232,15 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 				<Button
 					parent='ComponentButton'
 					className={props.className}
+					formId={props.formId}
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ?? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />
 					}
+					aria-label={props.label ? undefined : 'Login'}
 					{...props.buttonProps}
 				>
-					{props.label}
+					{props.label ?? 'Login'}
 				</Button>
 			);
 		case 'signup':
@@ -232,13 +248,15 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 				<Button
 					parent='ComponentButton'
 					className={props.className}
+					formId={props.formId}
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ?? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />
 					}
+					aria-label={props.label ? undefined : 'Sign up'}
 					{...props.buttonProps}
 				>
-					{props.label}
+					{props.label ?? 'Sign up'}
 				</Button>
 			);
 		case 'button':
@@ -246,6 +264,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 				<Button
 					parent='ComponentButton'
 					className={props.className}
+					formId={props.formId}
 					onClick={props.onClick}
 					iconLeft={props.iconLeft}
 					iconRight={props.iconRight}
@@ -261,8 +280,9 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 };
 
 export const Button = forwardRef<HTMLButtonElement, PropsWithChildren<ButtonTypeProps>>(function Button(props, ref) {
-	const { iconOnly, iconLeft, iconRight, isLoading, styleType, styleSize, ...attr } = props;
+	const { iconOnly, iconLeft, iconRight, isLoading, styleType, styleSize, formId, ...attr } = props;
 	const isIconOnly = !!iconOnly;
+	const hasAccessibleName = props['aria-label'] || hasReadableText(props.children);
 
 	const type = styleType ?? 'primary';
 	const size = styleSize ?? 'lg';
@@ -271,9 +291,11 @@ export const Button = forwardRef<HTMLButtonElement, PropsWithChildren<ButtonType
 	return (
 		<button
 			{...attr}
+			data-form-id={formId || undefined}
 			disabled={props.disabled}
 			ref={ref}
 			className={base({ className: props.className })}
+			aria-label={attr['aria-label'] ?? (isIconOnly && !hasAccessibleName ? 'Button' : undefined)}
 			onClick={e => {
 				props.onClick && props.onClick(e);
 			}}
@@ -300,16 +322,19 @@ export type ButtonLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'hre
 } & ButtonProps;
 
 export const ButtonLink = forwardRef<HTMLAnchorElement, PropsWithChildren<ButtonLinkProps>>(function ButtonLink(props, ref) {
-	const { iconOnly, parent, iconLeft, iconRight, isLoading, styleType, styleSize, ...attr } = props;
+	const { iconOnly, parent, iconLeft, iconRight, isLoading, styleType, styleSize, formId, ...attr } = props;
 	const isIconOnly = !!iconOnly;
+	const hasAccessibleName = attr['aria-label'] || hasReadableText(props.children);
 	const type = styleType ?? 'primary';
 	const size = styleSize ?? 'lg';
 	const { base, loader } = btnStyles({ type, iconOnly: isIconOnly, size });
 	return (
 		<Anchor
 			{...attr}
+			data-form-id={formId || undefined}
 			className={base({ className: props.className })}
 			ref={ref}
+			aria-label={attr['aria-label'] ?? (isIconOnly && !hasAccessibleName ? 'Link' : undefined)}
 			onClick={e => {
 				props.onClick && props.onClick(e);
 			}}

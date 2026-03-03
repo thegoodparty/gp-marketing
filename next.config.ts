@@ -2,6 +2,7 @@ import { breakpoints } from './src/ui/_lib/breakpoints';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+	devIndicators: false,
 	async headers() {
 		return [
 			{

@@ -12,6 +12,7 @@ import { field_shortLoopingVideo } from './field_shortLoopingVideo.ts';
 import { field_title } from './field_title.ts';
 import { field_bannerText } from './field_bannerText.ts';
 import { field_blockColorCreamMidnight } from './field_blockColorCreamMidnight.ts';
+import { field_formId } from './field_formId.ts';
 import { field_formProvider } from './field_formProvider.ts';
 import { field_internalLink } from './field_internalLink.ts';
 import { field_publishedDate } from './field_publishedDate.ts';
@@ -126,6 +127,7 @@ export const fieldSchema = [
 	field_bannerText,
 	field_blockColorCreamMidnight,
 	field_calculatorLayout,
+	field_formId,
 	field_formProvider,
 	field_internalLink,
 	field_publishedDate,

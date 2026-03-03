@@ -20,6 +20,7 @@ export function HeroBlockSection(section: Extract<Sections, { _type: 'component_
 				copy={<RichData value={section.summaryInfo?.block_summaryText} />}
 				buttons={transformButtons(section.summaryInfo?.list_buttons)}
 				image={section.heroImage?.img_image}
+				priority={!!section.heroImage?.img_image && !section.heroImage?.field_displayEmbed}
 				showFullImage={section.heroImage?.showFullImage}
 				embedCode={section.heroImage?.field_displayEmbed ? section.heroImage?.field_embedCode : undefined}
 				layout={resolveHeroLayout({

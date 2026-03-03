@@ -1,6 +1,7 @@
 import type { Metadata, ResolvedMetadata } from 'next';
 import type { Robots } from 'next/dist/lib/metadata/types/metadata-types';
 import type { Group_seo } from 'sanity.types';
+import { DEFAULT_SHARE_IMAGE, getBaseUrl, toAbsoluteUrl } from '~/lib/url';
 
 export async function StructureMetaData(parentMetadata: ResolvedMetadata, page?: { name?: string; seo?: Group_seo; url?: string } | null) {
 	const metaTitle = page?.seo?.field_metaTitle || page?.name;
@@ -9,17 +10,29 @@ export async function StructureMetaData(parentMetadata: ResolvedMetadata, page?:
 
 	const robots = parentMetadata.robots as Robots;
 
+	const absoluteUrl = page?.url ? toAbsoluteUrl(page.url) : getBaseUrl();
+	const ogImages = [ogImage, ...(parentMetadata.openGraph?.images || [])]
+		.filter((x): x is string => typeof x === 'string')
+		.map(img => (img.startsWith('http') ? img : toAbsoluteUrl(img)));
+	const images = ogImages.length > 0 ? ogImages : [DEFAULT_SHARE_IMAGE];
+
 	return {
 		title: metaTitle,
 		description: metaDescription,
 		openGraph: {
 			...(parentMetadata.openGraph as Metadata['openGraph']),
 			title: metaTitle,
-			images: [ogImage, ...(parentMetadata.openGraph?.images || [])].filter(x => typeof x === 'string'),
-			url: page?.url,
+			images,
+			url: absoluteUrl,
+		},
+		twitter: {
+			card: 'summary_large_image',
+			title: metaTitle,
+			description: metaDescription,
+			images,
 		},
 		alternates: {
-			canonical: page?.url,
+			canonical: absoluteUrl,
 		},
 		robots,
 	} satisfies Metadata;

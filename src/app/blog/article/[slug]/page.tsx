@@ -64,11 +64,11 @@ export default async function Page(props: any) {
 	const articleSchema = {
 		'@context': 'https://schema.org',
 		'@type': 'Article',
-		headline: page.editorialOverview?.field_editorialTitle,
+		headline: page.editorialOverview?.field_editorialTitle ? stegaClean(page.editorialOverview.field_editorialTitle) : undefined,
 		...(page.editorialOverview?.ref_author?.personOverview?.field_personName && {
 			author: {
 				'@type': 'Person',
-				name: page.editorialOverview.ref_author.personOverview.field_personName,
+				name: stegaClean(page.editorialOverview.ref_author.personOverview.field_personName),
 			},
 		}),
 		...(publishedDate && { datePublished: new Date(stegaClean(publishedDate)).toISOString() }),

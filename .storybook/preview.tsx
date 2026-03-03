@@ -86,7 +86,7 @@ export default definePreview({
 			options: {
 				default: {
 					name: 'default',
-					value: 'var(--background)',
+					value: 'var(--goodparty-cream)',
 				},
 			},
 			default: 'default',

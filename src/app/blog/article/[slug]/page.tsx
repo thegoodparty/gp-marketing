@@ -57,7 +57,9 @@ export default async function Page(props: any) {
 
 	const baseUrl = getBaseUrl();
 	const articleUrl = `${baseUrl}/blog/article/${slug}`;
-	const imageUrl = getSanityImageUrl(page.editorialAssets?.img_featuredImage as { asset?: { _ref?: string; url?: string } } | undefined);
+	const imageUrl =
+		getSanityImageUrl(page.editorialAssets?.img_featuredImage as { asset?: { _ref?: string; url?: string } } | undefined) ??
+		DEFAULT_SHARE_IMAGE;
 	const publishedDate = page.editorialOverview?.field_publishedDate;
 	const updatedDate = page.editorialOverview?.field_lastUpdated;
 
@@ -73,7 +75,7 @@ export default async function Page(props: any) {
 		}),
 		...(publishedDate && { datePublished: new Date(stegaClean(publishedDate)).toISOString() }),
 		...(updatedDate && { dateModified: new Date(stegaClean(updatedDate)).toISOString() }),
-		image: imageUrl ?? DEFAULT_SHARE_IMAGE,
+		image: imageUrl,
 		url: articleUrl,
 	};
 

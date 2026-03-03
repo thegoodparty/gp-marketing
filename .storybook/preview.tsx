@@ -1,4 +1,4 @@
-import { Inter, Outfit } from 'next/font/google';
+import { Outfit } from 'next/font/google';
 import { Open_Sans } from 'next/font/google';
 import * as storybookAddonTagBadges from 'storybook-addon-tag-badges/preview';
 import { definePreview, type NextJsParameters } from '@storybook/nextjs';

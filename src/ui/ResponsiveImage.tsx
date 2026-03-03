@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { parseSanityImageRef } from '~/lib/url';
 import { cn } from './_lib/utils.ts';
 import type { SanityImage } from './types.ts';
 import { breakpoints } from './_lib/breakpoints.ts';
@@ -34,12 +35,9 @@ export function ResponsiveImage(props: ResponsiveImageProps) {
 	}
 	let asset = props.image.asset;
 	if ('_ref' in asset && typeof asset._ref === 'string') {
-		let url = asset._ref;
-		if (url.startsWith('image-')) {
-			url = url.replace('image-', '');
-		}
-		const [id, dimensions, ext] = url.split('-');
-		const [widthStr, heightStr] = dimensions.split('x');
+		const parsed = parseSanityImageRef(asset._ref);
+		if (!parsed) return null;
+		const [widthStr, heightStr] = parsed.dimensions.split('x');
 		const width = widthStr ? Number(widthStr) : undefined;
 		const height = heightStr ? Number(heightStr) : undefined;
 		const metadata =
@@ -53,8 +51,8 @@ export function ResponsiveImage(props: ResponsiveImageProps) {
 				: undefined;
 
 		asset = {
-			_ref: id,
-			url: `https://cdn.sanity.io/images/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/${process.env.NEXT_PUBLIC_SANITY_DATASET}/${id}-${dimensions}.${ext}`,
+			_ref: parsed.id,
+			url: parsed.url,
 			altText: '',
 			metadata,
 		};

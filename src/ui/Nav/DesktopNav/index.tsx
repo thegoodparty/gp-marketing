@@ -28,7 +28,7 @@ export function DesktopNav(props: NavProps) {
 				<div className='flex flex-row items-center justify-center gap-[1rem]'>
 					<Anchor
 						aria-label='Go to home page'
-						className='inline-flex flex-row items-center justify-center px-[0.3rem] py-[0.15rem] w-[3rem]'
+						className='relative z-10 inline-flex flex-row items-center justify-center px-[0.3rem] py-[0.15rem] w-[3rem]'
 						href={pathname === '/' ? '#top' : '/'}
 						onClick={() => {
 							setNavState({
@@ -64,12 +64,12 @@ export function DesktopNav(props: NavProps) {
 					</ul>
 					{navState.isOpen && (
 						<div
-							className='fixed inset-0 z-30'
+							className='fixed inset-0 z-0'
 							onClick={() => setNavState({ isOpen: false, activeDropdownIndex: null })}
 						/>
 					)}
 				</div>
-				<div className='flex flex-row gap-[1rem] items-center justify-center w-fit '>
+				<div className='relative z-10 flex flex-row gap-[1rem] items-center justify-center w-fit'>
 					{props.secondaryCTA && <ComponentButton {...props.secondaryCTA} buttonProps={{ styleType: 'outline-inverse' }} />}
 					{props.primaryCTA && <ComponentButton {...props.primaryCTA} buttonProps={{ styleType: 'primary' }} />}
 				</div>

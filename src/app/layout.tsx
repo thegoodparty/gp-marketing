@@ -55,7 +55,7 @@ const organizationSchema = {
 	'@type': 'Organization',
 	name: 'GoodParty.org',
 	url: getBaseUrl(),
-	logo: `${getBaseUrl()}/favicon.ico`,
+	logo: `${getBaseUrl()}/web-app-manifest-192x192.png`,
 };
 
 export default async function RootLayout({ children }: Props) {

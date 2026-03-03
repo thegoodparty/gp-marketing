@@ -4,6 +4,11 @@ import { getBaseUrl } from '~/lib/url';
 
 type SitemapEntry = MetadataRoute.Sitemap[number];
 
+/** Max 5k docs per type keeps sitemap under 50k URLs and avoids Sanity timeouts */
+const SLICE = '[0..4999]';
+
+export const revalidate = 86400; // 24h - sitemap does not need real-time freshness
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const base = getBaseUrl();
 
@@ -24,22 +29,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		topicSlugs,
 	] = await Promise.all([
 		client.fetch<Array<{ slug: string }>>(
-			'*[_type=="goodpartyOrg_landingPages"]{ "slug": detailPageOverviewNoHero.field_slug }',
+			`*[_type=="goodpartyOrg_landingPages"]${SLICE}{ "slug": detailPageOverviewNoHero.field_slug }`,
 		),
 		client.fetch<Array<{ slug: string }>>(
-			'*[_type=="policy"]{ "slug": policyOverview.field_slug }',
+			`*[_type=="policy"]${SLICE}{ "slug": policyOverview.field_slug }`,
 		),
 		client.fetch<Array<{ slug: string; _updatedAt: string }>>(
-			'*[_type=="article"]{ "slug": editorialOverview.field_slug, _updatedAt }',
+			`*[_type=="article"]${SLICE}{ "slug": editorialOverview.field_slug, _updatedAt }`,
 		),
 		client.fetch<Array<{ slug: string }>>(
-			'*[_type=="glossary"]{ "slug": glossaryTermOverview.field_slug }',
+			`*[_type=="glossary"]${SLICE}{ "slug": glossaryTermOverview.field_slug }`,
 		),
 		client.fetch<Array<{ slug: string }>>(
-			'*[_type=="categories"]{ "slug": tagOverview.field_slug }',
+			`*[_type=="categories"]${SLICE}{ "slug": tagOverview.field_slug }`,
 		),
 		client.fetch<Array<{ slug: string }>>(
-			'*[_type=="topics"]{ "slug": tagOverview.field_slug }',
+			`*[_type=="topics"]${SLICE}{ "slug": tagOverview.field_slug }`,
 		),
 	]);
 

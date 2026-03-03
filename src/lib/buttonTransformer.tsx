@@ -22,6 +22,7 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 				if (button.link && 'href' in button.link && button.link.href)
 					transformedButtons.push({
 						_key: button._key,
+						formId: (button as { formId?: string }).formId,
 						label: button.text ?? button.link.title ?? button.link.name,
 						buttonType: 'internal',
 						href: button.link.href,
@@ -40,6 +41,7 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 				if (button.link && 'href' in button.link && button.link.href)
 					transformedButtons.push({
 						_key: button._key,
+						formId: (button as { formId?: string }).formId,
 						label: button.text ?? button.link.title ?? button.link.name,
 						buttonType: 'contact',
 						href: button.link.href,
@@ -58,6 +60,7 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 				if (button.field_externalLink)
 					transformedButtons.push({
 						_key: button._key,
+						formId: (button as { formId?: string }).formId,
 						label: button.text ?? button.field_externalLink,
 						buttonType: 'external',
 						href: button.field_externalLink,
@@ -76,6 +79,7 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 				if (button.anchor)
 					transformedButtons.push({
 						_key: button._key,
+						formId: (button as { formId?: string }).formId,
 						label: button.text,
 						buttonType: 'anchor',
 						href: button.anchor,
@@ -94,6 +98,7 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 				if (button.ref_download && button.ref_download.file?.url)
 					transformedButtons.push({
 						_key: button._key,
+						formId: (button as { formId?: string }).formId,
 						label: button.text ?? button.ref_download.name,
 						buttonType: 'download',
 						href: button.ref_download.file?.url,
@@ -111,6 +116,7 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 			case 'LogIn':
 				transformedButtons.push({
 					_key: button._key,
+					formId: (button as { formId?: string }).formId,
 					label: button.text ?? 'Login',
 					buttonType: 'external',
 					href: 'https://app.goodparty.org/login',
@@ -128,6 +134,7 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 			case 'SignUp':
 				transformedButtons.push({
 					_key: button._key,
+					formId: (button as { formId?: string }).formId,
 					label: button.text ?? 'Sign up',
 					buttonType: 'external',
 					href: 'https://app.goodparty.org/sign-up',

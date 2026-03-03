@@ -5,7 +5,8 @@
 export function getBaseUrl(): string {
 	const site = process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL;
 	if (site && site !== 'undefined') {
-		return site.startsWith('http') ? site : `https://${site}`;
+		const url = site.startsWith('http') ? site : `https://${site}`;
+		return url.replace(/\/$/, '');
 	}
 	return 'https://goodparty.org';
 }

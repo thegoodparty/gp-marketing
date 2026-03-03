@@ -9,11 +9,20 @@ export const DEFAULT_SHARE_IMAGE = 'https://assets.goodparty.org/gp-share-2025.p
  */
 export function getBaseUrl(): string {
 	const site = process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL;
-	if (site && site !== 'undefined') {
+	if (site) {
 		const url = site.startsWith('http') ? site : `https://${site}`;
 		return url.replace(/\/$/, '');
 	}
 	return 'https://goodparty.org';
+}
+
+/**
+ * Converts a path to an absolute URL using the site base. Pass-through for already-absolute URLs.
+ */
+export function toAbsoluteUrl(path: string): string {
+	if (path.startsWith('http')) return path;
+	const base = getBaseUrl();
+	return `${base.replace(/\/$/, '')}${path.startsWith('/') ? path : `/${path}`}`;
 }
 
 /**

@@ -14,6 +14,13 @@ import { Anchor, type AnchorProps } from '../Anchor.tsx';
 import { IconResolver } from '../IconResolver.tsx';
 import type { buttonStyleTypeValues } from '../_lib/designTypesStore.ts';
 
+function hasReadableText(children: ReactNode): boolean {
+	if (children == null) return false;
+	if (typeof children === 'string') return children.trim().length > 0;
+	if (typeof children === 'number') return true;
+	return false;
+}
+
 export const btnStyles = tv({
 	slots: {
 		base: [
@@ -275,7 +282,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 export const Button = forwardRef<HTMLButtonElement, PropsWithChildren<ButtonTypeProps>>(function Button(props, ref) {
 	const { iconOnly, iconLeft, iconRight, isLoading, styleType, styleSize, formId, ...attr } = props;
 	const isIconOnly = !!iconOnly;
-	const hasAccessibleName = props['aria-label'] || (props.children && String(props.children).trim());
+	const hasAccessibleName = props['aria-label'] || hasReadableText(props.children);
 
 	const type = styleType ?? 'primary';
 	const size = styleSize ?? 'lg';
@@ -317,7 +324,7 @@ export type ButtonLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'hre
 export const ButtonLink = forwardRef<HTMLAnchorElement, PropsWithChildren<ButtonLinkProps>>(function ButtonLink(props, ref) {
 	const { iconOnly, parent, iconLeft, iconRight, isLoading, styleType, styleSize, formId, ...attr } = props;
 	const isIconOnly = !!iconOnly;
-	const hasAccessibleName = attr['aria-label'] || (props.children && String(props.children).trim());
+	const hasAccessibleName = attr['aria-label'] || hasReadableText(props.children);
 	const type = styleType ?? 'primary';
 	const size = styleSize ?? 'lg';
 	const { base, loader } = btnStyles({ type, iconOnly: isIconOnly, size });

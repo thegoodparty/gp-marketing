@@ -1,5 +1,8 @@
 import { dataset, projectId } from '~/lib/env';
 
+/** Default share image for Open Graph, Twitter, and schema when no page-specific image is set */
+export const DEFAULT_SHARE_IMAGE = 'https://assets.goodparty.org/gp-share-2025.png';
+
 /**
  * Returns the absolute base URL for the site.
  * Used for canonical URLs, sitemap, Open Graph, and schema.org.

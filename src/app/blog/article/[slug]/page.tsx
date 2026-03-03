@@ -21,7 +21,7 @@ import { client } from '~/lib/client';
 import { format } from 'date-fns';
 import { stegaClean } from 'next-sanity';
 import { PageSchema } from '~/ui/PageSchema';
-import { getBaseUrl, getSanityImageUrl } from '~/lib/url';
+import { DEFAULT_SHARE_IMAGE, getBaseUrl, getSanityImageUrl } from '~/lib/url';
 
 export async function generateStaticParams() {
 	const entries = await client.fetch<Array<{ slug: string }>>('*[_type == "article"][0..99].editorialOverview.field_slug');
@@ -73,7 +73,7 @@ export default async function Page(props: any) {
 		}),
 		...(publishedDate && { datePublished: new Date(stegaClean(publishedDate)).toISOString() }),
 		...(updatedDate && { dateModified: new Date(stegaClean(updatedDate)).toISOString() }),
-		...(imageUrl && { image: imageUrl }),
+		image: imageUrl ?? DEFAULT_SHARE_IMAGE,
 		url: articleUrl,
 	};
 

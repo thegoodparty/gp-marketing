@@ -1,7 +1,7 @@
 import type { Metadata, ResolvedMetadata } from 'next';
 import type { Robots } from 'next/dist/lib/metadata/types/metadata-types';
 import type { Group_seo } from 'sanity.types';
-import { getBaseUrl } from '~/lib/url';
+import { DEFAULT_SHARE_IMAGE, getBaseUrl } from '~/lib/url';
 
 function toAbsoluteUrl(path: string): string {
 	if (path.startsWith('http')) return path;
@@ -20,6 +20,7 @@ export async function StructureMetaData(parentMetadata: ResolvedMetadata, page?:
 	const ogImages = [ogImage, ...(parentMetadata.openGraph?.images || [])]
 		.filter((x): x is string => typeof x === 'string')
 		.map(img => (img.startsWith('http') ? img : toAbsoluteUrl(img)));
+	const images = ogImages.length > 0 ? ogImages : [DEFAULT_SHARE_IMAGE];
 
 	return {
 		title: metaTitle,
@@ -27,14 +28,14 @@ export async function StructureMetaData(parentMetadata: ResolvedMetadata, page?:
 		openGraph: {
 			...(parentMetadata.openGraph as Metadata['openGraph']),
 			title: metaTitle,
-			images: ogImages.length > 0 ? ogImages : undefined,
+			images,
 			url: absoluteUrl,
 		},
 		twitter: {
 			card: 'summary_large_image',
 			title: metaTitle,
 			description: metaDescription,
-			images: ogImages.length > 0 ? ogImages : undefined,
+			images,
 		},
 		alternates: {
 			canonical: absoluteUrl,

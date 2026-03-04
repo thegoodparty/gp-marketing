@@ -20,7 +20,8 @@
     "sanity:generate": "sanity typegen generate",
     "sanity:start": "sanity start",
     "sanity:build": "sanity build",
-    "sanity:deploy": "sanity deploy"
+    "sanity:deploy": "sanity deploy",
+    "sitemap:validate": "bun run scripts/validate-sitemap-urls.ts"
   },
   "dependencies": {
     "@csstools/postcss-global-data": "^3.1.0",

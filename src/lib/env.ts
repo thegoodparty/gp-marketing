@@ -12,3 +12,6 @@ export const revalidateSecret = 'NS';
 
 // Used by `sanity-plugin-iframe-pane` to verify that draft mode was initiated by a valid Studio session
 export const urlSecretId = `preview.secret`;
+
+// Ashby job board name for careers page (from https://jobs.ashbyhq.com/{name})
+export const ashbyJobBoardName = process.env.ASHBY_JOB_BOARD_NAME || undefined;

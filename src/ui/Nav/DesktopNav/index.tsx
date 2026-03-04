@@ -1,6 +1,6 @@
 'use client';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Anchor } from '~/ui/Anchor';
 import { IconResolver } from '~/ui/IconResolver';
 import { ComponentButton } from '~/ui/Inputs/Button';
@@ -21,11 +21,25 @@ export type NavDropdownState = {
 export function DesktopNav(props: NavProps) {
 	const pathname = usePathname();
 	const [navState, setNavState] = useState<NavDropdownState>({ isOpen: false, activeDropdownIndex: null });
+	const navRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (!navState.isOpen) return;
+
+		function handleClickOutside(e: MouseEvent) {
+			if (navRef.current && !navRef.current.contains(e.target as Node)) {
+				setNavState({ isOpen: false, activeDropdownIndex: null });
+			}
+		}
+
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => document.removeEventListener('mousedown', handleClickOutside);
+	}, [navState.isOpen]);
 
 	return (
 		<div className={'hidden md:flex flex-row items-center w-full pointer-events-auto h-[5rem]'}>
 			<div className='flex flex-row items-center justify-between px-[1.5rem] w-full'>
-				<div className='flex flex-row items-center justify-center gap-[1rem]'>
+				<div ref={navRef} className='flex flex-row items-center justify-center gap-[1rem]'>
 					<Anchor
 						aria-label='Go to home page'
 						className='relative z-10 inline-flex flex-row items-center justify-center px-[0.3rem] py-[0.15rem] w-[3rem]'
@@ -62,12 +76,6 @@ export function DesktopNav(props: NavProps) {
 							),
 						)}
 					</ul>
-					{navState.isOpen && (
-						<div
-							className='fixed inset-0 z-0'
-							onClick={() => setNavState({ isOpen: false, activeDropdownIndex: null })}
-						/>
-					)}
 				</div>
 				<div className='relative z-10 flex flex-row gap-[1rem] items-center justify-center w-fit'>
 					{props.secondaryCTA && <ComponentButton {...props.secondaryCTA} buttonProps={{ styleType: 'outline-inverse' }} />}

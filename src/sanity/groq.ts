@@ -215,6 +215,18 @@ export const goodpartyOrg_landingPagesAndPolicyQuery = defineQuery(
 	`*[(_type=="goodpartyOrg_landingPages"&&detailPageOverviewNoHero.field_slug==$slug)||(_type=="policy"&&policyOverview.field_slug==$slug)][0]{...,_type=="goodpartyOrg_landingPages"=>{pageSections{...,list_pageSections[]{${sectionsGroq}}}},${landingPagesHrefGroq},${policyHrefGroq}}`,
 );
 /*language=textmate*/
+export const goodpartyOrg_electionsQuery = defineQuery(
+	`*[_type=="goodpartyOrg_landingPages"&&detailPageOverviewNoHero.field_slug=="elections"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},${landingPagesHrefGroq}}`,
+);
+/*language=textmate*/
+export const goodpartyOrg_candidatesQuery = defineQuery(
+	`*[_type=="goodpartyOrg_landingPages"&&detailPageOverviewNoHero.field_slug=="candidates"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},${landingPagesHrefGroq}}`,
+);
+/*language=textmate*/
+export const goodpartyOrg_profileQuery = defineQuery(
+	`*[_type=="goodpartyOrg_landingPages"&&detailPageOverviewNoHero.field_slug=="profile"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},${landingPagesHrefGroq}}`,
+);
+/*language=textmate*/
 export const goodpartyOrg_allComponentsQuery = defineQuery(
 	`*[_type=="goodpartyOrg_allComponents"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},${allComponentsHrefGroq}}`,
 );

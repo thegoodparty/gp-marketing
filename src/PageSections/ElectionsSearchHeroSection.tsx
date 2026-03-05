@@ -2,7 +2,7 @@ import { stegaClean } from 'next-sanity';
 
 import type { Sections } from '~/PageSections';
 
-import { ElectionsSearchHero } from '~/ui/ElectionsSearchHero';
+import { ElectionsSearchHeroWithNav } from '~/ui/ElectionsSearchHeroWithNav';
 import { US_STATES } from '~/constants/usStates';
 
 export function ElectionsSearchHeroSection(section: Extract<Sections, { _type: 'component_electionsSearchHero' }>) {
@@ -10,7 +10,7 @@ export function ElectionsSearchHeroSection(section: Extract<Sections, { _type: '
 
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Elections Search Hero'>
-			<ElectionsSearchHero
+			<ElectionsSearchHeroWithNav
 				showLogo={stegaClean(section.logoSettings?.showLogo) ?? true}
 				logoImage={section.logoSettings?.img_logoImage}
 				headerText={section.electionsSearchHeroContent?.field_headerText}

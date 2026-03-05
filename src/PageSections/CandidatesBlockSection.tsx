@@ -1,6 +1,7 @@
 import { stegaClean } from 'next-sanity';
 
 import type { Sections } from '~/PageSections';
+import type { CandidateCard } from '~/ui/CandidatesBlock';
 
 import { transformButtons } from '~/lib/buttonTransformer';
 
@@ -10,29 +11,33 @@ import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 import { CandidatesBlock } from '~/ui/CandidatesBlock';
 import { RichData } from '~/ui/RichData';
 
-export function CandidatesBlockSection(section: Extract<Sections, { _type: 'component_candidatesBlock' }>) {
+const mockCandidates: CandidateCard[] = [
+	{
+		_key: '1',
+		name: 'Firstname Lastname',
+		partyAffiliation: 'Party Affiliation',
+		href: '/candidates/firstname-lastname',
+	},
+	{
+		_key: '2',
+		name: 'Jane Smith',
+		partyAffiliation: 'Independent',
+		href: '/candidates/jane-smith',
+	},
+];
+
+type CandidatesBlockSectionProps = Extract<Sections, { _type: 'component_candidatesBlock' }> & {
+	candidatesOverride?: CandidateCard[];
+};
+
+export function CandidatesBlockSection(props: CandidatesBlockSectionProps) {
+	const { candidatesOverride, ...section } = props;
 	const backgroundColor = section.candidatesBlockDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(stegaClean(section.candidatesBlockDesignSettings.field_blockColorCreamMidnight))
 		: 'cream';
 
 	const hasFilters = stegaClean(section.candidatesBlockFilterSettings?.field_enableFilters) ?? false;
-
-	// TODO: Replace with actual candidate data source
-	// For now, using mock data - in production this would fetch from candidates API/database
-	const mockCandidates = [
-		{
-			_key: '1',
-			name: 'Firstname Lastname',
-			partyAffiliation: 'Party Affiliation',
-			href: '/candidates/firstname-lastname',
-		},
-		{
-			_key: '2',
-			name: 'Jane Smith',
-			partyAffiliation: 'Independent',
-			href: '/candidates/jane-smith',
-		},
-	];
+	const candidates = candidatesOverride ?? mockCandidates;
 
 	const buttons = transformButtons(section.candidatesBlockOptionalButton ? [section.candidatesBlockOptionalButton] : []);
 
@@ -49,7 +54,7 @@ export function CandidatesBlockSection(section: Extract<Sections, { _type: 'comp
 					buttons: transformButtons(section.candidatesBlockHeader?.list_buttons),
 					textSize: resolveTextSize(section.candidatesBlockHeader?.field_textSize),
 				}}
-				candidates={mockCandidates}
+				candidates={candidates}
 				hasFilters={hasFilters}
 				filters={hasFilters ? {} : undefined}
 				pagination={hasFilters ? { currentPage: 1, totalPages: 1 } : undefined}

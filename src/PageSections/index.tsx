@@ -44,8 +44,18 @@ import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
 
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
 
+export type SectionOverrides = {
+	component_candidatesBlock?: { candidates?: import('~/ui/CandidatesBlock').CandidateCard[] };
+	component_electionsIndexBlock?: {
+		elections?: import('~/ui/ElectionsIndexBlock').ElectionItem[];
+		stateSlug?: string;
+	};
+	component_electionsPositionHero?: import('~/PageSections/ElectionsPositionHeroSection').OfficeData;
+};
+
 type Props = {
 	pageSections?: Sections[] | null;
+	sectionOverrides?: SectionOverrides;
 };
 
 export function PageSections(props: Props) {
@@ -84,7 +94,10 @@ export function PageSections(props: Props) {
 				case 'component_candidatesBlock':
 					return (
 						<ComponentErrorBoundary key={section._key} componentName='Candidates Block'>
-							<CandidatesBlockSection {...section} />
+							<CandidatesBlockSection
+								{...section}
+								candidatesOverride={props.sectionOverrides?.component_candidatesBlock?.candidates}
+							/>
 						</ComponentErrorBoundary>
 					);
 				case 'component_calculatorTextBlock':
@@ -240,13 +253,20 @@ export function PageSections(props: Props) {
 					case 'component_electionsIndexBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Elections Index Block'>
-								<ElectionsIndexBlockSection {...section} />
+								<ElectionsIndexBlockSection
+									{...section}
+									electionsOverride={props.sectionOverrides?.component_electionsIndexBlock?.elections}
+									stateSlugOverride={props.sectionOverrides?.component_electionsIndexBlock?.stateSlug}
+								/>
 							</ComponentErrorBoundary>
 						);
 					case 'component_electionsPositionHero':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Elections Position Hero'>
-								<ElectionsPositionHeroSection {...section} />
+								<ElectionsPositionHeroSection
+									{...section}
+									officeData={props.sectionOverrides?.component_electionsPositionHero}
+								/>
 							</ComponentErrorBoundary>
 						);
 					case 'component_electionsSearchHero':

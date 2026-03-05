@@ -28,15 +28,19 @@ const mockOfficeData: OfficeData = {
 	filingDate: 'January 1, 2024 - March 15, 2024',
 };
 
-export function ElectionsPositionHeroSection(
-	section: Extract<Sections, { _type: 'component_electionsPositionHero' }>,
-	officeData?: OfficeData,
-) {
+type ElectionsPositionHeroSectionProps = Extract<
+	Sections,
+	{ _type: 'component_electionsPositionHero' }
+> & {
+	officeData?: OfficeData;
+};
+
+export function ElectionsPositionHeroSection(props: ElectionsPositionHeroSectionProps) {
+	const { officeData, ...section } = props;
 	const backgroundColor = section.electionsPositionHeroDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(stegaClean(section.electionsPositionHeroDesignSettings.field_blockColorCreamMidnight))
 		: 'midnight';
 
-	// Use provided office data or fallback to mock data
 	const data = officeData ?? mockOfficeData;
 
 	// Transform CTA from Sanity ctaActionWithShared format

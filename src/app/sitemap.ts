@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { client } from '~/lib/client';
 import { getBaseUrl } from '~/lib/url';
+import { US_STATE_CODES } from '~/constants/usStateCodes';
 
 type SitemapEntry = MetadataRoute.Sitemap[number];
 
@@ -18,6 +19,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		{ url: `${base}/contact`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
 		{ url: `${base}/political-terms`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
 		{ url: `${base}/all`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.3 },
+		{ url: `${base}/elections`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+		{ url: `${base}/candidates`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+		{ url: `${base}/profile`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
 	];
 
 	const [
@@ -102,6 +106,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			priority: 0.7,
 		}));
 
+	const electionStateRoutes: SitemapEntry[] = US_STATE_CODES.map((code) => ({
+		url: `${base}/elections/${code}`,
+		lastModified: new Date(),
+		changeFrequency: 'weekly' as const,
+		priority: 0.7,
+	}));
+
 	return [
 		...staticRoutes,
 		...landingPages,
@@ -110,5 +121,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		...glossaryTerms,
 		...categories,
 		...topics,
+		...electionStateRoutes,
 	];
 }

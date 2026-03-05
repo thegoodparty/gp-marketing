@@ -5,7 +5,8 @@ import { getIcon } from '../../utils/getIcon.tsx';
 export const component_electionsPositionContentBlock = {
 	title: 'Elections Position Content Block',
 	name: 'component_electionsPositionContentBlock',
-	description: 'Content block for Position Pages with card, grid items, and bottom sections.',
+	description:
+		'Content block for Position Pages. Content (card, grid, bottom items) is supplied at runtime via sectionOverrides; Sanity controls design settings only.',
 	type: 'object',
 	icon: getIcon('FileText'),
 	fields: [

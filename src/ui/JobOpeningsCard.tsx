@@ -5,9 +5,9 @@ import { Anchor, type AnchorProps } from './Anchor';
 
 const styles = tv({
 	slots: {
-		base: 'bg-white rounded-2xl p-6 overflow-clip flex flex-col',
-		content: 'flex flex-col gap-6 md:gap-8',
-		info: 'flex flex-col gap-3 items-start',
+		base: 'bg-white rounded-2xl p-6 overflow-clip flex flex-col h-full',
+		content: 'flex flex-col flex-1 gap-6 md:gap-8',
+		info: 'flex flex-col flex-1 gap-3 items-start',
 		tag: 'bg-lavender-100 rounded-full px-4 py-2.5 font-secondary text-sm font-semibold',
 		meta: 'flex items-center gap-2',
 		metaText: 'font-secondary text-body-2',

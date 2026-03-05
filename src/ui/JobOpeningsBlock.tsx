@@ -8,7 +8,7 @@ const styles = tv({
 	slots: {
 		base: 'bg-goodparty-cream py-(--container-padding)',
 		wrapper: 'flex flex-col gap-10 md:gap-20',
-		cardsGrid: 'flex flex-col gap-4 md:flex-row md:flex-wrap md:justify-center',
+		cardsGrid: 'grid grid-cols-1 gap-4 md:grid-cols-4 md:gap-4',
 	},
 });
 
@@ -31,7 +31,7 @@ export function JobOpeningsBlock(props: JobOpeningsBlockProps) {
 							{props.cards.map((card, index) => (
 								<JobOpeningsCard
 									key={`job-card-${index}-${card.title ?? ''}`}
-									className='w-full md:w-[calc((100%-3*1rem)/4)]'
+									className='w-full min-w-0'
 									{...card}
 								/>
 							))}

@@ -156,4 +156,4 @@ storybook-static/
 *.local
 
 # Sitemap validation reports
-public/sitemaps/validation-report-*.json
+.reports/sitemaps/validation-report-*.json

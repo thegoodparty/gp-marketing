@@ -1,6 +1,6 @@
 /**
  * Validates all URLs in a sitemap by making HEAD requests.
- * Usage: bun run scripts/validate-sitemap-urls.ts [sitemap-url] [--concurrency N] [--timeout N] [--dry-run] [--follow-redirects]
+ * Usage: bun run scripts/validate-sitemap-urls.ts [sitemap-url] [--concurrency N] [--timeout N] [--dry-run] [--trace-redirects]
  */
 
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -43,14 +43,14 @@ function parseArgs(): {
 	concurrency: number;
 	timeout: number;
 	dryRun: boolean;
-	followRedirects: boolean;
+	traceRedirects: boolean;
 } {
 	const args = process.argv.slice(2);
 	let sitemapUrl = DEFAULT_SITEMAP_URL;
 	let concurrency = DEFAULT_CONCURRENCY;
 	let timeout = DEFAULT_TIMEOUT_MS;
 	let dryRun = false;
-	let followRedirects = false;
+	let traceRedirects = false;
 
 	for (let i = 0; i < args.length; i++) {
 		const arg = args[i];
@@ -62,14 +62,14 @@ function parseArgs(): {
 			i++;
 		} else if (arg === '--dry-run') {
 			dryRun = true;
-		} else if (arg === '--follow-redirects') {
-			followRedirects = true;
+		} else if (arg === '--trace-redirects') {
+			traceRedirects = true;
 		} else if (!arg.startsWith('--') && arg.startsWith('http')) {
 			sitemapUrl = arg;
 		}
 	}
 
-	return { sitemapUrl, concurrency, timeout, dryRun, followRedirects };
+	return { sitemapUrl, concurrency, timeout, dryRun, traceRedirects };
 }
 
 async function fetchSitemapUrls(sitemapUrl: string): Promise<string[]> {
@@ -78,6 +78,7 @@ async function fetchSitemapUrls(sitemapUrl: string): Promise<string[]> {
 		throw new Error(`Failed to fetch sitemap: ${res.status} ${res.statusText}`);
 	}
 	const xml = await res.text();
+	// Regex-based parsing; does not handle CDATA, XML entities, or namespaced tags.
 	const locRegex = /<loc>([^<]+)<\/loc>/g;
 	const urls: string[] = [];
 	let match: RegExpExecArray | null;
@@ -89,11 +90,11 @@ async function fetchSitemapUrls(sitemapUrl: string): Promise<string[]> {
 
 async function validateUrl(
 	url: string,
-	opts: { timeout: number; followRedirects: boolean },
+	opts: { timeout: number; traceRedirects: boolean },
 ): Promise<ValidationResult> {
 	const start = Date.now();
 
-	if (!opts.followRedirects) {
+	if (!opts.traceRedirects) {
 		try {
 			const controller = new AbortController();
 			const timeoutId = setTimeout(() => controller.abort(), opts.timeout);
@@ -253,7 +254,7 @@ function buildReport(
 			redirects: redirects.length,
 			clientErrors: invalid.filter((r) => r.status !== null && r.status >= 400 && r.status < 500).length,
 			serverErrors: invalid.filter((r) => r.status !== null && r.status >= 500).length,
-			networkFailures: invalid.filter((r) => r.status === null || r.error).length,
+			networkFailures: invalid.filter((r) => r.status === null).length,
 		},
 		invalid,
 		redirects,
@@ -286,7 +287,7 @@ function printSummary(report: ValidationReport): void {
 }
 
 async function main(): Promise<void> {
-	const { sitemapUrl, concurrency, timeout, dryRun, followRedirects } = parseArgs();
+	const { sitemapUrl, concurrency, timeout, dryRun, traceRedirects } = parseArgs();
 
 	console.log(`Fetching sitemap from ${sitemapUrl}...`);
 	const urls = await fetchSitemapUrls(sitemapUrl);
@@ -305,7 +306,7 @@ async function main(): Promise<void> {
 	const progressInterval = Math.max(1, Math.floor(total / 10));
 
 	const results = await runWithConcurrency(urls, concurrency, async (url, index) => {
-		const result = await validateUrl(url, { timeout, followRedirects });
+		const result = await validateUrl(url, { timeout, traceRedirects });
 		completed++;
 		if (completed % progressInterval === 0 || completed === total) {
 			const pct = Math.round((completed / total) * 100);
@@ -317,7 +318,7 @@ async function main(): Promise<void> {
 	const durationMs = Date.now() - start;
 	const report = buildReport(sitemapUrl, results, durationMs);
 
-	const outDir = join(process.cwd(), 'public', 'sitemaps');
+	const outDir = join(process.cwd(), '.reports', 'sitemaps');
 	await mkdir(outDir, { recursive: true });
 	const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
 	const outPath = join(outDir, `validation-report-${timestamp}.json`);

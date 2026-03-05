@@ -32,8 +32,18 @@ export function DesktopNav(props: NavProps) {
 			}
 		}
 
+		function handleKeyDown(e: KeyboardEvent) {
+			if (e.key === 'Escape') {
+				setNavState({ isOpen: false, activeDropdownIndex: null });
+			}
+		}
+
 		document.addEventListener('mousedown', handleClickOutside);
-		return () => document.removeEventListener('mousedown', handleClickOutside);
+		document.addEventListener('keydown', handleKeyDown);
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+			document.removeEventListener('keydown', handleKeyDown);
+		};
 	}, [navState.isOpen]);
 
 	return (

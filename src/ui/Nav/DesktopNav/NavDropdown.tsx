@@ -26,16 +26,17 @@ export function NavDropdown(
 
 	const { link } = menuItemStyles();
 
-	// Handle mouse events
-	const handleMouseEnter = () => {
-		props.setNavState(prev => ({
-			isOpen: !prev.isOpen,
-			activeDropdownIndex: !prev.isOpen == false ? null : props.index,
-		}));
+	const handleClick = () => {
+		props.setNavState(prev => {
+			if (prev.isOpen && prev.activeDropdownIndex === props.index) {
+				return { isOpen: false, activeDropdownIndex: null };
+			}
+			return { isOpen: true, activeDropdownIndex: props.index };
+		});
 	};
 
 	return (
-		<li key={`nav-link-${props.label}`} onClick={handleMouseEnter}>
+		<li key={`nav-link-${props.label}`} onClick={handleClick}>
 			<div className={cn(link(), 'cursor-pointer')}>
 				<Text styleType='text-md' className='font-semibold'>
 					{props.label}
@@ -49,7 +50,6 @@ export function NavDropdown(
 
 			<NavDropdownContent
 				{...props}
-				handleMouseEnter={handleMouseEnter}
 				navState={props.navState}
 				onClick={() => {
 					props.setNavState({
@@ -64,7 +64,6 @@ export function NavDropdown(
 
 function NavDropdownContent(
 	props: NavDropdownProps & {
-		handleMouseEnter: () => void;
 		onClick: () => void;
 		navState: NavDropdownState;
 		index: number;
@@ -76,15 +75,8 @@ function NavDropdownContent(
 
 	const isActive = props.navState.isOpen && props.navState.activeDropdownIndex === props.index;
 
-	const state = useRef<{
-		position: 'done' | 'pending';
-	}>({
-		position: 'done',
-	}).current;
-
 	useEffect(() => {
 		if (isActive && dropdownContentRef.current && !positionWasSet) {
-			state.position = 'pending';
 			dropdownContentRef.current.style.left = '0';
 			dropdownContentRef.current.style.right = 'auto';
 
@@ -109,7 +101,6 @@ function NavDropdownContent(
 				}
 				setTimeout(() => {
 					setPositionWasSet(true);
-					state.position = 'done';
 				}, 50);
 			}
 		} else {

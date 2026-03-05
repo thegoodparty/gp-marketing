@@ -1,6 +1,6 @@
 'use client';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Anchor } from '~/ui/Anchor';
 import { IconResolver } from '~/ui/IconResolver';
 import { ComponentButton } from '~/ui/Inputs/Button';
@@ -21,11 +21,37 @@ export type NavDropdownState = {
 export function DesktopNav(props: NavProps) {
 	const pathname = usePathname();
 	const [navState, setNavState] = useState<NavDropdownState>({ isOpen: false, activeDropdownIndex: null });
+	const navRef = useRef<HTMLDivElement>(null);
+	const activeTriggerRef = useRef<HTMLButtonElement | null>(null);
+
+	useEffect(() => {
+		if (!navState.isOpen) return;
+
+		function handleClickOutside(e: MouseEvent) {
+			if (navRef.current && !navRef.current.contains(e.target as Node)) {
+				setNavState({ isOpen: false, activeDropdownIndex: null });
+			}
+		}
+
+		function handleKeyDown(e: KeyboardEvent) {
+			if (e.key === 'Escape') {
+				activeTriggerRef.current?.focus();
+				setNavState({ isOpen: false, activeDropdownIndex: null });
+			}
+		}
+
+		document.addEventListener('mousedown', handleClickOutside);
+		document.addEventListener('keydown', handleKeyDown);
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [navState.isOpen]);
 
 	return (
 		<div className={'hidden md:flex flex-row items-center w-full pointer-events-auto h-[5rem]'}>
 			<div className='flex flex-row items-center justify-between px-[1.5rem] w-full'>
-				<div className='flex flex-row items-center justify-center gap-[1rem]'>
+				<div ref={navRef} className='flex flex-row items-center justify-center gap-[1rem]'>
 					<Anchor
 						aria-label='Go to home page'
 						className='relative z-10 inline-flex flex-row items-center justify-center px-[0.3rem] py-[0.15rem] w-[3rem]'
@@ -46,7 +72,7 @@ export function DesktopNav(props: NavProps) {
 					<ul className={'flex flex-row gap-[1.5rem]'}>
 						{props.nav?.map((item, i) =>
 							'group' in item && item.group ? (
-								<NavDropdown key={`nav-desktop-button-${String(i)}.${item.label?.toString().slice(0, 10)}`} {...item} index={i} navState={navState} setNavState={setNavState} />
+								<NavDropdown key={`nav-desktop-button-${String(i)}.${item.label?.toString().slice(0, 10)}`} {...item} index={i} navState={navState} setNavState={setNavState} activeTriggerRef={activeTriggerRef} />
 							) : (
 								<li key={`nav-desktop-button-${String(i)}.${item.label?.toString().slice(0, 10)}`}>
 									<NavLink
@@ -62,12 +88,6 @@ export function DesktopNav(props: NavProps) {
 							),
 						)}
 					</ul>
-					{navState.isOpen && (
-						<div
-							className='fixed inset-0 z-0'
-							onClick={() => setNavState({ isOpen: false, activeDropdownIndex: null })}
-						/>
-					)}
 				</div>
 				<div className='relative z-10 flex flex-row gap-[1rem] items-center justify-center w-fit'>
 					{props.secondaryCTA && <ComponentButton {...props.secondaryCTA} buttonProps={{ styleType: 'outline-inverse' }} />}

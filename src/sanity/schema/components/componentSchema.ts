@@ -30,6 +30,7 @@ import {component_candidatesBlock} from './component_candidatesBlock.ts'
 import {component_claimProfileBlock} from './component_claimProfileBlock.ts'
 import {component_electionsIndexBlock} from './component_electionsIndexBlock.ts'
 import {component_electionsPositionHero} from './component_electionsPositionHero.ts'
+import {component_electionsPositionContentBlock} from './component_electionsPositionContentBlock.ts'
 import {component_electionsSearchHero} from './component_electionsSearchHero.ts'
 import {component_featuredCitiesBlock} from './component_featuredCitiesBlock.ts'
 import {component_goodPartyOrgPledge} from './component_goodPartyOrgPledge.ts'
@@ -72,6 +73,7 @@ component_candidatesBlock,
 component_claimProfileBlock,
 component_electionsIndexBlock,
 component_electionsPositionHero,
+	component_electionsPositionContentBlock,
 component_electionsSearchHero,
 component_featuredCitiesBlock,
 component_goodPartyOrgPledge,

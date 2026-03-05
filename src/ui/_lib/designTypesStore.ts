@@ -38,6 +38,7 @@ export const buttonStyleTypeValues = [
 	'min-ghost',
 	'min-ghost-inverse',
 ] as const;
+export const defaultCtaButtonStyleType = 'secondary' as const;
 export const iconColorValues = ['red', 'waxflower', 'bright-yellow', 'halo-green', 'blue', 'lavender', 'white', 'mixed'] as const;
 export const colorTypeValues = ['blue', 'red', 'waxflower', 'bright-yellow', 'halo-green', 'lavender', 'inverse'] as const;
 export const componentColorValues = [

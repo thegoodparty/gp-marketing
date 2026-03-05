@@ -16,6 +16,7 @@ import { CTAImageBlockSection } from '~/PageSections/CTAImageBlockSection';
 import { FAQBlockSection } from '~/PageSections/FAQBlockSection';
 import { FeaturedBlogBlockSection } from '~/PageSections/FeaturedBlogBlockSection';
 import { FeaturesBlockSection } from '~/PageSections/FeaturesBlockSection';
+import { JobOpeningsBlockSection } from '~/PageSections/JobOpeningsBlockSection';
 import { HeroBlockSection } from '~/PageSections/HeroBlockSection';
 import { HeroWithSubscribeBlockSection } from '~/PageSections/HeroWithSubscribeBlockSection';
 import { ProfileHeroSection } from '~/PageSections/ProfileHeroSection';
@@ -150,6 +151,12 @@ export function PageSections(props: Props) {
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Features Block'>
 								<FeaturesBlockSection {...section} />
+							</ComponentErrorBoundary>
+						);
+					case 'component_jobOpeningsBlock':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Job Openings Block'>
+								<JobOpeningsBlockSection {...section} />
 							</ComponentErrorBoundary>
 						);
 					case 'component_hero':

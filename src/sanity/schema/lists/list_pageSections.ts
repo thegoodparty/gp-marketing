@@ -51,6 +51,7 @@ export const list_pageSections = {
             'component_imageContentBlock',
             'component_tabbedImageBlock',
             'component_featuresBlock',
+            'component_jobOpeningsBlock',
             'component_faqBlock',
             'component_profileContentBlock',
           ],
@@ -102,6 +103,7 @@ export const list_pageSections = {
             'component_iconContentBlock',
             'component_imageContentBlock',
             'component_featuresBlock',
+            'component_jobOpeningsBlock',
             'component_electionsIndexBlock',
           ],
         },
@@ -125,6 +127,7 @@ export const list_pageSections = {
           of: [
             'component_pricingBlock',
             'component_featuresBlock',
+            'component_jobOpeningsBlock',
           ],
         },
         {
@@ -212,6 +215,10 @@ export const list_pageSections = {
     {
       title: 'Features Block',
       type: 'component_featuresBlock',
+    },
+    {
+      title: 'Job Openings Block',
+      type: 'component_jobOpeningsBlock',
     },
     {
       title: 'Team Block',

@@ -1,3 +1,4 @@
+import { component_jobOpeningsBlock } from './component_jobOpeningsBlock.ts';
 import {component_featuresBlock} from './component_featuresBlock.ts'
 import {component_stepperBlock} from './component_stepperBlock.ts'
 import {component_statsBlock} from './component_statsBlock.ts'
@@ -39,6 +40,7 @@ import {component_listOfOfficesBlock} from './component_listOfOfficesBlock.ts'
 import {component_embeddedBlock} from './component_embeddedBlock.ts'
 
 export const componentSchema = [
+	component_jobOpeningsBlock,
 component_featuresBlock,
 component_stepperBlock,
 component_statsBlock,

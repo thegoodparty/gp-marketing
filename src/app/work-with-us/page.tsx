@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { getAshbyJobs } from '~/lib/ashby';
-import { JobListingBlock } from '~/ui/JobListingBlock';
+import { getAshbyJobs, ashbyJobToCard } from '~/lib/ashby';
+import { JobOpeningsBlock } from '~/ui/JobOpeningsBlock';
 
 export const metadata: Metadata = {
 	title: 'Work With Us | GoodParty.org',
@@ -16,14 +16,13 @@ export default async function WorkWithUsPage() {
 	}
 
 	return (
-		<JobListingBlock
-			backgroundColor='cream'
+		<JobOpeningsBlock
 			header={{
 				label: 'Careers',
 				title: 'Work With Us',
 				copy: 'Join our team and help make democracy more accessible.',
 			}}
-			jobs={jobs}
+			cards={jobs.map(ashbyJobToCard)}
 		/>
 	);
 }

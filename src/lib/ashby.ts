@@ -1,5 +1,6 @@
 import { unstable_cache } from 'next/cache';
 import { ashbyJobBoardName } from '~/lib/env';
+import type { JobOpeningsCardProps } from '~/ui/JobOpeningsCard';
 
 export interface AshbyJob {
 	title: string;
@@ -86,3 +87,24 @@ export const getAshbyJobs = unstable_cache(
 	['ashby-jobs'],
 	{ revalidate: 3600 },
 );
+
+function formatEmploymentType(type: string): string {
+	const map: Record<string, string> = {
+		FullTime: 'Full-Time',
+		PartTime: 'Part-Time',
+		Intern: 'Internship',
+		Contract: 'Contract',
+		Temporary: 'Temporary',
+	};
+	return map[type] ?? type;
+}
+
+export function ashbyJobToCard(job: AshbyJob): JobOpeningsCardProps {
+	return {
+		title: job.title,
+		tag: job.department || 'General',
+		location: job.isRemote ? 'Remote (United States)' : job.location,
+		jobType: formatEmploymentType(job.employmentType),
+		href: job.applyUrl,
+	};
+}

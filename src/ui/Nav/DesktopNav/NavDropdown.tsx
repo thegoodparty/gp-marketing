@@ -19,6 +19,7 @@ export function NavDropdown(
 		index: number;
 		navState: NavDropdownState;
 		setNavState: React.Dispatch<React.SetStateAction<NavDropdownState>>;
+		activeTriggerRef?: React.RefObject<HTMLButtonElement | null>;
 	},
 ) {
 	// Check if this specific dropdown is active using the index
@@ -36,8 +37,15 @@ export function NavDropdown(
 	};
 
 	return (
-		<li key={`nav-link-${props.label}`} onClick={handleClick}>
-			<div className={cn(link(), 'cursor-pointer')}>
+		<li>
+			<button
+				type='button'
+				className={cn(link(), 'cursor-pointer bg-transparent border-0 p-0')}
+				onClick={handleClick}
+				ref={(el) => {
+					if (isActive && props.activeTriggerRef) props.activeTriggerRef.current = el;
+				}}
+			>
 				<Text styleType='text-md' className='font-semibold'>
 					{props.label}
 				</Text>
@@ -46,7 +54,7 @@ export function NavDropdown(
 					className='ml-2 transition-transform duration-[0.25s] ease-smooth'
 					style={{ transform: isActive ? 'rotate(180deg)' : 'rotate(0deg)' }}
 				/>
-			</div>
+			</button>
 
 			<NavDropdownContent
 				{...props}
@@ -80,32 +88,31 @@ function NavDropdownContent(
 			dropdownContentRef.current.style.left = '0';
 			dropdownContentRef.current.style.right = 'auto';
 
-			if (dropdownContentRef.current) {
-				const leftOffset = getLeftOffset(dropdownContentRef.current);
-				const viewportWidth = window.innerWidth;
-				const width = dropdownContentRef.current.children?.[0]?.clientWidth ?? 0;
+			const leftOffset = getLeftOffset(dropdownContentRef.current);
+			const viewportWidth = window.innerWidth;
+			const width = dropdownContentRef.current.children?.[0]?.clientWidth ?? 0;
 
-				const rightOffset = viewportWidth - leftOffset - width;
+			const rightOffset = viewportWidth - leftOffset - width;
 
-				if (rightOffset < 0) {
-					dropdownContentRef.current.style.left = `calc(${rightOffset}px - 40px)`;
-					dropdownContentRef.current.style.right = 'auto';
+			if (rightOffset < 0) {
+				dropdownContentRef.current.style.left = `calc(${rightOffset}px - 40px)`;
+				dropdownContentRef.current.style.right = 'auto';
+			} else {
+				if (leftOffset < 0) {
+					dropdownContentRef.current.style.left = 'auto';
+					dropdownContentRef.current.style.right = `calc(${leftOffset}px - 40px)`;
 				} else {
-					if (leftOffset < 0) {
-						dropdownContentRef.current.style.left = 'auto';
-						dropdownContentRef.current.style.right = `calc(${leftOffset}px - 40px)`;
-					} else {
-						dropdownContentRef.current.style.left = '0';
-						dropdownContentRef.current.style.right = 'auto';
-					}
+					dropdownContentRef.current.style.left = '0';
+					dropdownContentRef.current.style.right = 'auto';
 				}
-				setTimeout(() => {
-					setPositionWasSet(true);
-				}, 50);
 			}
+			requestAnimationFrame(() => {
+				setPositionWasSet(true);
+			});
 		} else {
 			if (!isActive && positionWasSet) setPositionWasSet(false);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps -- dropdownContentRef is stable; getLeftOffset is pure
 	}, [isActive, positionWasSet]);
 
 	return (

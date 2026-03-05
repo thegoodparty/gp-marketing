@@ -22,6 +22,7 @@ export function DesktopNav(props: NavProps) {
 	const pathname = usePathname();
 	const [navState, setNavState] = useState<NavDropdownState>({ isOpen: false, activeDropdownIndex: null });
 	const navRef = useRef<HTMLDivElement>(null);
+	const activeTriggerRef = useRef<HTMLButtonElement | null>(null);
 
 	useEffect(() => {
 		if (!navState.isOpen) return;
@@ -34,6 +35,7 @@ export function DesktopNav(props: NavProps) {
 
 		function handleKeyDown(e: KeyboardEvent) {
 			if (e.key === 'Escape') {
+				activeTriggerRef.current?.focus();
 				setNavState({ isOpen: false, activeDropdownIndex: null });
 			}
 		}
@@ -70,7 +72,7 @@ export function DesktopNav(props: NavProps) {
 					<ul className={'flex flex-row gap-[1.5rem]'}>
 						{props.nav?.map((item, i) =>
 							'group' in item && item.group ? (
-								<NavDropdown key={`nav-desktop-button-${String(i)}.${item.label?.toString().slice(0, 10)}`} {...item} index={i} navState={navState} setNavState={setNavState} />
+								<NavDropdown key={`nav-desktop-button-${String(i)}.${item.label?.toString().slice(0, 10)}`} {...item} index={i} navState={navState} setNavState={setNavState} activeTriggerRef={activeTriggerRef} />
 							) : (
 								<li key={`nav-desktop-button-${String(i)}.${item.label?.toString().slice(0, 10)}`}>
 									<NavLink

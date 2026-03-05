@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { cn, tv } from './_lib/utils.ts';
-import { type backgroundTypeValues, buttonStyleTypeValues } from './_lib/designTypesStore.ts';
+import { type backgroundTypeValues, defaultCtaButtonStyleType } from './_lib/designTypesStore.ts';
 import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
 import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
@@ -11,7 +11,7 @@ const styles = tv({
 	slots: {
 		base: 'py-(--container-padding)',
 		grid: 'grid lg:grid-cols-[auto_1fr] gap-20',
-		card: 'bg-white rounded-lg border border-neutral-200 p-4 md:p-6 lg:p-8 flex flex-col gap-3 md:gap-4 order-2 lg:order-1 w-fit self-start md:min-w-[400px]',
+		card: 'bg-white rounded-lg border border-neutral-200 p-4 md:p-6 lg:p-8 flex flex-col gap-3 md:gap-4 order-2 lg:order-1 w-fit self-start lg:min-w-[400px]',
 		cardContent: 'flex flex-col gap-8',
 		buttonContainer: 'w-fit',
 		rightContent: 'flex flex-col gap-8 order-1 lg:order-2',
@@ -26,7 +26,7 @@ const styles = tv({
 			midnight: {
 				base: 'bg-midnight-900',
 				rightContent: 'text-white',
-				card: 'bg-white',
+				card: 'bg-white text-midnight-900',
 				separator: 'border-neutral-700',
 			},
 			cream: {
@@ -69,7 +69,7 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 
 	const resolvedButtonStyle = props.card?.primaryCTA
 		? resolveButtonStyleType(
-				props.card.primaryCTA.buttonProps?.styleType ?? buttonStyleTypeValues[1],
+				props.card.primaryCTA.buttonProps?.styleType ?? defaultCtaButtonStyleType,
 				backgroundColor,
 			)
 		: undefined;
@@ -94,13 +94,13 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 									)}
 									{Array.isArray(props.card.bodyCopy) ? (
 										<div className='flex flex-col gap-8'>
-											{props.card.bodyCopy.map((copy, index) =>
-												isValidRichText(copy) ? (
+											{props.card.bodyCopy
+												.filter((copy): copy is NonNullable<typeof copy> => Boolean(isValidRichText(copy)))
+												.map((copy, index) => (
 													<Text key={index} styleType='body-1'>
 														{copy}
 													</Text>
-												) : null,
-											)}
+												))}
 										</div>
 									) : isValidRichText(props.card.bodyCopy) ? (
 										<Text styleType='body-1'>{props.card.bodyCopy}</Text>

@@ -18,13 +18,7 @@ export const component_electionsPositionContentBlock = {
 				{
 					title: 'Background Color',
 					name: 'field_blockColorCreamMidnight',
-					type: 'string',
-					options: {
-						list: [
-							{ title: 'Cream', value: 'Cream' },
-							{ title: 'Midnight', value: 'MidnightDark' },
-						],
-					},
+					type: 'field_blockColorCreamMidnight',
 				},
 			],
 			group: 'electionsPositionContentBlockDesignSettings',

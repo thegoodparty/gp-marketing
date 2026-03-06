@@ -9,7 +9,7 @@ import { isValidRichText } from './_lib/isValidRichText.ts';
 const styles = tv({
 	slots: {
 		base: 'py-(--container-padding)',
-		grid: 'grid lg:grid-cols-[auto_1fr] gap-20',
+		grid: 'grid lg:grid-cols-[400px_1fr] gap-20',
 		card: 'bg-white rounded-lg border border-neutral-200 p-4 md:p-6 lg:p-8 flex flex-col gap-3 md:gap-4 order-2 lg:order-1 w-fit self-start min-w-[400px]',
 		cardContent: 'flex flex-col gap-8',
 		buttonContainer: 'w-fit',

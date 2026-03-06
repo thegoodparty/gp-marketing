@@ -1,39 +1,39 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getPositionById } from '~/lib/electionsApi';
+import { getRaceBySlug } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
+	buildRaceSlug,
 	formatElectionDateFromApi,
-	formatFilingPeriod,
+	formatFilingPeriodFromRace,
 	getStateName,
 } from '~/lib/electionsHelpers';
 import { PositionPageContent } from '~/ui/PositionPageContent';
 
 export default async function Page({
 	params,
-	searchParams,
 }: {
-	params: Promise<{ state: string }>;
-	searchParams: Promise<{ positionId?: string; name?: string }>;
+	params: Promise<{ state: string; positionSlug: string }>;
 }) {
-	const { state } = await params;
-	const { positionId, name: nameParam } = await searchParams;
+	const { state, positionSlug } = await params;
 
-	if (!isValidStateCode(state) || !positionId) {
+	if (!isValidStateCode(state)) {
+		notFound();
+	}
+
+	const raceSlug = buildRaceSlug(state, positionSlug);
+	const race = await getRaceBySlug(raceSlug);
+
+	if (!race) {
 		notFound();
 	}
 
 	const stateName = getStateName(state);
-	const position = await getPositionById(positionId);
+	const officeName = race.normalizedPositionName ?? race.name ?? 'Position';
+	const electionDate = formatElectionDateFromApi(race.electionDate);
+	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 
-	const officeName =
-		position?.position?.name ??
-		position?.name ??
-		(typeof nameParam === 'string' ? decodeURIComponent(nameParam) : 'Position');
-	const electionDate = formatElectionDateFromApi(position?.election?.electionDay);
-	const filingDate = formatFilingPeriod(position?.filingPeriods);
-
-	const candidatesHref = `/elections/${state}/position/candidates?positionId=${encodeURIComponent(positionId)}`;
+	const candidatesHref = `/elections/${state.toLowerCase()}/position/${positionSlug}/candidates`;
 
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
@@ -45,29 +45,28 @@ export default async function Page({
 		<PositionPageContent
 			officeName={officeName}
 			stateName={stateName}
-			electionDate={electionDate || 'TBD'}
+			electionDate={electionDate}
 			filingDate={filingDate}
 			breadcrumbs={breadcrumbs}
 			backHref={`/elections/${state.toLowerCase()}`}
 			backLabel={`Back to ${stateName} elections`}
 			candidatesHref={candidatesHref}
+			race={race}
 		/>
 	);
 }
 
 export async function generateMetadata({
 	params,
-	searchParams,
 }: {
-	params: Promise<{ state: string }>;
-	searchParams: Promise<{ positionId?: string; name?: string }>;
+	params: Promise<{ state: string; positionSlug: string }>;
 }): Promise<Metadata> {
-	const { state } = await params;
-	const { name } = await searchParams;
+	const { state, positionSlug } = await params;
 	if (!isValidStateCode(state)) return {};
 	const stateName = getStateName(state);
-	const positionName =
-		typeof name === 'string' ? decodeURIComponent(name) : 'Position';
+	const raceSlug = buildRaceSlug(state, positionSlug);
+	const race = await getRaceBySlug(raceSlug);
+	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
 	return {
 		title: `${positionName} in ${stateName} | Good Party`,
 		description: `Election details and candidates for ${positionName} in ${stateName}.`,

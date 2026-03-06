@@ -7,6 +7,7 @@ import type {
 	PlaceItem,
 	PlaceWithFacts,
 	PositionDetail,
+	RaceDetail,
 	RaceNode,
 } from '~/types/elections';
 
@@ -82,13 +83,28 @@ export async function getPositionById(id: string): Promise<PositionDetail | null
 	return fetchJson<PositionDetail>(url, CACHE_OPTIONS);
 }
 
+export async function getRaceBySlug(
+	raceSlug: string,
+	includePlace = true,
+): Promise<RaceDetail | null> {
+	const searchParams = new URLSearchParams({
+		raceSlug,
+		includePlace: includePlace.toString(),
+	});
+	const url = `${BASE_URL}/v1/races?${searchParams}`;
+	const data = await fetchJson<RaceDetail[]>(url, CACHE_OPTIONS);
+	return Array.isArray(data) && data.length > 0 ? (data[0] ?? null) : null;
+}
+
 export async function getCandidacies(params: {
 	raceId?: string;
 	positionId?: string;
+	raceSlug?: string;
 }): Promise<CandidacyItem[]> {
 	const searchParams = new URLSearchParams();
 	if (params.raceId) searchParams.set('raceId', params.raceId);
 	if (params.positionId) searchParams.set('positionId', params.positionId);
+	if (params.raceSlug) searchParams.set('raceSlug', params.raceSlug);
 	if (searchParams.toString() === '') return [];
 	const url = `${BASE_URL}/v1/candidacies?${searchParams}`;
 	const data = await fetchJson<CandidacyItem[]>(url);
@@ -146,6 +162,7 @@ export async function getPlaceBySlug(params: {
 	includeChildren?: boolean;
 	includeRaces?: boolean;
 	placeColumns?: string;
+	raceColumns?: string;
 }): Promise<PlaceWithFacts | null> {
 	const searchParams = new URLSearchParams({
 		slug: params.slug,
@@ -153,7 +170,8 @@ export async function getPlaceBySlug(params: {
 		includeRaces: (params.includeRaces ?? false).toString(),
 	});
 	if (params.placeColumns) searchParams.set('placeColumns', params.placeColumns);
+	if (params.raceColumns) searchParams.set('raceColumns', params.raceColumns);
 	const url = `${BASE_URL}/v1/places?${searchParams}`;
 	const data = await fetchJson<PlaceWithFacts[]>(url, CACHE_OPTIONS);
-	return Array.isArray(data) && data.length > 0 ? data[0] : null;
+	return Array.isArray(data) && data.length > 0 ? (data[0] ?? null) : null;
 }

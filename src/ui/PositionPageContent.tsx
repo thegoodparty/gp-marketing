@@ -1,7 +1,9 @@
 import Link from 'next/link';
+import type { RaceDetail } from '~/types/elections';
 import { BreadcrumbBlock, type BreadcrumbItem } from '~/ui/BreadcrumbBlock';
 import { ElectionsPositionHero } from '~/ui/ElectionsPositionHero';
-import { ElectionsSidebar } from '~/ui/ElectionsSidebar';
+import { ElectionsSidebar, type SidebarLink } from '~/ui/ElectionsSidebar';
+import { ElectionsPositionContentBlock } from '~/ui/ElectionsPositionContentBlock';
 import { Container } from '~/ui/Container';
 
 export type PositionPageContentProps = {
@@ -15,7 +17,36 @@ export type PositionPageContentProps = {
 	backHref: string;
 	backLabel: string;
 	candidatesHref: string;
+	race?: RaceDetail | null;
 };
+
+function buildSidebarLinks(race: RaceDetail): SidebarLink[] {
+	const links: SidebarLink[] = [];
+	if (race.filingOfficeAddress) {
+		links.push({ label: 'Filing Office', href: `https://maps.google.com/?q=${encodeURIComponent(race.filingOfficeAddress)}`, icon: 'MapPin' });
+	}
+	if (race.filingPhoneNumber) {
+		links.push({ label: 'Filing Phone', href: `tel:${race.filingPhoneNumber}`, icon: 'Phone' });
+	}
+	return links;
+}
+
+function buildGridItems(race: RaceDetail) {
+	const items: { subhead: string; bodyCopy: string }[] = [];
+	if (race.employmentType) items.push({ subhead: 'Employment Type', bodyCopy: race.employmentType });
+	if (race.salary) items.push({ subhead: 'Salary', bodyCopy: race.salary });
+	if (race.partisanType) items.push({ subhead: 'Partisan Type', bodyCopy: race.partisanType });
+	if (race.frequency?.length) items.push({ subhead: 'Election Frequency', bodyCopy: race.frequency.join(', ') });
+	return items;
+}
+
+function buildBottomItems(race: RaceDetail) {
+	const items: { headline: string; bodyCopy: string }[] = [];
+	if (race.eligibilityRequirements) items.push({ headline: 'Eligibility Requirements', bodyCopy: race.eligibilityRequirements });
+	if (race.filingRequirements) items.push({ headline: 'Filing Requirements', bodyCopy: race.filingRequirements });
+	if (race.paperworkInstructions) items.push({ headline: 'Paperwork Instructions', bodyCopy: race.paperworkInstructions });
+	return items;
+}
 
 export function PositionPageContent(props: PositionPageContentProps) {
 	const {
@@ -29,7 +60,16 @@ export function PositionPageContent(props: PositionPageContentProps) {
 		backHref,
 		backLabel,
 		candidatesHref,
+		race,
 	} = props;
+
+	const sidebarLinks = race ? buildSidebarLinks(race) : [];
+	const aboutOffice = race?.positionDescription;
+	const termLength = race?.frequency?.length ? race.frequency.join(', ') : undefined;
+
+	const gridItems = race ? buildGridItems(race) : [];
+	const bottomItems = race ? buildBottomItems(race) : [];
+	const hasContentBlock = gridItems.length > 0 || bottomItems.length > 0;
 
 	return (
 		<>
@@ -53,6 +93,9 @@ export function PositionPageContent(props: PositionPageContentProps) {
 				<div className="grid lg:grid-cols-[minmax(400px,auto)_1fr] gap-[80px]">
 					<aside className="sticky top-4 self-start">
 						<ElectionsSidebar
+							links={sidebarLinks.length > 0 ? sidebarLinks : undefined}
+							aboutOffice={aboutOffice}
+							termLength={termLength}
 							electionDate={electionDate !== 'TBD' ? electionDate : undefined}
 							cta={{
 								buttonType: 'internal',
@@ -71,6 +114,29 @@ export function PositionPageContent(props: PositionPageContentProps) {
 					</div>
 				</div>
 			</Container>
+			{hasContentBlock && (
+				<ElectionsPositionContentBlock
+					backgroundColor="cream"
+					card={
+						race?.positionDescription
+							? {
+									headline: officeName,
+									subhead: 'About this position',
+									bodyCopy: race.positionDescription,
+									primaryCTA: {
+										buttonType: 'internal',
+										href: candidatesHref,
+										label: 'View candidates',
+										buttonProps: { styleType: 'secondary' },
+									},
+								}
+							: undefined
+					}
+					topHeadline="Position Details"
+					gridItems={gridItems}
+					bottomItems={bottomItems}
+				/>
+			)}
 		</>
 	);
 }

@@ -44,6 +44,44 @@ export function getStateName(code: string): string {
 	return found?.label ?? code;
 }
 
+export function slugifyPositionName(name: string): string {
+	return name
+		.toLowerCase()
+		.replace(/[^a-z0-9\s-]/g, '')
+		.replace(/\s+/g, '-')
+		.replace(/-+/g, '-')
+		.replace(/^-|-$/g, '');
+}
+
+export function buildRaceSlug(
+	state: string,
+	positionSlug: string,
+	county?: string,
+	municipality?: string,
+): string {
+	const parts = [state.toLowerCase()];
+	if (county) parts.push(county.toLowerCase());
+	if (municipality) parts.push(municipality.toLowerCase());
+	parts.push(positionSlug);
+	return parts.join('/');
+}
+
+export function formatFilingPeriodFromRace(
+	start: string | undefined,
+	end: string | undefined,
+): string {
+	if (!start && !end) return 'TBD';
+	const fmt = (d: string) =>
+		new Date(d).toLocaleDateString('en-US', {
+			month: 'long',
+			day: 'numeric',
+			year: 'numeric',
+		});
+	if (start && end) return `${fmt(start)} - ${fmt(end)}`;
+	if (start) return `From ${fmt(start)}`;
+	return `Until ${fmt(end!)}`;
+}
+
 export function placeToFactsCards(place: PlaceWithFacts | null): FactsCardProps[] {
 	if (!place) return [];
 	const cards: FactsCardProps[] = [];

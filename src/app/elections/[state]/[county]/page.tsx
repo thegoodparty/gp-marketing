@@ -17,7 +17,7 @@ import {
 } from '~/constants/electionsStaticSections';
 import { sanityFetch } from '~/sanity/sanityClient';
 import { quoteCollectionByIdQuery } from '~/sanity/groq';
-import { formatElectionDate, getStateName, placeToFactsCards } from '~/lib/electionsHelpers';
+import { formatElectionDate, getStateName, placeToFactsCards, slugifyPositionName } from '~/lib/electionsHelpers';
 import { resolveAuthor } from '~/ui/_lib/resolveAuthor';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 import { BreadcrumbBlock } from '~/ui/BreadcrumbBlock';
@@ -123,7 +123,7 @@ export default async function Page({
 						type: dt.L2DistrictType,
 						position: n.L2DistrictName,
 						nextElectionDate: formatElectionDate(electionYear),
-						href: `/elections/${fullSlug}/position?positionId=${encodeURIComponent(n.id)}&name=${encodeURIComponent(n.L2DistrictName)}`,
+						href: `/elections/${fullSlug}/position/${slugifyPositionName(n.L2DistrictName)}`,
 					})),
 			),
 		),

@@ -12,6 +12,7 @@ import { IconResolver } from './IconResolver.tsx';
 import { ArrowRightIcon } from './icons/ArrowRightIcon.tsx';
 import { Button } from './Inputs/Button.tsx';
 import { DEFAULT_YEAR_OFFSET } from '~/constants/display';
+import { formatElectionDateFromApi } from '~/lib/electionsHelpers';
 
 const styles = tv({
 	slots: {
@@ -232,7 +233,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 															<Text styleType="body-2" className={positionText()}>{office.position}</Text>
 														</div>
 													<div className={dateCell()}>
-														<Text styleType="body-2" className={dateText()}>{office.nextElectionDate}</Text>
+														<Text styleType="body-2" className={dateText()}>{formatElectionDateFromApi(office.nextElectionDate)}</Text>
 													</div>
 													<div className={tableCell()}>
 														<ArrowRightIcon size={32} className={arrowIcon()} innerClassName="group-hover:animate-slide-in-right" />
@@ -270,7 +271,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 												<div className={cardLeft()}>
 													<span className={typeTag()}>{office.type}</span>
 													<Text styleType="body-2" className={positionText()}>{office.position}</Text>
-													<Text styleType="body-2" className={dateText()}>{office.nextElectionDate}</Text>
+													<Text styleType="body-2" className={dateText()}>{formatElectionDateFromApi(office.nextElectionDate)}</Text>
 												</div>
 												<div className={cardRight()}>
 													<ArrowRightIcon size={32} className={arrowIcon()} innerClassName="group-hover:animate-slide-in-right" />

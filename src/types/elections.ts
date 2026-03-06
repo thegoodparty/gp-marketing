@@ -34,11 +34,41 @@ export interface DistrictNameItem {
 
 export interface CandidacyItem {
 	id: string;
+	slug?: string;
 	firstName?: string;
 	lastName?: string;
+	image?: string;
 	party?: string;
 	raceId?: string;
 	positionId?: string;
+}
+
+export interface RaceDetail {
+	id: number | string;
+	slug: string;
+	name: string;
+	state: string;
+	normalizedPositionName?: string;
+	positionDescription?: string;
+	positionLevel?: string;
+	positionNames?: string[];
+	electionDate?: string;
+	frequency?: string[];
+	filingDateStart?: string;
+	filingDateEnd?: string;
+	employmentType?: string;
+	salary?: string;
+	eligibilityRequirements?: string;
+	filingOfficeAddress?: string;
+	filingPhoneNumber?: string;
+	paperworkInstructions?: string;
+	filingRequirements?: string;
+	isRunoff?: boolean;
+	isPrimary?: boolean;
+	partisanType?: string;
+	Place?: PlaceWithFacts & {
+		parent?: { name: string; slug: string; state: string; geoId?: string };
+	};
 }
 
 export interface PositionDetail {
@@ -82,6 +112,16 @@ export interface FeaturedCity {
 	race_count: number;
 }
 
+export interface PlaceRace {
+	id: number | string;
+	slug: string;
+	normalizedPositionName?: string;
+	name?: string;
+	positionLevel?: string;
+	positionDescription?: string;
+	electionDate?: string;
+}
+
 export interface PlaceItem {
 	id: string;
 	name: string;
@@ -98,4 +138,5 @@ export interface PlaceWithFacts extends PlaceItem {
 	incomeHouseholdMedian?: number;
 	unemploymentRate?: number;
 	homeValue?: number;
+	Races?: PlaceRace[];
 }

@@ -1,13 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import {
-	getDistrictTypes,
-	getDistrictNames,
-	getPlacesByState,
-	getPlaceBySlug,
-} from '~/lib/electionsApi';
+import { getPlacesByState, getPlaceBySlug } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
-import { DEFAULT_DISPLAY_COUNT, DEFAULT_YEAR_OFFSET } from '~/constants/display';
+import { DEFAULT_DISPLAY_COUNT } from '~/constants/display';
 import {
 	CAROUSEL_QUOTE_COLLECTION_ID,
 	CAROUSEL_HEADER,
@@ -16,7 +11,7 @@ import {
 } from '~/constants/electionsStaticSections';
 import { sanityFetch } from '~/sanity/sanityClient';
 import { quoteCollectionByIdQuery } from '~/sanity/groq';
-import { formatElectionDate, getStateName, placeToFactsCards } from '~/lib/electionsHelpers';
+import { getStateName, placeToFactsCards } from '~/lib/electionsHelpers';
 import { resolveAuthor } from '~/ui/_lib/resolveAuthor';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 import { BreadcrumbBlock } from '~/ui/BreadcrumbBlock';
@@ -40,15 +35,16 @@ export default async function Page({
 	}
 
 	const stateName = getStateName(stateCode);
-	const electionYear = new Date().getFullYear() + DEFAULT_YEAR_OFFSET;
+	const currentYear = new Date().getFullYear();
 
-	const [districtTypes, countyPlaces, placeData, quoteCollection] = await Promise.all([
-		getDistrictTypes({
-			state: stateCode,
-			electionYear,
-		}),
+	const [countyPlaces, placeData, quoteCollection] = await Promise.all([
 		getPlacesByState({ state: stateCode, mtfcc: 'G4020' }),
-		getPlaceBySlug({ slug: state.toLowerCase(), includeChildren: false, includeRaces: false }),
+		getPlaceBySlug({
+			slug: state.toLowerCase(),
+			includeChildren: false,
+			includeRaces: true,
+			raceColumns: 'slug,normalizedPositionName,electionDate,positionDescription,positionLevel',
+		}),
 		sanityFetch({
 			query: quoteCollectionByIdQuery,
 			params: { id: CAROUSEL_QUOTE_COLLECTION_ID },
@@ -81,29 +77,35 @@ export default async function Page({
 		textSize: resolveTextSize('Medium'),
 	};
 
-	const countyTypes = districtTypes.filter(dt =>
-		dt.L2DistrictType.toUpperCase().includes('COUNTY'),
+	const stateRaces = (placeData?.Races ?? []).filter(
+		r => r.positionLevel?.toUpperCase() === 'STATE',
 	);
+	const stateOffices = stateRaces.map(race => {
+		const positionSlug = race.slug.split('/').slice(1).join('/');
+		return {
+			id: String(race.id),
+			type: 'State',
+			position: race.normalizedPositionName ?? race.name ?? 'Position',
+			nextElectionDate: race.electionDate ?? '',
+			href: `/elections/${state}/position/${positionSlug}`,
+		};
+	});
 
-	const districtNamesByType = await Promise.all(
-		countyTypes.map(async dt =>
-			getDistrictNames({
-				L2DistrictType: dt.L2DistrictType,
-				state: stateCode,
-				electionYear,
-			}).then(names =>
-				names.map(n => ({
-					id: n.id,
-					type: dt.L2DistrictType,
-					position: n.L2DistrictName,
-					nextElectionDate: formatElectionDate(electionYear),
-					href: `/elections/${state}/position?positionId=${encodeURIComponent(n.id)}&name=${encodeURIComponent(n.L2DistrictName)}`,
-				})),
-			),
+	const dataYears = [
+		...new Set(
+			stateRaces
+				.map(r => (r.electionDate ? new Date(r.electionDate).getFullYear() : NaN))
+				.filter((y): y is number => !isNaN(y)),
 		),
-	);
+	].sort((a, b) => a - b);
 
-	const offices = districtNamesByType.flat();
+	const defaultYear = dataYears.includes(currentYear)
+		? currentYear
+		: (dataYears[0] ?? currentYear);
+	const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
+	const countForDefaultYear = stateOffices.filter(
+		o => o.nextElectionDate && new Date(o.nextElectionDate).getFullYear() === defaultYear,
+	).length;
 
 	return (
 		<>
@@ -113,16 +115,11 @@ export default async function Page({
 				stateName={stateName}
 			/>
 			<ListOfOfficesBlock
-				heading={`County Elections in ${stateName}`}
-				headline={`${offices.length} county positions up for election in ${electionYear}`}
-				defaultYear={electionYear}
-				availableYears={[
-					electionYear - 2,
-					electionYear - 1,
-					electionYear,
-					electionYear + 1,
-				]}
-				offices={offices}
+				heading={`State Elections in ${stateName}`}
+				headline={`${countForDefaultYear} state positions up for election in ${defaultYear}`}
+				defaultYear={defaultYear}
+				availableYears={availableYears}
+				offices={stateOffices}
 			/>
 			{factsCards.length > 0 && (
 				<LocationFactsBlock

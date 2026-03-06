@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 
 import { cn, tv } from './_lib/utils.ts';
 import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
@@ -10,6 +10,7 @@ import { Text } from './Text.tsx';
 import { Anchor } from './Anchor.tsx';
 import { IconResolver } from './IconResolver.tsx';
 import { ArrowRightIcon } from './icons/ArrowRightIcon.tsx';
+import { Button } from './Inputs/Button.tsx';
 import { DEFAULT_YEAR_OFFSET } from '~/constants/display';
 
 const styles = tv({
@@ -50,6 +51,7 @@ const styles = tv({
 		cardLeft: 'flex-1 flex flex-col gap-2',
 		cardRight: 'flex-shrink-0 self-end',
 		desktopTable: 'hidden md:block',
+		showMoreWrapper: 'flex justify-center pt-4',
 	},
 	variants: {
 		backgroundColor: {
@@ -96,6 +98,7 @@ export interface ListOfOfficesBlockProps {
 	headline?: string;
 	defaultYear?: number;
 	availableYears?: number[];
+	pageSize?: number;
 	offices: OfficeItem[];
 	onYearChange?: (year: number) => void;
 	onOfficeClick?: (office: OfficeItem) => void;
@@ -105,8 +108,10 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
 	const defaultYear = props.defaultYear ?? new Date().getFullYear() + DEFAULT_YEAR_OFFSET;
 	const availableYears = props.availableYears ?? [defaultYear - 4, defaultYear - 3, defaultYear - 2, defaultYear - 1, defaultYear];
+	const pageSize = props.pageSize ?? 10;
 
 	const [selectedYear, setSelectedYear] = useState(defaultYear);
+	const [visibleCount, setVisibleCount] = useState(pageSize);
 
 	const {
 		base,
@@ -138,6 +143,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 		cardLeft,
 		cardRight,
 		desktopTable,
+		showMoreWrapper,
 	} = styles({ backgroundColor });
 
 	// Filter offices by selected year (extract year from date string)
@@ -148,9 +154,17 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 		});
 	}, [props.offices, selectedYear]);
 
+	const visibleOffices = filteredOffices.slice(0, visibleCount);
+	const hasMore = visibleCount < filteredOffices.length;
+
+	useEffect(() => {
+		setVisibleCount(pageSize);
+	}, [pageSize]);
+
 	const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const year = parseInt(e.target.value, 10);
 		setSelectedYear(year);
+		setVisibleCount(pageSize);
 		props.onYearChange?.(year);
 	};
 
@@ -208,7 +222,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 											<div className={tableHeaderCell()} aria-label="Actions"></div>
 										</div>
 										<div className={tableBody()}>
-											{filteredOffices.map(office => {
+											{visibleOffices.map(office => {
 												const RowContent = (
 													<>
 														<div className={tableCell()}>
@@ -250,7 +264,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 
 								{/* Mobile Card Layout */}
 								<div className={cardList()}>
-									{filteredOffices.map(office => {
+									{visibleOffices.map(office => {
 										const CardContent = (
 											<div className={cardContent()}>
 												<div className={cardLeft()}>
@@ -275,6 +289,18 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 										);
 									})}
 								</div>
+
+								{hasMore && (
+									<div className={showMoreWrapper()}>
+										<Button
+											parent="ListOfOfficesBlock"
+											styleType="secondary"
+											onClick={() => setVisibleCount(prev => prev + pageSize)}
+										>
+											Show More
+										</Button>
+									</div>
+								)}
 							</>
 						) : (
 							<div className="py-8 text-center">

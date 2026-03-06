@@ -73,7 +73,7 @@ export function PositionPageContent(props: PositionPageContentProps) {
 
 	return (
 		<>
-			<BreadcrumbBlock backgroundColor="cream" breadcrumbs={breadcrumbs} />
+			<BreadcrumbBlock backgroundColor="midnight" breadcrumbs={breadcrumbs} />
 			<ElectionsPositionHero
 				backgroundColor="midnight"
 				officeName={officeName}

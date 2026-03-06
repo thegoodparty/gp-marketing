@@ -133,11 +133,12 @@ export default async function Page({
 
 	return (
 		<>
-			<BreadcrumbBlock backgroundColor="cream" breadcrumbs={breadcrumbs} />
+			<BreadcrumbBlock backgroundColor="midnight" breadcrumbs={breadcrumbs} />
 			<LocationLandingPageHero
 				locationLevel="county"
-				stateName={stateName}
-				countyName={countyName}
+				backgroundColor="midnight"
+				stateName={`Upcoming elections in ${countyName},${stateName}`}
+				bodyCopy={`Learn what positions are up for election and who is currently running for office in ${countyName}.`}
 			/>
 			<ListOfOfficesBlock
 				heading={`Municipality Elections in ${countyName} County`}

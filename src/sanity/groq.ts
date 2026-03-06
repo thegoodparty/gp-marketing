@@ -129,7 +129,7 @@ export const component_bannerBlock = `_type=="component_bannerBlock"=>{...,banne
 /*language=textmate*/
 export const component_calculatorTextBlock = `_type=="component_calculatorTextBlock"=>{...,summaryInfo{${summaryInfoGroq}},calculatorTextBlockDesignSettings,componentSettings}`;
 /*language=textmate*/
-export const component_breadcrumbBlock = `_type=="component_breadcrumbBlock"=>{...}`;
+export const component_breadcrumbBlock = `_type=="component_breadcrumbBlock"=>{...,breadcrumbBlockDesignSettings,componentSettings}`;
 /*language=textmate*/
 export const component_teamBlock = `_type=="component_teamBlock"=>{...,people{...,list_people[]->},summaryInfo{${summaryInfoGroq}}}`;
 /*language=textmate*/

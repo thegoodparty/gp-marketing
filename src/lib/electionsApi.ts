@@ -2,6 +2,7 @@ import type {
 	CandidacyItem,
 	DistrictNameItem,
 	DistrictTypeItem,
+	FeaturedCity,
 	FindByRaceIdResponse,
 	PositionDetail,
 	RaceNode,
@@ -104,4 +105,10 @@ export async function findCampaignByRace(params: {
 	});
 	const url = `${BASE_URL}/v1/public-campaigns?${searchParams}`;
 	return fetchJson<FindByRaceIdResponse>(url);
+}
+
+export async function getMostElections(count = 3): Promise<FeaturedCity[]> {
+	const url = `${BASE_URL}/v1/places/most-elections?count=${count}`;
+	const data = await fetchJson<FeaturedCity[]>(url, CACHE_OPTIONS);
+	return Array.isArray(data) ? data : [];
 }

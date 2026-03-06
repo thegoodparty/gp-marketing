@@ -75,3 +75,9 @@ export interface FindByRaceIdResponse {
 		topIssue: { name: string } | null;
 	}>;
 }
+
+export interface FeaturedCity {
+	name: string;
+	slug: string;
+	race_count: number;
+}

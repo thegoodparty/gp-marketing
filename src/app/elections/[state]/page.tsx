@@ -7,7 +7,6 @@ import {
 	getPlaceBySlug,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
-import { US_STATES } from '~/constants/usStates';
 import { DEFAULT_DISPLAY_COUNT, DEFAULT_YEAR_OFFSET } from '~/constants/display';
 import {
 	CAROUSEL_QUOTE_COLLECTION_ID,
@@ -17,8 +16,7 @@ import {
 } from '~/constants/electionsStaticSections';
 import { sanityFetch } from '~/sanity/sanityClient';
 import { quoteCollectionByIdQuery } from '~/sanity/groq';
-import type { PlaceWithFacts } from '~/types/elections';
-import type { FactsCardProps } from '~/ui/FactsCard';
+import { formatElectionDate, getStateName, placeToFactsCards } from '~/lib/electionsHelpers';
 import { resolveAuthor } from '~/ui/_lib/resolveAuthor';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 import { BreadcrumbBlock } from '~/ui/BreadcrumbBlock';
@@ -28,67 +26,6 @@ import { LocationFactsBlock } from '~/ui/LocationFactsBlock';
 import { Carousel } from '~/ui/Carousel';
 import { StepperBlock } from '~/ui/StepperBlock';
 import { ElectionsIndexBlock } from '~/ui/ElectionsIndexBlock';
-
-function formatElectionDate(year: number): string {
-	const date = new Date(year, 10, 5);
-	return date.toLocaleDateString('en-US', {
-		month: 'long',
-		day: 'numeric',
-		year: 'numeric',
-	});
-}
-
-function getStateName(code: string): string {
-	const upper = code.toUpperCase();
-	const found = US_STATES.find(s => s.value === upper);
-	return found?.label ?? code;
-}
-
-function placeToFactsCards(place: PlaceWithFacts | null): FactsCardProps[] {
-	if (!place) return [];
-	const cards: FactsCardProps[] = [];
-	const factTypeLabels: Record<string, string> = {
-		'largest-city': 'Largest City',
-		population: 'Population',
-		density: 'Density (per sq mi)',
-		'median-income': 'Median Income',
-		'unemployment-rate': 'Unemployment Rate',
-		'average-home-value': 'Average Home Value',
-	};
-	if (place.cityLargest != null) {
-		cards.push({ factType: 'largest-city', label: factTypeLabels['largest-city']!, value: place.cityLargest });
-	}
-	if (place.population != null) {
-		cards.push({ factType: 'population', label: factTypeLabels['population']!, value: place.population.toLocaleString() });
-	}
-	if (place.density != null) {
-		// API returns people per sq km; display as people per sq mi
-		const densityPerSqMi = place.density / 0.386102;
-		cards.push({ factType: 'density', label: factTypeLabels['density']!, value: Math.round(densityPerSqMi).toLocaleString() });
-	}
-	if (place.incomeHouseholdMedian != null) {
-		cards.push({
-			factType: 'median-income',
-			label: factTypeLabels['median-income']!,
-			value: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(place.incomeHouseholdMedian),
-		});
-	}
-	if (place.unemploymentRate != null) {
-		cards.push({
-			factType: 'unemployment-rate',
-			label: factTypeLabels['unemployment-rate']!,
-			value: `${(place.unemploymentRate * 100).toFixed(1)}%`,
-		});
-	}
-	if (place.homeValue != null) {
-		cards.push({
-			factType: 'average-home-value',
-			label: factTypeLabels['average-home-value']!,
-			value: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(place.homeValue),
-		});
-	}
-	return cards;
-}
 
 export default async function Page({
 	params,

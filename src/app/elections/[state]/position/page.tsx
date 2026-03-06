@@ -45,17 +45,17 @@ export default async function Page({
 	params,
 	searchParams,
 }: {
-	params: Promise<{ subset: string }>;
+	params: Promise<{ state: string }>;
 	searchParams: Promise<{ positionId?: string; name?: string }>;
 }) {
-	const { subset } = await params;
+	const { state } = await params;
 	const { positionId, name: nameParam } = await searchParams;
 
-	if (!isValidStateCode(subset) || !positionId) {
+	if (!isValidStateCode(state) || !positionId) {
 		notFound();
 	}
 
-	const stateName = getStateName(subset);
+	const stateName = getStateName(state);
 	const position = await getPositionById(positionId);
 
 	const officeName =
@@ -65,7 +65,7 @@ export default async function Page({
 	const electionDate = formatElectionDate(position?.election?.electionDay);
 	const filingDate = formatFilingPeriod(position?.filingPeriods);
 
-	const candidatesHref = `/elections/${subset}/position/candidates?positionId=${encodeURIComponent(positionId)}`;
+	const candidatesHref = `/elections/${state}/position/candidates?positionId=${encodeURIComponent(positionId)}`;
 
 	return (
 		<>
@@ -97,7 +97,7 @@ export default async function Page({
 					</aside>
 					<div className="flex flex-col gap-8">
 						<p className="font-secondary text-body-2 text-neutral-600">
-							<Link href={`/elections/${subset}`} className="text-goodparty-blue hover:underline">
+							<Link href={`/elections/${state}`} className="text-goodparty-blue hover:underline">
 								Back to {stateName} elections
 							</Link>
 						</p>
@@ -112,13 +112,13 @@ export async function generateMetadata({
 	params,
 	searchParams,
 }: {
-	params: Promise<{ subset: string }>;
+	params: Promise<{ state: string }>;
 	searchParams: Promise<{ positionId?: string; name?: string }>;
 }): Promise<Metadata> {
-	const { subset } = await params;
+	const { state } = await params;
 	const { name } = await searchParams;
-	if (!isValidStateCode(subset)) return {};
-	const stateName = getStateName(subset);
+	if (!isValidStateCode(state)) return {};
+	const stateName = getStateName(state);
 	const positionName =
 		typeof name === 'string' ? decodeURIComponent(name) : 'Position';
 	return {

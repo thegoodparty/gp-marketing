@@ -81,3 +81,12 @@ export interface FeaturedCity {
 	slug: string;
 	race_count: number;
 }
+
+export interface PlaceItem {
+	id: string;
+	name: string;
+	slug: string;
+	state: string;
+	mtfcc?: string;
+	children?: PlaceItem[];
+}

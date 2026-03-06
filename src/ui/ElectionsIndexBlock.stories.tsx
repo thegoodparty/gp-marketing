@@ -13,67 +13,67 @@ const meta: Meta<typeof ElectionsIndexBlock> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Sample data for Illinois counties
+// Sample data for Illinois counties (state code: il)
 const illinoisCounties = [
-	{ name: 'Adams County', href: '/elections/illinois/adams-county', level: 'county' as const },
-	{ name: 'Alexander County', href: '/elections/illinois/alexander-county', level: 'county' as const },
-	{ name: 'Bond County', href: '/elections/illinois/bond-county', level: 'county' as const },
-	{ name: 'Boone County', href: '/elections/illinois/boone-county', level: 'county' as const },
-	{ name: 'Brown County', href: '/elections/illinois/brown-county', level: 'county' as const },
-	{ name: 'Bureau County', href: '/elections/illinois/bureau-county', level: 'county' as const },
-	{ name: 'Calhoun County', href: '/elections/illinois/calhoun-county', level: 'county' as const },
-	{ name: 'Carroll County', href: '/elections/illinois/carroll-county', level: 'county' as const },
-	{ name: 'Cass County', href: '/elections/illinois/cass-county', level: 'county' as const },
-	{ name: 'Champaign County', href: '/elections/illinois/champaign-county', level: 'county' as const },
-	{ name: 'Christian County', href: '/elections/illinois/christian-county', level: 'county' as const },
-	{ name: 'Clark County', href: '/elections/illinois/clark-county', level: 'county' as const },
-	{ name: 'Clay County', href: '/elections/illinois/clay-county', level: 'county' as const },
-	{ name: 'Clinton County', href: '/elections/illinois/clinton-county', level: 'county' as const },
-	{ name: 'Coles County', href: '/elections/illinois/coles-county', level: 'county' as const },
-	{ name: 'Cook County', href: '/elections/illinois/cook-county', level: 'county' as const },
-	{ name: 'Crawford County', href: '/elections/illinois/crawford-county', level: 'county' as const },
-	{ name: 'Cumberland County', href: '/elections/illinois/cumberland-county', level: 'county' as const },
-	{ name: 'DeKalb County', href: '/elections/illinois/dekalb-county', level: 'county' as const },
-	{ name: 'DeWitt County', href: '/elections/illinois/dewitt-county', level: 'county' as const },
-	{ name: 'Douglas County', href: '/elections/illinois/douglas-county', level: 'county' as const },
-	{ name: 'DuPage County', href: '/elections/illinois/dupage-county', level: 'county' as const },
-	{ name: 'Edgar County', href: '/elections/illinois/edgar-county', level: 'county' as const },
-	{ name: 'Edwards County', href: '/elections/illinois/edwards-county', level: 'county' as const },
-	{ name: 'Effingham County', href: '/elections/illinois/effingham-county', level: 'county' as const },
-	{ name: 'Fayette County', href: '/elections/illinois/fayette-county', level: 'county' as const },
-	{ name: 'Ford County', href: '/elections/illinois/ford-county', level: 'county' as const },
-	{ name: 'Franklin County', href: '/elections/illinois/franklin-county', level: 'county' as const },
-	{ name: 'Fulton County', href: '/elections/illinois/fulton-county', level: 'county' as const },
-	{ name: 'Gallatin County', href: '/elections/illinois/gallatin-county', level: 'county' as const },
+	{ name: 'Adams County', href: '/elections/il/adams-county', level: 'county' as const },
+	{ name: 'Alexander County', href: '/elections/il/alexander-county', level: 'county' as const },
+	{ name: 'Bond County', href: '/elections/il/bond-county', level: 'county' as const },
+	{ name: 'Boone County', href: '/elections/il/boone-county', level: 'county' as const },
+	{ name: 'Brown County', href: '/elections/il/brown-county', level: 'county' as const },
+	{ name: 'Bureau County', href: '/elections/il/bureau-county', level: 'county' as const },
+	{ name: 'Calhoun County', href: '/elections/il/calhoun-county', level: 'county' as const },
+	{ name: 'Carroll County', href: '/elections/il/carroll-county', level: 'county' as const },
+	{ name: 'Cass County', href: '/elections/il/cass-county', level: 'county' as const },
+	{ name: 'Champaign County', href: '/elections/il/champaign-county', level: 'county' as const },
+	{ name: 'Christian County', href: '/elections/il/christian-county', level: 'county' as const },
+	{ name: 'Clark County', href: '/elections/il/clark-county', level: 'county' as const },
+	{ name: 'Clay County', href: '/elections/il/clay-county', level: 'county' as const },
+	{ name: 'Clinton County', href: '/elections/il/clinton-county', level: 'county' as const },
+	{ name: 'Coles County', href: '/elections/il/coles-county', level: 'county' as const },
+	{ name: 'Cook County', href: '/elections/il/cook-county', level: 'county' as const },
+	{ name: 'Crawford County', href: '/elections/il/crawford-county', level: 'county' as const },
+	{ name: 'Cumberland County', href: '/elections/il/cumberland-county', level: 'county' as const },
+	{ name: 'DeKalb County', href: '/elections/il/dekalb-county', level: 'county' as const },
+	{ name: 'DeWitt County', href: '/elections/il/dewitt-county', level: 'county' as const },
+	{ name: 'Douglas County', href: '/elections/il/douglas-county', level: 'county' as const },
+	{ name: 'DuPage County', href: '/elections/il/dupage-county', level: 'county' as const },
+	{ name: 'Edgar County', href: '/elections/il/edgar-county', level: 'county' as const },
+	{ name: 'Edwards County', href: '/elections/il/edwards-county', level: 'county' as const },
+	{ name: 'Effingham County', href: '/elections/il/effingham-county', level: 'county' as const },
+	{ name: 'Fayette County', href: '/elections/il/fayette-county', level: 'county' as const },
+	{ name: 'Ford County', href: '/elections/il/ford-county', level: 'county' as const },
+	{ name: 'Franklin County', href: '/elections/il/franklin-county', level: 'county' as const },
+	{ name: 'Fulton County', href: '/elections/il/fulton-county', level: 'county' as const },
+	{ name: 'Gallatin County', href: '/elections/il/gallatin-county', level: 'county' as const },
 ];
 
 // Sample data for Cook County cities
 const cookCountyCities = [
-	{ name: 'Chicago', href: '/elections/illinois/cook-county/chicago', level: 'city' as const },
-	{ name: 'Evanston', href: '/elections/illinois/cook-county/evanston', level: 'city' as const },
-	{ name: 'Oak Park', href: '/elections/illinois/cook-county/oak-park', level: 'city' as const },
-	{ name: 'Cicero', href: '/elections/illinois/cook-county/cicero', level: 'city' as const },
-	{ name: 'Skokie', href: '/elections/illinois/cook-county/skokie', level: 'city' as const },
-	{ name: 'Des Plaines', href: '/elections/illinois/cook-county/des-plaines', level: 'city' as const },
-	{ name: 'Arlington Heights', href: '/elections/illinois/cook-county/arlington-heights', level: 'city' as const },
-	{ name: 'Schaumburg', href: '/elections/illinois/cook-county/schaumburg', level: 'city' as const },
-	{ name: 'Palatine', href: '/elections/illinois/cook-county/palatine', level: 'city' as const },
-	{ name: 'Orland Park', href: '/elections/illinois/cook-county/orland-park', level: 'city' as const },
-	{ name: 'Tinley Park', href: '/elections/illinois/cook-county/tinley-park', level: 'city' as const },
-	{ name: 'Oak Lawn', href: '/elections/illinois/cook-county/oak-lawn', level: 'city' as const },
+	{ name: 'Chicago', href: '/elections/il/cook-county/chicago', level: 'city' as const },
+	{ name: 'Evanston', href: '/elections/il/cook-county/evanston', level: 'city' as const },
+	{ name: 'Oak Park', href: '/elections/il/cook-county/oak-park', level: 'city' as const },
+	{ name: 'Cicero', href: '/elections/il/cook-county/cicero', level: 'city' as const },
+	{ name: 'Skokie', href: '/elections/il/cook-county/skokie', level: 'city' as const },
+	{ name: 'Des Plaines', href: '/elections/il/cook-county/des-plaines', level: 'city' as const },
+	{ name: 'Arlington Heights', href: '/elections/il/cook-county/arlington-heights', level: 'city' as const },
+	{ name: 'Schaumburg', href: '/elections/il/cook-county/schaumburg', level: 'city' as const },
+	{ name: 'Palatine', href: '/elections/il/cook-county/palatine', level: 'city' as const },
+	{ name: 'Orland Park', href: '/elections/il/cook-county/orland-park', level: 'city' as const },
+	{ name: 'Tinley Park', href: '/elections/il/cook-county/tinley-park', level: 'city' as const },
+	{ name: 'Oak Lawn', href: '/elections/il/cook-county/oak-lawn', level: 'city' as const },
 ];
 
-// Generate Texas counties for large result set test
+// Generate Texas counties for large result set test (state code: tx)
 const texasCounties = Array.from({ length: 254 }, (_, i) => ({
 	name: `County ${String(i + 1).padStart(3, '0')}`,
-	href: `/elections/texas/county-${String(i + 1).padStart(3, '0')}`,
+	href: `/elections/tx/county-${String(i + 1).padStart(3, '0')}`,
 	level: 'county' as const,
 }));
 
 export const StateLevel: Story = {
 	args: {
 		backgroundColor: 'midnight',
-		stateSlug: 'illinois',
+		stateSlug: 'il',
 		header: {
 			label: 'Illinois Elections',
 			title: 'Counties in Illinois',
@@ -93,7 +93,7 @@ export const StateLevel: Story = {
 export const CountyLevel: Story = {
 	args: {
 		backgroundColor: 'midnight',
-		stateSlug: 'illinois',
+		stateSlug: 'il',
 		countySlug: 'cook-county',
 		header: {
 			label: 'Cook County Elections',
@@ -108,7 +108,7 @@ export const CountyLevel: Story = {
 export const CreamBackground: Story = {
 	args: {
 		backgroundColor: 'cream',
-		stateSlug: 'illinois',
+		stateSlug: 'il',
 		header: {
 			label: 'Illinois Elections',
 			title: 'Counties in Illinois',
@@ -122,7 +122,7 @@ export const CreamBackground: Story = {
 export const LargeResultSet: Story = {
 	args: {
 		backgroundColor: 'midnight',
-		stateSlug: 'texas',
+		stateSlug: 'tx',
 		header: {
 			label: 'Texas Elections',
 			title: 'Counties in Texas',
@@ -136,7 +136,7 @@ export const LargeResultSet: Story = {
 export const EmptyResults: Story = {
 	args: {
 		backgroundColor: 'midnight',
-		stateSlug: 'illinois',
+		stateSlug: 'il',
 		header: {
 			label: 'Illinois Elections',
 			title: 'Counties in Illinois',
@@ -150,7 +150,7 @@ export const EmptyResults: Story = {
 export const CityLevel: Story = {
 	args: {
 		backgroundColor: 'midnight',
-		stateSlug: 'illinois',
+		stateSlug: 'il',
 		countySlug: 'cook-county',
 		citySlug: 'chicago', // Component returns null when citySlug is provided
 		header: {
@@ -179,7 +179,7 @@ export const CityLevel: Story = {
 export const WithoutSearch: Story = {
 	args: {
 		backgroundColor: 'midnight',
-		stateSlug: 'illinois',
+		stateSlug: 'il',
 		header: {
 			label: 'Illinois Elections',
 			title: 'Counties in Illinois',
@@ -193,7 +193,7 @@ export const WithoutSearch: Story = {
 export const MinimalHeader: Story = {
 	args: {
 		backgroundColor: 'midnight',
-		stateSlug: 'illinois',
+		stateSlug: 'il',
 		header: {
 			title: 'Counties in Illinois',
 		},

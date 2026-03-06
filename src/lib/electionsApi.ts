@@ -4,12 +4,13 @@ import type {
 	DistrictTypeItem,
 	FeaturedCity,
 	FindByRaceIdResponse,
+	PlaceItem,
 	PositionDetail,
 	RaceNode,
 } from '~/types/elections';
 
 const BASE_URL =
-	process.env.ELECTIONS_API_BASE_URL || 'https://election-api.goodparty.org';
+	process.env['ELECTIONS_API_BASE_URL'] || 'https://election-api.goodparty.org';
 
 const CACHE_OPTIONS = { next: { revalidate: 3600 } } as RequestInit;
 
@@ -110,5 +111,31 @@ export async function findCampaignByRace(params: {
 export async function getMostElections(count = 3): Promise<FeaturedCity[]> {
 	const url = `${BASE_URL}/v1/places/most-elections?count=${count}`;
 	const data = await fetchJson<FeaturedCity[]>(url, CACHE_OPTIONS);
+	return Array.isArray(data) ? data : [];
+}
+
+export async function getPlacesByState(params: {
+	state: string;
+	mtfcc?: string;
+}): Promise<PlaceItem[]> {
+	const searchParams = new URLSearchParams({
+		state: params.state.toUpperCase(),
+	});
+	if (params.mtfcc) searchParams.set('mtfcc', params.mtfcc);
+	const url = `${BASE_URL}/v1/places?${searchParams}`;
+	const data = await fetchJson<PlaceItem[]>(url, CACHE_OPTIONS);
+	return Array.isArray(data) ? data : [];
+}
+
+export async function getPlacesBySlugWithChildren(params: {
+	slug: string;
+	includeChildren?: boolean;
+}): Promise<PlaceItem[]> {
+	const searchParams = new URLSearchParams({
+		slug: params.slug,
+		includeChildren: (params.includeChildren ?? true).toString(),
+	});
+	const url = `${BASE_URL}/v1/places?${searchParams}`;
+	const data = await fetchJson<PlaceItem[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) ? data : [];
 }

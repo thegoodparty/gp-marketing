@@ -24,17 +24,17 @@ export default async function Page({
 	params,
 	searchParams,
 }: {
-	params: Promise<{ subset: string }>;
+	params: Promise<{ state: string }>;
 	searchParams: Promise<{ positionId?: string; name?: string }>;
 }) {
-	const { subset } = await params;
+	const { state } = await params;
 	const { positionId, name: positionName } = await searchParams;
 
-	if (!isValidStateCode(subset) || !positionId) {
+	if (!isValidStateCode(state) || !positionId) {
 		notFound();
 	}
 
-	const stateName = getStateName(subset);
+	const stateName = getStateName(state);
 	const [candidacies, position] = await Promise.all([
 		getCandidacies({ positionId }),
 		getPositionById(positionId),
@@ -63,7 +63,7 @@ export default async function Page({
 			<Container size="xl" className="py-(--container-padding)">
 				<p className="mb-6 font-secondary text-body-2 text-neutral-600">
 					<Link
-						href={`/elections/${subset}/position?positionId=${encodeURIComponent(positionId)}`}
+						href={`/elections/${state}/position?positionId=${encodeURIComponent(positionId)}`}
 						className="text-goodparty-blue hover:underline"
 					>
 						Back to {officeName}
@@ -92,7 +92,7 @@ export async function generateMetadata({
 	const { subset } = await params;
 	const { name } = await searchParams;
 	if (!isValidStateCode(subset)) return {};
-	const stateName = getStateName(subset);
+	const stateName = getStateName(state);
 	const positionName =
 		typeof name === 'string' ? decodeURIComponent(name) : 'Position';
 	return {

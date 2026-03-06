@@ -71,7 +71,7 @@ export interface ElectionsLocationResponse {
 export interface ElectionItem {
 	name: string;
 	href: string;
-	level: 'county' | 'city';
+	level: 'state' | 'county' | 'city';
 }
 
 export interface ElectionsIndexBlockProps {

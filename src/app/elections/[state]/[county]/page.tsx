@@ -97,21 +97,27 @@ export default async function Page({
 		textSize: resolveTextSize('Medium'),
 	};
 
-	const countyTypes = districtTypes.filter(dt =>
-		dt.L2DistrictType.toUpperCase().includes('COUNTY'),
+	const municipalityTypes = districtTypes.filter(dt => {
+		const t = dt.L2DistrictType.toUpperCase();
+		return t.includes('CITY') || t.includes('TOWN');
+	});
+
+	const municipalityBaseNames = children.map(c =>
+		c.name.replace(/\s+(Town|City|Township|Village)$/i, '').toLowerCase(),
 	);
 
 	const districtNamesByType = await Promise.all(
-		countyTypes.map(async dt =>
+		municipalityTypes.map(async dt =>
 			getDistrictNames({
 				L2DistrictType: dt.L2DistrictType,
 				state: stateCode,
 				electionYear,
 			}).then(names =>
 				names
-					.filter(n =>
-						n.L2DistrictName.toLowerCase().includes(countyName.toLowerCase()),
-					)
+					.filter(n => {
+						const lower = n.L2DistrictName.toLowerCase();
+						return municipalityBaseNames.some(base => lower.includes(base));
+					})
 					.map(n => ({
 						id: n.id,
 						type: dt.L2DistrictType,
@@ -134,8 +140,8 @@ export default async function Page({
 				countyName={countyName}
 			/>
 			<ListOfOfficesBlock
-				heading={`County Elections in ${countyName} County`}
-				headline={`${offices.length} county positions up for election in ${electionYear}`}
+				heading={`Municipality Elections in ${countyName} County`}
+				headline={`${offices.length} municipal positions up for election in ${electionYear}`}
 				defaultYear={electionYear}
 				availableYears={[
 					electionYear - 2,

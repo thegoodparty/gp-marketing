@@ -123,7 +123,7 @@ export default async function Page({
 						type: dt.L2DistrictType,
 						position: n.L2DistrictName,
 						nextElectionDate: formatElectionDate(electionYear),
-						href: `/elections/${state}/position?positionId=${encodeURIComponent(n.id)}&name=${encodeURIComponent(n.L2DistrictName)}`,
+						href: `/elections/${fullSlug}/position?positionId=${encodeURIComponent(n.id)}&name=${encodeURIComponent(n.L2DistrictName)}`,
 					})),
 			),
 		),

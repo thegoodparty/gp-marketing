@@ -11,6 +11,33 @@ export function formatElectionDate(year: number): string {
 	});
 }
 
+export function formatElectionDateFromApi(dateStr: string | undefined): string {
+	if (!dateStr) return 'TBD';
+	return new Date(dateStr).toLocaleDateString('en-US', {
+		month: 'long',
+		day: 'numeric',
+		year: 'numeric',
+	});
+}
+
+export function formatFilingPeriod(
+	periods: Array<{ startOn: string; endOn: string }> | undefined,
+): string {
+	const first = periods?.[0];
+	if (!first) return 'TBD';
+	const start = new Date(first.startOn).toLocaleDateString('en-US', {
+		month: 'long',
+		day: 'numeric',
+		year: 'numeric',
+	});
+	const end = new Date(first.endOn).toLocaleDateString('en-US', {
+		month: 'long',
+		day: 'numeric',
+		year: 'numeric',
+	});
+	return `${start} - ${end}`;
+}
+
 export function getStateName(code: string): string {
 	const upper = code.toUpperCase();
 	const found = US_STATES.find(s => s.value === upper);

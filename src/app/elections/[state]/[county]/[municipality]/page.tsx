@@ -3,15 +3,9 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getPlacesByState, getPlacesBySlugWithChildren } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
-import { US_STATES } from '~/constants/usStates';
+import { getStateName } from '~/lib/electionsHelpers';
 import { Container } from '~/ui/Container';
 import { LocationLandingPageHero } from '~/ui/LocationLandingPageHero';
-
-function getStateName(code: string): string {
-	const upper = code.toUpperCase();
-	const found = US_STATES.find(s => s.value === upper);
-	return found?.label ?? code;
-}
 
 export default async function Page({
 	params,

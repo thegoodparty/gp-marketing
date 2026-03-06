@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getCandidacies, getPositionById } from '~/lib/electionsApi';
+import { getCandidacies, getPlacesByState, getPositionById } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import { getStateName } from '~/lib/electionsHelpers';
 import { CandidatesPageContent } from '~/ui/CandidatesPageContent';
@@ -16,17 +16,28 @@ export default async function Page({
 	params,
 	searchParams,
 }: {
-	params: Promise<{ state: string }>;
+	params: Promise<{ state: string; county: string }>;
 	searchParams: Promise<{ positionId?: string; name?: string }>;
 }) {
-	const { state } = await params;
+	const { state, county } = await params;
 	const { positionId, name: positionName } = await searchParams;
 
-	if (!isValidStateCode(state) || !positionId) {
+	const stateCode = state.toUpperCase();
+	if (!isValidStateCode(stateCode) || !positionId) {
 		notFound();
 	}
 
-	const stateName = getStateName(state);
+	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
+	const counties = await getPlacesByState({ state: stateCode, mtfcc: 'G4020' });
+	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
+
+	if (!countyPlace) {
+		notFound();
+	}
+
+	const stateName = getStateName(stateCode);
+	const countyName = countyPlace.name.replace(/\s+County$/i, '') || countyPlace.name;
+
 	const [candidacies, position] = await Promise.all([
 		getCandidacies({ positionId }),
 		getPositionById(positionId),
@@ -50,12 +61,12 @@ export default async function Page({
 		};
 	});
 
-	const positionHref = `/elections/${state}/position?positionId=${encodeURIComponent(positionId)}`;
+	const positionHref = `/elections/${countySlug}/position?positionId=${encodeURIComponent(positionId)}`;
 
 	return (
 		<CandidatesPageContent
 			officeName={officeName}
-			stateName={stateName}
+			stateName={`${countyName} County, ${stateName}`}
 			candidates={candidates}
 			backHref={positionHref}
 			backLabel={`Back to ${officeName}`}
@@ -67,17 +78,21 @@ export async function generateMetadata({
 	params,
 	searchParams,
 }: {
-	params: Promise<{ state: string }>;
+	params: Promise<{ state: string; county: string }>;
 	searchParams: Promise<{ positionId?: string; name?: string }>;
 }): Promise<Metadata> {
-	const { state } = await params;
+	const { state, county } = await params;
 	const { name } = await searchParams;
 	if (!isValidStateCode(state)) return {};
 	const stateName = getStateName(state);
+	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
+	const counties = await getPlacesByState({ state: state.toUpperCase(), mtfcc: 'G4020' });
+	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
+	const countyName = countyPlace?.name?.replace(/\s+County$/i, '') ?? county;
 	const positionName =
 		typeof name === 'string' ? decodeURIComponent(name) : 'Position';
 	return {
-		title: `Candidates for ${positionName} in ${stateName} | Good Party`,
-		description: `View candidates running for ${positionName} in ${stateName}.`,
+		title: `Candidates for ${positionName} in ${countyName} County, ${stateName} | Good Party`,
+		description: `View candidates running for ${positionName} in ${countyName} County, ${stateName}.`,
 	};
 }

@@ -144,8 +144,12 @@ export default async function Page({
 		textSize: resolveTextSize('Medium'),
 	};
 
+	const countyTypes = districtTypes.filter(dt =>
+		dt.L2DistrictType.toUpperCase().includes('COUNTY'),
+	);
+
 	const districtNamesByType = await Promise.all(
-		districtTypes.map(async dt =>
+		countyTypes.map(async dt =>
 			getDistrictNames({
 				L2DistrictType: dt.L2DistrictType,
 				state: stateCode,
@@ -172,8 +176,8 @@ export default async function Page({
 				stateName={stateName}
 			/>
 			<ListOfOfficesBlock
-				heading={`Elections in ${stateName}`}
-				headline={`${offices.length} positions up for election in ${electionYear}`}
+				heading={`County Elections in ${stateName}`}
+				headline={`${offices.length} county positions up for election in ${electionYear}`}
 				defaultYear={electionYear}
 				availableYears={[
 					electionYear - 2,
@@ -190,6 +194,20 @@ export default async function Page({
 					factsCards={factsCards}
 				/>
 			)}
+			<ElectionsIndexBlock
+				backgroundColor="midnight"
+				stateSlug={state.toLowerCase()}
+				elections={counties}
+				header={{
+					title: `Counties in ${stateName}`,
+					copy: `Browse elections by county in ${stateName}.`,
+					backgroundColor: 'midnight',
+				}}
+				initialDisplayCount={DEFAULT_DISPLAY_COUNT}
+				showSearch={true}
+				searchPlaceholder="Search by county"
+				ctaLabel="Browse CTA"
+			/>
 			{carouselCards.length > 0 && (
 				<Carousel
 					backgroundColor="cream"
@@ -206,20 +224,6 @@ export default async function Page({
 				backgroundColor="cream"
 				header={stepperHeader}
 				items={STEPPER_ITEMS.map(i => ({ ...i, buttons: [...i.buttons] }))}
-			/>
-			<ElectionsIndexBlock
-				backgroundColor="midnight"
-				stateSlug={state.toLowerCase()}
-				elections={counties}
-				header={{
-					title: `Counties in ${stateName}`,
-					copy: `Browse elections by county in ${stateName}.`,
-					backgroundColor: 'midnight',
-				}}
-				initialDisplayCount={DEFAULT_DISPLAY_COUNT}
-				showSearch={true}
-				searchPlaceholder="Search by county"
-				ctaLabel="Browse CTA"
 			/>
 		</>
 	);

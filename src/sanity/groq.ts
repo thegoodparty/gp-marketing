@@ -271,3 +271,8 @@ export const articleQuery = defineQuery(
 export const allArticlesForSearchGroq = `*[_type=="article"] | order(editorialOverview.field_editorialTitle asc)[]{_id,"title":editorialOverview.field_editorialTitle,${articleHrefGroq}}`;
 /*language=textmate*/
 export const allTermsForSearchGroq = `*[_type=="glossary"] | order(glossaryTermOverview.field_glossaryTerm asc)[]{_id,"title":glossaryTermOverview.field_glossaryTerm,${glossaryTermHrefGroq}}`;
+
+/*language=textmate*/
+export const quoteCollectionByIdQuery = defineQuery(
+	`*[_type=="quoteCollections"&&_id==$id][0]{quoteCollectionContent{list_chooseQuotes[]->{_key,quote{field_quote,ref_quoteBy->{_type,personOverview{field_personName,field_jobTitleOrRole,img_profilePicture},organisationOverview{field_organisationName,img_logo}}}}}}`,
+);

@@ -5,6 +5,7 @@ import type {
 	FeaturedCity,
 	FindByRaceIdResponse,
 	PlaceItem,
+	PlaceWithFacts,
 	PositionDetail,
 	RaceNode,
 } from '~/types/elections';
@@ -138,4 +139,21 @@ export async function getPlacesBySlugWithChildren(params: {
 	const url = `${BASE_URL}/v1/places?${searchParams}`;
 	const data = await fetchJson<PlaceItem[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) ? data : [];
+}
+
+export async function getPlaceBySlug(params: {
+	slug: string;
+	includeChildren?: boolean;
+	includeRaces?: boolean;
+	placeColumns?: string;
+}): Promise<PlaceWithFacts | null> {
+	const searchParams = new URLSearchParams({
+		slug: params.slug,
+		includeChildren: (params.includeChildren ?? false).toString(),
+		includeRaces: (params.includeRaces ?? false).toString(),
+	});
+	if (params.placeColumns) searchParams.set('placeColumns', params.placeColumns);
+	const url = `${BASE_URL}/v1/places?${searchParams}`;
+	const data = await fetchJson<PlaceWithFacts[]>(url, CACHE_OPTIONS);
+	return Array.isArray(data) && data.length > 0 ? data[0] : null;
 }

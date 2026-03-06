@@ -90,3 +90,12 @@ export interface PlaceItem {
 	mtfcc?: string;
 	children?: PlaceItem[];
 }
+
+export interface PlaceWithFacts extends PlaceItem {
+	cityLargest?: string;
+	population?: number;
+	density?: number;
+	incomeHouseholdMedian?: number;
+	unemploymentRate?: number;
+	homeValue?: number;
+}

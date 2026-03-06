@@ -1,9 +1,18 @@
 import Link from 'next/link';
 import type { RaceDetail } from '~/types/elections';
 import { BreadcrumbBlock, type BreadcrumbItem } from '~/ui/BreadcrumbBlock';
+import { CTABannerBlock } from '~/ui/CTABannerBlock';
+import { CTABlock } from '~/ui/CTABlock';
 import { ElectionsPositionHero } from '~/ui/ElectionsPositionHero';
 import { ElectionsPositionContentBlock } from '~/ui/ElectionsPositionContentBlock';
-import { Container } from '~/ui/Container';
+import { FAQBlock } from '~/ui/FAQBlock';
+import { TwoUpCardBlock } from '~/ui/TwoUpCardBlock';
+import {
+	POSITION_PAGE_CTA_BANNER,
+	POSITION_PAGE_CTA_BLOCK,
+	POSITION_PAGE_FAQ,
+	POSITION_PAGE_TWO_UP_CARD,
+} from '~/constants/positionPageStaticSections';
 
 export type PositionPageContentProps = {
 	officeName: string;
@@ -18,6 +27,13 @@ export type PositionPageContentProps = {
 	candidatesHref: string;
 	race?: RaceDetail | null;
 };
+
+function replacePlaceholders(s: string, replacements: { officeName: string; stateName: string; locationName: string }): string {
+	return s
+		.replace(/\[office name\]/gi, replacements.officeName)
+		.replace(/\[State\]/g, replacements.stateName)
+		.replace(/\[County or City\]/g, replacements.locationName);
+}
 
 function buildGridItems(race: RaceDetail) {
 	const items: { subhead: string; bodyCopy: React.ReactNode }[] = [];
@@ -76,14 +92,15 @@ export function PositionPageContent(props: PositionPageContentProps) {
 		electionDate,
 		filingDate,
 		breadcrumbs,
-		backHref,
-		backLabel,
 		candidatesHref,
 		race,
 	} = props;
 
 	const gridItems = race ? buildGridItems(race) : [];
 	const bottomItems = race ? buildBottomItems(race) : [];
+
+	const locationName = countyName ?? cityName ?? stateName;
+	const replacements = { officeName, stateName, locationName };
 
 	return (
 		<>
@@ -102,6 +119,14 @@ export function PositionPageContent(props: PositionPageContentProps) {
 					label: 'Run for office',
 					buttonProps: { styleType: 'primary' },
 				}}
+			/>
+
+			<CTABannerBlock
+				backgroundColor={POSITION_PAGE_CTA_BANNER.backgroundColor}
+				color={POSITION_PAGE_CTA_BANNER.color}
+				title={replacePlaceholders(POSITION_PAGE_CTA_BANNER.title, replacements)}
+				copy={POSITION_PAGE_CTA_BANNER.copy}
+				button={POSITION_PAGE_CTA_BANNER.button}
 			/>
 
 			<ElectionsPositionContentBlock
@@ -124,6 +149,44 @@ export function PositionPageContent(props: PositionPageContentProps) {
 				topHeadline="Position Details"
 				gridItems={gridItems}
 				bottomItems={bottomItems}
+			/>
+
+			<FAQBlock
+				backgroundColor={POSITION_PAGE_FAQ.backgroundColor}
+				header={{
+					title: POSITION_PAGE_FAQ.title,
+					copy: POSITION_PAGE_FAQ.copy,
+					buttons: [...POSITION_PAGE_FAQ.buttons],
+				}}
+				items={POSITION_PAGE_FAQ.items.map((item) => ({ ...item }))}
+			/>
+
+			<CTABlock
+				backgroundColor={POSITION_PAGE_CTA_BLOCK.backgroundColor}
+				color={POSITION_PAGE_CTA_BLOCK.color}
+				label={POSITION_PAGE_CTA_BLOCK.label}
+				title={replacePlaceholders(POSITION_PAGE_CTA_BLOCK.title, replacements)}
+				copy={POSITION_PAGE_CTA_BLOCK.copy}
+				buttons={[
+					{
+						buttonType: 'internal',
+						href: candidatesHref,
+						label: POSITION_PAGE_CTA_BLOCK.primaryButtonLabel,
+						buttonProps: { styleType: 'primary' },
+					},
+				]}
+			/>
+
+			<TwoUpCardBlock
+				backgroundColor={POSITION_PAGE_TWO_UP_CARD.backgroundColor}
+				card1={{
+					...POSITION_PAGE_TWO_UP_CARD.card1,
+					list: POSITION_PAGE_TWO_UP_CARD.card1.list.map((item) => ({ ...item })),
+				}}
+				card2={{
+					...POSITION_PAGE_TWO_UP_CARD.card2,
+					list: POSITION_PAGE_TWO_UP_CARD.card2.list.map((item) => ({ ...item })),
+				}}
 			/>
 		</>
 	);

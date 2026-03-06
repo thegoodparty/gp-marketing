@@ -1,16 +1,13 @@
+import type { USStateCode } from '~/constants/usStates';
+import { US_STATES_TUPLES } from '~/constants/usStates';
+
+export type { USStateCode };
+
 /**
  * Array of valid US state codes (including DC).
- * Used for validation in StateIcon component.
+ * Derived from US_STATES_TUPLES.
  */
-export const US_STATE_CODES = [
-	'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA',
-	'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA',
-	'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY',
-	'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX',
-	'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY',
-] as const;
-
-export type USStateCode = (typeof US_STATE_CODES)[number];
+export const US_STATE_CODES = US_STATES_TUPLES.map(([code]) => code) as readonly USStateCode[];
 
 /**
  * Validates if a string is a valid US state code.

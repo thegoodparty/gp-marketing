@@ -2,7 +2,12 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getCandidacies, getRaceBySlug } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
-import { buildRaceSlug, getStateName } from '~/lib/electionsHelpers';
+import {
+	buildRaceSlug,
+	formatElectionDateFromApi,
+	formatFilingPeriodFromRace,
+	getStateName,
+} from '~/lib/electionsHelpers';
 import { CandidatesPageContent } from '~/ui/CandidatesPageContent';
 
 export default async function Page({
@@ -28,6 +33,8 @@ export default async function Page({
 
 	const stateName = getStateName(state);
 	const officeName = race.normalizedPositionName ?? race.name ?? 'Position';
+	const electionDate = formatElectionDateFromApi(race.electionDate);
+	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 
 	const candidates = candidacies.map((c, i) => ({
 		_key: c.id ?? `c-${i}`,
@@ -39,15 +46,27 @@ export default async function Page({
 			: `/profile?slug=${encodeURIComponent([c.firstName, c.lastName].filter(Boolean).join('-').toLowerCase())}&raceId=${encodeURIComponent(c.raceId ?? '')}`,
 	}));
 
-	const positionHref = `/elections/${state.toLowerCase()}/position/${positionSlug}`;
+	const statePath = state.toLowerCase();
+	const positionHref = `/elections/${statePath}/position/${positionSlug}`;
+	const locationHref = `/elections/${statePath}`;
+
+	const breadcrumbs = [
+		{ href: '/elections', label: 'Elections' },
+		{ href: `/elections/${statePath}`, label: stateName },
+		{ href: '', label: `Candidates for ${officeName}` },
+	];
 
 	return (
 		<CandidatesPageContent
 			officeName={officeName}
 			stateName={stateName}
+			electionDate={electionDate}
+			filingDate={filingDate}
+			breadcrumbs={breadcrumbs}
+			candidatesHref={positionHref}
+			locationHref={locationHref}
 			candidates={candidates}
-			backHref={positionHref}
-			backLabel={`Back to ${officeName}`}
+			race={race}
 		/>
 	);
 }

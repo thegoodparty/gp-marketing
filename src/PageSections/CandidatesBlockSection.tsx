@@ -36,7 +36,7 @@ export function CandidatesBlockSection(props: CandidatesBlockSectionProps) {
 		? resolveBg(stegaClean(section.candidatesBlockDesignSettings.field_blockColorCreamMidnight))
 		: 'cream';
 
-	const hasFilters = stegaClean(section.candidatesBlockFilterSettings?.field_enableFilters) ?? false;
+	const enablePagination = stegaClean(section.candidatesBlockFilterSettings?.field_enableFilters) ?? false;
 	const candidates = candidatesOverride ?? mockCandidates;
 
 	const buttons = transformButtons(section.candidatesBlockOptionalButton ? [section.candidatesBlockOptionalButton] : []);
@@ -55,10 +55,9 @@ export function CandidatesBlockSection(props: CandidatesBlockSectionProps) {
 					textSize: resolveTextSize(section.candidatesBlockHeader?.field_textSize),
 				}}
 				candidates={candidates}
-				hasFilters={hasFilters}
-				filters={hasFilters ? {} : undefined}
-				pagination={hasFilters ? { currentPage: 1, totalPages: 1 } : undefined}
-				optionalButton={!hasFilters && buttons.length > 0 ? buttons[0] : undefined}
+				enablePagination={enablePagination}
+				initialDisplayCount={6}
+				optionalButton={buttons.length > 0 ? buttons[0] : undefined}
 			/>
 		</section>
 	);

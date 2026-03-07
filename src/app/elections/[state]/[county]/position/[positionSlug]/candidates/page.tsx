@@ -2,7 +2,12 @@ import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 import { getCandidacies, getPlacesByState, getRaceBySlug } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
-import { buildRaceSlug, getStateName } from '~/lib/electionsHelpers';
+import {
+	buildRaceSlug,
+	formatElectionDateFromApi,
+	formatFilingPeriodFromRace,
+	getStateName,
+} from '~/lib/electionsHelpers';
 import { CandidatesPageContent } from '~/ui/CandidatesPageContent';
 
 export default async function Page({
@@ -35,10 +40,13 @@ export default async function Page({
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: 'G4020' });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
-	const countyName = countyPlace?.name?.replace(/\s+County$/i, '') ?? county;
+	const countyNameShort = countyPlace?.name?.replace(/\s+County$/i, '') ?? county;
+	const countyName = countyPlace?.name ?? `${countyNameShort} County`;
 
 	const stateName = getStateName(stateCode);
 	const officeName = race.normalizedPositionName ?? race.name ?? 'Position';
+	const electionDate = formatElectionDateFromApi(race.electionDate);
+	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 
 	const candidacies = await getCandidacies({ raceSlug });
 
@@ -53,14 +61,27 @@ export default async function Page({
 	}));
 
 	const positionHref = `/elections/${countySlug}/position/${positionSlug}`;
+	const locationHref = `/elections/${countySlug}`;
+
+	const breadcrumbs = [
+		{ href: '/elections', label: 'Elections' },
+		{ href: `/elections/${state.toLowerCase()}`, label: stateName },
+		{ href: `/elections/${countySlug}`, label: countyName },
+		{ href: '', label: `Candidates for ${officeName}` },
+	];
 
 	return (
 		<CandidatesPageContent
 			officeName={officeName}
-			stateName={`${countyName} County, ${stateName}`}
+			stateName={stateName}
+			countyName={countyName}
+			electionDate={electionDate}
+			filingDate={filingDate}
+			breadcrumbs={breadcrumbs}
+			candidatesHref={positionHref}
+			locationHref={locationHref}
 			candidates={candidates}
-			backHref={positionHref}
-			backLabel={`Back to ${officeName}`}
+			race={race}
 		/>
 	);
 }

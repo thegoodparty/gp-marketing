@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { cn, tv } from './_lib/utils.ts';
-import { type backgroundTypeValues, defaultCtaButtonStyleType } from './_lib/designTypesStore.ts';
-import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
+import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
@@ -10,11 +9,12 @@ import { isValidRichText } from './_lib/isValidRichText.ts';
 const styles = tv({
 	slots: {
 		base: 'py-(--container-padding)',
-		grid: 'grid lg:grid-cols-[auto_1fr] gap-20',
-		card: 'bg-white rounded-lg border border-neutral-200 p-4 md:p-6 lg:p-8 flex flex-col gap-3 md:gap-4 order-2 lg:order-1 w-fit self-start lg:min-w-[400px]',
+		grid: 'grid lg:grid-cols-[400px_1fr] gap-20',
+		card: 'bg-white rounded-lg border border-neutral-200 p-4 md:p-6 lg:p-8 flex flex-col gap-3 md:gap-4 order-2 lg:order-1 w-fit self-start min-w-[400px]',
 		cardContent: 'flex flex-col gap-8',
 		buttonContainer: 'w-fit',
 		rightContent: 'flex flex-col gap-8 order-1 lg:order-2',
+		topHeadline: '',
 		gridSection: 'grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:grid-cols-3',
 		gridItem: 'flex flex-col gap-3',
 		separator: 'border-t border-neutral-200',
@@ -69,17 +69,11 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 		styles({ backgroundColor });
 
 	const resolvedButtonStyle = props.card?.primaryCTA
-		? resolveButtonStyleType(
-				props.card.primaryCTA.buttonProps?.styleType ?? defaultCtaButtonStyleType,
-				backgroundColor,
-			)
+		? (backgroundColor === 'midnight' ? 'outline-inverse' : 'secondary')
 		: undefined;
 
 	const resolvedRightColumnCTAStyle = props.rightColumnCTA
-		? resolveButtonStyleType(
-				props.rightColumnCTA.buttonProps?.styleType ?? defaultCtaButtonStyleType,
-				backgroundColor,
-			)
+		? (backgroundColor === 'midnight' ? 'outline-inverse' : 'secondary')
 		: undefined;
 
 	return (

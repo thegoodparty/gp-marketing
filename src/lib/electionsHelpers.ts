@@ -181,7 +181,7 @@ export function placeToFactsCards(place: PlaceWithFacts | null): FactsCardProps[
 		cards.push({
 			factType: 'unemployment-rate',
 			label: factTypeLabels['unemployment-rate']!,
-			value: `${(place.unemploymentRate * 100).toFixed(1)}%`,
+			value: `${place.unemploymentRate.toFixed(1)}%`,
 		});
 	}
 	if (place.homeValue != null) {

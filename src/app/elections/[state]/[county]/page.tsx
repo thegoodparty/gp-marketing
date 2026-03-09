@@ -17,7 +17,12 @@ import {
 } from '~/constants/electionsStaticSections';
 import { sanityFetch } from '~/sanity/sanityClient';
 import { quoteCollectionByIdQuery } from '~/sanity/groq';
-import { getStateName, placeToFactsCards } from '~/lib/electionsHelpers';
+import {
+	getCountySuffixLabel,
+	getStateName,
+	placeToFactsCards,
+	stripCountySuffix,
+} from '~/lib/electionsHelpers';
 import { resolveAuthor } from '~/ui/_lib/resolveAuthor';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 import { BreadcrumbBlock } from '~/ui/BreadcrumbBlock';
@@ -70,7 +75,7 @@ export default async function Page({
 
 	const placeName = isDistrict
 		? (placeData?.name ?? county)
-		: (countyPlace!.name.replace(/\s+County$/i, '') || countyPlace!.name);
+		: (stripCountySuffix(countyPlace!.name) || countyPlace!.name);
 	const cities = isDistrict
 		? []
 		: cityPlaces.map(c => ({
@@ -82,7 +87,7 @@ export default async function Page({
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
 		{ href: `/elections/${state.toLowerCase()}`, label: stateName },
-		{ href: '', label: isDistrict ? placeName : `${placeName} County` },
+		{ href: '', label: isDistrict ? placeName : countyPlace!.name },
 	];
 
 	const factsCards = placeToFactsCards(placeData);
@@ -141,7 +146,7 @@ export default async function Page({
 				listProps={{
 					heading: isDistrict
 						? `Elections in ${placeName}`
-						: `County Elections in ${placeName} County`,
+						: `${getCountySuffixLabel(countyPlace!.name)} Elections in ${countyPlace!.name}`,
 					headlineLabel: isDistrict ? 'district' : 'county',
 					defaultYear,
 					availableYears,
@@ -151,7 +156,7 @@ export default async function Page({
 			{factsCards.length > 0 && (
 				<LocationFactsBlock
 					backgroundColor="cream"
-					header={{ title: isDistrict ? `${placeName} facts` : `${placeName} County facts` }}
+					header={{ title: isDistrict ? `${placeName} facts` : `${countyPlace!.name} facts` }}
 					factsCards={factsCards}
 				/>
 			)}
@@ -161,8 +166,8 @@ export default async function Page({
 					stateSlug={fullSlug}
 					elections={cities}
 					header={{
-						title: `Cities in ${placeName} County`,
-						copy: `Browse elections by city in ${placeName} County, ${stateName}.`,
+						title: `Cities in ${countyPlace!.name}`,
+						copy: `Browse elections by city in ${countyPlace!.name}, ${stateName}.`,
 						backgroundColor: 'midnight',
 					}}
 					initialDisplayCount={DEFAULT_DISPLAY_COUNT}
@@ -210,7 +215,7 @@ export async function generateMetadata({
 	const isDistrict = placeData != null && isDistrictMtfcc(placeData.mtfcc);
 	const placeName = isDistrict
 		? (placeData?.name ?? county)
-		: (countyPlace?.name?.replace(/\s+County$/i, '') ?? county);
+		: (countyPlace ? stripCountySuffix(countyPlace.name) : county);
 	return {
 		title: `Elections in ${placeName}, ${stateName} | Good Party`,
 		description: isDistrict

@@ -2,6 +2,19 @@ import { US_STATES } from '~/constants/usStates';
 import type { CandidacyItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
 import type { FactsCardProps } from '~/ui/FactsCard';
 
+const COUNTY_EQUIV_SUFFIX_RE = /\s+(County|Parish|Borough|Census Area|Municipio|City and County)$/i;
+
+/** Strip county-equivalent suffix from a place name: "Jefferson Parish" -> "Jefferson" */
+export function stripCountySuffix(name: string): string {
+	return name.replace(COUNTY_EQUIV_SUFFIX_RE, '') || name;
+}
+
+/** Get the suffix word from a county-equivalent name: "Jefferson Parish" -> "Parish", fallback "County" */
+export function getCountySuffixLabel(name: string): string {
+	const match = name.match(COUNTY_EQUIV_SUFFIX_RE);
+	return match?.[1] ?? 'County';
+}
+
 export function mapCandidacyToCard(
 	candidacy: CandidacyItem,
 	index: number,

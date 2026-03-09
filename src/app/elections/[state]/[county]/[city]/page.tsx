@@ -15,7 +15,7 @@ import {
 } from '~/constants/electionsStaticSections';
 import { sanityFetch } from '~/sanity/sanityClient';
 import { quoteCollectionByIdQuery } from '~/sanity/groq';
-import { getStateName, placeToFactsCards } from '~/lib/electionsHelpers';
+import { getStateName, placeToFactsCards, stripCountySuffix } from '~/lib/electionsHelpers';
 import { resolveAuthor } from '~/ui/_lib/resolveAuthor';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 import { BreadcrumbBlock } from '~/ui/BreadcrumbBlock';
@@ -74,14 +74,9 @@ export default async function Page({
 		notFound();
 	}
 
-	const countyName = countyPlace.name.replace(/\s+County$/i, '') || countyPlace.name;
 	const cityPlace =
-		cityPlaces.find(
-			c =>
-				(c.countyName?.toLowerCase() === countyName.toLowerCase() &&
-					c.slug.toLowerCase() === shortSlug) ||
-				c.slug.toLowerCase() === fullSlug,
-		) ?? (resolvedPlaceData?.slug?.toLowerCase() === shortSlug ? resolvedPlaceData : null);
+		cityPlaces.find(c => c.slug.toLowerCase() === shortSlug) ??
+		(resolvedPlaceData?.slug?.toLowerCase() === shortSlug ? resolvedPlaceData : null);
 
 	if (!cityPlace) {
 		notFound();
@@ -92,7 +87,7 @@ export default async function Page({
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
 		{ href: `/elections/${state.toLowerCase()}`, label: stateName },
-		{ href: `/elections/${countySlug}`, label: `${countyName} County` },
+		{ href: `/elections/${countySlug}`, label: countyPlace.name },
 		{ href: '', label: cityName },
 	];
 
@@ -194,18 +189,12 @@ export async function generateMetadata({
 	if (!isValidStateCode(stateCode)) return {};
 	const stateName = getStateName(stateCode);
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
-	const fullSlug = `${countySlug}/${city.toLowerCase()}`;
 	const shortSlug = `${state.toLowerCase()}/${city.toLowerCase()}`;
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
-	const countyName = countyPlace?.name?.replace(/\s+County$/i, '') ?? county;
+	const countyName = countyPlace ? stripCountySuffix(countyPlace.name) : county;
 	const cityPlaces = await getCityPlacesByCounty({ state: stateCode, countySlug });
-	let cityPlace = cityPlaces.find(
-		c =>
-			(c.countyName?.toLowerCase() === countyName.toLowerCase() &&
-				c.slug.toLowerCase() === shortSlug) ||
-			c.slug.toLowerCase() === fullSlug,
-	);
+	let cityPlace = cityPlaces.find(c => c.slug.toLowerCase() === shortSlug);
 	if (!cityPlace) {
 		const placeByShortSlug = await getPlaceBySlug({
 			slug: shortSlug,
@@ -219,6 +208,6 @@ export async function generateMetadata({
 	const cityName = cityPlace?.name ?? city;
 	return {
 		title: `Elections in ${cityName}, ${stateName} | Good Party`,
-		description: `Browse elections and local positions in ${cityName}, ${countyName} County, ${stateName}.`,
+		description: `Browse elections and local positions in ${cityName}, ${countyPlace?.name ?? `${countyName} County`}, ${stateName}.`,
 	};
 }

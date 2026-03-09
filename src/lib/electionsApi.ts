@@ -172,10 +172,18 @@ export async function getPlacesByState(params: {
 	return Array.isArray(data) ? data : [];
 }
 
+/** Normalize place name for comparison (strip punctuation, lowercase). */
+function normalizeName(name: string): string {
+	return name.replace(/[.'']/g, '').toLowerCase();
+}
+
 /** Derives county name from county slug (e.g. "ca/los-angeles-county" -> "Los Angeles"). */
 function countyNameFromSlug(countySlug: string): string {
 	const part = countySlug.split('/').pop() ?? '';
-	const withoutSuffix = part.replace(/-county$/i, '');
+	const withoutSuffix = part.replace(
+		/-(county|parish|borough|census-area|municipio|city-and-county)$/i,
+		'',
+	);
 	return withoutSuffix.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 }
 
@@ -186,7 +194,7 @@ export async function getCityPlacesByCounty(params: {
 	const allCities = await getPlacesByState({ state: params.state, mtfcc: CITY_MTFCC });
 	const countyName = countyNameFromSlug(params.countySlug);
 	return allCities.filter(
-		p => p.countyName?.toLowerCase() === countyName.toLowerCase(),
+		p => normalizeName(p.countyName ?? '') === normalizeName(countyName),
 	);
 }
 

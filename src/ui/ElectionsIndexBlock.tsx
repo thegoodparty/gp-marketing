@@ -204,44 +204,40 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 						</div>
 					)}
 
-					{/* Show More / CTA Button - only when ctaLabel is provided */}
-					{props.ctaLabel &&
-						(hasMore || props.ctaHref) && (
-							<div className={footer()}>
-								{hasMore ? (
-									<Button
-										parent="ElectionsIndexBlock"
-										type="button"
-										onClick={handleShowMore}
-										styleType={resolvedButtonStyle}
-										iconRight={
-											<IconResolver
-												icon="arrow-up-right"
-												className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5"
-											/>
-										}
-									>
-										{props.ctaLabel}
-									</Button>
-								) : (
-									<Anchor href={props.ctaHref!}>
-										<Button
-											parent="ElectionsIndexBlock"
-											type="button"
-											styleType={resolvedButtonStyle}
-											iconRight={
-												<IconResolver
-													icon="arrow-up-right"
-													className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5"
-												/>
-											}
-										>
-											{props.ctaLabel}
-										</Button>
-									</Anchor>
-								)}
-							</div>
-						)}
+					{/* Show More - reveals hidden items, always shown when there are more */}
+					{hasMore && (
+						<div className={footer()}>
+							<Button
+								parent="ElectionsIndexBlock"
+								type="button"
+								onClick={handleShowMore}
+								styleType={resolvedButtonStyle}
+							>
+								Show More
+							</Button>
+						</div>
+					)}
+
+					{/* CTA - optional link, shown when all items are visible */}
+					{!hasMore && props.ctaLabel && props.ctaHref && (
+						<div className={footer()}>
+							<Anchor href={props.ctaHref}>
+								<Button
+									parent="ElectionsIndexBlock"
+									type="button"
+									styleType={resolvedButtonStyle}
+									iconRight={
+										<IconResolver
+											icon="arrow-up-right"
+											className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5"
+										/>
+									}
+								>
+									{props.ctaLabel}
+								</Button>
+							</Anchor>
+						</div>
+					)}
 				</div>
 			</Container>
 		</article>

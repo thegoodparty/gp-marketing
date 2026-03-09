@@ -90,15 +90,10 @@ export interface ElectionsIndexBlockProps {
 }
 
 export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
-	// Return null for city pages - component should not render
-	if (props.citySlug) {
-		return null;
-	}
-
 	const backgroundColor = props.backgroundColor ?? 'midnight';
 	const initialDisplayCount = props.initialDisplayCount ?? DEFAULT_DISPLAY_COUNT;
 	const showSearch = props.showSearch ?? true;
-	const fullPlaceholder = props.searchPlaceholder ?? 'Search by county or municipality';
+	const fullPlaceholder = props.searchPlaceholder ?? 'Search by county or city';
 	const isMdOrLarger = useMediaQuery('(min-width: 768px)');
 	const searchPlaceholder = isMdOrLarger ? fullPlaceholder : 'Search';
 
@@ -149,6 +144,10 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 	};
 
 	const resolvedButtonStyle = resolveButtonStyleType('primary', backgroundColor);
+
+	if (props.citySlug) {
+		return null;
+	}
 
 	return (
 		<article className={cn(base(), props.className)} data-component="ElectionsIndexBlock">

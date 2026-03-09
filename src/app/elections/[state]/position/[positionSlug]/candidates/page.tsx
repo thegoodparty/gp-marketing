@@ -7,6 +7,7 @@ import {
 	formatElectionDateFromApi,
 	formatFilingPeriodFromRace,
 	getStateName,
+	mapCandidacyToCard,
 } from '~/lib/electionsHelpers';
 import { CandidatesPageContent } from '~/ui/CandidatesPageContent';
 
@@ -16,12 +17,13 @@ export default async function Page({
 	params: Promise<{ state: string; positionSlug: string }>;
 }) {
 	const { state, positionSlug } = await params;
+	const stateCode = state.toUpperCase();
 
-	if (!isValidStateCode(state)) {
+	if (!isValidStateCode(stateCode)) {
 		notFound();
 	}
 
-	const raceSlug = buildRaceSlug(state, positionSlug);
+	const raceSlug = buildRaceSlug(stateCode, positionSlug);
 	const [race, candidacies] = await Promise.all([
 		getRaceBySlug(raceSlug),
 		getCandidacies({ raceSlug }),
@@ -31,22 +33,14 @@ export default async function Page({
 		notFound();
 	}
 
-	const stateName = getStateName(state);
+	const stateName = getStateName(stateCode);
 	const officeName = race.normalizedPositionName ?? race.name ?? 'Position';
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 
-	const candidates = candidacies.map((c, i) => ({
-		_key: c.id ?? `c-${i}`,
-		name: [c.firstName, c.lastName].filter(Boolean).join(' ') || 'Candidate',
-		partyAffiliation: c.party ?? 'Unknown',
-		avatar: c.image ?? undefined,
-		href: c.slug
-			? `/candidate/${c.slug}`
-			: `/profile?slug=${encodeURIComponent([c.firstName, c.lastName].filter(Boolean).join('-').toLowerCase())}&raceId=${encodeURIComponent(c.raceId ?? '')}`,
-	}));
+	const candidates = candidacies.map((c, i) => mapCandidacyToCard(c, i));
 
-	const statePath = state.toLowerCase();
+	const statePath = stateCode.toLowerCase();
 	const positionHref = `/elections/${statePath}/position/${positionSlug}`;
 	const locationHref = `/elections/${statePath}`;
 
@@ -63,7 +57,7 @@ export default async function Page({
 			electionDate={electionDate}
 			filingDate={filingDate}
 			breadcrumbs={breadcrumbs}
-			candidatesHref={positionHref}
+			positionHref={positionHref}
 			locationHref={locationHref}
 			candidates={candidates}
 			race={race}
@@ -77,9 +71,10 @@ export async function generateMetadata({
 	params: Promise<{ state: string; positionSlug: string }>;
 }): Promise<Metadata> {
 	const { state, positionSlug } = await params;
-	if (!isValidStateCode(state)) return {};
-	const stateName = getStateName(state);
-	const raceSlug = buildRaceSlug(state, positionSlug);
+	const stateCode = state.toUpperCase();
+	if (!isValidStateCode(stateCode)) return {};
+	const stateName = getStateName(stateCode);
+	const raceSlug = buildRaceSlug(stateCode, positionSlug);
 	const race = await getRaceBySlug(raceSlug);
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
 	return {

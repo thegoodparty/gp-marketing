@@ -60,6 +60,7 @@ export type ElectionsPositionContentBlockProps = {
 	topHeadline?: string;
 	gridItems?: ElectionsPositionContentBlockGridItem[];
 	bottomItems?: ElectionsPositionContentBlockBottomItem[];
+	rightColumnCTA?: ComponentButtonProps;
 };
 
 export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlockProps) {
@@ -153,6 +154,17 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 										)}
 									</div>
 								))}
+							</div>
+						)}
+						{props.rightColumnCTA && (
+							<div className={buttonContainer()}>
+								<ComponentButton
+									{...props.rightColumnCTA}
+									buttonProps={{
+										...(props.rightColumnCTA.buttonProps ?? {}),
+										styleType: props.rightColumnCTA.buttonProps?.styleType ?? 'secondary',
+									}}
+								/>
 							</div>
 						)}
 					</div>

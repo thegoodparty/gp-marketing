@@ -3,7 +3,7 @@ import { stegaClean } from 'next-sanity';
 import type { Sections } from '~/PageSections';
 import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
 import { US_STATES_TUPLES } from '~/constants/usStates';
-import { getPlacesByState, getPlacesBySlugWithChildren } from '~/lib/electionsApi';
+import { COUNTY_MTFCC, getPlacesByState, getPlacesBySlugWithChildren } from '~/lib/electionsApi';
 import { transformButtons } from '~/lib/buttonTransformer';
 import { DEFAULT_DISPLAY_COUNT } from '~/constants/display';
 import { ElectionsIndexBlock } from '~/ui/ElectionsIndexBlock';
@@ -40,7 +40,7 @@ export async function ElectionsIndexBlockSection(props: ElectionsIndexBlockSecti
 	} else if (!slug) {
 		elections = statesToElectionItems();
 	} else if (!slug.includes('/')) {
-		const places = await getPlacesByState({ state: slug.toUpperCase(), mtfcc: 'G4020' });
+		const places = await getPlacesByState({ state: slug.toUpperCase(), mtfcc: COUNTY_MTFCC });
 		if (places.length > 0) {
 			elections = places.map(p => ({
 				name: p.name,
@@ -83,7 +83,7 @@ export async function ElectionsIndexBlockSection(props: ElectionsIndexBlockSecti
 				showSearch={section.electionsIndexBlockDesignSettings?.field_showSearch ?? true}
 				searchPlaceholder={
 					section.electionsIndexBlockDesignSettings?.field_searchPlaceholder ??
-					'Search by county or municipality'
+					'Search by county or city'
 				}
 				initialDisplayCount={section.electionsIndexBlockDesignSettings?.field_initialDisplayCount ?? DEFAULT_DISPLAY_COUNT}
 				ctaLabel={section.electionsIndexBlockDesignSettings?.field_ctaLabel ?? 'Browse CTA'}

@@ -37,7 +37,8 @@ export function CandidatesBlockSection(props: CandidatesBlockSectionProps) {
 		: 'cream';
 
 	const enablePagination = stegaClean(section.candidatesBlockFilterSettings?.field_enableFilters) ?? false;
-	const candidates = candidatesOverride ?? mockCandidates;
+	const candidates =
+		candidatesOverride ?? (process.env.NODE_ENV === 'development' ? mockCandidates : []);
 
 	const buttons = transformButtons(section.candidatesBlockOptionalButton ? [section.candidatesBlockOptionalButton] : []);
 

@@ -13,6 +13,7 @@ import {
 	POSITION_PAGE_FAQ,
 	POSITION_PAGE_TWO_UP_CARD,
 } from '~/constants/positionPageStaticSections';
+import { primaryButtonStyleType, secondaryButtonStyleType } from '~/ui/_lib/designTypesStore';
 
 export type PositionPageContentProps = {
 	officeName: string;
@@ -22,8 +23,6 @@ export type PositionPageContentProps = {
 	electionDate: string;
 	filingDate: string;
 	breadcrumbs: BreadcrumbItem[];
-	backHref: string;
-	backLabel: string;
 	candidatesHref: string;
 	race?: RaceDetail | null;
 };
@@ -99,7 +98,7 @@ export function PositionPageContent(props: PositionPageContentProps) {
 	const gridItems = race ? buildGridItems(race) : [];
 	const bottomItems = race ? buildBottomItems(race) : [];
 
-	const locationName = countyName ?? cityName ?? stateName;
+	const locationName = cityName ?? countyName ?? stateName;
 	const replacements = { officeName, stateName, locationName };
 
 	return (
@@ -117,7 +116,7 @@ export function PositionPageContent(props: PositionPageContentProps) {
 					buttonType: 'internal',
 					href: candidatesHref,
 					label: 'Run for office',
-					buttonProps: { styleType: 'primary' },
+					buttonProps: { styleType: primaryButtonStyleType },
 				}}
 			/>
 
@@ -138,10 +137,10 @@ export function PositionPageContent(props: PositionPageContentProps) {
 								subhead: 'About this position',
 								bodyCopy: race.positionDescription,
 								primaryCTA: {
-									buttonType: 'internal',
-									href: candidatesHref,
-									label: 'View candidates',
-									buttonProps: { styleType: 'secondary' },
+									buttonType: 'external',
+									href: '/get-a-demo',
+									label: 'Book now',
+									buttonProps: { styleType: secondaryButtonStyleType },
 								},
 							}
 						: undefined
@@ -149,6 +148,12 @@ export function PositionPageContent(props: PositionPageContentProps) {
 				topHeadline="Position Details"
 				gridItems={gridItems}
 				bottomItems={bottomItems}
+				rightColumnCTA={{
+					buttonType: 'internal',
+					href: candidatesHref,
+					label: 'View candidates',
+					buttonProps: { styleType: secondaryButtonStyleType },
+				}}
 			/>
 
 			<FAQBlock
@@ -172,7 +177,7 @@ export function PositionPageContent(props: PositionPageContentProps) {
 						buttonType: 'internal',
 						href: candidatesHref,
 						label: POSITION_PAGE_CTA_BLOCK.primaryButtonLabel,
-						buttonProps: { styleType: 'primary' },
+						buttonProps: { styleType: primaryButtonStyleType },
 					},
 				]}
 			/>

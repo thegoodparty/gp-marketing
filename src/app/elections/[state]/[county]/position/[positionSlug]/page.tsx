@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
-import { getPlacesByState, getRaceBySlug } from '~/lib/electionsApi';
+import { COUNTY_MTFCC, getPlacesByState, getRaceBySlug } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
 	buildRaceSlug,
@@ -23,7 +23,7 @@ export default async function Page({
 	}
 
 	const raceSlug = buildRaceSlug(state, positionSlug, county);
-	let race = await getRaceBySlug(raceSlug);
+	const race = await getRaceBySlug(raceSlug);
 
 	if (!race && !county.endsWith('-county')) {
 		const retrySlug = buildRaceSlug(state, positionSlug, `${county}-county`);
@@ -38,7 +38,7 @@ export default async function Page({
 	}
 
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
-	const counties = await getPlacesByState({ state: stateCode, mtfcc: 'G4020' });
+	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
 	const countyName = countyPlace?.name?.replace(/\s+County$/i, '') ?? county;
 
@@ -64,8 +64,6 @@ export default async function Page({
 			electionDate={electionDate}
 			filingDate={filingDate}
 			breadcrumbs={breadcrumbs}
-			backHref={`/elections/${countySlug}`}
-			backLabel={`Back to ${countyName} County elections`}
 			candidatesHref={candidatesHref}
 			race={race}
 		/>
@@ -78,12 +76,13 @@ export async function generateMetadata({
 	params: Promise<{ state: string; county: string; positionSlug: string }>;
 }): Promise<Metadata> {
 	const { state, county, positionSlug } = await params;
-	if (!isValidStateCode(state)) return {};
-	const stateName = getStateName(state);
+	const stateCode = state.toUpperCase();
+	if (!isValidStateCode(stateCode)) return {};
+	const stateName = getStateName(stateCode);
 	const raceSlug = buildRaceSlug(state, positionSlug, county);
 	const race = await getRaceBySlug(raceSlug);
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
-	const counties = await getPlacesByState({ state: state.toUpperCase(), mtfcc: 'G4020' });
+	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
 	const countyName = countyPlace?.name?.replace(/\s+County$/i, '') ?? county;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';

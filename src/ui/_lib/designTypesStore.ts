@@ -38,6 +38,10 @@ export const buttonStyleTypeValues = [
 	'min-ghost',
 	'min-ghost-inverse',
 ] as const;
+
+export const primaryButtonStyleType = buttonStyleTypeValues[0];
+export const secondaryButtonStyleType = buttonStyleTypeValues[1];
+export const outlineButtonStyleType = buttonStyleTypeValues[2];
 export const iconColorValues = ['red', 'waxflower', 'bright-yellow', 'halo-green', 'blue', 'lavender', 'white', 'mixed'] as const;
 export const colorTypeValues = ['blue', 'red', 'waxflower', 'bright-yellow', 'halo-green', 'lavender', 'inverse'] as const;
 export const componentColorValues = [

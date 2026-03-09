@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { primaryButtonStyleType, secondaryButtonStyleType } from './_lib/designTypesStore.ts';
 import { imageJpg, logoSVG } from './_data/media.tsx';
 import { ElectionsSearchHero } from './ElectionsSearchHero.tsx';
 import { US_STATES } from '~/constants/usStates';
@@ -22,7 +23,7 @@ const baseArgs = {
 		buttonType: 'button' as const,
 		label: 'Search',
 		buttonProps: {
-			styleType: 'primary' as const,
+			styleType: primaryButtonStyleType,
 		},
 	},
 };
@@ -80,7 +81,7 @@ export const WithCustomCTA: Story = {
 			buttonType: 'button' as const,
 			label: 'Find My Elections',
 			buttonProps: {
-				styleType: 'secondary' as const,
+				styleType: secondaryButtonStyleType,
 			},
 		},
 	},
@@ -96,7 +97,7 @@ export const Minimal: Story = {
 			buttonType: 'button' as const,
 			label: 'Search',
 			buttonProps: {
-				styleType: 'primary' as const,
+				styleType: primaryButtonStyleType,
 			},
 		},
 	},

@@ -46,7 +46,11 @@ const nextConfig = {
 		contentDispositionType: 'attachment',
 		contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
 
-		remotePatterns: [{ hostname: 'cdn.sanity.io' }],
+		remotePatterns: [
+			{ hostname: 'cdn.sanity.io' },
+			{ hostname: 'election-api.goodparty.org' },
+			{ hostname: 'election-api-dev.goodparty.org' },
+		],
 	},
 	experimental: {
 		// ppr: true,

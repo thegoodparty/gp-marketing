@@ -3,7 +3,11 @@ import { stegaClean } from 'next-sanity';
 import type { Sections } from '~/PageSections';
 import type { LocationCardProps } from '~/ui/LocationCard';
 
-import { getMostElections } from '~/lib/electionsApi';
+import {
+	COUNTY_MTFCC,
+	getMostElections,
+	getPlacesByState,
+} from '~/lib/electionsApi';
 import { transformButtons } from '~/lib/buttonTransformer';
 
 import { resolveBg } from '~/ui/_lib/resolveBg';
@@ -12,13 +16,31 @@ import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 import { FeaturedCitiesBlock } from '~/ui/FeaturedCitiesBlock';
 import { RichData } from '~/ui/RichData';
 
-function featuredCityToLocationCard(city: { name: string; slug: string; race_count: number }): LocationCardProps {
+async function resolveCityHref(slug: string): Promise<string> {
+	const parts = slug.split('/');
+	if (parts.length === 2 && parts[0]) {
+		const counties = await getPlacesByState({
+			state: parts[0].toUpperCase(),
+			mtfcc: COUNTY_MTFCC,
+		});
+		if (counties.length === 1) {
+			const countySegment = counties[0]?.slug.split('/').pop() ?? parts[0];
+			return `/elections/${parts[0]}/${countySegment}/${parts[1]}`;
+		}
+	}
+	return `/elections/${slug}`;
+}
+
+function featuredCityToLocationCard(
+	city: { name: string; slug: string; race_count: number },
+	href: string,
+): LocationCardProps {
 	const stateCode = city.slug.split('/')[0]?.toUpperCase() ?? '';
 	return {
 		cityName: city.name,
 		stateAbbreviation: stateCode,
 		openElectionsCount: city.race_count,
-		href: `/elections/${city.slug}`,
+		href,
 	};
 }
 
@@ -28,9 +50,15 @@ export async function FeaturedCitiesBlockSection(section: Extract<Sections, { _t
 		: 'cream';
 
 	const apiCities = await getMostElections(3);
+	const resolvedHrefs =
+		apiCities.length > 0
+			? await Promise.all(apiCities.map(c => resolveCityHref(c.slug)))
+			: [];
 	const locationCards: LocationCardProps[] =
 		apiCities.length > 0
-			? apiCities.map(featuredCityToLocationCard)
+			? apiCities.map((city, i) =>
+					featuredCityToLocationCard(city, resolvedHrefs[i] ?? `/elections/${city.slug}`),
+				)
 			: (section.featuredCitiesBlockCards?.list_locationCards?.map(card => ({
 					cityName: card.field_cityName ?? '',
 					stateAbbreviation: card.field_stateAbbreviation ?? '',

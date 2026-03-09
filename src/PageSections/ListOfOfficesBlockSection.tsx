@@ -1,18 +1,16 @@
 import { stegaClean } from 'next-sanity';
+import type { Field_blockColorCreamMidnight } from 'sanity.types';
 
+import { formatElectionDateFromApi } from '~/lib/electionsHelpers';
 import type { Sections } from '~/PageSections';
 import { ListOfOfficesBlock, type OfficeItem } from '~/ui/ListOfOfficesBlock';
+import { resolveBg } from '~/ui/_lib/resolveBg';
 
 type ListOfOfficesBlockSectionProps = Extract<Sections, { _type: 'component_listOfOfficesBlock' }>;
 
 export function ListOfOfficesBlockSection(section: ListOfOfficesBlockSectionProps) {
-	// Resolve background color
 	const bgValue = section.listOfOfficesBlockDesignSettings?.field_blockColorCreamMidnight;
-	const backgroundColor = bgValue
-		? stegaClean(bgValue) === 'cream' || stegaClean(bgValue) === 'Cream'
-			? 'cream'
-			: 'midnight'
-		: 'cream';
+	const backgroundColor = bgValue ? resolveBg(stegaClean(bgValue) as Field_blockColorCreamMidnight) : 'cream';
 
 	// Transform offices from Sanity format to component format
 	const offices: OfficeItem[] =
@@ -21,11 +19,7 @@ export function ListOfOfficesBlockSection(section: ListOfOfficesBlockSectionProp
 			type: stegaClean(office.field_type) || 'STATE',
 			position: stegaClean(office.field_position) || '',
 			nextElectionDate: office.field_nextElectionDate
-				? new Date(office.field_nextElectionDate).toLocaleDateString('en-US', {
-						year: 'numeric',
-						month: 'long',
-						day: 'numeric',
-					})
+				? formatElectionDateFromApi(office.field_nextElectionDate)
 				: '',
 			href: stegaClean(office.field_href) || undefined,
 		})) || [];

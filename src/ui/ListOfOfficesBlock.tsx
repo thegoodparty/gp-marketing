@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from 'react';
 
 import { cn, tv } from './_lib/utils.ts';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
+import { secondaryButtonStyleType, type backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
@@ -12,7 +12,7 @@ import { IconResolver } from './IconResolver.tsx';
 import { ArrowRightIcon } from './icons/ArrowRightIcon.tsx';
 import { Button } from './Inputs/Button.tsx';
 import { DEFAULT_YEAR_OFFSET } from '~/constants/display';
-import { formatElectionDateFromApi } from '~/lib/electionsHelpers';
+import { formatElectionDateFromApi, getYearFromDateString } from '~/lib/electionsHelpers';
 
 const styles = tv({
 	slots: {
@@ -92,15 +92,24 @@ export interface OfficeItem {
 	href?: string;
 }
 
+export type HeadlineLabelType = 'state' | 'municipal' | 'county';
+
 export interface ListOfOfficesBlockProps {
 	className?: string;
 	backgroundColor?: (typeof backgroundTypeValues)[number];
 	heading?: string;
+	/** Pre-built headline string (used when headlineLabel is not set). */
 	headline?: string;
+	/** When set, headline is derived as "{count} {label} positions up for election in {selectedYear}". */
+	headlineLabel?: HeadlineLabelType;
 	defaultYear?: number;
 	availableYears?: number[];
 	pageSize?: number;
 	offices: OfficeItem[];
+	/** When true and there are no offices, show "Loading…" instead of "No offices found". */
+	isLoading?: boolean;
+	/** When set, filter offices by position name (case-insensitive substring). */
+	searchQuery?: string;
 	onYearChange?: (year: number) => void;
 	onOfficeClick?: (office: OfficeItem) => void;
 }
@@ -147,13 +156,19 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 		showMoreWrapper,
 	} = styles({ backgroundColor });
 
-	// Filter offices by selected year (extract year from date string)
+	// Filter offices by selected year and optional search query (position name, case-insensitive substring)
 	const filteredOffices = useMemo(() => {
-		return props.offices.filter(office => {
-			const dateYear = new Date(office.nextElectionDate).getFullYear();
-			return dateYear === selectedYear;
+		let list = props.offices.filter(office => {
+			const dateYear = getYearFromDateString(office.nextElectionDate);
+			return !Number.isNaN(dateYear) && dateYear === selectedYear;
 		});
-	}, [props.offices, selectedYear]);
+		const q = props.searchQuery?.trim();
+		if (q) {
+			const lower = q.toLowerCase();
+			list = list.filter(office => office.position.toLowerCase().includes(lower));
+		}
+		return list;
+	}, [props.offices, selectedYear, props.searchQuery]);
 
 	const visibleOffices = filteredOffices.slice(0, visibleCount);
 	const hasMore = visibleCount < filteredOffices.length;
@@ -173,6 +188,10 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 		props.onOfficeClick?.(office);
 	};
 
+	const displayHeadline = props.headlineLabel
+		? `${filteredOffices.length} ${props.headlineLabel} positions up for election in ${selectedYear}`
+		: props.headline;
+
 	return (
 		<article className={cn(base(), props.className)} data-component="ListOfOfficesBlock">
 			<Container size="xl">
@@ -183,9 +202,9 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 					<div className={card()}>
 						{/* Header Row: Headline + Year Selector */}
 						<div className={headerRow()}>
-							{props.headline && (
+							{displayHeadline && (
 								<Text as="h3" styleType="heading-md" className={headlineStyle()}>
-									{props.headline}
+									{displayHeadline}
 								</Text>
 							)}
 							<div className={yearSelectorWrapper()}>
@@ -295,7 +314,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 									<div className={showMoreWrapper()}>
 										<Button
 											parent="ListOfOfficesBlock"
-											styleType="secondary"
+											styleType={secondaryButtonStyleType}
 											onClick={() => setVisibleCount(prev => prev + pageSize)}
 										>
 											Show More
@@ -306,7 +325,11 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 						) : (
 							<div className="py-8 text-center">
 								<Text styleType="body-2" className="text-neutral-500">
-									No offices found for {selectedYear}
+									{props.searchQuery?.trim()
+										? 'No positions match your search'
+										: props.isLoading
+											? 'Loading…'
+											: `No offices found for ${selectedYear}`}
 								</Text>
 							</div>
 						)}

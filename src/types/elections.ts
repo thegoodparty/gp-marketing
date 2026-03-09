@@ -41,6 +41,21 @@ export interface CandidacyItem {
 	party?: string;
 	raceId?: string;
 	positionId?: string;
+	positionName?: string;
+	state?: string;
+	placeName?: string;
+	about?: string;
+	email?: string;
+	urls?: string[];
+	Stances?: Array<{
+		Issue?: { name?: string };
+		stanceStatement?: string;
+	}>;
+	Race?: {
+		brHashId: string;
+		electionDate?: string;
+		[key: string]: unknown;
+	};
 }
 
 export interface RaceDetail {
@@ -90,7 +105,16 @@ export interface PositionDetail {
 export interface FindByRaceIdResponse {
 	id: number;
 	slug: string;
-	details: Record<string, unknown> | null;
+	statusCode?: number;
+	details: {
+		occupation?: string;
+		funFact?: string;
+		party?: string;
+		pastExperience?: string;
+		website?: string;
+		runningAgainst?: Array<{ name: string; party: string; description: string }>;
+		customIssues?: Array<{ title: string; description: string }>;
+	} | null;
 	updatedAt: string;
 	website: {
 		id: number;

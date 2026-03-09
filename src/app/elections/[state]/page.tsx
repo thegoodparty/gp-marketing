@@ -1,6 +1,11 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getPlacesByState, getPlaceBySlug } from '~/lib/electionsApi';
+import {
+	COUNTY_MTFCC,
+	CITY_MTFCC,
+	getPlacesByState,
+	getPlaceBySlug,
+} from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import { DEFAULT_DISPLAY_COUNT } from '~/constants/display';
 import {
@@ -15,8 +20,7 @@ import { getStateName, placeToFactsCards } from '~/lib/electionsHelpers';
 import { resolveAuthor } from '~/ui/_lib/resolveAuthor';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 import { BreadcrumbBlock } from '~/ui/BreadcrumbBlock';
-import { ListOfOfficesBlock } from '~/ui/ListOfOfficesBlock';
-import { LocationLandingPageHero } from '~/ui/LocationLandingPageHero';
+import { ElectionsLandingWithSearch } from '~/ui/ElectionsLandingWithSearch';
 import { LocationFactsBlock } from '~/ui/LocationFactsBlock';
 import { Carousel } from '~/ui/Carousel';
 import { StepperBlock } from '~/ui/StepperBlock';
@@ -38,7 +42,7 @@ export default async function Page({
 	const currentYear = new Date().getFullYear();
 
 	const [countyPlaces, placeData, quoteCollection] = await Promise.all([
-		getPlacesByState({ state: stateCode, mtfcc: 'G4020' }),
+		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
 		getPlaceBySlug({
 			slug: state.toLowerCase(),
 			includeChildren: false,
@@ -51,11 +55,37 @@ export default async function Page({
 		}),
 	]);
 
-	const counties = countyPlaces.map(p => ({
-		name: p.name,
-		href: `/elections/${p.slug}`,
-		level: 'county' as const,
-	}));
+	const isSingleCounty = countyPlaces.length <= 1;
+	let cityPlaces = isSingleCounty
+		? await getPlacesByState({ state: stateCode, mtfcc: CITY_MTFCC })
+		: [];
+
+	const countySlug = countyPlaces[0]?.slug;
+
+	const locationItems =
+		isSingleCounty && countySlug
+			? [
+					...cityPlaces.map(p => {
+						const citySegment =
+							p.slug.split('/').pop() ??
+							p.name.toLowerCase().replace(/\s+/g, '-');
+						return {
+							name: p.name,
+							href: `/elections/${countySlug}/${citySegment}`,
+							level: 'city' as const,
+						};
+					}),
+					{
+						name: countyPlaces[0]?.name ?? '',
+						href: `/elections/${countySlug}`,
+						level: 'county' as const,
+					},
+				]
+			: countyPlaces.map(p => ({
+					name: p.name,
+					href: `/elections/${p.slug}`,
+					level: 'county' as const,
+				}));
 
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
@@ -77,9 +107,11 @@ export default async function Page({
 		textSize: resolveTextSize('Medium'),
 	};
 
-	const stateRaces = (placeData?.Races ?? []).filter(
-		r => r.positionLevel?.toUpperCase() === 'STATE',
-	);
+	const stateRaces = isSingleCounty
+		? (placeData?.Races ?? [])
+		: (placeData?.Races ?? []).filter(
+				r => r.positionLevel?.toUpperCase() === 'STATE',
+			);
 	const stateOffices = stateRaces.map(race => {
 		const positionSlug = race.slug.split('/').slice(1).join('/');
 		return {
@@ -103,25 +135,26 @@ export default async function Page({
 		? currentYear
 		: (dataYears[0] ?? currentYear);
 	const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
-	const countForDefaultYear = stateOffices.filter(
-		o => o.nextElectionDate && new Date(o.nextElectionDate).getFullYear() === defaultYear,
-	).length;
 
 	return (
 		<>
 			<BreadcrumbBlock backgroundColor="midnight" breadcrumbs={breadcrumbs} />
-			<LocationLandingPageHero
-				backgroundColor="midnight"
-				locationLevel="state"
-				stateName={`Upcoming elections in ${stateName}`}
-				bodyCopy={`Learn what state positions are up for election and who is currently running for office in ${stateName}.`}
-			/>
-			<ListOfOfficesBlock
-				heading={`State Elections in ${stateName}`}
-				headline={`${countForDefaultYear} state positions up for election in ${defaultYear}`}
-				defaultYear={defaultYear}
-				availableYears={availableYears}
-				offices={stateOffices}
+			<ElectionsLandingWithSearch
+				heroProps={{
+					backgroundColor: 'midnight',
+					locationLevel: 'state',
+					stateName: `Upcoming elections in ${stateName}`,
+					bodyCopy: `Learn what state positions are up for election and who is currently running for office in ${stateName}.`,
+				}}
+				listProps={{
+					heading: isSingleCounty
+						? `Elections in ${stateName}`
+						: `State Elections in ${stateName}`,
+					headlineLabel: 'state',
+					defaultYear,
+					availableYears,
+					offices: stateOffices,
+				}}
 			/>
 			{factsCards.length > 0 && (
 				<LocationFactsBlock
@@ -133,15 +166,25 @@ export default async function Page({
 			<ElectionsIndexBlock
 				backgroundColor="midnight"
 				stateSlug={state.toLowerCase()}
-				elections={counties}
+				elections={locationItems}
 				header={{
-					title: `Counties in ${stateName}`,
-					copy: `Browse elections by county in ${stateName}.`,
+					title:
+						isSingleCounty && countySlug
+							? `Cities in ${stateName}`
+							: `Counties in ${stateName}`,
+					copy:
+						isSingleCounty && countySlug
+							? `Browse elections by city in ${stateName}.`
+							: `Browse elections by county in ${stateName}.`,
 					backgroundColor: 'midnight',
 				}}
 				initialDisplayCount={DEFAULT_DISPLAY_COUNT}
 				showSearch={true}
-				searchPlaceholder="Search by county"
+				searchPlaceholder={
+					isSingleCounty && countySlug
+						? 'Search by city'
+						: 'Search by county'
+				}
 				ctaLabel="Browse CTA"
 			/>
 			{carouselCards.length > 0 && (
@@ -171,8 +214,9 @@ export async function generateMetadata({
 	params: Promise<{ state: string }>;
 }): Promise<Metadata> {
 	const { state } = await params;
-	if (!isValidStateCode(state)) return {};
-	const stateName = getStateName(state);
+	const stateCode = state.toUpperCase();
+	if (!isValidStateCode(stateCode)) return {};
+	const stateName = getStateName(stateCode);
 	return {
 		title: `Elections in ${stateName} | Good Party`,
 		description: `Browse elections and positions in ${stateName}.`,

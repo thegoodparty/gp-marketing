@@ -7,6 +7,28 @@ export type ButtonsType = Exclude<Extract<Sections, { _type: 'component_hero' }>
 
 export type ButtonType = Exclude<ButtonsType, null | undefined>[number];
 
+/**
+ * Type guard for raw CTA/button data from Sanity (e.g. ctaAction, ctaActionWithShared).
+ * Ensures the value has the minimal shape expected by resolveCTALink and transformButtons.
+ */
+export function isButtonType(value: unknown): value is ButtonType {
+	if (value === null || typeof value !== 'object' || Array.isArray(value)) {
+		return false;
+	}
+	const obj = value as Record<string, unknown>;
+	return 'action' in obj && typeof obj.action !== 'undefined';
+}
+
+function resolveHierarchy(
+	hierarchy: ButtonType['hierarchy'],
+): 'primary' | 'secondary' | 'ghost' | undefined {
+	if (!hierarchy) return undefined;
+	const cleaned = stegaClean(hierarchy);
+	if (cleaned === 'Primary') return 'primary';
+	if (cleaned === 'Secondary') return 'secondary';
+	return 'ghost';
+}
+
 export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] | undefined {
 	if (!buttons) {
 		return undefined;
@@ -27,13 +49,7 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 						buttonType: 'internal',
 						href: button.link.href,
 						buttonProps: {
-							styleType: button.hierarchy
-								? stegaClean(button.hierarchy) === 'Primary'
-									? 'primary'
-									: stegaClean(button.hierarchy) === 'Secondary'
-										? 'secondary'
-										: 'ghost'
-								: undefined,
+							styleType: resolveHierarchy(button.hierarchy),
 						},
 					});
 				break;
@@ -46,13 +62,7 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 						buttonType: 'contact',
 						href: button.link.href,
 						buttonProps: {
-							styleType: button.hierarchy
-								? stegaClean(button.hierarchy) === 'Primary'
-									? 'primary'
-									: stegaClean(button.hierarchy) === 'Secondary'
-										? 'secondary'
-										: 'ghost'
-								: undefined,
+							styleType: resolveHierarchy(button.hierarchy),
 						},
 					});
 				break;
@@ -65,13 +75,7 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 						buttonType: 'external',
 						href: button.field_externalLink,
 						buttonProps: {
-							styleType: button.hierarchy
-								? stegaClean(button.hierarchy) === 'Primary'
-									? 'primary'
-									: stegaClean(button.hierarchy) === 'Secondary'
-										? 'secondary'
-										: 'ghost'
-								: undefined,
+							styleType: resolveHierarchy(button.hierarchy),
 						},
 					});
 				break;
@@ -84,13 +88,7 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 						buttonType: 'anchor',
 						href: button.anchor,
 						buttonProps: {
-							styleType: button.hierarchy
-								? stegaClean(button.hierarchy) === 'Primary'
-									? 'primary'
-									: stegaClean(button.hierarchy) === 'Secondary'
-										? 'secondary'
-										: 'ghost'
-								: undefined,
+							styleType: resolveHierarchy(button.hierarchy),
 						},
 					});
 				break;
@@ -103,13 +101,7 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 						buttonType: 'download',
 						href: button.ref_download.file?.url,
 						buttonProps: {
-							styleType: button.hierarchy
-								? stegaClean(button.hierarchy) === 'Primary'
-									? 'primary'
-									: stegaClean(button.hierarchy) === 'Secondary'
-										? 'secondary'
-										: 'ghost'
-								: undefined,
+							styleType: resolveHierarchy(button.hierarchy),
 						},
 					});
 				break;
@@ -120,16 +112,10 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 					label: button.text ?? 'Login',
 					buttonType: 'external',
 					href: 'https://app.goodparty.org/login',
-					buttonProps: {
-						styleType: button.hierarchy
-							? stegaClean(button.hierarchy) === 'Primary'
-								? 'primary'
-								: stegaClean(button.hierarchy) === 'Secondary'
-									? 'secondary'
-									: 'ghost'
-							: undefined,
-					},
-				});
+						buttonProps: {
+							styleType: resolveHierarchy(button.hierarchy),
+						},
+					});
 				break;
 			case 'SignUp':
 				transformedButtons.push({
@@ -139,13 +125,7 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 					buttonType: 'external',
 					href: 'https://app.goodparty.org/sign-up',
 					buttonProps: {
-						styleType: button.hierarchy
-							? stegaClean(button.hierarchy) === 'Primary'
-								? 'primary'
-								: stegaClean(button.hierarchy) === 'Secondary'
-									? 'secondary'
-									: 'ghost'
-							: undefined,
+						styleType: resolveHierarchy(button.hierarchy),
 					},
 				});
 				break;

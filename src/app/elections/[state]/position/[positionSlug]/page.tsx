@@ -16,28 +16,29 @@ export default async function Page({
 	params: Promise<{ state: string; positionSlug: string }>;
 }) {
 	const { state, positionSlug } = await params;
+	const stateCode = state.toUpperCase();
 
-	if (!isValidStateCode(state)) {
+	if (!isValidStateCode(stateCode)) {
 		notFound();
 	}
 
-	const raceSlug = buildRaceSlug(state, positionSlug);
+	const raceSlug = buildRaceSlug(stateCode, positionSlug);
 	const race = await getRaceBySlug(raceSlug);
 
 	if (!race) {
 		notFound();
 	}
 
-	const stateName = getStateName(state);
+	const stateName = getStateName(stateCode);
 	const officeName = race.normalizedPositionName ?? race.name ?? 'Position';
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 
-	const candidatesHref = `/elections/${state.toLowerCase()}/position/${positionSlug}/candidates`;
+	const candidatesHref = `/elections/${stateCode.toLowerCase()}/position/${positionSlug}/candidates`;
 
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
-		{ href: `/elections/${state.toLowerCase()}`, label: stateName },
+		{ href: `/elections/${stateCode.toLowerCase()}`, label: stateName },
 		{ href: '', label: officeName },
 	];
 
@@ -48,8 +49,6 @@ export default async function Page({
 			electionDate={electionDate}
 			filingDate={filingDate}
 			breadcrumbs={breadcrumbs}
-			backHref={`/elections/${state.toLowerCase()}`}
-			backLabel={`Back to ${stateName} elections`}
 			candidatesHref={candidatesHref}
 			race={race}
 		/>
@@ -62,9 +61,10 @@ export async function generateMetadata({
 	params: Promise<{ state: string; positionSlug: string }>;
 }): Promise<Metadata> {
 	const { state, positionSlug } = await params;
-	if (!isValidStateCode(state)) return {};
-	const stateName = getStateName(state);
-	const raceSlug = buildRaceSlug(state, positionSlug);
+	const stateCode = state.toUpperCase();
+	if (!isValidStateCode(stateCode)) return {};
+	const stateName = getStateName(stateCode);
+	const raceSlug = buildRaceSlug(stateCode, positionSlug);
 	const race = await getRaceBySlug(raceSlug);
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
 	return {

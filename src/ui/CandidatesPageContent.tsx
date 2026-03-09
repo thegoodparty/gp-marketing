@@ -10,6 +10,7 @@ import {
 	CANDIDATES_PAGE_CTA_IMAGE,
 	CANDIDATES_PAGE_TWO_UP_CARD,
 } from '~/constants/candidatesPageStaticSections';
+import { primaryButtonStyleType } from '~/ui/_lib/designTypesStore';
 
 export type CandidatesPageContentProps = {
 	officeName: string;
@@ -19,7 +20,7 @@ export type CandidatesPageContentProps = {
 	electionDate: string;
 	filingDate: string;
 	breadcrumbs: BreadcrumbItem[];
-	candidatesHref: string;
+	positionHref: string;
 	locationHref: string;
 	candidates: CandidateCard[];
 	race?: RaceDetail | null;
@@ -40,7 +41,7 @@ export function CandidatesPageContent(props: CandidatesPageContentProps) {
 		electionDate,
 		filingDate,
 		breadcrumbs,
-		candidatesHref,
+		positionHref,
 		locationHref,
 		candidates,
 	} = props;
@@ -65,9 +66,9 @@ export function CandidatesPageContent(props: CandidatesPageContentProps) {
 				filingDate={filingDate}
 				cta={{
 					buttonType: 'internal',
-					href: candidatesHref,
+					href: positionHref,
 					label: 'Back to position',
-					buttonProps: { styleType: 'primary' },
+					buttonProps: { styleType: primaryButtonStyleType },
 				}}
 			/>
 			<CandidatesBlock

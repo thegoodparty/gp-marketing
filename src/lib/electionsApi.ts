@@ -12,9 +12,15 @@ import type {
 } from '~/types/elections';
 
 const BASE_URL =
-	process.env['ELECTIONS_API_BASE_URL'] || 'https://election-api.goodparty.org';
+	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
 
 const CACHE_OPTIONS = { next: { revalidate: 3600 } } as RequestInit;
+
+/** MTFCC for county / county-equivalent places (e.g. District of Columbia). */
+export const COUNTY_MTFCC = 'G4020';
+
+/** MTFCC for incorporated places (cities, towns). */
+export const CITY_MTFCC = 'G4110';
 
 async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | null> {
 	try {
@@ -109,6 +115,21 @@ export async function getCandidacies(params: {
 	const url = `${BASE_URL}/v1/candidacies?${searchParams}`;
 	const data = await fetchJson<CandidacyItem[]>(url);
 	return Array.isArray(data) ? data : [];
+}
+
+export async function getCandidateBySlug(params: {
+	slug: string;
+	includeStances?: boolean;
+	includeRace?: boolean;
+}): Promise<CandidacyItem | null> {
+	const searchParams = new URLSearchParams({
+		slug: params.slug,
+		includeStances: (params.includeStances ?? true).toString(),
+		includeRace: (params.includeRace ?? true).toString(),
+	});
+	const url = `${BASE_URL}/v1/candidacies?${searchParams}`;
+	const data = await fetchJson<CandidacyItem[]>(url, CACHE_OPTIONS);
+	return Array.isArray(data) && data.length > 0 ? (data[0] ?? null) : null;
 }
 
 export async function findCampaignByRace(params: {

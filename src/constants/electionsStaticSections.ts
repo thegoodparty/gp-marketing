@@ -1,3 +1,4 @@
+import { primaryButtonStyleType } from '~/ui/_lib/designTypesStore';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 
 /**
@@ -40,7 +41,7 @@ export const STEPPER_ITEMS = [
 				buttonType: 'external' as const,
 				label: 'Start your campaign',
 				href: 'https://app.goodparty.org/sign-up',
-				buttonProps: { styleType: 'primary' as const },
+				buttonProps: { styleType: primaryButtonStyleType },
 			},
 		],
 	},
@@ -64,7 +65,7 @@ export const STEPPER_ITEMS = [
 				buttonType: 'external' as const,
 				label: 'Join the Community',
 				href: 'https://community.goodparty.org',
-				buttonProps: { styleType: 'primary' as const },
+				buttonProps: { styleType: primaryButtonStyleType },
 			},
 		],
 	},
@@ -88,7 +89,7 @@ export const STEPPER_ITEMS = [
 				buttonType: 'internal' as const,
 				label: 'Download the free e-book',
 				href: '/download',
-				buttonProps: { styleType: 'primary' as const },
+				buttonProps: { styleType: primaryButtonStyleType },
 			},
 		],
 	},

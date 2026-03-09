@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
-import { getCandidacies, getPlacesByState, getRaceBySlug } from '~/lib/electionsApi';
+import { COUNTY_MTFCC, getCandidacies, getPlacesByState, getRaceBySlug } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
 	buildRaceSlug,
 	formatElectionDateFromApi,
 	formatFilingPeriodFromRace,
 	getStateName,
+	mapCandidacyToCard,
 } from '~/lib/electionsHelpers';
 import { CandidatesPageContent } from '~/ui/CandidatesPageContent';
 
@@ -23,7 +24,7 @@ export default async function Page({
 	}
 
 	const raceSlug = buildRaceSlug(state, positionSlug, county);
-	let race = await getRaceBySlug(raceSlug);
+	const race = await getRaceBySlug(raceSlug);
 
 	if (!race && !county.endsWith('-county')) {
 		const retrySlug = buildRaceSlug(state, positionSlug, `${county}-county`);
@@ -38,7 +39,7 @@ export default async function Page({
 	}
 
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
-	const counties = await getPlacesByState({ state: stateCode, mtfcc: 'G4020' });
+	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
 	const countyNameShort = countyPlace?.name?.replace(/\s+County$/i, '') ?? county;
 	const countyName = countyPlace?.name ?? `${countyNameShort} County`;
@@ -50,15 +51,7 @@ export default async function Page({
 
 	const candidacies = await getCandidacies({ raceSlug });
 
-	const candidates = candidacies.map((c, i) => ({
-		_key: c.id ?? `c-${i}`,
-		name: [c.firstName, c.lastName].filter(Boolean).join(' ') || 'Candidate',
-		partyAffiliation: c.party ?? 'Unknown',
-		avatar: c.image ?? undefined,
-		href: c.slug
-			? `/candidate/${c.slug}`
-			: `/profile?slug=${encodeURIComponent([c.firstName, c.lastName].filter(Boolean).join('-').toLowerCase())}&raceId=${encodeURIComponent(c.raceId ?? '')}`,
-	}));
+	const candidates = candidacies.map((c, i) => mapCandidacyToCard(c, i));
 
 	const positionHref = `/elections/${countySlug}/position/${positionSlug}`;
 	const locationHref = `/elections/${countySlug}`;
@@ -78,7 +71,7 @@ export default async function Page({
 			electionDate={electionDate}
 			filingDate={filingDate}
 			breadcrumbs={breadcrumbs}
-			candidatesHref={positionHref}
+			positionHref={positionHref}
 			locationHref={locationHref}
 			candidates={candidates}
 			race={race}
@@ -92,12 +85,13 @@ export async function generateMetadata({
 	params: Promise<{ state: string; county: string; positionSlug: string }>;
 }): Promise<Metadata> {
 	const { state, county, positionSlug } = await params;
-	if (!isValidStateCode(state)) return {};
-	const stateName = getStateName(state);
+	const stateCode = state.toUpperCase();
+	if (!isValidStateCode(stateCode)) return {};
+	const stateName = getStateName(stateCode);
 	const raceSlug = buildRaceSlug(state, positionSlug, county);
 	const race = await getRaceBySlug(raceSlug);
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
-	const counties = await getPlacesByState({ state: state.toUpperCase(), mtfcc: 'G4020' });
+	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
 	const countyName = countyPlace?.name?.replace(/\s+County$/i, '') ?? county;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';

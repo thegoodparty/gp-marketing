@@ -1,14 +1,28 @@
-import type { backgroundTypeValues, buttonStyleTypeValues, componentColorValues } from '../_lib/designTypesStore';
+import { buttonStyleTypeValues, primaryButtonStyleType } from '../_lib/designTypesStore';
+import type { backgroundTypeValues, componentColorValues } from '../_lib/designTypesStore';
+
+export type ButtonStyleType = (typeof buttonStyleTypeValues)[number];
+
+/**
+ * Parse an unknown value (e.g. from Sanity) into a valid button style type.
+ * Returns 'primary' when the value is not in the allowlist.
+ */
+export function parseButtonStyleType(value: unknown): ButtonStyleType {
+	if (typeof value === 'string' && (buttonStyleTypeValues as readonly string[]).includes(value)) {
+		return value as ButtonStyleType;
+	}
+	return primaryButtonStyleType;
+}
 
 /**
  * Resolve the effective Button style based on the desired styleType
  * and the background it will be rendered on.
  */
 export function resolveButtonStyleType(
-	styleType: (typeof buttonStyleTypeValues)[number],
+	styleType: ButtonStyleType,
 	backgroundColor?: (typeof backgroundTypeValues)[number],
 ) {
-	const base = styleType ?? 'primary';
+	const base = styleType ?? primaryButtonStyleType;
 
 	if (backgroundColor === 'midnight') {
 		if (base === 'secondary') return 'outline-inverse';
@@ -19,13 +33,11 @@ export function resolveButtonStyleType(
 		if (base === 'secondary') return 'outline';
 	}
 
-	// // Default (e.g. "cream") mapping
-	// if (base === 'secondary') return 'outline';
 	return base;
 }
 
 export function resolveInverseButtonStyleType(
-	styleType: (typeof buttonStyleTypeValues)[number],
+	styleType: ButtonStyleType,
 	backgroundColor: (typeof backgroundTypeValues)[number],
 	color: (typeof componentColorValues)[number],
 ) {

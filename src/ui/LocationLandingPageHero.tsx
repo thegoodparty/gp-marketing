@@ -58,6 +58,9 @@ export type LocationLandingPageHeroProps = {
 	backgroundColor?: (typeof backgroundTypeValues)[number];
 	searchPlaceholder?: string;
 	textAlign?: 'left' | 'center' | 'right';
+	/** When provided with onChange, the search input is controlled. */
+	value?: string;
+	onChange?: (value: string) => void;
 };
 
 function buildHeadline(props: LocationLandingPageHeroProps): string {
@@ -111,7 +114,15 @@ export function LocationLandingPageHero(props: LocationLandingPageHeroProps) {
 					<div className={searchWrapper()}>
 						<div className={searchContainer()}>
 							<IconWrapper code='search' className={searchIcon()} />
-							<input type='search' placeholder={searchPlaceholder} className={searchInput()} aria-label='Search elections' />
+							<input
+								type='search'
+								placeholder={searchPlaceholder}
+								className={searchInput()}
+								aria-label='Search elections'
+								{...(props.value !== undefined && props.onChange
+									? { value: props.value, onChange: (e: React.ChangeEvent<HTMLInputElement>) => props.onChange?.(e.target.value) }
+									: {})}
+							/>
 						</div>
 					</div>
 				</div>

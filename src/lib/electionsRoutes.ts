@@ -4,11 +4,11 @@
 export function buildElectionsHref(segments: {
 	state: string;
 	county?: string;
-	municipality?: string;
+	city?: string;
 }): string {
 	const parts = ['/elections', segments.state.toLowerCase()];
 	if (segments.county) parts.push(segments.county.toLowerCase());
-	if (segments.municipality) parts.push(segments.municipality.toLowerCase());
+	if (segments.city) parts.push(segments.city.toLowerCase());
 	return parts.join('/');
 }
 

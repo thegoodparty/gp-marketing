@@ -92,7 +92,7 @@ export interface OfficeItem {
 	href?: string;
 }
 
-export type HeadlineLabelType = 'state' | 'municipal' | 'county';
+export type HeadlineLabelType = 'state' | 'municipal' | 'county' | 'district';
 
 export interface ListOfOfficesBlockProps {
 	className?: string;

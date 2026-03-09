@@ -63,7 +63,7 @@ export interface ElectionsLocationResponse {
 	childLocations: Array<{
 		name: string;
 		slug: string;
-		level: 'county' | 'city';
+		level: 'county' | 'city' | 'district';
 	}>;
 }
 
@@ -71,7 +71,7 @@ export interface ElectionsLocationResponse {
 export interface ElectionItem {
 	name: string;
 	href: string;
-	level: 'state' | 'county' | 'city';
+	level: 'state' | 'county' | 'city' | 'district';
 }
 
 export interface ElectionsIndexBlockProps {
@@ -204,41 +204,44 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 						</div>
 					)}
 
-					{/* Show More / CTA Button */}
-					<div className={footer()}>
-						{hasMore ? (
-							<Button
-								parent="ElectionsIndexBlock"
-								type="button"
-								onClick={handleShowMore}
-								styleType={resolvedButtonStyle}
-								iconRight={
-									<IconResolver
-										icon="arrow-up-right"
-										className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5"
-									/>
-								}
-							>
-								{props.ctaLabel ?? 'Browse CTA'}
-							</Button>
-						) : props.ctaHref ? (
-							<Anchor href={props.ctaHref}>
-								<Button
-									parent="ElectionsIndexBlock"
-									type="button"
-									styleType={resolvedButtonStyle}
-									iconRight={
-										<IconResolver
-											icon="arrow-up-right"
-											className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5"
-										/>
-									}
-								>
-									{props.ctaLabel ?? 'Browse All'}
-								</Button>
-							</Anchor>
-						) : null}
-					</div>
+					{/* Show More / CTA Button - only when ctaLabel is provided */}
+					{props.ctaLabel &&
+						(hasMore || props.ctaHref) && (
+							<div className={footer()}>
+								{hasMore ? (
+									<Button
+										parent="ElectionsIndexBlock"
+										type="button"
+										onClick={handleShowMore}
+										styleType={resolvedButtonStyle}
+										iconRight={
+											<IconResolver
+												icon="arrow-up-right"
+												className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5"
+											/>
+										}
+									>
+										{props.ctaLabel}
+									</Button>
+								) : (
+									<Anchor href={props.ctaHref!}>
+										<Button
+											parent="ElectionsIndexBlock"
+											type="button"
+											styleType={resolvedButtonStyle}
+											iconRight={
+												<IconResolver
+													icon="arrow-up-right"
+													className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5"
+												/>
+											}
+										>
+											{props.ctaLabel}
+										</Button>
+									</Anchor>
+								)}
+							</div>
+						)}
 				</div>
 			</Container>
 		</article>

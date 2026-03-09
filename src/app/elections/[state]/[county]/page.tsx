@@ -5,6 +5,7 @@ import {
 	getPlacesByState,
 	getPlaceBySlug,
 	getPlacesBySlugWithChildren,
+	isDistrictMtfcc,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import { DEFAULT_DISPLAY_COUNT } from '~/constants/display';
@@ -61,16 +62,19 @@ export default async function Page({
 	]);
 
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === fullSlug);
+	const isDistrict = placeData != null && isDistrictMtfcc(placeData.mtfcc);
 
-	if (!countyPlace) {
+	if (!countyPlace && !isDistrict) {
 		if (placeData?.mtfcc && placeData.mtfcc !== COUNTY_MTFCC) {
 			redirect(`/elections/${state.toLowerCase()}`);
 		}
 		notFound();
 	}
 
-	const countyName = countyPlace.name.replace(/\s+County$/i, '') || countyPlace.name;
-	const children = placesWithChildren[0]?.children ?? [];
+	const placeName = isDistrict
+		? (placeData?.name ?? county)
+		: (countyPlace!.name.replace(/\s+County$/i, '') || countyPlace!.name);
+	const children = isDistrict ? [] : (placesWithChildren[0]?.children ?? []);
 
 	const cities = children.map(c => ({
 		name: c.name,
@@ -81,7 +85,7 @@ export default async function Page({
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
 		{ href: `/elections/${state.toLowerCase()}`, label: stateName },
-		{ href: '', label: `${countyName} County` },
+		{ href: '', label: isDistrict ? placeName : `${placeName} County` },
 	];
 
 	const factsCards = placeToFactsCards(placeData);
@@ -99,7 +103,7 @@ export default async function Page({
 		textSize: resolveTextSize('Medium'),
 	};
 
-	// County and local positions (e.g. County Sheriff, Library District Board) from place Races
+	// County/local positions (e.g. County Sheriff, Library District Board, School Board) from place Races
 	const countyRaces = (placeData?.Races ?? []).filter(r => {
 		const level = r.positionLevel?.toUpperCase();
 		return level === 'COUNTY' || level === 'LOCAL';
@@ -108,7 +112,7 @@ export default async function Page({
 		const positionSlug = race.slug.split('/').slice(2).join('/');
 		return {
 			id: String(race.id),
-			type: 'County',
+			type: isDistrict ? 'District' : 'County',
 			position: race.normalizedPositionName ?? race.name ?? 'Position',
 			nextElectionDate: race.electionDate ?? '',
 			href: `/elections/${state.toLowerCase()}/${county.toLowerCase()}/position/${positionSlug}`,
@@ -134,12 +138,14 @@ export default async function Page({
 				heroProps={{
 					locationLevel: 'county',
 					backgroundColor: 'midnight',
-					stateName: `Upcoming elections in ${countyName}, ${stateName}`,
-					bodyCopy: `Learn what positions are up for election and who is currently running for office in ${countyName}.`,
+					stateName: `Upcoming elections in ${placeName}, ${stateName}`,
+					bodyCopy: `Learn what positions are up for election and who is currently running for office in ${placeName}.`,
 				}}
 				listProps={{
-					heading: `County Elections in ${countyName} County`,
-					headlineLabel: 'county',
+					heading: isDistrict
+						? `Elections in ${placeName}`
+						: `County Elections in ${placeName} County`,
+					headlineLabel: isDistrict ? 'district' : 'county',
 					defaultYear,
 					availableYears,
 					offices: countyOffices,
@@ -148,24 +154,26 @@ export default async function Page({
 			{factsCards.length > 0 && (
 				<LocationFactsBlock
 					backgroundColor="cream"
-					header={{ title: `${countyName} County facts` }}
+					header={{ title: isDistrict ? `${placeName} facts` : `${placeName} County facts` }}
 					factsCards={factsCards}
 				/>
 			)}
-			<ElectionsIndexBlock
-				backgroundColor="midnight"
-				stateSlug={fullSlug}
-				elections={cities}
-				header={{
-					title: `Cities in ${countyName} County`,
-					copy: `Browse elections by city in ${countyName} County, ${stateName}.`,
-					backgroundColor: 'midnight',
-				}}
-				initialDisplayCount={DEFAULT_DISPLAY_COUNT}
-				showSearch={true}
-				searchPlaceholder="Search by city"
-				ctaLabel="Browse CTA"
-			/>
+			{!isDistrict && (
+				<ElectionsIndexBlock
+					backgroundColor="midnight"
+					stateSlug={fullSlug}
+					elections={cities}
+					header={{
+						title: `Cities in ${placeName} County`,
+						copy: `Browse elections by city in ${placeName} County, ${stateName}.`,
+						backgroundColor: 'midnight',
+					}}
+					initialDisplayCount={DEFAULT_DISPLAY_COUNT}
+					showSearch={true}
+					searchPlaceholder="Search by city"
+					ctaLabel="Browse CTA"
+				/>
+			)}
 			{carouselCards.length > 0 && (
 				<Carousel
 					backgroundColor="cream"
@@ -197,11 +205,19 @@ export async function generateMetadata({
 	if (!isValidStateCode(stateCode)) return {};
 	const stateName = getStateName(stateCode);
 	const fullSlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
-	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
+	const [counties, placeData] = await Promise.all([
+		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
+		getPlaceBySlug({ slug: fullSlug, includeChildren: false, includeRaces: false }),
+	]);
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === fullSlug);
-	const countyName = countyPlace?.name?.replace(/\s+County$/i, '') ?? county;
+	const isDistrict = placeData != null && isDistrictMtfcc(placeData.mtfcc);
+	const placeName = isDistrict
+		? (placeData?.name ?? county)
+		: (countyPlace?.name?.replace(/\s+County$/i, '') ?? county);
 	return {
-		title: `Elections in ${countyName}, ${stateName} | Good Party`,
-		description: `Browse elections and cities in ${countyName}, ${stateName}.`,
+		title: `Elections in ${placeName}, ${stateName} | Good Party`,
+		description: isDistrict
+			? `Browse elections and positions in ${placeName}, ${stateName}.`
+			: `Browse elections and cities in ${placeName}, ${stateName}.`,
 	};
 }

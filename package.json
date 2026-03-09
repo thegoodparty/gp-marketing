@@ -21,7 +21,10 @@
     "sanity:start": "sanity start",
     "sanity:build": "sanity build",
     "sanity:deploy": "sanity deploy",
-    "sitemap:validate": "bun run scripts/validate-sitemap-urls.ts"
+    "sitemap:generate": "bun run scripts/generate-sitemaps.ts",
+    "sitemap:validate": "bun run scripts/validate-sitemap-urls.ts",
+    "sitemap:prune": "bun run scripts/prune-invalid-urls.ts",
+    "test:e2e:sitemap": "playwright test e2e/sitemap.spec.ts"
   },
   "dependencies": {
     "@csstools/postcss-global-data": "^3.1.0",
@@ -113,6 +116,7 @@
     "vwo-smartcode-nextjs": "^1.4.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.49.0",
     "@eslint/eslintrc": "^3.3.1",
     "@next/bundle-analyzer": "^15.5.4",
     "@sanity/eslint-config-studio": "^5.0.2",

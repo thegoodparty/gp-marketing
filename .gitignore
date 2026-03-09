@@ -157,3 +157,7 @@ storybook-static/
 
 # Sitemap validation reports
 .reports/sitemaps/validation-report-*.json
+
+# Generated static sitemaps
+public/sitemap.xml
+public/sitemaps/

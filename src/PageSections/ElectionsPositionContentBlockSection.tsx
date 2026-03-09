@@ -25,7 +25,7 @@ type ElectionsPositionContentBlockSectionProps = Extract<
 export function ElectionsPositionContentBlockSection(props: ElectionsPositionContentBlockSectionProps) {
 	const { contentOverride, ...section } = props;
 	const backgroundColor = section.electionsPositionContentBlockDesignSettings?.field_blockColorCreamMidnight
-		? resolveBg(stegaClean(section.electionsPositionContentBlockDesignSettings.field_blockColorCreamMidnight))
+		? resolveBg(section.electionsPositionContentBlockDesignSettings.field_blockColorCreamMidnight)
 		: 'cream';
 
 	return (

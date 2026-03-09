@@ -43,7 +43,7 @@ export const component_electionsIndexBlock = {
 					name: 'field_searchPlaceholder',
 					type: 'string',
 					description: 'Placeholder text for the search input',
-					initialValue: 'Search by county or municipality',
+					initialValue: 'Search by county or city',
 				},
 				{
 					title: 'Initial Display Count',

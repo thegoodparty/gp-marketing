@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { secondaryButtonStyleType } from './_lib/designTypesStore.ts';
 import { ElectionsPositionContentBlock } from './ElectionsPositionContentBlock.tsx';
 
 const meta: Meta<typeof ElectionsPositionContentBlock> = {
@@ -29,7 +30,7 @@ export const Default: Story = {
 				href: '/action',
 				label: 'Primary CTA',
 				buttonProps: {
-					styleType: 'secondary',
+					styleType: secondaryButtonStyleType,
 				},
 			},
 		},
@@ -70,6 +71,14 @@ export const Default: Story = {
 				bodyCopy: 'Body copy',
 			},
 		],
+		rightColumnCTA: {
+			buttonType: 'internal',
+			href: '/elections/WY/position/state-representative/candidates',
+			label: 'View candidates',
+			buttonProps: {
+				styleType: secondaryButtonStyleType,
+			},
+		},
 	},
 };
 
@@ -85,7 +94,7 @@ export const MidnightBackground: Story = {
 				href: '/action',
 				label: 'Primary CTA',
 				buttonProps: {
-					styleType: 'secondary',
+					styleType: secondaryButtonStyleType,
 				},
 			},
 		},
@@ -114,6 +123,14 @@ export const MidnightBackground: Story = {
 				bodyCopy: 'Body copy',
 			},
 		],
+		rightColumnCTA: {
+			buttonType: 'internal',
+			href: '/elections/WY/position/state-representative/candidates',
+			label: 'View candidates',
+			buttonProps: {
+				styleType: secondaryButtonStyleType,
+			},
+		},
 	},
 };
 
@@ -156,7 +173,7 @@ export const WithoutGridItems: Story = {
 				href: '/action',
 				label: 'Primary CTA',
 				buttonProps: {
-					styleType: 'secondary',
+					styleType: secondaryButtonStyleType,
 				},
 			},
 		},
@@ -186,7 +203,7 @@ export const WithoutBottomItems: Story = {
 				href: '/action',
 				label: 'Primary CTA',
 				buttonProps: {
-					styleType: 'secondary',
+					styleType: secondaryButtonStyleType,
 				},
 			},
 		},
@@ -237,7 +254,7 @@ export const SingleBodyCopy: Story = {
 				href: '/action',
 				label: 'Primary CTA',
 				buttonProps: {
-					styleType: 'secondary',
+					styleType: secondaryButtonStyleType,
 				},
 			},
 		},
@@ -277,7 +294,7 @@ export const ExternalButton: Story = {
 				href: 'https://example.com',
 				label: 'Visit External Site',
 				buttonProps: {
-					styleType: 'secondary',
+					styleType: secondaryButtonStyleType,
 				},
 			},
 		},

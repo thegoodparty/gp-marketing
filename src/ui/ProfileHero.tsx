@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { cn, tv } from './_lib/utils.ts';
 import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
@@ -51,6 +52,7 @@ export type ProfileHeroProps = {
 	candidateName: string;
 	office: string;
 	profileImage?: SanityImage;
+	profileImageUrl?: string;
 	isEmpowered?: boolean;
 };
 
@@ -66,14 +68,35 @@ export function ProfileHero(props: ProfileHeroProps) {
 			</div>
 			<Container size="xl">
 				<div className={container()}>
-					{props.profileImage && (
-						<div className={imageWrapper()}>
-							<div className={image()}>
+					<div className={imageWrapper()}>
+						<div className={cn(image(), 'relative')}>
+							{props.profileImageUrl ? (
+								<Image
+									src={props.profileImageUrl}
+									alt={`${props.candidateName} headshot`}
+									fill
+									unoptimized
+									className="object-cover object-center"
+								/>
+							) : props.profileImage ? (
 								<ResponsiveImage image={props.profileImage} />
-							</div>
-							<Logo width={80} height={65} className={badge()} />
+							) : (
+								<div className="absolute inset-0 flex items-center justify-center bg-gray-200 text-gray-400">
+									<svg
+										stroke="currentColor"
+										fill="currentColor"
+										strokeWidth="0"
+										viewBox="0 0 512 512"
+										className="w-1/2 h-1/2"
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<path d="M256 256a112 112 0 1 0-112-112 112 112 0 0 0 112 112zm0 32c-69.42 0-208 42.88-208 128v64h416v-64c0-85.12-138.58-128-208-128z" />
+									</svg>
+								</div>
+							)}
 						</div>
-					)}
+						<Logo width={80} height={65} className={badge()} />
+					</div>
 					<div className={content()}>
 						<div>
 							<Text as="h1" styleType={props.candidateName.length > 28 ? 'heading-md' : 'heading-lg'} className={heading()}>

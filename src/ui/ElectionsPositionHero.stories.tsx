@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { primaryButtonStyleType } from './_lib/designTypesStore.ts';
 import { ElectionsPositionHero } from './ElectionsPositionHero.tsx';
 
 const meta: Meta<typeof ElectionsPositionHero> = {
@@ -23,7 +24,7 @@ const defaultArgs = {
 		href: '/run',
 		label: 'Primary CTA',
 		buttonProps: {
-			styleType: 'primary' as const,
+			styleType: primaryButtonStyleType,
 		},
 	},
 };

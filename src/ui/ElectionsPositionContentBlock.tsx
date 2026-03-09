@@ -60,6 +60,7 @@ export type ElectionsPositionContentBlockProps = {
 	topHeadline?: string;
 	gridItems?: ElectionsPositionContentBlockGridItem[];
 	bottomItems?: ElectionsPositionContentBlockBottomItem[];
+	rightColumnCTA?: ComponentButtonProps;
 };
 
 export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlockProps) {
@@ -70,6 +71,13 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 	const resolvedButtonStyle = props.card?.primaryCTA
 		? resolveButtonStyleType(
 				props.card.primaryCTA.buttonProps?.styleType ?? defaultCtaButtonStyleType,
+				backgroundColor,
+			)
+		: undefined;
+
+	const resolvedRightColumnCTAStyle = props.rightColumnCTA
+		? resolveButtonStyleType(
+				props.rightColumnCTA.buttonProps?.styleType ?? defaultCtaButtonStyleType,
 				backgroundColor,
 			)
 		: undefined;
@@ -156,6 +164,17 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 										)}
 									</div>
 								))}
+							</div>
+						)}
+						{props.rightColumnCTA && (
+							<div className={buttonContainer()}>
+								<ComponentButton
+									{...props.rightColumnCTA}
+									buttonProps={{
+										...(props.rightColumnCTA.buttonProps ?? {}),
+										styleType: resolvedRightColumnCTAStyle,
+									}}
+								/>
 							</div>
 						)}
 					</div>

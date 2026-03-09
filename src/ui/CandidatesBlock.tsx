@@ -1,8 +1,15 @@
+'use client';
+
+import { useState } from 'react';
+
 import { cn, tv } from './_lib/utils.ts';
 import { Container } from './Container.tsx';
 import { HeaderBlock, type HeaderBlockProps } from './HeaderBlock.tsx';
 import { CandidatesCard, type CandidatesCardProps } from './CandidatesCard.tsx';
-import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
+import { Text } from './Text.tsx';
+import { Button, ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
+import { IconResolver } from './IconResolver.tsx';
+import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
 import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 const styles = tv({
@@ -10,8 +17,7 @@ const styles = tv({
 		base: 'py-[calc(var(--container-padding))]',
 		wrapper: 'flex flex-col gap-12 md:gap-20',
 		grid: 'grid gap-6 md:grid-cols-2',
-		filterPlaceholder: 'p-4 border border-dashed border-gray-300 rounded-lg text-center text-gray-500',
-		paginationPlaceholder: 'p-4 border border-dashed border-gray-300 rounded-lg text-center text-gray-500',
+		emptyState: 'text-center py-8',
 		buttonWrapper: 'flex justify-center mt-8',
 	},
 	variants: {
@@ -35,53 +41,79 @@ export type CandidatesBlockProps = {
 	backgroundColor?: (typeof backgroundTypeValues)[number];
 	header?: HeaderBlockProps;
 	candidates: CandidateCard[];
-	hasFilters?: boolean;
-	filters?: {
-		// Placeholder for future filter structure
-	};
-	pagination?: {
-		currentPage: number;
-		totalPages: number;
-		// Placeholder for future pagination structure
-	};
+	enablePagination?: boolean;
+	initialDisplayCount?: number;
+	showMoreLabel?: string;
 	optionalButton?: ComponentButtonProps;
 };
 
 export function CandidatesBlock(props: CandidatesBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
-	const { base, wrapper, grid, filterPlaceholder, paginationPlaceholder, buttonWrapper } = styles({ backgroundColor });
+	const initialDisplayCount = props.initialDisplayCount ?? 6;
+	const { base, wrapper, grid, emptyState, buttonWrapper } = styles({ backgroundColor });
+
+	const [displayCount, setDisplayCount] = useState(initialDisplayCount);
+
+	const displayedCandidates = props.enablePagination
+		? props.candidates.slice(0, displayCount)
+		: props.candidates;
+	const hasMore = props.enablePagination && displayCount < props.candidates.length;
+
+	const handleShowMore = () => {
+		setDisplayCount(prev => prev + initialDisplayCount);
+	};
+
+	const resolvedButtonStyle = resolveButtonStyleType('primary', backgroundColor);
+
+	const showShowMoreButton = props.enablePagination && hasMore;
+	const showOptionalButton =
+		(props.enablePagination && !hasMore && props.optionalButton) ||
+		(!props.enablePagination && props.optionalButton);
 
 	return (
 		<article className={cn(base(), props.className)} data-component='CandidatesBlock'>
 			<Container size='xl'>
 				<div className={wrapper()}>
-					{props.header && <HeaderBlock {...props.header} backgroundColor={backgroundColor} layout={props.header.layout ?? 'left'} />}
+					{props.header && (
+						<HeaderBlock
+							{...props.header}
+							backgroundColor={backgroundColor}
+							layout={props.header.layout ?? 'left'}
+						/>
+					)}
 
-					{props.hasFilters && (
-						<div className={filterPlaceholder()}>
-							{/* TODO: Implement filter UI - Feature deferred for future implementation */}
-							<p>Filter UI - To be implemented</p>
+					{displayedCandidates.length > 0 ? (
+						<div className={grid()}>
+							{displayedCandidates.map((candidate, index) => (
+								<CandidatesCard key={candidate._key ?? index} {...candidate} />
+							))}
+						</div>
+					) : (
+						<div className={emptyState()}>
+							<Text styleType="body-1">No candidates found</Text>
 						</div>
 					)}
 
-					<div className={grid()}>
-						{props.candidates.map((candidate, index) => (
-							<CandidatesCard key={candidate._key ?? index} {...candidate} />
-						))}
-					</div>
-
-					{props.hasFilters && props.pagination && (
-						<div className={paginationPlaceholder()}>
-							{/* TODO: Implement pagination UI - Feature deferred for future implementation */}
-							<p>
-								Pagination UI - Page {props.pagination.currentPage} of {props.pagination.totalPages}
-							</p>
-						</div>
-					)}
-
-					{!props.hasFilters && props.optionalButton && (
+					{(showShowMoreButton || showOptionalButton) && (
 						<div className={buttonWrapper()}>
-							<ComponentButton {...props.optionalButton} />
+							{showShowMoreButton ? (
+								<Button
+									parent='CandidatesBlock'
+									type='button'
+									onClick={handleShowMore}
+									styleType={resolvedButtonStyle}
+									iconRight={
+										<IconResolver
+											icon='arrow-up-right'
+											className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5'
+										/>
+									}
+								>
+									{props.showMoreLabel ?? 'Show more candidates'}
+								</Button>
+							) : (
+								props.optionalButton && <ComponentButton {...props.optionalButton} />
+							)}
 						</div>
 					)}
 				</div>

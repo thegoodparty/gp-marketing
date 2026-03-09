@@ -1,16 +1,18 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 
 import { cn, tv } from './_lib/utils.ts';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
+import { secondaryButtonStyleType, type backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
 import { Anchor } from './Anchor.tsx';
 import { IconResolver } from './IconResolver.tsx';
 import { ArrowRightIcon } from './icons/ArrowRightIcon.tsx';
+import { Button } from './Inputs/Button.tsx';
 import { DEFAULT_YEAR_OFFSET } from '~/constants/display';
+import { formatElectionDateFromApi, getYearFromDateString } from '~/lib/electionsHelpers';
 
 const styles = tv({
 	slots: {
@@ -50,6 +52,7 @@ const styles = tv({
 		cardLeft: 'flex-1 flex flex-col gap-2',
 		cardRight: 'flex-shrink-0 self-end',
 		desktopTable: 'hidden md:block',
+		showMoreWrapper: 'flex justify-center pt-4',
 	},
 	variants: {
 		backgroundColor: {
@@ -89,14 +92,24 @@ export interface OfficeItem {
 	href?: string;
 }
 
+export type HeadlineLabelType = 'state' | 'municipal' | 'county';
+
 export interface ListOfOfficesBlockProps {
 	className?: string;
 	backgroundColor?: (typeof backgroundTypeValues)[number];
 	heading?: string;
+	/** Pre-built headline string (used when headlineLabel is not set). */
 	headline?: string;
+	/** When set, headline is derived as "{count} {label} positions up for election in {selectedYear}". */
+	headlineLabel?: HeadlineLabelType;
 	defaultYear?: number;
 	availableYears?: number[];
+	pageSize?: number;
 	offices: OfficeItem[];
+	/** When true and there are no offices, show "Loading…" instead of "No offices found". */
+	isLoading?: boolean;
+	/** When set, filter offices by position name (case-insensitive substring). */
+	searchQuery?: string;
 	onYearChange?: (year: number) => void;
 	onOfficeClick?: (office: OfficeItem) => void;
 }
@@ -105,8 +118,10 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
 	const defaultYear = props.defaultYear ?? new Date().getFullYear() + DEFAULT_YEAR_OFFSET;
 	const availableYears = props.availableYears ?? [defaultYear - 4, defaultYear - 3, defaultYear - 2, defaultYear - 1, defaultYear];
+	const pageSize = props.pageSize ?? 10;
 
 	const [selectedYear, setSelectedYear] = useState(defaultYear);
+	const [visibleCount, setVisibleCount] = useState(pageSize);
 
 	const {
 		base,
@@ -138,25 +153,44 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 		cardLeft,
 		cardRight,
 		desktopTable,
+		showMoreWrapper,
 	} = styles({ backgroundColor });
 
-	// Filter offices by selected year (extract year from date string)
+	// Filter offices by selected year and optional search query (position name, case-insensitive substring)
 	const filteredOffices = useMemo(() => {
-		return props.offices.filter(office => {
-			const dateYear = new Date(office.nextElectionDate).getFullYear();
-			return dateYear === selectedYear;
+		let list = props.offices.filter(office => {
+			const dateYear = getYearFromDateString(office.nextElectionDate);
+			return !Number.isNaN(dateYear) && dateYear === selectedYear;
 		});
-	}, [props.offices, selectedYear]);
+		const q = props.searchQuery?.trim();
+		if (q) {
+			const lower = q.toLowerCase();
+			list = list.filter(office => office.position.toLowerCase().includes(lower));
+		}
+		return list;
+	}, [props.offices, selectedYear, props.searchQuery]);
+
+	const visibleOffices = filteredOffices.slice(0, visibleCount);
+	const hasMore = visibleCount < filteredOffices.length;
+
+	useEffect(() => {
+		setVisibleCount(pageSize);
+	}, [pageSize]);
 
 	const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const year = parseInt(e.target.value, 10);
 		setSelectedYear(year);
+		setVisibleCount(pageSize);
 		props.onYearChange?.(year);
 	};
 
 	const handleOfficeClick = (office: OfficeItem) => {
 		props.onOfficeClick?.(office);
 	};
+
+	const displayHeadline = props.headlineLabel
+		? `${filteredOffices.length} ${props.headlineLabel} positions up for election in ${selectedYear}`
+		: props.headline;
 
 	return (
 		<article className={cn(base(), props.className)} data-component="ListOfOfficesBlock">
@@ -168,9 +202,9 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 					<div className={card()}>
 						{/* Header Row: Headline + Year Selector */}
 						<div className={headerRow()}>
-							{props.headline && (
+							{displayHeadline && (
 								<Text as="h3" styleType="heading-md" className={headlineStyle()}>
-									{props.headline}
+									{displayHeadline}
 								</Text>
 							)}
 							<div className={yearSelectorWrapper()}>
@@ -208,7 +242,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 											<div className={tableHeaderCell()} aria-label="Actions"></div>
 										</div>
 										<div className={tableBody()}>
-											{filteredOffices.map(office => {
+											{visibleOffices.map(office => {
 												const RowContent = (
 													<>
 														<div className={tableCell()}>
@@ -218,7 +252,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 															<Text styleType="body-2" className={positionText()}>{office.position}</Text>
 														</div>
 													<div className={dateCell()}>
-														<Text styleType="body-2" className={dateText()}>{office.nextElectionDate}</Text>
+														<Text styleType="body-2" className={dateText()}>{formatElectionDateFromApi(office.nextElectionDate)}</Text>
 													</div>
 													<div className={tableCell()}>
 														<ArrowRightIcon size={32} className={arrowIcon()} innerClassName="group-hover:animate-slide-in-right" />
@@ -250,13 +284,13 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 
 								{/* Mobile Card Layout */}
 								<div className={cardList()}>
-									{filteredOffices.map(office => {
+									{visibleOffices.map(office => {
 										const CardContent = (
 											<div className={cardContent()}>
 												<div className={cardLeft()}>
 													<span className={typeTag()}>{office.type}</span>
 													<Text styleType="body-2" className={positionText()}>{office.position}</Text>
-													<Text styleType="body-2" className={dateText()}>{office.nextElectionDate}</Text>
+													<Text styleType="body-2" className={dateText()}>{formatElectionDateFromApi(office.nextElectionDate)}</Text>
 												</div>
 												<div className={cardRight()}>
 													<ArrowRightIcon size={32} className={arrowIcon()} innerClassName="group-hover:animate-slide-in-right" />
@@ -275,11 +309,27 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 										);
 									})}
 								</div>
+
+								{hasMore && (
+									<div className={showMoreWrapper()}>
+										<Button
+											parent="ListOfOfficesBlock"
+											styleType={secondaryButtonStyleType}
+											onClick={() => setVisibleCount(prev => prev + pageSize)}
+										>
+											Show More
+										</Button>
+									</div>
+								)}
 							</>
 						) : (
 							<div className="py-8 text-center">
 								<Text styleType="body-2" className="text-neutral-500">
-									No offices found for {selectedYear}
+									{props.searchQuery?.trim()
+										? 'No positions match your search'
+										: props.isLoading
+											? 'Loading…'
+											: `No offices found for ${selectedYear}`}
 								</Text>
 							</div>
 						)}

@@ -74,7 +74,6 @@ export const Default: Story = {
 			layout: 'left',
 		},
 		candidates: mockCandidates,
-		hasFilters: false,
 	},
 };
 
@@ -96,20 +95,16 @@ export const WithCTAButton: Story = {
 	},
 };
 
-export const WithFilters: Story = {
+export const WithPagination: Story = {
 	args: {
 		backgroundColor: 'cream',
 		header: {
 			title: 'Candidates',
 			layout: 'left',
 		},
-		candidates: mockCandidates,
-		hasFilters: true,
-		filters: {},
-		pagination: {
-			currentPage: 1,
-			totalPages: 5,
-		},
+		candidates: [...mockCandidates, ...mockCandidates, ...mockCandidates],
+		enablePagination: true,
+		initialDisplayCount: 6,
 	},
 };
 
@@ -141,11 +136,8 @@ export const LargeCandidateList: Story = {
 			layout: 'left',
 		},
 		candidates: [...mockCandidates, ...mockCandidates, ...mockCandidates],
-		hasFilters: true,
-		pagination: {
-			currentPage: 2,
-			totalPages: 10,
-		},
+		enablePagination: true,
+		initialDisplayCount: 6,
 	},
 };
 
@@ -159,7 +151,6 @@ export const HeaderLayoutLeft: Story = {
 			layout: 'left',
 		},
 		candidates: mockCandidates,
-		hasFilters: false,
 	},
 };
 
@@ -173,7 +164,6 @@ export const HeaderLayoutCenter: Story = {
 			layout: 'center',
 		},
 		candidates: mockCandidates,
-		hasFilters: false,
 	},
 };
 
@@ -187,6 +177,5 @@ export const HeaderLayoutRight: Story = {
 			layout: 'right',
 		},
 		candidates: mockCandidates,
-		hasFilters: false,
 	},
 };

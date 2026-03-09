@@ -80,11 +80,16 @@ function getSidebarData(officeData: OfficeData): ElectionsSidebarProps | undefin
 	};
 }
 
-export function ProfileContentBlockSection(
-	section: Extract<Sections, { _type: 'component_profileContentBlock' }>,
-	profileData?: ProfileData,
-	officeData?: OfficeData,
-) {
+type ProfileContentBlockSectionProps = Extract<Sections, { _type: 'component_profileContentBlock' }> & {
+	profileData?: ProfileData;
+	officeData?: OfficeData;
+};
+
+export function ProfileContentBlockSection({
+	profileData,
+	officeData,
+	...section
+}: ProfileContentBlockSectionProps) {
 	const backgroundColor = section.profileContentBlockDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(stegaClean(section.profileContentBlockDesignSettings.field_blockColorCreamMidnight))
 		: 'cream';

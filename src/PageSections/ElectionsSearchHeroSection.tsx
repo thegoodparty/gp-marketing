@@ -2,15 +2,17 @@ import { stegaClean } from 'next-sanity';
 
 import type { Sections } from '~/PageSections';
 
-import { ElectionsSearchHero } from '~/ui/ElectionsSearchHero';
+import { parseButtonStyleType } from '~/ui/_lib/resolveButtonStyleType';
+import { ElectionsSearchHeroWithNav } from '~/ui/ElectionsSearchHeroWithNav';
 import { US_STATES } from '~/constants/usStates';
 
 export function ElectionsSearchHeroSection(section: Extract<Sections, { _type: 'component_electionsSearchHero' }>) {
-	const buttonStyle = stegaClean(section.ctaAction?.field_buttonStyle) ?? 'primary';
+	const rawButtonStyle = stegaClean(section.ctaAction?.field_buttonStyle);
+	const buttonStyle = parseButtonStyleType(rawButtonStyle);
 
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Elections Search Hero'>
-			<ElectionsSearchHero
+			<ElectionsSearchHeroWithNav
 				showLogo={stegaClean(section.logoSettings?.showLogo) ?? true}
 				logoImage={section.logoSettings?.img_logoImage}
 				headerText={section.electionsSearchHeroContent?.field_headerText}
@@ -26,7 +28,7 @@ export function ElectionsSearchHeroSection(section: Extract<Sections, { _type: '
 					buttonType: 'button',
 					label: section.ctaAction?.field_buttonText ?? 'Search',
 					buttonProps: {
-						styleType: buttonStyle as 'primary' | 'secondary' | 'outline',
+						styleType: buttonStyle,
 					},
 				}}
 			/>

@@ -252,3 +252,120 @@ export function buildPositionSchema(params: {
 
 	return schema;
 }
+
+/**
+ * Builds a Schema.org BreadcrumbList JSON-LD object from breadcrumb items.
+ */
+export function buildBreadcrumbSchema(
+	breadcrumbs: { href: string; label: string }[],
+	toAbsolute: (path: string) => string,
+): object {
+	return {
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: breadcrumbs.map((crumb, i) => ({
+			'@type': 'ListItem',
+			position: i + 1,
+			name: crumb.label,
+			...(crumb.href && { item: toAbsolute(crumb.href) }),
+		})),
+	};
+}
+
+/**
+ * Builds a Schema.org FAQPage JSON-LD object from FAQ question/answer pairs.
+ */
+export function buildFAQSchema(
+	items: { title: string; copy: string }[],
+): object {
+	return {
+		'@context': 'https://schema.org',
+		'@type': 'Question',
+		mainEntity: items.map(item => ({
+			'@type': 'Question',
+			name: item.title,
+			acceptedAnswer: {
+				'@type': 'Answer',
+				text: item.copy,
+			},
+		})),
+	};
+}
+
+/**
+ * Builds dynamic FAQ items from race data, matching the live goodparty.org position page.
+ */
+export function buildDynamicFAQItems(
+	race: RaceDetail,
+	officeName: string,
+	stateName: string,
+): { title: string; copy: string }[] {
+	const items: { title: string; copy: string }[] = [];
+
+	if (race.frequency?.length) {
+		const freq = race.frequency
+			.map(v => String(v ?? '').trim())
+			.filter(Boolean)
+			.map(v => (/^\d+$/.test(v) ? `${v} years` : v))
+			.join(', ');
+		items.push({
+			title: `How often is ${officeName} elected?`,
+			copy: `The position of ${officeName} is typically elected every ${freq}.`,
+		});
+	}
+
+	if (race.partisanType) {
+		const isPartisan = race.partisanType.toLowerCase() === 'partisan';
+		items.push({
+			title: `What does it mean for an election to be ${race.partisanType.toLowerCase()}?`,
+			copy: isPartisan
+				? 'Partisan elections require candidates to declare a party affiliation, like Democrat, Republican, Libertarian, or Independent.'
+				: 'Nonpartisan elections do not require candidates to declare a party affiliation on the ballot.',
+		});
+	}
+
+	if (race.filingRequirements) {
+		items.push({
+			title: `What are the filing requirements to get on the ballot in ${stateName}?`,
+			copy: race.filingRequirements,
+		});
+	}
+
+	if (race.paperworkInstructions) {
+		items.push({
+			title: 'Where do I submit my candidate paperwork?',
+			copy: race.paperworkInstructions,
+		});
+	}
+
+	if (race.filingOfficeAddress) {
+		items.push({
+			title: 'Where is the filing office?',
+			copy: race.filingOfficeAddress,
+		});
+	}
+
+	if (race.filingPhoneNumber && /\d/.test(race.filingPhoneNumber)) {
+		items.push({
+			title: 'How can I get in touch with the filing office?',
+			copy: `You can contact the filing office by calling ${race.filingPhoneNumber}.`,
+		});
+	}
+
+	items.push({
+		title: `How do I get started running for ${officeName}?`,
+		copy: `You can start running for ${officeName} by checking to ensure you meet all filing deadlines and requirements. Next, you can prepare to file for office and start planning your campaign strategy. Get in touch with our team of campaign experts for help with any step of the campaign process!`,
+	});
+
+	if (race.isPrimary !== undefined || race.isRunoff !== undefined) {
+		const parts: string[] = [];
+		if (race.isPrimary !== undefined) parts.push(race.isPrimary ? 'a primary' : 'no primary');
+		if (race.isRunoff !== undefined) parts.push(race.isRunoff ? 'a runoff' : 'no runoff');
+		items.push({
+			title: 'Is there a primary or runoff election for this office?',
+			copy: `The next election for ${officeName} ${parts.length === 2 ? (race.isPrimary || race.isRunoff ? 'includes' : 'does not include') + ' a primary or runoff election' : `includes ${parts.join(' and ')} election`}.`,
+		});
+	}
+
+	return items;
+}

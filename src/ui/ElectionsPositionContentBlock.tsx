@@ -75,6 +75,13 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 			)
 		: undefined;
 
+	const resolvedRightColumnCTAStyle = props.rightColumnCTA
+		? resolveButtonStyleType(
+				props.rightColumnCTA.buttonProps?.styleType ?? defaultCtaButtonStyleType,
+				backgroundColor,
+			)
+		: undefined;
+
 	return (
 		<article className={cn(base(), props.className)} data-component='ElectionsPositionContentBlock'>
 			<Container size='xl'>
@@ -165,7 +172,7 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 									{...props.rightColumnCTA}
 									buttonProps={{
 										...(props.rightColumnCTA.buttonProps ?? {}),
-										styleType: props.rightColumnCTA.buttonProps?.styleType ?? 'secondary',
+										styleType: resolvedRightColumnCTAStyle,
 									}}
 								/>
 							</div>

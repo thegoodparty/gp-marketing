@@ -54,6 +54,7 @@ export const list_pageSections = {
             'component_jobOpeningsBlock',
             'component_faqBlock',
             'component_profileContentBlock',
+            'component_electionsPositionContentBlock',
           ],
         },
         {
@@ -93,6 +94,7 @@ export const list_pageSections = {
             'component_blogBlock',
             'component_candidatesBlock',
             'component_profileContentBlock',
+            'component_electionsPositionContentBlock',
           ],
         },
         {
@@ -287,6 +289,10 @@ export const list_pageSections = {
     {
       title: 'Elections Position Hero',
       type: 'component_electionsPositionHero',
+    },
+    {
+      title: 'Elections Position Content Block',
+      type: 'component_electionsPositionContentBlock',
     },
     {
       title: 'Elections Search Hero',

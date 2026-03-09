@@ -33,6 +33,7 @@ import { TestimonialBlockSection } from '~/PageSections/TestimonialBlockSection'
 import { TwoUpCardBlockSection } from '~/PageSections/TwoUpCardBlockSection';
 import { ElectionsIndexBlockSection } from '~/PageSections/ElectionsIndexBlockSection';
 import { ElectionsPositionHeroSection } from '~/PageSections/ElectionsPositionHeroSection';
+import { ElectionsPositionContentBlockSection } from '~/PageSections/ElectionsPositionContentBlockSection';
 import { ElectionsSearchHeroSection } from '~/PageSections/ElectionsSearchHeroSection';
 import { FeaturedCitiesBlockSection } from '~/PageSections/FeaturedCitiesBlockSection';
 import { GoodPartyOrgPledgeSection } from '~/PageSections/GoodPartyOrgPledgeSection';
@@ -51,6 +52,7 @@ export type SectionOverrides = {
 		stateSlug?: string;
 	};
 	component_electionsPositionHero?: import('~/PageSections/ElectionsPositionHeroSection').OfficeData;
+	component_electionsPositionContentBlock?: import('~/PageSections/ElectionsPositionContentBlockSection').ElectionsPositionContentBlockOverride;
 	component_profileHero?: {
 		candidateName: string;
 		office: string;
@@ -290,6 +292,15 @@ export function PageSections(props: Props) {
 								<ElectionsPositionHeroSection
 									{...section}
 									officeData={props.sectionOverrides?.component_electionsPositionHero}
+								/>
+							</ComponentErrorBoundary>
+						);
+					case 'component_electionsPositionContentBlock':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Elections Position Content Block'>
+								<ElectionsPositionContentBlockSection
+									{...section}
+									contentOverride={props.sectionOverrides?.component_electionsPositionContentBlock}
 								/>
 							</ComponentErrorBoundary>
 						);

@@ -1,5 +1,5 @@
 import { US_STATES } from '~/constants/usStates';
-import type { CandidacyItem, PlaceWithFacts } from '~/types/elections';
+import type { CandidacyItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
 import type { FactsCardProps } from '~/ui/FactsCard';
 
 export function mapCandidacyToCard(
@@ -181,7 +181,7 @@ export function placeToFactsCards(place: PlaceWithFacts | null): FactsCardProps[
 		cards.push({
 			factType: 'unemployment-rate',
 			label: factTypeLabels['unemployment-rate']!,
-			value: `${(place.unemploymentRate * 100).toFixed(1)}%`,
+			value: `${place.unemploymentRate.toFixed(1)}%`,
 		});
 	}
 	if (place.homeValue != null) {
@@ -192,4 +192,180 @@ export function placeToFactsCards(place: PlaceWithFacts | null): FactsCardProps[
 		});
 	}
 	return cards;
+}
+
+/**
+ * Builds a Schema.org JobPosting JSON-LD object from race data for position pages.
+ */
+export function buildPositionSchema(params: {
+	race: RaceDetail;
+	officeName: string;
+	stateName: string;
+	countyName?: string;
+	cityName?: string;
+	pageUrl: string;
+}): object {
+	const { race, officeName, stateName, countyName, cityName, pageUrl } = params;
+
+	const locationParts = [cityName, countyName, stateName].filter(Boolean);
+	const addressLocality = cityName ?? countyName;
+
+	const schema: Record<string, unknown> = {
+		'@context': 'https://schema.org',
+		'@type': 'JobPosting',
+		title: officeName,
+		name: `${officeName} in ${locationParts.join(', ')}`,
+		url: pageUrl,
+		hiringOrganization: {
+			'@type': 'Organization',
+			name: 'GoodParty.org',
+			url: 'https://goodparty.org',
+		},
+		jobLocation: {
+			'@type': 'Place',
+			address: {
+				'@type': 'PostalAddress',
+				addressRegion: race.state,
+				...(addressLocality && { addressLocality }),
+			},
+		},
+	};
+
+	if (race.positionDescription) schema['description'] = race.positionDescription;
+	if (race.filingDateStart) schema['datePosted'] = race.filingDateStart.slice(0, 10);
+	if (race.filingDateEnd) schema['validThrough'] = race.filingDateEnd.slice(0, 10);
+	if (race.employmentType) {
+		schema['employmentType'] = race.employmentType.toUpperCase().replace(/\s+/g, '_');
+	}
+	if (race.salary) {
+		schema['baseSalary'] = {
+			'@type': 'MonetaryAmount',
+			currency: 'USD',
+			value: {
+				'@type': 'QuantitativeValue',
+				value: race.salary,
+				unitText: 'YEAR',
+			},
+		};
+	}
+	if (race.eligibilityRequirements) schema['qualifications'] = race.eligibilityRequirements;
+
+	return schema;
+}
+
+/**
+ * Builds a Schema.org BreadcrumbList JSON-LD object from breadcrumb items.
+ */
+export function buildBreadcrumbSchema(
+	breadcrumbs: { href: string; label: string }[],
+	toAbsolute: (path: string) => string,
+): object {
+	return {
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: breadcrumbs.map((crumb, i) => ({
+			'@type': 'ListItem',
+			position: i + 1,
+			name: crumb.label,
+			...(crumb.href && { item: toAbsolute(crumb.href) }),
+		})),
+	};
+}
+
+/**
+ * Builds a Schema.org FAQPage JSON-LD object from FAQ question/answer pairs.
+ */
+export function buildFAQSchema(
+	items: { title: string; copy: string }[],
+): object {
+	return {
+		'@context': 'https://schema.org',
+		'@type': 'Question',
+		mainEntity: items.map(item => ({
+			'@type': 'Question',
+			name: item.title,
+			acceptedAnswer: {
+				'@type': 'Answer',
+				text: item.copy,
+			},
+		})),
+	};
+}
+
+/**
+ * Builds dynamic FAQ items from race data, matching the live goodparty.org position page.
+ */
+export function buildDynamicFAQItems(
+	race: RaceDetail,
+	officeName: string,
+	stateName: string,
+): { title: string; copy: string }[] {
+	const items: { title: string; copy: string }[] = [];
+
+	if (race.frequency?.length) {
+		const freq = race.frequency
+			.map(v => String(v ?? '').trim())
+			.filter(Boolean)
+			.map(v => (/^\d+$/.test(v) ? `${v} years` : v))
+			.join(', ');
+		items.push({
+			title: `How often is ${officeName} elected?`,
+			copy: `The position of ${officeName} is typically elected every ${freq}.`,
+		});
+	}
+
+	if (race.partisanType) {
+		const isPartisan = race.partisanType.toLowerCase() === 'partisan';
+		items.push({
+			title: `What does it mean for an election to be ${race.partisanType.toLowerCase()}?`,
+			copy: isPartisan
+				? 'Partisan elections require candidates to declare a party affiliation, like Democrat, Republican, Libertarian, or Independent.'
+				: 'Nonpartisan elections do not require candidates to declare a party affiliation on the ballot.',
+		});
+	}
+
+	if (race.filingRequirements) {
+		items.push({
+			title: `What are the filing requirements to get on the ballot in ${stateName}?`,
+			copy: race.filingRequirements,
+		});
+	}
+
+	if (race.paperworkInstructions) {
+		items.push({
+			title: 'Where do I submit my candidate paperwork?',
+			copy: race.paperworkInstructions,
+		});
+	}
+
+	if (race.filingOfficeAddress) {
+		items.push({
+			title: 'Where is the filing office?',
+			copy: race.filingOfficeAddress,
+		});
+	}
+
+	if (race.filingPhoneNumber && /\d/.test(race.filingPhoneNumber)) {
+		items.push({
+			title: 'How can I get in touch with the filing office?',
+			copy: `You can contact the filing office by calling ${race.filingPhoneNumber}.`,
+		});
+	}
+
+	items.push({
+		title: `How do I get started running for ${officeName}?`,
+		copy: `You can start running for ${officeName} by checking to ensure you meet all filing deadlines and requirements. Next, you can prepare to file for office and start planning your campaign strategy. Get in touch with our team of campaign experts for help with any step of the campaign process!`,
+	});
+
+	if (race.isPrimary !== undefined || race.isRunoff !== undefined) {
+		const parts: string[] = [];
+		if (race.isPrimary !== undefined) parts.push(race.isPrimary ? 'a primary' : 'no primary');
+		if (race.isRunoff !== undefined) parts.push(race.isRunoff ? 'a runoff' : 'no runoff');
+		items.push({
+			title: 'Is there a primary or runoff election for this office?',
+			copy: `The next election for ${officeName} ${parts.length === 2 ? (race.isPrimary || race.isRunoff ? 'includes' : 'does not include') + ' a primary or runoff election' : `includes ${parts.join(' and ')} election`}.`,
+		});
+	}
+
+	return items;
 }

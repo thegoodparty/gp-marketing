@@ -63,7 +63,7 @@ export interface ElectionsLocationResponse {
 	childLocations: Array<{
 		name: string;
 		slug: string;
-		level: 'county' | 'city';
+		level: 'county' | 'city' | 'district';
 	}>;
 }
 
@@ -71,7 +71,7 @@ export interface ElectionsLocationResponse {
 export interface ElectionItem {
 	name: string;
 	href: string;
-	level: 'state' | 'county' | 'city';
+	level: 'state' | 'county' | 'city' | 'district';
 }
 
 export interface ElectionsIndexBlockProps {
@@ -204,24 +204,23 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 						</div>
 					)}
 
-					{/* Show More / CTA Button */}
-					<div className={footer()}>
-						{hasMore ? (
+					{/* Show More - reveals hidden items, always shown when there are more */}
+					{hasMore && (
+						<div className={footer()}>
 							<Button
 								parent="ElectionsIndexBlock"
 								type="button"
 								onClick={handleShowMore}
 								styleType={resolvedButtonStyle}
-								iconRight={
-									<IconResolver
-										icon="arrow-up-right"
-										className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5"
-									/>
-								}
 							>
-								{props.ctaLabel ?? 'Browse CTA'}
+								Show More
 							</Button>
-						) : props.ctaHref ? (
+						</div>
+					)}
+
+					{/* CTA - optional link, shown when all items are visible */}
+					{!hasMore && props.ctaLabel && props.ctaHref && (
+						<div className={footer()}>
 							<Anchor href={props.ctaHref}>
 								<Button
 									parent="ElectionsIndexBlock"
@@ -234,11 +233,11 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 										/>
 									}
 								>
-									{props.ctaLabel ?? 'Browse All'}
+									{props.ctaLabel}
 								</Button>
 							</Anchor>
-						) : null}
-					</div>
+						</div>
+					)}
 				</div>
 			</Container>
 		</article>

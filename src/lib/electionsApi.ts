@@ -22,6 +22,13 @@ export const COUNTY_MTFCC = 'G4020';
 /** MTFCC for incorporated places (cities, towns). */
 export const CITY_MTFCC = 'G4110';
 
+/** MTFCC codes for school districts (elementary, secondary, unified). */
+export const DISTRICT_MTFCCS = ['G5400', 'G5410', 'G5420'] as const;
+
+export function isDistrictMtfcc(mtfcc?: string): boolean {
+	return mtfcc?.startsWith('G54') ?? false;
+}
+
 async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | null> {
 	try {
 		const res = await fetch(url, options);

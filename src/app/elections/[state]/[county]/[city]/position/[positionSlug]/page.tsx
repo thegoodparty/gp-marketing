@@ -13,6 +13,7 @@ import {
 	formatFilingPeriodFromRace,
 	getStateName,
 } from '~/lib/electionsHelpers';
+import { toAbsoluteUrl } from '~/lib/url';
 import { PositionPageContent } from '~/ui/PositionPageContent';
 
 export default async function Page({
@@ -83,6 +84,8 @@ export default async function Page({
 		{ href: '', label: officeName },
 	];
 
+	const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}/position/${positionSlug}`);
+
 	return (
 		<PositionPageContent
 			officeName={officeName}
@@ -94,6 +97,7 @@ export default async function Page({
 			breadcrumbs={breadcrumbs}
 			candidatesHref={candidatesHref}
 			race={race}
+			pageUrl={pageUrl}
 		/>
 	);
 }

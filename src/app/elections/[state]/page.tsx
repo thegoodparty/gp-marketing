@@ -5,6 +5,7 @@ import {
 	CITY_MTFCC,
 	getPlacesByState,
 	getPlaceBySlug,
+	isDistrictMtfcc,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import { DEFAULT_DISPLAY_COUNT } from '~/constants/display';
@@ -41,8 +42,8 @@ export default async function Page({
 	const stateName = getStateName(stateCode);
 	const currentYear = new Date().getFullYear();
 
-	const [countyPlaces, placeData, quoteCollection] = await Promise.all([
-		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
+	const [allPlaces, placeData, quoteCollection] = await Promise.all([
+		getPlacesByState({ state: stateCode }),
 		getPlaceBySlug({
 			slug: state.toLowerCase(),
 			includeChildren: false,
@@ -55,6 +56,8 @@ export default async function Page({
 		}),
 	]);
 
+	const countyPlaces = allPlaces.filter(p => p.mtfcc === COUNTY_MTFCC);
+	const districtPlaces = allPlaces.filter(p => isDistrictMtfcc(p.mtfcc));
 	const isSingleCounty = countyPlaces.length <= 1;
 	let cityPlaces = isSingleCounty
 		? await getPlacesByState({ state: stateCode, mtfcc: CITY_MTFCC })
@@ -62,7 +65,7 @@ export default async function Page({
 
 	const countySlug = countyPlaces[0]?.slug;
 
-	const locationItems =
+	const countyAndCityItems =
 		isSingleCounty && countySlug
 			? [
 					...cityPlaces.map(p => {
@@ -86,6 +89,14 @@ export default async function Page({
 					href: `/elections/${p.slug}`,
 					level: 'county' as const,
 				}));
+
+	const districtItems = districtPlaces.map(p => ({
+		name: p.name,
+		href: `/elections/${p.slug}`,
+		level: 'district' as const,
+	}));
+
+	const locationItems = [...countyAndCityItems, ...districtItems];
 
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
@@ -170,22 +181,21 @@ export default async function Page({
 				header={{
 					title:
 						isSingleCounty && countySlug
-							? `Cities in ${stateName}`
-							: `Counties in ${stateName}`,
+							? `Cities & Districts in ${stateName}`
+							: `Counties & Districts in ${stateName}`,
 					copy:
 						isSingleCounty && countySlug
-							? `Browse elections by city in ${stateName}.`
-							: `Browse elections by county in ${stateName}.`,
+							? `Browse elections by city or district in ${stateName}.`
+							: `Browse elections by county or district in ${stateName}.`,
 					backgroundColor: 'midnight',
 				}}
 				initialDisplayCount={DEFAULT_DISPLAY_COUNT}
 				showSearch={true}
 				searchPlaceholder={
 					isSingleCounty && countySlug
-						? 'Search by city'
-						: 'Search by county'
+						? 'Search by city or district'
+						: 'Search by county or district'
 				}
-				ctaLabel="Browse CTA"
 			/>
 			{carouselCards.length > 0 && (
 				<Carousel

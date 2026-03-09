@@ -14,6 +14,9 @@ import {
 	POSITION_PAGE_TWO_UP_CARD,
 } from '~/constants/positionPageStaticSections';
 import { primaryButtonStyleType, secondaryButtonStyleType } from '~/ui/_lib/designTypesStore';
+import { buildPositionSchema, buildBreadcrumbSchema, buildFAQSchema, buildDynamicFAQItems } from '~/lib/electionsHelpers';
+import { toAbsoluteUrl } from '~/lib/url';
+import { PageSchema } from '~/ui/PageSchema';
 
 export type PositionPageContentProps = {
 	officeName: string;
@@ -25,6 +28,7 @@ export type PositionPageContentProps = {
 	breadcrumbs: BreadcrumbItem[];
 	candidatesHref: string;
 	race?: RaceDetail | null;
+	pageUrl: string;
 };
 
 function replacePlaceholders(s: string, replacements: { officeName: string; stateName: string; locationName: string }): string {
@@ -93,6 +97,7 @@ export function PositionPageContent(props: PositionPageContentProps) {
 		breadcrumbs,
 		candidatesHref,
 		race,
+		pageUrl,
 	} = props;
 
 	const gridItems = race ? buildGridItems(race) : [];
@@ -101,8 +106,29 @@ export function PositionPageContent(props: PositionPageContentProps) {
 	const locationName = cityName ?? countyName ?? stateName;
 	const replacements = { officeName, stateName, locationName };
 
+	const jobPostingSchema = race
+		? buildPositionSchema({
+				race,
+				officeName,
+				stateName,
+				countyName,
+				cityName,
+				pageUrl,
+			})
+		: undefined;
+
+	const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbs, toAbsoluteUrl);
+
+	const faqItems = race
+		? buildDynamicFAQItems(race, officeName, stateName)
+		: POSITION_PAGE_FAQ.items.map(item => ({ title: item.title, copy: item.copy }));
+	const faqSchema = buildFAQSchema(faqItems);
+
 	return (
 		<>
+			<PageSchema schema={jobPostingSchema} />
+			<PageSchema schema={breadcrumbSchema} />
+			<PageSchema schema={faqSchema} />
 			<BreadcrumbBlock backgroundColor="midnight" breadcrumbs={breadcrumbs} />
 			<ElectionsPositionHero
 				backgroundColor="midnight"
@@ -163,7 +189,7 @@ export function PositionPageContent(props: PositionPageContentProps) {
 					copy: POSITION_PAGE_FAQ.copy,
 					buttons: [...POSITION_PAGE_FAQ.buttons],
 				}}
-				items={POSITION_PAGE_FAQ.items.map((item) => ({ ...item }))}
+				items={faqItems}
 			/>
 
 			<CTABlock

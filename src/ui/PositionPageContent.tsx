@@ -14,6 +14,8 @@ import {
 	POSITION_PAGE_TWO_UP_CARD,
 } from '~/constants/positionPageStaticSections';
 import { primaryButtonStyleType, secondaryButtonStyleType } from '~/ui/_lib/designTypesStore';
+import { buildPositionSchema } from '~/lib/electionsHelpers';
+import { PageSchema } from '~/ui/PageSchema';
 
 export type PositionPageContentProps = {
 	officeName: string;
@@ -25,6 +27,7 @@ export type PositionPageContentProps = {
 	breadcrumbs: BreadcrumbItem[];
 	candidatesHref: string;
 	race?: RaceDetail | null;
+	pageUrl: string;
 };
 
 function replacePlaceholders(s: string, replacements: { officeName: string; stateName: string; locationName: string }): string {
@@ -93,6 +96,7 @@ export function PositionPageContent(props: PositionPageContentProps) {
 		breadcrumbs,
 		candidatesHref,
 		race,
+		pageUrl,
 	} = props;
 
 	const gridItems = race ? buildGridItems(race) : [];
@@ -101,8 +105,20 @@ export function PositionPageContent(props: PositionPageContentProps) {
 	const locationName = cityName ?? countyName ?? stateName;
 	const replacements = { officeName, stateName, locationName };
 
+	const schema = race
+		? buildPositionSchema({
+				race,
+				officeName,
+				stateName,
+				countyName,
+				cityName,
+				pageUrl,
+			})
+		: undefined;
+
 	return (
 		<>
+			<PageSchema schema={schema} />
 			<BreadcrumbBlock backgroundColor="midnight" breadcrumbs={breadcrumbs} />
 			<ElectionsPositionHero
 				backgroundColor="midnight"

@@ -1,5 +1,5 @@
 import { US_STATES } from '~/constants/usStates';
-import type { CandidacyItem, PlaceWithFacts } from '~/types/elections';
+import type { CandidacyItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
 import type { FactsCardProps } from '~/ui/FactsCard';
 
 export function mapCandidacyToCard(
@@ -192,4 +192,63 @@ export function placeToFactsCards(place: PlaceWithFacts | null): FactsCardProps[
 		});
 	}
 	return cards;
+}
+
+/**
+ * Builds a Schema.org JobPosting JSON-LD object from race data for position pages.
+ */
+export function buildPositionSchema(params: {
+	race: RaceDetail;
+	officeName: string;
+	stateName: string;
+	countyName?: string;
+	cityName?: string;
+	pageUrl: string;
+}): object {
+	const { race, officeName, stateName, countyName, cityName, pageUrl } = params;
+
+	const locationParts = [cityName, countyName, stateName].filter(Boolean);
+	const addressLocality = cityName ?? countyName;
+
+	const schema: Record<string, unknown> = {
+		'@context': 'https://schema.org',
+		'@type': 'JobPosting',
+		title: officeName,
+		name: `${officeName} in ${locationParts.join(', ')}`,
+		url: pageUrl,
+		hiringOrganization: {
+			'@type': 'Organization',
+			name: 'GoodParty.org',
+			url: 'https://goodparty.org',
+		},
+		jobLocation: {
+			'@type': 'Place',
+			address: {
+				'@type': 'PostalAddress',
+				addressRegion: race.state,
+				...(addressLocality && { addressLocality }),
+			},
+		},
+	};
+
+	if (race.positionDescription) schema['description'] = race.positionDescription;
+	if (race.filingDateStart) schema['datePosted'] = race.filingDateStart.slice(0, 10);
+	if (race.filingDateEnd) schema['validThrough'] = race.filingDateEnd.slice(0, 10);
+	if (race.employmentType) {
+		schema['employmentType'] = race.employmentType.toUpperCase().replace(/\s+/g, '_');
+	}
+	if (race.salary) {
+		schema['baseSalary'] = {
+			'@type': 'MonetaryAmount',
+			currency: 'USD',
+			value: {
+				'@type': 'QuantitativeValue',
+				value: race.salary,
+				unitText: 'YEAR',
+			},
+		};
+	}
+	if (race.eligibilityRequirements) schema['qualifications'] = race.eligibilityRequirements;
+
+	return schema;
 }

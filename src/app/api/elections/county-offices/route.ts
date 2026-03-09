@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { getDistrictTypes, getDistrictNames, getPlacesBySlugWithChildren } from '~/lib/electionsApi';
+import { getCityPlacesByCounty, getDistrictTypes, getDistrictNames } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
 	formatElectionDate,
@@ -37,17 +37,16 @@ export async function GET(request: NextRequest) {
 
 	const normalizedSlug = fullSlug.toLowerCase();
 
-	const [districtTypes, placesWithChildren] = await Promise.all([
+	const [districtTypes, cityPlaces] = await Promise.all([
 		getDistrictTypes({ state: stateCode, electionYear }),
-		getPlacesBySlugWithChildren({ slug: normalizedSlug, includeChildren: true }),
+		getCityPlacesByCounty({ state: stateCode, countySlug: normalizedSlug }),
 	]);
 
-	const children = placesWithChildren[0]?.children ?? [];
 	const cityTypes = districtTypes.filter(dt => {
 		const t = dt.L2DistrictType.toUpperCase();
 		return t.includes('CITY') || t.includes('TOWN');
 	});
-	const cityBaseNames = children.map(c =>
+	const cityBaseNames = cityPlaces.map(c =>
 		c.name.replace(/\s+(Town|City|Township|Village)$/i, '').toLowerCase(),
 	);
 
@@ -65,7 +64,7 @@ export async function GET(request: NextRequest) {
 				})
 				.map(n => {
 					const positionSlug = slugifyPositionName(n.L2DistrictName);
-					const city = findCityForDistrictName(n.L2DistrictName, children);
+					const city = findCityForDistrictName(n.L2DistrictName, cityPlaces);
 					const href = city
 						? `/elections/${normalizedSlug}/${city.slug.split('/').pop()}/position/${positionSlug}`
 						: `/elections/${normalizedSlug}/position/${positionSlug}`;

@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
+	getCityPlacesByCounty,
 	getPlacesByState,
 	getPlaceBySlug,
-	getPlacesBySlugWithChildren,
 	isDistrictMtfcc,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
@@ -43,7 +43,7 @@ export default async function Page({
 	const fullSlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const currentYear = new Date().getFullYear();
 
-	const [counties, placeData, quoteCollection, placesWithChildren] = await Promise.all([
+	const [counties, placeData, quoteCollection, cityPlaces] = await Promise.all([
 		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
 		getPlaceBySlug({
 			slug: fullSlug,
@@ -55,10 +55,7 @@ export default async function Page({
 			query: quoteCollectionByIdQuery,
 			params: { id: CAROUSEL_QUOTE_COLLECTION_ID },
 		}),
-		getPlacesBySlugWithChildren({
-			slug: fullSlug,
-			includeChildren: true,
-		}),
+		getCityPlacesByCounty({ state: stateCode, countySlug: fullSlug }),
 	]);
 
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === fullSlug);
@@ -74,13 +71,13 @@ export default async function Page({
 	const placeName = isDistrict
 		? (placeData?.name ?? county)
 		: (countyPlace!.name.replace(/\s+County$/i, '') || countyPlace!.name);
-	const children = isDistrict ? [] : (placesWithChildren[0]?.children ?? []);
-
-	const cities = children.map(c => ({
-		name: c.name,
-		href: `/elections/${c.slug}`,
-		level: 'city' as const,
-	}));
+	const cities = isDistrict
+		? []
+		: cityPlaces.map(c => ({
+				name: c.name,
+				href: `/elections/${fullSlug}/${c.slug.split('/').pop() ?? c.name.toLowerCase().replace(/\s+/g, '-')}`,
+				level: 'city' as const,
+			}));
 
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },

@@ -153,6 +153,8 @@ export interface PlaceItem {
 	state: string;
 	mtfcc?: string;
 	children?: PlaceItem[];
+	/** County name from API (e.g. "Los Angeles"); used for filtering cities by county. */
+	countyName?: string;
 }
 
 export interface PlaceWithFacts extends PlaceItem {

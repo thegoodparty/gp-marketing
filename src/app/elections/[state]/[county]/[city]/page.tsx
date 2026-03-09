@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
+	getCityPlacesByCounty,
 	getPlacesByState,
 	getPlaceBySlug,
-	getPlacesBySlugWithChildren,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
@@ -43,7 +43,7 @@ export default async function Page({
 
 	const shortSlug = `${state.toLowerCase()}/${city.toLowerCase()}`;
 
-	const [counties, placeData, quoteCollection, placesWithChildren] = await Promise.all([
+	const [counties, placeData, quoteCollection, cityPlaces] = await Promise.all([
 		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
 		getPlaceBySlug({
 			slug: fullSlug,
@@ -55,10 +55,7 @@ export default async function Page({
 			query: quoteCollectionByIdQuery,
 			params: { id: CAROUSEL_QUOTE_COLLECTION_ID },
 		}),
-		getPlacesBySlugWithChildren({
-			slug: countySlug,
-			includeChildren: true,
-		}),
+		getCityPlacesByCounty({ state: stateCode, countySlug }),
 	]);
 
 	let resolvedPlaceData = placeData;
@@ -78,10 +75,13 @@ export default async function Page({
 	}
 
 	const countyName = countyPlace.name.replace(/\s+County$/i, '') || countyPlace.name;
-	const children = placesWithChildren[0]?.children ?? [];
 	const cityPlace =
-		children.find(c => c.slug.toLowerCase() === fullSlug) ??
-		(resolvedPlaceData?.slug?.toLowerCase() === shortSlug ? resolvedPlaceData : null);
+		cityPlaces.find(
+			c =>
+				(c.countyName?.toLowerCase() === countyName.toLowerCase() &&
+					c.slug.toLowerCase() === shortSlug) ||
+				c.slug.toLowerCase() === fullSlug,
+		) ?? (resolvedPlaceData?.slug?.toLowerCase() === shortSlug ? resolvedPlaceData : null);
 
 	if (!cityPlace) {
 		notFound();
@@ -199,12 +199,13 @@ export async function generateMetadata({
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
 	const countyName = countyPlace?.name?.replace(/\s+County$/i, '') ?? county;
-	const placesWithChildren = await getPlacesBySlugWithChildren({
-		slug: countySlug,
-		includeChildren: true,
-	});
-	const children = placesWithChildren[0]?.children ?? [];
-	let cityPlace = children.find(c => c.slug.toLowerCase() === fullSlug);
+	const cityPlaces = await getCityPlacesByCounty({ state: stateCode, countySlug });
+	let cityPlace = cityPlaces.find(
+		c =>
+			(c.countyName?.toLowerCase() === countyName.toLowerCase() &&
+				c.slug.toLowerCase() === shortSlug) ||
+			c.slug.toLowerCase() === fullSlug,
+	);
 	if (!cityPlace) {
 		const placeByShortSlug = await getPlaceBySlug({
 			slug: shortSlug,

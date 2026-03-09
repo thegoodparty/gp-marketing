@@ -181,7 +181,7 @@ function normalizeName(name: string): string {
 function countyNameFromSlug(countySlug: string): string {
 	const part = countySlug.split('/').pop() ?? '';
 	const withoutSuffix = part.replace(
-		/-(county|parish|borough|census-area|municipio|city-and-county)$/i,
+		/-(county|parish|city-and-borough|city-and-county|borough|census-area|municipio)$/i,
 		'',
 	);
 	return withoutSuffix.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());

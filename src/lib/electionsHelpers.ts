@@ -2,7 +2,7 @@ import { US_STATES } from '~/constants/usStates';
 import type { CandidacyItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
 import type { FactsCardProps } from '~/ui/FactsCard';
 
-const COUNTY_EQUIV_SUFFIX_RE = /\s+(County|Parish|Borough|Census Area|Municipio|City and County)$/i;
+const COUNTY_EQUIV_SUFFIX_RE = /\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio)$/i;
 
 /** Strip county-equivalent suffix from a place name: "Jefferson Parish" -> "Jefferson" */
 export function stripCountySuffix(name: string): string {

@@ -49,7 +49,7 @@ export function DesktopNav(props: NavProps) {
 	}, [navState.isOpen]);
 
 	return (
-		<div className={'hidden md:flex flex-row items-center w-full pointer-events-auto h-[5rem]'}>
+		<div className={'hidden lg:flex flex-row items-center w-full pointer-events-auto h-[5rem]'}>
 			<div className='flex flex-row items-center justify-between px-[1.5rem] w-full'>
 				<div ref={navRef} className='flex flex-row items-center justify-center gap-[1rem]'>
 					<Anchor

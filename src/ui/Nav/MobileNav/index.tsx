@@ -17,7 +17,7 @@ export function MobileNav(props: NavProps) {
 	const [navOpen, setNavOpen] = useState<boolean>(false);
 
 	return (
-		<div className='md:hidden block relative z-30 max-h-screen pointer-events-auto'>
+		<div className='lg:hidden block relative z-30 max-h-screen pointer-events-auto'>
 			<div className='relative flex flex-row justify-between items-center h-[5rem] px-[1rem]'>
 				<Anchor
 					aria-label='Go to home page'

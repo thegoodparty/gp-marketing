@@ -48,7 +48,7 @@ export default async function Page({
 	const fullSlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const currentYear = new Date().getFullYear();
 
-	const [counties, placeData, quoteCollection, cityPlaces] = await Promise.all([
+	const [counties, placeData, quoteCollection] = await Promise.all([
 		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
 		getPlaceBySlug({
 			slug: fullSlug,
@@ -60,11 +60,14 @@ export default async function Page({
 			query: quoteCollectionByIdQuery,
 			params: { id: CAROUSEL_QUOTE_COLLECTION_ID },
 		}),
-		getCityPlacesByCounty({ state: stateCode, countySlug: fullSlug }),
 	]);
 
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === fullSlug);
 	const isDistrict = placeData != null && isDistrictMtfcc(placeData.mtfcc);
+
+	const cityPlaces = isDistrict
+		? []
+		: await getCityPlacesByCounty({ state: stateCode, countySlug: fullSlug });
 
 	if (!countyPlace && !isDistrict) {
 		if (placeData?.mtfcc && placeData.mtfcc !== COUNTY_MTFCC) {

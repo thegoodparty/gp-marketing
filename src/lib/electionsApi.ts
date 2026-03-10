@@ -174,7 +174,7 @@ export async function getPlacesByState(params: {
 
 /** Normalize place name for comparison (strip punctuation, lowercase). */
 function normalizeName(name: string): string {
-	return name.replace(/[.'']/g, '').toLowerCase();
+	return name.replace(/[.\s''\-]/g, '').toLowerCase();
 }
 
 /** Derives county name from county slug (e.g. "ca/los-angeles-county" -> "Los Angeles"). */

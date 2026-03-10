@@ -161,3 +161,7 @@ storybook-static/
 # Generated static sitemaps
 public/sitemap.xml
 public/sitemaps/
+
+# Playwright test artifacts
+playwright-report/
+test-results/

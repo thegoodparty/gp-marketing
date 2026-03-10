@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import { test } from '@playwright/test';
 
-const BASE = process.env['E2E_BASE_URL'] ?? 'https://goodparty.org';
+const BASE = (process.env['E2E_BASE_URL'] ?? 'https://goodparty.org').replace(/\/+$/, '');
 
 test.describe('Sitemap', () => {
 	test('root sitemap.xml returns 200 with XML content-type', async ({ request }) => {
@@ -56,10 +56,11 @@ test.describe('Sitemap', () => {
 			urls.push(match[1]!.trim());
 		}
 		const childUrls = urls.filter((u) => u.includes('/sitemaps/'));
+		expect(childUrls.length, 'Expected at least one child sitemap URL containing /sitemaps/').toBeGreaterThan(0);
 		const sample = childUrls.slice(0, 3);
 		for (const url of sample) {
 			const pathname = url.startsWith('http') ? new URL(url).pathname : url;
-			const urlToFetch = `${BASE.replace(/\/$/, '')}${pathname.startsWith('/') ? pathname : `/${pathname}`}`;
+			const urlToFetch = `${BASE}${pathname.startsWith('/') ? pathname : `/${pathname}`}`;
 			const childRes = await request.get(urlToFetch);
 			expect(childRes.status(), `Expected 200 for ${urlToFetch}`).toBe(200);
 			const ct = childRes.headers()['content-type'] ?? '';

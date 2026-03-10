@@ -1,23 +1,25 @@
 #!/usr/bin/env npx tsx
 /**
  * Removes invalid URLs from existing sitemap XML files using a validation report.
- * Usage: npx tsx scripts/prune-invalid-urls.ts --report <path-to-validation-report.json>
+ * Usage: npx tsx scripts/prune-invalid-urls.ts --report <path-to-validation-report.json> [--apply-replacements]
  */
 
 import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { ValidationReport } from './validate-sitemap-urls';
 
-function parseArgs(): { reportPath: string } {
+function parseArgs(): { reportPath: string; applyReplacements: boolean } {
 	const args = process.argv.slice(2);
 	let reportPath = '';
+	let applyReplacements = false;
 	for (let i = 0; i < args.length; i++) {
 		if (args[i] === '--report' && args[i + 1]) {
 			reportPath = args[++i]!;
-			break;
+		} else if (args[i] === '--apply-replacements') {
+			applyReplacements = true;
 		}
 	}
-	return { reportPath };
+	return { reportPath, applyReplacements };
 }
 
 /**
@@ -36,6 +38,26 @@ function extractUrlsFromSitemapXml(xml: string): Array<{ fullBlock: string; loc:
 		}
 	}
 	return urlBlocks;
+}
+
+/**
+ * Replaces <loc> values according to the replacements map. Returns updated XML and count of replacements.
+ */
+function replaceUrlsInSitemapXml(
+	xml: string,
+	replacements: Map<string, string>,
+): { replacedXml: string; replacedCount: number } {
+	let replacedCount = 0;
+	const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+	for (const [from, to] of replacements) {
+		const re = new RegExp(`(<loc>)${escapeRe(from)}(</loc>)`, 'g');
+		const matches = xml.match(re);
+		if (matches) {
+			replacedCount += matches.length;
+			xml = xml.replace(re, (_, open: string, close: string) => open + to + close);
+		}
+	}
+	return { replacedXml: xml, replacedCount };
 }
 
 /**
@@ -66,9 +88,9 @@ function pruneSitemapXml(xml: string, invalidUrls: Set<string>): { prunedXml: st
 }
 
 async function main(): Promise<void> {
-	const { reportPath } = parseArgs();
+	const { reportPath, applyReplacements } = parseArgs();
 	if (!reportPath) {
-		console.error('Usage: npx tsx scripts/prune-invalid-urls.ts --report <path-to-validation-report.json>');
+		console.error('Usage: npx tsx scripts/prune-invalid-urls.ts --report <path-to-validation-report.json> [--apply-replacements]');
 		process.exit(1);
 	}
 
@@ -82,16 +104,15 @@ async function main(): Promise<void> {
 		process.exit(1);
 	}
 
-	const invalidUrls = new Set(
-		report.invalid.map((r) => r.url),
+	const invalidUrls = new Set(report.invalid.map((r) => r.url));
+	const replacements = new Map(
+		(report.replacements ?? []).map((r) => [r.from, r.to] as [string, string]),
 	);
 
-	if (invalidUrls.size === 0) {
-		console.log('No invalid URLs to prune.');
+	if (invalidUrls.size === 0 && (!applyReplacements || replacements.size === 0)) {
+		console.log('No invalid URLs to prune and no replacements to apply.');
 		return;
 	}
-
-	console.log(`Pruning ${invalidUrls.size} invalid URLs from sitemaps...`);
 
 	const publicDir = join(process.cwd(), 'public');
 	const sitemapsDir = join(publicDir, 'sitemaps');
@@ -117,23 +138,45 @@ async function main(): Promise<void> {
 
 	const xmlFiles = await findXmlFiles(sitemapsDir);
 	let totalRemoved = 0;
+	let totalReplaced = 0;
 
 	for (const sitemapPath of xmlFiles) {
 		try {
-			const xml = await readFile(sitemapPath, 'utf-8');
+			let xml = await readFile(sitemapPath, 'utf-8');
 			if (!xml.includes('<urlset')) continue;
-			const { prunedXml, removedCount } = pruneSitemapXml(xml, invalidUrls);
-			if (removedCount > 0) {
-				await writeFile(sitemapPath, prunedXml, 'utf-8');
-				totalRemoved += removedCount;
-				console.log(`  ${sitemapPath}: removed ${removedCount} URLs`);
+
+			let fileChanged = false;
+
+			if (applyReplacements && replacements.size > 0) {
+				const { replacedXml, replacedCount } = replaceUrlsInSitemapXml(xml, replacements);
+				if (replacedCount > 0) {
+					xml = replacedXml;
+					totalReplaced += replacedCount;
+					fileChanged = true;
+					console.log(`  ${sitemapPath}: replaced ${replacedCount} URLs`);
+				}
+			}
+
+			if (invalidUrls.size > 0) {
+				const { prunedXml, removedCount } = pruneSitemapXml(xml, invalidUrls);
+				if (removedCount > 0) {
+					xml = prunedXml;
+					totalRemoved += removedCount;
+					fileChanged = true;
+					console.log(`  ${sitemapPath}: removed ${removedCount} URLs`);
+				}
+			}
+
+			if (fileChanged) {
+				await writeFile(sitemapPath, xml, 'utf-8');
 			}
 		} catch (err) {
 			console.warn(`  Skipped ${sitemapPath}:`, err instanceof Error ? err.message : String(err));
 		}
 	}
 
-	console.log(`Pruned ${totalRemoved} invalid URLs total.`);
+	if (totalReplaced > 0) console.log(`Replaced ${totalReplaced} URLs total.`);
+	if (totalRemoved > 0) console.log(`Pruned ${totalRemoved} invalid URLs total.`);
 }
 
 main().catch((err) => {

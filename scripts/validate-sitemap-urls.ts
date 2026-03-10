@@ -1,6 +1,11 @@
 /**
  * Validates URLs in a sitemap by making HEAD requests.
  * Usage: bun run scripts/validate-sitemap-urls.ts [sitemap-url] [--concurrency N] [--timeout N] [--dry-run] [--trace-redirects] [--redirect-handling remove|replace|keep] [--max-redirects N] [--no-follow-redirects]
+ *
+ * redirect-handling:
+ *   remove  - treat redirects as invalid (for pruning)
+ *   replace - add replacements (from->to) to report; use prune --apply-replacements to update sitemaps
+ *   keep    - leave redirects as separate category (default)
  */
 
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -36,6 +41,8 @@ export interface ValidationReport {
 	invalid: ValidationResult[];
 	redirects: ValidationResult[];
 	all: ValidationResult[];
+	/** When redirectHandling=replace: URLs to replace in sitemaps (from -> to) */
+	replacements?: Array<{ from: string; to: string }>;
 }
 
 export interface ValidateUrlOpts {
@@ -66,7 +73,7 @@ function parseArgs(): {
 	let noFollowRedirects = false;
 
 	for (let i = 0; i < args.length; i++) {
-		const arg = args[i];
+		const arg = args[i] ?? '';
 		if (arg === '--concurrency' && args[i + 1]) {
 			concurrency = Number.parseInt(args[i + 1]!, 10);
 			i++;
@@ -126,7 +133,7 @@ export async function validateUrl(
 	const noFollow = opts.noFollowRedirects ?? false;
 	const traceRedirects = opts.traceRedirects ?? false;
 
-	if (noFollow || !traceRedirects) {
+		if (noFollow || !traceRedirects) {
 		try {
 			const controller = new AbortController();
 			const timeoutId = setTimeout(() => controller.abort(), opts.timeout);
@@ -148,10 +155,12 @@ export async function validateUrl(
 				clearTimeout(getTimeoutId);
 			}
 
+			const finalUrl = !noFollow && res.url && res.url !== url ? res.url : undefined;
 			return {
 				url,
 				status: res.status,
 				durationMs: Date.now() - start,
+				finalUrl,
 			};
 		} catch (err) {
 			return {
@@ -290,8 +299,21 @@ export function buildReport(
 	sitemapUrl: string,
 	results: ValidationResult[],
 	durationMs: number,
+	redirectHandling: 'remove' | 'replace' | 'keep' = 'keep',
 ): ValidationReport {
-	const { valid, redirects, invalid } = categorizeResults(results);
+	let { valid, redirects, invalid } = categorizeResults(results);
+	const replacements: Array<{ from: string; to: string }> = [];
+
+	if (redirectHandling === 'remove') {
+		invalid = [...invalid, ...redirects];
+		redirects = [];
+	} else if (redirectHandling === 'replace') {
+		for (const r of [...valid, ...redirects]) {
+			if (r.finalUrl && r.finalUrl !== r.url) {
+				replacements.push({ from: r.url, to: r.finalUrl });
+			}
+		}
+	}
 
 	return {
 		sitemapUrl,
@@ -308,6 +330,7 @@ export function buildReport(
 		invalid,
 		redirects,
 		all: results,
+		...(replacements.length > 0 && { replacements }),
 	};
 }
 
@@ -323,6 +346,16 @@ function printSummary(report: ValidationReport): void {
 	console.log(`Server errors (5xx): ${s.serverErrors}`);
 	console.log(`Network failures: ${s.networkFailures}`);
 	console.log('---------------------------------\n');
+
+	if (report.replacements && report.replacements.length > 0) {
+		console.log(`Replacements (${report.replacements.length}): run prune with --apply-replacements to update sitemaps`);
+		for (const r of report.replacements.slice(0, 5)) {
+			console.log(`  ${r.from} -> ${r.to}`);
+		}
+		if (report.replacements.length > 5) {
+			console.log(`  ... and ${report.replacements.length - 5} more`);
+		}
+	}
 
 	if (report.invalid.length > 0) {
 		console.log('Invalid URLs (first 20):');
@@ -348,7 +381,7 @@ export async function runValidationFromGenerate(
 	urls: string[],
 	opts: RunValidationOpts,
 ): Promise<void> {
-	const REPORT_DIR = join(process.cwd(), 'public', 'sitemaps');
+	const REPORT_DIR = join(process.cwd(), '.reports', 'sitemaps');
 	const CONCURRENCY = 20;
 	const TIMEOUT_MS = 10_000;
 
@@ -376,7 +409,7 @@ export async function runValidationFromGenerate(
 	});
 
 	const durationMs = Date.now() - start;
-	const report = buildReport('(generated)', results, durationMs);
+	const report = buildReport('(generated)', results, durationMs, opts.redirectHandling);
 
 	const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
 	const outPath = join(REPORT_DIR, `validation-report-${timestamp}.json`);
@@ -393,6 +426,7 @@ async function main(): Promise<void> {
 		timeout,
 		dryRun,
 		traceRedirects,
+		redirectHandling,
 		maxRedirects,
 		noFollowRedirects,
 	} = parseArgs();
@@ -429,9 +463,9 @@ async function main(): Promise<void> {
 	});
 
 	const durationMs = Date.now() - start;
-	const report = buildReport(sitemapUrl, results, durationMs);
+	const report = buildReport(sitemapUrl, results, durationMs, redirectHandling);
 
-	const outDir = join(process.cwd(), 'public', 'sitemaps');
+	const outDir = join(process.cwd(), '.reports', 'sitemaps');
 	await mkdir(outDir, { recursive: true });
 	const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
 	const outPath = join(outDir, `validation-report-${timestamp}.json`);

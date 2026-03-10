@@ -20,7 +20,7 @@ import {
 
 const OUTPUT_DIR = join(process.cwd(), 'public');
 const SITEMAPS_DIR = join(OUTPUT_DIR, 'sitemaps');
-const REPORT_DIR = join(OUTPUT_DIR, 'sitemaps');
+const REPORT_DIR = join(process.cwd(), '.reports', 'sitemaps');
 
 const STATIC_ROUTES = [
 	{ path: '/', priority: 1.0, changefreq: 'monthly' as const },
@@ -142,6 +142,7 @@ async function fetchMainContentEntries(): Promise<SitemapEntry[]> {
 async function fetchStateElectionEntries(stateCode: string): Promise<SitemapEntry[]> {
 	const entries: SitemapEntry[] = [];
 	const code = stateCode.toUpperCase();
+	const stateLower = code.toLowerCase();
 
 	const places = await fetchElectionData<{ slug?: string }>('v1/places', {
 		state: code,
@@ -156,7 +157,7 @@ async function fetchStateElectionEntries(stateCode: string): Promise<SitemapEntr
 		raceColumns: 'slug',
 	});
 	for (const r of races) {
-		if (r.slug) entries.push(toEntry(`/elections/position/${r.slug}`, 0.7, 'weekly'));
+		if (r.slug) entries.push(toEntry(`/elections/${stateLower}/position/${r.slug}`, 0.7, 'weekly'));
 	}
 
 	return entries;

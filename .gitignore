@@ -155,5 +155,14 @@ storybook-static/
 .sanity
 *.local
 
-# Sitemap validation reports
+# Sitemap reports (validation and generation)
 .reports/sitemaps/validation-report-*.json
+.reports/sitemaps/generation-report-*.json
+
+# Generated static sitemaps
+public/sitemap.xml
+public/sitemaps/
+
+# Playwright test artifacts
+playwright-report/
+test-results/

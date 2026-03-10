@@ -1,6 +1,11 @@
 /**
- * Validates all URLs in a sitemap by making HEAD requests.
- * Usage: bun run scripts/validate-sitemap-urls.ts [sitemap-url] [--concurrency N] [--timeout N] [--dry-run] [--trace-redirects]
+ * Validates URLs in a sitemap by making HEAD requests.
+ * Usage: bun run scripts/validate-sitemap-urls.ts [sitemap-url] [--concurrency N] [--timeout N] [--dry-run] [--trace-redirects] [--redirect-handling remove|replace|keep] [--max-redirects N] [--no-follow-redirects]
+ *
+ * redirect-handling:
+ *   remove  - treat redirects as invalid (for pruning)
+ *   replace - add replacements (from->to) to report; use prune --apply-replacements to update sitemaps
+ *   keep    - leave redirects as separate category (default)
  */
 
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -9,9 +14,9 @@ import { join } from 'node:path';
 const DEFAULT_SITEMAP_URL = 'https://goodparty.org/sitemap.xml';
 const DEFAULT_CONCURRENCY = 20;
 const DEFAULT_TIMEOUT_MS = 10_000;
-const MAX_REDIRECT_HOPS = 5;
+const DEFAULT_MAX_REDIRECTS = 5;
 
-interface ValidationResult {
+export interface ValidationResult {
 	url: string;
 	status: number | null;
 	durationMs: number;
@@ -21,7 +26,7 @@ interface ValidationResult {
 	finalStatus?: number;
 }
 
-interface ValidationReport {
+export interface ValidationReport {
 	sitemapUrl: string;
 	timestamp: string;
 	durationMs: number;
@@ -36,6 +41,15 @@ interface ValidationReport {
 	invalid: ValidationResult[];
 	redirects: ValidationResult[];
 	all: ValidationResult[];
+	/** When redirectHandling=replace: URLs to replace in sitemaps (from -> to) */
+	replacements?: Array<{ from: string; to: string }>;
+}
+
+export interface ValidateUrlOpts {
+	timeout: number;
+	traceRedirects: boolean;
+	maxRedirects: number;
+	noFollowRedirects: boolean;
 }
 
 function parseArgs(): {
@@ -44,6 +58,9 @@ function parseArgs(): {
 	timeout: number;
 	dryRun: boolean;
 	traceRedirects: boolean;
+	redirectHandling: 'remove' | 'replace' | 'keep';
+	maxRedirects: number;
+	noFollowRedirects: boolean;
 } {
 	const args = process.argv.slice(2);
 	let sitemapUrl = DEFAULT_SITEMAP_URL;
@@ -51,9 +68,12 @@ function parseArgs(): {
 	let timeout = DEFAULT_TIMEOUT_MS;
 	let dryRun = false;
 	let traceRedirects = false;
+	let redirectHandling: 'remove' | 'replace' | 'keep' = 'remove';
+	let maxRedirects = DEFAULT_MAX_REDIRECTS;
+	let noFollowRedirects = false;
 
 	for (let i = 0; i < args.length; i++) {
-		const arg = args[i];
+		const arg = args[i] ?? '';
 		if (arg === '--concurrency' && args[i + 1]) {
 			concurrency = Number.parseInt(args[i + 1]!, 10);
 			i++;
@@ -64,12 +84,29 @@ function parseArgs(): {
 			dryRun = true;
 		} else if (arg === '--trace-redirects') {
 			traceRedirects = true;
+		} else if (arg === '--redirect-handling' && args[i + 1]) {
+			const v = args[++i] as string;
+			if (v === 'remove' || v === 'replace' || v === 'keep') redirectHandling = v;
+		} else if (arg === '--max-redirects' && args[i + 1]) {
+			maxRedirects = Number.parseInt(args[i + 1]!, 10) || DEFAULT_MAX_REDIRECTS;
+			i++;
+		} else if (arg === '--no-follow-redirects') {
+			noFollowRedirects = true;
 		} else if (!arg.startsWith('--') && arg.startsWith('http')) {
 			sitemapUrl = arg;
 		}
 	}
 
-	return { sitemapUrl, concurrency, timeout, dryRun, traceRedirects };
+	return {
+		sitemapUrl,
+		concurrency,
+		timeout,
+		dryRun,
+		traceRedirects,
+		redirectHandling,
+		maxRedirects,
+		noFollowRedirects,
+	};
 }
 
 async function fetchSitemapUrls(sitemapUrl: string): Promise<string[]> {
@@ -78,7 +115,6 @@ async function fetchSitemapUrls(sitemapUrl: string): Promise<string[]> {
 		throw new Error(`Failed to fetch sitemap: ${res.status} ${res.statusText}`);
 	}
 	const xml = await res.text();
-	// Regex-based parsing; does not handle CDATA, XML entities, or namespaced tags.
 	const locRegex = /<loc>([^<]+)<\/loc>/g;
 	const urls: string[] = [];
 	let match: RegExpExecArray | null;
@@ -88,19 +124,22 @@ async function fetchSitemapUrls(sitemapUrl: string): Promise<string[]> {
 	return urls;
 }
 
-async function validateUrl(
+export async function validateUrl(
 	url: string,
-	opts: { timeout: number; traceRedirects: boolean },
+	opts: Partial<ValidateUrlOpts> & { timeout: number },
 ): Promise<ValidationResult> {
 	const start = Date.now();
+	const maxRedirects = opts.maxRedirects ?? DEFAULT_MAX_REDIRECTS;
+	const noFollow = opts.noFollowRedirects ?? false;
+	const traceRedirects = opts.traceRedirects ?? false;
 
-	if (!opts.traceRedirects) {
+		if (noFollow || !traceRedirects) {
 		try {
 			const controller = new AbortController();
 			const timeoutId = setTimeout(() => controller.abort(), opts.timeout);
 			let res = await fetch(url, {
 				method: 'HEAD',
-				redirect: 'follow',
+				redirect: noFollow ? 'manual' : 'follow',
 				signal: controller.signal,
 			});
 			clearTimeout(timeoutId);
@@ -108,14 +147,20 @@ async function validateUrl(
 			if (res.status === 405 || res.status === 501) {
 				const getController = new AbortController();
 				const getTimeoutId = setTimeout(() => getController.abort(), opts.timeout);
-				res = await fetch(url, { method: 'GET', redirect: 'follow', signal: getController.signal });
+				res = await fetch(url, {
+					method: 'GET',
+					redirect: noFollow ? 'manual' : 'follow',
+					signal: getController.signal,
+				});
 				clearTimeout(getTimeoutId);
 			}
 
+			const finalUrl = !noFollow && res.url && res.url !== url ? res.url : undefined;
 			return {
 				url,
 				status: res.status,
 				durationMs: Date.now() - start,
+				finalUrl,
 			};
 		} catch (err) {
 			return {
@@ -128,9 +173,22 @@ async function validateUrl(
 	}
 
 	const chain: Array<{ url: string; status: number }> = [];
+	const seen = new Set<string>();
 	let currentUrl = url;
 
-	for (let hop = 0; hop < MAX_REDIRECT_HOPS; hop++) {
+	for (let hop = 0; hop < maxRedirects; hop++) {
+		if (seen.has(currentUrl)) {
+			return {
+				url,
+				status: null,
+				durationMs: Date.now() - start,
+				error: 'Circular redirect detected',
+				redirectChain: chain,
+				finalUrl: currentUrl,
+			};
+		}
+		seen.add(currentUrl);
+
 		try {
 			const controller = new AbortController();
 			const timeoutId = setTimeout(() => controller.abort(), opts.timeout);
@@ -192,7 +250,7 @@ async function validateUrl(
 	};
 }
 
-async function runWithConcurrency<T, R>(
+export async function runWithConcurrency<T, R>(
 	items: T[],
 	concurrency: number,
 	fn: (item: T, index: number) => Promise<R>,
@@ -213,7 +271,7 @@ async function runWithConcurrency<T, R>(
 	return results;
 }
 
-function categorizeResults(results: ValidationResult[]): {
+export function categorizeResults(results: ValidationResult[]): {
 	valid: ValidationResult[];
 	redirects: ValidationResult[];
 	invalid: ValidationResult[];
@@ -237,12 +295,25 @@ function categorizeResults(results: ValidationResult[]): {
 	return { valid, redirects, invalid };
 }
 
-function buildReport(
+export function buildReport(
 	sitemapUrl: string,
 	results: ValidationResult[],
 	durationMs: number,
+	redirectHandling: 'remove' | 'replace' | 'keep' = 'keep',
 ): ValidationReport {
-	const { valid, redirects, invalid } = categorizeResults(results);
+	let { valid, redirects, invalid } = categorizeResults(results);
+	const replacements: Array<{ from: string; to: string }> = [];
+
+	if (redirectHandling === 'remove') {
+		invalid = [...invalid, ...redirects];
+		redirects = [];
+	} else if (redirectHandling === 'replace') {
+		for (const r of [...valid, ...redirects]) {
+			if (r.finalUrl && r.finalUrl !== r.url) {
+				replacements.push({ from: r.url, to: r.finalUrl });
+			}
+		}
+	}
 
 	return {
 		sitemapUrl,
@@ -259,6 +330,7 @@ function buildReport(
 		invalid,
 		redirects,
 		all: results,
+		...(replacements.length > 0 && { replacements }),
 	};
 }
 
@@ -275,6 +347,16 @@ function printSummary(report: ValidationReport): void {
 	console.log(`Network failures: ${s.networkFailures}`);
 	console.log('---------------------------------\n');
 
+	if (report.replacements && report.replacements.length > 0) {
+		console.log(`Replacements (${report.replacements.length}): run prune with --apply-replacements to update sitemaps`);
+		for (const r of report.replacements.slice(0, 5)) {
+			console.log(`  ${r.from} -> ${r.to}`);
+		}
+		if (report.replacements.length > 5) {
+			console.log(`  ... and ${report.replacements.length - 5} more`);
+		}
+	}
+
 	if (report.invalid.length > 0) {
 		console.log('Invalid URLs (first 20):');
 		for (const r of report.invalid.slice(0, 20)) {
@@ -286,8 +368,68 @@ function printSummary(report: ValidationReport): void {
 	}
 }
 
+export interface RunValidationOpts {
+	redirectHandling: 'remove' | 'replace' | 'keep';
+	maxRedirects: number;
+	noFollowRedirects: boolean;
+}
+
+/**
+ * Runs validation on a list of URLs (e.g. from generate-sitemaps). Writes report to public/sitemaps/.
+ */
+export async function runValidationFromGenerate(
+	urls: string[],
+	opts: RunValidationOpts,
+): Promise<void> {
+	const REPORT_DIR = join(process.cwd(), '.reports', 'sitemaps');
+	const CONCURRENCY = 20;
+	const TIMEOUT_MS = 10_000;
+
+	await mkdir(REPORT_DIR, { recursive: true });
+
+	const traceRedirects = !opts.noFollowRedirects;
+	let completed = 0;
+	const total = urls.length;
+	const progressInterval = Math.max(1, Math.floor(total / 10));
+
+	const start = Date.now();
+	const results = await runWithConcurrency(urls, CONCURRENCY, async (url) => {
+		const result = await validateUrl(url, {
+			timeout: TIMEOUT_MS,
+			traceRedirects,
+			maxRedirects: opts.maxRedirects,
+			noFollowRedirects: opts.noFollowRedirects,
+		});
+		completed++;
+		if (completed % progressInterval === 0 || completed === total) {
+			const pct = Math.round((completed / total) * 100);
+			console.log(`Progress: ${pct}% (${completed}/${total})`);
+		}
+		return result;
+	});
+
+	const durationMs = Date.now() - start;
+	const report = buildReport('(generated)', results, durationMs, opts.redirectHandling);
+
+	const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+	const outPath = join(REPORT_DIR, `validation-report-${timestamp}.json`);
+	await writeFile(outPath, JSON.stringify(report, null, 2), 'utf-8');
+	console.log(`Validation report: ${outPath}`);
+
+	printSummary(report);
+}
+
 async function main(): Promise<void> {
-	const { sitemapUrl, concurrency, timeout, dryRun, traceRedirects } = parseArgs();
+	const {
+		sitemapUrl,
+		concurrency,
+		timeout,
+		dryRun,
+		traceRedirects,
+		redirectHandling,
+		maxRedirects,
+		noFollowRedirects,
+	} = parseArgs();
 
 	console.log(`Fetching sitemap from ${sitemapUrl}...`);
 	const urls = await fetchSitemapUrls(sitemapUrl);
@@ -305,8 +447,13 @@ async function main(): Promise<void> {
 	const total = urls.length;
 	const progressInterval = Math.max(1, Math.floor(total / 10));
 
-	const results = await runWithConcurrency(urls, concurrency, async (url, index) => {
-		const result = await validateUrl(url, { timeout, traceRedirects });
+	const results = await runWithConcurrency(urls, concurrency, async (url) => {
+		const result = await validateUrl(url, {
+			timeout,
+			traceRedirects,
+			maxRedirects,
+			noFollowRedirects,
+		});
 		completed++;
 		if (completed % progressInterval === 0 || completed === total) {
 			const pct = Math.round((completed / total) * 100);
@@ -316,7 +463,7 @@ async function main(): Promise<void> {
 	});
 
 	const durationMs = Date.now() - start;
-	const report = buildReport(sitemapUrl, results, durationMs);
+	const report = buildReport(sitemapUrl, results, durationMs, redirectHandling);
 
 	const outDir = join(process.cwd(), '.reports', 'sitemaps');
 	await mkdir(outDir, { recursive: true });

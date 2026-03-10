@@ -3,8 +3,8 @@ import { notFound, redirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	getCandidacies,
+	getCityPlacesByCounty,
 	getPlacesByState,
-	getPlacesBySlugWithChildren,
 	getRaceBySlug,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
@@ -14,6 +14,7 @@ import {
 	formatFilingPeriodFromRace,
 	getStateName,
 	mapCandidacyToCard,
+	stripCountySuffix,
 } from '~/lib/electionsHelpers';
 import { CandidatesPageContent } from '~/ui/CandidatesPageContent';
 
@@ -56,15 +57,13 @@ export default async function Page({
 
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
-	const countyNameShort = countyPlace?.name?.replace(/\s+County$/i, '') ?? county;
+	const countyNameShort = countyPlace ? stripCountySuffix(countyPlace.name) : county;
 	const countyName = countyPlace?.name ?? `${countyNameShort} County`;
 
-	const placesWithChildren = await getPlacesBySlugWithChildren({
-		slug: countySlug,
-		includeChildren: true,
-	});
-	const children = placesWithChildren[0]?.children ?? [];
-	const cityPlace = children.find(c => c.slug.toLowerCase() === fullSlug);
+	const cityPlaces = await getCityPlacesByCounty({ state: stateCode, countySlug });
+	const cityPlace = cityPlaces.find(
+		c => c.slug.toLowerCase() === `${state.toLowerCase()}/${city.toLowerCase()}`,
+	);
 
 	if (!cityPlace) {
 		notFound();
@@ -125,20 +124,18 @@ export async function generateMetadata({
 	const raceSlug = buildRaceSlug(state, positionSlug, county, city);
 	const race = await getRaceBySlug(raceSlug);
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
-	const fullSlug = `${countySlug}/${city.toLowerCase()}`;
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
-	const countyName = countyPlace?.name?.replace(/\s+County$/i, '') ?? county;
-	const placesWithChildren = await getPlacesBySlugWithChildren({
-		slug: countySlug,
-		includeChildren: true,
-	});
-	const children = placesWithChildren[0]?.children ?? [];
-	const cityPlace = children.find(c => c.slug.toLowerCase() === fullSlug);
+	const countyName = countyPlace ? stripCountySuffix(countyPlace.name) : county;
+	const countyDisplayName = countyPlace?.name ?? `${countyName} County`;
+	const cityPlaces = await getCityPlacesByCounty({ state: stateCode, countySlug });
+	const cityPlace = cityPlaces.find(
+		c => c.slug.toLowerCase() === `${state.toLowerCase()}/${city.toLowerCase()}`,
+	);
 	const cityName = cityPlace?.name ?? city;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
 	return {
 		title: `Candidates for ${positionName} in ${cityName}, ${stateName} | Good Party`,
-		description: `View candidates running for ${positionName} in ${cityName}, ${countyName} County, ${stateName}.`,
+		description: `View candidates running for ${positionName} in ${cityName}, ${countyDisplayName}, ${stateName}.`,
 	};
 }

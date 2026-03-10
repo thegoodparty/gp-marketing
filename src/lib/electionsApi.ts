@@ -172,17 +172,30 @@ export async function getPlacesByState(params: {
 	return Array.isArray(data) ? data : [];
 }
 
-export async function getPlacesBySlugWithChildren(params: {
-	slug: string;
-	includeChildren?: boolean;
+/** Normalize place name for comparison (strip punctuation, lowercase). */
+function normalizeName(name: string): string {
+	return name.replace(/[.\s''\-]/g, '').toLowerCase();
+}
+
+/** Derives county name from county slug (e.g. "ca/los-angeles-county" -> "Los Angeles"). */
+function countyNameFromSlug(countySlug: string): string {
+	const part = countySlug.split('/').pop() ?? '';
+	const withoutSuffix = part.replace(
+		/-(county|parish|city-and-borough|city-and-county|borough|census-area|municipio)$/i,
+		'',
+	);
+	return withoutSuffix.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+export async function getCityPlacesByCounty(params: {
+	state: string;
+	countySlug: string;
 }): Promise<PlaceItem[]> {
-	const searchParams = new URLSearchParams({
-		slug: params.slug,
-		includeChildren: (params.includeChildren ?? true).toString(),
-	});
-	const url = `${BASE_URL}/v1/places?${searchParams}`;
-	const data = await fetchJson<PlaceItem[]>(url, CACHE_OPTIONS);
-	return Array.isArray(data) ? data : [];
+	const allCities = await getPlacesByState({ state: params.state, mtfcc: CITY_MTFCC });
+	const countyName = countyNameFromSlug(params.countySlug);
+	return allCities.filter(
+		p => normalizeName(p.countyName ?? '') === normalizeName(countyName),
+	);
 }
 
 export async function getPlaceBySlug(params: {

@@ -7,6 +7,7 @@ import {
 	formatElectionDateFromApi,
 	formatFilingPeriodFromRace,
 	getStateName,
+	stripCountySuffix,
 } from '~/lib/electionsHelpers';
 import { toAbsoluteUrl } from '~/lib/url';
 import { PositionPageContent } from '~/ui/PositionPageContent';
@@ -41,7 +42,7 @@ export default async function Page({
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
-	const countyName = countyPlace?.name?.replace(/\s+County$/i, '') ?? county;
+	const countyName = countyPlace ? stripCountySuffix(countyPlace.name) : county;
 
 	const stateName = getStateName(stateCode);
 	const officeName = race.normalizedPositionName ?? race.name ?? 'Position';
@@ -53,7 +54,7 @@ export default async function Page({
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
 		{ href: `/elections/${state.toLowerCase()}`, label: stateName },
-		{ href: `/elections/${countySlug}`, label: `${countyName} County` },
+		{ href: `/elections/${countySlug}`, label: countyPlace?.name ?? `${countyName} County` },
 		{ href: '', label: officeName },
 	];
 
@@ -63,7 +64,7 @@ export default async function Page({
 		<PositionPageContent
 			officeName={officeName}
 			stateName={stateName}
-			countyName={`${countyName} County`}
+			countyName={countyPlace?.name ?? `${countyName} County`}
 			electionDate={electionDate}
 			filingDate={filingDate}
 			breadcrumbs={breadcrumbs}
@@ -88,10 +89,11 @@ export async function generateMetadata({
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
-	const countyName = countyPlace?.name?.replace(/\s+County$/i, '') ?? county;
+	const countyName = countyPlace ? stripCountySuffix(countyPlace.name) : county;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
+	const countyDisplayName = countyPlace?.name ?? `${countyName} County`;
 	return {
-		title: `${positionName} in ${countyName} County, ${stateName} | Good Party`,
-		description: `Election details and candidates for ${positionName} in ${countyName} County, ${stateName}.`,
+		title: `${positionName} in ${countyDisplayName}, ${stateName} | Good Party`,
+		description: `Election details and candidates for ${positionName} in ${countyDisplayName}, ${stateName}.`,
 	};
 }

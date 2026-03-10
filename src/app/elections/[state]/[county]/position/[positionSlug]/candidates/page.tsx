@@ -8,6 +8,7 @@ import {
 	formatFilingPeriodFromRace,
 	getStateName,
 	mapCandidacyToCard,
+	stripCountySuffix,
 } from '~/lib/electionsHelpers';
 import { CandidatesPageContent } from '~/ui/CandidatesPageContent';
 
@@ -41,7 +42,7 @@ export default async function Page({
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
-	const countyNameShort = countyPlace?.name?.replace(/\s+County$/i, '') ?? county;
+	const countyNameShort = countyPlace ? stripCountySuffix(countyPlace.name) : county;
 	const countyName = countyPlace?.name ?? `${countyNameShort} County`;
 
 	const stateName = getStateName(stateCode);
@@ -93,10 +94,11 @@ export async function generateMetadata({
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
-	const countyName = countyPlace?.name?.replace(/\s+County$/i, '') ?? county;
+	const countyName = countyPlace ? stripCountySuffix(countyPlace.name) : county;
+	const countyDisplayName = countyPlace?.name ?? `${countyName} County`;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
 	return {
-		title: `Candidates for ${positionName} in ${countyName} County, ${stateName} | Good Party`,
-		description: `View candidates running for ${positionName} in ${countyName} County, ${stateName}.`,
+		title: `Candidates for ${positionName} in ${countyDisplayName}, ${stateName} | Good Party`,
+		description: `View candidates running for ${positionName} in ${countyDisplayName}, ${stateName}.`,
 	};
 }

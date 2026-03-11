@@ -2,14 +2,13 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getCandidateBySlug, findCampaignByRace } from '~/lib/electionsApi';
 import { formatElectionDateFromApi } from '~/lib/electionsHelpers';
-import { defaultRevalidate } from '~/lib/env';
 import { PageSections } from '~/PageSections';
 import type { SectionOverrides } from '~/PageSections';
 import type { CandidacyItem, FindByRaceIdResponse } from '~/types/elections';
 import type { ProfileData, OfficeData } from '~/PageSections/ProfileContentBlockSection';
 import { PROFILE_PAGE_SECTIONS } from './profilePageSections';
 
-export const revalidate = defaultRevalidate;
+export const revalidate = 3600;
 export const dynamic = 'force-static';
 
 function buildSectionOverrides(

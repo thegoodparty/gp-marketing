@@ -3,6 +3,7 @@ import { tv } from './_lib/utils.ts';
 import { colorTypeValues, type backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 import { Container } from './Container.tsx';
+import { FadeIn } from './FadeIn.tsx';
 import { TestimonialCard, type TestimonialCardProps } from './TestimonialCard.tsx';
 import { HeaderBlock, type HeaderBlockProps } from './HeaderBlock.tsx';
 import { shuffleArray } from '~/ui/_lib/shuffleArray.ts';
@@ -40,9 +41,14 @@ export function TestimonialBlock(props: TestimonialBlockProps) {
 		<article className={base()} data-component='TestimonialBlock'>
 			<Container size='xl'>
 				<div className={wrapper()}>
-					{props.header && <HeaderBlock {...props.header} backgroundColor={backgroundColor} />}
+					{props.header && (
+						<FadeIn delay={0}>
+							<HeaderBlock {...props.header} backgroundColor={backgroundColor} />
+						</FadeIn>
+					)}
 					{props.items && props.items.length > 0 && (
-						<div className='flex flex-wrap justify-center gap-6 lg:gap-8'>
+						<FadeIn delay={100}>
+							<div className='flex flex-wrap justify-center gap-6 lg:gap-8'>
 							{props.items?.map((item, index) => {
 								const isTwoItems = props.items.length === 2;
 
@@ -50,7 +56,7 @@ export function TestimonialBlock(props: TestimonialBlockProps) {
 									<TestimonialCard
 										{...item}
 										key={index}
-										color={colors[index]}
+										color={item.color ?? colors[index]}
 										className={`
 											grow-0 shrink-0 basis-full /* 1 col by default */
 											sm:basis-[calc((100%-1.5rem)/2)] /* 2 cols, gap-6 = 1.5rem, so (100% - 1*gap)/2 */
@@ -60,7 +66,8 @@ export function TestimonialBlock(props: TestimonialBlockProps) {
 									/>
 								);
 							})}
-						</div>
+							</div>
+						</FadeIn>
 					)}
 				</div>
 			</Container>

@@ -3,6 +3,8 @@ import type { StatProps } from '~/ui/Stat.tsx';
 import type { TestimonialCardProps } from '~/ui/TestimonialCard.tsx';
 import type { FeaturesBlockItemProps } from '~/ui/FeaturesBlock.tsx';
 import type { HeaderBlockProps } from '~/ui/HeaderBlock.tsx';
+import type { AIPlatformPillar } from '~/ui/AIPlatformSection.tsx';
+import type { AIChatMessage } from '~/ui/AIChatVisual.tsx';
 
 export const heroA = {
 	badgeText: (
@@ -64,6 +66,7 @@ export const heroesA: TestimonialCardProps[] = [
 			name: 'Maria Gonzalez',
 			meta: ['City Council — Austin, TX'],
 		},
+		avatar: '👩‍🏫',
 		copy: 'I was a teacher who got tired of waiting for someone else to fix things. GoodParty.org gave me the tools to run — and win — without owing anyone.',
 		color: 'midnight',
 	},
@@ -72,6 +75,7 @@ export const heroesA: TestimonialCardProps[] = [
 			name: 'James Chen',
 			meta: ['School Board — Portland, OR'],
 		},
+		avatar: '👨‍💼',
 		copy: 'As a small business owner, I knew our school board needed someone who actually lives in the community. The AI campaign tools made it possible.',
 		color: 'midnight',
 	},
@@ -80,6 +84,7 @@ export const heroesA: TestimonialCardProps[] = [
 			name: 'Aisha Williams',
 			meta: ['County Commissioner — Fulton, GA'],
 		},
+		avatar: '👩‍⚖️',
 		copy: 'People told me I needed a party behind me. I told them I had something better — the support of my neighbors and the right tools.',
 		color: 'midnight',
 	},
@@ -91,18 +96,42 @@ export const aiPlatformHeaderA: HeaderBlockProps = {
 	copy: 'Our AI campaign tools are built differently. Open, transparent, and designed to empower — never to manipulate. Every tool is verifiably anti-corruption because your campaign should answer to voters, not algorithms.',
 };
 
-export const aiPlatformToolsA: FeaturesBlockItemProps[] = [
+export const aiPlatformPillarsA: AIPlatformPillar[] = [
 	{
+		icon: '🔓',
 		title: 'Open & Transparent',
 		description: 'Our AI models and methods are documented and auditable. No black boxes, no hidden agendas.',
 	},
 	{
+		icon: '🤝',
 		title: 'Human-Empowering',
 		description: 'AI that amplifies your voice and judgment — never replaces it. You stay in control.',
 	},
 	{
+		icon: '🛡️',
 		title: 'Verifiably Anti-Corruption',
 		description: 'Built from the ground up to resist manipulation. Your campaign answers to voters, not algorithms.',
+	},
+];
+
+export const aiChatMessagesA: AIChatMessage[] = [
+	{
+		role: 'user',
+		text: "I'm running for city council. What should my first 30 days look like?",
+	},
+	{
+		role: 'ai',
+		name: 'GP Campaign Assistant',
+		text: "Great question! Here's a starter plan: Week 1 — finalize your platform and recruit a core team. Week 2–3 — door-knock in high-turnout precincts. Week 4 — launch your first digital ad. I can generate a full 90-day plan tailored to your district. Want me to pull voter data first?",
+	},
+	{
+		role: 'user',
+		text: 'Yes, and can you draft a short bio for my website?',
+	},
+	{
+		role: 'ai',
+		name: 'GP Campaign Assistant',
+		text: "On it. I'll use your district's demographics and your stated priorities to draft something that resonates. You'll have a bio and a sample website section in about 2 minutes.",
 	},
 ];
 
@@ -113,31 +142,55 @@ export const toolsHeaderA: HeaderBlockProps = {
 
 export const toolsA: FeaturesBlockItemProps[] = [
 	{
+		iconContent: '📋',
+		iconColor: 'red',
 		title: 'Custom Campaign Plan',
 		description:
 			'AI-generated campaign strategy tailored to your district, your race, and your resources. No consultants needed.',
+		tag: 'Free',
+		tagVariant: 'free',
 	},
 	{
+		iconContent: '📊',
+		iconColor: 'blue',
 		title: 'Voter Data & Insights',
 		description:
 			'Access detailed voter files, demographic breakdowns, and turnout history — data that used to cost thousands.',
+		tag: 'Free',
+		tagVariant: 'free',
 	},
 	{
+		iconContent: '✉️',
+		iconColor: 'gold',
 		title: 'Outreach & GOTV',
 		description: 'Text banking, door knocking tools, and robocall campaigns to reach voters where they are.',
+		tag: 'From $10/mo',
+		tagVariant: 'default',
 	},
 	{
+		iconContent: '🎨',
+		iconColor: 'red',
 		title: 'AI Content Builder',
 		description: 'Dozens of campaign templates — from websites to social posts to mailers — generated in seconds.',
+		tag: 'Free',
+		tagVariant: 'free',
 	},
 	{
+		iconContent: '🎓',
+		iconColor: 'blue',
 		title: 'Training & Community',
 		description: 'Step-by-step campaign training, live events, and a community of fellow Civic Heroes to learn from.',
+		tag: 'Free',
+		tagVariant: 'free',
 	},
 	{
+		iconContent: '🏛️',
+		iconColor: 'gold',
 		title: 'Serve in Office',
 		description:
 			'The tools don\'t stop at the election. We help you serve effectively once you win — because governing matters too.',
+		tag: 'Coming Soon',
+		tagVariant: 'default',
 	},
 ];
 

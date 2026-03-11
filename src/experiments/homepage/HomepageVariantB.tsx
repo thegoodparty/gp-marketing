@@ -1,4 +1,5 @@
 import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
+import { AIPlatformSection } from '~/ui/AIPlatformSection.tsx';
 import { CTABlock } from '~/ui/CTABlock.tsx';
 import { ExperimentHeroB } from '~/ui/ExperimentHeroB.tsx';
 import { FeaturesBlock } from '~/ui/FeaturesBlock.tsx';
@@ -15,7 +16,8 @@ import {
 	peopleHeaderB,
 	peopleB,
 	techHeaderB,
-	techB,
+	techPlatformPillarsB,
+	techChatMessagesB,
 	toolsHeaderB,
 	toolsB,
 	ctaB,
@@ -53,11 +55,12 @@ export function HomepageVariantB() {
 				/>
 			</ComponentErrorBoundary>
 
-			<ComponentErrorBoundary componentName="FeaturesBlock (Tech)">
-				<FeaturesBlock
+			<ComponentErrorBoundary componentName="AIPlatformSection">
+				<AIPlatformSection
 					backgroundColor="cream"
 					header={techHeaderB}
-					items={techB}
+					pillars={techPlatformPillarsB}
+					chatMessages={techChatMessagesB}
 				/>
 			</ComponentErrorBoundary>
 
@@ -76,6 +79,7 @@ export function HomepageVariantB() {
 					title={ctaB.title}
 					copy={ctaB.copy}
 					buttons={ctaB.buttons}
+					showLogo
 				/>
 			</ComponentErrorBoundary>
 		</>

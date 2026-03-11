@@ -3,6 +3,7 @@ import type { HeaderBlockProps } from './HeaderBlock.tsx';
 import { cn, tv } from './_lib/utils.ts';
 
 import { Container } from './Container.tsx';
+import { FadeIn } from './FadeIn.tsx';
 import { HeaderBlock } from './HeaderBlock.tsx';
 import { Text } from './Text.tsx';
 
@@ -49,10 +50,13 @@ export function ThreePillarsBlock(props: ThreePillarsBlockProps) {
 		<article className={cn('py-(--container-padding) bg-white', props.className)} data-component='ThreePillarsBlock'>
 			<Container size="xl">
 				<div className="flex flex-col gap-[4.5rem]">
-					<div className="text-center">
-						<HeaderBlock {...props.header} backgroundColor="cream" layout="center" />
-					</div>
-					<div className="grid gap-8 md:grid-cols-3">
+					<FadeIn delay={0}>
+						<div className="text-center">
+							<HeaderBlock {...props.header} backgroundColor="cream" layout="center" />
+						</div>
+					</FadeIn>
+					<FadeIn delay={100}>
+						<div className="grid gap-8 md:grid-cols-3">
 						{props.pillars.map((pillar, i) => {
 							const { card, label, title, description } = pillarStyles({ color: pillar.color });
 							return (
@@ -67,7 +71,8 @@ export function ThreePillarsBlock(props: ThreePillarsBlockProps) {
 								</div>
 							);
 						})}
-					</div>
+						</div>
+					</FadeIn>
 				</div>
 			</Container>
 		</article>

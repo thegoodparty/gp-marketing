@@ -7,6 +7,7 @@ import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
 
 import { Container } from './Container.tsx';
 import { CircleIcon } from './CircleIcon.tsx';
+import { FadeIn } from './FadeIn.tsx';
 import type { IconType } from './IconResolver.tsx';
 import { Text } from './Text.tsx';
 import { Media } from './Media.tsx';
@@ -60,11 +61,15 @@ const styles = tv({
 export type FeaturesBlockItemProps = {
 	description?: ReactNode;
 	icon?: IconType;
+	iconContent?: ReactNode;
+	iconColor?: 'red' | 'blue' | 'gold';
 	title?: string;
 	isHighlighted?: boolean;
 	image?: any;
 	showFullImage?: boolean;
 	button?: any;
+	tag?: string;
+	tagVariant?: 'free' | 'default';
 };
 
 export type FeaturesBlockProps = {
@@ -87,24 +92,75 @@ export function FeaturesBlock(props: FeaturesBlockProps) {
 	const highlighted = props.items.find(i => i.isHighlighted);
 	const normals = props.items.filter(i => !i.isHighlighted);
 
+	const iconColorMap = {
+		red: 'bg-[rgba(224,22,43,0.08)]',
+		blue: 'bg-[rgba(0,82,165,0.08)]',
+		gold: 'bg-[rgba(232,170,26,0.1)]',
+	} as const;
+
+	const tagColorMap = {
+		free: 'bg-[#ECFDF5] text-[#059669] border-[#A7F3D0]',
+		default: 'bg-white border-neutral-200 text-neutral-500',
+	} as const;
+
+	const renderFeatureIcon = (item: FeaturesBlockItemProps) => {
+		if (item.iconContent) {
+			const color = item.iconColor ?? 'red';
+			return (
+				<div
+					className={cn(
+						'w-14 h-14 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0 mb-5',
+						iconColorMap[color],
+					)}
+				>
+					{item.iconContent}
+				</div>
+			);
+		}
+		if (item.icon) {
+			return <CircleIcon icon={item.icon} iconBg={iconBg} />;
+		}
+		return null;
+	};
+
 	if (!highlighted) {
 		return (
 			<article className={cn(base(), props.className)} data-component='FeaturesBlock'>
 				<Container size='xl'>
 					<div className={wrapper()}>
-						<HeaderBlock {...props.header} backgroundColor={props.backgroundColor} layout='center' />
-						<ul className='grid gap-x-responsive-md gap-y-responsive-lg sm:grid-cols-2 lg:grid-cols-3'>
+						<FadeIn delay={0}>
+							<HeaderBlock {...props.header} backgroundColor={props.backgroundColor} layout='center' />
+						</FadeIn>
+						<FadeIn delay={100}>
+							<ul className='grid gap-x-responsive-md gap-y-responsive-lg sm:grid-cols-2 lg:grid-cols-3'>
 							{props.items.map((item, index) => (
-								<li key={`feature-${index}`} className={feature()}>
+								<li
+									key={`feature-${index}`}
+									className={cn(
+										feature(),
+										(item.iconContent || item.tag) &&
+											'bg-white rounded-2xl p-8 md:p-10 border border-transparent transition-all duration-300 hover:border-[#E8AA1A] hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)]',
+									)}
+								>
 									<div className={content()}>
 										<div className='flex flex-col gap-4'>
-											{item.icon && <CircleIcon icon={item.icon} iconBg={iconBg} />}
+											{renderFeatureIcon(item)}
 											{item.title && (
 												<Text as='h3' styleType='subtitle-1'>
 													{item.title}
 												</Text>
 											)}
 											{isValidRichText(item.description) && <Text styleType='body-2'>{item.description}</Text>}
+											{item.tag && (
+												<span
+													className={cn(
+														'inline-block border rounded-full py-1 px-3 text-xs font-semibold mt-4',
+														item.tagVariant ? tagColorMap[item.tagVariant] : tagColorMap.default,
+													)}
+												>
+													{item.tag}
+												</span>
+											)}
 										</div>
 										{item.button && (
 											<ComponentButton
@@ -119,7 +175,8 @@ export function FeaturesBlock(props: FeaturesBlockProps) {
 									)}
 								</li>
 							))}
-						</ul>
+							</ul>
+						</FadeIn>
 					</div>
 				</Container>
 			</article>

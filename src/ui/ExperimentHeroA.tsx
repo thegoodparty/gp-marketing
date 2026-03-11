@@ -1,5 +1,7 @@
-import type { ReactNode } from 'react';
+'use client';
 
+import type { ReactNode } from 'react';
+import { motion } from 'motion/react';
 import { cn, tv } from './_lib/utils.ts';
 import type { ComponentButtonProps } from './Inputs/Button.tsx';
 
@@ -7,6 +9,12 @@ import { Container } from './Container.tsx';
 import { ComponentButton } from './Inputs/Button.tsx';
 import { Logo } from '~/sanity/utils/Logo.tsx';
 import { Text } from './Text.tsx';
+
+const fadeInUp = {
+	initial: { opacity: 0, y: 24 },
+	animate: { opacity: 1, y: 0 },
+	transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const },
+};
 
 const styles = tv({
 	slots: {
@@ -44,26 +52,50 @@ export function ExperimentHeroA(props: ExperimentHeroAProps) {
 			<Container size="xl">
 				<div className={wrapper()}>
 					{props.badgeText && (
-						<div className={badge()}>
+						<motion.div
+							className={badge()}
+							{...fadeInUp}
+							transition={{ ...fadeInUp.transition, delay: 0 }}
+						>
 							<span className={badgeDot()} />
 							<span>{props.badgeText}</span>
-						</div>
+						</motion.div>
 					)}
-					<div className={logo()}>
+					<motion.div
+						className={logo()}
+						{...fadeInUp}
+						transition={{ ...fadeInUp.transition, delay: 0.1 }}
+					>
 						<Logo width={140} height={140} className="w-full h-full drop-shadow-[0_8px_32px_rgba(224,22,43,0.2)]" />
-					</div>
+					</motion.div>
 					{props.title && (
-						<Text as="h1" styleType="heading-xl" className={title()}>
-							{props.title}
-						</Text>
+						<motion.div
+							className={title()}
+							{...fadeInUp}
+							transition={{ ...fadeInUp.transition, delay: 0.2 }}
+						>
+							<Text as="h1" styleType="heading-xl">
+								{props.title}
+							</Text>
+						</motion.div>
 					)}
 					{props.subtitle && (
-						<Text as="p" styleType="body-xl" className={subtitle()}>
-							{props.subtitle}
-						</Text>
+						<motion.div
+							className={subtitle()}
+							{...fadeInUp}
+							transition={{ ...fadeInUp.transition, delay: 0.3 }}
+						>
+							<Text as="p" styleType="body-xl">
+								{props.subtitle}
+							</Text>
+						</motion.div>
 					)}
 					{props.buttons && props.buttons.length > 0 && (
-						<div className={buttons()}>
+						<motion.div
+							className={buttons()}
+							{...fadeInUp}
+							transition={{ ...fadeInUp.transition, delay: 0.4 }}
+						>
 							{props.buttons.map((item, index) => (
 								<ComponentButton
 									key={index}
@@ -75,17 +107,21 @@ export function ExperimentHeroA(props: ExperimentHeroAProps) {
 									}}
 								/>
 							))}
-						</div>
+						</motion.div>
 					)}
-					<div className={symbolsRow()}>
+					<motion.div
+						className={symbolsRow()}
+						{...fadeInUp}
+						transition={{ ...fadeInUp.transition, delay: 0.5 }}
+					>
 						<span className={oldSymbol()}>🐘</span>
 						<span className={vsText()}>vs</span>
 						<span className={oldSymbol()}>🫏</span>
 						<span className={vsText()}>vs</span>
-						<div className={cn(newSymbol(), 'after:content-[""] after:absolute after:inset-[-0.5rem] after:rounded-full after:border-2 after:border-[#E8AA1A] after:animate-pulse')}>
+						<div className={cn(newSymbol(), 'after:content-[""] after:absolute after:inset-[-0.5rem] after:rounded-full after:border-2 after:border-[#E8AA1A] after:animate-pulse-ring')}>
 							<Logo width={56} height={56} className="drop-shadow-[0_8px_32px_rgba(224,22,43,0.2)]" />
 						</div>
-					</div>
+					</motion.div>
 				</div>
 			</Container>
 		</article>

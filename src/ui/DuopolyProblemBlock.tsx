@@ -1,6 +1,7 @@
 import { cn, tv } from './_lib/utils.ts';
 
 import { Container } from './Container.tsx';
+import { FadeIn } from './FadeIn.tsx';
 import { Logo } from '~/sanity/utils/Logo.tsx';
 import { Text } from './Text.tsx';
 
@@ -31,23 +32,27 @@ export function DuopolyProblemBlock(props: DuopolyProblemBlockProps) {
 		<article className={cn(base(), props.className)} data-component='DuopolyProblemBlock'>
 			<Container size="xl">
 				<div className={grid()}>
-					<div className={text()}>
-						<Text as="h2" styleType="heading-lg" className={title()}>
-							{props.title}
-						</Text>
-						{props.paragraphs.map((p, i) => (
-							<Text key={i} as="p" styleType="body-1" className={paragraph()}>
-								{p}
+					<FadeIn delay={0}>
+						<div className={text()}>
+							<Text as="h2" styleType="heading-lg" className={title()}>
+								{props.title}
 							</Text>
-						))}
-					</div>
-					<div className={visual()}>
-						<div className={cn(partyIcon(), partyIconFaded())}>🐘</div>
-						<div className={cn(partyIcon(), partyIconStar())}>
-							<Logo width={72} height={72} />
+							{props.paragraphs.map((p, i) => (
+								<Text key={i} as="p" styleType="body-1" className={paragraph()}>
+									{p}
+								</Text>
+							))}
 						</div>
-						<div className={cn(partyIcon(), partyIconFaded())}>🫏</div>
-					</div>
+					</FadeIn>
+					<FadeIn delay={100}>
+						<div className={visual()}>
+							<div className={cn(partyIcon(), partyIconFaded())}>🐘</div>
+							<div className={cn(partyIcon(), partyIconStar())}>
+								<Logo width={72} height={72} />
+							</div>
+							<div className={cn(partyIcon(), partyIconFaded())}>🫏</div>
+						</div>
+					</FadeIn>
 				</div>
 			</Container>
 		</article>

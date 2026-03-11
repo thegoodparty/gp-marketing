@@ -6,7 +6,7 @@ import { StructureMetaData } from '~/components/StructureMetadata';
 import type { Params } from '~/lib/types';
 import { GlossaryList } from '~/ui/GlossaryList';
 import { RichData } from '~/ui/RichData';
-import { getCashedTerms } from '~/lib/getCashedTerms';
+import { getCachedTerms } from '~/lib/getCachedTerms';
 import { searchTermsToABCD } from '~/lib/serchTermsToABCD';
 import { GlossaryHero } from '~/ui/GlossaryHero';
 import { transformButtons, type ButtonType } from '~/lib/buttonTransformer';
@@ -24,7 +24,7 @@ export default async function Page() {
 		notFound();
 	}
 
-	const searchTerms = (await getCashedTerms()).terms;
+	const searchTerms = (await getCachedTerms()).terms;
 
 	return (
 		<>

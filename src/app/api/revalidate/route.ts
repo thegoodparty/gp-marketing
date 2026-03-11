@@ -16,12 +16,10 @@ export async function POST(req: NextRequest) {
 		const { isValidSignature, body } = await parseBody<WebhookPayload>(req, secret);
 
 		if (!isValidSignature) {
-			const message = 'Invalid signature';
-			return new Response(JSON.stringify({ message, isValidSignature, body }), { status: 401 });
+			return new Response(JSON.stringify({ message: 'Invalid signature' }), { status: 401 });
 		}
 		if (!body?._type) {
-			const message = 'Bad Request';
-			return new Response(JSON.stringify({ message, body }), { status: 400 });
+			return new Response(JSON.stringify({ message: 'Bad Request' }), { status: 400 });
 		}
 
 		revalidateTag(body._type);

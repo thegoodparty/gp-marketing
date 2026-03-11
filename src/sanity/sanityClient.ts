@@ -3,6 +3,7 @@ import { projectId, dataset } from 'env';
 import { draftMode } from 'next/headers';
 import { token } from '~/lib/env';
 
+// Canonical: tag-based revalidation via sanityFetch. electionsApi.ts and ashby.ts use time-based caching; migrate to tags in a follow-up.
 export const sanityClient = createClient({
 	projectId,
 	dataset,
@@ -31,14 +32,13 @@ export async function sanityFetch<Q extends QueryKey>({
 }): Promise<SanityQueries[Q]> {
 	const isDraft = (await draftMode()).isEnabled;
 
-	const cleanedQuery = query.replace(' ', '');
 	if (!isDraft) {
-		return sanityClient.fetch(cleanedQuery, params, {
+		return sanityClient.fetch(query, params, {
 			perspective: 'published',
 			next: { tags },
 		});
 	}
-	return sanityClient.fetch(cleanedQuery, params, {
+	return sanityClient.fetch(query, params, {
 		perspective: 'drafts',
 		token: token,
 		stega: {

@@ -5,7 +5,7 @@ import { sanityFetch } from '~/sanity/sanityClient';
 import { PageSections } from '~/PageSections';
 import { StructureMetaData } from '~/components/StructureMetadata';
 import type { Params } from '~/lib/types';
-import { getCashedArticles } from '~/lib/getCashedArticles';
+import { getCachedArticles } from '~/lib/getCachedArticles';
 import { BlogHero } from '~/ui/BlogHero';
 
 export default async function Page(props: any) {
@@ -17,7 +17,7 @@ export default async function Page(props: any) {
 		notFound();
 	}
 
-	const { articles } = await getCashedArticles();
+	const { articles } = await getCachedArticles();
 
 	return (
 		<>

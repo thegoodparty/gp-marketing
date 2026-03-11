@@ -2,7 +2,7 @@ import { unstable_cache } from 'next/cache';
 import { allArticlesForSearchGroq } from '~/sanity/groq';
 import { sanityClient } from '~/sanity/sanityClient';
 
-export const getCashedArticles = unstable_cache(
+export const getCachedArticles = unstable_cache(
 	// This function ONLY runs when:
 	// 1. Cache is empty (first time)
 	// 2. Cache expired (after 12 hours)

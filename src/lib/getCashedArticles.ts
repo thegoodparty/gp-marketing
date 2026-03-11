@@ -26,5 +26,5 @@ export const getCashedArticles = unstable_cache(
 		}
 	},
 	['all-articles-for-search-cache-sanity'],
-	{ revalidate: 60 * 60 * 12 }, // 12 hours
+	{ revalidate: 60 * 60 * 12, tags: ['article'] }, // 12 hours
 );

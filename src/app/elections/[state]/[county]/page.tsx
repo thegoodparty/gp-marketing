@@ -59,6 +59,7 @@ export default async function Page({
 		sanityFetch({
 			query: quoteCollectionByIdQuery,
 			params: { id: CAROUSEL_QUOTE_COLLECTION_ID },
+			tags: ['quoteCollection'],
 		}),
 	]);
 

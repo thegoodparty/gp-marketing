@@ -23,9 +23,11 @@ type QueryKey = Extract<keyof SanityQueries, string>;
 export async function sanityFetch<Q extends QueryKey>({
 	query,
 	params,
+	tags = [],
 }: {
 	query: Q;
 	params?: Record<string, unknown>;
+	tags?: string[];
 }): Promise<SanityQueries[Q]> {
 	const isDraft = (await draftMode()).isEnabled;
 
@@ -33,6 +35,7 @@ export async function sanityFetch<Q extends QueryKey>({
 	if (!isDraft) {
 		return sanityClient.fetch(cleanedQuery, params, {
 			perspective: 'published',
+			next: { tags },
 		});
 	}
 	return sanityClient.fetch(cleanedQuery, params, {

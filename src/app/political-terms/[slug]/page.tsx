@@ -43,6 +43,7 @@ export default async function Page(props: any) {
 			params: {
 				slug,
 			},
+			tags: ['glossary'],
 		});
 		if (!terms) {
 			notFound();
@@ -50,6 +51,7 @@ export default async function Page(props: any) {
 
 		const hero = await sanityFetch({
 			query: glossaryHeroGroq,
+			tags: ['glossary'],
 		});
 
 		const searchTerms = (await getCashedTerms()).terms;
@@ -110,6 +112,7 @@ export default async function Page(props: any) {
 		params: {
 			slug,
 		},
+		tags: ['glossary'],
 	});
 	if (!page) {
 		notFound();
@@ -120,6 +123,7 @@ export default async function Page(props: any) {
 	if (!cta || !cta.ref_sharedCta?.overview?.field_title) {
 		const hero = await sanityFetch({
 			query: glossaryHeroGroq,
+			tags: ['glossary'],
 		});
 		cta = hero?.cta as unknown as GlossaryTermCta;
 	}
@@ -175,6 +179,7 @@ export async function generateMetadata(props: Params, parent: ResolvingMetadata)
 		params: {
 			slug: slug,
 		},
+		tags: ['glossary'],
 	});
 
 	return StructureMetaData(parentMetadata, {

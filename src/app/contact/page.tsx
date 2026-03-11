@@ -15,6 +15,7 @@ import { PageSections } from '~/PageSections';
 export default async function Page() {
 	const page = await sanityFetch({
 		query: goodpartyOrg_contactQuery,
+		tags: ['goodpartyOrg_contact'],
 	});
 
 	if (!page) {
@@ -39,6 +40,7 @@ export async function generateMetadata(parent: ResolvingMetadata): Promise<Metad
 	const parentMetadata = await parent;
 	const page = await sanityFetch({
 		query: goodpartyOrg_contactQuery,
+		tags: ['goodpartyOrg_contact'],
 	});
 
 	return StructureMetaData(parentMetadata, {

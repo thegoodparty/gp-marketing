@@ -6,7 +6,7 @@ import { goodpartyOrg_candidatesQuery } from '~/sanity/groq';
 import { StructureMetaData } from '~/components/StructureMetadata';
 
 export default async function Page() {
-	const page = await sanityFetch({ query: goodpartyOrg_candidatesQuery });
+	const page = await sanityFetch({ query: goodpartyOrg_candidatesQuery, tags: ['goodpartyOrg_candidates'] });
 
 	if (!page) {
 		notFound();
@@ -19,7 +19,7 @@ export async function generateMetadata(
 	parent: ResolvingMetadata,
 ): Promise<Metadata> {
 	const parentMetadata = await parent;
-	const page = await sanityFetch({ query: goodpartyOrg_candidatesQuery });
+	const page = await sanityFetch({ query: goodpartyOrg_candidatesQuery, tags: ['goodpartyOrg_candidates'] });
 
 	return StructureMetaData(parentMetadata, {
 		name: page?.detailPageOverviewNoHero?.field_pageName,

@@ -11,6 +11,7 @@ import { BlogHero } from '~/ui/BlogHero';
 export default async function Page(props: any) {
 	const page = await sanityFetch({
 		query: goodpartyOrg_allArticlesQuery,
+		tags: ['goodpartyOrg_allArticles'],
 	});
 	if (!page) {
 		notFound();
@@ -35,6 +36,7 @@ export async function generateMetadata(props: Params, parent: ResolvingMetadata)
 	const parentMetadata = await parent;
 	const page = await sanityFetch({
 		query: goodpartyOrg_allArticlesQuery,
+		tags: ['goodpartyOrg_allArticles'],
 	});
 
 	return StructureMetaData(parentMetadata, {

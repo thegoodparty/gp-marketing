@@ -29,6 +29,7 @@ export default async function Page(props: any) {
 		params: {
 			slug,
 		},
+		tags: ['topics'],
 	});
 	if (!page) {
 		notFound();
@@ -87,6 +88,7 @@ export async function generateMetadata(props: Params, parent: ResolvingMetadata)
 		params: {
 			slug: slug,
 		},
+		tags: ['topics'],
 	});
 
 	return StructureMetaData(parentMetadata, {

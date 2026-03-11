@@ -26,5 +26,5 @@ export const getCashedTerms = unstable_cache(
 		}
 	},
 	['all-terms-for-search-cache-sanity'],
-	{ revalidate: 60 * 60 * 12 }, // 12 hours
+	{ revalidate: 60 * 60 * 12, tags: ['glossary'] }, // 12 hours
 );

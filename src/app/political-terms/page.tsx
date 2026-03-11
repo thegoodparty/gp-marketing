@@ -17,6 +17,7 @@ import { resolveComponentColor } from '~/ui/_lib/resolveComponentColor';
 export default async function Page() {
 	const page = await sanityFetch({
 		query: goodpartyOrg_glossaryQuery,
+		tags: ['goodpartyOrg_glossary'],
 	});
 
 	if (!page) {
@@ -80,6 +81,7 @@ export async function generateMetadata(props: Params, parent: ResolvingMetadata)
 	const parentMetadata = await parent;
 	const page = await sanityFetch({
 		query: goodpartyOrg_glossaryQuery,
+		tags: ['goodpartyOrg_glossary'],
 	});
 
 	return StructureMetaData(parentMetadata, {

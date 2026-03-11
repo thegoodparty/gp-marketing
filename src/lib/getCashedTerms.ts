@@ -1,11 +1,12 @@
 import { unstable_cache } from 'next/cache';
+import { defaultRevalidate } from '~/lib/env';
 import { allTermsForSearchGroq } from '~/sanity/groq';
 import { sanityClient } from '~/sanity/sanityClient';
 
 export const getCashedTerms = unstable_cache(
 	// This function ONLY runs when:
 	// 1. Cache is empty (first time)
-	// 2. Cache expired (after 12 hours)
+	// 2. Cache expired (after defaultRevalidate seconds)
 	// 3. Manual revalidation triggered
 	async () => {
 		const timestamp = new Date().toISOString();
@@ -26,5 +27,5 @@ export const getCashedTerms = unstable_cache(
 		}
 	},
 	['all-terms-for-search-cache-sanity'],
-	{ revalidate: 60 * 60 * 12 }, // 12 hours
+	{ revalidate: defaultRevalidate },
 );

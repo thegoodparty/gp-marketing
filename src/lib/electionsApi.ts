@@ -1,3 +1,4 @@
+import { defaultRevalidate } from '~/lib/env';
 import type {
 	CandidacyItem,
 	DistrictNameItem,
@@ -14,7 +15,7 @@ import type {
 const BASE_URL =
 	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
 
-const CACHE_OPTIONS = { next: { revalidate: 3600 } } as RequestInit;
+const CACHE_OPTIONS = { next: { revalidate: defaultRevalidate } } as RequestInit;
 
 /** MTFCC for county / county-equivalent places (e.g. District of Columbia). */
 export const COUNTY_MTFCC = 'G4020';

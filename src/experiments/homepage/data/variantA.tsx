@@ -27,13 +27,13 @@ export const heroA = {
 	buttons: [
 		{
 			buttonType: 'internal' as const,
-			href: '/run',
+			href: '/run-for-office',
 			label: "I'm Ready to Run",
 			buttonProps: { styleType: 'primary' as const },
 		},
 		{
 			buttonType: 'internal' as const,
-			href: '/candidates',
+			href: '/about',
 			label: 'I Want to Help',
 			buttonProps: { styleType: 'outline' as const },
 		},
@@ -41,8 +41,8 @@ export const heroA = {
 };
 
 export const statsA: StatProps[] = [
-	{ _key: '1', value: '6,700+', description: 'Candidates Supported', color: 'midnight' },
-	{ _key: '2', value: '3,400+', description: 'Winners Elected', color: 'midnight' },
+	{ _key: '1', value: '17,000+', description: 'Good People Supported', color: 'midnight' },
+	{ _key: '2', value: '13,000+', description: 'Winners Elected', color: 'midnight' },
 	{ _key: '3', value: '50', description: 'States Reached', color: 'midnight' },
 	{ _key: '4', value: '$0', description: 'From Corporate PACs', color: 'midnight' },
 ];
@@ -203,6 +203,7 @@ export const ctaA = {
 			buttonType: 'internal' as const,
 			href: '/run',
 			label: 'Start Your Campaign',
+			className: 'max-sm:w-full bg-[#E0162B] hover:bg-[#E0162B]/80 focus:ring-[#E0162B]/40 shadow-[0_8px_24px_rgba(224,22,43,0.35)]',
 			iconRight: <IconResolver icon="arrow-right" className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5" />,
 			buttonProps: { styleType: 'primary' as const },
 		},

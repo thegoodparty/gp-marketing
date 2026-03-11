@@ -44,7 +44,7 @@ export function DuopolyProblemBlock(props: DuopolyProblemBlockProps) {
 							))}
 						</div>
 					</FadeIn>
-					<FadeIn delay={100}>
+					<FadeIn delay={0.1}>
 						<div className={visual()}>
 							<div className={cn(partyIcon(), partyIconFaded())}>🐘</div>
 							<div className={cn(partyIcon(), partyIconStar())}>

@@ -11,7 +11,7 @@ export function Logo({ width = 200, height = 200, className, ...props }: LogoPro
 		<svg
 			width={width}
 			height={height}
-			viewBox="39 48 127 104"
+			viewBox="35 42 137 116"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 			className={className}

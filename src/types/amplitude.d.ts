@@ -8,6 +8,9 @@ declare global {
 			variant: (key: string) => { value?: string };
 			fetch: () => Promise<unknown>;
 		};
+		sessionReplay?: {
+			plugin: (options: { sampleRate: number }) => unknown;
+		};
 	}
 }
 

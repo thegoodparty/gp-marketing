@@ -3,6 +3,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 
 const FLAG_KEY = 'home_hero_layout_test';
+const VALID_VARIANTS = ['control', 'variant-a', 'variant-b'] as const;
 
 type Props = {
 	control: ReactNode;
@@ -14,19 +15,44 @@ export function HomepageExperiment(props: Props) {
 	const [variant, setVariant] = useState<string | null>(null);
 
 	useEffect(() => {
-		const resolveVariant = () => {
-			const experiment = typeof window !== 'undefined' ? window.experiment : undefined;
-			if (!experiment) {
-				setVariant('control');
+		const isLocal =
+			typeof window !== 'undefined' &&
+			(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+		if (isLocal) {
+			const match = document.cookie.match(new RegExp(`${FLAG_KEY}=([^;]+)`));
+			const forced = match?.[1]?.trim();
+			if (forced && (VALID_VARIANTS as readonly string[]).includes(forced)) {
+				setVariant(forced);
 				return;
 			}
-			const v = experiment.variant(FLAG_KEY);
-			const value = v?.value ?? 'control';
-			setVariant(value);
+		}
+
+		const resolve = () => {
+			const exp = window.experiment;
+			if (!exp) return false;
+			const v = exp.variant(FLAG_KEY);
+			if (v?.value) {
+				setVariant(v.value);
+				return true;
+			}
+			return false;
 		};
-		resolveVariant();
-		const t = setTimeout(resolveVariant, 1500);
-		return () => clearTimeout(t);
+
+		if (resolve()) return;
+
+		const onReady = () => {
+			resolve();
+		};
+		window.addEventListener('experiment:ready', onReady);
+
+		const timeout = setTimeout(() => {
+			if (!resolve()) setVariant('control');
+		}, 3000);
+
+		return () => {
+			window.removeEventListener('experiment:ready', onReady);
+			clearTimeout(timeout);
+		};
 	}, []);
 
 	if (variant === null) {

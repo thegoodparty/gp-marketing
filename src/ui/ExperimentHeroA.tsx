@@ -7,6 +7,7 @@ import type { ComponentButtonProps } from './Inputs/Button.tsx';
 
 import { Container } from './Container.tsx';
 import { ComponentButton } from './Inputs/Button.tsx';
+import { IconResolver } from './IconResolver.tsx';
 import { Logo } from '~/sanity/utils/Logo.tsx';
 import { Text } from './Text.tsx';
 
@@ -101,6 +102,11 @@ export function ExperimentHeroA(props: ExperimentHeroAProps) {
 									key={index}
 									className="max-sm:w-full w-fit"
 									{...item}
+									iconRight={
+										index === 0 ? (
+											<IconResolver icon="arrow-right" className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5" />
+										) : undefined
+									}
 									buttonProps={{
 										...(item.buttonProps ?? {}),
 										styleType: index === 0 ? 'primary' : 'outline',

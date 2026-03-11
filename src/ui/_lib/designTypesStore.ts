@@ -27,7 +27,7 @@ export const columnOneTwoThreeValues = [1, 2, 3] as const;
 
 /* COLORS */
 
-export const backgroundTypeValues = ['cream', 'midnight'] as const;
+export const backgroundTypeValues = ['cream', 'midnight', 'white'] as const;
 export const buttonStyleTypeValues = [
 	'primary',
 	'secondary',

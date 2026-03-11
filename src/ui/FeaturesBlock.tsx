@@ -30,6 +30,7 @@ const styles = tv({
 				content: 'text-white',
 			},
 			cream: 'bg-goodparty-cream',
+			white: { base: 'bg-white' },
 		},
 		isHighlighted: {
 			true: {
@@ -131,52 +132,55 @@ export function FeaturesBlock(props: FeaturesBlockProps) {
 						<FadeIn delay={0}>
 							<HeaderBlock {...props.header} backgroundColor={props.backgroundColor} layout='center' />
 						</FadeIn>
-						<FadeIn delay={100}>
-							<ul className='grid gap-x-responsive-md gap-y-responsive-lg sm:grid-cols-2 lg:grid-cols-3'>
+						<ul className='grid gap-x-responsive-md gap-y-responsive-lg sm:grid-cols-2 lg:grid-cols-3'>
 							{props.items.map((item, index) => (
 								<li
 									key={`feature-${index}`}
 									className={cn(
 										feature(),
 										(item.iconContent || item.tag) &&
-											'bg-white rounded-2xl p-8 md:p-10 border border-transparent transition-all duration-300 hover:border-[#E8AA1A] hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)]',
+											cn(
+												'rounded-2xl p-8 md:p-10 border border-transparent transition-all duration-300 hover:border-[#E8AA1A] hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)]',
+												backgroundColor === 'white' ? 'bg-goodparty-cream' : 'bg-white',
+											),
 									)}
 								>
-									<div className={content()}>
-										<div className='flex flex-col gap-4'>
-											{renderFeatureIcon(item)}
-											{item.title && (
-												<Text as='h3' styleType='subtitle-1'>
-													{item.title}
-												</Text>
-											)}
-											{isValidRichText(item.description) && <Text styleType='body-2'>{item.description}</Text>}
-											{item.tag && (
-												<span
-													className={cn(
-														'inline-block border rounded-full py-1 px-3 text-xs font-semibold mt-4',
-														item.tagVariant ? tagColorMap[item.tagVariant] : tagColorMap.default,
-													)}
-												>
-													{item.tag}
-												</span>
+									<FadeIn delay={index * 80}>
+										<div className={content()}>
+											<div className='flex flex-col gap-4'>
+												{renderFeatureIcon(item)}
+												{item.title && (
+													<Text as='h3' styleType='subtitle-1'>
+														{item.title}
+													</Text>
+												)}
+												{isValidRichText(item.description) && <Text styleType='body-2'>{item.description}</Text>}
+												{item.tag && (
+													<span
+														className={cn(
+															'inline-block border rounded-full py-1 px-3 text-xs font-semibold mt-4',
+															item.tagVariant ? tagColorMap[item.tagVariant] : tagColorMap.default,
+														)}
+													>
+														{item.tag}
+													</span>
+												)}
+											</div>
+											{item.button && (
+												<ComponentButton
+													className='w-fit'
+													{...item.button}
+													buttonProps={{ ...(item.button.buttonProps ?? {}), styleType: resolvedStyle }}
+												/>
 											)}
 										</div>
-										{item.button && (
-											<ComponentButton
-												className='w-fit'
-												{...item.button}
-												buttonProps={{ ...(item.button.buttonProps ?? {}), styleType: resolvedStyle }}
-											/>
+										{item.image && (
+											<Media image={item.image} aspectRatio='1:1' objectFit={item.showFullImage ? 'contain' : 'cover'} className='w-full' />
 										)}
-									</div>
-									{item.image && (
-										<Media image={item.image} aspectRatio='1:1' objectFit={item.showFullImage ? 'contain' : 'cover'} className='w-full' />
-									)}
+									</FadeIn>
 								</li>
 							))}
-							</ul>
-						</FadeIn>
+						</ul>
 					</div>
 				</Container>
 			</article>

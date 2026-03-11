@@ -66,7 +66,7 @@ export function HomepageVariantB() {
 
 			<ComponentErrorBoundary componentName="FeaturesBlock (Tools)">
 				<FeaturesBlock
-					backgroundColor="cream"
+					backgroundColor="white"
 					header={toolsHeaderB}
 					items={toolsB}
 				/>

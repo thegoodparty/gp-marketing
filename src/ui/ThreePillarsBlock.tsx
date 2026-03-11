@@ -55,24 +55,24 @@ export function ThreePillarsBlock(props: ThreePillarsBlockProps) {
 							<HeaderBlock {...props.header} backgroundColor="cream" layout="center" />
 						</div>
 					</FadeIn>
-					<FadeIn delay={100}>
-						<div className="grid gap-8 md:grid-cols-3">
+					<div className="grid gap-8 md:grid-cols-3">
 						{props.pillars.map((pillar, i) => {
 							const { card, label, title, description } = pillarStyles({ color: pillar.color });
 							return (
-								<div key={i} className={card()}>
-									<div className={label()}>{pillar.label}</div>
-									<Text as="h3" styleType="heading-sm" className={cn(title(), '!font-black')}>
-										{pillar.title}
-									</Text>
-									<Text as="p" styleType="body-2" className={description()}>
-										{pillar.description}
-									</Text>
-								</div>
+								<FadeIn key={i} delay={i * 80}>
+									<div className={card()}>
+										<div className={label()}>{pillar.label}</div>
+										<Text as="h3" styleType="heading-sm" className={cn(title(), '!font-black')}>
+											{pillar.title}
+										</Text>
+										<Text as="p" styleType="body-2" className={description()}>
+											{pillar.description}
+										</Text>
+									</div>
+								</FadeIn>
 							);
 						})}
-						</div>
-					</FadeIn>
+					</div>
 				</div>
 			</Container>
 		</article>

@@ -17,6 +17,7 @@ const styles = tv({
 		backgroundColor: {
 			midnight: 'bg-midnight-900',
 			cream: 'bg-goodparty-cream',
+			white: 'bg-white',
 		},
 	},
 });
@@ -47,27 +48,26 @@ export function TestimonialBlock(props: TestimonialBlockProps) {
 						</FadeIn>
 					)}
 					{props.items && props.items.length > 0 && (
-						<FadeIn delay={100}>
-							<div className='flex flex-wrap justify-center gap-6 lg:gap-8'>
+						<div className='flex flex-wrap justify-center gap-6 lg:gap-8'>
 							{props.items?.map((item, index) => {
 								const isTwoItems = props.items.length === 2;
 
 								return (
-									<TestimonialCard
-										{...item}
-										key={index}
-										color={item.color ?? colors[index]}
-										className={`
-											grow-0 shrink-0 basis-full /* 1 col by default */
-											sm:basis-[calc((100%-1.5rem)/2)] /* 2 cols, gap-6 = 1.5rem, so (100% - 1*gap)/2 */
-											${isTwoItems ? 'md:basis-[calc((100%-3rem)/2)]' : 'md:basis-[calc((100%-3rem)/3)]'}  /* 2 or 3 cols, two gaps of 1.5rem -> 3rem total */
-											lg:basis-[calc((100%-4rem)/3)] /* 3 cols, two gaps of 2rem -> 4rem total */
-										`}
-									/>
+									<FadeIn key={index} delay={index * 80}>
+										<TestimonialCard
+											{...item}
+											color={item.color ?? colors[index]}
+											className={`
+												grow-0 shrink-0 basis-full /* 1 col by default */
+												sm:basis-[calc((100%-1.5rem)/2)] /* 2 cols, gap-6 = 1.5rem, so (100% - 1*gap)/2 */
+												${isTwoItems ? 'md:basis-[calc((100%-3rem)/2)]' : 'md:basis-[calc((100%-3rem)/3)]'}  /* 2 or 3 cols, two gaps of 1.5rem -> 3rem total */
+												lg:basis-[calc((100%-4rem)/3)] /* 3 cols, two gaps of 2rem -> 4rem total */
+											`}
+										/>
+									</FadeIn>
 								);
 							})}
-							</div>
-						</FadeIn>
+						</div>
 					)}
 				</div>
 			</Container>

@@ -1,3 +1,4 @@
+import { IconResolver } from '~/ui/IconResolver.tsx';
 import type { ComponentButtonProps } from '~/ui/Inputs/Button.tsx';
 import type { StatProps } from '~/ui/Stat.tsx';
 import type { TestimonialCardProps } from '~/ui/TestimonialCard.tsx';
@@ -202,6 +203,7 @@ export const ctaA = {
 			buttonType: 'internal' as const,
 			href: '/run',
 			label: 'Start Your Campaign',
+			iconRight: <IconResolver icon="arrow-right" className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5" />,
 			buttonProps: { styleType: 'primary' as const },
 		},
 		{

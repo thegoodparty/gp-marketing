@@ -25,7 +25,7 @@ const styles = tv({
 		logoIcon: 'w-[6.25rem] h-[6.25rem]',
 		logoText: 'text-xs text-white/60 font-medium tracking-wide',
 		manifesto: 'max-w-[50rem]',
-		manifestoText: 'text-[clamp(1.75rem,3.5vw,2.75rem)] text-[rgba(255,255,255,0.85)] font-normal leading-[1.4]',
+		manifestoText: 'text-[44px]  font-normal leading-[1.4]',
 		title: 'max-w-[56.25rem] mt-12 [&_h1]:font-black [&_h1]:tracking-[-0.125rem] [&_h1]:leading-[1.1] [&_h1]:text-[clamp(2.25rem,5vw,4rem)]',
 		subtitle: 'max-w-[36.25rem]',
 		subtitleText: 'text-[clamp(1.0625rem,2vw,1.25rem)] text-white/55 leading-[1.6]',

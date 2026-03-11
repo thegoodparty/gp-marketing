@@ -29,7 +29,7 @@ const styles = tv({
 		subtitle: 'max-w-[40rem] text-neutral-500 text-body-xl',
 		buttons: 'flex flex-wrap gap-4 justify-center',
 		symbolsRow: 'flex items-center gap-10 mt-[4.5rem]',
-		oldSymbol: 'opacity-15 text-5xl grayscale',
+		oldSymbol: 'opacity-15 grayscale inline-flex items-center justify-center w-[60px] h-[57px] text-[3.5rem] leading-none',
 		vsText: 'text-sm font-bold text-neutral-500 uppercase tracking-[0.2em]',
 		newSymbol: 'relative',
 	},
@@ -98,20 +98,23 @@ export function ExperimentHeroA(props: ExperimentHeroAProps) {
 							transition={{ ...fadeInUp.transition, delay: 0.4 }}
 						>
 							{props.buttons.map((item, index) => (
-								<ComponentButton
-									key={index}
-									className="max-sm:w-full w-fit"
-									{...item}
-									iconRight={
-										index === 0 ? (
-											<IconResolver icon="arrow-right" className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5" />
-										) : undefined
-									}
-									buttonProps={{
-										...(item.buttonProps ?? {}),
-										styleType: index === 0 ? 'primary' : 'outline',
-									}}
-								/>
+							<ComponentButton
+								key={index}
+								className={cn(
+									'max-sm:w-full w-fit',
+									index === 0 && 'bg-[#E0162B] hover:bg-[#E0162B]/80 focus:ring-[#E0162B]/40 shadow-[0_8px_24px_rgba(224,22,43,0.35)]',
+								)}
+								{...item}
+								iconRight={
+									index === 0 ? (
+										<IconResolver icon="arrow-right" className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5" />
+									) : undefined
+								}
+								buttonProps={{
+									...(item.buttonProps ?? {}),
+									styleType: index === 0 ? 'primary' : 'outline',
+								}}
+							/>
 							))}
 						</motion.div>
 					)}

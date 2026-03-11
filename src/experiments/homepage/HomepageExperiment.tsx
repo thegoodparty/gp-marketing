@@ -2,7 +2,7 @@
 
 import { useEffect, useState, type ReactNode } from 'react';
 
-const FLAG_KEY = 'homepage-messaging';
+const FLAG_KEY = 'home_hero_layout_test';
 
 type Props = {
 	control: ReactNode;

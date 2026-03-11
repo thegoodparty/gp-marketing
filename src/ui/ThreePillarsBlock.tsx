@@ -47,7 +47,7 @@ export type ThreePillarsBlockProps = {
 
 export function ThreePillarsBlock(props: ThreePillarsBlockProps) {
 	return (
-		<article className={cn('py-(--container-padding) bg-white', props.className)} data-component='ThreePillarsBlock'>
+		<article className={cn('py-(--container-padding) bg-[rgb(245,243,238)]', props.className)} data-component='ThreePillarsBlock'>
 			<Container size="xl">
 				<div className="flex flex-col gap-[4.5rem]">
 					<FadeIn delay={0}>
@@ -55,12 +55,12 @@ export function ThreePillarsBlock(props: ThreePillarsBlockProps) {
 							<HeaderBlock {...props.header} backgroundColor="cream" layout="center" />
 						</div>
 					</FadeIn>
-					<div className="grid gap-8 md:grid-cols-3">
-						{props.pillars.map((pillar, i) => {
-							const { card, label, title, description } = pillarStyles({ color: pillar.color });
-							return (
-								<FadeIn key={i} delay={i * 80}>
-									<div className={card()}>
+					<FadeIn>
+						<div className="grid gap-8 md:grid-cols-3 items-start">
+							{props.pillars.map((pillar, i) => {
+								const { card, label, title, description } = pillarStyles({ color: pillar.color });
+								return (
+									<div key={i} className={card()}>
 										<div className={label()}>{pillar.label}</div>
 										<Text as="h3" styleType="heading-sm" className={cn(title(), '!font-black')}>
 											{pillar.title}
@@ -69,10 +69,10 @@ export function ThreePillarsBlock(props: ThreePillarsBlockProps) {
 											{pillar.description}
 										</Text>
 									</div>
-								</FadeIn>
-							);
-						})}
-					</div>
+								);
+							})}
+						</div>
+					</FadeIn>
 				</div>
 			</Container>
 		</article>

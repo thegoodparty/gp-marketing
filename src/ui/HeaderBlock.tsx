@@ -65,7 +65,12 @@ export function HeaderBlock(props: HeaderBlockProps) {
 	return (
 		<div className={cn(base(), props.className)} data-component='HeaderBlock'>
 			<div className={content()}>
-				<div className='flex flex-col gap-3 md:gap-4'>
+				<div
+					className={cn(
+						'flex flex-col gap-3 md:gap-4',
+						backgroundColor === 'cream' && 'bg-[rgb(245,243,238)]',
+					)}
+				>
 					{props.label && (
 						<span className={overline()}>
 							<Text as='span' styleType='overline'>

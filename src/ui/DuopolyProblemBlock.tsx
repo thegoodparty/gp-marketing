@@ -13,7 +13,7 @@ const styles = tv({
 		title: 'text-heading-lg font-black leading-tight tracking-tight text-midnight-900 mb-6',
 		paragraph: 'text-lg leading-[1.7] text-neutral-500 mb-4',
 		visual: 'relative flex items-center justify-center h-[25rem]',
-		partyIcon: 'w-[7.5rem] h-[7.5rem] rounded-full flex items-center justify-center text-5xl relative',
+		partyIcon: 'w-[7.5rem] h-[7.5rem] rounded-full flex items-center justify-center text-[4.5rem] leading-none relative',
 		partyIconFaded: 'bg-neutral-100 opacity-50 grayscale after:content-[""] after:absolute after:w-[140%] after:h-[3px] after:bg-[#E0162B] after:rotate-[-45deg] after:opacity-60',
 		partyIconStar: 'w-[10rem] h-[10rem] bg-gradient-to-br from-red-50 to-white border-[3px] border-[#E0162B] shadow-[0_12px_48px_rgba(224,22,43,0.15)] z-[2] -mx-5 [animation:float_6s_ease-in-out_infinite]',
 	},

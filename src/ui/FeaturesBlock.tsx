@@ -132,20 +132,20 @@ export function FeaturesBlock(props: FeaturesBlockProps) {
 						<FadeIn delay={0}>
 							<HeaderBlock {...props.header} backgroundColor={props.backgroundColor} layout='center' />
 						</FadeIn>
-						<ul className='grid gap-x-responsive-md gap-y-responsive-lg sm:grid-cols-2 lg:grid-cols-3'>
-							{props.items.map((item, index) => (
-								<li
-									key={`feature-${index}`}
-									className={cn(
-										feature(),
-										(item.iconContent || item.tag) &&
-											cn(
-												'rounded-2xl p-8 md:p-10 border border-transparent transition-all duration-300 hover:border-[#E8AA1A] hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)]',
-												backgroundColor === 'white' ? 'bg-goodparty-cream' : 'bg-white',
-											),
-									)}
-								>
-									<FadeIn delay={index * 80}>
+						<FadeIn delay={0.1}>
+							<ul className='grid gap-x-responsive-md gap-y-responsive-lg sm:grid-cols-2 lg:grid-cols-3'>
+								{props.items.map((item, index) => (
+									<li
+										key={`feature-${index}`}
+										className={cn(
+											feature(),
+											(item.iconContent || item.tag) &&
+												cn(
+													'rounded-2xl p-8 md:p-10 border border-transparent transition-all duration-300 hover:border-[#E8AA1A] hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)]',
+													backgroundColor === 'white' ? 'bg-goodparty-cream' : 'bg-white',
+												),
+										)}
+									>
 										<div className={content()}>
 											<div className='flex flex-col gap-4'>
 												{renderFeatureIcon(item)}
@@ -177,10 +177,10 @@ export function FeaturesBlock(props: FeaturesBlockProps) {
 										{item.image && (
 											<Media image={item.image} aspectRatio='1:1' objectFit={item.showFullImage ? 'contain' : 'cover'} className='w-full' />
 										)}
-									</FadeIn>
-								</li>
-							))}
-						</ul>
+									</li>
+								))}
+							</ul>
+						</FadeIn>
 					</div>
 				</Container>
 			</article>

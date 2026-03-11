@@ -151,21 +151,21 @@ export const techPlatformPillarsB: AIPlatformPillar[] = [
 export const techChatMessagesB: AIChatMessage[] = [
 	{
 		role: 'user',
-		text: "I've never run for anything. Where do I even start?",
+		text: 'My neighbors asked me to run for city council but I have no idea where to start. Help?',
 	},
 	{
 		role: 'ai',
-		name: 'GoodParty.org AI',
-		text: "You're in the right place. Start with our Campaign Plan tool — it'll ask about your race, district, and resources, then generate a step-by-step plan. Most first-timers finish their first plan in under 20 minutes. Want me to walk you through it?",
+		name: 'Good Party AI',
+		text: "We've got you! Let's start with the basics. I'll pull your district's voter data, help you build a custom campaign plan, and create your first outreach materials. What's your zip code?",
 	},
 	{
 		role: 'user',
-		text: 'Yes! And can I see what kind of voter data I get?',
+		text: '78701 — Austin, TX',
 	},
 	{
 		role: 'ai',
-		name: 'GoodParty.org AI',
-		text: "Absolutely. You'll get turnout history, demographic breakdowns, and contact info for high-propensity voters. All tailored to your district. I can show you a sample report — just tell me your state and district.",
+		name: 'Good Party AI',
+		text: "Great news — your district has 34,000 registered voters and 47% identify as Independent. That's a strong starting base. Let's build your plan together.",
 	},
 ];
 
@@ -235,6 +235,7 @@ export const ctaB = {
 			buttonType: 'internal' as const,
 			href: '/run',
 			label: 'Start Your Campaign',
+			className: 'max-sm:w-full bg-[#E0162B] hover:bg-[#E0162B]/80 focus:ring-[#E0162B]/40',
 			iconRight: <IconResolver icon="arrow-right" className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5" />,
 			buttonProps: { styleType: 'primary' as const },
 		},

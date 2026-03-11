@@ -83,9 +83,7 @@ export function AIPlatformSection(props: AIPlatformSectionProps) {
 						</div>
 						</div>
 					</FadeIn>
-					<FadeIn delay={100}>
-						<AIChatVisual messages={props.chatMessages} />
-					</FadeIn>
+					<AIChatVisual messages={props.chatMessages} />
 				</div>
 			</Container>
 		</article>

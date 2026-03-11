@@ -17,7 +17,7 @@ const styles = tv({
 	variants: {
 		backgroundColor: {
 			cream: {
-				base: 'bg-goodparty-cream',
+				base: 'bg-[rgb(245,243,238)]',
 			},
 			midnight: {
 				base: 'bg-midnight-900 text-white',

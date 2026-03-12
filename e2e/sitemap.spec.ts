@@ -2,8 +2,16 @@ import { expect } from '@playwright/test';
 import { test } from '@playwright/test';
 
 const BASE = (process.env['E2E_BASE_URL'] ?? 'https://goodparty.org').replace(/\/+$/, '');
+const EXPECTED_ORIGIN = new URL(BASE).origin;
 
 test.describe('Sitemap', () => {
+	test('robots.txt references sitemap with correct base URL', async ({ request }) => {
+		const res = await request.get(`${BASE}/robots.txt`);
+		expect(res.status()).toBe(200);
+		const text = await res.text();
+		expect(text).toContain(`Sitemap: ${BASE}/sitemap.xml`);
+	});
+
 	test('root sitemap.xml returns 200 with XML content-type', async ({ request }) => {
 		const res = await request.get(`${BASE}/sitemap.xml`);
 		expect(res.status()).toBe(200);
@@ -19,6 +27,18 @@ test.describe('Sitemap', () => {
 		expect(xml).toContain('</sitemapindex>');
 		const locMatches = xml.match(/<loc>([^<]+)<\/loc>/g);
 		expect(locMatches?.length).toBeGreaterThan(0);
+	});
+
+	test('all sitemap loc URLs use the expected base domain', async ({ request }) => {
+		const res = await request.get(`${BASE}/sitemap.xml`);
+		expect(res.status()).toBe(200);
+		const xml = await res.text();
+		const locMatches = xml.match(/<loc>([^<]+)<\/loc>/g);
+		expect(locMatches?.length).toBeGreaterThan(0);
+		for (const m of locMatches!) {
+			const url = m.replace(/<\/?loc>/g, '').trim();
+			expect(new URL(url).origin, `URL ${url} should use ${EXPECTED_ORIGIN}`).toBe(EXPECTED_ORIGIN);
+		}
 	});
 
 	test('state and candidate sitemaps are present in index', async ({ request }) => {

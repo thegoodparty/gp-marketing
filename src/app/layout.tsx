@@ -64,8 +64,10 @@ export default async function RootLayout({ children }: Props) {
 			lang='en-US'
 			className={`bg-background-primary ${primaryFont.variable} ${primaryFont.className} ${secondaryFont.variable} ${secondaryFont.className}`}
 		>
-			<body className='flex min-h-screen flex-col'>
+			<head>
 				<VWOScript accountId='757033' />
+			</head>
+			<body className='flex min-h-screen flex-col'>
 				<PageSchema schema={organizationSchema} />
 				<GTM />
 				<FacebookPixel />

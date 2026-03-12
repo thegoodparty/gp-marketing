@@ -38,6 +38,7 @@ export default async function Page(props: any) {
 		params: {
 			slug,
 		},
+		tags: ['article'],
 	});
 
 	if (!page) {
@@ -144,6 +145,7 @@ export async function generateMetadata(props: Params, parent: ResolvingMetadata)
 		params: {
 			slug: slug,
 		},
+		tags: ['article'],
 	});
 
 	return StructureMetaData(parentMetadata, {

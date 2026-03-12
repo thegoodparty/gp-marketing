@@ -7,8 +7,10 @@ import type { backgroundTypeValues, normalCondensedValues } from './_lib/designT
 
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { Container } from './Container.tsx';
+import { FadeIn } from './FadeIn.tsx';
 import { Text } from './Text.tsx';
 import { Newsletter } from './Form/Newsletter.tsx';
+import { Logo } from '~/sanity/utils/Logo.tsx';
 import type { FormProps } from './_lib/resolveForm.ts';
 
 const styles = tv({
@@ -80,6 +82,7 @@ export type CTABlockProps = {
 	className?: string;
 	form?: FormProps;
 	layout?: 'blog' | 'page';
+	showLogo?: boolean;
 };
 
 export function CTABlock(props: CTABlockProps) {
@@ -94,7 +97,13 @@ export function CTABlock(props: CTABlockProps) {
 		<article className={cn(base(), props.className)} data-component='CTABlock'>
 			<Container size={layout === 'blog' ? 'unset' : 'xl'}>
 				<div className='group relative'>
-					<div className={content()}>
+					<FadeIn>
+						<div className={content()}>
+						{props.showLogo && (
+							<div className="mb-10">
+								<Logo width={80} height={80} className="object-contain" />
+							</div>
+						)}
 						<div className='flex flex-col gap-3 md:gap-4'>
 							{props.label && (
 								<span className={overline()}>
@@ -131,7 +140,8 @@ export function CTABlock(props: CTABlockProps) {
 							</Text>
 						)}
 						{props.form?.provider === 'Hubspot' && props.form.formId && <Newsletter formId={props.form.formId} />}
-					</div>
+						</div>
+					</FadeIn>
 					<div className={card()}>
 						{size === 'normal' && (
 							<svg

@@ -27,7 +27,10 @@ export const columnOneTwoThreeValues = [1, 2, 3] as const;
 
 /* COLORS */
 
-export const backgroundTypeValues = ['cream', 'midnight'] as const;
+export const backgroundTypeValues = ['cream', 'midnight', 'white'] as const;
+export const creamBackgroundType = backgroundTypeValues[0];
+export const midnightBackgroundType = backgroundTypeValues[1];
+export const whiteBackgroundType = backgroundTypeValues[2];
 export const buttonStyleTypeValues = [
 	'primary',
 	'secondary',
@@ -42,6 +45,7 @@ export const buttonStyleTypeValues = [
 export const primaryButtonStyleType = buttonStyleTypeValues[0];
 export const secondaryButtonStyleType = buttonStyleTypeValues[1];
 export const outlineButtonStyleType = buttonStyleTypeValues[2];
+export const outlineInverseButtonStyleType = buttonStyleTypeValues[3];
 export const defaultCtaButtonStyleType = 'secondary' as const;
 export const iconColorValues = ['red', 'waxflower', 'bright-yellow', 'halo-green', 'blue', 'lavender', 'white', 'mixed'] as const;
 export const colorTypeValues = ['blue', 'red', 'waxflower', 'bright-yellow', 'halo-green', 'lavender', 'inverse'] as const;
@@ -56,6 +60,7 @@ export const componentColorValues = [
 	'cream',
 	'inverse',
 ] as const;
+export const midnightComponentColor = componentColorValues[6];
 
 /* CONTENT SECTIONS */
 

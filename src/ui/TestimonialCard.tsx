@@ -20,7 +20,8 @@ const styles = tv({
 			'halo-green': 'bg-halo-green-100',
 			blue: 'bg-blue-100',
 			lavender: 'bg-lavender-100',
-			midnight: 'bg-midnight-900',
+			midnight:
+				'bg-midnight-900 text-white relative overflow-hidden border border-white/10 transition-all duration-300 hover:-translate-y-1 hover:border-goodparty-gold/30',
 			cream: 'bg-goodparty-cream',
 			white: 'bg-white',
 		},
@@ -34,6 +35,7 @@ const styles = tv({
 
 export type TestimonialCardProps = {
 	author?: AuthorProps;
+	avatar?: string;
 	className?: string;
 	color?: Exclude<(typeof componentColorValues)[number], 'inverse'> | 'white';
 	copy?: ReactNode;
@@ -45,10 +47,26 @@ export function TestimonialCard(props: TestimonialCardProps) {
 	const quoteStyleType = props.quoteStyleType ?? 'text-md';
 	const { base, quote } = styles({ color, quoteStyleType });
 
+	const isMidnight = color === 'midnight';
+
 	return (
 		<article className={cn(base(), props.className)} data-component='TestimonialCard'>
+			{isMidnight && (
+				<Logo
+					width={32}
+					height={32}
+					className="absolute top-5 right-5 opacity-25 object-contain"
+					aria-hidden
+				/>
+			)}
 			<div className='flex flex-col gap-4'>
-				<Logo width={50} height={37} />
+				{isMidnight && props.avatar ? (
+					<div className="w-16 h-16 rounded-full bg-gradient-to-br from-goodparty-red to-goodparty-blue flex items-center justify-center text-3xl mb-5">
+						{props.avatar}
+					</div>
+				) : !isMidnight ? (
+					<Logo width={50} height={37} />
+				) : null}
 				<Text as='blockquote' className={quote()} styleType={quoteStyleType}>
 					{quoteStyleType === 'text-3xl' ? `"${props.copy}"` : props.copy}
 				</Text>

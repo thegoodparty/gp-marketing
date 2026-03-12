@@ -23,6 +23,9 @@ const styles = tv({
 				base: 'bg-midnight-900 text-white',
 				overline: 'text-neutral-400',
 			},
+			white: {
+				base: 'bg-white',
+			},
 		},
 		layout: {
 			center: {
@@ -47,7 +50,7 @@ export type HeaderBlockProps = {
 	label?: string;
 	title?: string;
 	layout?: 'left' | 'right' | 'center';
-	backgroundColor?: 'cream' | 'midnight';
+	backgroundColor?: 'cream' | 'midnight' | 'white';
 	caption?: string;
 	textSize?: ResolvedTextSize;
 };

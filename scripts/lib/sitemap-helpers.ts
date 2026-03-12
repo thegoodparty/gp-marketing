@@ -16,13 +16,19 @@ const MAX_BYTES_PER_SITEMAP = 50 * 1024 * 1024; // 50 MB
 const BYTES_PER_ENTRY_ESTIMATE = 180;
 const SPLIT_CHECK_INTERVAL = 1_000;
 
-const APP_BASE = process.env['NEXT_PUBLIC_APP_BASE'] ?? process.env['NEXT_PUBLIC_SITE_URL'] ?? 'https://goodparty.org';
 const GP_API_BASE = process.env['NEXT_PUBLIC_API_BASE'] ?? 'https://gp-api.goodparty.org';
 const ELECTION_API_BASE = process.env['NEXT_PUBLIC_ELECTION_API_BASE'] ?? process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
 
 export function getAppBase(): string {
-	const base = APP_BASE.replace(/\/$/, '');
-	return base.startsWith('http') ? base : `https://${base}`;
+	const explicit = process.env['NEXT_PUBLIC_APP_BASE'] ?? process.env['NEXT_PUBLIC_SITE_URL'];
+	if (explicit) {
+		const url = explicit.replace(/\/$/, '');
+		return url.startsWith('http') ? url : `https://${url}`;
+	}
+	if (process.env['VERCEL_ENV'] === 'preview' && process.env['VERCEL_URL']) {
+		return `https://${process.env['VERCEL_URL']}`;
+	}
+	return 'https://goodparty.org';
 }
 
 function isErrorResponse(data: unknown): boolean {

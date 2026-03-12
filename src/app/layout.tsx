@@ -38,6 +38,7 @@ type Props = Params & {
 };
 
 export const metadata: Metadata = {
+	metadataBase: new URL(getBaseUrl()),
 	title: 'GoodParty.org | Empowering independents to run, win and serve.',
 	description:
 		'GoodParty.org empowers independent candidates to run, win and serve. Access campaign tools, voter data, and support to level the playing field without deep pockets.',

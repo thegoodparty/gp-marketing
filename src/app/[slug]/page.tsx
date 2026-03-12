@@ -28,6 +28,7 @@ export default async function Page(props: any) {
 		params: {
 			slug,
 		},
+		tags: ['goodpartyOrg_landingPages', 'policy'],
 	});
 
 	if (!page || !(page._type === 'goodpartyOrg_landingPages' || page._type === 'policy')) {
@@ -60,6 +61,7 @@ export async function generateMetadata(props: Params, parent: ResolvingMetadata)
 		params: {
 			slug: slug,
 		},
+		tags: ['goodpartyOrg_landingPages', 'policy'],
 	});
 
 	if (page?._type === 'goodpartyOrg_landingPages') {

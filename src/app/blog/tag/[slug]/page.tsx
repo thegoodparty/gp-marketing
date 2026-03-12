@@ -6,7 +6,7 @@ import { PageSections } from '~/PageSections';
 import { StructureMetaData } from '~/components/StructureMetadata';
 import type { Params } from '~/lib/types';
 import { BlogHero } from '~/ui/BlogHero';
-import { getCashedArticles } from '~/lib/getCashedArticles';
+import { getCachedArticles } from '~/lib/getCachedArticles';
 import { FeaturedBlogBlock } from '~/ui/FeaturedBlogBlock';
 import type { SanityImage } from '~/ui/types';
 import { BlogBlock } from '~/ui/BlogBlock';
@@ -29,11 +29,12 @@ export default async function Page(props: any) {
 		params: {
 			slug,
 		},
+		tags: ['topics'],
 	});
 	if (!page) {
 		notFound();
 	}
-	const { articles } = await getCashedArticles();
+	const { articles } = await getCachedArticles();
 
 	return (
 		<>
@@ -87,6 +88,7 @@ export async function generateMetadata(props: Params, parent: ResolvingMetadata)
 		params: {
 			slug: slug,
 		},
+		tags: ['topics'],
 	});
 
 	return StructureMetaData(parentMetadata, {

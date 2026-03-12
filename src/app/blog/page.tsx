@@ -5,18 +5,19 @@ import { sanityFetch } from '~/sanity/sanityClient';
 import { PageSections } from '~/PageSections';
 import { StructureMetaData } from '~/components/StructureMetadata';
 import type { Params } from '~/lib/types';
-import { getCashedArticles } from '~/lib/getCashedArticles';
+import { getCachedArticles } from '~/lib/getCachedArticles';
 import { BlogHero } from '~/ui/BlogHero';
 
 export default async function Page(props: any) {
 	const page = await sanityFetch({
 		query: goodpartyOrg_allArticlesQuery,
+		tags: ['goodpartyOrg_allArticles'],
 	});
 	if (!page) {
 		notFound();
 	}
 
-	const { articles } = await getCashedArticles();
+	const { articles } = await getCachedArticles();
 
 	return (
 		<>
@@ -35,6 +36,7 @@ export async function generateMetadata(props: Params, parent: ResolvingMetadata)
 	const parentMetadata = await parent;
 	const page = await sanityFetch({
 		query: goodpartyOrg_allArticlesQuery,
+		tags: ['goodpartyOrg_allArticles'],
 	});
 
 	return StructureMetaData(parentMetadata, {

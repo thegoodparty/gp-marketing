@@ -8,7 +8,7 @@ export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '3rbseux7'
 export const token = process.env.SANITY_STUDIO_API_TOKEN || undefined;
 
 // Used to verify GROQ webhook revalidation requests, defining this will also disable time-based revalidation and only use on-demand revalidation
-export const revalidateSecret = 'NS';
+export const revalidateSecret = process.env.SANITY_REVALIDATE_SECRET;
 
 // Used by `sanity-plugin-iframe-pane` to verify that draft mode was initiated by a valid Studio session
 export const urlSecretId = `preview.secret`;

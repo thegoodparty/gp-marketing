@@ -109,7 +109,6 @@ export default async function Page({
 	const slug = `${name}/${office}`;
 
 	const candidate = await getCandidateBySlug({ slug });
-	console.log('[candidate page] slug=%s found=%s', slug, !!candidate);
 	if (!candidate) {
 		notFound();
 	}

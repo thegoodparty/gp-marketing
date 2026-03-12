@@ -81,6 +81,10 @@
 		--ui-dot-minimize: #ffbd2e;
 		--ui-dot-maximize: #28c840;
 
+		/* Hero section radial gradient glows */
+		--hero-glow-a: radial-gradient(circle, hsl(349 83% 47% / 0.06) 0%, hsl(218 100% 38% / 0.04) 40%, transparent 70%);
+		--hero-glow-b: radial-gradient(circle, hsl(349 83% 47% / 0.08) 0%, hsl(218 100% 38% / 0.05) 40%, transparent 70%);
+
 		/* StrikethroughBlock background */
 		--strikethrough-bg: #ede5f4;
 

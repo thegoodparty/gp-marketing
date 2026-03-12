@@ -49,7 +49,7 @@ export function ExperimentHeroA(props: ExperimentHeroAProps) {
 
 	return (
 		<article className={cn(base(), 'bg-goodparty-cream', props.className)} data-component='ExperimentHeroA'>
-			<div className="absolute top-[-12.5rem] left-1/2 -translate-x-1/2 w-[56.25rem] h-[56.25rem] bg-[radial-gradient(circle,var(--goodparty-red)/0.06_0%,var(--goodparty-blue)/0.04_40%,transparent_70%)] rounded-full pointer-events-none" />
+			<div className="absolute top-[-12.5rem] left-1/2 -translate-x-1/2 w-[56.25rem] h-[56.25rem] [background-image:var(--hero-glow-a)] rounded-full pointer-events-none" />
 			<Container size="xl">
 				<div className={wrapper()}>
 					{props.badgeText && (
@@ -67,7 +67,7 @@ export function ExperimentHeroA(props: ExperimentHeroAProps) {
 						{...fadeInUp}
 						transition={{ ...fadeInUp.transition, delay: 0.1 }}
 					>
-						<Logo width={140} height={140} className="w-full h-full drop-shadow-[0_8px_32px_var(--goodparty-red)/0.2]" />
+						<Logo width={140} height={140} className="w-full h-full drop-shadow-[var(--shadow-logo-glow)]" />
 					</motion.div>
 					{props.title && (
 						<motion.div
@@ -128,7 +128,7 @@ export function ExperimentHeroA(props: ExperimentHeroAProps) {
 						<span className={oldSymbol()}>🫏</span>
 						<span className={vsText()}>vs</span>
 						<div className={cn(newSymbol(), 'after:content-[""] after:absolute after:inset-[-0.5rem] after:rounded-full after:border-2 after:border-goodparty-gold after:animate-pulse-ring')}>
-							<Logo width={56} height={56} className="drop-shadow-[0_8px_32px_var(--goodparty-red)/0.2]" />
+							<Logo width={56} height={56} className="drop-shadow-[var(--shadow-logo-glow)]" />
 						</div>
 					</motion.div>
 				</div>

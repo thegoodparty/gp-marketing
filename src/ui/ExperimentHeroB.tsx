@@ -47,7 +47,7 @@ export function ExperimentHeroB(props: ExperimentHeroBProps) {
 
 	return (
 		<article className={cn(base(), 'bg-midnight-900 text-white', props.className)} data-component='ExperimentHeroB'>
-			<div className="absolute top-[-12.5rem] left-1/2 -translate-x-1/2 w-[56.25rem] h-[56.25rem] bg-[radial-gradient(circle,var(--goodparty-red)/0.08_0%,var(--goodparty-blue)/0.05_40%,transparent_70%)] rounded-full pointer-events-none" />
+			<div className="absolute top-[-12.5rem] left-1/2 -translate-x-1/2 w-[56.25rem] h-[56.25rem] [background-image:var(--hero-glow-b)] rounded-full pointer-events-none" />
 			<Container size="xl">
 				<div className={wrapper()}>
 					<motion.div
@@ -55,7 +55,7 @@ export function ExperimentHeroB(props: ExperimentHeroBProps) {
 						{...fadeInUp}
 						transition={{ ...fadeInUp.transition, delay: 0 }}
 					>
-						<Logo width={100} height={100} className={cn(logoIcon(), 'drop-shadow-[0_4px_24px_var(--goodparty-red)/0.3]')} />
+						<Logo width={100} height={100} className={cn(logoIcon(), 'drop-shadow-[var(--shadow-logo-glow-strong)]')} />
 						<div className={logoText()}>
 							<div>GoodParty.org</div>
 							<div>Bright-Hearted Star</div>

@@ -82,4 +82,7 @@
 	--shadow-party-icon: 0 12px 48px hsl(349 83% 47% / 0.15);
 	/* AIPlatformSection pillar hover */
 	--shadow-pillar-hover: 0 4px 20px hsl(218 100% 38% / 0.08);
+	/* Hero logo drop shadows */
+	--shadow-logo-glow: 0 8px 32px hsl(349 83% 47% / 0.2);
+	--shadow-logo-glow-strong: 0 4px 24px hsl(349 83% 47% / 0.3);
 }

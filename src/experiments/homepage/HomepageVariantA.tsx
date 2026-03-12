@@ -7,6 +7,11 @@ import { FeaturesBlock } from '~/ui/FeaturesBlock.tsx';
 import { StatsBlock } from '~/ui/StatsBlock.tsx';
 import { TestimonialBlock } from '~/ui/TestimonialBlock.tsx';
 import {
+	creamBackgroundType,
+	midnightBackgroundType,
+	whiteBackgroundType,
+} from '~/ui/_lib/designTypesStore.ts';
+import {
 	heroA,
 	statsA,
 	problemA,
@@ -33,7 +38,7 @@ export function HomepageVariantA() {
 			</ComponentErrorBoundary>
 
 			<ComponentErrorBoundary componentName="StatsBlock">
-				<StatsBlock backgroundColor="midnight" stats={statsA} />
+				<StatsBlock backgroundColor={midnightBackgroundType} stats={statsA} />
 			</ComponentErrorBoundary>
 
 			<ComponentErrorBoundary componentName="DuopolyProblemBlock">
@@ -42,7 +47,7 @@ export function HomepageVariantA() {
 
 			<ComponentErrorBoundary componentName="TestimonialBlock">
 				<TestimonialBlock
-					backgroundColor="midnight"
+					backgroundColor={midnightBackgroundType}
 					header={heroesHeaderA}
 					items={heroesA}
 				/>
@@ -50,7 +55,7 @@ export function HomepageVariantA() {
 
 			<ComponentErrorBoundary componentName="AIPlatformSection">
 				<AIPlatformSection
-					backgroundColor="cream"
+					backgroundColor={creamBackgroundType}
 					header={aiPlatformHeaderA}
 					pillars={aiPlatformPillarsA}
 					chatMessages={aiChatMessagesA}
@@ -59,7 +64,7 @@ export function HomepageVariantA() {
 
 			<ComponentErrorBoundary componentName="FeaturesBlock (Tools)">
 				<FeaturesBlock
-					backgroundColor="white"
+					backgroundColor={whiteBackgroundType}
 					header={toolsHeaderA}
 					items={toolsA}
 				/>
@@ -67,8 +72,8 @@ export function HomepageVariantA() {
 
 			<ComponentErrorBoundary componentName="CTABlock">
 				<CTABlock
-					backgroundColor="midnight"
-					color="midnight"
+					backgroundColor={midnightBackgroundType}
+					color={midnightBackgroundType}
 					title={ctaA.title}
 					copy={ctaA.copy}
 					buttons={ctaA.buttons}

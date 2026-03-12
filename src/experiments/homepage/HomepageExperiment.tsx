@@ -41,7 +41,7 @@ export function HomepageExperiment(props: Props) {
 		if (resolve()) return;
 
 		const onReady = () => {
-			resolve();
+			if (!resolve()) setVariant('control');
 		};
 		window.addEventListener('experiment:ready', onReady);
 

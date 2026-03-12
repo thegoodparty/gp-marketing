@@ -5,14 +5,14 @@ const styles = tv({
 		base: 'relative bg-white rounded-2xl border border-neutral-200 p-10 min-h-[30rem] flex flex-col',
 		header: 'flex items-center gap-2 mb-6 flex-shrink-0',
 		dot: 'w-3 h-3 rounded-full',
-		dotR: 'bg-[#FF5F57]',
-		dotY: 'bg-[#FFBD2E]',
-		dotG: 'bg-[#28C840]',
+		dotR: 'bg-ui-dot-close',
+		dotY: 'bg-ui-dot-minimize',
+		dotG: 'bg-ui-dot-maximize',
 		bubbles: 'flex flex-col gap-3 flex-1 min-h-0 overflow-y-auto',
 		bubble: 'py-4 px-5 rounded-2xl text-sm leading-[1.5] max-w-[85%]',
 		bubbleUser: 'bg-midnight-900 text-white self-end ml-auto rounded-br-sm',
 		bubbleAi: 'bg-neutral-100 text-midnight-900 rounded-bl-sm',
-		aiName: 'font-bold text-[#0052A5] text-xs uppercase tracking-wider mb-1.5',
+		aiName: 'font-bold text-goodparty-blue text-xs uppercase tracking-wider mb-1.5',
 	},
 });
 

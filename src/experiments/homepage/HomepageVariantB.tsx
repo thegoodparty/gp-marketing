@@ -8,6 +8,11 @@ import { StrikethroughBlock } from '~/ui/StrikethroughBlock.tsx';
 import { TestimonialBlock } from '~/ui/TestimonialBlock.tsx';
 import { ThreePillarsBlock } from '~/ui/ThreePillarsBlock.tsx';
 import {
+	creamBackgroundType,
+	midnightBackgroundType,
+	whiteBackgroundType,
+} from '~/ui/_lib/designTypesStore.ts';
+import {
 	heroB,
 	strikethroughB,
 	statsB,
@@ -40,7 +45,7 @@ export function HomepageVariantB() {
 			</ComponentErrorBoundary>
 
 			<ComponentErrorBoundary componentName="StatsBlock">
-				<StatsBlock backgroundColor="midnight" stats={statsB} />
+				<StatsBlock backgroundColor={midnightBackgroundType} stats={statsB} />
 			</ComponentErrorBoundary>
 
 			<ComponentErrorBoundary componentName="ThreePillarsBlock">
@@ -49,7 +54,7 @@ export function HomepageVariantB() {
 
 			<ComponentErrorBoundary componentName="TestimonialBlock">
 				<TestimonialBlock
-					backgroundColor="midnight"
+					backgroundColor={midnightBackgroundType}
 					header={peopleHeaderB}
 					items={peopleB}
 				/>
@@ -57,7 +62,7 @@ export function HomepageVariantB() {
 
 			<ComponentErrorBoundary componentName="AIPlatformSection">
 				<AIPlatformSection
-					backgroundColor="cream"
+					backgroundColor={creamBackgroundType}
 					header={techHeaderB}
 					pillars={techPlatformPillarsB}
 					chatMessages={techChatMessagesB}
@@ -66,7 +71,7 @@ export function HomepageVariantB() {
 
 			<ComponentErrorBoundary componentName="FeaturesBlock (Tools)">
 				<FeaturesBlock
-					backgroundColor="white"
+					backgroundColor={whiteBackgroundType}
 					header={toolsHeaderB}
 					items={toolsB}
 				/>
@@ -74,8 +79,8 @@ export function HomepageVariantB() {
 
 			<ComponentErrorBoundary componentName="CTABlock">
 				<CTABlock
-					backgroundColor="midnight"
-					color="midnight"
+					backgroundColor={midnightBackgroundType}
+					color={midnightBackgroundType}
 					title={ctaB.title}
 					copy={ctaB.copy}
 					buttons={ctaB.buttons}

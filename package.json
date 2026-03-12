@@ -27,6 +27,7 @@
     "test:e2e:sitemap": "playwright test e2e/sitemap.spec.ts"
   },
   "dependencies": {
+    "@amplitude/experiment-js-client": "^1.20.3",
     "@csstools/postcss-global-data": "^3.1.0",
     "@hubspot/api-client": "^13.4.0",
     "@material-tailwind/react": "^2.1.10",

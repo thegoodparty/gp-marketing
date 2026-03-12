@@ -7,6 +7,7 @@ import type { Params } from '~/lib/types';
 // @ts-ignore
 import '~/ui/_styles/globals.css';
 import { Amplitude } from '~/ui/Amplitude';
+import { ScrollDepthTracker } from '~/ui/ScrollDepthTracker';
 import { PageSchema } from '~/ui/PageSchema';
 import { getBaseUrl } from '~/lib/url';
 import { FacebookPixel } from '~/ui/FacebookPixel';
@@ -74,6 +75,7 @@ export default async function RootLayout({ children }: Props) {
 				<FacebookPixel />
 				<Segment />
 				<Amplitude />
+				<ScrollDepthTracker />
 				{(await draftMode()).isEnabled && <VisualEditing />}
 				<ComponentErrorBoundary componentName='Header'>
 					<PageHeader className='shrink-0' isDraftMode={(await draftMode()).isEnabled} />

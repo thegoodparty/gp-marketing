@@ -19,7 +19,7 @@ export const getCachedTerms = unstable_cache(
 				terms,
 			}; // Next.js automatically saves this to cache
 		} catch (err) {
-			console.error('Error fetching articles:', err);
+			console.error('Error fetching terms:', err);
 			return {
 				timestamp,
 				terms: null,

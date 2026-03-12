@@ -51,8 +51,10 @@ export const list_pageSections = {
             'component_imageContentBlock',
             'component_tabbedImageBlock',
             'component_featuresBlock',
+            'component_jobOpeningsBlock',
             'component_faqBlock',
             'component_profileContentBlock',
+            'component_electionsPositionContentBlock',
           ],
         },
         {
@@ -92,6 +94,7 @@ export const list_pageSections = {
             'component_blogBlock',
             'component_candidatesBlock',
             'component_profileContentBlock',
+            'component_electionsPositionContentBlock',
           ],
         },
         {
@@ -102,6 +105,7 @@ export const list_pageSections = {
             'component_iconContentBlock',
             'component_imageContentBlock',
             'component_featuresBlock',
+            'component_jobOpeningsBlock',
             'component_electionsIndexBlock',
           ],
         },
@@ -125,6 +129,7 @@ export const list_pageSections = {
           of: [
             'component_pricingBlock',
             'component_featuresBlock',
+            'component_jobOpeningsBlock',
           ],
         },
         {
@@ -214,6 +219,10 @@ export const list_pageSections = {
       type: 'component_featuresBlock',
     },
     {
+      title: 'Job Openings Block',
+      type: 'component_jobOpeningsBlock',
+    },
+    {
       title: 'Team Block',
       type: 'component_teamBlock',
     },
@@ -280,6 +289,10 @@ export const list_pageSections = {
     {
       title: 'Elections Position Hero',
       type: 'component_electionsPositionHero',
+    },
+    {
+      title: 'Elections Position Content Block',
+      type: 'component_electionsPositionContentBlock',
     },
     {
       title: 'Elections Search Hero',

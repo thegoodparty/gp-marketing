@@ -58,8 +58,8 @@ Left side card configuration with headline, subhead, body copy, and primary CTA.
 **Type:** `ElectionsPositionContentBlockCardProps`
 
 Card properties:
-- `headline` (optional) - Large heading text (heading-lg)
-- `subhead` (optional) - Medium heading text (heading-md)
+- `headline` (optional) - Medium heading text (heading-md)
+- `subhead` (optional) - Overline text (overline)
 - `bodyCopy` (optional) - Body text content, can be a single ReactNode or array of ReactNodes
 - `primaryCTA` (optional) - Primary call-to-action button configuration
 
@@ -69,7 +69,7 @@ Headline text displayed at the top of the right content area.
 
 **Type:** `string`
 
-Uses `heading-lg` text style.
+Uses `subtitle-1` text style.
 
 #### `gridItems` (optional)
 
@@ -78,8 +78,8 @@ Array of items to display in the three-column grid on the right side.
 **Type:** `ElectionsPositionContentBlockGridItem[]`
 
 Each grid item contains:
-- `subhead` (optional) - Subheading text (heading-md)
-- `bodyCopy` (optional) - Body text content (body-1)
+- `subhead` (optional) - Overline text (overline)
+- `bodyCopy` (optional) - Body text content (body-2)
 
 #### `bottomItems` (optional)
 
@@ -88,8 +88,8 @@ Array of items to display below the grid section, separated by a horizontal line
 **Type:** `ElectionsPositionContentBlockBottomItem[]`
 
 Each bottom item contains:
-- `headline` (optional) - Heading text (heading-md)
-- `bodyCopy` (optional) - Body text content (body-1)
+- `headline` (optional) - Subtitle text (subtitle-1)
+- `bodyCopy` (optional) - Body text content (body-2)
 
 #### `backgroundColor` (optional)
 
@@ -118,22 +118,23 @@ The component uses a responsive grid layout:
 - **Desktop** (`lg:`): Two-column grid
   - Left: Card with fixed width (`1fr`)
   - Right: Content area (`1fr`)
-  - Gap: `gap-8` between columns
+  - Gap: `gap-20` between columns
 
 ### Card Layout
 
 The left card features:
 - White background (`bg-white`)
 - Rounded corners (`rounded-lg`)
-- Responsive padding: `p-6` (mobile), `p-8` (tablet), `p-10` (desktop)
-- Vertical flex layout with gap: `gap-4` (mobile), `gap-6` (desktop)
+- Responsive padding: `p-4` (mobile), `md:p-6` (tablet), `lg:p-8` (desktop)
+- Vertical flex layout with gap: `gap-3` (mobile), `gap-4` (desktop)
 - Content section with `gap-4` between elements
 
 ### Grid Layout
 
 The right side grid:
 - **Mobile**: Single column
-- **Desktop** (`md:`): Three-column grid
+- **Tablet** (`md:`): Two-column grid
+- **Desktop** (`lg:`): Three-column grid
 - Gap: `gap-6` (mobile), `gap-8` (desktop)
 - Each grid item has vertical flex layout with `gap-3`
 
@@ -146,9 +147,10 @@ The horizontal separator:
 
 ## Typography
 
-- **Headline**: `heading-lg` - Large, bold heading
-- **Subhead**: `heading-md` - Medium, bold heading
-- **Body Copy**: `body-1` - Regular body text
+- **Card headline**: `heading-md` - Medium, bold heading
+- **Card subhead / Grid subhead**: `overline` - Overline text
+- **Top headline / Bottom headline**: `subtitle-1` - Subtitle text
+- **Body copy**: `body-1` (card), `body-2` (grid and bottom items)
 
 ## Button Styling
 

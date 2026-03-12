@@ -7,7 +7,7 @@ import { Text } from '~/ui/Text';
 import { Anchor } from '~/ui/Anchor';
 
 export async function PageHeader(props: { className?: string; isDraftMode: boolean }) {
-	const navigation = await sanityFetch({ query: goodpartyOrg_navigationQuery });
+	const navigation = await sanityFetch({ query: goodpartyOrg_navigationQuery, tags: ['goodpartyOrg_navigation'] });
 
 	// console.log(navigation?.primaryCTA);
 	// console.log(navigation?.secondaryCTA);

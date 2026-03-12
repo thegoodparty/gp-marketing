@@ -7,7 +7,7 @@ import type { Params } from '~/lib/types';
 import { RichData } from '~/ui/RichData';
 import { Container } from '~/ui/Container';
 import { Text } from '~/ui/Text';
-import { getCashedTerms } from '~/lib/getCashedTerms';
+import { getCachedTerms } from '~/lib/getCachedTerms';
 import { searchTermsToABCD } from '~/lib/serchTermsToABCD';
 import { GlossaryList } from '~/ui/GlossaryList';
 import { GlossaryHero } from '~/ui/GlossaryHero';
@@ -43,6 +43,7 @@ export default async function Page(props: any) {
 			params: {
 				slug,
 			},
+			tags: ['glossary'],
 		});
 		if (!terms) {
 			notFound();
@@ -50,9 +51,10 @@ export default async function Page(props: any) {
 
 		const hero = await sanityFetch({
 			query: glossaryHeroGroq,
+			tags: ['glossary'],
 		});
 
-		const searchTerms = (await getCashedTerms()).terms;
+		const searchTerms = (await getCachedTerms()).terms;
 		return (
 			<>
 				<GlossaryHero
@@ -110,6 +112,7 @@ export default async function Page(props: any) {
 		params: {
 			slug,
 		},
+		tags: ['glossary'],
 	});
 	if (!page) {
 		notFound();
@@ -120,6 +123,7 @@ export default async function Page(props: any) {
 	if (!cta || !cta.ref_sharedCta?.overview?.field_title) {
 		const hero = await sanityFetch({
 			query: glossaryHeroGroq,
+			tags: ['glossary'],
 		});
 		cta = hero?.cta as unknown as GlossaryTermCta;
 	}
@@ -175,6 +179,7 @@ export async function generateMetadata(props: Params, parent: ResolvingMetadata)
 		params: {
 			slug: slug,
 		},
+		tags: ['glossary'],
 	});
 
 	return StructureMetaData(parentMetadata, {

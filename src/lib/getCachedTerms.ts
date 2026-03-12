@@ -1,8 +1,9 @@
 import { unstable_cache } from 'next/cache';
-import { allArticlesForSearchGroq } from '~/sanity/groq';
+import { defaultRevalidate } from '~/lib/env';
+import { allTermsForSearchGroq } from '~/sanity/groq';
 import { sanityClient } from '~/sanity/sanityClient';
 
-export const getCashedArticles = unstable_cache(
+export const getCachedTerms = unstable_cache(
 	// This function ONLY runs when:
 	// 1. Cache is empty (first time)
 	// 2. Cache expired (after 12 hours)
@@ -11,20 +12,20 @@ export const getCashedArticles = unstable_cache(
 		const timestamp = new Date().toISOString();
 
 		try {
-			const articles = await sanityClient.fetch(allArticlesForSearchGroq);
+			const terms = await sanityClient.fetch(allTermsForSearchGroq);
 
 			return {
 				timestamp,
-				articles,
+				terms,
 			}; // Next.js automatically saves this to cache
 		} catch (err) {
-			console.error('Error fetching articles:', err);
+			console.error('Error fetching terms:', err);
 			return {
 				timestamp,
-				articles: null,
+				terms: null,
 			}; // Next.js automatically saves this to cache
 		}
 	},
-	['all-articles-for-search-cache-sanity'],
-	{ revalidate: 60 * 60 * 12 }, // 12 hours
+	['all-terms-for-search-cache-sanity'],
+	{ revalidate: defaultRevalidate, tags: ['glossary'] },
 );

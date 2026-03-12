@@ -2021,6 +2021,13 @@
     }
   },
   {
+    "name": "field_formId",
+    "type": "type",
+    "value": {
+      "type": "string"
+    }
+  },
+  {
     "name": "field_calculatorLayout",
     "type": "type",
     "value": {
@@ -2819,6 +2826,21 @@
             "rest": {
               "type": "inline",
               "name": "component_featuresBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_jobOpeningsBlock"
             }
           },
           {
@@ -7549,6 +7571,38 @@
     }
   },
   {
+    "name": "component_jobOpeningsBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_jobOpeningsBlock"
+          }
+        },
+        "summaryInfo": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "summaryInfo"
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
     "name": "officeItem",
     "type": "type",
     "value": {
@@ -7968,6 +8022,14 @@
           "value": {
             "type": "inline",
             "name": "ref_sharedCta"
+          },
+          "optional": true
+        },
+        "field_formId": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_formId"
           },
           "optional": true
         }
@@ -11099,6 +11161,14 @@
             "name": "ref_sharedCta"
           },
           "optional": true
+        },
+        "field_formId": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_formId"
+          },
+          "optional": true
         }
       }
     }
@@ -12352,6 +12422,14 @@
           "value": {
             "type": "inline",
             "name": "ref_download"
+          },
+          "optional": true
+        },
+        "field_formId": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_formId"
           },
           "optional": true
         }

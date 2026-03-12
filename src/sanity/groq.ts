@@ -79,6 +79,8 @@ export const component_tabbedImageBlock = `_type=="component_tabbedImageBlock"=>
 /*language=textmate*/
 export const component_featuresBlock = `_type=="component_featuresBlock"=>{...,summaryInfo{${summaryInfoGroq}},featuresBlockContent{...,list_featureBlockFeatures[]{${featureGroq}},list_featureBlockHighlightedFeature[]{${featureGroq}}}}`;
 /*language=textmate*/
+export const component_jobOpeningsBlock = `_type=="component_jobOpeningsBlock"=>{...,summaryInfo{${summaryInfoGroq}}}`;
+/*language=textmate*/
 export const component_twoUpCardBlock = `_type=="component_twoUpCardBlock"=>{...,twoUpCardBlockOne{...,valuePropositionCard{...,button{${buttonGroq}}},ref_quoteReference->{${quoteGroq}}},twoUpCardBlockTwo{...,valuePropositionCard{...,button{${buttonGroq}}},ref_quoteReference->{${quoteGroq}}}}`;
 /*language=textmate*/
 export const component_carouselBlock = `_type=="component_carouselBlock"=>{...,quotesContentCollection{${quotesContentCollectionGroq}},summaryInfo{${summaryInfoGroq}}}`;
@@ -127,7 +129,7 @@ export const component_bannerBlock = `_type=="component_bannerBlock"=>{...,banne
 /*language=textmate*/
 export const component_calculatorTextBlock = `_type=="component_calculatorTextBlock"=>{...,summaryInfo{${summaryInfoGroq}},calculatorTextBlockDesignSettings,componentSettings}`;
 /*language=textmate*/
-export const component_breadcrumbBlock = `_type=="component_breadcrumbBlock"=>{...}`;
+export const component_breadcrumbBlock = `_type=="component_breadcrumbBlock"=>{...,breadcrumbBlockDesignSettings,componentSettings}`;
 /*language=textmate*/
 export const component_teamBlock = `_type=="component_teamBlock"=>{...,people{...,list_people[]->},summaryInfo{${summaryInfoGroq}}}`;
 /*language=textmate*/
@@ -152,15 +154,17 @@ export const component_candidatesBlock = `_type=="component_candidatesBlock"=>{.
 export const component_claimProfileBlock = `_type=="component_claimProfileBlock"=>{...,claimProfileBlockContent,ctaAction{${buttonGroq}},claimProfileBlockDesignSettings}`;
 export const component_electionsIndexBlock = `_type=="component_electionsIndexBlock"=>{...,electionsIndexBlockHeader{${summaryInfoGroq}}}`;
 export const component_electionsPositionHero = `_type=="component_electionsPositionHero"=>{...,ctaAction{${buttonGroq}}}`;
+export const component_electionsPositionContentBlock = `_type=="component_electionsPositionContentBlock"=>{...,electionsPositionContentBlockDesignSettings,componentSettings}`;
 export const component_electionsSearchHero = `_type=="component_electionsSearchHero"=>{...}`;
 export const component_featuredCitiesBlock = `_type=="component_featuredCitiesBlock"=>{...,featuredCitiesBlockHeader{${summaryInfoGroq}}}`;
 export const component_goodPartyOrgPledge = `_type=="component_goodPartyOrgPledge"=>{...,summaryInfo{${summaryInfoGroq}},goodPartyOrgPledgeItems{...,list_pledgeCards[]{...,ctaActionWithShared{${buttonGroq}}}}}`;
 export const component_locationFactsBlock = `_type=="component_locationFactsBlock"=>{...,locationFactsBlockHeader{${summaryInfoGroq}}}`;
 export const component_locationLandingPageHero = `_type=="component_locationLandingPageHero"=>{...}`;
 export const component_profileContentBlock = `_type=="component_profileContentBlock"=>{...,profileContentBlockDesignSettings,componentSettings}`;
+export const component_listOfOfficesBlock = `_type=="component_listOfOfficesBlock"=>{...}`;
 export const component_embeddedBlock = `_type=="component_embeddedBlock"=>{...}`;
 /*language=textmate*/
-export const sectionsGroq = `_key,_type,${component_pricingBlockGroq},${component_heroGroq},${component_profileHeroGroq},${component_comparisonBlock},${component_stepperBlockGroq},${component_iconContentBlock},${component_imageContentBlock},${component_statsBlock},${component_tabbedImageBlock},${component_featuresBlock},${component_twoUpCardBlock},${component_carouselBlock},${component_testimonialBlock},${component_faqBlock},${component_blogBlock},${component_bannerBlock},${component_calculatorTextBlock},${component_breadcrumbBlock},${component_teamBlock},${component_featuredBlogBlock},${component_allCtaBlocks},${component_ctaBannerBlock},${component_heroWithSubscribe},${component_newsletterBlock},${component_ctaCardsBlock},${component_blogTopicTagsBlock},${component_candidatesBlock},${component_claimProfileBlock},${component_electionsIndexBlock},${component_electionsPositionHero},${component_electionsSearchHero},${component_featuredCitiesBlock},${component_goodPartyOrgPledge},${component_locationFactsBlock},${component_locationLandingPageHero},${component_profileContentBlock},${component_embeddedBlock}`;
+export const sectionsGroq = `_key,_type,${component_pricingBlockGroq},${component_heroGroq},${component_profileHeroGroq},${component_comparisonBlock},${component_stepperBlockGroq},${component_iconContentBlock},${component_imageContentBlock},${component_statsBlock},${component_tabbedImageBlock},${component_featuresBlock},${component_jobOpeningsBlock},${component_twoUpCardBlock},${component_carouselBlock},${component_testimonialBlock},${component_faqBlock},${component_blogBlock},${component_bannerBlock},${component_calculatorTextBlock},${component_breadcrumbBlock},${component_teamBlock},${component_featuredBlogBlock},${component_allCtaBlocks},${component_ctaBannerBlock},${component_heroWithSubscribe},${component_newsletterBlock},${component_ctaCardsBlock},${component_blogTopicTagsBlock},${component_candidatesBlock},${component_claimProfileBlock},${component_electionsIndexBlock},${component_electionsPositionHero},${component_electionsPositionContentBlock},${component_electionsSearchHero},${component_featuredCitiesBlock},${component_goodPartyOrgPledge},${component_locationFactsBlock},${component_locationLandingPageHero},${component_profileContentBlock},${component_listOfOfficesBlock},${component_embeddedBlock}`;
 /*language=textmate*/
 export const allCategoriesLinksGroq = `*[_type=="categories"][]{_id,"title":tagOverview.field_name,${categoriesHrefGroq}}`;
 /*language=textmate*/
@@ -213,6 +217,18 @@ export const goodpartyOrg_landingPagesAndPolicyQuery = defineQuery(
 	`*[(_type=="goodpartyOrg_landingPages"&&detailPageOverviewNoHero.field_slug==$slug)||(_type=="policy"&&policyOverview.field_slug==$slug)][0]{...,_type=="goodpartyOrg_landingPages"=>{pageSections{...,list_pageSections[]{${sectionsGroq}}}},${landingPagesHrefGroq},${policyHrefGroq}}`,
 );
 /*language=textmate*/
+export const goodpartyOrg_electionsQuery = defineQuery(
+	`*[_type=="goodpartyOrg_landingPages"&&detailPageOverviewNoHero.field_slug=="elections"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},${landingPagesHrefGroq}}`,
+);
+/*language=textmate*/
+export const goodpartyOrg_candidatesQuery = defineQuery(
+	`*[_type=="goodpartyOrg_landingPages"&&detailPageOverviewNoHero.field_slug=="candidates"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},${landingPagesHrefGroq}}`,
+);
+/*language=textmate*/
+export const goodpartyOrg_profileQuery = defineQuery(
+	`*[_type=="goodpartyOrg_landingPages"&&detailPageOverviewNoHero.field_slug=="profile"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},${landingPagesHrefGroq}}`,
+);
+/*language=textmate*/
 export const goodpartyOrg_allComponentsQuery = defineQuery(
 	`*[_type=="goodpartyOrg_allComponents"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},${allComponentsHrefGroq}}`,
 );
@@ -257,3 +273,8 @@ export const articleQuery = defineQuery(
 export const allArticlesForSearchGroq = `*[_type=="article"] | order(editorialOverview.field_editorialTitle asc)[]{_id,"title":editorialOverview.field_editorialTitle,${articleHrefGroq}}`;
 /*language=textmate*/
 export const allTermsForSearchGroq = `*[_type=="glossary"] | order(glossaryTermOverview.field_glossaryTerm asc)[]{_id,"title":glossaryTermOverview.field_glossaryTerm,${glossaryTermHrefGroq}}`;
+
+/*language=textmate*/
+export const quoteCollectionByIdQuery = defineQuery(
+	`*[_type=="quoteCollections"&&_id==$id][0]{quoteCollectionContent{list_chooseQuotes[]->{_key,quote{field_quote,ref_quoteBy->{_type,personOverview{field_personName,field_jobTitleOrRole,img_profilePicture},organisationOverview{field_organisationName,img_logo}}}}}}`,
+);

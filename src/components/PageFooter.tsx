@@ -5,7 +5,7 @@ import { goodpartyOrg_footerQuery } from '~/sanity/groq';
 import { Footer } from '~/ui/Footer';
 
 export async function PageFooter(props: { className?: string }) {
-	const footer = (await sanityFetch({ query: goodpartyOrg_footerQuery })) as Group_footer;
+	const footer = (await sanityFetch({ query: goodpartyOrg_footerQuery, tags: ['goodpartyOrg_footer'] })) as Group_footer;
 
 	if (!footer) return;
 

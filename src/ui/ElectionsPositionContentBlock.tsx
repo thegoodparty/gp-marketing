@@ -9,7 +9,7 @@ import { isValidRichText } from './_lib/isValidRichText.ts';
 const styles = tv({
 	slots: {
 		base: 'py-(--container-padding)',
-		grid: 'grid lg:grid-cols-[auto_1fr] gap-20',
+		grid: 'grid lg:grid-cols-[400px_1fr] gap-20',
 		card: 'bg-white rounded-lg border border-neutral-200 p-4 md:p-6 lg:p-8 flex flex-col gap-3 md:gap-4 order-2 lg:order-1 w-fit self-start min-w-[400px]',
 		cardContent: 'flex flex-col gap-8',
 		buttonContainer: 'w-fit',
@@ -26,7 +26,7 @@ const styles = tv({
 			midnight: {
 				base: 'bg-midnight-900',
 				rightContent: 'text-white',
-				card: 'bg-white',
+				card: 'bg-white text-midnight-900',
 				separator: 'border-neutral-700',
 			},
 			cream: {
@@ -60,15 +60,20 @@ export type ElectionsPositionContentBlockProps = {
 	topHeadline?: string;
 	gridItems?: ElectionsPositionContentBlockGridItem[];
 	bottomItems?: ElectionsPositionContentBlockBottomItem[];
+	rightColumnCTA?: ComponentButtonProps;
 };
 
 export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
-	const { base, grid, card, cardContent, buttonContainer, rightContent, topHeadline, gridSection, gridItem, separator, bottomSection, bottomItem } =
+	const { base, grid, card, cardContent, buttonContainer, rightContent, gridSection, gridItem, separator, bottomSection, bottomItem } =
 		styles({ backgroundColor });
 
 	const resolvedButtonStyle = props.card?.primaryCTA
-		? props.card.primaryCTA.buttonProps?.styleType ?? 'secondary'
+		? (backgroundColor === 'midnight' ? 'outline-inverse' : 'secondary')
+		: undefined;
+
+	const resolvedRightColumnCTAStyle = props.rightColumnCTA
+		? (backgroundColor === 'midnight' ? 'outline-inverse' : 'secondary')
 		: undefined;
 
 	return (
@@ -89,15 +94,15 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 											{props.card.subhead}
 										</Text>
 									)}
-										{Array.isArray(props.card.bodyCopy) ? (
+									{Array.isArray(props.card.bodyCopy) ? (
 										<div className='flex flex-col gap-8'>
-											{props.card.bodyCopy.map((copy, index) =>
-												isValidRichText(copy) ? (
+											{props.card.bodyCopy
+												.filter((copy): copy is NonNullable<typeof copy> => Boolean(isValidRichText(copy)))
+												.map((copy, index) => (
 													<Text key={index} styleType='body-1'>
 														{copy}
 													</Text>
-												) : null,
-											)}
+												))}
 										</div>
 									) : isValidRichText(props.card.bodyCopy) ? (
 										<Text styleType='body-1'>{props.card.bodyCopy}</Text>
@@ -116,7 +121,7 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 					)}
 					<div className={cn(rightContent())}>
 						{props.topHeadline && (
-							<Text as='h2' styleType='subtitle-1' className={topHeadline()}>
+							<Text as='h2' styleType='subtitle-1'>
 								{props.topHeadline}
 							</Text>
 						)}
@@ -153,6 +158,17 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 										)}
 									</div>
 								))}
+							</div>
+						)}
+						{props.rightColumnCTA && (
+							<div className={buttonContainer()}>
+								<ComponentButton
+									{...props.rightColumnCTA}
+									buttonProps={{
+										...(props.rightColumnCTA.buttonProps ?? {}),
+										styleType: resolvedRightColumnCTAStyle,
+									}}
+								/>
 							</div>
 						)}
 					</div>

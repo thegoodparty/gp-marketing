@@ -3,6 +3,7 @@ declare global {
 		amplitude?: {
 			init: (apiKey: string, options?: { fetchRemoteConfig?: boolean; autocapture?: boolean }) => void;
 			add?: (plugin: unknown) => void;
+			track: (eventName: string, eventProperties?: Record<string, unknown>) => void;
 		};
 		experiment?: {
 			variant: (key: string) => { value?: string };

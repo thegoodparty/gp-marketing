@@ -1,5 +1,5 @@
 import { unstable_cache } from 'next/cache';
-import { ashbyJobBoardName } from '~/lib/env';
+import { ashbyJobBoardName, defaultRevalidate } from '~/lib/env';
 import type { JobOpeningsCardProps } from '~/ui/JobOpeningsCard';
 
 export interface AshbyJob {
@@ -71,7 +71,7 @@ async function fetchAshbyJobs(): Promise<AshbyJob[]> {
 
 	const res = await fetch(
 		`https://api.ashbyhq.com/posting-api/job-board/${boardName}?includeCompensation=true`,
-		{ next: { revalidate: 3600 } },
+		{ next: { revalidate: defaultRevalidate } },
 	);
 
 	if (!res.ok) {
@@ -85,7 +85,7 @@ async function fetchAshbyJobs(): Promise<AshbyJob[]> {
 export const getAshbyJobs = unstable_cache(
 	fetchAshbyJobs,
 	['ashby-jobs'],
-	{ revalidate: 3600 },
+	{ revalidate: defaultRevalidate },
 );
 
 function formatEmploymentType(type: string): string {

@@ -15,3 +15,5 @@ export const urlSecretId = `preview.secret`;
 
 // Ashby job board name for careers page (from https://jobs.ashbyhq.com/{name})
 export const ashbyJobBoardName = process.env.ASHBY_JOB_BOARD_NAME || undefined;
+
+export const defaultRevalidate = 3600; // 1 hour, in seconds

@@ -1,4 +1,5 @@
 import { unstable_cache } from 'next/cache';
+import { defaultRevalidate } from '~/lib/env';
 import { allArticlesForSearchGroq } from '~/sanity/groq';
 import { sanityClient } from '~/sanity/sanityClient';
 
@@ -26,5 +27,5 @@ export const getCachedArticles = unstable_cache(
 		}
 	},
 	['all-articles-for-search-cache-sanity'],
-	{ revalidate: 60 * 60 * 12, tags: ['article'] }, // 12 hours
+	{ revalidate: defaultRevalidate, tags: ['article'] },
 );

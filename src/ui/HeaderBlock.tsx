@@ -17,7 +17,7 @@ const styles = tv({
 	variants: {
 		backgroundColor: {
 			cream: {
-				base: 'bg-[rgb(245,243,238)]',
+				base: 'bg-goodparty-cream',
 			},
 			midnight: {
 				base: 'bg-midnight-900 text-white',
@@ -65,12 +65,7 @@ export function HeaderBlock(props: HeaderBlockProps) {
 	return (
 		<div className={cn(base(), props.className)} data-component='HeaderBlock'>
 			<div className={content()}>
-				<div
-					className={cn(
-						'flex flex-col gap-3 md:gap-4',
-						backgroundColor === 'cream' && 'bg-[rgb(245,243,238)]',
-					)}
-				>
+				<div className='flex flex-col gap-3 md:gap-4'>
 					{props.label && (
 						<span className={overline()}>
 							<Text as='span' styleType='overline'>

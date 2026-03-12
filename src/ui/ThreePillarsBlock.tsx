@@ -47,7 +47,7 @@ export type ThreePillarsBlockProps = {
 
 export function ThreePillarsBlock(props: ThreePillarsBlockProps) {
 	return (
-		<article className={cn('py-(--container-padding) bg-[rgb(245,243,238)]', props.className)} data-component='ThreePillarsBlock'>
+		<article className={cn('py-(--container-padding) bg-goodparty-cream', props.className)} data-component='ThreePillarsBlock'>
 			<Container size="xl">
 				<div className="flex flex-col gap-[4.5rem]">
 					<FadeIn delay={0}>

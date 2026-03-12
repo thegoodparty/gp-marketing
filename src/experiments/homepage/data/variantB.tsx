@@ -7,6 +7,11 @@ import type { HeaderBlockProps } from '~/ui/HeaderBlock.tsx';
 import type { ThreePillarsPillar } from '~/ui/ThreePillarsBlock.tsx';
 import type { AIPlatformPillar } from '~/ui/AIPlatformSection.tsx';
 import type { AIChatMessage } from '~/ui/AIChatVisual.tsx';
+import {
+	midnightComponentColor,
+	outlineInverseButtonStyleType,
+	primaryButtonStyleType,
+} from '~/ui/_lib/designTypesStore.ts';
 
 export const heroB = {
 	manifesto: (
@@ -22,7 +27,7 @@ export const heroB = {
 		<>
 			Good People x Great Tech =
 			<br />
-			<span className="text-[#E0162B]">Civic Heroes</span>{' '}
+			<span className="text-goodparty-red">Civic Heroes</span>{' '}
 			🦸‍♀️🦸
 		</>
 	),
@@ -33,13 +38,13 @@ export const heroB = {
 			buttonType: 'internal' as const,
 			href: '/run-for-office',
 			label: "I'm Ready to Run",
-			buttonProps: { styleType: 'primary' as const },
+			buttonProps: { styleType: primaryButtonStyleType },
 		},
 		{
 			buttonType: 'internal' as const,
 			href: '/about',
 			label: 'I Want to Help',
-			buttonProps: { styleType: 'outline-inverse' as const },
+			buttonProps: { styleType: outlineInverseButtonStyleType },
 		},
 	] as ComponentButtonProps[],
 };
@@ -50,10 +55,10 @@ export const strikethroughB = {
 };
 
 export const statsB: StatProps[] = [
-	{ _key: '1', value: '17,000+', description: 'Good People Supported', color: 'midnight' },
-	{ _key: '2', value: '13,000+', description: 'Winners Elected', color: 'midnight' },
-	{ _key: '3', value: '50', description: 'States Reached', color: 'midnight' },
-	{ _key: '4', value: '$0', description: 'From Corporate PACs', color: 'midnight' },
+	{ _key: '1', value: '17,000+', description: 'Good People Supported', color: midnightComponentColor },
+	{ _key: '2', value: '13,000+', description: 'Winners Elected', color: midnightComponentColor },
+	{ _key: '3', value: '50', description: 'States Reached', color: midnightComponentColor },
+	{ _key: '4', value: '$0', description: 'From Corporate PACs', color: midnightComponentColor },
 ];
 
 export const pillarsB: ThreePillarsPillar[] = [
@@ -99,7 +104,7 @@ export const peopleB: TestimonialCardProps[] = [
 		},
 		avatar: '👩‍🏫',
 		copy: 'I love this place too much to sit out. My neighbors asked me to run, and GoodParty.org gave me the tools to actually do it — without selling out to anyone.',
-		color: 'midnight',
+		color: midnightComponentColor,
 	},
 	{
 		author: {
@@ -108,7 +113,7 @@ export const peopleB: TestimonialCardProps[] = [
 		},
 		avatar: '👨‍💼',
 		copy: "Nobody else was running. Somebody needed to do it. GoodParty.org made it feel possible — even for someone who'd never run for anything before.",
-		color: 'midnight',
+		color: midnightComponentColor,
 	},
 	{
 		author: {
@@ -117,7 +122,7 @@ export const peopleB: TestimonialCardProps[] = [
 		},
 		avatar: '👩‍⚖️',
 		copy: "I left both major parties because they'd been bought and sold. GoodParty.org gave me the infrastructure to win as an Independent. For real.",
-		color: 'midnight',
+		color: midnightComponentColor,
 	},
 ];
 
@@ -235,15 +240,15 @@ export const ctaB = {
 			buttonType: 'internal' as const,
 			href: '/run',
 			label: 'Start Your Campaign',
-			className: 'max-sm:w-full bg-[#E0162B] hover:bg-[#E0162B]/80 focus:ring-[#E0162B]/40',
+			className: 'max-sm:w-full bg-goodparty-red hover:bg-goodparty-red/80 focus:ring-goodparty-red/40 shadow-[var(--shadow-cta-red)]',
 			iconRight: <IconResolver icon="arrow-right" className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5" />,
-			buttonProps: { styleType: 'primary' as const },
+			buttonProps: { styleType: primaryButtonStyleType },
 		},
 		{
 			buttonType: 'internal' as const,
 			href: '/candidates',
 			label: 'Explore the Tools',
-			buttonProps: { styleType: 'outline-inverse' as const },
+			buttonProps: { styleType: outlineInverseButtonStyleType },
 		},
 	] as ComponentButtonProps[],
 };

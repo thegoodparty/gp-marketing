@@ -75,4 +75,11 @@
 	--shadow-2xl-blur-radius: 50px;
 	--shadow-2xl-spread-radius: -12px;
 	--shadow-2xl-color: rgba(0, 0, 0, 0.25);
+
+	/* CTA / primary button shadow (goodparty-red) */
+	--shadow-cta-red: 0 8px 24px hsl(349 83% 47% / 0.35);
+	/* DuopolyProblemBlock party icon */
+	--shadow-party-icon: 0 12px 48px hsl(349 83% 47% / 0.15);
+	/* AIPlatformSection pillar hover */
+	--shadow-pillar-hover: 0 4px 20px hsl(218 100% 38% / 0.08);
 }

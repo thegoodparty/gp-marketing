@@ -6,6 +6,12 @@ import type { FeaturesBlockItemProps } from '~/ui/FeaturesBlock.tsx';
 import type { HeaderBlockProps } from '~/ui/HeaderBlock.tsx';
 import type { AIPlatformPillar } from '~/ui/AIPlatformSection.tsx';
 import type { AIChatMessage } from '~/ui/AIChatVisual.tsx';
+import {
+	midnightComponentColor,
+	outlineButtonStyleType,
+	outlineInverseButtonStyleType,
+	primaryButtonStyleType,
+} from '~/ui/_lib/designTypesStore.ts';
 
 export const heroA = {
 	badgeText: (
@@ -19,7 +25,7 @@ export const heroA = {
 			<br />
 			<span className="text-neutral-500 font-semibold">built to empower</span>
 			<br />
-			<span className="text-[#E0162B]">We the People.</span>
+			<span className="text-goodparty-red">We the People.</span>
 		</>
 	),
 	subtitle:
@@ -29,22 +35,22 @@ export const heroA = {
 			buttonType: 'internal' as const,
 			href: '/run-for-office',
 			label: "I'm Ready to Run",
-			buttonProps: { styleType: 'primary' as const },
+			buttonProps: { styleType: primaryButtonStyleType },
 		},
 		{
 			buttonType: 'internal' as const,
 			href: '/about',
 			label: 'I Want to Help',
-			buttonProps: { styleType: 'outline' as const },
+			buttonProps: { styleType: outlineButtonStyleType },
 		},
 	] as ComponentButtonProps[],
 };
 
 export const statsA: StatProps[] = [
-	{ _key: '1', value: '17,000+', description: 'Good People Supported', color: 'midnight' },
-	{ _key: '2', value: '13,000+', description: 'Winners Elected', color: 'midnight' },
-	{ _key: '3', value: '50', description: 'States Reached', color: 'midnight' },
-	{ _key: '4', value: '$0', description: 'From Corporate PACs', color: 'midnight' },
+	{ _key: '1', value: '17,000+', description: 'Good People Supported', color: midnightComponentColor },
+	{ _key: '2', value: '13,000+', description: 'Winners Elected', color: midnightComponentColor },
+	{ _key: '3', value: '50', description: 'States Reached', color: midnightComponentColor },
+	{ _key: '4', value: '$0', description: 'From Corporate PACs', color: midnightComponentColor },
 ];
 
 export const problemA = {
@@ -69,7 +75,7 @@ export const heroesA: TestimonialCardProps[] = [
 		},
 		avatar: '👩‍🏫',
 		copy: 'I was a teacher who got tired of waiting for someone else to fix things. GoodParty.org gave me the tools to run — and win — without owing anyone.',
-		color: 'midnight',
+		color: midnightComponentColor,
 	},
 	{
 		author: {
@@ -78,7 +84,7 @@ export const heroesA: TestimonialCardProps[] = [
 		},
 		avatar: '👨‍💼',
 		copy: 'As a small business owner, I knew our school board needed someone who actually lives in the community. The AI campaign tools made it possible.',
-		color: 'midnight',
+		color: midnightComponentColor,
 	},
 	{
 		author: {
@@ -87,7 +93,7 @@ export const heroesA: TestimonialCardProps[] = [
 		},
 		avatar: '👩‍⚖️',
 		copy: 'People told me I needed a party behind me. I told them I had something better — the support of my neighbors and the right tools.',
-		color: 'midnight',
+		color: midnightComponentColor,
 	},
 ];
 
@@ -203,15 +209,15 @@ export const ctaA = {
 			buttonType: 'internal' as const,
 			href: '/run',
 			label: 'Start Your Campaign',
-			className: 'max-sm:w-full bg-[#E0162B] hover:bg-[#E0162B]/80 focus:ring-[#E0162B]/40 shadow-[0_8px_24px_rgba(224,22,43,0.35)]',
+			className: 'max-sm:w-full bg-goodparty-red hover:bg-goodparty-red/80 focus:ring-goodparty-red/40 shadow-[var(--shadow-cta-red)]',
 			iconRight: <IconResolver icon="arrow-right" className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5" />,
-			buttonProps: { styleType: 'primary' as const },
+			buttonProps: { styleType: primaryButtonStyleType },
 		},
 		{
 			buttonType: 'internal' as const,
 			href: '/candidates',
 			label: 'Explore the Tools',
-			buttonProps: { styleType: 'outline-inverse' as const },
+			buttonProps: { styleType: outlineInverseButtonStyleType },
 		},
 	] as ComponentButtonProps[],
 };

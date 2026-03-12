@@ -94,13 +94,13 @@ export function FeaturesBlock(props: FeaturesBlockProps) {
 	const normals = props.items.filter(i => !i.isHighlighted);
 
 	const iconColorMap = {
-		red: 'bg-[rgba(224,22,43,0.08)]',
-		blue: 'bg-[rgba(0,82,165,0.08)]',
-		gold: 'bg-[rgba(232,170,26,0.1)]',
+		red: 'bg-goodparty-red/10',
+		blue: 'bg-goodparty-blue/10',
+		gold: 'bg-goodparty-gold/10',
 	} as const;
 
 	const tagColorMap = {
-		free: 'bg-[#ECFDF5] text-[#059669] border-[#A7F3D0]',
+		free: 'bg-success-50 text-success-600 border-success-200',
 		default: 'bg-white border-neutral-200 text-neutral-500',
 	} as const;
 
@@ -141,7 +141,7 @@ export function FeaturesBlock(props: FeaturesBlockProps) {
 											feature(),
 											(item.iconContent || item.tag) &&
 												cn(
-													'rounded-2xl p-8 md:p-10 border border-transparent transition-all duration-300 hover:border-[#E8AA1A] hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)]',
+													'rounded-2xl p-8 md:p-10 border border-transparent transition-all duration-300 hover:border-goodparty-gold hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)]',
 													backgroundColor === 'white' ? 'bg-goodparty-cream' : 'bg-white',
 												),
 										)}

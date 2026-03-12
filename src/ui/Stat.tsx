@@ -34,7 +34,7 @@ const styles = tv({
 			},
 			midnight: {
 				base: 'bg-midnight-900 text-white',
-				value: 'text-[#E8AA1A]',
+				value: 'text-goodparty-gold',
 			},
 			cream: {
 				base: 'bg-goodparty-cream',
@@ -79,7 +79,7 @@ function AnimatedNumber({ value }: { value: string }) {
 		}
 
 		requestAnimationFrame(update);
-	}, [inView, parsed]);
+	}, [inView, value]);
 
 	if (!parsed) {
 		return <span>{value}</span>;

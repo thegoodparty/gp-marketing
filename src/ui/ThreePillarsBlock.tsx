@@ -17,16 +17,16 @@ const pillarStyles = tv({
 	variants: {
 		color: {
 			red: {
-				card: 'bg-gradient-to-b from-[rgba(224,22,43,0.04)] to-transparent border-[rgba(224,22,43,0.15)]',
-				label: 'text-[#E0162B]',
+				card: 'bg-gradient-to-b from-goodparty-red/[0.04] to-transparent border-goodparty-red/15',
+				label: 'text-goodparty-red',
 			},
 			blue: {
-				card: 'bg-gradient-to-b from-[rgba(0,82,165,0.04)] to-transparent border-[rgba(0,82,165,0.15)]',
-				label: 'text-[#0052A5]',
+				card: 'bg-gradient-to-b from-goodparty-blue/[0.04] to-transparent border-goodparty-blue/15',
+				label: 'text-goodparty-blue',
 			},
 			gold: {
-				card: 'bg-gradient-to-b from-[rgba(232,170,26,0.04)] to-transparent border-[rgba(232,170,26,0.15)]',
-				label: 'text-[#E8AA1A]',
+				card: 'bg-gradient-to-b from-goodparty-gold/[0.04] to-transparent border-goodparty-gold/15',
+				label: 'text-goodparty-gold',
 			},
 		},
 	},

@@ -21,7 +21,7 @@ const styles = tv({
 			blue: 'bg-blue-100',
 			lavender: 'bg-lavender-100',
 			midnight:
-				'bg-midnight-900 text-white relative overflow-hidden border border-white/10 transition-all duration-300 hover:-translate-y-1 hover:border-[#E8AA1A]/30',
+				'bg-midnight-900 text-white relative overflow-hidden border border-white/10 transition-all duration-300 hover:-translate-y-1 hover:border-goodparty-gold/30',
 			cream: 'bg-goodparty-cream',
 			white: 'bg-white',
 		},
@@ -61,7 +61,7 @@ export function TestimonialCard(props: TestimonialCardProps) {
 			)}
 			<div className='flex flex-col gap-4'>
 				{isMidnight && props.avatar ? (
-					<div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#E0162B] to-[#0052A5] flex items-center justify-center text-3xl mb-5">
+					<div className="w-16 h-16 rounded-full bg-gradient-to-br from-goodparty-red to-goodparty-blue flex items-center justify-center text-3xl mb-5">
 						{props.avatar}
 					</div>
 				) : !isMidnight ? (

@@ -1,6 +1,6 @@
 #!/usr/bin/env npx tsx
 /**
- * Static sitemap generation. Fetches from GP API and Election API, writes XML to public/.
+ * Static sitemap generation. Fetches from Sanity CMS and Election API, writes XML to public/.
  * Usage: npx tsx scripts/generate-sitemaps.ts [--main-only] [--candidates-only] [--validate] [--redirect-handling remove|replace|keep] [--max-redirects N] [--no-follow-redirects]
  */
 
@@ -9,27 +9,17 @@ import { join } from 'node:path';
 import { convertToXML, generateRootIndex, type SitemapEntry, type SitemapIndexEntry } from './lib/xml';
 import {
 	fetchElectionData,
-	fetchGpContent,
 	formatLastmod,
 	getAppBase,
 	splitUrlsIntoChunks,
 	US_STATE_CODES,
 	writeSitemapFile,
-	slugify,
 } from './lib/sitemap-helpers';
+import { scriptSanityClient } from './lib/sanity-client';
 
 const OUTPUT_DIR = join(process.cwd(), 'public');
 const SITEMAPS_DIR = join(OUTPUT_DIR, 'sitemaps');
 const REPORT_DIR = join(process.cwd(), '.reports', 'sitemaps');
-
-const STATIC_ROUTES = [
-	{ path: '/', priority: 1.0, changefreq: 'monthly' as const },
-	{ path: '/about', priority: 1.0, changefreq: 'monthly' as const },
-	{ path: '/elections', priority: 1.0, changefreq: 'monthly' as const },
-	{ path: '/blog', priority: 1.0, changefreq: 'monthly' as const },
-	{ path: '/faqs', priority: 1.0, changefreq: 'monthly' as const },
-	{ path: '/contact', priority: 1.0, changefreq: 'monthly' as const },
-];
 
 interface CliArgs {
 	mainOnly: boolean;
@@ -83,56 +73,81 @@ function toEntry(path: string, priority: number, changefreq: string): SitemapEnt
 }
 
 async function fetchMainContentEntries(): Promise<SitemapEntry[]> {
+	const base = getAppBase();
 	const entries: SitemapEntry[] = [];
+	const lastmod = formatLastmod();
 
-	// Static routes
-	for (const r of STATIC_ROUTES) {
-		entries.push(toEntry(r.path, r.priority, r.changefreq));
+	// Singleton pages (home, blog index, contact, glossary index)
+	const singletons = await scriptSanityClient.fetch<{
+		home: string | null;
+		blog: string | null;
+		contact: string | null;
+		glossary: string | null;
+	}>(
+		`{
+			"home": *[_type=="goodpartyOrg_home"][0]._id,
+			"blog": *[_type=="goodpartyOrg_allArticles"][0]._id,
+			"contact": *[_type=="goodpartyOrg_contact"][0]._id,
+			"glossary": *[_type=="goodpartyOrg_glossary"][0]._id
+		}`,
+	);
+	if (singletons.home) entries.push(toEntry('/', 1.0, 'monthly'));
+	if (singletons.blog) entries.push(toEntry('/blog', 1.0, 'monthly'));
+	if (singletons.contact) entries.push(toEntry('/contact', 1.0, 'monthly'));
+	if (singletons.glossary) entries.push(toEntry('/political-terms', 1.0, 'monthly'));
+
+	// Landing pages + policies (includes elections, candidates, profile)
+	const landingAndPolicySlugs = await scriptSanityClient.fetch<Array<{ slug: string | null }>>(
+		`*[_type in ["goodpartyOrg_landingPages","policy"]][]{"slug": select(_type == "goodpartyOrg_landingPages" => detailPageOverviewNoHero.field_slug, _type == "policy" => policyOverview.field_slug)}`,
+	);
+	for (const { slug } of landingAndPolicySlugs) {
+		if (slug) entries.push(toEntry(`/${slug}`, 1.0, 'monthly'));
 	}
 
-	// Blog articles
-	const blogArticles = await fetchGpContent<{ slug?: string; updatedAt?: string; section?: { slug?: string } }>(
-		'v1/content/type/blogArticle',
+	// Articles
+	const articles = await scriptSanityClient.fetch<Array<{ slug: string | null; updatedAt?: string }>>(
+		`*[_type == "article"][]{"slug": editorialOverview.field_slug, "updatedAt": editorialOverview.field_lastUpdated}`,
 	);
-	for (const a of blogArticles) {
+	for (const a of articles) {
 		if (a.slug) {
 			entries.push({
-				loc: `${getAppBase()}/blog/article/${a.slug}`,
-				lastmod: a.updatedAt ? a.updatedAt.slice(0, 10) : formatLastmod(),
+				loc: `${base}/blog/article/${a.slug}`,
+				lastmod: a.updatedAt ? a.updatedAt.slice(0, 10) : lastmod,
 				changefreq: 'monthly',
 				priority: 0.7,
 			});
 		}
 	}
 
-	// Blog sections (from article data)
-	const sectionSlugs = new Set<string>();
-	for (const a of blogArticles) {
-		const slug = a.section?.slug ?? (a as { sectionSlug?: string }).sectionSlug;
-		if (slug) sectionSlugs.add(slug);
-	}
-	for (const slug of sectionSlugs) {
-		entries.push(toEntry(`/blog/section/${slug}`, 0.7, 'weekly'));
+	// Categories (blog sections)
+	const categorySlugs = await scriptSanityClient.fetch<Array<string | null>>(
+		`*[_type == "categories"][].tagOverview.field_slug`,
+	);
+	for (const slug of categorySlugs) {
+		if (slug) entries.push(toEntry(`/blog/section/${slug}`, 0.7, 'weekly'));
 	}
 
-	// FAQ articles
-	const faqArticles = await fetchGpContent<{ title?: string; slug?: string }>('v1/content/type/faqArticle');
-	for (const f of faqArticles) {
-		const slug = f.slug ?? (f.title ? slugify(f.title) : null);
-		if (slug) entries.push(toEntry(`/faqs/${slug}`, 0.7, 'monthly'));
+	// Topics (blog tags)
+	const topicSlugs = await scriptSanityClient.fetch<Array<string | null>>(
+		`*[_type == "topics"][].tagOverview.field_slug`,
+	);
+	for (const slug of topicSlugs) {
+		if (slug) entries.push(toEntry(`/blog/tag/${slug}`, 0.7, 'weekly'));
 	}
 
-	// Glossary terms
-	const glossaryItems = await fetchGpContent<{ slug?: string }>('v1/content/type/glossaryItem');
-	for (const g of glossaryItems) {
-		if (g.slug) entries.push(toEntry(`/political-terms/${g.slug}`, 0.6, 'monthly'));
-	}
-
-	// Fallback: try by-slug endpoint if main returns empty (some APIs structure differently)
-	if (glossaryItems.length === 0) {
-		const bySlug = await fetchGpContent<{ slug?: string }>('v1/content/type/glossaryItem/by-slug');
-		for (const g of bySlug) {
-			if (g.slug) entries.push(toEntry(`/political-terms/${g.slug}`, 0.6, 'monthly'));
+	// Glossary terms + letter index pages
+	const glossaryTerms = await scriptSanityClient.fetch<
+		Array<{ _id: string; title: string; slug: string | null }>
+	>(
+		`*[_type == "glossary"][]{_id, "title": glossaryTermOverview.field_glossaryTerm, "slug": glossaryTermOverview.field_slug}`,
+	);
+	const seenLetters = new Set<string>();
+	for (const t of glossaryTerms) {
+		if (t.slug) entries.push(toEntry(`/political-terms/${t.slug}`, 0.6, 'monthly'));
+		const letter = t.title?.charAt(0)?.toLowerCase();
+		if (letter && !seenLetters.has(letter)) {
+			seenLetters.add(letter);
+			entries.push(toEntry(`/political-terms/${letter}`, 0.6, 'monthly'));
 		}
 	}
 
@@ -285,7 +300,7 @@ async function main(): Promise<void> {
 		durationMs,
 		environment: {
 			appBase: base,
-			gpApiBase: process.env['NEXT_PUBLIC_API_BASE'] ?? 'https://gp-api.goodparty.org',
+			sanityProjectId: process.env['NEXT_PUBLIC_SANITY_PROJECT_ID'] ?? '3rbseux7',
 			electionApiBase: process.env['NEXT_PUBLIC_ELECTION_API_BASE'] ?? process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org',
 		},
 		stats: {

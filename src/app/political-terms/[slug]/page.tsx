@@ -128,7 +128,7 @@ export default async function Page(props: any) {
 		cta = hero?.cta as typeof page.glossaryTermCta;
 	}
 
-	const letter = slug[0]?.toLowerCase() ?? '';
+	const letter = page.glossaryTermOverview?.field_glossaryTerm?.charAt(0).toLowerCase() ?? '';
 	const breadcrumbs = [
 		{ href: '/political-terms', label: 'Political Terms' },
 		...(letter ? [{ href: `/political-terms/${letter}`, label: letter.toUpperCase() }] : []),

@@ -13,11 +13,11 @@ import { GlossaryList } from '~/ui/GlossaryList';
 import { GlossaryHero } from '~/ui/GlossaryHero';
 import { CTAImageBlock } from '~/ui/CTAImageBlock';
 import { transformButtons, type ButtonType } from '~/lib/buttonTransformer';
-import type { GlossaryTermCta } from 'sanity.types';
 import { toPlainText } from '@portabletext/toolkit';
 import { client } from '~/lib/client';
 import { cn } from '~/ui/_lib/utils';
 import { resolveComponentColor } from '~/ui/_lib/resolveComponentColor';
+import { BreadcrumbBlock } from '~/ui/BreadcrumbBlock';
 
 export async function generateStaticParams() {
 	const entries = await client.fetch<Array<{ _id: string; title: string; slug: string }>>(
@@ -125,12 +125,28 @@ export default async function Page(props: any) {
 			query: glossaryHeroGroq,
 			tags: ['glossary'],
 		});
-		cta = hero?.cta as unknown as GlossaryTermCta;
+		cta = hero?.cta as typeof page.glossaryTermCta;
 	}
 
+	const letter = page.glossaryTermOverview?.field_glossaryTerm?.charAt(0).toLowerCase() ?? '';
+	const breadcrumbs = [
+		{ href: '/political-terms', label: 'Political Terms' },
+		...(letter ? [{ href: `/political-terms/${letter}`, label: letter.toUpperCase() }] : []),
+		{
+			href: page.href ?? `/political-terms/${slug}`,
+			label: page.glossaryTermOverview?.field_glossaryTerm ?? '',
+		},
+	];
+
 	return (
-		<div className='bg-goodparty-cream'>
-			<Container size='xl' className='py-(--container-padding) flex flex-col gap-6'>
+		<>
+			<BreadcrumbBlock
+				backgroundColor='cream'
+				breadcrumbs={breadcrumbs}
+				className='!pt-5 !pb-3'
+			/>
+			<div className='bg-goodparty-cream'>
+				<Container size='xl' className='pt-4 pb-(--container-padding) flex flex-col gap-6'>
 				<Text as='h1' styleType='heading-xl'>
 					{`What is ${page.glossaryTermOverview?.field_glossaryTerm}?`}
 				</Text>
@@ -166,7 +182,8 @@ export default async function Page(props: any) {
 					mediaAlignment='right'
 				/>
 			)}
-		</div>
+			</div>
+		</>
 	);
 }
 

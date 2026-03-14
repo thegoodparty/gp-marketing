@@ -22,7 +22,7 @@ const ELECTION_API_BASE = process.env['NEXT_PUBLIC_ELECTION_API_BASE'] ?? proces
 export function getAppBase(): string {
 	const explicit = process.env['NEXT_PUBLIC_APP_BASE'] ?? process.env['NEXT_PUBLIC_SITE_URL'];
 	if (explicit) {
-		const url = explicit.replace(/\/$/, '');
+		const url = explicit.trim().replace(/\/$/, '');
 		return url.startsWith('http') ? url : `https://${url}`;
 	}
 	if (process.env['VERCEL_ENV'] === 'preview' && process.env['VERCEL_URL']) {

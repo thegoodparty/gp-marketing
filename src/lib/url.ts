@@ -11,7 +11,8 @@ export const DEFAULT_SHARE_IMAGE = 'https://assets.goodparty.org/gp-share-2025.p
 export function getBaseUrl(): string {
 	const siteUrl = process.env['NEXT_PUBLIC_SITE_URL'];
 	if (siteUrl) {
-		const url = siteUrl.startsWith('http') ? siteUrl : `https://${siteUrl}`;
+		const trimmed = siteUrl.trim();
+		const url = trimmed.startsWith('http') ? trimmed : `https://${trimmed}`;
 		return url.replace(/\/$/, '');
 	}
 	if (process.env['VERCEL_ENV'] === 'preview' && process.env['VERCEL_URL']) {

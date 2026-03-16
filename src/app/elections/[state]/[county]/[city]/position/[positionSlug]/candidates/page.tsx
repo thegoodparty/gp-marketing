@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	getCandidacies,
@@ -14,7 +14,7 @@ import {
 	formatFilingPeriodFromRace,
 	getStateName,
 	mapCandidacyToCard,
-	stripCountySuffix,
+	resolveLocalityName,
 } from '~/lib/electionsHelpers';
 import { CandidatesPageContent } from '~/ui/CandidatesPageContent';
 
@@ -35,18 +35,8 @@ export default async function Page({
 		notFound();
 	}
 
-	const raceSlug = buildRaceSlug(state, positionSlug, county, city);
+	const raceSlug = buildRaceSlug(state, positionSlug, city);
 	const race = await getRaceBySlug(raceSlug);
-
-	if (!race && !county.endsWith('-county')) {
-		const retrySlug = buildRaceSlug(state, positionSlug, `${county}-county`, city);
-		const retryRace = await getRaceBySlug(retrySlug);
-		if (retryRace) {
-			redirect(
-				`/elections/${state.toLowerCase()}/${county}-county/${city.toLowerCase()}/position/${positionSlug}/candidates`,
-			);
-		}
-	}
 
 	if (!race) {
 		notFound();
@@ -57,8 +47,7 @@ export default async function Page({
 
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
-	const countyNameShort = countyPlace ? stripCountySuffix(countyPlace.name) : county;
-	const countyName = countyPlace?.name ?? `${countyNameShort} County`;
+	const countyName = resolveLocalityName(countyPlace, race.Place, countySlug);
 
 	const cityPlaces = await getCityPlacesByCounty({ state: stateCode, countySlug });
 	const cityPlace = cityPlaces.find(
@@ -121,13 +110,12 @@ export async function generateMetadata({
 	const stateCode = state.toUpperCase();
 	if (!isValidStateCode(stateCode)) return {};
 	const stateName = getStateName(stateCode);
-	const raceSlug = buildRaceSlug(state, positionSlug, county, city);
+	const raceSlug = buildRaceSlug(state, positionSlug, city);
 	const race = await getRaceBySlug(raceSlug);
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
-	const countyName = countyPlace ? stripCountySuffix(countyPlace.name) : county;
-	const countyDisplayName = countyPlace?.name ?? `${countyName} County`;
+	const countyDisplayName = resolveLocalityName(countyPlace, race?.Place, countySlug);
 	const cityPlaces = await getCityPlacesByCounty({ state: stateCode, countySlug });
 	const cityPlace = cityPlaces.find(
 		c => c.slug.toLowerCase() === `${state.toLowerCase()}/${city.toLowerCase()}`,

@@ -1,8 +1,22 @@
 import { US_STATES } from '~/constants/usStates';
-import type { CandidacyItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
+import type { CandidacyItem, PlaceItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
 import type { FactsCardProps } from '~/ui/FactsCard';
 
 const COUNTY_EQUIV_SUFFIX_RE = /\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio)$/i;
+
+/** Resolve display name for the [county] route param (county, city, or district). */
+export function resolveLocalityName(
+	countyPlace: PlaceItem | undefined,
+	racePlace: PlaceWithFacts | undefined,
+	fallbackSlug: string,
+): string {
+	if (countyPlace) return countyPlace.name;
+	if (racePlace?.name) return racePlace.name;
+	const last = fallbackSlug.split('/').pop();
+	return last
+		? last.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+		: fallbackSlug;
+}
 
 /** Strip county-equivalent suffix from a place name: "Jefferson Parish" -> "Jefferson" */
 export function stripCountySuffix(name: string): string {

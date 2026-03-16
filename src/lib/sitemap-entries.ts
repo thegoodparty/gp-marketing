@@ -138,6 +138,11 @@ export async function fetchMainSitemapEntries(baseUrl: string): Promise<Metadata
 
 /**
  * Fetches state election sitemap entries (places + races) from Election API.
+ *
+ * City-level races are excluded because the API slug (state/city/position) doesn't
+ * include the county, so we can't construct the correct 4-level app URL
+ * (/elections/[state]/[county]/[city]/position/[positionSlug]).
+ * City positions are still navigable via city listing pages.
  */
 export async function fetchStateElectionSitemapEntries(
 	stateCode: string,
@@ -147,15 +152,26 @@ export async function fetchStateElectionSitemapEntries(
 	const code = stateCode.toUpperCase();
 
 	const [places, races] = await Promise.all([
-		fetchElectionJson<{ slug?: string }>('v1/places', { state: code, placeColumns: 'slug' }),
-		fetchElectionJson<{ slug?: string }>('v1/races', { state: code, raceColumns: 'slug' }),
+		fetchElectionJson<{ slug?: string; mtfcc?: string }>('v1/places', {
+			state: code,
+			placeColumns: 'slug,mtfcc',
+		}),
+		fetchElectionJson<{ slug?: string; positionLevel?: string }>('v1/races', {
+			state: code,
+			raceColumns: 'slug,positionLevel',
+		}),
 	]);
 
 	for (const p of places) {
-		if (p.slug) entries.push(toEntry(baseUrl, `/elections/${p.slug}`, 0.7, 'weekly'));
+		if (!p.slug) continue;
+		const mtfcc = p.mtfcc ?? '';
+		if (mtfcc === 'G4020' || mtfcc.startsWith('G54')) {
+			entries.push(toEntry(baseUrl, `/elections/${p.slug}`, 0.7, 'weekly'));
+		}
 	}
 	for (const r of races) {
 		if (!r.slug) continue;
+		if (r.positionLevel?.toUpperCase() === 'CITY') continue;
 		const parts = r.slug.split('/');
 		const positionSlug = parts.pop();
 		if (!positionSlug) continue;

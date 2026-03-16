@@ -158,6 +158,7 @@ storybook-static/
 # Sitemap reports (validation and generation)
 .reports/sitemaps/validation-report-*.json
 .reports/sitemaps/generation-report-*.json
+.reports/sitemaps/election-page-report-*.json
 
 # Generated static sitemaps
 public/sitemap.xml

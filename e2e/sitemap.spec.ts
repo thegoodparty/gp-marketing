@@ -41,12 +41,17 @@ test.describe('Sitemap', () => {
 		}
 	});
 
-	test('state and candidate sitemaps are present in index', async ({ request }) => {
+	test('child sitemaps use /sitemap/[id].xml format', async ({ request }) => {
 		const res = await request.get(`${BASE}/sitemap.xml`);
 		expect(res.status()).toBe(200);
 		const xml = await res.text();
-		expect(xml).toMatch(/\/sitemaps\/state\/[a-z]{2}\/sitemap\//);
-		expect(xml).toMatch(/\/sitemaps\/candidates\/[a-z]{2}\/sitemap\//);
+		const childLocs = xml.match(/<loc>([^<]+)<\/loc>/g) ?? [];
+		const childUrls = childLocs.map((m) => m.replace(/<\/?loc>/g, '').trim()).filter((u) => u.includes('/sitemap/') && u.endsWith('.xml'));
+		expect(childUrls.length).toBeGreaterThan(0);
+		for (const url of childUrls) {
+			const pathname = new URL(url).pathname;
+			expect(pathname).toMatch(/\/sitemap\/\d+\.xml$/);
+		}
 	});
 
 	test('all lastmod dates are valid and within last year', async ({ request }) => {
@@ -75,12 +80,11 @@ test.describe('Sitemap', () => {
 		while ((match = locRegex.exec(xml)) !== null) {
 			urls.push(match[1]!.trim());
 		}
-		const childUrls = urls.filter((u) => u.includes('/sitemaps/'));
-		expect(childUrls.length, 'Expected at least one child sitemap URL containing /sitemaps/').toBeGreaterThan(0);
+		const childUrls = urls.filter((u) => /\/sitemap\/\d+\.xml$/.test(new URL(u).pathname));
+		expect(childUrls.length, 'Expected at least one child sitemap URL matching /sitemap/[id].xml').toBeGreaterThan(0);
 		const sample = childUrls.slice(0, 3);
 		for (const url of sample) {
-			const pathname = url.startsWith('http') ? new URL(url).pathname : url;
-			const urlToFetch = `${BASE}${pathname.startsWith('/') ? pathname : `/${pathname}`}`;
+			const urlToFetch = url.startsWith('http') ? url : `${BASE}${url.startsWith('/') ? url : `/${url}`}`;
 			const childRes = await request.get(urlToFetch);
 			expect(childRes.status(), `Expected 200 for ${urlToFetch}`).toBe(200);
 			const ct = childRes.headers()['content-type'] ?? '';

@@ -7,15 +7,13 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { convertToXML, generateRootIndex, type SitemapEntry, type SitemapIndexEntry } from './lib/xml';
+import { formatLastmod, getAppBase, splitUrlsIntoChunks, writeSitemapFile } from './lib/sitemap-helpers';
 import {
-	fetchElectionData,
-	formatLastmod,
-	getAppBase,
-	splitUrlsIntoChunks,
+	fetchMainSitemapEntries,
+	fetchStateElectionSitemapEntries,
+	fetchCandidateSitemapEntries,
 	US_STATE_CODES,
-	writeSitemapFile,
-} from './lib/sitemap-helpers';
-import { scriptSanityClient } from './lib/sanity-client';
+} from '../src/lib/sitemap-entries';
 
 const OUTPUT_DIR = join(process.cwd(), 'public');
 const SITEMAPS_DIR = join(OUTPUT_DIR, 'sitemaps');
@@ -62,133 +60,37 @@ function parseArgs(): CliArgs {
 	return result;
 }
 
-function toEntry(path: string, priority: number, changefreq: string): SitemapEntry {
-	const base = getAppBase();
+function toSitemapEntry(entry: { url: string; lastModified?: string | Date; changeFrequency?: string; priority?: number }): SitemapEntry {
+	const lastmod =
+		typeof entry.lastModified === 'string'
+			? entry.lastModified.slice(0, 10)
+			: entry.lastModified instanceof Date
+				? entry.lastModified.toISOString().slice(0, 10)
+				: formatLastmod();
 	return {
-		loc: `${base}${path.startsWith('/') ? path : `/${path}`}`,
-		lastmod: formatLastmod(),
-		changefreq,
-		priority,
+		loc: entry.url,
+		lastmod,
+		changefreq: entry.changeFrequency ?? 'monthly',
+		priority: entry.priority ?? 0.5,
 	};
 }
 
 async function fetchMainContentEntries(): Promise<SitemapEntry[]> {
 	const base = getAppBase();
-	const entries: SitemapEntry[] = [];
-	const lastmod = formatLastmod();
-
-	// Singleton pages (home, blog index, contact, glossary index)
-	const singletons = await scriptSanityClient.fetch<{
-		home: string | null;
-		blog: string | null;
-		contact: string | null;
-		glossary: string | null;
-	}>(
-		`{
-			"home": *[_type=="goodpartyOrg_home"][0]._id,
-			"blog": *[_type=="goodpartyOrg_allArticles"][0]._id,
-			"contact": *[_type=="goodpartyOrg_contact"][0]._id,
-			"glossary": *[_type=="goodpartyOrg_glossary"][0]._id
-		}`,
-	);
-	if (singletons.home) entries.push(toEntry('/', 1.0, 'monthly'));
-	if (singletons.blog) entries.push(toEntry('/blog', 1.0, 'monthly'));
-	if (singletons.contact) entries.push(toEntry('/contact', 1.0, 'monthly'));
-	if (singletons.glossary) entries.push(toEntry('/political-terms', 1.0, 'monthly'));
-
-	// Landing pages + policies (includes elections, candidates, profile)
-	const landingAndPolicySlugs = await scriptSanityClient.fetch<Array<{ slug: string | null }>>(
-		`*[_type in ["goodpartyOrg_landingPages","policy"]][]{"slug": select(_type == "goodpartyOrg_landingPages" => detailPageOverviewNoHero.field_slug, _type == "policy" => policyOverview.field_slug)}`,
-	);
-	for (const { slug } of landingAndPolicySlugs) {
-		if (slug) entries.push(toEntry(`/${slug}`, 1.0, 'monthly'));
-	}
-
-	// Articles
-	const articles = await scriptSanityClient.fetch<Array<{ slug: string | null; updatedAt?: string }>>(
-		`*[_type == "article"][]{"slug": editorialOverview.field_slug, "updatedAt": editorialOverview.field_lastUpdated}`,
-	);
-	for (const a of articles) {
-		if (a.slug) {
-			entries.push({
-				loc: `${base}/blog/article/${a.slug}`,
-				lastmod: a.updatedAt ? a.updatedAt.slice(0, 10) : lastmod,
-				changefreq: 'monthly',
-				priority: 0.7,
-			});
-		}
-	}
-
-	// Categories (blog sections)
-	const categorySlugs = await scriptSanityClient.fetch<Array<string | null>>(
-		`*[_type == "categories"][].tagOverview.field_slug`,
-	);
-	for (const slug of categorySlugs) {
-		if (slug) entries.push(toEntry(`/blog/section/${slug}`, 0.7, 'weekly'));
-	}
-
-	// Topics (blog tags)
-	const topicSlugs = await scriptSanityClient.fetch<Array<string | null>>(
-		`*[_type == "topics"][].tagOverview.field_slug`,
-	);
-	for (const slug of topicSlugs) {
-		if (slug) entries.push(toEntry(`/blog/tag/${slug}`, 0.7, 'weekly'));
-	}
-
-	// Glossary terms + letter index pages
-	const glossaryTerms = await scriptSanityClient.fetch<
-		Array<{ _id: string; title: string; slug: string | null }>
-	>(
-		`*[_type == "glossary"][]{_id, "title": glossaryTermOverview.field_glossaryTerm, "slug": glossaryTermOverview.field_slug}`,
-	);
-	const seenLetters = new Set<string>();
-	for (const t of glossaryTerms) {
-		if (t.slug) entries.push(toEntry(`/political-terms/${t.slug}`, 0.6, 'monthly'));
-		const letter = t.title?.charAt(0)?.toLowerCase();
-		if (letter && !seenLetters.has(letter)) {
-			seenLetters.add(letter);
-			entries.push(toEntry(`/political-terms/${letter}`, 0.6, 'monthly'));
-		}
-	}
-
-	return entries;
+	const entries = await fetchMainSitemapEntries(base);
+	return entries.map(toSitemapEntry);
 }
 
 async function fetchStateElectionEntries(stateCode: string): Promise<SitemapEntry[]> {
-	const entries: SitemapEntry[] = [];
-	const code = stateCode.toUpperCase();
-	const stateLower = code.toLowerCase();
-
-	const places = await fetchElectionData<{ slug?: string }>('v1/places', {
-		state: code,
-		placeColumns: 'slug',
-	});
-	for (const p of places) {
-		if (p.slug) entries.push(toEntry(`/elections/${p.slug}`, 0.7, 'weekly'));
-	}
-
-	const races = await fetchElectionData<{ slug?: string }>('v1/races', {
-		state: code,
-		raceColumns: 'slug',
-	});
-	for (const r of races) {
-		if (r.slug) entries.push(toEntry(`/elections/${stateLower}/position/${r.slug}`, 0.7, 'weekly'));
-	}
-
-	return entries;
+	const base = getAppBase();
+	const entries = await fetchStateElectionSitemapEntries(stateCode, base);
+	return entries.map(toSitemapEntry);
 }
 
 async function fetchCandidateEntries(stateCode: string): Promise<SitemapEntry[]> {
-	const code = stateCode.toUpperCase();
-	const candidacies = await fetchElectionData<{ slug?: string }>('v1/candidacies', {
-		state: code,
-		columns: 'slug',
-	});
-	const entries: SitemapEntry[] = [];
-	for (const c of candidacies) {
-		if (c.slug) entries.push(toEntry(`/candidate/${c.slug}`, 0.7, 'weekly'));
-	}
-	return entries;
+	const base = getAppBase();
+	const entries = await fetchCandidateSitemapEntries(stateCode, base);
+	return entries.map(toSitemapEntry);
 }
 
 async function runValidation(

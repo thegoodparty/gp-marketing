@@ -8,7 +8,7 @@
   "scripts": {
     "clean": "rm -rf ./node_modules",
     "dev": "next dev --turbopack -p 3009",
-    "prebuild": "bun run sanity:deploy && rm -rf dist && bun run sitemap:generate",
+    "prebuild": "bun run sanity:deploy && rm -rf dist",
     "build": "next build --turbopack",
     "lint": "next lint",
     "start": "next start",
@@ -24,7 +24,8 @@
     "sitemap:generate": "bun run scripts/generate-sitemaps.ts",
     "sitemap:validate": "bun run scripts/validate-sitemap-urls.ts",
     "sitemap:prune": "bun run scripts/prune-invalid-urls.ts",
-    "test:e2e:sitemap": "playwright test e2e/sitemap.spec.ts"
+    "test:e2e:sitemap": "playwright test e2e/sitemap.spec.ts",
+    "lint:sitemap": "next lint --file src/app/api/sitemap-index/route.ts --file src/app/sitemap.ts --file src/lib/sitemap-entries.ts"
   },
   "dependencies": {
     "@amplitude/experiment-js-client": "^1.20.3",

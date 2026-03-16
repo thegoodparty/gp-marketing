@@ -2,6 +2,9 @@ import { breakpoints } from './src/ui/_lib/breakpoints';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+	async rewrites() {
+		return [{ source: '/sitemap.xml', destination: '/api/sitemap-index' }];
+	},
 	devIndicators: false,
 	swcMinify: true,
 	reactStrictMode: true,

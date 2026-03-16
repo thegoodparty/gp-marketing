@@ -11,10 +11,40 @@ export const US_STATE_CODES = [
 	'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY',
 ] as const;
 
+/** Single source of truth for sitemap IDs. Used by generateSitemaps() and sitemap-index route. */
+export function getSitemapIds(): { id: number }[] {
+	const ids: { id: number }[] = [{ id: 0 }];
+	for (let i = 0; i < US_STATE_CODES.length; i++) {
+		ids.push({ id: i + 1 });
+		ids.push({ id: i + 1 + US_STATE_CODES.length });
+	}
+	return ids;
+}
+
 const ELECTION_API_BASE =
 	process.env['NEXT_PUBLIC_ELECTION_API_BASE'] ?? process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
 
 const CACHE_1H: RequestInit = { next: { revalidate: 3600 } };
+
+const COUNTY_SUFFIX_RE =
+	/\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio)$/i;
+
+function normalizeName(name: string): string {
+	return name.replace(/[.\s''\-]/g, '').toLowerCase();
+}
+
+function stripCountySuffix(name: string): string {
+	return name.replace(COUNTY_SUFFIX_RE, '') || name;
+}
+
+function dedupeByUrl(entries: MetadataRoute.Sitemap): MetadataRoute.Sitemap {
+	const seen = new Set<string>();
+	return entries.filter((e) => {
+		if (seen.has(e.url)) return false;
+		seen.add(e.url);
+		return true;
+	});
+}
 
 function toEntry(
 	baseUrl: string,
@@ -36,7 +66,10 @@ async function fetchElectionJson<T>(path: string, params: Record<string, string>
 	const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}?${search}`;
 	try {
 		const res = await fetch(url, CACHE_1H);
-		if (!res.ok) return [];
+		if (!res.ok) {
+			console.error(`[sitemap] Election API ${res.status} ${url}`);
+			return [];
+		}
 		const data: unknown = await res.json();
 		if (Array.isArray(data)) return data as T[];
 		if (data && typeof data === 'object' && 'data' in data) {
@@ -44,7 +77,8 @@ async function fetchElectionJson<T>(path: string, params: Record<string, string>
 			if (Array.isArray(inner)) return inner as T[];
 		}
 		return [];
-	} catch {
+	} catch (err) {
+		console.error('[sitemap] Election API fetch failed', url, err instanceof Error ? err.message : String(err));
 		return [];
 	}
 }
@@ -133,16 +167,15 @@ export async function fetchMainSitemapEntries(baseUrl: string): Promise<Metadata
 		}
 	}
 
-	return entries;
+	return dedupeByUrl(entries);
 }
 
 /**
  * Fetches state election sitemap entries (places + races) from Election API.
  *
- * City-level races are excluded because the API slug (state/city/position) doesn't
- * include the county, so we can't construct the correct 4-level app URL
- * (/elections/[state]/[county]/[city]/position/[positionSlug]).
- * City positions are still navigable via city listing pages.
+ * City-level races and city listing pages are included by fetching city places
+ * (mtfcc G4110) with countyName, building a citySlug->countySlug lookup, and
+ * emitting correct 4-level URLs (/elections/[state]/[county]/[city]/position/[positionSlug]).
  */
 export async function fetchStateElectionSitemapEntries(
 	stateCode: string,
@@ -151,16 +184,37 @@ export async function fetchStateElectionSitemapEntries(
 	const entries: MetadataRoute.Sitemap = [];
 	const code = stateCode.toUpperCase();
 
-	const [places, races] = await Promise.all([
-		fetchElectionJson<{ slug?: string; mtfcc?: string }>('v1/places', {
+	const [places, cities, races] = await Promise.all([
+		fetchElectionJson<{ slug?: string; mtfcc?: string; name?: string }>('v1/places', {
 			state: code,
-			placeColumns: 'slug,mtfcc',
+			placeColumns: 'slug,mtfcc,name',
+		}),
+		fetchElectionJson<{ slug?: string; countyName?: string }>('v1/places', {
+			state: code,
+			mtfcc: 'G4110',
+			placeColumns: 'slug,countyName',
 		}),
 		fetchElectionJson<{ slug?: string; positionLevel?: string }>('v1/races', {
 			state: code,
 			raceColumns: 'slug,positionLevel',
 		}),
 	]);
+
+	const countyNameToSlug = new Map<string, string>();
+	for (const p of places) {
+		if (p.slug && p.name && (p.mtfcc ?? '') === 'G4020') {
+			const normalized = normalizeName(stripCountySuffix(p.name));
+			countyNameToSlug.set(normalized, p.slug);
+		}
+	}
+
+	const citySlugToCountySlug = new Map<string, string>();
+	for (const c of cities) {
+		if (c.slug && c.countyName) {
+			const countySlug = countyNameToSlug.get(normalizeName(c.countyName));
+			if (countySlug) citySlugToCountySlug.set(c.slug, countySlug);
+		}
+	}
 
 	for (const p of places) {
 		if (!p.slug) continue;
@@ -169,17 +223,38 @@ export async function fetchStateElectionSitemapEntries(
 			entries.push(toEntry(baseUrl, `/elections/${p.slug}`, 0.7, 'weekly'));
 		}
 	}
+
+	for (const c of cities) {
+		const countySlug = citySlugToCountySlug.get(c.slug ?? '');
+		if (!countySlug || !c.slug) continue;
+		const citySegment = c.slug.split('/').pop();
+		if (citySegment) {
+			entries.push(toEntry(baseUrl, `/elections/${countySlug}/${citySegment}`, 0.7, 'weekly'));
+		}
+	}
+
 	for (const r of races) {
 		if (!r.slug) continue;
-		if (r.positionLevel?.toUpperCase() === 'CITY') continue;
 		const parts = r.slug.split('/');
 		const positionSlug = parts.pop();
 		if (!positionSlug) continue;
-		const prefix = parts.join('/');
-		entries.push(toEntry(baseUrl, `/elections/${prefix}/position/${positionSlug}`, 0.7, 'weekly'));
+
+		if (r.positionLevel?.toUpperCase() === 'CITY') {
+			const citySlug = parts.join('/');
+			const countySlug = citySlugToCountySlug.get(citySlug);
+			if (!countySlug) continue;
+			const citySegment = parts.pop();
+			if (!citySegment) continue;
+			entries.push(
+				toEntry(baseUrl, `/elections/${countySlug}/${citySegment}/position/${positionSlug}`, 0.7, 'weekly'),
+			);
+		} else {
+			const prefix = parts.join('/');
+			entries.push(toEntry(baseUrl, `/elections/${prefix}/position/${positionSlug}`, 0.7, 'weekly'));
+		}
 	}
 
-	return entries;
+	return dedupeByUrl(entries);
 }
 
 /**
@@ -198,5 +273,5 @@ export async function fetchCandidateSitemapEntries(
 	for (const c of candidacies) {
 		if (c.slug) entries.push(toEntry(baseUrl, `/candidate/${c.slug}`, 0.7, 'weekly'));
 	}
-	return entries;
+	return dedupeByUrl(entries);
 }

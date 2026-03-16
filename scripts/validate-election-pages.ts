@@ -198,38 +198,6 @@ async function checkPage(
 	}
 }
 
-async function runWithConcurrency<T, R>(
-	items: T[],
-	concurrency: number,
-	fn: (item: T) => Promise<R>,
-): Promise<R[]> {
-	const results: R[] = [];
-	const executing: Promise<void>[] = [];
-	for (const item of items) {
-		const p = fn(item).then(r => {
-			results.push(r);
-		});
-		executing.push(p);
-		if (executing.length >= concurrency) {
-			await Promise.race(executing);
-			for (let i = executing.length - 1; i >= 0; i--) {
-				const status = await Promise.race(executing.map(e => e.then(() => 'done').catch(() => 'done')));
-				// Remove settled promises
-				const stillPending = executing.filter(e => {
-					let settled = false;
-					e.then(() => { settled = true; }).catch(() => { settled = true; });
-					return !settled;
-				});
-				// Simpler: just await any one to finish
-				break;
-			}
-			// Simpler approach: use a pool
-		}
-	}
-	await Promise.all(executing);
-	return results;
-}
-
 async function runWithPool<T, R>(
 	items: T[],
 	concurrency: number,

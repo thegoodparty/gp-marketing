@@ -5,7 +5,7 @@
 
 import { NextResponse } from 'next/server';
 import { getBaseUrl } from '~/lib/url';
-import { US_STATE_CODES } from '~/lib/sitemap-entries';
+import { getSitemapIds } from '~/lib/sitemap-entries';
 
 const XMLNS = 'http://www.sitemaps.org/schemas/sitemap/0.9';
 
@@ -20,13 +20,13 @@ function escapeXml(s: string): string {
 
 export function GET() {
 	const base = getBaseUrl();
-	const lastmod = new Date().toISOString().slice(0, 10);
+	const lastmod =
+		(process.env['BUILD_TIMESTAMP'] ?? new Date().toISOString()).slice(0, 10);
 
-	const entries: { loc: string; lastmod: string }[] = [{ loc: `${base}/sitemap/0.xml`, lastmod }];
-	for (let i = 0; i < US_STATE_CODES.length; i++) {
-		entries.push({ loc: `${base}/sitemap/${i + 1}.xml`, lastmod });
-		entries.push({ loc: `${base}/sitemap/${i + 1 + US_STATE_CODES.length}.xml`, lastmod });
-	}
+	const entries = getSitemapIds().map(({ id }) => ({
+		loc: `${base}/sitemap/${id}.xml`,
+		lastmod,
+	}));
 
 	const sitemapBlocks = entries.map(
 		(e) =>
@@ -45,7 +45,7 @@ ${sitemapBlocks.join('\n')}
 	return new NextResponse(xml, {
 		headers: {
 			'Content-Type': 'application/xml',
-			'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+			'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
 		},
 	});
 }

@@ -7,7 +7,8 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { convertToXML, generateRootIndex, type SitemapEntry, type SitemapIndexEntry } from './lib/xml';
-import { formatLastmod, getAppBase, splitUrlsIntoChunks, writeSitemapFile } from './lib/sitemap-helpers';
+import { getBaseUrl } from '../src/lib/url';
+import { formatLastmod, splitUrlsIntoChunks, writeSitemapFile } from './lib/sitemap-helpers';
 import {
 	fetchMainSitemapEntries,
 	fetchStateElectionSitemapEntries,
@@ -76,19 +77,19 @@ function toSitemapEntry(entry: { url: string; lastModified?: string | Date; chan
 }
 
 async function fetchMainContentEntries(): Promise<SitemapEntry[]> {
-	const base = getAppBase();
+	const base = getBaseUrl();
 	const entries = await fetchMainSitemapEntries(base);
 	return entries.map(toSitemapEntry);
 }
 
 async function fetchStateElectionEntries(stateCode: string): Promise<SitemapEntry[]> {
-	const base = getAppBase();
+	const base = getBaseUrl();
 	const entries = await fetchStateElectionSitemapEntries(stateCode, base);
 	return entries.map(toSitemapEntry);
 }
 
 async function fetchCandidateEntries(stateCode: string): Promise<SitemapEntry[]> {
-	const base = getAppBase();
+	const base = getBaseUrl();
 	const entries = await fetchCandidateSitemapEntries(stateCode, base);
 	return entries.map(toSitemapEntry);
 }
@@ -104,7 +105,7 @@ async function runValidation(
 async function main(): Promise<void> {
 	const args = parseArgs();
 	const start = Date.now();
-	const base = getAppBase();
+	const base = getBaseUrl();
 
 	console.log(`Generating sitemaps (base: ${base})...`);
 	if (args.mainOnly) console.log('Mode: main-only');

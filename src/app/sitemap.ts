@@ -4,16 +4,12 @@ import {
 	fetchMainSitemapEntries,
 	fetchStateElectionSitemapEntries,
 	fetchCandidateSitemapEntries,
+	getSitemapIds,
 	US_STATE_CODES,
 } from '~/lib/sitemap-entries';
 
 export function generateSitemaps() {
-	const ids: { id: number }[] = [{ id: 0 }];
-	for (let i = 0; i < US_STATE_CODES.length; i++) {
-		ids.push({ id: i + 1 });
-		ids.push({ id: i + 1 + US_STATE_CODES.length });
-	}
-	return ids;
+	return getSitemapIds();
 }
 
 export default async function sitemap({ id }: { id: number }): Promise<MetadataRoute.Sitemap> {

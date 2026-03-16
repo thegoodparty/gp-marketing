@@ -11,18 +11,6 @@ const MAX_BYTES_PER_SITEMAP = 50 * 1024 * 1024; // 50 MB
 const BYTES_PER_ENTRY_ESTIMATE = 180;
 const SPLIT_CHECK_INTERVAL = 1_000;
 
-export function getAppBase(): string {
-	const explicit = process.env['NEXT_PUBLIC_APP_BASE'] ?? process.env['NEXT_PUBLIC_SITE_URL'];
-	if (explicit) {
-		const url = explicit.trim().replace(/\/$/, '');
-		return url.startsWith('http') ? url : `https://${url}`;
-	}
-	if (process.env['VERCEL_ENV'] === 'preview' && process.env['VERCEL_URL']) {
-		return `https://${process.env['VERCEL_URL']}`;
-	}
-	return 'https://goodparty.org';
-}
-
 /**
  * Splits URL entries into chunks respecting 50k URL and 50MB limits.
  * Checks splitting need every 1,000 URLs.

@@ -1,6 +1,7 @@
 #!/usr/bin/env npx tsx
 /**
- * Static sitemap generation. Fetches from Sanity CMS and Election API, writes XML to public/.
+ * Offline sitemap generation for validation and auditing. Writes XML to .reports/sitemaps/static/.
+ * NOT used for production serving -- the Next.js dynamic routes handle that.
  * Usage: npx tsx scripts/generate-sitemaps.ts [--main-only] [--candidates-only] [--validate] [--redirect-handling remove|replace|keep] [--max-redirects N] [--no-follow-redirects]
  */
 
@@ -16,9 +17,9 @@ import {
 	US_STATE_CODES,
 } from '../src/lib/sitemap-entries';
 
-const OUTPUT_DIR = join(process.cwd(), 'public');
-const SITEMAPS_DIR = join(OUTPUT_DIR, 'sitemaps');
 const REPORT_DIR = join(process.cwd(), '.reports', 'sitemaps');
+const OUTPUT_DIR = join(REPORT_DIR, 'static');
+const SITEMAPS_DIR = join(OUTPUT_DIR, 'sitemaps');
 
 interface CliArgs {
 	mainOnly: boolean;

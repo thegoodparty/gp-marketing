@@ -145,7 +145,6 @@ export async function fetchStateElectionSitemapEntries(
 ): Promise<MetadataRoute.Sitemap> {
 	const entries: MetadataRoute.Sitemap = [];
 	const code = stateCode.toUpperCase();
-	const stateLower = code.toLowerCase();
 
 	const [places, races] = await Promise.all([
 		fetchElectionJson<{ slug?: string }>('v1/places', { state: code, placeColumns: 'slug' }),
@@ -156,7 +155,12 @@ export async function fetchStateElectionSitemapEntries(
 		if (p.slug) entries.push(toEntry(baseUrl, `/elections/${p.slug}`, 0.7, 'weekly'));
 	}
 	for (const r of races) {
-		if (r.slug) entries.push(toEntry(baseUrl, `/elections/${stateLower}/position/${r.slug}`, 0.7, 'weekly'));
+		if (!r.slug) continue;
+		const parts = r.slug.split('/');
+		const positionSlug = parts.pop();
+		if (!positionSlug) continue;
+		const prefix = parts.join('/');
+		entries.push(toEntry(baseUrl, `/elections/${prefix}/position/${positionSlug}`, 0.7, 'weekly'));
 	}
 
 	return entries;

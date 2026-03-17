@@ -44,7 +44,7 @@ export function NavGroupItem(props: NonNullable<NavDropdownProps['group']>[numbe
 			as='div'
 			styleType='nav-dropdown-item'
 			className={cn(
-				'relative group w-full flex flex-row items-center gap-[0.5rem] py-[0.75rem] px-[0.625rem] text-black hover:bg-midnight-100 transition-colors duration-normal ease-smooth rounded-[0.375rem] font-semibold',
+				'relative group w-full flex flex-row items-center gap-[0.5rem] py-[0.75rem] px-[0.625rem] text-black hover:bg-midnight-100 transition-colors duration-normal ease-smooth rounded-[0.375rem] font-semibold whitespace-nowrap',
 				props.className,
 			)}
 			onClick={props.onClick}

@@ -6,7 +6,7 @@ import { StructureMetaData } from '~/components/StructureMetadata';
 import type { Params } from '~/lib/types';
 import { GlossaryList } from '~/ui/GlossaryList';
 import { RichData } from '~/ui/RichData';
-import { getCashedTerms } from '~/lib/getCashedTerms';
+import { getCachedTerms } from '~/lib/getCachedTerms';
 import { searchTermsToABCD } from '~/lib/serchTermsToABCD';
 import { GlossaryHero } from '~/ui/GlossaryHero';
 import { transformButtons, type ButtonType } from '~/lib/buttonTransformer';
@@ -17,13 +17,14 @@ import { resolveComponentColor } from '~/ui/_lib/resolveComponentColor';
 export default async function Page() {
 	const page = await sanityFetch({
 		query: goodpartyOrg_glossaryQuery,
+		tags: ['goodpartyOrg_glossary'],
 	});
 
 	if (!page) {
 		notFound();
 	}
 
-	const searchTerms = (await getCashedTerms()).terms;
+	const searchTerms = (await getCachedTerms()).terms;
 
 	return (
 		<>
@@ -80,6 +81,7 @@ export async function generateMetadata(props: Params, parent: ResolvingMetadata)
 	const parentMetadata = await parent;
 	const page = await sanityFetch({
 		query: goodpartyOrg_glossaryQuery,
+		tags: ['goodpartyOrg_glossary'],
 	});
 
 	return StructureMetaData(parentMetadata, {

@@ -73,7 +73,20 @@
 		--goodparty-red-light: hsl(349 79% 85% / 1);
 		--goodparty-blue: hsl(218 100% 38% / 1);
 		--goodparty-blue-light: hsl(218 80% 80% / 1);
+		--goodparty-gold: hsl(43 81% 51% / 1);
 		--goodparty-cream: hsl(33 60% 97% / 1);
+
+		/* macOS-style window control dots (AIChatVisual) */
+		--ui-dot-close: #ff5f57;
+		--ui-dot-minimize: #ffbd2e;
+		--ui-dot-maximize: #28c840;
+
+		/* Hero section radial gradient glows */
+		--hero-glow-a: radial-gradient(circle, hsl(349 83% 47% / 0.06) 0%, hsl(218 100% 38% / 0.04) 40%, transparent 70%);
+		--hero-glow-b: radial-gradient(circle, hsl(349 83% 47% / 0.08) 0%, hsl(218 100% 38% / 0.05) 40%, transparent 70%);
+
+		/* StrikethroughBlock background */
+		--strikethrough-bg: #ede5f4;
 
 		--error-50: hsl(0 100% 95% / 1);
 		--error-100: hsl(0 100% 95% / 1);
@@ -205,7 +218,13 @@
 	--color-goodparty-red-light: var(--goodparty-red-light);
 	--color-goodparty-blue: var(--goodparty-blue);
 	--color-goodparty-blue-light: var(--goodparty-blue-light);
+	--color-goodparty-gold: var(--goodparty-gold);
 	--color-goodparty-cream: var(--goodparty-cream);
+
+	--color-ui-dot-close: var(--ui-dot-close);
+	--color-ui-dot-minimize: var(--ui-dot-minimize);
+	--color-ui-dot-maximize: var(--ui-dot-maximize);
+	--color-strikethrough-bg: var(--strikethrough-bg);
 
 	--color-error-50: var(--error-50);
 	--color-error-100: var(--error-100);

@@ -8,7 +8,7 @@ import { HeroBlock } from '~/ui/HeroBlock';
 // therefore doesn't have a locale associated with it.
 
 export default async function NotFound() {
-	const page = await sanityFetch({ query: goodpartyOrg_404PageQuery });
+	const page = await sanityFetch({ query: goodpartyOrg_404PageQuery, tags: ['goodpartyOrg_404Page'] });
 	return (
 		<div className='h-full bg-midnight-900'>
 			<HeroBlock

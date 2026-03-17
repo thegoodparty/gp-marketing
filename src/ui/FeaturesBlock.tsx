@@ -7,6 +7,7 @@ import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
 
 import { Container } from './Container.tsx';
 import { CircleIcon } from './CircleIcon.tsx';
+import { FadeIn } from './FadeIn.tsx';
 import type { IconType } from './IconResolver.tsx';
 import { Text } from './Text.tsx';
 import { Media } from './Media.tsx';
@@ -29,6 +30,7 @@ const styles = tv({
 				content: 'text-white',
 			},
 			cream: 'bg-goodparty-cream',
+			white: { base: 'bg-white' },
 		},
 		isHighlighted: {
 			true: {
@@ -60,11 +62,15 @@ const styles = tv({
 export type FeaturesBlockItemProps = {
 	description?: ReactNode;
 	icon?: IconType;
+	iconContent?: ReactNode;
+	iconColor?: 'red' | 'blue' | 'gold';
 	title?: string;
 	isHighlighted?: boolean;
 	image?: any;
 	showFullImage?: boolean;
 	button?: any;
+	tag?: string;
+	tagVariant?: 'free' | 'default';
 };
 
 export type FeaturesBlockProps = {
@@ -87,39 +93,94 @@ export function FeaturesBlock(props: FeaturesBlockProps) {
 	const highlighted = props.items.find(i => i.isHighlighted);
 	const normals = props.items.filter(i => !i.isHighlighted);
 
+	const iconColorMap = {
+		red: 'bg-goodparty-red/10',
+		blue: 'bg-goodparty-blue/10',
+		gold: 'bg-goodparty-gold/10',
+	} as const;
+
+	const tagColorMap = {
+		free: 'bg-success-50 text-success-600 border-success-200',
+		default: 'bg-white border-neutral-200 text-neutral-500',
+	} as const;
+
+	const renderFeatureIcon = (item: FeaturesBlockItemProps) => {
+		if (item.iconContent) {
+			const color = item.iconColor ?? 'red';
+			return (
+				<div
+					className={cn(
+						'w-14 h-14 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0 mb-5',
+						iconColorMap[color],
+					)}
+				>
+					{item.iconContent}
+				</div>
+			);
+		}
+		if (item.icon) {
+			return <CircleIcon icon={item.icon} iconBg={iconBg} />;
+		}
+		return null;
+	};
+
 	if (!highlighted) {
 		return (
 			<article className={cn(base(), props.className)} data-component='FeaturesBlock'>
 				<Container size='xl'>
 					<div className={wrapper()}>
-						<HeaderBlock {...props.header} backgroundColor={props.backgroundColor} layout='center' />
-						<ul className='grid gap-x-responsive-md gap-y-responsive-lg sm:grid-cols-2 lg:grid-cols-3'>
-							{props.items.map((item, index) => (
-								<li key={`feature-${index}`} className={feature()}>
-									<div className={content()}>
-										<div className='flex flex-col gap-4'>
-											{item.icon && <CircleIcon icon={item.icon} iconBg={iconBg} />}
-											{item.title && (
-												<Text as='h3' styleType='subtitle-1'>
-													{item.title}
-												</Text>
-											)}
-											{isValidRichText(item.description) && <Text styleType='body-2'>{item.description}</Text>}
-										</div>
-										{item.button && (
-											<ComponentButton
-												className='w-fit'
-												{...item.button}
-												buttonProps={{ ...(item.button.buttonProps ?? {}), styleType: resolvedStyle }}
-											/>
+						<FadeIn delay={0}>
+							<HeaderBlock {...props.header} backgroundColor={props.backgroundColor} layout='center' />
+						</FadeIn>
+						<FadeIn delay={0.1}>
+							<ul className='grid gap-x-responsive-md gap-y-responsive-lg sm:grid-cols-2 lg:grid-cols-3'>
+								{props.items.map((item, index) => (
+									<li
+										key={`feature-${index}`}
+										className={cn(
+											feature(),
+											(item.iconContent || item.tag) &&
+												cn(
+													'rounded-2xl p-8 md:p-10 border border-transparent transition-all duration-300 hover:border-goodparty-gold hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)]',
+													backgroundColor === 'white' ? 'bg-goodparty-cream' : 'bg-white',
+												),
 										)}
-									</div>
-									{item.image && (
-										<Media image={item.image} aspectRatio='1:1' objectFit={item.showFullImage ? 'contain' : 'cover'} className='w-full' />
-									)}
-								</li>
-							))}
-						</ul>
+									>
+										<div className={content()}>
+											<div className='flex flex-col gap-4'>
+												{renderFeatureIcon(item)}
+												{item.title && (
+													<Text as='h3' styleType='subtitle-1'>
+														{item.title}
+													</Text>
+												)}
+												{isValidRichText(item.description) && <Text styleType='body-2'>{item.description}</Text>}
+												{item.tag && (
+													<span
+														className={cn(
+															'inline-block border rounded-full py-1 px-3 text-xs font-semibold mt-4',
+															item.tagVariant ? tagColorMap[item.tagVariant] : tagColorMap.default,
+														)}
+													>
+														{item.tag}
+													</span>
+												)}
+											</div>
+											{item.button && (
+												<ComponentButton
+													className='w-fit'
+													{...item.button}
+													buttonProps={{ ...(item.button.buttonProps ?? {}), styleType: resolvedStyle }}
+												/>
+											)}
+										</div>
+										{item.image && (
+											<Media image={item.image} aspectRatio='1:1' objectFit={item.showFullImage ? 'contain' : 'cover'} className='w-full' />
+										)}
+									</li>
+								))}
+							</ul>
+						</FadeIn>
 					</div>
 				</Container>
 			</article>

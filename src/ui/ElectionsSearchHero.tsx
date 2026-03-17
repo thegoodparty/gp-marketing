@@ -11,7 +11,7 @@ import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx'
 import { IconResolver } from './IconResolver.tsx';
 import { Logo } from '~/sanity/utils/Logo.tsx';
 import type { SanityImage } from './types.ts';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
+import { primaryButtonStyleType, type backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 const styles = tv({
 	slots: {
@@ -73,14 +73,12 @@ export type ElectionsSearchHeroProps = {
 
 export function ElectionsSearchHero(props: ElectionsSearchHeroProps) {
 	const backgroundImage = props.backgroundImage ?? '/images/unites-states.svg';
-	const hasBackgroundImage = true;
 	const isStaticImage = typeof backgroundImage === 'string';
-	const isDefaultImage = props.backgroundImage === undefined;
 
 	const [selectedState, setSelectedState] = useState(props.defaultStateValue ?? '');
 
 	const { base, wrapper, media, content, logo, textContainer, searchContainer, selectWrapper, select, selectIcon, buttons } =
-		styles({ backgroundColor: undefined });
+		styles({ backgroundColor: props.backgroundColor ?? 'midnight' });
 
 	const handleStateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const value = e.target.value;
@@ -98,20 +96,18 @@ export function ElectionsSearchHero(props: ElectionsSearchHeroProps) {
 		<article className={cn(base(), props.className)} data-component='ElectionsSearchHero'>
 			<Container size='unset'>
 				<div className={wrapper()}>
-					{hasBackgroundImage && (
-						<div className={media()}>
-							{isStaticImage ? (
-								<img 
-									src={backgroundImage} 
-									alt="" 
-									aria-hidden="true"
-									className={cn("h-full w-full object-cover")} 
-								/>
-							) : (
-								<Media image={backgroundImage} objectFit='cover' />
-							)}
-						</div>
-					)}
+					<div className={media()}>
+						{isStaticImage ? (
+							<img
+								src={backgroundImage}
+								alt=""
+								aria-hidden="true"
+								className={cn("h-full w-full object-cover")}
+							/>
+						) : (
+							<Media image={backgroundImage} objectFit='cover' />
+						)}
+					</div>
 					<div className={content()}>
 						{props.showLogo && (
 							<div className={logo()}>
@@ -166,7 +162,7 @@ export function ElectionsSearchHero(props: ElectionsSearchHeroProps) {
 								<ComponentButton
 									buttonType='button'
 									label='Search Elections'
-									buttonProps={{ styleType: 'primary' }}
+									buttonProps={{ styleType: primaryButtonStyleType }}
 									onClick={handleSearch}
 								/>
 							</div>

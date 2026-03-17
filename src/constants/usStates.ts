@@ -1,71 +1,74 @@
 /**
- * Array of US states with their codes and labels.
- * Used for dropdowns, selectors, and state selection UI components.
- * 
+ * Canonical list of US states as tuples [code, name].
+ * Use this when you need both code and human-readable name in any component.
+ *
  * @example
  * ```tsx
- * import { US_STATES } from '~/constants/usStates';
- * 
- * <select>
- *   {US_STATES.map(state => (
- *     <option key={state.value} value={state.value}>
- *       {state.label}
- *     </option>
- *   ))}
- * </select>
+ * import { US_STATES_TUPLES } from '~/constants/usStates';
+ *
+ * US_STATES_TUPLES.map(([code, name]) => <option key={code} value={code}>{name}</option>)
  * ```
  */
-export const US_STATES = [
-	{ value: 'AL', label: 'Alabama' },
-	{ value: 'AK', label: 'Alaska' },
-	{ value: 'AZ', label: 'Arizona' },
-	{ value: 'AR', label: 'Arkansas' },
-	{ value: 'CA', label: 'California' },
-	{ value: 'CO', label: 'Colorado' },
-	{ value: 'CT', label: 'Connecticut' },
-	{ value: 'DE', label: 'Delaware' },
-	{ value: 'FL', label: 'Florida' },
-	{ value: 'GA', label: 'Georgia' },
-	{ value: 'HI', label: 'Hawaii' },
-	{ value: 'ID', label: 'Idaho' },
-	{ value: 'IL', label: 'Illinois' },
-	{ value: 'IN', label: 'Indiana' },
-	{ value: 'IA', label: 'Iowa' },
-	{ value: 'KS', label: 'Kansas' },
-	{ value: 'KY', label: 'Kentucky' },
-	{ value: 'LA', label: 'Louisiana' },
-	{ value: 'ME', label: 'Maine' },
-	{ value: 'MD', label: 'Maryland' },
-	{ value: 'MA', label: 'Massachusetts' },
-	{ value: 'MI', label: 'Michigan' },
-	{ value: 'MN', label: 'Minnesota' },
-	{ value: 'MS', label: 'Mississippi' },
-	{ value: 'MO', label: 'Missouri' },
-	{ value: 'MT', label: 'Montana' },
-	{ value: 'NE', label: 'Nebraska' },
-	{ value: 'NV', label: 'Nevada' },
-	{ value: 'NH', label: 'New Hampshire' },
-	{ value: 'NJ', label: 'New Jersey' },
-	{ value: 'NM', label: 'New Mexico' },
-	{ value: 'NY', label: 'New York' },
-	{ value: 'NC', label: 'North Carolina' },
-	{ value: 'ND', label: 'North Dakota' },
-	{ value: 'OH', label: 'Ohio' },
-	{ value: 'OK', label: 'Oklahoma' },
-	{ value: 'OR', label: 'Oregon' },
-	{ value: 'PA', label: 'Pennsylvania' },
-	{ value: 'RI', label: 'Rhode Island' },
-	{ value: 'SC', label: 'South Carolina' },
-	{ value: 'SD', label: 'South Dakota' },
-	{ value: 'TN', label: 'Tennessee' },
-	{ value: 'TX', label: 'Texas' },
-	{ value: 'UT', label: 'Utah' },
-	{ value: 'VT', label: 'Vermont' },
-	{ value: 'VA', label: 'Virginia' },
-	{ value: 'WA', label: 'Washington' },
-	{ value: 'WV', label: 'West Virginia' },
-	{ value: 'WI', label: 'Wisconsin' },
-	{ value: 'WY', label: 'Wyoming' },
+export const US_STATES_TUPLES = [
+	['AL', 'Alabama'],
+	['AK', 'Alaska'],
+	['AZ', 'Arizona'],
+	['AR', 'Arkansas'],
+	['CA', 'California'],
+	['CO', 'Colorado'],
+	['CT', 'Connecticut'],
+	['DE', 'Delaware'],
+	['DC', 'District of Columbia'],
+	['FL', 'Florida'],
+	['GA', 'Georgia'],
+	['HI', 'Hawaii'],
+	['ID', 'Idaho'],
+	['IL', 'Illinois'],
+	['IN', 'Indiana'],
+	['IA', 'Iowa'],
+	['KS', 'Kansas'],
+	['KY', 'Kentucky'],
+	['LA', 'Louisiana'],
+	['ME', 'Maine'],
+	['MD', 'Maryland'],
+	['MA', 'Massachusetts'],
+	['MI', 'Michigan'],
+	['MN', 'Minnesota'],
+	['MS', 'Mississippi'],
+	['MO', 'Missouri'],
+	['MT', 'Montana'],
+	['NE', 'Nebraska'],
+	['NV', 'Nevada'],
+	['NH', 'New Hampshire'],
+	['NJ', 'New Jersey'],
+	['NM', 'New Mexico'],
+	['NY', 'New York'],
+	['NC', 'North Carolina'],
+	['ND', 'North Dakota'],
+	['OH', 'Ohio'],
+	['OK', 'Oklahoma'],
+	['OR', 'Oregon'],
+	['PA', 'Pennsylvania'],
+	['RI', 'Rhode Island'],
+	['SC', 'South Carolina'],
+	['SD', 'South Dakota'],
+	['TN', 'Tennessee'],
+	['TX', 'Texas'],
+	['UT', 'Utah'],
+	['VT', 'Vermont'],
+	['VA', 'Virginia'],
+	['WA', 'Washington'],
+	['WV', 'West Virginia'],
+	['WI', 'Wisconsin'],
+	['WY', 'Wyoming'],
 ] as const;
 
-export type USStateCode = (typeof US_STATES)[number]['value'];
+export type USStateCode = (typeof US_STATES_TUPLES)[number][0];
+
+/**
+ * Object format for dropdowns and selectors (value/label).
+ */
+export const US_STATES = US_STATES_TUPLES.map(([value, label]) => ({ value, label })) as Array<{
+	value: USStateCode;
+	label: string;
+}>;

@@ -9,6 +9,7 @@ import type { Params } from '~/lib/types';
 export default async function Page(props: any) {
 	const page = await sanityFetch({
 		query: goodpartyOrg_allComponentsQuery,
+		tags: ['goodpartyOrg_allComponents'],
 	});
 	if (!page) {
 		notFound();
@@ -20,6 +21,7 @@ export async function generateMetadata(props: Params, parent: ResolvingMetadata)
 	const parentMetadata = await parent;
 	const page = await sanityFetch({
 		query: goodpartyOrg_allComponentsQuery,
+		tags: ['goodpartyOrg_allComponents'],
 	});
 
 	return StructureMetaData(parentMetadata, {

@@ -2,6 +2,8 @@
 
 import Script from 'next/script';
 
+const EXPERIMENT_DEPLOYMENT_KEY = process.env.NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_DEPLOYMENT_KEY;
+
 export function Amplitude() {
 	return (
 		<Script
@@ -17,6 +19,19 @@ export function Amplitude() {
 						fetchRemoteConfig: true,
 						autocapture: true,
 					});
+					if (EXPERIMENT_DEPLOYMENT_KEY) {
+						import('@amplitude/experiment-js-client')
+							.then(({ Experiment }) => {
+								const experiment = Experiment.initialize(EXPERIMENT_DEPLOYMENT_KEY);
+								window.experiment = experiment;
+								experiment.fetch().finally(() => {
+									window.dispatchEvent(new Event('experiment:ready'));
+								});
+							})
+							.catch(() => {
+								window.dispatchEvent(new Event('experiment:ready'));
+							});
+					}
 				}
 			}}
 		/>

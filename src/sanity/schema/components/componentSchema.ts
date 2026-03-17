@@ -1,3 +1,4 @@
+import {component_jobOpeningsBlock} from './component_jobOpeningsBlock.ts';
 import {component_featuresBlock} from './component_featuresBlock.ts'
 import {component_stepperBlock} from './component_stepperBlock.ts'
 import {component_statsBlock} from './component_statsBlock.ts'
@@ -29,6 +30,7 @@ import {component_candidatesBlock} from './component_candidatesBlock.ts'
 import {component_claimProfileBlock} from './component_claimProfileBlock.ts'
 import {component_electionsIndexBlock} from './component_electionsIndexBlock.ts'
 import {component_electionsPositionHero} from './component_electionsPositionHero.ts'
+import {component_electionsPositionContentBlock} from './component_electionsPositionContentBlock.ts'
 import {component_electionsSearchHero} from './component_electionsSearchHero.ts'
 import {component_featuredCitiesBlock} from './component_featuredCitiesBlock.ts'
 import {component_goodPartyOrgPledge} from './component_goodPartyOrgPledge.ts'
@@ -39,42 +41,44 @@ import {component_listOfOfficesBlock} from './component_listOfOfficesBlock.ts'
 import {component_embeddedBlock} from './component_embeddedBlock.ts'
 
 export const componentSchema = [
-component_featuresBlock,
-component_stepperBlock,
-component_statsBlock,
+	component_jobOpeningsBlock,
+	component_featuresBlock,
+	component_stepperBlock,
+	component_statsBlock,
 	component_bannerBlock,
 	component_calculatorTextBlock,
 	component_breadcrumbBlock,
-component_newsletterBlock,
-component_ctaImageBlock,
-component_testimonialBlock,
-component_featuredBlogBlock,
-component_blogBlock,
-component_twoUpCardBlock,
-component_iconContentBlock,
-component_pricingBlock,
-component_ctaBlock,
-component_ctaCardsBlock,
-component_faqBlock,
-component_carouselBlock,
-component_hero,
-component_profileHero,
-component_blogTopicTagsBlock,
-component_heroWithSubscribe,
-component_imageContentBlock,
-component_tabbedImageBlock,
-component_comparisonBlock,
-component_teamBlock,
-component_ctaBannerBlock,
-component_candidatesBlock,
-component_claimProfileBlock,
-component_electionsIndexBlock,
-component_electionsPositionHero,
-component_electionsSearchHero,
-component_featuredCitiesBlock,
-component_goodPartyOrgPledge,
-component_locationFactsBlock,
-component_locationLandingPageHero,
+	component_newsletterBlock,
+	component_ctaImageBlock,
+	component_testimonialBlock,
+	component_featuredBlogBlock,
+	component_blogBlock,
+	component_twoUpCardBlock,
+	component_iconContentBlock,
+	component_pricingBlock,
+	component_ctaBlock,
+	component_ctaCardsBlock,
+	component_faqBlock,
+	component_carouselBlock,
+	component_hero,
+	component_profileHero,
+	component_blogTopicTagsBlock,
+	component_heroWithSubscribe,
+	component_imageContentBlock,
+	component_tabbedImageBlock,
+	component_comparisonBlock,
+	component_teamBlock,
+	component_ctaBannerBlock,
+	component_candidatesBlock,
+	component_claimProfileBlock,
+	component_electionsIndexBlock,
+	component_electionsPositionHero,
+	component_electionsPositionContentBlock,
+	component_electionsSearchHero,
+	component_featuredCitiesBlock,
+	component_goodPartyOrgPledge,
+	component_locationFactsBlock,
+	component_locationLandingPageHero,
 	component_profileContentBlock,
 	component_listOfOfficesBlock,
 	component_embeddedBlock

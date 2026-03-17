@@ -7,6 +7,7 @@ import type { Params } from '~/lib/types';
 // @ts-ignore
 import '~/ui/_styles/globals.css';
 import { Amplitude } from '~/ui/Amplitude';
+import { ScrollDepthTracker } from '~/ui/ScrollDepthTracker';
 import { PageSchema } from '~/ui/PageSchema';
 import { getBaseUrl } from '~/lib/url';
 import { FacebookPixel } from '~/ui/FacebookPixel';
@@ -38,6 +39,7 @@ type Props = Params & {
 };
 
 export const metadata: Metadata = {
+	metadataBase: new URL(getBaseUrl()),
 	title: 'GoodParty.org | Empowering independents to run, win and serve.',
 	description:
 		'GoodParty.org empowers independent candidates to run, win and serve. Access campaign tools, voter data, and support to level the playing field without deep pockets.',
@@ -64,13 +66,16 @@ export default async function RootLayout({ children }: Props) {
 			lang='en-US'
 			className={`bg-background-primary ${primaryFont.variable} ${primaryFont.className} ${secondaryFont.variable} ${secondaryFont.className}`}
 		>
-			<VWOScript accountId='757033' />
+			<head>
+				<VWOScript accountId='757033' />
+			</head>
 			<body className='flex min-h-screen flex-col'>
 				<PageSchema schema={organizationSchema} />
 				<GTM />
 				<FacebookPixel />
 				<Segment />
 				<Amplitude />
+				<ScrollDepthTracker />
 				{(await draftMode()).isEnabled && <VisualEditing />}
 				<ComponentErrorBoundary componentName='Header'>
 					<PageHeader className='shrink-0' isDraftMode={(await draftMode()).isEnabled} />

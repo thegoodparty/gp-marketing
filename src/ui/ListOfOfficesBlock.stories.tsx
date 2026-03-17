@@ -8,6 +8,12 @@ const meta: Meta<typeof ListOfOfficesBlock> = {
 	parameters: {
 		layout: 'fullscreen',
 	},
+	argTypes: {
+		pageSize: {
+			control: { type: 'number' },
+			description: 'Number of offices to show initially; Show More reveals this many at a time',
+		},
+	},
 };
 
 export default meta;
@@ -245,10 +251,18 @@ export const SingleOffice: Story = {
 		headline: 'Headline',
 		defaultYear: 2028,
 		availableYears: [2024, 2025, 2026, 2027, 2028],
-		offices: [sampleOffices[0]],
+		offices: sampleOffices.slice(0, 1),
 		backgroundColor: 'cream',
 	},
 };
+
+const manyOfficesData = Array.from({ length: 25 }, (_, i) => ({
+	id: `office-${i + 1}`,
+	type: i % 3 === 0 ? 'STATE' : i % 3 === 1 ? 'COUNTY' : 'CITY',
+	position: `Office Position ${i + 1}`,
+	nextElectionDate: 'November 5, 2028',
+	href: `/offices/${i + 1}`,
+}));
 
 export const ManyOffices: Story = {
 	args: {
@@ -256,7 +270,37 @@ export const ManyOffices: Story = {
 		headline: 'Headline',
 		defaultYear: 2028,
 		availableYears: [2024, 2025, 2026, 2027, 2028],
-		offices: Array.from({ length: 20 }, (_, i) => ({
+		offices: manyOfficesData,
+		backgroundColor: 'cream',
+	},
+};
+
+export const CustomPageSize: Story = {
+	args: {
+		heading: 'List of Offices',
+		headline: 'Headline',
+		defaultYear: 2028,
+		availableYears: [2024, 2025, 2026, 2027, 2028],
+		pageSize: 5,
+		offices: Array.from({ length: 18 }, (_, i) => ({
+			id: `office-${i + 1}`,
+			type: i % 3 === 0 ? 'STATE' : i % 3 === 1 ? 'COUNTY' : 'CITY',
+			position: `Office Position ${i + 1}`,
+			nextElectionDate: 'November 5, 2028',
+			href: `/offices/${i + 1}`,
+		})),
+		backgroundColor: 'cream',
+	},
+};
+
+export const ExactPageSize: Story = {
+	args: {
+		heading: 'List of Offices',
+		headline: 'Headline',
+		defaultYear: 2028,
+		availableYears: [2024, 2025, 2026, 2027, 2028],
+		pageSize: 10,
+		offices: Array.from({ length: 10 }, (_, i) => ({
 			id: `office-${i + 1}`,
 			type: i % 3 === 0 ? 'STATE' : i % 3 === 1 ? 'COUNTY' : 'CITY',
 			position: `Office Position ${i + 1}`,

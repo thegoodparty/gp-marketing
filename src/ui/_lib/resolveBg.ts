@@ -7,5 +7,5 @@ export function resolveBg(background: Field_blockColorCreamMidnight) {
 		MidnightDark: 'midnight',
 	};
 
-	return bgMap[stegaClean(background)];
+	return bgMap[stegaClean(background)] ?? 'cream';
 }

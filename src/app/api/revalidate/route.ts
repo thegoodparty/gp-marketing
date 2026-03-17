@@ -1,9 +1,9 @@
 import { timingSafeEqual } from 'node:crypto';
-import { revalidatePath } from 'next/cache';
-import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath, revalidateTag } from 'next/cache';
+import { type NextRequest, NextResponse } from 'next/server';
+import { parseBody } from 'next-sanity/webhook';
 import { revalidateSecret } from '~/lib/env';
 
-const SIGNATURE_HEADER = 'sanity-webhook-signature';
 const CUSTOM_SECRET_HEADER = 'x-sanity-webhook-secret';
 
 function safeCompare(a: string, b: string): boolean {
@@ -31,41 +31,6 @@ function getSlugFromPayload(payload: Record<string, unknown>, path: string): str
 	if (typeof value === 'string') return value;
 	if (isSlugObject(value)) return value.current;
 	return undefined;
-}
-
-async function verifySignature(
-	payload: string,
-	signature: string,
-	secret: string,
-): Promise<boolean> {
-	const match = signature.trim().match(/^t=(\d+)[, ]+v1=([^, ]+)$/);
-	if (!match) return false;
-
-	const [, timestampStr, hashedPayload] = match;
-	const timestamp = parseInt(timestampStr!, 10);
-	if (isNaN(timestamp) || timestamp < 1609459200000) return false;
-
-	const now = Date.now();
-	if (Math.abs(now - timestamp) > 5 * 60 * 1000) return false;
-
-	const enc = new TextEncoder();
-	const key = await crypto.subtle.importKey(
-		'raw',
-		enc.encode(secret),
-		{ name: 'HMAC', hash: 'SHA-256' },
-		false,
-		['sign'],
-	);
-
-	const signaturePayload = `${timestamp}.${payload}`;
-	const sig = await crypto.subtle.sign('HMAC', key, enc.encode(signaturePayload));
-	const signatureArray = Array.from(new Uint8Array(sig));
-	const expected = btoa(String.fromCharCode.apply(null, signatureArray))
-		.replace(/\+/g, '-')
-		.replace(/\//g, '_')
-		.replace(/=+$/, '');
-
-	return expected === hashedPayload;
 }
 
 function getPathsToRevalidate(_type: string, payload: Record<string, unknown>): string[] {
@@ -105,7 +70,7 @@ function getPathsToRevalidate(_type: string, payload: Record<string, unknown>): 
 	return ['/'];
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
 	if (!revalidateSecret) {
 		return NextResponse.json(
 			{ error: 'Revalidation not configured: SANITY_REVALIDATE_SECRET is not set' },
@@ -113,29 +78,27 @@ export async function POST(request: NextRequest) {
 		);
 	}
 
-	const rawBody = await request.text();
-	const customSecret = request.headers.get(CUSTOM_SECRET_HEADER);
-	const signature = request.headers.get(SIGNATURE_HEADER);
-
-	let authorized = false;
-	if (customSecret && revalidateSecret && safeCompare(customSecret, revalidateSecret)) {
-		authorized = true;
-	} else if (signature) {
-		authorized = await verifySignature(rawBody, signature, revalidateSecret);
-	}
-
-	if (!authorized) {
-		return NextResponse.json(
-			{ error: 'Missing or invalid authorization: provide x-sanity-webhook-secret header or valid sanity-webhook-signature' },
-			{ status: 401 },
-		);
-	}
-
+	const customSecret = req.headers.get(CUSTOM_SECRET_HEADER);
 	let payload: Record<string, unknown>;
-	try {
-		payload = rawBody ? (JSON.parse(rawBody) as Record<string, unknown>) : {};
-	} catch {
-		return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+
+	if (customSecret) {
+		if (!safeCompare(customSecret, revalidateSecret)) {
+			return NextResponse.json({ error: 'Invalid x-sanity-webhook-secret header' }, { status: 401 });
+		}
+		try {
+			payload = (await req.json()) as Record<string, unknown>;
+		} catch {
+			return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+		}
+	} else {
+		const { isValidSignature, body } = await parseBody<Record<string, unknown>>(
+			req,
+			revalidateSecret,
+		);
+		if (!isValidSignature) {
+			return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+		}
+		payload = body ?? {};
 	}
 
 	const _type = payload._type as string | undefined;
@@ -143,16 +106,18 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json({ error: 'Invalid payload: missing _type' }, { status: 400 });
 	}
 
-	const paths = getPathsToRevalidate(_type, payload);
-
 	try {
+		revalidateTag(_type);
+
+		const paths = getPathsToRevalidate(_type, payload);
 		for (const path of paths) {
 			revalidatePath(path);
 		}
+
 		return NextResponse.json({
 			revalidated: true,
+			tag: _type,
 			paths,
-			_type,
 		});
 	} catch (err) {
 		console.error('Revalidation failed:', err);

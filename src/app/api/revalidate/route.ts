@@ -1,15 +1,16 @@
-import { timingSafeEqual } from 'node:crypto';
+import { createHmac, timingSafeEqual } from 'node:crypto';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { type NextRequest, NextResponse } from 'next/server';
 import { parseBody } from 'next-sanity/webhook';
 import { revalidateSecret } from '~/lib/env';
 
 const CUSTOM_SECRET_HEADER = 'x-sanity-webhook-secret';
+const HMAC_KEY = 'safeCompare';
 
 function safeCompare(a: string, b: string): boolean {
-	if (a.length !== b.length) return false;
-	const enc = new TextEncoder();
-	return timingSafeEqual(enc.encode(a), enc.encode(b));
+	const da = createHmac('sha256', HMAC_KEY).update(a).digest();
+	const db = createHmac('sha256', HMAC_KEY).update(b).digest();
+	return timingSafeEqual(da, db);
 }
 
 function isSlugObject(value: unknown): value is { current: string } {

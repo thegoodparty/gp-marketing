@@ -83,27 +83,31 @@ export async function POST(req: NextRequest) {
 	const customSecret = req.headers.get(CUSTOM_SECRET_HEADER);
 	let payload: Record<string, unknown>;
 
-	if (customSecret) {
-		if (!safeCompare(customSecret, revalidateSecret)) {
-			return NextResponse.json({ error: 'Invalid x-sanity-webhook-secret header' }, { status: 401 });
+	try {
+		if (customSecret) {
+			if (!safeCompare(customSecret, revalidateSecret)) {
+				return NextResponse.json({ error: 'Invalid x-sanity-webhook-secret header' }, { status: 401 });
+			}
+			try {
+				payload = (await req.json()) as Record<string, unknown>;
+			} catch {
+				return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+			}
+		} else {
+			const { isValidSignature, body } = await parseBody<Record<string, unknown>>(
+				req,
+				revalidateSecret,
+			);
+			if (!isValidSignature) {
+				return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+			}
+			payload = body ?? {};
 		}
-		try {
-			payload = (await req.json()) as Record<string, unknown>;
-		} catch {
-			return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
-		}
-	} else {
-		const { isValidSignature, body } = await parseBody<Record<string, unknown>>(
-			req,
-			revalidateSecret,
-		);
-		if (!isValidSignature) {
-			return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
-		}
-		payload = body ?? {};
+	} catch {
+		return NextResponse.json({ error: 'Authorization failed' }, { status: 401 });
 	}
 
-	const _type = payload._type as string | undefined;
+	const _type = payload['_type'] as string | undefined;
 	if (!_type) {
 		return NextResponse.json({ error: 'Invalid payload: missing _type' }, { status: 400 });
 	}

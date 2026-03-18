@@ -126,7 +126,12 @@ For `article` body and other rich text fields, use **Resource HTML** in AirOps C
 Use **Execute Query** in AirOps for custom fetches:
 
 ```groq
-*[_type == "article" && status == "published"] | order(publishedAt desc) { _id, title, slug, publishedAt }
+*[_type == "article"] | order(editorialOverview.field_publishedDate desc) {
+  _id,
+  "title": editorialOverview.field_editorialTitle,
+  "slug": editorialOverview.field_slug,
+  "publishedAt": editorialOverview.field_publishedDate
+}
 ```
 
 ## Testing Checklist
@@ -154,7 +159,7 @@ Do not pass the secret in query parameters; it will appear in logs.
 {
   "revalidated": true,
   "paths": ["/blog", "/blog/article/my-slug"],
-  "_type": "article"
+  "tag": "article"
 }
 ```
 

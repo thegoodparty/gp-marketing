@@ -15,7 +15,7 @@ import {
 } from '~/constants/electionsStaticSections';
 import { sanityFetch } from '~/sanity/sanityClient';
 import { quoteCollectionByIdQuery } from '~/sanity/groq';
-import { getStateName, placeToFactsCards, resolveLocalityName, stripCountySuffix } from '~/lib/electionsHelpers';
+import { getStateName, placeToFactsCards, resolveLocalityName } from '~/lib/electionsHelpers';
 import { resolveAuthor } from '~/ui/_lib/resolveAuthor';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 import { BreadcrumbBlock } from '~/ui/BreadcrumbBlock';

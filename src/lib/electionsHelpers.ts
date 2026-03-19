@@ -227,12 +227,12 @@ export function buildPositionPageSchema(params: {
 	const locationName = locationParts.join(', ');
 
 	const description =
-		race.positionDescription ??
+		race.positionDescription ||
 		`Learn about running for ${officeName} in ${locationName}.`;
 
 	const datePublished =
-		race.filingDateStart?.slice(0, 10) ??
-		race.electionDate?.slice(0, 10) ??
+		race.filingDateStart?.slice(0, 10) ||
+		race.electionDate?.slice(0, 10) ||
 		new Date().toISOString().slice(0, 10);
 
 	return {

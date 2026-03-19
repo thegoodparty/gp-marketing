@@ -222,9 +222,11 @@ export function placeToFactsCards(place: PlaceWithFacts | null): FactsCardProps[
 }
 
 /**
- * Builds a Schema.org JobPosting JSON-LD object from race data for position pages.
+ * Builds a Schema.org WebPage JSON-LD object with GovernmentOffice for position pages.
+ * Uses WebPage + GovernmentOffice instead of JobPosting because these pages describe
+ * candidacy opportunities for elected office, not employment job postings.
  */
-export function buildPositionSchema(params: {
+export function buildPositionPageSchema(params: {
 	race: RaceDetail;
 	officeName: string;
 	stateName: string;
@@ -236,48 +238,37 @@ export function buildPositionSchema(params: {
 
 	const locationParts = [cityName, countyName, stateName].filter(Boolean);
 	const addressLocality = cityName ?? countyName;
+	const locationName = locationParts.join(', ');
 
-	const schema: Record<string, unknown> = {
+	const description =
+		race.positionDescription ||
+		`Learn about running for ${officeName} in ${locationName}.`;
+
+	const datePublished =
+		race.filingDateStart?.slice(0, 10) || race.electionDate?.slice(0, 10);
+
+	return {
 		'@context': 'https://schema.org',
-		'@type': 'JobPosting',
-		title: officeName,
-		name: `${officeName} in ${locationParts.join(', ')}`,
+		'@type': 'WebPage',
+		name: `${officeName} in ${locationName}`,
 		url: pageUrl,
-		hiringOrganization: {
-			'@type': 'Organization',
-			name: 'GoodParty.org',
-			url: 'https://goodparty.org',
-		},
-		jobLocation: {
-			'@type': 'Place',
+		description,
+		...(datePublished && { datePublished }),
+		about: {
+			'@type': 'GovernmentOffice',
+			name: officeName,
 			address: {
 				'@type': 'PostalAddress',
 				addressRegion: race.state,
 				...(addressLocality && { addressLocality }),
 			},
 		},
+		provider: {
+			'@type': 'Organization',
+			name: 'GoodParty.org',
+			url: 'https://goodparty.org',
+		},
 	};
-
-	if (race.positionDescription) schema['description'] = race.positionDescription;
-	if (race.filingDateStart) schema['datePosted'] = race.filingDateStart.slice(0, 10);
-	if (race.filingDateEnd) schema['validThrough'] = race.filingDateEnd.slice(0, 10);
-	if (race.employmentType) {
-		schema['employmentType'] = race.employmentType.toUpperCase().replace(/\s+/g, '_');
-	}
-	if (race.salary) {
-		schema['baseSalary'] = {
-			'@type': 'MonetaryAmount',
-			currency: 'USD',
-			value: {
-				'@type': 'QuantitativeValue',
-				value: race.salary,
-				unitText: 'YEAR',
-			},
-		};
-	}
-	if (race.eligibilityRequirements) schema['qualifications'] = race.eligibilityRequirements;
-
-	return schema;
 }
 
 /**

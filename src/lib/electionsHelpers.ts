@@ -231,9 +231,7 @@ export function buildPositionPageSchema(params: {
 		`Learn about running for ${officeName} in ${locationName}.`;
 
 	const datePublished =
-		race.filingDateStart?.slice(0, 10) ||
-		race.electionDate?.slice(0, 10) ||
-		new Date().toISOString().slice(0, 10);
+		race.filingDateStart?.slice(0, 10) || race.electionDate?.slice(0, 10);
 
 	return {
 		'@context': 'https://schema.org',
@@ -241,7 +239,7 @@ export function buildPositionPageSchema(params: {
 		name: `${officeName} in ${locationName}`,
 		url: pageUrl,
 		description,
-		datePublished,
+		...(datePublished && { datePublished }),
 		about: {
 			'@type': 'GovernmentOffice',
 			name: officeName,

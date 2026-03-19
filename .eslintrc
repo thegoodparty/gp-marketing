@@ -162,8 +162,7 @@
 		"@typescript-eslint/no-useless-constructor": ["error"],
 		"object-curly-spacing": ["off"],
 		"@typescript-eslint/object-curly-spacing": ["off"],
-		"quotes": ["off"],
-		"@typescript-eslint/quotes": [
+		"quotes": [
 			"error",
 			"single",
 			{
@@ -199,13 +198,6 @@
 		],
 		"@typescript-eslint/no-extra-non-null-assertion": ["error"],
 		"@typescript-eslint/ban-tslint-comment": ["error"],
-		"@typescript-eslint/ban-types": [
-			"error",
-			{
-				"extendDefaults": false,
-				"types": {}
-			}
-		],
 		"@typescript-eslint/consistent-indexed-object-style": ["error", "record"],
 		"@typescript-eslint/consistent-type-definitions": ["off", "interface"],
 		"@typescript-eslint/explicit-member-accessibility": [

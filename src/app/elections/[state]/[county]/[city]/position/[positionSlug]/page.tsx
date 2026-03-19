@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	getCityPlacesByCounty,
@@ -12,7 +12,7 @@ import {
 	formatElectionDateFromApi,
 	formatFilingPeriodFromRace,
 	getStateName,
-	stripCountySuffix,
+	resolveLocalityName,
 } from '~/lib/electionsHelpers';
 import { toAbsoluteUrl } from '~/lib/url';
 import { PositionPageContent } from '~/ui/PositionPageContent';
@@ -29,18 +29,8 @@ export default async function Page({
 		notFound();
 	}
 
-	const raceSlug = buildRaceSlug(state, positionSlug, county, city);
+	const raceSlug = buildRaceSlug(state, positionSlug, city);
 	const race = await getRaceBySlug(raceSlug);
-
-	if (!race && !county.endsWith('-county')) {
-		const retrySlug = buildRaceSlug(state, positionSlug, `${county}-county`, city);
-		const retryRace = await getRaceBySlug(retrySlug);
-		if (retryRace) {
-			redirect(
-				`/elections/${state.toLowerCase()}/${county}-county/${city.toLowerCase()}/position/${positionSlug}`,
-			);
-		}
-	}
 
 	if (!race) {
 		notFound();
@@ -113,12 +103,12 @@ export async function generateMetadata({
 	const stateCode = state.toUpperCase();
 	if (!isValidStateCode(stateCode)) return {};
 	const stateName = getStateName(stateCode);
-	const raceSlug = buildRaceSlug(state, positionSlug, county, city);
+	const raceSlug = buildRaceSlug(state, positionSlug, city);
 	const race = await getRaceBySlug(raceSlug);
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
-	const countyName = countyPlace ? stripCountySuffix(countyPlace.name) : county;
+	const countyDisplayName = resolveLocalityName(countyPlace, race?.Place, countySlug);
 	const cityPlaces = await getCityPlacesByCounty({ state: stateCode, countySlug });
 	const cityPlace = cityPlaces.find(
 		c => c.slug.toLowerCase() === `${state.toLowerCase()}/${city.toLowerCase()}`,
@@ -127,6 +117,6 @@ export async function generateMetadata({
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
 	return {
 		title: `${positionName} in ${cityName}, ${stateName} | Good Party`,
-		description: `Election details and candidates for ${positionName} in ${cityName}, ${countyPlace?.name ?? `${countyName} County`}, ${stateName}.`,
+		description: `Election details and candidates for ${positionName} in ${cityName}, ${countyDisplayName}, ${stateName}.`,
 	};
 }

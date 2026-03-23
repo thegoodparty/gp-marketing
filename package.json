@@ -11,6 +11,7 @@
     "prebuild": "bun run sanity:deploy && rm -rf dist public/sitemap.xml public/sitemaps",
     "build": "next build --turbopack",
     "lint": "next lint",
+    "test": "bun test ./src ./scripts",
     "start": "next start",
     "sb:dev": "storybook dev -p 6006 --disable-telemetry --no-version-updates",
     "sb:build": "storybook build",

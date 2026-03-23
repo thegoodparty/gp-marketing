@@ -102,7 +102,7 @@ async function fetchElectionJson<T>(path: string, params: Record<string, string>
 	}
 }
 
-function buildPageUrls(
+export function buildPageUrls(
 	baseUrl: string,
 	racesByState: Map<string, Array<{ slug?: string }>>,
 	samplePerState: number,
@@ -129,7 +129,7 @@ function buildPageUrls(
 	return urls;
 }
 
-function extractTitleAndDescription(html: string): { title?: string; description?: string } {
+export function extractTitleAndDescription(html: string): { title?: string; description?: string } {
 	const titleMatch = html.match(/<title>([^<]*)<\/title>/i);
 	const descMatch = html.match(/<meta\s+name=["']description["']\s+content=["']([^"']*)["']/i);
 	return {
@@ -138,13 +138,43 @@ function extractTitleAndDescription(html: string): { title?: string; description
 	};
 }
 
-function checkContent(text: string): string[] {
+export function checkContent(text: string): string[] {
 	const invalid: string[] = [];
 	for (const re of BAD_PATTERNS) {
 		const match = text.match(re);
 		if (match) invalid.push(match[0] ?? String(re));
 	}
 	return invalid;
+}
+
+export type CheckedPage = { result: PageCheckResult; error?: string };
+
+export function categorizeResults(checked: CheckedPage[]): {
+	summary: ElectionPageReport['summary'];
+	invalid: PageCheckResult[];
+	errors: Array<{ url: string; error: string }>;
+} {
+	const errors: Array<{ url: string; error: string }> = [];
+	const invalid: PageCheckResult[] = [];
+
+	for (const item of checked) {
+		if (item.error !== undefined) {
+			errors.push({ url: item.result.url, error: item.error });
+		} else if (item.result.invalid.length > 0) {
+			invalid.push(item.result);
+		}
+	}
+
+	const total = checked.length;
+	const errorsCount = errors.length;
+	const invalidCount = invalid.length;
+	const valid = total - errorsCount - invalidCount;
+
+	return {
+		summary: { total, valid, invalid: invalidCount, errors: errorsCount },
+		invalid,
+		errors,
+	};
 }
 
 async function checkPage(
@@ -246,29 +276,13 @@ async function main(): Promise<void> {
 	);
 	const durationMs = Date.now() - start;
 
-	const invalid: PageCheckResult[] = [];
-	const errors: Array<{ url: string; error: string }> = [];
+	const { summary, invalid, errors } = categorizeResults(checked);
 
-	for (const { result, error } of checked) {
-		if (error) {
-			errors.push({ url: result.url, error });
-		}
-		if (result.invalid.length > 0) {
-			invalid.push(result);
-		}
-	}
-
-	const valid = checked.length - invalid.length - errors.length;
 	const report: ElectionPageReport = {
 		baseUrl,
 		timestamp: new Date().toISOString(),
 		durationMs,
-		summary: {
-			total: checked.length,
-			valid,
-			invalid: invalid.length,
-			errors: errors.length,
-		},
+		summary,
 		invalid,
 		errors,
 	};
@@ -295,7 +309,9 @@ async function main(): Promise<void> {
 	}
 }
 
-main().catch(err => {
-	console.error(err);
-	process.exit(1);
-});
+if (import.meta.main) {
+	main().catch(err => {
+		console.error(err);
+		process.exit(1);
+	});
+}

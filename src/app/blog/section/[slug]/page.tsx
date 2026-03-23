@@ -1,8 +1,8 @@
 import type { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
-import { categoriesQuery } from '~/sanity/groq';
+import { categoriesQuery, goodpartyOrg_homeQuery } from '~/sanity/groq';
 import { sanityFetch } from '~/sanity/sanityClient';
-import { PageSections } from '~/PageSections';
+import { PageSections, type Sections } from '~/PageSections';
 import { StructureMetaData } from '~/components/StructureMetadata';
 import type { Params } from '~/lib/types';
 import { BlogHero } from '~/ui/BlogHero';
@@ -11,9 +11,11 @@ import { FeaturedBlogBlock } from '~/ui/FeaturedBlogBlock';
 import type { SanityImage } from '~/ui/types';
 import { resolveBlogCard } from '~/ui/_lib/resolveBlogCard';
 import { BlogBlock } from '~/ui/BlogBlock';
-import { CTABlock } from '~/ui/CTABlock';
 import { BlogTopicTagsBlock } from '~/ui/BlogTopicTagsBlock';
+import { NewsletterBlockSection } from '~/PageSections/NewsletterBlockSection';
 import { client } from '~/lib/client';
+
+type NewsletterBlockSectionType = Extract<Sections, { _type: 'component_newsletterBlock' }>;
 
 export async function generateStaticParams() {
 	const entries = await client.fetch<Array<string>>('*[_type=="categories"][0..99].tagOverview.field_slug');
@@ -22,7 +24,7 @@ export async function generateStaticParams() {
 	}));
 }
 
-export default async function Page(props: any) {
+export default async function Page(props: Params) {
 	const slug = (await props.params)['slug'];
 	const page = await sanityFetch({
 		query: categoriesQuery,
@@ -36,13 +38,31 @@ export default async function Page(props: any) {
 	}
 	const { articles } = await getCachedArticles();
 
+	const categoryNewsletterSection =
+		(page.pageSections?.list_pageSections?.find((section: Sections) => section?._type === 'component_newsletterBlock') as
+			| NewsletterBlockSectionType
+			| undefined);
+
+	const newsletterSectionFromHome = categoryNewsletterSection
+		? null
+		: await sanityFetch({
+				query: goodpartyOrg_homeQuery,
+				tags: ['goodpartyOrg_home'],
+			});
+
+	const newsletterSection =
+		categoryNewsletterSection ??
+		(newsletterSectionFromHome?.pageSections?.list_pageSections?.find((section: Sections) => section?._type === 'component_newsletterBlock') as
+			| NewsletterBlockSectionType
+			| undefined);
+
 	return (
 		<>
 			<BlogHero
 				articles={articles}
 				title={page.tagOverview?.field_name}
 				copy={page.tagOverview?.field_pageSubtitle}
-				categories={page.categories?.filter(item => item.title && item.href) as { _id: string; title: string; href: string }[]}
+				categories={page.categories?.filter((item): item is { _id: string; title: string; href: string } => Boolean(item.title && item.href))}
 			/>
 			{page.featuredArticle?.editorialOverview?.field_editorialTitle && page.featuredArticle.href && (
 				<FeaturedBlogBlock
@@ -61,17 +81,7 @@ export default async function Page(props: any) {
 			{page.categoryRelatedArticles?.articles && page.categoryRelatedArticles?.articles.length > 0 && (
 				<BlogBlock items={page.categoryRelatedArticles?.articles.slice(0, 3).map(resolveBlogCard).filter(Boolean)} allItemsCount={3} />
 			)}
-			<CTABlock
-				label={'Hardcoded label'}
-				title={'Hardcoded title'}
-				copy={'Hardcoded copy. This component is hardcoded and is not a part of the page sections array.'}
-				caption={'Hardcoded caption'}
-				color={'lavender'}
-				form={{
-					provider: 'Hubspot',
-					formId: '5d84452a-01df-422b-9734-580148677d2c',
-				}}
-			/>
+			{newsletterSection ? <NewsletterBlockSection {...newsletterSection} /> : null}
 			{page.categoryRelatedArticles?.articles && page.categoryRelatedArticles?.articles.length > 3 && (
 				<BlogBlock
 					items={page.categoryRelatedArticles?.articles.slice(3).map(resolveBlogCard).filter(Boolean)}
@@ -88,7 +98,9 @@ export default async function Page(props: any) {
 					)
 					.filter(Boolean)}
 			/>
-			<PageSections pageSections={page.pageSections?.list_pageSections} />
+			<PageSections
+				pageSections={page.pageSections?.list_pageSections?.filter((section: Sections) => section._type !== 'component_newsletterBlock')}
+			/>
 		</>
 	);
 }

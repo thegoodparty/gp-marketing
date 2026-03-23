@@ -22,6 +22,8 @@ import { format } from 'date-fns';
 import { stegaClean } from 'next-sanity';
 import { PageSchema } from '~/ui/PageSchema';
 import { DEFAULT_SHARE_IMAGE, getBaseUrl, getSanityImageUrl } from '~/lib/url';
+import { BlogBlock } from '~/ui/BlogBlock';
+import { resolveBlogCard } from '~/ui/_lib/resolveBlogCard';
 
 export async function generateStaticParams() {
 	const entries = await client.fetch<Array<{ slug: string }>>('*[_type == "article"][0..99].editorialOverview.field_slug');
@@ -132,6 +134,12 @@ export default async function Page(props: any) {
 					/>
 				</div>
 			</EditorialLayout>
+			{page.relatedArticles?.list_relatedArticles && page.relatedArticles.list_relatedArticles.length > 0 && (
+				<BlogBlock
+					header={{ title: 'Related Articles' }}
+					items={page.relatedArticles.list_relatedArticles.map(resolveBlogCard).filter(Boolean)}
+				/>
+			)}
 		</>
 	);
 }

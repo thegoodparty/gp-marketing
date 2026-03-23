@@ -148,7 +148,7 @@ export default async function Page(props: any) {
 			<div className='bg-goodparty-cream'>
 				<Container size='xl' className='pt-4 pb-(--container-padding) flex flex-col gap-6'>
 					<Text as='h1' styleType='heading-xl'>
-						{`What is ${page.glossaryTermOverview?.field_glossaryTerm}?`}
+						{page.glossaryTermOverview?.field_glossaryTerm}
 					</Text>
 					<Text
 						as='div'

@@ -15,7 +15,7 @@ import {
 } from '~/constants/electionsStaticSections';
 import { sanityFetch } from '~/sanity/sanityClient';
 import { quoteCollectionByIdQuery } from '~/sanity/groq';
-import { getStateName, placeToFactsCards, stripCountySuffix } from '~/lib/electionsHelpers';
+import { getStateName, placeToFactsCards, resolveLocalityName } from '~/lib/electionsHelpers';
 import { resolveAuthor } from '~/ui/_lib/resolveAuthor';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 import { BreadcrumbBlock } from '~/ui/BreadcrumbBlock';
@@ -112,7 +112,7 @@ export default async function Page({
 		return level === 'LOCAL' || level === 'CITY';
 	});
 	const cityOffices = cityRaces.map(race => {
-		const positionSlug = race.slug.split('/').slice(3).join('/');
+		const positionSlug = race.slug.split('/').pop() ?? '';
 		return {
 			id: String(race.id),
 			type: 'City',
@@ -193,7 +193,7 @@ export async function generateMetadata({
 	const shortSlug = `${state.toLowerCase()}/${city.toLowerCase()}`;
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
-	const countyName = countyPlace ? stripCountySuffix(countyPlace.name) : county;
+	const countyDisplayName = resolveLocalityName(countyPlace, undefined, countySlug);
 	const cityPlaces = await getCityPlacesByCounty({ state: stateCode, countySlug });
 	let cityPlace = cityPlaces.find(c => c.slug.toLowerCase() === shortSlug);
 	if (!cityPlace) {
@@ -209,6 +209,6 @@ export async function generateMetadata({
 	const cityName = cityPlace?.name ?? city;
 	return {
 		title: `Elections in ${cityName}, ${stateName} | Good Party`,
-		description: `Browse elections and local positions in ${cityName}, ${countyPlace?.name ?? `${countyName} County`}, ${stateName}.`,
+		description: `Browse elections and local positions in ${cityName}, ${countyDisplayName}, ${stateName}.`,
 	};
 }

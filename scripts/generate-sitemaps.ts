@@ -1,35 +1,25 @@
 #!/usr/bin/env npx tsx
 /**
- * Static sitemap generation. Fetches from GP API and Election API, writes XML to public/.
+ * Offline sitemap generation for validation and auditing. Writes XML to .reports/sitemaps/static/.
+ * NOT used for production serving -- the Next.js dynamic routes handle that.
  * Usage: npx tsx scripts/generate-sitemaps.ts [--main-only] [--candidates-only] [--validate] [--redirect-handling remove|replace|keep] [--max-redirects N] [--no-follow-redirects]
  */
 
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { convertToXML, generateRootIndex, type SitemapEntry, type SitemapIndexEntry } from './lib/xml';
+import { getBaseUrl } from '../src/lib/url';
+import { formatLastmod, splitUrlsIntoChunks, writeSitemapFile } from './lib/sitemap-helpers';
 import {
-	fetchElectionData,
-	fetchGpContent,
-	formatLastmod,
-	getAppBase,
-	splitUrlsIntoChunks,
+	fetchMainSitemapEntries,
+	fetchStateElectionSitemapEntries,
+	fetchCandidateSitemapEntries,
 	US_STATE_CODES,
-	writeSitemapFile,
-	slugify,
-} from './lib/sitemap-helpers';
+} from '../src/lib/sitemap-entries';
 
-const OUTPUT_DIR = join(process.cwd(), 'public');
-const SITEMAPS_DIR = join(OUTPUT_DIR, 'sitemaps');
 const REPORT_DIR = join(process.cwd(), '.reports', 'sitemaps');
-
-const STATIC_ROUTES = [
-	{ path: '/', priority: 1.0, changefreq: 'monthly' as const },
-	{ path: '/about', priority: 1.0, changefreq: 'monthly' as const },
-	{ path: '/elections', priority: 1.0, changefreq: 'monthly' as const },
-	{ path: '/blog', priority: 1.0, changefreq: 'monthly' as const },
-	{ path: '/faqs', priority: 1.0, changefreq: 'monthly' as const },
-	{ path: '/contact', priority: 1.0, changefreq: 'monthly' as const },
-];
+const OUTPUT_DIR = join(REPORT_DIR, 'static');
+const SITEMAPS_DIR = join(OUTPUT_DIR, 'sitemaps');
 
 interface CliArgs {
 	mainOnly: boolean;
@@ -72,108 +62,37 @@ function parseArgs(): CliArgs {
 	return result;
 }
 
-function toEntry(path: string, priority: number, changefreq: string): SitemapEntry {
-	const base = getAppBase();
+function toSitemapEntry(entry: { url: string; lastModified?: string | Date; changeFrequency?: string; priority?: number }): SitemapEntry {
+	const lastmod =
+		typeof entry.lastModified === 'string'
+			? entry.lastModified.slice(0, 10)
+			: entry.lastModified instanceof Date
+				? entry.lastModified.toISOString().slice(0, 10)
+				: formatLastmod();
 	return {
-		loc: `${base}${path.startsWith('/') ? path : `/${path}`}`,
-		lastmod: formatLastmod(),
-		changefreq,
-		priority,
+		loc: entry.url,
+		lastmod,
+		changefreq: entry.changeFrequency ?? 'monthly',
+		priority: entry.priority ?? 0.5,
 	};
 }
 
 async function fetchMainContentEntries(): Promise<SitemapEntry[]> {
-	const entries: SitemapEntry[] = [];
-
-	// Static routes
-	for (const r of STATIC_ROUTES) {
-		entries.push(toEntry(r.path, r.priority, r.changefreq));
-	}
-
-	// Blog articles
-	const blogArticles = await fetchGpContent<{ slug?: string; updatedAt?: string; section?: { slug?: string } }>(
-		'v1/content/type/blogArticle',
-	);
-	for (const a of blogArticles) {
-		if (a.slug) {
-			entries.push({
-				loc: `${getAppBase()}/blog/article/${a.slug}`,
-				lastmod: a.updatedAt ? a.updatedAt.slice(0, 10) : formatLastmod(),
-				changefreq: 'monthly',
-				priority: 0.7,
-			});
-		}
-	}
-
-	// Blog sections (from article data)
-	const sectionSlugs = new Set<string>();
-	for (const a of blogArticles) {
-		const slug = a.section?.slug ?? (a as { sectionSlug?: string }).sectionSlug;
-		if (slug) sectionSlugs.add(slug);
-	}
-	for (const slug of sectionSlugs) {
-		entries.push(toEntry(`/blog/section/${slug}`, 0.7, 'weekly'));
-	}
-
-	// FAQ articles
-	const faqArticles = await fetchGpContent<{ title?: string; slug?: string }>('v1/content/type/faqArticle');
-	for (const f of faqArticles) {
-		const slug = f.slug ?? (f.title ? slugify(f.title) : null);
-		if (slug) entries.push(toEntry(`/faqs/${slug}`, 0.7, 'monthly'));
-	}
-
-	// Glossary terms
-	const glossaryItems = await fetchGpContent<{ slug?: string }>('v1/content/type/glossaryItem');
-	for (const g of glossaryItems) {
-		if (g.slug) entries.push(toEntry(`/political-terms/${g.slug}`, 0.6, 'monthly'));
-	}
-
-	// Fallback: try by-slug endpoint if main returns empty (some APIs structure differently)
-	if (glossaryItems.length === 0) {
-		const bySlug = await fetchGpContent<{ slug?: string }>('v1/content/type/glossaryItem/by-slug');
-		for (const g of bySlug) {
-			if (g.slug) entries.push(toEntry(`/political-terms/${g.slug}`, 0.6, 'monthly'));
-		}
-	}
-
-	return entries;
+	const base = getBaseUrl();
+	const entries = await fetchMainSitemapEntries(base);
+	return entries.map(toSitemapEntry);
 }
 
 async function fetchStateElectionEntries(stateCode: string): Promise<SitemapEntry[]> {
-	const entries: SitemapEntry[] = [];
-	const code = stateCode.toUpperCase();
-	const stateLower = code.toLowerCase();
-
-	const places = await fetchElectionData<{ slug?: string }>('v1/places', {
-		state: code,
-		placeColumns: 'slug',
-	});
-	for (const p of places) {
-		if (p.slug) entries.push(toEntry(`/elections/${p.slug}`, 0.7, 'weekly'));
-	}
-
-	const races = await fetchElectionData<{ slug?: string }>('v1/races', {
-		state: code,
-		raceColumns: 'slug',
-	});
-	for (const r of races) {
-		if (r.slug) entries.push(toEntry(`/elections/${stateLower}/position/${r.slug}`, 0.7, 'weekly'));
-	}
-
-	return entries;
+	const base = getBaseUrl();
+	const entries = await fetchStateElectionSitemapEntries(stateCode, base);
+	return entries.map(toSitemapEntry);
 }
 
 async function fetchCandidateEntries(stateCode: string): Promise<SitemapEntry[]> {
-	const code = stateCode.toUpperCase();
-	const candidacies = await fetchElectionData<{ slug?: string }>('v1/candidacies', {
-		state: code,
-		columns: 'slug',
-	});
-	const entries: SitemapEntry[] = [];
-	for (const c of candidacies) {
-		if (c.slug) entries.push(toEntry(`/candidate/${c.slug}`, 0.7, 'weekly'));
-	}
-	return entries;
+	const base = getBaseUrl();
+	const entries = await fetchCandidateSitemapEntries(stateCode, base);
+	return entries.map(toSitemapEntry);
 }
 
 async function runValidation(
@@ -187,7 +106,7 @@ async function runValidation(
 async function main(): Promise<void> {
 	const args = parseArgs();
 	const start = Date.now();
-	const base = getAppBase();
+	const base = getBaseUrl();
 
 	console.log(`Generating sitemaps (base: ${base})...`);
 	if (args.mainOnly) console.log('Mode: main-only');
@@ -285,7 +204,7 @@ async function main(): Promise<void> {
 		durationMs,
 		environment: {
 			appBase: base,
-			gpApiBase: process.env['NEXT_PUBLIC_API_BASE'] ?? 'https://gp-api.goodparty.org',
+			sanityProjectId: process.env['NEXT_PUBLIC_SANITY_PROJECT_ID'] ?? '3rbseux7',
 			electionApiBase: process.env['NEXT_PUBLIC_ELECTION_API_BASE'] ?? process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org',
 		},
 		stats: {

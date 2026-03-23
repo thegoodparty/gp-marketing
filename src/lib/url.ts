@@ -6,13 +6,14 @@ export const DEFAULT_SHARE_IMAGE = 'https://assets.goodparty.org/gp-share-2025.p
 /**
  * Returns the absolute base URL for the site.
  * Used for canonical URLs, sitemap, Open Graph, and schema.org.
- * Production always falls back to goodparty.org; VERCEL_URL is only used for preview deployments.
+ * Checks NEXT_PUBLIC_APP_BASE first (CLI override), then NEXT_PUBLIC_SITE_URL.
+ * Production falls back to goodparty.org; VERCEL_URL is used for preview deployments.
  */
 export function getBaseUrl(): string {
-	const siteUrl = process.env['NEXT_PUBLIC_SITE_URL'];
-	if (siteUrl) {
-		const url = siteUrl.startsWith('http') ? siteUrl : `https://${siteUrl}`;
-		return url.replace(/\/$/, '');
+	const explicit = process.env['NEXT_PUBLIC_APP_BASE'] ?? process.env['NEXT_PUBLIC_SITE_URL'];
+	if (explicit) {
+		const trimmed = explicit.trim().replace(/\/$/, '');
+		return trimmed.startsWith('http') ? trimmed : `https://${trimmed}`;
 	}
 	if (process.env['VERCEL_ENV'] === 'preview' && process.env['VERCEL_URL']) {
 		return `https://${process.env['VERCEL_URL']}`;

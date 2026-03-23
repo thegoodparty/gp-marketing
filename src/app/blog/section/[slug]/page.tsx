@@ -1,6 +1,6 @@
 import type { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
-import { categoriesQuery, goodpartyOrg_allArticlesQuery } from '~/sanity/groq';
+import { categoriesQuery, goodpartyOrg_homeQuery } from '~/sanity/groq';
 import { sanityFetch } from '~/sanity/sanityClient';
 import { PageSections, type Sections } from '~/PageSections';
 import { StructureMetaData } from '~/components/StructureMetadata';
@@ -43,10 +43,12 @@ export default async function Page(props: Params) {
 			| NewsletterBlockSectionType
 			| undefined);
 
-	const newsletterSectionFromHome = await sanityFetch({
-		query: goodpartyOrg_allArticlesQuery,
-		tags: ['goodpartyOrg_allArticles'],
-	});
+	const newsletterSectionFromHome = categoryNewsletterSection
+		? null
+		: await sanityFetch({
+				query: goodpartyOrg_homeQuery,
+				tags: ['goodpartyOrg_home'],
+			});
 
 	const newsletterSection =
 		categoryNewsletterSection ??

@@ -271,6 +271,121 @@ export function buildPositionPageSchema(params: {
 	};
 }
 
+function mapPositionEmploymentType(type: string): string {
+	const normalized = type.toLowerCase().replace(/[^a-z]/g, '');
+	if (normalized.includes('fulltime')) return 'FULL_TIME';
+	if (normalized.includes('parttime')) return 'PART_TIME';
+	if (normalized.includes('volunteer')) return 'VOLUNTEER';
+	if (normalized.includes('contract')) return 'CONTRACTOR';
+	if (normalized.includes('temporary')) return 'TEMPORARY';
+	if (normalized.includes('intern')) return 'INTERN';
+	if (normalized.includes('perdiem')) return 'PER_DIEM';
+	return 'OTHER';
+}
+
+function parseSalaryString(salary: string): object | null {
+	const amounts = [...salary.matchAll(/\$?\s*([\d,]+(?:\.\d{2})?)/g)]
+		.map(m => parseFloat(m[1]!.replace(/,/g, '')))
+		.filter(n => !Number.isNaN(n));
+
+	if (amounts.length === 0) return null;
+
+	const isHourly = /\/\s*h(ou)?r|per\s*hour|hourly/i.test(salary);
+	const unitText = isHourly ? 'HOUR' : 'YEAR';
+
+	const value: Record<string, unknown> = {
+		'@type': 'QuantitativeValue',
+		unitText,
+	};
+
+	if (amounts.length === 1) {
+		value.value = amounts[0];
+	} else {
+		value.minValue = Math.min(...amounts);
+		value.maxValue = Math.max(...amounts);
+	}
+
+	return {
+		'@type': 'MonetaryAmount',
+		currency: 'USD',
+		value,
+	};
+}
+
+/**
+ * Builds Schema.org JobPosting JSON-LD for elections position pages (Google Job Postings rich results).
+ */
+export function buildJobPostingSchema(params: {
+	race: RaceDetail;
+	officeName: string;
+	stateName: string;
+	countyName?: string;
+	cityName?: string;
+	pageUrl: string;
+}): object {
+	const { race, officeName, stateName, countyName, cityName, pageUrl } = params;
+
+	const locationParts = [cityName, countyName, stateName].filter(Boolean);
+	const locationName = locationParts.join(', ');
+
+	const description =
+		race.positionDescription ||
+		`${officeName} is an elected public office position in ${locationName}. ` +
+			`Learn about eligibility, filing deadlines, and how to run for this office.`;
+
+	const orgName = cityName
+		? `City of ${cityName}`
+		: countyName
+			? countyName
+			: `State of ${stateName}`;
+
+	const addressLocality = cityName ?? countyName ?? stateName;
+
+	const schema: Record<string, unknown> = {
+		'@context': 'https://schema.org',
+		'@type': 'JobPosting',
+		title: officeName,
+		url: pageUrl,
+		description,
+		directApply: false,
+		hiringOrganization: {
+			'@type': 'GovernmentOrganization',
+			name: orgName,
+		},
+		jobLocation: {
+			'@type': 'Place',
+			address: {
+				'@type': 'PostalAddress',
+				addressLocality,
+				addressRegion: race.state,
+				addressCountry: 'US',
+			},
+		},
+	};
+
+	const datePosted = race.filingDateStart?.slice(0, 10) || race.electionDate?.slice(0, 10);
+	if (datePosted) {
+		schema.datePosted = datePosted;
+	}
+
+	if (race.filingDateEnd) {
+		schema.validThrough = race.filingDateEnd.slice(0, 10);
+	}
+
+	if (race.employmentType) {
+		schema.employmentType = mapPositionEmploymentType(race.employmentType);
+	}
+
+	if (race.salary) {
+		const baseSalary = parseSalaryString(race.salary);
+		if (baseSalary) {
+			schema.baseSalary = baseSalary;
+		}
+	}
+
+	return schema;
+}
+
 /**
  * Builds a Schema.org BreadcrumbList JSON-LD object from breadcrumb items.
  */

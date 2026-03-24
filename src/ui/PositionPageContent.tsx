@@ -14,7 +14,13 @@ import {
 	POSITION_PAGE_TWO_UP_CARD,
 } from '~/constants/positionPageStaticSections';
 import { primaryButtonStyleType, secondaryButtonStyleType } from '~/ui/_lib/designTypesStore';
-import { buildPositionPageSchema, buildBreadcrumbSchema, buildFAQSchema, buildDynamicFAQItems } from '~/lib/electionsHelpers';
+import {
+	buildPositionPageSchema,
+	buildJobPostingSchema,
+	buildBreadcrumbSchema,
+	buildFAQSchema,
+	buildDynamicFAQItems,
+} from '~/lib/electionsHelpers';
 import { toAbsoluteUrl } from '~/lib/url';
 import { PageSchema } from '~/ui/PageSchema';
 
@@ -117,6 +123,17 @@ export function PositionPageContent(props: PositionPageContentProps) {
 			})
 		: undefined;
 
+	const jobPostingSchema = race
+		? buildJobPostingSchema({
+				race,
+				officeName,
+				stateName,
+				countyName,
+				cityName,
+				pageUrl,
+			})
+		: undefined;
+
 	const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbs, toAbsoluteUrl);
 
 	const faqItems = race
@@ -127,6 +144,7 @@ export function PositionPageContent(props: PositionPageContentProps) {
 	return (
 		<>
 			<PageSchema schema={positionPageSchema} />
+			<PageSchema schema={jobPostingSchema} />
 			<PageSchema schema={breadcrumbSchema} />
 			<PageSchema schema={faqSchema} />
 			<BreadcrumbBlock backgroundColor="midnight" breadcrumbs={breadcrumbs} />

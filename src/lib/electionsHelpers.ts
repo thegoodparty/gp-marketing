@@ -271,45 +271,62 @@ export function buildPositionPageSchema(params: {
 	};
 }
 
+const EMPLOYMENT_TYPE_MAP: Record<string, string> = {
+	'full-time': 'FULL_TIME',
+	'full time': 'FULL_TIME',
+	'part-time': 'PART_TIME',
+	'part time': 'PART_TIME',
+	volunteer: 'VOLUNTEER',
+	contract: 'CONTRACTOR',
+	contractor: 'CONTRACTOR',
+	temporary: 'TEMPORARY',
+	temp: 'TEMPORARY',
+	intern: 'INTERN',
+	internship: 'INTERN',
+	'per diem': 'PER_DIEM',
+	'per-diem': 'PER_DIEM',
+};
+
 function mapPositionEmploymentType(type: string): string {
-	const normalized = type.toLowerCase().replace(/[^a-z]/g, '');
-	if (normalized.includes('fulltime')) return 'FULL_TIME';
-	if (normalized.includes('parttime')) return 'PART_TIME';
-	if (normalized.includes('volunteer')) return 'VOLUNTEER';
-	if (normalized.includes('contract')) return 'CONTRACTOR';
-	if (normalized.includes('temporary')) return 'TEMPORARY';
-	if (normalized.includes('intern')) return 'INTERN';
-	if (normalized.includes('perdiem')) return 'PER_DIEM';
-	return 'OTHER';
+	return EMPLOYMENT_TYPE_MAP[type.toLowerCase().trim()] ?? 'OTHER';
 }
 
 function parseSalaryString(salary: string): object | null {
-	const amounts = [...salary.matchAll(/\$\s*([\d,]+(?:\.\d{2})?)/g)]
-		.map(m => parseFloat(m[1]!.replace(/,/g, '')))
-		.filter(n => !Number.isNaN(n));
-
-	if (amounts.length === 0) return null;
-
-	const isHourly = /\/\s*h(ou)?r|per\s*hour|hourly/i.test(salary);
-	const unitText = isHourly ? 'HOUR' : 'YEAR';
-
-	const value: Record<string, unknown> = {
-		'@type': 'QuantitativeValue',
-		unitText,
-	};
-
-	if (amounts.length === 1) {
-		value.value = amounts[0];
-	} else {
-		value.minValue = Math.min(...amounts);
-		value.maxValue = Math.max(...amounts);
+	function makeResult(unitText: 'HOUR' | 'YEAR', amounts: number[]): object {
+		const value: Record<string, unknown> = { '@type': 'QuantitativeValue', unitText };
+		if (amounts.length === 1) {
+			value.value = amounts[0];
+		} else {
+			value.minValue = Math.min(...amounts);
+			value.maxValue = Math.max(...amounts);
+		}
+		return { '@type': 'MonetaryAmount', currency: 'USD', value };
 	}
 
-	return {
-		'@type': 'MonetaryAmount',
-		currency: 'USD',
-		value,
-	};
+	// 1. Explicit annual amounts — handles "$95,000/year", "$14,400 / year", prose with embedded salary.
+	//    Stops at the first 1–2 matches so per-diem noise ("$7,200/year + $221/day") is ignored.
+	const yearAmounts = [...salary.matchAll(/\$\s*([\d,]+(?:\.\d{2})?)\s*(?:\/\s*(?:year|yr)\b|per\s+year\b|annually\b)/gi)]
+		.map(m => parseFloat(m[1]!.replace(/,/g, '')));
+	if (yearAmounts.length >= 1 && yearAmounts.length <= 2) return makeResult('YEAR', yearAmounts);
+
+	// 2. Explicit hourly amounts — handles "$25/hr", "$25/hour".
+	const hourAmounts = [...salary.matchAll(/\$\s*([\d,]+(?:\.\d{2})?)\s*(?:\/\s*h(?:ou)?r\b|per\s+hour\b|hourly\b)/gi)]
+		.map(m => parseFloat(m[1]!.replace(/,/g, '')));
+	if (hourAmounts.length >= 1 && hourAmounts.length <= 2) return makeResult('HOUR', hourAmounts);
+
+	// 3. Bare integer with no other text — handles "147175".
+	const bareMatch = /^\s*([\d,]+)\s*$/.exec(salary);
+	if (bareMatch) {
+		const n = parseFloat(bareMatch[1]!.replace(/,/g, ''));
+		if (!isNaN(n)) return makeResult('YEAR', [n]);
+	}
+
+	// 4. Generic $ amounts with no explicit unit — handles "$50,000" and "$50,000 - $75,000".
+	const genericAmounts = [...salary.matchAll(/\$\s*([\d,]+(?:\.\d{2})?)/g)]
+		.map(m => parseFloat(m[1]!.replace(/,/g, '')));
+	if (genericAmounts.length === 1 || genericAmounts.length === 2) return makeResult('YEAR', genericAmounts);
+
+	return null;
 }
 
 function escapeHtmlForJobPosting(text: string): string {
@@ -329,8 +346,8 @@ function buildJobPostingDescription(
 ): string {
 	if (positionDescription?.trim()) {
 		const raw = positionDescription.trim();
-		// Trusted API HTML: leading markup only (avoid treating "text </script>" as HTML).
-		if (raw.startsWith('<') && raw.includes('</')) {
+		// Pass through API HTML only when it starts with a known safe block tag.
+		if (/^<(p|ul|ol|h[1-6]|div|section|article)\b/i.test(raw)) {
 			return raw;
 		}
 		return `<p>${escapeHtmlForJobPosting(raw)}</p>`;

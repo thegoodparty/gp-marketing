@@ -360,17 +360,34 @@ describe('buildJobPostingSchema', () => {
 		expect(value.value).toBe(25);
 	});
 
-	test('does not treat year 2024 as salary amount', () => {
+	test('parses bare integer salary (no $ prefix)', () => {
 		const schema = buildJobPostingSchema({
-			race: minimalRace({
-				filingDateStart: '2026-01-01',
-				salary: 'Salary effective 2024: $50,000',
-			}),
+			race: minimalRace({ filingDateStart: '2026-01-01', salary: '147175' }),
 			...jobPostingBaseParams,
 		});
 		const value = ((schema as Record<string, unknown>).baseSalary as Record<string, unknown>).value as Record<string, unknown>;
-		expect(value.value).toBe(50000);
-		expect(value.minValue).toBeUndefined();
+		expect(value.value).toBe(147175);
+		expect(value.unitText).toBe('YEAR');
+	});
+
+	test('picks annual amount from mixed annual+per-diem string', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({ filingDateStart: '2026-01-01', salary: '$7,200/year + $221/day' }),
+			...jobPostingBaseParams,
+		});
+		const value = ((schema as Record<string, unknown>).baseSalary as Record<string, unknown>).value as Record<string, unknown>;
+		expect(value.value).toBe(7200);
+		expect(value.unitText).toBe('YEAR');
+	});
+
+	test('extracts salary embedded in prose', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({ filingDateStart: '2026-01-01', salary: 'The base salary was $141,000/year in 2011 (NRS 223.050).' }),
+			...jobPostingBaseParams,
+		});
+		const value = ((schema as Record<string, unknown>).baseSalary as Record<string, unknown>).value as Record<string, unknown>;
+		expect(value.value).toBe(141000);
+		expect(value.unitText).toBe('YEAR');
 	});
 
 	test('maps Full-Time employment to FULL_TIME', () => {

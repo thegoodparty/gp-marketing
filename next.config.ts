@@ -8,6 +8,30 @@ const nextConfig = {
 	async rewrites() {
 		return [{ source: '/sitemap.xml', destination: '/api/sitemap-index' }];
 	},
+	async redirects() {
+		return [
+			{
+				source: '/sign-up',
+				destination: 'https://app.goodparty.org/sign-up',
+				permanent: true,
+			},
+			{
+				source: '/sign-up/',
+				destination: 'https://app.goodparty.org/sign-up',
+				permanent: true,
+			},
+			{
+				source: '/login',
+				destination: 'https://app.goodparty.org/login',
+				permanent: true,
+			},
+			{
+				source: '/login/',
+				destination: 'https://app.goodparty.org/login',
+				permanent: true,
+			},
+		];
+	},
 	devIndicators: false,
 	swcMinify: true,
 	reactStrictMode: true,

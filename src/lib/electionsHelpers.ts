@@ -223,8 +223,8 @@ export function placeToFactsCards(place: PlaceWithFacts | null): FactsCardProps[
 
 /**
  * Builds a Schema.org WebPage JSON-LD object with GovernmentOffice for position pages.
- * Uses WebPage + GovernmentOffice instead of JobPosting because these pages describe
- * candidacy opportunities for elected office, not employment job postings.
+ * Describes the page and the elected office. JobPosting JSON-LD is emitted separately
+ * (see buildJobPostingSchema) for Google Job Postings rich results.
  */
 export function buildPositionPageSchema(params: {
 	race: RaceDetail;
@@ -284,7 +284,7 @@ function mapPositionEmploymentType(type: string): string {
 }
 
 function parseSalaryString(salary: string): object | null {
-	const amounts = [...salary.matchAll(/\$?\s*([\d,]+(?:\.\d{2})?)/g)]
+	const amounts = [...salary.matchAll(/\$\s*([\d,]+(?:\.\d{2})?)/g)]
 		.map(m => parseFloat(m[1]!.replace(/,/g, '')))
 		.filter(n => !Number.isNaN(n));
 
@@ -312,8 +312,38 @@ function parseSalaryString(salary: string): object | null {
 	};
 }
 
+function escapeHtmlForJobPosting(text: string): string {
+	return text
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;');
+}
+
+/**
+ * JobPosting description as HTML: trusted API markup when present, else escaped plain text in `<p>`.
+ */
+function buildJobPostingDescription(
+	positionDescription: string | undefined,
+	officeName: string,
+	locationName: string,
+): string {
+	if (positionDescription?.trim()) {
+		const raw = positionDescription.trim();
+		// Trusted API HTML: leading markup only (avoid treating "text </script>" as HTML).
+		if (raw.startsWith('<') && raw.includes('</')) {
+			return raw;
+		}
+		return `<p>${escapeHtmlForJobPosting(raw)}</p>`;
+	}
+	const plain =
+		`${officeName} is an elected public office position in ${locationName}. ` +
+		`Learn about eligibility, filing deadlines, and how to run for this office.`;
+	return `<p>${escapeHtmlForJobPosting(plain)}</p>`;
+}
+
 /**
  * Builds Schema.org JobPosting JSON-LD for elections position pages (Google Job Postings rich results).
+ * Returns null when filingDateStart and electionDate are both missing (required datePosted); omit schema until the elections API backfills dates.
  */
 export function buildJobPostingSchema(params: {
 	race: RaceDetail;
@@ -322,16 +352,18 @@ export function buildJobPostingSchema(params: {
 	countyName?: string;
 	cityName?: string;
 	pageUrl: string;
-}): object {
+}): object | null {
 	const { race, officeName, stateName, countyName, cityName, pageUrl } = params;
+
+	const datePosted = race.filingDateStart?.slice(0, 10) || race.electionDate?.slice(0, 10);
+	if (!datePosted) {
+		return null;
+	}
 
 	const locationParts = [cityName, countyName, stateName].filter(Boolean);
 	const locationName = locationParts.join(', ');
 
-	const description =
-		race.positionDescription ||
-		`${officeName} is an elected public office position in ${locationName}. ` +
-			`Learn about eligibility, filing deadlines, and how to run for this office.`;
+	const description = buildJobPostingDescription(race.positionDescription, officeName, locationName);
 
 	const orgName = cityName
 		? `City of ${cityName}`
@@ -347,6 +379,7 @@ export function buildJobPostingSchema(params: {
 		title: officeName,
 		url: pageUrl,
 		description,
+		datePosted,
 		directApply: false,
 		hiringOrganization: {
 			'@type': 'GovernmentOrganization',
@@ -362,11 +395,6 @@ export function buildJobPostingSchema(params: {
 			},
 		},
 	};
-
-	const datePosted = race.filingDateStart?.slice(0, 10) || race.electionDate?.slice(0, 10);
-	if (datePosted) {
-		schema.datePosted = datePosted;
-	}
 
 	if (race.filingDateEnd) {
 		schema.validThrough = race.filingDateEnd.slice(0, 10);
@@ -413,7 +441,7 @@ export function buildFAQSchema(
 ): object {
 	return {
 		'@context': 'https://schema.org',
-		'@type': 'Question',
+		'@type': 'FAQPage',
 		mainEntity: items.map(item => ({
 			'@type': 'Question',
 			name: item.title,

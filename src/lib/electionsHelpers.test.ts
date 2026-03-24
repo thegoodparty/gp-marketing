@@ -1,5 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 import {
+	buildFAQSchema,
+	buildJobPostingSchema,
 	buildRaceSlug,
 	findCityForDistrictName,
 	formatElectionDateFromApi,
@@ -11,7 +13,7 @@ import {
 	slugifyPositionName,
 	stripCountySuffix,
 } from './electionsHelpers';
-import type { PlaceItem, PlaceWithFacts } from '~/types/elections';
+import type { PlaceItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
 
 function placeItem(id: string, name: string, slug: string, state: string): PlaceItem {
 	return { id, name, slug, state };
@@ -263,5 +265,179 @@ describe('formatFilingPeriodFromRace', () => {
 		const result = formatFilingPeriodFromRace(undefined, '2026-02-01');
 		expect(result).toMatch(/Until/);
 		expect(result).toMatch(/February 1, 2026/);
+	});
+});
+
+function minimalRace(overrides: Partial<RaceDetail> = {}): RaceDetail {
+	return {
+		id: 1,
+		slug: 'az/governor',
+		name: 'Governor',
+		state: 'AZ',
+		...overrides,
+	};
+}
+
+const jobPostingBaseParams = {
+	officeName: 'Governor',
+	stateName: 'Arizona',
+	pageUrl: 'https://goodparty.org/elections/az/position/governor',
+};
+
+describe('buildJobPostingSchema', () => {
+	test('returns null when filingDateStart and electionDate are both missing', () => {
+		expect(buildJobPostingSchema({ race: minimalRace(), ...jobPostingBaseParams })).toBeNull();
+	});
+
+	test('includes datePosted from filingDateStart', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({ filingDateStart: '2026-01-15T00:00:00Z' }),
+			...jobPostingBaseParams,
+		});
+		expect(schema).not.toBeNull();
+		expect((schema as Record<string, unknown>).datePosted).toBe('2026-01-15');
+	});
+
+	test('includes datePosted from electionDate when filing start missing', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({ electionDate: '2026-11-03' }),
+			...jobPostingBaseParams,
+		});
+		expect(schema).not.toBeNull();
+		expect((schema as Record<string, unknown>).datePosted).toBe('2026-11-03');
+	});
+
+	test('filingDateStart takes precedence over electionDate', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({
+				filingDateStart: '2026-01-01',
+				electionDate: '2026-11-03',
+			}),
+			...jobPostingBaseParams,
+		});
+		expect((schema as Record<string, unknown>).datePosted).toBe('2026-01-01');
+	});
+
+	test('sets validThrough from filingDateEnd', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({
+				filingDateStart: '2026-01-01',
+				filingDateEnd: '2026-02-01T12:00:00Z',
+			}),
+			...jobPostingBaseParams,
+		});
+		expect((schema as Record<string, unknown>).validThrough).toBe('2026-02-01');
+	});
+
+	test('parses single dollar salary', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({ filingDateStart: '2026-01-01', salary: '$50,000' }),
+			...jobPostingBaseParams,
+		});
+		const baseSalary = (schema as Record<string, unknown>).baseSalary as Record<string, unknown>;
+		expect(baseSalary['@type']).toBe('MonetaryAmount');
+		const value = baseSalary.value as Record<string, unknown>;
+		expect(value.value).toBe(50000);
+	});
+
+	test('parses salary range', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({ filingDateStart: '2026-01-01', salary: '$50,000 - $75,000' }),
+			...jobPostingBaseParams,
+		});
+		const value = ((schema as Record<string, unknown>).baseSalary as Record<string, unknown>).value as Record<string, unknown>;
+		expect(value.minValue).toBe(50000);
+		expect(value.maxValue).toBe(75000);
+	});
+
+	test('uses HOUR unit when hourly cues present', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({ filingDateStart: '2026-01-01', salary: '$25/hr' }),
+			...jobPostingBaseParams,
+		});
+		const value = ((schema as Record<string, unknown>).baseSalary as Record<string, unknown>).value as Record<string, unknown>;
+		expect(value.unitText).toBe('HOUR');
+		expect(value.value).toBe(25);
+	});
+
+	test('does not treat year 2024 as salary amount', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({
+				filingDateStart: '2026-01-01',
+				salary: 'Salary effective 2024: $50,000',
+			}),
+			...jobPostingBaseParams,
+		});
+		const value = ((schema as Record<string, unknown>).baseSalary as Record<string, unknown>).value as Record<string, unknown>;
+		expect(value.value).toBe(50000);
+		expect(value.minValue).toBeUndefined();
+	});
+
+	test('maps Full-Time employment to FULL_TIME', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({ filingDateStart: '2026-01-01', employmentType: 'Full-Time' }),
+			...jobPostingBaseParams,
+		});
+		expect((schema as Record<string, unknown>).employmentType).toBe('FULL_TIME');
+	});
+
+	test('maps unknown employment to OTHER', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({ filingDateStart: '2026-01-01', employmentType: 'Rotating shift' }),
+			...jobPostingBaseParams,
+		});
+		expect((schema as Record<string, unknown>).employmentType).toBe('OTHER');
+	});
+
+	test('omits baseSalary when salary unparseable', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({ filingDateStart: '2026-01-01', salary: 'TBD' }),
+			...jobPostingBaseParams,
+		});
+		expect((schema as Record<string, unknown>).baseSalary).toBeUndefined();
+	});
+
+	test('wraps fallback description in paragraph HTML', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({ filingDateStart: '2026-01-01' }),
+			officeName: 'Mayor',
+			stateName: 'Arizona',
+			countyName: 'Maricopa County',
+			pageUrl: 'https://example.com/elections',
+		}) as Record<string, unknown>;
+		const desc = String(schema.description);
+		expect(desc.startsWith('<p>')).toBe(true);
+		expect(desc.endsWith('</p>')).toBe(true);
+		expect(desc).toContain('elected public office');
+	});
+
+	test('escapes angle brackets in plain positionDescription', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({
+				filingDateStart: '2026-01-01',
+				positionDescription: 'Use <script>x</script> carefully',
+			}),
+			...jobPostingBaseParams,
+		}) as Record<string, unknown>;
+		expect(String(schema.description)).toContain('&lt;script&gt;');
+	});
+
+	test('passes through API HTML when closing tag present', () => {
+		const raw = '<p>Hello</p>';
+		const schema = buildJobPostingSchema({
+			race: minimalRace({
+				filingDateStart: '2026-01-01',
+				positionDescription: raw,
+			}),
+			...jobPostingBaseParams,
+		}) as Record<string, unknown>;
+		expect(schema.description).toBe(raw);
+	});
+});
+
+describe('buildFAQSchema', () => {
+	test('uses FAQPage as root @type', () => {
+		const schema = buildFAQSchema([{ title: 'Q?', copy: 'A.' }]) as Record<string, unknown>;
+		expect(schema['@type']).toBe('FAQPage');
 	});
 });

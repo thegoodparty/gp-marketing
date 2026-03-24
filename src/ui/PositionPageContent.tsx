@@ -123,6 +123,7 @@ export function PositionPageContent(props: PositionPageContentProps) {
 			})
 		: undefined;
 
+	// Omit JobPosting when the elections API has no filing or election date (required datePosted).
 	const jobPostingSchema = race
 		? buildJobPostingSchema({
 				race,
@@ -131,7 +132,7 @@ export function PositionPageContent(props: PositionPageContentProps) {
 				countyName,
 				cityName,
 				pageUrl,
-			})
+			}) ?? undefined
 		: undefined;
 
 	const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbs, toAbsoluteUrl);

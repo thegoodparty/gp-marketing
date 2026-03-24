@@ -14,8 +14,9 @@ export type ResolveBlogCardSource = TopicRelatedArticle | CategoryRelatedArticle
 
 function resolveBlogCardCategoryLabel(category: ResolveBlogCardSource['category']): string | undefined {
 	if (category == null) return undefined;
+	// Topic/category listing queries project `category` via articleCardGroq as tagOverview.field_name (string); article list_relatedArticles uses relatedArticlesGroq (categories document).
 	if (typeof category === 'string') return category;
-	if (typeof category === 'object' && 'tagOverview' in category) {
+	if (category !== null && typeof category === 'object' && !Array.isArray(category) && 'tagOverview' in category) {
 		return category.tagOverview?.field_name ?? undefined;
 	}
 	return undefined;

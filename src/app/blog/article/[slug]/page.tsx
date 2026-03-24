@@ -23,6 +23,7 @@ import { stegaClean } from 'next-sanity';
 import { PageSchema } from '~/ui/PageSchema';
 import { DEFAULT_SHARE_IMAGE, getBaseUrl, getSanityImageUrl } from '~/lib/url';
 import { BlogBlock } from '~/ui/BlogBlock';
+import type { BlogCardProps } from '~/ui/BlogCard';
 import { resolveBlogCard } from '~/ui/_lib/resolveBlogCard';
 
 export async function generateStaticParams() {
@@ -137,7 +138,9 @@ export default async function Page(props: any) {
 			{page.relatedArticles?.list_relatedArticles && page.relatedArticles.list_relatedArticles.length > 0 && (
 				<BlogBlock
 					header={{ title: 'Related Articles' }}
-					items={page.relatedArticles.list_relatedArticles.map(resolveBlogCard).filter(Boolean)}
+					items={page.relatedArticles.list_relatedArticles
+						.map(resolveBlogCard)
+						.filter((item): item is BlogCardProps => item != null)}
 				/>
 			)}
 		</>

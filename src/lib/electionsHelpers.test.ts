@@ -439,7 +439,7 @@ describe('buildJobPostingSchema', () => {
 		expect(String(schema.description)).toContain('&lt;script&gt;');
 	});
 
-	test('passes through API HTML when closing tag present', () => {
+	test('passes through API HTML starting with block tag', () => {
 		const raw = '<p>Hello</p>';
 		const schema = buildJobPostingSchema({
 			race: minimalRace({
@@ -449,6 +449,29 @@ describe('buildJobPostingSchema', () => {
 			...jobPostingBaseParams,
 		}) as Record<string, unknown>;
 		expect(schema.description).toBe(raw);
+	});
+
+	test('strips script tags from API HTML', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({
+				filingDateStart: '2026-01-01',
+				positionDescription: '<p>Safe</p><script>alert(1)</script>',
+			}),
+			...jobPostingBaseParams,
+		}) as Record<string, unknown>;
+		expect(String(schema.description)).not.toContain('<script>');
+		expect(String(schema.description)).toContain('<p>Safe</p>');
+	});
+
+	test('escapes ampersands in plain positionDescription', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({
+				filingDateStart: '2026-01-01',
+				positionDescription: 'Salary & benefits',
+			}),
+			...jobPostingBaseParams,
+		}) as Record<string, unknown>;
+		expect(String(schema.description)).toContain('&amp;');
 	});
 });
 

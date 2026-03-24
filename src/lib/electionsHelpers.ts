@@ -307,12 +307,14 @@ function parseSalaryString(salary: string): object | null {
 	//    Stops at the first 1–2 matches so per-diem noise ("$7,200/year + $221/day") is ignored.
 	const yearAmounts = [...salary.matchAll(/\$\s*([\d,]+(?:\.\d{2})?)\s*(?:\/\s*(?:year|yr)\b|per\s+year\b|annually\b)/gi)]
 		.map(m => parseFloat(m[1]!.replace(/,/g, '')));
-	if (yearAmounts.length >= 1 && yearAmounts.length <= 2) return makeResult('YEAR', yearAmounts);
+	if (yearAmounts.length > 2) return null;
+	if (yearAmounts.length >= 1) return makeResult('YEAR', yearAmounts);
 
 	// 2. Explicit hourly amounts — handles "$25/hr", "$25/hour".
 	const hourAmounts = [...salary.matchAll(/\$\s*([\d,]+(?:\.\d{2})?)\s*(?:\/\s*h(?:ou)?r\b|per\s+hour\b|hourly\b)/gi)]
 		.map(m => parseFloat(m[1]!.replace(/,/g, '')));
-	if (hourAmounts.length >= 1 && hourAmounts.length <= 2) return makeResult('HOUR', hourAmounts);
+	if (hourAmounts.length > 2) return null;
+	if (hourAmounts.length >= 1) return makeResult('HOUR', hourAmounts);
 
 	// 3. Bare integer with no other text — handles "147175".
 	const bareMatch = /^\s*([\d,]+)\s*$/.exec(salary);
@@ -348,7 +350,7 @@ function buildJobPostingDescription(
 		const raw = positionDescription.trim();
 		// Pass through API HTML only when it starts with a known safe block tag.
 		if (/^<(p|ul|ol|h[1-6]|div|section|article)\b/i.test(raw)) {
-			return raw;
+			return raw.replace(/<(script|iframe|object)[^>]*>[\s\S]*?<\/\1>/gi, '').replace(/\s+on\w+="[^"]*"/gi, '');
 		}
 		return `<p>${escapeHtmlForJobPosting(raw)}</p>`;
 	}
@@ -394,7 +396,7 @@ export function buildJobPostingSchema(params: {
 		'@context': 'https://schema.org',
 		'@type': 'JobPosting',
 		title: officeName,
-		url: pageUrl,
+		sameAs: pageUrl,
 		description,
 		datePosted,
 		directApply: false,

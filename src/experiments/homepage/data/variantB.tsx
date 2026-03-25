@@ -12,7 +12,7 @@ import {
 	primaryButtonStyleType,
 	primaryRedButtonStyleType,
 } from '~/ui/_lib/designTypesStore.ts';
-import { HOMEPAGE_EXPERIMENT_VARIANT_B, makeHomepageCtaOnClick } from '~/lib/analytics';
+import { HOMEPAGE_EXPERIMENT_VARIANT_B } from '~/lib/analytics';
 import { sharedStats } from './shared';
 
 export const heroB = {
@@ -40,14 +40,14 @@ export const heroB = {
 			buttonType: 'internal' as const,
 			href: '/run-for-office',
 			label: "I'm Ready to Run",
-			onClick: makeHomepageCtaOnClick(HOMEPAGE_EXPERIMENT_VARIANT_B, 'hero', "I'm Ready to Run", '/run-for-office'),
+			experimentTracking: { variant: HOMEPAGE_EXPERIMENT_VARIANT_B, section: 'hero' },
 			buttonProps: { styleType: primaryButtonStyleType },
 		},
 		{
 			buttonType: 'internal' as const,
 			href: '/about',
 			label: 'I Want to Help',
-			onClick: makeHomepageCtaOnClick(HOMEPAGE_EXPERIMENT_VARIANT_B, 'hero', 'I Want to Help', '/about'),
+			experimentTracking: { variant: HOMEPAGE_EXPERIMENT_VARIANT_B, section: 'hero' },
 			buttonProps: { styleType: outlineInverseButtonStyleType },
 		},
 	] satisfies ComponentButtonProps[],
@@ -241,14 +241,14 @@ export const ctaB = {
 			label: 'Start Your Campaign',
 			className: 'max-sm:w-full',
 			iconRight: <IconResolver icon="arrow-right" className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5" />,
-			onClick: makeHomepageCtaOnClick(HOMEPAGE_EXPERIMENT_VARIANT_B, 'cta_block', 'Start Your Campaign', '/run'),
+			experimentTracking: { variant: HOMEPAGE_EXPERIMENT_VARIANT_B, section: 'cta_block' },
 			buttonProps: { styleType: primaryRedButtonStyleType },
 		},
 		{
 			buttonType: 'internal' as const,
 			href: '/candidates',
 			label: 'Explore the Tools',
-			onClick: makeHomepageCtaOnClick(HOMEPAGE_EXPERIMENT_VARIANT_B, 'cta_block', 'Explore the Tools', '/candidates'),
+			experimentTracking: { variant: HOMEPAGE_EXPERIMENT_VARIANT_B, section: 'cta_block' },
 			buttonProps: { styleType: outlineInverseButtonStyleType },
 		},
 	] satisfies ComponentButtonProps[],

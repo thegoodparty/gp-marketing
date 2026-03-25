@@ -1,7 +1,3 @@
-'use client';
-
-import type { MouseEvent } from 'react';
-
 /** Amplitude Experiment flag for homepage hero A/B (`HomepageExperiment`). */
 export const HOME_HERO_LAYOUT_EXPERIMENT_FLAG_KEY = 'home_hero_layout_test';
 
@@ -46,7 +42,7 @@ export function isSignUpUrl(href: string | undefined | null): boolean {
 /**
  * Fires `'Sign Up Clicked'` for any sign-up link click.
  *
- * On the homepage this fires alongside `'Homepage CTA Clicked'` (from `makeHomepageCtaOnClick`).
+ * On the homepage this fires alongside `'Homepage CTA Clicked'` (via `experimentTracking` on `ComponentButton`).
  * The two events serve distinct funnels: `Homepage CTA Clicked` measures experiment CTA
  * engagement, while `Sign Up Clicked` tracks sign-up intent site-wide. Both are intentional.
  */
@@ -60,16 +56,4 @@ export function trackSignUpClicked(props: { href: string; label?: string | null 
 		page_path: pagePath ?? null,
 		homepage_experiment_variant: homepageVariant,
 	});
-}
-
-/** Factory for homepage CTA click handlers (used in variant data files). */
-export function makeHomepageCtaOnClick(
-	variant: string,
-	section: string,
-	label: string,
-	href: string,
-): (e: MouseEvent<HTMLElement>) => void {
-	return () => {
-		trackEvent('Homepage CTA Clicked', { variant, section, label, href });
-	};
 }

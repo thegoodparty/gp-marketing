@@ -1,10 +1,14 @@
 'use client';
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { trackEvent } from '~/lib/analytics';
-
-const FLAG_KEY = 'home_hero_layout_test';
-const VALID_VARIANTS = ['control', 'variant-a', 'variant-b'] as const;
+import {
+	HOME_HERO_LAYOUT_EXPERIMENT_FLAG_KEY,
+	HOMEPAGE_EXPERIMENT_VARIANT_A,
+	HOMEPAGE_EXPERIMENT_VARIANT_B,
+	HOMEPAGE_EXPERIMENT_VARIANT_CONTROL,
+	VALID_HOMEPAGE_EXPERIMENT_VARIANTS,
+	trackEvent,
+} from '~/lib/analytics';
 
 type Props = {
 	control: ReactNode;
@@ -22,7 +26,7 @@ export function HomepageExperiment(props: Props) {
 			if (hasTrackedExposureRef.current) return;
 
 			trackEvent('Experiment Viewed', {
-				flag_key: FLAG_KEY,
+				flag_key: HOME_HERO_LAYOUT_EXPERIMENT_FLAG_KEY,
 				variant: resolvedVariant,
 			});
 			hasTrackedExposureRef.current = true;
@@ -32,9 +36,9 @@ export function HomepageExperiment(props: Props) {
 			typeof window !== 'undefined' &&
 			(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 		if (isLocal) {
-			const match = new RegExp(`${FLAG_KEY}=([^;]+)`).exec(document.cookie);
+			const match = new RegExp(`${HOME_HERO_LAYOUT_EXPERIMENT_FLAG_KEY}=([^;]+)`).exec(document.cookie);
 			const forced = match?.[1]?.trim();
-			if (forced && (VALID_VARIANTS as readonly string[]).includes(forced)) {
+			if (forced && (VALID_HOMEPAGE_EXPERIMENT_VARIANTS as readonly string[]).includes(forced)) {
 				applyVariant(forced);
 				return;
 			}
@@ -43,7 +47,7 @@ export function HomepageExperiment(props: Props) {
 		const resolve = () => {
 			const exp = window.experiment;
 			if (!exp) return false;
-			const v = exp.variant(FLAG_KEY);
+			const v = exp.variant(HOME_HERO_LAYOUT_EXPERIMENT_FLAG_KEY);
 			if (v?.value) {
 				applyVariant(v.value);
 				return true;
@@ -54,12 +58,12 @@ export function HomepageExperiment(props: Props) {
 		if (resolve()) return;
 
 		const onReady = () => {
-			if (!resolve()) applyVariant('control');
+			if (!resolve()) applyVariant(HOMEPAGE_EXPERIMENT_VARIANT_CONTROL);
 		};
 		window.addEventListener('experiment:ready', onReady);
 
 		const timeout = setTimeout(() => {
-			if (!resolve()) applyVariant('control');
+			if (!resolve()) applyVariant(HOMEPAGE_EXPERIMENT_VARIANT_CONTROL);
 		}, 3000);
 
 		return () => {
@@ -71,10 +75,10 @@ export function HomepageExperiment(props: Props) {
 	if (variant === null) {
 		return <>{props.control}</>;
 	}
-	if (variant === 'variant-a') {
+	if (variant === HOMEPAGE_EXPERIMENT_VARIANT_A) {
 		return <>{props.variantA}</>;
 	}
-	if (variant === 'variant-b') {
+	if (variant === HOMEPAGE_EXPERIMENT_VARIANT_B) {
 		return <>{props.variantB}</>;
 	}
 	return <>{props.control}</>;

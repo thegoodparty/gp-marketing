@@ -12,7 +12,7 @@ import {
 	outlineInverseButtonStyleType,
 	primaryButtonStyleType,
 } from '~/ui/_lib/designTypesStore.ts';
-import { trackEvent } from '~/lib/analytics';
+import { HOMEPAGE_EXPERIMENT_VARIANT_B, trackEvent } from '~/lib/analytics';
 
 export const heroB = {
 	manifesto: (
@@ -41,7 +41,7 @@ export const heroB = {
 			label: "I'm Ready to Run",
 			onClick: () => {
 				trackEvent('Homepage CTA Clicked', {
-					variant: 'variant-b',
+					variant: HOMEPAGE_EXPERIMENT_VARIANT_B,
 					section: 'hero',
 					label: "I'm Ready to Run",
 					href: '/run-for-office',
@@ -55,7 +55,7 @@ export const heroB = {
 			label: 'I Want to Help',
 			onClick: () => {
 				trackEvent('Homepage CTA Clicked', {
-					variant: 'variant-b',
+					variant: HOMEPAGE_EXPERIMENT_VARIANT_B,
 					section: 'hero',
 					label: 'I Want to Help',
 					href: '/about',
@@ -261,7 +261,7 @@ export const ctaB = {
 			iconRight: <IconResolver icon="arrow-right" className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5" />,
 			onClick: () => {
 				trackEvent('Homepage CTA Clicked', {
-					variant: 'variant-b',
+					variant: HOMEPAGE_EXPERIMENT_VARIANT_B,
 					section: 'cta_block',
 					label: 'Start Your Campaign',
 					href: '/run',
@@ -275,7 +275,7 @@ export const ctaB = {
 			label: 'Explore the Tools',
 			onClick: () => {
 				trackEvent('Homepage CTA Clicked', {
-					variant: 'variant-b',
+					variant: HOMEPAGE_EXPERIMENT_VARIANT_B,
 					section: 'cta_block',
 					label: 'Explore the Tools',
 					href: '/candidates',

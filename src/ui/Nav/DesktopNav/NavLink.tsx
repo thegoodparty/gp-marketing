@@ -35,13 +35,9 @@ export function NavLink(item: NavLinkProps) {
 					onClick={() => {
 						const href = item.link?.href;
 						if (href && isSignUpUrl(href)) {
-							trackSignUpClicked({
-								href,
-								...(item.label ? { label: item.label } : {}),
-							});
+							trackSignUpClicked({ href, label: item.label ?? null });
 						}
-						// eslint-disable-next-line @typescript-eslint/unbound-method -- optional handler, not a method on `item`
-						item.onClick?.();
+						(item.onClick as (() => void) | undefined)?.();
 					}}
 				>
 					<Text styleType={item.textStyleType ?? 'nav-menu-item'}>{item.label}</Text>
@@ -65,8 +61,7 @@ export function NavGroupItem(props: NonNullable<NavDropdownProps['group']>[numbe
 				props.className,
 			)}
 			onClick={() => {
-				// eslint-disable-next-line @typescript-eslint/unbound-method -- invoke optional handler without `this`
-				props.onClick?.();
+				(props.onClick as (() => void) | undefined)?.();
 			}}
 		>
 			{props.icon && (
@@ -85,7 +80,7 @@ export function NavGroupItem(props: NonNullable<NavDropdownProps['group']>[numbe
 							if (isSignUpUrl(props.link?.href)) {
 								trackSignUpClicked({
 									href: props.link.href,
-									...(typeof props.label === 'string' ? { label: props.label } : {}),
+									label: typeof props.label === 'string' ? props.label : null,
 								});
 							}
 						}}

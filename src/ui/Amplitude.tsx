@@ -18,13 +18,14 @@ export function Amplitude() {
 					window.amplitude.init('5a7af08e3a00d6fd2486d1c1313740f2', {
 						fetchRemoteConfig: true,
 						autocapture: true,
+						transport: 'beacon',
 					});
 					if (EXPERIMENT_DEPLOYMENT_KEY) {
 						import('@amplitude/experiment-js-client')
 							.then(({ Experiment }) => {
 								const experiment = Experiment.initialize(EXPERIMENT_DEPLOYMENT_KEY);
 								window.experiment = experiment;
-								experiment.fetch().finally(() => {
+								void experiment.fetch().finally(() => {
 									window.dispatchEvent(new Event('experiment:ready'));
 								});
 							})

@@ -1,5 +1,5 @@
 'use client';
-import { AnimatePresence, cubicBezier, motion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { usePathname } from 'next/navigation';
 import { Fragment } from 'react';
 import { useState } from 'react';
@@ -33,6 +33,7 @@ export function MobileNav(props: NavProps) {
 					/>
 				</Anchor>
 				<div className='flex flex-row gap-[1rem] items-center justify-center w-fit'>
+					{/* Sign-up (and other) CTAs: tracking lives in `ComponentButton` via `isSignUpUrl` / `trackSignUpClicked`. */}
 					{props.secondaryCTA && (
 						<ComponentButton
 							{...props.secondaryCTA}

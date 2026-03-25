@@ -150,6 +150,18 @@ function componentButtonLabelString(label: ReactNode | undefined): string | unde
 	return undefined;
 }
 
+function handleLinkClickWithSignUpTracking(
+	href: string,
+	label: ReactNode | undefined,
+	userOnClick: ComponentButtonProps['onClick'],
+	e: React.MouseEvent<HTMLElement, MouseEvent>,
+): void {
+	if (isSignUpUrl(href)) {
+		trackSignUpClicked({ href, label: componentButtonLabelString(label) ?? null });
+	}
+	userOnClick?.(e);
+}
+
 export const ComponentButton = (props: ComponentButtonProps) => {
 	const isPrimary = props.buttonProps?.styleType === 'primary' || props.buttonProps?.styleType === 'secondary';
 
@@ -161,12 +173,15 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
-					onClick={e => {
-						if (isSignUpUrl(props.href)) {
-							trackSignUpClicked({ href: props.href, label: componentButtonLabelString(props.label) });
-						}
-						props.onClick?.(e);
-					}}
+					onClick={e =>
+						handleLinkClickWithSignUpTracking(
+							props.href,
+							props.label,
+							// eslint-disable-next-line @typescript-eslint/unbound-method -- forwarded optional handler from props
+							props.onClick,
+							e,
+						)
+					}
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ?? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />
@@ -183,12 +198,15 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
-					onClick={e => {
-						if (isSignUpUrl(props.href)) {
-							trackSignUpClicked({ href: props.href, label: componentButtonLabelString(props.label) });
-						}
-						props.onClick?.(e);
-					}}
+					onClick={e =>
+						handleLinkClickWithSignUpTracking(
+							props.href,
+							props.label,
+							// eslint-disable-next-line @typescript-eslint/unbound-method -- forwarded optional handler from props
+							props.onClick,
+							e,
+						)
+					}
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ??
@@ -206,12 +224,15 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
-					onClick={e => {
-						if (isSignUpUrl(props.href)) {
-							trackSignUpClicked({ href: props.href, label: componentButtonLabelString(props.label) });
-						}
-						props.onClick?.(e);
-					}}
+					onClick={e =>
+						handleLinkClickWithSignUpTracking(
+							props.href,
+							props.label,
+							// eslint-disable-next-line @typescript-eslint/unbound-method -- forwarded optional handler from props
+							props.onClick,
+							e,
+						)
+					}
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ?? (
@@ -230,12 +251,15 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
-					onClick={e => {
-						if (isSignUpUrl(props.href)) {
-							trackSignUpClicked({ href: props.href, label: componentButtonLabelString(props.label) });
-						}
-						props.onClick?.(e);
-					}}
+					onClick={e =>
+						handleLinkClickWithSignUpTracking(
+							props.href,
+							props.label,
+							// eslint-disable-next-line @typescript-eslint/unbound-method -- forwarded optional handler from props
+							props.onClick,
+							e,
+						)
+					}
 					target='_blank'
 					iconLeft={props.iconLeft}
 					iconRight={props.iconRight ?? <IconResolver icon='download' className='min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5' />}
@@ -251,12 +275,15 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
-					onClick={e => {
-						if (isSignUpUrl(props.href)) {
-							trackSignUpClicked({ href: props.href, label: componentButtonLabelString(props.label) });
-						}
-						props.onClick?.(e);
-					}}
+					onClick={e =>
+						handleLinkClickWithSignUpTracking(
+							props.href,
+							props.label,
+							// eslint-disable-next-line @typescript-eslint/unbound-method -- forwarded optional handler from props
+							props.onClick,
+							e,
+						)
+					}
 					iconLeft={props.iconLeft ?? <IconResolver icon='user-round' className='min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5' />}
 					iconRight={props.iconRight}
 					{...props.buttonProps}
@@ -288,7 +315,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					onClick={e => {
-						trackSignUpClicked({ href: APP_SIGN_UP_HREF, label: componentButtonLabelString(props.label) });
+						trackSignUpClicked({ href: APP_SIGN_UP_HREF, label: componentButtonLabelString(props.label) ?? null });
 						props.onClick?.(e);
 					}}
 					iconLeft={props.iconLeft}

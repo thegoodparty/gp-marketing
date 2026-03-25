@@ -1,6 +1,18 @@
 'use client';
 
-const HOMEPAGE_EXPERIMENT_FLAG_KEY = 'home_hero_layout_test';
+/** Amplitude Experiment flag for homepage hero A/B (`HomepageExperiment`). */
+export const HOME_HERO_LAYOUT_EXPERIMENT_FLAG_KEY = 'home_hero_layout_test';
+
+/** Values must match the Amplitude Experiment deployment for this flag. */
+export const HOMEPAGE_EXPERIMENT_VARIANT_CONTROL = 'control';
+export const HOMEPAGE_EXPERIMENT_VARIANT_A = 'variant-a';
+export const HOMEPAGE_EXPERIMENT_VARIANT_B = 'variant-b';
+
+export const VALID_HOMEPAGE_EXPERIMENT_VARIANTS = [
+	HOMEPAGE_EXPERIMENT_VARIANT_CONTROL,
+	HOMEPAGE_EXPERIMENT_VARIANT_A,
+	HOMEPAGE_EXPERIMENT_VARIANT_B,
+] as const;
 
 /** Canonical app sign-up URL (matches `buttonTransformer` SignUp action). */
 export const APP_SIGN_UP_HREF = 'https://app.goodparty.org/sign-up';
@@ -10,9 +22,10 @@ export function trackEvent(eventName: string, eventProperties?: Record<string, u
 	window.amplitude?.track(eventName, eventProperties);
 }
 
-export function getExperimentVariant(flagKey: string = HOMEPAGE_EXPERIMENT_FLAG_KEY): string | null {
+/** Resolved variant for `HOME_HERO_LAYOUT_EXPERIMENT_FLAG_KEY` (homepage hero experiment). */
+export function getHomepageExperimentVariant(): string | null {
 	if (typeof window === 'undefined') return null;
-	const variant = window.experiment?.variant(flagKey);
+	const variant = window.experiment?.variant(HOME_HERO_LAYOUT_EXPERIMENT_FLAG_KEY);
 	return variant?.value ?? null;
 }
 
@@ -26,13 +39,22 @@ export function isSignUpUrl(href: string | undefined | null): boolean {
 	return path.endsWith('/sign-up');
 }
 
-export function trackSignUpClicked(props: { href: string; label?: string }): void {
-	const variant = getExperimentVariant();
-	const pagePath = typeof window !== 'undefined' ? window.location.pathname : undefined;
+function isHomepageForExperiment(pathname: string): boolean {
+	return pathname === '/';
+}
+
+export function trackSignUpClicked(props: { href: string; label?: string | null }): void {
+	const pagePath = typeof window !== 'undefined' ? window.location.pathname : null;
+	const variant =
+		pagePath != null && isHomepageForExperiment(pagePath) ? getHomepageExperimentVariant() : null;
+
 	trackEvent('Sign Up Clicked', {
 		href: props.href,
-		...(props.label ? { label: props.label } : {}),
-		...(pagePath ? { page_path: pagePath } : {}),
-		...(variant != null ? { variant } : {}),
+		label: props.label ?? null,
+		page_path: pagePath ?? null,
+		variant,
 	});
+
+	// Best-effort: reduce dropped events when navigation unloads the page (review: beacon / flush).
+	void Promise.resolve(window.amplitude?.flush?.()).catch(() => undefined);
 }

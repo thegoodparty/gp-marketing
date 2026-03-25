@@ -76,6 +76,12 @@
 		--goodparty-gold: hsl(43 81% 51% / 1);
 		--goodparty-cream: hsl(33 60% 97% / 1);
 
+		/* Button style tokens */
+		--btn-primary-bg: hsl(221 83% 53% / 1);
+		--btn-secondary-hover-bg: hsl(220 17% 28% / 1);
+		--btn-ghost-hover-bg: hsl(0 0% 96% / 1);
+		--btn-outline-ring: hsl(0 0% 64% / 1);
+
 		/* macOS-style window control dots (AIChatVisual) */
 		--ui-dot-close: #ff5f57;
 		--ui-dot-minimize: #ffbd2e;
@@ -220,6 +226,11 @@
 	--color-goodparty-blue-light: var(--goodparty-blue-light);
 	--color-goodparty-gold: var(--goodparty-gold);
 	--color-goodparty-cream: var(--goodparty-cream);
+
+	--color-btn-primary-bg: var(--btn-primary-bg);
+	--color-btn-secondary-hover-bg: var(--btn-secondary-hover-bg);
+	--color-btn-ghost-hover-bg: var(--btn-ghost-hover-bg);
+	--color-btn-outline-ring: var(--btn-outline-ring);
 
 	--color-ui-dot-close: var(--ui-dot-close);
 	--color-ui-dot-minimize: var(--ui-dot-minimize);

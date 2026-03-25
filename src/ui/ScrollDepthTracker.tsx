@@ -14,30 +14,39 @@ export function ScrollDepthTracker() {
 	}, [pathname]);
 
 	useEffect(() => {
+		let rafId: number | null = null;
+
 		const handleScroll = () => {
-			const amp = typeof window !== 'undefined' ? window.amplitude : undefined;
-			if (!amp?.track) return;
+			if (rafId !== null) return;
+			rafId = requestAnimationFrame(() => {
+				rafId = null;
 
-			const { scrollTop, scrollHeight } = document.documentElement;
-			const { clientHeight } = document.documentElement;
-			const scrollable = scrollHeight - clientHeight;
-			if (scrollable <= 0) return;
+				const amp = typeof window !== 'undefined' ? window.amplitude : undefined;
+				if (!amp?.track) return;
 
-			const pct = Math.round(((scrollTop + clientHeight) / scrollHeight) * 100);
+				const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+				const scrollable = scrollHeight - clientHeight;
+				if (scrollable <= 0) return;
 
-			for (const threshold of THRESHOLDS) {
-				if (pct >= threshold && !firedRef.current.has(threshold)) {
-					firedRef.current.add(threshold);
-					amp.track('Scroll Depth', {
-						scroll_depth_pct: threshold,
-						page: pathname || '/',
-					});
+				const pct = Math.round(((scrollTop + clientHeight) / scrollHeight) * 100);
+
+				for (const threshold of THRESHOLDS) {
+					if (pct >= threshold && !firedRef.current.has(threshold)) {
+						firedRef.current.add(threshold);
+						amp.track('Scroll Depth', {
+							scroll_depth_pct: threshold,
+							page: pathname || '/',
+						});
+					}
 				}
-			}
+			});
 		};
 
 		window.addEventListener('scroll', handleScroll, { passive: true });
-		return () => window.removeEventListener('scroll', handleScroll);
+		return () => {
+			window.removeEventListener('scroll', handleScroll);
+			if (rafId !== null) cancelAnimationFrame(rafId);
+		};
 	}, [pathname]);
 
 	return null;

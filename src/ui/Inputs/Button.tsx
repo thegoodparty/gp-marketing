@@ -9,7 +9,8 @@ import {
 	type ReactNode,
 } from 'react';
 
-import { cn, tv } from '../_lib/utils.ts';
+import { APP_SIGN_UP_HREF, isSignUpUrl, trackEvent, trackSignUpClicked } from '~/lib/analytics';
+import { tv } from '../_lib/utils.ts';
 import { Anchor, type AnchorProps } from '../Anchor.tsx';
 import { IconResolver } from '../IconResolver.tsx';
 import type { buttonStyleTypeValues } from '../_lib/designTypesStore.ts';
@@ -26,6 +27,7 @@ export const btnStyles = tv({
 		base: [
 			'group/button text-black rounded-full cursor-pointer',
 			'inline-flex items-center justify-center',
+			'text-[0.875rem] font-semibold',
 			'focus:ring-4',
 			'disabled:opacity-50 disabled:cursor-not-allowed',
 			'transition-all duration-normal ease-smooth',
@@ -39,40 +41,37 @@ export const btnStyles = tv({
 		},
 		type: {
 			primary: {
-				base: 'text-white! bg-[#2563EB] hover:bg-[#2563EB]/80 focus:ring-[#2563EB]/40',
+				base: 'text-white! bg-btn-primary-bg hover:bg-btn-primary-bg/80 focus:ring-btn-primary-bg/40',
 			},
 			secondary: {
-				base: 'text-white! bg-midnight-900 hover:bg-[#3C4454] focus:ring-midnight-300/50',
+				base: 'text-white! bg-midnight-900 hover:bg-btn-secondary-hover-bg focus:ring-midnight-300/50',
 			},
 			outline: {
-				base: 'border border-black hover:bg-black/5 focus:ring-[#A3A3A3]/50',
+				base: 'border border-black hover:bg-black/5 focus:ring-btn-outline-ring/50',
 			},
 			'outline-inverse': {
 				base: 'text-white! border border-white hover:bg-white/10 focus:ring-white/50',
 			},
 			ghost: {
-				base: 'hover:bg-[#F5F5F5] focus:ring-[#A3A3A3]/50',
+				base: 'hover:bg-btn-ghost-hover-bg focus:ring-btn-outline-ring/50',
 			},
 			'ghost-inverse': {
 				base: 'text-white! hover:bg-white/10 focus:ring-white/50',
 			},
 			'min-ghost': {
-				base: 'hover:opacity-80 focus:ring-[#A3A3A3]/50 p-0! w-fit h-fit! ',
+				base: 'hover:opacity-80 focus:ring-btn-outline-ring/50 p-0! w-fit h-fit! ',
 			},
 			'min-ghost-inverse': {
 				base: 'text-white! hover:opacity-80 focus:ring-white/50 p-0! w-fit h-fit! ',
 			},
+			'primary-red': {
+				base: 'text-white! bg-goodparty-red hover:bg-goodparty-red/80 focus:ring-goodparty-red/40 shadow-[var(--shadow-cta-red)]',
+			},
 		},
 		size: {
-			lg: {
-				base: 'text-[0.875rem] font-semibold',
-			},
-			md: {
-				base: 'text-[0.875rem] font-semibold',
-			},
-			sm: {
-				base: 'text-[0.875rem] font-semibold',
-			},
+			lg: {},
+			md: {},
+			sm: {},
 		},
 		iconOnly: {
 			true: {
@@ -114,7 +113,7 @@ export type ButtonProps = {
 	styleType?: (typeof buttonStyleTypeValues)[number];
 	styleSize?: 'lg' | 'md' | 'sm';
 	parent: string;
-	onClick?(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void;
+	onClick?(e: React.MouseEvent<HTMLElement, MouseEvent>): void;
 };
 
 export type ButtonTypeProps = ButtonHTMLAttributes<HTMLButtonElement> & ButtonProps;
@@ -122,6 +121,12 @@ export type ButtonTypeProps = ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
 export type MainButtonProps = {
 	styleType?: ButtonProps['styleType'];
 	styleSize?: ButtonProps['styleSize'];
+};
+
+/** Serializable tracking metadata for homepage experiment CTA events. */
+export type ExperimentTracking = {
+	variant: string;
+	section: string;
 };
 
 export type ComponentButtonProps = {
@@ -132,6 +137,8 @@ export type ComponentButtonProps = {
 	label?: ReactNode;
 	iconLeft?: ReactElement;
 	iconRight?: ReactElement;
+	onClick?(e: React.MouseEvent<HTMLElement, MouseEvent>): void;
+	experimentTracking?: ExperimentTracking;
 } & (
 	| { buttonType: 'internal'; href: string }
 	| { buttonType: 'external'; href: string }
@@ -140,11 +147,36 @@ export type ComponentButtonProps = {
 	| { buttonType: 'contact'; href: string }
 	| { buttonType: 'login' }
 	| { buttonType: 'signup' }
-	| { buttonType: 'button'; onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void }
+	| { buttonType: 'button' }
 );
+
+function labelToString(label: ReactNode | undefined): string | null {
+	return typeof label === 'string' ? label : null;
+}
 
 export const ComponentButton = (props: ComponentButtonProps) => {
 	const isPrimary = props.buttonProps?.styleType === 'primary' || props.buttonProps?.styleType === 'secondary';
+
+	const fireExperimentTracking = () => {
+		if (!props.experimentTracking) return;
+		trackEvent('Homepage CTA Clicked', {
+			variant: props.experimentTracking.variant,
+			section: props.experimentTracking.section,
+			label: labelToString(props.label),
+			href: 'href' in props ? props.href : undefined,
+		});
+	};
+
+	const linkOnClick =
+		'href' in props
+			? (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+					if (isSignUpUrl(props.href)) {
+						trackSignUpClicked({ href: props.href, label: labelToString(props.label) });
+					}
+					fireExperimentTracking();
+					props.onClick?.(e);
+				}
+			: undefined;
 
 	switch (props.buttonType) {
 		case 'internal':
@@ -154,6 +186,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
+					onClick={linkOnClick}
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ?? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />
@@ -170,6 +203,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
+					onClick={linkOnClick}
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ??
@@ -187,6 +221,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
+					onClick={linkOnClick}
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ?? (
@@ -205,6 +240,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
+					onClick={linkOnClick}
 					target='_blank'
 					iconLeft={props.iconLeft}
 					iconRight={props.iconRight ?? <IconResolver icon='download' className='min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5' />}
@@ -220,6 +256,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
+					onClick={linkOnClick}
 					iconLeft={props.iconLeft ?? <IconResolver icon='user-round' className='min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5' />}
 					iconRight={props.iconRight}
 					{...props.buttonProps}
@@ -233,6 +270,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					parent='ComponentButton'
 					className={props.className}
 					formId={props.formId}
+					onClick={e => props.onClick?.(e)}
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ?? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />
@@ -249,6 +287,10 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					parent='ComponentButton'
 					className={props.className}
 					formId={props.formId}
+					onClick={e => {
+						trackSignUpClicked({ href: APP_SIGN_UP_HREF, label: labelToString(props.label) });
+						props.onClick?.(e);
+					}}
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ?? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />
@@ -265,7 +307,10 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					parent='ComponentButton'
 					className={props.className}
 					formId={props.formId}
-					onClick={props.onClick}
+					onClick={e => {
+						fireExperimentTracking();
+						props.onClick?.(e);
+					}}
 					iconLeft={props.iconLeft}
 					iconRight={props.iconRight}
 					{...props.buttonProps}

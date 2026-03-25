@@ -40,12 +40,14 @@ export const buttonStyleTypeValues = [
 	'ghost-inverse',
 	'min-ghost',
 	'min-ghost-inverse',
+	'primary-red',
 ] as const;
 
 export const primaryButtonStyleType = buttonStyleTypeValues[0];
 export const secondaryButtonStyleType = buttonStyleTypeValues[1];
 export const outlineButtonStyleType = buttonStyleTypeValues[2];
 export const outlineInverseButtonStyleType = buttonStyleTypeValues[3];
+export const primaryRedButtonStyleType = buttonStyleTypeValues[8];
 export const defaultCtaButtonStyleType = 'secondary' as const;
 export const iconColorValues = ['red', 'waxflower', 'bright-yellow', 'halo-green', 'blue', 'lavender', 'white', 'mixed'] as const;
 export const colorTypeValues = ['blue', 'red', 'waxflower', 'bright-yellow', 'halo-green', 'lavender', 'inverse'] as const;

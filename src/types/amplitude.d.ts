@@ -10,7 +10,6 @@ declare global {
 			add?(plugin: unknown): void;
 			track(eventName: string, eventProperties?: Record<string, unknown>): void;
 			getDeviceId?(): string;
-			flush?(): void | Promise<void>;
 		};
 		experiment?: {
 			variant(key: string): { value?: string };

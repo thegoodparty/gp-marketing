@@ -63,6 +63,9 @@ export const btnStyles = tv({
 			'min-ghost-inverse': {
 				base: 'text-white! hover:opacity-80 focus:ring-white/50 p-0! w-fit h-fit! ',
 			},
+			'primary-red': {
+				base: 'text-white! bg-goodparty-red hover:bg-goodparty-red/80 focus:ring-goodparty-red/40 shadow-[var(--shadow-cta-red)]',
+			},
 		},
 		size: {
 			lg: {

@@ -84,8 +84,8 @@ export function HomepageExperiment(props: Props) {
 		<div
 			aria-busy={!resolved}
 			style={{
-				opacity: resolved ? 1 : undefined,
-				transition: resolved ? 'opacity 150ms ease-in' : undefined,
+				opacity: resolved ? 1 : 0,
+				transition: 'opacity 150ms ease-in',
 			}}
 		>
 			{content}

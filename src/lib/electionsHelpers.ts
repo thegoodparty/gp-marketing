@@ -223,8 +223,8 @@ export function placeToFactsCards(place: PlaceWithFacts | null): FactsCardProps[
 
 /**
  * Builds a Schema.org WebPage JSON-LD object with GovernmentOffice for position pages.
- * Uses WebPage + GovernmentOffice instead of JobPosting because these pages describe
- * candidacy opportunities for elected office, not employment job postings.
+ * Describes the page and the elected office. JobPosting JSON-LD is emitted separately
+ * (see buildJobPostingSchema) for Google Job Postings rich results.
  */
 export function buildPositionPageSchema(params: {
 	race: RaceDetail;
@@ -271,6 +271,168 @@ export function buildPositionPageSchema(params: {
 	};
 }
 
+const EMPLOYMENT_TYPE_MAP: Record<string, string> = {
+	'full-time': 'FULL_TIME',
+	'full time': 'FULL_TIME',
+	'part-time': 'PART_TIME',
+	'part time': 'PART_TIME',
+	volunteer: 'VOLUNTEER',
+	contract: 'CONTRACTOR',
+	contractor: 'CONTRACTOR',
+	temporary: 'TEMPORARY',
+	temp: 'TEMPORARY',
+	intern: 'INTERN',
+	internship: 'INTERN',
+	'per diem': 'PER_DIEM',
+	'per-diem': 'PER_DIEM',
+};
+
+function mapPositionEmploymentType(type: string): string {
+	return EMPLOYMENT_TYPE_MAP[type.toLowerCase().trim()] ?? 'OTHER';
+}
+
+function parseSalaryString(salary: string): object | null {
+	function makeResult(unitText: 'HOUR' | 'YEAR', amounts: number[]): object {
+		const value: Record<string, unknown> = { '@type': 'QuantitativeValue', unitText };
+		if (amounts.length === 1) {
+			value.value = amounts[0];
+		} else {
+			value.minValue = Math.min(...amounts);
+			value.maxValue = Math.max(...amounts);
+		}
+		return { '@type': 'MonetaryAmount', currency: 'USD', value };
+	}
+
+	// 1. Explicit annual amounts — handles "$95,000/year", "$14,400 / year", prose with embedded salary.
+	//    Stops at the first 1–2 matches so per-diem noise ("$7,200/year + $221/day") is ignored.
+	const yearAmounts = [...salary.matchAll(/\$\s*([\d,]+(?:\.\d{2})?)\s*(?:\/\s*(?:year|yr)\b|per\s+year\b|annually\b)/gi)]
+		.map(m => parseFloat(m[1]!.replace(/,/g, '')));
+	if (yearAmounts.length > 2) return null;
+	if (yearAmounts.length >= 1) return makeResult('YEAR', yearAmounts);
+
+	// 2. Explicit hourly amounts — handles "$25/hr", "$25/hour".
+	const hourAmounts = [...salary.matchAll(/\$\s*([\d,]+(?:\.\d{2})?)\s*(?:\/\s*h(?:ou)?r\b|per\s+hour\b|hourly\b)/gi)]
+		.map(m => parseFloat(m[1]!.replace(/,/g, '')));
+	if (hourAmounts.length > 2) return null;
+	if (hourAmounts.length >= 1) return makeResult('HOUR', hourAmounts);
+
+	// 3. Bare integer with no other text — handles "147175".
+	const bareMatch = /^\s*([\d,]+)\s*$/.exec(salary);
+	if (bareMatch) {
+		const n = parseFloat(bareMatch[1]!.replace(/,/g, ''));
+		if (!isNaN(n)) return makeResult('YEAR', [n]);
+	}
+
+	// 4. Generic $ amounts with no explicit unit — handles "$50,000" and "$50,000 - $75,000".
+	const genericAmounts = [...salary.matchAll(/\$\s*([\d,]+(?:\.\d{2})?)/g)]
+		.map(m => parseFloat(m[1]!.replace(/,/g, '')));
+	if (genericAmounts.length === 1 || genericAmounts.length === 2) return makeResult('YEAR', genericAmounts);
+
+	return null;
+}
+
+function escapeHtmlForJobPosting(text: string): string {
+	return text
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;');
+}
+
+/**
+ * JobPosting description as HTML: trusted API markup when present, else escaped plain text in `<p>`.
+ */
+function buildJobPostingDescription(
+	positionDescription: string | undefined,
+	officeName: string,
+	locationName: string,
+): string {
+	if (positionDescription?.trim()) {
+		const raw = positionDescription.trim();
+		// Pass through API HTML only when it starts with a known safe block tag.
+		if (/^<(p|ul|ol|h[1-6]|div|section|article)\b/i.test(raw)) {
+			return raw.replace(/<(script|iframe|object)[^>]*>[\s\S]*?<\/\1>/gi, '').replace(/\s+on\w+="[^"]*"/gi, '');
+		}
+		return `<p>${escapeHtmlForJobPosting(raw)}</p>`;
+	}
+	const plain =
+		`${officeName} is an elected public office position in ${locationName}. ` +
+		`Learn about eligibility, filing deadlines, and how to run for this office.`;
+	return `<p>${escapeHtmlForJobPosting(plain)}</p>`;
+}
+
+/**
+ * Builds Schema.org JobPosting JSON-LD for elections position pages (Google Job Postings rich results).
+ * Returns null when filingDateStart and electionDate are both missing (required datePosted); omit schema until the elections API backfills dates.
+ */
+export function buildJobPostingSchema(params: {
+	race: RaceDetail;
+	officeName: string;
+	stateName: string;
+	countyName?: string;
+	cityName?: string;
+	pageUrl: string;
+}): object | null {
+	const { race, officeName, stateName, countyName, cityName, pageUrl } = params;
+
+	const datePosted = race.filingDateStart?.slice(0, 10) || race.electionDate?.slice(0, 10);
+	if (!datePosted) {
+		return null;
+	}
+
+	const locationParts = [cityName, countyName, stateName].filter(Boolean);
+	const locationName = locationParts.join(', ');
+
+	const description = buildJobPostingDescription(race.positionDescription, officeName, locationName);
+
+	const orgName = cityName
+		? `City of ${cityName}`
+		: countyName
+			? countyName
+			: `State of ${stateName}`;
+
+	const addressLocality = cityName ?? countyName ?? stateName;
+
+	const schema: Record<string, unknown> = {
+		'@context': 'https://schema.org',
+		'@type': 'JobPosting',
+		title: officeName,
+		sameAs: pageUrl,
+		description,
+		datePosted,
+		directApply: false,
+		hiringOrganization: {
+			'@type': 'GovernmentOrganization',
+			name: orgName,
+		},
+		jobLocation: {
+			'@type': 'Place',
+			address: {
+				'@type': 'PostalAddress',
+				addressLocality,
+				addressRegion: race.state,
+				addressCountry: 'US',
+			},
+		},
+	};
+
+	if (race.filingDateEnd) {
+		schema.validThrough = race.filingDateEnd.slice(0, 10);
+	}
+
+	if (race.employmentType) {
+		schema.employmentType = mapPositionEmploymentType(race.employmentType);
+	}
+
+	if (race.salary) {
+		const baseSalary = parseSalaryString(race.salary);
+		if (baseSalary) {
+			schema.baseSalary = baseSalary;
+		}
+	}
+
+	return schema;
+}
+
 /**
  * Builds a Schema.org BreadcrumbList JSON-LD object from breadcrumb items.
  */
@@ -298,7 +460,7 @@ export function buildFAQSchema(
 ): object {
 	return {
 		'@context': 'https://schema.org',
-		'@type': 'Question',
+		'@type': 'FAQPage',
 		mainEntity: items.map(item => ({
 			'@type': 'Question',
 			name: item.title,

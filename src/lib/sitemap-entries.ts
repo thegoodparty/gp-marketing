@@ -29,11 +29,15 @@ const CACHE_1H: RequestInit = { next: { revalidate: 3600 } };
 const COUNTY_SUFFIX_RE =
 	/\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio)$/i;
 
-function normalizeName(name: string): string {
+export type CountyPlace = { slug?: string; name?: string; mtfcc?: string };
+export type CityPlace = { slug?: string; countyName?: string };
+export type RaceEntry = { slug?: string; positionLevel?: string };
+
+export function normalizeName(name: string): string {
 	return name.replace(/[.\s''\-]/g, '').toLowerCase();
 }
 
-function stripCountySuffix(name: string): string {
+export function stripCountySuffix(name: string): string {
 	return name.replace(COUNTY_SUFFIX_RE, '') || name;
 }
 
@@ -59,6 +63,66 @@ function toEntry(
 		changeFrequency,
 		priority,
 	};
+}
+
+export function buildCountyLookups(
+	places: CountyPlace[],
+	cities: CityPlace[],
+): { countyNameToSlug: Map<string, string>; citySlugToCountySlug: Map<string, string> } {
+	const countyNameToSlug = new Map<string, string>();
+	for (const p of places) {
+		if (p.slug && p.name && (p.mtfcc ?? '') === 'G4020') {
+			const normalized = normalizeName(stripCountySuffix(p.name));
+			countyNameToSlug.set(normalized, p.slug);
+		}
+	}
+
+	const citySlugToCountySlug = new Map<string, string>();
+	for (const c of cities) {
+		if (c.slug && c.countyName) {
+			const countySlug = countyNameToSlug.get(normalizeName(stripCountySuffix(c.countyName)));
+			if (countySlug) citySlugToCountySlug.set(c.slug, countySlug);
+		}
+	}
+
+	return { countyNameToSlug, citySlugToCountySlug };
+}
+
+/**
+ * Builds election race sitemap entries. LOCAL races use the same 4-level city URL shape as CITY when a county mapping exists.
+ */
+export function buildRaceEntries(
+	races: RaceEntry[],
+	citySlugToCountySlug: Map<string, string>,
+	baseUrl: string,
+): MetadataRoute.Sitemap {
+	const out: MetadataRoute.Sitemap = [];
+	for (const r of races) {
+		if (!r.slug) continue;
+		const parts = r.slug.split('/');
+		const positionSlug = parts.pop();
+		if (!positionSlug) continue;
+
+		const level = (r.positionLevel ?? '').toUpperCase();
+
+		if (level === 'CITY' || level === 'LOCAL') {
+			const citySlug = parts.join('/');
+			const countySlug = citySlugToCountySlug.get(citySlug);
+			if (countySlug) {
+				const citySegment = parts.pop();
+				if (!citySegment) continue;
+				out.push(
+					toEntry(baseUrl, `/elections/${countySlug}/${citySegment}/position/${positionSlug}`, 0.7, 'weekly'),
+				);
+				continue;
+			}
+			if (level === 'CITY') continue;
+		}
+
+		const prefix = parts.join('/');
+		out.push(toEntry(baseUrl, `/elections/${prefix}/position/${positionSlug}`, 0.7, 'weekly'));
+	}
+	return out;
 }
 
 async function fetchElectionJson<T>(path: string, params: Record<string, string>): Promise<T[]> {
@@ -200,21 +264,7 @@ export async function fetchStateElectionSitemapEntries(
 		}),
 	]);
 
-	const countyNameToSlug = new Map<string, string>();
-	for (const p of places) {
-		if (p.slug && p.name && (p.mtfcc ?? '') === 'G4020') {
-			const normalized = normalizeName(stripCountySuffix(p.name));
-			countyNameToSlug.set(normalized, p.slug);
-		}
-	}
-
-	const citySlugToCountySlug = new Map<string, string>();
-	for (const c of cities) {
-		if (c.slug && c.countyName) {
-			const countySlug = countyNameToSlug.get(normalizeName(c.countyName));
-			if (countySlug) citySlugToCountySlug.set(c.slug, countySlug);
-		}
-	}
+	const { citySlugToCountySlug } = buildCountyLookups(places, cities);
 
 	for (const p of places) {
 		if (!p.slug) continue;
@@ -233,26 +283,7 @@ export async function fetchStateElectionSitemapEntries(
 		}
 	}
 
-	for (const r of races) {
-		if (!r.slug) continue;
-		const parts = r.slug.split('/');
-		const positionSlug = parts.pop();
-		if (!positionSlug) continue;
-
-		if (r.positionLevel?.toUpperCase() === 'CITY') {
-			const citySlug = parts.join('/');
-			const countySlug = citySlugToCountySlug.get(citySlug);
-			if (!countySlug) continue;
-			const citySegment = parts.pop();
-			if (!citySegment) continue;
-			entries.push(
-				toEntry(baseUrl, `/elections/${countySlug}/${citySegment}/position/${positionSlug}`, 0.7, 'weekly'),
-			);
-		} else {
-			const prefix = parts.join('/');
-			entries.push(toEntry(baseUrl, `/elections/${prefix}/position/${positionSlug}`, 0.7, 'weekly'));
-		}
-	}
+	entries.push(...buildRaceEntries(races, citySlugToCountySlug, baseUrl));
 
 	return dedupeByUrl(entries);
 }

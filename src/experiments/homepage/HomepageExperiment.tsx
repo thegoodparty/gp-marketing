@@ -1,9 +1,14 @@
 'use client';
 
-import { useEffect, useState, type ReactNode } from 'react';
-
-const FLAG_KEY = 'home_hero_layout_test';
-const VALID_VARIANTS = ['control', 'variant-a', 'variant-b'] as const;
+import { useEffect, useRef, useState, type ReactNode } from 'react';
+import {
+	HOME_HERO_LAYOUT_EXPERIMENT_FLAG_KEY,
+	HOMEPAGE_EXPERIMENT_VARIANT_A,
+	HOMEPAGE_EXPERIMENT_VARIANT_B,
+	HOMEPAGE_EXPERIMENT_VARIANT_CONTROL,
+	VALID_HOMEPAGE_EXPERIMENT_VARIANTS,
+	trackEvent,
+} from '~/lib/analytics';
 
 type Props = {
 	control: ReactNode;
@@ -13,16 +18,28 @@ type Props = {
 
 export function HomepageExperiment(props: Props) {
 	const [variant, setVariant] = useState<string | null>(null);
+	const hasTrackedExposureRef = useRef(false);
 
 	useEffect(() => {
+		const applyVariant = (resolvedVariant: string) => {
+			setVariant(resolvedVariant);
+			if (hasTrackedExposureRef.current) return;
+
+			trackEvent('Experiment Viewed', {
+				flag_key: HOME_HERO_LAYOUT_EXPERIMENT_FLAG_KEY,
+				variant: resolvedVariant,
+			});
+			hasTrackedExposureRef.current = true;
+		};
+
 		const isLocal =
 			typeof window !== 'undefined' &&
 			(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 		if (isLocal) {
-			const match = document.cookie.match(new RegExp(`${FLAG_KEY}=([^;]+)`));
+			const match = new RegExp(`(?:^|;\\s*)${HOME_HERO_LAYOUT_EXPERIMENT_FLAG_KEY}=([^;]+)`).exec(document.cookie);
 			const forced = match?.[1]?.trim();
-			if (forced && (VALID_VARIANTS as readonly string[]).includes(forced)) {
-				setVariant(forced);
+			if (forced && (VALID_HOMEPAGE_EXPERIMENT_VARIANTS as readonly string[]).includes(forced)) {
+				applyVariant(forced);
 				return;
 			}
 		}
@@ -30,9 +47,9 @@ export function HomepageExperiment(props: Props) {
 		const resolve = () => {
 			const exp = window.experiment;
 			if (!exp) return false;
-			const v = exp.variant(FLAG_KEY);
+			const v = exp.variant(HOME_HERO_LAYOUT_EXPERIMENT_FLAG_KEY);
 			if (v?.value) {
-				setVariant(v.value);
+				applyVariant(v.value);
 				return true;
 			}
 			return false;
@@ -41,12 +58,12 @@ export function HomepageExperiment(props: Props) {
 		if (resolve()) return;
 
 		const onReady = () => {
-			if (!resolve()) setVariant('control');
+			if (!resolve()) applyVariant(HOMEPAGE_EXPERIMENT_VARIANT_CONTROL);
 		};
 		window.addEventListener('experiment:ready', onReady);
 
 		const timeout = setTimeout(() => {
-			if (!resolve()) setVariant('control');
+			if (!resolve()) applyVariant(HOMEPAGE_EXPERIMENT_VARIANT_CONTROL);
 		}, 3000);
 
 		return () => {
@@ -55,14 +72,25 @@ export function HomepageExperiment(props: Props) {
 		};
 	}, []);
 
-	if (variant === null) {
-		return <>{props.control}</>;
-	}
-	if (variant === 'variant-a') {
-		return <>{props.variantA}</>;
-	}
-	if (variant === 'variant-b') {
-		return <>{props.variantB}</>;
-	}
-	return <>{props.control}</>;
+	const isNonControlVariant =
+		variant === HOMEPAGE_EXPERIMENT_VARIANT_A || variant === HOMEPAGE_EXPERIMENT_VARIANT_B;
+
+	const content = isNonControlVariant
+		? variant === HOMEPAGE_EXPERIMENT_VARIANT_A
+			? props.variantA
+			: props.variantB
+		: props.control;
+
+	return (
+		<div
+			aria-busy={variant === null}
+			style={
+				isNonControlVariant
+					? { opacity: 1, transition: 'opacity 150ms ease-in' }
+					: undefined
+			}
+		>
+			{content}
+		</div>
+	);
 }

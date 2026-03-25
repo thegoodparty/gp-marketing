@@ -1,6 +1,5 @@
 import { IconResolver } from '~/ui/IconResolver.tsx';
 import type { ComponentButtonProps } from '~/ui/Inputs/Button.tsx';
-import type { StatProps } from '~/ui/Stat.tsx';
 import type { TestimonialCardProps } from '~/ui/TestimonialCard.tsx';
 import type { FeaturesBlockItemProps } from '~/ui/FeaturesBlock.tsx';
 import type { HeaderBlockProps } from '~/ui/HeaderBlock.tsx';
@@ -11,7 +10,10 @@ import {
 	midnightComponentColor,
 	outlineInverseButtonStyleType,
 	primaryButtonStyleType,
+	primaryRedButtonStyleType,
 } from '~/ui/_lib/designTypesStore.ts';
+import { HOMEPAGE_EXPERIMENT_VARIANT_B } from '~/lib/analytics';
+import { sharedStats } from './shared';
 
 export const heroB = {
 	manifesto: (
@@ -38,15 +40,17 @@ export const heroB = {
 			buttonType: 'internal' as const,
 			href: '/run-for-office',
 			label: "I'm Ready to Run",
+			experimentTracking: { variant: HOMEPAGE_EXPERIMENT_VARIANT_B, section: 'hero' },
 			buttonProps: { styleType: primaryButtonStyleType },
 		},
 		{
 			buttonType: 'internal' as const,
 			href: '/about',
 			label: 'I Want to Help',
+			experimentTracking: { variant: HOMEPAGE_EXPERIMENT_VARIANT_B, section: 'hero' },
 			buttonProps: { styleType: outlineInverseButtonStyleType },
 		},
-	] as ComponentButtonProps[],
+	] satisfies ComponentButtonProps[],
 };
 
 export const strikethroughB = {
@@ -54,12 +58,7 @@ export const strikethroughB = {
 	punchline: 'Just good people doing good for our communities.',
 };
 
-export const statsB: StatProps[] = [
-	{ _key: '1', value: '17,000+', description: 'Good People Supported', color: midnightComponentColor },
-	{ _key: '2', value: '13,000+', description: 'Winners Elected', color: midnightComponentColor },
-	{ _key: '3', value: '50', description: 'States Reached', color: midnightComponentColor },
-	{ _key: '4', value: '$0', description: 'From Corporate PACs', color: midnightComponentColor },
-];
+export const statsB = sharedStats;
 
 export const pillarsB: ThreePillarsPillar[] = [
 	{
@@ -240,15 +239,17 @@ export const ctaB = {
 			buttonType: 'internal' as const,
 			href: '/run',
 			label: 'Start Your Campaign',
-			className: 'max-sm:w-full bg-goodparty-red hover:bg-goodparty-red/80 focus:ring-goodparty-red/40 shadow-[var(--shadow-cta-red)]',
+			className: 'max-sm:w-full',
 			iconRight: <IconResolver icon="arrow-right" className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5" />,
-			buttonProps: { styleType: primaryButtonStyleType },
+			experimentTracking: { variant: HOMEPAGE_EXPERIMENT_VARIANT_B, section: 'cta_block' },
+			buttonProps: { styleType: primaryRedButtonStyleType },
 		},
 		{
 			buttonType: 'internal' as const,
 			href: '/candidates',
 			label: 'Explore the Tools',
+			experimentTracking: { variant: HOMEPAGE_EXPERIMENT_VARIANT_B, section: 'cta_block' },
 			buttonProps: { styleType: outlineInverseButtonStyleType },
 		},
-	] as ComponentButtonProps[],
+	] satisfies ComponentButtonProps[],
 };

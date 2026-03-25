@@ -72,21 +72,23 @@ export function HomepageExperiment(props: Props) {
 		};
 	}, []);
 
-	const resolved = variant !== null;
-	const content =
-		variant === HOMEPAGE_EXPERIMENT_VARIANT_A
+	const isNonControlVariant =
+		variant === HOMEPAGE_EXPERIMENT_VARIANT_A || variant === HOMEPAGE_EXPERIMENT_VARIANT_B;
+
+	const content = isNonControlVariant
+		? variant === HOMEPAGE_EXPERIMENT_VARIANT_A
 			? props.variantA
-			: variant === HOMEPAGE_EXPERIMENT_VARIANT_B
-				? props.variantB
-				: props.control;
+			: props.variantB
+		: props.control;
 
 	return (
 		<div
-			aria-busy={!resolved}
-			style={{
-				opacity: resolved ? 1 : 0,
-				transition: 'opacity 150ms ease-in',
-			}}
+			aria-busy={variant === null}
+			style={
+				isNonControlVariant
+					? { opacity: 1, transition: 'opacity 150ms ease-in' }
+					: undefined
+			}
 		>
 			{content}
 		</div>

@@ -1,4 +1,7 @@
+'use client';
+
 import { tv } from 'tailwind-variants';
+import { isSignUpUrl, trackSignUpClicked } from '~/lib/analytics';
 import { cn } from '~/ui/_lib/utils';
 import type { LinkShape } from '~/ui/Anchor';
 import { Anchor } from '~/ui/Anchor';
@@ -14,10 +17,10 @@ export const menuItemStyles = tv({
 
 export type NavLinkProps = LinkShape & {
 	textStyleType?: StyleTypes;
-	onClick?: () => void;
 	iconLeft?: IconType;
 	iconRight?: IconType;
 	className?: string;
+	onClick?(): void;
 };
 
 export function NavLink(item: NavLinkProps) {
@@ -26,7 +29,21 @@ export function NavLink(item: NavLinkProps) {
 	return (
 		<>
 			{item.link?.href ? (
-				<Anchor className={cn(link(), item.className)} href={item.link?.href} onClick={item.onClick}>
+				<Anchor
+					className={cn(link(), item.className)}
+					href={item.link?.href}
+					onClick={() => {
+						const href = item.link?.href;
+						if (href && isSignUpUrl(href)) {
+							trackSignUpClicked({
+								href,
+								...(item.label ? { label: item.label } : {}),
+							});
+						}
+						// eslint-disable-next-line @typescript-eslint/unbound-method -- optional handler, not a method on `item`
+						item.onClick?.();
+					}}
+				>
 					<Text styleType={item.textStyleType ?? 'nav-menu-item'}>{item.label}</Text>
 				</Anchor>
 			) : (
@@ -38,7 +55,7 @@ export function NavLink(item: NavLinkProps) {
 	);
 }
 
-export function NavGroupItem(props: NonNullable<NavDropdownProps['group']>[number] & { onClick?: () => void; className?: string }) {
+export function NavGroupItem(props: NonNullable<NavDropdownProps['group']>[number] & { className?: string; onClick?(): void }) {
 	return (
 		<Text
 			as='div'
@@ -47,7 +64,10 @@ export function NavGroupItem(props: NonNullable<NavDropdownProps['group']>[numbe
 				'relative group w-full flex flex-row items-center gap-[0.5rem] py-[0.75rem] px-[0.625rem] text-black hover:bg-midnight-100 transition-colors duration-normal ease-smooth rounded-[0.375rem] font-semibold whitespace-nowrap',
 				props.className,
 			)}
-			onClick={props.onClick}
+			onClick={() => {
+				// eslint-disable-next-line @typescript-eslint/unbound-method -- invoke optional handler without `this`
+				props.onClick?.();
+			}}
 		>
 			{props.icon && (
 				<IconResolver
@@ -57,7 +77,19 @@ export function NavGroupItem(props: NonNullable<NavDropdownProps['group']>[numbe
 			)}
 			<>
 				{props.link?.href ? (
-					<Anchor className="before:content-[''] before:absolute before:inset-0" key={props.label?.toString()} href={props.link.href}>
+					<Anchor
+						className="before:content-[''] before:absolute before:inset-0"
+						key={props.label?.toString()}
+						href={props.link.href}
+						onClick={() => {
+							if (isSignUpUrl(props.link?.href)) {
+								trackSignUpClicked({
+									href: props.link.href,
+									...(typeof props.label === 'string' ? { label: props.label } : {}),
+								});
+							}
+						}}
+					>
 						{props.label}
 					</Anchor>
 				) : (

@@ -9,7 +9,8 @@ import {
 	type ReactNode,
 } from 'react';
 
-import { cn, tv } from '../_lib/utils.ts';
+import { APP_SIGN_UP_HREF, isSignUpUrl, trackSignUpClicked } from '~/lib/analytics';
+import { tv } from '../_lib/utils.ts';
 import { Anchor, type AnchorProps } from '../Anchor.tsx';
 import { IconResolver } from '../IconResolver.tsx';
 import type { buttonStyleTypeValues } from '../_lib/designTypesStore.ts';
@@ -114,7 +115,7 @@ export type ButtonProps = {
 	styleType?: (typeof buttonStyleTypeValues)[number];
 	styleSize?: 'lg' | 'md' | 'sm';
 	parent: string;
-	onClick?(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void;
+	onClick?(e: React.MouseEvent<HTMLElement, MouseEvent>): void;
 };
 
 export type ButtonTypeProps = ButtonHTMLAttributes<HTMLButtonElement> & ButtonProps;
@@ -132,6 +133,7 @@ export type ComponentButtonProps = {
 	label?: ReactNode;
 	iconLeft?: ReactElement;
 	iconRight?: ReactElement;
+	onClick?(e: React.MouseEvent<HTMLElement, MouseEvent>): void;
 } & (
 	| { buttonType: 'internal'; href: string }
 	| { buttonType: 'external'; href: string }
@@ -140,8 +142,13 @@ export type ComponentButtonProps = {
 	| { buttonType: 'contact'; href: string }
 	| { buttonType: 'login' }
 	| { buttonType: 'signup' }
-	| { buttonType: 'button'; onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void }
+	| { buttonType: 'button' }
 );
+
+function componentButtonLabelString(label: ReactNode | undefined): string | undefined {
+	if (typeof label === 'string') return label;
+	return undefined;
+}
 
 export const ComponentButton = (props: ComponentButtonProps) => {
 	const isPrimary = props.buttonProps?.styleType === 'primary' || props.buttonProps?.styleType === 'secondary';
@@ -154,6 +161,12 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
+					onClick={e => {
+						if (isSignUpUrl(props.href)) {
+							trackSignUpClicked({ href: props.href, label: componentButtonLabelString(props.label) });
+						}
+						props.onClick?.(e);
+					}}
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ?? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />
@@ -170,6 +183,12 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
+					onClick={e => {
+						if (isSignUpUrl(props.href)) {
+							trackSignUpClicked({ href: props.href, label: componentButtonLabelString(props.label) });
+						}
+						props.onClick?.(e);
+					}}
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ??
@@ -187,6 +206,12 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
+					onClick={e => {
+						if (isSignUpUrl(props.href)) {
+							trackSignUpClicked({ href: props.href, label: componentButtonLabelString(props.label) });
+						}
+						props.onClick?.(e);
+					}}
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ?? (
@@ -205,6 +230,12 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
+					onClick={e => {
+						if (isSignUpUrl(props.href)) {
+							trackSignUpClicked({ href: props.href, label: componentButtonLabelString(props.label) });
+						}
+						props.onClick?.(e);
+					}}
 					target='_blank'
 					iconLeft={props.iconLeft}
 					iconRight={props.iconRight ?? <IconResolver icon='download' className='min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5' />}
@@ -220,6 +251,12 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
+					onClick={e => {
+						if (isSignUpUrl(props.href)) {
+							trackSignUpClicked({ href: props.href, label: componentButtonLabelString(props.label) });
+						}
+						props.onClick?.(e);
+					}}
 					iconLeft={props.iconLeft ?? <IconResolver icon='user-round' className='min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5' />}
 					iconRight={props.iconRight}
 					{...props.buttonProps}
@@ -233,6 +270,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					parent='ComponentButton'
 					className={props.className}
 					formId={props.formId}
+					onClick={e => props.onClick?.(e)}
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ?? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />
@@ -249,6 +287,10 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					parent='ComponentButton'
 					className={props.className}
 					formId={props.formId}
+					onClick={e => {
+						trackSignUpClicked({ href: APP_SIGN_UP_HREF, label: componentButtonLabelString(props.label) });
+						props.onClick?.(e);
+					}}
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ?? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />
@@ -265,7 +307,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					parent='ComponentButton'
 					className={props.className}
 					formId={props.formId}
-					onClick={props.onClick}
+					onClick={e => props.onClick?.(e)}
 					iconLeft={props.iconLeft}
 					iconRight={props.iconRight}
 					{...props.buttonProps}

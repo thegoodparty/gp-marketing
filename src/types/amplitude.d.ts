@@ -1,16 +1,17 @@
 declare global {
 	interface Window {
 		amplitude?: {
-			init: (apiKey: string, options?: { fetchRemoteConfig?: boolean; autocapture?: boolean }) => void;
-			add?: (plugin: unknown) => void;
-			track: (eventName: string, eventProperties?: Record<string, unknown>) => void;
+			init(apiKey: string, options?: { fetchRemoteConfig?: boolean; autocapture?: boolean }): void;
+			add?(plugin: unknown): void;
+			track(eventName: string, eventProperties?: Record<string, unknown>): void;
+			getDeviceId?(): string;
 		};
 		experiment?: {
-			variant: (key: string) => { value?: string };
-			fetch: () => Promise<unknown>;
+			variant(key: string): { value?: string };
+			fetch(): Promise<unknown>;
 		};
 		sessionReplay?: {
-			plugin: (options: { sampleRate: number }) => unknown;
+			plugin(options: { sampleRate: number }): unknown;
 		};
 	}
 }

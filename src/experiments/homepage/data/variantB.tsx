@@ -12,6 +12,7 @@ import {
 	outlineInverseButtonStyleType,
 	primaryButtonStyleType,
 } from '~/ui/_lib/designTypesStore.ts';
+import { trackEvent } from '~/lib/analytics';
 
 export const heroB = {
 	manifesto: (
@@ -38,12 +39,28 @@ export const heroB = {
 			buttonType: 'internal' as const,
 			href: '/run-for-office',
 			label: "I'm Ready to Run",
+			onClick: () => {
+				trackEvent('Homepage CTA Clicked', {
+					variant: 'variant-b',
+					section: 'hero',
+					label: "I'm Ready to Run",
+					href: '/run-for-office',
+				});
+			},
 			buttonProps: { styleType: primaryButtonStyleType },
 		},
 		{
 			buttonType: 'internal' as const,
 			href: '/about',
 			label: 'I Want to Help',
+			onClick: () => {
+				trackEvent('Homepage CTA Clicked', {
+					variant: 'variant-b',
+					section: 'hero',
+					label: 'I Want to Help',
+					href: '/about',
+				});
+			},
 			buttonProps: { styleType: outlineInverseButtonStyleType },
 		},
 	] as ComponentButtonProps[],
@@ -242,12 +259,28 @@ export const ctaB = {
 			label: 'Start Your Campaign',
 			className: 'max-sm:w-full bg-goodparty-red hover:bg-goodparty-red/80 focus:ring-goodparty-red/40 shadow-[var(--shadow-cta-red)]',
 			iconRight: <IconResolver icon="arrow-right" className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5" />,
+			onClick: () => {
+				trackEvent('Homepage CTA Clicked', {
+					variant: 'variant-b',
+					section: 'cta_block',
+					label: 'Start Your Campaign',
+					href: '/run',
+				});
+			},
 			buttonProps: { styleType: primaryButtonStyleType },
 		},
 		{
 			buttonType: 'internal' as const,
 			href: '/candidates',
 			label: 'Explore the Tools',
+			onClick: () => {
+				trackEvent('Homepage CTA Clicked', {
+					variant: 'variant-b',
+					section: 'cta_block',
+					label: 'Explore the Tools',
+					href: '/candidates',
+				});
+			},
 			buttonProps: { styleType: outlineInverseButtonStyleType },
 		},
 	] as ComponentButtonProps[],

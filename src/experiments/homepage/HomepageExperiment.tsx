@@ -3,12 +3,13 @@
 import { useEffect, useState, type ReactNode } from 'react';
 
 const FLAG_KEY = 'home_hero_layout_test';
-const VALID_VARIANTS = ['control', 'variant-a', 'variant-b'] as const;
+const VALID_VARIANTS = ['control', 'variant-a', 'variant-b', 'variant-c'] as const;
 
 type Props = {
 	control: ReactNode;
 	variantA: ReactNode;
 	variantB: ReactNode;
+	variantC: ReactNode;
 };
 
 export function HomepageExperiment(props: Props) {
@@ -63,6 +64,9 @@ export function HomepageExperiment(props: Props) {
 	}
 	if (variant === 'variant-b') {
 		return <>{props.variantB}</>;
+	}
+	if (variant === 'variant-c') {
+		return <>{props.variantC}</>;
 	}
 	return <>{props.control}</>;
 }

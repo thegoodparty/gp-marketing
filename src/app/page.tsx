@@ -8,6 +8,7 @@ import { StructureMetaData } from '~/components/StructureMetadata';
 import { HomepageExperiment } from '~/experiments/homepage/HomepageExperiment';
 import { HomepageVariantA } from '~/experiments/homepage/HomepageVariantA';
 import { HomepageVariantB } from '~/experiments/homepage/HomepageVariantB';
+import { HomepageVariantC } from '~/experiments/homepage/HomepageVariantC';
 
 export default async function Page() {
 	const page = await sanityFetch({ query: goodpartyOrg_homeQuery, tags: ['goodpartyOrg_home'] });
@@ -21,6 +22,7 @@ export default async function Page() {
 			control={<PageSections pageSections={page.pageSections?.list_pageSections} />}
 			variantA={<HomepageVariantA />}
 			variantB={<HomepageVariantB />}
+			variantC={<HomepageVariantC />}
 		/>
 	);
 }

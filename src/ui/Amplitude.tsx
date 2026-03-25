@@ -32,9 +32,10 @@ export function Amplitude() {
 									window.dispatchEvent(new Event('experiment:ready'));
 								});
 							})
-							.catch(() => {
-								window.dispatchEvent(new Event('experiment:ready'));
-							});
+						.catch((err: unknown) => {
+							console.error('[Amplitude] Experiment SDK failed to load', err);
+							window.dispatchEvent(new Event('experiment:ready'));
+						});
 					}
 				}
 			}}

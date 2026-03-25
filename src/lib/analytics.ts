@@ -32,7 +32,9 @@ export function getHomepageExperimentVariant(): string | null {
 }
 
 /**
- * True for marketing `/sign-up` rewrite targets and full app sign-up URLs.
+ * True when the path ends with `/sign-up` (any origin, any prefix).
+ * Intentionally broad so every sign-up surface is tracked, including future
+ * paths like `/partner/sign-up`. Tighten if only specific origins should match.
  */
 export function isSignUpUrl(href: string | undefined | null): boolean {
 	if (!href?.trim()) return false;

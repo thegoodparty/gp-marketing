@@ -27,6 +27,7 @@ export const btnStyles = tv({
 		base: [
 			'group/button text-black rounded-full cursor-pointer',
 			'inline-flex items-center justify-center',
+			'text-[0.875rem] font-semibold',
 			'focus:ring-4',
 			'disabled:opacity-50 disabled:cursor-not-allowed',
 			'transition-all duration-normal ease-smooth',
@@ -68,15 +69,9 @@ export const btnStyles = tv({
 			},
 		},
 		size: {
-			lg: {
-				base: 'text-[0.875rem] font-semibold',
-			},
-			md: {
-				base: 'text-[0.875rem] font-semibold',
-			},
-			sm: {
-				base: 'text-[0.875rem] font-semibold',
-			},
+			lg: {},
+			md: {},
+			sm: {},
 		},
 		iconOnly: {
 			true: {

@@ -40,25 +40,25 @@ export const btnStyles = tv({
 		},
 		type: {
 			primary: {
-				base: 'text-white! bg-[#2563EB] hover:bg-[#2563EB]/80 focus:ring-[#2563EB]/40',
+				base: 'text-white! bg-btn-primary-bg hover:bg-btn-primary-bg/80 focus:ring-btn-primary-bg/40',
 			},
 			secondary: {
-				base: 'text-white! bg-midnight-900 hover:bg-[#3C4454] focus:ring-midnight-300/50',
+				base: 'text-white! bg-midnight-900 hover:bg-btn-secondary-hover-bg focus:ring-midnight-300/50',
 			},
 			outline: {
-				base: 'border border-black hover:bg-black/5 focus:ring-[#A3A3A3]/50',
+				base: 'border border-black hover:bg-black/5 focus:ring-btn-outline-ring/50',
 			},
 			'outline-inverse': {
 				base: 'text-white! border border-white hover:bg-white/10 focus:ring-white/50',
 			},
 			ghost: {
-				base: 'hover:bg-[#F5F5F5] focus:ring-[#A3A3A3]/50',
+				base: 'hover:bg-btn-ghost-hover-bg focus:ring-btn-outline-ring/50',
 			},
 			'ghost-inverse': {
 				base: 'text-white! hover:bg-white/10 focus:ring-white/50',
 			},
 			'min-ghost': {
-				base: 'hover:opacity-80 focus:ring-[#A3A3A3]/50 p-0! w-fit h-fit! ',
+				base: 'hover:opacity-80 focus:ring-btn-outline-ring/50 p-0! w-fit h-fit! ',
 			},
 			'min-ghost-inverse': {
 				base: 'text-white! hover:opacity-80 focus:ring-white/50 p-0! w-fit h-fit! ',
@@ -145,25 +145,22 @@ export type ComponentButtonProps = {
 	| { buttonType: 'button' }
 );
 
-function componentButtonLabelString(label: ReactNode | undefined): string | undefined {
-	if (typeof label === 'string') return label;
-	return undefined;
-}
-
-function handleLinkClickWithSignUpTracking(
-	href: string,
-	label: ReactNode | undefined,
-	userOnClick: ComponentButtonProps['onClick'],
-	e: React.MouseEvent<HTMLElement, MouseEvent>,
-): void {
-	if (isSignUpUrl(href)) {
-		trackSignUpClicked({ href, label: componentButtonLabelString(label) ?? null });
-	}
-	userOnClick?.(e);
+function labelToString(label: ReactNode | undefined): string | null {
+	return typeof label === 'string' ? label : null;
 }
 
 export const ComponentButton = (props: ComponentButtonProps) => {
 	const isPrimary = props.buttonProps?.styleType === 'primary' || props.buttonProps?.styleType === 'secondary';
+
+	const linkOnClick =
+		'href' in props
+			? (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+					if (isSignUpUrl(props.href)) {
+						trackSignUpClicked({ href: props.href, label: labelToString(props.label) });
+					}
+					props.onClick?.(e);
+				}
+			: undefined;
 
 	switch (props.buttonType) {
 		case 'internal':
@@ -173,15 +170,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
-					onClick={e =>
-						handleLinkClickWithSignUpTracking(
-							props.href,
-							props.label,
-							// eslint-disable-next-line @typescript-eslint/unbound-method -- forwarded optional handler from props
-							props.onClick,
-							e,
-						)
-					}
+					onClick={linkOnClick}
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ?? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />
@@ -198,15 +187,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
-					onClick={e =>
-						handleLinkClickWithSignUpTracking(
-							props.href,
-							props.label,
-							// eslint-disable-next-line @typescript-eslint/unbound-method -- forwarded optional handler from props
-							props.onClick,
-							e,
-						)
-					}
+					onClick={linkOnClick}
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ??
@@ -224,15 +205,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
-					onClick={e =>
-						handleLinkClickWithSignUpTracking(
-							props.href,
-							props.label,
-							// eslint-disable-next-line @typescript-eslint/unbound-method -- forwarded optional handler from props
-							props.onClick,
-							e,
-						)
-					}
+					onClick={linkOnClick}
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ?? (
@@ -251,15 +224,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
-					onClick={e =>
-						handleLinkClickWithSignUpTracking(
-							props.href,
-							props.label,
-							// eslint-disable-next-line @typescript-eslint/unbound-method -- forwarded optional handler from props
-							props.onClick,
-							e,
-						)
-					}
+					onClick={linkOnClick}
 					target='_blank'
 					iconLeft={props.iconLeft}
 					iconRight={props.iconRight ?? <IconResolver icon='download' className='min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5' />}
@@ -275,15 +240,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={props.href}
-					onClick={e =>
-						handleLinkClickWithSignUpTracking(
-							props.href,
-							props.label,
-							// eslint-disable-next-line @typescript-eslint/unbound-method -- forwarded optional handler from props
-							props.onClick,
-							e,
-						)
-					}
+					onClick={linkOnClick}
 					iconLeft={props.iconLeft ?? <IconResolver icon='user-round' className='min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5' />}
 					iconRight={props.iconRight}
 					{...props.buttonProps}
@@ -315,7 +272,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					onClick={e => {
-						trackSignUpClicked({ href: APP_SIGN_UP_HREF, label: componentButtonLabelString(props.label) ?? null });
+						trackSignUpClicked({ href: APP_SIGN_UP_HREF, label: labelToString(props.label) });
 						props.onClick?.(e);
 					}}
 					iconLeft={props.iconLeft}

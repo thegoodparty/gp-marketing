@@ -39,14 +39,9 @@ export function isSignUpUrl(href: string | undefined | null): boolean {
 	return path.endsWith('/sign-up');
 }
 
-function isHomepageForExperiment(pathname: string): boolean {
-	return pathname === '/';
-}
-
 export function trackSignUpClicked(props: { href: string; label?: string | null }): void {
 	const pagePath = typeof window !== 'undefined' ? window.location.pathname : null;
-	const variant =
-		pagePath != null && isHomepageForExperiment(pagePath) ? getHomepageExperimentVariant() : null;
+	const variant = pagePath === '/' ? getHomepageExperimentVariant() : null;
 
 	trackEvent('Sign Up Clicked', {
 		href: props.href,
@@ -55,6 +50,12 @@ export function trackSignUpClicked(props: { href: string; label?: string | null 
 		variant,
 	});
 
-	// Best-effort: reduce dropped events when navigation unloads the page (review: beacon / flush).
 	void Promise.resolve(window.amplitude?.flush?.()).catch(() => undefined);
+}
+
+/** Factory for homepage CTA click handlers (used in variant data files). */
+export function makeHomepageCtaOnClick(variant: string, section: string, label: string, href: string) {
+	return () => {
+		trackEvent('Homepage CTA Clicked', { variant, section, label, href });
+	};
 }

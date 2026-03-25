@@ -36,7 +36,7 @@ export function HomepageExperiment(props: Props) {
 			typeof window !== 'undefined' &&
 			(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 		if (isLocal) {
-			const match = new RegExp(`${HOME_HERO_LAYOUT_EXPERIMENT_FLAG_KEY}=([^;]+)`).exec(document.cookie);
+			const match = new RegExp(`(?:^|;\\s*)${HOME_HERO_LAYOUT_EXPERIMENT_FLAG_KEY}=([^;]+)`).exec(document.cookie);
 			const forced = match?.[1]?.trim();
 			if (forced && (VALID_HOMEPAGE_EXPERIMENT_VARIANTS as readonly string[]).includes(forced)) {
 				applyVariant(forced);
@@ -72,14 +72,23 @@ export function HomepageExperiment(props: Props) {
 		};
 	}, []);
 
-	if (variant === null) {
-		return <>{props.control}</>;
-	}
-	if (variant === HOMEPAGE_EXPERIMENT_VARIANT_A) {
-		return <>{props.variantA}</>;
-	}
-	if (variant === HOMEPAGE_EXPERIMENT_VARIANT_B) {
-		return <>{props.variantB}</>;
-	}
-	return <>{props.control}</>;
+	const resolved = variant !== null;
+	const content =
+		variant === HOMEPAGE_EXPERIMENT_VARIANT_A
+			? props.variantA
+			: variant === HOMEPAGE_EXPERIMENT_VARIANT_B
+				? props.variantB
+				: props.control;
+
+	return (
+		<div
+			aria-busy={!resolved}
+			style={{
+				opacity: resolved ? 1 : undefined,
+				transition: resolved ? 'opacity 150ms ease-in' : undefined,
+			}}
+		>
+			{content}
+		</div>
+	);
 }

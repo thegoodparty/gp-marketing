@@ -77,9 +77,10 @@ export function NavGroupItem(props: NonNullable<NavDropdownProps['group']>[numbe
 						key={props.label?.toString()}
 						href={props.link.href}
 						onClick={() => {
-							if (isSignUpUrl(props.link?.href)) {
+							const href = props.link?.href;
+							if (href && isSignUpUrl(href)) {
 								trackSignUpClicked({
-									href: props.link.href,
+									href,
 									label: typeof props.label === 'string' ? props.label : null,
 								});
 							}

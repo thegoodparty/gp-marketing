@@ -12,7 +12,7 @@ import {
 	outlineInverseButtonStyleType,
 	primaryButtonStyleType,
 } from '~/ui/_lib/designTypesStore.ts';
-import { HOMEPAGE_EXPERIMENT_VARIANT_A, trackEvent } from '~/lib/analytics';
+import { HOMEPAGE_EXPERIMENT_VARIANT_A, makeHomepageCtaOnClick } from '~/lib/analytics';
 
 export const heroA = {
 	badgeText: (
@@ -36,31 +36,17 @@ export const heroA = {
 			buttonType: 'internal' as const,
 			href: '/run-for-office',
 			label: "I'm Ready to Run",
-			onClick: () => {
-				trackEvent('Homepage CTA Clicked', {
-					variant: HOMEPAGE_EXPERIMENT_VARIANT_A,
-					section: 'hero',
-					label: "I'm Ready to Run",
-					href: '/run-for-office',
-				});
-			},
+			onClick: makeHomepageCtaOnClick(HOMEPAGE_EXPERIMENT_VARIANT_A, 'hero', "I'm Ready to Run", '/run-for-office'),
 			buttonProps: { styleType: primaryButtonStyleType },
 		},
 		{
 			buttonType: 'internal' as const,
 			href: '/about',
 			label: 'I Want to Help',
-			onClick: () => {
-				trackEvent('Homepage CTA Clicked', {
-					variant: HOMEPAGE_EXPERIMENT_VARIANT_A,
-					section: 'hero',
-					label: 'I Want to Help',
-					href: '/about',
-				});
-			},
+			onClick: makeHomepageCtaOnClick(HOMEPAGE_EXPERIMENT_VARIANT_A, 'hero', 'I Want to Help', '/about'),
 			buttonProps: { styleType: outlineButtonStyleType },
 		},
-	] as ComponentButtonProps[],
+	] satisfies ComponentButtonProps[],
 };
 
 export const statsA: StatProps[] = [
@@ -228,29 +214,15 @@ export const ctaA = {
 			label: 'Start Your Campaign',
 			className: 'max-sm:w-full bg-goodparty-red hover:bg-goodparty-red/80 focus:ring-goodparty-red/40 shadow-[var(--shadow-cta-red)]',
 			iconRight: <IconResolver icon="arrow-right" className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5" />,
-			onClick: () => {
-				trackEvent('Homepage CTA Clicked', {
-					variant: HOMEPAGE_EXPERIMENT_VARIANT_A,
-					section: 'cta_block',
-					label: 'Start Your Campaign',
-					href: '/run',
-				});
-			},
+			onClick: makeHomepageCtaOnClick(HOMEPAGE_EXPERIMENT_VARIANT_A, 'cta_block', 'Start Your Campaign', '/run'),
 			buttonProps: { styleType: primaryButtonStyleType },
 		},
 		{
 			buttonType: 'internal' as const,
 			href: '/candidates',
 			label: 'Explore the Tools',
-			onClick: () => {
-				trackEvent('Homepage CTA Clicked', {
-					variant: HOMEPAGE_EXPERIMENT_VARIANT_A,
-					section: 'cta_block',
-					label: 'Explore the Tools',
-					href: '/candidates',
-				});
-			},
+			onClick: makeHomepageCtaOnClick(HOMEPAGE_EXPERIMENT_VARIANT_A, 'cta_block', 'Explore the Tools', '/candidates'),
 			buttonProps: { styleType: outlineInverseButtonStyleType },
 		},
-	] as ComponentButtonProps[],
+	] satisfies ComponentButtonProps[],
 };

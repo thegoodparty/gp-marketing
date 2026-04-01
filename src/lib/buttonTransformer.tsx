@@ -29,6 +29,28 @@ function resolveHierarchy(
 	return 'ghost';
 }
 
+export function resolveButtonHref(button: ButtonType): string | undefined {
+	const action = stegaClean(button.action);
+
+	switch (action) {
+		case 'Internal':
+		case 'Contact':
+			return button.link && 'href' in button.link ? (button.link.href as string | undefined) ?? undefined : undefined;
+		case 'External':
+			return button.field_externalLink ?? undefined;
+		case 'Anchor':
+			return button.anchor ?? undefined;
+		case 'Download':
+			return button.ref_download?.file?.url ?? undefined;
+		case 'LogIn':
+			return 'https://app.goodparty.org/login';
+		case 'SignUp':
+			return 'https://app.goodparty.org/sign-up';
+		default:
+			return undefined;
+	}
+}
+
 export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] | undefined {
 	if (!buttons) {
 		return undefined;
@@ -39,95 +61,100 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 		if (!button) {
 			continue;
 		}
-		switch (stegaClean(button.action)) {
+		const action = stegaClean(button.action);
+		const href = resolveButtonHref(button);
+
+		switch (action) {
 			case 'Internal':
-				if (button.link && 'href' in button.link && button.link.href)
+				if (href)
 					transformedButtons.push({
 						_key: button._key,
 						formId: (button as { formId?: string }).formId,
 						label: button.text ?? button.link.title ?? button.link.name,
 						buttonType: 'internal',
-						href: button.link.href,
+						href,
 						buttonProps: {
 							styleType: resolveHierarchy(button.hierarchy),
 						},
 					});
 				break;
 			case 'Contact':
-				if (button.link && 'href' in button.link && button.link.href)
+				if (href)
 					transformedButtons.push({
 						_key: button._key,
 						formId: (button as { formId?: string }).formId,
 						label: button.text ?? button.link.title ?? button.link.name,
 						buttonType: 'contact',
-						href: button.link.href,
+						href,
 						buttonProps: {
 							styleType: resolveHierarchy(button.hierarchy),
 						},
 					});
 				break;
 			case 'External':
-				if (button.field_externalLink)
+				if (href)
 					transformedButtons.push({
 						_key: button._key,
 						formId: (button as { formId?: string }).formId,
 						label: button.text ?? button.field_externalLink,
 						buttonType: 'external',
-						href: button.field_externalLink,
+						href,
 						buttonProps: {
 							styleType: resolveHierarchy(button.hierarchy),
 						},
 					});
 				break;
 			case 'Anchor':
-				if (button.anchor)
+				if (href)
 					transformedButtons.push({
 						_key: button._key,
 						formId: (button as { formId?: string }).formId,
 						label: button.text,
 						buttonType: 'anchor',
-						href: button.anchor,
+						href,
 						buttonProps: {
 							styleType: resolveHierarchy(button.hierarchy),
 						},
 					});
 				break;
 			case 'Download':
-				if (button.ref_download && button.ref_download.file?.url)
+				if (href)
 					transformedButtons.push({
 						_key: button._key,
 						formId: (button as { formId?: string }).formId,
 						label: button.text ?? button.ref_download.name,
 						buttonType: 'download',
-						href: button.ref_download.file?.url,
+						href,
 						buttonProps: {
 							styleType: resolveHierarchy(button.hierarchy),
 						},
 					});
 				break;
 			case 'LogIn':
-				transformedButtons.push({
-					_key: button._key,
-					formId: (button as { formId?: string }).formId,
-					label: button.text ?? 'Login',
-					buttonType: 'external',
-					href: 'https://app.goodparty.org/login',
+				if (href)
+					transformedButtons.push({
+						_key: button._key,
+						formId: (button as { formId?: string }).formId,
+						label: button.text ?? 'Login',
+						buttonType: 'external',
+						href,
 						buttonProps: {
 							styleType: resolveHierarchy(button.hierarchy),
 						},
 					});
 				break;
 			case 'SignUp':
-				transformedButtons.push({
-					_key: button._key,
-					formId: (button as { formId?: string }).formId,
-					label: button.text ?? 'Sign up',
-					buttonType: 'external',
-					href: 'https://app.goodparty.org/sign-up',
-					buttonProps: {
-						styleType: resolveHierarchy(button.hierarchy),
-					},
-				});
+				if (href)
+					transformedButtons.push({
+						_key: button._key,
+						formId: (button as { formId?: string }).formId,
+						label: button.text ?? 'Sign up',
+						buttonType: 'external',
+						href,
+						buttonProps: {
+							styleType: resolveHierarchy(button.hierarchy),
+						},
+					});
 				break;
 		}
 	}

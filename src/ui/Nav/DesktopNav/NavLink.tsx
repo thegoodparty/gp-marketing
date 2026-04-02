@@ -8,6 +8,7 @@ import { Anchor } from '~/ui/Anchor';
 import { IconResolver, type IconType } from '~/ui/IconResolver';
 import type { NavDropdownProps } from '~/ui/Nav/DesktopNav/NavDropdown';
 import { Text, type StyleTypes } from '~/ui/Text';
+import { isExternalToEcosystem } from '~/ui/_lib/linkBehavior';
 
 export const menuItemStyles = tv({
 	slots: {
@@ -52,6 +53,10 @@ export function NavLink(item: NavLinkProps) {
 }
 
 export function NavGroupItem(props: NonNullable<NavDropdownProps['group']>[number] & { className?: string; onClick?(): void }) {
+	const href = props.link?.href ?? undefined;
+	const showExternalIcon =
+		Boolean(href) && props.link?._type === 'externalLinkWithIcon' && isExternalToEcosystem(href);
+
 	return (
 		<Text
 			as='div'
@@ -93,7 +98,7 @@ export function NavGroupItem(props: NonNullable<NavDropdownProps['group']>[numbe
 				)}
 			</>
 
-			{props.link?._type === 'externalLinkWithIcon' && (
+			{showExternalIcon && (
 				<IconResolver
 					icon='square-arrow-out-up-right'
 					className='min-w-[1.125rem] min-h-[1.125rem] w-[1.125rem] h-[1.125rem] max-w-[1.125rem] max-h-[1.125rem] md:min-w-[1.25rem] md:min-h-[1.25rem] md:w-[1.25rem] md:h-[1.25rem] md:max-w-[1.25rem] md:max-h-[1.25rem] ml-auto'

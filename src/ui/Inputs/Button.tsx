@@ -10,10 +10,12 @@ import {
 } from 'react';
 
 import { APP_SIGN_UP_HREF, isSignUpUrl, trackEvent, trackSignUpClicked } from '~/lib/analytics';
+import { LinkTarget } from '~/types/ui';
 import { tv } from '../_lib/utils.ts';
 import { Anchor, type AnchorProps } from '../Anchor.tsx';
 import { IconResolver } from '../IconResolver.tsx';
 import type { buttonStyleTypeValues } from '../_lib/designTypesStore.ts';
+import { isExternalToEcosystem } from '../_lib/linkBehavior';
 
 function hasReadableText(children: ReactNode): boolean {
 	if (children == null) return false;
@@ -157,6 +159,8 @@ function labelToString(label: ReactNode | undefined): string | null {
 export const ComponentButton = (props: ComponentButtonProps) => {
 	const isPrimary = props.buttonProps?.styleType === 'primary' || props.buttonProps?.styleType === 'secondary';
 
+	const isExternalHref = 'href' in props ? isExternalToEcosystem(props.href) : false;
+
 	const fireExperimentTracking = () => {
 		if (!props.experimentTracking) return;
 		trackEvent('Homepage CTA Clicked', {
@@ -188,9 +192,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					href={props.href}
 					onClick={linkOnClick}
 					iconLeft={props.iconLeft}
-					iconRight={
-						props.iconRight ?? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />
-					}
+					iconRight={props.iconRight ?? undefined}
 					{...props.buttonProps}
 				>
 					{props.label}
@@ -207,7 +209,12 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ??
-						(isPrimary ? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' /> : undefined)
+						(isPrimary && isExternalHref ? (
+							<IconResolver
+								icon='square-arrow-out-up-right'
+								className='min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5'
+							/>
+						) : undefined)
 					}
 					{...props.buttonProps}
 				>
@@ -224,9 +231,13 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					onClick={linkOnClick}
 					iconLeft={props.iconLeft}
 					iconRight={
-						props.iconRight ?? (
-							<IconResolver icon='square-arrow-out-up-right' className='min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5' />
-						)
+						props.iconRight ??
+						(isExternalHref ? (
+							<IconResolver
+								icon='square-arrow-out-up-right'
+								className='min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5'
+							/>
+						) : undefined)
 					}
 					{...props.buttonProps}
 				>
@@ -241,7 +252,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					formId={props.formId}
 					href={props.href}
 					onClick={linkOnClick}
-					target='_blank'
+					target={LinkTarget.BLANK}
 					iconLeft={props.iconLeft}
 					iconRight={props.iconRight ?? <IconResolver icon='download' className='min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5' />}
 					{...props.buttonProps}

@@ -4,6 +4,7 @@ describe('isExternalToEcosystem', () => {
 	it('treats empty or whitespace href as internal', () => {
 		expect(isExternalToEcosystem(undefined)).toBe(false);
 		expect(isExternalToEcosystem(null as unknown as string)).toBe(false);
+		expect(isExternalToEcosystem(42 as unknown as string)).toBe(false);
 		expect(isExternalToEcosystem('')).toBe(false);
 		expect(isExternalToEcosystem('   ')).toBe(false);
 	});
@@ -29,7 +30,7 @@ describe('isExternalToEcosystem', () => {
 	});
 
 	it('treats malformed URLs as external for safety', () => {
-		expect(isExternalToEcosystem('ht!tp:// not-a-url')).toBe(true);
+		expect(isExternalToEcosystem('http://[')).toBe(true);
 	});
 
 	it('treats mailto and tel as internal (no off-site navigation)', () => {

@@ -8,7 +8,7 @@
   "scripts": {
     "clean": "rm -rf ./node_modules",
     "dev": "next dev --turbopack -p 3009",
-    "prebuild": "bun run sanity:deploy && rm -rf dist public/sitemap.xml public/sitemaps",
+    "prebuild": "rm -rf dist public/sitemap.xml public/sitemaps",
     "build": "next build --turbopack",
     "lint": "next lint",
     "test": "bun test ./src ./scripts",

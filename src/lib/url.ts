@@ -11,7 +11,7 @@ export const DEFAULT_SHARE_IMAGE = 'https://assets.goodparty.org/gp-share-2025.p
  */
 export function getBaseUrl(): string {
 	const explicit = process.env['NEXT_PUBLIC_APP_BASE'] ?? process.env['NEXT_PUBLIC_SITE_URL'];
-	if (explicit) {
+	if (explicit && typeof explicit === 'string') {
 		const trimmed = explicit.trim().replace(/\/$/, '');
 		return trimmed.startsWith('http') ? trimmed : `https://${trimmed}`;
 	}

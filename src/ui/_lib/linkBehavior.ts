@@ -5,9 +5,10 @@ function isGoodPartyHost(host: string): boolean {
 }
 
 export function isExternalToEcosystem(href: string | undefined | null): boolean {
-	if (!href) return false;
+	if (href == null) return false;
 
-	const trimmed = href.trim();
+	const hrefStr = typeof href === 'string' ? href : String(href);
+	const trimmed = hrefStr.trim();
 	if (!trimmed) return false;
 
 	// Fragment-only and root-relative paths are always internal.

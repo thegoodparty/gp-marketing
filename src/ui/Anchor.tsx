@@ -8,7 +8,7 @@ import { isExternalToEcosystem } from '~/ui/_lib/linkBehavior';
 
 function mergeRelForNewTab(relProp: string | undefined): string {
 	const tokens = new Set<string>();
-	if (relProp) {
+	if (typeof relProp === 'string' && relProp) {
 		for (const t of relProp.trim().split(/\s+/)) {
 			if (t) tokens.add(t);
 		}

@@ -156,9 +156,13 @@ function labelToString(label: ReactNode | undefined): string | null {
 	return typeof label === 'string' ? label : null;
 }
 
-export const ComponentButton = (props: ComponentButtonProps) => {
-	const isPrimary = props.buttonProps?.styleType === 'primary' || props.buttonProps?.styleType === 'secondary';
+const EXTERNAL_LINK_ICON_CLASS = 'min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5';
 
+function defaultExternalLinkIcon() {
+	return <IconResolver icon='square-arrow-out-up-right' className={EXTERNAL_LINK_ICON_CLASS} />;
+}
+
+export const ComponentButton = (props: ComponentButtonProps) => {
 	const isExternalHref = 'href' in props ? isExternalToEcosystem(props.href) : false;
 
 	const fireExperimentTracking = () => {
@@ -207,15 +211,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					href={props.href}
 					onClick={linkOnClick}
 					iconLeft={props.iconLeft}
-					iconRight={
-						props.iconRight ??
-						(isPrimary && isExternalHref ? (
-							<IconResolver
-								icon='square-arrow-out-up-right'
-								className='min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5'
-							/>
-						) : undefined)
-					}
+					iconRight={props.iconRight ?? (isExternalHref ? defaultExternalLinkIcon() : undefined)}
 					{...props.buttonProps}
 				>
 					{props.label}
@@ -230,15 +226,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					href={props.href}
 					onClick={linkOnClick}
 					iconLeft={props.iconLeft}
-					iconRight={
-						props.iconRight ??
-						(isExternalHref ? (
-							<IconResolver
-								icon='square-arrow-out-up-right'
-								className='min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5'
-							/>
-						) : undefined)
-					}
+					iconRight={props.iconRight ?? (isExternalHref ? defaultExternalLinkIcon() : undefined)}
 					{...props.buttonProps}
 				>
 					{props.label}

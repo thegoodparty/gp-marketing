@@ -9,7 +9,7 @@ export type ButtonType = Exclude<ButtonsType, null | undefined>[number];
 
 /**
  * Type guard for raw CTA/button data from Sanity (e.g. ctaAction, ctaActionWithShared).
- * Ensures the value has the minimal shape expected by resolveCTALink and transformButtons.
+ * Ensures the value has the minimal shape expected by transformButton and transformButtons.
  */
 export function isButtonType(value: unknown): value is ButtonType {
 	if (value === null || typeof value !== 'object' || Array.isArray(value)) {
@@ -51,6 +51,100 @@ export function resolveButtonHref(button: ButtonType): string | undefined {
 	}
 }
 
+export function transformButton(button: ButtonType): ComponentButtonProps | undefined {
+	const action = stegaClean(button.action);
+	const href = resolveButtonHref(button);
+
+	switch (action) {
+		case 'Internal':
+			if (!href) return undefined;
+			return {
+				_key: button._key,
+				formId: (button as { formId?: string }).formId,
+				label: button.text ?? button.link.title ?? button.link.name,
+				buttonType: 'internal',
+				href,
+				buttonProps: {
+					styleType: resolveHierarchy(button.hierarchy),
+				},
+			};
+		case 'Contact':
+			if (!href) return undefined;
+			return {
+				_key: button._key,
+				formId: (button as { formId?: string }).formId,
+				label: button.text ?? button.link.title ?? button.link.name,
+				buttonType: 'contact',
+				href,
+				buttonProps: {
+					styleType: resolveHierarchy(button.hierarchy),
+				},
+			};
+		case 'External':
+			if (!href) return undefined;
+			return {
+				_key: button._key,
+				formId: (button as { formId?: string }).formId,
+				label: button.text ?? button.field_externalLink,
+				buttonType: 'external',
+				href,
+				buttonProps: {
+					styleType: resolveHierarchy(button.hierarchy),
+				},
+			};
+		case 'Anchor':
+			if (!href) return undefined;
+			return {
+				_key: button._key,
+				formId: (button as { formId?: string }).formId,
+				label: button.text,
+				buttonType: 'anchor',
+				href,
+				buttonProps: {
+					styleType: resolveHierarchy(button.hierarchy),
+				},
+			};
+		case 'Download':
+			if (!href) return undefined;
+			return {
+				_key: button._key,
+				formId: (button as { formId?: string }).formId,
+				label: button.text ?? button.ref_download.name,
+				buttonType: 'download',
+				href,
+				buttonProps: {
+					styleType: resolveHierarchy(button.hierarchy),
+				},
+			};
+		case 'LogIn':
+			if (!href) return undefined;
+			return {
+				_key: button._key,
+				formId: (button as { formId?: string }).formId,
+				label: button.text ?? 'Login',
+				buttonType: 'external',
+				href,
+				buttonProps: {
+					styleType: resolveHierarchy(button.hierarchy),
+				},
+			};
+		case 'SignUp':
+			if (!href) return undefined;
+			return {
+				_key: button._key,
+				formId: (button as { formId?: string }).formId,
+				label: button.text ?? 'Sign up',
+				buttonType: 'external',
+				href,
+				buttonProps: {
+					styleType: resolveHierarchy(button.hierarchy),
+				},
+			};
+		default:
+			return undefined;
+	}
+}
+
 export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] | undefined {
 	if (!buttons) {
 		return undefined;
@@ -61,101 +155,9 @@ export function transformButtons(buttons?: ButtonsType): ComponentButtonProps[] 
 		if (!button) {
 			continue;
 		}
-		const action = stegaClean(button.action);
-		const href = resolveButtonHref(button);
-
-		switch (action) {
-			case 'Internal':
-				if (href)
-					transformedButtons.push({
-						_key: button._key,
-						formId: (button as { formId?: string }).formId,
-						label: button.text ?? button.link.title ?? button.link.name,
-						buttonType: 'internal',
-						href,
-						buttonProps: {
-							styleType: resolveHierarchy(button.hierarchy),
-						},
-					});
-				break;
-			case 'Contact':
-				if (href)
-					transformedButtons.push({
-						_key: button._key,
-						formId: (button as { formId?: string }).formId,
-						label: button.text ?? button.link.title ?? button.link.name,
-						buttonType: 'contact',
-						href,
-						buttonProps: {
-							styleType: resolveHierarchy(button.hierarchy),
-						},
-					});
-				break;
-			case 'External':
-				if (href)
-					transformedButtons.push({
-						_key: button._key,
-						formId: (button as { formId?: string }).formId,
-						label: button.text ?? button.field_externalLink,
-						buttonType: 'external',
-						href,
-						buttonProps: {
-							styleType: resolveHierarchy(button.hierarchy),
-						},
-					});
-				break;
-			case 'Anchor':
-				if (href)
-					transformedButtons.push({
-						_key: button._key,
-						formId: (button as { formId?: string }).formId,
-						label: button.text,
-						buttonType: 'anchor',
-						href,
-						buttonProps: {
-							styleType: resolveHierarchy(button.hierarchy),
-						},
-					});
-				break;
-			case 'Download':
-				if (href)
-					transformedButtons.push({
-						_key: button._key,
-						formId: (button as { formId?: string }).formId,
-						label: button.text ?? button.ref_download.name,
-						buttonType: 'download',
-						href,
-						buttonProps: {
-							styleType: resolveHierarchy(button.hierarchy),
-						},
-					});
-				break;
-			case 'LogIn':
-				if (href)
-					transformedButtons.push({
-						_key: button._key,
-						formId: (button as { formId?: string }).formId,
-						label: button.text ?? 'Login',
-						buttonType: 'external',
-						href,
-						buttonProps: {
-							styleType: resolveHierarchy(button.hierarchy),
-						},
-					});
-				break;
-			case 'SignUp':
-				if (href)
-					transformedButtons.push({
-						_key: button._key,
-						formId: (button as { formId?: string }).formId,
-						label: button.text ?? 'Sign up',
-						buttonType: 'external',
-						href,
-						buttonProps: {
-							styleType: resolveHierarchy(button.hierarchy),
-						},
-					});
-				break;
+		const transformed = transformButton(button);
+		if (transformed) {
+			transformedButtons.push(transformed);
 		}
 	}
 	return transformedButtons;

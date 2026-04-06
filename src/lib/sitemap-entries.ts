@@ -89,7 +89,20 @@ export function buildCountyLookups(
 }
 
 /**
- * Builds election race sitemap entries. LOCAL races use the same 4-level city URL shape as CITY when a county mapping exists.
+ * Builds election race sitemap entries.
+ *
+ * Slug formats from the election API:
+ *   2-part  state/position                   → STATE / FEDERAL
+ *   3-part  state/county/position            → COUNTY, or LOCAL at county level
+ *   3-part  state/city/position              → CITY / LOCAL (city slug in map)
+ *   4-part  state/county/city/position       → CITY / LOCAL races whose place slug
+ *                                              includes the county (e.g. WI townships)
+ *
+ * CITY/LOCAL 3-part city slugs: look up county via citySlugToCountySlug to emit the
+ * canonical 4-level URL /elections/state/county/city/position.
+ * CITY/LOCAL 4-part slugs: the county is already embedded; fall through to the generic
+ * branch which emits the URL directly from the prefix.
+ * CITY 3-part slugs with no county mapping are skipped (would produce a wrong URL).
  */
 export function buildRaceEntries(
 	races: RaceEntry[],
@@ -109,6 +122,7 @@ export function buildRaceEntries(
 			const citySlug = parts.join('/');
 			const countySlug = citySlugToCountySlug.get(citySlug);
 			if (countySlug) {
+				// 3-part city slug with a known county mapping → expand to 4-level URL
 				const citySegment = parts.pop();
 				if (!citySegment) continue;
 				out.push(
@@ -116,7 +130,10 @@ export function buildRaceEntries(
 				);
 				continue;
 			}
-			if (level === 'CITY') continue;
+			// CITY 3-part slug with no county mapping would produce a bad URL (city treated
+			// as county). Skip it. 4-part slugs (parts.length === 3) already carry the county
+			// and fall through to emit the correct URL from the prefix.
+			if (level === 'CITY' && parts.length === 2) continue;
 		}
 
 		const prefix = parts.join('/');

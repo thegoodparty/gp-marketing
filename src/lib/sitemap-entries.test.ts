@@ -257,15 +257,33 @@ describe('buildRaceEntries', () => {
 		]);
 	});
 
-	test('CITY race without county mapping is skipped', () => {
+	test('CITY race with 3-part slug and no county mapping is skipped', () => {
 		const result = urls([{ slug: 'az/unknown-city/clerk', positionLevel: 'CITY' }]);
 		expect(result).toEqual([]);
 	});
 
-	test('LOCAL race without county mapping falls through to generic branch', () => {
+	test('CITY race with 4-part slug and no county mapping falls through to 4-level URL', () => {
+		// e.g. city places whose slug includes the county (WI-style) won't be in the map,
+		// but the URL can be emitted directly from the prefix.
+		const result = urls([{ slug: 'wi/adams-county/adams-town/city-clerk', positionLevel: 'CITY' }]);
+		expect(result).toEqual([
+			`${BASE}/elections/wi/adams-county/adams-town/position/city-clerk`,
+		]);
+	});
+
+	test('LOCAL race with 3-part slug and no county mapping falls through to 3-level URL', () => {
 		const result = urls([{ slug: 'az/unknown-place/board', positionLevel: 'LOCAL' }]);
 		expect(result).toEqual([
 			`${BASE}/elections/az/unknown-place/position/board`,
+		]);
+	});
+
+	test('LOCAL race with 4-part slug (e.g. WI township) falls through to 4-level URL', () => {
+		// WI township races have slugs like state/county/town/position because the town
+		// place slug includes the county. The county is already in the prefix.
+		const result = urls([{ slug: 'wi/adams-county/adams-town/township-board-head', positionLevel: 'LOCAL' }]);
+		expect(result).toEqual([
+			`${BASE}/elections/wi/adams-county/adams-town/position/township-board-head`,
 		]);
 	});
 

@@ -109,7 +109,7 @@ function parseArgs(): {
 	};
 }
 
-async function fetchSitemapUrls(sitemapUrl: string): Promise<string[]> {
+export async function fetchSitemapUrls(sitemapUrl: string): Promise<string[]> {
 	const res = await fetch(sitemapUrl);
 	if (!res.ok) {
 		throw new Error(`Failed to fetch sitemap: ${res.status} ${res.statusText}`);
@@ -475,7 +475,9 @@ async function main(): Promise<void> {
 	printSummary(report);
 }
 
-main().catch((err) => {
-	console.error(err);
-	process.exit(1);
-});
+if (import.meta.main) {
+	main().catch((err) => {
+		console.error(err);
+		process.exit(1);
+	});
+}

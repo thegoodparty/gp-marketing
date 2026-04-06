@@ -26,6 +26,7 @@
     "sitemap:validate": "bun run scripts/validate-sitemap-urls.ts",
     "sitemap:prune": "bun run scripts/prune-invalid-urls.ts",
     "test:e2e:sitemap": "playwright test e2e/sitemap.spec.ts",
+    "test:integration:sitemap": "bun test integration/validate-sitemap-urls.test.ts",
     "test:unit": "bun test src",
     "validate:elections": "bun run scripts/validate-election-pages.ts",
     "lint:sitemap": "next lint --file src/app/api/sitemap-index/route.ts --file src/app/sitemap.ts --file src/lib/sitemap-entries.ts"

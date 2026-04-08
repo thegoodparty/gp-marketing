@@ -109,9 +109,10 @@ export async function generateMetadata({
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
 	const countyDisplayName = resolveLocalityName(countyPlace, race?.Place, countySlug);
 	const cityPlaces = await getCityPlacesByCounty({ state: stateCode, countySlug });
-	const cityPlace = cityPlaces.find(
-		c => c.slug.toLowerCase() === `${state.toLowerCase()}/${city.toLowerCase()}`,
-	);
+	const cityPlace =
+		cityPlaces.find(c => c.slug.toLowerCase() === `${state.toLowerCase()}/${city.toLowerCase()}`) ??
+		race?.Place ??
+		null;
 	const cityName = cityPlace?.name ?? city;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
 	return {

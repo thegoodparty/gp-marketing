@@ -23,13 +23,11 @@ import { ElectionsLandingWithSearch } from '~/ui/ElectionsLandingWithSearch';
 import { LocationFactsBlock } from '~/ui/LocationFactsBlock';
 import { Carousel } from '~/ui/Carousel';
 import { StepperBlock } from '~/ui/StepperBlock';
-import { getCachedElectionRouteParams } from '~/lib/sitemap-entries';
 
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-	const { cityParams } = await getCachedElectionRouteParams();
-	return cityParams;
+	return [];
 }
 
 export default async function Page({

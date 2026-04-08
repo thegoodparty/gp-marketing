@@ -31,13 +31,11 @@ import { LocationFactsBlock } from '~/ui/LocationFactsBlock';
 import { Carousel } from '~/ui/Carousel';
 import { StepperBlock } from '~/ui/StepperBlock';
 import { ElectionsIndexBlock } from '~/ui/ElectionsIndexBlock';
-import { getCachedElectionRouteParams } from '~/lib/sitemap-entries';
 
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-	const { countyParams } = await getCachedElectionRouteParams();
-	return countyParams;
+	return [];
 }
 
 export default async function Page({

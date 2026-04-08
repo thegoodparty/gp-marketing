@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { fetchCandidacySlugs, getCandidateBySlug, findCampaignByRace } from '~/lib/electionsApi';
+import { getCandidateBySlug, findCampaignByRace } from '~/lib/electionsApi';
 import { formatElectionDateFromApi } from '~/lib/electionsHelpers';
-import { US_STATE_CODES } from '~/lib/sitemap-entries';
 import { PageSections } from '~/PageSections';
 import type { SectionOverrides } from '~/PageSections';
 import type { CandidacyItem, FindByRaceIdResponse } from '~/types/elections';
@@ -11,28 +10,8 @@ import { PROFILE_PAGE_SECTIONS } from './profilePageSections';
 
 export const revalidate = 3600;
 
-function dedupeSlugParams(params: { slug: string[] }[]): { slug: string[] }[] {
-	const seen = new Set<string>();
-	const out: { slug: string[] }[] = [];
-	for (const p of params) {
-		const k = p.slug.join('/');
-		if (seen.has(k)) continue;
-		seen.add(k);
-		out.push(p);
-	}
-	return out;
-}
-
 export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
-	const out: { slug: string[] }[] = [];
-	for (const code of US_STATE_CODES) {
-		const slugs = await fetchCandidacySlugs(code);
-		for (const s of slugs) {
-			const parts = s.split('/').filter(Boolean);
-			if (parts.length >= 2) out.push({ slug: parts });
-		}
-	}
-	return dedupeSlugParams(out);
+	return [];
 }
 
 function buildSectionOverrides(

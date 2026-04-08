@@ -11,13 +11,11 @@ import {
 } from '~/lib/electionsHelpers';
 import { toAbsoluteUrl } from '~/lib/url';
 import { PositionPageContent } from '~/ui/PositionPageContent';
-import { getCachedElectionRouteParams } from '~/lib/sitemap-entries';
 
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-	const { countyPositionParams } = await getCachedElectionRouteParams();
-	return countyPositionParams;
+	return [];
 }
 
 export default async function Page({

@@ -27,9 +27,9 @@ import type { BlogCardProps } from '~/ui/BlogCard';
 import { resolveBlogCard } from '~/ui/_lib/resolveBlogCard';
 
 export async function generateStaticParams() {
-	const entries = await client.fetch<Array<{ slug: string }>>('*[_type == "article"][0..99].editorialOverview.field_slug');
-	return entries.filter(Boolean).map(entry => ({
-		slug: entry,
+	const entries = await client.fetch<Array<string>>('*[_type == "article"].editorialOverview.field_slug');
+	return entries.filter(Boolean).map((slug) => ({
+		slug,
 	}));
 }
 

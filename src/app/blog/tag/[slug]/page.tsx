@@ -15,7 +15,7 @@ import { BlogTopicTagsBlock } from '~/ui/BlogTopicTagsBlock';
 import { client } from '~/lib/client';
 
 export async function generateStaticParams() {
-	const entries = await client.fetch<Array<string>>('*[_type=="topics"][0..99].tagOverview.field_slug');
+	const entries = await client.fetch<Array<string>>('*[_type=="topics"].tagOverview.field_slug');
 	return entries.filter(Boolean).map(entry => ({
 		slug: entry,
 	}));

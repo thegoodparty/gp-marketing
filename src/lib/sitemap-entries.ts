@@ -142,6 +142,217 @@ export function buildRaceEntries(
 	return out;
 }
 
+function dedupeByKey<T>(items: T[], keyFn: (t: T) => string): T[] {
+	const seen = new Set<string>();
+	const out: T[] = [];
+	for (const item of items) {
+		const k = keyFn(item);
+		if (seen.has(k)) continue;
+		seen.add(k);
+		out.push(item);
+	}
+	return out;
+}
+
+export type ElectionCountyRouteParam = { state: string; county: string };
+export type ElectionCityRouteParam = { state: string; county: string; city: string };
+export type ElectionStatePositionRouteParam = { state: string; positionSlug: string };
+export type ElectionCountyPositionRouteParam = { state: string; county: string; positionSlug: string };
+export type ElectionCityPositionRouteParam = { state: string; county: string; city: string; positionSlug: string };
+
+/**
+ * Same branching as buildRaceEntries; returns route params for static generation.
+ */
+export function buildRaceRouteParams(
+	races: RaceEntry[],
+	citySlugToCountySlug: Map<string, string>,
+): {
+	statePositionParams: ElectionStatePositionRouteParam[];
+	countyPositionParams: ElectionCountyPositionRouteParam[];
+	cityPositionParams: ElectionCityPositionRouteParam[];
+} {
+	const statePositionParams: ElectionStatePositionRouteParam[] = [];
+	const countyPositionParams: ElectionCountyPositionRouteParam[] = [];
+	const cityPositionParams: ElectionCityPositionRouteParam[] = [];
+
+	for (const r of races) {
+		if (!r.slug) continue;
+		const parts = r.slug.split('/');
+		const positionSlug = parts.pop();
+		if (!positionSlug) continue;
+
+		const level = (r.positionLevel ?? '').toUpperCase();
+
+		if (level === 'CITY' || level === 'LOCAL') {
+			const citySlug = parts.join('/');
+			const countySlug = citySlugToCountySlug.get(citySlug);
+			if (countySlug) {
+				const citySegment = parts.pop();
+				if (!citySegment) continue;
+				const csParts = countySlug.split('/').filter(Boolean);
+				if (csParts.length >= 2) {
+					cityPositionParams.push({
+						state: csParts[0]!.toLowerCase(),
+						county: csParts.slice(1).join('/').toLowerCase(),
+						city: citySegment.toLowerCase(),
+						positionSlug,
+					});
+				}
+				continue;
+			}
+			if (level === 'CITY' && parts.length === 2) continue;
+		}
+
+		const prefix = parts.join('/');
+		const segs = prefix.split('/').filter(Boolean);
+		if (segs.length === 1) {
+			statePositionParams.push({ state: segs[0]!.toLowerCase(), positionSlug });
+		} else if (segs.length === 2) {
+			countyPositionParams.push({
+				state: segs[0]!.toLowerCase(),
+				county: segs[1]!.toLowerCase(),
+				positionSlug,
+			});
+		} else if (segs.length === 3) {
+			cityPositionParams.push({
+				state: segs[0]!.toLowerCase(),
+				county: segs[1]!.toLowerCase(),
+				city: segs[2]!.toLowerCase(),
+				positionSlug,
+			});
+		}
+	}
+
+	return {
+		statePositionParams: dedupeByKey(statePositionParams, (p) => `${p.state}|${p.positionSlug}`),
+		countyPositionParams: dedupeByKey(
+			countyPositionParams,
+			(p) => `${p.state}|${p.county}|${p.positionSlug}`,
+		),
+		cityPositionParams: dedupeByKey(
+			cityPositionParams,
+			(p) => `${p.state}|${p.county}|${p.city}|${p.positionSlug}`,
+		),
+	};
+}
+
+/**
+ * Election route params for one state (aligned with fetchStateElectionSitemapEntries).
+ */
+export async function fetchStateElectionRouteParams(stateCode: string): Promise<{
+	countyParams: ElectionCountyRouteParam[];
+	cityParams: ElectionCityRouteParam[];
+	statePositionParams: ElectionStatePositionRouteParam[];
+	countyPositionParams: ElectionCountyPositionRouteParam[];
+	cityPositionParams: ElectionCityPositionRouteParam[];
+}> {
+	const code = stateCode.toUpperCase();
+
+	const [places, cities, races] = await Promise.all([
+		fetchElectionJson<{ slug?: string; mtfcc?: string; name?: string }>('v1/places', {
+			state: code,
+			placeColumns: 'slug,mtfcc,name',
+		}),
+		fetchElectionJson<{ slug?: string; countyName?: string }>('v1/places', {
+			state: code,
+			mtfcc: 'G4110',
+			placeColumns: 'slug,countyName',
+		}),
+		fetchElectionJson<{ slug?: string; positionLevel?: string }>('v1/races', {
+			state: code,
+			raceColumns: 'slug,positionLevel',
+		}),
+	]);
+
+	const { citySlugToCountySlug } = buildCountyLookups(places, cities);
+
+	const countyParams: ElectionCountyRouteParam[] = [];
+	for (const p of places) {
+		if (!p.slug) continue;
+		const mtfcc = p.mtfcc ?? '';
+		if (mtfcc === 'G4020' || mtfcc.startsWith('G54')) {
+			const segs = p.slug.split('/').filter(Boolean);
+			if (segs.length >= 2) {
+				countyParams.push({
+					state: segs[0]!.toLowerCase(),
+					county: segs.slice(1).join('/').toLowerCase(),
+				});
+			}
+		}
+	}
+
+	const cityParams: ElectionCityRouteParam[] = [];
+	for (const c of cities) {
+		const countySlug = citySlugToCountySlug.get(c.slug ?? '');
+		if (!countySlug || !c.slug) continue;
+		const citySegment = c.slug.split('/').pop();
+		if (!citySegment) continue;
+		const segs = countySlug.split('/').filter(Boolean);
+		if (segs.length >= 2) {
+			cityParams.push({
+				state: segs[0]!.toLowerCase(),
+				county: segs.slice(1).join('/').toLowerCase(),
+				city: citySegment.toLowerCase(),
+			});
+		}
+	}
+
+	const raceRoute = buildRaceRouteParams(races, citySlugToCountySlug);
+
+	return {
+		countyParams: dedupeByKey(countyParams, (x) => `${x.state}|${x.county}`),
+		cityParams: dedupeByKey(cityParams, (x) => `${x.state}|${x.county}|${x.city}`),
+		statePositionParams: raceRoute.statePositionParams,
+		countyPositionParams: raceRoute.countyPositionParams,
+		cityPositionParams: raceRoute.cityPositionParams,
+	};
+}
+
+let cachedElectionRouteParams: Promise<{
+	countyParams: ElectionCountyRouteParam[];
+	cityParams: ElectionCityRouteParam[];
+	statePositionParams: ElectionStatePositionRouteParam[];
+	countyPositionParams: ElectionCountyPositionRouteParam[];
+	cityPositionParams: ElectionCityPositionRouteParam[];
+}> | null = null;
+
+/**
+ * Merged election static params for all states (single fetch per build segment).
+ */
+export function getCachedElectionRouteParams(): Promise<{
+	countyParams: ElectionCountyRouteParam[];
+	cityParams: ElectionCityRouteParam[];
+	statePositionParams: ElectionStatePositionRouteParam[];
+	countyPositionParams: ElectionCountyPositionRouteParam[];
+	cityPositionParams: ElectionCityPositionRouteParam[];
+}> {
+	if (!cachedElectionRouteParams) {
+		cachedElectionRouteParams = (async () => {
+			const results = await Promise.all(US_STATE_CODES.map((c) => fetchStateElectionRouteParams(c)));
+			return {
+				countyParams: dedupeByKey(results.flatMap((r) => r.countyParams), (x) => `${x.state}|${x.county}`),
+				cityParams: dedupeByKey(
+					results.flatMap((r) => r.cityParams),
+					(x) => `${x.state}|${x.county}|${x.city}`,
+				),
+				statePositionParams: dedupeByKey(
+					results.flatMap((r) => r.statePositionParams),
+					(p) => `${p.state}|${p.positionSlug}`,
+				),
+				countyPositionParams: dedupeByKey(
+					results.flatMap((r) => r.countyPositionParams),
+					(p) => `${p.state}|${p.county}|${p.positionSlug}`,
+				),
+				cityPositionParams: dedupeByKey(
+					results.flatMap((r) => r.cityPositionParams),
+					(p) => `${p.state}|${p.county}|${p.city}|${p.positionSlug}`,
+				),
+			};
+		})();
+	}
+	return cachedElectionRouteParams;
+}
+
 async function fetchElectionJson<T>(path: string, params: Record<string, string>): Promise<T[]> {
 	const search = new URLSearchParams(params).toString();
 	const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}?${search}`;

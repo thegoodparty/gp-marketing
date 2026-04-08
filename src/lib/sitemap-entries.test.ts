@@ -2,6 +2,7 @@ import { describe, expect, test } from 'bun:test';
 import {
 	buildCountyLookups,
 	buildRaceEntries,
+	buildRaceRouteParams,
 	normalizeName,
 	stripCountySuffix,
 	type CountyPlace,
@@ -325,6 +326,57 @@ describe('buildRaceEntries', () => {
 		const result = urls([{ slug: 'az/buckeye/clerk', positionLevel: 'city' }]);
 		expect(result).toEqual([
 			`${BASE}/elections/az/maricopa-county/buckeye/position/clerk`,
+		]);
+	});
+});
+
+describe('buildRaceRouteParams', () => {
+	const citySlugToCountySlug = new Map([
+		['az/buckeye', 'az/maricopa-county'],
+		['az/phoenix', 'az/maricopa-county'],
+		['la/kenner', 'la/jefferson-parish'],
+	]);
+
+	function params(races: RaceEntry[]) {
+		return buildRaceRouteParams(races, citySlugToCountySlug);
+	}
+
+	test('CITY race maps to cityPositionParams with county expansion', () => {
+		const { cityPositionParams, statePositionParams, countyPositionParams } = params([
+			{ slug: 'az/buckeye/city-legislature', positionLevel: 'CITY' },
+		]);
+		expect(cityPositionParams).toEqual([
+			{ state: 'az', county: 'maricopa-county', city: 'buckeye', positionSlug: 'city-legislature' },
+		]);
+		expect(statePositionParams).toEqual([]);
+		expect(countyPositionParams).toEqual([]);
+	});
+
+	test('STATE race maps to statePositionParams', () => {
+		const { statePositionParams } = params([{ slug: 'az/governor', positionLevel: 'STATE' }]);
+		expect(statePositionParams).toEqual([{ state: 'az', positionSlug: 'governor' }]);
+	});
+
+	test('COUNTY race maps to countyPositionParams', () => {
+		const { countyPositionParams } = params([
+			{ slug: 'az/maricopa-county/county-sheriff', positionLevel: 'COUNTY' },
+		]);
+		expect(countyPositionParams).toEqual([
+			{ state: 'az', county: 'maricopa-county', positionSlug: 'county-sheriff' },
+		]);
+	});
+
+	test('4-part CITY slug maps to cityPositionParams via generic branch', () => {
+		const { cityPositionParams } = params([
+			{ slug: 'wi/adams-county/adams-town/city-clerk', positionLevel: 'CITY' },
+		]);
+		expect(cityPositionParams).toEqual([
+			{
+				state: 'wi',
+				county: 'adams-county',
+				city: 'adams-town',
+				positionSlug: 'city-clerk',
+			},
 		]);
 	});
 });

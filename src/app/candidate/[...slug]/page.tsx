@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getCandidateBySlug, findCampaignByRace } from '~/lib/electionsApi';
+import { fetchCandidacySlugs, getCandidateBySlug, findCampaignByRace } from '~/lib/electionsApi';
 import { formatElectionDateFromApi } from '~/lib/electionsHelpers';
+import { US_STATE_CODES } from '~/lib/sitemap-entries';
 import { PageSections } from '~/PageSections';
 import type { SectionOverrides } from '~/PageSections';
 import type { CandidacyItem, FindByRaceIdResponse } from '~/types/elections';
@@ -9,7 +10,30 @@ import type { ProfileData, OfficeData } from '~/PageSections/ProfileContentBlock
 import { PROFILE_PAGE_SECTIONS } from './profilePageSections';
 
 export const revalidate = 3600;
-export const dynamic = 'force-static';
+
+function dedupeSlugParams(params: { slug: string[] }[]): { slug: string[] }[] {
+	const seen = new Set<string>();
+	const out: { slug: string[] }[] = [];
+	for (const p of params) {
+		const k = p.slug.join('/');
+		if (seen.has(k)) continue;
+		seen.add(k);
+		out.push(p);
+	}
+	return out;
+}
+
+export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
+	const out: { slug: string[] }[] = [];
+	for (const code of US_STATE_CODES) {
+		const slugs = await fetchCandidacySlugs(code);
+		for (const s of slugs) {
+			const parts = s.split('/').filter(Boolean);
+			if (parts.length >= 2) out.push({ slug: parts });
+		}
+	}
+	return dedupeSlugParams(out);
+}
 
 function buildSectionOverrides(
 	candidate: CandidacyItem,
@@ -103,10 +127,13 @@ function buildTopIssues(
 export default async function Page({
 	params,
 }: {
-	params: Promise<{ name: string; office: string }>;
+	params: Promise<{ slug: string[] }>;
 }) {
-	const { name, office } = await params;
-	const slug = `${name}/${office}`;
+	const { slug: slugParts } = await params;
+	if (!slugParts || slugParts.length < 2) {
+		notFound();
+	}
+	const slug = slugParts.join('/');
 
 	const candidate = await getCandidateBySlug({ slug });
 	if (!candidate) {
@@ -136,10 +163,13 @@ export default async function Page({
 export async function generateMetadata({
 	params,
 }: {
-	params: Promise<{ name: string; office: string }>;
+	params: Promise<{ slug: string[] }>;
 }): Promise<Metadata> {
-	const { name, office } = await params;
-	const slug = `${name}/${office}`;
+	const { slug: slugParts } = await params;
+	if (!slugParts || slugParts.length < 2) {
+		return { title: 'Candidate Not Found | Good Party' };
+	}
+	const slug = slugParts.join('/');
 
 	const candidate = await getCandidateBySlug({
 		slug,

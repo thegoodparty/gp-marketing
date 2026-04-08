@@ -21,7 +21,7 @@ import { BreadcrumbBlock } from '~/ui/BreadcrumbBlock';
 
 export async function generateStaticParams() {
 	const entries = await client.fetch<Array<{ _id: string; title: string; slug: string }>>(
-		'*[_type=="glossary"][0..99]{_id,"title":glossaryTermOverview.field_glossaryTerm,"slug":glossaryTermOverview.field_slug}',
+		'*[_type=="glossary"]{_id,"title":glossaryTermOverview.field_glossaryTerm,"slug":glossaryTermOverview.field_slug}',
 	);
 	const letters = searchTermsToABCD(entries as any);
 	const paths = [...letters.map(letter => letter.href), ...entries.map(entry => entry.slug)];

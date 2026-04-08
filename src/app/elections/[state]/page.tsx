@@ -26,6 +26,13 @@ import { LocationFactsBlock } from '~/ui/LocationFactsBlock';
 import { Carousel } from '~/ui/Carousel';
 import { StepperBlock } from '~/ui/StepperBlock';
 import { ElectionsIndexBlock } from '~/ui/ElectionsIndexBlock';
+import { US_STATE_CODES } from '~/lib/sitemap-entries';
+
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+	return US_STATE_CODES.map((code) => ({ state: code.toLowerCase() }));
+}
 
 export default async function Page({
 	params,

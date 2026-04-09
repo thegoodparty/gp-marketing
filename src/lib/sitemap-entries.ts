@@ -159,6 +159,13 @@ export type ElectionCityRouteParam = { state: string; county: string; city: stri
 export type ElectionStatePositionRouteParam = { state: string; positionSlug: string };
 export type ElectionCountyPositionRouteParam = { state: string; county: string; positionSlug: string };
 export type ElectionCityPositionRouteParam = { state: string; county: string; city: string; positionSlug: string };
+export type ElectionSubplacePositionRouteParam = {
+	state: string;
+	county: string;
+	city: string;
+	subplace: string;
+	positionSlug: string;
+};
 
 /**
  * Same branching as buildRaceEntries; returns route params for static generation.
@@ -170,10 +177,12 @@ export function buildRaceRouteParams(
 	statePositionParams: ElectionStatePositionRouteParam[];
 	countyPositionParams: ElectionCountyPositionRouteParam[];
 	cityPositionParams: ElectionCityPositionRouteParam[];
+	subplacePositionParams: ElectionSubplacePositionRouteParam[];
 } {
 	const statePositionParams: ElectionStatePositionRouteParam[] = [];
 	const countyPositionParams: ElectionCountyPositionRouteParam[] = [];
 	const cityPositionParams: ElectionCityPositionRouteParam[] = [];
+	const subplacePositionParams: ElectionSubplacePositionRouteParam[] = [];
 
 	for (const r of races) {
 		if (!r.slug) continue;
@@ -220,6 +229,14 @@ export function buildRaceRouteParams(
 				city: segs[2]!.toLowerCase(),
 				positionSlug,
 			});
+		} else if (segs.length === 4) {
+			subplacePositionParams.push({
+				state: segs[0]!.toLowerCase(),
+				county: segs[1]!.toLowerCase(),
+				city: segs[2]!.toLowerCase(),
+				subplace: segs[3]!.toLowerCase(),
+				positionSlug,
+			});
 		}
 	}
 
@@ -233,6 +250,10 @@ export function buildRaceRouteParams(
 			cityPositionParams,
 			(p) => `${p.state}|${p.county}|${p.city}|${p.positionSlug}`,
 		),
+		subplacePositionParams: dedupeByKey(
+			subplacePositionParams,
+			(p) => `${p.state}|${p.county}|${p.city}|${p.subplace}|${p.positionSlug}`,
+		),
 	};
 }
 
@@ -245,6 +266,7 @@ export async function fetchStateElectionRouteParams(stateCode: string): Promise<
 	statePositionParams: ElectionStatePositionRouteParam[];
 	countyPositionParams: ElectionCountyPositionRouteParam[];
 	cityPositionParams: ElectionCityPositionRouteParam[];
+	subplacePositionParams: ElectionSubplacePositionRouteParam[];
 }> {
 	const code = stateCode.toUpperCase();
 
@@ -305,6 +327,7 @@ export async function fetchStateElectionRouteParams(stateCode: string): Promise<
 		statePositionParams: raceRoute.statePositionParams,
 		countyPositionParams: raceRoute.countyPositionParams,
 		cityPositionParams: raceRoute.cityPositionParams,
+		subplacePositionParams: raceRoute.subplacePositionParams,
 	};
 }
 
@@ -314,6 +337,7 @@ let cachedElectionRouteParams: Promise<{
 	statePositionParams: ElectionStatePositionRouteParam[];
 	countyPositionParams: ElectionCountyPositionRouteParam[];
 	cityPositionParams: ElectionCityPositionRouteParam[];
+	subplacePositionParams: ElectionSubplacePositionRouteParam[];
 }> | null = null;
 
 /**
@@ -325,6 +349,7 @@ export function getCachedElectionRouteParams(): Promise<{
 	statePositionParams: ElectionStatePositionRouteParam[];
 	countyPositionParams: ElectionCountyPositionRouteParam[];
 	cityPositionParams: ElectionCityPositionRouteParam[];
+	subplacePositionParams: ElectionSubplacePositionRouteParam[];
 }> {
 	if (!cachedElectionRouteParams) {
 		cachedElectionRouteParams = (async () => {
@@ -346,6 +371,10 @@ export function getCachedElectionRouteParams(): Promise<{
 				cityPositionParams: dedupeByKey(
 					results.flatMap((r) => r.cityPositionParams),
 					(p) => `${p.state}|${p.county}|${p.city}|${p.positionSlug}`,
+				),
+				subplacePositionParams: dedupeByKey(
+					results.flatMap((r) => r.subplacePositionParams),
+					(p) => `${p.state}|${p.county}|${p.city}|${p.subplace}|${p.positionSlug}`,
 				),
 			};
 		})();

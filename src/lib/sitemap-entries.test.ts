@@ -379,4 +379,23 @@ describe('buildRaceRouteParams', () => {
 			},
 		]);
 	});
+
+	test('5-part slug maps to subplacePositionParams via generic branch', () => {
+		const { subplacePositionParams, cityPositionParams } = params([
+			{
+				slug: 'wi/adams-county/quincy-town/township-clerk/treasurer-joint',
+				positionLevel: 'LOCAL',
+			},
+		]);
+		expect(subplacePositionParams).toEqual([
+			{
+				state: 'wi',
+				county: 'adams-county',
+				city: 'quincy-town',
+				subplace: 'township-clerk',
+				positionSlug: 'treasurer-joint',
+			},
+		]);
+		expect(cityPositionParams).toEqual([]);
+	});
 });

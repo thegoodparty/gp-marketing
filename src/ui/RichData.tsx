@@ -8,6 +8,7 @@ import { CircleIcon } from './CircleIcon.tsx';
 import { FeatureTooltip } from './FeatureTooltip.tsx';
 import { ResponsiveImage } from './ResponsiveImage.tsx';
 import { IconResolver } from './IconResolver.tsx';
+import { isExternalToEcosystem } from './_lib/linkBehavior.ts';
 
 export function isRecord(value: unknown): value is Record<string, unknown> {
 	return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
@@ -34,11 +35,17 @@ const additionalMarks = {
 		);
 	},
 	inlineExternalLink(mark) {
+		const href: string | undefined = mark.value?.field_externalLink;
+		const showExternalIcon = isExternalToEcosystem(href);
+
 		return (
 			<>
-				{mark.value?.field_externalLink ? (
-					<Anchor href={mark.value?.field_externalLink} className='link-inverse'>
-						{mark.children}
+				{href ? (
+					<Anchor href={href} className='link-inverse'>
+						<span className='inline-flex items-center gap-1'>
+							{mark.children}
+							{showExternalIcon && <IconResolver icon='square-arrow-out-up-right' className='inline-block w-3.5 h-3.5' />}
+						</span>
 					</Anchor>
 				) : (
 					mark.children

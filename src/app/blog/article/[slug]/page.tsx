@@ -12,6 +12,7 @@ import { BlogArticleHero } from '~/ui/BlogArticleHero';
 import type { SanityImage } from '~/ui/types';
 
 import { RichTextContentSections } from '~/RichTextContentSections';
+import { TypographyStackSpacing } from '~/types/ui';
 import { BlogArticleTags } from '~/ui/BlogArticleTags';
 import { resolveEditorialContentTags } from '~/ui/_lib/resolveEditorialContentTags';
 import { EditorialLayout } from '~/components/EditorialLayout';
@@ -130,7 +131,7 @@ export default async function Page(props: any) {
 				}
 			>
 				<RichTextContentSections
-					stackSpacing='editorial'
+					stackSpacing={TypographyStackSpacing.EDITORIAL}
 					contentSections={page.contentSections?.block_editorialContentSections}
 				/>
 				<div className='flex flex-col gap-12 pt-12'>

@@ -104,7 +104,7 @@ export function FAQBlock(props: FAQBlockProps) {
 									className={`overflow-hidden data-[state=open]:animate-accordion-open data-[state=closed]:animate-accordion-closed `}
 								>
 									{isValidRichText(item.copy) && (
-										<Text className={copy()} styleType='body-2'>
+										<Text className={copy()} styleType='body-2' hasParagraphs>
 											{item.copy}
 										</Text>
 									)}

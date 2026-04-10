@@ -32,6 +32,12 @@ import { Carousel } from '~/ui/Carousel';
 import { StepperBlock } from '~/ui/StepperBlock';
 import { ElectionsIndexBlock } from '~/ui/ElectionsIndexBlock';
 
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+	return [];
+}
+
 export default async function Page({
 	params,
 }: {

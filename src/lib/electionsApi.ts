@@ -29,19 +29,31 @@ export function isDistrictMtfcc(mtfcc?: string): boolean {
 	return mtfcc?.startsWith('G54') ?? false;
 }
 
+const FETCH_JSON_MAX_RETRIES = 2;
+
+function sleep(ms: number): Promise<void> {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | null> {
-	try {
-		const res = await fetch(url, options);
-		if (res.status === 404) return null;
-		if (!res.ok) {
-			console.error(`[electionsApi] ${res.status} ${url}`);
-			return null;
+	for (let attempt = 0; attempt <= FETCH_JSON_MAX_RETRIES; attempt++) {
+		try {
+			const res = await fetch(url, options);
+			if (res.status === 404) return null;
+			if (res.ok) return (await res.json()) as T;
+			if (res.status < 500) {
+				console.error(`[electionsApi] ${res.status} ${url}`);
+				return null;
+			}
+			console.error(`[electionsApi] ${res.status} ${url} (attempt ${attempt + 1})`);
+		} catch (err) {
+			console.error(`[electionsApi] attempt ${attempt + 1}`, err);
 		}
-		return (await res.json()) as T;
-	} catch (err) {
-		console.error('[electionsApi]', err);
-		return null;
+		if (attempt < FETCH_JSON_MAX_RETRIES) {
+			await sleep(500 * (attempt + 1));
+		}
 	}
+	return null;
 }
 
 export async function getRacesByYear(params: {
@@ -137,6 +149,20 @@ export async function getCandidateBySlug(params: {
 	const url = `${BASE_URL}/v1/candidacies?${searchParams}`;
 	const data = await fetchJson<CandidacyItem[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) && data.length > 0 ? (data[0] ?? null) : null;
+}
+
+/**
+ * Candidacy slug strings for a state (same source as sitemap candidate URLs).
+ */
+export async function fetchCandidacySlugs(stateCode: string): Promise<string[]> {
+	const searchParams = new URLSearchParams({
+		state: stateCode.toUpperCase(),
+		columns: 'slug',
+	});
+	const url = `${BASE_URL}/v1/candidacies?${searchParams}`;
+	const data = await fetchJson<Array<{ slug?: string }>>(url, CACHE_OPTIONS);
+	if (!Array.isArray(data)) return [];
+	return data.map((c) => c.slug).filter((s): s is string => typeof s === 'string' && s.length > 0);
 }
 
 export async function findCampaignByRace(params: {

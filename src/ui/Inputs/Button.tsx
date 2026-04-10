@@ -179,7 +179,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 		'href' in props
 			? (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
 					if (isSignUpUrl(props.href)) {
-						trackSignUpClicked({ href: props.href, label: labelToString(props.label) });
+						trackSignUpClicked({ href: props.href, label: labelToString(props.label), formId: props.formId ?? null });
 					}
 					fireExperimentTracking();
 					props.onClick?.(e);
@@ -287,7 +287,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					onClick={e => {
-						trackSignUpClicked({ href: APP_SIGN_UP_HREF, label: labelToString(props.label) });
+						trackSignUpClicked({ href: APP_SIGN_UP_HREF, label: labelToString(props.label), formId: props.formId ?? null });
 						props.onClick?.(e);
 					}}
 					iconLeft={props.iconLeft}

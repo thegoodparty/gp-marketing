@@ -2,57 +2,69 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
+	getCandidacies,
 	getCityPlacesByCounty,
 	getPlacesByState,
 	getRaceBySlug,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
-	buildRaceSlug,
 	formatElectionDateFromApi,
 	formatFilingPeriodFromRace,
 	getStateName,
+	mapCandidacyToCard,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
-import { toAbsoluteUrl } from '~/lib/url';
-import { PositionPageContent } from '~/ui/PositionPageContent';
+import { CandidatesPageContent } from '~/ui/CandidatesPageContent';
 
-export const revalidate = 3600;
+/** 5-part API slug: state/county/city/subplace/positionSlug */
+function buildFivePartRaceSlug(
+	state: string,
+	county: string,
+	city: string,
+	subplace: string,
+	positionSlug: string,
+): string {
+	return `${state.toLowerCase()}/${county.toLowerCase()}/${city.toLowerCase()}/${subplace.toLowerCase()}/${positionSlug}`;
+}
 
-export async function generateStaticParams() {
-	return [];
+function humanizeSegment(segment: string): string {
+	return segment
+		.split('-')
+		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+		.join(' ');
 }
 
 export default async function Page({
 	params,
 }: {
-	params: Promise<{ state: string; county: string; city: string; positionSlug: string }>;
+	params: Promise<{
+		state: string;
+		county: string;
+		city: string;
+		subplace: string;
+		positionSlug: string;
+	}>;
 }) {
-	const { state, county, city, positionSlug } = await params;
+	const { state, county, city, subplace, positionSlug } = await params;
 	const stateCode = state.toUpperCase();
 
 	if (!isValidStateCode(stateCode)) {
 		notFound();
 	}
 
-	// Some races have 4-part slugs (state/county/city/position) instead of 3-part
-	// (state/city/position). Try 3-part first for the common case, then fall back.
-	let race = await getRaceBySlug(buildRaceSlug(state, positionSlug, city));
-	if (!race) race = await getRaceBySlug(buildRaceSlug(state, positionSlug, county, city));
+	const raceSlug = buildFivePartRaceSlug(state, county, city, subplace, positionSlug);
+	const race = await getRaceBySlug(raceSlug);
 	if (!race) notFound();
 
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
-	const fullSlug = `${countySlug}/${city.toLowerCase()}`;
+	const cityPathSlug = `${countySlug}/${city.toLowerCase()}`;
+	const pathBeforePosition = `${cityPathSlug}/${subplace.toLowerCase()}`;
 
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
+	const countyName = resolveLocalityName(countyPlace, race.Place, countySlug);
 
-	if (!countyPlace) {
-		notFound();
-	}
-
-	// Cities queried by G4110 (incorporated places). Non-incorporated places (e.g. WI townships
-	// which are G4040) won't appear in that list, so fall back to the place on the race itself.
 	const cityPlaces = await getCityPlacesByCounty({ state: stateCode, countySlug });
 	const cityPlace =
 		cityPlaces.find(c => c.slug.toLowerCase() === `${state.toLowerCase()}/${city.toLowerCase()}`) ??
@@ -60,36 +72,46 @@ export default async function Page({
 		null;
 	if (!cityPlace) notFound();
 
+	const subplaceLabel =
+		race.Place && race.Place.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`)
+			? race.Place.name
+			: humanizeSegment(subplace);
+
 	const stateName = getStateName(stateCode);
 	const cityName = cityPlace.name;
 	const officeName = race.normalizedPositionName ?? race.name ?? 'Position';
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 
-	const candidatesHref = `/elections/${fullSlug}/position/${positionSlug}/candidates`;
+	const candidacies = await getCandidacies({ raceSlug });
+
+	const candidates = candidacies.map((c, i) => mapCandidacyToCard(c, i));
+
+	const positionHref = `/elections/${pathBeforePosition}/position/${positionSlug}`;
+	const locationHref = `/elections/${cityPathSlug}`;
 
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
 		{ href: `/elections/${state.toLowerCase()}`, label: stateName },
-		{ href: `/elections/${countySlug}`, label: countyPlace.name },
-		{ href: `/elections/${fullSlug}`, label: cityName },
-		{ href: '', label: officeName },
+		{ href: `/elections/${countySlug}`, label: countyName },
+		{ href: `/elections/${cityPathSlug}`, label: cityName },
+		{ href: '', label: subplaceLabel },
+		{ href: '', label: `Candidates for ${officeName}` },
 	];
 
-	const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}/position/${positionSlug}`);
-
 	return (
-		<PositionPageContent
+		<CandidatesPageContent
 			officeName={officeName}
 			stateName={stateName}
-			countyName={countyPlace.name}
+			countyName={countyName}
 			cityName={cityName}
 			electionDate={electionDate}
 			filingDate={filingDate}
 			breadcrumbs={breadcrumbs}
-			candidatesHref={candidatesHref}
+			positionHref={positionHref}
+			locationHref={locationHref}
+			candidates={candidates}
 			race={race}
-			pageUrl={pageUrl}
 		/>
 	);
 }
@@ -101,15 +123,16 @@ export async function generateMetadata({
 		state: string;
 		county: string;
 		city: string;
+		subplace: string;
 		positionSlug: string;
 	}>;
 }): Promise<Metadata> {
-	const { state, county, city, positionSlug } = await params;
+	const { state, county, city, subplace, positionSlug } = await params;
 	const stateCode = state.toUpperCase();
 	if (!isValidStateCode(stateCode)) return {};
 	const stateName = getStateName(stateCode);
-	let race = await getRaceBySlug(buildRaceSlug(state, positionSlug, city));
-	if (!race) race = await getRaceBySlug(buildRaceSlug(state, positionSlug, county, city));
+	const raceSlug = buildFivePartRaceSlug(state, county, city, subplace, positionSlug);
+	const race = await getRaceBySlug(raceSlug);
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
@@ -120,9 +143,13 @@ export async function generateMetadata({
 		race?.Place ??
 		null;
 	const cityName = cityPlace?.name ?? city;
+	const subplaceLabel =
+		race?.Place && race.Place.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`)
+			? race.Place.name
+			: humanizeSegment(subplace);
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
 	return {
-		title: `${positionName} in ${cityName}, ${stateName} | Good Party`,
-		description: `Election details and candidates for ${positionName} in ${cityName}, ${countyDisplayName}, ${stateName}.`,
+		title: `Candidates for ${positionName} in ${subplaceLabel}, ${cityName}, ${stateName} | Good Party`,
+		description: `View candidates running for ${positionName} in ${subplaceLabel}, ${cityName}, ${countyDisplayName}, ${stateName}.`,
 	};
 }

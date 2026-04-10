@@ -13,11 +13,13 @@ declare global {
 		};
 		experiment?: {
 			variant(key: string): { value?: string };
+			exposure(key: string): void;
 			fetch(): Promise<unknown>;
 		};
 		sessionReplay?: {
 			plugin(options: { sampleRate: number }): unknown;
 		};
+		dataLayer?: Record<string, unknown>[];
 	}
 }
 

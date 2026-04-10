@@ -2,6 +2,7 @@ import { describe, expect, test } from 'bun:test';
 import {
 	buildCountyLookups,
 	buildRaceEntries,
+	buildRaceRouteParams,
 	normalizeName,
 	stripCountySuffix,
 	type CountyPlace,
@@ -257,15 +258,33 @@ describe('buildRaceEntries', () => {
 		]);
 	});
 
-	test('CITY race without county mapping is skipped', () => {
+	test('CITY race with 3-part slug and no county mapping is skipped', () => {
 		const result = urls([{ slug: 'az/unknown-city/clerk', positionLevel: 'CITY' }]);
 		expect(result).toEqual([]);
 	});
 
-	test('LOCAL race without county mapping falls through to generic branch', () => {
+	test('CITY race with 4-part slug and no county mapping falls through to 4-level URL', () => {
+		// e.g. city places whose slug includes the county (WI-style) won't be in the map,
+		// but the URL can be emitted directly from the prefix.
+		const result = urls([{ slug: 'wi/adams-county/adams-town/city-clerk', positionLevel: 'CITY' }]);
+		expect(result).toEqual([
+			`${BASE}/elections/wi/adams-county/adams-town/position/city-clerk`,
+		]);
+	});
+
+	test('LOCAL race with 3-part slug and no county mapping falls through to 3-level URL', () => {
 		const result = urls([{ slug: 'az/unknown-place/board', positionLevel: 'LOCAL' }]);
 		expect(result).toEqual([
 			`${BASE}/elections/az/unknown-place/position/board`,
+		]);
+	});
+
+	test('LOCAL race with 4-part slug (e.g. WI township) falls through to 4-level URL', () => {
+		// WI township races have slugs like state/county/town/position because the town
+		// place slug includes the county. The county is already in the prefix.
+		const result = urls([{ slug: 'wi/adams-county/adams-town/township-board-head', positionLevel: 'LOCAL' }]);
+		expect(result).toEqual([
+			`${BASE}/elections/wi/adams-county/adams-town/position/township-board-head`,
 		]);
 	});
 
@@ -308,5 +327,75 @@ describe('buildRaceEntries', () => {
 		expect(result).toEqual([
 			`${BASE}/elections/az/maricopa-county/buckeye/position/clerk`,
 		]);
+	});
+});
+
+describe('buildRaceRouteParams', () => {
+	const citySlugToCountySlug = new Map([
+		['az/buckeye', 'az/maricopa-county'],
+		['az/phoenix', 'az/maricopa-county'],
+		['la/kenner', 'la/jefferson-parish'],
+	]);
+
+	function params(races: RaceEntry[]) {
+		return buildRaceRouteParams(races, citySlugToCountySlug);
+	}
+
+	test('CITY race maps to cityPositionParams with county expansion', () => {
+		const { cityPositionParams, statePositionParams, countyPositionParams } = params([
+			{ slug: 'az/buckeye/city-legislature', positionLevel: 'CITY' },
+		]);
+		expect(cityPositionParams).toEqual([
+			{ state: 'az', county: 'maricopa-county', city: 'buckeye', positionSlug: 'city-legislature' },
+		]);
+		expect(statePositionParams).toEqual([]);
+		expect(countyPositionParams).toEqual([]);
+	});
+
+	test('STATE race maps to statePositionParams', () => {
+		const { statePositionParams } = params([{ slug: 'az/governor', positionLevel: 'STATE' }]);
+		expect(statePositionParams).toEqual([{ state: 'az', positionSlug: 'governor' }]);
+	});
+
+	test('COUNTY race maps to countyPositionParams', () => {
+		const { countyPositionParams } = params([
+			{ slug: 'az/maricopa-county/county-sheriff', positionLevel: 'COUNTY' },
+		]);
+		expect(countyPositionParams).toEqual([
+			{ state: 'az', county: 'maricopa-county', positionSlug: 'county-sheriff' },
+		]);
+	});
+
+	test('4-part CITY slug maps to cityPositionParams via generic branch', () => {
+		const { cityPositionParams } = params([
+			{ slug: 'wi/adams-county/adams-town/city-clerk', positionLevel: 'CITY' },
+		]);
+		expect(cityPositionParams).toEqual([
+			{
+				state: 'wi',
+				county: 'adams-county',
+				city: 'adams-town',
+				positionSlug: 'city-clerk',
+			},
+		]);
+	});
+
+	test('5-part slug maps to subplacePositionParams via generic branch', () => {
+		const { subplacePositionParams, cityPositionParams } = params([
+			{
+				slug: 'wi/adams-county/quincy-town/township-clerk/treasurer-joint',
+				positionLevel: 'LOCAL',
+			},
+		]);
+		expect(subplacePositionParams).toEqual([
+			{
+				state: 'wi',
+				county: 'adams-county',
+				city: 'quincy-town',
+				subplace: 'township-clerk',
+				positionSlug: 'treasurer-joint',
+			},
+		]);
+		expect(cityPositionParams).toEqual([]);
 	});
 });

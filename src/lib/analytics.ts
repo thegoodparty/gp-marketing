@@ -45,8 +45,11 @@ export function isSignUpUrl(href: string | undefined | null): boolean {
  * On the homepage this fires alongside `'Homepage CTA Clicked'` (via `experimentTracking` on `ComponentButton`).
  * The two events serve distinct funnels: `Homepage CTA Clicked` measures experiment CTA
  * engagement, while `Sign Up Clicked` tracks sign-up intent site-wide. Both are intentional.
+ *
+ * When `formId` is provided this also pushes a sign-up-only payload into `window.dataLayer`
+ * so GTM Data Layer Variables keyed to `formId` can resolve the originating CTA.
  */
-export function trackSignUpClicked(props: { href: string; label?: string | null }): void {
+export function trackSignUpClicked(props: { href: string; label?: string | null; formId?: string | null }): void {
 	const pagePath = typeof window !== 'undefined' ? window.location.pathname : null;
 	const homepageVariant = pagePath === '/' ? getHomepageExperimentVariant() : null;
 
@@ -55,5 +58,17 @@ export function trackSignUpClicked(props: { href: string; label?: string | null 
 		label: props.label ?? null,
 		page_path: pagePath ?? null,
 		homepage_experiment_variant: homepageVariant,
+	});
+
+	if (typeof window === 'undefined') return;
+
+	const formId = props.formId?.trim();
+	if (!formId) return;
+
+	// Keep this lightweight and sign-up specific: only push when tracking sign-up clicks.
+	window.dataLayer = window.dataLayer || [];
+	window.dataLayer.push({
+		event: 'sign_up_click',
+		formId,
 	});
 }

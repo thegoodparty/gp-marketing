@@ -3,7 +3,6 @@ import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
 import type { ArticleQueryResult } from 'sanity.types';
 import { ImageCTAGroup } from '~/RichTextContentSections/ImageCTAGroup';
 import { CTASectionGroup } from '~/RichTextContentSections/CTASectionGroup';
-import { VideoSectionGroup } from '~/RichTextContentSections/VideoSectionGroup';
 import { TableSectionGroup } from '~/RichTextContentSections/TableSectionGroup';
 import { ImageContentSectionGroup } from '~/RichTextContentSections/ImageContentSectionGroup';
 import { InlineQuoteSectionGroup } from '~/RichTextContentSections/InlineQuoteSectionGroup';
@@ -11,7 +10,7 @@ import { ButtonSectionGroup } from '~/RichTextContentSections/ButtonSectionGroup
 import { FAQsSectionGroup } from '~/RichTextContentSections/FAQsSectionGroup';
 import { block, marks, list, listItem } from '~/ui/RichData';
 import { CalloutSectionGroup } from '~/RichTextContentSections/CalloutSectionGroup';
-import { Typography } from '~/ui/Typography';
+import { Typography, type TypographyStackSpacing } from '~/ui/Typography';
 
 export type ArticleSections = NonNullable<
 	NonNullable<NonNullable<NonNullable<ArticleQueryResult>['contentSections']>['block_editorialContentSections']>[number]
@@ -19,6 +18,7 @@ export type ArticleSections = NonNullable<
 
 interface Props {
 	contentSections?: ArticleSections[] | null;
+	stackSpacing?: TypographyStackSpacing;
 }
 
 export function RichTextContentSections(props: Props) {
@@ -26,8 +26,11 @@ export function RichTextContentSections(props: Props) {
 		return null;
 	}
 
+	const stackSpacing = props.stackSpacing ?? 'default';
+	const isEditorial = stackSpacing === 'editorial';
+
 	return (
-		<Typography as='article' data-section='RichTextContentSection'>
+		<Typography as='article' data-section='RichTextContentSection' stackSpacing={stackSpacing}>
 			<PortableText
 				value={props.contentSections}
 				components={{
@@ -54,10 +57,10 @@ export function RichTextContentSections(props: Props) {
 										height='315'
 										src='https://www.youtube.com/embed/k5CyDlFUE-k?si=7xXhw9-t3Bnv9P4C'
 										title='YouTube video player'
-										frameborder='0'
+										frameBorder={0}
 										allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-										referrerpolicy='strict-origin-when-cross-origin'
-										allowfullscreen
+										referrerPolicy='strict-origin-when-cross-origin'
+										allowFullScreen
 									></iframe>
 								</ComponentErrorBoundary>
 							);
@@ -109,7 +112,7 @@ export function RichTextContentSections(props: Props) {
 					block: block({ isInline: false }),
 					list: list(),
 					listItem: listItem(),
-					hardBreak: () => false,
+					hardBreak: () => (isEditorial ? <br /> : false),
 				}}
 			/>
 		</Typography>

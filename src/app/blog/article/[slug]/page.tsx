@@ -129,7 +129,10 @@ export default async function Page(props: any) {
 						: undefined
 				}
 			>
-				<RichTextContentSections contentSections={page.contentSections?.block_editorialContentSections} />
+				<RichTextContentSections
+					stackSpacing='editorial'
+					contentSections={page.contentSections?.block_editorialContentSections}
+				/>
 				<div className='flex flex-col gap-12 pt-12'>
 					<BlogArticleTags tags={resolveEditorialContentTags(page.editorialContentTags)} />
 					<Author

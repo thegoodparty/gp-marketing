@@ -10,10 +10,12 @@ import {
 } from 'react';
 
 import { APP_SIGN_UP_HREF, isSignUpUrl, trackEvent, trackSignUpClicked } from '~/lib/analytics';
+import { LinkTarget } from '~/types/ui';
 import { tv } from '../_lib/utils.ts';
 import { Anchor, type AnchorProps } from '../Anchor.tsx';
 import { IconResolver } from '../IconResolver.tsx';
 import type { buttonStyleTypeValues } from '../_lib/designTypesStore.ts';
+import { isExternalToEcosystem } from '../_lib/linkBehavior';
 
 function hasReadableText(children: ReactNode): boolean {
 	if (children == null) return false;
@@ -154,8 +156,14 @@ function labelToString(label: ReactNode | undefined): string | null {
 	return typeof label === 'string' ? label : null;
 }
 
+const EXTERNAL_LINK_ICON_CLASS = 'min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5';
+
+function defaultExternalLinkIcon() {
+	return <IconResolver icon='square-arrow-out-up-right' className={EXTERNAL_LINK_ICON_CLASS} />;
+}
+
 export const ComponentButton = (props: ComponentButtonProps) => {
-	const isPrimary = props.buttonProps?.styleType === 'primary' || props.buttonProps?.styleType === 'secondary';
+	const isExternalHref = 'href' in props ? isExternalToEcosystem(props.href) : false;
 
 	const fireExperimentTracking = () => {
 		if (!props.experimentTracking) return;
@@ -171,7 +179,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 		'href' in props
 			? (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
 					if (isSignUpUrl(props.href)) {
-						trackSignUpClicked({ href: props.href, label: labelToString(props.label) });
+						trackSignUpClicked({ href: props.href, label: labelToString(props.label), formId: props.formId ?? null });
 					}
 					fireExperimentTracking();
 					props.onClick?.(e);
@@ -188,9 +196,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					href={props.href}
 					onClick={linkOnClick}
 					iconLeft={props.iconLeft}
-					iconRight={
-						props.iconRight ?? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />
-					}
+					iconRight={props.iconRight ?? undefined}
 					{...props.buttonProps}
 				>
 					{props.label}
@@ -205,10 +211,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					href={props.href}
 					onClick={linkOnClick}
 					iconLeft={props.iconLeft}
-					iconRight={
-						props.iconRight ??
-						(isPrimary ? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' /> : undefined)
-					}
+					iconRight={props.iconRight ?? (isExternalHref ? defaultExternalLinkIcon() : undefined)}
 					{...props.buttonProps}
 				>
 					{props.label}
@@ -223,11 +226,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					href={props.href}
 					onClick={linkOnClick}
 					iconLeft={props.iconLeft}
-					iconRight={
-						props.iconRight ?? (
-							<IconResolver icon='square-arrow-out-up-right' className='min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5' />
-						)
-					}
+					iconRight={props.iconRight ?? (isExternalHref ? defaultExternalLinkIcon() : undefined)}
 					{...props.buttonProps}
 				>
 					{props.label}
@@ -241,7 +240,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					formId={props.formId}
 					href={props.href}
 					onClick={linkOnClick}
-					target='_blank'
+					target={LinkTarget.BLANK}
 					iconLeft={props.iconLeft}
 					iconRight={props.iconRight ?? <IconResolver icon='download' className='min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5' />}
 					{...props.buttonProps}
@@ -288,7 +287,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					onClick={e => {
-						trackSignUpClicked({ href: APP_SIGN_UP_HREF, label: labelToString(props.label) });
+						trackSignUpClicked({ href: APP_SIGN_UP_HREF, label: labelToString(props.label), formId: props.formId ?? null });
 						props.onClick?.(e);
 					}}
 					iconLeft={props.iconLeft}

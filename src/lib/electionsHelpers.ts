@@ -390,7 +390,23 @@ export function buildJobPostingSchema(params: {
 			? countyName
 			: `State of ${stateName}`;
 
-	const addressLocality = cityName ?? countyName ?? stateName;
+	const addressLocality = cityName ?? countyName ?? race.Place?.name ?? stateName;
+
+	const postalAddress: Record<string, unknown> = {
+		'@type': 'PostalAddress',
+		addressLocality,
+		addressRegion: race.state,
+		addressCountry: 'US',
+	};
+
+	const filingAddr = race.filingOfficeAddress?.trim();
+	if (filingAddr) {
+		postalAddress.streetAddress = filingAddr;
+		const zipMatch = filingAddr.match(/\b\d{5}(?:-\d{4})?\b/);
+		if (zipMatch?.[0]) {
+			postalAddress.postalCode = zipMatch[0];
+		}
+	}
 
 	const schema: Record<string, unknown> = {
 		'@context': 'https://schema.org',
@@ -401,27 +417,23 @@ export function buildJobPostingSchema(params: {
 		datePosted,
 		directApply: false,
 		hiringOrganization: {
-			'@type': 'GovernmentOrganization',
+			'@type': 'Organization',
 			name: orgName,
 		},
 		jobLocation: {
 			'@type': 'Place',
-			address: {
-				'@type': 'PostalAddress',
-				addressLocality,
-				addressRegion: race.state,
-				addressCountry: 'US',
-			},
+			address: postalAddress,
 		},
 	};
 
-	if (race.filingDateEnd) {
-		schema.validThrough = race.filingDateEnd.slice(0, 10);
+	const validThrough = race.filingDateEnd?.slice(0, 10) || race.electionDate?.slice(0, 10);
+	if (validThrough) {
+		schema.validThrough = validThrough;
 	}
 
-	if (race.employmentType) {
-		schema.employmentType = mapPositionEmploymentType(race.employmentType);
-	}
+	schema.employmentType = race.employmentType
+		? mapPositionEmploymentType(race.employmentType)
+		: 'FULL_TIME';
 
 	if (race.salary) {
 		const baseSalary = parseSalaryString(race.salary);

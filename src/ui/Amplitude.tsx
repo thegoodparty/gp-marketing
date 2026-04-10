@@ -26,16 +26,18 @@ export function Amplitude() {
 					if (EXPERIMENT_DEPLOYMENT_KEY) {
 						import('@amplitude/experiment-js-client')
 							.then(({ Experiment }) => {
-								const experiment = Experiment.initialize(EXPERIMENT_DEPLOYMENT_KEY);
+								const experiment = Experiment.initializeWithAmplitudeAnalytics(
+									EXPERIMENT_DEPLOYMENT_KEY,
+								);
 								window.experiment = experiment;
 								void experiment.fetch().finally(() => {
 									window.dispatchEvent(new Event('experiment:ready'));
 								});
 							})
-						.catch((err: unknown) => {
-							console.error('[Amplitude] Experiment SDK failed to load', err);
-							window.dispatchEvent(new Event('experiment:ready'));
-						});
+							.catch((err: unknown) => {
+								console.error('[Amplitude] Experiment SDK failed to load', err);
+								window.dispatchEvent(new Event('experiment:ready'));
+							});
 					}
 				}
 			}}

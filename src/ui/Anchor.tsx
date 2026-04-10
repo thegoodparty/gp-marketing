@@ -2,7 +2,21 @@
 import Link from 'next/link';
 import type { PropsWithChildren } from 'react';
 import { type ComponentProps, forwardRef } from 'react';
+import { LinkTarget } from '~/types/ui';
 // import type { SanityImage } from '~/ui/types';
+import { isExternalToEcosystem } from '~/ui/_lib/linkBehavior';
+
+function mergeRelForNewTab(relProp: string | undefined): string {
+	const tokens = new Set<string>();
+	if (typeof relProp === 'string' && relProp) {
+		for (const t of relProp.trim().split(/\s+/)) {
+			if (t) tokens.add(t);
+		}
+	}
+	tokens.add('noopener');
+	tokens.add('noreferrer');
+	return [...tokens].join(' ');
+}
 
 export type LinkShape = {
 	label?: string | null;
@@ -45,16 +59,18 @@ export type AnchorProps = Omit<ComponentProps<'a'>, 'href' | 'ref'> & {
 	href: string | undefined /** for debugging purposes */;
 };
 
-export const Anchor = forwardRef<HTMLAnchorElement, PropsWithChildren<AnchorProps>>(function Anchor({ children, href, ...props }, ref) {
+export const Anchor = forwardRef<HTMLAnchorElement, PropsWithChildren<AnchorProps>>(function Anchor(
+	{ children, href, target: targetProp, rel: relProp, ...rest },
+	ref,
+) {
 	let scroll = true;
 	let url: { href: string | undefined; onClick?: ComponentProps<'a'>['onClick'] | undefined } = {
 		href: undefined,
 		onClick: undefined,
 	};
 
-	const internal = href ? /^\/(?!\/)/.test(href) : true;
-
-	const target = props.target ? props.target : internal ? '_self' : '_blank';
+	const target = targetProp ?? (isExternalToEcosystem(href) ? LinkTarget.BLANK : LinkTarget.SELF);
+	const rel = target === LinkTarget.BLANK ? mergeRelForNewTab(relProp) : relProp;
 
 	if (typeof href === 'string') {
 		url = { href };
@@ -64,7 +80,9 @@ export const Anchor = forwardRef<HTMLAnchorElement, PropsWithChildren<AnchorProp
 		return (
 			<a
 				ref={ref}
-				{...props}
+				{...rest}
+				target={target}
+				rel={rel}
 				onClick={url.onClick}
 				href={url.onClick ? '#' : undefined}
 				style={{ cursor: url.onClick ? 'pointer' : undefined }}
@@ -86,7 +104,7 @@ export const Anchor = forwardRef<HTMLAnchorElement, PropsWithChildren<AnchorProp
 				}, 0);
 			};
 			return (
-				<a ref={ref} href={href} {...props} onClick={url.onClick}>
+				<a ref={ref} href={href} {...rest} target={target} rel={rel} onClick={url.onClick}>
 					{children}
 				</a>
 			);
@@ -96,7 +114,7 @@ export const Anchor = forwardRef<HTMLAnchorElement, PropsWithChildren<AnchorProp
 	}
 
 	return (
-		<Link ref={ref} href={url.href} onClick={url.onClick} target={target} {...props} scroll={scroll} prefetch={false}>
+		<Link ref={ref} href={url.href} onClick={url.onClick} {...rest} target={target} rel={rel} scroll={scroll} prefetch={false}>
 			{children}
 		</Link>
 	);

@@ -289,6 +289,15 @@ describe('buildJobPostingSchema', () => {
 		expect(buildJobPostingSchema({ race: minimalRace(), ...jobPostingBaseParams })).toBeNull();
 	});
 
+	test('hiringOrganization uses @type Organization (required by Google)', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({ filingDateStart: '2026-01-01' }),
+			...jobPostingBaseParams,
+		}) as Record<string, unknown>;
+		const org = schema['hiringOrganization'] as Record<string, unknown>;
+		expect(org['@type']).toBe('Organization');
+	});
+
 	test('includes datePosted from filingDateStart', () => {
 		const schema = buildJobPostingSchema({
 			race: minimalRace({ filingDateStart: '2026-01-15T00:00:00Z' }),
@@ -327,6 +336,104 @@ describe('buildJobPostingSchema', () => {
 			...jobPostingBaseParams,
 		});
 		expect((schema as Record<string, unknown>).validThrough).toBe('2026-02-01');
+	});
+
+	test('validThrough falls back to electionDate when filingDateEnd missing', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({
+				filingDateStart: '2026-01-01',
+				electionDate: '2026-11-05',
+			}),
+			...jobPostingBaseParams,
+		}) as Record<string, unknown>;
+		expect(schema['validThrough']).toBe('2026-11-05');
+	});
+
+	test('filingDateEnd takes precedence over electionDate for validThrough', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({
+				filingDateStart: '2026-01-01',
+				filingDateEnd: '2026-02-01',
+				electionDate: '2026-11-05',
+			}),
+			...jobPostingBaseParams,
+		}) as Record<string, unknown>;
+		expect(schema['validThrough']).toBe('2026-02-01');
+	});
+
+	test('includes streetAddress and postalCode from filingOfficeAddress', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({
+				filingDateStart: '2026-01-01',
+				filingOfficeAddress: '123 Main St, Phoenix, AZ 85001',
+			}),
+			...jobPostingBaseParams,
+		}) as Record<string, unknown>;
+		const addr = ((schema['jobLocation'] as Record<string, unknown>).address as Record<string, unknown>);
+		expect(addr['streetAddress']).toBe('123 Main St, Phoenix, AZ 85001');
+		expect(addr['postalCode']).toBe('85001');
+	});
+
+	test('includes extended ZIP in postalCode', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({
+				filingDateStart: '2026-01-01',
+				filingOfficeAddress: '1 Capitol Way, Washington DC 20510-1234',
+			}),
+			...jobPostingBaseParams,
+		}) as Record<string, unknown>;
+		const addr = ((schema['jobLocation'] as Record<string, unknown>).address as Record<string, unknown>);
+		expect(addr['postalCode']).toBe('20510-1234');
+	});
+
+	test('omits postalCode when filingOfficeAddress has no ZIP pattern', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({
+				filingDateStart: '2026-01-01',
+				filingOfficeAddress: 'Capitol Building, Phoenix, AZ',
+			}),
+			...jobPostingBaseParams,
+		}) as Record<string, unknown>;
+		const addr = ((schema['jobLocation'] as Record<string, unknown>).address as Record<string, unknown>);
+		expect(addr['streetAddress']).toBe('Capitol Building, Phoenix, AZ');
+		expect(addr['postalCode']).toBeUndefined();
+	});
+
+	test('omits streetAddress when filingOfficeAddress absent', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({ filingDateStart: '2026-01-01' }),
+			...jobPostingBaseParams,
+		}) as Record<string, unknown>;
+		const addr = ((schema['jobLocation'] as Record<string, unknown>).address as Record<string, unknown>);
+		expect(addr['streetAddress']).toBeUndefined();
+		expect(addr['postalCode']).toBeUndefined();
+	});
+
+	test('defaults employmentType to FULL_TIME when employmentType missing', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({ filingDateStart: '2026-01-01' }),
+			...jobPostingBaseParams,
+		}) as Record<string, unknown>;
+		expect(schema['employmentType']).toBe('FULL_TIME');
+	});
+
+	test('addressLocality falls back to race.Place.name', () => {
+		const schema = buildJobPostingSchema({
+			race: minimalRace({
+				filingDateStart: '2026-01-01',
+				Place: {
+					id: '1',
+					name: 'Yuma County',
+					slug: 'az/yuma-county',
+					state: 'AZ',
+				},
+			}),
+			officeName: 'Clerk',
+			stateName: '',
+			pageUrl: 'https://example.com/elections',
+		}) as Record<string, unknown>;
+		const addr = ((schema['jobLocation'] as Record<string, unknown>).address as Record<string, unknown>);
+		expect(addr['addressLocality']).toBe('Yuma County');
 	});
 
 	test('parses single dollar salary', () => {

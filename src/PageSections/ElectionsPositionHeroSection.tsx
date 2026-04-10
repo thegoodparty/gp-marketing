@@ -2,11 +2,10 @@ import { stegaClean } from 'next-sanity';
 
 import type { Sections } from '~/PageSections';
 
-import { isButtonType } from '~/lib/buttonTransformer';
+import { isButtonType, transformButton } from '~/lib/buttonTransformer';
 
 import { primaryButtonStyleType } from '~/ui/_lib/designTypesStore';
 import { resolveBg } from '~/ui/_lib/resolveBg';
-import { resolveCTALink } from '~/ui/_lib/resolveCTALink';
 import { ElectionsPositionHero } from '~/ui/ElectionsPositionHero';
 
 // Mock office data type - will be replaced with real data source
@@ -57,7 +56,23 @@ export function ElectionsPositionHeroSection(props: ElectionsPositionHeroSection
 
 	const rawCta = section.ctaAction;
 	const ctaData = rawCta && isButtonType(rawCta) ? rawCta : null;
-	const ctaHref = ctaData ? resolveCTALink(ctaData) : undefined;
+	const fromSanity = ctaData ? transformButton(ctaData) : undefined;
+	const cta = fromSanity
+		? {
+				...fromSanity,
+				buttonProps: {
+					...fromSanity.buttonProps,
+					styleType: primaryButtonStyleType,
+				},
+			}
+		: {
+				buttonType: 'internal' as const,
+				href: '/run',
+				label: ctaData?.text ?? 'Primary CTA',
+				buttonProps: {
+					styleType: primaryButtonStyleType,
+				},
+			};
 
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Elections Position Hero'>
@@ -69,14 +84,7 @@ export function ElectionsPositionHeroSection(props: ElectionsPositionHeroSection
 				cityName={data.cityName}
 				electionDate={data.electionDate}
 				filingDate={data.filingDate}
-				cta={{
-					buttonType: 'internal',
-					href: ctaHref ?? '/run',
-					label: ctaData?.text ?? 'Primary CTA',
-					buttonProps: {
-						styleType: primaryButtonStyleType,
-					},
-				}}
+				cta={cta}
 			/>
 		</section>
 	);

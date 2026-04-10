@@ -19,7 +19,7 @@ const fadeInUp = {
 
 const styles = tv({
 	slots: {
-		base: 'min-h-[100dvh] flex flex-col items-center justify-center text-center relative overflow-hidden',
+		base: 'min-h-[100dvh] flex flex-col items-center justify-center text-center relative overflow-hidden pb-16 md:pb-20',
 		wrapper: 'relative z-1 flex flex-col items-center gap-6',
 		logo: 'flex flex-col items-center gap-2 mb-10',
 		logoIcon: 'w-[6.25rem] h-[6.25rem]',
@@ -56,10 +56,7 @@ export function ExperimentHeroB(props: ExperimentHeroBProps) {
 						transition={{ ...fadeInUp.transition, delay: 0 }}
 					>
 						<Logo width={100} height={100} className={cn(logoIcon(), 'drop-shadow-[var(--shadow-logo-glow-strong)]')} />
-						<div className={logoText()}>
-							<div>GoodParty.org</div>
-							<div>Bright-Hearted Star</div>
-						</div>
+						<div className={logoText()}>GoodParty.org</div>
 					</motion.div>
 					{props.manifesto && (
 						<motion.div

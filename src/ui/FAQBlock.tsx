@@ -20,7 +20,7 @@ const styles = tv({
 		container: 'flex flex-col gap-12',
 		content: 'flex flex-col gap-6',
 		trigger: 'group flex items-center justify-between gap-6 text-left w-full p-6',
-		copy: 'p-6 pt-0 text-dark',
+		copy: 'p-6 pt-0 text-dark [&>*+*]:mt-4 [&>:empty]:hidden [&_br]:block [&_br]:mt-3',
 	},
 	variants: {
 		backgroundColor: {
@@ -104,7 +104,7 @@ export function FAQBlock(props: FAQBlockProps) {
 									className={`overflow-hidden data-[state=open]:animate-accordion-open data-[state=closed]:animate-accordion-closed `}
 								>
 									{isValidRichText(item.copy) && (
-										<Text className={copy()} styleType='body-2' hasParagraphs>
+										<Text className={copy()} styleType='body-2'>
 											{item.copy}
 										</Text>
 									)}

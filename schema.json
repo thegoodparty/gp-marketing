@@ -100,28 +100,28 @@
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         },
         "bottom": {
           "type": "objectAttribute",
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         },
         "left": {
           "type": "objectAttribute",
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         },
         "right": {
           "type": "objectAttribute",
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         }
       }
     }
@@ -144,28 +144,28 @@
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         },
         "y": {
           "type": "objectAttribute",
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         },
         "height": {
           "type": "objectAttribute",
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         },
         "width": {
           "type": "objectAttribute",
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         }
       }
     }
@@ -2213,6 +2213,28 @@
     }
   },
   {
+    "name": "list_teamValuesCards",
+    "type": "type",
+    "value": {
+      "type": "array",
+      "of": {
+        "type": "object",
+        "attributes": {
+          "_key": {
+            "type": "objectAttribute",
+            "value": {
+              "type": "string"
+            }
+          }
+        },
+        "rest": {
+          "type": "inline",
+          "name": "teamValuesCard"
+        }
+      }
+    }
+  },
+  {
     "name": "list_officeItems",
     "type": "type",
     "value": {
@@ -3110,6 +3132,21 @@
             },
             "rest": {
               "type": "inline",
+              "name": "component_electionsPositionContentBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
               "name": "component_electionsSearchHero"
             }
           },
@@ -3201,6 +3238,21 @@
             "rest": {
               "type": "inline",
               "name": "component_embeddedBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_teamValuesBlock"
             }
           }
         ]
@@ -5121,6 +5173,54 @@
     }
   },
   {
+    "name": "component_teamValuesBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_teamValuesBlock"
+          }
+        },
+        "summaryInfo": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "summaryInfo"
+          },
+          "optional": true
+        },
+        "teamValuesBlockContent": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "teamValuesBlockContent"
+          },
+          "optional": true
+        },
+        "teamValuesBlockDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "teamValuesBlockDesignSettings"
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
     "name": "component_embeddedBlock",
     "type": "type",
     "value": {
@@ -5138,7 +5238,7 @@
           "value": {
             "type": "string"
           },
-          "optional": true
+          "optional": false
         },
         "field_embedHeight": {
           "type": "objectAttribute",
@@ -5583,21 +5683,21 @@
                         "value": {
                           "type": "string"
                         },
-                        "optional": true
+                        "optional": false
                       },
                       "field_stateAbbreviation": {
                         "type": "objectAttribute",
                         "value": {
                           "type": "string"
                         },
-                        "optional": true
+                        "optional": false
                       },
                       "field_href": {
                         "type": "objectAttribute",
                         "value": {
                           "type": "string"
                         },
-                        "optional": true
+                        "optional": false
                       }
                     },
                     "rest": {
@@ -5902,6 +6002,47 @@
                       "value": "midnight"
                     }
                   ]
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "component_electionsPositionContentBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_electionsPositionContentBlock"
+          }
+        },
+        "electionsPositionContentBlockDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_blockColorCreamMidnight": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "field_blockColorCreamMidnight"
                 },
                 "optional": true
               }
@@ -7603,6 +7744,102 @@
     }
   },
   {
+    "name": "teamValuesBlockDesignSettings",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "teamValuesBlockDesignSettings"
+          }
+        },
+        "field_blockColorCreamMidnight": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_blockColorCreamMidnight"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "teamValuesBlockContent",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "teamValuesBlockContent"
+          }
+        },
+        "list_teamValuesCards": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "list_teamValuesCards"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "teamValuesCard",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "teamValuesCard"
+          }
+        },
+        "field_icon": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_icon"
+          },
+          "optional": true
+        },
+        "field_title": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_title"
+          },
+          "optional": true
+        },
+        "field_componentColor6Colors": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_componentColor6Colors"
+          },
+          "optional": true
+        },
+        "ctaActionWithShared": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "ctaActionWithShared"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
     "name": "officeItem",
     "type": "type",
     "value": {
@@ -7634,21 +7871,21 @@
               }
             ]
           },
-          "optional": true
+          "optional": false
         },
         "field_position": {
           "type": "objectAttribute",
           "value": {
             "type": "string"
           },
-          "optional": true
+          "optional": false
         },
         "field_nextElectionDate": {
           "type": "objectAttribute",
           "value": {
             "type": "string"
           },
-          "optional": true
+          "optional": false
         },
         "field_href": {
           "type": "objectAttribute",
@@ -16106,7 +16343,7 @@
           "value": {
             "type": "string"
           },
-          "optional": true
+          "optional": false
         },
         "source": {
           "type": "objectAttribute",
@@ -16339,7 +16576,7 @@
             },
             "dereferencesTo": "assist.instruction.context"
           },
-          "optional": true
+          "optional": false
         }
       }
     }
@@ -16518,7 +16755,7 @@
           "value": {
             "type": "string"
           },
-          "optional": true
+          "optional": false
         },
         "description": {
           "type": "objectAttribute",
@@ -16988,21 +17225,21 @@
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         },
         "width": {
           "type": "objectAttribute",
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         },
         "aspectRatio": {
           "type": "objectAttribute",
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         }
       }
     }

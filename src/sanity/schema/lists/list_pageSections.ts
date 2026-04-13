@@ -88,6 +88,7 @@ export const list_pageSections = {
             'component_stepperBlock',
             'component_pricingBlock',
             'component_teamBlock',
+            'component_teamValuesBlock',
             'component_carouselBlock',
             'component_testimonialBlock',
             'component_faqBlock',
@@ -321,6 +322,10 @@ export const list_pageSections = {
     {
       title: 'Embedded Block',
       type: 'component_embeddedBlock',
+    },
+    {
+      title: 'Team Values Block',
+      type: 'component_teamValuesBlock',
     },
   ],
 }

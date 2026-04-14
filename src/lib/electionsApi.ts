@@ -21,12 +21,17 @@ export const COUNTY_MTFCC = 'G4020';
 
 /** MTFCC for incorporated places (cities, towns). */
 export const CITY_MTFCC = 'G4110';
+export const TOWN_MTFCC = 'G4040';
 
 /** MTFCC codes for school districts (elementary, secondary, unified). */
 export const DISTRICT_MTFCCS = ['G5400', 'G5410', 'G5420'] as const;
 
 export function isDistrictMtfcc(mtfcc?: string): boolean {
 	return mtfcc?.startsWith('G54') ?? false;
+}
+
+function isLocalChildMtfcc(mtfcc?: string): boolean {
+	return mtfcc === CITY_MTFCC || mtfcc === TOWN_MTFCC;
 }
 
 const FETCH_JSON_MAX_RETRIES = 2;
@@ -222,6 +227,38 @@ export async function getCityPlacesByCounty(params: {
 	return allCities.filter(
 		p => normalizeName(p.countyName ?? '') === normalizeName(countyName),
 	);
+}
+
+function dedupePlacesBySlug(places: PlaceItem[]): PlaceItem[] {
+	const seen = new Set<string>();
+	const out: PlaceItem[] = [];
+	for (const p of places) {
+		const slug = p.slug?.toLowerCase();
+		if (!slug || seen.has(slug)) continue;
+		seen.add(slug);
+		out.push({
+			...p,
+			name: p.name.trim(),
+		});
+	}
+	return out;
+}
+
+export async function getCountyChildPlaces(params: {
+	state: string;
+	countySlug: string;
+}): Promise<PlaceItem[]> {
+	const county = await getPlaceBySlug({
+		slug: params.countySlug,
+		includeChildren: true,
+		includeRaces: false,
+		placeColumns: 'slug,name,mtfcc,countyName',
+	});
+	const hierarchyChildren = (county?.children ?? []).filter(
+		p => isLocalChildMtfcc(p.mtfcc) && !isDistrictMtfcc(p.mtfcc),
+	);
+	const fallbackCities = await getCityPlacesByCounty(params);
+	return dedupePlacesBySlug([...hierarchyChildren, ...fallbackCities]);
 }
 
 export async function getPlaceBySlug(params: {

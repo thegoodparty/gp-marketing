@@ -9,10 +9,14 @@ import {
 	getCountySuffixLabel,
 	getStateName,
 	getYearFromDateString,
+	hasSuspiciousFactsMatch,
+	isCityOrTownMtfcc,
+	placeToFactsCards,
 	resolveLocalityName,
 	slugifyPositionName,
 	stripCountySuffix,
 } from './electionsHelpers';
+import { CITY_MTFCC, COUNTY_MTFCC, TOWN_MTFCC } from './electionsApi';
 import type { PlaceItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
 
 function placeItem(id: string, name: string, slug: string, state: string): PlaceItem {
@@ -240,6 +244,136 @@ describe('getStateName', () => {
 
 	test('returns code unchanged for invalid code', () => {
 		expect(getStateName('XX')).toBe('XX');
+	});
+});
+
+describe('isCityOrTownMtfcc', () => {
+	test('returns true for city and town mtfcc values', () => {
+		expect(isCityOrTownMtfcc(CITY_MTFCC)).toBe(true);
+		expect(isCityOrTownMtfcc(TOWN_MTFCC)).toBe(true);
+	});
+
+	test('returns false for county or missing mtfcc values', () => {
+		expect(isCityOrTownMtfcc(COUNTY_MTFCC)).toBe(false);
+		expect(isCityOrTownMtfcc(undefined)).toBe(false);
+	});
+});
+
+describe('hasSuspiciousFactsMatch', () => {
+	test('flags fernley-style exact city/county fact match across multiple fields', () => {
+		const county: PlaceWithFacts = {
+			id: '1',
+			name: 'Lyon County',
+			slug: 'nv/lyon-county',
+			state: 'NV',
+			mtfcc: COUNTY_MTFCC,
+			population: 62000,
+			density: 12,
+			incomeHouseholdMedian: 64000,
+		};
+		const city: PlaceWithFacts = {
+			id: '2',
+			name: 'Fernley',
+			slug: 'nv/fernley',
+			state: 'NV',
+			mtfcc: CITY_MTFCC,
+			population: 62000,
+			density: 12,
+			incomeHouseholdMedian: 64000,
+		};
+		expect(hasSuspiciousFactsMatch(city, county)).toBe(true);
+	});
+
+	test('does not flag yerington-style city facts with different values', () => {
+		const county: PlaceWithFacts = {
+			id: '1',
+			name: 'Lyon County',
+			slug: 'nv/lyon-county',
+			state: 'NV',
+			mtfcc: COUNTY_MTFCC,
+			population: 62000,
+			density: 12,
+		};
+		const city: PlaceWithFacts = {
+			id: '2',
+			name: 'Yerington',
+			slug: 'nv/yerington',
+			state: 'NV',
+			mtfcc: CITY_MTFCC,
+			population: 3100,
+			density: 5,
+		};
+		expect(hasSuspiciousFactsMatch(city, county)).toBe(false);
+	});
+
+	test('does not flag smith-valley-style sparse facts with insufficient overlap', () => {
+		const county: PlaceWithFacts = {
+			id: '1',
+			name: 'Lyon County',
+			slug: 'nv/lyon-county',
+			state: 'NV',
+			mtfcc: COUNTY_MTFCC,
+			population: 62000,
+		};
+		const city: PlaceWithFacts = {
+			id: '2',
+			name: 'Smith Valley',
+			slug: 'nv/lyon-county/smith-valley',
+			state: 'NV',
+			mtfcc: TOWN_MTFCC,
+		};
+		expect(hasSuspiciousFactsMatch(city, county)).toBe(false);
+	});
+});
+
+describe('lyon county city facts eligibility scenarios', () => {
+	test('smith-valley: town type with no fact fields results in no facts cards', () => {
+		const smithValley: PlaceWithFacts = {
+			id: '1',
+			name: 'Smith Valley',
+			slug: 'nv/lyon-county/smith-valley',
+			state: 'NV',
+			mtfcc: TOWN_MTFCC,
+		};
+		expect(isCityOrTownMtfcc(smithValley.mtfcc)).toBe(true);
+		expect(placeToFactsCards(smithValley)).toHaveLength(0);
+	});
+
+	test('yerington: city type with localized metrics yields facts cards', () => {
+		const yerington: PlaceWithFacts = {
+			id: '2',
+			name: 'Yerington',
+			slug: 'nv/yerington',
+			state: 'NV',
+			mtfcc: CITY_MTFCC,
+			population: 3100,
+			density: 5,
+		};
+		expect(isCityOrTownMtfcc(yerington.mtfcc)).toBe(true);
+		expect(placeToFactsCards(yerington).length).toBeGreaterThan(0);
+	});
+
+	test('fernley: city type can be flagged when facts exactly match county signature', () => {
+		const county: PlaceWithFacts = {
+			id: '3',
+			name: 'Lyon County',
+			slug: 'nv/lyon-county',
+			state: 'NV',
+			mtfcc: COUNTY_MTFCC,
+			population: 62000,
+			density: 12,
+		};
+		const fernley: PlaceWithFacts = {
+			id: '4',
+			name: 'Fernley',
+			slug: 'nv/fernley',
+			state: 'NV',
+			mtfcc: CITY_MTFCC,
+			population: 62000,
+			density: 12,
+		};
+		expect(isCityOrTownMtfcc(fernley.mtfcc)).toBe(true);
+		expect(hasSuspiciousFactsMatch(fernley, county)).toBe(true);
 	});
 });
 

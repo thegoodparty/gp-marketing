@@ -238,7 +238,7 @@ function dedupePlacesBySlug(places: PlaceItem[]): PlaceItem[] {
 		seen.add(slug);
 		out.push({
 			...p,
-			name: p.name.trim(),
+			name: (p.name ?? '').trim(),
 		});
 	}
 	return out;

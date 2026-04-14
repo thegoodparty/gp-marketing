@@ -11,6 +11,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { US_STATE_CODES } from '../src/lib/sitemap-entries';
+import { getStateName } from '../src/lib/electionsHelpers';
 
 const DEFAULT_BASE_URL = 'https://goodparty.org';
 const DEFAULT_CONCURRENCY = 10;
@@ -178,9 +179,9 @@ export function checkStatePageFactsContent(url: string, html: string): string[] 
 	if (STATE_FACTS_MARKER.test(html)) {
 		invalid.push('Location Facts Block section marker found');
 	}
-	const factsHeading = new RegExp(`>${state}\\s*facts<`, 'i');
-	const stateNameHeading = new RegExp(`>\\s*[A-Za-z\\s]+\\s+facts\\s*<`, 'i');
-	if (factsHeading.test(html) || stateNameHeading.test(html)) {
+	const stateName = getStateName(state);
+	const factsHeading = new RegExp(`>\\s*${stateName}\\s+facts\\s*<`, 'i');
+	if (factsHeading.test(html)) {
 		invalid.push('State facts heading found');
 	}
 	return invalid;

@@ -278,6 +278,19 @@ describe('checkStatePageFactsContent', () => {
 		expect(invalid).toContain('State facts heading found');
 	});
 
+	test('flags state facts heading without marker present', () => {
+		const html = '<main><h2>Oklahoma facts</h2></main>';
+		const invalid = checkStatePageFactsContent('https://goodparty.org/elections/ok', html);
+		expect(invalid).not.toContain('Location Facts Block section marker found');
+		expect(invalid).toContain('State facts heading found');
+	});
+
+	test('does not match two-letter code heading (e.g. "OK facts")', () => {
+		const html = '<main><h2>OK facts</h2></main>';
+		const invalid = checkStatePageFactsContent('https://goodparty.org/elections/ok', html);
+		expect(invalid).toEqual([]);
+	});
+
 	test('passes clean state page html without facts block', () => {
 		const html = '<main><h2>Counties & Districts in Kansas</h2></main>';
 		const invalid = checkStatePageFactsContent('https://goodparty.org/elections/ks', html);

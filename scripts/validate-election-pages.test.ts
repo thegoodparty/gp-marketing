@@ -1,7 +1,9 @@
 import { describe, expect, test } from 'bun:test';
 import {
+	buildStatePageUrls,
 	buildPageUrls,
 	categorizeResults,
+	checkStatePageFactsContent,
 	checkContent,
 	extractTitleAndDescription,
 	type PageCheckResult,
@@ -255,5 +257,44 @@ describe('buildPageUrls', () => {
 			['AZ', []],
 		]);
 		expect(buildPageUrls(baseUrl, racesByState, 10)).toEqual([]);
+	});
+});
+
+describe('buildStatePageUrls', () => {
+	test('builds lowercase state page URLs', () => {
+		const urls = buildStatePageUrls('https://goodparty.org', ['AZ', 'pa']);
+		expect(urls).toEqual([
+			'https://goodparty.org/elections/az',
+			'https://goodparty.org/elections/pa',
+		]);
+	});
+});
+
+describe('checkStatePageFactsContent', () => {
+	test('flags state pages that include Location Facts block marker', () => {
+		const html = '<section data-section="Location Facts Block"><h2>Oklahoma facts</h2></section>';
+		const invalid = checkStatePageFactsContent('https://goodparty.org/elections/ok', html);
+		expect(invalid).toContain('Location Facts Block section marker found');
+		expect(invalid).toContain('State facts heading found');
+	});
+
+	test('passes clean state page html without facts block', () => {
+		const html = '<main><h2>Counties & Districts in Kansas</h2></main>';
+		const invalid = checkStatePageFactsContent('https://goodparty.org/elections/ks', html);
+		expect(invalid).toEqual([]);
+	});
+
+	test('ignores non-state urls so county/city behavior is unchanged', () => {
+		const html = '<section data-section="Location Facts Block"><h2>Maricopa County facts</h2></section>';
+		const countyInvalid = checkStatePageFactsContent(
+			'https://goodparty.org/elections/az/maricopa-county',
+			html,
+		);
+		const cityInvalid = checkStatePageFactsContent(
+			'https://goodparty.org/elections/az/maricopa-county/phoenix',
+			html,
+		);
+		expect(countyInvalid).toEqual([]);
+		expect(cityInvalid).toEqual([]);
 	});
 });

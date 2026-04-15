@@ -93,7 +93,7 @@ export default async function Page({
 				const level: 'town' | 'city' = c.mtfcc === TOWN_MTFCC ? 'town' : 'city';
 				return {
 					name: c.name,
-					href: `/elections/${fullSlug}/${c.slug.split('/').pop() ?? c.name.toLowerCase().replace(/\s+/g, '-')}`,
+					href: `/elections/${fullSlug}/${c.slug?.split('/')?.pop() ?? c.name.toLowerCase().replace(/\s+/g, '-')}`,
 					level,
 				};
 			});

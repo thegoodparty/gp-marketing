@@ -122,9 +122,10 @@ export default async function Page({
 		{ href: '', label: cityName },
 	];
 
-	const cityFactsEligible = isCityOrTownMtfcc(cityPlace.mtfcc);
-	const suspiciousFactsMatch = hasSuspiciousFactsMatch(cityPlace, countyFactsData);
-	const factsCards = cityFactsEligible ? placeToFactsCards(cityPlace) : [];
+	const factsSourcePlace = resolvedPlaceData ?? cityPlace;
+	const cityFactsEligible = isCityOrTownMtfcc(factsSourcePlace.mtfcc);
+	const suspiciousFactsMatch = hasSuspiciousFactsMatch(factsSourcePlace, countyFactsData);
+	const factsCards = cityFactsEligible ? placeToFactsCards(factsSourcePlace) : [];
 
 	const factsDecisionLog = {
 		requestedSlug: fullSlug,
@@ -242,9 +243,16 @@ export async function generateMetadata({
 	const stateName = getStateName(stateCode);
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const shortSlug = `${state.toLowerCase()}/${city.toLowerCase()}`;
-	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
+	const [counties, countyFactsData] = await Promise.all([
+		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
+		getPlaceBySlug({
+			slug: countySlug,
+			includeChildren: false,
+			includeRaces: false,
+		}),
+	]);
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
-	const countyDisplayName = resolveLocalityName(countyPlace, undefined, countySlug);
+	const countyDisplayName = resolveLocalityName(countyPlace, countyFactsData ?? undefined, countySlug);
 	const cityPlaces = await getCountyChildPlaces({ state: stateCode, countySlug });
 	const citySegment = city.toLowerCase();
 	let cityPlace = cityPlaces.find(c => {

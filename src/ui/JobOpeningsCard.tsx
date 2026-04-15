@@ -59,7 +59,7 @@ export function JobOpeningsCard(props: JobOpeningsCardProps) {
 					)}
 				</div>
 				{props.href ? (
-					<Anchor href={props.href} target='_blank' rel='noopener noreferrer' className={cta()}>
+					<Anchor href={props.href.replace('/application', '')} target='_blank' rel='noopener noreferrer' className={cta()}>
 						<span>Learn more</span>
 						<IconResolver icon='arrow-right' className={ctaArrow()} />
 					</Anchor>

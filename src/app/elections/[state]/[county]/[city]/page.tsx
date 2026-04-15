@@ -95,13 +95,15 @@ export default async function Page({
 	const citySegment = city.toLowerCase();
 	const cityPlace =
 		countyChildPlaces.find(c => {
-			const slug = c.slug.toLowerCase();
+			const slug = c.slug?.toLowerCase();
+			if (!slug) return false;
 			if (slug === fullSlug || slug === shortSlug) return true;
 			return slug.split('/').pop() === citySegment;
 		}) ??
 		(resolvedPlaceData &&
 		(() => {
-			const slug = resolvedPlaceData.slug.toLowerCase();
+			const slug = resolvedPlaceData.slug?.toLowerCase();
+			if (!slug) return false;
 			return slug === fullSlug || slug === shortSlug || slug.split('/').pop() === citySegment;
 		})()
 			? resolvedPlaceData
@@ -246,7 +248,8 @@ export async function generateMetadata({
 	const cityPlaces = await getCountyChildPlaces({ state: stateCode, countySlug });
 	const citySegment = city.toLowerCase();
 	let cityPlace = cityPlaces.find(c => {
-		const slug = c.slug.toLowerCase();
+		const slug = c.slug?.toLowerCase();
+		if (!slug) return false;
 		if (slug === `${countySlug}/${citySegment}` || slug === shortSlug) return true;
 		return slug.split('/').pop() === citySegment;
 	});

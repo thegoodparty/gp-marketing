@@ -122,7 +122,7 @@
 	html,
 	body {
 		font-family: var(--font-primary);
-		font-size: clamp(1rem, 0.427rem + 0.545vw, 1.3rem);
+		font-size: 1rem;
 		color: hsl(var(--hsla-text-primary) / 1);
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
@@ -132,6 +132,27 @@
 		h1[id],
 		h2[id] {
 			scroll-margin-top: 2.5rem;
+		}
+	}
+
+	@media (min-width: 768px) {
+		html,
+		body {
+			font-size: 1.125rem;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		html,
+		body {
+			font-size: 1.25rem;
+		}
+	}
+
+	@media (min-width: 1280px) {
+		html,
+		body {
+			font-size: 1.3rem;
 		}
 	}
 

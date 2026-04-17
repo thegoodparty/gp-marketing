@@ -1,16 +1,15 @@
 import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 import { cn, tv } from './_lib/utils.ts';
+import { useState } from 'react';
 
-import { Anchor } from './Anchor.tsx';
 import { CircleIcon } from './CircleIcon.tsx';
 import { Container } from './Container.tsx';
 import { FadeIn } from './FadeIn.tsx';
 import { HeaderBlock, type HeaderBlockProps } from './HeaderBlock.tsx';
-import { IconResolver, type IconType } from './IconResolver.tsx';
+import { type IconType } from './IconResolver.tsx';
 import { Text } from './Text.tsx';
 
-const cardColors = ['waxflower', 'blue', 'lavender', 'halo-green', 'bright-yellow'] as const;
-export type TeamValuesCardColor = (typeof cardColors)[number];
+export type TeamValuesCardColor = 'waxflower' | 'blue' | 'lavender' | 'halo-green' | 'bright-yellow';
 
 const blockStyles = tv({
 	slots: {
@@ -29,74 +28,89 @@ const blockStyles = tv({
 
 const cardStyles = tv({
 	slots: {
-		card: [
-			'group/card relative rounded-3xl p-6 flex flex-col items-start',
-			'gap-20 md:gap-40 flex-1',
-			'transition-transform duration-normal ease-smooth hover:-translate-y-1',
+		cardButton: [
+			'group/card relative w-full flex-1 rounded-3xl text-left cursor-pointer',
+			'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-midnight-900 focus-visible:ring-offset-4',
 		],
+		cardInner: [
+			'relative rounded-3xl p-6',
+			'transition-transform duration-normal ease-smooth hover:-translate-y-1',
+			'min-h-64',
+		],
+		face: [
+			'absolute inset-0 rounded-3xl p-6 flex flex-col items-start',
+		],
+		frontFace: 'justify-between',
+		backFace: 'justify-center',
 		top: 'flex flex-col gap-4 items-start',
-		bottom: 'flex flex-col items-start w-full',
-		arrowRow: 'flex items-center justify-end w-full',
 	},
 	variants: {
 		color: {
-			waxflower: { card: 'bg-waxflower-200' },
-			blue: { card: 'bg-blue-200' },
-			lavender: { card: 'bg-lavender-200' },
-			'halo-green': { card: 'bg-halo-green-200' },
-			'bright-yellow': { card: 'bg-bright-yellow-200' },
+			waxflower: { face: 'bg-waxflower-200' },
+			blue: { face: 'bg-blue-200' },
+			lavender: { face: 'bg-lavender-200' },
+			'halo-green': { face: 'bg-halo-green-200' },
+			'bright-yellow': { face: 'bg-bright-yellow-200' },
 		},
 	},
 });
 
 export type TeamValuesCardProps = {
+	backCopy?: string;
 	className?: string;
 	color?: TeamValuesCardColor;
 	heading?: string;
-	href?: string;
 	icon?: IconType;
+	isFlipped?: boolean;
+	onToggle?(): void;
 };
 
 export function TeamValuesCard(props: TeamValuesCardProps) {
 	const color = props.color ?? 'waxflower';
-	const { card, top, bottom, arrowRow } = cardStyles({ color });
-
-	const content = (
-		<>
-			<div className={top()}>
-				<CircleIcon icon={props.icon ?? 'heart-handshake'} iconBg='cream' />
-				{props.heading && (
-					<Text as='h3' styleType='heading-sm'>
-						{props.heading}
-					</Text>
-				)}
-			</div>
-			<div className={bottom()}>
-				<div className={arrowRow()}>
-					<IconResolver icon='arrow-right' />
-				</div>
-			</div>
-		</>
-	);
-
-	if (props.href) {
-		return (
-			<Anchor
-				href={props.href}
-				className={cn(
-					card(),
-					'before:content-[""] before:absolute before:inset-0 before:rounded-3xl',
-					props.className,
-				)}
-			>
-				{content}
-			</Anchor>
-		);
-	}
+	const { cardButton, cardInner, face, frontFace, backFace, top } = cardStyles({ color });
+	const isFlipped = props.isFlipped ?? false;
+	const ariaLabel = props.heading
+		? `${isFlipped ? 'Hide' : 'Show'} ${props.heading} details`
+		: isFlipped
+			? 'Hide details'
+			: 'Show details';
 
 	return (
-		<div className={cn(card(), props.className)}>
-			{content}
+		<div className={cn('w-full [perspective:1200px]', props.className)}>
+			<button
+				type='button'
+				className={cardButton()}
+				onClick={() => props.onToggle?.()}
+				aria-pressed={isFlipped}
+				aria-label={ariaLabel}
+			>
+				<div
+					className={cardInner()}
+					style={{
+						transformStyle: 'preserve-3d',
+						transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+					}}
+				>
+					<div className={cn(face(), frontFace())} style={{ backfaceVisibility: 'hidden' }}>
+						<div className={top()}>
+							<CircleIcon icon={props.icon ?? 'heart-handshake'} iconBg='cream' />
+							{props.heading && (
+								<Text as='h3' styleType='heading-sm'>
+									{props.heading}
+								</Text>
+							)}
+						</div>
+					</div>
+					<div
+						className={cn(face(), backFace())}
+						style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+					>
+						<Text as='p' styleType='body-2'>
+							{props.backCopy ?? props.heading ?? ''}
+						</Text>
+					</div>
+				</div>
+			</button>
 		</div>
 	);
 }
@@ -111,6 +125,7 @@ export type TeamValuesBlockProps = {
 export function TeamValuesBlock(props: TeamValuesBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
 	const { base, wrapper, cardsContainer } = blockStyles({ backgroundColor });
+	const [activeCardIndex, setActiveCardIndex] = useState<number | null>(null);
 
 	return (
 		<article className={cn(base(), props.className)} data-component='TeamValuesBlock'>
@@ -122,7 +137,12 @@ export function TeamValuesBlock(props: TeamValuesBlockProps) {
 					<FadeIn delay={0.1}>
 						<div className={cardsContainer()}>
 							{props.cards.map((card, index) => (
-								<TeamValuesCard key={index} {...card} />
+								<TeamValuesCard
+									key={index}
+									{...card}
+									isFlipped={activeCardIndex === index}
+									onToggle={() => setActiveCardIndex(current => (current === index ? null : index))}
+								/>
 							))}
 						</div>
 					</FadeIn>

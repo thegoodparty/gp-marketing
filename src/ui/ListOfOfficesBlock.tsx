@@ -110,8 +110,8 @@ export interface ListOfOfficesBlockProps {
 	isLoading?: boolean;
 	/** When set, filter offices by position name (case-insensitive substring). */
 	searchQuery?: string;
-	onYearChange?: (year: number) => void;
-	onOfficeClick?: (office: OfficeItem) => void;
+	onYearChange?(year: number): void;
+	onOfficeClick?(office: OfficeItem): void;
 }
 
 export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {

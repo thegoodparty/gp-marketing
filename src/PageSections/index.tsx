@@ -138,7 +138,7 @@ export function PageSections(props: Props) {
 							<ComponentErrorBoundary key={section._key} componentName='Claim Profile Block'>
 								<ClaimProfileBlockSection
 									{...section}
-									claimProfileOverride={props.sectionOverrides?.component_claimProfileBlock as SectionOverrides['component_claimProfileBlock']}
+									claimProfileOverride={props.sectionOverrides?.component_claimProfileBlock}
 								/>
 							</ComponentErrorBoundary>
 						);

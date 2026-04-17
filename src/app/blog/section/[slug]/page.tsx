@@ -39,9 +39,7 @@ export default async function Page(props: Params) {
 	const { articles } = await getCachedArticles();
 
 	const categoryNewsletterSection =
-		(page.pageSections?.list_pageSections?.find((section: Sections) => section?._type === 'component_newsletterBlock') as
-			| NewsletterBlockSectionType
-			| undefined);
+		(page.pageSections?.list_pageSections?.find((section: Sections) => section?._type === 'component_newsletterBlock'));
 
 	const newsletterSectionFromHome = categoryNewsletterSection
 		? null
@@ -52,9 +50,7 @@ export default async function Page(props: Params) {
 
 	const newsletterSection =
 		categoryNewsletterSection ??
-		(newsletterSectionFromHome?.pageSections?.list_pageSections?.find((section: Sections) => section?._type === 'component_newsletterBlock') as
-			| NewsletterBlockSectionType
-			| undefined);
+		(newsletterSectionFromHome?.pageSections?.list_pageSections?.find((section: Sections) => section?._type === 'component_newsletterBlock'));
 
 	return (
 		<>

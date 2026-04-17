@@ -1,4 +1,4 @@
-import type {ReactNode} from "react";
+import type {ReactNode} from 'react';
 
 export type FieldDescriptionProps = {
   description: ReactNode;
@@ -13,10 +13,10 @@ export function FieldDescription(props: FieldDescriptionProps): string {
         <details>
           <summary
             style={{
-              cursor: "pointer",
-              width: "fit-content",
+              cursor: 'pointer',
+              width: 'fit-content',
               lineHeight: 2,
-              userSelect: "none",
+              userSelect: 'none',
             }}
           >
             <strong>Example</strong>

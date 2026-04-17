@@ -63,7 +63,7 @@ export interface FAQLinksBlockProps {
 	backgroundColor?: (typeof backgroundTypeValues)[number];
 	header?: HeaderBlockProps;
 	items: FAQLinkItem[];
-	onLinkClick?: (item: FAQLinkItem) => void;
+	onLinkClick?(item: FAQLinkItem): void;
 }
 
 export function FAQLinksBlock(props: FAQLinksBlockProps) {

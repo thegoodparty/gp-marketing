@@ -110,7 +110,7 @@ function LoadMoreButton(props: {
 	fetchProps: { topicID?: string; categoryID?: string };
 	allItemsCount: number;
 	articlesLength: number;
-	setArticles: (articles: BlogCardProps[]) => void;
+	setArticles(articles: BlogCardProps[]): void;
 }) {
 	const [isPending, startTransition] = useTransition();
 

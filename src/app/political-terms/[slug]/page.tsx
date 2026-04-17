@@ -120,7 +120,7 @@ export default async function Page(props: any) {
 
 	let cta = page.glossaryTermCta;
 
-	if (!cta || !cta.ref_sharedCta?.overview?.field_title) {
+	if (!cta?.ref_sharedCta?.overview?.field_title) {
 		const hero = await sanityFetch({
 			query: glossaryHeroGroq,
 			tags: ['glossary'],
@@ -161,7 +161,7 @@ export default async function Page(props: any) {
 						<RichData value={page.glossaryTermOverview?.block_glossaryTermDefinition} />
 					</Text>
 				</Container>
-				{cta && cta.ref_sharedCta?.overview?.field_title && (
+				{cta?.ref_sharedCta?.overview?.field_title && (
 					<CTAImageBlock
 						className='py-(--container-padding)'
 						color={resolveComponentColor(cta.field_componentColor6ColorsInverse)}

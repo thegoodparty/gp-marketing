@@ -2,18 +2,18 @@ import {
   defineDocumentFieldAction,
   type DocumentFieldActionItem,
   type StringFieldProps, unset
-} from "sanity";
-import {RemoveIcon} from "@sanity/icons";
+} from 'sanity';
+import {RemoveIcon} from '@sanity/icons';
 
 export function ImagePromptField(props: StringFieldProps) {
   return props.renderDefault({
     ...props,
     actions: [
       defineDocumentFieldAction({
-        name: "prompt",
+        name: 'prompt',
         useAction: function useAction(): DocumentFieldActionItem {
           return {
-            type: "action",
+            type: 'action',
             icon: RemoveIcon,
             title: `Remove prompt`,
             onAction() {

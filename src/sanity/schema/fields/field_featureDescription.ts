@@ -9,6 +9,6 @@ export const field_featureDescription = {
       weight: 7,
     },
   },
-  validation: (R) => R.custom(async (_, ctx) => typeof ctx.type?.hidden === "function" && ctx.type.hidden(ctx) ? true : R["error"]("Max 250 characters").max(250).validate(_, ctx).then((e) => e.length === 0 ? true : e[0].item?.message || "Invalid")),
+  validation: (R) => R.custom(async (_, ctx) => typeof ctx.type?.hidden === 'function' && ctx.type.hidden(ctx) ? true : R['error']('Max 250 characters').max(250).validate(_, ctx).then((e) => e.length === 0 ? true : e[0].item?.message || 'Invalid')),
   type: 'text',
 }

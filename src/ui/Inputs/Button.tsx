@@ -10,7 +10,7 @@ import {
 } from 'react';
 
 import { APP_SIGN_UP_HREF, isSignUpUrl, trackEvent, trackSignUpClicked } from '~/lib/analytics';
-import { LinkTarget } from '~/types/ui';
+import { LINK_TARGET } from '~/types/ui';
 import { tv } from '../_lib/utils.ts';
 import { Anchor, type AnchorProps } from '../Anchor.tsx';
 import { IconResolver } from '../IconResolver.tsx';
@@ -240,7 +240,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					formId={props.formId}
 					href={props.href}
 					onClick={linkOnClick}
-					target={LinkTarget.BLANK}
+					target={LINK_TARGET.BLANK}
 					iconLeft={props.iconLeft}
 					iconRight={props.iconRight ?? <IconResolver icon='download' className='min-w-3.5 min-h-3.5 w-3.5 h-3.5 max-w-3.5 max-h-3.5' />}
 					{...props.buttonProps}

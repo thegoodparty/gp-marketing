@@ -1,6 +1,6 @@
-import {resolveValue} from "../../utils/resolveValue.ts";
-import {handleReplacements} from "../../utils/handleReplacements.ts";
-import {getIcon} from "../../utils/getIcon.tsx";
+import {resolveValue} from '../../utils/resolveValue.ts';
+import {handleReplacements} from '../../utils/handleReplacements.ts';
+import {getIcon} from '../../utils/getIcon.tsx';
 
 export const component_featuredBlogBlock = {
   title: 'Featured Blog Block',
@@ -41,7 +41,7 @@ const infer = {
         title: 'Featured Blog Block',
       },
     }
-           const vtype = x.type;           const title = resolveValue("title", component_featuredBlogBlock.preview.select, x);           const subtitle = resolveValue("subtitle", component_featuredBlogBlock.preview.select, x);           const media = resolveValue("media", component_featuredBlogBlock.preview.select, x);           const restitle = vtype in x ? x[vtype] : title;           return handleReplacements({             title: infer.singletonTitle || restitle || infer.name,             subtitle: subtitle ? subtitle : infer.fallback["title"],             media: media || infer.icon           }, x, infer.fallback);         },
+           const vtype = x.type;           const title = resolveValue('title', component_featuredBlogBlock.preview.select, x);           const subtitle = resolveValue('subtitle', component_featuredBlogBlock.preview.select, x);           const media = resolveValue('media', component_featuredBlogBlock.preview.select, x);           const restitle = vtype in x ? x[vtype] : title;           return handleReplacements({             title: infer.singletonTitle || restitle || infer.name,             subtitle: subtitle ? subtitle : infer.fallback['title'],             media: media || infer.icon           }, x, infer.fallback);         },
   },
   groups: [
     {

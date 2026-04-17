@@ -29,7 +29,7 @@ export function TwoUpCardBlockSection(section: Extract<Sections, { _type: 'compo
 function resolveTwoUpCardBlockCard(
 	card: Extract<Sections, { _type: 'component_twoUpCardBlock' }>['twoUpCardBlockOne' | 'twoUpCardBlockTwo'],
 ): TwoUpCardBlockCardProps | undefined {
-	if (!card || !card.field_twoUpCardBlockCardType) return undefined;
+	if (!card?.field_twoUpCardBlockCardType) return undefined;
 
 	const cardType = resolveTwoUpCardBlockCardType(stegaClean(card.field_twoUpCardBlockCardType));
 

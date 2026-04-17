@@ -343,7 +343,7 @@ let cachedElectionRouteParams: Promise<{
 /**
  * Merged election static params for all states (single fetch per build segment).
  */
-export function getCachedElectionRouteParams(): Promise<{
+export async function getCachedElectionRouteParams(): Promise<{
 	countyParams: ElectionCountyRouteParam[];
 	cityParams: ElectionCityRouteParam[];
 	statePositionParams: ElectionStatePositionRouteParam[];
@@ -353,7 +353,7 @@ export function getCachedElectionRouteParams(): Promise<{
 }> {
 	if (!cachedElectionRouteParams) {
 		cachedElectionRouteParams = (async () => {
-			const results = await Promise.all(US_STATE_CODES.map((c) => fetchStateElectionRouteParams(c)));
+			const results = await Promise.all(US_STATE_CODES.map(async (c) => fetchStateElectionRouteParams(c)));
 			return {
 				countyParams: dedupeByKey(results.flatMap((r) => r.countyParams), (x) => `${x.state}|${x.county}`),
 				cityParams: dedupeByKey(

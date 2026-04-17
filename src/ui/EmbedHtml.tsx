@@ -76,7 +76,7 @@ export function EmbedHtml({
 	useEffect(() => {
 		if (!html) return;
 
-		import('dompurify').then((mod) => {
+		void import('dompurify').then((mod) => {
 			const result = parseEmbed(html, mod.default);
 			if (!result) return;
 

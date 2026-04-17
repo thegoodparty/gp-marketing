@@ -35,7 +35,7 @@ export function toAbsoluteUrl(path: string): string {
  * Shared by getSanityImageUrl and ResponsiveImage.
  */
 export function parseSanityImageRef(ref: string): { url: string; id: string; dimensions: string; ext: string } | undefined {
-	let r = ref.startsWith('image-') ? ref.replace('image-', '') : ref;
+	const r = ref.startsWith('image-') ? ref.replace('image-', '') : ref;
 	const [id, dimensions, ext] = r.split('-');
 	if (!id || !dimensions || !ext) return undefined;
 	return {

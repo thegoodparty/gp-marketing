@@ -11,7 +11,7 @@ import { FAQsSectionGroup } from '~/RichTextContentSections/FAQsSectionGroup';
 import { block, marks, list, listItem } from '~/ui/RichData';
 import { CalloutSectionGroup } from '~/RichTextContentSections/CalloutSectionGroup';
 import { Typography } from '~/ui/Typography';
-import { TypographyStackSpacing } from '~/types/ui';
+import { TYPOGRAPHY_STACK_SPACING, type TypographyStackSpacing } from '~/types/ui';
 
 export type ArticleSections = NonNullable<
 	NonNullable<NonNullable<NonNullable<ArticleQueryResult>['contentSections']>['block_editorialContentSections']>[number]
@@ -27,8 +27,8 @@ export function RichTextContentSections(props: Props) {
 		return null;
 	}
 
-	const stackSpacing = props.stackSpacing ?? TypographyStackSpacing.DEFAULT;
-	const isEditorial = stackSpacing === TypographyStackSpacing.EDITORIAL;
+	const stackSpacing = props.stackSpacing ?? TYPOGRAPHY_STACK_SPACING.DEFAULT;
+	const isEditorial = stackSpacing === TYPOGRAPHY_STACK_SPACING.EDITORIAL;
 
 	return (
 		<Typography as='article' data-section='RichTextContentSection' stackSpacing={stackSpacing}>

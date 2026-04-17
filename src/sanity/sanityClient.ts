@@ -14,8 +14,10 @@ export const sanityClient = createClient({
 
 // Pull the augmented SanityQueries interface:
 declare module '@sanity/client' {
-	// just to import the name, no changes here
+	// Augmentation anchor for generated query result types (see sanity typegen)
+	/* eslint-disable @typescript-eslint/no-empty-interface, @typescript-eslint/no-empty-object-type -- merged by sanity typegen */
 	interface SanityQueries {}
+	/* eslint-enable @typescript-eslint/no-empty-interface, @typescript-eslint/no-empty-object-type */
 }
 
 // Helper type: any string key from the generated TypeMap

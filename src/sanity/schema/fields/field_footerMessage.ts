@@ -1,5 +1,5 @@
-import {createElement} from "react";
-import {FieldDescription} from "../../utils/FieldDescription.tsx";
+import {createElement} from 'react';
+import {FieldDescription} from '../../utils/FieldDescription.tsx';
 
 export const field_footerMessage = {
   name: 'field_footerMessage',

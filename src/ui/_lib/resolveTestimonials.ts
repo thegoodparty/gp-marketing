@@ -1,9 +1,9 @@
 import type { TestimonialCardProps } from '../TestimonialCard';
 
 export function resolveTestimonials(item: any): TestimonialCardProps[] {
-	let testimonials: TestimonialCardProps[] = [];
+	const testimonials: TestimonialCardProps[] = [];
 
-	item.quotes.map(quote => {
+	item.quotes.forEach((quote: any) => {
 		testimonials.push({
 			author: {
 				name:

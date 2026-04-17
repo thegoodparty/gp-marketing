@@ -66,7 +66,7 @@ export default async function Page({
 	const countyPlaces = allPlaces.filter(p => p.mtfcc === COUNTY_MTFCC);
 	const districtPlaces = allPlaces.filter(p => isDistrictMtfcc(p.mtfcc));
 	const isSingleCounty = countyPlaces.length <= 1;
-	let cityPlaces = isSingleCounty
+	const cityPlaces = isSingleCounty
 		? await getPlacesByState({ state: stateCode, mtfcc: CITY_MTFCC })
 		: [];
 

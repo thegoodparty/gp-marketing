@@ -15,7 +15,7 @@ const blockStyles = tv({
 	slots: {
 		base: 'py-(--container-padding)',
 		wrapper: 'flex flex-col gap-10',
-		cardsContainer: 'flex gap-4 max-md:flex-col md:items-center',
+		cardsContainer: 'grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 items-stretch',
 	},
 	variants: {
 		backgroundColor: {
@@ -29,11 +29,11 @@ const blockStyles = tv({
 const cardStyles = tv({
 	slots: {
 		cardButton: [
-			'group/card relative w-full flex-1 rounded-3xl text-left cursor-pointer',
+			'group/card relative w-full h-full rounded-3xl text-left cursor-pointer',
 			'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-midnight-900 focus-visible:ring-offset-4',
 		],
 		cardInner: [
-			'relative rounded-3xl p-6',
+			'relative rounded-3xl p-6 h-full',
 			'transition-transform duration-normal ease-smooth hover:-translate-y-1',
 			'min-h-64',
 		],
@@ -91,11 +91,15 @@ export function TeamValuesCard(props: TeamValuesCardProps) {
 						transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
 					}}
 				>
-					<div className={cn(face(), frontFace())} style={{ backfaceVisibility: 'hidden' }}>
+					<div
+						className={cn(face(), frontFace())}
+						style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+					>
 						<div className={top()}>
 							<CircleIcon icon={props.icon ?? 'heart-handshake'} iconBg='cream' />
 							{props.heading && (
-								<Text as='h3' styleType='heading-sm'>
+								// Keep value names whole and on one line; adjust grid min width before allowing wrap fallback.
+								<Text as='h3' styleType='heading-sm' className='whitespace-nowrap break-normal'>
 									{props.heading}
 								</Text>
 							)}
@@ -103,7 +107,11 @@ export function TeamValuesCard(props: TeamValuesCardProps) {
 					</div>
 					<div
 						className={cn(face(), backFace())}
-						style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+						style={{
+							backfaceVisibility: 'hidden',
+							WebkitBackfaceVisibility: 'hidden',
+							transform: 'rotateY(180deg)',
+						}}
 					>
 						<Text as='p' styleType='body-2'>
 							{props.backCopy ?? props.heading ?? ''}

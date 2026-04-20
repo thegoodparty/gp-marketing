@@ -1,3 +1,5 @@
+'use client';
+
 import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 import { cn, tv } from './_lib/utils.ts';
 import { useState } from 'react';

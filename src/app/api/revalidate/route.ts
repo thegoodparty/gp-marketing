@@ -3,7 +3,6 @@ import { revalidatePath, revalidateTag } from 'next/cache';
 import { type NextRequest, NextResponse } from 'next/server';
 import { parseBody } from 'next-sanity/webhook';
 import { revalidateSecret } from '~/lib/env';
-import { invalidateRedirectCache } from '~/middleware';
 
 const CUSTOM_SECRET_HEADER = 'x-sanity-webhook-secret';
 const HMAC_KEY = 'safeCompare';
@@ -116,10 +115,6 @@ export async function POST(req: NextRequest) {
 
 	try {
 		revalidateTag(_type);
-
-		if (_type === 'goodpartyOrg_redirects') {
-			invalidateRedirectCache();
-		}
 
 		const paths = getPathsToRevalidate(_type, payload);
 		for (const path of paths) {

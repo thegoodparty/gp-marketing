@@ -43,13 +43,23 @@ async function getRedirectMap(): Promise<Map<string, { to: string; permanent: bo
 	if (redirectMap) return redirectMap;
 
 	if (!refreshPromise) {
-		refreshPromise = loadRedirects().then((map) => {
-			redirectMap = map;
-			refreshPromise = null;
-		});
+		refreshPromise = loadRedirects()
+			.then((map) => {
+				redirectMap = map;
+			})
+			.finally(() => {
+				refreshPromise = null;
+			});
 	}
-	await refreshPromise;
-	return redirectMap!;
+
+	try {
+		await refreshPromise;
+	} catch {
+		// Fetch failed after retries/timeouts: fail open so the site stays up; next request can retry.
+		return new Map();
+	}
+
+	return redirectMap ?? new Map();
 }
 
 export function invalidateRedirectCache(): void {

@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@sanity/client';
+import { dataset, projectId } from '~/lib/env';
 
 interface RedirectEntry {
 	field_fromUrl?: string;
@@ -8,8 +9,8 @@ interface RedirectEntry {
 }
 
 const client = createClient({
-	projectId: '3rbseux7',
-	dataset: 'production',
+	projectId,
+	dataset,
 	apiVersion: '2025-10-08',
 	useCdn: true,
 });

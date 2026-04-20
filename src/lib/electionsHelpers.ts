@@ -1,7 +1,8 @@
 import { US_STATES } from '~/constants/usStates';
-import { CITY_MTFCC, TOWN_MTFCC } from '~/lib/electionsApi';
 import type { CandidacyItem, PlaceItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
 import type { FactsCardProps } from '~/ui/FactsCard';
+
+export { isCityOrTownMtfcc } from '~/lib/electionsApi';
 
 const COUNTY_EQUIV_SUFFIX_RE = /\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio)$/i;
 
@@ -220,10 +221,6 @@ export function placeToFactsCards(place: PlaceWithFacts | null): FactsCardProps[
 		});
 	}
 	return cards;
-}
-
-export function isCityOrTownMtfcc(mtfcc?: string): boolean {
-	return mtfcc === CITY_MTFCC || mtfcc === TOWN_MTFCC;
 }
 
 type FactField =

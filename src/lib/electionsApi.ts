@@ -23,15 +23,16 @@ export const COUNTY_MTFCC = 'G4020';
 export const CITY_MTFCC = 'G4110';
 export const TOWN_MTFCC = 'G4040';
 
+/** True for incorporated places (cities, towns) used as county child localities. */
+export function isCityOrTownMtfcc(mtfcc?: string): boolean {
+	return mtfcc === CITY_MTFCC || mtfcc === TOWN_MTFCC;
+}
+
 /** MTFCC codes for school districts (elementary, secondary, unified). */
 export const DISTRICT_MTFCCS = ['G5400', 'G5410', 'G5420'] as const;
 
 export function isDistrictMtfcc(mtfcc?: string): boolean {
 	return mtfcc?.startsWith('G54') ?? false;
-}
-
-function isLocalChildMtfcc(mtfcc?: string): boolean {
-	return mtfcc === CITY_MTFCC || mtfcc === TOWN_MTFCC;
 }
 
 const FETCH_JSON_MAX_RETRIES = 2;
@@ -255,7 +256,7 @@ export async function getCountyChildPlaces(params: {
 		placeColumns: 'slug,name,mtfcc,countyName',
 	});
 	const hierarchyChildren = (county?.children ?? []).filter(
-		p => isLocalChildMtfcc(p.mtfcc) && !isDistrictMtfcc(p.mtfcc),
+		p => isCityOrTownMtfcc(p.mtfcc) && !isDistrictMtfcc(p.mtfcc),
 	);
 	const fallbackCities = await getCityPlacesByCounty(params);
 	return dedupePlacesBySlug([...hierarchyChildren, ...fallbackCities]);

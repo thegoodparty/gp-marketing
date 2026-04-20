@@ -15,8 +15,6 @@ import { BlogTopicTagsBlock } from '~/ui/BlogTopicTagsBlock';
 import { NewsletterBlockSection } from '~/PageSections/NewsletterBlockSection';
 import { client } from '~/lib/client';
 
-type NewsletterBlockSectionType = Extract<Sections, { _type: 'component_newsletterBlock' }>;
-
 export async function generateStaticParams() {
 	const entries = await client.fetch<Array<string>>('*[_type=="categories"].tagOverview.field_slug');
 	return entries.filter(Boolean).map(entry => ({

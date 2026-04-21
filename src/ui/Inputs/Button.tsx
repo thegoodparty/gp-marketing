@@ -9,7 +9,7 @@ import {
 	type ReactNode,
 } from 'react';
 
-import { APP_SIGN_UP_HREF, isSignUpUrl, trackEvent, trackSignUpClicked } from '~/lib/analytics';
+import { APP_SIGN_UP_HREF, isSignUpUrl, trackSignUpClicked } from '~/lib/analytics';
 import { LinkTarget } from '~/types/ui';
 import { tv } from '../_lib/utils.ts';
 import { Anchor, type AnchorProps } from '../Anchor.tsx';
@@ -125,12 +125,6 @@ export type MainButtonProps = {
 	styleSize?: ButtonProps['styleSize'];
 };
 
-/** Serializable tracking metadata for homepage experiment CTA events. */
-export type ExperimentTracking = {
-	variant: string;
-	section: string;
-};
-
 export type ComponentButtonProps = {
 	_key?: string;
 	className?: string;
@@ -140,7 +134,6 @@ export type ComponentButtonProps = {
 	iconLeft?: ReactElement;
 	iconRight?: ReactElement;
 	onClick?(e: React.MouseEvent<HTMLElement, MouseEvent>): void;
-	experimentTracking?: ExperimentTracking;
 } & (
 	| { buttonType: 'internal'; href: string }
 	| { buttonType: 'external'; href: string }
@@ -165,23 +158,12 @@ function defaultExternalLinkIcon() {
 export const ComponentButton = (props: ComponentButtonProps) => {
 	const isExternalHref = 'href' in props ? isExternalToEcosystem(props.href) : false;
 
-	const fireExperimentTracking = () => {
-		if (!props.experimentTracking) return;
-		trackEvent('Homepage CTA Clicked', {
-			variant: props.experimentTracking.variant,
-			section: props.experimentTracking.section,
-			label: labelToString(props.label),
-			href: 'href' in props ? props.href : undefined,
-		});
-	};
-
 	const linkOnClick =
 		'href' in props
 			? (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
 					if (isSignUpUrl(props.href)) {
 						trackSignUpClicked({ href: props.href, label: labelToString(props.label), formId: props.formId ?? null });
 					}
-					fireExperimentTracking();
 					props.onClick?.(e);
 				}
 			: undefined;
@@ -306,10 +288,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					parent='ComponentButton'
 					className={props.className}
 					formId={props.formId}
-					onClick={e => {
-						fireExperimentTracking();
-						props.onClick?.(e);
-					}}
+					onClick={props.onClick}
 					iconLeft={props.iconLeft}
 					iconRight={props.iconRight}
 					{...props.buttonProps}

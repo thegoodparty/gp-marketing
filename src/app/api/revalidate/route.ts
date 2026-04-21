@@ -62,6 +62,7 @@ function getPathsToRevalidate(_type: string, payload: Record<string, unknown>): 
 		goodpartyOrg_404Page: ['/'],
 		goodpartyOrg_allComponents: ['/all'],
 		quoteCollections: ['/elections'],
+		experiment_variant: ['/'],
 	};
 
 	const paths = pathMap[_type];

@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import type { PropsWithChildren } from 'react';
 import { type ComponentProps, forwardRef } from 'react';
-import { LINK_TARGET } from '~/types/ui';
+import { LinkTarget } from '~/types/ui';
 // import type { SanityImage } from '~/ui/types';
 import { isExternalToEcosystem } from '~/ui/_lib/linkBehavior';
 
@@ -69,8 +69,8 @@ export const Anchor = forwardRef<HTMLAnchorElement, PropsWithChildren<AnchorProp
 		onClick: undefined,
 	};
 
-	const target = targetProp ?? (isExternalToEcosystem(href) ? LINK_TARGET.BLANK : LINK_TARGET.SELF);
-	const rel = target === LINK_TARGET.BLANK ? mergeRelForNewTab(relProp) : relProp;
+	const target = targetProp ?? (isExternalToEcosystem(href) ? LinkTarget.BLANK : LinkTarget.SELF);
+	const rel = target === LinkTarget.BLANK ? mergeRelForNewTab(relProp) : relProp;
 
 	if (typeof href === 'string') {
 		url = { href };

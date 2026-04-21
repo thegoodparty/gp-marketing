@@ -173,6 +173,10 @@ export const allCategoriesLinksGroq = `*[_type=="categories"][]{_id,"title":tagO
 export const goodpartyOrg_homeQuery = defineQuery(
 	`*[_type=="goodpartyOrg_home"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},${homeHrefGroq}}`,
 );
+/*language=textmate*/
+export const experiment_variantsByExperimentIdQuery = defineQuery(
+	`*[_type == "experiment_variant" && field_experimentId == $experimentId]{field_variantName,pageSections{...,list_pageSections[]{${sectionsGroq}}}}`,
+);
 
 /*language=textmate*/
 export const goodpartyOrg_allArticlesQuery = defineQuery(

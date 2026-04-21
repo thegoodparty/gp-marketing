@@ -220,10 +220,11 @@ export async function getCityPlacesByCounty(params: {
 }): Promise<PlaceItem[]> {
 	const allCities = await getPlacesByState({ state: params.state, mtfcc: CITY_MTFCC });
 	const countyName = countyNameFromSlug(params.countySlug);
+	const normalizedCountyBaseName = canonicalizeCountyEquivalentName(params.state, countyName).baseName;
 	return allCities.filter(
 		p =>
 			normalizeName(canonicalizeCountyEquivalentName(params.state, p.countyName ?? '').baseName) ===
-			normalizeName(countyName),
+			normalizeName(normalizedCountyBaseName),
 	);
 }
 

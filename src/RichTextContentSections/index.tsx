@@ -11,7 +11,7 @@ import { FAQsSectionGroup } from '~/RichTextContentSections/FAQsSectionGroup';
 import { block, marks, list, listItem } from '~/ui/RichData';
 import { CalloutSectionGroup } from '~/RichTextContentSections/CalloutSectionGroup';
 import { Typography } from '~/ui/Typography';
-import { TypographyStackSpacing, type TypographyStackSpacing } from '~/types/ui';
+import { TypographyStackSpacing } from '~/types/ui';
 
 export type ArticleSections = NonNullable<
 	NonNullable<NonNullable<NonNullable<ArticleQueryResult>['contentSections']>['block_editorialContentSections']>[number]

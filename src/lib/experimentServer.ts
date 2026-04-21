@@ -13,11 +13,11 @@ async function initClient() {
 	return client;
 }
 
-function getClient() {
+async function getClient() {
 	if (!clientPromise) {
 		clientPromise = initClient();
 	}
-	return clientPromise;
+	return await clientPromise;
 }
 
 export async function getAmplitudeDeviceId(): Promise<string | null> {

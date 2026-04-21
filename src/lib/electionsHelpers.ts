@@ -2,9 +2,10 @@ import { US_STATES } from '~/constants/usStates';
 import type { CandidacyItem, PlaceItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
 import type { FactsCardProps } from '~/ui/FactsCard';
 
-const COUNTY_EQUIV_SUFFIX_RE = /\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio)$/i;
+const COUNTY_EQUIV_SUFFIX_RE =
+	/\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio|Municipality)$/i;
 const COUNTY_EQUIV_TAIL_RE =
-	/\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio)(?:\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio))*$/i;
+	/\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio|Municipality)(?:\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio|Municipality))*$/i;
 
 type CanonicalSuffix =
 	| 'County'
@@ -13,7 +14,8 @@ type CanonicalSuffix =
 	| 'Census Area'
 	| 'City and Borough'
 	| 'City and County'
-	| 'Municipio';
+	| 'Municipio'
+	| 'Municipality';
 
 type CanonicalCountyName = {
 	displayName: string;
@@ -29,6 +31,7 @@ const SUFFIX_NORMALIZATION: Record<string, CanonicalSuffix> = {
 	'city and borough': 'City and Borough',
 	'city and county': 'City and County',
 	municipio: 'Municipio',
+	municipality: 'Municipality',
 };
 
 function normalizeWhitespace(value: string): string {
@@ -46,7 +49,12 @@ function pickSuffixByState(
 ): CanonicalSuffix {
 	const upper = stateCode.toUpperCase();
 	if (upper === 'AK') {
-		if (existingSuffix === 'City and Borough' || existingSuffix === 'Census Area') {
+		if (
+			existingSuffix === 'City and Borough' ||
+			existingSuffix === 'Census Area' ||
+			existingSuffix === 'Borough' ||
+			existingSuffix === 'Municipality'
+		) {
 			return existingSuffix;
 		}
 		return 'Borough';

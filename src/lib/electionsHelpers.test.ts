@@ -107,6 +107,10 @@ describe('stripCountySuffix', () => {
 		expect(stripCountySuffix('San Juan Municipio')).toBe('San Juan');
 	});
 
+	test('strips Municipality', () => {
+		expect(stripCountySuffix('Anchorage Municipality')).toBe('Anchorage');
+	});
+
 	test('strips City and Borough', () => {
 		expect(stripCountySuffix('Juneau City and Borough')).toBe('Juneau');
 	});
@@ -128,6 +132,7 @@ describe('getCountySuffixLabel', () => {
 	test('returns matched suffix', () => {
 		expect(getCountySuffixLabel('Jefferson Parish')).toBe('Parish');
 		expect(getCountySuffixLabel('Jefferson County')).toBe('County');
+		expect(getCountySuffixLabel('Anchorage Municipality')).toBe('Municipality');
 	});
 
 	test('returns "County" when no suffix match', () => {
@@ -156,11 +161,27 @@ describe('canonicalizeCountyEquivalentName', () => {
 		});
 	});
 
+	test('preserves Alaska municipality naming', () => {
+		expect(canonicalizeCountyEquivalentName('AK', 'Skagway Municipality')).toEqual({
+			displayName: 'Skagway Municipality',
+			baseName: 'Skagway',
+			suffixLabel: 'Municipality',
+		});
+	});
+
 	test('fixes malformed Alaska double suffix', () => {
 		expect(canonicalizeCountyEquivalentName('AK', 'Haines Borough County')).toEqual({
 			displayName: 'Haines Borough',
 			baseName: 'Haines',
 			suffixLabel: 'Borough',
+		});
+	});
+
+	test('fixes malformed Alaska municipality double suffix', () => {
+		expect(canonicalizeCountyEquivalentName('AK', 'Skagway Municipality County')).toEqual({
+			displayName: 'Skagway Municipality',
+			baseName: 'Skagway',
+			suffixLabel: 'Municipality',
 		});
 	});
 

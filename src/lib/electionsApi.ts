@@ -10,6 +10,7 @@ import type {
 	RaceDetail,
 	RaceNode,
 } from '~/types/elections';
+import { canonicalizeCountyEquivalentName } from '~/lib/electionsHelpers';
 
 const BASE_URL =
 	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
@@ -220,7 +221,9 @@ export async function getCityPlacesByCounty(params: {
 	const allCities = await getPlacesByState({ state: params.state, mtfcc: CITY_MTFCC });
 	const countyName = countyNameFromSlug(params.countySlug);
 	return allCities.filter(
-		p => normalizeName(p.countyName ?? '') === normalizeName(countyName),
+		p =>
+			normalizeName(canonicalizeCountyEquivalentName(params.state, p.countyName ?? '').baseName) ===
+			normalizeName(countyName),
 	);
 }
 

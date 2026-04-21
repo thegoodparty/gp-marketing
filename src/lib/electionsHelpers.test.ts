@@ -3,6 +3,7 @@ import {
 	buildFAQSchema,
 	buildJobPostingSchema,
 	buildRaceSlug,
+	canonicalizeCountyEquivalentName,
 	findCityForDistrictName,
 	formatElectionDateFromApi,
 	formatFilingPeriodFromRace,
@@ -135,6 +136,64 @@ describe('getCountySuffixLabel', () => {
 
 	test('returns "County" for empty string', () => {
 		expect(getCountySuffixLabel('')).toBe('County');
+	});
+});
+
+describe('canonicalizeCountyEquivalentName', () => {
+	test('appends County for non-exception states when suffix missing', () => {
+		expect(canonicalizeCountyEquivalentName('AZ', 'Apache')).toEqual({
+			displayName: 'Apache County',
+			baseName: 'Apache',
+			suffixLabel: 'County',
+		});
+	});
+
+	test('preserves Alaska borough naming', () => {
+		expect(canonicalizeCountyEquivalentName('AK', 'Haines Borough')).toEqual({
+			displayName: 'Haines Borough',
+			baseName: 'Haines',
+			suffixLabel: 'Borough',
+		});
+	});
+
+	test('fixes malformed Alaska double suffix', () => {
+		expect(canonicalizeCountyEquivalentName('AK', 'Haines Borough County')).toEqual({
+			displayName: 'Haines Borough',
+			baseName: 'Haines',
+			suffixLabel: 'Borough',
+		});
+	});
+
+	test('preserves Louisiana parish naming', () => {
+		expect(canonicalizeCountyEquivalentName('LA', 'Jefferson Parish')).toEqual({
+			displayName: 'Jefferson Parish',
+			baseName: 'Jefferson',
+			suffixLabel: 'Parish',
+		});
+	});
+
+	test('fixes malformed Louisiana double suffix', () => {
+		expect(canonicalizeCountyEquivalentName('LA', 'Jefferson Parish County')).toEqual({
+			displayName: 'Jefferson Parish',
+			baseName: 'Jefferson',
+			suffixLabel: 'Parish',
+		});
+	});
+
+	test('preserves Puerto Rico municipio naming', () => {
+		expect(canonicalizeCountyEquivalentName('PR', 'San Juan Municipio')).toEqual({
+			displayName: 'San Juan Municipio',
+			baseName: 'San Juan',
+			suffixLabel: 'Municipio',
+		});
+	});
+
+	test('fixes malformed Puerto Rico double suffix', () => {
+		expect(canonicalizeCountyEquivalentName('PR', 'San Juan Municipio County')).toEqual({
+			displayName: 'San Juan Municipio',
+			baseName: 'San Juan',
+			suffixLabel: 'Municipio',
+		});
 	});
 });
 

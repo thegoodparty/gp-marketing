@@ -3,6 +3,76 @@ import type { CandidacyItem, PlaceItem, PlaceWithFacts, RaceDetail } from '~/typ
 import type { FactsCardProps } from '~/ui/FactsCard';
 
 const COUNTY_EQUIV_SUFFIX_RE = /\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio)$/i;
+const COUNTY_EQUIV_TAIL_RE =
+	/\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio)(?:\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio))*$/i;
+
+type CanonicalSuffix =
+	| 'County'
+	| 'Parish'
+	| 'Borough'
+	| 'Census Area'
+	| 'City and Borough'
+	| 'City and County'
+	| 'Municipio';
+
+type CanonicalCountyName = {
+	displayName: string;
+	baseName: string;
+	suffixLabel: CanonicalSuffix;
+};
+
+const SUFFIX_NORMALIZATION: Record<string, CanonicalSuffix> = {
+	county: 'County',
+	parish: 'Parish',
+	borough: 'Borough',
+	'census area': 'Census Area',
+	'city and borough': 'City and Borough',
+	'city and county': 'City and County',
+	municipio: 'Municipio',
+};
+
+function normalizeWhitespace(value: string): string {
+	return value.replace(/\s+/g, ' ').trim();
+}
+
+function toCanonicalSuffix(value: string): CanonicalSuffix | null {
+	const normalized = normalizeWhitespace(value).toLowerCase();
+	return SUFFIX_NORMALIZATION[normalized] ?? null;
+}
+
+function pickSuffixByState(
+	stateCode: string,
+	existingSuffix: CanonicalSuffix | null,
+): CanonicalSuffix {
+	const upper = stateCode.toUpperCase();
+	if (upper === 'AK') {
+		if (existingSuffix === 'City and Borough' || existingSuffix === 'Census Area') {
+			return existingSuffix;
+		}
+		return 'Borough';
+	}
+	if (upper === 'LA') return 'Parish';
+	if (upper === 'PR') return 'Municipio';
+	if (existingSuffix === 'City and County') return existingSuffix;
+	return 'County';
+}
+
+/**
+ * Canonical county-equivalent naming for county-level display surfaces.
+ * Enforces AK/LA/PR conventions and defensively cleans malformed double suffixes.
+ */
+export function canonicalizeCountyEquivalentName(
+	stateCode: string,
+	rawPlaceName: string,
+): CanonicalCountyName {
+	const normalizedName = normalizeWhitespace(rawPlaceName);
+	const tailMatch = normalizedName.match(COUNTY_EQUIV_TAIL_RE);
+	const existingSuffix = tailMatch ? toCanonicalSuffix(tailMatch[1] ?? '') : null;
+	const suffixLabel = pickSuffixByState(stateCode, existingSuffix);
+	const baseName = normalizeWhitespace(normalizedName.replace(COUNTY_EQUIV_TAIL_RE, '')) || normalizedName;
+	const displayName = `${baseName} ${suffixLabel}`.trim();
+	return { displayName, baseName, suffixLabel };
+}
 
 /** Resolve display name for the [county] route param (county, city, or district). */
 export function resolveLocalityName(

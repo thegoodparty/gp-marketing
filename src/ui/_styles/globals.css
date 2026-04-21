@@ -135,27 +135,6 @@
 		}
 	}
 
-	@media (min-width: 768px) {
-		html,
-		body {
-			font-size: 1.125rem;
-		}
-	}
-
-	@media (min-width: 1024px) {
-		html,
-		body {
-			font-size: 1.25rem;
-		}
-	}
-
-	@media (min-width: 1280px) {
-		html,
-		body {
-			font-size: 1.3rem;
-		}
-	}
-
 	mux-player {
 		--media-object-fit: cover !important;
 		aspect-ratio: var(--media-aspect-ratio) !important;

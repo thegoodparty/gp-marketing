@@ -27,6 +27,7 @@ import {goodpartyOrg_redirects} from './goodpartyOrg_redirects.ts'
 import {goodpartyOrg_socialChannels} from './goodpartyOrg_socialChannels.ts'
 import {goodpartyOrg_navigation} from './goodpartyOrg_navigation.ts'
 import {goodpartyOrg_footer} from './goodpartyOrg_footer.ts'
+import {experiment_variant} from './experiment_variant.ts'
 
 export const documentSchema = [
 topics,
@@ -57,5 +58,6 @@ goodpartyOrg_404Page,
 goodpartyOrg_redirects,
 goodpartyOrg_socialChannels,
 goodpartyOrg_navigation,
-goodpartyOrg_footer
+goodpartyOrg_footer,
+experiment_variant
 ];

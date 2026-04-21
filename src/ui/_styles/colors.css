@@ -91,9 +91,6 @@
 		--hero-glow-a: radial-gradient(circle, hsl(349 83% 47% / 0.06) 0%, hsl(218 100% 38% / 0.04) 40%, transparent 70%);
 		--hero-glow-b: radial-gradient(circle, hsl(349 83% 47% / 0.08) 0%, hsl(218 100% 38% / 0.05) 40%, transparent 70%);
 
-		/* StrikethroughBlock background */
-		--strikethrough-bg: #ede5f4;
-
 		--error-50: hsl(0 100% 95% / 1);
 		--error-100: hsl(0 100% 95% / 1);
 		--error-200: hsl(0 100% 84% / 1);
@@ -235,7 +232,6 @@
 	--color-ui-dot-close: var(--ui-dot-close);
 	--color-ui-dot-minimize: var(--ui-dot-minimize);
 	--color-ui-dot-maximize: var(--ui-dot-maximize);
-	--color-strikethrough-bg: var(--strikethrough-bg);
 
 	--color-error-50: var(--error-50);
 	--color-error-100: var(--error-100);

@@ -19,10 +19,10 @@ import {
 import { sanityFetch } from '~/sanity/sanityClient';
 import { quoteCollectionByIdQuery } from '~/sanity/groq';
 import {
+	canonicalizeCountyEquivalentName,
 	getCountySuffixLabel,
 	getStateName,
 	placeToFactsCards,
-	stripCountySuffix,
 } from '~/lib/electionsHelpers';
 import { resolveAuthor } from '~/ui/_lib/resolveAuthor';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
@@ -72,6 +72,9 @@ export default async function Page({
 
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === fullSlug);
 	const isDistrict = placeData != null && isDistrictMtfcc(placeData.mtfcc);
+	const normalizedCounty = countyPlace
+		? canonicalizeCountyEquivalentName(stateCode, countyPlace.name)
+		: null;
 
 	const cityPlaces = isDistrict
 		? []
@@ -86,7 +89,7 @@ export default async function Page({
 
 	const placeName = isDistrict
 		? (placeData?.name ?? county)
-		: (stripCountySuffix(countyPlace!.name) || countyPlace!.name);
+		: (normalizedCounty?.displayName ?? countyPlace!.name);
 	const cities = isDistrict
 		? []
 		: cityPlaces.map(c => {
@@ -102,7 +105,7 @@ export default async function Page({
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
 		{ href: `/elections/${state.toLowerCase()}`, label: stateName },
-		{ href: '', label: isDistrict ? placeName : countyPlace!.name },
+		{ href: '', label: isDistrict ? placeName : (normalizedCounty?.displayName ?? countyPlace!.name) },
 	];
 
 	const factsCards = placeToFactsCards(placeData);
@@ -161,7 +164,7 @@ export default async function Page({
 				listProps={{
 					heading: isDistrict
 						? `Elections in ${placeName}`
-						: `${getCountySuffixLabel(countyPlace!.name)} Elections in ${countyPlace!.name}`,
+						: `${normalizedCounty?.suffixLabel ?? getCountySuffixLabel(countyPlace!.name)} Elections in ${normalizedCounty?.displayName ?? countyPlace!.name}`,
 					headlineLabel: isDistrict ? 'district' : 'county',
 					defaultYear,
 					availableYears,
@@ -171,7 +174,7 @@ export default async function Page({
 			{factsCards.length > 0 && (
 				<LocationFactsBlock
 					backgroundColor="cream"
-					header={{ title: isDistrict ? `${placeName} facts` : `${countyPlace!.name} facts` }}
+					header={{ title: isDistrict ? `${placeName} facts` : `${normalizedCounty?.displayName ?? countyPlace!.name} facts` }}
 					factsCards={factsCards}
 				/>
 			)}
@@ -181,8 +184,8 @@ export default async function Page({
 					stateSlug={fullSlug}
 					elections={cities}
 					header={{
-						title: `${hasTownEntries ? 'Cities & Towns' : 'Cities'} in ${countyPlace!.name}`,
-						copy: `Browse elections by city in ${countyPlace!.name}, ${stateName}.`,
+						title: `${hasTownEntries ? 'Cities & Towns' : 'Cities'} in ${normalizedCounty?.displayName ?? countyPlace!.name}`,
+						copy: `Browse elections by city in ${normalizedCounty?.displayName ?? countyPlace!.name}, ${stateName}.`,
 						backgroundColor: 'midnight',
 					}}
 					initialDisplayCount={DEFAULT_DISPLAY_COUNT}
@@ -228,9 +231,12 @@ export async function generateMetadata({
 	]);
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === fullSlug);
 	const isDistrict = placeData != null && isDistrictMtfcc(placeData.mtfcc);
+	const normalizedCounty = countyPlace
+		? canonicalizeCountyEquivalentName(stateCode, countyPlace.name)
+		: null;
 	const placeName = isDistrict
 		? (placeData?.name ?? county)
-		: (countyPlace ? stripCountySuffix(countyPlace.name) : county);
+		: (normalizedCounty?.displayName ?? county);
 	return {
 		title: `Elections in ${placeName}, ${stateName} | Good Party`,
 		description: isDistrict

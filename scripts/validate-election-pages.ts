@@ -3,17 +3,21 @@
  * Validates election page content for display name regressions (e.g. "buckeye County" for city of Buckeye).
  * Fetches race slugs from Election API, GETs rendered pages, checks title/meta for anti-patterns.
  *
- * Usage: bun run scripts/validate-election-pages.ts [--base-url URL] [--states AZ,AL,CA] [--concurrency N] [--sample N]
+ * Usage:
+ * - bun run scripts/validate-election-pages.ts --mode positions [--base-url URL] [--states AZ,AL,CA] [--concurrency N] [--sample N]
+ * - bun run scripts/validate-election-pages.ts --mode state-pages [--base-url URL] [--states AZ,AL,CA] [--concurrency N]
  */
 
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { US_STATE_CODES } from '../src/lib/sitemap-entries';
+import { getStateName } from '../src/lib/electionsHelpers';
 
 const DEFAULT_BASE_URL = 'https://goodparty.org';
 const DEFAULT_CONCURRENCY = 10;
 const DEFAULT_SAMPLE_PER_STATE = 20;
 const DEFAULT_TIMEOUT_MS = 15_000;
+const STATE_FACTS_MARKER = /data-section=["']Location Facts Block["']/i;
 
 const ELECTION_API_BASE =
 	process.env['NEXT_PUBLIC_ELECTION_API_BASE'] ??
@@ -55,12 +59,14 @@ function parseArgs(): {
 	states: string[];
 	concurrency: number;
 	samplePerState: number;
+	mode: 'positions' | 'state-pages';
 } {
 	const args = process.argv.slice(2);
 	let baseUrl = DEFAULT_BASE_URL;
 	let states: string[] = [];
 	let concurrency = DEFAULT_CONCURRENCY;
 	let samplePerState = DEFAULT_SAMPLE_PER_STATE;
+	let mode: 'positions' | 'state-pages' = 'positions';
 
 	for (let i = 0; i < args.length; i++) {
 		const arg = args[i] ?? '';
@@ -73,15 +79,22 @@ function parseArgs(): {
 			concurrency = Number.parseInt(args[++i]!, 10) || DEFAULT_CONCURRENCY;
 		} else if (arg === '--sample' && args[i + 1]) {
 			samplePerState = Number.parseInt(args[++i]!, 10) || DEFAULT_SAMPLE_PER_STATE;
+		} else if (arg === '--mode' && args[i + 1]) {
+			const value = (args[++i] ?? '').toLowerCase();
+			if (value === 'positions' || value === 'state-pages') {
+				mode = value;
+			}
 		}
 	}
 
-	if (states.length === 0) {
+	if (states.length === 0 && mode === 'positions') {
 		const shuffled = [...US_STATE_CODES].sort(() => Math.random() - 0.5);
 		states = shuffled.slice(0, 3).filter(Boolean);
+	} else if (states.length === 0 && mode === 'state-pages') {
+		states = [...US_STATE_CODES];
 	}
 
-	return { baseUrl, states, concurrency, samplePerState };
+	return { baseUrl, states, concurrency, samplePerState, mode };
 }
 
 async function fetchElectionJson<T>(path: string, params: Record<string, string>): Promise<T[]> {
@@ -129,6 +142,10 @@ export function buildPageUrls(
 	return urls;
 }
 
+export function buildStatePageUrls(baseUrl: string, states: string[]): string[] {
+	return states.map((state) => `${baseUrl}/elections/${state.toLowerCase()}`);
+}
+
 export function extractTitleAndDescription(html: string): { title?: string; description?: string } {
 	const titleMatch = html.match(/<title>([^<]*)<\/title>/i);
 	const descMatch = html.match(/<meta\s+name=["']description["']\s+content=["']([^"']*)["']/i);
@@ -143,6 +160,29 @@ export function checkContent(text: string): string[] {
 	for (const re of BAD_PATTERNS) {
 		const match = text.match(re);
 		if (match) invalid.push(match[0] ?? String(re));
+	}
+	return invalid;
+}
+
+export function checkStatePageFactsContent(url: string, html: string): string[] {
+	const invalid: string[] = [];
+	const path = (() => {
+		try {
+			return new URL(url).pathname;
+		} catch {
+			return '';
+		}
+	})();
+	const stateMatch = path.match(/^\/elections\/([a-z]{2})\/?$/i);
+	if (!stateMatch) return invalid;
+	const state = stateMatch[1]!.toUpperCase();
+	if (STATE_FACTS_MARKER.test(html)) {
+		invalid.push('Location Facts Block section marker found');
+	}
+	const stateName = getStateName(state);
+	const factsHeading = new RegExp(`>\\s*${stateName}\\s+facts\\s*<`, 'i');
+	if (factsHeading.test(html)) {
+		invalid.push('State facts heading found');
 	}
 	return invalid;
 }
@@ -180,6 +220,7 @@ export function categorizeResults(checked: CheckedPage[]): {
 async function checkPage(
 	url: string,
 	timeoutMs: number,
+	mode: 'positions' | 'state-pages',
 ): Promise<{ result: PageCheckResult; error?: string }> {
 	const start = Date.now();
 	try {
@@ -203,7 +244,9 @@ async function checkPage(
 		const html = await res.text();
 		const { title, description } = extractTitleAndDescription(html);
 		const combined = [title, description].filter(Boolean).join(' ');
-		const invalid = checkContent(combined);
+		const invalid = mode === 'state-pages'
+			? checkStatePageFactsContent(url, html)
+			: checkContent(combined);
 
 		return {
 			result: {
@@ -252,27 +295,34 @@ async function runWithPool<T, R>(
 }
 
 async function main(): Promise<void> {
-	const { baseUrl, states, concurrency, samplePerState } = parseArgs();
+	const { baseUrl, states, concurrency, samplePerState, mode } = parseArgs();
 
 	console.log(`Base URL: ${baseUrl}`);
 	console.log(`States: ${states.join(', ')}`);
-	console.log(`Sample per state: ${samplePerState}`);
-
-	const racesByState = new Map<string, Array<{ slug?: string }>>();
-	for (const state of states) {
-		const races = await fetchElectionJson<{ slug?: string }>('v1/races', {
-			state,
-			raceColumns: 'slug',
-		});
-		racesByState.set(state, races);
+	console.log(`Mode: ${mode}`);
+	if (mode === 'positions') {
+		console.log(`Sample per state: ${samplePerState}`);
 	}
 
-	const urls = buildPageUrls(baseUrl, racesByState, samplePerState);
+	let urls: string[] = [];
+	if (mode === 'positions') {
+		const racesByState = new Map<string, Array<{ slug?: string }>>();
+		for (const state of states) {
+			const races = await fetchElectionJson<{ slug?: string }>('v1/races', {
+				state,
+				raceColumns: 'slug',
+			});
+			racesByState.set(state, races);
+		}
+		urls = buildPageUrls(baseUrl, racesByState, samplePerState);
+	} else {
+		urls = buildStatePageUrls(baseUrl, states);
+	}
 	console.log(`Checking ${urls.length} pages...`);
 
 	const start = Date.now();
 	const checked = await runWithPool(urls, concurrency, url =>
-		checkPage(url, DEFAULT_TIMEOUT_MS),
+		checkPage(url, DEFAULT_TIMEOUT_MS, mode),
 	);
 	const durationMs = Date.now() - start;
 

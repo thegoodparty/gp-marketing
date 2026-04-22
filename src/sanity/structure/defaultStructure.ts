@@ -52,6 +52,14 @@ export function defaultStructure(S: StructureBuilder) {
         items: [
           item('goodpartyOrg_home'),
           item('goodpartyOrg_landingPages'),
+          group({
+            id: 'experiment_variant',
+            title: 'Experiments',
+            icon: getIcon('Chemistry'),
+            items: [
+              item('experiment_variant'),
+            ],
+          }),
           S.divider(),
           group({
             id: 'goodpartyOrg_allArticles',

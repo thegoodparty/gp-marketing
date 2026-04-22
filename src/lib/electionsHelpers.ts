@@ -2,6 +2,8 @@ import { US_STATES } from '~/constants/usStates';
 import type { CandidacyItem, PlaceItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
 import type { FactsCardProps } from '~/ui/FactsCard';
 
+export { isCityOrTownMtfcc } from '~/lib/electionsApi';
+
 const COUNTY_EQUIV_SUFFIX_RE =
 	/\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio|Municipality)$/i;
 const COUNTY_EQUIV_TAIL_RE =
@@ -297,6 +299,40 @@ export function placeToFactsCards(place: PlaceWithFacts | null): FactsCardProps[
 		});
 	}
 	return cards;
+}
+
+type FactField =
+	| 'population'
+	| 'density'
+	| 'incomeHouseholdMedian'
+	| 'unemploymentRate'
+	| 'homeValue';
+
+const FACT_SIGNATURE_FIELDS: FactField[] = [
+	'population',
+	'density',
+	'incomeHouseholdMedian',
+	'unemploymentRate',
+	'homeValue',
+];
+
+export function hasSuspiciousFactsMatch(
+	cityPlace: PlaceWithFacts | null | undefined,
+	countyPlace: PlaceWithFacts | null | undefined,
+): boolean {
+	if (!cityPlace || !countyPlace) return false;
+
+	let comparedFields = 0;
+	for (const field of FACT_SIGNATURE_FIELDS) {
+		const cityValue = cityPlace[field];
+		const countyValue = countyPlace[field];
+		if (typeof cityValue !== 'number' || typeof countyValue !== 'number') continue;
+		comparedFields += 1;
+		if (cityValue !== countyValue) return false;
+	}
+
+	// Require multiple identical facts to avoid noisy single-field matches.
+	return comparedFields >= 2;
 }
 
 /**

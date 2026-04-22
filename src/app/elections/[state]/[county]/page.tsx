@@ -2,10 +2,11 @@ import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
-	getCityPlacesByCounty,
+	getCountyChildPlaces,
 	getPlacesByState,
 	getPlaceBySlug,
 	isDistrictMtfcc,
+	TOWN_MTFCC,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import { DEFAULT_DISPLAY_COUNT } from '~/constants/display';
@@ -77,7 +78,7 @@ export default async function Page({
 
 	const cityPlaces = isDistrict
 		? []
-		: await getCityPlacesByCounty({ state: stateCode, countySlug: fullSlug });
+		: await getCountyChildPlaces({ state: stateCode, countySlug: fullSlug });
 
 	if (!countyPlace && !isDistrict) {
 		if (placeData?.mtfcc && placeData.mtfcc !== COUNTY_MTFCC) {
@@ -91,11 +92,15 @@ export default async function Page({
 		: (normalizedCounty?.displayName ?? countyPlace!.name);
 	const cities = isDistrict
 		? []
-		: cityPlaces.map(c => ({
-				name: c.name,
-				href: `/elections/${fullSlug}/${c.slug.split('/').pop() ?? c.name.toLowerCase().replace(/\s+/g, '-')}`,
-				level: 'city' as const,
-			}));
+		: cityPlaces.map(c => {
+				const level: 'town' | 'city' = c.mtfcc === TOWN_MTFCC ? 'town' : 'city';
+				return {
+					name: c.name,
+					href: `/elections/${fullSlug}/${c.slug?.split('/')?.pop() ?? c.name.toLowerCase().replace(/\s+/g, '-')}`,
+					level,
+				};
+			});
+	const hasTownEntries = cityPlaces.some(c => c.mtfcc === TOWN_MTFCC);
 
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
@@ -179,7 +184,7 @@ export default async function Page({
 					stateSlug={fullSlug}
 					elections={cities}
 					header={{
-						title: `Cities in ${normalizedCounty?.displayName ?? countyPlace!.name}`,
+						title: `${hasTownEntries ? 'Cities & Towns' : 'Cities'} in ${normalizedCounty?.displayName ?? countyPlace!.name}`,
 						copy: `Browse elections by city in ${normalizedCounty?.displayName ?? countyPlace!.name}, ${stateName}.`,
 						backgroundColor: 'midnight',
 					}}

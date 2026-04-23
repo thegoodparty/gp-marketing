@@ -40,6 +40,7 @@ import {component_profileContentBlock} from './component_profileContentBlock.ts'
 import {component_listOfOfficesBlock} from './component_listOfOfficesBlock.ts'
 import {component_embeddedBlock} from './component_embeddedBlock.ts'
 import {component_teamValuesBlock} from './component_teamValuesBlock.ts'
+import {component_usMapBlock} from './component_usMapBlock.ts'
 
 export const componentSchema = [
 	component_jobOpeningsBlock,
@@ -83,5 +84,6 @@ export const componentSchema = [
 	component_profileContentBlock,
 	component_listOfOfficesBlock,
 	component_embeddedBlock,
-	component_teamValuesBlock
+	component_teamValuesBlock,
+	component_usMapBlock,
 ];

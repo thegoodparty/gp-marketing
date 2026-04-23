@@ -146,6 +146,9 @@ import { officeItem } from './officeItem.ts';
 import { teamValuesCard } from './teamValuesCard.ts';
 import { teamValuesBlockContent } from './teamValuesBlockContent.ts';
 import { teamValuesBlockDesignSettings } from './teamValuesBlockDesignSettings.ts';
+import { usMapStateItem } from './usMapStateItem.ts';
+import { usMapBlockContent } from './usMapBlockContent.ts';
+import { usMapBlockDesignSettings } from './usMapBlockDesignSettings.ts';
 
 export const groupSchema = [
 	calculatorTextBlockDesignSettings,
@@ -296,4 +299,7 @@ export const groupSchema = [
 	teamValuesCard,
 	teamValuesBlockContent,
 	teamValuesBlockDesignSettings,
+	usMapStateItem,
+	usMapBlockContent,
+	usMapBlockDesignSettings,
 ];

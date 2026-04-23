@@ -109,6 +109,12 @@ import { field_heroImageSize } from './field_heroImageSize.ts';
 import { field_slug } from './field_slug.ts';
 import { field_aspectRatio } from './field_aspectRatio.ts';
 import { field_textSize } from './field_textSize.ts';
+import { field_stateCode } from './field_stateCode.ts';
+import { field_mapStateColor } from './field_mapStateColor.ts';
+import { field_hoverTitle } from './field_hoverTitle.ts';
+import { field_hoverDescription } from './field_hoverDescription.ts';
+import { field_hoverStat } from './field_hoverStat.ts';
+import { field_defaultStateColor } from './field_defaultStateColor.ts';
 
 export const fieldSchema = [
 	field_aspectRatio,
@@ -222,4 +228,10 @@ export const fieldSchema = [
 	field_heroImageSize,
 	field_slug,
 	field_textSize,
+	field_stateCode,
+	field_mapStateColor,
+	field_hoverTitle,
+	field_hoverDescription,
+	field_hoverStat,
+	field_defaultStateColor,
 ];

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
 import type { PlaceItem } from '~/types/elections';
-import { getCountyChildPlaces } from './electionsApi';
+import { getCountyChildPlaces, isStateIndexDistrictPlace } from './electionsApi';
 
 type FetchMockResponse = {
 	match: (url: string) => boolean;
@@ -205,5 +205,85 @@ describe('getCountyChildPlaces', () => {
 
 		const result = await getCountyChildPlaces({ state: 'WV', countySlug: 'wv/braxton-county' });
 		expect(slugs(result)).toEqual(['wv/sutton', 'wv/gassaway']);
+	});
+
+	test('falls back to town records for Maine counties when G4110 city payload is sparse', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('slug=me%2Fandroscoggin-county'),
+				body: [
+					{
+						slug: 'me/androscoggin-county',
+						name: 'Androscoggin County',
+						mtfcc: 'G4020',
+						// Mirrors the real ME payload shape where hierarchy can be incomplete.
+						children: [],
+					},
+				],
+			},
+			{
+				match: url =>
+					url.includes('/v1/places?') &&
+					url.includes('state=ME') &&
+					url.includes('mtfcc=G4110'),
+				body: [],
+			},
+			{
+				match: url =>
+					url.includes('/v1/places?') &&
+					url.includes('state=ME') &&
+					url.includes('mtfcc=G4040'),
+				body: [
+					{
+						slug: 'me/androscoggin-county/lisbon-town',
+						name: 'Lisbon Town',
+						mtfcc: 'G4040',
+						state: 'ME',
+						countyName: 'Androscoggin',
+					},
+					{
+						slug: 'me/androscoggin-county/sabattus-town',
+						name: 'Sabattus Town',
+						mtfcc: 'G4040',
+						state: 'ME',
+						countyName: 'Androscoggin',
+					},
+				],
+			},
+		]);
+
+		const result = await getCountyChildPlaces({ state: 'ME', countySlug: 'me/androscoggin-county' });
+		expect(slugs(result)).toEqual([
+			'me/androscoggin-county/lisbon-town',
+			'me/androscoggin-county/sabattus-town',
+		]);
+	});
+});
+
+describe('isStateIndexDistrictPlace', () => {
+	test('filters out municipality-like G54xx rows while preserving district-shaped rows', () => {
+		expect(
+			isStateIndexDistrictPlace({
+				name: 'Acton',
+				slug: 'me/acton',
+				mtfcc: 'G5420',
+			}),
+		).toBe(false);
+
+		expect(
+			isStateIndexDistrictPlace({
+				name: 'Andover Public Schools',
+				slug: 'me/andover-public-schools',
+				mtfcc: 'G5420',
+			}),
+		).toBe(true);
+
+		expect(
+			isStateIndexDistrictPlace({
+				name: 'RSU 16',
+				slug: 'me/rsu-16',
+				mtfcc: 'G5420',
+			}),
+		).toBe(true);
 	});
 });

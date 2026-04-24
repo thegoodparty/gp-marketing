@@ -36,6 +36,28 @@ export function isDistrictMtfcc(mtfcc?: string): boolean {
 	return mtfcc?.startsWith('G54') ?? false;
 }
 
+const COUNTY_EQUIVALENT_SLUG_SUFFIX_RE =
+	/(?:-county|-parish|-borough|-census-area|-municipio|-city-and-borough|-city-and-county)$/i;
+
+const DISTRICT_KEYWORD_RE = /\b(district|school|schools|isd|usd|csd|sd|rsu|sau)\b/i;
+
+/**
+ * Defensively classify district entries for the state-level index.
+ * Some API payloads (notably Maine) include municipality-like slugs under G54xx.
+ * We only keep records that look district-shaped by slug depth or district keywords.
+ */
+export function isStateIndexDistrictPlace(place: Pick<PlaceItem, 'name' | 'slug' | 'mtfcc'>): boolean {
+	if (!isDistrictMtfcc(place.mtfcc)) return false;
+	const slug = (place.slug ?? '').toLowerCase();
+	const name = (place.name ?? '').toLowerCase();
+	const segments = slug.split('/').filter(Boolean);
+	const tail = segments[segments.length - 1] ?? '';
+
+	if (segments.length >= 3) return true;
+	if (COUNTY_EQUIVALENT_SLUG_SUFFIX_RE.test(tail)) return true;
+	return DISTRICT_KEYWORD_RE.test(name) || DISTRICT_KEYWORD_RE.test(tail);
+}
+
 const FETCH_JSON_MAX_RETRIES = 2;
 
 function sleep(ms: number): Promise<void> {
@@ -224,10 +246,13 @@ export async function getCityPlacesByCounty(params: {
 	state: string;
 	countySlug: string;
 }): Promise<PlaceItem[]> {
-	const allCities = await getPlacesByState({ state: params.state, mtfcc: CITY_MTFCC });
+	const [allCities, allTowns] = await Promise.all([
+		getPlacesByState({ state: params.state, mtfcc: CITY_MTFCC }),
+		getPlacesByState({ state: params.state, mtfcc: TOWN_MTFCC }),
+	]);
 	const countyName = countyNameFromSlug(params.countySlug);
 	const normalizedCountyBaseName = canonicalizeCountyEquivalentName(params.state, countyName).baseName;
-	return allCities.filter(
+	return [...allCities, ...allTowns].filter(
 		p =>
 			normalizeName(canonicalizeCountyEquivalentName(params.state, p.countyName ?? '').baseName) ===
 			normalizeName(normalizedCountyBaseName),

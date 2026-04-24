@@ -49,8 +49,11 @@ function whenAmplitudeScriptProvidesGlobal(
 	script: HTMLScriptElement,
 	onReady: () => void,
 ): (() => void) | undefined {
+	let called = false;
 	const tryBoot = () => {
+		if (called) return true;
 		if (!window.amplitude) return false;
+		called = true;
 		onReady();
 		return true;
 	};

@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 
 const AMPLITUDE_API_KEY = process.env['NEXT_PUBLIC_AMPLITUDE_API_KEY'];
 const EXTERNAL_AMPLITUDE_WAIT_MS = 1_500;
+const AMPLITUDE_CDN_WAIT_MS = 10_000;
 
 function getAmplitudeState() {
 	if (typeof window === 'undefined') return undefined;
@@ -13,6 +14,13 @@ function getAmplitudeState() {
 
 function markAmplitudeReady() {
 	window.dispatchEvent(new Event('experiment:ready'));
+}
+
+function markAmplitudeUnavailable(message: string) {
+	const state = getAmplitudeState();
+	if (state) state.scriptInjected = false;
+	console.warn(message);
+	markAmplitudeReady();
 }
 
 function adoptExternalAmplitude() {
@@ -48,36 +56,60 @@ function findInjectedAmplitudeScript(apiKey: string) {
 function whenAmplitudeScriptProvidesGlobal(
 	script: HTMLScriptElement,
 	onReady: () => void,
+	onUnavailable: (message: string) => void,
 ): (() => void) | undefined {
-	let called = false;
+	if (window.amplitude) {
+		onReady();
+		return undefined;
+	}
+
+	let completed = false;
+
+	const cleanup = () => {
+		script.removeEventListener('load', handleLoad);
+		script.removeEventListener('error', handleError);
+		window.clearInterval(pollId);
+	};
+
 	const tryBoot = () => {
-		if (called) return true;
+		if (completed) return true;
 		if (!window.amplitude) return false;
-		called = true;
+		completed = true;
+		cleanup();
 		onReady();
 		return true;
 	};
 
-	if (tryBoot()) return undefined;
-
-	const run = () => {
+	function handleLoad() {
 		void tryBoot();
-	};
+	}
 
-	script.addEventListener('load', run, { once: true });
-	script.addEventListener('error', run, { once: true });
-	void queueMicrotask(run);
-	requestAnimationFrame(run);
+	function handleError() {
+		if (completed) return;
+		completed = true;
+		cleanup();
+		script.remove();
+		onUnavailable('[Amplitude] CDN script failed to load');
+	}
+
+	script.addEventListener('load', handleLoad);
+	script.addEventListener('error', handleError);
+	void queueMicrotask(handleLoad);
+	requestAnimationFrame(handleLoad);
 
 	const started = performance.now();
 	const pollId = window.setInterval(() => {
-		if (tryBoot() || performance.now() - started > 10_000) {
-			window.clearInterval(pollId);
+		if (tryBoot()) return;
+		if (performance.now() - started > AMPLITUDE_CDN_WAIT_MS) {
+			completed = true;
+			cleanup();
+			script.remove();
+			onUnavailable('[Amplitude] CDN script did not provide window.amplitude');
 		}
 	}, 100);
 
 	return () => {
-		window.clearInterval(pollId);
+		cleanup();
 	};
 }
 
@@ -112,6 +144,7 @@ export function Amplitude() {
 				stopWaitingForScript = whenAmplitudeScriptProvidesGlobal(
 					existing,
 					state.scriptInjected ? bootAppAmplitude : adoptExternalAmplitude,
+					markAmplitudeUnavailable,
 				);
 				return;
 			}
@@ -121,7 +154,11 @@ export function Amplitude() {
 			script.src = `https://cdn.amplitude.com/script/${AMPLITUDE_API_KEY}.js`;
 			script.async = true;
 			document.head.appendChild(script);
-			stopWaitingForScript = whenAmplitudeScriptProvidesGlobal(script, bootAppAmplitude);
+			stopWaitingForScript = whenAmplitudeScriptProvidesGlobal(
+				script,
+				bootAppAmplitude,
+				markAmplitudeUnavailable,
+			);
 		}, EXTERNAL_AMPLITUDE_WAIT_MS);
 
 		return () => {

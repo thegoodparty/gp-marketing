@@ -31,6 +31,7 @@ import {list_pricingPlans} from './list_pricingPlans.ts'
 import {list_collectionFaQs} from './list_collectionFaQs.ts'
 import {list_officeItems} from './list_officeItems.ts'
 import {list_teamValuesCards} from './list_teamValuesCards.ts'
+import {list_usMapStateItems} from './list_usMapStateItems.ts'
 
 export const listSchema = [
 list_footerLegalNavigation,
@@ -65,5 +66,6 @@ list_socialChannels,
 list_pricingPlans,
 	list_collectionFaQs,
 	list_officeItems,
-	list_teamValuesCards
+	list_teamValuesCards,
+	list_usMapStateItems,
 ];

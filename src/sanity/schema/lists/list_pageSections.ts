@@ -134,6 +134,13 @@ export const list_pageSections = {
           ],
         },
         {
+          name: 'map',
+          title: 'Map',
+          of: [
+            'component_usMapBlock',
+          ],
+        },
+        {
           name: 'cta',
           title: 'CTA',
           of: [
@@ -326,6 +333,10 @@ export const list_pageSections = {
     {
       title: 'Team Values Block',
       type: 'component_teamValuesBlock',
+    },
+    {
+      title: 'US Map Block',
+      type: 'component_usMapBlock',
     },
   ],
 }

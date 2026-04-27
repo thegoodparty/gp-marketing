@@ -20,7 +20,7 @@ export function ElectionsSearchHeroSection(section: Extract<Sections, { _type: '
 				backgroundImage={section.electionsSearchHeroDesignSettings?.img_backgroundImage}
 				backgroundColor={
 					section.electionsSearchHeroDesignSettings?.field_backgroundColor
-						? stegaClean(section.electionsSearchHeroDesignSettings.field_backgroundColor) as 'cream' | 'midnight'
+						? stegaClean(section.electionsSearchHeroDesignSettings.field_backgroundColor)
 						: undefined
 				}
 				states={US_STATES}

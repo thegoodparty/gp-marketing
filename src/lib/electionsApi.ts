@@ -15,7 +15,7 @@ import { canonicalizeCountyEquivalentName } from '~/lib/electionsHelpers';
 const BASE_URL =
 	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
 
-const CACHE_OPTIONS = { next: { revalidate: 3600 } } as RequestInit;
+const CACHE_OPTIONS = { next: { revalidate: 3600 } } satisfies RequestInit;
 
 /** MTFCC for county / county-equivalent places (e.g. District of Columbia). */
 export const COUNTY_MTFCC = 'G4020';
@@ -38,7 +38,7 @@ export function isDistrictMtfcc(mtfcc?: string): boolean {
 
 const FETCH_JSON_MAX_RETRIES = 2;
 
-function sleep(ms: number): Promise<void> {
+async function sleep(ms: number): Promise<void> {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 

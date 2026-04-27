@@ -1,8 +1,8 @@
-import type {StructureBuilder} from "sanity/structure";
-import {getIcon} from "../utils/getIcon.tsx";
-import type {ComponentType, ReactNode} from "react";
-import type {Divider, ListItem, ListItemBuilder} from "sanity/structure";
-import {sites} from "../../../sites.ts";
+import type {StructureBuilder} from 'sanity/structure';
+import {getIcon} from '../utils/getIcon.tsx';
+import type {ComponentType, ReactNode} from 'react';
+import type {Divider, ListItem, ListItemBuilder} from 'sanity/structure';
+import {sites} from '../../../sites.ts';
 
 export function defaultStructure(S: StructureBuilder) {
 
@@ -42,8 +42,8 @@ export function defaultStructure(S: StructureBuilder) {
   }
 
   return S.list({
-    id: "__root__",
-    title: "Content",
+    id: '__root__',
+    title: 'Content',
     items: [
       group({
         id: 'goodpartyOrg',

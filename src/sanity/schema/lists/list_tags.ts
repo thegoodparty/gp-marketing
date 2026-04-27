@@ -15,7 +15,7 @@ export const list_tags = {
         type: 'categories',
       },
       options: {
-        filter: (ctx) => ({           filter: "!(_id in $existing)",           params: {             existing: ctx.parent.flatMap((i) => ("_ref" in i) ? i._ref : [])           }         }),
+        filter: (ctx) => ({           filter: '!(_id in $existing)',           params: {             existing: ctx.parent.flatMap((i) => ('_ref' in i) ? i._ref : [])           }         }),
       },
     },
     {
@@ -25,7 +25,7 @@ export const list_tags = {
         type: 'topics',
       },
       options: {
-        filter: (ctx) => ({           filter: "!(_id in $existing)",           params: {             existing: ctx.parent.flatMap((i) => ("_ref" in i) ? i._ref : [])           }         }),
+        filter: (ctx) => ({           filter: '!(_id in $existing)',           params: {             existing: ctx.parent.flatMap((i) => ('_ref' in i) ? i._ref : [])           }         }),
       },
     },
   ],

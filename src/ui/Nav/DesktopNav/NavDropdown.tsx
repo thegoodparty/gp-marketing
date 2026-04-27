@@ -72,7 +72,7 @@ export function NavDropdown(
 
 function NavDropdownContent(
 	props: NavDropdownProps & {
-		onClick: () => void;
+		onClick(): void;
 		navState: NavDropdownState;
 		index: number;
 	},
@@ -133,7 +133,9 @@ function NavDropdownContent(
 							<NavGroupItem
 								key={`dropdown-item-${item.label?.toString().slice(0, 1)}-${String(index)}`}
 								{...item}
-								onClick={props.onClick}
+								onClick={() => {
+									props.onClick();
+								}}
 							/>
 						))}
 					</div>

@@ -17,7 +17,7 @@ export function resolvePricingPlans(plans?: PricingPlan[]): PricingCardProps[] {
 			hideIcon: Boolean(plan.pricingPlanOverview?.hideGoodPartyHeartIcon),
 			listTitle: plan.pricingPlanFeatures?.field_featureListTitle,
 			list: plan.pricingPlanFeatures?.list_pricingPlanFeatureListItems?.map(item => (
-				<RichData value={item.block_pricingPlanFeatureItemText} />
+				<RichData key={item._key} value={item.block_pricingPlanFeatureItemText} />
 			)),
 			button: transformButtons([plan.pricingPlanCta?.ctaActionWithShared as unknown as ButtonType])?.[0],
 		})) ?? []

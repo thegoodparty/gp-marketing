@@ -25,7 +25,7 @@ export function ShareLinks() {
 	};
 
 	function copyUrlToClipboard() {
-		if (navigator.clipboard) navigator.clipboard.writeText(pageUrl);
+		if (navigator.clipboard) void navigator.clipboard.writeText(pageUrl);
 	}
 
 	return (

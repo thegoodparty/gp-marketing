@@ -50,7 +50,7 @@ export default async function Page() {
 					})
 					.filter(Boolean)}
 			/>
-			{page.glossaryPageCta && page.glossaryPageCta.ref_sharedCta?.overview?.field_title && (
+			{page.glossaryPageCta?.ref_sharedCta?.overview?.field_title && (
 				<CTAImageBlock
 					className='py-(--container-padding)'
 					color={resolveComponentColor(page.glossaryPageCta.field_componentColor6ColorsInverse)}

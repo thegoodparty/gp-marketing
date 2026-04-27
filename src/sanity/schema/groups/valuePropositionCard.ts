@@ -1,6 +1,6 @@
-import {resolveValue} from "../../utils/resolveValue.ts";
-import {handleReplacements} from "../../utils/handleReplacements.ts";
-import {getIcon} from "../../utils/getIcon.tsx";
+import {resolveValue} from '../../utils/resolveValue.ts';
+import {handleReplacements} from '../../utils/handleReplacements.ts';
+import {getIcon} from '../../utils/getIcon.tsx';
 
 export const valuePropositionCard = {
   title: 'Value Proposition Card',
@@ -44,6 +44,6 @@ const infer = {
       icon: getIcon('WatsonHealthStackedScrolling_1'),
       fallback: {},
     }
-         const title = resolveValue("title", valuePropositionCard.preview.select, x);         const subtitle = resolveValue("subtitle", valuePropositionCard.preview.select, x);         const media = resolveValue("media", valuePropositionCard.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback["title"],           media: media || infer.icon         }, x, infer.fallback);       },
+         const title = resolveValue('title', valuePropositionCard.preview.select, x);         const subtitle = resolveValue('subtitle', valuePropositionCard.preview.select, x);         const media = resolveValue('media', valuePropositionCard.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback['title'],           media: media || infer.icon         }, x, infer.fallback);       },
   },
 }

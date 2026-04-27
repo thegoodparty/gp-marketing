@@ -52,7 +52,7 @@ export async function FeaturedCitiesBlockSection(section: Extract<Sections, { _t
 	const apiCities = await getMostElections(3);
 	const resolvedHrefs =
 		apiCities.length > 0
-			? await Promise.all(apiCities.map(c => resolveCityHref(c.slug)))
+			? await Promise.all(apiCities.map(async c => resolveCityHref(c.slug)))
 			: [];
 	const locationCards: LocationCardProps[] =
 		apiCities.length > 0

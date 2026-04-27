@@ -1,6 +1,6 @@
-import {resolveValue} from "../../utils/resolveValue.ts";
-import {handleReplacements} from "../../utils/handleReplacements.ts";
-import {getIcon} from "../../utils/getIcon.tsx";
+import {resolveValue} from '../../utils/resolveValue.ts';
+import {handleReplacements} from '../../utils/handleReplacements.ts';
+import {getIcon} from '../../utils/getIcon.tsx';
 
 export const customFeatureWithImage = {
   title: 'Custom Feature With Image',
@@ -56,6 +56,6 @@ const infer = {
         title: 'Custom Feature With Image',
       },
     }
-         const title = resolveValue("title", customFeatureWithImage.preview.select, x);         const subtitle = resolveValue("subtitle", customFeatureWithImage.preview.select, x);         const media = resolveValue("media", customFeatureWithImage.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback["title"],           media: media || infer.icon         }, x, infer.fallback);       },
+         const title = resolveValue('title', customFeatureWithImage.preview.select, x);         const subtitle = resolveValue('subtitle', customFeatureWithImage.preview.select, x);         const media = resolveValue('media', customFeatureWithImage.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback['title'],           media: media || infer.icon         }, x, infer.fallback);       },
   },
 }

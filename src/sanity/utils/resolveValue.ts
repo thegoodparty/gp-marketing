@@ -1,10 +1,10 @@
 export function resolveValue(
-  type: "title" | "subtitle" | "media",
+  type: 'title' | 'subtitle' | 'media',
   select: Record<any, any>,
   value: unknown,
 ) {
-  if (type === "title") {
-    if (!("title1" in select)) {
+  if (type === 'title') {
+    if (!('title1' in select)) {
       return value?.['title'];
     }
     return (
@@ -16,8 +16,8 @@ export function resolveValue(
       value?.['title5']
     );
   }
-  if (type === "subtitle") {
-    if (!("subtitle1" in select)) {
+  if (type === 'subtitle') {
+    if (!('subtitle1' in select)) {
       return value?.['subtitle'];
     }
     return (
@@ -29,8 +29,8 @@ export function resolveValue(
       value?.['subtitle5']
     );
   }
-  if (type === "media") {
-    if (!("media1" in select)) {
+  if (type === 'media') {
+    if (!('media1' in select)) {
       return value?.['media'];
     }
     return (

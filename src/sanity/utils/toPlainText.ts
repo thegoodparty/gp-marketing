@@ -1,1 +1,1 @@
-export { toPlainText } from "@portabletext/toolkit";
+export { toPlainText } from '@portabletext/toolkit';

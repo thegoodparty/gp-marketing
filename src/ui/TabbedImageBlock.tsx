@@ -120,11 +120,12 @@ export function TabbedImageBlock(props: TabbedImageBlockProps) {
 
 type ProgressBarProps = {
 	active: boolean;
-	setNextActiveItem: () => void;
+	setNextActiveItem(): void;
 	backgroundColor: 'cream' | 'midnight';
 };
 
-export function ProgressBar({ active, setNextActiveItem, backgroundColor }: ProgressBarProps) {
+export function ProgressBar(props: ProgressBarProps) {
+	const { active, backgroundColor } = props;
 	return (
 		<div className={`h-full w-1 rounded ${backgroundColor === 'cream' ? 'bg-black/10' : 'bg-white/10'} overflow-hidden`}>
 			<motion.div
@@ -137,7 +138,7 @@ export function ProgressBar({ active, setNextActiveItem, backgroundColor }: Prog
 				}}
 				onAnimationComplete={e => {
 					if (e?.['scaleY'] === 1) {
-						setNextActiveItem();
+						props.setNextActiveItem();
 					}
 				}}
 				style={{ transformOrigin: 'top' }}

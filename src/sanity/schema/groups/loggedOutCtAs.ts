@@ -1,6 +1,6 @@
-import {resolveValue} from "../../utils/resolveValue.ts";
-import {handleReplacements} from "../../utils/handleReplacements.ts";
-import {getIcon} from "../../utils/getIcon.tsx";
+import {resolveValue} from '../../utils/resolveValue.ts';
+import {handleReplacements} from '../../utils/handleReplacements.ts';
+import {getIcon} from '../../utils/getIcon.tsx';
 
 export const loggedOutCtAs = {
   title: 'Logged Out CTAs',
@@ -36,6 +36,6 @@ const infer = {
       icon: getIcon('Rocket'),
       fallback: {},
     }
-           const vtype = x.type;           const title = resolveValue("title", loggedOutCtAs.preview.select, x);           const subtitle = resolveValue("subtitle", loggedOutCtAs.preview.select, x);           const media = resolveValue("media", loggedOutCtAs.preview.select, x);           const restitle = vtype in x ? x[vtype] : title;           return handleReplacements({             title: infer.singletonTitle || restitle || infer.name,             subtitle: subtitle ? subtitle : infer.fallback["title"],             media: media || infer.icon           }, x, infer.fallback);         },
+           const vtype = x.type;           const title = resolveValue('title', loggedOutCtAs.preview.select, x);           const subtitle = resolveValue('subtitle', loggedOutCtAs.preview.select, x);           const media = resolveValue('media', loggedOutCtAs.preview.select, x);           const restitle = vtype in x ? x[vtype] : title;           return handleReplacements({             title: infer.singletonTitle || restitle || infer.name,             subtitle: subtitle ? subtitle : infer.fallback['title'],             media: media || infer.icon           }, x, infer.fallback);         },
   },
 }

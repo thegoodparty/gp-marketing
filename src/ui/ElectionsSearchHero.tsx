@@ -67,8 +67,8 @@ export type ElectionsSearchHeroProps = {
 	backgroundColor?: (typeof backgroundTypeValues)[number];
 	states?: StateOption[];
 	defaultStateValue?: string;
-	onStateChange?: (stateValue: string) => void;
-	onSearch?: (stateValue: string) => void;
+	onStateChange?(stateValue: string): void;
+	onSearch?(stateValue: string): void;
 };
 
 export function ElectionsSearchHero(props: ElectionsSearchHeroProps) {
@@ -102,7 +102,7 @@ export function ElectionsSearchHero(props: ElectionsSearchHeroProps) {
 								src={backgroundImage}
 								alt=""
 								aria-hidden="true"
-								className={cn("h-full w-full object-cover")}
+								className={cn('h-full w-full object-cover')}
 							/>
 						) : (
 							<Media image={backgroundImage} objectFit='cover' />

@@ -33,6 +33,9 @@ export function resolveButtonHref(button: ButtonType): string | undefined {
 	const action = stegaClean(button.action);
 
 	switch (action) {
+		case null:
+		case 'Reference':
+			return undefined;
 		case 'Internal':
 		case 'Contact':
 			return button.link && 'href' in button.link ? (button.link.href as string | undefined) ?? undefined : undefined;
@@ -56,6 +59,9 @@ export function transformButton(button: ButtonType): ComponentButtonProps | unde
 	const href = resolveButtonHref(button);
 
 	switch (action) {
+		case null:
+		case 'Reference':
+			return undefined;
 		case 'Internal':
 			if (!href) return undefined;
 			return {

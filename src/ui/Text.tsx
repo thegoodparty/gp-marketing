@@ -122,7 +122,7 @@ export const Text = forwardRef(function TextInner<E extends ElementType = 'div'>
 	{ as, styleType, className, hasParagraphs = false, children, ...props }: TextProps<E>,
 	ref: PolymorphicRef<E>,
 ): ReactElement {
-	const El = (as ?? 'div') as ElementType;
+	const El = (as ?? 'div');
 	const { base } = styles({ hasParagraphs, type: styleType });
 
 	return (

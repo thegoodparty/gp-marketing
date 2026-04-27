@@ -50,29 +50,26 @@ export function IconPicker(props: StringInputProps) {
 
 								<Container>
 									<Box marginTop={4}>
-										<TabList
-											space={2}
-											children={[
+										<TabList space={2}>
+											<Tab
+												key={'all'}
+												aria-controls={'all'}
+												id={'all' + 'Tab'}
+												label={'All'}
+												onClick={() => setId(undefined)}
+												selected={id === undefined}
+											/>
+											{lucideCategories.map(c => (
 												<Tab
-													key={'all'}
-													aria-controls={'all'}
-													id={'all' + 'Tab'}
-													label={'All'}
-													onClick={() => setId(undefined)}
-													selected={id === undefined}
-												/>,
-												lucideCategories.map(c => (
-													<Tab
-														key={c.name}
-														aria-controls={c.name}
-														id={`${c.name}Tab`}
-														label={c.title}
-														onClick={() => setId(c.name)}
-														selected={id === c.name}
-													/>
-												)),
-											].flat()}
-										/>
+													key={c.name}
+													aria-controls={c.name}
+													id={`${c.name}Tab`}
+													label={c.title}
+													onClick={() => setId(c.name)}
+													selected={id === c.name}
+												/>
+											))}
+										</TabList>
 
 										{lucideCategories.map(c => {
 											if (typeof id === 'string' && id !== c.name) {
@@ -118,7 +115,7 @@ export function IconPicker(props: StringInputProps) {
 	);
 }
 
-function CategoryPanel(props: { name: string; members: string[]; setIcon: (icon: string) => void }) {
+function CategoryPanel(props: { name: string; members: string[]; setIcon(icon: string): void }) {
 	return useMemo(
 		() => (
 			<TabPanel aria-labelledby={props.name} id={`${props.name}Panel`}>
@@ -132,6 +129,7 @@ function CategoryPanel(props: { name: string; members: string[]; setIcon: (icon:
 				))}
 			</TabPanel>
 		),
+		// eslint-disable-next-line @typescript-eslint/unbound-method -- callback identity tracked for memoization
 		[props.name, props.members, props.setIcon],
 	);
 }
@@ -302,7 +300,7 @@ export function ImgIcon(props: { name: string }) {
 	return <div ref={ref}>{isInView ? content : null}</div>;
 }
 
-function Current(props: { name: string; onClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void }) {
+function Current(props: { name: string; onClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>): void }) {
 	return (
 		<>
 			<Tooltip
@@ -323,7 +321,11 @@ function Current(props: { name: string; onClick: (event: React.MouseEvent<HTMLDi
 				placement='top'
 				portal
 			>
-				<IconInline onClick={props.onClick}>
+				<IconInline
+					onClick={event => {
+						props.onClick(event);
+					}}
+				>
 					<ImgIcon name={props.name} />
 				</IconInline>
 			</Tooltip>
@@ -331,9 +333,9 @@ function Current(props: { name: string; onClick: (event: React.MouseEvent<HTMLDi
 	);
 }
 
-function SearchedIcon(props: { name: string; setIcon: () => void }) {
-	return useMemo(() => {
-		return (
+function SearchedIcon(props: { name: string; setIcon(): void }) {
+	return useMemo(
+		() => (
 			<Tooltip
 				animate
 				padding={0}
@@ -352,8 +354,10 @@ function SearchedIcon(props: { name: string; setIcon: () => void }) {
 					<ImgIcon name={props.name} />
 				</BigInline>
 			</Tooltip>
-		);
-	}, [props.setIcon, props.name]);
+		),
+		// eslint-disable-next-line @typescript-eslint/unbound-method -- callback identity tracked for memoization
+		[props.setIcon, props.name],
+	);
 }
 
 export function IconWrapper({ code, ...props }) {

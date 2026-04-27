@@ -9,7 +9,7 @@ import { StructureMetaData } from '~/components/StructureMetadata';
 import { resolveVariant } from '~/lib/experimentServer';
 import { ExperimentExposureTracker } from '~/experiments/ExperimentExposureTracker';
 
-const EXPERIMENT_FLAG_KEY = 'home_hero_layout_test';
+const EXPERIMENT_FLAG_KEY = 'home_claude_layout_test';
 
 export default async function Page() {
 	const page = await sanityFetch({ query: goodpartyOrg_homeQuery, tags: ['goodpartyOrg_home'] });
@@ -33,7 +33,7 @@ async function ExperimentResolver(props: {
 }) {
 	const variant = await resolveVariant(props.flagKey);
 
-	if (!variant || variant === 'control') {
+	if (!variant || variant === 'control' || variant === 'off') {
 		return <PageSections pageSections={props.controlSections} />;
 	}
 
@@ -57,7 +57,7 @@ async function ExperimentResolver(props: {
 	);
 }
 
-export async function generateMetadata(props: Params, parent: ResolvingMetadata) {
+export async function generateMetadata(_props: Params, parent: ResolvingMetadata) {
 	const parentMetadata = await parent;
 	const page = await sanityFetch({ query: goodpartyOrg_homeQuery, tags: ['goodpartyOrg_home'] });
 

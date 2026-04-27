@@ -39,18 +39,31 @@ export async function getAmplitudeDeviceId(): Promise<string | null> {
 	return parsed.device_id ?? null;
 }
 
-export async function resolveVariant(flagKey: string): Promise<string | null> {
+export async function resolveVariants(flagKeys: string[]): Promise<Record<string, string | null>> {
 	try {
 		const client = await getClient();
-		if (!client) return null;
+		if (!client) return {};
 
 		const deviceId = await getAmplitudeDeviceId();
-		if (!deviceId) return null;
+		if (!deviceId) return {};
 
-		const variants = await client.fetchV2({ device_id: deviceId }, { flagKeys: [flagKey] });
-		const variant = variants[flagKey];
-		return variant?.value ?? variant?.key ?? null;
+		const uniqueKeys = [...new Set(flagKeys)].filter(Boolean);
+		if (uniqueKeys.length === 0) return {};
+
+		const variants = await client.fetchV2({ device_id: deviceId }, { flagKeys: uniqueKeys });
+
+		return Object.fromEntries(
+			uniqueKeys.map((key) => {
+				const v = variants[key];
+				return [key, v?.value ?? v?.key ?? null];
+			}),
+		) as Record<string, string | null>;
 	} catch {
-		return null;
+		return {};
 	}
+}
+
+export async function resolveVariant(flagKey: string): Promise<string | null> {
+	const result = await resolveVariants([flagKey]);
+	return result[flagKey] ?? null;
 }

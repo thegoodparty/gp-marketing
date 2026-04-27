@@ -25,6 +25,54 @@ export const experiment_variant = {
       group: 'experimentSettings',
     },
     {
+      title: 'Target Pages',
+      name: 'field_targetPages',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [
+            { type: 'goodpartyOrg_home' },
+            { type: 'goodpartyOrg_landingPages' },
+            { type: 'goodpartyOrg_contact' },
+            { type: 'goodpartyOrg_glossary' },
+            { type: 'goodpartyOrg_allArticles' },
+          ],
+        },
+      ],
+      description:
+        'Pages where this experiment variant is active. Uses references to prevent typos.',
+      validation: (Rule: any) => Rule.required().min(1),
+      group: 'experimentSettings',
+    },
+    {
+      title: 'Status',
+      name: 'field_status',
+      type: 'string',
+      initialValue: 'draft',
+      options: {
+        list: [
+          { title: 'Draft', value: 'draft' },
+          { title: 'Running', value: 'running' },
+          { title: 'Ended', value: 'ended' },
+        ],
+        layout: 'radio',
+      },
+      description: 'Only Running experiments are resolved at runtime.',
+      validation: (Rule: any) => Rule.required(),
+      group: 'experimentSettings',
+    },
+    {
+      title: 'Priority',
+      name: 'field_priority',
+      type: 'number',
+      initialValue: 100,
+      description:
+        'Lower numbers take precedence. When multiple experiments target the same page, the lowest priority number wins.',
+      validation: (Rule: any) => Rule.required().integer().min(1).max(999),
+      group: 'experimentSettings',
+    },
+    {
       title: 'Page Sections',
       name: 'pageSections',
       type: 'pageSections',

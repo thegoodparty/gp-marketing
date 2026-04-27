@@ -177,6 +177,23 @@ export const goodpartyOrg_homeQuery = defineQuery(
 export const experiment_variantsByExperimentIdQuery = defineQuery(
 	`*[_type == "experiment_variant" && field_experimentId == $experimentId]{field_variantName,pageSections{...,list_pageSections[]{${sectionsGroq}}}}`,
 );
+/*language=textmate*/
+export const activeVariantsByPageIdQuery = defineQuery(`
+  *[
+    _type == "experiment_variant" &&
+    $pageId in field_targetPages[]._ref &&
+    field_status == "running"
+  ] | order(field_priority asc, _id asc) {
+    _id,
+    field_experimentId,
+    field_variantName,
+    field_priority,
+    pageSections{
+      ...,
+      list_pageSections[]{${sectionsGroq}}
+    }
+  }
+`);
 
 /*language=textmate*/
 export const goodpartyOrg_allArticlesQuery = defineQuery(

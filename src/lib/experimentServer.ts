@@ -1,5 +1,5 @@
 import 'server-only';
-import { Experiment } from '@amplitude/experiment-node-server';
+import { AmplitudeCookie, Experiment } from '@amplitude/experiment-node-server';
 import { cookies } from 'next/headers';
 
 const DEPLOYMENT_KEY = process.env['AMPLITUDE_EXPERIMENT_DEPLOYMENT_KEY'];
@@ -8,9 +8,7 @@ let clientPromise: ReturnType<typeof initClient> | null = null;
 
 async function initClient() {
 	if (!DEPLOYMENT_KEY) return null;
-	const client = Experiment.initializeLocal(DEPLOYMENT_KEY);
-	await client.start();
-	return client;
+	return Experiment.initializeRemote(DEPLOYMENT_KEY);
 }
 
 function getClient() {
@@ -29,26 +27,43 @@ export async function getAmplitudeDeviceId(): Promise<string | null> {
 	const raw = jar.get(cookieName)?.value;
 	if (!raw) return null;
 
+	// Next may URL-encode cookie values in Set-Cookie (e.g. '=' as '%3D'). Browsers usually
+	// send decoded values, but normalize so AmplitudeCookie.parse always receives raw base64.
+	let normalized = raw;
 	try {
-		const decoded = decodeURIComponent(raw);
-		const parsed = JSON.parse(decoded);
-		return typeof parsed.deviceId === 'string' ? parsed.deviceId : null;
+		normalized = decodeURIComponent(raw);
 	} catch {
-		return null;
+		normalized = raw;
+	}
+	const parsed = AmplitudeCookie.parse(normalized, true);
+	return parsed.device_id ?? null;
+}
+
+export async function resolveVariants(flagKeys: string[]): Promise<Record<string, string | null>> {
+	try {
+		const client = await getClient();
+		if (!client) return {};
+
+		const deviceId = await getAmplitudeDeviceId();
+		if (!deviceId) return {};
+
+		const uniqueKeys = [...new Set(flagKeys)].filter(Boolean);
+		if (uniqueKeys.length === 0) return {};
+
+		const variants = await client.fetchV2({ device_id: deviceId }, { flagKeys: uniqueKeys });
+
+		return Object.fromEntries(
+			uniqueKeys.map((key) => {
+				const v = variants[key];
+				return [key, v?.value ?? v?.key ?? null];
+			}),
+		) as Record<string, string | null>;
+	} catch {
+		return {};
 	}
 }
 
 export async function resolveVariant(flagKey: string): Promise<string | null> {
-	try {
-		const client = await getClient();
-		if (!client) return null;
-
-		const deviceId = await getAmplitudeDeviceId();
-		if (!deviceId) return null;
-
-		const variants = client.evaluateV2({ device_id: deviceId }, [flagKey]);
-		return variants[flagKey]?.value ?? null;
-	} catch {
-		return null;
-	}
+	const result = await resolveVariants([flagKey]);
+	return result[flagKey] ?? null;
 }

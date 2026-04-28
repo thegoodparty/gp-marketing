@@ -19,6 +19,7 @@
     "sanity:dev": "sanity dev",
     "sanity:extract": "sanity schema extract",
     "sanity:generate": "sanity typegen generate",
+    "sanity:backfill:experiments": "bun run scripts/backfill-experiment-variant-fields.ts",
     "sanity:start": "sanity start",
     "sanity:build": "sanity build",
     "sanity:deploy": "sanity deploy",

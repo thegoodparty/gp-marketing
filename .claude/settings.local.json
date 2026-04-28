@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Bash(claude mcp *)",
+      "WebFetch(domain:amplitude.com)",
+      "Bash(bunx tsc *)",
+      "Bash(node_modules/.bin/tsc --noEmit)",
+      "PowerShell(Get-Command bun -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-ChildItem \"$env:USERPROFILE\\\\.bun\\\\bin\\\\\" 2>&1 | Select-Object -First 10)",
+      "PowerShell($env:PATH -split ';' | Where-Object { $_ -ne '' } | Select-Object -First 30)",
+      "Bash(node --run sb:dev)",
+      "Bash(echo \"PID: $!\")",
+      "PowerShell(.\\\\scripts\\\\install-bun.ps1)",
+      "Bash(\"/c/Users/jack/.bun/bin/bun\" run *)",
+      "Bash(echo \"Started with PID: $!\")",
+      "Bash(\"/c/Users/jack/.bun/bin/bun\" install *)"
+    ]
+  }
+}

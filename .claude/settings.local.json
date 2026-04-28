@@ -21,7 +21,8 @@
       "mcp__Amplitude__create_experiment",
       "mcp__Amplitude__create_flags",
       "mcp__Sanity__query_documents",
-      "mcp__Sanity__create_documents_from_json"
+      "mcp__Sanity__create_documents_from_json",
+      "Bash(git checkout *)"
     ]
   }
 }

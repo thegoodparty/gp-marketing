@@ -16,7 +16,10 @@
       "PowerShell(.\\\\scripts\\\\install-bun.ps1)",
       "Bash(\"/c/Users/jack/.bun/bin/bun\" run *)",
       "Bash(echo \"Started with PID: $!\")",
-      "Bash(\"/c/Users/jack/.bun/bin/bun\" install *)"
+      "Bash(\"/c/Users/jack/.bun/bin/bun\" install *)",
+      "mcp__Amplitude__get_context",
+      "mcp__Amplitude__create_experiment",
+      "mcp__Amplitude__create_flags"
     ]
   }
 }

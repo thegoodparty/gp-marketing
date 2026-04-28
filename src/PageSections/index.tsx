@@ -42,6 +42,7 @@ import { ProfileContentBlockSection } from '~/PageSections/ProfileContentBlockSe
 import { ListOfOfficesBlockSection } from '~/PageSections/ListOfOfficesBlockSection';
 import { EmbeddedBlockSection } from '~/PageSections/EmbeddedBlockSection';
 import { TeamValuesBlockSection } from '~/PageSections/TeamValuesBlockSection';
+import { TestimonialAutoScrollSection } from '~/PageSections/TestimonialAutoScrollSection';
 import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
 
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
@@ -361,6 +362,13 @@ export function PageSections(props: Props) {
 					return (
 						<ComponentErrorBoundary key={section._key} componentName='Team Values Block'>
 							<TeamValuesBlockSection {...section} />
+						</ComponentErrorBoundary>
+					);
+				// @ts-expect-error — run `bun run sanity:generate` to add component_testimonialAutoScroll to the Sections union
+				case 'component_testimonialAutoScroll':
+					return (
+						<ComponentErrorBoundary key={section._key} componentName='Testimonials Auto Scroll'>
+							<TestimonialAutoScrollSection {...(section as any)} />
 						</ComponentErrorBoundary>
 					);
 				default:

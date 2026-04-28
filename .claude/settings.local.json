@@ -19,7 +19,10 @@
       "Bash(\"/c/Users/jack/.bun/bin/bun\" install *)",
       "mcp__Amplitude__get_context",
       "mcp__Amplitude__create_experiment",
-      "mcp__Amplitude__create_flags"
+      "mcp__Amplitude__create_flags",
+      "mcp__Sanity__query_documents",
+      "mcp__Sanity__create_documents_from_json",
+      "Bash(git checkout *)"
     ]
   }
 }

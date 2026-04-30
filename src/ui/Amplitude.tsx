@@ -37,7 +37,7 @@ function bootAppAmplitude() {
 	state.clientInitialized = true;
 
 	window.amplitude.init(AMPLITUDE_API_KEY, {
-		fetchRemoteConfig: true,
+		fetchRemoteConfig: false,
 		autocapture: true,
 		transport: 'beacon',
 	});

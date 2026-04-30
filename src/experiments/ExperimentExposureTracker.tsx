@@ -12,6 +12,9 @@ export function ExperimentExposureTracker(props: {
 	useEffect(() => {
 		if (tracked.current) return;
 		tracked.current = true;
+
+		window.experiment?.exposure(props.flagKey);
+
 		trackEvent('Experiment Viewed', {
 			flag_key: props.flagKey,
 			variant: props.variant,

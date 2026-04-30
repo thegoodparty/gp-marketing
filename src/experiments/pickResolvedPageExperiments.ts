@@ -43,8 +43,15 @@ export function pickResolvedPageExperiments(
 	for (const experimentId of orderedExperimentIds) {
 		const assignedVariant = assignments[experimentId];
 
-		if (!assignedVariant || assignedVariant === 'control' || assignedVariant === 'off') {
+		if (!assignedVariant || assignedVariant === 'off') {
 			continue;
+		}
+
+		if (assignedVariant === 'control') {
+			return {
+				pageSections: controlSections,
+				exposures: [{ flagKey: experimentId, variant: 'control' }],
+			};
 		}
 
 		const match = variants.find(

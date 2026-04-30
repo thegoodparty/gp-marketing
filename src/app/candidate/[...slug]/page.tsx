@@ -9,7 +9,10 @@ import type { ProfileData, OfficeData } from '~/PageSections/ProfileContentBlock
 import { PROFILE_PAGE_SECTIONS } from './profilePageSections';
 
 export const revalidate = 3600;
-export const dynamic = 'force-static';
+
+export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
+	return [];
+}
 
 function buildSectionOverrides(
 	candidate: CandidacyItem,
@@ -103,10 +106,13 @@ function buildTopIssues(
 export default async function Page({
 	params,
 }: {
-	params: Promise<{ name: string; office: string }>;
+	params: Promise<{ slug: string[] }>;
 }) {
-	const { name, office } = await params;
-	const slug = `${name}/${office}`;
+	const { slug: slugParts } = await params;
+	if (!slugParts || slugParts.length < 2) {
+		notFound();
+	}
+	const slug = slugParts.join('/');
 
 	const candidate = await getCandidateBySlug({ slug });
 	if (!candidate) {
@@ -136,10 +142,13 @@ export default async function Page({
 export async function generateMetadata({
 	params,
 }: {
-	params: Promise<{ name: string; office: string }>;
+	params: Promise<{ slug: string[] }>;
 }): Promise<Metadata> {
-	const { name, office } = await params;
-	const slug = `${name}/${office}`;
+	const { slug: slugParts } = await params;
+	if (!slugParts || slugParts.length < 2) {
+		return { title: 'Candidate Not Found | Good Party' };
+	}
+	const slug = slugParts.join('/');
 
 	const candidate = await getCandidateBySlug({
 		slug,

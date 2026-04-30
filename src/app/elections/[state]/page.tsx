@@ -17,15 +17,21 @@ import {
 } from '~/constants/electionsStaticSections';
 import { sanityFetch } from '~/sanity/sanityClient';
 import { quoteCollectionByIdQuery } from '~/sanity/groq';
-import { getStateName, placeToFactsCards } from '~/lib/electionsHelpers';
+import { getStateName } from '~/lib/electionsHelpers';
 import { resolveAuthor } from '~/ui/_lib/resolveAuthor';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 import { BreadcrumbBlock } from '~/ui/BreadcrumbBlock';
 import { ElectionsLandingWithSearch } from '~/ui/ElectionsLandingWithSearch';
-import { LocationFactsBlock } from '~/ui/LocationFactsBlock';
 import { Carousel } from '~/ui/Carousel';
 import { StepperBlock } from '~/ui/StepperBlock';
 import { ElectionsIndexBlock } from '~/ui/ElectionsIndexBlock';
+import { US_STATE_CODES } from '~/lib/sitemap-entries';
+
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+	return US_STATE_CODES.map((code) => ({ state: code.toLowerCase() }));
+}
 
 export default async function Page({
 	params,
@@ -104,8 +110,6 @@ export default async function Page({
 		{ href: '', label: stateName },
 	];
 
-	const factsCards = placeToFactsCards(placeData);
-
 	const quoteItems = quoteCollection?.quoteCollectionContent?.list_chooseQuotes ?? [];
 	const carouselCards = quoteItems.map(item => ({
 		copy: item.quote?.field_quote ?? undefined,
@@ -168,13 +172,6 @@ export default async function Page({
 					offices: stateOffices,
 				}}
 			/>
-			{factsCards.length > 0 && (
-				<LocationFactsBlock
-					backgroundColor="cream"
-					header={{ title: `${stateName} facts` }}
-					factsCards={factsCards}
-				/>
-			)}
 			<ElectionsIndexBlock
 				backgroundColor="midnight"
 				stateSlug={state.toLowerCase()}

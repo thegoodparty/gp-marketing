@@ -1,4 +1,5 @@
 import type { Metadata, ResolvingMetadata } from 'next';
+import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { goodpartyOrg_landingPagesAndPolicyQuery } from '~/sanity/groq';
 import { sanityFetch } from '~/sanity/sanityClient';
@@ -7,14 +8,14 @@ import { StructureMetaData } from '~/components/StructureMetadata';
 import type { Params } from '~/lib/types';
 import { RichTextContentSections } from '~/RichTextContentSections';
 import { PageSections } from '~/PageSections';
+import { ExperimentResolver } from '~/experiments/ExperimentResolver';
 import { HeaderBlock } from '~/ui/HeaderBlock';
 import { Container } from '~/ui/Container';
 import { client } from '~/lib/client';
-import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 
 export async function generateStaticParams() {
 	const entries = await client.fetch<Array<string>>(
-		'*[_type in ["goodpartyOrg_landingPages","policy"]][0..99]{"slug": select(_type == "goodpartyOrg_landingPages" => detailPageOverviewNoHero.field_slug,_type == "policy" => policyOverview.field_slug)}.slug',
+		'*[_type in ["goodpartyOrg_landingPages","policy"]]{"slug": select(_type == "goodpartyOrg_landingPages" => detailPageOverviewNoHero.field_slug,_type == "policy" => policyOverview.field_slug)}.slug',
 	);
 	return entries.filter(Boolean).map(entry => ({
 		slug: entry,
@@ -36,7 +37,12 @@ export default async function Page(props: any) {
 	}
 
 	if (page._type === 'goodpartyOrg_landingPages') {
-		return <PageSections pageSections={page.pageSections?.list_pageSections} />;
+		const controlSections = page.pageSections?.list_pageSections;
+		return (
+			<Suspense fallback={<PageSections pageSections={controlSections} />}>
+				<ExperimentResolver pageId={page._id} controlSections={controlSections} />
+			</Suspense>
+		);
 	}
 	if (page._type === 'policy') {
 		return (

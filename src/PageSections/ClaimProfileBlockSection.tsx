@@ -1,9 +1,8 @@
 import type { SectionOverrides, Sections } from '~/PageSections';
+import { isButtonType, transformButton } from '~/lib/buttonTransformer';
 import { ClaimProfileBlock } from '~/ui/ClaimProfileBlock';
 import { resolveBg } from '~/ui/_lib/resolveBg';
-import { resolveCTALink } from '~/ui/_lib/resolveCTALink';
 import { stegaClean } from 'next-sanity';
-import type { ButtonType } from '~/lib/buttonTransformer';
 
 type Props = Extract<Sections, { _type: 'component_claimProfileBlock' }> & {
 	claimProfileOverride?: SectionOverrides['component_claimProfileBlock'];
@@ -15,6 +14,10 @@ export function ClaimProfileBlockSection({ claimProfileOverride, ...section }: P
 		: 'cream';
 
 	const ctaButton = section.ctaAction;
+	const claimButton =
+		ctaButton && isButtonType(ctaButton)
+			? transformButton(ctaButton)
+			: undefined;
 	const exampleCard = section.claimProfileBlockContent?.exampleCard;
 
 	return (
@@ -26,11 +29,13 @@ export function ClaimProfileBlockSection({ claimProfileOverride, ...section }: P
 				backgroundColor={backgroundColor}
 				headline={section.claimProfileBlockContent?.field_headline}
 				body={section.claimProfileBlockContent?.field_body}
-				claimButton={{
-					buttonType: 'internal',
-					href: resolveCTALink(ctaButton as unknown as ButtonType),
-					label: ctaButton?.text || 'View Claims',
-				}}
+				claimButton={
+					claimButton ?? {
+						buttonType: 'internal',
+						href: '/',
+						label: ctaButton?.text || 'View Claims',
+					}
+				}
 				exampleCard={{
 					name: claimProfileOverride?.candidateName ?? exampleCard?.field_name ?? 'Firstname Lastname',
 					partyAffiliation: claimProfileOverride?.partyAffiliation ?? exampleCard?.field_partyAffiliation,

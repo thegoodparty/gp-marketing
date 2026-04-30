@@ -105,6 +105,7 @@ test.describe('Sitemap', () => {
 		/^\/elections\/[a-z]{2}$/,                                                 // state
 		/^\/elections\/[a-z]{2}\/position\/[^/]+$/,                               // state position
 		/^\/elections\/[a-z]{2}\/[^/]+\/position\/[^/]+$/,                         // state/county position
+		/^\/elections\/[a-z]{2}\/[^/]+\/[^/]+\/[^/]+\/position\/[^/]+$/,          // state/county/city/subplace position
 		/^\/elections\/[a-z]{2}\/[^/]+\/[^/]+\/position\/[^/]+$/,                // state/county/city position
 		/^\/elections\/[a-z]{2}\/[^/]+$/,                                        // state/county (place)
 		/^\/elections\/[a-z]{2}\/[^/]+\/[^/]+$/,                                  // state/county/city (place)

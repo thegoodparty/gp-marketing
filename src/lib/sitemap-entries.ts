@@ -5,6 +5,7 @@
 
 import type { MetadataRoute } from 'next';
 import { sanityClient } from '~/sanity/sanityClient';
+import { stripCountySuffix as stripCountySuffixFromHelpers } from '~/lib/electionsHelpers';
 
 /** 51 US state/territory codes (50 states + DC) */
 export const US_STATE_CODES = [
@@ -26,9 +27,6 @@ const ELECTION_API_BASE =
 
 const CACHE_1H: RequestInit = { next: { revalidate: 3600 } };
 
-const COUNTY_SUFFIX_RE =
-	/\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio)$/i;
-
 export type CountyPlace = { slug?: string; name?: string; mtfcc?: string };
 export type CityPlace = { slug?: string; countyName?: string };
 export type RaceEntry = { slug?: string; positionLevel?: string };
@@ -38,7 +36,7 @@ export function normalizeName(name: string): string {
 }
 
 export function stripCountySuffix(name: string): string {
-	return name.replace(COUNTY_SUFFIX_RE, '') || name;
+	return stripCountySuffixFromHelpers(name);
 }
 
 function dedupeByUrl(entries: MetadataRoute.Sitemap): MetadataRoute.Sitemap {
@@ -89,7 +87,20 @@ export function buildCountyLookups(
 }
 
 /**
- * Builds election race sitemap entries. LOCAL races use the same 4-level city URL shape as CITY when a county mapping exists.
+ * Builds election race sitemap entries.
+ *
+ * Slug formats from the election API:
+ *   2-part  state/position                   → STATE / FEDERAL
+ *   3-part  state/county/position            → COUNTY, or LOCAL at county level
+ *   3-part  state/city/position              → CITY / LOCAL (city slug in map)
+ *   4-part  state/county/city/position       → CITY / LOCAL races whose place slug
+ *                                              includes the county (e.g. WI townships)
+ *
+ * CITY/LOCAL 3-part city slugs: look up county via citySlugToCountySlug to emit the
+ * canonical 4-level URL /elections/state/county/city/position.
+ * CITY/LOCAL 4-part slugs: the county is already embedded; fall through to the generic
+ * branch which emits the URL directly from the prefix.
+ * CITY 3-part slugs with no county mapping are skipped (would produce a wrong URL).
  */
 export function buildRaceEntries(
 	races: RaceEntry[],
@@ -109,6 +120,7 @@ export function buildRaceEntries(
 			const citySlug = parts.join('/');
 			const countySlug = citySlugToCountySlug.get(citySlug);
 			if (countySlug) {
+				// 3-part city slug with a known county mapping → expand to 4-level URL
 				const citySegment = parts.pop();
 				if (!citySegment) continue;
 				out.push(
@@ -116,13 +128,256 @@ export function buildRaceEntries(
 				);
 				continue;
 			}
-			if (level === 'CITY') continue;
+			// CITY 3-part slug with no county mapping would produce a bad URL (city treated
+			// as county). Skip it. 4-part slugs (parts.length === 3) already carry the county
+			// and fall through to emit the correct URL from the prefix.
+			if (level === 'CITY' && parts.length === 2) continue;
 		}
 
 		const prefix = parts.join('/');
 		out.push(toEntry(baseUrl, `/elections/${prefix}/position/${positionSlug}`, 0.7, 'weekly'));
 	}
 	return out;
+}
+
+function dedupeByKey<T>(items: T[], keyFn: (t: T) => string): T[] {
+	const seen = new Set<string>();
+	const out: T[] = [];
+	for (const item of items) {
+		const k = keyFn(item);
+		if (seen.has(k)) continue;
+		seen.add(k);
+		out.push(item);
+	}
+	return out;
+}
+
+export type ElectionCountyRouteParam = { state: string; county: string };
+export type ElectionCityRouteParam = { state: string; county: string; city: string };
+export type ElectionStatePositionRouteParam = { state: string; positionSlug: string };
+export type ElectionCountyPositionRouteParam = { state: string; county: string; positionSlug: string };
+export type ElectionCityPositionRouteParam = { state: string; county: string; city: string; positionSlug: string };
+export type ElectionSubplacePositionRouteParam = {
+	state: string;
+	county: string;
+	city: string;
+	subplace: string;
+	positionSlug: string;
+};
+
+/**
+ * Same branching as buildRaceEntries; returns route params for static generation.
+ */
+export function buildRaceRouteParams(
+	races: RaceEntry[],
+	citySlugToCountySlug: Map<string, string>,
+): {
+	statePositionParams: ElectionStatePositionRouteParam[];
+	countyPositionParams: ElectionCountyPositionRouteParam[];
+	cityPositionParams: ElectionCityPositionRouteParam[];
+	subplacePositionParams: ElectionSubplacePositionRouteParam[];
+} {
+	const statePositionParams: ElectionStatePositionRouteParam[] = [];
+	const countyPositionParams: ElectionCountyPositionRouteParam[] = [];
+	const cityPositionParams: ElectionCityPositionRouteParam[] = [];
+	const subplacePositionParams: ElectionSubplacePositionRouteParam[] = [];
+
+	for (const r of races) {
+		if (!r.slug) continue;
+		const parts = r.slug.split('/');
+		const positionSlug = parts.pop();
+		if (!positionSlug) continue;
+
+		const level = (r.positionLevel ?? '').toUpperCase();
+
+		if (level === 'CITY' || level === 'LOCAL') {
+			const citySlug = parts.join('/');
+			const countySlug = citySlugToCountySlug.get(citySlug);
+			if (countySlug) {
+				const citySegment = parts.pop();
+				if (!citySegment) continue;
+				const csParts = countySlug.split('/').filter(Boolean);
+				if (csParts.length >= 2) {
+					cityPositionParams.push({
+						state: csParts[0]!.toLowerCase(),
+						county: csParts.slice(1).join('/').toLowerCase(),
+						city: citySegment.toLowerCase(),
+						positionSlug,
+					});
+				}
+				continue;
+			}
+			if (level === 'CITY' && parts.length === 2) continue;
+		}
+
+		const prefix = parts.join('/');
+		const segs = prefix.split('/').filter(Boolean);
+		if (segs.length === 1) {
+			statePositionParams.push({ state: segs[0]!.toLowerCase(), positionSlug });
+		} else if (segs.length === 2) {
+			countyPositionParams.push({
+				state: segs[0]!.toLowerCase(),
+				county: segs[1]!.toLowerCase(),
+				positionSlug,
+			});
+		} else if (segs.length === 3) {
+			cityPositionParams.push({
+				state: segs[0]!.toLowerCase(),
+				county: segs[1]!.toLowerCase(),
+				city: segs[2]!.toLowerCase(),
+				positionSlug,
+			});
+		} else if (segs.length === 4) {
+			subplacePositionParams.push({
+				state: segs[0]!.toLowerCase(),
+				county: segs[1]!.toLowerCase(),
+				city: segs[2]!.toLowerCase(),
+				subplace: segs[3]!.toLowerCase(),
+				positionSlug,
+			});
+		}
+	}
+
+	return {
+		statePositionParams: dedupeByKey(statePositionParams, (p) => `${p.state}|${p.positionSlug}`),
+		countyPositionParams: dedupeByKey(
+			countyPositionParams,
+			(p) => `${p.state}|${p.county}|${p.positionSlug}`,
+		),
+		cityPositionParams: dedupeByKey(
+			cityPositionParams,
+			(p) => `${p.state}|${p.county}|${p.city}|${p.positionSlug}`,
+		),
+		subplacePositionParams: dedupeByKey(
+			subplacePositionParams,
+			(p) => `${p.state}|${p.county}|${p.city}|${p.subplace}|${p.positionSlug}`,
+		),
+	};
+}
+
+/**
+ * Election route params for one state (aligned with fetchStateElectionSitemapEntries).
+ */
+export async function fetchStateElectionRouteParams(stateCode: string): Promise<{
+	countyParams: ElectionCountyRouteParam[];
+	cityParams: ElectionCityRouteParam[];
+	statePositionParams: ElectionStatePositionRouteParam[];
+	countyPositionParams: ElectionCountyPositionRouteParam[];
+	cityPositionParams: ElectionCityPositionRouteParam[];
+	subplacePositionParams: ElectionSubplacePositionRouteParam[];
+}> {
+	const code = stateCode.toUpperCase();
+
+	const [places, cities, races] = await Promise.all([
+		fetchElectionJson<{ slug?: string; mtfcc?: string; name?: string }>('v1/places', {
+			state: code,
+			placeColumns: 'slug,mtfcc,name',
+		}),
+		fetchElectionJson<{ slug?: string; countyName?: string }>('v1/places', {
+			state: code,
+			mtfcc: 'G4110',
+			placeColumns: 'slug,countyName',
+		}),
+		fetchElectionJson<{ slug?: string; positionLevel?: string }>('v1/races', {
+			state: code,
+			raceColumns: 'slug,positionLevel',
+		}),
+	]);
+
+	const { citySlugToCountySlug } = buildCountyLookups(places, cities);
+
+	const countyParams: ElectionCountyRouteParam[] = [];
+	for (const p of places) {
+		if (!p.slug) continue;
+		const mtfcc = p.mtfcc ?? '';
+		if (mtfcc === 'G4020' || mtfcc.startsWith('G54')) {
+			const segs = p.slug.split('/').filter(Boolean);
+			if (segs.length >= 2) {
+				countyParams.push({
+					state: segs[0]!.toLowerCase(),
+					county: segs.slice(1).join('/').toLowerCase(),
+				});
+			}
+		}
+	}
+
+	const cityParams: ElectionCityRouteParam[] = [];
+	for (const c of cities) {
+		const countySlug = citySlugToCountySlug.get(c.slug ?? '');
+		if (!countySlug || !c.slug) continue;
+		const citySegment = c.slug.split('/').pop();
+		if (!citySegment) continue;
+		const segs = countySlug.split('/').filter(Boolean);
+		if (segs.length >= 2) {
+			cityParams.push({
+				state: segs[0]!.toLowerCase(),
+				county: segs.slice(1).join('/').toLowerCase(),
+				city: citySegment.toLowerCase(),
+			});
+		}
+	}
+
+	const raceRoute = buildRaceRouteParams(races, citySlugToCountySlug);
+
+	return {
+		countyParams: dedupeByKey(countyParams, (x) => `${x.state}|${x.county}`),
+		cityParams: dedupeByKey(cityParams, (x) => `${x.state}|${x.county}|${x.city}`),
+		statePositionParams: raceRoute.statePositionParams,
+		countyPositionParams: raceRoute.countyPositionParams,
+		cityPositionParams: raceRoute.cityPositionParams,
+		subplacePositionParams: raceRoute.subplacePositionParams,
+	};
+}
+
+let cachedElectionRouteParams: Promise<{
+	countyParams: ElectionCountyRouteParam[];
+	cityParams: ElectionCityRouteParam[];
+	statePositionParams: ElectionStatePositionRouteParam[];
+	countyPositionParams: ElectionCountyPositionRouteParam[];
+	cityPositionParams: ElectionCityPositionRouteParam[];
+	subplacePositionParams: ElectionSubplacePositionRouteParam[];
+}> | null = null;
+
+/**
+ * Merged election static params for all states (single fetch per build segment).
+ */
+export function getCachedElectionRouteParams(): Promise<{
+	countyParams: ElectionCountyRouteParam[];
+	cityParams: ElectionCityRouteParam[];
+	statePositionParams: ElectionStatePositionRouteParam[];
+	countyPositionParams: ElectionCountyPositionRouteParam[];
+	cityPositionParams: ElectionCityPositionRouteParam[];
+	subplacePositionParams: ElectionSubplacePositionRouteParam[];
+}> {
+	if (!cachedElectionRouteParams) {
+		cachedElectionRouteParams = (async () => {
+			const results = await Promise.all(US_STATE_CODES.map((c) => fetchStateElectionRouteParams(c)));
+			return {
+				countyParams: dedupeByKey(results.flatMap((r) => r.countyParams), (x) => `${x.state}|${x.county}`),
+				cityParams: dedupeByKey(
+					results.flatMap((r) => r.cityParams),
+					(x) => `${x.state}|${x.county}|${x.city}`,
+				),
+				statePositionParams: dedupeByKey(
+					results.flatMap((r) => r.statePositionParams),
+					(p) => `${p.state}|${p.positionSlug}`,
+				),
+				countyPositionParams: dedupeByKey(
+					results.flatMap((r) => r.countyPositionParams),
+					(p) => `${p.state}|${p.county}|${p.positionSlug}`,
+				),
+				cityPositionParams: dedupeByKey(
+					results.flatMap((r) => r.cityPositionParams),
+					(p) => `${p.state}|${p.county}|${p.city}|${p.positionSlug}`,
+				),
+				subplacePositionParams: dedupeByKey(
+					results.flatMap((r) => r.subplacePositionParams),
+					(p) => `${p.state}|${p.county}|${p.city}|${p.subplace}|${p.positionSlug}`,
+				),
+			};
+		})();
+	}
+	return cachedElectionRouteParams;
 }
 
 async function fetchElectionJson<T>(path: string, params: Record<string, string>): Promise<T[]> {

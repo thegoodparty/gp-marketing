@@ -37,10 +37,10 @@ export default defineConfig({
 		structureTool({
 			name: 'structure',
 			title: 'Structure',
-			defaultDocumentNode(S, ctx) {
-				const type = ctx.schema.get(ctx.schemaType)!;
-				const previews: ComponentViewBuilder[] = [];
-				if ('channels' in type.options && Object.keys(type.options.channels).length > 0) {
+		defaultDocumentNode(S, ctx) {
+			const type = ctx.schema.get(ctx.schemaType)!;
+			const previews: ComponentViewBuilder[] = [];
+			if (type.options && 'channels' in type.options && Object.keys(type.options.channels).length > 0) {
 					for (const [siteId, path] of Object.entries(type.options.channels)) {
 						const siteData = sites[siteId as keyof typeof sites];
 						previews.push(
@@ -97,12 +97,12 @@ export default defineConfig({
 		...Object.entries(sites).map(([site, siteData]) => {
 			const mainDocuments: DocumentResolver[] = [];
 			const locations = {};
-			for (const doc of documentSchema) {
-				if (!(site in doc.options.channels)) {
-					continue;
-				}
-				const filters = [`_type == "${doc.name}"`];
-				if ('pathParams' in doc.options && Object.keys(doc.options.pathParams as { slug: string }).length > 0) {
+		for (const doc of documentSchema) {
+			if (!doc.options?.channels || !(site in doc.options.channels)) {
+				continue;
+			}
+			const filters = [`_type == "${doc.name}"`];
+			if ('pathParams' in doc.options && Object.keys(doc.options.pathParams as { slug: string }).length > 0) {
 					for (const [param, paramPath] of Object.entries(doc.options.pathParams as { slug: string })) {
 						filters.push(`${paramPath} == $${param}`);
 					}

@@ -1,5 +1,10 @@
 declare global {
 	interface Window {
+		/** Survives HMR and Strict Mode remounts; prevents duplicate `init` / experiment wiring. */
+		__goodpartyAmplitude?: {
+			clientInitialized: boolean;
+			scriptInjected: boolean;
+		};
 		amplitude?: {
 			init(apiKey: string, options?: {
 				fetchRemoteConfig?: boolean;
@@ -13,11 +18,13 @@ declare global {
 		};
 		experiment?: {
 			variant(key: string): { value?: string };
+			exposure(key: string): void;
 			fetch(): Promise<unknown>;
 		};
 		sessionReplay?: {
 			plugin(options: { sampleRate: number }): unknown;
 		};
+		dataLayer?: Record<string, unknown>[];
 	}
 }
 

@@ -10,6 +10,7 @@ import type {
 	RaceDetail,
 	RaceNode,
 } from '~/types/elections';
+import { canonicalizeCountyEquivalentName } from '~/lib/electionsHelpers';
 
 const BASE_URL =
 	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
@@ -21,6 +22,12 @@ export const COUNTY_MTFCC = 'G4020';
 
 /** MTFCC for incorporated places (cities, towns). */
 export const CITY_MTFCC = 'G4110';
+export const TOWN_MTFCC = 'G4040';
+
+/** True for incorporated places (cities, towns) used as county child localities. */
+export function isCityOrTownMtfcc(mtfcc?: string): boolean {
+	return mtfcc === CITY_MTFCC || mtfcc === TOWN_MTFCC;
+}
 
 /** MTFCC codes for school districts (elementary, secondary, unified). */
 export const DISTRICT_MTFCCS = ['G5400', 'G5410', 'G5420'] as const;
@@ -29,19 +36,31 @@ export function isDistrictMtfcc(mtfcc?: string): boolean {
 	return mtfcc?.startsWith('G54') ?? false;
 }
 
+const FETCH_JSON_MAX_RETRIES = 2;
+
+function sleep(ms: number): Promise<void> {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | null> {
-	try {
-		const res = await fetch(url, options);
-		if (res.status === 404) return null;
-		if (!res.ok) {
-			console.error(`[electionsApi] ${res.status} ${url}`);
-			return null;
+	for (let attempt = 0; attempt <= FETCH_JSON_MAX_RETRIES; attempt++) {
+		try {
+			const res = await fetch(url, options);
+			if (res.status === 404) return null;
+			if (res.ok) return (await res.json()) as T;
+			if (res.status < 500) {
+				console.error(`[electionsApi] ${res.status} ${url}`);
+				return null;
+			}
+			console.error(`[electionsApi] ${res.status} ${url} (attempt ${attempt + 1})`);
+		} catch (err) {
+			console.error(`[electionsApi] attempt ${attempt + 1}`, err);
 		}
-		return (await res.json()) as T;
-	} catch (err) {
-		console.error('[electionsApi]', err);
-		return null;
+		if (attempt < FETCH_JSON_MAX_RETRIES) {
+			await sleep(500 * (attempt + 1));
+		}
 	}
+	return null;
 }
 
 export async function getRacesByYear(params: {
@@ -139,6 +158,20 @@ export async function getCandidateBySlug(params: {
 	return Array.isArray(data) && data.length > 0 ? (data[0] ?? null) : null;
 }
 
+/**
+ * Candidacy slug strings for a state (same source as sitemap candidate URLs).
+ */
+export async function fetchCandidacySlugs(stateCode: string): Promise<string[]> {
+	const searchParams = new URLSearchParams({
+		state: stateCode.toUpperCase(),
+		columns: 'slug',
+	});
+	const url = `${BASE_URL}/v1/candidacies?${searchParams}`;
+	const data = await fetchJson<Array<{ slug?: string }>>(url, CACHE_OPTIONS);
+	if (!Array.isArray(data)) return [];
+	return data.map((c) => c.slug).filter((s): s is string => typeof s === 'string' && s.length > 0);
+}
+
 export async function findCampaignByRace(params: {
 	raceId: string;
 	firstName: string;
@@ -193,9 +226,44 @@ export async function getCityPlacesByCounty(params: {
 }): Promise<PlaceItem[]> {
 	const allCities = await getPlacesByState({ state: params.state, mtfcc: CITY_MTFCC });
 	const countyName = countyNameFromSlug(params.countySlug);
+	const normalizedCountyBaseName = canonicalizeCountyEquivalentName(params.state, countyName).baseName;
 	return allCities.filter(
-		p => normalizeName(p.countyName ?? '') === normalizeName(countyName),
+		p =>
+			normalizeName(canonicalizeCountyEquivalentName(params.state, p.countyName ?? '').baseName) ===
+			normalizeName(normalizedCountyBaseName),
 	);
+}
+
+function dedupePlacesBySlug(places: PlaceItem[]): PlaceItem[] {
+	const seen = new Set<string>();
+	const out: PlaceItem[] = [];
+	for (const p of places) {
+		const slug = p.slug?.toLowerCase();
+		if (!slug || seen.has(slug)) continue;
+		seen.add(slug);
+		out.push({
+			...p,
+			name: (p.name ?? '').trim(),
+		});
+	}
+	return out;
+}
+
+export async function getCountyChildPlaces(params: {
+	state: string;
+	countySlug: string;
+}): Promise<PlaceItem[]> {
+	const county = await getPlaceBySlug({
+		slug: params.countySlug,
+		includeChildren: true,
+		includeRaces: false,
+		placeColumns: 'slug,name,mtfcc,countyName',
+	});
+	const hierarchyChildren = (county?.children ?? []).filter(
+		p => isCityOrTownMtfcc(p.mtfcc) && !isDistrictMtfcc(p.mtfcc),
+	);
+	const fallbackCities = await getCityPlacesByCounty(params);
+	return dedupePlacesBySlug([...hierarchyChildren, ...fallbackCities]);
 }
 
 export async function getPlaceBySlug(params: {

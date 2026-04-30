@@ -20,7 +20,7 @@ const styles = tv({
 		container: 'flex flex-col gap-12',
 		content: 'flex flex-col gap-6',
 		trigger: 'group flex items-center justify-between gap-6 text-left w-full p-6',
-		copy: 'p-6 pt-0 text-dark',
+		copy: 'p-6 pt-0 text-dark [&>*+*]:mt-4 [&>:empty]:hidden [&_br]:block [&_br]:mt-3',
 	},
 	variants: {
 		backgroundColor: {

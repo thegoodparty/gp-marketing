@@ -2,7 +2,87 @@ import { US_STATES } from '~/constants/usStates';
 import type { CandidacyItem, PlaceItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
 import type { FactsCardProps } from '~/ui/FactsCard';
 
-const COUNTY_EQUIV_SUFFIX_RE = /\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio)$/i;
+export { isCityOrTownMtfcc } from '~/lib/electionsApi';
+
+const COUNTY_EQUIV_SUFFIX_RE =
+	/\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio|Municipality)$/i;
+const COUNTY_EQUIV_TAIL_RE =
+	/\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio|Municipality)(?:\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio|Municipality))*$/i;
+
+type CanonicalSuffix =
+	| 'County'
+	| 'Parish'
+	| 'Borough'
+	| 'Census Area'
+	| 'City and Borough'
+	| 'City and County'
+	| 'Municipio'
+	| 'Municipality';
+
+type CanonicalCountyName = {
+	displayName: string;
+	baseName: string;
+	suffixLabel: CanonicalSuffix;
+};
+
+const SUFFIX_NORMALIZATION: Record<string, CanonicalSuffix> = {
+	county: 'County',
+	parish: 'Parish',
+	borough: 'Borough',
+	'census area': 'Census Area',
+	'city and borough': 'City and Borough',
+	'city and county': 'City and County',
+	municipio: 'Municipio',
+	municipality: 'Municipality',
+};
+
+function normalizeWhitespace(value: string): string {
+	return value.replace(/\s+/g, ' ').trim();
+}
+
+function toCanonicalSuffix(value: string): CanonicalSuffix | null {
+	const normalized = normalizeWhitespace(value).toLowerCase();
+	return SUFFIX_NORMALIZATION[normalized] ?? null;
+}
+
+function pickSuffixByState(
+	stateCode: string,
+	existingSuffix: CanonicalSuffix | null,
+): CanonicalSuffix {
+	const upper = stateCode.toUpperCase();
+	if (upper === 'AK') {
+		if (
+			existingSuffix === 'City and Borough' ||
+			existingSuffix === 'Census Area' ||
+			existingSuffix === 'Borough' ||
+			existingSuffix === 'Municipality'
+		) {
+			return existingSuffix;
+		}
+		return 'Borough';
+	}
+	if (upper === 'LA') return 'Parish';
+	if (upper === 'PR') return 'Municipio';
+	if (existingSuffix === 'City and County') return existingSuffix;
+	return 'County';
+}
+
+/**
+ * Canonical county-equivalent naming for county-level display surfaces.
+ * Enforces AK/LA/PR conventions and defensively cleans malformed double suffixes.
+ */
+export function canonicalizeCountyEquivalentName(
+	stateCode: string,
+	rawPlaceName: string,
+): CanonicalCountyName {
+	const normalizedName = normalizeWhitespace(rawPlaceName);
+	const tailMatch = normalizedName.match(COUNTY_EQUIV_TAIL_RE);
+	const existingSuffix = tailMatch ? toCanonicalSuffix(tailMatch[1] ?? '') : null;
+	const suffixLabel = pickSuffixByState(stateCode, existingSuffix);
+	const baseName = normalizeWhitespace(normalizedName.replace(COUNTY_EQUIV_TAIL_RE, '')) || normalizedName;
+	const displayName = `${baseName} ${suffixLabel}`.trim();
+	return { displayName, baseName, suffixLabel };
+}
 
 /** Resolve display name for the [county] route param (county, city, or district). */
 export function resolveLocalityName(
@@ -221,6 +301,40 @@ export function placeToFactsCards(place: PlaceWithFacts | null): FactsCardProps[
 	return cards;
 }
 
+type FactField =
+	| 'population'
+	| 'density'
+	| 'incomeHouseholdMedian'
+	| 'unemploymentRate'
+	| 'homeValue';
+
+const FACT_SIGNATURE_FIELDS: FactField[] = [
+	'population',
+	'density',
+	'incomeHouseholdMedian',
+	'unemploymentRate',
+	'homeValue',
+];
+
+export function hasSuspiciousFactsMatch(
+	cityPlace: PlaceWithFacts | null | undefined,
+	countyPlace: PlaceWithFacts | null | undefined,
+): boolean {
+	if (!cityPlace || !countyPlace) return false;
+
+	let comparedFields = 0;
+	for (const field of FACT_SIGNATURE_FIELDS) {
+		const cityValue = cityPlace[field];
+		const countyValue = countyPlace[field];
+		if (typeof cityValue !== 'number' || typeof countyValue !== 'number') continue;
+		comparedFields += 1;
+		if (cityValue !== countyValue) return false;
+	}
+
+	// Require multiple identical facts to avoid noisy single-field matches.
+	return comparedFields >= 2;
+}
+
 /**
  * Builds a Schema.org WebPage JSON-LD object with GovernmentOffice for position pages.
  * Describes the page and the elected office. JobPosting JSON-LD is emitted separately
@@ -390,7 +504,23 @@ export function buildJobPostingSchema(params: {
 			? countyName
 			: `State of ${stateName}`;
 
-	const addressLocality = cityName ?? countyName ?? stateName;
+	const addressLocality = cityName ?? countyName ?? race.Place?.name ?? stateName;
+
+	const postalAddress: Record<string, unknown> = {
+		'@type': 'PostalAddress',
+		addressLocality,
+		addressRegion: race.state,
+		addressCountry: 'US',
+	};
+
+	const filingAddr = race.filingOfficeAddress?.trim();
+	if (filingAddr) {
+		postalAddress.streetAddress = filingAddr;
+		const zipMatch = filingAddr.match(/\b\d{5}(?:-\d{4})?\b/);
+		if (zipMatch?.[0]) {
+			postalAddress.postalCode = zipMatch[0];
+		}
+	}
 
 	const schema: Record<string, unknown> = {
 		'@context': 'https://schema.org',
@@ -401,27 +531,23 @@ export function buildJobPostingSchema(params: {
 		datePosted,
 		directApply: false,
 		hiringOrganization: {
-			'@type': 'GovernmentOrganization',
+			'@type': 'Organization',
 			name: orgName,
 		},
 		jobLocation: {
 			'@type': 'Place',
-			address: {
-				'@type': 'PostalAddress',
-				addressLocality,
-				addressRegion: race.state,
-				addressCountry: 'US',
-			},
+			address: postalAddress,
 		},
 	};
 
-	if (race.filingDateEnd) {
-		schema.validThrough = race.filingDateEnd.slice(0, 10);
+	const validThrough = race.filingDateEnd?.slice(0, 10) || race.electionDate?.slice(0, 10);
+	if (validThrough) {
+		schema.validThrough = validThrough;
 	}
 
-	if (race.employmentType) {
-		schema.employmentType = mapPositionEmploymentType(race.employmentType);
-	}
+	schema.employmentType = race.employmentType
+		? mapPositionEmploymentType(race.employmentType)
+		: 'FULL_TIME';
 
 	if (race.salary) {
 		const baseSalary = parseSalaryString(race.salary);

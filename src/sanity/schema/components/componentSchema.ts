@@ -39,6 +39,8 @@ import {component_locationLandingPageHero} from './component_locationLandingPage
 import {component_profileContentBlock} from './component_profileContentBlock.ts'
 import {component_listOfOfficesBlock} from './component_listOfOfficesBlock.ts'
 import {component_embeddedBlock} from './component_embeddedBlock.ts'
+import {component_teamValuesBlock} from './component_teamValuesBlock.ts'
+import {component_testimonialAutoScroll} from './component_testimonialAutoScroll.ts'
 
 export const componentSchema = [
 	component_jobOpeningsBlock,
@@ -81,5 +83,7 @@ export const componentSchema = [
 	component_locationLandingPageHero,
 	component_profileContentBlock,
 	component_listOfOfficesBlock,
-	component_embeddedBlock
+	component_embeddedBlock,
+	component_teamValuesBlock,
+	component_testimonialAutoScroll,
 ];

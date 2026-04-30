@@ -17,6 +17,12 @@ import {
 import { toAbsoluteUrl } from '~/lib/url';
 import { PositionPageContent } from '~/ui/PositionPageContent';
 
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+	return [];
+}
+
 export default async function Page({
 	params,
 }: {
@@ -29,12 +35,11 @@ export default async function Page({
 		notFound();
 	}
 
-	const raceSlug = buildRaceSlug(state, positionSlug, city);
-	const race = await getRaceBySlug(raceSlug);
-
-	if (!race) {
-		notFound();
-	}
+	// Some races have 4-part slugs (state/county/city/position) instead of 3-part
+	// (state/city/position). Try 3-part first for the common case, then fall back.
+	let race = await getRaceBySlug(buildRaceSlug(state, positionSlug, city));
+	if (!race) race = await getRaceBySlug(buildRaceSlug(state, positionSlug, county, city));
+	if (!race) notFound();
 
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const fullSlug = `${countySlug}/${city.toLowerCase()}`;
@@ -46,14 +51,14 @@ export default async function Page({
 		notFound();
 	}
 
+	// Cities queried by G4110 (incorporated places). Non-incorporated places (e.g. WI townships
+	// which are G4040) won't appear in that list, so fall back to the place on the race itself.
 	const cityPlaces = await getCityPlacesByCounty({ state: stateCode, countySlug });
-	const cityPlace = cityPlaces.find(
-		c => c.slug.toLowerCase() === `${state.toLowerCase()}/${city.toLowerCase()}`,
-	);
-
-	if (!cityPlace) {
-		notFound();
-	}
+	const cityPlace =
+		cityPlaces.find(c => c.slug.toLowerCase() === `${state.toLowerCase()}/${city.toLowerCase()}`) ??
+		race.Place ??
+		null;
+	if (!cityPlace) notFound();
 
 	const stateName = getStateName(stateCode);
 	const cityName = cityPlace.name;
@@ -103,16 +108,17 @@ export async function generateMetadata({
 	const stateCode = state.toUpperCase();
 	if (!isValidStateCode(stateCode)) return {};
 	const stateName = getStateName(stateCode);
-	const raceSlug = buildRaceSlug(state, positionSlug, city);
-	const race = await getRaceBySlug(raceSlug);
+	let race = await getRaceBySlug(buildRaceSlug(state, positionSlug, city));
+	if (!race) race = await getRaceBySlug(buildRaceSlug(state, positionSlug, county, city));
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
 	const countyDisplayName = resolveLocalityName(countyPlace, race?.Place, countySlug);
 	const cityPlaces = await getCityPlacesByCounty({ state: stateCode, countySlug });
-	const cityPlace = cityPlaces.find(
-		c => c.slug.toLowerCase() === `${state.toLowerCase()}/${city.toLowerCase()}`,
-	);
+	const cityPlace =
+		cityPlaces.find(c => c.slug.toLowerCase() === `${state.toLowerCase()}/${city.toLowerCase()}`) ??
+		race?.Place ??
+		null;
 	const cityName = cityPlace?.name ?? city;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
 	return {

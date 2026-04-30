@@ -2213,6 +2213,28 @@
     }
   },
   {
+    "name": "list_teamValuesCards",
+    "type": "type",
+    "value": {
+      "type": "array",
+      "of": {
+        "type": "object",
+        "attributes": {
+          "_key": {
+            "type": "objectAttribute",
+            "value": {
+              "type": "string"
+            }
+          }
+        },
+        "rest": {
+          "type": "inline",
+          "name": "teamValuesCard"
+        }
+      }
+    }
+  },
+  {
     "name": "list_officeItems",
     "type": "type",
     "value": {
@@ -3110,6 +3132,21 @@
             },
             "rest": {
               "type": "inline",
+              "name": "component_electionsPositionContentBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
               "name": "component_electionsSearchHero"
             }
           },
@@ -3201,6 +3238,21 @@
             "rest": {
               "type": "inline",
               "name": "component_embeddedBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_teamValuesBlock"
             }
           }
         ]
@@ -5121,6 +5173,54 @@
     }
   },
   {
+    "name": "component_teamValuesBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_teamValuesBlock"
+          }
+        },
+        "summaryInfo": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "summaryInfo"
+          },
+          "optional": true
+        },
+        "teamValuesBlockContent": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "teamValuesBlockContent"
+          },
+          "optional": true
+        },
+        "teamValuesBlockDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "teamValuesBlockDesignSettings"
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
     "name": "component_embeddedBlock",
     "type": "type",
     "value": {
@@ -5902,6 +6002,47 @@
                       "value": "midnight"
                     }
                   ]
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "component_electionsPositionContentBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_electionsPositionContentBlock"
+          }
+        },
+        "electionsPositionContentBlockDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_blockColorCreamMidnight": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "field_blockColorCreamMidnight"
                 },
                 "optional": true
               }
@@ -7596,6 +7737,109 @@
           "value": {
             "type": "inline",
             "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "teamValuesBlockDesignSettings",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "teamValuesBlockDesignSettings"
+          }
+        },
+        "field_blockColorCreamMidnight": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_blockColorCreamMidnight"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "teamValuesBlockContent",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "teamValuesBlockContent"
+          }
+        },
+        "list_teamValuesCards": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "list_teamValuesCards"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "teamValuesCard",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "teamValuesCard"
+          }
+        },
+        "field_icon": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_icon"
+          },
+          "optional": true
+        },
+        "field_title": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_title"
+          },
+          "optional": true
+        },
+        "field_componentColor6Colors": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_componentColor6Colors"
+          },
+          "optional": true
+        },
+        "field_backCopy": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "ctaActionWithShared": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "ctaActionWithShared"
           },
           "optional": true
         }
@@ -13396,6 +13640,235 @@
         }
       },
       "dereferencesTo": "download"
+    }
+  },
+  {
+    "name": "experiment_variant",
+    "type": "document",
+    "attributes": {
+      "_id": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_type": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string",
+          "value": "experiment_variant"
+        }
+      },
+      "_createdAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_updatedAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_rev": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "field_experimentId": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "field_variantName": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "field_targetPages": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "array",
+          "of": {
+            "type": "union",
+            "of": [
+              {
+                "type": "object",
+                "attributes": {
+                  "_ref": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "_type": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string",
+                      "value": "reference"
+                    }
+                  },
+                  "_weak": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "boolean"
+                    },
+                    "optional": true
+                  }
+                },
+                "dereferencesTo": "goodpartyOrg_home"
+              },
+              {
+                "type": "object",
+                "attributes": {
+                  "_ref": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "_type": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string",
+                      "value": "reference"
+                    }
+                  },
+                  "_weak": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "boolean"
+                    },
+                    "optional": true
+                  }
+                },
+                "dereferencesTo": "goodpartyOrg_landingPages"
+              },
+              {
+                "type": "object",
+                "attributes": {
+                  "_ref": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "_type": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string",
+                      "value": "reference"
+                    }
+                  },
+                  "_weak": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "boolean"
+                    },
+                    "optional": true
+                  }
+                },
+                "dereferencesTo": "goodpartyOrg_contact"
+              },
+              {
+                "type": "object",
+                "attributes": {
+                  "_ref": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "_type": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string",
+                      "value": "reference"
+                    }
+                  },
+                  "_weak": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "boolean"
+                    },
+                    "optional": true
+                  }
+                },
+                "dereferencesTo": "goodpartyOrg_glossary"
+              },
+              {
+                "type": "object",
+                "attributes": {
+                  "_ref": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "_type": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string",
+                      "value": "reference"
+                    }
+                  },
+                  "_weak": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "boolean"
+                    },
+                    "optional": true
+                  }
+                },
+                "dereferencesTo": "goodpartyOrg_allArticles"
+              }
+            ]
+          }
+        },
+        "optional": true
+      },
+      "field_status": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "union",
+          "of": [
+            {
+              "type": "string",
+              "value": "draft"
+            },
+            {
+              "type": "string",
+              "value": "running"
+            },
+            {
+              "type": "string",
+              "value": "ended"
+            }
+          ]
+        },
+        "optional": true
+      },
+      "field_priority": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "number"
+        },
+        "optional": true
+      },
+      "pageSections": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "pageSections"
+        },
+        "optional": true
+      }
     }
   },
   {

@@ -11,6 +11,12 @@ import {
 import { toAbsoluteUrl } from '~/lib/url';
 import { PositionPageContent } from '~/ui/PositionPageContent';
 
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+	return [];
+}
+
 export default async function Page({
 	params,
 }: {

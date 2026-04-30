@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
-	getCityPlacesByCounty,
+	getCountyChildPlaces,
 	getPlacesByState,
 	getPlaceBySlug,
 } from '~/lib/electionsApi';
@@ -15,7 +15,13 @@ import {
 } from '~/constants/electionsStaticSections';
 import { sanityFetch } from '~/sanity/sanityClient';
 import { quoteCollectionByIdQuery } from '~/sanity/groq';
-import { getStateName, placeToFactsCards, resolveLocalityName } from '~/lib/electionsHelpers';
+import {
+	getStateName,
+	hasSuspiciousFactsMatch,
+	isCityOrTownMtfcc,
+	placeToFactsCards,
+	resolveLocalityName,
+} from '~/lib/electionsHelpers';
 import { resolveAuthor } from '~/ui/_lib/resolveAuthor';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 import { BreadcrumbBlock } from '~/ui/BreadcrumbBlock';
@@ -23,6 +29,12 @@ import { ElectionsLandingWithSearch } from '~/ui/ElectionsLandingWithSearch';
 import { LocationFactsBlock } from '~/ui/LocationFactsBlock';
 import { Carousel } from '~/ui/Carousel';
 import { StepperBlock } from '~/ui/StepperBlock';
+
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+	return [];
+}
 
 export default async function Page({
 	params,
@@ -43,7 +55,7 @@ export default async function Page({
 
 	const shortSlug = `${state.toLowerCase()}/${city.toLowerCase()}`;
 
-	const [counties, placeData, quoteCollection, cityPlaces] = await Promise.all([
+	const [counties, placeData, countyFactsData, quoteCollection, countyChildPlaces] = await Promise.all([
 		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
 		getPlaceBySlug({
 			slug: fullSlug,
@@ -51,12 +63,17 @@ export default async function Page({
 			includeRaces: true,
 			raceColumns: 'slug,normalizedPositionName,electionDate,positionDescription,positionLevel',
 		}),
+		getPlaceBySlug({
+			slug: countySlug,
+			includeChildren: false,
+			includeRaces: false,
+		}),
 		sanityFetch({
 			query: quoteCollectionByIdQuery,
 			params: { id: CAROUSEL_QUOTE_COLLECTION_ID },
 			tags: ['quoteCollections'],
 		}),
-		getCityPlacesByCounty({ state: stateCode, countySlug }),
+		getCountyChildPlaces({ state: stateCode, countySlug }),
 	]);
 
 	let resolvedPlaceData = placeData;
@@ -75,9 +92,22 @@ export default async function Page({
 		notFound();
 	}
 
+	const citySegment = city.toLowerCase();
 	const cityPlace =
-		cityPlaces.find(c => c.slug.toLowerCase() === shortSlug) ??
-		(resolvedPlaceData?.slug?.toLowerCase() === shortSlug ? resolvedPlaceData : null);
+		countyChildPlaces.find(c => {
+			const slug = c.slug?.toLowerCase();
+			if (!slug) return false;
+			if (slug === fullSlug || slug === shortSlug) return true;
+			return slug.split('/').pop() === citySegment;
+		}) ??
+		(resolvedPlaceData &&
+		(() => {
+			const slug = resolvedPlaceData.slug?.toLowerCase();
+			if (!slug) return false;
+			return slug === fullSlug || slug === shortSlug || slug.split('/').pop() === citySegment;
+		})()
+			? resolvedPlaceData
+			: null);
 
 	if (!cityPlace) {
 		notFound();
@@ -92,7 +122,29 @@ export default async function Page({
 		{ href: '', label: cityName },
 	];
 
-	const factsCards = placeToFactsCards(resolvedPlaceData);
+	const factsSourcePlace = resolvedPlaceData ?? cityPlace;
+	const cityFactsEligible = isCityOrTownMtfcc(factsSourcePlace.mtfcc);
+	const suspiciousFactsMatch = hasSuspiciousFactsMatch(factsSourcePlace, countyFactsData);
+	const factsCards = cityFactsEligible ? placeToFactsCards(factsSourcePlace) : [];
+
+	const factsDecisionLog = {
+		requestedSlug: fullSlug,
+		requestedShortSlug: shortSlug,
+		resolvedCitySlug: cityPlace.slug,
+		resolvedCityMtfcc: cityPlace.mtfcc ?? null,
+		countySlug,
+		countyFactsSlug: countyFactsData?.slug ?? null,
+		cityFactsEligible,
+		suspiciousFactsMatch,
+		factsShown: factsCards.length > 0,
+	};
+	if (!cityFactsEligible) {
+		console.warn('[city-facts] suppressed-invalid-locality-type', factsDecisionLog);
+	} else if (suspiciousFactsMatch) {
+		console.warn('[city-facts] suspicious-city-county-facts-match', factsDecisionLog);
+	} else {
+		console.info('[city-facts] resolved', factsDecisionLog);
+	}
 
 	const quoteItems = quoteCollection?.quoteCollectionContent?.list_chooseQuotes ?? [];
 	const carouselCards = quoteItems.map(item => ({
@@ -191,11 +243,24 @@ export async function generateMetadata({
 	const stateName = getStateName(stateCode);
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const shortSlug = `${state.toLowerCase()}/${city.toLowerCase()}`;
-	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
+	const [counties, countyFactsData] = await Promise.all([
+		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
+		getPlaceBySlug({
+			slug: countySlug,
+			includeChildren: false,
+			includeRaces: false,
+		}),
+	]);
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
-	const countyDisplayName = resolveLocalityName(countyPlace, undefined, countySlug);
-	const cityPlaces = await getCityPlacesByCounty({ state: stateCode, countySlug });
-	let cityPlace = cityPlaces.find(c => c.slug.toLowerCase() === shortSlug);
+	const countyDisplayName = resolveLocalityName(countyPlace, countyFactsData ?? undefined, countySlug);
+	const cityPlaces = await getCountyChildPlaces({ state: stateCode, countySlug });
+	const citySegment = city.toLowerCase();
+	let cityPlace = cityPlaces.find(c => {
+		const slug = c.slug?.toLowerCase();
+		if (!slug) return false;
+		if (slug === `${countySlug}/${citySegment}` || slug === shortSlug) return true;
+		return slug.split('/').pop() === citySegment;
+	});
 	if (!cityPlace) {
 		const placeByShortSlug = await getPlaceBySlug({
 			slug: shortSlug,

@@ -143,6 +143,9 @@ import { footer } from './footer.ts';
 import { twoUpCardBlockCardImage } from './twoUpCardBlockCardImage.ts';
 import { electionsPositionHeroDesignSettings } from './electionsPositionHeroDesignSettings.ts';
 import { officeItem } from './officeItem.ts';
+import { teamValuesCard } from './teamValuesCard.ts';
+import { teamValuesBlockContent } from './teamValuesBlockContent.ts';
+import { teamValuesBlockDesignSettings } from './teamValuesBlockDesignSettings.ts';
 
 export const groupSchema = [
 	calculatorTextBlockDesignSettings,
@@ -290,4 +293,7 @@ export const groupSchema = [
 	footer,
 	electionsPositionHeroDesignSettings,
 	officeItem,
+	teamValuesCard,
+	teamValuesBlockContent,
+	teamValuesBlockDesignSettings,
 ];

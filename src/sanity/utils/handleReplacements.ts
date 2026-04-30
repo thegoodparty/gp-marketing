@@ -5,16 +5,45 @@ function checkPrimary(item: any,primaryLanguage:string) {
     : item;
 }
 
+function isSafeMedia(value: unknown): boolean {
+  if (!value || typeof value !== 'object') return false;
+
+  const obj = value as { asset?: unknown };
+
+  if ('asset' in obj) {
+    const asset = obj.asset as any;
+
+    if (asset && typeof asset === 'object') {
+      if ('_ref' in asset && typeof asset._ref === 'string') {
+        return true;
+      }
+      if ('metadata' in asset && asset.metadata && typeof asset.metadata === 'object') {
+        const metadata = asset.metadata as { dimensions?: { width?: number; height?: number } };
+        if (metadata.dimensions && typeof metadata.dimensions.width === 'number' && typeof metadata.dimensions.height === 'number') {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  return true;
+}
+
 function checkReturnI18n(obj: {
   title?: unknown;
   subtitle?: unknown;
   media?: unknown;
 },primaryLanguage:string) {
-  return {
+  const result = {
     title: checkPrimary(obj.title,primaryLanguage),
     subtitle: checkPrimary(obj.subtitle,primaryLanguage),
     media: checkPrimary(obj.media,primaryLanguage),
   };
+  if (!isSafeMedia(result.media)) {
+    result.media = undefined;
+  }
+  return result;
 }
 export function handleReplacements(
   i: Record<string, unknown>,

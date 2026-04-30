@@ -77,6 +77,7 @@ export const list_pageSections = {
             'component_twoUpCardBlock',
             'component_carouselBlock',
             'component_testimonialBlock',
+            'component_testimonialAutoScroll',
           ],
         },
         {
@@ -326,6 +327,10 @@ export const list_pageSections = {
     {
       title: 'Team Values Block',
       type: 'component_teamValuesBlock',
+    },
+    {
+      title: 'Testimonials Auto Scroll',
+      type: 'component_testimonialAutoScroll',
     },
   ],
 }

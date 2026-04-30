@@ -25,7 +25,7 @@ describe('pickResolvedPageExperiments', () => {
 		});
 	});
 
-	test('skips control assignment and uses next experiment', () => {
+	test('control assignment returns control sections with exposure tracked', () => {
 		const control = [{ _key: 'c', _type: 'component_hero' }] as unknown as Sections[];
 		const variants = [
 			row('exp_a', 'treat', treatmentSections),
@@ -33,8 +33,8 @@ describe('pickResolvedPageExperiments', () => {
 		];
 		const assignments = { exp_a: 'control', exp_b: 'v2' };
 		const r = pickResolvedPageExperiments(variants, assignments, control);
-		expect(r.exposures).toEqual([{ flagKey: 'exp_b', variant: 'v2' }]);
-		expect(r.pageSections).toEqual(variants[1].pageSections?.list_pageSections);
+		expect(r.exposures).toEqual([{ flagKey: 'exp_a', variant: 'control' }]);
+		expect(r.pageSections).toEqual(control);
 	});
 
 	test('lower-priority experiment listed first still wins when first has no match', () => {
@@ -59,10 +59,18 @@ describe('pickResolvedPageExperiments', () => {
 		expect(r.pageSections).toEqual(a);
 	});
 
-	test('skips off and null', () => {
+	test('skips off and null (no exposure tracked)', () => {
 		const control = [{ _key: 'c', _type: 'component_hero' }] as unknown as Sections[];
 		const variants = [row('e1', 't', treatmentSections)];
 		expect(pickResolvedPageExperiments(variants, { e1: 'off' }, control).exposures).toEqual([]);
 		expect(pickResolvedPageExperiments(variants, { e1: null }, control).exposures).toEqual([]);
+	});
+
+	test('control tracks exposure but off does not', () => {
+		const control = [{ _key: 'c', _type: 'component_hero' }] as unknown as Sections[];
+		const variants = [row('e1', 't', treatmentSections)];
+		const r = pickResolvedPageExperiments(variants, { e1: 'control' }, control);
+		expect(r.exposures).toEqual([{ flagKey: 'e1', variant: 'control' }]);
+		expect(r.pageSections).toEqual(control);
 	});
 });

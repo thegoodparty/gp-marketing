@@ -21,6 +21,12 @@ export async function generateStaticParams() {
 		slug: entry,
 	}));
 }
+
+// SSR per request so ExperimentResolver reads the visitor's AMP_* cookie and
+// resolves the variant on the server before HTML is sent (no client flicker).
+// Without this, generateStaticParams above would prerender these routes at
+// build time without any cookie, so no exposure event would ever fire.
+export const dynamic = 'force-dynamic';
 export default async function Page(props: any) {
 	const slug = (await props.params)['slug'];
 

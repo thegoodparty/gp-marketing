@@ -29,13 +29,13 @@ function encodeAmplitudeBrowserSdk20Cookie(deviceId: string): string {
  * First-time visitors have no `AMP_*` cookie yet, so SSR cannot bucket them.
  * Bootstrap the same cookie shape the Browser SDK uses, forward it on this
  * request, and set it on the response so the client keeps the same device id.
+ *
+ * Runs on every page route the matcher allows so experiments can be resolved
+ * server-side on first visit, not just on the homepage.
  */
 function maybeBootstrapAmplitudeDeviceCookie(
 	request: NextRequest,
-	pathname: string,
 ): NextResponse | null {
-	if (pathname !== '/') return null;
-
 	const apiKey = process.env['NEXT_PUBLIC_AMPLITUDE_API_KEY'];
 	const cookieName = apiKey ? amplitudeBrowserSdk20CookieName(apiKey) : null;
 	if (!cookieName) return null;
@@ -89,7 +89,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse | u
 		return NextResponse.redirect(destination, match.permanent ? 308 : 307);
 	}
 
-	const bootstrapped = maybeBootstrapAmplitudeDeviceCookie(request, pathname);
+	const bootstrapped = maybeBootstrapAmplitudeDeviceCookie(request);
 	if (bootstrapped) return bootstrapped;
 
 	return undefined;

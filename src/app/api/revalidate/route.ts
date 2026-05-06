@@ -63,7 +63,6 @@ function getPathsToRevalidate(_type: string, payload: Record<string, unknown>): 
 		goodpartyOrg_404Page: ['/'],
 		goodpartyOrg_allComponents: ['/all'],
 		quoteCollections: ['/elections'],
-		experiment_variant: ['/'],
 	};
 
 	const paths = pathMap[_type];
@@ -110,20 +109,31 @@ function targetPageToRoute(target: {
 async function resolveExperimentVariantPaths(
 	payload: Record<string, unknown>,
 ): Promise<string[]> {
-	const id = typeof payload['_id'] === 'string' ? (payload['_id'] as string) : null;
-	if (!id) return ['/'];
+	const rawId = typeof payload['_id'] === 'string' ? (payload['_id'] as string) : null;
+	if (!rawId) return ['/'];
+
+	// Cached HTML is rendered from published content only (sanityClient pins
+	// `perspective: 'published'`), so the published doc is the only meaningful
+	// source for revalidation. Strip the `drafts.` prefix if present; if the
+	// document has only ever existed as a draft, no public HTML was built from
+	// it and the fallback below correctly degrades to `/`.
+	const publishedId = rawId.startsWith('drafts.') ? rawId.slice('drafts.'.length) : rawId;
 
 	type TargetRow = { _type?: string; slug?: string | null };
-	const publishedId = id.startsWith('drafts.') ? id.slice('drafts.'.length) : id;
 
 	try {
-		const targets = await sanityClient.fetch<TargetRow[]>(
-			`*[_id == $id || _id == $publishedId][0].field_targetPages[]->{
+		// Bypass the CDN: it can lag up to ~60s after publish, and the webhook
+		// fires immediately on publish, so a CDN read here would reliably return
+		// pre-publish data and revalidate the wrong (or no) targets.
+		const targets = await sanityClient
+			.withConfig({ useCdn: false })
+			.fetch<TargetRow[]>(
+				`*[_id == $publishedId][0].field_targetPages[]->{
 				_type,
 				"slug": detailPageOverviewNoHero.field_slug
 			}`,
-			{ id, publishedId },
-		);
+				{ publishedId },
+			);
 
 		const routes = (targets ?? [])
 			.map(targetPageToRoute)

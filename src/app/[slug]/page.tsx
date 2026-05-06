@@ -11,16 +11,16 @@ import { PageSections } from '~/PageSections';
 import { ExperimentResolver } from '~/experiments/ExperimentResolver';
 import { HeaderBlock } from '~/ui/HeaderBlock';
 import { Container } from '~/ui/Container';
-import { client } from '~/lib/client';
 
-export async function generateStaticParams() {
-	const entries = await client.fetch<Array<string>>(
-		'*[_type in ["goodpartyOrg_landingPages","policy"]]{"slug": select(_type == "goodpartyOrg_landingPages" => detailPageOverviewNoHero.field_slug,_type == "policy" => policyOverview.field_slug)}.slug',
-	);
-	return entries.filter(Boolean).map(entry => ({
-		slug: entry,
-	}));
-}
+// SSR per request so ExperimentResolver reads the visitor's AMP_* cookie and
+// resolves the variant on the server before HTML is sent (no client flicker).
+// `generateStaticParams` is intentionally omitted: it is a build-time API for
+// static generation and the Next.js docs only sanction combining it with
+// `force-static`. Pairing it with `force-dynamic` is contradictory and causes
+// dev/prod render differences. Unknown slugs are handled by `notFound()` below
+// and the sitemap enumerates landing pages via `src/lib/sitemap-entries.ts`.
+export const dynamic = 'force-dynamic';
+
 export default async function Page(props: any) {
 	const slug = (await props.params)['slug'];
 
@@ -49,7 +49,11 @@ export default async function Page(props: any) {
 			<Container className='bg-goodparty-cream py-(--container-padding) flex flex-col gap-12' size='xl'>
 				<HeaderBlock
 					title={page.policyOverview?.field_policyName}
-					copy={`${page.policyOverview?.field_policySummary}${page.policyOverview?.field_lastUpdated && ` | ${new Date(page.policyOverview.field_lastUpdated).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`}`}
+					copy={`${page.policyOverview?.field_policySummary ?? ''}${
+						page.policyOverview?.field_lastUpdated
+							? ` | ${new Date(page.policyOverview.field_lastUpdated).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
+							: ''
+					}`}
 				/>
 				<RichTextContentSections contentSections={page.policySections?.block_policyText as any} />
 			</Container>

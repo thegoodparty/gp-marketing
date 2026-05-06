@@ -1,10 +1,9 @@
 import { type NextRequest, NextResponse } from 'next/server';
-
-type RedirectMap = Record<string, { to: string; permanent: boolean }>;
-
-function normalizePath(path: string): string {
-	return path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path;
-}
+import {
+	type RedirectMap,
+	fetchRedirectMapFromSanityCdn,
+	normalizePath,
+} from '~/lib/redirect-map';
 
 /**
  * Browser SDK 2.0 cookie name. Must match {@link AmplitudeCookie.cookieName} in
@@ -67,15 +66,11 @@ function maybeBootstrapAmplitudeDeviceCookie(
 }
 
 export async function middleware(request: NextRequest): Promise<NextResponse | undefined> {
-	const origin = request.nextUrl.origin;
-
-	let map: RedirectMap;
+	let map: RedirectMap = {};
 	try {
-		const res = await fetch(`${origin}/api/redirects`);
-		if (!res.ok) return undefined;
-		map = (await res.json()) as RedirectMap;
+		map = await fetchRedirectMapFromSanityCdn();
 	} catch {
-		return undefined;
+		// CMS fetch failed — continue without CMS redirects (still run cookie bootstrap on `/`).
 	}
 
 	const pathname = normalizePath(request.nextUrl.pathname);

@@ -49,7 +49,11 @@ export default async function Page(props: any) {
 			<Container className='bg-goodparty-cream py-(--container-padding) flex flex-col gap-12' size='xl'>
 				<HeaderBlock
 					title={page.policyOverview?.field_policyName}
-					copy={`${page.policyOverview?.field_policySummary}${page.policyOverview?.field_lastUpdated && ` | ${new Date(page.policyOverview.field_lastUpdated).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`}`}
+					copy={`${page.policyOverview?.field_policySummary ?? ''}${
+						page.policyOverview?.field_lastUpdated
+							? ` | ${new Date(page.policyOverview.field_lastUpdated).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
+							: ''
+					}`}
 				/>
 				<RichTextContentSections contentSections={page.policySections?.block_policyText as any} />
 			</Container>

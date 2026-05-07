@@ -1,13 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { getBaseUrl, isPreviewBaseUrl } from '~/lib/url';
 
-<<<<<<< Updated upstream
-export default function robots(): MetadataRoute.Robots {
-	const baseUrl = getBaseUrl();
-	const isStaging = baseUrl.includes('staging') || baseUrl.includes('e6.digital');
-
-	if (isStaging) {
-=======
 const AI_CRAWLERS = [
 	'GPTBot',
 	'OAI-SearchBot',
@@ -21,7 +14,6 @@ export default function robots(): MetadataRoute.Robots {
 	const baseUrl = getBaseUrl();
 
 	if (isPreviewBaseUrl(baseUrl)) {
->>>>>>> Stashed changes
 		return {
 			rules: [
 				{

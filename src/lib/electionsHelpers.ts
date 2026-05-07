@@ -172,6 +172,20 @@ export function getYearFromDateString(dateStr: string): number {
 	return yearMatch ? parseInt(yearMatch[0], 10) : NaN;
 }
 
+const CITY_PAGE_RACE_LEVELS = new Set([
+	'LOCAL',
+	'CITY',
+	'TOWNSHIP',
+	'TOWN',
+	'VILLAGE',
+	'BOROUGH',
+]);
+
+export function isCityPageRaceLevel(level: string | undefined): boolean {
+	if (!level) return false;
+	return CITY_PAGE_RACE_LEVELS.has(level.toUpperCase());
+}
+
 export function formatFilingPeriod(
 	periods: Array<{ startOn: string; endOn: string }> | undefined,
 ): string {

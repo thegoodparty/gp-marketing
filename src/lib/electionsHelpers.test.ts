@@ -11,6 +11,7 @@ import {
 	getStateName,
 	getYearFromDateString,
 	hasSuspiciousFactsMatch,
+	isCityPageRaceLevel,
 	isCityOrTownMtfcc,
 	placeToFactsCards,
 	resolveLocalityName,
@@ -336,6 +337,28 @@ describe('isCityOrTownMtfcc', () => {
 	test('returns false for county or missing mtfcc values', () => {
 		expect(isCityOrTownMtfcc(COUNTY_MTFCC)).toBe(false);
 		expect(isCityOrTownMtfcc(undefined)).toBe(false);
+	});
+});
+
+describe('isCityPageRaceLevel', () => {
+	test('returns true for supported municipal levels', () => {
+		expect(isCityPageRaceLevel('LOCAL')).toBe(true);
+		expect(isCityPageRaceLevel('CITY')).toBe(true);
+		expect(isCityPageRaceLevel('TOWNSHIP')).toBe(true);
+		expect(isCityPageRaceLevel('TOWN')).toBe(true);
+		expect(isCityPageRaceLevel('VILLAGE')).toBe(true);
+		expect(isCityPageRaceLevel('BOROUGH')).toBe(true);
+	});
+
+	test('is case-insensitive', () => {
+		expect(isCityPageRaceLevel('township')).toBe(true);
+	});
+
+	test('returns false for non-municipal or missing levels', () => {
+		expect(isCityPageRaceLevel('COUNTY')).toBe(false);
+		expect(isCityPageRaceLevel('STATE')).toBe(false);
+		expect(isCityPageRaceLevel('FEDERAL')).toBe(false);
+		expect(isCityPageRaceLevel(undefined)).toBe(false);
 	});
 });
 

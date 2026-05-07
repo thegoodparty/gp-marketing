@@ -18,6 +18,7 @@ import { quoteCollectionByIdQuery } from '~/sanity/groq';
 import {
 	getStateName,
 	hasSuspiciousFactsMatch,
+	isCityPageRaceLevel,
 	isCityOrTownMtfcc,
 	placeToFactsCards,
 	resolveLocalityName,
@@ -160,8 +161,7 @@ export default async function Page({
 	};
 
 	const cityRaces = (resolvedPlaceData?.Races ?? []).filter(r => {
-		const level = r.positionLevel?.toUpperCase();
-		return level === 'LOCAL' || level === 'CITY';
+		return isCityPageRaceLevel(r.positionLevel);
 	});
 	const cityOffices = cityRaces.map(race => {
 		const positionSlug = race.slug.split('/').pop() ?? '';

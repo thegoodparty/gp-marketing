@@ -59,3 +59,27 @@ export function getSanityImageUrl(image: { asset?: { _ref?: string; url?: string
 	}
 	return undefined;
 }
+
+function hostnameLooksLikePreview(host: string): boolean {
+	return /\.vercel\.app$/i.test(host);
+}
+
+/**
+ * Detects preview/staging environments that should be blocked from public
+ * crawling and AI discovery. Shared by `src/app/robots.ts` and `/llms.txt`
+ * so both gates stay aligned.
+ */
+export function isPreviewBaseUrl(baseUrl: string): boolean {
+	let host = '';
+	try {
+		host = new URL(baseUrl).hostname;
+	} catch {
+		host = '';
+	}
+	return (
+		process.env['VERCEL_ENV'] === 'preview' ||
+		hostnameLooksLikePreview(host) ||
+		baseUrl.includes('staging') ||
+		baseUrl.includes('e6.digital')
+	);
+}

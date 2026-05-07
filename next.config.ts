@@ -33,6 +33,8 @@ const nextConfig = {
 		];
 	},
 	devIndicators: false,
+	/** Default 60s is too tight on slow or proxied networks (many Sanity/API fetches per page). */
+	staticPageGenerationTimeout: 240,
 	swcMinify: true,
 	reactStrictMode: true,
 	poweredByHeader: false,
@@ -71,6 +73,9 @@ const nextConfig = {
 		taint: false,
 		// optimizeServerReact: true,
 		appDocumentPreloading: false,
+		/** Fewer concurrent prerenders reduces flaky TLS resets through strict corporate proxies. */
+		staticGenerationMaxConcurrency: 6,
+		staticGenerationRetryCount: 5,
 	},
 	webpack(config) {
 		config.module.rules.push({

@@ -8,6 +8,17 @@ const nextConfig = {
 	async rewrites() {
 		return [{ source: '/sitemap.xml', destination: '/api/sitemap-index' }];
 	},
+	async headers() {
+		if (process.env['VERCEL_ENV'] === 'preview') {
+			return [
+				{
+					source: '/:path*',
+					headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
+				},
+			];
+		}
+		return [];
+	},
 	async redirects() {
 		return [
 			{

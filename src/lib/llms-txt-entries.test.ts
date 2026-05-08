@@ -1,7 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 import {
 	buildLlmsTxtDoc,
-	dedupeByUrl,
 	joinUrl,
 	normalizeDescription,
 	renderLlmsTxt,
@@ -57,24 +56,6 @@ describe('joinUrl', () => {
 
 	test('prefixes path with slash if missing', () => {
 		expect(joinUrl(BASE, 'blog')).toBe(`${BASE}/blog`);
-	});
-});
-
-describe('dedupeByUrl', () => {
-	test('keeps first occurrence', () => {
-		const items = [
-			{ url: 'https://a/', title: 'A' },
-			{ url: 'https://b/', title: 'B' },
-			{ url: 'https://a/', title: 'A2' },
-		];
-		expect(dedupeByUrl(items)).toEqual([
-			{ url: 'https://a/', title: 'A' },
-			{ url: 'https://b/', title: 'B' },
-		]);
-	});
-
-	test('returns empty array when input is empty', () => {
-		expect(dedupeByUrl([])).toEqual([]);
 	});
 });
 

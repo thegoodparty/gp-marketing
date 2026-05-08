@@ -57,17 +57,6 @@ export function joinUrl(baseUrl: string, path: string): string {
 	return `${base}${suffix}`;
 }
 
-export function dedupeByUrl<T extends { url: string }>(items: T[]): T[] {
-	const seen = new Set<string>();
-	const out: T[] = [];
-	for (const item of items) {
-		if (seen.has(item.url)) continue;
-		seen.add(item.url);
-		out.push(item);
-	}
-	return out;
-}
-
 /**
  * Collapses whitespace, strips Markdown link syntax, and truncates so a single
  * description line never breaks the `- [title](url): description` format.

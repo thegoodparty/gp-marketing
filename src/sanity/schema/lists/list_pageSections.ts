@@ -36,6 +36,7 @@ export const list_pageSections = {
           of: [
             'component_heroWithSubscribe',
             'component_newsletterBlock',
+            'component_clickToCallBlock',
           ],
         },
         {
@@ -77,6 +78,7 @@ export const list_pageSections = {
             'component_twoUpCardBlock',
             'component_carouselBlock',
             'component_testimonialBlock',
+            'component_testimonialAutoScroll',
           ],
         },
         {
@@ -141,6 +143,7 @@ export const list_pageSections = {
             'component_ctaBlock',
             'component_ctaImageBlock',
             'component_ctaCardsBlock',
+            'component_clickToCallBlock',
             'component_newsletterBlock',
             'component_claimProfileBlock',
           ],
@@ -324,8 +327,16 @@ export const list_pageSections = {
       type: 'component_embeddedBlock',
     },
     {
+      title: 'Click to Call Block',
+      type: 'component_clickToCallBlock',
+    },
+    {
       title: 'Team Values Block',
       type: 'component_teamValuesBlock',
+    },
+    {
+      title: 'Testimonials Auto Scroll',
+      type: 'component_testimonialAutoScroll',
     },
   ],
 }

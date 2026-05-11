@@ -5,6 +5,7 @@
 
 import type { MetadataRoute } from 'next';
 import { sanityClient } from '~/sanity/sanityClient';
+import { stripCountySuffix as stripCountySuffixFromHelpers } from '~/lib/electionsHelpers';
 
 /** 51 US state/territory codes (50 states + DC) */
 export const US_STATE_CODES = [
@@ -26,9 +27,6 @@ const ELECTION_API_BASE =
 
 const CACHE_1H: RequestInit = { next: { revalidate: 3600 } };
 
-const COUNTY_SUFFIX_RE =
-	/\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio)$/i;
-
 export type CountyPlace = { slug?: string; name?: string; mtfcc?: string };
 export type CityPlace = { slug?: string; countyName?: string };
 export type RaceEntry = { slug?: string; positionLevel?: string };
@@ -38,7 +36,7 @@ export function normalizeName(name: string): string {
 }
 
 export function stripCountySuffix(name: string): string {
-	return name.replace(COUNTY_SUFFIX_RE, '') || name;
+	return stripCountySuffixFromHelpers(name);
 }
 
 function dedupeByUrl(entries: MetadataRoute.Sitemap): MetadataRoute.Sitemap {

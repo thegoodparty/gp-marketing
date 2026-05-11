@@ -63,7 +63,7 @@ export interface ElectionsLocationResponse {
 	childLocations: Array<{
 		name: string;
 		slug: string;
-		level: 'county' | 'city' | 'district';
+		level: 'county' | 'city' | 'town' | 'district';
 	}>;
 }
 
@@ -71,7 +71,7 @@ export interface ElectionsLocationResponse {
 export interface ElectionItem {
 	name: string;
 	href: string;
-	level: 'state' | 'county' | 'city' | 'district';
+	level: 'state' | 'county' | 'city' | 'town' | 'district';
 }
 
 export interface ElectionsIndexBlockProps {

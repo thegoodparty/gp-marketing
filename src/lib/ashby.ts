@@ -105,6 +105,6 @@ export function ashbyJobToCard(job: AshbyJob): JobOpeningsCardProps {
 		tag: job.department || 'General',
 		location: job.isRemote ? 'Remote (United States)' : job.location,
 		jobType: formatEmploymentType(job.employmentType),
-		href: job.applyUrl,
+		href: job.jobUrl || job.applyUrl,
 	};
 }

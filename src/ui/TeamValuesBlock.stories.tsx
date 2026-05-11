@@ -14,11 +14,36 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const defaultCards: TeamValuesCardProps[] = [
-	{ heading: 'Compassion', icon: 'heart-handshake', color: 'waxflower', href: '/values/compassion' },
-	{ heading: 'Integrity', icon: 'shield-check', color: 'blue', href: '/values/integrity' },
-	{ heading: 'Innovation', icon: 'lightbulb', color: 'lavender', href: '/values/innovation' },
-	{ heading: 'Community', icon: 'users', color: 'halo-green', href: '/values/community' },
-	{ heading: 'Transparency', icon: 'eye', color: 'bright-yellow', href: '/values/transparency' },
+	{
+		heading: 'Compassion',
+		icon: 'heart-handshake',
+		color: 'waxflower',
+		backCopy: 'We lead with empathy and listen first, centering people in every decision we make.',
+	},
+	{
+		heading: 'Integrity',
+		icon: 'shield-check',
+		color: 'blue',
+		backCopy: 'We act with honesty and accountability, even when it is difficult or inconvenient.',
+	},
+	{
+		heading: 'Innovation',
+		icon: 'lightbulb',
+		color: 'lavender',
+		backCopy: 'We challenge assumptions and test new ideas to deliver better outcomes over time.',
+	},
+	{
+		heading: 'Community',
+		icon: 'users',
+		color: 'halo-green',
+		backCopy: 'We collaborate with and for people, building trust through shared purpose and action.',
+	},
+	{
+		heading: 'Transparency',
+		icon: 'eye',
+		color: 'bright-yellow',
+		backCopy: 'We communicate clearly about what we know, what we do not, and why choices are made.',
+	},
 ];
 
 export const Default: Story = {
@@ -72,6 +97,14 @@ export const NoButtons: Story = {
 			copy: 'These core values guide everything we do.',
 		},
 		cards: defaultCards,
+	},
+	parameters: Default.parameters,
+};
+
+export const MissingBackCopyFallback: Story = {
+	args: {
+		...Default.args,
+		cards: defaultCards.map((card, index) => (index === 0 ? { ...card, backCopy: undefined } : card)),
 	},
 	parameters: Default.parameters,
 };

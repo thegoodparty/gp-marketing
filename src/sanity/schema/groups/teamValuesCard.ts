@@ -28,6 +28,13 @@ export const teamValuesCard = {
 			type: 'field_componentColor6Colors',
 		},
 		{
+			title: 'Back Copy',
+			name: 'field_backCopy',
+			type: 'text',
+			rows: 5,
+			description: 'Content displayed on the back of the card after it is flipped.',
+		},
+		{
 			title: 'Link',
 			name: 'ctaActionWithShared',
 			type: 'ctaActionWithShared',

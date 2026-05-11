@@ -1,25 +1,10 @@
 import { dataset, projectId } from '~/lib/env';
+import { getBaseUrl } from './siteBaseUrl';
+
+export { getBaseUrl } from './siteBaseUrl';
 
 /** Default share image for Open Graph, Twitter, and schema when no page-specific image is set */
 export const DEFAULT_SHARE_IMAGE = 'https://assets.goodparty.org/gp-share-2025.png';
-
-/**
- * Returns the absolute base URL for the site.
- * Used for canonical URLs, sitemap, Open Graph, and schema.org.
- * Checks NEXT_PUBLIC_APP_BASE first (CLI override), then NEXT_PUBLIC_SITE_URL.
- * Production falls back to goodparty.org; VERCEL_URL is used for preview deployments.
- */
-export function getBaseUrl(): string {
-	const explicit = process.env['NEXT_PUBLIC_APP_BASE'] ?? process.env['NEXT_PUBLIC_SITE_URL'];
-	if (explicit && typeof explicit === 'string') {
-		const trimmed = explicit.trim().replace(/\/$/, '');
-		return trimmed.startsWith('http') ? trimmed : `https://${trimmed}`;
-	}
-	if (process.env['VERCEL_ENV'] === 'preview' && process.env['VERCEL_URL']) {
-		return `https://${process.env['VERCEL_URL']}`;
-	}
-	return 'https://goodparty.org';
-}
 
 /**
  * Converts a path to an absolute URL using the site base. Pass-through for already-absolute URLs.
@@ -58,4 +43,28 @@ export function getSanityImageUrl(image: { asset?: { _ref?: string; url?: string
 		return parsed?.url;
 	}
 	return undefined;
+}
+
+function hostnameLooksLikePreview(host: string): boolean {
+	return /\.vercel\.app$/i.test(host);
+}
+
+/**
+ * Detects preview/staging environments that should be blocked from public
+ * crawling and AI discovery. Shared by `src/app/robots.ts` and `/llms.txt`
+ * so both gates stay aligned.
+ */
+export function isPreviewBaseUrl(baseUrl: string): boolean {
+	let host = '';
+	try {
+		host = new URL(baseUrl).hostname;
+	} catch {
+		host = '';
+	}
+	return (
+		process.env['VERCEL_ENV'] === 'preview' ||
+		hostnameLooksLikePreview(host) ||
+		baseUrl.includes('staging') ||
+		baseUrl.includes('e6.digital')
+	);
 }

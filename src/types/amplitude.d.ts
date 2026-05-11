@@ -1,5 +1,10 @@
 declare global {
 	interface Window {
+		/** Survives HMR and Strict Mode remounts; prevents duplicate `init` / experiment wiring. */
+		__goodpartyAmplitude?: {
+			clientInitialized: boolean;
+			scriptInjected: boolean;
+		};
 		amplitude?: {
 			init(apiKey: string, options?: {
 				fetchRemoteConfig?: boolean;

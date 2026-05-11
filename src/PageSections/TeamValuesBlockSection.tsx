@@ -2,7 +2,6 @@ import { stegaClean } from 'next-sanity';
 
 import type { Sections } from '~/PageSections';
 
-import { resolveButtonHref, type ButtonType } from '~/lib/buttonTransformer';
 import { transformButtons } from '~/lib/buttonTransformer';
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { resolveComponentColor } from '~/ui/_lib/resolveComponentColor';
@@ -22,15 +21,11 @@ export function TeamValuesBlockSection(section: Extract<Sections, { _type: 'comp
 				? resolveComponentColor(stegaClean(item.field_componentColor6Colors))
 				: undefined;
 
-			const href = item.ctaActionWithShared?.action
-				? resolveButtonHref(item.ctaActionWithShared as unknown as ButtonType)
-				: undefined;
-
 			return {
 				icon: item.field_icon,
 				heading: item.field_title,
+				backCopy: (item as { field_backCopy?: string }).field_backCopy,
 				color: rawColor as TeamValuesCardColor | undefined,
-				href,
 			};
 		}) ?? [];
 

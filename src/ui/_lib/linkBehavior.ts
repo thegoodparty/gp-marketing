@@ -1,4 +1,4 @@
-const DEFAULT_ORIGIN = process.env['NEXT_PUBLIC_SITE_URL'] ?? 'https://goodparty.org';
+import { getBaseUrl } from '~/lib/url';
 
 function isGoodPartyHost(host: string): boolean {
 	return host === 'goodparty.org' || host.endsWith('.goodparty.org');
@@ -23,7 +23,7 @@ export function isExternalToEcosystem(href: string | undefined | null): boolean 
 
 	let url: URL;
 	try {
-		url = new URL(trimmed, DEFAULT_ORIGIN);
+		url = new URL(trimmed, getBaseUrl());
 	} catch {
 		// Malformed URLs are treated as external to be safe.
 		return true;

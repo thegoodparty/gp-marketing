@@ -2,6 +2,14 @@ import { type NextRequest, NextResponse } from 'next/server';
 
 type RedirectMap = Record<string, { to: string; permanent: boolean }>;
 
+/** Runtime gate — avoids baking preview-only headers into the build (next.config headers). */
+function withPreviewNoIndex(response: NextResponse): NextResponse {
+	if (process.env['VERCEL_ENV'] === 'preview') {
+		response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+	}
+	return response;
+}
+
 function normalizePath(path: string): string {
 	return path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path;
 }
@@ -66,16 +74,16 @@ function maybeBootstrapAmplitudeDeviceCookie(
 	return response;
 }
 
-export async function middleware(request: NextRequest): Promise<NextResponse | undefined> {
+export async function middleware(request: NextRequest): Promise<NextResponse> {
 	const origin = request.nextUrl.origin;
 
 	let map: RedirectMap;
 	try {
 		const res = await fetch(`${origin}/api/redirects`);
-		if (!res.ok) return undefined;
+		if (!res.ok) return withPreviewNoIndex(NextResponse.next());
 		map = (await res.json()) as RedirectMap;
 	} catch {
-		return undefined;
+		return withPreviewNoIndex(NextResponse.next());
 	}
 
 	const pathname = normalizePath(request.nextUrl.pathname);
@@ -86,13 +94,15 @@ export async function middleware(request: NextRequest): Promise<NextResponse | u
 			? match.to
 			: new URL(match.to, request.url).toString();
 
-		return NextResponse.redirect(destination, match.permanent ? 308 : 307);
+		return withPreviewNoIndex(
+			NextResponse.redirect(destination, match.permanent ? 308 : 307),
+		);
 	}
 
 	const bootstrapped = maybeBootstrapAmplitudeDeviceCookie(request);
-	if (bootstrapped) return bootstrapped;
+	if (bootstrapped) return withPreviewNoIndex(bootstrapped);
 
-	return undefined;
+	return withPreviewNoIndex(NextResponse.next());
 }
 
 export const config = {

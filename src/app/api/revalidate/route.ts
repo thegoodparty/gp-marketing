@@ -35,6 +35,22 @@ function getSlugFromPayload(payload: Record<string, unknown>, path: string): str
 	return undefined;
 }
 
+/**
+ * Document types whose changes should also bust the curated /llms.txt feed.
+ * Mirrors the source data wired up in `fetchLlmsTxtData` so any publish that
+ * could affect the listing invalidates the cached llms.txt response.
+ */
+const LLMS_TXT_FEEDING_TYPES = new Set<string>([
+	'article',
+	'glossary',
+	'goodpartyOrg_landingPages',
+	'policy',
+	'goodpartyOrg_home',
+	'goodpartyOrg_allArticles',
+	'goodpartyOrg_glossary',
+	'goodpartyOrg_contact',
+]);
+
 function getPathsToRevalidate(_type: string, payload: Record<string, unknown>): string[] {
 	const slugPaths: Record<string, string> = {
 		article: 'editorialOverview.field_slug',
@@ -65,12 +81,14 @@ function getPathsToRevalidate(_type: string, payload: Record<string, unknown>): 
 		quoteCollections: ['/elections'],
 	};
 
-	const paths = pathMap[_type];
-	if (paths) {
-		return Array.isArray(paths) ? paths : [paths];
+	const raw = pathMap[_type];
+	const paths = raw ? (Array.isArray(raw) ? [...raw] : [raw]) : ['/'];
+
+	if (LLMS_TXT_FEEDING_TYPES.has(_type) && !paths.includes('/llms.txt')) {
+		paths.push('/llms.txt');
 	}
 
-	return ['/'];
+	return paths;
 }
 
 /**

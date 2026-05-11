@@ -30,6 +30,11 @@ const nextConfig = {
 				destination: 'https://app.goodparty.org/login',
 				permanent: true,
 			},
+			{
+				source: '/llms.xml',
+				destination: '/llms.txt',
+				permanent: true,
+			},
 		];
 	},
 	devIndicators: false,

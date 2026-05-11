@@ -13,11 +13,10 @@ async function initClient() {
 	return client;
 }
 
-async function getClient() {
-	if (!clientPromise) {
-		clientPromise = initClient();
-	}
-	return await clientPromise;
+function getClient(): Promise<Awaited<ReturnType<typeof initClient>>> {
+	const promise = clientPromise ?? initClient();
+	clientPromise = promise;
+	return promise;
 }
 
 export async function getAmplitudeDeviceId(): Promise<string | null> {
@@ -31,8 +30,10 @@ export async function getAmplitudeDeviceId(): Promise<string | null> {
 
 	try {
 		const decoded = decodeURIComponent(raw);
-		const parsed = JSON.parse(decoded);
-		return typeof parsed.deviceId === 'string' ? parsed.deviceId : null;
+		const parsed: unknown = JSON.parse(decoded);
+		if (typeof parsed !== 'object' || parsed === null) return null;
+		const deviceId = (parsed as Record<string, unknown>)['deviceId'];
+		return typeof deviceId === 'string' ? deviceId : null;
 	} catch {
 		return null;
 	}

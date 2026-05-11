@@ -353,7 +353,7 @@ export async function getCachedElectionRouteParams(): Promise<{
 }> {
 	if (!cachedElectionRouteParams) {
 		cachedElectionRouteParams = (async () => {
-			const results = await Promise.all(US_STATE_CODES.map(async (c) => fetchStateElectionRouteParams(c)));
+			const results = await Promise.all(US_STATE_CODES.map((c) => fetchStateElectionRouteParams(c)));
 			return {
 				countyParams: dedupeByKey(results.flatMap((r) => r.countyParams), (x) => `${x.state}|${x.county}`),
 				cityParams: dedupeByKey(

@@ -36,6 +36,7 @@ export const list_pageSections = {
           of: [
             'component_heroWithSubscribe',
             'component_newsletterBlock',
+            'component_clickToCallBlock',
           ],
         },
         {
@@ -142,6 +143,7 @@ export const list_pageSections = {
             'component_ctaBlock',
             'component_ctaImageBlock',
             'component_ctaCardsBlock',
+            'component_clickToCallBlock',
             'component_newsletterBlock',
             'component_claimProfileBlock',
           ],
@@ -323,6 +325,10 @@ export const list_pageSections = {
     {
       title: 'Embedded Block',
       type: 'component_embeddedBlock',
+    },
+    {
+      title: 'Click to Call Block',
+      type: 'component_clickToCallBlock',
     },
     {
       title: 'Team Values Block',

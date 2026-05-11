@@ -6,6 +6,19 @@ export function trackEvent(eventName: string, eventProperties?: Record<string, u
 	window.amplitude?.track(eventName, eventProperties);
 }
 
+/** Click-to-call MOFU CTA (component_clickToCallBlock). */
+export function trackClickToCallCtaViewed(props: { page_path: string | null }): void {
+	trackEvent('Click to Call CTA Viewed', { page_path: props.page_path });
+}
+
+export function trackClickToCallCtaClicked(props: { page_path: string | null }): void {
+	trackEvent('Click to Call CTA Clicked', { page_path: props.page_path });
+}
+
+export function trackClickToCallPhoneSubmitted(props: { page_path: string | null }): void {
+	trackEvent('Click to Call Phone Submitted', { page_path: props.page_path });
+}
+
 /**
  * True when the path ends with `/sign-up` (any origin, any prefix).
  * Intentionally broad so every sign-up surface is tracked, including future

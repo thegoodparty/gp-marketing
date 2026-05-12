@@ -2,6 +2,9 @@ import type { Sections } from '~/PageSections';
 import type { AuthorProps } from '~/ui/Author';
 import type { SanityImage } from '~/ui/types';
 
+const PERSON_TYPE = 'person';
+const ORGANISATION_TYPE = 'organisation';
+
 export function resolveAuthor(
 	quote?: NonNullable<
 		NonNullable<
@@ -13,7 +16,7 @@ export function resolveAuthor(
 
 	const { _type } = quote;
 
-	if (_type === 'person') {
+	if (_type === PERSON_TYPE) {
 		const { personOverview } = quote;
 		const { field_personName, field_jobTitleOrRole, img_profilePicture } = personOverview ?? {};
 		if (!field_personName) return undefined;
@@ -25,7 +28,7 @@ export function resolveAuthor(
 		};
 	}
 
-	if (_type === 'organisation') {
+	if (_type === ORGANISATION_TYPE) {
 		const { organisationOverview } = quote;
 		const { field_organisationName, img_logo } = organisationOverview ?? {};
 		if (!field_organisationName) return undefined;

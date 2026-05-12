@@ -1,4 +1,5 @@
 import type { TestimonialCardProps } from '../TestimonialCard';
+import { resolveAuthor } from './resolveAuthor';
 
 export function resolveTestimonials(item: any): TestimonialCardProps[] {
 	const quotes = item?.quotes;
@@ -16,14 +17,9 @@ export function resolveTestimonials(item: any): TestimonialCardProps[] {
 		}
 
 		const { ref_quoteBy } = nested ?? {};
-		const { personOverview: person, organisationOverview: org } = ref_quoteBy ?? {};
 
 		testimonials.push({
-			author: {
-				name: person?.field_personName || org?.field_organisationName,
-				meta: [person?.field_jobTitleOrRole],
-				image: person?.img_profilePicture || org?.img_logo,
-			},
+			author: resolveAuthor(ref_quoteBy),
 			copy,
 		});
 	}

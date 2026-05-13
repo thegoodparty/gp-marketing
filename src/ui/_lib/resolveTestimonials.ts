@@ -1,20 +1,28 @@
 import type { TestimonialCardProps } from '../TestimonialCard';
+import { resolveAuthor } from './resolveAuthor';
 
 export function resolveTestimonials(item: any): TestimonialCardProps[] {
+	const quotes = item?.quotes;
+	if (!Array.isArray(quotes) || quotes.length === 0) {
+		return [];
+	}
+
 	const testimonials: TestimonialCardProps[] = [];
 
-	item.quotes.forEach((quote: any) => {
+	for (const row of quotes as Array<{ quote?: any }>) {
+		const nested = row?.quote;
+		const copy = nested?.field_quote;
+		if (typeof copy !== 'string' || copy.trim().length === 0) {
+			continue;
+		}
+
+		const { ref_quoteBy } = nested ?? {};
+
 		testimonials.push({
-			author: {
-				name:
-					quote?.quote?.ref_quoteBy?.personOverview?.field_personName ||
-					quote?.quote?.ref_quoteBy?.organisationOverview?.field_organisationName,
-				meta: [quote?.quote?.ref_quoteBy?.personOverview?.field_jobTitleOrRole],
-				image: quote?.quote?.ref_quoteBy?.personOverview?.img_profilePicture || quote?.quote?.ref_quoteBy?.organisationOverview?.img_logo,
-			},
-			copy: quote.quote.field_quote,
+			author: resolveAuthor(ref_quoteBy),
+			copy,
 		});
-	});
+	}
 
 	return testimonials;
 }

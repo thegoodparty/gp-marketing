@@ -293,6 +293,14 @@ describe('isStateIndexDistrictPlace', () => {
 
 		expect(
 			isStateIndexDistrictPlace({
+				name: 'Union',
+				slug: 'me/union',
+				mtfcc: 'G5420',
+			}),
+		).toBe(false);
+
+		expect(
+			isStateIndexDistrictPlace({
 				name: 'Andover Public Schools',
 				slug: 'me/andover-public-schools',
 				mtfcc: 'G5420',

@@ -39,9 +39,9 @@ export function isDistrictMtfcc(mtfcc?: string): boolean {
 const COUNTY_EQUIVALENT_SLUG_SUFFIX_RE =
 	/(?:-county|-parish|-borough|-census-area|-municipio|-city-and-borough|-city-and-county)$/i;
 
-/** Matches common school / district naming (incl. VT UHSD and supervisory unions). */
+/** Matches common school / district naming (incl. VT UHSD and supervisory-union phrases). */
 const DISTRICT_KEYWORD_RE =
-	/\b(district|school|schools|isd|usd|csd|sd|rsu|sau|uhsd|supervisory|union)\b/i;
+	/\b(district|schools?|isd|usd|csd|sd|rsu|sau|uhsd)\b|\bsupervisory(?:\s+|-)union\b/i;
 
 /**
  * Defensive classification for the state-level elections index "districts" list.

@@ -36,6 +36,31 @@ export function isDistrictMtfcc(mtfcc?: string): boolean {
 	return mtfcc?.startsWith('G54') ?? false;
 }
 
+const COUNTY_EQUIVALENT_SLUG_SUFFIX_RE =
+	/(?:-county|-parish|-borough|-census-area|-municipio|-city-and-borough|-city-and-county)$/i;
+
+/** Matches common school / district naming (incl. VT UHSD and supervisory unions). */
+const DISTRICT_KEYWORD_RE =
+	/\b(district|school|schools|isd|usd|csd|sd|rsu|sau|uhsd|supervisory|union)\b/i;
+
+/**
+ * Defensive classification for the state-level elections index "districts" list.
+ * Some API payloads (notably Maine) attach G54xx to municipality-like slugs; we only
+ * keep rows that look district-shaped by slug depth, county-equivalent tail, or
+ * district keywords in name/slug.
+ */
+export function isStateIndexDistrictPlace(place: Pick<PlaceItem, 'name' | 'slug' | 'mtfcc'>): boolean {
+	if (!isDistrictMtfcc(place.mtfcc)) return false;
+	const slug = (place.slug ?? '').toLowerCase();
+	const name = (place.name ?? '').toLowerCase();
+	const segments = slug.split('/').filter(Boolean);
+	const tail = segments[segments.length - 1] ?? '';
+
+	if (segments.length >= 3) return true;
+	if (COUNTY_EQUIVALENT_SLUG_SUFFIX_RE.test(tail)) return true;
+	return DISTRICT_KEYWORD_RE.test(name) || DISTRICT_KEYWORD_RE.test(tail);
+}
+
 const FETCH_JSON_MAX_RETRIES = 2;
 
 function sleep(ms: number): Promise<void> {
@@ -224,10 +249,13 @@ export async function getCityPlacesByCounty(params: {
 	state: string;
 	countySlug: string;
 }): Promise<PlaceItem[]> {
-	const allCities = await getPlacesByState({ state: params.state, mtfcc: CITY_MTFCC });
+	const [allCities, allTowns] = await Promise.all([
+		getPlacesByState({ state: params.state, mtfcc: CITY_MTFCC }),
+		getPlacesByState({ state: params.state, mtfcc: TOWN_MTFCC }),
+	]);
 	const countyName = countyNameFromSlug(params.countySlug);
 	const normalizedCountyBaseName = canonicalizeCountyEquivalentName(params.state, countyName).baseName;
-	return allCities.filter(
+	return [...allCities, ...allTowns].filter(
 		p =>
 			normalizeName(canonicalizeCountyEquivalentName(params.state, p.countyName ?? '').baseName) ===
 			normalizeName(normalizedCountyBaseName),

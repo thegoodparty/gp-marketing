@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { urlWithoutHubSpotTrackingParams } from '~/lib/stripHubSpotTrackingParams';
 
 type RedirectMap = Record<string, { to: string; permanent: boolean }>;
 
@@ -75,6 +76,11 @@ function maybeBootstrapAmplitudeDeviceCookie(
 }
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
+	const withoutHubSpot = urlWithoutHubSpotTrackingParams(request.nextUrl);
+	if (withoutHubSpot) {
+		return withPreviewNoIndex(NextResponse.redirect(withoutHubSpot, 308));
+	}
+
 	const origin = request.nextUrl.origin;
 
 	let map: RedirectMap;

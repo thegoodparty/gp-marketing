@@ -4,6 +4,7 @@ import {
 	fetchRedirectMapFromSanityCdn,
 	normalizePath,
 } from '~/lib/redirect-map';
+import { urlWithoutHubSpotTrackingParams } from '~/lib/stripHubSpotTrackingParams';
 
 /** Runtime gate — avoids baking preview-only headers into the build (next.config headers). */
 function withPreviewNoIndex(response: NextResponse): NextResponse {
@@ -71,6 +72,11 @@ function maybeBootstrapAmplitudeDeviceCookie(request: NextRequest): NextResponse
 }
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
+	const withoutHubSpot = urlWithoutHubSpotTrackingParams(request.nextUrl);
+	if (withoutHubSpot) {
+		return withPreviewNoIndex(NextResponse.redirect(withoutHubSpot, 308));
+	}
+
 	let map: RedirectMap = {};
 	try {
 		map = await fetchRedirectMapFromSanityCdn();

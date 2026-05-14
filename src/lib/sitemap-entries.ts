@@ -7,7 +7,7 @@ import type { MetadataRoute } from 'next';
 import { sanityClient } from '~/sanity/sanityClient';
 import { stripCountySuffix as stripCountySuffixFromHelpers } from '~/lib/electionsHelpers';
 
-/** 51 US state/territory codes (50 states + DC) */
+/** 51 US state/DC codes (50 states + DC) */
 export const US_STATE_CODES = [
 	'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY',
 ] as const;

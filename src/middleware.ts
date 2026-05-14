@@ -1,7 +1,10 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import {
+	type RedirectMap,
+	fetchRedirectMapFromSanityCdn,
+	normalizePath,
+} from '~/lib/redirect-map';
 import { urlWithoutHubSpotTrackingParams } from '~/lib/stripHubSpotTrackingParams';
-
-type RedirectMap = Record<string, { to: string; permanent: boolean }>;
 
 /** Runtime gate — avoids baking preview-only headers into the build (next.config headers). */
 function withPreviewNoIndex(response: NextResponse): NextResponse {
@@ -9,10 +12,6 @@ function withPreviewNoIndex(response: NextResponse): NextResponse {
 		response.headers.set('X-Robots-Tag', 'noindex, nofollow');
 	}
 	return response;
-}
-
-function normalizePath(path: string): string {
-	return path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path;
 }
 
 /**
@@ -36,15 +35,12 @@ function encodeAmplitudeBrowserSdk20Cookie(deviceId: string): string {
 
 /**
  * First-time visitors have no `AMP_*` cookie yet, so SSR cannot bucket them.
- * Bootstrap the same cookie shape the Browser SDK uses, forward it on this
- * request, and set it on the response so the client keeps the same device id.
- *
  * Runs on every page route the matcher allows so experiments can be resolved
- * server-side on first visit, not just on the homepage.
+ * server-side on first visit, not just on the homepage. Bootstrap the same
+ * cookie shape the Browser SDK uses, forward it on this request, and set it
+ * on the response so the client keeps the same device id.
  */
-function maybeBootstrapAmplitudeDeviceCookie(
-	request: NextRequest,
-): NextResponse | null {
+function maybeBootstrapAmplitudeDeviceCookie(request: NextRequest): NextResponse | null {
 	const apiKey = process.env['NEXT_PUBLIC_AMPLITUDE_API_KEY'];
 	const cookieName = apiKey ? amplitudeBrowserSdk20CookieName(apiKey) : null;
 	if (!cookieName) return null;
@@ -81,15 +77,11 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
 		return withPreviewNoIndex(NextResponse.redirect(withoutHubSpot, 308));
 	}
 
-	const origin = request.nextUrl.origin;
-
-	let map: RedirectMap;
+	let map: RedirectMap = {};
 	try {
-		const res = await fetch(`${origin}/api/redirects`);
-		if (!res.ok) return withPreviewNoIndex(NextResponse.next());
-		map = (await res.json()) as RedirectMap;
+		map = await fetchRedirectMapFromSanityCdn();
 	} catch {
-		return withPreviewNoIndex(NextResponse.next());
+		// CMS fetch failed — continue without CMS redirects (still run Amplitude cookie bootstrap).
 	}
 
 	const pathname = normalizePath(request.nextUrl.pathname);

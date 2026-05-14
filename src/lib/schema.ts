@@ -2,6 +2,7 @@ import { getBaseUrl, toAbsoluteUrl, DEFAULT_SHARE_IMAGE } from './url';
 
 const ORGANIZATION_ID_FRAGMENT = '#organization';
 const WEBSITE_ID_FRAGMENT = '#website';
+const WEBPAGE_ID_FRAGMENT = '#webpage';
 const SOFTWARE_APPLICATION_ID_FRAGMENT = '#software-application';
 
 function trimTrailingSlash(value: string): string {
@@ -16,6 +17,12 @@ export function organizationId(baseUrl: string = getBaseUrl()): string {
 /** Stable `@id` for the WebSite entity. */
 export function webSiteId(baseUrl: string = getBaseUrl()): string {
 	return `${trimTrailingSlash(baseUrl)}/${WEBSITE_ID_FRAGMENT}`;
+}
+
+/** Stable `@id` for a WebPage entity at the given URL. */
+export function webPageId(url: string): string {
+	const absoluteUrl = url.startsWith('http') ? url : toAbsoluteUrl(url);
+	return `${absoluteUrl}${WEBPAGE_ID_FRAGMENT}`;
 }
 
 /** Stable `@id` for the SoftwareApplication entity (campaign platform). */
@@ -131,7 +138,7 @@ export function buildWebPageSchema(params: WebPageSchemaParams): object {
 	const schema: Record<string, unknown> = {
 		'@context': 'https://schema.org',
 		'@type': params.pageType ?? 'WebPage',
-		'@id': `${url}#webpage`,
+		'@id': webPageId(url),
 		url,
 		name: params.name,
 		isPartOf: { '@id': params.isPartOfId ?? webSiteId(baseUrl) },
@@ -170,7 +177,7 @@ export function buildArticleSchema(params: ArticleSchemaParams): object {
 		'@type': params.pageType ?? 'Article',
 		headline: params.headline,
 		url,
-		mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+		mainEntityOfPage: { '@type': 'WebPage', '@id': webPageId(url) },
 		publisher: { '@id': params.publisherId ?? organizationId(baseUrl) },
 	};
 

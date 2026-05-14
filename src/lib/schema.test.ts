@@ -12,6 +12,7 @@ import {
 	organizationId,
 	resolveSameAs,
 	softwareApplicationId,
+	webPageId,
 	webSiteId,
 } from './schema';
 
@@ -48,6 +49,13 @@ describe('organization id helpers', () => {
 	test('webSiteId and softwareApplicationId share base URL', () => {
 		expect(webSiteId('https://goodparty.org')).toBe('https://goodparty.org/#website');
 		expect(softwareApplicationId('https://goodparty.org')).toBe('https://goodparty.org/#software-application');
+	});
+
+	test('webPageId matches WebPage schema node ids', () => {
+		expect(webPageId('/blog/article/foo')).toBe('https://goodparty.org/blog/article/foo#webpage');
+		expect(webPageId('https://goodparty.org/blog/article/foo')).toBe(
+			'https://goodparty.org/blog/article/foo#webpage',
+		);
 	});
 });
 
@@ -134,7 +142,7 @@ describe('buildArticleSchema', () => {
 		expect(schema['@type']).toBe('Article');
 		expect(schema['headline']).toBe('Foo');
 		expect((schema['mainEntityOfPage'] as Record<string, unknown>)['@id']).toBe(
-			'https://goodparty.org/blog/article/foo',
+			'https://goodparty.org/blog/article/foo#webpage',
 		);
 		const author = schema['author'] as Record<string, unknown>;
 		expect(author['@type']).toBe('Person');
@@ -217,6 +225,20 @@ describe('buildSoftwareApplicationSchema', () => {
 });
 
 describe('buildSchemaGraph', () => {
+	test('links Article mainEntityOfPage to the matching WebPage node id', () => {
+		const graph = asRecord(
+			buildSchemaGraph([
+				buildArticleSchema({ url: '/blog/article/foo', headline: 'Foo' }),
+				buildWebPageSchema({ url: '/blog/article/foo', name: 'Foo' }),
+			]) as object,
+		);
+		const entries = graph['@graph'] as Array<Record<string, unknown>>;
+		const article = entries.find(entry => entry['@type'] === 'Article');
+		const webPage = entries.find(entry => entry['@type'] === 'WebPage');
+
+		expect((article?.['mainEntityOfPage'] as Record<string, unknown>)['@id']).toBe(webPage?.['@id']);
+	});
+
 	test('strips inner @context fields and wraps results', () => {
 		const graph = asRecord(
 			buildSchemaGraph([

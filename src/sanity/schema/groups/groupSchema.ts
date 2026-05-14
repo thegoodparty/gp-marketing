@@ -1,4 +1,5 @@
 import { pricingPlanDesignSettings } from './pricingPlanDesignSettings.ts';
+import { imageTwoColumnCopyBlockDesignSettings } from './imageTwoColumnCopyBlockDesignSettings.ts';
 import { stepperBlockItem } from './stepperBlockItem.ts';
 import { twoUpCardBlockOne } from './twoUpCardBlockOne.ts';
 import { goodPartyOrgPledgeDesignSettings } from './goodPartyOrgPledgeDesignSettings.ts';
@@ -296,4 +297,5 @@ export const groupSchema = [
 	teamValuesCard,
 	teamValuesBlockContent,
 	teamValuesBlockDesignSettings,
+	imageTwoColumnCopyBlockDesignSettings,
 ];

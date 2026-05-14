@@ -43,6 +43,7 @@ import { ListOfOfficesBlockSection } from '~/PageSections/ListOfOfficesBlockSect
 import { EmbeddedBlockSection } from '~/PageSections/EmbeddedBlockSection';
 import { TeamValuesBlockSection } from '~/PageSections/TeamValuesBlockSection';
 import { TestimonialAutoScrollSection } from '~/PageSections/TestimonialAutoScrollSection';
+import { ImageTwoColumnCopyBlockSection } from '~/PageSections/ImageTwoColumnCopyBlockSection';
 import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
 
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
@@ -369,6 +370,13 @@ export function PageSections(props: Props) {
 					return (
 						<ComponentErrorBoundary key={section._key} componentName='Testimonials Auto Scroll'>
 							<TestimonialAutoScrollSection {...(section as any)} />
+						</ComponentErrorBoundary>
+					);
+				// @ts-expect-error — run `bun run sanity:generate` to add component_imageTwoColumnCopyBlock to the Sections union
+				case 'component_imageTwoColumnCopyBlock':
+					return (
+						<ComponentErrorBoundary key={section._key} componentName='Image Two Column Copy Block'>
+							<ImageTwoColumnCopyBlockSection {...(section as any)} />
 						</ComponentErrorBoundary>
 					);
 				default:

@@ -23,7 +23,12 @@
       "mcp__Sanity__query_documents",
       "mcp__Sanity__create_documents_from_json",
       "Bash(git checkout *)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(cat ~/.claude/settings.json 2>/dev/null || echo \"File not found\")",
+      "Read(//Users/tonypham/.claude/**)",
+      "Bash(curl -fsSL https://bun.sh/install)",
+      "Bash(bash)",
+      "Bash(~/.bun/bin/bun --version)"
     ]
   }
 }

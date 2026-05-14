@@ -17,7 +17,7 @@ const images = Array.from({ length: 8 }, () => imageJpg());
 export const Default: Story = {
 	args: {
 		title: 'Come build a space to dream',
-		copy: <p>We're creating the most inspiring place on the internet. Join us.</p>,
+		copy: (<p>We're creating the most inspiring place on the internet. Join us.</p>) as any,
 		buttons: [
 			{
 				label: 'Open Roles',

@@ -42,6 +42,7 @@ import {component_embeddedBlock} from './component_embeddedBlock.ts'
 import {component_teamValuesBlock} from './component_teamValuesBlock.ts'
 import {component_testimonialAutoScroll} from './component_testimonialAutoScroll.ts'
 import {component_imageTwoColumnCopyBlock} from './component_imageTwoColumnCopyBlock.ts'
+import {component_clickToCallBlock} from './component_clickToCallBlock.ts'
 
 export const componentSchema = [
 	component_jobOpeningsBlock,
@@ -88,4 +89,5 @@ export const componentSchema = [
 	component_teamValuesBlock,
 	component_testimonialAutoScroll,
 	component_imageTwoColumnCopyBlock,
+	component_clickToCallBlock,
 ];

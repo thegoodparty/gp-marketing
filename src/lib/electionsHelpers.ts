@@ -5,9 +5,9 @@ import type { FactsCardProps } from '~/ui/FactsCard';
 export { isCityOrTownMtfcc } from '~/lib/electionsApi';
 
 const COUNTY_EQUIV_SUFFIX_RE =
-	/\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio|Municipality)$/i;
+	/\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipality)$/i;
 const COUNTY_EQUIV_TAIL_RE =
-	/\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio|Municipality)(?:\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipio|Municipality))*$/i;
+	/\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipality)(?:\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipality))*$/i;
 
 type CanonicalSuffix =
 	| 'County'
@@ -16,7 +16,6 @@ type CanonicalSuffix =
 	| 'Census Area'
 	| 'City and Borough'
 	| 'City and County'
-	| 'Municipio'
 	| 'Municipality';
 
 type CanonicalCountyName = {
@@ -32,7 +31,6 @@ const SUFFIX_NORMALIZATION: Record<string, CanonicalSuffix> = {
 	'census area': 'Census Area',
 	'city and borough': 'City and Borough',
 	'city and county': 'City and County',
-	municipio: 'Municipio',
 	municipality: 'Municipality',
 };
 
@@ -62,14 +60,13 @@ function pickSuffixByState(
 		return 'Borough';
 	}
 	if (upper === 'LA') return 'Parish';
-	if (upper === 'PR') return 'Municipio';
 	if (existingSuffix === 'City and County') return existingSuffix;
 	return 'County';
 }
 
 /**
  * Canonical county-equivalent naming for county-level display surfaces.
- * Enforces AK/LA/PR conventions and defensively cleans malformed double suffixes.
+ * Enforces AK/LA conventions and defensively cleans malformed double suffixes.
  */
 export function canonicalizeCountyEquivalentName(
 	stateCode: string,

@@ -10,6 +10,7 @@ import { CarouselBlockSection } from '~/PageSections/CarouselBlockSection';
 import { ClaimProfileBlockSection } from '~/PageSections/ClaimProfileBlockSection';
 import { ComparisonBlockSection } from '~/PageSections/ComparisonBlockSection';
 import { CTABannerBlockSection } from '~/PageSections/CTABannerBlockSection';
+import { ClickToCallBlockSection } from '~/PageSections/ClickToCallBlockSection';
 import { CTABlockSection } from '~/PageSections/CTABlockSection';
 import { CTACardsBlockSection } from '~/PageSections/CTACardsBlockSection';
 import { CTAImageBlockSection } from '~/PageSections/CTAImageBlockSection';
@@ -160,6 +161,12 @@ export function PageSections(props: Props) {
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='CTA Block'>
 								<CTABlockSection {...section} />
+							</ComponentErrorBoundary>
+						);
+					case 'component_clickToCallBlock':
+						return (
+							<ComponentErrorBoundary key={section._key} componentName='Click to Call Block'>
+								<ClickToCallBlockSection {...section} />
 							</ComponentErrorBoundary>
 						);
 					case 'component_ctaCardsBlock':

@@ -5,7 +5,7 @@ import {
 	CITY_MTFCC,
 	getPlacesByState,
 	getPlaceBySlug,
-	isDistrictMtfcc,
+	isStateIndexDistrictPlace,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import { DEFAULT_DISPLAY_COUNT } from '~/constants/display';
@@ -64,7 +64,7 @@ export default async function Page({
 	]);
 
 	const countyPlaces = allPlaces.filter(p => p.mtfcc === COUNTY_MTFCC);
-	const districtPlaces = allPlaces.filter(p => isDistrictMtfcc(p.mtfcc));
+	const districtPlaces = allPlaces.filter(isStateIndexDistrictPlace);
 	const isSingleCounty = countyPlaces.length <= 1;
 	let cityPlaces = isSingleCounty
 		? await getPlacesByState({ state: stateCode, mtfcc: CITY_MTFCC })

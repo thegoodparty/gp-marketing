@@ -37,7 +37,7 @@ export function isDistrictMtfcc(mtfcc?: string): boolean {
 }
 
 const COUNTY_EQUIVALENT_SLUG_SUFFIX_RE =
-	/(?:-county|-parish|-borough|-census-area|-municipio|-city-and-borough|-city-and-county)$/i;
+	/(?:-county|-parish|-borough|-census-area|-city-and-borough|-city-and-county)$/i;
 
 /** Matches common school / district naming (incl. VT UHSD and supervisory-union phrases). */
 const DISTRICT_KEYWORD_RE =
@@ -239,7 +239,7 @@ function normalizeName(name: string): string {
 function countyNameFromSlug(countySlug: string): string {
 	const part = countySlug.split('/').pop() ?? '';
 	const withoutSuffix = part.replace(
-		/-(county|parish|city-and-borough|city-and-county|borough|census-area|municipio)$/i,
+		/-(county|parish|city-and-borough|city-and-county|borough|census-area)$/i,
 		'',
 	);
 	return withoutSuffix.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());

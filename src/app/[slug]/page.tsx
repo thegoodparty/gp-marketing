@@ -1,6 +1,7 @@
 import type { Metadata, ResolvingMetadata } from 'next';
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
+import { stegaClean } from 'next-sanity';
 import { goodpartyOrg_landingPagesAndPolicyQuery } from '~/sanity/groq';
 import { sanityFetch } from '~/sanity/sanityClient';
 
@@ -11,6 +12,9 @@ import { PageSections } from '~/PageSections';
 import { ExperimentResolver } from '~/experiments/ExperimentResolver';
 import { HeaderBlock } from '~/ui/HeaderBlock';
 import { Container } from '~/ui/Container';
+import { PageSchema } from '~/ui/PageSchema';
+import { buildWebPageSchema } from '~/lib/schema';
+import { toAbsoluteUrl } from '~/lib/url';
 
 // SSR per request so ExperimentResolver reads the visitor's AMP_* cookie and
 // resolves the variant on the server before HTML is sent (no client flicker).
@@ -36,27 +40,61 @@ export default async function Page(props: any) {
 		notFound();
 	}
 
+	const pageUrl = page.href ? toAbsoluteUrl(page.href) : toAbsoluteUrl(`/${slug}`);
+	const seoDescription = page.seo?.field_metaDescription
+		? stegaClean(page.seo.field_metaDescription)
+		: undefined;
+
 	if (page._type === 'goodpartyOrg_landingPages') {
 		const controlSections = page.pageSections?.list_pageSections;
+		const landingName = page.detailPageOverviewNoHero?.field_pageName
+			? stegaClean(page.detailPageOverviewNoHero.field_pageName)
+			: slug;
+		const landingSchema = buildWebPageSchema({
+			url: pageUrl,
+			name: landingName,
+			description: seoDescription,
+		});
 		return (
-			<Suspense fallback={<PageSections pageSections={controlSections} />}>
-				<ExperimentResolver pageId={page._id} controlSections={controlSections} />
-			</Suspense>
+			<>
+				<PageSchema schema={landingSchema} />
+				<Suspense fallback={<PageSections pageSections={controlSections} />}>
+					<ExperimentResolver pageId={page._id} controlSections={controlSections} />
+				</Suspense>
+			</>
 		);
 	}
 	if (page._type === 'policy') {
+		const policyName = page.policyOverview?.field_policyName
+			? stegaClean(page.policyOverview.field_policyName)
+			: slug;
+		const policySummary = page.policyOverview?.field_policySummary
+			? stegaClean(page.policyOverview.field_policySummary)
+			: undefined;
+		const lastUpdated = page.policyOverview?.field_lastUpdated
+			? new Date(stegaClean(page.policyOverview.field_lastUpdated)).toISOString()
+			: undefined;
+		const policySchema = buildWebPageSchema({
+			url: pageUrl,
+			name: policyName,
+			description: policySummary ?? seoDescription,
+			dateModified: lastUpdated,
+		});
 		return (
-			<Container className='bg-goodparty-cream py-(--container-padding) flex flex-col gap-12' size='xl'>
-				<HeaderBlock
-					title={page.policyOverview?.field_policyName}
-					copy={`${page.policyOverview?.field_policySummary ?? ''}${
-						page.policyOverview?.field_lastUpdated
-							? ` | ${new Date(page.policyOverview.field_lastUpdated).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
-							: ''
-					}`}
-				/>
-				<RichTextContentSections contentSections={page.policySections?.block_policyText as any} />
-			</Container>
+			<>
+				<PageSchema schema={policySchema} />
+				<Container className='bg-goodparty-cream py-(--container-padding) flex flex-col gap-12' size='xl'>
+					<HeaderBlock
+						title={page.policyOverview?.field_policyName}
+						copy={`${page.policyOverview?.field_policySummary ?? ''}${
+							page.policyOverview?.field_lastUpdated
+								? ` | ${new Date(page.policyOverview.field_lastUpdated).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
+								: ''
+						}`}
+					/>
+					<RichTextContentSections contentSections={page.policySections?.block_policyText as any} />
+				</Container>
+			</>
 		);
 	}
 	return null;

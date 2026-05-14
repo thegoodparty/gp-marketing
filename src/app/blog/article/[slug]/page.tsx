@@ -22,7 +22,15 @@ import { client } from '~/lib/client';
 import { format } from 'date-fns';
 import { stegaClean } from 'next-sanity';
 import { PageSchema } from '~/ui/PageSchema';
-import { DEFAULT_SHARE_IMAGE, getBaseUrl, getSanityImageUrl } from '~/lib/url';
+import { DEFAULT_SHARE_IMAGE, getBaseUrl, getSanityImageUrl, toAbsoluteUrl } from '~/lib/url';
+import {
+	buildArticleSchema,
+	buildBreadcrumbSchema,
+	buildFAQSchema,
+	buildSchemaGraph,
+	buildWebPageSchema,
+} from '~/lib/schema';
+import { resolveFAQItemsAsText } from '~/lib/resolveFAQItemsAsText';
 import { BlogBlock } from '~/ui/BlogBlock';
 import type { BlogCardProps } from '~/ui/BlogCard';
 import { resolveBlogCard } from '~/ui/_lib/resolveBlogCard';
@@ -68,21 +76,53 @@ export default async function Page(props: any) {
 	const publishedDate = page.editorialOverview?.field_publishedDate;
 	const updatedDate = page.editorialOverview?.field_lastUpdated;
 
-	const articleSchema = {
-		'@context': 'https://schema.org',
-		'@type': 'Article',
-		headline: page.editorialOverview?.field_editorialTitle ? stegaClean(page.editorialOverview.field_editorialTitle) : undefined,
-		...(page.editorialOverview?.ref_author?.personOverview?.field_personName && {
-			author: {
-				'@type': 'Person',
-				name: stegaClean(page.editorialOverview.ref_author.personOverview.field_personName),
-			},
-		}),
-		...(publishedDate && { datePublished: new Date(stegaClean(publishedDate)).toISOString() }),
-		...(updatedDate && { dateModified: new Date(stegaClean(updatedDate)).toISOString() }),
-		image: imageUrl,
+	const headline = page.editorialOverview?.field_editorialTitle
+		? stegaClean(page.editorialOverview.field_editorialTitle)
+		: '';
+	const metaDescription = page.seo?.field_metaDescription ? stegaClean(page.seo.field_metaDescription) : undefined;
+	const authorName = page.editorialOverview?.ref_author?.personOverview?.field_personName
+		? stegaClean(page.editorialOverview.ref_author.personOverview.field_personName)
+		: undefined;
+	const authorJobTitle = page.editorialOverview?.ref_author?.personOverview?.field_jobTitleOrRole
+		? stegaClean(page.editorialOverview.ref_author.personOverview.field_jobTitleOrRole)
+		: undefined;
+
+	const articleSchema = buildArticleSchema({
 		url: articleUrl,
-	};
+		headline,
+		description: metaDescription,
+		image: imageUrl,
+		datePublished: publishedDate ? new Date(stegaClean(publishedDate)).toISOString() : undefined,
+		dateModified: updatedDate ? new Date(stegaClean(updatedDate)).toISOString() : undefined,
+		authorName,
+		authorJobTitle,
+		pageType: 'BlogPosting',
+	});
+
+	const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbs, toAbsoluteUrl);
+
+	const inlineFaqItems = ((page.contentSections?.block_editorialContentSections ?? []) as ReadonlyArray<
+		{ _type?: string | undefined }
+	>)
+		.filter(section => section?._type === 'faqs')
+		.flatMap(section =>
+			resolveFAQItemsAsText(
+				((section as { list_faQs?: unknown }).list_faQs ?? null) as Parameters<typeof resolveFAQItemsAsText>[0],
+			),
+		);
+	const faqSchema = buildFAQSchema(inlineFaqItems);
+
+	const articleGraph = buildSchemaGraph([
+		articleSchema,
+		breadcrumbSchema,
+		faqSchema,
+		buildWebPageSchema({
+			url: articleUrl,
+			name: headline || 'Article',
+			description: metaDescription,
+			image: imageUrl,
+		}),
+	]);
 
 	const relatedArticles = (page.relatedArticles?.list_relatedArticles ?? [])
 		.map(resolveBlogCard)
@@ -90,7 +130,7 @@ export default async function Page(props: any) {
 
 	return (
 		<>
-			<PageSchema schema={articleSchema} />
+			<PageSchema schema={articleGraph ?? undefined} />
 			<BlogArticleHero
 				title={page.editorialOverview?.field_editorialTitle}
 				tagline={{ label: page.editorialContentTags?.category?.tagOverview?.field_name, href: page.editorialContentTags?.category?.href }}

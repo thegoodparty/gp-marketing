@@ -16,8 +16,8 @@ const styles = tv({
 		heading: 'max-w-[16ch]',
 		body: 'max-w-[40ch] text-neutral-600',
 		buttons: 'flex flex-wrap justify-center gap-4',
-		imageStrip: 'flex w-full',
-		imageItem: 'flex-1 min-w-0 aspect-square overflow-hidden',
+		imageStrip: 'flex w-full gap-4',
+		imageItem: 'flex-1 min-w-0 aspect-square overflow-hidden rounded-lg',
 	},
 });
 

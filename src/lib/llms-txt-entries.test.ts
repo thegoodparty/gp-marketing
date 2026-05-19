@@ -180,6 +180,8 @@ describe('buildLlmsTxtDoc', () => {
 			emptyData({
 				landingPages: [
 					{ slug: 'about', title: 'About', description: null },
+					{ slug: 'framework', title: 'Our Framework for Change', description: null },
+					{ slug: 'redraft-platform', title: 'Redraft Your Platform', description: null },
 					{ slug: 'homepage-frame', title: 'Homepage Frame', description: null },
 					{ slug: 'candidate-draft', title: 'Candidate Draft Page', description: null },
 					{ slug: 'lowercase-frame', title: 'internal frame example', description: null },
@@ -187,7 +189,7 @@ describe('buildLlmsTxtDoc', () => {
 			}),
 		);
 		const urls = getSection(doc, 'Pages').items.map(i => i.url);
-		expect(urls).toEqual([`${BASE}/about`]);
+		expect(urls).toEqual([`${BASE}/about`, `${BASE}/framework`, `${BASE}/redraft-platform`]);
 	});
 
 	test('skips rows with missing slug or missing title', () => {

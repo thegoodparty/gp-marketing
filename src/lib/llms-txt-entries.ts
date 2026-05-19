@@ -47,6 +47,7 @@ const SITE_SUMMARY =
 	'Nonpartisan tools, guides, and data that help independent and third-party candidates run for office and help voters discover them.';
 const MAX_DESCRIPTION_LENGTH = 200;
 const EXCLUDED_PAGE_TITLE_TERMS = ['frame', 'draft'] as const;
+const EXCLUDED_PAGE_TITLE_PATTERN = new RegExp(`\\b(?:${EXCLUDED_PAGE_TITLE_TERMS.join('|')})\\b`, 'i');
 
 /**
  * Removes a trailing slash and joins a path onto an absolute base URL.
@@ -92,8 +93,7 @@ function rowsToItems(
 
 function excludeInternalLandingPages(items: LlmsTxtItem[]): LlmsTxtItem[] {
 	return items.filter(item => {
-		const title = item.title.toLowerCase();
-		return !EXCLUDED_PAGE_TITLE_TERMS.some(term => title.includes(term));
+		return !EXCLUDED_PAGE_TITLE_PATTERN.test(item.title);
 	});
 }
 

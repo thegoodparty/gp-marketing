@@ -42,10 +42,11 @@ export type LlmsTxtSourceData = {
 	policies: SlugTitleDescRow[];
 };
 
-const SITE_TITLE = 'Good Party';
+const SITE_TITLE = 'GoodParty.org';
 const SITE_SUMMARY =
 	'Nonpartisan tools, guides, and data that help independent and third-party candidates run for office and help voters discover them.';
 const MAX_DESCRIPTION_LENGTH = 200;
+const EXCLUDED_PAGE_TITLE_TERMS = ['frame', 'draft'] as const;
 
 /**
  * Removes a trailing slash and joins a path onto an absolute base URL.
@@ -89,6 +90,13 @@ function rowsToItems(
 	return items;
 }
 
+function excludeInternalLandingPages(items: LlmsTxtItem[]): LlmsTxtItem[] {
+	return items.filter(item => {
+		const title = item.title.toLowerCase();
+		return !EXCLUDED_PAGE_TITLE_TERMS.some(term => title.includes(term));
+	});
+}
+
 /**
  * Pure transformation: source data + base URL → structured llms.txt doc.
  */
@@ -101,7 +109,7 @@ export function buildLlmsTxtDoc(
 		topLevel.push({
 			title: 'Home',
 			url: joinUrl(baseUrl, '/'),
-			description: 'Good Party homepage and mission overview.',
+			description: 'GoodParty.org homepage and mission overview.',
 		});
 	}
 	if (data.singletons.blog) {
@@ -123,16 +131,11 @@ export function buildLlmsTxtDoc(
 		url: joinUrl(baseUrl, '/elections'),
 		description: 'State, county, and local election guides for US voters.',
 	});
-	topLevel.push({
-		title: 'Candidates',
-		url: joinUrl(baseUrl, '/candidates'),
-		description: 'Independent and third-party candidates running for office.',
-	});
 	if (data.singletons.contact) {
 		topLevel.push({
 			title: 'Contact',
 			url: joinUrl(baseUrl, '/contact'),
-			description: 'Get in touch with Good Party.',
+			description: 'Get in touch with GoodParty.org.',
 		});
 	}
 
@@ -154,7 +157,7 @@ export function buildLlmsTxtDoc(
 	pushSection('Top-level pages', topLevel);
 	pushSection('Articles', rowsToItems(baseUrl, data.articles, '/blog/article'));
 	pushSection('Political terms', rowsToItems(baseUrl, data.glossary, '/political-terms'));
-	pushSection('Pages', rowsToItems(baseUrl, data.landingPages, ''));
+	pushSection('Pages', excludeInternalLandingPages(rowsToItems(baseUrl, data.landingPages, '')));
 	pushSection('Policies', rowsToItems(baseUrl, data.policies, ''));
 
 	return {

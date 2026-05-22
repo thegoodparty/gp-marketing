@@ -3,7 +3,7 @@ import { stegaClean } from 'next-sanity';
 import type { Sections } from '~/PageSections';
 import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
 import { US_STATES_TUPLES } from '~/constants/usStates';
-import { COUNTY_MTFCC, getCityPlacesByCounty, getPlacesByState } from '~/lib/electionsApi';
+import { COUNTY_MTFCC, getCountyChildPlaces, getPlacesByState, TOWN_MTFCC } from '~/lib/electionsApi';
 import { transformButtons } from '~/lib/buttonTransformer';
 import { DEFAULT_DISPLAY_COUNT } from '~/constants/display';
 import { ElectionsIndexBlock } from '~/ui/ElectionsIndexBlock';
@@ -52,15 +52,15 @@ export async function ElectionsIndexBlockSection(props: ElectionsIndexBlockSecti
 		}
 	} else {
 		const statePart = slug.split('/')[0] ?? '';
-		const cityPlaces = await getCityPlacesByCounty({
+		const childPlaces = await getCountyChildPlaces({
 			state: statePart.toUpperCase(),
 			countySlug: slug,
 		});
-		if (cityPlaces.length > 0) {
-			elections = cityPlaces.map(c => ({
+		if (childPlaces.length > 0) {
+			elections = childPlaces.map(c => ({
 				name: c.name,
-				href: `/elections/${slug}/${c.slug.split('/').pop() ?? c.name.toLowerCase().replace(/\s+/g, '-')}`,
-				level: 'city' as const,
+				href: `/elections/${slug}/${c.slug?.split('/')?.pop() ?? c.name.toLowerCase().replace(/\s+/g, '-')}`,
+				level: (c.mtfcc === TOWN_MTFCC ? 'town' : 'city') as 'city' | 'town',
 			}));
 		} else {
 			elections = statesToElectionItems();

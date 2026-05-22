@@ -166,7 +166,7 @@ describe('getCountyChildPlaces', () => {
 		expect(slugs(result)).toEqual(['ct/hartford-county/avon-town', 'ct/hartford']);
 	});
 
-	test('falls back to countyName city matching when hierarchy children are empty', async () => {
+	test('returns empty when hierarchy and fallback are empty (production-shaped WV Braxton)', async () => {
 		withFetchMock([
 			{
 				match: url => url.includes('/v1/places?') && url.includes('slug=wv%2Fbraxton-county'),
@@ -184,27 +184,54 @@ describe('getCountyChildPlaces', () => {
 					url.includes('/v1/places?') &&
 					url.includes('state=WV') &&
 					url.includes('mtfcc=G4110'),
+				body: [],
+			},
+			{
+				match: url =>
+					url.includes('/v1/places?') &&
+					url.includes('state=WV') &&
+					url.includes('mtfcc=G4040'),
+				status: 404,
+				body: { statusCode: 404 },
+			},
+		]);
+
+		const result = await getCountyChildPlaces({ state: 'WV', countySlug: 'wv/braxton-county' });
+		expect(slugs(result)).toEqual([]);
+	});
+
+	test('falls back to countyName city matching when hierarchy children are empty and API has matching cities', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('slug=ca%2Fsample-county'),
 				body: [
 					{
-						slug: 'wv/sutton',
-						name: 'Sutton',
-						mtfcc: 'G4110',
-						state: 'WV',
-						countyName: 'Braxton',
+						slug: 'ca/sample-county',
+						name: 'Sample County',
+						mtfcc: 'G4020',
+						children: [],
 					},
+				],
+			},
+			{
+				match: url =>
+					url.includes('/v1/places?') &&
+					url.includes('state=CA') &&
+					url.includes('mtfcc=G4110'),
+				body: [
 					{
-						slug: 'wv/gassaway',
-						name: 'Gassaway',
+						slug: 'ca/sample-city',
+						name: 'Sample City',
 						mtfcc: 'G4110',
-						state: 'WV',
-						countyName: 'Braxton',
+						state: 'CA',
+						countyName: 'Sample',
 					},
 				],
 			},
 		]);
 
-		const result = await getCountyChildPlaces({ state: 'WV', countySlug: 'wv/braxton-county' });
-		expect(slugs(result)).toEqual(['wv/sutton', 'wv/gassaway']);
+		const result = await getCountyChildPlaces({ state: 'CA', countySlug: 'ca/sample-county' });
+		expect(slugs(result)).toEqual(['ca/sample-city']);
 	});
 
 	test('merges G4040 towns for Maine Androscoggin when hierarchy children are sparse (production-shaped)', async () => {

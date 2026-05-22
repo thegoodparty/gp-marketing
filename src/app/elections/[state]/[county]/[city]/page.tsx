@@ -125,7 +125,8 @@ export default async function Page({
 	const factsSourcePlace = resolvedPlaceData ?? cityPlace;
 	const cityFactsEligible = isCityOrTownMtfcc(factsSourcePlace.mtfcc);
 	const suspiciousFactsMatch = hasSuspiciousFactsMatch(factsSourcePlace, countyFactsData);
-	const factsCards = cityFactsEligible ? placeToFactsCards(factsSourcePlace) : [];
+	const factsCards =
+		cityFactsEligible && !suspiciousFactsMatch ? placeToFactsCards(factsSourcePlace) : [];
 
 	const factsDecisionLog = {
 		requestedSlug: fullSlug,

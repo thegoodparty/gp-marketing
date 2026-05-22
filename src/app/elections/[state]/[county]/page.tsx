@@ -101,6 +101,11 @@ export default async function Page({
 				};
 			});
 	const hasTownEntries = cityPlaces.some(c => c.mtfcc === TOWN_MTFCC);
+	const countyHasCityLargest = Boolean(placeData?.cityLargest?.trim());
+	const citiesEmptyMessage =
+		cities.length === 0 && countyHasCityLargest
+			? `Municipal election pages for cities and towns in ${normalizedCounty?.displayName ?? countyPlace!.name} are not available yet. County-level elections are listed above.`
+			: undefined;
 
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
@@ -183,6 +188,7 @@ export default async function Page({
 					backgroundColor="midnight"
 					stateSlug={fullSlug}
 					elections={cities}
+					emptyMessage={citiesEmptyMessage}
 					header={{
 						title: `${hasTownEntries ? 'Cities & Towns' : 'Cities'} in ${normalizedCounty?.displayName ?? countyPlace!.name}`,
 						copy: `Browse elections by city in ${normalizedCounty?.displayName ?? countyPlace!.name}, ${stateName}.`,

@@ -227,6 +227,7 @@ export async function getPlacesByState(params: {
 	if (params.mtfcc) searchParams.set('mtfcc', params.mtfcc);
 	const url = `${BASE_URL}/v1/places?${searchParams}`;
 	const data = await fetchJson<PlaceItem[]>(url, CACHE_OPTIONS);
+	// 404 (e.g. state=WV&mtfcc=G4040 when no towns in DB) → [] without treating as error
 	return Array.isArray(data) ? data : [];
 }
 

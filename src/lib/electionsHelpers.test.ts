@@ -366,14 +366,16 @@ describe('hasSuspiciousFactsMatch', () => {
 		expect(hasSuspiciousFactsMatch(city, county)).toBe(false);
 	});
 
-	test('does not flag smith-valley-style sparse facts with insufficient overlap', () => {
+	test('flags smith-valley-style prod duplicate county metrics on town row', () => {
 		const county: PlaceWithFacts = {
 			id: '1',
 			name: 'Lyon County',
 			slug: 'nv/lyon-county',
 			state: 'NV',
 			mtfcc: COUNTY_MTFCC,
-			population: 62000,
+			population: 22343,
+			density: 70.9,
+			incomeHouseholdMedian: 77701,
 		};
 		const city: PlaceWithFacts = {
 			id: '2',
@@ -381,22 +383,40 @@ describe('hasSuspiciousFactsMatch', () => {
 			slug: 'nv/lyon-county/smith-valley',
 			state: 'NV',
 			mtfcc: TOWN_MTFCC,
+			population: 22343,
+			density: 70.9,
+			incomeHouseholdMedian: 77701,
 		};
-		expect(hasSuspiciousFactsMatch(city, county)).toBe(false);
+		expect(hasSuspiciousFactsMatch(city, county)).toBe(true);
 	});
 });
 
 describe('lyon county city facts eligibility scenarios', () => {
-	test('smith-valley: town type with no fact fields results in no facts cards', () => {
-		const smithValley: PlaceWithFacts = {
+	test('smith-valley: suspicious county duplicate suppresses facts on city page pattern', () => {
+		const county: PlaceWithFacts = {
 			id: '1',
+			name: 'Lyon County',
+			slug: 'nv/lyon-county',
+			state: 'NV',
+			mtfcc: COUNTY_MTFCC,
+			population: 22343,
+			density: 70.9,
+			incomeHouseholdMedian: 77701,
+		};
+		const smithValley: PlaceWithFacts = {
+			id: '2',
 			name: 'Smith Valley',
 			slug: 'nv/lyon-county/smith-valley',
 			state: 'NV',
 			mtfcc: TOWN_MTFCC,
+			population: 22343,
+			density: 70.9,
+			incomeHouseholdMedian: 77701,
+			cityLargest: 'Fernley',
 		};
 		expect(isCityOrTownMtfcc(smithValley.mtfcc)).toBe(true);
-		expect(placeToFactsCards(smithValley)).toHaveLength(0);
+		expect(placeToFactsCards(smithValley).length).toBeGreaterThan(0);
+		expect(hasSuspiciousFactsMatch(smithValley, county)).toBe(true);
 	});
 
 	test('yerington: city type with localized metrics yields facts cards', () => {

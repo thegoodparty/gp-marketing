@@ -48,6 +48,14 @@ const styles = tv({
 				resultCount: 'text-black',
 				locationLink: 'text-black',
 			},
+			white: {
+				base: 'bg-white',
+				searchInput:
+					'border-neutral-500 text-black placeholder:text-black/50 focus:border-blue-500',
+				searchIcon: 'text-neutral-500',
+				resultCount: 'text-black',
+				locationLink: 'text-black',
+			},
 		},
 	},
 });
@@ -87,6 +95,8 @@ export interface ElectionsIndexBlockProps {
 	searchPlaceholder?: string;
 	ctaLabel?: string;
 	ctaHref?: string;
+	/** Shown when elections list is empty and user is not searching */
+	emptyMessage?: string;
 }
 
 export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
@@ -133,6 +143,7 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 
 	const hasMore = displayCount < filteredElections.length;
 	const totalCount = filteredElections.length;
+	const hasNoLocations = props.elections.length === 0;
 
 	const handleShowMore = () => {
 		setDisplayCount(prev => prev + initialDisplayCount);
@@ -172,12 +183,14 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 								/>
 								<IconResolver icon="search" className={searchIcon()} />
 							</div>
-							{/* Result Count */}
-							<div className={resultCount()}>
-								<span>
-									{totalCount.toLocaleString()} Available Results
-								</span>
-							</div>
+							{/* Result Count — hidden when master list is empty; emptyMessage carries the story */}
+							{!hasNoLocations && (
+								<div className={resultCount()}>
+									<span>
+										{totalCount.toLocaleString()} Available Results
+									</span>
+								</div>
+							)}
 						</div>
 					)}
 
@@ -199,7 +212,7 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 							<Text styleType="body-1">
 								{searchQuery
 									? `No results found for "${searchQuery}"`
-									: 'No locations found'}
+									: (props.emptyMessage ?? 'No locations found')}
 							</Text>
 						</div>
 					)}

@@ -41,9 +41,9 @@ gp-marketing cannot create municipal pages or correct demographics without corre
 | **LIM-04** | Children only via fallback | Hierarchy municipal children empty; state cities/towns match `countyName` | List works if `countyName` aligns (e.g. Lyon, Harris) | ETL hierarchy |
 | **LIM-05** | `countyName` ≠ county slug name | Child `countyName` does not canonicalize to county derived from slug (CT planning regions, AK borough names on cities) | Fallback fails; need hierarchy | ETL |
 | **LIM-06** | Wrong `cityLargest` on child | Town/city row carries county’s `cityLargest` (e.g. Smith Valley → Fernley) | Often overlaps LIM-02 | ETL |
-| **LIM-07** | Sitemap / index gap | City in API but `countyName` cannot map to a G4020 county slug ([`buildCountyLookups`](../src/lib/sitemap-entries.ts)) | City may be omitted from state index / sitemap | ETL + QA doc |
+| **LIM-07** | Sitemap / index gap | City in API but `countyName` cannot map to a G4020 county slug ([`buildCountyLookups`](../src/lib/sitemap-entries.ts)) | City may be omitted from state index / sitemap | ETL + Engineering |
 | **LIM-08** | District on county route (`G54*`) | County URL resolves to district MTFCC | No city list; district election UX | Product / data model |
-| **LIM-09** | QA trap: short API slug URL | `/elections/nv/fernley` hits county route → redirect `/elections/nv` | Use county-scoped URLs only | Marketing doc |
+| **LIM-09** | Engineering trap: short API slug URL | `/elections/nv/fernley` hits county route → redirect `/elections/nv` | Use county-scoped URLs only | Marketing doc |
 
 **ETL lineage note (LIM-01):** Places are materialized when tied to races (see `m_election_api__place`). Counties with `cityLargest` but zero children may lack **any** municipal place rows with races—not only missing `parentId`.
 
@@ -73,12 +73,12 @@ Canonical **site URLs** use `/elections/{state}/{county-segment}/{city-segment}`
 | LIM-01 | VA | [Fairfax County](https://goodparty.org/elections/va/fairfax-county) | `cityLargest`: Centreville; municipal `children`: 0 (57 VA counties in national LIM-01 sweep) | Empty-list UX when deployed | Ingest/link Fairfax cities (high traffic county) |
 | LIM-01 | LA | [Jefferson Parish](https://goodparty.org/elections/la/jefferson-parish) | `cityLargest`: Metairie; municipal `children`: 0 | Empty-list UX | Parish place rows for cities (Metairie, etc.) |
 | LIM-01 | AK | [Haines Borough](https://goodparty.org/elections/ak/haines-borough) | `cityLargest`: Haines; `children`: [] | Empty-list UX | Borough child place or clear `cityLargest` |
-| LIM-01 | MD | [Baltimore City](https://goodparty.org/elections/md/baltimore-city) | Independent city county row; `children`: [] | County page without city sub-list | Expected for city-county; document for QA |
+| LIM-01 | MD | [Baltimore City](https://goodparty.org/elections/md/baltimore-city) | Independent city county row; `children`: [] | County page without city sub-list | Expected for city-county; document for Engineering |
 | LIM-04 | TX | [Harris County](https://goodparty.org/elections/tx/harris-county) | Hierarchy municipal: 0; **29** cities via `countyName=Harris` fallback | **Working** — large fallback list | Optional: nest under `tx/harris-county/*` |
 | LIM-03 | ME | [Androscoggin County](https://goodparty.org/elections/me/androscoggin-county) | Hierarchy towns: `me/androscoggin-county/sabattus-town`, `lisbon-town` | Working (New England town pattern) | — |
 | LIM-05, LIM-07 | CT | (index / sitemap) | Cities e.g. `ct/hartford`, `ct/bridgeport` use planning-region `countyName` (`Capitol`, `Western Connecticut`, …) not `"Hartford"` | County pages use hierarchy; standalone cities rely on sitemap mapping | Map `countyName` to county slugs or enrich hierarchy |
 | LIM-05, LIM-07 | AK | — | Cities e.g. `ak/bethel`, `ak/nome` — `countyName` uses borough/census area labels | Fallback-only counties common | Align city `countyName` to borough G4020 `name` |
-| LIM-04 | NV | [Carson City](https://goodparty.org/elections/nv/carson-city) | Consolidated city-county; `children`: [] | No municipal sub-pages | Expected; document for QA |
+| LIM-04 | NV | [Carson City](https://goodparty.org/elections/nv/carson-city) | Consolidated city-county; `children`: [] | No municipal sub-pages | Expected; document for Engineering |
 
 ### Tier C outliers (bulk scan — additional LIM-01 samples)
 
@@ -103,7 +103,7 @@ Use these when prioritizing ETL; full machine list: run `node scripts/elections-
 | **LIM-02** (Fernley, Smith Valley) | Guardrail intentionally hides facts when API duplicates county | Fix `Place` demographics upstream |
 | **LIM-04** (Lyon, Harris) | Short slugs + fallback merge is **by design** | Do not force nested slugs in marketing |
 | **LIM-05** (CT, AK) | Fallback cannot match planning region / borough labels | Rely on hierarchy children; fix `countyName` in ETL |
-| **LIM-09** | `/elections/nv/fernley` is wrong URL shape | QA with `/elections/nv/lyon-county/fernley` |
+| **LIM-09** | `/elections/nv/fernley` is wrong URL shape | Verify with `/elections/nv/lyon-county/fernley` |
 
 ---
 
@@ -135,7 +135,7 @@ Use these when prioritizing ETL; full machine list: run `node scripts/elections-
 
 ---
 
-## Verify with curl (ETL / PM / engineering)
+## Verify with curl (ETL / Engineering)
 
 ```bash
 BASE=https://election-api.goodparty.org
@@ -202,7 +202,7 @@ cd gp-marketing && node scripts/elections-limitations-audit.mjs > /tmp/elections
 
 ---
 
-## Verify on the site (QA / PM)
+## Verify on the site (Engineering / Product)
 
 Use **canonical** county-scoped paths.
 
@@ -222,7 +222,7 @@ Use **canonical** county-scoped paths.
 
 - **API slugs** can be short: `nv/fernley`, `nv/yerington`.
 - **Public URLs** are county-scoped: `/elections/nv/lyon-county/fernley`.
-- **Do not QA** `/elections/nv/fernley` — redirects to `/elections/nv` ([`src/app/elections/[state]/[county]/page.tsx`](../src/app/elections/[state]/[county]/page.tsx)).
+- **Do not test** `/elections/nv/fernley` — redirects to `/elections/nv` ([`src/app/elections/[state]/[county]/page.tsx`](../src/app/elections/[state]/[county]/page.tsx)).
 
 ```bash
 bun test src/lib/electionsApi.test.ts src/lib/electionsHelpers.test.ts

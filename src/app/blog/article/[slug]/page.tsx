@@ -19,7 +19,7 @@ import { EditorialLayout } from '~/components/EditorialLayout';
 import { resolveArticleNavigation } from '~/lib/resolveArticleNavigation';
 import { Author } from '~/ui/Author';
 import { client } from '~/lib/client';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { stegaClean } from 'next-sanity';
 import { PageSchema } from '~/ui/PageSchema';
 import { DEFAULT_SHARE_IMAGE, getBaseUrl, getSanityImageUrl, toAbsoluteUrl } from '~/lib/url';
@@ -92,8 +92,8 @@ export default async function Page(props: any) {
 		headline,
 		description: metaDescription,
 		image: imageUrl,
-		datePublished: publishedDate ? new Date(stegaClean(publishedDate)).toISOString() : undefined,
-		dateModified: updatedDate ? new Date(stegaClean(updatedDate)).toISOString() : undefined,
+		datePublished: publishedDate ? parseISO(stegaClean(publishedDate)).toISOString() : undefined,
+		dateModified: updatedDate ? parseISO(stegaClean(updatedDate)).toISOString() : undefined,
 		authorName,
 		authorJobTitle,
 		pageType: 'BlogPosting',
@@ -140,11 +140,11 @@ export default async function Page(props: any) {
 					meta:
 						page.editorialOverview?.field_publishedDate || page.editorialOverview?.field_lastUpdated
 							? [
-									page.editorialOverview?.field_lastUpdated
-										? `Updated: ${format(new Date(stegaClean(page.editorialOverview?.field_lastUpdated)), 'MMM dd, yyyy')}`
-										: page.editorialOverview?.field_publishedDate
-											? format(new Date(stegaClean(page.editorialOverview?.field_publishedDate)), 'MMM dd, yyyy')
-											: '',
+							page.editorialOverview?.field_lastUpdated
+									? `Updated: ${format(parseISO(stegaClean(page.editorialOverview?.field_lastUpdated)), 'MMM dd, yyyy')}`
+									: page.editorialOverview?.field_publishedDate
+										? format(parseISO(stegaClean(page.editorialOverview?.field_publishedDate)), 'MMM dd, yyyy')
+										: '',
 								]
 							: undefined,
 				}}

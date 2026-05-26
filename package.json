@@ -84,6 +84,7 @@
     "babel-plugin-react-compiler": "^1.0.0",
     "chromatic": "^14.0.0--canary.1188.15686730781.0",
     "clsx": "^2.1.1",
+    "date-fns": "^4.3.0",
     "dompurify": "^3.3.1",
     "embla-carousel": "^8.6.0",
     "embla-carousel-react": "^8.6.0",

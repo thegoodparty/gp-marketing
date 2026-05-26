@@ -2,6 +2,7 @@ import type { Metadata, ResolvingMetadata } from 'next';
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { stegaClean } from 'next-sanity';
+import { format, parseISO } from 'date-fns';
 import { goodpartyOrg_landingPagesAndPolicyQuery } from '~/sanity/groq';
 import { sanityFetch } from '~/sanity/sanityClient';
 
@@ -15,6 +16,7 @@ import { Container } from '~/ui/Container';
 import { PageSchema } from '~/ui/PageSchema';
 import { buildWebPageSchema } from '~/lib/schema';
 import { toAbsoluteUrl } from '~/lib/url';
+import { SANITY_DOC_TYPE } from '~/lib/sanity-doc-types';
 
 // SSR per request so ExperimentResolver reads the visitor's AMP_* cookie and
 // resolves the variant on the server before HTML is sent (no client flicker).
@@ -36,7 +38,7 @@ export default async function Page(props: any) {
 		tags: ['goodpartyOrg_landingPages', 'policy'],
 	});
 
-	if (!page || !(page._type === 'goodpartyOrg_landingPages' || page._type === 'policy')) {
+	if (!page || !(page._type === SANITY_DOC_TYPE.LANDING_PAGE || page._type === SANITY_DOC_TYPE.POLICY)) {
 		notFound();
 	}
 
@@ -45,7 +47,7 @@ export default async function Page(props: any) {
 		? stegaClean(page.seo.field_metaDescription)
 		: undefined;
 
-	if (page._type === 'goodpartyOrg_landingPages') {
+	if (page._type === SANITY_DOC_TYPE.LANDING_PAGE) {
 		const controlSections = page.pageSections?.list_pageSections;
 		const landingName = page.detailPageOverviewNoHero?.field_pageName
 			? stegaClean(page.detailPageOverviewNoHero.field_pageName)
@@ -64,7 +66,7 @@ export default async function Page(props: any) {
 			</>
 		);
 	}
-	if (page._type === 'policy') {
+	if (page._type === SANITY_DOC_TYPE.POLICY) {
 		const policyName = page.policyOverview?.field_policyName
 			? stegaClean(page.policyOverview.field_policyName)
 			: slug;
@@ -72,7 +74,7 @@ export default async function Page(props: any) {
 			? stegaClean(page.policyOverview.field_policySummary)
 			: undefined;
 		const lastUpdated = page.policyOverview?.field_lastUpdated
-			? new Date(stegaClean(page.policyOverview.field_lastUpdated)).toISOString()
+			? parseISO(stegaClean(page.policyOverview.field_lastUpdated)).toISOString()
 			: undefined;
 		const policySchema = buildWebPageSchema({
 			url: pageUrl,
@@ -84,15 +86,15 @@ export default async function Page(props: any) {
 			<>
 				<PageSchema schema={policySchema} />
 				<Container className='bg-goodparty-cream py-(--container-padding) flex flex-col gap-12' size='xl'>
-					<HeaderBlock
-						title={page.policyOverview?.field_policyName}
-						copy={`${page.policyOverview?.field_policySummary ?? ''}${
-							page.policyOverview?.field_lastUpdated
-								? ` | ${new Date(page.policyOverview.field_lastUpdated).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
-								: ''
-						}`}
-					/>
-					<RichTextContentSections contentSections={page.policySections?.block_policyText as any} />
+				<HeaderBlock
+					title={page.policyOverview?.field_policyName}
+					copy={`${page.policyOverview?.field_policySummary ?? ''}${
+						page.policyOverview?.field_lastUpdated
+							? ` | ${format(parseISO(stegaClean(page.policyOverview.field_lastUpdated)), 'MMM d, yyyy')}`
+							: ''
+					}`}
+				/>
+					<RichTextContentSections contentSections={page.policySections?.block_policyText} />
 				</Container>
 			</>
 		);
@@ -112,7 +114,7 @@ export async function generateMetadata(props: Params, parent: ResolvingMetadata)
 		tags: ['goodpartyOrg_landingPages', 'policy'],
 	});
 
-	if (page?._type === 'goodpartyOrg_landingPages') {
+	if (page?._type === SANITY_DOC_TYPE.LANDING_PAGE) {
 		return StructureMetaData(parentMetadata, {
 			name: page?.detailPageOverviewNoHero?.field_pageName,
 			seo: page?.seo,

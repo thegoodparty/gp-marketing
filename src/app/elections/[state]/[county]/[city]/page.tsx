@@ -29,6 +29,9 @@ import { ElectionsLandingWithSearch } from '~/ui/ElectionsLandingWithSearch';
 import { LocationFactsBlock } from '~/ui/LocationFactsBlock';
 import { Carousel } from '~/ui/Carousel';
 import { StepperBlock } from '~/ui/StepperBlock';
+import { PageSchema } from '~/ui/PageSchema';
+import { buildBreadcrumbSchema, buildSchemaGraph, buildWebPageSchema } from '~/lib/schema';
+import { toAbsoluteUrl } from '~/lib/url';
 
 export const revalidate = 3600;
 
@@ -186,8 +189,20 @@ export default async function Page({
 		: (dataYears[0] ?? currentYear);
 	const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
 
+	const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);
+	const cityGraph = buildSchemaGraph([
+		buildWebPageSchema({
+			url: pageUrl,
+			name: `Elections in ${cityName}, ${stateName}`,
+			description: `Browse elections and local positions in ${cityName}, ${countyPlace.name}, ${stateName}.`,
+			pageType: 'CollectionPage',
+		}),
+		buildBreadcrumbSchema(breadcrumbs, toAbsoluteUrl),
+	]);
+
 	return (
 		<>
+			<PageSchema schema={cityGraph ?? undefined} />
 			<BreadcrumbBlock backgroundColor="midnight" breadcrumbs={breadcrumbs} />
 			<ElectionsLandingWithSearch
 				heroProps={{

@@ -1,5 +1,6 @@
 import type { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
+import { stegaClean } from 'next-sanity';
 import { goodpartyOrg_allArticlesQuery } from '~/sanity/groq';
 import { sanityFetch } from '~/sanity/sanityClient';
 import { PageSections } from '~/PageSections';
@@ -7,6 +8,9 @@ import { StructureMetaData } from '~/components/StructureMetadata';
 import type { Params } from '~/lib/types';
 import { getCachedArticles } from '~/lib/getCachedArticles';
 import { BlogHero } from '~/ui/BlogHero';
+import { PageSchema } from '~/ui/PageSchema';
+import { buildBreadcrumbSchema, buildSchemaGraph, buildWebPageSchema } from '~/lib/schema';
+import { toAbsoluteUrl } from '~/lib/url';
 
 export default async function Page(props: any) {
 	const page = await sanityFetch({
@@ -19,8 +23,28 @@ export default async function Page(props: any) {
 
 	const { articles } = await getCachedArticles();
 
+	const blogUrl = page.href ? toAbsoluteUrl(page.href) : toAbsoluteUrl('/blog');
+	const blogName = page.singlePageOverview?.field_pageName
+		? stegaClean(page.singlePageOverview.field_pageName)
+		: 'Blog';
+	const blogDescription = page.seo?.field_metaDescription
+		? stegaClean(page.seo.field_metaDescription)
+		: page.singlePageOverview?.field_summaryDescription
+			? stegaClean(page.singlePageOverview.field_summaryDescription)
+			: undefined;
+	const blogGraph = buildSchemaGraph([
+		buildWebPageSchema({
+			url: blogUrl,
+			name: blogName,
+			description: blogDescription,
+			pageType: 'CollectionPage',
+		}),
+		buildBreadcrumbSchema([{ href: '/blog', label: blogName }]),
+	]);
+
 	return (
 		<>
+			<PageSchema schema={blogGraph ?? undefined} />
 			<BlogHero
 				articles={articles}
 				title={page.singlePageOverview?.field_pageTitle ?? page.singlePageOverview?.field_pageName}

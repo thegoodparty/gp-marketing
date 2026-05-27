@@ -18,6 +18,15 @@ import { client } from '~/lib/client';
 import { cn } from '~/ui/_lib/utils';
 import { resolveComponentColor } from '~/ui/_lib/resolveComponentColor';
 import { BreadcrumbBlock } from '~/ui/BreadcrumbBlock';
+import { PageSchema } from '~/ui/PageSchema';
+import {
+	buildBreadcrumbSchema,
+	buildDefinedTermSchema,
+	buildSchemaGraph,
+	buildWebPageSchema,
+} from '~/lib/schema';
+import { toAbsoluteUrl } from '~/lib/url';
+import { stegaClean } from 'next-sanity';
 
 export async function generateStaticParams() {
 	const entries = await client.fetch<Array<{ _id: string; title: string; slug: string }>>(
@@ -129,17 +138,45 @@ export default async function Page(props: any) {
 	}
 
 	const letter = page.glossaryTermOverview?.field_glossaryTerm?.charAt(0).toLowerCase() ?? '';
+	const termHref = page.href ?? `/political-terms/${slug}`;
 	const breadcrumbs = [
 		{ href: '/political-terms', label: 'Political Terms' },
 		...(letter ? [{ href: `/political-terms/${letter}`, label: letter.toUpperCase() }] : []),
 		{
-			href: page.href ?? `/political-terms/${slug}`,
+			href: termHref,
 			label: page.glossaryTermOverview?.field_glossaryTerm ?? '',
 		},
 	];
 
+	const termName = page.glossaryTermOverview?.field_glossaryTerm
+		? stegaClean(page.glossaryTermOverview.field_glossaryTerm)
+		: '';
+	const termDefinition = page.glossaryTermOverview?.block_glossaryTermDefinition
+		? toPlainText(page.glossaryTermOverview.block_glossaryTermDefinition as any).replace(/\s+/g, ' ').trim()
+		: '';
+	const termSchemaGraph = termName
+		? buildSchemaGraph([
+				buildWebPageSchema({
+					url: termHref,
+					name: termName,
+					description: termDefinition || undefined,
+				}),
+				termDefinition
+					? buildDefinedTermSchema({
+							url: termHref,
+							term: termName,
+							description: termDefinition,
+							inDefinedTermSetName: 'Political Terms Glossary',
+							inDefinedTermSetUrl: '/political-terms',
+						})
+					: null,
+				buildBreadcrumbSchema(breadcrumbs, toAbsoluteUrl),
+			])
+		: null;
+
 	return (
 		<>
+			<PageSchema schema={termSchemaGraph ?? undefined} />
 			<BreadcrumbBlock
 				backgroundColor='cream'
 				breadcrumbs={breadcrumbs}

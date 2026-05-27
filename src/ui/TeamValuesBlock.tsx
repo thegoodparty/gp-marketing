@@ -39,7 +39,7 @@ const cardStyles = tv({
 			'relative rounded-3xl p-6 h-full min-h-64',
 			'transition-transform duration-normal ease-smooth',
 			'[@media(hover:hover)]:group-hover/card:[transform:rotateY(180deg)]',
-			'[@media(hover:none)]:group-data-[flipped=true]/card:[transform:rotateY(180deg)]',
+			'group-data-[flipped=true]/card:[transform:rotateY(180deg)]',
 		],
 		face: [
 			'absolute inset-0 rounded-3xl p-6 flex flex-col items-start',

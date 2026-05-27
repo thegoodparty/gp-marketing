@@ -10,6 +10,7 @@ import { FadeIn } from './FadeIn.tsx';
 import { HeaderBlock, type HeaderBlockProps } from './HeaderBlock.tsx';
 import { type IconType } from './IconResolver.tsx';
 import { Text } from './Text.tsx';
+import { ArrowRightIcon } from './icons/ArrowRightIcon.tsx';
 
 export type TeamValuesCardColor = 'waxflower' | 'blue' | 'lavender' | 'halo-green' | 'bright-yellow';
 
@@ -35,9 +36,10 @@ const cardStyles = tv({
 			'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-midnight-900 focus-visible:ring-offset-4',
 		],
 		cardInner: [
-			'relative rounded-3xl p-6 h-full',
-			'transition-transform duration-normal ease-smooth hover:-translate-y-1',
-			'min-h-64',
+			'relative rounded-3xl p-6 h-full min-h-64',
+			'transition-transform duration-normal ease-smooth',
+			'[@media(hover:hover)]:group-hover/card:[transform:rotateY(180deg)]',
+			'group-data-[flipped=true]/card:[transform:rotateY(180deg)]',
 		],
 		face: [
 			'absolute inset-0 rounded-3xl p-6 flex flex-col items-start',
@@ -78,20 +80,18 @@ export function TeamValuesCard(props: TeamValuesCardProps) {
 			: 'Show details';
 
 	return (
-		<div className={cn('w-full [perspective:1200px]', props.className)}>
+		<div className={cn('w-full h-full [perspective:1200px]', props.className)}>
 			<button
 				type='button'
 				className={cardButton()}
 				onClick={() => props.onToggle?.()}
 				aria-pressed={isFlipped}
 				aria-label={ariaLabel}
+				data-flipped={isFlipped}
 			>
 				<div
 					className={cardInner()}
-					style={{
-						transformStyle: 'preserve-3d',
-						transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-					}}
+					style={{ transformStyle: 'preserve-3d' }}
 				>
 					<div
 						className={cn(face(), frontFace())}
@@ -100,12 +100,12 @@ export function TeamValuesCard(props: TeamValuesCardProps) {
 						<div className={top()}>
 							<CircleIcon icon={props.icon ?? 'heart-handshake'} iconBg='cream' />
 							{props.heading && (
-								// Keep value names whole and on one line; adjust grid min width before allowing wrap fallback.
-								<Text as='h3' styleType='heading-sm' className='whitespace-nowrap break-normal'>
+								<Text as='h3' styleType='heading-sm'>
 									{props.heading}
 								</Text>
 							)}
 						</div>
+						<ArrowRightIcon size={20} className='self-end' aria-hidden />
 					</div>
 					<div
 						className={cn(face(), backFace())}

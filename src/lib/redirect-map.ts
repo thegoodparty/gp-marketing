@@ -32,15 +32,45 @@ export function entriesToRedirectMap(entries: RedirectEntry[] | null | undefined
 	return map;
 }
 
+const REDIRECT_MAP_TTL_MS = 60_000;
+
+let cachedMap: RedirectMap | null = null;
+let cachedAt = 0;
+let inflightPromise: Promise<RedirectMap> | null = null;
+
 /**
- * Load redirect rules from Sanity without calling this app’s `/api/redirects`.
+ * Load redirect rules from Sanity without calling this app's `/api/redirects`.
  * Same-origin fetches from middleware deadlock Next.js dev (e.g. Bun + Turbopack).
+ *
+ * Results are cached in-memory for {@link REDIRECT_MAP_TTL_MS} to avoid an
+ * uncached cross-network round-trip on every request. The `next.revalidate`
+ * hint is also passed so Vercel's Edge Data Cache can layer additional caching.
  */
 export async function fetchRedirectMapFromSanityCdn(): Promise<RedirectMap> {
-	const query = encodeURIComponent(REDIRECTS_GROQ);
-	const url = `https://${projectId}.apicdn.sanity.io/v${SANITY_QUERY_API_VERSION}/data/query/${dataset}?query=${query}`;
-	const res = await fetch(url, { headers: { Accept: 'application/json' } });
-	if (!res.ok) throw new Error(`Sanity CDN responded ${res.status}`);
-	const data = (await res.json()) as { result: RedirectEntry[] | null };
-	return entriesToRedirectMap(data.result);
+	const now = Date.now();
+	if (cachedMap && now - cachedAt < REDIRECT_MAP_TTL_MS) {
+		return cachedMap;
+	}
+
+	if (inflightPromise) return inflightPromise;
+
+	inflightPromise = (async () => {
+		try {
+			const query = encodeURIComponent(REDIRECTS_GROQ);
+			const url = `https://${projectId}.apicdn.sanity.io/v${SANITY_QUERY_API_VERSION}/data/query/${dataset}?query=${query}`;
+			const res = await fetch(url, {
+				headers: { Accept: 'application/json' },
+				next: { revalidate: 60, tags: ['goodpartyOrg_redirects'] },
+			});
+			if (!res.ok) throw new Error(`Sanity CDN responded ${res.status}`);
+			const data = (await res.json()) as { result: RedirectEntry[] | null };
+			cachedMap = entriesToRedirectMap(data.result);
+			cachedAt = Date.now();
+			return cachedMap;
+		} finally {
+			inflightPromise = null;
+		}
+	})();
+
+	return inflightPromise;
 }

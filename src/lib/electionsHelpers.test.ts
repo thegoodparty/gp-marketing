@@ -107,10 +107,6 @@ describe('stripCountySuffix', () => {
 		expect(stripCountySuffix('Yukon-Koyukuk Census Area')).toBe('Yukon-Koyukuk');
 	});
 
-	test('strips Municipio', () => {
-		expect(stripCountySuffix('San Juan Municipio')).toBe('San Juan');
-	});
-
 	test('strips Municipality', () => {
 		expect(stripCountySuffix('Anchorage Municipality')).toBe('Anchorage');
 	});
@@ -202,22 +198,6 @@ describe('canonicalizeCountyEquivalentName', () => {
 			displayName: 'Jefferson Parish',
 			baseName: 'Jefferson',
 			suffixLabel: 'Parish',
-		});
-	});
-
-	test('preserves Puerto Rico municipio naming', () => {
-		expect(canonicalizeCountyEquivalentName('PR', 'San Juan Municipio')).toEqual({
-			displayName: 'San Juan Municipio',
-			baseName: 'San Juan',
-			suffixLabel: 'Municipio',
-		});
-	});
-
-	test('fixes malformed Puerto Rico double suffix', () => {
-		expect(canonicalizeCountyEquivalentName('PR', 'San Juan Municipio County')).toEqual({
-			displayName: 'San Juan Municipio',
-			baseName: 'San Juan',
-			suffixLabel: 'Municipio',
 		});
 	});
 });

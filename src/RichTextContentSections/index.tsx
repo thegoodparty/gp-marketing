@@ -1,6 +1,6 @@
 import { PortableText } from '@portabletext/react';
 import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
-import type { ArticleQueryResult } from 'sanity.types';
+import type { ArticleQueryResult, Block_policyText } from 'sanity.types';
 import { ImageCTAGroup } from '~/RichTextContentSections/ImageCTAGroup';
 import { CTASectionGroup } from '~/RichTextContentSections/CTASectionGroup';
 import { TableSectionGroup } from '~/RichTextContentSections/TableSectionGroup';
@@ -18,7 +18,7 @@ export type ArticleSections = NonNullable<
 >;
 
 interface Props {
-	contentSections?: ArticleSections[] | null;
+	contentSections?: ArticleSections[] | Block_policyText | null;
 	stackSpacing?: TypographyStackSpacing;
 }
 

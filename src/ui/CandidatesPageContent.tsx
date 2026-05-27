@@ -11,6 +11,9 @@ import {
 	CANDIDATES_PAGE_TWO_UP_CARD,
 } from '~/constants/candidatesPageStaticSections';
 import { primaryButtonStyleType } from '~/ui/_lib/designTypesStore';
+import { PageSchema } from '~/ui/PageSchema';
+import { buildBreadcrumbSchema, buildSchemaGraph, buildWebPageSchema } from '~/lib/schema';
+import { toAbsoluteUrl } from '~/lib/url';
 
 export type CandidatesPageContentProps = {
 	officeName: string;
@@ -53,8 +56,23 @@ export function CandidatesPageContent(props: CandidatesPageContentProps) {
 	const ctaImageTitle = replacePlaceholders(CANDIDATES_PAGE_CTA_IMAGE.title, replacements);
 	const ctaImageCopy = replacePlaceholders(CANDIDATES_PAGE_CTA_IMAGE.copy, replacements);
 
+	const lastCrumbHref = breadcrumbs[breadcrumbs.length - 1]?.href;
+	const candidatesPageUrl = lastCrumbHref ? toAbsoluteUrl(lastCrumbHref) : undefined;
+	const candidatesGraph = buildSchemaGraph([
+		candidatesPageUrl
+			? buildWebPageSchema({
+					url: candidatesPageUrl,
+					name: `Candidates for ${officeName} in ${locationName}`,
+					description: `Candidates running for ${officeName} in ${locationName}.`,
+					pageType: 'CollectionPage',
+				})
+			: null,
+		buildBreadcrumbSchema(breadcrumbs, toAbsoluteUrl),
+	]);
+
 	return (
 		<>
+			<PageSchema schema={candidatesGraph ?? undefined} />
 			<BreadcrumbBlock backgroundColor="midnight" breadcrumbs={breadcrumbs} />
 			<ElectionsPositionHero
 				backgroundColor="midnight"

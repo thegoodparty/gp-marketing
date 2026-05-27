@@ -22,7 +22,11 @@
       "mcp__Amplitude__create_flags",
       "mcp__Sanity__query_documents",
       "mcp__Sanity__create_documents_from_json",
-      "Bash(git checkout *)"
+      "Bash(git checkout *)",
+      "Bash(xargs ls)",
+      "Bash(npx tsc *)",
+      "Bash(bun install *)",
+      "Bash(bun storybook *)"
     ]
   }
 }

@@ -35,7 +35,6 @@ export type StickySidebarCTAProps = {
 
 export function StickySidebarCTA(props: StickySidebarCTAProps) {
 	const color = props.color ?? 'lavender';
-	const copy = <RichData value={props.copy} />;
 
 	return (
 		<div data-component='StickySidebarCTA' className={cn(styles({ color }))}>
@@ -50,7 +49,11 @@ export function StickySidebarCTA(props: StickySidebarCTAProps) {
 						{props.title}
 					</Text>
 				)}
-				{isValidRichText(copy) && <Text styleType='body-1'>{copy}</Text>}
+				{isValidRichText(props.copy) && (
+					<Text styleType='body-1'>
+						<RichData value={props.copy} />
+					</Text>
+				)}
 			</div>
 			{props.buttons && props.buttons.length > 0 && (
 				<div className='flex flex-wrap gap-4 w-full'>

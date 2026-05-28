@@ -1,6 +1,6 @@
 import { cn, tv } from './_lib/utils.ts';
 import { isValidRichText } from './_lib/isValidRichText.ts';
-import type { componentColorValues } from './_lib/designTypesStore.ts';
+import { secondaryButtonStyleType, type componentColorValues } from './_lib/designTypesStore.ts';
 import type { ComponentButtonProps } from './Inputs/Button.tsx';
 import { ComponentButton } from './Inputs/Button.tsx';
 import { RichData } from './RichData.tsx';
@@ -61,7 +61,7 @@ export function StickySidebarCTA(props: StickySidebarCTAProps) {
 							{...item}
 							buttonProps={{
 								...item.buttonProps,
-								styleType: 'secondary',
+								styleType: secondaryButtonStyleType,
 							}}
 						/>
 					))}

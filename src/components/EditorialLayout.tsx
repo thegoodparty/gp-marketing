@@ -7,9 +7,11 @@ import { ComponentButton } from '~/ui/Inputs/Button';
 import { Media } from '~/ui/Media';
 import { Text } from '~/ui/Text';
 import { ShareLinks } from './ShareLinks';
+import { StickySidebarCTA, type StickySidebarCTAProps } from '~/ui/StickySidebarCTA';
 
 export type EditorialLayoutProps = PropsWithChildren<{
 	navigation?: { title?: string; href?: string; items: { title: string; href: string }[] }[];
+	stickySidebarCta?: StickySidebarCTAProps;
 	stickyRelatedArticle?: FeaturedBlogBlockProps;
 }>;
 
@@ -25,6 +27,7 @@ export function EditorialLayout(props: EditorialLayoutProps) {
 				{props.navigation && props.navigation.length > 0 && <Navigation navigation={props.navigation} />}
 				<div className='sticky top-28 flex flex-col gap-8'>
 					<ShareLinks />
+					{props.stickySidebarCta && <StickySidebarCTA {...props.stickySidebarCta} />}
 					{props.stickyRelatedArticle && props.stickyRelatedArticle.title && <StickyRelatedArticle {...props.stickyRelatedArticle} />}
 				</div>
 			</div>

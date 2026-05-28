@@ -11658,6 +11658,37 @@
     }
   },
   {
+    "name": "stickySidebarCta",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "stickySidebarCta"
+          }
+        },
+        "field_showStickySidebarCta": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "boolean"
+          },
+          "optional": true
+        },
+        "ctaConfig": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "ctaSection"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
     "name": "ctaSection",
     "type": "type",
     "value": {
@@ -15853,6 +15884,14 @@
         "value": {
           "type": "inline",
           "name": "ctaSection"
+        },
+        "optional": true
+      },
+      "stickySidebarCta": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "stickySidebarCta"
         },
         "optional": true
       },

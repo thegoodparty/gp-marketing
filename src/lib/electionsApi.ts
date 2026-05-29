@@ -364,7 +364,7 @@ export async function resolveRaceElectionHrefs(
 	}
 
 	const fullRace = await getRaceBySlug(raceSlug);
-	const effectiveLevel = (positionLevel ?? fullRace?.positionLevel ?? '').toUpperCase();
+	const effectiveLevel = (positionLevel || fullRace?.positionLevel || '').toUpperCase();
 	if (effectiveLevel !== 'CITY' && effectiveLevel !== 'LOCAL') {
 		const positionHref = buildElectionPositionHrefFromRaceSlug({
 			slug: raceSlug,

@@ -367,6 +367,38 @@ describe('resolveRaceElectionHrefs', () => {
 		});
 	});
 
+	test('expands CITY race when positionLevel is empty string and falls back to race fetch', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/races?') && url.includes('mi%2Fnorthville'),
+				body: [
+					{
+						slug: 'mi/northville/city-legislature',
+						state: 'MI',
+						positionLevel: 'CITY',
+						Place: {
+							slug: 'mi/northville',
+							mtfcc: 'G4110',
+							countyName: 'Wayne',
+						},
+					},
+				],
+			},
+			{
+				match: url =>
+					url.includes('/v1/places?') && url.includes('state=MI') && url.includes('mtfcc=G4020'),
+				body: [{ slug: 'mi/wayne-county', name: 'Wayne County', mtfcc: 'G4020', state: 'MI' }],
+			},
+		]);
+
+		await expect(
+			resolveRaceElectionHrefs('mi/northville/city-legislature', ''),
+		).resolves.toEqual({
+			positionHref: '/elections/mi/wayne-county/northville/position/city-legislature',
+			candidatesHref: '/elections/mi/wayne-county/northville/position/city-legislature/candidates',
+		});
+	});
+
 	test('returns empty object when race slug is missing', async () => {
 		await expect(resolveRaceElectionHrefs(undefined)).resolves.toEqual({});
 	});

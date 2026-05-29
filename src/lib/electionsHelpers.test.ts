@@ -1,8 +1,10 @@
 /// <reference types="bun-types" />
 import { describe, expect, test } from 'bun:test';
 import {
+	buildElectionPositionHrefFromRaceSlug,
 	buildFAQSchema,
 	buildJobPostingSchema,
+	buildRaceCandidatesHref,
 	buildRacePositionHref,
 	buildRaceSlug,
 	canonicalizeCountyEquivalentName,
@@ -915,6 +917,81 @@ describe('buildRacePositionHref', () => {
 	test('returns undefined for invalid slug', () => {
 		expect(buildRacePositionHref(undefined)).toBeUndefined();
 		expect(buildRacePositionHref('single-part')).toBeUndefined();
+	});
+});
+
+describe('buildElectionPositionHrefFromRaceSlug', () => {
+	const citySlugToCountySlug = new Map([
+		['mi/northville', 'mi/wayne-county'],
+		['az/buckeye', 'az/maricopa-county'],
+	]);
+
+	test('expands CITY 3-part slug with county mapping', () => {
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{ slug: 'mi/northville/city-legislature', positionLevel: 'CITY' },
+				{ citySlugToCountySlug },
+			),
+		).toBe('/elections/mi/wayne-county/northville/position/city-legislature');
+	});
+
+	test('keeps LOCAL school district at generic 3-level path without county mapping', () => {
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{ slug: 'ok/tecumseh-public-schools/local-school-board', positionLevel: 'LOCAL' },
+				{ citySlugToCountySlug },
+			),
+		).toBe('/elections/ok/tecumseh-public-schools/position/local-school-board');
+	});
+
+	test('builds STATE-level path', () => {
+		expect(
+			buildElectionPositionHrefFromRaceSlug({ slug: 'az/governor', positionLevel: 'STATE' }),
+		).toBe('/elections/az/position/governor');
+	});
+
+	test('builds 4-part WI city path from prefix', () => {
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{ slug: 'wi/adams-county/adams-town/city-clerk', positionLevel: 'CITY' },
+				{ citySlugToCountySlug },
+			),
+		).toBe('/elections/wi/adams-county/adams-town/position/city-clerk');
+	});
+
+	test('skips unmapped CITY 3-part slug when skipUnmappedCity is true', () => {
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{ slug: 'az/unknown-city/clerk', positionLevel: 'CITY' },
+				{ citySlugToCountySlug, skipUnmappedCity: true },
+			),
+		).toBeUndefined();
+	});
+
+	test('falls back to generic path for unmapped CITY when skipUnmappedCity is false', () => {
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{ slug: 'az/unknown-city/clerk', positionLevel: 'CITY' },
+				{ citySlugToCountySlug },
+			),
+		).toBe('/elections/az/unknown-city/position/clerk');
+	});
+});
+
+describe('buildRaceCandidatesHref', () => {
+	const citySlugToCountySlug = new Map([['mi/northville', 'mi/wayne-county']]);
+
+	test('appends /candidates to position path', () => {
+		expect(
+			buildRaceCandidatesHref(
+				{ slug: 'mi/northville/city-legislature', positionLevel: 'CITY' },
+				{ citySlugToCountySlug },
+			),
+		).toBe('/elections/mi/wayne-county/northville/position/city-legislature/candidates');
+	});
+
+	test('returns undefined for invalid slug', () => {
+		expect(buildRaceCandidatesHref({ slug: undefined })).toBeUndefined();
 	});
 });
 

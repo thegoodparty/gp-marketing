@@ -56,6 +56,7 @@ export interface CandidacyItem {
 	Race?: {
 		brHashId: string;
 		slug?: string;
+		positionLevel?: string;
 		electionDate?: string;
 		positionDescription?: string;
 		frequency?: number[];

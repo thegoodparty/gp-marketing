@@ -784,11 +784,56 @@ export function prependClaimedWebsiteIfNew(
 	];
 }
 
-/** Builds elections position page path from a race slug (e.g. ok/foo/local-school-board). */
-export function buildRacePositionHref(raceSlug: string | undefined): string | undefined {
-	if (!raceSlug) return undefined;
-	const parts = raceSlug.split('/').filter(Boolean);
+export type RaceSlugEntry = { slug?: string; positionLevel?: string };
+
+export type BuildElectionPositionHrefOptions = {
+	citySlugToCountySlug?: Map<string, string>;
+	/** When true, omit CITY 3-part slugs with no county mapping (sitemap behavior). */
+	skipUnmappedCity?: boolean;
+};
+
+/**
+ * Builds elections position page path from a race slug and optional county lookup.
+ * Mirrors buildRaceEntries URL rules in sitemap-entries.ts.
+ */
+export function buildElectionPositionHrefFromRaceSlug(
+	race: RaceSlugEntry,
+	options?: BuildElectionPositionHrefOptions,
+): string | undefined {
+	if (!race.slug) return undefined;
+	const parts = race.slug.split('/').filter(Boolean);
 	const positionSlug = parts.pop();
 	if (!positionSlug || parts.length === 0) return undefined;
-	return `/elections/${parts.join('/')}/position/${positionSlug}`;
+
+	const level = (race.positionLevel ?? '').toUpperCase();
+
+	if (level === 'CITY' || level === 'LOCAL') {
+		const citySlug = parts.join('/');
+		const countySlug = options?.citySlugToCountySlug?.get(citySlug);
+		if (countySlug) {
+			const citySegment = parts.pop();
+			if (!citySegment) return undefined;
+			return `/elections/${countySlug}/${citySegment}/position/${positionSlug}`;
+		}
+		if (level === 'CITY' && parts.length === 2 && options?.skipUnmappedCity) {
+			return undefined;
+		}
+	}
+
+	const prefix = parts.join('/');
+	return `/elections/${prefix}/position/${positionSlug}`;
+}
+
+/** Builds elections position page path from a race slug (e.g. ok/foo/local-school-board). */
+export function buildRacePositionHref(raceSlug: string | undefined): string | undefined {
+	return buildElectionPositionHrefFromRaceSlug({ slug: raceSlug });
+}
+
+/** Builds elections candidates listing path from a race slug entry. */
+export function buildRaceCandidatesHref(
+	race: RaceSlugEntry,
+	options?: BuildElectionPositionHrefOptions,
+): string | undefined {
+	const positionHref = buildElectionPositionHrefFromRaceSlug(race, options);
+	return positionHref ? `${positionHref}/candidates` : undefined;
 }

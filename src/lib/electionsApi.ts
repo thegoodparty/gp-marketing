@@ -10,7 +10,12 @@ import type {
 	RaceDetail,
 	RaceNode,
 } from '~/types/elections';
-import { canonicalizeCountyEquivalentName } from '~/lib/electionsHelpers';
+import {
+	buildElectionPositionHrefFromRaceSlug,
+	buildRaceCandidatesHref,
+	canonicalizeCountyEquivalentName,
+	stripCountySuffix,
+} from '~/lib/electionsHelpers';
 
 const BASE_URL =
 	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
@@ -311,4 +316,106 @@ export async function getPlaceBySlug(params: {
 	const url = `${BASE_URL}/v1/places?${searchParams}`;
 	const data = await fetchJson<PlaceWithFacts[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) && data.length > 0 ? (data[0] ?? null) : null;
+}
+
+/** Resolves a county place slug from a state code and county name on a city/town place. */
+export async function resolveCountySlugForPlace(
+	state: string,
+	countyName: string,
+): Promise<string | undefined> {
+	const counties = await getPlacesByState({ state, mtfcc: COUNTY_MTFCC });
+	const target = normalizeName(canonicalizeCountyEquivalentName(state, countyName).baseName);
+	for (const county of counties) {
+		if (!county.slug || !county.name) continue;
+		const countyBase = normalizeName(stripCountySuffix(county.name));
+		if (countyBase === target) return county.slug;
+	}
+	return undefined;
+}
+
+export type RaceElectionHrefs = {
+	positionHref?: string;
+	candidatesHref?: string;
+};
+
+/**
+ * Resolves canonical elections position and candidates listing paths for a race slug.
+ * Expands city/town 3-part slugs to 4-level URLs when county can be resolved.
+ */
+export async function resolveRaceElectionHrefs(
+	raceSlug: string | undefined,
+	positionLevel?: string,
+): Promise<RaceElectionHrefs> {
+	if (!raceSlug) return {};
+
+	const raceEntry = { slug: raceSlug, positionLevel };
+	const parts = raceSlug.split('/').filter(Boolean);
+	const prefixParts = parts.slice(0, -1);
+	const level = (positionLevel ?? '').toUpperCase();
+	const mightNeedCountyExpansion =
+		prefixParts.length === 2 && (level === '' || level === 'CITY' || level === 'LOCAL');
+
+	if (!mightNeedCountyExpansion) {
+		const positionHref = buildElectionPositionHrefFromRaceSlug(raceEntry);
+		return {
+			positionHref,
+			candidatesHref: buildRaceCandidatesHref(raceEntry),
+		};
+	}
+
+	const fullRace = await getRaceBySlug(raceSlug);
+	const effectiveLevel = (positionLevel ?? fullRace?.positionLevel ?? '').toUpperCase();
+	if (effectiveLevel !== 'CITY' && effectiveLevel !== 'LOCAL') {
+		const positionHref = buildElectionPositionHrefFromRaceSlug({
+			slug: raceSlug,
+			positionLevel: effectiveLevel,
+		});
+		return {
+			positionHref,
+			candidatesHref: positionHref ? `${positionHref}/candidates` : undefined,
+		};
+	}
+
+	if (!isCityOrTownMtfcc(fullRace?.Place?.mtfcc)) {
+		const positionHref = buildElectionPositionHrefFromRaceSlug({
+			slug: raceSlug,
+			positionLevel: effectiveLevel,
+		});
+		return {
+			positionHref,
+			candidatesHref: positionHref ? `${positionHref}/candidates` : undefined,
+		};
+	}
+
+	const countyName = fullRace?.Place?.countyName;
+	const state = fullRace?.state ?? prefixParts[0]?.toUpperCase();
+	if (!countyName || !state) {
+		const positionHref = buildElectionPositionHrefFromRaceSlug({
+			slug: raceSlug,
+			positionLevel: effectiveLevel,
+		});
+		return {
+			positionHref,
+			candidatesHref: positionHref ? `${positionHref}/candidates` : undefined,
+		};
+	}
+
+	const countySlug = await resolveCountySlugForPlace(state, countyName);
+	if (!countySlug) {
+		const positionHref = buildElectionPositionHrefFromRaceSlug({
+			slug: raceSlug,
+			positionLevel: effectiveLevel,
+		});
+		return {
+			positionHref,
+			candidatesHref: positionHref ? `${positionHref}/candidates` : undefined,
+		};
+	}
+
+	const citySlugToCountySlug = new Map([[prefixParts.join('/'), countySlug]]);
+	const expandedRace = { slug: raceSlug, positionLevel: effectiveLevel };
+	return {
+		positionHref: buildElectionPositionHrefFromRaceSlug(expandedRace, { citySlugToCountySlug }),
+		candidatesHref: buildRaceCandidatesHref(expandedRace, { citySlugToCountySlug }),
+	};
 }

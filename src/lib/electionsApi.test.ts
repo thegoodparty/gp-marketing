@@ -1,6 +1,11 @@
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
 import type { PlaceItem } from '~/types/elections';
-import { getCountyChildPlaces, isStateIndexDistrictPlace } from './electionsApi';
+import {
+	getCountyChildPlaces,
+	isStateIndexDistrictPlace,
+	resolveCountySlugForPlace,
+	resolveRaceElectionHrefs,
+} from './electionsApi';
 
 type FetchMockResponse = {
 	match: (url: string) => boolean;
@@ -278,6 +283,99 @@ describe('getCountyChildPlaces', () => {
 		expect(slugs(result).sort()).toEqual(
 			['me/androscoggin-county/auburn-town', 'me/androscoggin-county/lisbon-town', 'me/androscoggin-county/sabattus-town', 'me/lewiston'].sort(),
 		);
+	});
+});
+
+describe('resolveCountySlugForPlace', () => {
+	test('matches county name to county place slug', async () => {
+		withFetchMock([
+			{
+				match: url =>
+					url.includes('/v1/places?') && url.includes('state=MI') && url.includes('mtfcc=G4020'),
+				body: [
+					{ slug: 'mi/wayne-county', name: 'Wayne County', mtfcc: 'G4020', state: 'MI' },
+					{ slug: 'mi/oakland-county', name: 'Oakland County', mtfcc: 'G4020', state: 'MI' },
+				],
+			},
+		]);
+
+		await expect(resolveCountySlugForPlace('MI', 'Wayne')).resolves.toBe('mi/wayne-county');
+	});
+});
+
+describe('resolveRaceElectionHrefs', () => {
+	test('returns generic path for LOCAL school district without county expansion', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/races?') && url.includes('ok%2Ftecumseh-public-schools'),
+				body: [
+					{
+						slug: 'ok/tecumseh-public-schools/local-school-board',
+						state: 'OK',
+						positionLevel: 'LOCAL',
+						Place: {
+							slug: 'ok/tecumseh-public-schools',
+							mtfcc: 'G5420',
+							countyName: 'Pottawatomie',
+						},
+					},
+				],
+			},
+		]);
+
+		await expect(
+			resolveRaceElectionHrefs(
+				'ok/tecumseh-public-schools/local-school-board',
+				'LOCAL',
+			),
+		).resolves.toEqual({
+			positionHref: '/elections/ok/tecumseh-public-schools/position/local-school-board',
+			candidatesHref:
+				'/elections/ok/tecumseh-public-schools/position/local-school-board/candidates',
+		});
+	});
+
+	test('expands CITY race to canonical 4-level candidates URL', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/races?') && url.includes('mi%2Fnorthville'),
+				body: [
+					{
+						slug: 'mi/northville/city-legislature',
+						state: 'MI',
+						positionLevel: 'CITY',
+						Place: {
+							slug: 'mi/northville',
+							mtfcc: 'G4110',
+							countyName: 'Wayne',
+						},
+					},
+				],
+			},
+			{
+				match: url =>
+					url.includes('/v1/places?') && url.includes('state=MI') && url.includes('mtfcc=G4020'),
+				body: [{ slug: 'mi/wayne-county', name: 'Wayne County', mtfcc: 'G4020', state: 'MI' }],
+			},
+		]);
+
+		await expect(
+			resolveRaceElectionHrefs('mi/northville/city-legislature', 'CITY'),
+		).resolves.toEqual({
+			positionHref: '/elections/mi/wayne-county/northville/position/city-legislature',
+			candidatesHref: '/elections/mi/wayne-county/northville/position/city-legislature/candidates',
+		});
+	});
+
+	test('returns empty object when race slug is missing', async () => {
+		await expect(resolveRaceElectionHrefs(undefined)).resolves.toEqual({});
+	});
+
+	test('builds state-level paths without race fetch', async () => {
+		await expect(resolveRaceElectionHrefs('az/governor', 'STATE')).resolves.toEqual({
+			positionHref: '/elections/az/position/governor',
+			candidatesHref: '/elections/az/position/governor/candidates',
+		});
 	});
 });
 

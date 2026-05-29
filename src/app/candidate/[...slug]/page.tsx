@@ -1,12 +1,11 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getCandidateBySlug, findCampaignByRace } from '~/lib/electionsApi';
+import { getCandidateBySlug, findCampaignByRace, resolveRaceElectionHrefs } from '~/lib/electionsApi';
 import {
 	formatElectionDateFromApi,
 	formatSidebarLinkLabel,
 	formatTermLength,
 	inferSidebarLinkIcon,
-	buildRacePositionHref,
 	prependClaimedWebsiteIfNew,
 } from '~/lib/electionsHelpers';
 import { PageSections } from '~/PageSections';
@@ -24,6 +23,7 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
 function buildSectionOverrides(
 	candidate: CandidacyItem,
 	claimed: FindByRaceIdResponse | null,
+	electionHrefs: { positionHref?: string; candidatesHref?: string },
 ): SectionOverrides {
 	const candidateName = [candidate.firstName, candidate.lastName].filter(Boolean).join(' ') || 'Candidate';
 	const office = candidate.positionName ?? 'Office';
@@ -58,7 +58,7 @@ function buildSectionOverrides(
 		links.push(...merged);
 	}
 
-	const racePositionHref = buildRacePositionHref(candidate.Race?.slug);
+	const racePositionHref = electionHrefs.positionHref;
 
 	const officeData: OfficeData = {
 		links: links.length ? links : undefined,
@@ -75,7 +75,9 @@ function buildSectionOverrides(
 		component_breadcrumbBlock: {
 			breadcrumbs: [
 				{ href: '/', label: 'Home' },
-				{ href: '/candidates', label: 'Candidates' },
+				...(electionHrefs.candidatesHref
+					? [{ href: electionHrefs.candidatesHref, label: 'Candidates' }]
+					: [{ label: 'Candidates' }]),
 				{ label: candidateName },
 			],
 		},
@@ -151,7 +153,11 @@ export default async function Page({
 		});
 	}
 
-	const sectionOverrides = buildSectionOverrides(candidate, claimed);
+	const sectionOverrides = buildSectionOverrides(
+		candidate,
+		claimed,
+		await resolveRaceElectionHrefs(candidate.Race?.slug, candidate.Race?.positionLevel),
+	);
 
 	return (
 		<PageSections

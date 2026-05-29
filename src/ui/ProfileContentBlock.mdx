@@ -88,14 +88,17 @@ The component uses a responsive grid layout:
   - Sidebar: up to `400px` wide (`minmax(280px, 400px)`), sticky while scrolling
   - Content: remaining width (`minmax(0, 1fr)`) with `min-w-0` so long copy wraps
   - Gap: `gap-8` below `lg`, `gap-10` at `lg`, `gap-12` at `xl`
-- **Sidebar-only profiles**: Centered `max-w-3xl` well — cards fill the well without a faux second column on wide viewports
+- **Sidebar-only profiles**: Centered `max-w-3xl` well — sidebar fills the full well width; no sticky positioning or 400px cap (those apply only when content cards are present)
 
 ## Sticky Sidebar
 
-When the sidebar is present on desktop (`lg:` and two columns):
+When the sidebar is present on desktop (`lg:`) **and** content cards are rendered (two-column layout):
 - Uses `lg:sticky lg:top-4 self-start` positioning
+- Sidebar is capped at `400px` wide within the grid
 - Stays visible while scrolling through content cards
 - Below `lg`, the sidebar is not sticky (avoids content scrolling under the sidebar on tablet/mobile)
+
+When the sidebar is the only content (no content cards), it spans the full `max-w-3xl` well and is not sticky.
 - Provides quick access to contact links, office information, and CTA
 - Displays links with icons (Website, Facebook, Email, etc.)
 - Shows office details (About Office, Term Length, Election Date) with separators

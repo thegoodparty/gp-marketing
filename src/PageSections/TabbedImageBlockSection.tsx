@@ -2,7 +2,7 @@ import { stegaClean } from 'next-sanity';
 
 import type { Sections } from '~/PageSections';
 
-import { transformButtons } from '~/lib/buttonTransformer';
+import { normalizeRawCtaToButton, transformButtons } from '~/lib/buttonTransformer';
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 
@@ -15,20 +15,24 @@ export function TabbedImageBlockSection(section: Extract<Sections, { _type: 'com
 		: 'cream';
 
 	const items = section.tabbedImageBlockItems?.list_tabbedImageItems
-		?.map(item =>
-			item.field_title
-				? {
-						_key: item._key,
-						title: item.field_title,
-						copy: item.field_summaryDescription,
-						image: item.img_image,
-						showFullImage: item.showFullImage,
-						button: item.ctaActionWithShared?.action
-							? transformButtons([{ ...item.ctaActionWithShared, _key: item._key + 'TabbedImageBlockButton' }])?.[0]
-							: undefined,
-					}
-				: undefined,
-		)
+		?.map(item => {
+			if (!item.field_title) {
+				return undefined;
+			}
+
+			const button = item.ctaActionWithShared
+				? normalizeRawCtaToButton(item.ctaActionWithShared, `${item._key}-tabbed-image-cta`)
+				: undefined;
+
+			return {
+				_key: item._key,
+				title: item.field_title,
+				copy: item.field_summaryDescription,
+				image: item.img_image,
+				showFullImage: item.showFullImage,
+				button: button ? transformButtons([button])?.[0] : undefined,
+			};
+		})
 		.filter(Boolean);
 
 	if (!(items && items.length > 0)) return null;

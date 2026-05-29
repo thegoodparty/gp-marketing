@@ -1,6 +1,11 @@
 import type { Sections } from '~/PageSections';
 
-import { isButtonType, resolveButtonHref } from '~/lib/buttonTransformer';
+import {
+	isUsableHref,
+	normalizeRawCtaToButton,
+	resolveButtonHref,
+	type RawCtaInput,
+} from '~/lib/buttonTransformer';
 
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { resolveComponentColor } from '~/ui/_lib/resolveComponentColor';
@@ -11,8 +16,9 @@ export function resolveCtaCardHref(
 	cta: unknown,
 	labelFallback?: { label: string; href: string },
 ): string | undefined {
-	const href = cta && isButtonType(cta) ? resolveButtonHref(cta) : undefined;
-	return href ?? (labelFallback ? labelFallback.href : undefined);
+	const button = cta ? normalizeRawCtaToButton(cta as RawCtaInput, 'cta-card') : undefined;
+	const href = button ? resolveButtonHref(button) : undefined;
+	return isUsableHref(href) ? href : labelFallback?.href;
 }
 
 export function CTACardsBlockSection(section: Extract<Sections, { _type: 'component_ctaCardsBlock' }>) {

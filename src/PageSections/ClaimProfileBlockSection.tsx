@@ -1,9 +1,7 @@
 import type { SectionOverrides, Sections } from '~/PageSections';
 import { isButtonType, transformButton } from '~/lib/buttonTransformer';
 import { ClaimProfileBlock } from '~/ui/ClaimProfileBlock';
-import { resolveBg } from '~/ui/_lib/resolveBg';
 import { stegaClean } from 'next-sanity';
-import type { Field_blockColorCreamMidnight } from 'sanity.types';
 
 type Props = Extract<Sections, { _type: 'component_claimProfileBlock' }> & {
 	claimProfileOverride?: SectionOverrides['component_claimProfileBlock'];
@@ -16,14 +14,18 @@ export function resolveExampleCardPartyAffiliation(
 	return override ?? exampleCard?.field_partyAffiliation ?? '';
 }
 
+export function resolveClaimProfileBlockBackgroundColor(
+	bgValue: ReturnType<typeof stegaClean<string | undefined>>,
+): 'cream' | 'midnight' {
+	if (bgValue === 'midnight' || bgValue === 'MidnightDark') {
+		return 'midnight';
+	}
+	return 'cream';
+}
+
 export function ClaimProfileBlockSection({ claimProfileOverride, ...section }: Props) {
 	const bgValue = stegaClean(section.claimProfileBlockDesignSettings?.field_blockColorCreamMidnight);
-	const backgroundColor =
-		bgValue === 'midnight'
-			? 'midnight'
-			: bgValue
-				? resolveBg(bgValue as Field_blockColorCreamMidnight)
-				: 'cream';
+	const backgroundColor = resolveClaimProfileBlockBackgroundColor(bgValue);
 
 	const ctaButton = section.ctaAction;
 	const claimButton =

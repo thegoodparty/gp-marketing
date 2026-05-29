@@ -29,4 +29,16 @@ describe('resolveCtaCardHref', () => {
 	test('returns undefined when no href and no fallback', () => {
 		expect(resolveCtaCardHref({ action: 'Internal', link: { href: '' }, _key: 'x' })).toBeUndefined();
 	});
+
+	test('uses label fallback for static mock shape without GROQ action alias', () => {
+		const href = resolveCtaCardHref(
+			{
+				field_ctaActionWithShared: 'Internal',
+				field_buttonText: 'Explore candidates running near you',
+				text: 'Explore candidates running near you',
+			},
+			{ label: 'Candidates', href: '/candidates' },
+		);
+		expect(href).toBe('/candidates');
+	});
 });

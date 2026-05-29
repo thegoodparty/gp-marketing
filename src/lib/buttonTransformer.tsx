@@ -87,7 +87,12 @@ export function resolveButtonHref(button: ButtonType): string | undefined {
 			href = undefined;
 	}
 
-	return href || undefined;
+	return href;
+}
+
+/** True when href is a non-empty string suitable for navigation or fallback decisions. */
+export function isUsableHref(href: string | undefined): href is string {
+	return href != null && href !== '';
 }
 
 export function transformButton(button: ButtonType): ComponentButtonProps | undefined {
@@ -96,7 +101,7 @@ export function transformButton(button: ButtonType): ComponentButtonProps | unde
 
 	switch (action) {
 		case 'Internal':
-			if (!href) return undefined;
+			if (!isUsableHref(href)) return undefined;
 			return {
 				_key: button._key,
 				formId: (button as { formId?: string }).formId,
@@ -108,7 +113,7 @@ export function transformButton(button: ButtonType): ComponentButtonProps | unde
 				},
 			};
 		case 'Contact':
-			if (!href) return undefined;
+			if (!isUsableHref(href)) return undefined;
 			return {
 				_key: button._key,
 				formId: (button as { formId?: string }).formId,
@@ -120,7 +125,7 @@ export function transformButton(button: ButtonType): ComponentButtonProps | unde
 				},
 			};
 		case 'External':
-			if (!href) return undefined;
+			if (!isUsableHref(href)) return undefined;
 			return {
 				_key: button._key,
 				formId: (button as { formId?: string }).formId,
@@ -132,7 +137,7 @@ export function transformButton(button: ButtonType): ComponentButtonProps | unde
 				},
 			};
 		case 'Anchor':
-			if (!href) return undefined;
+			if (!isUsableHref(href)) return undefined;
 			return {
 				_key: button._key,
 				formId: (button as { formId?: string }).formId,
@@ -144,7 +149,7 @@ export function transformButton(button: ButtonType): ComponentButtonProps | unde
 				},
 			};
 		case 'Download':
-			if (!href) return undefined;
+			if (!isUsableHref(href)) return undefined;
 			return {
 				_key: button._key,
 				formId: (button as { formId?: string }).formId,
@@ -156,7 +161,7 @@ export function transformButton(button: ButtonType): ComponentButtonProps | unde
 				},
 			};
 		case 'LogIn':
-			if (!href) return undefined;
+			if (!isUsableHref(href)) return undefined;
 			return {
 				_key: button._key,
 				formId: (button as { formId?: string }).formId,
@@ -168,7 +173,7 @@ export function transformButton(button: ButtonType): ComponentButtonProps | unde
 				},
 			};
 		case 'SignUp':
-			if (!href) return undefined;
+			if (!isUsableHref(href)) return undefined;
 			return {
 				_key: button._key,
 				formId: (button as { formId?: string }).formId,

@@ -1,8 +1,10 @@
 import { describe, expect, test } from 'bun:test';
 import {
 	isButtonType,
+	isUsableHref,
 	normalizeRawCtaToButton,
 	resolveButtonHref,
+	transformButton,
 	transformButtons,
 } from './buttonTransformer';
 
@@ -65,16 +67,43 @@ describe('normalizeRawCtaToButton', () => {
 		expect(transformed?.href).toBe('/candidates');
 		expect(transformed?.label).toBe('Learn more');
 	});
+
+	test('static mock shape with field_ctaActionWithShared only produces a button', () => {
+		const button = normalizeRawCtaToButton(
+			{
+				field_ctaActionWithShared: 'Internal',
+				field_buttonText: 'Learn more',
+				link: { href: '/candidates' },
+			},
+			'pledge-cta',
+		);
+		expect(button?.action).toBe('Internal');
+
+		const transformed = button ? transformButtons([button])?.[0] : undefined;
+		expect(transformed?.href).toBe('/candidates');
+		expect(transformed?.label).toBe('Learn more');
+	});
+});
+
+describe('isUsableHref', () => {
+	test('rejects undefined and empty string', () => {
+		expect(isUsableHref(undefined)).toBe(false);
+		expect(isUsableHref('')).toBe(false);
+	});
+
+	test('accepts non-empty href', () => {
+		expect(isUsableHref('/candidates')).toBe(true);
+	});
 });
 
 describe('resolveButtonHref', () => {
-	test('treats empty string internal href as undefined', () => {
+	test('preserves empty string internal href', () => {
 		const href = resolveButtonHref({
 			action: 'Internal',
 			link: { href: '' },
 			_key: 'x',
 		} as Parameters<typeof resolveButtonHref>[0]);
-		expect(href).toBeUndefined();
+		expect(href).toBe('');
 	});
 
 	test('returns internal link href when present', () => {
@@ -84,5 +113,30 @@ describe('resolveButtonHref', () => {
 			_key: 'x',
 		} as Parameters<typeof resolveButtonHref>[0]);
 		expect(href).toBe('/candidates');
+	});
+});
+
+describe('transformButton', () => {
+	test('returns undefined when internal href is empty', () => {
+		const result = transformButton({
+			action: 'Internal',
+			link: { href: '' },
+			text: 'Learn more',
+			_key: 'x',
+		} as Parameters<typeof transformButton>[0]);
+		expect(result).toBeUndefined();
+	});
+
+	test('returns undefined when normalizeRawCtaToButton yields empty link href', () => {
+		const button = normalizeRawCtaToButton(
+			{
+				action: 'Internal',
+				text: 'Learn more',
+				link: { href: '' },
+			},
+			'card-cta',
+		);
+		expect(button).toBeDefined();
+		expect(transformButton(button!)).toBeUndefined();
 	});
 });

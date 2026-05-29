@@ -1,11 +1,19 @@
 import type { Sections } from '~/PageSections';
 
-import { isButtonType, transformButton } from '~/lib/buttonTransformer';
+import { isButtonType, resolveButtonHref } from '~/lib/buttonTransformer';
 
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { resolveComponentColor } from '~/ui/_lib/resolveComponentColor';
 import { CTACardBlock } from '~/ui/CTACardBlock';
 import { stegaClean } from 'next-sanity';
+
+export function resolveCtaCardHref(
+	cta: unknown,
+	labelFallback?: { label: string; href: string },
+): string | undefined {
+	const href = cta && isButtonType(cta) ? resolveButtonHref(cta) : undefined;
+	return href ?? (labelFallback ? labelFallback.href : undefined);
+}
 
 export function CTACardsBlockSection(section: Extract<Sections, { _type: 'component_ctaCardsBlock' }>) {
 	const backgroundColor = section.ctaCardsBlockDesignSettings?.field_blockColorCreamMidnight
@@ -14,10 +22,19 @@ export function CTACardsBlockSection(section: Extract<Sections, { _type: 'compon
 
 	const cardOneCta = section.ctaCardOne?.ctaActionWithShared;
 	const cardTwoCta = section.ctaCardTwo?.ctaActionWithShared;
-	const cardOneHref =
-		cardOneCta && isButtonType(cardOneCta) ? transformButton(cardOneCta)?.href : undefined;
-	const cardTwoHref =
-		cardTwoCta && isButtonType(cardTwoCta) ? transformButton(cardTwoCta)?.href : undefined;
+	const cardOneHref = resolveCtaCardHref(
+		cardOneCta,
+		section.ctaCardOne?.field_label === 'Candidates' ? { label: 'Candidates', href: '/candidates' } : undefined,
+	);
+	const cardTwoHref = resolveCtaCardHref(
+		cardTwoCta,
+		section.ctaCardTwo?.field_label === 'Upcoming elections'
+			? { label: 'Upcoming elections', href: '/elections' }
+			: undefined,
+	);
+
+	const cardOneTitle = section.ctaCardOne?.ctaActionWithShared?.text;
+	const cardTwoTitle = section.ctaCardTwo?.ctaActionWithShared?.text;
 
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='CTA Cards Block'>
@@ -27,13 +44,13 @@ export function CTACardsBlockSection(section: Extract<Sections, { _type: 'compon
 					color: resolveComponentColor(stegaClean(section.ctaCardOne?.field_componentColor6ColorsInverse), backgroundColor),
 					href: cardOneHref,
 					label: section.ctaCardOne?.field_label,
-					title: section.ctaCardOne?.ctaActionWithShared?.text ?? undefined,
+					title: cardOneTitle ?? undefined,
 				}}
 				card2={{
 					color: resolveComponentColor(stegaClean(section.ctaCardTwo?.field_componentColor6ColorsInverse), backgroundColor),
 					href: cardTwoHref,
 					label: section.ctaCardTwo?.field_label,
-					title: section.ctaCardTwo?.ctaActionWithShared?.text ?? undefined,
+					title: cardTwoTitle ?? undefined,
 				}}
 			/>
 		</section>

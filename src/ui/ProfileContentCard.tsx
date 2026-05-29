@@ -7,7 +7,7 @@ const styles = tv({
 	slots: {
 		base: 'flex flex-col gap-6 border-b border-gray-200 last:border-b-0 pb-[16px]',
 		heading: '',
-		content: '',
+		content: 'min-w-0 break-words',
 	},
 });
 
@@ -29,7 +29,7 @@ export function ProfileContentCard(props: ProfileContentCardProps) {
 				</Text>
 			)}
 			{isValidRichText(props.content) && (
-				<div className={content()}>
+				<div className={cn(content(), typeof props.content === 'string' && 'whitespace-pre-line')}>
 					<Text styleType='body-2'>{props.content}</Text>
 				</div>
 			)}

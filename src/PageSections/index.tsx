@@ -66,10 +66,14 @@ export type SectionOverrides = {
 		profileData?: import('~/PageSections/ProfileContentBlockSection').ProfileData;
 		officeData?: import('~/PageSections/ProfileContentBlockSection').OfficeData;
 	};
+	component_breadcrumbBlock?: {
+		breadcrumbs: import('~/ui/BreadcrumbBlock').BreadcrumbItem[];
+	};
 	component_claimProfileBlock?: {
 		claimed?: boolean;
 		candidateName?: string;
 		partyAffiliation?: string;
+		layout?: 'card' | 'banner';
 	};
 };
 
@@ -96,7 +100,10 @@ export function PageSections(props: Props) {
 					case 'component_breadcrumbBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Breadcrumb Block'>
-								<BreadcrumbBlockSection {...section} />
+								<BreadcrumbBlockSection
+									{...section}
+									breadcrumbOverride={props.sectionOverrides?.component_breadcrumbBlock}
+								/>
 							</ComponentErrorBoundary>
 						);
 					case 'component_blogBlock':

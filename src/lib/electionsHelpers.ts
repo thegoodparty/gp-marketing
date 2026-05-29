@@ -128,8 +128,27 @@ const DATE_ONLY_REGEX = /^\d{4}-\d{2}-\d{2}$/;
  * Parses an ISO date-only string (YYYY-MM-DD) as local date to avoid UTC midnight shifting the day in western time zones.
  */
 function parseDateOnlyAsLocal(dateOnly: string): Date {
-	const [y, m, d] = dateOnly.split('-').map(Number);
-	return new Date(y, m - 1, d);
+	if (!DATE_ONLY_REGEX.test(dateOnly)) {
+		throw new Error(`Invalid date-only string: ${dateOnly}`);
+	}
+	const parts = dateOnly.split('-').map(Number);
+	const y = parts[0];
+	const m = parts[1];
+	const d = parts[2];
+	if (y === undefined || m === undefined || d === undefined) {
+		throw new Error(`Invalid date-only string: ${dateOnly}`);
+	}
+	if (!Number.isInteger(y) || !Number.isInteger(m) || !Number.isInteger(d)) {
+		throw new Error(`Invalid date-only string: ${dateOnly}`);
+	}
+	if (m < 1 || m > 12 || d < 1 || d > 31) {
+		throw new Error(`Invalid date-only string: ${dateOnly}`);
+	}
+	const date = new Date(y, m - 1, d);
+	if (date.getFullYear() !== y || date.getMonth() !== m - 1 || date.getDate() !== d) {
+		throw new Error(`Invalid date-only string: ${dateOnly}`);
+	}
+	return date;
 }
 
 const LOCALE_DATE_OPTIONS: Intl.DateTimeFormatOptions = {
@@ -222,7 +241,9 @@ export function findCityForDistrictName(
 	if (matching.length === 0) return null;
 	// Prefer longest base name match (e.g. "quincy township" over "quincy")
 	matching.sort((a, b) => b.baseName.length - a.baseName.length);
-	return { name: matching[0].name, slug: matching[0].slug };
+	const best = matching[0];
+	if (!best) return null;
+	return { name: best.name, slug: best.slug };
 }
 
 export function buildRaceSlug(
@@ -406,10 +427,10 @@ function parseSalaryString(salary: string): object | null {
 	function makeResult(unitText: 'HOUR' | 'YEAR', amounts: number[]): object {
 		const value: Record<string, unknown> = { '@type': 'QuantitativeValue', unitText };
 		if (amounts.length === 1) {
-			value.value = amounts[0];
+			value['value'] = amounts[0];
 		} else {
-			value.minValue = Math.min(...amounts);
-			value.maxValue = Math.max(...amounts);
+			value['minValue'] = Math.min(...amounts);
+			value['maxValue'] = Math.max(...amounts);
 		}
 		return { '@type': 'MonetaryAmount', currency: 'USD', value };
 	}
@@ -512,10 +533,10 @@ export function buildJobPostingSchema(params: {
 
 	const filingAddr = race.filingOfficeAddress?.trim();
 	if (filingAddr) {
-		postalAddress.streetAddress = filingAddr;
+		postalAddress['streetAddress'] = filingAddr;
 		const zipMatch = filingAddr.match(/\b\d{5}(?:-\d{4})?\b/);
 		if (zipMatch?.[0]) {
-			postalAddress.postalCode = zipMatch[0];
+			postalAddress['postalCode'] = zipMatch[0];
 		}
 	}
 
@@ -539,17 +560,17 @@ export function buildJobPostingSchema(params: {
 
 	const validThrough = race.filingDateEnd?.slice(0, 10) || race.electionDate?.slice(0, 10);
 	if (validThrough) {
-		schema.validThrough = validThrough;
+		schema['validThrough'] = validThrough;
 	}
 
-	schema.employmentType = race.employmentType
+	schema['employmentType'] = race.employmentType
 		? mapPositionEmploymentType(race.employmentType)
 		: 'FULL_TIME';
 
 	if (race.salary) {
 		const baseSalary = parseSalaryString(race.salary);
 		if (baseSalary) {
-			schema.baseSalary = baseSalary;
+			schema['baseSalary'] = baseSalary;
 		}
 	}
 
@@ -671,4 +692,52 @@ export function buildDynamicFAQItems(
 	}
 
 	return items;
+}
+
+/** Formats election frequency years for profile sidebar (e.g. [4] → "4 Years"). */
+export function formatTermLength(
+	frequency: Array<number | string> | undefined | null,
+): string | undefined {
+	if (!frequency?.length) return undefined;
+	const years = Number(frequency[0]);
+	if (!Number.isFinite(years) || years <= 0) return undefined;
+	return years === 1 ? '1 Year' : `${years} Years`;
+}
+
+/** Infers Lucide icon name for elections sidebar links from URL. */
+export function inferSidebarLinkIcon(href: string): string {
+	const lower = href.toLowerCase();
+	if (lower.startsWith('mailto:')) return 'mail';
+	if (lower.includes('linkedin.com')) return 'linkedin';
+	if (lower.includes('facebook.com') || lower.includes('fb.com')) return 'facebook';
+	if (lower.includes('twitter.com') || lower.includes('x.com')) return 'twitter';
+	if (lower.includes('instagram.com')) return 'instagram';
+	return 'globe';
+}
+
+/** Human-readable label for a candidate profile link (first URL is always Website). */
+export function formatSidebarLinkLabel(href: string, index: number): string {
+	if (index === 0) return 'Website';
+	const lower = href.toLowerCase();
+	if (lower.startsWith('mailto:')) return 'Email';
+	if (lower.includes('linkedin.com')) return 'LinkedIn';
+	if (lower.includes('facebook.com') || lower.includes('fb.com')) return 'Facebook';
+	if (lower.includes('twitter.com') || lower.includes('x.com')) return 'Twitter';
+	if (lower.includes('instagram.com')) return 'Instagram';
+	try {
+		const url = new URL(href.startsWith('http') ? href : `https://${href}`);
+		const host = url.hostname.replace(/^www\./, '');
+		return host.charAt(0).toUpperCase() + host.slice(1);
+	} catch {
+		return `Link ${index + 1}`;
+	}
+}
+
+/** Builds elections position page path from a race slug (e.g. ok/foo/local-school-board). */
+export function buildRacePositionHref(raceSlug: string | undefined): string | undefined {
+	if (!raceSlug) return undefined;
+	const parts = raceSlug.split('/').filter(Boolean);
+	const positionSlug = parts.pop();
+	if (!positionSlug || parts.length === 0) return undefined;
+	return `/elections/${parts.join('/')}/position/${positionSlug}`;
 }

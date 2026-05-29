@@ -1,16 +1,21 @@
+/// <reference types="bun-types" />
 import { describe, expect, test } from 'bun:test';
 import {
 	buildFAQSchema,
 	buildJobPostingSchema,
+	buildRacePositionHref,
 	buildRaceSlug,
 	canonicalizeCountyEquivalentName,
 	findCityForDistrictName,
 	formatElectionDateFromApi,
 	formatFilingPeriodFromRace,
+	formatSidebarLinkLabel,
+	formatTermLength,
 	getCountySuffixLabel,
 	getStateName,
 	getYearFromDateString,
 	hasSuspiciousFactsMatch,
+	inferSidebarLinkIcon,
 	isCityOrTownMtfcc,
 	placeToFactsCards,
 	resolveLocalityName,
@@ -258,6 +263,14 @@ describe('formatElectionDateFromApi', () => {
 		expect(result).toMatch(/November/);
 		expect(result).toMatch(/2026/);
 	});
+
+	test('throws for invalid calendar date that matches date-only pattern', () => {
+		expect(() => formatElectionDateFromApi('2026-02-30')).toThrow('Invalid date-only string');
+	});
+
+	test('throws for invalid month in date-only string', () => {
+		expect(() => formatElectionDateFromApi('2026-13-01')).toThrow('Invalid date-only string');
+	});
 });
 
 describe('getYearFromDateString', () => {
@@ -498,7 +511,7 @@ describe('buildJobPostingSchema', () => {
 			...jobPostingBaseParams,
 		});
 		expect(schema).not.toBeNull();
-		expect((schema as Record<string, unknown>).datePosted).toBe('2026-01-15');
+		expect((schema as Record<string, unknown>)['datePosted']).toBe('2026-01-15');
 	});
 
 	test('includes datePosted from electionDate when filing start missing', () => {
@@ -507,7 +520,7 @@ describe('buildJobPostingSchema', () => {
 			...jobPostingBaseParams,
 		});
 		expect(schema).not.toBeNull();
-		expect((schema as Record<string, unknown>).datePosted).toBe('2026-11-03');
+		expect((schema as Record<string, unknown>)['datePosted']).toBe('2026-11-03');
 	});
 
 	test('filingDateStart takes precedence over electionDate', () => {
@@ -518,7 +531,7 @@ describe('buildJobPostingSchema', () => {
 			}),
 			...jobPostingBaseParams,
 		});
-		expect((schema as Record<string, unknown>).datePosted).toBe('2026-01-01');
+		expect((schema as Record<string, unknown>)['datePosted']).toBe('2026-01-01');
 	});
 
 	test('sets validThrough from filingDateEnd', () => {
@@ -529,7 +542,7 @@ describe('buildJobPostingSchema', () => {
 			}),
 			...jobPostingBaseParams,
 		});
-		expect((schema as Record<string, unknown>).validThrough).toBe('2026-02-01');
+		expect((schema as Record<string, unknown>)['validThrough']).toBe('2026-02-01');
 	});
 
 	test('validThrough falls back to electionDate when filingDateEnd missing', () => {
@@ -563,7 +576,7 @@ describe('buildJobPostingSchema', () => {
 			}),
 			...jobPostingBaseParams,
 		}) as Record<string, unknown>;
-		const addr = ((schema['jobLocation'] as Record<string, unknown>).address as Record<string, unknown>);
+		const addr = (schema['jobLocation'] as Record<string, unknown>)['address'] as Record<string, unknown>;
 		expect(addr['streetAddress']).toBe('123 Main St, Phoenix, AZ 85001');
 		expect(addr['postalCode']).toBe('85001');
 	});
@@ -576,7 +589,7 @@ describe('buildJobPostingSchema', () => {
 			}),
 			...jobPostingBaseParams,
 		}) as Record<string, unknown>;
-		const addr = ((schema['jobLocation'] as Record<string, unknown>).address as Record<string, unknown>);
+		const addr = (schema['jobLocation'] as Record<string, unknown>)['address'] as Record<string, unknown>;
 		expect(addr['postalCode']).toBe('20510-1234');
 	});
 
@@ -588,7 +601,7 @@ describe('buildJobPostingSchema', () => {
 			}),
 			...jobPostingBaseParams,
 		}) as Record<string, unknown>;
-		const addr = ((schema['jobLocation'] as Record<string, unknown>).address as Record<string, unknown>);
+		const addr = (schema['jobLocation'] as Record<string, unknown>)['address'] as Record<string, unknown>;
 		expect(addr['streetAddress']).toBe('Capitol Building, Phoenix, AZ');
 		expect(addr['postalCode']).toBeUndefined();
 	});
@@ -598,7 +611,7 @@ describe('buildJobPostingSchema', () => {
 			race: minimalRace({ filingDateStart: '2026-01-01' }),
 			...jobPostingBaseParams,
 		}) as Record<string, unknown>;
-		const addr = ((schema['jobLocation'] as Record<string, unknown>).address as Record<string, unknown>);
+		const addr = (schema['jobLocation'] as Record<string, unknown>)['address'] as Record<string, unknown>;
 		expect(addr['streetAddress']).toBeUndefined();
 		expect(addr['postalCode']).toBeUndefined();
 	});
@@ -626,7 +639,7 @@ describe('buildJobPostingSchema', () => {
 			stateName: '',
 			pageUrl: 'https://example.com/elections',
 		}) as Record<string, unknown>;
-		const addr = ((schema['jobLocation'] as Record<string, unknown>).address as Record<string, unknown>);
+		const addr = (schema['jobLocation'] as Record<string, unknown>)['address'] as Record<string, unknown>;
 		expect(addr['addressLocality']).toBe('Yuma County');
 	});
 
@@ -635,10 +648,10 @@ describe('buildJobPostingSchema', () => {
 			race: minimalRace({ filingDateStart: '2026-01-01', salary: '$50,000' }),
 			...jobPostingBaseParams,
 		});
-		const baseSalary = (schema as Record<string, unknown>).baseSalary as Record<string, unknown>;
+		const baseSalary = (schema as Record<string, unknown>)['baseSalary'] as Record<string, unknown>;
 		expect(baseSalary['@type']).toBe('MonetaryAmount');
-		const value = baseSalary.value as Record<string, unknown>;
-		expect(value.value).toBe(50000);
+		const value = baseSalary['value'] as Record<string, unknown>;
+		expect(value['value']).toBe(50000);
 	});
 
 	test('parses salary range', () => {
@@ -646,9 +659,9 @@ describe('buildJobPostingSchema', () => {
 			race: minimalRace({ filingDateStart: '2026-01-01', salary: '$50,000 - $75,000' }),
 			...jobPostingBaseParams,
 		});
-		const value = ((schema as Record<string, unknown>).baseSalary as Record<string, unknown>).value as Record<string, unknown>;
-		expect(value.minValue).toBe(50000);
-		expect(value.maxValue).toBe(75000);
+		const value = ((schema as Record<string, unknown>)['baseSalary'] as Record<string, unknown>)['value'] as Record<string, unknown>;
+		expect(value['minValue']).toBe(50000);
+		expect(value['maxValue']).toBe(75000);
 	});
 
 	test('uses HOUR unit when hourly cues present', () => {
@@ -656,9 +669,9 @@ describe('buildJobPostingSchema', () => {
 			race: minimalRace({ filingDateStart: '2026-01-01', salary: '$25/hr' }),
 			...jobPostingBaseParams,
 		});
-		const value = ((schema as Record<string, unknown>).baseSalary as Record<string, unknown>).value as Record<string, unknown>;
-		expect(value.unitText).toBe('HOUR');
-		expect(value.value).toBe(25);
+		const value = ((schema as Record<string, unknown>)['baseSalary'] as Record<string, unknown>)['value'] as Record<string, unknown>;
+		expect(value['unitText']).toBe('HOUR');
+		expect(value['value']).toBe(25);
 	});
 
 	test('parses bare integer salary (no $ prefix)', () => {
@@ -666,9 +679,9 @@ describe('buildJobPostingSchema', () => {
 			race: minimalRace({ filingDateStart: '2026-01-01', salary: '147175' }),
 			...jobPostingBaseParams,
 		});
-		const value = ((schema as Record<string, unknown>).baseSalary as Record<string, unknown>).value as Record<string, unknown>;
-		expect(value.value).toBe(147175);
-		expect(value.unitText).toBe('YEAR');
+		const value = ((schema as Record<string, unknown>)['baseSalary'] as Record<string, unknown>)['value'] as Record<string, unknown>;
+		expect(value['value']).toBe(147175);
+		expect(value['unitText']).toBe('YEAR');
 	});
 
 	test('picks annual amount from mixed annual+per-diem string', () => {
@@ -676,9 +689,9 @@ describe('buildJobPostingSchema', () => {
 			race: minimalRace({ filingDateStart: '2026-01-01', salary: '$7,200/year + $221/day' }),
 			...jobPostingBaseParams,
 		});
-		const value = ((schema as Record<string, unknown>).baseSalary as Record<string, unknown>).value as Record<string, unknown>;
-		expect(value.value).toBe(7200);
-		expect(value.unitText).toBe('YEAR');
+		const value = ((schema as Record<string, unknown>)['baseSalary'] as Record<string, unknown>)['value'] as Record<string, unknown>;
+		expect(value['value']).toBe(7200);
+		expect(value['unitText']).toBe('YEAR');
 	});
 
 	test('extracts salary embedded in prose', () => {
@@ -686,9 +699,9 @@ describe('buildJobPostingSchema', () => {
 			race: minimalRace({ filingDateStart: '2026-01-01', salary: 'The base salary was $141,000/year in 2011 (NRS 223.050).' }),
 			...jobPostingBaseParams,
 		});
-		const value = ((schema as Record<string, unknown>).baseSalary as Record<string, unknown>).value as Record<string, unknown>;
-		expect(value.value).toBe(141000);
-		expect(value.unitText).toBe('YEAR');
+		const value = ((schema as Record<string, unknown>)['baseSalary'] as Record<string, unknown>)['value'] as Record<string, unknown>;
+		expect(value['value']).toBe(141000);
+		expect(value['unitText']).toBe('YEAR');
 	});
 
 	test('maps Full-Time employment to FULL_TIME', () => {
@@ -696,7 +709,7 @@ describe('buildJobPostingSchema', () => {
 			race: minimalRace({ filingDateStart: '2026-01-01', employmentType: 'Full-Time' }),
 			...jobPostingBaseParams,
 		});
-		expect((schema as Record<string, unknown>).employmentType).toBe('FULL_TIME');
+		expect((schema as Record<string, unknown>)['employmentType']).toBe('FULL_TIME');
 	});
 
 	test('maps unknown employment to OTHER', () => {
@@ -704,7 +717,7 @@ describe('buildJobPostingSchema', () => {
 			race: minimalRace({ filingDateStart: '2026-01-01', employmentType: 'Rotating shift' }),
 			...jobPostingBaseParams,
 		});
-		expect((schema as Record<string, unknown>).employmentType).toBe('OTHER');
+		expect((schema as Record<string, unknown>)['employmentType']).toBe('OTHER');
 	});
 
 	test('omits baseSalary when salary unparseable', () => {
@@ -712,7 +725,7 @@ describe('buildJobPostingSchema', () => {
 			race: minimalRace({ filingDateStart: '2026-01-01', salary: 'TBD' }),
 			...jobPostingBaseParams,
 		});
-		expect((schema as Record<string, unknown>).baseSalary).toBeUndefined();
+		expect((schema as Record<string, unknown>)['baseSalary']).toBeUndefined();
 	});
 
 	test('wraps fallback description in paragraph HTML', () => {
@@ -723,7 +736,7 @@ describe('buildJobPostingSchema', () => {
 			countyName: 'Maricopa County',
 			pageUrl: 'https://example.com/elections',
 		}) as Record<string, unknown>;
-		const desc = String(schema.description);
+		const desc = String(schema['description']);
 		expect(desc.startsWith('<p>')).toBe(true);
 		expect(desc.endsWith('</p>')).toBe(true);
 		expect(desc).toContain('elected public office');
@@ -737,7 +750,7 @@ describe('buildJobPostingSchema', () => {
 			}),
 			...jobPostingBaseParams,
 		}) as Record<string, unknown>;
-		expect(String(schema.description)).toContain('&lt;script&gt;');
+		expect(String(schema['description'])).toContain('&lt;script&gt;');
 	});
 
 	test('passes through API HTML starting with block tag', () => {
@@ -749,7 +762,7 @@ describe('buildJobPostingSchema', () => {
 			}),
 			...jobPostingBaseParams,
 		}) as Record<string, unknown>;
-		expect(schema.description).toBe(raw);
+		expect(schema['description']).toBe(raw);
 	});
 
 	test('strips script tags from API HTML', () => {
@@ -760,8 +773,8 @@ describe('buildJobPostingSchema', () => {
 			}),
 			...jobPostingBaseParams,
 		}) as Record<string, unknown>;
-		expect(String(schema.description)).not.toContain('<script>');
-		expect(String(schema.description)).toContain('<p>Safe</p>');
+		expect(String(schema['description'])).not.toContain('<script>');
+		expect(String(schema['description'])).toContain('<p>Safe</p>');
 	});
 
 	test('escapes ampersands in plain positionDescription', () => {
@@ -772,7 +785,57 @@ describe('buildJobPostingSchema', () => {
 			}),
 			...jobPostingBaseParams,
 		}) as Record<string, unknown>;
-		expect(String(schema.description)).toContain('&amp;');
+		expect(String(schema['description'])).toContain('&amp;');
+	});
+});
+
+describe('formatTermLength', () => {
+	test('formats multiple years', () => {
+		expect(formatTermLength([4])).toBe('4 Years');
+		expect(formatTermLength([5])).toBe('5 Years');
+	});
+
+	test('formats single year', () => {
+		expect(formatTermLength([1])).toBe('1 Year');
+	});
+
+	test('returns undefined for empty or invalid input', () => {
+		expect(formatTermLength([])).toBeUndefined();
+		expect(formatTermLength(undefined)).toBeUndefined();
+		expect(formatTermLength(['invalid'])).toBeUndefined();
+	});
+});
+
+describe('inferSidebarLinkIcon', () => {
+	test('infers icons from URL patterns', () => {
+		expect(inferSidebarLinkIcon('mailto:test@example.com')).toBe('mail');
+		expect(inferSidebarLinkIcon('https://www.linkedin.com/in/user')).toBe('linkedin');
+		expect(inferSidebarLinkIcon('https://facebook.com/page')).toBe('facebook');
+		expect(inferSidebarLinkIcon('https://example.com')).toBe('globe');
+	});
+});
+
+describe('formatSidebarLinkLabel', () => {
+	test('uses Website for first link', () => {
+		expect(formatSidebarLinkLabel('https://example.com', 0)).toBe('Website');
+	});
+
+	test('detects platform labels', () => {
+		expect(formatSidebarLinkLabel('https://www.linkedin.com/in/user', 1)).toBe('LinkedIn');
+		expect(formatSidebarLinkLabel('mailto:a@b.com', 1)).toBe('Email');
+	});
+});
+
+describe('buildRacePositionHref', () => {
+	test('builds position page path from race slug', () => {
+		expect(buildRacePositionHref('ok/tecumseh-public-schools/local-school-board')).toBe(
+			'/elections/ok/tecumseh-public-schools/position/local-school-board',
+		);
+	});
+
+	test('returns undefined for invalid slug', () => {
+		expect(buildRacePositionHref(undefined)).toBeUndefined();
+		expect(buildRacePositionHref('single-part')).toBeUndefined();
 	});
 });
 

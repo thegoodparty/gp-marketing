@@ -6,6 +6,7 @@ import { Media } from './Media';
 import { Tagline } from './Tagline';
 import { Text } from './Text';
 import { Breadcrumbs } from './Breadcrumbs';
+import type { BreadcrumbItem } from './BreadcrumbBlock';
 
 interface BlogArticleHeroProps {
 	title?: string;
@@ -15,7 +16,7 @@ interface BlogArticleHeroProps {
 		href?: string;
 	};
 	image?: SanityImage;
-	breadcrumbs?: { href: string; label: string }[];
+	breadcrumbs?: BreadcrumbItem[];
 }
 
 export const BlogArticleHero = (props: BlogArticleHeroProps) => {

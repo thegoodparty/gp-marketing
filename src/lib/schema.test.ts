@@ -167,6 +167,19 @@ describe('buildBreadcrumbSchema', () => {
 		expect(items[1]?.['position']).toBe(2);
 		expect('item' in (items[1] ?? {})).toBe(false);
 	});
+
+	test('omitted href on current crumb omits item field', () => {
+		const schema = asRecord(
+			buildBreadcrumbSchema([
+				{ href: '/candidates', label: 'Candidates' },
+				{ label: 'Jane Doe' },
+			]),
+		);
+		const items = schema['itemListElement'] as Array<Record<string, unknown>>;
+		expect(items[0]?.['item']).toBe('https://goodparty.org/candidates');
+		expect(items[1]?.['name']).toBe('Jane Doe');
+		expect('item' in (items[1] ?? {})).toBe(false);
+	});
 });
 
 describe('buildFAQSchema', () => {

@@ -30,6 +30,12 @@ Use this component when:
 
 <Canvas of={ProfileContentBlockStories.MultipleCards} />
 
+<Canvas of={ProfileContentBlockStories.SidebarOnly} />
+
+<Canvas of={ProfileContentBlockStories.LongUrls} />
+
+<Canvas of={ProfileContentBlockStories.TabletStacked} />
+
 ## Props
 
 <Controls of={ProfileContentBlockStories.Default} />
@@ -77,17 +83,19 @@ Additional CSS classes to apply to the component.
 ## Layout
 
 The component uses a responsive grid layout:
-- **Mobile**: Single column (sidebar appears above content if present)
-- **Desktop** (`lg:`): Two-column grid with fixed sidebar width
-  - Sidebar: `300px` fixed width
-  - Content: Remaining space (`1fr`)
-  - Gap: `gap-8` between columns
+- **Mobile / tablet (below `lg`)**: Single column inside a centered `max-w-3xl` content well; sidebar and content cards share the same width and left edge
+- **Desktop** (`lg:`): Two-column grid (well constraints removed)
+  - Sidebar: up to `400px` wide (`minmax(280px, 400px)`), sticky while scrolling
+  - Content: remaining width (`minmax(0, 1fr)`) with `min-w-0` so long copy wraps
+  - Gap: `gap-8` below `lg`, `gap-10` at `lg`, `gap-12` at `xl`
+- **Sidebar-only profiles**: Centered `max-w-3xl` well — cards fill the well without a faux second column on wide viewports
 
 ## Sticky Sidebar
 
-When the sidebar is present:
-- Uses `sticky top-4 self-start` positioning
+When the sidebar is present on desktop (`lg:` and two columns):
+- Uses `lg:sticky lg:top-4 self-start` positioning
 - Stays visible while scrolling through content cards
+- Below `lg`, the sidebar is not sticky (avoids content scrolling under the sidebar on tablet/mobile)
 - Provides quick access to contact links, office information, and CTA
 - Displays links with icons (Website, Facebook, Email, etc.)
 - Shows office details (About Office, Term Length, Election Date) with separators

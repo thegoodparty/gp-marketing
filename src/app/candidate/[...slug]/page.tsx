@@ -1,7 +1,13 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getCandidateBySlug, findCampaignByRace } from '~/lib/electionsApi';
-import { formatElectionDateFromApi } from '~/lib/electionsHelpers';
+import {
+	formatElectionDateFromApi,
+	formatSidebarLinkLabel,
+	formatTermLength,
+	inferSidebarLinkIcon,
+	buildRacePositionHref,
+} from '~/lib/electionsHelpers';
 import { PageSections } from '~/PageSections';
 import type { SectionOverrides } from '~/PageSections';
 import type { CandidacyItem, FindByRaceIdResponse } from '~/types/elections';
@@ -23,7 +29,7 @@ function buildSectionOverrides(
 	const isClaimed = !!claimed;
 
 	const profileData: ProfileData = {
-		aboutMe: candidate.about,
+		aboutMe: candidate.about ?? undefined,
 		whyRunning: claimed?.details?.pastExperience,
 		topIssues: buildTopIssues(candidate, claimed),
 	};
@@ -32,7 +38,8 @@ function buildSectionOverrides(
 	if (candidate.urls?.length) {
 		candidate.urls.forEach((url, i) => {
 			links.push({
-				label: i === 0 ? 'Website' : `Link ${i + 1}`,
+				label: formatSidebarLinkLabel(url, i),
+				icon: inferSidebarLinkIcon(url),
 				href: url,
 			});
 		});
@@ -40,24 +47,42 @@ function buildSectionOverrides(
 	if (candidate.email) {
 		links.push({
 			label: 'Email',
+			icon: 'mail',
 			href: `mailto:${candidate.email}`,
 		});
 	}
 	if (claimed?.details?.website) {
 		const hasWebsite = links.some((l) => l.label === 'Website');
 		if (!hasWebsite) {
-			links.unshift({ label: 'Website', href: claimed.details.website });
+			links.unshift({
+				label: 'Website',
+				icon: inferSidebarLinkIcon(claimed.details.website),
+				href: claimed.details.website,
+			});
 		}
 	}
 
+	const racePositionHref = buildRacePositionHref(candidate.Race?.slug);
+
 	const officeData: OfficeData = {
 		links: links.length ? links : undefined,
+		aboutOffice: candidate.positionDescription ?? candidate.Race?.positionDescription,
+		termLength: formatTermLength(candidate.electionFrequency ?? candidate.Race?.frequency),
 		electionDate: candidate.Race?.electionDate
 			? formatElectionDateFromApi(candidate.Race.electionDate)
 			: undefined,
+		ctaHref: racePositionHref,
+		ctaLabel: racePositionHref ? 'View office details' : undefined,
 	};
 
 	return {
+		component_breadcrumbBlock: {
+			breadcrumbs: [
+				{ href: '/', label: 'Home' },
+				{ href: '/candidates', label: 'Candidates' },
+				{ label: candidateName },
+			],
+		},
 		component_profileHero: {
 			candidateName,
 			office,
@@ -72,6 +97,7 @@ function buildSectionOverrides(
 			claimed: isClaimed,
 			candidateName,
 			partyAffiliation: claimed?.details?.party ?? candidate.party,
+			layout: 'banner',
 		},
 	};
 }

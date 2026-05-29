@@ -47,14 +47,18 @@ export interface CandidacyItem {
 	about?: string;
 	email?: string;
 	urls?: string[];
+	positionDescription?: string;
+	electionFrequency?: number[];
 	Stances?: Array<{
 		Issue?: { name?: string };
 		stanceStatement?: string;
 	}>;
 	Race?: {
 		brHashId: string;
+		slug?: string;
 		electionDate?: string;
-		[key: string]: unknown;
+		positionDescription?: string;
+		frequency?: number[];
 	};
 }
 

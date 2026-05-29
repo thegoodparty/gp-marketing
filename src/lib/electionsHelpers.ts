@@ -733,6 +733,57 @@ export function formatSidebarLinkLabel(href: string, index: number): string {
 	}
 }
 
+export type SidebarLink = { label: string; icon: string; href: string };
+
+export type SidebarLinkInput = { label: string; href: string; icon?: string };
+
+/** Normalize URLs for dedup (scheme, www, trailing slash). mailto: compared case-insensitively. */
+export function normalizeLinkHrefForCompare(href: string): string {
+	const trimmed = href.trim();
+	const lower = trimmed.toLowerCase();
+	if (lower.startsWith('mailto:')) {
+		return lower;
+	}
+	try {
+		const url = new URL(trimmed.startsWith('http') ? trimmed : `https://${trimmed}`);
+		const host = url.hostname.replace(/^www\./i, '').toLowerCase();
+		const path = url.pathname.replace(/\/$/, '') || '';
+		return `${host}${path}`;
+	} catch {
+		return lower;
+	}
+}
+
+export function linkHrefAlreadyPresent(
+	links: ReadonlyArray<{ href: string }>,
+	href: string,
+): boolean {
+	const target = normalizeLinkHrefForCompare(href);
+	return links.some((l) => normalizeLinkHrefForCompare(l.href) === target);
+}
+
+/** Prepends claimed campaign website when not already present (by href, not label). */
+export function prependClaimedWebsiteIfNew(
+	links: SidebarLinkInput[],
+	claimedWebsite: string,
+): SidebarLink[] {
+	const normalized = links.map((link) => ({
+		...link,
+		icon: link.icon ?? inferSidebarLinkIcon(link.href),
+	}));
+	if (linkHrefAlreadyPresent(normalized, claimedWebsite)) {
+		return normalized;
+	}
+	return [
+		{
+			label: 'Website',
+			icon: inferSidebarLinkIcon(claimedWebsite),
+			href: claimedWebsite,
+		},
+		...normalized,
+	];
+}
+
 /** Builds elections position page path from a race slug (e.g. ok/foo/local-school-board). */
 export function buildRacePositionHref(raceSlug: string | undefined): string | undefined {
 	if (!raceSlug) return undefined;

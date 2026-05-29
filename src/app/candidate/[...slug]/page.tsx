@@ -7,6 +7,7 @@ import {
 	formatTermLength,
 	inferSidebarLinkIcon,
 	buildRacePositionHref,
+	prependClaimedWebsiteIfNew,
 } from '~/lib/electionsHelpers';
 import { PageSections } from '~/PageSections';
 import type { SectionOverrides } from '~/PageSections';
@@ -52,14 +53,9 @@ function buildSectionOverrides(
 		});
 	}
 	if (claimed?.details?.website) {
-		const hasWebsite = links.some((l) => l.label === 'Website');
-		if (!hasWebsite) {
-			links.unshift({
-				label: 'Website',
-				icon: inferSidebarLinkIcon(claimed.details.website),
-				href: claimed.details.website,
-			});
-		}
+		const merged = prependClaimedWebsiteIfNew(links ?? [], claimed.details.website);
+		links.length = 0;
+		links.push(...merged);
 	}
 
 	const racePositionHref = buildRacePositionHref(candidate.Race?.slug);

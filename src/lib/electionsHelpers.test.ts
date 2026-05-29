@@ -11,6 +11,9 @@ import {
 	formatFilingPeriodFromRace,
 	formatSidebarLinkLabel,
 	formatTermLength,
+	linkHrefAlreadyPresent,
+	normalizeLinkHrefForCompare,
+	prependClaimedWebsiteIfNew,
 	getCountySuffixLabel,
 	getStateName,
 	getYearFromDateString,
@@ -823,6 +826,82 @@ describe('formatSidebarLinkLabel', () => {
 	test('detects platform labels', () => {
 		expect(formatSidebarLinkLabel('https://www.linkedin.com/in/user', 1)).toBe('LinkedIn');
 		expect(formatSidebarLinkLabel('mailto:a@b.com', 1)).toBe('Email');
+	});
+});
+
+describe('normalizeLinkHrefForCompare', () => {
+	test('treats www and trailing slash as equivalent', () => {
+		expect(normalizeLinkHrefForCompare('https://same.com')).toBe(
+			normalizeLinkHrefForCompare('https://www.same.com/'),
+		);
+	});
+
+	test('normalizes mailto case-insensitively', () => {
+		expect(normalizeLinkHrefForCompare('mailto:Test@Example.com')).toBe(
+			normalizeLinkHrefForCompare('mailto:test@example.com'),
+		);
+	});
+});
+
+describe('prependClaimedWebsiteIfNew', () => {
+	test('prepends when candidate has different first URL labeled Website', () => {
+		const links = [
+			{
+				label: 'Website',
+				icon: 'globe',
+				href: 'https://old-campaign.com',
+			},
+		];
+		const result = prependClaimedWebsiteIfNew(links, 'https://new-campaign.com');
+		expect(result).toHaveLength(2);
+		expect(result[0]?.href).toBe('https://new-campaign.com');
+		expect(result[0]?.label).toBe('Website');
+		expect(result[1]?.href).toBe('https://old-campaign.com');
+	});
+
+	test('does not duplicate when claimed URL matches existing link (www variant)', () => {
+		const links = [
+			{
+				label: 'Website',
+				icon: 'globe',
+				href: 'https://same.com',
+			},
+		];
+		const result = prependClaimedWebsiteIfNew(links, 'https://www.same.com/');
+		expect(result).toHaveLength(1);
+		expect(result[0]?.href).toBe('https://same.com');
+	});
+
+	test('prepends when first candidate URL is not the claimed website', () => {
+		const links = [
+			{
+				label: 'Website',
+				icon: 'linkedin',
+				href: 'https://www.linkedin.com/in/jane',
+			},
+		];
+		const result = prependClaimedWebsiteIfNew(links, 'https://janeforoffice.com');
+		expect(result).toHaveLength(2);
+		expect(result[0]?.href).toBe('https://janeforoffice.com');
+		expect(result[1]?.label).toBe('Website');
+	});
+
+	test('adds claimed website when links array is empty', () => {
+		const result = prependClaimedWebsiteIfNew([], 'https://campaign.com');
+		expect(result).toHaveLength(1);
+		expect(result[0]).toEqual({
+			label: 'Website',
+			icon: 'globe',
+			href: 'https://campaign.com',
+		});
+	});
+});
+
+describe('linkHrefAlreadyPresent', () => {
+	test('returns false when href is not in links', () => {
+		expect(
+			linkHrefAlreadyPresent([{ href: 'https://example.com' }], 'https://other.com'),
+		).toBe(false);
 	});
 });
 

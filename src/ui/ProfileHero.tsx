@@ -9,13 +9,13 @@ import { Logo } from '~/sanity/utils/Logo.tsx';
 
 const styles = tv({
 	slots: {
-		base: 'relative py-12 md:py-16 lg:py-20 overflow-hidden',
+		base: 'relative py-8 md:py-10 lg:py-12 overflow-hidden',
 		backgroundWrapper: 'absolute top-0 bottom-0 max-md:-left-[var(--container-padding)] max-md:-right-[var(--container-padding)] md:inset-0',
 		topSection: 'absolute top-0 left-0 right-0 h-[60%]',
 		bottomSection: 'absolute bottom-0 left-0 right-0 h-[40%]',
 		container: 'relative z-10 flex flex-col items-start gap-8 md:flex-row md:items-start md:gap-12 lg:gap-40',
 		imageWrapper: 'relative flex-shrink-0 z-20',
-		image: 'rounded-full overflow-hidden w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 mt-8 md:mt-12 lg:mt-16',
+		image: 'rounded-full overflow-hidden w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64',
 		badge: 'absolute bottom-0 right-0 translate-x-[-2%] translate-y-1/17 z-30',
 		content: 'flex flex-col gap-6 text-left z-10',
 		heading: '',
@@ -58,7 +58,8 @@ export type ProfileHeroProps = {
 
 export function ProfileHero(props: ProfileHeroProps) {
 	const backgroundColor = props.backgroundColor ?? 'midnight';
-	const { base, backgroundWrapper, topSection, bottomSection, container, imageWrapper, image, badge, content, heading, office, attribution, attributionIcon, attributionText } = styles({ backgroundColor });
+	const resolvedBackgroundColor = backgroundColor === 'white' ? 'cream' : backgroundColor;
+	const { base, backgroundWrapper, topSection, bottomSection, container, imageWrapper, image, badge, content, heading, office, attribution, attributionIcon, attributionText } = styles({ backgroundColor: resolvedBackgroundColor });
 
 	return (
 		<section className={cn(base(), props.className)} data-component="ProfileHero">

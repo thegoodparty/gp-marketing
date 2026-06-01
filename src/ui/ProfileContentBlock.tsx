@@ -8,9 +8,11 @@ import { Text } from './Text.tsx';
 const styles = tv({
 	slots: {
 		base: 'py-(--container-padding)',
-		grid: 'grid lg:grid-cols-[minmax(400px,auto)_1fr] gap-[80px]',
-		sidebar: 'sticky top-4 self-start',
-		content: 'flex flex-col gap-8 bg-white rounded-xl p-6',
+		well: 'mx-auto w-full max-w-3xl',
+		grid: 'grid w-full mx-auto max-w-3xl gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-[minmax(280px,400px)_minmax(0,1fr)] lg:gap-10 xl:gap-12 lg:overflow-hidden',
+		sidebar: 'self-start w-full min-w-0 lg:max-w-[400px] lg:sticky lg:top-4',
+		sidebarStandalone: 'w-full min-w-0',
+		content: 'flex min-w-0 w-full flex-col gap-8 rounded-xl bg-white p-6',
 		title: 'border-b border-gray-200 ',
 	},
 	variants: {
@@ -36,27 +38,38 @@ export type ProfileContentBlockProps = {
 
 export function ProfileContentBlock(props: ProfileContentBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
-	const { base, grid, sidebar, content, title: titleSlot } = styles({ backgroundColor });
+	const { base, well, grid, sidebar, sidebarStandalone, content, title: titleSlot } = styles({ backgroundColor });
+	const hasContentCards = props.contentCards.length > 0;
 
 	return (
 		<article className={cn(base(), props.className)} data-component='ProfileContentBlock'>
 			<Container size='xl'>
-				<div className={grid()}>
+				<div
+					className={cn(
+						hasContentCards
+							? grid()
+							: props.sidebar
+								? well()
+								: undefined,
+					)}
+				>
 					{props.sidebar && (
-						<aside className={sidebar()}>
+						<aside className={hasContentCards ? sidebar() : sidebarStandalone()}>
 							<ElectionsSidebar {...props.sidebar} />
 						</aside>
 					)}
-					<div className={cn(content())}>
-						{props.title && (
-							<Text as="h2" styleType="heading-sm" className={titleSlot()}>
-								{props.title}
-							</Text>
-						)}
-						{props.contentCards.map((card, index) => (
-							<ProfileContentCard key={index} {...card} />
-						))}
-					</div>
+					{hasContentCards && (
+						<div className={cn(content())}>
+							{props.title && (
+								<Text as="h2" styleType="heading-sm" className={titleSlot()}>
+									{props.title}
+								</Text>
+							)}
+							{props.contentCards.map((card, index) => (
+								<ProfileContentCard key={index} {...card} />
+							))}
+						</div>
+					)}
 				</div>
 			</Container>
 		</article>

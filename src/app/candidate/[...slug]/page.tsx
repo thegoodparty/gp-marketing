@@ -1,7 +1,13 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getCandidateBySlug, findCampaignByRace } from '~/lib/electionsApi';
-import { formatElectionDateFromApi } from '~/lib/electionsHelpers';
+import { getCandidateBySlug, findCampaignByRace, resolveRaceElectionHrefs } from '~/lib/electionsApi';
+import {
+	formatElectionDateFromApi,
+	formatSidebarLinkLabel,
+	formatTermLength,
+	inferSidebarLinkIcon,
+	prependClaimedWebsiteIfNew,
+} from '~/lib/electionsHelpers';
 import { PageSections } from '~/PageSections';
 import type { SectionOverrides } from '~/PageSections';
 import type { CandidacyItem, FindByRaceIdResponse } from '~/types/elections';
@@ -17,13 +23,14 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
 function buildSectionOverrides(
 	candidate: CandidacyItem,
 	claimed: FindByRaceIdResponse | null,
+	electionHrefs: { positionHref?: string; candidatesHref?: string },
 ): SectionOverrides {
 	const candidateName = [candidate.firstName, candidate.lastName].filter(Boolean).join(' ') || 'Candidate';
 	const office = candidate.positionName ?? 'Office';
 	const isClaimed = !!claimed;
 
 	const profileData: ProfileData = {
-		aboutMe: candidate.about,
+		aboutMe: candidate.about ?? undefined,
 		whyRunning: claimed?.details?.pastExperience,
 		topIssues: buildTopIssues(candidate, claimed),
 	};
@@ -32,7 +39,8 @@ function buildSectionOverrides(
 	if (candidate.urls?.length) {
 		candidate.urls.forEach((url, i) => {
 			links.push({
-				label: i === 0 ? 'Website' : `Link ${i + 1}`,
+				label: formatSidebarLinkLabel(url, i),
+				icon: inferSidebarLinkIcon(url),
 				href: url,
 			});
 		});
@@ -40,24 +48,39 @@ function buildSectionOverrides(
 	if (candidate.email) {
 		links.push({
 			label: 'Email',
+			icon: 'mail',
 			href: `mailto:${candidate.email}`,
 		});
 	}
 	if (claimed?.details?.website) {
-		const hasWebsite = links.some((l) => l.label === 'Website');
-		if (!hasWebsite) {
-			links.unshift({ label: 'Website', href: claimed.details.website });
-		}
+		const merged = prependClaimedWebsiteIfNew(links ?? [], claimed.details.website);
+		links.length = 0;
+		links.push(...merged);
 	}
+
+	const racePositionHref = electionHrefs.positionHref;
 
 	const officeData: OfficeData = {
 		links: links.length ? links : undefined,
+		aboutOffice: candidate.positionDescription ?? candidate.Race?.positionDescription,
+		termLength: formatTermLength(candidate.electionFrequency ?? candidate.Race?.frequency),
 		electionDate: candidate.Race?.electionDate
 			? formatElectionDateFromApi(candidate.Race.electionDate)
 			: undefined,
+		ctaHref: racePositionHref,
+		ctaLabel: racePositionHref ? 'View office details' : undefined,
 	};
 
 	return {
+		component_breadcrumbBlock: {
+			breadcrumbs: [
+				{ href: '/', label: 'Home' },
+				...(electionHrefs.candidatesHref
+					? [{ href: electionHrefs.candidatesHref, label: 'Candidates' }]
+					: [{ label: 'Candidates' }]),
+				{ label: candidateName },
+			],
+		},
 		component_profileHero: {
 			candidateName,
 			office,
@@ -72,6 +95,7 @@ function buildSectionOverrides(
 			claimed: isClaimed,
 			candidateName,
 			partyAffiliation: claimed?.details?.party ?? candidate.party,
+			layout: 'banner',
 		},
 	};
 }
@@ -129,7 +153,11 @@ export default async function Page({
 		});
 	}
 
-	const sectionOverrides = buildSectionOverrides(candidate, claimed);
+	const sectionOverrides = buildSectionOverrides(
+		candidate,
+		claimed,
+		await resolveRaceElectionHrefs(candidate.Race?.slug, candidate.Race?.positionLevel),
+	);
 
 	return (
 		<PageSections

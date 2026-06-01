@@ -10,12 +10,14 @@ import { ButtonSectionGroup } from '~/RichTextContentSections/ButtonSectionGroup
 import { FAQsSectionGroup } from '~/RichTextContentSections/FAQsSectionGroup';
 import { block, marks, list, listItem } from '~/ui/RichData';
 import { CalloutSectionGroup } from '~/RichTextContentSections/CalloutSectionGroup';
+import { VideoSectionGroup } from '~/RichTextContentSections/VideoSectionGroup';
 import { Typography } from '~/ui/Typography';
 import { TypographyStackSpacing } from '~/types/ui';
 
 export type ArticleSections = NonNullable<
 	NonNullable<NonNullable<NonNullable<ArticleQueryResult>['contentSections']>['block_editorialContentSections']>[number]
 >;
+type RichTextSection = ArticleSections | Block_policyText[number];
 
 interface Props {
 	contentSections?: ArticleSections[] | Block_policyText | null;
@@ -29,11 +31,12 @@ export function RichTextContentSections(props: Props) {
 
 	const stackSpacing = props.stackSpacing ?? TypographyStackSpacing.DEFAULT;
 	const isEditorial = stackSpacing === TypographyStackSpacing.EDITORIAL;
+	const contentSections: RichTextSection[] = props.contentSections;
 
 	return (
 		<Typography as='article' data-section='RichTextContentSection' stackSpacing={stackSpacing}>
-			<PortableText
-				value={props.contentSections}
+			<PortableText<RichTextSection>
+				value={contentSections}
 				components={{
 					types: {
 						imageCta({ value: section }) {
@@ -53,16 +56,7 @@ export function RichTextContentSections(props: Props) {
 						videoSection({ value: section }) {
 							return (
 								<ComponentErrorBoundary key={`video-section-${section._key}`} componentName='VideoSectionGroup'>
-									<iframe
-										width='560'
-										height='315'
-										src='https://www.youtube.com/embed/k5CyDlFUE-k?si=7xXhw9-t3Bnv9P4C'
-										title='YouTube video player'
-										frameBorder={0}
-										allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-										referrerPolicy='strict-origin-when-cross-origin'
-										allowFullScreen
-									></iframe>
+									<VideoSectionGroup {...section} />
 								</ComponentErrorBoundary>
 							);
 						},

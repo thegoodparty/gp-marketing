@@ -46,6 +46,12 @@ export const article = {
 			group: 'ctaSection',
 		},
 		{
+			title: 'Sticky Sidebar CTA',
+			name: 'stickySidebarCta',
+			type: 'stickySidebarCta',
+			group: 'stickySidebarCta',
+		},
+		{
 			title: 'Related Articles',
 			name: 'relatedArticles',
 			type: 'relatedArticles',
@@ -118,6 +124,11 @@ export const article = {
 		{
 			title: 'CTA',
 			name: 'ctaSection',
+			icon: getIcon('Rocket'),
+		},
+		{
+			title: 'Sticky Sidebar CTA',
+			name: 'stickySidebarCta',
 			icon: getIcon('Rocket'),
 		},
 		{

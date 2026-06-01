@@ -34,6 +34,7 @@ import { resolveFAQItemsAsText } from '~/lib/resolveFAQItemsAsText';
 import { BlogBlock } from '~/ui/BlogBlock';
 import type { BlogCardProps } from '~/ui/BlogCard';
 import { resolveBlogCard } from '~/ui/_lib/resolveBlogCard';
+import { resolveStickySidebarCta } from '~/ui/_lib/resolveStickySidebarCta';
 
 export async function generateStaticParams() {
 	const entries = await client.fetch<Array<string>>('*[_type == "article"].editorialOverview.field_slug');
@@ -128,6 +129,8 @@ export default async function Page(props: any) {
 		.map(resolveBlogCard)
 		.filter((item): item is BlogCardProps => item != null);
 
+	const stickySidebarCta = resolveStickySidebarCta(page.stickySidebarCta);
+
 	return (
 		<>
 			<PageSchema schema={articleGraph ?? undefined} />
@@ -153,6 +156,7 @@ export default async function Page(props: any) {
 			/>
 			<EditorialLayout
 				navigation={articleNavigation}
+				stickySidebarCta={stickySidebarCta}
 				stickyRelatedArticle={
 					page.relatedArticles?.ref_stickyRelatedArticle?.href &&
 					page.relatedArticles?.ref_stickyRelatedArticle.editorialOverview?.field_editorialTitle

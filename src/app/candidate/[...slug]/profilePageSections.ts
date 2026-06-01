@@ -4,11 +4,18 @@ import type { Sections } from '~/PageSections';
  * Static profile page section layout (from profile.json template).
  * Used when Sanity profile landing page is not available.
  */
-export const PROFILE_PAGE_SECTIONS: Sections[] = [
+export const PROFILE_PAGE_SECTIONS = [
 	{
 		_key: 'a154f5843c8d',
 		_type: 'component_breadcrumbBlock',
 		breadcrumbBlockDesignSettings: {
+			field_blockColorCreamMidnight: 'MidnightDark',
+		},
+	},
+	{
+		_key: 'ca7f2bfda6dc',
+		_type: 'component_profileHero',
+		profileHeroDesignSettings: {
 			field_blockColorCreamMidnight: 'MidnightDark',
 		},
 	},
@@ -23,7 +30,7 @@ export const PROFILE_PAGE_SECTIONS: Sections[] = [
 			field_headline: 'This profile is unclaimed',
 		},
 		claimProfileBlockDesignSettings: {
-			field_blockColorCreamMidnight: 'midnight',
+			field_blockColorCreamMidnight: 'Cream',
 		},
 		ctaAction: {
 			_type: 'ctaActionWithShared',
@@ -38,13 +45,6 @@ export const PROFILE_PAGE_SECTIONS: Sections[] = [
 			anchor: null,
 			ref_download: null,
 			formId: null,
-		},
-	},
-	{
-		_key: 'ca7f2bfda6dc',
-		_type: 'component_profileHero',
-		profileHeroDesignSettings: {
-			field_blockColorCreamMidnight: 'MidnightDark',
 		},
 	},
 	{
@@ -87,6 +87,9 @@ export const PROFILE_PAGE_SECTIONS: Sections[] = [
 					],
 					ctaActionWithShared: {
 						_type: 'ctaActionWithShared',
+						action: 'Internal',
+						text: 'Learn more',
+						link: { href: '/candidates' },
 						field_buttonText: 'Learn more',
 						field_ctaActionWithShared: 'Internal',
 						field_internalLink: { _type: 'field_internalLink', href: { _ref: '19a8efe4-5a87-4ea5-ae0e-42656ea7c7f8', _type: 'reference' } },
@@ -115,6 +118,9 @@ export const PROFILE_PAGE_SECTIONS: Sections[] = [
 					],
 					ctaActionWithShared: {
 						_type: 'ctaActionWithShared',
+						action: 'Internal',
+						text: 'Learn more',
+						link: { href: '/candidates' },
 						field_buttonText: 'Learn more',
 						field_ctaActionWithShared: 'Internal',
 						field_internalLink: { _type: 'field_internalLink', href: { _ref: '19a8efe4-5a87-4ea5-ae0e-42656ea7c7f8', _type: 'reference' } },
@@ -143,6 +149,9 @@ export const PROFILE_PAGE_SECTIONS: Sections[] = [
 					],
 					ctaActionWithShared: {
 						_type: 'ctaActionWithShared',
+						action: 'Internal',
+						text: 'Learn more',
+						link: { href: '/candidates' },
 						field_buttonText: 'Learn more',
 						field_ctaActionWithShared: 'Internal',
 						field_internalLink: { _type: 'field_internalLink', href: { _ref: '19a8efe4-5a87-4ea5-ae0e-42656ea7c7f8', _type: 'reference' } },
@@ -171,6 +180,9 @@ export const PROFILE_PAGE_SECTIONS: Sections[] = [
 					],
 					ctaActionWithShared: {
 						_type: 'ctaActionWithShared',
+						action: 'Internal',
+						text: 'Learn more',
+						link: { href: '/candidates' },
 						field_buttonText: 'Learn more',
 						field_ctaActionWithShared: 'Internal',
 						field_internalLink: { _type: 'field_internalLink', href: { _ref: '19a8efe4-5a87-4ea5-ae0e-42656ea7c7f8', _type: 'reference' } },
@@ -368,6 +380,7 @@ export const PROFILE_PAGE_SECTIONS: Sections[] = [
 			ctaActionWithShared: {
 				_type: 'ctaActionWithShared',
 				field_buttonText: 'Explore candidates running near you',
+				text: 'Explore candidates running near you',
 				field_ctaActionWithShared: 'Internal',
 			},
 			field_componentColor6ColorsInverse: 'BrightYellow',
@@ -378,6 +391,7 @@ export const PROFILE_PAGE_SECTIONS: Sections[] = [
 			ctaActionWithShared: {
 				_type: 'ctaActionWithShared',
 				field_buttonText: 'Explore upcoming elections near you',
+				text: 'Explore upcoming elections near you',
 				field_ctaActionWithShared: 'Internal',
 			},
 			field_componentColor6ColorsInverse: 'HaloGreen',
@@ -388,4 +402,4 @@ export const PROFILE_PAGE_SECTIONS: Sections[] = [
 			field_blockColorCreamMidnight: 'Cream',
 		},
 	},
-];
+] as unknown as Sections[];

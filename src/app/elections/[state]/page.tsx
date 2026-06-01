@@ -5,7 +5,7 @@ import {
 	CITY_MTFCC,
 	getPlacesByState,
 	getPlaceBySlug,
-	isDistrictMtfcc,
+	isStateIndexDistrictPlace,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import { DEFAULT_DISPLAY_COUNT } from '~/constants/display';
@@ -26,6 +26,9 @@ import { Carousel } from '~/ui/Carousel';
 import { StepperBlock } from '~/ui/StepperBlock';
 import { ElectionsIndexBlock } from '~/ui/ElectionsIndexBlock';
 import { US_STATE_CODES } from '~/lib/sitemap-entries';
+import { PageSchema } from '~/ui/PageSchema';
+import { buildBreadcrumbSchema, buildSchemaGraph, buildWebPageSchema } from '~/lib/schema';
+import { toAbsoluteUrl } from '~/lib/url';
 
 export const revalidate = 3600;
 
@@ -64,7 +67,7 @@ export default async function Page({
 	]);
 
 	const countyPlaces = allPlaces.filter(p => p.mtfcc === COUNTY_MTFCC);
-	const districtPlaces = allPlaces.filter(p => isDistrictMtfcc(p.mtfcc));
+	const districtPlaces = allPlaces.filter(isStateIndexDistrictPlace);
 	const isSingleCounty = countyPlaces.length <= 1;
 	const cityPlaces = isSingleCounty
 		? await getPlacesByState({ state: stateCode, mtfcc: CITY_MTFCC })
@@ -152,8 +155,20 @@ export default async function Page({
 		: (dataYears[0] ?? currentYear);
 	const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
 
+	const pageUrl = toAbsoluteUrl(`/elections/${state.toLowerCase()}`);
+	const stateSchema = buildSchemaGraph([
+		buildWebPageSchema({
+			url: pageUrl,
+			name: `Elections in ${stateName}`,
+			description: `Browse elections and positions in ${stateName}.`,
+			pageType: 'CollectionPage',
+		}),
+		buildBreadcrumbSchema(breadcrumbs, toAbsoluteUrl),
+	]);
+
 	return (
 		<>
+			<PageSchema schema={stateSchema ?? undefined} />
 			<BreadcrumbBlock backgroundColor="midnight" breadcrumbs={breadcrumbs} />
 			<ElectionsLandingWithSearch
 				heroProps={{

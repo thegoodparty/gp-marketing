@@ -1,22 +1,30 @@
 import { stegaClean } from 'next-sanity';
-import type { Sections } from '~/PageSections';
+import type { SectionOverrides, Sections } from '~/PageSections';
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { BreadcrumbBlock } from '~/ui/BreadcrumbBlock';
 
-export function BreadcrumbBlockSection(section: Extract<Sections, { _type: 'component_breadcrumbBlock' }>) {
+type Props = Extract<Sections, { _type: 'component_breadcrumbBlock' }> & {
+	breadcrumbOverride?: SectionOverrides['component_breadcrumbBlock'];
+};
+
+export function BreadcrumbBlockSection({ breadcrumbOverride, ...section }: Props) {
 	const backgroundColor = section.breadcrumbBlockDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(stegaClean(section.breadcrumbBlockDesignSettings.field_blockColorCreamMidnight))
 		: 'cream';
 
-	// TODO: Generate breadcrumbs from page context/hierarchy
-	// For now, this returns an empty array. When integrated into Position Pages,
-	// the breadcrumbs should be generated from the location hierarchy
-	// (state > county > city > office)
-	const breadcrumbs = [];
+	const breadcrumbs = breadcrumbOverride?.breadcrumbs ?? [];
+
+	if (breadcrumbs.length === 0) {
+		return null;
+	}
 
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Breadcrumb Block'>
-			<BreadcrumbBlock backgroundColor={backgroundColor} breadcrumbs={breadcrumbs} />
+			<BreadcrumbBlock
+				backgroundColor={backgroundColor}
+				breadcrumbs={breadcrumbs}
+				className='pb-4 md:pb-6'
+			/>
 		</section>
 	);
 }

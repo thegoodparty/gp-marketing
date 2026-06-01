@@ -41,6 +41,7 @@ import { detailPageOverviewNoHero } from './detailPageOverviewNoHero.ts';
 import { teamBlockDesignSettings } from './teamBlockDesignSettings.ts';
 import { comparisonBlockTableTwo } from './comparisonBlockTableTwo.ts';
 import { ctaSection } from './ctaSection.ts';
+import { stickySidebarCta } from './stickySidebarCta.ts';
 import { generalContentTags } from './generalContentTags.ts';
 import { comparisonBlockTableOne } from './comparisonBlockTableOne.ts';
 import { heroSubscribeForm } from './heroSubscribeForm.ts';
@@ -193,6 +194,7 @@ export const groupSchema = [
 	teamBlockDesignSettings,
 	comparisonBlockTableTwo,
 	ctaSection,
+	stickySidebarCta,
 	generalContentTags,
 	comparisonBlockTableOne,
 	heroSubscribeForm,

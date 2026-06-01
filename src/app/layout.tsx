@@ -10,6 +10,9 @@ import { Amplitude } from '~/ui/Amplitude';
 import { ScrollDepthTracker } from '~/ui/ScrollDepthTracker';
 import { PageSchema } from '~/ui/PageSchema';
 import { getBaseUrl } from '~/lib/url';
+import { buildOrganizationSchema, buildSchemaGraph, buildWebSiteSchema, resolveSameAs } from '~/lib/schema';
+import { sanityFetch } from '~/sanity/sanityClient';
+import { goodpartyOrg_socialChannelsQuery } from '~/sanity/groq';
 import { FacebookPixel } from '~/ui/FacebookPixel';
 import { GTM } from '~/ui/GTM';
 import { Segment } from '~/ui/Segment';
@@ -52,15 +55,33 @@ export const metadata: Metadata = {
 	},
 };
 
-const organizationSchema = {
-	'@context': 'https://schema.org',
-	'@type': 'Organization',
-	name: 'GoodParty.org',
-	url: getBaseUrl(),
-	logo: `${getBaseUrl()}/web-app-manifest-192x192.png`,
-};
+type SocialChannelRecord = { field_socialChannelUrl?: string | null; field_socialChannel?: string | null };
+
+async function getSiteSocialChannels(): Promise<Array<{ url?: string | null; name?: string | null }>> {
+	try {
+		const result = (await sanityFetch({
+			query: goodpartyOrg_socialChannelsQuery,
+			tags: ['goodpartyOrg_socialChannels'],
+		})) as { socialChannels?: { list_socialChannels?: SocialChannelRecord[] | null } | null } | null;
+		const list = result?.socialChannels?.list_socialChannels ?? [];
+		return list.map((entry) => ({
+			url: entry?.field_socialChannelUrl ?? undefined,
+			name: entry?.field_socialChannel ?? undefined,
+		}));
+	} catch {
+		// Best-effort: schema must still render even if the singleton has no document yet.
+		return [];
+	}
+}
 
 export default async function RootLayout({ children }: Props) {
+	const baseUrl = getBaseUrl();
+	const socialChannels = await getSiteSocialChannels();
+	const sameAs = resolveSameAs(socialChannels);
+	const siteSchema = buildSchemaGraph([
+		buildOrganizationSchema({ baseUrl, sameAs }),
+		buildWebSiteSchema({ baseUrl }),
+	]);
 	return (
 		<html
 			lang='en-US'
@@ -70,7 +91,7 @@ export default async function RootLayout({ children }: Props) {
 				<VWOScript accountId='757033' />
 			</head>
 			<body className='flex min-h-screen flex-col'>
-				<PageSchema schema={organizationSchema} />
+				<PageSchema schema={siteSchema ?? undefined} />
 				<GTM />
 				<FacebookPixel />
 				<Segment />

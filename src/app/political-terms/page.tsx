@@ -13,6 +13,10 @@ import { transformButtons, type ButtonType } from '~/lib/buttonTransformer';
 import { CTAImageBlock } from '~/ui/CTAImageBlock';
 import { toPlainText } from '@portabletext/react';
 import { resolveComponentColor } from '~/ui/_lib/resolveComponentColor';
+import { PageSchema } from '~/ui/PageSchema';
+import { buildBreadcrumbSchema, buildSchemaGraph, buildWebPageSchema } from '~/lib/schema';
+import { toAbsoluteUrl } from '~/lib/url';
+import { stegaClean } from 'next-sanity';
 
 export default async function Page() {
 	const page = await sanityFetch({
@@ -26,8 +30,28 @@ export default async function Page() {
 
 	const searchTerms = (await getCachedTerms()).terms;
 
+	const glossaryUrl = toAbsoluteUrl(page.href ?? '/political-terms');
+	const glossaryName = page.glossaryOverview?.field_name
+		? stegaClean(page.glossaryOverview.field_name)
+		: 'Political Terms Glossary';
+	const glossaryDescription = page.seo?.field_metaDescription
+		? stegaClean(page.seo.field_metaDescription)
+		: page.glossaryOverview?.field_pageSubtitle
+			? stegaClean(page.glossaryOverview.field_pageSubtitle)
+			: undefined;
+	const glossarySchema = buildSchemaGraph([
+		buildWebPageSchema({
+			url: glossaryUrl,
+			name: glossaryName,
+			description: glossaryDescription,
+			pageType: 'CollectionPage',
+		}),
+		buildBreadcrumbSchema([{ href: '/political-terms', label: glossaryName }]),
+	]);
+
 	return (
 		<>
+			<PageSchema schema={glossarySchema ?? undefined} />
 			<GlossaryHero
 				title={page.glossaryOverview?.field_name ?? 'Terms Glossary'}
 				copy={page.glossaryOverview?.field_pageSubtitle}

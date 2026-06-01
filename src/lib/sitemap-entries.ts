@@ -5,9 +5,12 @@
 
 import type { MetadataRoute } from 'next';
 import { sanityClient } from '~/sanity/sanityClient';
-import { stripCountySuffix as stripCountySuffixFromHelpers } from '~/lib/electionsHelpers';
+import {
+	buildElectionPositionHrefFromRaceSlug,
+	stripCountySuffix as stripCountySuffixFromHelpers,
+} from '~/lib/electionsHelpers';
 
-/** 51 US state/territory codes (50 states + DC) */
+/** 51 US state/DC codes (50 states + DC) */
 export const US_STATE_CODES = [
 	'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY',
 ] as const;
@@ -109,33 +112,12 @@ export function buildRaceEntries(
 ): MetadataRoute.Sitemap {
 	const out: MetadataRoute.Sitemap = [];
 	for (const r of races) {
-		if (!r.slug) continue;
-		const parts = r.slug.split('/');
-		const positionSlug = parts.pop();
-		if (!positionSlug) continue;
-
-		const level = (r.positionLevel ?? '').toUpperCase();
-
-		if (level === 'CITY' || level === 'LOCAL') {
-			const citySlug = parts.join('/');
-			const countySlug = citySlugToCountySlug.get(citySlug);
-			if (countySlug) {
-				// 3-part city slug with a known county mapping → expand to 4-level URL
-				const citySegment = parts.pop();
-				if (!citySegment) continue;
-				out.push(
-					toEntry(baseUrl, `/elections/${countySlug}/${citySegment}/position/${positionSlug}`, 0.7, 'weekly'),
-				);
-				continue;
-			}
-			// CITY 3-part slug with no county mapping would produce a bad URL (city treated
-			// as county). Skip it. 4-part slugs (parts.length === 3) already carry the county
-			// and fall through to emit the correct URL from the prefix.
-			if (level === 'CITY' && parts.length === 2) continue;
-		}
-
-		const prefix = parts.join('/');
-		out.push(toEntry(baseUrl, `/elections/${prefix}/position/${positionSlug}`, 0.7, 'weekly'));
+		const path = buildElectionPositionHrefFromRaceSlug(r, {
+			citySlugToCountySlug,
+			skipUnmappedCity: true,
+		});
+		if (!path) continue;
+		out.push(toEntry(baseUrl, path, 0.7, 'weekly'));
 	}
 	return out;
 }

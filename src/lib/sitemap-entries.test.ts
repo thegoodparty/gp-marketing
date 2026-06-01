@@ -31,7 +31,6 @@ describe('stripCountySuffix (sitemap-entries)', () => {
 		['Jefferson Parish', 'Jefferson'],
 		['Fairbanks North Star Borough', 'Fairbanks North Star'],
 		['Yukon-Koyukuk Census Area', 'Yukon-Koyukuk'],
-		['San Juan Municipio', 'San Juan'],
 		['Juneau City and Borough', 'Juneau'],
 		['San Francisco City and County', 'San Francisco'],
 	])('strips suffix from "%s"', (input, expected) => {
@@ -95,15 +94,6 @@ describe('buildCountyLookups', () => {
 		const { citySlugToCountySlug } = buildCountyLookups(places, cities);
 
 		expect(citySlugToCountySlug.get('ak/galena')).toBe('ak/yukon-koyukuk-census-area');
-	});
-
-	test('maps city to county with Municipio suffix', () => {
-		const places = [countyPlace('pr/san-juan-municipio', 'San Juan Municipio')];
-		const cities = [cityPlace('pr/san-juan-city', 'San Juan Municipio')];
-
-		const { citySlugToCountySlug } = buildCountyLookups(places, cities);
-
-		expect(citySlugToCountySlug.get('pr/san-juan-city')).toBe('pr/san-juan-municipio');
 	});
 
 	test('maps city to county with City and Borough suffix', () => {

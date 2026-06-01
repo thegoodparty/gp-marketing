@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { cn, tv } from './_lib/utils.ts';
-import type { backgroundTypeValues, componentColorValues } from './_lib/designTypesStore.ts';
+import type { backgroundTypeValues, componentColorValues, iconColorValues } from './_lib/designTypesStore.ts';
 
 import { Container } from './Container.tsx';
 import { HeaderBlock, type HeaderBlockProps } from './HeaderBlock.tsx';
@@ -44,8 +44,15 @@ export type GoodPartyOrgPledgeProps = {
 	backgroundColor?: (typeof backgroundTypeValues)[number];
 	header?: HeaderBlockProps;
 	pledgeCards?: PledgeCard[];
-	iconBg?: Exclude<(typeof componentColorValues)[number], 'inverse'>;
+	iconBg?: Exclude<(typeof componentColorValues)[number], 'inverse'> | 'mixed';
 };
+
+const PLEDGE_MIXED_ICON_COLORS: Exclude<(typeof iconColorValues)[number], 'mixed' | 'white'>[] = [
+	'blue',
+	'bright-yellow',
+	'lavender',
+	'halo-green',
+];
 
 export function GoodPartyOrgPledge(props: GoodPartyOrgPledgeProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
@@ -53,6 +60,17 @@ export function GoodPartyOrgPledge(props: GoodPartyOrgPledgeProps) {
 	const { base, wrapper, grid, card } = styles({ backgroundColor });
 
 	const resolvedStyle = resolveButtonStyleType('min-ghost', backgroundColor);
+
+	const resolveCardIconBg = (
+		card: PledgeCard,
+		index: number,
+	): Exclude<(typeof componentColorValues)[number], 'inverse'> => {
+		if (card.iconBg) return card.iconBg;
+		if (iconBg === 'mixed') {
+			return PLEDGE_MIXED_ICON_COLORS[index % PLEDGE_MIXED_ICON_COLORS.length];
+		}
+		return iconBg;
+	};
 
 	return (
 		<article className={cn(base(), props.className)} data-component='GoodPartyOrgPledge'>
@@ -63,7 +81,9 @@ export function GoodPartyOrgPledge(props: GoodPartyOrgPledgeProps) {
 						{props.pledgeCards?.map((pledgeCard, index) => (
 							<div key={`pledge-${index}`} className={card()}>
 								<div className='flex flex-col gap-4'>
-									{pledgeCard.icon && <CircleIcon icon={pledgeCard.icon} iconBg={pledgeCard.iconBg ?? iconBg} />}
+									{pledgeCard.icon && (
+										<CircleIcon icon={pledgeCard.icon} iconBg={resolveCardIconBg(pledgeCard, index)} />
+									)}
 									{pledgeCard.title && (
 										<Text as='h3' styleType='subtitle-1'>
 											{pledgeCard.title}

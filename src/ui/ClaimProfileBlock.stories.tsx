@@ -14,8 +14,8 @@ type Story = StoryObj<typeof meta>;
 const exampleCard = {
 	name: 'Firstname Lastname',
 	partyAffiliation: 'City Council Member',
-	secondaryText: 'District 5',
-	showBadge: true,
+	href: '#',
+	isGoodPartyCandidate: true,
 };
 
 export const Default: Story = {
@@ -72,6 +72,21 @@ export const MinimalContent: Story = {
 		exampleCard: {
 			name: 'Jane Smith',
 			partyAffiliation: 'School Board Trustee',
+			href: '#',
+		},
+	},
+};
+
+export const BannerLayout: Story = {
+	args: {
+		layout: 'banner',
+		backgroundColor: 'cream',
+		headline: 'This profile is unclaimed',
+		body: 'Enhance your profile by signing up.',
+		claimButton: {
+			buttonType: 'internal',
+			href: 'https://app.goodparty.org/sign-up',
+			label: 'Join today',
 		},
 	},
 };

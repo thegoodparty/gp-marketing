@@ -94,15 +94,15 @@ describe('normalizeDescription', () => {
 describe('buildLlmsTxtDoc', () => {
 	test('emits hard-coded site title and summary', () => {
 		const doc = buildLlmsTxtDoc(BASE, emptyData());
-		expect(doc.title).toBe('Good Party');
+		expect(doc.title).toBe('GoodParty.org');
 		expect(doc.summary.length).toBeGreaterThan(0);
 	});
 
-	test('includes hard-coded Elections and Candidates entries even with no Sanity data', () => {
+	test('includes hard-coded Elections entry and omits Candidates', () => {
 		const doc = buildLlmsTxtDoc(BASE, emptyData());
 		const urls = getSection(doc, 'Top-level pages').items.map(i => i.url);
 		expect(urls).toContain(`${BASE}/elections`);
-		expect(urls).toContain(`${BASE}/candidates`);
+		expect(urls).not.toContain(`${BASE}/candidates`);
 	});
 
 	test('omits Home/Blog/Glossary/Contact when their singletons are missing', () => {
@@ -172,6 +172,24 @@ describe('buildLlmsTxtDoc', () => {
 		);
 		expect(firstItem(getSection(doc, 'Pages').items).url).toBe(`${BASE}/about`);
 		expect(firstItem(getSection(doc, 'Policies').items).url).toBe(`${BASE}/privacy`);
+	});
+
+	test('omits landing pages with Frame or Draft in the title', () => {
+		const doc = buildLlmsTxtDoc(
+			BASE,
+			emptyData({
+				landingPages: [
+					{ slug: 'about', title: 'About', description: null },
+					{ slug: 'framework', title: 'Our Framework for Change', description: null },
+					{ slug: 'redraft-platform', title: 'Redraft Your Platform', description: null },
+					{ slug: 'homepage-frame', title: 'Homepage Frame', description: null },
+					{ slug: 'candidate-draft', title: 'Candidate Draft Page', description: null },
+					{ slug: 'lowercase-frame', title: 'internal frame example', description: null },
+				],
+			}),
+		);
+		const urls = getSection(doc, 'Pages').items.map(i => i.url);
+		expect(urls).toEqual([`${BASE}/about`, `${BASE}/framework`, `${BASE}/redraft-platform`]);
 	});
 
 	test('skips rows with missing slug or missing title', () => {
@@ -272,7 +290,7 @@ describe('buildLlmsTxtDoc', () => {
 describe('renderLlmsTxt', () => {
 	function makeDoc(overrides: Partial<LlmsTxtDoc> = {}): LlmsTxtDoc {
 		return {
-			title: 'Good Party',
+			title: 'GoodParty.org',
 			summary: 'Site summary.',
 			sections: [],
 			...overrides,
@@ -282,7 +300,7 @@ describe('renderLlmsTxt', () => {
 	test('starts with the H1 title and a blockquote summary line', () => {
 		const out = renderLlmsTxt(makeDoc());
 		const lines = out.split('\n');
-		expect(lines[0]).toBe('# Good Party');
+		expect(lines[0]).toBe('# GoodParty.org');
 		expect(lines[1]).toBe('');
 		expect(lines[2]).toBe('> Site summary.');
 	});
@@ -349,7 +367,7 @@ describe('renderLlmsTxt', () => {
 			policies: [],
 		});
 		const out = renderLlmsTxt(doc);
-		expect(out.split('\n')[0]).toBe('# Good Party');
+		expect(out.split('\n')[0]).toBe('# GoodParty.org');
 		expect(out).toMatch(/^>\s.+/m);
 		expect(out).toContain('## Top-level pages');
 		expect(out).toContain('## Articles');

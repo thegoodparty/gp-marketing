@@ -1,3 +1,3 @@
-export function undefinedCheck<T extends any>(value: T): NonNullable<T> {
+export function undefinedCheck<T>(value: T): NonNullable<T> {
 	return value ? value : (undefined as any);
 }

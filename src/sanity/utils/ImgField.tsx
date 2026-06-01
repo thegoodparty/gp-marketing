@@ -3,23 +3,23 @@ import {
   type DocumentFieldActionItem,
   type ImageValue,
   type ObjectFieldProps, set
-} from "sanity";
-import {AddIcon} from "@sanity/icons";
+} from 'sanity';
+import {AddIcon} from '@sanity/icons';
 
 export function ImgField(props: ObjectFieldProps<ImageValue>) {
   return props.renderDefault({
     ...props,
     actions: [
       defineDocumentFieldAction({
-        name: "prompt",
+        name: 'prompt',
         useAction: function useAction(): DocumentFieldActionItem {
           return {
-            type: "action",
+            type: 'action',
             icon: AddIcon,
             title: `Add prompt`,
             onAction() {
               props.inputProps.onChange(
-                set({ ["promptForImage"]: "" }),
+                set({ ['promptForImage']: '' }),
               );
             },
             renderAsButton: true,

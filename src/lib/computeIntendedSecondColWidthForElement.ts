@@ -50,7 +50,7 @@ function pickActiveClass(
 function parseFrList(value: string): number[] {
 	const tokens = value.replace(/_/g, ' ').trim().split(/\s+/);
 	return tokens.map(t => {
-		const m = t.match(/^([0-9.]+)fr$/);
+		const m = /^([0-9.]+)fr$/.exec(t);
 		if (!m) throw new Error(`Only 'fr' units supported: "${t}"`);
 		return parseFloat(m[1]!);
 	});
@@ -60,7 +60,7 @@ function resolveMaxWidthFromClass(cls: string | null, vw: number, bps: Breakpoin
 	if (!cls) return vw;
 	const raw = cls.includes(':') ? cls.split(':').pop()! : cls;
 
-	const arb = raw.match(/^max-w-\[(.+?)\]$/);
+	const arb = /^max-w-\[(.+?)\]$/.exec(raw);
 	if (arb) {
 		const val = arb[1]!;
 		if (/^\d+(\.\d+)?px$/.test(val)) return parseFloat(val);
@@ -69,16 +69,16 @@ function resolveMaxWidthFromClass(cls: string | null, vw: number, bps: Breakpoin
 		return vw; // %, ch, var(...) → treat as full
 	}
 
-	const scr = raw.match(/^max-w-screen-(sm|md|lg|xl|2xl)$/);
+	const scr = /^max-w-screen-(sm|md|lg|xl|2xl)$/.exec(raw);
 	if (scr) return bps[scr[1] as keyof Breakpoints];
 
-	const tok = raw.match(/^max-w-([A-Za-z0-9-]+)$/);
+	const tok = /^max-w-([A-Za-z0-9-]+)$/.exec(raw);
 	if (tok) {
 		const key = tok[1]!;
 		const v = MAX_W_TOKENS_PX[key];
 		if (v === 'none') return Number.POSITIVE_INFINITY;
 		if (v === 'full' || v === undefined) return vw;
-		return v as number;
+		return v;
 	}
 
 	return vw;
@@ -101,7 +101,7 @@ export function computeIntendedSecondColWidthForElement(
 
 	// 1) Active grid template (may not exist before lg)
 	const gridClass = pickActiveClass(classList, vw, bps, /^grid-cols-\[(.+?)\]$/, bp => new RegExp(`^${bp}:grid-cols-\\[(.+?)\\]$`));
-	const frs = gridClass ? parseFrList(gridClass.match(/\[(.+?)\]$/)![1]!) : [1]; // default: one column
+	const frs = gridClass ? parseFrList(/\[(.+?)\]$/.exec(gridClass)![1]!) : [1]; // default: one column
 	const cols = frs.length;
 
 	// 2) Active max-w

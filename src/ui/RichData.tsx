@@ -98,7 +98,13 @@ export const block = ({ isInline }: { isInline?: boolean }) => ({
 		return <p className='font-secondary'>{mark.children}</p>;
 	},
 	blockquote(mark) {
-		return <blockquote className='font-secondary py-2 pl-8 border-l-4 border-lavender-200 italic'>"{mark.children}"</blockquote>;
+		return (
+			<blockquote className='font-secondary py-2 pl-8 border-l-4 border-lavender-200 italic'>
+				{'\u201c'}
+				{mark.children}
+				{'\u201d'}
+			</blockquote>
+		);
 	},
 	h1(mark) {
 		return <h1 id={getAnchorId(mark.children)}>{mark.children}</h1>;

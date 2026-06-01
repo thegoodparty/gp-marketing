@@ -1,5 +1,5 @@
-import {createElement} from "react";
-import {FieldDescription} from "../../utils/FieldDescription.tsx";
+import {createElement} from 'react';
+import {FieldDescription} from '../../utils/FieldDescription.tsx';
 
 export const field_externalLink = {
   name: 'field_externalLink',
@@ -8,6 +8,6 @@ export const field_externalLink = {
   options: {
     collapsible: false,
   },
-  validation: (R) => R.custom(async (_, ctx) => typeof ctx.type?.hidden === "function" && ctx.type.hidden(ctx) ? true : R["error"]().uri({ scheme: "https" }).validate(_, ctx).then((e) => e.length === 0 ? true : e[0].item?.message || "Invalid")),
+  validation: (R) => R.custom(async (_, ctx) => typeof ctx.type?.hidden === 'function' && ctx.type.hidden(ctx) ? true : R['error']().uri({ scheme: 'https' }).validate(_, ctx).then((e) => e.length === 0 ? true : e[0].item?.message || 'Invalid')),
   type: 'string',
 }

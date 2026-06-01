@@ -61,6 +61,9 @@ export function resolveButtonHref(button: ButtonType): string | undefined {
 	let href: string | undefined;
 
 	switch (action) {
+		case null:
+		case 'Reference':
+			return undefined;
 		case 'Internal':
 		case 'Contact':
 			href =
@@ -100,6 +103,9 @@ export function transformButton(button: ButtonType): ComponentButtonProps | unde
 	const href = resolveButtonHref(button);
 
 	switch (action) {
+		case null:
+		case 'Reference':
+			return undefined;
 		case 'Internal':
 			if (!isUsableHref(href)) return undefined;
 			return {

@@ -33,7 +33,15 @@ export function PlainText<K extends keyof JSX.IntrinsicElements = 'div'>(props: 
 		</Text>
 	) : (
 		<Text {...rest} className={className}>
-			{rest.as === 'blockquote' || props.isQuote ? <>"{text}"</> : text}
+			{rest.as === 'blockquote' || props.isQuote ? (
+				<>
+					{'\u201c'}
+					{text}
+					{'\u201d'}
+				</>
+			) : (
+				text
+			)}
 		</Text>
 	);
 }

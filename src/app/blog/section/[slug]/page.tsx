@@ -15,8 +15,6 @@ import { BlogTopicTagsBlock } from '~/ui/BlogTopicTagsBlock';
 import { NewsletterBlockSection } from '~/PageSections/NewsletterBlockSection';
 import { client } from '~/lib/client';
 
-type NewsletterBlockSectionType = Extract<Sections, { _type: 'component_newsletterBlock' }>;
-
 export async function generateStaticParams() {
 	const entries = await client.fetch<Array<string>>('*[_type=="categories"].tagOverview.field_slug');
 	return entries.filter(Boolean).map(entry => ({
@@ -39,9 +37,7 @@ export default async function Page(props: Params) {
 	const { articles } = await getCachedArticles();
 
 	const categoryNewsletterSection =
-		(page.pageSections?.list_pageSections?.find((section: Sections) => section?._type === 'component_newsletterBlock') as
-			| NewsletterBlockSectionType
-			| undefined);
+		(page.pageSections?.list_pageSections?.find((section: Sections) => section?._type === 'component_newsletterBlock'));
 
 	const newsletterSectionFromHome = categoryNewsletterSection
 		? null
@@ -52,9 +48,7 @@ export default async function Page(props: Params) {
 
 	const newsletterSection =
 		categoryNewsletterSection ??
-		(newsletterSectionFromHome?.pageSections?.list_pageSections?.find((section: Sections) => section?._type === 'component_newsletterBlock') as
-			| NewsletterBlockSectionType
-			| undefined);
+		(newsletterSectionFromHome?.pageSections?.list_pageSections?.find((section: Sections) => section?._type === 'component_newsletterBlock'));
 
 	return (
 		<>

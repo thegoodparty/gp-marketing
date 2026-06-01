@@ -53,30 +53,30 @@ export function handleReplacements(
 ) {
   const p = checkReturnI18n(i,primaryLanguage);
   if (
-    typeof fallback.previewTitle === "string" &&
-    String(fallback.previewTitle).startsWith("*")
+    typeof fallback.previewTitle === 'string' &&
+    String(fallback.previewTitle).startsWith('*')
   ) {
     p.title = String(fallback.previewTitle)
-      .replace("* ", "")
-      .replace("*", "");
+      .replace('* ', '')
+      .replace('*', '');
   }
   if (
-    typeof fallback.previewTitle === "string" &&
-    String(fallback.previewTitle).startsWith("_type")
+    typeof fallback.previewTitle === 'string' &&
+    String(fallback.previewTitle).startsWith('_type')
   ) {
     p.title = fallback.title;
   }
   if (
-    typeof fallback.previewSubTitle === "string" &&
-    String(fallback.previewSubTitle).startsWith("*")
+    typeof fallback.previewSubTitle === 'string' &&
+    String(fallback.previewSubTitle).startsWith('*')
   ) {
     p.subtitle = String(fallback.previewSubTitle)
-      .replace("* ", "")
-      .replace("*", "");
+      .replace('* ', '')
+      .replace('*', '');
   }
   if (
-    typeof fallback.previewSubTitle === "string" &&
-    String(fallback.previewSubTitle).startsWith("_type")
+    typeof fallback.previewSubTitle === 'string' &&
+    String(fallback.previewSubTitle).startsWith('_type')
   ) {
     p.subtitle = fallback.title;
   }

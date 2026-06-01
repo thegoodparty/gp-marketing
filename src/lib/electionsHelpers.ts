@@ -102,7 +102,7 @@ export function stripCountySuffix(name: string): string {
 
 /** Get the suffix word from a county-equivalent name: "Jefferson Parish" -> "Parish", fallback "County" */
 export function getCountySuffixLabel(name: string): string {
-	const match = name.match(COUNTY_EQUIV_SUFFIX_RE);
+	const match = COUNTY_EQUIV_SUFFIX_RE.exec(name);
 	return match?.[1] ?? 'County';
 }
 
@@ -184,7 +184,7 @@ export function getYearFromDateString(dateStr: string): number {
 	}
 	const parsed = new Date(dateStr);
 	if (!Number.isNaN(parsed.getTime())) return parsed.getFullYear();
-	const yearMatch = dateStr.match(/\b(19|20)\d{2}\b/);
+	const yearMatch = /\b(19|20)\d{2}\b/.exec(dateStr);
 	return yearMatch ? parseInt(yearMatch[0], 10) : NaN;
 }
 

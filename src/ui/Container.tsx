@@ -54,7 +54,7 @@ type PropsToOmit<E extends ElementType> = keyof AsProp<E> | keyof ContainerOwnPr
 export type ContainerProps<E extends ElementType = 'div'> = AsProp<E> & Omit<ComponentPropsWithRef<E>, PropsToOmit<E>> & ContainerOwnProps;
 
 export function Container<E extends ElementType = 'div'>({ as, size = 'xl', className, children, ref, ...rest }: ContainerProps<E>) {
-	const El = (as ?? 'div') as ElementType;
+	const El = (as ?? 'div');
 	const { base } = styles({ size });
 	return (
 		<El ref={ref as Ref<any>} {...rest} className={`${base()} ${className ?? ''}`}>

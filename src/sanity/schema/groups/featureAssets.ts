@@ -1,6 +1,6 @@
-import {resolveValue} from "../../utils/resolveValue.ts";
-import {handleReplacements} from "../../utils/handleReplacements.ts";
-import {getIcon} from "../../utils/getIcon.tsx";
+import {resolveValue} from '../../utils/resolveValue.ts';
+import {handleReplacements} from '../../utils/handleReplacements.ts';
+import {getIcon} from '../../utils/getIcon.tsx';
 
 export const featureAssets = {
   title: 'Feature Assets',
@@ -29,6 +29,6 @@ const infer = {
       icon: getIcon('Image'),
       fallback: {},
     }
-           const title = resolveValue("title", featureAssets.preview.select, x);           const subtitle = resolveValue("subtitle", featureAssets.preview.select, x);           const media = resolveValue("media", featureAssets.preview.select, x);           return handleReplacements({             title: infer.singletonTitle || title || infer.name,             subtitle: subtitle || media?.alt,             media: media || infer.icon           }, x, infer.fallback);         },
+           const title = resolveValue('title', featureAssets.preview.select, x);           const subtitle = resolveValue('subtitle', featureAssets.preview.select, x);           const media = resolveValue('media', featureAssets.preview.select, x);           return handleReplacements({             title: infer.singletonTitle || title || infer.name,             subtitle: subtitle || media?.alt,             media: media || infer.icon           }, x, infer.fallback);         },
   },
 }

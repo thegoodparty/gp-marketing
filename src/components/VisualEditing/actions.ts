@@ -1,12 +1,11 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
 import { draftMode } from 'next/headers';
+
+import { revalidatePreviewDraftTags } from '~/lib/revalidatePreviewDraftTags';
 
 export async function revalidate({ tags }: { tags: string[] }) {
 	if ((await draftMode()).isEnabled) {
-		for (const tag of tags) {
-			await revalidateTag(`previewDrafts:${tag}`);
-		}
+		revalidatePreviewDraftTags(tags);
 	}
 }

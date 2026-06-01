@@ -27,7 +27,7 @@ const styles = tv({
 export type CarouselIndicatorProps = {
 	active?: boolean;
 	className?: string;
-	onClick: () => void;
+	onClick(): void;
 	color?: 'midnight' | 'cream';
 };
 
@@ -36,7 +36,13 @@ export function CarouselIndicator(props: CarouselIndicatorProps) {
 	const { item } = styles({ active: props.active, color });
 
 	return (
-		<div className={cn('group relative px-1 py-4', props.className)} onClick={props.onClick} data-component='CarouselIndicator'>
+		<div
+			className={cn('group relative px-1 py-4', props.className)}
+			onClick={() => {
+				props.onClick();
+			}}
+			data-component='CarouselIndicator'
+		>
 			<div className={`h-2 rounded-full ${item()}`} />
 		</div>
 	);

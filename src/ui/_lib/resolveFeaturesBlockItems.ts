@@ -9,7 +9,7 @@ export function resolveFeaturesBlockItems(items?: Group_featuresBlockContent) {
 	const featuredBlockItems: FeaturesBlockItemProps[] = [];
 
 	if (items.list_featureBlockFeatures) {
-		items.list_featureBlockFeatures?.map((item: any) => {
+		items.list_featureBlockFeatures?.forEach((item: any) => {
 			featuredBlockItems.push({
 				title: item.field_featureName,
 				icon: item.field_icon,
@@ -20,7 +20,7 @@ export function resolveFeaturesBlockItems(items?: Group_featuresBlockContent) {
 	}
 
 	if (items.list_featureBlockHighlightedFeature) {
-		items.list_featureBlockHighlightedFeature?.map((item: any) => {
+		items.list_featureBlockHighlightedFeature?.forEach((item: any) => {
 			featuredBlockItems.push({
 				title: item.field_featureName,
 				icon: item.field_icon,

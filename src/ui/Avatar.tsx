@@ -39,7 +39,7 @@ export const Avatar: FC<AvatarProps> = props => {
 					<img src={props.image} />
 				</div>
 			) : (
-				<Media image={props.image as SanityImage} className={image()} objectFit={imageFit} />
+				<Media image={props.image} className={image()} objectFit={imageFit} />
 			)}
 		</div>
 	);

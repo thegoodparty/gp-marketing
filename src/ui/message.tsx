@@ -8,7 +8,7 @@ export function ComponentErrorBoundaryMessage(props: Props) {
 	return <ErrorBoundary FallbackComponent={errorProps => <Fallback {...errorProps} {...props} />}>{props.children}</ErrorBoundary>;
 }
 
-function Fallback({ error, draftMode, isLocalhost, componentName }: { error: Error; resetErrorBoundary: () => void } & Props) {
+function Fallback({ error, draftMode, isLocalhost, componentName }: { error: Error; resetErrorBoundary(): void } & Props) {
 	if (!(draftMode || isLocalhost)) return null;
 
 	return (

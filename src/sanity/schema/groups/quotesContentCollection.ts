@@ -1,6 +1,6 @@
-import {resolveValue} from "../../utils/resolveValue.ts";
-import {handleReplacements} from "../../utils/handleReplacements.ts";
-import {getIcon} from "../../utils/getIcon.tsx";
+import {resolveValue} from '../../utils/resolveValue.ts';
+import {handleReplacements} from '../../utils/handleReplacements.ts';
+import {getIcon} from '../../utils/getIcon.tsx';
 
 export const quotesContentCollection = {
   title: 'Quotes Content Collection',
@@ -41,6 +41,6 @@ const infer = {
       icon: getIcon('Grid'),
       fallback: {},
     }
-         const title = resolveValue("title", quotesContentCollection.preview.select, x);         const subtitle = resolveValue("subtitle", quotesContentCollection.preview.select, x);         const media = resolveValue("media", quotesContentCollection.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback["title"],           media: media || infer.icon         }, x, infer.fallback);       },
+         const title = resolveValue('title', quotesContentCollection.preview.select, x);         const subtitle = resolveValue('subtitle', quotesContentCollection.preview.select, x);         const media = resolveValue('media', quotesContentCollection.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback['title'],           media: media || infer.icon         }, x, infer.fallback);       },
   },
 }

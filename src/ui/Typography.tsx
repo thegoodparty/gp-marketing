@@ -1,4 +1,4 @@
-import { type ComponentProps, type PropsWithChildren } from 'react';
+import { type ComponentPropsWithoutRef, type PropsWithChildren } from 'react';
 import { cn, tv } from './_lib/utils.ts';
 import { styles as textStyles, type StyleTypes } from './Text.tsx';
 import { TypographyStackSpacing } from '~/types/ui';
@@ -28,12 +28,14 @@ const styles = tv({
 
 export type { TypographyStackSpacing };
 
-export type TypographyProps = ComponentProps<any> & {
-	as: keyof JSX.IntrinsicElements;
-	className?: string;
-	styleType?: 'default' | StyleTypes;
-	stackSpacing?: TypographyStackSpacing;
-};
+export type TypographyProps = PropsWithChildren<
+	Omit<ComponentPropsWithoutRef<'div'>, 'as'> & {
+		as: keyof JSX.IntrinsicElements;
+		className?: string;
+		styleType?: 'default' | StyleTypes;
+		stackSpacing?: TypographyStackSpacing;
+	}
+>;
 
 export function Typography({
 	as: El = 'div',
@@ -41,7 +43,7 @@ export function Typography({
 	stackSpacing = TypographyStackSpacing.DEFAULT,
 	className,
 	...props
-}: PropsWithChildren<TypographyProps>) {
+}: TypographyProps) {
 	const { base } = styles({ type: styleType, stackSpacing });
 
 	return (

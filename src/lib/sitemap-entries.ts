@@ -323,7 +323,7 @@ let cachedElectionRouteParams: Promise<{
 /**
  * Merged election static params for all states (single fetch per build segment).
  */
-export function getCachedElectionRouteParams(): Promise<{
+export async function getCachedElectionRouteParams(): Promise<{
 	countyParams: ElectionCountyRouteParam[];
 	cityParams: ElectionCityRouteParam[];
 	statePositionParams: ElectionStatePositionRouteParam[];

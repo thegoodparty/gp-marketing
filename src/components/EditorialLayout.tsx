@@ -28,7 +28,7 @@ export function EditorialLayout(props: EditorialLayoutProps) {
 				<div className='sticky top-28 flex flex-col gap-8'>
 					<ShareLinks />
 					{props.stickySidebarCta && <StickySidebarCTA {...props.stickySidebarCta} />}
-					{props.stickyRelatedArticle && props.stickyRelatedArticle.title && <StickyRelatedArticle {...props.stickyRelatedArticle} />}
+					{props.stickyRelatedArticle?.title && <StickyRelatedArticle {...props.stickyRelatedArticle} />}
 				</div>
 			</div>
 			<div>{props.children}</div>

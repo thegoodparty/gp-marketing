@@ -288,7 +288,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					parent='ComponentButton'
 					className={props.className}
 					formId={props.formId}
-					onClick={props.onClick}
+					onClick={e => props.onClick?.(e)}
 					iconLeft={props.iconLeft}
 					iconRight={props.iconRight}
 					{...props.buttonProps}

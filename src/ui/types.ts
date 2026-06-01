@@ -76,7 +76,7 @@ type Story<Component = ComponentType<any>, TArgs = Record<string, any>> = BaseAn
 } & ((args: TArgs, context: StoryContext<Component, TArgs>) => ReactElement<unknown>);
 export type ComponentStory<
 	T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>,
-	ExtraProps extends Record<string, any> = {},
+	ExtraProps extends Record<string, any> = Record<string, never>,
 > = Story<T, ComponentProps<T> & ExtraProps>;
 
 type Meta<Component = ComponentType<any>, TArgs = Record<string, any>> = BaseAnnotations<Component, TArgs> & {
@@ -92,5 +92,8 @@ import type { DynamicOptions, Loader } from 'next/dynamic';
 import type { FunctionComponent } from 'react';
 
 declare module 'next/dynamic' {
-	export default function dynamic<P = {}>(dynamicOptions: DynamicOptions<P> | Loader<P>, options?: DynamicOptions<P>): FunctionComponent<P>;
+	export default function dynamic<P extends Record<string, unknown> = Record<string, never>>(
+		dynamicOptions: DynamicOptions<P> | Loader<P>,
+		options?: DynamicOptions<P>,
+	): FunctionComponent<P>;
 }

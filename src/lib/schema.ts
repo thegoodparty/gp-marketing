@@ -1,4 +1,7 @@
 import { getBaseUrl, toAbsoluteUrl, DEFAULT_SHARE_IMAGE } from './url';
+import type { BreadcrumbItem } from '~/ui/BreadcrumbBlock';
+
+export type { BreadcrumbItem };
 
 const ORGANIZATION_ID_FRAGMENT = '#organization';
 const WEBSITE_ID_FRAGMENT = '#website';
@@ -195,8 +198,6 @@ export function buildArticleSchema(params: ArticleSchemaParams): object {
 
 	return schema;
 }
-
-export type BreadcrumbItem = { href: string; label: string };
 
 /**
  * Schema.org BreadcrumbList built from breadcrumb items. Items without an `href`

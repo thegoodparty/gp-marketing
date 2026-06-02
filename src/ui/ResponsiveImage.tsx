@@ -24,7 +24,7 @@ export type ResponsiveImageProps = {
 	};
 	aspectRatio?: string;
 	priority?: boolean;
-	setImageLoaded?: Function;
+	setImageLoaded?(loaded: boolean): void;
 	objectFit?: (typeof imageObjectFitValues)[number];
 	alt?: string;
 };
@@ -120,7 +120,7 @@ export function ResponsiveImage(props: ResponsiveImageProps) {
 				width={maxWidth}
 				height={maxHeight}
 				priority={props.priority}
-				onLoad={() => props.setImageLoaded && props.setImageLoaded(true)}
+				onLoad={() => props.setImageLoaded?.(true)}
 			/>
 		</span>
 	);

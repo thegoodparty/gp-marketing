@@ -1,6680 +1,6680 @@
 export const lucideCategories = [
   {
-    name: "accessibility",
-    title: "Accessibility"
+    name: 'accessibility',
+    title: 'Accessibility'
   },
   {
-    name: "account",
-    title: "Accounts & access"
+    name: 'account',
+    title: 'Accounts & access'
   },
   {
-    name: "animals",
-    title: "Animals"
+    name: 'animals',
+    title: 'Animals'
   },
   {
-    name: "arrows",
-    title: "Arrows"
+    name: 'arrows',
+    title: 'Arrows'
   },
   {
-    name: "brands",
-    title: "Brands"
+    name: 'brands',
+    title: 'Brands'
   },
   {
-    name: "buildings",
-    title: "Buildings"
+    name: 'buildings',
+    title: 'Buildings'
   },
   {
-    name: "charts",
-    title: "Charts"
+    name: 'charts',
+    title: 'Charts'
   },
   {
-    name: "communication",
-    title: "Communication"
+    name: 'communication',
+    title: 'Communication'
   },
   {
-    name: "connectivity",
-    title: "Connectivity"
+    name: 'connectivity',
+    title: 'Connectivity'
   },
   {
-    name: "cursors",
-    title: "Cursors"
+    name: 'cursors',
+    title: 'Cursors'
   },
   {
-    name: "design",
-    title: "Design"
+    name: 'design',
+    title: 'Design'
   },
   {
-    name: "development",
-    title: "Coding & development"
+    name: 'development',
+    title: 'Coding & development'
   },
   {
-    name: "devices",
-    title: "Devices"
+    name: 'devices',
+    title: 'Devices'
   },
   {
-    name: "emoji",
-    title: "Emoji"
+    name: 'emoji',
+    title: 'Emoji'
   },
   {
-    name: "files",
-    title: "File icons"
+    name: 'files',
+    title: 'File icons'
   },
   {
-    name: "finance",
-    title: "Finance"
+    name: 'finance',
+    title: 'Finance'
   },
   {
-    name: "food-beverage",
-    title: "Food & beverage"
+    name: 'food-beverage',
+    title: 'Food & beverage'
   },
   {
-    name: "gaming",
-    title: "Gaming"
+    name: 'gaming',
+    title: 'Gaming'
   },
   {
-    name: "home",
-    title: "Home"
+    name: 'home',
+    title: 'Home'
   },
   {
-    name: "layout",
-    title: "Layout"
+    name: 'layout',
+    title: 'Layout'
   },
   {
-    name: "mail",
-    title: "Mail"
+    name: 'mail',
+    title: 'Mail'
   },
   {
-    name: "math",
-    title: "Mathematics"
+    name: 'math',
+    title: 'Mathematics'
   },
   {
-    name: "medical",
-    title: "Medical"
+    name: 'medical',
+    title: 'Medical'
   },
   {
-    name: "multimedia",
-    title: "Multimedia"
+    name: 'multimedia',
+    title: 'Multimedia'
   },
   {
-    name: "nature",
-    title: "Nature"
+    name: 'nature',
+    title: 'Nature'
   },
   {
-    name: "navigation",
-    title: "Navigation"
+    name: 'navigation',
+    title: 'Navigation'
   },
   {
-    name: "notifications",
-    title: "Notification"
+    name: 'notifications',
+    title: 'Notification'
   },
   {
-    name: "people",
-    title: "People"
+    name: 'people',
+    title: 'People'
   },
   {
-    name: "photography",
-    title: "Photography"
+    name: 'photography',
+    title: 'Photography'
   },
   {
-    name: "science",
-    title: "Science"
+    name: 'science',
+    title: 'Science'
   },
   {
-    name: "seasons",
-    title: "Seasons"
+    name: 'seasons',
+    title: 'Seasons'
   },
   {
-    name: "security",
-    title: "Security"
+    name: 'security',
+    title: 'Security'
   },
   {
-    name: "shapes",
-    title: "Shapes"
+    name: 'shapes',
+    title: 'Shapes'
   },
   {
-    name: "shopping",
-    title: "Shopping"
+    name: 'shopping',
+    title: 'Shopping'
   },
   {
-    name: "social",
-    title: "Social"
+    name: 'social',
+    title: 'Social'
   },
   {
-    name: "sports",
-    title: "Sports"
+    name: 'sports',
+    title: 'Sports'
   },
   {
-    name: "sustainability",
-    title: "Sustainability"
+    name: 'sustainability',
+    title: 'Sustainability'
   },
   {
-    name: "text",
-    title: "Text formatting"
+    name: 'text',
+    title: 'Text formatting'
   },
   {
-    name: "time",
-    title: "Time & calendar"
+    name: 'time',
+    title: 'Time & calendar'
   },
   {
-    name: "tools",
-    title: "Tools"
+    name: 'tools',
+    title: 'Tools'
   },
   {
-    name: "transportation",
-    title: "Transportation"
+    name: 'transportation',
+    title: 'Transportation'
   },
   {
-    name: "travel",
-    title: "Travel"
+    name: 'travel',
+    title: 'Travel'
   },
   {
-    name: "weather",
-    title: "Weather"
+    name: 'weather',
+    title: 'Weather'
   }
 ]
 export const lucideIcons = {
-  "a-arrow-down": [
-    "text",
-    "design"
+  'a-arrow-down': [
+    'text',
+    'design'
   ],
-  "a-arrow-up": [
-    "text",
-    "design"
+  'a-arrow-up': [
+    'text',
+    'design'
   ],
-  "a-large-small": [
-    "text",
-    "design"
+  'a-large-small': [
+    'text',
+    'design'
   ],
-  "accessibility": [
-    "accessibility",
-    "medical"
+  'accessibility': [
+    'accessibility',
+    'medical'
   ],
-  "activity": [
-    "medical",
-    "account",
-    "social",
-    "science",
-    "multimedia"
+  'activity': [
+    'medical',
+    'account',
+    'social',
+    'science',
+    'multimedia'
   ],
-  "air-vent": [
-    "home"
+  'air-vent': [
+    'home'
   ],
-  "airplay": [
-    "multimedia",
-    "connectivity",
-    "devices",
-    "brands"
+  'airplay': [
+    'multimedia',
+    'connectivity',
+    'devices',
+    'brands'
   ],
-  "alarm-clock-check": [
-    "devices",
-    "notifications",
-    "time"
+  'alarm-clock-check': [
+    'devices',
+    'notifications',
+    'time'
   ],
-  "alarm-clock-minus": [
-    "devices",
-    "notifications",
-    "time"
+  'alarm-clock-minus': [
+    'devices',
+    'notifications',
+    'time'
   ],
-  "alarm-clock-off": [
-    "devices",
-    "notifications",
-    "time"
+  'alarm-clock-off': [
+    'devices',
+    'notifications',
+    'time'
   ],
-  "alarm-clock-plus": [
-    "devices",
-    "notifications",
-    "time"
+  'alarm-clock-plus': [
+    'devices',
+    'notifications',
+    'time'
   ],
-  "alarm-clock": [
-    "devices",
-    "notifications",
-    "time"
+  'alarm-clock': [
+    'devices',
+    'notifications',
+    'time'
   ],
-  "alarm-smoke": [
-    "home",
-    "devices",
-    "travel"
+  'alarm-smoke': [
+    'home',
+    'devices',
+    'travel'
   ],
-  "album": [
-    "photography",
-    "multimedia"
+  'album': [
+    'photography',
+    'multimedia'
   ],
-  "align-center-horizontal": [
-    "layout"
+  'align-center-horizontal': [
+    'layout'
   ],
-  "align-center-vertical": [
-    "layout"
+  'align-center-vertical': [
+    'layout'
   ],
-  "align-end-horizontal": [
-    "layout"
+  'align-end-horizontal': [
+    'layout'
   ],
-  "align-end-vertical": [
-    "layout"
+  'align-end-vertical': [
+    'layout'
   ],
-  "align-horizontal-distribute-center": [
-    "layout"
+  'align-horizontal-distribute-center': [
+    'layout'
   ],
-  "align-horizontal-distribute-end": [
-    "layout"
+  'align-horizontal-distribute-end': [
+    'layout'
   ],
-  "align-horizontal-distribute-start": [
-    "layout"
+  'align-horizontal-distribute-start': [
+    'layout'
   ],
-  "align-horizontal-justify-center": [
-    "layout"
+  'align-horizontal-justify-center': [
+    'layout'
   ],
-  "align-horizontal-justify-end": [
-    "layout"
+  'align-horizontal-justify-end': [
+    'layout'
   ],
-  "align-horizontal-justify-start": [
-    "layout"
+  'align-horizontal-justify-start': [
+    'layout'
   ],
-  "align-horizontal-space-around": [
-    "layout"
+  'align-horizontal-space-around': [
+    'layout'
   ],
-  "align-horizontal-space-between": [
-    "layout"
+  'align-horizontal-space-between': [
+    'layout'
   ],
-  "align-start-horizontal": [
-    "layout"
+  'align-start-horizontal': [
+    'layout'
   ],
-  "align-start-vertical": [
-    "layout"
+  'align-start-vertical': [
+    'layout'
   ],
-  "align-vertical-distribute-center": [
-    "layout"
+  'align-vertical-distribute-center': [
+    'layout'
   ],
-  "align-vertical-distribute-end": [
-    "layout"
+  'align-vertical-distribute-end': [
+    'layout'
   ],
-  "align-vertical-distribute-start": [
-    "layout"
+  'align-vertical-distribute-start': [
+    'layout'
   ],
-  "align-vertical-justify-center": [
-    "layout"
+  'align-vertical-justify-center': [
+    'layout'
   ],
-  "align-vertical-justify-end": [
-    "layout"
+  'align-vertical-justify-end': [
+    'layout'
   ],
-  "align-vertical-justify-start": [
-    "layout"
+  'align-vertical-justify-start': [
+    'layout'
   ],
-  "align-vertical-space-around": [
-    "layout"
+  'align-vertical-space-around': [
+    'layout'
   ],
-  "align-vertical-space-between": [
-    "layout"
+  'align-vertical-space-between': [
+    'layout'
   ],
-  "ambulance": [
-    "medical",
-    "transportation"
+  'ambulance': [
+    'medical',
+    'transportation'
   ],
-  "ampersand": [
-    "text",
-    "development"
+  'ampersand': [
+    'text',
+    'development'
   ],
-  "ampersands": [
-    "text",
-    "development"
-  ],
-  "amphora": [
-    "food-beverage",
-    "gaming"
-  ],
-  "anchor": [
-    "transportation",
-    "text"
-  ],
-  "angry": [
-    "emoji"
-  ],
-  "annoyed": [
-    "emoji"
-  ],
-  "antenna": [
-    "devices",
-    "multimedia",
-    "communication"
-  ],
-  "anvil": [
-    "buildings",
-    "tools",
-    "gaming"
-  ],
-  "aperture": [
-    "photography"
-  ],
-  "app-window-mac": [
-    "layout",
-    "design",
-    "development",
-    "files"
-  ],
-  "app-window": [
-    "layout",
-    "design",
-    "development",
-    "files"
-  ],
-  "apple": [
-    "food-beverage"
-  ],
-  "archive-restore": [
-    "files",
-    "mail"
-  ],
-  "archive-x": [
-    "files",
-    "mail"
-  ],
-  "archive": [
-    "files",
-    "mail"
-  ],
-  "armchair": [
-    "home"
-  ],
-  "arrow-big-down-dash": [
-    "arrows",
-    "navigation",
-    "gaming",
-    "files"
-  ],
-  "arrow-big-down": [
-    "arrows",
-    "navigation",
-    "gaming"
-  ],
-  "arrow-big-left-dash": [
-    "arrows",
-    "navigation",
-    "gaming"
-  ],
-  "arrow-big-left": [
-    "arrows",
-    "navigation",
-    "gaming"
-  ],
-  "arrow-big-right-dash": [
-    "arrows",
-    "navigation",
-    "gaming"
-  ],
-  "arrow-big-right": [
-    "arrows",
-    "navigation",
-    "gaming"
-  ],
-  "arrow-big-up-dash": [
-    "arrows",
-    "navigation",
-    "text",
-    "development",
-    "gaming"
-  ],
-  "arrow-big-up": [
-    "arrows",
-    "navigation",
-    "text",
-    "development",
-    "gaming"
-  ],
-  "arrow-down-0-1": [
-    "text",
-    "layout",
-    "arrows"
-  ],
-  "arrow-down-1-0": [
-    "text",
-    "layout",
-    "arrows"
-  ],
-  "arrow-down-a-z": [
-    "text",
-    "layout",
-    "arrows"
-  ],
-  "arrow-down-from-line": [
-    "arrows",
-    "navigation",
-    "files"
-  ],
-  "arrow-down-left": [
-    "arrows",
-    "navigation"
-  ],
-  "arrow-down-narrow-wide": [
-    "text",
-    "layout",
-    "arrows"
-  ],
-  "arrow-down-right": [
-    "arrows",
-    "navigation"
-  ],
-  "arrow-down-to-dot": [
-    "arrows",
-    "navigation"
-  ],
-  "arrow-down-to-line": [
-    "arrows",
-    "navigation",
-    "files",
-    "development"
-  ],
-  "arrow-down-up": [
-    "arrows",
-    "navigation"
-  ],
-  "arrow-down-wide-narrow": [
-    "text",
-    "layout",
-    "arrows"
-  ],
-  "arrow-down-z-a": [
-    "text",
-    "layout",
-    "arrows"
-  ],
-  "arrow-down": [
-    "arrows",
-    "navigation"
-  ],
-  "arrow-left-from-line": [
-    "arrows",
-    "navigation"
-  ],
-  "arrow-left-right": [
-    "arrows",
-    "navigation"
-  ],
-  "arrow-left-to-line": [
-    "arrows",
-    "navigation"
-  ],
-  "arrow-left": [
-    "arrows",
-    "navigation"
-  ],
-  "arrow-right-from-line": [
-    "arrows",
-    "navigation"
-  ],
-  "arrow-right-left": [
-    "arrows",
-    "navigation"
-  ],
-  "arrow-right-to-line": [
-    "arrows",
-    "navigation",
-    "development"
-  ],
-  "arrow-right": [
-    "arrows",
-    "navigation"
-  ],
-  "arrow-up-0-1": [
-    "text",
-    "layout",
-    "arrows"
-  ],
-  "arrow-up-1-0": [
-    "text",
-    "layout",
-    "arrows"
-  ],
-  "arrow-up-a-z": [
-    "text",
-    "layout",
-    "arrows"
-  ],
-  "arrow-up-down": [
-    "arrows",
-    "navigation"
-  ],
-  "arrow-up-from-dot": [
-    "arrows",
-    "navigation"
-  ],
-  "arrow-up-from-line": [
-    "arrows",
-    "navigation",
-    "files",
-    "development"
-  ],
-  "arrow-up-left": [
-    "arrows",
-    "navigation"
-  ],
-  "arrow-up-narrow-wide": [
-    "text",
-    "layout",
-    "arrows"
-  ],
-  "arrow-up-right": [
-    "arrows",
-    "navigation"
-  ],
-  "arrow-up-to-line": [
-    "arrows",
-    "navigation",
-    "files"
-  ],
-  "arrow-up-wide-narrow": [
-    "text",
-    "layout",
-    "arrows"
-  ],
-  "arrow-up-z-a": [
-    "text",
-    "layout",
-    "arrows"
-  ],
-  "arrow-up": [
-    "arrows",
-    "navigation"
-  ],
-  "arrows-up-from-line": [
-    "arrows",
-    "transportation",
-    "mail"
-  ],
-  "asterisk": [
-    "text",
-    "math",
-    "development"
-  ],
-  "at-sign": [
-    "text",
-    "account"
-  ],
-  "atom": [
-    "science"
-  ],
-  "audio-lines": [
-    "multimedia",
-    "communication"
-  ],
-  "audio-waveform": [
-    "multimedia",
-    "communication"
-  ],
-  "award": [
-    "account",
-    "sports",
-    "gaming"
-  ],
-  "axe": [
-    "tools",
-    "gaming"
-  ],
-  "axis-3d": [
-    "design"
-  ],
-  "baby": [
-    "accessibility",
-    "people"
-  ],
-  "backpack": [
-    "gaming",
-    "photography",
-    "travel"
-  ],
-  "badge-alert": [
-    "account",
-    "social"
-  ],
-  "badge-cent": [
-    "shopping",
-    "finance"
-  ],
-  "badge-check": [
-    "social"
-  ],
-  "badge-dollar-sign": [
-    "shopping",
-    "finance"
-  ],
-  "badge-euro": [
-    "shopping",
-    "finance"
-  ],
-  "badge-indian-rupee": [
-    "shopping",
-    "finance"
-  ],
-  "badge-info": [
-    "account",
-    "accessibility",
-    "social"
-  ],
-  "badge-japanese-yen": [
-    "shopping",
-    "finance"
-  ],
-  "badge-minus": [
-    "social"
-  ],
-  "badge-percent": [
-    "social",
-    "finance",
-    "shopping",
-    "math"
-  ],
-  "badge-plus": [
-    "social"
-  ],
-  "badge-pound-sterling": [
-    "shopping",
-    "finance"
-  ],
-  "badge-question-mark": [
-    "accessibility",
-    "social",
-    "shapes"
-  ],
-  "badge-russian-ruble": [
-    "shopping",
-    "finance"
-  ],
-  "badge-swiss-franc": [
-    "shopping",
-    "finance"
-  ],
-  "badge-turkish-lira": [
-    "shopping",
-    "finance"
-  ],
-  "badge-x": [
-    "social"
-  ],
-  "badge": [
-    "account",
-    "social",
-    "shapes"
-  ],
-  "baggage-claim": [
-    "transportation",
-    "travel"
-  ],
-  "ban": [
-    "account"
-  ],
-  "banana": [
-    "food-beverage"
-  ],
-  "bandage": [
-    "medical"
-  ],
-  "banknote-arrow-down": [
-    "finance"
-  ],
-  "banknote-arrow-up": [
-    "finance"
-  ],
-  "banknote-x": [
-    "finance"
-  ],
-  "banknote": [
-    "finance"
-  ],
-  "barcode": [
-    "shopping"
-  ],
-  "barrel": [
-    "food-beverage",
-    "navigation"
-  ],
-  "baseline": [
-    "text"
-  ],
-  "bath": [
-    "travel"
-  ],
-  "battery-charging": [
-    "connectivity",
-    "devices"
-  ],
-  "battery-full": [
-    "connectivity",
-    "devices"
-  ],
-  "battery-low": [
-    "connectivity",
-    "devices"
-  ],
-  "battery-medium": [
-    "connectivity",
-    "devices"
-  ],
-  "battery-plus": [
-    "devices"
-  ],
-  "battery-warning": [
-    "connectivity",
-    "devices"
-  ],
-  "battery": [
-    "connectivity",
-    "devices"
-  ],
-  "beaker": [
-    "science",
-    "gaming"
-  ],
-  "bean-off": [
-    "food-beverage"
-  ],
-  "bean": [
-    "food-beverage"
-  ],
-  "bed-double": [
-    "home"
-  ],
-  "bed-single": [
-    "home"
-  ],
-  "bed": [
-    "home"
-  ],
-  "beef": [
-    "food-beverage"
-  ],
-  "beer-off": [
-    "food-beverage"
-  ],
-  "beer": [
-    "food-beverage"
-  ],
-  "bell-dot": [
-    "account",
-    "notifications"
-  ],
-  "bell-electric": [
-    "devices",
-    "notifications",
-    "home"
-  ],
-  "bell-minus": [
-    "notifications"
-  ],
-  "bell-off": [
-    "notifications"
-  ],
-  "bell-plus": [
-    "notifications"
-  ],
-  "bell-ring": [
-    "notifications"
-  ],
-  "bell": [
-    "account",
-    "notifications"
-  ],
-  "between-horizontal-end": [
-    "layout",
-    "design",
-    "tools"
-  ],
-  "between-horizontal-start": [
-    "layout",
-    "design",
-    "tools"
-  ],
-  "between-vertical-end": [
-    "layout",
-    "design",
-    "tools"
-  ],
-  "between-vertical-start": [
-    "layout",
-    "design",
-    "tools"
-  ],
-  "biceps-flexed": [
-    "emoji"
-  ],
-  "bike": [
-    "transportation"
-  ],
-  "binary": [
-    "text",
-    "development"
-  ],
-  "binoculars": [
-    "navigation",
-    "nature",
-    "photography",
-    "science",
-    "travel",
-    "development"
-  ],
-  "biohazard": [
-    "science"
-  ],
-  "bird": [
-    "animals"
-  ],
-  "bitcoin": [
-    "brands",
-    "development",
-    "finance"
-  ],
-  "blend": [
-    "design",
-    "photography",
-    "tools",
-    "development"
-  ],
-  "blinds": [
-    "home"
-  ],
-  "blocks": [
-    "development",
-    "layout",
-    "shapes"
-  ],
-  "bluetooth-connected": [
-    "connectivity",
-    "devices"
-  ],
-  "bluetooth-off": [
-    "connectivity",
-    "devices"
-  ],
-  "bluetooth-searching": [
-    "connectivity",
-    "devices"
-  ],
-  "bluetooth": [
-    "connectivity",
-    "devices"
-  ],
-  "bold": [
-    "text"
-  ],
-  "bolt": [
-    "tools",
-    "home"
-  ],
-  "bomb": [
-    "security",
-    "tools"
-  ],
-  "bone": [
-    "animals",
-    "medical",
-    "gaming"
-  ],
-  "book-a": [
-    "text",
-    "gaming"
-  ],
-  "book-alert": [
-    "text",
-    "development",
-    "gaming"
-  ],
-  "book-audio": [
-    "multimedia",
-    "text"
-  ],
-  "book-check": [
-    "text",
-    "development",
-    "gaming"
-  ],
-  "book-copy": [
-    "development",
-    "text",
-    "gaming"
-  ],
-  "book-dashed": [
-    "development"
-  ],
-  "book-down": [
-    "development"
-  ],
-  "book-headphones": [
-    "multimedia",
-    "text"
-  ],
-  "book-heart": [
-    "social",
-    "text",
-    "gaming"
-  ],
-  "book-image": [
-    "photography",
-    "text",
-    "multimedia",
-    "files",
-    "social",
-    "shopping",
-    "travel"
-  ],
-  "book-key": [
-    "development",
-    "security",
-    "gaming"
-  ],
-  "book-lock": [
-    "development",
-    "security",
-    "gaming"
-  ],
-  "book-marked": [
-    "text",
-    "development",
-    "gaming"
-  ],
-  "book-minus": [
-    "development",
-    "text",
-    "gaming"
-  ],
-  "book-open-check": [
-    "text",
-    "development",
-    "gaming"
-  ],
-  "book-open-text": [
-    "text",
-    "development"
-  ],
-  "book-open": [
-    "text",
-    "development",
-    "gaming"
-  ],
-  "book-plus": [
-    "development",
-    "text",
-    "gaming"
-  ],
-  "book-text": [
-    "text",
-    "gaming"
-  ],
-  "book-type": [
-    "text",
-    "design",
-    "gaming"
-  ],
-  "book-up-2": [
-    "development"
-  ],
-  "book-up": [
-    "development"
-  ],
-  "book-user": [
-    "account",
-    "connectivity",
-    "communication",
-    "social"
-  ],
-  "book-x": [
-    "text",
-    "gaming"
-  ],
-  "book": [
-    "text",
-    "development",
-    "gaming"
-  ],
-  "bookmark-check": [
-    "account"
-  ],
-  "bookmark-minus": [
-    "account"
-  ],
-  "bookmark-plus": [
-    "account"
-  ],
-  "bookmark-x": [
-    "account"
-  ],
-  "bookmark": [
-    "account"
-  ],
-  "boom-box": [
-    "devices",
-    "multimedia",
-    "social"
-  ],
-  "bot-message-square": [
-    "development",
-    "social"
-  ],
-  "bot-off": [
-    "development",
-    "social"
-  ],
-  "bot": [
-    "development",
-    "social"
-  ],
-  "bottle-wine": [
-    "food-beverage"
-  ],
-  "bow-arrow": [
-    "gaming",
-    "tools"
-  ],
-  "box": [
-    "shapes",
-    "gaming",
-    "development",
-    "math"
-  ],
-  "boxes": [
-    "shapes",
-    "gaming",
-    "development"
-  ],
-  "braces": [
-    "development",
-    "files"
-  ],
-  "brackets": [
-    "development",
-    "files"
-  ],
-  "brain-circuit": [
-    "science",
-    "development"
-  ],
-  "brain-cog": [
-    "science",
-    "development"
-  ],
-  "brain": [
-    "medical",
-    "science"
-  ],
-  "brick-wall-fire": [
-    "security",
-    "home",
-    "connectivity"
-  ],
-  "brick-wall-shield": [
-    "security",
-    "home",
-    "connectivity"
-  ],
-  "brick-wall": [
-    "buildings",
-    "home"
-  ],
-  "briefcase-business": [
-    "transportation"
-  ],
-  "briefcase-conveyor-belt": [
-    "travel",
-    "transportation"
-  ],
-  "briefcase-medical": [
-    "medical",
-    "transportation"
-  ],
-  "briefcase": [
-    "transportation"
-  ],
-  "bring-to-front": [
-    "design",
-    "layout"
-  ],
-  "brush-cleaning": [
-    "home",
-    "tools",
-    "design"
-  ],
-  "brush": [
-    "text",
-    "design",
-    "tools"
-  ],
-  "bubbles": [
-    "weather"
-  ],
-  "bug-off": [
-    "development",
-    "animals"
-  ],
-  "bug-play": [
-    "development",
-    "animals"
-  ],
-  "bug": [
-    "development",
-    "animals"
-  ],
-  "building-2": [
-    "account",
-    "buildings"
-  ],
-  "building": [
-    "account",
-    "buildings"
-  ],
-  "bus-front": [
-    "transportation"
-  ],
-  "bus": [
-    "transportation"
-  ],
-  "cable-car": [
-    "transportation",
-    "travel"
-  ],
-  "cable": [
-    "connectivity",
-    "devices",
-    "multimedia"
-  ],
-  "cake-slice": [
-    "food-beverage",
-    "social"
-  ],
-  "cake": [
-    "food-beverage",
-    "social",
-    "account"
-  ],
-  "calculator": [
-    "math",
-    "devices"
+  'ampersands': [
+    'text',
+    'development'
+  ],
+  'amphora': [
+    'food-beverage',
+    'gaming'
+  ],
+  'anchor': [
+    'transportation',
+    'text'
+  ],
+  'angry': [
+    'emoji'
+  ],
+  'annoyed': [
+    'emoji'
+  ],
+  'antenna': [
+    'devices',
+    'multimedia',
+    'communication'
+  ],
+  'anvil': [
+    'buildings',
+    'tools',
+    'gaming'
+  ],
+  'aperture': [
+    'photography'
+  ],
+  'app-window-mac': [
+    'layout',
+    'design',
+    'development',
+    'files'
+  ],
+  'app-window': [
+    'layout',
+    'design',
+    'development',
+    'files'
+  ],
+  'apple': [
+    'food-beverage'
+  ],
+  'archive-restore': [
+    'files',
+    'mail'
+  ],
+  'archive-x': [
+    'files',
+    'mail'
+  ],
+  'archive': [
+    'files',
+    'mail'
+  ],
+  'armchair': [
+    'home'
+  ],
+  'arrow-big-down-dash': [
+    'arrows',
+    'navigation',
+    'gaming',
+    'files'
+  ],
+  'arrow-big-down': [
+    'arrows',
+    'navigation',
+    'gaming'
+  ],
+  'arrow-big-left-dash': [
+    'arrows',
+    'navigation',
+    'gaming'
+  ],
+  'arrow-big-left': [
+    'arrows',
+    'navigation',
+    'gaming'
+  ],
+  'arrow-big-right-dash': [
+    'arrows',
+    'navigation',
+    'gaming'
+  ],
+  'arrow-big-right': [
+    'arrows',
+    'navigation',
+    'gaming'
+  ],
+  'arrow-big-up-dash': [
+    'arrows',
+    'navigation',
+    'text',
+    'development',
+    'gaming'
+  ],
+  'arrow-big-up': [
+    'arrows',
+    'navigation',
+    'text',
+    'development',
+    'gaming'
+  ],
+  'arrow-down-0-1': [
+    'text',
+    'layout',
+    'arrows'
+  ],
+  'arrow-down-1-0': [
+    'text',
+    'layout',
+    'arrows'
+  ],
+  'arrow-down-a-z': [
+    'text',
+    'layout',
+    'arrows'
+  ],
+  'arrow-down-from-line': [
+    'arrows',
+    'navigation',
+    'files'
+  ],
+  'arrow-down-left': [
+    'arrows',
+    'navigation'
+  ],
+  'arrow-down-narrow-wide': [
+    'text',
+    'layout',
+    'arrows'
+  ],
+  'arrow-down-right': [
+    'arrows',
+    'navigation'
+  ],
+  'arrow-down-to-dot': [
+    'arrows',
+    'navigation'
+  ],
+  'arrow-down-to-line': [
+    'arrows',
+    'navigation',
+    'files',
+    'development'
+  ],
+  'arrow-down-up': [
+    'arrows',
+    'navigation'
+  ],
+  'arrow-down-wide-narrow': [
+    'text',
+    'layout',
+    'arrows'
+  ],
+  'arrow-down-z-a': [
+    'text',
+    'layout',
+    'arrows'
+  ],
+  'arrow-down': [
+    'arrows',
+    'navigation'
+  ],
+  'arrow-left-from-line': [
+    'arrows',
+    'navigation'
+  ],
+  'arrow-left-right': [
+    'arrows',
+    'navigation'
+  ],
+  'arrow-left-to-line': [
+    'arrows',
+    'navigation'
+  ],
+  'arrow-left': [
+    'arrows',
+    'navigation'
+  ],
+  'arrow-right-from-line': [
+    'arrows',
+    'navigation'
+  ],
+  'arrow-right-left': [
+    'arrows',
+    'navigation'
+  ],
+  'arrow-right-to-line': [
+    'arrows',
+    'navigation',
+    'development'
+  ],
+  'arrow-right': [
+    'arrows',
+    'navigation'
+  ],
+  'arrow-up-0-1': [
+    'text',
+    'layout',
+    'arrows'
+  ],
+  'arrow-up-1-0': [
+    'text',
+    'layout',
+    'arrows'
+  ],
+  'arrow-up-a-z': [
+    'text',
+    'layout',
+    'arrows'
+  ],
+  'arrow-up-down': [
+    'arrows',
+    'navigation'
+  ],
+  'arrow-up-from-dot': [
+    'arrows',
+    'navigation'
+  ],
+  'arrow-up-from-line': [
+    'arrows',
+    'navigation',
+    'files',
+    'development'
+  ],
+  'arrow-up-left': [
+    'arrows',
+    'navigation'
+  ],
+  'arrow-up-narrow-wide': [
+    'text',
+    'layout',
+    'arrows'
+  ],
+  'arrow-up-right': [
+    'arrows',
+    'navigation'
+  ],
+  'arrow-up-to-line': [
+    'arrows',
+    'navigation',
+    'files'
+  ],
+  'arrow-up-wide-narrow': [
+    'text',
+    'layout',
+    'arrows'
+  ],
+  'arrow-up-z-a': [
+    'text',
+    'layout',
+    'arrows'
+  ],
+  'arrow-up': [
+    'arrows',
+    'navigation'
+  ],
+  'arrows-up-from-line': [
+    'arrows',
+    'transportation',
+    'mail'
+  ],
+  'asterisk': [
+    'text',
+    'math',
+    'development'
+  ],
+  'at-sign': [
+    'text',
+    'account'
+  ],
+  'atom': [
+    'science'
+  ],
+  'audio-lines': [
+    'multimedia',
+    'communication'
+  ],
+  'audio-waveform': [
+    'multimedia',
+    'communication'
+  ],
+  'award': [
+    'account',
+    'sports',
+    'gaming'
+  ],
+  'axe': [
+    'tools',
+    'gaming'
+  ],
+  'axis-3d': [
+    'design'
+  ],
+  'baby': [
+    'accessibility',
+    'people'
+  ],
+  'backpack': [
+    'gaming',
+    'photography',
+    'travel'
+  ],
+  'badge-alert': [
+    'account',
+    'social'
+  ],
+  'badge-cent': [
+    'shopping',
+    'finance'
+  ],
+  'badge-check': [
+    'social'
+  ],
+  'badge-dollar-sign': [
+    'shopping',
+    'finance'
+  ],
+  'badge-euro': [
+    'shopping',
+    'finance'
+  ],
+  'badge-indian-rupee': [
+    'shopping',
+    'finance'
+  ],
+  'badge-info': [
+    'account',
+    'accessibility',
+    'social'
+  ],
+  'badge-japanese-yen': [
+    'shopping',
+    'finance'
+  ],
+  'badge-minus': [
+    'social'
+  ],
+  'badge-percent': [
+    'social',
+    'finance',
+    'shopping',
+    'math'
+  ],
+  'badge-plus': [
+    'social'
+  ],
+  'badge-pound-sterling': [
+    'shopping',
+    'finance'
+  ],
+  'badge-question-mark': [
+    'accessibility',
+    'social',
+    'shapes'
+  ],
+  'badge-russian-ruble': [
+    'shopping',
+    'finance'
+  ],
+  'badge-swiss-franc': [
+    'shopping',
+    'finance'
+  ],
+  'badge-turkish-lira': [
+    'shopping',
+    'finance'
+  ],
+  'badge-x': [
+    'social'
+  ],
+  'badge': [
+    'account',
+    'social',
+    'shapes'
+  ],
+  'baggage-claim': [
+    'transportation',
+    'travel'
+  ],
+  'ban': [
+    'account'
+  ],
+  'banana': [
+    'food-beverage'
+  ],
+  'bandage': [
+    'medical'
+  ],
+  'banknote-arrow-down': [
+    'finance'
+  ],
+  'banknote-arrow-up': [
+    'finance'
+  ],
+  'banknote-x': [
+    'finance'
+  ],
+  'banknote': [
+    'finance'
+  ],
+  'barcode': [
+    'shopping'
+  ],
+  'barrel': [
+    'food-beverage',
+    'navigation'
+  ],
+  'baseline': [
+    'text'
+  ],
+  'bath': [
+    'travel'
+  ],
+  'battery-charging': [
+    'connectivity',
+    'devices'
+  ],
+  'battery-full': [
+    'connectivity',
+    'devices'
+  ],
+  'battery-low': [
+    'connectivity',
+    'devices'
+  ],
+  'battery-medium': [
+    'connectivity',
+    'devices'
+  ],
+  'battery-plus': [
+    'devices'
+  ],
+  'battery-warning': [
+    'connectivity',
+    'devices'
+  ],
+  'battery': [
+    'connectivity',
+    'devices'
+  ],
+  'beaker': [
+    'science',
+    'gaming'
+  ],
+  'bean-off': [
+    'food-beverage'
+  ],
+  'bean': [
+    'food-beverage'
+  ],
+  'bed-double': [
+    'home'
+  ],
+  'bed-single': [
+    'home'
+  ],
+  'bed': [
+    'home'
+  ],
+  'beef': [
+    'food-beverage'
+  ],
+  'beer-off': [
+    'food-beverage'
+  ],
+  'beer': [
+    'food-beverage'
+  ],
+  'bell-dot': [
+    'account',
+    'notifications'
+  ],
+  'bell-electric': [
+    'devices',
+    'notifications',
+    'home'
+  ],
+  'bell-minus': [
+    'notifications'
+  ],
+  'bell-off': [
+    'notifications'
+  ],
+  'bell-plus': [
+    'notifications'
+  ],
+  'bell-ring': [
+    'notifications'
+  ],
+  'bell': [
+    'account',
+    'notifications'
+  ],
+  'between-horizontal-end': [
+    'layout',
+    'design',
+    'tools'
+  ],
+  'between-horizontal-start': [
+    'layout',
+    'design',
+    'tools'
+  ],
+  'between-vertical-end': [
+    'layout',
+    'design',
+    'tools'
+  ],
+  'between-vertical-start': [
+    'layout',
+    'design',
+    'tools'
+  ],
+  'biceps-flexed': [
+    'emoji'
+  ],
+  'bike': [
+    'transportation'
+  ],
+  'binary': [
+    'text',
+    'development'
+  ],
+  'binoculars': [
+    'navigation',
+    'nature',
+    'photography',
+    'science',
+    'travel',
+    'development'
+  ],
+  'biohazard': [
+    'science'
+  ],
+  'bird': [
+    'animals'
+  ],
+  'bitcoin': [
+    'brands',
+    'development',
+    'finance'
+  ],
+  'blend': [
+    'design',
+    'photography',
+    'tools',
+    'development'
+  ],
+  'blinds': [
+    'home'
+  ],
+  'blocks': [
+    'development',
+    'layout',
+    'shapes'
+  ],
+  'bluetooth-connected': [
+    'connectivity',
+    'devices'
+  ],
+  'bluetooth-off': [
+    'connectivity',
+    'devices'
+  ],
+  'bluetooth-searching': [
+    'connectivity',
+    'devices'
+  ],
+  'bluetooth': [
+    'connectivity',
+    'devices'
+  ],
+  'bold': [
+    'text'
+  ],
+  'bolt': [
+    'tools',
+    'home'
+  ],
+  'bomb': [
+    'security',
+    'tools'
+  ],
+  'bone': [
+    'animals',
+    'medical',
+    'gaming'
+  ],
+  'book-a': [
+    'text',
+    'gaming'
+  ],
+  'book-alert': [
+    'text',
+    'development',
+    'gaming'
+  ],
+  'book-audio': [
+    'multimedia',
+    'text'
+  ],
+  'book-check': [
+    'text',
+    'development',
+    'gaming'
+  ],
+  'book-copy': [
+    'development',
+    'text',
+    'gaming'
+  ],
+  'book-dashed': [
+    'development'
+  ],
+  'book-down': [
+    'development'
+  ],
+  'book-headphones': [
+    'multimedia',
+    'text'
+  ],
+  'book-heart': [
+    'social',
+    'text',
+    'gaming'
+  ],
+  'book-image': [
+    'photography',
+    'text',
+    'multimedia',
+    'files',
+    'social',
+    'shopping',
+    'travel'
+  ],
+  'book-key': [
+    'development',
+    'security',
+    'gaming'
+  ],
+  'book-lock': [
+    'development',
+    'security',
+    'gaming'
+  ],
+  'book-marked': [
+    'text',
+    'development',
+    'gaming'
+  ],
+  'book-minus': [
+    'development',
+    'text',
+    'gaming'
+  ],
+  'book-open-check': [
+    'text',
+    'development',
+    'gaming'
+  ],
+  'book-open-text': [
+    'text',
+    'development'
+  ],
+  'book-open': [
+    'text',
+    'development',
+    'gaming'
+  ],
+  'book-plus': [
+    'development',
+    'text',
+    'gaming'
+  ],
+  'book-text': [
+    'text',
+    'gaming'
+  ],
+  'book-type': [
+    'text',
+    'design',
+    'gaming'
+  ],
+  'book-up-2': [
+    'development'
+  ],
+  'book-up': [
+    'development'
+  ],
+  'book-user': [
+    'account',
+    'connectivity',
+    'communication',
+    'social'
+  ],
+  'book-x': [
+    'text',
+    'gaming'
+  ],
+  'book': [
+    'text',
+    'development',
+    'gaming'
+  ],
+  'bookmark-check': [
+    'account'
+  ],
+  'bookmark-minus': [
+    'account'
+  ],
+  'bookmark-plus': [
+    'account'
+  ],
+  'bookmark-x': [
+    'account'
+  ],
+  'bookmark': [
+    'account'
+  ],
+  'boom-box': [
+    'devices',
+    'multimedia',
+    'social'
+  ],
+  'bot-message-square': [
+    'development',
+    'social'
+  ],
+  'bot-off': [
+    'development',
+    'social'
+  ],
+  'bot': [
+    'development',
+    'social'
+  ],
+  'bottle-wine': [
+    'food-beverage'
+  ],
+  'bow-arrow': [
+    'gaming',
+    'tools'
+  ],
+  'box': [
+    'shapes',
+    'gaming',
+    'development',
+    'math'
+  ],
+  'boxes': [
+    'shapes',
+    'gaming',
+    'development'
+  ],
+  'braces': [
+    'development',
+    'files'
+  ],
+  'brackets': [
+    'development',
+    'files'
+  ],
+  'brain-circuit': [
+    'science',
+    'development'
+  ],
+  'brain-cog': [
+    'science',
+    'development'
+  ],
+  'brain': [
+    'medical',
+    'science'
+  ],
+  'brick-wall-fire': [
+    'security',
+    'home',
+    'connectivity'
+  ],
+  'brick-wall-shield': [
+    'security',
+    'home',
+    'connectivity'
+  ],
+  'brick-wall': [
+    'buildings',
+    'home'
+  ],
+  'briefcase-business': [
+    'transportation'
+  ],
+  'briefcase-conveyor-belt': [
+    'travel',
+    'transportation'
+  ],
+  'briefcase-medical': [
+    'medical',
+    'transportation'
+  ],
+  'briefcase': [
+    'transportation'
+  ],
+  'bring-to-front': [
+    'design',
+    'layout'
+  ],
+  'brush-cleaning': [
+    'home',
+    'tools',
+    'design'
+  ],
+  'brush': [
+    'text',
+    'design',
+    'tools'
+  ],
+  'bubbles': [
+    'weather'
+  ],
+  'bug-off': [
+    'development',
+    'animals'
+  ],
+  'bug-play': [
+    'development',
+    'animals'
+  ],
+  'bug': [
+    'development',
+    'animals'
+  ],
+  'building-2': [
+    'account',
+    'buildings'
+  ],
+  'building': [
+    'account',
+    'buildings'
+  ],
+  'bus-front': [
+    'transportation'
+  ],
+  'bus': [
+    'transportation'
+  ],
+  'cable-car': [
+    'transportation',
+    'travel'
+  ],
+  'cable': [
+    'connectivity',
+    'devices',
+    'multimedia'
+  ],
+  'cake-slice': [
+    'food-beverage',
+    'social'
+  ],
+  'cake': [
+    'food-beverage',
+    'social',
+    'account'
+  ],
+  'calculator': [
+    'math',
+    'devices'
   ],
-  "calendar-1": [
-    "time"
+  'calendar-1': [
+    'time'
   ],
-  "calendar-arrow-down": [
-    "time"
-  ],
-  "calendar-arrow-up": [
-    "time"
+  'calendar-arrow-down': [
+    'time'
+  ],
+  'calendar-arrow-up': [
+    'time'
   ],
-  "calendar-check-2": [
-    "time"
-  ],
-  "calendar-check": [
-    "time"
-  ],
-  "calendar-clock": [
-    "time"
-  ],
-  "calendar-cog": [
-    "time"
+  'calendar-check-2': [
+    'time'
+  ],
+  'calendar-check': [
+    'time'
+  ],
+  'calendar-clock': [
+    'time'
+  ],
+  'calendar-cog': [
+    'time'
   ],
-  "calendar-days": [
-    "time"
+  'calendar-days': [
+    'time'
   ],
-  "calendar-fold": [
-    "time",
-    "files"
+  'calendar-fold': [
+    'time',
+    'files'
   ],
-  "calendar-heart": [
-    "time"
-  ],
-  "calendar-minus-2": [
-    "time"
-  ],
-  "calendar-minus": [
-    "time"
-  ],
-  "calendar-off": [
-    "time"
-  ],
-  "calendar-plus-2": [
-    "time"
-  ],
-  "calendar-plus": [
-    "time"
-  ],
-  "calendar-range": [
-    "time"
-  ],
-  "calendar-search": [
-    "time"
-  ],
-  "calendar-sync": [
-    "arrows",
-    "time"
-  ],
-  "calendar-x-2": [
-    "time"
-  ],
-  "calendar-x": [
-    "time"
-  ],
-  "calendar": [
-    "time"
+  'calendar-heart': [
+    'time'
+  ],
+  'calendar-minus-2': [
+    'time'
+  ],
+  'calendar-minus': [
+    'time'
+  ],
+  'calendar-off': [
+    'time'
+  ],
+  'calendar-plus-2': [
+    'time'
+  ],
+  'calendar-plus': [
+    'time'
+  ],
+  'calendar-range': [
+    'time'
+  ],
+  'calendar-search': [
+    'time'
+  ],
+  'calendar-sync': [
+    'arrows',
+    'time'
+  ],
+  'calendar-x-2': [
+    'time'
+  ],
+  'calendar-x': [
+    'time'
+  ],
+  'calendar': [
+    'time'
   ],
-  "camera-off": [
-    "photography",
-    "devices",
-    "communication"
-  ],
-  "camera": [
-    "photography",
-    "devices",
-    "communication"
+  'camera-off': [
+    'photography',
+    'devices',
+    'communication'
+  ],
+  'camera': [
+    'photography',
+    'devices',
+    'communication'
   ],
-  "candy-cane": [
-    "food-beverage"
+  'candy-cane': [
+    'food-beverage'
   ],
-  "candy-off": [
-    "food-beverage"
+  'candy-off': [
+    'food-beverage'
   ],
-  "candy": [
-    "food-beverage"
+  'candy': [
+    'food-beverage'
   ],
-  "cannabis": [
-    "nature"
+  'cannabis': [
+    'nature'
   ],
-  "captions-off": [
-    "multimedia"
+  'captions-off': [
+    'multimedia'
   ],
-  "captions": [
-    "multimedia"
+  'captions': [
+    'multimedia'
   ],
-  "car-front": [
-    "transportation"
+  'car-front': [
+    'transportation'
   ],
-  "car-taxi-front": [
-    "transportation"
+  'car-taxi-front': [
+    'transportation'
   ],
-  "car": [
-    "transportation"
+  'car': [
+    'transportation'
   ],
-  "caravan": [
-    "transportation",
-    "travel",
-    "nature"
+  'caravan': [
+    'transportation',
+    'travel',
+    'nature'
   ],
-  "card-sim": [
-    "connectivity",
-    "communication",
-    "multimedia",
-    "devices"
+  'card-sim': [
+    'connectivity',
+    'communication',
+    'multimedia',
+    'devices'
   ],
-  "carrot": [
-    "food-beverage"
+  'carrot': [
+    'food-beverage'
   ],
-  "case-lower": [
-    "text",
-    "development"
+  'case-lower': [
+    'text',
+    'development'
   ],
-  "case-sensitive": [
-    "text"
+  'case-sensitive': [
+    'text'
   ],
-  "case-upper": [
-    "text",
-    "development"
+  'case-upper': [
+    'text',
+    'development'
   ],
-  "cassette-tape": [
-    "connectivity",
-    "devices",
-    "multimedia",
-    "communication",
-    "files"
+  'cassette-tape': [
+    'connectivity',
+    'devices',
+    'multimedia',
+    'communication',
+    'files'
   ],
-  "cast": [
-    "devices",
-    "connectivity"
+  'cast': [
+    'devices',
+    'connectivity'
   ],
-  "castle": [
-    "buildings",
-    "gaming"
+  'castle': [
+    'buildings',
+    'gaming'
   ],
-  "cat": [
-    "animals"
+  'cat': [
+    'animals'
   ],
-  "cctv": [
-    "security",
-    "devices",
-    "communication",
-    "connectivity",
-    "photography"
+  'cctv': [
+    'security',
+    'devices',
+    'communication',
+    'connectivity',
+    'photography'
   ],
-  "chart-area": [
-    "charts"
+  'chart-area': [
+    'charts'
   ],
-  "chart-bar-big": [
-    "charts"
+  'chart-bar-big': [
+    'charts'
   ],
-  "chart-bar-decreasing": [
-    "charts"
+  'chart-bar-decreasing': [
+    'charts'
   ],
-  "chart-bar-increasing": [
-    "charts"
+  'chart-bar-increasing': [
+    'charts'
   ],
-  "chart-bar-stacked": [
-    "charts"
+  'chart-bar-stacked': [
+    'charts'
   ],
-  "chart-bar": [
-    "charts"
+  'chart-bar': [
+    'charts'
   ],
-  "chart-candlestick": [
-    "charts",
-    "finance"
+  'chart-candlestick': [
+    'charts',
+    'finance'
   ],
-  "chart-column-big": [
-    "charts"
+  'chart-column-big': [
+    'charts'
   ],
-  "chart-column-decreasing": [
-    "charts"
+  'chart-column-decreasing': [
+    'charts'
   ],
-  "chart-column-increasing": [
-    "charts"
+  'chart-column-increasing': [
+    'charts'
   ],
-  "chart-column-stacked": [
-    "charts"
+  'chart-column-stacked': [
+    'charts'
   ],
-  "chart-column": [
-    "charts"
+  'chart-column': [
+    'charts'
   ],
-  "chart-gantt": [
-    "charts"
+  'chart-gantt': [
+    'charts'
   ],
-  "chart-line": [
-    "charts"
+  'chart-line': [
+    'charts'
   ],
-  "chart-network": [
-    "charts"
+  'chart-network': [
+    'charts'
   ],
-  "chart-no-axes-column-decreasing": [
-    "charts"
+  'chart-no-axes-column-decreasing': [
+    'charts'
   ],
-  "chart-no-axes-column-increasing": [
-    "charts"
+  'chart-no-axes-column-increasing': [
+    'charts'
   ],
-  "chart-no-axes-column": [
-    "charts"
+  'chart-no-axes-column': [
+    'charts'
   ],
-  "chart-no-axes-combined": [
-    "charts"
+  'chart-no-axes-combined': [
+    'charts'
   ],
-  "chart-no-axes-gantt": [
-    "charts",
-    "time",
-    "development",
-    "design"
+  'chart-no-axes-gantt': [
+    'charts',
+    'time',
+    'development',
+    'design'
   ],
-  "chart-pie": [
-    "charts",
-    "files"
+  'chart-pie': [
+    'charts',
+    'files'
   ],
-  "chart-scatter": [
-    "charts"
+  'chart-scatter': [
+    'charts'
   ],
-  "chart-spline": [
-    "charts"
+  'chart-spline': [
+    'charts'
   ],
-  "check-check": [
-    "notifications"
+  'check-check': [
+    'notifications'
   ],
-  "check-line": [
-    "notifications"
+  'check-line': [
+    'notifications'
   ],
-  "check": [
-    "notifications"
+  'check': [
+    'notifications'
   ],
-  "chef-hat": [
-    "food-beverage"
+  'chef-hat': [
+    'food-beverage'
   ],
-  "cherry": [
-    "food-beverage"
+  'cherry': [
+    'food-beverage'
   ],
-  "chevron-down": [
-    "arrows",
-    "navigation",
-    "gaming"
+  'chevron-down': [
+    'arrows',
+    'navigation',
+    'gaming'
   ],
-  "chevron-first": [
-    "arrows",
-    "multimedia"
+  'chevron-first': [
+    'arrows',
+    'multimedia'
   ],
-  "chevron-last": [
-    "arrows",
-    "multimedia"
+  'chevron-last': [
+    'arrows',
+    'multimedia'
   ],
-  "chevron-left": [
-    "arrows",
-    "navigation"
+  'chevron-left': [
+    'arrows',
+    'navigation'
   ],
-  "chevron-right": [
-    "arrows",
-    "navigation",
-    "math",
-    "development"
+  'chevron-right': [
+    'arrows',
+    'navigation',
+    'math',
+    'development'
   ],
-  "chevron-up": [
-    "arrows",
-    "navigation",
-    "math",
-    "gaming"
+  'chevron-up': [
+    'arrows',
+    'navigation',
+    'math',
+    'gaming'
   ],
-  "chevrons-down-up": [
-    "arrows"
+  'chevrons-down-up': [
+    'arrows'
   ],
-  "chevrons-down": [
-    "arrows",
-    "navigation",
-    "gaming"
+  'chevrons-down': [
+    'arrows',
+    'navigation',
+    'gaming'
   ],
-  "chevrons-left-right-ellipsis": [
-    "communication",
-    "devices",
-    "multimedia",
-    "gaming"
+  'chevrons-left-right-ellipsis': [
+    'communication',
+    'devices',
+    'multimedia',
+    'gaming'
   ],
-  "chevrons-left-right": [
-    "arrows"
+  'chevrons-left-right': [
+    'arrows'
   ],
-  "chevrons-left": [
-    "arrows",
-    "navigation",
-    "gaming"
+  'chevrons-left': [
+    'arrows',
+    'navigation',
+    'gaming'
   ],
-  "chevrons-right-left": [
-    "arrows"
+  'chevrons-right-left': [
+    'arrows'
   ],
-  "chevrons-right": [
-    "arrows",
-    "navigation",
-    "gaming"
+  'chevrons-right': [
+    'arrows',
+    'navigation',
+    'gaming'
   ],
-  "chevrons-up-down": [
-    "arrows"
+  'chevrons-up-down': [
+    'arrows'
   ],
-  "chevrons-up": [
-    "arrows",
-    "navigation",
-    "gaming"
+  'chevrons-up': [
+    'arrows',
+    'navigation',
+    'gaming'
   ],
-  "chromium": [
-    "brands"
+  'chromium': [
+    'brands'
   ],
-  "church": [
-    "buildings",
-    "navigation"
+  'church': [
+    'buildings',
+    'navigation'
   ],
-  "cigarette-off": [
-    "travel",
-    "transportation",
-    "medical"
+  'cigarette-off': [
+    'travel',
+    'transportation',
+    'medical'
   ],
-  "cigarette": [
-    "travel",
-    "transportation",
-    "medical"
+  'cigarette': [
+    'travel',
+    'transportation',
+    'medical'
   ],
-  "circle-alert": [
-    "notifications"
+  'circle-alert': [
+    'notifications'
   ],
-  "circle-arrow-down": [
-    "arrows",
-    "navigation",
-    "gaming"
+  'circle-arrow-down': [
+    'arrows',
+    'navigation',
+    'gaming'
   ],
-  "circle-arrow-left": [
-    "arrows",
-    "navigation",
-    "gaming"
+  'circle-arrow-left': [
+    'arrows',
+    'navigation',
+    'gaming'
   ],
-  "circle-arrow-out-down-left": [
-    "arrows",
-    "navigation"
+  'circle-arrow-out-down-left': [
+    'arrows',
+    'navigation'
   ],
-  "circle-arrow-out-down-right": [
-    "arrows",
-    "navigation"
+  'circle-arrow-out-down-right': [
+    'arrows',
+    'navigation'
   ],
-  "circle-arrow-out-up-left": [
-    "arrows",
-    "navigation",
-    "development"
+  'circle-arrow-out-up-left': [
+    'arrows',
+    'navigation',
+    'development'
   ],
-  "circle-arrow-out-up-right": [
-    "arrows",
-    "navigation"
+  'circle-arrow-out-up-right': [
+    'arrows',
+    'navigation'
   ],
-  "circle-arrow-right": [
-    "arrows",
-    "navigation",
-    "gaming"
+  'circle-arrow-right': [
+    'arrows',
+    'navigation',
+    'gaming'
   ],
-  "circle-arrow-up": [
-    "arrows",
-    "navigation",
-    "gaming"
+  'circle-arrow-up': [
+    'arrows',
+    'navigation',
+    'gaming'
   ],
-  "circle-check-big": [
-    "notifications"
+  'circle-check-big': [
+    'notifications'
   ],
-  "circle-check": [
-    "notifications"
+  'circle-check': [
+    'notifications'
   ],
-  "circle-chevron-down": [
-    "arrows",
-    "navigation"
+  'circle-chevron-down': [
+    'arrows',
+    'navigation'
   ],
-  "circle-chevron-left": [
-    "arrows",
-    "navigation"
+  'circle-chevron-left': [
+    'arrows',
+    'navigation'
   ],
-  "circle-chevron-right": [
-    "arrows",
-    "navigation"
+  'circle-chevron-right': [
+    'arrows',
+    'navigation'
   ],
-  "circle-chevron-up": [
-    "arrows",
-    "navigation"
+  'circle-chevron-up': [
+    'arrows',
+    'navigation'
   ],
-  "circle-dashed": [
-    "development",
-    "shapes"
+  'circle-dashed': [
+    'development',
+    'shapes'
   ],
-  "circle-divide": [
-    "math"
+  'circle-divide': [
+    'math'
   ],
-  "circle-dollar-sign": [
-    "finance"
+  'circle-dollar-sign': [
+    'finance'
   ],
-  "circle-dot-dashed": [
-    "development",
-    "shapes"
+  'circle-dot-dashed': [
+    'development',
+    'shapes'
   ],
-  "circle-dot": [
-    "development",
-    "shapes"
+  'circle-dot': [
+    'development',
+    'shapes'
   ],
-  "circle-ellipsis": [
-    "layout",
-    "development"
+  'circle-ellipsis': [
+    'layout',
+    'development'
   ],
-  "circle-equal": [
-    "math"
+  'circle-equal': [
+    'math'
   ],
-  "circle-fading-arrow-up": [
-    "arrows",
-    "development"
+  'circle-fading-arrow-up': [
+    'arrows',
+    'development'
   ],
-  "circle-fading-plus": [
-    "communication",
-    "social"
+  'circle-fading-plus': [
+    'communication',
+    'social'
   ],
-  "circle-gauge": [
-    "transportation",
-    "sports",
-    "science"
+  'circle-gauge': [
+    'transportation',
+    'sports',
+    'science'
   ],
-  "circle-minus": [
-    "math"
+  'circle-minus': [
+    'math'
   ],
-  "circle-off": [
-    "shapes"
+  'circle-off': [
+    'shapes'
   ],
-  "circle-parking-off": [
-    "transportation",
-    "navigation"
+  'circle-parking-off': [
+    'transportation',
+    'navigation'
   ],
-  "circle-parking": [
-    "transportation",
-    "navigation"
+  'circle-parking': [
+    'transportation',
+    'navigation'
   ],
-  "circle-pause": [
-    "multimedia"
+  'circle-pause': [
+    'multimedia'
   ],
-  "circle-percent": [
-    "social",
-    "finance",
-    "shopping",
-    "math"
+  'circle-percent': [
+    'social',
+    'finance',
+    'shopping',
+    'math'
   ],
-  "circle-play": [
-    "multimedia"
+  'circle-play': [
+    'multimedia'
   ],
-  "circle-plus": [
-    "math",
-    "development",
-    "cursors",
-    "gaming"
+  'circle-plus': [
+    'math',
+    'development',
+    'cursors',
+    'gaming'
   ],
-  "circle-pound-sterling": [
-    "finance"
+  'circle-pound-sterling': [
+    'finance'
   ],
-  "circle-power": [
-    "connectivity"
+  'circle-power': [
+    'connectivity'
   ],
-  "circle-question-mark": [
-    "accessibility",
-    "text",
-    "notifications"
+  'circle-question-mark': [
+    'accessibility',
+    'text',
+    'notifications'
   ],
-  "circle-slash-2": [
-    "shapes",
-    "math",
-    "development"
+  'circle-slash-2': [
+    'shapes',
+    'math',
+    'development'
   ],
-  "circle-slash": [
-    "development",
-    "math"
+  'circle-slash': [
+    'development',
+    'math'
   ],
-  "circle-small": [
-    "shapes",
-    "medical"
+  'circle-small': [
+    'shapes',
+    'medical'
   ],
-  "circle-star": [
-    "sports",
-    "gaming"
+  'circle-star': [
+    'sports',
+    'gaming'
   ],
-  "circle-stop": [
-    "multimedia"
+  'circle-stop': [
+    'multimedia'
   ],
-  "circle-user-round": [
-    "account"
+  'circle-user-round': [
+    'account'
   ],
-  "circle-user": [
-    "account"
+  'circle-user': [
+    'account'
   ],
-  "circle-x": [
-    "math",
-    "development"
+  'circle-x': [
+    'math',
+    'development'
   ],
-  "circle": [
-    "shapes"
+  'circle': [
+    'shapes'
   ],
-  "circuit-board": [
-    "science",
-    "development"
+  'circuit-board': [
+    'science',
+    'development'
   ],
-  "citrus": [
-    "food-beverage"
+  'citrus': [
+    'food-beverage'
   ],
-  "clapperboard": [
-    "multimedia"
+  'clapperboard': [
+    'multimedia'
   ],
-  "clipboard-check": [
-    "text"
+  'clipboard-check': [
+    'text'
   ],
-  "clipboard-clock": [
-    "time",
-    "text"
+  'clipboard-clock': [
+    'time',
+    'text'
   ],
-  "clipboard-copy": [
-    "text",
-    "arrows"
+  'clipboard-copy': [
+    'text',
+    'arrows'
   ],
-  "clipboard-list": [
-    "text"
+  'clipboard-list': [
+    'text'
   ],
-  "clipboard-minus": [
-    "text",
-    "medical"
+  'clipboard-minus': [
+    'text',
+    'medical'
   ],
-  "clipboard-paste": [
-    "text",
-    "arrows"
+  'clipboard-paste': [
+    'text',
+    'arrows'
   ],
-  "clipboard-pen-line": [
-    "text"
+  'clipboard-pen-line': [
+    'text'
   ],
-  "clipboard-pen": [
-    "text"
+  'clipboard-pen': [
+    'text'
   ],
-  "clipboard-plus": [
-    "text",
-    "medical"
+  'clipboard-plus': [
+    'text',
+    'medical'
   ],
-  "clipboard-type": [
-    "text"
+  'clipboard-type': [
+    'text'
   ],
-  "clipboard-x": [
-    "text"
+  'clipboard-x': [
+    'text'
   ],
-  "clipboard": [
-    "text"
+  'clipboard': [
+    'text'
   ],
-  "clock-1": [
-    "time"
+  'clock-1': [
+    'time'
   ],
-  "clock-10": [
-    "time"
+  'clock-10': [
+    'time'
   ],
-  "clock-11": [
-    "time"
+  'clock-11': [
+    'time'
   ],
-  "clock-12": [
-    "time"
+  'clock-12': [
+    'time'
   ],
-  "clock-2": [
-    "time"
+  'clock-2': [
+    'time'
   ],
-  "clock-3": [
-    "time"
+  'clock-3': [
+    'time'
   ],
-  "clock-4": [
-    "time"
+  'clock-4': [
+    'time'
   ],
-  "clock-5": [
-    "time"
+  'clock-5': [
+    'time'
   ],
-  "clock-6": [
-    "time"
+  'clock-6': [
+    'time'
   ],
-  "clock-7": [
-    "time"
+  'clock-7': [
+    'time'
   ],
-  "clock-8": [
-    "time"
+  'clock-8': [
+    'time'
   ],
-  "clock-9": [
-    "time"
+  'clock-9': [
+    'time'
   ],
-  "clock-alert": [
-    "time"
+  'clock-alert': [
+    'time'
   ],
-  "clock-arrow-down": [
-    "time"
+  'clock-arrow-down': [
+    'time'
   ],
-  "clock-arrow-up": [
-    "time"
+  'clock-arrow-up': [
+    'time'
   ],
-  "clock-fading": [
-    "time"
+  'clock-fading': [
+    'time'
   ],
-  "clock-plus": [
-    "time"
+  'clock-plus': [
+    'time'
   ],
-  "clock": [
-    "time"
+  'clock': [
+    'time'
   ],
-  "closed-caption": [
-    "accessibility",
-    "multimedia"
+  'closed-caption': [
+    'accessibility',
+    'multimedia'
   ],
-  "cloud-alert": [
-    "development"
+  'cloud-alert': [
+    'development'
   ],
-  "cloud-check": [
-    "development"
+  'cloud-check': [
+    'development'
   ],
-  "cloud-cog": [
-    "development"
+  'cloud-cog': [
+    'development'
   ],
-  "cloud-download": [
-    "arrows",
-    "files"
+  'cloud-download': [
+    'arrows',
+    'files'
   ],
-  "cloud-drizzle": [
-    "weather"
+  'cloud-drizzle': [
+    'weather'
   ],
-  "cloud-fog": [
-    "weather"
+  'cloud-fog': [
+    'weather'
   ],
-  "cloud-hail": [
-    "weather"
+  'cloud-hail': [
+    'weather'
   ],
-  "cloud-lightning": [
-    "weather"
+  'cloud-lightning': [
+    'weather'
   ],
-  "cloud-moon-rain": [
-    "weather"
+  'cloud-moon-rain': [
+    'weather'
   ],
-  "cloud-moon": [
-    "weather"
+  'cloud-moon': [
+    'weather'
   ],
-  "cloud-off": [
-    "connectivity",
-    "weather"
+  'cloud-off': [
+    'connectivity',
+    'weather'
   ],
-  "cloud-rain-wind": [
-    "weather"
+  'cloud-rain-wind': [
+    'weather'
   ],
-  "cloud-rain": [
-    "weather"
+  'cloud-rain': [
+    'weather'
   ],
-  "cloud-snow": [
-    "weather"
+  'cloud-snow': [
+    'weather'
   ],
-  "cloud-sun-rain": [
-    "weather"
+  'cloud-sun-rain': [
+    'weather'
   ],
-  "cloud-sun": [
-    "weather"
+  'cloud-sun': [
+    'weather'
   ],
-  "cloud-upload": [
-    "arrows",
-    "files"
+  'cloud-upload': [
+    'arrows',
+    'files'
   ],
-  "cloud": [
-    "weather"
+  'cloud': [
+    'weather'
   ],
-  "cloudy": [
-    "weather"
+  'cloudy': [
+    'weather'
   ],
-  "clover": [
-    "gaming"
+  'clover': [
+    'gaming'
   ],
-  "club": [
-    "shapes",
-    "gaming"
+  'club': [
+    'shapes',
+    'gaming'
   ],
-  "code-xml": [
-    "text",
-    "development"
+  'code-xml': [
+    'text',
+    'development'
   ],
-  "code": [
-    "text",
-    "development"
+  'code': [
+    'text',
+    'development'
   ],
-  "codepen": [
-    "brands",
-    "development"
+  'codepen': [
+    'brands',
+    'development'
   ],
-  "codesandbox": [
-    "brands",
-    "development"
+  'codesandbox': [
+    'brands',
+    'development'
   ],
-  "coffee": [
-    "food-beverage"
+  'coffee': [
+    'food-beverage'
   ],
-  "cog": [
-    "account"
+  'cog': [
+    'account'
   ],
-  "coins": [
-    "gaming"
+  'coins': [
+    'gaming'
   ],
-  "columns-2": [
-    "layout",
-    "design",
-    "text"
+  'columns-2': [
+    'layout',
+    'design',
+    'text'
   ],
-  "columns-3-cog": [
-    "layout",
-    "design"
+  'columns-3-cog': [
+    'layout',
+    'design'
   ],
-  "columns-3": [
-    "layout",
-    "design",
-    "text"
+  'columns-3': [
+    'layout',
+    'design',
+    'text'
   ],
-  "columns-4": [
-    "layout",
-    "design",
-    "text",
-    "security"
+  'columns-4': [
+    'layout',
+    'design',
+    'text',
+    'security'
   ],
-  "combine": [
-    "development",
-    "files"
+  'combine': [
+    'development',
+    'files'
   ],
-  "command": [
-    "development"
+  'command': [
+    'development'
   ],
-  "compass": [
-    "navigation",
-    "travel"
+  'compass': [
+    'navigation',
+    'travel'
   ],
-  "component": [
-    "design",
-    "development"
+  'component': [
+    'design',
+    'development'
   ],
-  "computer": [
-    "devices",
-    "development",
-    "gaming"
+  'computer': [
+    'devices',
+    'development',
+    'gaming'
   ],
-  "concierge-bell": [
-    "travel"
+  'concierge-bell': [
+    'travel'
   ],
-  "cone": [
-    "shapes",
-    "math"
+  'cone': [
+    'shapes',
+    'math'
   ],
-  "construction": [
-    "development"
+  'construction': [
+    'development'
   ],
-  "contact-round": [
-    "account",
-    "connectivity",
-    "communication",
-    "social"
+  'contact-round': [
+    'account',
+    'connectivity',
+    'communication',
+    'social'
   ],
-  "contact": [
-    "account",
-    "connectivity",
-    "communication",
-    "social"
+  'contact': [
+    'account',
+    'connectivity',
+    'communication',
+    'social'
   ],
-  "container": [
-    "development",
-    "transportation",
-    "mail"
+  'container': [
+    'development',
+    'transportation',
+    'mail'
   ],
-  "contrast": [
-    "photography",
-    "accessibility",
-    "design"
+  'contrast': [
+    'photography',
+    'accessibility',
+    'design'
   ],
-  "cookie": [
-    "account",
-    "food-beverage"
+  'cookie': [
+    'account',
+    'food-beverage'
   ],
-  "cooking-pot": [
-    "food-beverage",
-    "home"
+  'cooking-pot': [
+    'food-beverage',
+    'home'
   ],
-  "copy-check": [
-    "text",
-    "notifications"
+  'copy-check': [
+    'text',
+    'notifications'
   ],
-  "copy-minus": [
-    "text",
-    "math"
+  'copy-minus': [
+    'text',
+    'math'
   ],
-  "copy-plus": [
-    "text",
-    "math"
+  'copy-plus': [
+    'text',
+    'math'
   ],
-  "copy-slash": [
-    "text",
-    "development",
-    "math"
+  'copy-slash': [
+    'text',
+    'development',
+    'math'
   ],
-  "copy-x": [
-    "notifications",
-    "math"
+  'copy-x': [
+    'notifications',
+    'math'
   ],
-  "copy": [
-    "text"
+  'copy': [
+    'text'
   ],
-  "copyleft": [
-    "text"
+  'copyleft': [
+    'text'
   ],
-  "copyright": [
-    "text"
+  'copyright': [
+    'text'
   ],
-  "corner-down-left": [
-    "arrows"
+  'corner-down-left': [
+    'arrows'
   ],
-  "corner-down-right": [
-    "arrows",
-    "text",
-    "development"
+  'corner-down-right': [
+    'arrows',
+    'text',
+    'development'
   ],
-  "corner-left-down": [
-    "arrows"
+  'corner-left-down': [
+    'arrows'
   ],
-  "corner-left-up": [
-    "arrows"
+  'corner-left-up': [
+    'arrows'
   ],
-  "corner-right-down": [
-    "arrows"
+  'corner-right-down': [
+    'arrows'
   ],
-  "corner-right-up": [
-    "arrows"
+  'corner-right-up': [
+    'arrows'
   ],
-  "corner-up-left": [
-    "arrows"
+  'corner-up-left': [
+    'arrows'
   ],
-  "corner-up-right": [
-    "arrows"
+  'corner-up-right': [
+    'arrows'
   ],
-  "cpu": [
-    "devices"
+  'cpu': [
+    'devices'
   ],
-  "creative-commons": [
-    "text"
+  'creative-commons': [
+    'text'
   ],
-  "credit-card": [
-    "account",
-    "finance"
+  'credit-card': [
+    'account',
+    'finance'
   ],
-  "croissant": [
-    "food-beverage"
+  'croissant': [
+    'food-beverage'
   ],
-  "crop": [
-    "photography",
-    "design"
+  'crop': [
+    'photography',
+    'design'
   ],
-  "cross": [
-    "shapes"
+  'cross': [
+    'shapes'
   ],
-  "crosshair": [
-    "photography"
+  'crosshair': [
+    'photography'
   ],
-  "crown": [
-    "gaming"
+  'crown': [
+    'gaming'
   ],
-  "cuboid": [
-    "shapes",
-    "math",
-    "buildings"
+  'cuboid': [
+    'shapes',
+    'math',
+    'buildings'
   ],
-  "cup-soda": [
-    "food-beverage"
+  'cup-soda': [
+    'food-beverage'
   ],
-  "currency": [
-    "finance"
+  'currency': [
+    'finance'
   ],
-  "cylinder": [
-    "shapes",
-    "design",
-    "math"
+  'cylinder': [
+    'shapes',
+    'design',
+    'math'
   ],
-  "dam": [
-    "buildings",
-    "sustainability"
+  'dam': [
+    'buildings',
+    'sustainability'
   ],
-  "database-backup": [
-    "devices",
-    "arrows",
-    "design",
-    "development",
-    "photography"
+  'database-backup': [
+    'devices',
+    'arrows',
+    'design',
+    'development',
+    'photography'
   ],
-  "database-zap": [
-    "devices",
-    "development"
+  'database-zap': [
+    'devices',
+    'development'
   ],
-  "database": [
-    "devices",
-    "development"
+  'database': [
+    'devices',
+    'development'
   ],
-  "decimals-arrow-left": [
-    "design",
-    "text",
-    "arrows",
-    "math"
+  'decimals-arrow-left': [
+    'design',
+    'text',
+    'arrows',
+    'math'
   ],
-  "decimals-arrow-right": [
-    "design",
-    "text",
-    "arrows",
-    "math"
+  'decimals-arrow-right': [
+    'design',
+    'text',
+    'arrows',
+    'math'
   ],
-  "delete": [
-    "text",
-    "arrows"
+  'delete': [
+    'text',
+    'arrows'
   ],
-  "dessert": [
-    "food-beverage"
+  'dessert': [
+    'food-beverage'
   ],
-  "diameter": [
-    "shapes",
-    "math",
-    "design",
-    "tools"
+  'diameter': [
+    'shapes',
+    'math',
+    'design',
+    'tools'
   ],
-  "diamond-minus": [
-    "multimedia",
-    "photography",
-    "tools",
-    "devices"
+  'diamond-minus': [
+    'multimedia',
+    'photography',
+    'tools',
+    'devices'
   ],
-  "diamond-percent": [
-    "social",
-    "finance",
-    "shopping",
-    "math"
+  'diamond-percent': [
+    'social',
+    'finance',
+    'shopping',
+    'math'
   ],
-  "diamond-plus": [
-    "multimedia",
-    "photography",
-    "tools",
-    "devices"
+  'diamond-plus': [
+    'multimedia',
+    'photography',
+    'tools',
+    'devices'
   ],
-  "diamond": [
-    "shapes",
-    "gaming"
+  'diamond': [
+    'shapes',
+    'gaming'
   ],
-  "dice-1": [
-    "gaming"
+  'dice-1': [
+    'gaming'
   ],
-  "dice-2": [
-    "gaming"
+  'dice-2': [
+    'gaming'
   ],
-  "dice-3": [
-    "gaming"
+  'dice-3': [
+    'gaming'
   ],
-  "dice-4": [
-    "gaming"
+  'dice-4': [
+    'gaming'
   ],
-  "dice-5": [
-    "gaming"
+  'dice-5': [
+    'gaming'
   ],
-  "dice-6": [
-    "gaming"
+  'dice-6': [
+    'gaming'
   ],
-  "dices": [
-    "gaming"
+  'dices': [
+    'gaming'
   ],
-  "diff": [
-    "development",
-    "files"
+  'diff': [
+    'development',
+    'files'
   ],
-  "disc-2": [
-    "devices",
-    "multimedia"
+  'disc-2': [
+    'devices',
+    'multimedia'
   ],
-  "disc-3": [
-    "devices",
-    "multimedia"
+  'disc-3': [
+    'devices',
+    'multimedia'
   ],
-  "disc-album": [
-    "devices",
-    "multimedia"
+  'disc-album': [
+    'devices',
+    'multimedia'
   ],
-  "disc": [
-    "devices",
-    "multimedia"
+  'disc': [
+    'devices',
+    'multimedia'
   ],
-  "divide": [
-    "math",
-    "development"
+  'divide': [
+    'math',
+    'development'
   ],
-  "dna-off": [
-    "medical",
-    "food-beverage"
+  'dna-off': [
+    'medical',
+    'food-beverage'
   ],
-  "dna": [
-    "medical"
+  'dna': [
+    'medical'
   ],
-  "dock": [
-    "layout",
-    "design",
-    "development",
-    "files"
+  'dock': [
+    'layout',
+    'design',
+    'development',
+    'files'
   ],
-  "dog": [
-    "animals"
+  'dog': [
+    'animals'
   ],
-  "dollar-sign": [
-    "finance"
+  'dollar-sign': [
+    'finance'
   ],
-  "donut": [
-    "food-beverage"
+  'donut': [
+    'food-beverage'
   ],
-  "door-closed-locked": [
-    "home",
-    "travel",
-    "security"
+  'door-closed-locked': [
+    'home',
+    'travel',
+    'security'
   ],
-  "door-closed": [
-    "home",
-    "travel",
-    "security"
+  'door-closed': [
+    'home',
+    'travel',
+    'security'
   ],
-  "door-open": [
-    "home",
-    "travel",
-    "security"
+  'door-open': [
+    'home',
+    'travel',
+    'security'
   ],
-  "dot": [
-    "shapes",
-    "text"
+  'dot': [
+    'shapes',
+    'text'
   ],
-  "download": [
-    "arrows",
-    "files"
+  'download': [
+    'arrows',
+    'files'
   ],
-  "drafting-compass": [
-    "math",
-    "design",
-    "tools"
+  'drafting-compass': [
+    'math',
+    'design',
+    'tools'
   ],
-  "drama": [
-    "multimedia"
+  'drama': [
+    'multimedia'
   ],
-  "dribbble": [
-    "brands",
-    "social",
-    "design"
+  'dribbble': [
+    'brands',
+    'social',
+    'design'
   ],
-  "drill": [
-    "tools",
-    "home",
-    "devices"
+  'drill': [
+    'tools',
+    'home',
+    'devices'
   ],
-  "drone": [
-    "transportation",
-    "devices"
+  'drone': [
+    'transportation',
+    'devices'
   ],
-  "droplet-off": [
-    "weather",
-    "gaming"
+  'droplet-off': [
+    'weather',
+    'gaming'
   ],
-  "droplet": [
-    "weather",
-    "gaming"
+  'droplet': [
+    'weather',
+    'gaming'
   ],
-  "droplets": [
-    "weather"
+  'droplets': [
+    'weather'
   ],
-  "drum": [
-    "multimedia",
-    "devices"
+  'drum': [
+    'multimedia',
+    'devices'
   ],
-  "drumstick": [
-    "food-beverage"
+  'drumstick': [
+    'food-beverage'
   ],
-  "dumbbell": [
-    "navigation",
-    "sports"
+  'dumbbell': [
+    'navigation',
+    'sports'
   ],
-  "ear-off": [
-    "medical",
-    "accessibility"
+  'ear-off': [
+    'medical',
+    'accessibility'
   ],
-  "ear": [
-    "medical",
-    "accessibility"
+  'ear': [
+    'medical',
+    'accessibility'
   ],
-  "earth-lock": [
-    "security",
-    "development",
-    "devices"
+  'earth-lock': [
+    'security',
+    'development',
+    'devices'
   ],
-  "earth": [
-    "navigation"
+  'earth': [
+    'navigation'
   ],
-  "eclipse": [
-    "science",
-    "design",
-    "development",
-    "accessibility",
-    "photography"
+  'eclipse': [
+    'science',
+    'design',
+    'development',
+    'accessibility',
+    'photography'
   ],
-  "egg-fried": [
-    "food-beverage"
+  'egg-fried': [
+    'food-beverage'
   ],
-  "egg-off": [
-    "food-beverage"
+  'egg-off': [
+    'food-beverage'
   ],
-  "egg": [
-    "food-beverage",
-    "animals"
+  'egg': [
+    'food-beverage',
+    'animals'
   ],
-  "ellipsis-vertical": [
-    "layout"
+  'ellipsis-vertical': [
+    'layout'
   ],
-  "ellipsis": [
-    "layout",
-    "development"
+  'ellipsis': [
+    'layout',
+    'development'
   ],
-  "equal-approximately": [
-    "math"
+  'equal-approximately': [
+    'math'
   ],
-  "equal-not": [
-    "math",
-    "development"
+  'equal-not': [
+    'math',
+    'development'
   ],
-  "equal": [
-    "math",
-    "development"
+  'equal': [
+    'math',
+    'development'
   ],
-  "eraser": [
-    "text"
+  'eraser': [
+    'text'
   ],
-  "ethernet-port": [
-    "communication",
-    "devices",
-    "multimedia",
-    "gaming"
+  'ethernet-port': [
+    'communication',
+    'devices',
+    'multimedia',
+    'gaming'
   ],
-  "euro": [
-    "finance"
+  'euro': [
+    'finance'
   ],
-  "ev-charger": [
-    "transportation",
-    "navigation"
+  'ev-charger': [
+    'transportation',
+    'navigation'
   ],
-  "expand": [
-    "text",
-    "arrows"
+  'expand': [
+    'text',
+    'arrows'
   ],
-  "external-link": [
-    "arrows",
-    "text",
-    "social"
+  'external-link': [
+    'arrows',
+    'text',
+    'social'
   ],
-  "eye-closed": [
-    "accessibility",
-    "photography",
-    "design",
-    "security"
+  'eye-closed': [
+    'accessibility',
+    'photography',
+    'design',
+    'security'
   ],
-  "eye-off": [
-    "accessibility",
-    "photography",
-    "design",
-    "security"
+  'eye-off': [
+    'accessibility',
+    'photography',
+    'design',
+    'security'
   ],
-  "eye": [
-    "accessibility",
-    "photography",
-    "design",
-    "security"
+  'eye': [
+    'accessibility',
+    'photography',
+    'design',
+    'security'
   ],
-  "facebook": [
-    "social",
-    "brands"
+  'facebook': [
+    'social',
+    'brands'
   ],
-  "factory": [
-    "buildings"
+  'factory': [
+    'buildings'
   ],
-  "fan": [
-    "home"
+  'fan': [
+    'home'
   ],
-  "fast-forward": [
-    "multimedia",
-    "arrows"
+  'fast-forward': [
+    'multimedia',
+    'arrows'
   ],
-  "feather": [
-    "gaming"
+  'feather': [
+    'gaming'
   ],
-  "fence": [
-    "home",
-    "buildings"
+  'fence': [
+    'home',
+    'buildings'
   ],
-  "ferris-wheel": [
-    "navigation"
+  'ferris-wheel': [
+    'navigation'
   ],
-  "figma": [
-    "brands",
-    "design"
+  'figma': [
+    'brands',
+    'design'
   ],
-  "file-archive": [
-    "files"
+  'file-archive': [
+    'files'
   ],
-  "file-audio-2": [
-    "files"
+  'file-audio-2': [
+    'files'
   ],
-  "file-audio": [
-    "files"
+  'file-audio': [
+    'files'
   ],
-  "file-axis-3d": [
-    "design",
-    "files"
+  'file-axis-3d': [
+    'design',
+    'files'
   ],
-  "file-badge-2": [
-    "files"
+  'file-badge-2': [
+    'files'
   ],
-  "file-badge": [
-    "files"
+  'file-badge': [
+    'files'
   ],
-  "file-box": [
-    "files"
+  'file-box': [
+    'files'
   ],
-  "file-chart-column-increasing": [
-    "files"
+  'file-chart-column-increasing': [
+    'files'
   ],
-  "file-chart-column": [
-    "files"
+  'file-chart-column': [
+    'files'
   ],
-  "file-chart-line": [
-    "files"
+  'file-chart-line': [
+    'files'
   ],
-  "file-chart-pie": [
-    "files"
+  'file-chart-pie': [
+    'files'
   ],
-  "file-check-2": [
-    "files"
+  'file-check-2': [
+    'files'
   ],
-  "file-check": [
-    "files"
+  'file-check': [
+    'files'
   ],
-  "file-clock": [
-    "files",
-    "time"
+  'file-clock': [
+    'files',
+    'time'
   ],
-  "file-code-2": [
-    "files",
-    "development"
+  'file-code-2': [
+    'files',
+    'development'
   ],
-  "file-code": [
-    "files",
-    "development"
+  'file-code': [
+    'files',
+    'development'
   ],
-  "file-cog": [
-    "files"
+  'file-cog': [
+    'files'
   ],
-  "file-diff": [
-    "files",
-    "development"
+  'file-diff': [
+    'files',
+    'development'
   ],
-  "file-digit": [
-    "files",
-    "development"
+  'file-digit': [
+    'files',
+    'development'
   ],
-  "file-down": [
-    "files",
-    "arrows"
+  'file-down': [
+    'files',
+    'arrows'
   ],
-  "file-heart": [
-    "files"
+  'file-heart': [
+    'files'
   ],
-  "file-image": [
-    "files"
+  'file-image': [
+    'files'
   ],
-  "file-input": [
-    "files",
-    "arrows"
+  'file-input': [
+    'files',
+    'arrows'
   ],
-  "file-json-2": [
-    "files",
-    "development"
+  'file-json-2': [
+    'files',
+    'development'
   ],
-  "file-json": [
-    "files",
-    "development"
+  'file-json': [
+    'files',
+    'development'
   ],
-  "file-key-2": [
-    "files",
-    "security"
+  'file-key-2': [
+    'files',
+    'security'
   ],
-  "file-key": [
-    "files",
-    "security"
+  'file-key': [
+    'files',
+    'security'
   ],
-  "file-lock-2": [
-    "files",
-    "security"
+  'file-lock-2': [
+    'files',
+    'security'
   ],
-  "file-lock": [
-    "files",
-    "security"
+  'file-lock': [
+    'files',
+    'security'
   ],
-  "file-minus-2": [
-    "files"
+  'file-minus-2': [
+    'files'
   ],
-  "file-minus": [
-    "files"
+  'file-minus': [
+    'files'
   ],
-  "file-music": [
-    "files",
-    "multimedia"
+  'file-music': [
+    'files',
+    'multimedia'
   ],
-  "file-output": [
-    "files",
-    "arrows"
+  'file-output': [
+    'files',
+    'arrows'
   ],
-  "file-pen-line": [
-    "files"
+  'file-pen-line': [
+    'files'
   ],
-  "file-pen": [
-    "files"
+  'file-pen': [
+    'files'
   ],
-  "file-play": [
-    "files"
+  'file-play': [
+    'files'
   ],
-  "file-plus-2": [
-    "files"
+  'file-plus-2': [
+    'files'
   ],
-  "file-plus": [
-    "files"
+  'file-plus': [
+    'files'
   ],
-  "file-question-mark": [
-    "files"
+  'file-question-mark': [
+    'files'
   ],
-  "file-scan": [
-    "files"
+  'file-scan': [
+    'files'
   ],
-  "file-search-2": [
-    "files"
+  'file-search-2': [
+    'files'
   ],
-  "file-search": [
-    "files"
+  'file-search': [
+    'files'
   ],
-  "file-sliders": [
-    "files",
-    "development"
+  'file-sliders': [
+    'files',
+    'development'
   ],
-  "file-spreadsheet": [
-    "files"
+  'file-spreadsheet': [
+    'files'
   ],
-  "file-stack": [
-    "files",
-    "development"
+  'file-stack': [
+    'files',
+    'development'
   ],
-  "file-symlink": [
-    "files"
+  'file-symlink': [
+    'files'
   ],
-  "file-terminal": [
-    "files",
-    "development"
+  'file-terminal': [
+    'files',
+    'development'
   ],
-  "file-text": [
-    "files",
-    "text"
+  'file-text': [
+    'files',
+    'text'
   ],
-  "file-type-2": [
-    "files",
-    "text"
+  'file-type-2': [
+    'files',
+    'text'
   ],
-  "file-type": [
-    "files",
-    "text"
+  'file-type': [
+    'files',
+    'text'
   ],
-  "file-up": [
-    "files",
-    "arrows"
+  'file-up': [
+    'files',
+    'arrows'
   ],
-  "file-user": [
-    "account",
-    "files"
+  'file-user': [
+    'account',
+    'files'
   ],
-  "file-video-camera": [
-    "files"
+  'file-video-camera': [
+    'files'
   ],
-  "file-volume-2": [
-    "files"
+  'file-volume-2': [
+    'files'
   ],
-  "file-volume": [
-    "files"
+  'file-volume': [
+    'files'
   ],
-  "file-warning": [
-    "files",
-    "notifications"
+  'file-warning': [
+    'files',
+    'notifications'
   ],
-  "file-x-2": [
-    "files"
+  'file-x-2': [
+    'files'
   ],
-  "file-x": [
-    "files"
+  'file-x': [
+    'files'
   ],
-  "file": [
-    "files"
+  'file': [
+    'files'
   ],
-  "files": [
-    "files"
+  'files': [
+    'files'
   ],
-  "film": [
-    "photography",
-    "multimedia"
+  'film': [
+    'photography',
+    'multimedia'
   ],
-  "fingerprint": [
-    "account",
-    "security",
-    "medical",
-    "devices"
+  'fingerprint': [
+    'account',
+    'security',
+    'medical',
+    'devices'
   ],
-  "fire-extinguisher": [
-    "home",
-    "tools",
-    "travel"
+  'fire-extinguisher': [
+    'home',
+    'tools',
+    'travel'
   ],
-  "fish-off": [
-    "food-beverage",
-    "animals"
+  'fish-off': [
+    'food-beverage',
+    'animals'
   ],
-  "fish-symbol": [
-    "food-beverage",
-    "animals"
+  'fish-symbol': [
+    'food-beverage',
+    'animals'
   ],
-  "fish": [
-    "food-beverage",
-    "animals"
+  'fish': [
+    'food-beverage',
+    'animals'
   ],
-  "flag-off": [
-    "account",
-    "social"
+  'flag-off': [
+    'account',
+    'social'
   ],
-  "flag-triangle-left": [
-    "development",
-    "navigation"
+  'flag-triangle-left': [
+    'development',
+    'navigation'
   ],
-  "flag-triangle-right": [
-    "development",
-    "navigation"
+  'flag-triangle-right': [
+    'development',
+    'navigation'
   ],
-  "flag": [
-    "account",
-    "social"
+  'flag': [
+    'account',
+    'social'
   ],
-  "flame-kindling": [
-    "nature",
-    "social",
-    "gaming"
+  'flame-kindling': [
+    'nature',
+    'social',
+    'gaming'
   ],
-  "flame": [
-    "weather",
-    "social",
-    "gaming"
+  'flame': [
+    'weather',
+    'social',
+    'gaming'
   ],
-  "flashlight-off": [
-    "photography",
-    "devices"
+  'flashlight-off': [
+    'photography',
+    'devices'
   ],
-  "flashlight": [
-    "photography",
-    "devices"
+  'flashlight': [
+    'photography',
+    'devices'
   ],
-  "flask-conical-off": [
-    "science",
-    "gaming"
+  'flask-conical-off': [
+    'science',
+    'gaming'
   ],
-  "flask-conical": [
-    "science",
-    "gaming"
+  'flask-conical': [
+    'science',
+    'gaming'
   ],
-  "flask-round": [
-    "science",
-    "gaming"
+  'flask-round': [
+    'science',
+    'gaming'
   ],
-  "flip-horizontal-2": [
-    "design",
-    "photography"
+  'flip-horizontal-2': [
+    'design',
+    'photography'
   ],
-  "flip-horizontal": [
-    "design",
-    "photography"
+  'flip-horizontal': [
+    'design',
+    'photography'
   ],
-  "flip-vertical-2": [
-    "design",
-    "photography"
+  'flip-vertical-2': [
+    'design',
+    'photography'
   ],
-  "flip-vertical": [
-    "design",
-    "photography"
+  'flip-vertical': [
+    'design',
+    'photography'
   ],
-  "flower-2": [
-    "nature",
-    "sustainability",
-    "seasons"
+  'flower-2': [
+    'nature',
+    'sustainability',
+    'seasons'
   ],
-  "flower": [
-    "nature",
-    "gaming",
-    "sustainability"
+  'flower': [
+    'nature',
+    'gaming',
+    'sustainability'
   ],
-  "focus": [
-    "photography"
+  'focus': [
+    'photography'
   ],
-  "fold-horizontal": [
-    "arrows",
-    "layout"
+  'fold-horizontal': [
+    'arrows',
+    'layout'
   ],
-  "fold-vertical": [
-    "arrows",
-    "layout"
+  'fold-vertical': [
+    'arrows',
+    'layout'
   ],
-  "folder-archive": [
-    "files"
+  'folder-archive': [
+    'files'
   ],
-  "folder-check": [
-    "files"
+  'folder-check': [
+    'files'
   ],
-  "folder-clock": [
-    "files",
-    "time"
+  'folder-clock': [
+    'files',
+    'time'
   ],
-  "folder-closed": [
-    "files"
+  'folder-closed': [
+    'files'
   ],
-  "folder-code": [
-    "files",
-    "development"
+  'folder-code': [
+    'files',
+    'development'
   ],
-  "folder-cog": [
-    "files"
+  'folder-cog': [
+    'files'
   ],
-  "folder-dot": [
-    "files",
-    "development"
+  'folder-dot': [
+    'files',
+    'development'
   ],
-  "folder-down": [
-    "files",
-    "arrows"
+  'folder-down': [
+    'files',
+    'arrows'
   ],
-  "folder-git-2": [
-    "files"
+  'folder-git-2': [
+    'files'
   ],
-  "folder-git": [
-    "files"
+  'folder-git': [
+    'files'
   ],
-  "folder-heart": [
-    "files"
+  'folder-heart': [
+    'files'
   ],
-  "folder-input": [
-    "files",
-    "arrows"
+  'folder-input': [
+    'files',
+    'arrows'
   ],
-  "folder-kanban": [
-    "charts",
-    "development",
-    "design",
-    "files"
+  'folder-kanban': [
+    'charts',
+    'development',
+    'design',
+    'files'
   ],
-  "folder-key": [
-    "files",
-    "security"
+  'folder-key': [
+    'files',
+    'security'
   ],
-  "folder-lock": [
-    "files",
-    "security"
+  'folder-lock': [
+    'files',
+    'security'
   ],
-  "folder-minus": [
-    "files"
+  'folder-minus': [
+    'files'
   ],
-  "folder-open-dot": [
-    "files",
-    "development"
+  'folder-open-dot': [
+    'files',
+    'development'
   ],
-  "folder-open": [
-    "files"
+  'folder-open': [
+    'files'
   ],
-  "folder-output": [
-    "files",
-    "arrows"
+  'folder-output': [
+    'files',
+    'arrows'
   ],
-  "folder-pen": [
-    "files"
+  'folder-pen': [
+    'files'
   ],
-  "folder-plus": [
-    "files"
+  'folder-plus': [
+    'files'
   ],
-  "folder-root": [
-    "files",
-    "development"
+  'folder-root': [
+    'files',
+    'development'
   ],
-  "folder-search-2": [
-    "files"
+  'folder-search-2': [
+    'files'
   ],
-  "folder-search": [
-    "files"
+  'folder-search': [
+    'files'
   ],
-  "folder-symlink": [
-    "files"
+  'folder-symlink': [
+    'files'
   ],
-  "folder-sync": [
-    "files",
-    "arrows"
+  'folder-sync': [
+    'files',
+    'arrows'
   ],
-  "folder-tree": [
-    "files"
+  'folder-tree': [
+    'files'
   ],
-  "folder-up": [
-    "files",
-    "arrows"
+  'folder-up': [
+    'files',
+    'arrows'
   ],
-  "folder-x": [
-    "files"
+  'folder-x': [
+    'files'
   ],
-  "folder": [
-    "files"
+  'folder': [
+    'files'
   ],
-  "folders": [
-    "files"
+  'folders': [
+    'files'
   ],
-  "footprints": [
-    "navigation"
+  'footprints': [
+    'navigation'
   ],
-  "forklift": [
-    "transportation"
+  'forklift': [
+    'transportation'
   ],
-  "forward": [
-    "mail"
+  'forward': [
+    'mail'
   ],
-  "frame": [
-    "design",
-    "photography"
+  'frame': [
+    'design',
+    'photography'
   ],
-  "framer": [
-    "brands",
-    "design"
+  'framer': [
+    'brands',
+    'design'
   ],
-  "frown": [
-    "emoji",
-    "account"
+  'frown': [
+    'emoji',
+    'account'
   ],
-  "fuel": [
-    "transportation",
-    "navigation"
+  'fuel': [
+    'transportation',
+    'navigation'
   ],
-  "fullscreen": [
-    "layout",
-    "multimedia",
-    "design",
-    "photography"
+  'fullscreen': [
+    'layout',
+    'multimedia',
+    'design',
+    'photography'
   ],
-  "funnel-plus": [
-    "layout"
+  'funnel-plus': [
+    'layout'
   ],
-  "funnel-x": [
-    "layout"
+  'funnel-x': [
+    'layout'
   ],
-  "funnel": [
-    "layout"
+  'funnel': [
+    'layout'
   ],
-  "gallery-horizontal-end": [
-    "layout",
-    "design",
-    "development",
-    "photography",
-    "multimedia",
-    "files"
+  'gallery-horizontal-end': [
+    'layout',
+    'design',
+    'development',
+    'photography',
+    'multimedia',
+    'files'
   ],
-  "gallery-horizontal": [
-    "layout",
-    "design",
-    "development",
-    "photography",
-    "multimedia"
+  'gallery-horizontal': [
+    'layout',
+    'design',
+    'development',
+    'photography',
+    'multimedia'
   ],
-  "gallery-thumbnails": [
-    "layout",
-    "design",
-    "development",
-    "photography",
-    "multimedia"
+  'gallery-thumbnails': [
+    'layout',
+    'design',
+    'development',
+    'photography',
+    'multimedia'
   ],
-  "gallery-vertical-end": [
-    "layout",
-    "design",
-    "development",
-    "photography",
-    "multimedia",
-    "files"
+  'gallery-vertical-end': [
+    'layout',
+    'design',
+    'development',
+    'photography',
+    'multimedia',
+    'files'
   ],
-  "gallery-vertical": [
-    "layout",
-    "design",
-    "development",
-    "photography",
-    "multimedia"
+  'gallery-vertical': [
+    'layout',
+    'design',
+    'development',
+    'photography',
+    'multimedia'
   ],
-  "gamepad-2": [
-    "gaming",
-    "devices"
+  'gamepad-2': [
+    'gaming',
+    'devices'
   ],
-  "gamepad": [
-    "gaming",
-    "devices"
+  'gamepad': [
+    'gaming',
+    'devices'
   ],
-  "gauge": [
-    "transportation",
-    "sports",
-    "science"
+  'gauge': [
+    'transportation',
+    'sports',
+    'science'
   ],
-  "gavel": [
-    "navigation",
-    "tools"
+  'gavel': [
+    'navigation',
+    'tools'
   ],
-  "gem": [
-    "gaming",
-    "development",
-    "finance"
+  'gem': [
+    'gaming',
+    'development',
+    'finance'
   ],
-  "georgian-lari": [
-    "finance"
+  'georgian-lari': [
+    'finance'
   ],
-  "ghost": [
-    "gaming"
+  'ghost': [
+    'gaming'
   ],
-  "gift": [
-    "gaming",
-    "account"
+  'gift': [
+    'gaming',
+    'account'
   ],
-  "git-branch-plus": [
-    "development"
+  'git-branch-plus': [
+    'development'
   ],
-  "git-branch": [
-    "development"
+  'git-branch': [
+    'development'
   ],
-  "git-commit-horizontal": [
-    "development",
-    "navigation"
+  'git-commit-horizontal': [
+    'development',
+    'navigation'
   ],
-  "git-commit-vertical": [
-    "development",
-    "navigation"
+  'git-commit-vertical': [
+    'development',
+    'navigation'
   ],
-  "git-compare-arrows": [
-    "development",
-    "arrows"
+  'git-compare-arrows': [
+    'development',
+    'arrows'
   ],
-  "git-compare": [
-    "development"
+  'git-compare': [
+    'development'
   ],
-  "git-fork": [
-    "development"
+  'git-fork': [
+    'development'
   ],
-  "git-graph": [
-    "development"
+  'git-graph': [
+    'development'
   ],
-  "git-merge": [
-    "development"
+  'git-merge': [
+    'development'
   ],
-  "git-pull-request-arrow": [
-    "development",
-    "arrows"
+  'git-pull-request-arrow': [
+    'development',
+    'arrows'
   ],
-  "git-pull-request-closed": [
-    "development"
+  'git-pull-request-closed': [
+    'development'
   ],
-  "git-pull-request-create-arrow": [
-    "development",
-    "arrows"
+  'git-pull-request-create-arrow': [
+    'development',
+    'arrows'
   ],
-  "git-pull-request-create": [
-    "development"
+  'git-pull-request-create': [
+    'development'
   ],
-  "git-pull-request-draft": [
-    "development"
+  'git-pull-request-draft': [
+    'development'
   ],
-  "git-pull-request": [
-    "development"
+  'git-pull-request': [
+    'development'
   ],
-  "github": [
-    "brands",
-    "development"
+  'github': [
+    'brands',
+    'development'
   ],
-  "gitlab": [
-    "brands",
-    "development"
+  'gitlab': [
+    'brands',
+    'development'
   ],
-  "glass-water": [
-    "food-beverage"
+  'glass-water': [
+    'food-beverage'
   ],
-  "glasses": [
-    "accessibility"
+  'glasses': [
+    'accessibility'
   ],
-  "globe-lock": [
-    "security",
-    "development",
-    "devices"
+  'globe-lock': [
+    'security',
+    'development',
+    'devices'
   ],
-  "globe": [
-    "navigation"
+  'globe': [
+    'navigation'
   ],
-  "goal": [
-    "gaming"
+  'goal': [
+    'gaming'
   ],
-  "gpu": [
-    "devices",
-    "gaming"
+  'gpu': [
+    'devices',
+    'gaming'
   ],
-  "graduation-cap": [
-    "buildings"
+  'graduation-cap': [
+    'buildings'
   ],
-  "grape": [
-    "food-beverage"
+  'grape': [
+    'food-beverage'
   ],
-  "grid-2x2-check": [
-    "text",
-    "layout",
-    "math"
+  'grid-2x2-check': [
+    'text',
+    'layout',
+    'math'
   ],
-  "grid-2x2-plus": [
-    "text",
-    "layout",
-    "math"
+  'grid-2x2-plus': [
+    'text',
+    'layout',
+    'math'
   ],
-  "grid-2x2-x": [
-    "text",
-    "layout",
-    "math"
+  'grid-2x2-x': [
+    'text',
+    'layout',
+    'math'
   ],
-  "grid-2x2": [
-    "text",
-    "layout",
-    "design",
-    "math"
+  'grid-2x2': [
+    'text',
+    'layout',
+    'design',
+    'math'
   ],
-  "grid-3x2": [
-    "text",
-    "math",
-    "layout",
-    "design"
+  'grid-3x2': [
+    'text',
+    'math',
+    'layout',
+    'design'
   ],
-  "grid-3x3": [
-    "text",
-    "layout",
-    "design"
+  'grid-3x3': [
+    'text',
+    'layout',
+    'design'
   ],
-  "grip-horizontal": [
-    "layout"
+  'grip-horizontal': [
+    'layout'
   ],
-  "grip-vertical": [
-    "layout"
+  'grip-vertical': [
+    'layout'
   ],
-  "grip": [
-    "layout"
+  'grip': [
+    'layout'
   ],
-  "group": [
-    "files"
+  'group': [
+    'files'
   ],
-  "guitar": [
-    "multimedia"
+  'guitar': [
+    'multimedia'
   ],
-  "ham": [
-    "food-beverage"
+  'ham': [
+    'food-beverage'
   ],
-  "hamburger": [
-    "food-beverage"
+  'hamburger': [
+    'food-beverage'
   ],
-  "hammer": [
-    "tools",
-    "home"
+  'hammer': [
+    'tools',
+    'home'
   ],
-  "hand-coins": [
-    "finance",
-    "account"
+  'hand-coins': [
+    'finance',
+    'account'
   ],
-  "hand-fist": [
-    "social",
-    "emoji",
-    "communication",
-    "sports"
+  'hand-fist': [
+    'social',
+    'emoji',
+    'communication',
+    'sports'
   ],
-  "hand-grab": [
-    "cursors",
-    "design",
-    "layout"
+  'hand-grab': [
+    'cursors',
+    'design',
+    'layout'
   ],
-  "hand-heart": [
-    "social"
+  'hand-heart': [
+    'social'
   ],
-  "hand-helping": [
-    "emoji"
+  'hand-helping': [
+    'emoji'
   ],
-  "hand-metal": [
-    "emoji",
-    "multimedia"
+  'hand-metal': [
+    'emoji',
+    'multimedia'
   ],
-  "hand-platter": [
-    "food-beverage",
-    "people"
+  'hand-platter': [
+    'food-beverage',
+    'people'
   ],
-  "hand": [
-    "cursors",
-    "accessibility"
+  'hand': [
+    'cursors',
+    'accessibility'
   ],
-  "handbag": [
-    "shopping",
-    "transportation"
+  'handbag': [
+    'shopping',
+    'transportation'
   ],
-  "handshake": [
-    "account",
-    "social",
-    "communication",
-    "finance",
-    "security"
+  'handshake': [
+    'account',
+    'social',
+    'communication',
+    'finance',
+    'security'
   ],
-  "hard-drive-download": [
-    "development",
-    "devices",
-    "arrows",
-    "files"
+  'hard-drive-download': [
+    'development',
+    'devices',
+    'arrows',
+    'files'
   ],
-  "hard-drive-upload": [
-    "development",
-    "devices",
-    "arrows",
-    "files"
+  'hard-drive-upload': [
+    'development',
+    'devices',
+    'arrows',
+    'files'
   ],
-  "hard-drive": [
-    "development",
-    "devices"
+  'hard-drive': [
+    'development',
+    'devices'
   ],
-  "hard-hat": [
-    "tools"
+  'hard-hat': [
+    'tools'
   ],
-  "hash": [
-    "text",
-    "social"
+  'hash': [
+    'text',
+    'social'
   ],
-  "hat-glasses": [
-    "social",
-    "account",
-    "security"
+  'hat-glasses': [
+    'social',
+    'account',
+    'security'
   ],
-  "haze": [
-    "weather"
+  'haze': [
+    'weather'
   ],
-  "hdmi-port": [
-    "devices",
-    "multimedia",
-    "gaming"
+  'hdmi-port': [
+    'devices',
+    'multimedia',
+    'gaming'
   ],
-  "heading-1": [
-    "text"
+  'heading-1': [
+    'text'
   ],
-  "heading-2": [
-    "text"
+  'heading-2': [
+    'text'
   ],
-  "heading-3": [
-    "text"
+  'heading-3': [
+    'text'
   ],
-  "heading-4": [
-    "text"
+  'heading-4': [
+    'text'
   ],
-  "heading-5": [
-    "text"
+  'heading-5': [
+    'text'
   ],
-  "heading-6": [
-    "text"
+  'heading-6': [
+    'text'
   ],
-  "heading": [
-    "text"
+  'heading': [
+    'text'
   ],
-  "headphone-off": [
-    "multimedia",
-    "connectivity",
-    "communication",
-    "devices",
-    "gaming"
+  'headphone-off': [
+    'multimedia',
+    'connectivity',
+    'communication',
+    'devices',
+    'gaming'
   ],
-  "headphones": [
-    "multimedia",
-    "connectivity",
-    "devices",
-    "files",
-    "gaming"
+  'headphones': [
+    'multimedia',
+    'connectivity',
+    'devices',
+    'files',
+    'gaming'
   ],
-  "headset": [
-    "multimedia",
-    "connectivity",
-    "devices",
-    "files",
-    "gaming"
+  'headset': [
+    'multimedia',
+    'connectivity',
+    'devices',
+    'files',
+    'gaming'
   ],
-  "heart-crack": [
-    "emoji"
+  'heart-crack': [
+    'emoji'
   ],
-  "heart-handshake": [
-    "emoji",
-    "account",
-    "security"
+  'heart-handshake': [
+    'emoji',
+    'account',
+    'security'
   ],
-  "heart-minus": [
-    "medical",
-    "account",
-    "multimedia",
-    "gaming",
-    "social"
+  'heart-minus': [
+    'medical',
+    'account',
+    'multimedia',
+    'gaming',
+    'social'
   ],
-  "heart-off": [
-    "social",
-    "multimedia"
+  'heart-off': [
+    'social',
+    'multimedia'
   ],
-  "heart-plus": [
-    "medical",
-    "account",
-    "multimedia",
-    "gaming",
-    "social"
+  'heart-plus': [
+    'medical',
+    'account',
+    'multimedia',
+    'gaming',
+    'social'
   ],
-  "heart-pulse": [
-    "medical"
+  'heart-pulse': [
+    'medical'
   ],
-  "heart": [
-    "medical",
-    "social",
-    "multimedia",
-    "emoji",
-    "gaming",
-    "shapes"
+  'heart': [
+    'medical',
+    'social',
+    'multimedia',
+    'emoji',
+    'gaming',
+    'shapes'
   ],
-  "heater": [
-    "home",
-    "devices",
-    "travel"
+  'heater': [
+    'home',
+    'devices',
+    'travel'
   ],
-  "hexagon": [
-    "shapes",
-    "brands",
-    "development"
+  'hexagon': [
+    'shapes',
+    'brands',
+    'development'
   ],
-  "highlighter": [
-    "text",
-    "design"
+  'highlighter': [
+    'text',
+    'design'
   ],
-  "history": [
-    "arrows",
-    "time"
+  'history': [
+    'arrows',
+    'time'
   ],
-  "hop-off": [
-    "food-beverage"
+  'hop-off': [
+    'food-beverage'
   ],
-  "hop": [
-    "food-beverage"
+  'hop': [
+    'food-beverage'
   ],
-  "hospital": [
-    "medical",
-    "buildings",
-    "navigation",
-    "travel"
+  'hospital': [
+    'medical',
+    'buildings',
+    'navigation',
+    'travel'
   ],
-  "hotel": [
-    "buildings",
-    "navigation",
-    "travel"
+  'hotel': [
+    'buildings',
+    'navigation',
+    'travel'
   ],
-  "hourglass": [
-    "time",
-    "gaming"
+  'hourglass': [
+    'time',
+    'gaming'
   ],
-  "house-heart": [
-    "home",
-    "buildings",
-    "medical"
+  'house-heart': [
+    'home',
+    'buildings',
+    'medical'
   ],
-  "house-plug": [
-    "buildings",
-    "home",
-    "sustainability"
+  'house-plug': [
+    'buildings',
+    'home',
+    'sustainability'
   ],
-  "house-plus": [
-    "buildings",
-    "medical"
+  'house-plus': [
+    'buildings',
+    'medical'
   ],
-  "house-wifi": [
-    "home",
-    "buildings",
-    "connectivity"
+  'house-wifi': [
+    'home',
+    'buildings',
+    'connectivity'
   ],
-  "house": [
-    "buildings",
-    "home"
+  'house': [
+    'buildings',
+    'home'
   ],
-  "ice-cream-bowl": [
-    "food-beverage"
+  'ice-cream-bowl': [
+    'food-beverage'
   ],
-  "ice-cream-cone": [
-    "food-beverage"
+  'ice-cream-cone': [
+    'food-beverage'
   ],
-  "id-card-lanyard": [
-    "security",
-    "account"
+  'id-card-lanyard': [
+    'security',
+    'account'
   ],
-  "id-card": [
-    "security",
-    "account"
+  'id-card': [
+    'security',
+    'account'
   ],
-  "image-down": [
-    "photography",
-    "text",
-    "multimedia",
-    "files"
+  'image-down': [
+    'photography',
+    'text',
+    'multimedia',
+    'files'
   ],
-  "image-minus": [
-    "photography",
-    "multimedia",
-    "files"
+  'image-minus': [
+    'photography',
+    'multimedia',
+    'files'
   ],
-  "image-off": [
-    "photography",
-    "multimedia",
-    "files"
+  'image-off': [
+    'photography',
+    'multimedia',
+    'files'
   ],
-  "image-play": [
-    "photography",
-    "text",
-    "multimedia",
-    "files"
+  'image-play': [
+    'photography',
+    'text',
+    'multimedia',
+    'files'
   ],
-  "image-plus": [
-    "photography",
-    "multimedia",
-    "files"
+  'image-plus': [
+    'photography',
+    'multimedia',
+    'files'
   ],
-  "image-up": [
-    "photography",
-    "text",
-    "multimedia",
-    "files"
+  'image-up': [
+    'photography',
+    'text',
+    'multimedia',
+    'files'
   ],
-  "image-upscale": [
-    "photography",
-    "multimedia"
+  'image-upscale': [
+    'photography',
+    'multimedia'
   ],
-  "image": [
-    "photography",
-    "text",
-    "multimedia",
-    "files"
+  'image': [
+    'photography',
+    'text',
+    'multimedia',
+    'files'
   ],
-  "images": [
-    "photography",
-    "text",
-    "multimedia",
-    "files"
+  'images': [
+    'photography',
+    'text',
+    'multimedia',
+    'files'
   ],
-  "import": [
-    "arrows",
-    "files"
+  'import': [
+    'arrows',
+    'files'
   ],
-  "inbox": [
-    "account",
-    "mail"
+  'inbox': [
+    'account',
+    'mail'
   ],
-  "indian-rupee": [
-    "finance"
+  'indian-rupee': [
+    'finance'
   ],
-  "infinity": [
-    "multimedia"
+  'infinity': [
+    'multimedia'
   ],
-  "info": [
-    "accessibility",
-    "notifications"
+  'info': [
+    'accessibility',
+    'notifications'
   ],
-  "inspection-panel": [
-    "tools"
+  'inspection-panel': [
+    'tools'
   ],
-  "instagram": [
-    "brands",
-    "social",
-    "photography"
+  'instagram': [
+    'brands',
+    'social',
+    'photography'
   ],
-  "italic": [
-    "text"
+  'italic': [
+    'text'
   ],
-  "iteration-ccw": [
-    "arrows",
-    "design"
+  'iteration-ccw': [
+    'arrows',
+    'design'
   ],
-  "iteration-cw": [
-    "arrows",
-    "design"
+  'iteration-cw': [
+    'arrows',
+    'design'
   ],
-  "japanese-yen": [
-    "finance"
+  'japanese-yen': [
+    'finance'
   ],
-  "joystick": [
-    "gaming",
-    "devices"
+  'joystick': [
+    'gaming',
+    'devices'
   ],
-  "kanban": [
-    "charts",
-    "development",
-    "design"
+  'kanban': [
+    'charts',
+    'development',
+    'design'
   ],
-  "kayak": [
-    "transportation"
+  'kayak': [
+    'transportation'
   ],
-  "key-round": [
-    "security",
-    "account"
+  'key-round': [
+    'security',
+    'account'
   ],
-  "key-square": [
-    "security",
-    "account"
+  'key-square': [
+    'security',
+    'account'
   ],
-  "key": [
-    "security",
-    "account"
+  'key': [
+    'security',
+    'account'
   ],
-  "keyboard-music": [
-    "multimedia",
-    "devices"
+  'keyboard-music': [
+    'multimedia',
+    'devices'
   ],
-  "keyboard-off": [
-    "devices",
-    "text",
-    "development"
+  'keyboard-off': [
+    'devices',
+    'text',
+    'development'
   ],
-  "keyboard": [
-    "text",
-    "devices",
-    "development"
+  'keyboard': [
+    'text',
+    'devices',
+    'development'
   ],
-  "lamp-ceiling": [
-    "home"
+  'lamp-ceiling': [
+    'home'
   ],
-  "lamp-desk": [
-    "home"
+  'lamp-desk': [
+    'home'
   ],
-  "lamp-floor": [
-    "home"
+  'lamp-floor': [
+    'home'
   ],
-  "lamp-wall-down": [
-    "home"
+  'lamp-wall-down': [
+    'home'
   ],
-  "lamp-wall-up": [
-    "home"
+  'lamp-wall-up': [
+    'home'
   ],
-  "lamp": [
-    "home"
+  'lamp': [
+    'home'
   ],
-  "land-plot": [
-    "design",
-    "tools",
-    "math",
-    "sports",
-    "gaming"
+  'land-plot': [
+    'design',
+    'tools',
+    'math',
+    'sports',
+    'gaming'
   ],
-  "landmark": [
-    "finance",
-    "navigation",
-    "buildings"
+  'landmark': [
+    'finance',
+    'navigation',
+    'buildings'
   ],
-  "languages": [
-    "text"
+  'languages': [
+    'text'
   ],
-  "laptop-minimal-check": [
-    "devices",
-    "notifications"
+  'laptop-minimal-check': [
+    'devices',
+    'notifications'
   ],
-  "laptop-minimal": [
-    "devices"
+  'laptop-minimal': [
+    'devices'
   ],
-  "laptop": [
-    "devices"
+  'laptop': [
+    'devices'
   ],
-  "lasso-select": [
-    "arrows",
-    "design",
-    "cursors"
+  'lasso-select': [
+    'arrows',
+    'design',
+    'cursors'
   ],
-  "lasso": [
-    "design",
-    "cursors"
+  'lasso': [
+    'design',
+    'cursors'
   ],
-  "laugh": [
-    "emoji"
+  'laugh': [
+    'emoji'
   ],
-  "layers-2": [
-    "design",
-    "layout"
+  'layers-2': [
+    'design',
+    'layout'
   ],
-  "layers": [
-    "design",
-    "layout"
+  'layers': [
+    'design',
+    'layout'
   ],
-  "layout-dashboard": [
-    "design",
-    "layout"
+  'layout-dashboard': [
+    'design',
+    'layout'
   ],
-  "layout-grid": [
-    "design",
-    "layout"
+  'layout-grid': [
+    'design',
+    'layout'
   ],
-  "layout-list": [
-    "design",
-    "layout",
-    "photography",
-    "text"
+  'layout-list': [
+    'design',
+    'layout',
+    'photography',
+    'text'
   ],
-  "layout-panel-left": [
-    "design",
-    "layout"
+  'layout-panel-left': [
+    'design',
+    'layout'
   ],
-  "layout-panel-top": [
-    "layout"
+  'layout-panel-top': [
+    'layout'
   ],
-  "layout-template": [
-    "layout"
+  'layout-template': [
+    'layout'
   ],
-  "leaf": [
-    "nature",
-    "sustainability",
-    "seasons"
+  'leaf': [
+    'nature',
+    'sustainability',
+    'seasons'
   ],
-  "leafy-green": [
-    "food-beverage",
-    "emoji",
-    "sustainability"
+  'leafy-green': [
+    'food-beverage',
+    'emoji',
+    'sustainability'
   ],
-  "lectern": [
-    "communication",
-    "multimedia"
+  'lectern': [
+    'communication',
+    'multimedia'
   ],
-  "library-big": [
-    "text",
-    "photography",
-    "multimedia",
-    "navigation",
-    "development"
+  'library-big': [
+    'text',
+    'photography',
+    'multimedia',
+    'navigation',
+    'development'
   ],
-  "library": [
-    "text",
-    "photography",
-    "multimedia",
-    "navigation",
-    "development"
+  'library': [
+    'text',
+    'photography',
+    'multimedia',
+    'navigation',
+    'development'
   ],
-  "life-buoy": [
-    "accessibility",
-    "medical"
+  'life-buoy': [
+    'accessibility',
+    'medical'
   ],
-  "ligature": [
-    "text"
+  'ligature': [
+    'text'
   ],
-  "lightbulb-off": [
-    "photography"
+  'lightbulb-off': [
+    'photography'
   ],
-  "lightbulb": [
-    "photography"
+  'lightbulb': [
+    'photography'
   ],
-  "line-squiggle": [
-    "shapes",
-    "math",
-    "design"
+  'line-squiggle': [
+    'shapes',
+    'math',
+    'design'
   ],
-  "link-2-off": [
-    "text"
+  'link-2-off': [
+    'text'
   ],
-  "link-2": [
-    "text",
-    "account"
+  'link-2': [
+    'text',
+    'account'
   ],
-  "link": [
-    "text",
-    "account"
+  'link': [
+    'text',
+    'account'
   ],
-  "linkedin": [
-    "social",
-    "brands"
+  'linkedin': [
+    'social',
+    'brands'
   ],
-  "list-check": [
-    "text"
+  'list-check': [
+    'text'
   ],
-  "list-checks": [
-    "text"
+  'list-checks': [
+    'text'
   ],
-  "list-chevrons-down-up": [
-    "text",
-    "arrows"
+  'list-chevrons-down-up': [
+    'text',
+    'arrows'
   ],
-  "list-chevrons-up-down": [
-    "text",
-    "arrows"
+  'list-chevrons-up-down': [
+    'text',
+    'arrows'
   ],
-  "list-collapse": [
-    "text"
+  'list-collapse': [
+    'text'
   ],
-  "list-end": [
-    "multimedia",
-    "text"
+  'list-end': [
+    'multimedia',
+    'text'
   ],
-  "list-filter-plus": [
-    "text",
-    "layout"
+  'list-filter-plus': [
+    'text',
+    'layout'
   ],
-  "list-filter": [
-    "text"
+  'list-filter': [
+    'text'
   ],
-  "list-indent-decrease": [
-    "text",
-    "development"
+  'list-indent-decrease': [
+    'text',
+    'development'
   ],
-  "list-indent-increase": [
-    "text",
-    "development"
+  'list-indent-increase': [
+    'text',
+    'development'
   ],
-  "list-minus": [
-    "multimedia",
-    "text"
+  'list-minus': [
+    'multimedia',
+    'text'
   ],
-  "list-music": [
-    "multimedia"
+  'list-music': [
+    'multimedia'
   ],
-  "list-ordered": [
-    "text"
+  'list-ordered': [
+    'text'
   ],
-  "list-plus": [
-    "multimedia",
-    "text"
+  'list-plus': [
+    'multimedia',
+    'text'
   ],
-  "list-restart": [
-    "multimedia",
-    "text"
+  'list-restart': [
+    'multimedia',
+    'text'
   ],
-  "list-start": [
-    "multimedia",
-    "text"
+  'list-start': [
+    'multimedia',
+    'text'
   ],
-  "list-todo": [
-    "text"
+  'list-todo': [
+    'text'
   ],
-  "list-tree": [
-    "files",
-    "text",
-    "layout"
+  'list-tree': [
+    'files',
+    'text',
+    'layout'
   ],
-  "list-video": [
-    "multimedia"
+  'list-video': [
+    'multimedia'
   ],
-  "list-x": [
-    "multimedia",
-    "text"
+  'list-x': [
+    'multimedia',
+    'text'
   ],
-  "list": [
-    "text"
+  'list': [
+    'text'
   ],
-  "loader-circle": [
-    "cursors",
-    "multimedia",
-    "layout"
+  'loader-circle': [
+    'cursors',
+    'multimedia',
+    'layout'
   ],
-  "loader-pinwheel": [
-    "cursors",
-    "design"
+  'loader-pinwheel': [
+    'cursors',
+    'design'
   ],
-  "loader": [
-    "cursors",
-    "multimedia",
-    "layout",
-    "design"
+  'loader': [
+    'cursors',
+    'multimedia',
+    'layout',
+    'design'
   ],
-  "locate-fixed": [
-    "navigation"
+  'locate-fixed': [
+    'navigation'
   ],
-  "locate-off": [
-    "navigation"
+  'locate-off': [
+    'navigation'
   ],
-  "locate": [
-    "navigation"
+  'locate': [
+    'navigation'
   ],
-  "lock-keyhole-open": [
-    "security"
+  'lock-keyhole-open': [
+    'security'
   ],
-  "lock-keyhole": [
-    "security"
+  'lock-keyhole': [
+    'security'
   ],
-  "lock-open": [
-    "security"
+  'lock-open': [
+    'security'
   ],
-  "lock": [
-    "security"
+  'lock': [
+    'security'
   ],
-  "log-in": [
-    "arrows",
-    "account"
+  'log-in': [
+    'arrows',
+    'account'
   ],
-  "log-out": [
-    "arrows",
-    "account"
+  'log-out': [
+    'arrows',
+    'account'
   ],
-  "logs": [
-    "text"
+  'logs': [
+    'text'
   ],
-  "lollipop": [
-    "food-beverage"
+  'lollipop': [
+    'food-beverage'
   ],
-  "luggage": [
-    "travel",
-    "transportation"
+  'luggage': [
+    'travel',
+    'transportation'
   ],
-  "magnet": [
-    "design"
+  'magnet': [
+    'design'
   ],
-  "mail-check": [
-    "mail"
+  'mail-check': [
+    'mail'
   ],
-  "mail-minus": [
-    "mail"
+  'mail-minus': [
+    'mail'
   ],
-  "mail-open": [
-    "mail"
+  'mail-open': [
+    'mail'
   ],
-  "mail-plus": [
-    "mail"
+  'mail-plus': [
+    'mail'
   ],
-  "mail-question-mark": [
-    "mail"
+  'mail-question-mark': [
+    'mail'
   ],
-  "mail-search": [
-    "mail"
+  'mail-search': [
+    'mail'
   ],
-  "mail-warning": [
-    "mail"
+  'mail-warning': [
+    'mail'
   ],
-  "mail-x": [
-    "mail"
+  'mail-x': [
+    'mail'
   ],
-  "mail": [
-    "text",
-    "account",
-    "mail"
+  'mail': [
+    'text',
+    'account',
+    'mail'
   ],
-  "mailbox": [
-    "mail"
+  'mailbox': [
+    'mail'
   ],
-  "mails": [
-    "mail"
+  'mails': [
+    'mail'
   ],
-  "map-minus": [
-    "navigation",
-    "travel"
+  'map-minus': [
+    'navigation',
+    'travel'
   ],
-  "map-pin-check-inside": [
-    "navigation",
-    "travel",
-    "account"
+  'map-pin-check-inside': [
+    'navigation',
+    'travel',
+    'account'
   ],
-  "map-pin-check": [
-    "navigation",
-    "travel",
-    "account"
+  'map-pin-check': [
+    'navigation',
+    'travel',
+    'account'
   ],
-  "map-pin-house": [
-    "navigation",
-    "travel",
-    "account"
+  'map-pin-house': [
+    'navigation',
+    'travel',
+    'account'
   ],
-  "map-pin-minus-inside": [
-    "navigation",
-    "travel",
-    "account"
+  'map-pin-minus-inside': [
+    'navigation',
+    'travel',
+    'account'
   ],
-  "map-pin-minus": [
-    "navigation",
-    "travel",
-    "account"
+  'map-pin-minus': [
+    'navigation',
+    'travel',
+    'account'
   ],
-  "map-pin-off": [
-    "navigation",
-    "travel"
+  'map-pin-off': [
+    'navigation',
+    'travel'
   ],
-  "map-pin-pen": [
-    "navigation",
-    "travel",
-    "account"
+  'map-pin-pen': [
+    'navigation',
+    'travel',
+    'account'
   ],
-  "map-pin-plus-inside": [
-    "navigation",
-    "travel",
-    "account"
+  'map-pin-plus-inside': [
+    'navigation',
+    'travel',
+    'account'
   ],
-  "map-pin-plus": [
-    "navigation",
-    "travel",
-    "account"
+  'map-pin-plus': [
+    'navigation',
+    'travel',
+    'account'
   ],
-  "map-pin-x-inside": [
-    "navigation",
-    "travel",
-    "account"
+  'map-pin-x-inside': [
+    'navigation',
+    'travel',
+    'account'
   ],
-  "map-pin-x": [
-    "navigation",
-    "travel",
-    "account"
+  'map-pin-x': [
+    'navigation',
+    'travel',
+    'account'
   ],
-  "map-pin": [
-    "navigation",
-    "travel",
-    "account"
+  'map-pin': [
+    'navigation',
+    'travel',
+    'account'
   ],
-  "map-pinned": [
-    "navigation",
-    "travel",
-    "account"
+  'map-pinned': [
+    'navigation',
+    'travel',
+    'account'
   ],
-  "map-plus": [
-    "navigation"
+  'map-plus': [
+    'navigation'
   ],
-  "map": [
-    "text",
-    "navigation"
+  'map': [
+    'text',
+    'navigation'
   ],
-  "mars-stroke": [
-    "medical"
+  'mars-stroke': [
+    'medical'
   ],
-  "mars": [
-    "medical"
+  'mars': [
+    'medical'
   ],
-  "martini": [
-    "food-beverage"
+  'martini': [
+    'food-beverage'
   ],
-  "maximize-2": [
-    "arrows",
-    "layout",
-    "design"
+  'maximize-2': [
+    'arrows',
+    'layout',
+    'design'
   ],
-  "maximize": [
-    "layout",
-    "design"
+  'maximize': [
+    'layout',
+    'design'
   ],
-  "medal": [
-    "sports",
-    "gaming"
+  'medal': [
+    'sports',
+    'gaming'
   ],
-  "megaphone-off": [
-    "multimedia",
-    "notifications"
+  'megaphone-off': [
+    'multimedia',
+    'notifications'
   ],
-  "megaphone": [
-    "multimedia",
-    "notifications"
+  'megaphone': [
+    'multimedia',
+    'notifications'
   ],
-  "meh": [
-    "emoji"
+  'meh': [
+    'emoji'
   ],
-  "memory-stick": [
-    "devices",
-    "gaming"
+  'memory-stick': [
+    'devices',
+    'gaming'
   ],
-  "menu": [
-    "layout",
-    "account"
+  'menu': [
+    'layout',
+    'account'
   ],
-  "merge": [
-    "development",
-    "arrows"
+  'merge': [
+    'development',
+    'arrows'
   ],
-  "message-circle-code": [
-    "development",
-    "social"
+  'message-circle-code': [
+    'development',
+    'social'
   ],
-  "message-circle-dashed": [
-    "social"
+  'message-circle-dashed': [
+    'social'
   ],
-  "message-circle-heart": [
-    "social"
+  'message-circle-heart': [
+    'social'
   ],
-  "message-circle-more": [
-    "social"
+  'message-circle-more': [
+    'social'
   ],
-  "message-circle-off": [
-    "social"
+  'message-circle-off': [
+    'social'
   ],
-  "message-circle-plus": [
-    "social"
+  'message-circle-plus': [
+    'social'
   ],
-  "message-circle-question-mark": [
-    "social"
+  'message-circle-question-mark': [
+    'social'
   ],
-  "message-circle-reply": [
-    "social"
+  'message-circle-reply': [
+    'social'
   ],
-  "message-circle-warning": [
-    "social",
-    "notifications"
+  'message-circle-warning': [
+    'social',
+    'notifications'
   ],
-  "message-circle-x": [
-    "account",
-    "social"
+  'message-circle-x': [
+    'account',
+    'social'
   ],
-  "message-circle": [
-    "social"
+  'message-circle': [
+    'social'
   ],
-  "message-square-code": [
-    "development",
-    "social"
+  'message-square-code': [
+    'development',
+    'social'
   ],
-  "message-square-dashed": [
-    "social"
+  'message-square-dashed': [
+    'social'
   ],
-  "message-square-diff": [
-    "development",
-    "files",
-    "social"
+  'message-square-diff': [
+    'development',
+    'files',
+    'social'
   ],
-  "message-square-dot": [
-    "social",
-    "notifications"
+  'message-square-dot': [
+    'social',
+    'notifications'
   ],
-  "message-square-heart": [
-    "social"
+  'message-square-heart': [
+    'social'
   ],
-  "message-square-lock": [
-    "social"
+  'message-square-lock': [
+    'social'
   ],
-  "message-square-more": [
-    "social"
+  'message-square-more': [
+    'social'
   ],
-  "message-square-off": [
-    "social"
+  'message-square-off': [
+    'social'
   ],
-  "message-square-plus": [
-    "social"
+  'message-square-plus': [
+    'social'
   ],
-  "message-square-quote": [
-    "social",
-    "text"
+  'message-square-quote': [
+    'social',
+    'text'
   ],
-  "message-square-reply": [
-    "social"
+  'message-square-reply': [
+    'social'
   ],
-  "message-square-share": [
-    "social"
+  'message-square-share': [
+    'social'
   ],
-  "message-square-text": [
-    "social"
+  'message-square-text': [
+    'social'
   ],
-  "message-square-warning": [
-    "social",
-    "notifications"
+  'message-square-warning': [
+    'social',
+    'notifications'
   ],
-  "message-square-x": [
-    "social"
+  'message-square-x': [
+    'social'
   ],
-  "message-square": [
-    "social"
+  'message-square': [
+    'social'
   ],
-  "messages-square": [
-    "social"
+  'messages-square': [
+    'social'
   ],
-  "mic-off": [
-    "devices",
-    "communication",
-    "connectivity",
-    "multimedia"
+  'mic-off': [
+    'devices',
+    'communication',
+    'connectivity',
+    'multimedia'
   ],
-  "mic-vocal": [
-    "devices",
-    "multimedia"
+  'mic-vocal': [
+    'devices',
+    'multimedia'
   ],
-  "mic": [
-    "devices",
-    "communication",
-    "connectivity",
-    "multimedia"
+  'mic': [
+    'devices',
+    'communication',
+    'connectivity',
+    'multimedia'
   ],
-  "microchip": [
-    "devices"
+  'microchip': [
+    'devices'
   ],
-  "microscope": [
-    "science",
-    "medical"
+  'microscope': [
+    'science',
+    'medical'
   ],
-  "microwave": [
-    "food-beverage",
-    "home"
+  'microwave': [
+    'food-beverage',
+    'home'
   ],
-  "milestone": [
-    "arrows",
-    "navigation",
-    "development",
-    "gaming"
+  'milestone': [
+    'arrows',
+    'navigation',
+    'development',
+    'gaming'
   ],
-  "milk-off": [
-    "food-beverage"
+  'milk-off': [
+    'food-beverage'
   ],
-  "milk": [
-    "food-beverage"
+  'milk': [
+    'food-beverage'
   ],
-  "minimize-2": [
-    "arrows",
-    "layout",
-    "design"
+  'minimize-2': [
+    'arrows',
+    'layout',
+    'design'
   ],
-  "minimize": [
-    "layout",
-    "design"
+  'minimize': [
+    'layout',
+    'design'
   ],
-  "minus": [
-    "math",
-    "development",
-    "text",
-    "tools"
+  'minus': [
+    'math',
+    'development',
+    'text',
+    'tools'
   ],
-  "monitor-check": [
-    "connectivity",
-    "devices"
+  'monitor-check': [
+    'connectivity',
+    'devices'
   ],
-  "monitor-cog": [
-    "connectivity",
-    "devices"
+  'monitor-cog': [
+    'connectivity',
+    'devices'
   ],
-  "monitor-dot": [
-    "connectivity",
-    "devices"
+  'monitor-dot': [
+    'connectivity',
+    'devices'
   ],
-  "monitor-down": [
-    "connectivity",
-    "devices"
+  'monitor-down': [
+    'connectivity',
+    'devices'
   ],
-  "monitor-off": [
-    "connectivity",
-    "devices"
+  'monitor-off': [
+    'connectivity',
+    'devices'
   ],
-  "monitor-pause": [
-    "connectivity",
-    "devices",
-    "multimedia"
+  'monitor-pause': [
+    'connectivity',
+    'devices',
+    'multimedia'
   ],
-  "monitor-play": [
-    "connectivity",
-    "devices",
-    "multimedia"
+  'monitor-play': [
+    'connectivity',
+    'devices',
+    'multimedia'
   ],
-  "monitor-smartphone": [
-    "connectivity",
-    "devices"
+  'monitor-smartphone': [
+    'connectivity',
+    'devices'
   ],
-  "monitor-speaker": [
-    "connectivity",
-    "devices"
+  'monitor-speaker': [
+    'connectivity',
+    'devices'
   ],
-  "monitor-stop": [
-    "connectivity",
-    "devices",
-    "multimedia"
+  'monitor-stop': [
+    'connectivity',
+    'devices',
+    'multimedia'
   ],
-  "monitor-up": [
-    "connectivity",
-    "devices"
+  'monitor-up': [
+    'connectivity',
+    'devices'
   ],
-  "monitor-x": [
-    "connectivity",
-    "devices"
+  'monitor-x': [
+    'connectivity',
+    'devices'
   ],
-  "monitor": [
-    "connectivity",
-    "devices"
+  'monitor': [
+    'connectivity',
+    'devices'
   ],
-  "moon-star": [
-    "accessibility",
-    "weather"
+  'moon-star': [
+    'accessibility',
+    'weather'
   ],
-  "moon": [
-    "accessibility"
+  'moon': [
+    'accessibility'
   ],
-  "mountain-snow": [
-    "nature"
+  'mountain-snow': [
+    'nature'
   ],
-  "mountain": [
-    "nature",
-    "gaming"
+  'mountain': [
+    'nature',
+    'gaming'
   ],
-  "mouse-off": [
-    "devices"
+  'mouse-off': [
+    'devices'
   ],
-  "mouse-pointer-2": [
-    "arrows",
-    "cursors"
+  'mouse-pointer-2': [
+    'arrows',
+    'cursors'
   ],
-  "mouse-pointer-ban": [
-    "arrows",
-    "cursors"
+  'mouse-pointer-ban': [
+    'arrows',
+    'cursors'
   ],
-  "mouse-pointer-click": [
-    "arrows",
-    "cursors"
+  'mouse-pointer-click': [
+    'arrows',
+    'cursors'
   ],
-  "mouse-pointer": [
-    "arrows",
-    "cursors"
+  'mouse-pointer': [
+    'arrows',
+    'cursors'
   ],
-  "mouse": [
-    "devices"
+  'mouse': [
+    'devices'
   ],
-  "move-3d": [
-    "design"
+  'move-3d': [
+    'design'
   ],
-  "move-diagonal-2": [
-    "arrows",
-    "cursors"
+  'move-diagonal-2': [
+    'arrows',
+    'cursors'
   ],
-  "move-diagonal": [
-    "arrows",
-    "cursors"
+  'move-diagonal': [
+    'arrows',
+    'cursors'
   ],
-  "move-down-left": [
-    "arrows"
+  'move-down-left': [
+    'arrows'
   ],
-  "move-down-right": [
-    "arrows"
+  'move-down-right': [
+    'arrows'
   ],
-  "move-down": [
-    "arrows"
+  'move-down': [
+    'arrows'
   ],
-  "move-horizontal": [
-    "arrows",
-    "cursors"
+  'move-horizontal': [
+    'arrows',
+    'cursors'
   ],
-  "move-left": [
-    "arrows"
+  'move-left': [
+    'arrows'
   ],
-  "move-right": [
-    "arrows"
+  'move-right': [
+    'arrows'
   ],
-  "move-up-left": [
-    "arrows"
+  'move-up-left': [
+    'arrows'
   ],
-  "move-up-right": [
-    "arrows"
+  'move-up-right': [
+    'arrows'
   ],
-  "move-up": [
-    "arrows"
+  'move-up': [
+    'arrows'
   ],
-  "move-vertical": [
-    "arrows",
-    "cursors"
+  'move-vertical': [
+    'arrows',
+    'cursors'
   ],
-  "move": [
-    "arrows",
-    "cursors"
+  'move': [
+    'arrows',
+    'cursors'
   ],
-  "music-2": [
-    "multimedia",
-    "files"
+  'music-2': [
+    'multimedia',
+    'files'
   ],
-  "music-3": [
-    "multimedia",
-    "files"
+  'music-3': [
+    'multimedia',
+    'files'
   ],
-  "music-4": [
-    "multimedia",
-    "files"
+  'music-4': [
+    'multimedia',
+    'files'
   ],
-  "music": [
-    "multimedia",
-    "files"
+  'music': [
+    'multimedia',
+    'files'
   ],
-  "navigation-2-off": [
-    "navigation"
+  'navigation-2-off': [
+    'navigation'
   ],
-  "navigation-2": [
-    "navigation"
+  'navigation-2': [
+    'navigation'
   ],
-  "navigation-off": [
-    "navigation"
+  'navigation-off': [
+    'navigation'
   ],
-  "navigation": [
-    "navigation"
+  'navigation': [
+    'navigation'
   ],
-  "network": [
-    "development"
+  'network': [
+    'development'
   ],
-  "newspaper": [
-    "multimedia",
-    "communication"
+  'newspaper': [
+    'multimedia',
+    'communication'
   ],
-  "nfc": [
-    "communication",
-    "finance",
-    "devices"
+  'nfc': [
+    'communication',
+    'finance',
+    'devices'
   ],
-  "non-binary": [
-    "medical"
+  'non-binary': [
+    'medical'
   ],
-  "notebook-pen": [
-    "text",
-    "social"
+  'notebook-pen': [
+    'text',
+    'social'
   ],
-  "notebook-tabs": [
-    "account",
-    "communication",
-    "social"
+  'notebook-tabs': [
+    'account',
+    'communication',
+    'social'
   ],
-  "notebook-text": [
-    "text",
-    "social"
+  'notebook-text': [
+    'text',
+    'social'
   ],
-  "notebook": [
-    "text",
-    "communication",
-    "social",
-    "design"
+  'notebook': [
+    'text',
+    'communication',
+    'social',
+    'design'
   ],
-  "notepad-text-dashed": [
-    "text",
-    "social"
+  'notepad-text-dashed': [
+    'text',
+    'social'
   ],
-  "notepad-text": [
-    "text",
-    "social"
+  'notepad-text': [
+    'text',
+    'social'
   ],
-  "nut-off": [
-    "food-beverage"
+  'nut-off': [
+    'food-beverage'
   ],
-  "nut": [
-    "food-beverage"
+  'nut': [
+    'food-beverage'
   ],
-  "octagon-alert": [
-    "notifications",
-    "shapes"
+  'octagon-alert': [
+    'notifications',
+    'shapes'
   ],
-  "octagon-minus": [
-    "transportation"
+  'octagon-minus': [
+    'transportation'
   ],
-  "octagon-pause": [
-    "multimedia",
-    "shapes"
+  'octagon-pause': [
+    'multimedia',
+    'shapes'
   ],
-  "octagon-x": [
-    "math",
-    "notifications"
+  'octagon-x': [
+    'math',
+    'notifications'
   ],
-  "octagon": [
-    "shapes"
+  'octagon': [
+    'shapes'
   ],
-  "omega": [
-    "math",
-    "development",
-    "text",
-    "science"
+  'omega': [
+    'math',
+    'development',
+    'text',
+    'science'
   ],
-  "option": [
-    "development"
+  'option': [
+    'development'
   ],
-  "orbit": [
-    "science"
+  'orbit': [
+    'science'
   ],
-  "origami": [
-    "animals",
-    "design"
+  'origami': [
+    'animals',
+    'design'
   ],
-  "package-2": [
-    "files",
-    "development"
+  'package-2': [
+    'files',
+    'development'
   ],
-  "package-check": [
-    "development"
+  'package-check': [
+    'development'
   ],
-  "package-minus": [
-    "development"
+  'package-minus': [
+    'development'
   ],
-  "package-open": [
-    "files",
-    "development"
+  'package-open': [
+    'files',
+    'development'
   ],
-  "package-plus": [
-    "development"
+  'package-plus': [
+    'development'
   ],
-  "package-search": [
-    "files",
-    "development"
+  'package-search': [
+    'files',
+    'development'
   ],
-  "package-x": [
-    "development"
+  'package-x': [
+    'development'
   ],
-  "package": [
-    "files",
-    "development"
+  'package': [
+    'files',
+    'development'
   ],
-  "paint-bucket": [
-    "design",
-    "tools"
+  'paint-bucket': [
+    'design',
+    'tools'
   ],
-  "paint-roller": [
-    "text",
-    "design",
-    "home",
-    "tools"
+  'paint-roller': [
+    'text',
+    'design',
+    'home',
+    'tools'
   ],
-  "paintbrush-vertical": [
-    "text",
-    "design",
-    "photography",
-    "home",
-    "tools"
+  'paintbrush-vertical': [
+    'text',
+    'design',
+    'photography',
+    'home',
+    'tools'
   ],
-  "paintbrush": [
-    "text",
-    "design",
-    "photography",
-    "home",
-    "tools"
+  'paintbrush': [
+    'text',
+    'design',
+    'photography',
+    'home',
+    'tools'
   ],
-  "palette": [
-    "text",
-    "design",
-    "photography"
+  'palette': [
+    'text',
+    'design',
+    'photography'
   ],
-  "panda": [
-    "animals"
+  'panda': [
+    'animals'
   ],
-  "panel-bottom-close": [
-    "layout",
-    "arrows"
+  'panel-bottom-close': [
+    'layout',
+    'arrows'
   ],
-  "panel-bottom-dashed": [
-    "layout"
+  'panel-bottom-dashed': [
+    'layout'
   ],
-  "panel-bottom-open": [
-    "layout",
-    "arrows"
+  'panel-bottom-open': [
+    'layout',
+    'arrows'
   ],
-  "panel-bottom": [
-    "layout"
+  'panel-bottom': [
+    'layout'
   ],
-  "panel-left-close": [
-    "layout",
-    "arrows"
+  'panel-left-close': [
+    'layout',
+    'arrows'
   ],
-  "panel-left-dashed": [
-    "layout"
+  'panel-left-dashed': [
+    'layout'
   ],
-  "panel-left-open": [
-    "layout",
-    "arrows"
+  'panel-left-open': [
+    'layout',
+    'arrows'
   ],
-  "panel-left-right-dashed": [
-    "layout"
+  'panel-left-right-dashed': [
+    'layout'
   ],
-  "panel-left": [
-    "layout"
+  'panel-left': [
+    'layout'
   ],
-  "panel-right-close": [
-    "layout",
-    "arrows"
+  'panel-right-close': [
+    'layout',
+    'arrows'
   ],
-  "panel-right-dashed": [
-    "layout"
+  'panel-right-dashed': [
+    'layout'
   ],
-  "panel-right-open": [
-    "layout",
-    "arrows"
+  'panel-right-open': [
+    'layout',
+    'arrows'
   ],
-  "panel-right": [
-    "layout"
+  'panel-right': [
+    'layout'
   ],
-  "panel-top-bottom-dashed": [
-    "layout"
+  'panel-top-bottom-dashed': [
+    'layout'
   ],
-  "panel-top-close": [
-    "layout",
-    "arrows"
+  'panel-top-close': [
+    'layout',
+    'arrows'
   ],
-  "panel-top-dashed": [
-    "layout"
+  'panel-top-dashed': [
+    'layout'
   ],
-  "panel-top-open": [
-    "layout",
-    "arrows"
+  'panel-top-open': [
+    'layout',
+    'arrows'
   ],
-  "panel-top": [
-    "layout",
-    "design",
-    "development"
+  'panel-top': [
+    'layout',
+    'design',
+    'development'
   ],
-  "panels-left-bottom": [
-    "layout"
+  'panels-left-bottom': [
+    'layout'
   ],
-  "panels-right-bottom": [
-    "layout"
+  'panels-right-bottom': [
+    'layout'
   ],
-  "panels-top-left": [
-    "layout",
-    "design",
-    "development"
+  'panels-top-left': [
+    'layout',
+    'design',
+    'development'
   ],
-  "paperclip": [
-    "text",
-    "design",
-    "files",
-    "mail"
+  'paperclip': [
+    'text',
+    'design',
+    'files',
+    'mail'
   ],
-  "parentheses": [
-    "development",
-    "files",
-    "math"
+  'parentheses': [
+    'development',
+    'files',
+    'math'
   ],
-  "parking-meter": [
-    "transportation",
-    "navigation"
+  'parking-meter': [
+    'transportation',
+    'navigation'
   ],
-  "party-popper": [
-    "emoji"
+  'party-popper': [
+    'emoji'
   ],
-  "pause": [
-    "multimedia"
+  'pause': [
+    'multimedia'
   ],
-  "paw-print": [
-    "animals"
+  'paw-print': [
+    'animals'
   ],
-  "pc-case": [
-    "devices",
-    "gaming"
+  'pc-case': [
+    'devices',
+    'gaming'
   ],
-  "pen-line": [
-    "text",
-    "design",
-    "tools"
+  'pen-line': [
+    'text',
+    'design',
+    'tools'
   ],
-  "pen-off": [
-    "text",
-    "design",
-    "tools"
+  'pen-off': [
+    'text',
+    'design',
+    'tools'
   ],
-  "pen-tool": [
-    "text",
-    "design",
-    "cursors"
+  'pen-tool': [
+    'text',
+    'design',
+    'cursors'
   ],
-  "pen": [
-    "text",
-    "design",
-    "tools"
+  'pen': [
+    'text',
+    'design',
+    'tools'
   ],
-  "pencil-line": [
-    "text",
-    "design",
-    "tools"
+  'pencil-line': [
+    'text',
+    'design',
+    'tools'
   ],
-  "pencil-off": [
-    "design",
-    "cursors",
-    "tools",
-    "text"
+  'pencil-off': [
+    'design',
+    'cursors',
+    'tools',
+    'text'
   ],
-  "pencil-ruler": [
-    "tools",
-    "design",
-    "layout",
-    "text"
+  'pencil-ruler': [
+    'tools',
+    'design',
+    'layout',
+    'text'
   ],
-  "pencil": [
-    "design",
-    "cursors",
-    "tools",
-    "text"
+  'pencil': [
+    'design',
+    'cursors',
+    'tools',
+    'text'
   ],
-  "pentagon": [
-    "shapes"
+  'pentagon': [
+    'shapes'
   ],
-  "percent": [
-    "math",
-    "development",
-    "finance",
-    "shopping"
+  'percent': [
+    'math',
+    'development',
+    'finance',
+    'shopping'
   ],
-  "person-standing": [
-    "accessibility",
-    "people"
+  'person-standing': [
+    'accessibility',
+    'people'
   ],
-  "philippine-peso": [
-    "finance"
+  'philippine-peso': [
+    'finance'
   ],
-  "phone-call": [
-    "connectivity",
-    "devices",
-    "communication"
+  'phone-call': [
+    'connectivity',
+    'devices',
+    'communication'
   ],
-  "phone-forwarded": [
-    "arrows",
-    "connectivity",
-    "devices",
-    "communication"
+  'phone-forwarded': [
+    'arrows',
+    'connectivity',
+    'devices',
+    'communication'
   ],
-  "phone-incoming": [
-    "arrows",
-    "connectivity",
-    "devices",
-    "communication"
+  'phone-incoming': [
+    'arrows',
+    'connectivity',
+    'devices',
+    'communication'
   ],
-  "phone-missed": [
-    "connectivity",
-    "devices",
-    "communication"
+  'phone-missed': [
+    'connectivity',
+    'devices',
+    'communication'
   ],
-  "phone-off": [
-    "connectivity",
-    "devices",
-    "communication"
+  'phone-off': [
+    'connectivity',
+    'devices',
+    'communication'
   ],
-  "phone-outgoing": [
-    "arrows",
-    "connectivity",
-    "devices",
-    "communication"
+  'phone-outgoing': [
+    'arrows',
+    'connectivity',
+    'devices',
+    'communication'
   ],
-  "phone": [
-    "text",
-    "connectivity",
-    "devices",
-    "communication"
+  'phone': [
+    'text',
+    'connectivity',
+    'devices',
+    'communication'
   ],
-  "pi": [
-    "development",
-    "math"
+  'pi': [
+    'development',
+    'math'
   ],
-  "piano": [
-    "multimedia",
-    "devices"
+  'piano': [
+    'multimedia',
+    'devices'
   ],
-  "pickaxe": [
-    "tools",
-    "gaming"
+  'pickaxe': [
+    'tools',
+    'gaming'
   ],
-  "picture-in-picture-2": [
-    "multimedia"
+  'picture-in-picture-2': [
+    'multimedia'
   ],
-  "picture-in-picture": [
-    "multimedia"
+  'picture-in-picture': [
+    'multimedia'
   ],
-  "piggy-bank": [
-    "finance"
+  'piggy-bank': [
+    'finance'
   ],
-  "pilcrow-left": [
-    "text"
+  'pilcrow-left': [
+    'text'
   ],
-  "pilcrow-right": [
-    "text"
+  'pilcrow-right': [
+    'text'
   ],
-  "pilcrow": [
-    "text"
+  'pilcrow': [
+    'text'
   ],
-  "pill-bottle": [
-    "medical"
+  'pill-bottle': [
+    'medical'
   ],
-  "pill": [
-    "medical"
+  'pill': [
+    'medical'
   ],
-  "pin-off": [
-    "navigation"
+  'pin-off': [
+    'navigation'
   ],
-  "pin": [
-    "navigation",
-    "account"
+  'pin': [
+    'navigation',
+    'account'
   ],
-  "pipette": [
-    "text",
-    "design",
-    "science"
+  'pipette': [
+    'text',
+    'design',
+    'science'
   ],
-  "pizza": [
-    "food-beverage"
+  'pizza': [
+    'food-beverage'
   ],
-  "plane-landing": [
-    "transportation",
-    "travel"
+  'plane-landing': [
+    'transportation',
+    'travel'
   ],
-  "plane-takeoff": [
-    "transportation",
-    "travel"
+  'plane-takeoff': [
+    'transportation',
+    'travel'
   ],
-  "plane": [
-    "transportation",
-    "travel"
+  'plane': [
+    'transportation',
+    'travel'
   ],
-  "play": [
-    "arrows",
-    "multimedia"
+  'play': [
+    'arrows',
+    'multimedia'
   ],
-  "plug-2": [
-    "devices",
-    "development"
+  'plug-2': [
+    'devices',
+    'development'
   ],
-  "plug-zap": [
-    "devices"
+  'plug-zap': [
+    'devices'
   ],
-  "plug": [
-    "devices",
-    "development"
+  'plug': [
+    'devices',
+    'development'
   ],
-  "plus": [
-    "math",
-    "tools",
-    "development",
-    "text",
-    "cursors",
-    "gaming"
+  'plus': [
+    'math',
+    'tools',
+    'development',
+    'text',
+    'cursors',
+    'gaming'
   ],
-  "pocket-knife": [
-    "tools"
+  'pocket-knife': [
+    'tools'
   ],
-  "pocket": [
-    "brands"
+  'pocket': [
+    'brands'
   ],
-  "podcast": [
-    "multimedia",
-    "social"
+  'podcast': [
+    'multimedia',
+    'social'
   ],
-  "pointer-off": [
-    "cursors"
+  'pointer-off': [
+    'cursors'
   ],
-  "pointer": [
-    "cursors"
+  'pointer': [
+    'cursors'
   ],
-  "popcorn": [
-    "food-beverage",
-    "multimedia"
+  'popcorn': [
+    'food-beverage',
+    'multimedia'
   ],
-  "popsicle": [
-    "food-beverage"
+  'popsicle': [
+    'food-beverage'
   ],
-  "pound-sterling": [
-    "finance"
+  'pound-sterling': [
+    'finance'
   ],
-  "power-off": [
-    "connectivity"
+  'power-off': [
+    'connectivity'
   ],
-  "power": [
-    "connectivity"
+  'power': [
+    'connectivity'
   ],
-  "presentation": [
-    "multimedia",
-    "photography",
-    "devices",
-    "communication",
-    "design"
+  'presentation': [
+    'multimedia',
+    'photography',
+    'devices',
+    'communication',
+    'design'
   ],
-  "printer-check": [
-    "devices"
+  'printer-check': [
+    'devices'
   ],
-  "printer": [
-    "devices"
+  'printer': [
+    'devices'
   ],
-  "projector": [
-    "multimedia",
-    "photography",
-    "devices",
-    "communication"
+  'projector': [
+    'multimedia',
+    'photography',
+    'devices',
+    'communication'
   ],
-  "proportions": [
-    "layout",
-    "design",
-    "photography",
-    "devices"
+  'proportions': [
+    'layout',
+    'design',
+    'photography',
+    'devices'
   ],
-  "puzzle": [
-    "development",
-    "gaming"
+  'puzzle': [
+    'development',
+    'gaming'
   ],
-  "pyramid": [
-    "shapes",
-    "math",
-    "travel"
+  'pyramid': [
+    'shapes',
+    'math',
+    'travel'
   ],
-  "qr-code": [
-    "development",
-    "social"
+  'qr-code': [
+    'development',
+    'social'
   ],
-  "quote": [
-    "text"
+  'quote': [
+    'text'
   ],
-  "rabbit": [
-    "animals"
+  'rabbit': [
+    'animals'
   ],
-  "radar": [
-    "navigation",
-    "security",
-    "communication"
+  'radar': [
+    'navigation',
+    'security',
+    'communication'
   ],
-  "radiation": [
-    "science"
+  'radiation': [
+    'science'
   ],
-  "radical": [
-    "development",
-    "math"
+  'radical': [
+    'development',
+    'math'
   ],
-  "radio-receiver": [
-    "devices"
+  'radio-receiver': [
+    'devices'
   ],
-  "radio-tower": [
-    "devices",
-    "multimedia",
-    "social"
+  'radio-tower': [
+    'devices',
+    'multimedia',
+    'social'
   ],
-  "radio": [
-    "devices",
-    "multimedia",
-    "social"
+  'radio': [
+    'devices',
+    'multimedia',
+    'social'
   ],
-  "radius": [
-    "shapes",
-    "math",
-    "design",
-    "tools"
+  'radius': [
+    'shapes',
+    'math',
+    'design',
+    'tools'
   ],
-  "rail-symbol": [
-    "transportation",
-    "navigation"
+  'rail-symbol': [
+    'transportation',
+    'navigation'
   ],
-  "rainbow": [
-    "weather"
+  'rainbow': [
+    'weather'
   ],
-  "rat": [
-    "animals"
+  'rat': [
+    'animals'
   ],
-  "ratio": [
-    "layout",
-    "design",
-    "photography"
+  'ratio': [
+    'layout',
+    'design',
+    'photography'
   ],
-  "receipt-cent": [
-    "finance",
-    "travel"
+  'receipt-cent': [
+    'finance',
+    'travel'
   ],
-  "receipt-euro": [
-    "finance",
-    "travel"
+  'receipt-euro': [
+    'finance',
+    'travel'
   ],
-  "receipt-indian-rupee": [
-    "finance",
-    "travel"
+  'receipt-indian-rupee': [
+    'finance',
+    'travel'
   ],
-  "receipt-japanese-yen": [
-    "finance",
-    "travel"
+  'receipt-japanese-yen': [
+    'finance',
+    'travel'
   ],
-  "receipt-pound-sterling": [
-    "finance",
-    "travel"
+  'receipt-pound-sterling': [
+    'finance',
+    'travel'
   ],
-  "receipt-russian-ruble": [
-    "finance",
-    "travel"
+  'receipt-russian-ruble': [
+    'finance',
+    'travel'
   ],
-  "receipt-swiss-franc": [
-    "finance",
-    "travel"
+  'receipt-swiss-franc': [
+    'finance',
+    'travel'
   ],
-  "receipt-text": [
-    "finance",
-    "travel"
+  'receipt-text': [
+    'finance',
+    'travel'
   ],
-  "receipt-turkish-lira": [
-    "finance",
-    "travel"
+  'receipt-turkish-lira': [
+    'finance',
+    'travel'
   ],
-  "receipt": [
-    "finance",
-    "travel"
+  'receipt': [
+    'finance',
+    'travel'
   ],
-  "rectangle-circle": [
-    "development",
-    "text"
+  'rectangle-circle': [
+    'development',
+    'text'
   ],
-  "rectangle-ellipsis": [
-    "text",
-    "development"
+  'rectangle-ellipsis': [
+    'text',
+    'development'
   ],
-  "rectangle-goggles": [
-    "devices",
-    "gaming",
-    "multimedia",
-    "connectivity"
+  'rectangle-goggles': [
+    'devices',
+    'gaming',
+    'multimedia',
+    'connectivity'
   ],
-  "rectangle-horizontal": [
-    "shapes",
-    "design"
+  'rectangle-horizontal': [
+    'shapes',
+    'design'
   ],
-  "rectangle-vertical": [
-    "shapes",
-    "design"
+  'rectangle-vertical': [
+    'shapes',
+    'design'
   ],
-  "recycle": [
-    "sustainability"
+  'recycle': [
+    'sustainability'
   ],
-  "redo-2": [
-    "text",
-    "arrows"
+  'redo-2': [
+    'text',
+    'arrows'
   ],
-  "redo-dot": [
-    "text",
-    "arrows"
+  'redo-dot': [
+    'text',
+    'arrows'
   ],
-  "redo": [
-    "text",
-    "arrows"
+  'redo': [
+    'text',
+    'arrows'
   ],
-  "refresh-ccw-dot": [
-    "arrows",
-    "development"
+  'refresh-ccw-dot': [
+    'arrows',
+    'development'
   ],
-  "refresh-ccw": [
-    "arrows"
+  'refresh-ccw': [
+    'arrows'
   ],
-  "refresh-cw-off": [
-    "arrows"
+  'refresh-cw-off': [
+    'arrows'
   ],
-  "refresh-cw": [
-    "arrows"
+  'refresh-cw': [
+    'arrows'
   ],
-  "refrigerator": [
-    "food-beverage",
-    "home"
+  'refrigerator': [
+    'food-beverage',
+    'home'
   ],
-  "regex": [
-    "text",
-    "development"
+  'regex': [
+    'text',
+    'development'
   ],
-  "remove-formatting": [
-    "text"
+  'remove-formatting': [
+    'text'
   ],
-  "repeat-1": [
-    "multimedia"
+  'repeat-1': [
+    'multimedia'
   ],
-  "repeat-2": [
-    "arrows",
-    "social",
-    "multimedia"
+  'repeat-2': [
+    'arrows',
+    'social',
+    'multimedia'
   ],
-  "repeat": [
-    "arrows",
-    "multimedia"
+  'repeat': [
+    'arrows',
+    'multimedia'
   ],
-  "replace-all": [
-    "text"
+  'replace-all': [
+    'text'
   ],
-  "replace": [
-    "text"
+  'replace': [
+    'text'
   ],
-  "reply-all": [
-    "mail"
+  'reply-all': [
+    'mail'
   ],
-  "reply": [
-    "mail"
+  'reply': [
+    'mail'
   ],
-  "rewind": [
-    "arrows",
-    "multimedia"
+  'rewind': [
+    'arrows',
+    'multimedia'
   ],
-  "ribbon": [
-    "social",
-    "medical",
-    "emoji"
+  'ribbon': [
+    'social',
+    'medical',
+    'emoji'
   ],
-  "rocket": [
-    "gaming",
-    "development"
+  'rocket': [
+    'gaming',
+    'development'
   ],
-  "rocking-chair": [
-    "home"
+  'rocking-chair': [
+    'home'
   ],
-  "roller-coaster": [
-    "navigation"
+  'roller-coaster': [
+    'navigation'
   ],
-  "rose": [
-    "nature",
-    "seasons",
-    "sustainability",
-    "home",
-    "social"
+  'rose': [
+    'nature',
+    'seasons',
+    'sustainability',
+    'home',
+    'social'
   ],
-  "rotate-3d": [
-    "design"
+  'rotate-3d': [
+    'design'
   ],
-  "rotate-ccw-key": [
-    "security",
-    "account"
+  'rotate-ccw-key': [
+    'security',
+    'account'
   ],
-  "rotate-ccw-square": [
-    "layout",
-    "design",
-    "photography",
-    "tools",
-    "arrows"
+  'rotate-ccw-square': [
+    'layout',
+    'design',
+    'photography',
+    'tools',
+    'arrows'
   ],
-  "rotate-ccw": [
-    "arrows",
-    "design",
-    "photography"
+  'rotate-ccw': [
+    'arrows',
+    'design',
+    'photography'
   ],
-  "rotate-cw-square": [
-    "layout",
-    "design",
-    "photography",
-    "tools",
-    "arrows"
+  'rotate-cw-square': [
+    'layout',
+    'design',
+    'photography',
+    'tools',
+    'arrows'
   ],
-  "rotate-cw": [
-    "arrows",
-    "design",
-    "photography"
+  'rotate-cw': [
+    'arrows',
+    'design',
+    'photography'
   ],
-  "route-off": [
-    "navigation"
+  'route-off': [
+    'navigation'
   ],
-  "route": [
-    "navigation"
+  'route': [
+    'navigation'
   ],
-  "router": [
-    "development",
-    "devices",
-    "connectivity",
-    "home"
+  'router': [
+    'development',
+    'devices',
+    'connectivity',
+    'home'
   ],
-  "rows-2": [
-    "layout",
-    "design",
-    "text"
+  'rows-2': [
+    'layout',
+    'design',
+    'text'
   ],
-  "rows-3": [
-    "layout",
-    "design",
-    "text"
+  'rows-3': [
+    'layout',
+    'design',
+    'text'
   ],
-  "rows-4": [
-    "layout",
-    "design",
-    "text"
+  'rows-4': [
+    'layout',
+    'design',
+    'text'
   ],
-  "rss": [
-    "development",
-    "social"
+  'rss': [
+    'development',
+    'social'
   ],
-  "ruler-dimension-line": [
-    "tools",
-    "design",
-    "layout"
+  'ruler-dimension-line': [
+    'tools',
+    'design',
+    'layout'
   ],
-  "ruler": [
-    "tools",
-    "design",
-    "layout"
+  'ruler': [
+    'tools',
+    'design',
+    'layout'
   ],
-  "russian-ruble": [
-    "finance"
+  'russian-ruble': [
+    'finance'
   ],
-  "sailboat": [
-    "transportation",
-    "travel"
+  'sailboat': [
+    'transportation',
+    'travel'
   ],
-  "salad": [
-    "food-beverage",
-    "emoji"
+  'salad': [
+    'food-beverage',
+    'emoji'
   ],
-  "sandwich": [
-    "food-beverage"
+  'sandwich': [
+    'food-beverage'
   ],
-  "satellite-dish": [
-    "connectivity",
-    "devices",
-    "multimedia"
+  'satellite-dish': [
+    'connectivity',
+    'devices',
+    'multimedia'
   ],
-  "satellite": [
-    "connectivity",
-    "science"
+  'satellite': [
+    'connectivity',
+    'science'
   ],
-  "saudi-riyal": [
-    "finance"
+  'saudi-riyal': [
+    'finance'
   ],
-  "save-all": [
-    "text",
-    "files"
+  'save-all': [
+    'text',
+    'files'
   ],
-  "save-off": [
-    "text",
-    "files"
+  'save-off': [
+    'text',
+    'files'
   ],
-  "save": [
-    "text",
-    "files"
+  'save': [
+    'text',
+    'files'
   ],
-  "scale-3d": [
-    "design"
+  'scale-3d': [
+    'design'
   ],
-  "scale": [
-    "navigation"
+  'scale': [
+    'navigation'
   ],
-  "scaling": [
-    "design"
+  'scaling': [
+    'design'
   ],
-  "scan-barcode": [
-    "shopping",
-    "devices"
+  'scan-barcode': [
+    'shopping',
+    'devices'
   ],
-  "scan-eye": [
-    "photography",
-    "multimedia",
-    "accessibility",
-    "security",
-    "devices",
-    "account"
+  'scan-eye': [
+    'photography',
+    'multimedia',
+    'accessibility',
+    'security',
+    'devices',
+    'account'
   ],
-  "scan-face": [
-    "account",
-    "security",
-    "devices",
-    "social"
+  'scan-face': [
+    'account',
+    'security',
+    'devices',
+    'social'
   ],
-  "scan-heart": [
-    "medical"
+  'scan-heart': [
+    'medical'
   ],
-  "scan-line": [
-    "devices",
-    "shopping"
+  'scan-line': [
+    'devices',
+    'shopping'
   ],
-  "scan-qr-code": [
-    "account",
-    "shopping",
-    "devices",
-    "security"
+  'scan-qr-code': [
+    'account',
+    'shopping',
+    'devices',
+    'security'
   ],
-  "scan-search": [
-    "photography",
-    "multimedia",
-    "accessibility"
+  'scan-search': [
+    'photography',
+    'multimedia',
+    'accessibility'
   ],
-  "scan-text": [
-    "text",
-    "devices"
+  'scan-text': [
+    'text',
+    'devices'
   ],
-  "scan": [
-    "devices",
-    "shopping",
-    "security",
-    "social",
-    "gaming"
+  'scan': [
+    'devices',
+    'shopping',
+    'security',
+    'social',
+    'gaming'
   ],
-  "school": [
-    "buildings",
-    "navigation"
+  'school': [
+    'buildings',
+    'navigation'
   ],
-  "scissors-line-dashed": [
-    "design",
-    "tools"
+  'scissors-line-dashed': [
+    'design',
+    'tools'
   ],
-  "scissors": [
-    "text",
-    "design",
-    "tools"
+  'scissors': [
+    'text',
+    'design',
+    'tools'
   ],
-  "screen-share-off": [
-    "connectivity",
-    "devices",
-    "communication"
+  'screen-share-off': [
+    'connectivity',
+    'devices',
+    'communication'
   ],
-  "screen-share": [
-    "connectivity",
-    "devices",
-    "communication"
+  'screen-share': [
+    'connectivity',
+    'devices',
+    'communication'
   ],
-  "scroll-text": [
-    "gaming",
-    "development",
-    "text"
+  'scroll-text': [
+    'gaming',
+    'development',
+    'text'
   ],
-  "scroll": [
-    "gaming",
-    "development",
-    "text"
+  'scroll': [
+    'gaming',
+    'development',
+    'text'
   ],
-  "search-check": [
-    "text",
-    "social"
+  'search-check': [
+    'text',
+    'social'
   ],
-  "search-code": [
-    "text",
-    "social",
-    "development"
+  'search-code': [
+    'text',
+    'social',
+    'development'
   ],
-  "search-slash": [
-    "text",
-    "social"
+  'search-slash': [
+    'text',
+    'social'
   ],
-  "search-x": [
-    "text",
-    "social"
+  'search-x': [
+    'text',
+    'social'
   ],
-  "search": [
-    "text",
-    "social"
+  'search': [
+    'text',
+    'social'
   ],
-  "section": [
-    "text"
+  'section': [
+    'text'
   ],
-  "send-horizontal": [
-    "mail",
-    "communication",
-    "connectivity"
+  'send-horizontal': [
+    'mail',
+    'communication',
+    'connectivity'
   ],
-  "send-to-back": [
-    "design",
-    "layout"
+  'send-to-back': [
+    'design',
+    'layout'
   ],
-  "send": [
-    "mail",
-    "communication",
-    "connectivity"
+  'send': [
+    'mail',
+    'communication',
+    'connectivity'
   ],
-  "separator-horizontal": [
-    "text",
-    "arrows",
-    "layout"
+  'separator-horizontal': [
+    'text',
+    'arrows',
+    'layout'
   ],
-  "separator-vertical": [
-    "text",
-    "arrows",
-    "layout"
+  'separator-vertical': [
+    'text',
+    'arrows',
+    'layout'
   ],
-  "server-cog": [
-    "development",
-    "devices"
+  'server-cog': [
+    'development',
+    'devices'
   ],
-  "server-crash": [
-    "development",
-    "devices"
+  'server-crash': [
+    'development',
+    'devices'
   ],
-  "server-off": [
-    "development",
-    "devices"
+  'server-off': [
+    'development',
+    'devices'
   ],
-  "server": [
-    "development",
-    "devices"
+  'server': [
+    'development',
+    'devices'
   ],
-  "settings-2": [
-    "account"
+  'settings-2': [
+    'account'
   ],
-  "settings": [
-    "account"
+  'settings': [
+    'account'
   ],
-  "shapes": [
-    "shapes",
-    "gaming"
+  'shapes': [
+    'shapes',
+    'gaming'
   ],
-  "share-2": [
-    "account",
-    "social"
+  'share-2': [
+    'account',
+    'social'
   ],
-  "share": [
-    "account",
-    "social"
+  'share': [
+    'account',
+    'social'
   ],
-  "sheet": [
-    "text",
-    "files"
+  'sheet': [
+    'text',
+    'files'
   ],
-  "shell": [
-    "animals",
-    "development",
-    "nature",
-    "science",
-    "travel",
-    "food-beverage",
-    "home"
+  'shell': [
+    'animals',
+    'development',
+    'nature',
+    'science',
+    'travel',
+    'food-beverage',
+    'home'
   ],
-  "shield-alert": [
-    "account",
-    "security",
-    "development",
-    "notifications",
-    "gaming"
+  'shield-alert': [
+    'account',
+    'security',
+    'development',
+    'notifications',
+    'gaming'
   ],
-  "shield-ban": [
-    "account",
-    "security",
-    "development",
-    "gaming"
+  'shield-ban': [
+    'account',
+    'security',
+    'development',
+    'gaming'
   ],
-  "shield-check": [
-    "account",
-    "security",
-    "development",
-    "gaming"
+  'shield-check': [
+    'account',
+    'security',
+    'development',
+    'gaming'
   ],
-  "shield-ellipsis": [
-    "account",
-    "security",
-    "development",
-    "gaming"
+  'shield-ellipsis': [
+    'account',
+    'security',
+    'development',
+    'gaming'
   ],
-  "shield-half": [
-    "account",
-    "security",
-    "development",
-    "gaming"
+  'shield-half': [
+    'account',
+    'security',
+    'development',
+    'gaming'
   ],
-  "shield-minus": [
-    "account",
-    "security",
-    "development",
-    "gaming"
+  'shield-minus': [
+    'account',
+    'security',
+    'development',
+    'gaming'
   ],
-  "shield-off": [
-    "account",
-    "security",
-    "development",
-    "gaming"
+  'shield-off': [
+    'account',
+    'security',
+    'development',
+    'gaming'
   ],
-  "shield-plus": [
-    "account",
-    "security",
-    "development",
-    "gaming",
-    "medical"
+  'shield-plus': [
+    'account',
+    'security',
+    'development',
+    'gaming',
+    'medical'
   ],
-  "shield-question-mark": [
-    "account",
-    "security",
-    "development",
-    "gaming"
+  'shield-question-mark': [
+    'account',
+    'security',
+    'development',
+    'gaming'
   ],
-  "shield-user": [
-    "account",
-    "security",
-    "development"
+  'shield-user': [
+    'account',
+    'security',
+    'development'
   ],
-  "shield-x": [
-    "account",
-    "security",
-    "development",
-    "gaming"
+  'shield-x': [
+    'account',
+    'security',
+    'development',
+    'gaming'
   ],
-  "shield": [
-    "account",
-    "security",
-    "development",
-    "gaming",
-    "shapes"
+  'shield': [
+    'account',
+    'security',
+    'development',
+    'gaming',
+    'shapes'
   ],
-  "ship-wheel": [
-    "transportation",
-    "navigation",
-    "travel"
+  'ship-wheel': [
+    'transportation',
+    'navigation',
+    'travel'
   ],
-  "ship": [
-    "transportation",
-    "navigation",
-    "travel"
+  'ship': [
+    'transportation',
+    'navigation',
+    'travel'
   ],
-  "shirt": [
-    "shopping"
+  'shirt': [
+    'shopping'
   ],
-  "shopping-bag": [
-    "shopping"
+  'shopping-bag': [
+    'shopping'
   ],
-  "shopping-basket": [
-    "shopping"
+  'shopping-basket': [
+    'shopping'
   ],
-  "shopping-cart": [
-    "shopping"
+  'shopping-cart': [
+    'shopping'
   ],
-  "shovel": [
-    "nature",
-    "tools",
-    "gaming"
+  'shovel': [
+    'nature',
+    'tools',
+    'gaming'
   ],
-  "shower-head": [
-    "home",
-    "travel"
+  'shower-head': [
+    'home',
+    'travel'
   ],
-  "shredder": [
-    "mail",
-    "files"
+  'shredder': [
+    'mail',
+    'files'
   ],
-  "shrimp": [
-    "animals"
+  'shrimp': [
+    'animals'
   ],
-  "shrink": [
-    "layout",
-    "arrows"
+  'shrink': [
+    'layout',
+    'arrows'
   ],
-  "shrub": [
-    "nature"
+  'shrub': [
+    'nature'
   ],
-  "shuffle": [
-    "multimedia",
-    "arrows"
+  'shuffle': [
+    'multimedia',
+    'arrows'
   ],
-  "sigma": [
-    "text",
-    "math",
-    "science"
+  'sigma': [
+    'text',
+    'math',
+    'science'
   ],
-  "signal-high": [
-    "connectivity"
+  'signal-high': [
+    'connectivity'
   ],
-  "signal-low": [
-    "connectivity"
+  'signal-low': [
+    'connectivity'
   ],
-  "signal-medium": [
-    "connectivity"
+  'signal-medium': [
+    'connectivity'
   ],
-  "signal-zero": [
-    "connectivity"
+  'signal-zero': [
+    'connectivity'
   ],
-  "signal": [
-    "connectivity"
+  'signal': [
+    'connectivity'
   ],
-  "signature": [
-    "text"
+  'signature': [
+    'text'
   ],
-  "signpost-big": [
-    "arrows",
-    "navigation",
-    "development",
-    "gaming"
+  'signpost-big': [
+    'arrows',
+    'navigation',
+    'development',
+    'gaming'
   ],
-  "signpost": [
-    "arrows",
-    "navigation",
-    "development",
-    "gaming"
+  'signpost': [
+    'arrows',
+    'navigation',
+    'development',
+    'gaming'
   ],
-  "siren": [
-    "medical"
+  'siren': [
+    'medical'
   ],
-  "skip-back": [
-    "multimedia",
-    "arrows"
+  'skip-back': [
+    'multimedia',
+    'arrows'
   ],
-  "skip-forward": [
-    "multimedia",
-    "arrows"
+  'skip-forward': [
+    'multimedia',
+    'arrows'
   ],
-  "skull": [
-    "gaming"
+  'skull': [
+    'gaming'
   ],
-  "slack": [
-    "account",
-    "social",
-    "brands",
-    "development"
+  'slack': [
+    'account',
+    'social',
+    'brands',
+    'development'
   ],
-  "slash": [
-    "development",
-    "math"
+  'slash': [
+    'development',
+    'math'
   ],
-  "slice": [
-    "design"
+  'slice': [
+    'design'
   ],
-  "sliders-horizontal": [
-    "account"
+  'sliders-horizontal': [
+    'account'
   ],
-  "sliders-vertical": [
-    "account"
+  'sliders-vertical': [
+    'account'
   ],
-  "smartphone-charging": [
-    "connectivity",
-    "devices"
+  'smartphone-charging': [
+    'connectivity',
+    'devices'
   ],
-  "smartphone-nfc": [
-    "communication",
-    "finance",
-    "devices"
+  'smartphone-nfc': [
+    'communication',
+    'finance',
+    'devices'
   ],
-  "smartphone": [
-    "connectivity",
-    "devices"
+  'smartphone': [
+    'connectivity',
+    'devices'
   ],
-  "smile-plus": [
-    "emoji",
-    "social",
-    "notifications",
-    "communication"
+  'smile-plus': [
+    'emoji',
+    'social',
+    'notifications',
+    'communication'
   ],
-  "smile": [
-    "emoji",
-    "account"
+  'smile': [
+    'emoji',
+    'account'
   ],
-  "snail": [
-    "animals",
-    "food-beverage"
+  'snail': [
+    'animals',
+    'food-beverage'
   ],
-  "snowflake": [
-    "weather",
-    "seasons"
+  'snowflake': [
+    'weather',
+    'seasons'
   ],
-  "soap-dispenser-droplet": [
-    "home",
-    "travel"
+  'soap-dispenser-droplet': [
+    'home',
+    'travel'
   ],
-  "sofa": [
-    "home"
+  'sofa': [
+    'home'
   ],
-  "soup": [
-    "food-beverage"
+  'soup': [
+    'food-beverage'
   ],
-  "space": [
-    "text"
+  'space': [
+    'text'
   ],
-  "spade": [
-    "shapes",
-    "gaming"
+  'spade': [
+    'shapes',
+    'gaming'
   ],
-  "sparkle": [
-    "shapes"
+  'sparkle': [
+    'shapes'
   ],
-  "sparkles": [
-    "cursors",
-    "multimedia",
-    "gaming",
-    "weather"
+  'sparkles': [
+    'cursors',
+    'multimedia',
+    'gaming',
+    'weather'
   ],
-  "speaker": [
-    "multimedia",
-    "devices"
+  'speaker': [
+    'multimedia',
+    'devices'
   ],
-  "speech": [
-    "accessibility",
-    "communication"
+  'speech': [
+    'accessibility',
+    'communication'
   ],
-  "spell-check-2": [
-    "text",
-    "development"
+  'spell-check-2': [
+    'text',
+    'development'
   ],
-  "spell-check": [
-    "text",
-    "development"
+  'spell-check': [
+    'text',
+    'development'
   ],
-  "spline-pointer": [
-    "arrows",
-    "cursors",
-    "design",
-    "tools"
+  'spline-pointer': [
+    'arrows',
+    'cursors',
+    'design',
+    'tools'
   ],
-  "spline": [
-    "design"
+  'spline': [
+    'design'
   ],
-  "split": [
-    "development",
-    "arrows"
+  'split': [
+    'development',
+    'arrows'
   ],
-  "spool": [
-    "communication",
-    "tools",
-    "social"
+  'spool': [
+    'communication',
+    'tools',
+    'social'
   ],
-  "spotlight": [
-    "devices",
-    "photography",
-    "multimedia",
-    "communication"
+  'spotlight': [
+    'devices',
+    'photography',
+    'multimedia',
+    'communication'
   ],
-  "spray-can": [
-    "design",
-    "tools"
+  'spray-can': [
+    'design',
+    'tools'
   ],
-  "sprout": [
-    "nature",
-    "gaming",
-    "sustainability"
+  'sprout': [
+    'nature',
+    'gaming',
+    'sustainability'
   ],
-  "square-activity": [
-    "medical",
-    "social",
-    "science",
-    "multimedia"
+  'square-activity': [
+    'medical',
+    'social',
+    'science',
+    'multimedia'
   ],
-  "square-arrow-down-left": [
-    "arrows",
-    "navigation",
-    "gaming"
+  'square-arrow-down-left': [
+    'arrows',
+    'navigation',
+    'gaming'
   ],
-  "square-arrow-down-right": [
-    "arrows",
-    "navigation",
-    "gaming"
+  'square-arrow-down-right': [
+    'arrows',
+    'navigation',
+    'gaming'
   ],
-  "square-arrow-down": [
-    "arrows",
-    "navigation",
-    "gaming"
+  'square-arrow-down': [
+    'arrows',
+    'navigation',
+    'gaming'
   ],
-  "square-arrow-left": [
-    "arrows",
-    "navigation"
+  'square-arrow-left': [
+    'arrows',
+    'navigation'
   ],
-  "square-arrow-out-down-left": [
-    "arrows",
-    "navigation"
+  'square-arrow-out-down-left': [
+    'arrows',
+    'navigation'
   ],
-  "square-arrow-out-down-right": [
-    "arrows",
-    "navigation"
+  'square-arrow-out-down-right': [
+    'arrows',
+    'navigation'
   ],
-  "square-arrow-out-up-left": [
-    "arrows",
-    "navigation"
+  'square-arrow-out-up-left': [
+    'arrows',
+    'navigation'
   ],
-  "square-arrow-out-up-right": [
-    "arrows",
-    "navigation",
-    "social"
+  'square-arrow-out-up-right': [
+    'arrows',
+    'navigation',
+    'social'
   ],
-  "square-arrow-right": [
-    "arrows",
-    "navigation"
+  'square-arrow-right': [
+    'arrows',
+    'navigation'
   ],
-  "square-arrow-up-left": [
-    "arrows",
-    "navigation"
+  'square-arrow-up-left': [
+    'arrows',
+    'navigation'
   ],
-  "square-arrow-up-right": [
-    "arrows",
-    "navigation",
-    "social"
+  'square-arrow-up-right': [
+    'arrows',
+    'navigation',
+    'social'
   ],
-  "square-arrow-up": [
-    "arrows",
-    "navigation"
+  'square-arrow-up': [
+    'arrows',
+    'navigation'
   ],
-  "square-asterisk": [
-    "text",
-    "security",
-    "math",
-    "development"
+  'square-asterisk': [
+    'text',
+    'security',
+    'math',
+    'development'
   ],
-  "square-bottom-dashed-scissors": [
-    "text",
-    "design",
-    "tools",
-    "files",
-    "development"
+  'square-bottom-dashed-scissors': [
+    'text',
+    'design',
+    'tools',
+    'files',
+    'development'
   ],
-  "square-chart-gantt": [
-    "charts",
-    "time",
-    "development",
-    "design"
+  'square-chart-gantt': [
+    'charts',
+    'time',
+    'development',
+    'design'
   ],
-  "square-check-big": [
-    "notifications"
+  'square-check-big': [
+    'notifications'
   ],
-  "square-check": [
-    "notifications"
+  'square-check': [
+    'notifications'
   ],
-  "square-chevron-down": [
-    "arrows",
-    "navigation"
+  'square-chevron-down': [
+    'arrows',
+    'navigation'
   ],
-  "square-chevron-left": [
-    "arrows",
-    "navigation"
+  'square-chevron-left': [
+    'arrows',
+    'navigation'
   ],
-  "square-chevron-right": [
-    "arrows",
-    "navigation",
-    "development"
+  'square-chevron-right': [
+    'arrows',
+    'navigation',
+    'development'
   ],
-  "square-chevron-up": [
-    "arrows",
-    "navigation",
-    "math"
+  'square-chevron-up': [
+    'arrows',
+    'navigation',
+    'math'
   ],
-  "square-code": [
-    "text",
-    "development"
+  'square-code': [
+    'text',
+    'development'
   ],
-  "square-dashed-bottom-code": [
-    "development",
-    "files"
+  'square-dashed-bottom-code': [
+    'development',
+    'files'
   ],
-  "square-dashed-bottom": [
-    "development",
-    "files"
+  'square-dashed-bottom': [
+    'development',
+    'files'
   ],
-  "square-dashed-kanban": [
-    "charts",
-    "development",
-    "design"
+  'square-dashed-kanban': [
+    'charts',
+    'development',
+    'design'
   ],
-  "square-dashed-mouse-pointer": [
-    "arrows",
-    "cursors",
-    "development",
-    "tools"
+  'square-dashed-mouse-pointer': [
+    'arrows',
+    'cursors',
+    'development',
+    'tools'
   ],
-  "square-dashed-top-solid": [
-    "design",
-    "development",
-    "layout"
+  'square-dashed-top-solid': [
+    'design',
+    'development',
+    'layout'
   ],
-  "square-dashed": [
-    "text",
-    "design"
+  'square-dashed': [
+    'text',
+    'design'
   ],
-  "square-divide": [
-    "math"
+  'square-divide': [
+    'math'
   ],
-  "square-dot": [
-    "development"
+  'square-dot': [
+    'development'
   ],
-  "square-equal": [
-    "math"
+  'square-equal': [
+    'math'
   ],
-  "square-function": [
-    "development",
-    "math"
+  'square-function': [
+    'development',
+    'math'
   ],
-  "square-kanban": [
-    "charts",
-    "development",
-    "design"
+  'square-kanban': [
+    'charts',
+    'development',
+    'design'
   ],
-  "square-library": [
-    "text",
-    "photography",
-    "multimedia",
-    "navigation",
-    "development"
+  'square-library': [
+    'text',
+    'photography',
+    'multimedia',
+    'navigation',
+    'development'
   ],
-  "square-m": [
-    "transportation",
-    "navigation"
+  'square-m': [
+    'transportation',
+    'navigation'
   ],
-  "square-menu": [
-    "layout"
+  'square-menu': [
+    'layout'
   ],
-  "square-minus": [
-    "math",
-    "development",
-    "text",
-    "tools",
-    "devices"
+  'square-minus': [
+    'math',
+    'development',
+    'text',
+    'tools',
+    'devices'
   ],
-  "square-mouse-pointer": [
-    "arrows",
-    "cursors",
-    "development",
-    "tools"
+  'square-mouse-pointer': [
+    'arrows',
+    'cursors',
+    'development',
+    'tools'
   ],
-  "square-parking-off": [
-    "transportation",
-    "navigation"
+  'square-parking-off': [
+    'transportation',
+    'navigation'
   ],
-  "square-parking": [
-    "transportation",
-    "navigation"
+  'square-parking': [
+    'transportation',
+    'navigation'
   ],
-  "square-pause": [
-    "multimedia"
+  'square-pause': [
+    'multimedia'
   ],
-  "square-pen": [
-    "text"
+  'square-pen': [
+    'text'
   ],
-  "square-percent": [
-    "social",
-    "finance",
-    "shopping",
-    "math"
+  'square-percent': [
+    'social',
+    'finance',
+    'shopping',
+    'math'
   ],
-  "square-pi": [
-    "development",
-    "math"
+  'square-pi': [
+    'development',
+    'math'
   ],
-  "square-pilcrow": [
-    "text"
+  'square-pilcrow': [
+    'text'
   ],
-  "square-play": [
-    "arrows",
-    "multimedia"
+  'square-play': [
+    'arrows',
+    'multimedia'
   ],
-  "square-plus": [
-    "math",
-    "tools",
-    "development",
-    "text"
+  'square-plus': [
+    'math',
+    'tools',
+    'development',
+    'text'
   ],
-  "square-power": [
-    "connectivity"
+  'square-power': [
+    'connectivity'
   ],
-  "square-radical": [
-    "development",
-    "math"
+  'square-radical': [
+    'development',
+    'math'
   ],
-  "square-round-corner": [
-    "design",
-    "development",
-    "layout"
+  'square-round-corner': [
+    'design',
+    'development',
+    'layout'
   ],
-  "square-scissors": [
-    "text",
-    "design",
-    "tools",
-    "files",
-    "development"
+  'square-scissors': [
+    'text',
+    'design',
+    'tools',
+    'files',
+    'development'
   ],
-  "square-sigma": [
-    "text",
-    "math"
+  'square-sigma': [
+    'text',
+    'math'
   ],
-  "square-slash": [
-    "development",
-    "math"
+  'square-slash': [
+    'development',
+    'math'
   ],
-  "square-split-horizontal": [
-    "layout"
+  'square-split-horizontal': [
+    'layout'
   ],
-  "square-split-vertical": [
-    "layout"
+  'square-split-vertical': [
+    'layout'
   ],
-  "square-square": [
-    "layout"
+  'square-square': [
+    'layout'
   ],
-  "square-stack": [
-    "text",
-    "files",
-    "development"
+  'square-stack': [
+    'text',
+    'files',
+    'development'
   ],
-  "square-star": [
-    "sports",
-    "gaming"
+  'square-star': [
+    'sports',
+    'gaming'
   ],
-  "square-stop": [
-    "multimedia"
+  'square-stop': [
+    'multimedia'
   ],
-  "square-terminal": [
-    "development"
+  'square-terminal': [
+    'development'
   ],
-  "square-user-round": [
-    "account"
+  'square-user-round': [
+    'account'
   ],
-  "square-user": [
-    "account"
+  'square-user': [
+    'account'
   ],
-  "square-x": [
-    "math",
-    "notifications"
+  'square-x': [
+    'math',
+    'notifications'
   ],
-  "square": [
-    "shapes",
-    "multimedia"
+  'square': [
+    'shapes',
+    'multimedia'
   ],
-  "squares-exclude": [
-    "design"
+  'squares-exclude': [
+    'design'
   ],
-  "squares-intersect": [
-    "design"
+  'squares-intersect': [
+    'design'
   ],
-  "squares-subtract": [
-    "design"
+  'squares-subtract': [
+    'design'
   ],
-  "squares-unite": [
-    "design"
+  'squares-unite': [
+    'design'
   ],
-  "squircle-dashed": [
-    "development",
-    "shapes",
-    "design"
+  'squircle-dashed': [
+    'development',
+    'shapes',
+    'design'
   ],
-  "squircle": [
-    "shapes"
+  'squircle': [
+    'shapes'
   ],
-  "squirrel": [
-    "animals"
+  'squirrel': [
+    'animals'
   ],
-  "stamp": [
-    "design",
-    "cursors",
-    "tools"
+  'stamp': [
+    'design',
+    'cursors',
+    'tools'
   ],
-  "star-half": [
-    "social",
-    "multimedia"
+  'star-half': [
+    'social',
+    'multimedia'
   ],
-  "star-off": [
-    "multimedia",
-    "social"
+  'star-off': [
+    'multimedia',
+    'social'
   ],
-  "star": [
-    "account",
-    "social",
-    "shapes",
-    "multimedia",
-    "weather",
-    "emoji",
-    "gaming"
+  'star': [
+    'account',
+    'social',
+    'shapes',
+    'multimedia',
+    'weather',
+    'emoji',
+    'gaming'
   ],
-  "step-back": [
-    "multimedia",
-    "arrows"
+  'step-back': [
+    'multimedia',
+    'arrows'
   ],
-  "step-forward": [
-    "multimedia",
-    "arrows"
+  'step-forward': [
+    'multimedia',
+    'arrows'
   ],
-  "stethoscope": [
-    "science",
-    "medical"
+  'stethoscope': [
+    'science',
+    'medical'
   ],
-  "sticker": [
-    "social"
+  'sticker': [
+    'social'
   ],
-  "sticky-note": [
-    "text",
-    "social"
+  'sticky-note': [
+    'text',
+    'social'
   ],
-  "store": [
-    "buildings",
-    "navigation",
-    "shopping"
+  'store': [
+    'buildings',
+    'navigation',
+    'shopping'
   ],
-  "stretch-horizontal": [
-    "layout"
+  'stretch-horizontal': [
+    'layout'
   ],
-  "stretch-vertical": [
-    "layout"
+  'stretch-vertical': [
+    'layout'
   ],
-  "strikethrough": [
-    "text"
+  'strikethrough': [
+    'text'
   ],
-  "subscript": [
-    "text"
+  'subscript': [
+    'text'
   ],
-  "sun-dim": [
-    "accessibility",
-    "weather"
+  'sun-dim': [
+    'accessibility',
+    'weather'
   ],
-  "sun-medium": [
-    "accessibility",
-    "weather"
+  'sun-medium': [
+    'accessibility',
+    'weather'
   ],
-  "sun-moon": [
-    "accessibility"
+  'sun-moon': [
+    'accessibility'
   ],
-  "sun-snow": [
-    "weather"
+  'sun-snow': [
+    'weather'
   ],
-  "sun": [
-    "accessibility",
-    "weather",
-    "seasons",
-    "sustainability"
+  'sun': [
+    'accessibility',
+    'weather',
+    'seasons',
+    'sustainability'
   ],
-  "sunrise": [
-    "arrows",
-    "weather",
-    "time"
+  'sunrise': [
+    'arrows',
+    'weather',
+    'time'
   ],
-  "sunset": [
-    "arrows",
-    "weather"
+  'sunset': [
+    'arrows',
+    'weather'
   ],
-  "superscript": [
-    "text"
+  'superscript': [
+    'text'
   ],
-  "swatch-book": [
-    "design",
-    "home",
-    "photography"
+  'swatch-book': [
+    'design',
+    'home',
+    'photography'
   ],
-  "swiss-franc": [
-    "finance"
+  'swiss-franc': [
+    'finance'
   ],
-  "switch-camera": [
-    "communication",
-    "devices"
+  'switch-camera': [
+    'communication',
+    'devices'
   ],
-  "sword": [
-    "gaming",
-    "tools"
+  'sword': [
+    'gaming',
+    'tools'
   ],
-  "swords": [
-    "gaming",
-    "tools"
+  'swords': [
+    'gaming',
+    'tools'
   ],
-  "syringe": [
-    "science",
-    "medical"
+  'syringe': [
+    'science',
+    'medical'
   ],
-  "table-2": [
-    "text",
-    "files"
+  'table-2': [
+    'text',
+    'files'
   ],
-  "table-cells-merge": [
-    "text",
-    "files"
+  'table-cells-merge': [
+    'text',
+    'files'
   ],
-  "table-cells-split": [
-    "text",
-    "files"
+  'table-cells-split': [
+    'text',
+    'files'
   ],
-  "table-columns-split": [
-    "text",
-    "files"
+  'table-columns-split': [
+    'text',
+    'files'
   ],
-  "table-of-contents": [
-    "text"
+  'table-of-contents': [
+    'text'
   ],
-  "table-properties": [
-    "text",
-    "development",
-    "files"
+  'table-properties': [
+    'text',
+    'development',
+    'files'
   ],
-  "table-rows-split": [
-    "text",
-    "files"
+  'table-rows-split': [
+    'text',
+    'files'
   ],
-  "table": [
-    "text",
-    "files"
+  'table': [
+    'text',
+    'files'
   ],
-  "tablet-smartphone": [
-    "devices",
-    "design",
-    "development",
-    "tools"
+  'tablet-smartphone': [
+    'devices',
+    'design',
+    'development',
+    'tools'
   ],
-  "tablet": [
-    "devices"
+  'tablet': [
+    'devices'
   ],
-  "tablets": [
-    "medical"
+  'tablets': [
+    'medical'
   ],
-  "tag": [
-    "account"
+  'tag': [
+    'account'
   ],
-  "tags": [
-    "account"
+  'tags': [
+    'account'
   ],
-  "tally-1": [
-    "math",
-    "gaming"
+  'tally-1': [
+    'math',
+    'gaming'
   ],
-  "tally-2": [
-    "math",
-    "gaming"
+  'tally-2': [
+    'math',
+    'gaming'
   ],
-  "tally-3": [
-    "math",
-    "gaming"
+  'tally-3': [
+    'math',
+    'gaming'
   ],
-  "tally-4": [
-    "math",
-    "gaming"
+  'tally-4': [
+    'math',
+    'gaming'
   ],
-  "tally-5": [
-    "math",
-    "gaming"
+  'tally-5': [
+    'math',
+    'gaming'
   ],
-  "tangent": [
-    "shapes",
-    "math",
-    "design",
-    "tools"
+  'tangent': [
+    'shapes',
+    'math',
+    'design',
+    'tools'
   ],
-  "target": [
-    "brands",
-    "gaming"
+  'target': [
+    'brands',
+    'gaming'
   ],
-  "telescope": [
-    "science",
-    "development",
-    "tools"
+  'telescope': [
+    'science',
+    'development',
+    'tools'
   ],
-  "tent-tree": [
-    "travel",
-    "nature"
+  'tent-tree': [
+    'travel',
+    'nature'
   ],
-  "tent": [
-    "travel",
-    "nature",
-    "sustainability"
+  'tent': [
+    'travel',
+    'nature',
+    'sustainability'
   ],
-  "terminal": [
-    "development"
+  'terminal': [
+    'development'
   ],
-  "test-tube-diagonal": [
-    "science"
+  'test-tube-diagonal': [
+    'science'
   ],
-  "test-tube": [
-    "science"
+  'test-tube': [
+    'science'
   ],
-  "test-tubes": [
-    "science"
+  'test-tubes': [
+    'science'
   ],
-  "text-align-center": [
-    "text"
+  'text-align-center': [
+    'text'
   ],
-  "text-align-end": [
-    "text"
+  'text-align-end': [
+    'text'
   ],
-  "text-align-justify": [
-    "text"
+  'text-align-justify': [
+    'text'
   ],
-  "text-align-start": [
-    "text"
+  'text-align-start': [
+    'text'
   ],
-  "text-cursor-input": [
-    "text",
-    "layout"
+  'text-cursor-input': [
+    'text',
+    'layout'
   ],
-  "text-cursor": [
-    "text",
-    "cursors"
+  'text-cursor': [
+    'text',
+    'cursors'
   ],
-  "text-initial": [
-    "text"
+  'text-initial': [
+    'text'
   ],
-  "text-quote": [
-    "text"
+  'text-quote': [
+    'text'
   ],
-  "text-search": [
-    "text"
+  'text-search': [
+    'text'
   ],
-  "text-select": [
-    "text",
-    "cursors"
+  'text-select': [
+    'text',
+    'cursors'
   ],
-  "text-wrap": [
-    "text",
-    "arrows"
+  'text-wrap': [
+    'text',
+    'arrows'
   ],
-  "theater": [
-    "buildings",
-    "social"
+  'theater': [
+    'buildings',
+    'social'
   ],
-  "thermometer-snowflake": [
-    "weather"
+  'thermometer-snowflake': [
+    'weather'
   ],
-  "thermometer-sun": [
-    "weather"
+  'thermometer-sun': [
+    'weather'
   ],
-  "thermometer": [
-    "weather"
+  'thermometer': [
+    'weather'
   ],
-  "thumbs-down": [
-    "account",
-    "social",
-    "emoji"
+  'thumbs-down': [
+    'account',
+    'social',
+    'emoji'
   ],
-  "thumbs-up": [
-    "account",
-    "social",
-    "emoji"
+  'thumbs-up': [
+    'account',
+    'social',
+    'emoji'
   ],
-  "ticket-check": [
-    "transportation"
+  'ticket-check': [
+    'transportation'
   ],
-  "ticket-minus": [
-    "transportation"
+  'ticket-minus': [
+    'transportation'
   ],
-  "ticket-percent": [
-    "transportation",
-    "shopping"
+  'ticket-percent': [
+    'transportation',
+    'shopping'
   ],
-  "ticket-plus": [
-    "transportation"
+  'ticket-plus': [
+    'transportation'
   ],
-  "ticket-slash": [
-    "transportation"
+  'ticket-slash': [
+    'transportation'
   ],
-  "ticket-x": [
-    "transportation"
+  'ticket-x': [
+    'transportation'
   ],
-  "ticket": [
-    "account",
-    "transportation"
+  'ticket': [
+    'account',
+    'transportation'
   ],
-  "tickets-plane": [
-    "transportation",
-    "travel"
+  'tickets-plane': [
+    'transportation',
+    'travel'
   ],
-  "tickets": [
-    "travel",
-    "account",
-    "transportation"
+  'tickets': [
+    'travel',
+    'account',
+    'transportation'
   ],
-  "timer-off": [
-    "time"
+  'timer-off': [
+    'time'
   ],
-  "timer-reset": [
-    "time"
+  'timer-reset': [
+    'time'
   ],
-  "timer": [
-    "time"
+  'timer': [
+    'time'
   ],
-  "toggle-left": [
-    "layout",
-    "account",
-    "development"
+  'toggle-left': [
+    'layout',
+    'account',
+    'development'
   ],
-  "toggle-right": [
-    "layout",
-    "account",
-    "development"
+  'toggle-right': [
+    'layout',
+    'account',
+    'development'
   ],
-  "toilet": [
-    "devices",
-    "home"
+  'toilet': [
+    'devices',
+    'home'
   ],
-  "tool-case": [
-    "tools",
-    "development",
-    "home"
+  'tool-case': [
+    'tools',
+    'development',
+    'home'
   ],
-  "tornado": [
-    "weather"
+  'tornado': [
+    'weather'
   ],
-  "torus": [
-    "shapes",
-    "design",
-    "tools",
-    "food-beverage"
+  'torus': [
+    'shapes',
+    'design',
+    'tools',
+    'food-beverage'
   ],
-  "touchpad-off": [
-    "devices"
+  'touchpad-off': [
+    'devices'
   ],
-  "touchpad": [
-    "devices"
+  'touchpad': [
+    'devices'
   ],
-  "tower-control": [
-    "travel",
-    "transportation"
+  'tower-control': [
+    'travel',
+    'transportation'
   ],
-  "toy-brick": [
-    "gaming",
-    "development"
+  'toy-brick': [
+    'gaming',
+    'development'
   ],
-  "tractor": [
-    "transportation",
-    "sustainability",
-    "food-beverage"
+  'tractor': [
+    'transportation',
+    'sustainability',
+    'food-beverage'
   ],
-  "traffic-cone": [
-    "transportation"
+  'traffic-cone': [
+    'transportation'
   ],
-  "train-front-tunnel": [
-    "transportation",
-    "navigation"
+  'train-front-tunnel': [
+    'transportation',
+    'navigation'
   ],
-  "train-front": [
-    "transportation"
+  'train-front': [
+    'transportation'
   ],
-  "train-track": [
-    "transportation",
-    "navigation"
+  'train-track': [
+    'transportation',
+    'navigation'
   ],
-  "tram-front": [
-    "transportation"
+  'tram-front': [
+    'transportation'
   ],
-  "transgender": [
-    "medical",
-    "accessibility"
+  'transgender': [
+    'medical',
+    'accessibility'
   ],
-  "trash-2": [
-    "files",
-    "mail"
+  'trash-2': [
+    'files',
+    'mail'
   ],
-  "trash": [
-    "files",
-    "mail"
+  'trash': [
+    'files',
+    'mail'
   ],
-  "tree-deciduous": [
-    "nature",
-    "sustainability"
+  'tree-deciduous': [
+    'nature',
+    'sustainability'
   ],
-  "tree-palm": [
-    "nature",
-    "sustainability"
+  'tree-palm': [
+    'nature',
+    'sustainability'
   ],
-  "tree-pine": [
-    "nature",
-    "sustainability"
+  'tree-pine': [
+    'nature',
+    'sustainability'
   ],
-  "trees": [
-    "nature",
-    "sustainability"
+  'trees': [
+    'nature',
+    'sustainability'
   ],
-  "trello": [
-    "account",
-    "brands",
-    "development"
+  'trello': [
+    'account',
+    'brands',
+    'development'
   ],
-  "trending-down": [
-    "charts",
-    "arrows"
+  'trending-down': [
+    'charts',
+    'arrows'
   ],
-  "trending-up-down": [
-    "charts",
-    "arrows"
+  'trending-up-down': [
+    'charts',
+    'arrows'
   ],
-  "trending-up": [
-    "charts",
-    "arrows"
+  'trending-up': [
+    'charts',
+    'arrows'
   ],
-  "triangle-alert": [
-    "notifications",
-    "shapes",
-    "development"
+  'triangle-alert': [
+    'notifications',
+    'shapes',
+    'development'
   ],
-  "triangle-dashed": [
-    "shapes"
+  'triangle-dashed': [
+    'shapes'
   ],
-  "triangle-right": [
-    "shapes",
-    "math"
+  'triangle-right': [
+    'shapes',
+    'math'
   ],
-  "triangle": [
-    "shapes"
+  'triangle': [
+    'shapes'
   ],
-  "trophy": [
-    "sports",
-    "gaming"
+  'trophy': [
+    'sports',
+    'gaming'
   ],
-  "truck-electric": [
-    "transportation"
+  'truck-electric': [
+    'transportation'
   ],
-  "truck": [
-    "transportation"
+  'truck': [
+    'transportation'
   ],
-  "turkish-lira": [
-    "finance"
+  'turkish-lira': [
+    'finance'
   ],
-  "turntable": [
-    "multimedia",
-    "home"
+  'turntable': [
+    'multimedia',
+    'home'
   ],
-  "turtle": [
-    "animals"
+  'turtle': [
+    'animals'
   ],
-  "tv-minimal-play": [
-    "devices",
-    "multimedia"
+  'tv-minimal-play': [
+    'devices',
+    'multimedia'
   ],
-  "tv-minimal": [
-    "devices",
-    "multimedia"
+  'tv-minimal': [
+    'devices',
+    'multimedia'
   ],
-  "tv": [
-    "devices",
-    "multimedia",
-    "communication"
+  'tv': [
+    'devices',
+    'multimedia',
+    'communication'
   ],
-  "twitch": [
-    "brands",
-    "social",
-    "account",
-    "gaming"
+  'twitch': [
+    'brands',
+    'social',
+    'account',
+    'gaming'
   ],
-  "twitter": [
-    "brands",
-    "social",
-    "account"
+  'twitter': [
+    'brands',
+    'social',
+    'account'
   ],
-  "type-outline": [
-    "text"
+  'type-outline': [
+    'text'
   ],
-  "type": [
-    "text"
+  'type': [
+    'text'
   ],
-  "umbrella-off": [
-    "weather"
+  'umbrella-off': [
+    'weather'
   ],
-  "umbrella": [
-    "weather"
+  'umbrella': [
+    'weather'
   ],
-  "underline": [
-    "text"
+  'underline': [
+    'text'
   ],
-  "undo-2": [
-    "text",
-    "arrows"
+  'undo-2': [
+    'text',
+    'arrows'
   ],
-  "undo-dot": [
-    "text",
-    "arrows"
+  'undo-dot': [
+    'text',
+    'arrows'
   ],
-  "undo": [
-    "text",
-    "arrows"
+  'undo': [
+    'text',
+    'arrows'
   ],
-  "unfold-horizontal": [
-    "arrows",
-    "layout"
+  'unfold-horizontal': [
+    'arrows',
+    'layout'
   ],
-  "unfold-vertical": [
-    "arrows",
-    "layout"
+  'unfold-vertical': [
+    'arrows',
+    'layout'
   ],
-  "ungroup": [
-    "shapes",
-    "files"
+  'ungroup': [
+    'shapes',
+    'files'
   ],
-  "university": [
-    "buildings",
-    "navigation"
+  'university': [
+    'buildings',
+    'navigation'
   ],
-  "unlink-2": [
-    "text"
+  'unlink-2': [
+    'text'
   ],
-  "unlink": [
-    "text"
+  'unlink': [
+    'text'
   ],
-  "unplug": [
-    "devices",
-    "development"
+  'unplug': [
+    'devices',
+    'development'
   ],
-  "upload": [
-    "arrows",
-    "files"
+  'upload': [
+    'arrows',
+    'files'
   ],
-  "usb": [
-    "devices",
-    "multimedia",
-    "home"
+  'usb': [
+    'devices',
+    'multimedia',
+    'home'
   ],
-  "user-check": [
-    "account"
+  'user-check': [
+    'account'
   ],
-  "user-cog": [
-    "account"
+  'user-cog': [
+    'account'
   ],
-  "user-lock": [
-    "account",
-    "security"
+  'user-lock': [
+    'account',
+    'security'
   ],
-  "user-minus": [
-    "account"
+  'user-minus': [
+    'account'
   ],
-  "user-pen": [
-    "account"
+  'user-pen': [
+    'account'
   ],
-  "user-plus": [
-    "account"
+  'user-plus': [
+    'account'
   ],
-  "user-round-check": [
-    "account"
+  'user-round-check': [
+    'account'
   ],
-  "user-round-cog": [
-    "account"
+  'user-round-cog': [
+    'account'
   ],
-  "user-round-minus": [
-    "account"
+  'user-round-minus': [
+    'account'
   ],
-  "user-round-pen": [
-    "account"
+  'user-round-pen': [
+    'account'
   ],
-  "user-round-plus": [
-    "account"
+  'user-round-plus': [
+    'account'
   ],
-  "user-round-search": [
-    "account",
-    "social"
+  'user-round-search': [
+    'account',
+    'social'
   ],
-  "user-round-x": [
-    "account"
+  'user-round-x': [
+    'account'
   ],
-  "user-round": [
-    "account"
+  'user-round': [
+    'account'
   ],
-  "user-search": [
-    "account",
-    "social"
+  'user-search': [
+    'account',
+    'social'
   ],
-  "user-star": [
-    "account"
+  'user-star': [
+    'account'
   ],
-  "user-x": [
-    "account"
+  'user-x': [
+    'account'
   ],
-  "user": [
-    "account"
+  'user': [
+    'account'
   ],
-  "users-round": [
-    "account"
+  'users-round': [
+    'account'
   ],
-  "users": [
-    "account"
+  'users': [
+    'account'
   ],
-  "utensils-crossed": [
-    "food-beverage",
-    "travel",
-    "navigation"
+  'utensils-crossed': [
+    'food-beverage',
+    'travel',
+    'navigation'
   ],
-  "utensils": [
-    "food-beverage",
-    "travel",
-    "navigation"
+  'utensils': [
+    'food-beverage',
+    'travel',
+    'navigation'
   ],
-  "utility-pole": [
-    "buildings",
-    "home",
-    "sustainability"
+  'utility-pole': [
+    'buildings',
+    'home',
+    'sustainability'
   ],
-  "variable": [
-    "development",
-    "math"
+  'variable': [
+    'development',
+    'math'
   ],
-  "vault": [
-    "security",
-    "travel",
-    "home"
+  'vault': [
+    'security',
+    'travel',
+    'home'
   ],
-  "vector-square": [
-    "shapes",
-    "math",
-    "design",
-    "tools"
+  'vector-square': [
+    'shapes',
+    'math',
+    'design',
+    'tools'
   ],
-  "vegan": [
-    "food-beverage",
-    "sustainability"
+  'vegan': [
+    'food-beverage',
+    'sustainability'
   ],
-  "venetian-mask": [
-    "account",
-    "gaming"
+  'venetian-mask': [
+    'account',
+    'gaming'
   ],
-  "venus-and-mars": [
-    "medical"
+  'venus-and-mars': [
+    'medical'
   ],
-  "venus": [
-    "medical"
+  'venus': [
+    'medical'
   ],
-  "vibrate-off": [
-    "devices",
-    "connectivity",
-    "account"
+  'vibrate-off': [
+    'devices',
+    'connectivity',
+    'account'
   ],
-  "vibrate": [
-    "devices",
-    "connectivity",
-    "account",
-    "notifications"
+  'vibrate': [
+    'devices',
+    'connectivity',
+    'account',
+    'notifications'
   ],
-  "video-off": [
-    "devices",
-    "communication",
-    "connectivity",
-    "photography"
+  'video-off': [
+    'devices',
+    'communication',
+    'connectivity',
+    'photography'
   ],
-  "video": [
-    "devices",
-    "communication",
-    "connectivity",
-    "photography"
+  'video': [
+    'devices',
+    'communication',
+    'connectivity',
+    'photography'
   ],
-  "videotape": [
-    "devices",
-    "communication",
-    "connectivity",
-    "photography",
-    "files"
+  'videotape': [
+    'devices',
+    'communication',
+    'connectivity',
+    'photography',
+    'files'
   ],
-  "view": [
-    "design",
-    "photography"
+  'view': [
+    'design',
+    'photography'
   ],
-  "voicemail": [
-    "connectivity",
-    "devices",
-    "social"
+  'voicemail': [
+    'connectivity',
+    'devices',
+    'social'
   ],
-  "volleyball": [
-    "sports",
-    "gaming",
-    "travel"
+  'volleyball': [
+    'sports',
+    'gaming',
+    'travel'
   ],
-  "volume-1": [
-    "connectivity",
-    "communication",
-    "multimedia"
+  'volume-1': [
+    'connectivity',
+    'communication',
+    'multimedia'
   ],
-  "volume-2": [
-    "connectivity",
-    "communication",
-    "multimedia"
+  'volume-2': [
+    'connectivity',
+    'communication',
+    'multimedia'
   ],
-  "volume-off": [
-    "connectivity",
-    "communication",
-    "multimedia"
+  'volume-off': [
+    'connectivity',
+    'communication',
+    'multimedia'
   ],
-  "volume-x": [
-    "connectivity",
-    "communication",
-    "multimedia"
+  'volume-x': [
+    'connectivity',
+    'communication',
+    'multimedia'
   ],
-  "volume": [
-    "connectivity",
-    "communication",
-    "multimedia"
+  'volume': [
+    'connectivity',
+    'communication',
+    'multimedia'
   ],
-  "vote": [
-    "social"
+  'vote': [
+    'social'
   ],
-  "wallet-cards": [
-    "account",
-    "finance"
+  'wallet-cards': [
+    'account',
+    'finance'
   ],
-  "wallet-minimal": [
-    "account",
-    "finance"
+  'wallet-minimal': [
+    'account',
+    'finance'
   ],
-  "wallet": [
-    "account",
-    "finance"
+  'wallet': [
+    'account',
+    'finance'
   ],
-  "wallpaper": [
-    "account",
-    "devices"
+  'wallpaper': [
+    'account',
+    'devices'
   ],
-  "wand-sparkles": [
-    "design",
-    "gaming",
-    "cursors",
-    "photography"
+  'wand-sparkles': [
+    'design',
+    'gaming',
+    'cursors',
+    'photography'
   ],
-  "wand": [
-    "design",
-    "gaming",
-    "cursors",
-    "photography"
+  'wand': [
+    'design',
+    'gaming',
+    'cursors',
+    'photography'
   ],
-  "warehouse": [
-    "buildings",
-    "navigation"
+  'warehouse': [
+    'buildings',
+    'navigation'
   ],
-  "washing-machine": [
-    "home",
-    "devices",
-    "travel"
+  'washing-machine': [
+    'home',
+    'devices',
+    'travel'
   ],
-  "watch": [
-    "time"
+  'watch': [
+    'time'
   ],
-  "waves-ladder": [
-    "sports",
-    "home"
+  'waves-ladder': [
+    'sports',
+    'home'
   ],
-  "waves": [
-    "weather",
-    "navigation",
-    "multimedia",
-    "sustainability"
+  'waves': [
+    'weather',
+    'navigation',
+    'multimedia',
+    'sustainability'
   ],
-  "waypoints": [
-    "security",
-    "account",
-    "navigation",
-    "development",
-    "social"
+  'waypoints': [
+    'security',
+    'account',
+    'navigation',
+    'development',
+    'social'
   ],
-  "webcam": [
-    "connectivity",
-    "devices",
-    "communication"
+  'webcam': [
+    'connectivity',
+    'devices',
+    'communication'
   ],
-  "webhook-off": [
-    "development",
-    "social",
-    "account"
+  'webhook-off': [
+    'development',
+    'social',
+    'account'
   ],
-  "webhook": [
-    "development",
-    "social",
-    "account"
+  'webhook': [
+    'development',
+    'social',
+    'account'
   ],
-  "weight": [
-    "math"
+  'weight': [
+    'math'
   ],
-  "wheat-off": [
-    "food-beverage"
+  'wheat-off': [
+    'food-beverage'
   ],
-  "wheat": [
-    "food-beverage"
+  'wheat': [
+    'food-beverage'
   ],
-  "whole-word": [
-    "text"
+  'whole-word': [
+    'text'
   ],
-  "wifi-cog": [
-    "connectivity",
-    "devices",
-    "files"
+  'wifi-cog': [
+    'connectivity',
+    'devices',
+    'files'
   ],
-  "wifi-high": [
-    "connectivity",
-    "devices"
+  'wifi-high': [
+    'connectivity',
+    'devices'
   ],
-  "wifi-low": [
-    "connectivity",
-    "devices"
+  'wifi-low': [
+    'connectivity',
+    'devices'
   ],
-  "wifi-off": [
-    "connectivity",
-    "devices"
+  'wifi-off': [
+    'connectivity',
+    'devices'
   ],
-  "wifi-pen": [
-    "connectivity",
-    "devices"
+  'wifi-pen': [
+    'connectivity',
+    'devices'
   ],
-  "wifi-sync": [
-    "connectivity",
-    "devices"
+  'wifi-sync': [
+    'connectivity',
+    'devices'
   ],
-  "wifi-zero": [
-    "connectivity",
-    "devices"
+  'wifi-zero': [
+    'connectivity',
+    'devices'
   ],
-  "wifi": [
-    "connectivity",
-    "devices"
+  'wifi': [
+    'connectivity',
+    'devices'
   ],
-  "wind-arrow-down": [
-    "weather",
-    "sustainability"
+  'wind-arrow-down': [
+    'weather',
+    'sustainability'
   ],
-  "wind": [
-    "weather",
-    "sustainability"
+  'wind': [
+    'weather',
+    'sustainability'
   ],
-  "wine-off": [
-    "food-beverage"
+  'wine-off': [
+    'food-beverage'
   ],
-  "wine": [
-    "food-beverage"
+  'wine': [
+    'food-beverage'
   ],
-  "workflow": [
-    "development"
+  'workflow': [
+    'development'
   ],
-  "worm": [
-    "animals",
-    "security"
+  'worm': [
+    'animals',
+    'security'
   ],
-  "wrench": [
-    "account",
-    "development",
-    "tools"
+  'wrench': [
+    'account',
+    'development',
+    'tools'
   ],
-  "x": [
-    "notifications",
-    "math"
+  'x': [
+    'notifications',
+    'math'
   ],
-  "youtube": [
-    "multimedia",
-    "social",
-    "brands"
+  'youtube': [
+    'multimedia',
+    'social',
+    'brands'
   ],
-  "zap-off": [
-    "connectivity",
-    "devices",
-    "photography",
-    "weather"
+  'zap-off': [
+    'connectivity',
+    'devices',
+    'photography',
+    'weather'
   ],
-  "zap": [
-    "connectivity",
-    "devices",
-    "photography",
-    "weather"
+  'zap': [
+    'connectivity',
+    'devices',
+    'photography',
+    'weather'
   ],
-  "zoom-in": [
-    "accessibility",
-    "layout",
-    "design",
-    "text",
-    "photography"
+  'zoom-in': [
+    'accessibility',
+    'layout',
+    'design',
+    'text',
+    'photography'
   ],
-  "zoom-out": [
-    "accessibility",
-    "layout",
-    "design",
-    "text",
-    "photography"
+  'zoom-out': [
+    'accessibility',
+    'layout',
+    'design',
+    'text',
+    'photography'
   ]
 }

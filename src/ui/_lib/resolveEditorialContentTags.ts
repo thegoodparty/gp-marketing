@@ -12,13 +12,13 @@ export function resolveEditorialContentTags(items?: any) {
 	}
 
 	if (items?.topics) {
-		items.topics.map(topic => {
+		for (const topic of items.topics) {
 			tags.push({
 				id: topic._id,
 				name: topic.tagOverview.field_name,
 				href: topic.href,
 			});
-		});
+		}
 	}
 
 	return tags;

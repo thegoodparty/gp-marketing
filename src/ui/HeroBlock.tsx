@@ -148,9 +148,12 @@ export type HeroBlockProps = {
 	textSize?: ResolvedTextSize;
 };
 
+const ROUNDED_MEDIA_LAYOUTS = ['media-left', 'media-right'] as const satisfies readonly HeroBlockProps['layout'][];
+
 export function HeroBlock(props: HeroBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
 	const layout = props.layout ?? 'no-media';
+	const roundMedia = ROUNDED_MEDIA_LAYOUTS.includes(layout as (typeof ROUNDED_MEDIA_LAYOUTS)[number]);
 	const textSize = props.textSize ?? resolveTextSize('Medium');
 
 	const { base, wrapper, container, media, content, overline, buttons, text } = styles({ backgroundColor, layout });
@@ -165,7 +168,7 @@ export function HeroBlock(props: HeroBlockProps) {
 							{props.embedCode ? (
 								<EmbedHtml html={props.embedCode} />
 							) : (
-								<Media aspectRatio='5:4' image={props.image} objectFit={props.showFullImage ? 'contain' : 'cover'} priority={props.priority} />
+								<Media aspectRatio='5:4' className={roundMedia ? 'rounded-lg' : undefined} image={props.image} objectFit={props.showFullImage ? 'contain' : 'cover'} priority={props.priority} />
 							)}
 						</div>
 					)}

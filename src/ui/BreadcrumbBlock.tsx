@@ -1,4 +1,3 @@
-import type { backgroundTypeValues } from './_lib/designTypesStore';
 import { cn, tv } from './_lib/utils';
 import { Breadcrumbs } from './Breadcrumbs';
 import { Container } from './Container';
@@ -20,13 +19,16 @@ const styles = tv({
 });
 
 export type BreadcrumbItem = {
-	href: string;
+	id?: string;
+	href?: string;
 	label: string;
 };
 
+export type BreadcrumbBackgroundColor = 'cream' | 'midnight';
+
 export type BreadcrumbBlockProps = {
 	className?: string;
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: BreadcrumbBackgroundColor;
 	breadcrumbs: BreadcrumbItem[];
 };
 

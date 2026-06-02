@@ -1,6 +1,6 @@
-import {resolveValue} from "../../utils/resolveValue.ts";
-import {handleReplacements} from "../../utils/handleReplacements.ts";
-import {getIcon} from "../../utils/getIcon.tsx";
+import {resolveValue} from '../../utils/resolveValue.ts';
+import {handleReplacements} from '../../utils/handleReplacements.ts';
+import {getIcon} from '../../utils/getIcon.tsx';
 
 export const newsletterBlockForm = {
   title: 'Newsletter Block Form',
@@ -31,6 +31,6 @@ const infer = {
       icon: getIcon('DataBase'),
       fallback: {},
     }
-           const vtype = x.type;           const title = resolveValue("title", newsletterBlockForm.preview.select, x);           const subtitle = resolveValue("subtitle", newsletterBlockForm.preview.select, x);           const media = resolveValue("media", newsletterBlockForm.preview.select, x);           const restitle = vtype in x ? x[vtype] : title;           return handleReplacements({             title: infer.singletonTitle || restitle || infer.name,             subtitle: subtitle ? subtitle : infer.fallback["title"],             media: media || infer.icon           }, x, infer.fallback);         },
+           const vtype = x.type;           const title = resolveValue('title', newsletterBlockForm.preview.select, x);           const subtitle = resolveValue('subtitle', newsletterBlockForm.preview.select, x);           const media = resolveValue('media', newsletterBlockForm.preview.select, x);           const restitle = vtype in x ? x[vtype] : title;           return handleReplacements({             title: infer.singletonTitle || restitle || infer.name,             subtitle: subtitle ? subtitle : infer.fallback['title'],             media: media || infer.icon           }, x, infer.fallback);         },
   },
 }

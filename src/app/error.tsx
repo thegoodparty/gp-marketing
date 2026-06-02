@@ -7,7 +7,10 @@ type Props = {
 	reset(): void;
 };
 
-export default function Error({ error, reset }: Props) {
+export default function Error(props: Props) {
+	if (process.env.NODE_ENV === 'development') {
+		console.error(props.error);
+	}
 	return (
 		<div className='h-full bg-midnight-900'>
 			<HeroBlock
@@ -17,7 +20,9 @@ export default function Error({ error, reset }: Props) {
 				buttons={[
 					{
 						label: 'Reload Page',
-						onClick: reset,
+						onClick: () => {
+							props.reset();
+						},
 						buttonProps: {
 							styleType: 'primary',
 						},

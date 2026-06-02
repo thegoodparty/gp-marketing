@@ -60,7 +60,7 @@ export type LocationLandingPageHeroProps = {
 	textAlign?: 'left' | 'center' | 'right';
 	/** When provided with onChange, the search input is controlled. */
 	value?: string;
-	onChange?: (value: string) => void;
+	onChange?(value: string): void;
 };
 
 function buildHeadline(props: LocationLandingPageHeroProps): string {

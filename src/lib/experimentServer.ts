@@ -11,11 +11,10 @@ async function initClient() {
 	return Experiment.initializeRemote(DEPLOYMENT_KEY);
 }
 
-function getClient() {
-	if (!clientPromise) {
-		clientPromise = initClient();
-	}
-	return clientPromise;
+async function getClient(): Promise<Awaited<ReturnType<typeof initClient>>> {
+	const promise = clientPromise ?? initClient();
+	clientPromise = promise;
+	return promise;
 }
 
 export async function getAmplitudeDeviceId(): Promise<string | null> {

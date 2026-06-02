@@ -11,7 +11,7 @@ export function EmbeddedBlockSection(section: Extract<Sections, { _type: 'compon
 				html={section.field_embedCode}
 				height={section.field_embedHeight}
 				fullPage={section.field_embedFullPage}
-				maxWidth={section.field_embedMaxWidth as EmbeddedBlockProps['maxWidth']}
+				maxWidth={section.field_embedMaxWidth}
 			/>
 		</section>
 	);

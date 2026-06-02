@@ -1,6 +1,6 @@
-import {resolveValue} from "../../utils/resolveValue.ts";
-import {handleReplacements} from "../../utils/handleReplacements.ts";
-import {getIcon} from "../../utils/getIcon.tsx";
+import {resolveValue} from '../../utils/resolveValue.ts';
+import {handleReplacements} from '../../utils/handleReplacements.ts';
+import {getIcon} from '../../utils/getIcon.tsx';
 
 export const iconBlockItem = {
   title: 'Icon Block Item',
@@ -49,6 +49,6 @@ const infer = {
         title: 'Icon Block Item',
       },
     }
-         const title = resolveValue("title", iconBlockItem.preview.select, x);         const subtitle = resolveValue("subtitle", iconBlockItem.preview.select, x);         const media = resolveValue("media", iconBlockItem.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback["title"],           media: media || infer.icon         }, x, infer.fallback);       },
+         const title = resolveValue('title', iconBlockItem.preview.select, x);         const subtitle = resolveValue('subtitle', iconBlockItem.preview.select, x);         const media = resolveValue('media', iconBlockItem.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback['title'],           media: media || infer.icon         }, x, infer.fallback);       },
   },
 }

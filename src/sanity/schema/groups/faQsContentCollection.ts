@@ -1,6 +1,6 @@
-import {resolveValue} from "../../utils/resolveValue.ts";
-import {handleReplacements} from "../../utils/handleReplacements.ts";
-import {getIcon} from "../../utils/getIcon.tsx";
+import {resolveValue} from '../../utils/resolveValue.ts';
+import {handleReplacements} from '../../utils/handleReplacements.ts';
+import {getIcon} from '../../utils/getIcon.tsx';
 
 export const faQsContentCollection = {
   title: 'FAQs Content Collection',
@@ -41,6 +41,6 @@ const infer = {
       icon: getIcon('TableOfContents'),
       fallback: {},
     }
-         const title = resolveValue("title", faQsContentCollection.preview.select, x);         const subtitle = resolveValue("subtitle", faQsContentCollection.preview.select, x);         const media = resolveValue("media", faQsContentCollection.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback["title"],           media: media || infer.icon         }, x, infer.fallback);       },
+         const title = resolveValue('title', faQsContentCollection.preview.select, x);         const subtitle = resolveValue('subtitle', faQsContentCollection.preview.select, x);         const media = resolveValue('media', faQsContentCollection.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback['title'],           media: media || infer.icon         }, x, infer.fallback);       },
   },
 }

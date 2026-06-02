@@ -4,7 +4,7 @@ import { draftMode } from 'next/headers';
 import { VisualEditing } from 'next-sanity/visual-editing';
 import type { ReactNode } from 'react';
 import type { Params } from '~/lib/types';
-// @ts-ignore
+// @ts-expect-error Vite/Next has no typings for side-effect CSS import
 import '~/ui/_styles/globals.css';
 import { Amplitude } from '~/ui/Amplitude';
 import { ScrollDepthTracker } from '~/ui/ScrollDepthTracker';

@@ -85,3 +85,14 @@ export const LongBreadcrumb: Story = {
 		},
 	},
 };
+
+export const CurrentPageWithoutHref: Story = {
+	args: {
+		backgroundColor: 'midnight',
+		breadcrumbs: [
+			{ href: '/', label: 'Home' },
+			{ href: '/candidates', label: 'Candidates' },
+			{ label: 'Jane Doe' },
+		],
+	},
+};

@@ -43,8 +43,8 @@ export function Carousel(props: CarouselProps) {
 		align: 'start',
 	});
 	const { base, text } = styles({ backgroundColor });
-	const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(emblaApi);
-	const { prevBtnDisabled, nextBtnDisabled, onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(emblaApi);
+	const dots = useDotButton(emblaApi);
+	const nav = usePrevNextButtons(emblaApi);
 
 	const containerRef = useRef<HTMLDivElement>(null);
 	const rect = useRectTracker(containerRef);
@@ -64,8 +64,8 @@ export function Carousel(props: CarouselProps) {
 			<Container ref={containerRef} size='xl' className='flex flex-col md:flex-row gap-[2rem] justify-between'>
 				{props.header && <HeaderBlock {...props.header} backgroundColor={backgroundColor} />}
 				<div className={cn(text(), 'flex gap-4 items-end justify-end')}>
-					<PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} backgroundColor={backgroundColor} />
-					<NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} backgroundColor={backgroundColor} />
+					<PrevButton onClick={() => nav.onPrevButtonClick()} disabled={nav.prevBtnDisabled} backgroundColor={backgroundColor} />
+					<NextButton onClick={() => nav.onNextButtonClick()} disabled={nav.nextBtnDisabled} backgroundColor={backgroundColor} />
 				</div>
 			</Container>
 			<div className='embla max-w-full'>
@@ -98,8 +98,8 @@ export function Carousel(props: CarouselProps) {
 				</div>
 			</div>
 			<Container size='xl' className='flex gap-4 justify-center text-black'>
-				{scrollSnaps.map((_, index) => (
-					<CarouselIndicator key={index} active={index === selectedIndex} onClick={() => onDotButtonClick(index)} color={backgroundColor} />
+				{dots.scrollSnaps.map((_, index) => (
+					<CarouselIndicator key={index} active={index === dots.selectedIndex} onClick={() => dots.onDotButtonClick(index)} color={backgroundColor} />
 				))}
 			</Container>
 		</div>
@@ -109,7 +109,7 @@ export function Carousel(props: CarouselProps) {
 type UseDotButtonType = {
 	selectedIndex: number;
 	scrollSnaps: number[];
-	onDotButtonClick: (index: number) => void;
+	onDotButtonClick(index: number): void;
 };
 
 export const useDotButton = (emblaApi: EmblaCarouselType | undefined): UseDotButtonType => {
@@ -152,8 +152,8 @@ type PropType = ComponentPropsWithRef<'button'>;
 type UsePrevNextButtonsType = {
 	prevBtnDisabled: boolean;
 	nextBtnDisabled: boolean;
-	onPrevButtonClick: () => void;
-	onNextButtonClick: () => void;
+	onPrevButtonClick(): void;
+	onNextButtonClick(): void;
 };
 
 export const usePrevNextButtons = (emblaApi: EmblaCarouselType | undefined): UsePrevNextButtonsType => {

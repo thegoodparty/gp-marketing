@@ -9,11 +9,11 @@ import { RichData } from '~/ui/RichData';
 import { TestimonialsAutoScroll } from '~/ui/TestimonialsAutoScroll';
 
 // Shares the same fields as component_testimonialBlock — run `bun run sanity:generate` to get a generated type.
-type TestimonialAutoScrollSection = Omit<Extract<Sections, { _type: 'component_testimonialBlock' }>, '_type'> & {
+type TestimonialAutoScrollSectionProps = Omit<Extract<Sections, { _type: 'component_testimonialBlock' }>, '_type'> & {
 	_type: 'component_testimonialAutoScroll';
 };
 
-export function TestimonialAutoScrollSection(section: TestimonialAutoScrollSection) {
+export function TestimonialAutoScrollSection(section: TestimonialAutoScrollSectionProps) {
 	const backgroundColor = section.testimonialBlockDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(section.testimonialBlockDesignSettings.field_blockColorCreamMidnight)
 		: 'cream';

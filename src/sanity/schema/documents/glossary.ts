@@ -1,6 +1,6 @@
-import {resolveValue} from "../../utils/resolveValue.ts";
-import {handleReplacements} from "../../utils/handleReplacements.ts";
-import {getIcon} from "../../utils/getIcon.tsx";
+import {resolveValue} from '../../utils/resolveValue.ts';
+import {handleReplacements} from '../../utils/handleReplacements.ts';
+import {getIcon} from '../../utils/getIcon.tsx';
 
 export const glossary = {
   title: 'Glossary Terms',
@@ -42,7 +42,7 @@ const infer = {
         title: 'Glossary Terms',
       },
     }
-         const title = resolveValue("title", glossary.preview.select, x);         const subtitle = resolveValue("subtitle", glossary.preview.select, x);         const media = resolveValue("media", glossary.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback["title"],           media: media || infer.icon         }, x, infer.fallback);       },
+         const title = resolveValue('title', glossary.preview.select, x);         const subtitle = resolveValue('subtitle', glossary.preview.select, x);         const media = resolveValue('media', glossary.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback['title'],           media: media || infer.icon         }, x, infer.fallback);       },
   },
   groups: [
     {

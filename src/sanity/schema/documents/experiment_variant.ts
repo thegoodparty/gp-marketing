@@ -1,6 +1,6 @@
-import {resolveValue} from "../../utils/resolveValue.ts";
-import {handleReplacements} from "../../utils/handleReplacements.ts";
-import {getIcon} from "../../utils/getIcon.tsx";
+import {resolveValue} from '../../utils/resolveValue.ts';
+import {handleReplacements} from '../../utils/handleReplacements.ts';
+import {getIcon} from '../../utils/getIcon.tsx';
 
 export const experiment_variant = {
   title: 'Experiment Variant',
@@ -85,14 +85,26 @@ export const experiment_variant = {
       subtitle: 'field_experimentId',
     },
     prepare: x => {
-const infer = {
-      singletonTitle: null,
-      icon: getIcon('Chemistry'),
-      fallback: {
-        title: 'Experiment Variant',
-      },
-    }
-         const title = resolveValue("title", experiment_variant.preview.select, x);         const subtitle = resolveValue("subtitle", experiment_variant.preview.select, x);         const media = resolveValue("media", experiment_variant.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback["title"],           media: media || infer.icon         }, x, infer.fallback);       },
+      const infer = {
+        singletonTitle: null,
+        icon: getIcon('Chemistry'),
+        fallback: {
+          title: 'Experiment Variant',
+        },
+      };
+      const title = resolveValue('title', experiment_variant.preview.select, x);
+      const subtitle = resolveValue('subtitle', experiment_variant.preview.select, x);
+      const media = resolveValue('media', experiment_variant.preview.select, x);
+      return handleReplacements(
+        {
+          title: infer.singletonTitle || title || undefined,
+          subtitle: subtitle ? subtitle : infer.fallback['title'],
+          media: media || infer.icon,
+        },
+        x,
+        infer.fallback,
+      );
+    },
   },
   groups: [
     {

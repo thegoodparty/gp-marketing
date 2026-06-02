@@ -108,9 +108,9 @@ type Article = { _id: string; title: string; href: string };
 export function CategoryAutocomplete({ items }: { items: Article[] }) {
 	const router = useRouter();
 	const [inputValue, setInputValue] = useState('');
-	const { contains } = useFilter({ sensitivity: 'base' });
+	const filter = useFilter({ sensitivity: 'base' });
 
-	const filtered = useMemo(() => items.filter(c => contains(c.title, inputValue)), [items, inputValue, contains]);
+	const filtered = useMemo(() => items.filter(c => filter.contains(c.title, inputValue)), [items, inputValue, filter]);
 
 	return (
 		<div className='w-full max-w-[24rem] md:max-w-[16rem] lg:max-w-[20rem]'>

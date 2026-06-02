@@ -3,5 +3,5 @@ export type Params<
 	Type = T extends (context: any) => Promise<Record<infer F, string>[]> ? Record<F | 'locale', string> : { locale: string },
 > = {
 	params: Type;
-	searchParams: { [key: string]: string | string[] | undefined };
+	searchParams: Record<string, string | string[] | undefined>;
 };

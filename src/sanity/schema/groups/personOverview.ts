@@ -1,6 +1,6 @@
-import {resolveValue} from "../../utils/resolveValue.ts";
-import {handleReplacements} from "../../utils/handleReplacements.ts";
-import {getIcon} from "../../utils/getIcon.tsx";
+import {resolveValue} from '../../utils/resolveValue.ts';
+import {handleReplacements} from '../../utils/handleReplacements.ts';
+import {getIcon} from '../../utils/getIcon.tsx';
 
 export const personOverview = {
   title: 'Person Overview',
@@ -44,7 +44,7 @@ const infer = {
       icon: getIcon('User'),
       fallback: {},
     }
-         const title = resolveValue("title", personOverview.preview.select, x);         const subtitle = resolveValue("subtitle", personOverview.preview.select, x);         const media = resolveValue("media", personOverview.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback["title"],           media: media || infer.icon         }, x, infer.fallback);       },
+         const title = resolveValue('title', personOverview.preview.select, x);         const subtitle = resolveValue('subtitle', personOverview.preview.select, x);         const media = resolveValue('media', personOverview.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback['title'],           media: media || infer.icon         }, x, infer.fallback);       },
   },
-  validation: (R) => R.custom(async (_, ctx) => typeof ctx.type?.hidden === "function" && ctx.type.hidden(ctx) ? true : R["error"]().required().validate(_, ctx).then((e) => e.length === 0 ? true : e[0].item?.message || "Invalid")),
+  validation: (R) => R.custom(async (_, ctx) => typeof ctx.type?.hidden === 'function' && ctx.type.hidden(ctx) ? true : R['error']().required().validate(_, ctx).then((e) => e.length === 0 ? true : e[0].item?.message || 'Invalid')),
 }

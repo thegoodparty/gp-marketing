@@ -23,7 +23,7 @@ type Story = StoryObj<typeof meta>;
 const copy = (
 	<>
 		<p>
-			Voter data helps you target the right people, plan outreach, and track turnout trends—but it's locked
+			Voter data helps you target the right people, plan outreach, and track turnout trends—but it&apos;s locked
 			behind big-party paywalls.
 		</p>
 		<p>

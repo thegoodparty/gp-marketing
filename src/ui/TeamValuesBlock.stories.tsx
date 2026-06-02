@@ -15,34 +15,39 @@ type Story = StoryObj<typeof meta>;
 
 const defaultCards: TeamValuesCardProps[] = [
 	{
-		heading: 'Compassion',
+		heading: 'People First',
 		icon: 'heart-handshake',
 		color: 'waxflower',
-		backCopy: 'We lead with empathy and listen first, centering people in every decision we make.',
+		backCopy:
+			'Our priority is to make systems serve people, not the other way around. We center on our shared humanity and integrate diverse perspectives in pursuit of the greater good.',
 	},
 	{
-		heading: 'Integrity',
-		icon: 'shield-check',
+		heading: 'Direct, Open and Honest',
+		icon: 'message-circle',
 		color: 'blue',
-		backCopy: 'We act with honesty and accountability, even when it is difficult or inconvenient.',
+		backCopy:
+			'Anti-political in all the right ways: we operate with integrity, engage in direct civil discourse and openly give and receive honest feedback.',
 	},
 	{
-		heading: 'Innovation',
-		icon: 'lightbulb',
+		heading: 'Empowered Ownership',
+		icon: 'key',
 		color: 'lavender',
-		backCopy: 'We challenge assumptions and test new ideas to deliver better outcomes over time.',
+		backCopy:
+			'We are high-agency problem solvers – independent thinkers, empowered with freedom to act, and responsibility to deliver results that advance our mission.',
 	},
 	{
-		heading: 'Community',
-		icon: 'users',
+		heading: 'Iterate for Impact',
+		icon: 'rocket',
 		color: 'halo-green',
-		backCopy: 'We collaborate with and for people, building trust through shared purpose and action.',
+		backCopy:
+			'We work with urgency and purpose. We rapidly ideate, test, learn and improve everything we do to maximize positive impact.',
 	},
 	{
-		heading: 'Transparency',
-		icon: 'eye',
+		heading: 'Fun Is Fuel',
+		icon: 'party-popper',
 		color: 'bright-yellow',
-		backCopy: 'We communicate clearly about what we know, what we do not, and why choices are made.',
+		backCopy:
+			"Our work is hard. That's why having fun, celebrating each other and our successes is important. It fuels our humanity, keeping us optimistic and connected. Besides, everybody loves a good party!",
 	},
 ];
 

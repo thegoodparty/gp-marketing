@@ -1,38 +1,38 @@
-import {IdInput} from "./IdInput.tsx";
-import {StyledDescription} from "./StyledDescription.tsx";
-import {IconPicker} from "./IconPicker.tsx";
-import {LinkSelectType} from "./LinkSelect.tsx";
+import {IdInput} from './IdInput.tsx';
+import {StyledDescription} from './StyledDescription.tsx';
+import {IconPicker} from './IconPicker.tsx';
+import {LinkSelectType} from './LinkSelect.tsx';
 
 export const customTypes = {
-  name: "customTypes",
+  name: 'customTypes',
   schema: {
-    name: "customTypes",
+    name: 'customTypes',
     types: [
       {
-        name: "StringIcon",
-        type: "string",
-        title: "Icon",
+        name: 'StringIcon',
+        type: 'string',
+        title: 'Icon',
         components: {
           input: IconPicker,
         },
       },
       {
         name: 'StringId',
-        type: "string",
+        type: 'string',
         components: {
           input: IdInput,
         },
-        title: "Id",
+        title: 'Id',
       },
       {
         name: 'ObjectAddress',
-        type: "object",
-        title: "Address",
+        type: 'object',
+        title: 'Address',
         fields: [
           {
-            type: "array",
-            name: "streetAddress",
-            title: "Address",
+            type: 'array',
+            name: 'streetAddress',
+            title: 'Address',
             description: (
               <>
                 The street address.
@@ -42,13 +42,13 @@ export const customTypes = {
                 </StyledDescription>
               </>
             ),
-            initialValue: [""],
-            of: [{ type: "string" }],
+            initialValue: [''],
+            of: [{ type: 'string' }],
           },
           {
-            type: "string",
-            name: "addressLocality",
-            title: "Town / City",
+            type: 'string',
+            name: 'addressLocality',
+            title: 'Town / City',
             description: (
               <>
                 The locality in which the street address is, and which is in the
@@ -61,9 +61,9 @@ export const customTypes = {
             ),
           },
           {
-            type: "string",
-            name: "addressRegion",
-            title: "County / State",
+            type: 'string',
+            name: 'addressRegion',
+            title: 'County / State',
             description: (
               <>
                 The region in which the locality is, and which is in the country.
@@ -78,9 +78,9 @@ export const customTypes = {
             ),
           },
           {
-            type: "string",
-            name: "addressCountry",
-            title: "Country",
+            type: 'string',
+            name: 'addressCountry',
+            title: 'Country',
             description: (
               <>
                 The country. You can also provide the two-letter ISO 3166-1 alpha-2
@@ -93,9 +93,9 @@ export const customTypes = {
             ),
           },
           {
-            type: "string",
-            name: "postalCode",
-            title: "Postcode / Zip",
+            type: 'string',
+            name: 'postalCode',
+            title: 'Postcode / Zip',
             description: (
               <>
                 The postal code.

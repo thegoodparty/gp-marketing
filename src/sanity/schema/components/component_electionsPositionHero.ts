@@ -1,6 +1,6 @@
-import {resolveValue} from "../../utils/resolveValue.ts";
-import {handleReplacements} from "../../utils/handleReplacements.ts";
-import {getIcon} from "../../utils/getIcon.tsx";
+import {resolveValue} from '../../utils/resolveValue.ts';
+import {handleReplacements} from '../../utils/handleReplacements.ts';
+import {getIcon} from '../../utils/getIcon.tsx';
 
 export const component_electionsPositionHero = {
   title: 'Elections Position Hero',
@@ -42,7 +42,7 @@ const infer = {
         title: 'Elections Position Hero',
       },
     }
-         const title = resolveValue("title", component_electionsPositionHero.preview.select, x);         const subtitle = resolveValue("subtitle", component_electionsPositionHero.preview.select, x);         const media = resolveValue("media", component_electionsPositionHero.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback["title"],           media: media || infer.icon         }, x, infer.fallback);       },
+         const title = resolveValue('title', component_electionsPositionHero.preview.select, x);         const subtitle = resolveValue('subtitle', component_electionsPositionHero.preview.select, x);         const media = resolveValue('media', component_electionsPositionHero.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback['title'],           media: media || infer.icon         }, x, infer.fallback);       },
   },
   groups: [
     {

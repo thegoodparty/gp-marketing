@@ -47,7 +47,7 @@ const styles = tv({
 });
 
 function parseAnimatedValue(value: string): { prefix: string; target: number; suffix: string } | null {
-	const match = value.match(/^([^\d]*)([\d,]+)(.*)$/);
+	const match = /^([^\d]*)([\d,]+)(.*)$/.exec(value);
 	if (!match) return null;
 	const [, prefix, numStr, suffix] = match;
 	const target = parseInt(numStr.replace(/,/g, ''), 10);

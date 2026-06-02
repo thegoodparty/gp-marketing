@@ -1,6 +1,6 @@
-import {resolveValue} from "../../utils/resolveValue.ts";
-import {handleReplacements} from "../../utils/handleReplacements.ts";
-import {getIcon} from "../../utils/getIcon.tsx";
+import {resolveValue} from '../../utils/resolveValue.ts';
+import {handleReplacements} from '../../utils/handleReplacements.ts';
+import {getIcon} from '../../utils/getIcon.tsx';
 
 export const goodpartyOrg_seoSettings = {
   title: 'SEO Settings',
@@ -27,7 +27,7 @@ const infer = {
         title: 'SEO Settings',
       },
     }
-         const title = resolveValue("title", goodpartyOrg_seoSettings.preview.select, x);         const subtitle = resolveValue("subtitle", goodpartyOrg_seoSettings.preview.select, x);         const media = resolveValue("media", goodpartyOrg_seoSettings.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback["title"],           media: media || infer.icon         }, x, infer.fallback);       },
+         const title = resolveValue('title', goodpartyOrg_seoSettings.preview.select, x);         const subtitle = resolveValue('subtitle', goodpartyOrg_seoSettings.preview.select, x);         const media = resolveValue('media', goodpartyOrg_seoSettings.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback['title'],           media: media || infer.icon         }, x, infer.fallback);       },
   },
   options: {
     channels: {},

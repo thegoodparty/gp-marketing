@@ -7,6 +7,17 @@ export type ButtonsType = Exclude<Extract<Sections, { _type: 'component_hero' }>
 
 export type ButtonType = Exclude<ButtonsType, null | undefined>[number];
 
+export type RawCtaFields = {
+	action?: ButtonType['action'];
+	field_ctaActionWithShared?: ButtonType['action'];
+	text?: string | null;
+	field_buttonText?: string | null;
+	_key?: string | null;
+};
+
+/** Raw Sanity/GROQ CTA payload; may include link, anchor, etc. preserved via spread. */
+export type RawCtaInput = RawCtaFields & Partial<Omit<ButtonType, '_key' | 'action' | 'text'>>;
+
 /**
  * Type guard for raw CTA/button data from Sanity (e.g. ctaAction, ctaActionWithShared).
  * Ensures the value has the minimal shape expected by transformButton and transformButtons.
@@ -16,7 +27,23 @@ export function isButtonType(value: unknown): value is ButtonType {
 		return false;
 	}
 	const obj = value as Record<string, unknown>;
-	return 'action' in obj && typeof obj.action !== 'undefined';
+	return 'action' in obj && obj.action != null;
+}
+
+export function normalizeRawCtaToButton(
+	raw: RawCtaInput,
+	keySuffix: string,
+): ButtonType | undefined {
+	const action = raw.action ?? raw.field_ctaActionWithShared;
+	if (action == null) {
+		return undefined;
+	}
+	return {
+		...raw,
+		action,
+		text: raw.text ?? raw.field_buttonText ?? null,
+		_key: keySuffix,
+	} as ButtonType;
 }
 
 function resolveHierarchy(
@@ -31,24 +58,44 @@ function resolveHierarchy(
 
 export function resolveButtonHref(button: ButtonType): string | undefined {
 	const action = stegaClean(button.action);
+	let href: string | undefined;
 
 	switch (action) {
+		case null:
+		case 'Reference':
+			return undefined;
 		case 'Internal':
 		case 'Contact':
-			return button.link && 'href' in button.link ? (button.link.href as string | undefined) ?? undefined : undefined;
+			href =
+				button.link && 'href' in button.link
+					? ((button.link.href as string | undefined) ?? undefined)
+					: undefined;
+			break;
 		case 'External':
-			return button.field_externalLink ?? undefined;
+			href = button.field_externalLink ?? undefined;
+			break;
 		case 'Anchor':
-			return button.anchor ?? undefined;
+			href = button.anchor ?? undefined;
+			break;
 		case 'Download':
-			return button.ref_download?.file?.url ?? undefined;
+			href = button.ref_download?.file?.url ?? undefined;
+			break;
 		case 'LogIn':
-			return 'https://app.goodparty.org/login';
+			href = 'https://app.goodparty.org/login';
+			break;
 		case 'SignUp':
-			return 'https://app.goodparty.org/sign-up';
+			href = 'https://app.goodparty.org/sign-up';
+			break;
 		default:
-			return undefined;
+			href = undefined;
 	}
+
+	return href;
+}
+
+/** True when href is a non-empty string suitable for navigation or fallback decisions. */
+export function isUsableHref(href: string | undefined): href is string {
+	return href != null && href !== '';
 }
 
 export function transformButton(button: ButtonType): ComponentButtonProps | undefined {
@@ -56,8 +103,11 @@ export function transformButton(button: ButtonType): ComponentButtonProps | unde
 	const href = resolveButtonHref(button);
 
 	switch (action) {
+		case null:
+		case 'Reference':
+			return undefined;
 		case 'Internal':
-			if (!href) return undefined;
+			if (!isUsableHref(href)) return undefined;
 			return {
 				_key: button._key,
 				formId: (button as { formId?: string }).formId,
@@ -69,7 +119,7 @@ export function transformButton(button: ButtonType): ComponentButtonProps | unde
 				},
 			};
 		case 'Contact':
-			if (!href) return undefined;
+			if (!isUsableHref(href)) return undefined;
 			return {
 				_key: button._key,
 				formId: (button as { formId?: string }).formId,
@@ -81,7 +131,7 @@ export function transformButton(button: ButtonType): ComponentButtonProps | unde
 				},
 			};
 		case 'External':
-			if (!href) return undefined;
+			if (!isUsableHref(href)) return undefined;
 			return {
 				_key: button._key,
 				formId: (button as { formId?: string }).formId,
@@ -93,7 +143,7 @@ export function transformButton(button: ButtonType): ComponentButtonProps | unde
 				},
 			};
 		case 'Anchor':
-			if (!href) return undefined;
+			if (!isUsableHref(href)) return undefined;
 			return {
 				_key: button._key,
 				formId: (button as { formId?: string }).formId,
@@ -105,7 +155,7 @@ export function transformButton(button: ButtonType): ComponentButtonProps | unde
 				},
 			};
 		case 'Download':
-			if (!href) return undefined;
+			if (!isUsableHref(href)) return undefined;
 			return {
 				_key: button._key,
 				formId: (button as { formId?: string }).formId,
@@ -117,7 +167,7 @@ export function transformButton(button: ButtonType): ComponentButtonProps | unde
 				},
 			};
 		case 'LogIn':
-			if (!href) return undefined;
+			if (!isUsableHref(href)) return undefined;
 			return {
 				_key: button._key,
 				formId: (button as { formId?: string }).formId,
@@ -129,7 +179,7 @@ export function transformButton(button: ButtonType): ComponentButtonProps | unde
 				},
 			};
 		case 'SignUp':
-			if (!href) return undefined;
+			if (!isUsableHref(href)) return undefined;
 			return {
 				_key: button._key,
 				formId: (button as { formId?: string }).formId,

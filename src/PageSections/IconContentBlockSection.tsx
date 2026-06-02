@@ -2,7 +2,7 @@ import { stegaClean } from 'next-sanity';
 
 import type { Sections } from '~/PageSections';
 
-import { transformButtons } from '~/lib/buttonTransformer';
+import { normalizeRawCtaToButton, transformButtons } from '~/lib/buttonTransformer';
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { resolveIconColor } from '~/ui/_lib/resolveComponentColor';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
@@ -29,14 +29,18 @@ export function IconContentBlockSection(section: Extract<Sections, { _type: 'com
 				}}
 				columns={resolveColumns(stegaClean(section.iconContentBlockDesignSettings?.field_columnLayout234Columns))}
 				color={resolveIconColor(stegaClean(section.iconContentBlockDesignSettings?.field_iconColor6ColorsWhiteMixed))}
-				items={section.iconContentBlockItems?.list_iconContentItems?.map(item => ({
-					copy: <RichData value={item.block_summaryText} />,
-					icon: item.field_icon,
-					title: item?.field_title,
-					button: item.ctaActionWithShared?.action
-						? transformButtons([{ ...item.ctaActionWithShared, _key: `${item._key ?? ''}-icon-cta` }])?.[0]
-						: undefined,
-				}))}
+				items={section.iconContentBlockItems?.list_iconContentItems?.map(item => {
+					const button = item.ctaActionWithShared
+						? normalizeRawCtaToButton(item.ctaActionWithShared, `${item._key ?? ''}-icon-cta`)
+						: undefined;
+
+					return {
+						copy: <RichData value={item.block_summaryText} />,
+						icon: item.field_icon,
+						title: item?.field_title,
+						button: button ? transformButtons([button])?.[0] : undefined,
+					};
+				})}
 			/>
 		</section>
 	);

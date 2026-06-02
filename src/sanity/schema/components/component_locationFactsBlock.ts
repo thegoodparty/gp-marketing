@@ -1,7 +1,7 @@
 import type { Rule } from 'sanity';
-import {resolveValue} from "../../utils/resolveValue.ts";
-import {handleReplacements} from "../../utils/handleReplacements.ts";
-import {getIcon} from "../../utils/getIcon.tsx";
+import {resolveValue} from '../../utils/resolveValue.ts';
+import {handleReplacements} from '../../utils/handleReplacements.ts';
+import {getIcon} from '../../utils/getIcon.tsx';
 
 export const component_locationFactsBlock = {
   title: 'Location Facts Block',
@@ -85,12 +85,12 @@ export const component_locationFactsBlock = {
           title: 'Location Facts Block',
         },
       };
-      const title = resolveValue("title", component_locationFactsBlock.preview.select, x);
-      const subtitle = resolveValue("subtitle", component_locationFactsBlock.preview.select, x);
-      const media = resolveValue("media", component_locationFactsBlock.preview.select, x);
+      const title = resolveValue('title', component_locationFactsBlock.preview.select, x);
+      const subtitle = resolveValue('subtitle', component_locationFactsBlock.preview.select, x);
+      const media = resolveValue('media', component_locationFactsBlock.preview.select, x);
       return handleReplacements({
         title: infer.singletonTitle || title || undefined,
-        subtitle: subtitle ? subtitle : infer.fallback["title"],
+        subtitle: subtitle ? subtitle : infer.fallback['title'],
         media: media || infer.icon
       }, x, infer.fallback);
     },

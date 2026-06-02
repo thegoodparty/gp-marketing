@@ -122,7 +122,7 @@
 	html,
 	body {
 		font-family: var(--font-primary);
-		font-size: clamp(1rem, 0.427rem + 0.545vw, 1.3rem);
+		font-size: 1rem;
 		color: hsl(var(--hsla-text-primary) / 1);
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;

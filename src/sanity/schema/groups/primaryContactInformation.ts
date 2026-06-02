@@ -1,6 +1,6 @@
-import {resolveValue} from "../../utils/resolveValue.ts";
-import {handleReplacements} from "../../utils/handleReplacements.ts";
-import {getIcon} from "../../utils/getIcon.tsx";
+import {resolveValue} from '../../utils/resolveValue.ts';
+import {handleReplacements} from '../../utils/handleReplacements.ts';
+import {getIcon} from '../../utils/getIcon.tsx';
 
 export const primaryContactInformation = {
   title: 'Primary Contact Information',
@@ -39,6 +39,6 @@ const infer = {
       icon: getIcon('Phone'),
       fallback: {},
     }
-         const title = resolveValue("title", primaryContactInformation.preview.select, x);         const subtitle = resolveValue("subtitle", primaryContactInformation.preview.select, x);         const media = resolveValue("media", primaryContactInformation.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback["title"],           media: media || infer.icon         }, x, infer.fallback);       },
+         const title = resolveValue('title', primaryContactInformation.preview.select, x);         const subtitle = resolveValue('subtitle', primaryContactInformation.preview.select, x);         const media = resolveValue('media', primaryContactInformation.preview.select, x);         return handleReplacements({           title: infer.singletonTitle || title || undefined,           subtitle: subtitle ? subtitle : infer.fallback['title'],           media: media || infer.icon         }, x, infer.fallback);       },
   },
 }

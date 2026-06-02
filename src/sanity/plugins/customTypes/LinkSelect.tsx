@@ -1,16 +1,16 @@
-import {sites} from "../../../../sites.ts";
-import {documentSchema} from "../../schema/documents/documentSchema.ts";
+import {sites} from '../../../../sites.ts';
+import {documentSchema} from '../../schema/documents/documentSchema.ts';
 import {
   ChangeIndicator,
   PatchEvent,
   type ReferenceDefinition,
   set,
   type StringInputProps
-} from "sanity";
-import {useEffect} from "react";
-import {useDocumentPane} from "sanity/structure";
-import {Autocomplete, Card, Text} from "@sanity/ui";
-import {styled} from "styled-components";
+} from 'sanity';
+import {useEffect} from 'react';
+import {useDocumentPane} from 'sanity/structure';
+import {Autocomplete, Card, Text} from '@sanity/ui';
+import {styled} from 'styled-components';
 
 
 const sitesList = Object.entries(sites)
@@ -34,8 +34,8 @@ export const Tighten = styled.div`
 `;
 export const LinkSelectType = {
   name: 'LinkSelect',
-  type: "object",
-  title: "Link Select",
+  type: 'object',
+  title: 'Link Select',
   options: {
     collapsible: false,
   },
@@ -44,9 +44,9 @@ export const LinkSelectType = {
   },
   fields: [
     {
-      name: "site",
+      name: 'site',
       title: `Select a site`,
-      type: "string",
+      type: 'string',
       options: {
         list: sitesList.length ? sitesList.map(([value,data]) => ({value, title: data.title})) : undefined,
       },
@@ -57,7 +57,7 @@ export const LinkSelectType = {
     },
     ...sitesList.map(([siteId]) => {
       return {
-        type: "reference",
+        type: 'reference',
         to: documentSchema.flatMap(doc => {
           const isInChannel = doc.options.channels && siteId in doc.options.channels
           if(!isInChannel) {
@@ -65,7 +65,7 @@ export const LinkSelectType = {
           }
           return {type: doc.name}
         }),
-        name: "href",
+        name: 'href',
         title: `Link`,
         hidden: (x) => !String(x.parent?.site),
         components: {
@@ -115,7 +115,7 @@ function LinkSiteInput(props: StringInputProps) {
       onChange(
         PatchEvent.from(
           set(
-            { ["site"]: items.at(0)!.value },
+            { ['site']: items.at(0)!.value },
             props.path.slice(0, -1),
           ),
         ),
@@ -127,7 +127,7 @@ function LinkSiteInput(props: StringInputProps) {
       path={props.path}
       isChanged={false}
       hasFocus={!!props.focused}
-      style={{ maxWidth: "fit-content" }}
+      style={{ maxWidth: 'fit-content' }}
     >
       <Autocomplete
         {...props.elementProps}
@@ -137,15 +137,15 @@ function LinkSiteInput(props: StringInputProps) {
         value={currentSiteData?.title}
         radius={0}
         prefix={
-          <PreCon children={currentSiteData?.icon()} />
+          <PreCon>{currentSiteData?.icon()}</PreCon>
         }
-        style={{ maxWidth: "fit-content" }}
+        style={{ maxWidth: 'fit-content' }}
         fontSize={[1]}
         onChange={(nextItem) => {
           if (nextItem !== props.value) {
             onChange(
               PatchEvent.from(
-                set({ ["site"]: nextItem }, props.path.slice(0, -1)),
+                set({ ['site']: nextItem }, props.path.slice(0, -1)),
               ),
             );
           }
@@ -161,16 +161,14 @@ function LinkSiteInput(props: StringInputProps) {
           return (
             <Card
               style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
               }}
               as="button"
               padding={2}
             >
-              <RowCon
-                children={rowData?.icon()}
-              />
+              <RowCon>{rowData?.icon()}</RowCon>
               <Text size={1}>{option.payload.title}</Text>
             </Card>
           );

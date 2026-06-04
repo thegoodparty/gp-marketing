@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	getCountyChildPlaces,
 	getPlacesByState,
 	getPlaceBySlug,
+	resolveCountySlugForPlace,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
@@ -114,6 +115,13 @@ export default async function Page({
 
 	if (!cityPlace) {
 		notFound();
+	}
+
+	if (cityPlace.countyName) {
+		const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, cityPlace.countyName);
+		if (canonicalCountySlug && canonicalCountySlug.toLowerCase() !== countySlug) {
+			permanentRedirect(`/elections/${canonicalCountySlug}/${city.toLowerCase()}`);
+		}
 	}
 
 	const cityName = cityPlace.name;

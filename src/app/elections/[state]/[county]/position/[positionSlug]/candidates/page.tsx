@@ -1,6 +1,13 @@
 import type { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
-import { COUNTY_MTFCC, getCandidacies, getPlacesByState, getRaceBySlug } from '~/lib/electionsApi';
+import { notFound, permanentRedirect, redirect } from 'next/navigation';
+import {
+	COUNTY_MTFCC,
+	getCandidacies,
+	getPlacesByState,
+	getRaceBySlug,
+	isCityOrTownMtfcc,
+	resolveCountySlugForPlace,
+} from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
 	buildRaceSlug,
@@ -32,6 +39,15 @@ export default async function Page({
 		const retryRace = await getRaceBySlug(retrySlug);
 		if (retryRace) {
 			redirect(`/elections/${state.toLowerCase()}/${county}-county/position/${positionSlug}/candidates`);
+		}
+	}
+
+	if (race?.Place && isCityOrTownMtfcc(race.Place.mtfcc) && race.Place.countyName) {
+		const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, race.Place.countyName);
+		if (canonicalCountySlug) {
+			permanentRedirect(
+				`/elections/${canonicalCountySlug}/${county.toLowerCase()}/position/${positionSlug}/candidates`,
+			);
 		}
 	}
 

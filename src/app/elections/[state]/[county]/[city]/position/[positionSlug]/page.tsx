@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	getCityPlacesByCounty,
 	getPlacesByState,
 	getRaceBySlug,
+	resolveCountySlugForPlace,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
@@ -49,6 +50,15 @@ export default async function Page({
 
 	if (!countyPlace) {
 		notFound();
+	}
+
+	if (race.Place?.countyName) {
+		const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, race.Place.countyName);
+		if (canonicalCountySlug && canonicalCountySlug.toLowerCase() !== countySlug) {
+			permanentRedirect(
+				`/elections/${canonicalCountySlug}/${city.toLowerCase()}/position/${positionSlug}`,
+			);
+		}
 	}
 
 	// Cities queried by G4110 (incorporated places). Non-incorporated places (e.g. WI townships

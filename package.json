@@ -127,9 +127,6 @@
     "vite-plugin-svgr": "^4.5.0",
     "vwo-smartcode-nextjs": "^1.4.2"
   },
-  "overrides": {
-    "easymde>codemirror": "5.65.21"
-  },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@next/bundle-analyzer": "^15.5.4",

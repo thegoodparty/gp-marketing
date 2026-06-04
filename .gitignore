@@ -158,6 +158,9 @@ storybook-static/
 # Sitemap reports and offline generation output
 .reports/sitemaps/
 
+# Elections limitations validation (machine JSON — gitignored; human summary lives in docs/)
+.reports/elections-limitations/
+
 # Playwright test artifacts
 playwright-report/
 test-results/

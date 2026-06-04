@@ -4,7 +4,7 @@
 
 **Purpose:** Source of truth for upstream place-data gaps, how to verify them via election-api and the site, what gp-marketing already mitigates, and what **not** to re-investigate in the marketing repo.
 
-**Last validated:** Production election-api (`https://election-api.goodparty.org`) via automated audit + curl, production site (`https://goodparty.org`) spot-checks — **May 2026**.
+**Last validated:** Production election-api (`https://election-api.goodparty.org`) via `scripts/elections-limitations/validate.mjs`, production site spot-checks — **June 2026**. See [elections-limitations-validation-2026-06.md](elections-limitations-validation-2026-06.md).
 
 **Coverage (this audit cycle):** All **51** state codes in [`US_STATE_CODES`](../src/lib/sitemap-entries.ts); **~3,100+** county-equivalent places fetched; per-county `includeChildren` probes for merge/LIM-01/LIM-02 detection. Deep-dive archetypes: WV, NV, CT, LA, AK, ME, VA, MD, MO, CA, TX.
 
@@ -13,8 +13,8 @@
 ## Executive summary
 
 - **gp-marketing** merges county municipal lists from **hierarchy** (`includeChildren`) plus **state-wide city/town fallback** filtered by `countyName`, hides city “fun facts” when ≥2 demographic fields duplicate the parent county, and shows empty-list copy when `cityLargest` exists but no municipalities load.
-- **gp-data-platform / ETL** owns `Place` rows, `parentId` hierarchy, `countyName`, and localized fun facts. The election-api mart [`m_election_api__place.sql`](https://github.com/thegoodparty/gp-data-platform/blob/main/dbt/project/models/marts/election_api/m_election_api__place.sql) only includes places in **race lineage** (place + ancestors). An empty municipal list typically means no municipal places with races in Postgres — the query is working as expected.
-- **National bulk scan (May 2026):** **251** counties match **LIM-01** (no merged children, `cityLargest` set) across **28** states; **~20,200** city/town rows match parent county on ≥2 fact fields (**LIM-02**, systemic ETL duplication); **203** cities have `countyName` that does not map to any county slug (**LIM-05/07**); **~1,600** counties rely on fallback-only children (**LIM-04**).
+- **gp-data-platform / ETL** owns `Place` rows, `parentId` hierarchy, `countyName`, and localized fun facts. The election-api mart [`m_election_api__place.sql`](https://github.com/thegoodparty/gp-data-platform/blob/main/dbt/project/models/marts/election_api/m_election_api__place.sql) only includes places in **race lineage** (place + ancestors). An empty municipal list often means no municipal places with races in Postgres—not a marketing query bug.
+- **National bulk scan (June 2026):** **281** counties match **LIM-01** (+30 vs May); **18,495** city/town rows match parent county on ≥2 fact fields (**LIM-02**, −1,706 vs May); **194** orphan `countyName` cities (**LIM-05/07**); **~1,570** fallback-only counties (**LIM-04**). Partial ETL improvement: Kanawha WV, Fairfax VA, Jefferson LA now have municipal lists; Braxton WV, Haines AK, Fernley/Smith Valley NV remain open.
 - Use **pattern IDs** (LIM-01 … LIM-09) below when filing tickets or answering “why doesn’t this page show cities/facts?”
 - For actionable fixes, jump to the [ETL backlog](#etl-backlog-copy-paste-ready).
 
@@ -68,16 +68,21 @@ Canonical **site URLs** use `/elections/{state}/{county-segment}/{city-segment}`
 | LIM-03, LIM-05 | CT | [Hartford County](https://goodparty.org/elections/ct/hartford-county) | 26 hierarchy towns; `countyName`: `"Capitol"` (not Hartford); state fallback useless | **Done** — list via hierarchy | Align `countyName` to county label or keep hierarchy-only |
 | LIM-03 | NV | [Mineral County](https://goodparty.org/elections/nv/mineral-county) | `nv/mineral-county/hawthorne` in hierarchy | Working | — |
 
-### New discoveries (May 2026 audit)
+### Resolved (June 2026 upstream validation)
 
-| ID | State | Site example | API evidence | Marketing | Upstream fix |
-|----|-------|--------------|--------------|-----------|--------------|
-| LIM-01 | WV | [Kanawha County](https://goodparty.org/elections/wv/kanawha-county) | `cityLargest`: Charleston; municipal `children`: 0 | Same as Braxton pattern | WV municipal ingest + hierarchy |
-| LIM-01 | VA | [Fairfax County](https://goodparty.org/elections/va/fairfax-county) | `cityLargest`: Centreville; municipal `children`: 0 (57 VA counties in national LIM-01 sweep) | Empty-list UX when deployed | Ingest/link Fairfax cities (high traffic county) |
-| LIM-01 | LA | [Jefferson Parish](https://goodparty.org/elections/la/jefferson-parish) | `cityLargest`: Metairie; municipal `children`: 0 | Empty-list UX | Parish place rows for cities (Metairie, etc.) |
+| ID | State | Site example | API evidence (Jun 2026) | Marketing |
+|----|-------|--------------|-------------------------|-----------|
+| LIM-01 | WV | [Kanawha County](https://goodparty.org/elections/wv/kanawha-county) | **12** cities via fallback (Charleston, South Charleston, Dunbar, …) | City list on prod |
+| LIM-01 | VA | [Fairfax County](https://goodparty.org/elections/va/fairfax-county) | **5** places (Herndon, Vienna, Clifton, …) | City list on prod |
+| LIM-01 | LA | [Jefferson Parish](https://goodparty.org/elections/la/jefferson-parish) | **6** places (Kenner, Gretna, Westwego, …) | City list on prod |
+
+### New discoveries (May 2026 audit — still open unless noted)
+
+| ID | State | Site example | API evidence | Marketing | ETL action |
+|----|-------|--------------|--------------|-----------|------------|
 | LIM-01 | AK | [Haines Borough](https://goodparty.org/elections/ak/haines-borough) | `cityLargest`: Haines; `children`: [] | Empty-list UX | Borough child place or clear `cityLargest` |
-| LIM-01 | MD | [Baltimore City](https://goodparty.org/elections/md/baltimore-city) | Independent city county row; `children`: [] | County page without city sub-list | Expected for city-county; document for Engineering |
-| LIM-04 | TX | [Harris County](https://goodparty.org/elections/tx/harris-county) | Hierarchy municipal: 0; **29** cities via `countyName=Harris` fallback | **Working** — large fallback list | Optional: nest under `tx/harris-county/*` |
+| LIM-01 | MD | [Baltimore City](https://goodparty.org/elections/md/baltimore-city) | Independent city county row; `children`: [] | County page without city sub-list | Expected for city-county; document for QA |
+| LIM-04 | TX | [Harris County](https://goodparty.org/elections/tx/harris-county) | Hierarchy municipal: 0; **27** cities via `countyName=Harris` fallback (was 29, Jun 2026) | **Working** — large fallback list | Optional: nest under `tx/harris-county/*`; monitor list shrink |
 | LIM-03 | ME | [Androscoggin County](https://goodparty.org/elections/me/androscoggin-county) | Hierarchy towns: `me/androscoggin-county/sabattus-town`, `lisbon-town` | Working (New England town pattern) | — |
 | LIM-05, LIM-07 | CT | (index / sitemap) | Cities e.g. `ct/hartford`, `ct/bridgeport` use planning-region `countyName` (`Capitol`, `Western Connecticut`, …) not `"Hartford"` | County pages use hierarchy; standalone cities rely on sitemap mapping | Map `countyName` to county slugs or enrich hierarchy |
 | LIM-05, LIM-07 | AK | — | Cities e.g. `ak/bethel`, `ak/nome` — `countyName` uses borough/census area labels | Fallback-only counties common | Align city `countyName` to borough G4020 `name` |
@@ -85,7 +90,7 @@ Canonical **site URLs** use `/elections/{state}/{county-segment}/{city-segment}`
 
 ### Tier C outliers (bulk scan — additional LIM-01 samples)
 
-Use these when prioritizing ETL; full machine list: run `node scripts/elections-limitations-audit.mjs` (see [Bulk scan appendix](#bulk-scan-appendix-may-2026)).
+Use these when prioritizing ETL; full machine list: run `node scripts/elections-limitations/validate.mjs --api-only` (see [Bulk scan appendix](#bulk-scan-appendix-june-2026)).
 
 | State | County slug | `cityLargest` |
 |-------|-------------|---------------|
@@ -94,7 +99,7 @@ Use these when prioritizing ETL; full machine list: run `node scripts/elections-
 | CO | (27 counties — see scan) | — |
 | SD | (10 counties) | — |
 | TX | (15 counties) | — |
-| WV | (29 counties total in scan) | e.g. Braxton → Gassaway, Kanawha → Charleston |
+| WV | (32 counties in Jun 2026 scan) | e.g. Braxton → Gassaway; Kanawha **resolved** |
 
 ---
 
@@ -102,7 +107,7 @@ Use these when prioritizing ETL; full machine list: run `node scripts/elections-
 
 | Pattern | Why | Instead |
 |---------|-----|---------|
-| **LIM-01** (e.g. Braxton, Fairfax, Jefferson) | gp-marketing query is correct; empty result means no rows in election-api | File ETL ticket; verify with curl registry |
+| **LIM-01** (e.g. Braxton, Haines) | State-wide city/town fetch + `countyName` filter already runs; empty merge = **no rows in API** | File ETL ticket; verify with curl registry. Kanawha/Fairfax/Jefferson resolved Jun 2026. |
 | **LIM-02** (Fernley, Smith Valley) | Guardrail intentionally hides facts when API duplicates county | Fix `Place` demographics upstream |
 | **LIM-04** (Lyon, Harris) | Short slugs + fallback merge is **by design** | Do not force nested slugs in marketing |
 | **LIM-05** (CT, AK) | Fallback cannot match planning region / borough labels | Rely on hierarchy children; fix `countyName` in ETL |
@@ -200,7 +205,8 @@ curl -sS "$BASE/v1/places?state=TX&mtfcc=G4110&placeColumns=slug,name,countyName
 ### Re-run national audit
 
 ```bash
-cd gp-marketing && node scripts/elections-limitations-audit.mjs > /tmp/elections-audit-report.json
+cd gp-marketing && node scripts/elections-limitations/validate.mjs --api-only
+# Or lightweight counts-only: node scripts/elections-limitations/audit.mjs > /tmp/elections-audit-report.json
 ```
 
 ---
@@ -289,19 +295,19 @@ flowchart LR
 
 ---
 
-## Bulk scan appendix (May 2026)
+## Bulk scan appendix (June 2026)
 
-**Run:** `node scripts/elections-limitations-audit.mjs` (mirrors `getCountyChildPlaces` + `hasSuspiciousFactsMatch` logic).
+**Run:** `node scripts/elections-limitations/validate.mjs --api-only` (or `node scripts/elections-limitations/audit.mjs` for counts-only JSON). Mirrors `getCountyChildPlaces` + `hasSuspiciousFactsMatch` logic. Machine JSON is written to `.reports/elections-limitations/` (gitignored).
 
-| Metric | Count | Notes |
-|--------|------:|-------|
-| **LIM-01** counties | **251** | 28 states; top: VA 57, CO 27, AL 22, WV 29 |
-| **LIM-02** city–county pairs | **20,201** | Systemic duplicate demographics; marketing hides on affected pages |
-| **Orphan `countyName`** cities | **203** | CT, AK dominant in sample |
-| **Fallback-only counties** | **~1,600** | Hierarchy municipal empty; cities via `countyName` |
-| **Hierarchy-only counties** | **9** | Rare; CT/ME-style when fallback fails |
+| Metric | May 2026 | Jun 2026 | Notes |
+|--------|--------:|---------:|-------|
+| **LIM-01** counties | **251** | **281** | 28 states; top: VA 60, AL 29, CO 29, WV 32 |
+| **LIM-02** city–county pairs | **20,201** | **18,495** | Systemic duplicate demographics; marketing hides on affected pages |
+| **Orphan `countyName`** cities | **203** | **194** | CT, AK dominant in sample |
+| **Fallback-only counties** | **~1,600** | **~1,570** | Hierarchy municipal empty; cities via `countyName` |
+| **Hierarchy-only counties** | **9** | **9** | Rare; CT/ME-style when fallback fails |
 
-**LIM-01 by state (counties):** AL 22, AK 13, CA 3, CO 27, FL 1, GA 11, HI 4, KY 9, LA 5, ME 1, MD 6, MO 2, MT 4, NE 3, NV 6, NM 1, NY 2, NC 2, ND 5, OK 5, SC 1, SD 10, TN 4, TX 15, VA 57, WV 29, WI 2, WY 1.
+**LIM-01 by state (Jun 2026 counties):** AL 29, AK 13, CA 3, CO 29, GA 8, HI 4, KY 2, LA 5, ME 1, MD 7, MO 6, MT 4, NE 2, NV 6, NM 1, NY 4, NC 1, ND 6, OK 11, PA 1, SC 1, SD 11, TN 5, TX 22, UT 1, VA 60, WV 32, WI 5, WY 1.
 
 **Sample orphan `countyName` (LIM-05/07):** CT `ct/hartford` → `Capitol`; CT `ct/bridgeport` → `Greater Bridgeport`; AK `ak/bethel` → `Bethel`; AK `ak/craig` → `Prince of Wales-Hyder`.
 
@@ -315,6 +321,6 @@ Re-run quarterly or after major ETL place releases; update **Last validated** an
 
 **Blocked on ETL / gp-data-platform:**
 
-- **LIM-01:** WV municipalities (29 counties), VA Fairfax and peer counties, LA Jefferson Parish, AK borough empty children, and 251 counties nationally with `cityLargest` but no merged children.
-- **LIM-02:** Localized fun facts (priority: NV Fernley, Smith Valley; national scale ~20k pairs).
+- **LIM-01:** WV municipalities (32 counties in Jun scan; Braxton still open), AK borough empty children (Haines), and **281** counties nationally with `cityLargest` but no merged children. Kanawha WV, Fairfax VA, Jefferson LA **resolved** Jun 2026.
+- **LIM-02:** Localized fun facts (priority: NV Fernley, Smith Valley still open; national scale ~18.5k pairs, down from ~20k).
 - **LIM-05/07:** CT planning-region and AK borough `countyName` alignment for sitemap and fallback.

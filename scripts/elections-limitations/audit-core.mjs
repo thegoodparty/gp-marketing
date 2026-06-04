@@ -1,34 +1,53 @@
-#!/usr/bin/env node
 /**
- * One-off audit helper for docs/elections-known-limitations.md
- * Run: node scripts/elections-limitations-audit.mjs
+ * Shared elections limitations audit logic (mirrors getCountyChildPlaces + hasSuspiciousFactsMatch).
+ * Used by scripts/elections-limitations/audit.mjs and validate.mjs.
  */
-const BASE = process.env.ELECTIONS_API_BASE_URL ?? 'https://election-api.goodparty.org';
-const CITY_MTFCC = 'G4110';
-const TOWN_MTFCC = 'G4040';
-const COUNTY_MTFCC = 'G4020';
-const FACT_FIELDS = ['population', 'density', 'incomeHouseholdMedian', 'unemploymentRate', 'homeValue'];
 
-const STATES = [
+export const CITY_MTFCC = 'G4110';
+export const TOWN_MTFCC = 'G4040';
+export const COUNTY_MTFCC = 'G4020';
+export const FACT_FIELDS = [
+  'population',
+  'density',
+  'incomeHouseholdMedian',
+  'unemploymentRate',
+  'homeValue',
+];
+
+export const US_STATES = [
   'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY',
   'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH',
   'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY',
 ];
 
-async function fetchJson(path) {
-  const url = `${BASE}${path}`;
-  const res = await fetch(url);
-  if (res.status === 404) return null;
-  if (!res.ok) throw new Error(`${res.status} ${url}`);
-  const data = await res.json();
-  return data;
+/** May 2026 baseline from docs/elections-known-limitations.md */
+export const BASELINE_MAY_2026 = {
+  lim01Count: 251,
+  lim02Count: 20201,
+  orphanCountyNameCount: 203,
+  fallbackOnlyCount: 1600,
+  hierarchyOnlyCount: 9,
+};
+
+export function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function normalizeName(name) {
+export function createFetchJson(base) {
+  return async function fetchJson(path) {
+    const url = `${base}${path}`;
+    const res = await fetch(url);
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error(`${res.status} ${url}`);
+    return res.json();
+  };
+}
+
+export function normalizeName(name) {
   return (name ?? '').replace(/[.\s''\-]/g, '').toLowerCase();
 }
 
-function countyBaseFromSlug(countySlug) {
+export function countyBaseFromSlug(countySlug) {
   const part = countySlug.split('/').pop() ?? '';
   const withoutSuffix = part.replace(
     /-(county|parish|city-and-borough|city-and-county|borough|census-area)$/i,
@@ -37,7 +56,7 @@ function countyBaseFromSlug(countySlug) {
   return withoutSuffix.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-function canonicalBaseName(state, rawName) {
+export function canonicalBaseName(state, rawName) {
   const normalized = (rawName ?? '').trim().replace(/\s+/g, ' ');
   const tailRe =
     /\s+(County|Parish|Borough|Census Area|City and Borough|City and County|Municipality)\s*$/i;
@@ -45,11 +64,11 @@ function canonicalBaseName(state, rawName) {
   return normalizeName(base);
 }
 
-function isCityOrTown(mtfcc) {
+export function isCityOrTown(mtfcc) {
   return mtfcc === CITY_MTFCC || mtfcc === TOWN_MTFCC;
 }
 
-function suspiciousFactsMatch(city, county) {
+export function suspiciousFactsMatch(city, county) {
   if (!city || !county) return false;
   let compared = 0;
   for (const field of FACT_FIELDS) {
@@ -62,7 +81,21 @@ function suspiciousFactsMatch(city, county) {
   return compared >= 2;
 }
 
-async function mapPool(items, concurrency, fn) {
+/** Count numeric fact fields that differ between city and county. */
+export function countDifferingFacts(city, county) {
+  let differing = 0;
+  let compared = 0;
+  for (const field of FACT_FIELDS) {
+    const cv = city?.[field];
+    const kv = county?.[field];
+    if (typeof cv !== 'number' || typeof kv !== 'number') continue;
+    compared += 1;
+    if (cv !== kv) differing += 1;
+  }
+  return { differing, compared };
+}
+
+export async function mapPool(items, concurrency, fn) {
   const results = [];
   let i = 0;
   async function worker() {
@@ -75,23 +108,30 @@ async function mapPool(items, concurrency, fn) {
   return results;
 }
 
-async function main() {
+/**
+ * National scan: LIM-01, LIM-02, orphan countyName, merge gaps.
+ * @param {{ base: string, onStateProgress?: (state: string) => void }} options
+ */
+export async function runNationalScan({ base, onStateProgress }) {
+  const fetchJson = createFetchJson(base);
   const lim01 = [];
   const lim02 = [];
   const orphanCountyName = [];
   const mergeGaps = [];
   const stateStats = {};
 
-  for (const state of STATES) {
+  for (const state of US_STATES) {
+    onStateProgress?.(state);
     stateStats[state] = { counties: 0, lim01: 0, lim02: 0 };
     let counties = [];
     let cities = [];
     let towns = [];
 
     try {
-      counties = (await fetchJson(
-        `/v1/places?state=${state}&mtfcc=${COUNTY_MTFCC}&placeColumns=slug,name,population`,
-      )) ?? [];
+      counties =
+        (await fetchJson(
+          `/v1/places?state=${state}&mtfcc=${COUNTY_MTFCC}&placeColumns=slug,name,population`,
+        )) ?? [];
     } catch (e) {
       console.error(`counties ${state}:`, e.message);
       await sleep(200);
@@ -99,17 +139,19 @@ async function main() {
     }
 
     try {
-      cities = (await fetchJson(
-        `/v1/places?state=${state}&mtfcc=${CITY_MTFCC}&placeColumns=slug,name,countyName,population,density,incomeHouseholdMedian,unemploymentRate,homeValue`,
-      )) ?? [];
+      cities =
+        (await fetchJson(
+          `/v1/places?state=${state}&mtfcc=${CITY_MTFCC}&placeColumns=slug,name,countyName,population,density,incomeHouseholdMedian,unemploymentRate,homeValue,mtfcc`,
+        )) ?? [];
     } catch {
       cities = [];
     }
 
     try {
-      towns = (await fetchJson(
-        `/v1/places?state=${state}&mtfcc=${TOWN_MTFCC}&placeColumns=slug,name,countyName,population,density,incomeHouseholdMedian,unemploymentRate,homeValue`,
-      )) ?? [];
+      towns =
+        (await fetchJson(
+          `/v1/places?state=${state}&mtfcc=${TOWN_MTFCC}&placeColumns=slug,name,countyName,population,density,incomeHouseholdMedian,unemploymentRate,homeValue,mtfcc`,
+        )) ?? [];
     } catch {
       towns = [];
     }
@@ -152,9 +194,7 @@ async function main() {
 
     for (const detail of countyDetails) {
       if (!detail?.slug) continue;
-      const hierarchyChildren = (detail.children ?? []).filter((c) =>
-        isCityOrTown(c.mtfcc),
-      );
+      const hierarchyChildren = (detail.children ?? []).filter((c) => isCityOrTown(c.mtfcc));
       const countyBase = canonicalBaseName(state, countyBaseFromSlug(detail.slug));
       const fallback = [...cities, ...towns].filter(
         (p) => canonicalBaseName(state, p.countyName ?? '') === countyBase,
@@ -194,9 +234,8 @@ async function main() {
       let stateLim02 = 0;
       for (const childSlug of mergedSlugs) {
         const child =
-          [...hierarchyChildren, ...fallback].find(
-            (c) => c.slug?.toLowerCase() === childSlug,
-          ) ?? null;
+          [...hierarchyChildren, ...fallback].find((c) => c.slug?.toLowerCase() === childSlug) ??
+          null;
         if (!child) continue;
         if (suspiciousFactsMatch(child, detail)) {
           lim02.push({
@@ -212,9 +251,14 @@ async function main() {
     }
   }
 
-  const report = {
+  return {
     scannedAt: new Date().toISOString(),
-    base: BASE,
+    base,
+    lim01,
+    lim02,
+    orphanCountyName,
+    mergeGaps,
+    stateStats,
     lim01Count: lim01.length,
     lim02Count: lim02.length,
     orphanCountyNameCount: orphanCountyName.length,
@@ -224,18 +268,43 @@ async function main() {
         .filter(([, s]) => s.lim01 > 0)
         .map(([st, s]) => [st, s.lim01]),
     ),
-    lim01Sample: lim01.slice(0, 30),
-    lim02Sample: lim02.slice(0, 40),
-    orphanSample: orphanCountyName.slice(0, 25),
-    mergeGapSample: mergeGaps.slice(0, 25),
     hierarchyOnlyCount: mergeGaps.filter((g) => g.type === 'hierarchy_only').length,
     fallbackOnlyCount: mergeGaps.filter((g) => g.type === 'fallback_only').length,
   };
-
-  console.log(JSON.stringify(report, null, 2));
 }
 
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+/** Fetch a single place by slug (first row). */
+export async function fetchPlaceBySlug(fetchJson, slug, extraParams = {}) {
+  const params = new URLSearchParams({
+    slug,
+    placeColumns:
+      'slug,name,mtfcc,cityLargest,population,density,incomeHouseholdMedian,unemploymentRate,homeValue,countyName',
+    ...extraParams,
+  });
+  if (extraParams.includeChildren) {
+    params.set('includeChildren', 'true');
+  }
+  const rows = (await fetchJson(`/v1/places?${params.toString()}`)) ?? [];
+  return rows[0] ?? null;
+}
+
+/** Merged municipal children for a county (hierarchy + fallback). */
+export async function getMergedCountyChildren(fetchJson, state, countySlug, stateCities, stateTowns) {
+  const detail = await fetchPlaceBySlug(fetchJson, countySlug, { includeChildren: true });
+  if (!detail) return { detail: null, merged: [], hierarchyChildren: [], fallback: [] };
+
+  const hierarchyChildren = (detail.children ?? []).filter((c) => isCityOrTown(c.mtfcc));
+  const countyBase = canonicalBaseName(state, countyBaseFromSlug(countySlug));
+  const fallback = [...(stateCities ?? []), ...(stateTowns ?? [])].filter(
+    (p) => canonicalBaseName(state, p.countyName ?? '') === countyBase,
+  );
+  const seen = new Set();
+  const merged = [];
+  for (const c of [...hierarchyChildren, ...fallback]) {
+    const key = c.slug?.toLowerCase();
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    merged.push(c);
+  }
+  return { detail, merged, hierarchyChildren, fallback };
+}

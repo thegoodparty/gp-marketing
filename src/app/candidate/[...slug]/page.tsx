@@ -131,6 +131,21 @@ function buildTopIssues(
 	return parts.length ? parts.join('\n\n') : undefined;
 }
 
+async function loadClaimedCampaignForCandidate(
+	candidate: CandidacyItem,
+): Promise<FindByRaceIdResponse | null> {
+	const raceId = candidate.Race?.brHashId;
+	if (!raceId || !candidate.firstName || !candidate.lastName) {
+		return null;
+	}
+
+	return findCampaignByRace({
+		raceId,
+		firstName: candidate.firstName,
+		lastName: candidate.lastName,
+	});
+}
+
 export default async function Page({
 	params,
 }: {
@@ -147,15 +162,7 @@ export default async function Page({
 		notFound();
 	}
 
-	let claimed: FindByRaceIdResponse | null = null;
-	const raceId = candidate.Race?.brHashId;
-	if (raceId && candidate.firstName && candidate.lastName) {
-		claimed = await findCampaignByRace({
-			raceId,
-			firstName: candidate.firstName,
-			lastName: candidate.lastName,
-		});
-	}
+	const claimed = await loadClaimedCampaignForCandidate(candidate);
 
 	const sectionOverrides = buildSectionOverrides(
 		candidate,
@@ -185,13 +192,14 @@ export async function generateMetadata({
 	const candidate = await getCandidateBySlug({
 		slug,
 		includeStances: false,
-		includeRace: false,
+		includeRace: true,
 	});
 
 	if (!candidate) {
 		return { title: 'Candidate Not Found | Good Party' };
 	}
 
+	const claimed = await loadClaimedCampaignForCandidate(candidate);
 	const candidateName = [candidate.firstName, candidate.lastName].filter(Boolean).join(' ') || 'Candidate';
 	const positionName = candidate.positionName ?? 'Office';
 	const profileImageUrl = resolveProfileImageUrl(candidate.image);
@@ -199,7 +207,7 @@ export async function generateMetadata({
 	return {
 		title: `${candidateName} for ${positionName} | Good Party`,
 		description:
-			resolveProfileAboutText(candidate.about, null) ??
+			resolveProfileAboutText(candidate.about, claimed) ??
 			`View ${candidateName}'s profile for ${positionName}.`,
 		openGraph: {
 			images: profileImageUrl ? [{ url: profileImageUrl }] : undefined,

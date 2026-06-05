@@ -4,6 +4,9 @@ import type { FactsCardProps } from '~/ui/FactsCard';
 
 export { isCityOrTownMtfcc } from '~/lib/electionsApi';
 
+import { permanentRedirect } from 'next/navigation';
+import { isCityOrTownMtfcc, resolveCountySlugForPlace } from '~/lib/electionsApi';
+
 const COUNTY_EQUIV_SUFFIX_RE =
 	/\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipality)$/i;
 const COUNTY_EQUIV_TAIL_RE =
@@ -836,4 +839,27 @@ export function buildRaceCandidatesHref(
 ): string | undefined {
 	const positionHref = buildElectionPositionHrefFromRaceSlug(race, options);
 	return positionHref ? `${positionHref}/candidates` : undefined;
+}
+
+/**
+ * On 3-level county routes (`/elections/[state]/[county]/position/...`), city/town
+ * races must redirect to the 4-level URL that includes the city segment. This is
+ * NOT the same as the county-correction redirect on 4-level pages — the target here
+ * is always a different route handler, so no redirect loop is possible.
+ */
+export async function redirectCityRaceToFourLevelUrl(
+	race: Pick<RaceDetail, 'Place'> | null | undefined,
+	stateCode: string,
+	state: string,
+	county: string,
+	pathSuffix: string,
+): Promise<void> {
+	if (!race?.Place || !isCityOrTownMtfcc(race.Place.mtfcc)) return;
+	const citySegment = race.Place.slug?.split('/').pop()?.toLowerCase();
+	if (!citySegment) return;
+	const canonicalCountySlug = race.Place.countyName
+		? await resolveCountySlugForPlace(stateCode, race.Place.countyName)
+		: undefined;
+	const targetCounty = canonicalCountySlug ?? `${state.toLowerCase()}/${county.toLowerCase()}`;
+	permanentRedirect(`/elections/${targetCounty}/${citySegment}${pathSuffix}`);
 }

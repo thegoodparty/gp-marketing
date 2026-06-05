@@ -1,13 +1,6 @@
 import type { Metadata } from 'next';
-import { notFound, permanentRedirect, redirect } from 'next/navigation';
-import {
-	COUNTY_MTFCC,
-	getCandidacies,
-	getPlacesByState,
-	getRaceBySlug,
-	isCityOrTownMtfcc,
-	resolveCountySlugForPlace,
-} from '~/lib/electionsApi';
+import { notFound, redirect } from 'next/navigation';
+import { COUNTY_MTFCC, getCandidacies, getPlacesByState, getRaceBySlug } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
 	buildRaceSlug,
@@ -15,6 +8,7 @@ import {
 	formatFilingPeriodFromRace,
 	getStateName,
 	mapCandidacyToCard,
+	redirectCityRaceToFourLevelUrl,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
 import { CandidatesPageContent } from '~/ui/CandidatesPageContent';
@@ -42,15 +36,7 @@ export default async function Page({
 		}
 	}
 
-	if (race?.Place && isCityOrTownMtfcc(race.Place.mtfcc) && race.Place.countyName) {
-		const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, race.Place.countyName);
-		const currentCountySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
-		const citySegment = race.Place.slug?.split('/').pop()?.toLowerCase();
-		if (citySegment) {
-			const targetCounty = canonicalCountySlug ?? currentCountySlug;
-			permanentRedirect(`/elections/${targetCounty}/${citySegment}/position/${positionSlug}/candidates`);
-		}
-	}
+	await redirectCityRaceToFourLevelUrl(race, stateCode, state, county, `/position/${positionSlug}/candidates`);
 
 	if (!race) {
 		notFound();

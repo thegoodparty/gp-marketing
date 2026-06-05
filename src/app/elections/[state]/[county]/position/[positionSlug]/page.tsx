@@ -49,9 +49,11 @@ export default async function Page({
 
 	if (race?.Place && isCityOrTownMtfcc(race.Place.mtfcc) && race.Place.countyName) {
 		const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, race.Place.countyName);
+		const currentCountySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 		const citySegment = race.Place.slug?.split('/').pop()?.toLowerCase();
-		if (canonicalCountySlug && citySegment) {
-			permanentRedirect(`/elections/${canonicalCountySlug}/${citySegment}/position/${positionSlug}`);
+		if (citySegment) {
+			const targetCounty = canonicalCountySlug ?? currentCountySlug;
+			permanentRedirect(`/elections/${targetCounty}/${citySegment}/position/${positionSlug}`);
 		}
 	}
 

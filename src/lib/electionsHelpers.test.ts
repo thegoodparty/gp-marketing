@@ -14,6 +14,7 @@ import {
 	formatSidebarLinkLabel,
 	formatTermLength,
 	linkHrefAlreadyPresent,
+	normalizeCandidateLookupName,
 	normalizeLinkHrefForCompare,
 	prependClaimedWebsiteIfNew,
 	getCountySuffixLabel,
@@ -21,13 +22,16 @@ import {
 	getYearFromDateString,
 	hasSuspiciousFactsMatch,
 	inferSidebarLinkIcon,
-	isCityOrTownMtfcc,
 	placeToFactsCards,
+	resolveClaimedCustomIssueText,
+	resolveClaimedTextField,
 	resolveLocalityName,
+	resolveProfileAboutText,
+	resolveProfileImageUrl,
 	slugifyPositionName,
 	stripCountySuffix,
 } from './electionsHelpers';
-import { CITY_MTFCC, COUNTY_MTFCC, TOWN_MTFCC } from './electionsApi';
+import { CITY_MTFCC, COUNTY_MTFCC, TOWN_MTFCC, isCityOrTownMtfcc } from './electionsApi';
 import type { PlaceItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
 
 function placeItem(id: string, name: string, slug: string, state: string): PlaceItem {
@@ -999,5 +1003,57 @@ describe('buildFAQSchema', () => {
 	test('uses FAQPage as root @type', () => {
 		const schema = buildFAQSchema([{ title: 'Q?', copy: 'A.' }]) as Record<string, unknown>;
 		expect(schema['@type']).toBe('FAQPage');
+	});
+});
+
+describe('claimed profile helpers', () => {
+	test('normalizeCandidateLookupName trims and collapses whitespace', () => {
+		expect(normalizeCandidateLookupName('  Monica  ')).toBe('Monica');
+		expect(normalizeCandidateLookupName('Mary   Jane')).toBe('Mary Jane');
+	});
+
+	test('resolveClaimedTextField handles string and object values', () => {
+		expect(resolveClaimedTextField('  Hello  ')).toBe('Hello');
+		expect(resolveClaimedTextField({ intro: 'Line one', detail: 'Line two' })).toBe(
+			'Line one\n\nLine two',
+		);
+		expect(resolveClaimedTextField('   ')).toBeUndefined();
+	});
+
+	test('resolveClaimedCustomIssueText prefers description then position', () => {
+		expect(
+			resolveClaimedCustomIssueText({ title: 'Education', description: 'Fund schools' }),
+		).toBe('Education\n\nFund schools');
+		expect(resolveClaimedCustomIssueText({ title: 'Education', position: 'Fund schools' })).toBe(
+			'Education\n\nFund schools',
+		);
+	});
+
+	test('resolveProfileAboutText prefers elections API about over claimed occupation', () => {
+		expect(
+			resolveProfileAboutText('Election bio', {
+				id: 1,
+				slug: 'monica-alponte',
+				details: { occupation: 'Teacher' },
+				updatedAt: '',
+				website: null,
+				campaignPositions: [],
+			}),
+		).toBe('Election bio');
+		expect(
+			resolveProfileAboutText(undefined, {
+				id: 1,
+				slug: 'monica-alponte',
+				details: { occupation: 'Teacher' },
+				updatedAt: '',
+				website: null,
+				campaignPositions: [],
+			}),
+		).toBe('Teacher');
+	});
+
+	test('resolveProfileImageUrl trims and rejects empty values', () => {
+		expect(resolveProfileImageUrl(' https://example.com/a.jpg ')).toBe('https://example.com/a.jpg');
+		expect(resolveProfileImageUrl('   ')).toBeUndefined();
 	});
 });

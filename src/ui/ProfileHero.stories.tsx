@@ -58,6 +58,16 @@ export const LongName: Story = {
 	},
 };
 
+export const Unclaimed: Story = {
+	args: {
+		...Default.args,
+		isEmpowered: false,
+	},
+	parameters: {
+		...Default.parameters,
+	},
+};
+
 export const Mobile: Story = {
 	args: {
 		...Default.args,

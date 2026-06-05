@@ -14,11 +14,17 @@ import {
 	buildElectionPositionHrefFromRaceSlug,
 	buildRaceCandidatesHref,
 	canonicalizeCountyEquivalentName,
+	normalizeCandidateLookupName,
 	stripCountySuffix,
 } from '~/lib/electionsHelpers';
 
-const BASE_URL =
+const ELECTIONS_API_BASE_URL =
 	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
+
+const GP_API_BASE_URL =
+	process.env['GP_API_BASE_URL'] ??
+	process.env['NEXT_PUBLIC_API_BASE'] ??
+	'https://gp-api.goodparty.org';
 
 const CACHE_OPTIONS = { next: { revalidate: 3600 } } satisfies RequestInit;
 
@@ -101,7 +107,7 @@ export async function getRacesByYear(params: {
 	const searchParams = new URLSearchParams({ zipcode: params.zipcode });
 	if (params.level) searchParams.set('level', params.level);
 	if (params.electionDate) searchParams.set('electionDate', params.electionDate);
-	const url = `${BASE_URL}/v1/elections/races-by-year?${searchParams}`;
+	const url = `${ELECTIONS_API_BASE_URL}/v1/elections/races-by-year?${searchParams}`;
 	const data = await fetchJson<RaceNode[]>(url);
 	return data ?? [];
 }
@@ -116,7 +122,7 @@ export async function getDistrictTypes(params: {
 		electionYear: params.electionYear.toString(),
 		excludeInvalid: (params.excludeInvalid ?? true).toString(),
 	});
-	const url = `${BASE_URL}/v1/districts/types?${searchParams}`;
+	const url = `${ELECTIONS_API_BASE_URL}/v1/districts/types?${searchParams}`;
 	const data = await fetchJson<DistrictTypeItem[]>(url, CACHE_OPTIONS);
 	return data ?? [];
 }
@@ -135,13 +141,13 @@ export async function getDistrictNames(params: {
 	if (params.excludeInvalid !== undefined) {
 		searchParams.set('excludeInvalid', params.excludeInvalid.toString());
 	}
-	const url = `${BASE_URL}/v1/districts/names?${searchParams}`;
+	const url = `${ELECTIONS_API_BASE_URL}/v1/districts/names?${searchParams}`;
 	const data = await fetchJson<DistrictNameItem[]>(url, CACHE_OPTIONS);
 	return data ?? [];
 }
 
 export async function getPositionById(id: string): Promise<PositionDetail | null> {
-	const url = `${BASE_URL}/v1/positions/${encodeURIComponent(id)}`;
+	const url = `${ELECTIONS_API_BASE_URL}/v1/positions/${encodeURIComponent(id)}`;
 	return fetchJson<PositionDetail>(url, CACHE_OPTIONS);
 }
 
@@ -153,7 +159,7 @@ export async function getRaceBySlug(
 		raceSlug,
 		includePlace: includePlace.toString(),
 	});
-	const url = `${BASE_URL}/v1/races?${searchParams}`;
+	const url = `${ELECTIONS_API_BASE_URL}/v1/races?${searchParams}`;
 	const data = await fetchJson<RaceDetail[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) && data.length > 0 ? (data[0] ?? null) : null;
 }
@@ -168,7 +174,7 @@ export async function getCandidacies(params: {
 	if (params.positionId) searchParams.set('positionId', params.positionId);
 	if (params.raceSlug) searchParams.set('raceSlug', params.raceSlug);
 	if (searchParams.toString() === '') return [];
-	const url = `${BASE_URL}/v1/candidacies?${searchParams}`;
+	const url = `${ELECTIONS_API_BASE_URL}/v1/candidacies?${searchParams}`;
 	const data = await fetchJson<CandidacyItem[]>(url);
 	return Array.isArray(data) ? data : [];
 }
@@ -183,7 +189,7 @@ export async function getCandidateBySlug(params: {
 		includeStances: (params.includeStances ?? true).toString(),
 		includeRace: (params.includeRace ?? true).toString(),
 	});
-	const url = `${BASE_URL}/v1/candidacies?${searchParams}`;
+	const url = `${ELECTIONS_API_BASE_URL}/v1/candidacies?${searchParams}`;
 	const data = await fetchJson<CandidacyItem[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) && data.length > 0 ? (data[0] ?? null) : null;
 }
@@ -196,7 +202,7 @@ export async function fetchCandidacySlugs(stateCode: string): Promise<string[]> 
 		state: stateCode.toUpperCase(),
 		columns: 'slug',
 	});
-	const url = `${BASE_URL}/v1/candidacies?${searchParams}`;
+	const url = `${ELECTIONS_API_BASE_URL}/v1/candidacies?${searchParams}`;
 	const data = await fetchJson<Array<{ slug?: string }>>(url, CACHE_OPTIONS);
 	if (!Array.isArray(data)) return [];
 	return data.map((c) => c.slug).filter((s): s is string => typeof s === 'string' && s.length > 0);
@@ -207,17 +213,23 @@ export async function findCampaignByRace(params: {
 	firstName: string;
 	lastName: string;
 }): Promise<FindByRaceIdResponse | null> {
+	const firstName = normalizeCandidateLookupName(params.firstName);
+	const lastName = normalizeCandidateLookupName(params.lastName);
+	if (!firstName || !lastName) {
+		return null;
+	}
+
 	const searchParams = new URLSearchParams({
 		raceId: params.raceId,
-		firstName: params.firstName,
-		lastName: params.lastName,
+		firstName,
+		lastName,
 	});
-	const url = `${BASE_URL}/v1/public-campaigns?${searchParams}`;
+	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-campaigns?${searchParams}`;
 	return fetchJson<FindByRaceIdResponse>(url);
 }
 
 export async function getMostElections(count = 3): Promise<FeaturedCity[]> {
-	const url = `${BASE_URL}/v1/places/most-elections?count=${count}`;
+	const url = `${ELECTIONS_API_BASE_URL}/v1/places/most-elections?count=${count}`;
 	const data = await fetchJson<FeaturedCity[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) ? data : [];
 }
@@ -230,7 +242,7 @@ export async function getPlacesByState(params: {
 		state: params.state.toUpperCase(),
 	});
 	if (params.mtfcc) searchParams.set('mtfcc', params.mtfcc);
-	const url = `${BASE_URL}/v1/places?${searchParams}`;
+	const url = `${ELECTIONS_API_BASE_URL}/v1/places?${searchParams}`;
 	const data = await fetchJson<PlaceItem[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) ? data : [];
 }
@@ -313,7 +325,7 @@ export async function getPlaceBySlug(params: {
 	});
 	if (params.placeColumns) searchParams.set('placeColumns', params.placeColumns);
 	if (params.raceColumns) searchParams.set('raceColumns', params.raceColumns);
-	const url = `${BASE_URL}/v1/places?${searchParams}`;
+	const url = `${ELECTIONS_API_BASE_URL}/v1/places?${searchParams}`;
 	const data = await fetchJson<PlaceWithFacts[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) && data.length > 0 ? (data[0] ?? null) : null;
 }

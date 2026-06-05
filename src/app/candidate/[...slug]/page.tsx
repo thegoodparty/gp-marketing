@@ -7,6 +7,10 @@ import {
 	formatTermLength,
 	inferSidebarLinkIcon,
 	prependClaimedWebsiteIfNew,
+	resolveClaimedCustomIssueText,
+	resolveClaimedTextField,
+	resolveProfileAboutText,
+	resolveProfileImageUrl,
 } from '~/lib/electionsHelpers';
 import { PageSections } from '~/PageSections';
 import type { SectionOverrides } from '~/PageSections';
@@ -30,8 +34,8 @@ function buildSectionOverrides(
 	const isClaimed = !!claimed;
 
 	const profileData: ProfileData = {
-		aboutMe: candidate.about ?? undefined,
-		whyRunning: claimed?.details?.pastExperience,
+		aboutMe: resolveProfileAboutText(candidate.about, claimed),
+		whyRunning: resolveClaimedTextField(claimed?.details?.pastExperience),
 		topIssues: buildTopIssues(candidate, claimed),
 	};
 
@@ -84,7 +88,7 @@ function buildSectionOverrides(
 		component_profileHero: {
 			candidateName,
 			office,
-			profileImageUrl: candidate.image ?? undefined,
+			profileImageUrl: resolveProfileImageUrl(candidate.image),
 			isEmpowered: isClaimed,
 		},
 		component_profileContentBlock: {
@@ -120,7 +124,7 @@ function buildTopIssues(
 
 	if (claimed?.details?.customIssues?.length) {
 		for (const ci of claimed.details.customIssues) {
-			parts.push(`${ci.title}\n\n${ci.description}`);
+			parts.push(resolveClaimedCustomIssueText(ci));
 		}
 	}
 
@@ -190,12 +194,15 @@ export async function generateMetadata({
 
 	const candidateName = [candidate.firstName, candidate.lastName].filter(Boolean).join(' ') || 'Candidate';
 	const positionName = candidate.positionName ?? 'Office';
+	const profileImageUrl = resolveProfileImageUrl(candidate.image);
 
 	return {
 		title: `${candidateName} for ${positionName} | Good Party`,
-		description: candidate.about ?? `View ${candidateName}'s profile for ${positionName}.`,
+		description:
+			resolveProfileAboutText(candidate.about, null) ??
+			`View ${candidateName}'s profile for ${positionName}.`,
 		openGraph: {
-			images: candidate.image ? [{ url: candidate.image }] : undefined,
+			images: profileImageUrl ? [{ url: profileImageUrl }] : undefined,
 		},
 	};
 }

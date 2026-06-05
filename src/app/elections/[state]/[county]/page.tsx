@@ -90,7 +90,7 @@ export default async function Page({
 		if (placeData && isCityOrTownMtfcc(placeData.mtfcc) && placeData.countyName) {
 			const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, placeData.countyName);
 			if (canonicalCountySlug) {
-				permanentRedirect(`/elections/${canonicalCountySlug}/${county.toLowerCase()}`);
+				permanentRedirect(`/elections/${canonicalCountySlug}`);
 			}
 		}
 		if (placeData?.mtfcc && placeData.mtfcc !== COUNTY_MTFCC) {

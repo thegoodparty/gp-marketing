@@ -45,13 +45,6 @@ export default async function Page({
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const fullSlug = `${countySlug}/${city.toLowerCase()}`;
 
-	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
-	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
-
-	if (!countyPlace) {
-		notFound();
-	}
-
 	if (race.Place?.countyName) {
 		const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, race.Place.countyName);
 		if (canonicalCountySlug && canonicalCountySlug.toLowerCase() !== countySlug) {
@@ -59,6 +52,13 @@ export default async function Page({
 				`/elections/${canonicalCountySlug}/${city.toLowerCase()}/position/${positionSlug}`,
 			);
 		}
+	}
+
+	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
+	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
+
+	if (!countyPlace) {
+		notFound();
 	}
 
 	// Cities queried by G4110 (incorporated places). Non-incorporated places (e.g. WI townships

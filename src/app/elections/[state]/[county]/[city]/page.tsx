@@ -65,6 +65,7 @@ export default async function Page({
 			slug: fullSlug,
 			includeChildren: false,
 			includeRaces: true,
+			placeColumns: 'slug,name,mtfcc,countyName',
 			raceColumns: 'slug,normalizedPositionName,electionDate,positionDescription,positionLevel',
 		}),
 		getPlaceBySlug({
@@ -86,6 +87,7 @@ export default async function Page({
 			slug: shortSlug,
 			includeChildren: false,
 			includeRaces: true,
+			placeColumns: 'slug,name,mtfcc,countyName',
 			raceColumns: 'slug,normalizedPositionName,electionDate,positionDescription,positionLevel',
 		});
 	}

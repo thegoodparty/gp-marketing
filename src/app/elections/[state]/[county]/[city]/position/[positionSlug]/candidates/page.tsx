@@ -6,6 +6,7 @@ import {
 	getCityPlacesByCounty,
 	getPlacesByState,
 	getRaceBySlug,
+	isCityOrTownMtfcc,
 	resolveCountySlugForPlace,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
@@ -51,7 +52,7 @@ export default async function Page({
 
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
-	if (race.Place?.countyName) {
+	if (race.Place && isCityOrTownMtfcc(race.Place.mtfcc) && race.Place.countyName) {
 		const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, race.Place.countyName);
 		if (canonicalCountySlug && canonicalCountySlug.toLowerCase() !== countySlug) {
 			permanentRedirect(

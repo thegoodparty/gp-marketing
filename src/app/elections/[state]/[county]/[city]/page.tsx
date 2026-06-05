@@ -93,6 +93,12 @@ export default async function Page({
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
 
 	if (!countyPlace) {
+		if (resolvedPlaceData?.countyName) {
+			const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, resolvedPlaceData.countyName);
+			if (canonicalCountySlug && canonicalCountySlug.toLowerCase() !== countySlug) {
+				permanentRedirect(`/elections/${canonicalCountySlug}/${city.toLowerCase()}`);
+			}
+		}
 		notFound();
 	}
 

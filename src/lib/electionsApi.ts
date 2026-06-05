@@ -24,7 +24,7 @@ const ELECTIONS_API_BASE_URL =
 const GP_API_BASE_URL =
 	process.env['GP_API_BASE_URL'] ??
 	process.env['NEXT_PUBLIC_API_BASE'] ??
-	'https://gp-api.goodparty.org';
+	ELECTIONS_API_BASE_URL.replace('election-api', 'gp-api');
 
 const CACHE_OPTIONS = { next: { revalidate: 3600 } } satisfies RequestInit;
 

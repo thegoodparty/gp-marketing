@@ -45,8 +45,9 @@ export default async function Page({
 	if (race?.Place && isCityOrTownMtfcc(race.Place.mtfcc) && race.Place.countyName) {
 		const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, race.Place.countyName);
 		const currentCountySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
-		if (canonicalCountySlug && canonicalCountySlug.toLowerCase() !== currentCountySlug) {
-			permanentRedirect(`/elections/${canonicalCountySlug}/position/${positionSlug}/candidates`);
+		const citySegment = race.Place.slug?.split('/').pop()?.toLowerCase();
+		if (canonicalCountySlug && citySegment && canonicalCountySlug.toLowerCase() !== currentCountySlug) {
+			permanentRedirect(`/elections/${canonicalCountySlug}/${citySegment}/position/${positionSlug}/candidates`);
 		}
 	}
 

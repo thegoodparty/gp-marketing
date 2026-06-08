@@ -1,3 +1,5 @@
+import 'easymde/dist/easymde.min.css';
+
 import { defineConfig } from 'sanity';
 import { ComponentViewBuilder, structureTool } from 'sanity/structure';
 import { defineLocations, presentationTool, type DocumentResolver } from 'sanity/presentation';
@@ -5,6 +7,7 @@ import { media, mediaAssetSource } from 'sanity-plugin-media';
 import { muxInput } from 'sanity-plugin-mux-input';
 import { default as DocumentsPane } from 'sanity-plugin-documents-pane';
 import { Iframe, type IframeOptions } from 'sanity-plugin-iframe-pane';
+import { markdownSchema } from 'sanity-plugin-markdown';
 
 import { assist } from '@sanity/assist';
 import { table } from '@sanity/table';
@@ -171,6 +174,7 @@ export default defineConfig({
 			defaultDataset: dataset,
 		}),
 		table(),
+		markdownSchema(),
 		customTypes,
 	],
 	schema: {

@@ -13,6 +13,8 @@ import { Container } from './Container.tsx';
 import { IconResolver } from './IconResolver.tsx';
 import { Text } from './Text.tsx';
 import { HeaderBlock, type HeaderBlockProps } from './HeaderBlock.tsx';
+import { Anchor } from './Anchor.tsx';
+import { ArrowShortIcon } from './icons/ArrowShortIcon.tsx';
 
 const styles = tv({
 	slots: {
@@ -20,6 +22,7 @@ const styles = tv({
 		container: 'flex flex-col gap-12',
 		content: 'flex flex-col gap-6',
 		trigger: 'group flex items-center justify-between gap-6 text-left w-full p-6',
+		link: 'group flex items-center justify-between gap-6 text-left w-full p-6 bg-white rounded-lg hover:border-lavender-600 transition-colors',
 		copy: 'p-6 pt-0 text-dark [&>*+*]:mt-4 [&>:empty]:hidden [&_br]:block [&_br]:mt-3',
 	},
 	variants: {
@@ -49,8 +52,9 @@ const styles = tv({
 
 export type FAQBlockItemProps = {
 	id?: string;
-	copy: ReactNode;
+	copy?: ReactNode;
 	title: string;
+	href?: string;
 };
 
 export type FAQBlockProps = {
@@ -65,54 +69,79 @@ export type FAQBlockProps = {
 	caption?: string;
 	header?: HeaderBlockProps;
 	layout?: 'blog' | 'page';
+	variant?: 'accordion' | 'links';
 };
 
 export function FAQBlock(props: FAQBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
 	const layout = props.layout ?? 'page';
+	const variant = props.variant ?? 'accordion';
 
-	const { base, container, trigger, copy } = styles({ backgroundColor, layout });
+	const { base, container, trigger, link, copy } = styles({ backgroundColor, layout });
 
 	return (
 		<article className={cn(base(), props.className)} data-component='FAQBlock'>
 			<Container className={container({ hasHeader: !!props.header })} size={layout === 'blog' ? 'unset' : 'xl'}>
 				{props.header && <HeaderBlock {...props.header} backgroundColor={props.backgroundColor} layout='left' />}
-				<Root className={`flex flex-col gap-6`} type='multiple'>
-					{props.items?.map((item, index) => {
-						return (
-							<Item
-								key={`accordion-item-${item.id}-${index}`}
-								value={`accordion-item-${item.id}-${index}`}
-								className={`bg-white rounded-lg data-[state="open"]:bg-background- data-[state="open"]:bg-text-`}
-							>
-								<Header className={`animate-accordion-open`}>
-									<Trigger className={trigger()}>
+				{variant === 'links' ? (
+					<ul className='flex flex-col gap-6'>
+						{props.items?.map((item, index) => (
+							<li key={`faq-link-${item.id}-${index}`}>
+								{item.href ? (
+									<Anchor href={item.href} className={link()}>
 										<Text styleType='subtitle-1'>{item.title}</Text>
-										<div className={`grid transition-transform duration-normal ease-smooth group-data-[state=open]:-scale-y-100`}>
-											<IconResolver
-												icon={'plus'}
-												className={`col-start-1 col-end-1 row-start-1 row-end-1 transition-opacity duration-fast ease-smooth group-data-[state=open]:opacity-0`}
-											/>
-											<IconResolver
-												icon={'minus'}
-												className={`col-start-1 col-end-1 row-start-1 row-end-1 opacity-0 transition-opacity duration-fast ease-smooth group-data-[state=open]:opacity-100`}
-											/>
-										</div>
-									</Trigger>
-								</Header>
-								<Content
-									className={`overflow-hidden data-[state=open]:animate-accordion-open data-[state=closed]:animate-accordion-closed `}
+										<ArrowShortIcon
+											size={32}
+											className='text-neutral-900 flex-shrink-0'
+											innerClassName='group-hover:animate-slide-in-right'
+										/>
+									</Anchor>
+								) : (
+									<div className={link()}>
+										<Text styleType='subtitle-1'>{item.title}</Text>
+									</div>
+								)}
+							</li>
+						))}
+					</ul>
+				) : (
+					<Root className={`flex flex-col gap-6`} type='multiple'>
+						{props.items?.map((item, index) => {
+							return (
+								<Item
+									key={`accordion-item-${item.id}-${index}`}
+									value={`accordion-item-${item.id}-${index}`}
+									className={`bg-white rounded-lg data-[state="open"]:bg-background- data-[state="open"]:bg-text-`}
 								>
-									{isValidRichText(item.copy) && (
-										<Text className={copy()} styleType='body-2'>
-											{item.copy}
-										</Text>
-									)}
-								</Content>
-							</Item>
-						);
-					})}
-				</Root>
+									<Header className={`animate-accordion-open`}>
+										<Trigger className={trigger()}>
+											<Text styleType='subtitle-1'>{item.title}</Text>
+											<div className={`grid transition-transform duration-normal ease-smooth group-data-[state=open]:-scale-y-100`}>
+												<IconResolver
+													icon={'plus'}
+													className={`col-start-1 col-end-1 row-start-1 row-end-1 transition-opacity duration-fast ease-smooth group-data-[state=open]:opacity-0`}
+												/>
+												<IconResolver
+													icon={'minus'}
+													className={`col-start-1 col-end-1 row-start-1 row-end-1 opacity-0 transition-opacity duration-fast ease-smooth group-data-[state=open]:opacity-100`}
+												/>
+											</div>
+										</Trigger>
+									</Header>
+									<Content
+										className={`overflow-hidden data-[state=open]:animate-accordion-open data-[state=closed]:animate-accordion-closed `}
+									>
+										{isValidRichText(item.copy) && (
+											<Text className={copy()} styleType='body-2'>
+												{item.copy}
+											</Text>
+										)}
+									</Content>
+								</Item>
+							);
+						})}
+					</Root>
+				)}
 			</Container>
 		</article>
 	);

@@ -60,8 +60,8 @@ export default async function Page(props: any) {
 		return (
 			<>
 				<PageSchema schema={landingSchema} />
-				<Suspense fallback={<PageSections pageSections={controlSections} />}>
-					<ExperimentResolver pageId={page._id} controlSections={controlSections} />
+				<Suspense fallback={<PageSections pageSections={controlSections} pageSlug={slug} />}>
+					<ExperimentResolver pageId={page._id} controlSections={controlSections} pageSlug={slug} />
 				</Suspense>
 			</>
 		);

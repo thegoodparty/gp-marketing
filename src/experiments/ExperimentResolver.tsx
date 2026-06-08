@@ -7,6 +7,7 @@ export async function ExperimentResolver(props: {
 	pageId: string;
 	controlSections?: Sections[] | null;
 	sectionOverrides?: SectionOverrides;
+	pageSlug?: string;
 }) {
 	const result = await resolvePageExperiments({
 		pageId: props.pageId,
@@ -18,7 +19,11 @@ export async function ExperimentResolver(props: {
 			{result.exposures.map((exp) => (
 				<ExperimentExposureTracker key={exp.flagKey} flagKey={exp.flagKey} variant={exp.variant} />
 			))}
-			<PageSections pageSections={result.pageSections} sectionOverrides={props.sectionOverrides} />
+			<PageSections
+				pageSections={result.pageSections}
+				sectionOverrides={props.sectionOverrides}
+				pageSlug={props.pageSlug}
+			/>
 		</>
 	);
 }

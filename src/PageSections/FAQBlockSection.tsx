@@ -1,5 +1,7 @@
 import { stegaClean } from 'next-sanity';
 import { transformButtons } from '~/lib/buttonTransformer';
+import { FAQ_PAGE_SLUG } from '~/lib/faqSlugs';
+import { getCachedFaqSlugMap } from '~/lib/getCachedFaqSlugMap';
 import type { Sections } from '~/PageSections';
 import { resolveFAQItems } from '~/ui/_lib/resolveFAQItems';
 import { resolveFAQItemsAsText } from '~/lib/resolveFAQItemsAsText';
@@ -8,13 +10,21 @@ import { RichData } from '~/ui/RichData';
 import { PageSchema } from '~/ui/PageSchema';
 import { buildFAQSchema } from '~/lib/schema';
 
-export function FAQBlockSection(section: Extract<Sections, { _type: 'component_faqBlock' }>) {
+type FAQBlockSectionProps = Extract<Sections, { _type: 'component_faqBlock' }> & {
+	pageSlug?: string;
+};
+
+export async function FAQBlockSection(section: FAQBlockSectionProps) {
 	const sourceFaqs = (section.faQsContentCollection?.['faQs'] ?? null) as Parameters<typeof resolveFAQItemsAsText>[0];
-	const faqSchema = buildFAQSchema(resolveFAQItemsAsText(sourceFaqs));
+	const isFaqLandingPage = section.pageSlug === FAQ_PAGE_SLUG;
+	const slugMap = isFaqLandingPage ? await getCachedFaqSlugMap() : undefined;
+	const faqSchema = isFaqLandingPage ? null : buildFAQSchema(resolveFAQItemsAsText(sourceFaqs));
+
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='FAQ Block'>
 			<PageSchema schema={faqSchema ?? undefined} />
 			<FAQBlock
+				variant={isFaqLandingPage ? 'links' : 'accordion'}
 				header={{
 					label: section.summaryInfo?.field_label,
 					title: section.summaryInfo?.field_title,
@@ -22,7 +32,10 @@ export function FAQBlockSection(section: Extract<Sections, { _type: 'component_f
 					caption: section.summaryInfo?.field_caption,
 					buttons: transformButtons(section.summaryInfo?.list_buttons),
 				}}
-				items={resolveFAQItems(section.faQsContentCollection?.['faQs'])}
+				items={resolveFAQItems(section.faQsContentCollection?.['faQs'], {
+					linksOnly: isFaqLandingPage,
+					slugMap,
+				})}
 			/>
 		</section>
 	);

@@ -80,6 +80,7 @@ export type SectionOverrides = {
 type Props = {
 	pageSections?: Sections[] | null;
 	sectionOverrides?: SectionOverrides;
+	pageSlug?: string;
 };
 
 export function PageSections(props: Props) {
@@ -190,7 +191,7 @@ export function PageSections(props: Props) {
 					case 'component_faqBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='FAQ Block'>
-								<FAQBlockSection {...section} />
+								<FAQBlockSection {...section} pageSlug={props.pageSlug} />
 							</ComponentErrorBoundary>
 						);
 					case 'component_featuredBlogBlock':

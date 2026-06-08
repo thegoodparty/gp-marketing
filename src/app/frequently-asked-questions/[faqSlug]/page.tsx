@@ -2,8 +2,7 @@ import type { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 import { stegaClean } from 'next-sanity';
 import { allFaqsQuery } from '~/sanity/groq';
-import { sanityFetch } from '~/sanity/sanityClient';
-import { client } from '~/lib/client';
+import { sanityClient, sanityFetch } from '~/sanity/sanityClient';
 import { StructureMetaData } from '~/components/StructureMetadata';
 import type { Params } from '~/lib/types';
 import { FAQ_BASE_PATH, FAQ_PAGE_LABEL, findFaqBySlug, getAllFaqSlugs, getFaqHref, buildFaqSlugMap } from '~/lib/faqSlugs';
@@ -18,8 +17,8 @@ import { ArrowShortIcon } from '~/ui/icons/ArrowShortIcon';
 import { cn } from '~/ui/_lib/utils';
 
 export async function generateStaticParams() {
-	const faqs = await client.fetch<Array<{ _id: string; faqOverview?: { field_question?: string } }>>(allFaqsQuery);
-	return getAllFaqSlugs(faqs).map(faqSlug => ({ faqSlug }));
+	const faqs = await sanityClient.fetch(allFaqsQuery, {}, { perspective: 'published', next: { tags: ['faq'] } });
+	return getAllFaqSlugs(faqs ?? []).map(faqSlug => ({ faqSlug }));
 }
 
 export default async function Page(props: Params) {

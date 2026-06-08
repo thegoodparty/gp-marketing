@@ -1,12 +1,12 @@
 import { unstable_cache } from 'next/cache';
 import { defaultRevalidate } from '~/lib/env';
-import { buildFaqSlugMap, type FaqLike } from '~/lib/faqSlugs';
+import { buildFaqSlugMap } from '~/lib/faqSlugs';
 import { allFaqsQuery } from '~/sanity/groq';
 import { sanityClient } from '~/sanity/sanityClient';
 
 const getCachedFaqs = unstable_cache(
 	async () => {
-		const faqs = await sanityClient.fetch<FaqLike[]>(allFaqsQuery);
+		const faqs = await sanityClient.fetch(allFaqsQuery, {}, { perspective: 'published', next: { tags: ['faq'] } });
 		return faqs ?? [];
 	},
 	['all-faqs-cache-sanity'],

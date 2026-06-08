@@ -44,6 +44,59 @@ describe('buildFaqSlugMap', () => {
 		expect(slugs[1]).toBe('what-is-goodpartyorg-def456');
 		expect(getFaqHref(faqs[0]!, slugMap)).toBe('/frequently-asked-questions/what-is-goodpartyorg');
 	});
+
+	it('assigns unique slugs for three duplicate questions', () => {
+		const faqs = [
+			{ _id: 'abc123', faqOverview: { field_question: 'What is GoodParty.org?' } },
+			{ _id: 'def456', faqOverview: { field_question: 'What is GoodParty.org?' } },
+			{ _id: 'ghi789', faqOverview: { field_question: 'What is GoodParty.org?' } },
+		];
+
+		const slugs = getAllFaqSlugs(faqs);
+
+		expect(slugs).toHaveLength(3);
+		expect(new Set(slugs).size).toBe(3);
+		expect(slugs[0]).toBe('what-is-goodpartyorg');
+		expect(slugs[1]).toBe('what-is-goodpartyorg-def456');
+		expect(slugs[2]).toBe('what-is-goodpartyorg-ghi789');
+
+		for (let i = 0; i < faqs.length; i++) {
+			expect(findFaqBySlug(faqs, slugs[i]!)?._id).toBe(faqs[i]!._id);
+		}
+	});
+
+	it('resolves suffix collision when another question slugifies to the suffixed form', () => {
+		const faqs = [
+			{ _id: 'aaa111', faqOverview: { field_question: 'What is GoodParty.org?' } },
+			{ _id: 'bbb222', faqOverview: { field_question: 'What is GoodParty.org?' } },
+			{ _id: 'ccc333', faqOverview: { field_question: 'What is GoodParty.org bbb222' } },
+		];
+
+		const slugs = getAllFaqSlugs(faqs);
+
+		expect(slugs).toHaveLength(3);
+		expect(new Set(slugs).size).toBe(3);
+		expect(slugs[0]).toBe('what-is-goodpartyorg');
+		expect(slugs[1]).toBe('what-is-goodpartyorg-bbb222');
+		expect(slugs[2]).toBe('what-is-goodpartyorg-bbb222-ccc333');
+
+		for (let i = 0; i < faqs.length; i++) {
+			expect(findFaqBySlug(faqs, slugs[i]!)?._id).toBe(faqs[i]!._id);
+		}
+	});
+
+	it('assigns base slug to the first FAQ in array order', () => {
+		const faqsForward = [
+			{ _id: 'abc123', faqOverview: { field_question: 'What is GoodParty.org?' } },
+			{ _id: 'def456', faqOverview: { field_question: 'What is GoodParty.org?' } },
+		];
+		const faqsReversed = [...faqsForward].reverse();
+
+		expect(getAllFaqSlugs(faqsForward)[0]).toBe('what-is-goodpartyorg');
+		expect(getAllFaqSlugs(faqsReversed)[0]).toBe('what-is-goodpartyorg');
+		expect(getAllFaqSlugs(faqsForward)[1]).toBe('what-is-goodpartyorg-def456');
+		expect(getAllFaqSlugs(faqsReversed)[1]).toBe('what-is-goodpartyorg-abc123');
+	});
 });
 
 describe('findFaqBySlug', () => {

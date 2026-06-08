@@ -9,7 +9,8 @@ import {
 	buildElectionPositionHrefFromRaceSlug,
 	stripCountySuffix as stripCountySuffixFromHelpers,
 } from '~/lib/electionsHelpers';
-import { getAllFaqSlugs } from '~/lib/faqSlugs';
+import { FAQ_BASE_PATH, getAllFaqSlugs } from '~/lib/faqSlugs';
+import { allFaqsQuery } from '~/sanity/groq';
 
 /** 51 US state/DC codes (50 states + DC) */
 export const US_STATE_CODES = [
@@ -435,9 +436,9 @@ export async function fetchMainSitemapEntries(baseUrl: string): Promise<Metadata
 				{ next: { tags: ['glossary'] } },
 			),
 			sanityClient.fetch<Array<{ _id: string; _updatedAt?: string; faqOverview?: { field_question?: string } }>>(
-				`*[_type == "faq"]{_id,_updatedAt,faqOverview{field_question}}`,
+				allFaqsQuery,
 				{},
-				{ next: { tags: ['faq'] } },
+				{ perspective: 'published', next: { tags: ['faq'] } },
 			),
 		]);
 
@@ -479,7 +480,7 @@ export async function fetchMainSitemapEntries(baseUrl: string): Promise<Metadata
 		const slug = faqSlugs[i];
 		if (slug) {
 			entries.push(
-				toEntry(baseUrl, `/frequently-asked-questions/${slug}`, 0.6, 'monthly', faqs[i]?._updatedAt?.slice(0, 10)),
+				toEntry(baseUrl, `${FAQ_BASE_PATH}/${slug}`, 0.6, 'monthly', faqs[i]?._updatedAt?.slice(0, 10)),
 			);
 		}
 	}

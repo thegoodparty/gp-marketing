@@ -41,7 +41,7 @@ export function buildFaqSlugMap(faqs: ReadonlyArray<FaqLike>): Map<string, strin
 		const baseSlug = question ? slugifyFaqQuestion(question) : '';
 		let slug = baseSlug || faq._id.replace(/^drafts\./, '');
 
-		if (slugToId.has(slug) && slugToId.get(slug) !== faq._id) {
+		while (slugToId.has(slug) && slugToId.get(slug) !== faq._id) {
 			slug = `${slug}-${shortIdSuffix(faq._id)}`;
 		}
 

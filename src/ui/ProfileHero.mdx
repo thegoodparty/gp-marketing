@@ -9,18 +9,20 @@ import * as ProfileHeroStories from './ProfileHero.stories';
 
 ## Overview
 
-The ProfileHero component displays a candidate's profile header with their name, office title, profile image (with optional GoodParty badge overlay), and "Empowered by GoodParty.org" attribution. It's designed for candidate profile pages.
+The ProfileHero component displays a candidate's profile header with their name, office title, profile image, and optional GoodParty branding. When `isEmpowered` is true, it shows the logo badge on the avatar and the "Empowered by GoodParty.org" attribution.
 
 ## Usage
 
 Use this component when:
 - Displaying the hero section on candidate profile pages
-- Showing candidate information with GoodParty branding
+- Showing candidate information with GoodParty branding for claimed product users
 - Providing visual identification of GoodParty-empowered candidates
 
 ## Variants
 
 <Canvas of={ProfileHeroStories.DefaultStory} />
+
+<Canvas of={ProfileHeroStories.Unclaimed} />
 
 <Canvas of={ProfileHeroStories.CreamBackground} />
 
@@ -46,9 +48,23 @@ The office or position the candidate is running for or holds.
 
 #### `profileImage` (optional)
 
-The candidate's profile image. Can be a SanityImage object.
+The candidate's profile image as a Sanity image object. Used on CMS-driven pages.
 
 **Type:** `SanityImage`
+
+#### `profileImageUrl` (optional)
+
+The candidate's profile image as a hosted URL. Used on dynamic candidate profile pages from the Elections API.
+
+**Type:** `string`
+
+#### `isEmpowered` (optional)
+
+When true, shows the GoodParty logo badge on the avatar and the "Empowered by GoodParty.org" attribution. Set from claimed campaign lookup on candidate profile pages.
+
+**Type:** `boolean`
+
+**Default:** `false`
 
 #### `backgroundColor` (optional)
 
@@ -73,30 +89,26 @@ The component uses a responsive flex layout:
 
 ## Avatar and Badge
 
-When `profileImage` is provided:
-- Image is displayed in a circular container with a red ring border (`ring-4 ring-red-500`)
-- GoodParty logo badge is positioned absolutely at bottom-right of avatar
-- Badge size is responsive: `w-16 h-12` on mobile, `w-20 md:h-15` on tablet, `w-24 lg:h-18` on desktop
+When a profile image is provided (`profileImageUrl` or `profileImage`):
+- Image is displayed in a circular container
+- The GoodParty logo badge overlays the avatar only when `isEmpowered` is true
 - Avatar size is responsive: `w-48 h-48` on mobile, `w-56 md:h-56` on tablet, `w-64 lg:h-64` on desktop
 
 ## Attribution
 
-The component always displays "Empowered by GoodParty.org" text with a heart icon:
-- Positioned below the office title
-- Includes an SVG heart icon
-- Text color adapts to background variant (white on midnight, dark on cream)
+When `isEmpowered` is true, the component displays "Empowered by GoodParty.org" with the GoodParty logo below the office title. Text color adapts to the background variant (white on midnight, dark on cream).
 
 ## Image Fallback
 
-If `profileImage` is not provided, the avatar section is not rendered. Only the text content (name, office, attribution) is displayed.
+If no profile image is provided, a generic person icon placeholder is rendered inside the circular avatar container.
 
 ## Accessibility
 
 - Uses semantic `<section>` element
-- Main heading uses `heading-lg` style type
+- Main heading uses `heading-lg` or `heading-md` style type depending on name length
 - Office title uses `subtitle-1` style type
 - Attribution text uses `body-2` style type
-- Image includes proper alt text handling via ResponsiveImage component
+- Image includes alt text derived from the candidate name
 
 ## Design Reference
 
@@ -105,5 +117,5 @@ If `profileImage` is not provided, the avatar section is not rendered. Only the 
 ## Related Components
 
 - `ProfileContentBlock` - Content section that follows ProfileHero
-- `ResponsiveImage` - Image component used for profile images
-- `Logo` - GoodParty logo component used for badge
+- `ResponsiveImage` - Image component used for Sanity profile images
+- `Logo` - GoodParty logo component used for badge and attribution

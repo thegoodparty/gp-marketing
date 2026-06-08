@@ -7,6 +7,10 @@ import {
 	formatTermLength,
 	inferSidebarLinkIcon,
 	prependClaimedWebsiteIfNew,
+	resolveClaimedCustomIssueText,
+	resolveClaimedTextField,
+	resolveProfileAboutText,
+	resolveProfileImageUrl,
 } from '~/lib/electionsHelpers';
 import { PageSections } from '~/PageSections';
 import type { SectionOverrides } from '~/PageSections';
@@ -30,8 +34,8 @@ function buildSectionOverrides(
 	const isClaimed = !!claimed;
 
 	const profileData: ProfileData = {
-		aboutMe: candidate.about ?? undefined,
-		whyRunning: claimed?.details?.pastExperience,
+		aboutMe: resolveProfileAboutText(candidate.about, claimed),
+		whyRunning: resolveClaimedTextField(claimed?.details?.pastExperience),
 		topIssues: buildTopIssues(candidate, claimed),
 	};
 
@@ -84,7 +88,7 @@ function buildSectionOverrides(
 		component_profileHero: {
 			candidateName,
 			office,
-			profileImageUrl: candidate.image ?? undefined,
+			profileImageUrl: resolveProfileImageUrl(candidate.image),
 			isEmpowered: isClaimed,
 		},
 		component_profileContentBlock: {
@@ -120,11 +124,26 @@ function buildTopIssues(
 
 	if (claimed?.details?.customIssues?.length) {
 		for (const ci of claimed.details.customIssues) {
-			parts.push(`${ci.title}\n\n${ci.description}`);
+			parts.push(resolveClaimedCustomIssueText(ci));
 		}
 	}
 
 	return parts.length ? parts.join('\n\n') : undefined;
+}
+
+async function loadClaimedCampaignForCandidate(
+	candidate: CandidacyItem,
+): Promise<FindByRaceIdResponse | null> {
+	const raceId = candidate.Race?.brHashId;
+	if (!raceId || !candidate.firstName || !candidate.lastName) {
+		return null;
+	}
+
+	return findCampaignByRace({
+		raceId,
+		firstName: candidate.firstName,
+		lastName: candidate.lastName,
+	});
 }
 
 export default async function Page({
@@ -143,15 +162,7 @@ export default async function Page({
 		notFound();
 	}
 
-	let claimed: FindByRaceIdResponse | null = null;
-	const raceId = candidate.Race?.brHashId;
-	if (raceId && candidate.firstName && candidate.lastName) {
-		claimed = await findCampaignByRace({
-			raceId,
-			firstName: candidate.firstName,
-			lastName: candidate.lastName,
-		});
-	}
+	const claimed = await loadClaimedCampaignForCandidate(candidate);
 
 	const sectionOverrides = buildSectionOverrides(
 		candidate,
@@ -181,21 +192,25 @@ export async function generateMetadata({
 	const candidate = await getCandidateBySlug({
 		slug,
 		includeStances: false,
-		includeRace: false,
+		includeRace: true,
 	});
 
 	if (!candidate) {
 		return { title: 'Candidate Not Found | Good Party' };
 	}
 
+	const claimed = await loadClaimedCampaignForCandidate(candidate);
 	const candidateName = [candidate.firstName, candidate.lastName].filter(Boolean).join(' ') || 'Candidate';
 	const positionName = candidate.positionName ?? 'Office';
+	const profileImageUrl = resolveProfileImageUrl(candidate.image);
 
 	return {
 		title: `${candidateName} for ${positionName} | Good Party`,
-		description: candidate.about ?? `View ${candidateName}'s profile for ${positionName}.`,
+		description:
+			resolveProfileAboutText(candidate.about, claimed) ??
+			`View ${candidateName}'s profile for ${positionName}.`,
 		openGraph: {
-			images: candidate.image ? [{ url: candidate.image }] : undefined,
+			images: profileImageUrl ? [{ url: profileImageUrl }] : undefined,
 		},
 	};
 }

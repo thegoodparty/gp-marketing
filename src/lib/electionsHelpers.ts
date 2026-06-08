@@ -1,8 +1,6 @@
 import { US_STATES } from '~/constants/usStates';
-import type { CandidacyItem, PlaceItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
+import type { CandidacyItem, FindByRaceIdResponse, PlaceItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
 import type { FactsCardProps } from '~/ui/FactsCard';
-
-export { isCityOrTownMtfcc } from '~/lib/electionsApi';
 
 import { permanentRedirect } from 'next/navigation';
 import { isCityOrTownMtfcc, resolveCountySlugForPlace } from '~/lib/electionsApi';
@@ -123,6 +121,58 @@ export function mapCandidacyToCard(
 			? `/candidate/${candidacy.slug}`
 			: `/profile?slug=${encodeURIComponent([candidacy.firstName, candidacy.lastName].filter(Boolean).join('-').toLowerCase())}&raceId=${encodeURIComponent(candidacy.raceId ?? '')}`,
 	};
+}
+
+/** Trims candidate names before public-campaigns lookup. */
+export function normalizeCandidateLookupName(name: string): string {
+	return name.trim().replace(/\s+/g, ' ');
+}
+
+/** Coerces claimed campaign text fields that may be stored as JSON objects. */
+export function resolveClaimedTextField(
+	value: string | Record<string, string> | null | undefined,
+): string | undefined {
+	if (typeof value === 'string') {
+		const trimmed = value.trim();
+		return trimmed.length > 0 ? trimmed : undefined;
+	}
+	if (value && typeof value === 'object') {
+		const parts = Object.values(value)
+			.map((part) => part.trim())
+			.filter(Boolean);
+		return parts.length > 0 ? parts.join('\n\n') : undefined;
+	}
+	return undefined;
+}
+
+type ClaimedCustomIssue = {
+	title: string;
+	description?: string;
+	position?: string;
+};
+
+/** Maps gp-api custom issue shape (title/position) to display text. */
+export function resolveClaimedCustomIssueText(issue: ClaimedCustomIssue): string {
+	const description = issue.description ?? issue.position ?? '';
+	return description ? `${issue.title}\n\n${description}` : issue.title;
+}
+
+/** Prefers elections API bio, then claimed occupation when unclaimed about is empty. */
+export function resolveProfileAboutText(
+	candidateAbout: string | null | undefined,
+	claimed: FindByRaceIdResponse | null,
+): string | undefined {
+	const about = candidateAbout?.trim();
+	if (about) return about;
+	return resolveClaimedTextField(claimed?.details?.occupation);
+}
+
+/** Prefers elections API image; public-campaigns does not expose profile photos. */
+export function resolveProfileImageUrl(
+	candidateImage: string | null | undefined,
+): string | undefined {
+	const image = candidateImage?.trim();
+	return image && image.length > 0 ? image : undefined;
 }
 
 const DATE_ONLY_REGEX = /^\d{4}-\d{2}-\d{2}$/;

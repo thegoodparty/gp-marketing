@@ -5,6 +5,7 @@ import {
 	getCountyChildPlaces,
 	getPlacesByState,
 	getPlaceBySlug,
+	isCityOrTownMtfcc,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
@@ -18,7 +19,6 @@ import { quoteCollectionByIdQuery } from '~/sanity/groq';
 import {
 	getStateName,
 	hasSuspiciousFactsMatch,
-	isCityOrTownMtfcc,
 	placeToFactsCards,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';

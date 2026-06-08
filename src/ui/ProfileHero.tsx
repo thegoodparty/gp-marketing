@@ -96,7 +96,9 @@ export function ProfileHero(props: ProfileHeroProps) {
 								</div>
 							)}
 						</div>
-						<Logo width={80} height={65} className={badge()} />
+						{props.isEmpowered && (
+							<Logo width={80} height={65} className={badge()} />
+						)}
 					</div>
 					<div className={content()}>
 						<div>
@@ -108,12 +110,12 @@ export function ProfileHero(props: ProfileHeroProps) {
 							</Text>
 						</div>
 						{props.isEmpowered && (
-						<div className={attribution()}>
-							<Logo className={attributionIcon()} />
-							<Text as="span" styleType="body-2" className={attributionText()}>
-								Empowered by GoodParty.org
-							</Text>
-						</div>
+							<div className={attribution()}>
+								<Logo className={attributionIcon()} />
+								<Text as="span" styleType="body-2" className={attributionText()}>
+									Empowered by GoodParty.org
+								</Text>
+							</div>
 						)}
 					</div>
 				</div>

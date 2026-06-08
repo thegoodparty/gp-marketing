@@ -115,10 +115,11 @@ export interface FindByRaceIdResponse {
 		occupation?: string;
 		funFact?: string;
 		party?: string;
-		pastExperience?: string;
+		pastExperience?: string | Record<string, string>;
 		website?: string;
+		pledged?: boolean;
 		runningAgainst?: Array<{ name: string; party: string; description: string }>;
-		customIssues?: Array<{ title: string; description: string }>;
+		customIssues?: Array<{ title: string; description?: string; position?: string }>;
 	} | null;
 	updatedAt: string;
 	website: {

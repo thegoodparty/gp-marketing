@@ -1,7 +1,6 @@
 import { stegaClean } from 'next-sanity';
 import { transformButtons } from '~/lib/buttonTransformer';
 import { FAQ_PAGE_SLUG } from '~/lib/faqSlugs';
-import { getCachedFaqSlugMap } from '~/lib/getCachedFaqSlugMap';
 import type { Sections } from '~/PageSections';
 import { resolveFAQItems } from '~/ui/_lib/resolveFAQItems';
 import { resolveFAQItemsAsText } from '~/lib/resolveFAQItemsAsText';
@@ -12,12 +11,13 @@ import { buildFAQSchema } from '~/lib/schema';
 
 type FAQBlockSectionProps = Extract<Sections, { _type: 'component_faqBlock' }> & {
 	pageSlug?: string;
+	faqSlugMap?: ReadonlyMap<string, string>;
 };
 
-export async function FAQBlockSection(section: FAQBlockSectionProps) {
+export function FAQBlockSection(section: FAQBlockSectionProps) {
 	const sourceFaqs = (section.faQsContentCollection?.['faQs'] ?? null) as Parameters<typeof resolveFAQItemsAsText>[0];
 	const isFaqLandingPage = section.pageSlug === FAQ_PAGE_SLUG;
-	const slugMap = isFaqLandingPage ? await getCachedFaqSlugMap() : undefined;
+	const slugMap = isFaqLandingPage ? section.faqSlugMap : undefined;
 	const faqSchema = isFaqLandingPage ? null : buildFAQSchema(resolveFAQItemsAsText(sourceFaqs));
 
 	return (

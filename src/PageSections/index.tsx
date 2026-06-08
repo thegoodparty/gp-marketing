@@ -81,6 +81,7 @@ type Props = {
 	pageSections?: Sections[] | null;
 	sectionOverrides?: SectionOverrides;
 	pageSlug?: string;
+	faqSlugMap?: ReadonlyMap<string, string>;
 };
 
 export function PageSections(props: Props) {
@@ -191,7 +192,7 @@ export function PageSections(props: Props) {
 					case 'component_faqBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='FAQ Block'>
-								<FAQBlockSection {...section} pageSlug={props.pageSlug} />
+								<FAQBlockSection {...section} pageSlug={props.pageSlug} faqSlugMap={props.faqSlugMap} />
 							</ComponentErrorBoundary>
 						);
 					case 'component_featuredBlogBlock':

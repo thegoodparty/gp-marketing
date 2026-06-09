@@ -11,6 +11,7 @@ import type { Params } from '~/lib/types';
 import { RichTextContentSections } from '~/RichTextContentSections';
 import { PageSections } from '~/PageSections';
 import { ExperimentResolver } from '~/experiments/ExperimentResolver';
+import { getFaqSlugMapForPage } from '~/lib/getCachedFaqSlugMap';
 import { HeaderBlock } from '~/ui/HeaderBlock';
 import { Container } from '~/ui/Container';
 import { PageSchema } from '~/ui/PageSchema';
@@ -49,6 +50,7 @@ export default async function Page(props: any) {
 
 	if (page._type === SANITY_DOC_TYPE.LANDING_PAGE) {
 		const controlSections = page.pageSections?.list_pageSections;
+		const faqSlugMap = await getFaqSlugMapForPage(slug);
 		const landingName = page.detailPageOverviewNoHero?.field_pageName
 			? stegaClean(page.detailPageOverviewNoHero.field_pageName)
 			: slug;
@@ -60,8 +62,8 @@ export default async function Page(props: any) {
 		return (
 			<>
 				<PageSchema schema={landingSchema} />
-				<Suspense fallback={<PageSections pageSections={controlSections} />}>
-					<ExperimentResolver pageId={page._id} controlSections={controlSections} />
+				<Suspense fallback={<PageSections pageSections={controlSections} pageSlug={slug} faqSlugMap={faqSlugMap} />}>
+					<ExperimentResolver pageId={page._id} controlSections={controlSections} pageSlug={slug} faqSlugMap={faqSlugMap} />
 				</Suspense>
 			</>
 		);

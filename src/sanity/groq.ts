@@ -302,6 +302,15 @@ export const allArticlesForSearchGroq = `*[_type=="article"] | order(editorialOv
 export const allTermsForSearchGroq = `*[_type=="glossary"] | order(glossaryTermOverview.field_glossaryTerm asc)[]{_id,"title":glossaryTermOverview.field_glossaryTerm,${glossaryTermHrefGroq}}`;
 
 /*language=textmate*/
+export const allFaqsQuery = defineQuery(
+	`*[_type=="faq"] | order(faqOverview.field_question asc){_id,_updatedAt,${faQGroq}}`,
+);
+/*language=textmate*/
+export const faqByIdQuery = defineQuery(
+	`*[_type=="faq"&&_id==$id][0]{_id,_updatedAt,${faQGroq}}`,
+);
+
+/*language=textmate*/
 export const quoteCollectionByIdQuery = defineQuery(
 	`*[_type=="quoteCollections"&&_id==$id][0]{quoteCollectionContent{list_chooseQuotes[]->{_key,quote{field_quote,ref_quoteBy->{_type,personOverview{field_personName,field_jobTitleOrRole,img_profilePicture},organisationOverview{field_organisationName,img_logo}}}}}}`,
 );

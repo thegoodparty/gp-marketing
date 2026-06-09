@@ -9,6 +9,8 @@ import {
 	buildElectionPositionHrefFromRaceSlug,
 	stripCountySuffix as stripCountySuffixFromHelpers,
 } from '~/lib/electionsHelpers';
+import { FAQ_BASE_PATH, getAllFaqSlugs } from '~/lib/faqSlugs';
+import { allFaqsQuery } from '~/sanity/groq';
 
 /** 51 US state/DC codes (50 states + DC) */
 export const US_STATE_CODES = [
@@ -391,7 +393,7 @@ async function fetchElectionJson<T>(path: string, params: Record<string, string>
 export async function fetchMainSitemapEntries(baseUrl: string): Promise<MetadataRoute.Sitemap> {
 	const entries: MetadataRoute.Sitemap = [];
 
-	const [singletons, landingAndPolicySlugs, articles, categorySlugs, topicSlugs, glossaryTerms] =
+	const [singletons, landingAndPolicySlugs, articles, categorySlugs, topicSlugs, glossaryTerms, faqs] =
 		await Promise.all([
 			sanityClient.fetch<{
 				home: string | null;
@@ -433,6 +435,11 @@ export async function fetchMainSitemapEntries(baseUrl: string): Promise<Metadata
 				{},
 				{ next: { tags: ['glossary'] } },
 			),
+			sanityClient.fetch<Array<{ _id: string; _updatedAt?: string; faqOverview?: { field_question?: string } }>>(
+				allFaqsQuery,
+				{},
+				{ perspective: 'published', next: { tags: ['faq'] } },
+			),
 		]);
 
 	if (singletons.home) entries.push(toEntry(baseUrl, '/', 1.0, 'monthly'));
@@ -465,6 +472,16 @@ export async function fetchMainSitemapEntries(baseUrl: string): Promise<Metadata
 		if (letter && !seenLetters.has(letter)) {
 			seenLetters.add(letter);
 			entries.push(toEntry(baseUrl, `/political-terms/${letter}`, 0.6, 'monthly'));
+		}
+	}
+
+	const faqSlugs = getAllFaqSlugs(faqs);
+	for (let i = 0; i < faqs.length; i++) {
+		const slug = faqSlugs[i];
+		if (slug) {
+			entries.push(
+				toEntry(baseUrl, `${FAQ_BASE_PATH}/${slug}`, 0.6, 'monthly', faqs[i]?._updatedAt?.slice(0, 10)),
+			);
 		}
 	}
 

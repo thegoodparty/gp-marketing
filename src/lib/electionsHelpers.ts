@@ -312,6 +312,20 @@ export function buildRaceSlug(
 	return parts.join('/');
 }
 
+/** Joint city office race slug: state/city/subplace/position, optionally with county segment. */
+export function buildSubplaceRaceSlug(
+	state: string,
+	city: string,
+	subplace: string,
+	positionSlug: string,
+	county?: string,
+): string {
+	const parts = [state.toLowerCase()];
+	if (county) parts.push(county.toLowerCase());
+	parts.push(city.toLowerCase(), subplace.toLowerCase(), positionSlug);
+	return parts.join('/');
+}
+
 export function formatFilingPeriodFromRace(
 	start: string | undefined,
 	end: string | undefined,

@@ -7,6 +7,7 @@ import {
 	buildRaceCandidatesHref,
 	buildRacePositionHref,
 	buildRaceSlug,
+	buildSubplaceRaceSlug,
 	canonicalizeCountyEquivalentName,
 	findCityForDistrictName,
 	formatElectionDateFromApi,
@@ -139,6 +140,20 @@ describe('buildRaceSlug', () => {
 	test('normalizes state and locality to lowercase (positionSlug unchanged)', () => {
 		expect(buildRaceSlug('AZ', 'governor')).toBe('az/governor');
 		expect(buildRaceSlug('az', 'governor', 'Buckeye')).toBe('az/buckeye/governor');
+	});
+});
+
+describe('buildSubplaceRaceSlug', () => {
+	test('builds 4-part joint office slug without county', () => {
+		expect(buildSubplaceRaceSlug('AR', 'winchester', 'city-recorder', 'treasurer-joint')).toBe(
+			'ar/winchester/city-recorder/treasurer-joint',
+		);
+	});
+
+	test('builds 5-part slug when county is provided', () => {
+		expect(
+			buildSubplaceRaceSlug('AR', 'winchester', 'city-recorder', 'treasurer-joint', 'drew-county'),
+		).toBe('ar/drew-county/winchester/city-recorder/treasurer-joint');
 	});
 });
 

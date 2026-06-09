@@ -1027,16 +1027,14 @@ export function buildRaceCandidatesHref(
 export async function redirectCityRaceToFourLevelUrl(
 	race: Pick<RaceDetail, 'Place'> | null | undefined,
 	stateCode: string,
-	state: string,
-	county: string,
+	_state: string,
+	_county: string,
 	pathSuffix: string,
 ): Promise<void> {
 	if (!race?.Place || !isCityOrTownMtfcc(race.Place.mtfcc)) return;
 	const citySegment = race.Place.slug?.split('/').pop()?.toLowerCase();
-	if (!citySegment) return;
-	const canonicalCountySlug = race.Place.countyName
-		? await resolveCountySlugForPlace(stateCode, race.Place.countyName)
-		: undefined;
-	const targetCounty = canonicalCountySlug ?? `${state.toLowerCase()}/${county.toLowerCase()}`;
-	permanentRedirect(`/elections/${targetCounty}/${citySegment}${pathSuffix}`);
+	if (!citySegment || !race.Place.countyName) return;
+	const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, race.Place.countyName);
+	if (!canonicalCountySlug) return;
+	permanentRedirect(`/elections/${canonicalCountySlug}/${citySegment}${pathSuffix}`);
 }

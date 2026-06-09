@@ -1,5 +1,5 @@
 /// <reference types="bun-types" />
-import { describe, expect, test } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
 import {
 	buildElectionPositionHrefFromRaceSlug,
 	buildFAQSchema,
@@ -23,6 +23,7 @@ import {
 	hasSuspiciousFactsMatch,
 	inferSidebarLinkIcon,
 	placeToFactsCards,
+	redirectCityRaceToFourLevelUrl,
 	resolveClaimedCustomIssueText,
 	resolveClaimedTextField,
 	resolveLocalityName,
@@ -33,6 +34,43 @@ import {
 } from './electionsHelpers';
 import { CITY_MTFCC, COUNTY_MTFCC, TOWN_MTFCC, isCityOrTownMtfcc } from './electionsApi';
 import type { PlaceItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
+
+const originalFetch = globalThis.fetch;
+
+function withFetchMock(responses: { match: (url: string) => boolean; body: unknown }[]) {
+	globalThis.fetch = (async (input: RequestInfo | URL) => {
+		const url = String(input);
+		const match = responses.find(r => r.match(url));
+		if (!match) {
+			return new Response(JSON.stringify([]), { status: 200 });
+		}
+		return new Response(JSON.stringify(match.body), {
+			status: 200,
+			headers: { 'content-type': 'application/json' },
+		});
+	}) as typeof fetch;
+}
+
+async function expectRedirect(
+	fn: () => Promise<void>,
+	expectedPath: string,
+): Promise<void> {
+	try {
+		await fn();
+		throw new Error('expected redirect');
+	} catch (error) {
+		const digest = (error as { digest?: string }).digest ?? '';
+		expect(digest).toContain(`;${expectedPath};`);
+	}
+}
+
+beforeEach(() => {
+	globalThis.fetch = originalFetch;
+});
+
+afterEach(() => {
+	globalThis.fetch = originalFetch;
+});
 
 function placeItem(id: string, name: string, slug: string, state: string): PlaceItem {
 	return { id, name, slug, state };
@@ -1095,5 +1133,83 @@ describe('claimed profile helpers', () => {
 	test('resolveProfileImageUrl trims and rejects empty values', () => {
 		expect(resolveProfileImageUrl(' https://example.com/a.jpg ')).toBe('https://example.com/a.jpg');
 		expect(resolveProfileImageUrl('   ')).toBeUndefined();
+	});
+});
+
+describe('redirectCityRaceToFourLevelUrl', () => {
+	test('redirects to verified canonical county, not the URL county segment', async () => {
+		withFetchMock([
+			{
+				match: url =>
+					url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
+				body: [
+					{ slug: 'ok/caddo-county', name: 'Caddo County', mtfcc: 'G4020', state: 'OK' },
+					{ slug: 'ok/comanche-county', name: 'Comanche County', mtfcc: 'G4020', state: 'OK' },
+				],
+			},
+		]);
+
+		const race = {
+			Place: {
+				slug: 'ok/binger',
+				mtfcc: CITY_MTFCC,
+				countyName: 'Caddo',
+			},
+		};
+
+		await expectRedirect(
+			() =>
+				redirectCityRaceToFourLevelUrl(
+					race,
+					'OK',
+					'ok',
+					'comanche-county',
+					'/position/city-clerk',
+				),
+			'/elections/ok/caddo-county/binger/position/city-clerk',
+		);
+	});
+
+	test('does not redirect when county lookup fails', async () => {
+		withFetchMock([
+			{
+				match: url =>
+					url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
+				body: [{ slug: 'ok/comanche-county', name: 'Comanche County', mtfcc: 'G4020', state: 'OK' }],
+			},
+		]);
+
+		const race = {
+			Place: {
+				slug: 'ok/binger',
+				mtfcc: CITY_MTFCC,
+				countyName: 'Caddo',
+			},
+		};
+
+		await redirectCityRaceToFourLevelUrl(
+			race,
+			'OK',
+			'ok',
+			'comanche-county',
+			'/position/city-clerk',
+		);
+	});
+
+	test('does not redirect when place has no countyName', async () => {
+		const race = {
+			Place: {
+				slug: 'ok/binger',
+				mtfcc: CITY_MTFCC,
+			},
+		};
+
+		await redirectCityRaceToFourLevelUrl(
+			race,
+			'OK',
+			'ok',
+			'comanche-county',
+			'/position/city-clerk',
+		);
 	});
 });

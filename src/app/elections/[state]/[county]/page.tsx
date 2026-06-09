@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
+import { notFound, permanentRedirect, redirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	getCountyChildPlaces,
 	getPlacesByState,
 	getPlaceBySlug,
+	isCityOrTownMtfcc,
 	isDistrictMtfcc,
+	resolveCountySlugForPlace,
 	TOWN_MTFCC,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
@@ -84,6 +86,17 @@ export default async function Page({
 		: await getCountyChildPlaces({ state: stateCode, countySlug: fullSlug });
 
 	if (!countyPlace && !isDistrict) {
+		if (placeData && isCityOrTownMtfcc(placeData.mtfcc) && placeData.countyName) {
+			const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, placeData.countyName);
+			if (canonicalCountySlug) {
+				const citySegment =
+					placeData.slug?.split('/').pop()?.toLowerCase() ?? county.toLowerCase();
+				const canonicalCitySlug = `${canonicalCountySlug}/${citySegment}`;
+				if (canonicalCitySlug.toLowerCase() !== fullSlug) {
+					permanentRedirect(`/elections/${canonicalCitySlug}`);
+				}
+			}
+		}
 		if (placeData?.mtfcc && placeData.mtfcc !== COUNTY_MTFCC) {
 			redirect(`/elections/${state.toLowerCase()}`);
 		}

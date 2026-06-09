@@ -331,12 +331,21 @@ describe('buildRaceEntries', () => {
 		]);
 	});
 
-	test('collapses district race slug with erroneous middle segment', () => {
+	test('emits 4-level URL for nested LOCAL school district race', () => {
 		const result = urls([
 			{ slug: 'ok/choctaw/nicoma-park-schools/local-school-board', positionLevel: 'LOCAL' },
 		]);
 		expect(result).toEqual([
-			`${BASE}/elections/ok/nicoma-park-schools/position/local-school-board`,
+			`${BASE}/elections/ok/choctaw/nicoma-park-schools/position/local-school-board`,
+		]);
+	});
+
+	test('emits 4-level URL for AK nested school district race', () => {
+		const result = urls([
+			{ slug: 'ak/delta/greely-school-district/local-school-board', positionLevel: 'LOCAL' },
+		]);
+		expect(result).toEqual([
+			`${BASE}/elections/ak/delta/greely-school-district/position/local-school-board`,
 		]);
 	});
 

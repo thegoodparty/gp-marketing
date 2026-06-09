@@ -7,6 +7,7 @@ import {
 	getPlacesByState,
 	getRaceBySlug,
 	isCityOrTownMtfcc,
+	isDistrictMtfcc,
 	resolveCountySlugForPlace,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
@@ -52,6 +53,12 @@ export default async function Page({
 
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
+	const isNestedDistrict =
+		!countyPlace &&
+		race.Place != null &&
+		isDistrictMtfcc(race.Place.mtfcc) &&
+		race.Place.slug?.toLowerCase() === fullSlug;
+
 	if (race.Place && isCityOrTownMtfcc(race.Place.mtfcc) && race.Place.countyName) {
 		const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, race.Place.countyName);
 		if (canonicalCountySlug && canonicalCountySlug.toLowerCase() !== countySlug) {
@@ -61,15 +68,24 @@ export default async function Page({
 		}
 	}
 
-	const countyName = resolveLocalityName(countyPlace, race.Place, countySlug);
+	if (!countyPlace && !isNestedDistrict) {
+		notFound();
+	}
+
+	const countyName = isNestedDistrict
+		? race.Place!.name
+		: resolveLocalityName(countyPlace, race.Place, countySlug);
 
 	// Cities queried by G4110 (incorporated places). Non-incorporated places (e.g. WI townships
 	// which are G4040) won't appear in that list, so fall back to the place on the race itself.
-	const cityPlaces = await getCityPlacesByCounty({ state: stateCode, countySlug });
-	const cityPlace =
-		cityPlaces.find(c => c.slug.toLowerCase() === `${state.toLowerCase()}/${city.toLowerCase()}`) ??
-		race.Place ??
-		null;
+	const cityPlaces = isNestedDistrict
+		? []
+		: await getCityPlacesByCounty({ state: stateCode, countySlug });
+	const cityPlace = isNestedDistrict
+		? race.Place
+		: (cityPlaces.find(c => c.slug.toLowerCase() === `${state.toLowerCase()}/${city.toLowerCase()}`) ??
+			race.Place ??
+			null);
 	if (!cityPlace) notFound();
 
 	const stateName = getStateName(stateCode);

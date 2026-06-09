@@ -256,12 +256,24 @@ export async function fetchStateElectionRouteParams(stateCode: string): Promise<
 	const { citySlugToCountySlug } = buildCountyLookups(places, cities);
 
 	const countyParams: ElectionCountyRouteParam[] = [];
+	const cityParams: ElectionCityRouteParam[] = [];
 	for (const p of places) {
 		if (!p.slug) continue;
 		const mtfcc = p.mtfcc ?? '';
-		if (mtfcc === 'G4020' || mtfcc.startsWith('G54')) {
-			const segs = p.slug.split('/').filter(Boolean);
-			if (segs.length >= 2) {
+		const segs = p.slug.split('/').filter(Boolean);
+		if (mtfcc === 'G4020' && segs.length >= 2) {
+			countyParams.push({
+				state: segs[0]!.toLowerCase(),
+				county: segs.slice(1).join('/').toLowerCase(),
+			});
+		} else if (mtfcc.startsWith('G54')) {
+			if (segs.length >= 3) {
+				cityParams.push({
+					state: segs[0]!.toLowerCase(),
+					county: segs[1]!.toLowerCase(),
+					city: segs.slice(2).join('/').toLowerCase(),
+				});
+			} else if (segs.length >= 2) {
 				countyParams.push({
 					state: segs[0]!.toLowerCase(),
 					county: segs.slice(1).join('/').toLowerCase(),
@@ -270,7 +282,6 @@ export async function fetchStateElectionRouteParams(stateCode: string): Promise<
 		}
 	}
 
-	const cityParams: ElectionCityRouteParam[] = [];
 	for (const c of cities) {
 		const countySlug = citySlugToCountySlug.get(c.slug ?? '');
 		if (!countySlug || !c.slug) continue;

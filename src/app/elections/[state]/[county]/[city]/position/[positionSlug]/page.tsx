@@ -6,6 +6,7 @@ import {
 	getPlacesByState,
 	getRaceBySlug,
 	isCityOrTownMtfcc,
+	isDistrictMtfcc,
 	resolveCountySlugForPlace,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
@@ -57,9 +58,45 @@ export default async function Page({
 
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
+	const isNestedDistrict =
+		!countyPlace &&
+		race.Place != null &&
+		isDistrictMtfcc(race.Place.mtfcc) &&
+		race.Place.slug?.toLowerCase() === fullSlug;
 
-	if (!countyPlace) {
+	if (!countyPlace && !isNestedDistrict) {
 		notFound();
+	}
+
+	const stateName = getStateName(stateCode);
+	const officeName = race.normalizedPositionName ?? race.name ?? 'Position';
+	const electionDate = formatElectionDateFromApi(race.electionDate);
+	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
+	const candidatesHref = `/elections/${fullSlug}/position/${positionSlug}/candidates`;
+	const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}/position/${positionSlug}`);
+
+	if (isNestedDistrict) {
+		const districtName = race.Place!.name;
+		const breadcrumbs = [
+			{ href: '/elections', label: 'Elections' },
+			{ href: `/elections/${state.toLowerCase()}`, label: stateName },
+			{ href: `/elections/${fullSlug}`, label: districtName },
+			{ href: '', label: officeName },
+		];
+
+		return (
+			<PositionPageContent
+				officeName={officeName}
+				stateName={stateName}
+				cityName={districtName}
+				electionDate={electionDate}
+				filingDate={filingDate}
+				breadcrumbs={breadcrumbs}
+				candidatesHref={candidatesHref}
+				race={race}
+				pageUrl={pageUrl}
+			/>
+		);
 	}
 
 	// Cities queried by G4110 (incorporated places). Non-incorporated places (e.g. WI townships
@@ -71,29 +108,20 @@ export default async function Page({
 		null;
 	if (!cityPlace) notFound();
 
-	const stateName = getStateName(stateCode);
 	const cityName = cityPlace.name;
-	const officeName = race.normalizedPositionName ?? race.name ?? 'Position';
-	const electionDate = formatElectionDateFromApi(race.electionDate);
-	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
-
-	const candidatesHref = `/elections/${fullSlug}/position/${positionSlug}/candidates`;
-
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
 		{ href: `/elections/${state.toLowerCase()}`, label: stateName },
-		{ href: `/elections/${countySlug}`, label: countyPlace.name },
+		{ href: `/elections/${countySlug}`, label: countyPlace!.name },
 		{ href: `/elections/${fullSlug}`, label: cityName },
 		{ href: '', label: officeName },
 	];
-
-	const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}/position/${positionSlug}`);
 
 	return (
 		<PositionPageContent
 			officeName={officeName}
 			stateName={stateName}
-			countyName={countyPlace.name}
+			countyName={countyPlace!.name}
 			cityName={cityName}
 			electionDate={electionDate}
 			filingDate={filingDate}
@@ -122,14 +150,25 @@ export async function generateMetadata({
 	let race = await getRaceBySlug(buildRaceSlug(state, positionSlug, city));
 	if (!race) race = await getRaceBySlug(buildRaceSlug(state, positionSlug, county, city));
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
+	const fullSlug = `${countySlug}/${city.toLowerCase()}`;
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
-	const countyDisplayName = resolveLocalityName(countyPlace, race?.Place, countySlug);
-	const cityPlaces = await getCityPlacesByCounty({ state: stateCode, countySlug });
-	const cityPlace =
-		cityPlaces.find(c => c.slug.toLowerCase() === `${state.toLowerCase()}/${city.toLowerCase()}`) ??
-		race?.Place ??
-		null;
+	const isNestedDistrict =
+		!countyPlace &&
+		race?.Place != null &&
+		isDistrictMtfcc(race.Place.mtfcc) &&
+		race.Place.slug?.toLowerCase() === fullSlug;
+	const countyDisplayName = isNestedDistrict
+		? race!.Place!.name
+		: resolveLocalityName(countyPlace, race?.Place, countySlug);
+	const cityPlaces = isNestedDistrict
+		? []
+		: await getCityPlacesByCounty({ state: stateCode, countySlug });
+	const cityPlace = isNestedDistrict
+		? race?.Place
+		: (cityPlaces.find(c => c.slug.toLowerCase() === `${state.toLowerCase()}/${city.toLowerCase()}`) ??
+			race?.Place ??
+			null);
 	const cityName = cityPlace?.name ?? city;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
 	return {

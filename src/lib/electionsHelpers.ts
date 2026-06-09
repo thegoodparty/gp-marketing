@@ -930,10 +930,12 @@ export function resolveElectionPositionFromRaceSlug(
 			if (!state || !seg2 || !seg3) return undefined;
 
 			if (!looksLikeCountySlugSegment(seg2) && looksLikeDistrictSlug(seg3)) {
+				const stateLower = state.toLowerCase();
+				const parent = seg2.toLowerCase();
 				const district = seg3.toLowerCase();
 				return {
-					path: `/elections/${state}/${district}/position/${positionSlug}`,
-					route: { level: 'county', state: state.toLowerCase(), county: district, positionSlug },
+					path: `/elections/${stateLower}/${parent}/${district}/position/${positionSlug}`,
+					route: { level: 'city', state: stateLower, county: parent, city: district, positionSlug },
 				};
 			}
 

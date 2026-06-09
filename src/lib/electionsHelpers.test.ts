@@ -991,13 +991,22 @@ describe('buildElectionPositionHrefFromRaceSlug', () => {
 		).toBe('/elections/ok/caddo-county/binger/city-clerk/position/treasurer-joint');
 	});
 
-	test('collapses district race slug with erroneous middle segment', () => {
+	test('emits 4-level URL for nested LOCAL school district race', () => {
 		expect(
 			buildElectionPositionHrefFromRaceSlug(
 				{ slug: 'ok/choctaw/nicoma-park-schools/local-school-board', positionLevel: 'LOCAL' },
 				{ citySlugToCountySlug },
 			),
-		).toBe('/elections/ok/nicoma-park-schools/position/local-school-board');
+		).toBe('/elections/ok/choctaw/nicoma-park-schools/position/local-school-board');
+	});
+
+	test('emits 4-level URL for AK nested school district race', () => {
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{ slug: 'ak/delta/greely-school-district/local-school-board', positionLevel: 'LOCAL' },
+				{ citySlugToCountySlug },
+			),
+		).toBe('/elections/ak/delta/greely-school-district/position/local-school-board');
 	});
 
 	test('skips PA compound county office slug in sitemap mode', () => {

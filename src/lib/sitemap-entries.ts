@@ -5,10 +5,14 @@
 
 import type { MetadataRoute } from 'next';
 import { sanityClient } from '~/sanity/sanityClient';
+import { looksLikeDistrictSlug } from '~/lib/electionsApi';
 import {
 	buildElectionPositionHrefFromRaceSlug,
+	resolveElectionPositionFromRaceSlug,
 	stripCountySuffix as stripCountySuffixFromHelpers,
 } from '~/lib/electionsHelpers';
+import { FAQ_BASE_PATH, getAllFaqSlugs } from '~/lib/faqSlugs';
+import { allFaqsQuery } from '~/sanity/groq';
 
 /** 51 US state/DC codes (50 states + DC) */
 export const US_STATE_CODES = [
@@ -166,57 +170,42 @@ export function buildRaceRouteParams(
 
 	for (const r of races) {
 		if (!r.slug) continue;
-		const parts = r.slug.split('/');
-		const positionSlug = parts.pop();
-		if (!positionSlug) continue;
 
-		const level = (r.positionLevel ?? '').toUpperCase();
+		const resolved = resolveElectionPositionFromRaceSlug(r, {
+			citySlugToCountySlug,
+			skipUnmappedCity: true,
+		});
+		if (!resolved) continue;
 
-		if (level === 'CITY' || level === 'LOCAL') {
-			const citySlug = parts.join('/');
-			const countySlug = citySlugToCountySlug.get(citySlug);
-			if (countySlug) {
-				const citySegment = parts.pop();
-				if (!citySegment) continue;
-				const csParts = countySlug.split('/').filter(Boolean);
-				if (csParts.length >= 2) {
-					cityPositionParams.push({
-						state: csParts[0]!.toLowerCase(),
-						county: csParts.slice(1).join('/').toLowerCase(),
-						city: citySegment.toLowerCase(),
-						positionSlug,
-					});
-				}
-				continue;
-			}
-			if (level === 'CITY' && parts.length === 2) continue;
-		}
-
-		const prefix = parts.join('/');
-		const segs = prefix.split('/').filter(Boolean);
-		if (segs.length === 1) {
-			statePositionParams.push({ state: segs[0]!.toLowerCase(), positionSlug });
-		} else if (segs.length === 2) {
-			countyPositionParams.push({
-				state: segs[0]!.toLowerCase(),
-				county: segs[1]!.toLowerCase(),
-				positionSlug,
-			});
-		} else if (segs.length === 3) {
-			cityPositionParams.push({
-				state: segs[0]!.toLowerCase(),
-				county: segs[1]!.toLowerCase(),
-				city: segs[2]!.toLowerCase(),
-				positionSlug,
-			});
-		} else if (segs.length === 4) {
-			subplacePositionParams.push({
-				state: segs[0]!.toLowerCase(),
-				county: segs[1]!.toLowerCase(),
-				city: segs[2]!.toLowerCase(),
-				subplace: segs[3]!.toLowerCase(),
-				positionSlug,
-			});
+		const { route } = resolved;
+		switch (route.level) {
+			case 'state':
+				statePositionParams.push({ state: route.state, positionSlug: route.positionSlug });
+				break;
+			case 'county':
+				countyPositionParams.push({
+					state: route.state,
+					county: route.county,
+					positionSlug: route.positionSlug,
+				});
+				break;
+			case 'city':
+				cityPositionParams.push({
+					state: route.state,
+					county: route.county,
+					city: route.city,
+					positionSlug: route.positionSlug,
+				});
+				break;
+			case 'subplace':
+				subplacePositionParams.push({
+					state: route.state,
+					county: route.county,
+					city: route.city,
+					subplace: route.subplace,
+					positionSlug: route.positionSlug,
+				});
+				break;
 		}
 	}
 
@@ -269,12 +258,24 @@ export async function fetchStateElectionRouteParams(stateCode: string): Promise<
 	const { citySlugToCountySlug } = buildCountyLookups(places, cities);
 
 	const countyParams: ElectionCountyRouteParam[] = [];
+	const cityParams: ElectionCityRouteParam[] = [];
 	for (const p of places) {
 		if (!p.slug) continue;
 		const mtfcc = p.mtfcc ?? '';
-		if (mtfcc === 'G4020' || mtfcc.startsWith('G54')) {
-			const segs = p.slug.split('/').filter(Boolean);
-			if (segs.length >= 2) {
+		const segs = p.slug.split('/').filter(Boolean);
+		if (mtfcc === 'G4020' && segs.length >= 2) {
+			countyParams.push({
+				state: segs[0]!.toLowerCase(),
+				county: segs.slice(1).join('/').toLowerCase(),
+			});
+		} else if (mtfcc.startsWith('G54')) {
+			if (segs.length >= 3) {
+				cityParams.push({
+					state: segs[0]!.toLowerCase(),
+					county: segs[1]!.toLowerCase(),
+					city: segs.slice(2).join('/').toLowerCase(),
+				});
+			} else if (segs.length >= 2) {
 				countyParams.push({
 					state: segs[0]!.toLowerCase(),
 					county: segs.slice(1).join('/').toLowerCase(),
@@ -283,12 +284,11 @@ export async function fetchStateElectionRouteParams(stateCode: string): Promise<
 		}
 	}
 
-	const cityParams: ElectionCityRouteParam[] = [];
 	for (const c of cities) {
 		const countySlug = citySlugToCountySlug.get(c.slug ?? '');
 		if (!countySlug || !c.slug) continue;
 		const citySegment = c.slug.split('/').pop();
-		if (!citySegment) continue;
+		if (!citySegment || looksLikeDistrictSlug(citySegment)) continue;
 		const segs = countySlug.split('/').filter(Boolean);
 		if (segs.length >= 2) {
 			cityParams.push({
@@ -391,7 +391,7 @@ async function fetchElectionJson<T>(path: string, params: Record<string, string>
 export async function fetchMainSitemapEntries(baseUrl: string): Promise<MetadataRoute.Sitemap> {
 	const entries: MetadataRoute.Sitemap = [];
 
-	const [singletons, landingAndPolicySlugs, articles, categorySlugs, topicSlugs, glossaryTerms] =
+	const [singletons, landingAndPolicySlugs, articles, categorySlugs, topicSlugs, glossaryTerms, faqs] =
 		await Promise.all([
 			sanityClient.fetch<{
 				home: string | null;
@@ -433,6 +433,11 @@ export async function fetchMainSitemapEntries(baseUrl: string): Promise<Metadata
 				{},
 				{ next: { tags: ['glossary'] } },
 			),
+			sanityClient.fetch<Array<{ _id: string; _updatedAt?: string; faqOverview?: { field_question?: string } }>>(
+				allFaqsQuery,
+				{},
+				{ perspective: 'published', next: { tags: ['faq'] } },
+			),
 		]);
 
 	if (singletons.home) entries.push(toEntry(baseUrl, '/', 1.0, 'monthly'));
@@ -465,6 +470,16 @@ export async function fetchMainSitemapEntries(baseUrl: string): Promise<Metadata
 		if (letter && !seenLetters.has(letter)) {
 			seenLetters.add(letter);
 			entries.push(toEntry(baseUrl, `/political-terms/${letter}`, 0.6, 'monthly'));
+		}
+	}
+
+	const faqSlugs = getAllFaqSlugs(faqs);
+	for (let i = 0; i < faqs.length; i++) {
+		const slug = faqSlugs[i];
+		if (slug) {
+			entries.push(
+				toEntry(baseUrl, `${FAQ_BASE_PATH}/${slug}`, 0.6, 'monthly', faqs[i]?._updatedAt?.slice(0, 10)),
+			);
 		}
 	}
 
@@ -515,9 +530,8 @@ export async function fetchStateElectionSitemapEntries(
 		const countySlug = citySlugToCountySlug.get(c.slug ?? '');
 		if (!countySlug || !c.slug) continue;
 		const citySegment = c.slug.split('/').pop();
-		if (citySegment) {
-			entries.push(toEntry(baseUrl, `/elections/${countySlug}/${citySegment}`, 0.7, 'weekly'));
-		}
+		if (!citySegment || looksLikeDistrictSlug(citySegment)) continue;
+		entries.push(toEntry(baseUrl, `/elections/${countySlug}/${citySegment}`, 0.7, 'weekly'));
 	}
 
 	entries.push(...buildRaceEntries(races, citySlugToCountySlug, baseUrl));

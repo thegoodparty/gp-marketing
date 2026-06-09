@@ -5,7 +5,7 @@ import {
 	getCandidacies,
 	getCityPlacesByCounty,
 	getPlacesByState,
-	getRaceBySlug,
+	getSubplaceRaceBySlug,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
@@ -16,17 +16,6 @@ import {
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
 import { CandidatesPageContent } from '~/ui/CandidatesPageContent';
-
-/** 5-part API slug: state/county/city/subplace/positionSlug */
-function buildFivePartRaceSlug(
-	state: string,
-	county: string,
-	city: string,
-	subplace: string,
-	positionSlug: string,
-): string {
-	return `${state.toLowerCase()}/${county.toLowerCase()}/${city.toLowerCase()}/${subplace.toLowerCase()}/${positionSlug}`;
-}
 
 function humanizeSegment(segment: string): string {
 	return segment
@@ -53,8 +42,7 @@ export default async function Page({
 		notFound();
 	}
 
-	const raceSlug = buildFivePartRaceSlug(state, county, city, subplace, positionSlug);
-	const race = await getRaceBySlug(raceSlug);
+	const race = await getSubplaceRaceBySlug({ state, county, city, subplace, positionSlug });
 	if (!race) notFound();
 
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
@@ -83,7 +71,7 @@ export default async function Page({
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 
-	const candidacies = await getCandidacies({ raceSlug });
+	const candidacies = await getCandidacies({ raceSlug: race.slug });
 
 	const candidates = candidacies.map((c, i) => mapCandidacyToCard(c, i));
 
@@ -131,8 +119,7 @@ export async function generateMetadata({
 	const stateCode = state.toUpperCase();
 	if (!isValidStateCode(stateCode)) return {};
 	const stateName = getStateName(stateCode);
-	const raceSlug = buildFivePartRaceSlug(state, county, city, subplace, positionSlug);
-	const race = await getRaceBySlug(raceSlug);
+	const race = await getSubplaceRaceBySlug({ state, county, city, subplace, positionSlug });
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);

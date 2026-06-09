@@ -7,6 +7,7 @@
  * Usage:
  *   SITEMAP_BASE_URL=https://goodparty.org bun test integration/validate-sitemap-urls.test.ts
  *   SITEMAP_BASE_URL=http://localhost:3009 bun test integration/validate-sitemap-urls.test.ts
+ *   SITEMAP_BASE_URL=https://goodparty.org bun run test:integration:sitemap:batches -- --batch-size 5
  *
  * Environment variables:
  *   SITEMAP_BASE_URL     Required. Base URL to validate against.

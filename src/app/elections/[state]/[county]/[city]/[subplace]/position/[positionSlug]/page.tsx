@@ -4,7 +4,7 @@ import {
 	COUNTY_MTFCC,
 	getCityPlacesByCounty,
 	getPlacesByState,
-	getRaceBySlug,
+	getSubplaceRaceBySlug,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
@@ -18,17 +18,6 @@ import { toAbsoluteUrl } from '~/lib/url';
 import { PositionPageContent } from '~/ui/PositionPageContent';
 
 export const revalidate = 3600;
-
-/** 5-part API slug: state/county/city/subplace/positionSlug */
-function buildFivePartRaceSlug(
-	state: string,
-	county: string,
-	city: string,
-	subplace: string,
-	positionSlug: string,
-): string {
-	return `${state.toLowerCase()}/${county.toLowerCase()}/${city.toLowerCase()}/${subplace.toLowerCase()}/${positionSlug}`;
-}
 
 function humanizeSegment(segment: string): string {
 	return segment
@@ -60,8 +49,7 @@ export default async function Page({
 		notFound();
 	}
 
-	const raceSlug = buildFivePartRaceSlug(state, county, city, subplace, positionSlug);
-	const race = await getRaceBySlug(raceSlug);
+	const race = await getSubplaceRaceBySlug({ state, county, city, subplace, positionSlug });
 	if (!race) notFound();
 
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
@@ -137,8 +125,7 @@ export async function generateMetadata({
 	const stateCode = state.toUpperCase();
 	if (!isValidStateCode(stateCode)) return {};
 	const stateName = getStateName(stateCode);
-	const raceSlug = buildFivePartRaceSlug(state, county, city, subplace, positionSlug);
-	const race = await getRaceBySlug(raceSlug);
+	const race = await getSubplaceRaceBySlug({ state, county, city, subplace, positionSlug });
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);

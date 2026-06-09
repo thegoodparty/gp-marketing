@@ -23,6 +23,7 @@ import {
 	getCountySuffixLabel,
 	getStateName,
 	placeToFactsCards,
+	redirectCityPlaceToFourLevelUrl,
 } from '~/lib/electionsHelpers';
 import { resolveAuthor } from '~/ui/_lib/resolveAuthor';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
@@ -64,6 +65,7 @@ export default async function Page({
 			slug: fullSlug,
 			includeChildren: false,
 			includeRaces: true,
+			placeColumns: 'slug,name,mtfcc,countyName',
 			raceColumns: 'slug,normalizedPositionName,electionDate,positionDescription,positionLevel',
 		}),
 		sanityFetch({
@@ -84,6 +86,7 @@ export default async function Page({
 		: await getCountyChildPlaces({ state: stateCode, countySlug: fullSlug });
 
 	if (!countyPlace && !isDistrict) {
+		await redirectCityPlaceToFourLevelUrl(placeData, stateCode, fullSlug);
 		if (placeData?.mtfcc && placeData.mtfcc !== COUNTY_MTFCC) {
 			redirect(`/elections/${state.toLowerCase()}`);
 		}

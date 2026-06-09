@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	getCountyChildPlaces,
 	getPlacesByState,
 	getPlaceBySlug,
+	isCityOrTownMtfcc,
+	isDistrictMtfcc,
+	resolveCountySlugForPlace,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
@@ -18,7 +21,6 @@ import { quoteCollectionByIdQuery } from '~/sanity/groq';
 import {
 	getStateName,
 	hasSuspiciousFactsMatch,
-	isCityOrTownMtfcc,
 	placeToFactsCards,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
@@ -64,6 +66,7 @@ export default async function Page({
 			slug: fullSlug,
 			includeChildren: false,
 			includeRaces: true,
+			placeColumns: 'slug,name,mtfcc,countyName',
 			raceColumns: 'slug,normalizedPositionName,electionDate,positionDescription,positionLevel',
 		}),
 		getPlaceBySlug({
@@ -85,14 +88,129 @@ export default async function Page({
 			slug: shortSlug,
 			includeChildren: false,
 			includeRaces: true,
+			placeColumns: 'slug,name,mtfcc,countyName',
 			raceColumns: 'slug,normalizedPositionName,electionDate,positionDescription,positionLevel',
 		});
 	}
 
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
+	const isNestedDistrict =
+		!countyPlace &&
+		resolvedPlaceData != null &&
+		isDistrictMtfcc(resolvedPlaceData.mtfcc) &&
+		resolvedPlaceData.slug?.toLowerCase() === fullSlug;
 
-	if (!countyPlace) {
+	if (!countyPlace && !isNestedDistrict) {
+		if (resolvedPlaceData?.countyName) {
+			const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, resolvedPlaceData.countyName);
+			if (canonicalCountySlug && canonicalCountySlug.toLowerCase() !== countySlug) {
+				permanentRedirect(`/elections/${canonicalCountySlug}/${city.toLowerCase()}`);
+			}
+		}
 		notFound();
+	}
+
+	if (isNestedDistrict) {
+		const districtPlace = resolvedPlaceData!;
+		const districtName = districtPlace.name;
+		const breadcrumbs = [
+			{ href: '/elections', label: 'Elections' },
+			{ href: `/elections/${state.toLowerCase()}`, label: stateName },
+			{ href: '', label: districtName },
+		];
+		const districtRaces = (districtPlace.Races ?? []).filter(r => {
+			const level = r.positionLevel?.toUpperCase();
+			return level === 'LOCAL' || level === 'COUNTY';
+		});
+		const districtOffices = districtRaces.map(race => {
+			const positionSlug = race.slug.split('/').pop() ?? '';
+			return {
+				id: String(race.id),
+				type: 'District',
+				position: race.normalizedPositionName ?? race.name ?? 'Position',
+				nextElectionDate: race.electionDate ?? '',
+				href: `/elections/${state.toLowerCase()}/${county.toLowerCase()}/${city.toLowerCase()}/position/${positionSlug}`,
+			};
+		});
+		const dataYears = [
+			...new Set(
+				districtRaces
+					.map(r => (r.electionDate ? new Date(r.electionDate).getFullYear() : NaN))
+					.filter((y): y is number => !isNaN(y)),
+			),
+		].sort((a, b) => a - b);
+		const defaultYear = dataYears.includes(currentYear)
+			? currentYear
+			: (dataYears[0] ?? currentYear);
+		const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
+		const factsCards = placeToFactsCards(districtPlace);
+		const quoteItems = quoteCollection?.quoteCollectionContent?.list_chooseQuotes ?? [];
+		const carouselCards = quoteItems.map(item => ({
+			copy: item.quote?.field_quote ?? undefined,
+			author: resolveAuthor(item.quote?.ref_quoteBy as Parameters<typeof resolveAuthor>[0]),
+		}));
+		const stepperHeader = {
+			title: STEPPER_HEADER.title,
+			copy: STEPPER_HEADER.copy,
+			backgroundColor: 'cream' as const,
+			textSize: resolveTextSize('Medium'),
+		};
+		const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);
+		const districtGraph = buildSchemaGraph([
+			buildWebPageSchema({
+				url: pageUrl,
+				name: `Elections in ${districtName}, ${stateName}`,
+				description: `Browse elections and positions in ${districtName}, ${stateName}.`,
+				pageType: 'CollectionPage',
+			}),
+			buildBreadcrumbSchema(breadcrumbs, toAbsoluteUrl),
+		]);
+
+		return (
+			<>
+				<PageSchema schema={districtGraph ?? undefined} />
+				<BreadcrumbBlock backgroundColor="midnight" breadcrumbs={breadcrumbs} />
+				<ElectionsLandingWithSearch
+					heroProps={{
+						locationLevel: 'county',
+						backgroundColor: 'midnight',
+						stateName: `Upcoming elections in ${districtName}, ${stateName}`,
+						bodyCopy: `Learn what positions are up for election and who is currently running for office in ${districtName}.`,
+					}}
+					listProps={{
+						heading: `Elections in ${districtName}`,
+						headlineLabel: 'district',
+						defaultYear,
+						availableYears,
+						offices: districtOffices,
+					}}
+				/>
+				{factsCards.length > 0 && (
+					<LocationFactsBlock
+						backgroundColor="cream"
+						header={{ title: `${districtName} facts` }}
+						factsCards={factsCards}
+					/>
+				)}
+				{carouselCards.length > 0 && (
+					<Carousel
+						backgroundColor="cream"
+						header={{
+							title: CAROUSEL_HEADER.title,
+							copy: CAROUSEL_HEADER.copy,
+							backgroundColor: 'cream',
+							textSize: resolveTextSize('Medium'),
+						}}
+						cards={carouselCards}
+					/>
+				)}
+				<StepperBlock
+					backgroundColor="cream"
+					header={stepperHeader}
+					items={STEPPER_ITEMS.map(i => ({ ...i, buttons: [...i.buttons] }))}
+				/>
+			</>
+		);
 	}
 
 	const citySegment = city.toLowerCase();
@@ -114,6 +232,13 @@ export default async function Page({
 
 	if (!cityPlace) {
 		notFound();
+	}
+
+	if (cityPlace.countyName) {
+		const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, cityPlace.countyName);
+		if (canonicalCountySlug && canonicalCountySlug.toLowerCase() !== countySlug) {
+			permanentRedirect(`/elections/${canonicalCountySlug}/${city.toLowerCase()}`);
+		}
 	}
 
 	const cityName = cityPlace.name;
@@ -257,16 +382,33 @@ export async function generateMetadata({
 	if (!isValidStateCode(stateCode)) return {};
 	const stateName = getStateName(stateCode);
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
+	const fullSlug = `${countySlug}/${city.toLowerCase()}`;
 	const shortSlug = `${state.toLowerCase()}/${city.toLowerCase()}`;
-	const [counties, countyFactsData] = await Promise.all([
+	const [counties, countyFactsData, placeData] = await Promise.all([
 		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
 		getPlaceBySlug({
 			slug: countySlug,
 			includeChildren: false,
 			includeRaces: false,
 		}),
+		getPlaceBySlug({
+			slug: fullSlug,
+			includeChildren: false,
+			includeRaces: false,
+		}),
 	]);
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
+	const isNestedDistrict =
+		!countyPlace &&
+		placeData != null &&
+		isDistrictMtfcc(placeData.mtfcc) &&
+		placeData.slug?.toLowerCase() === fullSlug;
+	if (isNestedDistrict) {
+		return {
+			title: `Elections in ${placeData.name}, ${stateName} | Good Party`,
+			description: `Browse elections and positions in ${placeData.name}, ${stateName}.`,
+		};
+	}
 	const countyDisplayName = resolveLocalityName(countyPlace, countyFactsData ?? undefined, countySlug);
 	const cityPlaces = await getCountyChildPlaces({ state: stateCode, countySlug });
 	const citySegment = city.toLowerCase();

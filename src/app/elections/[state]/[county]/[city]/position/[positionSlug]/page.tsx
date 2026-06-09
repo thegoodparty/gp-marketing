@@ -153,21 +153,22 @@ export async function generateMetadata({
 	const fullSlug = `${countySlug}/${city.toLowerCase()}`;
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
+	const racePlace = race?.Place;
 	const isNestedDistrict =
 		!countyPlace &&
-		race?.Place != null &&
-		isDistrictMtfcc(race.Place.mtfcc) &&
-		race.Place.slug?.toLowerCase() === fullSlug;
+		racePlace != null &&
+		isDistrictMtfcc(racePlace.mtfcc) &&
+		racePlace.slug?.toLowerCase() === fullSlug;
 	const countyDisplayName = isNestedDistrict
-		? race!.Place!.name
-		: resolveLocalityName(countyPlace, race?.Place, countySlug);
+		? racePlace.name
+		: resolveLocalityName(countyPlace, racePlace, countySlug);
 	const cityPlaces = isNestedDistrict
 		? []
 		: await getCityPlacesByCounty({ state: stateCode, countySlug });
 	const cityPlace = isNestedDistrict
-		? race?.Place
+		? racePlace
 		: (cityPlaces.find(c => c.slug.toLowerCase() === `${state.toLowerCase()}/${city.toLowerCase()}`) ??
-			race?.Place ??
+			racePlace ??
 			null);
 	const cityName = cityPlace?.name ?? city;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';

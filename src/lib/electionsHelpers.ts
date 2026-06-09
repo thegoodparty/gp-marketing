@@ -1052,3 +1052,20 @@ export async function redirectCityRaceToFourLevelUrl(
 	if (!canonicalCountySlug) return;
 	permanentRedirect(`/elections/${canonicalCountySlug}/${citySegment}${pathSuffix}`);
 }
+
+/**
+ * On 2-level routes (`/elections/[state]/[county]`), a city/town slug in the county
+ * segment must redirect to the 4-level URL that includes the canonical county and city.
+ */
+export async function redirectCityPlaceToFourLevelUrl(
+	place: { slug?: string; mtfcc?: string; countyName?: string } | null | undefined,
+	stateCode: string,
+	currentFullSlug: string,
+): Promise<void> {
+	if (!place || !isCityOrTownMtfcc(place.mtfcc) || !place.countyName) return;
+	const citySegment = place.slug?.split('/').pop()?.toLowerCase();
+	if (!citySegment) return;
+	const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, place.countyName);
+	if (!canonicalCountySlug || canonicalCountySlug.toLowerCase() === currentFullSlug.toLowerCase()) return;
+	permanentRedirect(`/elections/${canonicalCountySlug}/${citySegment}`);
+}

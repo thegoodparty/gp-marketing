@@ -1,13 +1,11 @@
 import type { Metadata } from 'next';
-import { notFound, permanentRedirect, redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	getCountyChildPlaces,
 	getPlacesByState,
 	getPlaceBySlug,
-	isCityOrTownMtfcc,
 	isDistrictMtfcc,
-	resolveCountySlugForPlace,
 	TOWN_MTFCC,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
@@ -25,6 +23,7 @@ import {
 	getCountySuffixLabel,
 	getStateName,
 	placeToFactsCards,
+	redirectCityPlaceToFourLevelUrl,
 } from '~/lib/electionsHelpers';
 import { resolveAuthor } from '~/ui/_lib/resolveAuthor';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
@@ -87,12 +86,7 @@ export default async function Page({
 		: await getCountyChildPlaces({ state: stateCode, countySlug: fullSlug });
 
 	if (!countyPlace && !isDistrict) {
-		if (placeData && isCityOrTownMtfcc(placeData.mtfcc) && placeData.countyName) {
-			const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, placeData.countyName);
-			if (canonicalCountySlug && canonicalCountySlug.toLowerCase() !== fullSlug) {
-				permanentRedirect(`/elections/${canonicalCountySlug}`);
-			}
-		}
+		await redirectCityPlaceToFourLevelUrl(placeData, stateCode, fullSlug);
 		if (placeData?.mtfcc && placeData.mtfcc !== COUNTY_MTFCC) {
 			redirect(`/elections/${state.toLowerCase()}`);
 		}

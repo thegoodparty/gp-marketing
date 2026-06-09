@@ -24,6 +24,7 @@ import {
 	hasSuspiciousFactsMatch,
 	inferSidebarLinkIcon,
 	placeToFactsCards,
+	redirectCityPlaceToFourLevelUrl,
 	redirectCityRaceToFourLevelUrl,
 	resolveClaimedCustomIssueText,
 	resolveClaimedTextField,
@@ -1226,5 +1227,76 @@ describe('redirectCityRaceToFourLevelUrl', () => {
 			'comanche-county',
 			'/position/city-clerk',
 		);
+	});
+});
+
+describe('redirectCityPlaceToFourLevelUrl', () => {
+	test('redirects city on two-segment URL to canonical county with city segment', async () => {
+		withFetchMock([
+			{
+				match: url =>
+					url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
+				body: [
+					{ slug: 'ok/caddo-county', name: 'Caddo County', mtfcc: 'G4020', state: 'OK' },
+					{ slug: 'ok/comanche-county', name: 'Comanche County', mtfcc: 'G4020', state: 'OK' },
+				],
+			},
+		]);
+
+		const place = {
+			slug: 'ok/binger',
+			mtfcc: CITY_MTFCC,
+			countyName: 'Caddo',
+		};
+
+		await expectRedirect(
+			() => redirectCityPlaceToFourLevelUrl(place, 'OK', 'ok/binger'),
+			'/elections/ok/caddo-county/binger',
+		);
+	});
+
+	test('does not redirect when county lookup fails', async () => {
+		withFetchMock([
+			{
+				match: url =>
+					url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
+				body: [{ slug: 'ok/comanche-county', name: 'Comanche County', mtfcc: 'G4020', state: 'OK' }],
+			},
+		]);
+
+		const place = {
+			slug: 'ok/binger',
+			mtfcc: CITY_MTFCC,
+			countyName: 'Caddo',
+		};
+
+		await redirectCityPlaceToFourLevelUrl(place, 'OK', 'ok/binger');
+	});
+
+	test('does not redirect when place has no countyName', async () => {
+		const place = {
+			slug: 'ok/binger',
+			mtfcc: CITY_MTFCC,
+		};
+
+		await redirectCityPlaceToFourLevelUrl(place, 'OK', 'ok/binger');
+	});
+
+	test('does not redirect when canonical county slug equals current full slug', async () => {
+		withFetchMock([
+			{
+				match: url =>
+					url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
+				body: [{ slug: 'ok/binger', name: 'Binger', mtfcc: 'G4020', state: 'OK' }],
+			},
+		]);
+
+		const place = {
+			slug: 'ok/binger',
+			mtfcc: CITY_MTFCC,
+			countyName: 'Caddo',
+		};
+
+		await redirectCityPlaceToFourLevelUrl(place, 'OK', 'ok/binger');
 	});
 });

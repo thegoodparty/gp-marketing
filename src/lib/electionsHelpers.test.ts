@@ -980,6 +980,37 @@ describe('buildElectionPositionHrefFromRaceSlug', () => {
 			),
 		).toBe('/elections/az/unknown-city/position/clerk');
 	});
+
+	test('expands OK joint city office to 5-level subplace URL', () => {
+		const okMap = new Map([['ok/binger', 'ok/caddo-county']]);
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{ slug: 'ok/binger/city-clerk/treasurer-joint', positionLevel: 'CITY' },
+				{ citySlugToCountySlug: okMap },
+			),
+		).toBe('/elections/ok/caddo-county/binger/city-clerk/position/treasurer-joint');
+	});
+
+	test('collapses district race slug with erroneous middle segment', () => {
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{ slug: 'ok/choctaw/nicoma-park-schools/local-school-board', positionLevel: 'LOCAL' },
+				{ citySlugToCountySlug },
+			),
+		).toBe('/elections/ok/nicoma-park-schools/position/local-school-board');
+	});
+
+	test('skips PA compound county office slug in sitemap mode', () => {
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{
+					slug: 'pa/sullivan-county/county-prothonotary/register-of-wills/recorder-of-deeds/clerk-of-orphans-court/court-clerk-joint',
+					positionLevel: 'COUNTY',
+				},
+				{ skipUnmappedCity: true },
+			),
+		).toBeUndefined();
+	});
 });
 
 describe('buildRaceCandidatesHref', () => {

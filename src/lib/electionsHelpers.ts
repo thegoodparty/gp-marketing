@@ -3,7 +3,7 @@ import type { CandidacyItem, FindByRaceIdResponse, PlaceItem, PlaceWithFacts, Ra
 import type { FactsCardProps } from '~/ui/FactsCard';
 
 import { permanentRedirect } from 'next/navigation';
-import { isCityOrTownMtfcc, resolveCountySlugForPlace } from '~/lib/electionsApi';
+import { isCityOrTownMtfcc, looksLikeCountySlugSegment, looksLikeDistrictSlug, resolveCountySlugForPlace } from '~/lib/electionsApi';
 
 const COUNTY_EQUIV_SUFFIX_RE =
 	/\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipality)$/i;
@@ -845,6 +845,152 @@ export type BuildElectionPositionHrefOptions = {
 	skipUnmappedCity?: boolean;
 };
 
+export type ElectionPositionRouteShape =
+	| { level: 'state'; state: string; positionSlug: string }
+	| { level: 'county'; state: string; county: string; positionSlug: string }
+	| { level: 'city'; state: string; county: string; city: string; positionSlug: string }
+	| {
+			level: 'subplace';
+			state: string;
+			county: string;
+			city: string;
+			subplace: string;
+			positionSlug: string;
+	  };
+
+export type ResolvedElectionPosition = {
+	path: string;
+	route: ElectionPositionRouteShape;
+};
+
+function routeFromCountySlug(
+	countySlug: string,
+	citySegment: string,
+	positionSlug: string,
+): ResolvedElectionPosition | undefined {
+	const csParts = countySlug.split('/').filter(Boolean);
+	if (csParts.length < 2) return undefined;
+	const state = csParts[0]!.toLowerCase();
+	const county = csParts.slice(1).join('/').toLowerCase();
+	const city = citySegment.toLowerCase();
+	return {
+		path: `/elections/${countySlug}/${city}/position/${positionSlug}`,
+		route: { level: 'city', state, county, city, positionSlug },
+	};
+}
+
+function routeFromSubplaceCountySlug(
+	countySlug: string,
+	citySegment: string,
+	subplace: string,
+	positionSlug: string,
+): ResolvedElectionPosition | undefined {
+	const csParts = countySlug.split('/').filter(Boolean);
+	if (csParts.length < 2) return undefined;
+	const state = csParts[0]!.toLowerCase();
+	const county = csParts.slice(1).join('/').toLowerCase();
+	const city = citySegment.toLowerCase();
+	const sub = subplace.toLowerCase();
+	return {
+		path: `/elections/${countySlug}/${city}/${sub}/position/${positionSlug}`,
+		route: { level: 'subplace', state, county, city, subplace: sub, positionSlug },
+	};
+}
+
+/**
+ * Shared slug → path + route-param resolution for elections position pages.
+ * Used by sitemap href builders and static route param generation.
+ */
+export function resolveElectionPositionFromRaceSlug(
+	race: RaceSlugEntry,
+	options?: BuildElectionPositionHrefOptions,
+): ResolvedElectionPosition | undefined {
+	if (!race.slug) return undefined;
+	const parts = race.slug.split('/').filter(Boolean);
+	const positionSlug = parts.pop();
+	if (!positionSlug || parts.length === 0) return undefined;
+
+	const level = (race.positionLevel ?? '').toUpperCase();
+	const skipUnmapped = options?.skipUnmappedCity ?? false;
+
+	if (skipUnmapped && parts.length > 4) return undefined;
+
+	if (level === 'CITY' || level === 'LOCAL') {
+		if (parts.length === 2) {
+			const citySlug = parts.join('/');
+			const countySlug = options?.citySlugToCountySlug?.get(citySlug);
+			if (countySlug) {
+				return routeFromCountySlug(countySlug, parts[1]!, positionSlug);
+			}
+			if (level === 'CITY' && skipUnmapped) return undefined;
+		}
+
+		if (parts.length === 3) {
+			const [state, seg2, seg3] = parts;
+			if (!state || !seg2 || !seg3) return undefined;
+
+			if (!looksLikeCountySlugSegment(seg2) && looksLikeDistrictSlug(seg3)) {
+				const district = seg3.toLowerCase();
+				return {
+					path: `/elections/${state}/${district}/position/${positionSlug}`,
+					route: { level: 'county', state: state.toLowerCase(), county: district, positionSlug },
+				};
+			}
+
+			if (!looksLikeCountySlugSegment(seg2)) {
+				const citySlug = `${state}/${seg2}`;
+				const countySlug = options?.citySlugToCountySlug?.get(citySlug);
+				if (countySlug) {
+					return routeFromSubplaceCountySlug(countySlug, seg2, seg3, positionSlug);
+				}
+				if (skipUnmapped) return undefined;
+			}
+		}
+	}
+
+	const prefix = parts.join('/');
+	const segs = prefix.split('/').filter(Boolean);
+
+	if (segs.length > 4) return undefined;
+
+	if (segs.length === 1) {
+		const state = segs[0]!.toLowerCase();
+		return {
+			path: `/elections/${prefix}/position/${positionSlug}`,
+			route: { level: 'state', state, positionSlug },
+		};
+	}
+	if (segs.length === 2) {
+		const state = segs[0]!.toLowerCase();
+		const county = segs[1]!.toLowerCase();
+		return {
+			path: `/elections/${prefix}/position/${positionSlug}`,
+			route: { level: 'county', state, county, positionSlug },
+		};
+	}
+	if (segs.length === 3) {
+		const state = segs[0]!.toLowerCase();
+		const county = segs[1]!.toLowerCase();
+		const city = segs[2]!.toLowerCase();
+		return {
+			path: `/elections/${prefix}/position/${positionSlug}`,
+			route: { level: 'city', state, county, city, positionSlug },
+		};
+	}
+	if (segs.length === 4) {
+		const state = segs[0]!.toLowerCase();
+		const county = segs[1]!.toLowerCase();
+		const city = segs[2]!.toLowerCase();
+		const subplace = segs[3]!.toLowerCase();
+		return {
+			path: `/elections/${prefix}/position/${positionSlug}`,
+			route: { level: 'subplace', state, county, city, subplace, positionSlug },
+		};
+	}
+
+	return undefined;
+}
+
 /**
  * Builds elections position page path from a race slug and optional county lookup.
  * Mirrors buildRaceEntries URL rules in sitemap-entries.ts.
@@ -853,28 +999,7 @@ export function buildElectionPositionHrefFromRaceSlug(
 	race: RaceSlugEntry,
 	options?: BuildElectionPositionHrefOptions,
 ): string | undefined {
-	if (!race.slug) return undefined;
-	const parts = race.slug.split('/').filter(Boolean);
-	const positionSlug = parts.pop();
-	if (!positionSlug || parts.length === 0) return undefined;
-
-	const level = (race.positionLevel ?? '').toUpperCase();
-
-	if (level === 'CITY' || level === 'LOCAL') {
-		const citySlug = parts.join('/');
-		const countySlug = options?.citySlugToCountySlug?.get(citySlug);
-		if (countySlug) {
-			const citySegment = parts.pop();
-			if (!citySegment) return undefined;
-			return `/elections/${countySlug}/${citySegment}/position/${positionSlug}`;
-		}
-		if (level === 'CITY' && parts.length === 2 && options?.skipUnmappedCity) {
-			return undefined;
-		}
-	}
-
-	const prefix = parts.join('/');
-	return `/elections/${prefix}/position/${positionSlug}`;
+	return resolveElectionPositionFromRaceSlug(race, options)?.path;
 }
 
 /** Builds elections position page path from a race slug (e.g. ok/foo/local-school-board). */

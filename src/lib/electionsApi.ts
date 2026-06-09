@@ -54,6 +54,14 @@ const COUNTY_EQUIVALENT_SLUG_SUFFIX_RE =
 const DISTRICT_KEYWORD_RE =
 	/\b(district|schools?|isd|usd|csd|sd|rsu|sau|uhsd)\b|\bsupervisory(?:\s+|-)union\b/i;
 
+export function looksLikeCountySlugSegment(segment: string): boolean {
+	return COUNTY_EQUIVALENT_SLUG_SUFFIX_RE.test(segment);
+}
+
+export function looksLikeDistrictSlug(segment: string): boolean {
+	return DISTRICT_KEYWORD_RE.test(segment);
+}
+
 /**
  * Defensive classification for the state-level elections index "districts" list.
  * Some API payloads (notably Maine) attach G54xx to municipality-like slugs; we only

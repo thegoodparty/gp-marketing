@@ -13,6 +13,7 @@ import type {
 import {
 	buildElectionPositionHrefFromRaceSlug,
 	buildRaceCandidatesHref,
+	buildSubplaceRaceSlug,
 	canonicalizeCountyEquivalentName,
 	normalizeCandidateLookupName,
 	stripCountySuffix,
@@ -53,6 +54,14 @@ const COUNTY_EQUIVALENT_SLUG_SUFFIX_RE =
 /** Matches common school / district naming (incl. VT UHSD and supervisory-union phrases). */
 const DISTRICT_KEYWORD_RE =
 	/\b(district|schools?|isd|usd|csd|sd|rsu|sau|uhsd)\b|\bsupervisory(?:\s+|-)union\b/i;
+
+export function looksLikeCountySlugSegment(segment: string): boolean {
+	return COUNTY_EQUIVALENT_SLUG_SUFFIX_RE.test(segment);
+}
+
+export function looksLikeDistrictSlug(segment: string): boolean {
+	return DISTRICT_KEYWORD_RE.test(segment);
+}
 
 /**
  * Defensive classification for the state-level elections index "districts" list.
@@ -162,6 +171,24 @@ export async function getRaceBySlug(
 	const url = `${ELECTIONS_API_BASE_URL}/v1/races?${searchParams}`;
 	const data = await fetchJson<RaceDetail[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) && data.length > 0 ? (data[0] ?? null) : null;
+}
+
+/** Resolves joint city office races; API slugs omit the county segment. */
+export async function getSubplaceRaceBySlug(params: {
+	state: string;
+	county: string;
+	city: string;
+	subplace: string;
+	positionSlug: string;
+}): Promise<RaceDetail | null> {
+	const { state, county, city, subplace, positionSlug } = params;
+	let race = await getRaceBySlug(
+		buildSubplaceRaceSlug(state, city, subplace, positionSlug, county),
+	);
+	if (!race) {
+		race = await getRaceBySlug(buildSubplaceRaceSlug(state, city, subplace, positionSlug));
+	}
+	return race;
 }
 
 export async function getCandidacies(params: {

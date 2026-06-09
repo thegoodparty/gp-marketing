@@ -7,6 +7,7 @@ import {
 	formatElectionDateFromApi,
 	formatFilingPeriodFromRace,
 	getStateName,
+	redirectCityRaceToFourLevelUrl,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
 import { toAbsoluteUrl } from '~/lib/url';
@@ -40,6 +41,8 @@ export default async function Page({
 			redirect(`/elections/${state.toLowerCase()}/${county}-county/position/${positionSlug}`);
 		}
 	}
+
+	await redirectCityRaceToFourLevelUrl(race, stateCode, state, county, `/position/${positionSlug}`);
 
 	if (!race) {
 		notFound();

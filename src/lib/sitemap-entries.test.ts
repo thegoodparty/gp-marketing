@@ -318,6 +318,46 @@ describe('buildRaceEntries', () => {
 			`${BASE}/elections/az/maricopa-county/buckeye/position/clerk`,
 		]);
 	});
+
+	test('OK joint city office emits 5-level subplace URL', () => {
+		const okMap = new Map([['ok/binger', 'ok/caddo-county']]);
+		const result = buildRaceEntries(
+			[{ slug: 'ok/binger/city-clerk/treasurer-joint', positionLevel: 'CITY' }],
+			okMap,
+			BASE,
+		).map(e => e.url);
+		expect(result).toEqual([
+			`${BASE}/elections/ok/caddo-county/binger/city-clerk/position/treasurer-joint`,
+		]);
+	});
+
+	test('emits 4-level URL for nested LOCAL school district race', () => {
+		const result = urls([
+			{ slug: 'ok/choctaw/nicoma-park-schools/local-school-board', positionLevel: 'LOCAL' },
+		]);
+		expect(result).toEqual([
+			`${BASE}/elections/ok/choctaw/nicoma-park-schools/position/local-school-board`,
+		]);
+	});
+
+	test('emits 4-level URL for AK nested school district race', () => {
+		const result = urls([
+			{ slug: 'ak/delta/greely-school-district/local-school-board', positionLevel: 'LOCAL' },
+		]);
+		expect(result).toEqual([
+			`${BASE}/elections/ak/delta/greely-school-district/position/local-school-board`,
+		]);
+	});
+
+	test('skips PA compound county office slug', () => {
+		const result = urls([
+			{
+				slug: 'pa/sullivan-county/county-prothonotary/register-of-wills/recorder-of-deeds/clerk-of-orphans-court/court-clerk-joint',
+				positionLevel: 'COUNTY',
+			},
+		]);
+		expect(result).toEqual([]);
+	});
 });
 
 describe('buildRaceRouteParams', () => {
@@ -383,6 +423,24 @@ describe('buildRaceRouteParams', () => {
 				county: 'adams-county',
 				city: 'quincy-town',
 				subplace: 'township-clerk',
+				positionSlug: 'treasurer-joint',
+			},
+		]);
+		expect(cityPositionParams).toEqual([]);
+	});
+
+	test('OK joint city office maps to subplacePositionParams with county expansion', () => {
+		const okMap = new Map([['ok/binger', 'ok/caddo-county']]);
+		const { subplacePositionParams, cityPositionParams } = buildRaceRouteParams(
+			[{ slug: 'ok/binger/city-clerk/treasurer-joint', positionLevel: 'CITY' }],
+			okMap,
+		);
+		expect(subplacePositionParams).toEqual([
+			{
+				state: 'ok',
+				county: 'caddo-county',
+				city: 'binger',
+				subplace: 'city-clerk',
 				positionSlug: 'treasurer-joint',
 			},
 		]);

@@ -8,6 +8,7 @@ import {
 	formatFilingPeriodFromRace,
 	getStateName,
 	mapCandidacyToCard,
+	redirectCityRaceToFourLevelUrl,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
 import { CandidatesPageContent } from '~/ui/CandidatesPageContent';
@@ -34,6 +35,8 @@ export default async function Page({
 			redirect(`/elections/${state.toLowerCase()}/${county}-county/position/${positionSlug}/candidates`);
 		}
 	}
+
+	await redirectCityRaceToFourLevelUrl(race, stateCode, state, county, `/position/${positionSlug}/candidates`);
 
 	if (!race) {
 		notFound();

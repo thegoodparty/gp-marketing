@@ -1,5 +1,5 @@
 /// <reference types="bun-types" />
-import { describe, expect, test } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
 import {
 	buildElectionPositionHrefFromRaceSlug,
 	buildFAQSchema,
@@ -7,6 +7,7 @@ import {
 	buildRaceCandidatesHref,
 	buildRacePositionHref,
 	buildRaceSlug,
+	buildSubplaceRaceSlug,
 	canonicalizeCountyEquivalentName,
 	findCityForDistrictName,
 	formatElectionDateFromApi,
@@ -23,6 +24,7 @@ import {
 	hasSuspiciousFactsMatch,
 	inferSidebarLinkIcon,
 	placeToFactsCards,
+	redirectCityRaceToFourLevelUrl,
 	resolveClaimedCustomIssueText,
 	resolveClaimedTextField,
 	resolveLocalityName,
@@ -33,6 +35,43 @@ import {
 } from './electionsHelpers';
 import { CITY_MTFCC, COUNTY_MTFCC, TOWN_MTFCC, isCityOrTownMtfcc } from './electionsApi';
 import type { PlaceItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
+
+const originalFetch = globalThis.fetch;
+
+function withFetchMock(responses: { match: (url: string) => boolean; body: unknown }[]) {
+	globalThis.fetch = (async (input: RequestInfo | URL) => {
+		const url = String(input);
+		const match = responses.find(r => r.match(url));
+		if (!match) {
+			return new Response(JSON.stringify([]), { status: 200 });
+		}
+		return new Response(JSON.stringify(match.body), {
+			status: 200,
+			headers: { 'content-type': 'application/json' },
+		});
+	}) as typeof fetch;
+}
+
+async function expectRedirect(
+	fn: () => Promise<void>,
+	expectedPath: string,
+): Promise<void> {
+	try {
+		await fn();
+		throw new Error('expected redirect');
+	} catch (error) {
+		const digest = (error as { digest?: string }).digest ?? '';
+		expect(digest).toContain(`;${expectedPath};`);
+	}
+}
+
+beforeEach(() => {
+	globalThis.fetch = originalFetch;
+});
+
+afterEach(() => {
+	globalThis.fetch = originalFetch;
+});
 
 function placeItem(id: string, name: string, slug: string, state: string): PlaceItem {
 	return { id, name, slug, state };
@@ -101,6 +140,20 @@ describe('buildRaceSlug', () => {
 	test('normalizes state and locality to lowercase (positionSlug unchanged)', () => {
 		expect(buildRaceSlug('AZ', 'governor')).toBe('az/governor');
 		expect(buildRaceSlug('az', 'governor', 'Buckeye')).toBe('az/buckeye/governor');
+	});
+});
+
+describe('buildSubplaceRaceSlug', () => {
+	test('builds 4-part joint office slug without county', () => {
+		expect(buildSubplaceRaceSlug('AR', 'winchester', 'city-recorder', 'treasurer-joint')).toBe(
+			'ar/winchester/city-recorder/treasurer-joint',
+		);
+	});
+
+	test('builds 5-part slug when county is provided', () => {
+		expect(
+			buildSubplaceRaceSlug('AR', 'winchester', 'city-recorder', 'treasurer-joint', 'drew-county'),
+		).toBe('ar/drew-county/winchester/city-recorder/treasurer-joint');
 	});
 });
 
@@ -980,6 +1033,46 @@ describe('buildElectionPositionHrefFromRaceSlug', () => {
 			),
 		).toBe('/elections/az/unknown-city/position/clerk');
 	});
+
+	test('expands OK joint city office to 5-level subplace URL', () => {
+		const okMap = new Map([['ok/binger', 'ok/caddo-county']]);
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{ slug: 'ok/binger/city-clerk/treasurer-joint', positionLevel: 'CITY' },
+				{ citySlugToCountySlug: okMap },
+			),
+		).toBe('/elections/ok/caddo-county/binger/city-clerk/position/treasurer-joint');
+	});
+
+	test('emits 4-level URL for nested LOCAL school district race', () => {
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{ slug: 'ok/choctaw/nicoma-park-schools/local-school-board', positionLevel: 'LOCAL' },
+				{ citySlugToCountySlug },
+			),
+		).toBe('/elections/ok/choctaw/nicoma-park-schools/position/local-school-board');
+	});
+
+	test('emits 4-level URL for AK nested school district race', () => {
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{ slug: 'ak/delta/greely-school-district/local-school-board', positionLevel: 'LOCAL' },
+				{ citySlugToCountySlug },
+			),
+		).toBe('/elections/ak/delta/greely-school-district/position/local-school-board');
+	});
+
+	test('skips PA compound county office slug in sitemap mode', () => {
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{
+					slug: 'pa/sullivan-county/county-prothonotary/register-of-wills/recorder-of-deeds/clerk-of-orphans-court/court-clerk-joint',
+					positionLevel: 'COUNTY',
+				},
+				{ skipUnmappedCity: true },
+			),
+		).toBeUndefined();
+	});
 });
 
 describe('buildRaceCandidatesHref', () => {
@@ -1055,5 +1148,83 @@ describe('claimed profile helpers', () => {
 	test('resolveProfileImageUrl trims and rejects empty values', () => {
 		expect(resolveProfileImageUrl(' https://example.com/a.jpg ')).toBe('https://example.com/a.jpg');
 		expect(resolveProfileImageUrl('   ')).toBeUndefined();
+	});
+});
+
+describe('redirectCityRaceToFourLevelUrl', () => {
+	test('redirects to verified canonical county, not the URL county segment', async () => {
+		withFetchMock([
+			{
+				match: url =>
+					url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
+				body: [
+					{ slug: 'ok/caddo-county', name: 'Caddo County', mtfcc: 'G4020', state: 'OK' },
+					{ slug: 'ok/comanche-county', name: 'Comanche County', mtfcc: 'G4020', state: 'OK' },
+				],
+			},
+		]);
+
+		const race = {
+			Place: {
+				slug: 'ok/binger',
+				mtfcc: CITY_MTFCC,
+				countyName: 'Caddo',
+			},
+		};
+
+		await expectRedirect(
+			() =>
+				redirectCityRaceToFourLevelUrl(
+					race,
+					'OK',
+					'ok',
+					'comanche-county',
+					'/position/city-clerk',
+				),
+			'/elections/ok/caddo-county/binger/position/city-clerk',
+		);
+	});
+
+	test('does not redirect when county lookup fails', async () => {
+		withFetchMock([
+			{
+				match: url =>
+					url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
+				body: [{ slug: 'ok/comanche-county', name: 'Comanche County', mtfcc: 'G4020', state: 'OK' }],
+			},
+		]);
+
+		const race = {
+			Place: {
+				slug: 'ok/binger',
+				mtfcc: CITY_MTFCC,
+				countyName: 'Caddo',
+			},
+		};
+
+		await redirectCityRaceToFourLevelUrl(
+			race,
+			'OK',
+			'ok',
+			'comanche-county',
+			'/position/city-clerk',
+		);
+	});
+
+	test('does not redirect when place has no countyName', async () => {
+		const race = {
+			Place: {
+				slug: 'ok/binger',
+				mtfcc: CITY_MTFCC,
+			},
+		};
+
+		await redirectCityRaceToFourLevelUrl(
+			race,
+			'OK',
+			'ok',
+			'comanche-county',
+			'/position/city-clerk',
+		);
 	});
 });

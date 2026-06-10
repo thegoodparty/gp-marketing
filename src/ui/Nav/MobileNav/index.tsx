@@ -38,14 +38,14 @@ export function MobileNav(props: NavProps) {
 						<ComponentButton
 							{...props.secondaryCTA}
 							buttonProps={{ styleType: 'outline-inverse', styleSize: 'md' }}
-							className={cn(props.secondaryCTA?.className, 'max-[400px]:[&>*:last-child]:hidden')}
+							className={cn(props.secondaryCTA?.className, 'max-[480px]:[&>div]:hidden')}
 						/>
 					)}
 					{props.primaryCTA && (
 						<ComponentButton
 							{...props.primaryCTA}
 							buttonProps={{ styleType: 'primary', styleSize: 'md' }}
-							className={cn(props.primaryCTA?.className, 'max-[400px]:[&>*:last-child]:hidden')}
+							className={cn(props.primaryCTA?.className, 'max-[480px]:[&>div]:hidden')}
 						/>
 					)}
 

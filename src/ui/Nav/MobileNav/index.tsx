@@ -32,20 +32,26 @@ export function MobileNav(props: NavProps) {
 						className='min-w-[2.4rem] min-h-[2.7rem] w-[2.4rem] h-[2.7rem] max-w-[2.4rem] max-h-[2.7rem]'
 					/>
 				</Anchor>
-				<div className='flex flex-row gap-[1rem] items-center justify-center w-fit'>
+				<div className='flex flex-row gap-[1rem] max-[360px]:gap-1.5 items-center justify-center w-fit min-w-0 shrink'>
 					{/* Sign-up (and other) CTAs: tracking lives in `ComponentButton` via `isSignUpUrl` / `trackSignUpClicked`. */}
 					{props.secondaryCTA && (
 						<ComponentButton
 							{...props.secondaryCTA}
-							buttonProps={{ styleType: 'outline-inverse', styleSize: 'md' }}
-							className={cn(props.secondaryCTA?.className, 'max-[480px]:[&>div]:hidden')}
+							buttonProps={{ styleType: 'outline-inverse', styleSize: 'sm' }}
+							className={cn(
+								props.secondaryCTA?.className,
+								'max-[360px]:!px-2 max-[360px]:!gap-1 max-[360px]:text-xs',
+							)}
 						/>
 					)}
 					{props.primaryCTA && (
 						<ComponentButton
 							{...props.primaryCTA}
-							buttonProps={{ styleType: 'primary', styleSize: 'md' }}
-							className={cn(props.primaryCTA?.className, 'max-[480px]:[&>div]:hidden')}
+							buttonProps={{ styleType: 'primary', styleSize: 'sm' }}
+							className={cn(
+								props.primaryCTA?.className,
+								'max-[360px]:!px-2 max-[360px]:!gap-1 max-[360px]:text-xs',
+							)}
 						/>
 					)}
 

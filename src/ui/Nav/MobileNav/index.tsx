@@ -32,7 +32,7 @@ export function MobileNav(props: NavProps) {
 						className='min-w-[2.4rem] min-h-[2.7rem] w-[2.4rem] h-[2.7rem] max-w-[2.4rem] max-h-[2.7rem]'
 					/>
 				</Anchor>
-				<div className='flex flex-row gap-[1rem] max-[360px]:gap-1.5 items-center justify-center w-fit min-w-0 shrink'>
+				<div className='flex flex-row gap-[1rem] max-[360px]:gap-1.5 items-center shrink-0'>
 					{/* Sign-up (and other) CTAs: tracking lives in `ComponentButton` via `isSignUpUrl` / `trackSignUpClicked`. */}
 					{props.secondaryCTA && (
 						<ComponentButton

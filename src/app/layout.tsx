@@ -9,7 +9,7 @@ import '~/ui/_styles/globals.css';
 import { Amplitude } from '~/ui/Amplitude';
 import { ScrollDepthTracker } from '~/ui/ScrollDepthTracker';
 import { PageSchema } from '~/ui/PageSchema';
-import { getBaseUrl } from '~/lib/url';
+import { getBaseUrl, SITE_NAME } from '~/lib/url';
 import { buildOrganizationSchema, buildSchemaGraph, buildWebSiteSchema, resolveSameAs } from '~/lib/schema';
 import { sanityFetch } from '~/sanity/sanityClient';
 import { goodpartyOrg_socialChannelsQuery } from '~/sanity/groq';
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
 		'GoodParty.org empowers independent candidates to run, win and serve. Access campaign tools, voter data, and support to level the playing field without deep pockets.',
 	openGraph: {
 		type: 'website',
-		siteName: 'GoodParty.org',
+		siteName: SITE_NAME,
 	},
 	twitter: {
 		card: 'summary_large_image',

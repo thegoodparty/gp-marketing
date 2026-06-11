@@ -32,6 +32,7 @@
     "test:integration:sitemap:batches": "bash scripts/test-sitemap-batches.sh",
     "test:unit": "bun test src",
     "validate:elections": "bun run scripts/validate-election-pages.ts",
+    "audit:claimed-profiles": "bun run scripts/audit-claimed-profile-lookup.ts",
     "lint:sitemap": "next lint --file src/app/api/sitemap-index/route.ts --file src/app/sitemap.ts --file src/lib/sitemap-entries.ts"
   },
   "dependencies": {

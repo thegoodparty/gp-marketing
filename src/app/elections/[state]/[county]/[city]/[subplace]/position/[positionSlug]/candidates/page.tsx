@@ -123,10 +123,16 @@ export async function generateMetadata({
 	const cityName = cityPlace?.name ?? city;
 	const isRealSubplace =
 		race?.Place?.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`) ?? false;
-	const localityLabel = isRealSubplace ? race!.Place!.name : cityName;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
+	if (isRealSubplace) {
+		const subplaceName = race!.Place!.name;
+		return {
+			title: `Candidates for ${positionName} in ${subplaceName}, ${cityName}, ${stateName} | Good Party`,
+			description: `View candidates running for ${positionName} in ${subplaceName}, ${cityName}, ${countyDisplayName}, ${stateName}.`,
+		};
+	}
 	return {
-		title: `Candidates for ${positionName} in ${localityLabel}, ${cityName}, ${stateName} | Good Party`,
-		description: `View candidates running for ${positionName} in ${localityLabel}, ${cityName}, ${countyDisplayName}, ${stateName}.`,
+		title: `Candidates for ${positionName} in ${cityName}, ${stateName} | Good Party`,
+		description: `View candidates running for ${positionName} in ${cityName}, ${countyDisplayName}, ${stateName}.`,
 	};
 }

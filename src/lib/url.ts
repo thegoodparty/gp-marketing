@@ -1,7 +1,7 @@
 import { dataset, projectId } from '~/lib/env';
 import { getBaseUrl } from './siteBaseUrl';
 
-export { getBaseUrl } from './siteBaseUrl';
+export { getBaseUrl, SITE_NAME } from './siteBaseUrl';
 
 /** Default share image for Open Graph, Twitter, and schema when no page-specific image is set */
 export const DEFAULT_SHARE_IMAGE = 'https://assets.goodparty.org/gp-share-2025.png';

@@ -27,11 +27,16 @@
     "sitemap:generate": "bun run scripts/generate-sitemaps.ts",
     "sitemap:validate": "bun run scripts/validate-sitemap-urls.ts",
     "sitemap:prune": "bun run scripts/prune-invalid-urls.ts",
+    "test:e2e": "playwright test e2e/pages.spec.ts e2e/journeys.spec.ts",
+    "test:e2e:visual": "playwright test e2e/visual.spec.ts",
+    "test:e2e:visual:update": "playwright test e2e/visual.spec.ts --update-snapshots",
     "test:e2e:sitemap": "playwright test e2e/sitemap.spec.ts",
     "test:integration:sitemap": "bun test integration/validate-sitemap-urls.test.ts",
     "test:integration:sitemap:batches": "bash scripts/test-sitemap-batches.sh",
+    "test:integration:contracts": "bun test integration/sanity-contracts.test.ts",
     "test:unit": "bun test src",
     "validate:elections": "bun run scripts/validate-election-pages.ts",
+    "smoke": "bun run scripts/smoke.ts",
     "lint:sitemap": "next lint --file src/app/api/sitemap-index/route.ts --file src/app/sitemap.ts --file src/lib/sitemap-entries.ts"
   },
   "dependencies": {

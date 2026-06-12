@@ -140,3 +140,102 @@ describe('transformButton', () => {
 		expect(transformButton(button!)).toBeUndefined();
 	});
 });
+
+describe('transformButton — External action', () => {
+	test('returns external button when externalLink is set', () => {
+		const result = transformButton({
+			action: 'External',
+			field_externalLink: 'https://example.com',
+			text: 'Visit',
+			_key: 'ext-1',
+		} as Parameters<typeof transformButton>[0]);
+		expect(result?.buttonType).toBe('external');
+		expect(result?.href).toBe('https://example.com');
+		expect(result?.label).toBe('Visit');
+	});
+
+	test('returns undefined when externalLink is absent', () => {
+		// guards against rendering a broken <a> with no href
+		const result = transformButton({
+			action: 'External',
+			text: 'Visit',
+			_key: 'ext-2',
+		} as Parameters<typeof transformButton>[0]);
+		expect(result).toBeUndefined();
+	});
+});
+
+describe('transformButton — Anchor action', () => {
+	test('returns anchor button when anchor is set', () => {
+		const result = transformButton({
+			action: 'Anchor',
+			anchor: '#section-id',
+			text: 'Jump',
+			_key: 'anc-1',
+		} as Parameters<typeof transformButton>[0]);
+		expect(result?.buttonType).toBe('anchor');
+		expect(result?.href).toBe('#section-id');
+	});
+
+	test('returns undefined when anchor is absent', () => {
+		const result = transformButton({
+			action: 'Anchor',
+			text: 'Jump',
+			_key: 'anc-2',
+		} as Parameters<typeof transformButton>[0]);
+		expect(result).toBeUndefined();
+	});
+});
+
+describe('transformButton — LogIn and SignUp actions', () => {
+	test('LogIn returns hardcoded goodparty login URL', () => {
+		// guards against the href accidentally becoming undefined if env changes
+		const result = transformButton({
+			action: 'LogIn',
+			_key: 'login-1',
+		} as Parameters<typeof transformButton>[0]);
+		expect(result?.buttonType).toBe('external');
+		expect(result?.href).toBe('https://app.goodparty.org/login');
+		expect(result?.label).toBe('Login');
+	});
+
+	test('LogIn uses custom text when provided', () => {
+		const result = transformButton({
+			action: 'LogIn',
+			text: 'Log in to your account',
+			_key: 'login-2',
+		} as Parameters<typeof transformButton>[0]);
+		expect(result?.label).toBe('Log in to your account');
+	});
+
+	test('SignUp returns hardcoded goodparty sign-up URL', () => {
+		const result = transformButton({
+			action: 'SignUp',
+			_key: 'signup-1',
+		} as Parameters<typeof transformButton>[0]);
+		expect(result?.buttonType).toBe('external');
+		expect(result?.href).toBe('https://app.goodparty.org/sign-up');
+		expect(result?.label).toBe('Sign up');
+	});
+});
+
+describe('transformButtons — collection helpers', () => {
+	test('filters out null entries without throwing', () => {
+		const buttons = [null, { action: 'LogIn', _key: 'k1' }] as Parameters<typeof transformButtons>[0];
+		const result = transformButtons(buttons);
+		expect(result).toHaveLength(1);
+		expect(result?.[0]?.href).toBe('https://app.goodparty.org/login');
+	});
+
+	test('returns undefined for undefined input', () => {
+		expect(transformButtons(undefined)).toBeUndefined();
+	});
+
+	test('returns empty array when all buttons produce no href', () => {
+		const buttons = [
+			{ action: 'Internal', link: { href: '' }, text: 'x', _key: 'k1' },
+			{ action: 'External', text: 'y', _key: 'k2' },
+		] as Parameters<typeof transformButtons>[0];
+		expect(transformButtons(buttons)).toEqual([]);
+	});
+});

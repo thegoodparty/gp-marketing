@@ -1,0 +1,167 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop, main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# ---------------------------------------------------------------------------
+# Job 1: Lint, typecheck, unit + integration tests
+# Runs on every PR and push. Fast — no browser or external deploys needed.
+# ---------------------------------------------------------------------------
+jobs:
+  check:
+    name: Lint / Typecheck / Unit & Integration tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.23
+
+      - name: Cache bun modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lockb') }}
+          restore-keys: bun-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Lint
+        run: bun run lint
+
+      - name: Typecheck
+        run: bunx tsc --noEmit
+
+      - name: Unit tests
+        run: bun run test:unit
+
+      - name: Sanity contract tests
+        run: bun run test:integration:contracts
+        env:
+          SANITY_TEST_DATASET: ${{ vars.SANITY_TEST_DATASET || 'production' }}
+          # SANITY_TEST_TOKEN is optional — only needed for private datasets.
+          # Add it as a repository secret if you switch to a private dataset.
+          SANITY_TEST_TOKEN: ${{ secrets.SANITY_TEST_TOKEN }}
+
+# ---------------------------------------------------------------------------
+# Job 2: E2E + visual regression tests
+# Runs on PR only. Requires a deployed preview URL set via
+# E2E_BASE_URL (pass it from your deploy step, or set as a repo variable
+# pointing at a stable staging environment).
+# ---------------------------------------------------------------------------
+  e2e:
+    name: E2E & Visual regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # Only run when there is a base URL to test against.
+    if: vars.E2E_BASE_URL != ''
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.23
+
+      - name: Cache bun modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lockb') }}
+          restore-keys: bun-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: pw-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('bun.lockb') }}
+
+      - name: Install Playwright browsers
+        if: steps.pw-cache.outputs.cache-hit != 'true'
+        run: bunx playwright install --with-deps chromium
+
+      - name: Install Playwright system deps (cache hit)
+        if: steps.pw-cache.outputs.cache-hit == 'true'
+        run: bunx playwright install-deps chromium
+
+      - name: Run page health E2E tests
+        run: bun run test:e2e
+        env:
+          E2E_BASE_URL: ${{ vars.E2E_BASE_URL }}
+          SANITY_TEST_DATASET: ${{ vars.SANITY_TEST_DATASET || 'production' }}
+
+      - name: Run visual regression tests
+        run: bun run test:e2e:visual
+        env:
+          E2E_BASE_URL: ${{ vars.E2E_BASE_URL }}
+          SANITY_TEST_DATASET: ${{ vars.SANITY_TEST_DATASET || 'production' }}
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload visual diff artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diffs-${{ github.run_id }}
+          path: |
+            test-results/
+            e2e/snapshots/
+          retention-days: 14
+
+# ---------------------------------------------------------------------------
+# Job 3: Post-production smoke crawl
+# Triggered manually or by a separate deploy workflow via workflow_call /
+# workflow_dispatch. Set SMOKE_BASE_URL to the production URL.
+# ---------------------------------------------------------------------------
+  smoke:
+    name: Post-deploy smoke crawl
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Only run when explicitly triggered via workflow_dispatch or a caller
+    # workflow passes the production URL. Skipped on normal PRs.
+    if: github.event_name == 'workflow_dispatch' || vars.SMOKE_BASE_URL != ''
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.23
+
+      - name: Cache bun modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lockb') }}
+          restore-keys: bun-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Smoke crawl
+        run: bun run smoke ${{ vars.SMOKE_BASE_URL || 'https://goodparty.org' }} --sample 100
+        env:
+          SMOKE_BASE_URL: ${{ vars.SMOKE_BASE_URL }}
+          SMOKE_SAMPLE: ${{ vars.SMOKE_SAMPLE || '100' }}
+          SMOKE_CONCURRENCY: ${{ vars.SMOKE_CONCURRENCY || '8' }}

@@ -4,6 +4,7 @@ import {
 	findFaqBySlug,
 	getAllFaqSlugs,
 	getFaqHref,
+	getFaqSitemapEntries,
 	slugifyFaqQuestion,
 } from './faqSlugs';
 
@@ -117,5 +118,65 @@ describe('findFaqBySlug', () => {
 
 	it('returns undefined for unknown slug', () => {
 		expect(findFaqBySlug(faqs, 'does-not-exist')).toBeUndefined();
+	});
+});
+
+describe('getFaqSitemapEntries', () => {
+	it('returns one canonical entry for three duplicate questions (ticket scenario)', () => {
+		const faqs = [
+			{ _id: 'faq8942aa', faqOverview: { field_question: 'What is GoodParty.org?' } },
+			{ _id: 'faq40f192', faqOverview: { field_question: 'What is GoodParty.org?' } },
+			{ _id: 'faq999999', faqOverview: { field_question: 'What is GoodParty.org?' } },
+		];
+
+		const entries = getFaqSitemapEntries(faqs);
+
+		expect(entries).toHaveLength(1);
+		expect(entries[0]?.slug).toBe('what-is-goodpartyorg');
+		expect(entries[0]?.faq._id).toBe('faq8942aa');
+	});
+
+	it('excludes suffixed duplicates and keeps distinct questions', () => {
+		const downloadQuestion = 'Do I need to download anything to use GoodParty.org?';
+		const faqs = [
+			{ _id: 'download-canonical', faqOverview: { field_question: downloadQuestion } },
+			{ _id: 'download-cc0853', faqOverview: { field_question: downloadQuestion } },
+			{ _id: 'unique-faq', faqOverview: { field_question: 'How much does it cost?' } },
+		];
+
+		const entries = getFaqSitemapEntries(faqs);
+		const slugs = entries.map(e => e.slug);
+
+		expect(entries).toHaveLength(2);
+		expect(slugs).toContain('do-i-need-to-download-anything-to-use-goodpartyorg');
+		expect(slugs).toContain('how-much-does-it-cost');
+		expect(slugs.some(s => s.includes('-cc0853'))).toBe(false);
+	});
+
+	it('includes distinct questions that share a slug prefix after collision suffixing', () => {
+		const faqs = [
+			{ _id: 'aaa111', faqOverview: { field_question: 'What is GoodParty.org?' } },
+			{ _id: 'bbb222', faqOverview: { field_question: 'What is GoodParty.org?' } },
+			{ _id: 'ccc333', faqOverview: { field_question: 'What is GoodParty.org bbb222' } },
+		];
+
+		const entries = getFaqSitemapEntries(faqs);
+		const slugs = entries.map(e => e.slug);
+
+		expect(entries).toHaveLength(2);
+		expect(slugs).toContain('what-is-goodpartyorg');
+		expect(slugs).toContain('what-is-goodpartyorg-bbb222-ccc333');
+	});
+
+	it('includes one entry per FAQ when question is missing (keyed by _id)', () => {
+		const faqs = [
+			{ _id: 'no-question-a' },
+			{ _id: 'no-question-b' },
+		];
+
+		const entries = getFaqSitemapEntries(faqs);
+
+		expect(entries).toHaveLength(2);
+		expect(entries.map(e => e.slug)).toEqual(['no-question-a', 'no-question-b']);
 	});
 });

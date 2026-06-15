@@ -6,9 +6,15 @@ export const FAQ_BASE_PATH = `/${FAQ_PAGE_SLUG}`;
 
 export type FaqLike = {
 	_id: string;
+	_updatedAt?: string;
 	faqOverview?: {
 		field_question?: unknown;
 	} | null;
+};
+
+export type FaqSitemapEntry = {
+	slug: string;
+	faq: FaqLike;
 };
 
 export function slugifyFaqQuestion(question: string): string {
@@ -75,4 +81,29 @@ export function findFaqBySlug(faqs: ReadonlyArray<FaqLike>, slug: string): FaqLi
 export function getAllFaqSlugs(faqs: ReadonlyArray<FaqLike>): string[] {
 	const slugMap = buildFaqSlugMap(faqs);
 	return faqs.map(faq => getFaqSlug(faq, slugMap));
+}
+
+function faqDedupeKey(faq: FaqLike): string {
+	const question = readQuestion(faq);
+	return question ? slugifyFaqQuestion(question) : faq._id.replace(/^drafts\./, '');
+}
+
+/** One sitemap entry per unique question (first FAQ wins); excludes collision-suffixed duplicates. */
+export function getFaqSitemapEntries(faqs: ReadonlyArray<FaqLike>): FaqSitemapEntry[] {
+	const slugMap = buildFaqSlugMap(faqs);
+	const seenKeys = new Set<string>();
+	const entries: FaqSitemapEntry[] = [];
+
+	for (const faq of faqs) {
+		const key = faqDedupeKey(faq);
+		if (seenKeys.has(key)) continue;
+		seenKeys.add(key);
+
+		const slug = getFaqSlug(faq, slugMap);
+		if (slug) {
+			entries.push({ slug, faq });
+		}
+	}
+
+	return entries;
 }

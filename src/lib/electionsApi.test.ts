@@ -3,6 +3,7 @@ import type { PlaceItem } from '~/types/elections';
 import {
 	getCountyChildPlaces,
 	isStateIndexDistrictPlace,
+	mapCandidaciesToCards,
 	resolveCountySlugForPlace,
 	resolveRaceElectionHrefs,
 } from './electionsApi';
@@ -460,5 +461,72 @@ describe('isStateIndexDistrictPlace', () => {
 				mtfcc: 'G5420',
 			}),
 		).toBe(true);
+	});
+});
+
+describe('mapCandidaciesToCards', () => {
+	test('fetches claimed campaigns only for candidacies missing elections images', async () => {
+		const requestedUrls: string[] = [];
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = String(input);
+			requestedUrls.push(url);
+			if (url.includes('/v1/public-campaigns?')) {
+				if (url.includes('firstName=Heather-Marie') && url.includes('raceId=race-b')) {
+					return new Response(
+						JSON.stringify({
+							id: 1,
+							slug: 'heather-marie-wilson',
+							updatedAt: '',
+							website: {
+								id: 1,
+								vanityPath: 'heather-marie-wilson',
+								status: 'published',
+								content: {
+									main: { image: 'https://example.com/heather.jpg' },
+								},
+								domain: null,
+							},
+							details: null,
+							campaignPositions: [],
+						}),
+						{ status: 200, headers: { 'content-type': 'application/json' } },
+					);
+				}
+				return new Response('null', { status: 200, headers: { 'content-type': 'application/json' } });
+			}
+			return new Response(JSON.stringify([]), { status: 200 });
+		}) as typeof fetch;
+
+		const cards = await mapCandidaciesToCards([
+			{
+				id: 'with-image',
+				firstName: 'Alex',
+				lastName: 'One',
+				image: 'https://example.com/alex.jpg',
+				Race: { brHashId: 'race-a' },
+			},
+			{
+				id: 'needs-claimed',
+				firstName: 'Heather-Marie',
+				lastName: 'Wilson',
+				image: null,
+				Race: { brHashId: 'race-b' },
+			},
+			{
+				id: 'missing-race',
+				firstName: 'No',
+				lastName: 'Race',
+				image: null,
+			},
+		]);
+
+		expect(cards[0]?.avatar).toBe('https://example.com/alex.jpg');
+		expect(cards[1]?.avatar).toBe('https://example.com/heather.jpg');
+		expect(cards[2]?.avatar).toBeUndefined();
+
+		const campaignRequests = requestedUrls.filter(url => url.includes('/v1/public-campaigns?'));
+		expect(campaignRequests).toHaveLength(1);
+		expect(campaignRequests[0]).toContain('raceId=race-b');
+		expect(campaignRequests[0]).toContain('firstName=Heather-Marie');
 	});
 });

@@ -89,7 +89,7 @@ function buildSectionOverrides(
 		component_profileHero: {
 			candidateName,
 			office,
-			profileImageUrl: resolveProfileImageUrl(candidate.image),
+			profileImageUrl: resolveProfileImageUrl(candidate.image, claimed),
 			isEmpowered: isClaimed,
 		},
 		component_profileContentBlock: {
@@ -203,7 +203,7 @@ export async function generateMetadata({
 	const claimed = await loadClaimedCampaignForCandidate(candidate);
 	const candidateName = [candidate.firstName, candidate.lastName].filter(Boolean).join(' ') || 'Candidate';
 	const positionName = candidate.positionName ?? 'Office';
-	const profileImageUrl = resolveProfileImageUrl(candidate.image);
+	const profileImageUrl = resolveProfileImageUrl(candidate.image, claimed);
 
 	return {
 		title: `${candidateName} for ${positionName} | Good Party`,

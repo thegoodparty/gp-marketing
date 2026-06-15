@@ -29,6 +29,7 @@ import {
 	resolveClaimedCustomIssueText,
 	resolveClaimedTextField,
 	resolveLocalityName,
+	mapCandidacyToCard,
 	resolveProfileAboutText,
 	resolveProfileImageUrl,
 	slugifyPositionName,
@@ -1149,6 +1150,109 @@ describe('claimed profile helpers', () => {
 	test('resolveProfileImageUrl trims and rejects empty values', () => {
 		expect(resolveProfileImageUrl(' https://example.com/a.jpg ')).toBe('https://example.com/a.jpg');
 		expect(resolveProfileImageUrl('   ')).toBeUndefined();
+	});
+
+	test('resolveProfileImageUrl prefers elections API image over claimed campaign image', () => {
+		expect(
+			resolveProfileImageUrl('https://example.com/elections.jpg', {
+				id: 1,
+				slug: 'candidate',
+				updatedAt: '',
+				website: {
+					id: 1,
+					vanityPath: 'candidate',
+					status: 'published',
+					content: {
+						main: { image: 'https://example.com/claimed.jpg' },
+					},
+					domain: null,
+				},
+				details: null,
+				campaignPositions: [],
+			}),
+		).toBe('https://example.com/elections.jpg');
+	});
+
+	test('resolveProfileImageUrl falls back to claimed main.image then logo', () => {
+		const claimedWithMain = {
+			id: 1,
+			slug: 'candidate',
+			updatedAt: '',
+			website: {
+				id: 1,
+				vanityPath: 'candidate',
+				status: 'published',
+				content: {
+					main: { image: 'https://example.com/main.jpg' },
+					logo: 'https://example.com/logo.jpg',
+				},
+				domain: null,
+			},
+			details: null,
+			campaignPositions: [],
+		};
+
+		expect(resolveProfileImageUrl(null, claimedWithMain)).toBe('https://example.com/main.jpg');
+
+		const claimedWithLogoOnly = {
+			...claimedWithMain,
+			website: {
+				...claimedWithMain.website,
+				content: { logo: 'https://example.com/logo.jpg' },
+			},
+		};
+
+		expect(resolveProfileImageUrl(undefined, claimedWithLogoOnly)).toBe('https://example.com/logo.jpg');
+	});
+
+	test('resolveProfileImageUrl ignores malformed claimed website content', () => {
+		expect(
+			resolveProfileImageUrl(null, {
+				id: 1,
+				slug: 'candidate',
+				updatedAt: '',
+				website: {
+					id: 1,
+					vanityPath: 'candidate',
+					status: 'published',
+					content: { main: 'not-an-object', logo: 123 },
+					domain: null,
+				},
+				details: null,
+				campaignPositions: [],
+			}),
+		).toBeUndefined();
+	});
+
+	test('mapCandidacyToCard uses claimed campaign image when elections image is missing', () => {
+		const card = mapCandidacyToCard(
+			{
+				id: 'c-1',
+				firstName: 'Heather-Marie',
+				lastName: 'Wilson',
+				party: 'Independent',
+				slug: 'heather-marie-wilson/washington-state-senate-district-43',
+			},
+			0,
+			{
+				id: 1,
+				slug: 'heather-marie-wilson',
+				updatedAt: '',
+				website: {
+					id: 1,
+					vanityPath: 'heather-marie-wilson',
+					status: 'published',
+					content: {
+						main: { image: 'data:image/jpeg;base64,abc' },
+					},
+					domain: null,
+				},
+				details: null,
+				campaignPositions: [],
+			},
+		);
+
+		expect(card.avatar).toBe('data:image/jpeg;base64,abc');
 	});
 });
 

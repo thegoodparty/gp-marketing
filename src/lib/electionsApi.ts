@@ -15,7 +15,9 @@ import {
 	buildRaceCandidatesHref,
 	buildSubplaceRaceSlug,
 	canonicalizeCountyEquivalentName,
+	mapCandidacyToCard,
 	normalizeCandidateLookupName,
+	resolveProfileImageUrl,
 	stripCountySuffix,
 } from '~/lib/electionsHelpers';
 
@@ -195,11 +197,13 @@ export async function getCandidacies(params: {
 	raceId?: string;
 	positionId?: string;
 	raceSlug?: string;
+	includeRace?: boolean;
 }): Promise<CandidacyItem[]> {
 	const searchParams = new URLSearchParams();
 	if (params.raceId) searchParams.set('raceId', params.raceId);
 	if (params.positionId) searchParams.set('positionId', params.positionId);
 	if (params.raceSlug) searchParams.set('raceSlug', params.raceSlug);
+	if (params.includeRace) searchParams.set('includeRace', 'true');
 	if (searchParams.toString() === '') return [];
 	const url = `${ELECTIONS_API_BASE_URL}/v1/candidacies?${searchParams}`;
 	const data = await fetchJson<CandidacyItem[]>(url);
@@ -253,6 +257,39 @@ export async function findCampaignByRace(params: {
 	});
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-campaigns?${searchParams}`;
 	return fetchJson<FindByRaceIdResponse>(url);
+}
+
+export async function mapCandidaciesToCards(
+	candidacies: CandidacyItem[],
+): Promise<ReturnType<typeof mapCandidacyToCard>[]> {
+	const needsClaimed = candidacies
+		.map((candidacy, index) => ({ candidacy, index }))
+		.filter(
+			({ candidacy }) =>
+				!resolveProfileImageUrl(candidacy.image) &&
+				candidacy.firstName &&
+				candidacy.lastName &&
+				candidacy.Race?.brHashId,
+		);
+
+	const claimedResults = await Promise.all(
+		needsClaimed.map(({ candidacy }) =>
+			findCampaignByRace({
+				raceId: candidacy.Race!.brHashId,
+				firstName: candidacy.firstName!,
+				lastName: candidacy.lastName!,
+			}),
+		),
+	);
+
+	const claimedByIndex = new Map<number, FindByRaceIdResponse | null>();
+	needsClaimed.forEach(({ index }, resultIndex) => {
+		claimedByIndex.set(index, claimedResults[resultIndex] ?? null);
+	});
+
+	return candidacies.map((candidacy, index) =>
+		mapCandidacyToCard(candidacy, index, claimedByIndex.get(index) ?? null),
+	);
 }
 
 export async function getMostElections(count = 3): Promise<FeaturedCity[]> {

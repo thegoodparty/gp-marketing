@@ -6,13 +6,13 @@ import {
 	getCityPlacesByCounty,
 	getPlacesByState,
 	getSubplaceRaceBySlug,
+	mapCandidaciesToCards,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
 	formatElectionDateFromApi,
 	formatFilingPeriodFromRace,
 	getStateName,
-	mapCandidacyToCard,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
 import { CandidatesPageContent } from '~/ui/CandidatesPageContent';
@@ -71,9 +71,9 @@ export default async function Page({
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 
-	const candidacies = await getCandidacies({ raceSlug: race.slug });
+	const candidacies = await getCandidacies({ raceSlug: race.slug, includeRace: true });
 
-	const candidates = candidacies.map((c, i) => mapCandidacyToCard(c, i));
+	const candidates = await mapCandidaciesToCards(candidacies);
 
 	const positionHref = `/elections/${pathBeforePosition}/position/${positionSlug}`;
 	const locationHref = `/elections/${cityPathSlug}`;

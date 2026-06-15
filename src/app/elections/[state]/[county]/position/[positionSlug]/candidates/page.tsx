@@ -1,13 +1,12 @@
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
-import { COUNTY_MTFCC, getCandidacies, getPlacesByState, getRaceBySlug } from '~/lib/electionsApi';
+import { COUNTY_MTFCC, getCandidacies, getPlacesByState, getRaceBySlug, mapCandidaciesToCards } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
 	buildRaceSlug,
 	formatElectionDateFromApi,
 	formatFilingPeriodFromRace,
 	getStateName,
-	mapCandidacyToCard,
 	redirectCityRaceToFourLevelUrl,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
@@ -52,9 +51,9 @@ export default async function Page({
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 
-	const candidacies = await getCandidacies({ raceSlug });
+	const candidacies = await getCandidacies({ raceSlug, includeRace: true });
 
-	const candidates = candidacies.map((c, i) => mapCandidacyToCard(c, i));
+	const candidates = await mapCandidaciesToCards(candidacies);
 
 	const positionHref = `/elections/${countySlug}/position/${positionSlug}`;
 	const locationHref = `/elections/${countySlug}`;

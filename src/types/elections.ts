@@ -46,6 +46,7 @@ export interface CandidacyItem {
 	placeName?: string;
 	about?: string;
 	email?: string;
+	gpCandidateId?: string | null;
 	urls?: string[];
 	positionDescription?: string;
 	electionFrequency?: number[];

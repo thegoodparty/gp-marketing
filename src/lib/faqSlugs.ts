@@ -85,7 +85,8 @@ export function getAllFaqSlugs(faqs: ReadonlyArray<FaqLike>): string[] {
 
 function faqDedupeKey(faq: FaqLike): string {
 	const question = readQuestion(faq);
-	return question ? slugifyFaqQuestion(question) : faq._id.replace(/^drafts\./, '');
+	const slug = question ? slugifyFaqQuestion(question) : '';
+	return slug || faq._id.replace(/^drafts\./, '');
 }
 
 /** One sitemap entry per unique question (first FAQ wins); excludes collision-suffixed duplicates. */

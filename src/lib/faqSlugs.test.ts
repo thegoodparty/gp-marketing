@@ -168,6 +168,18 @@ describe('getFaqSitemapEntries', () => {
 		expect(slugs).toContain('what-is-goodpartyorg-bbb222-ccc333');
 	});
 
+	it('keeps all FAQs whose questions slugify to empty string (falls back to _id)', () => {
+		const faqs = [
+			{ _id: 'symbols-a', faqOverview: { field_question: '!!!' } },
+			{ _id: 'symbols-b', faqOverview: { field_question: '@#$' } },
+		];
+
+		const entries = getFaqSitemapEntries(faqs);
+
+		expect(entries).toHaveLength(2);
+		expect(entries.map(e => e.slug)).toEqual(['symbols-a', 'symbols-b']);
+	});
+
 	it('includes one entry per FAQ when question is missing (keyed by _id)', () => {
 		const faqs = [
 			{ _id: 'no-question-a' },

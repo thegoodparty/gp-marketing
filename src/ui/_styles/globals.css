@@ -129,6 +129,7 @@
 		scroll-padding-top: 8rem;
 		padding: 0 !important;
 		scroll-behavior: smooth;
+		overflow-x: hidden;
 		h1[id],
 		h2[id] {
 			scroll-margin-top: 2.5rem;

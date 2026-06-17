@@ -16,6 +16,7 @@ import { PageSections } from '~/PageSections';
 import type { SectionOverrides } from '~/PageSections';
 import type { CandidacyItem, FindByRaceIdResponse } from '~/types/elections';
 import type { ProfileData, OfficeData } from '~/PageSections/ProfileContentBlockSection';
+import { SITE_NAME } from '~/lib/url';
 import { PROFILE_PAGE_SECTIONS } from './profilePageSections';
 
 export const revalidate = 3600;
@@ -210,6 +211,8 @@ export async function generateMetadata({
 			resolveProfileAboutText(candidate.about, claimed) ??
 			`View ${candidateName}'s profile for ${positionName}.`,
 		openGraph: {
+			type: 'website',
+			siteName: SITE_NAME,
 			images: profileImageUrl ? [{ url: profileImageUrl }] : undefined,
 		},
 	};

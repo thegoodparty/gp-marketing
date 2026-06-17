@@ -11,7 +11,7 @@ import {
 	resolveElectionPositionFromRaceSlug,
 	stripCountySuffix as stripCountySuffixFromHelpers,
 } from '~/lib/electionsHelpers';
-import { FAQ_BASE_PATH, getAllFaqSlugs } from '~/lib/faqSlugs';
+import { FAQ_BASE_PATH, getFaqSitemapEntries } from '~/lib/faqSlugs';
 import { allFaqsQuery } from '~/sanity/groq';
 
 /** 51 US state/DC codes (50 states + DC) */
@@ -473,14 +473,10 @@ export async function fetchMainSitemapEntries(baseUrl: string): Promise<Metadata
 		}
 	}
 
-	const faqSlugs = getAllFaqSlugs(faqs);
-	for (let i = 0; i < faqs.length; i++) {
-		const slug = faqSlugs[i];
-		if (slug) {
-			entries.push(
-				toEntry(baseUrl, `${FAQ_BASE_PATH}/${slug}`, 0.6, 'monthly', faqs[i]?._updatedAt?.slice(0, 10)),
-			);
-		}
+	for (const { slug, faq } of getFaqSitemapEntries(faqs)) {
+		entries.push(
+			toEntry(baseUrl, `${FAQ_BASE_PATH}/${slug}`, 0.6, 'monthly', faq._updatedAt?.slice(0, 10)),
+		);
 	}
 
 	return dedupeByUrl(entries);

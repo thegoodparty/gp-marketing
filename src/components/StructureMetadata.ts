@@ -1,7 +1,7 @@
 import type { Metadata, ResolvedMetadata } from 'next';
 import type { Robots } from 'next/dist/lib/metadata/types/metadata-types';
 import type { Group_seo } from 'sanity.types';
-import { DEFAULT_SHARE_IMAGE, getBaseUrl, toAbsoluteUrl } from '~/lib/url';
+import { DEFAULT_SHARE_IMAGE, getBaseUrl, SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 
 function metaString(value: unknown): string | undefined {
 	if (typeof value === 'string') return value;
@@ -28,6 +28,8 @@ export async function StructureMetaData(parentMetadata: ResolvedMetadata, page?:
 		description: metaDescription,
 		openGraph: {
 			...(parentMetadata.openGraph as Metadata['openGraph']),
+			type: 'website',
+			siteName: SITE_NAME,
 			title: metaTitle,
 			images,
 			url: absoluteUrl,

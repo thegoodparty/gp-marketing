@@ -167,12 +167,39 @@ export function resolveProfileAboutText(
 	return resolveClaimedTextField(claimed?.details?.occupation);
 }
 
-/** Prefers elections API image; public-campaigns does not expose profile photos. */
+function resolveClaimedWebsiteImageUrl(
+	value: unknown,
+): string | undefined {
+	if (typeof value !== 'string') return undefined;
+	const trimmed = value.trim();
+	return trimmed.length > 0 ? trimmed : undefined;
+}
+
+function resolveClaimedProfileImageUrl(
+	claimed: FindByRaceIdResponse | null,
+): string | undefined {
+	const content = claimed?.website?.content;
+	if (!content || typeof content !== 'object') return undefined;
+
+	const main = content['main'];
+	if (main && typeof main === 'object') {
+		const mainImage = resolveClaimedWebsiteImageUrl(
+			(main as { image?: unknown }).image,
+		);
+		if (mainImage) return mainImage;
+	}
+
+	return resolveClaimedWebsiteImageUrl(content['logo']);
+}
+
+/** Prefers elections API image, then claimed website hero, then logo. */
 export function resolveProfileImageUrl(
 	candidateImage: string | null | undefined,
+	claimed?: FindByRaceIdResponse | null,
 ): string | undefined {
 	const image = candidateImage?.trim();
-	return image && image.length > 0 ? image : undefined;
+	if (image && image.length > 0) return image;
+	return resolveClaimedProfileImageUrl(claimed ?? null);
 }
 
 const DATE_ONLY_REGEX = /^\d{4}-\d{2}-\d{2}$/;

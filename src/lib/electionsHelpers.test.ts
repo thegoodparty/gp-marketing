@@ -1150,6 +1150,80 @@ describe('claimed profile helpers', () => {
 		expect(resolveProfileImageUrl(' https://example.com/a.jpg ')).toBe('https://example.com/a.jpg');
 		expect(resolveProfileImageUrl('   ')).toBeUndefined();
 	});
+
+	test('resolveProfileImageUrl prefers elections API image over claimed campaign image', () => {
+		expect(
+			resolveProfileImageUrl('https://example.com/elections.jpg', {
+				id: 1,
+				slug: 'candidate',
+				updatedAt: '',
+				website: {
+					id: 1,
+					vanityPath: 'candidate',
+					status: 'published',
+					content: {
+						main: { image: 'https://example.com/claimed.jpg' },
+					},
+					domain: null,
+				},
+				details: null,
+				campaignPositions: [],
+			}),
+		).toBe('https://example.com/elections.jpg');
+	});
+
+	test('resolveProfileImageUrl falls back to claimed main.image then logo', () => {
+		const claimedWithMain = {
+			id: 1,
+			slug: 'candidate',
+			updatedAt: '',
+			website: {
+				id: 1,
+				vanityPath: 'candidate',
+				status: 'published',
+				content: {
+					main: { image: 'https://example.com/main.jpg' },
+					logo: 'https://example.com/logo.jpg',
+				},
+				domain: null,
+			},
+			details: null,
+			campaignPositions: [],
+		};
+
+		expect(resolveProfileImageUrl(null, claimedWithMain)).toBe('https://example.com/main.jpg');
+
+		const claimedWithLogoOnly = {
+			...claimedWithMain,
+			website: {
+				...claimedWithMain.website,
+				content: { logo: 'https://example.com/logo.jpg' },
+			},
+		};
+
+		expect(resolveProfileImageUrl(undefined, claimedWithLogoOnly)).toBe(
+			'https://example.com/logo.jpg',
+		);
+	});
+
+	test('resolveProfileImageUrl ignores malformed claimed website content', () => {
+		expect(
+			resolveProfileImageUrl(null, {
+				id: 1,
+				slug: 'candidate',
+				updatedAt: '',
+				website: {
+					id: 1,
+					vanityPath: 'candidate',
+					status: 'published',
+					content: { main: 'not-an-object', logo: 123 },
+					domain: null,
+				},
+				details: null,
+				campaignPositions: [],
+			}),
+		).toBeUndefined();
+	});
 });
 
 describe('redirectCityRaceToFourLevelUrl', () => {

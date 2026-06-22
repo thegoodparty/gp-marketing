@@ -16,7 +16,7 @@ import { PageSections } from '~/PageSections';
 import type { SectionOverrides } from '~/PageSections';
 import type { CandidacyItem, FindByRaceIdResponse } from '~/types/elections';
 import type { ProfileData, OfficeData } from '~/PageSections/ProfileContentBlockSection';
-import { SITE_NAME } from '~/lib/url';
+import { DEFAULT_SHARE_IMAGE, SITE_NAME } from '~/lib/url';
 import { PROFILE_PAGE_SECTIONS } from './profilePageSections';
 
 export const revalidate = 3600;
@@ -89,7 +89,7 @@ function buildSectionOverrides(
 		component_profileHero: {
 			candidateName,
 			office,
-			profileImageUrl: resolveProfileImageUrl(candidate.image),
+			profileImageUrl: resolveProfileImageUrl(candidate.image, claimed),
 			isEmpowered: isClaimed,
 		},
 		component_profileContentBlock: {
@@ -203,7 +203,11 @@ export async function generateMetadata({
 	const claimed = await loadClaimedCampaignForCandidate(candidate);
 	const candidateName = [candidate.firstName, candidate.lastName].filter(Boolean).join(' ') || 'Candidate';
 	const positionName = candidate.positionName ?? 'Office';
-	const profileImageUrl = resolveProfileImageUrl(candidate.image);
+	const profileImageUrl = resolveProfileImageUrl(candidate.image, claimed);
+	const ogImageUrl =
+		profileImageUrl?.startsWith('http') ?
+			profileImageUrl
+		:	DEFAULT_SHARE_IMAGE;
 
 	return {
 		title: `${candidateName} for ${positionName} | Good Party`,
@@ -213,7 +217,7 @@ export async function generateMetadata({
 		openGraph: {
 			type: 'website',
 			siteName: SITE_NAME,
-			images: profileImageUrl ? [{ url: profileImageUrl }] : undefined,
+			images: [{ url: ogImageUrl }],
 		},
 	};
 }

@@ -128,12 +128,17 @@ function buildTopIssues(
 	}
 
 	const websiteIssues = claimed?.website?.content?.about?.issues;
+	let addedWebsiteIssues = false;
 	if (websiteIssues?.length) {
 		for (const issue of websiteIssues) {
 			const text = resolveWebsiteIssueText(issue);
-			if (text) parts.push(text);
+			if (text) {
+				parts.push(text);
+				addedWebsiteIssues = true;
+			}
 		}
-	} else if (claimed?.details?.customIssues?.length) {
+	}
+	if (!addedWebsiteIssues && claimed?.details?.customIssues?.length) {
 		for (const ci of claimed.details.customIssues) {
 			parts.push(resolveClaimedCustomIssueText(ci));
 		}

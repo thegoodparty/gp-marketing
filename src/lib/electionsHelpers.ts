@@ -1,3 +1,5 @@
+import { convert } from 'html-to-text';
+
 import { US_STATES } from '~/constants/usStates';
 import type { CandidacyItem, FindByRaceIdResponse, PlaceItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
 import type { FactsCardProps } from '~/ui/FactsCard';
@@ -165,19 +167,7 @@ export function resolveClaimedCustomIssueText(issue: ClaimedCustomIssue): string
  */
 export function htmlToPlainText(value: string | null | undefined): string | undefined {
 	if (typeof value !== 'string') return undefined;
-	const text = value
-		.replace(/<\s*br\s*\/?\s*>/gi, '\n')
-		.replace(/<\/\s*(p|div|li|h[1-6])\s*>/gi, '\n')
-		.replace(/<[^>]+>/g, '')
-		.replace(/&nbsp;/gi, ' ')
-		.replace(/&lt;/gi, '<')
-		.replace(/&gt;/gi, '>')
-		.replace(/&#39;|&apos;/gi, "'")
-		.replace(/&quot;/gi, '"')
-		.replace(/&amp;/gi, '&')
-		.replace(/[ \t]+\n/g, '\n')
-		.replace(/\n{3,}/g, '\n\n')
-		.trim();
+	const text = convert(value, { wordwrap: false }).trim();
 	return text.length > 0 ? text : undefined;
 }
 

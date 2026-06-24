@@ -1150,6 +1150,21 @@ describe('claimed profile helpers', () => {
 		expect(resolveProfileImageUrl(' https://example.com/a.jpg ')).toBe('https://example.com/a.jpg');
 		expect(resolveProfileImageUrl('   ')).toBeUndefined();
 	});
+
+	test('resolveProfileImageUrl prefers claimed avatar over BallotReady image', () => {
+		expect(
+			resolveProfileImageUrl('https://example.com/ballotready.jpg', 'https://example.com/clerk.jpg'),
+		).toBe('https://example.com/clerk.jpg');
+		expect(resolveProfileImageUrl(null, 'https://example.com/clerk.jpg')).toBe(
+			'https://example.com/clerk.jpg',
+		);
+		expect(resolveProfileImageUrl('https://example.com/ballotready.jpg', null)).toBe(
+			'https://example.com/ballotready.jpg',
+		);
+		expect(resolveProfileImageUrl('https://example.com/ballotready.jpg', '   ')).toBe(
+			'https://example.com/ballotready.jpg',
+		);
+	});
 });
 
 describe('redirectCityRaceToFourLevelUrl', () => {

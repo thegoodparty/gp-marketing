@@ -122,6 +122,7 @@ export interface FindByRaceIdResponse {
 		customIssues?: Array<{ title: string; description?: string; position?: string }>;
 	} | null;
 	updatedAt: string;
+	avatar: string | null;
 	website: {
 		id: number;
 		vanityPath: string;

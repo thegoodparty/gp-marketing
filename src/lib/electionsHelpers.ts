@@ -167,11 +167,12 @@ export function resolveProfileAboutText(
 	return resolveClaimedTextField(claimed?.details?.occupation);
 }
 
-/** Prefers elections API image; public-campaigns does not expose profile photos. */
+/** Prefers claimed campaign avatar; falls back to elections API (BallotReady) image. */
 export function resolveProfileImageUrl(
 	candidateImage: string | null | undefined,
+	claimedAvatar?: string | null | undefined,
 ): string | undefined {
-	const image = candidateImage?.trim();
+	const image = claimedAvatar?.trim() || candidateImage?.trim();
 	return image && image.length > 0 ? image : undefined;
 }
 

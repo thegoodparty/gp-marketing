@@ -157,6 +157,38 @@ export function resolveClaimedCustomIssueText(issue: ClaimedCustomIssue): string
 	return description ? `${issue.title}\n\n${description}` : issue.title;
 }
 
+/**
+ * Converts candidate website rich-text (HTML from the product editor) to plain
+ * text. The profile cards render their content as plain text with
+ * `whitespace-pre-line`, so block tags become newlines and inline tags/entities
+ * are stripped.
+ */
+export function htmlToPlainText(value: string | null | undefined): string | undefined {
+	if (typeof value !== 'string') return undefined;
+	const text = value
+		.replace(/<\s*br\s*\/?\s*>/gi, '\n')
+		.replace(/<\/\s*(p|div|li|h[1-6])\s*>/gi, '\n')
+		.replace(/<[^>]+>/g, '')
+		.replace(/&nbsp;/gi, ' ')
+		.replace(/&amp;/gi, '&')
+		.replace(/&lt;/gi, '<')
+		.replace(/&gt;/gi, '>')
+		.replace(/&#39;|&apos;/gi, "'")
+		.replace(/&quot;/gi, '"')
+		.replace(/[ \t]+\n/g, '\n')
+		.replace(/\n{3,}/g, '\n\n')
+		.trim();
+	return text.length > 0 ? text : undefined;
+}
+
+/** Maps website about.issues entry (title + HTML description) to display text. */
+export function resolveWebsiteIssueText(issue: { title?: string; description?: string }): string | undefined {
+	const title = issue.title?.trim();
+	const description = htmlToPlainText(issue.description);
+	if (title && description) return `${title}\n\n${description}`;
+	return title || description || undefined;
+}
+
 /** Prefers elections API bio, then claimed occupation when unclaimed about is empty. */
 export function resolveProfileAboutText(
 	candidateAbout: string | null | undefined,

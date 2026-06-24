@@ -5,12 +5,14 @@ import {
 	formatElectionDateFromApi,
 	formatSidebarLinkLabel,
 	formatTermLength,
+	htmlToPlainText,
 	inferSidebarLinkIcon,
 	prependClaimedWebsiteIfNew,
 	resolveClaimedCustomIssueText,
 	resolveClaimedTextField,
 	resolveProfileAboutText,
 	resolveProfileImageUrl,
+	resolveWebsiteIssueText,
 } from '~/lib/electionsHelpers';
 import { PageSections } from '~/PageSections';
 import type { SectionOverrides } from '~/PageSections';
@@ -36,7 +38,9 @@ function buildSectionOverrides(
 
 	const profileData: ProfileData = {
 		aboutMe: resolveProfileAboutText(candidate.about, claimed),
-		whyRunning: resolveClaimedTextField(claimed?.details?.pastExperience),
+		whyRunning:
+			htmlToPlainText(claimed?.website?.content?.about?.bio) ??
+			resolveClaimedTextField(claimed?.details?.pastExperience),
 		topIssues: buildTopIssues(candidate, claimed),
 	};
 
@@ -123,7 +127,13 @@ function buildTopIssues(
 		}
 	}
 
-	if (claimed?.details?.customIssues?.length) {
+	const websiteIssues = claimed?.website?.content?.about?.issues;
+	if (websiteIssues?.length) {
+		for (const issue of websiteIssues) {
+			const text = resolveWebsiteIssueText(issue);
+			if (text) parts.push(text);
+		}
+	} else if (claimed?.details?.customIssues?.length) {
 		for (const ci of claimed.details.customIssues) {
 			parts.push(resolveClaimedCustomIssueText(ci));
 		}

@@ -90,7 +90,9 @@ async function main() {
 		};
 
 		if (write) {
-			await client.createOrReplace(payload);
+			// Seed docs are `as const`, so `_id` is a literal union that confuses the
+			// createOrReplace generic; cast to the method's document parameter type.
+			await client.createOrReplace(payload as Parameters<typeof client.createOrReplace>[0]);
 			console.log(`[write] ${globalDoc._id} (${source}, ${sections?.length ?? 0} sections)`);
 		} else {
 			console.log(`[dry-run] would upsert ${globalDoc._id} from ${source} (${sections?.length ?? 0} sections)`);

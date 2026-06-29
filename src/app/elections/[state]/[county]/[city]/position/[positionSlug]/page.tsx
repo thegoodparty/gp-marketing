@@ -44,6 +44,7 @@ export default async function Page({
 	if (!race) race = await getRaceBySlug(buildRaceSlug(state, positionSlug, county, city));
 	if (!race) notFound();
 
+	const raceSlug = race.slug;
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const fullSlug = `${countySlug}/${city.toLowerCase()}`;
 

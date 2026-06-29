@@ -63,10 +63,10 @@ export default defineConfig({
 								origin: siteData.url,
 								draftMode: '/api/draft-mode/enable',
 								preview(doc) {
-									const templateType = doc?.field_electionTemplateType as string | undefined;
-									const previewTarget = doc?.previewTarget as
+									const templateType = doc?.['field_electionTemplateType'] as string | undefined;
+									const previewTarget = doc?.['previewTarget'] as
 										| {
-												field_electionTargetType?: string;
+												field_electionTargetType?: 'place' | 'position' | 'candidate';
 												field_electionTargetSlug?: string;
 												field_positionSlug?: string;
 										  }

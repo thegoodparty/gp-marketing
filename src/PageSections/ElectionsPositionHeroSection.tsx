@@ -62,11 +62,16 @@ export function ElectionsPositionHeroSection(props: ElectionsPositionHeroSection
 	const rawCta = section.ctaAction;
 	const ctaData = rawCta && isButtonType(rawCta) ? rawCta : null;
 	const fromSanity = ctaData ? transformButton(ctaData) : undefined;
+	// `transformButton` returns the ComponentButtonProps union; `href` only exists on the
+	// link-bearing variants, so read it defensively. On templated pages the CTA href/label
+	// always arrive via `officeData`; the Sanity values are only a fallback.
+	const sanityHref = fromSanity && 'href' in fromSanity ? fromSanity.href : undefined;
+	const resolvedLabel = resolveSectionText(data.ctaLabel, tokens);
 	const cta = fromSanity
 		? {
 				...fromSanity,
-				href: data.ctaHref ?? fromSanity.href,
-				label: resolveSectionText(data.ctaLabel ?? fromSanity.label, tokens) ?? fromSanity.label,
+				href: data.ctaHref ?? sanityHref ?? '/run',
+				label: resolvedLabel ?? fromSanity.label,
 				buttonProps: {
 					...fromSanity.buttonProps,
 					styleType: primaryButtonStyleType,
@@ -75,7 +80,7 @@ export function ElectionsPositionHeroSection(props: ElectionsPositionHeroSection
 		: {
 				buttonType: 'internal' as const,
 				href: data.ctaHref ?? '/run',
-				label: resolveSectionText(data.ctaLabel ?? ctaData?.text, tokens) ?? 'Primary CTA',
+				label: resolvedLabel ?? 'Primary CTA',
 				buttonProps: {
 					styleType: primaryButtonStyleType,
 				},

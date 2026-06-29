@@ -26,11 +26,13 @@ export type PositionPageContext = {
 	electionDate: string;
 	filingDate: string;
 	breadcrumbs: BreadcrumbItem[];
-	candidatesHref: string;
+	// Required by the position template overrides; candidates pages legitimately omit it.
+	candidatesHref?: string;
 	positionHref?: string;
 	locationHref?: string;
 	race?: RaceDetail | null;
-	pageUrl: string;
+	// Used only by the position-page schema builders; optional for candidates pages.
+	pageUrl?: string;
 };
 
 function formatFrequency(frequency: (string | number)[]): string {
@@ -144,12 +146,6 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 						},
 					}
 				: undefined,
-			rightColumnCTA: {
-				buttonType: 'internal',
-				href: ctx.candidatesHref,
-				label: 'View candidates',
-				buttonProps: { styleType: secondaryButtonStyleType },
-			},
 		},
 		component_faqBlock: {
 			items: race
@@ -192,25 +188,28 @@ export function buildCandidatesSectionOverrides(
 
 export function buildPositionPageSchemas(ctx: PositionPageContext) {
 	const race = ctx.race;
-	const positionPageSchema = race
-		? buildPositionPageSchema({
-				race,
-				officeName: ctx.officeName,
-				stateName: ctx.stateName,
-				countyName: ctx.countyName,
-				cityName: ctx.cityName,
-				pageUrl: ctx.pageUrl,
-			})
-		: undefined;
+	const pageUrl = ctx.pageUrl;
+	const positionPageSchema =
+		race && pageUrl
+			? buildPositionPageSchema({
+					race,
+					officeName: ctx.officeName,
+					stateName: ctx.stateName,
+					countyName: ctx.countyName,
+					cityName: ctx.cityName,
+					pageUrl,
+				})
+			: undefined;
 	const jobPostingSchema =
 		race &&
+		pageUrl &&
 		buildJobPostingSchema({
 			race,
 			officeName: ctx.officeName,
 			stateName: ctx.stateName,
 			countyName: ctx.countyName,
 			cityName: ctx.cityName,
-			pageUrl: ctx.pageUrl,
+			pageUrl,
 		});
 	const breadcrumbSchema = buildBreadcrumbSchema(ctx.breadcrumbs, toAbsoluteUrl);
 	const faqItems = race

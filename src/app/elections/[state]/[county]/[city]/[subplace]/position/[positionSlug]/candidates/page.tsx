@@ -92,7 +92,6 @@ export default async function Page({
 		locationHref,
 		candidates,
 		race,
-		pageUrl: '',
 	});
 }
 

@@ -1,7 +1,8 @@
 import type { Sections } from '~/PageSections';
 import { getCodeDefaultElectionTemplate } from '~/lib/electionTemplateDefaults';
 import {
-	customElectionTemplatesQuery,
+	customElectionTemplateByIdQuery,
+	customElectionTemplateTargetsQuery,
 	globalElectionTemplateQuery,
 } from '~/sanity/groq';
 import { sanityFetch } from '~/sanity/sanityClient';
@@ -35,13 +36,14 @@ type SanityTarget = {
 	field_electionTargetSlug?: string;
 };
 
-type CustomTemplateDoc = {
+// Lightweight doc used for matching only — pageSections are fetched by id for the winner.
+type CustomTemplateTargetsDoc = {
 	_id: string;
 	field_enabled?: boolean;
 	field_priority?: number;
 	field_electionTemplateType?: ElectionTemplateType;
+	_updatedAt?: string;
 	list_targets?: SanityTarget[];
-	pageSections?: { list_pageSections?: Sections[] | null } | null;
 };
 
 type GlobalTemplateDoc = {
@@ -91,7 +93,7 @@ function targetMatches(docTarget: SanityTarget, ctxTarget: ElectionTemplateTarge
 	return ctxTarget.slug === docSlug;
 }
 
-function scoreCustomTemplate(doc: CustomTemplateDoc, ctx: ElectionTemplateContext): number | null {
+function scoreCustomTemplate(doc: CustomTemplateTargetsDoc, ctx: ElectionTemplateContext): number | null {
 	if (doc.field_enabled === false) return null;
 	if (doc.field_electionTemplateType !== ctx.templateType) return null;
 
@@ -112,21 +114,30 @@ function scoreCustomTemplate(doc: CustomTemplateDoc, ctx: ElectionTemplateContex
 }
 
 export function pickBestCustomTemplate(
-	docs: CustomTemplateDoc[],
+	docs: CustomTemplateTargetsDoc[],
 	ctx: ElectionTemplateContext,
-): CustomTemplateDoc | null {
-	let best: CustomTemplateDoc | null = null;
+): CustomTemplateTargetsDoc | null {
+	let best: CustomTemplateTargetsDoc | null = null;
 	let bestScore = -1;
 	let bestPriority = Number.POSITIVE_INFINITY;
+	let bestUpdatedAt = '';
 
 	for (const doc of docs) {
 		const score = scoreCustomTemplate(doc, ctx);
 		if (score == null) continue;
 		const priority = doc.field_priority ?? 100;
-		if (score > bestScore || (score === bestScore && priority < bestPriority)) {
+		const updatedAt = doc._updatedAt ?? '';
+		// Higher specificity wins; ties break on lower priority, then most-recently updated —
+		// so the result does not depend on the order docs come back from the query.
+		const better =
+			score > bestScore ||
+			(score === bestScore && priority < bestPriority) ||
+			(score === bestScore && priority === bestPriority && updatedAt > bestUpdatedAt);
+		if (better) {
 			best = doc;
 			bestScore = score;
 			bestPriority = priority;
+			bestUpdatedAt = updatedAt;
 		}
 	}
 	return best;
@@ -146,17 +157,34 @@ async function fetchGlobalTemplate(templateType: ElectionTemplateType): Promise<
 	}
 }
 
-async function fetchCustomTemplates(templateType: ElectionTemplateType): Promise<CustomTemplateDoc[]> {
+async function fetchCustomTemplateTargets(templateType: ElectionTemplateType): Promise<CustomTemplateTargetsDoc[]> {
 	try {
 		const docs = (await sanityFetch({
-			query: customElectionTemplatesQuery,
+			query: customElectionTemplateTargetsQuery,
 			params: { templateType },
 			tags: ['goodpartyOrg_customTemplate', `goodpartyOrg_customTemplate_${templateType}`],
-		})) as CustomTemplateDoc[] | null;
+		})) as CustomTemplateTargetsDoc[] | null;
 		return docs ?? [];
 	} catch (error) {
-		console.error(`[election-template] custom fetch failed for ${templateType}`, error);
+		console.error(`[election-template] custom targets fetch failed for ${templateType}`, error);
 		return [];
+	}
+}
+
+async function fetchCustomTemplateSectionsById(
+	id: string,
+	templateType: ElectionTemplateType,
+): Promise<Sections[] | null> {
+	try {
+		const doc = (await sanityFetch({
+			query: customElectionTemplateByIdQuery,
+			params: { id },
+			tags: ['goodpartyOrg_customTemplate', `goodpartyOrg_customTemplate_${templateType}`],
+		})) as { pageSections?: { list_pageSections?: Sections[] | null } | null } | null;
+		return extractSections(doc);
+	} catch (error) {
+		console.error(`[election-template] custom sections fetch failed for ${id}`, error);
+		return null;
 	}
 }
 
@@ -171,10 +199,10 @@ export async function resolveElectionTemplate(
 	};
 
 	try {
-		const customDocs = await fetchCustomTemplates(ctx.templateType);
-		const bestCustom = pickBestCustomTemplate(customDocs, ctx);
+		const customTargets = await fetchCustomTemplateTargets(ctx.templateType);
+		const bestCustom = pickBestCustomTemplate(customTargets, ctx);
 		if (bestCustom) {
-			const customSections = extractSections(bestCustom);
+			const customSections = await fetchCustomTemplateSectionsById(bestCustom._id, ctx.templateType);
 			if (customSections) {
 				return { pageSections: customSections, source: 'custom', tokens: options?.tokens };
 			}

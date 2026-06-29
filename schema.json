@@ -7896,6 +7896,101 @@
     }
   },
   {
+    "name": "electionTemplatePreviewTarget",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "electionTemplatePreviewTarget"
+          }
+        },
+        "field_electionTargetType": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "place"
+              },
+              {
+                "type": "string",
+                "value": "position"
+              },
+              {
+                "type": "string",
+                "value": "candidate"
+              }
+            ]
+          },
+          "optional": true
+        },
+        "field_electionTargetSlug": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "field_positionSlug": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "electionTemplateTarget",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "electionTemplateTarget"
+          }
+        },
+        "field_electionTargetType": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "place"
+              },
+              {
+                "type": "string",
+                "value": "position"
+              },
+              {
+                "type": "string",
+                "value": "candidate"
+              }
+            ]
+          },
+          "optional": true
+        },
+        "field_electionTargetSlug": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
     "name": "teamValuesBlockDesignSettings",
     "type": "type",
     "value": {
@@ -13826,6 +13921,256 @@
     }
   },
   {
+    "name": "goodpartyOrg_customTemplate",
+    "type": "document",
+    "attributes": {
+      "_id": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_type": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string",
+          "value": "goodpartyOrg_customTemplate"
+        }
+      },
+      "_createdAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_updatedAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_rev": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "field_title": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "field_electionTemplateType": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "union",
+          "of": [
+            {
+              "type": "string",
+              "value": "location"
+            },
+            {
+              "type": "string",
+              "value": "position"
+            },
+            {
+              "type": "string",
+              "value": "positionCandidates"
+            },
+            {
+              "type": "string",
+              "value": "candidateProfile"
+            }
+          ]
+        },
+        "optional": true
+      },
+      "field_enabled": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "boolean"
+        },
+        "optional": true
+      },
+      "field_priority": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "number"
+        },
+        "optional": true
+      },
+      "field_instructions": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "ref_sourceGlobalTemplate": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "object",
+          "attributes": {
+            "_ref": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "string"
+              }
+            },
+            "_type": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "string",
+                "value": "reference"
+              }
+            },
+            "_weak": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "boolean"
+              },
+              "optional": true
+            }
+          },
+          "dereferencesTo": "goodpartyOrg_globalTemplate"
+        },
+        "optional": true
+      },
+      "list_targets": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "array",
+          "of": {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "electionTemplateTarget"
+            }
+          }
+        },
+        "optional": true
+      },
+      "previewTarget": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "electionTemplatePreviewTarget"
+        },
+        "optional": true
+      },
+      "pageSections": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "pageSections"
+        },
+        "optional": true
+      }
+    }
+  },
+  {
+    "name": "goodpartyOrg_globalTemplate",
+    "type": "document",
+    "attributes": {
+      "_id": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_type": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string",
+          "value": "goodpartyOrg_globalTemplate"
+        }
+      },
+      "_createdAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_updatedAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_rev": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "field_title": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "field_electionTemplateType": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "union",
+          "of": [
+            {
+              "type": "string",
+              "value": "location"
+            },
+            {
+              "type": "string",
+              "value": "position"
+            },
+            {
+              "type": "string",
+              "value": "positionCandidates"
+            },
+            {
+              "type": "string",
+              "value": "candidateProfile"
+            }
+          ]
+        },
+        "optional": true
+      },
+      "field_instructions": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "previewTarget": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "electionTemplatePreviewTarget"
+        },
+        "optional": true
+      },
+      "pageSections": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "pageSections"
+        },
+        "optional": true
+      }
+    }
+  },
+  {
     "name": "experiment_variant",
     "type": "document",
     "attributes": {
@@ -16106,6 +16451,13 @@
   },
   {
     "name": "StringIcon",
+    "type": "type",
+    "value": {
+      "type": "string"
+    }
+  },
+  {
+    "name": "markdown",
     "type": "type",
     "value": {
       "type": "string"

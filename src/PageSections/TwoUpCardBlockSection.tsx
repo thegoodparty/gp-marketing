@@ -1,6 +1,8 @@
 import type { Sections } from '~/PageSections';
 
 import { transformButtons } from '~/lib/buttonTransformer';
+import type { TokenMap } from '~/lib/resolveTokens';
+import { resolveSectionText } from '~/lib/resolveSectionText';
 import { resolveTwoUpCardBlockCardType } from '~/ui/_lib/resolveTwoUpCardBlockCardType';
 import { resolveComponentColor } from '~/ui/_lib/resolveComponentColor';
 
@@ -11,7 +13,11 @@ import type { SanityImage } from '~/ui/types';
 import { resolveTestimonials } from '~/ui/_lib/resolveTestimonials';
 import { resolveBg } from '~/ui/_lib/resolveBg';
 
-export function TwoUpCardBlockSection(section: Extract<Sections, { _type: 'component_twoUpCardBlock' }>) {
+type Props = Extract<Sections, { _type: 'component_twoUpCardBlock' }> & {
+	tokens?: TokenMap;
+};
+
+export function TwoUpCardBlockSection(section: Props) {
 	const backgroundColor = section.twoUpCardBlockDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(stegaClean(section.twoUpCardBlockDesignSettings.field_blockColorCreamMidnight))
 		: 'cream';
@@ -19,8 +25,8 @@ export function TwoUpCardBlockSection(section: Extract<Sections, { _type: 'compo
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Two Up Card Block'>
 			<TwoUpCardBlock
 				backgroundColor={backgroundColor}
-				card1={resolveTwoUpCardBlockCard(section.twoUpCardBlockOne)}
-				card2={resolveTwoUpCardBlockCard(section.twoUpCardBlockTwo)}
+				card1={resolveTwoUpCardBlockCard(section.twoUpCardBlockOne, section.tokens)}
+				card2={resolveTwoUpCardBlockCard(section.twoUpCardBlockTwo, section.tokens)}
 			/>
 		</section>
 	);
@@ -28,6 +34,7 @@ export function TwoUpCardBlockSection(section: Extract<Sections, { _type: 'compo
 
 function resolveTwoUpCardBlockCard(
 	card: Extract<Sections, { _type: 'component_twoUpCardBlock' }>['twoUpCardBlockOne' | 'twoUpCardBlockTwo'],
+	tokens?: TokenMap,
 ): TwoUpCardBlockCardProps | undefined {
 	if (!card) return undefined;
 	if (!card.field_twoUpCardBlockCardType) return undefined;
@@ -37,7 +44,7 @@ function resolveTwoUpCardBlockCard(
 	switch (cardType) {
 		case 'value-prop':
 			return {
-				title: card.valuePropositionCard?.field_title ?? '',
+				title: resolveSectionText(card.valuePropositionCard?.field_title, tokens) ?? '',
 				type: 'value-prop',
 				color: card.valuePropositionCard?.field_componentColor6ColorsInverse
 					? resolveComponentColor(stegaClean(card.valuePropositionCard.field_componentColor6ColorsInverse))

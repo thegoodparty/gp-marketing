@@ -20,6 +20,7 @@ import { Logo } from './src/sanity/utils/Logo.tsx';
 import { documentSchema } from './src/sanity/schema/documents/documentSchema.ts';
 import { sites } from './sites.ts';
 import { brandName, dataset, enabledProviders, projectId, defaultApiVersion } from './env.ts';
+import { buildElectionTemplatePreviewPath } from './src/lib/electionTemplatePreview.ts';
 
 export default defineConfig({
 	title: brandName,
@@ -43,7 +44,39 @@ export default defineConfig({
 		defaultDocumentNode(S, ctx) {
 			const type = ctx.schema.get(ctx.schemaType)!;
 			const previews: ComponentViewBuilder[] = [];
-			if (type.options && 'channels' in type.options && Object.keys(type.options.channels).length > 0) {
+
+			const isElectionTemplate =
+				ctx.schemaType === 'goodpartyOrg_globalTemplate' ||
+				ctx.schemaType === 'goodpartyOrg_customTemplate';
+
+			if (isElectionTemplate) {
+				const siteData = sites.goodpartyOrg;
+				previews.push(
+					S.view
+						.component(Iframe)
+						.title(siteData.title)
+						.id('goodpartyOrg')
+						.options({
+							key: ctx.documentId,
+							reload: { button: true },
+							url: {
+								origin: siteData.url,
+								draftMode: '/api/draft-mode/enable',
+								preview(doc) {
+									const templateType = doc?.field_electionTemplateType as string | undefined;
+									const previewTarget = doc?.previewTarget as
+										| {
+												field_electionTargetType?: string;
+												field_electionTargetSlug?: string;
+												field_positionSlug?: string;
+										  }
+										| undefined;
+									return buildElectionTemplatePreviewPath(templateType, previewTarget) ?? '/elections';
+								},
+							},
+						} satisfies IframeOptions),
+				);
+			} else if (type.options && 'channels' in type.options && Object.keys(type.options.channels).length > 0) {
 					for (const [siteId, path] of Object.entries(type.options.channels)) {
 						const siteData = sites[siteId as keyof typeof sites];
 						previews.push(

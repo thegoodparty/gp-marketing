@@ -314,3 +314,13 @@ export const faqByIdQuery = defineQuery(
 export const quoteCollectionByIdQuery = defineQuery(
 	`*[_type=="quoteCollections"&&_id==$id][0]{quoteCollectionContent{list_chooseQuotes[]->{_key,quote{field_quote,ref_quoteBy->{_type,personOverview{field_personName,field_jobTitleOrRole,img_profilePicture},organisationOverview{field_organisationName,img_logo}}}}}}`,
 );
+
+/*language=textmate*/
+export const globalElectionTemplateQuery = defineQuery(
+	`*[_type=="goodpartyOrg_globalTemplate"&&field_electionTemplateType==$templateType][0]{_id,_type,field_title,field_electionTemplateType,previewTarget,pageSections{...,list_pageSections[]{${sectionsGroq}}}}`,
+);
+
+/*language=textmate*/
+export const customElectionTemplatesQuery = defineQuery(
+	`*[_type=="goodpartyOrg_customTemplate"&&field_electionTemplateType==$templateType&&field_enabled!=false] | order(field_priority asc, _updatedAt desc){_id,_type,field_title,field_electionTemplateType,field_enabled,field_priority,list_targets[]{field_electionTargetType,field_electionTargetSlug},pageSections{...,list_pageSections[]{${sectionsGroq}}}}`,
+);

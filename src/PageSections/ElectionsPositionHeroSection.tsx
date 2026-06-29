@@ -1,6 +1,8 @@
 import { stegaClean } from 'next-sanity';
 
 import type { Sections } from '~/PageSections';
+import type { TokenMap } from '~/lib/resolveTokens';
+import { resolveSectionText } from '~/lib/resolveSectionText';
 
 import { isButtonType, transformButton } from '~/lib/buttonTransformer';
 
@@ -16,6 +18,8 @@ export type OfficeData = {
 	cityName?: string;
 	electionDate: string;
 	filingDate: string;
+	ctaHref?: string;
+	ctaLabel?: string;
 };
 
 // Default mock data for development/preview
@@ -33,10 +37,11 @@ type ElectionsPositionHeroSectionProps = Extract<
 	{ _type: 'component_electionsPositionHero' }
 > & {
 	officeData?: OfficeData;
+	tokens?: TokenMap;
 };
 
 export function ElectionsPositionHeroSection(props: ElectionsPositionHeroSectionProps) {
-	const { officeData, ...section } = props;
+	const { officeData, tokens, ...section } = props;
 	const backgroundColor = section.electionsPositionHeroDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(stegaClean(section.electionsPositionHeroDesignSettings.field_blockColorCreamMidnight))
 		: 'midnight';
@@ -60,6 +65,8 @@ export function ElectionsPositionHeroSection(props: ElectionsPositionHeroSection
 	const cta = fromSanity
 		? {
 				...fromSanity,
+				href: data.ctaHref ?? fromSanity.href,
+				label: resolveSectionText(data.ctaLabel ?? fromSanity.label, tokens) ?? fromSanity.label,
 				buttonProps: {
 					...fromSanity.buttonProps,
 					styleType: primaryButtonStyleType,
@@ -67,8 +74,8 @@ export function ElectionsPositionHeroSection(props: ElectionsPositionHeroSection
 			}
 		: {
 				buttonType: 'internal' as const,
-				href: '/run',
-				label: ctaData?.text ?? 'Primary CTA',
+				href: data.ctaHref ?? '/run',
+				label: resolveSectionText(data.ctaLabel ?? ctaData?.text, tokens) ?? 'Primary CTA',
 				buttonProps: {
 					styleType: primaryButtonStyleType,
 				},

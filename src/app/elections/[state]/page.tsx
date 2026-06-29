@@ -8,26 +8,9 @@ import {
 	isStateIndexDistrictPlace,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
-import { DEFAULT_DISPLAY_COUNT } from '~/constants/display';
-import {
-	CAROUSEL_QUOTE_COLLECTION_ID,
-	CAROUSEL_HEADER,
-	STEPPER_HEADER,
-	STEPPER_ITEMS,
-} from '~/constants/electionsStaticSections';
-import { sanityFetch } from '~/sanity/sanityClient';
-import { quoteCollectionByIdQuery } from '~/sanity/groq';
 import { getStateName } from '~/lib/electionsHelpers';
-import { resolveAuthor } from '~/ui/_lib/resolveAuthor';
-import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
-import { BreadcrumbBlock } from '~/ui/BreadcrumbBlock';
-import { ElectionsLandingWithSearch } from '~/ui/ElectionsLandingWithSearch';
-import { Carousel } from '~/ui/Carousel';
-import { StepperBlock } from '~/ui/StepperBlock';
-import { ElectionsIndexBlock } from '~/ui/ElectionsIndexBlock';
+import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
 import { US_STATE_CODES } from '~/lib/sitemap-entries';
-import { PageSchema } from '~/ui/PageSchema';
-import { buildBreadcrumbSchema, buildSchemaGraph, buildWebPageSchema } from '~/lib/schema';
 import { toAbsoluteUrl } from '~/lib/url';
 
 export const revalidate = 3600;
@@ -51,18 +34,13 @@ export default async function Page({
 	const stateName = getStateName(stateCode);
 	const currentYear = new Date().getFullYear();
 
-	const [allPlaces, placeData, quoteCollection] = await Promise.all([
+	const [allPlaces, placeData] = await Promise.all([
 		getPlacesByState({ state: stateCode }),
 		getPlaceBySlug({
 			slug: state.toLowerCase(),
 			includeChildren: false,
 			includeRaces: true,
 			raceColumns: 'slug,normalizedPositionName,electionDate,positionDescription,positionLevel',
-		}),
-		sanityFetch({
-			query: quoteCollectionByIdQuery,
-			params: { id: CAROUSEL_QUOTE_COLLECTION_ID },
-			tags: ['quoteCollections'],
 		}),
 	]);
 
@@ -113,24 +91,9 @@ export default async function Page({
 		{ href: '', label: stateName },
 	];
 
-	const quoteItems = quoteCollection?.quoteCollectionContent?.list_chooseQuotes ?? [];
-	const carouselCards = quoteItems.map(item => ({
-		copy: item.quote?.field_quote ?? undefined,
-		author: resolveAuthor(item.quote?.ref_quoteBy as Parameters<typeof resolveAuthor>[0]),
-	}));
-
-	const stepperHeader = {
-		title: STEPPER_HEADER.title,
-		copy: STEPPER_HEADER.copy,
-		backgroundColor: 'cream' as const,
-		textSize: resolveTextSize('Medium'),
-	};
-
 	const stateRaces = isSingleCounty
 		? (placeData?.Races ?? [])
-		: (placeData?.Races ?? []).filter(
-				r => r.positionLevel?.toUpperCase() === 'STATE',
-			);
+		: (placeData?.Races ?? []).filter(r => r.positionLevel?.toUpperCase() === 'STATE');
 	const stateOffices = stateRaces.map(race => {
 		const positionSlug = race.slug.split('/').slice(1).join('/');
 		return {
@@ -150,85 +113,29 @@ export default async function Page({
 		),
 	].sort((a, b) => a - b);
 
-	const defaultYear = dataYears.includes(currentYear)
-		? currentYear
-		: (dataYears[0] ?? currentYear);
+	const defaultYear = dataYears.includes(currentYear) ? currentYear : (dataYears[0] ?? currentYear);
 	const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
-
 	const pageUrl = toAbsoluteUrl(`/elections/${state.toLowerCase()}`);
-	const stateSchema = buildSchemaGraph([
-		buildWebPageSchema({
-			url: pageUrl,
-			name: `Elections in ${stateName}`,
-			description: `Browse elections and positions in ${stateName}.`,
-			pageType: 'CollectionPage',
-		}),
-		buildBreadcrumbSchema(breadcrumbs, toAbsoluteUrl),
-	]);
 
-	return (
-		<>
-			<PageSchema schema={stateSchema ?? undefined} />
-			<BreadcrumbBlock backgroundColor="midnight" breadcrumbs={breadcrumbs} />
-			<ElectionsLandingWithSearch
-				heroProps={{
-					backgroundColor: 'midnight',
-					locationLevel: 'state',
-					stateName: `Upcoming elections in ${stateName}`,
-					bodyCopy: `Learn what state positions are up for election and who is currently running for office in ${stateName}.`,
-				}}
-				listProps={{
-					heading: isSingleCounty
-						? `Elections in ${stateName}`
-						: `State Elections in ${stateName}`,
-					headlineLabel: 'state',
-					defaultYear,
-					availableYears,
-					offices: stateOffices,
-				}}
-			/>
-			<ElectionsIndexBlock
-				backgroundColor="midnight"
-				stateSlug={state.toLowerCase()}
-				elections={locationItems}
-				header={{
-					title:
-						isSingleCounty && countySlug
-							? `Cities & Districts in ${stateName}`
-							: `Counties & Districts in ${stateName}`,
-					copy:
-						isSingleCounty && countySlug
-							? `Browse elections by city or district in ${stateName}.`
-							: `Browse elections by county or district in ${stateName}.`,
-					backgroundColor: 'midnight',
-				}}
-				initialDisplayCount={DEFAULT_DISPLAY_COUNT}
-				showSearch={true}
-				searchPlaceholder={
-					isSingleCounty && countySlug
-						? 'Search by city or district'
-						: 'Search by county or district'
-				}
-			/>
-			{carouselCards.length > 0 && (
-				<Carousel
-					backgroundColor="cream"
-					header={{
-						title: CAROUSEL_HEADER.title,
-						copy: CAROUSEL_HEADER.copy,
-						backgroundColor: 'cream',
-						textSize: resolveTextSize('Medium'),
-					}}
-					cards={carouselCards}
-				/>
-			)}
-			<StepperBlock
-				backgroundColor="cream"
-				header={stepperHeader}
-				items={STEPPER_ITEMS.map(i => ({ ...i, buttons: [...i.buttons] }))}
-			/>
-		</>
-	);
+	return renderElectionsIndexPage({
+		placeSlug: state.toLowerCase(),
+		breadcrumbs,
+		locationLevel: 'state',
+		stateName,
+		heroTitle: `Upcoming elections in ${stateName}`,
+		bodyCopy: `Learn what state positions are up for election and who is currently running for office in ${stateName}.`,
+		searchPlaceholder: 'Search positions',
+		listHeading: isSingleCounty ? `Elections in ${stateName}` : `State Elections in ${stateName}`,
+		listHeadline: 'state',
+		defaultYear,
+		availableYears,
+		offices: stateOffices,
+		elections: locationItems,
+		stateSlug: state.toLowerCase(),
+		pageUrl,
+		pageTitle: `Elections in ${stateName}`,
+		pageDescription: `Browse elections and positions in ${stateName}.`,
+	});
 }
 
 export async function generateMetadata({

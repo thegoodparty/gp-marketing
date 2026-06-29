@@ -41,6 +41,19 @@ export function defaultStructure(S: StructureBuilder) {
     return S.documentTypeListItem(schemaType)
   }
 
+  function globalTemplateItem(documentId: string, title: string) {
+    return S.listItem()
+      .id(documentId)
+      .title(title)
+      .icon(getIcon('Template'))
+      .child(
+        S.document()
+          .schemaType('goodpartyOrg_globalTemplate')
+          .documentId(documentId)
+          .title(title),
+      );
+  }
+
   return S.list({
     id: '__root__',
     title: 'Content',
@@ -52,6 +65,26 @@ export function defaultStructure(S: StructureBuilder) {
         items: [
           item('goodpartyOrg_home'),
           item('goodpartyOrg_landingPages'),
+          group({
+            id: 'electionTemplates',
+            title: 'Templates',
+            icon: getIcon('Template'),
+            items: [
+              group({
+                id: 'globalElectionTemplates',
+                title: 'Global Templates',
+                icon: getIcon('Template'),
+                items: [
+                  globalTemplateItem('globalTemplate_location', 'Location'),
+                  globalTemplateItem('globalTemplate_position', 'Position'),
+                  globalTemplateItem('globalTemplate_positionCandidates', 'Position Candidates'),
+                  globalTemplateItem('globalTemplate_candidateProfile', 'Candidate Profile'),
+                ],
+              }),
+              S.divider(),
+              item('goodpartyOrg_customTemplate').title('Custom Templates'),
+            ],
+          }),
           group({
             id: 'experiment_variant',
             title: 'Experiments',

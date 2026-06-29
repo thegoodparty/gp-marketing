@@ -6,12 +6,19 @@ import { US_STATES_TUPLES } from '~/constants/usStates';
 import { COUNTY_MTFCC, getCityPlacesByCounty, getPlacesByState } from '~/lib/electionsApi';
 import { transformButtons } from '~/lib/buttonTransformer';
 import { DEFAULT_DISPLAY_COUNT } from '~/constants/display';
+import type { TokenMap } from '~/lib/resolveTokens';
+import { resolveSectionText, resolveRichTextTokens } from '~/lib/resolveSectionText';
 import { ElectionsIndexBlock } from '~/ui/ElectionsIndexBlock';
 import { RichData } from '~/ui/RichData';
 
 type ElectionsIndexBlockSectionProps = Extract<Sections, { _type: 'component_electionsIndexBlock' }> & {
 	electionsOverride?: ElectionItem[];
 	stateSlugOverride?: string;
+	indexOverride?: {
+		hidden?: boolean;
+		header?: { title?: string; copy?: string; searchPlaceholder?: string };
+	};
+	tokens?: TokenMap;
 };
 
 function statesToElectionItems(): ElectionItem[] {
@@ -23,8 +30,12 @@ function statesToElectionItems(): ElectionItem[] {
 }
 
 export async function ElectionsIndexBlockSection(props: ElectionsIndexBlockSectionProps) {
-	const { electionsOverride, stateSlugOverride, ...section } = props;
+	const { electionsOverride, stateSlugOverride, indexOverride, ...section } = props;
 	const slug = (stateSlugOverride ?? '').trim().toLowerCase();
+
+	if (indexOverride?.hidden) {
+		return null;
+	}
 
 	const bgValue = section.electionsIndexBlockDesignSettings?.field_blockColorCreamMidnight;
 	const backgroundColor = bgValue
@@ -77,14 +88,24 @@ export async function ElectionsIndexBlockSection(props: ElectionsIndexBlockSecti
 				stateSlug={stateSlugOverride ?? ''}
 				elections={elections}
 				header={{
-					title: section.electionsIndexBlockHeader?.field_title,
-					label: section.electionsIndexBlockHeader?.field_label,
-					copy: <RichData value={section.electionsIndexBlockHeader?.block_summaryText} />,
+					title: resolveSectionText(indexOverride?.header?.title ?? section.electionsIndexBlockHeader?.field_title, props.tokens),
+					label: resolveSectionText(section.electionsIndexBlockHeader?.field_label, props.tokens),
+					copy: indexOverride?.header?.copy ? (
+						indexOverride.header.copy
+					) : (
+						<RichData
+							value={resolveRichTextTokens(
+								section.electionsIndexBlockHeader?.block_summaryText,
+								props.tokens,
+							)}
+						/>
+					),
 					backgroundColor,
 					buttons: transformButtons(section.electionsIndexBlockHeader?.list_buttons),
 				}}
 				showSearch={section.electionsIndexBlockDesignSettings?.field_showSearch ?? true}
 				searchPlaceholder={
+					indexOverride?.header?.searchPlaceholder ??
 					section.electionsIndexBlockDesignSettings?.field_searchPlaceholder ??
 					'Search by county or city'
 				}

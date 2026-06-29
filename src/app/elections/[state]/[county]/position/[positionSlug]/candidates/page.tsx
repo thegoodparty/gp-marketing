@@ -11,7 +11,7 @@ import {
 	redirectCityRaceToFourLevelUrl,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
-import { CandidatesPageContent } from '~/ui/CandidatesPageContent';
+import { renderElectionsCandidatesPage } from '~/lib/renderElectionsCandidatesPage';
 
 export default async function Page({
 	params,
@@ -66,20 +66,21 @@ export default async function Page({
 		{ href: '', label: `Candidates for ${officeName}` },
 	];
 
-	return (
-		<CandidatesPageContent
-			officeName={officeName}
-			stateName={stateName}
-			countyName={countyName}
-			electionDate={electionDate}
-			filingDate={filingDate}
-			breadcrumbs={breadcrumbs}
-			positionHref={positionHref}
-			locationHref={locationHref}
-			candidates={candidates}
-			race={race}
-		/>
-	);
+	return renderElectionsCandidatesPage({
+		placeSlug: countySlug,
+		raceSlug,
+		officeName,
+		stateName,
+		countyName,
+		electionDate,
+		filingDate,
+		breadcrumbs,
+		positionHref,
+		locationHref,
+		candidates,
+		race,
+		pageUrl: '',
+	});
 }
 
 export async function generateMetadata({

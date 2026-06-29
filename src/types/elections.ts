@@ -127,7 +127,14 @@ export interface FindByRaceIdResponse {
 		id: number;
 		vanityPath: string;
 		status: string;
-		content: Record<string, unknown> | null;
+		content:
+			| {
+					about?: {
+						bio?: string;
+						issues?: Array<{ title?: string; description?: string }>;
+					};
+			  }
+			| null;
 		domain: { name: string; status: string } | null;
 	} | null;
 	campaignPositions: Array<{

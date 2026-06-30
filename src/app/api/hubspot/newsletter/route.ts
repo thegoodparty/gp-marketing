@@ -21,7 +21,7 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export async function POST(request: NextRequest) {
 	let body: SubmissionBody;
 	try {
-		body = await request.json();
+		body = (await request.json()) as SubmissionBody;
 	} catch {
 		return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
 	}
@@ -35,9 +35,9 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json({ error: 'A valid email is required' }, { status: 400 });
 	}
 
-	const portalId = process.env.NEXT_PUBLIC_HUBSPOT_PORTAL_ID ?? DEFAULT_PORTAL_ID;
+	const portalId = process.env['NEXT_PUBLIC_HUBSPOT_PORTAL_ID'] ?? DEFAULT_PORTAL_ID;
 	const hutk = (await cookies()).get('hubspotutk')?.value;
-	const token = process.env.HUBSPOT_PRIVATE_APP_TOKEN;
+	const token = process.env['HUBSPOT_PRIVATE_APP_TOKEN'];
 
 	const fields = [
 		{ objectTypeId: '0-1', name: 'firstname', value: firstname ?? '' },

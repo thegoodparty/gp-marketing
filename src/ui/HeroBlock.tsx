@@ -11,7 +11,7 @@ import { Container } from './Container.tsx';
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { EmbedHtml } from './EmbedHtml.tsx';
 import { Media } from './Media.tsx';
-import { Newsletter } from './Form/Newsletter.tsx';
+import { NewsletterEmbed } from './Form/NewsletterEmbed.tsx';
 import { Text } from './Text.tsx';
 
 const styles = tv({
@@ -192,7 +192,9 @@ export function HeroBlock(props: HeroBlockProps) {
 									</Text>
 								)}
 							</div>
-							{props.form?.provider === 'Hubspot' && props.form.formId && <Newsletter formId={props.form.formId} />}
+							{props.form?.provider === 'Hubspot' && props.form.formId && (
+								<NewsletterEmbed formId={props.form.formId} />
+							)}
 							{props.buttons && props.buttons.length > 0 && (
 								<div className={buttons()}>
 									{props.buttons.map((item, index) => {

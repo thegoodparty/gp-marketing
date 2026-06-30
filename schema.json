@@ -1443,6 +1443,13 @@
     }
   },
   {
+    "name": "field_redirectUrl",
+    "type": "type",
+    "value": {
+      "type": "string"
+    }
+  },
+  {
     "name": "field_hubspotFormId",
     "type": "type",
     "value": {
@@ -8922,6 +8929,14 @@
           "value": {
             "type": "inline",
             "name": "field_hubspotFormId"
+          },
+          "optional": true
+        },
+        "field_redirectUrl": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_redirectUrl"
           },
           "optional": true
         }

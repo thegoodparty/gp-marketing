@@ -59,6 +59,7 @@ import { field_componentColor6Colors } from './field_componentColor6Colors.ts';
 import { field_featureOptions } from './field_featureOptions.ts';
 import { field_hubspotFormId } from './field_hubspotFormId.ts';
 import { field_redirectUrl } from './field_redirectUrl.ts';
+import { field_submitLabel } from './field_submitLabel.ts';
 import { field_policyName } from './field_policyName.ts';
 import { field_policySummary } from './field_policySummary.ts';
 import { field_label } from './field_label.ts';
@@ -174,6 +175,7 @@ export const fieldSchema = [
 	field_featureOptions,
 	field_hubspotFormId,
 	field_redirectUrl,
+	field_submitLabel,
 	field_policyName,
 	field_policySummary,
 	field_label,

@@ -5,12 +5,13 @@ export type FormProps = {
 	provider?: Field_formProvider;
 	formId?: string;
 	redirectTo?: string;
+	submitLabel?: string;
 };
 
 export function resolveForm(form?: Forms) {
 	if (!form?.formOverview) return undefined;
 
-	const { field_formProvider, field_formType, field_hubspotFormId, field_redirectUrl } = form.formOverview;
+	const { field_formProvider, field_formType, field_hubspotFormId, field_redirectUrl, field_submitLabel } = form.formOverview;
 
 	if (field_formProvider === 'Hubspot' && field_formType === 'Newsletter') {
 		return {
@@ -18,6 +19,7 @@ export function resolveForm(form?: Forms) {
 			formId: field_hubspotFormId,
 			type: field_formType,
 			redirectTo: field_redirectUrl || undefined,
+			submitLabel: field_submitLabel || undefined,
 		};
 	}
 

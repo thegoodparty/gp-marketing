@@ -1443,6 +1443,13 @@
     }
   },
   {
+    "name": "field_submitLabel",
+    "type": "type",
+    "value": {
+      "type": "string"
+    }
+  },
+  {
     "name": "field_redirectUrl",
     "type": "type",
     "value": {
@@ -8937,6 +8944,14 @@
           "value": {
             "type": "inline",
             "name": "field_redirectUrl"
+          },
+          "optional": true
+        },
+        "field_submitLabel": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_submitLabel"
           },
           "optional": true
         }

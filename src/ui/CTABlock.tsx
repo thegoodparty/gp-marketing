@@ -137,9 +137,7 @@ export function CTABlock(props: CTABlockProps) {
 								{props.caption}
 							</Text>
 						)}
-						{props.form?.provider === 'Hubspot' && props.form.formId && (
-							<Newsletter formId={props.form.formId} redirectTo={props.form.redirectTo} />
-						)}
+						{props.form?.provider === 'Hubspot' && props.form.formId && <Newsletter formId={props.form.formId} />}
 					</div>
 					<div className={card()}>
 						{size === 'normal' && (

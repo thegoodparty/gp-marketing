@@ -10,13 +10,25 @@ import { Text } from '../Text.tsx';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+function isSafeRelativeRedirect(path: string): boolean {
+	return path.startsWith('/') && !path.startsWith('//');
+}
+
 type NewsletterValues = {
 	firstname: string;
 	lastname: string;
 	email: string;
 };
 
-export function Newsletter({ formId, submitLabel = 'Subscribe' }: { formId: string; submitLabel?: string }) {
+export function Newsletter({
+	formId,
+	submitLabel = 'Subscribe',
+	redirectTo,
+}: {
+	formId: string;
+	submitLabel?: string;
+	redirectTo?: string;
+}) {
 	const [isSuccess, setIsSuccess] = useState(false);
 	const {
 		register,
@@ -42,6 +54,13 @@ export function Newsletter({ formId, submitLabel = 'Subscribe' }: { formId: stri
 				formId,
 				page_path: typeof window !== 'undefined' ? window.location.pathname : null,
 			});
+
+			if (redirectTo && isSafeRelativeRedirect(redirectTo)) {
+				const separator = redirectTo.includes('?') ? '&' : '?';
+				window.location.assign(`${redirectTo}${separator}submissionGuid=${crypto.randomUUID()}`);
+				return;
+			}
+
 			reset();
 			setIsSuccess(true);
 		} catch {

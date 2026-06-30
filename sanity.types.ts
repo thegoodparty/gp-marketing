@@ -273,6 +273,8 @@ export type Field_policySummary = string;
 
 export type Field_policyName = string;
 
+export type Field_redirectUrl = string;
+
 export type Field_hubspotFormId = string;
 
 export type Field_featureOptions = 'Reference' | 'Custom';
@@ -1571,6 +1573,7 @@ export type FormOverview = {
 	field_formProvider?: Field_formProvider;
 	field_formType?: Field_formType;
 	field_hubspotFormId?: Field_hubspotFormId;
+	field_redirectUrl?: Field_redirectUrl;
 };
 
 export type PersonOverview = {
@@ -2926,6 +2929,8 @@ export type StringId = string;
 
 export type StringIcon = string;
 
+export type Markdown = string;
+
 export type Table = {
 	_type: 'table';
 	rows?: Array<
@@ -3344,6 +3349,7 @@ export type AllSanitySchemaTypes =
 	| Field_label
 	| Field_policySummary
 	| Field_policyName
+	| Field_redirectUrl
 	| Field_hubspotFormId
 	| Field_featureOptions
 	| Field_componentColor6Colors
@@ -3689,6 +3695,7 @@ export type AllSanitySchemaTypes =
 	| ObjectAddress
 	| StringId
 	| StringIcon
+	| Markdown
 	| Table
 	| TableRow
 	| MuxVideo
@@ -234051,6 +234058,782 @@ export type ArticleQueryResult = {
 	seo?: Seo;
 	href: string;
 } | null;
+// Variable: allFaqsQuery
+// Query: *[_type=="faq"] | order(faqOverview.field_question asc){_id,_updatedAt,...,faqOverview{...,block_answer[]{_type=="button"=>{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)},_type!="button"=>{...,markDefs[]{...,_type=="inlineInternalLink"=>{field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}}}}}}}}
+export type AllFaqsQueryResult = Array<{
+	_id: string;
+	_updatedAt: string;
+	_type: 'faq';
+	_createdAt: string;
+	_rev: string;
+	faqOverview: {
+		_type: 'faqOverview';
+		field_question?: Field_question;
+		block_answer: Array<
+			| {
+					children?: Array<{
+						marks?: Array<string>;
+						text?: string;
+						_type: 'span';
+						_key: string;
+					}>;
+					style?: 'normal';
+					listItem?: 'bullet' | 'checked' | 'number';
+					markDefs: Array<
+						| {
+								_key: string;
+								_type: 'inlineEmailLink';
+								field_emailLink?: Field_emailLink;
+						  }
+						| {
+								_key: string;
+								_type: 'inlineExternalLink';
+								field_externalLink?: Field_externalLink;
+						  }
+						| {
+								_key: string;
+								_type: 'inlineInternalLink';
+								field_internalLink:
+									| {
+											_id: string;
+											_type: 'article';
+											name: null;
+											label: null;
+											title: Field_editorialTitle | null;
+											href: string;
+									  }
+									| {
+											_id: string;
+											_type: 'categories';
+											name: Field_name | null;
+											label: Field_pageSubtitle | null;
+											title: null;
+											href: string;
+									  }
+									| {
+											_id: string;
+											_type: 'glossary';
+											name: null;
+											label: null;
+											title: Field_glossaryTerm | null;
+											href: string;
+									  }
+									| {
+											_id: string;
+											_type: 'goodpartyOrg_allArticles';
+											name: Field_pageName | null;
+											label: null;
+											title: Field_pageTitle | null;
+											href: '/blog';
+									  }
+									| {
+											_id: string;
+											_type: 'goodpartyOrg_allComponents';
+											name: Field_pageName | null;
+											label: null;
+											title: null;
+											href: '/all';
+									  }
+									| {
+											_id: string;
+											_type: 'goodpartyOrg_contact';
+											name: null;
+											label: null;
+											title: null;
+											href: '/contact';
+									  }
+									| {
+											_id: string;
+											_type: 'goodpartyOrg_glossary';
+											name: Field_name | null;
+											label: Field_pageSubtitle | null;
+											title: null;
+											href: '/political-terms';
+									  }
+									| {
+											_id: string;
+											_type: 'goodpartyOrg_home';
+											name: Field_pageName | null;
+											label: null;
+											title: null;
+											href: '/';
+									  }
+									| {
+											_id: string;
+											_type: 'goodpartyOrg_landingPages';
+											name: Field_pageName | null;
+											label: null;
+											title: null;
+											href: string;
+									  }
+									| {
+											_id: string;
+											_type: 'policy';
+											name: Field_policyName | null;
+											label: null;
+											title: null;
+											href: string;
+									  }
+									| {
+											_id: string;
+											_type: 'topics';
+											name: Field_name | null;
+											label: Field_pageSubtitle | null;
+											title: null;
+											href: string;
+									  }
+									| {}
+									| null;
+						  }
+					> | null;
+					level?: number;
+					_type: 'block';
+					_key: string;
+			  }
+			| {
+					_key: string;
+					action: Field_ctaAction | null;
+					hierarchy: Field_buttonHierarchy | null;
+					link:
+						| {
+								_id: string;
+								_type: 'article';
+								name: null;
+								label: null;
+								title: Field_editorialTitle | null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'categories';
+								name: Field_name | null;
+								label: Field_pageSubtitle | null;
+								title: null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'glossary';
+								name: null;
+								label: null;
+								title: Field_glossaryTerm | null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_allArticles';
+								name: Field_pageName | null;
+								label: null;
+								title: Field_pageTitle | null;
+								href: '/blog';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_allComponents';
+								name: Field_pageName | null;
+								label: null;
+								title: null;
+								href: '/all';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_contact';
+								name: null;
+								label: null;
+								title: null;
+								href: '/contact';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_glossary';
+								name: Field_name | null;
+								label: Field_pageSubtitle | null;
+								title: null;
+								href: '/political-terms';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_home';
+								name: Field_pageName | null;
+								label: null;
+								title: null;
+								href: '/';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_landingPages';
+								name: Field_pageName | null;
+								label: null;
+								title: null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'policy';
+								name: Field_policyName | null;
+								label: null;
+								title: null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'topics';
+								name: Field_name | null;
+								label: Field_pageSubtitle | null;
+								title: null;
+								href: string;
+						  }
+						| {}
+						| null;
+					field_externalLink: Field_externalLink | null;
+					anchor: string | '' | null;
+					ref_download: {
+						_id: string;
+						_type: 'download';
+						name: Field_documentName | null;
+						file: {
+							_id: string;
+							_type: 'sanity.fileAsset';
+							_createdAt: string;
+							_updatedAt: string;
+							_rev: string;
+							originalFilename?: string;
+							label?: string;
+							title?: string;
+							description?: string;
+							altText?: string;
+							sha1hash?: string;
+							extension?: string;
+							mimeType?: string;
+							size?: number;
+							assetId?: string;
+							uploadId?: string;
+							path?: string;
+							url?: string;
+							source?: SanityAssetSourceData;
+						} | null;
+					} | null;
+					text: Field_buttonText | null;
+					formId: Field_formId | null;
+			  }
+			| {
+					_key: string;
+					action: Field_ctaActionWithShared | null;
+					hierarchy: Field_buttonHierarchy | null;
+					link:
+						| {
+								_id: string;
+								_type: 'article';
+								name: null;
+								label: null;
+								title: Field_editorialTitle | null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'categories';
+								name: Field_name | null;
+								label: Field_pageSubtitle | null;
+								title: null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'glossary';
+								name: null;
+								label: null;
+								title: Field_glossaryTerm | null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_allArticles';
+								name: Field_pageName | null;
+								label: null;
+								title: Field_pageTitle | null;
+								href: '/blog';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_allComponents';
+								name: Field_pageName | null;
+								label: null;
+								title: null;
+								href: '/all';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_contact';
+								name: null;
+								label: null;
+								title: null;
+								href: '/contact';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_glossary';
+								name: Field_name | null;
+								label: Field_pageSubtitle | null;
+								title: null;
+								href: '/political-terms';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_home';
+								name: Field_pageName | null;
+								label: null;
+								title: null;
+								href: '/';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_landingPages';
+								name: Field_pageName | null;
+								label: null;
+								title: null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'policy';
+								name: Field_policyName | null;
+								label: null;
+								title: null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'topics';
+								name: Field_name | null;
+								label: Field_pageSubtitle | null;
+								title: null;
+								href: string;
+						  }
+						| {}
+						| null;
+					field_externalLink: Field_externalLink | null;
+					anchor: string | '' | null;
+					ref_download: {
+						_id: string;
+						_type: 'download';
+						name: Field_documentName | null;
+						file: {
+							_id: string;
+							_type: 'sanity.fileAsset';
+							_createdAt: string;
+							_updatedAt: string;
+							_rev: string;
+							originalFilename?: string;
+							label?: string;
+							title?: string;
+							description?: string;
+							altText?: string;
+							sha1hash?: string;
+							extension?: string;
+							mimeType?: string;
+							size?: number;
+							assetId?: string;
+							uploadId?: string;
+							path?: string;
+							url?: string;
+							source?: SanityAssetSourceData;
+						} | null;
+					} | null;
+					text: Field_buttonText | null;
+					formId: Field_formId | null;
+			  }
+		> | null;
+	} | null;
+	generalContentTags?: GeneralContentTags;
+}>;
+// Variable: faqByIdQuery
+// Query: *[_type=="faq"&&_id==$id][0]{_id,_updatedAt,...,faqOverview{...,block_answer[]{_type=="button"=>{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)},_type!="button"=>{...,markDefs[]{...,_type=="inlineInternalLink"=>{field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}}}}}}}}
+export type FaqByIdQueryResult = {
+	_id: string;
+	_updatedAt: string;
+	_type: 'faq';
+	_createdAt: string;
+	_rev: string;
+	faqOverview: {
+		_type: 'faqOverview';
+		field_question?: Field_question;
+		block_answer: Array<
+			| {
+					children?: Array<{
+						marks?: Array<string>;
+						text?: string;
+						_type: 'span';
+						_key: string;
+					}>;
+					style?: 'normal';
+					listItem?: 'bullet' | 'checked' | 'number';
+					markDefs: Array<
+						| {
+								_key: string;
+								_type: 'inlineEmailLink';
+								field_emailLink?: Field_emailLink;
+						  }
+						| {
+								_key: string;
+								_type: 'inlineExternalLink';
+								field_externalLink?: Field_externalLink;
+						  }
+						| {
+								_key: string;
+								_type: 'inlineInternalLink';
+								field_internalLink:
+									| {
+											_id: string;
+											_type: 'article';
+											name: null;
+											label: null;
+											title: Field_editorialTitle | null;
+											href: string;
+									  }
+									| {
+											_id: string;
+											_type: 'categories';
+											name: Field_name | null;
+											label: Field_pageSubtitle | null;
+											title: null;
+											href: string;
+									  }
+									| {
+											_id: string;
+											_type: 'glossary';
+											name: null;
+											label: null;
+											title: Field_glossaryTerm | null;
+											href: string;
+									  }
+									| {
+											_id: string;
+											_type: 'goodpartyOrg_allArticles';
+											name: Field_pageName | null;
+											label: null;
+											title: Field_pageTitle | null;
+											href: '/blog';
+									  }
+									| {
+											_id: string;
+											_type: 'goodpartyOrg_allComponents';
+											name: Field_pageName | null;
+											label: null;
+											title: null;
+											href: '/all';
+									  }
+									| {
+											_id: string;
+											_type: 'goodpartyOrg_contact';
+											name: null;
+											label: null;
+											title: null;
+											href: '/contact';
+									  }
+									| {
+											_id: string;
+											_type: 'goodpartyOrg_glossary';
+											name: Field_name | null;
+											label: Field_pageSubtitle | null;
+											title: null;
+											href: '/political-terms';
+									  }
+									| {
+											_id: string;
+											_type: 'goodpartyOrg_home';
+											name: Field_pageName | null;
+											label: null;
+											title: null;
+											href: '/';
+									  }
+									| {
+											_id: string;
+											_type: 'goodpartyOrg_landingPages';
+											name: Field_pageName | null;
+											label: null;
+											title: null;
+											href: string;
+									  }
+									| {
+											_id: string;
+											_type: 'policy';
+											name: Field_policyName | null;
+											label: null;
+											title: null;
+											href: string;
+									  }
+									| {
+											_id: string;
+											_type: 'topics';
+											name: Field_name | null;
+											label: Field_pageSubtitle | null;
+											title: null;
+											href: string;
+									  }
+									| {}
+									| null;
+						  }
+					> | null;
+					level?: number;
+					_type: 'block';
+					_key: string;
+			  }
+			| {
+					_key: string;
+					action: Field_ctaAction | null;
+					hierarchy: Field_buttonHierarchy | null;
+					link:
+						| {
+								_id: string;
+								_type: 'article';
+								name: null;
+								label: null;
+								title: Field_editorialTitle | null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'categories';
+								name: Field_name | null;
+								label: Field_pageSubtitle | null;
+								title: null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'glossary';
+								name: null;
+								label: null;
+								title: Field_glossaryTerm | null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_allArticles';
+								name: Field_pageName | null;
+								label: null;
+								title: Field_pageTitle | null;
+								href: '/blog';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_allComponents';
+								name: Field_pageName | null;
+								label: null;
+								title: null;
+								href: '/all';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_contact';
+								name: null;
+								label: null;
+								title: null;
+								href: '/contact';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_glossary';
+								name: Field_name | null;
+								label: Field_pageSubtitle | null;
+								title: null;
+								href: '/political-terms';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_home';
+								name: Field_pageName | null;
+								label: null;
+								title: null;
+								href: '/';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_landingPages';
+								name: Field_pageName | null;
+								label: null;
+								title: null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'policy';
+								name: Field_policyName | null;
+								label: null;
+								title: null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'topics';
+								name: Field_name | null;
+								label: Field_pageSubtitle | null;
+								title: null;
+								href: string;
+						  }
+						| {}
+						| null;
+					field_externalLink: Field_externalLink | null;
+					anchor: string | '' | null;
+					ref_download: {
+						_id: string;
+						_type: 'download';
+						name: Field_documentName | null;
+						file: {
+							_id: string;
+							_type: 'sanity.fileAsset';
+							_createdAt: string;
+							_updatedAt: string;
+							_rev: string;
+							originalFilename?: string;
+							label?: string;
+							title?: string;
+							description?: string;
+							altText?: string;
+							sha1hash?: string;
+							extension?: string;
+							mimeType?: string;
+							size?: number;
+							assetId?: string;
+							uploadId?: string;
+							path?: string;
+							url?: string;
+							source?: SanityAssetSourceData;
+						} | null;
+					} | null;
+					text: Field_buttonText | null;
+					formId: Field_formId | null;
+			  }
+			| {
+					_key: string;
+					action: Field_ctaActionWithShared | null;
+					hierarchy: Field_buttonHierarchy | null;
+					link:
+						| {
+								_id: string;
+								_type: 'article';
+								name: null;
+								label: null;
+								title: Field_editorialTitle | null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'categories';
+								name: Field_name | null;
+								label: Field_pageSubtitle | null;
+								title: null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'glossary';
+								name: null;
+								label: null;
+								title: Field_glossaryTerm | null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_allArticles';
+								name: Field_pageName | null;
+								label: null;
+								title: Field_pageTitle | null;
+								href: '/blog';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_allComponents';
+								name: Field_pageName | null;
+								label: null;
+								title: null;
+								href: '/all';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_contact';
+								name: null;
+								label: null;
+								title: null;
+								href: '/contact';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_glossary';
+								name: Field_name | null;
+								label: Field_pageSubtitle | null;
+								title: null;
+								href: '/political-terms';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_home';
+								name: Field_pageName | null;
+								label: null;
+								title: null;
+								href: '/';
+						  }
+						| {
+								_id: string;
+								_type: 'goodpartyOrg_landingPages';
+								name: Field_pageName | null;
+								label: null;
+								title: null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'policy';
+								name: Field_policyName | null;
+								label: null;
+								title: null;
+								href: string;
+						  }
+						| {
+								_id: string;
+								_type: 'topics';
+								name: Field_name | null;
+								label: Field_pageSubtitle | null;
+								title: null;
+								href: string;
+						  }
+						| {}
+						| null;
+					field_externalLink: Field_externalLink | null;
+					anchor: string | '' | null;
+					ref_download: {
+						_id: string;
+						_type: 'download';
+						name: Field_documentName | null;
+						file: {
+							_id: string;
+							_type: 'sanity.fileAsset';
+							_createdAt: string;
+							_updatedAt: string;
+							_rev: string;
+							originalFilename?: string;
+							label?: string;
+							title?: string;
+							description?: string;
+							altText?: string;
+							sha1hash?: string;
+							extension?: string;
+							mimeType?: string;
+							size?: number;
+							assetId?: string;
+							uploadId?: string;
+							path?: string;
+							url?: string;
+							source?: SanityAssetSourceData;
+						} | null;
+					} | null;
+					text: Field_buttonText | null;
+					formId: Field_formId | null;
+			  }
+		> | null;
+	} | null;
+	generalContentTags?: GeneralContentTags;
+} | null;
 // Variable: quoteCollectionByIdQuery
 // Query: *[_type=="quoteCollections"&&_id==$id][0]{quoteCollectionContent{list_chooseQuotes[]->{_key,quote{field_quote,ref_quoteBy->{_type,personOverview{field_personName,field_jobTitleOrRole,img_profilePicture},organisationOverview{field_organisationName,img_logo}}}}}}
 export type QuoteCollectionByIdQueryResult = {
@@ -234110,6 +234893,8 @@ declare module '@sanity/client' {
 		'*[_type=="goodpartyOrg_navigation"][0]{"navigationList":primaryNavigation.list_primaryNavigation[]{_type=="internalLink"=>{_key,_type,"label":field_linkText,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},"icon":field_linkIcon},_type=="externalLink"=>{_key,_type,"label":field_linkText,"link":{"href":field_externalLink},"icon":field_linkIcon},_type=="navigationGroup"=>{_key,_type,"label":field_linkText,"list_navigationGroup":list_navigationGroup[]{_type=="internalLinkWithIcon"=>{_key,_type,"label":field_linkText,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},"icon":field_linkIcon},_type=="externalLinkWithIcon"=>{_key,_type,"label":field_linkText,"link":{"href":field_externalLink},"icon":field_linkIcon}}}},"primaryCTA":primaryNavigation.loggedOutCtAs.ref_navigationPrimaryCTA->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":primaryNavigation.loggedOutCtAs.ref_navigationSecondaryCTA->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}}': GoodpartyOrg_navigationQueryResult;
 		'*[_type=="goodpartyOrg_footer"][0]{...footer,"list_footerLegalNavigation":footer.list_footerLegalNavigation[]{_type=="internalLink"=>{_key,_type,"label":field_linkText,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},"icon":field_linkIcon},_type=="externalLink"=>{_key,_type,"label":field_linkText,"link":{"href":field_externalLink},"icon":field_linkIcon}},"list_footerNavigation":footer.list_footerNavigation[]{_key,_type,"groupTitle":field_title,"list_footerNavigationGroup":list_footerNavigationGroup[]{_type=="externalLink"=>{_key,_type,"label":field_linkText,"link":{"href":field_externalLink},"icon":field_linkIcon},_type=="internalLink"=>{_key,_type,"label":field_linkText,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},"icon":field_linkIcon}}}}': GoodpartyOrg_footerQueryResult;
 		'*[_type=="article"&&editorialOverview.field_slug==$slug][0]{...,editorialOverview{...,ref_author->},relatedArticles{...,ref_stickyRelatedArticle->{_id,_type,editorialAssets,editorialOverview{...,ref_author->},"category":editorialContentTags.ref_catgories->{...,tagOverview,_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)}},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)}},list_relatedArticles[]->{_id,_type,editorialAssets,editorialOverview{...,ref_author->},"category":editorialContentTags.ref_catgories->{...,tagOverview,_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)}},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)}}},ctaSection{...,field_componentColor6Colors,"image":coalesce(ctaAssets,campaignPromotion.ref_promotion->ctaAssets),_key,_type,field_ctaType,field_ctaType=="Reference"=>{"cta":campaignPromotion.ref_promotion->{"overview":ctaMessaging{...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}}}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)}}}.cta,field_ctaType=="Manual"=>{"cta":{"overview":ctaMessaging{...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}}}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)}}}.cta},stickySidebarCta{field_showStickySidebarCta,ctaConfig{...,field_componentColor6Colors,"image":coalesce(ctaAssets,campaignPromotion.ref_promotion->ctaAssets),_key,_type,field_ctaType,field_ctaType=="Reference"=>{"cta":campaignPromotion.ref_promotion->{"overview":ctaMessaging{...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}}}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)}}}.cta,field_ctaType=="Manual"=>{"cta":{"overview":ctaMessaging{...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}}}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)}}}.cta}},editorialContentTags{"topics":list_topics[]->{...,_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)}},"category":ref_catgories->{...,tagOverview,_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)}}},contentSections{...,block_editorialContentSections[]{_key,_type,_type=="block"||_type=="imageContentSection"||_type=="tableGroup"=>{...},_type=="videoSection"=>{field_videoEmbedCode,field_caption},_type=="imageCta"=>{field_componentColor6Colors,"image":coalesce(ctaAssets,campaignPromotion.ref_promotion->ctaAssets),_key,_type,field_ctaType,field_ctaType=="Reference"=>{"cta":campaignPromotion.ref_promotion->{"overview":ctaMessaging{...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}}}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)}}}.cta,field_ctaType=="Manual"=>{"cta":{"overview":ctaMessaging{...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}}}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)}}}.cta},_type=="ctaSection"=>{field_componentColor6Colors,"image":coalesce(ctaAssets,campaignPromotion.ref_promotion->ctaAssets),_key,_type,field_ctaType,field_ctaType=="Reference"=>{"cta":campaignPromotion.ref_promotion->{"overview":ctaMessaging{...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}}}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)}}}.cta,field_ctaType=="Manual"=>{"cta":{"overview":ctaMessaging{...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}}}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)}}}.cta},_type=="inlineQuoteSection"=>{...,ref_quoteBy->},_type=="button"=>{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)},_type=="faqs"=>{...,list_faQs[]->{...,faqOverview{...,block_answer[]{_type=="button"=>{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)},_type!="button"=>{...,markDefs[]{...,_type=="inlineInternalLink"=>{field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}}}}}}}}},_type=="callout"=>{...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}}}}}},markDefs[]{...,_type=="inlineInternalLink"=>{field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}}}}},_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)}}': ArticleQueryResult;
+		'*[_type=="faq"] | order(faqOverview.field_question asc){_id,_updatedAt,...,faqOverview{...,block_answer[]{_type=="button"=>{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)},_type!="button"=>{...,markDefs[]{...,_type=="inlineInternalLink"=>{field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}}}}}}}}': AllFaqsQueryResult;
+		'*[_type=="faq"&&_id==$id][0]{_id,_updatedAt,...,faqOverview{...,block_answer[]{_type=="button"=>{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}},field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)},_type!="button"=>{...,markDefs[]{...,_type=="inlineInternalLink"=>{field_internalLink{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}}}}}}}}': FaqByIdQueryResult;
 		'*[_type=="quoteCollections"&&_id==$id][0]{quoteCollectionContent{list_chooseQuotes[]->{_key,quote{field_quote,ref_quoteBy->{_type,personOverview{field_personName,field_jobTitleOrRole,img_profilePicture},organisationOverview{field_organisationName,img_logo}}}}}}': QuoteCollectionByIdQueryResult;
 	}
 }

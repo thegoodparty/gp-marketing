@@ -493,10 +493,6 @@ const GLOBAL_TEMPLATE_PREVIEW_TARGETS = {
 		field_electionTargetSlug: 'ny',
 		field_positionSlug: 'governor',
 	},
-	candidateProfile: {
-		field_electionTargetType: 'candidate',
-		field_electionTargetSlug: 'example/candidate-slug',
-	},
 } as const;
 
 export const globalElectionTemplateSeedDocuments = [
@@ -505,7 +501,6 @@ export const globalElectionTemplateSeedDocuments = [
 		_type: 'goodpartyOrg_globalTemplate',
 		field_title: 'Candidate Profile',
 		field_electionTemplateType: 'candidateProfile',
-		previewTarget: GLOBAL_TEMPLATE_PREVIEW_TARGETS.candidateProfile,
 		pageSections: { list_pageSections: tmplCandidateProfileSections },
 	},
 	{

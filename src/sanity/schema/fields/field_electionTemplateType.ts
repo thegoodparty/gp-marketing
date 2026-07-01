@@ -12,10 +12,9 @@ export const field_electionTemplateType = {
 	title: 'Template Type',
 	type: 'string',
 	description:
-		'Which election page family this template applies to. Global templates define the site-wide default; custom templates override for specific places, positions, or candidates.',
+		'Which election page family this template applies to. Custom templates override the global default for matching places, positions, or candidates.',
 	options: {
 		list: [...ELECTION_TEMPLATE_TYPES],
-		layout: 'radio',
 	},
 	validation: (rule: { required: () => unknown }) => rule.required(),
 };
@@ -30,7 +29,6 @@ export const field_electionTargetType = {
 			{ title: 'Position (race slug)', value: 'position' },
 			{ title: 'Candidate (candidate slug)', value: 'candidate' },
 		],
-		layout: 'radio',
 	},
 	validation: (rule: { required: () => unknown }) => rule.required(),
 };

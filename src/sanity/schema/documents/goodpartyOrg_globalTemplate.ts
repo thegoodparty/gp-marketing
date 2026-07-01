@@ -31,7 +31,7 @@ export const goodpartyOrg_globalTemplate = {
 			...field_electionTemplateType,
 			name: 'field_electionTemplateType',
 			readOnly: true,
-			description: 'Fixed per global template entry in Studio.',
+			description: 'Fixed for this template. Determines which election page family it controls.',
 		},
 		{
 			name: 'field_instructions',
@@ -79,7 +79,7 @@ export const goodpartyOrg_globalTemplate = {
 				fallback: { title: 'Global Election Template' },
 			};
 			const title = resolveValue('title', goodpartyOrg_globalTemplate.preview.select, x);
-			const templateType = resolveValue('templateType', goodpartyOrg_globalTemplate.preview.select, x);
+			const templateType = x['templateType'] as string | undefined;
 			return handleReplacements(
 				{
 					title: title || infer.fallback.title,

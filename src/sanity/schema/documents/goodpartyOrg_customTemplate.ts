@@ -117,7 +117,7 @@ export const goodpartyOrg_customTemplate = {
 				fallback: { title: 'Custom Election Template' },
 			};
 			const title = resolveValue('title', goodpartyOrg_customTemplate.preview.select, x);
-			const templateType = resolveValue('templateType', goodpartyOrg_customTemplate.preview.select, x);
+			const templateType = x['templateType'] as string | undefined;
 			const count = Array.isArray(x.targetCount) ? x.targetCount.length : 0;
 			const enabled = x.enabled === false ? 'disabled' : 'enabled';
 			return handleReplacements(

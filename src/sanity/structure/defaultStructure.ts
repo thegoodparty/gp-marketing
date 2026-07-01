@@ -47,9 +47,7 @@ export function defaultStructure(S: StructureBuilder) {
       .title(title)
       .icon(getIcon('Template'))
       .child(
-        S.document()
-          .schemaType('goodpartyOrg_globalTemplate')
-          .documentId(documentId)
+        S.defaultDocument({ schemaType: 'goodpartyOrg_globalTemplate', documentId })
           .title(title),
       );
   }

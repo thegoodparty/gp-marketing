@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { PortableText, type PortableTextProps } from '@portabletext/react';
 
-import { resolveComponentColor } from './_lib/resolveComponentColor.tsx';
+import { resolveInternalLinkHref } from '~/lib/faqSlugs';
 
 import { Anchor } from './Anchor.tsx';
 import { CircleIcon } from './CircleIcon.tsx';
@@ -22,10 +22,11 @@ const types = () => ({
 
 const additionalMarks = {
 	inlineInternalLink(mark) {
+		const href = resolveInternalLinkHref(mark.value?.field_internalLink);
 		return (
 			<>
-				{mark.value?.field_internalLink?.href ? (
-					<Anchor href={mark.value?.field_internalLink?.href} className='link-inverse'>
+				{href ? (
+					<Anchor href={href} className='link-inverse'>
 						{mark.children}
 					</Anchor>
 				) : (

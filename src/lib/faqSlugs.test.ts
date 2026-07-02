@@ -4,7 +4,9 @@ import {
 	findFaqBySlug,
 	getAllFaqSlugs,
 	getFaqHref,
+	getFaqHrefForDocument,
 	getFaqSitemapEntries,
+	resolveInternalLinkHref,
 	slugifyFaqQuestion,
 } from './faqSlugs';
 
@@ -147,6 +149,29 @@ describe('findFaqBySlug', () => {
 
 		expect(slugs[0]).toBe('what-is-x');
 		expect(findFaqBySlug(collisionFaqs, 'what-is-x')?._id).toBe('aaa');
+	});
+
+	it('resolves href for a single FAQ document without stored slug', () => {
+		const faq = { _id: 'abc123', faqOverview: { field_question: 'What is GoodParty.org?' } };
+		expect(getFaqHrefForDocument(faq)).toBe('/frequently-asked-questions/what-is-goodpartyorg');
+	});
+});
+
+describe('resolveInternalLinkHref', () => {
+	it('resolves FAQ links from question when slug is missing', () => {
+		const link = {
+			_type: 'faq',
+			_id: 'abc123',
+			href: '/frequently-asked-questions/abc123',
+			faqOverview: { field_question: 'What is GoodParty.org?' },
+		};
+		expect(resolveInternalLinkHref(link)).toBe('/frequently-asked-questions/what-is-goodpartyorg');
+	});
+
+	it('passes through non-FAQ href values', () => {
+		expect(resolveInternalLinkHref({ _type: 'article', href: '/blog/article/my-post' })).toBe(
+			'/blog/article/my-post',
+		);
 	});
 });
 

@@ -32,6 +32,7 @@ export const faqOverview = {
           const existing = await client.fetch(
             `*[_type == "faq" && faqOverview.field_slug == $slug && _id != $publishedId && _id != $draftId][0]._id`,
             { slug: value, publishedId, draftId: `drafts.${publishedId}` },
+            { perspective: 'published' },
           );
           return existing ? `Slug "${value}" is already used by another FAQ` : true;
         }),

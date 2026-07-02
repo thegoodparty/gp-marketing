@@ -1,7 +1,8 @@
 import { convert } from 'html-to-text';
 
 import { US_STATES } from '~/constants/usStates';
-import type { CandidacyItem, FindByRaceIdResponse, PlaceItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
+import type { CandidacyItem, FindByRaceIdResponse, PlaceItem, PlaceRace, PlaceWithFacts, RaceDetail } from '~/types/elections';
+import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
 import type { FactsCardProps } from '~/ui/FactsCard';
 
 import { permanentRedirect } from 'next/navigation';
@@ -262,6 +263,95 @@ export function getYearFromDateString(dateStr: string): number {
 	if (!Number.isNaN(parsed.getTime())) return parsed.getFullYear();
 	const yearMatch = /\b(19|20)\d{2}\b/.exec(dateStr);
 	return yearMatch ? parseInt(yearMatch[0], 10) : NaN;
+}
+
+/** Race columns for location pages that build office lists from place races. */
+export const PLACE_RACE_COLUMNS =
+	'slug,normalizedPositionName,electionDate,positionDescription,positionLevel,isPrimary';
+
+function startOfLocalDay(date: Date): Date {
+	return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function parseElectionDateAsLocal(dateStr: string): Date {
+	if (DATE_ONLY_REGEX.test(dateStr)) {
+		return parseDateOnlyAsLocal(dateStr);
+	}
+	return startOfLocalDay(new Date(dateStr));
+}
+
+/** True when the election calendar day is strictly before today (local time). */
+export function isElectionDateBeforeToday(
+	dateStr: string | undefined,
+	today: Date = new Date(),
+): boolean {
+	if (!dateStr) return false;
+	const electionDay = startOfLocalDay(parseElectionDateAsLocal(dateStr));
+	const todayDay = startOfLocalDay(today);
+	return electionDay < todayDay;
+}
+
+/**
+ * For place races whose electionDate is already past, fetches the general-election
+ * record via getRaceBySlug (races API filters to isPrimary:false).
+ */
+export async function resolvePlaceRaceElectionDates(
+	races: PlaceRace[],
+	today: Date = new Date(),
+): Promise<Map<string, string>> {
+	const { getRaceBySlug } = await import('~/lib/electionsApi');
+	const resolved = new Map<string, string>();
+
+	const staleSlugs = [
+		...new Set(
+			races
+				.filter(r => r.slug && r.electionDate && isElectionDateBeforeToday(r.electionDate, today))
+				.map(r => r.slug),
+		),
+	];
+
+	await Promise.all(
+		staleSlugs.map(async slug => {
+			const placeRace = races.find(r => r.slug === slug);
+			const fallback = placeRace?.electionDate ?? '';
+			const race = await getRaceBySlug(slug);
+			resolved.set(slug, race?.electionDate ?? fallback);
+		}),
+	);
+
+	return resolved;
+}
+
+export type BuildOfficeItemsFromPlaceRacesConfig = {
+	type: string;
+	buildHref: (race: PlaceRace) => string;
+};
+
+export function buildOfficeItemsFromPlaceRaces(
+	races: PlaceRace[],
+	resolvedDates: Map<string, string>,
+	config: BuildOfficeItemsFromPlaceRacesConfig,
+): { offices: OfficeItem[]; dataYears: number[] } {
+	const offices: OfficeItem[] = races.map(race => ({
+		id: String(race.id),
+		type: config.type,
+		position: race.normalizedPositionName ?? race.name ?? 'Position',
+		nextElectionDate: resolvedDates.get(race.slug) ?? race.electionDate ?? '',
+		href: config.buildHref(race),
+	}));
+
+	const dataYears = [
+		...new Set(
+			races
+				.map(r => {
+					const dateStr = resolvedDates.get(r.slug) ?? r.electionDate;
+					return dateStr ? getYearFromDateString(dateStr) : NaN;
+				})
+				.filter((y): y is number => !Number.isNaN(y)),
+		),
+	].sort((a, b) => a - b);
+
+	return { offices, dataYears };
 }
 
 export function formatFilingPeriod(

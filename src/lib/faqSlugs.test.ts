@@ -128,6 +128,36 @@ describe('buildFaqSlugMap', () => {
 		expect(slugs[0]).toBe('what-is-x-aaa');
 		expect(findFaqBySlug(collisionFaqs, 'what-is-x')?._id).toBe('bbb');
 	});
+
+	it('assigns unique slugs for published and draft pair with same question', () => {
+		const faqs = [
+			{ _id: 'abc123', faqOverview: { field_question: 'What is X?' } },
+			{ _id: 'drafts.abc123', faqOverview: { field_question: 'What is X?' } },
+		];
+
+		const slugs = getAllFaqSlugs(faqs);
+
+		expect(slugs).toHaveLength(2);
+		expect(new Set(slugs).size).toBe(2);
+		expect(slugs[0]).toBe('what-is-x');
+		expect(slugs[1]).toBe('what-is-x-abc123');
+	});
+
+	it('uses attempt counter when suffixed slug is already taken', () => {
+		const faqs = [
+			{ _id: 'abc123', faqOverview: { field_question: 'What is X?' } },
+			{ _id: 'holder', faqOverview: { field_question: 'Other', field_slug: 'what-is-x-abc123' } },
+			{ _id: 'drafts.abc123', faqOverview: { field_question: 'What is X?' } },
+		];
+
+		const slugs = getAllFaqSlugs(faqs);
+
+		expect(slugs).toHaveLength(3);
+		expect(new Set(slugs).size).toBe(3);
+		expect(slugs[0]).toBe('what-is-x');
+		expect(slugs[1]).toBe('what-is-x-abc123');
+		expect(slugs[2]).toBe('what-is-x-abc123-2');
+	});
 });
 
 describe('findFaqBySlug', () => {

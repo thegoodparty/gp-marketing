@@ -53,10 +53,13 @@ export function buildFaqSlugMap(faqs: ReadonlyArray<FaqLike>): Map<string, strin
 	const idToSlug = new Map<string, string>();
 
 	function assignSlug(faq: FaqLike, baseSlug: string) {
-		let slug = baseSlug || faq._id.replace(/^drafts\./, '');
+		const base = baseSlug || faq._id.replace(/^drafts\./, '');
+		let slug = base;
+		let attempt = 0;
 
 		while (slugToId.has(slug) && slugToId.get(slug) !== faq._id) {
-			slug = `${slug}-${shortIdSuffix(faq._id)}`;
+			attempt++;
+			slug = `${base}-${shortIdSuffix(faq._id)}${attempt > 1 ? `-${attempt}` : ''}`;
 		}
 
 		slugToId.set(slug, faq._id);

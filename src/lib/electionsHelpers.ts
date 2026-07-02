@@ -286,9 +286,13 @@ export function isElectionDateBeforeToday(
 	today: Date = new Date(),
 ): boolean {
 	if (!dateStr) return false;
-	const electionDay = startOfLocalDay(parseElectionDateAsLocal(dateStr));
-	const todayDay = startOfLocalDay(today);
-	return electionDay < todayDay;
+	try {
+		const electionDay = startOfLocalDay(parseElectionDateAsLocal(dateStr));
+		const todayDay = startOfLocalDay(today);
+		return electionDay < todayDay;
+	} catch {
+		return false;
+	}
 }
 
 /**

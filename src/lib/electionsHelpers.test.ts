@@ -379,6 +379,12 @@ describe('isElectionDateBeforeToday', () => {
 	test('returns false for UTC-midnight ISO datetime on same calendar day', () => {
 		expect(isElectionDateBeforeToday('2026-07-01T00:00:00.000Z', today)).toBe(false);
 	});
+
+	test('returns false for a malformed date string', () => {
+		expect(isElectionDateBeforeToday('TBD', today)).toBe(false);
+		expect(isElectionDateBeforeToday('', today)).toBe(false);
+		expect(isElectionDateBeforeToday('not-a-date', today)).toBe(false);
+	});
 });
 
 function placeRace(overrides: Partial<PlaceRace> = {}): PlaceRace {

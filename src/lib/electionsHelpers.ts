@@ -805,22 +805,18 @@ export function inferSidebarLinkIcon(href: string): string {
 	return 'globe';
 }
 
-/** Human-readable label for a candidate profile link (first URL is always Website). */
-export function formatSidebarLinkLabel(href: string, index: number): string {
-	if (index === 0) return 'Website';
+/** Human-readable label for a candidate profile link inferred from URL. */
+export function formatSidebarLinkLabel(href: string): string {
 	const lower = href.toLowerCase();
 	if (lower.startsWith('mailto:')) return 'Email';
 	if (lower.includes('linkedin.com')) return 'LinkedIn';
 	if (lower.includes('facebook.com') || lower.includes('fb.com')) return 'Facebook';
 	if (lower.includes('twitter.com') || lower.includes('x.com')) return 'Twitter';
 	if (lower.includes('instagram.com')) return 'Instagram';
-	try {
-		const url = new URL(href.startsWith('http') ? href : `https://${href}`);
-		const host = url.hostname.replace(/^www\./, '');
-		return host.charAt(0).toUpperCase() + host.slice(1);
-	} catch {
-		return `Link ${index + 1}`;
-	}
+	if (lower.includes('wikipedia.org')) return 'Wikipedia';
+	if (lower.includes('youtube.com') || lower.includes('youtu.be')) return 'YouTube';
+	if (lower.includes('tiktok.com')) return 'TikTok';
+	return 'Website';
 }
 
 export type SidebarLink = { label: string; icon: string; href: string };

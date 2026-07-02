@@ -46,9 +46,9 @@ function buildSectionOverrides(
 
 	const links: OfficeData['links'] = [];
 	if (candidate.urls?.length) {
-		candidate.urls.forEach((url, i) => {
+		candidate.urls.forEach((url) => {
 			links.push({
-				label: formatSidebarLinkLabel(url, i),
+				label: formatSidebarLinkLabel(url),
 				icon: inferSidebarLinkIcon(url),
 				href: url,
 			});

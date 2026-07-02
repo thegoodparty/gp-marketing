@@ -814,7 +814,7 @@ export function formatSidebarLinkLabel(href: string, index: number): string {
 	if (lower.startsWith('mailto:')) return 'Email';
 	if (lower.includes('linkedin.com')) return 'LinkedIn';
 	if (lower.includes('facebook.com') || lower.includes('fb.com')) return 'Facebook';
-	if (lower.includes('twitter.com') || lower.includes('x.com')) return 'Twitter';
+	if (lower.includes('twitter.com') || /(?:^|[/.])x\.com(?:\/|$)/.test(lower)) return 'Twitter';
 	if (lower.includes('instagram.com')) return 'Instagram';
 	if (lower.includes('wikipedia.org')) return 'Wikipedia';
 	if (lower.includes('youtube.com') || lower.includes('youtu.be')) return 'YouTube';

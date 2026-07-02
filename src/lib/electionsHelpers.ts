@@ -893,20 +893,25 @@ export function inferSidebarLinkIcon(href: string): string {
 	if (lower.startsWith('mailto:')) return 'mail';
 	if (lower.includes('linkedin.com')) return 'linkedin';
 	if (lower.includes('facebook.com') || lower.includes('fb.com')) return 'facebook';
-	if (lower.includes('twitter.com') || lower.includes('x.com')) return 'twitter';
+	if (lower.includes('twitter.com') || /(?:^|[/.])x\.com(?:\/|$)/.test(lower)) return 'twitter';
 	if (lower.includes('instagram.com')) return 'instagram';
+	if (lower.includes('wikipedia.org')) return 'book-open';
+	if (lower.includes('youtube.com') || lower.includes('youtu.be')) return 'youtube';
+	if (lower.includes('tiktok.com')) return 'video';
 	return 'globe';
 }
 
-/** Human-readable label for a candidate profile link (first URL is always Website). */
+/** Human-readable label for a candidate profile link inferred from URL. */
 export function formatSidebarLinkLabel(href: string, index: number): string {
-	if (index === 0) return 'Website';
 	const lower = href.toLowerCase();
 	if (lower.startsWith('mailto:')) return 'Email';
 	if (lower.includes('linkedin.com')) return 'LinkedIn';
 	if (lower.includes('facebook.com') || lower.includes('fb.com')) return 'Facebook';
-	if (lower.includes('twitter.com') || lower.includes('x.com')) return 'Twitter';
+	if (lower.includes('twitter.com') || /(?:^|[/.])x\.com(?:\/|$)/.test(lower)) return 'Twitter';
 	if (lower.includes('instagram.com')) return 'Instagram';
+	if (lower.includes('wikipedia.org')) return 'Wikipedia';
+	if (lower.includes('youtube.com') || lower.includes('youtu.be')) return 'YouTube';
+	if (lower.includes('tiktok.com')) return 'TikTok';
 	try {
 		const url = new URL(href.startsWith('http') ? href : `https://${href}`);
 		const host = url.hostname.replace(/^www\./, '');

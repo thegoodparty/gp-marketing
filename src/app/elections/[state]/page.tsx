@@ -17,7 +17,12 @@ import {
 } from '~/constants/electionsStaticSections';
 import { sanityFetch } from '~/sanity/sanityClient';
 import { quoteCollectionByIdQuery } from '~/sanity/groq';
-import { getStateName } from '~/lib/electionsHelpers';
+import {
+	buildOfficeItemsFromPlaceRaces,
+	getStateName,
+	PLACE_RACE_COLUMNS,
+	resolvePlaceRaceElectionDates,
+} from '~/lib/electionsHelpers';
 import { resolveAuthor } from '~/ui/_lib/resolveAuthor';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 import { BreadcrumbBlock } from '~/ui/BreadcrumbBlock';
@@ -57,7 +62,7 @@ export default async function Page({
 			slug: state.toLowerCase(),
 			includeChildren: false,
 			includeRaces: true,
-			raceColumns: 'slug,normalizedPositionName,electionDate,positionDescription,positionLevel',
+			raceColumns: PLACE_RACE_COLUMNS,
 		}),
 		sanityFetch({
 			query: quoteCollectionByIdQuery,
@@ -131,24 +136,14 @@ export default async function Page({
 		: (placeData?.Races ?? []).filter(
 				r => r.positionLevel?.toUpperCase() === 'STATE',
 			);
-	const stateOffices = stateRaces.map(race => {
-		const positionSlug = race.slug.split('/').slice(1).join('/');
-		return {
-			id: String(race.id),
-			type: 'State',
-			position: race.normalizedPositionName ?? race.name ?? 'Position',
-			nextElectionDate: race.electionDate ?? '',
-			href: `/elections/${state}/position/${positionSlug}`,
-		};
+	const resolvedDates = await resolvePlaceRaceElectionDates(stateRaces);
+	const { offices: stateOffices, dataYears } = buildOfficeItemsFromPlaceRaces(stateRaces, resolvedDates, {
+		type: 'State',
+		buildHref: race => {
+			const positionSlug = race.slug.split('/').slice(1).join('/');
+			return `/elections/${state}/position/${positionSlug}`;
+		},
 	});
-
-	const dataYears = [
-		...new Set(
-			stateRaces
-				.map(r => (r.electionDate ? new Date(r.electionDate).getFullYear() : NaN))
-				.filter((y): y is number => !isNaN(y)),
-		),
-	].sort((a, b) => a - b);
 
 	const defaultYear = dataYears.includes(currentYear)
 		? currentYear

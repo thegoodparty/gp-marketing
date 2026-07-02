@@ -4,6 +4,7 @@ import {
 	buildElectionPositionHrefFromRaceSlug,
 	buildFAQSchema,
 	buildJobPostingSchema,
+	buildOfficeItemsFromPlaceRaces,
 	buildRaceCandidatesHref,
 	buildRacePositionHref,
 	buildRaceSlug,
@@ -23,19 +24,21 @@ import {
 	getYearFromDateString,
 	hasSuspiciousFactsMatch,
 	inferSidebarLinkIcon,
+	isElectionDateBeforeToday,
 	placeToFactsCards,
 	redirectCityPlaceToFourLevelUrl,
 	redirectCityRaceToFourLevelUrl,
 	resolveClaimedCustomIssueText,
 	resolveClaimedTextField,
 	resolveLocalityName,
+	resolvePlaceRaceElectionDates,
 	resolveProfileAboutText,
 	resolveProfileImageUrl,
 	slugifyPositionName,
 	stripCountySuffix,
 } from './electionsHelpers';
 import { CITY_MTFCC, COUNTY_MTFCC, TOWN_MTFCC, isCityOrTownMtfcc } from './electionsApi';
-import type { PlaceItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
+import type { PlaceItem, PlaceRace, PlaceWithFacts, RaceDetail } from '~/types/elections';
 
 const originalFetch = globalThis.fetch;
 
@@ -351,6 +354,179 @@ describe('getYearFromDateString', () => {
 
 	test('returns NaN for invalid string', () => {
 		expect(getYearFromDateString('invalid')).toBeNaN();
+	});
+
+	test('extracts year from ISO datetime using calendar date portion', () => {
+		expect(getYearFromDateString('2026-01-01T00:00:00.000Z')).toBe(2026);
+	});
+});
+
+describe('isElectionDateBeforeToday', () => {
+	const today = new Date(2026, 6, 1); // July 1, 2026 local
+
+	test('returns true for a past ISO datetime', () => {
+		expect(isElectionDateBeforeToday('2026-06-02T00:00:00.000Z', today)).toBe(true);
+	});
+
+	test('returns false for UTC-midnight ISO datetime on same calendar day', () => {
+		expect(isElectionDateBeforeToday('2026-07-01T00:00:00.000Z', today)).toBe(false);
+	});
+
+	test('returns false for a future date-only string', () => {
+		expect(isElectionDateBeforeToday('2026-11-03', today)).toBe(false);
+	});
+
+	test('returns false for undefined', () => {
+		expect(isElectionDateBeforeToday(undefined, today)).toBe(false);
+	});
+
+	test('returns false when election day is today', () => {
+		expect(isElectionDateBeforeToday('2026-07-01', today)).toBe(false);
+	});
+
+	test('returns false for a malformed date string', () => {
+		expect(isElectionDateBeforeToday('TBD', today)).toBe(false);
+		expect(isElectionDateBeforeToday('', today)).toBe(false);
+		expect(isElectionDateBeforeToday('not-a-date', today)).toBe(false);
+	});
+});
+
+function placeRace(overrides: Partial<PlaceRace> = {}): PlaceRace {
+	return {
+		id: '1',
+		slug: 'ca/lieutenant-governor',
+		normalizedPositionName: 'Lieutenant Governor',
+		electionDate: '2026-06-02T00:00:00.000Z',
+		isPrimary: true,
+		...overrides,
+	};
+}
+
+describe('resolvePlaceRaceElectionDates', () => {
+	const today = new Date(2026, 6, 1);
+
+	test('does not fetch races API when primary date is still upcoming', async () => {
+		let fetchCount = 0;
+		globalThis.fetch = (async () => {
+			fetchCount += 1;
+			return new Response(JSON.stringify([]), { status: 200 });
+		}) as typeof fetch;
+
+		const races = [placeRace({ electionDate: '2026-11-03T00:00:00.000Z', isPrimary: true })];
+		const resolved = await resolvePlaceRaceElectionDates(races, today);
+
+		expect(fetchCount).toBe(0);
+		expect(resolved.size).toBe(0);
+	});
+
+	test('fetches general election date when place date is in the past', async () => {
+		withFetchMock([
+			{
+				match: url =>
+					url.includes('/v1/races?') &&
+					url.includes('raceSlug=ca%2Flieutenant-governor') &&
+					url.includes('isPrimary=false'),
+				body: [
+					{
+						id: 1,
+						slug: 'ca/lieutenant-governor',
+						name: 'Lieutenant Governor',
+						state: 'CA',
+						electionDate: '2026-11-03T00:00:00.000Z',
+						isPrimary: false,
+					},
+				],
+			},
+		]);
+
+		const resolved = await resolvePlaceRaceElectionDates([placeRace()], today);
+
+		expect(resolved.get('ca/lieutenant-governor')).toBe('2026-11-03T00:00:00.000Z');
+	});
+
+	test('does not fetch races API for a past general-election race', async () => {
+		let fetchCount = 0;
+		globalThis.fetch = (async () => {
+			fetchCount += 1;
+			return new Response(JSON.stringify([]), { status: 200 });
+		}) as typeof fetch;
+
+		const races = [placeRace({ electionDate: '2025-11-04T00:00:00.000Z', isPrimary: false })];
+		const resolved = await resolvePlaceRaceElectionDates(races, today);
+
+		expect(fetchCount).toBe(0);
+		expect(resolved.size).toBe(0);
+	});
+
+	test('does not fetch races API when isPrimary is undefined', async () => {
+		let fetchCount = 0;
+		globalThis.fetch = (async () => {
+			fetchCount += 1;
+			return new Response(JSON.stringify([]), { status: 200 });
+		}) as typeof fetch;
+
+		const races = [placeRace({ electionDate: '2026-06-02T00:00:00.000Z', isPrimary: undefined })];
+		const resolved = await resolvePlaceRaceElectionDates(races, today);
+
+		expect(fetchCount).toBe(0);
+		expect(resolved.size).toBe(0);
+	});
+
+	test('falls back to place date when races API returns nothing', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/races?'),
+				body: [],
+			},
+		]);
+
+		const races = [placeRace()];
+		const resolved = await resolvePlaceRaceElectionDates(races, today);
+
+		expect(resolved.get('ca/lieutenant-governor')).toBe('2026-06-02T00:00:00.000Z');
+	});
+});
+
+describe('buildOfficeItemsFromPlaceRaces', () => {
+	test('uses resolved dates for nextElectionDate and dataYears', () => {
+		const races = [
+			placeRace(),
+			placeRace({
+				id: '2',
+				slug: 'ca/governor',
+				normalizedPositionName: 'Governor',
+				electionDate: '2028-03-07T00:00:00.000Z',
+				isPrimary: true,
+			}),
+		];
+		const resolvedDates = new Map([
+			['ca/lieutenant-governor', '2026-11-03T00:00:00.000Z'],
+		]);
+
+		const { offices, dataYears } = buildOfficeItemsFromPlaceRaces(races, resolvedDates, {
+			type: 'State',
+			buildHref: race => `/elections/ca/position/${race.slug.split('/').slice(1).join('/')}`,
+		});
+
+		expect(offices[0]?.nextElectionDate).toBe('2026-11-03T00:00:00.000Z');
+		expect(offices[1]?.nextElectionDate).toBe('2028-03-07T00:00:00.000Z');
+		expect(dataYears).toEqual([2026, 2028]);
+	});
+
+	test('handles year-boundary ISO datetime correctly', () => {
+		const races = [
+			placeRace({
+				electionDate: '2026-01-01T00:00:00.000Z',
+			}),
+		];
+		const resolvedDates = new Map<string, string>();
+
+		const { dataYears } = buildOfficeItemsFromPlaceRaces(races, resolvedDates, {
+			type: 'State',
+			buildHref: race => `/elections/ca/position/${race.slug.split('/').slice(1).join('/')}`,
+		});
+
+		expect(dataYears).toEqual([2026]);
 	});
 });
 

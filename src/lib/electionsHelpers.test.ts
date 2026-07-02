@@ -361,7 +361,13 @@ describe('isElectionDateBeforeToday', () => {
 	const today = new Date(2026, 6, 1); // July 1, 2026 local
 
 	test('returns true for a past ISO datetime', () => {
+	test('returns true for a past ISO datetime', () => {
 		expect(isElectionDateBeforeToday('2026-06-02T00:00:00.000Z', today)).toBe(true);
+	});
+
+	test('returns false for UTC-midnight ISO datetime on same calendar day', () => {
+		expect(isElectionDateBeforeToday('2026-07-01T00:00:00.000Z', today)).toBe(false);
+	});
 	});
 
 	test('returns false for a future date-only string', () => {

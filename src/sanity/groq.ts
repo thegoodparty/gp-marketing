@@ -19,7 +19,7 @@ export const glossaryHrefGroq = `_type=="goodpartyOrg_glossary"=>{"href":"/polit
 /*language=textmate*/
 export const glossaryTermHrefGroq = `_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)}`;
 /*language=textmate*/
-export const faqHrefGroq = `_type=="faq"=>{"href":"/frequently-asked-questions/"+coalesce(faqOverview.field_slug,_id)}`;
+export const faqHrefGroq = `_type=="faq"=>{"href":defined(faqOverview.field_slug)=>"/frequently-asked-questions/"+faqOverview.field_slug}`;
 /*language=textmate*/
 export const contactHrefGroq = `_type=="goodpartyOrg_contact"=>{"href":"/contact"}`;
 /*language=textmate*/

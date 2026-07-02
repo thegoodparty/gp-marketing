@@ -137,6 +137,17 @@ describe('findFaqBySlug', () => {
 	it('returns undefined for unknown slug', () => {
 		expect(findFaqBySlug(faqs, 'does-not-exist')).toBeUndefined();
 	});
+
+	it('returns FAQ assigned by slug map when stored slug collides with computed slug', () => {
+		const collisionFaqs = [
+			{ _id: 'aaa', faqOverview: { field_question: 'What is X?' } },
+			{ _id: 'bbb', faqOverview: { field_question: 'Other', field_slug: 'what-is-x' } },
+		];
+		const slugs = getAllFaqSlugs(collisionFaqs);
+
+		expect(slugs[0]).toBe('what-is-x');
+		expect(findFaqBySlug(collisionFaqs, 'what-is-x')?._id).toBe('aaa');
+	});
 });
 
 describe('getFaqSitemapEntries', () => {

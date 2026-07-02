@@ -21,6 +21,7 @@ export const faqOverview = {
       title: 'Slug',
       name: 'field_slug',
       type: 'field_slug',
+      validation: (Rule: any) => Rule.required(),
     },
     {
       title: 'Answer',

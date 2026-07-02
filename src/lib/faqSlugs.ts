@@ -85,9 +85,6 @@ export function findFaqBySlug(faqs: ReadonlyArray<FaqLike>, slug: string): FaqLi
 	const direct = faqs.find(faq => faq._id === slug || faq._id === `drafts.${slug}`);
 	if (direct) return direct;
 
-	const byStoredSlug = faqs.find(faq => readStoredSlug(faq) === slug);
-	if (byStoredSlug) return byStoredSlug;
-
 	const slugMap = buildFaqSlugMap(faqs);
 	for (const faq of faqs) {
 		if (getFaqSlug(faq, slugMap) === slug) return faq;

@@ -1,5 +1,7 @@
 import { stegaClean } from 'next-sanity';
 
+// FAQ URL slug: faqOverview.field_slug (required, unique). Post-merge backfill:
+// bun run sanity:post-merge:faq-internal-links:apply
 export const FAQ_PAGE_SLUG = 'frequently-asked-questions';
 export const FAQ_PAGE_LABEL = 'Frequently Asked Questions';
 export const FAQ_BASE_PATH = `/${FAQ_PAGE_SLUG}`;
@@ -9,6 +11,7 @@ export type FaqLike = {
 	_updatedAt?: string;
 	faqOverview?: {
 		field_question?: unknown;
+		field_slug?: string | null;
 	} | null;
 };
 
@@ -33,6 +36,21 @@ function readQuestion(faq: FaqLike): string {
 	return typeof cleaned === 'string' ? cleaned.trim() : '';
 }
 
+function readStoredSlug(faq: FaqLike): string {
+	const raw = faq.faqOverview?.field_slug;
+	if (typeof raw !== 'string') return '';
+	const cleaned = stegaClean(raw);
+	return typeof cleaned === 'string' ? cleaned.trim() : '';
+}
+
+function resolveBaseSlug(faq: FaqLike): string {
+	const storedSlug = readStoredSlug(faq);
+	if (storedSlug) return storedSlug;
+
+	const question = readQuestion(faq);
+	return question ? slugifyFaqQuestion(question) : '';
+}
+
 function shortIdSuffix(id: string): string {
 	const normalized = id.replace(/^drafts\./, '');
 	return normalized.slice(-6).toLowerCase();
@@ -42,9 +60,7 @@ export function buildFaqSlugMap(faqs: ReadonlyArray<FaqLike>): Map<string, strin
 	const slugToId = new Map<string, string>();
 	const idToSlug = new Map<string, string>();
 
-	for (const faq of faqs) {
-		const question = readQuestion(faq);
-		const baseSlug = question ? slugifyFaqQuestion(question) : '';
+	function assignSlug(faq: FaqLike, baseSlug: string) {
 		let slug = baseSlug || faq._id.replace(/^drafts\./, '');
 
 		while (slugToId.has(slug) && slugToId.get(slug) !== faq._id) {
@@ -53,6 +69,27 @@ export function buildFaqSlugMap(faqs: ReadonlyArray<FaqLike>): Map<string, strin
 
 		slugToId.set(slug, faq._id);
 		idToSlug.set(faq._id, slug);
+	}
+
+	const withStoredSlug: FaqLike[] = [];
+	const withoutStoredSlug: FaqLike[] = [];
+
+	for (const faq of faqs) {
+		if (readStoredSlug(faq)) {
+			withStoredSlug.push(faq);
+		} else {
+			withoutStoredSlug.push(faq);
+		}
+	}
+
+	for (const faq of withStoredSlug) {
+		assignSlug(faq, readStoredSlug(faq));
+	}
+
+	for (const faq of withoutStoredSlug) {
+		const question = readQuestion(faq);
+		const baseSlug = question ? slugifyFaqQuestion(question) : '';
+		assignSlug(faq, baseSlug);
 	}
 
 	return idToSlug;
@@ -84,8 +121,7 @@ export function getAllFaqSlugs(faqs: ReadonlyArray<FaqLike>): string[] {
 }
 
 function faqDedupeKey(faq: FaqLike): string {
-	const question = readQuestion(faq);
-	const slug = question ? slugifyFaqQuestion(question) : '';
+	const slug = resolveBaseSlug(faq);
 	return slug || faq._id.replace(/^drafts\./, '');
 }
 

@@ -21,6 +21,8 @@
     "sanity:extract": "sanity schema extract",
     "sanity:generate": "sanity typegen generate",
     "sanity:backfill:experiments": "bun run scripts/backfill-experiment-variant-fields.ts",
+    "sanity:post-merge:faq-internal-links": "bun run scripts/post-merge-faq-internal-links.ts",
+    "sanity:post-merge:faq-internal-links:apply": "POST_MERGE_APPLY=1 bun run scripts/post-merge-faq-internal-links.ts",
     "sanity:start": "sanity start",
     "sanity:build": "sanity build",
     "sanity:deploy": "sanity deploy",

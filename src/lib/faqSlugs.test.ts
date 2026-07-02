@@ -98,6 +98,36 @@ describe('buildFaqSlugMap', () => {
 		expect(getAllFaqSlugs(faqsForward)[1]).toBe('what-is-goodpartyorg-def456');
 		expect(getAllFaqSlugs(faqsReversed)[1]).toBe('what-is-goodpartyorg-abc123');
 	});
+
+	it('prefers stored slug over question-derived slug', () => {
+		const faqs = [
+			{
+				_id: 'abc123',
+				faqOverview: {
+					field_question: 'What is GoodParty.org?',
+					field_slug: 'custom-faq-slug',
+				},
+			},
+		];
+
+		const slugMap = buildFaqSlugMap(faqs);
+
+		expect(getAllFaqSlugs(faqs)).toEqual(['custom-faq-slug']);
+		expect(getFaqHref(faqs[0]!, slugMap)).toBe('/frequently-asked-questions/custom-faq-slug');
+		expect(findFaqBySlug(faqs, 'custom-faq-slug')?._id).toBe('abc123');
+	});
+
+	it('stored slug wins over question-derived slug in a collision', () => {
+		const collisionFaqs = [
+			{ _id: 'aaa', faqOverview: { field_question: 'What is X?' } },
+			{ _id: 'bbb', faqOverview: { field_question: 'Other', field_slug: 'what-is-x' } },
+		];
+		const slugs = getAllFaqSlugs(collisionFaqs);
+
+		expect(slugs[1]).toBe('what-is-x');
+		expect(slugs[0]).toBe('what-is-x-aaa');
+		expect(findFaqBySlug(collisionFaqs, 'what-is-x')?._id).toBe('bbb');
+	});
 });
 
 describe('findFaqBySlug', () => {

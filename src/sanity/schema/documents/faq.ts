@@ -53,7 +53,20 @@ const infer = {
     },
   ],
   options: {
-    channels: {},
+    // Enables FAQ documents in the Studio internal-link picker. Post-merge backfill:
+    // bun run sanity:post-merge:faq-internal-links:apply
+    pathParams: {
+      slug: 'faqOverview.field_slug',
+    },
+    channels: {
+      goodpartyOrg: '/frequently-asked-questions/:slug',
+    },
+    documentSlugs: [
+      {
+        slugField: 'faqOverview.field_slug',
+        slugSources: ['faqOverview.field_question'],
+      },
+    ],
     single: false,
   },
 }

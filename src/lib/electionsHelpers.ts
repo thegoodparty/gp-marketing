@@ -256,11 +256,10 @@ export function formatElectionDateFromApi(dateStr: string | undefined): string {
  * or a pre-formatted string like "November 5, 2026". Uses local-date parsing for ISO to avoid timezone shift.
  */
 export function getYearFromDateString(dateStr: string): number {
-	if (DATE_ONLY_REGEX.test(dateStr)) {
-		return parseDateOnlyAsLocal(dateStr).getFullYear();
+	const dateOnly = dateStr.slice(0, 10);
+	if (DATE_ONLY_REGEX.test(dateOnly)) {
+		return parseDateOnlyAsLocal(dateOnly).getFullYear();
 	}
-	const parsed = new Date(dateStr);
-	if (!Number.isNaN(parsed.getTime())) return parsed.getFullYear();
 	const yearMatch = /\b(19|20)\d{2}\b/.exec(dateStr);
 	return yearMatch ? parseInt(yearMatch[0], 10) : NaN;
 }
@@ -309,7 +308,7 @@ export async function resolvePlaceRaceElectionDates(
 	const staleSlugs = [
 		...new Set(
 			races
-				.filter(r => r.slug && r.electionDate && r.isPrimary !== false && isElectionDateBeforeToday(r.electionDate, today))
+				.filter(r => r.slug && r.electionDate && r.isPrimary === true && isElectionDateBeforeToday(r.electionDate, today))
 				.map(r => r.slug),
 		),
 	];

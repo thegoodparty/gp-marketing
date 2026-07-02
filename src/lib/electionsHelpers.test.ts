@@ -355,6 +355,10 @@ describe('getYearFromDateString', () => {
 	test('returns NaN for invalid string', () => {
 		expect(getYearFromDateString('invalid')).toBeNaN();
 	});
+
+	test('extracts year from ISO datetime using calendar date portion', () => {
+		expect(getYearFromDateString('2026-01-01T00:00:00.000Z')).toBe(2026);
+	});
 });
 
 describe('isElectionDateBeforeToday', () => {
@@ -454,6 +458,20 @@ describe('resolvePlaceRaceElectionDates', () => {
 		expect(resolved.size).toBe(0);
 	});
 
+	test('does not fetch races API when isPrimary is undefined', async () => {
+		let fetchCount = 0;
+		globalThis.fetch = (async () => {
+			fetchCount += 1;
+			return new Response(JSON.stringify([]), { status: 200 });
+		}) as typeof fetch;
+
+		const races = [placeRace({ electionDate: '2026-06-02T00:00:00.000Z', isPrimary: undefined })];
+		const resolved = await resolvePlaceRaceElectionDates(races, today);
+
+		expect(fetchCount).toBe(0);
+		expect(resolved.size).toBe(0);
+	});
+
 	test('falls back to place date when races API returns nothing', async () => {
 		withFetchMock([
 			{
@@ -493,6 +511,22 @@ describe('buildOfficeItemsFromPlaceRaces', () => {
 		expect(offices[0]?.nextElectionDate).toBe('2026-11-03T00:00:00.000Z');
 		expect(offices[1]?.nextElectionDate).toBe('2028-03-07T00:00:00.000Z');
 		expect(dataYears).toEqual([2026, 2028]);
+	});
+
+	test('handles year-boundary ISO datetime correctly', () => {
+		const races = [
+			placeRace({
+				electionDate: '2026-01-01T00:00:00.000Z',
+			}),
+		];
+		const resolvedDates = new Map<string, string>();
+
+		const { dataYears } = buildOfficeItemsFromPlaceRaces(races, resolvedDates, {
+			type: 'State',
+			buildHref: race => `/elections/ca/position/${race.slug.split('/').slice(1).join('/')}`,
+		});
+
+		expect(dataYears).toEqual([2026]);
 	});
 });
 

@@ -166,6 +166,20 @@ describe('getFaqSitemapEntries', () => {
 		expect(entries[0]?.faq._id).toBe('faq8942aa');
 	});
 
+	it('collapses duplicate questions to one entry even when each has a distinct stored slug (post-backfill)', () => {
+		const faqs = [
+			{ _id: 'faq8942aa', faqOverview: { field_question: 'What is GoodParty.org?', field_slug: 'what-is-goodpartyorg' } },
+			{ _id: 'faq40f192', faqOverview: { field_question: 'What is GoodParty.org?', field_slug: 'what-is-goodpartyorg-faq40f192' } },
+			{ _id: 'faq999999', faqOverview: { field_question: 'What is GoodParty.org?', field_slug: 'what-is-goodpartyorg-faq999999' } },
+		];
+
+		const entries = getFaqSitemapEntries(faqs);
+
+		expect(entries).toHaveLength(1);
+		expect(entries[0]?.slug).toBe('what-is-goodpartyorg');
+		expect(entries[0]?.faq._id).toBe('faq8942aa');
+	});
+
 	it('excludes suffixed duplicates and keeps distinct questions', () => {
 		const downloadQuestion = 'Do I need to download anything to use GoodParty.org?';
 		const faqs = [

@@ -43,14 +43,6 @@ function readStoredSlug(faq: FaqLike): string {
 	return typeof cleaned === 'string' ? cleaned.trim() : '';
 }
 
-function resolveBaseSlug(faq: FaqLike): string {
-	const storedSlug = readStoredSlug(faq);
-	if (storedSlug) return storedSlug;
-
-	const question = readQuestion(faq);
-	return question ? slugifyFaqQuestion(question) : '';
-}
-
 function shortIdSuffix(id: string): string {
 	const normalized = id.replace(/^drafts\./, '');
 	return normalized.slice(-6).toLowerCase();
@@ -120,8 +112,10 @@ export function getAllFaqSlugs(faqs: ReadonlyArray<FaqLike>): string[] {
 	return faqs.map(faq => getFaqSlug(faq, slugMap));
 }
 
+/** Sitemap dedupe key: identical questions collapse to one entry regardless of stored slug (avoids duplicate-content URLs). */
 function faqDedupeKey(faq: FaqLike): string {
-	const slug = resolveBaseSlug(faq);
+	const question = readQuestion(faq);
+	const slug = question ? slugifyFaqQuestion(question) : '';
 	return slug || faq._id.replace(/^drafts\./, '');
 }
 

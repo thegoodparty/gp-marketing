@@ -105,8 +105,12 @@ export async function backfillFaqSlugs(options: BackfillFaqSlugsOptions = {}): P
 
 	log(prefix, `start project=${projectId} dataset=${dataset}${dryRun ? ' (DRY RUN)' : ''}`);
 
+	// Published docs only: including drafts would assign collision-suffixed slugs that
+	// overwrite the canonical slug when the draft is published.
 	const faqs = await withStuckHeartbeat(
-		client.fetch<FaqDoc[]>(`*[_type == "faq"]{_id, faqOverview{field_question, field_slug}}`),
+		client.fetch<FaqDoc[]>(
+			`*[_type == "faq" && !(_id in path("drafts.**"))]{_id, faqOverview{field_question, field_slug}}`,
+		),
 		'fetch FAQs',
 		STUCK_LOG_MS,
 		prefix,

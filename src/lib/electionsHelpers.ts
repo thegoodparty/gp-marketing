@@ -305,7 +305,7 @@ export async function resolvePlaceRaceElectionDates(
 	const staleSlugs = [
 		...new Set(
 			races
-				.filter(r => r.slug && r.electionDate && isElectionDateBeforeToday(r.electionDate, today))
+				.filter(r => r.slug && r.electionDate && r.isPrimary !== false && isElectionDateBeforeToday(r.electionDate, today))
 				.map(r => r.slug),
 		),
 	];

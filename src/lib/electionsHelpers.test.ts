@@ -434,6 +434,20 @@ describe('resolvePlaceRaceElectionDates', () => {
 		expect(resolved.get('ca/lieutenant-governor')).toBe('2026-11-03T00:00:00.000Z');
 	});
 
+	test('does not fetch races API for a past general-election race', async () => {
+		let fetchCount = 0;
+		globalThis.fetch = (async () => {
+			fetchCount += 1;
+			return new Response(JSON.stringify([]), { status: 200 });
+		}) as typeof fetch;
+
+		const races = [placeRace({ electionDate: '2025-11-04T00:00:00.000Z', isPrimary: false })];
+		const resolved = await resolvePlaceRaceElectionDates(races, today);
+
+		expect(fetchCount).toBe(0);
+		expect(resolved.size).toBe(0);
+	});
+
 	test('falls back to place date when races API returns nothing', async () => {
 		withFetchMock([
 			{

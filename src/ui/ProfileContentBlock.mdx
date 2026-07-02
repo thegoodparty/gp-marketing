@@ -16,7 +16,7 @@ The ProfileContentBlock component displays a two-column layout with an optional 
 Use this component when:
 - Displaying candidate profile content sections
 - Showing multiple content cards (About Me, Why Running, Top Issues, etc.)
-- Providing contact links (Website, Facebook, Email) in a sidebar
+- Providing contact links (LinkedIn, Facebook, custom websites, Email) in a sidebar
 - Displaying office information (About Office, Term Length, Election Date) in a sidebar
 - Creating a sticky sidebar for navigation or key information
 
@@ -60,7 +60,7 @@ ElectionsSidebar configuration. When provided, displays a sticky sidebar on the 
 **Type:** `ElectionsSidebarProps`
 
 Sidebar can include:
-- `links` - Array of link objects with label, optional icon, and href (e.g., Website, Facebook, Email)
+- `links` - Array of link objects with label, optional icon, and href (e.g., LinkedIn, Facebook, hostname-based website labels, Email)
 - `aboutOffice` - Text describing the office position
 - `termLength` - Text describing the term length
 - `electionDate` - Text showing the election date
@@ -100,7 +100,7 @@ When the sidebar is present on desktop (`lg:`) **and** content cards are rendere
 
 When the sidebar is the only content (no content cards), it spans the full `max-w-3xl` well and is not sticky.
 - Provides quick access to contact links, office information, and CTA
-- Displays links with icons (Website, Facebook, Email, etc.)
+- Displays links with icons (LinkedIn, Facebook, custom websites, Email, etc.)
 - Shows office details (About Office, Term Length, Election Date) with separators
 
 ## Content Cards

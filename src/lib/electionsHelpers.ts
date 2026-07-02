@@ -802,11 +802,14 @@ export function inferSidebarLinkIcon(href: string): string {
 	if (lower.includes('facebook.com') || lower.includes('fb.com')) return 'facebook';
 	if (lower.includes('twitter.com') || lower.includes('x.com')) return 'twitter';
 	if (lower.includes('instagram.com')) return 'instagram';
+	if (lower.includes('wikipedia.org')) return 'book-open';
+	if (lower.includes('youtube.com') || lower.includes('youtu.be')) return 'youtube';
+	if (lower.includes('tiktok.com')) return 'video';
 	return 'globe';
 }
 
 /** Human-readable label for a candidate profile link inferred from URL. */
-export function formatSidebarLinkLabel(href: string): string {
+export function formatSidebarLinkLabel(href: string, index: number): string {
 	const lower = href.toLowerCase();
 	if (lower.startsWith('mailto:')) return 'Email';
 	if (lower.includes('linkedin.com')) return 'LinkedIn';
@@ -816,7 +819,13 @@ export function formatSidebarLinkLabel(href: string): string {
 	if (lower.includes('wikipedia.org')) return 'Wikipedia';
 	if (lower.includes('youtube.com') || lower.includes('youtu.be')) return 'YouTube';
 	if (lower.includes('tiktok.com')) return 'TikTok';
-	return 'Website';
+	try {
+		const url = new URL(href.startsWith('http') ? href : `https://${href}`);
+		const host = url.hostname.replace(/^www\./, '');
+		return host.charAt(0).toUpperCase() + host.slice(1);
+	} catch {
+		return `Link ${index + 1}`;
+	}
 }
 
 export type SidebarLink = { label: string; icon: string; href: string };

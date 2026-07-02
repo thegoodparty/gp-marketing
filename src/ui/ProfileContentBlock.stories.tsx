@@ -1,5 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { formatSidebarLinkLabel, inferSidebarLinkIcon } from '~/lib/electionsHelpers';
 import { ProfileContentBlock } from './ProfileContentBlock.tsx';
+
+function toSidebarLink(href: string, index: number) {
+	return {
+		label: formatSidebarLinkLabel(href, index),
+		icon: inferSidebarLinkIcon(href),
+		href,
+	};
+}
 
 const meta: Meta<typeof ProfileContentBlock> = {
 	title: 'New Components/Page Sections/Profile Content Block',
@@ -18,9 +27,9 @@ type Story = StoryObj<typeof meta>;
 
 const defaultSidebar = {
 	links: [
-		{ label: 'Website', icon: 'globe', href: 'https://www.website.com' },
-		{ label: 'Facebook', icon: 'facebook', href: 'https://www.facebook.com/' },
-		{ label: 'Email', icon: 'mail', href: 'mailto:hello@example.com' },
+		toSidebarLink('https://www.linkedin.com/in/jane-candidate', 0),
+		toSidebarLink('https://www.facebook.com/jane', 1),
+		toSidebarLink('mailto:hello@example.com', 2),
 	],
 	aboutOffice: 'Body text here',
 	termLength: 'Body text here',
@@ -83,9 +92,9 @@ export const MidnightBackground: Story = {
 		backgroundColor: 'midnight',
 		sidebar: {
 			links: [
-				{ label: 'Website', icon: 'globe', href: 'https://www.website.com' },
-				{ label: 'Facebook', icon: 'facebook', href: 'https://www.facebook.com/' },
-				{ label: 'Email', icon: 'mail', href: 'mailto:hello@example.com' },
+				toSidebarLink('https://www.linkedin.com/in/jane-candidate', 0),
+				toSidebarLink('https://www.facebook.com/jane', 1),
+				toSidebarLink('mailto:hello@example.com', 2),
 			],
 			aboutOffice: 'Body text here',
 			termLength: 'Body text here',
@@ -114,8 +123,8 @@ export const MultipleCards: Story = {
 		backgroundColor: 'cream',
 		sidebar: {
 			links: [
-				{ label: 'Website', icon: 'globe', href: 'https://www.website.com' },
-				{ label: 'Email', icon: 'mail', href: 'mailto:hello@example.com' },
+				toSidebarLink('https://www.janeforoffice.com', 0),
+				toSidebarLink('mailto:hello@example.com', 1),
 			],
 			aboutOffice: 'Body text here',
 			termLength: 'Body text here',
@@ -162,21 +171,9 @@ export const LongUrls: Story = {
 		backgroundColor: 'cream',
 		sidebar: {
 			links: [
-				{
-					label: 'LinkedIn',
-					icon: 'linkedin',
-					href: 'https://www.linkedin.com/in/dylan-hays-5263b0218',
-				},
-				{
-					label: 'Website',
-					icon: 'globe',
-					href: 'https://www.ci.northville.mi.us/government/city-council',
-				},
-				{
-					label: 'Campaign',
-					icon: 'globe',
-					href: 'https://www.krenzfornorthville.com/about-the-candidate',
-				},
+				toSidebarLink('https://www.linkedin.com/in/dylan-hays-5263b0218', 0),
+				toSidebarLink('https://www.ci.northville.mi.us/government/city-council', 1),
+				toSidebarLink('https://www.krenzfornorthville.com/about-the-candidate', 2),
 			],
 			aboutOffice:
 				'The City Legislature is the legislative branch of City Government. The Legislature is composed of a seven-member Council, elected from six Council districts and one at-large Council member.',

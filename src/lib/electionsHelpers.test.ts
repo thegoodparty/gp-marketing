@@ -874,27 +874,38 @@ describe('inferSidebarLinkIcon', () => {
 		expect(inferSidebarLinkIcon('mailto:test@example.com')).toBe('mail');
 		expect(inferSidebarLinkIcon('https://www.linkedin.com/in/user')).toBe('linkedin');
 		expect(inferSidebarLinkIcon('https://facebook.com/page')).toBe('facebook');
+		expect(inferSidebarLinkIcon('https://en.wikipedia.org/wiki/User')).toBe('book-open');
+		expect(inferSidebarLinkIcon('https://www.youtube.com/watch?v=abc')).toBe('youtube');
+		expect(inferSidebarLinkIcon('https://youtu.be/abc')).toBe('youtube');
+		expect(inferSidebarLinkIcon('https://www.tiktok.com/@user')).toBe('video');
 		expect(inferSidebarLinkIcon('https://example.com')).toBe('globe');
 	});
 });
 
 describe('formatSidebarLinkLabel', () => {
-	test('labels unknown hosts as Website regardless of position', () => {
-		expect(formatSidebarLinkLabel('https://example.com')).toBe('Website');
-		expect(formatSidebarLinkLabel('https://senatedemocrats.wa.gov/kauffman/')).toBe('Website');
+	test('uses hostname for unknown domains so multiple links stay distinguishable', () => {
+		expect(formatSidebarLinkLabel('https://example.com', 0)).toBe('Example.com');
+		expect(formatSidebarLinkLabel('https://senatedemocrats.wa.gov/kauffman/', 2)).toBe(
+			'Senatedemocrats.wa.gov',
+		);
+		expect(formatSidebarLinkLabel('https://www.voteclaudiakauffman.com/', 3)).toBe('Voteclaudiakauffman.com');
 	});
 
-	test('detects platform labels from URL', () => {
-		expect(formatSidebarLinkLabel('https://www.linkedin.com/in/user')).toBe('LinkedIn');
-		expect(formatSidebarLinkLabel('mailto:a@b.com')).toBe('Email');
-		expect(formatSidebarLinkLabel('https://facebook.com/page')).toBe('Facebook');
-		expect(formatSidebarLinkLabel('https://www.instagram.com/user')).toBe('Instagram');
-		expect(formatSidebarLinkLabel('https://twitter.com/user')).toBe('Twitter');
-		expect(formatSidebarLinkLabel('https://x.com/user')).toBe('Twitter');
-		expect(formatSidebarLinkLabel('https://en.wikipedia.org/wiki/User')).toBe('Wikipedia');
-		expect(formatSidebarLinkLabel('https://www.youtube.com/watch?v=abc')).toBe('YouTube');
-		expect(formatSidebarLinkLabel('https://youtu.be/abc')).toBe('YouTube');
-		expect(formatSidebarLinkLabel('https://www.tiktok.com/@user')).toBe('TikTok');
+	test('detects platform labels from URL regardless of position', () => {
+		expect(formatSidebarLinkLabel('https://www.linkedin.com/in/user', 0)).toBe('LinkedIn');
+		expect(formatSidebarLinkLabel('mailto:a@b.com', 1)).toBe('Email');
+		expect(formatSidebarLinkLabel('https://facebook.com/page', 0)).toBe('Facebook');
+		expect(formatSidebarLinkLabel('https://www.instagram.com/user', 2)).toBe('Instagram');
+		expect(formatSidebarLinkLabel('https://twitter.com/user', 1)).toBe('Twitter');
+		expect(formatSidebarLinkLabel('https://x.com/user', 1)).toBe('Twitter');
+		expect(formatSidebarLinkLabel('https://en.wikipedia.org/wiki/User', 0)).toBe('Wikipedia');
+		expect(formatSidebarLinkLabel('https://www.youtube.com/watch?v=abc', 1)).toBe('YouTube');
+		expect(formatSidebarLinkLabel('https://youtu.be/abc', 1)).toBe('YouTube');
+		expect(formatSidebarLinkLabel('https://www.tiktok.com/@user', 2)).toBe('TikTok');
+	});
+
+	test('falls back to position-based label when URL cannot be parsed', () => {
+		expect(formatSidebarLinkLabel('', 1)).toBe('Link 2');
 	});
 });
 

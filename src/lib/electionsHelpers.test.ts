@@ -879,6 +879,8 @@ describe('inferSidebarLinkIcon', () => {
 		expect(inferSidebarLinkIcon('https://youtu.be/abc')).toBe('youtube');
 		expect(inferSidebarLinkIcon('https://www.tiktok.com/@user')).toBe('video');
 		expect(inferSidebarLinkIcon('https://example.com')).toBe('globe');
+		expect(inferSidebarLinkIcon('https://twitter.com/user')).toBe('twitter');
+		expect(inferSidebarLinkIcon('https://x.com/user')).toBe('twitter');
 	});
 });
 

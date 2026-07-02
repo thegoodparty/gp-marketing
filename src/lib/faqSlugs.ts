@@ -9,6 +9,7 @@ export type FaqLike = {
 	_updatedAt?: string;
 	faqOverview?: {
 		field_question?: unknown;
+		field_slug?: string | null;
 	} | null;
 };
 
@@ -33,6 +34,21 @@ function readQuestion(faq: FaqLike): string {
 	return typeof cleaned === 'string' ? cleaned.trim() : '';
 }
 
+function readStoredSlug(faq: FaqLike): string {
+	const raw = faq.faqOverview?.field_slug;
+	if (typeof raw !== 'string') return '';
+	const cleaned = stegaClean(raw);
+	return typeof cleaned === 'string' ? cleaned.trim() : '';
+}
+
+function resolveBaseSlug(faq: FaqLike): string {
+	const storedSlug = readStoredSlug(faq);
+	if (storedSlug) return storedSlug;
+
+	const question = readQuestion(faq);
+	return question ? slugifyFaqQuestion(question) : '';
+}
+
 function shortIdSuffix(id: string): string {
 	const normalized = id.replace(/^drafts\./, '');
 	return normalized.slice(-6).toLowerCase();
@@ -43,8 +59,7 @@ export function buildFaqSlugMap(faqs: ReadonlyArray<FaqLike>): Map<string, strin
 	const idToSlug = new Map<string, string>();
 
 	for (const faq of faqs) {
-		const question = readQuestion(faq);
-		const baseSlug = question ? slugifyFaqQuestion(question) : '';
+		const baseSlug = resolveBaseSlug(faq);
 		let slug = baseSlug || faq._id.replace(/^drafts\./, '');
 
 		while (slugToId.has(slug) && slugToId.get(slug) !== faq._id) {
@@ -70,6 +85,9 @@ export function findFaqBySlug(faqs: ReadonlyArray<FaqLike>, slug: string): FaqLi
 	const direct = faqs.find(faq => faq._id === slug || faq._id === `drafts.${slug}`);
 	if (direct) return direct;
 
+	const byStoredSlug = faqs.find(faq => readStoredSlug(faq) === slug);
+	if (byStoredSlug) return byStoredSlug;
+
 	const slugMap = buildFaqSlugMap(faqs);
 	for (const faq of faqs) {
 		if (getFaqSlug(faq, slugMap) === slug) return faq;
@@ -84,8 +102,7 @@ export function getAllFaqSlugs(faqs: ReadonlyArray<FaqLike>): string[] {
 }
 
 function faqDedupeKey(faq: FaqLike): string {
-	const question = readQuestion(faq);
-	const slug = question ? slugifyFaqQuestion(question) : '';
+	const slug = resolveBaseSlug(faq);
 	return slug || faq._id.replace(/^drafts\./, '');
 }
 

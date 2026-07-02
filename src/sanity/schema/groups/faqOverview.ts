@@ -18,6 +18,11 @@ export const faqOverview = {
       type: 'field_question',
     },
     {
+      title: 'Slug',
+      name: 'field_slug',
+      type: 'field_slug',
+    },
+    {
       title: 'Answer',
       name: 'block_answer',
       type: 'block_answer',

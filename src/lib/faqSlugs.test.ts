@@ -98,6 +98,24 @@ describe('buildFaqSlugMap', () => {
 		expect(getAllFaqSlugs(faqsForward)[1]).toBe('what-is-goodpartyorg-def456');
 		expect(getAllFaqSlugs(faqsReversed)[1]).toBe('what-is-goodpartyorg-abc123');
 	});
+
+	it('prefers stored slug over question-derived slug', () => {
+		const faqs = [
+			{
+				_id: 'abc123',
+				faqOverview: {
+					field_question: 'What is GoodParty.org?',
+					field_slug: 'custom-faq-slug',
+				},
+			},
+		];
+
+		const slugMap = buildFaqSlugMap(faqs);
+
+		expect(getAllFaqSlugs(faqs)).toEqual(['custom-faq-slug']);
+		expect(getFaqHref(faqs[0]!, slugMap)).toBe('/frequently-asked-questions/custom-faq-slug');
+		expect(findFaqBySlug(faqs, 'custom-faq-slug')?._id).toBe('abc123');
+	});
 });
 
 describe('findFaqBySlug', () => {

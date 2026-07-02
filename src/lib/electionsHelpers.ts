@@ -800,7 +800,7 @@ export function inferSidebarLinkIcon(href: string): string {
 	if (lower.startsWith('mailto:')) return 'mail';
 	if (lower.includes('linkedin.com')) return 'linkedin';
 	if (lower.includes('facebook.com') || lower.includes('fb.com')) return 'facebook';
-	if (lower.includes('twitter.com') || lower.includes('x.com')) return 'twitter';
+	if (lower.includes('twitter.com') || /(?:^|[/.])x\.com(?:\/|$)/.test(lower)) return 'twitter';
 	if (lower.includes('instagram.com')) return 'instagram';
 	if (lower.includes('wikipedia.org')) return 'book-open';
 	if (lower.includes('youtube.com') || lower.includes('youtu.be')) return 'youtube';

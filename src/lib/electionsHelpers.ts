@@ -277,7 +277,7 @@ function parseElectionDateAsLocal(dateStr: string): Date {
 	if (DATE_ONLY_REGEX.test(dateStr)) {
 		return parseDateOnlyAsLocal(dateStr);
 	}
-	return startOfLocalDay(new Date(dateStr));
+	return parseDateOnlyAsLocal(dateStr.slice(0, 10));
 }
 
 /** True when the election calendar day is strictly before today (local time). */
@@ -293,7 +293,7 @@ export function isElectionDateBeforeToday(
 
 /**
  * For place races whose electionDate is already past, fetches the general-election
- * record via getRaceBySlug (races API filters to isPrimary:false).
+ * record via getRaceBySlug with isPrimary:false.
  */
 export async function resolvePlaceRaceElectionDates(
 	races: PlaceRace[],
@@ -314,7 +314,7 @@ export async function resolvePlaceRaceElectionDates(
 		staleSlugs.map(async slug => {
 			const placeRace = races.find(r => r.slug === slug);
 			const fallback = placeRace?.electionDate ?? '';
-			const race = await getRaceBySlug(slug);
+			const race = await getRaceBySlug(slug, false, { isPrimary: false });
 			resolved.set(slug, race?.electionDate ?? fallback);
 		}),
 	);

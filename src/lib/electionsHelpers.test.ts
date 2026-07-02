@@ -375,6 +375,10 @@ describe('isElectionDateBeforeToday', () => {
 	test('returns false when election day is today', () => {
 		expect(isElectionDateBeforeToday('2026-07-01', today)).toBe(false);
 	});
+
+	test('returns false for UTC-midnight ISO datetime on same calendar day', () => {
+		expect(isElectionDateBeforeToday('2026-07-01T00:00:00.000Z', today)).toBe(false);
+	});
 });
 
 function placeRace(overrides: Partial<PlaceRace> = {}): PlaceRace {
@@ -408,7 +412,10 @@ describe('resolvePlaceRaceElectionDates', () => {
 	test('fetches general election date when place date is in the past', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/races?') && url.includes('raceSlug=ca%2Flieutenant-governor'),
+				match: url =>
+					url.includes('/v1/races?') &&
+					url.includes('raceSlug=ca%2Flieutenant-governor') &&
+					url.includes('isPrimary=false'),
 				body: [
 					{
 						id: 1,

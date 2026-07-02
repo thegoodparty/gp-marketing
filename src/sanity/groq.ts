@@ -19,10 +19,7 @@ export const glossaryHrefGroq = `_type=="goodpartyOrg_glossary"=>{"href":"/polit
 /*language=textmate*/
 export const glossaryTermHrefGroq = `_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)}`;
 /*language=textmate*/
-// FAQ hrefs use stored field_slug only (no _id fallback). The spread select omits
-// href entirely when field_slug is absent (never emits href:null). Post-merge backfill required:
-// bun run sanity:post-merge:faq-internal-links:apply
-export const faqHrefGroq = `_type=="faq"=>{...select(defined(faqOverview.field_slug)=>{"href":"/frequently-asked-questions/"+faqOverview.field_slug})}`;
+export const faqHrefGroq = `_type=="faq"=>{"href":"/frequently-asked-questions/"+coalesce(faqOverview.field_slug,_id)}`;
 /*language=textmate*/
 export const contactHrefGroq = `_type=="goodpartyOrg_contact"=>{"href":"/contact"}`;
 /*language=textmate*/

@@ -75,6 +75,7 @@ function createBackfillClient(token: string): SanityClient {
 		token,
 		apiVersion: '2025-09-25',
 		useCdn: false,
+		perspective: 'published',
 		fetch: (url, init) => {
 			const timeout = AbortSignal.timeout(REQUEST_TIMEOUT_MS);
 			const userSignal = init && 'signal' in init ? init.signal : undefined;

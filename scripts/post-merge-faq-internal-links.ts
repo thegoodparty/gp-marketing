@@ -3,8 +3,8 @@
  *
  * Run once after the FAQ internal-links PR is deployed to production (app +
  * Sanity schema). Until this completes, existing FAQ documents may lack
- * faqOverview.field_slug; GROQ internal links fall back to _id in hrefs, but
- * routing and sitemap use canonical slugs from buildFaqSlugMap once stored.
+ * faqOverview.field_slug; GROQ internal links omit href until field_slug is set.
+ * Routing and sitemap use canonical slugs from buildFaqSlugMap once stored.
  *
  * ---------------------------------------------------------------------------
  * FOR REVIEWERS — why this script exists
@@ -14,11 +14,11 @@
  *
  *   - src/sanity/schema/documents/faq.ts       — Studio internal-link picker
  *   - src/sanity/schema/groups/faqOverview.ts  — required + unique field_slug
- *   - src/sanity/groq.ts                       — faqHrefGroq (coalesce slug, _id)
+ *   - src/sanity/groq.ts                       — faqHrefGroq (stored slug only)
  *   - src/lib/faqSlugs.ts                      — routing/sitemap slug map
  *   - scripts/backfill-faq-slugs.ts            — low-level backfill impl
  *
- * GROQ emits hrefs via coalesce(field_slug, _id). Routing prefers stored slugs
+ * GROQ emits href only when field_slug is defined. Routing prefers stored slugs
  * via buildFaqSlugMap. This script backfills missing slugs and dedupes any
  * collisions so both paths agree. It is idempotent.
  * ---------------------------------------------------------------------------

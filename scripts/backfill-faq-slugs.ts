@@ -162,7 +162,9 @@ export async function backfillFaqSlugs(options: BackfillFaqSlugsOptions = {}): P
 				.patch(`drafts.${id}`)
 				.set({ 'faqOverview.field_slug': slug })
 				.commit()
-				.catch(() => {});
+				.catch((err: unknown) => {
+					log(prefix, `draft sibling patch failed id=${id}:`, err);
+				});
 			log(prefix, `patch ok id=${id}`);
 		}
 	} else {

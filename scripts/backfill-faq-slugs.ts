@@ -157,6 +157,12 @@ export async function backfillFaqSlugs(options: BackfillFaqSlugsOptions = {}): P
 				STUCK_LOG_MS,
 				prefix,
 			);
+			// Patch draft sibling so a pending publish carries the correct slug.
+			await client
+				.patch(`drafts.${id}`)
+				.set({ 'faqOverview.field_slug': slug })
+				.commit()
+				.catch(() => {});
 			log(prefix, `patch ok id=${id}`);
 		}
 	} else {

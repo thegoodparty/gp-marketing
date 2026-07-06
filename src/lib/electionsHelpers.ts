@@ -184,7 +184,7 @@ export function htmlToPlainText(value: string | null | undefined): string | unde
 			{ selector: 'ol', format: 'unorderedList', options: { itemPrefix: ' ', leadingLineBreaks: 2, trailingLineBreaks: 2 } },
 			{ selector: 'blockquote', format: 'blockquote', options: { leadingLineBreaks: 2, trailingLineBreaks: 2, trimEmptyLines: true } },
 		],
-	}).trim();
+	}).replace(/^\n+|\n+$/g, '');
 	return text.length > 0 ? text : undefined;
 }
 

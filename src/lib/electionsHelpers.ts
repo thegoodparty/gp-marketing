@@ -182,7 +182,7 @@ export function htmlToPlainText(value: string | null | undefined): string | unde
 			{ selector: 'h6', options: { uppercase: false, leadingLineBreaks: 2, trailingLineBreaks: 2 } },
 			{ selector: 'ul', options: { itemPrefix: ' ', leadingLineBreaks: 2, trailingLineBreaks: 2 } },
 			{ selector: 'ol', format: 'unorderedList', options: { itemPrefix: ' ', leadingLineBreaks: 2, trailingLineBreaks: 2 } },
-			{ selector: 'blockquote', format: 'block', options: { leadingLineBreaks: 2, trailingLineBreaks: 2, trimEmptyLines: true } },
+			{ selector: 'blockquote', format: 'blockquote', options: { leadingLineBreaks: 2, trailingLineBreaks: 2, trimEmptyLines: true } },
 		],
 	}).trim();
 	return text.length > 0 ? text : undefined;

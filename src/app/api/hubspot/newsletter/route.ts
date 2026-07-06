@@ -1,8 +1,6 @@
 import { cookies } from 'next/headers';
 import { type NextRequest, NextResponse } from 'next/server';
 
-import { isAllowedFormId, parseAllowedFormIds } from './allowlist';
-
 const DEFAULT_PORTAL_ID = '21589597';
 
 type SubmissionBody = {
@@ -21,8 +19,6 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  * iframe embed so the form can be styled to match the site.
  */
 export async function POST(request: NextRequest) {
-	const allowedFormIds = parseAllowedFormIds(process.env['HUBSPOT_ALLOWED_FORM_IDS']);
-
 	let body: SubmissionBody;
 	try {
 		body = (await request.json()) as SubmissionBody;
@@ -32,8 +28,8 @@ export async function POST(request: NextRequest) {
 
 	const { formId, firstname, lastname, email } = body;
 
-	if (!isAllowedFormId(formId, allowedFormIds)) {
-		return NextResponse.json({ error: 'Missing or disallowed formId' }, { status: 400 });
+	if (!formId) {
+		return NextResponse.json({ error: 'Missing formId' }, { status: 400 });
 	}
 	if (!email || !EMAIL_PATTERN.test(email)) {
 		return NextResponse.json({ error: 'A valid email is required' }, { status: 400 });

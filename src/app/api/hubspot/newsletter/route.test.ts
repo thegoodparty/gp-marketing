@@ -62,4 +62,22 @@ describe('POST /api/hubspot/newsletter', () => {
 		expect(await response.json()).toEqual({ ok: true });
 		expect(fetchMock).toHaveBeenCalledTimes(1);
 	});
+
+	test('forwards HubSpot error status and details', async () => {
+		const hubspotError = { message: 'INVALID_EMAIL', status: 'error' };
+		const fetchMock = mock(async () =>
+			new Response(JSON.stringify(hubspotError), { status: 400 }),
+		);
+		globalThis.fetch = fetchMock as typeof fetch;
+
+		const { POST } = await import('./route');
+		const response = await POST(
+			createRequest({ formId: 'newsletter-form-id', email: 'user@example.com' }),
+		);
+		expect(response.status).toBe(400);
+		expect(await response.json()).toEqual({
+			error: 'HubSpot submission failed',
+			details: hubspotError,
+		});
+	});
 });

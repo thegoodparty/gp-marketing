@@ -3,7 +3,6 @@ import { NextRequest } from 'next/server';
 
 const originalFetch = globalThis.fetch;
 const originalEnv = process.env['HUBSPOT_ALLOWED_FORM_IDS'];
-const originalToken = process.env['HUBSPOT_PRIVATE_APP_TOKEN'];
 
 mock.module('next/headers', () => ({
 	cookies: async () => ({
@@ -13,7 +12,6 @@ mock.module('next/headers', () => ({
 
 beforeEach(() => {
 	delete process.env['HUBSPOT_ALLOWED_FORM_IDS'];
-	delete process.env['HUBSPOT_PRIVATE_APP_TOKEN'];
 });
 
 afterEach(() => {
@@ -22,11 +20,6 @@ afterEach(() => {
 		delete process.env['HUBSPOT_ALLOWED_FORM_IDS'];
 	} else {
 		process.env['HUBSPOT_ALLOWED_FORM_IDS'] = originalEnv;
-	}
-	if (originalToken === undefined) {
-		delete process.env['HUBSPOT_PRIVATE_APP_TOKEN'];
-	} else {
-		process.env['HUBSPOT_PRIVATE_APP_TOKEN'] = originalToken;
 	}
 });
 

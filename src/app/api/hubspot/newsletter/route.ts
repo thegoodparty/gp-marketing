@@ -41,7 +41,6 @@ export async function POST(request: NextRequest) {
 
 	const portalId = process.env['NEXT_PUBLIC_HUBSPOT_PORTAL_ID'] ?? DEFAULT_PORTAL_ID;
 	const hutk = (await cookies()).get('hubspotutk')?.value;
-	const token = process.env['HUBSPOT_PRIVATE_APP_TOKEN'];
 
 	const fields = [
 		{ objectTypeId: '0-1', name: 'firstname', value: firstname ?? '' },
@@ -49,16 +48,11 @@ export async function POST(request: NextRequest) {
 		{ objectTypeId: '0-1', name: 'email', value: email },
 	].filter(field => field.value !== '');
 
-	const endpoint = token
-		? `https://api.hsforms.com/submissions/v3/integration/secure/submit/${portalId}/${formId}`
-		: `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formId}`;
+	const endpoint = `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formId}`;
 
 	const hubspotResponse = await fetch(endpoint, {
 		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			...(token ? { Authorization: `Bearer ${token}` } : {}),
-		},
+		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({
 			fields,
 			context: {

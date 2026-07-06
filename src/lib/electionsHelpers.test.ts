@@ -1345,6 +1345,12 @@ describe('claimed profile helpers', () => {
 		expect(htmlToPlainText('<h2>My Position</h2>')).toBe('My Position');
 	});
 
+	test('htmlToPlainText separates paragraph and heading with exactly two newlines', () => {
+		expect(htmlToPlainText('<p>Intro</p><h2>My Position</h2><p>More detail</p>')).toBe(
+			'Intro\n\nMy Position\n\nMore detail',
+		);
+	});
+
 	test('resolveProfileAboutText prefers elections API about over claimed occupation', () => {
 		expect(
 			resolveProfileAboutText('Election bio', {

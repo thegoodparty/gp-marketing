@@ -14,6 +14,10 @@ describe('isSafeRelativeRedirect', () => {
 		expect(isSafeRelativeRedirect('/\\evil.com')).toBe(false);
 	});
 
+	it('blocks percent-encoded backslash open-redirect bypass', () => {
+		expect(isSafeRelativeRedirect('/%5C%2Fevil.com')).toBe(false);
+	});
+
 	it('blocks absolute URLs', () => {
 		expect(isSafeRelativeRedirect('https://evil.com')).toBe(false);
 	});

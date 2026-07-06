@@ -13,6 +13,8 @@ afterEach(() => {
 	globalThis.fetch = originalFetch;
 });
 
+const VALID_FORM_ID = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+
 function createRequest(body: Record<string, unknown>) {
 	return new NextRequest('http://localhost/api/hubspot/newsletter', {
 		method: 'POST',
@@ -31,10 +33,19 @@ describe('POST /api/hubspot/newsletter', () => {
 		expect(await response.json()).toEqual({ error: 'Missing formId' });
 	});
 
+	test('returns 400 for invalid formId', async () => {
+		const { POST } = await import('./route');
+		const response = await POST(
+			createRequest({ formId: '../../v1/other-endpoint', email: 'user@example.com' }),
+		);
+		expect(response.status).toBe(400);
+		expect(await response.json()).toEqual({ error: 'Invalid formId' });
+	});
+
 	test('returns 400 for invalid email', async () => {
 		const { POST } = await import('./route');
 		const response = await POST(
-			createRequest({ formId: 'form-id', email: 'not-an-email', firstname: 'Jane', lastname: 'Doe' }),
+			createRequest({ formId: VALID_FORM_ID, email: 'not-an-email', firstname: 'Jane', lastname: 'Doe' }),
 		);
 		expect(response.status).toBe(400);
 		expect(await response.json()).toEqual({ error: 'A valid email is required' });
@@ -44,7 +55,7 @@ describe('POST /api/hubspot/newsletter', () => {
 		const fetchMock = mock(async (input: RequestInfo | URL) => {
 			const url = String(input);
 			expect(url).toContain('/integration/submit/');
-			expect(url).toContain('/newsletter-form-id');
+			expect(url).toContain(`/${VALID_FORM_ID}`);
 			return new Response(JSON.stringify({ inlineMessage: 'ok' }), { status: 200 });
 		});
 		globalThis.fetch = fetchMock as typeof fetch;
@@ -52,7 +63,7 @@ describe('POST /api/hubspot/newsletter', () => {
 		const { POST } = await import('./route');
 		const response = await POST(
 			createRequest({
-				formId: 'newsletter-form-id',
+				formId: VALID_FORM_ID,
 				email: 'user@example.com',
 				firstname: 'Jane',
 				lastname: 'Doe',
@@ -72,7 +83,7 @@ describe('POST /api/hubspot/newsletter', () => {
 
 		const { POST } = await import('./route');
 		const response = await POST(
-			createRequest({ formId: 'newsletter-form-id', email: 'user@example.com' }),
+			createRequest({ formId: VALID_FORM_ID, email: 'user@example.com' }),
 		);
 		expect(response.status).toBe(400);
 		expect(await response.json()).toEqual({

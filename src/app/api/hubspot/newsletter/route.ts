@@ -11,6 +11,7 @@ type SubmissionBody = {
 };
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const HUBSPOT_FORM_ID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
  * POST /api/hubspot/newsletter
@@ -30,6 +31,9 @@ export async function POST(request: NextRequest) {
 
 	if (!formId) {
 		return NextResponse.json({ error: 'Missing formId' }, { status: 400 });
+	}
+	if (!HUBSPOT_FORM_ID_PATTERN.test(formId)) {
+		return NextResponse.json({ error: 'Invalid formId' }, { status: 400 });
 	}
 	if (!email || !EMAIL_PATTERN.test(email)) {
 		return NextResponse.json({ error: 'A valid email is required' }, { status: 400 });

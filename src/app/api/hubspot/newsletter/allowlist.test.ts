@@ -15,6 +15,13 @@ describe('parseAllowedFormIds', () => {
 	test('filters empty segments', () => {
 		expect(parseAllowedFormIds('abc,,def,')).toEqual(new Set(['abc', 'def']));
 	});
+
+	test('trims whitespace around form IDs', () => {
+		expect(parseAllowedFormIds('form-1, form-2, form-3')).toEqual(
+			new Set(['form-1', 'form-2', 'form-3']),
+		);
+		expect(isAllowedFormId('form-2', parseAllowedFormIds('form-1, form-2, form-3'))).toBe(true);
+	});
 });
 
 describe('isAllowedFormId', () => {

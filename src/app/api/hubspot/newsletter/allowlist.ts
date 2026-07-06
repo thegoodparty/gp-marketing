@@ -1,5 +1,10 @@
 export function parseAllowedFormIds(raw: string | undefined): Set<string> {
-	return new Set((raw ?? '').split(',').filter(Boolean));
+	return new Set(
+		(raw ?? '')
+			.split(',')
+			.map(id => id.trim())
+			.filter(Boolean),
+	);
 }
 
 export function isAllowedFormId(formId: string | undefined, allowedFormIds: Set<string>): boolean {

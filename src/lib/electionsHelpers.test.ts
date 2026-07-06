@@ -1337,6 +1337,20 @@ describe('claimed profile helpers', () => {
 		expect(htmlToPlainText('Tom &amp; Jerry')).toBe('Tom & Jerry');
 	});
 
+	test('htmlToPlainText strips list formatting artifacts', () => {
+		expect(htmlToPlainText('<ul><li>One</li><li>Two</li></ul>')).toBe('One\n\nTwo');
+		expect(htmlToPlainText('<ol><li>First</li><li>Second</li></ol>')).toBe('First\n\nSecond');
+	});
+
+	test('htmlToPlainText skips horizontal rules and blockquote prefixes', () => {
+		expect(htmlToPlainText('<p>Before</p><hr><p>After</p>')).toBe('Before\n\nAfter');
+		expect(htmlToPlainText('<blockquote>Quoted text</blockquote>')).toBe('Quoted text');
+	});
+
+	test('htmlToPlainText preserves heading casing', () => {
+		expect(htmlToPlainText('<h2>My Position</h2>')).toBe('My Position');
+	});
+
 	test('resolveProfileAboutText prefers elections API about over claimed occupation', () => {
 		expect(
 			resolveProfileAboutText('Election bio', {

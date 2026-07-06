@@ -30,7 +30,7 @@ Run the command in your Terminal to initialize this template on your local compu
 See the documentation if you are [having issues with the CLI](https://www.sanity.io/help/cli-errors).
 
 ```shell
-bun create sanity@latest -- --template sanity-io/sanity-template-nextjs-clean
+npm create sanity@latest -- --template sanity-io/sanity-template-nextjs-clean
 ```
 
 #### 2. Run Studio and Next.js app locally
@@ -38,7 +38,7 @@ bun create sanity@latest -- --template sanity-io/sanity-template-nextjs-clean
 Navigate to the template directory using `cd <your app name>`, and start the development servers by running the following command
 
 ```shell
-bun run dev
+npm run dev
 ```
 
 #### 3. Open the app and sign in to the Studio
@@ -62,7 +62,7 @@ Your content should now appear in your Next.js app ([http://localhost:3000](http
 You may want to start with some sample content and we've got you covered. Run this command from the root of your project to import the provided dataset (sample-data.tar.gz) into your Sanity project. This step is optional but can be helpful for getting started quickly.
 
 ```shell
-bun run import-sample-data
+npm run import-sample-data
 ```
 
 #### 3. Extending the Sanity schema

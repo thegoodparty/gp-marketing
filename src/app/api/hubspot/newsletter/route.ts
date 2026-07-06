@@ -65,7 +65,13 @@ export async function POST(request: NextRequest) {
 	const result = await hubspotResponse.json().catch(() => ({}));
 
 	if (!hubspotResponse.ok) {
-		return NextResponse.json({ error: 'HubSpot submission failed', details: result }, { status: hubspotResponse.status });
+		const isClientError = hubspotResponse.status >= 400 && hubspotResponse.status < 500;
+		return NextResponse.json(
+			isClientError
+				? { error: 'HubSpot submission failed', details: result }
+				: { error: 'HubSpot submission failed' },
+			{ status: isClientError ? hubspotResponse.status : 502 },
+		);
 	}
 
 	return NextResponse.json({ ok: true });

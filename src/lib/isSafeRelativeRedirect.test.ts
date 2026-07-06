@@ -21,4 +21,8 @@ describe('isSafeRelativeRedirect', () => {
 	it('blocks absolute URLs', () => {
 		expect(isSafeRelativeRedirect('https://evil.com')).toBe(false);
 	});
+
+	it('blocks double-encoded protocol-relative URL bypass', () => {
+		expect(isSafeRelativeRedirect('/%252F%252Fevil.com')).toBe(false);
+	});
 });

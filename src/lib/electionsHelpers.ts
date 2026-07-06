@@ -173,8 +173,18 @@ export function htmlToPlainText(value: string | null | undefined): string | unde
 		selectors: [
 			{ selector: 'a', options: { ignoreHref: true } },
 			{ selector: 'img', format: 'skip' },
+			{ selector: 'hr', format: 'skip' },
+			{ selector: 'h1', options: { uppercase: false, leadingLineBreaks: 2, trailingLineBreaks: 2 } },
+			{ selector: 'h2', options: { uppercase: false, leadingLineBreaks: 2, trailingLineBreaks: 2 } },
+			{ selector: 'h3', options: { uppercase: false, leadingLineBreaks: 2, trailingLineBreaks: 2 } },
+			{ selector: 'h4', options: { uppercase: false, leadingLineBreaks: 2, trailingLineBreaks: 2 } },
+			{ selector: 'h5', options: { uppercase: false, leadingLineBreaks: 2, trailingLineBreaks: 2 } },
+			{ selector: 'h6', options: { uppercase: false, leadingLineBreaks: 2, trailingLineBreaks: 2 } },
+			{ selector: 'ul', options: { itemPrefix: ' ', leadingLineBreaks: 2, trailingLineBreaks: 2 } },
+			{ selector: 'ol', format: 'unorderedList', options: { itemPrefix: ' ', leadingLineBreaks: 2, trailingLineBreaks: 2 } },
+			{ selector: 'blockquote', format: 'blockquote', options: { leadingLineBreaks: 2, trailingLineBreaks: 2, trimEmptyLines: true } },
 		],
-	}).trim();
+	}).replace(/^\n+|\n+$/g, '');
 	return text.length > 0 ? text : undefined;
 }
 

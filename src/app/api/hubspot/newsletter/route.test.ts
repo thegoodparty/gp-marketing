@@ -74,7 +74,7 @@ describe('POST /api/hubspot/newsletter', () => {
 		expect(fetchMock).toHaveBeenCalledTimes(1);
 	});
 
-	test('forwards HubSpot error status and details', async () => {
+	test('forwards HubSpot 4xx error status and details', async () => {
 		const hubspotError = { message: 'INVALID_EMAIL', status: 'error' };
 		const fetchMock = mock(async () =>
 			new Response(JSON.stringify(hubspotError), { status: 400 }),
@@ -90,5 +90,20 @@ describe('POST /api/hubspot/newsletter', () => {
 			error: 'HubSpot submission failed',
 			details: hubspotError,
 		});
+	});
+
+	test('returns generic 502 for HubSpot 5xx errors without details', async () => {
+		const hubspotError = { message: 'Internal server error', traceId: 'abc-123' };
+		const fetchMock = mock(async () =>
+			new Response(JSON.stringify(hubspotError), { status: 503 }),
+		);
+		globalThis.fetch = fetchMock as typeof fetch;
+
+		const { POST } = await import('./route');
+		const response = await POST(
+			createRequest({ formId: VALID_FORM_ID, email: 'user@example.com' }),
+		);
+		expect(response.status).toBe(502);
+		expect(await response.json()).toEqual({ error: 'HubSpot submission failed' });
 	});
 });

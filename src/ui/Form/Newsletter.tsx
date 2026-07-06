@@ -4,15 +4,12 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { trackEvent } from '~/lib/analytics';
+import { isSafeRelativeRedirect } from '~/lib/isSafeRelativeRedirect';
 import { Button } from '../Inputs/Button.tsx';
 import { TextInput } from '../Inputs/TextInput.tsx';
 import { Text } from '../Text.tsx';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-function isSafeRelativeRedirect(path: string): boolean {
-	return path.startsWith('/') && !path.startsWith('//');
-}
 
 type NewsletterValues = {
 	firstname: string;

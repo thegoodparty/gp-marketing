@@ -168,7 +168,13 @@ export function resolveClaimedCustomIssueText(issue: ClaimedCustomIssue): string
  */
 export function htmlToPlainText(value: string | null | undefined): string | undefined {
 	if (typeof value !== 'string') return undefined;
-	const text = convert(value, { wordwrap: false }).trim();
+	const text = convert(value, {
+		wordwrap: false,
+		selectors: [
+			{ selector: 'a', options: { ignoreHref: true } },
+			{ selector: 'img', format: 'skip' },
+		],
+	}).trim();
 	return text.length > 0 ? text : undefined;
 }
 

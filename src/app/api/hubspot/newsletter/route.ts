@@ -11,6 +11,7 @@ type SubmissionBody = {
 };
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const HUBSPOT_FORM_ID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
  * POST /api/hubspot/newsletter
@@ -31,13 +32,15 @@ export async function POST(request: NextRequest) {
 	if (!formId) {
 		return NextResponse.json({ error: 'Missing formId' }, { status: 400 });
 	}
+	if (!HUBSPOT_FORM_ID_PATTERN.test(formId)) {
+		return NextResponse.json({ error: 'Invalid formId' }, { status: 400 });
+	}
 	if (!email || !EMAIL_PATTERN.test(email)) {
 		return NextResponse.json({ error: 'A valid email is required' }, { status: 400 });
 	}
 
 	const portalId = process.env['NEXT_PUBLIC_HUBSPOT_PORTAL_ID'] ?? DEFAULT_PORTAL_ID;
 	const hutk = (await cookies()).get('hubspotutk')?.value;
-	const token = process.env['HUBSPOT_PRIVATE_APP_TOKEN'];
 
 	const fields = [
 		{ objectTypeId: '0-1', name: 'firstname', value: firstname ?? '' },
@@ -45,16 +48,11 @@ export async function POST(request: NextRequest) {
 		{ objectTypeId: '0-1', name: 'email', value: email },
 	].filter(field => field.value !== '');
 
-	const endpoint = token
-		? `https://api.hsforms.com/submissions/v3/integration/secure/submit/${portalId}/${formId}`
-		: `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formId}`;
+	const endpoint = `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formId}`;
 
 	const hubspotResponse = await fetch(endpoint, {
 		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			...(token ? { Authorization: `Bearer ${token}` } : {}),
-		},
+		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({
 			fields,
 			context: {

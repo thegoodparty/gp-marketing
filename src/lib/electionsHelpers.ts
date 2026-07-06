@@ -180,10 +180,6 @@ export function htmlToPlainText(value: string | null | undefined): string | unde
 			{ selector: 'h4', options: { uppercase: false } },
 			{ selector: 'h5', options: { uppercase: false } },
 			{ selector: 'h6', options: { uppercase: false } },
-			{ selector: 'ul', format: 'block' },
-			{ selector: 'ol', format: 'block' },
-			{ selector: 'li', format: 'block', options: { leadingLineBreaks: 1, trailingLineBreaks: 0 } },
-			{ selector: 'blockquote', format: 'block', options: { leadingLineBreaks: 1, trailingLineBreaks: 1 } },
 		],
 	}).trim();
 	return text.length > 0 ? text : undefined;

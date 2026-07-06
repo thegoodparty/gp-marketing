@@ -23,6 +23,7 @@ import {
 	getStateName,
 	getYearFromDateString,
 	hasSuspiciousFactsMatch,
+	htmlToPlainText,
 	inferSidebarLinkIcon,
 	isElectionDateBeforeToday,
 	placeToFactsCards,
@@ -1319,6 +1320,21 @@ describe('claimed profile helpers', () => {
 		expect(resolveClaimedCustomIssueText({ title: 'Education', position: 'Fund schools' })).toBe(
 			'Education\n\nFund schools',
 		);
+	});
+
+	test('htmlToPlainText strips tags without appending link URLs', () => {
+		expect(htmlToPlainText('<p>We need change <a href="https://goodparty.org">now</a></p>')).toBe(
+			'We need change now',
+		);
+	});
+
+	test('htmlToPlainText skips images', () => {
+		expect(htmlToPlainText('<img alt="photo" src="https://example.com/x.jpg">')).toBeUndefined();
+	});
+
+	test('htmlToPlainText handles paragraphs and entities', () => {
+		expect(htmlToPlainText('<p>Line one</p><p>Line two</p>')).toBe('Line one\n\nLine two');
+		expect(htmlToPlainText('Tom &amp; Jerry')).toBe('Tom & Jerry');
 	});
 
 	test('resolveProfileAboutText prefers elections API about over claimed occupation', () => {

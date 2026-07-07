@@ -122,11 +122,19 @@ export interface FindByRaceIdResponse {
 		customIssues?: Array<{ title: string; description?: string; position?: string }>;
 	} | null;
 	updatedAt: string;
+	avatar: string | null;
 	website: {
 		id: number;
 		vanityPath: string;
 		status: string;
-		content: Record<string, unknown> | null;
+		content:
+			| {
+					about?: {
+						bio?: string;
+						issues?: Array<{ title?: string; description?: string }>;
+					};
+			  }
+			| null;
 		domain: { name: string; status: string } | null;
 	} | null;
 	campaignPositions: Array<{
@@ -150,6 +158,7 @@ export interface PlaceRace {
 	positionLevel?: string;
 	positionDescription?: string;
 	electionDate?: string;
+	isPrimary?: boolean;
 }
 
 export interface PlaceItem {

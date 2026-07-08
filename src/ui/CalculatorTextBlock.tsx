@@ -266,7 +266,7 @@ export function CalculatorTextBlock(props: CalculatorTextBlockProps) {
 									{props.calculator?.othersCostLabel ?? 'Total cost'}
 								</Text>
 								<Text as='span' styleType='caption' className={hexagonDetail()}>
-									{props.calculator?.othersPerRecordDetail ?? '£0.1 per record'}
+									{props.calculator?.othersPerRecordDetail ?? '$0.1 per record'}
 								</Text>
 							</div>
 						</div>

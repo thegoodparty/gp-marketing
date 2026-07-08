@@ -8,7 +8,12 @@ import {
 	isStateIndexDistrictPlace,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
-import { getStateName } from '~/lib/electionsHelpers';
+import {
+	buildOfficeItemsFromPlaceRaces,
+	getStateName,
+	PLACE_RACE_COLUMNS,
+	resolvePlaceRaceElectionDates,
+} from '~/lib/electionsHelpers';
 import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
 import { US_STATE_CODES } from '~/lib/sitemap-entries';
 import { toAbsoluteUrl } from '~/lib/url';
@@ -40,7 +45,7 @@ export default async function Page({
 			slug: state.toLowerCase(),
 			includeChildren: false,
 			includeRaces: true,
-			raceColumns: 'slug,normalizedPositionName,electionDate,positionDescription,positionLevel',
+			raceColumns: PLACE_RACE_COLUMNS,
 		}),
 	]);
 
@@ -93,27 +98,21 @@ export default async function Page({
 
 	const stateRaces = isSingleCounty
 		? (placeData?.Races ?? [])
-		: (placeData?.Races ?? []).filter(r => r.positionLevel?.toUpperCase() === 'STATE');
-	const stateOffices = stateRaces.map(race => {
-		const positionSlug = race.slug.split('/').slice(1).join('/');
-		return {
-			id: String(race.id),
-			type: 'State',
-			position: race.normalizedPositionName ?? race.name ?? 'Position',
-			nextElectionDate: race.electionDate ?? '',
-			href: `/elections/${state}/position/${positionSlug}`,
-		};
+		: (placeData?.Races ?? []).filter(
+				r => r.positionLevel?.toUpperCase() === 'STATE',
+			);
+	const resolvedDates = await resolvePlaceRaceElectionDates(stateRaces);
+	const { offices: stateOffices, dataYears } = buildOfficeItemsFromPlaceRaces(stateRaces, resolvedDates, {
+		type: 'State',
+		buildHref: race => {
+			const positionSlug = race.slug.split('/').slice(1).join('/');
+			return `/elections/${state}/position/${positionSlug}`;
+		},
 	});
 
-	const dataYears = [
-		...new Set(
-			stateRaces
-				.map(r => (r.electionDate ? new Date(r.electionDate).getFullYear() : NaN))
-				.filter((y): y is number => !isNaN(y)),
-		),
-	].sort((a, b) => a - b);
-
-	const defaultYear = dataYears.includes(currentYear) ? currentYear : (dataYears[0] ?? currentYear);
+	const defaultYear = dataYears.includes(currentYear)
+		? currentYear
+		: (dataYears[0] ?? currentYear);
 	const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
 	const pageUrl = toAbsoluteUrl(`/elections/${state.toLowerCase()}`);
 

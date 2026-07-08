@@ -11,10 +11,13 @@ import {
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
+	buildOfficeItemsFromPlaceRaces,
 	getStateName,
 	hasSuspiciousFactsMatch,
+	PLACE_RACE_COLUMNS,
 	placeToFactsCards,
 	resolveLocalityName,
+	resolvePlaceRaceElectionDates,
 } from '~/lib/electionsHelpers';
 import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
 import { toAbsoluteUrl } from '~/lib/url';
@@ -51,7 +54,7 @@ export default async function Page({
 			includeChildren: false,
 			includeRaces: true,
 			placeColumns: 'slug,name,mtfcc,countyName',
-			raceColumns: 'slug,normalizedPositionName,electionDate,positionDescription,positionLevel',
+			raceColumns: PLACE_RACE_COLUMNS,
 		}),
 		getPlaceBySlug({
 			slug: countySlug,
@@ -68,7 +71,7 @@ export default async function Page({
 			includeChildren: false,
 			includeRaces: true,
 			placeColumns: 'slug,name,mtfcc,countyName',
-			raceColumns: 'slug,normalizedPositionName,electionDate,positionDescription,positionLevel',
+			raceColumns: PLACE_RACE_COLUMNS,
 		});
 	}
 
@@ -101,23 +104,18 @@ export default async function Page({
 			const level = r.positionLevel?.toUpperCase();
 			return level === 'LOCAL' || level === 'COUNTY';
 		});
-		const districtOffices = districtRaces.map(race => {
-			const positionSlug = race.slug.split('/').pop() ?? '';
-			return {
-				id: String(race.id),
+		const districtResolvedDates = await resolvePlaceRaceElectionDates(districtRaces);
+		const { offices: districtOffices, dataYears } = buildOfficeItemsFromPlaceRaces(
+			districtRaces,
+			districtResolvedDates,
+			{
 				type: 'District',
-				position: race.normalizedPositionName ?? race.name ?? 'Position',
-				nextElectionDate: race.electionDate ?? '',
-				href: `/elections/${state.toLowerCase()}/${county.toLowerCase()}/${city.toLowerCase()}/position/${positionSlug}`,
-			};
-		});
-		const dataYears = [
-			...new Set(
-				districtRaces
-					.map(r => (r.electionDate ? new Date(r.electionDate).getFullYear() : NaN))
-					.filter((y): y is number => !isNaN(y)),
-			),
-		].sort((a, b) => a - b);
+				buildHref: race => {
+					const positionSlug = race.slug.split('/').pop() ?? '';
+					return `/elections/${state.toLowerCase()}/${county.toLowerCase()}/${city.toLowerCase()}/position/${positionSlug}`;
+				},
+			},
+		);
 		const defaultYear = dataYears.includes(currentYear)
 			? currentYear
 			: (dataYears[0] ?? currentYear);
@@ -214,25 +212,22 @@ export default async function Page({
 		const level = r.positionLevel?.toUpperCase();
 		return level === 'LOCAL' || level === 'CITY';
 	});
-	const cityOffices = cityRaces.map(race => {
-		const positionSlug = race.slug.split('/').pop() ?? '';
-		return {
-			id: String(race.id),
+	const cityResolvedDates = await resolvePlaceRaceElectionDates(cityRaces);
+	const { offices: cityOffices, dataYears } = buildOfficeItemsFromPlaceRaces(
+		cityRaces,
+		cityResolvedDates,
+		{
 			type: 'City',
-			position: race.normalizedPositionName ?? race.name ?? 'Position',
-			nextElectionDate: race.electionDate ?? '',
-			href: `/elections/${state.toLowerCase()}/${county.toLowerCase()}/${city.toLowerCase()}/position/${positionSlug}`,
-		};
-	});
+			buildHref: race => {
+				const positionSlug = race.slug.split('/').pop() ?? '';
+				return `/elections/${state.toLowerCase()}/${county.toLowerCase()}/${city.toLowerCase()}/position/${positionSlug}`;
+			},
+		},
+	);
 
-	const dataYears = [
-		...new Set(
-			cityRaces
-				.map(r => (r.electionDate ? new Date(r.electionDate).getFullYear() : NaN))
-				.filter((y): y is number => !isNaN(y)),
-		),
-	].sort((a, b) => a - b);
-	const defaultYear = dataYears.includes(currentYear) ? currentYear : (dataYears[0] ?? currentYear);
+	const defaultYear = dataYears.includes(currentYear)
+		? currentYear
+		: (dataYears[0] ?? currentYear);
 	const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
 	const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);
 

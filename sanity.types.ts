@@ -273,6 +273,10 @@ export type Field_policySummary = string;
 
 export type Field_policyName = string;
 
+export type Field_submitLabel = string;
+
+export type Field_redirectUrl = string;
+
 export type Field_hubspotFormId = string;
 
 export type Field_featureOptions = 'Reference' | 'Custom';
@@ -1584,6 +1588,8 @@ export type FormOverview = {
 	field_formProvider?: Field_formProvider;
 	field_formType?: Field_formType;
 	field_hubspotFormId?: Field_hubspotFormId;
+	field_redirectUrl?: Field_redirectUrl;
+	field_submitLabel?: Field_submitLabel;
 };
 
 export type PersonOverview = {
@@ -3398,6 +3404,8 @@ export type AllSanitySchemaTypes =
 	| Field_label
 	| Field_policySummary
 	| Field_policyName
+	| Field_submitLabel
+	| Field_redirectUrl
 	| Field_hubspotFormId
 	| Field_featureOptions
 	| Field_componentColor6Colors

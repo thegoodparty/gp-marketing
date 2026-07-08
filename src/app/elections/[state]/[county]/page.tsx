@@ -9,7 +9,16 @@ import {
 	TOWN_MTFCC,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
-import { getStateName, placeToFactsCards, redirectCityPlaceToFourLevelUrl, canonicalizeCountyEquivalentName, getCountySuffixLabel } from '~/lib/electionsHelpers';
+import {
+	buildOfficeItemsFromPlaceRaces,
+	canonicalizeCountyEquivalentName,
+	getCountySuffixLabel,
+	getStateName,
+	PLACE_RACE_COLUMNS,
+	placeToFactsCards,
+	redirectCityPlaceToFourLevelUrl,
+	resolvePlaceRaceElectionDates,
+} from '~/lib/electionsHelpers';
 import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
 import { toAbsoluteUrl } from '~/lib/url';
 
@@ -42,7 +51,7 @@ export default async function Page({
 			includeChildren: false,
 			includeRaces: true,
 			placeColumns: 'slug,name,mtfcc,countyName',
-			raceColumns: 'slug,normalizedPositionName,electionDate,positionDescription,positionLevel',
+			raceColumns: PLACE_RACE_COLUMNS,
 		}),
 	]);
 
@@ -91,24 +100,20 @@ export default async function Page({
 		const level = r.positionLevel?.toUpperCase();
 		return level === 'COUNTY' || level === 'LOCAL';
 	});
-	const countyOffices = countyRaces.map(race => {
-		const positionSlug = race.slug.split('/').slice(2).join('/');
-		return {
-			id: String(race.id),
-			type: isDistrict ? 'District' : 'County',
-			position: race.normalizedPositionName ?? race.name ?? 'Position',
-			nextElectionDate: race.electionDate ?? '',
-			href: `/elections/${state.toLowerCase()}/${county.toLowerCase()}/position/${positionSlug}`,
-		};
-	});
+	const resolvedDates = await resolvePlaceRaceElectionDates(countyRaces);
+	const officeType = isDistrict ? 'District' : 'County';
+	const { offices: countyOffices, dataYears } = buildOfficeItemsFromPlaceRaces(
+		countyRaces,
+		resolvedDates,
+		{
+			type: officeType,
+			buildHref: race => {
+				const positionSlug = race.slug.split('/').slice(2).join('/');
+				return `/elections/${state.toLowerCase()}/${county.toLowerCase()}/position/${positionSlug}`;
+			},
+		},
+	);
 
-	const dataYears = [
-		...new Set(
-			countyRaces
-				.map(r => (r.electionDate ? new Date(r.electionDate).getFullYear() : NaN))
-				.filter((y): y is number => !isNaN(y)),
-		),
-	].sort((a, b) => a - b);
 	const defaultYear = dataYears.includes(currentYear)
 		? currentYear
 		: (dataYears[0] ?? currentYear);

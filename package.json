@@ -39,7 +39,6 @@
     "@amplitude/experiment-js-client": "^1.20.3",
     "@amplitude/experiment-node-server": "^1.13.4",
     "@csstools/postcss-global-data": "^3.1.0",
-    "@hubspot/api-client": "^13.4.0",
     "@material-tailwind/react": "^2.1.10",
     "@mux/mux-player-react": "^3.6.1",
     "@portabletext/react": "^4.0.3",

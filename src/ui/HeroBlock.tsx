@@ -192,7 +192,13 @@ export function HeroBlock(props: HeroBlockProps) {
 									</Text>
 								)}
 							</div>
-							{props.form?.provider === 'Hubspot' && props.form.formId && <Newsletter formId={props.form.formId} />}
+							{props.form?.provider === 'Hubspot' && props.form.formId && (
+								<Newsletter
+									formId={props.form.formId}
+									redirectTo={props.form.redirectTo}
+									submitLabel={props.form.submitLabel}
+								/>
+							)}
 							{props.buttons && props.buttons.length > 0 && (
 								<div className={buttons()}>
 									{props.buttons.map((item, index) => {

@@ -33,6 +33,18 @@ export const formOverview = {
       type: 'field_hubspotFormId',
       hidden: function (ctx ) { return !['Hubspot'].includes(ctx.parent?.field_formProvider) },
     },
+    {
+      title: 'Redirect URL (after submit)',
+      name: 'field_redirectUrl',
+      type: 'field_redirectUrl',
+      hidden: function (ctx ) { return !['Hubspot'].includes(ctx.parent?.field_formProvider) },
+    },
+    {
+      title: 'Submit button label',
+      name: 'field_submitLabel',
+      type: 'field_submitLabel',
+      hidden: function (ctx ) { return !['Hubspot'].includes(ctx.parent?.field_formProvider) },
+    },
   ],
   preview: {
     select: {

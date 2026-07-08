@@ -163,11 +163,15 @@ export async function getPositionById(id: string): Promise<PositionDetail | null
 export async function getRaceBySlug(
 	raceSlug: string,
 	includePlace = true,
+	filters?: { isPrimary?: boolean },
 ): Promise<RaceDetail | null> {
 	const searchParams = new URLSearchParams({
 		raceSlug,
 		includePlace: includePlace.toString(),
 	});
+	if (filters?.isPrimary !== undefined) {
+		searchParams.set('isPrimary', filters.isPrimary.toString());
+	}
 	const url = `${ELECTIONS_API_BASE_URL}/v1/races?${searchParams}`;
 	const data = await fetchJson<RaceDetail[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) && data.length > 0 ? (data[0] ?? null) : null;

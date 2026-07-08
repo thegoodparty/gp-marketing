@@ -52,6 +52,18 @@ Minimal variant with a single link and one info field. Demonstrates the componen
 
 Full sidebar without the CTA button. Useful when the call-to-action is handled elsewhere on the page.
 
+### Multiple Websites
+
+<Canvas of={ElectionsSidebarStories.MultipleWebsites} />
+
+Candidate profiles with several custom-domain links. Labels are derived from each URL hostname so government and campaign sites remain distinguishable.
+
+### Social Platforms
+
+<Canvas of={ElectionsSidebarStories.SocialPlatforms} />
+
+Platform links (LinkedIn, Instagram, Wikipedia, YouTube, TikTok) receive platform-specific labels and icons regardless of their position in the list.
+
 ## Props
 
 <Controls of={ElectionsSidebarStories.Default} />
@@ -72,10 +84,13 @@ Each `SidebarLink` contains:
 **Example:**
 ```typescript
 links: [
-  { label: 'Website', icon: 'globe', href: 'https://www.example.com' },
+  { label: 'LinkedIn', icon: 'linkedin', href: 'https://www.linkedin.com/in/candidate' },
+  { label: 'Ci.northville.mi.us', icon: 'globe', href: 'https://www.ci.northville.mi.us/' },
   { label: 'Email', icon: 'mail', href: 'mailto:contact@example.com' },
 ]
 ```
+
+On candidate profile pages, labels and icons are inferred from each URL via `formatSidebarLinkLabel` and `inferSidebarLinkIcon` in `electionsHelpers.ts`. Known platforms get platform names; other URLs use a capitalized hostname so multiple websites stay distinguishable.
 
 #### `aboutOffice` (optional)
 
@@ -113,12 +128,15 @@ Additional CSS classes to apply to the component.
 
 The component uses the Lucide icon set through `IconResolver`. Common icon names include:
 
-- `globe` - Website/URL icon
+- `globe` - Generic website/URL icon
 - `mail` - Email icon
 - `facebook` - Facebook social icon
-- `link` - Generic link icon
 - `twitter` - Twitter/X icon
 - `linkedin` - LinkedIn icon
+- `instagram` - Instagram icon
+- `youtube` - YouTube icon
+- `book-open` - Wikipedia icon
+- `video` - TikTok icon
 
 Icons are optional - links will render without icons if the `icon` property is omitted.
 

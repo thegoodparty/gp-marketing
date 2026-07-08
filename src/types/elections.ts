@@ -158,6 +158,7 @@ export interface PlaceRace {
 	positionLevel?: string;
 	positionDescription?: string;
 	electionDate?: string;
+	isPrimary?: boolean;
 }
 
 export interface PlaceItem {

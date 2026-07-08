@@ -4,6 +4,8 @@ import type { Sections } from '~/PageSections';
 import type { CandidateCard } from '~/ui/CandidatesBlock';
 
 import { transformButtons } from '~/lib/buttonTransformer';
+import type { TokenMap } from '~/lib/resolveTokens';
+import { resolveSectionText } from '~/lib/resolveSectionText';
 
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
@@ -28,10 +30,12 @@ const mockCandidates: CandidateCard[] = [
 
 type CandidatesBlockSectionProps = Extract<Sections, { _type: 'component_candidatesBlock' }> & {
 	candidatesOverride?: CandidateCard[];
+	headerOverride?: { title?: string; copy?: string };
+	tokens?: TokenMap;
 };
 
 export function CandidatesBlockSection(props: CandidatesBlockSectionProps) {
-	const { candidatesOverride, ...section } = props;
+	const { candidatesOverride, headerOverride, tokens, ...section } = props;
 	const backgroundColor = section.candidatesBlockDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(stegaClean(section.candidatesBlockDesignSettings.field_blockColorCreamMidnight))
 		: 'cream';
@@ -47,10 +51,14 @@ export function CandidatesBlockSection(props: CandidatesBlockSectionProps) {
 			<CandidatesBlock
 				backgroundColor={backgroundColor}
 				header={{
-					title: section.candidatesBlockHeader?.field_title,
-					label: section.candidatesBlockHeader?.field_label,
-					caption: section.candidatesBlockHeader?.field_caption,
-					copy: <RichData value={section.candidatesBlockHeader?.block_summaryText} />,
+					title: headerOverride?.title ?? resolveSectionText(section.candidatesBlockHeader?.field_title, tokens),
+					label: resolveSectionText(section.candidatesBlockHeader?.field_label, tokens),
+					caption: resolveSectionText(section.candidatesBlockHeader?.field_caption, tokens),
+					copy: headerOverride?.copy ? (
+						headerOverride.copy
+					) : (
+						<RichData value={section.candidatesBlockHeader?.block_summaryText} />
+					),
 					backgroundColor,
 					buttons: transformButtons(section.candidatesBlockHeader?.list_buttons),
 					textSize: resolveTextSize(section.candidatesBlockHeader?.field_textSize),

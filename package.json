@@ -12,6 +12,7 @@
     "build": "next build --turbopack",
     "postbuild": "bun run scripts/check-canonicals.ts",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
     "test": "bun test ./src ./scripts",
     "start": "next start",
     "sb:dev": "storybook dev -p 6006 --disable-telemetry --no-version-updates",

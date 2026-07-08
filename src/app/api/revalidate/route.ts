@@ -4,6 +4,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { parseBody } from 'next-sanity/webhook';
 import { revalidateSecret } from '~/lib/env';
 import { sanityClient } from '~/sanity/sanityClient';
+import { buildCustomTemplateRevalidatePaths } from '~/lib/electionTemplatePreview';
 
 const CUSTOM_SECRET_HEADER = 'x-sanity-webhook-secret';
 const HMAC_KEY = 'safeCompare';
@@ -79,6 +80,8 @@ function getPathsToRevalidate(_type: string, payload: Record<string, unknown>): 
 		goodpartyOrg_404Page: ['/'],
 		goodpartyOrg_allComponents: ['/all'],
 		quoteCollections: ['/elections'],
+		goodpartyOrg_globalTemplate: ['/elections', '/candidate'],
+		goodpartyOrg_customTemplate: ['/elections', '/candidate'],
 	};
 
 	const raw = pathMap[_type];
@@ -164,6 +167,33 @@ async function resolveExperimentVariantPaths(
 	}
 }
 
+async function resolveCustomTemplatePaths(payload: Record<string, unknown>): Promise<string[]> {
+	const rawId = typeof payload['_id'] === 'string' ? (payload['_id'] as string) : null;
+	if (!rawId) return ['/elections', '/candidate'];
+
+	const publishedId = rawId.startsWith('drafts.') ? rawId.slice('drafts.'.length) : rawId;
+
+	type TargetRow = { field_electionTargetType?: string; field_electionTargetSlug?: string };
+
+	try {
+		const targets = await sanityClient
+			.withConfig({ useCdn: false })
+			.fetch<TargetRow[]>(
+				`*[_id == $publishedId][0].list_targets[]{
+				field_electionTargetType,
+				field_electionTargetSlug
+			}`,
+				{ publishedId },
+			);
+
+		const paths = buildCustomTemplateRevalidatePaths(targets ?? []);
+		return paths.length > 0 ? paths : ['/elections', '/candidate'];
+	} catch (err) {
+		console.error('Failed to resolve custom template target paths:', err);
+		return ['/elections', '/candidate'];
+	}
+}
+
 export async function POST(req: NextRequest) {
 	if (!revalidateSecret) {
 		return NextResponse.json(
@@ -206,11 +236,19 @@ export async function POST(req: NextRequest) {
 
 	try {
 		revalidateTag(_type);
+		if (_type === 'goodpartyOrg_globalTemplate' && typeof payload['field_electionTemplateType'] === 'string') {
+			revalidateTag(`goodpartyOrg_globalTemplate_${payload['field_electionTemplateType']}`);
+		}
+		if (_type === 'goodpartyOrg_customTemplate' && typeof payload['field_electionTemplateType'] === 'string') {
+			revalidateTag(`goodpartyOrg_customTemplate_${payload['field_electionTemplateType']}`);
+		}
 
 		const paths =
 			_type === 'experiment_variant'
 				? await resolveExperimentVariantPaths(payload)
-				: getPathsToRevalidate(_type, payload);
+				: _type === 'goodpartyOrg_customTemplate'
+					? await resolveCustomTemplatePaths(payload)
+					: getPathsToRevalidate(_type, payload);
 		for (const path of paths) {
 			revalidatePath(path);
 		}

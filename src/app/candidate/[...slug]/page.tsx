@@ -14,12 +14,11 @@ import {
 	resolveProfileImageUrl,
 	resolveWebsiteIssueText,
 } from '~/lib/electionsHelpers';
-import { PageSections } from '~/PageSections';
 import type { SectionOverrides } from '~/PageSections';
 import type { CandidacyItem, FindByRaceIdResponse } from '~/types/elections';
 import type { ProfileData, OfficeData } from '~/PageSections/ProfileContentBlockSection';
 import { SITE_NAME } from '~/lib/url';
-import { PROFILE_PAGE_SECTIONS } from './profilePageSections';
+import { renderElectionTemplatePage } from '~/lib/renderElectionTemplatePage';
 
 export const revalidate = 3600;
 
@@ -186,12 +185,19 @@ export default async function Page({
 		await resolveRaceElectionHrefs(candidate.Race?.slug, candidate.Race?.positionLevel),
 	);
 
-	return (
-		<PageSections
-			pageSections={PROFILE_PAGE_SECTIONS}
-			sectionOverrides={sectionOverrides}
-		/>
-	);
+	const candidateName = [candidate.firstName, candidate.lastName].filter(Boolean).join(' ') || 'Candidate';
+
+	return renderElectionTemplatePage({
+		context: {
+			templateType: 'candidateProfile',
+			candidateSlug: slug,
+		},
+		sectionOverrides,
+		tokens: {
+			'[candidate name]': candidateName,
+			'[office name]': candidate.positionName ?? 'Office',
+		},
+	});
 }
 
 export async function generateMetadata({

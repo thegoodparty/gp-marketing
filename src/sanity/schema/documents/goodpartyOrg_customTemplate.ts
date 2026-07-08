@@ -14,7 +14,10 @@ On any error in a custom template, the site uses the corresponding global templa
 
 Clone workflow: duplicate a global template document, change type to custom, add targets, and edit sections.
 
-Supported tokens: [State], [County], [City], [District], [office name], [County or City], [office], [location], [candidate name]`;
+Supported tokens in plain text fields:
+- Location: [State], [County], [City], [District]
+- Position / candidates: [office name], [State], [County or City], [office], [location]
+- Profile: [candidate name], [office name]`;
 
 export const goodpartyOrg_customTemplate = {
 	title: 'Custom Election Template',

@@ -4,6 +4,7 @@ import {
 	fetchMainSitemapEntries,
 	fetchStateElectionSitemapEntries,
 	fetchCandidateSitemapEntries,
+	fetchPeopleSitemapEntries,
 	getSitemapIds,
 	US_STATE_CODES,
 } from '~/lib/sitemap-entries';
@@ -15,7 +16,13 @@ export function generateSitemaps() {
 export default async function sitemap({ id }: { id: number }): Promise<MetadataRoute.Sitemap> {
 	const n = Number(id);
 	const base = getBaseUrl();
-	if (n === 0) return fetchMainSitemapEntries(base);
+	if (n === 0) {
+		const [main, people] = await Promise.all([
+			fetchMainSitemapEntries(base),
+			fetchPeopleSitemapEntries(base),
+		]);
+		return [...main, ...people];
+	}
 	if (n >= 1 && n <= US_STATE_CODES.length) {
 		const code = US_STATE_CODES[n - 1];
 		if (code) return fetchStateElectionSitemapEntries(code, base);

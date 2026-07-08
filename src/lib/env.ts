@@ -10,6 +10,10 @@ export const token = process.env.SANITY_STUDIO_API_TOKEN || undefined;
 // Used to verify GROQ webhook revalidation requests, defining this will also disable time-based revalidation and only use on-demand revalidation
 export const revalidateSecret = process.env.SANITY_REVALIDATE_SECRET;
 
+// Shared secret gp-api sends to /api/revalidate-person to on-demand bust a
+// public /people/* page after a publish/unpublish/delete/edit.
+export const personRevalidateSecret = process.env.MARKETING_REVALIDATE_SECRET;
+
 // Used by `sanity-plugin-iframe-pane` to verify that draft mode was initiated by a valid Studio session
 export const urlSecretId = `preview.secret`;
 

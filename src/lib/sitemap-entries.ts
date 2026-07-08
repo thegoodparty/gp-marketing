@@ -12,6 +12,7 @@ import {
 	stripCountySuffix as stripCountySuffixFromHelpers,
 } from '~/lib/electionsHelpers';
 import { FAQ_BASE_PATH, getFaqSitemapEntries } from '~/lib/faqSlugs';
+import { buildPersonSlug } from '~/lib/peopleProfile';
 import { allFaqsQuery } from '~/sanity/groq';
 
 /** 51 US state/DC codes (50 states + DC) */
@@ -31,6 +32,11 @@ export function getSitemapIds(): { id: number }[] {
 
 const ELECTION_API_BASE =
 	process.env['NEXT_PUBLIC_ELECTION_API_BASE'] ?? process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
+
+const GP_API_BASE =
+	process.env['GP_API_BASE_URL'] ??
+	process.env['NEXT_PUBLIC_API_BASE'] ??
+	ELECTION_API_BASE.replace('election-api', 'gp-api');
 
 const CACHE_1H: RequestInit = { next: { revalidate: 3600 } };
 
@@ -362,6 +368,22 @@ export async function getCachedElectionRouteParams(): Promise<{
 	return cachedElectionRouteParams;
 }
 
+async function fetchGpApiJson<T>(path: string): Promise<T[]> {
+	const url = `${GP_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
+	try {
+		const res = await fetch(url, CACHE_1H);
+		if (!res.ok) {
+			console.error(`[sitemap] gp-api ${res.status} ${url}`);
+			return [];
+		}
+		const data: unknown = await res.json();
+		return Array.isArray(data) ? (data as T[]) : [];
+	} catch (err) {
+		console.error('[sitemap] gp-api fetch failed', url, err instanceof Error ? err.message : String(err));
+		return [];
+	}
+}
+
 async function fetchElectionJson<T>(path: string, params: Record<string, string>): Promise<T[]> {
 	const search = new URLSearchParams(params).toString();
 	const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}?${search}`;
@@ -532,6 +554,45 @@ export async function fetchStateElectionSitemapEntries(
 
 	entries.push(...buildRaceEntries(races, citySlugToCountySlug, baseUrl));
 
+	return dedupeByUrl(entries);
+}
+
+/**
+ * Fetches public /people profile sitemap entries.
+ *
+ * Two-hop join across the service boundary: gp-api owns the publish gate (which
+ * personIds are live), election-api owns the person names used to build the
+ * canonical name-based slug. Anything gp-api reports as published but that has
+ * no election-api Person yet is skipped (no name → no stable pretty slug).
+ */
+export async function fetchPeopleSitemapEntries(baseUrl: string): Promise<MetadataRoute.Sitemap> {
+	const published = await fetchGpApiJson<{ personId?: string; updatedAt?: string }>(
+		'v1/public-person-profiles/published',
+	);
+	if (published.length === 0) return [];
+
+	const updatedByPersonId = new Map<string, string | undefined>();
+	for (const row of published) {
+		if (row.personId) updatedByPersonId.set(row.personId.toLowerCase(), row.updatedAt);
+	}
+
+	const ids = [...updatedByPersonId.keys()];
+	const persons = await fetchElectionJson<{
+		id?: string;
+		firstName?: string | null;
+		lastName?: string | null;
+		fullName?: string | null;
+	}>('v1/persons', { ids: ids.join(','), columns: 'id,firstName,lastName,fullName' });
+
+	const entries: MetadataRoute.Sitemap = [];
+	for (const p of persons) {
+		if (!p.id) continue;
+		const name = p.fullName ?? [p.firstName, p.lastName].filter(Boolean).join(' ');
+		if (!name) continue;
+		const slug = buildPersonSlug(name, p.id);
+		const updatedAt = updatedByPersonId.get(p.id.toLowerCase());
+		entries.push(toEntry(baseUrl, `/people/${slug}`, 0.7, 'weekly', updatedAt?.slice(0, 10)));
+	}
 	return dedupeByUrl(entries);
 }
 

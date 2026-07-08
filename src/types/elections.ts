@@ -35,6 +35,8 @@ export interface DistrictNameItem {
 export interface CandidacyItem {
 	id: string;
 	slug?: string;
+	/** Canonical person id (election-api gp_candidate_id); links to a /people profile. */
+	personId?: string | null;
 	firstName?: string;
 	lastName?: string;
 	image?: string;

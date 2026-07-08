@@ -10,6 +10,11 @@ import type {
 	RaceDetail,
 	RaceNode,
 } from '~/types/elections';
+import type {
+	PersonItem,
+	PersonOfficeHolder,
+	PublicPersonProfile,
+} from '~/types/people';
 import {
 	buildElectionPositionHrefFromRaceSlug,
 	buildRaceCandidatesHref,
@@ -257,6 +262,50 @@ export async function findCampaignByRace(params: {
 	});
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-campaigns?${searchParams}`;
 	return fetchJson<FindByRaceIdResponse>(url);
+}
+
+/**
+ * Cache tag for everything that composes one person's public page. gp-api busts
+ * this tag (via /api/revalidate-person) on publish/unpublish/delete/edit so the
+ * page is regenerated regardless of its name-based slug.
+ */
+export function personCacheTag(personId: string): string {
+	return `person:${personId.toLowerCase()}`;
+}
+
+function personCacheOptions(personId: string): RequestInit {
+	return { next: { revalidate: 3600, tags: [personCacheTag(personId)] } };
+}
+
+/**
+ * The read-only civics spine for one person (election-api). Includes their
+ * office terms and candidacies. Returns null when no Person row exists yet
+ * (e.g. a brand-new user the data team hasn't reconciled).
+ */
+export async function getPersonByPersonId(personId: string): Promise<PersonItem | null> {
+	const url = `${ELECTIONS_API_BASE_URL}/v1/persons/${encodeURIComponent(personId)}`;
+	return fetchJson<PersonItem>(url, personCacheOptions(personId));
+}
+
+/** Office terms held by a person (election-api). */
+export async function getOfficeHoldersByPerson(personId: string): Promise<PersonOfficeHolder[]> {
+	const searchParams = new URLSearchParams({ personId, includePosition: 'true' });
+	const url = `${ELECTIONS_API_BASE_URL}/v1/officeholders?${searchParams}`;
+	const data = await fetchJson<PersonOfficeHolder[]>(url, personCacheOptions(personId));
+	return Array.isArray(data) ? data : [];
+}
+
+/**
+ * The product-owned overlay for a person's public profile (gp-api). This is the
+ * render gate: gp-api returns 404 (unpublished / never created) or 410 (deleted)
+ * for anything that is not live, so a null here means "do not render a page".
+ */
+export async function getPublicPersonProfile(
+	personId: string,
+): Promise<PublicPersonProfile | null> {
+	const searchParams = new URLSearchParams({ personId });
+	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles?${searchParams}`;
+	return fetchJson<PublicPersonProfile>(url, personCacheOptions(personId));
 }
 
 export async function getMostElections(count = 3): Promise<FeaturedCity[]> {

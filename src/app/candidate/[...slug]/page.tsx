@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { getCandidateBySlug, findCampaignByRace, resolveRaceElectionHrefs } from '~/lib/electionsApi';
+import { loadPersonProfile } from '~/lib/peopleProfile';
 import {
 	formatElectionDateFromApi,
 	formatSidebarLinkLabel,
@@ -175,6 +176,15 @@ export default async function Page({
 	const candidate = await getCandidateBySlug({ slug });
 	if (!candidate) {
 		notFound();
+	}
+
+	// Once a candidate has a live public /people profile, that becomes the single
+	// canonical home for the person; send the legacy candidate URL there.
+	if (candidate.personId) {
+		const person = await loadPersonProfile(candidate.personId);
+		if (person) {
+			redirect(`/people/${person.canonicalSlug}`);
+		}
 	}
 
 	const claimed = await loadClaimedCampaignForCandidate(candidate);

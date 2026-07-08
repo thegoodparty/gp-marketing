@@ -2,7 +2,7 @@ import type { Sections } from '~/PageSections';
 
 import { transformButtons } from '~/lib/buttonTransformer';
 import type { TokenMap } from '~/lib/resolveTokens';
-import { resolveSectionText } from '~/lib/resolveSectionText';
+import { resolveSectionText, resolveRichTextTokens } from '~/lib/resolveSectionText';
 
 import { resolveComponentColor } from '~/ui/_lib/resolveComponentColor';
 import { CTABannerBlock } from '~/ui/CTABannerBlock';
@@ -25,7 +25,7 @@ export function CTABannerBlockSection(section: Props) {
 				backgroundColor={backgroundColor}
 				color={resolveComponentColor(stegaClean(section.ctaBannerBlockDesignSettings?.field_componentColor6ColorsInverse), backgroundColor)}
 				title={resolveSectionText(section.title, section.tokens)}
-				copy={<RichData value={section.block_summaryText} />}
+				copy={<RichData value={resolveRichTextTokens(section.block_summaryText, section.tokens)} />}
 				button={transformButtons([section['primaryCTA']])?.[0]}
 			/>
 		</section>

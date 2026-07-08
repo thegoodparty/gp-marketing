@@ -178,7 +178,7 @@ export function PageSections(props: Props) {
 					case 'component_carouselBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Carousel Block'>
-								<CarouselBlockSection {...section} />
+								<CarouselBlockSection {...section} tokens={props.tokens} />
 							</ComponentErrorBoundary>
 						);
 					case 'component_claimProfileBlock':
@@ -414,6 +414,7 @@ export function PageSections(props: Props) {
 								<LocationFactsBlockSection
 									{...section}
 									factsOverride={props.sectionOverrides?.component_locationFactsBlock}
+									tokens={props.tokens}
 								/>
 							</ComponentErrorBoundary>
 						);

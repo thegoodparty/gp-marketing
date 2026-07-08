@@ -2,7 +2,7 @@ import type { Sections } from '~/PageSections';
 
 import { transformButtons } from '~/lib/buttonTransformer';
 import type { TokenMap } from '~/lib/resolveTokens';
-import { resolveSectionText } from '~/lib/resolveSectionText';
+import { resolveSectionText, resolveRichTextTokens } from '~/lib/resolveSectionText';
 import { resolveTwoUpCardBlockCardType } from '~/ui/_lib/resolveTwoUpCardBlockCardType';
 import { resolveComponentColor } from '~/ui/_lib/resolveComponentColor';
 
@@ -51,7 +51,7 @@ function resolveTwoUpCardBlockCard(
 					: undefined,
 				list: card.valuePropositionCard?.list_valuePropositionCardItems?.map(item => {
 					return {
-						title: <RichData value={item.block_summaryText} />,
+						title: <RichData value={resolveRichTextTokens(item.block_summaryText, tokens)} />,
 						icon: item.field_icon,
 					};
 				}),

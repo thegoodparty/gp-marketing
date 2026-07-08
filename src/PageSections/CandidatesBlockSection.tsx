@@ -5,7 +5,7 @@ import type { CandidateCard } from '~/ui/CandidatesBlock';
 
 import { transformButtons } from '~/lib/buttonTransformer';
 import type { TokenMap } from '~/lib/resolveTokens';
-import { resolveSectionText } from '~/lib/resolveSectionText';
+import { resolveSectionText, resolveRichTextTokens } from '~/lib/resolveSectionText';
 
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
@@ -57,7 +57,12 @@ export function CandidatesBlockSection(props: CandidatesBlockSectionProps) {
 					copy: headerOverride?.copy ? (
 						headerOverride.copy
 					) : (
-						<RichData value={section.candidatesBlockHeader?.block_summaryText} />
+						<RichData
+							value={resolveRichTextTokens(
+								section.candidatesBlockHeader?.block_summaryText,
+								tokens,
+							)}
+						/>
 					),
 					backgroundColor,
 					buttons: transformButtons(section.candidatesBlockHeader?.list_buttons),

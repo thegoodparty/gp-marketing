@@ -17,7 +17,8 @@ describe('resolveRichTextTokens', () => {
 		];
 
 		const result = resolveRichTextTokens(value, { '[office]': 'Mayor' });
+		const blocks = result as Array<{ children?: Array<{ text?: string }> }> | null | undefined;
 
-		expect(result?.[0]?.children?.[0]?.text).toBe('Candidates for Mayor');
+		expect(blocks?.[0]?.children?.[0]?.text).toBe('Candidates for Mayor');
 	});
 });

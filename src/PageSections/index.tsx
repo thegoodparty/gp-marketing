@@ -189,6 +189,7 @@ export function PageSections(props: Props) {
 							<ComponentErrorBoundary key={section._key} componentName='Claim Profile Block'>
 								<ClaimProfileBlockSection
 									{...section}
+									tokens={props.tokens}
 									claimProfileOverride={props.sectionOverrides?.component_claimProfileBlock}
 								/>
 							</ComponentErrorBoundary>
@@ -395,7 +396,7 @@ export function PageSections(props: Props) {
 					case 'component_goodPartyOrgPledge':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='GoodParty.org Pledge'>
-								<GoodPartyOrgPledgeSection {...section} />
+								<GoodPartyOrgPledgeSection {...section} tokens={props.tokens} />
 							</ComponentErrorBoundary>
 						);
 					case 'component_locationLandingPageHero':

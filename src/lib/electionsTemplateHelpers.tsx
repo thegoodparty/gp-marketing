@@ -122,6 +122,13 @@ export function buildCandidatesTokens(
 	};
 }
 
+export function buildProfileTokens(ctx: { candidateName: string; officeName: string }): TokenMap {
+	return {
+		'[candidate name]': ctx.candidateName,
+		'[office name]': ctx.officeName,
+	};
+}
+
 export function buildPositionSectionOverrides(ctx: PositionPageContext): SectionOverrides {
 	const race = ctx.race;
 	return {

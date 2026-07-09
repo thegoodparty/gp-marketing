@@ -112,4 +112,29 @@ describe('pickBestCustomTemplate', () => {
 		const ctx: ElectionTemplateContext = { templateType: 'location', placeSlug: 'ny' };
 		expect(pickBestCustomTemplate(docs, ctx)).toBeNull();
 	});
+
+	test('uses raceSlug over positionSlug for position target when both are supplied', () => {
+		const docs = [
+			{
+				_id: 'by-race-slug',
+				field_enabled: true,
+				field_priority: 100,
+				field_electionTemplateType: 'position' as const,
+				list_targets: [{ field_electionTargetType: 'position' as const, field_electionTargetSlug: 'mayor-2024' }],
+			},
+			{
+				_id: 'by-position-slug',
+				field_enabled: true,
+				field_priority: 100,
+				field_electionTemplateType: 'position' as const,
+				list_targets: [{ field_electionTargetType: 'position' as const, field_electionTargetSlug: 'mayor' }],
+			},
+		];
+		const ctx: ElectionTemplateContext = {
+			templateType: 'position',
+			raceSlug: 'mayor-2024',
+			positionSlug: 'mayor',
+		};
+		expect(pickBestCustomTemplate(docs, ctx)?._id).toBe('by-race-slug');
+	});
 });

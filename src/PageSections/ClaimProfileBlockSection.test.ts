@@ -1,17 +1,32 @@
 import { describe, expect, test } from 'bun:test';
 import {
 	resolveClaimProfileBlockBackgroundColor,
+	resolveClaimProfileBlockText,
 	resolveExampleCardPartyAffiliation,
 } from './ClaimProfileBlockSection';
-import { resolveSectionText } from '~/lib/resolveSectionText';
 
-describe('ClaimProfileBlockSection token resolution', () => {
-	test('resolves [candidate name] in headline and body', () => {
+describe('resolveClaimProfileBlockText', () => {
+	test('resolves profile tokens in headline and body from CMS content', () => {
 		const tokens = { '[candidate name]': 'Jane Doe', '[office name]': 'Mayor' };
-		expect(resolveSectionText('Claim profile for [candidate name]', tokens)).toBe(
-			'Claim profile for Jane Doe',
-		);
-		expect(resolveSectionText('Running for [office name]', tokens)).toBe('Running for Mayor');
+		expect(
+			resolveClaimProfileBlockText(
+				{
+					field_headline: 'Claim profile for [candidate name]',
+					field_body: 'Running for [office name]',
+				},
+				tokens,
+			),
+		).toEqual({
+			headline: 'Claim profile for Jane Doe',
+			body: 'Running for Mayor',
+		});
+	});
+
+	test('returns undefined fields when CMS content is absent', () => {
+		expect(resolveClaimProfileBlockText(null, { '[candidate name]': 'Jane Doe' })).toEqual({
+			headline: undefined,
+			body: undefined,
+		});
 	});
 });
 

@@ -15,6 +15,31 @@ type Props = Extract<Sections, { _type: 'component_goodPartyOrgPledge' }> & {
 	tokens?: TokenMap;
 };
 
+type PledgeSection = Extract<Sections, { _type: 'component_goodPartyOrgPledge' }>;
+type PledgeSummaryInfo = PledgeSection['summaryInfo'];
+type PledgeCardFields = NonNullable<
+	NonNullable<PledgeSection['goodPartyOrgPledgeItems']>['list_pledgeCards']
+>[number];
+
+export function resolveGoodPartyOrgPledgeHeader(
+	summaryInfo: PledgeSummaryInfo,
+	tokens?: TokenMap,
+) {
+	return {
+		title: resolveSectionText(summaryInfo?.field_title, tokens),
+		label: resolveSectionText(summaryInfo?.field_label, tokens),
+		caption: resolveSectionText(summaryInfo?.field_caption, tokens),
+		copy: resolveRichTextTokens(summaryInfo?.block_summaryText, tokens),
+	};
+}
+
+export function resolveGoodPartyOrgPledgeCard(card: PledgeCardFields, tokens?: TokenMap) {
+	return {
+		title: resolveSectionText(card.field_title, tokens),
+		content: resolveRichTextTokens(card.block_summaryText, tokens),
+	};
+}
+
 export function GoodPartyOrgPledgeSection({ tokens, ...section }: Props) {
 	const backgroundColor = section.goodPartyOrgPledgeDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(stegaClean(section.goodPartyOrgPledgeDesignSettings.field_blockColorCreamMidnight))
@@ -24,6 +49,7 @@ export function GoodPartyOrgPledgeSection({ tokens, ...section }: Props) {
 		? resolveIconColor(stegaClean(section.goodPartyOrgPledgeDesignSettings.field_iconColor6ColorsWhiteMixed))
 		: 'blue';
 	const iconColor = resolvedIconColor === 'white' ? 'blue' : resolvedIconColor;
+	const header = resolveGoodPartyOrgPledgeHeader(section.summaryInfo, tokens);
 
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='GoodParty.org Pledge'>
@@ -31,14 +57,10 @@ export function GoodPartyOrgPledgeSection({ tokens, ...section }: Props) {
 				backgroundColor={backgroundColor}
 				iconBg={iconColor}
 				header={{
-					title: resolveSectionText(section.summaryInfo?.field_title, tokens),
-					label: resolveSectionText(section.summaryInfo?.field_label, tokens),
-					caption: resolveSectionText(section.summaryInfo?.field_caption, tokens),
-					copy: (
-						<RichData
-							value={resolveRichTextTokens(section.summaryInfo?.block_summaryText, tokens)}
-						/>
-					),
+					title: header.title,
+					label: header.label,
+					caption: header.caption,
+					copy: <RichData value={header.copy} />,
 					buttons: transformButtons(section.summaryInfo?.list_buttons),
 					textSize: resolveTextSize(section.summaryInfo?.field_textSize),
 				}}
@@ -47,11 +69,12 @@ export function GoodPartyOrgPledgeSection({ tokens, ...section }: Props) {
 					const pledgeButton = cta
 						? normalizeRawCtaToButton(cta, `${card._key ?? ''}-pledge-cta`)
 						: undefined;
+					const resolvedCard = resolveGoodPartyOrgPledgeCard(card, tokens);
 
 					return {
 						icon: card.field_icon,
-						title: resolveSectionText(card.field_title, tokens),
-						content: <RichData value={resolveRichTextTokens(card.block_summaryText, tokens)} />,
+						title: resolvedCard.title,
+						content: <RichData value={resolvedCard.content} />,
 						button: pledgeButton ? transformButtons([pledgeButton])?.[0] : undefined,
 					};
 				})}

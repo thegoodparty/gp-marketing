@@ -26,6 +26,18 @@ export function resolveClaimProfileBlockBackgroundColor(
 	return 'cream';
 }
 
+type ClaimProfileContent = Extract<Sections, { _type: 'component_claimProfileBlock' }>['claimProfileBlockContent'];
+
+export function resolveClaimProfileBlockText(
+	content: ClaimProfileContent,
+	tokens?: TokenMap,
+): { headline?: string; body?: string } {
+	return {
+		headline: resolveSectionText(content?.field_headline, tokens),
+		body: resolveSectionText(content?.field_body, tokens),
+	};
+}
+
 export function ClaimProfileBlockSection({ claimProfileOverride, tokens, ...section }: Props) {
 	const bgValue = stegaClean(section.claimProfileBlockDesignSettings?.field_blockColorCreamMidnight);
 	const backgroundColor = resolveClaimProfileBlockBackgroundColor(bgValue);
@@ -36,6 +48,7 @@ export function ClaimProfileBlockSection({ claimProfileOverride, tokens, ...sect
 			? transformButton(ctaButton)
 			: undefined;
 	const exampleCard = section.claimProfileBlockContent?.exampleCard;
+	const { headline, body } = resolveClaimProfileBlockText(section.claimProfileBlockContent, tokens);
 
 	return (
 		<section
@@ -45,8 +58,8 @@ export function ClaimProfileBlockSection({ claimProfileOverride, tokens, ...sect
 			<ClaimProfileBlock
 				layout={claimProfileOverride?.layout ?? 'card'}
 				backgroundColor={backgroundColor}
-				headline={resolveSectionText(section.claimProfileBlockContent?.field_headline, tokens)}
-				body={resolveSectionText(section.claimProfileBlockContent?.field_body, tokens)}
+				headline={headline}
+				body={body}
 				claimButton={
 					claimButton ?? {
 						buttonType: 'internal',

@@ -3,6 +3,17 @@ import {
 	resolveClaimProfileBlockBackgroundColor,
 	resolveExampleCardPartyAffiliation,
 } from './ClaimProfileBlockSection';
+import { resolveSectionText } from '~/lib/resolveSectionText';
+
+describe('ClaimProfileBlockSection token resolution', () => {
+	test('resolves [candidate name] in headline and body', () => {
+		const tokens = { '[candidate name]': 'Jane Doe', '[office name]': 'Mayor' };
+		expect(resolveSectionText('Claim profile for [candidate name]', tokens)).toBe(
+			'Claim profile for Jane Doe',
+		);
+		expect(resolveSectionText('Running for [office name]', tokens)).toBe('Running for Mayor');
+	});
+});
 
 describe('resolveClaimProfileBlockBackgroundColor', () => {
 	test('maps CMS midnight value', () => {

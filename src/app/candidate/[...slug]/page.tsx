@@ -18,6 +18,7 @@ import type { SectionOverrides } from '~/PageSections';
 import type { CandidacyItem, FindByRaceIdResponse } from '~/types/elections';
 import type { ProfileData, OfficeData } from '~/PageSections/ProfileContentBlockSection';
 import { SITE_NAME } from '~/lib/url';
+import { buildProfileTokens } from '~/lib/electionsTemplateHelpers';
 import { renderElectionTemplatePage } from '~/lib/renderElectionTemplatePage';
 
 export const revalidate = 3600;
@@ -193,10 +194,10 @@ export default async function Page({
 			candidateSlug: slug,
 		},
 		sectionOverrides,
-		tokens: {
-			'[candidate name]': candidateName,
-			'[office name]': candidate.positionName ?? 'Office',
-		},
+		tokens: buildProfileTokens({
+			candidateName,
+			officeName: candidate.positionName ?? 'Office',
+		}),
 	});
 }
 

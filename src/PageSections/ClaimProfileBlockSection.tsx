@@ -1,10 +1,13 @@
 import type { SectionOverrides, Sections } from '~/PageSections';
 import { isButtonType, transformButton } from '~/lib/buttonTransformer';
+import type { TokenMap } from '~/lib/resolveTokens';
+import { resolveSectionText } from '~/lib/resolveSectionText';
 import { ClaimProfileBlock } from '~/ui/ClaimProfileBlock';
 import { stegaClean } from 'next-sanity';
 
 type Props = Extract<Sections, { _type: 'component_claimProfileBlock' }> & {
 	claimProfileOverride?: SectionOverrides['component_claimProfileBlock'];
+	tokens?: TokenMap;
 };
 
 export function resolveExampleCardPartyAffiliation(
@@ -23,7 +26,7 @@ export function resolveClaimProfileBlockBackgroundColor(
 	return 'cream';
 }
 
-export function ClaimProfileBlockSection({ claimProfileOverride, ...section }: Props) {
+export function ClaimProfileBlockSection({ claimProfileOverride, tokens, ...section }: Props) {
 	const bgValue = stegaClean(section.claimProfileBlockDesignSettings?.field_blockColorCreamMidnight);
 	const backgroundColor = resolveClaimProfileBlockBackgroundColor(bgValue);
 
@@ -42,8 +45,8 @@ export function ClaimProfileBlockSection({ claimProfileOverride, ...section }: P
 			<ClaimProfileBlock
 				layout={claimProfileOverride?.layout ?? 'card'}
 				backgroundColor={backgroundColor}
-				headline={section.claimProfileBlockContent?.field_headline}
-				body={section.claimProfileBlockContent?.field_body}
+				headline={resolveSectionText(section.claimProfileBlockContent?.field_headline, tokens)}
+				body={resolveSectionText(section.claimProfileBlockContent?.field_body, tokens)}
 				claimButton={
 					claimButton ?? {
 						buttonType: 'internal',

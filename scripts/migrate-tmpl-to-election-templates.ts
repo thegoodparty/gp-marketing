@@ -7,8 +7,10 @@
  *   export SANITY_STUDIO_API_TOKEN="your-token-with-editor-permissions"
  *
  * Run:
- *   bun run scripts/migrate-tmpl-to-election-templates.ts          # dry-run (default)
- *   bun run scripts/migrate-tmpl-to-election-templates.ts --write  # create/update globals
+ *   bun run scripts/migrate-tmpl-to-election-templates.ts                    # dry-run (default)
+ *   bun run scripts/migrate-tmpl-to-election-templates.ts --write            # create/update globals
+ *   bun run scripts/migrate-tmpl-to-election-templates.ts --force-seed       # dry-run using seed only
+ *   bun run scripts/migrate-tmpl-to-election-templates.ts --force-seed --write
  */
 import { createClient } from '@sanity/client';
 import {
@@ -20,6 +22,7 @@ const projectId = '3rbseux7';
 const dataset = 'production';
 const token = process.env['SANITY_STUDIO_API_TOKEN'];
 const write = process.argv.includes('--write');
+const forceSeed = process.argv.includes('--force-seed');
 
 const LEGACY_GLOBAL_MAP: Record<
 	string,
@@ -63,7 +66,7 @@ async function main() {
 	const plans: Array<{
 		globalId: string;
 		templateType: string;
-		source: 'legacy-live' | 'seed';
+		source: 'legacy-live' | 'seed' | 'force-seed';
 		legacyId?: string;
 		sectionCount: number;
 	}> = [];
@@ -73,8 +76,12 @@ async function main() {
 		const live = legacyId ? legacyById.get(legacyId) : undefined;
 		const liveSections = live?.pageSections?.list_pageSections;
 		const seedSections = legacySeedFor(legacyId ?? '')?.pageSections?.list_pageSections;
-		const sections = liveSections?.length ? liveSections : seedSections ?? globalDoc.pageSections.list_pageSections;
-		const source = liveSections?.length ? 'legacy-live' : 'seed';
+		const sections = forceSeed
+			? (seedSections ?? globalDoc.pageSections.list_pageSections)
+			: liveSections?.length
+				? liveSections
+				: (seedSections ?? globalDoc.pageSections.list_pageSections);
+		const source = forceSeed ? 'force-seed' : liveSections?.length ? 'legacy-live' : 'seed';
 
 		plans.push({
 			globalId: globalDoc._id,

@@ -3,6 +3,8 @@ import { stegaClean } from 'next-sanity';
 import type { Sections } from '~/PageSections';
 
 import { transformButtons } from '~/lib/buttonTransformer';
+import type { TokenMap } from '~/lib/resolveTokens';
+import { resolveSectionText, resolveRichTextTokens } from '~/lib/resolveSectionText';
 import { resolveAuthor } from '~/ui/_lib/resolveAuthor';
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
@@ -10,7 +12,11 @@ import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
 import { Carousel } from '~/ui/Carousel';
 import { RichData } from '~/ui/RichData';
 
-export function CarouselBlockSection(section: Extract<Sections, { _type: 'component_carouselBlock' }>) {
+type Props = Extract<Sections, { _type: 'component_carouselBlock' }> & {
+	tokens?: TokenMap;
+};
+
+export function CarouselBlockSection(section: Props) {
 	const backgroundColor = section.carouselBlockDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(section.carouselBlockDesignSettings.field_blockColorCreamMidnight)
 		: 'cream';
@@ -26,10 +32,14 @@ export function CarouselBlockSection(section: Extract<Sections, { _type: 'compon
 				}))}
 				backgroundColor={backgroundColor}
 				header={{
-					title: section.summaryInfo?.field_title,
-					label: section.summaryInfo?.field_label,
-					caption: section.summaryInfo?.field_caption,
-					copy: <RichData value={section.summaryInfo?.block_summaryText} />,
+					title: resolveSectionText(section.summaryInfo?.field_title, section.tokens),
+					label: resolveSectionText(section.summaryInfo?.field_label, section.tokens),
+					caption: resolveSectionText(section.summaryInfo?.field_caption, section.tokens),
+					copy: (
+						<RichData
+							value={resolveRichTextTokens(section.summaryInfo?.block_summaryText, section.tokens)}
+						/>
+					),
 					buttons: transformButtons(section.summaryInfo?.list_buttons),
 					layout: 'left',
 					backgroundColor,

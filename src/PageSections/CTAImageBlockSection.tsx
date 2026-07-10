@@ -1,6 +1,8 @@
 import type { Sections } from '~/PageSections';
 
 import { transformButtons } from '~/lib/buttonTransformer';
+import type { TokenMap } from '~/lib/resolveTokens';
+import { resolveSectionText, resolveRichTextTokens } from '~/lib/resolveSectionText';
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { resolveComponentColor } from '~/ui/_lib/resolveComponentColor';
 import { tv } from '~/ui/_lib/utils';
@@ -25,7 +27,12 @@ const styles = tv({
 	},
 });
 
-export async function CTAImageBlockSection(section: Extract<Sections, { _type: 'component_ctaImageBlock' }>) {
+export async function CTAImageBlockSection(
+	section: Extract<Sections, { _type: 'component_ctaImageBlock' }> & {
+		tokens?: TokenMap;
+		ctaOverride?: { primaryButtonHref?: string };
+	},
+) {
 	const backgroundColor = section.designSettings?.field_blockColorCreamMidnight
 		? resolveBg(stegaClean(section.designSettings.field_blockColorCreamMidnight))
 		: 'cream';
@@ -36,17 +43,23 @@ export async function CTAImageBlockSection(section: Extract<Sections, { _type: '
 
 	const { base } = styles({ backgroundColor });
 
+	const primaryButton = transformButtons([section['primaryCTA']])?.[0];
+	const primaryButtonWithOverride =
+		primaryButton && section.ctaOverride?.primaryButtonHref
+			? { ...primaryButton, href: section.ctaOverride.primaryButtonHref }
+			: primaryButton;
+
 	return (
 		<section className={base()} data-section='CTA Image Block'>
 			<CTAImageBlock
 				color={componentColor}
 				image={section.image?.img_featuredImage}
 				showFullImage={section.image?.showFullImage}
-				label={section['overview']?.field_label}
-				title={section['overview']?.field_title}
-				copy={<RichData value={section['overview']?.block_summaryText} />}
-				caption={section['overview']?.field_caption}
-				primaryButton={transformButtons([section['primaryCTA']])?.[0]}
+				label={resolveSectionText(section['overview']?.field_label, section.tokens)}
+				title={resolveSectionText(section['overview']?.field_title, section.tokens)}
+				copy={<RichData value={resolveRichTextTokens(section['overview']?.block_summaryText, section.tokens)} />}
+				caption={resolveSectionText(section['overview']?.field_caption, section.tokens)}
+				primaryButton={primaryButtonWithOverride}
 				secondaryButton={transformButtons([section['secondaryCTA']])?.[0]}
 			/>
 		</section>

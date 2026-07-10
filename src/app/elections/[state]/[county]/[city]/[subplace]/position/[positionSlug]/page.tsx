@@ -15,7 +15,7 @@ import {
 } from '~/lib/electionsHelpers';
 import { getCachedElectionRouteParams } from '~/lib/sitemap-entries';
 import { toAbsoluteUrl } from '~/lib/url';
-import { PositionPageContent } from '~/ui/PositionPageContent';
+import { renderElectionsPositionPage } from '~/lib/renderElectionsPositionPage';
 
 export const revalidate = 3600;
 
@@ -85,20 +85,20 @@ export default async function Page({
 
 	const pageUrl = toAbsoluteUrl(`/elections/${pathBeforePosition}/position/${positionSlug}`);
 
-	return (
-		<PositionPageContent
-			officeName={officeName}
-			stateName={stateName}
-			countyName={countyPlace.name}
-			cityName={cityName}
-			electionDate={electionDate}
-			filingDate={filingDate}
-			breadcrumbs={breadcrumbs}
-			candidatesHref={candidatesHref}
-			race={race}
-			pageUrl={pageUrl}
-		/>
-	);
+	return renderElectionsPositionPage({
+		placeSlug: pathBeforePosition,
+		raceSlug: race.slug,
+		officeName,
+		stateName,
+		countyName: countyPlace.name,
+		cityName,
+		electionDate,
+		filingDate,
+		breadcrumbs,
+		candidatesHref,
+		race,
+		pageUrl,
+	});
 }
 
 export async function generateMetadata({

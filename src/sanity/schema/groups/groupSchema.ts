@@ -28,6 +28,8 @@ import { externalLink } from './externalLink.ts';
 import { newsletterBlockDesignSettings } from './newsletterBlockDesignSettings.ts';
 import { carouselBlockDesignSettings } from './carouselBlockDesignSettings.ts';
 import { pageSections } from './pageSections.ts';
+import { electionTemplateTarget } from './electionTemplateTarget.ts';
+import { electionTemplatePreviewTarget } from './electionTemplatePreviewTarget.ts';
 import { pricingPlanFeatures } from './pricingPlanFeatures.ts';
 import { editorialAssets } from './editorialAssets.ts';
 import { faqBlockDesignSettings } from './faqBlockDesignSettings.ts';
@@ -298,4 +300,6 @@ export const groupSchema = [
 	teamValuesCard,
 	teamValuesBlockContent,
 	teamValuesBlockDesignSettings,
+	electionTemplateTarget,
+	electionTemplatePreviewTarget,
 ];

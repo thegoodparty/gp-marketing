@@ -18,7 +18,7 @@ import {
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
 import { toAbsoluteUrl } from '~/lib/url';
-import { PositionPageContent } from '~/ui/PositionPageContent';
+import { renderElectionsPositionPage } from '~/lib/renderElectionsPositionPage';
 
 export const revalidate = 3600;
 
@@ -44,6 +44,7 @@ export default async function Page({
 	if (!race) race = await getRaceBySlug(buildRaceSlug(state, positionSlug, county, city));
 	if (!race) notFound();
 
+	const raceSlug = race.slug;
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const fullSlug = `${countySlug}/${city.toLowerCase()}`;
 
@@ -84,19 +85,19 @@ export default async function Page({
 			{ href: '', label: officeName },
 		];
 
-		return (
-			<PositionPageContent
-				officeName={officeName}
-				stateName={stateName}
-				cityName={districtName}
-				electionDate={electionDate}
-				filingDate={filingDate}
-				breadcrumbs={breadcrumbs}
-				candidatesHref={candidatesHref}
-				race={race}
-				pageUrl={pageUrl}
-			/>
-		);
+		return renderElectionsPositionPage({
+			placeSlug: fullSlug,
+			raceSlug,
+			officeName,
+			stateName,
+			cityName: districtName,
+			electionDate,
+			filingDate,
+			breadcrumbs,
+			candidatesHref,
+			race,
+			pageUrl,
+		});
 	}
 
 	// Cities queried by G4110 (incorporated places). Non-incorporated places (e.g. WI townships
@@ -117,20 +118,20 @@ export default async function Page({
 		{ href: '', label: officeName },
 	];
 
-	return (
-		<PositionPageContent
-			officeName={officeName}
-			stateName={stateName}
-			countyName={countyPlace!.name}
-			cityName={cityName}
-			electionDate={electionDate}
-			filingDate={filingDate}
-			breadcrumbs={breadcrumbs}
-			candidatesHref={candidatesHref}
-			race={race}
-			pageUrl={pageUrl}
-		/>
-	);
+	return renderElectionsPositionPage({
+		placeSlug: fullSlug,
+		raceSlug,
+		officeName,
+		stateName,
+		countyName: countyPlace!.name,
+		cityName,
+		electionDate,
+		filingDate,
+		breadcrumbs,
+		candidatesHref,
+		race,
+		pageUrl,
+	});
 }
 
 export async function generateMetadata({

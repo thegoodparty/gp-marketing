@@ -127,7 +127,7 @@ export const tmplElectionsPositionSections = [
 		_type: 'component_twoUpCardBlock',
 		twoUpCardBlockDesignSettings: { field_blockColorCreamMidnight: 'Cream' },
 		twoUpCardBlockOne: {
-			field_twoUpCardBlockCardType: 'Value Proposition Card',
+			field_twoUpCardBlockCardType: 'ValueProposition',
 			valuePropositionCard: {
 				field_title: POSITION_PAGE_TWO_UP_CARD.card1.title,
 				field_componentColor6ColorsInverse: 'BrightYellow',
@@ -154,7 +154,7 @@ export const tmplElectionsPositionSections = [
 			},
 		},
 		twoUpCardBlockTwo: {
-			field_twoUpCardBlockCardType: 'Value Proposition Card',
+			field_twoUpCardBlockCardType: 'ValueProposition',
 			valuePropositionCard: {
 				field_title: POSITION_PAGE_TWO_UP_CARD.card2.title,
 				field_componentColor6ColorsInverse: 'Lavender',

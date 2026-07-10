@@ -45,8 +45,14 @@ describe('tmplElectionsPositionSections seed shapes', () => {
 	});
 
 	test('includes two-up cards section', () => {
-		const section = findSection(tmplElectionsPositionSections, 'pos-two-up');
+		const section = findSection(tmplElectionsPositionSections, 'pos-two-up') as {
+			_type: string;
+			twoUpCardBlockOne?: { field_twoUpCardBlockCardType?: string };
+			twoUpCardBlockTwo?: { field_twoUpCardBlockCardType?: string };
+		};
 		expect(section._type).toBe('component_twoUpCardBlock');
+		expect(section.twoUpCardBlockOne?.field_twoUpCardBlockCardType).toBe('ValueProposition');
+		expect(section.twoUpCardBlockTwo?.field_twoUpCardBlockCardType).toBe('ValueProposition');
 	});
 
 	test('GROQ-projected CTA banner button renders Get free demo', () => {

@@ -21,3 +21,17 @@ export const urlSecretId = `preview.secret`;
 export const ashbyJobBoardName = process.env.ASHBY_JOB_BOARD_NAME || undefined;
 
 export const defaultRevalidate = 3600; // 1 hour, in seconds
+
+// Basemap vector style for the voter-density heat map (Option A). Defaults to
+// CARTO's hosted Positron style, which is free and needs no API key. Read
+// server-side and passed to the client map as a prop, so a non-public
+// `MAP_STYLE_URL` works too (e.g. a self-hosted Protomaps style later — a cost
+// optimization deliberately out of scope now).
+export const mapStyleUrl =
+	process.env['NEXT_PUBLIC_MAP_STYLE_URL'] ||
+	process.env['MAP_STYLE_URL'] ||
+	'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
+
+// Attribution required by the CARTO Positron basemap (CARTO + OpenStreetMap).
+export const mapAttribution =
+	'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors, © <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer">CARTO</a>';

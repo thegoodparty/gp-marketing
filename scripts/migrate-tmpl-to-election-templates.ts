@@ -28,7 +28,10 @@ const LEGACY_GLOBAL_MAP: Record<
 	tmpl_candidateProfile: 'globalTemplate_candidateProfile',
 	tmpl_electionsPosition: 'globalTemplate_position',
 	tmpl_electionsCandidates: 'globalTemplate_positionCandidates',
-	tmpl_electionsStateIndex: 'globalTemplate_location',
+	tmpl_electionsStateIndex: 'globalTemplate_locationState',
+	tmpl_electionsCountyIndex: 'globalTemplate_locationCounty',
+	tmpl_electionsCityIndex: 'globalTemplate_locationCity',
+	tmpl_electionsDistrictIndex: 'globalTemplate_locationDistrict',
 };
 
 const client = createClient({

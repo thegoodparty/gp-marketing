@@ -5,6 +5,8 @@ import { field_electionTemplateType } from '../fields/field_electionTemplateType
 
 const CUSTOM_INSTRUCTIONS = `Custom templates override the global template when their targets match the current page.
 
+Location templates are split by level (state, county, city, district). Choose the level that matches the pages you want to override.
+
 Matching rules (most specific wins, then lower Priority number):
 1. Candidate slug beats position slug beats place slug
 2. Longer place slug beats shorter (e.g. ny/kings/brooklyn beats ny)

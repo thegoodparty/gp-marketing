@@ -8,7 +8,53 @@ import {
 import { sanityFetch } from '~/sanity/sanityClient';
 import type { TokenMap } from '~/lib/resolveTokens';
 
-export type ElectionTemplateType = 'location' | 'position' | 'positionCandidates' | 'candidateProfile';
+export type LocationLevel = 'state' | 'county' | 'city' | 'district';
+
+export type LocationTemplateType =
+	| 'locationState'
+	| 'locationCounty'
+	| 'locationCity'
+	| 'locationDistrict';
+
+export type ElectionTemplateType =
+	| LocationTemplateType
+	| 'position'
+	| 'positionCandidates'
+	| 'candidateProfile';
+
+/** @deprecated Legacy custom docs may still use this type for all location levels. */
+export type LegacyLocationTemplateType = 'location';
+
+export const LOCATION_TEMPLATE_TYPES: readonly LocationTemplateType[] = [
+	'locationState',
+	'locationCounty',
+	'locationCity',
+	'locationDistrict',
+] as const;
+
+export function isLocationTemplateType(
+	templateType: ElectionTemplateType | LegacyLocationTemplateType | string | undefined,
+): templateType is LocationTemplateType {
+	return (
+		templateType === 'locationState' ||
+		templateType === 'locationCounty' ||
+		templateType === 'locationCity' ||
+		templateType === 'locationDistrict'
+	);
+}
+
+export function locationTemplateTypeFromLevel(level: LocationLevel): LocationTemplateType {
+	switch (level) {
+		case 'state':
+			return 'locationState';
+		case 'county':
+			return 'locationCounty';
+		case 'city':
+			return 'locationCity';
+		case 'district':
+			return 'locationDistrict';
+	}
+}
 
 export type ElectionTargetType = 'place' | 'position' | 'candidate';
 
@@ -41,10 +87,20 @@ type CustomTemplateTargetsDoc = {
 	_id: string;
 	field_enabled?: boolean;
 	field_priority?: number;
-	field_electionTemplateType?: ElectionTemplateType;
+	field_electionTemplateType?: ElectionTemplateType | LegacyLocationTemplateType;
 	_updatedAt?: string;
 	list_targets?: SanityTarget[];
 };
+
+function customTemplateTypeMatches(
+	docType: ElectionTemplateType | LegacyLocationTemplateType | undefined,
+	ctxType: ElectionTemplateType,
+): boolean {
+	if (!docType) return false;
+	if (docType === ctxType) return true;
+	if (docType === 'location' && isLocationTemplateType(ctxType)) return true;
+	return false;
+}
 
 type GlobalTemplateDoc = {
 	pageSections?: { list_pageSections?: Sections[] | null } | null;
@@ -95,7 +151,7 @@ function targetMatches(docTarget: SanityTarget, ctxTarget: ElectionTemplateTarge
 
 function scoreCustomTemplate(doc: CustomTemplateTargetsDoc, ctx: ElectionTemplateContext): number | null {
 	if (doc.field_enabled === false) return null;
-	if (doc.field_electionTemplateType !== ctx.templateType) return null;
+	if (!customTemplateTypeMatches(doc.field_electionTemplateType, ctx.templateType)) return null;
 
 	const ctxTargetsList = contextTargets(ctx);
 	if (!ctxTargetsList.length || !doc.list_targets?.length) return null;
@@ -157,11 +213,18 @@ async function fetchGlobalTemplate(templateType: ElectionTemplateType): Promise<
 	}
 }
 
+function customTemplateTypesForQuery(templateType: ElectionTemplateType): Array<ElectionTemplateType | LegacyLocationTemplateType> {
+	if (isLocationTemplateType(templateType)) {
+		return [templateType, 'location'];
+	}
+	return [templateType];
+}
+
 async function fetchCustomTemplateTargets(templateType: ElectionTemplateType): Promise<CustomTemplateTargetsDoc[]> {
 	try {
 		const docs = (await sanityFetch({
 			query: customElectionTemplateTargetsQuery,
-			params: { templateType },
+			params: { templateTypes: customTemplateTypesForQuery(templateType) },
 			tags: ['goodpartyOrg_customTemplate', `goodpartyOrg_customTemplate_${templateType}`],
 		})) as CustomTemplateTargetsDoc[] | null;
 		return docs ?? [];

@@ -1,10 +1,23 @@
 import { describe, expect, test } from 'bun:test';
-import { pickBestCustomTemplate, type ElectionTemplateContext } from '~/lib/electionTemplates';
+import {
+	locationTemplateTypeFromLevel,
+	pickBestCustomTemplate,
+	type ElectionTemplateContext,
+} from '~/lib/electionTemplates';
 
 const baseCtx: ElectionTemplateContext = {
-	templateType: 'location',
+	templateType: 'locationCity',
 	placeSlug: 'ny/kings/brooklyn',
 };
+
+describe('locationTemplateTypeFromLevel', () => {
+	test('maps each location level to its template type', () => {
+		expect(locationTemplateTypeFromLevel('state')).toBe('locationState');
+		expect(locationTemplateTypeFromLevel('county')).toBe('locationCounty');
+		expect(locationTemplateTypeFromLevel('city')).toBe('locationCity');
+		expect(locationTemplateTypeFromLevel('district')).toBe('locationDistrict');
+	});
+});
 
 describe('pickBestCustomTemplate', () => {
 	test('prefers candidate target over place when template types match', () => {
@@ -40,14 +53,14 @@ describe('pickBestCustomTemplate', () => {
 				_id: 'ny',
 				field_enabled: true,
 				field_priority: 1,
-				field_electionTemplateType: 'location' as const,
+				field_electionTemplateType: 'locationCity' as const,
 				list_targets: [{ field_electionTargetType: 'place' as const, field_electionTargetSlug: 'ny' }],
 			},
 			{
 				_id: 'ny-kings',
 				field_enabled: true,
 				field_priority: 50,
-				field_electionTemplateType: 'location' as const,
+				field_electionTemplateType: 'locationCity' as const,
 				list_targets: [
 					{ field_electionTargetType: 'place' as const, field_electionTargetSlug: 'ny/kings' },
 				],
@@ -62,18 +75,18 @@ describe('pickBestCustomTemplate', () => {
 				_id: 'high-priority',
 				field_enabled: true,
 				field_priority: 200,
-				field_electionTemplateType: 'location' as const,
+				field_electionTemplateType: 'locationState' as const,
 				list_targets: [{ field_electionTargetType: 'place' as const, field_electionTargetSlug: 'ny' }],
 			},
 			{
 				_id: 'low-priority',
 				field_enabled: true,
 				field_priority: 10,
-				field_electionTemplateType: 'location' as const,
+				field_electionTemplateType: 'locationState' as const,
 				list_targets: [{ field_electionTargetType: 'place' as const, field_electionTargetSlug: 'ny' }],
 			},
 		];
-		const ctx: ElectionTemplateContext = { templateType: 'location', placeSlug: 'ny' };
+		const ctx: ElectionTemplateContext = { templateType: 'locationState', placeSlug: 'ny' };
 		expect(pickBestCustomTemplate(docs, ctx)?._id).toBe('low-priority');
 	});
 
@@ -82,7 +95,7 @@ describe('pickBestCustomTemplate', () => {
 			_id: 'older',
 			field_enabled: true,
 			field_priority: 100,
-			field_electionTemplateType: 'location' as const,
+			field_electionTemplateType: 'locationState' as const,
 			_updatedAt: '2024-01-01T00:00:00Z',
 			list_targets: [{ field_electionTargetType: 'place' as const, field_electionTargetSlug: 'ny' }],
 		};
@@ -90,11 +103,11 @@ describe('pickBestCustomTemplate', () => {
 			_id: 'newer',
 			field_enabled: true,
 			field_priority: 100,
-			field_electionTemplateType: 'location' as const,
+			field_electionTemplateType: 'locationState' as const,
 			_updatedAt: '2024-06-01T00:00:00Z',
 			list_targets: [{ field_electionTargetType: 'place' as const, field_electionTargetSlug: 'ny' }],
 		};
-		const ctx: ElectionTemplateContext = { templateType: 'location', placeSlug: 'ny' };
+		const ctx: ElectionTemplateContext = { templateType: 'locationState', placeSlug: 'ny' };
 		expect(pickBestCustomTemplate([older, newer], ctx)?._id).toBe('newer');
 		expect(pickBestCustomTemplate([newer, older], ctx)?._id).toBe('newer');
 	});
@@ -105,12 +118,26 @@ describe('pickBestCustomTemplate', () => {
 				_id: 'disabled',
 				field_enabled: false,
 				field_priority: 1,
+				field_electionTemplateType: 'locationState' as const,
+				list_targets: [{ field_electionTargetType: 'place' as const, field_electionTargetSlug: 'ny' }],
+			},
+		];
+		const ctx: ElectionTemplateContext = { templateType: 'locationState', placeSlug: 'ny' };
+		expect(pickBestCustomTemplate(docs, ctx)).toBeNull();
+	});
+
+	test('matches legacy location custom templates against any location level type', () => {
+		const docs = [
+			{
+				_id: 'legacy-location',
+				field_enabled: true,
+				field_priority: 100,
 				field_electionTemplateType: 'location' as const,
 				list_targets: [{ field_electionTargetType: 'place' as const, field_electionTargetSlug: 'ny' }],
 			},
 		];
-		const ctx: ElectionTemplateContext = { templateType: 'location', placeSlug: 'ny' };
-		expect(pickBestCustomTemplate(docs, ctx)).toBeNull();
+		const ctx: ElectionTemplateContext = { templateType: 'locationCounty', placeSlug: 'ny/kings' };
+		expect(pickBestCustomTemplate(docs, ctx)?._id).toBe('legacy-location');
 	});
 
 	test('uses raceSlug over positionSlug for position target when both are supplied', () => {

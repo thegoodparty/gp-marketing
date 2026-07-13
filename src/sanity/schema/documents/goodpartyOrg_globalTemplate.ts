@@ -5,6 +5,8 @@ import { field_electionTemplateType } from '../fields/field_electionTemplateType
 
 const EDITOR_INSTRUCTIONS = `Global templates are the site-wide default for each election page family.
 
+Location pages have separate globals for state, county, city, and district index pages.
+
 If a custom template matches the current page but has an error, the site falls back to this global template.
 If this global template is missing or invalid, the site falls back to the built-in code default (same as launch).
 

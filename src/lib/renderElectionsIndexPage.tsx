@@ -4,6 +4,7 @@ import {
 	type ElectionsIndexPageContext,
 } from '~/lib/electionsTemplateHelpers';
 import { buildElectionsIndexTokens } from '~/lib/electionsIndexTemplates';
+import { locationTemplateTypeFromLevel } from '~/lib/electionTemplates';
 import { renderElectionTemplatePage } from '~/lib/renderElectionTemplatePage';
 
 export type ElectionsIndexTemplateContext = ElectionsIndexPageContext & {
@@ -13,7 +14,7 @@ export type ElectionsIndexTemplateContext = ElectionsIndexPageContext & {
 export async function renderElectionsIndexPage(ctx: ElectionsIndexTemplateContext) {
 	return renderElectionTemplatePage({
 		context: {
-			templateType: 'location',
+			templateType: locationTemplateTypeFromLevel(ctx.locationLevel),
 			placeSlug: ctx.placeSlug,
 		},
 		sectionOverrides: buildElectionsIndexSectionOverrides(ctx),

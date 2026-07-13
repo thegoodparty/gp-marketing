@@ -19,7 +19,10 @@ export function buildElectionTemplatePreviewPath(
 	const positionSlug = previewTarget.field_positionSlug?.replace(/^\/+|\/+$/g, '');
 
 	switch (templateType) {
-		case 'location':
+		case 'locationState':
+		case 'locationCounty':
+		case 'locationCity':
+		case 'locationDistrict':
 			return `/elections/${slug}`;
 		case 'position':
 			return positionSlug ? `/elections/${slug}/position/${positionSlug}` : `/elections/${slug}`;

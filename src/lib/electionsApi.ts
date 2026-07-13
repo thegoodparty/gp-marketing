@@ -14,6 +14,7 @@ import type {
 	PersonItem,
 	PersonOfficeHolder,
 	PublicPersonProfile,
+	VoterDensity,
 } from '~/types/people';
 import {
 	buildElectionPositionHrefFromRaceSlug,
@@ -306,6 +307,21 @@ export async function getPublicPersonProfile(
 	const searchParams = new URLSearchParams({ personId });
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles?${searchParams}`;
 	return fetchJson<PublicPersonProfile>(url, personCacheOptions(personId));
+}
+
+/**
+ * Precomputed voter-density heat-map cells for a person's office/district
+ * (gp-api resolves the district and proxies people-api). Shares the person
+ * cache (1h ISR + `person:<id>` tag), so it is busted with the rest of the page
+ * on publish/edit. Returns null when gp-api 404s (person maps to no district) —
+ * the profile then renders no map, which is a valid, expected state.
+ */
+export async function getVoterDensityForDistrict(
+	personId: string,
+): Promise<VoterDensity | null> {
+	const searchParams = new URLSearchParams({ personId });
+	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles/voter-density?${searchParams}`;
+	return fetchJson<VoterDensity>(url, personCacheOptions(personId));
 }
 
 export async function getMostElections(count = 3): Promise<FeaturedCity[]> {

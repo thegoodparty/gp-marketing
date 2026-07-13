@@ -1,12 +1,14 @@
 import {
 	getPersonByPersonId,
 	getPublicPersonProfile,
+	getVoterDensityForDistrict,
 } from '~/lib/electionsApi';
 import type {
 	PersonAccomplishment,
 	PersonItem,
 	PersonOfficeHolder,
 	PublicPersonProfile,
+	VoterDensity,
 } from '~/types/people';
 
 const PERSON_ID_RE = /([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i;
@@ -72,6 +74,12 @@ export interface PersonProfileView {
 	stateLabel: string | null;
 	issues: PersonProfileIssueView[];
 	links: PersonProfileLink[];
+	/**
+	 * Precomputed voter-density surface for the person's district, or null when
+	 * unavailable (no district resolved / upstream not populated yet). The map is
+	 * a progressive enhancement — SSR/SEO content never depends on it.
+	 */
+	voterDensity: VoterDensity | null;
 	updatedAt: string;
 }
 
@@ -123,6 +131,7 @@ function composeView(
 	personId: string,
 	person: PersonItem | null,
 	overlay: PublicPersonProfile,
+	voterDensity: VoterDensity | null,
 ): PersonProfileView {
 	const composedName = [person?.firstName, person?.lastName].filter(Boolean).join(' ');
 	const nameFromPerson = person?.fullName ?? (composedName || null);
@@ -159,6 +168,7 @@ function composeView(
 				description: issue.description,
 			})),
 		links: buildLinks(overlay, person, office),
+		voterDensity,
 		updatedAt: overlay.updatedAt,
 	};
 }
@@ -171,6 +181,12 @@ function composeView(
 export async function loadPersonProfile(personId: string): Promise<PersonProfileView | null> {
 	const overlay = await getPublicPersonProfile(personId);
 	if (!overlay) return null;
-	const person = await getPersonByPersonId(personId);
-	return composeView(personId, person, overlay);
+	// The civics spine and the (optional) voter-density surface are independent
+	// of each other; fetch them in parallel. Density failures never block the
+	// page — getVoterDensityForDistrict resolves to null on any non-live result.
+	const [person, voterDensity] = await Promise.all([
+		getPersonByPersonId(personId),
+		getVoterDensityForDistrict(personId),
+	]);
+	return composeView(personId, person, overlay, voterDensity);
 }

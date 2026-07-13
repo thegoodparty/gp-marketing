@@ -3,6 +3,14 @@ import type {
 	PersonProfileLink,
 	PersonProfileView,
 } from '~/lib/peopleProfile';
+import { mapAttribution, mapStyleUrl } from '~/lib/env';
+import { VoterDensityMapCard } from '~/components/people/VoterDensityMapCard';
+
+// Below this rendered-voter coverage the density surface is too partial to be
+// trustworthy, so the map is hidden (the profile still renders everything
+// else). Coverage may be null when upstream has no meta row; in that case we
+// fall back to "render if there are cells at all".
+const MIN_VOTER_DENSITY_COVERAGE = 0.5;
 
 function formatTermYear(date: string | null): string | null {
 	if (!date) return null;
@@ -68,9 +76,19 @@ export function PersonProfile({ view }: { view: PersonProfileView }) {
 		stateLabel,
 		issues,
 		links,
+		voterDensity,
 	} = view;
 
 	const locationLabel = [districtLabel, stateLabel].filter(Boolean).join(', ');
+
+	// Progressive enhancement: only show the map when we actually have cells and
+	// coverage is either healthy or unknown. Otherwise the sidebar simply omits
+	// it — no map, no error, no layout shift for the SSR content.
+	const showVoterDensity =
+		!!voterDensity &&
+		voterDensity.cells.length > 0 &&
+		(voterDensity.coverage === null ||
+			voterDensity.coverage >= MIN_VOTER_DENSITY_COVERAGE);
 
 	return (
 		<article className='pb-16'>
@@ -216,6 +234,14 @@ export function PersonProfile({ view }: { view: PersonProfileView }) {
 									))}
 								</div>
 							</SectionCard>
+						) : null}
+
+						{showVoterDensity && voterDensity ? (
+							<VoterDensityMapCard
+								cells={voterDensity.cells}
+								styleUrl={mapStyleUrl}
+								attribution={mapAttribution}
+							/>
 						) : null}
 					</aside>
 				</div>

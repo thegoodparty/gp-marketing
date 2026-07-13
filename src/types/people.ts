@@ -68,6 +68,23 @@ export interface PersonAccomplishment {
 	date?: string | null;
 }
 
+// One precomputed voter-density heat-map cell: an H3 cell centroid + its voter
+// count. Aggregated + k-anonymized upstream (people-api) — never a voter or
+// household location. See src/components/people/VoterDensityMap.tsx.
+export interface VoterDensityCell {
+	lat: number;
+	lng: number;
+	count: number;
+}
+
+export interface VoterDensity {
+	// rendered_voters / total_voters in [0, 1], or null when unknown. The map is
+	// hidden below a coverage threshold so a sparse/unreliable surface is never
+	// shown as if it were complete.
+	coverage: number | null;
+	cells: VoterDensityCell[];
+}
+
 export interface PublicPersonProfile {
 	personId: string;
 	displayName: string | null;

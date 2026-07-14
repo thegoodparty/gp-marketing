@@ -71,6 +71,13 @@ async function main() {
 		sectionCount: number;
 	}> = [];
 
+	const payloads: Array<{
+		globalId: string;
+		source: 'legacy-live' | 'seed' | 'force-seed';
+		sectionCount: number;
+		payload: Parameters<typeof client.createOrReplace>[0];
+	}> = [];
+
 	for (const globalDoc of globalElectionTemplateSeedDocuments) {
 		const legacyId = Object.entries(LEGACY_GLOBAL_MAP).find(([, gid]) => gid === globalDoc._id)?.[0];
 		const live = legacyId ? legacyById.get(legacyId) : undefined;
@@ -99,15 +106,26 @@ async function main() {
 		if (write) {
 			// Seed docs are `as const`, so `_id` is a literal union that confuses the
 			// createOrReplace generic; cast to the method's document parameter type.
-			await client.createOrReplace(payload as Parameters<typeof client.createOrReplace>[0]);
-			console.log(`[write] ${globalDoc._id} (${source}, ${sections?.length ?? 0} sections)`);
+			payloads.push({
+				globalId: globalDoc._id,
+				source,
+				sectionCount: sections?.length ?? 0,
+				payload: payload as Parameters<typeof client.createOrReplace>[0],
+			});
+			console.log(`[planned] will upsert ${globalDoc._id} from ${source} (${sections?.length ?? 0} sections)`);
 		} else {
 			console.log(`[dry-run] would upsert ${globalDoc._id} from ${source} (${sections?.length ?? 0} sections)`);
 		}
 	}
 
 	console.log('\nMigration plan:', JSON.stringify(plans, null, 2));
-	if (!write) {
+
+	if (write) {
+		for (const { globalId, source, sectionCount, payload } of payloads) {
+			await client.createOrReplace(payload);
+			console.log(`[write] ${globalId} (${source}, ${sectionCount} sections)`);
+		}
+	} else {
 		console.log('\nDry run only. Re-run with --write to apply.');
 	}
 }

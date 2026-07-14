@@ -45,6 +45,7 @@ export async function CTAImageBlockSection(
 
 	const primaryCTA = section.ctaOverride?.primaryButtonHref
 		? {
+				action: 'Internal' as const,
 				...(section['primaryCTA'] as object),
 				link: { href: section.ctaOverride.primaryButtonHref },
 			}

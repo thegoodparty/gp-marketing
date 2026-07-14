@@ -193,7 +193,11 @@ export function HeroBlock(props: HeroBlockProps) {
 								)}
 							</div>
 							{props.form?.provider === 'Hubspot' && props.form.formId && (
-								<HubSpotEmbedForm formId={props.form.formId} redirectTo={props.form.redirectTo} />
+								<HubSpotEmbedForm
+									formId={props.form.formId}
+									redirectTo={props.form.redirectTo}
+									submitLabel={props.form.submitLabel}
+								/>
 							)}
 							{props.buttons && props.buttons.length > 0 && (
 								<div className={buttons()}>

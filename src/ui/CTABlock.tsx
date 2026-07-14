@@ -138,7 +138,11 @@ export function CTABlock(props: CTABlockProps) {
 							</Text>
 						)}
 						{props.form?.provider === 'Hubspot' && props.form.formId && (
-							<HubSpotEmbedForm formId={props.form.formId} redirectTo={props.form.redirectTo} />
+							<HubSpotEmbedForm
+								formId={props.form.formId}
+								redirectTo={props.form.redirectTo}
+								submitLabel={props.form.submitLabel}
+							/>
 						)}
 					</div>
 					<div className={card()}>

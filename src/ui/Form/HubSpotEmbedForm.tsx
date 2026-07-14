@@ -29,6 +29,17 @@ declare global {
 	}
 }
 
+function applySubmitLabel(target: HTMLElement, submitLabel?: string) {
+	if (!submitLabel) return;
+
+	const submit = target.querySelector('.hs-button, input[type="submit"], button[type="submit"]');
+	if (submit instanceof HTMLInputElement) {
+		submit.value = submitLabel;
+	} else if (submit instanceof HTMLButtonElement) {
+		submit.textContent = submitLabel;
+	}
+}
+
 function applyEmbedWidth(target: HTMLElement) {
 	target.style.width = 'stretch';
 	target.style.maxWidth = '100%';
@@ -69,9 +80,11 @@ async function waitForHubSpotForms(): Promise<HubSpotFormsApi> {
 export function HubSpotEmbedForm({
 	formId,
 	redirectTo,
+	submitLabel,
 }: {
 	formId: string;
 	redirectTo?: string;
+	submitLabel?: string;
 }) {
 	const reactId = useId();
 	const targetId = `hs-form-${reactId.replace(/:/g, '')}`;
@@ -99,6 +112,7 @@ export function HubSpotEmbedForm({
 					onFormReady: () => {
 						if (cancelled || !mountedRef.current) return;
 						applyEmbedWidth(target);
+						applySubmitLabel(target, submitLabel);
 					},
 					onFormSubmitted: () => {
 						trackEvent('Newsletter Form Submitted', {
@@ -124,7 +138,7 @@ export function HubSpotEmbedForm({
 			mountedRef.current = false;
 			target.innerHTML = '';
 		};
-	}, [formId, redirectTo, targetId]);
+	}, [formId, redirectTo, submitLabel, targetId]);
 
 	return (
 		<div data-component='HubSpotEmbedForm' className='gp-hubspot-form flex w-full flex-col gap-4'>

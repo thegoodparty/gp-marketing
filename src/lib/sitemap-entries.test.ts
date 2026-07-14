@@ -3,12 +3,40 @@ import {
 	buildCountyLookups,
 	buildRaceEntries,
 	buildRaceRouteParams,
+	chunkArray,
 	normalizeName,
 	stripCountySuffix,
 	type CountyPlace,
 	type CityPlace,
 	type RaceEntry,
 } from './sitemap-entries';
+
+describe('chunkArray', () => {
+	test('returns a single chunk when input is smaller than the size', () => {
+		expect(chunkArray([1, 2, 3], 500)).toEqual([[1, 2, 3]]);
+	});
+
+	test('returns an empty array for empty input', () => {
+		expect(chunkArray([], 500)).toEqual([]);
+	});
+
+	test('splits into batches of at most `size` (people sitemap 500-id cap)', () => {
+		const ids = Array.from({ length: 1201 }, (_, i) => i);
+		const batches = chunkArray(ids, 500);
+		expect(batches.map((b) => b.length)).toEqual([500, 500, 201]);
+		// No id is dropped and order is preserved.
+		expect(batches.flat()).toEqual(ids);
+	});
+
+	test('handles an exact multiple of the size', () => {
+		const ids = Array.from({ length: 1000 }, (_, i) => i);
+		expect(chunkArray(ids, 500).map((b) => b.length)).toEqual([500, 500]);
+	});
+
+	test('throws when size is not positive', () => {
+		expect(() => chunkArray([1], 0)).toThrow();
+	});
+});
 
 describe('normalizeName', () => {
 	test('lowercases and strips whitespace', () => {

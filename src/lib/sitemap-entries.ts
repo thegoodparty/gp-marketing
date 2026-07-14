@@ -61,6 +61,16 @@ function dedupeByUrl(entries: MetadataRoute.Sitemap): MetadataRoute.Sitemap {
 	});
 }
 
+/** Splits an array into chunks of at most `size` (size must be > 0). */
+export function chunkArray<T>(items: T[], size: number): T[][] {
+	if (size <= 0) throw new Error('chunk size must be > 0');
+	const chunks: T[][] = [];
+	for (let i = 0; i < items.length; i += size) {
+		chunks.push(items.slice(i, i + size));
+	}
+	return chunks;
+}
+
 function toEntry(
 	baseUrl: string,
 	path: string,
@@ -577,12 +587,21 @@ export async function fetchPeopleSitemapEntries(baseUrl: string): Promise<Metada
 	}
 
 	const ids = [...updatedByPersonId.keys()];
-	const persons = await fetchElectionJson<{
-		id?: string;
-		firstName?: string | null;
-		lastName?: string | null;
-		fullName?: string | null;
-	}>('v1/persons', { ids: ids.join(','), columns: 'id,firstName,lastName,fullName' });
+	// election-api caps the `ids` filter at 500 (a larger list is rejected and
+	// returns []), so batch to avoid silently dropping published people.
+	const idBatches = chunkArray(ids, 500);
+	const persons = (
+		await Promise.all(
+			idBatches.map((batch) =>
+				fetchElectionJson<{
+					id?: string;
+					firstName?: string | null;
+					lastName?: string | null;
+					fullName?: string | null;
+				}>('v1/persons', { ids: batch.join(','), columns: 'id,firstName,lastName,fullName' }),
+			),
+		)
+	).flat();
 
 	const entries: MetadataRoute.Sitemap = [];
 	for (const p of persons) {

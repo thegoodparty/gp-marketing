@@ -54,11 +54,16 @@ function applyEmbedWidth(target: HTMLElement) {
 const SCRIPT_TIMEOUT_MS = 10_000;
 const SCRIPT_POLL_MS = 250;
 
-async function waitForHubSpotForms(): Promise<HubSpotFormsApi> {
+async function waitForHubSpotForms(isCancelled: () => boolean): Promise<HubSpotFormsApi> {
 	return new Promise((resolve, reject) => {
 		const started = Date.now();
 
 		const check = () => {
+			if (isCancelled()) {
+				reject(new Error('HubSpot form wait cancelled'));
+				return;
+			}
+
 			const forms = window.hbspt?.forms;
 			if (forms?.create) {
 				resolve(forms);
@@ -75,6 +80,30 @@ async function waitForHubSpotForms(): Promise<HubSpotFormsApi> {
 
 		check();
 	});
+}
+
+export function handleHubSpotFormSubmission({
+	formId,
+	redirectTo,
+	pagePath,
+	randomUuid = () => crypto.randomUUID(),
+	assign = url => window.location.assign(url),
+}: {
+	formId: string;
+	redirectTo?: string;
+	pagePath: string;
+	randomUuid?: () => string;
+	assign?: (url: string) => void;
+}) {
+	trackEvent('Newsletter Form Submitted', {
+		formId,
+		page_path: pagePath,
+	});
+
+	if (redirectTo && isSafeRelativeRedirect(redirectTo)) {
+		const separator = redirectTo.includes('?') ? '&' : '?';
+		assign(`${redirectTo}${separator}submissionGuid=${randomUuid()}`);
+	}
 }
 
 export function HubSpotEmbedForm({
@@ -98,7 +127,7 @@ export function HubSpotEmbedForm({
 
 		let cancelled = false;
 
-		void waitForHubSpotForms()
+		void waitForHubSpotForms(() => cancelled)
 			.then(forms => {
 				if (cancelled || !mountedRef.current) return;
 
@@ -115,15 +144,11 @@ export function HubSpotEmbedForm({
 						applySubmitLabel(target, submitLabel);
 					},
 					onFormSubmitted: () => {
-						trackEvent('Newsletter Form Submitted', {
+						handleHubSpotFormSubmission({
 							formId,
-							page_path: window.location.pathname,
+							redirectTo,
+							pagePath: window.location.pathname,
 						});
-
-						if (redirectTo && isSafeRelativeRedirect(redirectTo)) {
-							const separator = redirectTo.includes('?') ? '&' : '?';
-							window.location.assign(`${redirectTo}${separator}submissionGuid=${crypto.randomUUID()}`);
-						}
 					},
 				});
 			})

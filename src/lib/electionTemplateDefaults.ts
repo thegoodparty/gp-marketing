@@ -16,6 +16,7 @@ const UNRESOLVABLE_SEED_BLOCK_TYPES = new Set<string>([
 	'component_carouselBlock',
 	'component_ctaImageBlock',
 	'component_ctaBlock',
+	'component_ctaBannerBlock',
 ]);
 
 function stripUnresolvableSeedBlocks(sections: Sections[]): Sections[] {

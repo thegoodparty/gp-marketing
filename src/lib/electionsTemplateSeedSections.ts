@@ -116,6 +116,7 @@ export const tmplElectionsPositionSections = [
 			_type: 'ctaAction',
 			field_buttonText: POSITION_PAGE_CTA_BLOCK.primaryButtonLabel,
 			field_ctaAction: 'Internal',
+			field_internalLink: contactInternalLink,
 		},
 		ctaBlockDesignSettings: {
 			field_blockColorCreamMidnight: 'Cream',
@@ -253,6 +254,7 @@ export const tmplElectionsCandidatesSections = [
 			_type: 'ctaAction',
 			field_buttonText: CANDIDATES_PAGE_CTA_IMAGE.primaryButton.label,
 			field_ctaAction: 'Internal',
+			field_internalLink: contactInternalLink,
 		},
 		ctaAssets: {
 			img_featuredImage: {

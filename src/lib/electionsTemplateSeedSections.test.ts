@@ -29,7 +29,7 @@ describe('tmplElectionsPositionSections seed shapes', () => {
 		const section = findSection(tmplElectionsPositionSections, 'pos-cta-block') as {
 			field_ctaType?: string;
 			ctaMessaging?: { field_title?: string };
-			ctaAction?: { field_ctaAction?: string };
+			ctaAction?: { field_ctaAction?: string; field_internalLink?: { href?: unknown } };
 			ctaBlockDesignSettings?: { field_componentColor6ColorsInverse?: string };
 			overview?: unknown;
 			primaryCTA?: unknown;
@@ -39,6 +39,7 @@ describe('tmplElectionsPositionSections seed shapes', () => {
 		expect(section.field_ctaType).toBe('Manual');
 		expect(section.ctaMessaging?.field_title).toContain('[office name]');
 		expect(section.ctaAction?.field_ctaAction).toBe('Internal');
+		expect(section.ctaAction?.field_internalLink?.href).toBeDefined();
 		expect(section.ctaBlockDesignSettings?.field_componentColor6ColorsInverse).toBe('Lavender');
 		expect(section.overview).toBeUndefined();
 		expect(section.primaryCTA).toBeUndefined();
@@ -110,7 +111,7 @@ describe('tmplElectionsCandidatesSections seed shapes', () => {
 		const section = findSection(tmplElectionsCandidatesSections, 'cand-cta-image') as {
 			field_ctaType?: string;
 			ctaMessaging?: { field_title?: string };
-			ctaAction?: { field_ctaAction?: string; field_buttonText?: string };
+			ctaAction?: { field_ctaAction?: string; field_buttonText?: string; field_internalLink?: { href?: unknown } };
 			ctaAssets?: { img_featuredImage?: unknown; showFullImage?: boolean };
 			ctaImageBlockDesignSettings?: { field_componentColor6ColorsInverse?: string };
 			overview?: unknown;
@@ -123,6 +124,7 @@ describe('tmplElectionsCandidatesSections seed shapes', () => {
 		expect(section.ctaMessaging?.field_title).toContain('[office]');
 		expect(section.ctaAction?.field_ctaAction).toBe('Internal');
 		expect(section.ctaAction?.field_buttonText).toBe(CANDIDATES_PAGE_CTA_IMAGE.primaryButton.label);
+		expect(section.ctaAction?.field_internalLink?.href).toBeDefined();
 		expect(section.ctaAssets?.img_featuredImage).toBeDefined();
 		expect(section.ctaAssets?.showFullImage).toBe(true);
 		expect(section.ctaImageBlockDesignSettings?.field_componentColor6ColorsInverse).toBe('Blue');

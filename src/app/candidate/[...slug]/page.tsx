@@ -178,11 +178,13 @@ export default async function Page({
 		notFound();
 	}
 
-	// Once a candidate has a live public /people profile, that becomes the single
-	// canonical home for the person; send the legacy candidate URL there.
+	// Once a candidate has *claimed and published* a public /people profile, that
+	// becomes the single canonical home for the person; send the legacy candidate
+	// URL there. Unclaimed programmatic /people pages don't preempt the richer
+	// candidate experience, so we only redirect when the profile is claimed.
 	if (candidate.personId) {
 		const person = await loadPersonProfile(candidate.personId);
-		if (person) {
+		if (person?.claimed) {
 			redirect(`/people/${person.canonicalSlug}`);
 		}
 	}

@@ -296,16 +296,52 @@ export async function getOfficeHoldersByPerson(personId: string): Promise<Person
 }
 
 /**
- * The product-owned overlay for a person's public profile (gp-api). This is the
- * render gate: gp-api returns 404 (unpublished / never created) or 410 (deleted)
- * for anything that is not live, so a null here means "do not render a page".
+ * Result of resolving a person's product overlay (gp-api). The distinction
+ * matters for the render gate:
+ *  - `live`   → an owner has claimed + published a profile; enrich the page.
+ *  - `absent` → no published overlay (never claimed, or unpublished draft); the
+ *               page still renders as an unclaimed, programmatic-SEO profile
+ *               from the election-api spine, with claim CTAs.
+ *  - `gone`   → the owner deleted their profile; suppress the page entirely.
  */
-export async function getPublicPersonProfile(
+export type PublicPersonProfileResult =
+	| { status: 'live'; profile: PublicPersonProfile }
+	| { status: 'absent' }
+	| { status: 'gone' };
+
+/**
+ * The product-owned overlay for a person's public profile (gp-api). gp-api
+ * returns 200 (live), 404 (never created / unpublished), or 410 (deleted). We
+ * map those to the render-gate outcomes above; any transient/5xx failure falls
+ * back to `absent` so the spine page still renders instead of 404-ing.
+ */
+export async function getPublicPersonProfileStatus(
 	personId: string,
-): Promise<PublicPersonProfile | null> {
+): Promise<PublicPersonProfileResult> {
 	const searchParams = new URLSearchParams({ personId });
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles?${searchParams}`;
-	return fetchJson<PublicPersonProfile>(url, personCacheOptions(personId));
+	for (let attempt = 0; attempt <= FETCH_JSON_MAX_RETRIES; attempt++) {
+		try {
+			const res = await fetch(url, personCacheOptions(personId));
+			if (res.ok) {
+				const profile = (await res.json()) as PublicPersonProfile;
+				return { status: 'live', profile };
+			}
+			if (res.status === 410) return { status: 'gone' };
+			if (res.status === 404) return { status: 'absent' };
+			if (res.status < 500) {
+				console.error(`[electionsApi] ${res.status} ${url}`);
+				return { status: 'absent' };
+			}
+			console.error(`[electionsApi] ${res.status} ${url} (attempt ${attempt + 1})`);
+		} catch (err) {
+			console.error(`[electionsApi] overlay attempt ${attempt + 1}`, err);
+		}
+		if (attempt < FETCH_JSON_MAX_RETRIES) {
+			await sleep(500 * (attempt + 1));
+		}
+	}
+	return { status: 'absent' };
 }
 
 export async function getMostElections(count = 3): Promise<FeaturedCity[]> {

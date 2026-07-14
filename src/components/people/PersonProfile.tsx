@@ -1,225 +1,240 @@
-import { Container } from '~/ui/Container';
-import type {
-	PersonProfileLink,
-	PersonProfileView,
-} from '~/lib/peopleProfile';
+import type { ReactNode } from 'react';
 
-function formatTermYear(date: string | null): string | null {
-	if (!date) return null;
-	const parsed = new Date(date);
-	if (Number.isNaN(parsed.getTime())) return null;
-	return String(parsed.getUTCFullYear());
+import type { PersonProfileView, PersonPersona } from '~/lib/peopleProfile';
+import type { PersonAccomplishment } from '~/types/people';
+import { BreadcrumbBlock } from '~/ui/BreadcrumbBlock';
+import { CTABannerBlock } from '~/ui/CTABannerBlock';
+import { GoodPartyOrgPledge, type PledgeCard } from '~/ui/GoodPartyOrgPledge';
+import { IconResolver } from '~/ui/IconResolver';
+import { ProfileContentBlock } from '~/ui/ProfileContentBlock';
+import type { ProfileContentCardProps } from '~/ui/ProfileContentCard';
+import { ProfileHero } from '~/ui/ProfileHero';
+import type { ElectionsSidebarProps } from '~/ui/ElectionsSidebar';
+import { Text } from '~/ui/Text';
+import { ClaimProfileModal } from './ClaimProfileModal';
+
+const PLEDGE_CARDS: PledgeCard[] = [
+	{
+		icon: 'heart',
+		title: 'Independent',
+		content:
+			'Candidates are running outside the two-party system as an Independent, nonpartisan, or third-party candidate.',
+	},
+	{
+		icon: 'users',
+		title: 'People-Powered',
+		content:
+			'Candidates take the majority of their funds from grassroots donors and reject the influence of special interests and big money.',
+	},
+	{
+		icon: 'star',
+		title: 'Anti-Corruption',
+		content:
+			'Candidates pledge to be accountable and transparent with their policy agendas and report attempts to unduly influence them.',
+	},
+	{
+		icon: 'hand-heart',
+		title: 'Civility',
+		content:
+			"Candidates pledge to run a clean campaign free of mudslinging and uphold a minimum standard of civility in their campaign's conduct.",
+	},
+];
+
+function whyHeading(persona: PersonPersona): string {
+	switch (persona) {
+		case 'candidate':
+		case 'both':
+			return 'Why I\u2019m Running';
+		case 'officeholder':
+			return 'Why I Serve';
+		case 'past':
+			return 'Why I Served';
+	}
 }
 
-function TermRange({ start, end }: { start: string | null; end: string | null }) {
-	const startYear = formatTermYear(start);
-	const endYear = formatTermYear(end);
-	if (!startYear && !endYear) return null;
+function issuesHeading(persona: PersonPersona): string {
+	switch (persona) {
+		case 'candidate':
+		case 'both':
+			return 'Top Issues';
+		case 'officeholder':
+			return 'Top Priorities in Office';
+		case 'past':
+			return 'Priorities in Office';
+	}
+}
+
+function TransparencyPill({ label }: { label: string }) {
 	return (
-		<span>
-			{startYear ?? '—'} – {endYear ?? 'Present'}
+		<span className='inline-flex w-fit items-center gap-1.5 rounded-full bg-halo-green-100 px-3 py-1 text-midnight-900'>
+			<IconResolver icon='badge-check' className='h-3.5 w-3.5' />
+			<Text as='span' styleType='caption'>
+				{label}
+			</Text>
 		</span>
 	);
 }
 
-function LinkPill({ link }: { link: PersonProfileLink }) {
-	const isExternal = link.href.startsWith('http');
+function IssuesContent({ issues }: { issues: PersonProfileView['issues'] }): ReactNode {
 	return (
-		<a
-			href={link.href}
-			target={isExternal ? '_blank' : undefined}
-			rel={isExternal ? 'noopener noreferrer' : undefined}
-			className='inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold text-gray-800 transition-colors hover:border-black/20 hover:bg-gray-50'
-		>
-			{link.label}
-		</a>
+		<ol className='flex flex-col gap-6'>
+			{issues.map((issue, index) => (
+				<li key={issue.id} className='flex flex-col gap-2'>
+					<div className='flex items-baseline gap-3'>
+						<Text as='span' styleType='subtitle-1' className='text-btn-primary-bg'>
+							{index + 1}
+						</Text>
+						<Text as='span' styleType='subtitle-1'>
+							{issue.title}
+						</Text>
+					</div>
+					{issue.description && (
+						<div className='pl-7'>
+							<Text styleType='body-2'>{issue.description}</Text>
+						</div>
+					)}
+					{issue.transparency && (
+						<div className='pl-7'>
+							<TransparencyPill label={issue.transparency} />
+						</div>
+					)}
+				</li>
+			))}
+		</ol>
 	);
 }
 
-function SectionCard({
-	title,
-	children,
+function AccomplishmentsContent({
+	accomplishments,
 }: {
-	title: string;
-	children: React.ReactNode;
-}) {
+	accomplishments: PersonAccomplishment[];
+}): ReactNode {
 	return (
-		<section className='rounded-2xl border border-black/5 bg-white p-6 shadow-sm sm:p-8'>
-			<h2 className='mb-4 text-xl font-semibold text-gray-900'>{title}</h2>
-			{children}
-		</section>
+		<ul className='flex flex-col gap-5'>
+			{accomplishments.map((item, index) => (
+				<li key={`${item.title}-${index}`} className='flex flex-col gap-1'>
+					<div className='flex flex-wrap items-baseline gap-x-3 gap-y-1'>
+						<span className='inline-flex items-center gap-2'>
+							<IconResolver icon='star' className='h-4 w-4 text-btn-primary-bg' />
+							<Text as='span' styleType='subtitle-2'>
+								{item.title}
+							</Text>
+						</span>
+						{item.date && (
+							<Text as='span' styleType='caption' className='text-gray-500'>
+								{item.date}
+							</Text>
+						)}
+					</div>
+					{item.description && (
+						<div className='pl-6'>
+							<Text styleType='body-2'>{item.description}</Text>
+						</div>
+					)}
+				</li>
+			))}
+		</ul>
 	);
+}
+
+function buildContentCards(view: PersonProfileView): ProfileContentCardProps[] {
+	const cards: ProfileContentCardProps[] = [];
+
+	if (view.bio) {
+		cards.push({ cardType: 'about-me', heading: 'About', content: view.bio });
+	}
+	if (view.whyRunning) {
+		cards.push({
+			cardType: 'why-running',
+			heading: whyHeading(view.persona),
+			content: view.whyRunning,
+		});
+	}
+	if (view.issues.length > 0) {
+		cards.push({
+			cardType: 'top-issues',
+			heading: issuesHeading(view.persona),
+			content: <IssuesContent issues={view.issues} />,
+		});
+	}
+	if (view.accomplishments.length > 0) {
+		cards.push({
+			heading: 'Accomplishments',
+			content: <AccomplishmentsContent accomplishments={view.accomplishments} />,
+		});
+	}
+	return cards;
+}
+
+function buildSidebar(view: PersonProfileView): ElectionsSidebarProps | undefined {
+	const links = view.links.map((link) => ({ label: link.label, icon: link.icon, href: link.href }));
+	const location = [view.districtLabel, view.stateLabel].filter(Boolean).join(', ');
+	const aboutOffice = [view.officeName, location].filter(Boolean).join(' · ') || undefined;
+
+	if (links.length === 0 && !aboutOffice && !view.termLabel) return undefined;
+
+	return {
+		links: links.length > 0 ? links : undefined,
+		aboutOffice,
+		termLength: view.termLabel ?? undefined,
+	};
 }
 
 export function PersonProfile({ view }: { view: PersonProfileView }) {
-	const {
-		displayName,
-		roleTitle,
-		party,
-		isVerified,
-		avatarUrl,
-		coverImageUrl,
-		initials,
-		bio,
-		whyRunning,
-		accomplishments,
-		term,
-		districtLabel,
-		stateLabel,
-		issues,
-		links,
-	} = view;
-
-	const locationLabel = [districtLabel, stateLabel].filter(Boolean).join(', ');
+	const showPledge = view.persona === 'candidate' || view.persona === 'both';
+	const contentCards = buildContentCards(view);
+	const sidebar = buildSidebar(view);
 
 	return (
-		<article className='pb-16'>
-			{/* Cover / hero band */}
-			<div className='relative h-40 w-full bg-gradient-to-r from-emerald-700 to-teal-600 sm:h-56'>
-				{coverImageUrl ? (
-					// eslint-disable-next-line @next/next/no-img-element
-					<img
-						src={coverImageUrl}
-						alt=''
-						className='h-full w-full object-cover'
-						loading='eager'
-					/>
-				) : null}
-			</div>
+		<article data-component='PersonProfilePage'>
+			<BreadcrumbBlock
+				backgroundColor='midnight'
+				breadcrumbs={[
+					{ href: '/', label: 'Home' },
+					{ href: '/people', label: 'People' },
+					{ label: view.displayName },
+				]}
+			/>
 
-			<Container size='lg' className='relative'>
-				{/* Header card overlapping the cover */}
-				<div className='-mt-16 mb-8 flex flex-col gap-4 rounded-2xl border border-black/5 bg-white p-6 shadow-sm sm:-mt-20 sm:flex-row sm:items-end sm:gap-6 sm:p-8'>
-					<div className='shrink-0'>
-						{avatarUrl ? (
-							// eslint-disable-next-line @next/next/no-img-element
-							<img
-								src={avatarUrl}
-								alt={displayName}
-								className='h-28 w-28 rounded-2xl border-4 border-white object-cover shadow-md sm:h-32 sm:w-32'
-								loading='eager'
-							/>
-						) : (
-							<div className='flex h-28 w-28 items-center justify-center rounded-2xl border-4 border-white bg-emerald-100 text-3xl font-bold text-emerald-700 shadow-md sm:h-32 sm:w-32'>
-								{initials}
-							</div>
-						)}
-					</div>
-					<div className='min-w-0 flex-1'>
-						<div className='flex flex-wrap items-center gap-2'>
-							<h1 className='text-2xl font-bold text-gray-900 sm:text-3xl'>{displayName}</h1>
-							{isVerified ? (
-								<span className='inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700'>
-									Verified
-								</span>
-							) : null}
-						</div>
-						{roleTitle ? (
-							<p className='mt-1 text-lg text-gray-700'>{roleTitle}</p>
-						) : null}
-						<div className='mt-2 flex flex-wrap items-center gap-2 text-sm text-gray-500'>
-							{party ? (
-								<span className='rounded-full bg-gray-100 px-3 py-1 font-medium text-gray-700'>
-									{party}
-								</span>
-							) : null}
-							{locationLabel ? <span>{locationLabel}</span> : null}
-						</div>
-					</div>
-				</div>
+			<ProfileHero
+				backgroundColor='midnight'
+				candidateName={view.displayName}
+				office={view.roleTitle ?? ''}
+				profileImageUrl={view.avatarUrl ?? undefined}
+				isEmpowered={view.claimed}
+			/>
 
-				<div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
-					{/* Main column */}
-					<div className='flex flex-col gap-6 lg:col-span-2'>
-						{bio ? (
-							<SectionCard title='About'>
-								<p className='whitespace-pre-line leading-relaxed text-gray-700'>{bio}</p>
-							</SectionCard>
-						) : null}
+			{!view.claimed && (
+				<ClaimProfileModal
+					personId={view.personId}
+					displayName={view.displayName}
+					persona={view.persona}
+				/>
+			)}
 
-						{whyRunning ? (
-							<SectionCard title='Why I serve'>
-								<p className='whitespace-pre-line leading-relaxed text-gray-700'>{whyRunning}</p>
-							</SectionCard>
-						) : null}
+			{(contentCards.length > 0 || sidebar) && (
+				<ProfileContentBlock backgroundColor='cream' sidebar={sidebar} contentCards={contentCards} />
+			)}
 
-						{issues.length > 0 ? (
-							<SectionCard title='Top issues'>
-								<ul className='flex flex-col gap-5'>
-									{issues.map((issue) => (
-										<li key={issue.id}>
-											<h3 className='font-semibold text-gray-900'>{issue.title}</h3>
-											{issue.description ? (
-												<p className='mt-1 whitespace-pre-line leading-relaxed text-gray-700'>
-													{issue.description}
-												</p>
-											) : null}
-										</li>
-									))}
-								</ul>
-							</SectionCard>
-						) : null}
+			{showPledge && (
+				<GoodPartyOrgPledge
+					backgroundColor='midnight'
+					iconBg='mixed'
+					header={{
+						title: 'The GoodParty.org Pledge',
+						copy: 'All GoodParty.org candidates agree to the following:',
+					}}
+					pledgeCards={PLEDGE_CARDS}
+				/>
+			)}
 
-						{accomplishments.length > 0 ? (
-							<SectionCard title='Accomplishments'>
-								<ul className='flex flex-col gap-4'>
-									{accomplishments.map((item, i) => (
-										<li key={`${item.title}-${i}`} className='border-l-2 border-emerald-500 pl-4'>
-											<div className='flex flex-wrap items-baseline justify-between gap-2'>
-												<h3 className='font-semibold text-gray-900'>{item.title}</h3>
-												{item.date ? (
-													<span className='text-sm text-gray-500'>{item.date}</span>
-												) : null}
-											</div>
-											{item.description ? (
-												<p className='mt-1 leading-relaxed text-gray-700'>{item.description}</p>
-											) : null}
-										</li>
-									))}
-								</ul>
-							</SectionCard>
-						) : null}
-					</div>
-
-					{/* Sidebar */}
-					<aside className='flex flex-col gap-6'>
-						{term && (formatTermYear(term.start) || formatTermYear(term.end)) ? (
-							<SectionCard title='In office'>
-								<dl className='flex flex-col gap-3 text-sm'>
-									{roleTitle ? (
-										<div>
-											<dt className='text-gray-500'>Office</dt>
-											<dd className='font-medium text-gray-900'>{roleTitle}</dd>
-										</div>
-									) : null}
-									<div>
-										<dt className='text-gray-500'>Term</dt>
-										<dd className='font-medium text-gray-900'>
-											<TermRange start={term.start} end={term.end} />
-										</dd>
-									</div>
-									{locationLabel ? (
-										<div>
-											<dt className='text-gray-500'>District</dt>
-											<dd className='font-medium text-gray-900'>{locationLabel}</dd>
-										</div>
-									) : null}
-								</dl>
-							</SectionCard>
-						) : null}
-
-						{links.length > 0 ? (
-							<SectionCard title='Connect'>
-								<div className='flex flex-wrap gap-2'>
-									{links.map((link) => (
-										<LinkPill key={`${link.kind}-${link.href}`} link={link} />
-									))}
-								</div>
-							</SectionCard>
-						) : null}
-					</aside>
-				</div>
-			</Container>
+			<CTABannerBlock
+				backgroundColor='cream'
+				color='halo-green'
+				title='Build a better democracy with us.'
+				copy='Support independent candidates, run for office, or join our community of people working to fix our broken political system.'
+				button={{ buttonType: 'signup', label: 'Get started' }}
+			/>
 		</article>
 	);
 }

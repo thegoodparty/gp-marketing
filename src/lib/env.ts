@@ -14,6 +14,10 @@ export const revalidateSecret = process.env.SANITY_REVALIDATE_SECRET;
 // public /people/* page after a publish/unpublish/delete/edit.
 export const personRevalidateSecret = process.env.MARKETING_REVALIDATE_SECRET;
 
+// HubSpot form id backing the "claim / notify this person" modal on unclaimed
+// public /people/* pages. When unset, the modal falls back to a signup CTA only.
+export const personClaimFormId = process.env.NEXT_PUBLIC_PERSON_CLAIM_FORM_ID;
+
 // Used by `sanity-plugin-iframe-pane` to verify that draft mode was initiated by a valid Studio session
 export const urlSecretId = `preview.secret`;
 

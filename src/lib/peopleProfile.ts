@@ -190,7 +190,7 @@ function buildLinks(
 	return links;
 }
 
-function composeView(
+export function composeView(
 	personId: string,
 	person: PersonItem | null,
 	overlay: PublicPersonProfile | null,

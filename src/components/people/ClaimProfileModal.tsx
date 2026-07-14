@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { APP_SIGN_UP_HREF, trackEvent, trackSignUpClicked } from '~/lib/analytics';
-import { personClaimFormId } from '~/lib/env';
 import { ClaimProfileBlock } from '~/ui/ClaimProfileBlock';
 import { Button, ButtonLink } from '~/ui/Inputs/Button';
 import { TextInput } from '~/ui/Inputs/TextInput';
@@ -27,10 +26,10 @@ function NotifyForm({ personId, displayName }: { personId: string; displayName: 
 
 	async function onSubmit(values: NotifyValues) {
 		try {
-			const res = await fetch('/api/hubspot/newsletter', {
+			const res = await fetch('/api/people/claim-request', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ formId: personClaimFormId, ...values }),
+				body: JSON.stringify({ personId, firstname: values.firstname, email: values.email }),
 			});
 			if (!res.ok) throw new Error('Submission failed');
 			trackEvent('Person Profile Notify Submitted', { personId });
@@ -170,15 +169,13 @@ export function ClaimProfileModal({ personId, displayName, persona }: ClaimProfi
 						Claim this profile
 					</ButtonLink>
 
-					{personClaimFormId && (
-						<div className='flex flex-col gap-4 border-t border-gray-200 pt-6'>
-							<Text styleType='subtitle-2'>Not {displayName}?</Text>
-							<Text styleType='body-2'>
-								Let them know their profile is ready to claim on GoodParty.org.
-							</Text>
-							<NotifyForm personId={personId} displayName={displayName} />
-						</div>
-					)}
+					<div className='flex flex-col gap-4 border-t border-gray-200 pt-6'>
+						<Text styleType='subtitle-2'>Not {displayName}?</Text>
+						<Text styleType='body-2'>
+							Let them know their profile is ready to claim on GoodParty.org.
+						</Text>
+						<NotifyForm personId={personId} displayName={displayName} />
+					</div>
 				</Dialog.Content>
 			</Dialog.Portal>
 		</Dialog.Root>

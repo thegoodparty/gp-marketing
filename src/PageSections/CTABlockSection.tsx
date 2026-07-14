@@ -34,6 +34,7 @@ export function CTABlockSection(section: Props) {
 					section.ctaOverride?.primaryButtonHref
 						? {
 								...(section['primaryCTA'] as object),
+								action: 'Internal' as const,
 								link: { href: section.ctaOverride.primaryButtonHref },
 							}
 						: section['primaryCTA'],

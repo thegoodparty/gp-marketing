@@ -160,6 +160,16 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 						},
 					}
 				: undefined,
+			...(ctx.candidatesHref
+				? {
+						rightColumnCTA: {
+							buttonType: 'internal' as const,
+							href: ctx.candidatesHref,
+							label: 'View candidates',
+							buttonProps: { styleType: secondaryButtonStyleType },
+						},
+					}
+				: {}),
 		},
 		component_faqBlock: {
 			items: race

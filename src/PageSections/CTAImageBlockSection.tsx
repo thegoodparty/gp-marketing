@@ -43,7 +43,14 @@ export async function CTAImageBlockSection(
 
 	const { base } = styles({ backgroundColor });
 
-	const primaryButton = transformButtons([section['primaryCTA']])?.[0];
+	const primaryCTA = section.ctaOverride?.primaryButtonHref
+		? {
+				...(section['primaryCTA'] as object),
+				action: 'Internal' as const,
+				link: { href: section.ctaOverride.primaryButtonHref },
+			}
+		: section['primaryCTA'];
+	const primaryButton = transformButtons([primaryCTA as never])?.[0];
 	const primaryButtonWithOverride =
 		primaryButton && section.ctaOverride?.primaryButtonHref
 			? { ...primaryButton, href: section.ctaOverride.primaryButtonHref }

@@ -55,7 +55,7 @@ export const tmplElectionsPositionSections = [
 		ctaAction: {
 			_type: 'ctaAction',
 			field_buttonText: POSITION_PAGE_CTA_BANNER.button.label,
-			field_ctaActionWithShared: 'Internal',
+			field_ctaAction: 'Internal',
 			field_internalLink: contactInternalLink,
 		},
 		ctaBannerBlockDesignSettings: {
@@ -98,7 +98,8 @@ export const tmplElectionsPositionSections = [
 	{
 		_key: 'pos-cta-block',
 		_type: 'component_ctaBlock',
-		overview: {
+		field_ctaType: 'Manual',
+		ctaMessaging: {
 			field_label: POSITION_PAGE_CTA_BLOCK.label,
 			field_title: POSITION_PAGE_CTA_BLOCK.title,
 			block_summaryText: [
@@ -111,13 +112,13 @@ export const tmplElectionsPositionSections = [
 				},
 			],
 		},
-		primaryCTA: {
-			_type: 'button',
-			field_buttonHierarchy: 'Primary',
+		ctaAction: {
+			_type: 'ctaAction',
 			field_buttonText: POSITION_PAGE_CTA_BLOCK.primaryButtonLabel,
-			field_ctaActionWithShared: 'Internal',
+			field_ctaAction: 'Internal',
+			field_internalLink: contactInternalLink,
 		},
-		designSettings: {
+		ctaBlockDesignSettings: {
 			field_blockColorCreamMidnight: 'Cream',
 			field_componentColor6ColorsInverse: 'Lavender',
 		},
@@ -127,7 +128,7 @@ export const tmplElectionsPositionSections = [
 		_type: 'component_twoUpCardBlock',
 		twoUpCardBlockDesignSettings: { field_blockColorCreamMidnight: 'Cream' },
 		twoUpCardBlockOne: {
-			field_twoUpCardBlockCardType: 'Value Proposition Card',
+			field_twoUpCardBlockCardType: 'ValueProposition',
 			valuePropositionCard: {
 				field_title: POSITION_PAGE_TWO_UP_CARD.card1.title,
 				field_componentColor6ColorsInverse: 'BrightYellow',
@@ -154,7 +155,7 @@ export const tmplElectionsPositionSections = [
 			},
 		},
 		twoUpCardBlockTwo: {
-			field_twoUpCardBlockCardType: 'Value Proposition Card',
+			field_twoUpCardBlockCardType: 'ValueProposition',
 			valuePropositionCard: {
 				field_title: POSITION_PAGE_TWO_UP_CARD.card2.title,
 				field_componentColor6ColorsInverse: 'Lavender',
@@ -225,7 +226,7 @@ export const tmplElectionsCandidatesSections = [
 		ctaAction: {
 			_type: 'ctaAction',
 			field_buttonText: CANDIDATES_PAGE_CTA_BANNER.button.label,
-			field_ctaActionWithShared: 'External',
+			field_ctaAction: 'External',
 			field_externalLink: CANDIDATES_PAGE_CTA_BANNER.button.href,
 		},
 		ctaBannerBlockDesignSettings: {
@@ -236,7 +237,8 @@ export const tmplElectionsCandidatesSections = [
 	{
 		_key: 'cand-cta-image',
 		_type: 'component_ctaImageBlock',
-		overview: {
+		field_ctaType: 'Manual',
+		ctaMessaging: {
 			field_title: CANDIDATES_PAGE_CTA_IMAGE.title,
 			block_summaryText: [
 				{
@@ -248,20 +250,20 @@ export const tmplElectionsCandidatesSections = [
 				},
 			],
 		},
-		primaryCTA: {
-			_type: 'button',
-			field_buttonHierarchy: 'Primary',
+		ctaAction: {
+			_type: 'ctaAction',
 			field_buttonText: CANDIDATES_PAGE_CTA_IMAGE.primaryButton.label,
-			field_ctaActionWithShared: 'Internal',
+			field_ctaAction: 'Internal',
+			field_internalLink: contactInternalLink,
 		},
-		image: {
+		ctaAssets: {
 			img_featuredImage: {
 				_type: 'img_image',
 				asset: { _ref: CANDIDATES_PAGE_CTA_IMAGE.imageAssetRef, _type: 'reference' },
 			},
 			showFullImage: CANDIDATES_PAGE_CTA_IMAGE.showFullImage,
 		},
-		designSettings: {
+		ctaImageBlockDesignSettings: {
 			field_blockColorCreamMidnight: 'Cream',
 			field_componentColor6ColorsInverse: 'Blue',
 		},

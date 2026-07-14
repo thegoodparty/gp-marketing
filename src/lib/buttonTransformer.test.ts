@@ -20,6 +20,10 @@ describe('isButtonType', () => {
 	test('accepts valid action', () => {
 		expect(isButtonType({ action: 'Internal', _key: 'x' })).toBe(true);
 	});
+
+	test('accepts field_ctaAction alias', () => {
+		expect(isButtonType({ field_ctaAction: 'External', _key: 'x' })).toBe(true);
+	});
 });
 
 describe('normalizeRawCtaToButton', () => {
@@ -38,6 +42,35 @@ describe('normalizeRawCtaToButton', () => {
 
 	test('returns undefined when action is missing', () => {
 		expect(normalizeRawCtaToButton({ field_buttonText: 'Learn more' }, 'card-cta')).toBeUndefined();
+	});
+
+	test('maps field_ctaAction to action and text', () => {
+		const button = normalizeRawCtaToButton(
+			{
+				field_ctaAction: 'External',
+				field_buttonText: 'Claim profile',
+				field_externalLink: 'https://app.goodparty.org/sign-up',
+			},
+			'cand-banner-cta',
+		);
+		expect(button?.action).toBe('External');
+		expect(button?.text).toBe('Claim profile');
+
+		const transformed = button ? transformButtons([button])?.[0] : undefined;
+		expect(transformed?.href).toBe('https://app.goodparty.org/sign-up');
+		expect(transformed?.label).toBe('Claim profile');
+	});
+
+	test('prefers GROQ action alias over field_ctaAction', () => {
+		const button = normalizeRawCtaToButton(
+			{
+				action: 'SignUp',
+				field_ctaAction: 'Internal',
+				text: 'Sign up',
+			},
+			'card-cta',
+		);
+		expect(button?.action).toBe('SignUp');
 	});
 
 	test('prefers GROQ action alias over field_ctaActionWithShared', () => {
@@ -138,5 +171,20 @@ describe('transformButton', () => {
 		);
 		expect(button).toBeDefined();
 		expect(transformButton(button!)).toBeUndefined();
+	});
+});
+
+describe('transformButtons', () => {
+	test('normalizes raw field_ctaAction payloads before transforming', () => {
+		const transformed = transformButtons([
+			{
+				field_ctaAction: 'Internal',
+				field_buttonText: 'Get free demo',
+				link: { href: '/contact' },
+			} as never,
+		])?.[0];
+
+		expect(transformed?.label).toBe('Get free demo');
+		expect(transformed?.href).toBe('/contact');
 	});
 });

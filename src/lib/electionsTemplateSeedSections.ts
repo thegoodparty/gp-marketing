@@ -236,7 +236,8 @@ export const tmplElectionsCandidatesSections = [
 	{
 		_key: 'cand-cta-image',
 		_type: 'component_ctaImageBlock',
-		overview: {
+		field_ctaType: 'Manual',
+		ctaMessaging: {
 			field_title: CANDIDATES_PAGE_CTA_IMAGE.title,
 			block_summaryText: [
 				{
@@ -248,20 +249,19 @@ export const tmplElectionsCandidatesSections = [
 				},
 			],
 		},
-		primaryCTA: {
-			_type: 'button',
-			field_buttonHierarchy: 'Primary',
+		ctaAction: {
+			_type: 'ctaAction',
 			field_buttonText: CANDIDATES_PAGE_CTA_IMAGE.primaryButton.label,
-			field_ctaActionWithShared: 'Internal',
+			field_ctaAction: 'Internal',
 		},
-		image: {
+		ctaAssets: {
 			img_featuredImage: {
 				_type: 'img_image',
 				asset: { _ref: CANDIDATES_PAGE_CTA_IMAGE.imageAssetRef, _type: 'reference' },
 			},
 			showFullImage: CANDIDATES_PAGE_CTA_IMAGE.showFullImage,
 		},
-		designSettings: {
+		ctaImageBlockDesignSettings: {
 			field_blockColorCreamMidnight: 'Cream',
 			field_componentColor6ColorsInverse: 'Blue',
 		},

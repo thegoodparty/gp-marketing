@@ -1,0 +1,54 @@
+/* HubSpot new-form editor theme variables scoped to Good Party embeds.
+   See: https://developers.hubspot.com/docs/cms/start-building/features/forms/forms */
+
+.gp-hubspot-form {
+	--hsf-global__font-family: var(--font-secondary);
+	--hsf-global__font-size: var(--text-body-2);
+	--hsf-global__color: #000;
+	--hsf-global-error__color: var(--color-error-600);
+
+	--hsf-field-label__font-family: var(--font-secondary);
+	--hsf-field-label__font-size: var(--text-text-md);
+	--hsf-field-label__color: #000;
+	--hsf-field-label-requiredindicator__color: var(--color-goodparty-red);
+
+	--hsf-field-input__font-family: var(--font-secondary);
+	--hsf-field-input__font-size: var(--text-body-2);
+	--hsf-field-input__color: #000;
+	--hsf-field-input__background-color: #fff;
+	--hsf-field-input__placeholder-color: hsl(0 0% 64%);
+	--hsf-field-input__border-color: hsl(0 0% 82%);
+	--hsf-field-input__border-width: 1px;
+	--hsf-field-input__border-style: solid;
+	--hsf-field-input__border-radius: var(--radius-md);
+	--hsf-field-input__padding: 0.75rem 0.875rem;
+
+	--hsf-button__font-family: var(--font-secondary);
+	--hsf-button__font-size: 0.875rem;
+	--hsf-button__color: #fff;
+	--hsf-button__background-color: var(--color-btn-primary-bg);
+	--hsf-button__border-radius: 9999px;
+	--hsf-button__padding: 0.75rem 1.5rem;
+
+	--hsf-background__background-color: transparent;
+	--hsf-background__border-width: 0;
+	--hsf-background__padding: 0;
+}
+
+.gp-hubspot-form {
+	width: 100%;
+	text-align: left;
+}
+
+.gp-hubspot-form-target,
+.gp-hubspot-form-target[data-hs-forms-root] {
+	width: stretch;
+	max-width: 100%;
+}
+
+.gp-hubspot-form-target iframe,
+.gp-hubspot-form-target[data-hs-forms-root] iframe {
+	width: 100% !important;
+	max-width: 100% !important;
+	display: block;
+}

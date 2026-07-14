@@ -11,7 +11,7 @@ import { Container } from './Container.tsx';
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { EmbedHtml } from './EmbedHtml.tsx';
 import { Media } from './Media.tsx';
-import { Newsletter } from './Form/Newsletter.tsx';
+import { HubSpotEmbedForm } from './Form/HubSpotEmbedForm.tsx';
 import { Text } from './Text.tsx';
 
 const styles = tv({
@@ -193,11 +193,7 @@ export function HeroBlock(props: HeroBlockProps) {
 								)}
 							</div>
 							{props.form?.provider === 'Hubspot' && props.form.formId && (
-								<Newsletter
-									formId={props.form.formId}
-									redirectTo={props.form.redirectTo}
-									submitLabel={props.form.submitLabel}
-								/>
+								<HubSpotEmbedForm formId={props.form.formId} redirectTo={props.form.redirectTo} />
 							)}
 							{props.buttons && props.buttons.length > 0 && (
 								<div className={buttons()}>

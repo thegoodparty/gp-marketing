@@ -8,7 +8,7 @@ import type { backgroundTypeValues, normalCondensedValues } from './_lib/designT
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
-import { Newsletter } from './Form/Newsletter.tsx';
+import { HubSpotEmbedForm } from './Form/HubSpotEmbedForm.tsx';
 import { Logo } from '~/sanity/utils/Logo.tsx';
 import type { FormProps } from './_lib/resolveForm.ts';
 
@@ -138,7 +138,7 @@ export function CTABlock(props: CTABlockProps) {
 							</Text>
 						)}
 						{props.form?.provider === 'Hubspot' && props.form.formId && (
-							<Newsletter formId={props.form.formId} redirectTo={props.form.redirectTo} submitLabel={props.form.submitLabel} />
+							<HubSpotEmbedForm formId={props.form.formId} redirectTo={props.form.redirectTo} />
 						)}
 					</div>
 					<div className={card()}>

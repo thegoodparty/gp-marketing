@@ -33,5 +33,4 @@
 - Seed data in `electionsTemplateSeedSections.ts` uses CMS schema field names (`ctaMessaging`, `ctaAction`, `ctaBlockDesignSettings`, `ctaAssets`, `smallCtaMessaging`)
 - Page section components read GROQ-projected names after fetch (`overview`, `primaryCTA`, `designSettings`, `image`, `title`, `block_summaryText`) — see `ctaBaseGroq` in `src/sanity/groq.ts`
 - `getCodeDefaultElectionTemplate` bypasses GROQ; blocks that depend on projection or dereferenced refs must be listed in `UNRESOLVABLE_SEED_BLOCK_TYPES` in `src/lib/electionTemplateDefaults.ts`
-- After editing seed sections or CTA page section components, run `bun run verify`
 

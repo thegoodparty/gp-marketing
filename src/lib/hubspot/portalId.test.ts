@@ -1,3 +1,5 @@
+import { afterEach, describe, expect, test } from 'bun:test';
+
 import { getHubSpotPortalId } from './portalId';
 
 describe('getHubSpotPortalId', () => {

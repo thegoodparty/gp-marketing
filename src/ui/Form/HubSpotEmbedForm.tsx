@@ -2,9 +2,8 @@
 
 import { useEffect, useId, useRef } from 'react';
 
-import { trackEvent } from '~/lib/analytics';
+import { handleHubSpotFormSubmission } from '~/lib/hubspot/handleHubSpotFormSubmission';
 import { getHubSpotPortalId } from '~/lib/hubspot/portalId';
-import { isSafeRelativeRedirect } from '~/lib/isSafeRelativeRedirect';
 
 import './hubspot-embed.css';
 
@@ -80,30 +79,6 @@ async function waitForHubSpotForms(isCancelled: () => boolean): Promise<HubSpotF
 
 		check();
 	});
-}
-
-export function handleHubSpotFormSubmission({
-	formId,
-	redirectTo,
-	pagePath,
-	randomUuid = () => crypto.randomUUID(),
-	assign = url => window.location.assign(url),
-}: {
-	formId: string;
-	redirectTo?: string;
-	pagePath: string;
-	randomUuid?: () => string;
-	assign?: (url: string) => void;
-}) {
-	trackEvent('Newsletter Form Submitted', {
-		formId,
-		page_path: pagePath,
-	});
-
-	if (redirectTo && isSafeRelativeRedirect(redirectTo)) {
-		const separator = redirectTo.includes('?') ? '&' : '?';
-		assign(`${redirectTo}${separator}submissionGuid=${randomUuid()}`);
-	}
 }
 
 export function HubSpotEmbedForm({

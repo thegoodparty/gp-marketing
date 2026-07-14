@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, mock, test } from 'bun:test';
 
-import { handleHubSpotFormSubmission } from './HubSpotEmbedForm';
+import { handleHubSpotFormSubmission } from '~/lib/hubspot/handleHubSpotFormSubmission';
 
 const trackEventMock = mock(() => {});
 

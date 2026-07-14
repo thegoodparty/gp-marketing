@@ -1,32 +1,13 @@
 'use client';
 
-import { useEffect, useId, useRef } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 
 import { handleHubSpotFormSubmission } from '~/lib/hubspot/handleHubSpotFormSubmission';
 import { getHubSpotPortalId } from '~/lib/hubspot/portalId';
 
+import { waitForHubSpotForms } from './waitForHubSpotForms';
+
 import './hubspot-embed.css';
-
-type HubSpotFormCreateOptions = {
-	portalId: string;
-	formId: string;
-	target: string;
-	region?: string;
-	onFormReady?(): void;
-	onFormSubmitted?(): void;
-};
-
-type HubSpotFormsApi = {
-	create(options: HubSpotFormCreateOptions): void;
-};
-
-declare global {
-	interface Window {
-		hbspt?: {
-			forms: HubSpotFormsApi;
-		};
-	}
-}
 
 function applySubmitLabel(target: HTMLElement, submitLabel?: string) {
 	if (!submitLabel) return;
@@ -50,37 +31,6 @@ function applyEmbedWidth(target: HTMLElement) {
 	}
 }
 
-const SCRIPT_TIMEOUT_MS = 10_000;
-const SCRIPT_POLL_MS = 250;
-
-async function waitForHubSpotForms(isCancelled: () => boolean): Promise<HubSpotFormsApi> {
-	return new Promise((resolve, reject) => {
-		const started = Date.now();
-
-		const check = () => {
-			if (isCancelled()) {
-				reject(new Error('HubSpot form wait cancelled'));
-				return;
-			}
-
-			const forms = window.hbspt?.forms;
-			if (forms?.create) {
-				resolve(forms);
-				return;
-			}
-
-			if (Date.now() - started >= SCRIPT_TIMEOUT_MS) {
-				reject(new Error('HubSpot forms script did not load'));
-				return;
-			}
-
-			window.setTimeout(check, SCRIPT_POLL_MS);
-		};
-
-		check();
-	});
-}
-
 export function HubSpotEmbedForm({
 	formId,
 	redirectTo,
@@ -93,9 +43,12 @@ export function HubSpotEmbedForm({
 	const reactId = useId();
 	const targetId = `hs-form-${reactId.replace(/:/g, '')}`;
 	const mountedRef = useRef(true);
+	const [loadError, setLoadError] = useState(false);
 
 	useEffect(() => {
 		mountedRef.current = true;
+		setLoadError(false);
+
 		const target = document.getElementById(targetId);
 
 		if (!target) return;
@@ -127,9 +80,10 @@ export function HubSpotEmbedForm({
 					},
 				});
 			})
-			.catch(() => {
+			.catch(err => {
 				if (!cancelled && mountedRef.current) {
-					target.innerHTML = '';
+					console.error('HubSpotEmbedForm: failed to load HubSpot forms script', err);
+					setLoadError(true);
 				}
 			});
 
@@ -142,7 +96,20 @@ export function HubSpotEmbedForm({
 
 	return (
 		<div data-component='HubSpotEmbedForm' className='gp-hubspot-form flex w-full flex-col gap-4'>
-			<div id={targetId} className='gp-hubspot-form-target' style={{ width: 'stretch', maxWidth: '100%' }} />
+			{loadError ? (
+				<p className='opacity-70'>
+					Form failed to load. Please{' '}
+					<a href='/contact' className='underline'>
+						contact us
+					</a>{' '}
+					directly.
+				</p>
+			) : null}
+			<div
+				id={targetId}
+				className='gp-hubspot-form-target'
+				style={{ width: 'stretch', maxWidth: '100%', display: loadError ? 'none' : undefined }}
+			/>
 		</div>
 	);
 }

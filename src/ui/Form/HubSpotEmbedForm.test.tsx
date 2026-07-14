@@ -4,7 +4,24 @@ import React from 'react';
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
+import type { HubSpotFormsApi } from './waitForHubSpotForms';
+
 const handleHubSpotFormSubmissionMock = mock(() => {});
+
+async function defaultWaitForHubSpotForms(isCancelled: () => boolean): Promise<HubSpotFormsApi> {
+	if (isCancelled()) {
+		throw new Error('HubSpot form wait cancelled');
+	}
+
+	const forms = window.hbspt?.forms;
+	if (forms?.create) {
+		return forms;
+	}
+
+	throw new Error('HubSpot forms script did not load');
+}
+
+const waitForHubSpotFormsMock = mock(defaultWaitForHubSpotForms);
 
 mock.module('~/lib/hubspot/handleHubSpotFormSubmission', () => ({
 	handleHubSpotFormSubmission: handleHubSpotFormSubmissionMock,
@@ -15,6 +32,11 @@ mock.module('~/lib/hubspot/portalId', () => ({
 }));
 
 mock.module('./hubspot-embed.css', () => ({}));
+
+mock.module('./waitForHubSpotForms', () => ({
+	waitForHubSpotForms: (...args: Parameters<typeof defaultWaitForHubSpotForms>) =>
+		waitForHubSpotFormsMock(...args),
+}));
 
 type HubSpotFormCreateOptions = {
 	onFormReady?(): void;
@@ -28,6 +50,7 @@ let root: Root;
 beforeEach(() => {
 	createOptions = undefined;
 	handleHubSpotFormSubmissionMock.mockClear();
+	waitForHubSpotFormsMock.mockImplementation(defaultWaitForHubSpotForms);
 
 	dom = new JSDOM('<!DOCTYPE html><html><body><div id="root"></div></body></html>', {
 		url: 'http://localhost/newsletter',
@@ -138,5 +161,47 @@ describe('HubSpotEmbedForm', () => {
 		});
 
 		expect(button.textContent).toBe('Subscribe now');
+	});
+
+	test('shows fallback with contact link when HubSpot script fails to load', async () => {
+		waitForHubSpotFormsMock.mockImplementation(() => Promise.reject(new Error('timeout')));
+
+		const { HubSpotEmbedForm } = await import('./HubSpotEmbedForm');
+
+		await act(async () => {
+			root = createRoot(document.getElementById('root')!);
+			root.render(React.createElement(HubSpotEmbedForm, { formId: 'form-123' }));
+			await new Promise<void>(resolve => {
+				window.setTimeout(resolve, 0);
+			});
+		});
+
+		expect(document.body.textContent).toContain('Form failed to load');
+		const contactLink = document.querySelector('a[href="/contact"]');
+		expect(contactLink).not.toBeNull();
+		expect(contactLink?.textContent).toBe('contact us');
+	});
+
+	test('does not show fallback when unmounted before HubSpot script loads', async () => {
+		waitForHubSpotFormsMock.mockImplementation(() => new Promise(() => {}));
+
+		const { HubSpotEmbedForm } = await import('./HubSpotEmbedForm');
+
+		await act(async () => {
+			root = createRoot(document.getElementById('root')!);
+			root.render(React.createElement(HubSpotEmbedForm, { formId: 'form-123' }));
+			await new Promise<void>(resolve => {
+				window.setTimeout(resolve, 0);
+			});
+		});
+
+		await act(async () => {
+			root.unmount();
+			await new Promise<void>(resolve => {
+				window.setTimeout(resolve, 0);
+			});
+		});
+
+		expect(document.body.textContent).not.toContain('Form failed to load');
 	});
 });

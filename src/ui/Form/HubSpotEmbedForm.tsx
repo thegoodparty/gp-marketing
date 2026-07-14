@@ -8,15 +8,17 @@ import { isSafeRelativeRedirect } from '~/lib/isSafeRelativeRedirect';
 
 import './hubspot-embed.css';
 
+type HubSpotFormCreateOptions = {
+	portalId: string;
+	formId: string;
+	target: string;
+	region?: string;
+	onFormReady?(): void;
+	onFormSubmitted?(): void;
+};
+
 type HubSpotFormsApi = {
-	create: (options: {
-		portalId: string;
-		formId: string;
-		target: string;
-		region?: string;
-		onFormReady?: () => void;
-		onFormSubmitted?: () => void;
-	}) => void;
+	create(options: HubSpotFormCreateOptions): void;
 };
 
 declare global {
@@ -39,8 +41,9 @@ function applyEmbedWidth(target: HTMLElement) {
 }
 
 const SCRIPT_TIMEOUT_MS = 10_000;
+const SCRIPT_POLL_MS = 250;
 
-function waitForHubSpotForms(): Promise<HubSpotFormsApi> {
+async function waitForHubSpotForms(): Promise<HubSpotFormsApi> {
 	return new Promise((resolve, reject) => {
 		const started = Date.now();
 

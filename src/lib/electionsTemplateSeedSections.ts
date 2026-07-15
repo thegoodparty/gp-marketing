@@ -481,9 +481,21 @@ export const tmplElectionsDistrictIndexSections = [
 ];
 
 const GLOBAL_TEMPLATE_PREVIEW_TARGETS = {
-	location: {
+	locationState: {
 		field_electionTargetType: 'place',
 		field_electionTargetSlug: 'ny',
+	},
+	locationCounty: {
+		field_electionTargetType: 'place',
+		field_electionTargetSlug: 'ny/kings',
+	},
+	locationCity: {
+		field_electionTargetType: 'place',
+		field_electionTargetSlug: 'ny/kings/brooklyn',
+	},
+	locationDistrict: {
+		field_electionTargetType: 'place',
+		field_electionTargetSlug: 'tx/congressional-district-1',
 	},
 	position: {
 		field_electionTargetType: 'place',
@@ -522,12 +534,36 @@ export const globalElectionTemplateSeedDocuments = [
 		pageSections: { list_pageSections: tmplElectionsCandidatesSections },
 	},
 	{
-		_id: 'globalTemplate_location',
+		_id: 'globalTemplate_locationState',
 		_type: 'goodpartyOrg_globalTemplate',
-		field_title: 'Location Index',
-		field_electionTemplateType: 'location',
-		previewTarget: GLOBAL_TEMPLATE_PREVIEW_TARGETS.location,
+		field_title: 'Location - State',
+		field_electionTemplateType: 'locationState',
+		previewTarget: GLOBAL_TEMPLATE_PREVIEW_TARGETS.locationState,
 		pageSections: { list_pageSections: tmplElectionsStateIndexSections },
+	},
+	{
+		_id: 'globalTemplate_locationCounty',
+		_type: 'goodpartyOrg_globalTemplate',
+		field_title: 'Location - County',
+		field_electionTemplateType: 'locationCounty',
+		previewTarget: GLOBAL_TEMPLATE_PREVIEW_TARGETS.locationCounty,
+		pageSections: { list_pageSections: tmplElectionsCountyIndexSections },
+	},
+	{
+		_id: 'globalTemplate_locationCity',
+		_type: 'goodpartyOrg_globalTemplate',
+		field_title: 'Location - City',
+		field_electionTemplateType: 'locationCity',
+		previewTarget: GLOBAL_TEMPLATE_PREVIEW_TARGETS.locationCity,
+		pageSections: { list_pageSections: tmplElectionsCityIndexSections },
+	},
+	{
+		_id: 'globalTemplate_locationDistrict',
+		_type: 'goodpartyOrg_globalTemplate',
+		field_title: 'Location - District',
+		field_electionTemplateType: 'locationDistrict',
+		previewTarget: GLOBAL_TEMPLATE_PREVIEW_TARGETS.locationDistrict,
+		pageSections: { list_pageSections: tmplElectionsDistrictIndexSections },
 	},
 ] as const;
 

@@ -1,5 +1,8 @@
 export const ELECTION_TEMPLATE_TYPES = [
-	{ title: 'Location (state / county / city / district)', value: 'location' },
+	{ title: 'Location - State', value: 'locationState' },
+	{ title: 'Location - County', value: 'locationCounty' },
+	{ title: 'Location - City', value: 'locationCity' },
+	{ title: 'Location - District', value: 'locationDistrict' },
 	{ title: 'Position page', value: 'position' },
 	{ title: 'Position candidates list', value: 'positionCandidates' },
 	{ title: 'Candidate profile', value: 'candidateProfile' },

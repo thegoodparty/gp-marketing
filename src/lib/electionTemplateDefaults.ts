@@ -2,6 +2,9 @@ import type { Sections } from '~/PageSections';
 import { PROFILE_PAGE_SECTIONS } from '~/app/candidate/[...slug]/profilePageSections';
 import {
 	tmplElectionsCandidatesSections,
+	tmplElectionsCityIndexSections,
+	tmplElectionsCountyIndexSections,
+	tmplElectionsDistrictIndexSections,
 	tmplElectionsPositionSections,
 	tmplElectionsStateIndexSections,
 } from '~/lib/electionsTemplateSeedSections';
@@ -31,8 +34,14 @@ export function getCodeDefaultElectionTemplate(templateType: ElectionTemplateTyp
 			return stripUnresolvableSeedBlocks(tmplElectionsPositionSections as unknown as Sections[]);
 		case 'positionCandidates':
 			return stripUnresolvableSeedBlocks(tmplElectionsCandidatesSections as unknown as Sections[]);
-		case 'location':
+		case 'locationState':
 			return stripUnresolvableSeedBlocks(tmplElectionsStateIndexSections as unknown as Sections[]);
+		case 'locationCounty':
+			return stripUnresolvableSeedBlocks(tmplElectionsCountyIndexSections as unknown as Sections[]);
+		case 'locationCity':
+			return stripUnresolvableSeedBlocks(tmplElectionsCityIndexSections as unknown as Sections[]);
+		case 'locationDistrict':
+			return stripUnresolvableSeedBlocks(tmplElectionsDistrictIndexSections as unknown as Sections[]);
 		default:
 			return [];
 	}

@@ -38,6 +38,15 @@ describe('buildElectionTemplatePreviewPath', () => {
 		).toBe('/elections/tx/congressional-district-1');
 	});
 
+	test('builds legacy location path', () => {
+		expect(
+			buildElectionTemplatePreviewPath('location', {
+				field_electionTargetType: 'place',
+				field_electionTargetSlug: 'ny/kings',
+			}),
+		).toBe('/elections/ny/kings');
+	});
+
 	test('builds position path with position slug', () => {
 		expect(
 			buildElectionTemplatePreviewPath('position', {

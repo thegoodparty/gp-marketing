@@ -2,6 +2,7 @@ import { describe, expect, test } from 'bun:test';
 import {
 	locationTemplateTypeFromLevel,
 	pickBestCustomTemplate,
+	templateTypesForQuery,
 	type ElectionTemplateContext,
 } from '~/lib/electionTemplates';
 
@@ -9,6 +10,16 @@ const baseCtx: ElectionTemplateContext = {
 	templateType: 'locationCity',
 	placeSlug: 'ny/kings/brooklyn',
 };
+
+describe('templateTypesForQuery', () => {
+	test('includes legacy location type for location level templates', () => {
+		expect(templateTypesForQuery('locationCounty')).toEqual(['locationCounty', 'location']);
+	});
+
+	test('returns only the template type for non-location templates', () => {
+		expect(templateTypesForQuery('position')).toEqual(['position']);
+	});
+});
 
 describe('locationTemplateTypeFromLevel', () => {
 	test('maps each location level to its template type', () => {

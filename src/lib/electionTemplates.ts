@@ -199,7 +199,18 @@ export function pickBestCustomTemplate(
 	return best;
 }
 
-async function fetchGlobalTemplate(templateType: ElectionTemplateType): Promise<Sections[] | null> {
+export function templateTypesForQuery(
+	templateType: ElectionTemplateType,
+): Array<ElectionTemplateType | LegacyLocationTemplateType> {
+	if (isLocationTemplateType(templateType)) {
+		return [templateType, 'location'];
+	}
+	return [templateType];
+}
+
+async function fetchGlobalTemplateByType(
+	templateType: ElectionTemplateType | LegacyLocationTemplateType,
+): Promise<Sections[] | null> {
 	try {
 		const doc = (await sanityFetch({
 			query: globalElectionTemplateQuery,
@@ -213,18 +224,21 @@ async function fetchGlobalTemplate(templateType: ElectionTemplateType): Promise<
 	}
 }
 
-function customTemplateTypesForQuery(templateType: ElectionTemplateType): Array<ElectionTemplateType | LegacyLocationTemplateType> {
+async function fetchGlobalTemplate(templateType: ElectionTemplateType): Promise<Sections[] | null> {
+	const primary = await fetchGlobalTemplateByType(templateType);
+	if (primary) return primary;
+
 	if (isLocationTemplateType(templateType)) {
-		return [templateType, 'location'];
+		return fetchGlobalTemplateByType('location');
 	}
-	return [templateType];
+	return null;
 }
 
 async function fetchCustomTemplateTargets(templateType: ElectionTemplateType): Promise<CustomTemplateTargetsDoc[]> {
 	try {
 		const docs = (await sanityFetch({
 			query: customElectionTemplateTargetsQuery,
-			params: { templateTypes: customTemplateTypesForQuery(templateType) },
+			params: { templateTypes: templateTypesForQuery(templateType) },
 			tags: ['goodpartyOrg_customTemplate', `goodpartyOrg_customTemplate_${templateType}`],
 		})) as CustomTemplateTargetsDoc[] | null;
 		return docs ?? [];

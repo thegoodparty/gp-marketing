@@ -45,7 +45,7 @@ const styles = tv({
 	},
 });
 
-export type LocationLevel = 'state' | 'county' | 'city';
+export type LocationLevel = 'state' | 'county' | 'city' | 'district';
 
 export type LocationLandingPageHeroProps = {
 	className?: string;
@@ -69,6 +69,7 @@ function buildHeadline(props: LocationLandingPageHeroProps): string {
 		case 'city':
 			return cityName ? `${cityName}, ${stateName}` : stateName;
 		case 'county':
+		case 'district':
 			return countyName ? `${countyName}, ${stateName}` : stateName;
 		case 'state':
 		default:
@@ -83,8 +84,7 @@ function buildBodyCopy(props: LocationLandingPageHeroProps): string {
 		return bodyCopy;
 	}
 
-	const levelText = locationLevel === 'state' ? 'state' : locationLevel === 'county' ? 'county' : 'city';
-	return `Explore elections in this ${levelText}`;
+	return `Explore elections in this ${locationLevel}`;
 }
 
 export function LocationLandingPageHero(props: LocationLandingPageHeroProps) {

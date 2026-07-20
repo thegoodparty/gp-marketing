@@ -5,7 +5,7 @@ import { stegaClean } from 'next-sanity';
 import type { SectionOverrides, Sections } from '~/PageSections';
 import { resolveSectionText } from '~/lib/resolveSectionText';
 import type { TokenMap } from '~/lib/resolveTokens';
-import { LocationLandingPageHero, type LocationLevel } from '~/ui/LocationLandingPageHero';
+import { LocationLandingPageHero } from '~/ui/LocationLandingPageHero';
 import { useElectionsLandingSearch } from '~/ui/ElectionsLandingSearchContext';
 
 type Props = Extract<Sections, { _type: 'component_locationLandingPageHero' }> & {
@@ -20,7 +20,7 @@ export function LocationLandingPageHeroSection(props: Props) {
 		? stegaClean(section.locationLandingPageHeroDesignSettings.field_blockColorCreamMidnight)
 		: 'midnight';
 
-	const locationLevel = (locationOverride?.locationLevel ?? 'state') as LocationLevel;
+	const locationLevel = locationOverride?.locationLevel ?? 'state';
 	const stateName = locationOverride?.stateName ?? 'State Name';
 	const countyName = locationOverride?.countyName;
 	const cityName = locationOverride?.cityName;

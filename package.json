@@ -20,6 +20,7 @@
     "sb:dev": "storybook dev -p 6006 --disable-telemetry --no-version-updates",
     "sb:build": "storybook build",
     "sb:deploy": "chromatic",
+    "new:component": "bun run scripts/new-component.ts",
     "sanity:dev": "sanity dev",
     "sanity:extract": "sanity schema extract",
     "sanity:generate": "sanity typegen generate",

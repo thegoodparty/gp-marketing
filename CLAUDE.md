@@ -41,6 +41,7 @@ bun run typecheck           # tsc --noEmit  (the ONLY way to catch type errors; 
 bun run lint                # eslint (next lint)
 bun run test                # full test suite (splits .ts unit tests and .tsx DOM tests, see docs)
 bun run sanity:extract && bun run sanity:generate   # regenerate Sanity types after any schema change
+bun run new:component <PascalName> [--group text]   # scaffold + fully wire a new page-builder block
 ```
 
 The `/all` route (http://localhost:3009/all) renders every block in the real
@@ -79,7 +80,8 @@ Read the nearest relevant doc rather than loading everything.
 | ------------------------------------------- | ----------------------------------- |
 | Deciding if a request needs code at all     | `docs/content-vs-code.md`           |
 | Understanding the system / how pages render | `docs/architecture.md`              |
-| Adding or changing a page-builder block     | `docs/adding-a-component.md`        |
+| Adding a page-builder block                 | the `new-component` skill           |
+| Changing an existing page-builder block     | `docs/adding-a-component.md`        |
 | Anything about election or candidate pages  | `docs/elections.md`                 |
 | How AirOps writes content into Sanity       | `docs/airops-sanity-integration.md` |
 | Opening a PR and getting it approved        | the `ship-pr` skill                 |

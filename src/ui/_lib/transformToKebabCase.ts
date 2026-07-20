@@ -5,7 +5,7 @@ export function transformToKebabCase(input: string): string {
 	}
 
 	// Convert PascalCase to kebab-case
-	return input.replace(/([A-Z])/g, (match, letter, offset) => {
+	return input.replace(/([A-Z])/g, (_match, letter, offset) => {
 		// Don't add hyphen at the start of the string
 		return offset === 0 ? letter.toLowerCase() : `-${letter.toLowerCase()}`;
 	});

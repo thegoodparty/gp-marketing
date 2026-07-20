@@ -1,5 +1,4 @@
 import { cn, tv } from './_lib/utils.ts';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 import type { SanityImage } from './types.ts';
 import { Container } from './Container.tsx';
@@ -29,7 +28,7 @@ export type TwoUpCardBlockCardProps =
 	| { type: 'image'; image: SanityImage; showFullImage?: boolean };
 
 export type TwoUpCardBlockProps = {
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	card1?: TwoUpCardBlockCardProps;
 	card2?: TwoUpCardBlockCardProps;
 	className?: string;

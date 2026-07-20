@@ -57,7 +57,7 @@ describe('normalizeRawCtaToButton', () => {
 		expect(button?.text).toBe('Claim profile');
 
 		const transformed = button ? transformButtons([button])?.[0] : undefined;
-		expect(transformed?.href).toBe('https://app.goodparty.org/sign-up');
+		expect((transformed as { href?: string } | undefined)?.href).toBe('https://app.goodparty.org/sign-up');
 		expect(transformed?.label).toBe('Claim profile');
 	});
 
@@ -94,10 +94,10 @@ describe('normalizeRawCtaToButton', () => {
 			},
 			'card-cta',
 		);
-		expect(button?.link?.href).toBe('/candidates');
+		expect((button?.link as { href?: string } | null | undefined)?.href).toBe('/candidates');
 
 		const transformed = button ? transformButtons([button])?.[0] : undefined;
-		expect(transformed?.href).toBe('/candidates');
+		expect((transformed as { href?: string } | undefined)?.href).toBe('/candidates');
 		expect(transformed?.label).toBe('Learn more');
 	});
 
@@ -113,7 +113,7 @@ describe('normalizeRawCtaToButton', () => {
 		expect(button?.action).toBe('Internal');
 
 		const transformed = button ? transformButtons([button])?.[0] : undefined;
-		expect(transformed?.href).toBe('/candidates');
+		expect((transformed as { href?: string } | undefined)?.href).toBe('/candidates');
 		expect(transformed?.label).toBe('Learn more');
 	});
 });
@@ -185,6 +185,6 @@ describe('transformButtons', () => {
 		])?.[0];
 
 		expect(transformed?.label).toBe('Get free demo');
-		expect(transformed?.href).toBe('/contact');
+		expect((transformed as { href?: string } | undefined)?.href).toBe('/contact');
 	});
 });

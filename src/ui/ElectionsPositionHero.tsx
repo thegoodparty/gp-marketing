@@ -1,5 +1,4 @@
 import { cn, tv } from './_lib/utils.ts';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 import { Container } from './Container.tsx';
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
@@ -26,7 +25,7 @@ const styles = tv({
 
 export type ElectionsPositionHeroProps = {
 	className?: string;
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	officeName: string;
 	countyName?: string;
 	cityName?: string;

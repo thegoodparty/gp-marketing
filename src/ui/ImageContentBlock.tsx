@@ -1,5 +1,4 @@
 import { HeaderBlock, type HeaderBlockProps } from '~/ui/HeaderBlock';
-import { backgroundTypeValues } from './_lib/designTypesStore';
 import { cn, tv } from '~/ui/_lib/utils';
 import { Container } from '~/ui/Container';
 import { ImageContentCard, type ImageContentCardProps } from '~/ui/ImageContentCard';
@@ -18,7 +17,7 @@ const styles = tv({
 });
 
 export type ImageContentBlockProps = {
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	header?: HeaderBlockProps;
 	columns?: '2' | '3' | '4';
 	items?: ImageContentCardProps[];

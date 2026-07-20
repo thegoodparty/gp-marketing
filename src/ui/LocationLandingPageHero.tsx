@@ -4,7 +4,6 @@ import { cn, tv } from './_lib/utils.ts';
 import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
 import { IconWrapper } from './IconResolver.tsx';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 const styles = tv({
 	slots: {
@@ -55,7 +54,7 @@ export type LocationLandingPageHeroProps = {
 	countyName?: string;
 	cityName?: string;
 	bodyCopy?: ReactNode;
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	searchPlaceholder?: string;
 	textAlign?: 'left' | 'center' | 'right';
 	/** When provided with onChange, the search input is controlled. */
@@ -95,7 +94,16 @@ export function LocationLandingPageHero(props: LocationLandingPageHeroProps) {
 	const bodyCopyText = buildBodyCopy(props);
 	const searchPlaceholder = props.searchPlaceholder ?? 'Search elections by county and city';
 
-	const { base, content, headline: headlineStyle, bodyCopy, searchWrapper, searchContainer, searchIcon, searchInput } = styles({ backgroundColor, textAlign });
+	const {
+		base,
+		content,
+		headline: headlineStyle,
+		bodyCopy,
+		searchWrapper,
+		searchContainer,
+		searchIcon,
+		searchInput,
+	} = styles({ backgroundColor, textAlign });
 
 	return (
 		<section className={cn(base(), props.className)} data-component='LocationLandingPageHero'>

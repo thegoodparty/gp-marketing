@@ -30,10 +30,11 @@ export function Video(props: VideoPlayerProps) {
 
 	const { wrapper, videoWrapper, video, buttonBase } = styles();
 
-	const muxUiStyle = {
+	const muxUiVars = {
 		'--center-controls': 'none',
 		'--play-button': 'none',
-	} satisfies CSSProperties;
+	};
+	const muxUiStyle = muxUiVars as CSSProperties;
 
 	return (
 		<div className={cn(wrapper(), props.className)} data-component='VideoPlayer' data-mode='dark'>

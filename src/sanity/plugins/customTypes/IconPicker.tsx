@@ -51,24 +51,26 @@ export function IconPicker(props: StringInputProps) {
 								<Container>
 									<Box marginTop={4}>
 										<TabList space={2}>
-											<Tab
-												key={'all'}
-												aria-controls={'all'}
-												id={'all' + 'Tab'}
-												label={'All'}
-												onClick={() => setId(undefined)}
-												selected={id === undefined}
-											/>
-											{lucideCategories.map(c => (
+											{[
 												<Tab
-													key={c.name}
-													aria-controls={c.name}
-													id={`${c.name}Tab`}
-													label={c.title}
-													onClick={() => setId(c.name)}
-													selected={id === c.name}
-												/>
-											))}
+													key={'all'}
+													aria-controls={'all'}
+													id={'all' + 'Tab'}
+													label={'All'}
+													onClick={() => setId(undefined)}
+													selected={id === undefined}
+												/>,
+												...lucideCategories.map(c => (
+													<Tab
+														key={c.name}
+														aria-controls={c.name}
+														id={`${c.name}Tab`}
+														label={c.title}
+														onClick={() => setId(c.name)}
+														selected={id === c.name}
+													/>
+												)),
+											]}
 										</TabList>
 
 										{lucideCategories.map(c => {

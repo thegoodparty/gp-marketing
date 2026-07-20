@@ -86,7 +86,6 @@ export const WithCTAButton: Story = {
 			layout: 'left',
 		},
 		candidates: mockCandidates,
-		hasFilters: false,
 		optionalButton: {
 			...primaryButton,
 			label: 'Become a Candidate',
@@ -117,7 +116,6 @@ export const MidnightBackground: Story = {
 			layout: 'left',
 		},
 		candidates: mockCandidates,
-		hasFilters: false,
 		optionalButton: {
 			...primaryButton,
 			label: 'Become a Candidate',

@@ -62,7 +62,12 @@ function buildBottomItems(race: RaceDetail) {
 		items.push({
 			headline: 'Filing Office',
 			bodyCopy: (
-				<Link href={`https://maps.google.com/?q=${encodeURIComponent(race.filingOfficeAddress)}`} target="_blank" rel="noopener noreferrer" className="text-goodparty-blue hover:underline">
+				<Link
+					href={`https://maps.google.com/?q=${encodeURIComponent(race.filingOfficeAddress)}`}
+					target='_blank'
+					rel='noopener noreferrer'
+					className='text-goodparty-blue hover:underline'
+				>
 					{race.filingOfficeAddress}
 				</Link>
 			),
@@ -72,7 +77,7 @@ function buildBottomItems(race: RaceDetail) {
 		items.push({
 			headline: 'Filing Phone',
 			bodyCopy: (
-				<Link href={`tel:${race.filingPhoneNumber}`} className="text-goodparty-blue hover:underline">
+				<Link href={`tel:${race.filingPhoneNumber}`} className='text-goodparty-blue hover:underline'>
 					{race.filingPhoneNumber}
 				</Link>
 			),
@@ -83,7 +88,7 @@ function buildBottomItems(race: RaceDetail) {
 
 function formatFrequency(frequency: (string | number)[]): string {
 	return frequency
-		.map((v) => {
+		.map(v => {
 			const s = String(v ?? '').trim();
 			if (/^\d+$/.test(s)) return `Every ${s} years`;
 			return s;
@@ -93,18 +98,7 @@ function formatFrequency(frequency: (string | number)[]): string {
 }
 
 export function PositionPageContent(props: PositionPageContentProps) {
-	const {
-		officeName,
-		stateName,
-		countyName,
-		cityName,
-		electionDate,
-		filingDate,
-		breadcrumbs,
-		candidatesHref,
-		race,
-		pageUrl,
-	} = props;
+	const { officeName, stateName, countyName, cityName, electionDate, filingDate, breadcrumbs, candidatesHref, race, pageUrl } = props;
 
 	const gridItems = race ? buildGridItems(race) : [];
 	const bottomItems = race ? buildBottomItems(race) : [];
@@ -125,17 +119,20 @@ export function PositionPageContent(props: PositionPageContentProps) {
 
 	// Omit JobPosting when the elections API has no filing or election date (required datePosted).
 	const jobPostingSchema = race
-		? buildJobPostingSchema({
+		? (buildJobPostingSchema({
 				race,
 				officeName,
 				stateName,
 				countyName,
 				cityName,
 				pageUrl,
-			}) ?? undefined
+			}) ?? undefined)
 		: undefined;
 
-	const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbs, toAbsoluteUrl);
+	const breadcrumbSchema = buildBreadcrumbSchema(
+		breadcrumbs.map(({ href, label }) => ({ href: href ?? '', label })),
+		toAbsoluteUrl,
+	);
 
 	const faqItems = race
 		? buildDynamicFAQItems(race, officeName, stateName)
@@ -148,9 +145,9 @@ export function PositionPageContent(props: PositionPageContentProps) {
 			<PageSchema schema={jobPostingSchema} />
 			<PageSchema schema={breadcrumbSchema} />
 			<PageSchema schema={faqSchema} />
-			<BreadcrumbBlock backgroundColor="midnight" breadcrumbs={breadcrumbs} />
+			<BreadcrumbBlock backgroundColor='midnight' breadcrumbs={breadcrumbs} />
 			<ElectionsPositionHero
-				backgroundColor="midnight"
+				backgroundColor='midnight'
 				officeName={officeName}
 				stateName={stateName}
 				countyName={countyName}
@@ -174,7 +171,7 @@ export function PositionPageContent(props: PositionPageContentProps) {
 			/>
 
 			<ElectionsPositionContentBlock
-				backgroundColor="cream"
+				backgroundColor='cream'
 				card={
 					race?.positionDescription
 						? {
@@ -190,7 +187,7 @@ export function PositionPageContent(props: PositionPageContentProps) {
 							}
 						: undefined
 				}
-				topHeadline="Position Details"
+				topHeadline='Position Details'
 				gridItems={gridItems}
 				bottomItems={bottomItems}
 				rightColumnCTA={{
@@ -231,11 +228,11 @@ export function PositionPageContent(props: PositionPageContentProps) {
 				backgroundColor={POSITION_PAGE_TWO_UP_CARD.backgroundColor}
 				card1={{
 					...POSITION_PAGE_TWO_UP_CARD.card1,
-					list: POSITION_PAGE_TWO_UP_CARD.card1.list.map((item) => ({ ...item })),
+					list: POSITION_PAGE_TWO_UP_CARD.card1.list.map(item => ({ ...item })),
 				}}
 				card2={{
 					...POSITION_PAGE_TWO_UP_CARD.card2,
-					list: POSITION_PAGE_TWO_UP_CARD.card2.list.map((item) => ({ ...item })),
+					list: POSITION_PAGE_TWO_UP_CARD.card2.list.map(item => ({ ...item })),
 				}}
 			/>
 		</>

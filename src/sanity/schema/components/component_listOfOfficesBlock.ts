@@ -91,7 +91,7 @@ export const component_listOfOfficesBlock = {
 					title: 'List of Offices Block',
 				},
 			};
-			const title = resolveValue('headline', component_listOfOfficesBlock.preview.select, x) || resolveValue('heading', component_listOfOfficesBlock.preview.select, x);
+			const title = x['headline'] || x['heading'];
 			const subtitle = resolveValue('subtitle', component_listOfOfficesBlock.preview.select, x);
 			const media = resolveValue('media', component_listOfOfficesBlock.preview.select, x);
 			return handleReplacements(

@@ -32,7 +32,7 @@ export const goodpartyOrg_customTemplate = {
 			title: 'Title',
 			type: 'string',
 			description: 'Internal label, e.g. "NY + TX state landing variant".',
-			validation: (rule: { required: () => unknown }) => rule.required(),
+			validation: (rule: { required(): unknown }) => rule.required(),
 		},
 		{
 			...field_electionTemplateType,
@@ -73,8 +73,7 @@ export const goodpartyOrg_customTemplate = {
 			type: 'array',
 			of: [{ type: 'electionTemplateTarget' }],
 			description: 'One or more targets that use this template (e.g. NY, TX, OH state pages).',
-			validation: (rule: { required: () => unknown; min: (n: number) => unknown }) =>
-				rule.required().min(1),
+			validation: (rule: { required(): { min(n: number): unknown } }) => rule.required().min(1),
 		},
 		{
 			title: 'Preview Target',
@@ -124,7 +123,7 @@ export const goodpartyOrg_customTemplate = {
 			const title = resolveValue('title', goodpartyOrg_customTemplate.preview.select, x);
 			const templateType = x['templateType'] as string | undefined;
 			const count = Array.isArray(x.targetCount) ? x.targetCount.length : 0;
-			const enabled = x.enabled === false ? 'disabled' : 'enabled';
+			const enabled = x['enabled'] === false ? 'disabled' : 'enabled';
 			return handleReplacements(
 				{
 					title: title || infer.fallback.title,

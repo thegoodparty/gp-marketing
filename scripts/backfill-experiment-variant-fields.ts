@@ -23,10 +23,7 @@ if (!token) {
 }
 
 const REQUEST_TIMEOUT_MS = 60_000;
-const STUCK_LOG_MS = Math.max(
-	1000,
-	Number.parseInt(process.env['BACKFILL_STUCK_LOG_MS'] ?? '5000', 10) || 5000,
-);
+const STUCK_LOG_MS = Math.max(1000, Number.parseInt(process.env['BACKFILL_STUCK_LOG_MS'] ?? '5000', 10) || 5000);
 
 function log(...parts: unknown[]) {
 	console.error(new Date().toISOString(), '[backfill]', ...parts);
@@ -51,23 +48,18 @@ const client = createClient({
 	token,
 	apiVersion: '2025-09-25',
 	useCdn: false,
-	fetch: (url, init) => {
+	fetch: ((url, init) => {
 		const timeout = AbortSignal.timeout(REQUEST_TIMEOUT_MS);
 		const userSignal = init && 'signal' in init ? init.signal : undefined;
-		const signal =
-			userSignal && userSignal instanceof AbortSignal
-				? AbortSignal.any([userSignal, timeout])
-				: timeout;
+		const signal = userSignal && userSignal instanceof AbortSignal ? AbortSignal.any([userSignal, timeout]) : timeout;
 		return fetch(url, { ...init, signal });
-	},
+	}) as unknown as Parameters<typeof createClient>[0]['fetch'],
 });
 
 const homeRef = { _type: 'reference' as const, _ref: 'goodpartyOrg_home', _key: 'targetHome' };
 
 async function main() {
-	log(
-		`start project=${projectId} dataset=${dataset} patches=2 httpTimeoutMs=${REQUEST_TIMEOUT_MS} stuckLogMs=${STUCK_LOG_MS}`,
-	);
+	log(`start project=${projectId} dataset=${dataset} patches=2 httpTimeoutMs=${REQUEST_TIMEOUT_MS} stuckLogMs=${STUCK_LOG_MS}`);
 
 	const patches: Array<{ id: string; set: Record<string, unknown> }> = [
 		{
@@ -90,18 +82,14 @@ async function main() {
 
 	for (const { id, set } of patches) {
 		log(`patch begin id=${id}`);
-		await withStuckHeartbeat(
-			client.patch(id).set(set).commit(),
-			`Sanity mutate id=${id}`,
-			STUCK_LOG_MS,
-		);
+		await withStuckHeartbeat(client.patch(id).set(set).commit(), `Sanity mutate id=${id}`, STUCK_LOG_MS);
 		log(`patch ok id=${id}`);
 	}
 
 	log('done');
 }
 
-main().catch((e) => {
+main().catch(e => {
 	console.error(e);
 	process.exit(1);
 });

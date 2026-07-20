@@ -73,7 +73,7 @@ describe('tmplElectionsPositionSections seed shapes', () => {
 
 		const button = transformButtons([projectedPrimaryCTA as never])?.[0];
 		expect(button?.label).toBe(POSITION_PAGE_CTA_BANNER.button.label);
-		expect(button?.href).toBe('/contact');
+		expect((button as { href?: string } | undefined)?.href).toBe('/contact');
 	});
 
 	test('GROQ-projected CTA block button renders View all candidates when href is overridden', () => {
@@ -93,7 +93,7 @@ describe('tmplElectionsPositionSections seed shapes', () => {
 
 		const button = transformButtons([projectedPrimaryCTA as never])?.[0];
 		expect(button?.label).toBe(POSITION_PAGE_CTA_BLOCK.primaryButtonLabel);
-		expect(button?.href).toBe('/elections/mn/morrison-county/position/county-attorney/candidates');
+		expect((button as { href?: string } | undefined)?.href).toBe('/elections/mn/morrison-county/position/county-attorney/candidates');
 	});
 });
 
@@ -148,7 +148,7 @@ describe('tmplElectionsCandidatesSections seed shapes', () => {
 
 		const button = transformButtons([projectedPrimaryCTA as never])?.[0];
 		expect(button?.label).toBe(CANDIDATES_PAGE_CTA_IMAGE.primaryButton.label);
-		expect(button?.href).toBe('/elections/al');
+		expect((button as { href?: string } | undefined)?.href).toBe('/elections/al');
 	});
 
 	test('CTA image Internal button without CMS link renders when override href is injected before transform', () => {
@@ -170,7 +170,7 @@ describe('tmplElectionsCandidatesSections seed shapes', () => {
 		};
 		const button = transformButtons([withOverride as never])?.[0];
 		expect(button?.label).toBe('Get started');
-		expect(button?.href).toBe('/elections/al');
+		expect((button as { href?: string } | undefined)?.href).toBe('/elections/al');
 	});
 
 	test('includes shared two-up cards section with ValueProposition card types', () => {

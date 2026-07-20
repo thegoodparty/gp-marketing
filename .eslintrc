@@ -309,7 +309,19 @@
 		"@typescript-eslint/prefer-as-const": ["error"],
 		"@typescript-eslint/no-base-to-string": ["off"]
 	},
-	"overrides": [],
+	"overrides": [
+		{
+			"files": ["**/*.test.ts", "**/*.test.tsx"],
+			"rules": {
+				"@typescript-eslint/no-empty-function": ["off"],
+				"@typescript-eslint/no-floating-promises": ["off"],
+				"@typescript-eslint/no-confusing-void-expression": ["off"],
+				"@typescript-eslint/no-dynamic-delete": ["off"],
+				"@typescript-eslint/unbound-method": ["off"],
+				"@typescript-eslint/consistent-type-assertions": ["off"]
+			}
+		}
+	],
 	"settings": {
 		"react": {
 			"version": "detect"

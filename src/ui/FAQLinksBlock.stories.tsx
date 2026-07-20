@@ -164,7 +164,7 @@ export const SingleItem: Story = {
 			title: 'Headline',
 			copy: 'Body copy',
 		},
-		items: [sampleLinks[0]],
+		items: [sampleLinks[0]!],
 		backgroundColor: 'cream',
 	},
 };

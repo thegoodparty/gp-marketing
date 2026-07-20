@@ -23,7 +23,7 @@ let snapshot: Partial<Record<(typeof envKeys)[number], string | undefined>>;
 beforeEach(() => {
 	snapshot = {};
 	for (const k of envKeys) snapshot[k] = process.env[k];
-	process.env['NODE_ENV'] = 'development';
+	(process.env as Record<string, string | undefined>)['NODE_ENV'] = 'development';
 	delete process.env['VERCEL_ENV'];
 	process.env['NEXT_PUBLIC_SITE_URL'] = 'https://goodparty.org';
 });
@@ -32,7 +32,7 @@ afterEach(() => {
 	for (const k of envKeys) {
 		const v = snapshot[k];
 		if (v === undefined) delete process.env[k];
-		else process.env[k] = v;
+		else (process.env as Record<string, string | undefined>)[k] = v;
 	}
 });
 
@@ -53,9 +53,7 @@ describe('organization id helpers', () => {
 
 	test('webPageId matches WebPage schema node ids', () => {
 		expect(webPageId('/blog/article/foo')).toBe('https://goodparty.org/blog/article/foo#webpage');
-		expect(webPageId('https://goodparty.org/blog/article/foo')).toBe(
-			'https://goodparty.org/blog/article/foo#webpage',
-		);
+		expect(webPageId('https://goodparty.org/blog/article/foo')).toBe('https://goodparty.org/blog/article/foo#webpage');
 	});
 });
 
@@ -90,9 +88,7 @@ describe('buildOrganizationSchema', () => {
 		const without = asRecord(buildOrganizationSchema());
 		expect('sameAs' in without).toBe(false);
 
-		const withChannels = asRecord(
-			buildOrganizationSchema({ socialChannels: [{ url: 'https://twitter.com/goodparty' }] }),
-		);
+		const withChannels = asRecord(buildOrganizationSchema({ socialChannels: [{ url: 'https://twitter.com/goodparty' }] }));
 		expect(withChannels['sameAs']).toEqual(['https://twitter.com/goodparty']);
 	});
 });
@@ -101,22 +97,16 @@ describe('buildWebSiteSchema', () => {
 	test('publisher references the Organization @id', () => {
 		const schema = asRecord(buildWebSiteSchema());
 		expect(schema['@type']).toBe('WebSite');
-		expect((schema['publisher'] as Record<string, unknown>)['@id']).toBe(
-			'https://goodparty.org/#organization',
-		);
+		expect((schema['publisher'] as Record<string, unknown>)['@id']).toBe('https://goodparty.org/#organization');
 	});
 });
 
 describe('buildWebPageSchema', () => {
 	test('absolutizes relative urls and references publisher Organization', () => {
-		const schema = asRecord(
-			buildWebPageSchema({ url: '/about', name: 'About', description: 'About GoodParty' }),
-		);
+		const schema = asRecord(buildWebPageSchema({ url: '/about', name: 'About', description: 'About GoodParty' }));
 		expect(schema['url']).toBe('https://goodparty.org/about');
 		expect(schema['@id']).toBe('https://goodparty.org/about#webpage');
-		expect((schema['publisher'] as Record<string, unknown>)['@id']).toBe(
-			'https://goodparty.org/#organization',
-		);
+		expect((schema['publisher'] as Record<string, unknown>)['@id']).toBe('https://goodparty.org/#organization');
 		expect(schema['description']).toBe('About GoodParty');
 	});
 
@@ -141,9 +131,7 @@ describe('buildArticleSchema', () => {
 		);
 		expect(schema['@type']).toBe('Article');
 		expect(schema['headline']).toBe('Foo');
-		expect((schema['mainEntityOfPage'] as Record<string, unknown>)['@id']).toBe(
-			'https://goodparty.org/blog/article/foo#webpage',
-		);
+		expect((schema['mainEntityOfPage'] as Record<string, unknown>)['@id']).toBe('https://goodparty.org/blog/article/foo#webpage');
 		const author = schema['author'] as Record<string, unknown>;
 		expect(author['@type']).toBe('Person');
 		expect(author['name']).toBe('Jane Doe');
@@ -169,12 +157,7 @@ describe('buildBreadcrumbSchema', () => {
 	});
 
 	test('omitted href on current crumb omits item field', () => {
-		const schema = asRecord(
-			buildBreadcrumbSchema([
-				{ href: '/candidates', label: 'Candidates' },
-				{ label: 'Jane Doe' },
-			]),
-		);
+		const schema = asRecord(buildBreadcrumbSchema([{ href: '/candidates', label: 'Candidates' }, { label: 'Jane Doe' }]));
 		const items = schema['itemListElement'] as Array<Record<string, unknown>>;
 		expect(items[0]?.['item']).toBe('https://goodparty.org/candidates');
 		expect(items[1]?.['name']).toBe('Jane Doe');
@@ -185,7 +168,12 @@ describe('buildBreadcrumbSchema', () => {
 describe('buildFAQSchema', () => {
 	test('returns null when no valid pairs remain', () => {
 		expect(buildFAQSchema([])).toBeNull();
-		expect(buildFAQSchema([{ title: '', copy: 'a' }, { title: 'q', copy: '' }])).toBeNull();
+		expect(
+			buildFAQSchema([
+				{ title: '', copy: 'a' },
+				{ title: 'q', copy: '' },
+			]),
+		).toBeNull();
 	});
 
 	test('emits FAQPage with cleaned question/answer pairs', () => {
@@ -193,7 +181,7 @@ describe('buildFAQSchema', () => {
 			buildFAQSchema([
 				{ title: '  Q1  ', copy: '  A1  ' },
 				{ title: 'Q2', copy: 'A2' },
-			]) as object,
+			])!,
 		);
 		expect(schema['@type']).toBe('FAQPage');
 		const entity = schema['mainEntity'] as Array<Record<string, unknown>>;
@@ -225,15 +213,11 @@ describe('buildDefinedTermSchema', () => {
 
 describe('buildSoftwareApplicationSchema', () => {
 	test('uses sensible defaults and references publisher Organization', () => {
-		const schema = asRecord(
-			buildSoftwareApplicationSchema({ description: 'Free campaign tools for independents.' }),
-		);
+		const schema = asRecord(buildSoftwareApplicationSchema({ description: 'Free campaign tools for independents.' }));
 		expect(schema['@type']).toBe('SoftwareApplication');
 		expect(schema['applicationCategory']).toBe('BusinessApplication');
 		expect((schema['offers'] as Record<string, unknown>)['price']).toBe('0');
-		expect((schema['publisher'] as Record<string, unknown>)['@id']).toBe(
-			'https://goodparty.org/#organization',
-		);
+		expect((schema['publisher'] as Record<string, unknown>)['@id']).toBe('https://goodparty.org/#organization');
 	});
 });
 
@@ -243,7 +227,7 @@ describe('buildSchemaGraph', () => {
 			buildSchemaGraph([
 				buildArticleSchema({ url: '/blog/article/foo', headline: 'Foo' }),
 				buildWebPageSchema({ url: '/blog/article/foo', name: 'Foo' }),
-			]) as object,
+			])!,
 		);
 		const entries = graph['@graph'] as Array<Record<string, unknown>>;
 		const article = entries.find(entry => entry['@type'] === 'Article');
@@ -254,12 +238,7 @@ describe('buildSchemaGraph', () => {
 
 	test('strips inner @context fields and wraps results', () => {
 		const graph = asRecord(
-			buildSchemaGraph([
-				buildOrganizationSchema(),
-				buildBreadcrumbSchema([{ href: '/blog', label: 'Blog' }]),
-				null,
-				undefined,
-			]) as object,
+			buildSchemaGraph([buildOrganizationSchema(), buildBreadcrumbSchema([{ href: '/blog', label: 'Blog' }]), null, undefined])!,
 		);
 		expect(graph['@context']).toBe('https://schema.org');
 		const entries = graph['@graph'] as Array<Record<string, unknown>>;

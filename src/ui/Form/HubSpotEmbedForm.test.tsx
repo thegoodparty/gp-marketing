@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from 'bun:test';
 import { JSDOM } from 'jsdom';
-import React from 'react';
+import * as React from 'react';
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
@@ -34,8 +34,7 @@ mock.module('~/lib/hubspot/portalId', () => ({
 mock.module('./hubspot-embed.css', () => ({}));
 
 mock.module('./waitForHubSpotForms', () => ({
-	waitForHubSpotForms: (...args: Parameters<typeof defaultWaitForHubSpotForms>) =>
-		waitForHubSpotFormsMock(...args),
+	waitForHubSpotForms: async (...args: Parameters<typeof defaultWaitForHubSpotForms>) => waitForHubSpotFormsMock(...args),
 }));
 
 type HubSpotFormCreateOptions = {
@@ -84,9 +83,7 @@ describe('HubSpotEmbedForm', () => {
 
 		await act(async () => {
 			root = createRoot(document.getElementById('root')!);
-			root.render(
-				React.createElement(HubSpotEmbedForm, { formId: 'form-123', redirectTo: '/thanks' }),
-			);
+			root.render(React.createElement(HubSpotEmbedForm, { formId: 'form-123', redirectTo: '/thanks' }));
 			await new Promise<void>(resolve => {
 				window.setTimeout(resolve, 0);
 			});
@@ -110,9 +107,7 @@ describe('HubSpotEmbedForm', () => {
 
 		await act(async () => {
 			root = createRoot(document.getElementById('root')!);
-			root.render(
-				React.createElement(HubSpotEmbedForm, { formId: 'form-123', submitLabel: 'Subscribe now' }),
-			);
+			root.render(React.createElement(HubSpotEmbedForm, { formId: 'form-123', submitLabel: 'Subscribe now' }));
 			await new Promise<void>(resolve => {
 				window.setTimeout(resolve, 0);
 			});
@@ -120,7 +115,7 @@ describe('HubSpotEmbedForm', () => {
 
 		expect(createOptions?.onFormReady).toBeDefined();
 
-		const target = document.querySelector('.gp-hubspot-form-target') as HTMLElement;
+		const target = document.querySelector('.gp-hubspot-form-target')!;
 		const input = document.createElement('input');
 		input.type = 'submit';
 		input.value = 'Submit';
@@ -139,9 +134,7 @@ describe('HubSpotEmbedForm', () => {
 
 		await act(async () => {
 			root = createRoot(document.getElementById('root')!);
-			root.render(
-				React.createElement(HubSpotEmbedForm, { formId: 'form-123', submitLabel: 'Subscribe now' }),
-			);
+			root.render(React.createElement(HubSpotEmbedForm, { formId: 'form-123', submitLabel: 'Subscribe now' }));
 			await new Promise<void>(resolve => {
 				window.setTimeout(resolve, 0);
 			});
@@ -149,7 +142,7 @@ describe('HubSpotEmbedForm', () => {
 
 		expect(createOptions?.onFormReady).toBeDefined();
 
-		const target = document.querySelector('.gp-hubspot-form-target') as HTMLElement;
+		const target = document.querySelector('.gp-hubspot-form-target')!;
 		const button = document.createElement('button');
 		button.type = 'submit';
 		button.textContent = 'Submit';
@@ -164,7 +157,7 @@ describe('HubSpotEmbedForm', () => {
 	});
 
 	test('shows fallback with contact link when HubSpot script fails to load', async () => {
-		waitForHubSpotFormsMock.mockImplementation(() => Promise.reject(new Error('timeout')));
+		waitForHubSpotFormsMock.mockImplementation(async () => Promise.reject(new Error('timeout')));
 
 		const { HubSpotEmbedForm } = await import('./HubSpotEmbedForm');
 
@@ -183,7 +176,7 @@ describe('HubSpotEmbedForm', () => {
 	});
 
 	test('does not show fallback when unmounted before HubSpot script loads', async () => {
-		waitForHubSpotFormsMock.mockImplementation(() => new Promise(() => {}));
+		waitForHubSpotFormsMock.mockImplementation(async () => new Promise(() => {}));
 
 		const { HubSpotEmbedForm } = await import('./HubSpotEmbedForm');
 

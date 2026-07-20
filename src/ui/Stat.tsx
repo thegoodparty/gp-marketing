@@ -49,7 +49,7 @@ const styles = tv({
 function parseAnimatedValue(value: string): { prefix: string; target: number; suffix: string } | null {
 	const match = /^([^\d]*)([\d,]+)(.*)$/.exec(value);
 	if (!match) return null;
-	const [, prefix, numStr, suffix] = match;
+	const [, prefix = '', numStr = '', suffix = ''] = match;
 	const target = parseInt(numStr.replace(/,/g, ''), 10);
 	if (Number.isNaN(target)) return null;
 	return { prefix, target, suffix };
@@ -57,7 +57,7 @@ function parseAnimatedValue(value: string): { prefix: string; target: number; su
 
 function AnimatedNumber({ value }: { value: string }) {
 	const ref = useRef<HTMLSpanElement>(null);
-	const inView = useInView(ref, { threshold: 0.3, once: true });
+	const inView = useInView(ref, { once: true });
 	const [display, setDisplay] = useState(0);
 	const parsed = parseAnimatedValue(value);
 	const hasAnimated = useRef(false);

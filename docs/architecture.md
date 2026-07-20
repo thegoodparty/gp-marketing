@@ -58,11 +58,12 @@ Every case is wrapped in a `ComponentErrorBoundary`, so a single broken block wi
 not take down the whole page. There are roughly 45 registered block types today.
 Adding one touches about five files. Full recipe: `docs/adding-a-component.md`.
 
-Warning: the build does not fail on type errors (`next.config.ts` sets
-`typescript.ignoreBuildErrors` and `eslint.ignoreDuringBuilds`), and there is no CI
-test/typecheck gate. A half-registered block can deploy green and just render
-nothing. So verify visually on `/all` and run `bun run typecheck` by hand after
-schema, GROQ, or component changes.
+Warning: type and lint errors are enforced (`next.config.ts` sets
+`typescript.ignoreBuildErrors: false` and `eslint.ignoreDuringBuilds: false`, and CI
+gates every PR on `typecheck`, `lint`, and `test`), but a half-registered block still
+deploys green and just renders nothing, because the error boundary swallows it. So
+verify visually on `/all` and run `bun run typecheck` by hand after schema, GROQ, or
+component changes.
 
 ## Sanity CMS integration
 

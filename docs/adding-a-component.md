@@ -8,7 +8,7 @@ A block is a reusable section that a marketer can drag onto a page in the editor
 
 Adding a new block is a code change. It touches several files that must all agree with each other. This is the important thing to understand: the block only works if every file is edited. If you skip one of the edits, the block can still deploy without any error, and it will half-work in a way that is easy to miss. It might not appear in the editor's add-block menu, or it might appear but render nothing, or it might render but pull in no data. So follow every step, and then verify visually (see the verification loop at the end).
 
-Why it fails silently: the build is set to ignore type errors, unknown block types render as nothing instead of crashing, and each block is wrapped in an error boundary that swallows render errors. There is also no CI check that would catch a half-finished block. Manual verification is the only safety net.
+Why it fails silently: type and lint errors are caught (CI and the build enforce `typecheck` and `lint`), but most ways to half-wire a block are not type errors. An unknown block type renders as nothing instead of crashing (the render switch just logs a warning), the error boundary swallows render errors, and a missing GROQ projection or a missing add-block-menu entry is perfectly valid TypeScript. So `typecheck`, `lint`, and `test` will pass on a broken block. Verifying visually on `/all` is the only safety net for wiring gaps.
 
 If you are an agent doing this work for a non-technical user, explain what you did and whether it worked in plain language. No jargon. Short sentences. If something needs an engineer (see the last section), say so plainly.
 
@@ -271,7 +271,7 @@ Run this loop:
 
 1. `bun run dev` and open the dev site at `http://localhost:3009`.
 2. Add your block to a page in Studio, or view the gallery at `http://localhost:3009/all`. The `/all` page renders every registered block through the real page pipeline, so it is the fastest way to eyeball a new block. Confirm the block appears, shows your content, and looks right.
-3. `bun run typecheck`. This runs `tsc --noEmit`. The build ignores type errors, so this is the only place they surface. It must be clean.
+3. `bun run typecheck`. This runs `tsc --noEmit`. CI and the Vercel build both enforce it, so it must be clean before you open a PR. If a local run looks clean but you are unsure, clear the cache first: `rm -f node_modules/.tsbuildinfo && bun run typecheck`.
 4. `bun run test`. Runs the unit and DOM tests.
 
 If the block does not appear in the add-block menu, recheck step 3 (`list_pageSections.ts` insertMenu). If it appears but is empty, recheck the GROQ append (step 4 of the recipe) and the projection names.

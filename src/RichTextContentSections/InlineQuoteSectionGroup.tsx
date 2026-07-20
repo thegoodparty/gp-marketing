@@ -14,8 +14,8 @@ export function InlineQuoteSectionGroup(section: Extract<ArticleSections, { _typ
 				/>
 				<Author
 					className='pl-9'
-					name={section.ref_quoteBy?.['personOverview'].field_personName}
-					meta={[section.ref_quoteBy?.['personOverview'].field_jobTitleOrRole]}
+					name={section.ref_quoteBy?.['personOverview']?.field_personName}
+					meta={[section.ref_quoteBy?.['personOverview']?.field_jobTitleOrRole]}
 				/>
 			</div>
 		</section>

@@ -89,7 +89,7 @@ export const NoElectionsCount: Story = {
 
 export const MultipleCards: Story = {
 	decorators: [
-		Story => (
+		_Story => (
 			<div className='grid max-w-4xl grid-cols-3 gap-6'>
 				<LocationCard cityName='Nashville' stateAbbreviation='TN' openElectionsCount={12} href='#' />
 				<LocationCard cityName='Austin' stateAbbreviation='TX' openElectionsCount={8} href='#' />

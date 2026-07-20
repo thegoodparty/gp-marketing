@@ -3,8 +3,6 @@ import Script from 'next/script';
 import { draftMode } from 'next/headers';
 import { VisualEditing } from 'next-sanity/visual-editing';
 import type { ReactNode } from 'react';
-import type { Params } from '~/lib/types';
-// @ts-expect-error Vite/Next has no typings for side-effect CSS import
 import '~/ui/_styles/globals.css';
 import { Amplitude } from '~/ui/Amplitude';
 import { ScrollDepthTracker } from '~/ui/ScrollDepthTracker';
@@ -37,7 +35,7 @@ const secondaryFont = Open_Sans({
 	variable: '--font-secondary',
 	weight: ['400', '600'],
 });
-type Props = Params & {
+type Props = {
 	children: ReactNode;
 };
 
@@ -64,7 +62,7 @@ async function getSiteSocialChannels(): Promise<Array<{ url?: string | null; nam
 			tags: ['goodpartyOrg_socialChannels'],
 		})) as { socialChannels?: { list_socialChannels?: SocialChannelRecord[] | null } | null } | null;
 		const list = result?.socialChannels?.list_socialChannels ?? [];
-		return list.map((entry) => ({
+		return list.map(entry => ({
 			url: entry?.field_socialChannelUrl ?? undefined,
 			name: entry?.field_socialChannel ?? undefined,
 		}));
@@ -78,10 +76,7 @@ export default async function RootLayout({ children }: Props) {
 	const baseUrl = getBaseUrl();
 	const socialChannels = await getSiteSocialChannels();
 	const sameAs = resolveSameAs(socialChannels);
-	const siteSchema = buildSchemaGraph([
-		buildOrganizationSchema({ baseUrl, sameAs }),
-		buildWebSiteSchema({ baseUrl }),
-	]);
+	const siteSchema = buildSchemaGraph([buildOrganizationSchema({ baseUrl, sameAs }), buildWebSiteSchema({ baseUrl })]);
 	return (
 		<html
 			lang='en-US'
@@ -111,11 +106,7 @@ export default async function RootLayout({ children }: Props) {
 					<PageFooter className='shrink-0' />
 				</ComponentErrorBoundary>
 				<Script id='hubspot-forms' src='//js.hsforms.net/forms/embed/v2.js' strategy='beforeInteractive' />
-				<Script
-					id='hs-script-loader'
-					src='//js.hs-scripts.com/21589597.js'
-					strategy='afterInteractive'
-				/>
+				<Script id='hs-script-loader' src='//js.hs-scripts.com/21589597.js' strategy='afterInteractive' />
 			</body>
 		</html>
 	);

@@ -41,104 +41,103 @@ export default defineConfig({
 		structureTool({
 			name: 'structure',
 			title: 'Structure',
-		defaultDocumentNode(S, ctx) {
-			const type = ctx.schema.get(ctx.schemaType)!;
-			const previews: ComponentViewBuilder[] = [];
+			defaultDocumentNode(S, ctx) {
+				const type = ctx.schema.get(ctx.schemaType)!;
+				const previews: ComponentViewBuilder[] = [];
 
-			const isElectionTemplate =
-				ctx.schemaType === 'goodpartyOrg_globalTemplate' ||
-				ctx.schemaType === 'goodpartyOrg_customTemplate';
+				const isElectionTemplate = ctx.schemaType === 'goodpartyOrg_globalTemplate' || ctx.schemaType === 'goodpartyOrg_customTemplate';
 
-			if (isElectionTemplate) {
-				const siteData = sites.goodpartyOrg;
-				previews.push(
-					S.view
-						.component(Iframe)
-						.title(siteData.title)
-						.id('goodpartyOrg')
-						.options({
-							key: ctx.documentId,
-							reload: { button: true },
-							url: {
-								origin: siteData.url,
-								draftMode: '/api/draft-mode/enable',
-								preview(doc) {
-									const templateType = doc?.['field_electionTemplateType'] as string | undefined;
-									const previewTarget = doc?.['previewTarget'] as
-										| {
-												field_electionTargetType?: 'place' | 'position' | 'candidate';
-												field_electionTargetSlug?: string;
-												field_positionSlug?: string;
-										  }
-										| undefined;
-									return buildElectionTemplatePreviewPath(templateType, previewTarget) ?? '/elections';
-								},
-							},
-						} satisfies IframeOptions),
-				);
-			} else if (type.options && 'channels' in type.options && Object.keys(type.options.channels).length > 0) {
-				for (const [siteId, path] of Object.entries(type.options.channels)) {
-					const siteData = sites[siteId as keyof typeof sites];
+				if (isElectionTemplate) {
+					const siteData = sites.goodpartyOrg;
 					previews.push(
 						S.view
 							.component(Iframe)
 							.title(siteData.title)
-							.id(siteId)
+							.id('goodpartyOrg')
 							.options({
 								key: ctx.documentId,
 								reload: { button: true },
 								url: {
 									origin: siteData.url,
 									draftMode: '/api/draft-mode/enable',
-									async preview(doc) {
-										let refinedPath = String(path);
-										// If the type has dynamic parts of its URL, we'll loop over and replace the params here
-										if ('pathParams' in type.options && Object.keys(type.options.pathParams).length > 0) {
-											for (const [param, paramPath] of Object.entries(type.options.pathParams)) {
-												// If the path has a reference, we'll need to resolve the ref via a fetch at this point
-												if(String(paramPath).includes('->')) {
-													const refValue = await ctx.getClient({apiVersion: defaultApiVersion}).fetch<{value?: string}|null>(`*[_id == $id][0]{"value":${paramPath}}`,{id: doc?._id})
-													refinedPath = refinedPath.replaceAll(`:${param}`, refValue?.value || 'draft');
-												}
-												else {
-													refinedPath = refinedPath.replaceAll(`:${param}`, String(get(doc, String(paramPath))));
-												}
-											}
-										}
-										return refinedPath;
+									preview(doc) {
+										const templateType = doc?.['field_electionTemplateType'] as string | undefined;
+										const previewTarget = doc?.['previewTarget'] as
+											| {
+													field_electionTargetType?: 'place' | 'position' | 'candidate';
+													field_electionTargetSlug?: string;
+													field_positionSlug?: string;
+											  }
+											| undefined;
+										return buildElectionTemplatePreviewPath(templateType, previewTarget) ?? '/elections';
 									},
-								}
+								},
 							} satisfies IframeOptions),
 					);
+				} else if (type.options && 'channels' in type.options && Object.keys(type.options.channels).length > 0) {
+					for (const [siteId, path] of Object.entries(type.options.channels)) {
+						const siteData = sites[siteId as keyof typeof sites];
+						previews.push(
+							S.view
+								.component(Iframe)
+								.title(siteData.title)
+								.id(siteId)
+								.options({
+									key: ctx.documentId,
+									reload: { button: true },
+									url: {
+										origin: siteData.url,
+										draftMode: '/api/draft-mode/enable',
+										async preview(doc) {
+											let refinedPath = String(path);
+											// If the type has dynamic parts of its URL, we'll loop over and replace the params here
+											if ('pathParams' in type.options && Object.keys(type.options.pathParams).length > 0) {
+												for (const [param, paramPath] of Object.entries(type.options.pathParams)) {
+													// If the path has a reference, we'll need to resolve the ref via a fetch at this point
+													if (String(paramPath).includes('->')) {
+														const refValue = await ctx
+															.getClient({ apiVersion: defaultApiVersion })
+															.fetch<{ value?: string } | null>(`*[_id == $id][0]{"value":${paramPath}}`, { id: doc?._id });
+														refinedPath = refinedPath.replaceAll(`:${param}`, refValue?.value || 'draft');
+													} else {
+														refinedPath = refinedPath.replaceAll(`:${param}`, String(get(doc, String(paramPath))));
+													}
+												}
+											}
+											return refinedPath;
+										},
+									},
+								} satisfies IframeOptions),
+						);
+					}
 				}
-			}
-			return S.document().views([
-				S.view.form(),
-				S.view
-					.component(DocumentsPane)
-					.title('Referenced by')
-					.options({
-						query: `*[references(select(string::startsWith($id,"drafts.") => string::split($id, "drafts.")[1], $id))]`,
-						params: { id: '_id' },
-						debug: false,
-						useDraft: true,
-						duplicate: false,
-						options: { perspective: 'previewDrafts', apiVersion: '2025-10-01' },
-					}),
-				...previews,
-			]);
+				return S.document().views([
+					S.view.form(),
+					S.view
+						.component(DocumentsPane)
+						.title('Referenced by')
+						.options({
+							query: `*[references(select(string::startsWith($id,"drafts.") => string::split($id, "drafts.")[1], $id))]`,
+							params: { id: '_id' },
+							debug: false,
+							useDraft: true,
+							duplicate: false,
+							options: { perspective: 'previewDrafts', apiVersion: '2025-10-01' },
+						}),
+					...previews,
+				]);
 			},
 			structure: defaultStructure,
 		}),
 		...Object.entries(sites).map(([site, siteData]) => {
 			const mainDocuments: DocumentResolver[] = [];
 			const locations = {};
-		for (const doc of documentSchema) {
-			if (!doc.options?.channels || !(site in doc.options.channels)) {
-				continue;
-			}
-			const filters = [`_type == "${doc.name}"`];
-			if ('pathParams' in doc.options && Object.keys(doc.options.pathParams as { slug: string }).length > 0) {
+			for (const doc of documentSchema) {
+				if (!doc.options || !('channels' in doc.options) || !doc.options.channels || !(site in doc.options.channels)) {
+					continue;
+				}
+				const filters = [`_type == "${doc.name}"`];
+				if ('pathParams' in doc.options && Object.keys(doc.options.pathParams as { slug: string }).length > 0) {
 					for (const [param, paramPath] of Object.entries(doc.options.pathParams as { slug: string })) {
 						filters.push(`${paramPath} == $${param}`);
 					}

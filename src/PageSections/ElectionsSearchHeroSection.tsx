@@ -1,6 +1,7 @@
 import { stegaClean } from 'next-sanity';
 
 import type { Sections } from '~/PageSections';
+import type { SanityImage } from '~/ui/types';
 
 import { parseButtonStyleType } from '~/ui/_lib/resolveButtonStyleType';
 import { ElectionsSearchHeroWithNav } from '~/ui/ElectionsSearchHeroWithNav';
@@ -14,10 +15,10 @@ export function ElectionsSearchHeroSection(section: Extract<Sections, { _type: '
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Elections Search Hero'>
 			<ElectionsSearchHeroWithNav
 				showLogo={stegaClean(section.logoSettings?.showLogo) ?? true}
-				logoImage={section.logoSettings?.img_logoImage}
+				logoImage={section.logoSettings?.img_logoImage as SanityImage | undefined}
 				headerText={section.electionsSearchHeroContent?.field_headerText}
 				bodyCopy={section.electionsSearchHeroContent?.field_bodyCopy}
-				backgroundImage={section.electionsSearchHeroDesignSettings?.img_backgroundImage}
+				backgroundImage={section.electionsSearchHeroDesignSettings?.img_backgroundImage as SanityImage | undefined}
 				backgroundColor={
 					section.electionsSearchHeroDesignSettings?.field_backgroundColor
 						? stegaClean(section.electionsSearchHeroDesignSettings.field_backgroundColor)

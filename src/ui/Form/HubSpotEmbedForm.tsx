@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useId, useRef, useState } from 'react';
+import Link from 'next/link';
 
 import { handleHubSpotFormSubmission } from '~/lib/hubspot/handleHubSpotFormSubmission';
 import { getHubSpotPortalId } from '~/lib/hubspot/portalId';
@@ -31,15 +32,7 @@ function applyEmbedWidth(target: HTMLElement) {
 	}
 }
 
-export function HubSpotEmbedForm({
-	formId,
-	redirectTo,
-	submitLabel,
-}: {
-	formId: string;
-	redirectTo?: string;
-	submitLabel?: string;
-}) {
+export function HubSpotEmbedForm({ formId, redirectTo, submitLabel }: { formId: string; redirectTo?: string; submitLabel?: string }) {
 	const reactId = useId();
 	const targetId = `hs-form-${reactId.replace(/:/g, '')}`;
 	const mountedRef = useRef(true);
@@ -99,9 +92,9 @@ export function HubSpotEmbedForm({
 			{loadError ? (
 				<p className='opacity-70'>
 					Form failed to load. Please{' '}
-					<a href='/contact' className='underline'>
+					<Link href='/contact' className='underline'>
 						contact us
-					</a>{' '}
+					</Link>{' '}
 					directly.
 				</p>
 			) : null}

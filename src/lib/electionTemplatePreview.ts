@@ -10,7 +10,7 @@ type PreviewTarget = {
  * Build a public preview path from a template document's previewTarget + templateType.
  */
 export function buildElectionTemplatePreviewPath(
-	templateType: ElectionTemplateType | string | undefined,
+	templateType: ElectionTemplateType | (string & {}) | undefined,
 	previewTarget: PreviewTarget | null | undefined,
 ): string | null {
 	if (!templateType || !previewTarget?.field_electionTargetSlug) return null;
@@ -28,9 +28,7 @@ export function buildElectionTemplatePreviewPath(
 		case 'position':
 			return positionSlug ? `/elections/${slug}/position/${positionSlug}` : `/elections/${slug}`;
 		case 'positionCandidates':
-			return positionSlug
-				? `/elections/${slug}/position/${positionSlug}/candidates`
-				: `/elections/${slug}`;
+			return positionSlug ? `/elections/${slug}/position/${positionSlug}/candidates` : `/elections/${slug}`;
 		case 'candidateProfile':
 			return `/candidate/${slug}`;
 		default:
@@ -41,7 +39,9 @@ export function buildElectionTemplatePreviewPath(
 /**
  * Best-effort path prefixes to revalidate when a custom template is published.
  */
-export function buildCustomTemplateRevalidatePaths(targets: Array<{ field_electionTargetType?: string; field_electionTargetSlug?: string }>): string[] {
+export function buildCustomTemplateRevalidatePaths(
+	targets: Array<{ field_electionTargetType?: string; field_electionTargetSlug?: string }>,
+): string[] {
 	const paths = new Set<string>(['/elections', '/candidate']);
 
 	for (const target of targets) {
@@ -58,6 +58,7 @@ export function buildCustomTemplateRevalidatePaths(targets: Array<{ field_electi
 			case 'candidate':
 				paths.add(`/candidate/${slug}`);
 				break;
+			case undefined:
 			default:
 				break;
 		}

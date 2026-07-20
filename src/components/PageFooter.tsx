@@ -1,4 +1,4 @@
-import type { Group_footer } from 'sanity.types';
+import type { Footer as Group_footer } from 'sanity.types';
 
 import { sanityFetch } from '~/sanity/sanityClient';
 import { goodpartyOrg_footerQuery } from '~/sanity/groq';

@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>;
 
 const avatar = {
 	image: imageJpg(),
-	size: 'xxl' as const,
+	size: 'xl' as const,
 };
 
 const Default = {

@@ -19,7 +19,7 @@ export const field_electionTemplateType = {
 	options: {
 		list: [...ELECTION_TEMPLATE_TYPES],
 	},
-	validation: (rule: { required: () => unknown }) => rule.required(),
+	validation: (rule: { required(): unknown }) => rule.required(),
 };
 
 export const field_electionTargetType = {
@@ -33,7 +33,7 @@ export const field_electionTargetType = {
 			{ title: 'Candidate (candidate slug)', value: 'candidate' },
 		],
 	},
-	validation: (rule: { required: () => unknown }) => rule.required(),
+	validation: (rule: { required(): unknown }) => rule.required(),
 };
 
 export const field_electionTargetSlug = {
@@ -42,5 +42,5 @@ export const field_electionTargetSlug = {
 	type: 'string',
 	description:
 		'API slug used for matching. Examples: place `ny`, `ny/kings`, `ny/kings/brooklyn`; position race slug; candidate profile slug.',
-	validation: (rule: { required: () => unknown }) => rule.required(),
+	validation: (rule: { required(): unknown }) => rule.required(),
 };

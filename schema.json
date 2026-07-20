@@ -13999,7 +13999,19 @@
           "of": [
             {
               "type": "string",
-              "value": "location"
+              "value": "locationState"
+            },
+            {
+              "type": "string",
+              "value": "locationCounty"
+            },
+            {
+              "type": "string",
+              "value": "locationCity"
+            },
+            {
+              "type": "string",
+              "value": "locationDistrict"
             },
             {
               "type": "string",
@@ -14157,7 +14169,19 @@
           "of": [
             {
               "type": "string",
-              "value": "location"
+              "value": "locationState"
+            },
+            {
+              "type": "string",
+              "value": "locationCounty"
+            },
+            {
+              "type": "string",
+              "value": "locationCity"
+            },
+            {
+              "type": "string",
+              "value": "locationDistrict"
             },
             {
               "type": "string",

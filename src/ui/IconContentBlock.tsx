@@ -1,5 +1,5 @@
 import { HeaderBlock, type HeaderBlockProps } from '~/ui/HeaderBlock';
-import { backgroundTypeValues, iconColorValues } from './_lib/designTypesStore';
+import { iconColorValues } from './_lib/designTypesStore';
 import { cn, tv } from '~/ui/_lib/utils';
 import { Container } from '~/ui/Container';
 import { IconContent, type IconContentProps } from '~/ui/IconContent';
@@ -19,7 +19,7 @@ const styles = tv({
 });
 
 export type IconContentBlockProps = {
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	header?: HeaderBlockProps;
 	columns?: '2' | '3' | '4';
 	color: IconContentProps['color'] | 'mixed';

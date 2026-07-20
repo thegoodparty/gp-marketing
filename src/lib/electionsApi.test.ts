@@ -8,7 +8,7 @@ import {
 } from './electionsApi';
 
 type FetchMockResponse = {
-	match: (url: string) => boolean;
+	match(url: string): boolean;
 	body: unknown;
 	status?: number;
 };

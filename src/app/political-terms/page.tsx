@@ -31,9 +31,7 @@ export default async function Page() {
 	const searchTerms = (await getCachedTerms()).terms;
 
 	const glossaryUrl = toAbsoluteUrl(page.href ?? '/political-terms');
-	const glossaryName = page.glossaryOverview?.field_name
-		? stegaClean(page.glossaryOverview.field_name)
-		: 'Political Terms Glossary';
+	const glossaryName = page.glossaryOverview?.field_name ? stegaClean(page.glossaryOverview.field_name) : 'Political Terms Glossary';
 	const glossaryDescription = page.seo?.field_metaDescription
 		? stegaClean(page.seo.field_metaDescription)
 		: page.glossaryOverview?.field_pageSubtitle
@@ -101,7 +99,7 @@ export default async function Page() {
 	);
 }
 
-export async function generateMetadata(props: Params, parent: ResolvingMetadata): Promise<Metadata> {
+export async function generateMetadata(_props: Params, parent: ResolvingMetadata): Promise<Metadata> {
 	const parentMetadata = await parent;
 	const page = await sanityFetch({
 		query: goodpartyOrg_glossaryQuery,

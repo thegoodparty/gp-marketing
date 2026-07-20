@@ -28,11 +28,7 @@ export async function generateStaticParams() {
 	return [];
 }
 
-export default async function Page({
-	params,
-}: {
-	params: Promise<{ state: string; county: string; city: string }>;
-}) {
+export default async function Page({ params }: { params: Promise<{ state: string; county: string; city: string }> }) {
 	const { state, county, city } = await params;
 	const stateCode = state.toUpperCase();
 
@@ -105,20 +101,14 @@ export default async function Page({
 			return level === 'LOCAL' || level === 'COUNTY';
 		});
 		const districtResolvedDates = await resolvePlaceRaceElectionDates(districtRaces);
-		const { offices: districtOffices, dataYears } = buildOfficeItemsFromPlaceRaces(
-			districtRaces,
-			districtResolvedDates,
-			{
-				type: 'District',
-				buildHref: race => {
-					const positionSlug = race.slug.split('/').pop() ?? '';
-					return `/elections/${state.toLowerCase()}/${county.toLowerCase()}/${city.toLowerCase()}/position/${positionSlug}`;
-				},
+		const { offices: districtOffices, dataYears } = buildOfficeItemsFromPlaceRaces(districtRaces, districtResolvedDates, {
+			type: 'District',
+			buildHref: race => {
+				const positionSlug = race.slug.split('/').pop() ?? '';
+				return `/elections/${state.toLowerCase()}/${county.toLowerCase()}/${city.toLowerCase()}/position/${positionSlug}`;
 			},
-		);
-		const defaultYear = dataYears.includes(currentYear)
-			? currentYear
-			: (dataYears[0] ?? currentYear);
+		});
+		const defaultYear = dataYears.includes(currentYear) ? currentYear : (dataYears[0] ?? currentYear);
 		const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
 		const factsCards = placeToFactsCards(districtPlace);
 		const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);
@@ -137,10 +127,7 @@ export default async function Page({
 			availableYears,
 			offices: districtOffices,
 			electionsIndexHidden: true,
-			locationFacts:
-				factsCards.length > 0
-					? { title: `${districtName} facts`, factsCards }
-					: { hidden: true },
+			locationFacts: factsCards.length > 0 ? { title: `${districtName} facts`, factsCards } : { hidden: true },
 			pageUrl,
 			pageTitle: `Elections in ${districtName}, ${stateName}`,
 			pageDescription: `Browse elections and positions in ${districtName}, ${stateName}.`,
@@ -180,7 +167,7 @@ export default async function Page({
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
 		{ href: `/elections/${state.toLowerCase()}`, label: stateName },
-		{ href: `/elections/${countySlug}`, label: countyPlace.name },
+		{ href: `/elections/${countySlug}`, label: countyPlace!.name },
 		{ href: '', label: cityName },
 	];
 
@@ -213,21 +200,15 @@ export default async function Page({
 		return level === 'LOCAL' || level === 'CITY';
 	});
 	const cityResolvedDates = await resolvePlaceRaceElectionDates(cityRaces);
-	const { offices: cityOffices, dataYears } = buildOfficeItemsFromPlaceRaces(
-		cityRaces,
-		cityResolvedDates,
-		{
-			type: 'City',
-			buildHref: race => {
-				const positionSlug = race.slug.split('/').pop() ?? '';
-				return `/elections/${state.toLowerCase()}/${county.toLowerCase()}/${city.toLowerCase()}/position/${positionSlug}`;
-			},
+	const { offices: cityOffices, dataYears } = buildOfficeItemsFromPlaceRaces(cityRaces, cityResolvedDates, {
+		type: 'City',
+		buildHref: race => {
+			const positionSlug = race.slug.split('/').pop() ?? '';
+			return `/elections/${state.toLowerCase()}/${county.toLowerCase()}/${city.toLowerCase()}/position/${positionSlug}`;
 		},
-	);
+	});
 
-	const defaultYear = dataYears.includes(currentYear)
-		? currentYear
-		: (dataYears[0] ?? currentYear);
+	const defaultYear = dataYears.includes(currentYear) ? currentYear : (dataYears[0] ?? currentYear);
 	const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
 	const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);
 
@@ -237,7 +218,7 @@ export default async function Page({
 		locationLevel: 'city',
 		stateName,
 		heroTitle: `Upcoming elections in ${cityName}, ${stateName}`,
-		countyName: countyPlace.name,
+		countyName: countyPlace!.name,
 		cityName,
 		bodyCopy: `Learn what positions are up for election and who is currently running for office in ${cityName}.`,
 		listHeading: `City Elections in ${cityName}`,
@@ -246,11 +227,10 @@ export default async function Page({
 		availableYears,
 		offices: cityOffices,
 		electionsIndexHidden: true,
-		locationFacts:
-			factsCards.length > 0 ? { title: `${cityName} facts`, factsCards } : { hidden: true },
+		locationFacts: factsCards.length > 0 ? { title: `${cityName} facts`, factsCards } : { hidden: true },
 		pageUrl,
 		pageTitle: `Elections in ${cityName}, ${stateName}`,
-		pageDescription: `Browse elections and local positions in ${cityName}, ${countyPlace.name}, ${stateName}.`,
+		pageDescription: `Browse elections and local positions in ${cityName}, ${countyPlace!.name}, ${stateName}.`,
 	});
 }
 
@@ -281,10 +261,7 @@ export async function generateMetadata({
 	]);
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
 	const isNestedDistrict =
-		!countyPlace &&
-		placeData != null &&
-		isDistrictMtfcc(placeData.mtfcc) &&
-		placeData.slug?.toLowerCase() === fullSlug;
+		!countyPlace && placeData != null && isDistrictMtfcc(placeData.mtfcc) && placeData.slug?.toLowerCase() === fullSlug;
 	if (isNestedDistrict) {
 		return {
 			title: `Elections in ${placeData.name}, ${stateName} | Good Party`,

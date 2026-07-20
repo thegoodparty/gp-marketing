@@ -63,7 +63,7 @@ export async function CTAImageBlockSection(
 				image={section.image?.img_featuredImage}
 				showFullImage={section.image?.showFullImage}
 				label={resolveSectionText(section['overview']?.field_label, section.tokens)}
-				title={resolveSectionText(section['overview']?.field_title, section.tokens)}
+				title={resolveSectionText(section['overview']?.field_title, section.tokens) ?? ''}
 				copy={<RichData value={resolveRichTextTokens(section['overview']?.block_summaryText, section.tokens)} />}
 				caption={resolveSectionText(section['overview']?.field_caption, section.tokens)}
 				primaryButton={primaryButtonWithOverride}

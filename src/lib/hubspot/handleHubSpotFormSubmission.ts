@@ -1,6 +1,9 @@
 import { trackEvent } from '~/lib/analytics';
 import { isSafeRelativeRedirect } from '~/lib/isSafeRelativeRedirect';
 
+type RandomUuidFn = () => string;
+type AssignFn = (url: string) => void;
+
 export function handleHubSpotFormSubmission({
 	formId,
 	redirectTo,
@@ -11,8 +14,8 @@ export function handleHubSpotFormSubmission({
 	formId: string;
 	redirectTo?: string;
 	pagePath: string;
-	randomUuid?: () => string;
-	assign?: (url: string) => void;
+	randomUuid?: RandomUuidFn;
+	assign?: AssignFn;
 }) {
 	trackEvent('Newsletter Form Submitted', {
 		formId,

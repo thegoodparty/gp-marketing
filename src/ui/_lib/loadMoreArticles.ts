@@ -1,6 +1,6 @@
 'use server';
 import { sanityFetch } from '~/sanity/sanityClient';
-import type { TopicsQueryResult } from '~/sanity/groq';
+import type { TopicsQueryResult } from 'sanity.types';
 
 export async function loadMoreArticles(props: { query: string; params?: Record<string, unknown> }) {
 	const result = await sanityFetch({

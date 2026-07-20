@@ -1,6 +1,6 @@
-import {resolveValue} from "../../utils/resolveValue.ts";
-import {handleReplacements} from "../../utils/handleReplacements.ts";
-import {getIcon} from "../../utils/getIcon.tsx";
+import {resolveValue} from '../../utils/resolveValue.ts';
+import {handleReplacements} from '../../utils/handleReplacements.ts';
+import {getIcon} from '../../utils/getIcon.tsx';
 
 export const component_testimonialAutoScroll = {
   title: 'Testimonials Auto Scroll',
@@ -49,12 +49,12 @@ export const component_testimonialAutoScroll = {
           title: 'Testimonials Auto Scroll',
         },
       }
-      const title = resolveValue("title", component_testimonialAutoScroll.preview.select, x);
-      const subtitle = resolveValue("subtitle", component_testimonialAutoScroll.preview.select, x);
-      const media = resolveValue("media", component_testimonialAutoScroll.preview.select, x);
+      const title = resolveValue('title', component_testimonialAutoScroll.preview.select, x);
+      const subtitle = resolveValue('subtitle', component_testimonialAutoScroll.preview.select, x);
+      const media = resolveValue('media', component_testimonialAutoScroll.preview.select, x);
       return handleReplacements({
         title: infer.singletonTitle || title || undefined,
-        subtitle: subtitle ? subtitle : infer.fallback["title"],
+        subtitle: subtitle ? subtitle : infer.fallback['title'],
         media: media || infer.icon
       }, x, infer.fallback);
     },

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { cn, tv } from './_lib/utils.ts';
 import { isValidRichText } from './_lib/isValidRichText.ts';
 import { secondaryButtonStyleType, type componentColorValues } from './_lib/designTypesStore.ts';
@@ -49,7 +50,7 @@ export function StickySidebarCTA(props: StickySidebarCTAProps) {
 						{props.title}
 					</Text>
 				)}
-				{isValidRichText(props.copy) && (
+				{isValidRichText(props.copy as ReactNode) && (
 					<Text styleType='body-1'>
 						<RichData value={props.copy} />
 					</Text>

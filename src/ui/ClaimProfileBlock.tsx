@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 import { cn, tv } from './_lib/utils.ts';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
@@ -67,7 +66,7 @@ const styles = tv({
 export type ClaimProfileBlockProps = {
 	className?: string;
 	layout?: 'card' | 'banner';
-	backgroundColor?: (typeof backgroundTypeValues)[number] | 'bright-yellow';
+	backgroundColor?: 'cream' | 'midnight' | 'bright-yellow';
 	headline?: string;
 	body?: ReactNode;
 	claimButton: ComponentButtonProps;
@@ -88,19 +87,13 @@ export function ClaimProfileBlock(props: ClaimProfileBlockProps) {
 		buttonProps: {
 			...props.claimButton.buttonProps,
 			styleSize: props.claimButton.buttonProps?.styleSize ?? 'sm',
-			styleType:
-				props.claimButton.buttonProps?.styleType ??
-				(backgroundColor === 'bright-yellow' ? 'secondary' : 'primary'),
+			styleType: props.claimButton.buttonProps?.styleType ?? (backgroundColor === 'bright-yellow' ? 'secondary' : 'primary'),
 		},
 	};
 
 	if (layout === 'banner') {
 		return (
-			<article
-				className={cn(bannerBase(), props.className)}
-				data-component='ClaimProfileBlock'
-				data-layout='banner'
-			>
+			<article className={cn(bannerBase(), props.className)} data-component='ClaimProfileBlock' data-layout='banner'>
 				<Container size='xl'>
 					<div className={bannerContent()}>
 						<div className={bannerTextSection()}>

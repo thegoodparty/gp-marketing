@@ -1,9 +1,12 @@
-import type { FeaturesBlockContent } from 'sanity.types';
-
 import type { FeaturesBlockItemProps } from '../FeaturesBlock';
 import { transformButtons, type ButtonType } from '~/lib/buttonTransformer';
 
-export function resolveFeaturesBlockItems(items?: FeaturesBlockContent) {
+type FeaturesBlockContentInput = {
+	list_featureBlockFeatures?: unknown[] | null;
+	list_featureBlockHighlightedFeature?: unknown[] | null;
+};
+
+export function resolveFeaturesBlockItems(items?: FeaturesBlockContentInput | null) {
 	if (!items) return [];
 
 	const featuredBlockItems: FeaturesBlockItemProps[] = [];

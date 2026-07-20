@@ -3,7 +3,6 @@ import Script from 'next/script';
 import { draftMode } from 'next/headers';
 import { VisualEditing } from 'next-sanity/visual-editing';
 import type { ReactNode } from 'react';
-import type { Params } from '~/lib/types';
 import '~/ui/_styles/globals.css';
 import { Amplitude } from '~/ui/Amplitude';
 import { ScrollDepthTracker } from '~/ui/ScrollDepthTracker';
@@ -36,7 +35,7 @@ const secondaryFont = Open_Sans({
 	variable: '--font-secondary',
 	weight: ['400', '600'],
 });
-type Props = Params & {
+type Props = {
 	children: ReactNode;
 };
 

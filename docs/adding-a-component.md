@@ -8,6 +8,18 @@ A block is a reusable section that a marketer can drag onto a page in the editor
 
 Adding a new block is a code change. It touches several files that must all agree with each other. This is the important thing to understand: the block only works if every file is edited. If you skip one of the edits, the block can still deploy without any error, and it will half-work in a way that is easy to miss. It might not appear in the editor's add-block menu, or it might appear but render nothing, or it might render but pull in no data. So follow every step, and then verify visually (see the verification loop at the end).
 
+## Fastest path: the generator
+
+You usually should not do the wiring by hand. Run the generator, which creates all three new files and edits all the registration points in one step, so none can be missed:
+
+```bash
+bun run new:component PromoBanner --group text
+```
+
+Use a PascalCase name. The `--group` is the add-block menu section it appears under (`hero`, `form`, `text`, `image`, `quote`, `cards`, `grid`, `stats`, `pricing`, `features`, `cta`, `blog`; defaults to `text`). Then regenerate types (`bun run sanity:extract && bun run sanity:generate`), customize the three generated files for your fields, mapping, and styling, and verify (see the verification loop at the end). The `new-component` skill walks through this.
+
+The manual recipe below documents exactly what the generator does, and is what you follow to customize the generated files or when the generator cannot run.
+
 Why it fails silently: type and lint errors are caught (CI and the build enforce `typecheck` and `lint`), but most ways to half-wire a block are not type errors. An unknown block type renders as nothing instead of crashing (the render switch just logs a warning), the error boundary swallows render errors, and a missing GROQ projection or a missing add-block-menu entry is perfectly valid TypeScript. So `typecheck`, `lint`, and `test` will pass on a broken block. Verifying visually on `/all` is the only safety net for wiring gaps.
 
 If you are an agent doing this work for a non-technical user, explain what you did and whether it worked in plain language. No jargon. Short sentences. If something needs an engineer (see the last section), say so plainly.

@@ -44,7 +44,7 @@ const reactName = rawName!;
 const camel = reactName.charAt(0).toLowerCase() + reactName.slice(1);
 const componentType = `component_${camel}`;
 const sectionName = `${reactName}Section`;
-const title = reactName.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+const title = reactName.replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2').replace(/([a-z0-9])([A-Z])/g, '$1 $2');
 
 const schemaPath = join(root, 'src/sanity/schema/components', `${componentType}.ts`);
 if (existsSync(schemaPath)) {

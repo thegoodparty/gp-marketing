@@ -2,14 +2,10 @@ import { afterEach, describe, expect, mock, test } from 'bun:test';
 
 import { handleHubSpotFormSubmission } from '~/lib/hubspot/handleHubSpotFormSubmission';
 
-const trackEventMock = mock(() => {});
-
-mock.module('~/lib/analytics', () => ({
-	trackEvent: trackEventMock,
-}));
+const trackMock = mock((_eventName: string, _eventProperties?: Record<string, unknown>) => {});
 
 afterEach(() => {
-	trackEventMock.mockClear();
+	trackMock.mockClear();
 });
 
 describe('handleHubSpotFormSubmission', () => {
@@ -21,9 +17,10 @@ describe('handleHubSpotFormSubmission', () => {
 			pagePath: '/newsletter',
 			randomUuid: () => 'uuid-123',
 			assign,
+			track: trackMock,
 		});
 
-		expect(trackEventMock).toHaveBeenCalledWith('Newsletter Form Submitted', {
+		expect(trackMock).toHaveBeenCalledWith('Newsletter Form Submitted', {
 			formId: 'form-123',
 			page_path: '/newsletter',
 		});
@@ -37,9 +34,10 @@ describe('handleHubSpotFormSubmission', () => {
 			redirectTo: 'https://evil.example',
 			pagePath: '/newsletter',
 			assign,
+			track: trackMock,
 		});
 
-		expect(trackEventMock).toHaveBeenCalledTimes(1);
+		expect(trackMock).toHaveBeenCalledTimes(1);
 		expect(assign).not.toHaveBeenCalled();
 	});
 
@@ -51,6 +49,7 @@ describe('handleHubSpotFormSubmission', () => {
 			pagePath: '/newsletter',
 			randomUuid: () => 'uuid-456',
 			assign,
+			track: trackMock,
 		});
 
 		expect(assign).toHaveBeenCalledWith('/thanks?foo=bar&submissionGuid=uuid-456');

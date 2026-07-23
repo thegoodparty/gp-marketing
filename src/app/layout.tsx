@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 import { draftMode } from 'next/headers';
 import { VisualEditing } from 'next-sanity/visual-editing';
-import type { ReactNode } from 'react';
+import { Suspense, type ReactNode } from 'react';
 import '~/ui/_styles/globals.css';
 import { Amplitude } from '~/ui/Amplitude';
+import { AttributionProvider } from '~/ui/AttributionProvider';
 import { ScrollDepthTracker } from '~/ui/ScrollDepthTracker';
 import { PageSchema } from '~/ui/PageSchema';
 import { getBaseUrl, SITE_NAME } from '~/lib/url';
@@ -93,18 +94,22 @@ export default async function RootLayout({ children }: Props) {
 				<Amplitude />
 				<ScrollDepthTracker />
 				{(await draftMode()).isEnabled && <VisualEditing />}
-				<ComponentErrorBoundary componentName='Header'>
-					<PageHeader className='shrink-0' isDraftMode={(await draftMode()).isEnabled} />
-				</ComponentErrorBoundary>
-				<main
-					role='main'
-					className={`bg-goodparty-cream flex-1 basis-0 ${(await draftMode()).isEnabled ? 'pt-[calc(var(--header-height)+var(--preview-header-height))]' : 'pt-(--header-height)'}`}
-				>
-					{children}
-				</main>
-				<ComponentErrorBoundary componentName='Footer'>
-					<PageFooter className='shrink-0' />
-				</ComponentErrorBoundary>
+				<Suspense fallback={null}>
+					<AttributionProvider>
+						<ComponentErrorBoundary componentName='Header'>
+							<PageHeader className='shrink-0' isDraftMode={(await draftMode()).isEnabled} />
+						</ComponentErrorBoundary>
+						<main
+							role='main'
+							className={`bg-goodparty-cream flex-1 basis-0 ${(await draftMode()).isEnabled ? 'pt-[calc(var(--header-height)+var(--preview-header-height))]' : 'pt-(--header-height)'}`}
+						>
+							{children}
+						</main>
+						<ComponentErrorBoundary componentName='Footer'>
+							<PageFooter className='shrink-0' />
+						</ComponentErrorBoundary>
+					</AttributionProvider>
+				</Suspense>
 				<Script id='hubspot-forms' src='//js.hsforms.net/forms/embed/v2.js' strategy='beforeInteractive' />
 				<Script id='hs-script-loader' src='//js.hs-scripts.com/21589597.js' strategy='afterInteractive' />
 			</body>

@@ -2,7 +2,6 @@ import { cn, tv } from './_lib/utils.ts';
 import { Container } from './Container.tsx';
 import { HeaderBlock, type HeaderBlockProps } from './HeaderBlock.tsx';
 import { LocationCard, type LocationCardProps } from './LocationCard.tsx';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 const styles = tv({
 	slots: {
@@ -24,7 +23,7 @@ const styles = tv({
 
 export type FeaturedCitiesBlockProps = {
 	className?: string;
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	header?: HeaderBlockProps;
 	locationCards: LocationCardProps[];
 };
@@ -45,10 +44,7 @@ export function FeaturedCitiesBlock(props: FeaturedCitiesBlockProps) {
 					<ul className={grid()}>
 						{props.locationCards.map((card, index) => (
 							<li key={`location-card-${index}`}>
-								<LocationCard
-									{...card}
-									className={cn(backgroundColor === 'midnight' && 'ring-1 ring-neutral-500')}
-								/>
+								<LocationCard {...card} className={cn(backgroundColor === 'midnight' && 'ring-1 ring-neutral-500')} />
 							</li>
 						))}
 					</ul>

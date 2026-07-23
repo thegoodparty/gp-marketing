@@ -7,8 +7,10 @@
  *   export SANITY_STUDIO_API_TOKEN="your-token-with-editor-permissions"
  *
  * Run:
- *   bun run scripts/migrate-tmpl-to-election-templates.ts          # dry-run (default)
- *   bun run scripts/migrate-tmpl-to-election-templates.ts --write  # create/update globals
+ *   bun run scripts/migrate-tmpl-to-election-templates.ts                    # dry-run (default)
+ *   bun run scripts/migrate-tmpl-to-election-templates.ts --write            # create/update globals
+ *   bun run scripts/migrate-tmpl-to-election-templates.ts --force-seed       # dry-run using seed only
+ *   bun run scripts/migrate-tmpl-to-election-templates.ts --force-seed --write
  */
 import { createClient } from '@sanity/client';
 import {
@@ -20,6 +22,7 @@ const projectId = '3rbseux7';
 const dataset = 'production';
 const token = process.env['SANITY_STUDIO_API_TOKEN'];
 const write = process.argv.includes('--write');
+const forceSeed = process.argv.includes('--force-seed');
 
 const LEGACY_GLOBAL_MAP: Record<
 	string,
@@ -28,7 +31,10 @@ const LEGACY_GLOBAL_MAP: Record<
 	tmpl_candidateProfile: 'globalTemplate_candidateProfile',
 	tmpl_electionsPosition: 'globalTemplate_position',
 	tmpl_electionsCandidates: 'globalTemplate_positionCandidates',
-	tmpl_electionsStateIndex: 'globalTemplate_location',
+	tmpl_electionsStateIndex: 'globalTemplate_locationState',
+	tmpl_electionsCountyIndex: 'globalTemplate_locationCounty',
+	tmpl_electionsCityIndex: 'globalTemplate_locationCity',
+	tmpl_electionsDistrictIndex: 'globalTemplate_locationDistrict',
 };
 
 const client = createClient({
@@ -63,9 +69,16 @@ async function main() {
 	const plans: Array<{
 		globalId: string;
 		templateType: string;
-		source: 'legacy-live' | 'seed';
+		source: 'legacy-live' | 'seed' | 'force-seed';
 		legacyId?: string;
 		sectionCount: number;
+	}> = [];
+
+	const payloads: Array<{
+		globalId: string;
+		source: 'legacy-live' | 'seed' | 'force-seed';
+		sectionCount: number;
+		payload: Parameters<typeof client.createOrReplace>[0];
 	}> = [];
 
 	for (const globalDoc of globalElectionTemplateSeedDocuments) {
@@ -73,8 +86,12 @@ async function main() {
 		const live = legacyId ? legacyById.get(legacyId) : undefined;
 		const liveSections = live?.pageSections?.list_pageSections;
 		const seedSections = legacySeedFor(legacyId ?? '')?.pageSections?.list_pageSections;
-		const sections = liveSections?.length ? liveSections : seedSections ?? globalDoc.pageSections.list_pageSections;
-		const source = liveSections?.length ? 'legacy-live' : 'seed';
+		const sections = forceSeed
+			? (seedSections ?? globalDoc.pageSections.list_pageSections)
+			: liveSections?.length
+				? liveSections
+				: (seedSections ?? globalDoc.pageSections.list_pageSections);
+		const source = forceSeed ? 'force-seed' : liveSections?.length ? 'legacy-live' : 'seed';
 
 		plans.push({
 			globalId: globalDoc._id,
@@ -92,15 +109,26 @@ async function main() {
 		if (write) {
 			// Seed docs are `as const`, so `_id` is a literal union that confuses the
 			// createOrReplace generic; cast to the method's document parameter type.
-			await client.createOrReplace(payload as Parameters<typeof client.createOrReplace>[0]);
-			console.log(`[write] ${globalDoc._id} (${source}, ${sections?.length ?? 0} sections)`);
+			payloads.push({
+				globalId: globalDoc._id,
+				source,
+				sectionCount: sections?.length ?? 0,
+				payload: payload as Parameters<typeof client.createOrReplace>[0],
+			});
+			console.log(`[planned] will upsert ${globalDoc._id} from ${source} (${sections?.length ?? 0} sections)`);
 		} else {
 			console.log(`[dry-run] would upsert ${globalDoc._id} from ${source} (${sections?.length ?? 0} sections)`);
 		}
 	}
 
 	console.log('\nMigration plan:', JSON.stringify(plans, null, 2));
-	if (!write) {
+
+	if (write) {
+		for (const { globalId, source, sectionCount, payload } of payloads) {
+			await client.createOrReplace(payload);
+			console.log(`[write] ${globalId} (${source}, ${sectionCount} sections)`);
+		}
+	} else {
 		console.log('\nDry run only. Re-run with --write to apply.');
 	}
 }

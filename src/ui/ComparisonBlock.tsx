@@ -1,6 +1,5 @@
 import { ComparisonTableCard, type ComparisonTableCardProps } from '~/ui/ComparisonTableCard';
 import { HeaderBlock, type HeaderBlockProps } from '~/ui/HeaderBlock';
-import { backgroundTypeValues } from './_lib/designTypesStore';
 import { tv } from '~/ui/_lib/utils';
 import { Container } from '~/ui/Container';
 
@@ -18,7 +17,7 @@ const styles = tv({
 });
 
 export type ComparisonBlockProps = {
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	header?: HeaderBlockProps;
 	tableOne?: ComparisonTableCardProps;
 	tableTwo?: ComparisonTableCardProps;

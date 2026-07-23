@@ -2,6 +2,7 @@ import type { SanityImage } from '../types.ts';
 
 export function logoSVG(crop?: SanityImage['crop'], hotspot?: SanityImage['hotspot']): SanityImage {
 	return {
+		_type: 'img_image',
 		crop,
 		hotspot,
 		asset: {
@@ -15,12 +16,13 @@ export function logoSVG(crop?: SanityImage['crop'], hotspot?: SanityImage['hotsp
 			},
 			mimeType: 'image/svg',
 			url: 'https://cdn.sanity.io/images/3100uthq/boilerplate/a56d64fbb0a0c9a37510acf9313f75a029eaadd7-42x42.svg',
-		},
+		} as unknown as SanityImage['asset'],
 	};
 }
 
 export function imageJpg(crop?: SanityImage['crop'], hotspot?: SanityImage['hotspot']): SanityImage {
 	return {
+		_type: 'img_image',
 		crop,
 		hotspot,
 		asset: {
@@ -34,12 +36,13 @@ export function imageJpg(crop?: SanityImage['crop'], hotspot?: SanityImage['hots
 			},
 			mimeType: 'image/jpeg',
 			url: 'https://cdn.sanity.io/images/3100uthq/boilerplate/d270ecadfb79fc2dd9644c2456b8fa5eddaec108-3840x2160.jpg',
-		},
+		} as unknown as SanityImage['asset'],
 	};
 }
 
 export function imageJpgAlt(crop?: SanityImage['crop'], hotspot?: SanityImage['hotspot']): SanityImage {
 	return {
+		_type: 'img_image',
 		crop,
 		hotspot,
 		asset: {
@@ -53,12 +56,13 @@ export function imageJpgAlt(crop?: SanityImage['crop'], hotspot?: SanityImage['h
 			},
 			mimeType: 'image/jpeg',
 			url: 'https://cdn.sanity.io/images/3ik9klvj/production/2898dfffb119f226df94c0b863aa83bf6781b41a-3840x2160.jpg',
-		},
+		} as unknown as SanityImage['asset'],
 	};
 }
 
 export function imagePng(crop?: SanityImage['crop'], hotspot?: SanityImage['hotspot']): SanityImage {
 	return {
+		_type: 'img_image',
 		crop,
 		hotspot,
 		asset: {
@@ -78,12 +82,13 @@ export function imagePng(crop?: SanityImage['crop'], hotspot?: SanityImage['hots
 					aspectRatio: 1,
 				},
 			},
-		},
+		} as unknown as SanityImage['asset'],
 	};
 }
 
 export function avatarJpg(crop?: SanityImage['crop'], hotspot?: SanityImage['hotspot']): SanityImage {
 	return {
+		_type: 'img_image',
 		crop,
 		hotspot,
 		asset: {
@@ -100,12 +105,13 @@ export function avatarJpg(crop?: SanityImage['crop'], hotspot?: SanityImage['hot
 			},
 			mimeType: 'image/jpeg',
 			url: 'https://cdn.sanity.io/images/3ik9klvj/production/0b263357f770d5fbb3b4265dc52bf3808950d52b-1786x2500.jpg',
-		},
+		} as unknown as SanityImage['asset'],
 	};
 }
 
 export function customProfileImage(crop?: SanityImage['crop'], hotspot?: SanityImage['hotspot']): SanityImage {
 	return {
+		_type: 'img_image',
 		crop,
 		hotspot,
 		asset: {
@@ -120,7 +126,7 @@ export function customProfileImage(crop?: SanityImage['crop'], hotspot?: SanityI
 			},
 			mimeType: 'image/png',
 			url: '/images/profile-hero-avatar.png',
-		},
+		} as unknown as SanityImage['asset'],
 	};
 }
 

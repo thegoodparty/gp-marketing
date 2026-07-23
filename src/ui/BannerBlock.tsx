@@ -1,4 +1,4 @@
-import type { backgroundTypeValues, componentColorValues } from './_lib/designTypesStore';
+import type { componentColorValues } from './_lib/designTypesStore';
 import { tv } from './_lib/utils';
 
 import type { AvatarProps } from './Avatar';
@@ -52,7 +52,7 @@ const styles = tv({
 
 interface BannerBlockProps {
 	avatars?: AvatarProps[];
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	color?: Exclude<(typeof componentColorValues)[number], 'inverse'>;
 	copy?: string;
 }

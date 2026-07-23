@@ -5,7 +5,6 @@ import { Content, Header, Item, Root, Trigger } from '@radix-ui/react-accordion'
 
 import { cn, tv } from './_lib/utils.ts';
 import type { mediumLargeValues } from './_lib/designTypesStore.ts';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 import { isValidRichText } from './_lib/isValidRichText.ts';
 
 import { type ComponentButtonProps } from './Inputs/Button.tsx';
@@ -58,7 +57,7 @@ export type FAQBlockItemProps = {
 };
 
 export type FAQBlockProps = {
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	buttons?: ComponentButtonProps[];
 	className?: string;
 	copy?: ReactNode;

@@ -6,7 +6,7 @@ import { PageSections } from '~/PageSections';
 import { StructureMetaData } from '~/components/StructureMetadata';
 import type { Params } from '~/lib/types';
 
-export default async function Page(props: any) {
+export default async function Page(_props: any) {
 	const page = await sanityFetch({
 		query: goodpartyOrg_allComponentsQuery,
 		tags: ['goodpartyOrg_allComponents'],
@@ -17,7 +17,7 @@ export default async function Page(props: any) {
 	return <PageSections pageSections={page.pageSections?.list_pageSections} />;
 }
 
-export async function generateMetadata(props: Params, parent: ResolvingMetadata): Promise<Metadata> {
+export async function generateMetadata(_props: Params, parent: ResolvingMetadata): Promise<Metadata> {
 	const parentMetadata = await parent;
 	const page = await sanityFetch({
 		query: goodpartyOrg_allComponentsQuery,

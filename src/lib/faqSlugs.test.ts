@@ -1,12 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import {
-	buildFaqSlugMap,
-	findFaqBySlug,
-	getAllFaqSlugs,
-	getFaqHref,
-	getFaqSitemapEntries,
-	slugifyFaqQuestion,
-} from './faqSlugs';
+import { describe, expect, it } from 'bun:test';
+import { buildFaqSlugMap, findFaqBySlug, getAllFaqSlugs, getFaqHref, getFaqSitemapEntries, slugifyFaqQuestion } from './faqSlugs';
 
 describe('slugifyFaqQuestion', () => {
 	it('normalizes question text into a URL slug', () => {
@@ -21,9 +14,7 @@ describe('slugifyFaqQuestion', () => {
 
 describe('buildFaqSlugMap', () => {
 	it('resolves hrefs after Map is serialized and reconstructed (unstable_cache round-trip)', () => {
-		const faqs = [
-			{ _id: 'abc123', faqOverview: { field_question: 'What is GoodParty.org?' } },
-		];
+		const faqs = [{ _id: 'abc123', faqOverview: { field_question: 'What is GoodParty.org?' } }];
 		const serialized = Object.fromEntries(buildFaqSlugMap(faqs));
 		const restoredMap = new Map(Object.entries(serialized));
 
@@ -181,10 +172,7 @@ describe('getFaqSitemapEntries', () => {
 	});
 
 	it('includes one entry per FAQ when question is missing (keyed by _id)', () => {
-		const faqs = [
-			{ _id: 'no-question-a' },
-			{ _id: 'no-question-b' },
-		];
+		const faqs = [{ _id: 'no-question-a' }, { _id: 'no-question-b' }];
 
 		const entries = getFaqSitemapEntries(faqs);
 

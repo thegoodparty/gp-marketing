@@ -1,5 +1,4 @@
 import { cn, tv } from './_lib/utils.ts';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 import { Container } from './Container.tsx';
 import { HeaderBlock, type HeaderBlockProps } from './HeaderBlock.tsx';
@@ -25,7 +24,7 @@ const styles = tv({
 
 export type SectionQuoteBlockProps = {
 	className?: string;
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	header?: HeaderBlockProps;
 	items: SectionQuoteCardProps[];
 };

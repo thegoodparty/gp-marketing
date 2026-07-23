@@ -47,7 +47,7 @@ export function resolveSameAs(channels: ReadonlyArray<SocialChannelLike> | null 
 		const url = channel?.url;
 		if (typeof url !== 'string') continue;
 		const trimmed = url.trim();
-		if (!trimmed || !trimmed.startsWith('http')) continue;
+		if (!trimmed?.startsWith('http')) continue;
 		if (seen.has(trimmed)) continue;
 		seen.add(trimmed);
 		out.push(trimmed);

@@ -35,10 +35,10 @@ const LEGACY_TO_GLOBAL: Record<string, string> = {
 	tmpl_candidateProfile: 'globalTemplate_candidateProfile / candidateProfile',
 	tmpl_electionsPosition: 'globalTemplate_position / position',
 	tmpl_electionsCandidates: 'globalTemplate_positionCandidates / positionCandidates',
-	tmpl_electionsStateIndex: 'globalTemplate_location / location (baseline)',
-	tmpl_electionsCountyIndex: 'custom location template (place target) or fold into global',
-	tmpl_electionsCityIndex: 'custom location template (place target) or fold into global',
-	tmpl_electionsDistrictIndex: 'custom location template (place target) or fold into global',
+	tmpl_electionsStateIndex: 'globalTemplate_locationState / locationState',
+	tmpl_electionsCountyIndex: 'globalTemplate_locationCounty / locationCounty',
+	tmpl_electionsCityIndex: 'globalTemplate_locationCity / locationCity',
+	tmpl_electionsDistrictIndex: 'globalTemplate_locationDistrict / locationDistrict',
 };
 
 type LegacyDoc = {

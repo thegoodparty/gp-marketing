@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { cn, tv } from './_lib/utils.ts';
 import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
 import { isValidRichText } from './_lib/isValidRichText.ts';
-import type { backgroundTypeValues, componentColorValues } from './_lib/designTypesStore.ts';
+import type { componentColorValues } from './_lib/designTypesStore.ts';
 import type { ResolvedTextSize } from './_lib/resolveTextSize.ts';
 import type { IconType } from './IconResolver.tsx';
 
@@ -62,7 +62,7 @@ type StepperItemProps = {
 };
 
 export type StepperBlockProps = {
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	className?: string;
 	header?: HeaderBlockProps;
 	items?: StepperItemProps[];

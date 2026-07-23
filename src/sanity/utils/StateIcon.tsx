@@ -13,7 +13,7 @@ export type StateIconProps = {
 } & Omit<ImgHTMLAttributes<HTMLImageElement>, 'src' | 'width' | 'height'>;
 
 export const StateIcon = memo(function StateIcon({ stateCode, width = 24, height = 24, className, ...props }: StateIconProps) {
-	const [hasError, setHasError] = useState(false);
+	const [hasError] = useState(false);
 	const [imageLoadError, setImageLoadError] = useState(false);
 
 	// Validate state code
@@ -37,16 +37,8 @@ export const StateIcon = memo(function StateIcon({ stateCode, width = 24, height
 			src={src}
 			width={width}
 			height={height}
-			alt={
-				shouldUseFallback
-					? `State icon unavailable for ${displayCode} - USA map placeholder`
-					: `${displayCode} state icon`
-			}
-			aria-label={
-				shouldUseFallback
-					? `Fallback: State icon for ${displayCode} unavailable`
-					: `${displayCode} state icon`
-			}
+			alt={shouldUseFallback ? `State icon unavailable for ${displayCode} - USA map placeholder` : `${displayCode} state icon`}
+			aria-label={shouldUseFallback ? `Fallback: State icon for ${displayCode} unavailable` : `${displayCode} state icon`}
 			className={cn(className, shouldUseFallback && 'opacity-50 grayscale')}
 			onError={handleError}
 			{...props}

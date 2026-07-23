@@ -43,7 +43,7 @@ import type { PlaceItem, PlaceRace, PlaceWithFacts, RaceDetail } from '~/types/e
 
 const originalFetch = globalThis.fetch;
 
-function withFetchMock(responses: { match: (url: string) => boolean; body: unknown }[]) {
+function withFetchMock(responses: { match(url: string): boolean; body: unknown }[]) {
 	globalThis.fetch = (async (input: RequestInfo | URL) => {
 		const url = String(input);
 		const match = responses.find(r => r.match(url));
@@ -57,10 +57,7 @@ function withFetchMock(responses: { match: (url: string) => boolean; body: unkno
 	}) as typeof fetch;
 }
 
-async function expectRedirect(
-	fn: () => Promise<void>,
-	expectedPath: string,
-): Promise<void> {
+async function expectRedirect(fn: () => Promise<void>, expectedPath: string): Promise<void> {
 	try {
 		await fn();
 		throw new Error('expected redirect');
@@ -156,9 +153,9 @@ describe('buildSubplaceRaceSlug', () => {
 	});
 
 	test('builds 5-part slug when county is provided', () => {
-		expect(
-			buildSubplaceRaceSlug('AR', 'winchester', 'city-recorder', 'treasurer-joint', 'drew-county'),
-		).toBe('ar/drew-county/winchester/city-recorder/treasurer-joint');
+		expect(buildSubplaceRaceSlug('AR', 'winchester', 'city-recorder', 'treasurer-joint', 'drew-county')).toBe(
+			'ar/drew-county/winchester/city-recorder/treasurer-joint',
+		);
 	});
 });
 
@@ -411,7 +408,7 @@ describe('resolvePlaceRaceElectionDates', () => {
 		globalThis.fetch = (async () => {
 			fetchCount += 1;
 			return new Response(JSON.stringify([]), { status: 200 });
-		}) as typeof fetch;
+		}) as unknown as typeof fetch;
 
 		const races = [placeRace({ electionDate: '2026-11-03T00:00:00.000Z', isPrimary: true })];
 		const resolved = await resolvePlaceRaceElectionDates(races, today);
@@ -423,10 +420,7 @@ describe('resolvePlaceRaceElectionDates', () => {
 	test('fetches general election date when place date is in the past', async () => {
 		withFetchMock([
 			{
-				match: url =>
-					url.includes('/v1/races?') &&
-					url.includes('raceSlug=ca%2Flieutenant-governor') &&
-					url.includes('isPrimary=false'),
+				match: url => url.includes('/v1/races?') && url.includes('raceSlug=ca%2Flieutenant-governor') && url.includes('isPrimary=false'),
 				body: [
 					{
 						id: 1,
@@ -450,7 +444,7 @@ describe('resolvePlaceRaceElectionDates', () => {
 		globalThis.fetch = (async () => {
 			fetchCount += 1;
 			return new Response(JSON.stringify([]), { status: 200 });
-		}) as typeof fetch;
+		}) as unknown as typeof fetch;
 
 		const races = [placeRace({ electionDate: '2025-11-04T00:00:00.000Z', isPrimary: false })];
 		const resolved = await resolvePlaceRaceElectionDates(races, today);
@@ -464,7 +458,7 @@ describe('resolvePlaceRaceElectionDates', () => {
 		globalThis.fetch = (async () => {
 			fetchCount += 1;
 			return new Response(JSON.stringify([]), { status: 200 });
-		}) as typeof fetch;
+		}) as unknown as typeof fetch;
 
 		const races = [placeRace({ electionDate: '2026-06-02T00:00:00.000Z', isPrimary: undefined })];
 		const resolved = await resolvePlaceRaceElectionDates(races, today);
@@ -500,9 +494,7 @@ describe('buildOfficeItemsFromPlaceRaces', () => {
 				isPrimary: true,
 			}),
 		];
-		const resolvedDates = new Map([
-			['ca/lieutenant-governor', '2026-11-03T00:00:00.000Z'],
-		]);
+		const resolvedDates = new Map([['ca/lieutenant-governor', '2026-11-03T00:00:00.000Z']]);
 
 		const { offices, dataYears } = buildOfficeItemsFromPlaceRaces(races, resolvedDates, {
 			type: 'State',
@@ -1064,9 +1056,7 @@ describe('inferSidebarLinkIcon', () => {
 describe('formatSidebarLinkLabel', () => {
 	test('uses hostname for unknown domains so multiple links stay distinguishable', () => {
 		expect(formatSidebarLinkLabel('https://example.com', 0)).toBe('Example.com');
-		expect(formatSidebarLinkLabel('https://senatedemocrats.wa.gov/kauffman/', 2)).toBe(
-			'Senatedemocrats.wa.gov',
-		);
+		expect(formatSidebarLinkLabel('https://senatedemocrats.wa.gov/kauffman/', 2)).toBe('Senatedemocrats.wa.gov');
 		expect(formatSidebarLinkLabel('https://www.voteclaudiakauffman.com/', 3)).toBe('Voteclaudiakauffman.com');
 	});
 
@@ -1090,15 +1080,11 @@ describe('formatSidebarLinkLabel', () => {
 
 describe('normalizeLinkHrefForCompare', () => {
 	test('treats www and trailing slash as equivalent', () => {
-		expect(normalizeLinkHrefForCompare('https://same.com')).toBe(
-			normalizeLinkHrefForCompare('https://www.same.com/'),
-		);
+		expect(normalizeLinkHrefForCompare('https://same.com')).toBe(normalizeLinkHrefForCompare('https://www.same.com/'));
 	});
 
 	test('normalizes mailto case-insensitively', () => {
-		expect(normalizeLinkHrefForCompare('mailto:Test@Example.com')).toBe(
-			normalizeLinkHrefForCompare('mailto:test@example.com'),
-		);
+		expect(normalizeLinkHrefForCompare('mailto:Test@Example.com')).toBe(normalizeLinkHrefForCompare('mailto:test@example.com'));
 	});
 });
 
@@ -1158,9 +1144,7 @@ describe('prependClaimedWebsiteIfNew', () => {
 
 describe('linkHrefAlreadyPresent', () => {
 	test('returns false when href is not in links', () => {
-		expect(
-			linkHrefAlreadyPresent([{ href: 'https://example.com' }], 'https://other.com'),
-		).toBe(false);
+		expect(linkHrefAlreadyPresent([{ href: 'https://example.com' }], 'https://other.com')).toBe(false);
 	});
 });
 
@@ -1185,10 +1169,7 @@ describe('buildElectionPositionHrefFromRaceSlug', () => {
 
 	test('expands CITY 3-part slug with county mapping', () => {
 		expect(
-			buildElectionPositionHrefFromRaceSlug(
-				{ slug: 'mi/northville/city-legislature', positionLevel: 'CITY' },
-				{ citySlugToCountySlug },
-			),
+			buildElectionPositionHrefFromRaceSlug({ slug: 'mi/northville/city-legislature', positionLevel: 'CITY' }, { citySlugToCountySlug }),
 		).toBe('/elections/mi/wayne-county/northville/position/city-legislature');
 	});
 
@@ -1202,9 +1183,7 @@ describe('buildElectionPositionHrefFromRaceSlug', () => {
 	});
 
 	test('builds STATE-level path', () => {
-		expect(
-			buildElectionPositionHrefFromRaceSlug({ slug: 'az/governor', positionLevel: 'STATE' }),
-		).toBe('/elections/az/position/governor');
+		expect(buildElectionPositionHrefFromRaceSlug({ slug: 'az/governor', positionLevel: 'STATE' })).toBe('/elections/az/position/governor');
 	});
 
 	test('builds 4-part WI city path from prefix', () => {
@@ -1226,12 +1205,9 @@ describe('buildElectionPositionHrefFromRaceSlug', () => {
 	});
 
 	test('falls back to generic path for unmapped CITY when skipUnmappedCity is false', () => {
-		expect(
-			buildElectionPositionHrefFromRaceSlug(
-				{ slug: 'az/unknown-city/clerk', positionLevel: 'CITY' },
-				{ citySlugToCountySlug },
-			),
-		).toBe('/elections/az/unknown-city/position/clerk');
+		expect(buildElectionPositionHrefFromRaceSlug({ slug: 'az/unknown-city/clerk', positionLevel: 'CITY' }, { citySlugToCountySlug })).toBe(
+			'/elections/az/unknown-city/position/clerk',
+		);
 	});
 
 	test('expands OK joint city office to 5-level subplace URL', () => {
@@ -1279,12 +1255,9 @@ describe('buildRaceCandidatesHref', () => {
 	const citySlugToCountySlug = new Map([['mi/northville', 'mi/wayne-county']]);
 
 	test('appends /candidates to position path', () => {
-		expect(
-			buildRaceCandidatesHref(
-				{ slug: 'mi/northville/city-legislature', positionLevel: 'CITY' },
-				{ citySlugToCountySlug },
-			),
-		).toBe('/elections/mi/wayne-county/northville/position/city-legislature/candidates');
+		expect(buildRaceCandidatesHref({ slug: 'mi/northville/city-legislature', positionLevel: 'CITY' }, { citySlugToCountySlug })).toBe(
+			'/elections/mi/wayne-county/northville/position/city-legislature/candidates',
+		);
 	});
 
 	test('returns undefined for invalid slug', () => {
@@ -1307,25 +1280,17 @@ describe('claimed profile helpers', () => {
 
 	test('resolveClaimedTextField handles string and object values', () => {
 		expect(resolveClaimedTextField('  Hello  ')).toBe('Hello');
-		expect(resolveClaimedTextField({ intro: 'Line one', detail: 'Line two' })).toBe(
-			'Line one\n\nLine two',
-		);
+		expect(resolveClaimedTextField({ intro: 'Line one', detail: 'Line two' })).toBe('Line one\n\nLine two');
 		expect(resolveClaimedTextField('   ')).toBeUndefined();
 	});
 
 	test('resolveClaimedCustomIssueText prefers description then position', () => {
-		expect(
-			resolveClaimedCustomIssueText({ title: 'Education', description: 'Fund schools' }),
-		).toBe('Education\n\nFund schools');
-		expect(resolveClaimedCustomIssueText({ title: 'Education', position: 'Fund schools' })).toBe(
-			'Education\n\nFund schools',
-		);
+		expect(resolveClaimedCustomIssueText({ title: 'Education', description: 'Fund schools' })).toBe('Education\n\nFund schools');
+		expect(resolveClaimedCustomIssueText({ title: 'Education', position: 'Fund schools' })).toBe('Education\n\nFund schools');
 	});
 
 	test('htmlToPlainText strips tags without appending link URLs', () => {
-		expect(htmlToPlainText('<p>We need change <a href="https://goodparty.org">now</a></p>')).toBe(
-			'We need change now',
-		);
+		expect(htmlToPlainText('<p>We need change <a href="https://goodparty.org">now</a></p>')).toBe('We need change now');
 	});
 
 	test('htmlToPlainText skips images', () => {
@@ -1346,9 +1311,7 @@ describe('claimed profile helpers', () => {
 	});
 
 	test('htmlToPlainText separates paragraph and heading with exactly two newlines', () => {
-		expect(htmlToPlainText('<p>Intro</p><h2>My Position</h2><p>More detail</p>')).toBe(
-			'Intro\n\nMy Position\n\nMore detail',
-		);
+		expect(htmlToPlainText('<p>Intro</p><h2>My Position</h2><p>More detail</p>')).toBe('Intro\n\nMy Position\n\nMore detail');
 	});
 
 	test('htmlToPlainText strips list bullets from ul items', () => {
@@ -1370,6 +1333,7 @@ describe('claimed profile helpers', () => {
 				slug: 'monica-alponte',
 				details: { occupation: 'Teacher' },
 				updatedAt: '',
+				avatar: null,
 				website: null,
 				campaignPositions: [],
 			}),
@@ -1380,6 +1344,7 @@ describe('claimed profile helpers', () => {
 				slug: 'monica-alponte',
 				details: { occupation: 'Teacher' },
 				updatedAt: '',
+				avatar: null,
 				website: null,
 				campaignPositions: [],
 			}),
@@ -1392,18 +1357,12 @@ describe('claimed profile helpers', () => {
 	});
 
 	test('resolveProfileImageUrl prefers claimed avatar over BallotReady image', () => {
-		expect(
-			resolveProfileImageUrl('https://example.com/ballotready.jpg', 'https://example.com/clerk.jpg'),
-		).toBe('https://example.com/clerk.jpg');
-		expect(resolveProfileImageUrl(null, 'https://example.com/clerk.jpg')).toBe(
+		expect(resolveProfileImageUrl('https://example.com/ballotready.jpg', 'https://example.com/clerk.jpg')).toBe(
 			'https://example.com/clerk.jpg',
 		);
-		expect(resolveProfileImageUrl('https://example.com/ballotready.jpg', null)).toBe(
-			'https://example.com/ballotready.jpg',
-		);
-		expect(resolveProfileImageUrl('https://example.com/ballotready.jpg', '   ')).toBe(
-			'https://example.com/ballotready.jpg',
-		);
+		expect(resolveProfileImageUrl(null, 'https://example.com/clerk.jpg')).toBe('https://example.com/clerk.jpg');
+		expect(resolveProfileImageUrl('https://example.com/ballotready.jpg', null)).toBe('https://example.com/ballotready.jpg');
+		expect(resolveProfileImageUrl('https://example.com/ballotready.jpg', '   ')).toBe('https://example.com/ballotready.jpg');
 	});
 });
 
@@ -1411,8 +1370,7 @@ describe('redirectCityRaceToFourLevelUrl', () => {
 	test('redirects to verified canonical county, not the URL county segment', async () => {
 		withFetchMock([
 			{
-				match: url =>
-					url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
+				match: url => url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
 				body: [
 					{ slug: 'ok/caddo-county', name: 'Caddo County', mtfcc: 'G4020', state: 'OK' },
 					{ slug: 'ok/comanche-county', name: 'Comanche County', mtfcc: 'G4020', state: 'OK' },
@@ -1426,17 +1384,10 @@ describe('redirectCityRaceToFourLevelUrl', () => {
 				mtfcc: CITY_MTFCC,
 				countyName: 'Caddo',
 			},
-		};
+		} as unknown as Pick<RaceDetail, 'Place'>;
 
 		await expectRedirect(
-			() =>
-				redirectCityRaceToFourLevelUrl(
-					race,
-					'OK',
-					'ok',
-					'comanche-county',
-					'/position/city-clerk',
-				),
+			async () => redirectCityRaceToFourLevelUrl(race, 'OK', 'ok', 'comanche-county', '/position/city-clerk'),
 			'/elections/ok/caddo-county/binger/position/city-clerk',
 		);
 	});
@@ -1444,8 +1395,7 @@ describe('redirectCityRaceToFourLevelUrl', () => {
 	test('does not redirect when county lookup fails', async () => {
 		withFetchMock([
 			{
-				match: url =>
-					url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
+				match: url => url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
 				body: [{ slug: 'ok/comanche-county', name: 'Comanche County', mtfcc: 'G4020', state: 'OK' }],
 			},
 		]);
@@ -1456,15 +1406,9 @@ describe('redirectCityRaceToFourLevelUrl', () => {
 				mtfcc: CITY_MTFCC,
 				countyName: 'Caddo',
 			},
-		};
+		} as unknown as Pick<RaceDetail, 'Place'>;
 
-		await redirectCityRaceToFourLevelUrl(
-			race,
-			'OK',
-			'ok',
-			'comanche-county',
-			'/position/city-clerk',
-		);
+		await redirectCityRaceToFourLevelUrl(race, 'OK', 'ok', 'comanche-county', '/position/city-clerk');
 	});
 
 	test('does not redirect when place has no countyName', async () => {
@@ -1473,15 +1417,9 @@ describe('redirectCityRaceToFourLevelUrl', () => {
 				slug: 'ok/binger',
 				mtfcc: CITY_MTFCC,
 			},
-		};
+		} as unknown as Pick<RaceDetail, 'Place'>;
 
-		await redirectCityRaceToFourLevelUrl(
-			race,
-			'OK',
-			'ok',
-			'comanche-county',
-			'/position/city-clerk',
-		);
+		await redirectCityRaceToFourLevelUrl(race, 'OK', 'ok', 'comanche-county', '/position/city-clerk');
 	});
 });
 
@@ -1489,8 +1427,7 @@ describe('redirectCityPlaceToFourLevelUrl', () => {
 	test('redirects city on two-segment URL to canonical county with city segment', async () => {
 		withFetchMock([
 			{
-				match: url =>
-					url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
+				match: url => url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
 				body: [
 					{ slug: 'ok/caddo-county', name: 'Caddo County', mtfcc: 'G4020', state: 'OK' },
 					{ slug: 'ok/comanche-county', name: 'Comanche County', mtfcc: 'G4020', state: 'OK' },
@@ -1504,17 +1441,13 @@ describe('redirectCityPlaceToFourLevelUrl', () => {
 			countyName: 'Caddo',
 		};
 
-		await expectRedirect(
-			() => redirectCityPlaceToFourLevelUrl(place, 'OK', 'ok/binger'),
-			'/elections/ok/caddo-county/binger',
-		);
+		await expectRedirect(async () => redirectCityPlaceToFourLevelUrl(place, 'OK', 'ok/binger'), '/elections/ok/caddo-county/binger');
 	});
 
 	test('does not redirect when county lookup fails', async () => {
 		withFetchMock([
 			{
-				match: url =>
-					url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
+				match: url => url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
 				body: [{ slug: 'ok/comanche-county', name: 'Comanche County', mtfcc: 'G4020', state: 'OK' }],
 			},
 		]);
@@ -1540,8 +1473,7 @@ describe('redirectCityPlaceToFourLevelUrl', () => {
 	test('does not redirect when canonical county slug equals current full slug', async () => {
 		withFetchMock([
 			{
-				match: url =>
-					url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
+				match: url => url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
 				body: [{ slug: 'ok/binger', name: 'Binger', mtfcc: 'G4020', state: 'OK' }],
 			},
 		]);

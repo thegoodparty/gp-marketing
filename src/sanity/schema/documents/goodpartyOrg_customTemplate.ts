@@ -5,6 +5,8 @@ import { field_electionTemplateType } from '../fields/field_electionTemplateType
 
 const CUSTOM_INSTRUCTIONS = `Custom templates override the global template when their targets match the current page.
 
+Location templates are split by level (state, county, city, district). Choose the level that matches the pages you want to override.
+
 Matching rules (most specific wins, then lower Priority number):
 1. Candidate slug beats position slug beats place slug
 2. Longer place slug beats shorter (e.g. ny/kings/brooklyn beats ny)
@@ -30,7 +32,7 @@ export const goodpartyOrg_customTemplate = {
 			title: 'Title',
 			type: 'string',
 			description: 'Internal label, e.g. "NY + TX state landing variant".',
-			validation: (rule: { required: () => unknown }) => rule.required(),
+			validation: (rule: { required(): unknown }) => rule.required(),
 		},
 		{
 			...field_electionTemplateType,
@@ -71,8 +73,7 @@ export const goodpartyOrg_customTemplate = {
 			type: 'array',
 			of: [{ type: 'electionTemplateTarget' }],
 			description: 'One or more targets that use this template (e.g. NY, TX, OH state pages).',
-			validation: (rule: { required: () => unknown; min: (n: number) => unknown }) =>
-				rule.required().min(1),
+			validation: (rule: { required(): { min(n: number): unknown } }) => rule.required().min(1),
 		},
 		{
 			title: 'Preview Target',
@@ -122,7 +123,7 @@ export const goodpartyOrg_customTemplate = {
 			const title = resolveValue('title', goodpartyOrg_customTemplate.preview.select, x);
 			const templateType = x['templateType'] as string | undefined;
 			const count = Array.isArray(x.targetCount) ? x.targetCount.length : 0;
-			const enabled = x.enabled === false ? 'disabled' : 'enabled';
+			const enabled = x['enabled'] === false ? 'disabled' : 'enabled';
 			return handleReplacements(
 				{
 					title: title || infer.fallback.title,

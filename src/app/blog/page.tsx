@@ -12,7 +12,7 @@ import { PageSchema } from '~/ui/PageSchema';
 import { buildBreadcrumbSchema, buildSchemaGraph, buildWebPageSchema } from '~/lib/schema';
 import { toAbsoluteUrl } from '~/lib/url';
 
-export default async function Page(props: any) {
+export default async function Page(_props: any) {
 	const page = await sanityFetch({
 		query: goodpartyOrg_allArticlesQuery,
 		tags: ['goodpartyOrg_allArticles'],
@@ -24,9 +24,7 @@ export default async function Page(props: any) {
 	const { articles } = await getCachedArticles();
 
 	const blogUrl = page.href ? toAbsoluteUrl(page.href) : toAbsoluteUrl('/blog');
-	const blogName = page.singlePageOverview?.field_pageName
-		? stegaClean(page.singlePageOverview.field_pageName)
-		: 'Blog';
+	const blogName = page.singlePageOverview?.field_pageName ? stegaClean(page.singlePageOverview.field_pageName) : 'Blog';
 	const blogDescription = page.seo?.field_metaDescription
 		? stegaClean(page.seo.field_metaDescription)
 		: page.singlePageOverview?.field_summaryDescription
@@ -56,7 +54,7 @@ export default async function Page(props: any) {
 	);
 }
 
-export async function generateMetadata(props: Params, parent: ResolvingMetadata): Promise<Metadata> {
+export async function generateMetadata(_props: Params, parent: ResolvingMetadata): Promise<Metadata> {
 	const parentMetadata = await parent;
 	const page = await sanityFetch({
 		query: goodpartyOrg_allArticlesQuery,

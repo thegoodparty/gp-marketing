@@ -7,7 +7,7 @@ type Props = {
 	context: ElectionTemplateContext;
 	sectionOverrides?: SectionOverrides;
 	tokens?: TokenMap;
-	schemas?: Array<unknown | null | undefined>;
+	schemas?: Array<unknown>;
 	enableLandingSearch?: boolean;
 };
 

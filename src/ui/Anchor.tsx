@@ -3,6 +3,7 @@ import Link from 'next/link';
 import type { PropsWithChildren } from 'react';
 import { type ComponentProps, forwardRef } from 'react';
 import { LinkTarget } from '~/types/ui';
+import { useDecoratedAppHref } from '~/ui/AttributionProvider';
 // import type { SanityImage } from '~/ui/types';
 import { isExternalToEcosystem } from '~/ui/_lib/linkBehavior';
 
@@ -63,17 +64,18 @@ export const Anchor = forwardRef<HTMLAnchorElement, PropsWithChildren<AnchorProp
 	{ children, href, target: targetProp, rel: relProp, ...rest },
 	ref,
 ) {
+	const resolvedHref = useDecoratedAppHref(href);
 	let scroll = true;
 	let url: { href: string | undefined; onClick?: ComponentProps<'a'>['onClick'] | undefined } = {
 		href: undefined,
 		onClick: undefined,
 	};
 
-	const target = targetProp ?? (isExternalToEcosystem(href) ? LinkTarget.BLANK : LinkTarget.SELF);
+	const target = targetProp ?? (isExternalToEcosystem(resolvedHref) ? LinkTarget.BLANK : LinkTarget.SELF);
 	const rel = target === LinkTarget.BLANK ? mergeRelForNewTab(relProp) : relProp;
 
-	if (typeof href === 'string') {
-		url = { href };
+	if (typeof resolvedHref === 'string') {
+		url = { href: resolvedHref };
 	}
 
 	if (!url.href) {

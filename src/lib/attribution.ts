@@ -165,35 +165,3 @@ export function decorateAppUrl(href: string, attribution: AttributionData | null
 
 	return url.toString();
 }
-
-export function decorateAppLinksInDocument(attribution: AttributionData | null, root: ParentNode = document): void {
-	if (!attribution || typeof document === 'undefined') return;
-
-	const anchors = root.querySelectorAll<HTMLAnchorElement>(`a[href*="${APP_GOODPARTY_HOST}"]`);
-	for (const anchor of anchors) {
-		const href = anchor.getAttribute('href');
-		if (!href) continue;
-		const decorated = decorateAppUrl(href, attribution);
-		if (decorated !== href) {
-			anchor.href = decorated;
-		}
-	}
-}
-
-export function decorateAppLinkOnClick(event: MouseEvent, attribution: AttributionData | null): void {
-	if (!attribution) return;
-
-	const target = event.target;
-	if (!(target instanceof Element)) return;
-
-	const anchor = target.closest(`a[href*="${APP_GOODPARTY_HOST}"]`);
-	if (!(anchor instanceof HTMLAnchorElement)) return;
-
-	const href = anchor.getAttribute('href');
-	if (!href) return;
-
-	const decorated = decorateAppUrl(href, attribution);
-	if (decorated !== href) {
-		anchor.href = decorated;
-	}
-}

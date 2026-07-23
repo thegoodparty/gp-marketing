@@ -7,6 +7,14 @@ import { useDecoratedAppHref } from '~/ui/AttributionProvider';
 // import type { SanityImage } from '~/ui/types';
 import { isExternalToEcosystem } from '~/ui/_lib/linkBehavior';
 
+function decodeFragmentId(rawId: string): string {
+	try {
+		return decodeURIComponent(rawId);
+	} catch {
+		return rawId;
+	}
+}
+
 function mergeRelForNewTab(relProp: string | undefined): string {
 	const tokens = new Set<string>();
 	if (typeof relProp === 'string' && relProp) {
@@ -96,17 +104,19 @@ export const Anchor = forwardRef<HTMLAnchorElement, PropsWithChildren<AnchorProp
 
 	if (url.href.includes('#')) {
 		if (url.href.startsWith('#')) {
-			const id = String(url.href).replace('#', '');
+			const fragmentHref = url.href;
+			const rawId = fragmentHref.slice(1);
+			const id = decodeFragmentId(rawId);
 			url.href = '';
 			url.onClick = event => {
 				event.preventDefault();
 				setTimeout(() => {
-					const element = document.getElementById(id);
-					element?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
+					const scrollTarget = id === '' || id === 'top' ? document.body : document.getElementById(id);
+					scrollTarget?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
 				}, 0);
 			};
 			return (
-				<a ref={ref} href={href} {...rest} target={target} rel={rel} onClick={url.onClick}>
+				<a ref={ref} href={fragmentHref} {...rest} target={target} rel={rel} onClick={url.onClick}>
 					{children}
 				</a>
 			);

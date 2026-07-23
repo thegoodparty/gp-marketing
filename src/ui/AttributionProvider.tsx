@@ -6,6 +6,7 @@ import {
 	Suspense,
 	useContext,
 	useEffect,
+	useLayoutEffect,
 	useState,
 	type Dispatch,
 	type ReactNode,
@@ -19,6 +20,8 @@ import {
 } from '~/lib/attribution';
 
 const AttributionContext = createContext<AttributionData | null>(null);
+
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export function useAttribution(): AttributionData | null {
 	return useContext(AttributionContext);
@@ -56,7 +59,7 @@ function AttributionCapture({ onCapture }: CaptureProps) {
 	const searchParams = useSearchParams();
 	const searchKey = searchParams.toString();
 
-	useEffect(() => {
+	useIsomorphicLayoutEffect(() => {
 		const captured =
 			captureAttributionFromSearch(searchKey ? `?${searchKey}` : '', window.location.hostname) ??
 			readGpAttributionCookie();

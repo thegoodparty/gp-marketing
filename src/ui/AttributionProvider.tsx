@@ -5,8 +5,6 @@ import {
 	createContext,
 	Suspense,
 	useContext,
-	useEffect,
-	useLayoutEffect,
 	useState,
 	type Dispatch,
 	type ReactNode,
@@ -18,10 +16,9 @@ import {
 	decorateAppUrl,
 	readGpAttributionCookie,
 } from '~/lib/attribution';
+import useIsomorphicLayoutEffect from '~/ui/_lib/useIsomorphicLayoutEffect';
 
 const AttributionContext = createContext<AttributionData | null>(null);
-
-const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export function useAttribution(): AttributionData | null {
 	return useContext(AttributionContext);

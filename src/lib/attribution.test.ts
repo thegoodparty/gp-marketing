@@ -1,6 +1,7 @@
-import { describe, expect, test } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
 import {
 	ATTRIBUTION_PARAM_KEYS,
+	captureAttributionFromSearch,
 	decorateAppUrl,
 	GP_ATTRIBUTION_COOKIE,
 	isAppGoodPartyUrl,
@@ -8,7 +9,40 @@ import {
 	parseAttributionFromSearch,
 	readGpAttributionCookie,
 	serializeGpAttributionCookie,
+	writeGpAttributionCookie,
 } from './attribution';
+
+type CookieDocument = { cookie: string };
+type ProtocolWindow = { location: { protocol: string } };
+type MutableGlobals = {
+	document?: CookieDocument;
+	window?: ProtocolWindow;
+};
+
+const testGlobal = globalThis as unknown as MutableGlobals;
+const originalDocument = testGlobal.document;
+const originalWindow = testGlobal.window;
+
+function installBrowserGlobals() {
+	testGlobal.document = { cookie: '' };
+	testGlobal.window = { location: { protocol: 'https:' } };
+}
+
+function restoreBrowserGlobals() {
+	testGlobal.document = originalDocument;
+	testGlobal.window = originalWindow;
+}
+
+function getDocumentCookie(): string {
+	return testGlobal.document?.cookie ?? '';
+}
+
+function setDocumentCookie(value: string) {
+	if (!testGlobal.document) {
+		throw new Error('document stub missing');
+	}
+	testGlobal.document.cookie = value;
+}
 
 describe('parseAttributionFromSearch', () => {
 	test('captures only allowlisted params', () => {
@@ -145,6 +179,83 @@ describe('decorateAppUrl', () => {
 	test('returns href unchanged when attribution is null', () => {
 		const href = 'https://app.goodparty.org/sign-up';
 		expect(decorateAppUrl(href, null)).toBe(href);
+	});
+});
+
+describe('captureAttributionFromSearch', () => {
+	beforeEach(installBrowserGlobals);
+	afterEach(restoreBrowserGlobals);
+
+	test('writes cookie and returns merged data when incoming params are present', () => {
+		const now = 1_700_000_000_000;
+		const originalNow = Date.now;
+		Date.now = () => now;
+		try {
+			const captured = captureAttributionFromSearch('?fbclid=abc&utm_source=meta', 'localhost');
+
+			expect(captured).toEqual({ fbclid: 'abc', utm_source: 'meta', _ts: now });
+			expect(getDocumentCookie()).toContain(`${GP_ATTRIBUTION_COOKIE}=`);
+			expect(readGpAttributionCookie(getDocumentCookie())).toEqual(captured);
+		} finally {
+			Date.now = originalNow;
+		}
+	});
+
+	test('returns existing cookie without writing when no incoming params', () => {
+		const existing = { fbclid: 'abc', _ts: 1_000, utm_source: 'meta' };
+		setDocumentCookie(`${GP_ATTRIBUTION_COOKIE}=${serializeGpAttributionCookie(existing)}`);
+		const cookieBefore = getDocumentCookie();
+
+		const captured = captureAttributionFromSearch('?foo=bar', 'localhost');
+
+		expect(captured).toEqual(existing);
+		expect(getDocumentCookie()).toBe(cookieBefore);
+	});
+
+	test('merges incoming params with existing cookie and writes updated value', () => {
+		const existing = { fbclid: 'abc', _ts: 1_000, utm_source: 'meta' };
+		setDocumentCookie(`${GP_ATTRIBUTION_COOKIE}=${serializeGpAttributionCookie(existing)}`);
+
+		const captured = captureAttributionFromSearch('?utm_campaign=spring', 'localhost');
+
+		expect(captured).toEqual({
+			fbclid: 'abc',
+			_ts: 1_000,
+			utm_source: 'meta',
+			utm_campaign: 'spring',
+		});
+		expect(readGpAttributionCookie(getDocumentCookie())).toEqual(captured);
+	});
+});
+
+describe('writeGpAttributionCookie', () => {
+	beforeEach(installBrowserGlobals);
+	afterEach(restoreBrowserGlobals);
+
+	test('writes host-only cookie on non-production hostname', () => {
+		writeGpAttributionCookie({ fbclid: 'abc' }, 'localhost');
+
+		const cookie = getDocumentCookie();
+		expect(cookie).toContain(`${GP_ATTRIBUTION_COOKIE}=`);
+		expect(cookie).toContain('path=/');
+		expect(cookie).toContain('max-age=7776000');
+		expect(cookie).toContain('SameSite=Lax');
+		expect(cookie).not.toContain('domain=');
+		expect(cookie).not.toContain('Secure');
+	});
+
+	test('writes domain-scoped Secure cookie on production hostname over https', () => {
+		writeGpAttributionCookie({ fbclid: 'abc' }, 'www.goodparty.org');
+
+		const cookie = getDocumentCookie();
+		expect(cookie).toContain('domain=.goodparty.org');
+		expect(cookie).toContain('Secure');
+	});
+
+	test('returns without writing when document is undefined', () => {
+		testGlobal.document = undefined;
+
+		expect(() => writeGpAttributionCookie({ fbclid: 'abc' }, 'localhost')).not.toThrow();
 	});
 });
 

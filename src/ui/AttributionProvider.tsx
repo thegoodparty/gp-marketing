@@ -1,7 +1,16 @@
 'use client';
 
 import { usePathname, useSearchParams } from 'next/navigation';
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import {
+	createContext,
+	Suspense,
+	useContext,
+	useEffect,
+	useState,
+	type Dispatch,
+	type ReactNode,
+	type SetStateAction,
+} from 'react';
 import {
 	type AttributionData,
 	captureAttributionFromSearch,
@@ -26,17 +35,33 @@ type Props = {
 };
 
 export function AttributionProvider({ children }: Props) {
+	const [attribution, setAttribution] = useState<AttributionData | null>(null);
+
+	return (
+		<AttributionContext.Provider value={attribution}>
+			<Suspense fallback={null}>
+				<AttributionCapture onCapture={setAttribution} />
+			</Suspense>
+			{children}
+		</AttributionContext.Provider>
+	);
+}
+
+type CaptureProps = {
+	onCapture: Dispatch<SetStateAction<AttributionData | null>>;
+};
+
+function AttributionCapture({ onCapture }: CaptureProps) {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 	const searchKey = searchParams.toString();
-	const [attribution, setAttribution] = useState<AttributionData | null>(null);
 
 	useEffect(() => {
 		const captured =
 			captureAttributionFromSearch(searchKey ? `?${searchKey}` : '', window.location.hostname) ??
 			readGpAttributionCookie();
-		setAttribution(captured);
-	}, [pathname, searchKey]);
+		onCapture(captured);
+	}, [pathname, searchKey, onCapture]);
 
-	return <AttributionContext.Provider value={attribution}>{children}</AttributionContext.Provider>;
+	return null;
 }

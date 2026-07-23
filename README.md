@@ -52,6 +52,6 @@ in the repo root, then follow its pointers into `docs/`:
 
 ## Branches and deploys
 
-`develop` -> `qa` -> `master` deploy to the dev, qa, and prod environments on Vercel.
+`develop` -> `master` deploy to the dev, and prod environments on Vercel.
 Content published in Sanity Studio goes live without a rebuild (a webhook revalidates
 the affected pages).

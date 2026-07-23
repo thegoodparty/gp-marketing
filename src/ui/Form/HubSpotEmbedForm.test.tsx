@@ -4,9 +4,11 @@ import * as React from 'react';
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
+import type { handleHubSpotFormSubmission } from '~/lib/hubspot/handleHubSpotFormSubmission';
+
 import type { HubSpotFormsApi } from './waitForHubSpotForms';
 
-const handleHubSpotFormSubmissionMock = mock(() => {});
+const handleHubSpotFormSubmissionMock = mock<typeof handleHubSpotFormSubmission>(() => {});
 
 async function defaultWaitForHubSpotForms(isCancelled: () => boolean): Promise<HubSpotFormsApi> {
 	if (isCancelled()) {
@@ -22,14 +24,6 @@ async function defaultWaitForHubSpotForms(isCancelled: () => boolean): Promise<H
 }
 
 const waitForHubSpotFormsMock = mock(defaultWaitForHubSpotForms);
-
-mock.module('~/lib/hubspot/handleHubSpotFormSubmission', () => ({
-	handleHubSpotFormSubmission: handleHubSpotFormSubmissionMock,
-}));
-
-mock.module('~/lib/hubspot/portalId', () => ({
-	getHubSpotPortalId: () => '21589597',
-}));
 
 mock.module('./hubspot-embed.css', () => ({}));
 
@@ -83,7 +77,9 @@ describe('HubSpotEmbedForm', () => {
 
 		await act(async () => {
 			root = createRoot(document.getElementById('root')!);
-			root.render(React.createElement(HubSpotEmbedForm, { formId: 'form-123', redirectTo: '/thanks' }));
+			root.render(
+				React.createElement(HubSpotEmbedForm, { formId: 'form-123', redirectTo: '/thanks', onFormSubmit: handleHubSpotFormSubmissionMock }),
+			);
 			await new Promise<void>(resolve => {
 				window.setTimeout(resolve, 0);
 			});

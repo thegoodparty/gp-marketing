@@ -32,7 +32,17 @@ function applyEmbedWidth(target: HTMLElement) {
 	}
 }
 
-export function HubSpotEmbedForm({ formId, redirectTo, submitLabel }: { formId: string; redirectTo?: string; submitLabel?: string }) {
+export function HubSpotEmbedForm({
+	formId,
+	redirectTo,
+	submitLabel,
+	onFormSubmit = handleHubSpotFormSubmission,
+}: {
+	formId: string;
+	redirectTo?: string;
+	submitLabel?: string;
+	onFormSubmit?: typeof handleHubSpotFormSubmission;
+}) {
 	const reactId = useId();
 	const targetId = `hs-form-${reactId.replace(/:/g, '')}`;
 	const mountedRef = useRef(true);
@@ -65,7 +75,7 @@ export function HubSpotEmbedForm({ formId, redirectTo, submitLabel }: { formId: 
 						applySubmitLabel(target, submitLabel);
 					},
 					onFormSubmitted: () => {
-						handleHubSpotFormSubmission({
+						onFormSubmit({
 							formId,
 							redirectTo,
 							pagePath: window.location.pathname,
@@ -85,7 +95,7 @@ export function HubSpotEmbedForm({ formId, redirectTo, submitLabel }: { formId: 
 			mountedRef.current = false;
 			target.innerHTML = '';
 		};
-	}, [formId, redirectTo, submitLabel, targetId]);
+	}, [formId, redirectTo, submitLabel, targetId, onFormSubmit]);
 
 	return (
 		<div data-component='HubSpotEmbedForm' className='gp-hubspot-form flex w-full flex-col gap-4'>

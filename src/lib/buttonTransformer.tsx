@@ -1,6 +1,6 @@
 import { stegaClean } from '@sanity/client/stega';
 import type { Sections } from '~/PageSections';
-import { resolveInternalLinkHref, type FaqLike } from '~/lib/faqSlugs';
+import { resolveInternalLinkHref } from '~/lib/faqSlugs';
 
 import type { ComponentButtonProps } from '~/ui/Inputs/Button';
 
@@ -72,7 +72,7 @@ export function resolveButtonHref(button: ButtonType): string | undefined {
 			return undefined;
 		case 'Internal':
 		case 'Contact':
-			href = resolveInternalLinkHref(button.link as FaqLike);
+			href = resolveInternalLinkHref(button.link);
 			break;
 		case 'External':
 			href = button.field_externalLink ?? undefined;

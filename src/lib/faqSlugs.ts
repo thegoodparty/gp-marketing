@@ -81,25 +81,14 @@ export function getFaqHref(faq: FaqLike, slugMap: ReadonlyMap<string, string>): 
 	return `${FAQ_BASE_PATH}/${getFaqSlug(faq, slugMap)}`;
 }
 
-/** Resolve FAQ href for a single document (e.g. GROQ-dereferenced internal links). */
-export function getFaqHrefForDocument(faq: FaqLike, allFaqs?: ReadonlyArray<FaqLike>): string {
-	const slugMap = allFaqs ? buildFaqSlugMap(allFaqs) : buildFaqSlugMap([faq]);
-	return getFaqHref(faq, slugMap);
-}
-
 type InternalLinkLike = {
 	_type?: string;
-	_id?: string;
 	href?: string | null;
-	faqOverview?: FaqLike['faqOverview'];
 };
 
-/** Prefer runtime FAQ slug resolution over GROQ coalesce(_id) fallback. */
+/** Pass through GROQ-computed href from internalLinkGroq (includes FAQ field_slug). */
 export function resolveInternalLinkHref(link: InternalLinkLike | null | undefined): string | undefined {
 	if (!link) return undefined;
-	if (link._type === 'faq') {
-		return getFaqHrefForDocument(link as FaqLike);
-	}
 	return typeof link.href === 'string' ? link.href : undefined;
 }
 

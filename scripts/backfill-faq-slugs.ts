@@ -14,9 +14,8 @@
  *      (src/lib/faqSlugs.ts), which deterministically de-duplicates by
  *      appending a short _id suffix to colliding slugs.
  *   2. Internal-link hrefs come from GROQ `coalesce(faqOverview.field_slug,_id)`
- *      (src/sanity/groq.ts) and the single-document resolveInternalLinkHref
- *      (src/lib/faqSlugs.ts), which both emit the RAW stored slug with no
- *      collision awareness.
+ *      (src/sanity/groq.ts), which emits the RAW stored slug with no collision
+ *      awareness. resolveInternalLinkHref passes that href through unchanged.
  *
  * If two FAQs share a stored slug, path (1) suffixes the loser while path (2)
  * does not, so a link to the second FAQ resolves to the first (wrong target /

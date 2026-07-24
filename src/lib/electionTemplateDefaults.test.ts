@@ -2,7 +2,13 @@ import { describe, expect, test } from 'bun:test';
 import { getCodeDefaultElectionTemplate } from '~/lib/electionTemplateDefaults';
 import type { ElectionTemplateType } from '~/lib/electionTemplates';
 
-const TEMPLATE_TYPES: ElectionTemplateType[] = ['location', 'position', 'positionCandidates', 'candidateProfile'];
+const TEMPLATE_TYPES: ElectionTemplateType[] = [
+	'location',
+	'position',
+	'positionCandidates',
+	'candidateProfile',
+	'personProfile',
+];
 
 describe('getCodeDefaultElectionTemplate', () => {
 	for (const templateType of TEMPLATE_TYPES) {

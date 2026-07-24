@@ -58,6 +58,7 @@ export interface CandidacyItem {
 	Race?: {
 		brHashId: string;
 		slug?: string;
+		positionId?: string | null;
 		positionLevel?: string;
 		electionDate?: string;
 		positionDescription?: string;

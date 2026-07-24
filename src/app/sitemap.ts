@@ -6,6 +6,8 @@ import {
 	fetchCandidateSitemapEntries,
 	fetchPeopleSitemapEntries,
 	getSitemapIds,
+	PEOPLE_SITEMAP_BAND_START,
+	PEOPLE_SITEMAP_SHARDS,
 	US_STATE_CODES,
 } from '~/lib/sitemap-entries';
 
@@ -16,12 +18,9 @@ export function generateSitemaps() {
 export default async function sitemap({ id }: { id: number }): Promise<MetadataRoute.Sitemap> {
 	const n = Number(id);
 	const base = getBaseUrl();
+	// Shard 0 is marketing pages only; /people now lives in its own alphabetical band.
 	if (n === 0) {
-		const [main, people] = await Promise.all([
-			fetchMainSitemapEntries(base),
-			fetchPeopleSitemapEntries(base),
-		]);
-		return [...main, ...people];
+		return fetchMainSitemapEntries(base);
 	}
 	if (n >= 1 && n <= US_STATE_CODES.length) {
 		const code = US_STATE_CODES[n - 1];
@@ -31,6 +30,11 @@ export default async function sitemap({ id }: { id: number }): Promise<MetadataR
 	if (candidateIdx >= 0 && candidateIdx < US_STATE_CODES.length) {
 		const code = US_STATE_CODES[candidateIdx];
 		if (code) return fetchCandidateSitemapEntries(code, base);
+	}
+	const peopleIdx = n - PEOPLE_SITEMAP_BAND_START;
+	if (peopleIdx >= 0 && peopleIdx < PEOPLE_SITEMAP_SHARDS.length) {
+		const shard = PEOPLE_SITEMAP_SHARDS[peopleIdx];
+		if (shard) return fetchPeopleSitemapEntries(base, shard);
 	}
 	return [];
 }

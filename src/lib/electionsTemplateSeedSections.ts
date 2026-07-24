@@ -15,6 +15,15 @@ import { CANDIDATES_PAGE_CTA_BANNER, CANDIDATES_PAGE_CTA_IMAGE } from '~/constan
 
 export const tmplCandidateProfileSections = PROFILE_PAGE_SECTIONS;
 
+// Person profiles (/people/<slug>) render a profile-flavored layout: hero +
+// claim block + content (bio/why/issues + sidebar + district map) + the two
+// interlink candidate lists + pledge + state elections index + sign-up CTA.
+// Editors clone this into per-state Custom Templates (see field_profileState) to
+// tune copy / sections for individual Figma states A–L. Defined in
+// personProfileSections so the code default and this seed stay in lockstep.
+import { PERSON_PROFILE_SECTIONS as tmplPersonProfileSections } from '~/components/people/personProfileSections';
+export { tmplPersonProfileSections };
+
 const profileStepperSection = tmplCandidateProfileSections.find(
 	section => section._type === 'component_stepperBlock',
 );
@@ -502,6 +511,13 @@ export const globalElectionTemplateSeedDocuments = [
 		field_title: 'Candidate Profile',
 		field_electionTemplateType: 'candidateProfile',
 		pageSections: { list_pageSections: tmplCandidateProfileSections },
+	},
+	{
+		_id: 'globalTemplate_personProfile',
+		_type: 'goodpartyOrg_globalTemplate',
+		field_title: 'Person Profile',
+		field_electionTemplateType: 'personProfile',
+		pageSections: { list_pageSections: tmplPersonProfileSections },
 	},
 	{
 		_id: 'globalTemplate_position',

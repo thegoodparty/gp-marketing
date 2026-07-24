@@ -4,6 +4,7 @@ import {
 	buildBreadcrumbSchema,
 	buildDefinedTermSchema,
 	buildFAQSchema,
+	buildGovernmentOrganizationSchema,
 	buildOrganizationSchema,
 	buildSchemaGraph,
 	buildSoftwareApplicationSchema,
@@ -234,6 +235,32 @@ describe('buildSoftwareApplicationSchema', () => {
 		expect((schema['publisher'] as Record<string, unknown>)['@id']).toBe(
 			'https://goodparty.org/#organization',
 		);
+	});
+});
+
+describe('buildGovernmentOrganizationSchema', () => {
+	test('emits a GovernmentOrganization with a stable id and areaServed', () => {
+		const schema = asRecord(
+			buildGovernmentOrganizationSchema({
+				url: '/elections/ca/los-angeles-county',
+				name: 'Los Angeles County Government',
+				areaServed: 'Los Angeles County',
+			}),
+		);
+		expect(schema['@type']).toBe('GovernmentOrganization');
+		expect(schema['@id']).toBe(
+			'https://goodparty.org/elections/ca/los-angeles-county#government-organization',
+		);
+		expect(schema['name']).toBe('Los Angeles County Government');
+		expect((schema['areaServed'] as Record<string, unknown>)['@type']).toBe('AdministrativeArea');
+		expect((schema['areaServed'] as Record<string, unknown>)['name']).toBe('Los Angeles County');
+	});
+
+	test('omits areaServed when not provided', () => {
+		const schema = asRecord(
+			buildGovernmentOrganizationSchema({ url: '/elections/ca', name: 'California Government' }),
+		);
+		expect('areaServed' in schema).toBe(false);
 	});
 });
 

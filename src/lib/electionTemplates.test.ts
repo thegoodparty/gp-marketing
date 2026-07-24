@@ -99,6 +99,56 @@ describe('pickBestCustomTemplate', () => {
 		expect(pickBestCustomTemplate([newer, older], ctx)?._id).toBe('newer');
 	});
 
+	test('matches a person target for the personProfile family', () => {
+		const docs = [
+			{
+				_id: 'person',
+				field_enabled: true,
+				field_priority: 100,
+				field_electionTemplateType: 'personProfile' as const,
+				list_targets: [
+					{ field_electionTargetType: 'person' as const, field_electionTargetSlug: 'jane-doe-2f1c' },
+				],
+			},
+		];
+		const ctx: ElectionTemplateContext = {
+			templateType: 'personProfile',
+			personSlug: 'jane-doe-2f1c',
+		};
+		expect(pickBestCustomTemplate(docs, ctx)?._id).toBe('person');
+	});
+
+	test('a state-pinned person template only matches its own resolved state', () => {
+		const docs = [
+			{
+				_id: 'state-a',
+				field_enabled: true,
+				field_priority: 100,
+				field_electionTemplateType: 'personProfile' as const,
+				field_profileState: 'A' as const,
+				list_targets: [
+					{ field_electionTargetType: 'person' as const, field_electionTargetSlug: 'jane-doe-2f1c' },
+				],
+			},
+		];
+		// Context resolves a different state → no match.
+		expect(
+			pickBestCustomTemplate(docs, {
+				templateType: 'personProfile',
+				personSlug: 'jane-doe-2f1c',
+				profileState: 'B',
+			}),
+		).toBeNull();
+		// Same state → matches.
+		expect(
+			pickBestCustomTemplate(docs, {
+				templateType: 'personProfile',
+				personSlug: 'jane-doe-2f1c',
+				profileState: 'A',
+			})?._id,
+		).toBe('state-a');
+	});
+
 	test('ignores disabled templates', () => {
 		const docs = [
 			{

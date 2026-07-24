@@ -327,7 +327,7 @@ export const globalElectionTemplateQuery = defineQuery(
  */
 /*language=textmate*/
 export const customElectionTemplateTargetsQuery = defineQuery(
-	`*[_type=="goodpartyOrg_customTemplate"&&field_electionTemplateType==$templateType&&field_enabled!=false] | order(field_priority asc, _updatedAt desc){_id,field_electionTemplateType,field_enabled,field_priority,_updatedAt,list_targets[]{field_electionTargetType,field_electionTargetSlug}}`,
+	`*[_type=="goodpartyOrg_customTemplate"&&field_electionTemplateType==$templateType&&field_enabled!=false] | order(field_priority asc, _updatedAt desc){_id,field_electionTemplateType,field_profileState,field_enabled,field_priority,_updatedAt,list_targets[]{field_electionTargetType,field_electionTargetSlug}}`,
 );
 
 /*language=textmate*/

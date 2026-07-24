@@ -219,6 +219,77 @@ export function buildBreadcrumbSchema(
 	};
 }
 
+export type PersonSchemaParams = {
+	url: string;
+	name: string;
+	jobTitle?: string | null;
+	image?: string | null;
+	description?: string | null;
+	/** Absolute social/official URLs. */
+	sameAs?: ReadonlyArray<string>;
+	/** State code / region for the person's office. */
+	addressRegion?: string | null;
+	/** Party affiliation label, emitted as a memberOf PoliticalParty. */
+	affiliation?: string | null;
+};
+
+/**
+ * Schema.org Person for a public /people profile. Only emits fields backed by
+ * visible on-page content — image/sameAs are omitted for the stripped
+ * removal/minimal states so the structured data mirrors what actually renders.
+ */
+export function buildPersonSchema(params: PersonSchemaParams): object {
+	const url = params.url.startsWith('http') ? params.url : toAbsoluteUrl(params.url);
+	const schema: Record<string, unknown> = {
+		'@context': 'https://schema.org',
+		'@type': 'Person',
+		name: params.name,
+		url,
+	};
+	if (params.jobTitle) schema['jobTitle'] = params.jobTitle;
+	if (params.description) schema['description'] = params.description;
+	if (params.image) schema['image'] = params.image;
+	const sameAs = (params.sameAs ?? []).filter((u) => u.startsWith('http'));
+	if (sameAs.length > 0) schema['sameAs'] = sameAs;
+	if (params.affiliation) {
+		schema['memberOf'] = { '@type': 'PoliticalParty', name: params.affiliation };
+	}
+	if (params.addressRegion) {
+		schema['address'] = { '@type': 'PostalAddress', addressRegion: params.addressRegion };
+	}
+	return schema;
+}
+
+export type GovernmentOrganizationSchemaParams = {
+	url: string;
+	name: string;
+	/** The jurisdiction the body governs (state/county/city name). */
+	areaServed?: string | null;
+	description?: string | null;
+};
+
+/**
+ * Schema.org GovernmentOrganization for an elections locality page
+ * (`/elections/<state>/<county?>/<city?>`). Describes the governing body whose
+ * offices/elections the page indexes, giving search/AI engines an entity for
+ * the jurisdiction to complement the BreadcrumbList already emitted there.
+ */
+export function buildGovernmentOrganizationSchema(params: GovernmentOrganizationSchemaParams): object {
+	const url = params.url.startsWith('http') ? params.url : toAbsoluteUrl(params.url);
+	const schema: Record<string, unknown> = {
+		'@context': 'https://schema.org',
+		'@type': 'GovernmentOrganization',
+		'@id': `${url}#government-organization`,
+		name: params.name,
+		url,
+	};
+	if (params.areaServed) {
+		schema['areaServed'] = { '@type': 'AdministrativeArea', name: params.areaServed };
+	}
+	if (params.description) schema['description'] = params.description;
+	return schema;
+}
+
 export type FAQItemLike = { title: string; copy: string };
 
 /**

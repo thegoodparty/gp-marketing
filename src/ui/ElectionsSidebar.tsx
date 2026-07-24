@@ -40,6 +40,7 @@ export type ElectionsSidebarProps = {
 	aboutOffice?: string;
 	termLength?: string;
 	electionDate?: string;
+	party?: string;
 	cta?: ComponentButtonProps;
 };
 
@@ -71,13 +72,17 @@ export function ElectionsSidebar(props: ElectionsSidebarProps) {
 					))}
 				</div>
 			)}
-			{(props.aboutOffice || props.termLength || props.electionDate || props.cta) && (
+			{(props.aboutOffice || props.termLength || props.electionDate || props.party || props.cta) && (
 				<div className={card()}>
 					{props.aboutOffice && (
 						<div
 							className={cn(
 								infoItem(),
-								props.cta && !props.termLength && !props.electionDate && 'border-b-0',
+								props.cta &&
+									!props.termLength &&
+									!props.electionDate &&
+									!props.party &&
+									'border-b-0',
 							)}
 						>
 							<Text as='dt' styleType='subtitle-1' className={label()}>
@@ -85,6 +90,21 @@ export function ElectionsSidebar(props: ElectionsSidebarProps) {
 							</Text>
 							<Text as='dd' styleType='body-2' className={value()}>
 								{props.aboutOffice}
+							</Text>
+						</div>
+					)}
+					{props.party && (
+						<div
+							className={cn(
+								infoItem(),
+								props.cta && !props.termLength && !props.electionDate && 'border-b-0',
+							)}
+						>
+							<Text as='dt' styleType='subtitle-2' className={label()}>
+								Party
+							</Text>
+							<Text as='dd' styleType='body-2' className={value()}>
+								{props.party}
 							</Text>
 						</div>
 					)}

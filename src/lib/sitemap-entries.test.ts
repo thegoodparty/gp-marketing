@@ -4,12 +4,45 @@ import {
 	buildRaceEntries,
 	buildRaceRouteParams,
 	chunkArray,
+	getSitemapIds,
 	normalizeName,
+	peopleShardForSlug,
+	PEOPLE_SITEMAP_BAND_START,
+	PEOPLE_SITEMAP_SHARDS,
 	stripCountySuffix,
+	US_STATE_CODES,
 	type CountyPlace,
 	type CityPlace,
 	type RaceEntry,
 } from './sitemap-entries';
+
+describe('people sitemap shards', () => {
+	test('maps slugs to a–z shards by first character', () => {
+		expect(peopleShardForSlug('jane-doe')).toBe('j');
+		expect(peopleShardForSlug('Abe-Lincoln')).toBe('a');
+	});
+
+	test('non-letter leading characters fall into the "other" shard', () => {
+		expect(peopleShardForSlug('123-numeric')).toBe('other');
+		expect(peopleShardForSlug('-leading-hyphen')).toBe('other');
+		expect(peopleShardForSlug('')).toBe('other');
+	});
+
+	test('there are 27 shards (a–z + other) starting after the candidate band', () => {
+		expect(PEOPLE_SITEMAP_SHARDS).toHaveLength(27);
+		expect(PEOPLE_SITEMAP_SHARDS[26]).toBe('other');
+		expect(PEOPLE_SITEMAP_BAND_START).toBe(1 + 2 * US_STATE_CODES.length);
+	});
+
+	test('getSitemapIds includes main + 2 state bands + the people band, contiguously', () => {
+		const ids = getSitemapIds().map((i) => i.id);
+		const expectedLength = 1 + 2 * US_STATE_CODES.length + PEOPLE_SITEMAP_SHARDS.length;
+		expect(ids).toHaveLength(expectedLength);
+		// The set is a contiguous 0..last with no gaps or dupes (ids are emitted
+		// interleaved by band, so compare the sorted set).
+		expect([...ids].sort((a, b) => a - b)).toEqual([...Array(expectedLength).keys()]);
+	});
+});
 
 describe('chunkArray', () => {
 	test('returns a single chunk when input is smaller than the size', () => {

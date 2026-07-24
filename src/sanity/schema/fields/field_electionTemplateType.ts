@@ -3,6 +3,7 @@ export const ELECTION_TEMPLATE_TYPES = [
 	{ title: 'Position page', value: 'position' },
 	{ title: 'Position candidates list', value: 'positionCandidates' },
 	{ title: 'Candidate profile', value: 'candidateProfile' },
+	{ title: 'Person profile (/people/<slug>)', value: 'personProfile' },
 ] as const;
 
 export type ElectionTemplateTypeValue = (typeof ELECTION_TEMPLATE_TYPES)[number]['value'];
@@ -28,6 +29,7 @@ export const field_electionTargetType = {
 			{ title: 'Place (state, county, city, district slug)', value: 'place' },
 			{ title: 'Position (race slug)', value: 'position' },
 			{ title: 'Candidate (candidate slug)', value: 'candidate' },
+			{ title: 'Person (people profile slug)', value: 'person' },
 		],
 	},
 	validation: (rule: { required: () => unknown }) => rule.required(),
@@ -38,6 +40,6 @@ export const field_electionTargetSlug = {
 	title: 'Target Slug',
 	type: 'string',
 	description:
-		'API slug used for matching. Examples: place `ny`, `ny/kings`, `ny/kings/brooklyn`; position race slug; candidate profile slug.',
+		'API slug used for matching. Examples: place `ny`, `ny/kings`, `ny/kings/brooklyn`; position race slug; candidate profile slug; person profile slug (`/people/<slug>`).',
 	validation: (rule: { required: () => unknown }) => rule.required(),
 };

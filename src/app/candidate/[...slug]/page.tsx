@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { getCandidateBySlug, findCampaignByRace, resolveRaceElectionHrefs } from '~/lib/electionsApi';
 import { loadPersonProfile } from '~/lib/peopleProfile';
 import {
@@ -178,14 +178,17 @@ export default async function Page({
 		notFound();
 	}
 
-	// Once a candidate has *claimed and published* a public /people profile, that
-	// becomes the single canonical home for the person; send the legacy candidate
-	// URL there. Unclaimed programmatic /people pages don't preempt the richer
-	// candidate experience, so we only redirect when the profile is claimed.
+	// The public /people/<slug> profile is the single canonical home for a person,
+	// so migrate the legacy /candidate URL there whenever a person page exists at
+	// all — claimed, unclaimed programmatic, or removed — not just claimed ones.
+	// This preserves link equity per the SEO migration plan. permanentRedirect
+	// emits a 308 (a permanent redirect, treated by search engines like a 301 and
+	// matching this app's redirect convention in middleware.ts); the /people page
+	// self-references its own canonical.
 	if (candidate.personId) {
 		const person = await loadPersonProfile(candidate.personId);
-		if (person?.claimed) {
-			redirect(`/people/${person.canonicalSlug}`);
+		if (person) {
+			permanentRedirect(`/people/${person.canonicalSlug}`);
 		}
 	}
 

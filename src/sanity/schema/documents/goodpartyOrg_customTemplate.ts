@@ -2,6 +2,7 @@ import { getIcon } from '../../utils/getIcon.tsx';
 import { handleReplacements } from '../../utils/handleReplacements.ts';
 import { resolveValue } from '../../utils/resolveValue.ts';
 import { field_electionTemplateType } from '../fields/field_electionTemplateType.ts';
+import { field_profileState } from '../fields/field_profileState.ts';
 
 const CUSTOM_INSTRUCTIONS = `Custom templates override the global template when their targets match the current page.
 
@@ -32,6 +33,12 @@ export const goodpartyOrg_customTemplate = {
 		{
 			...field_electionTemplateType,
 			name: 'field_electionTemplateType',
+		},
+		{
+			...field_profileState,
+			// Only relevant to person-profile templates; hidden for other families.
+			hidden: ({ parent }: { parent?: { field_electionTemplateType?: string } }) =>
+				parent?.field_electionTemplateType !== 'personProfile',
 		},
 		{
 			name: 'field_enabled',

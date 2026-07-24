@@ -14,7 +14,13 @@ import {
 	buildPositionPageSchema,
 	buildJobPostingSchema,
 } from '~/lib/electionsHelpers';
-import { buildBreadcrumbSchema, buildFAQSchema, buildSchemaGraph, buildWebPageSchema } from '~/lib/schema';
+import {
+	buildBreadcrumbSchema,
+	buildFAQSchema,
+	buildGovernmentOrganizationSchema,
+	buildSchemaGraph,
+	buildWebPageSchema,
+} from '~/lib/schema';
 import { toAbsoluteUrl } from '~/lib/url';
 import { POSITION_PAGE_FAQ } from '~/constants/positionPageStaticSections';
 
@@ -301,6 +307,8 @@ export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageConte
 
 export function buildElectionsIndexPageSchema(ctx: ElectionsIndexPageContext) {
 	if (!ctx.pageUrl) return undefined;
+	// Most-specific jurisdiction the page represents (city > county > state).
+	const localityName = ctx.cityName ?? ctx.countyName ?? ctx.stateName;
 	return buildSchemaGraph([
 		buildWebPageSchema({
 			url: ctx.pageUrl,
@@ -308,5 +316,10 @@ export function buildElectionsIndexPageSchema(ctx: ElectionsIndexPageContext) {
 			description: ctx.pageDescription,
 		}),
 		buildBreadcrumbSchema(ctx.breadcrumbs, toAbsoluteUrl),
+		buildGovernmentOrganizationSchema({
+			url: ctx.pageUrl,
+			name: `${localityName} Government`,
+			areaServed: localityName,
+		}),
 	]);
 }

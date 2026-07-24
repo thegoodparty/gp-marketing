@@ -80,8 +80,8 @@ function getPathsToRevalidate(_type: string, payload: Record<string, unknown>): 
 		goodpartyOrg_404Page: ['/'],
 		goodpartyOrg_allComponents: ['/all'],
 		quoteCollections: ['/elections'],
-		goodpartyOrg_globalTemplate: ['/elections', '/candidate'],
-		goodpartyOrg_customTemplate: ['/elections', '/candidate'],
+		goodpartyOrg_globalTemplate: ['/elections', '/candidate', '/people'],
+		goodpartyOrg_customTemplate: ['/elections', '/candidate', '/people'],
 	};
 
 	const raw = pathMap[_type];
@@ -169,7 +169,7 @@ async function resolveExperimentVariantPaths(
 
 async function resolveCustomTemplatePaths(payload: Record<string, unknown>): Promise<string[]> {
 	const rawId = typeof payload['_id'] === 'string' ? (payload['_id'] as string) : null;
-	if (!rawId) return ['/elections', '/candidate'];
+	if (!rawId) return ['/elections', '/candidate', '/people'];
 
 	const publishedId = rawId.startsWith('drafts.') ? rawId.slice('drafts.'.length) : rawId;
 
@@ -187,10 +187,10 @@ async function resolveCustomTemplatePaths(payload: Record<string, unknown>): Pro
 			);
 
 		const paths = buildCustomTemplateRevalidatePaths(targets ?? []);
-		return paths.length > 0 ? paths : ['/elections', '/candidate'];
+		return paths.length > 0 ? paths : ['/elections', '/candidate', '/people'];
 	} catch (err) {
 		console.error('Failed to resolve custom template target paths:', err);
-		return ['/elections', '/candidate'];
+		return ['/elections', '/candidate', '/people'];
 	}
 }
 

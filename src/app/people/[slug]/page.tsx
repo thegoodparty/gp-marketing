@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
-import { PageSchema } from '~/ui/PageSchema';
-import { PersonProfile } from '~/components/people/PersonProfile';
 import {
 	buildBreadcrumbSchema,
+	buildPersonSchema,
 	buildSchemaGraph,
 	buildWebPageSchema,
 } from '~/lib/schema';
@@ -12,6 +11,12 @@ import {
 	loadPersonProfile,
 	type PersonProfileView,
 } from '~/lib/peopleProfile';
+import {
+	buildPersonProfileTokens,
+	buildPersonSectionOverrides,
+} from '~/components/people/personSectionOverrides';
+import { renderElectionTemplatePage } from '~/lib/renderElectionTemplatePage';
+import { getPersonBySlug } from '~/lib/electionsApi';
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 
 export const revalidate = 3600;
@@ -29,9 +34,17 @@ function canonicalPath(view: PersonProfileView): string {
 }
 
 async function resolveView(slug: string): Promise<PersonProfileView | null> {
-	const personId = extractPersonId(slug);
-	if (!personId) return null;
-	return loadPersonProfile(personId);
+	// Legacy /people/<name>-<uuid> URLs (the pre-migration scheme) still resolve
+	// by their trailing personId; the canonical redirect below sends them to the
+	// clean /people/<slug>.
+	const legacyPersonId = extractPersonId(slug);
+	if (legacyPersonId) return loadPersonProfile(legacyPersonId);
+
+	// Clean /people/<slug>: resolve the personId from the authoritative unique
+	// slug, then load the full profile by id.
+	const person = await getPersonBySlug(slug);
+	if (!person) return null;
+	return loadPersonProfile(person.id);
 }
 
 export default async function Page({ params }: { params: Promise<PageParams> }) {
@@ -54,34 +67,37 @@ export default async function Page({ params }: { params: Promise<PageParams> }) 
 		view.bio ??
 		`${view.displayName}${view.roleTitle ? `, ${view.roleTitle}` : ''} on GoodParty.org.`;
 
-	const personSchema = {
-		'@context': 'https://schema.org',
-		'@type': 'Person',
-		name: view.displayName,
-		...(view.roleTitle ? { jobTitle: view.roleTitle } : {}),
-		...(view.avatarUrl ? { image: view.avatarUrl } : {}),
-		...(view.links.length
-			? { sameAs: view.links.filter((l) => l.href.startsWith('http')).map((l) => l.href) }
-			: {}),
+	const personSchema = buildPersonSchema({
 		url,
-	};
+		name: view.displayName,
+		jobTitle: view.roleTitle,
+		image: view.avatarUrl,
+		description,
+		sameAs: view.links.filter((l) => l.href.startsWith('http')).map((l) => l.href),
+		addressRegion: view.stateLabel,
+		affiliation: view.party,
+	});
 
 	const schema = buildSchemaGraph([
 		buildWebPageSchema({ url, name: view.displayName, description }),
-		buildBreadcrumbSchema([
-			{ href: '/', label: 'Home' },
-			{ href: '/people', label: 'People' },
-			{ label: view.displayName },
-		]),
+		buildBreadcrumbSchema(view.breadcrumb),
 		personSchema,
 	]);
 
-	return (
-		<>
-			<PageSchema schema={schema ?? undefined} />
-			<PersonProfile view={view} />
-		</>
-	);
+	// Option A: /people is template-driven, mirroring /candidate. Resolve the
+	// `personProfile` Sanity template (custom per-state → global → code default)
+	// and render it with this person's data injected via SectionOverrides. Editors
+	// can pin per-state (A–L) Custom Templates via field_profileState.
+	return renderElectionTemplatePage({
+		context: {
+			templateType: 'personProfile',
+			personSlug: view.canonicalSlug,
+			profileState: view.state,
+		},
+		sectionOverrides: buildPersonSectionOverrides(view),
+		tokens: buildPersonProfileTokens(view),
+		schemas: [schema],
+	});
 }
 
 export async function generateMetadata({
@@ -108,6 +124,9 @@ export async function generateMetadata({
 		title,
 		description,
 		alternates: { canonical },
+		// A person who requested removal keeps a crawlable, stripped URL (K/L) but
+		// should not be actively indexed/surfaced.
+		...(view.removed ? { robots: { index: false, follow: true } } : {}),
 		openGraph: {
 			type: 'profile',
 			siteName: SITE_NAME,

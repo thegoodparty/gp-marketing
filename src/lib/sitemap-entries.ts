@@ -12,7 +12,6 @@ import {
 	stripCountySuffix as stripCountySuffixFromHelpers,
 } from '~/lib/electionsHelpers';
 import { FAQ_BASE_PATH, getFaqSitemapEntries } from '~/lib/faqSlugs';
-import { buildPersonSlug } from '~/lib/peopleProfile';
 import { allFaqsQuery } from '~/sanity/groq';
 
 /** 51 US state/DC codes (50 states + DC) */
@@ -21,11 +20,37 @@ export const US_STATE_CODES = [
 ] as const;
 
 /** Single source of truth for sitemap IDs. Used by generateSitemaps() and sitemap-index route. */
+/**
+ * Alphabetical shards for the /people sitemaps (a–z + a catch-all "other" for
+ * slugs that don't start with a letter). People are sharded by the first
+ * character of their canonical slug so each people-*.xml stays crawlable and
+ * bounded, instead of being lumped into shard 0 with the marketing pages.
+ */
+export const PEOPLE_SITEMAP_SHARDS = [
+	...'abcdefghijklmnopqrstuvwxyz'.split(''),
+	'other',
+] as const;
+
+/** Maps a person slug to its alphabetical sitemap shard key. */
+export function peopleShardForSlug(slug: string): string {
+	const first = slug.trim().charAt(0).toLowerCase();
+	return first >= 'a' && first <= 'z' ? first : 'other';
+}
+
+/**
+ * The first people shard id sits immediately after the state-election and
+ * candidate bands (id 0 = main, 1..N = state elections, N+1..2N = candidates).
+ */
+export const PEOPLE_SITEMAP_BAND_START = 1 + 2 * US_STATE_CODES.length;
+
 export function getSitemapIds(): { id: number }[] {
 	const ids: { id: number }[] = [{ id: 0 }];
 	for (let i = 0; i < US_STATE_CODES.length; i++) {
 		ids.push({ id: i + 1 });
 		ids.push({ id: i + 1 + US_STATE_CODES.length });
+	}
+	for (let i = 0; i < PEOPLE_SITEMAP_SHARDS.length; i++) {
+		ids.push({ id: PEOPLE_SITEMAP_BAND_START + i });
 	}
 	return ids;
 }
@@ -571,11 +596,14 @@ export async function fetchStateElectionSitemapEntries(
  * Fetches public /people profile sitemap entries.
  *
  * Two-hop join across the service boundary: gp-api owns the publish gate (which
- * personIds are live), election-api owns the person names used to build the
- * canonical name-based slug. Anything gp-api reports as published but that has
- * no election-api Person yet is skipped (no name → no stable pretty slug).
+ * personIds are live), election-api owns the authoritative, unique, clean
+ * `Person.slug` that is the canonical URL. Anything gp-api reports as published
+ * but that has no election-api Person yet is skipped (no slug → no page).
  */
-export async function fetchPeopleSitemapEntries(baseUrl: string): Promise<MetadataRoute.Sitemap> {
+export async function fetchPeopleSitemapEntries(
+	baseUrl: string,
+	shard?: string,
+): Promise<MetadataRoute.Sitemap> {
 	const published = await fetchGpApiJson<{ personId?: string; updatedAt?: string }>(
 		'v1/public-person-profiles/published',
 	);
@@ -593,24 +621,21 @@ export async function fetchPeopleSitemapEntries(baseUrl: string): Promise<Metada
 	const persons = (
 		await Promise.all(
 			idBatches.map((batch) =>
-				fetchElectionJson<{
-					id?: string;
-					firstName?: string | null;
-					lastName?: string | null;
-					fullName?: string | null;
-				}>('v1/persons', { ids: batch.join(','), columns: 'id,firstName,lastName,fullName' }),
+				fetchElectionJson<{ id?: string; slug?: string | null }>('v1/persons', {
+					ids: batch.join(','),
+					columns: 'id,slug',
+				}),
 			),
 		)
 	).flat();
 
 	const entries: MetadataRoute.Sitemap = [];
 	for (const p of persons) {
-		if (!p.id) continue;
-		const name = p.fullName ?? [p.firstName, p.lastName].filter(Boolean).join(' ');
-		if (!name) continue;
-		const slug = buildPersonSlug(name, p.id);
+		if (!p.id || !p.slug) continue;
+		// When a shard is requested, only emit people whose slug falls in it.
+		if (shard && peopleShardForSlug(p.slug) !== shard) continue;
 		const updatedAt = updatedByPersonId.get(p.id.toLowerCase());
-		entries.push(toEntry(baseUrl, `/people/${slug}`, 0.7, 'weekly', updatedAt?.slice(0, 10)));
+		entries.push(toEntry(baseUrl, `/people/${p.slug}`, 0.7, 'weekly', updatedAt?.slice(0, 10)));
 	}
 	return dedupeByUrl(entries);
 }

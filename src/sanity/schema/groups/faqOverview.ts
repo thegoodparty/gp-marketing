@@ -18,6 +18,12 @@ export const faqOverview = {
       type: 'field_question',
     },
     {
+      title: 'Slug',
+      name: 'field_slug',
+      type: 'field_slug',
+      validation: (Rule: any) => Rule.required(),
+    },
+    {
       title: 'Answer',
       name: 'block_answer',
       type: 'block_answer',

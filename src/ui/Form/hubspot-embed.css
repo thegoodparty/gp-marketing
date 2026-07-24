@@ -9,6 +9,7 @@
 
 	--hsf-field-label__font-family: var(--font-secondary);
 	--hsf-field-label__font-size: var(--text-text-md);
+	--hsf-field-label__font-weight: 600;
 	--hsf-field-label__color: #000;
 	--hsf-field-label-requiredindicator__color: var(--color-goodparty-red);
 
@@ -17,16 +18,19 @@
 	--hsf-field-input__color: #000;
 	--hsf-field-input__background-color: #fff;
 	--hsf-field-input__placeholder-color: hsl(0 0% 64%);
-	--hsf-field-input__border-color: hsl(0 0% 82%);
+	--hsf-field-input__border-color: #d4d4d4;
 	--hsf-field-input__border-width: 1px;
 	--hsf-field-input__border-style: solid;
 	--hsf-field-input__border-radius: var(--radius-md);
 	--hsf-field-input__padding: 0.75rem 0.875rem;
+	--hsf-field-input__min-height: 3rem;
 
 	--hsf-button__font-family: var(--font-secondary);
 	--hsf-button__font-size: 0.875rem;
+	--hsf-button__font-weight: 600;
 	--hsf-button__color: #fff;
 	--hsf-button__background-color: var(--color-btn-primary-bg);
+	--hsf-button--hover__background-color: color-mix(in srgb, var(--color-btn-primary-bg) 80%, transparent);
 	--hsf-button__border-radius: 9999px;
 	--hsf-button__padding: 0.75rem 1.5rem;
 
@@ -51,4 +55,27 @@
 	width: 100% !important;
 	max-width: 100% !important;
 	display: block;
+}
+
+/* Match TextInput focus ring when HubSpot does not expose focus theme variables. */
+.gp-hubspot-form :is(input, textarea, select):focus-visible {
+	border-color: var(--color-btn-primary-bg) !important;
+	outline: 2px solid color-mix(in srgb, var(--color-btn-primary-bg) 30%, transparent);
+	outline-offset: 0;
+}
+
+.gp-hubspot-form :is(input, textarea, select) {
+	min-height: 3rem;
+	transition:
+		border-color var(--duration-fast, 150ms) var(--ease-smooth, ease),
+		outline-color var(--duration-fast, 150ms) var(--ease-smooth, ease);
+}
+
+.gp-hubspot-form :is(.hs-button, input[type='submit'], button[type='submit']):hover {
+	background-color: color-mix(in srgb, var(--color-btn-primary-bg) 80%, transparent) !important;
+}
+
+.gp-hubspot-form :is(.hs-button, input[type='submit'], button[type='submit']):focus-visible {
+	outline: 4px solid color-mix(in srgb, var(--color-btn-primary-bg) 40%, transparent);
+	outline-offset: 0;
 }

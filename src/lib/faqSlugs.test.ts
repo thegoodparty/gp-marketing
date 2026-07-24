@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'bun:test';
-import { buildFaqSlugMap, findFaqBySlug, getAllFaqSlugs, getFaqHref, getFaqSitemapEntries, slugifyFaqQuestion } from './faqSlugs';
+import {
+	buildFaqSlugMap,
+	findFaqBySlug,
+	getAllFaqSlugs,
+	getFaqHref,
+	getFaqHrefForDocument,
+	getFaqSitemapEntries,
+	resolveInternalLinkHref,
+	slugifyFaqQuestion,
+} from './faqSlugs';
 
 describe('slugifyFaqQuestion', () => {
 	it('normalizes question text into a URL slug', () => {
@@ -89,6 +98,24 @@ describe('buildFaqSlugMap', () => {
 		expect(getAllFaqSlugs(faqsForward)[1]).toBe('what-is-goodpartyorg-def456');
 		expect(getAllFaqSlugs(faqsReversed)[1]).toBe('what-is-goodpartyorg-abc123');
 	});
+
+	it('prefers stored slug over question-derived slug', () => {
+		const faqs = [
+			{
+				_id: 'abc123',
+				faqOverview: {
+					field_question: 'What is GoodParty.org?',
+					field_slug: 'custom-faq-slug',
+				},
+			},
+		];
+
+		const slugMap = buildFaqSlugMap(faqs);
+
+		expect(getAllFaqSlugs(faqs)).toEqual(['custom-faq-slug']);
+		expect(getFaqHref(faqs[0]!, slugMap)).toBe('/frequently-asked-questions/custom-faq-slug');
+		expect(findFaqBySlug(faqs, 'custom-faq-slug')?._id).toBe('abc123');
+	});
 });
 
 describe('findFaqBySlug', () => {
@@ -109,6 +136,40 @@ describe('findFaqBySlug', () => {
 
 	it('returns undefined for unknown slug', () => {
 		expect(findFaqBySlug(faqs, 'does-not-exist')).toBeUndefined();
+	});
+
+	it('returns FAQ assigned by slug map when stored slug collides with computed slug', () => {
+		const collisionFaqs = [
+			{ _id: 'aaa', faqOverview: { field_question: 'What is X?' } },
+			{ _id: 'bbb', faqOverview: { field_question: 'Other', field_slug: 'what-is-x' } },
+		];
+		const slugs = getAllFaqSlugs(collisionFaqs);
+
+		expect(slugs[0]).toBe('what-is-x');
+		expect(findFaqBySlug(collisionFaqs, 'what-is-x')?._id).toBe('aaa');
+	});
+
+	it('resolves href for a single FAQ document without stored slug', () => {
+		const faq = { _id: 'abc123', faqOverview: { field_question: 'What is GoodParty.org?' } };
+		expect(getFaqHrefForDocument(faq)).toBe('/frequently-asked-questions/what-is-goodpartyorg');
+	});
+});
+
+describe('resolveInternalLinkHref', () => {
+	it('resolves FAQ links from question when slug is missing', () => {
+		const link = {
+			_type: 'faq',
+			_id: 'abc123',
+			href: '/frequently-asked-questions/abc123',
+			faqOverview: { field_question: 'What is GoodParty.org?' },
+		};
+		expect(resolveInternalLinkHref(link)).toBe('/frequently-asked-questions/what-is-goodpartyorg');
+	});
+
+	it('passes through non-FAQ href values', () => {
+		expect(resolveInternalLinkHref({ _type: 'article', _id: 'article-1', href: '/blog/article/my-post' })).toBe(
+			'/blog/article/my-post',
+		);
 	});
 });
 

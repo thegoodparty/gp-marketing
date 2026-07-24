@@ -1,4 +1,5 @@
 import { sanityFetch } from '~/sanity/sanityClient';
+import { resolveInternalLinkHref } from '~/lib/faqSlugs';
 import { goodpartyOrg_navigationQuery } from '~/sanity/groq';
 import { Nav } from '~/ui/Nav';
 import { cn } from '~/ui/_lib/utils';
@@ -29,7 +30,7 @@ export async function PageHeader(props: { className?: string; isDraftMode: boole
 					icon: item.icon,
 					link: {
 						_type: item._type,
-						href: item.link && 'href' in item.link ? item.link.href : undefined,
+						href: resolveInternalLinkHref(item.link),
 					},
 				};
 			}
@@ -41,7 +42,7 @@ export async function PageHeader(props: { className?: string; isDraftMode: boole
 						icon: item.icon,
 						link: {
 							_type: item._type,
-							href: item.link && 'href' in item.link ? item.link.href : undefined,
+							href: resolveInternalLinkHref(item.link),
 						},
 					})),
 				};

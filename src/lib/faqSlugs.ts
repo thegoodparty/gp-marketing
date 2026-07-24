@@ -9,6 +9,7 @@ export type FaqLike = {
 	_updatedAt?: string;
 	faqOverview?: {
 		field_question?: unknown;
+		field_slug?: string | null;
 	} | null;
 };
 
@@ -33,6 +34,21 @@ function readQuestion(faq: FaqLike): string {
 	return typeof cleaned === 'string' ? cleaned.trim() : '';
 }
 
+function readStoredSlug(faq: FaqLike): string {
+	const raw = faq.faqOverview?.field_slug;
+	if (typeof raw !== 'string') return '';
+	const cleaned = stegaClean(raw);
+	return typeof cleaned === 'string' ? cleaned.trim() : '';
+}
+
+function resolveBaseSlug(faq: FaqLike): string {
+	const storedSlug = readStoredSlug(faq);
+	if (storedSlug) return storedSlug;
+
+	const question = readQuestion(faq);
+	return question ? slugifyFaqQuestion(question) : '';
+}
+
 function shortIdSuffix(id: string): string {
 	const normalized = id.replace(/^drafts\./, '');
 	return normalized.slice(-6).toLowerCase();
@@ -43,8 +59,7 @@ export function buildFaqSlugMap(faqs: ReadonlyArray<FaqLike>): Map<string, strin
 	const idToSlug = new Map<string, string>();
 
 	for (const faq of faqs) {
-		const question = readQuestion(faq);
-		const baseSlug = question ? slugifyFaqQuestion(question) : '';
+		const baseSlug = resolveBaseSlug(faq);
 		let slug = baseSlug || faq._id.replace(/^drafts\./, '');
 
 		while (slugToId.has(slug) && slugToId.get(slug) !== faq._id) {
@@ -66,6 +81,28 @@ export function getFaqHref(faq: FaqLike, slugMap: ReadonlyMap<string, string>): 
 	return `${FAQ_BASE_PATH}/${getFaqSlug(faq, slugMap)}`;
 }
 
+/** Resolve FAQ href for a single document (e.g. GROQ-dereferenced internal links). */
+export function getFaqHrefForDocument(faq: FaqLike, allFaqs?: ReadonlyArray<FaqLike>): string {
+	const slugMap = allFaqs ? buildFaqSlugMap(allFaqs) : buildFaqSlugMap([faq]);
+	return getFaqHref(faq, slugMap);
+}
+
+type InternalLinkLike = {
+	_type?: string;
+	_id?: string;
+	href?: string | null;
+	faqOverview?: FaqLike['faqOverview'];
+};
+
+/** Prefer runtime FAQ slug resolution over GROQ coalesce(_id) fallback. */
+export function resolveInternalLinkHref(link: InternalLinkLike | null | undefined): string | undefined {
+	if (!link) return undefined;
+	if (link._type === 'faq') {
+		return getFaqHrefForDocument(link as FaqLike);
+	}
+	return typeof link.href === 'string' ? link.href : undefined;
+}
+
 export function findFaqBySlug(faqs: ReadonlyArray<FaqLike>, slug: string): FaqLike | undefined {
 	const direct = faqs.find(faq => faq._id === slug || faq._id === `drafts.${slug}`);
 	if (direct) return direct;
@@ -84,8 +121,7 @@ export function getAllFaqSlugs(faqs: ReadonlyArray<FaqLike>): string[] {
 }
 
 function faqDedupeKey(faq: FaqLike): string {
-	const question = readQuestion(faq);
-	const slug = question ? slugifyFaqQuestion(question) : '';
+	const slug = resolveBaseSlug(faq);
 	return slug || faq._id.replace(/^drafts\./, '');
 }
 

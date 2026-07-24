@@ -61,7 +61,7 @@ Save this value. You will use it in Step 3b and Step 4.
    - **Trigger on:** Create, Update, Delete (or only Create + Update if preferred)
    - **Filter:** Leave empty to trigger on all documents, or use a GROQ filter to limit to content types, e.g.:
      ```
-     _type in ["article", "glossary", "goodpartyOrg_landingPages", "policy", "categories", "topics", "goodpartyOrg_home", "goodpartyOrg_contact", "goodpartyOrg_navigation", "goodpartyOrg_footer", "goodpartyOrg_allArticles", "goodpartyOrg_glossary", "goodpartyOrg_404Page", "goodpartyOrg_allComponents", "quoteCollections"]
+     _type in ["article", "glossary", "faq", "goodpartyOrg_landingPages", "policy", "categories", "topics", "goodpartyOrg_home", "goodpartyOrg_contact", "goodpartyOrg_navigation", "goodpartyOrg_footer", "goodpartyOrg_allArticles", "goodpartyOrg_glossary", "goodpartyOrg_404Page", "goodpartyOrg_allComponents", "quoteCollections"]
      ```
    - **Secret:** Paste the secret from 3a (enables HMAC signature verification)
    - **HTTP method:** POST
@@ -105,6 +105,7 @@ AirOps creates documents via JSON. The payload must match the Sanity schema. Key
 | `glossary` | Political terms | `glossaryTermOverview.field_slug` | |
 | `goodpartyOrg_landingPages` | Landing pages | `detailPageOverviewNoHero.field_slug` | |
 | `policy` | Policy pages | `policyOverview.field_slug` | |
+| `faq` | FAQ entries | `faqOverview.field_slug` | Run slug backfill before required schema deploy |
 | `categories` | Blog sections | `tagOverview.field_slug` | |
 | `topics` | Blog tags | `tagOverview.field_slug` | |
 

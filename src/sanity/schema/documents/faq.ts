@@ -53,7 +53,18 @@ const infer = {
     },
   ],
   options: {
-    channels: {},
+    pathParams: {
+      slug: 'faqOverview.field_slug',
+    },
+    channels: {
+      goodpartyOrg: '/frequently-asked-questions/:slug',
+    },
+    documentSlugs: [
+      {
+        slugField: 'faqOverview.field_slug',
+        slugSources: ['faqOverview.field_question'],
+      },
+    ],
     single: false,
   },
 }

@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'bun:test';
-import { buildFaqSlugMap, findFaqBySlug, getAllFaqSlugs, getFaqHref, getFaqSitemapEntries, slugifyFaqQuestion } from './faqSlugs';
+import {
+	buildFaqSlugMap,
+	findFaqBySlug,
+	getAllFaqSlugs,
+	getFaqHref,
+	getFaqSitemapEntries,
+	slugifyFaqQuestion,
+	sortFaqsForSlugMap,
+} from './faqSlugs';
 
 describe('slugifyFaqQuestion', () => {
 	it('normalizes question text into a URL slug', () => {
@@ -69,25 +77,42 @@ describe('buildFaqSlugMap', () => {
 		expect(slugs).toHaveLength(3);
 		expect(new Set(slugs).size).toBe(3);
 		expect(slugs[0]).toBe('what-is-goodpartyorg');
-		expect(slugs[1]).toBe('what-is-goodpartyorg-bbb222');
-		expect(slugs[2]).toBe('what-is-goodpartyorg-bbb222-ccc333');
+		expect(slugs[1]).toBe('what-is-goodpartyorg-bbb222-bbb222');
+		expect(slugs[2]).toBe('what-is-goodpartyorg-bbb222');
 
 		for (let i = 0; i < faqs.length; i++) {
 			expect(findFaqBySlug(faqs, slugs[i]!)?._id).toBe(faqs[i]!._id);
 		}
 	});
 
-	it('assigns base slug to the first FAQ in array order', () => {
+	it('assigns base slug deterministically by question then _id', () => {
 		const faqsForward = [
 			{ _id: 'abc123', faqOverview: { field_question: 'What is GoodParty.org?' } },
 			{ _id: 'def456', faqOverview: { field_question: 'What is GoodParty.org?' } },
 		];
 		const faqsReversed = [...faqsForward].reverse();
 
+		expect([...getAllFaqSlugs(faqsForward)].sort()).toEqual([...getAllFaqSlugs(faqsReversed)].sort());
 		expect(getAllFaqSlugs(faqsForward)[0]).toBe('what-is-goodpartyorg');
-		expect(getAllFaqSlugs(faqsReversed)[0]).toBe('what-is-goodpartyorg');
 		expect(getAllFaqSlugs(faqsForward)[1]).toBe('what-is-goodpartyorg-def456');
-		expect(getAllFaqSlugs(faqsReversed)[1]).toBe('what-is-goodpartyorg-abc123');
+	});
+
+	it('prefers stored slug over question-derived slug', () => {
+		const faqs = [
+			{
+				_id: 'abc123',
+				faqOverview: {
+					field_question: 'What is GoodParty.org?',
+					field_slug: 'custom-faq-slug',
+				},
+			},
+		];
+
+		const slugMap = buildFaqSlugMap(faqs);
+
+		expect(getAllFaqSlugs(faqs)).toEqual(['custom-faq-slug']);
+		expect(getFaqHref(faqs[0]!, slugMap)).toBe('/frequently-asked-questions/custom-faq-slug');
+		expect(findFaqBySlug(faqs, 'custom-faq-slug')?._id).toBe('abc123');
 	});
 });
 
@@ -110,6 +135,33 @@ describe('findFaqBySlug', () => {
 	it('returns undefined for unknown slug', () => {
 		expect(findFaqBySlug(faqs, 'does-not-exist')).toBeUndefined();
 	});
+
+	it('returns FAQ assigned by slug map when stored slug collides with computed slug', () => {
+		const collisionFaqs = [
+			{ _id: 'aaa', faqOverview: { field_question: 'What is X?' } },
+			{ _id: 'bbb', faqOverview: { field_question: 'ZZZ Other', field_slug: 'what-is-x' } },
+		];
+		const slugs = getAllFaqSlugs(collisionFaqs);
+
+		expect(slugs[0]).toBe('what-is-x');
+		expect(findFaqBySlug(collisionFaqs, 'what-is-x')?._id).toBe('aaa');
+
+		const slugMap = buildFaqSlugMap(collisionFaqs);
+		const loser = collisionFaqs[1];
+		const groqHref = `/frequently-asked-questions/${loser?.faqOverview?.field_slug}`;
+		const canonicalHref = loser ? getFaqHref(loser, slugMap) : '';
+		expect(groqHref).not.toBe(canonicalHref);
+	});
+
+	it('sorts FAQs deterministically by question then normalized _id', () => {
+		const faqs = sortFaqsForSlugMap([
+			{ _id: 'drafts.bbb', faqOverview: { field_question: 'Beta?' } },
+			{ _id: 'aaa', faqOverview: { field_question: 'Alpha?' } },
+			{ _id: 'bbb', faqOverview: { field_question: 'Beta?' } },
+		]);
+
+		expect(faqs.map(faq => faq._id)).toEqual(['aaa', 'bbb', 'drafts.bbb']);
+	});
 });
 
 describe('getFaqSitemapEntries', () => {
@@ -124,7 +176,7 @@ describe('getFaqSitemapEntries', () => {
 
 		expect(entries).toHaveLength(1);
 		expect(entries[0]?.slug).toBe('what-is-goodpartyorg');
-		expect(entries[0]?.faq._id).toBe('faq8942aa');
+		expect(entries[0]?.faq._id).toBe('faq40f192');
 	});
 
 	it('excludes suffixed duplicates and keeps distinct questions', () => {
@@ -156,7 +208,7 @@ describe('getFaqSitemapEntries', () => {
 
 		expect(entries).toHaveLength(2);
 		expect(slugs).toContain('what-is-goodpartyorg');
-		expect(slugs).toContain('what-is-goodpartyorg-bbb222-ccc333');
+		expect(slugs).toContain('what-is-goodpartyorg-bbb222');
 	});
 
 	it('keeps all FAQs whose questions slugify to empty string (falls back to _id)', () => {

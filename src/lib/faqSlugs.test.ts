@@ -77,8 +77,8 @@ describe('buildFaqSlugMap', () => {
 		expect(slugs).toHaveLength(3);
 		expect(new Set(slugs).size).toBe(3);
 		expect(slugs[0]).toBe('what-is-goodpartyorg');
-		expect(slugs[1]).toBe('what-is-goodpartyorg-bbb222-bbb222');
-		expect(slugs[2]).toBe('what-is-goodpartyorg-bbb222');
+		expect(slugs[1]).toBe('what-is-goodpartyorg-bbb222');
+		expect(slugs[2]).toBe('what-is-goodpartyorg-bbb222-ccc333');
 
 		for (let i = 0; i < faqs.length; i++) {
 			expect(findFaqBySlug(faqs, slugs[i]!)?._id).toBe(faqs[i]!._id);
@@ -153,14 +153,14 @@ describe('findFaqBySlug', () => {
 		expect(groqHref).not.toBe(canonicalHref);
 	});
 
-	it('sorts FAQs deterministically by question then normalized _id', () => {
+	it('sorts FAQs deterministically by base slug length then normalized _id', () => {
 		const faqs = sortFaqsForSlugMap([
 			{ _id: 'drafts.bbb', faqOverview: { field_question: 'Beta?' } },
 			{ _id: 'aaa', faqOverview: { field_question: 'Alpha?' } },
 			{ _id: 'bbb', faqOverview: { field_question: 'Beta?' } },
 		]);
 
-		expect(faqs.map(faq => faq._id)).toEqual(['aaa', 'bbb', 'drafts.bbb']);
+		expect(faqs.map(faq => faq._id)).toEqual(['bbb', 'drafts.bbb', 'aaa']);
 	});
 });
 
@@ -208,7 +208,7 @@ describe('getFaqSitemapEntries', () => {
 
 		expect(entries).toHaveLength(2);
 		expect(slugs).toContain('what-is-goodpartyorg');
-		expect(slugs).toContain('what-is-goodpartyorg-bbb222');
+		expect(slugs).toContain('what-is-goodpartyorg-bbb222-ccc333');
 	});
 
 	it('keeps all FAQs whose questions slugify to empty string (falls back to _id)', () => {

@@ -55,8 +55,16 @@ function shortIdSuffix(id: string): string {
 }
 
 function compareFaqsForSlugMap(a: FaqLike, b: FaqLike): number {
+	const baseA = resolveBaseSlug(a) || a._id.replace(/^drafts\./, '');
+	const baseB = resolveBaseSlug(b) || b._id.replace(/^drafts\./, '');
+	if (baseA.length !== baseB.length) return baseA.length - baseB.length;
+
+	const baseCompare = baseA.localeCompare(baseB);
+	if (baseCompare !== 0) return baseCompare;
+
 	const questionCompare = readQuestion(a).localeCompare(readQuestion(b));
 	if (questionCompare !== 0) return questionCompare;
+
 	const normalizedIdCompare = a._id.replace(/^drafts\./, '').localeCompare(b._id.replace(/^drafts\./, ''));
 	if (normalizedIdCompare !== 0) return normalizedIdCompare;
 	return a._id.localeCompare(b._id);

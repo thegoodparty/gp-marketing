@@ -9,7 +9,7 @@ Location templates are split by level (state, county, city, district). Choose th
 
 Matching rules (most specific wins, then lower Priority number):
 1. Candidate slug beats position slug beats place slug
-2. Longer place slug beats shorter (e.g. ny/kings/brooklyn beats ny)
+2. Longer place slug beats shorter (e.g. ny/kings-county/brooklyn beats ny)
 3. Lower Priority wins ties
 
 On any error in a custom template, the site uses the corresponding global template, then the code default.

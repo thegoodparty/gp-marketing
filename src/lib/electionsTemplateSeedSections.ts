@@ -487,11 +487,11 @@ const GLOBAL_TEMPLATE_PREVIEW_TARGETS = {
 	},
 	locationCounty: {
 		field_electionTargetType: 'place',
-		field_electionTargetSlug: 'ny/kings',
+		field_electionTargetSlug: 'ny/kings-county',
 	},
 	locationCity: {
 		field_electionTargetType: 'place',
-		field_electionTargetSlug: 'ny/kings/brooklyn',
+		field_electionTargetSlug: 'ny/kings-county/brooklyn',
 	},
 	locationDistrict: {
 		field_electionTargetType: 'place',

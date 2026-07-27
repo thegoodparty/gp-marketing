@@ -14,6 +14,7 @@ import { createClient } from '@sanity/client';
 import {
 	globalElectionTemplateSeedDocuments,
 	electionsTemplateSeedDocuments,
+	personProfileStateCustomTemplateSeeds,
 } from '../src/lib/electionsTemplateSeedSections.ts';
 
 const projectId = '3rbseux7';
@@ -21,10 +22,7 @@ const dataset = 'production';
 const token = process.env['SANITY_STUDIO_API_TOKEN'];
 const write = process.argv.includes('--write');
 
-const LEGACY_GLOBAL_MAP: Record<
-	string,
-	(typeof globalElectionTemplateSeedDocuments)[number]['_id']
-> = {
+const LEGACY_GLOBAL_MAP: Record<string, (typeof globalElectionTemplateSeedDocuments)[number]['_id']> = {
 	tmpl_candidateProfile: 'globalTemplate_candidateProfile',
 	tmpl_electionsPosition: 'globalTemplate_position',
 	tmpl_electionsCandidates: 'globalTemplate_positionCandidates',
@@ -55,9 +53,7 @@ async function main() {
 		process.exit(1);
 	}
 
-	const legacyDocs = await client.fetch<LegacyDoc[]>(
-		`*[_type match "tmpl_*"]{_id,_type,pageSections}`,
-	);
+	const legacyDocs = await client.fetch<LegacyDoc[]>(`*[_type match "tmpl_*"]{_id,_type,pageSections}`);
 	const legacyById = new Map(legacyDocs.map(doc => [doc._id.replace(/^drafts\./, ''), doc]));
 
 	const plans: Array<{
@@ -73,7 +69,7 @@ async function main() {
 		const live = legacyId ? legacyById.get(legacyId) : undefined;
 		const liveSections = live?.pageSections?.list_pageSections;
 		const seedSections = legacySeedFor(legacyId ?? '')?.pageSections?.list_pageSections;
-		const sections = liveSections?.length ? liveSections : seedSections ?? globalDoc.pageSections.list_pageSections;
+		const sections = liveSections?.length ? liveSections : (seedSections ?? globalDoc.pageSections.list_pageSections);
 		const source = liveSections?.length ? 'legacy-live' : 'seed';
 
 		plans.push({
@@ -100,6 +96,20 @@ async function main() {
 	}
 
 	console.log('\nMigration plan:', JSON.stringify(plans, null, 2));
+
+	// Per-state (A–L) starter Custom Templates. These are disabled scaffolds the
+	// marketing team clones/retargets per Figma state; createOrReplace is safe to
+	// re-run (idempotent by fixed _id) and never touches an editor's live copies,
+	// which carry their own generated ids.
+	for (const scaffold of personProfileStateCustomTemplateSeeds) {
+		if (write) {
+			await client.createOrReplace(scaffold as Parameters<typeof client.createOrReplace>[0]);
+			console.log(`[write] ${scaffold._id} (personProfile state scaffold, disabled)`);
+		} else {
+			console.log(`[dry-run] would upsert ${scaffold._id} (personProfile state scaffold, disabled)`);
+		}
+	}
+
 	if (!write) {
 		console.log('\nDry run only. Re-run with --write to apply.');
 	}

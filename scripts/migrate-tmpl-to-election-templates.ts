@@ -21,6 +21,11 @@ const projectId = '3rbseux7';
 const dataset = 'production';
 const token = process.env['SANITY_STUDIO_API_TOKEN'];
 const write = process.argv.includes('--write');
+// Person-profile seeding only: write globalTemplate_personProfile + the A–L
+// scaffolds and skip re-writing the other (already-migrated, editor-owned)
+// global templates, so this can be run for the /people feature without
+// clobbering marketing's edits to candidate/position/location globals.
+const personOnly = process.argv.includes('--person-only');
 
 const LEGACY_GLOBAL_MAP: Record<string, (typeof globalElectionTemplateSeedDocuments)[number]['_id']> = {
 	tmpl_candidateProfile: 'globalTemplate_candidateProfile',
@@ -65,6 +70,11 @@ async function main() {
 	}> = [];
 
 	for (const globalDoc of globalElectionTemplateSeedDocuments) {
+		// In --person-only mode, only (re)seed the person-profile global; leave the
+		// other editor-owned globals exactly as they are in the dataset.
+		if (personOnly && globalDoc._id !== 'globalTemplate_personProfile') {
+			continue;
+		}
 		const legacyId = Object.entries(LEGACY_GLOBAL_MAP).find(([, gid]) => gid === globalDoc._id)?.[0];
 		const live = legacyId ? legacyById.get(legacyId) : undefined;
 		const liveSections = live?.pageSections?.list_pageSections;

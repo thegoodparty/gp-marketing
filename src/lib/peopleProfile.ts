@@ -53,6 +53,7 @@ export interface PersonProfileLink {
 	icon: string;
 	kind:
 		| 'website'
+		| 'government'
 		| 'email'
 		| 'phone'
 		| 'instagram'
@@ -315,8 +316,11 @@ function buildLinks(
 ): PersonProfileLink[] {
 	const links: PersonProfileLink[] = [];
 	const website = overlay?.websiteUrl ?? person?.websiteUrl ?? office?.websiteUrl ?? null;
+	// Official .gov site is a distinct link from the personal/campaign website.
+	const governmentWebsite = overlay?.governmentWebsiteUrl ?? null;
 	const email = overlay?.publicEmail ?? office?.officeEmail ?? null;
-	const phone = overlay?.publicPhone ?? office?.officePhone ?? null;
+	// Owner's public line wins; their office-line override precedes the spine's.
+	const phone = overlay?.publicPhone ?? overlay?.officePhone ?? office?.officePhone ?? null;
 	const instagram = overlay?.instagramUrl ?? null;
 	const tiktok = overlay?.tiktokUrl ?? null;
 	const facebook = overlay?.facebookUrl ?? person?.facebookUrl ?? null;
@@ -324,6 +328,8 @@ function buildLinks(
 	const linkedin = overlay?.linkedinUrl ?? person?.linkedinUrl ?? null;
 
 	if (website) links.push({ kind: 'website', label: 'Website', icon: 'globe', href: website });
+	if (governmentWebsite)
+		links.push({ kind: 'government', label: 'Official Site', icon: 'globe', href: governmentWebsite });
 	if (email) links.push({ kind: 'email', label: 'Email', icon: 'mail', href: `mailto:${email}` });
 	if (phone) links.push({ kind: 'phone', label: 'Phone', icon: 'phone', href: `tel:${phone}` });
 	if (instagram) links.push({ kind: 'instagram', label: 'Instagram', icon: 'instagram', href: instagram });

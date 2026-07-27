@@ -71,7 +71,9 @@ function makeOverlay(o: Partial<PublicPersonProfile> = {}): PublicPersonProfile 
 		recentExperience: null,
 		publicEmail: null,
 		publicPhone: null,
+		officePhone: null,
 		websiteUrl: null,
+		governmentWebsiteUrl: null,
 		instagramUrl: null,
 		tiktokUrl: null,
 		facebookUrl: null,
@@ -281,6 +283,22 @@ describe('composeView issues, links, labels', () => {
 		expect(byKind['email']).toBe('mailto:jane@example.com');
 		expect(byKind['phone']).toBe('tel:555-1234');
 		expect(byKind['website']).toBe('https://jane.example');
+	});
+
+	test('office contact overrides surface as their own links', () => {
+		const view = composeView(
+			PID,
+			makePerson({ fullName: 'Jane Doe' }),
+			makeOverlay({
+				officePhone: '555-0199',
+				governmentWebsiteUrl: 'https://springfield.gov/council/rivera',
+			}),
+		);
+		const byKind = Object.fromEntries(view.links.map((l) => [l.kind, l.href]));
+		// The official .gov site is a distinct link from the personal website.
+		expect(byKind['government']).toBe('https://springfield.gov/council/rivera');
+		// officePhone falls in behind publicPhone (absent here) as the tel: source.
+		expect(byKind['phone']).toBe('tel:555-0199');
 	});
 
 	test('formats term label, district and state from the current office', () => {

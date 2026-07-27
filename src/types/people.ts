@@ -139,7 +139,11 @@ export interface PublicPersonProfile {
 	recentExperience: PersonAuthoredExperience[] | null;
 	publicEmail: string | null;
 	publicPhone: string | null;
+	/** Owner-set office line; falls back to the election-api office spine. */
+	officePhone: string | null;
 	websiteUrl: string | null;
+	/** Official .gov office site, distinct from the personal/campaign website. */
+	governmentWebsiteUrl: string | null;
 	instagramUrl: string | null;
 	tiktokUrl: string | null;
 	facebookUrl: string | null;

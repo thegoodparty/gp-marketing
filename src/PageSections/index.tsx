@@ -8,6 +8,7 @@ import { CalculatorTextBlockSection } from '~/PageSections/CalculatorTextBlockSe
 import { CandidatesBlockSection } from '~/PageSections/CandidatesBlockSection';
 import { CarouselBlockSection } from '~/PageSections/CarouselBlockSection';
 import { ClaimProfileBlockSection } from '~/PageSections/ClaimProfileBlockSection';
+import { VoterDensityBlockSection } from '~/PageSections/VoterDensityBlockSection';
 import { ComparisonBlockSection } from '~/PageSections/ComparisonBlockSection';
 import { CTABannerBlockSection } from '~/PageSections/CTABannerBlockSection';
 import { ClickToCallBlockSection } from '~/PageSections/ClickToCallBlockSection';
@@ -61,7 +62,10 @@ export type SectionOverrides = {
 		 * "Nearby officials"); this lets each instance receive its own data. Falls
 		 * back to the type-level `candidates`/`header` when a `_key` isn't listed.
 		 */
-		byKey?: Record<string, { candidates?: import('~/ui/CandidatesBlock').CandidateCard[]; header?: { title?: string; copy?: string }; hidden?: boolean }>;
+		byKey?: Record<
+			string,
+			{ candidates?: import('~/ui/CandidatesBlock').CandidateCard[]; header?: { title?: string; copy?: string }; hidden?: boolean }
+		>;
 	};
 	component_electionsIndexBlock?: {
 		elections?: import('~/ui/ElectionsIndexBlock').ElectionItem[];
@@ -125,9 +129,19 @@ export type SectionOverrides = {
 		 */
 		contentCards?: import('~/ui/ProfileContentCard').ProfileContentCardProps[];
 		sidebar?: import('~/ui/ElectionsSidebar').ElectionsSidebarProps;
-		/** Optional district voter-density map rendered within the content section. */
+		/**
+		 * @deprecated The district voter-density map is now its own
+		 * `component_voterDensityBlock` section; person profiles no longer inject it
+		 * here. Retained for any non-person caller still rendering it inline.
+		 */
 		districtMap?: import('react').ReactNode;
 		/** When true the section renders nothing (used to gate empty/removed states). */
+		hidden?: boolean;
+	};
+	component_voterDensityBlock?: {
+		/** Prebuilt district voter-density map node (coverage/k-anon gating already applied). */
+		map?: import('react').ReactNode;
+		/** When true the section renders nothing. */
 		hidden?: boolean;
 	};
 	component_breadcrumbBlock?: {
@@ -138,6 +152,13 @@ export type SectionOverrides = {
 		candidateName?: string;
 		partyAffiliation?: string;
 		layout?: 'card' | 'banner';
+		// When set, render the interactive claim/notify modal (which posts the
+		// personId to the claim-request endpoint → ProfileClaimRequest) instead of
+		// the static CMS banner. Populated for unclaimed person profiles.
+		interactive?: boolean;
+		personId?: string;
+		displayName?: string;
+		persona?: 'candidate' | 'officeholder' | 'both' | 'past';
 	};
 };
 
@@ -181,10 +202,7 @@ export function PageSections(props: Props) {
 					case 'component_breadcrumbBlock':
 						return (
 							<Boundary key={section._key} componentName='Breadcrumb Block'>
-								<BreadcrumbBlockSection
-									{...section}
-									breadcrumbOverride={props.sectionOverrides?.component_breadcrumbBlock}
-								/>
+								<BreadcrumbBlockSection {...section} breadcrumbOverride={props.sectionOverrides?.component_breadcrumbBlock} />
 							</Boundary>
 						);
 					case 'component_blogBlock':
@@ -234,10 +252,16 @@ export function PageSections(props: Props) {
 						}
 						return (
 							<Boundary key={section._key} componentName='Claim Profile Block'>
-								<ClaimProfileBlockSection
-									{...section}
-									claimProfileOverride={props.sectionOverrides?.component_claimProfileBlock}
-								/>
+								<ClaimProfileBlockSection {...section} claimProfileOverride={props.sectionOverrides?.component_claimProfileBlock} />
+							</Boundary>
+						);
+					case 'component_voterDensityBlock':
+						if (props.sectionOverrides?.component_voterDensityBlock?.hidden) {
+							return <Fragment key={section._key} />;
+						}
+						return (
+							<Boundary key={section._key} componentName='Voter Density Map Block'>
+								<VoterDensityBlockSection {...section} voterDensityOverride={props.sectionOverrides?.component_voterDensityBlock} />
 							</Boundary>
 						);
 					case 'component_comparisonBlock':
@@ -258,11 +282,7 @@ export function PageSections(props: Props) {
 					case 'component_ctaBlock':
 						return (
 							<Boundary key={section._key} componentName='CTA Block'>
-								<CTABlockSection
-									{...section}
-									tokens={props.tokens}
-									ctaOverride={props.sectionOverrides?.component_ctaBlock}
-								/>
+								<CTABlockSection {...section} tokens={props.tokens} ctaOverride={props.sectionOverrides?.component_ctaBlock} />
 							</Boundary>
 						);
 					case 'component_clickToCallBlock':
@@ -280,11 +300,7 @@ export function PageSections(props: Props) {
 					case 'component_ctaImageBlock':
 						return (
 							<Boundary key={section._key} componentName='CTA Image Block'>
-								<CTAImageBlockSection
-									{...section}
-									tokens={props.tokens}
-									ctaOverride={props.sectionOverrides?.component_ctaImageBlock}
-								/>
+								<CTAImageBlockSection {...section} tokens={props.tokens} ctaOverride={props.sectionOverrides?.component_ctaImageBlock} />
 							</Boundary>
 						);
 					case 'component_faqBlock':
@@ -464,10 +480,7 @@ export function PageSections(props: Props) {
 					case 'component_locationFactsBlock':
 						return (
 							<Boundary key={section._key} componentName='Location Facts Block'>
-								<LocationFactsBlockSection
-									{...section}
-									factsOverride={props.sectionOverrides?.component_locationFactsBlock}
-								/>
+								<LocationFactsBlockSection {...section} factsOverride={props.sectionOverrides?.component_locationFactsBlock} />
 							</Boundary>
 						);
 					case 'component_profileContentBlock': {
@@ -498,25 +511,25 @@ export function PageSections(props: Props) {
 								/>
 							</Boundary>
 						);
-				case 'component_embeddedBlock':
-					return (
-						<Boundary key={section._key} componentName='Embedded Block'>
-							<EmbeddedBlockSection {...section} />
-						</Boundary>
-					);
-				case 'component_teamValuesBlock':
-					return (
-						<Boundary key={section._key} componentName='Team Values Block'>
-							<TeamValuesBlockSection {...section} />
-						</Boundary>
-					);
-				case 'component_testimonialAutoScroll':
-					return (
-						<Boundary key={section._key} componentName='Testimonials Auto Scroll'>
-							<TestimonialAutoScrollSection {...section} />
-						</Boundary>
-					);
-				default:
+					case 'component_embeddedBlock':
+						return (
+							<Boundary key={section._key} componentName='Embedded Block'>
+								<EmbeddedBlockSection {...section} />
+							</Boundary>
+						);
+					case 'component_teamValuesBlock':
+						return (
+							<Boundary key={section._key} componentName='Team Values Block'>
+								<TeamValuesBlockSection {...section} />
+							</Boundary>
+						);
+					case 'component_testimonialAutoScroll':
+						return (
+							<Boundary key={section._key} componentName='Testimonials Auto Scroll'>
+								<TestimonialAutoScrollSection {...section} />
+							</Boundary>
+						);
+					default:
 						console.warn('unknown section._type', section['_type']);
 						return <Fragment key={`unknown section._type' ${i}`} />;
 				}

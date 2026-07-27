@@ -170,7 +170,7 @@ function buildAuthoredCards(view: PersonProfileView): ProfileContentCardProps[] 
 }
 
 function buildSidebar(view: PersonProfileView): ElectionsSidebarProps | undefined {
-	const links = view.links.map((link) => ({ label: link.label, icon: link.icon, href: link.href }));
+	const links = view.links.map(link => ({ label: link.label, icon: link.icon, href: link.href }));
 	const location = [view.districtLabel, view.stateLabel].filter(Boolean).join(', ');
 	const aboutOffice = [view.officeName, location].filter(Boolean).join(' · ') || undefined;
 	const electionDate = view.electionDate ? formatElectionDateFromApi(view.electionDate) : undefined;
@@ -191,8 +191,8 @@ function buildSidebar(view: PersonProfileView): ElectionsSidebarProps | undefine
 /** Maps interlink cards to CandidatesBlock cards, dropping any without a link. */
 function toCandidateCards(cards: RelatedPersonCard[]): CandidateCard[] {
 	return cards
-		.filter((c) => Boolean(c.href))
-		.map((c) => ({
+		.filter(c => Boolean(c.href))
+		.map(c => ({
 			_key: c.personId ?? c.name,
 			name: c.name,
 			partyAffiliation: c.subtitle ?? '',
@@ -204,10 +204,7 @@ function toCandidateCards(cards: RelatedPersonCard[]): CandidateCard[] {
 
 function buildDistrictMap(view: PersonProfileView): ReactNode | undefined {
 	const density = view.voterDensity;
-	const show =
-		!!density &&
-		density.cells.length > 0 &&
-		(density.coverage === null || density.coverage >= MIN_VOTER_DENSITY_COVERAGE);
+	const show = !!density && density.cells.length > 0 && (density.coverage === null || density.coverage >= MIN_VOTER_DENSITY_COVERAGE);
 	if (!show || !density) return undefined;
 	return (
 		<section className='bg-goodparty-cream py-(--container-padding)' data-component='DistrictMap'>
@@ -235,9 +232,7 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	// office, not the person) shows whenever a description exists.
 	const contentCards: ProfileContentCardProps[] = [
 		...(view.empowered ? buildAuthoredCards(view) : []),
-		...(view.positionDescription
-			? [{ heading: `About ${view.officeName ?? 'the Role'}`, content: view.positionDescription }]
-			: []),
+		...(view.positionDescription ? [{ heading: `About ${view.officeName ?? 'the Role'}`, content: view.positionDescription }] : []),
 	];
 	const sidebar = buildSidebar(view);
 	const districtMap = buildDistrictMap(view);
@@ -245,12 +240,11 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	const otherCandidates = toCandidateCards(view.otherCandidates);
 	const nearbyOfficials = toCandidateCards(view.nearbyOfficials);
 
-	const elections: ElectionItem[] =
-		view.electionsIndex?.entries.map((e) => ({ name: e.name, href: e.href, level: e.level })) ?? [];
+	const elections: ElectionItem[] = view.electionsIndex?.entries.map(e => ({ name: e.name, href: e.href, level: e.level })) ?? [];
 
 	return {
 		component_breadcrumbBlock: {
-			breadcrumbs: view.breadcrumb.map((b) => ({ label: b.label, ...(b.href ? { href: b.href } : {}) })),
+			breadcrumbs: view.breadcrumb.map(b => ({ label: b.label, ...(b.href ? { href: b.href } : {}) })),
 		},
 		component_profileHero: {
 			candidateName: view.displayName,
@@ -266,12 +260,23 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			candidateName: view.displayName,
 			partyAffiliation: view.party ?? undefined,
 			layout: 'banner',
+			// Render the interactive claim/notify modal on unclaimed profiles so the
+			// "notify" form carries the real personId through to ProfileClaimRequest.
+			interactive: showClaim,
+			personId: view.personId,
+			displayName: view.displayName,
+			persona: view.persona,
 		},
 		component_profileContentBlock: {
 			contentCards,
 			sidebar,
-			districtMap,
-			hidden: contentCards.length === 0 && !sidebar && !districtMap,
+			hidden: contentCards.length === 0 && !sidebar,
+		},
+		// The district voter-density map is its own section now (so marketing can
+		// reorder / toggle it independently); the content block no longer hosts it.
+		component_voterDensityBlock: {
+			map: districtMap,
+			hidden: !districtMap,
 		},
 		component_candidatesBlock: {
 			byKey: {

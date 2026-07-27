@@ -20,6 +20,7 @@ export const PERSON_SECTION_KEYS = {
 	hero: 'person-hero',
 	claim: 'person-claim',
 	content: 'person-content',
+	voterDensity: 'person-voter-density',
 	otherCandidates: 'person-other-candidates',
 	nearbyOfficials: 'person-nearby-officials',
 	pledge: 'person-pledge',
@@ -30,7 +31,7 @@ export const PERSON_SECTION_KEYS = {
 // Reuse the already-valid profile skeletons (breadcrumb/hero/claim/content/pledge)
 // from the candidate profile layout; person profiles add the two interlink
 // candidate lists, a state elections index, and a sign-up CTA banner.
-const byType = (type: string) => PROFILE_PAGE_SECTIONS.find((s) => s._type === type);
+const byType = (type: string) => PROFILE_PAGE_SECTIONS.find(s => s._type === type);
 
 const breadcrumbSkeleton = byType('component_breadcrumbBlock');
 const heroSkeleton = byType('component_profileHero');
@@ -43,6 +44,7 @@ export const PERSON_PROFILE_SECTIONS = [
 	{ ...heroSkeleton, _key: PERSON_SECTION_KEYS.hero },
 	{ ...claimSkeleton, _key: PERSON_SECTION_KEYS.claim },
 	{ ...contentSkeleton, _key: PERSON_SECTION_KEYS.content },
+	{ _key: PERSON_SECTION_KEYS.voterDensity, _type: 'component_voterDensityBlock' },
 	{
 		_key: PERSON_SECTION_KEYS.otherCandidates,
 		_type: 'component_candidatesBlock',

@@ -334,16 +334,53 @@ function buildLinks(
 	return links;
 }
 
+/**
+ * Spine-derived "Recent Experience" for unclaimed/major-party/removed pages
+ * (the Figma frames list a person's public record here). Offices carry their
+ * term (startAt/endAt); candidacies carry their race's election year. Both are
+ * interleaved and sorted most-recent-first so a current run leads an old office
+ * term (and vice versa). Entries without a date sort last.
+ * Claimed profiles override this with the owner-authored list (see composeView).
+ */
 function buildRecentExperience(person: PersonItem | null): ExperienceItem[] {
-	const offices = person?.OfficeHolders ?? [];
-	return [...offices]
-		.sort((a, b) => (b.startAt ?? '').localeCompare(a.startAt ?? ''))
-		.slice(0, 5)
-		.map((o) => ({
+	const offices = (person?.OfficeHolders ?? []).map((o) => ({
+		sortKey: o.startAt ?? '',
+		item: {
 			title: o.officeTitle ?? o.positionName ?? 'Public office',
 			organization: [o.subAreaValue ?? o.subAreaName, o.state].filter(Boolean).join(', ') || null,
 			term: formatTerm(o),
-		}));
+		},
+	}));
+
+	const candidacies = (person?.Candidacies ?? [])
+		.filter((c) => c.positionName)
+		.map((c) => {
+			const electionDate = c.Race?.electionDate ?? null;
+			return {
+				sortKey: electionDate ?? '',
+				item: {
+					title: `Candidate for ${c.positionName}`,
+					organization: c.state ?? null,
+					term: formatYear(electionDate),
+				},
+			};
+		});
+
+	return [...candidacies, ...offices]
+		.sort((a, b) => b.sortKey.localeCompare(a.sortKey))
+		.map((e) => e.item)
+		.slice(0, 5);
+}
+
+/** Authored overlay experience → the view's ExperienceItem shape (drops `source`). */
+function authoredExperience(overlay: PublicPersonProfile | null): ExperienceItem[] | null {
+	const rows = overlay?.recentExperience;
+	if (!rows || rows.length === 0) return null;
+	return rows.map((e) => ({
+		title: e.title,
+		organization: e.organization ?? null,
+		term: e.term ?? null,
+	}));
 }
 
 const PARTY_LABELS: Record<PartyClass, string> = {
@@ -399,12 +436,16 @@ export function buildNearbyOfficialCards(
 	for (const oh of officeholders) {
 		const pid = oh.personId ?? null;
 		if (pid && pid.toLowerCase() === excludePersonId.toLowerCase()) continue;
-		if (pid && seen.has(pid.toLowerCase())) continue;
 		const person = pid ? personsById.get(pid.toLowerCase()) : undefined;
 		const name =
 			person?.fullName ?? nameOf(person?.firstName, person?.lastName, oh.officeTitle ?? '');
 		if (!name) continue;
-		if (pid) seen.add(pid.toLowerCase());
+		// Dedupe by personId when present, else by name — otherwise null-id rows
+		// with the same office title yield duplicate cards (and colliding React
+		// keys downstream, where the key falls back to the name).
+		const dedupeKey = pid?.toLowerCase() ?? name.toLowerCase();
+		if (seen.has(dedupeKey)) continue;
+		seen.add(dedupeKey);
 		const href = pid ? `/people/${buildPersonSlug(name, pid)}` : null;
 		cards.push({
 			personId: pid,
@@ -493,6 +534,8 @@ export interface ComposeExtras {
 	breadcrumb?: ProfileBreadcrumb[];
 	electionsIndex?: ElectionsIndex | null;
 	voterDensity?: VoterDensity | null;
+	/** Authoritative state resolved by the loader (office → person → candidacy). */
+	stateCode?: string | null;
 }
 
 /**
@@ -525,10 +568,13 @@ export function composeView(
 	const displayName = overlay?.displayName ?? nameFromPerson ?? 'Public Official';
 	const office = pickCurrentOffice(person);
 	const persona = resolvePersona(person, office);
+	// Label and class must share one source precedence, or a "both" persona whose
+	// office and candidacy parties differ would show one party while being gated
+	// (majorParty → I/J empowerment) by the other. Office-first for both.
 	const rawParty = office?.partyNames?.[0] ?? person?.Candidacies?.[0]?.party ?? null;
 	const partyClass = classifyPartyFrom(
-		person?.Candidacies?.[0]?.party,
 		office?.partyNames?.[0],
+		person?.Candidacies?.[0]?.party,
 	);
 	const majorParty = isMajorParty(partyClass);
 	const state = resolveProfileState(persona, { claimed, removed, partyClass });
@@ -538,7 +584,9 @@ export function composeView(
 	const roleTitle = resolveRoleTitle(persona, person, office, overlay?.roleTitleOverride ?? null);
 	const party = rawParty ?? (partyClass ? PARTY_LABELS[partyClass] : null);
 	const districtLabel = office?.subAreaValue ?? office?.subAreaName ?? null;
-	const stateLabel = office?.state ?? person?.state ?? null;
+	// Mirror the loader's stateCode (which includes the candidacy fallback) so a
+	// candidate-only person's sidebar label matches their breadcrumb.
+	const stateLabel = extras.stateCode ?? office?.state ?? person?.state ?? null;
 
 	// Removal strips photo + authored content; keep only the civics spine.
 	const avatarUrl = removed ? null : (overlay?.avatarUrl ?? person?.headshotUrl ?? null);
@@ -592,7 +640,11 @@ export function composeView(
 						transparency: issue.transparency,
 					})),
 		links: removed ? [] : buildLinks(overlay, person, office),
-		recentExperience: extras.recentExperience ?? buildRecentExperience(person),
+		// Owner-authored experience wins on a claimed page; removal strips it back
+		// to the public-record spine. Unclaimed pages get the spine list too.
+		recentExperience:
+			extras.recentExperience ??
+			(removed ? buildRecentExperience(person) : (authoredExperience(overlay) ?? buildRecentExperience(person))),
 		otherCandidates: extras.otherCandidates ?? [],
 		nearbyOfficials: extras.nearbyOfficials ?? [],
 		breadcrumb: extras.breadcrumb ?? [
@@ -719,5 +771,6 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 		breadcrumb,
 		electionsIndex,
 		voterDensity,
+		stateCode,
 	});
 }

@@ -225,7 +225,10 @@ function buildDistrictMap(view: PersonProfileView): ReactNode | undefined {
  */
 export function buildPersonSectionOverrides(view: PersonProfileView): SectionOverrides {
 	const showClaim = view.empowered && !view.claimed;
-	const showPledge = view.empowered && (view.persona === 'candidate' || view.persona === 'both');
+	// The 4-pillar pledge explainer is claimed-candidate content (Figma A/C). On
+	// unclaimed empowered pages (D/F) the claim CTA leads instead, so it's hidden
+	// there even though the hero still shows the "Took the pledge" badge.
+	const showPledge = view.claimed && (view.persona === 'candidate' || view.persona === 'both');
 	const showCTA = view.empowered;
 
 	// Authored content is empowerment-gated; the About-position card (about the

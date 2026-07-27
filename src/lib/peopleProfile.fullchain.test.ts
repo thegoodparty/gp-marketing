@@ -72,6 +72,15 @@ describe('public profile — full-chain content fidelity (claimed officeholder)'
 		expect(view.whyRunning).toBe('To make local government work for everyone.');
 		expect(view.avatarUrl).toBe('https://cdn.example.org/jane-overlay.jpg');
 
+		// Owner-authored "Recent Experience" (gp-api overlay) reaches the view,
+		// winning over the spine-derived office/candidacy list.
+		expect(view.recentExperience).toHaveLength(1);
+		expect(view.recentExperience[0]).toMatchObject({
+			title: 'City Council Member, Ward 3',
+			organization: 'City of Springfield',
+			term: '2021\u20132025',
+		});
+
 		// The published, visible priority reaches the UI WITH its live Serve status
 		// and transparency label — the whole point of the issues pipeline.
 		expect(view.issues).toHaveLength(1);

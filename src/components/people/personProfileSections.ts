@@ -39,12 +39,14 @@ const claimSkeleton = byType('component_claimProfileBlock');
 const contentSkeleton = byType('component_profileContentBlock');
 const pledgeSkeleton = byType('component_goodPartyOrgPledge');
 
+// Order mirrors the Figma states: identity (breadcrumb/hero/claim) → authored +
+// civics content → interlink candidate lists → district map → sign-up CTA →
+// GoodParty pledge → elections index. Editors can reorder per-state in Sanity.
 export const PERSON_PROFILE_SECTIONS = [
 	{ ...breadcrumbSkeleton, _key: PERSON_SECTION_KEYS.breadcrumb },
 	{ ...heroSkeleton, _key: PERSON_SECTION_KEYS.hero },
 	{ ...claimSkeleton, _key: PERSON_SECTION_KEYS.claim },
 	{ ...contentSkeleton, _key: PERSON_SECTION_KEYS.content },
-	{ _key: PERSON_SECTION_KEYS.voterDensity, _type: 'component_voterDensityBlock' },
 	{
 		_key: PERSON_SECTION_KEYS.otherCandidates,
 		_type: 'component_candidatesBlock',
@@ -55,15 +57,7 @@ export const PERSON_PROFILE_SECTIONS = [
 		_type: 'component_candidatesBlock',
 		candidatesBlockDesignSettings: { field_blockColorCreamMidnight: 'MidnightDark' },
 	},
-	{ ...pledgeSkeleton, _key: PERSON_SECTION_KEYS.pledge },
-	{
-		_key: PERSON_SECTION_KEYS.elections,
-		_type: 'component_electionsIndexBlock',
-		electionsIndexBlockDesignSettings: {
-			field_blockColorCreamMidnight: 'MidnightDark',
-			field_showSearch: false,
-		},
-	},
+	{ _key: PERSON_SECTION_KEYS.voterDensity, _type: 'component_voterDensityBlock' },
 	{
 		_key: PERSON_SECTION_KEYS.cta,
 		_type: 'component_ctaBannerBlock',
@@ -95,6 +89,15 @@ export const PERSON_PROFILE_SECTIONS = [
 		ctaBannerBlockDesignSettings: {
 			field_blockColorCreamMidnight: 'Cream',
 			field_componentColor6ColorsInverse: 'HaloGreen',
+		},
+	},
+	{ ...pledgeSkeleton, _key: PERSON_SECTION_KEYS.pledge },
+	{
+		_key: PERSON_SECTION_KEYS.elections,
+		_type: 'component_electionsIndexBlock',
+		electionsIndexBlockDesignSettings: {
+			field_blockColorCreamMidnight: 'MidnightDark',
+			field_showSearch: false,
 		},
 	},
 ] as unknown as Sections[];

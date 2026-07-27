@@ -10,7 +10,7 @@
  * Payloads come from the shared contract fixtures (see peopleProfileFixtures.ts)
  * so the Storybook stories render the exact same data.
  */
-import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
+import { afterEach, describe, expect, test } from 'bun:test';
 import { loadPersonProfile } from './peopleProfile';
 import {
 	assertNoPii,

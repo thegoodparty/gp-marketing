@@ -60,7 +60,15 @@ export interface ExpectedFacts {
 function candidacy(over: Partial<PersonCandidacySummary> = {}): PersonCandidacySummary {
 	// No `slug` on purpose: loadPrimaryCandidacy short-circuits without one, so
 	// the matrix stays focused on state/gating rather than the race fetch.
-	return { id: 'cand-1', positionName: 'Mayor', party: 'Independent', ...over };
+	// `Race.electionDate` lets the spine-derived "Recent Experience" date the run.
+	return {
+		id: 'cand-1',
+		positionName: 'Mayor',
+		party: 'Independent',
+		state: 'CA',
+		Race: { electionDate: '2024-11-05' },
+		...over,
+	};
 }
 
 function office(over: Partial<PersonOfficeHolder> = {}): PersonOfficeHolder {
@@ -124,6 +132,14 @@ function liveOverlay(over: Partial<PublicPersonProfile> = {}): OverlayFixture {
 			avatarUrl: 'https://cdn.example.org/jane-overlay.jpg',
 			whyRunning: 'To make local government work for everyone.',
 			accomplishments: null,
+			recentExperience: [
+				{
+					title: 'City Council Member, Ward 3',
+					organization: 'City of Springfield',
+					term: '2021\u20132025',
+					source: 'user',
+				},
+			],
 			publicEmail: null,
 			publicPhone: null,
 			websiteUrl: null,

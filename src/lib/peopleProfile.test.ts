@@ -68,6 +68,7 @@ function makeOverlay(o: Partial<PublicPersonProfile> = {}): PublicPersonProfile 
 		avatarUrl: null,
 		whyRunning: null,
 		accomplishments: null,
+		recentExperience: null,
 		publicEmail: null,
 		publicPhone: null,
 		websiteUrl: null,
@@ -83,6 +84,69 @@ function makeOverlay(o: Partial<PublicPersonProfile> = {}): PublicPersonProfile 
 		...o,
 	};
 }
+
+describe('composeView recent experience', () => {
+	test('unclaimed candidate: spine candidacies populate Recent Experience', () => {
+		const person = makePerson({
+			firstName: 'Jane',
+			lastName: 'Public',
+			state: 'CA',
+			Candidacies: [{ id: 'c1', positionName: 'Mayor', party: 'Independent', state: 'CA' }],
+		});
+		const view = composeView(PID, person, null);
+		expect(view.recentExperience).toEqual([
+			{ title: 'Candidate for Mayor', organization: 'CA', term: null },
+		]);
+	});
+
+	test('candidacy election date surfaces as the term year and sorts by recency', () => {
+		const person = makePerson({
+			state: 'CA',
+			// Older office term + a more recent candidacy: the candidacy leads.
+			OfficeHolders: [
+				makeOffice({
+					officeTitle: 'City Council',
+					state: 'CA',
+					startAt: '2016-01-01',
+					endAt: '2020-01-01',
+				}),
+			],
+			Candidacies: [
+				{ id: 'c1', positionName: 'Mayor', state: 'CA', Race: { electionDate: '2024-11-05' } },
+			],
+		});
+		const view = composeView(PID, person, null);
+		expect(view.recentExperience).toEqual([
+			{ title: 'Candidate for Mayor', organization: 'CA', term: '2024' },
+			{ title: 'City Council', organization: 'CA', term: '2016 – 2020' },
+		]);
+	});
+
+	test('claimed authored experience overrides the spine list', () => {
+		const person = makePerson({ Candidacies: [{ id: 'c1', positionName: 'Mayor' }] });
+		const overlay = makeOverlay({
+			publishedAt: '2026-01-01T00:00:00.000Z',
+			recentExperience: [
+				{ title: 'City Council Member', organization: 'Springfield', term: '2021-2025', source: 'user' },
+			],
+		});
+		const view = composeView(PID, person, overlay);
+		expect(view.recentExperience).toEqual([
+			{ title: 'City Council Member', organization: 'Springfield', term: '2021-2025' },
+		]);
+	});
+
+	test('removal strips authored experience back to the civics spine', () => {
+		const person = makePerson({ Candidacies: [{ id: 'c1', positionName: 'Mayor', state: 'CA' }] });
+		const overlay = makeOverlay({
+			recentExperience: [{ title: 'Authored, should be stripped', source: 'user' }],
+		});
+		const view = composeView(PID, person, overlay, { removed: true });
+		expect(view.recentExperience).toEqual([
+			{ title: 'Candidate for Mayor', organization: 'CA', term: null },
+		]);
+	});
+});
 
 describe('extractPersonId', () => {
 	test('extracts the trailing UUID from a slug', () => {

@@ -47,21 +47,6 @@ import { stabilizePage } from './helpers/stabilize';
 const BASE = (process.env['E2E_BASE_URL'] ?? 'https://goodparty.org').replace(/\/+$/, '');
 
 // ---------------------------------------------------------------------------
-// Shared screenshot helper
-// ---------------------------------------------------------------------------
-
-async function snapshot(
-	context: Parameters<typeof test.step>[1] extends (args: infer A) => unknown ? A : never,
-	name: string,
-	url: string,
-) {
-	const { page } = context as { page: ReturnType<typeof test['info']> extends { page: infer P } ? P : never };
-	return page;
-}
-
-// The test runner provides `page` as a fixture; we use a closure to keep DRY.
-
-// ---------------------------------------------------------------------------
 // Fixed pages
 // ---------------------------------------------------------------------------
 

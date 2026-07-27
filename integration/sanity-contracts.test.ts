@@ -68,7 +68,7 @@ function formatIssues(issues: z.ZodIssue[]): string {
  * Validates every item in an array against a schema. Collects all failures
  * instead of stopping at the first, so the report shows the full scope.
  */
-function validateAll<T>(
+function validateAll(
 	rows: unknown[],
 	schema: z.ZodObject<z.ZodRawShape>,
 ): { passed: number; failures: { id: string; issues: z.ZodIssue[] }[] } {

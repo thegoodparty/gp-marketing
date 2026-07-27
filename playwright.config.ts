@@ -30,7 +30,9 @@ export default defineConfig({
 		},
 		{
 			name: 'chromium-mobile',
-			use: { ...devices['iPhone 14'] }, // 390×844
+			// iPhone 14 descriptor defaults to WebKit; force Chromium since CI
+			// only installs the Chromium browser.
+			use: { ...devices['iPhone 14'], browserName: 'chromium' }, // 390×844
 		},
 	],
 	snapshotPathTemplate: '{testDir}/snapshots/{testFilePath}/{arg}-{projectName}{ext}',

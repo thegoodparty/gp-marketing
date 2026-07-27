@@ -351,7 +351,7 @@ export function viewFor(state: ProfileState): PersonProfileView {
 
 // ----- fetch mock ------------------------------------------------------------
 
-type MockResponse = { ok: boolean; status: number; json: () => Promise<unknown> };
+type MockResponse = { ok: boolean; status: number; json(): Promise<unknown> };
 
 const jsonResponse = (data: unknown, status = 200): MockResponse => ({
 	ok: status >= 200 && status < 300,
@@ -410,7 +410,9 @@ export function assertNoPii(payload: unknown): string[] {
 	const leaks: string[] = [];
 	const walk = (node: unknown, path: string) => {
 		if (Array.isArray(node)) {
-			node.forEach((item, i) => walk(item, `${path}[${i}]`));
+			node.forEach((item, i) => {
+				walk(item, `${path}[${i}]`);
+			});
 			return;
 		}
 		if (node && typeof node === 'object') {

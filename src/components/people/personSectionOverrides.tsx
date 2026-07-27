@@ -196,7 +196,7 @@ function toCandidateCards(cards: RelatedPersonCard[]): CandidateCard[] {
 			_key: c.personId ?? c.name,
 			name: c.name,
 			partyAffiliation: c.subtitle ?? '',
-			href: c.href as string,
+			href: c.href!,
 			isGoodPartyCandidate: c.isEmpowered,
 			...(c.avatarUrl ? { avatar: c.avatarUrl } : {}),
 		}));

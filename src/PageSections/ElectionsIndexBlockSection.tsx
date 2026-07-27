@@ -142,7 +142,7 @@ export function ElectionsIndexBlockSection(props: ElectionsIndexBlockSectionProp
 	if (hasOverride || !slug) {
 		return (
 			<ElectionsIndexView
-				elections={hasOverride ? electionsOverride! : statesToElectionItems()}
+				elections={hasOverride ? electionsOverride : statesToElectionItems()}
 				section={section as Extract<Sections, { _type: 'component_electionsIndexBlock' }>}
 				stateSlugOverride={stateSlugOverride}
 				indexOverride={indexOverride}

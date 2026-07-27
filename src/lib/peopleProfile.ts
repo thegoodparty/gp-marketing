@@ -696,7 +696,7 @@ async function loadElectionsIndex(stateCode: string | null): Promise<ElectionsIn
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const entries: ElectionIndexEntry[] = counties
 		.filter((c) => c.slug && c.name)
-		.map((c) => ({ name: c.name as string, href: `/elections/${c.slug}`, level: 'county' as const }));
+		.map((c) => ({ name: c.name, href: `/elections/${c.slug}`, level: 'county' as const }));
 	if (entries.length === 0) return null;
 	return {
 		stateSlug: stateCode.toLowerCase(),

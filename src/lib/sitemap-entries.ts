@@ -620,7 +620,7 @@ export async function fetchPeopleSitemapEntries(
 	const idBatches = chunkArray(ids, 500);
 	const persons = (
 		await Promise.all(
-			idBatches.map((batch) =>
+			idBatches.map(async (batch) =>
 				fetchElectionJson<{ id?: string; slug?: string | null }>('v1/persons', {
 					ids: batch.join(','),
 					columns: 'id,slug',

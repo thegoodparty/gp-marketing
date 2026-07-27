@@ -44,11 +44,6 @@ function Identifier(props: StringInputProps) {
 
 	const update = useCallback(
 		(nameVar: string) => {
-			const id = _.camelCase(nameVar);
-			if (id) {
-				props.onChange(PatchEvent.from([set(id)]));
-				return;
-			}
 			if (slugSourcePaths) {
 				const joined = slugSourcePaths
 					.map(sourcePath => {
@@ -61,6 +56,11 @@ function Identifier(props: StringInputProps) {
 					.filter(Boolean)
 					.join('-');
 				props.onChange(PatchEvent.from(set(joined || null)));
+				return;
+			}
+			const id = _.camelCase(nameVar);
+			if (id) {
+				props.onChange(PatchEvent.from([set(id)]));
 				return;
 			}
 			props.onChange(PatchEvent.from(set(null)));

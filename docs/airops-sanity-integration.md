@@ -118,7 +118,7 @@ Studio validation does **not** run for Content Lake API / AirOps writes. AirOps 
 3. **Collision suffix:** if that slug is already used by another FAQ, append `-{last6 of published document id}` and repeat until unique (e.g. `what-is-goodpartyorg-bbb222`).
 4. **Preflight uniqueness query** (raw perspective, authenticated):
    ```groq
-   count(*[_type == "faq" && faqOverview.field_slug == $slug && !sanity::versionOf($publishedId)])
+   count(*[_type == "faq" && faqOverview.field_slug == $slug && _id != $publishedId && !sanity::versionOf($publishedId)])
    ```
    Abort the write when the count is greater than zero.
 5. **Post-write audit:** after creating or updating FAQs via AirOps, run:

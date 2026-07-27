@@ -31,7 +31,7 @@ export const faqOverview = {
           const publishedId = ctx.document?._id ? getPublishedId(ctx.document._id) : '';
           const client = ctx.getClient({ apiVersion: '2025-09-25', perspective: 'raw' });
           const existing = await client.fetch(
-            'count(*[_type == "faq" && faqOverview.field_slug == $slug && !sanity::versionOf($publishedId)])',
+            'count(*[_type == "faq" && faqOverview.field_slug == $slug && _id != $publishedId && !sanity::versionOf($publishedId)])',
             { slug: typeof slug === 'string' ? slug.trim() : '', publishedId },
           );
 

@@ -20,7 +20,7 @@ export const Default: Story = {
 			image: imageJpg(),
 			meta: ['Test Title'],
 		},
-		tagline: 'Tagline',
+		tagline: { label: 'Tagline' },
 		image: imageJpg(),
 	},
 	parameters: {

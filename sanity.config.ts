@@ -20,6 +20,7 @@ import { Logo } from './src/sanity/utils/Logo.tsx';
 import { documentSchema } from './src/sanity/schema/documents/documentSchema.ts';
 import { sites } from './sites.ts';
 import { brandName, dataset, enabledProviders, projectId, defaultApiVersion } from './env.ts';
+import { buildElectionTemplatePreviewPath } from './src/lib/electionTemplatePreview.ts';
 
 export default defineConfig({
 	title: brandName,
@@ -40,10 +41,40 @@ export default defineConfig({
 		structureTool({
 			name: 'structure',
 			title: 'Structure',
-		defaultDocumentNode(S, ctx) {
-			const type = ctx.schema.get(ctx.schemaType)!;
-			const previews: ComponentViewBuilder[] = [];
-			if (type.options && 'channels' in type.options && Object.keys(type.options.channels).length > 0) {
+			defaultDocumentNode(S, ctx) {
+				const type = ctx.schema.get(ctx.schemaType)!;
+				const previews: ComponentViewBuilder[] = [];
+
+				const isElectionTemplate = ctx.schemaType === 'goodpartyOrg_globalTemplate' || ctx.schemaType === 'goodpartyOrg_customTemplate';
+
+				if (isElectionTemplate) {
+					const siteData = sites.goodpartyOrg;
+					previews.push(
+						S.view
+							.component(Iframe)
+							.title(siteData.title)
+							.id('goodpartyOrg')
+							.options({
+								key: ctx.documentId,
+								reload: { button: true },
+								url: {
+									origin: siteData.url,
+									draftMode: '/api/draft-mode/enable',
+									preview(doc) {
+										const templateType = doc?.['field_electionTemplateType'] as string | undefined;
+										const previewTarget = doc?.['previewTarget'] as
+											| {
+													field_electionTargetType?: 'place' | 'position' | 'candidate';
+													field_electionTargetSlug?: string;
+													field_positionSlug?: string;
+											  }
+											| undefined;
+										return buildElectionTemplatePreviewPath(templateType, previewTarget) ?? '/elections';
+									},
+								},
+							} satisfies IframeOptions),
+					);
+				} else if (type.options && 'channels' in type.options && Object.keys(type.options.channels).length > 0) {
 					for (const [siteId, path] of Object.entries(type.options.channels)) {
 						const siteData = sites[siteId as keyof typeof sites];
 						previews.push(
@@ -63,18 +94,19 @@ export default defineConfig({
 											if ('pathParams' in type.options && Object.keys(type.options.pathParams).length > 0) {
 												for (const [param, paramPath] of Object.entries(type.options.pathParams)) {
 													// If the path has a reference, we'll need to resolve the ref via a fetch at this point
-													if(String(paramPath).includes('->')) {
-														const refValue = await ctx.getClient({apiVersion: defaultApiVersion}).fetch<{value?: string}|null>(`*[_id == $id][0]{"value":${paramPath}}`,{id: doc?._id})
+													if (String(paramPath).includes('->')) {
+														const refValue = await ctx
+															.getClient({ apiVersion: defaultApiVersion })
+															.fetch<{ value?: string } | null>(`*[_id == $id][0]{"value":${paramPath}}`, { id: doc?._id });
 														refinedPath = refinedPath.replaceAll(`:${param}`, refValue?.value || 'draft');
-													}
-													else {
+													} else {
 														refinedPath = refinedPath.replaceAll(`:${param}`, String(get(doc, String(paramPath))));
 													}
 												}
 											}
 											return refinedPath;
 										},
-									}
+									},
 								} satisfies IframeOptions),
 						);
 					}
@@ -100,12 +132,12 @@ export default defineConfig({
 		...Object.entries(sites).map(([site, siteData]) => {
 			const mainDocuments: DocumentResolver[] = [];
 			const locations = {};
-		for (const doc of documentSchema) {
-			if (!doc.options?.channels || !(site in doc.options.channels)) {
-				continue;
-			}
-			const filters = [`_type == "${doc.name}"`];
-			if ('pathParams' in doc.options && Object.keys(doc.options.pathParams as { slug: string }).length > 0) {
+			for (const doc of documentSchema) {
+				if (!doc.options || !('channels' in doc.options) || !doc.options.channels || !(site in doc.options.channels)) {
+					continue;
+				}
+				const filters = [`_type == "${doc.name}"`];
+				if ('pathParams' in doc.options && Object.keys(doc.options.pathParams as { slug: string }).length > 0) {
 					for (const [param, paramPath] of Object.entries(doc.options.pathParams as { slug: string })) {
 						filters.push(`${paramPath} == $${param}`);
 					}

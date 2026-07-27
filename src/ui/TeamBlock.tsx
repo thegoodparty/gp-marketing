@@ -1,5 +1,4 @@
 import { cn, tv } from './_lib/utils.ts';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 import { Container } from './Container.tsx';
 import { TeamCard, type TeamCardProps } from './TeamCard.tsx';
@@ -32,7 +31,7 @@ const styles = tv({
 });
 
 export type TeamBlockProps = {
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	className?: string;
 	items: TeamCardProps[];
 	columns?: 3 | 4;

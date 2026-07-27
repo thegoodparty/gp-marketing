@@ -15,14 +15,7 @@ import {
 	mapCandidacyToCard,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
-import { CandidatesPageContent } from '~/ui/CandidatesPageContent';
-
-function humanizeSegment(segment: string): string {
-	return segment
-		.split('-')
-		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-		.join(' ');
-}
+import { renderElectionsCandidatesPage } from '~/lib/renderElectionsCandidatesPage';
 
 export default async function Page({
 	params,
@@ -60,10 +53,8 @@ export default async function Page({
 		null;
 	if (!cityPlace) notFound();
 
-	const subplaceLabel =
-		race.Place && race.Place.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`)
-			? race.Place.name
-			: humanizeSegment(subplace);
+	const isRealSubplace =
+		race.Place?.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`) ?? false;
 
 	const stateName = getStateName(stateCode);
 	const cityName = cityPlace.name;
@@ -83,25 +74,25 @@ export default async function Page({
 		{ href: `/elections/${state.toLowerCase()}`, label: stateName },
 		{ href: `/elections/${countySlug}`, label: countyName },
 		{ href: `/elections/${cityPathSlug}`, label: cityName },
-		{ href: '', label: subplaceLabel },
+		...(isRealSubplace ? [{ href: '', label: race.Place!.name }] : []),
 		{ href: '', label: `Candidates for ${officeName}` },
 	];
 
-	return (
-		<CandidatesPageContent
-			officeName={officeName}
-			stateName={stateName}
-			countyName={countyName}
-			cityName={cityName}
-			electionDate={electionDate}
-			filingDate={filingDate}
-			breadcrumbs={breadcrumbs}
-			positionHref={positionHref}
-			locationHref={locationHref}
-			candidates={candidates}
-			race={race}
-		/>
-	);
+	return renderElectionsCandidatesPage({
+		placeSlug: pathBeforePosition,
+		raceSlug: race.slug,
+		officeName,
+		stateName,
+		countyName,
+		cityName,
+		electionDate,
+		filingDate,
+		breadcrumbs,
+		positionHref,
+		locationHref,
+		candidates,
+		race,
+	});
 }
 
 export async function generateMetadata({
@@ -130,13 +121,18 @@ export async function generateMetadata({
 		race?.Place ??
 		null;
 	const cityName = cityPlace?.name ?? city;
-	const subplaceLabel =
-		race?.Place && race.Place.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`)
-			? race.Place.name
-			: humanizeSegment(subplace);
+	const isRealSubplace =
+		race?.Place?.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`) ?? false;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
+	if (isRealSubplace) {
+		const subplaceName = race!.Place!.name;
+		return {
+			title: `Candidates for ${positionName} in ${subplaceName}, ${cityName}, ${stateName} | Good Party`,
+			description: `View candidates running for ${positionName} in ${subplaceName}, ${cityName}, ${countyDisplayName}, ${stateName}.`,
+		};
+	}
 	return {
-		title: `Candidates for ${positionName} in ${subplaceLabel}, ${cityName}, ${stateName} | Good Party`,
-		description: `View candidates running for ${positionName} in ${subplaceLabel}, ${cityName}, ${countyDisplayName}, ${stateName}.`,
+		title: `Candidates for ${positionName} in ${cityName}, ${stateName} | Good Party`,
+		description: `View candidates running for ${positionName} in ${cityName}, ${countyDisplayName}, ${stateName}.`,
 	};
 }

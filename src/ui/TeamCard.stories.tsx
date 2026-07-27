@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 import { imageJpg } from './_data/media.tsx';
 import { TeamCard } from './TeamCard.tsx';
 import { Container } from './Container.tsx';

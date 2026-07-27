@@ -7,12 +7,14 @@ import type {
 	ElectionsPositionContentBlockGridItem,
 	ElectionsPositionContentBlockBottomItem,
 } from '~/ui/ElectionsPositionContentBlock';
+import type { ComponentButtonProps } from '~/ui/Inputs/Button';
 
 export type ElectionsPositionContentBlockOverride = {
 	card?: ElectionsPositionContentBlockCardProps;
 	topHeadline?: string;
 	gridItems?: ElectionsPositionContentBlockGridItem[];
 	bottomItems?: ElectionsPositionContentBlockBottomItem[];
+	rightColumnCTA?: ComponentButtonProps;
 };
 
 type ElectionsPositionContentBlockSectionProps = Extract<
@@ -39,6 +41,7 @@ export function ElectionsPositionContentBlockSection(props: ElectionsPositionCon
 				topHeadline={contentOverride?.topHeadline}
 				gridItems={contentOverride?.gridItems}
 				bottomItems={contentOverride?.bottomItems}
+				rightColumnCTA={contentOverride?.rightColumnCTA}
 			/>
 		</section>
 	);

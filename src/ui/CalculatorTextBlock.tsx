@@ -6,7 +6,6 @@ import { useId, useState } from 'react';
 import { cn, tv } from './_lib/utils.ts';
 import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
 import { isValidRichText } from './_lib/isValidRichText.ts';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 import type { ResolvedTextSize } from './_lib/resolveTextSize.ts';
 
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
@@ -27,8 +26,7 @@ const styles = tv({
 		calculator:
 			'flex flex-col gap-6 p-(--container-padding) bg-white rounded-xl shadow-sm border border-neutral-200 max-md:[zoom:60%] md:[zoom:1]',
 		calculatorHeader: 'flex flex-col items-center gap-2 text-center',
-		tryItLink:
-			'flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 cursor-pointer transition-colors',
+		tryItLink: 'flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 cursor-pointer transition-colors',
 		sliderSection: 'flex flex-col gap-2',
 		sliderLabels: 'flex justify-between text-sm text-neutral-500',
 		sliderWrapper: 'relative w-full pt-14',
@@ -42,14 +40,12 @@ const styles = tv({
 		recordsLabel:
 			'absolute -top-1 transform -translate-x-1/2 px-3 py-1.5 bg-white border border-neutral-200 rounded shadow-sm text-sm font-medium text-neutral-900 flex flex-col items-center leading-tight',
 		comparisonRow: 'flex items-stretch gap-[15px]',
-		hexagon:
-			'flex-1 flex flex-col items-center justify-center p-6 border border-white min-h-[10rem]',
+		hexagon: 'flex-1 flex flex-col items-center justify-center p-6 border border-white min-h-[10rem]',
 		hexagonGoodparty: 'bg-lavender-100',
 		hexagonOthers: 'bg-[#9747FF] text-white',
 		hexagonIcon: 'mb-6',
 		hexagonLabel: 'text-sm font-medium mb-7',
-		hexagonValue:
-			'text-center text-[#FFF] font-primary text-[32px] font-medium leading-[110%] [font-feature-settings:\'liga\'_0,\'clig\'_0]',
+		hexagonValue: "text-center text-[#FFF] font-primary text-[32px] font-medium leading-[110%] [font-feature-settings:'liga'_0,'clig'_0]",
 		hexagonSub: 'text-sm opacity-90 mt-0.5',
 		hexagonDetail: 'text-xs mt-[29.5px] opacity-80',
 		vsBadge:
@@ -71,7 +67,7 @@ const styles = tv({
 });
 
 export type CalculatorTextBlockProps = {
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	className?: string;
 	layout?: 'calculator-left' | 'calculator-right';
 	calculator?: {
@@ -119,9 +115,7 @@ export function CalculatorTextBlock(props: CalculatorTextBlockProps) {
 	const costPerRecord = props.calculator?.othersCostPerRecord ?? COST_PER_RECORD;
 	const goodPartyCost = props.calculator?.goodPartyCost ?? GOODPARTY_MONTHLY;
 
-	const [records, setRecords] = useState(
-		Math.round((recordsMin + recordsMax) / 2),
-	);
+	const [records, setRecords] = useState(Math.round((recordsMin + recordsMax) / 2));
 
 	const othersCost = Math.round(records * costPerRecord);
 	const thumbPercent = Math.max(2, Math.min(98, (records / recordsMax) * 100));
@@ -157,24 +151,19 @@ export function CalculatorTextBlock(props: CalculatorTextBlockProps) {
 
 	return (
 		<article className={cn(base(), props.className)} data-component='CalculatorTextBlock'>
-			<svg width={0} height={0} aria-hidden="true" style={{ position: 'absolute' }}>
+			<svg width={0} height={0} aria-hidden='true' style={{ position: 'absolute' }}>
 				<defs>
 					<clipPath id={clipId} clipPathUnits='objectBoundingBox'>
-						<path
-							d="M0 0.2798C0 0.2533 0.0164 0.2285 0.0429 0.2154L0.4583 0.0096C0.4842 0 0.5158 0 0.5418 0.0096L0.9571 0.2154C0.9836 0.2302 1 0.2533 1 0.2798V0.9218C1 0.9632 0.9621 0.9964 0.9153 0.9964H0.0847C0.0379 0.9964 0 0.9632 0 0.9218V0.2798Z"
-						/>
+						<path d='M0 0.2798C0 0.2533 0.0164 0.2285 0.0429 0.2154L0.4583 0.0096C0.4842 0 0.5158 0 0.5418 0.0096L0.9571 0.2154C0.9836 0.2302 1 0.2533 1 0.2798V0.9218C1 0.9632 0.9621 0.9964 0.9153 0.9964H0.0847C0.0379 0.9964 0 0.9632 0 0.9218V0.2798Z' />
 					</clipPath>
 				</defs>
 			</svg>
-			<div
-				className='relative overflow-hidden rounded-2xl mx-(--container-padding)'
-				style={{ background: '#F1E5FF' }}
-			>
+			<div className='relative overflow-hidden rounded-2xl mx-(--container-padding)' style={{ background: '#F1E5FF' }}>
 				<img
-					src="/svg/calculator-bg-stroke.svg"
-					alt=""
+					src='/svg/calculator-bg-stroke.svg'
+					alt=''
 					aria-hidden
-					className="pointer-events-none"
+					className='pointer-events-none'
 					style={{
 						width: 1037.854,
 						height: 307.724,
@@ -185,124 +174,115 @@ export function CalculatorTextBlock(props: CalculatorTextBlockProps) {
 					}}
 				/>
 				<Container size='xl' className='max-md:p-0'>
-				<div className={wrapper()}>
-					<div className={calculator()}>
-						<div className={calculatorHeader()}>
-							{props.calculator?.heading && (
-								<Text as='h3' styleType='subtitle-1'>
-									{props.calculator.heading}
-								</Text>
+					<div className={wrapper()}>
+						<div className={calculator()}>
+							<div className={calculatorHeader()}>
+								{props.calculator?.heading && (
+									<Text as='h3' styleType='subtitle-1'>
+										{props.calculator.heading}
+									</Text>
+								)}
+								<span className={tryItLink()} onClick={handleTryIt}>
+									<CurvedArrowDownLeftIcon size={16} />
+									<Text as='span' styleType='caption'>
+										{props.calculator?.tryItText ?? 'Try it yourself'}
+									</Text>
+								</span>
+							</div>
+
+							<div className={sliderSection()}>
+								<div className={sliderWrapper()}>
+									<div className={recordsLabel()} style={{ left: `${thumbPercent}%` }}>
+										<span>{formatNumber(records)}</span>
+										<span>records</span>
+									</div>
+									<input
+										type='range'
+										min={recordsMin}
+										max={recordsMax}
+										step={Math.max(1, Math.floor(recordsMax / 500))}
+										value={records}
+										onChange={e => setRecords(Number(e.target.value))}
+										className={slider()}
+										style={{
+											background: `linear-gradient(to right, var(--lavender-800) 0%, var(--lavender-800) ${thumbPercent}%, var(--lavender-200) ${thumbPercent}%, var(--lavender-200) 100%)`,
+										}}
+										aria-label='Number of voter records'
+									/>
+								</div>
+								<div className={sliderLabels()}>
+									<span>{formatNumber(recordsMin)}</span>
+									<span>{formatNumber(recordsMax)}</span>
+								</div>
+							</div>
+
+							<div className={comparisonRow()}>
+								<div className={cn(hexagon(), hexagonGoodparty())} style={{ clipPath: `url(#${clipId})` }}>
+									<div className={hexagonIcon()}>
+										<Logo width={24} height={24} className='min-w-6 min-h-6' />
+									</div>
+
+									<Text as='span' styleType='heading-md' className={hexagonValue()}>
+										{formatCurrency(goodPartyCost)}
+									</Text>
+									<Text as='span' styleType='caption' className={hexagonSub()}>
+										{props.calculator?.goodPartyPeriod ?? 'per month'}
+									</Text>
+									<Text as='span' styleType='caption' className={hexagonDetail()}>
+										{props.calculator?.goodPartyDetail ?? 'Unlimited records'}
+									</Text>
+								</div>
+
+								<div className={vsBadge()}>vs</div>
+
+								<div className={cn(hexagon(), hexagonOthers())} style={{ clipPath: `url(#${clipId})` }}>
+									<Text as='span' styleType='caption' className={hexagonLabel()}>
+										{props.calculator?.othersLabel ?? 'Others'}
+									</Text>
+									<Text as='span' styleType='heading-md' className={hexagonValue()}>
+										{formatCurrency(othersCost)}
+									</Text>
+									<Text as='span' styleType='caption' className={hexagonSub()}>
+										{props.calculator?.othersCostLabel ?? 'Total cost'}
+									</Text>
+									<Text as='span' styleType='caption' className={hexagonDetail()}>
+										{props.calculator?.othersPerRecordDetail ?? '$0.1 per record'}
+									</Text>
+								</div>
+							</div>
+						</div>
+
+						<div className={content()}>
+							<div className={cn('flex flex-col gap-3 md:gap-4', backgroundColor === 'midnight' && 'text-white')}>
+								{props.text?.title && (
+									<Text as='h2' styleType={textSize.heading}>
+										{props.text.title}
+									</Text>
+								)}
+								{isValidRichText(props.text?.copy) && (
+									<Text styleType={textSize.body} className={backgroundColor === 'midnight' ? 'text-neutral-300' : undefined}>
+										{props.text?.copy}
+									</Text>
+								)}
+							</div>
+							{(props.text?.buttons?.length ?? 0) > 0 && (
+								<div className='flex flex-wrap gap-4 max-sm:w-full'>
+									{(props.text?.buttons ?? []).map((item, index) => {
+										const resolvedStyle = resolveButtonStyleType(item?.buttonProps?.styleType ?? 'primary', backgroundColor);
+										return (
+											<ComponentButton
+												key={index}
+												className='max-sm:w-full w-fit'
+												{...item}
+												buttonProps={{ ...(item.buttonProps ?? {}), styleType: resolvedStyle }}
+											/>
+										);
+									})}
+								</div>
 							)}
-							<span className={tryItLink()} onClick={handleTryIt}>
-								<CurvedArrowDownLeftIcon size={16} />
-								<Text as='span' styleType='caption'>
-									{props.calculator?.tryItText ?? 'Try it yourself'}
-								</Text>
-							</span>
-						</div>
-
-						<div className={sliderSection()}>
-							<div className={sliderWrapper()}>
-								<div
-									className={recordsLabel()}
-									style={{ left: `${thumbPercent}%` }}
-								>
-									<span>{formatNumber(records)}</span>
-									<span>records</span>
-								</div>
-								<input
-									type='range'
-									min={recordsMin}
-									max={recordsMax}
-									step={Math.max(1, Math.floor(recordsMax / 500))}
-									value={records}
-									onChange={e => setRecords(Number(e.target.value))}
-									className={slider()}
-									style={{
-										background: `linear-gradient(to right, var(--lavender-800) 0%, var(--lavender-800) ${thumbPercent}%, var(--lavender-200) ${thumbPercent}%, var(--lavender-200) 100%)`,
-									}}
-									aria-label='Number of voter records'
-								/>
-							</div>
-							<div className={sliderLabels()}>
-								<span>{formatNumber(recordsMin)}</span>
-								<span>{formatNumber(recordsMax)}</span>
-							</div>
-						</div>
-
-						<div className={comparisonRow()}>
-							<div
-								className={cn(hexagon(), hexagonGoodparty())}
-								style={{ clipPath: `url(#${clipId})` }}
-							>
-								<div className={hexagonIcon()}>
-									<Logo width={24} height={24} className='min-w-6 min-h-6' />
-								</div>
-
-								<Text as='span' styleType='heading-md' className={hexagonValue()}>
-									{formatCurrency(goodPartyCost)}
-								</Text>
-								<Text as='span' styleType='caption' className={hexagonSub()}>
-									{props.calculator?.goodPartyPeriod ?? 'per month'}
-								</Text>
-								<Text as='span' styleType='caption' className={hexagonDetail()}>
-									{props.calculator?.goodPartyDetail ?? 'Unlimited records'}
-								</Text>
-							</div>
-
-							<div className={vsBadge()}>vs</div>
-
-							<div
-								className={cn(hexagon(), hexagonOthers())}
-								style={{ clipPath: `url(#${clipId})` }}
-							>
-								<Text as='span' styleType='caption' className={hexagonLabel()}>
-									{props.calculator?.othersLabel ?? 'Others'}
-								</Text>
-								<Text as='span' styleType='heading-md' className={hexagonValue()}>
-									{formatCurrency(othersCost)}
-								</Text>
-								<Text as='span' styleType='caption' className={hexagonSub()}>
-									{props.calculator?.othersCostLabel ?? 'Total cost'}
-								</Text>
-								<Text as='span' styleType='caption' className={hexagonDetail()}>
-									{props.calculator?.othersPerRecordDetail ?? '£0.1 per record'}
-								</Text>
-							</div>
 						</div>
 					</div>
-
-					<div className={content()}>
-						<div className={cn('flex flex-col gap-3 md:gap-4', backgroundColor === 'midnight' && 'text-white')}>
-							{props.text?.title && (
-								<Text as='h2' styleType={textSize.heading}>
-									{props.text.title}
-								</Text>
-							)}
-							{isValidRichText(props.text?.copy) && (
-								<Text styleType={textSize.body} className={backgroundColor === 'midnight' ? 'text-neutral-300' : undefined}>
-									{props.text?.copy}
-								</Text>
-							)}
-						</div>
-						{(props.text?.buttons?.length ?? 0) > 0 && (
-							<div className='flex flex-wrap gap-4 max-sm:w-full'>
-								{(props.text?.buttons ?? []).map((item, index) => {
-									const resolvedStyle = resolveButtonStyleType(item?.buttonProps?.styleType ?? 'primary', backgroundColor);
-									return (
-										<ComponentButton
-											key={index}
-											className='max-sm:w-full w-fit'
-											{...item}
-											buttonProps={{ ...(item.buttonProps ?? {}), styleType: resolvedStyle }}
-										/>
-									);
-								})}
-							</div>
-						)}
-					</div>
-				</div>
-			</Container>
+				</Container>
 			</div>
 		</article>
 	);

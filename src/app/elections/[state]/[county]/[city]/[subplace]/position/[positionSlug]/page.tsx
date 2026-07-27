@@ -15,16 +15,9 @@ import {
 } from '~/lib/electionsHelpers';
 import { getCachedElectionRouteParams } from '~/lib/sitemap-entries';
 import { toAbsoluteUrl } from '~/lib/url';
-import { PositionPageContent } from '~/ui/PositionPageContent';
+import { renderElectionsPositionPage } from '~/lib/renderElectionsPositionPage';
 
 export const revalidate = 3600;
-
-function humanizeSegment(segment: string): string {
-	return segment
-		.split('-')
-		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-		.join(' ');
-}
 
 export async function generateStaticParams() {
 	const { subplacePositionParams } = await getCachedElectionRouteParams();
@@ -70,10 +63,8 @@ export default async function Page({
 		null;
 	if (!cityPlace) notFound();
 
-	const subplaceLabel =
-		race.Place && race.Place.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`)
-			? race.Place.name
-			: humanizeSegment(subplace);
+	const isRealSubplace =
+		race.Place?.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`) ?? false;
 
 	const stateName = getStateName(stateCode);
 	const cityName = cityPlace.name;
@@ -88,26 +79,26 @@ export default async function Page({
 		{ href: `/elections/${state.toLowerCase()}`, label: stateName },
 		{ href: `/elections/${countySlug}`, label: countyPlace.name },
 		{ href: `/elections/${cityPathSlug}`, label: cityName },
-		{ href: '', label: subplaceLabel },
+		...(isRealSubplace ? [{ href: '', label: race.Place!.name }] : []),
 		{ href: '', label: officeName },
 	];
 
 	const pageUrl = toAbsoluteUrl(`/elections/${pathBeforePosition}/position/${positionSlug}`);
 
-	return (
-		<PositionPageContent
-			officeName={officeName}
-			stateName={stateName}
-			countyName={countyPlace.name}
-			cityName={cityName}
-			electionDate={electionDate}
-			filingDate={filingDate}
-			breadcrumbs={breadcrumbs}
-			candidatesHref={candidatesHref}
-			race={race}
-			pageUrl={pageUrl}
-		/>
-	);
+	return renderElectionsPositionPage({
+		placeSlug: pathBeforePosition,
+		raceSlug: race.slug,
+		officeName,
+		stateName,
+		countyName: countyPlace.name,
+		cityName,
+		electionDate,
+		filingDate,
+		breadcrumbs,
+		candidatesHref,
+		race,
+		pageUrl,
+	});
 }
 
 export async function generateMetadata({
@@ -136,13 +127,18 @@ export async function generateMetadata({
 		race?.Place ??
 		null;
 	const cityName = cityPlace?.name ?? city;
-	const subplaceLabel =
-		race?.Place && race.Place.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`)
-			? race.Place.name
-			: humanizeSegment(subplace);
+	const isRealSubplace =
+		race?.Place?.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`) ?? false;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
+	if (isRealSubplace) {
+		const subplaceName = race!.Place!.name;
+		return {
+			title: `${positionName} in ${subplaceName}, ${cityName}, ${stateName} | Good Party`,
+			description: `Election details and candidates for ${positionName} in ${subplaceName}, ${cityName}, ${countyDisplayName}, ${stateName}.`,
+		};
+	}
 	return {
-		title: `${positionName} in ${subplaceLabel}, ${cityName}, ${stateName} | Good Party`,
-		description: `Election details and candidates for ${positionName} in ${subplaceLabel}, ${cityName}, ${countyDisplayName}, ${stateName}.`,
+		title: `${positionName} in ${cityName}, ${stateName} | Good Party`,
+		description: `Election details and candidates for ${positionName} in ${cityName}, ${countyDisplayName}, ${stateName}.`,
 	};
 }

@@ -10,7 +10,6 @@ import { Text } from './Text.tsx';
 import { Button, ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { IconResolver } from './IconResolver.tsx';
 import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 const styles = tv({
 	slots: {
@@ -38,7 +37,7 @@ export type CandidateCard = CandidatesCardProps & {
 
 export type CandidatesBlockProps = {
 	className?: string;
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	header?: HeaderBlockProps;
 	candidates: CandidateCard[];
 	enablePagination?: boolean;
@@ -54,9 +53,7 @@ export function CandidatesBlock(props: CandidatesBlockProps) {
 
 	const [displayCount, setDisplayCount] = useState(initialDisplayCount);
 
-	const displayedCandidates = props.enablePagination
-		? props.candidates.slice(0, displayCount)
-		: props.candidates;
+	const displayedCandidates = props.enablePagination ? props.candidates.slice(0, displayCount) : props.candidates;
 	const hasMore = props.enablePagination && displayCount < props.candidates.length;
 
 	const handleShowMore = () => {
@@ -67,20 +64,13 @@ export function CandidatesBlock(props: CandidatesBlockProps) {
 
 	const showShowMoreButton = props.enablePagination && hasMore;
 	const showOptionalButton =
-		(props.enablePagination && !hasMore && props.optionalButton) ||
-		(!props.enablePagination && props.optionalButton);
+		(props.enablePagination && !hasMore && props.optionalButton) || (!props.enablePagination && props.optionalButton);
 
 	return (
 		<article className={cn(base(), props.className)} data-component='CandidatesBlock'>
 			<Container size='xl'>
 				<div className={wrapper()}>
-					{props.header && (
-						<HeaderBlock
-							{...props.header}
-							backgroundColor={backgroundColor}
-							layout={props.header.layout ?? 'left'}
-						/>
-					)}
+					{props.header && <HeaderBlock {...props.header} backgroundColor={backgroundColor} layout={props.header.layout ?? 'left'} />}
 
 					{displayedCandidates.length > 0 ? (
 						<div className={grid()}>
@@ -90,7 +80,7 @@ export function CandidatesBlock(props: CandidatesBlockProps) {
 						</div>
 					) : (
 						<div className={emptyState()}>
-							<Text styleType="body-1">No candidates found</Text>
+							<Text styleType='body-1'>No candidates found</Text>
 						</div>
 					)}
 
@@ -102,12 +92,7 @@ export function CandidatesBlock(props: CandidatesBlockProps) {
 									type='button'
 									onClick={handleShowMore}
 									styleType={resolvedButtonStyle}
-									iconRight={
-										<IconResolver
-											icon='arrow-up-right'
-											className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5'
-										/>
-									}
+									iconRight={<IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />}
 								>
 									{props.showMoreLabel ?? 'Show more candidates'}
 								</Button>

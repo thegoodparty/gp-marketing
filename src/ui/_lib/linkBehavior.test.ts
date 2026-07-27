@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'bun:test';
 import { isExternalToEcosystem } from './linkBehavior';
 
 describe('isExternalToEcosystem', () => {
@@ -47,4 +48,3 @@ describe('isExternalToEcosystem', () => {
 		expect(isExternalToEcosystem('https://app.example.com/dashboard')).toBe(true);
 	});
 });
-

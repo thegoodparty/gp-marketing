@@ -5,11 +5,6 @@ import { motion, useInView } from 'motion/react';
 import { useRef } from 'react';
 import { cn } from './_lib/utils.ts';
 
-const DEFAULT_OPTIONS = {
-	threshold: 0.1,
-	rootMargin: '0px 0px -50px 0px',
-} as const;
-
 export type FadeInProps = {
 	children: ReactNode;
 	delay?: number;
@@ -19,7 +14,7 @@ export type FadeInProps = {
 
 export function FadeIn(props: FadeInProps) {
 	const ref = useRef<HTMLDivElement>(null);
-	const inView = useInView(ref, DEFAULT_OPTIONS);
+	const inView = useInView(ref);
 
 	return (
 		<motion.div

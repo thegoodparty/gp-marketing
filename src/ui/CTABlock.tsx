@@ -3,12 +3,12 @@ import type { ReactNode } from 'react';
 import { cn, tv } from './_lib/utils.ts';
 import { resolveInverseButtonStyleType } from './_lib/resolveButtonStyleType.ts';
 import { isValidRichText } from './_lib/isValidRichText.ts';
-import type { backgroundTypeValues, normalCondensedValues } from './_lib/designTypesStore.ts';
+import type { normalCondensedValues } from './_lib/designTypesStore.ts';
 
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
-import { Newsletter } from './Form/Newsletter.tsx';
+import { HubSpotEmbedForm } from './Form/HubSpotEmbedForm.tsx';
 import { Logo } from '~/sanity/utils/Logo.tsx';
 import type { FormProps } from './_lib/resolveForm.ts';
 
@@ -70,7 +70,7 @@ const styles = tv({
 
 export type CTABlockProps = {
 	id?: string;
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	buttons?: ComponentButtonProps[];
 	caption?: string;
 	color?: any;
@@ -98,8 +98,8 @@ export function CTABlock(props: CTABlockProps) {
 				<div className='group relative'>
 					<div className={content()}>
 						{props.showLogo && (
-							<div className="mb-10">
-								<Logo width={80} height={80} className="object-contain" />
+							<div className='mb-10'>
+								<Logo width={80} height={80} className='object-contain' />
 							</div>
 						)}
 						<div className='flex flex-col gap-3 md:gap-4'>
@@ -137,7 +137,9 @@ export function CTABlock(props: CTABlockProps) {
 								{props.caption}
 							</Text>
 						)}
-						{props.form?.provider === 'Hubspot' && props.form.formId && <Newsletter formId={props.form.formId} />}
+						{props.form?.provider === 'Hubspot' && props.form.formId && (
+							<HubSpotEmbedForm formId={props.form.formId} redirectTo={props.form.redirectTo} submitLabel={props.form.submitLabel} />
+						)}
 					</div>
 					<div className={card()}>
 						{size === 'normal' && (

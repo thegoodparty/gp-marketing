@@ -1,5 +1,8 @@
+import { convert } from 'html-to-text';
+
 import { US_STATES } from '~/constants/usStates';
-import type { CandidacyItem, FindByRaceIdResponse, PlaceItem, PlaceWithFacts, RaceDetail } from '~/types/elections';
+import type { CandidacyItem, FindByRaceIdResponse, PlaceItem, PlaceRace, PlaceWithFacts, RaceDetail } from '~/types/elections';
+import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
 import type { FactsCardProps } from '~/ui/FactsCard';
 
 import { permanentRedirect } from 'next/navigation';
@@ -74,7 +77,7 @@ export function canonicalizeCountyEquivalentName(
 	rawPlaceName: string,
 ): CanonicalCountyName {
 	const normalizedName = normalizeWhitespace(rawPlaceName);
-	const tailMatch = normalizedName.match(COUNTY_EQUIV_TAIL_RE);
+	const tailMatch = COUNTY_EQUIV_TAIL_RE.exec(normalizedName);
 	const existingSuffix = tailMatch ? toCanonicalSuffix(tailMatch[1] ?? '') : null;
 	const suffixLabel = pickSuffixByState(stateCode, existingSuffix);
 	const baseName = normalizeWhitespace(normalizedName.replace(COUNTY_EQUIV_TAIL_RE, '')) || normalizedName;
@@ -157,6 +160,42 @@ export function resolveClaimedCustomIssueText(issue: ClaimedCustomIssue): string
 	return description ? `${issue.title}\n\n${description}` : issue.title;
 }
 
+/**
+ * Converts candidate website rich-text (HTML from the product editor) to plain
+ * text. The profile cards render their content as plain text with
+ * `whitespace-pre-line`, so block tags become newlines and inline tags/entities
+ * are stripped.
+ */
+export function htmlToPlainText(value: string | null | undefined): string | undefined {
+	if (typeof value !== 'string') return undefined;
+	const text = convert(value, {
+		wordwrap: false,
+		selectors: [
+			{ selector: 'a', options: { ignoreHref: true } },
+			{ selector: 'img', format: 'skip' },
+			{ selector: 'hr', format: 'skip' },
+			{ selector: 'h1', options: { uppercase: false, leadingLineBreaks: 2, trailingLineBreaks: 2 } },
+			{ selector: 'h2', options: { uppercase: false, leadingLineBreaks: 2, trailingLineBreaks: 2 } },
+			{ selector: 'h3', options: { uppercase: false, leadingLineBreaks: 2, trailingLineBreaks: 2 } },
+			{ selector: 'h4', options: { uppercase: false, leadingLineBreaks: 2, trailingLineBreaks: 2 } },
+			{ selector: 'h5', options: { uppercase: false, leadingLineBreaks: 2, trailingLineBreaks: 2 } },
+			{ selector: 'h6', options: { uppercase: false, leadingLineBreaks: 2, trailingLineBreaks: 2 } },
+			{ selector: 'ul', options: { itemPrefix: ' ', leadingLineBreaks: 2, trailingLineBreaks: 2 } },
+			{ selector: 'ol', format: 'unorderedList', options: { itemPrefix: ' ', leadingLineBreaks: 2, trailingLineBreaks: 2 } },
+			{ selector: 'blockquote', format: 'blockquote', options: { leadingLineBreaks: 2, trailingLineBreaks: 2, trimEmptyLines: true } },
+		],
+	}).replace(/^\n+|\n+$/g, '');
+	return text.length > 0 ? text : undefined;
+}
+
+/** Maps website about.issues entry (title + HTML description) to display text. */
+export function resolveWebsiteIssueText(issue: { title?: string; description?: string }): string | undefined {
+	const title = issue.title?.trim();
+	const description = htmlToPlainText(issue.description);
+	if (title && description) return `${title}\n\n${description}`;
+	return title || description || undefined;
+}
+
 /** Prefers elections API bio, then claimed occupation when unclaimed about is empty. */
 export function resolveProfileAboutText(
 	candidateAbout: string | null | undefined,
@@ -167,11 +206,12 @@ export function resolveProfileAboutText(
 	return resolveClaimedTextField(claimed?.details?.occupation);
 }
 
-/** Prefers elections API image; public-campaigns does not expose profile photos. */
+/** Prefers claimed campaign avatar; falls back to elections API (BallotReady) image. */
 export function resolveProfileImageUrl(
 	candidateImage: string | null | undefined,
+	claimedAvatar?: string | null  ,
 ): string | undefined {
-	const image = candidateImage?.trim();
+	const image = claimedAvatar?.trim() || candidateImage?.trim();
 	return image && image.length > 0 ? image : undefined;
 }
 
@@ -232,13 +272,105 @@ export function formatElectionDateFromApi(dateStr: string | undefined): string {
  * or a pre-formatted string like "November 5, 2026". Uses local-date parsing for ISO to avoid timezone shift.
  */
 export function getYearFromDateString(dateStr: string): number {
-	if (DATE_ONLY_REGEX.test(dateStr)) {
-		return parseDateOnlyAsLocal(dateStr).getFullYear();
+	const dateOnly = dateStr.slice(0, 10);
+	if (DATE_ONLY_REGEX.test(dateOnly)) {
+		return parseDateOnlyAsLocal(dateOnly).getFullYear();
 	}
-	const parsed = new Date(dateStr);
-	if (!Number.isNaN(parsed.getTime())) return parsed.getFullYear();
 	const yearMatch = /\b(19|20)\d{2}\b/.exec(dateStr);
 	return yearMatch ? parseInt(yearMatch[0], 10) : NaN;
+}
+
+/** Race columns for location pages that build office lists from place races. */
+export const PLACE_RACE_COLUMNS =
+	'slug,normalizedPositionName,electionDate,positionDescription,positionLevel,isPrimary';
+
+function startOfLocalDay(date: Date): Date {
+	return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function parseElectionDateAsLocal(dateStr: string): Date {
+	if (DATE_ONLY_REGEX.test(dateStr)) {
+		return parseDateOnlyAsLocal(dateStr);
+	}
+	return parseDateOnlyAsLocal(dateStr.slice(0, 10));
+}
+
+/** True when the election calendar day is strictly before today (local time). */
+export function isElectionDateBeforeToday(
+	dateStr: string | undefined,
+	today: Date = new Date(),
+): boolean {
+	if (!dateStr) return false;
+	try {
+		const electionDay = startOfLocalDay(parseElectionDateAsLocal(dateStr));
+		const todayDay = startOfLocalDay(today);
+		return electionDay < todayDay;
+	} catch {
+		return false;
+	}
+}
+
+/**
+ * For place races whose electionDate is already past, fetches the general-election
+ * record via getRaceBySlug with isPrimary:false.
+ */
+export async function resolvePlaceRaceElectionDates(
+	races: PlaceRace[],
+	today: Date = new Date(),
+): Promise<Map<string, string>> {
+	const { getRaceBySlug } = await import('~/lib/electionsApi');
+	const resolved = new Map<string, string>();
+
+	const staleSlugs = [
+		...new Set(
+			races
+				.filter(r => r.slug && r.electionDate && r.isPrimary === true && isElectionDateBeforeToday(r.electionDate, today))
+				.map(r => r.slug),
+		),
+	];
+
+	await Promise.all(
+		staleSlugs.map(async slug => {
+			const placeRace = races.find(r => r.slug === slug);
+			const fallback = placeRace?.electionDate ?? '';
+			const race = await getRaceBySlug(slug, false, { isPrimary: false });
+			resolved.set(slug, race?.electionDate ?? fallback);
+		}),
+	);
+
+	return resolved;
+}
+
+export type BuildOfficeItemsFromPlaceRacesConfig = {
+	type: string;
+	buildHref(race: PlaceRace): string;
+};
+
+export function buildOfficeItemsFromPlaceRaces(
+	races: PlaceRace[],
+	resolvedDates: Map<string, string>,
+	config: BuildOfficeItemsFromPlaceRacesConfig,
+): { offices: OfficeItem[]; dataYears: number[] } {
+	const offices: OfficeItem[] = races.map(race => ({
+		id: String(race.id),
+		type: config.type,
+		position: race.normalizedPositionName ?? race.name ?? 'Position',
+		nextElectionDate: resolvedDates.get(race.slug) ?? race.electionDate ?? '',
+		href: config.buildHref(race),
+	}));
+
+	const dataYears = [
+		...new Set(
+			races
+				.map(r => {
+					const dateStr = resolvedDates.get(r.slug) ?? r.electionDate;
+					return dateStr ? getYearFromDateString(dateStr) : NaN;
+				})
+				.filter((y): y is number => !Number.isNaN(y)),
+		),
+	].sort((a, b) => a - b);
+
+	return { offices, dataYears };
 }
 
 export function formatFilingPeriod(
@@ -601,7 +733,7 @@ export function buildJobPostingSchema(params: {
 	const filingAddr = race.filingOfficeAddress?.trim();
 	if (filingAddr) {
 		postalAddress['streetAddress'] = filingAddr;
-		const zipMatch = filingAddr.match(/\b\d{5}(?:-\d{4})?\b/);
+		const zipMatch = /\b\d{5}(?:-\d{4})?\b/.exec(filingAddr);
 		if (zipMatch?.[0]) {
 			postalAddress['postalCode'] = zipMatch[0];
 		}
@@ -777,20 +909,25 @@ export function inferSidebarLinkIcon(href: string): string {
 	if (lower.startsWith('mailto:')) return 'mail';
 	if (lower.includes('linkedin.com')) return 'linkedin';
 	if (lower.includes('facebook.com') || lower.includes('fb.com')) return 'facebook';
-	if (lower.includes('twitter.com') || lower.includes('x.com')) return 'twitter';
+	if (lower.includes('twitter.com') || /(?:^|[/.])x\.com(?:\/|$)/.test(lower)) return 'twitter';
 	if (lower.includes('instagram.com')) return 'instagram';
+	if (lower.includes('wikipedia.org')) return 'book-open';
+	if (lower.includes('youtube.com') || lower.includes('youtu.be')) return 'youtube';
+	if (lower.includes('tiktok.com')) return 'video';
 	return 'globe';
 }
 
-/** Human-readable label for a candidate profile link (first URL is always Website). */
+/** Human-readable label for a candidate profile link inferred from URL. */
 export function formatSidebarLinkLabel(href: string, index: number): string {
-	if (index === 0) return 'Website';
 	const lower = href.toLowerCase();
 	if (lower.startsWith('mailto:')) return 'Email';
 	if (lower.includes('linkedin.com')) return 'LinkedIn';
 	if (lower.includes('facebook.com') || lower.includes('fb.com')) return 'Facebook';
-	if (lower.includes('twitter.com') || lower.includes('x.com')) return 'Twitter';
+	if (lower.includes('twitter.com') || /(?:^|[/.])x\.com(?:\/|$)/.test(lower)) return 'Twitter';
 	if (lower.includes('instagram.com')) return 'Instagram';
+	if (lower.includes('wikipedia.org')) return 'Wikipedia';
+	if (lower.includes('youtube.com') || lower.includes('youtu.be')) return 'YouTube';
+	if (lower.includes('tiktok.com')) return 'TikTok';
 	try {
 		const url = new URL(href.startsWith('http') ? href : `https://${href}`);
 		const host = url.hostname.replace(/^www\./, '');

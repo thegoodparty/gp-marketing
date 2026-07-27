@@ -5,18 +5,21 @@ import {
 	formatElectionDateFromApi,
 	formatSidebarLinkLabel,
 	formatTermLength,
+	htmlToPlainText,
 	inferSidebarLinkIcon,
 	prependClaimedWebsiteIfNew,
 	resolveClaimedCustomIssueText,
 	resolveClaimedTextField,
 	resolveProfileAboutText,
 	resolveProfileImageUrl,
+	resolveWebsiteIssueText,
 } from '~/lib/electionsHelpers';
-import { PageSections } from '~/PageSections';
 import type { SectionOverrides } from '~/PageSections';
 import type { CandidacyItem, FindByRaceIdResponse } from '~/types/elections';
 import type { ProfileData, OfficeData } from '~/PageSections/ProfileContentBlockSection';
-import { PROFILE_PAGE_SECTIONS } from './profilePageSections';
+import { SITE_NAME } from '~/lib/url';
+import { buildProfileTokens } from '~/lib/electionsTemplateHelpers';
+import { renderElectionTemplatePage } from '~/lib/renderElectionTemplatePage';
 
 export const revalidate = 3600;
 
@@ -35,7 +38,9 @@ function buildSectionOverrides(
 
 	const profileData: ProfileData = {
 		aboutMe: resolveProfileAboutText(candidate.about, claimed),
-		whyRunning: resolveClaimedTextField(claimed?.details?.pastExperience),
+		whyRunning:
+			htmlToPlainText(claimed?.website?.content?.about?.bio) ??
+			resolveClaimedTextField(claimed?.details?.pastExperience),
 		topIssues: buildTopIssues(candidate, claimed),
 	};
 
@@ -88,7 +93,7 @@ function buildSectionOverrides(
 		component_profileHero: {
 			candidateName,
 			office,
-			profileImageUrl: resolveProfileImageUrl(candidate.image),
+			profileImageUrl: resolveProfileImageUrl(candidate.image, claimed?.avatar),
 			isEmpowered: isClaimed,
 		},
 		component_profileContentBlock: {
@@ -122,7 +127,18 @@ function buildTopIssues(
 		}
 	}
 
-	if (claimed?.details?.customIssues?.length) {
+	const websiteIssues = claimed?.website?.content?.about?.issues;
+	let addedWebsiteIssues = false;
+	if (websiteIssues?.length) {
+		for (const issue of websiteIssues) {
+			const text = resolveWebsiteIssueText(issue);
+			if (text) {
+				parts.push(text);
+				addedWebsiteIssues = true;
+			}
+		}
+	}
+	if (!addedWebsiteIssues && claimed?.details?.customIssues?.length) {
 		for (const ci of claimed.details.customIssues) {
 			parts.push(resolveClaimedCustomIssueText(ci));
 		}
@@ -170,12 +186,19 @@ export default async function Page({
 		await resolveRaceElectionHrefs(candidate.Race?.slug, candidate.Race?.positionLevel),
 	);
 
-	return (
-		<PageSections
-			pageSections={PROFILE_PAGE_SECTIONS}
-			sectionOverrides={sectionOverrides}
-		/>
-	);
+	const candidateName = [candidate.firstName, candidate.lastName].filter(Boolean).join(' ') || 'Candidate';
+
+	return renderElectionTemplatePage({
+		context: {
+			templateType: 'candidateProfile',
+			candidateSlug: slug,
+		},
+		sectionOverrides,
+		tokens: buildProfileTokens({
+			candidateName,
+			officeName: candidate.positionName ?? 'Office',
+		}),
+	});
 }
 
 export async function generateMetadata({
@@ -202,7 +225,7 @@ export async function generateMetadata({
 	const claimed = await loadClaimedCampaignForCandidate(candidate);
 	const candidateName = [candidate.firstName, candidate.lastName].filter(Boolean).join(' ') || 'Candidate';
 	const positionName = candidate.positionName ?? 'Office';
-	const profileImageUrl = resolveProfileImageUrl(candidate.image);
+	const profileImageUrl = resolveProfileImageUrl(candidate.image, claimed?.avatar);
 
 	return {
 		title: `${candidateName} for ${positionName} | Good Party`,
@@ -210,6 +233,8 @@ export async function generateMetadata({
 			resolveProfileAboutText(candidate.about, claimed) ??
 			`View ${candidateName}'s profile for ${positionName}.`,
 		openGraph: {
+			type: 'website',
+			siteName: SITE_NAME,
 			images: profileImageUrl ? [{ url: profileImageUrl }] : undefined,
 		},
 	};

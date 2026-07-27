@@ -44,12 +44,11 @@ const nextConfig = {
 	reactStrictMode: true,
 	poweredByHeader: false,
 	optimizeFonts: true,
-	// TODO: Re-enable to fail builds on lint/type errors. May surface existing issues.
 	eslint: {
-		ignoreDuringBuilds: true,
+		ignoreDuringBuilds: false,
 	},
 	typescript: {
-		ignoreBuildErrors: true,
+		ignoreBuildErrors: false,
 	},
 
 	// */
@@ -71,6 +70,7 @@ const nextConfig = {
 			{ hostname: 'cdn.sanity.io' },
 			{ hostname: 'election-api.goodparty.org' },
 			{ hostname: 'election-api-dev.goodparty.org' },
+			{ hostname: 'img.clerk.com' },
 		],
 	},
 	experimental: {

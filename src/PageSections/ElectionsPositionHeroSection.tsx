@@ -1,8 +1,10 @@
 import { stegaClean } from 'next-sanity';
 
 import type { Sections } from '~/PageSections';
+import type { TokenMap } from '~/lib/resolveTokens';
+import { resolveSectionText } from '~/lib/resolveSectionText';
 
-import { isButtonType, transformButton } from '~/lib/buttonTransformer';
+import { normalizeRawCtaToButton, type RawCtaInput, transformButton } from '~/lib/buttonTransformer';
 
 import { primaryButtonStyleType } from '~/ui/_lib/designTypesStore';
 import { resolveBg } from '~/ui/_lib/resolveBg';
@@ -16,6 +18,8 @@ export type OfficeData = {
 	cityName?: string;
 	electionDate: string;
 	filingDate: string;
+	ctaHref?: string;
+	ctaLabel?: string;
 };
 
 // Default mock data for development/preview
@@ -33,10 +37,11 @@ type ElectionsPositionHeroSectionProps = Extract<
 	{ _type: 'component_electionsPositionHero' }
 > & {
 	officeData?: OfficeData;
+	tokens?: TokenMap;
 };
 
 export function ElectionsPositionHeroSection(props: ElectionsPositionHeroSectionProps) {
-	const { officeData, ...section } = props;
+	const { officeData, tokens, ...section } = props;
 	const backgroundColor = section.electionsPositionHeroDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(stegaClean(section.electionsPositionHeroDesignSettings.field_blockColorCreamMidnight))
 		: 'midnight';
@@ -55,11 +60,20 @@ export function ElectionsPositionHeroSection(props: ElectionsPositionHeroSection
 				});
 
 	const rawCta = section.ctaAction;
-	const ctaData = rawCta && isButtonType(rawCta) ? rawCta : null;
+	const ctaData = rawCta
+		? normalizeRawCtaToButton(rawCta as RawCtaInput, section._key ?? 'elections-position-hero-cta')
+		: undefined;
 	const fromSanity = ctaData ? transformButton(ctaData) : undefined;
+	// `transformButton` returns the ComponentButtonProps union; `href` only exists on the
+	// link-bearing variants, so read it defensively. On templated pages the CTA href/label
+	// always arrive via `officeData`; the Sanity values are only a fallback.
+	const sanityHref = fromSanity && 'href' in fromSanity ? fromSanity.href : undefined;
+	const resolvedLabel = resolveSectionText(data.ctaLabel, tokens);
 	const cta = fromSanity
 		? {
 				...fromSanity,
+				href: data.ctaHref ?? sanityHref ?? '/run',
+				label: resolvedLabel ?? fromSanity.label,
 				buttonProps: {
 					...fromSanity.buttonProps,
 					styleType: primaryButtonStyleType,
@@ -67,8 +81,8 @@ export function ElectionsPositionHeroSection(props: ElectionsPositionHeroSection
 			}
 		: {
 				buttonType: 'internal' as const,
-				href: '/run',
-				label: ctaData?.text ?? 'Primary CTA',
+				href: data.ctaHref ?? '/run',
+				label: resolvedLabel ?? 'Primary CTA',
 				buttonProps: {
 					styleType: primaryButtonStyleType,
 				},

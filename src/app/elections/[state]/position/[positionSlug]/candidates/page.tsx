@@ -9,7 +9,7 @@ import {
 	getStateName,
 	mapCandidacyToCard,
 } from '~/lib/electionsHelpers';
-import { CandidatesPageContent } from '~/ui/CandidatesPageContent';
+import { renderElectionsCandidatesPage } from '~/lib/renderElectionsCandidatesPage';
 
 export default async function Page({
 	params,
@@ -50,19 +50,19 @@ export default async function Page({
 		{ href: '', label: `Candidates for ${officeName}` },
 	];
 
-	return (
-		<CandidatesPageContent
-			officeName={officeName}
-			stateName={stateName}
-			electionDate={electionDate}
-			filingDate={filingDate}
-			breadcrumbs={breadcrumbs}
-			positionHref={positionHref}
-			locationHref={locationHref}
-			candidates={candidates}
-			race={race}
-		/>
-	);
+	return renderElectionsCandidatesPage({
+		placeSlug: stateCode.toLowerCase(),
+		raceSlug,
+		officeName,
+		stateName,
+		electionDate,
+		filingDate,
+		breadcrumbs,
+		positionHref,
+		locationHref,
+		candidates,
+		race,
+	});
 }
 
 export async function generateMetadata({

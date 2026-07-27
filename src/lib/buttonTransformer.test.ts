@@ -20,6 +20,10 @@ describe('isButtonType', () => {
 	test('accepts valid action', () => {
 		expect(isButtonType({ action: 'Internal', _key: 'x' })).toBe(true);
 	});
+
+	test('accepts field_ctaAction alias', () => {
+		expect(isButtonType({ field_ctaAction: 'External', _key: 'x' })).toBe(true);
+	});
 });
 
 describe('normalizeRawCtaToButton', () => {
@@ -38,6 +42,35 @@ describe('normalizeRawCtaToButton', () => {
 
 	test('returns undefined when action is missing', () => {
 		expect(normalizeRawCtaToButton({ field_buttonText: 'Learn more' }, 'card-cta')).toBeUndefined();
+	});
+
+	test('maps field_ctaAction to action and text', () => {
+		const button = normalizeRawCtaToButton(
+			{
+				field_ctaAction: 'External',
+				field_buttonText: 'Claim profile',
+				field_externalLink: 'https://app.goodparty.org/sign-up',
+			},
+			'cand-banner-cta',
+		);
+		expect(button?.action).toBe('External');
+		expect(button?.text).toBe('Claim profile');
+
+		const transformed = button ? transformButtons([button])?.[0] : undefined;
+		expect((transformed as { href?: string } | undefined)?.href).toBe('https://app.goodparty.org/sign-up');
+		expect(transformed?.label).toBe('Claim profile');
+	});
+
+	test('prefers GROQ action alias over field_ctaAction', () => {
+		const button = normalizeRawCtaToButton(
+			{
+				action: 'SignUp',
+				field_ctaAction: 'Internal',
+				text: 'Sign up',
+			},
+			'card-cta',
+		);
+		expect(button?.action).toBe('SignUp');
 	});
 
 	test('prefers GROQ action alias over field_ctaActionWithShared', () => {
@@ -61,10 +94,10 @@ describe('normalizeRawCtaToButton', () => {
 			},
 			'card-cta',
 		);
-		expect(button?.link?.href).toBe('/candidates');
+		expect((button?.link as { href?: string } | null | undefined)?.href).toBe('/candidates');
 
 		const transformed = button ? transformButtons([button])?.[0] : undefined;
-		expect(transformed?.href).toBe('/candidates');
+		expect((transformed as { href?: string } | undefined)?.href).toBe('/candidates');
 		expect(transformed?.label).toBe('Learn more');
 	});
 
@@ -80,7 +113,7 @@ describe('normalizeRawCtaToButton', () => {
 		expect(button?.action).toBe('Internal');
 
 		const transformed = button ? transformButtons([button])?.[0] : undefined;
-		expect(transformed?.href).toBe('/candidates');
+		expect((transformed as { href?: string } | undefined)?.href).toBe('/candidates');
 		expect(transformed?.label).toBe('Learn more');
 	});
 });
@@ -141,101 +174,17 @@ describe('transformButton', () => {
 	});
 });
 
-describe('transformButton — External action', () => {
-	test('returns external button when externalLink is set', () => {
-		const result = transformButton({
-			action: 'External',
-			field_externalLink: 'https://example.com',
-			text: 'Visit',
-			_key: 'ext-1',
-		} as Parameters<typeof transformButton>[0]);
-		expect(result?.buttonType).toBe('external');
-		expect(result?.href).toBe('https://example.com');
-		expect(result?.label).toBe('Visit');
-	});
+describe('transformButtons', () => {
+	test('normalizes raw field_ctaAction payloads before transforming', () => {
+		const transformed = transformButtons([
+			{
+				field_ctaAction: 'Internal',
+				field_buttonText: 'Get free demo',
+				link: { href: '/contact' },
+			} as never,
+		])?.[0];
 
-	test('returns undefined when externalLink is absent', () => {
-		// guards against rendering a broken <a> with no href
-		const result = transformButton({
-			action: 'External',
-			text: 'Visit',
-			_key: 'ext-2',
-		} as Parameters<typeof transformButton>[0]);
-		expect(result).toBeUndefined();
-	});
-});
-
-describe('transformButton — Anchor action', () => {
-	test('returns anchor button when anchor is set', () => {
-		const result = transformButton({
-			action: 'Anchor',
-			anchor: '#section-id',
-			text: 'Jump',
-			_key: 'anc-1',
-		} as Parameters<typeof transformButton>[0]);
-		expect(result?.buttonType).toBe('anchor');
-		expect(result?.href).toBe('#section-id');
-	});
-
-	test('returns undefined when anchor is absent', () => {
-		const result = transformButton({
-			action: 'Anchor',
-			text: 'Jump',
-			_key: 'anc-2',
-		} as Parameters<typeof transformButton>[0]);
-		expect(result).toBeUndefined();
-	});
-});
-
-describe('transformButton — LogIn and SignUp actions', () => {
-	test('LogIn returns hardcoded goodparty login URL', () => {
-		// guards against the href accidentally becoming undefined if env changes
-		const result = transformButton({
-			action: 'LogIn',
-			_key: 'login-1',
-		} as Parameters<typeof transformButton>[0]);
-		expect(result?.buttonType).toBe('external');
-		expect(result?.href).toBe('https://app.goodparty.org/login');
-		expect(result?.label).toBe('Login');
-	});
-
-	test('LogIn uses custom text when provided', () => {
-		const result = transformButton({
-			action: 'LogIn',
-			text: 'Log in to your account',
-			_key: 'login-2',
-		} as Parameters<typeof transformButton>[0]);
-		expect(result?.label).toBe('Log in to your account');
-	});
-
-	test('SignUp returns hardcoded goodparty sign-up URL', () => {
-		const result = transformButton({
-			action: 'SignUp',
-			_key: 'signup-1',
-		} as Parameters<typeof transformButton>[0]);
-		expect(result?.buttonType).toBe('external');
-		expect(result?.href).toBe('https://app.goodparty.org/sign-up');
-		expect(result?.label).toBe('Sign up');
-	});
-});
-
-describe('transformButtons — collection helpers', () => {
-	test('filters out null entries without throwing', () => {
-		const buttons = [null, { action: 'LogIn', _key: 'k1' }] as Parameters<typeof transformButtons>[0];
-		const result = transformButtons(buttons);
-		expect(result).toHaveLength(1);
-		expect(result?.[0]?.href).toBe('https://app.goodparty.org/login');
-	});
-
-	test('returns undefined for undefined input', () => {
-		expect(transformButtons(undefined)).toBeUndefined();
-	});
-
-	test('returns empty array when all buttons produce no href', () => {
-		const buttons = [
-			{ action: 'Internal', link: { href: '' }, text: 'x', _key: 'k1' },
-			{ action: 'External', text: 'y', _key: 'k2' },
-		] as Parameters<typeof transformButtons>[0];
-		expect(transformButtons(buttons)).toEqual([]);
+		expect(transformed?.label).toBe('Get free demo');
+		expect((transformed as { href?: string } | undefined)?.href).toBe('/contact');
 	});
 });

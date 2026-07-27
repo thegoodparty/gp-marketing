@@ -1,5 +1,4 @@
 import { cn, tv } from './_lib/utils.ts';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 import { Container } from './Container.tsx';
 import { ElectionsSidebar, type ElectionsSidebarProps } from './ElectionsSidebar.tsx';
 import { ProfileContentCard, type ProfileContentCardProps } from './ProfileContentCard.tsx';
@@ -30,7 +29,7 @@ const styles = tv({
 
 export type ProfileContentBlockProps = {
 	className?: string;
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	sidebar?: ElectionsSidebarProps;
 	title?: string;
 	contentCards: ProfileContentCardProps[];
@@ -44,15 +43,7 @@ export function ProfileContentBlock(props: ProfileContentBlockProps) {
 	return (
 		<article className={cn(base(), props.className)} data-component='ProfileContentBlock'>
 			<Container size='xl'>
-				<div
-					className={cn(
-						hasContentCards
-							? grid()
-							: props.sidebar
-								? well()
-								: undefined,
-					)}
-				>
+				<div className={cn(hasContentCards ? grid() : props.sidebar ? well() : undefined)}>
 					{props.sidebar && (
 						<aside className={hasContentCards ? sidebar() : sidebarStandalone()}>
 							<ElectionsSidebar {...props.sidebar} />
@@ -61,7 +52,7 @@ export function ProfileContentBlock(props: ProfileContentBlockProps) {
 					{hasContentCards && (
 						<div className={cn(content())}>
 							{props.title && (
-								<Text as="h2" styleType="heading-sm" className={titleSlot()}>
+								<Text as='h2' styleType='heading-sm' className={titleSlot()}>
 									{props.title}
 								</Text>
 							)}

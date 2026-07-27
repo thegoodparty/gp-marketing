@@ -5,6 +5,8 @@
 
 const PRODUCTION_HOST = 'https://goodparty.org';
 
+export const SITE_NAME = 'GoodParty.org';
+
 function sanitizeSiteUrl(value: string | undefined): string | undefined {
 	if (value == null || typeof value !== 'string') return undefined;
 	const cleaned = value.replace(/[\s\r\n]+/g, '').replace(/\/$/, '');

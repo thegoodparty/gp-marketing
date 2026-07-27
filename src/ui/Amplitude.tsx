@@ -24,6 +24,7 @@ function markAmplitudeUnavailable(message: string) {
 }
 
 function adoptExternalAmplitude() {
+	// Externally-owned Amplitude (GTM/Segment) also needs cookieOptions.domain: '.goodparty.org' at its source to stitch across subdomains.
 	const state = getAmplitudeState();
 	if (!state || state.clientInitialized) return;
 	state.clientInitialized = true;
@@ -36,10 +37,19 @@ function bootAppAmplitude() {
 	if (!state || state.clientInitialized) return;
 	state.clientInitialized = true;
 
+	const host = window.location.hostname;
+	const onGoodPartyDomain = host === 'goodparty.org' || host.endsWith('.goodparty.org');
+
 	window.amplitude.init(AMPLITUDE_API_KEY, {
 		fetchRemoteConfig: false,
-		autocapture: true,
+		autocapture: {
+			attribution: {
+				resetSessionOnNewCampaign: false,
+				excludeReferrers: [/goodparty\.org$/],
+			},
+		},
 		transport: 'beacon',
+		...(onGoodPartyDomain ? { cookieOptions: { domain: '.goodparty.org' } } : {}),
 	});
 	markAmplitudeReady();
 }

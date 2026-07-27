@@ -6,11 +6,17 @@ import {
 	resolveButtonHref,
 	type RawCtaInput,
 } from '~/lib/buttonTransformer';
+import type { TokenMap } from '~/lib/resolveTokens';
+import { resolveSectionText } from '~/lib/resolveSectionText';
 
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { resolveComponentColor } from '~/ui/_lib/resolveComponentColor';
 import { CTACardBlock } from '~/ui/CTACardBlock';
 import { stegaClean } from 'next-sanity';
+
+type Props = Extract<Sections, { _type: 'component_ctaCardsBlock' }> & {
+	tokens?: TokenMap;
+};
 
 export function resolveCtaCardHref(
 	cta: unknown,
@@ -21,7 +27,7 @@ export function resolveCtaCardHref(
 	return isUsableHref(href) ? href : labelFallback?.href;
 }
 
-export function CTACardsBlockSection(section: Extract<Sections, { _type: 'component_ctaCardsBlock' }>) {
+export function CTACardsBlockSection(section: Props) {
 	const backgroundColor = section.ctaCardsBlockDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(stegaClean(section.ctaCardsBlockDesignSettings.field_blockColorCreamMidnight))
 		: 'cream';
@@ -49,14 +55,14 @@ export function CTACardsBlockSection(section: Extract<Sections, { _type: 'compon
 				card1={{
 					color: resolveComponentColor(stegaClean(section.ctaCardOne?.field_componentColor6ColorsInverse), backgroundColor),
 					href: cardOneHref,
-					label: section.ctaCardOne?.field_label,
-					title: cardOneTitle ?? undefined,
+					label: resolveSectionText(section.ctaCardOne?.field_label, section.tokens),
+					title: resolveSectionText(cardOneTitle ?? undefined, section.tokens),
 				}}
 				card2={{
 					color: resolveComponentColor(stegaClean(section.ctaCardTwo?.field_componentColor6ColorsInverse), backgroundColor),
 					href: cardTwoHref,
-					label: section.ctaCardTwo?.field_label,
-					title: cardTwoTitle ?? undefined,
+					label: resolveSectionText(section.ctaCardTwo?.field_label, section.tokens),
+					title: resolveSectionText(cardTwoTitle ?? undefined, section.tokens),
 				}}
 			/>
 		</section>

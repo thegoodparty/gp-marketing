@@ -7993,10 +7993,6 @@
               {
                 "type": "string",
                 "value": "candidate"
-              },
-              {
-                "type": "string",
-                "value": "person"
               }
             ]
           },
@@ -10601,6 +10597,14 @@
           "value": {
             "type": "inline",
             "name": "field_question"
+          },
+          "optional": true
+        },
+        "field_slug": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_slug"
           },
           "optional": true
         },
@@ -14062,7 +14066,19 @@
           "of": [
             {
               "type": "string",
-              "value": "location"
+              "value": "locationState"
+            },
+            {
+              "type": "string",
+              "value": "locationCounty"
+            },
+            {
+              "type": "string",
+              "value": "locationCity"
+            },
+            {
+              "type": "string",
+              "value": "locationDistrict"
             },
             {
               "type": "string",
@@ -14281,7 +14297,19 @@
           "of": [
             {
               "type": "string",
-              "value": "location"
+              "value": "locationState"
+            },
+            {
+              "type": "string",
+              "value": "locationCounty"
+            },
+            {
+              "type": "string",
+              "value": "locationCity"
+            },
+            {
+              "type": "string",
+              "value": "locationDistrict"
             },
             {
               "type": "string",
@@ -15321,59 +15349,6 @@
     }
   },
   {
-    "name": "faq",
-    "type": "document",
-    "attributes": {
-      "_id": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        }
-      },
-      "_type": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string",
-          "value": "faq"
-        }
-      },
-      "_createdAt": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        }
-      },
-      "_updatedAt": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        }
-      },
-      "_rev": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        }
-      },
-      "faqOverview": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "faqOverview"
-        },
-        "optional": true
-      },
-      "generalContentTags": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "generalContentTags"
-        },
-        "optional": true
-      }
-    }
-  },
-  {
     "name": "faqCollection",
     "type": "document",
     "attributes": {
@@ -15543,6 +15518,32 @@
                   }
                 },
                 "dereferencesTo": "topics"
+              },
+              {
+                "type": "object",
+                "attributes": {
+                  "_ref": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "_type": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string",
+                      "value": "reference"
+                    }
+                  },
+                  "_weak": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "boolean"
+                    },
+                    "optional": true
+                  }
+                },
+                "dereferencesTo": "faq"
               },
               {
                 "type": "object",
@@ -16472,6 +16473,59 @@
         "value": {
           "type": "inline",
           "name": "seo"
+        },
+        "optional": true
+      }
+    }
+  },
+  {
+    "name": "faq",
+    "type": "document",
+    "attributes": {
+      "_id": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_type": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string",
+          "value": "faq"
+        }
+      },
+      "_createdAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_updatedAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_rev": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "faqOverview": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "faqOverview"
+        },
+        "optional": true
+      },
+      "generalContentTags": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "generalContentTags"
         },
         "optional": true
       }

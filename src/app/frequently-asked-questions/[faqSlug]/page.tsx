@@ -1,4 +1,5 @@
 import type { Metadata, ResolvingMetadata } from 'next';
+import type { PortableTextProps } from '@portabletext/react';
 import { notFound } from 'next/navigation';
 import { stegaClean } from 'next-sanity';
 import { allFaqsQuery } from '~/sanity/groq';
@@ -40,7 +41,9 @@ export default async function Page(props: Params) {
 
 	const faqTextItems = resolveFAQItemsAsText([faq]);
 	const faqSchema = buildFAQSchema(faqTextItems);
-	const question = faq.faqOverview?.field_question ? stegaClean(faq.faqOverview.field_question) : undefined;
+	const rawQuestion = faq.faqOverview?.field_question;
+	const question = typeof rawQuestion === 'string' ? stegaClean(rawQuestion) : undefined;
+	const answer = (faq.faqOverview as { block_answer?: PortableTextProps['value'] } | null | undefined)?.block_answer;
 
 	return (
 		<>
@@ -51,11 +54,7 @@ export default async function Page(props: Params) {
 						href={FAQ_BASE_PATH}
 						className='group inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-black transition-colors w-fit'
 					>
-						<ArrowShortIcon
-							size={24}
-							className='rotate-180 flex-shrink-0'
-							innerClassName='group-hover:animate-slide-in-right'
-						/>
+						<ArrowShortIcon size={24} className='rotate-180 flex-shrink-0' innerClassName='group-hover:animate-slide-in-right' />
 						{FAQ_PAGE_LABEL}
 					</Anchor>
 					{question && (
@@ -71,7 +70,7 @@ export default async function Page(props: Params) {
 							`[&_ul:not([class])]:pl-8 [&_ul:not([class])]:list-disc [&_ul:not([class])_ul]:mt-2 [&_ul:not([class])_li]:mb-[0.5em] [&_ol:not([class])]:list-none [&_ol:not([class])]:[counter-reset:section] [&_ol:not([class])_ol]:mt-2 [&_ol:not([class])_li]:pl-8 [&_ol:not([class])_li]:mb-[0.5em] [&_ol:not([class])_li]:[counter-increment:section] [&_ol:not([class])_li]:before:[content:counters(section,'.')] [&_ol:not([class])_li]:before:mr-3 [&_ol:not([class])_li]:before:font-medium`,
 						)}
 					>
-						<RichData value={faq.faqOverview?.block_answer} />
+						<RichData value={answer} />
 					</Text>
 				</Container>
 			</div>
@@ -94,15 +93,15 @@ export async function generateMetadata(props: Params, parent: ResolvingMetadata)
 
 	const slugMap = buildFaqSlugMap(faqs ?? []);
 	const pageUrl = getFaqHref(faq, slugMap);
-	const question = faq.faqOverview?.field_question
-		? stegaClean(faq.faqOverview.field_question)
-		: undefined;
+	const rawQuestion = faq.faqOverview?.field_question;
+	const question = typeof rawQuestion === 'string' ? stegaClean(rawQuestion) : undefined;
 	const answerText = resolveFAQItemsAsText([faq])[0]?.copy;
 	const description = answerText && answerText.length > 160 ? `${answerText.slice(0, 157)}...` : answerText;
 
 	return StructureMetaData(parentMetadata, {
 		name: question,
 		seo: {
+			_type: 'seo',
 			field_metaTitle: question,
 			field_metaDescription: description,
 		},

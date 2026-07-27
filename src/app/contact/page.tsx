@@ -26,9 +26,7 @@ export default async function Page() {
 	}
 
 	const contactUrl = page.href ? toAbsoluteUrl(page.href) : toAbsoluteUrl('/contact');
-	const contactName = page['contactPageOverview']?.field_pageTitle
-		? stegaClean(page['contactPageOverview'].field_pageTitle)
-		: 'Contact';
+	const contactName = page['contactPageOverview']?.field_pageTitle ? stegaClean(page['contactPageOverview'].field_pageTitle) : 'Contact';
 	const contactDescription = page.seo?.field_metaDescription
 		? stegaClean(page.seo.field_metaDescription)
 		: page['contactPageOverview']?.field_summaryDescription
@@ -66,7 +64,7 @@ export async function generateMetadata(parent: ResolvingMetadata): Promise<Metad
 
 	return StructureMetaData(parentMetadata, {
 		name: page?.contactPageOverview?.field_pageTitle,
-		seo: page?.seo,
+		seo: page?.seo ?? undefined,
 		url: page?.href ?? undefined,
 	});
 }

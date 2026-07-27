@@ -2,13 +2,49 @@ import { describe, expect, test } from 'bun:test';
 import { buildElectionTemplatePreviewPath } from '~/lib/electionTemplatePreview';
 
 describe('buildElectionTemplatePreviewPath', () => {
-	test('builds location path', () => {
+	test('builds state location path', () => {
 		expect(
-			buildElectionTemplatePreviewPath('location', {
+			buildElectionTemplatePreviewPath('locationState', {
 				field_electionTargetType: 'place',
 				field_electionTargetSlug: 'ny',
 			}),
 		).toBe('/elections/ny');
+	});
+
+	test('builds county location path', () => {
+		expect(
+			buildElectionTemplatePreviewPath('locationCounty', {
+				field_electionTargetType: 'place',
+				field_electionTargetSlug: 'wi/adams-county',
+			}),
+		).toBe('/elections/wi/adams-county');
+	});
+
+	test('builds city location path', () => {
+		expect(
+			buildElectionTemplatePreviewPath('locationCity', {
+				field_electionTargetType: 'place',
+				field_electionTargetSlug: 'wi/adams-county/adams',
+			}),
+		).toBe('/elections/wi/adams-county/adams');
+	});
+
+	test('builds district location path', () => {
+		expect(
+			buildElectionTemplatePreviewPath('locationDistrict', {
+				field_electionTargetType: 'place',
+				field_electionTargetSlug: 'mn/minneapolis-public-school-district',
+			}),
+		).toBe('/elections/mn/minneapolis-public-school-district');
+	});
+
+	test('builds legacy location path', () => {
+		expect(
+			buildElectionTemplatePreviewPath('location', {
+				field_electionTargetType: 'place',
+				field_electionTargetSlug: 'ny/kings-county',
+			}),
+		).toBe('/elections/ny/kings-county');
 	});
 
 	test('builds position path with position slug', () => {

@@ -4,7 +4,7 @@ import type { Sections } from '~/PageSections';
 import type { TokenMap } from '~/lib/resolveTokens';
 import { resolveSectionText } from '~/lib/resolveSectionText';
 
-import { isButtonType, transformButton } from '~/lib/buttonTransformer';
+import { normalizeRawCtaToButton, type RawCtaInput, transformButton } from '~/lib/buttonTransformer';
 
 import { primaryButtonStyleType } from '~/ui/_lib/designTypesStore';
 import { resolveBg } from '~/ui/_lib/resolveBg';
@@ -60,7 +60,9 @@ export function ElectionsPositionHeroSection(props: ElectionsPositionHeroSection
 				});
 
 	const rawCta = section.ctaAction;
-	const ctaData = rawCta && isButtonType(rawCta) ? rawCta : null;
+	const ctaData = rawCta
+		? normalizeRawCtaToButton(rawCta as RawCtaInput, section._key ?? 'elections-position-hero-cta')
+		: undefined;
 	const fromSanity = ctaData ? transformButton(ctaData) : undefined;
 	// `transformButton` returns the ComponentButtonProps union; `href` only exists on the
 	// link-bearing variants, so read it defensively. On templated pages the CTA href/label

@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from 'react';
 
 import { cn, tv } from './_lib/utils.ts';
-import { secondaryButtonStyleType, type backgroundTypeValues } from './_lib/designTypesStore.ts';
+import { secondaryButtonStyleType } from './_lib/designTypesStore.ts';
 
 import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
@@ -38,10 +38,12 @@ const styles = tv({
 		headerPositionCell: 'ml-8',
 		headerDateCell: 'ml-auto',
 		tableBody: 'flex flex-col gap-3',
-		tableRow: 'group bg-white rounded-lg border border-neutral-200 hover:border-goodparty-blue transition-colors flex items-center gap-4 px-4 py-4',
+		tableRow:
+			'group bg-white rounded-lg border border-neutral-200 hover:border-goodparty-blue transition-colors flex items-center gap-4 px-4 py-4',
 		tableCell: 'flex items-center',
 		positionCell: 'flex items-center ml-2',
-		typeTag: 'inline-block px-3 py-1 rounded-sm bg-goodparty-blue text-white font-secondary text-text-xs font-semibold uppercase whitespace-nowrap',
+		typeTag:
+			'inline-block px-3 py-1 rounded-sm bg-goodparty-blue text-white font-secondary text-text-xs font-semibold uppercase whitespace-nowrap',
 		positionText: 'font-secondary text-body-2 text-neutral-900',
 		dateText: 'font-secondary text-body-2 text-neutral-600',
 		dateCell: 'flex items-center ml-auto',
@@ -96,7 +98,7 @@ export type HeadlineLabelType = 'state' | 'municipal' | 'county' | 'district';
 
 export interface ListOfOfficesBlockProps {
 	className?: string;
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	heading?: string;
 	/** Pre-built headline string (used when headlineLabel is not set). */
 	headline?: string;
@@ -193,31 +195,29 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 		: props.headline;
 
 	return (
-		<article className={cn(base(), props.className)} data-component="ListOfOfficesBlock">
-			<Container size="xl">
+		<article className={cn(base(), props.className)} data-component='ListOfOfficesBlock'>
+			<Container size='xl'>
 				<div className={wrapper()}>
-
-
 					{/* Main Card */}
 					<div className={card()}>
 						{/* Header Row: Headline + Year Selector */}
 						<div className={headerRow()}>
 							{displayHeadline && (
-								<Text as="h3" styleType="heading-md" className={headlineStyle()}>
+								<Text as='h3' styleType='heading-md' className={headlineStyle()}>
 									{displayHeadline}
 								</Text>
 							)}
 							<div className={yearSelectorWrapper()}>
-								<Text as="label" styleType="subtitle-2" className={yearLabel()} htmlFor="year-select">
+								<Text as='label' styleType='subtitle-2' className={yearLabel()} htmlFor='year-select'>
 									Year
 								</Text>
-								<div className="relative">
+								<div className='relative'>
 									<select
-										id="year-select"
+										id='year-select'
 										className={yearSelect()}
 										value={selectedYear}
 										onChange={handleYearChange}
-										aria-label="Select year"
+										aria-label='Select year'
 									>
 										{availableYears.map(year => (
 											<option key={year} value={year}>
@@ -225,7 +225,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 											</option>
 										))}
 									</select>
-									<IconResolver icon="calendar-days" className={yearSelectIcon()} />
+									<IconResolver icon='calendar-days' className={yearSelectIcon()} />
 								</div>
 							</div>
 						</div>
@@ -239,7 +239,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 											<div className={tableHeaderCell()}>Type</div>
 											<div className={cn(tableHeaderCell(), headerPositionCell())}>Position</div>
 											<div className={cn(tableHeaderCell(), headerDateCell())}>Next Election Date</div>
-											<div className={tableHeaderCell()} aria-label="Actions"></div>
+											<div className={tableHeaderCell()} aria-label='Actions'></div>
 										</div>
 										<div className={tableBody()}>
 											{visibleOffices.map(office => {
@@ -249,14 +249,18 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 															<span className={typeTag()}>{office.type}</span>
 														</div>
 														<div className={positionCell()}>
-															<Text styleType="body-2" className={positionText()}>{office.position}</Text>
+															<Text styleType='body-2' className={positionText()}>
+																{office.position}
+															</Text>
 														</div>
-													<div className={dateCell()}>
-														<Text styleType="body-2" className={dateText()}>{formatElectionDateFromApi(office.nextElectionDate)}</Text>
-													</div>
-													<div className={tableCell()}>
-														<ArrowRightIcon size={32} className={arrowIcon()} innerClassName="group-hover:animate-slide-in-right" />
-													</div>
+														<div className={dateCell()}>
+															<Text styleType='body-2' className={dateText()}>
+																{formatElectionDateFromApi(office.nextElectionDate)}
+															</Text>
+														</div>
+														<div className={tableCell()}>
+															<ArrowRightIcon size={32} className={arrowIcon()} innerClassName='group-hover:animate-slide-in-right' />
+														</div>
 													</>
 												);
 
@@ -270,10 +274,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 														{RowContent}
 													</Anchor>
 												) : (
-													<div
-														key={office.id}
-														className={tableRow()}
-													>
+													<div key={office.id} className={tableRow()}>
 														{RowContent}
 													</div>
 												);
@@ -289,11 +290,15 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 											<div className={cardContent()}>
 												<div className={cardLeft()}>
 													<span className={typeTag()}>{office.type}</span>
-													<Text styleType="body-2" className={positionText()}>{office.position}</Text>
-													<Text styleType="body-2" className={dateText()}>{formatElectionDateFromApi(office.nextElectionDate)}</Text>
+													<Text styleType='body-2' className={positionText()}>
+														{office.position}
+													</Text>
+													<Text styleType='body-2' className={dateText()}>
+														{formatElectionDateFromApi(office.nextElectionDate)}
+													</Text>
 												</div>
 												<div className={cardRight()}>
-													<ArrowRightIcon size={32} className={arrowIcon()} innerClassName="group-hover:animate-slide-in-right" />
+													<ArrowRightIcon size={32} className={arrowIcon()} innerClassName='group-hover:animate-slide-in-right' />
 												</div>
 											</div>
 										);
@@ -313,7 +318,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 								{hasMore && (
 									<div className={showMoreWrapper()}>
 										<Button
-											parent="ListOfOfficesBlock"
+											parent='ListOfOfficesBlock'
 											styleType={secondaryButtonStyleType}
 											onClick={() => setVisibleCount(prev => prev + pageSize)}
 										>
@@ -323,8 +328,8 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 								)}
 							</>
 						) : (
-							<div className="py-8 text-center">
-								<Text styleType="body-2" className="text-neutral-500">
+							<div className='py-8 text-center'>
+								<Text styleType='body-2' className='text-neutral-500'>
 									{props.searchQuery?.trim()
 										? 'No positions match your search'
 										: props.isLoading

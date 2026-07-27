@@ -4,14 +4,13 @@ import { cn, tv } from './_lib/utils.ts';
 import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
 import { isValidRichText } from './_lib/isValidRichText.ts';
 import type { FormProps } from './_lib/resolveForm.ts';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 import { resolveTextSize, type ResolvedTextSize } from '~/ui/_lib/resolveTextSize.ts';
 
 import { Container } from './Container.tsx';
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { EmbedHtml } from './EmbedHtml.tsx';
 import { Media } from './Media.tsx';
-import { Newsletter } from './Form/Newsletter.tsx';
+import { HubSpotEmbedForm } from './Form/HubSpotEmbedForm.tsx';
 import { Text } from './Text.tsx';
 
 const styles = tv({
@@ -132,7 +131,7 @@ const styles = tv({
 });
 
 export type HeroBlockProps = {
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	buttons?: ComponentButtonProps[];
 	className?: string;
 	copy?: ReactNode;
@@ -140,7 +139,17 @@ export type HeroBlockProps = {
 	priority?: boolean;
 	showFullImage?: boolean;
 	label?: string;
-	layout?: 'no-media' | 'media-left' | 'media-right' | 'media-center' | 'media-left-full' | 'media-right-full' | 'media-center-full' | 'embed-right' | 'embed-left' | 'embed-center';
+	layout?:
+		| 'no-media'
+		| 'media-left'
+		| 'media-right'
+		| 'media-center'
+		| 'media-left-full'
+		| 'media-right-full'
+		| 'media-center-full'
+		| 'embed-right'
+		| 'embed-left'
+		| 'embed-center';
 	embedCode?: string;
 	subscribe?: boolean;
 	title?: string;
@@ -163,15 +172,21 @@ export function HeroBlock(props: HeroBlockProps) {
 			<Container size={layout.includes('center-full') ? 'unset' : 'xl'}>
 				<div className={wrapper()}>
 					<div className={container()}>
-					{layout !== 'no-media' && (
-						<div className={media()}>
-							{props.embedCode ? (
-								<EmbedHtml html={props.embedCode} />
-							) : (
-								<Media aspectRatio='5:4' className={roundMedia ? 'rounded-lg' : undefined} image={props.image} objectFit={props.showFullImage ? 'contain' : 'cover'} priority={props.priority} />
-							)}
-						</div>
-					)}
+						{layout !== 'no-media' && (
+							<div className={media()}>
+								{props.embedCode ? (
+									<EmbedHtml html={props.embedCode} />
+								) : (
+									<Media
+										aspectRatio='5:4'
+										className={roundMedia ? 'rounded-lg' : undefined}
+										image={props.image}
+										objectFit={props.showFullImage ? 'contain' : 'cover'}
+										priority={props.priority}
+									/>
+								)}
+							</div>
+						)}
 						<div className={content()}>
 							<div className='flex flex-col gap-3 md:gap-4'>
 								{props.label && (
@@ -193,11 +208,7 @@ export function HeroBlock(props: HeroBlockProps) {
 								)}
 							</div>
 							{props.form?.provider === 'Hubspot' && props.form.formId && (
-								<Newsletter
-									formId={props.form.formId}
-									redirectTo={props.form.redirectTo}
-									submitLabel={props.form.submitLabel}
-								/>
+								<HubSpotEmbedForm formId={props.form.formId} redirectTo={props.form.redirectTo} submitLabel={props.form.submitLabel} />
 							)}
 							{props.buttons && props.buttons.length > 0 && (
 								<div className={buttons()}>

@@ -1,8 +1,6 @@
-import { draftMode } from 'next/headers';
-import { redirect } from 'next/navigation';
 // import { fetchPath } from '~/lib/loadPageQueryNew';
 
-export async function GET(req: Request) {
+export async function GET(_req: Request) {
 	// const url = new URL(req.url);
 	// const id = url.searchParams.get('id')?.replace(/^drafts\./, '');
 	// const type = url.searchParams.get('type');

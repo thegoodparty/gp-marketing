@@ -1,11 +1,14 @@
 import type { SectionOverrides, Sections } from '~/PageSections';
 import { isButtonType, transformButton } from '~/lib/buttonTransformer';
+import type { TokenMap } from '~/lib/resolveTokens';
+import { resolveSectionText } from '~/lib/resolveSectionText';
 import { ClaimProfileBlock } from '~/ui/ClaimProfileBlock';
 import { ClaimProfileModal } from '~/components/people/ClaimProfileModal';
 import { stegaClean } from 'next-sanity';
 
 type Props = Extract<Sections, { _type: 'component_claimProfileBlock' }> & {
 	claimProfileOverride?: SectionOverrides['component_claimProfileBlock'];
+	tokens?: TokenMap;
 };
 
 export function resolveExampleCardPartyAffiliation(
@@ -22,7 +25,19 @@ export function resolveClaimProfileBlockBackgroundColor(bgValue: ReturnType<type
 	return 'cream';
 }
 
-export function ClaimProfileBlockSection({ claimProfileOverride, ...section }: Props) {
+type ClaimProfileContent = Extract<Sections, { _type: 'component_claimProfileBlock' }>['claimProfileBlockContent'];
+
+export function resolveClaimProfileBlockText(
+	content: ClaimProfileContent,
+	tokens?: TokenMap,
+): { headline?: string; body?: string } {
+	return {
+		headline: resolveSectionText(content?.field_headline, tokens),
+		body: resolveSectionText(content?.field_body, tokens),
+	};
+}
+
+export function ClaimProfileBlockSection({ claimProfileOverride, tokens, ...section }: Props) {
 	const bgValue = stegaClean(section.claimProfileBlockDesignSettings?.field_blockColorCreamMidnight);
 	const backgroundColor = resolveClaimProfileBlockBackgroundColor(bgValue);
 
@@ -44,14 +59,15 @@ export function ClaimProfileBlockSection({ claimProfileOverride, ...section }: P
 	const ctaButton = section.ctaAction;
 	const claimButton = ctaButton && isButtonType(ctaButton) ? transformButton(ctaButton) : undefined;
 	const exampleCard = section.claimProfileBlockContent?.exampleCard;
+	const { headline, body } = resolveClaimProfileBlockText(section.claimProfileBlockContent, tokens);
 
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Claim Profile Block'>
 			<ClaimProfileBlock
 				layout={claimProfileOverride?.layout ?? 'card'}
 				backgroundColor={backgroundColor}
-				headline={section.claimProfileBlockContent?.field_headline}
-				body={section.claimProfileBlockContent?.field_body}
+				headline={headline}
+				body={body}
 				claimButton={
 					claimButton ?? {
 						buttonType: 'internal',

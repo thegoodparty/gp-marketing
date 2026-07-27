@@ -43,7 +43,14 @@ export async function CTAImageBlockSection(
 
 	const { base } = styles({ backgroundColor });
 
-	const primaryButton = transformButtons([section['primaryCTA']])?.[0];
+	const primaryCTA = section.ctaOverride?.primaryButtonHref
+		? {
+				...(section['primaryCTA'] as object),
+				action: 'Internal' as const,
+				link: { href: section.ctaOverride.primaryButtonHref },
+			}
+		: section['primaryCTA'];
+	const primaryButton = transformButtons([primaryCTA as never])?.[0];
 	const primaryButtonWithOverride =
 		primaryButton && section.ctaOverride?.primaryButtonHref
 			? { ...primaryButton, href: section.ctaOverride.primaryButtonHref }
@@ -56,7 +63,7 @@ export async function CTAImageBlockSection(
 				image={section.image?.img_featuredImage}
 				showFullImage={section.image?.showFullImage}
 				label={resolveSectionText(section['overview']?.field_label, section.tokens)}
-				title={resolveSectionText(section['overview']?.field_title, section.tokens)}
+				title={resolveSectionText(section['overview']?.field_title, section.tokens) ?? ''}
 				copy={<RichData value={resolveRichTextTokens(section['overview']?.block_summaryText, section.tokens)} />}
 				caption={resolveSectionText(section['overview']?.field_caption, section.tokens)}
 				primaryButton={primaryButtonWithOverride}

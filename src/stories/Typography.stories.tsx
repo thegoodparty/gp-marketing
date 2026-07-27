@@ -98,7 +98,7 @@ const meta = preview.meta({
 						Text xs
 					</Text>
 				</div>
-				<T style={{ marginBottom: '2rem' }} styleType='default'>
+				<T as='div' style={{ marginBottom: '2rem' }} styleType='default'>
 					<h1>Heading 1</h1>
 					<p>
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultricies accumsan eros eget ultricies. Aliquam dictum faucibus

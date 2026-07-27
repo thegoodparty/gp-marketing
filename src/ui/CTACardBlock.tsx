@@ -1,5 +1,4 @@
 import { cn, tv } from './_lib/utils.ts';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 import { CTACard, type CTACardProps } from './CTACard.tsx';
 import { Container } from './Container.tsx';
@@ -21,7 +20,7 @@ const styles = tv({
 });
 
 export type CTACardBlockProps = {
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	card1: CTACardProps;
 	card2: CTACardProps;
 	className?: string;

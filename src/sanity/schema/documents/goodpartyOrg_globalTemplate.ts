@@ -5,15 +5,18 @@ import { field_electionTemplateType } from '../fields/field_electionTemplateType
 
 const EDITOR_INSTRUCTIONS = `Global templates are the site-wide default for each election page family.
 
-If a custom template matches the current page but has an error, the site falls back to this global template.
-If this global template is missing or invalid, the site falls back to the built-in code default (same as launch).
+Location pages have separate globals for state, county, city, and district index pages.
+
+If a custom template is missing, disabled, or has no page sections, the site uses this global template.
+If this global template is missing or has no page sections, the site uses the built-in default (same as launch).
 
 Supported tokens in plain text fields:
 - Location: [State], [County], [City], [District]
 - Position / candidates: [office name], [State], [County or City], [office], [location]
 - Profile: [candidate name], [office name]
 
-Preview: set Preview Target to a real slug so the iframe opens an example page.`;
+Preview: set Preview Target to a real slug so the iframe opens an example page.
+For Candidate Profile, choose Candidate and a candidate slug (e.g. janet-mills/us-senate-maine).`;
 
 export const goodpartyOrg_globalTemplate = {
 	title: 'Global Election Template',

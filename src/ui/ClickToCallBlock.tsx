@@ -1,14 +1,9 @@
 'use client';
 
 import { useEffect, useId, useMemo, useState } from 'react';
-import {
-	trackClickToCallCtaClicked,
-	trackClickToCallCtaViewed,
-	trackClickToCallPhoneSubmitted,
-} from '~/lib/analytics';
+import { trackClickToCallCtaClicked, trackClickToCallCtaViewed, trackClickToCallPhoneSubmitted } from '~/lib/analytics';
 import { cn, tv } from '~/ui/_lib/utils.ts';
 import { resolveInverseButtonStyleType } from '~/ui/_lib/resolveButtonStyleType.ts';
-import type { backgroundTypeValues } from '~/ui/_lib/designTypesStore.ts';
 import { ComponentButton } from '~/ui/Inputs/Button.tsx';
 import { Container } from '~/ui/Container.tsx';
 import { FadeIn } from '~/ui/FadeIn.tsx';
@@ -53,7 +48,7 @@ export type ClickToCallBlockProps = {
 	microcopy: string;
 	phoneNumberDisplay: string;
 	responseTime: string;
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	color?: any;
 	className?: string;
 };
@@ -112,11 +107,7 @@ export function ClickToCallBlock(props: ClickToCallBlockProps) {
 							{submitted ? (
 								<Text styleType='body-1'>Thanks. If this number looks right, you will get a call shortly.</Text>
 							) : (
-								<form
-									className='flex w-full max-w-md flex-col items-stretch gap-4'
-									onSubmit={handleSubmit}
-									noValidate
-								>
+								<form className='flex w-full max-w-md flex-col items-stretch gap-4' onSubmit={handleSubmit} noValidate>
 									<label className='sr-only' htmlFor={inputId}>
 										Phone number
 									</label>
@@ -129,7 +120,7 @@ export function ClickToCallBlock(props: ClickToCallBlockProps) {
 										placeholder='(555) 555-5555'
 										className='rounded-full border border-black/20 bg-white px-5 py-3 text-left text-[0.875rem] text-black placeholder:text-neutral-400 focus:border-black focus:outline-none focus:ring-4 focus:ring-black/10'
 										value={phone}
-										onChange={(ev) => {
+										onChange={ev => {
 											setPhone(ev.target.value);
 											if (error) setError(null);
 										}}
@@ -146,7 +137,7 @@ export function ClickToCallBlock(props: ClickToCallBlockProps) {
 											buttonType='button'
 											label={props.buttonText}
 											className='max-sm:w-full'
-											buttonProps={{ styleType: resolvedButtonStyle, styleSize: 'lg', type: 'submit' }}
+											buttonProps={{ styleType: resolvedButtonStyle, styleSize: 'lg' }}
 										/>
 									</div>
 								</form>

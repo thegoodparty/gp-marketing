@@ -8,9 +8,15 @@ declare global {
 		amplitude?: {
 			init(apiKey: string, options?: {
 				fetchRemoteConfig?: boolean;
-				autocapture?: boolean;
+				autocapture?: boolean | {
+					attribution?: boolean | {
+						resetSessionOnNewCampaign?: boolean;
+						excludeReferrers?: (string | RegExp)[];
+					};
+				};
 				/** Prefer beacon so events survive full-page navigation / unload. */
 				transport?: 'fetch' | 'xhr' | 'beacon';
+				cookieOptions?: { domain?: string };
 			}): void;
 			add?(plugin: unknown): void;
 			track(eventName: string, eventProperties?: Record<string, unknown>): void;

@@ -243,7 +243,7 @@ export function PageSections(props: Props) {
 					case 'component_carouselBlock':
 						return (
 							<Boundary key={section._key} componentName='Carousel Block'>
-								<CarouselBlockSection {...section} />
+								<CarouselBlockSection {...section} tokens={props.tokens} />
 							</Boundary>
 						);
 					case 'component_claimProfileBlock':
@@ -252,7 +252,11 @@ export function PageSections(props: Props) {
 						}
 						return (
 							<Boundary key={section._key} componentName='Claim Profile Block'>
-								<ClaimProfileBlockSection {...section} claimProfileOverride={props.sectionOverrides?.component_claimProfileBlock} />
+								<ClaimProfileBlockSection
+									{...section}
+									tokens={props.tokens}
+									claimProfileOverride={props.sectionOverrides?.component_claimProfileBlock}
+								/>
 							</Boundary>
 						);
 					case 'component_voterDensityBlock':
@@ -464,7 +468,7 @@ export function PageSections(props: Props) {
 						}
 						return (
 							<Boundary key={section._key} componentName='GoodParty.org Pledge'>
-								<GoodPartyOrgPledgeSection {...section} />
+								<GoodPartyOrgPledgeSection {...section} tokens={props.tokens} />
 							</Boundary>
 						);
 					case 'component_locationLandingPageHero':
@@ -480,7 +484,11 @@ export function PageSections(props: Props) {
 					case 'component_locationFactsBlock':
 						return (
 							<Boundary key={section._key} componentName='Location Facts Block'>
-								<LocationFactsBlockSection {...section} factsOverride={props.sectionOverrides?.component_locationFactsBlock} />
+								<LocationFactsBlockSection
+									{...section}
+									factsOverride={props.sectionOverrides?.component_locationFactsBlock}
+									tokens={props.tokens}
+								/>
 							</Boundary>
 						);
 					case 'component_profileContentBlock': {

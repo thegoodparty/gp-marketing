@@ -4,7 +4,7 @@ import { createContext, useContext, useMemo, useState, type ReactNode } from 're
 
 type ElectionsLandingSearchContextValue = {
 	searchQuery: string;
-	setSearchQuery: (value: string) => void;
+	setSearchQuery(value: string): void;
 };
 
 const ElectionsLandingSearchContext = createContext<ElectionsLandingSearchContextValue | null>(null);
@@ -12,9 +12,7 @@ const ElectionsLandingSearchContext = createContext<ElectionsLandingSearchContex
 export function ElectionsLandingSearchProvider({ children }: { children: ReactNode }) {
 	const [searchQuery, setSearchQuery] = useState('');
 	const value = useMemo(() => ({ searchQuery, setSearchQuery }), [searchQuery]);
-	return (
-		<ElectionsLandingSearchContext.Provider value={value}>{children}</ElectionsLandingSearchContext.Provider>
-	);
+	return <ElectionsLandingSearchContext.Provider value={value}>{children}</ElectionsLandingSearchContext.Provider>;
 }
 
 export function useElectionsLandingSearch() {

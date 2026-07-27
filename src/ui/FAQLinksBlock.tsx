@@ -1,7 +1,6 @@
 'use client';
 
 import { cn, tv } from './_lib/utils.ts';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
@@ -60,7 +59,7 @@ export interface FAQLinkItem {
 
 export interface FAQLinksBlockProps {
 	className?: string;
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	header?: HeaderBlockProps;
 	items: FAQLinkItem[];
 	onLinkClick?(item: FAQLinkItem): void;
@@ -87,24 +86,20 @@ export function FAQLinksBlock(props: FAQLinksBlockProps) {
 	};
 
 	return (
-		<article className={cn(base(), props.className)} data-component="FAQLinksBlock">
-			<Container size="xl">
+		<article className={cn(base(), props.className)} data-component='FAQLinksBlock'>
+			<Container size='xl'>
 				<div className={wrapper()}>
 					{/* Card Container */}
 					<div className={card()}>
 						{/* Header Section */}
 						{props.header && (props.header.title || props.header.copy) && (
-							<div className="flex flex-col gap-3 md:gap-4 mb-6">
+							<div className='flex flex-col gap-3 md:gap-4 mb-6'>
 								{props.header.title && (
-									<Text as="h3" styleType="heading-md" className={headlineStyle()}>
+									<Text as='h3' styleType='heading-md' className={headlineStyle()}>
 										{props.header.title}
 									</Text>
 								)}
-								{props.header.copy && (
-									<Text styleType="body-2">
-										{props.header.copy}
-									</Text>
-								)}
+								{props.header.copy && <Text styleType='body-2'>{props.header.copy}</Text>}
 							</div>
 						)}
 
@@ -114,20 +109,16 @@ export function FAQLinksBlock(props: FAQLinksBlockProps) {
 								{props.items.map(item => {
 									const LinkContent = (
 										<>
-											<Text styleType="body-2" className={linkText()}>
+											<Text styleType='body-2' className={linkText()}>
 												{item.label}
 											</Text>
-											<ArrowShortIcon size={32} className={linkIcon()} innerClassName="group-hover:animate-slide-in-right" />
+											<ArrowShortIcon size={32} className={linkIcon()} innerClassName='group-hover:animate-slide-in-right' />
 										</>
 									);
 
 									return item.href ? (
 										<li key={item.id}>
-											<Anchor
-												href={item.href}
-												className={linkItem()}
-												onClick={() => handleLinkClick(item)}
-											>
+											<Anchor href={item.href} className={linkItem()} onClick={() => handleLinkClick(item)}>
 												{LinkContent}
 											</Anchor>
 										</li>
@@ -140,7 +131,7 @@ export function FAQLinksBlock(props: FAQLinksBlockProps) {
 							</ul>
 						) : (
 							<div className={emptyState()}>
-								<Text styleType="body-2" className={emptyStateText()}>
+								<Text styleType='body-2' className={emptyStateText()}>
 									No FAQ links available
 								</Text>
 							</div>

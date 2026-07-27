@@ -1,19 +1,53 @@
 import type { Sections } from '~/PageSections';
 import { getCodeDefaultElectionTemplate } from '~/lib/electionTemplateDefaults';
-import {
-	customElectionTemplateByIdQuery,
-	customElectionTemplateTargetsQuery,
-	globalElectionTemplateQuery,
-} from '~/sanity/groq';
+import { customElectionTemplateByIdQuery, customElectionTemplateTargetsQuery, globalElectionTemplateQuery } from '~/sanity/groq';
 import { sanityFetch } from '~/sanity/sanityClient';
 import type { TokenMap } from '~/lib/resolveTokens';
 
+export type LocationLevel = 'state' | 'county' | 'city' | 'district';
+
+export type LocationTemplateType = 'locationState' | 'locationCounty' | 'locationCity' | 'locationDistrict';
+
 export type ElectionTemplateType =
-	| 'location'
+	| LocationTemplateType
 	| 'position'
 	| 'positionCandidates'
 	| 'candidateProfile'
 	| 'personProfile';
+
+/** @deprecated Legacy custom docs may still use this type for all location levels. */
+export type LegacyLocationTemplateType = 'location';
+
+export const LOCATION_TEMPLATE_TYPES: readonly LocationTemplateType[] = [
+	'locationState',
+	'locationCounty',
+	'locationCity',
+	'locationDistrict',
+] as const;
+
+export function isLocationTemplateType(
+	templateType: ElectionTemplateType | LegacyLocationTemplateType | (string & {}) | undefined,
+): templateType is LocationTemplateType {
+	return (
+		templateType === 'locationState' ||
+		templateType === 'locationCounty' ||
+		templateType === 'locationCity' ||
+		templateType === 'locationDistrict'
+	);
+}
+
+export function locationTemplateTypeFromLevel(level: LocationLevel): LocationTemplateType {
+	switch (level) {
+		case 'state':
+			return 'locationState';
+		case 'county':
+			return 'locationCounty';
+		case 'city':
+			return 'locationCity';
+		case 'district':
+			return 'locationDistrict';
+	}
+}
 
 export type ElectionTargetType = 'place' | 'position' | 'candidate' | 'person';
 
@@ -70,12 +104,22 @@ type CustomTemplateTargetsDoc = {
 	_id: string;
 	field_enabled?: boolean;
 	field_priority?: number;
-	field_electionTemplateType?: ElectionTemplateType;
+	field_electionTemplateType?: ElectionTemplateType | LegacyLocationTemplateType;
 	/** Set on person-profile templates that are scoped to a single state (A–L). */
 	field_profileState?: ProfileStateValue;
 	_updatedAt?: string;
 	list_targets?: SanityTarget[];
 };
+
+function customTemplateTypeMatches(
+	docType: ElectionTemplateType | LegacyLocationTemplateType | undefined,
+	ctxType: ElectionTemplateType,
+): boolean {
+	if (!docType) return false;
+	if (docType === ctxType) return true;
+	if (docType === 'location' && isLocationTemplateType(ctxType)) return true;
+	return false;
+}
 
 type GlobalTemplateDoc = {
 	pageSections?: { list_pageSections?: Sections[] | null } | null;
@@ -130,7 +174,7 @@ function targetMatches(docTarget: SanityTarget, ctxTarget: ElectionTemplateTarge
 
 function scoreCustomTemplate(doc: CustomTemplateTargetsDoc, ctx: ElectionTemplateContext): number | null {
 	if (doc.field_enabled === false) return null;
-	if (doc.field_electionTemplateType !== ctx.templateType) return null;
+	if (!customTemplateTypeMatches(doc.field_electionTemplateType, ctx.templateType)) return null;
 
 	// Person-profile templates may be pinned to a single Figma state (A–L). When the
 	// doc pins a state and the context resolves one too, they must match. Contexts
@@ -156,10 +200,7 @@ function scoreCustomTemplate(doc: CustomTemplateTargetsDoc, ctx: ElectionTemplat
 	return best >= 0 ? best : null;
 }
 
-export function pickBestCustomTemplate(
-	docs: CustomTemplateTargetsDoc[],
-	ctx: ElectionTemplateContext,
-): CustomTemplateTargetsDoc | null {
+export function pickBestCustomTemplate(docs: CustomTemplateTargetsDoc[], ctx: ElectionTemplateContext): CustomTemplateTargetsDoc | null {
 	let best: CustomTemplateTargetsDoc | null = null;
 	let bestScore = -1;
 	let bestPriority = Number.POSITIVE_INFINITY;
@@ -186,7 +227,14 @@ export function pickBestCustomTemplate(
 	return best;
 }
 
-async function fetchGlobalTemplate(templateType: ElectionTemplateType): Promise<Sections[] | null> {
+export function templateTypesForQuery(templateType: ElectionTemplateType): Array<ElectionTemplateType | LegacyLocationTemplateType> {
+	if (isLocationTemplateType(templateType)) {
+		return [templateType, 'location'];
+	}
+	return [templateType];
+}
+
+async function fetchGlobalTemplateByType(templateType: ElectionTemplateType | LegacyLocationTemplateType): Promise<Sections[] | null> {
 	try {
 		const doc = (await sanityFetch({
 			query: globalElectionTemplateQuery,
@@ -200,11 +248,21 @@ async function fetchGlobalTemplate(templateType: ElectionTemplateType): Promise<
 	}
 }
 
+async function fetchGlobalTemplate(templateType: ElectionTemplateType): Promise<Sections[] | null> {
+	const primary = await fetchGlobalTemplateByType(templateType);
+	if (primary) return primary;
+
+	if (isLocationTemplateType(templateType)) {
+		return fetchGlobalTemplateByType('location');
+	}
+	return null;
+}
+
 async function fetchCustomTemplateTargets(templateType: ElectionTemplateType): Promise<CustomTemplateTargetsDoc[]> {
 	try {
 		const docs = (await sanityFetch({
 			query: customElectionTemplateTargetsQuery,
-			params: { templateType },
+			params: { templateTypes: templateTypesForQuery(templateType) },
 			tags: ['goodpartyOrg_customTemplate', `goodpartyOrg_customTemplate_${templateType}`],
 		})) as CustomTemplateTargetsDoc[] | null;
 		return docs ?? [];
@@ -214,10 +272,7 @@ async function fetchCustomTemplateTargets(templateType: ElectionTemplateType): P
 	}
 }
 
-async function fetchCustomTemplateSectionsById(
-	id: string,
-	templateType: ElectionTemplateType,
-): Promise<Sections[] | null> {
+async function fetchCustomTemplateSectionsById(id: string, templateType: ElectionTemplateType): Promise<Sections[] | null> {
 	try {
 		const doc = (await sanityFetch({
 			query: customElectionTemplateByIdQuery,

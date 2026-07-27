@@ -77,7 +77,7 @@ export function canonicalizeCountyEquivalentName(
 	rawPlaceName: string,
 ): CanonicalCountyName {
 	const normalizedName = normalizeWhitespace(rawPlaceName);
-	const tailMatch = normalizedName.match(COUNTY_EQUIV_TAIL_RE);
+	const tailMatch = COUNTY_EQUIV_TAIL_RE.exec(normalizedName);
 	const existingSuffix = tailMatch ? toCanonicalSuffix(tailMatch[1] ?? '') : null;
 	const suffixLabel = pickSuffixByState(stateCode, existingSuffix);
 	const baseName = normalizeWhitespace(normalizedName.replace(COUNTY_EQUIV_TAIL_RE, '')) || normalizedName;
@@ -209,7 +209,7 @@ export function resolveProfileAboutText(
 /** Prefers claimed campaign avatar; falls back to elections API (BallotReady) image. */
 export function resolveProfileImageUrl(
 	candidateImage: string | null | undefined,
-	claimedAvatar?: string | null | undefined,
+	claimedAvatar?: string | null  ,
 ): string | undefined {
 	const image = claimedAvatar?.trim() || candidateImage?.trim();
 	return image && image.length > 0 ? image : undefined;
@@ -343,7 +343,7 @@ export async function resolvePlaceRaceElectionDates(
 
 export type BuildOfficeItemsFromPlaceRacesConfig = {
 	type: string;
-	buildHref: (race: PlaceRace) => string;
+	buildHref(race: PlaceRace): string;
 };
 
 export function buildOfficeItemsFromPlaceRaces(
@@ -733,7 +733,7 @@ export function buildJobPostingSchema(params: {
 	const filingAddr = race.filingOfficeAddress?.trim();
 	if (filingAddr) {
 		postalAddress['streetAddress'] = filingAddr;
-		const zipMatch = filingAddr.match(/\b\d{5}(?:-\d{4})?\b/);
+		const zipMatch = /\b\d{5}(?:-\d{4})?\b/.exec(filingAddr);
 		if (zipMatch?.[0]) {
 			postalAddress['postalCode'] = zipMatch[0];
 		}

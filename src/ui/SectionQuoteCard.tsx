@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 
 import { cn, tv } from './_lib/utils.ts';
-import type { SanityImage } from './types.ts';
 
 import { Author, type AuthorProps } from './Author.tsx';
 import { Text } from './Text.tsx';

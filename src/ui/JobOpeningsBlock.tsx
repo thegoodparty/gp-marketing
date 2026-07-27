@@ -29,15 +29,11 @@ export function JobOpeningsBlock(props: JobOpeningsBlockProps) {
 					{props.cards && props.cards.length > 0 ? (
 						<div className={cardsGrid()}>
 							{props.cards.map((card, index) => (
-								<JobOpeningsCard
-									key={`job-card-${index}-${card.title ?? ''}`}
-									className='w-full min-w-0'
-									{...card}
-								/>
+								<JobOpeningsCard key={`job-card-${index}-${card.title ?? ''}`} className='w-full min-w-0' {...card} />
 							))}
 						</div>
 					) : (
-						<Text styleType='body-md'>No open positions at this time. Check back soon.</Text>
+						<Text styleType='body-1'>No open positions at this time. Check back soon.</Text>
 					)}
 				</div>
 			</Container>

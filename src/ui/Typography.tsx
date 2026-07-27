@@ -1,4 +1,4 @@
-import { type ComponentPropsWithoutRef, type PropsWithChildren } from 'react';
+import { type ComponentPropsWithoutRef, type ElementType, type JSX, type PropsWithChildren } from 'react';
 import { cn, tv } from './_lib/utils.ts';
 import { styles as textStyles, type StyleTypes } from './Text.tsx';
 import { TypographyStackSpacing } from '~/types/ui';
@@ -44,11 +44,12 @@ export function Typography({
 	className,
 	...props
 }: TypographyProps) {
-	const { base } = styles({ type: styleType, stackSpacing });
+	const { base } = styles({ type: styleType === 'default' ? undefined : styleType, stackSpacing });
+	const Component = El as ElementType;
 
 	return (
-		<El {...props} className={cn(base(), className)}>
+		<Component {...props} className={cn(base(), className)}>
 			{props.children}
-		</El>
+		</Component>
 	);
 }

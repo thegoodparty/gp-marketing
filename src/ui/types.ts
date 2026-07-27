@@ -1,4 +1,4 @@
-import type { ComponentProps, ComponentType, JSXElementConstructor, ReactElement } from 'react';
+import type { ComponentProps, ComponentType, JSX, JSXElementConstructor, ReactElement } from 'react';
 import type { Img_image } from 'sanity.types';
 
 export type SanityImage = Img_image;

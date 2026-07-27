@@ -4,7 +4,6 @@ import { cn, tv } from './_lib/utils.ts';
 
 import { Media, type MediaProps } from './Media.tsx';
 import type { SanityImage } from './types.ts';
-import type { smallLargeValues } from './_lib/designTypesStore.ts';
 
 const styles = tv({
 	slots: {

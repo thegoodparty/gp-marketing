@@ -1,9 +1,7 @@
 import type { Field_mediaAlignmentRightLeft } from 'sanity.types';
 
-import type { StepperBlockProps } from '../StepperBlock';
-
-export function resolveStepperBlockLayout(mediaAlignment: Field_mediaAlignmentRightLeft): StepperBlockProps['layout'] {
-	const layoutMap: Record<Field_mediaAlignmentRightLeft, StepperBlockProps['layout']> = {
+export function resolveStepperBlockLayout(mediaAlignment: Field_mediaAlignmentRightLeft): 'media-left' | 'media-right' {
+	const layoutMap: Record<Field_mediaAlignmentRightLeft, 'media-left' | 'media-right'> = {
 		Left: 'media-left',
 		Right: 'media-right',
 	};

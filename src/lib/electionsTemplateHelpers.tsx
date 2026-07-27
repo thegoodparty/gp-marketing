@@ -104,20 +104,34 @@ export function buildPositionBottomItems(race: RaceDetail) {
 
 export function buildPositionTokens(ctx: Pick<PositionPageContext, 'officeName' | 'stateName' | 'countyName' | 'cityName'>): TokenMap {
 	const locationName = ctx.cityName ?? ctx.countyName ?? ctx.stateName;
+	const locationParts = [ctx.cityName, ctx.countyName, ctx.stateName].filter(Boolean);
 	return {
 		'[office name]': ctx.officeName,
+		'[office]': ctx.officeName,
 		'[State]': ctx.stateName,
 		'[County or City]': locationName,
+		'[location]': locationParts.join(', '),
 	};
 }
 
 export function buildCandidatesTokens(
 	ctx: Pick<PositionPageContext, 'officeName' | 'stateName' | 'countyName' | 'cityName'>,
 ): TokenMap {
+	const locationName = ctx.cityName ?? ctx.countyName ?? ctx.stateName;
 	const locationParts = [ctx.cityName, ctx.countyName, ctx.stateName].filter(Boolean);
 	return {
 		'[office]': ctx.officeName,
+		'[office name]': ctx.officeName,
+		'[State]': ctx.stateName,
+		'[County or City]': locationName,
 		'[location]': locationParts.join(', '),
+	};
+}
+
+export function buildProfileTokens(ctx: { candidateName: string; officeName: string }): TokenMap {
+	return {
+		'[candidate name]': ctx.candidateName,
+		'[office name]': ctx.officeName,
 	};
 }
 
@@ -152,6 +166,16 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 						},
 					}
 				: undefined,
+			...(ctx.candidatesHref
+				? {
+						rightColumnCTA: {
+							buttonType: 'internal' as const,
+							href: ctx.candidatesHref,
+							label: 'View candidates',
+							buttonProps: { styleType: secondaryButtonStyleType },
+						},
+					}
+				: {}),
 		},
 		component_faqBlock: {
 			items: race

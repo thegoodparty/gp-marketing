@@ -2,7 +2,6 @@ import { cn, tv } from './_lib/utils.ts';
 import { Container } from './Container.tsx';
 import { HeaderBlock, type HeaderBlockProps } from './HeaderBlock.tsx';
 import { FactsCard, type FactsCardProps } from './FactsCard.tsx';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 const styles = tv({
 	slots: {
@@ -24,7 +23,7 @@ const styles = tv({
 
 export type LocationFactsBlockProps = {
 	className?: string;
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	header?: HeaderBlockProps;
 	factsCards: FactsCardProps[];
 };

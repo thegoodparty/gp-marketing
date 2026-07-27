@@ -3,6 +3,8 @@ import { stegaClean } from 'next-sanity';
 import type { SectionOverrides, Sections } from '~/PageSections';
 
 import { transformButtons } from '~/lib/buttonTransformer';
+import type { TokenMap } from '~/lib/resolveTokens';
+import { resolveSectionText, resolveRichTextTokens } from '~/lib/resolveSectionText';
 
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
@@ -12,10 +14,11 @@ import { RichData } from '~/ui/RichData';
 
 type Props = Extract<Sections, { _type: 'component_locationFactsBlock' }> & {
 	factsOverride?: SectionOverrides['component_locationFactsBlock'];
+	tokens?: TokenMap;
 };
 
 export function LocationFactsBlockSection(props: Props) {
-	const { factsOverride, ...section } = props;
+	const { factsOverride, tokens, ...section } = props;
 
 	if (factsOverride?.hidden) {
 		return null;
@@ -45,10 +48,19 @@ export function LocationFactsBlockSection(props: Props) {
 			<LocationFactsBlock
 				backgroundColor={backgroundColor}
 				header={{
-					title: factsOverride?.headerTitle ?? section.locationFactsBlockHeader?.field_title,
-					label: section.locationFactsBlockHeader?.field_label,
-					caption: section.locationFactsBlockHeader?.field_caption,
-					copy: <RichData value={section.locationFactsBlockHeader?.block_summaryText} />,
+					title:
+						factsOverride?.headerTitle ??
+						resolveSectionText(section.locationFactsBlockHeader?.field_title, tokens),
+					label: resolveSectionText(section.locationFactsBlockHeader?.field_label, tokens),
+					caption: resolveSectionText(section.locationFactsBlockHeader?.field_caption, tokens),
+					copy: (
+						<RichData
+							value={resolveRichTextTokens(
+								section.locationFactsBlockHeader?.block_summaryText,
+								tokens,
+							)}
+						/>
+					),
 					backgroundColor,
 					buttons: transformButtons(section.locationFactsBlockHeader?.list_buttons),
 					textSize: resolveTextSize(section.locationFactsBlockHeader?.field_textSize),

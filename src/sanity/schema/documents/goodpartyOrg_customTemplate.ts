@@ -12,9 +12,13 @@ Matching rules (most specific wins, then lower Priority number):
 2. Longer place slug beats shorter (e.g. ny/kings-county/brooklyn beats ny)
 3. Lower Priority wins ties
 
-On any error in a custom template, the site uses the corresponding global template, then the code default.
+If a custom template is missing, disabled, or has no page sections, the site uses the matching global template, then the built-in default. A single broken block on a page may still hide itself without switching the whole template.
 
-Clone workflow: duplicate a global template document, change type to custom, add targets, and edit sections.
+Clone workflow (do not duplicate and change document type — Sanity cannot change type that way):
+1. Open the Global Template you want to start from
+2. On Page Sections, use the field menu → Copy field
+3. Create a new Custom Template
+4. Paste into Page Sections, set Template Type, add Targets, set Preview Target, then publish
 
 Supported tokens in plain text fields:
 - Location: [State], [County], [City], [District]

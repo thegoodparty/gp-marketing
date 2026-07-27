@@ -487,15 +487,15 @@ const GLOBAL_TEMPLATE_PREVIEW_TARGETS = {
 	},
 	locationCounty: {
 		field_electionTargetType: 'place',
-		field_electionTargetSlug: 'ny/kings-county',
+		field_electionTargetSlug: 'wi/adams-county',
 	},
 	locationCity: {
 		field_electionTargetType: 'place',
-		field_electionTargetSlug: 'ny/kings-county/brooklyn',
+		field_electionTargetSlug: 'wi/adams-county/adams',
 	},
 	locationDistrict: {
 		field_electionTargetType: 'place',
-		field_electionTargetSlug: 'tx/congressional-district-1',
+		field_electionTargetSlug: 'mn/minneapolis-public-school-district',
 	},
 	position: {
 		field_electionTargetType: 'place',
@@ -507,6 +507,10 @@ const GLOBAL_TEMPLATE_PREVIEW_TARGETS = {
 		field_electionTargetSlug: 'ny',
 		field_positionSlug: 'governor',
 	},
+	candidateProfile: {
+		field_electionTargetType: 'candidate',
+		field_electionTargetSlug: 'janet-mills/us-senate-maine',
+	},
 } as const;
 
 export const globalElectionTemplateSeedDocuments = [
@@ -515,6 +519,7 @@ export const globalElectionTemplateSeedDocuments = [
 		_type: 'goodpartyOrg_globalTemplate',
 		field_title: 'Candidate Profile',
 		field_electionTemplateType: 'candidateProfile',
+		previewTarget: GLOBAL_TEMPLATE_PREVIEW_TARGETS.candidateProfile,
 		pageSections: { list_pageSections: tmplCandidateProfileSections },
 	},
 	{

@@ -69,41 +69,51 @@ export default function VoterDensityMap({
 
 		const bounds = boundsFor(cells);
 
-		const map = new maplibregl.Map({
-			container,
-			style: styleUrl,
-			// Static, non-interactive-ish reference surface; framed to the district.
-			bounds: bounds ?? undefined,
-			fitBoundsOptions: { padding: 32 },
-			center: bounds ? undefined : [-98.5, 39.8],
-			zoom: bounds ? undefined : 3,
-			attributionControl: false,
-			// Keep it a clean 2D density read: no pitch/rotate gestures.
-			pitchWithRotate: false,
-			dragRotate: false,
-		});
-		map.addControl(
-			new maplibregl.AttributionControl({ customAttribution: attribution }),
-			'bottom-right',
-		);
-		map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
+		let map: maplibregl.Map;
+		let overlay: MapboxOverlay;
+		try {
+			map = new maplibregl.Map({
+				container,
+				style: styleUrl,
+				// Static, non-interactive-ish reference surface; framed to the district.
+				bounds: bounds ?? undefined,
+				fitBoundsOptions: { padding: 32 },
+				center: bounds ? undefined : [-98.5, 39.8],
+				zoom: bounds ? undefined : 3,
+				attributionControl: false,
+				// Keep it a clean 2D density read: no pitch/rotate gestures.
+				pitchWithRotate: false,
+				dragRotate: false,
+			});
+			map.addControl(
+				new maplibregl.AttributionControl({ customAttribution: attribution }),
+				'bottom-right',
+			);
+			map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
 
-		const overlay = new MapboxOverlay({
-			interleaved: false,
-			layers: [
-				new HeatmapLayer<VoterDensityCell>({
-					id: 'voter-density',
-					data: cells,
-					getPosition: (d) => [d.lng, d.lat],
-					getWeight: (d) => d.count,
-					radiusPixels: 40,
-					intensity: 1,
-					threshold: 0.05,
-					colorRange: HEATMAP_COLOR_RANGE,
-				}),
-			],
-		});
-		map.addControl(overlay);
+			overlay = new MapboxOverlay({
+				interleaved: false,
+				layers: [
+					new HeatmapLayer<VoterDensityCell>({
+						id: 'voter-density',
+						data: cells,
+						getPosition: (d) => [d.lng, d.lat],
+						getWeight: (d) => d.count,
+						radiusPixels: 40,
+						intensity: 1,
+						threshold: 0.05,
+						colorRange: HEATMAP_COLOR_RANGE,
+					}),
+				],
+			});
+			map.addControl(overlay);
+		} catch (err) {
+			// WebGL can be unavailable (older device, GPU blocklist, hardened
+			// browser, headless env). Degrade to no map rather than throwing and
+			// taking down the whole profile render.
+			console.warn('Voter-density map could not initialize (WebGL unavailable?):', err);
+			return;
+		}
 
 		return () => {
 			// Order matters: detach the deck overlay before destroying the map so

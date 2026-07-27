@@ -50,10 +50,8 @@ export async function POST(req: NextRequest) {
 		revalidateTag(tag);
 		return NextResponse.json({ revalidated: true, tag });
 	} catch (err) {
+		// Log the detail server-side; don't echo the raw error text to the caller.
 		console.error('Person revalidation failed:', err);
-		return NextResponse.json(
-			{ error: 'Revalidation failed', details: err instanceof Error ? err.message : String(err) },
-			{ status: 500 },
-		);
+		return NextResponse.json({ error: 'Revalidation failed' }, { status: 500 });
 	}
 }

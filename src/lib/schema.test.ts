@@ -21,19 +21,23 @@ const envKeys = ['NEXT_PUBLIC_APP_BASE', 'NEXT_PUBLIC_SITE_URL', 'VERCEL_ENV', '
 
 let snapshot: Partial<Record<(typeof envKeys)[number], string | undefined>>;
 
+// `process.env.NODE_ENV` is typed read-only, but tests need to swap it to
+// exercise env-dependent base-URL resolution — alias to a mutable record.
+const mutableEnv = process.env as Record<string, string | undefined>;
+
 beforeEach(() => {
 	snapshot = {};
 	for (const k of envKeys) snapshot[k] = process.env[k];
-	process.env['NODE_ENV'] = 'development';
-	delete process.env['VERCEL_ENV'];
-	process.env['NEXT_PUBLIC_SITE_URL'] = 'https://goodparty.org';
+	mutableEnv['NODE_ENV'] = 'development';
+	delete mutableEnv['VERCEL_ENV'];
+	mutableEnv['NEXT_PUBLIC_SITE_URL'] = 'https://goodparty.org';
 });
 
 afterEach(() => {
 	for (const k of envKeys) {
 		const v = snapshot[k];
-		if (v === undefined) delete process.env[k];
-		else process.env[k] = v;
+		if (v === undefined) delete mutableEnv[k];
+		else mutableEnv[k] = v;
 	}
 });
 

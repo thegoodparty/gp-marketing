@@ -143,9 +143,9 @@ async function main() {
 		try {
 			await withStuckHeartbeat(patch.commit(), `Sanity mutate id=${id}`, STUCK_LOG_MS);
 		} catch (err) {
-			throw new Error(
-				`patch failed id=${id} (likely concurrent edit; re-run dry-run then --write): ${err instanceof Error ? err.message : String(err)}`,
-			);
+			const msg = err instanceof Error ? err.message : String(err);
+			log(`patch failed id=${id} - ${msg} - continuing (re-run --write to finish)`);
+			continue;
 		}
 		log(`patch ok id=${id}`);
 	}

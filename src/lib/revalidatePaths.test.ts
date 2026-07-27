@@ -14,6 +14,14 @@ describe('getPathsToRevalidate', () => {
 		expect(getPathsToRevalidate('faq', {})).toEqual(['/frequently-asked-questions']);
 	});
 
+	it('revalidates FAQ detail and index paths when slug is a Sanity slug object', () => {
+		expect(
+			getPathsToRevalidate('faq', {
+				faqOverview: { field_slug: { current: 'what-is-goodpartyorg' } },
+			}),
+		).toEqual(['/frequently-asked-questions/what-is-goodpartyorg', '/frequently-asked-questions']);
+	});
+
 	it('keeps article path parity after extraction', () => {
 		expect(
 			getPathsToRevalidate('article', {

@@ -61,7 +61,7 @@ Save this value. You will use it in Step 3b and Step 4.
    - **Trigger on:** Create, Update, Delete (or only Create + Update if preferred)
    - **Filter:** Leave empty to trigger on all documents, or use a GROQ filter to limit to content types, e.g.:
      ```
-     _type in ["article", "glossary", "goodpartyOrg_landingPages", "policy", "categories", "topics", "goodpartyOrg_home", "goodpartyOrg_contact", "goodpartyOrg_navigation", "goodpartyOrg_footer", "goodpartyOrg_allArticles", "goodpartyOrg_glossary", "goodpartyOrg_404Page", "goodpartyOrg_allComponents", "quoteCollections"]
+     _type in ["article", "glossary", "faq", "goodpartyOrg_landingPages", "policy", "categories", "topics", "goodpartyOrg_home", "goodpartyOrg_contact", "goodpartyOrg_navigation", "goodpartyOrg_footer", "goodpartyOrg_allArticles", "goodpartyOrg_glossary", "goodpartyOrg_404Page", "goodpartyOrg_allComponents", "quoteCollections"]
      ```
    - **Secret:** Paste the secret from 3a (enables HMAC signature verification)
    - **HTTP method:** POST
@@ -105,8 +105,27 @@ AirOps creates documents via JSON. The payload must match the Sanity schema. Key
 | `glossary` | Political terms | `glossaryTermOverview.field_slug` | |
 | `goodpartyOrg_landingPages` | Landing pages | `detailPageOverviewNoHero.field_slug` | |
 | `policy` | Policy pages | `policyOverview.field_slug` | |
+| `faq` | FAQ entries | `faqOverview.field_slug` | Required; unique; run slug backfill before required schema deploy. API writes bypass Studio validation — see FAQ slug rules below. |
 | `categories` | Blog sections | `tagOverview.field_slug` | |
 | `topics` | Blog tags | `tagOverview.field_slug` | |
+
+### FAQ slug rules (required for AirOps)
+
+Studio validation does **not** run for Content Lake API / AirOps writes. AirOps must enforce the same slug contract as the marketing site:
+
+1. **Format:** lowercase letters, numbers, and hyphens only (`^[a-z0-9]+(?:-[a-z0-9]+)*$`). No spaces, uppercase, or slashes.
+2. **Generate from question** using the same algorithm as `slugifyFaqQuestion` (lowercase, strip non-alphanumerics except spaces/hyphens, collapse whitespace to `-`). Example: `What is GoodParty.org?` → `what-is-goodpartyorg`.
+3. **Collision suffix:** if that slug is already used by another FAQ, append `-{last6 of published document id}` and repeat until unique (e.g. `what-is-goodpartyorg-bbb222`).
+4. **Preflight uniqueness query** (raw perspective, authenticated):
+   ```groq
+   count(*[_type == "faq" && faqOverview.field_slug == $slug && !sanity::versionOf($publishedId)])
+   ```
+   Abort the write when the count is greater than zero.
+5. **Post-write audit:** after creating or updating FAQs via AirOps, run:
+   ```bash
+   bun run sanity:backfill:faq-slugs -- --audit
+   ```
+   This must report zero remaining patches, zero preflight errors, and zero duplicate stored slugs.
 
 ### Portable Text (Rich Content)
 

@@ -100,6 +100,9 @@ inheriting its county's statistics.
 
 ### Templates: global vs custom, and three-tier resolution
 
+Editor-facing how-to (Studio steps, preview targets, clone workflow):
+`docs/election-templates-manual.md`.
+
 `ElectionTemplateType` is one of `locationState`, `locationCounty`, `locationCity`,
 `locationDistrict`, `position`, `positionCandidates`, or `candidateProfile` (plus a
 deprecated legacy `location`). `resolveElectionTemplate` in `electionTemplates.ts`

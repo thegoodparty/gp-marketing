@@ -1,0 +1,65 @@
+name: Update visual baselines
+
+# Regenerates the visual regression baselines in the exact environment the CI
+# e2e job runs in (ubuntu runner + pinned Playwright Chromium), so comparisons
+# never fail on cross-machine font rendering.
+#
+# Flow: dispatch this workflow → download the "visual-baselines" artifact →
+# review the images → commit them to e2e/snapshots/ in a PR. Repeat after any
+# intentional design change.
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'URL to snapshot (production, or a preview deployment)'
+        required: false
+        default: 'https://goodparty.org'
+
+permissions:
+  contents: read
+
+jobs:
+  baselines:
+    name: Generate baselines
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.23
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: pw-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+
+      - name: Install Playwright browsers
+        if: steps.pw-cache.outputs.cache-hit != 'true'
+        run: bunx playwright install --with-deps chromium
+
+      - name: Install Playwright system deps (cache hit)
+        if: steps.pw-cache.outputs.cache-hit == 'true'
+        run: bunx playwright install-deps chromium
+
+      - name: Generate snapshots
+        run: bun run test:e2e:visual:update
+        env:
+          E2E_BASE_URL: ${{ inputs.base_url }}
+          SANITY_TEST_DATASET: ${{ vars.SANITY_TEST_DATASET || 'production' }}
+
+      - name: Upload baselines artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-baselines
+          path: e2e/snapshots/
+          retention-days: 14

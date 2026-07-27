@@ -53,6 +53,8 @@ export type HeaderBlockProps = {
 	backgroundColor?: 'cream' | 'midnight' | 'white';
 	caption?: string;
 	textSize?: ResolvedTextSize;
+	/** 'h1' when the block is the page header (default 'h2' for section headers). */
+	headingLevel?: 'h1' | 'h2';
 };
 
 export function HeaderBlock(props: HeaderBlockProps) {
@@ -74,7 +76,7 @@ export function HeaderBlock(props: HeaderBlockProps) {
 						</span>
 					)}
 					{props.title && (
-						<Text as='h2' styleType={textSize.heading}>
+						<Text as={props.headingLevel ?? 'h2'} styleType={textSize.heading}>
 							{props.title}
 						</Text>
 					)}

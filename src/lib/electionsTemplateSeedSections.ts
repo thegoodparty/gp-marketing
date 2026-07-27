@@ -560,6 +560,24 @@ export const globalElectionTemplateSeedDocuments = [
  * the state you want, set `field_electionTargetSlug` to the real person slug,
  * flip `field_enabled` on, then edit sections.
  */
+/**
+ * "How to use" copy stored on each scaffold. Seeded explicitly because the
+ * schema `initialValue` only fills in the Studio UI on manual creation, not on
+ * API writes — so without this the read-only field would render empty on the
+ * seeded docs. Lists the placeholder tokens a person-profile template supports.
+ */
+const PERSON_PROFILE_SCAFFOLD_INSTRUCTIONS = `Per-state starter template for /people profile pages.
+
+This is a DISABLED scaffold. To use it:
+1. Duplicate this document (or edit it in place).
+2. Under "Targets", set a person target — the /people/<slug> of the profile this should apply to.
+3. Turn "Enabled" on.
+4. Edit the sections below. Leave "Person Profile State" pinned to keep it scoped to this Figma state (A–L).
+
+Matching: an enabled custom template wins over the global "Person Profile" template when its target matches the page, and (if a state is pinned) the page is in that state. Lower "Priority" number wins ties.
+
+Supported placeholder tokens: [person name], [office], [office name], [location], [State], [County], [City], [District], [County or City]`;
+
 export const personProfileStateCustomTemplateSeeds = PROFILE_STATES.map(state => ({
 	_id: `customTemplate_personProfile_state_${state.value}`,
 	_type: 'goodpartyOrg_customTemplate',
@@ -568,6 +586,7 @@ export const personProfileStateCustomTemplateSeeds = PROFILE_STATES.map(state =>
 	field_profileState: state.value,
 	field_enabled: false,
 	field_priority: 100,
+	field_instructions: PERSON_PROFILE_SCAFFOLD_INSTRUCTIONS,
 	ref_sourceGlobalTemplate: {
 		_type: 'reference',
 		_ref: 'globalTemplate_personProfile',

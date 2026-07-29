@@ -1,4 +1,11 @@
-import { forwardRef, type ComponentPropsWithRef, type ElementType, type PropsWithChildren, type ReactElement } from 'react';
+import {
+	forwardRef,
+	type ComponentPropsWithRef,
+	type ElementType,
+	type ForwardRefRenderFunction,
+	type PropsWithChildren,
+	type ReactElement,
+} from 'react';
 import { tv } from './_lib/utils.ts';
 
 export const styles = tv({
@@ -122,7 +129,7 @@ export const Text = forwardRef(function TextInner<E extends ElementType = 'div'>
 	{ as, styleType, className, hasParagraphs = false, children, ...props }: TextProps<E>,
 	ref: PolymorphicRef<E>,
 ): ReactElement {
-	const El = (as ?? 'div');
+	const El = as ?? 'div';
 	const { base } = styles({ hasParagraphs, type: styleType });
 
 	return (
@@ -130,4 +137,6 @@ export const Text = forwardRef(function TextInner<E extends ElementType = 'div'>
 			{children}
 		</El>
 	);
-}) as <E extends ElementType = 'div'>(props: TextProps<E> & { ref?: PolymorphicRef<E> }) => ReactElement;
+} as unknown as ForwardRefRenderFunction<unknown, Omit<TextProps<ElementType>, 'ref'>>) as <E extends ElementType = 'div'>(
+	props: TextProps<E> & { ref?: PolymorphicRef<E> },
+) => ReactElement;

@@ -17,7 +17,8 @@ export const component_locationLandingPageHero = {
 					title: 'Body Copy',
 					name: 'field_bodyCopy',
 					type: 'text',
-					description: 'Static copy that references location level (state, county, or city). Location names are populated dynamically from the URL.',
+					description:
+						'Static copy that references location level (state, county, or city). Location names are populated dynamically from the URL.',
 				},
 				{
 					title: 'Search Placeholder',
@@ -71,7 +72,6 @@ export const component_locationLandingPageHero = {
 				},
 			};
 			const title = resolveValue('title', component_locationLandingPageHero.preview.select, x);
-			const subtitle = resolveValue('subtitle', component_locationLandingPageHero.preview.select, x);
 			const media = resolveValue('media', component_locationLandingPageHero.preview.select, x);
 			return handleReplacements(
 				{

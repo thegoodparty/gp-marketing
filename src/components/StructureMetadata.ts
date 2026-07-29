@@ -1,6 +1,6 @@
 import type { Metadata, ResolvedMetadata } from 'next';
 import type { Robots } from 'next/dist/lib/metadata/types/metadata-types';
-import type { Group_seo } from 'sanity.types';
+import type { Seo as Group_seo } from 'sanity.types';
 import { DEFAULT_SHARE_IMAGE, getBaseUrl, SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 
 function metaString(value: unknown): string | undefined {
@@ -11,8 +11,7 @@ function metaString(value: unknown): string | undefined {
 
 export async function StructureMetaData(parentMetadata: ResolvedMetadata, page?: { name?: string; seo?: Group_seo; url?: string } | null) {
 	const metaTitle = metaString(page?.seo?.field_metaTitle) ?? metaString(page?.name);
-	const metaDescription =
-		metaString(page?.seo?.field_metaDescription) ?? metaString(parentMetadata.description);
+	const metaDescription = metaString(page?.seo?.field_metaDescription) ?? metaString(parentMetadata.description);
 	const ogImage = page?.seo?.img_openGraphImage ?? undefined;
 
 	const robots = parentMetadata.robots as Robots;

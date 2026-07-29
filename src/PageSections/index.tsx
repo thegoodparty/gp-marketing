@@ -45,17 +45,54 @@ import { EmbeddedBlockSection } from '~/PageSections/EmbeddedBlockSection';
 import { TeamValuesBlockSection } from '~/PageSections/TeamValuesBlockSection';
 import { TestimonialAutoScrollSection } from '~/PageSections/TestimonialAutoScrollSection';
 import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
+import type { TokenMap } from '~/lib/resolveTokens';
 
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
 
+export type { TokenMap };
+
 export type SectionOverrides = {
-	component_candidatesBlock?: { candidates?: import('~/ui/CandidatesBlock').CandidateCard[] };
+	component_candidatesBlock?: {
+		candidates?: import('~/ui/CandidatesBlock').CandidateCard[];
+		header?: { title?: string; copy?: string };
+	};
 	component_electionsIndexBlock?: {
 		elections?: import('~/ui/ElectionsIndexBlock').ElectionItem[];
 		stateSlug?: string;
+		hidden?: boolean;
+		header?: { title?: string; copy?: string; searchPlaceholder?: string };
+	};
+	component_locationFactsBlock?: {
+		headerTitle?: string;
+		factsCards?: Array<{ factType: string; label: string; value: string }>;
+		hidden?: boolean;
 	};
 	component_electionsPositionHero?: import('~/PageSections/ElectionsPositionHeroSection').OfficeData;
 	component_electionsPositionContentBlock?: import('~/PageSections/ElectionsPositionContentBlockSection').ElectionsPositionContentBlockOverride;
+	component_locationLandingPageHero?: {
+		locationLevel?: 'state' | 'county' | 'city' | 'district';
+		stateName?: string;
+		countyName?: string;
+		cityName?: string;
+		bodyCopy?: string;
+		searchPlaceholder?: string;
+	};
+	component_listOfOfficesBlock?: {
+		heading?: string;
+		headline?: string;
+		defaultYear?: number;
+		availableYears?: number[];
+		offices?: import('~/ui/ListOfOfficesBlock').OfficeItem[];
+	};
+	component_faqBlock?: {
+		items?: Array<{ title: string; copy: string }>;
+	};
+	component_ctaBlock?: {
+		primaryButtonHref?: string;
+	};
+	component_ctaImageBlock?: {
+		primaryButtonHref?: string;
+	};
 	component_profileHero?: {
 		candidateName: string;
 		office: string;
@@ -80,6 +117,7 @@ export type SectionOverrides = {
 type Props = {
 	pageSections?: Sections[] | null;
 	sectionOverrides?: SectionOverrides;
+	tokens?: TokenMap;
 	pageSlug?: string;
 	faqSlugMap?: ReadonlyMap<string, string>;
 };
@@ -125,7 +163,9 @@ export function PageSections(props: Props) {
 							<ComponentErrorBoundary key={section._key} componentName='Candidates Block'>
 								<CandidatesBlockSection
 									{...section}
+									tokens={props.tokens}
 									candidatesOverride={props.sectionOverrides?.component_candidatesBlock?.candidates}
+									headerOverride={props.sectionOverrides?.component_candidatesBlock?.header}
 								/>
 							</ComponentErrorBoundary>
 						);
@@ -138,7 +178,7 @@ export function PageSections(props: Props) {
 					case 'component_carouselBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Carousel Block'>
-								<CarouselBlockSection {...section} />
+								<CarouselBlockSection {...section} tokens={props.tokens} />
 							</ComponentErrorBoundary>
 						);
 					case 'component_claimProfileBlock':
@@ -149,6 +189,7 @@ export function PageSections(props: Props) {
 							<ComponentErrorBoundary key={section._key} componentName='Claim Profile Block'>
 								<ClaimProfileBlockSection
 									{...section}
+									tokens={props.tokens}
 									claimProfileOverride={props.sectionOverrides?.component_claimProfileBlock}
 								/>
 							</ComponentErrorBoundary>
@@ -162,13 +203,17 @@ export function PageSections(props: Props) {
 					case 'component_ctaBannerBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='CTA Banner Block'>
-								<CTABannerBlockSection {...section} />
+								<CTABannerBlockSection {...section} tokens={props.tokens} />
 							</ComponentErrorBoundary>
 						);
 					case 'component_ctaBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='CTA Block'>
-								<CTABlockSection {...section} />
+								<CTABlockSection
+									{...section}
+									tokens={props.tokens}
+									ctaOverride={props.sectionOverrides?.component_ctaBlock}
+								/>
 							</ComponentErrorBoundary>
 						);
 					case 'component_clickToCallBlock':
@@ -180,19 +225,29 @@ export function PageSections(props: Props) {
 					case 'component_ctaCardsBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='CTA Cards Block'>
-								<CTACardsBlockSection {...section} />
+								<CTACardsBlockSection {...section} tokens={props.tokens} />
 							</ComponentErrorBoundary>
 						);
 					case 'component_ctaImageBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='CTA Image Block'>
-								<CTAImageBlockSection {...section} />
+								<CTAImageBlockSection
+									{...section}
+									tokens={props.tokens}
+									ctaOverride={props.sectionOverrides?.component_ctaImageBlock}
+								/>
 							</ComponentErrorBoundary>
 						);
 					case 'component_faqBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='FAQ Block'>
-								<FAQBlockSection {...section} pageSlug={props.pageSlug} faqSlugMap={props.faqSlugMap} />
+								<FAQBlockSection
+									{...section}
+									tokens={props.tokens}
+									faqOverride={props.sectionOverrides?.component_faqBlock}
+									pageSlug={props.pageSlug}
+									faqSlugMap={props.faqSlugMap}
+								/>
 							</ComponentErrorBoundary>
 						);
 					case 'component_featuredBlogBlock':
@@ -230,6 +285,7 @@ export function PageSections(props: Props) {
 							<ComponentErrorBoundary key={section._key} componentName='Profile Hero'>
 								<ProfileHeroSection
 									{...section}
+									tokens={props.tokens}
 									profileHeroOverride={props.sectionOverrides?.component_profileHero}
 								/>
 							</ComponentErrorBoundary>
@@ -267,7 +323,7 @@ export function PageSections(props: Props) {
 					case 'component_stepperBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Stepper Block'>
-								<StepperBlockSection {...section} />
+								<StepperBlockSection {...section} tokens={props.tokens} />
 							</ComponentErrorBoundary>
 						);
 					case 'component_tabbedImageBlock':
@@ -291,7 +347,7 @@ export function PageSections(props: Props) {
 					case 'component_twoUpCardBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Two Up Card Block'>
-								<TwoUpCardBlockSection {...section} />
+								<TwoUpCardBlockSection {...section} tokens={props.tokens} />
 							</ComponentErrorBoundary>
 						);
 					case 'component_electionsIndexBlock':
@@ -299,8 +355,10 @@ export function PageSections(props: Props) {
 							<ComponentErrorBoundary key={section._key} componentName='Elections Index Block'>
 								<ElectionsIndexBlockSection
 									{...section}
+									tokens={props.tokens}
 									electionsOverride={props.sectionOverrides?.component_electionsIndexBlock?.elections}
 									stateSlugOverride={props.sectionOverrides?.component_electionsIndexBlock?.stateSlug}
+									indexOverride={props.sectionOverrides?.component_electionsIndexBlock}
 								/>
 							</ComponentErrorBoundary>
 						);
@@ -309,6 +367,7 @@ export function PageSections(props: Props) {
 							<ComponentErrorBoundary key={section._key} componentName='Elections Position Hero'>
 								<ElectionsPositionHeroSection
 									{...section}
+									tokens={props.tokens}
 									officeData={props.sectionOverrides?.component_electionsPositionHero}
 								/>
 							</ComponentErrorBoundary>
@@ -337,19 +396,27 @@ export function PageSections(props: Props) {
 					case 'component_goodPartyOrgPledge':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='GoodParty.org Pledge'>
-								<GoodPartyOrgPledgeSection {...section} />
+								<GoodPartyOrgPledgeSection {...section} tokens={props.tokens} />
 							</ComponentErrorBoundary>
 						);
 					case 'component_locationLandingPageHero':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Location Landing Page Hero'>
-								<LocationLandingPageHeroSection {...section} />
+								<LocationLandingPageHeroSection
+									{...section}
+									tokens={props.tokens}
+									locationOverride={props.sectionOverrides?.component_locationLandingPageHero}
+								/>
 							</ComponentErrorBoundary>
 						);
 					case 'component_locationFactsBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='Location Facts Block'>
-								<LocationFactsBlockSection {...section} />
+								<LocationFactsBlockSection
+									{...section}
+									factsOverride={props.sectionOverrides?.component_locationFactsBlock}
+									tokens={props.tokens}
+								/>
 							</ComponentErrorBoundary>
 						);
 					case 'component_profileContentBlock':
@@ -365,7 +432,11 @@ export function PageSections(props: Props) {
 					case 'component_listOfOfficesBlock':
 						return (
 							<ComponentErrorBoundary key={section._key} componentName='List of Offices Block'>
-								<ListOfOfficesBlockSection {...section} />
+								<ListOfOfficesBlockSection
+									{...section}
+									tokens={props.tokens}
+									officesOverride={props.sectionOverrides?.component_listOfOfficesBlock}
+								/>
 							</ComponentErrorBoundary>
 						);
 				case 'component_embeddedBlock':
@@ -380,11 +451,10 @@ export function PageSections(props: Props) {
 							<TeamValuesBlockSection {...section} />
 						</ComponentErrorBoundary>
 					);
-				// @ts-expect-error — run `bun run sanity:generate` to add component_testimonialAutoScroll to the Sections union
 				case 'component_testimonialAutoScroll':
 					return (
 						<ComponentErrorBoundary key={section._key} componentName='Testimonials Auto Scroll'>
-							<TestimonialAutoScrollSection {...(section as any)} />
+							<TestimonialAutoScrollSection {...section} />
 						</ComponentErrorBoundary>
 					);
 				default:

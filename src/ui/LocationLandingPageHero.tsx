@@ -4,7 +4,6 @@ import { cn, tv } from './_lib/utils.ts';
 import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
 import { IconWrapper } from './IconResolver.tsx';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 const styles = tv({
 	slots: {
@@ -46,7 +45,7 @@ const styles = tv({
 	},
 });
 
-export type LocationLevel = 'state' | 'county' | 'city';
+export type LocationLevel = 'state' | 'county' | 'city' | 'district';
 
 export type LocationLandingPageHeroProps = {
 	className?: string;
@@ -55,7 +54,7 @@ export type LocationLandingPageHeroProps = {
 	countyName?: string;
 	cityName?: string;
 	bodyCopy?: ReactNode;
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	searchPlaceholder?: string;
 	textAlign?: 'left' | 'center' | 'right';
 	/** When provided with onChange, the search input is controlled. */
@@ -70,6 +69,7 @@ function buildHeadline(props: LocationLandingPageHeroProps): string {
 		case 'city':
 			return cityName ? `${cityName}, ${stateName}` : stateName;
 		case 'county':
+		case 'district':
 			return countyName ? `${countyName}, ${stateName}` : stateName;
 		case 'state':
 		default:
@@ -84,8 +84,7 @@ function buildBodyCopy(props: LocationLandingPageHeroProps): string {
 		return bodyCopy;
 	}
 
-	const levelText = locationLevel === 'state' ? 'state' : locationLevel === 'county' ? 'county' : 'city';
-	return `Explore elections in this ${levelText}`;
+	return `Explore elections in this ${locationLevel}`;
 }
 
 export function LocationLandingPageHero(props: LocationLandingPageHeroProps) {
@@ -95,7 +94,16 @@ export function LocationLandingPageHero(props: LocationLandingPageHeroProps) {
 	const bodyCopyText = buildBodyCopy(props);
 	const searchPlaceholder = props.searchPlaceholder ?? 'Search elections by county and city';
 
-	const { base, content, headline: headlineStyle, bodyCopy, searchWrapper, searchContainer, searchIcon, searchInput } = styles({ backgroundColor, textAlign });
+	const {
+		base,
+		content,
+		headline: headlineStyle,
+		bodyCopy,
+		searchWrapper,
+		searchContainer,
+		searchIcon,
+		searchInput,
+	} = styles({ backgroundColor, textAlign });
 
 	return (
 		<section className={cn(base(), props.className)} data-component='LocationLandingPageHero'>

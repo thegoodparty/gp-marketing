@@ -69,24 +69,19 @@ async function fetchAshbyJobs(): Promise<AshbyJob[]> {
 		throw new Error('ASHBY_JOB_BOARD_NAME is not set');
 	}
 
-	const res = await fetch(
-		`https://api.ashbyhq.com/posting-api/job-board/${boardName}?includeCompensation=true`,
-		{ next: { revalidate: 3600 } },
-	);
+	const res = await fetch(`https://api.ashbyhq.com/posting-api/job-board/${boardName}?includeCompensation=true`, {
+		next: { revalidate: 3600 },
+	});
 
 	if (!res.ok) {
 		throw new Error(`Ashby API error: ${res.status} ${res.statusText}`);
 	}
 
-	const data: AshbyResponse = await res.json();
-	return (data.jobs ?? []).filter((job) => job.isListed);
+	const data = (await res.json()) as AshbyResponse;
+	return (data.jobs ?? []).filter(job => job.isListed);
 }
 
-export const getAshbyJobs = unstable_cache(
-	fetchAshbyJobs,
-	['ashby-jobs'],
-	{ revalidate: 3600 },
-);
+export const getAshbyJobs = unstable_cache(fetchAshbyJobs, ['ashby-jobs'], { revalidate: 3600 });
 
 function formatEmploymentType(type: string): string {
 	const map: Record<string, string> = {

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { cn, tv } from './_lib/utils.ts';
-import type { backgroundTypeValues, componentColorValues, iconColorValues } from './_lib/designTypesStore.ts';
+import type { componentColorValues, iconColorValues } from './_lib/designTypesStore.ts';
 
 import { Container } from './Container.tsx';
 import { HeaderBlock, type HeaderBlockProps } from './HeaderBlock.tsx';
@@ -41,7 +41,7 @@ export type PledgeCard = {
 
 export type GoodPartyOrgPledgeProps = {
 	className?: string;
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	header?: HeaderBlockProps;
 	pledgeCards?: PledgeCard[];
 	iconBg?: Exclude<(typeof componentColorValues)[number], 'inverse'> | 'mixed';
@@ -61,13 +61,10 @@ export function GoodPartyOrgPledge(props: GoodPartyOrgPledgeProps) {
 
 	const resolvedStyle = resolveButtonStyleType('min-ghost', backgroundColor);
 
-	const resolveCardIconBg = (
-		card: PledgeCard,
-		index: number,
-	): Exclude<(typeof componentColorValues)[number], 'inverse'> => {
+	const resolveCardIconBg = (card: PledgeCard, index: number): Exclude<(typeof componentColorValues)[number], 'inverse'> => {
 		if (card.iconBg) return card.iconBg;
 		if (iconBg === 'mixed') {
-			return PLEDGE_MIXED_ICON_COLORS[index % PLEDGE_MIXED_ICON_COLORS.length];
+			return PLEDGE_MIXED_ICON_COLORS[index % PLEDGE_MIXED_ICON_COLORS.length]!;
 		}
 		return iconBg;
 	};
@@ -81,9 +78,7 @@ export function GoodPartyOrgPledge(props: GoodPartyOrgPledgeProps) {
 						{props.pledgeCards?.map((pledgeCard, index) => (
 							<div key={`pledge-${index}`} className={card()}>
 								<div className='flex flex-col gap-4'>
-									{pledgeCard.icon && (
-										<CircleIcon icon={pledgeCard.icon} iconBg={resolveCardIconBg(pledgeCard, index)} />
-									)}
+									{pledgeCard.icon && <CircleIcon icon={pledgeCard.icon} iconBg={resolveCardIconBg(pledgeCard, index)} />}
 									{pledgeCard.title && (
 										<Text as='h3' styleType='subtitle-1'>
 											{pledgeCard.title}

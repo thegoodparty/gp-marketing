@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 import { cn, tv } from './_lib/utils.ts';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
@@ -55,7 +54,7 @@ export type ElectionsPositionContentBlockBottomItem = {
 
 export type ElectionsPositionContentBlockProps = {
 	className?: string;
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	card?: ElectionsPositionContentBlockCardProps;
 	topHeadline?: string;
 	gridItems?: ElectionsPositionContentBlockGridItem[];
@@ -68,13 +67,9 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 	const { base, grid, card, cardContent, buttonContainer, rightContent, gridSection, gridItem, separator, bottomSection, bottomItem } =
 		styles({ backgroundColor });
 
-	const resolvedButtonStyle = props.card?.primaryCTA
-		? (backgroundColor === 'midnight' ? 'outline-inverse' : 'secondary')
-		: undefined;
+	const resolvedButtonStyle = props.card?.primaryCTA ? (backgroundColor === 'midnight' ? 'outline-inverse' : 'secondary') : undefined;
 
-	const resolvedRightColumnCTAStyle = props.rightColumnCTA
-		? (backgroundColor === 'midnight' ? 'outline-inverse' : 'secondary')
-		: undefined;
+	const resolvedRightColumnCTAStyle = props.rightColumnCTA ? (backgroundColor === 'midnight' ? 'outline-inverse' : 'secondary') : undefined;
 
 	return (
 		<article className={cn(base(), props.className)} data-component='ElectionsPositionContentBlock'>
@@ -134,16 +129,12 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 												{item.subhead}
 											</Text>
 										)}
-										{isValidRichText(item.bodyCopy) && (
-											<Text styleType='body-2'>{item.bodyCopy}</Text>
-										)}
+										{isValidRichText(item.bodyCopy) && <Text styleType='body-2'>{item.bodyCopy}</Text>}
 									</div>
 								))}
 							</div>
 						)}
-						{(props.gridItems?.length ?? 0) > 0 && (props.bottomItems?.length ?? 0) > 0 && (
-							<div className={separator()} />
-						)}
+						{(props.gridItems?.length ?? 0) > 0 && (props.bottomItems?.length ?? 0) > 0 && <div className={separator()} />}
 						{props.bottomItems && props.bottomItems.length > 0 && (
 							<div className={bottomSection()}>
 								{props.bottomItems.map((item, index) => (
@@ -153,9 +144,7 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 												{item.headline}
 											</Text>
 										)}
-										{isValidRichText(item.bodyCopy) && (
-											<Text styleType='body-2'>{item.bodyCopy}</Text>
-										)}
+										{isValidRichText(item.bodyCopy) && <Text styleType='body-2'>{item.bodyCopy}</Text>}
 									</div>
 								))}
 							</div>

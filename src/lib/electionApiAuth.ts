@@ -19,26 +19,57 @@ import { createClerkClient } from '@clerk/backend';
  */
 
 const TOKEN_RENEWAL_BUFFER_MS = 30_000;
+const MINT_COOLDOWN_MS = 30_000;
 const TOKEN_TTL_SECONDS = 600;
 
-const machineSecret = process.env['GP_MARKETING_MACHINE_SECRET'];
+type ClerkM2MClient = {
+	m2m: {
+		createToken(params: {
+			machineSecretKey: string;
+			secondsUntilExpiration: number;
+		}): Promise<{ token?: string | null; expiration?: number | null }>;
+	};
+};
 
-const clerkClient = createClerkClient({
-	secretKey: process.env['CLERK_SECRET_KEY'],
-	publishableKey: process.env['CLERK_PUBLISHABLE_KEY'],
-});
+let clerkClient: ClerkM2MClient | null = null;
+
+function getClerkClient(): ClerkM2MClient {
+	if (!clerkClient) {
+		clerkClient = createClerkClient({
+			secretKey: process.env['CLERK_SECRET_KEY'],
+			publishableKey: process.env['CLERK_PUBLISHABLE_KEY'],
+		}) as ClerkM2MClient;
+	}
+	return clerkClient;
+}
 
 let cachedToken: string | null = null;
 let tokenExpiration: number | null = null;
 let pending: Promise<string | null> | null = null;
 let warnedMissingSecret = false;
+let mintCooldownUntil = 0;
 
-function isTokenValid(): boolean {
-	if (!tokenExpiration) return false;
-	return Date.now() < tokenExpiration - TOKEN_RENEWAL_BUFFER_MS;
+/** True when a cached token exists and has not yet reached its real expiry. */
+function isTokenUsable(): boolean {
+	return cachedToken != null && tokenExpiration != null && Date.now() < tokenExpiration;
+}
+
+/** True when there is no usable cached token, or it is within the renewal buffer. */
+function needsRenewal(): boolean {
+	if (!cachedToken || tokenExpiration == null) return true;
+	return Date.now() >= tokenExpiration - TOKEN_RENEWAL_BUFFER_MS;
+}
+
+function usableCachedToken(): string | null {
+	return isTokenUsable() ? cachedToken : null;
+}
+
+function enterMintCooldown(): void {
+	mintCooldownUntil = Date.now() + MINT_COOLDOWN_MS;
 }
 
 async function mint(): Promise<string | null> {
+	const machineSecret = process.env['GP_MARKETING_MACHINE_SECRET'];
 	if (!machineSecret) {
 		if (!warnedMissingSecret) {
 			warnedMissingSecret = true;
@@ -46,29 +77,35 @@ async function mint(): Promise<string | null> {
 				'[electionApiAuth] GP_MARKETING_MACHINE_SECRET is not set; election-api requests will be unauthenticated',
 			);
 		}
-		return null;
+		return usableCachedToken();
 	}
 	try {
-		const minted = await clerkClient.m2m.createToken({
+		const minted = await getClerkClient().m2m.createToken({
 			machineSecretKey: machineSecret,
 			secondsUntilExpiration: TOKEN_TTL_SECONDS,
 		});
-		if (!minted.token) return null;
+		if (!minted.token || minted.expiration == null) {
+			enterMintCooldown();
+			return usableCachedToken();
+		}
 		cachedToken = minted.token;
 		tokenExpiration = minted.expiration;
+		mintCooldownUntil = 0;
 		return minted.token;
 	} catch (err) {
 		console.error(
 			'[electionApiAuth] failed to mint M2M token',
 			err instanceof Error ? err.message : String(err),
 		);
-		return null;
+		enterMintCooldown();
+		return usableCachedToken();
 	}
 }
 
 /** Returns a cached M2M token, minting/renewing as needed. Null if unavailable. */
 export async function getElectionApiToken(): Promise<string | null> {
-	if (cachedToken && isTokenValid()) return cachedToken;
+	if (!needsRenewal()) return cachedToken;
+	if (Date.now() < mintCooldownUntil) return usableCachedToken();
 	if (pending) return pending;
 	const promise = mint();
 	pending = promise;
@@ -83,4 +120,22 @@ export async function getElectionApiToken(): Promise<string | null> {
 export async function electionApiAuthHeaders(): Promise<Record<string, string>> {
 	const token = await getElectionApiToken();
 	return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+/** Test-only: reset module cache / cooldown state (and optionally seed a token). */
+export function __resetElectionApiAuthForTests(seed?: {
+	cachedToken?: string | null;
+	tokenExpiration?: number | null;
+	mintCooldownUntil?: number;
+	warnedMissingSecret?: boolean;
+	resetClerkClient?: boolean;
+}): void {
+	cachedToken = seed?.cachedToken ?? null;
+	tokenExpiration = seed?.tokenExpiration ?? null;
+	mintCooldownUntil = seed?.mintCooldownUntil ?? 0;
+	warnedMissingSecret = seed?.warnedMissingSecret ?? false;
+	pending = null;
+	if (seed?.resetClerkClient !== false) {
+		clerkClient = null;
+	}
 }

@@ -44,12 +44,11 @@ const nextConfig = {
 	reactStrictMode: true,
 	poweredByHeader: false,
 	optimizeFonts: true,
-	// TODO: Re-enable to fail builds on lint/type errors. May surface existing issues.
 	eslint: {
-		ignoreDuringBuilds: true,
+		ignoreDuringBuilds: false,
 	},
 	typescript: {
-		ignoreBuildErrors: true,
+		ignoreBuildErrors: false,
 	},
 
 	// */

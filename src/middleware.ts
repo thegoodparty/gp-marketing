@@ -33,6 +33,10 @@ function encodeAmplitudeBrowserSdk20Cookie(deviceId: string): string {
 	return btoa(encoded);
 }
 
+function isGoodPartyProductionHost(hostname: string): boolean {
+	return hostname === 'goodparty.org' || hostname.endsWith('.goodparty.org');
+}
+
 /**
  * First-time visitors have no `AMP_*` cookie yet, so SSR cannot bucket them.
  * Runs on every page route the matcher allows so experiments can be resolved
@@ -66,6 +70,9 @@ function maybeBootstrapAmplitudeDeviceCookie(request: NextRequest): NextResponse
 		maxAge: 365 * 24 * 60 * 60,
 		sameSite: 'lax',
 		secure: request.nextUrl.protocol === 'https:',
+		...(isGoodPartyProductionHost(request.nextUrl.hostname)
+			? { domain: '.goodparty.org' }
+			: {}),
 	});
 
 	return response;

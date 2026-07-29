@@ -1,4 +1,3 @@
-import type { backgroundTypeValues } from './_lib/designTypesStore';
 import { tv } from './_lib/utils';
 
 import { Container } from './Container';
@@ -28,7 +27,7 @@ const styles = tv({
 });
 
 export interface StatsBlockProps {
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	header?: HeaderBlockProps;
 	stats?: StatProps[];
 	layout?: 'stacked' | 'side-by-side';

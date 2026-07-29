@@ -7,10 +7,10 @@ import { Button, ComponentButton } from './Inputs/Button.tsx';
 import { Container, type ContainerProps } from './Container.tsx';
 import { Text } from './Text.tsx';
 import type { HeaderBlockProps } from '~/ui/HeaderBlock.tsx';
-import { useState, useTransition } from 'react';
+import { useState, useTransition, type Dispatch, type SetStateAction } from 'react';
 import { loadMoreArticles } from '~/ui/_lib/loadMoreArticles.ts';
 import { articleCardGroq } from '~/sanity/groq.ts';
-import { resolveBlogCard } from './_lib/resolveBlogCard.ts';
+import { resolveBlogCard, type ResolveBlogCardSource } from './_lib/resolveBlogCard.ts';
 
 const styles = tv({
 	slots: {
@@ -110,7 +110,7 @@ function LoadMoreButton(props: {
 	fetchProps: { topicID?: string; categoryID?: string };
 	allItemsCount: number;
 	articlesLength: number;
-	setArticles(articles: BlogCardProps[]): void;
+	setArticles: Dispatch<SetStateAction<BlogCardProps[]>>;
 }) {
 	const [isPending, startTransition] = useTransition();
 
@@ -127,7 +127,12 @@ function LoadMoreButton(props: {
 						query: articlesByCategoryWithPaginationFetchGroq({ category: props.fetchProps.categoryID, start, end }),
 					});
 					if (newArticles && Array.isArray(newArticles) && newArticles.length > 0) {
-						props.setArticles(prevArticles => [...prevArticles, ...newArticles.map(resolveBlogCard).filter(Boolean)]);
+						props.setArticles(prevArticles => [
+							...prevArticles,
+							...newArticles
+								.map(item => resolveBlogCard(item as ResolveBlogCardSource))
+								.filter((card): card is BlogCardProps => Boolean(card)),
+						]);
 					}
 				} catch (error) {
 					console.error('Failed to fetch:', error);
@@ -142,7 +147,12 @@ function LoadMoreButton(props: {
 						query: articlesWithPaginationFetchGroq({ topic: props.fetchProps.topicID, start, end }),
 					});
 					if (newArticles && Array.isArray(newArticles) && newArticles.length > 0) {
-						props.setArticles(prevArticles => [...prevArticles, ...newArticles.map(resolveBlogCard).filter(Boolean)]);
+						props.setArticles(prevArticles => [
+							...prevArticles,
+							...newArticles
+								.map(item => resolveBlogCard(item as ResolveBlogCardSource))
+								.filter((card): card is BlogCardProps => Boolean(card)),
+						]);
 					}
 				} catch (error) {
 					console.error('Failed to fetch:', error);

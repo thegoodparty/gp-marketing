@@ -17,7 +17,7 @@ const stat = {
 	description: 'Label copy',
 };
 
-const Default = {
+const Default: Story = {
 	args: {
 		header: {
 			label: 'Test label',

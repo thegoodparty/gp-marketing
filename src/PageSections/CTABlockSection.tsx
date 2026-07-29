@@ -1,6 +1,8 @@
 import type { Sections } from '~/PageSections';
 
 import { transformButtons } from '~/lib/buttonTransformer';
+import type { TokenMap } from '~/lib/resolveTokens';
+import { resolveSectionText, resolveRichTextTokens } from '~/lib/resolveSectionText';
 
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { resolveComponentColor } from '~/ui/_lib/resolveComponentColor';
@@ -9,7 +11,12 @@ import { CTABlock } from '~/ui/CTABlock';
 import { stegaClean } from 'next-sanity';
 import { RichData } from '~/ui/RichData';
 
-export function CTABlockSection(section: Extract<Sections, { _type: 'component_ctaBlock' }>) {
+type Props = Extract<Sections, { _type: 'component_ctaBlock' }> & {
+	tokens?: TokenMap;
+	ctaOverride?: { primaryButtonHref?: string };
+};
+
+export function CTABlockSection(section: Props) {
 	const backgroundColor = section.designSettings?.field_blockColorCreamMidnight
 		? resolveBg(stegaClean(section.designSettings.field_blockColorCreamMidnight))
 		: 'cream';
@@ -20,12 +27,21 @@ export function CTABlockSection(section: Extract<Sections, { _type: 'component_c
 				id={section._key}
 				backgroundColor={backgroundColor}
 				color={resolveComponentColor(stegaClean(section.designSettings?.field_componentColor6ColorsInverse), backgroundColor)}
-				label={section['overview']?.field_label}
-				title={section['overview']?.field_title}
-				caption={section['overview']?.field_caption}
-				buttons={transformButtons([section['primaryCTA'], { ...section['secondaryCTA'], hierarchy: 'Secondary' }])}
+				label={resolveSectionText(section['overview']?.field_label, section.tokens)}
+				title={resolveSectionText(section['overview']?.field_title, section.tokens)}
+				caption={resolveSectionText(section['overview']?.field_caption, section.tokens)}
+				buttons={transformButtons([
+					section.ctaOverride?.primaryButtonHref
+						? {
+								...(section['primaryCTA'] as object),
+								action: 'Internal' as const,
+								link: { href: section.ctaOverride.primaryButtonHref },
+							}
+						: section['primaryCTA'],
+					{ ...section['secondaryCTA'], hierarchy: 'Secondary' },
+				])}
 				size={resolveCTASize(stegaClean(section.designSettings?.field_ctaSizeNormalCondensed))}
-				copy={<RichData value={section['overview']?.block_summaryText} />}
+				copy={<RichData value={resolveRichTextTokens(section['overview']?.block_summaryText, section.tokens)} />}
 			/>
 		</section>
 	);

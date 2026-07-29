@@ -30,12 +30,26 @@ export type ResponsiveImageProps = {
 };
 
 export function ResponsiveImage(props: ResponsiveImageProps) {
-	if (!props.image.asset) {
+	if (typeof props.image === 'string' || !props.image.asset) {
 		return null;
 	}
-	let asset = props.image.asset;
-	if ('_ref' in asset && typeof asset._ref === 'string') {
-		const parsed = parseSanityImageRef(asset._ref);
+	const image = props.image;
+	const rawAsset = image.asset as {
+		_ref?: string;
+		url?: string;
+		altText?: string;
+		metadata?: { dimensions?: { width?: number; height?: number } };
+	};
+
+	let asset: {
+		_ref?: string;
+		url: string;
+		altText?: string;
+		metadata?: { dimensions?: { width?: number; height?: number } };
+	};
+
+	if (rawAsset._ref && typeof rawAsset._ref === 'string') {
+		const parsed = parseSanityImageRef(rawAsset._ref);
 		if (!parsed) return null;
 		const [widthStr, heightStr] = parsed.dimensions.split('x');
 		const width = widthStr ? Number(widthStr) : undefined;
@@ -56,19 +70,17 @@ export function ResponsiveImage(props: ResponsiveImageProps) {
 			altText: '',
 			metadata,
 		};
+	} else {
+		asset = { ...rawAsset, url: rawAsset.url ?? '' };
 	}
 
 	// Add crop parameters if they exist
-	if (props.image.crop && asset.metadata?.dimensions?.width && asset.metadata?.dimensions?.height) {
+	if (image.crop && asset.metadata?.dimensions?.width && asset.metadata?.dimensions?.height) {
 		if (!asset.url.includes('rect=')) {
-			const cropLeft = Math.round(Number(props.image.crop.left) * Number(asset.metadata.dimensions.width));
-			const cropTop = Math.round(Number(props.image.crop.top) * Number(asset.metadata.dimensions.height));
-			const cropWidth = Math.round(
-				(1 - Number(props.image.crop.left) - Number(props.image.crop.right)) * Number(asset.metadata.dimensions.width),
-			);
-			const cropHeight = Math.round(
-				(1 - Number(props.image.crop.top) - Number(props.image.crop.bottom)) * Number(asset.metadata.dimensions.height),
-			);
+			const cropLeft = Math.round(Number(image.crop.left) * Number(asset.metadata.dimensions.width));
+			const cropTop = Math.round(Number(image.crop.top) * Number(asset.metadata.dimensions.height));
+			const cropWidth = Math.round((1 - Number(image.crop.left) - Number(image.crop.right)) * Number(asset.metadata.dimensions.width));
+			const cropHeight = Math.round((1 - Number(image.crop.top) - Number(image.crop.bottom)) * Number(asset.metadata.dimensions.height));
 
 			const cropParams = `rect=${cropLeft},${cropTop},${cropWidth},${cropHeight}`;
 			asset.url += `?${cropParams}`;

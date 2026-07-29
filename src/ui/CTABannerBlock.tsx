@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 import { cn, tv } from './_lib/utils.ts';
 import { resolveInverseButtonStyleType } from './_lib/resolveButtonStyleType.ts';
 import { isValidRichText } from './_lib/isValidRichText.ts';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { Container } from './Container.tsx';
@@ -54,7 +53,7 @@ const styles = tv({
 });
 
 export type CTABannerBlockProps = {
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	button?: ComponentButtonProps;
 	color?: any;
 	copy?: ReactNode;

@@ -1,11 +1,14 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import {
 	buildFaqSlugMap,
 	findFaqBySlug,
 	getAllFaqSlugs,
 	getFaqHref,
 	getFaqSitemapEntries,
+	isValidFaqSlug,
 	slugifyFaqQuestion,
+	sortFaqsForSlugMap,
+	validateFaqSlugFormat,
 } from './faqSlugs';
 
 describe('slugifyFaqQuestion', () => {
@@ -17,13 +20,30 @@ describe('slugifyFaqQuestion', () => {
 	it('trims and collapses whitespace', () => {
 		expect(slugifyFaqQuestion('  City   Council  ')).toBe('city-council');
 	});
+
+	it('differs from lodash kebabCase for domains (Studio Generate parity)', () => {
+		expect(slugifyFaqQuestion('What is GoodParty.org?')).toBe('what-is-goodpartyorg');
+		expect(slugifyFaqQuestion('What is GoodParty.org?')).not.toBe('what-is-good-party-org');
+	});
+});
+
+describe('validateFaqSlugFormat', () => {
+	it('accepts lowercase hyphenated slugs', () => {
+		expect(isValidFaqSlug('what-is-goodpartyorg')).toBe(true);
+		expect(validateFaqSlugFormat('what-is-goodpartyorg')).toBe(true);
+	});
+
+	it('rejects whitespace, uppercase, and path separators', () => {
+		expect(validateFaqSlugFormat(' ')).toBe('Slug is required');
+		expect(validateFaqSlugFormat(' slug ')).toBe('Slug must not have leading or trailing whitespace');
+		expect(validateFaqSlugFormat('UPPERCASE')).not.toBe(true);
+		expect(validateFaqSlugFormat('nested/path')).not.toBe(true);
+	});
 });
 
 describe('buildFaqSlugMap', () => {
 	it('resolves hrefs after Map is serialized and reconstructed (unstable_cache round-trip)', () => {
-		const faqs = [
-			{ _id: 'abc123', faqOverview: { field_question: 'What is GoodParty.org?' } },
-		];
+		const faqs = [{ _id: 'abc123', faqOverview: { field_question: 'What is GoodParty.org?' } }];
 		const serialized = Object.fromEntries(buildFaqSlugMap(faqs));
 		const restoredMap = new Map(Object.entries(serialized));
 
@@ -86,17 +106,48 @@ describe('buildFaqSlugMap', () => {
 		}
 	});
 
-	it('assigns base slug to the first FAQ in array order', () => {
+	it('assigns base slug deterministically by question then _id', () => {
 		const faqsForward = [
 			{ _id: 'abc123', faqOverview: { field_question: 'What is GoodParty.org?' } },
 			{ _id: 'def456', faqOverview: { field_question: 'What is GoodParty.org?' } },
 		];
 		const faqsReversed = [...faqsForward].reverse();
 
+		expect([...getAllFaqSlugs(faqsForward)].sort()).toEqual([...getAllFaqSlugs(faqsReversed)].sort());
 		expect(getAllFaqSlugs(faqsForward)[0]).toBe('what-is-goodpartyorg');
-		expect(getAllFaqSlugs(faqsReversed)[0]).toBe('what-is-goodpartyorg');
 		expect(getAllFaqSlugs(faqsForward)[1]).toBe('what-is-goodpartyorg-def456');
-		expect(getAllFaqSlugs(faqsReversed)[1]).toBe('what-is-goodpartyorg-abc123');
+	});
+
+	it('prefers stored slug over question-derived slug', () => {
+		const faqs = [
+			{
+				_id: 'abc123',
+				faqOverview: {
+					field_question: 'What is GoodParty.org?',
+					field_slug: 'custom-faq-slug',
+				},
+			},
+		];
+
+		const slugMap = buildFaqSlugMap(faqs);
+
+		expect(getAllFaqSlugs(faqs)).toEqual(['custom-faq-slug']);
+		expect(getFaqHref(faqs[0]!, slugMap)).toBe('/frequently-asked-questions/custom-faq-slug');
+		expect(findFaqBySlug(faqs, 'custom-faq-slug')?._id).toBe('abc123');
+	});
+
+	it('matches GROQ internal hrefs once stored slugs are converged', () => {
+		const faqs = [
+			{ _id: 'aaa', faqOverview: { field_question: 'What is X?', field_slug: 'what-is-x' } },
+			{ _id: 'bbb', faqOverview: { field_question: 'ZZZ Other', field_slug: 'what-is-x-bbb' } },
+		];
+		const slugMap = buildFaqSlugMap(faqs);
+
+		for (const faq of faqs) {
+			const groqHref = `/frequently-asked-questions/${faq.faqOverview.field_slug}`;
+			expect(getFaqHref(faq, slugMap)).toBe(groqHref);
+			expect(findFaqBySlug(faqs, faq.faqOverview.field_slug)?._id).toBe(faq._id);
+		}
 	});
 });
 
@@ -119,6 +170,16 @@ describe('findFaqBySlug', () => {
 	it('returns undefined for unknown slug', () => {
 		expect(findFaqBySlug(faqs, 'does-not-exist')).toBeUndefined();
 	});
+
+	it('sorts FAQs deterministically by base slug length then normalized _id', () => {
+		const sorted = sortFaqsForSlugMap([
+			{ _id: 'drafts.bbb', faqOverview: { field_question: 'Beta?' } },
+			{ _id: 'aaa', faqOverview: { field_question: 'Alpha?' } },
+			{ _id: 'bbb', faqOverview: { field_question: 'Beta?' } },
+		]);
+
+		expect(sorted.map(faq => faq._id)).toEqual(['bbb', 'drafts.bbb', 'aaa']);
+	});
 });
 
 describe('getFaqSitemapEntries', () => {
@@ -133,7 +194,26 @@ describe('getFaqSitemapEntries', () => {
 
 		expect(entries).toHaveLength(1);
 		expect(entries[0]?.slug).toBe('what-is-goodpartyorg');
-		expect(entries[0]?.faq._id).toBe('faq8942aa');
+		expect(entries[0]?.faq._id).toBe('faq40f192');
+	});
+
+	it('keeps one sitemap entry after backfill stores distinct collision slugs', () => {
+		const faqs = [
+			{
+				_id: 'aaa111',
+				faqOverview: { field_question: 'What is GoodParty.org?', field_slug: 'what-is-goodpartyorg' },
+			},
+			{
+				_id: 'bbb222',
+				faqOverview: { field_question: 'What is GoodParty.org?', field_slug: 'what-is-goodpartyorg-bbb222' },
+			},
+		];
+
+		const entries = getFaqSitemapEntries(faqs);
+
+		expect(entries).toHaveLength(1);
+		expect(entries[0]?.slug).toBe('what-is-goodpartyorg');
+		expect(entries[0]?.faq._id).toBe('aaa111');
 	});
 
 	it('excludes suffixed duplicates and keeps distinct questions', () => {
@@ -181,10 +261,7 @@ describe('getFaqSitemapEntries', () => {
 	});
 
 	it('includes one entry per FAQ when question is missing (keyed by _id)', () => {
-		const faqs = [
-			{ _id: 'no-question-a' },
-			{ _id: 'no-question-b' },
-		];
+		const faqs = [{ _id: 'no-question-a' }, { _id: 'no-question-b' }];
 
 		const entries = getFaqSitemapEntries(faqs);
 

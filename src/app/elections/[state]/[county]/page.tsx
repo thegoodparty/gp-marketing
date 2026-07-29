@@ -9,32 +9,17 @@ import {
 	TOWN_MTFCC,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
-import { DEFAULT_DISPLAY_COUNT } from '~/constants/display';
 import {
-	CAROUSEL_QUOTE_COLLECTION_ID,
-	CAROUSEL_HEADER,
-	STEPPER_HEADER,
-	STEPPER_ITEMS,
-} from '~/constants/electionsStaticSections';
-import { sanityFetch } from '~/sanity/sanityClient';
-import { quoteCollectionByIdQuery } from '~/sanity/groq';
-import {
+	buildOfficeItemsFromPlaceRaces,
 	canonicalizeCountyEquivalentName,
 	getCountySuffixLabel,
 	getStateName,
+	PLACE_RACE_COLUMNS,
 	placeToFactsCards,
 	redirectCityPlaceToFourLevelUrl,
+	resolvePlaceRaceElectionDates,
 } from '~/lib/electionsHelpers';
-import { resolveAuthor } from '~/ui/_lib/resolveAuthor';
-import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
-import { BreadcrumbBlock } from '~/ui/BreadcrumbBlock';
-import { ElectionsLandingWithSearch } from '~/ui/ElectionsLandingWithSearch';
-import { LocationFactsBlock } from '~/ui/LocationFactsBlock';
-import { Carousel } from '~/ui/Carousel';
-import { StepperBlock } from '~/ui/StepperBlock';
-import { ElectionsIndexBlock } from '~/ui/ElectionsIndexBlock';
-import { PageSchema } from '~/ui/PageSchema';
-import { buildBreadcrumbSchema, buildSchemaGraph, buildWebPageSchema } from '~/lib/schema';
+import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
 import { toAbsoluteUrl } from '~/lib/url';
 
 export const revalidate = 3600;
@@ -59,19 +44,14 @@ export default async function Page({
 	const fullSlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const currentYear = new Date().getFullYear();
 
-	const [counties, placeData, quoteCollection] = await Promise.all([
+	const [counties, placeData] = await Promise.all([
 		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
 		getPlaceBySlug({
 			slug: fullSlug,
 			includeChildren: false,
 			includeRaces: true,
 			placeColumns: 'slug,name,mtfcc,countyName',
-			raceColumns: 'slug,normalizedPositionName,electionDate,positionDescription,positionLevel',
-		}),
-		sanityFetch({
-			query: quoteCollectionByIdQuery,
-			params: { id: CAROUSEL_QUOTE_COLLECTION_ID },
-			tags: ['quoteCollections'],
+			raceColumns: PLACE_RACE_COLUMNS,
 		}),
 	]);
 
@@ -116,123 +96,72 @@ export default async function Page({
 
 	const factsCards = placeToFactsCards(placeData);
 
-	const quoteItems = quoteCollection?.quoteCollectionContent?.list_chooseQuotes ?? [];
-	const carouselCards = quoteItems.map(item => ({
-		copy: item.quote?.field_quote ?? undefined,
-		author: resolveAuthor(item.quote?.ref_quoteBy as Parameters<typeof resolveAuthor>[0]),
-	}));
-
-	const stepperHeader = {
-		title: STEPPER_HEADER.title,
-		copy: STEPPER_HEADER.copy,
-		backgroundColor: 'cream' as const,
-		textSize: resolveTextSize('Medium'),
-	};
-
-	// County/local positions (e.g. County Sheriff, Library District Board, School Board) from place Races
 	const countyRaces = (placeData?.Races ?? []).filter(r => {
 		const level = r.positionLevel?.toUpperCase();
 		return level === 'COUNTY' || level === 'LOCAL';
 	});
-	const countyOffices = countyRaces.map(race => {
-		const positionSlug = race.slug.split('/').slice(2).join('/');
-		return {
-			id: String(race.id),
-			type: isDistrict ? 'District' : 'County',
-			position: race.normalizedPositionName ?? race.name ?? 'Position',
-			nextElectionDate: race.electionDate ?? '',
-			href: `/elections/${state.toLowerCase()}/${county.toLowerCase()}/position/${positionSlug}`,
-		};
-	});
+	const resolvedDates = await resolvePlaceRaceElectionDates(countyRaces);
+	const officeType = isDistrict ? 'District' : 'County';
+	const { offices: countyOffices, dataYears } = buildOfficeItemsFromPlaceRaces(
+		countyRaces,
+		resolvedDates,
+		{
+			type: officeType,
+			buildHref: race => {
+				const positionSlug = race.slug.split('/').slice(2).join('/');
+				return `/elections/${state.toLowerCase()}/${county.toLowerCase()}/position/${positionSlug}`;
+			},
+		},
+	);
 
-	const dataYears = [
-		...new Set(
-			countyRaces
-				.map(r => (r.electionDate ? new Date(r.electionDate).getFullYear() : NaN))
-				.filter((y): y is number => !isNaN(y)),
-		),
-	].sort((a, b) => a - b);
 	const defaultYear = dataYears.includes(currentYear)
 		? currentYear
 		: (dataYears[0] ?? currentYear);
 	const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
 
 	const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);
-	const countyGraph = buildSchemaGraph([
-		buildWebPageSchema({
-			url: pageUrl,
-			name: `Elections in ${placeName}, ${stateName}`,
-			description: isDistrict
-				? `Browse elections and positions in ${placeName}, ${stateName}.`
-				: `Browse elections, positions, and cities in ${placeName}, ${stateName}.`,
-			pageType: 'CollectionPage',
-		}),
-		buildBreadcrumbSchema(breadcrumbs, toAbsoluteUrl),
-	]);
 
-	return (
-		<>
-			<PageSchema schema={countyGraph ?? undefined} />
-			<BreadcrumbBlock backgroundColor="midnight" breadcrumbs={breadcrumbs} />
-			<ElectionsLandingWithSearch
-				heroProps={{
-					locationLevel: 'county',
-					backgroundColor: 'midnight',
-					stateName: `Upcoming elections in ${placeName}, ${stateName}`,
-					bodyCopy: `Learn what positions are up for election and who is currently running for office in ${placeName}.`,
-				}}
-				listProps={{
-					heading: isDistrict
-						? `Elections in ${placeName}`
-						: `${normalizedCounty?.suffixLabel ?? getCountySuffixLabel(countyPlace!.name)} Elections in ${normalizedCounty?.displayName ?? countyPlace!.name}`,
-					headlineLabel: isDistrict ? 'district' : 'county',
-					defaultYear,
-					availableYears,
-					offices: countyOffices,
-				}}
-			/>
-			{factsCards.length > 0 && (
-				<LocationFactsBlock
-					backgroundColor="cream"
-					header={{ title: isDistrict ? `${placeName} facts` : `${normalizedCounty?.displayName ?? countyPlace!.name} facts` }}
-					factsCards={factsCards}
-				/>
-			)}
-			{!isDistrict && (
-				<ElectionsIndexBlock
-					backgroundColor="midnight"
-					stateSlug={fullSlug}
-					elections={cities}
-					header={{
-						title: `${hasTownEntries ? 'Cities & Towns' : 'Cities'} in ${normalizedCounty?.displayName ?? countyPlace!.name}`,
-						copy: `Browse elections by city in ${normalizedCounty?.displayName ?? countyPlace!.name}, ${stateName}.`,
-						backgroundColor: 'midnight',
-					}}
-					initialDisplayCount={DEFAULT_DISPLAY_COUNT}
-					showSearch={true}
-					searchPlaceholder="Search by city"
-					ctaLabel="Browse CTA"
-				/>
-			)}
-			{carouselCards.length > 0 && (
-				<Carousel
-					backgroundColor="cream"
-					header={{
-						title: CAROUSEL_HEADER.title,
-						copy: CAROUSEL_HEADER.copy,
-						backgroundColor: 'cream',
-						textSize: resolveTextSize('Medium'),
-					}}
-					cards={carouselCards}
-				/>
-			)}
-			<StepperBlock
-				backgroundColor="cream"
-				header={stepperHeader}
-				items={STEPPER_ITEMS.map(i => ({ ...i, buttons: [...i.buttons] }))}
-			/>
-		</>
-	);
+	return renderElectionsIndexPage({
+		placeSlug: fullSlug,
+		breadcrumbs,
+		locationLevel: isDistrict ? 'district' : 'county',
+		stateName,
+		heroTitle: `Upcoming elections in ${placeName}, ${stateName}`,
+		countyName: placeName,
+		bodyCopy: `Learn what positions are up for election and who is currently running for office in ${placeName}.`,
+		searchPlaceholder: 'Search positions',
+		listHeading: isDistrict
+			? `Elections in ${placeName}`
+			: `${normalizedCounty?.suffixLabel ?? getCountySuffixLabel(countyPlace!.name)} Elections in ${normalizedCounty?.displayName ?? countyPlace!.name}`,
+		listHeadline: isDistrict ? 'district' : 'county',
+		defaultYear,
+		availableYears,
+		offices: countyOffices,
+		elections: cities,
+		stateSlug: fullSlug,
+		pageUrl,
+		pageTitle: `Elections in ${placeName}, ${stateName}`,
+		pageDescription: isDistrict
+			? `Browse elections and positions in ${placeName}, ${stateName}.`
+			: `Browse elections, positions, and cities in ${placeName}, ${stateName}.`,
+		electionsIndexHidden: isDistrict,
+		electionsIndexHeader: isDistrict
+			? undefined
+			: {
+					title: `${hasTownEntries ? 'Cities & Towns' : 'Cities'} in ${normalizedCounty?.displayName ?? countyPlace!.name}`,
+					copy: `Browse elections by city in ${normalizedCounty?.displayName ?? countyPlace!.name}, ${stateName}.`,
+					searchPlaceholder: 'Search by city',
+				},
+		locationFacts:
+			factsCards.length > 0
+				? {
+						title: isDistrict
+							? `${placeName} facts`
+							: `${normalizedCounty?.displayName ?? countyPlace!.name} facts`,
+						factsCards,
+					}
+				: { hidden: true },
+	});
 }
 
 export async function generateMetadata({

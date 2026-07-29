@@ -6,7 +6,6 @@ import { cn, tv } from './_lib/utils.ts';
 import { useMediaQuery } from './_lib/useMediaQuery.ts';
 import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
 import { isValidRichText } from './_lib/isValidRichText.ts';
-import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
 
 import { Container } from './Container.tsx';
 import { HeaderBlock, type HeaderBlockProps } from './HeaderBlock.tsx';
@@ -34,16 +33,14 @@ const styles = tv({
 		backgroundColor: {
 			midnight: {
 				base: 'bg-midnight-900 text-white',
-				searchInput:
-					'border-neutral-400 text-white placeholder:text-white/50 focus:border-white',
+				searchInput: 'border-neutral-400 text-white placeholder:text-white/50 focus:border-white',
 				searchIcon: 'text-neutral-400',
 				resultCount: 'text-white',
 				locationLink: 'text-white',
 			},
 			cream: {
 				base: 'bg-goodparty-cream',
-				searchInput:
-					'border-neutral-500 text-black placeholder:text-black/50 focus:border-blue-500',
+				searchInput: 'border-neutral-500 text-black placeholder:text-black/50 focus:border-blue-500',
 				searchIcon: 'text-neutral-500',
 				resultCount: 'text-black',
 				locationLink: 'text-black',
@@ -76,7 +73,7 @@ export interface ElectionItem {
 
 export interface ElectionsIndexBlockProps {
 	className?: string;
-	backgroundColor?: (typeof backgroundTypeValues)[number];
+	backgroundColor?: 'cream' | 'midnight';
 	header?: HeaderBlockProps;
 	elections: ElectionItem[];
 	stateSlug: string;
@@ -97,19 +94,8 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 	const isMdOrLarger = useMediaQuery('(min-width: 768px)');
 	const searchPlaceholder = isMdOrLarger ? fullPlaceholder : 'Search';
 
-	const {
-		base,
-		wrapper,
-		searchWrapper,
-		searchInput,
-		searchContainer,
-		searchIcon,
-		resultCount,
-		grid,
-		locationLink,
-		footer,
-		emptyState,
-	} = styles({ backgroundColor });
+	const { base, wrapper, searchWrapper, searchInput, searchContainer, searchIcon, resultCount, grid, locationLink, footer, emptyState } =
+		styles({ backgroundColor });
 
 	const [searchQuery, setSearchQuery] = useState('');
 	const [displayCount, setDisplayCount] = useState(initialDisplayCount);
@@ -150,12 +136,12 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 	}
 
 	return (
-		<article className={cn(base(), props.className)} data-component="ElectionsIndexBlock">
-			<Container size="xl">
+		<article className={cn(base(), props.className)} data-component='ElectionsIndexBlock'>
+			<Container size='xl'>
 				<div className={wrapper()}>
 					{/* Header Section */}
 					{props.header && (props.header.label || props.header.title || isValidRichText(props.header.copy)) && (
-						<HeaderBlock {...props.header} backgroundColor={backgroundColor} layout="center" />
+						<HeaderBlock {...props.header} backgroundColor={backgroundColor} layout='center' />
 					)}
 
 					{/* Search Section */}
@@ -163,27 +149,25 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 						<div className={searchWrapper()}>
 							<div className={searchContainer()}>
 								<input
-									type="text"
+									type='text'
 									placeholder={searchPlaceholder}
 									value={searchQuery}
 									onChange={handleSearchChange}
 									className={searchInput()}
-									aria-label="Search locations"
+									aria-label='Search locations'
 								/>
-								<IconResolver icon="search" className={searchIcon()} />
+								<IconResolver icon='search' className={searchIcon()} />
 							</div>
 							{/* Result Count */}
 							<div className={resultCount()}>
-								<span>
-									{totalCount.toLocaleString()} Available Results
-								</span>
+								<span>{totalCount.toLocaleString()} Available Results</span>
 							</div>
 						</div>
 					)}
 
 					{/* Elections Grid */}
 					{displayedElections.length > 0 ? (
-						<nav aria-label="Elections by location">
+						<nav aria-label='Elections by location'>
 							<ul className={grid()}>
 								{displayedElections.map((election, index) => (
 									<li key={`${election.href}-${index}`}>
@@ -196,23 +180,14 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 						</nav>
 					) : (
 						<div className={emptyState()}>
-							<Text styleType="body-1">
-								{searchQuery
-									? `No results found for "${searchQuery}"`
-									: 'No locations found'}
-							</Text>
+							<Text styleType='body-1'>{searchQuery ? `No results found for "${searchQuery}"` : 'No locations found'}</Text>
 						</div>
 					)}
 
 					{/* Show More - reveals hidden items, always shown when there are more */}
 					{hasMore && (
 						<div className={footer()}>
-							<Button
-								parent="ElectionsIndexBlock"
-								type="button"
-								onClick={handleShowMore}
-								styleType={resolvedButtonStyle}
-							>
+							<Button parent='ElectionsIndexBlock' type='button' onClick={handleShowMore} styleType={resolvedButtonStyle}>
 								Show More
 							</Button>
 						</div>
@@ -223,15 +198,10 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 						<div className={footer()}>
 							<Anchor href={props.ctaHref}>
 								<Button
-									parent="ElectionsIndexBlock"
-									type="button"
+									parent='ElectionsIndexBlock'
+									type='button'
 									styleType={resolvedButtonStyle}
-									iconRight={
-										<IconResolver
-											icon="arrow-up-right"
-											className="min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5"
-										/>
-									}
+									iconRight={<IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />}
 								>
 									{props.ctaLabel}
 								</Button>

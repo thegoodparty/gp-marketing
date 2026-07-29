@@ -6,6 +6,12 @@ const AMPLITUDE_API_KEY = process.env['NEXT_PUBLIC_AMPLITUDE_API_KEY'];
 const EXTERNAL_AMPLITUDE_WAIT_MS = 1_500;
 const AMPLITUDE_CDN_WAIT_MS = 10_000;
 
+// Never load the all-in-one cdn.amplitude.com/script/<key>.js build: it bundles the session
+// replay plugin, whose sample rate is remote-controlled (overriding any local sampleRate) and
+// burned the entire monthly replay quota on anonymous marketing sessions (ENG-10831). The plain
+// SDK plus the experiment-only build below cover everything this site uses, with no replay.
+const AMPLITUDE_SDK_SRC = 'https://cdn.amplitude.com/libs/analytics-browser-2.42.4-min.js.gz';
+
 function getAmplitudeState() {
 	if (typeof window === 'undefined') return undefined;
 	window.__goodpartyAmplitude ??= { clientInitialized: false, scriptInjected: false };
@@ -24,6 +30,7 @@ function markAmplitudeUnavailable(message: string) {
 }
 
 function adoptExternalAmplitude() {
+	// Externally-owned Amplitude (GTM/Segment) also needs cookieOptions.domain: '.goodparty.org' at its source to stitch across subdomains.
 	const state = getAmplitudeState();
 	if (!state || state.clientInitialized) return;
 	state.clientInitialized = true;
@@ -36,17 +43,39 @@ function bootAppAmplitude() {
 	if (!state || state.clientInitialized) return;
 	state.clientInitialized = true;
 
+	const host = window.location.hostname;
+	const onGoodPartyDomain = host === 'goodparty.org' || host.endsWith('.goodparty.org');
+
 	window.amplitude.init(AMPLITUDE_API_KEY, {
 		fetchRemoteConfig: false,
-		autocapture: true,
+		autocapture: {
+			attribution: {
+				resetSessionOnNewCampaign: false,
+				excludeReferrers: [/goodparty\.org$/],
+			},
+		},
 		transport: 'beacon',
+		...(onGoodPartyDomain ? { cookieOptions: { domain: '.goodparty.org' } } : {}),
 	});
 	markAmplitudeReady();
 }
 
 function findInjectedAmplitudeScript(apiKey: string) {
-	const suffix = `/script/${apiKey}.js`;
-	return [...document.scripts].find((s) => s.src.endsWith(suffix));
+	// GTM may inject either the legacy all-in-one build or the plain SDK.
+	const legacySuffix = `/script/${apiKey}.js`;
+	return [...document.scripts].find((s) => s.src.endsWith(legacySuffix) || s.src === AMPLITUDE_SDK_SRC);
+}
+
+// window.experiment used to come from the all-in-one build; with the plain SDK it needs the
+// experiment-only build, which contains no session replay code.
+function ensureExperimentScript() {
+	if (window.experiment || !AMPLITUDE_API_KEY) return;
+	const src = `https://cdn.amplitude.com/script/${AMPLITUDE_API_KEY}.experiment.js`;
+	if ([...document.scripts].some((s) => s.src === src)) return;
+	const script = document.createElement('script');
+	script.src = src;
+	script.async = true;
+	document.head.appendChild(script);
 }
 
 /**
@@ -127,12 +156,15 @@ export function Amplitude() {
 
 		// GTM/Segment may already own Amplitude. Do not re-init an externally-owned SDK.
 		if (window.amplitude) {
+			ensureExperimentScript();
 			adoptExternalAmplitude();
 			return;
 		}
 
 		const waitForExternalTags = window.setTimeout(() => {
 			if (cancelled || state.clientInitialized) return;
+
+			ensureExperimentScript();
 
 			if (window.amplitude) {
 				adoptExternalAmplitude();
@@ -151,7 +183,7 @@ export function Amplitude() {
 
 			state.scriptInjected = true;
 			const script = document.createElement('script');
-			script.src = `https://cdn.amplitude.com/script/${AMPLITUDE_API_KEY}.js`;
+			script.src = AMPLITUDE_SDK_SRC;
 			script.async = true;
 			document.head.appendChild(script);
 			stopWaitingForScript = whenAmplitudeScriptProvidesGlobal(

@@ -3,7 +3,9 @@ import { revalidatePath, revalidateTag } from 'next/cache';
 import { type NextRequest, NextResponse } from 'next/server';
 import { parseBody } from 'next-sanity/webhook';
 import { revalidateSecret } from '~/lib/env';
+import { getPathsToRevalidate, shouldRevalidateAllLayouts } from '~/lib/revalidatePaths';
 import { sanityClient } from '~/sanity/sanityClient';
+import { buildCustomTemplateRevalidatePaths } from '~/lib/electionTemplatePreview';
 
 const CUSTOM_SECRET_HEADER = 'x-sanity-webhook-secret';
 const HMAC_KEY = 'safeCompare';
@@ -14,91 +16,11 @@ function safeCompare(a: string, b: string): boolean {
 	return timingSafeEqual(da, db);
 }
 
-function isSlugObject(value: unknown): value is { current: string } {
-	return (
-		value != null &&
-		typeof value === 'object' &&
-		'current' in value &&
-		typeof (value as { current: unknown }).current === 'string'
-	);
-}
-
-function getSlugFromPayload(payload: Record<string, unknown>, path: string): string | undefined {
-	const parts = path.split('.');
-	let value: unknown = payload;
-	for (const part of parts) {
-		if (value == null || typeof value !== 'object') return undefined;
-		value = (value as Record<string, unknown>)[part];
-	}
-	if (typeof value === 'string') return value;
-	if (isSlugObject(value)) return value.current;
-	return undefined;
-}
-
-/**
- * Document types whose changes should also bust the curated /llms.txt feed.
- * Mirrors the source data wired up in `fetchLlmsTxtData` so any publish that
- * could affect the listing invalidates the cached llms.txt response.
- */
-const LLMS_TXT_FEEDING_TYPES = new Set<string>([
-	'article',
-	'glossary',
-	'goodpartyOrg_landingPages',
-	'policy',
-	'goodpartyOrg_home',
-	'goodpartyOrg_allArticles',
-	'goodpartyOrg_glossary',
-	'goodpartyOrg_contact',
-]);
-
-function getPathsToRevalidate(_type: string, payload: Record<string, unknown>): string[] {
-	const slugPaths: Record<string, string> = {
-		article: 'editorialOverview.field_slug',
-		categories: 'tagOverview.field_slug',
-		topics: 'tagOverview.field_slug',
-		glossary: 'glossaryTermOverview.field_slug',
-		goodpartyOrg_landingPages: 'detailPageOverviewNoHero.field_slug',
-		policy: 'policyOverview.field_slug',
-	};
-
-	const slug = slugPaths[_type] ? getSlugFromPayload(payload, slugPaths[_type]) : undefined;
-
-	const pathMap: Record<string, string | string[]> = {
-		article: slug ? [`/blog/article/${slug}`, '/blog'] : ['/blog'],
-		categories: slug ? [`/blog/section/${slug}`, '/blog'] : ['/blog'],
-		topics: slug ? [`/blog/tag/${slug}`, '/blog'] : ['/blog'],
-		glossary: slug ? [`/political-terms/${slug}`, '/political-terms'] : ['/political-terms'],
-		goodpartyOrg_landingPages: slug ? [`/${slug}`] : ['/'],
-		goodpartyOrg_home: ['/'],
-		policy: slug ? [`/${slug}`] : ['/'],
-		goodpartyOrg_contact: ['/contact'],
-		goodpartyOrg_navigation: ['/'],
-		goodpartyOrg_footer: ['/'],
-		goodpartyOrg_allArticles: ['/blog'],
-		goodpartyOrg_glossary: ['/political-terms'],
-		goodpartyOrg_404Page: ['/'],
-		goodpartyOrg_allComponents: ['/all'],
-		quoteCollections: ['/elections'],
-	};
-
-	const raw = pathMap[_type];
-	const paths = raw ? (Array.isArray(raw) ? [...raw] : [raw]) : ['/'];
-
-	if (LLMS_TXT_FEEDING_TYPES.has(_type) && !paths.includes('/llms.txt')) {
-		paths.push('/llms.txt');
-	}
-
-	return paths;
-}
-
 /**
  * Map a referenced "target page" document to the public route that renders it.
  * Mirrors the routes in `src/app/**` that mount each singleton/landing-page type.
  */
-function targetPageToRoute(target: {
-	_type?: string;
-	slug?: string | null;
-}): string | null {
+function targetPageToRoute(target: { _type?: string; slug?: string | null }): string | null {
 	switch (target._type) {
 		case 'goodpartyOrg_home':
 			return '/';
@@ -110,6 +32,7 @@ function targetPageToRoute(target: {
 			return '/political-terms';
 		case 'goodpartyOrg_allArticles':
 			return '/blog';
+		case undefined:
 		default:
 			return null;
 	}
@@ -124,10 +47,8 @@ function targetPageToRoute(target: {
  * busts `/` regardless of which landing page it actually targets, leaving
  * targeted pages stuck on stale cached HTML.
  */
-async function resolveExperimentVariantPaths(
-	payload: Record<string, unknown>,
-): Promise<string[]> {
-	const rawId = typeof payload['_id'] === 'string' ? (payload['_id'] as string) : null;
+async function resolveExperimentVariantPaths(payload: Record<string, unknown>): Promise<string[]> {
+	const rawId = typeof payload['_id'] === 'string' ? payload['_id'] : null;
 	if (!rawId) return ['/'];
 
 	// Cached HTML is rendered from published content only (sanityClient pins
@@ -143,19 +64,15 @@ async function resolveExperimentVariantPaths(
 		// Bypass the CDN: it can lag up to ~60s after publish, and the webhook
 		// fires immediately on publish, so a CDN read here would reliably return
 		// pre-publish data and revalidate the wrong (or no) targets.
-		const targets = await sanityClient
-			.withConfig({ useCdn: false })
-			.fetch<TargetRow[]>(
-				`*[_id == $publishedId][0].field_targetPages[]->{
+		const targets = await sanityClient.withConfig({ useCdn: false }).fetch<TargetRow[]>(
+			`*[_id == $publishedId][0].field_targetPages[]->{
 				_type,
 				"slug": detailPageOverviewNoHero.field_slug
 			}`,
-				{ publishedId },
-			);
+			{ publishedId },
+		);
 
-		const routes = (targets ?? [])
-			.map(targetPageToRoute)
-			.filter((route): route is string => Boolean(route));
+		const routes = (targets ?? []).map(targetPageToRoute).filter((route): route is string => Boolean(route));
 
 		return routes.length > 0 ? Array.from(new Set(routes)) : ['/'];
 	} catch (err) {
@@ -164,12 +81,34 @@ async function resolveExperimentVariantPaths(
 	}
 }
 
+async function resolveCustomTemplatePaths(payload: Record<string, unknown>): Promise<string[]> {
+	const rawId = typeof payload['_id'] === 'string' ? payload['_id'] : null;
+	if (!rawId) return ['/elections', '/candidate'];
+
+	const publishedId = rawId.startsWith('drafts.') ? rawId.slice('drafts.'.length) : rawId;
+
+	type TargetRow = { field_electionTargetType?: string; field_electionTargetSlug?: string };
+
+	try {
+		const targets = await sanityClient.withConfig({ useCdn: false }).fetch<TargetRow[]>(
+			`*[_id == $publishedId][0].list_targets[]{
+				field_electionTargetType,
+				field_electionTargetSlug
+			}`,
+			{ publishedId },
+		);
+
+		const paths = buildCustomTemplateRevalidatePaths(targets ?? []);
+		return paths.length > 0 ? paths : ['/elections', '/candidate'];
+	} catch (err) {
+		console.error('Failed to resolve custom template target paths:', err);
+		return ['/elections', '/candidate'];
+	}
+}
+
 export async function POST(req: NextRequest) {
 	if (!revalidateSecret) {
-		return NextResponse.json(
-			{ error: 'Revalidation not configured: SANITY_REVALIDATE_SECRET is not set' },
-			{ status: 503 },
-		);
+		return NextResponse.json({ error: 'Revalidation not configured: SANITY_REVALIDATE_SECRET is not set' }, { status: 503 });
 	}
 
 	const customSecret = req.headers.get(CUSTOM_SECRET_HEADER);
@@ -186,10 +125,7 @@ export async function POST(req: NextRequest) {
 				return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
 			}
 		} else {
-			const { isValidSignature, body } = await parseBody<Record<string, unknown>>(
-				req,
-				revalidateSecret,
-			);
+			const { isValidSignature, body } = await parseBody<Record<string, unknown>>(req, revalidateSecret);
 			if (!isValidSignature) {
 				return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
 			}
@@ -206,25 +142,34 @@ export async function POST(req: NextRequest) {
 
 	try {
 		revalidateTag(_type);
+		if (_type === 'goodpartyOrg_globalTemplate' && typeof payload['field_electionTemplateType'] === 'string') {
+			revalidateTag(`goodpartyOrg_globalTemplate_${payload['field_electionTemplateType']}`);
+		}
+		if (_type === 'goodpartyOrg_customTemplate' && typeof payload['field_electionTemplateType'] === 'string') {
+			revalidateTag(`goodpartyOrg_customTemplate_${payload['field_electionTemplateType']}`);
+		}
 
 		const paths =
 			_type === 'experiment_variant'
 				? await resolveExperimentVariantPaths(payload)
-				: getPathsToRevalidate(_type, payload);
+				: _type === 'goodpartyOrg_customTemplate'
+					? await resolveCustomTemplatePaths(payload)
+					: getPathsToRevalidate(_type, payload);
 		for (const path of paths) {
 			revalidatePath(path);
+		}
+		if (shouldRevalidateAllLayouts(_type)) {
+			revalidatePath('/', 'layout');
 		}
 
 		return NextResponse.json({
 			revalidated: true,
 			tag: _type,
 			paths,
+			layout: shouldRevalidateAllLayouts(_type) ? '/' : undefined,
 		});
 	} catch (err) {
 		console.error('Revalidation failed:', err);
-		return NextResponse.json(
-			{ error: 'Revalidation failed', details: err instanceof Error ? err.message : String(err) },
-			{ status: 500 },
-		);
+		return NextResponse.json({ error: 'Revalidation failed', details: err instanceof Error ? err.message : String(err) }, { status: 500 });
 	}
 }

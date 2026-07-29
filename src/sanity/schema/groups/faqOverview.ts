@@ -1,6 +1,8 @@
+import { getPublishedId } from 'sanity';
 import {resolveValue} from '../../utils/resolveValue.ts';
 import {handleReplacements} from '../../utils/handleReplacements.ts';
 import {getIcon} from '../../utils/getIcon.tsx';
+import { validateFaqSlugFormat } from '../../../lib/faqSlugFormat';
 
 export const faqOverview = {
   title: 'FAQ',
@@ -16,6 +18,25 @@ export const faqOverview = {
       title: 'Question',
       name: 'field_question',
       type: 'field_question',
+    },
+    {
+      title: 'Slug',
+      name: 'field_slug',
+      type: 'field_slug',
+      validation: (Rule: any) =>
+        Rule.required().custom(async (slug: unknown, ctx: any) => {
+          const formatError = validateFaqSlugFormat(slug);
+          if (formatError !== true) return formatError;
+
+          const publishedId = ctx.document?._id ? getPublishedId(ctx.document._id) : '';
+          const client = ctx.getClient({ apiVersion: '2025-09-25', perspective: 'raw' });
+          const existing = await client.fetch(
+            'count(*[_type == "faq" && faqOverview.field_slug == $slug && _id != $publishedId && !sanity::versionOf($publishedId)])',
+            { slug: typeof slug === 'string' ? slug.trim() : '', publishedId },
+          );
+
+          return existing === 0 || 'Another FAQ already uses this slug';
+        }),
     },
     {
       title: 'Answer',

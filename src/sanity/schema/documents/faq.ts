@@ -14,6 +14,7 @@ export const faq = {
       name: 'faqOverview',
       type: 'faqOverview',
       group: 'faqOverview',
+      validation: (Rule: any) => Rule.required(),
     },
     {
       title: 'Tags',
@@ -53,7 +54,18 @@ const infer = {
     },
   ],
   options: {
-    channels: {},
+    pathParams: {
+      slug: 'faqOverview.field_slug',
+    },
+    channels: {
+      goodpartyOrg: '/frequently-asked-questions/:slug',
+    },
+    documentSlugs: [
+      {
+        slugField: 'faqOverview.field_slug',
+        slugSources: ['faqOverview.field_question'],
+      },
+    ],
     single: false,
   },
 }

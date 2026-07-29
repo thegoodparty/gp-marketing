@@ -15,36 +15,36 @@ describe('buildElectionTemplatePreviewPath', () => {
 		expect(
 			buildElectionTemplatePreviewPath('locationCounty', {
 				field_electionTargetType: 'place',
-				field_electionTargetSlug: 'ny/kings',
+				field_electionTargetSlug: 'wi/adams-county',
 			}),
-		).toBe('/elections/ny/kings');
+		).toBe('/elections/wi/adams-county');
 	});
 
 	test('builds city location path', () => {
 		expect(
 			buildElectionTemplatePreviewPath('locationCity', {
 				field_electionTargetType: 'place',
-				field_electionTargetSlug: 'ny/kings/brooklyn',
+				field_electionTargetSlug: 'wi/adams-county/adams',
 			}),
-		).toBe('/elections/ny/kings/brooklyn');
+		).toBe('/elections/wi/adams-county/adams');
 	});
 
 	test('builds district location path', () => {
 		expect(
 			buildElectionTemplatePreviewPath('locationDistrict', {
 				field_electionTargetType: 'place',
-				field_electionTargetSlug: 'tx/congressional-district-1',
+				field_electionTargetSlug: 'mn/minneapolis-public-school-district',
 			}),
-		).toBe('/elections/tx/congressional-district-1');
+		).toBe('/elections/mn/minneapolis-public-school-district');
 	});
 
 	test('builds legacy location path', () => {
 		expect(
 			buildElectionTemplatePreviewPath('location', {
 				field_electionTargetType: 'place',
-				field_electionTargetSlug: 'ny/kings',
+				field_electionTargetSlug: 'ny/kings-county',
 			}),
-		).toBe('/elections/ny/kings');
+		).toBe('/elections/ny/kings-county');
 	});
 
 	test('builds position path with position slug', () => {

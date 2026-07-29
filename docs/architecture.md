@@ -108,7 +108,9 @@ domain model, data sources, and what is and is not fixable in this repo:
 - **Amplitude** — product analytics plus A/B experiments. `src/middleware.ts`
   bootstraps an Amplitude device cookie on page routes so experiments can be resolved
   server-side. Experiment variants are also modeled as Sanity content
-  (`experiment_variant`).
+  (`experiment_variant`). The client loads the plain Amplitude SDK plus the
+  experiment-only script — never the all-in-one `script/<key>.js` build, which
+  bundles session replay capture (see `src/ui/Amplitude.tsx`).
 - **AirOps -> Sanity** — AirOps writes content (articles, glossary, landing pages,
   policy) into Sanity via the Editor API, then a Sanity webhook hits
   `POST /api/revalidate` to make it live. Details, auth, and troubleshooting:

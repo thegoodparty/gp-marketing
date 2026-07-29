@@ -4,6 +4,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import _ from 'lodash';
 import { Box, Button, Flex, Stack, TextInput } from '@sanity/ui';
 import { get } from '@sanity/util/paths';
+import { slugifyFaqQuestion } from '../../../lib/faqSlugFormat';
+
+const FAQ_SLUG_FIELD = 'faqOverview.field_slug';
 
 function Identifier(props: StringInputProps) {
 	const pathSuffix = props.schemaType.options?.['path'];
@@ -41,29 +44,29 @@ function Identifier(props: StringInputProps) {
 
 	const update = useCallback(
 		(nameVar: string) => {
+			if (slugSourcePaths) {
+				const joined = slugSourcePaths
+					.map(sourcePath => {
+						const source = get(value, sourcePath);
+						if (props.id === FAQ_SLUG_FIELD) {
+							return slugifyFaqQuestion(typeof source === 'string' ? source : '');
+						}
+						return _.kebabCase(source);
+					})
+					.filter(Boolean)
+					.join('-');
+				props.onChange(PatchEvent.from(set(joined || null)));
+				return;
+			}
 			const id = _.camelCase(nameVar);
 			if (id) {
 				props.onChange(PatchEvent.from([set(id)]));
 				return;
 			}
-			if (slugSourcePaths) {
-				props.onChange(
-					PatchEvent.from(
-						set(
-							slugSourcePaths
-								.map(sourcePath => {
-									return _.kebabCase(get(value, sourcePath));
-								})
-								.join('-'),
-						),
-					),
-				);
-				return;
-			}
 			props.onChange(PatchEvent.from(set(null)));
 			return;
 		},
-		[props.onChange, props.schemaType.name, slugSourcePaths, value],
+		[props.onChange, props.id, slugSourcePaths, value],
 	);
 
 	return (

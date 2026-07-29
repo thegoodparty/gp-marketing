@@ -27,7 +27,8 @@ Studio (the CMS, served at `/studio/main`), do not open a PR:
 - Redirects (managed as content; they take effect without a deploy).
 - A/B experiment variants.
 - Election page templates: which blocks appear and the token-driven copy on the
-  global template or a per-location custom template.
+  global template or a per-location custom template. Step-by-step editor guide:
+  `docs/election-templates-manual.md`.
 
 Content published in Studio goes live without a rebuild (a webhook revalidates the
 affected pages). Some content is also written programmatically by AirOps — see

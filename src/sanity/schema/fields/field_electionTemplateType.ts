@@ -41,6 +41,6 @@ export const field_electionTargetSlug = {
 	title: 'Target Slug',
 	type: 'string',
 	description:
-		'API slug used for matching. Examples: place `ny`, `ny/kings`, `ny/kings/brooklyn`; position race slug; candidate profile slug.',
+		'API slug used for matching. Examples: place `ny`, `ny/kings-county`, `ny/kings-county/brooklyn`; position race slug; candidate profile slug.',
 	validation: (rule: { required(): unknown }) => rule.required(),
 };

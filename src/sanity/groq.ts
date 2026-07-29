@@ -19,6 +19,8 @@ export const glossaryHrefGroq = `_type=="goodpartyOrg_glossary"=>{"href":"/polit
 /*language=textmate*/
 export const glossaryTermHrefGroq = `_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)}`;
 /*language=textmate*/
+export const faqHrefGroq = `_type=="faq"=>{"href":"/frequently-asked-questions/"+coalesce(faqOverview.field_slug,_id)}`;
+/*language=textmate*/
 export const contactHrefGroq = `_type=="goodpartyOrg_contact"=>{"href":"/contact"}`;
 /*language=textmate*/
 export const policyHrefGroq = `_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)}`;
@@ -27,9 +29,9 @@ export const allComponentsHrefGroq = `_type=="goodpartyOrg_allComponents"=>{"hre
 /*language=textmate*/
 export const notFoundHrefGroq = `_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}`;
 /*language=textmate*/
-export const hrefGroq = `${homeHrefGroq},${allArticlesHrefGroq},${articleHrefGroq},${categoriesHrefGroq},${topicsHrefGroq},${landingPagesHrefGroq},${glossaryHrefGroq},${glossaryTermHrefGroq},${contactHrefGroq},${policyHrefGroq},${allComponentsHrefGroq},${notFoundHrefGroq}`;
+export const hrefGroq = `${homeHrefGroq},${allArticlesHrefGroq},${articleHrefGroq},${categoriesHrefGroq},${topicsHrefGroq},${landingPagesHrefGroq},${glossaryHrefGroq},${glossaryTermHrefGroq},${faqHrefGroq},${contactHrefGroq},${policyHrefGroq},${allComponentsHrefGroq},${notFoundHrefGroq}`;
 /*language=textmate*/
-export const internalLinkGroq = `{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,null),${hrefGroq}}}`;
+export const internalLinkGroq = `{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,faqOverview.field_question,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,faqOverview.field_question,null),${hrefGroq}}}`;
 /*language=textmate*/
 const downloadGroq = `_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->`;
 /*language=textmate*/
@@ -303,7 +305,7 @@ export const allTermsForSearchGroq = `*[_type=="glossary"] | order(glossaryTermO
 
 /*language=textmate*/
 export const allFaqsQuery = defineQuery(
-	`*[_type=="faq"] | order(faqOverview.field_question asc){_id,_updatedAt,${faQGroq}}`,
+	`*[_type=="faq"] | order(faqOverview.field_question asc, _id asc){_id,_updatedAt,${faQGroq}}`,
 );
 /*language=textmate*/
 export const faqByIdQuery = defineQuery(

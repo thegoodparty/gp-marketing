@@ -22,6 +22,11 @@ const TOKEN_RENEWAL_BUFFER_MS = 30_000;
 const MINT_COOLDOWN_MS = 30_000;
 const TOKEN_TTL_SECONDS = 600;
 
+export type CreateM2MToken = (params: {
+	machineSecretKey: string;
+	secondsUntilExpiration: number;
+}) => Promise<{ token?: string | null; expiration?: number | null }>;
+
 type ClerkM2MClient = {
 	m2m: {
 		createToken(params: {
@@ -32,6 +37,7 @@ type ClerkM2MClient = {
 };
 
 let clerkClient: ClerkM2MClient | null = null;
+let createTokenForTests: CreateM2MToken | null = null;
 
 function getClerkClient(): ClerkM2MClient {
 	if (!clerkClient) {
@@ -41,6 +47,14 @@ function getClerkClient(): ClerkM2MClient {
 		}) as ClerkM2MClient;
 	}
 	return clerkClient;
+}
+
+async function createToken(params: {
+	machineSecretKey: string;
+	secondsUntilExpiration: number;
+}): Promise<{ token?: string | null; expiration?: number | null }> {
+	if (createTokenForTests) return createTokenForTests(params);
+	return getClerkClient().m2m.createToken(params);
 }
 
 let cachedToken: string | null = null;
@@ -80,7 +94,7 @@ async function mint(): Promise<string | null> {
 		return usableCachedToken();
 	}
 	try {
-		const minted = await getClerkClient().m2m.createToken({
+		const minted = await createToken({
 			machineSecretKey: machineSecret,
 			secondsUntilExpiration: TOKEN_TTL_SECONDS,
 		});
@@ -122,20 +136,23 @@ export async function electionApiAuthHeaders(): Promise<Record<string, string>> 
 	return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
+/** Test-only: inject a createToken implementation (null restores Clerk). */
+export function __setCreateTokenForTests(fn: CreateM2MToken | null): void {
+	createTokenForTests = fn;
+}
+
 /** Test-only: reset module cache / cooldown state (and optionally seed a token). */
 export function __resetElectionApiAuthForTests(seed?: {
 	cachedToken?: string | null;
 	tokenExpiration?: number | null;
 	mintCooldownUntil?: number;
 	warnedMissingSecret?: boolean;
-	resetClerkClient?: boolean;
 }): void {
 	cachedToken = seed?.cachedToken ?? null;
 	tokenExpiration = seed?.tokenExpiration ?? null;
 	mintCooldownUntil = seed?.mintCooldownUntil ?? 0;
 	warnedMissingSecret = seed?.warnedMissingSecret ?? false;
 	pending = null;
-	if (seed?.resetClerkClient !== false) {
-		clerkClient = null;
-	}
+	clerkClient = null;
+	createTokenForTests = null;
 }

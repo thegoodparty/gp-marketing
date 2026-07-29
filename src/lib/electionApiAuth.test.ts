@@ -1,23 +1,18 @@
 import { afterEach, beforeEach, describe, expect, mock, spyOn, test } from 'bun:test';
 
+import {
+	__resetElectionApiAuthForTests,
+	__setCreateTokenForTests,
+	electionApiAuthHeaders,
+	getElectionApiToken,
+} from './electionApiAuth';
+
 const createToken = mock(
 	async (): Promise<{ token: string | null; expiration: number | null }> => ({
 		token: 'fresh-token',
 		expiration: Date.now() + 600_000,
 	}),
 );
-
-mock.module('@clerk/backend', () => ({
-	createClerkClient: () => ({
-		m2m: { createToken },
-	}),
-}));
-
-const {
-	__resetElectionApiAuthForTests,
-	electionApiAuthHeaders,
-	getElectionApiToken,
-} = await import('./electionApiAuth');
 
 const ORIGINAL_SECRET = process.env['GP_MARKETING_MACHINE_SECRET'];
 
@@ -29,6 +24,7 @@ beforeEach(() => {
 	}));
 	process.env['GP_MARKETING_MACHINE_SECRET'] = 'test-machine-secret';
 	__resetElectionApiAuthForTests();
+	__setCreateTokenForTests(createToken);
 });
 
 afterEach(() => {
@@ -46,6 +42,7 @@ describe('getElectionApiToken', () => {
 			cachedToken: 'cached-token',
 			tokenExpiration: Date.now() + 120_000,
 		});
+		__setCreateTokenForTests(createToken);
 
 		await expect(getElectionApiToken()).resolves.toBe('cached-token');
 		expect(createToken).toHaveBeenCalledTimes(0);
@@ -61,6 +58,7 @@ describe('getElectionApiToken', () => {
 			cachedToken: 'stale-token',
 			tokenExpiration: Date.now() - 1_000,
 		});
+		__setCreateTokenForTests(createToken);
 
 		await expect(getElectionApiToken()).resolves.toBe('fresh-token');
 		expect(createToken).toHaveBeenCalledTimes(1);
@@ -71,6 +69,7 @@ describe('getElectionApiToken', () => {
 			cachedToken: 'near-expiry-token',
 			tokenExpiration: Date.now() + 10_000,
 		});
+		__setCreateTokenForTests(createToken);
 
 		await expect(getElectionApiToken()).resolves.toBe('fresh-token');
 		expect(createToken).toHaveBeenCalledTimes(1);
@@ -115,6 +114,7 @@ describe('getElectionApiToken', () => {
 			cachedToken: 'still-valid',
 			tokenExpiration: Date.now() + 10_000,
 		});
+		__setCreateTokenForTests(createToken);
 		createToken.mockImplementation(async () => {
 			throw new Error('Clerk unavailable');
 		});
@@ -146,6 +146,7 @@ describe('getElectionApiToken', () => {
 			tokenExpiration: Date.now() + 10_000,
 			mintCooldownUntil: Date.now() + 30_000,
 		});
+		__setCreateTokenForTests(createToken);
 
 		await expect(getElectionApiToken()).resolves.toBe('cached-during-cooldown');
 		expect(createToken).toHaveBeenCalledTimes(0);

@@ -1,5 +1,13 @@
-import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, mock, test } from 'bun:test';
 import type { PlaceItem } from '~/types/elections';
+
+// election-api requests mint a Clerk M2M token server-side. Stub the minter so
+// unit tests never touch Clerk; requests just go out without an auth header.
+mock.module('~/lib/electionApiAuth', () => ({
+	electionApiAuthHeaders: async () => ({}),
+	getElectionApiToken: async () => null,
+}));
+
 import {
 	getCountyChildPlaces,
 	isStateIndexDistrictPlace,

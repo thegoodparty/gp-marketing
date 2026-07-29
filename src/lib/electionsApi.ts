@@ -18,6 +18,7 @@ import {
 	normalizeCandidateLookupName,
 	stripCountySuffix,
 } from '~/lib/electionsHelpers';
+import { electionApiAuthHeaders } from '~/lib/electionApiAuth';
 
 const ELECTIONS_API_BASE_URL =
 	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
@@ -88,9 +89,20 @@ async function sleep(ms: number): Promise<void> {
 }
 
 async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | null> {
+	// Attach a Clerk M2M token only for election-api requests. fetchJson is
+	// also used for gp-api calls (GP_API_BASE_URL); an election-api-scoped
+	// token would be rejected there, so scope it by base URL.
+	let requestOptions = options;
+	if (url.startsWith(ELECTIONS_API_BASE_URL)) {
+		const authHeaders = await electionApiAuthHeaders();
+		requestOptions = {
+			...options,
+			headers: { ...(options?.headers as Record<string, string> | undefined), ...authHeaders },
+		};
+	}
 	for (let attempt = 0; attempt <= FETCH_JSON_MAX_RETRIES; attempt++) {
 		try {
-			const res = await fetch(url, options);
+			const res = await fetch(url, requestOptions);
 			if (res.status === 404) return null;
 			if (res.ok) return (await res.json()) as T;
 			if (res.status < 500) {

@@ -12,6 +12,7 @@ import {
 	stripCountySuffix as stripCountySuffixFromHelpers,
 } from '~/lib/electionsHelpers';
 import { FAQ_BASE_PATH, getFaqSitemapEntries } from '~/lib/faqSlugs';
+import { electionApiAuthHeaders } from '~/lib/electionApiAuth';
 import { allFaqsQuery } from '~/sanity/groq';
 
 /** 51 US state/DC codes (50 states + DC) */
@@ -366,7 +367,8 @@ async function fetchElectionJson<T>(path: string, params: Record<string, string>
 	const search = new URLSearchParams(params).toString();
 	const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}?${search}`;
 	try {
-		const res = await fetch(url, CACHE_1H);
+		const authHeaders = await electionApiAuthHeaders();
+		const res = await fetch(url, { ...CACHE_1H, headers: authHeaders });
 		if (!res.ok) {
 			console.error(`[sitemap] Election API ${res.status} ${url}`);
 			return [];

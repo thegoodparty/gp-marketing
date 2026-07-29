@@ -289,8 +289,9 @@ export async function getPersonByPersonId(personId: string): Promise<PersonItem 
 }
 
 /**
- * Resolves the canonical `/people/<slug>` URL to a person via the unique
- * election-api slug. Returns null on miss (404) so the page can 404. The
+ * Resolves a `/people/<base>-<id8>` URL to a person. election-api parses the
+ * trailing 8-hex id suffix and resolves via an indexed id-range scan (the base
+ * slug is non-unique). Returns null on miss (404) so the page can 404. The
  * profile then loads by the resolved personId (so per-person cache-busting by
  * `person:<uuid>` tag still applies).
  */

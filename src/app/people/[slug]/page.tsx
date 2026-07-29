@@ -34,14 +34,15 @@ function canonicalPath(view: PersonProfileView): string {
 }
 
 async function resolveView(slug: string): Promise<PersonProfileView | null> {
-	// Legacy /people/<name>-<uuid> URLs (the pre-migration scheme) still resolve
-	// by their trailing personId; the canonical redirect below sends them to the
-	// clean /people/<slug>.
+	// Legacy /people/<name>-<full-uuid> URLs (an earlier scheme) still resolve by
+	// their trailing full personId; the canonical redirect below sends them to the
+	// current /people/<base>-<id8>.
 	const legacyPersonId = extractPersonId(slug);
 	if (legacyPersonId) return loadPersonProfile(legacyPersonId);
 
-	// Clean /people/<slug>: resolve the personId from the authoritative unique
-	// slug, then load the full profile by id.
+	// Current /people/<base>-<id8>: election-api parses the 8-hex suffix and
+	// resolves the person via an indexed id-range scan; then load the full
+	// profile by id (so per-person `person:<uuid>` cache-busting still applies).
 	const person = await getPersonBySlug(slug);
 	if (!person) return null;
 	return loadPersonProfile(person.id);

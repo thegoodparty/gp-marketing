@@ -165,16 +165,19 @@ describe('extractPersonId', () => {
 });
 
 describe('buildPersonSlug', () => {
-	test('builds first-last-<personId>', () => {
-		expect(buildPersonSlug('Jane Doe', PID)).toBe(`jane-doe-${PID}`);
+	// id8 = first 8 hex of PID.
+	const ID8 = '11111111';
+
+	test('builds first-last-<id8>', () => {
+		expect(buildPersonSlug('Jane Doe', PID)).toBe(`jane-doe-${ID8}`);
 	});
 
 	test('strips punctuation and diacritics', () => {
-		expect(buildPersonSlug("José O'Brien-Smith", PID)).toBe(`jose-o-brien-smith-${PID}`);
+		expect(buildPersonSlug("José O'Brien-Smith", PID)).toBe(`jose-o-brien-smith-${ID8}`);
 	});
 
-	test('falls back to just the id when the name has no slug chars', () => {
-		expect(buildPersonSlug('!!!', PID)).toBe(PID);
+	test('falls back to just the id suffix when the name has no slug chars', () => {
+		expect(buildPersonSlug('!!!', PID)).toBe(ID8);
 	});
 });
 
@@ -318,20 +321,21 @@ describe('composeView issues, links, labels', () => {
 		expect(view.stateLabel).toBe('CA');
 	});
 
-	test('canonicalSlug is the authoritative spine slug, not derived from the overlay display name', () => {
+	test('canonicalSlug uses the spine base slug + id8 suffix, not the overlay display name', () => {
 		const view = composeView(
 			PID,
 			makePerson({ slug: 'jane-doe', fullName: 'Jane Doe' }),
 			makeOverlay({ displayName: 'Councilmember Doe' }),
 		);
-		// Clean slug (no trailing UUID) comes straight from election-api Person.slug.
-		expect(view.canonicalSlug).toBe('jane-doe');
+		// Base comes from election-api Person.slug; the 8-hex id suffix is appended
+		// so the URL resolves to exactly one person.
+		expect(view.canonicalSlug).toBe('jane-doe-11111111');
 		expect(view.initials).toBe('CD');
 	});
 
-	test('canonicalSlug falls back to a derived slug when the spine is absent', () => {
+	test('canonicalSlug falls back to a derived base + id8 when the spine is absent', () => {
 		const view = composeView(PID, null, makeOverlay({ displayName: 'Councilmember Doe' }));
-		expect(view.canonicalSlug).toBe('councilmember-doe');
+		expect(view.canonicalSlug).toBe('councilmember-doe-11111111');
 	});
 
 	test('falls back to a generic name when neither spine nor overlay names exist', () => {

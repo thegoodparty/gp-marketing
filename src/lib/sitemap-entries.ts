@@ -11,6 +11,7 @@ import {
 	resolveElectionPositionFromRaceSlug,
 	stripCountySuffix as stripCountySuffixFromHelpers,
 } from '~/lib/electionsHelpers';
+import { buildPersonSlugFromBase } from '~/lib/peopleProfile';
 import { FAQ_BASE_PATH, getFaqSitemapEntries } from '~/lib/faqSlugs';
 import { allFaqsQuery } from '~/sanity/groq';
 
@@ -632,10 +633,15 @@ export async function fetchPeopleSitemapEntries(
 	const entries: MetadataRoute.Sitemap = [];
 	for (const p of persons) {
 		if (!p.id || !p.slug) continue;
-		// When a shard is requested, only emit people whose slug falls in it.
+		// When a shard is requested, only emit people whose slug falls in it. The
+		// canonical URL appends the 8-hex id suffix but shares the base's first
+		// char, so sharding on the base is equivalent.
 		if (shard && peopleShardForSlug(p.slug) !== shard) continue;
+		const canonicalSlug = buildPersonSlugFromBase(p.slug, p.id);
 		const updatedAt = updatedByPersonId.get(p.id.toLowerCase());
-		entries.push(toEntry(baseUrl, `/people/${p.slug}`, 0.7, 'weekly', updatedAt?.slice(0, 10)));
+		entries.push(
+			toEntry(baseUrl, `/people/${canonicalSlug}`, 0.7, 'weekly', updatedAt?.slice(0, 10)),
+		);
 	}
 	return dedupeByUrl(entries);
 }

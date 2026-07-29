@@ -41,10 +41,24 @@ function slugifyName(name: string): string {
 		.replace(/^-+|-+$/g, '');
 }
 
-/** Builds the canonical `first-last-<personId>` slug for a person. */
+/**
+ * First 8 hex chars of the personId — the stable, collision-safe slug suffix.
+ * The election-api resolves /people/<base>-<id8> by an indexed range scan on the
+ * id PK, so this suffix (not the non-unique base slug) is the real lookup key.
+ */
+export function personIdSuffix(personId: string): string {
+	return personId.replace(/-/g, '').slice(0, 8).toLowerCase();
+}
+
+/** Builds the public `<base>-<id8>` slug from an already-slugified base. */
+export function buildPersonSlugFromBase(base: string, personId: string): string {
+	const suffix = personIdSuffix(personId);
+	return base ? `${base}-${suffix}` : suffix;
+}
+
+/** Builds the public `first-last-<id8>` slug for a person from a display name. */
 export function buildPersonSlug(name: string, personId: string): string {
-	const base = slugifyName(name);
-	return base ? `${base}-${personId}` : personId;
+	return buildPersonSlugFromBase(slugifyName(name), personId);
 }
 
 export interface PersonProfileLink {
@@ -452,7 +466,11 @@ export function buildNearbyOfficialCards(
 		const dedupeKey = pid?.toLowerCase() ?? name.toLowerCase();
 		if (seen.has(dedupeKey)) continue;
 		seen.add(dedupeKey);
-		const href = pid ? `/people/${buildPersonSlug(name, pid)}` : null;
+		// Prefer the person's mint base slug so the link is already canonical
+		// (/people/<base>-<id8>) and skips the redirect hop.
+		const href = pid
+			? `/people/${buildPersonSlugFromBase(person?.slug ?? slugifyName(name), pid)}`
+			: null;
 		cards.push({
 			personId: pid,
 			name,
@@ -600,10 +618,14 @@ export function composeView(
 
 	return {
 		personId,
-		// The election-api mint is the authoritative clean slug (/people/<slug>,
-		// no trailing UUID). Fall back to a derived slug only when the spine is
-		// absent (e.g. an overlay-only edge case).
-		canonicalSlug: person?.slug ?? (slugifyName(nameFromPerson ?? displayName) || personId),
+		// Public URL is /people/<base>-<id8>. The election-api mart mints the base
+		// (`first-last`, non-unique); we always append the 8-hex id suffix so the
+		// URL resolves to exactly one person. Fall back to a name-derived base only
+		// when the spine is absent (e.g. an overlay-only edge case).
+		canonicalSlug: buildPersonSlugFromBase(
+			person?.slug ?? slugifyName(nameFromPerson ?? displayName),
+			personId,
+		),
 		state,
 		claimed,
 		persona,

@@ -51,9 +51,9 @@ describe('public profile — 12-state data-flow matrix', () => {
 			expect(view.issues.length > 0).toBe(e.hasIssues);
 
 			// Breadcrumb always terminates at the person; canonical slug is the
-			// authoritative spine slug.
+			// spine base slug plus the 8-hex id suffix.
 			expect(view.breadcrumb.at(-1)?.label).toBe('Jane Public');
-			expect(view.canonicalSlug).toBe('jane-public');
+			expect(view.canonicalSlug).toBe('jane-public-aaaaaaaa');
 
 			// PII must never reach the composed view.
 			expect(assertNoPii(view)).toEqual([]);

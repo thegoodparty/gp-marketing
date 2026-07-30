@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { getCandidateBySlug, findCampaignByRace, resolveRaceElectionHrefs } from '~/lib/electionsApi';
 import { loadPersonProfile } from '~/lib/peopleProfile';
+import { candidatePeopleRedirectEnabled } from '~/lib/env';
 import {
 	formatElectionDateFromApi,
 	formatSidebarLinkLabel,
@@ -186,7 +187,11 @@ export default async function Page({
 	// emits a 308 (a permanent redirect, treated by search engines like a 301 and
 	// matching this app's redirect convention in middleware.ts); the /people page
 	// self-references its own canonical.
-	if (candidate.personId) {
+	//
+	// Gated OFF by default: a 308 is cached by browsers/crawlers, so we only flip
+	// ENABLE_CANDIDATE_PEOPLE_REDIRECT=true once /people is verified end-to-end on
+	// real data. Until then /candidate keeps rendering its own page unchanged.
+	if (candidatePeopleRedirectEnabled && candidate.personId) {
 		const person = await loadPersonProfile(candidate.personId);
 		if (person) {
 			permanentRedirect(`/people/${person.canonicalSlug}`);

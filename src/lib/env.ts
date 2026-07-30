@@ -22,6 +22,14 @@ export const ashbyJobBoardName = process.env['ASHBY_JOB_BOARD_NAME'] || undefine
 
 export const defaultRevalidate = 3600; // 1 hour, in seconds
 
+// Feature gate for the legacy /candidate -> /people 308 redirect. OFF by default
+// so all the /people code can ship dormant: the redirect is permanent (308) and
+// gets cached by browsers/crawlers, so it must only turn on once /people is
+// verified end-to-end on real data. Server-side only (read in the /candidate
+// page, a server component). Set ENABLE_CANDIDATE_PEOPLE_REDIRECT=true to enable.
+export const candidatePeopleRedirectEnabled =
+	process.env['ENABLE_CANDIDATE_PEOPLE_REDIRECT'] === 'true';
+
 // Basemap style for the person-profile voter-density map. Defaults to CARTO's
 // hosted Positron style, which is free and needs no API key. Read server-side
 // and passed to the client map as a prop, so a non-public MAP_STYLE_URL works

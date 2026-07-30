@@ -18,7 +18,7 @@ import {
 	normalizeCandidateLookupName,
 	stripCountySuffix,
 } from '~/lib/electionsHelpers';
-import { electionApiAuthHeaders } from '~/lib/electionApiAuth';
+import { fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
 
 const ELECTIONS_API_BASE_URL =
 	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
@@ -89,20 +89,33 @@ async function sleep(ms: number): Promise<void> {
 }
 
 async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | null> {
-	// Attach a Clerk M2M token only for election-api requests. fetchJson is
-	// also used for gp-api calls (GP_API_BASE_URL); an election-api-scoped
-	// token would be rejected there, so scope it by base URL.
-	let requestOptions = options;
+	// election-api: auth + URL-keyed unstable_cache (Authorization must not be in the
+	// Next fetch cache key or the shared 1h cache stops hitting across isolates).
 	if (url.startsWith(ELECTIONS_API_BASE_URL)) {
-		const authHeaders = await electionApiAuthHeaders();
-		requestOptions = {
-			...options,
-			headers: { ...(options?.headers as Record<string, string> | undefined), ...authHeaders },
-		};
+		for (let attempt = 0; attempt <= FETCH_JSON_MAX_RETRIES; attempt++) {
+			try {
+				const result = await fetchElectionApiJsonCached(url);
+				if (result.status === 404) return null;
+				if (result.ok) return result.json as T;
+				if (result.status > 0 && result.status < 500) {
+					console.error(`[electionsApi] ${result.status} ${url}`);
+					return null;
+				}
+				console.error(`[electionsApi] ${result.status || 'error'} ${url} (attempt ${attempt + 1})`);
+			} catch (err) {
+				console.error(`[electionsApi] attempt ${attempt + 1}`, err);
+			}
+			if (attempt < FETCH_JSON_MAX_RETRIES) {
+				await sleep(500 * (attempt + 1));
+			}
+		}
+		return null;
 	}
+
+	// gp-api and other hosts: no M2M token (election-api-scoped).
 	for (let attempt = 0; attempt <= FETCH_JSON_MAX_RETRIES; attempt++) {
 		try {
-			const res = await fetch(url, requestOptions);
+			const res = await fetch(url, options);
 			if (res.status === 404) return null;
 			if (res.ok) return (await res.json()) as T;
 			if (res.status < 500) {

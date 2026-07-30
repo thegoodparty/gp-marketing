@@ -12,6 +12,13 @@ import { createClerkClient } from '@clerk/backend';
  * CLERK_SECRET_KEY are server-only. All election-api reads already run
  * server-side (Server Components, route handlers, sitemap/build scripts).
  *
+ * Deliberately does NOT `import 'server-only'`: this module is also imported by
+ * offline CLI scripts (`scripts/validate-election-pages.ts`, and
+ * `scripts/generate-sitemaps.ts` via `sitemap-entries.ts`). Under bun/tsx the
+ * `server-only` package's default export throws, so the sentinel would break
+ * those tools. Client-bundle safety still holds because no Client Component
+ * imports this file (and `@clerk/backend` is Node-only).
+ *
  * If the machine secret is unset, minting is skipped and requests go out
  * unauthenticated. That is intentional: it keeps gp-marketing working while
  * election-api is still in observe-only mode. Once ELECTION_API_AUTH_ENFORCED

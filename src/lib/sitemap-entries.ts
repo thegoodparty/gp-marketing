@@ -12,7 +12,7 @@ import {
 	stripCountySuffix as stripCountySuffixFromHelpers,
 } from '~/lib/electionsHelpers';
 import { FAQ_BASE_PATH, getFaqSitemapEntries } from '~/lib/faqSlugs';
-import { electionApiAuthHeaders } from '~/lib/electionApiAuth';
+import { fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
 import { allFaqsQuery } from '~/sanity/groq';
 
 /** 51 US state/DC codes (50 states + DC) */
@@ -31,9 +31,7 @@ export function getSitemapIds(): { id: number }[] {
 }
 
 const ELECTION_API_BASE =
-	process.env['NEXT_PUBLIC_ELECTION_API_BASE'] ?? process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
-
-const CACHE_1H: RequestInit = { next: { revalidate: 3600 } };
+	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
 
 export type CountyPlace = { slug?: string; name?: string; mtfcc?: string };
 export type CityPlace = { slug?: string; countyName?: string };
@@ -367,13 +365,12 @@ async function fetchElectionJson<T>(path: string, params: Record<string, string>
 	const search = new URLSearchParams(params).toString();
 	const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}?${search}`;
 	try {
-		const authHeaders = await electionApiAuthHeaders();
-		const res = await fetch(url, { ...CACHE_1H, headers: authHeaders });
-		if (!res.ok) {
-			console.error(`[sitemap] Election API ${res.status} ${url}`);
+		const result = await fetchElectionApiJsonCached(url);
+		if (!result.ok) {
+			console.error(`[sitemap] Election API ${result.status} ${url}`);
 			return [];
 		}
-		const data: unknown = await res.json();
+		const data = result.json;
 		if (Array.isArray(data)) return data as T[];
 		if (data && typeof data === 'object' && 'data' in data) {
 			const inner = (data as { data: unknown }).data;

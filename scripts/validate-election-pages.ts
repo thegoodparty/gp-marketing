@@ -21,9 +21,7 @@ const DEFAULT_TIMEOUT_MS = 15_000;
 const STATE_FACTS_MARKER = /data-section=["']Location Facts Block["']/i;
 
 const ELECTION_API_BASE =
-	process.env['NEXT_PUBLIC_ELECTION_API_BASE'] ??
-	process.env['ELECTIONS_API_BASE_URL'] ??
-	'https://election-api.goodparty.org';
+	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
 
 const BAD_PATTERNS = [
 	/\b[a-z][a-z-]*\s+County\b/, // lowercase word + " County" = broken fallback (e.g. "buckeye County"), not "Yuma County"

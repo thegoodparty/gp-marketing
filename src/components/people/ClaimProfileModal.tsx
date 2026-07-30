@@ -120,7 +120,7 @@ function ClaimPromptCard({
 	displayName: string;
 	isRunning: boolean;
 	variant: 'voter-card' | 'owner-card';
-	onOpen: () => void;
+	onOpen: VoidFunction;
 }) {
 	const owner = variant === 'owner-card';
 	const heading = owner ? `Are you ${displayName}?` : `Want to hear from ${displayName}?`;

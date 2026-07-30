@@ -90,6 +90,10 @@ export interface ExperienceItem {
 	title: string;
 	organization: string | null;
 	term: string | null;
+	/** Status pill per the Figma rows, e.g. "Incumbent" / "Candidate". null = no pill. */
+	status: string | null;
+	/** Optional link to the office/position page ("View position →"). null = no link. */
+	href: string | null;
 }
 
 /** A card in the "Other Candidates" / "Nearby Officials" interlink sections. */
@@ -185,6 +189,8 @@ export interface PersonProfileView {
 	electionDate: string | null;
 	positionId: string | null;
 	positionDescription: string | null;
+	/** Canonical /elections position page href for the person's own office ("Learn more"). */
+	positionHref: string | null;
 	districtLabel: string | null;
 	stateLabel: string | null;
 	issues: PersonProfileIssueView[];
@@ -369,6 +375,9 @@ function buildRecentExperience(person: PersonItem | null): ExperienceItem[] {
 			title: o.officeTitle ?? o.positionName ?? 'Public office',
 			organization: [o.subAreaValue ?? o.subAreaName, o.state].filter(Boolean).join(', ') || null,
 			term: formatTerm(o),
+			// Current terms read as "Incumbent"; past terms let the year range speak.
+			status: o.isCurrent === true ? 'Incumbent' : null,
+			href: null,
 		},
 	}));
 
@@ -382,6 +391,8 @@ function buildRecentExperience(person: PersonItem | null): ExperienceItem[] {
 					title: `Candidate for ${c.positionName}`,
 					organization: c.state ?? null,
 					term: formatYear(electionDate),
+					status: 'Candidate',
+					href: c.slug ? `/candidate/${c.slug}` : null,
 				},
 			};
 		});
@@ -400,6 +411,8 @@ function authoredExperience(overlay: PublicPersonProfile | null): ExperienceItem
 		title: e.title,
 		organization: e.organization ?? null,
 		term: e.term ?? null,
+		status: null,
+		href: null,
 	}));
 }
 
@@ -552,6 +565,7 @@ export interface ComposeExtras {
 	positionId?: string | null;
 	electionDate?: string | null;
 	positionDescription?: string | null;
+	positionHref?: string | null;
 	recentExperience?: ExperienceItem[];
 	otherCandidates?: RelatedPersonCard[];
 	nearbyOfficials?: RelatedPersonCard[];
@@ -651,6 +665,7 @@ export function composeView(
 		electionDate: extras.electionDate ?? null,
 		positionId: extras.positionId ?? office?.positionId ?? null,
 		positionDescription: extras.positionDescription ?? null,
+		positionHref: extras.positionHref ?? null,
 		districtLabel,
 		stateLabel,
 		issues: removed
@@ -775,6 +790,15 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 		candidacy?.positionDescription ??
 		office?.Position?.description ??
 		null;
+	// Canonical /elections position href for the person's OWN office ("Learn more").
+	// Only resolvable from a candidacy's race slug today, so this is populated for
+	// candidate/"both" personas; pure office-holders get null until election-api
+	// threads the office race slug (tracked follow-up).
+	const positionHref =
+		buildElectionPositionHrefFromRaceSlug({
+			slug: raceSlug ?? undefined,
+			positionLevel: positionLevel ?? undefined,
+		}) ?? null;
 	const stateCode = office?.state ?? person?.state ?? candidacy?.state ?? null;
 
 	const composedName = [person?.firstName, person?.lastName].filter(Boolean).join(' ');
@@ -794,6 +818,7 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 		positionId,
 		electionDate,
 		positionDescription,
+		positionHref,
 		otherCandidates,
 		nearbyOfficials,
 		breadcrumb,

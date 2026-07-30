@@ -31,6 +31,8 @@ export function ProfileHeroSection({ profileHeroOverride, tokens: _tokens, ...se
 				office={office}
 				profileImageUrl={profileHeroOverride?.profileImageUrl}
 				isEmpowered={profileHeroOverride?.isEmpowered}
+				tags={profileHeroOverride?.tags}
+				attribution={profileHeroOverride?.attribution}
 			/>
 			{profileHeroOverride?.pledged && (
 				<div className='bg-goodparty-cream'>

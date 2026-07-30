@@ -111,6 +111,14 @@ export type SectionOverrides = {
 		isEmpowered?: boolean;
 		/** Person profiles: renders a "Took the GoodParty.org Pledge" badge under the hero. */
 		pledged?: boolean;
+		/** Persona tag pills shown above the name (e.g. "Candidate", "Incumbent"). */
+		tags?: string[];
+		/**
+		 * Attribution line under the office. `empowered` → "Empowered by GoodParty.org"
+		 * (logo + text); `notEndorsed` → grey "Not Endorsed by GoodParty.org"; `none` →
+		 * nothing. When omitted, falls back to `isEmpowered`.
+		 */
+		attribution?: 'empowered' | 'notEndorsed' | 'none';
 	};
 	component_goodPartyOrgPledge?: {
 		hidden?: boolean;

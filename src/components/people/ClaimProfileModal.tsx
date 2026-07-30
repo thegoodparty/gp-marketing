@@ -101,9 +101,60 @@ export type ClaimProfileModalProps = {
 	personId: string;
 	displayName: string;
 	persona: 'candidate' | 'officeholder' | 'both' | 'past';
+	/**
+	 * Which trigger to render (the dialog itself is identical):
+	 *  - `banner`      full-width yellow CMS banner (default; legacy section use)
+	 *  - `voter-card`  in-column light-blue prompt aimed at visitors ("hear from …")
+	 *  - `owner-card`  in-column light-blue prompt aimed at the person ("Are you …?")
+	 */
+	variant?: 'banner' | 'voter-card' | 'owner-card';
 };
 
-export function ClaimProfileModal({ personId, displayName, persona }: ClaimProfileModalProps) {
+/** In-column light-blue claim prompt (voter- or owner-facing) — a Figma content-well card. */
+function ClaimPromptCard({
+	displayName,
+	isRunning,
+	variant,
+	onOpen,
+}: {
+	displayName: string;
+	isRunning: boolean;
+	variant: 'voter-card' | 'owner-card';
+	onOpen: () => void;
+}) {
+	const owner = variant === 'owner-card';
+	const heading = owner ? `Are you ${displayName}?` : `Want to hear from ${displayName}?`;
+	const body = owner
+		? isRunning
+			? 'Complete your profile now to share why you\u2019re running, your top issues, and how voters can reach you.'
+			: 'Complete your profile now to share your record, your priorities in office, and how constituents can reach you.'
+		: `Ask ${displayName} to claim their GoodParty.org profile and share their platform.`;
+	const cta = owner ? 'Complete your profile' : `Notify ${displayName}`;
+
+	return (
+		<div
+			className='flex flex-col gap-4 rounded-3xl border border-blue-200 bg-blue-100 p-6'
+			data-component='ClaimPromptCard'
+			data-variant={variant}
+		>
+			<Text as='h2' styleType='subtitle-1'>
+				{heading}
+			</Text>
+			<Text styleType='body-2'>{body}</Text>
+			<Button
+				parent='ClaimProfileModal'
+				styleType='primary'
+				styleSize='md'
+				className='w-fit'
+				onClick={onOpen}
+			>
+				{cta}
+			</Button>
+		</div>
+	);
+}
+
+export function ClaimProfileModal({ personId, displayName, persona, variant = 'banner' }: ClaimProfileModalProps) {
 	const [open, setOpen] = useState(false);
 	const isRunning = persona === 'candidate' || persona === 'both';
 
@@ -114,18 +165,27 @@ export function ClaimProfileModal({ personId, displayName, persona }: ClaimProfi
 
 	return (
 		<Dialog.Root open={open} onOpenChange={setOpen}>
-			<ClaimProfileBlock
-				layout='banner'
-				backgroundColor='bright-yellow'
-				headline={headline}
-				body={bannerBody}
-				claimButton={{
-					buttonType: 'button',
-					label: 'Claim your profile',
-					onClick: () => setOpen(true),
-					buttonProps: { styleType: 'primary', styleSize: 'md' },
-				}}
-			/>
+			{variant === 'banner' ? (
+				<ClaimProfileBlock
+					layout='banner'
+					backgroundColor='bright-yellow'
+					headline={headline}
+					body={bannerBody}
+					claimButton={{
+						buttonType: 'button',
+						label: 'Claim your profile',
+						onClick: () => setOpen(true),
+						buttonProps: { styleType: 'primary', styleSize: 'md' },
+					}}
+				/>
+			) : (
+				<ClaimPromptCard
+					displayName={displayName}
+					isRunning={isRunning}
+					variant={variant}
+					onOpen={() => setOpen(true)}
+				/>
+			)}
 
 			<Dialog.Portal>
 				<Dialog.Overlay className='fixed inset-0 z-40 bg-midnight-900/60 backdrop-blur-sm data-[state=open]:animate-in data-[state=open]:fade-in' />

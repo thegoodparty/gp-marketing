@@ -14,15 +14,12 @@
 import type { Sections } from '~/PageSections';
 import { PROFILE_PAGE_SECTIONS } from '~/app/candidate/[...slug]/profilePageSections';
 
-/** Stable section `_key`s so per-`_key` overrides (e.g. the two candidate lists) resolve. */
+/** Stable section `_key`s for per-`_key` overrides. */
 export const PERSON_SECTION_KEYS = {
 	breadcrumb: 'person-breadcrumb',
 	hero: 'person-hero',
 	claim: 'person-claim',
 	content: 'person-content',
-	voterDensity: 'person-voter-density',
-	otherCandidates: 'person-other-candidates',
-	nearbyOfficials: 'person-nearby-officials',
 	pledge: 'person-pledge',
 	elections: 'person-elections',
 	cta: 'person-cta',
@@ -39,31 +36,27 @@ const claimSkeleton = byType('component_claimProfileBlock');
 const contentSkeleton = byType('component_profileContentBlock');
 const pledgeSkeleton = byType('component_goodPartyOrgPledge');
 
-// Order mirrors the Figma states: identity (breadcrumb/hero/claim) → authored +
-// civics content → interlink candidate lists → district map → sign-up CTA →
-// GoodParty pledge → elections index. Editors can reorder per-state in Sanity.
+// Order mirrors the Figma person-profile states:
+//   breadcrumb → hero → claim (unclaimed only) → content well → sign-up CTA →
+//   GoodParty pledge (claimed candidate/both) → elections index.
+// The Figma content well is a two-column layout (left contact/office sidebar +
+// right card stack). The right stack — authored cards, Recent Experience, the
+// in-column "Other candidates" list, the About-position card, and the District
+// Information map — is all composed inside `component_profileContentBlock` (see
+// buildPersonSectionOverrides), NOT as separate full-width sections, so it
+// matches the Figma single-column-of-cards layout. Editors can reorder per-state
+// in Sanity.
 export const PERSON_PROFILE_SECTIONS = [
 	{ ...breadcrumbSkeleton, _key: PERSON_SECTION_KEYS.breadcrumb },
 	{ ...heroSkeleton, _key: PERSON_SECTION_KEYS.hero },
 	{ ...claimSkeleton, _key: PERSON_SECTION_KEYS.claim },
 	{ ...contentSkeleton, _key: PERSON_SECTION_KEYS.content },
 	{
-		_key: PERSON_SECTION_KEYS.otherCandidates,
-		_type: 'component_candidatesBlock',
-		candidatesBlockDesignSettings: { field_blockColorCreamMidnight: 'Cream' },
-	},
-	{
-		_key: PERSON_SECTION_KEYS.nearbyOfficials,
-		_type: 'component_candidatesBlock',
-		candidatesBlockDesignSettings: { field_blockColorCreamMidnight: 'MidnightDark' },
-	},
-	{ _key: PERSON_SECTION_KEYS.voterDensity, _type: 'component_voterDensityBlock' },
-	{
 		_key: PERSON_SECTION_KEYS.cta,
 		_type: 'component_ctaBannerBlock',
 		field_ctaType: 'Manual',
 		smallCtaMessaging: {
-			field_title: 'Build a better democracy with us.',
+			field_title: 'Join the movement to build a better democracy.',
 			block_summaryText: [
 				{
 					_key: 'person-cta-copy',
@@ -73,7 +66,7 @@ export const PERSON_PROFILE_SECTIONS = [
 							_key: 'person-cta-span',
 							_type: 'span',
 							marks: [],
-							text: 'Support independent candidates, run for office, or join our community of people working to fix our broken political system.',
+							text: 'GoodParty.org helps everyday people run for office and win — free from big money and party bosses. Join us.',
 						},
 					],
 					markDefs: [],
@@ -88,7 +81,7 @@ export const PERSON_PROFILE_SECTIONS = [
 		},
 		ctaBannerBlockDesignSettings: {
 			field_blockColorCreamMidnight: 'Cream',
-			field_componentColor6ColorsInverse: 'HaloGreen',
+			field_componentColor6ColorsInverse: 'Blue',
 		},
 	},
 	{ ...pledgeSkeleton, _key: PERSON_SECTION_KEYS.pledge },

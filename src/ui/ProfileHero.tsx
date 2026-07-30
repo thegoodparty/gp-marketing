@@ -9,38 +9,49 @@ import { Logo } from '~/sanity/utils/Logo.tsx';
 
 const styles = tv({
 	slots: {
-		base: 'relative py-8 md:py-10 lg:py-12 overflow-hidden',
-		backgroundWrapper: 'absolute top-0 bottom-0 max-md:-left-[var(--container-padding)] max-md:-right-[var(--container-padding)] md:inset-0',
-		topSection: 'absolute top-0 left-0 right-0 h-[60%]',
-		bottomSection: 'absolute bottom-0 left-0 right-0 h-[40%]',
-		container: 'relative z-10 flex flex-col items-start gap-8 md:flex-row md:items-start md:gap-12 lg:gap-40',
-		imageWrapper: 'relative flex-shrink-0 z-20',
-		image: 'rounded-full overflow-hidden w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64',
-		badge: 'absolute bottom-0 right-0 translate-x-[-2%] translate-y-1/17 z-30',
-		content: 'flex flex-col gap-6 text-left z-10',
+		// Cream is the page background the hero blends into below the short dark band.
+		base: 'relative overflow-hidden text-white',
+		// Extra bleed on mobile so the band reaches the viewport edges.
+		backgroundWrapper: 'absolute inset-0 max-md:-left-[var(--container-padding)] max-md:-right-[var(--container-padding)]',
+		// Short dark band. On mobile it covers the whole hero (h-full) so stacked
+		// text stays readable; on desktop it is a short band the photo straddles.
+		band: 'absolute inset-x-0 top-0 h-full md:h-[224px] lg:h-[240px]',
+		// Cream fill below the band on desktop (blends into the following section).
+		belowBand: 'absolute inset-x-0 bottom-0 top-[224px] lg:top-[240px] max-md:hidden bg-goodparty-cream',
+		container: 'relative z-10 flex flex-col items-start gap-6 pt-8 pb-10 md:flex-row md:items-start md:gap-12 lg:gap-16 md:pt-10 md:pb-12',
+		imageWrapper: 'relative z-20 flex-shrink-0',
+		// Circular portrait straddling the dark band and the cream content below.
+		image: 'relative rounded-full overflow-hidden w-40 h-40 md:w-72 md:h-72 lg:w-80 lg:h-80',
+		badge: 'absolute -bottom-4 left-1/2 -translate-x-1/2 z-30 drop-shadow-md',
+		content: 'flex flex-col gap-4 text-left z-10 md:pt-2',
+		tagRow: 'flex flex-wrap items-center gap-2',
+		tag: 'inline-flex w-fit items-center rounded-full px-3 py-1',
+		nameOffice: 'flex flex-col gap-2',
 		heading: '',
 		office: '',
-		attribution: 'flex items-center justify-start gap-1',
+		attribution: 'flex items-center justify-start gap-1.5',
 		attributionIcon: 'w-[37px] h-[28px]',
 		attributionText: 'text-sm',
+		notEndorsed: 'text-sm',
 	},
 	variants: {
 		backgroundColor: {
 			midnight: {
-				base: 'text-white',
-				topSection: 'bg-midnight-900',
-				bottomSection: 'max-md:bg-midnight-900',
+				band: 'bg-midnight-900',
 				heading: 'text-white',
 				office: 'text-white',
 				attributionText: 'text-white',
+				tag: 'bg-goodparty-cream text-midnight-900',
+				notEndorsed: 'text-gray-400',
 			},
 			cream: {
 				base: 'text-midnight-900',
-				topSection: 'bg-goodparty-cream',
-				bottomSection: 'max-md:bg-goodparty-cream',
+				band: 'bg-goodparty-cream',
 				heading: 'text-midnight-900',
 				office: 'text-midnight-900',
 				attributionText: 'text-midnight-900',
+				tag: 'bg-white text-midnight-900 ring-1 ring-midnight-900/10',
+				notEndorsed: 'text-gray-500',
 			},
 		},
 	},
@@ -54,23 +65,34 @@ export type ProfileHeroProps = {
 	profileImage?: SanityImage;
 	profileImageUrl?: string;
 	isEmpowered?: boolean;
+	/** Persona tag pills rendered above the name (e.g. "Candidate", "Incumbent"). Renders nothing when empty. */
+	tags?: string[];
+	/**
+	 * Attribution row under the office line. When omitted it falls back to
+	 * `isEmpowered` (empowered → "Empowered by GoodParty.org", otherwise none).
+	 */
+	attribution?: 'empowered' | 'notEndorsed' | 'none';
 };
 
 export function ProfileHero(props: ProfileHeroProps) {
 	const backgroundColor = props.backgroundColor ?? 'midnight';
 	const resolvedBackgroundColor = backgroundColor === 'white' ? 'cream' : backgroundColor;
-	const { base, backgroundWrapper, topSection, bottomSection, container, imageWrapper, image, badge, content, heading, office, attribution, attributionIcon, attributionText } = styles({ backgroundColor: resolvedBackgroundColor });
+	const { base, backgroundWrapper, band, belowBand, container, imageWrapper, image, badge, content, tagRow, tag, nameOffice, heading, office, attribution, attributionIcon, attributionText, notEndorsed } = styles({ backgroundColor: resolvedBackgroundColor });
+
+	// `attribution` wins when provided; otherwise fall back to legacy `isEmpowered`.
+	const attributionMode = props.attribution ?? (props.isEmpowered ? 'empowered' : 'none');
+	const tags = props.tags?.filter(Boolean) ?? [];
 
 	return (
 		<section className={cn(base(), props.className)} data-component="ProfileHero">
 			<div className={backgroundWrapper()}>
-				<div className={topSection()} />
-				<div className={bottomSection()} />
+				<div className={band()} />
+				<div className={belowBand()} />
 			</div>
 			<Container size="xl">
 				<div className={container()}>
 					<div className={imageWrapper()}>
-						<div className={cn(image(), 'relative')}>
+						<div className={image()}>
 							{props.profileImageUrl ? (
 								<Image
 									src={props.profileImageUrl}
@@ -101,7 +123,16 @@ export function ProfileHero(props: ProfileHeroProps) {
 						)}
 					</div>
 					<div className={content()}>
-						<div>
+						{tags.length > 0 && (
+							<div className={tagRow()}>
+								{tags.map((label) => (
+									<Text key={label} as="span" styleType="caption" className={tag()}>
+										{label}
+									</Text>
+								))}
+							</div>
+						)}
+						<div className={nameOffice()}>
 							<Text as="h1" styleType={props.candidateName.length > 28 ? 'heading-md' : 'heading-lg'} className={heading()}>
 								{props.candidateName}
 							</Text>
@@ -109,13 +140,18 @@ export function ProfileHero(props: ProfileHeroProps) {
 								{props.office}
 							</Text>
 						</div>
-						{props.isEmpowered && (
+						{attributionMode === 'empowered' && (
 							<div className={attribution()}>
 								<Logo className={attributionIcon()} />
 								<Text as="span" styleType="body-2" className={attributionText()}>
 									Empowered by GoodParty.org
 								</Text>
 							</div>
+						)}
+						{attributionMode === 'notEndorsed' && (
+							<Text as="span" styleType="body-2" className={notEndorsed()}>
+								Not Endorsed by GoodParty.org
+							</Text>
 						)}
 					</div>
 				</div>

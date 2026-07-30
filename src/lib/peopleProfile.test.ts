@@ -97,7 +97,7 @@ describe('composeView recent experience', () => {
 		});
 		const view = composeView(PID, person, null);
 		expect(view.recentExperience).toEqual([
-			{ title: 'Candidate for Mayor', organization: 'CA', term: null },
+			{ title: 'Candidate for Mayor', organization: 'CA', term: null, status: 'Candidate', href: null },
 		]);
 	});
 
@@ -119,8 +119,8 @@ describe('composeView recent experience', () => {
 		});
 		const view = composeView(PID, person, null);
 		expect(view.recentExperience).toEqual([
-			{ title: 'Candidate for Mayor', organization: 'CA', term: '2024' },
-			{ title: 'City Council', organization: 'CA', term: '2016 – 2020' },
+			{ title: 'Candidate for Mayor', organization: 'CA', term: '2024', status: 'Candidate', href: null },
+			{ title: 'City Council', organization: 'CA', term: '2016 – 2020', status: null, href: null },
 		]);
 	});
 
@@ -134,7 +134,7 @@ describe('composeView recent experience', () => {
 		});
 		const view = composeView(PID, person, overlay);
 		expect(view.recentExperience).toEqual([
-			{ title: 'City Council Member', organization: 'Springfield', term: '2021-2025' },
+			{ title: 'City Council Member', organization: 'Springfield', term: '2021-2025', status: null, href: null },
 		]);
 	});
 
@@ -145,7 +145,7 @@ describe('composeView recent experience', () => {
 		});
 		const view = composeView(PID, person, overlay, { removed: true });
 		expect(view.recentExperience).toEqual([
-			{ title: 'Candidate for Mayor', organization: 'CA', term: null },
+			{ title: 'Candidate for Mayor', organization: 'CA', term: null, status: 'Candidate', href: null },
 		]);
 	});
 });

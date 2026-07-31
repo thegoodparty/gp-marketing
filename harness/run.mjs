@@ -60,14 +60,16 @@ if (failing.length) {
 
 function printTable(report) {
 	console.log(`\n  gated overall = feature bands only (body/cta/pledge). all = every band incl. chrome/data.`);
-	console.log(`\n  state  gated    all     gate   worst feature band   capture`);
-	console.log(`  -----  -------  ------  -----  -------------------  -------`);
+	console.log(`  avatar = hero headshot check (photo ok / placeholder / BROKEN=hard fail).`);
+	console.log(`\n  state  gated    all     avatar       gate   worst feature band   capture`);
+	console.log(`  -----  -------  ------  -----------  -----  -------------------  -------`);
 	for (const r of report.rows) {
 		const gate = r.pass === false ? 'FAIL' : r.pass ? ' ok ' : 'blkd';
 		const sc = `${(r.overall * 100).toFixed(2)}%`.padStart(6);
 		const all = `${(r.overallAll * 100).toFixed(1)}%`.padStart(6);
+		const av = r.avatar ? (r.avatar.ok === false ? 'BROKEN' : r.avatar.kind) : '-';
 		const w = r.worstBand ? `${r.worstBand.id}${r.worstBand.missing ? `(missing:${r.worstBand.missing})` : ` ${(r.worstBand.score * 100).toFixed(0)}%`}` : '-';
-		console.log(`  ${r.id.padEnd(5)}  ${sc}   ${all}  ${gate}   ${w.padEnd(19)}  ${r.captureStatus ?? r.captureError ?? ''}  ${r.label}`);
+		console.log(`  ${r.id.padEnd(5)}  ${sc}   ${all}  ${av.padEnd(11)}  ${gate}   ${w.padEnd(19)}  ${r.captureStatus ?? r.captureError ?? ''}  ${r.label}`);
 	}
 }
 

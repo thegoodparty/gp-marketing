@@ -35,11 +35,17 @@ export const CANON_WIDTH = 1000;
 // text differences into similar-density gray while preserving what we actually
 // care about — section order, spacing, sizing, color blocks, and alignment.
 // Blur mushes glyph-level text (real seeded data vs Figma placeholders) into
-// similar-density gray, but we keep the downscale high enough that STRUCTURE —
-// avatar presence/placement, whitespace, alignment, section sizing — cannot hide.
-// (The earlier 4/320 setting was so soft it certified an empty hero as a match.)
-export const LAYOUT_BLUR_SIGMA = 3;
-export const LAYOUT_DOWNSCALE_WIDTH = 480;
+// similar-density gray so the per-band score reflects LAYOUT (section order,
+// spacing, sizing, color blocks, alignment) rather than copy. The gate is a
+// layout-tolerance, not a pixel diff.
+//
+// This alone can't catch a missing hero photo — the avatar is a tiny fraction of
+// the tall `body` band, so an empty hero barely moves the score (that, plus the
+// old headshot MASK, is exactly how an empty hero once passed). The hero photo is
+// instead guarded directly by an avatar-presence assertion at capture time
+// (capture.mjs -> `avatar`), surfaced as a hard fail in the report.
+export const LAYOUT_BLUR_SIGMA = 4;
+export const LAYOUT_DOWNSCALE_WIDTH = 320;
 
 // Region kinds we exclude from the score. A mask is
 //   { band, kind, rect: [x, y, w, h] }

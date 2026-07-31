@@ -8,7 +8,7 @@ are excluded from the 3% gate by band class in `config.mjs` (not masked).
 |----------|-------------|---------------|----------------|-------------|
 | all | `elections` index county list | Diff is dominated by how many counties are **seeded** vs the mock's long list — data volume, not layout | seeded election data / elections-api | report-only (class `data`) |
 | all | `nav`, `breadcrumb`, `footer` | Shared, already-shipped site chrome; live DOM box bounds don't map cleanly to the thin Figma bands | marketing site chrome (out of scope) | report-only (class `chrome`) |
-| all | Hero **headshot** in `body` | Seeded test people carry no photo, so the hero avatar is a flat initials disc while every Figma frame shows a real photo; prod profiles carry BallotReady/authored headshots | people-api / seed data | `GLOBAL_MASKS` (top-left avatar disc of `body`) + flag |
+| ~~all~~ | ~~Hero **headshot** in `body`~~ | **RESOLVED (was a false-parity trap).** The old `GLOBAL_MASKS` painted the avatar disc flat gray on BOTH sides, so an *empty/broken* hero photo scored the same as a real one — that is exactly how a hero with no photo once passed the gate. Fix: dev fixtures now seed real per-state headshots (`devPeopleProfileFixtures.ts`, on both `overlay.avatarUrl` and `person.headshotUrl`), the mask is removed, and capture now asserts the hero photo actually decoded (`capture.mjs` → `avatar`, a hard fail on `BROKEN`). | — | seeded photos + `avatar` presence gate (no mask) |
 | A/D/E/F + any empowered w/ density | Voter-density **heatmap** in District Information | Density data not wired to these seeded people; the map is the largest single red blob in the `body` diff (bottom of the content well) | people-api / gp-api voter-density | flag — nested deep in a content card, so masking both sides precisely is not wired; contributes to the `body` residual below |
 | H | `pledge` band | Cached Figma "H" frame is a **cloned Claimed-candidate frame** (its desktop frame is literally named "Claimed profile: Candidate only" and still carries a Pledge instance + claimed CTA). Our correct unclaimed render omits the pledge, so the band can never match | design file (re-export a real unclaimed-past frame) | `REPORT_ONLY_BANDS.H` |
 | I | Sidebar rows/icons | Unclaimed → no owner overlay/office, so Current Term, Office Contact, Office Mailing Address and the gov/Instagram contact icons have **no data**; live correctly renders only Election Date / Political Affiliation / Contact(3). Figma shows the full filled template | people-api (owner claim / office data) | data gap — flag |
@@ -44,10 +44,43 @@ template.
   because the seed authored the button in `ctaAction`, not `primaryCTA`; now
   injected via the section override). `cta` band 7% → 6% and no longer the
   dominant term (band weight is only ~0.08 of the gated mean).
+- **Claimed CTA button color** — Figma shows a dark **navy filled** button; live
+  was rendering a light `outline` button because `CTABannerBlock` inverts the
+  button style for the card color (`secondary → outline` on a cream/blue card).
+  Fix: new `preserveButtonStyle` opt-out on `CTABannerBlock` (plumbed through
+  `CTABannerBlockSection` + the override type); the person CTA now passes
+  `styleType: 'secondary'` (= `bg-midnight-900`) with `preserveButtonStyle`, so
+  it renders the navy button. `/elections` keeps the inverse mapping unchanged.
 
-## RESOLVED — body band closed via enriched dev fixtures
+## Harness honesty fix (why an empty hero once passed)
 
-**All 12 states now gate green (2.26%–2.97%, tolerance 3%). PARITY REACHED.**
+The blurred per-band layout score is a *layout-tolerance*, not a pixel diff —
+it intentionally mushes text so real seeded copy vs Figma lorem doesn't dominate.
+Two things made it certify a visibly-broken hero as a match:
+
+1. **The headshot mask** painted the avatar disc gray on both sides, so a broken
+   photo == a real photo. **Removed.**
+2. **Body-band dilution** — the avatar is a sliver of the tall `body` band, so
+   even un-masked its diff barely moves the score. A blurred comparison can't
+   reliably catch a missing photo.
+
+Fix: the hero photo is now guarded *directly* by a capture-time assertion
+(`captureAvatar`) that a decoded `<img headshot>` (or the intentional silhouette
+placeholder for removed profiles) is present, surfaced as a **hard FAIL** in the
+report independent of the blurred score. Don't re-add the headshot mask.
+
+## Body band — enriched dev fixtures + honest scoring
+
+> **Calibration note.** An earlier pass reported "all 12 green, PARITY REACHED"
+> at 2.26–2.97%. That was under the old config that **masked the headshot** and
+> blurred hard enough to hide hero drift — i.e. partly false confidence. With the
+> mask removed and the avatar guarded directly, the blurred `body`/`cta` scores
+> now hover *around* the 3% tolerance because the residual is **seeded-vs-mock
+> text content** (verified by full-page Figma-vs-live montages: the hero photo,
+> sidebar, content-well order, CTA, pledge, elections, and footer all match
+> structurally). The gate is a layout-tolerance; treat a state as done when the
+> montage matches structurally AND `avatar` is `photo`/`placeholder` (not
+> `BROKEN`), not when the blurred number ticks under an arbitrary line.
 
 The `body` residual was **data volume**, not layout: the live pages read sparse
 seeded records from election-api-dev / gp-api-dev (1 issue, 1–2 experience rows,

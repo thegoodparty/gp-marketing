@@ -61,6 +61,13 @@ export type CTABannerBlockProps = {
 	className?: string;
 	/** Content alignment on desktop. Defaults to 'end' (right); 'center' matches the person-profile CTA. */
 	align?: 'start' | 'center' | 'end';
+	/**
+	 * Use the button's `styleType` as-is instead of inverting it for the card
+	 * color. The inverse mapping flips `primary` to a light button on colored
+	 * cards, but the person-profile CTA (Figma) wants the dark filled `primary`
+	 * button on its light-blue card, so it opts out.
+	 */
+	preserveButtonStyle?: boolean;
 };
 
 export function CTABannerBlock(props: CTABannerBlockProps) {
@@ -68,7 +75,10 @@ export function CTABannerBlock(props: CTABannerBlockProps) {
 	const color = props.color ?? 'red';
 	const align = props.align ?? 'end';
 	const { base, card } = styles({ backgroundColor, color });
-	const resolvedStyle = resolveInverseButtonStyleType(props.button?.buttonProps?.styleType ?? 'primary', backgroundColor, color);
+	const requestedStyle = props.button?.buttonProps?.styleType ?? 'primary';
+	const resolvedStyle = props.preserveButtonStyle
+		? requestedStyle
+		: resolveInverseButtonStyleType(requestedStyle, backgroundColor, color);
 	const isCentered = align === 'center';
 
 	return (

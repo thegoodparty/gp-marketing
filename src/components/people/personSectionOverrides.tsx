@@ -469,7 +469,12 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 				align: 'center',
 				title: 'Join the movement to build a better democracy.',
 				copy: 'GoodParty.org is on a mission to make people matter more than money in our democracy. Learn how you can become part of the movement for change.',
+				// Figma shows a dark navy filled button on the light-blue card. That is
+				// the `secondary` style (bg-midnight-900); preserveButtonStyle skips the
+				// card-color inverse mapping that would otherwise turn it into a light
+				// `outline` button.
 				button: { buttonType: 'signup', label: 'Learn more', buttonProps: { styleType: 'secondary', styleSize: 'md' } },
+				preserveButtonStyle: true,
 			}
 		: showClaim
 			? {

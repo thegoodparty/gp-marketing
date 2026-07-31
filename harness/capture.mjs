@@ -41,17 +41,19 @@ export async function capture(states, outDir) {
 			// whole run — the state is still recorded (with whatever we captured).
 			let bands = {};
 			let dims = null;
+			let avatar = null;
 			try {
 				bands = await captureBands(page);
 				dims = await page.evaluate(() => ({
 					scrollHeight: document.documentElement.scrollHeight,
 					clientWidth: document.documentElement.clientWidth,
 				}));
+				avatar = await captureAvatar(page);
 			} catch (e) {
 				error = error ?? e.message;
 			}
 
-			results.push({ id: st.id, url, status, error, fullPath, bands, dims });
+			results.push({ id: st.id, url, status, error, fullPath, bands, dims, avatar });
 			await page.close();
 			process.stdout.write(`  captured ${st.id} (${st.label}) status=${status}${error ? ` ERROR=${error}` : ''}\n`);
 		}
@@ -88,6 +90,32 @@ async function captureBands(page) {
 		bands.body = heroBox ?? contentBox ?? null;
 	}
 	return bands;
+}
+
+// Assert the hero actually shows an avatar. The Figma design puts a real headshot
+// in every hero; a broken/empty photo is the exact "profile pic is gone" bug the
+// blurred layout score can't see (the avatar is a sliver of the tall body band).
+// Returns { ok, kind, reason }:
+//   - kind 'photo'       : an <img headshot> that actually decoded (naturalWidth>0)
+//   - kind 'placeholder' : the intentional no-photo silhouette (removed profiles)
+//   - ok=false           : an <img> that failed to load, or no avatar node at all
+async function captureAvatar(page) {
+	return page
+		.evaluate(() => {
+			const hero = document.querySelector('[data-component="ProfileHero"]');
+			if (!hero) return { ok: false, kind: 'none', reason: 'no ProfileHero' };
+			const img = Array.from(hero.querySelectorAll('img')).find(i => /headshot/i.test(i.alt || ''));
+			if (img) {
+				const ok = img.complete && img.naturalWidth > 0;
+				return { ok, kind: 'photo', reason: ok ? '' : `img failed to load (${img.currentSrc || img.src})` };
+			}
+			// No headshot <img>: only valid if the intentional silhouette placeholder rendered.
+			const hasPlaceholder = Boolean(hero.querySelector('svg'));
+			return hasPlaceholder
+				? { ok: true, kind: 'placeholder', reason: '' }
+				: { ok: false, kind: 'none', reason: 'no headshot img and no placeholder' };
+		})
+		.catch(e => ({ ok: false, kind: 'error', reason: e.message }));
 }
 
 // Bring the page to a stable, fully-painted state. Every wait is time-bounded so

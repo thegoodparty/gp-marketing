@@ -39,6 +39,7 @@ export function CTABannerBlockSection(section: Props) {
 				copy={copy}
 				button={ctaOverride?.button ?? transformButtons([section['primaryCTA']])?.[0]}
 				align={ctaOverride?.align}
+				preserveButtonStyle={ctaOverride?.preserveButtonStyle}
 			/>
 		</section>
 	);

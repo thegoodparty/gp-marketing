@@ -105,13 +105,19 @@ export async function diffAll(outDir) {
 		if (worstPanel) writeFileSync(diffPath, worstPanel.diffPng);
 
 		const active = st.status === 'active';
+		// The hero photo is guarded separately from the blurred layout score: a
+		// broken/missing headshot is a hard fail even if the layout otherwise matches
+		// (this is the exact regression the blurred body band could not see).
+		const avatar = cap.avatar ?? null;
+		const avatarOk = avatar ? avatar.ok !== false : true;
 		rows.push({
 			id: st.id,
 			label: st.label,
 			status: st.status,
 			overall,
 			overallAll,
-			pass: active ? overall <= TOLERANCE : null,
+			avatar,
+			pass: active ? overall <= TOLERANCE && avatarOk : null,
 			worstBand: worst ? { id: worst.id, score: worst.score, missing: worst.missing } : null,
 			bands: bandResults.map(b => ({
 				id: b.id,

@@ -146,5 +146,84 @@ pipeline.
 - **H reference** is a mislabeled clone of a Claimed-candidate frame; `pledge`
   stays `REPORT_ONLY_BANDS.H`. Re-export a real unclaimed-past frame to gate it.
 
+## RESOLVED — hero→content gap (the visible "huge whitespace")
+
+**Symptom.** A large empty cream area between the hero and the content well: the
+whole right-hand side was blank from the dark band down to the first content card.
+
+**Root cause — a structural mismatch, not a padding value.** The Figma frames use
+two *continuous, staggered* columns spanning hero + content: the portrait
+STRADDLES the dark band, so the right-hand content column starts 48px below the
+band (beside the photo) and the left sidebar starts 48px below the photo. Live
+instead stacked three self-contained sections — hero (sized by the 320px photo)
+→ a full-width "Took the GoodParty.org Pledge" band → content well (pt-80) —
+so the content began below *everything*:
+
+| boundary | design | live (before) |
+| --- | --- | --- |
+| band bottom → content column top | 48px | **314px** |
+| portrait bottom → sidebar top | 48px | **210px** |
+
+**Fix.**
+- `ProfileHero`: `md:overflow-visible md:z-10`, container `md:pb-0`, and the
+  portrait gets `md:-mb-[104px] lg:-mb-[120px]` so it stops contributing its full
+  height to the flow — the hero box ends at the band and the photo overflows past
+  it (z-10 keeps it above the next section's cream background).
+- The pledge pill moved from its own full-width band into the hero's tag row
+  (`pledged` prop) — same feature, zero vertical cost, and it no longer collides
+  with the straddling portrait. **Placement is a design deviation to review:** the
+  Figma hero shows only the persona tag there.
+- `ProfileContentBlock`: section padding to 48px (`0.6 x --container-padding`),
+  and the sidebar column clears the portrait with `md:mt-[104px] lg:mt-[120px]`
+  (MARGIN, not padding — padding would ride along inside the sticky box). Applied
+  to `sidebarStandalone` too, or a card-less profile would be overlapped.
+
+Verified by `harness/spacing-check.mjs`: both hero gaps are 48px design / 48px
+live, delta 0, on all 12 states.
+
+## RESOLVED — content→next-section gap (the "huge gap below the content")
+
+**Symptom.** A visible band of empty whitespace between the content well and the
+next full-width section (blue CTA / elections), on every state. The raster gate
+never caught it: it lives *inside* the `body` band (which is defined to end at
+the next section's top, see extract-figma-sections.mjs), and blur+downscale to
+320px mushes an 80px gap in a ~3600px band into ~nothing.
+
+**Diagnosis (spec-driven, not raster).** New tool `harness/spacing-check.mjs`
+reads the design's real content-well bottom from the get_metadata node tree (the
+number the band extractor discards) and the live perceived gap from the DOM:
+- design gap = next full-width section top − content **column** bottom = **48px**
+  (a clean 3rem token; confirmed on A/C/D/G/H/I/J/K/L — B/E/F under-report due to
+  an extra wrapper frame in those dumps, a parse quirk, not a design diff).
+- live gap was **80px** — the full `--container-padding` bottom padding on
+  `ProfileContentBlock`. The next section's own top padding is *inside* its
+  full-bleed color band, so the perceived white gap is content padding-bottom
+  alone.
+
+**Fix.** `ProfileContentBlock` base padding split: keep
+`pt-(--container-padding)` (hero→content rhythm unchanged) and set
+`pb-[calc(var(--container-padding)*0.6)]` → 48px at the 1440 desktop the design
+targets, degrading responsively. Post-fix spacing-check: live 48px == design
+48px (delta 0) on every cleanly-measured state.
+
+**Note on the raster gate (Goodhart) — read this before trusting the 3% number.**
+Neither spacing fix moves the raster score, because the gate cannot see spacing:
+
+| | before (final-honest) | after (herofix) |
+| --- | --- | --- |
+| gated range | 2.77% – 3.53% | 2.69% – 3.70% |
+| states over 3% | 9 of 12 | 10 of 12 |
+| worst bands | `cta 5.9%` / `body 3.5%` | `cta 5.9%` / `body 3.5%` (unchanged) |
+
+The deltas are +0.02…+0.18pp — noise. The binding bands are *blurred text /
+content-volume* differences (seeded copy vs Figma placeholder), which is why the
+worst-band values are byte-identical before and after. Two conclusions:
+1. The states were **already** over 3% before any of this work; the earlier
+   "all 12 green" claim did not hold at `final-honest`.
+2. A 266px layout hole moved this metric by ~0.1pp. The `body` band is *defined*
+   to span hero→content-bottom as one blurred unit, so a gap **inside** it is
+   structurally invisible. Use `spacing-check.mjs` for spacing; the raster gate is
+   only a coarse backstop for gross layout.
+
 <!-- Add rows as the loop uncovers genuine data gaps. Do NOT use this file to
      excuse real layout bugs — only true data/heatmap/chrome exceptions belong. -->

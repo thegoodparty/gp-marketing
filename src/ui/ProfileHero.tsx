@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { cn, tv } from './_lib/utils.ts';
 import { Container } from './Container.tsx';
+import { IconResolver } from './IconResolver.tsx';
 import { Text } from './Text.tsx';
 import { ResponsiveImage } from './ResponsiveImage.tsx';
 import type { SanityImage } from './types.ts';
@@ -10,7 +11,12 @@ import { Logo } from '~/sanity/utils/Logo.tsx';
 const styles = tv({
 	slots: {
 		// Cream is the page background the hero blends into below the short dark band.
-		base: 'relative overflow-hidden text-white',
+		// On desktop the portrait STRADDLES the band: it overflows the hero box so the
+		// following content well can start 48px below the band (as the Figma frames do)
+		// instead of below the full photo. overflow-visible lets it show; z-10 keeps it
+		// painted above the next section's cream background (later sibling in the DOM).
+		// Mobile keeps overflow-hidden — the band bleeds past the container there.
+		base: 'relative overflow-hidden text-white md:overflow-visible md:z-10',
 		// Extra bleed on mobile so the band reaches the viewport edges.
 		backgroundWrapper: 'absolute inset-0 max-md:-left-[var(--container-padding)] max-md:-right-[var(--container-padding)]',
 		// Short dark band. On mobile it covers the whole hero (h-full) so stacked
@@ -18,14 +24,23 @@ const styles = tv({
 		band: 'absolute inset-x-0 top-0 h-full md:h-[224px] lg:h-[240px]',
 		// Cream fill below the band on desktop (blends into the following section).
 		belowBand: 'absolute inset-x-0 bottom-0 top-[224px] lg:top-[240px] max-md:hidden bg-goodparty-cream',
-		container: 'relative z-10 flex flex-col items-start gap-6 pt-8 pb-10 md:flex-row md:items-start md:gap-12 lg:gap-16 md:pt-10 md:pb-12',
-		imageWrapper: 'relative z-20 flex-shrink-0',
+		container: 'relative z-10 flex flex-col items-start gap-6 pt-8 pb-10 md:flex-row md:items-start md:gap-12 lg:gap-16 md:pt-10 md:pb-0',
+		// The negative bottom margin is the portrait's OVERFLOW below the hero: it caps
+		// how much height the photo contributes to the flow (md 288-184=104, lg 320-200=120)
+		// so the hero box ends at the band, while the photo still renders past it. The
+		// sidebar column in ProfileContentBlock offsets by the same amount to clear it.
+		imageWrapper: 'relative z-20 flex-shrink-0 md:-mb-[104px] lg:-mb-[120px]',
 		// Circular portrait straddling the dark band and the cream content below.
 		image: 'relative rounded-full overflow-hidden w-40 h-40 md:w-72 md:h-72 lg:w-80 lg:h-80',
 		badge: 'absolute -bottom-4 left-1/2 -translate-x-1/2 z-30 drop-shadow-md',
 		content: 'flex flex-col gap-4 text-left z-10 md:pt-2',
 		tagRow: 'flex flex-wrap items-center gap-2',
 		tag: 'inline-flex w-fit items-center rounded-full px-3 py-1',
+		// Pledge pill sits in the SAME row as the persona tags so it costs no vertical
+		// height. It previously rendered as its own full-width band under the hero,
+		// which is dead space the design does not have (and it collided with the
+		// straddling portrait once the hero stopped reserving the photo's full height).
+		pledgeTag: 'inline-flex w-fit items-center gap-1.5 rounded-full bg-halo-green-100 px-3 py-1 text-midnight-900',
 		nameOffice: 'flex flex-col gap-2',
 		heading: '',
 		office: '',
@@ -65,6 +80,8 @@ export type ProfileHeroProps = {
 	profileImage?: SanityImage;
 	profileImageUrl?: string;
 	isEmpowered?: boolean;
+	/** Renders a "Took the GoodParty.org Pledge" pill alongside the persona tags. */
+	pledged?: boolean;
 	/** Persona tag pills rendered above the name (e.g. "Candidate", "Incumbent"). Renders nothing when empty. */
 	tags?: string[];
 	/**
@@ -77,7 +94,7 @@ export type ProfileHeroProps = {
 export function ProfileHero(props: ProfileHeroProps) {
 	const backgroundColor = props.backgroundColor ?? 'midnight';
 	const resolvedBackgroundColor = backgroundColor === 'white' ? 'cream' : backgroundColor;
-	const { base, backgroundWrapper, band, belowBand, container, imageWrapper, image, badge, content, tagRow, tag, nameOffice, heading, office, attribution, attributionIcon, attributionText, notEndorsed } = styles({ backgroundColor: resolvedBackgroundColor });
+	const { base, backgroundWrapper, band, belowBand, container, imageWrapper, image, badge, content, tagRow, tag, pledgeTag, nameOffice, heading, office, attribution, attributionIcon, attributionText, notEndorsed } = styles({ backgroundColor: resolvedBackgroundColor });
 
 	// `attribution` wins when provided; otherwise fall back to legacy `isEmpowered`.
 	const attributionMode = props.attribution ?? (props.isEmpowered ? 'empowered' : 'none');
@@ -123,13 +140,21 @@ export function ProfileHero(props: ProfileHeroProps) {
 						)}
 					</div>
 					<div className={content()}>
-						{tags.length > 0 && (
+						{(tags.length > 0 || props.pledged) && (
 							<div className={tagRow()}>
 								{tags.map((label) => (
 									<Text key={label} as="span" styleType="caption" className={tag()}>
 										{label}
 									</Text>
 								))}
+								{props.pledged && (
+									<span className={pledgeTag()}>
+										<IconResolver icon="badge-check" className="h-3.5 w-3.5" />
+										<Text as="span" styleType="caption">
+											Took the GoodParty.org Pledge
+										</Text>
+									</span>
+								)}
 							</div>
 						)}
 						<div className={nameOffice()}>

@@ -125,6 +125,20 @@ export type SectionOverrides = {
 	};
 	component_ctaBannerBlock?: {
 		hidden?: boolean;
+		/** Desktop content alignment. Person profiles center the CTA to match Figma. */
+		align?: 'start' | 'center' | 'end';
+		/** Overrides the Sanity-authored title (person profiles set it per state). */
+		title?: string;
+		/** Overrides the Sanity-authored body copy with plain text. */
+		copy?: string;
+		/** Overrides the CMS-authored button (person profiles supply "Learn more"). */
+		button?: import('~/ui/Inputs/Button').ComponentButtonProps;
+		/**
+		 * Full replacement node rendered in the CTA slot instead of the CMS banner.
+		 * Used by unclaimed person profiles to render the interactive claim CTA band
+		 * (heading + inline name/email form) in place of the "Join the movement" CTA.
+		 */
+		render?: import('react').ReactNode;
 	};
 	component_profileContentBlock?: {
 		profileData?: import('~/PageSections/ProfileContentBlockSection').ProfileData;
@@ -282,15 +296,24 @@ export function PageSections(props: Props) {
 								<ComparisonBlockSection {...section} />
 							</Boundary>
 						);
-					case 'component_ctaBannerBlock':
-						if (props.sectionOverrides?.component_ctaBannerBlock?.hidden) {
+					case 'component_ctaBannerBlock': {
+						const ctaOverride = props.sectionOverrides?.component_ctaBannerBlock;
+						if (ctaOverride?.hidden) {
 							return <Fragment key={section._key} />;
+						}
+						if (ctaOverride?.render) {
+							return (
+								<Boundary key={section._key} componentName='CTA Banner Block'>
+									{ctaOverride.render}
+								</Boundary>
+							);
 						}
 						return (
 							<Boundary key={section._key} componentName='CTA Banner Block'>
-								<CTABannerBlockSection {...section} tokens={props.tokens} />
+								<CTABannerBlockSection {...section} tokens={props.tokens} ctaOverride={ctaOverride} />
 							</Boundary>
 						);
+					}
 					case 'component_ctaBlock':
 						return (
 							<Boundary key={section._key} componentName='CTA Block'>

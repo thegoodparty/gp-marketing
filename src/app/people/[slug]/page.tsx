@@ -17,6 +17,7 @@ import {
 } from '~/components/people/personSectionOverrides';
 import { renderElectionTemplatePage } from '~/lib/renderElectionTemplatePage';
 import { getPersonBySlug } from '~/lib/electionsApi';
+import { getDevPersonProfileView, isDevPeopleFixturesEnabled } from '~/lib/devPeopleProfileFixtures';
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 
 export const revalidate = 3600;
@@ -34,6 +35,14 @@ function canonicalPath(view: PersonProfileView): string {
 }
 
 async function resolveView(slug: string): Promise<PersonProfileView | null> {
+	// Dev-only Figma-parity aid: when PEOPLE_DEV_FIXTURES=true, serve the enriched
+	// (mock-volume) harness fixtures through the real render pipeline. No-op in
+	// prod (flag unset → reads the live election-api/gp-api data below).
+	if (isDevPeopleFixturesEnabled()) {
+		const devView = getDevPersonProfileView(slug);
+		if (devView) return devView;
+	}
+
 	// Legacy /people/<name>-<full-uuid> URLs (an earlier scheme) still resolve by
 	// their trailing full personId; the canonical redirect below sends them to the
 	// current /people/<base>-<id8>.

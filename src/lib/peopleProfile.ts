@@ -201,6 +201,8 @@ export interface PersonProfileView {
 	breadcrumb: ProfileBreadcrumb[];
 	electionsIndex: ElectionsIndex | null;
 	voterDensity: VoterDensity | null;
+	/** Office mailing address lines for the sidebar "Office Mailing Address" row. */
+	officeAddress: string[] | null;
 	updatedAt: string;
 }
 
@@ -349,7 +351,7 @@ function buildLinks(
 
 	if (website) links.push({ kind: 'website', label: 'Website', icon: 'globe', href: website });
 	if (governmentWebsite)
-		links.push({ kind: 'government', label: 'Official Site', icon: 'globe', href: governmentWebsite });
+		links.push({ kind: 'government', label: 'Official Site', icon: 'landmark', href: governmentWebsite });
 	if (email) links.push({ kind: 'email', label: 'Email', icon: 'mail', href: `mailto:${email}` });
 	if (phone) links.push({ kind: 'phone', label: 'Phone', icon: 'phone', href: `tel:${phone}` });
 	if (instagram) links.push({ kind: 'instagram', label: 'Instagram', icon: 'instagram', href: instagram });
@@ -572,6 +574,8 @@ export interface ComposeExtras {
 	breadcrumb?: ProfileBreadcrumb[];
 	electionsIndex?: ElectionsIndex | null;
 	voterDensity?: VoterDensity | null;
+	/** Office mailing address lines (sidebar). Absent in prod until data exists. */
+	officeAddress?: string[] | null;
 	/** Authoritative state resolved by the loader (office → person → candidacy). */
 	stateCode?: string | null;
 }
@@ -697,6 +701,7 @@ export function composeView(
 		],
 		electionsIndex: extras.electionsIndex ?? null,
 		voterDensity: extras.voterDensity ?? null,
+		officeAddress: removed ? null : (extras.officeAddress ?? null),
 		updatedAt: overlay?.updatedAt ?? new Date(0).toISOString(),
 	};
 }

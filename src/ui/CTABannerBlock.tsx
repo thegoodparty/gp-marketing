@@ -59,20 +59,29 @@ export type CTABannerBlockProps = {
 	copy?: ReactNode;
 	title?: string;
 	className?: string;
+	/** Content alignment on desktop. Defaults to 'end' (right); 'center' matches the person-profile CTA. */
+	align?: 'start' | 'center' | 'end';
 };
 
 export function CTABannerBlock(props: CTABannerBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
 	const color = props.color ?? 'red';
+	const align = props.align ?? 'end';
 	const { base, card } = styles({ backgroundColor, color });
 	const resolvedStyle = resolveInverseButtonStyleType(props.button?.buttonProps?.styleType ?? 'primary', backgroundColor, color);
+	const isCentered = align === 'center';
 
 	return (
 		<article className={cn(base(), props.className)} data-component='CTABannerBlock'>
 			<Container size='xl'>
 				<div className='group relative'>
-					<div className='relative p-6 z-2 flex flex-col gap-6 md:p-12 md:items-end'>
-						<div className='flex flex-col gap-3 w-full md:gap-4'>
+					<div
+						className={cn(
+							'relative p-6 z-2 flex flex-col gap-6 md:p-12',
+							isCentered ? 'md:items-center md:text-center' : 'md:items-end',
+						)}
+					>
+						<div className={cn('flex flex-col gap-3 w-full md:gap-4', isCentered && 'md:mx-auto md:max-w-2xl md:items-center')}>
 							{props.title && (
 								<Text as='h2' styleType='heading-lg'>
 									{props.title}

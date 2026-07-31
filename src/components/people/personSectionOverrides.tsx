@@ -16,6 +16,7 @@ import { ButtonLink } from '~/ui/Inputs/Button';
 import { CandidatesCard } from '~/ui/CandidatesCard';
 import { VoterDensityMapCard } from './VoterDensityMapCard';
 import { ClaimProfileModal } from './ClaimProfileModal';
+import { PersonClaimCTABand } from './PersonClaimCTABand';
 
 // Below this rendered-voter coverage the density surface is too partial to be
 // trustworthy, so the map is hidden. Coverage may be null when upstream has no
@@ -354,21 +355,64 @@ function buildCivicCards(view: PersonProfileView): ProfileContentCardProps[] {
 	return cards;
 }
 
-function buildSidebar(view: PersonProfileView): ElectionsSidebarProps | undefined {
-	const links = view.links.map(link => ({ label: link.label, icon: link.icon, href: link.href }));
-	const location = [view.districtLabel, view.stateLabel].filter(Boolean).join(', ');
-	const aboutOffice = [view.officeName, location].filter(Boolean).join(' · ') || undefined;
+/** Contact links that render as icon-only buttons in the Figma "Contact" row. */
+const SIDEBAR_ICON_KINDS = new Set(['website', 'government', 'instagram', 'tiktok', 'facebook', 'twitter', 'linkedin']);
 
-	if (links.length === 0 && !aboutOffice && !view.party) {
+/** Strips mailto:/tel: so the "Office Contact" link shows a human-readable value. */
+function contactLinkLabel(href: string): string {
+	return href.replace(/^mailto:/, '').replace(/^tel:/, '');
+}
+
+/**
+ * Builds the Figma person-profile sidebar: a single card of divider-separated
+ * rows — Election Date / Current Term, Political Affiliation, a Contact icon
+ * row, and (only for someone currently in office) Office Contact + Office
+ * Mailing Address. See the A/J Figma frames.
+ */
+function buildSidebar(view: PersonProfileView): ElectionsSidebarProps | undefined {
+	const inOffice = view.currentOffice?.isCurrent === true;
+	const running = view.persona === 'candidate' || view.persona === 'both';
+
+	// Leading rows: "Election Date" for anyone running now (or a past holder's last
+	// race), plus "Current Term" for anyone currently in office. Persona "both"
+	// shows both rows, matching the Figma frame.
+	const topInfos: { icon: string; label: string; value: string }[] = [];
+	if (view.electionDate && (running || view.persona === 'past')) {
+		topInfos.push({ icon: 'calendar', label: 'Election Date', value: formatElectionDateFromApi(view.electionDate) });
+	}
+	if (inOffice && view.termLabel) {
+		topInfos.push({ icon: 'calendar', label: 'Current Term', value: view.termLabel });
+	}
+
+	const contactIcons = view.links
+		.filter(l => SIDEBAR_ICON_KINDS.has(l.kind))
+		.map(l => ({ icon: l.icon, href: l.href, label: l.label }));
+
+	// Office contact/address only appear for someone currently in office (Figma
+	// shows them on officeholder frames, not candidate/past ones).
+	const officeContacts = inOffice
+		? view.links
+				.filter(l => l.kind === 'email' || l.kind === 'phone')
+				.map(l => ({ icon: l.icon, href: l.href, label: contactLinkLabel(l.href) }))
+		: [];
+	const officeAddress = inOffice ? (view.officeAddress ?? []) : [];
+
+	if (
+		topInfos.length === 0 &&
+		!view.party &&
+		contactIcons.length === 0 &&
+		officeContacts.length === 0 &&
+		officeAddress.length === 0
+	) {
 		return undefined;
 	}
 
-	// Term length / next election now render in the "About [position]" content
-	// card (Figma), so the sidebar carries only contact links, office, and party.
 	return {
-		links: links.length > 0 ? links : undefined,
-		aboutOffice,
-		party: view.party ?? undefined,
+		topInfos: topInfos.length > 0 ? topInfos : undefined,
+		politicalAffiliation: view.party ?? undefined,
+		contactIcons: contactIcons.length > 0 ? contactIcons : undefined,
+		officeContacts: officeContacts.length > 0 ? officeContacts : undefined,
+		officeAddress: officeAddress.length > 0 ? officeAddress : undefined,
 	};
 }
 
@@ -414,17 +458,38 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	// all show it once claimed). Unclaimed empowered pages lead with the claim
 	// prompt instead, so it stays hidden there.
 	const showPledge = view.claimed;
-	// The generic sign-up CTA banner is the claimed-state bottom CTA ("Join the
-	// movement"). Unclaimed empowered pages get the person-facing claim card
-	// instead (below); major-party (I/J) and removed (K/L) get neither.
-	const showCTA = view.claimed;
+
+	// The person-profile CTA band sits below the content well (Figma order):
+	//  - claimed (A/B/C/G)   → generic centered "Join the movement" sign-up CTA
+	//  - unclaimed empowered (D/E/F/H) → full-width interactive claim CTA band
+	//    ("Are you …? Complete your profile now." + inline name/email form)
+	//  - major-party (I/J) + removed (K/L) → no CTA band
+	const ctaOverride: SectionOverrides['component_ctaBannerBlock'] = view.claimed
+		? {
+				align: 'center',
+				title: 'Join the movement to build a better democracy.',
+				copy: 'GoodParty.org is on a mission to make people matter more than money in our democracy. Learn how you can become part of the movement for change.',
+				button: { buttonType: 'signup', label: 'Learn more', buttonProps: { styleType: 'secondary', styleSize: 'md' } },
+			}
+		: showClaim
+			? {
+					render: (
+						<PersonClaimCTABand
+							personId={view.personId}
+							displayName={view.displayName}
+							isRunning={view.persona === 'candidate' || view.persona === 'both'}
+						/>
+					),
+				}
+			: { hidden: true };
 
 	// The Figma content well is one column of cards. For unclaimed empowered
-	// pages a light-blue claim prompt bookends the column: a voter-facing "hear
-	// from …" card up top and a person-facing "Are you …?" card at the bottom.
-	// Between them: authored cards (empowerment-gated) then the civics-spine
-	// cards (Recent Experience → Other candidates → Nearby officials → About
-	// position → District map) that render on every state.
+	// pages a voter-facing "hear from …" claim card leads the column; the
+	// person-facing "Are you …?" prompt is NOT in-column — it renders as the
+	// full-width claim CTA band below the well (see `ctaOverride`). Between the
+	// voter card and the civics cards: authored cards (empowerment-gated) then
+	// the civics-spine cards (Recent Experience → Other candidates → Nearby
+	// officials → About position → District map) that render on every state.
 	const claimCard = (variant: 'voter-card' | 'owner-card'): ProfileContentCardProps => ({
 		raw: true,
 		content: (
@@ -448,7 +513,6 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 		...(showClaim ? [claimCard('voter-card')] : []),
 		...authoredCards,
 		...buildCivicCards(view),
-		...(showClaim ? [claimCard('owner-card')] : []),
 	];
 	const sidebar = buildSidebar(view);
 
@@ -492,7 +556,7 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 					}
 				: undefined,
 		},
-		component_ctaBannerBlock: { hidden: !showCTA },
+		component_ctaBannerBlock: ctaOverride,
 	};
 }
 

@@ -3,6 +3,7 @@ import { isButtonType, transformButton } from '~/lib/buttonTransformer';
 import type { TokenMap } from '~/lib/resolveTokens';
 import { resolveSectionText } from '~/lib/resolveSectionText';
 import { ClaimProfileBlock } from '~/ui/ClaimProfileBlock';
+import { ClaimProfileModal } from '~/components/people/ClaimProfileModal';
 import { stegaClean } from 'next-sanity';
 
 type Props = Extract<Sections, { _type: 'component_claimProfileBlock' }> & {
@@ -17,9 +18,7 @@ export function resolveExampleCardPartyAffiliation(
 	return override ?? exampleCard?.field_partyAffiliation ?? '';
 }
 
-export function resolveClaimProfileBlockBackgroundColor(
-	bgValue: ReturnType<typeof stegaClean<string | undefined>>,
-): 'cream' | 'midnight' {
+export function resolveClaimProfileBlockBackgroundColor(bgValue: ReturnType<typeof stegaClean<string | undefined>>): 'cream' | 'midnight' {
 	if (bgValue === 'midnight' || bgValue === 'MidnightDark') {
 		return 'midnight';
 	}
@@ -42,19 +41,28 @@ export function ClaimProfileBlockSection({ claimProfileOverride, tokens, ...sect
 	const bgValue = stegaClean(section.claimProfileBlockDesignSettings?.field_blockColorCreamMidnight);
 	const backgroundColor = resolveClaimProfileBlockBackgroundColor(bgValue);
 
+	// Person profiles: render the interactive claim/notify modal so the "notify"
+	// form posts the real personId to the claim-request endpoint. Falls through
+	// to the static CMS banner for regular marketing pages.
+	if (claimProfileOverride?.interactive && claimProfileOverride.personId) {
+		return (
+			<section data-section='Claim Profile Block'>
+				<ClaimProfileModal
+					personId={claimProfileOverride.personId}
+					displayName={claimProfileOverride.displayName ?? 'this candidate'}
+					persona={claimProfileOverride.persona ?? 'candidate'}
+				/>
+			</section>
+		);
+	}
+
 	const ctaButton = section.ctaAction;
-	const claimButton =
-		ctaButton && isButtonType(ctaButton)
-			? transformButton(ctaButton)
-			: undefined;
+	const claimButton = ctaButton && isButtonType(ctaButton) ? transformButton(ctaButton) : undefined;
 	const exampleCard = section.claimProfileBlockContent?.exampleCard;
 	const { headline, body } = resolveClaimProfileBlockText(section.claimProfileBlockContent, tokens);
 
 	return (
-		<section
-			id={stegaClean(section.componentSettings?.field_anchorId)}
-			data-section='Claim Profile Block'
-		>
+		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Claim Profile Block'>
 			<ClaimProfileBlock
 				layout={claimProfileOverride?.layout ?? 'card'}
 				backgroundColor={backgroundColor}
@@ -72,14 +80,8 @@ export function ClaimProfileBlockSection({ claimProfileOverride, tokens, ...sect
 					claimProfileOverride?.layout === 'banner'
 						? undefined
 						: {
-								name:
-									claimProfileOverride?.candidateName ??
-									exampleCard?.field_name ??
-									'Firstname Lastname',
-								partyAffiliation: resolveExampleCardPartyAffiliation(
-									claimProfileOverride?.partyAffiliation,
-									exampleCard,
-								),
+								name: claimProfileOverride?.candidateName ?? exampleCard?.field_name ?? 'Firstname Lastname',
+								partyAffiliation: resolveExampleCardPartyAffiliation(claimProfileOverride?.partyAffiliation, exampleCard),
 								href: '#',
 								isGoodPartyCandidate: exampleCard?.field_showBadge ?? true,
 							}

@@ -4,7 +4,12 @@
  */
 import { PROFILE_PAGE_SECTIONS } from '~/app/candidate/[...slug]/profilePageSections';
 import { CAROUSEL_QUOTE_COLLECTION_ID, CAROUSEL_HEADER, STEPPER_HEADER } from '~/constants/electionsStaticSections';
-import { POSITION_PAGE_CTA_BANNER, POSITION_PAGE_CTA_BLOCK, POSITION_PAGE_FAQ, POSITION_PAGE_TWO_UP_CARD } from '~/constants/positionPageStaticSections';
+import {
+	POSITION_PAGE_CTA_BANNER,
+	POSITION_PAGE_CTA_BLOCK,
+	POSITION_PAGE_FAQ,
+	POSITION_PAGE_TWO_UP_CARD,
+} from '~/constants/positionPageStaticSections';
 
 const contactInternalLink = {
 	_type: 'field_internalLink' as const,
@@ -15,9 +20,17 @@ import { CANDIDATES_PAGE_CTA_BANNER, CANDIDATES_PAGE_CTA_IMAGE } from '~/constan
 
 export const tmplCandidateProfileSections = PROFILE_PAGE_SECTIONS;
 
-const profileStepperSection = tmplCandidateProfileSections.find(
-	section => section._type === 'component_stepperBlock',
-);
+// Person profiles (/people/<slug>) render a profile-flavored layout: hero +
+// claim block + content (bio/why/issues + sidebar + district map) + the two
+// interlink candidate lists + pledge + state elections index + sign-up CTA.
+// Editors clone this into per-state Custom Templates (see field_profileState) to
+// tune copy / sections for individual Figma states A–L. Defined in
+// personProfileSections so the code default and this seed stay in lockstep.
+import { PERSON_PROFILE_SECTIONS as tmplPersonProfileSections } from '~/components/people/personProfileSections';
+import { PROFILE_STATES } from '~/sanity/schema/fields/field_profileState';
+export { tmplPersonProfileSections };
+
+const profileStepperSection = tmplCandidateProfileSections.find(section => section._type === 'component_stepperBlock');
 
 export const tmplElectionsPositionSections = [
 	{
@@ -523,6 +536,13 @@ export const globalElectionTemplateSeedDocuments = [
 		pageSections: { list_pageSections: tmplCandidateProfileSections },
 	},
 	{
+		_id: 'globalTemplate_personProfile',
+		_type: 'goodpartyOrg_globalTemplate',
+		field_title: 'Person Profile',
+		field_electionTemplateType: 'personProfile',
+		pageSections: { list_pageSections: tmplPersonProfileSections },
+	},
+	{
 		_id: 'globalTemplate_position',
 		_type: 'goodpartyOrg_globalTemplate',
 		field_title: 'Position Page',
@@ -571,6 +591,59 @@ export const globalElectionTemplateSeedDocuments = [
 		pageSections: { list_pageSections: tmplElectionsDistrictIndexSections },
 	},
 ] as const;
+
+/**
+ * Disabled per-state (A–L) starter Custom Templates for /people profiles.
+ *
+ * Seeded so the marketing team has a ready-made section skeleton to clone and
+ * tweak per Figma state instead of authoring from a blank slate. Each doc is
+ * DISABLED and points at a placeholder person target, so it can never match a
+ * live page — `scoreCustomTemplate` skips any doc with `field_enabled === false`
+ * (and the placeholder slug matches no real person). Editor workflow: duplicate
+ * the state you want, set `field_electionTargetSlug` to the real person slug,
+ * flip `field_enabled` on, then edit sections.
+ */
+/**
+ * "How to use" copy stored on each scaffold. Seeded explicitly because the
+ * schema `initialValue` only fills in the Studio UI on manual creation, not on
+ * API writes — so without this the read-only field would render empty on the
+ * seeded docs. Lists the placeholder tokens a person-profile template supports.
+ */
+const PERSON_PROFILE_SCAFFOLD_INSTRUCTIONS = `Per-state starter template for /people profile pages.
+
+This is a DISABLED scaffold. To use it:
+1. Duplicate this document (or edit it in place).
+2. Under "Targets", set a person target — the /people/<slug> of the profile this should apply to.
+3. Turn "Enabled" on.
+4. Edit the sections below. Leave "Person Profile State" pinned to keep it scoped to this Figma state (A–L).
+
+Matching: an enabled custom template wins over the global "Person Profile" template when its target matches the page, and (if a state is pinned) the page is in that state. Lower "Priority" number wins ties.
+
+Supported placeholder tokens: [person name], [office], [office name], [location], [State], [County], [City], [District], [County or City]`;
+
+export const personProfileStateCustomTemplateSeeds = PROFILE_STATES.map(state => ({
+	_id: `customTemplate_personProfile_state_${state.value}`,
+	_type: 'goodpartyOrg_customTemplate',
+	field_title: `Person Profile · ${state.title} · scaffold`,
+	field_electionTemplateType: 'personProfile',
+	field_profileState: state.value,
+	field_enabled: false,
+	field_priority: 100,
+	field_instructions: PERSON_PROFILE_SCAFFOLD_INSTRUCTIONS,
+	ref_sourceGlobalTemplate: {
+		_type: 'reference',
+		_ref: 'globalTemplate_personProfile',
+	},
+	list_targets: [
+		{
+			_type: 'electionTemplateTarget',
+			_key: `scaffold-${state.value}`,
+			field_electionTargetType: 'person',
+			field_electionTargetSlug: 'example-person-replace-me',
+		},
+	],
+	pageSections: { list_pageSections: tmplPersonProfileSections },
+}));
 
 /** @deprecated Legacy tmpl_* singleton IDs */
 export const electionsTemplateSeedDocuments = [

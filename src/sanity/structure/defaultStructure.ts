@@ -80,6 +80,7 @@ export function defaultStructure(S: StructureBuilder) {
                   globalTemplateItem('globalTemplate_position', 'Position'),
                   globalTemplateItem('globalTemplate_positionCandidates', 'Position Candidates'),
                   globalTemplateItem('globalTemplate_candidateProfile', 'Candidate Profile'),
+                  globalTemplateItem('globalTemplate_personProfile', 'Person Profile'),
                 ],
               }),
               S.divider(),

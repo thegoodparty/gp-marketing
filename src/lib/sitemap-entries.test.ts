@@ -3,12 +3,73 @@ import {
 	buildCountyLookups,
 	buildRaceEntries,
 	buildRaceRouteParams,
+	chunkArray,
+	getSitemapIds,
 	normalizeName,
+	peopleShardForSlug,
+	PEOPLE_SITEMAP_BAND_START,
+	PEOPLE_SITEMAP_SHARDS,
 	stripCountySuffix,
+	US_STATE_CODES,
 	type CountyPlace,
 	type CityPlace,
 	type RaceEntry,
 } from './sitemap-entries';
+
+describe('people sitemap shards', () => {
+	test('maps slugs to a–z shards by first character', () => {
+		expect(peopleShardForSlug('jane-doe')).toBe('j');
+		expect(peopleShardForSlug('Abe-Lincoln')).toBe('a');
+	});
+
+	test('non-letter leading characters fall into the "other" shard', () => {
+		expect(peopleShardForSlug('123-numeric')).toBe('other');
+		expect(peopleShardForSlug('-leading-hyphen')).toBe('other');
+		expect(peopleShardForSlug('')).toBe('other');
+	});
+
+	test('there are 27 shards (a–z + other) starting after the candidate band', () => {
+		expect(PEOPLE_SITEMAP_SHARDS).toHaveLength(27);
+		expect(PEOPLE_SITEMAP_SHARDS[26]).toBe('other');
+		expect(PEOPLE_SITEMAP_BAND_START).toBe(1 + 2 * US_STATE_CODES.length);
+	});
+
+	test('getSitemapIds includes main + 2 state bands + the people band, contiguously', () => {
+		const ids = getSitemapIds().map((i) => i.id);
+		const expectedLength = 1 + 2 * US_STATE_CODES.length + PEOPLE_SITEMAP_SHARDS.length;
+		expect(ids).toHaveLength(expectedLength);
+		// The set is a contiguous 0..last with no gaps or dupes (ids are emitted
+		// interleaved by band, so compare the sorted set).
+		expect([...ids].sort((a, b) => a - b)).toEqual([...Array(expectedLength).keys()]);
+	});
+});
+
+describe('chunkArray', () => {
+	test('returns a single chunk when input is smaller than the size', () => {
+		expect(chunkArray([1, 2, 3], 500)).toEqual([[1, 2, 3]]);
+	});
+
+	test('returns an empty array for empty input', () => {
+		expect(chunkArray([], 500)).toEqual([]);
+	});
+
+	test('splits into batches of at most `size` (people sitemap 500-id cap)', () => {
+		const ids = Array.from({ length: 1201 }, (_, i) => i);
+		const batches = chunkArray(ids, 500);
+		expect(batches.map((b) => b.length)).toEqual([500, 500, 201]);
+		// No id is dropped and order is preserved.
+		expect(batches.flat()).toEqual(ids);
+	});
+
+	test('handles an exact multiple of the size', () => {
+		const ids = Array.from({ length: 1000 }, (_, i) => i);
+		expect(chunkArray(ids, 500).map((b) => b.length)).toEqual([500, 500]);
+	});
+
+	test('throws when size is not positive', () => {
+		expect(() => chunkArray([1], 0)).toThrow();
+	});
+});
 
 describe('normalizeName', () => {
 	test('lowercases and strips whitespace', () => {

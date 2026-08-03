@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, type PropsWithChildren } from 'react';
 import type { GoodpartyOrg_homeQueryResult } from 'sanity.types';
 import { BannerBlockSection } from '~/PageSections/BannerBlockSection';
 import { BlogBlockSection } from '~/PageSections/BlogBlockSection';
@@ -8,6 +8,7 @@ import { CalculatorTextBlockSection } from '~/PageSections/CalculatorTextBlockSe
 import { CandidatesBlockSection } from '~/PageSections/CandidatesBlockSection';
 import { CarouselBlockSection } from '~/PageSections/CarouselBlockSection';
 import { ClaimProfileBlockSection } from '~/PageSections/ClaimProfileBlockSection';
+import { VoterDensityBlockSection } from '~/PageSections/VoterDensityBlockSection';
 import { ComparisonBlockSection } from '~/PageSections/ComparisonBlockSection';
 import { CTABannerBlockSection } from '~/PageSections/CTABannerBlockSection';
 import { ClickToCallBlockSection } from '~/PageSections/ClickToCallBlockSection';
@@ -55,6 +56,16 @@ export type SectionOverrides = {
 	component_candidatesBlock?: {
 		candidates?: import('~/ui/CandidatesBlock').CandidateCard[];
 		header?: { title?: string; copy?: string };
+		/**
+		 * Per-section-`_key` overrides. A page may render the same candidatesBlock
+		 * type more than once (e.g. person profiles show "Other candidates" and
+		 * "Nearby officials"); this lets each instance receive its own data. Falls
+		 * back to the type-level `candidates`/`header` when a `_key` isn't listed.
+		 */
+		byKey?: Record<
+			string,
+			{ candidates?: import('~/ui/CandidatesBlock').CandidateCard[]; header?: { title?: string; copy?: string }; hidden?: boolean }
+		>;
 	};
 	component_electionsIndexBlock?: {
 		elections?: import('~/ui/ElectionsIndexBlock').ElectionItem[];
@@ -98,10 +109,64 @@ export type SectionOverrides = {
 		office: string;
 		profileImageUrl?: string;
 		isEmpowered?: boolean;
+		/** Person profiles: renders a "Took the GoodParty.org Pledge" badge under the hero. */
+		pledged?: boolean;
+		/** Persona tag pills shown above the name (e.g. "Candidate", "Incumbent"). */
+		tags?: string[];
+		/**
+		 * Attribution line under the office. `empowered` → "Empowered by GoodParty.org"
+		 * (logo + text); `notEndorsed` → grey "Not Endorsed by GoodParty.org"; `none` →
+		 * nothing. When omitted, falls back to `isEmpowered`.
+		 */
+		attribution?: 'empowered' | 'notEndorsed' | 'none';
+	};
+	component_goodPartyOrgPledge?: {
+		hidden?: boolean;
+	};
+	component_ctaBannerBlock?: {
+		hidden?: boolean;
+		/** Desktop content alignment. Person profiles center the CTA to match Figma. */
+		align?: 'start' | 'center' | 'end';
+		/** Overrides the Sanity-authored title (person profiles set it per state). */
+		title?: string;
+		/** Overrides the Sanity-authored body copy with plain text. */
+		copy?: string;
+		/** Overrides the CMS-authored button (person profiles supply "Learn more"). */
+		button?: import('~/ui/Inputs/Button').ComponentButtonProps;
+		/** Render the button's styleType as-is (skip the card-color inverse mapping). */
+		preserveButtonStyle?: boolean;
+		/**
+		 * Full replacement node rendered in the CTA slot instead of the CMS banner.
+		 * Used by unclaimed person profiles to render the interactive claim CTA band
+		 * (heading + inline name/email form) in place of the "Join the movement" CTA.
+		 */
+		render?: import('react').ReactNode;
 	};
 	component_profileContentBlock?: {
 		profileData?: import('~/PageSections/ProfileContentBlockSection').ProfileData;
 		officeData?: import('~/PageSections/ProfileContentBlockSection').OfficeData;
+		/**
+		 * Prebuilt content cards / sidebar for callers whose content is richer than
+		 * the plain-string `profileData` (e.g. person profiles render numbered
+		 * issues with status tags, accomplishments, and recent experience). When
+		 * provided these win over `profileData`/`officeData`.
+		 */
+		contentCards?: import('~/ui/ProfileContentCard').ProfileContentCardProps[];
+		sidebar?: import('~/ui/ElectionsSidebar').ElectionsSidebarProps;
+		/**
+		 * @deprecated The district voter-density map is now its own
+		 * `component_voterDensityBlock` section; person profiles no longer inject it
+		 * here. Retained for any non-person caller still rendering it inline.
+		 */
+		districtMap?: import('react').ReactNode;
+		/** When true the section renders nothing (used to gate empty/removed states). */
+		hidden?: boolean;
+	};
+	component_voterDensityBlock?: {
+		/** Prebuilt district voter-density map node (coverage/k-anon gating already applied). */
+		map?: import('react').ReactNode;
+		/** When true the section renders nothing. */
+		hidden?: boolean;
 	};
 	component_breadcrumbBlock?: {
 		breadcrumbs: import('~/ui/BreadcrumbBlock').BreadcrumbItem[];
@@ -111,6 +176,13 @@ export type SectionOverrides = {
 		candidateName?: string;
 		partyAffiliation?: string;
 		layout?: 'card' | 'banner';
+		// When set, render the interactive claim/notify modal (which posts the
+		// personId to the claim-request endpoint → ProfileClaimRequest) instead of
+		// the static CMS banner. Populated for unclaimed person profiles.
+		interactive?: boolean;
+		personId?: string;
+		displayName?: string;
+		persona?: 'candidate' | 'officeholder' | 'both' | 'past';
 	};
 };
 
@@ -120,12 +192,26 @@ type Props = {
 	tokens?: TokenMap;
 	pageSlug?: string;
 	faqSlugMap?: ReadonlyMap<string, string>;
+	/**
+	 * The default `ComponentErrorBoundary` is an async server component (it awaits
+	 * `draftMode()`), so it can't render in client-only contexts like Storybook.
+	 * Set this in direct/preview renders (e.g. the PersonProfile component) to swap
+	 * in a synchronous passthrough. Server pages leave it off for real boundaries.
+	 */
+	disableErrorBoundary?: boolean;
 };
+
+/** Sync no-op boundary for client/preview render contexts (see `disableErrorBoundary`). */
+function PassthroughBoundary({ children }: PropsWithChildren & { componentName?: string }) {
+	return <>{children}</>;
+}
 
 export function PageSections(props: Props) {
 	if (!props.pageSections) {
 		return null;
 	}
+
+	const Boundary = props.disableErrorBoundary ? PassthroughBoundary : ComponentErrorBoundary;
 
 	return (
 		<>
@@ -133,114 +219,130 @@ export function PageSections(props: Props) {
 				switch (section._type) {
 					case 'component_bannerBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Banner Block'>
+							<Boundary key={section._key} componentName='Banner Block'>
 								<BannerBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_breadcrumbBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Breadcrumb Block'>
-								<BreadcrumbBlockSection
-									{...section}
-									breadcrumbOverride={props.sectionOverrides?.component_breadcrumbBlock}
-								/>
-							</ComponentErrorBoundary>
+							<Boundary key={section._key} componentName='Breadcrumb Block'>
+								<BreadcrumbBlockSection {...section} breadcrumbOverride={props.sectionOverrides?.component_breadcrumbBlock} />
+							</Boundary>
 						);
 					case 'component_blogBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Blog Block'>
+							<Boundary key={section._key} componentName='Blog Block'>
 								<BlogBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_blogTopicTagsBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Blog Topic Tags Block'>
+							<Boundary key={section._key} componentName='Blog Topic Tags Block'>
 								<BlogTopicTagsBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
-					case 'component_candidatesBlock':
+					case 'component_candidatesBlock': {
+						const cbOverride = props.sectionOverrides?.component_candidatesBlock;
+						const cbPerKey = section._key ? cbOverride?.byKey?.[section._key] : undefined;
+						if (cbPerKey?.hidden) {
+							return <Fragment key={section._key} />;
+						}
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Candidates Block'>
+							<Boundary key={section._key} componentName='Candidates Block'>
 								<CandidatesBlockSection
 									{...section}
 									tokens={props.tokens}
-									candidatesOverride={props.sectionOverrides?.component_candidatesBlock?.candidates}
-									headerOverride={props.sectionOverrides?.component_candidatesBlock?.header}
+									candidatesOverride={cbPerKey?.candidates ?? cbOverride?.candidates}
+									headerOverride={cbPerKey?.header ?? cbOverride?.header}
 								/>
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
+					}
 					case 'component_calculatorTextBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Calculator Text Block'>
+							<Boundary key={section._key} componentName='Calculator Text Block'>
 								<CalculatorTextBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_carouselBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Carousel Block'>
+							<Boundary key={section._key} componentName='Carousel Block'>
 								<CarouselBlockSection {...section} tokens={props.tokens} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_claimProfileBlock':
 						if (props.sectionOverrides?.component_claimProfileBlock?.claimed) {
 							return <Fragment key={section._key} />;
 						}
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Claim Profile Block'>
+							<Boundary key={section._key} componentName='Claim Profile Block'>
 								<ClaimProfileBlockSection
 									{...section}
 									tokens={props.tokens}
 									claimProfileOverride={props.sectionOverrides?.component_claimProfileBlock}
 								/>
-							</ComponentErrorBoundary>
+							</Boundary>
+						);
+					case 'component_voterDensityBlock':
+						if (props.sectionOverrides?.component_voterDensityBlock?.hidden) {
+							return <Fragment key={section._key} />;
+						}
+						return (
+							<Boundary key={section._key} componentName='Voter Density Map Block'>
+								<VoterDensityBlockSection {...section} voterDensityOverride={props.sectionOverrides?.component_voterDensityBlock} />
+							</Boundary>
 						);
 					case 'component_comparisonBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Comparison Block'>
+							<Boundary key={section._key} componentName='Comparison Block'>
 								<ComparisonBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
-					case 'component_ctaBannerBlock':
+					case 'component_ctaBannerBlock': {
+						const ctaOverride = props.sectionOverrides?.component_ctaBannerBlock;
+						if (ctaOverride?.hidden) {
+							return <Fragment key={section._key} />;
+						}
+						if (ctaOverride?.render) {
+							return (
+								<Boundary key={section._key} componentName='CTA Banner Block'>
+									{ctaOverride.render}
+								</Boundary>
+							);
+						}
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='CTA Banner Block'>
-								<CTABannerBlockSection {...section} tokens={props.tokens} />
-							</ComponentErrorBoundary>
+							<Boundary key={section._key} componentName='CTA Banner Block'>
+								<CTABannerBlockSection {...section} tokens={props.tokens} ctaOverride={ctaOverride} />
+							</Boundary>
 						);
+					}
 					case 'component_ctaBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='CTA Block'>
-								<CTABlockSection
-									{...section}
-									tokens={props.tokens}
-									ctaOverride={props.sectionOverrides?.component_ctaBlock}
-								/>
-							</ComponentErrorBoundary>
+							<Boundary key={section._key} componentName='CTA Block'>
+								<CTABlockSection {...section} tokens={props.tokens} ctaOverride={props.sectionOverrides?.component_ctaBlock} />
+							</Boundary>
 						);
 					case 'component_clickToCallBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Click to Call Block'>
+							<Boundary key={section._key} componentName='Click to Call Block'>
 								<ClickToCallBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_ctaCardsBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='CTA Cards Block'>
+							<Boundary key={section._key} componentName='CTA Cards Block'>
 								<CTACardsBlockSection {...section} tokens={props.tokens} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_ctaImageBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='CTA Image Block'>
-								<CTAImageBlockSection
-									{...section}
-									tokens={props.tokens}
-									ctaOverride={props.sectionOverrides?.component_ctaImageBlock}
-								/>
-							</ComponentErrorBoundary>
+							<Boundary key={section._key} componentName='CTA Image Block'>
+								<CTAImageBlockSection {...section} tokens={props.tokens} ctaOverride={props.sectionOverrides?.component_ctaImageBlock} />
+							</Boundary>
 						);
 					case 'component_faqBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='FAQ Block'>
+							<Boundary key={section._key} componentName='FAQ Block'>
 								<FAQBlockSection
 									{...section}
 									tokens={props.tokens}
@@ -248,111 +350,111 @@ export function PageSections(props: Props) {
 									pageSlug={props.pageSlug}
 									faqSlugMap={props.faqSlugMap}
 								/>
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_featuredBlogBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Featured Blog Block'>
+							<Boundary key={section._key} componentName='Featured Blog Block'>
 								<FeaturedBlogBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_featuresBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Features Block'>
+							<Boundary key={section._key} componentName='Features Block'>
 								<FeaturesBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_jobOpeningsBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Job Openings Block'>
+							<Boundary key={section._key} componentName='Job Openings Block'>
 								<JobOpeningsBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_hero':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Hero Block'>
+							<Boundary key={section._key} componentName='Hero Block'>
 								<HeroBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_heroWithSubscribe':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Hero With Subscribe Block'>
+							<Boundary key={section._key} componentName='Hero With Subscribe Block'>
 								<HeroWithSubscribeBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_profileHero':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Profile Hero'>
+							<Boundary key={section._key} componentName='Profile Hero'>
 								<ProfileHeroSection
 									{...section}
 									tokens={props.tokens}
 									profileHeroOverride={props.sectionOverrides?.component_profileHero}
 								/>
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_iconContentBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Icon Content Block'>
+							<Boundary key={section._key} componentName='Icon Content Block'>
 								<IconContentBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_imageContentBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Image Content Block'>
+							<Boundary key={section._key} componentName='Image Content Block'>
 								<ImageContentBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_newsletterBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Newsletter Block'>
+							<Boundary key={section._key} componentName='Newsletter Block'>
 								<NewsletterBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_pricingBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Pricing Block'>
+							<Boundary key={section._key} componentName='Pricing Block'>
 								<PricingBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_statsBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Stats Block'>
+							<Boundary key={section._key} componentName='Stats Block'>
 								<StatsBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_stepperBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Stepper Block'>
+							<Boundary key={section._key} componentName='Stepper Block'>
 								<StepperBlockSection {...section} tokens={props.tokens} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_tabbedImageBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Tabbed Image Block'>
+							<Boundary key={section._key} componentName='Tabbed Image Block'>
 								<TabbedImageBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_teamBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Team Block'>
+							<Boundary key={section._key} componentName='Team Block'>
 								<TeamBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_testimonialBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Testimonial Block'>
+							<Boundary key={section._key} componentName='Testimonial Block'>
 								<TestimonialBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_twoUpCardBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Two Up Card Block'>
+							<Boundary key={section._key} componentName='Two Up Card Block'>
 								<TwoUpCardBlockSection {...section} tokens={props.tokens} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_electionsIndexBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Elections Index Block'>
+							<Boundary key={section._key} componentName='Elections Index Block'>
 								<ElectionsIndexBlockSection
 									{...section}
 									tokens={props.tokens}
@@ -360,104 +462,115 @@ export function PageSections(props: Props) {
 									stateSlugOverride={props.sectionOverrides?.component_electionsIndexBlock?.stateSlug}
 									indexOverride={props.sectionOverrides?.component_electionsIndexBlock}
 								/>
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_electionsPositionHero':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Elections Position Hero'>
+							<Boundary key={section._key} componentName='Elections Position Hero'>
 								<ElectionsPositionHeroSection
 									{...section}
 									tokens={props.tokens}
 									officeData={props.sectionOverrides?.component_electionsPositionHero}
 								/>
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_electionsPositionContentBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Elections Position Content Block'>
+							<Boundary key={section._key} componentName='Elections Position Content Block'>
 								<ElectionsPositionContentBlockSection
 									{...section}
 									contentOverride={props.sectionOverrides?.component_electionsPositionContentBlock}
 								/>
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_electionsSearchHero':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Elections Search Hero'>
+							<Boundary key={section._key} componentName='Elections Search Hero'>
 								<ElectionsSearchHeroSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_featuredCitiesBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Featured Cities Block'>
+							<Boundary key={section._key} componentName='Featured Cities Block'>
 								<FeaturedCitiesBlockSection {...section} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_goodPartyOrgPledge':
+						if (props.sectionOverrides?.component_goodPartyOrgPledge?.hidden) {
+							return <Fragment key={section._key} />;
+						}
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='GoodParty.org Pledge'>
+							<Boundary key={section._key} componentName='GoodParty.org Pledge'>
 								<GoodPartyOrgPledgeSection {...section} tokens={props.tokens} />
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_locationLandingPageHero':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Location Landing Page Hero'>
+							<Boundary key={section._key} componentName='Location Landing Page Hero'>
 								<LocationLandingPageHeroSection
 									{...section}
 									tokens={props.tokens}
 									locationOverride={props.sectionOverrides?.component_locationLandingPageHero}
 								/>
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
 					case 'component_locationFactsBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Location Facts Block'>
+							<Boundary key={section._key} componentName='Location Facts Block'>
 								<LocationFactsBlockSection
 									{...section}
 									factsOverride={props.sectionOverrides?.component_locationFactsBlock}
 									tokens={props.tokens}
 								/>
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
-					case 'component_profileContentBlock':
+					case 'component_profileContentBlock': {
+						const pcbOverride = props.sectionOverrides?.component_profileContentBlock;
+						if (pcbOverride?.hidden) {
+							return <Fragment key={section._key} />;
+						}
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='Profile Content Block'>
+							<Boundary key={section._key} componentName='Profile Content Block'>
 								<ProfileContentBlockSection
 									{...section}
-									profileData={props.sectionOverrides?.component_profileContentBlock?.profileData}
-									officeData={props.sectionOverrides?.component_profileContentBlock?.officeData}
+									profileData={pcbOverride?.profileData}
+									officeData={pcbOverride?.officeData}
+									contentCardsOverride={pcbOverride?.contentCards}
+									sidebarOverride={pcbOverride?.sidebar}
+									districtMap={pcbOverride?.districtMap}
 								/>
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
+					}
 					case 'component_listOfOfficesBlock':
 						return (
-							<ComponentErrorBoundary key={section._key} componentName='List of Offices Block'>
+							<Boundary key={section._key} componentName='List of Offices Block'>
 								<ListOfOfficesBlockSection
 									{...section}
 									tokens={props.tokens}
 									officesOverride={props.sectionOverrides?.component_listOfOfficesBlock}
 								/>
-							</ComponentErrorBoundary>
+							</Boundary>
 						);
-				case 'component_embeddedBlock':
-					return (
-						<ComponentErrorBoundary key={section._key} componentName='Embedded Block'>
-							<EmbeddedBlockSection {...section} />
-						</ComponentErrorBoundary>
-					);
-				case 'component_teamValuesBlock':
-					return (
-						<ComponentErrorBoundary key={section._key} componentName='Team Values Block'>
-							<TeamValuesBlockSection {...section} />
-						</ComponentErrorBoundary>
-					);
-				case 'component_testimonialAutoScroll':
-					return (
-						<ComponentErrorBoundary key={section._key} componentName='Testimonials Auto Scroll'>
-							<TestimonialAutoScrollSection {...section} />
-						</ComponentErrorBoundary>
-					);
-				default:
+					case 'component_embeddedBlock':
+						return (
+							<Boundary key={section._key} componentName='Embedded Block'>
+								<EmbeddedBlockSection {...section} />
+							</Boundary>
+						);
+					case 'component_teamValuesBlock':
+						return (
+							<Boundary key={section._key} componentName='Team Values Block'>
+								<TeamValuesBlockSection {...section} />
+							</Boundary>
+						);
+					case 'component_testimonialAutoScroll':
+						return (
+							<Boundary key={section._key} componentName='Testimonials Auto Scroll'>
+								<TestimonialAutoScrollSection {...section} />
+							</Boundary>
+						);
+					default:
 						console.warn('unknown section._type', section['_type']);
 						return <Fragment key={`unknown section._type' ${i}`} />;
 				}

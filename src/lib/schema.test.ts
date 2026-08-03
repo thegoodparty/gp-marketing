@@ -4,6 +4,7 @@ import {
 	buildBreadcrumbSchema,
 	buildDefinedTermSchema,
 	buildFAQSchema,
+	buildGovernmentOrganizationSchema,
 	buildOrganizationSchema,
 	buildSchemaGraph,
 	buildSoftwareApplicationSchema,
@@ -20,19 +21,23 @@ const envKeys = ['NEXT_PUBLIC_APP_BASE', 'NEXT_PUBLIC_SITE_URL', 'VERCEL_ENV', '
 
 let snapshot: Partial<Record<(typeof envKeys)[number], string | undefined>>;
 
+// `process.env.NODE_ENV` is typed read-only, but tests need to swap it to
+// exercise env-dependent base-URL resolution — alias to a mutable record.
+const mutableEnv = process.env as Record<string, string | undefined>;
+
 beforeEach(() => {
 	snapshot = {};
 	for (const k of envKeys) snapshot[k] = process.env[k];
-	(process.env as Record<string, string | undefined>)['NODE_ENV'] = 'development';
-	delete process.env['VERCEL_ENV'];
-	process.env['NEXT_PUBLIC_SITE_URL'] = 'https://goodparty.org';
+	mutableEnv['NODE_ENV'] = 'development';
+	delete mutableEnv['VERCEL_ENV'];
+	mutableEnv['NEXT_PUBLIC_SITE_URL'] = 'https://goodparty.org';
 });
 
 afterEach(() => {
 	for (const k of envKeys) {
 		const v = snapshot[k];
-		if (v === undefined) delete process.env[k];
-		else (process.env as Record<string, string | undefined>)[k] = v;
+		if (v === undefined) delete mutableEnv[k];
+		else mutableEnv[k] = v;
 	}
 });
 
@@ -218,6 +223,32 @@ describe('buildSoftwareApplicationSchema', () => {
 		expect(schema['applicationCategory']).toBe('BusinessApplication');
 		expect((schema['offers'] as Record<string, unknown>)['price']).toBe('0');
 		expect((schema['publisher'] as Record<string, unknown>)['@id']).toBe('https://goodparty.org/#organization');
+	});
+});
+
+describe('buildGovernmentOrganizationSchema', () => {
+	test('emits a GovernmentOrganization with a stable id and areaServed', () => {
+		const schema = asRecord(
+			buildGovernmentOrganizationSchema({
+				url: '/elections/ca/los-angeles-county',
+				name: 'Los Angeles County Government',
+				areaServed: 'Los Angeles County',
+			}),
+		);
+		expect(schema['@type']).toBe('GovernmentOrganization');
+		expect(schema['@id']).toBe(
+			'https://goodparty.org/elections/ca/los-angeles-county#government-organization',
+		);
+		expect(schema['name']).toBe('Los Angeles County Government');
+		expect((schema['areaServed'] as Record<string, unknown>)['@type']).toBe('AdministrativeArea');
+		expect((schema['areaServed'] as Record<string, unknown>)['name']).toBe('Los Angeles County');
+	});
+
+	test('omits areaServed when not provided', () => {
+		const schema = asRecord(
+			buildGovernmentOrganizationSchema({ url: '/elections/ca', name: 'California Government' }),
+		);
+		expect('areaServed' in schema).toBe(false);
 	});
 });
 

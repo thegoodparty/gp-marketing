@@ -28,6 +28,9 @@ export function ProfileHeroSection({ profileHeroOverride, tokens: _tokens, ...se
 				office={office}
 				profileImageUrl={profileHeroOverride?.profileImageUrl}
 				isEmpowered={profileHeroOverride?.isEmpowered}
+				tags={profileHeroOverride?.tags}
+				attribution={profileHeroOverride?.attribution}
+				pledged={profileHeroOverride?.pledged}
 			/>
 		</section>
 	);

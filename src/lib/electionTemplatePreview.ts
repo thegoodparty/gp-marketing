@@ -1,7 +1,7 @@
 import type { ElectionTemplateType } from '~/lib/electionTemplates';
 
 type PreviewTarget = {
-	field_electionTargetType?: 'place' | 'position' | 'candidate';
+	field_electionTargetType?: 'place' | 'position' | 'candidate' | 'person';
 	field_electionTargetSlug?: string;
 	field_positionSlug?: string;
 };
@@ -31,6 +31,8 @@ export function buildElectionTemplatePreviewPath(
 			return positionSlug ? `/elections/${slug}/position/${positionSlug}/candidates` : `/elections/${slug}`;
 		case 'candidateProfile':
 			return `/candidate/${slug}`;
+		case 'personProfile':
+			return `/people/${slug}`;
 		default:
 			return null;
 	}
@@ -42,7 +44,7 @@ export function buildElectionTemplatePreviewPath(
 export function buildCustomTemplateRevalidatePaths(
 	targets: Array<{ field_electionTargetType?: string; field_electionTargetSlug?: string }>,
 ): string[] {
-	const paths = new Set<string>(['/elections', '/candidate']);
+	const paths = new Set<string>(['/elections', '/candidate', '/people']);
 
 	for (const target of targets) {
 		const slug = target.field_electionTargetSlug?.replace(/^\/+|\/+$/g, '');
@@ -57,6 +59,9 @@ export function buildCustomTemplateRevalidatePaths(
 				break;
 			case 'candidate':
 				paths.add(`/candidate/${slug}`);
+				break;
+			case 'person':
+				paths.add(`/people/${slug}`);
 				break;
 			case undefined:
 			default:

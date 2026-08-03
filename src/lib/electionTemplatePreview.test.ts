@@ -65,4 +65,13 @@ describe('buildElectionTemplatePreviewPath', () => {
 			}),
 		).toBe('/candidate/ny/albany/jane-doe');
 	});
+
+	test('builds person profile path', () => {
+		expect(
+			buildElectionTemplatePreviewPath('personProfile', {
+				field_electionTargetType: 'person',
+				field_electionTargetSlug: 'jane-doe-2f1c',
+			}),
+		).toBe('/people/jane-doe-2f1c');
+	});
 });

@@ -3236,6 +3236,21 @@
             },
             "rest": {
               "type": "inline",
+              "name": "component_voterDensityBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
               "name": "component_listOfOfficesBlock"
             }
           },
@@ -5519,6 +5534,46 @@
                       "value": "midnight"
                     }
                   ]
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "component_voterDensityBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_voterDensityBlock"
+          }
+        },
+        "voterDensityBlockContent": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_headline": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
                 },
                 "optional": true
               }
@@ -7989,6 +8044,10 @@
               {
                 "type": "string",
                 "value": "candidate"
+              },
+              {
+                "type": "string",
+                "value": "person"
               }
             ]
           },
@@ -14032,6 +14091,67 @@
             {
               "type": "string",
               "value": "candidateProfile"
+            },
+            {
+              "type": "string",
+              "value": "personProfile"
+            }
+          ]
+        },
+        "optional": true
+      },
+      "field_profileState": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "union",
+          "of": [
+            {
+              "type": "string",
+              "value": "A"
+            },
+            {
+              "type": "string",
+              "value": "B"
+            },
+            {
+              "type": "string",
+              "value": "C"
+            },
+            {
+              "type": "string",
+              "value": "D"
+            },
+            {
+              "type": "string",
+              "value": "E"
+            },
+            {
+              "type": "string",
+              "value": "F"
+            },
+            {
+              "type": "string",
+              "value": "G"
+            },
+            {
+              "type": "string",
+              "value": "H"
+            },
+            {
+              "type": "string",
+              "value": "I"
+            },
+            {
+              "type": "string",
+              "value": "J"
+            },
+            {
+              "type": "string",
+              "value": "K"
+            },
+            {
+              "type": "string",
+              "value": "L"
             }
           ]
         },
@@ -14202,6 +14322,10 @@
             {
               "type": "string",
               "value": "candidateProfile"
+            },
+            {
+              "type": "string",
+              "value": "personProfile"
             }
           ]
         },

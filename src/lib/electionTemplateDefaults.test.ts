@@ -10,6 +10,7 @@ const TEMPLATE_TYPES: ElectionTemplateType[] = [
 	'position',
 	'positionCandidates',
 	'candidateProfile',
+	'personProfile',
 ];
 
 describe('getCodeDefaultElectionTemplate', () => {

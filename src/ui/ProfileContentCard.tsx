@@ -16,10 +16,20 @@ export type ProfileContentCardProps = {
 	cardType?: 'about-me' | 'why-running' | 'top-issues';
 	heading?: string;
 	content?: ReactNode;
+	/**
+	 * Render `content` verbatim, without the card chrome (bottom divider + the
+	 * `<Text>` body wrapper). Used for self-styled embedded blocks like the
+	 * claim prompt or the structured "About [position]" card.
+	 */
+	raw?: boolean;
 };
 
 export function ProfileContentCard(props: ProfileContentCardProps) {
 	const { base, heading, content } = styles();
+
+	if (props.raw) {
+		return <>{props.content}</>;
+	}
 
 	return (
 		<article className={cn(base(), props.className)} data-component='ProfileContentCard'>

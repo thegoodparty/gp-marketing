@@ -18,13 +18,13 @@ const styles = tv({
 		// section's left column, so the sidebar starts below it (the design puts the
 		// first sidebar card 48px under the photo, while the right-hand content column
 		// starts 48px under the band). The offset mirrors the portrait's overflow in
-		// ProfileHero (imageWrapper -mb): md 104px, lg 120px. It must be MARGIN, not
-		// padding — padding would be part of the sticky box and drag a 120px dead zone
+		// ProfileHero (imageWrapper -mb): md 104px, lg 216px. It must be MARGIN, not
+		// padding — padding would be part of the sticky box and drag a dead zone
 		// along as the sidebar sticks on scroll.
-		sidebar: 'self-start w-full min-w-0 md:mt-[104px] lg:mt-[120px] lg:max-w-[400px] lg:sticky lg:top-4',
+		sidebar: 'self-start w-full min-w-0 md:mt-[104px] lg:mt-[216px] lg:max-w-[400px] lg:sticky lg:top-4',
 		// Same portrait clearance as `sidebar` — a profile with no content cards still
 		// sits under the straddling hero photo, so without this it would be overlapped.
-		sidebarStandalone: 'w-full min-w-0 md:mt-[104px] lg:mt-[120px]',
+		sidebarStandalone: 'w-full min-w-0 md:mt-[104px] lg:mt-[216px]',
 		content: 'flex min-w-0 w-full flex-col gap-8 rounded-xl bg-white p-6',
 		title: 'border-b border-gray-200 ',
 	},

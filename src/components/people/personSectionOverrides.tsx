@@ -68,10 +68,12 @@ const STATUS_LABELS: Record<PersonProfileIssueStatus, string> = {
 	RESOLVED: 'Resolved',
 };
 
-function TypeTag({ icon, label }: { icon: string; label: string }) {
+// Inline "Pro Blocks / Tagline" pill from Figma: white fill, hairline gray border,
+// rounded-md, subtle shadow, no icon. Used for persona/status tags on the content
+// sections (Recent Experience, Accomplishments, Issues, Other Candidates).
+function TypeTag({ label }: { label: string }) {
 	return (
-		<span className='inline-flex w-fit items-center gap-1.5 rounded-full bg-halo-green-100 px-3 py-1 text-midnight-900'>
-			<IconResolver icon={icon} className='h-3.5 w-3.5' />
+		<span className='inline-flex w-fit shrink-0 items-center rounded-[6px] border border-gray-300 bg-white px-2.5 py-1 text-midnight-900 shadow-xs'>
 			<Text as='span' styleType='caption'>
 				{label}
 			</Text>
@@ -99,7 +101,7 @@ function IssuesContent({ issues }: { issues: PersonProfileView['issues'] }): Rea
 					)}
 					{issue.status && (
 						<div className='pl-7'>
-							<TypeTag icon='badge-check' label={STATUS_LABELS[issue.status]} />
+							<TypeTag label={STATUS_LABELS[issue.status]} />
 						</div>
 					)}
 				</li>
@@ -113,19 +115,21 @@ function AccomplishmentsContent({ accomplishments }: { accomplishments: PersonAc
 		<ul className='flex flex-col gap-5'>
 			{accomplishments.map((item, index) => (
 				<li key={`${item.title}-${index}`} className='flex flex-col gap-1'>
-					<div className='flex flex-wrap items-baseline gap-x-3 gap-y-1'>
-						<span className='inline-flex items-center gap-2'>
-							<IconResolver icon='star' className='h-4 w-4 text-btn-primary-bg' />
-							<Text as='span' styleType='subtitle-2'>
-								{item.title}
-							</Text>
-						</span>
-						{item.date && (
-							<Text as='span' styleType='caption' className='text-gray-500'>
-								{item.date}
-							</Text>
-						)}
-						<TypeTag icon='badge-check' label='Resolved' />
+					<div className='flex items-start justify-between gap-3'>
+						<div className='flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1'>
+							<span className='inline-flex items-center gap-2'>
+								<IconResolver icon='star' className='h-4 w-4 text-btn-primary-bg' />
+								<Text as='span' styleType='subtitle-2'>
+									{item.title}
+								</Text>
+							</span>
+							{item.date && (
+								<Text as='span' styleType='caption' className='text-gray-500'>
+									{item.date}
+								</Text>
+							)}
+						</div>
+						<TypeTag label='Resolved' />
 					</div>
 					{item.description && (
 						<div className='pl-6'>
@@ -143,33 +147,30 @@ function ExperienceContent({ experience }: { experience: PersonProfileView['rece
 		<ul className='flex flex-col gap-5'>
 			{experience.map((item, index) => (
 				<li key={`${item.title}-${index}`} className='flex flex-col gap-1'>
-					<div className='flex flex-wrap items-center gap-x-3 gap-y-1'>
+					<div className='flex items-center justify-between gap-3'>
 						<Text as='span' styleType='subtitle-2'>
 							{item.title}
 						</Text>
+						{item.status && <TypeTag label={item.status} />}
+					</div>
+					<div className='flex items-center justify-between gap-3'>
 						{item.term && (
-							<Text as='span' styleType='caption' className='text-gray-500'>
+							<Text as='span' styleType='body-2' className='text-gray-500'>
 								{item.term}
 							</Text>
 						)}
-						{item.status && <TypeTag icon='badge-check' label={item.status} />}
+						{item.href && (
+							<a
+								href={item.href}
+								className='inline-flex w-fit items-center gap-1 text-btn-primary-bg hover:underline'
+							>
+								<Text as='span' styleType='caption'>
+									View Position
+								</Text>
+								<IconResolver icon='arrow-up-right' className='h-3.5 w-3.5' />
+							</a>
+						)}
 					</div>
-					{item.organization && (
-						<Text styleType='body-2' className='text-gray-600'>
-							{item.organization}
-						</Text>
-					)}
-					{item.href && (
-						<a
-							href={item.href}
-							className='inline-flex w-fit items-center gap-1 text-btn-primary-bg hover:underline'
-						>
-							<Text as='span' styleType='caption'>
-								View position
-							</Text>
-							<IconResolver icon='arrow-right' className='h-3.5 w-3.5' />
-						</a>
-					)}
 				</li>
 			))}
 		</ul>

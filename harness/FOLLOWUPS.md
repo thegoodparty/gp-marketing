@@ -225,5 +225,52 @@ worst-band values are byte-identical before and after. Two conclusions:
    structurally invisible. Use `spacing-check.mjs` for spacing; the raster gate is
    only a coarse backstop for gross layout.
 
+## Design-token divergence: gp-marketing scale ≠ the Figma (shadcn) scale
+
+The Figma "Marketing Design System" file builds many components (e.g. the inline
+"Pro Blocks / Tagline" persona/status pill) on the **shadcn token scale** — the
+same scale gp-webapp uses, but **not** the one gp-marketing uses. Same class
+names, different values, so copying a Figma class name into gp-marketing silently
+renders the wrong thing.
+
+Confirmed radius divergence:
+
+| class | Figma / gp-webapp (shadcn) | gp-marketing (`src/ui/_styles/globals.css`) |
+| --- | --- | --- |
+| `rounded-sm` | 4px | 8px |
+| `rounded-md` | 6px | 12px |
+| `rounded-lg` | 8px | 16px |
+
+gp-marketing has **no 6px radius token**, so matching a shadcn `rounded-md` (6px)
+needs the arbitrary `rounded-[6px]` (that is why the Recent Experience / status
+pills now use it). Shadows diverge too: Tailwind v4 `shadow-sm` is a stronger
+two-layer shadow than Figma's `shadow/xs` (= `shadow-xs`, `0 1px 2px .05`).
+
+Consequence for parity work: **map Figma tokens by VALUE, never by class name.**
+The `/marketing-ui-clone` skill reads gp-marketing's own token values from
+`src/ui/_styles/{globals,colors}.css` and resolves each Figma value against them
+(exact → class; no match → arbitrary value + a flag added here).
+
+**DECISION FOR THE TEAM (not a bug — do NOT do this on a feature branch):** should
+gp-marketing adopt the shadcn/design-system token scale (a site-wide migration
+touching every `rounded-*`/`shadow-*`), or is the heavier marketing scale
+intentional? Until that is decided, parity work uses exact values for
+shadcn-derived components. This section is the evidence base — append each new
+"Figma value has no gp-marketing token" case as the loop finds it.
+
+### Related infra bug: tailwind-merge drops font-size when combined with text color
+
+The tailwind-merge used by the `Text` component / `cn` / `tv` slots does not
+recognize gp-marketing's custom `text-*` **color** utilities (`text-midnight-900`)
+or **size** utilities (`text-caption`, `text-body-2`, arbitrary `text-[…]`). It
+therefore treats a text-size and a text-color on the same element as one
+conflicting `text-*` group and keeps only the last (the color), **silently
+dropping the size** — even with `text-[length:…]`/`text-[color:…]` type hints. This
+is why the two hero pills rendered at 16px vs 12px until size and color were split
+onto separate elements (`ProfileHero` `tag`/`tagText`/`pledgeTag`). Per-component
+workaround: keep text-size and text-color on different elements. **Proper fix
+(owner: design-system/tokens):** extend the tailwind-merge config with classGroups
+for the custom `text-*` sizes and the brand color scales so they stop colliding.
+
 <!-- Add rows as the loop uncovers genuine data gaps. Do NOT use this file to
      excuse real layout bugs — only true data/heatmap/chrome exceptions belong. -->

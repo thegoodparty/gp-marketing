@@ -135,6 +135,8 @@ export type SectionOverrides = {
 		button?: import('~/ui/Inputs/Button').ComponentButtonProps;
 		/** Render the button's styleType as-is (skip the card-color inverse mapping). */
 		preserveButtonStyle?: boolean;
+		/** Align inner content with the profile content-card column (person profiles). */
+		contentColumnAlign?: boolean;
 		/**
 		 * Full replacement node rendered in the CTA slot instead of the CMS banner.
 		 * Used by unclaimed person profiles to render the interactive claim CTA band

@@ -476,6 +476,10 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 				// `outline` button.
 				button: { buttonType: 'signup', label: 'Learn more', buttonProps: { styleType: 'secondary', styleSize: 'md' } },
 				preserveButtonStyle: true,
+				// The CTA sits below the asymmetric sidebar + cards layout; align its
+				// centered content with the content-card column above (not the page
+				// middle) so it reads as continuous with the last card.
+				contentColumnAlign: true,
 			}
 		: showClaim
 			? {

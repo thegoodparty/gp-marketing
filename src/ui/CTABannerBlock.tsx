@@ -68,6 +68,15 @@ export type CTABannerBlockProps = {
 	 * button on its light-blue card, so it opts out.
 	 */
 	preserveButtonStyle?: boolean;
+	/**
+	 * Align the inner content (title/copy/button) with the profile content-card
+	 * column instead of the full container. Opt-in for the person-profile CTA,
+	 * which sits below the asymmetric sidebar + cards layout; without it the
+	 * centered content lines up with the page middle rather than the cards above.
+	 * The colored card stays full-width behind the content. Off (full-width)
+	 * everywhere else, so /elections and /candidate are unaffected.
+	 */
+	contentColumnAlign?: boolean;
 };
 
 export function CTABannerBlock(props: CTABannerBlockProps) {
@@ -81,32 +90,47 @@ export function CTABannerBlock(props: CTABannerBlockProps) {
 		: resolveInverseButtonStyleType(requestedStyle, backgroundColor, color);
 	const isCentered = align === 'center';
 
+	const content = (
+		<div
+			className={cn(
+				'relative p-6 z-2 flex flex-col gap-6 md:p-12',
+				isCentered ? 'md:items-center md:text-center' : 'md:items-end',
+			)}
+		>
+			<div className={cn('flex flex-col gap-3 w-full md:gap-4', isCentered && 'md:mx-auto md:max-w-2xl md:items-center')}>
+				{props.title && (
+					<Text as='h2' styleType='heading-lg'>
+						{props.title}
+					</Text>
+				)}
+				{isValidRichText(props.copy) && <Text styleType='body-1'>{props.copy}</Text>}
+			</div>
+			{props.button && (
+				<ComponentButton
+					{...props.button}
+					className='max-sm:w-full before:content[""] before:absolute before:inset-0'
+					buttonProps={{ ...(props.button.buttonProps ?? {}), styleType: resolvedStyle }}
+				/>
+			)}
+		</div>
+	);
+
 	return (
 		<article className={cn(base(), props.className)} data-component='CTABannerBlock'>
 			<Container size='xl'>
 				<div className='group relative'>
-					<div
-						className={cn(
-							'relative p-6 z-2 flex flex-col gap-6 md:p-12',
-							isCentered ? 'md:items-center md:text-center' : 'md:items-end',
-						)}
-					>
-						<div className={cn('flex flex-col gap-3 w-full md:gap-4', isCentered && 'md:mx-auto md:max-w-2xl md:items-center')}>
-							{props.title && (
-								<Text as='h2' styleType='heading-lg'>
-									{props.title}
-								</Text>
-							)}
-							{isValidRichText(props.copy) && <Text styleType='body-1'>{props.copy}</Text>}
+					{props.contentColumnAlign ? (
+						// People profiles: mirror ProfileContentBlock's grid so the CTA
+						// content lines up with the content-card column above it. The
+						// empty first cell reserves the sidebar's width; the colored card
+						// below stays full-width.
+						<div className='relative z-2 lg:grid lg:grid-cols-[minmax(280px,400px)_minmax(0,1fr)] lg:gap-10 xl:gap-12'>
+							<div className='hidden lg:block' aria-hidden />
+							{content}
 						</div>
-						{props.button && (
-							<ComponentButton
-								{...props.button}
-								className='max-sm:w-full before:content[""] before:absolute before:inset-0'
-								buttonProps={{ ...(props.button.buttonProps ?? {}), styleType: resolvedStyle }}
-							/>
-						)}
-					</div>
+					) : (
+						content
+					)}
 					<div className={card()}>
 						<svg
 							className='absolute z-1 max-md:top-0 max-md:left-0 md:-bottom-20 md:right-[25%] md:rotate-180'

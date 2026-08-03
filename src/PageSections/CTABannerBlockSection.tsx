@@ -40,6 +40,7 @@ export function CTABannerBlockSection(section: Props) {
 				button={ctaOverride?.button ?? transformButtons([section['primaryCTA']])?.[0]}
 				align={ctaOverride?.align}
 				preserveButtonStyle={ctaOverride?.preserveButtonStyle}
+				contentColumnAlign={ctaOverride?.contentColumnAlign}
 			/>
 		</section>
 	);

@@ -178,9 +178,9 @@ export function getDevPersonProfileView(slug: string): PersonProfileView | null 
 		})),
 	};
 
-	const overlay =
+	const overlay: PublicPersonProfile | null =
 		fixture.overlay.status === 'live'
-			? ({ ...fixture.overlay.profile, personId, ...richOverlay(name), avatarUrl: headshotUrl } as PublicPersonProfile)
+			? { ...fixture.overlay.profile, personId, ...richOverlay(name), avatarUrl: headshotUrl }
 			: null;
 	const removed = fixture.overlay.status === 'removed';
 

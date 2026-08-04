@@ -50,16 +50,21 @@ function personIdFromSuffix(suffix: string): string {
 const LOREM =
 	'Focused on transparent, accountable local government that puts residents first. Building coalitions across the community to deliver practical results on the issues families care about most.';
 
-function richOverlay(name: string): Partial<PublicPersonProfile> {
+function richOverlay(name: string, holdsOffice: boolean): Partial<PublicPersonProfile> {
 	return {
 		displayName: name,
 		bioOverride: `${name} is a lifelong resident and community advocate. ${LOREM}`,
 		whyRunning: `I'm running because our community deserves leadership that listens. ${LOREM}`,
-		accomplishments: [
-			{ title: 'Balanced the district budget without raising taxes', date: '2024' },
-			{ title: 'Expanded after-school programs to every neighborhood school', date: '2023' },
-			{ title: 'Launched a small-business recovery grant program', date: '2022' },
-		],
+		// Accomplishments describe time IN office, so they're seeded only for
+		// office-holding personas (officeholder/both/past) — a pure candidate
+		// (State A) has none, matching the Figma candidate frames.
+		accomplishments: holdsOffice
+			? [
+					{ title: 'Balanced the district budget without raising taxes', date: '2024' },
+					{ title: 'Expanded after-school programs to every neighborhood school', date: '2023' },
+					{ title: 'Launched a small-business recovery grant program', date: '2022' },
+				]
+			: null,
 		publicEmail: 'contact@example.org',
 		publicPhone: '(307) 555-0142',
 		websiteUrl: 'https://example.org',
@@ -178,14 +183,15 @@ export function getDevPersonProfileView(slug: string): PersonProfileView | null 
 		})),
 	};
 
-	const overlay: PublicPersonProfile | null =
-		fixture.overlay.status === 'live'
-			? { ...fixture.overlay.profile, personId, ...richOverlay(name), avatarUrl: headshotUrl }
-			: null;
-	const removed = fixture.overlay.status === 'removed';
-
 	const persona: PersonPersona = fixture.expected.persona;
 	const running = persona === 'candidate' || persona === 'both';
+	const holdsOffice = persona === 'officeholder' || persona === 'both' || persona === 'past';
+
+	const overlay: PublicPersonProfile | null =
+		fixture.overlay.status === 'live'
+			? { ...fixture.overlay.profile, personId, ...richOverlay(name, holdsOffice), avatarUrl: headshotUrl }
+			: null;
+	const removed = fixture.overlay.status === 'removed';
 
 	const view = composeView(personId, person, overlay, {
 		removed,

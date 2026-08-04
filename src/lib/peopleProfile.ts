@@ -656,7 +656,14 @@ export function composeView(
 		pledged: !removed && (person?.isPledged ?? false),
 		displayName,
 		roleTitle,
-		officeName: office?.positionName ?? office?.officeTitle ?? null,
+		// Candidate-only people have no held office; fall back to the candidacy's
+		// position so section headings ("About …", "Other Candidates for …") still
+		// name the seat they're running for, matching the Figma candidate frames.
+		officeName:
+			office?.positionName ??
+			office?.officeTitle ??
+			person?.Candidacies?.[0]?.positionName ??
+			null,
 		party,
 		avatarUrl,
 		coverImageUrl: removed ? null : (overlay?.coverImageUrl ?? null),

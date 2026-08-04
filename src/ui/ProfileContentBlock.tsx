@@ -71,8 +71,8 @@ function chunkCardGroups(cards: ProfileContentCardProps[]): ProfileContentCardPr
 	for (const card of cards) {
 		const last = groups.at(-1);
 		const mergeable =
-			last != null && !card.raw && !last[0]!.raw && card.group != null && last[0]!.group === card.group;
-		if (mergeable) last!.push(card);
+			last != null && !card.raw && !last[0].raw && card.group != null && last[0].group === card.group;
+		if (mergeable && last) last.push(card);
 		else groups.push([card]);
 	}
 	return groups;
@@ -98,7 +98,7 @@ export function ProfileContentBlock(props: ProfileContentBlockProps) {
 						(separated ? (
 							<div className={cn(separatedColumn())}>
 								{chunkCardGroups(props.contentCards).map((group, gi) =>
-									group[0]!.raw ? (
+									group[0].raw ? (
 										group.map((card, ci) => <ProfileContentCard key={`${gi}-${ci}`} {...card} />)
 									) : (
 										<div key={gi} className={cn(separatedCard())} data-component='ProfileContentCardGroup'>

@@ -81,6 +81,7 @@ function office(over: Partial<PersonOfficeHolder> = {}): PersonOfficeHolder {
 		startAt: '2021-01-01',
 		endAt: null,
 		termDateSpecificity: null,
+		electionFrequency: [4],
 		isCurrent: true,
 		isAppointed: null,
 		numberOfSeats: null,

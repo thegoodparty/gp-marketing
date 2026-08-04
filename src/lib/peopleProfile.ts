@@ -295,12 +295,25 @@ function formatYear(date: string | null): string | null {
 	return /^\d{4}$/.test(year) ? year : null;
 }
 
+/** "4 Years" / "1 Year" from a term frequency like [4]; null when unknown. */
+function formatTermYears(frequency: number[] | null | undefined): string | null {
+	if (!frequency?.length) return null;
+	const years = Number(frequency[0]);
+	if (!Number.isFinite(years) || years <= 0) return null;
+	return years === 1 ? '1 Year' : `${years} Years`;
+}
+
 function formatTerm(office: PersonOfficeHolder | null): string | null {
 	if (!office) return null;
+	// Preferred: the canonical term length as a year count. "In office since
+	// 20xx" was flagged inaccurate (data-limitation guesswork), so the
+	// open-ended `Since {start}` output is intentionally dropped.
+	const byYears = formatTermYears(office.electionFrequency);
+	if (byYears) return byYears;
+	// Fallback for past holders: the factual served range.
 	const start = formatYear(office.startAt);
 	const end = formatYear(office.endAt);
 	if (start && end) return `${start} – ${end}`;
-	if (start) return `Since ${start}`;
 	if (end) return `Through ${end}`;
 	return null;
 }

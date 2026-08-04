@@ -155,6 +155,8 @@ export type SectionOverrides = {
 		 */
 		contentCards?: import('~/ui/ProfileContentCard').ProfileContentCardProps[];
 		sidebar?: import('~/ui/ElectionsSidebar').ElectionsSidebarProps;
+		/** Content-card layout ('separated' groups cards into Figma's white cards). */
+		cardLayout?: 'joined' | 'separated';
 		/**
 		 * @deprecated The district voter-density map is now its own
 		 * `component_voterDensityBlock` section; person profiles no longer inject it
@@ -539,6 +541,7 @@ export function PageSections(props: Props) {
 									officeData={pcbOverride?.officeData}
 									contentCardsOverride={pcbOverride?.contentCards}
 									sidebarOverride={pcbOverride?.sidebar}
+									cardLayout={pcbOverride?.cardLayout}
 									districtMap={pcbOverride?.districtMap}
 								/>
 							</Boundary>

@@ -26,6 +26,14 @@ const styles = tv({
 		// sits under the straddling hero photo, so without this it would be overlapped.
 		sidebarStandalone: 'w-full min-w-0 md:mt-[104px] lg:mt-[216px]',
 		content: 'flex min-w-0 w-full flex-col gap-8 rounded-xl bg-white p-6',
+		// Separated layout (Figma people profiles): a transparent column whose
+		// children are individual white cards; the cream page shows through the
+		// 24px gaps between them.
+		separatedColumn: 'flex min-w-0 w-full flex-col gap-6',
+		// Figma card: 16px radius (--radius-lg) white fill; the inner sections
+		// carry their own 24px padding (ProfileContentCard), so the card itself
+		// only adds the 16px outer inset the frame shows.
+		separatedCard: 'flex flex-col rounded-lg bg-white p-4',
 		title: 'border-b border-gray-200 ',
 	},
 	variants: {
@@ -47,12 +55,35 @@ export type ProfileContentBlockProps = {
 	sidebar?: ElectionsSidebarProps;
 	title?: string;
 	contentCards: ProfileContentCardProps[];
+	/**
+	 * `joined` (default, used by `/candidate`) stacks every card inside one white
+	 * box with hairline dividers. `separated` (people profiles) renders the Figma
+	 * layout: adjacent cards sharing a `group` collapse into their own white card,
+	 * separated by cream gaps; `raw` cards render standalone without card chrome.
+	 */
+	cardLayout?: 'joined' | 'separated';
 };
+
+/** Chunks a flat card list into groups: consecutive same-`group` non-raw cards
+ * share a white card; every `raw` card stands alone (self-styled). */
+function chunkCardGroups(cards: ProfileContentCardProps[]): ProfileContentCardProps[][] {
+	const groups: ProfileContentCardProps[][] = [];
+	for (const card of cards) {
+		const last = groups.at(-1);
+		const mergeable =
+			last != null && !card.raw && !last[0]!.raw && card.group != null && last[0]!.group === card.group;
+		if (mergeable) last!.push(card);
+		else groups.push([card]);
+	}
+	return groups;
+}
 
 export function ProfileContentBlock(props: ProfileContentBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
-	const { base, well, grid, sidebar, sidebarStandalone, content, title: titleSlot } = styles({ backgroundColor });
+	const { base, well, grid, sidebar, sidebarStandalone, content, separatedColumn, separatedCard, title: titleSlot } =
+		styles({ backgroundColor });
 	const hasContentCards = props.contentCards.length > 0;
+	const separated = props.cardLayout === 'separated';
 
 	return (
 		<article className={cn(base(), props.className)} data-component='ProfileContentBlock'>
@@ -63,18 +94,33 @@ export function ProfileContentBlock(props: ProfileContentBlockProps) {
 							<ElectionsSidebar {...props.sidebar} />
 						</aside>
 					)}
-					{hasContentCards && (
-						<div className={cn(content())}>
-							{props.title && (
-								<Text as='h2' styleType='heading-sm' className={titleSlot()}>
-									{props.title}
-								</Text>
-							)}
-							{props.contentCards.map((card, index) => (
-								<ProfileContentCard key={index} {...card} />
-							))}
-						</div>
-					)}
+					{hasContentCards &&
+						(separated ? (
+							<div className={cn(separatedColumn())}>
+								{chunkCardGroups(props.contentCards).map((group, gi) =>
+									group[0]!.raw ? (
+										group.map((card, ci) => <ProfileContentCard key={`${gi}-${ci}`} {...card} />)
+									) : (
+										<div key={gi} className={cn(separatedCard())} data-component='ProfileContentCardGroup'>
+											{group.map((card, ci) => (
+												<ProfileContentCard key={`${gi}-${ci}`} {...card} bare />
+											))}
+										</div>
+									),
+								)}
+							</div>
+						) : (
+							<div className={cn(content())}>
+								{props.title && (
+									<Text as='h2' styleType='heading-sm' className={titleSlot()}>
+										{props.title}
+									</Text>
+								)}
+								{props.contentCards.map((card, index) => (
+									<ProfileContentCard key={index} {...card} />
+								))}
+							</div>
+						))}
 				</div>
 			</Container>
 		</article>

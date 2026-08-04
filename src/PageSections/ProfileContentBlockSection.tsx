@@ -87,6 +87,8 @@ type ProfileContentBlockSectionProps = Extract<Sections, { _type: 'component_pro
 	/** Prebuilt cards/sidebar (person profiles) — win over profileData/officeData. */
 	contentCardsOverride?: ProfileContentCardProps[];
 	sidebarOverride?: ElectionsSidebarProps;
+	/** Content-card layout: person profiles use `separated` (grouped white cards). */
+	cardLayout?: 'joined' | 'separated';
 	/** Optional district voter-density map rendered below the content. */
 	districtMap?: ReactNode;
 };
@@ -96,6 +98,7 @@ export function ProfileContentBlockSection({
 	officeData,
 	contentCardsOverride,
 	sidebarOverride,
+	cardLayout,
 	districtMap,
 	...section
 }: ProfileContentBlockSectionProps) {
@@ -114,7 +117,12 @@ export function ProfileContentBlockSection({
 
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Profile Content Block'>
-			<ProfileContentBlock backgroundColor={backgroundColor} sidebar={sidebar} contentCards={contentCards} />
+			<ProfileContentBlock
+				backgroundColor={backgroundColor}
+				sidebar={sidebar}
+				contentCards={contentCards}
+				cardLayout={cardLayout}
+			/>
 			{districtMap}
 		</section>
 	);

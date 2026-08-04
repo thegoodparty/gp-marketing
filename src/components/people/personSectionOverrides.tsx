@@ -247,18 +247,18 @@ function buildAuthoredCards(view: PersonProfileView): ProfileContentCardProps[] 
 	// "Why I'm Running for Office" is candidate-only (Figma A); officeholder/past
 	// frames drop the section entirely.
 	if (view.whyRunning && (view.persona === 'candidate' || view.persona === 'both')) {
-		cards.push({ cardType: 'why-running', heading: whyHeading(view.persona), content: view.whyRunning });
+		cards.push({ cardType: 'why-running', group: 'platform', heading: whyHeading(view.persona), content: view.whyRunning });
 	}
 	if (view.issues.length > 0) {
-		cards.push({ cardType: 'top-issues', heading: issuesHeading(view.persona), content: <IssuesContent issues={view.issues} showStatus={holdsOffice(view.persona)} /> });
+		cards.push({ cardType: 'top-issues', group: 'platform', heading: issuesHeading(view.persona), content: <IssuesContent issues={view.issues} showStatus={holdsOffice(view.persona)} /> });
 	}
 	if (view.bio) {
-		cards.push({ cardType: 'about-me', heading: 'About Me', content: view.bio });
+		cards.push({ cardType: 'about-me', group: 'about', heading: 'About Me', content: view.bio });
 	}
 	// Accomplishments are an in-office record — only personas who hold/held office
 	// show them. A pure candidate (Figma A) has none, so gate the section.
 	if (view.accomplishments.length > 0 && holdsOffice(view.persona)) {
-		cards.push({ heading: 'Accomplishments', content: <AccomplishmentsContent accomplishments={view.accomplishments} /> });
+		cards.push({ group: 'about', heading: 'Accomplishments', content: <AccomplishmentsContent accomplishments={view.accomplishments} /> });
 	}
 	return cards;
 }
@@ -323,10 +323,10 @@ function buildAuthoredPlaceholderCards(view: PersonProfileView): ProfileContentC
 	const cards: ProfileContentCardProps[] = [];
 	// Mirror the claimed gating: the "Why" prompt is candidate-only.
 	if (view.persona === 'candidate' || view.persona === 'both') {
-		cards.push({ cardType: 'why-running', heading: whyHeading(view.persona), content: <PlaceholderPrompt>{whyPrompt(view)}</PlaceholderPrompt> });
+		cards.push({ cardType: 'why-running', group: 'platform', heading: whyHeading(view.persona), content: <PlaceholderPrompt>{whyPrompt(view)}</PlaceholderPrompt> });
 	}
-	cards.push({ cardType: 'top-issues', heading: issuesHeading(view.persona), content: <PlaceholderPrompt>{issuesPrompt(view)}</PlaceholderPrompt> });
-	cards.push({ cardType: 'about-me', heading: 'About Me', content: <PlaceholderPrompt>{aboutPrompt(view)}</PlaceholderPrompt> });
+	cards.push({ cardType: 'top-issues', group: 'platform', heading: issuesHeading(view.persona), content: <PlaceholderPrompt>{issuesPrompt(view)}</PlaceholderPrompt> });
+	cards.push({ cardType: 'about-me', group: 'about', heading: 'About Me', content: <PlaceholderPrompt>{aboutPrompt(view)}</PlaceholderPrompt> });
 	return cards;
 }
 
@@ -387,7 +387,7 @@ function OtherCandidatesContent({ cards }: { cards: CandidateCard[] }): ReactNod
 function buildCivicCards(view: PersonProfileView): ProfileContentCardProps[] {
 	const cards: ProfileContentCardProps[] = [];
 	if (view.recentExperience.length > 0) {
-		cards.push({ heading: 'Recent Experience', content: <ExperienceContent experience={view.recentExperience} /> });
+		cards.push({ group: 'about', heading: 'Recent Experience', content: <ExperienceContent experience={view.recentExperience} /> });
 	}
 	// Figma title-cases this heading and leads with the empowered (GoodParty)
 	// candidate. FLAG: the frame reads "Other Candidates for [Position] in
@@ -396,6 +396,7 @@ function buildCivicCards(view: PersonProfileView): ProfileContentCardProps[] {
 	const otherCandidates = empoweredFirst(toCandidateCards(view.otherCandidates));
 	if (otherCandidates.length > 0) {
 		cards.push({
+			group: 'people',
 			heading: view.officeName ? `Other Candidates for ${view.officeName}` : 'Other Candidates',
 			content: <OtherCandidatesContent cards={otherCandidates} />,
 		});
@@ -404,17 +405,18 @@ function buildCivicCards(view: PersonProfileView): ProfileContentCardProps[] {
 	// in (or formerly in) office, per Figma (candidate-only pages omit this).
 	const nearby = holdsOffice(view.persona) ? toCandidateCards(view.nearbyOfficials) : [];
 	if (nearby.length > 0) {
-		cards.push({ heading: 'Nearby Officials', content: <OtherCandidatesContent cards={nearby} /> });
+		cards.push({ group: 'people', heading: 'Nearby Officials', content: <OtherCandidatesContent cards={nearby} /> });
 	}
 	if (view.positionDescription || view.termLabel || view.electionDate) {
 		cards.push({
+			group: 'position',
 			heading: `About ${view.officeName ?? 'the Role'}`,
 			content: <AboutPositionContent view={view} />,
 		});
 	}
 	const districtMap = buildDistrictMap(view);
 	if (districtMap) {
-		cards.push({ heading: 'District information', content: districtMap });
+		cards.push({ group: 'district', heading: 'District information', content: districtMap });
 	}
 	return cards;
 }
@@ -621,6 +623,9 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 		component_profileContentBlock: {
 			contentCards,
 			sidebar,
+			// Figma people profiles group sections into separate white cards with
+			// cream gaps (not one joined box like /candidate).
+			cardLayout: 'separated',
 			hidden: contentCards.length === 0 && !sidebar,
 		},
 		component_goodPartyOrgPledge: { hidden: !showPledge },

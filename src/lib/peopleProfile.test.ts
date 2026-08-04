@@ -473,7 +473,7 @@ describe('composeView state + empowerment gating', () => {
 });
 
 describe('buildBreadcrumb', () => {
-	test('degrades to Home > People > Name without a race slug', async () => {
+	test('degrades to Elections > State > Name without a race slug', async () => {
 		const trail = await buildBreadcrumb({
 			displayName: 'Jane Doe',
 			stateCode: 'CA',
@@ -481,7 +481,19 @@ describe('buildBreadcrumb', () => {
 			positionLevel: null,
 			positionName: null,
 		});
-		expect(trail.map((c) => c.label)).toEqual(['Home', 'People', 'Jane Doe']);
+		expect(trail.map((c) => c.label)).toEqual(['Elections', 'California', 'Jane Doe']);
+		expect(trail[0]?.href).toBe('/elections');
+	});
+
+	test('degrades to Elections > Name when neither race slug nor state is known', async () => {
+		const trail = await buildBreadcrumb({
+			displayName: 'Jane Doe',
+			stateCode: null,
+			raceSlug: null,
+			positionLevel: null,
+			positionName: null,
+		});
+		expect(trail.map((c) => c.label)).toEqual(['Elections', 'Jane Doe']);
 	});
 
 	test('builds Elections > State > ... > Position > Name from a race slug', async () => {
@@ -493,9 +505,8 @@ describe('buildBreadcrumb', () => {
 			positionName: 'Mayor',
 		});
 		const labels = trail.map((c) => c.label);
-		expect(labels[0]).toBe('Home');
-		expect(labels[1]).toBe('Elections');
-		expect(labels[2]).toBe('California');
+		expect(labels[0]).toBe('Elections');
+		expect(labels[1]).toBe('California');
 		expect(labels).toContain('Mayor');
 		expect(labels[labels.length - 1]).toBe('Jane Doe');
 	});

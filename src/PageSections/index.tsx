@@ -107,10 +107,10 @@ export type SectionOverrides = {
 	component_profileHero?: {
 		candidateName: string;
 		office: string;
+		/** When set, the hero office line links to the office/position page. */
+		officeHref?: string;
 		profileImageUrl?: string;
 		isEmpowered?: boolean;
-		/** Person profiles: renders a "Took the GoodParty.org Pledge" badge under the hero. */
-		pledged?: boolean;
 		/** Persona tag pills shown above the name (e.g. "Candidate", "Incumbent"). */
 		tags?: string[];
 		/**
@@ -135,6 +135,8 @@ export type SectionOverrides = {
 		button?: import('~/ui/Inputs/Button').ComponentButtonProps;
 		/** Render the button's styleType as-is (skip the card-color inverse mapping). */
 		preserveButtonStyle?: boolean;
+		/** Align inner content with the profile content-card column (person profiles). */
+		contentColumnAlign?: boolean;
 		/**
 		 * Full replacement node rendered in the CTA slot instead of the CMS banner.
 		 * Used by unclaimed person profiles to render the interactive claim CTA band
@@ -153,6 +155,8 @@ export type SectionOverrides = {
 		 */
 		contentCards?: import('~/ui/ProfileContentCard').ProfileContentCardProps[];
 		sidebar?: import('~/ui/ElectionsSidebar').ElectionsSidebarProps;
+		/** Content-card layout ('separated' groups cards into Figma's white cards). */
+		cardLayout?: 'joined' | 'separated';
 		/**
 		 * @deprecated The district voter-density map is now its own
 		 * `component_voterDensityBlock` section; person profiles no longer inject it
@@ -537,6 +541,7 @@ export function PageSections(props: Props) {
 									officeData={pcbOverride?.officeData}
 									contentCardsOverride={pcbOverride?.contentCards}
 									sidebarOverride={pcbOverride?.sidebar}
+									cardLayout={pcbOverride?.cardLayout}
 									districtMap={pcbOverride?.districtMap}
 								/>
 							</Boundary>

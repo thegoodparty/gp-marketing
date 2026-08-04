@@ -9,11 +9,27 @@ const styles = tv({
 		heading: '',
 		content: 'min-w-0 break-words',
 	},
+	variants: {
+		// `bare` drops the inter-section divider + bottom padding used in the
+		// joined (single-card) layout. In the Figma people-profile "separated"
+		// layout each section is a padded sub-box inside its own white card, so
+		// sections are set apart by whitespace, not a hairline rule.
+		bare: {
+			true: { base: 'flex flex-col gap-6 p-6' },
+		},
+	},
 });
 
 export type ProfileContentCardProps = {
 	className?: string;
 	cardType?: 'about-me' | 'why-running' | 'top-issues';
+	/**
+	 * Groups adjacent cards into one white container in the "separated" layout
+	 * (Figma people profiles): cards sharing a `group` render inside a single
+	 * rounded white card, with cream gaps between groups. Ignored by the joined
+	 * layout (`/candidate`).
+	 */
+	group?: string;
 	heading?: string;
 	content?: ReactNode;
 	/**
@@ -22,10 +38,12 @@ export type ProfileContentCardProps = {
 	 * claim prompt or the structured "About [position]" card.
 	 */
 	raw?: boolean;
+	/** Drops the inter-section divider (used by the grouped/separated layout). */
+	bare?: boolean;
 };
 
 export function ProfileContentCard(props: ProfileContentCardProps) {
-	const { base, heading, content } = styles();
+	const { base, heading, content } = styles({ bare: props.bare });
 
 	if (props.raw) {
 		return <>{props.content}</>;

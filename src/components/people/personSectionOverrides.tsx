@@ -23,16 +23,41 @@ import { PersonClaimCTABand } from './PersonClaimCTABand';
 // meta row; in that case we fall back to "render if there are cells at all".
 const MIN_VOTER_DENSITY_COVERAGE = 0.5;
 
+// Pre-footer "Explore elections near you" body copy, keyed by the index tier so
+// the prompt matches the level the list drills into (verbatim from the frames).
+const ELECTIONS_INDEX_COPY: Record<'state' | 'county' | 'city', string> = {
+	state: 'Select your state to see local offices, candidates, and elected officials.',
+	county: 'Select your county to see local offices, candidates, and elected officials.',
+	city: 'Select your city to see local offices, candidates, and elected officials.',
+};
+
+// Only candidate/both personas render the "Why" card (Figma frame A heading is
+// "Why I'm Running for Office"). Officeholder/past frames drop it, so those cases
+// are never reached — they exist only to keep the switch exhaustive.
 function whyHeading(persona: PersonPersona): string {
 	switch (persona) {
 		case 'candidate':
 		case 'both':
-			return 'Why I\u2019m Running';
+			return 'Why I\u2019m Running for Office';
 		case 'officeholder':
 			return 'Why I Serve';
 		case 'past':
 			return 'Why I Served';
 	}
+}
+
+/** Personas that actually hold (or held) office — the only ones that show issue
+ * progress tags. A pure candidate has no in-office record, so frame A omits them. */
+function holdsOffice(persona: PersonPersona): boolean {
+	return persona === 'officeholder' || persona === 'both' || persona === 'past';
+}
+
+/** Stable empowered-first ordering (Figma puts the GoodParty candidate on top). */
+function empoweredFirst(cards: CandidateCard[]): CandidateCard[] {
+	return [
+		...cards.filter(c => c.isGoodPartyCandidate),
+		...cards.filter(c => !c.isGoodPartyCandidate),
+	];
 }
 
 /** Small persona tag pill(s) rendered above the hero name (Figma). */
@@ -81,7 +106,7 @@ function TypeTag({ label }: { label: string }) {
 	);
 }
 
-function IssuesContent({ issues }: { issues: PersonProfileView['issues'] }): ReactNode {
+function IssuesContent({ issues, showStatus }: { issues: PersonProfileView['issues']; showStatus: boolean }): ReactNode {
 	return (
 		<ol className='flex flex-col gap-6'>
 			{issues.map((issue, index) => (
@@ -99,7 +124,7 @@ function IssuesContent({ issues }: { issues: PersonProfileView['issues'] }): Rea
 							<Text styleType='body-2'>{issue.description}</Text>
 						</div>
 					)}
-					{issue.status && (
+					{showStatus && issue.status && (
 						<div className='pl-7'>
 							<TypeTag label={STATUS_LABELS[issue.status]} />
 						</div>
@@ -227,17 +252,21 @@ function AboutPositionContent({ view }: { view: PersonProfileView }): ReactNode 
  */
 function buildAuthoredCards(view: PersonProfileView): ProfileContentCardProps[] {
 	const cards: ProfileContentCardProps[] = [];
-	if (view.whyRunning) {
-		cards.push({ cardType: 'why-running', heading: whyHeading(view.persona), content: view.whyRunning });
+	// "Why I'm Running for Office" is candidate-only (Figma A); officeholder/past
+	// frames drop the section entirely.
+	if (view.whyRunning && (view.persona === 'candidate' || view.persona === 'both')) {
+		cards.push({ cardType: 'why-running', group: 'platform', heading: whyHeading(view.persona), content: view.whyRunning });
 	}
 	if (view.issues.length > 0) {
-		cards.push({ cardType: 'top-issues', heading: issuesHeading(view.persona), content: <IssuesContent issues={view.issues} /> });
+		cards.push({ cardType: 'top-issues', group: 'platform', heading: issuesHeading(view.persona), content: <IssuesContent issues={view.issues} showStatus={holdsOffice(view.persona)} /> });
 	}
 	if (view.bio) {
-		cards.push({ cardType: 'about-me', heading: 'About Me', content: view.bio });
+		cards.push({ cardType: 'about-me', group: 'about', heading: 'About Me', content: view.bio });
 	}
-	if (view.accomplishments.length > 0) {
-		cards.push({ heading: 'Accomplishments', content: <AccomplishmentsContent accomplishments={view.accomplishments} /> });
+	// Accomplishments are an in-office record — only personas who hold/held office
+	// show them. A pure candidate (Figma A) has none, so gate the section.
+	if (view.accomplishments.length > 0 && holdsOffice(view.persona)) {
+		cards.push({ group: 'about', heading: 'Accomplishments', content: <AccomplishmentsContent accomplishments={view.accomplishments} /> });
 	}
 	return cards;
 }
@@ -299,11 +328,50 @@ function aboutPrompt(view: PersonProfileView): string {
  * does not show a placeholder for it).
  */
 function buildAuthoredPlaceholderCards(view: PersonProfileView): ProfileContentCardProps[] {
-	return [
-		{ cardType: 'why-running', heading: whyHeading(view.persona), content: <PlaceholderPrompt>{whyPrompt(view)}</PlaceholderPrompt> },
-		{ cardType: 'top-issues', heading: issuesHeading(view.persona), content: <PlaceholderPrompt>{issuesPrompt(view)}</PlaceholderPrompt> },
-		{ cardType: 'about-me', heading: 'About Me', content: <PlaceholderPrompt>{aboutPrompt(view)}</PlaceholderPrompt> },
-	];
+	const cards: ProfileContentCardProps[] = [];
+	// Mirror the claimed gating: the "Why" prompt is candidate-only.
+	if (view.persona === 'candidate' || view.persona === 'both') {
+		cards.push({ cardType: 'why-running', group: 'platform', heading: whyHeading(view.persona), content: <PlaceholderPrompt>{whyPrompt(view)}</PlaceholderPrompt> });
+	}
+	cards.push({ cardType: 'top-issues', group: 'platform', heading: issuesHeading(view.persona), content: <PlaceholderPrompt>{issuesPrompt(view)}</PlaceholderPrompt> });
+	cards.push({ cardType: 'about-me', group: 'about', heading: 'About Me', content: <PlaceholderPrompt>{aboutPrompt(view)}</PlaceholderPrompt> });
+	return cards;
+}
+
+/** First 4-digit year in an ISO-ish date string (avoids TZ off-by-one). */
+function electionYear(electionDate: string | null): string | null {
+	return electionDate?.match(/\d{4}/)?.[0] ?? null;
+}
+
+/**
+ * Past-election disclaimer shown at the top of the content well for persona
+ * `past` (Figma states G 1958:113149 + H 1970:113742). It reuses the Figma "CTA
+ * Section Module" treatment — a light-blue (blue-100) card with centered copy and
+ * a dark "Start exploring" button — and carries the frames' verbatim copy.
+ */
+function pastElectionDisclaimer(view: PersonProfileView): ProfileContentCardProps {
+	const year = electionYear(view.electionDate);
+	const ranClause = year ? `last ran for office in ${year}` : 'last ran for office';
+	return {
+		raw: true,
+		content: (
+			<div className='flex flex-col items-center gap-6 rounded-2xl bg-blue-100 px-6 py-10 text-center text-midnight-900 md:px-12'>
+				<Text styleType='body-1' className='mx-auto max-w-xl'>
+					{`According to our records, ${view.displayName} ${ranClause}. Please see our updated voter guide for information about upcoming elections, candidates, and current elected officials.`}
+				</Text>
+				<ButtonLink
+					parent='PersonProfilePastElectionDisclaimer'
+					href='/elections'
+					styleType='secondary'
+					styleSize='md'
+					className='w-fit'
+					iconRight={<IconResolver icon='arrow-up-right' className='h-4 w-4' />}
+				>
+					Start exploring
+				</ButtonLink>
+			</div>
+		),
+	};
 }
 
 /** In-column "Other candidates" list — a vertical stack of candidate cards. */
@@ -327,31 +395,36 @@ function OtherCandidatesContent({ cards }: { cards: CandidateCard[] }): ReactNod
 function buildCivicCards(view: PersonProfileView): ProfileContentCardProps[] {
 	const cards: ProfileContentCardProps[] = [];
 	if (view.recentExperience.length > 0) {
-		cards.push({ heading: 'Recent Experience', content: <ExperienceContent experience={view.recentExperience} /> });
+		cards.push({ group: 'about', heading: 'Recent Experience', content: <ExperienceContent experience={view.recentExperience} /> });
 	}
-	const otherCandidates = toCandidateCards(view.otherCandidates);
+	// Figma title-cases this heading and leads with the empowered (GoodParty)
+	// candidate. FLAG: the frame reads "Other Candidates for [Position] in
+	// <Location>" but the view has no clean locality field distinct from the
+	// position name, so the "in <Location>" clause is omitted rather than invented.
+	const otherCandidates = empoweredFirst(toCandidateCards(view.otherCandidates));
 	if (otherCandidates.length > 0) {
 		cards.push({
-			heading: view.officeName ? `Other candidates for ${view.officeName}` : 'Other candidates',
+			group: 'people',
+			heading: view.officeName ? `Other Candidates for ${view.officeName}` : 'Other Candidates',
 			content: <OtherCandidatesContent cards={otherCandidates} />,
 		});
 	}
 	// Nearby officials serving the same constituency — only for personas actually
 	// in (or formerly in) office, per Figma (candidate-only pages omit this).
-	const holdsOffice = view.persona === 'officeholder' || view.persona === 'both' || view.persona === 'past';
-	const nearby = holdsOffice ? toCandidateCards(view.nearbyOfficials) : [];
+	const nearby = holdsOffice(view.persona) ? empoweredFirst(toCandidateCards(view.nearbyOfficials)) : [];
 	if (nearby.length > 0) {
-		cards.push({ heading: 'Nearby Officials', content: <OtherCandidatesContent cards={nearby} /> });
+		cards.push({ group: 'people', heading: 'Nearby Officials', content: <OtherCandidatesContent cards={nearby} /> });
 	}
 	if (view.positionDescription || view.termLabel || view.electionDate) {
 		cards.push({
+			group: 'position',
 			heading: `About ${view.officeName ?? 'the Role'}`,
 			content: <AboutPositionContent view={view} />,
 		});
 	}
 	const districtMap = buildDistrictMap(view);
 	if (districtMap) {
-		cards.push({ heading: 'District information', content: districtMap });
+		cards.push({ group: 'district', heading: 'District information', content: districtMap });
 	}
 	return cards;
 }
@@ -454,7 +527,9 @@ function buildDistrictMap(view: PersonProfileView): ReactNode | undefined {
  * so the same behaviour holds regardless of the (editor-authored) template.
  */
 export function buildPersonSectionOverrides(view: PersonProfileView): SectionOverrides {
-	const showClaim = view.empowered && !view.claimed;
+	// Past-election profiles (G claimed, H unclaimed) lead with the past-election
+	// disclaimer, NOT the claim CTA — so exclude persona 'past' from the claim gate.
+	const showClaim = view.empowered && !view.claimed && view.persona !== 'past';
 	// The pledge explainer is claimed content across every persona (Figma A/B/C/G
 	// all show it once claimed). Unclaimed empowered pages lead with the claim
 	// prompt instead, so it stays hidden there.
@@ -476,6 +551,10 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 				// `outline` button.
 				button: { buttonType: 'signup', label: 'Learn more', buttonProps: { styleType: 'secondary', styleSize: 'md' } },
 				preserveButtonStyle: true,
+				// The CTA sits below the asymmetric sidebar + cards layout; align its
+				// centered content with the content-card column above (not the page
+				// middle) so it reads as continuous with the last card.
+				contentColumnAlign: true,
 			}
 		: showClaim
 			? {
@@ -516,6 +595,7 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			? buildAuthoredPlaceholderCards(view)
 			: [];
 	const contentCards: ProfileContentCardProps[] = [
+		...(view.persona === 'past' ? [pastElectionDisclaimer(view)] : []),
 		...(showClaim ? [claimCard('voter-card')] : []),
 		...authoredCards,
 		...buildCivicCards(view),
@@ -531,13 +611,16 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 		component_profileHero: {
 			candidateName: view.displayName,
 			office: view.roleTitle ?? '',
+			// The full positionName (incl. locality) links to the office/position page.
+			officeHref: view.positionHref ?? undefined,
 			profileImageUrl: view.avatarUrl ?? undefined,
 			isEmpowered: view.empowered,
-			pledged: view.pledged,
 			tags: personaTags(view.persona),
-			// Empowered pages carry the GoodParty attribution; major-party (I/J) and
-			// removed (K/L) pages show the neutral "Not Endorsed" line instead.
-			attribution: view.empowered ? 'empowered' : 'notEndorsed',
+			// The GoodParty attribution line + on-photo logo gate on CLAIMED (endorsed):
+			// only claimed pages (A/B/C/G) show "Empowered by GoodParty.org" with the
+			// logo. Every unclaimed page — independent (D/E/F/H), major-party (I/J), and
+			// removed (K/L) — shows the neutral "Not Endorsed by GoodParty.org" line.
+			attribution: view.claimed ? 'empowered' : 'notEndorsed',
 		},
 		component_claimProfileBlock: {
 			// The standalone full-width claim banner is always suppressed now: the
@@ -548,6 +631,9 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 		component_profileContentBlock: {
 			contentCards,
 			sidebar,
+			// Figma people profiles group sections into separate white cards with
+			// cream gaps (not one joined box like /candidate).
+			cardLayout: 'separated',
 			hidden: contentCards.length === 0 && !sidebar,
 		},
 		component_goodPartyOrgPledge: { hidden: !showPledge },
@@ -558,7 +644,7 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			header: view.electionsIndex
 				? {
 						title: 'Explore elections near you',
-						copy: 'Find candidates and offices on the ballot near you.',
+						copy: ELECTIONS_INDEX_COPY[view.electionsIndex.entryLevel],
 					}
 				: undefined,
 		},

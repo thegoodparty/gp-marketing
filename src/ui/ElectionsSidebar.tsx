@@ -18,6 +18,13 @@ const styles = tv({
 		// Figma person-profile card: tighter rows (no card gap; trimmed first/last).
 		figmaCard: 'flex flex-col p-6 bg-white rounded-xl',
 		figmaRow: 'flex flex-col gap-2 py-3 border-b border-gray-200 last:border-b-0 first:pt-0 last:pb-0',
+		// Icon + value line (Figma "Website Link"): a 20px icon centred against the
+		// value text. body-2's 140% line-height (25.2px) is taller than the icon, so
+		// `items-center` on the raw line box parks the icon ~3px below the glyphs'
+		// optical centre — the "off-centre" the Figma frame does not have. Pin the
+		// line to the icon height so the two share one box and centre cleanly.
+		iconValueRow: 'flex items-center gap-2',
+		iconValue: 'break-words leading-5',
 		label: '',
 		value: 'break-words',
 	},
@@ -90,7 +97,7 @@ function ContactIconButton({ icon, href, label }: SidebarContactIcon) {
 }
 
 export function ElectionsSidebar(props: ElectionsSidebarProps) {
-	const { base, card, linkItem, linkIcon, linkText, linkLabel, linkUrlContainer, linkUrl, infoItem, figmaCard, figmaRow, label, value } = styles();
+	const { base, card, linkItem, linkIcon, linkText, linkLabel, linkUrlContainer, linkUrl, infoItem, figmaCard, figmaRow, iconValueRow, iconValue, label, value } = styles();
 
 	// Figma person-profile card renders whenever any structured row is supplied.
 	const hasFigmaCard =
@@ -109,9 +116,9 @@ export function ElectionsSidebar(props: ElectionsSidebarProps) {
 							<Text as='dt' styleType='subtitle-2' className={label()}>
 								{row.label}
 							</Text>
-							<div className='flex items-center gap-2'>
+							<div className={iconValueRow()}>
 								<IconResolver icon={row.icon} className={linkIcon()} />
-								<Text as='dd' styleType='body-2' className={value()}>
+								<Text as='dd' styleType='body-2' className={iconValue()}>
 									{row.value}
 								</Text>
 							</div>
@@ -122,9 +129,9 @@ export function ElectionsSidebar(props: ElectionsSidebarProps) {
 							<Text as='dt' styleType='subtitle-2' className={label()}>
 								Political Affiliation
 							</Text>
-							<div className='flex items-center gap-2'>
+							<div className={iconValueRow()}>
 								<IconResolver icon='flag' className={linkIcon()} />
-								<Text as='dd' styleType='body-2' className={value()}>
+								<Text as='dd' styleType='body-2' className={iconValue()}>
 									{props.politicalAffiliation}
 								</Text>
 							</div>
@@ -149,10 +156,10 @@ export function ElectionsSidebar(props: ElectionsSidebarProps) {
 							</Text>
 							<div className='flex flex-col gap-2'>
 								{props.officeContacts!.map((c, i) => (
-									<div key={i} className='flex items-center gap-2'>
+									<div key={i} className={iconValueRow()}>
 										<IconResolver icon={c.icon} className={linkIcon()} />
 										<Anchor href={c.href} className={linkUrl()}>
-											<Text as='span' styleType='body-2'>
+											<Text as='span' styleType='body-2' className={iconValue()}>
 												{c.label}
 											</Text>
 										</Anchor>

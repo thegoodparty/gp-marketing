@@ -12,6 +12,14 @@ export const DEV_ORIGIN = 'http://localhost:3009';
 // Re-export from Figma into this folder to refresh the source of truth.
 export const FIGMA_DIR = '/tmp/figma-shots';
 
+// Live Figma source of truth — "GoodParty — Marketing Design System". Each STATES
+// entry carries its `node` id; pull the live frame via the Figma MCP
+// (get_screenshot / get_design_context) with FIGMA_FILE_KEY + that node id.
+export const FIGMA_FILE_KEY = 'qIOT4lO1nRw4reuj6LjLwn';
+
+// The unclaimed-profile "claim" form overlay dialog (shared across unclaimed states).
+export const FIGMA_OVERLAY_NODE = '1901:51609';
+
 // Harness run artifacts (screenshots, diffs, reports) land here, one dir per run.
 export const OUT_ROOT = '/tmp/people-harness';
 
@@ -125,6 +133,7 @@ export const STATES = [
 		label: 'claimed-candidate',
 		slug: 'allen-slagle-74eee01a',
 		figma: 'A',
+		node: '1901:50309',
 		status: 'active',
 		masks: [],
 	},
@@ -133,6 +142,7 @@ export const STATES = [
 		label: 'claimed-officeholder',
 		slug: 'tracy-good-ecff49d3',
 		figma: 'B',
+		node: '1901:52117',
 		status: 'active',
 		masks: [],
 	},
@@ -141,6 +151,7 @@ export const STATES = [
 		label: 'claimed-both',
 		slug: 'susan-overman-ad914b82',
 		figma: 'C',
+		node: '1901:53123',
 		status: 'active',
 		masks: [],
 	},
@@ -149,6 +160,7 @@ export const STATES = [
 		label: 'unclaimed-indep-candidate',
 		slug: 'kim-byrd-b77f912d',
 		figma: 'D',
+		node: '1917:88035',
 		status: 'active',
 		masks: [],
 	},
@@ -157,6 +169,7 @@ export const STATES = [
 		label: 'unclaimed-indep-officeholder',
 		slug: 'rob-zotti-d8c578fb',
 		figma: 'E',
+		node: '1917:88616',
 		status: 'active',
 		masks: [],
 	},
@@ -165,6 +178,7 @@ export const STATES = [
 		label: 'unclaimed-indep-both',
 		slug: 'tim-ficken-0a951485',
 		figma: 'F',
+		node: '1917:89211',
 		status: 'active',
 		masks: [],
 	},
@@ -173,6 +187,7 @@ export const STATES = [
 		label: 'claimed-past',
 		slug: 'bill-fortner-61a42912',
 		figma: 'G',
+		node: '1958:110869',
 		status: 'active',
 		masks: [],
 	},
@@ -181,6 +196,7 @@ export const STATES = [
 		label: 'unclaimed-indep-past',
 		slug: 'gregory-schreurs-136cadf0',
 		figma: 'H',
+		node: '1970:113629',
 		status: 'active',
 		masks: [],
 	},
@@ -189,6 +205,7 @@ export const STATES = [
 		label: 'unclaimed-major-candidate',
 		slug: 'jeb-hanson-3753676b',
 		figma: 'I',
+		node: '1958:108636',
 		status: 'active',
 		masks: [],
 	},
@@ -197,6 +214,7 @@ export const STATES = [
 		label: 'unclaimed-major-officeholder',
 		slug: 'deb-craft-f88e7434',
 		figma: 'J',
+		node: '1958:109815',
 		status: 'active',
 		masks: [],
 	},
@@ -205,6 +223,7 @@ export const STATES = [
 		label: 'removal-running',
 		slug: 'x-27255f40',
 		figma: 'K',
+		node: '1997:118776',
 		status: 'active',
 		masks: [],
 	},
@@ -213,6 +232,7 @@ export const STATES = [
 		label: 'removal-officeholder',
 		slug: 'x-3412f69c',
 		figma: 'L',
+		node: '1997:118282',
 		status: 'active',
 		masks: [],
 	},

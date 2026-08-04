@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { cn, tv } from './_lib/utils.ts';
+import { Anchor } from './Anchor.tsx';
 import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
 import { ResponsiveImage } from './ResponsiveImage.tsx';
@@ -31,7 +32,10 @@ const styles = tv({
 		imageWrapper: 'relative z-20 flex-shrink-0 md:-mb-[104px] lg:-mb-[216px]',
 		// Circular portrait straddling the dark band and the cream content below.
 		image: 'relative rounded-full overflow-hidden w-40 h-40 md:w-72 md:h-72 lg:w-[416px] lg:h-[416px]',
-		badge: 'absolute -bottom-4 left-1/2 -translate-x-1/2 z-30 drop-shadow-md',
+		// GoodParty logo overlaid on the photo's bottom-right corner. Sized as a
+		// fraction of the portrait per Figma (desktop glyph 113x94 on the 416px
+		// avatar; mobile 48x40 on the 144px avatar), so it scales across breakpoints.
+		badge: 'absolute bottom-1 right-1 z-30 drop-shadow-md w-12 h-10 md:w-20 md:h-[66px] lg:w-[113px] lg:h-[94px]',
 		content: 'flex flex-col gap-4 text-left z-10 md:pt-2',
 		tagRow: 'flex flex-wrap items-center gap-2',
 		// Pill CONTAINER only (shape + color). The text size lives on an inner span,
@@ -41,15 +45,10 @@ const styles = tv({
 		// Inner text span: 14px medium Open Sans (Figma tag). No color here → nothing
 		// for merge to collapse it against; color is inherited from the container.
 		tagText: 'font-secondary text-[0.875rem] font-medium',
-		// Pledge pill sits in the SAME row as the persona tags so it costs no vertical
-		// height. It previously rendered as its own full-width band under the hero,
-		// which is dead space the design does not have (and it collided with the
-		// straddling portrait once the hero stopped reserving the photo's full height).
-		// Styled as the Figma "Pro Blocks / Tagline" (yellow fill), matching the persona tag.
-		pledgeTag: 'inline-flex w-fit items-center rounded-[6px] border border-gray-300 bg-bright-yellow-50 px-2.5 py-1 text-[color:#0a0a0a] shadow-xs',
 		nameOffice: 'flex flex-col gap-2',
 		heading: '',
 		office: '',
+		officeLink: 'hover:underline',
 		attribution: 'flex items-center justify-start gap-1.5',
 		attributionIcon: 'w-[37px] h-[28px]',
 		attributionText: 'text-sm',
@@ -83,11 +82,11 @@ export type ProfileHeroProps = {
 	backgroundColor?: (typeof backgroundTypeValues)[number];
 	candidateName: string;
 	office: string;
+	/** When set, the office line renders as a link to the office/position page. */
+	officeHref?: string;
 	profileImage?: SanityImage;
 	profileImageUrl?: string;
 	isEmpowered?: boolean;
-	/** Renders a "Took the GoodParty.org Pledge" pill alongside the persona tags. */
-	pledged?: boolean;
 	/** Persona tag pills rendered above the name (e.g. "Candidate", "Incumbent"). Renders nothing when empty. */
 	tags?: string[];
 	/**
@@ -100,7 +99,7 @@ export type ProfileHeroProps = {
 export function ProfileHero(props: ProfileHeroProps) {
 	const backgroundColor = props.backgroundColor ?? 'midnight';
 	const resolvedBackgroundColor = backgroundColor === 'white' ? 'cream' : backgroundColor;
-	const { base, backgroundWrapper, band, belowBand, container, imageWrapper, image, badge, content, tagRow, tag, tagText, pledgeTag, nameOffice, heading, office, attribution, attributionIcon, attributionText, notEndorsed } = styles({ backgroundColor: resolvedBackgroundColor });
+	const { base, backgroundWrapper, band, belowBand, container, imageWrapper, image, badge, content, tagRow, tag, tagText, nameOffice, heading, office, officeLink, attribution, attributionIcon, attributionText, notEndorsed } = styles({ backgroundColor: resolvedBackgroundColor });
 
 	// `attribution` wins when provided; otherwise fall back to legacy `isEmpowered`.
 	const attributionMode = props.attribution ?? (props.isEmpowered ? 'empowered' : 'none');
@@ -141,23 +140,18 @@ export function ProfileHero(props: ProfileHeroProps) {
 								</div>
 							)}
 						</div>
-						{props.isEmpowered && (
-							<Logo width={80} height={65} className={badge()} />
+						{attributionMode === 'empowered' && (
+							<Logo className={badge()} />
 						)}
 					</div>
 					<div className={content()}>
-						{(tags.length > 0 || props.pledged) && (
+						{tags.length > 0 && (
 							<div className={tagRow()}>
 								{tags.map((label) => (
 									<span key={label} className={tag()}>
 										<span className={tagText()}>{label}</span>
 									</span>
 								))}
-								{props.pledged && (
-									<span className={pledgeTag()}>
-										<span className={tagText()}>Took the GoodParty.org Pledge</span>
-									</span>
-								)}
 							</div>
 						)}
 						<div className={nameOffice()}>
@@ -165,7 +159,13 @@ export function ProfileHero(props: ProfileHeroProps) {
 								{props.candidateName}
 							</Text>
 							<Text as="p" styleType="subtitle-1" className={office()}>
-								{props.office}
+								{props.officeHref ? (
+									<Anchor href={props.officeHref} className={officeLink()}>
+										{props.office}
+									</Anchor>
+								) : (
+									props.office
+								)}
 							</Text>
 						</div>
 						{attributionMode === 'empowered' && (

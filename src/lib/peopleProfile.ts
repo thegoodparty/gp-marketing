@@ -2,6 +2,7 @@ import {
 	COUNTY_MTFCC,
 	getCandidacies,
 	getCandidateBySlug,
+	getCityPlacesByCounty,
 	getOfficeHoldersByGeoId,
 	getPersonByPersonId,
 	getPersonsByIds,
@@ -9,6 +10,7 @@ import {
 	getPublicPersonProfileStatus,
 	getVoterDensityForDistrict,
 } from '~/lib/electionsApi';
+import { US_STATES_TUPLES } from '~/constants/usStates';
 import {
 	buildElectionPositionHrefFromRaceSlug,
 	getStateName,
@@ -17,6 +19,7 @@ import { classifyPartyFrom, isMajorParty, type PartyClass } from '~/lib/party';
 import type { CandidacyItem } from '~/types/elections';
 import type {
 	PersonAccomplishment,
+	PersonCandidacySummary,
 	PersonItem,
 	PersonOfficeHolder,
 	PersonProfileIssueStatus,
@@ -122,6 +125,12 @@ export interface ElectionsIndex {
 	stateSlug: string;
 	stateName: string;
 	entries: ElectionIndexEntry[];
+	/**
+	 * Geographic tier of the listed entries — scales with the profile's own
+	 * office level (state profile → states, county → counties, city → cities).
+	 * Drives the pre-footer band's "Select your {state|county|city}…" copy.
+	 */
+	entryLevel: 'state' | 'county' | 'city';
 }
 
 /**
@@ -297,10 +306,12 @@ function formatYear(date: string | null): string | null {
 
 function formatTerm(office: PersonOfficeHolder | null): string | null {
 	if (!office) return null;
+	// Term is shown only when the spine gives us real dates. electionFrequency was
+	// unreliable/unpopulated so it's intentionally unused; "In office since 20xx"
+	// was likewise dropped as data-limitation guesswork.
 	const start = formatYear(office.startAt);
 	const end = formatYear(office.endAt);
 	if (start && end) return `${start} – ${end}`;
-	if (start) return `Since ${start}`;
 	if (end) return `Through ${end}`;
 	return null;
 }
@@ -509,11 +520,13 @@ function humanizeSlugSegment(segment: string): string {
  * Builds the location + position breadcrumb hierarchy
  * (`Elections > State > County > City > Position > Name`).
  *
+ * The trail always starts at `Elections` (no leading `Home` crumb) so it matches
+ * the profile frames and so the JSON-LD `BreadcrumbList` leads with Elections.
  * The intermediate location crumbs are derived from the resolved elections
  * position path (`/elections/<state>/<county?>/<city?>/position/<slug>`) so they
  * match the canonical elections routes exactly. When no race slug is available
  * (e.g. an office holder with no linked race), the trail degrades to
- * `Home > People > Name`.
+ * `Elections > State? > Name`.
  */
 export async function buildBreadcrumb(params: {
 	displayName: string;
@@ -523,15 +536,15 @@ export async function buildBreadcrumb(params: {
 	positionName: string | null;
 }): Promise<ProfileBreadcrumb[]> {
 	const { displayName, stateCode, raceSlug, positionLevel, positionName } = params;
-	const trail: ProfileBreadcrumb[] = [{ href: '/', label: 'Home' }];
+	const trail: ProfileBreadcrumb[] = [{ href: '/elections', label: 'Elections' }];
 
 	if (!raceSlug) {
-		trail.push({ href: '/people', label: 'People' });
+		if (stateCode) {
+			trail.push({ href: `/elections/${stateCode.toLowerCase()}`, label: getStateName(stateCode) });
+		}
 		trail.push({ label: displayName });
 		return trail;
 	}
-
-	trail.push({ href: '/elections', label: 'Elections' });
 
 	const positionHref = buildElectionPositionHrefFromRaceSlug({
 		slug: raceSlug,
@@ -656,7 +669,14 @@ export function composeView(
 		pledged: !removed && (person?.isPledged ?? false),
 		displayName,
 		roleTitle,
-		officeName: office?.positionName ?? office?.officeTitle ?? null,
+		// Candidate-only people have no held office; fall back to the candidacy's
+		// position so section headings ("About …", "Other Candidates for …") still
+		// name the seat they're running for, matching the Figma candidate frames.
+		officeName:
+			office?.positionName ??
+			office?.officeTitle ??
+			person?.Candidacies?.[0]?.positionName ??
+			null,
 		party,
 		avatarUrl,
 		coverImageUrl: removed ? null : (overlay?.coverImageUrl ?? null),
@@ -694,11 +714,7 @@ export function composeView(
 			(removed ? buildRecentExperience(person) : (authoredExperience(overlay) ?? buildRecentExperience(person))),
 		otherCandidates: extras.otherCandidates ?? [],
 		nearbyOfficials: extras.nearbyOfficials ?? [],
-		breadcrumb: extras.breadcrumb ?? [
-			{ href: '/', label: 'Home' },
-			{ href: '/people', label: 'People' },
-			{ label: displayName },
-		],
+		breadcrumb: extras.breadcrumb ?? [{ href: '/elections', label: 'Elections' }, { label: displayName }],
 		electionsIndex: extras.electionsIndex ?? null,
 		voterDensity: extras.voterDensity ?? null,
 		officeAddress: removed ? null : (extras.officeAddress ?? null),
@@ -706,9 +722,48 @@ export function composeView(
 	};
 }
 
+/**
+ * Selects which of a person's candidacies drives the profile's office context
+ * (breadcrumb position crumb, "Other Candidates", position href), by precedence:
+ *   1. CURRENT candidate — the soonest UPCOMING election wins, even when the
+ *      person also holds office ("both"): the office they're running for leads.
+ *   2. Elected officeholder who is NOT currently running — defer to the elected
+ *      office (return null) so the crumb reflects the seat they hold.
+ *   3. Archived (no current run, no current office) — the most recent PAST run
+ *      by election date wins.
+ * Candidacies without a slug are skipped (the detail fetch keys off the slug).
+ */
+function selectPrimaryCandidacy(
+	person: PersonItem | null,
+	hasCurrentOffice: boolean,
+): PersonCandidacySummary | null {
+	const candidacies = (person?.Candidacies ?? []).filter((c) => c.slug);
+	if (candidacies.length === 0) return null;
+	const now = Date.now();
+	const dated = candidacies.map((c) => {
+		const parsed = c.Race?.electionDate ? Date.parse(c.Race.electionDate) : NaN;
+		return { candidacy: c, time: Number.isNaN(parsed) ? null : parsed };
+	});
+	// (1) Current candidate: earliest upcoming election.
+	const upcoming = dated
+		.filter((x): x is { candidacy: PersonCandidacySummary; time: number } => x.time != null && x.time >= now)
+		.sort((a, b) => a.time - b.time);
+	if (upcoming[0]) return upcoming[0].candidacy;
+	// (2) Elected officeholder not currently running: defer to the office.
+	if (hasCurrentOffice) return null;
+	// (3) Archived: most recent past run wins; undated rows fall back to first.
+	const past = dated
+		.filter((x): x is { candidacy: PersonCandidacySummary; time: number } => x.time != null)
+		.sort((a, b) => b.time - a.time);
+	return past[0]?.candidacy ?? candidacies[0] ?? null;
+}
+
 /** Resolves the primary candidacy detail (with race) used to enrich the page. */
-async function loadPrimaryCandidacy(person: PersonItem | null): Promise<CandidacyItem | null> {
-	const slug = person?.Candidacies?.[0]?.slug;
+async function loadPrimaryCandidacy(
+	person: PersonItem | null,
+	hasCurrentOffice: boolean,
+): Promise<CandidacyItem | null> {
+	const slug = selectPrimaryCandidacy(person, hasCurrentOffice)?.slug;
 	if (!slug) return null;
 	return getCandidateBySlug({ slug, includeStances: false, includeRace: true });
 }
@@ -738,19 +793,104 @@ async function loadNearbyOfficials(
 	return buildNearbyOfficialCards(officeholders, byId, excludePersonId);
 }
 
-/** Builds an "Explore Elections" index of counties in the person's state. */
-async function loadElectionsIndex(stateCode: string | null): Promise<ElectionsIndex | null> {
-	if (!stateCode) return null;
-	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
-	const entries: ElectionIndexEntry[] = counties
-		.filter((c) => c.slug && c.name)
-		.map((c) => ({ name: c.name, href: `/elections/${c.slug}`, level: 'county' as const }));
-	if (entries.length === 0) return null;
+/**
+ * Resolves the pre-footer "Explore Elections" index tier from the profile's
+ * office geography. City/local offices list sibling cities in their county,
+ * county offices list sibling counties in their state, and everything else
+ * (state/federal/unknown) lists all states.
+ *
+ * The county slug is recovered from the resolved position href
+ * (`/elections/<state>/<county>/<city?>/position/<slug>`) since the persons
+ * spine does not carry a clean county reference for city-level offices.
+ */
+function deriveElectionsIndexTier(
+	positionHref: string | null,
+	positionLevel: string | null,
+): { tier: 'state' | 'county' | 'city'; countySlug: string | null } {
+	if (positionHref) {
+		const segments = positionHref.split('/').filter(Boolean); // ['elections', state, ...]
+		const positionIdx = segments.indexOf('position');
+		const locationSegments =
+			positionIdx > 1 ? segments.slice(1, positionIdx) : segments.slice(1);
+		// [state] | [state, county] | [state, county, city(, subplace)]
+		if (locationSegments.length >= 3) {
+			return { tier: 'city', countySlug: `${locationSegments[0]}/${locationSegments[1]}` };
+		}
+		if (locationSegments.length === 2) return { tier: 'county', countySlug: null };
+		return { tier: 'state', countySlug: null };
+	}
+	const level = (positionLevel ?? '').toUpperCase();
+	if (/CITY|LOCAL|TOWN|MUNICIPAL|VILLAGE|BOROUGH/.test(level)) return { tier: 'county', countySlug: null };
+	if (/COUNTY|REGIONAL/.test(level)) return { tier: 'county', countySlug: null };
+	return { tier: 'state', countySlug: null };
+}
+
+/** Lists all US states as an "Explore Elections" index (state-level profiles). */
+function statesElectionsIndex(stateCode: string | null): ElectionsIndex {
+	const entries: ElectionIndexEntry[] = US_STATES_TUPLES.map(([code, name]) => ({
+		name,
+		href: `/elections/${code.toLowerCase()}`,
+		level: 'state' as const,
+	}));
 	return {
-		stateSlug: stateCode.toLowerCase(),
-		stateName: getStateName(stateCode),
+		stateSlug: stateCode?.toLowerCase() ?? '',
+		stateName: stateCode ? getStateName(stateCode) : 'United States',
+		entryLevel: 'state',
 		entries,
 	};
+}
+
+/**
+ * Builds the pre-footer "Explore Elections" index, scaled to the profile's
+ * office level: state → all states, county → counties in the state, city →
+ * sibling cities in the office's county.
+ */
+async function loadElectionsIndex(params: {
+	stateCode: string | null;
+	tier: 'state' | 'county' | 'city';
+	countySlug: string | null;
+}): Promise<ElectionsIndex | null> {
+	const { stateCode, tier, countySlug } = params;
+
+	if (tier === 'city' && countySlug) {
+		const state = countySlug.split('/')[0]?.toUpperCase() ?? stateCode?.toUpperCase() ?? '';
+		const cities = await getCityPlacesByCounty({ state, countySlug });
+		const entries: ElectionIndexEntry[] = cities
+			.filter((c) => c.slug && c.name)
+			.map((c) => ({
+				name: c.name,
+				href: `/elections/${countySlug}/${c.slug.split('/').pop() ?? ''}`,
+				level: 'city' as const,
+			}));
+		if (entries.length > 0) {
+			return {
+				stateSlug: countySlug,
+				stateName: stateCode ? getStateName(stateCode) : '',
+				entryLevel: 'city',
+				entries,
+			};
+		}
+		// Fall through to the state list if the county has no listable cities.
+		return statesElectionsIndex(stateCode);
+	}
+
+	if (tier === 'county' && stateCode) {
+		const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
+		const entries: ElectionIndexEntry[] = counties
+			.filter((c) => c.slug && c.name)
+			.map((c) => ({ name: c.name, href: `/elections/${c.slug}`, level: 'county' as const }));
+		if (entries.length > 0) {
+			return {
+				stateSlug: stateCode.toLowerCase(),
+				stateName: getStateName(stateCode),
+				entryLevel: 'county',
+				entries,
+			};
+		}
+	}
+
+	// State-level profiles (and any tier that produced no entries) list states.
+	return statesElectionsIndex(stateCode);
 }
 
 /**
@@ -780,7 +920,7 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 	if (!overlay && !removed && !person) return null;
 
 	const office = pickCurrentOffice(person);
-	const candidacy = await loadPrimaryCandidacy(person);
+	const candidacy = await loadPrimaryCandidacy(person, office?.isCurrent === true);
 
 	const raceSlug = candidacy?.Race?.slug ?? null;
 	const positionLevel = candidacy?.Race?.positionLevel ?? office?.Position?.level ?? null;
@@ -811,11 +951,12 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 
 	// Interlink sections + breadcrumb are independent; fetch in parallel. Each
 	// degrades to empty on any miss so the core profile always renders.
+	const { tier, countySlug } = deriveElectionsIndexTier(positionHref, positionLevel);
 	const [otherCandidates, nearbyOfficials, breadcrumb, electionsIndex] = await Promise.all([
 		loadOtherCandidates(positionId, personId),
 		loadNearbyOfficials(geoId, personId),
 		buildBreadcrumb({ displayName, stateCode, raceSlug, positionLevel, positionName }),
-		loadElectionsIndex(stateCode),
+		loadElectionsIndex({ stateCode, tier, countySlug }),
 	]);
 
 	return composeView(personId, person, overlay, {

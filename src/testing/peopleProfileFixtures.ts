@@ -63,7 +63,7 @@ function candidacy(over: Partial<PersonCandidacySummary> = {}): PersonCandidacyS
 	// `Race.electionDate` lets the spine-derived "Recent Experience" date the run.
 	return {
 		id: 'cand-1',
-		positionName: 'Mayor',
+		positionName: 'Mayor of Springfield',
 		party: 'Independent',
 		state: 'CA',
 		Race: { electionDate: '2024-11-05' },
@@ -74,9 +74,9 @@ function candidacy(over: Partial<PersonCandidacySummary> = {}): PersonCandidacyS
 function office(over: Partial<PersonOfficeHolder> = {}): PersonOfficeHolder {
 	return {
 		id: 'off-1',
-		positionName: 'City Council',
-		normalizedPositionName: null,
-		officeTitle: 'City Council',
+		positionName: 'Springfield City Council',
+		normalizedPositionName: 'City Council',
+		officeTitle: 'City Council Member',
 		partyNames: ['Independent'],
 		startAt: '2021-01-01',
 		endAt: null,
@@ -85,8 +85,8 @@ function office(over: Partial<PersonOfficeHolder> = {}): PersonOfficeHolder {
 		isAppointed: null,
 		numberOfSeats: null,
 		state: 'CA',
-		subAreaName: null,
-		subAreaValue: null,
+		subAreaName: 'Ward',
+		subAreaValue: '3',
 		websiteUrl: null,
 		officePhone: null,
 		officeEmail: null,
@@ -182,13 +182,16 @@ const claimedFacts = (persona: PersonPersona, pledged: boolean): ExpectedFacts =
 	noindex: false,
 });
 
-const unclaimedIndepFacts = (persona: PersonPersona, pledged: boolean): ExpectedFacts => ({
+// An unclaimed profile never surfaces a GP pledge (pledge framing is
+// claimed-only, and the hero pledge pill has been removed), so these are always
+// pledged:false — the spine flag is left off the unclaimed fixtures to match.
+const unclaimedIndepFacts = (persona: PersonPersona): ExpectedFacts => ({
 	persona,
 	claimed: false,
 	majorParty: false,
 	empowered: true,
 	removed: false,
-	pledged,
+	pledged: false,
 	hasAvatar: true, // spine headshot
 	hasBio: true, // spine bioText
 	hasIssues: false, // no overlay
@@ -255,27 +258,26 @@ export const STATE_FIXTURES: StateFixture[] = [
 	{
 		state: 'D',
 		description: 'Unclaimed independent candidate',
-		person: spine({ isPledged: true, Candidacies: [candidacy({ party: 'Independent' })] }),
+		person: spine({ Candidacies: [candidacy({ party: 'Independent' })] }),
 		overlay: { status: 'absent' },
-		expected: unclaimedIndepFacts('candidate', true),
+		expected: unclaimedIndepFacts('candidate'),
 	},
 	{
 		state: 'E',
 		description: 'Unclaimed independent officeholder',
 		person: spine({ OfficeHolders: [office({ isCurrent: true, partyNames: ['Independent'] })] }),
 		overlay: { status: 'absent' },
-		expected: unclaimedIndepFacts('officeholder', false),
+		expected: unclaimedIndepFacts('officeholder'),
 	},
 	{
 		state: 'F',
 		description: 'Unclaimed independent candidate + officeholder',
 		person: spine({
-			isPledged: true,
 			Candidacies: [candidacy({ party: 'Independent' })],
 			OfficeHolders: [office({ isCurrent: true, partyNames: ['Independent'] })],
 		}),
 		overlay: { status: 'absent' },
-		expected: unclaimedIndepFacts('both', true),
+		expected: unclaimedIndepFacts('both'),
 	},
 	{
 		state: 'G',
@@ -300,7 +302,7 @@ export const STATE_FIXTURES: StateFixture[] = [
 			],
 		}),
 		overlay: { status: 'absent' },
-		expected: unclaimedIndepFacts('past', false),
+		expected: unclaimedIndepFacts('past'),
 	},
 	{
 		state: 'I',

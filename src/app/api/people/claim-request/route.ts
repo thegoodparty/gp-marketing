@@ -10,7 +10,7 @@ const GP_API_BASE =
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PERSON_ID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-type ClaimBody = { personId?: string; email?: string; firstname?: string };
+type ClaimBody = { personId?: string; email?: string; firstname?: string; marketingConsent?: boolean };
 
 /**
  * POST /api/people/claim-request
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
 	}
 
-	const { personId, email, firstname } = body;
+	const { personId, email, firstname, marketingConsent } = body;
 
 	if (!personId || !PERSON_ID_PATTERN.test(personId)) {
 		return NextResponse.json({ error: 'Invalid personId' }, { status: 400 });
@@ -45,6 +45,7 @@ export async function POST(request: NextRequest) {
 				personId,
 				requesterEmail: email,
 				...(firstname ? { requesterName: firstname } : {}),
+				marketingConsent: marketingConsent ?? false,
 			}),
 		});
 		if (!res.ok) {

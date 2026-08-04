@@ -602,6 +602,11 @@ type PeopleSitemapData = {
 
 let cachedPeopleSitemapData: Promise<PeopleSitemapData> | null = null;
 
+/** Clears the module-level people sitemap cache. Used by tests. */
+export function clearPeopleSitemapCache(): void {
+	cachedPeopleSitemapData = null;
+}
+
 /**
  * Shared gp-api + election-api lookup for the /people sitemap band.
  * All 27 alphabetical shards call this; the Promise is hoisted so they share

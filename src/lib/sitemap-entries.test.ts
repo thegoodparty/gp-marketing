@@ -4,6 +4,7 @@ import {
 	buildRaceEntries,
 	buildRaceRouteParams,
 	chunkArray,
+	clearPeopleSitemapCache,
 	fetchPeopleSitemapEntries,
 	getSitemapIds,
 	normalizeName,
@@ -53,6 +54,7 @@ describe('fetchPeopleSitemapEntries cache', () => {
 
 	afterAll(() => {
 		globalThis.fetch = originalFetch;
+		clearPeopleSitemapCache();
 	});
 
 	test('empty upstream is not poisoned; concurrent shards then share one warm fetch', async () => {

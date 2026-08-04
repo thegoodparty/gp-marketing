@@ -13,7 +13,7 @@ import { Text } from '~/ui/Text';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-type NotifyValues = { firstname: string; email: string };
+type NotifyValues = { firstname: string; email: string; marketingConsent: boolean };
 
 function NotifyForm({ personId, displayName }: { personId: string; displayName: string }) {
 	const [isSuccess, setIsSuccess] = useState(false);
@@ -22,14 +22,19 @@ function NotifyForm({ personId, displayName }: { personId: string; displayName: 
 		handleSubmit,
 		setError,
 		formState: { errors, isSubmitting },
-	} = useForm<NotifyValues>({ defaultValues: { firstname: '', email: '' } });
+	} = useForm<NotifyValues>({ defaultValues: { firstname: '', email: '', marketingConsent: true } });
 
 	async function onSubmit(values: NotifyValues) {
 		try {
 			const res = await fetch('/api/people/claim-request', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ personId, firstname: values.firstname, email: values.email }),
+				body: JSON.stringify({
+					personId,
+					firstname: values.firstname,
+					email: values.email,
+					marketingConsent: values.marketingConsent,
+				}),
 			});
 			if (!res.ok) throw new Error('Submission failed');
 			trackEvent('Person Profile Notify Submitted', { personId });
@@ -77,6 +82,27 @@ function NotifyForm({ personId, displayName }: { personId: string; displayName: 
 					pattern: { value: EMAIL_PATTERN, message: 'Enter a valid email address' },
 				})}
 			/>
+			<label htmlFor='notify-marketing-consent' className='flex items-start gap-2.5'>
+				<input
+					id='notify-marketing-consent'
+					type='checkbox'
+					className='mt-0.5 h-5 w-5 shrink-0 rounded border-neutral-300 text-btn-primary-bg accent-btn-primary-bg focus:outline-none focus-visible:ring-2 focus-visible:ring-btn-primary-bg/30'
+					{...register('marketingConsent')}
+				/>
+				<Text as='span' styleType='body-2'>
+					Sign up for marketing communications from{' '}
+					<a
+						href='https://goodparty.org'
+						target='_blank'
+						rel='noopener noreferrer'
+						className='underline'
+						onClick={(e) => e.stopPropagation()}
+					>
+						GoodParty.org
+					</a>
+					. Unsubscribe at any time.
+				</Text>
+			</label>
 			{errors.root?.message && (
 				<Text styleType='caption' className='text-error-600' role='alert'>
 					{errors.root.message}

@@ -263,13 +263,15 @@ function buildAuthoredCards(view: PersonProfileView): ProfileContentCardProps[] 
 	if (view.issues.length > 0) {
 		cards.push({ cardType: 'top-issues', group: 'platform', heading: issuesHeading(view.persona), content: <IssuesContent issues={view.issues} showStatus={holdsOffice(view.persona)} /> });
 	}
-	if (view.bio) {
-		cards.push({ cardType: 'about-me', group: 'about', heading: 'About Me', content: view.bio });
-	}
 	// Accomplishments are an in-office record — only personas who hold/held office
-	// show them. A pure candidate (Figma A) has none, so gate the section.
+	// show them. A pure candidate (Figma A) has none, so gate the section. Per Figma
+	// (B/C/G) it sits immediately after Campaign Issues, grouped with them as the
+	// in-office record, BEFORE About Me.
 	if (view.accomplishments.length > 0 && holdsOffice(view.persona)) {
 		cards.push({ group: 'about', heading: 'Accomplishments', content: <AccomplishmentsContent accomplishments={view.accomplishments} /> });
+	}
+	if (view.bio) {
+		cards.push({ cardType: 'about-me', group: 'about', heading: 'About Me', content: view.bio });
 	}
 	return cards;
 }
@@ -400,7 +402,21 @@ function buildCivicCards(view: PersonProfileView): ProfileContentCardProps[] {
 	if (view.recentExperience.length > 0) {
 		cards.push({ group: 'about', heading: 'Recent Experience', content: <ExperienceContent experience={view.recentExperience} /> });
 	}
-	// Figma title-cases this heading and leads with the empowered (GoodParty)
+	if (view.positionDescription || view.termLabel || view.electionDate) {
+		cards.push({
+			group: 'position',
+			heading: `About ${view.officeName ?? 'the Role'}`,
+			content: <AboutPositionContent view={view} />,
+		});
+	}
+	const districtMap = buildDistrictMap(view);
+	if (districtMap) {
+		cards.push({ group: 'district', heading: 'District information', content: districtMap });
+	}
+	// People cards (other candidates / nearby officials) close the column. Per Figma
+	// the officeholder frames (B/C/G) place these last, after the position + district
+	// context, so the reader meets the office before the surrounding people.
+	// Figma title-cases the heading and leads with the empowered (GoodParty)
 	// candidate. FLAG: the frame reads "Other Candidates for [Position] in
 	// <Location>" but the view has no clean locality field distinct from the
 	// position name, so the "in <Location>" clause is omitted rather than invented.
@@ -417,17 +433,6 @@ function buildCivicCards(view: PersonProfileView): ProfileContentCardProps[] {
 	const nearby = holdsOffice(view.persona) ? empoweredFirst(toCandidateCards(view.nearbyOfficials)) : [];
 	if (nearby.length > 0) {
 		cards.push({ group: 'people', heading: 'Nearby Officials', content: <OtherCandidatesContent cards={nearby} /> });
-	}
-	if (view.positionDescription || view.termLabel || view.electionDate) {
-		cards.push({
-			group: 'position',
-			heading: `About ${view.officeName ?? 'the Role'}`,
-			content: <AboutPositionContent view={view} />,
-		});
-	}
-	const districtMap = buildDistrictMap(view);
-	if (districtMap) {
-		cards.push({ group: 'district', heading: 'District information', content: districtMap });
 	}
 	return cards;
 }

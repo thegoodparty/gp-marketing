@@ -49,24 +49,29 @@ describe('fetchPeopleSitemapEntries cache', () => {
 	const originalFetch = globalThis.fetch;
 	const aliceId = 'aaaaaaaa-1111-2222-3333-444444444444';
 	const bobId = 'bbbbbbbb-1111-2222-3333-444444444444';
+	const base = 'https://goodparty.org';
 
 	afterAll(() => {
 		globalThis.fetch = originalFetch;
 	});
 
-	test('shards share one gp-api + election-api round-trip', async () => {
+	test('empty upstream is not poisoned; concurrent shards then share one warm fetch', async () => {
 		const urls: string[] = [];
+		let serveEmpty = true;
 		globalThis.fetch = (async (input: RequestInfo | URL) => {
 			const url = String(input);
 			urls.push(url);
 			if (url.includes('public-person-profiles/published')) {
-				return new Response(
-					JSON.stringify([
-						{ personId: aliceId, updatedAt: '2026-01-15T00:00:00.000Z' },
-						{ personId: bobId, updatedAt: '2026-02-01T00:00:00.000Z' },
-					]),
-					{ status: 200, headers: { 'content-type': 'application/json' } },
-				);
+				const body = serveEmpty
+					? []
+					: [
+							{ personId: aliceId, updatedAt: '2026-01-15T00:00:00.000Z' },
+							{ personId: bobId, updatedAt: '2026-02-01T00:00:00.000Z' },
+						];
+				return new Response(JSON.stringify(body), {
+					status: 200,
+					headers: { 'content-type': 'application/json' },
+				});
 			}
 			if (url.includes('/v1/persons')) {
 				return new Response(
@@ -80,17 +85,21 @@ describe('fetchPeopleSitemapEntries cache', () => {
 			return new Response(JSON.stringify([]), { status: 200 });
 		}) as typeof fetch;
 
-		const base = 'https://goodparty.org';
+		const empty = await fetchPeopleSitemapEntries(base, 'a');
+		expect(empty).toEqual([]);
+		expect(urls.filter((u) => u.includes('public-person-profiles/published'))).toHaveLength(1);
+		expect(urls.filter((u) => u.includes('/v1/persons'))).toHaveLength(0);
+
+		serveEmpty = false;
+		urls.length = 0;
+
 		const [aShard, bShard] = await Promise.all([
 			fetchPeopleSitemapEntries(base, 'a'),
 			fetchPeopleSitemapEntries(base, 'b'),
 		]);
 
-		const gpCalls = urls.filter((u) => u.includes('public-person-profiles/published'));
-		const personCalls = urls.filter((u) => u.includes('/v1/persons'));
-		expect(gpCalls).toHaveLength(1);
-		expect(personCalls).toHaveLength(1);
-
+		expect(urls.filter((u) => u.includes('public-person-profiles/published'))).toHaveLength(1);
+		expect(urls.filter((u) => u.includes('/v1/persons'))).toHaveLength(1);
 		expect(aShard.map((e) => e.url)).toEqual([`${base}/people/alice-smith-aaaaaaaa`]);
 		expect(bShard.map((e) => e.url)).toEqual([`${base}/people/bob-jones-bbbbbbbb`]);
 	});

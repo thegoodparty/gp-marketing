@@ -120,14 +120,22 @@ function richExperience(persona: PersonPersona): ExperienceItem[] {
 
 function relatedCards(prefix: string, count: number, empoweredEvery = 3): RelatedPersonCard[] {
 	const NAMES = ['Garrett Borton', 'Nathan Todd', 'Don Taylor', 'Henry Nessul', 'Vera Huber', 'Gilian Sears', 'Cheri Steinmetz', 'Eric Barlow', 'Marcia Bean', 'Lori Smallwood', 'Serena Lipp', 'Abby Angelos'];
-	return Array.from({ length: count }, (_, i) => ({
-		personId: `${prefix}-${i}`,
-		name: NAMES[i % NAMES.length]!,
-		subtitle: i % 2 === 0 ? 'Republican' : 'Nonpartisan',
-		href: `/people/${prefix}-${i}`,
-		isEmpowered: i % empoweredEvery === 0,
-		avatarUrl: null,
-	}));
+	// Realistic party mix, but ONLY non-partisan/independent people can be
+	// GoodParty-empowered — a Republican/Democrat card must never show the
+	// "Empowered by GoodParty.org" badge (we only empower non-partisan/3rd-party).
+	const PARTIES = ['Nonpartisan', 'Republican', 'Independent', 'Democrat'];
+	return Array.from({ length: count }, (_, i) => {
+		const subtitle = PARTIES[i % PARTIES.length]!;
+		const isMajorParty = subtitle === 'Republican' || subtitle === 'Democrat';
+		return {
+			personId: `${prefix}-${i}`,
+			name: NAMES[i % NAMES.length]!,
+			subtitle,
+			href: `/people/${prefix}-${i}`,
+			isEmpowered: !isMajorParty && i % empoweredEvery === 0,
+			avatarUrl: null,
+		};
+	});
 }
 
 function richVoterDensity(): VoterDensity {

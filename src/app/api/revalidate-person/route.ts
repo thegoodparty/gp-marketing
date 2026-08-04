@@ -3,6 +3,7 @@ import { revalidateTag } from 'next/cache';
 import { type NextRequest, NextResponse } from 'next/server';
 import { personRevalidateSecret } from '~/lib/env';
 import { personCacheTag } from '~/lib/electionsApi';
+import { clearPeopleSitemapCache } from '~/lib/sitemap-entries';
 
 const SECRET_HEADER = 'x-revalidate-secret';
 const HMAC_KEY = 'personRevalidate';
@@ -48,6 +49,7 @@ export async function POST(req: NextRequest) {
 	try {
 		const tag = personCacheTag(personId);
 		revalidateTag(tag);
+		clearPeopleSitemapCache();
 		return NextResponse.json({ revalidated: true, tag });
 	} catch (err) {
 		// Log the detail server-side; don't echo the raw error text to the caller.

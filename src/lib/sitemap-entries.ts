@@ -602,7 +602,7 @@ type PeopleSitemapData = {
 
 let cachedPeopleSitemapData: Promise<PeopleSitemapData> | null = null;
 
-/** Clears the module-level people sitemap cache. Used by tests. */
+/** Clears the module-level people sitemap cache. Used by revalidate-person and tests. */
 export function clearPeopleSitemapCache(): void {
 	cachedPeopleSitemapData = null;
 }

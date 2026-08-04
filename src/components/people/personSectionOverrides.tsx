@@ -23,16 +23,33 @@ import { PersonClaimCTABand } from './PersonClaimCTABand';
 // meta row; in that case we fall back to "render if there are cells at all".
 const MIN_VOTER_DENSITY_COVERAGE = 0.5;
 
+// Only candidate/both personas render the "Why" card (Figma frame A heading is
+// "Why I'm Running for Office"). Officeholder/past frames drop it, so those cases
+// are never reached — they exist only to keep the switch exhaustive.
 function whyHeading(persona: PersonPersona): string {
 	switch (persona) {
 		case 'candidate':
 		case 'both':
-			return 'Why I\u2019m Running';
+			return 'Why I\u2019m Running for Office';
 		case 'officeholder':
 			return 'Why I Serve';
 		case 'past':
 			return 'Why I Served';
 	}
+}
+
+/** Personas that actually hold (or held) office — the only ones that show issue
+ * progress tags. A pure candidate has no in-office record, so frame A omits them. */
+function holdsOffice(persona: PersonPersona): boolean {
+	return persona === 'officeholder' || persona === 'both' || persona === 'past';
+}
+
+/** Stable empowered-first ordering (Figma puts the GoodParty candidate on top). */
+function empoweredFirst(cards: CandidateCard[]): CandidateCard[] {
+	return [
+		...cards.filter(c => c.isGoodPartyCandidate),
+		...cards.filter(c => !c.isGoodPartyCandidate),
+	];
 }
 
 /** Small persona tag pill(s) rendered above the hero name (Figma). */
@@ -81,7 +98,7 @@ function TypeTag({ label }: { label: string }) {
 	);
 }
 
-function IssuesContent({ issues }: { issues: PersonProfileView['issues'] }): ReactNode {
+function IssuesContent({ issues, showStatus }: { issues: PersonProfileView['issues']; showStatus: boolean }): ReactNode {
 	return (
 		<ol className='flex flex-col gap-6'>
 			{issues.map((issue, index) => (
@@ -99,7 +116,7 @@ function IssuesContent({ issues }: { issues: PersonProfileView['issues'] }): Rea
 							<Text styleType='body-2'>{issue.description}</Text>
 						</div>
 					)}
-					{issue.status && (
+					{showStatus && issue.status && (
 						<div className='pl-7'>
 							<TypeTag label={STATUS_LABELS[issue.status]} />
 						</div>
@@ -227,16 +244,20 @@ function AboutPositionContent({ view }: { view: PersonProfileView }): ReactNode 
  */
 function buildAuthoredCards(view: PersonProfileView): ProfileContentCardProps[] {
 	const cards: ProfileContentCardProps[] = [];
-	if (view.whyRunning) {
+	// "Why I'm Running for Office" is candidate-only (Figma A); officeholder/past
+	// frames drop the section entirely.
+	if (view.whyRunning && (view.persona === 'candidate' || view.persona === 'both')) {
 		cards.push({ cardType: 'why-running', heading: whyHeading(view.persona), content: view.whyRunning });
 	}
 	if (view.issues.length > 0) {
-		cards.push({ cardType: 'top-issues', heading: issuesHeading(view.persona), content: <IssuesContent issues={view.issues} /> });
+		cards.push({ cardType: 'top-issues', heading: issuesHeading(view.persona), content: <IssuesContent issues={view.issues} showStatus={holdsOffice(view.persona)} /> });
 	}
 	if (view.bio) {
 		cards.push({ cardType: 'about-me', heading: 'About Me', content: view.bio });
 	}
-	if (view.accomplishments.length > 0) {
+	// Accomplishments are an in-office record — only personas who hold/held office
+	// show them. A pure candidate (Figma A) has none, so gate the section.
+	if (view.accomplishments.length > 0 && holdsOffice(view.persona)) {
 		cards.push({ heading: 'Accomplishments', content: <AccomplishmentsContent accomplishments={view.accomplishments} /> });
 	}
 	return cards;
@@ -299,11 +320,14 @@ function aboutPrompt(view: PersonProfileView): string {
  * does not show a placeholder for it).
  */
 function buildAuthoredPlaceholderCards(view: PersonProfileView): ProfileContentCardProps[] {
-	return [
-		{ cardType: 'why-running', heading: whyHeading(view.persona), content: <PlaceholderPrompt>{whyPrompt(view)}</PlaceholderPrompt> },
-		{ cardType: 'top-issues', heading: issuesHeading(view.persona), content: <PlaceholderPrompt>{issuesPrompt(view)}</PlaceholderPrompt> },
-		{ cardType: 'about-me', heading: 'About Me', content: <PlaceholderPrompt>{aboutPrompt(view)}</PlaceholderPrompt> },
-	];
+	const cards: ProfileContentCardProps[] = [];
+	// Mirror the claimed gating: the "Why" prompt is candidate-only.
+	if (view.persona === 'candidate' || view.persona === 'both') {
+		cards.push({ cardType: 'why-running', heading: whyHeading(view.persona), content: <PlaceholderPrompt>{whyPrompt(view)}</PlaceholderPrompt> });
+	}
+	cards.push({ cardType: 'top-issues', heading: issuesHeading(view.persona), content: <PlaceholderPrompt>{issuesPrompt(view)}</PlaceholderPrompt> });
+	cards.push({ cardType: 'about-me', heading: 'About Me', content: <PlaceholderPrompt>{aboutPrompt(view)}</PlaceholderPrompt> });
+	return cards;
 }
 
 /** First 4-digit year in an ISO-ish date string (avoids TZ off-by-one). */
@@ -365,17 +389,20 @@ function buildCivicCards(view: PersonProfileView): ProfileContentCardProps[] {
 	if (view.recentExperience.length > 0) {
 		cards.push({ heading: 'Recent Experience', content: <ExperienceContent experience={view.recentExperience} /> });
 	}
-	const otherCandidates = toCandidateCards(view.otherCandidates);
+	// Figma title-cases this heading and leads with the empowered (GoodParty)
+	// candidate. FLAG: the frame reads "Other Candidates for [Position] in
+	// <Location>" but the view has no clean locality field distinct from the
+	// position name, so the "in <Location>" clause is omitted rather than invented.
+	const otherCandidates = empoweredFirst(toCandidateCards(view.otherCandidates));
 	if (otherCandidates.length > 0) {
 		cards.push({
-			heading: view.officeName ? `Other candidates for ${view.officeName}` : 'Other candidates',
+			heading: view.officeName ? `Other Candidates for ${view.officeName}` : 'Other Candidates',
 			content: <OtherCandidatesContent cards={otherCandidates} />,
 		});
 	}
 	// Nearby officials serving the same constituency — only for personas actually
 	// in (or formerly in) office, per Figma (candidate-only pages omit this).
-	const holdsOffice = view.persona === 'officeholder' || view.persona === 'both' || view.persona === 'past';
-	const nearby = holdsOffice ? toCandidateCards(view.nearbyOfficials) : [];
+	const nearby = holdsOffice(view.persona) ? toCandidateCards(view.nearbyOfficials) : [];
 	if (nearby.length > 0) {
 		cards.push({ heading: 'Nearby Officials', content: <OtherCandidatesContent cards={nearby} /> });
 	}

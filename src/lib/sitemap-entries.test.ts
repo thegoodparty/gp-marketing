@@ -58,6 +58,7 @@ describe('fetchPeopleSitemapEntries cache', () => {
 	});
 
 	test('empty upstream is not poisoned; concurrent shards then share one warm fetch', async () => {
+		clearPeopleSitemapCache();
 		const urls: string[] = [];
 		let serveEmpty = true;
 		globalThis.fetch = (async (input: RequestInfo | URL) => {
@@ -104,6 +105,51 @@ describe('fetchPeopleSitemapEntries cache', () => {
 		expect(urls.filter((u) => u.includes('/v1/persons'))).toHaveLength(1);
 		expect(aShard.map((e) => e.url)).toEqual([`${base}/people/alice-smith-aaaaaaaa`]);
 		expect(bShard.map((e) => e.url)).toEqual([`${base}/people/bob-jones-bbbbbbbb`]);
+	});
+
+	test('empty election-api persons is not poisoned while published ids exist', async () => {
+		clearPeopleSitemapCache();
+		const urls: string[] = [];
+		let servePersons = false;
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = String(input);
+			urls.push(url);
+			if (url.includes('public-person-profiles/published')) {
+				return new Response(
+					JSON.stringify([
+						{ personId: aliceId, updatedAt: '2026-01-15T00:00:00.000Z' },
+						{ personId: bobId, updatedAt: '2026-02-01T00:00:00.000Z' },
+					]),
+					{ status: 200, headers: { 'content-type': 'application/json' } },
+				);
+			}
+			if (url.includes('/v1/persons')) {
+				const body = servePersons
+					? [
+							{ id: aliceId, slug: 'alice-smith' },
+							{ id: bobId, slug: 'bob-jones' },
+						]
+					: [];
+				return new Response(JSON.stringify(body), {
+					status: 200,
+					headers: { 'content-type': 'application/json' },
+				});
+			}
+			return new Response(JSON.stringify([]), { status: 200 });
+		}) as typeof fetch;
+
+		const empty = await fetchPeopleSitemapEntries(base, 'a');
+		expect(empty).toEqual([]);
+		expect(urls.filter((u) => u.includes('public-person-profiles/published'))).toHaveLength(1);
+		expect(urls.filter((u) => u.includes('/v1/persons'))).toHaveLength(1);
+
+		servePersons = true;
+		urls.length = 0;
+
+		const recovered = await fetchPeopleSitemapEntries(base, 'a');
+		expect(urls.filter((u) => u.includes('public-person-profiles/published'))).toHaveLength(1);
+		expect(urls.filter((u) => u.includes('/v1/persons'))).toHaveLength(1);
+		expect(recovered.map((e) => e.url)).toEqual([`${base}/people/alice-smith-aaaaaaaa`]);
 	});
 });
 

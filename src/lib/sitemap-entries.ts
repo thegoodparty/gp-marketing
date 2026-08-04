@@ -644,10 +644,11 @@ async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
 
 			return { updatedByPersonId, persons };
 		})().then((result) => {
-			// If the upstream returned empty data (indistinguishable from a transient
-			// error at this layer), clear the cache so the next request retries rather
-			// than serving poisoned empty sitemaps for the process lifetime.
-			if (result.updatedByPersonId.size === 0) cachedPeopleSitemapData = null;
+			// Empty published set or empty persons (indistinguishable from a swallowed
+			// gp-api / election-api failure) must not poison the process-lifetime cache.
+			if (result.updatedByPersonId.size === 0 || result.persons.length === 0) {
+				cachedPeopleSitemapData = null;
+			}
 			return result;
 		});
 	}

@@ -306,6 +306,27 @@ function buildAuthoredPlaceholderCards(view: PersonProfileView): ProfileContentC
 	];
 }
 
+/**
+ * Past-election disclaimer shown at the top of the content well for persona
+ * `past` (Figma states G claimed + H unclaimed). FLAG: the exact Figma copy for
+ * the G frame could not be pulled (the profile frames are no longer in the
+ * accessible Figma file and H is a known mislabeled clone — see FOLLOWUPS.md), so
+ * this uses a clear placeholder pending design confirmation.
+ */
+function pastElectionDisclaimer(view: PersonProfileView): ProfileContentCardProps {
+	return {
+		raw: true,
+		content: (
+			<div className='flex items-start gap-3 rounded-xl border border-blue-200 bg-blue-50 p-4 text-midnight-900'>
+				<IconResolver icon='info' className='mt-0.5 h-5 w-5 flex-shrink-0 text-btn-primary-bg' />
+				<Text styleType='body-2'>
+					{`This profile reflects a past election. ${view.displayName} is no longer running for or serving in this office.`}
+				</Text>
+			</div>
+		),
+	};
+}
+
 /** In-column "Other candidates" list — a vertical stack of candidate cards. */
 function OtherCandidatesContent({ cards }: { cards: CandidateCard[] }): ReactNode {
 	return (
@@ -454,7 +475,9 @@ function buildDistrictMap(view: PersonProfileView): ReactNode | undefined {
  * so the same behaviour holds regardless of the (editor-authored) template.
  */
 export function buildPersonSectionOverrides(view: PersonProfileView): SectionOverrides {
-	const showClaim = view.empowered && !view.claimed;
+	// Past-election profiles (G claimed, H unclaimed) lead with the past-election
+	// disclaimer, NOT the claim CTA — so exclude persona 'past' from the claim gate.
+	const showClaim = view.empowered && !view.claimed && view.persona !== 'past';
 	// The pledge explainer is claimed content across every persona (Figma A/B/C/G
 	// all show it once claimed). Unclaimed empowered pages lead with the claim
 	// prompt instead, so it stays hidden there.
@@ -520,6 +543,7 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			? buildAuthoredPlaceholderCards(view)
 			: [];
 	const contentCards: ProfileContentCardProps[] = [
+		...(view.persona === 'past' ? [pastElectionDisclaimer(view)] : []),
 		...(showClaim ? [claimCard('voter-card')] : []),
 		...authoredCards,
 		...buildCivicCards(view),
@@ -535,13 +559,17 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 		component_profileHero: {
 			candidateName: view.displayName,
 			office: view.roleTitle ?? '',
+			// The full positionName (incl. locality) links to the office/position page.
+			officeHref: view.positionHref ?? undefined,
 			profileImageUrl: view.avatarUrl ?? undefined,
 			isEmpowered: view.empowered,
-			pledged: view.pledged,
+			compactPortrait: true,
 			tags: personaTags(view.persona),
-			// Empowered pages carry the GoodParty attribution; major-party (I/J) and
-			// removed (K/L) pages show the neutral "Not Endorsed" line instead.
-			attribution: view.empowered ? 'empowered' : 'notEndorsed',
+			// The GoodParty attribution line + on-photo logo gate on CLAIMED (endorsed):
+			// only claimed pages (A/B/C/G) show "Empowered by GoodParty.org" with the
+			// logo. Every unclaimed page — independent (D/E/F/H), major-party (I/J), and
+			// removed (K/L) — shows the neutral "Not Endorsed by GoodParty.org" line.
+			attribution: view.claimed ? 'empowered' : 'notEndorsed',
 		},
 		component_claimProfileBlock: {
 			// The standalone full-width claim banner is always suppressed now: the
@@ -552,6 +580,7 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 		component_profileContentBlock: {
 			contentCards,
 			sidebar,
+			compactPortrait: true,
 			hidden: contentCards.length === 0 && !sidebar,
 		},
 		component_goodPartyOrgPledge: { hidden: !showPledge },

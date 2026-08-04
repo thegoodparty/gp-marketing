@@ -107,10 +107,12 @@ export type SectionOverrides = {
 	component_profileHero?: {
 		candidateName: string;
 		office: string;
+		/** When set, the hero office line links to the office/position page. */
+		officeHref?: string;
 		profileImageUrl?: string;
 		isEmpowered?: boolean;
-		/** Person profiles: renders a "Took the GoodParty.org Pledge" badge under the hero. */
-		pledged?: boolean;
+		/** Person profiles: smaller (320px) desktop portrait so the sidebar clears the fold. */
+		compactPortrait?: boolean;
 		/** Persona tag pills shown above the name (e.g. "Candidate", "Incumbent"). */
 		tags?: string[];
 		/**
@@ -161,6 +163,8 @@ export type SectionOverrides = {
 		 * here. Retained for any non-person caller still rendering it inline.
 		 */
 		districtMap?: import('react').ReactNode;
+		/** People profiles: clear the smaller (320px) portrait instead of the 416px default. */
+		compactPortrait?: boolean;
 		/** When true the section renders nothing (used to gate empty/removed states). */
 		hidden?: boolean;
 	};
@@ -540,6 +544,7 @@ export function PageSections(props: Props) {
 									contentCardsOverride={pcbOverride?.contentCards}
 									sidebarOverride={pcbOverride?.sidebar}
 									districtMap={pcbOverride?.districtMap}
+									compactPortrait={pcbOverride?.compactPortrait}
 								/>
 							</Boundary>
 						);

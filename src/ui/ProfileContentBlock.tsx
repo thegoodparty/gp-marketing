@@ -38,6 +38,20 @@ const styles = tv({
 				base: 'bg-goodparty-cream',
 			},
 		},
+		// Sidebar clearance for the straddling hero portrait. MUST stay in lockstep
+		// with ProfileHero's portrait overhang (overhang = avatarSize − 200):
+		// `default` clears the 416px /candidate portrait (216px); `compact` clears
+		// the people-profile 320px portrait (120px).
+		portrait: {
+			default: {},
+			compact: {
+				sidebar: 'lg:mt-[120px]',
+				sidebarStandalone: 'lg:mt-[120px]',
+			},
+		},
+	},
+	defaultVariants: {
+		portrait: 'default',
 	},
 });
 
@@ -47,11 +61,13 @@ export type ProfileContentBlockProps = {
 	sidebar?: ElectionsSidebarProps;
 	title?: string;
 	contentCards: ProfileContentCardProps[];
+	/** Clears the smaller (320px) people-profile portrait instead of the 416px default. */
+	compactPortrait?: boolean;
 };
 
 export function ProfileContentBlock(props: ProfileContentBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
-	const { base, well, grid, sidebar, sidebarStandalone, content, title: titleSlot } = styles({ backgroundColor });
+	const { base, well, grid, sidebar, sidebarStandalone, content, title: titleSlot } = styles({ backgroundColor, portrait: props.compactPortrait ? 'compact' : 'default' });
 	const hasContentCards = props.contentCards.length > 0;
 
 	return (

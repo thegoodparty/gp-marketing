@@ -26,11 +26,12 @@ export function ProfileHeroSection({ profileHeroOverride, tokens: _tokens, ...se
 				backgroundColor={backgroundColor}
 				candidateName={candidateName}
 				office={office}
+				officeHref={profileHeroOverride?.officeHref}
 				profileImageUrl={profileHeroOverride?.profileImageUrl}
 				isEmpowered={profileHeroOverride?.isEmpowered}
+				compactPortrait={profileHeroOverride?.compactPortrait}
 				tags={profileHeroOverride?.tags}
 				attribution={profileHeroOverride?.attribution}
-				pledged={profileHeroOverride?.pledged}
 			/>
 		</section>
 	);

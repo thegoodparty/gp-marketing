@@ -411,7 +411,7 @@ function buildCivicCards(view: PersonProfileView): ProfileContentCardProps[] {
 	}
 	// Nearby officials serving the same constituency — only for personas actually
 	// in (or formerly in) office, per Figma (candidate-only pages omit this).
-	const nearby = holdsOffice(view.persona) ? toCandidateCards(view.nearbyOfficials) : [];
+	const nearby = holdsOffice(view.persona) ? empoweredFirst(toCandidateCards(view.nearbyOfficials)) : [];
 	if (nearby.length > 0) {
 		cards.push({ group: 'people', heading: 'Nearby Officials', content: <OtherCandidatesContent cards={nearby} /> });
 	}

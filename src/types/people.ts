@@ -18,14 +18,6 @@ export interface PersonOfficeHolder {
 	startAt: string | null;
 	endAt: string | null;
 	termDateSpecificity: string | null;
-	/**
-	 * Canonical term length in years for the office (e.g. [4] = 4-year term),
-	 * sourced from the position's election frequency. Optional: the election-api
-	 * persons spine does not populate it today, so the profile falls back to the
-	 * served date range when it's absent. Preferred source for the sidebar
-	 * "Current Term" / About-office "Term length" rows over "in office since".
-	 */
-	electionFrequency?: number[] | null;
 	isCurrent: boolean | null;
 	isAppointed: boolean | null;
 	numberOfSeats: number | null;

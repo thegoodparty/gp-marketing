@@ -7,10 +7,14 @@ import {
 	getElectionApiToken,
 } from './electionApiAuth';
 
+// Clerk's createToken returns `expiration` as a Unix timestamp in seconds.
+const expirationInSeconds = (secondsFromNow: number): number =>
+	Math.floor(Date.now() / 1000) + secondsFromNow;
+
 const createToken = mock(
 	async (): Promise<{ token: string | null; expiration: number | null }> => ({
 		token: 'fresh-token',
-		expiration: Date.now() + 600_000,
+		expiration: expirationInSeconds(600),
 	}),
 );
 
@@ -20,7 +24,7 @@ beforeEach(() => {
 	createToken.mockClear();
 	createToken.mockImplementation(async () => ({
 		token: 'fresh-token',
-		expiration: Date.now() + 600_000,
+		expiration: expirationInSeconds(600),
 	}));
 	process.env['GP_MARKETING_MACHINE_SECRET'] = 'test-machine-secret';
 	__resetElectionApiAuthForTests();
@@ -89,7 +93,7 @@ describe('getElectionApiToken', () => {
 
 		expect(createToken).toHaveBeenCalledTimes(1);
 
-		resolveMint({ token: 'shared-token', expiration: Date.now() + 600_000 });
+		resolveMint({ token: 'shared-token', expiration: expirationInSeconds(600) });
 		await expect(Promise.all([first, second])).resolves.toEqual(['shared-token', 'shared-token']);
 		expect(createToken).toHaveBeenCalledTimes(1);
 	});

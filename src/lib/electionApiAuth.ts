@@ -114,7 +114,10 @@ async function mint(): Promise<string | null> {
 			return usableCachedToken();
 		}
 		cachedToken = minted.token;
-		tokenExpiration = minted.expiration;
+		// Clerk returns `expiration` as a Unix timestamp in seconds; the cache
+		// checks compare against Date.now() in ms, so convert here or the token
+		// is treated as already expired and re-minted on every request.
+		tokenExpiration = minted.expiration * 1000;
 		mintCooldownUntil = 0;
 		return minted.token;
 	} catch (err) {

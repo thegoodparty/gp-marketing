@@ -1,9 +1,10 @@
-import { describe, expect, test } from 'bun:test';
+import { afterAll, describe, expect, test } from 'bun:test';
 import {
 	buildCountyLookups,
 	buildRaceEntries,
 	buildRaceRouteParams,
 	chunkArray,
+	fetchPeopleSitemapEntries,
 	getSitemapIds,
 	normalizeName,
 	peopleShardForSlug,
@@ -41,6 +42,57 @@ describe('people sitemap shards', () => {
 		// The set is a contiguous 0..last with no gaps or dupes (ids are emitted
 		// interleaved by band, so compare the sorted set).
 		expect([...ids].sort((a, b) => a - b)).toEqual([...Array(expectedLength).keys()]);
+	});
+});
+
+describe('fetchPeopleSitemapEntries cache', () => {
+	const originalFetch = globalThis.fetch;
+	const aliceId = 'aaaaaaaa-1111-2222-3333-444444444444';
+	const bobId = 'bbbbbbbb-1111-2222-3333-444444444444';
+
+	afterAll(() => {
+		globalThis.fetch = originalFetch;
+	});
+
+	test('shards share one gp-api + election-api round-trip', async () => {
+		const urls: string[] = [];
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = String(input);
+			urls.push(url);
+			if (url.includes('public-person-profiles/published')) {
+				return new Response(
+					JSON.stringify([
+						{ personId: aliceId, updatedAt: '2026-01-15T00:00:00.000Z' },
+						{ personId: bobId, updatedAt: '2026-02-01T00:00:00.000Z' },
+					]),
+					{ status: 200, headers: { 'content-type': 'application/json' } },
+				);
+			}
+			if (url.includes('/v1/persons')) {
+				return new Response(
+					JSON.stringify([
+						{ id: aliceId, slug: 'alice-smith' },
+						{ id: bobId, slug: 'bob-jones' },
+					]),
+					{ status: 200, headers: { 'content-type': 'application/json' } },
+				);
+			}
+			return new Response(JSON.stringify([]), { status: 200 });
+		}) as typeof fetch;
+
+		const base = 'https://goodparty.org';
+		const [aShard, bShard] = await Promise.all([
+			fetchPeopleSitemapEntries(base, 'a'),
+			fetchPeopleSitemapEntries(base, 'b'),
+		]);
+
+		const gpCalls = urls.filter((u) => u.includes('public-person-profiles/published'));
+		const personCalls = urls.filter((u) => u.includes('/v1/persons'));
+		expect(gpCalls).toHaveLength(1);
+		expect(personCalls).toHaveLength(1);
+
+		expect(aShard.map((e) => e.url)).toEqual([`${base}/people/alice-smith-aaaaaaaa`]);
+		expect(bShard.map((e) => e.url)).toEqual([`${base}/people/bob-jones-bbbbbbbb`]);
 	});
 });
 

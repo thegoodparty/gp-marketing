@@ -1,12 +1,12 @@
 import { createClerkClient } from '@clerk/backend';
 
 /**
- * Server-only Clerk M2M token minter for calling election-api.
+ * Server-only Clerk JWT-format M2M token minter for calling election-api.
  *
  * gp-marketing is a caller: it mints tokens with its own machine secret
- * (GP_MARKETING_MACHINE_SECRET); election-api verifies as the recipient. The
- * gp-marketing machine must be connected to the election-api machine in the
- * Clerk dashboard.
+ * (GP_MARKETING_MACHINE_SECRET); election-api verifies as the recipient
+ * (networkless, since the token is a JWT). The gp-marketing machine must be
+ * connected to the election-api machine in the Clerk dashboard.
  *
  * NEVER import this from client components — GP_MARKETING_MACHINE_SECRET and
  * CLERK_SECRET_KEY are server-only. All election-api reads already run
@@ -32,6 +32,7 @@ const TOKEN_TTL_SECONDS = 600;
 export type CreateM2MToken = (params: {
 	machineSecretKey: string;
 	secondsUntilExpiration: number;
+	tokenFormat?: 'jwt';
 }) => Promise<{ token?: string | null; expiration?: number | null }>;
 
 type ClerkM2MClient = {
@@ -39,6 +40,7 @@ type ClerkM2MClient = {
 		createToken(params: {
 			machineSecretKey: string;
 			secondsUntilExpiration: number;
+			tokenFormat?: 'jwt';
 		}): Promise<{ token?: string | null; expiration?: number | null }>;
 	};
 };
@@ -59,6 +61,7 @@ function getClerkClient(): ClerkM2MClient {
 async function createToken(params: {
 	machineSecretKey: string;
 	secondsUntilExpiration: number;
+	tokenFormat?: 'jwt';
 }): Promise<{ token?: string | null; expiration?: number | null }> {
 	if (createTokenForTests) return createTokenForTests(params);
 	return getClerkClient().m2m.createToken(params);
@@ -103,6 +106,7 @@ async function mint(): Promise<string | null> {
 	try {
 		const minted = await createToken({
 			machineSecretKey: machineSecret,
+			tokenFormat: 'jwt',
 			secondsUntilExpiration: TOKEN_TTL_SECONDS,
 		});
 		if (!minted.token || minted.expiration == null) {

@@ -23,6 +23,14 @@ import { PersonClaimCTABand } from './PersonClaimCTABand';
 // meta row; in that case we fall back to "render if there are cells at all".
 const MIN_VOTER_DENSITY_COVERAGE = 0.5;
 
+// Pre-footer "Explore elections near you" body copy, keyed by the index tier so
+// the prompt matches the level the list drills into (verbatim from the frames).
+const ELECTIONS_INDEX_COPY: Record<'state' | 'county' | 'city', string> = {
+	state: 'Select your state to see local offices, candidates, and elected officials.',
+	county: 'Select your county to see local offices, candidates, and elected officials.',
+	city: 'Select your city to see local offices, candidates, and elected officials.',
+};
+
 // Only candidate/both personas render the "Why" card (Figma frame A heading is
 // "Why I'm Running for Office"). Officeholder/past frames drop it, so those cases
 // are never reached — they exist only to keep the switch exhaustive.
@@ -636,7 +644,7 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			header: view.electionsIndex
 				? {
 						title: 'Explore elections near you',
-						copy: 'Find candidates and offices on the ballot near you.',
+						copy: ELECTIONS_INDEX_COPY[view.electionsIndex.entryLevel],
 					}
 				: undefined,
 		},

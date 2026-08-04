@@ -144,6 +144,7 @@ function richElectionsIndex() {
 	return {
 		stateSlug: 'wy',
 		stateName: 'Wyoming',
+		entryLevel: 'county' as const,
 		entries: counties.map((c) => ({ name: `${c} County`, href: `/elections/${c.toLowerCase().replace(/ /g, '-')}-county`, level: 'county' as const })),
 	};
 }

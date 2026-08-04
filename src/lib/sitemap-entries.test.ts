@@ -1,9 +1,11 @@
-import { describe, expect, test } from 'bun:test';
+import { afterAll, describe, expect, test } from 'bun:test';
 import {
 	buildCountyLookups,
 	buildRaceEntries,
 	buildRaceRouteParams,
 	chunkArray,
+	clearPeopleSitemapCache,
+	fetchPeopleSitemapEntries,
 	getSitemapIds,
 	normalizeName,
 	peopleShardForSlug,
@@ -41,6 +43,113 @@ describe('people sitemap shards', () => {
 		// The set is a contiguous 0..last with no gaps or dupes (ids are emitted
 		// interleaved by band, so compare the sorted set).
 		expect([...ids].sort((a, b) => a - b)).toEqual([...Array(expectedLength).keys()]);
+	});
+});
+
+describe('fetchPeopleSitemapEntries cache', () => {
+	const originalFetch = globalThis.fetch;
+	const aliceId = 'aaaaaaaa-1111-2222-3333-444444444444';
+	const bobId = 'bbbbbbbb-1111-2222-3333-444444444444';
+	const base = 'https://goodparty.org';
+
+	afterAll(() => {
+		globalThis.fetch = originalFetch;
+		clearPeopleSitemapCache();
+	});
+
+	test('empty upstream is not poisoned; concurrent shards then share one warm fetch', async () => {
+		clearPeopleSitemapCache();
+		const urls: string[] = [];
+		let serveEmpty = true;
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = String(input);
+			urls.push(url);
+			if (url.includes('public-person-profiles/published')) {
+				const body = serveEmpty
+					? []
+					: [
+							{ personId: aliceId, updatedAt: '2026-01-15T00:00:00.000Z' },
+							{ personId: bobId, updatedAt: '2026-02-01T00:00:00.000Z' },
+						];
+				return new Response(JSON.stringify(body), {
+					status: 200,
+					headers: { 'content-type': 'application/json' },
+				});
+			}
+			if (url.includes('/v1/persons')) {
+				return new Response(
+					JSON.stringify([
+						{ id: aliceId, slug: 'alice-smith' },
+						{ id: bobId, slug: 'bob-jones' },
+					]),
+					{ status: 200, headers: { 'content-type': 'application/json' } },
+				);
+			}
+			return new Response(JSON.stringify([]), { status: 200 });
+		}) as typeof fetch;
+
+		const empty = await fetchPeopleSitemapEntries(base, 'a');
+		expect(empty).toEqual([]);
+		expect(urls.filter((u) => u.includes('public-person-profiles/published'))).toHaveLength(1);
+		expect(urls.filter((u) => u.includes('/v1/persons'))).toHaveLength(0);
+
+		serveEmpty = false;
+		urls.length = 0;
+
+		const [aShard, bShard] = await Promise.all([
+			fetchPeopleSitemapEntries(base, 'a'),
+			fetchPeopleSitemapEntries(base, 'b'),
+		]);
+
+		expect(urls.filter((u) => u.includes('public-person-profiles/published'))).toHaveLength(1);
+		expect(urls.filter((u) => u.includes('/v1/persons'))).toHaveLength(1);
+		expect(aShard.map((e) => e.url)).toEqual([`${base}/people/alice-smith-aaaaaaaa`]);
+		expect(bShard.map((e) => e.url)).toEqual([`${base}/people/bob-jones-bbbbbbbb`]);
+	});
+
+	test('empty election-api persons is not poisoned while published ids exist', async () => {
+		clearPeopleSitemapCache();
+		const urls: string[] = [];
+		let servePersons = false;
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = String(input);
+			urls.push(url);
+			if (url.includes('public-person-profiles/published')) {
+				return new Response(
+					JSON.stringify([
+						{ personId: aliceId, updatedAt: '2026-01-15T00:00:00.000Z' },
+						{ personId: bobId, updatedAt: '2026-02-01T00:00:00.000Z' },
+					]),
+					{ status: 200, headers: { 'content-type': 'application/json' } },
+				);
+			}
+			if (url.includes('/v1/persons')) {
+				const body = servePersons
+					? [
+							{ id: aliceId, slug: 'alice-smith' },
+							{ id: bobId, slug: 'bob-jones' },
+						]
+					: [];
+				return new Response(JSON.stringify(body), {
+					status: 200,
+					headers: { 'content-type': 'application/json' },
+				});
+			}
+			return new Response(JSON.stringify([]), { status: 200 });
+		}) as typeof fetch;
+
+		const empty = await fetchPeopleSitemapEntries(base, 'a');
+		expect(empty).toEqual([]);
+		expect(urls.filter((u) => u.includes('public-person-profiles/published'))).toHaveLength(1);
+		expect(urls.filter((u) => u.includes('/v1/persons'))).toHaveLength(1);
+
+		servePersons = true;
+		urls.length = 0;
+
+		const recovered = await fetchPeopleSitemapEntries(base, 'a');
+		expect(urls.filter((u) => u.includes('public-person-profiles/published'))).toHaveLength(1);
+		expect(urls.filter((u) => u.includes('/v1/persons'))).toHaveLength(1);
+		expect(recovered.map((e) => e.url)).toEqual([`${base}/people/alice-smith-aaaaaaaa`]);
 	});
 });
 

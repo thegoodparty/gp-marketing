@@ -593,6 +593,68 @@ export async function fetchStateElectionSitemapEntries(
 	return dedupeByUrl(entries);
 }
 
+type PeopleSitemapPerson = { id?: string; slug?: string | null };
+
+type PeopleSitemapData = {
+	updatedByPersonId: Map<string, string | undefined>;
+	persons: PeopleSitemapPerson[];
+};
+
+let cachedPeopleSitemapData: Promise<PeopleSitemapData> | null = null;
+
+/** Clears the module-level people sitemap cache. Used by tests. */
+export function clearPeopleSitemapCache(): void {
+	cachedPeopleSitemapData = null;
+}
+
+/**
+ * Shared gp-api + election-api lookup for the /people sitemap band.
+ * All 27 alphabetical shards call this; the Promise is hoisted so they share
+ * a single upstream round-trip (mirrors getCachedElectionRouteParams).
+ */
+async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
+	if (!cachedPeopleSitemapData) {
+		cachedPeopleSitemapData = (async () => {
+			const published = await fetchGpApiJson<{ personId?: string; updatedAt?: string }>(
+				'v1/public-person-profiles/published',
+			);
+			const updatedByPersonId = new Map<string, string | undefined>();
+			for (const row of published) {
+				if (row.personId) updatedByPersonId.set(row.personId.toLowerCase(), row.updatedAt);
+			}
+
+			if (updatedByPersonId.size === 0) {
+				return { updatedByPersonId, persons: [] };
+			}
+
+			const ids = [...updatedByPersonId.keys()];
+			// election-api caps the `ids` filter at 500 (a larger list is rejected and
+			// returns []), so batch to avoid silently dropping published people.
+			const idBatches = chunkArray(ids, 500);
+			const persons = (
+				await Promise.all(
+					idBatches.map(async (batch) =>
+						fetchElectionJson<PeopleSitemapPerson>('v1/persons', {
+							ids: batch.join(','),
+							columns: 'id,slug',
+						}),
+					),
+				)
+			).flat();
+
+			return { updatedByPersonId, persons };
+		})().then((result) => {
+			// Empty published set or empty persons (indistinguishable from a swallowed
+			// gp-api / election-api failure) must not poison the process-lifetime cache.
+			if (result.updatedByPersonId.size === 0 || result.persons.length === 0) {
+				cachedPeopleSitemapData = null;
+			}
+			return result;
+		});
+	}
+	return cachedPeopleSitemapData;
+}
+
 /**
  * Fetches public /people profile sitemap entries.
  *
@@ -600,35 +662,14 @@ export async function fetchStateElectionSitemapEntries(
  * personIds are live), election-api owns the authoritative, unique, clean
  * `Person.slug` that is the canonical URL. Anything gp-api reports as published
  * but that has no election-api Person yet is skipped (no slug → no page).
+ *
+ * Upstream fetches are shared across shards via getCachedPeopleSitemapData.
  */
 export async function fetchPeopleSitemapEntries(
 	baseUrl: string,
 	shard?: string,
 ): Promise<MetadataRoute.Sitemap> {
-	const published = await fetchGpApiJson<{ personId?: string; updatedAt?: string }>(
-		'v1/public-person-profiles/published',
-	);
-	if (published.length === 0) return [];
-
-	const updatedByPersonId = new Map<string, string | undefined>();
-	for (const row of published) {
-		if (row.personId) updatedByPersonId.set(row.personId.toLowerCase(), row.updatedAt);
-	}
-
-	const ids = [...updatedByPersonId.keys()];
-	// election-api caps the `ids` filter at 500 (a larger list is rejected and
-	// returns []), so batch to avoid silently dropping published people.
-	const idBatches = chunkArray(ids, 500);
-	const persons = (
-		await Promise.all(
-			idBatches.map(async (batch) =>
-				fetchElectionJson<{ id?: string; slug?: string | null }>('v1/persons', {
-					ids: batch.join(','),
-					columns: 'id,slug',
-				}),
-			),
-		)
-	).flat();
+	const { updatedByPersonId, persons } = await getCachedPeopleSitemapData();
 
 	const entries: MetadataRoute.Sitemap = [];
 	for (const p of persons) {

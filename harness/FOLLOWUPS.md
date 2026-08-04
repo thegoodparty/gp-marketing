@@ -258,6 +258,13 @@ intentional? Until that is decided, parity work uses exact values for
 shadcn-derived components. This section is the evidence base — append each new
 "Figma value has no gp-marketing token" case as the loop finds it.
 
+- **Hero band gradient blue `#26498f`** (ProfileHero, Figma frame A `1901:50311`:
+  `linear-gradient(156.73deg, #0b1529 68.4%, #26498f 125.1%)`). The midnight stop
+  is `--midnight-900`; the blue second stop has **no gp-marketing token** (nearest
+  is `--goodparty-blue #0048c2`, too saturated), so it is an arbitrary hex in the
+  `bg-[linear-gradient(...)]` class. Add a `midnight-…`/brand-blue token if this
+  gradient is reused.
+
 ### Related infra bug: tailwind-merge drops font-size when combined with text color
 
 The tailwind-merge used by the `Text` component / `cn` / `tv` slots does not

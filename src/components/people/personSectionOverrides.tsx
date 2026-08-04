@@ -306,22 +306,37 @@ function buildAuthoredPlaceholderCards(view: PersonProfileView): ProfileContentC
 	];
 }
 
+/** First 4-digit year in an ISO-ish date string (avoids TZ off-by-one). */
+function electionYear(electionDate: string | null): string | null {
+	return electionDate?.match(/\d{4}/)?.[0] ?? null;
+}
+
 /**
  * Past-election disclaimer shown at the top of the content well for persona
- * `past` (Figma states G claimed + H unclaimed). FLAG: the exact Figma copy for
- * the G frame could not be pulled (the profile frames are no longer in the
- * accessible Figma file and H is a known mislabeled clone — see FOLLOWUPS.md), so
- * this uses a clear placeholder pending design confirmation.
+ * `past` (Figma states G 1958:113149 + H 1970:113742). It reuses the Figma "CTA
+ * Section Module" treatment — a light-blue (blue-100) card with centered copy and
+ * a dark "Start exploring" button — and carries the frames' verbatim copy.
  */
 function pastElectionDisclaimer(view: PersonProfileView): ProfileContentCardProps {
+	const year = electionYear(view.electionDate);
+	const ranClause = year ? `last ran for office in ${year}` : 'last ran for office';
 	return {
 		raw: true,
 		content: (
-			<div className='flex items-start gap-3 rounded-xl border border-blue-200 bg-blue-50 p-4 text-midnight-900'>
-				<IconResolver icon='info' className='mt-0.5 h-5 w-5 flex-shrink-0 text-btn-primary-bg' />
-				<Text styleType='body-2'>
-					{`This profile reflects a past election. ${view.displayName} is no longer running for or serving in this office.`}
+			<div className='flex flex-col items-center gap-6 rounded-2xl bg-blue-100 px-6 py-10 text-center text-midnight-900 md:px-12'>
+				<Text styleType='body-1' className='mx-auto max-w-xl'>
+					{`According to our records, ${view.displayName} ${ranClause}. Please see our updated voter guide for information about upcoming elections, candidates, and current elected officials.`}
 				</Text>
+				<ButtonLink
+					parent='PersonProfilePastElectionDisclaimer'
+					href='/elections'
+					styleType='secondary'
+					styleSize='md'
+					className='w-fit'
+					iconRight={<IconResolver icon='arrow-up-right' className='h-4 w-4' />}
+				>
+					Start exploring
+				</ButtonLink>
 			</div>
 		),
 	};
@@ -563,7 +578,6 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			officeHref: view.positionHref ?? undefined,
 			profileImageUrl: view.avatarUrl ?? undefined,
 			isEmpowered: view.empowered,
-			compactPortrait: true,
 			tags: personaTags(view.persona),
 			// The GoodParty attribution line + on-photo logo gate on CLAIMED (endorsed):
 			// only claimed pages (A/B/C/G) show "Empowered by GoodParty.org" with the
@@ -580,7 +594,6 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 		component_profileContentBlock: {
 			contentCards,
 			sidebar,
-			compactPortrait: true,
 			hidden: contentCards.length === 0 && !sidebar,
 		},
 		component_goodPartyOrgPledge: { hidden: !showPledge },

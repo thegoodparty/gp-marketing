@@ -32,8 +32,10 @@ const styles = tv({
 		imageWrapper: 'relative z-20 flex-shrink-0 md:-mb-[104px] lg:-mb-[216px]',
 		// Circular portrait straddling the dark band and the cream content below.
 		image: 'relative rounded-full overflow-hidden w-40 h-40 md:w-72 md:h-72 lg:w-[416px] lg:h-[416px]',
-		// GoodParty logo overlaid on the photo's bottom-right corner (Figma).
-		badge: 'absolute bottom-1 right-1 z-30 drop-shadow-md',
+		// GoodParty logo overlaid on the photo's bottom-right corner. Sized as a
+		// fraction of the portrait per Figma (desktop glyph 113x94 on the 416px
+		// avatar; mobile 48x40 on the 144px avatar), so it scales across breakpoints.
+		badge: 'absolute bottom-1 right-1 z-30 drop-shadow-md w-12 h-10 md:w-20 md:h-[66px] lg:w-[113px] lg:h-[94px]',
 		content: 'flex flex-col gap-4 text-left z-10 md:pt-2',
 		tagRow: 'flex flex-wrap items-center gap-2',
 		// Pill CONTAINER only (shape + color). The text size lives on an inner span,
@@ -72,22 +74,6 @@ const styles = tv({
 				notEndorsed: 'text-gray-500',
 			},
 		},
-		// People profiles use a smaller desktop portrait (Emily/Jack: the 416px
-		// avatar pushed the sidebar entirely below the fold). Shrinking it to 320px
-		// on lg moves the straddle overhang from 216→120px so the sidebar's leading
-		// rows sit partially above the fold. The overhang MUST stay in lockstep with
-		// ProfileContentBlock's sidebar clearance (overhang = avatarSize − 200).
-		// `default` preserves the shared /candidate hero unchanged.
-		portrait: {
-			default: {},
-			compact: {
-				image: 'lg:w-[320px] lg:h-[320px]',
-				imageWrapper: 'lg:-mb-[120px]',
-			},
-		},
-	},
-	defaultVariants: {
-		portrait: 'default',
 	},
 });
 
@@ -101,12 +87,6 @@ export type ProfileHeroProps = {
 	profileImage?: SanityImage;
 	profileImageUrl?: string;
 	isEmpowered?: boolean;
-	/**
-	 * People profiles use a smaller (320px) desktop portrait so the sidebar's
-	 * leading rows sit partially above the fold. Defaults to the full 416px
-	 * portrait used by the shared /candidate hero.
-	 */
-	compactPortrait?: boolean;
 	/** Persona tag pills rendered above the name (e.g. "Candidate", "Incumbent"). Renders nothing when empty. */
 	tags?: string[];
 	/**
@@ -119,7 +99,7 @@ export type ProfileHeroProps = {
 export function ProfileHero(props: ProfileHeroProps) {
 	const backgroundColor = props.backgroundColor ?? 'midnight';
 	const resolvedBackgroundColor = backgroundColor === 'white' ? 'cream' : backgroundColor;
-	const { base, backgroundWrapper, band, belowBand, container, imageWrapper, image, badge, content, tagRow, tag, tagText, nameOffice, heading, office, officeLink, attribution, attributionIcon, attributionText, notEndorsed } = styles({ backgroundColor: resolvedBackgroundColor, portrait: props.compactPortrait ? 'compact' : 'default' });
+	const { base, backgroundWrapper, band, belowBand, container, imageWrapper, image, badge, content, tagRow, tag, tagText, nameOffice, heading, office, officeLink, attribution, attributionIcon, attributionText, notEndorsed } = styles({ backgroundColor: resolvedBackgroundColor });
 
 	// `attribution` wins when provided; otherwise fall back to legacy `isEmpowered`.
 	const attributionMode = props.attribution ?? (props.isEmpowered ? 'empowered' : 'none');
@@ -161,7 +141,7 @@ export function ProfileHero(props: ProfileHeroProps) {
 							)}
 						</div>
 						{attributionMode === 'empowered' && (
-							<Logo width={80} height={65} className={badge()} />
+							<Logo className={badge()} />
 						)}
 					</div>
 					<div className={content()}>

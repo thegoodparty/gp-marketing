@@ -89,8 +89,6 @@ type ProfileContentBlockSectionProps = Extract<Sections, { _type: 'component_pro
 	sidebarOverride?: ElectionsSidebarProps;
 	/** Optional district voter-density map rendered below the content. */
 	districtMap?: ReactNode;
-	/** People profiles: clear the smaller (320px) portrait instead of the 416px default. */
-	compactPortrait?: boolean;
 };
 
 export function ProfileContentBlockSection({
@@ -99,7 +97,6 @@ export function ProfileContentBlockSection({
 	contentCardsOverride,
 	sidebarOverride,
 	districtMap,
-	compactPortrait,
 	...section
 }: ProfileContentBlockSectionProps) {
 	const backgroundColor = section.profileContentBlockDesignSettings?.field_blockColorCreamMidnight
@@ -117,7 +114,7 @@ export function ProfileContentBlockSection({
 
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Profile Content Block'>
-			<ProfileContentBlock backgroundColor={backgroundColor} sidebar={sidebar} contentCards={contentCards} compactPortrait={compactPortrait} />
+			<ProfileContentBlock backgroundColor={backgroundColor} sidebar={sidebar} contentCards={contentCards} />
 			{districtMap}
 		</section>
 	);

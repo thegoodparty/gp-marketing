@@ -29,7 +29,6 @@ export function ProfileHeroSection({ profileHeroOverride, tokens: _tokens, ...se
 				officeHref={profileHeroOverride?.officeHref}
 				profileImageUrl={profileHeroOverride?.profileImageUrl}
 				isEmpowered={profileHeroOverride?.isEmpowered}
-				compactPortrait={profileHeroOverride?.compactPortrait}
 				tags={profileHeroOverride?.tags}
 				attribution={profileHeroOverride?.attribution}
 			/>

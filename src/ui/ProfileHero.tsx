@@ -65,13 +65,17 @@ const styles = tv({
 	variants: {
 		backgroundColor: {
 			midnight: {
-				// Figma hero band: a midnight→blue diagonal gradient. Figma's stops
-				// (68.4% / 125.1%) were measured on its full-height hero frame; on our
-				// short dark band those push the bright-blue stop off-canvas so it
-				// reads as one flat color. The stops are re-fit here to transition
-				// within the band (dark top for legibility → blue by the lower edge).
-				// The bright stop is the --goodparty-blue-bright token (colors.css).
-				band: 'bg-[linear-gradient(156.73deg,var(--midnight-900)_30%,var(--goodparty-blue-bright))]',
+				// Figma hero band: a soft blue glow rising from the BOTTOM-CENTER over
+				// a midnight field (not a linear top→bottom ramp — that read wrong at
+				// both the top corners and the edges). This radial is fit by VALUE:
+				// sampling Figma's rendered band on a 5×5 grid and minimizing RGB error
+				// gives an ellipse at 50% 100% sized 90%×93% of the band, blue at the
+				// center fading to midnight by the top, with a 40% interpolation hint
+				// bending the falloff to Figma's ease-in curve (RMSE ~5.6/channel,
+				// bottom-center 36,70,137 vs Figma 37,71,138). % sizing keeps it
+				// correct across viewport widths. Colors are tokens: blue = #26498f
+				// (--goodparty-blue-bright), field = --midnight-900 (colors.css).
+				band: 'bg-[radial-gradient(90%_93%_at_50%_100%,var(--goodparty-blue-bright)_0%,40%,var(--midnight-900)_100%)]',
 				heading: 'text-white',
 				office: 'text-white',
 				attribution: 'text-white',

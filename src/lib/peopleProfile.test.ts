@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 import type { PersonItem, PersonOfficeHolder, PublicPersonProfile } from '~/types/people';
 import {
-	buildBreadcrumb,
+	buildBreadcrumbTrail,
 	buildPersonSlug,
 	composeView,
 	extractPersonId,
@@ -214,6 +214,56 @@ describe('composeView persona resolution', () => {
 			null,
 		);
 		expect(view.persona).toBe('both');
+	});
+
+	test('the hero names the current race, not whichever candidacy the API returns first', () => {
+		const view = composeView(
+			PID,
+			makePerson({
+				fullName: 'Jane Doe',
+				// The API does not order this array, so a past run can come first.
+				Candidacies: [
+					{ id: 'c1', positionName: 'School Board', Race: { electionDate: '2022-11-08' } },
+					{ id: 'c2', positionName: 'Mayor', Race: { electionDate: '2099-11-03' } },
+				],
+			}),
+			null,
+		);
+		expect(view.roleTitle).toBe('Candidate for Mayor');
+		// Section headings ("About …", "Other Candidates for …") read the same name.
+		expect(view.officeName).toBe('Mayor');
+	});
+
+	test('an archived candidate falls back to their most recent past race', () => {
+		const view = composeView(
+			PID,
+			makePerson({
+				fullName: 'Jane Doe',
+				Candidacies: [
+					{ id: 'c1', positionName: 'School Board', Race: { electionDate: '2018-11-06' } },
+					{ id: 'c2', positionName: 'Mayor', Race: { electionDate: '2022-11-08' } },
+				],
+			}),
+			null,
+		);
+		expect(view.roleTitle).toBe('Candidate for Mayor');
+	});
+
+	test('both: the second hero line names the seat being sought, not a past run', () => {
+		const view = composeView(
+			PID,
+			makePerson({
+				fullName: 'Jane Doe',
+				Candidacies: [
+					{ id: 'c1', positionName: 'School Board', Race: { electionDate: '2022-11-08' } },
+					{ id: 'c2', positionName: 'Mayor', Race: { electionDate: '2099-11-03' } },
+				],
+				OfficeHolders: [makeOffice({ isCurrent: true, officeTitle: 'City Council' })],
+			}),
+			null,
+		);
+		expect(view.roleTitle).toBe('City Council');
+		expect(view.secondaryRoleTitle).toBe('Candidate for Mayor');
 	});
 
 	test('past: held office before, not current and not running', () => {
@@ -472,9 +522,9 @@ describe('composeView state + empowerment gating', () => {
 	});
 });
 
-describe('buildBreadcrumb', () => {
+describe('buildBreadcrumbTrail', () => {
 	test('degrades to Elections > State > Name without a race slug', async () => {
-		const trail = await buildBreadcrumb({
+		const trail = buildBreadcrumbTrail({
 			displayName: 'Jane Doe',
 			stateCode: 'CA',
 			raceSlug: null,
@@ -486,7 +536,7 @@ describe('buildBreadcrumb', () => {
 	});
 
 	test('degrades to Elections > Name when neither race slug nor state is known', async () => {
-		const trail = await buildBreadcrumb({
+		const trail = buildBreadcrumbTrail({
 			displayName: 'Jane Doe',
 			stateCode: null,
 			raceSlug: null,
@@ -497,7 +547,7 @@ describe('buildBreadcrumb', () => {
 	});
 
 	test('builds Elections > State > ... > Position > Name from a race slug', async () => {
-		const trail = await buildBreadcrumb({
+		const trail = buildBreadcrumbTrail({
 			displayName: 'Jane Doe',
 			stateCode: 'CA',
 			raceSlug: 'ca/los-angeles-county/mayor',

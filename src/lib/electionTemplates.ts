@@ -8,7 +8,12 @@ export type LocationLevel = 'state' | 'county' | 'city' | 'district';
 
 export type LocationTemplateType = 'locationState' | 'locationCounty' | 'locationCity' | 'locationDistrict';
 
-export type ElectionTemplateType = LocationTemplateType | 'position' | 'positionCandidates' | 'candidateProfile';
+export type ElectionTemplateType =
+	| LocationTemplateType
+	| 'position'
+	| 'positionCandidates'
+	| 'candidateProfile'
+	| 'personProfile';
 
 /** @deprecated Legacy custom docs may still use this type for all location levels. */
 export type LegacyLocationTemplateType = 'location';
@@ -44,7 +49,22 @@ export function locationTemplateTypeFromLevel(level: LocationLevel): LocationTem
 	}
 }
 
-export type ElectionTargetType = 'place' | 'position' | 'candidate';
+export type ElectionTargetType = 'place' | 'position' | 'candidate' | 'person';
+
+/** Figma person-profile page states (A–L). See `~/lib/peopleProfile.ts` `ProfileState`. */
+export type ProfileStateValue =
+	| 'A'
+	| 'B'
+	| 'C'
+	| 'D'
+	| 'E'
+	| 'F'
+	| 'G'
+	| 'H'
+	| 'I'
+	| 'J'
+	| 'K'
+	| 'L';
 
 export type ElectionTemplateTarget = {
 	targetType: ElectionTargetType;
@@ -57,6 +77,15 @@ export type ElectionTemplateContext = {
 	positionSlug?: string;
 	candidateSlug?: string;
 	raceSlug?: string;
+	/** Person-profile slug (`/people/<slug>`) — used only by the personProfile family. */
+	personSlug?: string;
+	/**
+	 * Resolved Figma page state (A–L) for a person profile. When provided, a custom
+	 * template that pins `field_profileState` only matches the same state. Left unset
+	 * by every caller today (the /people page renders direct-from-API, not via
+	 * templates), so this dimension is inert until that consumption is wired up.
+	 */
+	profileState?: ProfileStateValue;
 };
 
 export type ResolvedElectionTemplate = {
@@ -76,6 +105,8 @@ type CustomTemplateTargetsDoc = {
 	field_enabled?: boolean;
 	field_priority?: number;
 	field_electionTemplateType?: ElectionTemplateType | LegacyLocationTemplateType;
+	/** Set on person-profile templates that are scoped to a single state (A–L). */
+	field_profileState?: ProfileStateValue;
 	_updatedAt?: string;
 	list_targets?: SanityTarget[];
 };
@@ -95,6 +126,7 @@ type GlobalTemplateDoc = {
 };
 
 const TARGET_TYPE_RANK: Record<ElectionTargetType, number> = {
+	person: 4,
 	candidate: 3,
 	position: 2,
 	place: 1,
@@ -112,6 +144,9 @@ function extractSections(doc: { pageSections?: { list_pageSections?: Sections[] 
 
 function contextTargets(ctx: ElectionTemplateContext): ElectionTemplateTarget[] {
 	const targets: ElectionTemplateTarget[] = [];
+	if (ctx.personSlug) {
+		targets.push({ targetType: 'person', slug: normalizeSlug(ctx.personSlug) });
+	}
 	if (ctx.candidateSlug) {
 		targets.push({ targetType: 'candidate', slug: normalizeSlug(ctx.candidateSlug) });
 	}
@@ -140,6 +175,14 @@ function targetMatches(docTarget: SanityTarget, ctxTarget: ElectionTemplateTarge
 function scoreCustomTemplate(doc: CustomTemplateTargetsDoc, ctx: ElectionTemplateContext): number | null {
 	if (doc.field_enabled === false) return null;
 	if (!customTemplateTypeMatches(doc.field_electionTemplateType, ctx.templateType)) return null;
+
+	// Person-profile templates may be pinned to a single Figma state (A–L). When the
+	// doc pins a state and the context resolves one too, they must match. Contexts
+	// without a resolved state (every non-person family, and the /people page until
+	// template consumption is wired up) skip this filter entirely.
+	if (doc.field_profileState && ctx.profileState && doc.field_profileState !== ctx.profileState) {
+		return null;
+	}
 
 	const ctxTargetsList = contextTargets(ctx);
 	if (!ctxTargetsList.length || !doc.list_targets?.length) return null;

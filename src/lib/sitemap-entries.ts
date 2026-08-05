@@ -11,6 +11,7 @@ import {
 	resolveElectionPositionFromRaceSlug,
 	stripCountySuffix as stripCountySuffixFromHelpers,
 } from '~/lib/electionsHelpers';
+import { buildPersonSlugFromBase } from '~/lib/peopleProfile';
 import { FAQ_BASE_PATH, getFaqSitemapEntries } from '~/lib/faqSlugs';
 import { fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
 import { allFaqsQuery } from '~/sanity/groq';
@@ -21,17 +22,60 @@ export const US_STATE_CODES = [
 ] as const;
 
 /** Single source of truth for sitemap IDs. Used by generateSitemaps() and sitemap-index route. */
+/**
+ * Alphabetical shards for the /people sitemaps (a–z + a catch-all "other" for
+ * slugs that don't start with a letter). People are sharded by the first
+ * character of their canonical slug so each people-*.xml stays crawlable and
+ * bounded, instead of being lumped into shard 0 with the marketing pages.
+ */
+export const PEOPLE_SITEMAP_SHARDS = [
+	...'abcdefghijklmnopqrstuvwxyz'.split(''),
+	'other',
+] as const;
+
+/** Maps a person slug to its alphabetical sitemap shard key. */
+export function peopleShardForSlug(slug: string): string {
+	const first = slug.trim().charAt(0).toLowerCase();
+	return first >= 'a' && first <= 'z' ? first : 'other';
+}
+
+/**
+ * The first people shard id sits immediately after the state-election and
+ * candidate bands (id 0 = main, 1..N = state elections, N+1..2N = candidates).
+ */
+export const PEOPLE_SITEMAP_BAND_START = 1 + 2 * US_STATE_CODES.length;
+
 export function getSitemapIds(): { id: number }[] {
 	const ids: { id: number }[] = [{ id: 0 }];
 	for (let i = 0; i < US_STATE_CODES.length; i++) {
 		ids.push({ id: i + 1 });
 		ids.push({ id: i + 1 + US_STATE_CODES.length });
 	}
+	for (let i = 0; i < PEOPLE_SITEMAP_SHARDS.length; i++) {
+		ids.push({ id: PEOPLE_SITEMAP_BAND_START + i });
+	}
 	return ids;
 }
 
 const ELECTION_API_BASE =
-	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
+	process.env['NEXT_PUBLIC_ELECTION_API_BASE'] ?? process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
+
+const GP_API_BASE =
+	process.env['GP_API_BASE_URL'] ??
+	process.env['NEXT_PUBLIC_API_BASE'] ??
+	ELECTION_API_BASE.replace('election-api', 'gp-api');
+
+const CACHE_1H: RequestInit = { next: { revalidate: 3600 } };
+
+/** Next.js data-cache tag for the /people sitemap upstream fetches. Bust via revalidateTag. */
+export const PEOPLE_SITEMAP_CACHE_TAG = 'people-sitemap';
+
+function cacheInit(tags?: readonly string[]): RequestInit {
+	if (tags && tags.length > 0) {
+		return { next: { revalidate: 3600, tags: [...tags] } };
+	}
+	return CACHE_1H;
+}
 
 export type CountyPlace = { slug?: string; name?: string; mtfcc?: string };
 export type CityPlace = { slug?: string; countyName?: string };
@@ -52,6 +96,16 @@ function dedupeByUrl(entries: MetadataRoute.Sitemap): MetadataRoute.Sitemap {
 		seen.add(e.url);
 		return true;
 	});
+}
+
+/** Splits an array into chunks of at most `size` (size must be > 0). */
+export function chunkArray<T>(items: T[], size: number): T[][] {
+	if (size <= 0) throw new Error('chunk size must be > 0');
+	const chunks: T[][] = [];
+	for (let i = 0; i < items.length; i += size) {
+		chunks.push(items.slice(i, i + size));
+	}
+	return chunks;
 }
 
 function toEntry(
@@ -361,11 +415,31 @@ export async function getCachedElectionRouteParams(): Promise<{
 	return cachedElectionRouteParams;
 }
 
-async function fetchElectionJson<T>(path: string, params: Record<string, string>): Promise<T[]> {
+async function fetchGpApiJson<T>(path: string, tags?: readonly string[]): Promise<T[]> {
+	const url = `${GP_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
+	try {
+		const res = await fetch(url, cacheInit(tags));
+		if (!res.ok) {
+			console.error(`[sitemap] gp-api ${res.status} ${url}`);
+			return [];
+		}
+		const data: unknown = await res.json();
+		return Array.isArray(data) ? (data as T[]) : [];
+	} catch (err) {
+		console.error('[sitemap] gp-api fetch failed', url, err instanceof Error ? err.message : String(err));
+		return [];
+	}
+}
+
+async function fetchElectionJson<T>(
+	path: string,
+	params: Record<string, string>,
+	tags?: readonly string[],
+): Promise<T[]> {
 	const search = new URLSearchParams(params).toString();
 	const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}?${search}`;
 	try {
-		const result = await fetchElectionApiJsonCached(url);
+		const result = await fetchElectionApiJsonCached(url, tags);
 		if (!result.ok) {
 			console.error(`[sitemap] Election API ${result.status} ${url}`);
 			return [];
@@ -531,6 +605,109 @@ export async function fetchStateElectionSitemapEntries(
 
 	entries.push(...buildRaceEntries(races, citySlugToCountySlug, baseUrl));
 
+	return dedupeByUrl(entries);
+}
+
+type PeopleSitemapPerson = { id?: string; slug?: string | null };
+
+type PeopleSitemapData = {
+	updatedByPersonId: Map<string, string | undefined>;
+	persons: PeopleSitemapPerson[];
+};
+
+let cachedPeopleSitemapData: Promise<PeopleSitemapData> | null = null;
+
+/**
+ * Clears the process-local in-flight Promise (same instance only).
+ * Pair with revalidateTag(PEOPLE_SITEMAP_CACHE_TAG) so other instances hit a
+ * fresh Next.js data cache on next access. Used by revalidate-person and tests.
+ */
+export function clearPeopleSitemapCache(): void {
+	cachedPeopleSitemapData = null;
+}
+
+/**
+ * Shared gp-api + election-api lookup for the /people sitemap band.
+ * Concurrent shard callers share one in-flight Promise; once it settles the
+ * module slot clears so the next access goes through the tagged Next.js data
+ * cache (mirrors Sanity sitemap revalidateTag busting).
+ */
+async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
+	if (!cachedPeopleSitemapData) {
+		const load = (async (): Promise<PeopleSitemapData> => {
+			const published = await fetchGpApiJson<{ personId?: string; updatedAt?: string }>(
+				'v1/public-person-profiles/published',
+				[PEOPLE_SITEMAP_CACHE_TAG],
+			);
+			const updatedByPersonId = new Map<string, string | undefined>();
+			for (const row of published) {
+				if (row.personId) updatedByPersonId.set(row.personId.toLowerCase(), row.updatedAt);
+			}
+
+			if (updatedByPersonId.size === 0) {
+				return { updatedByPersonId, persons: [] };
+			}
+
+			const ids = [...updatedByPersonId.keys()];
+			// election-api caps the `ids` filter at 500 (a larger list is rejected and
+			// returns []), so batch to avoid silently dropping published people.
+			const idBatches = chunkArray(ids, 500);
+			const persons = (
+				await Promise.all(
+					idBatches.map(async (batch) =>
+						fetchElectionJson<PeopleSitemapPerson>(
+							'v1/persons',
+							{
+								ids: batch.join(','),
+								columns: 'id,slug',
+							},
+							[PEOPLE_SITEMAP_CACHE_TAG],
+						),
+					),
+				)
+			).flat();
+
+			return { updatedByPersonId, persons };
+		})();
+		cachedPeopleSitemapData = load;
+		void load.finally(() => {
+			if (cachedPeopleSitemapData === load) {
+				cachedPeopleSitemapData = null;
+			}
+		});
+	}
+	return cachedPeopleSitemapData;
+}
+
+/**
+ * Fetches public /people profile sitemap entries.
+ *
+ * Two-hop join across the service boundary: gp-api owns the publish gate (which
+ * personIds are live), election-api owns the authoritative, unique, clean
+ * `Person.slug` that is the canonical URL. Anything gp-api reports as published
+ * but that has no election-api Person yet is skipped (no slug → no page).
+ *
+ * Upstream fetches are shared across shards via getCachedPeopleSitemapData.
+ */
+export async function fetchPeopleSitemapEntries(
+	baseUrl: string,
+	shard?: string,
+): Promise<MetadataRoute.Sitemap> {
+	const { updatedByPersonId, persons } = await getCachedPeopleSitemapData();
+
+	const entries: MetadataRoute.Sitemap = [];
+	for (const p of persons) {
+		if (!p.id || !p.slug) continue;
+		// When a shard is requested, only emit people whose slug falls in it. The
+		// canonical URL appends the 8-hex id suffix but shares the base's first
+		// char, so sharding on the base is equivalent.
+		if (shard && peopleShardForSlug(p.slug) !== shard) continue;
+		const canonicalSlug = buildPersonSlugFromBase(p.slug, p.id);
+		const updatedAt = updatedByPersonId.get(p.id.toLowerCase());
+		entries.push(
+			toEntry(baseUrl, `/people/${canonicalSlug}`, 0.7, 'weekly', updatedAt?.slice(0, 10)),
+		);
+	}
 	return dedupeByUrl(entries);
 }
 

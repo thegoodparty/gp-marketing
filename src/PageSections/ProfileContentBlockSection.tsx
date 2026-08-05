@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { stegaClean } from 'next-sanity';
 import type { Sections } from '~/PageSections';
 import { ProfileContentBlock } from '~/ui/ProfileContentBlock';
@@ -83,23 +84,46 @@ function getSidebarData(officeData: OfficeData): ElectionsSidebarProps | undefin
 type ProfileContentBlockSectionProps = Extract<Sections, { _type: 'component_profileContentBlock' }> & {
 	profileData?: ProfileData;
 	officeData?: OfficeData;
+	/** Prebuilt cards/sidebar (person profiles) — win over profileData/officeData. */
+	contentCardsOverride?: ProfileContentCardProps[];
+	sidebarOverride?: ElectionsSidebarProps;
+	/** Content-card layout: person profiles use `separated` (grouped white cards). */
+	cardLayout?: 'joined' | 'separated';
+	/** Optional district voter-density map rendered below the content. */
+	districtMap?: ReactNode;
 };
 
 export function ProfileContentBlockSection({
 	profileData,
 	officeData,
+	contentCardsOverride,
+	sidebarOverride,
+	cardLayout,
+	districtMap,
 	...section
 }: ProfileContentBlockSectionProps) {
 	const backgroundColor = section.profileContentBlockDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(stegaClean(section.profileContentBlockDesignSettings.field_blockColorCreamMidnight))
 		: 'cream';
 
-	const contentCards = profileData ? getProfileContentCards(profileData) : [];
-	const sidebar = officeData ? getSidebarData(officeData) : undefined;
+	const contentCards = contentCardsOverride ?? (profileData ? getProfileContentCards(profileData) : []);
+	const sidebar = sidebarOverride ?? (officeData ? getSidebarData(officeData) : undefined);
+
+	// Nothing authored and no sidebar/map (e.g. removal states) — render nothing
+	// rather than an empty shell.
+	if (contentCards.length === 0 && !sidebar && !districtMap) {
+		return null;
+	}
 
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Profile Content Block'>
-			<ProfileContentBlock backgroundColor={backgroundColor} sidebar={sidebar} contentCards={contentCards} />
+			<ProfileContentBlock
+				backgroundColor={backgroundColor}
+				sidebar={sidebar}
+				contentCards={contentCards}
+				cardLayout={cardLayout}
+			/>
+			{districtMap}
 		</section>
 	);
 }

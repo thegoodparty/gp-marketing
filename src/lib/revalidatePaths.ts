@@ -59,8 +59,8 @@ export function getPathsToRevalidate(_type: string, payload: Record<string, unkn
 		goodpartyOrg_404Page: ['/'],
 		goodpartyOrg_allComponents: ['/all'],
 		quoteCollections: ['/elections'],
-		goodpartyOrg_globalTemplate: ['/elections', '/candidate'],
-		goodpartyOrg_customTemplate: ['/elections', '/candidate'],
+		goodpartyOrg_globalTemplate: ['/elections', '/candidate', '/people'],
+		goodpartyOrg_customTemplate: ['/elections', '/candidate', '/people'],
 	};
 
 	const raw = pathMap[_type];

@@ -7,6 +7,7 @@ import {
 	tmplElectionsDistrictIndexSections,
 	tmplElectionsPositionSections,
 	tmplElectionsStateIndexSections,
+	tmplPersonProfileSections,
 } from '~/lib/electionsTemplateSeedSections';
 import type { ElectionTemplateType } from '~/lib/electionTemplates';
 
@@ -30,6 +31,8 @@ export function getCodeDefaultElectionTemplate(templateType: ElectionTemplateTyp
 	switch (templateType) {
 		case 'candidateProfile':
 			return stripUnresolvableSeedBlocks(PROFILE_PAGE_SECTIONS as unknown as Sections[]);
+		case 'personProfile':
+			return stripUnresolvableSeedBlocks(tmplPersonProfileSections as unknown as Sections[]);
 		case 'position':
 			return stripUnresolvableSeedBlocks(tmplElectionsPositionSections as unknown as Sections[]);
 		case 'positionCandidates':

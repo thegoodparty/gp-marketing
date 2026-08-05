@@ -8,6 +8,7 @@ export default defineMain({
 		'../src/PageSections/**/*.@(mdx|stories.@(js|jsx|ts|tsx))',
 		'../src/stories/*.@(mdx|stories.@(js|jsx|ts|tsx))',
 		'../src/sanity/**/*.@(mdx|stories.@(js|jsx|ts|tsx))',
+		'../src/components/**/*.@(mdx|stories.@(js|jsx|ts|tsx))',
 	],
 	addons: [
 		"@storybook/addon-designs",

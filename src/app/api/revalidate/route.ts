@@ -83,7 +83,7 @@ async function resolveExperimentVariantPaths(payload: Record<string, unknown>): 
 
 async function resolveCustomTemplatePaths(payload: Record<string, unknown>): Promise<string[]> {
 	const rawId = typeof payload['_id'] === 'string' ? payload['_id'] : null;
-	if (!rawId) return ['/elections', '/candidate'];
+	if (!rawId) return ['/elections', '/candidate', '/people'];
 
 	const publishedId = rawId.startsWith('drafts.') ? rawId.slice('drafts.'.length) : rawId;
 
@@ -99,10 +99,10 @@ async function resolveCustomTemplatePaths(payload: Record<string, unknown>): Pro
 		);
 
 		const paths = buildCustomTemplateRevalidatePaths(targets ?? []);
-		return paths.length > 0 ? paths : ['/elections', '/candidate'];
+		return paths.length > 0 ? paths : ['/elections', '/candidate', '/people'];
 	} catch (err) {
 		console.error('Failed to resolve custom template target paths:', err);
-		return ['/elections', '/candidate'];
+		return ['/elections', '/candidate', '/people'];
 	}
 }
 

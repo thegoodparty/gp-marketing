@@ -15,15 +15,18 @@ import { getFaqSlugMapForPage } from '~/lib/getCachedFaqSlugMap';
 import { HeaderBlock } from '~/ui/HeaderBlock';
 import { Container } from '~/ui/Container';
 import { PageSchema } from '~/ui/PageSchema';
+import { PostalyticsPixel } from '~/ui/PostalyticsPixel';
 import { buildWebPageSchema } from '~/lib/schema';
 import { toAbsoluteUrl } from '~/lib/url';
 import { SANITY_DOC_TYPE } from '~/lib/sanity-doc-types';
+
+const POSTALYTICS_PIXEL_SLUG = 'find-your-super-voters';
 
 // SSR per request so ExperimentResolver reads the visitor's AMP_* cookie and
 // resolves the variant on the server before HTML is sent (no client flicker).
 // `generateStaticParams` is intentionally omitted: it is a build-time API for
 // static generation and the Next.js docs only sanction combining it with
-// `force-static`. Pairing it with `force-dynamic` is contradictory and causes
+ // `force-static`. Pairing it with `force-dynamic` is contradictory and causes
 // dev/prod render differences. Unknown slugs are handled by `notFound()` below
 // and the sitemap enumerates landing pages via `src/lib/sitemap-entries.ts`.
 export const dynamic = 'force-dynamic';
@@ -62,6 +65,7 @@ export default async function Page(props: any) {
 		return (
 			<>
 				<PageSchema schema={landingSchema} />
+				{slug === POSTALYTICS_PIXEL_SLUG && <PostalyticsPixel />}
 				<Suspense fallback={<PageSections pageSections={controlSections} pageSlug={slug} faqSlugMap={faqSlugMap} />}>
 					<ExperimentResolver pageId={page._id} controlSections={controlSections} pageSlug={slug} faqSlugMap={faqSlugMap} />
 				</Suspense>

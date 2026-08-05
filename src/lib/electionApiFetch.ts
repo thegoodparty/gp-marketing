@@ -19,7 +19,10 @@ export type ElectionApiJsonResult = {
  * CLI scripts (bun/tsx) cannot load next/cache (it pulls server-only), so we fall
  * back to an uncached fetch outside the Next runtime.
  */
-export async function fetchElectionApiJsonCached(url: string): Promise<ElectionApiJsonResult> {
+export async function fetchElectionApiJsonCached(
+	url: string,
+	tags?: readonly string[],
+): Promise<ElectionApiJsonResult> {
 	const run = async (): Promise<ElectionApiJsonResult> => {
 		const authHeaders = await electionApiAuthHeaders();
 		const res = await fetch(url, { headers: authHeaders, cache: 'no-store' });
@@ -32,6 +35,7 @@ export async function fetchElectionApiJsonCached(url: string): Promise<ElectionA
 		const { unstable_cache } = await import('next/cache');
 		return await unstable_cache(run, ['election-api-json', url], {
 			revalidate: ELECTION_API_CACHE_SECONDS,
+			...(tags && tags.length > 0 ? { tags: [...tags] } : {}),
 		})();
 	} catch {
 		return run();

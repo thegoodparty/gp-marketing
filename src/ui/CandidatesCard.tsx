@@ -81,7 +81,7 @@ export const CandidatesCard = memo(function CandidatesCard(props: CandidatesCard
 				<div className={footerWrapper()}>
 					{isGoodParty ? (
 						<Text as='p' styleType='caption' className={empowered()}>
-							Empowered by goodparty.org
+							Empowered by GoodParty.org
 						</Text>
 					) : (
 						<div />

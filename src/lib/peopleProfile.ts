@@ -347,10 +347,24 @@ function candidaciesByRecency(candidacies: PersonCandidacySummary[]): {
 	};
 }
 
-/** The race a person is currently running in, else the last one they ran in. */
+/**
+ * The race a person is currently running in, else the last one they ran in.
+ *
+ * Prefers a candidacy with a slug, because the rest of the page — position
+ * link, breadcrumb crumb, "About [position]", other candidates — is built from
+ * {@link selectPrimaryCandidacy}, which can only use slugged rows. Without that
+ * preference the hero could name one race while everything under it named
+ * another. Slug-less rows are still a fallback rather than being filtered out:
+ * they carry the office name and party, and dropping them would blank the hero
+ * and, via `classifyPartyFrom`, change which profile state the page renders.
+ */
 function primaryCandidacy(person: PersonItem | null): PersonCandidacySummary | null {
-	const { upcoming, past, undated } = candidaciesByRecency(person?.Candidacies ?? []);
-	return upcoming[0] ?? past[0] ?? undated[0] ?? null;
+	const all = person?.Candidacies ?? [];
+	const first = (candidacies: PersonCandidacySummary[]) => {
+		const { upcoming, past, undated } = candidaciesByRecency(candidacies);
+		return upcoming[0] ?? past[0] ?? undated[0] ?? null;
+	};
+	return first(all.filter(c => c.slug)) ?? first(all);
 }
 
 function candidateOfficeName(person: PersonItem | null): string | null {

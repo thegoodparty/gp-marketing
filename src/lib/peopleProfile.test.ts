@@ -234,6 +234,35 @@ describe('composeView persona resolution', () => {
 		expect(view.officeName).toBe('Mayor');
 	});
 
+	test('prefers a linkable race so the hero cannot name one race while the links name another', () => {
+		const view = composeView(
+			PID,
+			makePerson({
+				fullName: 'Jane Doe',
+				Candidacies: [
+					// Sooner, but with no slug the rest of the page cannot use it.
+					{ id: 'c1', positionName: 'Mayor', Race: { electionDate: '2099-11-01' } },
+					{ id: 'c2', positionName: 'School Board', slug: 'wy/laramie/school-board', Race: { electionDate: '2099-11-03' } },
+				],
+			}),
+			null,
+		);
+		expect(view.roleTitle).toBe('Candidate for School Board');
+	});
+
+	test('a slug-less candidacy still supplies the office name and party', () => {
+		const view = composeView(
+			PID,
+			makePerson({
+				fullName: 'Jane Doe',
+				Candidacies: [{ id: 'c1', positionName: 'Mayor', party: 'Independent' }],
+			}),
+			null,
+		);
+		expect(view.roleTitle).toBe('Candidate for Mayor');
+		expect(view.party).toBe('Independent');
+	});
+
 	test('an archived candidate falls back to their most recent past race', () => {
 		const view = composeView(
 			PID,

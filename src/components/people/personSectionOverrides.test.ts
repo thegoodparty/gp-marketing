@@ -150,6 +150,17 @@ describe('card grouping sets the Figma heading levels', () => {
 		]);
 	});
 
+	test('state C keeps campaign issues and the in-office record in separate cards', () => {
+		// The original regression: both issue sections shared a group and merged
+		// into one card. sectionHeadings alone cannot catch that — it flattens.
+		const cards = headingsByCard('susan-overman-ad914b82');
+		expect(cards).toContainEqual(['Why I\u2019m Running for Office', 'Campaign Issues']);
+		expect(cards).toContainEqual([
+			'Top Priorities While in Office',
+			'Accomplishments During This Term',
+		]);
+	});
+
 	test('state G keeps nearby officials and other candidates in separate cards', () => {
 		const cards = headingsByCard('bill-fortner-61a42912');
 		expect(cards).toContainEqual(['Nearby Officials']);

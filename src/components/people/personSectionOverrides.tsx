@@ -375,8 +375,10 @@ function issuesPrompt(view: PersonProfileView): string {
 			return `Which issues would ${displayName} champion${office ? ` as ${office}` : ''}? Their campaign priorities will appear here once they claim their profile.`;
 		case 'officeholder':
 			return `What are ${displayName}'s top priorities${office ? ` for ${office}` : ''}? Their agenda in office will appear here once they claim their profile.`;
+		// A past official's frame carries this section AND the in-office one, so
+		// this has to ask about the campaign; `inOfficePrompt` covers the record.
 		case 'past':
-			return `Which priorities did ${displayName} focus on${office ? ` in ${office}` : ' in office'}? Their record will appear here once they claim their profile.`;
+			return `What did ${displayName} campaign on${office ? ` for ${office}` : ''}? Their platform and issues will appear here once they claim their profile.`;
 	}
 }
 

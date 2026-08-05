@@ -7,7 +7,7 @@ import { IconWrapper } from './IconResolver.tsx';
 
 const styles = tv({
 	slots: {
-		base: 'py-6 md:py-20',
+		base: 'pt-6 pb-6 md:pt-20 md:pb-10',
 		content: 'flex flex-col gap-6',
 		headline: '',
 		bodyCopy: 'text-white/80 max-w-[50rem]',

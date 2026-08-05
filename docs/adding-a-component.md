@@ -224,6 +224,8 @@ export function ClickToCallBlockSection(section: Extract<Sections, { _type: 'com
 
 The `resolve*` helpers live in `src/ui/_lib/`. Reuse them; do not reinvent color or background logic.
 
+Always run `field_blockColorCreamMidnight` through `resolveBg` before passing it to a UI component. Content uses two spellings for the same setting (`Cream`/`MidnightDark` from the shared field, and `cream`/`midnight` from some block-local dropdowns). `resolveBg` accepts both; raw values will not match the component's style variants and the block will render with the wrong colors.
+
 ### 6. Wire the switch (`index.tsx`)
 
 Two edits, same file. Add the import near the other section imports:

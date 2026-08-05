@@ -6,6 +6,7 @@ import type { SectionOverrides, Sections } from '~/PageSections';
 import { resolveSectionText } from '~/lib/resolveSectionText';
 import type { TokenMap } from '~/lib/resolveTokens';
 import { LocationLandingPageHero } from '~/ui/LocationLandingPageHero';
+import { resolveBg } from '~/ui/_lib/resolveBg';
 import { useElectionsLandingSearch } from '~/ui/ElectionsLandingSearchContext';
 
 type Props = Extract<Sections, { _type: 'component_locationLandingPageHero' }> & {
@@ -17,7 +18,7 @@ export function LocationLandingPageHeroSection(props: Props) {
 	const { locationOverride, tokens, ...section } = props;
 	const search = useElectionsLandingSearch();
 	const backgroundColor = section.locationLandingPageHeroDesignSettings?.field_blockColorCreamMidnight
-		? stegaClean(section.locationLandingPageHeroDesignSettings.field_blockColorCreamMidnight)
+		? resolveBg(stegaClean(section.locationLandingPageHeroDesignSettings.field_blockColorCreamMidnight))
 		: 'midnight';
 
 	const locationLevel = locationOverride?.locationLevel ?? 'state';

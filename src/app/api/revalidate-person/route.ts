@@ -3,7 +3,7 @@ import { revalidateTag } from 'next/cache';
 import { type NextRequest, NextResponse } from 'next/server';
 import { personRevalidateSecret } from '~/lib/env';
 import { personCacheTag } from '~/lib/electionsApi';
-import { clearPeopleSitemapCache } from '~/lib/sitemap-entries';
+import { clearPeopleSitemapCache, PEOPLE_SITEMAP_CACHE_TAG } from '~/lib/sitemap-entries';
 
 const SECRET_HEADER = 'x-revalidate-secret';
 const HMAC_KEY = 'personRevalidate';
@@ -49,6 +49,10 @@ export async function POST(req: NextRequest) {
 	try {
 		const tag = personCacheTag(personId);
 		revalidateTag(tag);
+		// Bust the Next.js data cache for people-sitemap upstream fetches across
+		// all instances, then drop this instance's in-memory Promise so shards
+		// re-seed from the freshly invalidated cache.
+		revalidateTag(PEOPLE_SITEMAP_CACHE_TAG);
 		clearPeopleSitemapCache();
 		return NextResponse.json({ revalidated: true, tag });
 	} catch (err) {

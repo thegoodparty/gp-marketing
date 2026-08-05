@@ -33,8 +33,8 @@ describe('profile section order matches the Figma frames', () => {
 			'Recent Experience',
 			// A candidate-only person holds no seat, so the office name comes from
 			// the candidacy rather than a held office.
-			'Other Candidates for Mayor of Springfield',
-			'About Mayor of Springfield',
+			'Other Candidates for Springfield City Council',
+			'About Springfield City Council',
 			'District information',
 		]);
 	});
@@ -106,8 +106,8 @@ describe('card grouping sets the Figma heading levels', () => {
 		expect(headingsByCard('allen-slagle-74eee01a')).toEqual([
 			['Why I\u2019m Running for Office', 'Campaign Issues'],
 			['About Me', 'Recent Experience'],
-			['Other Candidates for Mayor of Springfield'],
-			['About Mayor of Springfield'],
+			['Other Candidates for Springfield City Council'],
+			['About Springfield City Council'],
 			['District information'],
 		]);
 	});
@@ -154,5 +154,14 @@ describe('breadcrumb', () => {
 			'Springfield City Council',
 			'Allen Slagle',
 		]);
+	});
+
+	test('every dev persona names one office in the trail, the hero, and the sections', () => {
+		for (const slug of ['allen-slagle-74eee01a', 'tracy-good-ecff49d3', 'susan-overman-ad914b82', 'bill-fortner-61a42912']) {
+			const view = getDevPersonProfileView(slug);
+			const positionCrumb = view!.breadcrumb.at(-2)?.label;
+			expect(positionCrumb).toBe(view!.officeName ?? undefined);
+			expect(sectionHeadings(slug)).toContain(`About ${positionCrumb}`);
+		}
 	});
 });

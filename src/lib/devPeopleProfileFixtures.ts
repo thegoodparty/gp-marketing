@@ -31,6 +31,10 @@ import { fixtureForState } from '~/testing/peopleProfileFixtures';
 const DEV_RACE_SLUG = 'wy/laramie/springfield/city-council';
 const DEV_POSITION_NAME = 'Springfield City Council';
 
+function devPositionHref(): string | undefined {
+	return buildElectionPositionHrefFromRaceSlug({ slug: DEV_RACE_SLUG, positionLevel: 'CITY' });
+}
+
 export function isDevPeopleFixturesEnabled(): boolean {
 	return process.env['PEOPLE_DEV_FIXTURES'] === 'true';
 }
@@ -164,7 +168,7 @@ function richExperience(persona: PersonPersona): ExperienceItem[] {
 		{ title: 'School Board Trustee, At-Large', organization: '2010 – 2014', term: '2010 – 2014', status: null, href: '/elections/school-board' },
 	];
 	if (running) {
-		rows.unshift({ title: 'Candidate for Mayor of Springfield', organization: '2026 election', term: '2026 election', status: 'Candidate', href: '/elections/mayor' });
+		rows.unshift({ title: `Candidate for ${DEV_POSITION_NAME}`, organization: '2026 election', term: '2026 election', status: 'Candidate', href: devPositionHref() ?? null });
 	}
 	return rows;
 }
@@ -227,6 +231,12 @@ export function getDevPersonProfileView(slug: string): PersonProfileView | null 
 		firstName: entry.first,
 		lastName: entry.last,
 		fullName: name,
+		// The shared matrix runs its candidacies for a different office (Mayor)
+		// than it holds (city council), which is fine for state/gating tests but
+		// would show a dev page whose hero names one race while the breadcrumb
+		// and position link point at another. Every dev persona is about the one
+		// DEV_RACE_SLUG race, so an incumbent here is running for re-election.
+		Candidacies: (fixture.person.Candidacies ?? []).map((c) => ({ ...c, positionName: DEV_POSITION_NAME })),
 		bioText: `${name} has served the community for over a decade. ${LOREM}`,
 		headshotUrl,
 		websiteUrl: 'https://example.org',
@@ -252,8 +262,7 @@ export function getDevPersonProfileView(slug: string): PersonProfileView | null 
 			: null;
 	const removed = fixture.overlay.status === 'removed';
 
-	const positionHref =
-		buildElectionPositionHrefFromRaceSlug({ slug: DEV_RACE_SLUG, positionLevel: 'CITY' }) ?? null;
+	const positionHref = devPositionHref() ?? null;
 
 	const view = composeView(personId, person, overlay, {
 		removed,

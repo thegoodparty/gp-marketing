@@ -57,8 +57,10 @@ export function getSitemapIds(): { id: number }[] {
 	return ids;
 }
 
+// Server-only base: M2M auth headers are attached to requests against this URL,
+// so it must never be sourced from a client-visible (NEXT_PUBLIC_*) env var.
 const ELECTION_API_BASE =
-	process.env['NEXT_PUBLIC_ELECTION_API_BASE'] ?? process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
+	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
 
 const GP_API_BASE =
 	process.env['GP_API_BASE_URL'] ??

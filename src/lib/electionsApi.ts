@@ -98,9 +98,12 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | nul
 	// election-api: auth + URL-keyed unstable_cache (Authorization must not be in the
 	// Next fetch cache key or the shared 1h cache stops hitting across isolates).
 	if (url.startsWith(ELECTIONS_API_BASE_URL)) {
+		// Forward on-demand revalidation tags (e.g. person:<id>) so cache busts
+		// via /api/revalidate-person actually invalidate these cached responses.
+		const tags = (options as { next?: { tags?: readonly string[] } } | undefined)?.next?.tags;
 		for (let attempt = 0; attempt <= FETCH_JSON_MAX_RETRIES; attempt++) {
 			try {
-				const result = await fetchElectionApiJsonCached(url);
+				const result = await fetchElectionApiJsonCached(url, tags);
 				if (result.status === 404) return null;
 				if (result.ok) return result.json as T;
 				if (result.status > 0 && result.status < 500) {

@@ -171,7 +171,7 @@ function ExperienceContent({ experience }: { experience: PersonProfileView['rece
 	return (
 		<ul className='flex flex-col gap-5'>
 			{experience.map((item, index) => (
-				<li key={`${item.title}-${index}`} className='flex flex-col gap-3'>
+				<li key={`${item.title}-${index}`} className='flex flex-col gap-4'>
 					<div className='flex items-center justify-between gap-3'>
 						<Text as='span' styleType='subtitle-2'>
 							{item.title}

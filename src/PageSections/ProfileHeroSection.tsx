@@ -27,6 +27,8 @@ export function ProfileHeroSection({ profileHeroOverride, tokens: _tokens, ...se
 				candidateName={candidateName}
 				office={office}
 				officeHref={profileHeroOverride?.officeHref}
+				secondaryOffice={profileHeroOverride?.secondaryOffice}
+				secondaryOfficeHref={profileHeroOverride?.secondaryOfficeHref}
 				profileImageUrl={profileHeroOverride?.profileImageUrl}
 				isEmpowered={profileHeroOverride?.isEmpowered}
 				tags={profileHeroOverride?.tags}

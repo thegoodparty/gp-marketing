@@ -31,6 +31,13 @@ export type ProfileContentCardProps = {
 	 */
 	group?: string;
 	heading?: string;
+	/**
+	 * `sub` renders a smaller heading for a section nested inside another
+	 * section's card (Figma: "Accomplishments During This Term" sits under
+	 * "Top Priorities While in Office" at one step down), so a grouped card
+	 * keeps the frame's two-level hierarchy instead of two equal headings.
+	 */
+	headingStyle?: 'section' | 'sub';
 	content?: ReactNode;
 	/**
 	 * Render `content` verbatim, without the card chrome (bottom divider + the
@@ -52,7 +59,11 @@ export function ProfileContentCard(props: ProfileContentCardProps) {
 	return (
 		<article className={cn(base(), props.className)} data-component='ProfileContentCard'>
 			{props.heading && (
-				<Text as='h2' styleType='subtitle-1' className={heading()}>
+				<Text
+					as={props.headingStyle === 'sub' ? 'h3' : 'h2'}
+					styleType={props.headingStyle === 'sub' ? 'subtitle-2' : 'subtitle-1'}
+					className={heading()}
+				>
 					{props.heading}
 				</Text>
 			)}

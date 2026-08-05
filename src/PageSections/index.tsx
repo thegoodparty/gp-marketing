@@ -109,6 +109,10 @@ export type SectionOverrides = {
 		office: string;
 		/** When set, the hero office line links to the office/position page. */
 		officeHref?: string;
+		/** Second office line for someone serving and running at once (Figma C). */
+		secondaryOffice?: string;
+		/** When set, the second office line links to its own position page. */
+		secondaryOfficeHref?: string;
 		profileImageUrl?: string;
 		isEmpowered?: boolean;
 		/** Persona tag pills shown above the name (e.g. "Candidate", "Incumbent"). */

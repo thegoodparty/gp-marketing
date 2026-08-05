@@ -193,6 +193,59 @@ A state is at parity when every measured element is within a few px AND you have
 signed off visually on color, type, and the details geometry cannot see (shadows,
 radius, icons). Never declare parity from the number alone.
 
+## Section ORDER is per-state data, not a shared guess
+
+Geometry parity is only half the job — the frames also disagree about the ORDER
+and GROUPING of the content sections, and that is where this page kept
+regressing (the designer raised the same ordering bug four review rounds in a
+row). The cause each time was the same: one shared section list in code, tuned
+to whichever frame was open, silently wrong for the others.
+
+Before changing section order, read the order off EVERY affected frame and
+write it down. The four claimed frames genuinely differ:
+
+| | A candidate | B officeholder | C both | G past |
+|---|---|---|---|---|
+| opens with | Why + Campaign Issues | Top Priorities + Accomplishments | Why + Campaign Issues | About Me + Recent Experience |
+| Other Candidates | before About Position | absent | before Top Priorities | LAST |
+| About Position vs District | Position → District | **District → Position** | Position → District | **District → Position** |
+| Nearby Officials | absent | last | last | before Other Candidates |
+
+Rules that fall out of this, and that the code now encodes:
+
+- **Order is per persona.** `SECTION_ORDER` in `personSectionOverrides.tsx` maps
+  each persona to its section list, cites the frame node ids, and is the ONLY
+  thing that decides which sections a persona shows. Do not re-add a
+  `holdsOffice(...)`-style gate next to the content — two places to express
+  "candidates have no accomplishments" is how they drift apart.
+- **Lock it with a test.** `personSectionOverrides.test.ts` asserts the exact
+  heading sequence per state against the frame node ids. Ordering had NO test
+  before, which is why every regression reached the designer instead of CI. If
+  a frame changes, change the expectation and cite the new node id.
+- **Two sections can come from one field.** Figma C/G show "Campaign Issues"
+  (no status tags) and "Top Priorities While in Office" (status tags) as
+  separate sections; both are `view.issues`. Partition by the data that
+  distinguishes them (`issue.status`) rather than by persona. Seed fixtures for
+  BOTH kinds or a state silently collapses to one section — which is exactly
+  how C shipped "smooshed".
+- **Grouping is expressed by `group`, and adjacency matters.** Consecutive
+  cards sharing a `group` merge into one white card (`chunkCardGroups`). Two
+  sections that are adjacent in one state's order but must stay separate cards
+  (Nearby Officials and Other Candidates in G) need DIFFERENT group keys —
+  reusing one `people` group merges them the moment a frame puts them together.
+
+## Layer names lie; use structure + one `get_design_context` to confirm
+
+`get_metadata` is the cheap way to recover a frame's section order (sort the
+content column's children by `y`), but the layer names in this file are cloned
+junk — "Why Running", "About Me Header" and "Mailing Address Section" each name
+several unrelated sections. Identify sections by their STRUCTURE and by text
+width, then confirm with one `get_design_context` (or the frame screenshot) that
+returns real copy. Useful tells in this file: a 409px-wide "Top Issues Header"
+is "Top Priorities While in Office" while a 182px one is "Campaign Issues"; a
+"Mailing Address Section" carrying a tagline pill + button is a Recent
+Experience row; avatar + "Pro Blocks / Tagline" cards are a people section.
+
 ## Troubleshooting (lessons from real runs)
 
 - **Live doesn't match the source you expect? Verify the CURRENT source FIRST.**

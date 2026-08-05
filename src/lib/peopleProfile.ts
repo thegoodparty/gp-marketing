@@ -184,6 +184,11 @@ export interface PersonProfileView {
 	displayName: string;
 	/** Hero line under the name, e.g. "Candidate for Mayor" or "City Council". */
 	roleTitle: string | null;
+	/**
+	 * Second hero line, only for someone serving and running at once (Figma
+	 * state C): `roleTitle` names the seat held, this names the candidacy.
+	 */
+	secondaryRoleTitle: string | null;
 	/** Bare office name for the sidebar "About Office" row. */
 	officeName: string | null;
 	party: string | null;
@@ -535,6 +540,21 @@ export async function buildBreadcrumb(params: {
 	positionLevel: string | null;
 	positionName: string | null;
 }): Promise<ProfileBreadcrumb[]> {
+	return buildBreadcrumbTrail(params);
+}
+
+/**
+ * Synchronous core of {@link buildBreadcrumb}. Split out so the dev fixtures
+ * (which compose a view synchronously) build the exact same trail as
+ * production instead of falling back to `Elections > Name`.
+ */
+export function buildBreadcrumbTrail(params: {
+	displayName: string;
+	stateCode: string | null;
+	raceSlug: string | null;
+	positionLevel: string | null;
+	positionName: string | null;
+}): ProfileBreadcrumb[] {
 	const { displayName, stateCode, raceSlug, positionLevel, positionName } = params;
 	const trail: ProfileBreadcrumb[] = [{ href: '/elections', label: 'Elections' }];
 
@@ -637,6 +657,11 @@ export function composeView(
 	// pages; it is stripped for major-party (I/J) and removal (K/L) states.
 	const empowered = claimed || (!removed && !majorParty);
 	const roleTitle = resolveRoleTitle(persona, person, office, overlay?.roleTitleOverride ?? null);
+	// Someone serving AND running shows both offices in the hero (Figma C):
+	// `roleTitle` carries the seat held, this carries the candidacy beneath it.
+	const candidacyTarget = candidateOfficeName(person);
+	const secondaryRoleTitle =
+		persona === 'both' && candidacyTarget ? `Candidate for ${candidacyTarget}` : null;
 	const party = rawParty ?? (partyClass ? PARTY_LABELS[partyClass] : null);
 	const districtLabel = office?.subAreaValue ?? office?.subAreaName ?? null;
 	// Mirror the loader's stateCode (which includes the candidacy fallback) so a
@@ -669,6 +694,7 @@ export function composeView(
 		pledged: !removed && (person?.isPledged ?? false),
 		displayName,
 		roleTitle,
+		secondaryRoleTitle,
 		// Candidate-only people have no held office; fall back to the candidacy's
 		// position so section headings ("About …", "Other Candidates for …") still
 		// name the seat they're running for, matching the Figma candidate frames.

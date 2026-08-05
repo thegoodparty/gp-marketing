@@ -73,6 +73,9 @@
 		--goodparty-red-light: hsl(349 79% 85% / 1);
 		--goodparty-blue: hsl(218 100% 38% / 1);
 		--goodparty-blue-light: hsl(218 80% 80% / 1);
+		/* Lighter, more saturated member of the midnight family (== #26498f).
+		   Used as the bright stop of the person-profile hero gradient. */
+		--goodparty-blue-bright: hsl(220 58% 35% / 1);
 		--goodparty-gold: hsl(43 81% 51% / 1);
 		--goodparty-cream: hsl(33 60% 97% / 1);
 
@@ -221,6 +224,7 @@
 	--color-goodparty-red-light: var(--goodparty-red-light);
 	--color-goodparty-blue: var(--goodparty-blue);
 	--color-goodparty-blue-light: var(--goodparty-blue-light);
+	--color-goodparty-blue-bright: var(--goodparty-blue-bright);
 	--color-goodparty-gold: var(--goodparty-gold);
 	--color-goodparty-cream: var(--goodparty-cream);
 

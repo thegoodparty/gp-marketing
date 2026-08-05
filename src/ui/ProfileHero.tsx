@@ -65,9 +65,13 @@ const styles = tv({
 	variants: {
 		backgroundColor: {
 			midnight: {
-				// Figma hero band: a subtle midnight→blue diagonal gradient (the blue
-				// #26498f has no gp-marketing token — flagged in harness/FOLLOWUPS.md).
-				band: 'bg-[linear-gradient(156.73deg,var(--midnight-900)_68.4%,#26498f_125.1%)]',
+				// Figma hero band: a midnight→blue diagonal gradient. Figma's stops
+				// (68.4% / 125.1%) were measured on its full-height hero frame; on our
+				// short dark band those push the bright-blue stop off-canvas so it
+				// reads as one flat color. The stops are re-fit here to transition
+				// within the band (dark top for legibility → blue by the lower edge).
+				// The bright stop is the --goodparty-blue-bright token (colors.css).
+				band: 'bg-[linear-gradient(156.73deg,var(--midnight-900)_30%,var(--goodparty-blue-bright))]',
 				heading: 'text-white',
 				office: 'text-white',
 				attribution: 'text-white',

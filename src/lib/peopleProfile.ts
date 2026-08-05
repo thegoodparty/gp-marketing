@@ -662,11 +662,13 @@ export function composeView(
 	// Label and class must share one source precedence, or a "both" persona whose
 	// office and candidacy parties differ would show one party while being gated
 	// (majorParty → I/J empowerment) by the other. Office-first for both.
-	const rawParty = office?.partyNames?.[0] ?? person?.Candidacies?.[0]?.party ?? null;
-	const partyClass = classifyPartyFrom(
-		office?.partyNames?.[0],
-		person?.Candidacies?.[0]?.party,
-	);
+	// Read the party off the CURRENT race, not whichever candidacy the API
+	// happens to return first: someone who ran as a Democrat in 2020 and is now
+	// running as an Independent would otherwise be gated as major-party (I/J)
+	// and lose the empowerment framing they qualify for.
+	const primaryCand = primaryCandidacy(person);
+	const rawParty = office?.partyNames?.[0] ?? primaryCand?.party ?? null;
+	const partyClass = classifyPartyFrom(office?.partyNames?.[0], primaryCand?.party);
 	const majorParty = isMajorParty(partyClass);
 	const state = resolveProfileState(persona, { claimed, removed, partyClass });
 	// Empowerment framing applies to claimed pages and unclaimed non-partisan
@@ -675,7 +677,7 @@ export function composeView(
 	const roleTitle = resolveRoleTitle(persona, person, office, overlay?.roleTitleOverride ?? null);
 	// Someone serving AND running shows both offices in the hero (Figma C):
 	// `roleTitle` carries the seat held, this carries the candidacy beneath it.
-	const candidacyTarget = candidateOfficeName(person);
+	const candidacyTarget = primaryCand?.positionName ?? null;
 	const secondaryRoleTitle =
 		persona === 'both' && candidacyTarget ? `Candidate for ${candidacyTarget}` : null;
 	const party = rawParty ?? (partyClass ? PARTY_LABELS[partyClass] : null);

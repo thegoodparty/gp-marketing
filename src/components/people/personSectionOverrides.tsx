@@ -135,6 +135,7 @@ function personaTags(persona: PersonPersona): string[] {
 
 const CAMPAIGN_ISSUES_HEADING = 'Campaign Issues';
 const IN_OFFICE_ISSUES_HEADING = 'Top Priorities While in Office';
+const ACCOMPLISHMENTS_HEADING = 'Accomplishments During This Term';
 
 const STATUS_LABELS: Record<PersonProfileIssueStatus, string> = {
 	IN_PROGRESS: 'In Progress',
@@ -322,7 +323,7 @@ function buildAuthoredSections(view: PersonProfileView): SectionMap {
 	// from being set here.
 	if (view.accomplishments.length > 0) {
 		sections.accomplishments = {
-			heading: 'Accomplishments During This Term',
+			heading: ACCOMPLISHMENTS_HEADING,
 			content: (
 				<AccomplishmentsContent
 					accomplishments={view.accomplishments}
@@ -379,36 +380,62 @@ function issuesPrompt(view: PersonProfileView): string {
 	}
 }
 
+/** Copy for the "Top Priorities While in Office" placeholder prompt. */
+function inOfficePrompt(view: PersonProfileView): string {
+	const office = view.officeName ? ` in ${view.officeName}` : ' in office';
+	if (view.persona === 'past') {
+		return `Which priorities did ${view.displayName} focus on${office}? Their record will appear here once they claim their profile.`;
+	}
+	return `What is ${view.displayName} focused on${office}? Their priorities will appear here once they claim their profile.`;
+}
+
+/** Copy for the "Accomplishments During This Term" placeholder prompt. */
+function accomplishmentsPrompt(view: PersonProfileView): string {
+	const office = view.officeName ? ` in ${view.officeName}` : ' in office';
+	const verb = view.persona === 'past' ? 'did' : 'has';
+	const achieved = view.persona === 'past' ? 'achieve' : 'achieved';
+	return `What ${verb} ${view.displayName} ${achieved}${office}? Their accomplishments will appear here once they claim their profile.`;
+}
+
 /** Copy for the "About Me" placeholder prompt. */
 function aboutPrompt(view: PersonProfileView): string {
 	const office = view.officeName ? ` for ${view.officeName}` : '';
 	return `Get to know ${view.displayName}. Their background, experience, and story${office} will appear here once they claim their profile.`;
 }
 
+/** The sections a profile owner writes; the rest come from the civic spine. */
+const AUTHORED_SECTIONS = new Set<SectionKey>([
+	'why',
+	'campaignIssues',
+	'inOfficePriorities',
+	'accomplishments',
+	'aboutMe',
+]);
+
 /**
  * Placeholder prompt cards shown in the authored-cards slot for UNCLAIMED but
- * empowered pages (Figma states D/E/F/H). They mirror the authored cards' Figma
- * order and persona-aware headings (Why → Campaign Issues → About Me) but carry
- * muted, name + office prompt copy inviting engagement, since there is no
- * owner-authored content yet. Accomplishments is intentionally omitted (Figma
- * does not show a placeholder for it).
+ * empowered pages (Figma states D 1917:88035, E 1917:88616, F 1917:89211,
+ * H 1970:113629). The frames show a prompt for every authored section the
+ * claimed page would have, so this seeds from the persona's `SECTION_ORDER`
+ * rather than its own list — an unclaimed page must never advertise a
+ * different set of sections than its claimed counterpart. Copy is muted
+ * name + office prompt text, since there is no owner-authored content yet.
  */
 function buildAuthoredPlaceholderSections(view: PersonProfileView): SectionMap {
-	const issuesPlaceholder: ProfileContentCardProps = {
-		cardType: 'top-issues',
-		content: <PlaceholderPrompt>{issuesPrompt(view)}</PlaceholderPrompt>,
+	const prompt = (text: string) => <PlaceholderPrompt>{text}</PlaceholderPrompt>;
+	const placeholders: Record<string, ProfileContentCardProps> = {
+		why: { cardType: 'why-running', heading: whyHeading(view.persona), content: prompt(whyPrompt(view)) },
+		campaignIssues: { cardType: 'top-issues', heading: CAMPAIGN_ISSUES_HEADING, content: prompt(issuesPrompt(view)) },
+		inOfficePriorities: { cardType: 'top-issues', heading: IN_OFFICE_ISSUES_HEADING, content: prompt(inOfficePrompt(view)) },
+		accomplishments: { heading: ACCOMPLISHMENTS_HEADING, content: prompt(accomplishmentsPrompt(view)) },
+		aboutMe: { cardType: 'about-me', heading: 'About Me', content: prompt(aboutPrompt(view)) },
 	};
-	// There is no authored content yet to split, so the prompt goes on whichever
-	// issues section the persona leads with.
-	const issuesSection: SectionMap =
-		view.persona === 'officeholder'
-			? { inOfficePriorities: { ...issuesPlaceholder, heading: IN_OFFICE_ISSUES_HEADING } }
-			: { campaignIssues: { ...issuesPlaceholder, heading: CAMPAIGN_ISSUES_HEADING } };
-	return {
-		why: { cardType: 'why-running', heading: whyHeading(view.persona), content: <PlaceholderPrompt>{whyPrompt(view)}</PlaceholderPrompt> },
-		...issuesSection,
-		aboutMe: { cardType: 'about-me', heading: 'About Me', content: <PlaceholderPrompt>{aboutPrompt(view)}</PlaceholderPrompt> },
-	};
+	const sections: SectionMap = {};
+	for (const key of SECTION_ORDER[view.persona]) {
+		const card = AUTHORED_SECTIONS.has(key) ? placeholders[key] : undefined;
+		if (card) sections[key] = card;
+	}
+	return sections;
 }
 
 /** First 4-digit year in an ISO-ish date string (avoids TZ off-by-one). */

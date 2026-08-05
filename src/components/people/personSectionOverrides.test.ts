@@ -94,6 +94,37 @@ describe('profile section order matches the Figma frames', () => {
 	});
 });
 
+describe('unclaimed pages prompt for every section the claimed page would show', () => {
+	/**
+	 * The unclaimed frames (D 1917:88035, E 1917:88616, F 1917:89211,
+	 * H 1970:113629) carry a prompt per authored section, so a persona must not
+	 * lose one just because nobody has written it yet.
+	 */
+	test('state F — serving and running prompts for campaign AND in-office sections', () => {
+		// Guards the premise: if this fixture ever becomes claimed the assertions
+		// below would pass on authored content and stop testing the placeholders.
+		expect(getDevPersonProfileView('tim-ficken-0a951485')?.claimed).toBe(false);
+		const headings = sectionHeadings('tim-ficken-0a951485');
+		expect(headings).toContain('Campaign Issues');
+		expect(headings).toContain('Top Priorities While in Office');
+		expect(headings).toContain('Accomplishments During This Term');
+	});
+
+	test('state E — an officeholder prompts for their in-office record, not a campaign', () => {
+		const headings = sectionHeadings('rob-zotti-d8c578fb');
+		expect(headings).toContain('Top Priorities While in Office');
+		expect(headings).toContain('Accomplishments During This Term');
+		expect(headings).not.toContain('Campaign Issues');
+	});
+
+	test('state D — a candidate is never prompted for an in-office record', () => {
+		const headings = sectionHeadings('kim-byrd-b77f912d');
+		expect(headings).toContain('Campaign Issues');
+		expect(headings).not.toContain('Top Priorities While in Office');
+		expect(headings).not.toContain('Accomplishments During This Term');
+	});
+});
+
 describe('card grouping sets the Figma heading levels', () => {
 	/** Headings per white card: the first is the 32/44 one, the rest are 24/32. */
 	function headingsByCard(slug: string): string[][] {

@@ -184,6 +184,11 @@ export interface PersonProfileView {
 	displayName: string;
 	/** Hero line under the name, e.g. "Candidate for Mayor" or "City Council". */
 	roleTitle: string | null;
+	/**
+	 * Second hero line, only for someone serving and running at once (Figma
+	 * state C): `roleTitle` names the seat held, this names the candidacy.
+	 */
+	secondaryRoleTitle: string | null;
 	/** Bare office name for the sidebar "About Office" row. */
 	officeName: string | null;
 	party: string | null;
@@ -316,9 +321,54 @@ function formatTerm(office: PersonOfficeHolder | null): string | null {
 	return null;
 }
 
+/**
+ * Buckets candidacies by how current they are: the soonest upcoming election
+ * first, then the most recent past one, then rows we can't date. The API does
+ * not guarantee an order, so anything that reads "the" candidacy off the array
+ * must go through this or it risks naming a race the person already ran.
+ */
+function candidaciesByRecency(candidacies: PersonCandidacySummary[]): {
+	upcoming: PersonCandidacySummary[];
+	past: PersonCandidacySummary[];
+	undated: PersonCandidacySummary[];
+} {
+	const now = Date.now();
+	const dated: { candidacy: PersonCandidacySummary; time: number }[] = [];
+	const undated: PersonCandidacySummary[] = [];
+	for (const candidacy of candidacies) {
+		const parsed = candidacy.Race?.electionDate ? Date.parse(candidacy.Race.electionDate) : NaN;
+		if (Number.isNaN(parsed)) undated.push(candidacy);
+		else dated.push({ candidacy, time: parsed });
+	}
+	return {
+		upcoming: dated.filter(x => x.time >= now).sort((a, b) => a.time - b.time).map(x => x.candidacy),
+		past: dated.filter(x => x.time < now).sort((a, b) => b.time - a.time).map(x => x.candidacy),
+		undated,
+	};
+}
+
+/**
+ * The race a person is currently running in, else the last one they ran in.
+ *
+ * Prefers a candidacy with a slug, because the rest of the page — position
+ * link, breadcrumb crumb, "About [position]", other candidates — is built from
+ * {@link selectPrimaryCandidacy}, which can only use slugged rows. Without that
+ * preference the hero could name one race while everything under it named
+ * another. Slug-less rows are still a fallback rather than being filtered out:
+ * they carry the office name and party, and dropping them would blank the hero
+ * and, via `classifyPartyFrom`, change which profile state the page renders.
+ */
+function primaryCandidacy(person: PersonItem | null): PersonCandidacySummary | null {
+	const all = person?.Candidacies ?? [];
+	const first = (candidacies: PersonCandidacySummary[]) => {
+		const { upcoming, past, undated } = candidaciesByRecency(candidacies);
+		return upcoming[0] ?? past[0] ?? undated[0] ?? null;
+	};
+	return first(all.filter(c => c.slug)) ?? first(all);
+}
+
 function candidateOfficeName(person: PersonItem | null): string | null {
-	const candidacy = person?.Candidacies?.[0];
-	return candidacy?.positionName ?? null;
+	return primaryCandidacy(person)?.positionName ?? null;
 }
 
 function resolveRoleTitle(
@@ -528,13 +578,13 @@ function humanizeSlugSegment(segment: string): string {
  * (e.g. an office holder with no linked race), the trail degrades to
  * `Elections > State? > Name`.
  */
-export async function buildBreadcrumb(params: {
+export function buildBreadcrumbTrail(params: {
 	displayName: string;
 	stateCode: string | null;
 	raceSlug: string | null;
 	positionLevel: string | null;
 	positionName: string | null;
-}): Promise<ProfileBreadcrumb[]> {
+}): ProfileBreadcrumb[] {
 	const { displayName, stateCode, raceSlug, positionLevel, positionName } = params;
 	const trail: ProfileBreadcrumb[] = [{ href: '/elections', label: 'Elections' }];
 
@@ -626,17 +676,24 @@ export function composeView(
 	// Label and class must share one source precedence, or a "both" persona whose
 	// office and candidacy parties differ would show one party while being gated
 	// (majorParty → I/J empowerment) by the other. Office-first for both.
-	const rawParty = office?.partyNames?.[0] ?? person?.Candidacies?.[0]?.party ?? null;
-	const partyClass = classifyPartyFrom(
-		office?.partyNames?.[0],
-		person?.Candidacies?.[0]?.party,
-	);
+	// Read the party off the CURRENT race, not whichever candidacy the API
+	// happens to return first: someone who ran as a Democrat in 2020 and is now
+	// running as an Independent would otherwise be gated as major-party (I/J)
+	// and lose the empowerment framing they qualify for.
+	const primaryCand = primaryCandidacy(person);
+	const rawParty = office?.partyNames?.[0] ?? primaryCand?.party ?? null;
+	const partyClass = classifyPartyFrom(office?.partyNames?.[0], primaryCand?.party);
 	const majorParty = isMajorParty(partyClass);
 	const state = resolveProfileState(persona, { claimed, removed, partyClass });
 	// Empowerment framing applies to claimed pages and unclaimed non-partisan
 	// pages; it is stripped for major-party (I/J) and removal (K/L) states.
 	const empowered = claimed || (!removed && !majorParty);
 	const roleTitle = resolveRoleTitle(persona, person, office, overlay?.roleTitleOverride ?? null);
+	// Someone serving AND running shows both offices in the hero (Figma C):
+	// `roleTitle` carries the seat held, this carries the candidacy beneath it.
+	const candidacyTarget = primaryCand?.positionName ?? null;
+	const secondaryRoleTitle =
+		persona === 'both' && candidacyTarget ? `Candidate for ${candidacyTarget}` : null;
 	const party = rawParty ?? (partyClass ? PARTY_LABELS[partyClass] : null);
 	const districtLabel = office?.subAreaValue ?? office?.subAreaName ?? null;
 	// Mirror the loader's stateCode (which includes the candidacy fallback) so a
@@ -669,14 +726,11 @@ export function composeView(
 		pledged: !removed && (person?.isPledged ?? false),
 		displayName,
 		roleTitle,
+		secondaryRoleTitle,
 		// Candidate-only people have no held office; fall back to the candidacy's
 		// position so section headings ("About …", "Other Candidates for …") still
 		// name the seat they're running for, matching the Figma candidate frames.
-		officeName:
-			office?.positionName ??
-			office?.officeTitle ??
-			person?.Candidacies?.[0]?.positionName ??
-			null,
+		officeName: office?.positionName ?? office?.officeTitle ?? candidacyTarget,
 		party,
 		avatarUrl,
 		coverImageUrl: removed ? null : (overlay?.coverImageUrl ?? null),
@@ -737,25 +791,15 @@ function selectPrimaryCandidacy(
 	person: PersonItem | null,
 	hasCurrentOffice: boolean,
 ): PersonCandidacySummary | null {
-	const candidacies = (person?.Candidacies ?? []).filter((c) => c.slug);
-	if (candidacies.length === 0) return null;
-	const now = Date.now();
-	const dated = candidacies.map((c) => {
-		const parsed = c.Race?.electionDate ? Date.parse(c.Race.electionDate) : NaN;
-		return { candidacy: c, time: Number.isNaN(parsed) ? null : parsed };
-	});
+	const { upcoming, past, undated } = candidaciesByRecency(
+		(person?.Candidacies ?? []).filter((c) => c.slug),
+	);
 	// (1) Current candidate: earliest upcoming election.
-	const upcoming = dated
-		.filter((x): x is { candidacy: PersonCandidacySummary; time: number } => x.time != null && x.time >= now)
-		.sort((a, b) => a.time - b.time);
-	if (upcoming[0]) return upcoming[0].candidacy;
+	if (upcoming[0]) return upcoming[0];
 	// (2) Elected officeholder not currently running: defer to the office.
 	if (hasCurrentOffice) return null;
 	// (3) Archived: most recent past run wins; undated rows fall back to first.
-	const past = dated
-		.filter((x): x is { candidacy: PersonCandidacySummary; time: number } => x.time != null)
-		.sort((a, b) => b.time - a.time);
-	return past[0]?.candidacy ?? candidacies[0] ?? null;
+	return past[0] ?? undated[0] ?? null;
 }
 
 /** Resolves the primary candidacy detail (with race) used to enrich the page. */
@@ -949,13 +993,13 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 	const composedName = [person?.firstName, person?.lastName].filter(Boolean).join(' ');
 	const displayName = overlay?.displayName ?? person?.fullName ?? (composedName || 'Public Official');
 
-	// Interlink sections + breadcrumb are independent; fetch in parallel. Each
-	// degrades to empty on any miss so the core profile always renders.
+	// The interlink sections are independent; fetch in parallel. Each degrades to
+	// empty on any miss so the core profile always renders.
 	const { tier, countySlug } = deriveElectionsIndexTier(positionHref, positionLevel);
-	const [otherCandidates, nearbyOfficials, breadcrumb, electionsIndex] = await Promise.all([
+	const breadcrumb = buildBreadcrumbTrail({ displayName, stateCode, raceSlug, positionLevel, positionName });
+	const [otherCandidates, nearbyOfficials, electionsIndex] = await Promise.all([
 		loadOtherCandidates(positionId, personId),
 		loadNearbyOfficials(geoId, personId),
-		buildBreadcrumb({ displayName, stateCode, raceSlug, positionLevel, positionName }),
 		loadElectionsIndex({ stateCode, tier, countySlug }),
 	]);
 

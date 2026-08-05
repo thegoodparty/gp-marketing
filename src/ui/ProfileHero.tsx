@@ -50,6 +50,9 @@ const styles = tv({
 		// for merge to collapse it against; color is inherited from the container.
 		tagText: 'font-secondary text-[0.875rem] font-medium',
 		nameOffice: 'flex flex-col gap-1',
+		// Office lines stack flush (Figma sets them on consecutive 32px lines with
+		// no gap) even when a second line is present.
+		officeLines: 'flex flex-col',
 		heading: '',
 		// Figma office line is Outfit Medium (500), not the subtitle-1 default (600).
 		office: 'font-medium',
@@ -102,6 +105,14 @@ export type ProfileHeroProps = {
 	office: string;
 	/** When set, the office line renders as a link to the office/position page. */
 	officeHref?: string;
+	/**
+	 * Second office line, stacked directly under the first with no gap. Used by
+	 * the simultaneous candidate + office-holder frame (Figma state C), which
+	 * shows the seat held above "Candidate for [position]".
+	 */
+	secondaryOffice?: string;
+	/** When set, the secondary office line renders as a link. */
+	secondaryOfficeHref?: string;
 	profileImage?: SanityImage;
 	profileImageUrl?: string;
 	isEmpowered?: boolean;
@@ -117,7 +128,19 @@ export type ProfileHeroProps = {
 export function ProfileHero(props: ProfileHeroProps) {
 	const backgroundColor = props.backgroundColor ?? 'midnight';
 	const resolvedBackgroundColor = backgroundColor === 'white' ? 'cream' : backgroundColor;
-	const { base, backgroundWrapper, band, belowBand, container, imageWrapper, image, badge, content, tagRow, tag, tagText, nameOffice, heading, office, officeLink, attribution, attributionIcon, attributionText, notEndorsed } = styles({ backgroundColor: resolvedBackgroundColor });
+	const { base, backgroundWrapper, band, belowBand, container, imageWrapper, image, badge, content, tagRow, tag, tagText, nameOffice, officeLines, heading, office, officeLink, attribution, attributionIcon, attributionText, notEndorsed } = styles({ backgroundColor: resolvedBackgroundColor });
+
+	const renderOfficeLine = (label: string, href?: string) => (
+		<Text key={label} as="p" styleType="subtitle-1" className={office()}>
+			{href ? (
+				<Anchor href={href} className={officeLink()}>
+					{label}
+				</Anchor>
+			) : (
+				label
+			)}
+		</Text>
+	);
 
 	// `attribution` wins when provided; otherwise fall back to legacy `isEmpowered`.
 	const attributionMode = props.attribution ?? (props.isEmpowered ? 'empowered' : 'none');
@@ -180,15 +203,10 @@ export function ProfileHero(props: ProfileHeroProps) {
 							<Text as="h1" styleType={props.candidateName.length > 28 ? 'heading-md' : 'heading-lg'} className={heading()}>
 								{props.candidateName}
 							</Text>
-							<Text as="p" styleType="subtitle-1" className={office()}>
-								{props.officeHref ? (
-									<Anchor href={props.officeHref} className={officeLink()}>
-										{props.office}
-									</Anchor>
-								) : (
-									props.office
-								)}
-							</Text>
+							<div className={officeLines()}>
+								{renderOfficeLine(props.office, props.officeHref)}
+								{props.secondaryOffice && renderOfficeLine(props.secondaryOffice, props.secondaryOfficeHref)}
+							</div>
 						</div>
 						{attributionMode === 'empowered' && (
 							<div className={attribution()}>

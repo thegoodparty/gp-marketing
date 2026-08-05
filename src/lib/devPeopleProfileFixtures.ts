@@ -16,10 +16,24 @@
  * each slug lands on the intended Figma state; only the CONTENT VOLUME (issues,
  * experience, interlinks, density, bios) is enriched on top.
  */
-import { composeView, type ExperienceItem, type PersonProfileView, type ProfileState, type RelatedPersonCard } from '~/lib/peopleProfile';
+import { buildBreadcrumbTrail, composeView, type ExperienceItem, type PersonProfileView, type ProfileState, type RelatedPersonCard } from '~/lib/peopleProfile';
 import type { PersonPersona } from '~/lib/peopleProfile';
 import type { PublicPersonProfile, VoterDensity } from '~/types/people';
+import { buildElectionPositionHrefFromRaceSlug } from '~/lib/electionsHelpers';
 import { fixtureForState } from '~/testing/peopleProfileFixtures';
+
+/**
+ * A realistic race slug (`state/county/city/position`) so the dev pages render
+ * the full breadcrumb + position href the same way production does for anyone
+ * with a candidacy. The city matches the fixtures' office name so the trail and
+ * the section headings name the same place.
+ */
+const DEV_RACE_SLUG = 'wy/laramie/springfield/city-council';
+const DEV_POSITION_NAME = 'Springfield City Council';
+
+function devPositionHref(): string | undefined {
+	return buildElectionPositionHrefFromRaceSlug({ slug: DEV_RACE_SLUG, positionLevel: 'CITY' });
+}
 
 export function isDevPeopleFixturesEnabled(): boolean {
 	return process.env['PEOPLE_DEV_FIXTURES'] === 'true';
@@ -50,7 +64,73 @@ function personIdFromSuffix(suffix: string): string {
 const LOREM =
 	'Focused on transparent, accountable local government that puts residents first. Building coalitions across the community to deliver practical results on the issues families care about most.';
 
-function richOverlay(name: string, holdsOffice: boolean): Partial<PublicPersonProfile> {
+// Issues WITHOUT a status are the campaign platform ("Campaign Issues"); issues
+// WITH one are the in-office record ("Top Priorities While in Office"). The
+// frames show these as separate sections, so seed each kind only for the
+// personas whose frame has that section.
+const CAMPAIGN_ISSUES = [
+	{
+		issueId: 'issue-housing',
+		title: 'Affordable Housing',
+		description: 'Expand affordable housing options and streamline permitting for new homes.',
+		visible: true,
+		status: null,
+		transparency: null,
+		sortOrder: 0,
+	},
+	{
+		issueId: 'issue-safety',
+		title: 'Public Safety & Roads',
+		description: 'Repair aging roads and invest in community-based public safety programs.',
+		visible: true,
+		status: null,
+		transparency: null,
+		sortOrder: 1,
+	},
+	{
+		issueId: 'issue-transparency',
+		title: 'Government Transparency',
+		description: 'Publish budgets and votes openly so residents can hold leaders accountable.',
+		visible: true,
+		status: null,
+		transparency: null,
+		sortOrder: 2,
+	},
+] as const;
+
+const IN_OFFICE_ISSUES = [
+	{
+		issueId: 'issue-tree-canopy',
+		title: 'Protecting the tree canopy as we grow',
+		description: 'Pair new development with replanting so block-level shade keeps pace with construction.',
+		visible: true,
+		status: 'IN_PROGRESS',
+		transparency: 'Verified',
+		sortOrder: 3,
+	},
+	{
+		issueId: 'issue-repaving',
+		title: 'Potholes and repaving on Riverside Avenue',
+		description: 'Fund the repaving backlog and publish a street-by-street schedule residents can track.',
+		visible: true,
+		status: 'PRIORITIZED',
+		transparency: 'Verified',
+		sortOrder: 4,
+	},
+	{
+		issueId: 'issue-fire-staffing',
+		title: 'Fire department staffing and response times',
+		description: 'Keep every station fully staffed and hold response times under the national benchmark.',
+		visible: true,
+		status: 'ONGOING',
+		transparency: 'Verified',
+		sortOrder: 5,
+	},
+] as const;
+
+function richOverlay(name: string, persona: PersonPersona): Partial<PublicPersonProfile> {
+	const ran = persona === 'candidate' || persona === 'both' || persona === 'past';
+	const holdsOffice = persona === 'officeholder' || persona === 'both' || persona === 'past';
 	return {
 		displayName: name,
 		bioOverride: `${name} is a lifelong resident and community advocate. ${LOREM}`,
@@ -73,33 +153,8 @@ function richOverlay(name: string, holdsOffice: boolean): Partial<PublicPersonPr
 		linkedinUrl: 'https://linkedin.com/in/example',
 		instagramUrl: 'https://instagram.com/example',
 		issues: [
-			{
-				issueId: 'issue-housing',
-				title: 'Affordable Housing',
-				description: 'Expand affordable housing options and streamline permitting for new homes.',
-				visible: true,
-				status: 'IN_PROGRESS',
-				transparency: 'Verified',
-				sortOrder: 0,
-			},
-			{
-				issueId: 'issue-safety',
-				title: 'Public Safety & Roads',
-				description: 'Repair aging roads and invest in community-based public safety programs.',
-				visible: true,
-				status: 'PRIORITIZED',
-				transparency: 'Verified',
-				sortOrder: 1,
-			},
-			{
-				issueId: 'issue-transparency',
-				title: 'Government Transparency',
-				description: 'Publish budgets and votes openly so residents can hold leaders accountable.',
-				visible: true,
-				status: 'ONGOING',
-				transparency: 'Verified',
-				sortOrder: 2,
-			},
+			...(ran ? CAMPAIGN_ISSUES : []),
+			...(holdsOffice ? IN_OFFICE_ISSUES : []),
 		],
 	};
 }
@@ -113,7 +168,7 @@ function richExperience(persona: PersonPersona): ExperienceItem[] {
 		{ title: 'School Board Trustee, At-Large', organization: '2010 – 2014', term: '2010 – 2014', status: null, href: '/elections/school-board' },
 	];
 	if (running) {
-		rows.unshift({ title: 'Candidate for Mayor of Springfield', organization: '2026 election', term: '2026 election', status: 'Candidate', href: '/elections/mayor' });
+		rows.unshift({ title: `Candidate for ${DEV_POSITION_NAME}`, organization: '2026 election', term: '2026 election', status: 'Candidate', href: devPositionHref() ?? null });
 	}
 	return rows;
 }
@@ -176,6 +231,12 @@ export function getDevPersonProfileView(slug: string): PersonProfileView | null 
 		firstName: entry.first,
 		lastName: entry.last,
 		fullName: name,
+		// The shared matrix runs its candidacies for a different office (Mayor)
+		// than it holds (city council), which is fine for state/gating tests but
+		// would show a dev page whose hero names one race while the breadcrumb
+		// and position link point at another. Every dev persona is about the one
+		// DEV_RACE_SLUG race, so an incumbent here is running for re-election.
+		Candidacies: (fixture.person.Candidacies ?? []).map((c) => ({ ...c, positionName: DEV_POSITION_NAME })),
 		bioText: `${name} has served the community for over a decade. ${LOREM}`,
 		headshotUrl,
 		websiteUrl: 'https://example.org',
@@ -194,13 +255,14 @@ export function getDevPersonProfileView(slug: string): PersonProfileView | null 
 
 	const persona: PersonPersona = fixture.expected.persona;
 	const running = persona === 'candidate' || persona === 'both';
-	const holdsOffice = persona === 'officeholder' || persona === 'both' || persona === 'past';
 
 	const overlay: PublicPersonProfile | null =
 		fixture.overlay.status === 'live'
-			? { ...fixture.overlay.profile, personId, ...richOverlay(name, holdsOffice), avatarUrl: headshotUrl }
+			? { ...fixture.overlay.profile, personId, ...richOverlay(name, persona), avatarUrl: headshotUrl }
 			: null;
 	const removed = fixture.overlay.status === 'removed';
+
+	const positionHref = devPositionHref() ?? null;
 
 	const view = composeView(personId, person, overlay, {
 		removed,
@@ -209,7 +271,17 @@ export function getDevPersonProfileView(slug: string): PersonProfileView | null 
 		electionDate: '2026-11-03',
 		positionDescription:
 			'The County Legislature or Executive Board is the governing body of the county and exercises broad policy-making authority. The Board is charged with implementing policy and overseeing the county budget process and administration.',
-		positionHref: '/elections/wyoming-house',
+		positionHref,
+		// Mirror production's trail so reviewers see the real
+		// Elections > State > County > City > Position > Name hierarchy rather
+		// than the bare `Elections > Name` fallback.
+		breadcrumb: buildBreadcrumbTrail({
+			displayName: name,
+			stateCode: 'WY',
+			raceSlug: DEV_RACE_SLUG,
+			positionLevel: 'CITY',
+			positionName: DEV_POSITION_NAME,
+		}),
 		recentExperience: richExperience(persona),
 		// Running personas get "Other candidates"; the Figma "past" mocks (G/H) are
 		// the tallest frames and also carry this section, so include it there too.

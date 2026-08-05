@@ -13,6 +13,7 @@ import {
 } from '~/lib/electionsHelpers';
 import { buildPersonSlugFromBase } from '~/lib/peopleProfile';
 import { FAQ_BASE_PATH, getFaqSitemapEntries } from '~/lib/faqSlugs';
+import { fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
 import { allFaqsQuery } from '~/sanity/groq';
 
 /** 51 US state/DC codes (50 states + DC) */
@@ -56,8 +57,10 @@ export function getSitemapIds(): { id: number }[] {
 	return ids;
 }
 
+// Server-only base: M2M auth headers are attached to requests against this URL,
+// so it must never be sourced from a client-visible (NEXT_PUBLIC_*) env var.
 const ELECTION_API_BASE =
-	process.env['NEXT_PUBLIC_ELECTION_API_BASE'] ?? process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
+	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
 
 const GP_API_BASE =
 	process.env['GP_API_BASE_URL'] ??
@@ -438,12 +441,12 @@ async function fetchElectionJson<T>(
 	const search = new URLSearchParams(params).toString();
 	const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}?${search}`;
 	try {
-		const res = await fetch(url, cacheInit(tags));
-		if (!res.ok) {
-			console.error(`[sitemap] Election API ${res.status} ${url}`);
+		const result = await fetchElectionApiJsonCached(url, tags);
+		if (!result.ok) {
+			console.error(`[sitemap] Election API ${result.status} ${url}`);
 			return [];
 		}
-		const data: unknown = await res.json();
+		const data = result.json;
 		if (Array.isArray(data)) return data as T[];
 		if (data && typeof data === 'object' && 'data' in data) {
 			const inner = (data as { data: unknown }).data;

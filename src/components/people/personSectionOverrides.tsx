@@ -11,6 +11,7 @@ import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
 import type { ProfileContentCardProps } from '~/ui/ProfileContentCard';
 import type { ElectionsSidebarProps } from '~/ui/ElectionsSidebar';
 import { IconResolver } from '~/ui/IconResolver';
+import { cn } from '~/ui/_lib/utils';
 import { Text } from '~/ui/Text';
 import { ButtonLink } from '~/ui/Inputs/Button';
 import { CandidatesCard } from '~/ui/CandidatesCard';
@@ -94,8 +95,8 @@ const STATUS_LABELS: Record<PersonProfileIssueStatus, string> = {
 };
 
 // Inline "Pro Blocks / Tagline" pill from Figma: white fill, hairline gray border,
-// rounded-md, subtle shadow, no icon. Used for persona/status tags on the content
-// sections (Recent Experience, Accomplishments, Issues, Other Candidates).
+// rounded-md, subtle shadow, no icon. Used for persona tags on Recent Experience
+// rows and the Other Candidates cards.
 function TypeTag({ label }: { label: string }) {
 	return (
 		<span className='inline-flex w-fit shrink-0 items-center rounded-[6px] border border-gray-300 bg-white px-2.5 py-1 text-midnight-900 shadow-xs'>
@@ -106,61 +107,60 @@ function TypeTag({ label }: { label: string }) {
 	);
 }
 
+// Figma "Top Issues Type Tag": a solid colour-coded chip (rounded-xs, no border)
+// with uppercase 12px Outfit SemiBold text, keyed by issue/accomplishment status.
+// Colour on the container, size/weight on the inner span so tailwind-merge can't
+// collapse the size against the colour (see marketing-ui-clone skill).
+const STATUS_TAG_STYLES: Record<PersonProfileIssueStatus, string> = {
+	IN_PROGRESS: 'bg-blue-100 text-blue-900',
+	PRIORITIZED: 'bg-bright-yellow-100 text-bright-yellow-900',
+	ONGOING: 'bg-red-100 text-red-900',
+	RESOLVED: 'bg-halo-green-100 text-halo-green-900',
+};
+
+function StatusTag({ status }: { status: PersonProfileIssueStatus }) {
+	return (
+		<span className={cn('inline-flex w-fit shrink-0 items-center rounded-xs px-2 py-1', STATUS_TAG_STYLES[status])}>
+			<span className='font-primary text-[0.75rem] leading-4 font-semibold tracking-[1px] uppercase'>
+				{STATUS_LABELS[status]}
+			</span>
+		</span>
+	);
+}
+
 function IssuesContent({ issues, showStatus }: { issues: PersonProfileView['issues']; showStatus: boolean }): ReactNode {
 	return (
-		<ol className='flex flex-col gap-6'>
-			{issues.map((issue, index) => (
+		<ul className='flex flex-col gap-6'>
+			{issues.map((issue) => (
 				<li key={issue.id} className='flex flex-col gap-2'>
-					<div className='flex items-baseline gap-3'>
-						<Text as='span' styleType='subtitle-1' className='text-btn-primary-bg'>
-							{index + 1}
-						</Text>
-						<Text as='span' styleType='subtitle-1'>
-							{issue.title}
-						</Text>
-					</div>
-					{issue.description && (
-						<div className='pl-7'>
-							<Text styleType='body-2'>{issue.description}</Text>
-						</div>
-					)}
-					{showStatus && issue.status && (
-						<div className='pl-7'>
-							<TypeTag label={STATUS_LABELS[issue.status]} />
-						</div>
-					)}
+					{showStatus && issue.status && <StatusTag status={issue.status} />}
+					<Text as='h4' styleType='subtitle-1'>
+						{issue.title}
+					</Text>
+					{issue.description && <Text styleType='body-2'>{issue.description}</Text>}
 				</li>
 			))}
-		</ol>
+		</ul>
 	);
 }
 
 function AccomplishmentsContent({ accomplishments }: { accomplishments: PersonAccomplishment[] }): ReactNode {
 	return (
-		<ul className='flex flex-col gap-5'>
+		<ul className='flex flex-col gap-6'>
 			{accomplishments.map((item, index) => (
-				<li key={`${item.title}-${index}`} className='flex flex-col gap-1'>
-					<div className='flex items-start justify-between gap-3'>
-						<div className='flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1'>
-							<span className='inline-flex items-center gap-2'>
-								<IconResolver icon='star' className='h-4 w-4 text-btn-primary-bg' />
-								<Text as='span' styleType='subtitle-2'>
-									{item.title}
-								</Text>
-							</span>
-							{item.date && (
-								<Text as='span' styleType='caption' className='text-gray-500'>
-									{item.date}
-								</Text>
-							)}
-						</div>
-						<TypeTag label='Resolved' />
+				<li key={`${item.title}-${index}`} className='flex flex-col gap-2'>
+					<StatusTag status='RESOLVED' />
+					<div className='flex flex-wrap items-baseline gap-x-3 gap-y-1'>
+						<Text as='span' styleType='subtitle-2'>
+							{item.title}
+						</Text>
+						{item.date && (
+							<Text as='span' styleType='caption' className='text-gray-500'>
+								{item.date}
+							</Text>
+						)}
 					</div>
-					{item.description && (
-						<div className='pl-6'>
-							<Text styleType='body-2'>{item.description}</Text>
-						</div>
-					)}
+					{item.description && <Text styleType='body-2'>{item.description}</Text>}
 				</li>
 			))}
 		</ul>
@@ -171,7 +171,7 @@ function ExperienceContent({ experience }: { experience: PersonProfileView['rece
 	return (
 		<ul className='flex flex-col gap-5'>
 			{experience.map((item, index) => (
-				<li key={`${item.title}-${index}`} className='flex flex-col gap-1'>
+				<li key={`${item.title}-${index}`} className='flex flex-col gap-3'>
 					<div className='flex items-center justify-between gap-3'>
 						<Text as='span' styleType='subtitle-2'>
 							{item.title}
@@ -208,22 +208,25 @@ function ExperienceContent({ experience }: { experience: PersonProfileView['rece
  */
 function AboutPositionContent({ view }: { view: PersonProfileView }): ReactNode {
 	const electionDate = view.electionDate ? formatElectionDateFromApi(view.electionDate) : null;
-	const rows: Array<{ label: string; value: string }> = [];
-	if (view.termLabel) rows.push({ label: 'Term length', value: view.termLabel });
-	if (electionDate) rows.push({ label: 'Next election', value: electionDate });
+	const rows: Array<{ icon: string; label: string; value: string }> = [];
+	if (view.termLabel) rows.push({ icon: 'calendar', label: 'Term length', value: view.termLabel });
+	if (electionDate) rows.push({ icon: 'vote', label: 'Next election', value: electionDate });
 	return (
 		<div className='flex flex-col gap-4'>
 			{view.positionDescription && <Text styleType='body-2'>{view.positionDescription}</Text>}
 			{rows.length > 0 && (
-				<dl className='flex flex-col gap-2'>
+				<dl className='flex flex-col gap-4'>
 					{rows.map(r => (
-						<div key={r.label} className='flex items-baseline justify-between gap-4'>
-							<Text as='dt' styleType='caption' className='text-gray-500'>
-								{r.label}
-							</Text>
-							<Text as='dd' styleType='subtitle-2'>
-								{r.value}
-							</Text>
+						<div key={r.label} className='flex items-start gap-3'>
+							<IconResolver icon={r.icon} className='mt-0.5 h-6 w-6 shrink-0 text-midnight-900' />
+							<div className='flex min-w-0 flex-col gap-0.5'>
+								<Text as='dt' styleType='subtitle-2'>
+									{r.label}
+								</Text>
+								<Text as='dd' styleType='body-2' className='text-gray-500'>
+									{r.value}
+								</Text>
+							</div>
 						</div>
 					))}
 				</dl>
@@ -260,13 +263,15 @@ function buildAuthoredCards(view: PersonProfileView): ProfileContentCardProps[] 
 	if (view.issues.length > 0) {
 		cards.push({ cardType: 'top-issues', group: 'platform', heading: issuesHeading(view.persona), content: <IssuesContent issues={view.issues} showStatus={holdsOffice(view.persona)} /> });
 	}
+	// Accomplishments are an in-office record — only personas who hold/held office
+	// show them. A pure candidate (Figma A) has none, so gate the section. Per Figma
+	// (B/C/G) it sits immediately after Campaign Issues, grouped with them as the
+	// in-office record, BEFORE About Me.
+	if (view.accomplishments.length > 0 && holdsOffice(view.persona)) {
+		cards.push({ group: 'platform', heading: 'Accomplishments', content: <AccomplishmentsContent accomplishments={view.accomplishments} /> });
+	}
 	if (view.bio) {
 		cards.push({ cardType: 'about-me', group: 'about', heading: 'About Me', content: view.bio });
-	}
-	// Accomplishments are an in-office record — only personas who hold/held office
-	// show them. A pure candidate (Figma A) has none, so gate the section.
-	if (view.accomplishments.length > 0 && holdsOffice(view.persona)) {
-		cards.push({ group: 'about', heading: 'Accomplishments', content: <AccomplishmentsContent accomplishments={view.accomplishments} /> });
 	}
 	return cards;
 }
@@ -397,7 +402,21 @@ function buildCivicCards(view: PersonProfileView): ProfileContentCardProps[] {
 	if (view.recentExperience.length > 0) {
 		cards.push({ group: 'about', heading: 'Recent Experience', content: <ExperienceContent experience={view.recentExperience} /> });
 	}
-	// Figma title-cases this heading and leads with the empowered (GoodParty)
+	if (view.positionDescription || view.termLabel || view.electionDate) {
+		cards.push({
+			group: 'position',
+			heading: `About ${view.officeName ?? 'the Role'}`,
+			content: <AboutPositionContent view={view} />,
+		});
+	}
+	const districtMap = buildDistrictMap(view);
+	if (districtMap) {
+		cards.push({ group: 'district', heading: 'District information', content: districtMap });
+	}
+	// People cards (other candidates / nearby officials) close the column. Per Figma
+	// the officeholder frames (B/C/G) place these last, after the position + district
+	// context, so the reader meets the office before the surrounding people.
+	// Figma title-cases the heading and leads with the empowered (GoodParty)
 	// candidate. FLAG: the frame reads "Other Candidates for [Position] in
 	// <Location>" but the view has no clean locality field distinct from the
 	// position name, so the "in <Location>" clause is omitted rather than invented.
@@ -414,17 +433,6 @@ function buildCivicCards(view: PersonProfileView): ProfileContentCardProps[] {
 	const nearby = holdsOffice(view.persona) ? empoweredFirst(toCandidateCards(view.nearbyOfficials)) : [];
 	if (nearby.length > 0) {
 		cards.push({ group: 'people', heading: 'Nearby Officials', content: <OtherCandidatesContent cards={nearby} /> });
-	}
-	if (view.positionDescription || view.termLabel || view.electionDate) {
-		cards.push({
-			group: 'position',
-			heading: `About ${view.officeName ?? 'the Role'}`,
-			content: <AboutPositionContent view={view} />,
-		});
-	}
-	const districtMap = buildDistrictMap(view);
-	if (districtMap) {
-		cards.push({ group: 'district', heading: 'District information', content: districtMap });
 	}
 	return cards;
 }

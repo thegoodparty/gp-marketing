@@ -36,32 +36,46 @@ const styles = tv({
 		// fraction of the portrait per Figma (desktop glyph 113x94 on the 416px
 		// avatar; mobile 48x40 on the 144px avatar), so it scales across breakpoints.
 		badge: 'absolute bottom-1 right-1 z-30 drop-shadow-md w-12 h-10 md:w-20 md:h-[66px] lg:w-[113px] lg:h-[94px]',
-		content: 'flex flex-col gap-4 text-left z-10 md:pt-2',
+		// Tighter rhythm than before so the attribution sits higher in the band,
+		// leaving more dark space beneath "Empowered by GoodParty.org" (Figma).
+		content: 'flex flex-col gap-2 text-left z-10 md:pt-2',
 		tagRow: 'flex flex-wrap items-center gap-2',
-		// Pill CONTAINER only (shape + color). The text size lives on an inner span,
-		// NOT here: our tailwind-merge collapses any text-size against a text-color in
-		// the same pass and keeps the color, so size + color must be separate elements.
+		// Pill CONTAINER only (shape + border/text-color). The FILL is applied per
+		// tag in the render (Incumbent → halo-green, Candidate → bright-yellow) and
+		// the text size lives on an inner span, NOT here: our tailwind-merge collapses
+		// any text-size against a text-color in the same pass and keeps the color, so
+		// size + color must be separate elements.
 		tag: 'inline-flex w-fit items-center rounded-[6px] border px-2.5 py-1 shadow-xs',
 		// Inner text span: 14px medium Open Sans (Figma tag). No color here → nothing
 		// for merge to collapse it against; color is inherited from the container.
 		tagText: 'font-secondary text-[0.875rem] font-medium',
-		nameOffice: 'flex flex-col gap-2',
+		nameOffice: 'flex flex-col gap-1',
 		heading: '',
-		office: '',
+		// Figma office line is Outfit Medium (500), not the subtitle-1 default (600).
+		office: 'font-medium',
 		officeLink: 'hover:underline',
-		attribution: 'flex items-center justify-start gap-1.5',
+		// Container carries the text COLOR (via variant); the inner span carries the
+		// size/weight so tailwind-merge can't collapse them into one another.
+		attribution: 'mt-1 flex items-center justify-start gap-1.5',
 		attributionIcon: 'w-[37px] h-[28px]',
-		attributionText: 'text-sm',
+		// Figma "Empowered by GoodParty.org": Outfit SemiBold 20/28.
+		attributionText: 'font-primary text-[1.25rem] font-semibold leading-7',
 		notEndorsed: 'text-sm',
 	},
 	variants: {
 		backgroundColor: {
 			midnight: {
-				band: 'bg-midnight-900',
+				// Figma hero band: a midnight→blue diagonal gradient. Figma's stops
+				// (68.4% / 125.1%) were measured on its full-height hero frame; on our
+				// short dark band those push the bright-blue stop off-canvas so it
+				// reads as one flat color. The stops are re-fit here to transition
+				// within the band (dark top for legibility → blue by the lower edge).
+				// The bright stop is the --goodparty-blue-bright token (colors.css).
+				band: 'bg-[linear-gradient(156.73deg,var(--midnight-900)_30%,var(--goodparty-blue-bright))]',
 				heading: 'text-white',
 				office: 'text-white',
-				attributionText: 'text-white',
-				tag: 'bg-bright-yellow-50 border-gray-300 text-[color:#0a0a0a]',
+				attribution: 'text-white',
+				tag: 'border-gray-300 text-[color:#0a0a0a]',
 				notEndorsed: 'text-gray-400',
 			},
 			cream: {
@@ -69,7 +83,7 @@ const styles = tv({
 				band: 'bg-goodparty-cream',
 				heading: 'text-midnight-900',
 				office: 'text-midnight-900',
-				attributionText: 'text-midnight-900',
+				attribution: 'text-midnight-900',
 				tag: 'bg-white border-gray-300 text-[color:#0a0a0a]',
 				notEndorsed: 'text-gray-500',
 			},
@@ -104,6 +118,10 @@ export function ProfileHero(props: ProfileHeroProps) {
 	// `attribution` wins when provided; otherwise fall back to legacy `isEmpowered`.
 	const attributionMode = props.attribution ?? (props.isEmpowered ? 'empowered' : 'none');
 	const tags = props.tags?.filter(Boolean) ?? [];
+
+	// Per Figma the persona pill is colour-coded by label: an in-office "Incumbent"
+	// reads halo-green, everyone else (Candidate / Former Official) reads bright-yellow.
+	const tagFill = (label: string): string => (label === 'Incumbent' ? 'bg-halo-green-50' : 'bg-bright-yellow-50');
 
 	return (
 		<section className={cn(base(), props.className)} data-component="ProfileHero">
@@ -148,7 +166,7 @@ export function ProfileHero(props: ProfileHeroProps) {
 						{tags.length > 0 && (
 							<div className={tagRow()}>
 								{tags.map((label) => (
-									<span key={label} className={tag()}>
+									<span key={label} className={cn(tag(), tagFill(label))}>
 										<span className={tagText()}>{label}</span>
 									</span>
 								))}
@@ -171,9 +189,7 @@ export function ProfileHero(props: ProfileHeroProps) {
 						{attributionMode === 'empowered' && (
 							<div className={attribution()}>
 								<Logo className={attributionIcon()} />
-								<Text as="span" styleType="body-2" className={attributionText()}>
-									Empowered by GoodParty.org
-								</Text>
+								<span className={attributionText()}>Empowered by GoodParty.org</span>
 							</div>
 						)}
 						{attributionMode === 'notEndorsed' && (

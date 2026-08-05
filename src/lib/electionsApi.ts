@@ -10,6 +10,12 @@ import type {
 	RaceDetail,
 	RaceNode,
 } from '~/types/elections';
+import type {
+	PersonItem,
+	PersonOfficeHolder,
+	PublicPersonProfile,
+	VoterDensity,
+} from '~/types/people';
 import {
 	buildElectionPositionHrefFromRaceSlug,
 	buildRaceCandidatesHref,
@@ -257,6 +263,140 @@ export async function findCampaignByRace(params: {
 	});
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-campaigns?${searchParams}`;
 	return fetchJson<FindByRaceIdResponse>(url);
+}
+
+/**
+ * Cache tag for everything that composes one person's public page. gp-api busts
+ * this tag (via /api/revalidate-person) on publish/unpublish/delete/edit so the
+ * page is regenerated regardless of its name-based slug.
+ */
+export function personCacheTag(personId: string): string {
+	return `person:${personId.toLowerCase()}`;
+}
+
+function personCacheOptions(personId: string): RequestInit {
+	return { next: { revalidate: 3600, tags: [personCacheTag(personId)] } };
+}
+
+/**
+ * The read-only civics spine for one person (election-api). Includes their
+ * office terms and candidacies. Returns null when no Person row exists yet
+ * (e.g. a brand-new user the data team hasn't reconciled).
+ */
+export async function getPersonByPersonId(personId: string): Promise<PersonItem | null> {
+	const url = `${ELECTIONS_API_BASE_URL}/v1/persons/${encodeURIComponent(personId)}`;
+	return fetchJson<PersonItem>(url, personCacheOptions(personId));
+}
+
+/**
+ * Resolves a `/people/<base>-<id8>` URL to a person. election-api parses the
+ * trailing 8-hex id suffix and resolves via an indexed id-range scan (the base
+ * slug is non-unique). Returns null on miss (404) so the page can 404. The
+ * profile then loads by the resolved personId (so per-person cache-busting by
+ * `person:<uuid>` tag still applies).
+ */
+export async function getPersonBySlug(slug: string): Promise<PersonItem | null> {
+	const url = `${ELECTIONS_API_BASE_URL}/v1/persons/by-slug/${encodeURIComponent(slug)}`;
+	return fetchJson<PersonItem>(url, CACHE_OPTIONS);
+}
+
+/** Office terms held by a person (election-api). */
+export async function getOfficeHoldersByPerson(personId: string): Promise<PersonOfficeHolder[]> {
+	const searchParams = new URLSearchParams({ personId, includePosition: 'true' });
+	const url = `${ELECTIONS_API_BASE_URL}/v1/officeholders?${searchParams}`;
+	const data = await fetchJson<PersonOfficeHolder[]>(url, personCacheOptions(personId));
+	return Array.isArray(data) ? data : [];
+}
+
+/**
+ * Office holders sharing a BallotReady geo id — the "Nearby Officials" feed.
+ * Person PII is never joined here (election-api omits it), so callers resolve
+ * names/slugs separately via getPersonsByIds.
+ */
+export async function getOfficeHoldersByGeoId(geoId: string): Promise<PersonOfficeHolder[]> {
+	const searchParams = new URLSearchParams({ geoId, includePosition: 'true' });
+	const url = `${ELECTIONS_API_BASE_URL}/v1/officeholders?${searchParams}`;
+	const data = await fetchJson<PersonOfficeHolder[]>(url, CACHE_OPTIONS);
+	return Array.isArray(data) ? data : [];
+}
+
+/** Batch-resolves canonical Person rows by id (election-api caps `ids` at 500). */
+export async function getPersonsByIds(ids: string[]): Promise<PersonItem[]> {
+	const unique = Array.from(new Set(ids.filter(Boolean))).slice(0, 500);
+	if (unique.length === 0) return [];
+	const searchParams = new URLSearchParams({ ids: unique.join(',') });
+	const url = `${ELECTIONS_API_BASE_URL}/v1/persons?${searchParams}`;
+	const data = await fetchJson<PersonItem[]>(url, CACHE_OPTIONS);
+	return Array.isArray(data) ? data : [];
+}
+
+/**
+ * Precomputed voter-density surface for the person's district (gp-api). This is
+ * a progressive enhancement — SSR/SEO content never depends on it, and any
+ * non-live result (404 when the person maps to no district, or a transient
+ * failure) resolves to null so the profile simply renders no map. The endpoint
+ * lives on the heatmap track and may not exist in every environment yet; the
+ * null-on-miss contract keeps the profile fully functional regardless.
+ */
+export async function getVoterDensityForDistrict(
+	personId: string,
+): Promise<VoterDensity | null> {
+	const searchParams = new URLSearchParams({ personId });
+	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles/voter-density?${searchParams}`;
+	return fetchJson<VoterDensity>(url, personCacheOptions(personId));
+}
+
+/**
+ * Result of resolving a person's product overlay (gp-api). The distinction
+ * matters for the render gate:
+ *  - `live`   → an owner has claimed + published a profile; enrich the page.
+ *  - `absent` → no published overlay (never claimed, or unpublished draft); the
+ *               page still renders as an unclaimed, programmatic-SEO profile
+ *               from the election-api spine, with claim CTAs.
+ *  - `gone`   → the owner deleted their profile; suppress the page entirely.
+ */
+export type PublicPersonProfileResult =
+	| { status: 'live'; profile: PublicPersonProfile }
+	| { status: 'absent' }
+	| { status: 'gone' }
+	| { status: 'removed' };
+
+/**
+ * The product-owned overlay for a person's public profile (gp-api). gp-api
+ * returns 200 (live), 404 (never created / unpublished), or 410 (deleted). We
+ * map those to the render-gate outcomes above; any transient/5xx failure falls
+ * back to `absent` so the spine page still renders instead of 404-ing.
+ */
+export async function getPublicPersonProfileStatus(
+	personId: string,
+): Promise<PublicPersonProfileResult> {
+	const searchParams = new URLSearchParams({ personId });
+	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles?${searchParams}`;
+	for (let attempt = 0; attempt <= FETCH_JSON_MAX_RETRIES; attempt++) {
+		try {
+			const res = await fetch(url, personCacheOptions(personId));
+			if (res.ok) {
+				const profile = (await res.json()) as PublicPersonProfile;
+				// Privacy takedown: gp-api answers 200 with { removed: true } and no
+				// authored content. Render the minimal "removal requested" states.
+				if (profile.removed === true) return { status: 'removed' };
+				return { status: 'live', profile };
+			}
+			if (res.status === 410) return { status: 'gone' };
+			if (res.status === 404) return { status: 'absent' };
+			if (res.status < 500) {
+				console.error(`[electionsApi] ${res.status} ${url}`);
+				return { status: 'absent' };
+			}
+			console.error(`[electionsApi] ${res.status} ${url} (attempt ${attempt + 1})`);
+		} catch (err) {
+			console.error(`[electionsApi] overlay attempt ${attempt + 1}`, err);
+		}
+		if (attempt < FETCH_JSON_MAX_RETRIES) {
+			await sleep(500 * (attempt + 1));
+		}
+	}
+	return { status: 'absent' };
 }
 
 export async function getMostElections(count = 3): Promise<FeaturedCity[]> {

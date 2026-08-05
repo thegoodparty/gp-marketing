@@ -131,10 +131,6 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 
 	const resolvedButtonStyle = resolveButtonStyleType('primary', backgroundColor);
 
-	if (props.citySlug) {
-		return null;
-	}
-
 	return (
 		<article className={cn(base(), props.className)} data-component='ElectionsIndexBlock'>
 			<Container size='xl'>

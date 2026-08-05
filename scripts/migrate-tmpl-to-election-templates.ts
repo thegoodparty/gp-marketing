@@ -16,18 +16,21 @@ import { createClient } from '@sanity/client';
 import {
 	globalElectionTemplateSeedDocuments,
 	electionsTemplateSeedDocuments,
+	personProfileStateCustomTemplateSeeds,
 } from '../src/lib/electionsTemplateSeedSections.ts';
 
 const projectId = '3rbseux7';
 const dataset = 'production';
 const token = process.env['SANITY_STUDIO_API_TOKEN'];
 const write = process.argv.includes('--write');
+// Person-profile seeding only: write globalTemplate_personProfile + the A–L
+// scaffolds and skip re-writing the other (already-migrated, editor-owned)
+// global templates, so this can be run for the /people feature without
+// clobbering marketing's edits to candidate/position/location globals.
+const personOnly = process.argv.includes('--person-only');
 const forceSeed = process.argv.includes('--force-seed');
 
-const LEGACY_GLOBAL_MAP: Record<
-	string,
-	(typeof globalElectionTemplateSeedDocuments)[number]['_id']
-> = {
+const LEGACY_GLOBAL_MAP: Record<string, (typeof globalElectionTemplateSeedDocuments)[number]['_id']> = {
 	tmpl_candidateProfile: 'globalTemplate_candidateProfile',
 	tmpl_electionsPosition: 'globalTemplate_position',
 	tmpl_electionsCandidates: 'globalTemplate_positionCandidates',
@@ -61,9 +64,7 @@ async function main() {
 		process.exit(1);
 	}
 
-	const legacyDocs = await client.fetch<LegacyDoc[]>(
-		`*[_type match "tmpl_*"]{_id,_type,pageSections}`,
-	);
+	const legacyDocs = await client.fetch<LegacyDoc[]>(`*[_type match "tmpl_*"]{_id,_type,pageSections}`);
 	const legacyById = new Map(legacyDocs.map(doc => [doc._id.replace(/^drafts\./, ''), doc]));
 
 	const plans: Array<{
@@ -82,6 +83,11 @@ async function main() {
 	}> = [];
 
 	for (const globalDoc of globalElectionTemplateSeedDocuments) {
+		// In --person-only mode, only (re)seed the person-profile global; leave the
+		// other editor-owned globals exactly as they are in the dataset.
+		if (personOnly && globalDoc._id !== 'globalTemplate_personProfile') {
+			continue;
+		}
 		const legacyId = Object.entries(LEGACY_GLOBAL_MAP).find(([, gid]) => gid === globalDoc._id)?.[0];
 		const live = legacyId ? legacyById.get(legacyId) : undefined;
 		const liveSections = live?.pageSections?.list_pageSections;
@@ -128,7 +134,22 @@ async function main() {
 			await client.createOrReplace(payload);
 			console.log(`[write] ${globalId} (${source}, ${sectionCount} sections)`);
 		}
-	} else {
+	}
+
+	// Per-state (A–L) starter Custom Templates. These are disabled scaffolds the
+	// marketing team clones/retargets per Figma state; createOrReplace is safe to
+	// re-run (idempotent by fixed _id) and never touches an editor's live copies,
+	// which carry their own generated ids.
+	for (const scaffold of personProfileStateCustomTemplateSeeds) {
+		if (write) {
+			await client.createOrReplace(scaffold as Parameters<typeof client.createOrReplace>[0]);
+			console.log(`[write] ${scaffold._id} (personProfile state scaffold, disabled)`);
+		} else {
+			console.log(`[dry-run] would upsert ${scaffold._id} (personProfile state scaffold, disabled)`);
+		}
+	}
+
+	if (!write) {
 		console.log('\nDry run only. Re-run with --write to apply.');
 	}
 }

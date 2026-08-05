@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { cn, tv } from './_lib/utils.ts';
-import { Text } from './Text.tsx';
+import { Text, type StyleTypes } from './Text.tsx';
 import { isValidRichText } from './_lib/isValidRichText.ts';
 
 const styles = tv({
@@ -20,6 +20,12 @@ const styles = tv({
 	},
 });
 
+const HEADING_STYLE_TYPE = {
+	section: 'section-heading',
+	sub: 'section-subheading',
+	legacy: 'subtitle-1',
+} as const satisfies Record<string, StyleTypes>;
+
 export type ProfileContentCardProps = {
 	className?: string;
 	cardType?: 'about-me' | 'why-running' | 'top-issues';
@@ -32,10 +38,12 @@ export type ProfileContentCardProps = {
 	group?: string;
 	heading?: string;
 	/**
-	 * `sub` renders a smaller heading for a section nested inside another
-	 * section's card (Figma: "Accomplishments During This Term" sits under
-	 * "Top Priorities While in Office" at one step down), so a grouped card
-	 * keeps the frame's two-level hierarchy instead of two equal headings.
+	 * Heading level within a white card, per the Figma people-profile frames:
+	 * the card's first section is `section` (32/44) and any section stacked
+	 * under it is `sub` (24/32), e.g. "Campaign Issues" beneath "Why I'm
+	 * Running for Office". Supplied by ProfileContentBlock's separated layout
+	 * from the card's position in its group. Left undefined by the joined
+	 * `/candidate` layout, which keeps its own uniform subtitle heading.
 	 */
 	headingStyle?: 'section' | 'sub';
 	content?: ReactNode;
@@ -61,7 +69,7 @@ export function ProfileContentCard(props: ProfileContentCardProps) {
 			{props.heading && (
 				<Text
 					as={props.headingStyle === 'sub' ? 'h3' : 'h2'}
-					styleType={props.headingStyle === 'sub' ? 'subtitle-2' : 'subtitle-1'}
+					styleType={HEADING_STYLE_TYPE[props.headingStyle ?? 'legacy']}
 					className={heading()}
 				>
 					{props.heading}

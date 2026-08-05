@@ -282,16 +282,5 @@ workaround: keep text-size and text-color on different elements. **Proper fix
 (owner: design-system/tokens):** extend the tailwind-merge config with classGroups
 for the custom `text-*` sizes and the brand color scales so they stop colliding.
 
-### Section headings render 24px; Figma frames specify 32px
-
-Every content-section heading ("Campaign Issues", "About [Position]", …) renders
-at 24px because `Text` `styleType="h3"` is the largest heading the design system
-exposes below the hero, while the frames use a 32px heading. The nested
-"Accomplishments" sub-heading inside the in-office card is correctly one step
-smaller than its parent, so the hierarchy is right and only the absolute scale
-is off. Fixing it means adding a heading size to the design system rather than
-one-off classes on this page. Flag for design-system: reconcile the marketing
-heading ramp with the Figma type scale.
-
 <!-- Add rows as the loop uncovers genuine data gaps. Do NOT use this file to
      excuse real layout bugs — only true data/heatmap/chrome exceptions belong. -->

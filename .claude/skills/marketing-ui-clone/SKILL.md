@@ -228,6 +228,15 @@ Rules that fall out of this, and that the code now encodes:
   distinguishes them (`issue.status`) rather than by persona. Seed fixtures for
   BOTH kinds or a state silently collapses to one section — which is exactly
   how C shipped "smooshed".
+- **Heading level follows position in the card, not the section.** The frames
+  give a card's FIRST section a 32/44 heading (Figma `typography/3xl`) and every
+  section stacked under it a 24/32 one (`typography/2xl`), both Outfit SemiBold
+  — so "Campaign Issues" is 32px when it leads a card and 24px when it sits
+  under "Why I'm Running for Office". `ProfileContentBlock` derives this from
+  the card's index within its chunk; never hardcode a level on a section.
+  Note these two sizes are FLAT: the frames use them on the mobile artboard
+  too, which is why `--text-section-heading` / `--text-section-subheading` are
+  omitted from the stepped `@media` blocks that scale the `heading-*` ramp.
 - **Grouping is expressed by `group`, and adjacency matters.** Consecutive
   cards sharing a `group` merge into one white card (`chunkCardGroups`). Two
   sections that are adjacent in one state's order but must stay separate cards

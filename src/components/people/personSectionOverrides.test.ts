@@ -10,14 +10,18 @@
  */
 import { describe, expect, test } from 'bun:test';
 import { getDevPersonProfileView } from '~/lib/devPeopleProfileFixtures';
+import { chunkCardGroups } from '~/ui/_lib/chunkCardGroups';
 import { buildPersonSectionOverrides } from './personSectionOverrides';
+
+function contentCards(slug: string) {
+	const view = getDevPersonProfileView(slug);
+	if (!view) throw new Error(`no dev fixture for ${slug}`);
+	return buildPersonSectionOverrides(view).component_profileContentBlock?.contentCards ?? [];
+}
 
 /** Ordered headings of the content well, ignoring the chrome-less raw cards. */
 function sectionHeadings(slug: string): string[] {
-	const view = getDevPersonProfileView(slug);
-	if (!view) throw new Error(`no dev fixture for ${slug}`);
-	const cards = buildPersonSectionOverrides(view).component_profileContentBlock?.contentCards ?? [];
-	return cards.flatMap(card => (card.heading ? [card.heading] : []));
+	return contentCards(slug).flatMap(card => (card.heading ? [card.heading] : []));
 }
 
 describe('profile section order matches the Figma frames', () => {
@@ -87,6 +91,38 @@ describe('profile section order matches the Figma frames', () => {
 		expect(headings).not.toContain('Accomplishments During This Term');
 		expect(headings).not.toContain('Top Priorities While in Office');
 		expect(headings).not.toContain('Nearby Officials');
+	});
+});
+
+describe('card grouping sets the Figma heading levels', () => {
+	/** Headings per white card: the first is the 32/44 one, the rest are 24/32. */
+	function headingsByCard(slug: string): string[][] {
+		return chunkCardGroups(contentCards(slug))
+			.map(group => group.flatMap(card => (card.heading ? [card.heading] : [])))
+			.filter(headings => headings.length > 0);
+	}
+
+	test('state A pairs each lead section with its sub-section', () => {
+		expect(headingsByCard('allen-slagle-74eee01a')).toEqual([
+			['Why I\u2019m Running for Office', 'Campaign Issues'],
+			['About Me', 'Recent Experience'],
+			['Other Candidates for Mayor of Springfield'],
+			['About Mayor of Springfield'],
+			['District information'],
+		]);
+	});
+
+	test('accomplishments sit under the in-office priorities, not beside them', () => {
+		expect(headingsByCard('tracy-good-ecff49d3')[0]).toEqual([
+			'Top Priorities While in Office',
+			'Accomplishments During This Term',
+		]);
+	});
+
+	test('state G keeps nearby officials and other candidates in separate cards', () => {
+		const cards = headingsByCard('bill-fortner-61a42912');
+		expect(cards).toContainEqual(['Nearby Officials']);
+		expect(cards).toContainEqual(['Other Candidates for Springfield City Council']);
 	});
 });
 

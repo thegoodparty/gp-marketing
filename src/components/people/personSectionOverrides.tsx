@@ -317,12 +317,12 @@ function buildAuthoredSections(view: PersonProfileView): SectionMap {
 	if (inOffice.length > 0) {
 		sections.inOfficePriorities = { cardType: 'top-issues', heading: IN_OFFICE_ISSUES_HEADING, content: <IssuesContent issues={inOffice} showStatus /> };
 	}
-	// Figma nests this under "Top Priorities While in Office" as a smaller
-	// heading with a lead-in line, inside the same card.
+	// Figma nests this under "Top Priorities While in Office" with a lead-in
+	// line. The smaller heading comes from sharing that section's group, not
+	// from being set here.
 	if (view.accomplishments.length > 0) {
 		sections.accomplishments = {
 			heading: 'Accomplishments During This Term',
-			headingStyle: 'sub',
 			content: (
 				<AccomplishmentsContent
 					accomplishments={view.accomplishments}

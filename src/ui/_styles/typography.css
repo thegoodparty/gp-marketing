@@ -28,6 +28,23 @@
 	--text-heading-xs--letter-spacing: 0;
 	--text-heading-xs--font-weight: 600;
 
+	/*
+	 * Profile section headings. Mirrors the people-profile frames' Figma
+	 * `typography/3xl` (32/44) and `typography/2xl` (24/32) semibold styles.
+	 * Deliberately absent from the stepped @media blocks below: the frames use
+	 * these same two sizes on the mobile and desktop artboards alike, so unlike
+	 * the `heading-*` ramp they must NOT scale with the viewport.
+	 */
+	--text-section-heading: 2rem;
+	--text-section-heading--line-height: 2.75rem;
+	--text-section-heading--letter-spacing: 0;
+	--text-section-heading--font-weight: 600;
+
+	--text-section-subheading: 1.5rem;
+	--text-section-subheading--line-height: 2rem;
+	--text-section-subheading--letter-spacing: 0;
+	--text-section-subheading--font-weight: 600;
+
 	/* Subtitle */
 	--text-subtitle-1: 1.25rem;
 	--text-subtitle-1--line-height: 125%;

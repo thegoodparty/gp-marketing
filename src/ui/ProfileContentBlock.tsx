@@ -1,3 +1,4 @@
+import { chunkCardGroups } from './_lib/chunkCardGroups.ts';
 import { cn, tv } from './_lib/utils.ts';
 import { Container } from './Container.tsx';
 import { ElectionsSidebar, type ElectionsSidebarProps } from './ElectionsSidebar.tsx';
@@ -64,21 +65,6 @@ export type ProfileContentBlockProps = {
 	cardLayout?: 'joined' | 'separated';
 };
 
-/** Chunks a flat card list into groups: consecutive same-`group` non-raw cards
- * share a white card; every `raw` card stands alone (self-styled). */
-function chunkCardGroups(cards: ProfileContentCardProps[]): ProfileContentCardProps[][] {
-	const groups: ProfileContentCardProps[][] = [];
-	for (const card of cards) {
-		const last = groups.at(-1);
-		const head = last?.[0];
-		const mergeable =
-			head != null && !card.raw && !head.raw && card.group != null && head.group === card.group;
-		if (mergeable && last) last.push(card);
-		else groups.push([card]);
-	}
-	return groups;
-}
-
 export function ProfileContentBlock(props: ProfileContentBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
 	const { base, well, grid, sidebar, sidebarStandalone, content, separatedColumn, separatedCard, title: titleSlot } =
@@ -104,7 +90,12 @@ export function ProfileContentBlock(props: ProfileContentBlockProps) {
 									) : (
 										<div key={gi} className={cn(separatedCard())} data-component='ProfileContentCardGroup'>
 											{group.map((card, ci) => (
-												<ProfileContentCard key={`${gi}-${ci}`} {...card} bare />
+												<ProfileContentCard
+													key={`${gi}-${ci}`}
+													{...card}
+													headingStyle={ci === 0 ? 'section' : 'sub'}
+													bare
+												/>
 											))}
 										</div>
 									),

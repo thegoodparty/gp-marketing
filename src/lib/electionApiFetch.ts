@@ -16,8 +16,11 @@ export type ElectionApiJsonResult = {
  * every ~10 minutes (and per isolate) would bust the shared 1h cache. We mint
  * inside unstable_cache and key only on the URL; fetch itself uses cache:'no-store'.
  *
- * CLI scripts (bun/tsx) cannot load next/cache (it pulls server-only), so we fall
- * back to an uncached fetch outside the Next runtime.
+ * unstable_cache only works inside the Next server runtime. In CLI scripts (bun/tsx)
+ * and unit tests the module still imports, but invoking unstable_cache outside the
+ * runtime hangs/misbehaves — so we gate on NEXT_RUNTIME and fall back to an uncached
+ * fetch there. Inside the Next runtime we do NOT swallow errors: a genuine cache-layer
+ * or run() failure propagates to the caller instead of silently degrading.
  */
 export async function fetchElectionApiJsonCached(
 	url: string,
@@ -31,15 +34,9 @@ export async function fetchElectionApiJsonCached(
 		return { status: res.status, ok: true, json: await res.json() };
 	};
 
-	// Guard only the import: CLI scripts (bun/tsx) cannot load next/cache. Errors
-	// from unstable_cache or run() must propagate rather than be swallowed here.
-	let unstable_cache: typeof import('next/cache').unstable_cache | undefined;
-	try {
-		({ unstable_cache } = await import('next/cache'));
-	} catch {
-		// next/cache is unavailable outside the Next runtime; fall back to uncached fetch.
-	}
-	if (!unstable_cache) return run();
+	if (!process.env['NEXT_RUNTIME']) return run();
+
+	const { unstable_cache } = await import('next/cache');
 	return await unstable_cache(run, ['election-api-json', url], {
 		revalidate: ELECTION_API_CACHE_SECONDS,
 		...(tags && tags.length > 0 ? { tags: [...tags] } : {}),

@@ -657,6 +657,12 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 				// `outline` button.
 				button: { buttonType: 'signup', label: 'Learn more', buttonProps: { styleType: 'secondary', styleSize: 'md' } },
 				preserveButtonStyle: true,
+				// Deliberately NOT `contentColumnAlign`. That prop mirrors the sidebar
+				// grid so the CTA lines up with the content-card column, but the frames
+				// don't do that: in A (1901:50309) the CTA is a stock CTA Block whose
+				// content frame sits at x=208 w=1024 in a 1440 frame — 208px either
+				// side, centered on the page. Mirroring the column pushed it right of
+				// center, which is the misalignment marketing reported.
 			}
 		: showClaim
 			? {

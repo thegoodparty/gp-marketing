@@ -164,6 +164,10 @@ describe('hero', () => {
 		expect(hero?.secondaryOffice).toMatch(/^Candidate for /);
 		expect(hero?.office).not.toMatch(/^Candidate for /);
 		expect(hero?.tags).toEqual(['Incumbent', 'Candidate']);
+		// The position link belongs to the race being run, so it moves to the
+		// candidacy line and the held-office line above it stays unlinked.
+		expect(hero?.officeHref).toBeUndefined();
+		expect(hero?.secondaryOfficeHref).toContain('/elections/');
 	});
 
 	test('a candidate-only hero has no second office line', () => {

@@ -31,13 +31,17 @@ export async function fetchElectionApiJsonCached(
 		return { status: res.status, ok: true, json: await res.json() };
 	};
 
+	// Guard only the import: CLI scripts (bun/tsx) cannot load next/cache. Errors
+	// from unstable_cache or run() must propagate rather than be swallowed here.
+	let unstable_cache: typeof import('next/cache').unstable_cache | undefined;
 	try {
-		const { unstable_cache } = await import('next/cache');
-		return await unstable_cache(run, ['election-api-json', url], {
-			revalidate: ELECTION_API_CACHE_SECONDS,
-			...(tags && tags.length > 0 ? { tags: [...tags] } : {}),
-		})();
+		({ unstable_cache } = await import('next/cache'));
 	} catch {
-		return run();
+		// next/cache is unavailable outside the Next runtime; fall back to uncached fetch.
 	}
+	if (!unstable_cache) return run();
+	return await unstable_cache(run, ['election-api-json', url], {
+		revalidate: ELECTION_API_CACHE_SECONDS,
+		...(tags && tags.length > 0 ? { tags: [...tags] } : {}),
+	})();
 }

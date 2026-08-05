@@ -66,6 +66,16 @@ const GP_API_BASE =
 
 const CACHE_1H: RequestInit = { next: { revalidate: 3600 } };
 
+/** Next.js data-cache tag for the /people sitemap upstream fetches. Bust via revalidateTag. */
+export const PEOPLE_SITEMAP_CACHE_TAG = 'people-sitemap';
+
+function cacheInit(tags?: readonly string[]): RequestInit {
+	if (tags && tags.length > 0) {
+		return { next: { revalidate: 3600, tags: [...tags] } };
+	}
+	return CACHE_1H;
+}
+
 export type CountyPlace = { slug?: string; name?: string; mtfcc?: string };
 export type CityPlace = { slug?: string; countyName?: string };
 export type RaceEntry = { slug?: string; positionLevel?: string };
@@ -404,10 +414,10 @@ export async function getCachedElectionRouteParams(): Promise<{
 	return cachedElectionRouteParams;
 }
 
-async function fetchGpApiJson<T>(path: string): Promise<T[]> {
+async function fetchGpApiJson<T>(path: string, tags?: readonly string[]): Promise<T[]> {
 	const url = `${GP_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
 	try {
-		const res = await fetch(url, CACHE_1H);
+		const res = await fetch(url, cacheInit(tags));
 		if (!res.ok) {
 			console.error(`[sitemap] gp-api ${res.status} ${url}`);
 			return [];
@@ -420,11 +430,15 @@ async function fetchGpApiJson<T>(path: string): Promise<T[]> {
 	}
 }
 
-async function fetchElectionJson<T>(path: string, params: Record<string, string>): Promise<T[]> {
+async function fetchElectionJson<T>(
+	path: string,
+	params: Record<string, string>,
+	tags?: readonly string[],
+): Promise<T[]> {
 	const search = new URLSearchParams(params).toString();
 	const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}?${search}`;
 	try {
-		const res = await fetch(url, CACHE_1H);
+		const res = await fetch(url, cacheInit(tags));
 		if (!res.ok) {
 			console.error(`[sitemap] Election API ${res.status} ${url}`);
 			return [];
@@ -602,21 +616,27 @@ type PeopleSitemapData = {
 
 let cachedPeopleSitemapData: Promise<PeopleSitemapData> | null = null;
 
-/** Clears the module-level people sitemap cache. Used by tests. */
+/**
+ * Clears the process-local in-flight Promise (same instance only).
+ * Pair with revalidateTag(PEOPLE_SITEMAP_CACHE_TAG) so other instances hit a
+ * fresh Next.js data cache on next access. Used by revalidate-person and tests.
+ */
 export function clearPeopleSitemapCache(): void {
 	cachedPeopleSitemapData = null;
 }
 
 /**
  * Shared gp-api + election-api lookup for the /people sitemap band.
- * All 27 alphabetical shards call this; the Promise is hoisted so they share
- * a single upstream round-trip (mirrors getCachedElectionRouteParams).
+ * Concurrent shard callers share one in-flight Promise; once it settles the
+ * module slot clears so the next access goes through the tagged Next.js data
+ * cache (mirrors Sanity sitemap revalidateTag busting).
  */
 async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
 	if (!cachedPeopleSitemapData) {
-		cachedPeopleSitemapData = (async () => {
+		const load = (async (): Promise<PeopleSitemapData> => {
 			const published = await fetchGpApiJson<{ personId?: string; updatedAt?: string }>(
 				'v1/public-person-profiles/published',
+				[PEOPLE_SITEMAP_CACHE_TAG],
 			);
 			const updatedByPersonId = new Map<string, string | undefined>();
 			for (const row of published) {
@@ -634,22 +654,25 @@ async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
 			const persons = (
 				await Promise.all(
 					idBatches.map(async (batch) =>
-						fetchElectionJson<PeopleSitemapPerson>('v1/persons', {
-							ids: batch.join(','),
-							columns: 'id,slug',
-						}),
+						fetchElectionJson<PeopleSitemapPerson>(
+							'v1/persons',
+							{
+								ids: batch.join(','),
+								columns: 'id,slug',
+							},
+							[PEOPLE_SITEMAP_CACHE_TAG],
+						),
 					),
 				)
 			).flat();
 
 			return { updatedByPersonId, persons };
-		})().then((result) => {
-			// Empty published set or empty persons (indistinguishable from a swallowed
-			// gp-api / election-api failure) must not poison the process-lifetime cache.
-			if (result.updatedByPersonId.size === 0 || result.persons.length === 0) {
+		})();
+		cachedPeopleSitemapData = load;
+		void load.finally(() => {
+			if (cachedPeopleSitemapData === load) {
 				cachedPeopleSitemapData = null;
 			}
-			return result;
 		});
 	}
 	return cachedPeopleSitemapData;

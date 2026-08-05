@@ -268,7 +268,7 @@ function buildAuthoredCards(view: PersonProfileView): ProfileContentCardProps[] 
 	// (B/C/G) it sits immediately after Campaign Issues, grouped with them as the
 	// in-office record, BEFORE About Me.
 	if (view.accomplishments.length > 0 && holdsOffice(view.persona)) {
-		cards.push({ group: 'about', heading: 'Accomplishments', content: <AccomplishmentsContent accomplishments={view.accomplishments} /> });
+		cards.push({ group: 'platform', heading: 'Accomplishments', content: <AccomplishmentsContent accomplishments={view.accomplishments} /> });
 	}
 	if (view.bio) {
 		cards.push({ cardType: 'about-me', group: 'about', heading: 'About Me', content: view.bio });

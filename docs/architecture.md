@@ -130,7 +130,7 @@ chain and letting Vercel build and deploy.
 
 | You're doing                                   | Read                                |
 | ---------------------------------------------- | ----------------------------------- |
-| Repo-wide conventions, commands, style         | root `CLAUDE.md`                    |
+| Repo-wide conventions, commands, style         | root `AGENTS.md`                    |
 | Deciding if a change is content or code        | `docs/content-vs-code.md`           |
 | Adding or changing a page-builder block        | `docs/adding-a-component.md`        |
 | Election / candidate programmatic pages        | `docs/elections.md`                 |

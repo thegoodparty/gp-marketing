@@ -3,6 +3,7 @@ import type { PersonItem, PersonOfficeHolder, PublicPersonProfile } from '~/type
 import {
 	buildBreadcrumbTrail,
 	buildPersonSlug,
+	buildPersonSlugFromBase,
 	composeView,
 	extractPersonId,
 	resolveProfileState,
@@ -178,6 +179,36 @@ describe('buildPersonSlug', () => {
 
 	test('falls back to just the id suffix when the name has no slug chars', () => {
 		expect(buildPersonSlug('!!!', PID)).toBe(ID8);
+	});
+});
+
+describe('buildPersonSlugFromBase', () => {
+	const ID8 = '11111111';
+
+	test('appends the suffix to a name-derived base', () => {
+		expect(buildPersonSlugFromBase('jane-doe', PID)).toBe(`jane-doe-${ID8}`);
+	});
+
+	// The election-api mart mints `Person.slug` with the suffix already on it. This
+	// is the case that shipped doubled (`jane-doe-11111111-11111111`) and put a
+	// redirect hop in front of every clean person URL.
+	test('leaves a mart slug that already carries the suffix alone', () => {
+		expect(buildPersonSlugFromBase(`jane-doe-${ID8}`, PID)).toBe(`jane-doe-${ID8}`);
+	});
+
+	test('is idempotent under repeated application', () => {
+		const once = buildPersonSlugFromBase('jane-doe', PID);
+		expect(buildPersonSlugFromBase(once, PID)).toBe(once);
+	});
+
+	// A base that slugified away to nothing yields the bare suffix; feeding that
+	// back in must not produce `11111111-11111111`.
+	test('does not double a base that is only the suffix', () => {
+		expect(buildPersonSlugFromBase(ID8, PID)).toBe(ID8);
+	});
+
+	test('still appends when the base merely contains the suffix mid-string', () => {
+		expect(buildPersonSlugFromBase(`${ID8}-jane`, PID)).toBe(`${ID8}-jane-${ID8}`);
 	});
 });
 
@@ -403,11 +434,13 @@ describe('composeView issues, links, labels', () => {
 	test('canonicalSlug uses the spine base slug + id8 suffix, not the overlay display name', () => {
 		const view = composeView(
 			PID,
-			makePerson({ slug: 'jane-doe', fullName: 'Jane Doe' }),
+			makePerson({ slug: 'jane-doe-11111111', fullName: 'Jane Doe' }),
 			makeOverlay({ displayName: 'Councilmember Doe' }),
 		);
-		// Base comes from election-api Person.slug; the 8-hex id suffix is appended
-		// so the URL resolves to exactly one person.
+		// election-api mints Person.slug with the 8-hex id suffix already on it, so
+		// the canonical is that slug verbatim. Fixturing an unsuffixed base here is
+		// what let the doubled-suffix bug (`jane-doe-11111111-11111111`) reach prod:
+		// the assertion held either way.
 		expect(view.canonicalSlug).toBe('jane-doe-11111111');
 		expect(view.initials).toBe('CD');
 	});

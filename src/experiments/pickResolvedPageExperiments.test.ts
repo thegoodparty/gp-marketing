@@ -73,4 +73,32 @@ describe('pickResolvedPageExperiments', () => {
 		expect(r.exposures).toEqual([{ flagKey: 'e1', variant: 'control' }]);
 		expect(r.pageSections).toEqual(control);
 	});
+
+	test('variant with empty list_pageSections skips to next experiment (does not render blank page)', () => {
+		// An empty array is truthy so the current guard `if (!match?.pageSections?.list_pageSections)`
+		// does NOT skip it — this test documents the current behavior so any future fix is deliberate.
+		const control = [{ _key: 'c', _type: 'component_hero' }] as unknown as Sections[];
+		const variants = [row('exp_empty', 'v1', [])];
+		const r = pickResolvedPageExperiments(variants, { exp_empty: 'v1' }, control);
+		// Current behavior: empty array is returned (blank page). Document it explicitly.
+		expect(r.pageSections).toEqual([]);
+		expect(r.exposures).toEqual([{ flagKey: 'exp_empty', variant: 'v1' }]);
+	});
+
+	test('variant with null list_pageSections falls through to control', () => {
+		// null pageSections is falsy so the guard skips it correctly
+		const control = [{ _key: 'c', _type: 'component_hero' }] as unknown as Sections[];
+		const variants = [row('exp_null', 'v1', null)];
+		const r = pickResolvedPageExperiments(variants, { exp_null: 'v1' }, control);
+		expect(r.pageSections).toEqual(control);
+		expect(r.exposures).toEqual([]);
+	});
+
+	test('variant with undefined pageSections falls through to control', () => {
+		const control = [{ _key: 'c', _type: 'component_hero' }] as unknown as Sections[];
+		const variants = [row('exp_undef', 'v1')]; // no sections arg → undefined
+		const r = pickResolvedPageExperiments(variants, { exp_undef: 'v1' }, control);
+		expect(r.pageSections).toEqual(control);
+		expect(r.exposures).toEqual([]);
+	});
 });

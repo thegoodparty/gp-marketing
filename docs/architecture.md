@@ -60,10 +60,12 @@ Adding one touches about five files. Full recipe: `docs/adding-a-component.md`.
 
 Warning: type and lint errors are enforced (`next.config.ts` sets
 `typescript.ignoreBuildErrors: false` and `eslint.ignoreDuringBuilds: false`, and CI
-gates every PR on `typecheck`, `lint`, and `test`), but a half-registered block still
-deploys green and just renders nothing, because the error boundary swallows it. So
-verify visually on `/all` and run `bun run typecheck` by hand after schema, GROQ, or
-component changes.
+gates every PR on `typecheck`, `lint`, `test`, Sanity content contracts, and
+Playwright e2e tests against the PR's preview deployment), but a half-registered
+block still deploys green and just renders nothing, because the error boundary
+swallows it. The visual regression suite (`e2e/visual.spec.ts`) is the CI net for
+that case; still verify visually on `/all` and run `bun run typecheck` by hand after
+schema, GROQ, or component changes.
 
 ## Sanity CMS integration
 
@@ -125,6 +127,12 @@ Content changes do not need a deploy. When content is published (or written by
 AirOps), a Sanity webhook calls `POST /api/revalidate`, which triggers Next.js ISR
 revalidation and the change goes live. Code changes go live by merging up the branch
 chain and letting Vercel build and deploy.
+
+Every PR gets a Vercel Preview deployment; the CI e2e job resolves its URL (via
+`scripts/resolve-preview-url.ts`) and runs the Playwright suites against it, so
+merge gates reflect the PR's own build. After each successful Production
+deployment, the smoke job in `.github/workflows/ci.yml` crawls a sample of
+sitemap URLs and runs the sitemap contract tests against the live site.
 
 ## Where to look
 

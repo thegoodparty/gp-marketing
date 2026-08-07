@@ -47,6 +47,7 @@ export default async function Page() {
 					title={page['contactPageOverview']?.field_pageTitle}
 					copy={page['contactPageOverview']?.field_summaryDescription}
 					layout='left'
+					headingLevel='h1'
 				/>
 				{/* Contact form goes here */}
 			</Container>

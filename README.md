@@ -25,10 +25,17 @@ CI runs these on every PR, and they also gate the Vercel build. Run them before
 opening a PR:
 
 ```bash
-bun run typecheck  # tsc --noEmit
-bun run lint       # eslint
-bun run test       # unit (.ts) + DOM (.tsx) test suites
+bun run typecheck                   # tsc --noEmit
+bun run lint                        # eslint
+bun run test                        # unit (.ts) + DOM (.tsx) test suites
+bun run test:integration:contracts  # Sanity content contracts (live dataset)
 ```
+
+CI additionally runs Playwright e2e and visual regression tests against each
+PR's Vercel Preview deployment, and smoke-crawls production after every deploy.
+Visual baselines live in `e2e/snapshots/`; regenerate them with the "Update
+visual baselines" workflow (dispatch it, download the artifact, commit) — CI
+runner rendering differs from local machines, so never generate them locally.
 
 After changing any Sanity schema, regenerate the generated types:
 

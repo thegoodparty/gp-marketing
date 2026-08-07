@@ -11,5 +11,29 @@ export default defineConfig({
 		baseURL: process.env['E2E_BASE_URL'] ?? 'https://goodparty.org',
 		trace: 'on-first-retry',
 	},
-	projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+	expect: {
+		toHaveScreenshot: {
+			// Allow up to 3% pixel difference to absorb minor anti-aliasing and
+			// sub-pixel rendering differences between machines/OS versions.
+			// Increase to 0.05 if font rendering differences cause flakiness
+			// between environments — the Playwright Docker image eliminates this.
+			maxDiffPixelRatio: 0.03,
+			// Animated elements are frozen by stabilizePage() before snapshots
+			// are taken, but this provides a second layer of protection.
+			animations: 'disabled',
+		},
+	},
+	projects: [
+		{
+			name: 'chromium-desktop',
+			use: { ...devices['Desktop Chrome'] }, // 1280×720
+		},
+		{
+			name: 'chromium-mobile',
+			// iPhone 14 descriptor defaults to WebKit; force Chromium since CI
+			// only installs the Chromium browser.
+			use: { ...devices['iPhone 14'], browserName: 'chromium' }, // 390×844
+		},
+	],
+	snapshotPathTemplate: '{testDir}/snapshots/{testFilePath}/{arg}-{projectName}{ext}',
 });

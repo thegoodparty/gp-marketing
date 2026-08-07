@@ -49,10 +49,26 @@ pipeline — it is the fastest way to eyeball a new or changed block.
 
 ## Verify before you ship (required)
 
-CI enforces three gates on every PR, and they also fail the Vercel build:
-`typecheck`, `lint`, and `test`. Run all three locally before opening a PR. The
-recommended loop for a visual change: `bun run dev` -> check `/all` (or the affected
-page) -> `bun run typecheck` -> `bun run test`.
+CI enforces two gating jobs on every PR (type and lint errors also fail the
+Vercel build):
+
+- **Verify** — `typecheck`, `lint`, `test`, plus Sanity content contract tests
+  (`test:integration:contracts`) that validate required fields and slug
+  uniqueness in the live dataset.
+- **E2E & Visual regression** — Playwright runs against the PR's own Vercel
+  Preview deployment (URL resolved by `scripts/resolve-preview-url.ts`):
+  page-health and journey tests (`test:e2e`), then visual snapshots compared to
+  the baselines in `e2e/snapshots/` (`test:e2e:visual`; non-blocking until
+  baselines are committed). To update baselines after an intentional design
+  change, dispatch the "Update visual baselines" workflow and commit the
+  artifact it produces — never generate baselines on a local machine.
+
+After a production deploy, the smoke job crawls a sample of sitemap URLs and
+runs the sitemap contract tests automatically.
+
+Run `typecheck`, `lint`, and `test` locally before opening a PR. The recommended
+loop for a visual change: `bun run dev` -> check `/all` (or the affected page)
+-> `bun run typecheck` -> `bun run test`.
 
 To open the PR and drive it to approval, use the **`ship-pr`** skill.
 

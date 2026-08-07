@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, mock, test } from 'bun:test';
+import { PEOPLE_SITEMAP_CACHE_TAG } from '~/lib/sitemap-entries';
 import { resetNextCacheMock, revalidateTag } from '~/testing/nextCacheMock';
 
 /**
@@ -30,15 +31,14 @@ const PERSON_ID = '74eee01a-1111-4222-8333-444444444444';
 const realEnv = await import('~/lib/env');
 mock.module('~/lib/env', () => ({ ...realEnv, personRevalidateSecret: SECRET }));
 
-// Spread the real exports for the same reason as `~/lib/env`: a registration
-// carrying only the two names this file cares about would hand every other
-// importer in the run a module missing everything else.
-const realSitemapEntries = await import('~/lib/sitemap-entries');
-const clearPeopleSitemapCache = mock(() => undefined);
-mock.module('~/lib/sitemap-entries', () => ({
-	...realSitemapEntries,
-	clearPeopleSitemapCache,
-}));
+// `~/lib/sitemap-entries` is deliberately NOT mocked. Stubbing
+// `clearPeopleSitemapCache` would hand the stub to `sitemap-entries.test.ts`,
+// which calls the real one to reset module-level cache state between its cases —
+// bun keeps the first `mock.module` for a specifier, so whichever file evaluated
+// first would decide, and that file's fetch-count assertions would turn
+// order-dependent. The real function only nulls an in-process promise, so it is
+// safe to run here; the observable half of the sitemap bust is the revalidated
+// tag, which is asserted below.
 
 const { POST } = await import('./route');
 
@@ -56,7 +56,6 @@ async function post(body: unknown, secret?: string | null): Promise<Response> {
 
 beforeEach(() => {
 	resetNextCacheMock();
-	clearPeopleSitemapCache.mockClear();
 });
 
 describe('POST /api/revalidate-person', () => {
@@ -74,8 +73,7 @@ describe('POST /api/revalidate-person', () => {
 	test('also busts the people sitemap so a new page is discoverable', async () => {
 		await post({ personId: PERSON_ID }, SECRET);
 
-		expect(revalidateTag).toHaveBeenCalledWith('people-sitemap');
-		expect(clearPeopleSitemapCache).toHaveBeenCalled();
+		expect(revalidateTag).toHaveBeenCalledWith(PEOPLE_SITEMAP_CACHE_TAG);
 	});
 
 	// Postgres hands gp-api lowercase uuids today, but the tag is what pairs this

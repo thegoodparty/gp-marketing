@@ -1,25 +1,9 @@
-import { afterEach, beforeEach, describe, expect, mock, test } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
 import { __resetElectionApiAuthForTests } from './electionApiAuth';
-
-// Faithful passthrough for next/cache so the NEXT_RUNTIME branch can be exercised
-// without invoking the real unstable_cache (which hangs outside the Next runtime).
-// It only captures the arguments and immediately runs the wrapped function, so it
-// is harmless even if the module mock leaks to sibling files — and those never set
-// NEXT_RUNTIME, so they bypass this branch entirely.
-let capturedKeyParts: unknown;
-let capturedOptions: { revalidate?: number; tags?: readonly string[] } | undefined;
-const unstable_cache = mock(
-	(
-		fn: (...args: unknown[]) => unknown,
-		keyParts: unknown,
-		options: { revalidate?: number; tags?: readonly string[] },
-	) => {
-		capturedKeyParts = keyParts;
-		capturedOptions = options;
-		return (...args: unknown[]) => fn(...args);
-	},
-);
-mock.module('next/cache', () => ({ unstable_cache }));
+// Mocks next/cache on import so the NEXT_RUNTIME branch can be exercised without
+// invoking the real unstable_cache (which hangs outside the Next runtime). Shared
+// with the other files that mock next/cache; see the module for why.
+import { lastCacheCall, resetNextCacheMock, unstable_cache } from '~/testing/nextCacheMock';
 
 // Imported after the module mock so the dynamic import('next/cache') resolves to it.
 const { fetchElectionApiJsonCached } = await import('./electionApiFetch');
@@ -34,9 +18,7 @@ const ORIGINAL_RUNTIME = process.env['NEXT_RUNTIME'];
 let fetchCalls: number;
 
 beforeEach(() => {
-	unstable_cache.mockClear();
-	capturedKeyParts = undefined;
-	capturedOptions = undefined;
+	resetNextCacheMock();
 	fetchCalls = 0;
 	// Fail-soft auth path: unset secret so run() never touches Clerk.
 	delete process.env['GP_MARKETING_MACHINE_SECRET'];
@@ -72,9 +54,9 @@ describe('fetchElectionApiJsonCached', () => {
 		const result = await fetchElectionApiJsonCached(ELECTION_URL, ['person:abc']);
 
 		expect(unstable_cache).toHaveBeenCalledTimes(1);
-		expect(capturedKeyParts).toEqual(['election-api-json', ELECTION_URL]);
-		expect(capturedOptions?.revalidate).toBe(3600);
-		expect(capturedOptions?.tags).toEqual(['person:abc']);
+		expect(lastCacheCall.keyParts).toEqual(['election-api-json', ELECTION_URL]);
+		expect(lastCacheCall.options?.revalidate).toBe(3600);
+		expect(lastCacheCall.options?.tags).toEqual(['person:abc']);
 		expect(result).toEqual({ status: 200, ok: true, json: OK_BODY });
 	});
 
@@ -84,8 +66,8 @@ describe('fetchElectionApiJsonCached', () => {
 		await fetchElectionApiJsonCached(ELECTION_URL);
 
 		expect(unstable_cache).toHaveBeenCalledTimes(1);
-		expect(capturedOptions && 'tags' in capturedOptions).toBe(false);
-		expect(capturedOptions?.revalidate).toBe(3600);
+		expect(lastCacheCall.options && 'tags' in lastCacheCall.options).toBe(false);
+		expect(lastCacheCall.options?.revalidate).toBe(3600);
 	});
 
 	test('outside the Next runtime, bypasses unstable_cache and fetches directly', async () => {

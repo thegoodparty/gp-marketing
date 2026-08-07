@@ -30,10 +30,14 @@ const PERSON_ID = '74eee01a-1111-4222-8333-444444444444';
 const realEnv = await import('~/lib/env');
 mock.module('~/lib/env', () => ({ ...realEnv, personRevalidateSecret: SECRET }));
 
-const clearPeopleSitemapCache = mock(() => {});
+// Spread the real exports for the same reason as `~/lib/env`: a registration
+// carrying only the two names this file cares about would hand every other
+// importer in the run a module missing everything else.
+const realSitemapEntries = await import('~/lib/sitemap-entries');
+const clearPeopleSitemapCache = mock(() => undefined);
 mock.module('~/lib/sitemap-entries', () => ({
+	...realSitemapEntries,
 	clearPeopleSitemapCache,
-	PEOPLE_SITEMAP_CACHE_TAG: 'people-sitemap',
 }));
 
 const { POST } = await import('./route');

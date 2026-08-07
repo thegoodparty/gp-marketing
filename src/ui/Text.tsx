@@ -34,6 +34,12 @@ export const styles = tv({
 			'heading-xs': {
 				base: 'text-heading-xs',
 			},
+			'section-heading': {
+				base: 'text-section-heading',
+			},
+			'section-subheading': {
+				base: 'text-section-subheading',
+			},
 			'subtitle-1': {
 				base: 'text-subtitle-1',
 			},

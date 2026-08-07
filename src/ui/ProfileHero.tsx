@@ -36,32 +36,53 @@ const styles = tv({
 		// fraction of the portrait per Figma (desktop glyph 113x94 on the 416px
 		// avatar; mobile 48x40 on the 144px avatar), so it scales across breakpoints.
 		badge: 'absolute bottom-1 right-1 z-30 drop-shadow-md w-12 h-10 md:w-20 md:h-[66px] lg:w-[113px] lg:h-[94px]',
-		content: 'flex flex-col gap-4 text-left z-10 md:pt-2',
+		// Tighter rhythm than before so the attribution sits higher in the band,
+		// leaving more dark space beneath "Empowered by GoodParty.org" (Figma).
+		content: 'flex flex-col gap-2 text-left z-10 md:pt-2',
 		tagRow: 'flex flex-wrap items-center gap-2',
-		// Pill CONTAINER only (shape + color). The text size lives on an inner span,
-		// NOT here: our tailwind-merge collapses any text-size against a text-color in
-		// the same pass and keeps the color, so size + color must be separate elements.
+		// Pill CONTAINER only (shape + border/text-color). The FILL is applied per
+		// tag in the render (Incumbent → halo-green, Candidate → bright-yellow) and
+		// the text size lives on an inner span, NOT here: our tailwind-merge collapses
+		// any text-size against a text-color in the same pass and keeps the color, so
+		// size + color must be separate elements.
 		tag: 'inline-flex w-fit items-center rounded-[6px] border px-2.5 py-1 shadow-xs',
 		// Inner text span: 14px medium Open Sans (Figma tag). No color here → nothing
 		// for merge to collapse it against; color is inherited from the container.
 		tagText: 'font-secondary text-[0.875rem] font-medium',
-		nameOffice: 'flex flex-col gap-2',
+		nameOffice: 'flex flex-col gap-1',
+		// Office lines stack flush (Figma sets them on consecutive 32px lines with
+		// no gap) even when a second line is present.
+		officeLines: 'flex flex-col',
 		heading: '',
-		office: '',
+		// Figma office line is Outfit Medium (500), not the subtitle-1 default (600).
+		office: 'font-medium',
 		officeLink: 'hover:underline',
-		attribution: 'flex items-center justify-start gap-1.5',
+		// Container carries the text COLOR (via variant); the inner span carries the
+		// size/weight so tailwind-merge can't collapse them into one another.
+		attribution: 'mt-1 flex items-center justify-start gap-1.5',
 		attributionIcon: 'w-[37px] h-[28px]',
-		attributionText: 'text-sm',
+		// Figma "Empowered by GoodParty.org": Outfit SemiBold 20/28.
+		attributionText: 'font-primary text-[1.25rem] font-semibold leading-7',
 		notEndorsed: 'text-sm',
 	},
 	variants: {
 		backgroundColor: {
 			midnight: {
-				band: 'bg-midnight-900',
+				// Figma hero band: a soft blue glow rising from the BOTTOM-CENTER over
+				// a midnight field (not a linear top→bottom ramp — that read wrong at
+				// both the top corners and the edges). This radial is fit by VALUE:
+				// sampling Figma's rendered band on a 5×5 grid and minimizing RGB error
+				// gives an ellipse at 50% 100% sized 90%×93% of the band, blue at the
+				// center fading to midnight by the top, with a 40% interpolation hint
+				// bending the falloff to Figma's ease-in curve (RMSE ~5.6/channel,
+				// bottom-center 36,70,137 vs Figma 37,71,138). % sizing keeps it
+				// correct across viewport widths. Colors are tokens: blue = #26498f
+				// (--goodparty-blue-bright), field = --midnight-900 (colors.css).
+				band: 'bg-[radial-gradient(90%_93%_at_50%_100%,var(--goodparty-blue-bright)_0%,40%,var(--midnight-900)_100%)]',
 				heading: 'text-white',
 				office: 'text-white',
-				attributionText: 'text-white',
-				tag: 'bg-bright-yellow-50 border-gray-300 text-[color:#0a0a0a]',
+				attribution: 'text-white',
+				tag: 'border-gray-300 text-[color:#0a0a0a]',
 				notEndorsed: 'text-gray-400',
 			},
 			cream: {
@@ -69,7 +90,7 @@ const styles = tv({
 				band: 'bg-goodparty-cream',
 				heading: 'text-midnight-900',
 				office: 'text-midnight-900',
-				attributionText: 'text-midnight-900',
+				attribution: 'text-midnight-900',
 				tag: 'bg-white border-gray-300 text-[color:#0a0a0a]',
 				notEndorsed: 'text-gray-500',
 			},
@@ -84,6 +105,14 @@ export type ProfileHeroProps = {
 	office: string;
 	/** When set, the office line renders as a link to the office/position page. */
 	officeHref?: string;
+	/**
+	 * Second office line, stacked directly under the first with no gap. Used by
+	 * the simultaneous candidate + office-holder frame (Figma state C), which
+	 * shows the seat held above "Candidate for [position]".
+	 */
+	secondaryOffice?: string;
+	/** When set, the secondary office line renders as a link. */
+	secondaryOfficeHref?: string;
 	profileImage?: SanityImage;
 	profileImageUrl?: string;
 	isEmpowered?: boolean;
@@ -99,11 +128,27 @@ export type ProfileHeroProps = {
 export function ProfileHero(props: ProfileHeroProps) {
 	const backgroundColor = props.backgroundColor ?? 'midnight';
 	const resolvedBackgroundColor = backgroundColor === 'white' ? 'cream' : backgroundColor;
-	const { base, backgroundWrapper, band, belowBand, container, imageWrapper, image, badge, content, tagRow, tag, tagText, nameOffice, heading, office, officeLink, attribution, attributionIcon, attributionText, notEndorsed } = styles({ backgroundColor: resolvedBackgroundColor });
+	const { base, backgroundWrapper, band, belowBand, container, imageWrapper, image, badge, content, tagRow, tag, tagText, nameOffice, officeLines, heading, office, officeLink, attribution, attributionIcon, attributionText, notEndorsed } = styles({ backgroundColor: resolvedBackgroundColor });
+
+	const renderOfficeLine = (label: string, href?: string) => (
+		<Text key={label} as="p" styleType="subtitle-1" className={office()}>
+			{href ? (
+				<Anchor href={href} className={officeLink()}>
+					{label}
+				</Anchor>
+			) : (
+				label
+			)}
+		</Text>
+	);
 
 	// `attribution` wins when provided; otherwise fall back to legacy `isEmpowered`.
 	const attributionMode = props.attribution ?? (props.isEmpowered ? 'empowered' : 'none');
 	const tags = props.tags?.filter(Boolean) ?? [];
+
+	// Per Figma the persona pill is colour-coded by label: an in-office "Incumbent"
+	// reads halo-green, everyone else (Candidate / Former Official) reads bright-yellow.
+	const tagFill = (label: string): string => (label === 'Incumbent' ? 'bg-halo-green-50' : 'bg-bright-yellow-50');
 
 	return (
 		<section className={cn(base(), props.className)} data-component="ProfileHero">
@@ -148,7 +193,7 @@ export function ProfileHero(props: ProfileHeroProps) {
 						{tags.length > 0 && (
 							<div className={tagRow()}>
 								{tags.map((label) => (
-									<span key={label} className={tag()}>
+									<span key={label} className={cn(tag(), tagFill(label))}>
 										<span className={tagText()}>{label}</span>
 									</span>
 								))}
@@ -158,22 +203,15 @@ export function ProfileHero(props: ProfileHeroProps) {
 							<Text as="h1" styleType={props.candidateName.length > 28 ? 'heading-md' : 'heading-lg'} className={heading()}>
 								{props.candidateName}
 							</Text>
-							<Text as="p" styleType="subtitle-1" className={office()}>
-								{props.officeHref ? (
-									<Anchor href={props.officeHref} className={officeLink()}>
-										{props.office}
-									</Anchor>
-								) : (
-									props.office
-								)}
-							</Text>
+							<div className={officeLines()}>
+								{renderOfficeLine(props.office, props.officeHref)}
+								{props.secondaryOffice && renderOfficeLine(props.secondaryOffice, props.secondaryOfficeHref)}
+							</div>
 						</div>
 						{attributionMode === 'empowered' && (
 							<div className={attribution()}>
 								<Logo className={attributionIcon()} />
-								<Text as="span" styleType="body-2" className={attributionText()}>
-									Empowered by GoodParty.org
-								</Text>
+								<span className={attributionText()}>Empowered by GoodParty.org</span>
 							</div>
 						)}
 						{attributionMode === 'notEndorsed' && (

@@ -24,6 +24,7 @@ import {
 	normalizeCandidateLookupName,
 	stripCountySuffix,
 } from '~/lib/electionsHelpers';
+import { ElectionApiError, fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
 
 const ELECTIONS_API_BASE_URL =
 	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
@@ -94,6 +95,35 @@ async function sleep(ms: number): Promise<void> {
 }
 
 async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | null> {
+	// election-api: auth + URL-keyed unstable_cache (Authorization must not be in the
+	// Next fetch cache key or the shared 1h cache stops hitting across isolates).
+	if (url.startsWith(ELECTIONS_API_BASE_URL)) {
+		// Forward on-demand revalidation tags (e.g. person:<id>) so cache busts
+		// via /api/revalidate-person actually invalidate these cached responses.
+		const tags = (options as { next?: { tags?: readonly string[] } } | undefined)?.next?.tags;
+		for (let attempt = 0; attempt <= FETCH_JSON_MAX_RETRIES; attempt++) {
+			try {
+				const result = await fetchElectionApiJsonCached(url, tags);
+				if (result.status === 404) return null;
+				return result.json as T;
+			} catch (err) {
+				// A 4xx is a deterministic answer — retrying just re-asks the same bad
+				// question three times and delays the null by 1.5s. Only 5xx and
+				// transport errors are worth another attempt.
+				if (err instanceof ElectionApiError && err.status < 500) {
+					console.error(`[electionsApi] ${err.status} ${url}`);
+					return null;
+				}
+				console.error(`[electionsApi] attempt ${attempt + 1}`, err);
+			}
+			if (attempt < FETCH_JSON_MAX_RETRIES) {
+				await sleep(500 * (attempt + 1));
+			}
+		}
+		return null;
+	}
+
+	// gp-api and other hosts: no M2M token (election-api-scoped).
 	for (let attempt = 0; attempt <= FETCH_JSON_MAX_RETRIES; attempt++) {
 		try {
 			const res = await fetch(url, options);

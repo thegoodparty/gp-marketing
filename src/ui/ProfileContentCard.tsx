@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { cn, tv } from './_lib/utils.ts';
-import { Text } from './Text.tsx';
+import { Text, type StyleTypes } from './Text.tsx';
 import { isValidRichText } from './_lib/isValidRichText.ts';
 
 const styles = tv({
@@ -20,6 +20,12 @@ const styles = tv({
 	},
 });
 
+const HEADING_STYLE_TYPE = {
+	section: 'section-heading',
+	sub: 'section-subheading',
+	legacy: 'subtitle-1',
+} as const satisfies Record<string, StyleTypes>;
+
 export type ProfileContentCardProps = {
 	className?: string;
 	cardType?: 'about-me' | 'why-running' | 'top-issues';
@@ -31,6 +37,15 @@ export type ProfileContentCardProps = {
 	 */
 	group?: string;
 	heading?: string;
+	/**
+	 * Heading level within a white card, per the Figma people-profile frames:
+	 * the card's first section is `section` (32/44) and any section stacked
+	 * under it is `sub` (24/32), e.g. "Campaign Issues" beneath "Why I'm
+	 * Running for Office". Supplied by ProfileContentBlock's separated layout
+	 * from the card's position in its group. Left undefined by the joined
+	 * `/candidate` layout, which keeps its own uniform subtitle heading.
+	 */
+	headingStyle?: 'section' | 'sub';
 	content?: ReactNode;
 	/**
 	 * Render `content` verbatim, without the card chrome (bottom divider + the
@@ -52,7 +67,11 @@ export function ProfileContentCard(props: ProfileContentCardProps) {
 	return (
 		<article className={cn(base(), props.className)} data-component='ProfileContentCard'>
 			{props.heading && (
-				<Text as='h2' styleType='subtitle-1' className={heading()}>
+				<Text
+					as={props.headingStyle === 'sub' ? 'h3' : 'h2'}
+					styleType={HEADING_STYLE_TYPE[props.headingStyle ?? 'legacy']}
+					className={heading()}
+				>
 					{props.heading}
 				</Text>
 			)}

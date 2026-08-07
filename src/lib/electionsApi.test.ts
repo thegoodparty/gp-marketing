@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
 import type { PlaceItem } from '~/types/elections';
+import { __resetElectionApiAuthForTests } from './electionApiAuth';
 import {
 	getCountyChildPlaces,
 	isStateIndexDistrictPlace,
@@ -14,6 +15,7 @@ type FetchMockResponse = {
 };
 
 const originalFetch = globalThis.fetch;
+const ORIGINAL_MACHINE_SECRET = process.env['GP_MARKETING_MACHINE_SECRET'];
 
 function withFetchMock(responses: FetchMockResponse[]) {
 	globalThis.fetch = (async (input: RequestInfo | URL) => {
@@ -34,10 +36,21 @@ function slugs(items: PlaceItem[]): string[] {
 }
 
 beforeEach(() => {
+	// Fail-soft path: unset secret so election-api reads go out unauthenticated
+	// without touching Clerk (and without mock.module, which can poison sibling tests).
+	delete process.env['GP_MARKETING_MACHINE_SECRET'];
+	// Skip the warn-once log — these tests intentionally exercise the fail-soft path.
+	__resetElectionApiAuthForTests({ warnedMissingSecret: true });
 	globalThis.fetch = originalFetch;
 });
 
 afterEach(() => {
+	if (ORIGINAL_MACHINE_SECRET === undefined) {
+		delete process.env['GP_MARKETING_MACHINE_SECRET'];
+	} else {
+		process.env['GP_MARKETING_MACHINE_SECRET'] = ORIGINAL_MACHINE_SECRET;
+	}
+	__resetElectionApiAuthForTests();
 	globalThis.fetch = originalFetch;
 });
 

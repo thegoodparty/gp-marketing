@@ -12,6 +12,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { US_STATE_CODES } from '../src/lib/sitemap-entries';
 import { getStateName } from '../src/lib/electionsHelpers';
+import { electionApiAuthHeaders } from '../src/lib/electionApiAuth';
 
 const DEFAULT_BASE_URL = 'https://goodparty.org';
 const DEFAULT_CONCURRENCY = 10;
@@ -20,9 +21,7 @@ const DEFAULT_TIMEOUT_MS = 15_000;
 const STATE_FACTS_MARKER = /data-section=["']Location Facts Block["']/i;
 
 const ELECTION_API_BASE =
-	process.env['NEXT_PUBLIC_ELECTION_API_BASE'] ??
-	process.env['ELECTIONS_API_BASE_URL'] ??
-	'https://election-api.goodparty.org';
+	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
 
 const BAD_PATTERNS = [
 	/\b[a-z][a-z-]*\s+County\b/, // lowercase word + " County" = broken fallback (e.g. "buckeye County"), not "Yuma County"
@@ -101,7 +100,8 @@ async function fetchElectionJson<T>(path: string, params: Record<string, string>
 	const search = new URLSearchParams(params).toString();
 	const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}?${search}`;
 	try {
-		const res = await fetch(url);
+		const authHeaders = await electionApiAuthHeaders();
+		const res = await fetch(url, { headers: authHeaders });
 		if (!res.ok) return [];
 		const data: unknown = await res.json();
 		if (Array.isArray(data)) return data as T[];

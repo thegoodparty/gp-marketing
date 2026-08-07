@@ -34,6 +34,7 @@
     "sitemap:validate": "bun run scripts/validate-sitemap-urls.ts",
     "sitemap:prune": "bun run scripts/prune-invalid-urls.ts",
     "test:e2e:sitemap": "playwright test e2e/sitemap.spec.ts",
+    "test:e2e:revalidate": "playwright test e2e/revalidate-person.spec.ts",
     "test:integration:sitemap": "bun test integration/validate-sitemap-urls.test.ts",
     "test:integration:sitemap:batches": "bash scripts/test-sitemap-batches.sh",
     "test:unit": "bun test src --path-ignore-patterns='**/*.test.tsx'",
@@ -43,6 +44,7 @@
   "dependencies": {
     "@amplitude/experiment-js-client": "^1.20.3",
     "@amplitude/experiment-node-server": "^1.13.4",
+    "@clerk/backend": "^2.29.7",
     "@csstools/postcss-global-data": "^3.1.0",
     "@deck.gl/aggregation-layers": "^9.3.6",
     "@deck.gl/core": "^9.3.6",

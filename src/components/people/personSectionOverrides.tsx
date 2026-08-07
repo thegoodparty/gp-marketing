@@ -11,6 +11,7 @@ import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
 import type { ProfileContentCardProps } from '~/ui/ProfileContentCard';
 import type { ElectionsSidebarProps } from '~/ui/ElectionsSidebar';
 import { IconResolver } from '~/ui/IconResolver';
+import { cn } from '~/ui/_lib/utils';
 import { Text } from '~/ui/Text';
 import { ButtonLink } from '~/ui/Inputs/Button';
 import { CandidatesCard } from '~/ui/CandidatesCard';
@@ -46,10 +47,67 @@ function whyHeading(persona: PersonPersona): string {
 	}
 }
 
-/** Personas that actually hold (or held) office — the only ones that show issue
- * progress tags. A pure candidate has no in-office record, so frame A omits them. */
-function holdsOffice(persona: PersonPersona): boolean {
-	return persona === 'officeholder' || persona === 'both' || persona === 'past';
+/**
+ * The content sections a profile can show, named after the Figma frames. The
+ * issues list splits in two: the campaign platform (issues with no in-office
+ * status) and the in-office record (issues carrying a status tag).
+ */
+type SectionKey =
+	| 'why'
+	| 'campaignIssues'
+	| 'aboutMe'
+	| 'recentExperience'
+	| 'otherCandidates'
+	| 'inOfficePriorities'
+	| 'accomplishments'
+	| 'aboutPosition'
+	| 'district'
+	| 'nearbyOfficials';
+
+/**
+ * Section order per persona, read off the Figma frames: A 1901:50309,
+ * B 1901:52117, C 1901:53123, G 1958:110869. The frames genuinely differ —
+ * a candidate meets the other candidates before the office, an office-holder
+ * leads with their in-office record and sees the district before the office,
+ * and the past frame opens with About Me. Assuming one shared order is what
+ * kept regressing against the designs, so each persona owns its list and the
+ * order alone decides which sections a persona shows.
+ */
+const SECTION_ORDER: Record<PersonPersona, SectionKey[]> = {
+	candidate: ['why', 'campaignIssues', 'aboutMe', 'recentExperience', 'otherCandidates', 'aboutPosition', 'district'],
+	officeholder: ['inOfficePriorities', 'accomplishments', 'aboutMe', 'recentExperience', 'district', 'aboutPosition', 'nearbyOfficials'],
+	both: ['why', 'campaignIssues', 'aboutMe', 'recentExperience', 'otherCandidates', 'inOfficePriorities', 'accomplishments', 'aboutPosition', 'district', 'nearbyOfficials'],
+	past: ['aboutMe', 'recentExperience', 'why', 'campaignIssues', 'inOfficePriorities', 'accomplishments', 'district', 'aboutPosition', 'nearbyOfficials', 'otherCandidates'],
+};
+
+/**
+ * Adjacent sections sharing a group collapse into one white card (see
+ * `chunkCardGroups` in ProfileContentBlock) — how the frames bundle Why with
+ * Campaign Issues, About Me with Recent Experience, and the in-office record.
+ * Other Candidates and Nearby Officials take distinct groups so the past
+ * frame, where they sit next to each other, still renders two cards.
+ */
+const SECTION_GROUP: Record<SectionKey, string> = {
+	why: 'platform',
+	campaignIssues: 'platform',
+	aboutMe: 'about',
+	recentExperience: 'about',
+	otherCandidates: 'candidates',
+	inOfficePriorities: 'inoffice',
+	accomplishments: 'inoffice',
+	aboutPosition: 'position',
+	district: 'district',
+	nearbyOfficials: 'nearby',
+};
+
+type SectionMap = Partial<Record<SectionKey, ProfileContentCardProps>>;
+
+/** Issues carrying a status are the in-office record; the rest are the platform. */
+function splitIssues(issues: PersonProfileView['issues']) {
+	return {
+		platform: issues.filter(issue => !issue.status),
+		inOffice: issues.filter(issue => issue.status),
+	};
 }
 
 /** Stable empowered-first ordering (Figma puts the GoodParty candidate on top). */
@@ -68,23 +126,16 @@ function personaTags(persona: PersonPersona): string[] {
 		case 'officeholder':
 			return ['Incumbent'];
 		case 'both':
-			return ['Candidate', 'Incumbent'];
+			// Figma C leads with the seat held, matching the hero's office lines.
+			return ['Incumbent', 'Candidate'];
 		case 'past':
 			return ['Former Official'];
 	}
 }
 
-function issuesHeading(persona: PersonPersona): string {
-	switch (persona) {
-		case 'candidate':
-		case 'both':
-			return 'Campaign Issues';
-		case 'officeholder':
-			return 'Top Priorities in Office';
-		case 'past':
-			return 'Priorities in Office';
-	}
-}
+const CAMPAIGN_ISSUES_HEADING = 'Campaign Issues';
+const IN_OFFICE_ISSUES_HEADING = 'Top Priorities While in Office';
+const ACCOMPLISHMENTS_HEADING = 'Accomplishments During This Term';
 
 const STATUS_LABELS: Record<PersonProfileIssueStatus, string> = {
 	IN_PROGRESS: 'In Progress',
@@ -94,8 +145,8 @@ const STATUS_LABELS: Record<PersonProfileIssueStatus, string> = {
 };
 
 // Inline "Pro Blocks / Tagline" pill from Figma: white fill, hairline gray border,
-// rounded-md, subtle shadow, no icon. Used for persona/status tags on the content
-// sections (Recent Experience, Accomplishments, Issues, Other Candidates).
+// rounded-md, subtle shadow, no icon. Used for persona tags on Recent Experience
+// rows and the Other Candidates cards.
 function TypeTag({ label }: { label: string }) {
 	return (
 		<span className='inline-flex w-fit shrink-0 items-center rounded-[6px] border border-gray-300 bg-white px-2.5 py-1 text-midnight-900 shadow-xs'>
@@ -106,64 +157,66 @@ function TypeTag({ label }: { label: string }) {
 	);
 }
 
-function IssuesContent({ issues, showStatus }: { issues: PersonProfileView['issues']; showStatus: boolean }): ReactNode {
+// Figma "Top Issues Type Tag": a solid colour-coded chip (rounded-xs, no border)
+// with uppercase 12px Outfit SemiBold text, keyed by issue/accomplishment status.
+// Colour on the container, size/weight on the inner span so tailwind-merge can't
+// collapse the size against the colour (see marketing-ui-clone skill).
+const STATUS_TAG_STYLES: Record<PersonProfileIssueStatus, string> = {
+	IN_PROGRESS: 'bg-blue-100 text-blue-900',
+	PRIORITIZED: 'bg-bright-yellow-100 text-bright-yellow-900',
+	ONGOING: 'bg-red-100 text-red-900',
+	RESOLVED: 'bg-halo-green-100 text-halo-green-900',
+};
+
+function StatusTag({ status }: { status: PersonProfileIssueStatus }) {
 	return (
-		<ol className='flex flex-col gap-6'>
-			{issues.map((issue, index) => (
-				<li key={issue.id} className='flex flex-col gap-2'>
-					<div className='flex items-baseline gap-3'>
-						<Text as='span' styleType='subtitle-1' className='text-btn-primary-bg'>
-							{index + 1}
-						</Text>
-						<Text as='span' styleType='subtitle-1'>
-							{issue.title}
-						</Text>
-					</div>
-					{issue.description && (
-						<div className='pl-7'>
-							<Text styleType='body-2'>{issue.description}</Text>
-						</div>
-					)}
-					{showStatus && issue.status && (
-						<div className='pl-7'>
-							<TypeTag label={STATUS_LABELS[issue.status]} />
-						</div>
-					)}
-				</li>
-			))}
-		</ol>
+		<span className={cn('inline-flex w-fit shrink-0 items-center rounded-xs px-2 py-1', STATUS_TAG_STYLES[status])}>
+			<span className='font-primary text-[0.75rem] leading-4 font-semibold tracking-[1px] uppercase'>
+				{STATUS_LABELS[status]}
+			</span>
+		</span>
 	);
 }
 
-function AccomplishmentsContent({ accomplishments }: { accomplishments: PersonAccomplishment[] }): ReactNode {
+function IssuesContent({ issues, showStatus }: { issues: PersonProfileView['issues']; showStatus: boolean }): ReactNode {
 	return (
-		<ul className='flex flex-col gap-5'>
-			{accomplishments.map((item, index) => (
-				<li key={`${item.title}-${index}`} className='flex flex-col gap-1'>
-					<div className='flex items-start justify-between gap-3'>
-						<div className='flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1'>
-							<span className='inline-flex items-center gap-2'>
-								<IconResolver icon='star' className='h-4 w-4 text-btn-primary-bg' />
-								<Text as='span' styleType='subtitle-2'>
-									{item.title}
-								</Text>
-							</span>
+		<ul className='flex flex-col gap-6'>
+			{issues.map((issue) => (
+				<li key={issue.id} className='flex flex-col gap-2'>
+					{showStatus && issue.status && <StatusTag status={issue.status} />}
+					<Text as='h4' styleType='subtitle-1'>
+						{issue.title}
+					</Text>
+					{issue.description && <Text styleType='body-2'>{issue.description}</Text>}
+				</li>
+			))}
+		</ul>
+	);
+}
+
+function AccomplishmentsContent({ accomplishments, lead }: { accomplishments: PersonAccomplishment[]; lead: string }): ReactNode {
+	return (
+		<div className='flex flex-col gap-6'>
+			<Text styleType='body-2'>{lead}</Text>
+			<ul className='flex flex-col gap-6'>
+				{accomplishments.map((item, index) => (
+					<li key={`${item.title}-${index}`} className='flex flex-col gap-2'>
+						<StatusTag status='RESOLVED' />
+						<div className='flex flex-wrap items-baseline gap-x-3 gap-y-1'>
+							<Text as='span' styleType='subtitle-2'>
+								{item.title}
+							</Text>
 							{item.date && (
 								<Text as='span' styleType='caption' className='text-gray-500'>
 									{item.date}
 								</Text>
 							)}
 						</div>
-						<TypeTag label='Resolved' />
-					</div>
-					{item.description && (
-						<div className='pl-6'>
-							<Text styleType='body-2'>{item.description}</Text>
-						</div>
-					)}
-				</li>
-			))}
-		</ul>
+						{item.description && <Text styleType='body-2'>{item.description}</Text>}
+					</li>
+				))}
+			</ul>
+		</div>
 	);
 }
 
@@ -171,7 +224,7 @@ function ExperienceContent({ experience }: { experience: PersonProfileView['rece
 	return (
 		<ul className='flex flex-col gap-5'>
 			{experience.map((item, index) => (
-				<li key={`${item.title}-${index}`} className='flex flex-col gap-1'>
+				<li key={`${item.title}-${index}`} className='flex flex-col gap-4'>
 					<div className='flex items-center justify-between gap-3'>
 						<Text as='span' styleType='subtitle-2'>
 							{item.title}
@@ -208,22 +261,25 @@ function ExperienceContent({ experience }: { experience: PersonProfileView['rece
  */
 function AboutPositionContent({ view }: { view: PersonProfileView }): ReactNode {
 	const electionDate = view.electionDate ? formatElectionDateFromApi(view.electionDate) : null;
-	const rows: Array<{ label: string; value: string }> = [];
-	if (view.termLabel) rows.push({ label: 'Term length', value: view.termLabel });
-	if (electionDate) rows.push({ label: 'Next election', value: electionDate });
+	const rows: Array<{ icon: string; label: string; value: string }> = [];
+	if (view.termLabel) rows.push({ icon: 'calendar', label: 'Term length', value: view.termLabel });
+	if (electionDate) rows.push({ icon: 'vote', label: 'Next election', value: electionDate });
 	return (
 		<div className='flex flex-col gap-4'>
 			{view.positionDescription && <Text styleType='body-2'>{view.positionDescription}</Text>}
 			{rows.length > 0 && (
-				<dl className='flex flex-col gap-2'>
+				<dl className='flex flex-col gap-4'>
 					{rows.map(r => (
-						<div key={r.label} className='flex items-baseline justify-between gap-4'>
-							<Text as='dt' styleType='caption' className='text-gray-500'>
-								{r.label}
-							</Text>
-							<Text as='dd' styleType='subtitle-2'>
-								{r.value}
-							</Text>
+						<div key={r.label} className='flex items-start gap-3'>
+							<IconResolver icon={r.icon} className='mt-0.5 h-6 w-6 shrink-0 text-midnight-900' />
+							<div className='flex min-w-0 flex-col gap-0.5'>
+								<Text as='dt' styleType='subtitle-2'>
+									{r.label}
+								</Text>
+								<Text as='dd' styleType='body-2' className='text-gray-500'>
+									{r.value}
+								</Text>
+							</div>
 						</div>
 					))}
 				</dl>
@@ -245,30 +301,41 @@ function AboutPositionContent({ view }: { view: PersonProfileView }): ReactNode 
 }
 
 /**
- * Person-authored content cards, in Figma order: Why → Campaign Issues → About
- * Me → Accomplishments. These are empowerment-gated (only shown on empowered
- * pages). Recent Experience is NOT here — it's a civics-spine card that renders
- * on every state (see buildCivicCards).
+ * Person-authored sections, empowerment-gated (only shown on empowered pages).
+ * Which of these actually render — and in what order — is decided solely by
+ * `SECTION_ORDER` for the persona, so a candidate never picks up an in-office
+ * section and vice versa.
  */
-function buildAuthoredCards(view: PersonProfileView): ProfileContentCardProps[] {
-	const cards: ProfileContentCardProps[] = [];
-	// "Why I'm Running for Office" is candidate-only (Figma A); officeholder/past
-	// frames drop the section entirely.
-	if (view.whyRunning && (view.persona === 'candidate' || view.persona === 'both')) {
-		cards.push({ cardType: 'why-running', group: 'platform', heading: whyHeading(view.persona), content: view.whyRunning });
+function buildAuthoredSections(view: PersonProfileView): SectionMap {
+	const sections: SectionMap = {};
+	const { platform, inOffice } = splitIssues(view.issues);
+	if (view.whyRunning) {
+		sections.why = { cardType: 'why-running', heading: whyHeading(view.persona), content: view.whyRunning };
 	}
-	if (view.issues.length > 0) {
-		cards.push({ cardType: 'top-issues', group: 'platform', heading: issuesHeading(view.persona), content: <IssuesContent issues={view.issues} showStatus={holdsOffice(view.persona)} /> });
+	if (platform.length > 0) {
+		sections.campaignIssues = { cardType: 'top-issues', heading: CAMPAIGN_ISSUES_HEADING, content: <IssuesContent issues={platform} showStatus={false} /> };
+	}
+	if (inOffice.length > 0) {
+		sections.inOfficePriorities = { cardType: 'top-issues', heading: IN_OFFICE_ISSUES_HEADING, content: <IssuesContent issues={inOffice} showStatus /> };
+	}
+	// Figma nests this under "Top Priorities While in Office" with a lead-in
+	// line. The smaller heading comes from sharing that section's group, not
+	// from being set here.
+	if (view.accomplishments.length > 0) {
+		sections.accomplishments = {
+			heading: ACCOMPLISHMENTS_HEADING,
+			content: (
+				<AccomplishmentsContent
+					accomplishments={view.accomplishments}
+					lead={`${view.displayName} has accomplished the following:`}
+				/>
+			),
+		};
 	}
 	if (view.bio) {
-		cards.push({ cardType: 'about-me', group: 'about', heading: 'About Me', content: view.bio });
+		sections.aboutMe = { cardType: 'about-me', heading: 'About Me', content: view.bio };
 	}
-	// Accomplishments are an in-office record — only personas who hold/held office
-	// show them. A pure candidate (Figma A) has none, so gate the section.
-	if (view.accomplishments.length > 0 && holdsOffice(view.persona)) {
-		cards.push({ group: 'about', heading: 'Accomplishments', content: <AccomplishmentsContent accomplishments={view.accomplishments} /> });
-	}
-	return cards;
+	return sections;
 }
 
 /** Muted, italic prompt copy used inside unclaimed placeholder cards. */
@@ -308,9 +375,28 @@ function issuesPrompt(view: PersonProfileView): string {
 			return `Which issues would ${displayName} champion${office ? ` as ${office}` : ''}? Their campaign priorities will appear here once they claim their profile.`;
 		case 'officeholder':
 			return `What are ${displayName}'s top priorities${office ? ` for ${office}` : ''}? Their agenda in office will appear here once they claim their profile.`;
+		// A past official's frame carries this section AND the in-office one, so
+		// this has to ask about the campaign; `inOfficePrompt` covers the record.
 		case 'past':
-			return `Which priorities did ${displayName} focus on${office ? ` in ${office}` : ' in office'}? Their record will appear here once they claim their profile.`;
+			return `What did ${displayName} campaign on${office ? ` for ${office}` : ''}? Their platform and issues will appear here once they claim their profile.`;
 	}
+}
+
+/** Copy for the "Top Priorities While in Office" placeholder prompt. */
+function inOfficePrompt(view: PersonProfileView): string {
+	const office = view.officeName ? ` in ${view.officeName}` : ' in office';
+	if (view.persona === 'past') {
+		return `Which priorities did ${view.displayName} focus on${office}? Their record will appear here once they claim their profile.`;
+	}
+	return `What is ${view.displayName} focused on${office}? Their priorities will appear here once they claim their profile.`;
+}
+
+/** Copy for the "Accomplishments During This Term" placeholder prompt. */
+function accomplishmentsPrompt(view: PersonProfileView): string {
+	const office = view.officeName ? ` in ${view.officeName}` : ' in office';
+	const verb = view.persona === 'past' ? 'did' : 'has';
+	const achieved = view.persona === 'past' ? 'achieve' : 'achieved';
+	return `What ${verb} ${view.displayName} ${achieved}${office}? Their accomplishments will appear here once they claim their profile.`;
 }
 
 /** Copy for the "About Me" placeholder prompt. */
@@ -319,23 +405,39 @@ function aboutPrompt(view: PersonProfileView): string {
 	return `Get to know ${view.displayName}. Their background, experience, and story${office} will appear here once they claim their profile.`;
 }
 
+/** The sections a profile owner writes; the rest come from the civic spine. */
+const AUTHORED_SECTIONS = new Set<SectionKey>([
+	'why',
+	'campaignIssues',
+	'inOfficePriorities',
+	'accomplishments',
+	'aboutMe',
+]);
+
 /**
  * Placeholder prompt cards shown in the authored-cards slot for UNCLAIMED but
- * empowered pages (Figma states D/E/F/H). They mirror the authored cards' Figma
- * order and persona-aware headings (Why → Campaign Issues → About Me) but carry
- * muted, name + office prompt copy inviting engagement, since there is no
- * owner-authored content yet. Accomplishments is intentionally omitted (Figma
- * does not show a placeholder for it).
+ * empowered pages (Figma states D 1917:88035, E 1917:88616, F 1917:89211,
+ * H 1970:113629). The frames show a prompt for every authored section the
+ * claimed page would have, so this seeds from the persona's `SECTION_ORDER`
+ * rather than its own list — an unclaimed page must never advertise a
+ * different set of sections than its claimed counterpart. Copy is muted
+ * name + office prompt text, since there is no owner-authored content yet.
  */
-function buildAuthoredPlaceholderCards(view: PersonProfileView): ProfileContentCardProps[] {
-	const cards: ProfileContentCardProps[] = [];
-	// Mirror the claimed gating: the "Why" prompt is candidate-only.
-	if (view.persona === 'candidate' || view.persona === 'both') {
-		cards.push({ cardType: 'why-running', group: 'platform', heading: whyHeading(view.persona), content: <PlaceholderPrompt>{whyPrompt(view)}</PlaceholderPrompt> });
+function buildAuthoredPlaceholderSections(view: PersonProfileView): SectionMap {
+	const prompt = (text: string) => <PlaceholderPrompt>{text}</PlaceholderPrompt>;
+	const placeholders: Record<string, ProfileContentCardProps> = {
+		why: { cardType: 'why-running', heading: whyHeading(view.persona), content: prompt(whyPrompt(view)) },
+		campaignIssues: { cardType: 'top-issues', heading: CAMPAIGN_ISSUES_HEADING, content: prompt(issuesPrompt(view)) },
+		inOfficePriorities: { cardType: 'top-issues', heading: IN_OFFICE_ISSUES_HEADING, content: prompt(inOfficePrompt(view)) },
+		accomplishments: { heading: ACCOMPLISHMENTS_HEADING, content: prompt(accomplishmentsPrompt(view)) },
+		aboutMe: { cardType: 'about-me', heading: 'About Me', content: prompt(aboutPrompt(view)) },
+	};
+	const sections: SectionMap = {};
+	for (const key of SECTION_ORDER[view.persona]) {
+		const card = AUTHORED_SECTIONS.has(key) ? placeholders[key] : undefined;
+		if (card) sections[key] = card;
 	}
-	cards.push({ cardType: 'top-issues', group: 'platform', heading: issuesHeading(view.persona), content: <PlaceholderPrompt>{issuesPrompt(view)}</PlaceholderPrompt> });
-	cards.push({ cardType: 'about-me', group: 'about', heading: 'About Me', content: <PlaceholderPrompt>{aboutPrompt(view)}</PlaceholderPrompt> });
-	return cards;
+	return sections;
 }
 
 /** First 4-digit year in an ISO-ish date string (avoids TZ off-by-one). */
@@ -386,47 +488,53 @@ function OtherCandidatesContent({ cards }: { cards: CandidateCard[] }): ReactNod
 }
 
 /**
- * Civics-spine content cards shown on every state (data permitting), in Figma
- * order after the authored cards: Recent Experience → Other candidates →
- * About [position] → District Information (voter-density map). These are NOT
- * empowerment-gated, so unclaimed major-party (I/J) and removed (K/L) pages
- * still render their public-record context per the Figma removal frames.
+ * Civics-spine sections, available on every state (data permitting). These are
+ * NOT empowerment-gated, so unclaimed major-party (I/J) and removed (K/L)
+ * pages still render their public-record context per the Figma removal frames.
  */
-function buildCivicCards(view: PersonProfileView): ProfileContentCardProps[] {
-	const cards: ProfileContentCardProps[] = [];
+function buildCivicSections(view: PersonProfileView): SectionMap {
+	const sections: SectionMap = {};
 	if (view.recentExperience.length > 0) {
-		cards.push({ group: 'about', heading: 'Recent Experience', content: <ExperienceContent experience={view.recentExperience} /> });
+		sections.recentExperience = { heading: 'Recent Experience', content: <ExperienceContent experience={view.recentExperience} /> };
 	}
-	// Figma title-cases this heading and leads with the empowered (GoodParty)
+	if (view.positionDescription || view.termLabel || view.electionDate) {
+		sections.aboutPosition = {
+			heading: `About ${view.officeName ?? 'the Role'}`,
+			content: <AboutPositionContent view={view} />,
+		};
+	}
+	const districtMap = buildDistrictMap(view);
+	if (districtMap) {
+		sections.district = { heading: 'District information', content: districtMap };
+	}
+	// Figma title-cases the heading and leads with the empowered (GoodParty)
 	// candidate. FLAG: the frame reads "Other Candidates for [Position] in
 	// <Location>" but the view has no clean locality field distinct from the
 	// position name, so the "in <Location>" clause is omitted rather than invented.
 	const otherCandidates = empoweredFirst(toCandidateCards(view.otherCandidates));
 	if (otherCandidates.length > 0) {
-		cards.push({
-			group: 'people',
+		sections.otherCandidates = {
 			heading: view.officeName ? `Other Candidates for ${view.officeName}` : 'Other Candidates',
 			content: <OtherCandidatesContent cards={otherCandidates} />,
-		});
+		};
 	}
-	// Nearby officials serving the same constituency — only for personas actually
-	// in (or formerly in) office, per Figma (candidate-only pages omit this).
-	const nearby = holdsOffice(view.persona) ? empoweredFirst(toCandidateCards(view.nearbyOfficials)) : [];
+	const nearby = empoweredFirst(toCandidateCards(view.nearbyOfficials));
 	if (nearby.length > 0) {
-		cards.push({ group: 'people', heading: 'Nearby Officials', content: <OtherCandidatesContent cards={nearby} /> });
+		sections.nearbyOfficials = { heading: 'Nearby Officials', content: <OtherCandidatesContent cards={nearby} /> };
 	}
-	if (view.positionDescription || view.termLabel || view.electionDate) {
-		cards.push({
-			group: 'position',
-			heading: `About ${view.officeName ?? 'the Role'}`,
-			content: <AboutPositionContent view={view} />,
-		});
-	}
-	const districtMap = buildDistrictMap(view);
-	if (districtMap) {
-		cards.push({ group: 'district', heading: 'District information', content: districtMap });
-	}
-	return cards;
+	return sections;
+}
+
+/**
+ * Resolves the persona's section list into ordered cards, tagging each with
+ * its card group. A section with no data — or one absent from the persona's
+ * order — simply doesn't render.
+ */
+function orderedSectionCards(view: PersonProfileView, sections: SectionMap): ProfileContentCardProps[] {
+	return SECTION_ORDER[view.persona].flatMap(key => {
+		const card = sections[key];
+		return card ? [{ ...card, group: SECTION_GROUP[key] }] : [];
+	});
 }
 
 /** Contact links that render as icon-only buttons in the Figma "Contact" row. */
@@ -551,10 +659,12 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 				// `outline` button.
 				button: { buttonType: 'signup', label: 'Learn more', buttonProps: { styleType: 'secondary', styleSize: 'md' } },
 				preserveButtonStyle: true,
-				// The CTA sits below the asymmetric sidebar + cards layout; align its
-				// centered content with the content-card column above (not the page
-				// middle) so it reads as continuous with the last card.
-				contentColumnAlign: true,
+				// Deliberately NOT `contentColumnAlign`. That prop mirrors the sidebar
+				// grid so the CTA lines up with the content-card column, but the frames
+				// don't do that: in A (1901:50309) the CTA is a stock CTA Block whose
+				// content frame sits at x=208 w=1024 in a 1440 frame — 208px either
+				// side, centered on the page. Mirroring the column pushed it right of
+				// center, which is the misalignment marketing reported.
 			}
 		: showClaim
 			? {
@@ -589,16 +699,15 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	// Authored slot: claimed pages show real owner content; unclaimed but
 	// empowered pages (Figma D/E/F/H) show muted placeholder prompt cards in the
 	// same slot; major-party (I/J) and removed (K/L) pages show neither.
-	const authoredCards = view.claimed
-		? buildAuthoredCards(view)
+	const authoredSections = view.claimed
+		? buildAuthoredSections(view)
 		: view.empowered
-			? buildAuthoredPlaceholderCards(view)
-			: [];
+			? buildAuthoredPlaceholderSections(view)
+			: {};
 	const contentCards: ProfileContentCardProps[] = [
 		...(view.persona === 'past' ? [pastElectionDisclaimer(view)] : []),
 		...(showClaim ? [claimCard('voter-card')] : []),
-		...authoredCards,
-		...buildCivicCards(view),
+		...orderedSectionCards(view, { ...authoredSections, ...buildCivicSections(view) }),
 	];
 	const sidebar = buildSidebar(view);
 
@@ -612,7 +721,13 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			candidateName: view.displayName,
 			office: view.roleTitle ?? '',
 			// The full positionName (incl. locality) links to the office/position page.
-			officeHref: view.positionHref ?? undefined,
+			// When a second line is present (serving AND running, Figma C) the first
+			// line is the seat HELD, so the candidacy-derived href belongs on the
+			// second line; the held seat gets its own href once election-api threads
+			// the office's position slug through.
+			officeHref: (view.secondaryRoleTitle ? undefined : view.positionHref) ?? undefined,
+			secondaryOffice: view.secondaryRoleTitle ?? undefined,
+			secondaryOfficeHref: (view.secondaryRoleTitle ? view.positionHref : undefined) ?? undefined,
 			profileImageUrl: view.avatarUrl ?? undefined,
 			isEmpowered: view.empowered,
 			tags: personaTags(view.persona),

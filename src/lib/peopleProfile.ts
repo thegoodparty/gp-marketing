@@ -53,10 +53,22 @@ export function personIdSuffix(personId: string): string {
 	return personId.replace(/-/g, '').slice(0, 8).toLowerCase();
 }
 
-/** Builds the public `<base>-<id8>` slug from an already-slugified base. */
+/**
+ * Builds the public `<base>-<id8>` slug from an already-slugified base.
+ *
+ * Idempotent, because the two kinds of base this is called with disagree about
+ * whether the suffix is already there: a name-derived base (`slugifyName`) never
+ * carries it, while the election-api mart's `Person.slug` already ends in it.
+ * Appending unconditionally produced `jane-doe-11111111-11111111` for every
+ * person sourced from the spine — pages still resolved (the resolver reads the
+ * *trailing* 8 hex either way), but the canonical URL, the og:url, the sitemap
+ * entries and every inter-profile link carried the doubled suffix, and the clean
+ * URL cost a redirect hop to reach it.
+ */
 export function buildPersonSlugFromBase(base: string, personId: string): string {
 	const suffix = personIdSuffix(personId);
-	return base ? `${base}-${suffix}` : suffix;
+	if (!base || base === suffix) return suffix;
+	return base.endsWith(`-${suffix}`) ? base : `${base}-${suffix}`;
 }
 
 /** Builds the public `first-last-<id8>` slug for a person from a display name. */
@@ -706,10 +718,11 @@ export function composeView(
 
 	return {
 		personId,
-		// Public URL is /people/<base>-<id8>. The election-api mart mints the base
-		// (`first-last`, non-unique); we always append the 8-hex id suffix so the
-		// URL resolves to exactly one person. Fall back to a name-derived base only
-		// when the spine is absent (e.g. an overlay-only edge case).
+		// Public URL is /people/<base>-<id8>, where the 8-hex id suffix is what makes
+		// a non-unique `first-last` base resolve to exactly one person. The mart's
+		// `Person.slug` already ends in that suffix, so it passes through unchanged;
+		// the name-derived fallback (for the overlay-only edge case, where there is
+		// no spine row) gets the suffix appended.
 		canonicalSlug: buildPersonSlugFromBase(
 			person?.slug ?? slugifyName(nameFromPerson ?? displayName),
 			personId,

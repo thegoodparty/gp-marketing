@@ -16,7 +16,7 @@ only stop to ask them about a genuine decision.
 check is green.** You never merge — opening and driving to green is the job; the
 human clicks merge.
 
-Repo conventions (from the root `CLAUDE.md`): PRs target **`develop`**. PR bodies
+Repo conventions (from the root `AGENTS.md`): PRs target **`develop`**. PR bodies
 explain **why**, not a file-by-file what. **No** "test plan" section. **No**
 `Co-Authored-By: Claude` and no "Created by Claude" footer.
 

@@ -68,7 +68,7 @@ Different repo from gp-webapp, so the conventions differ. Do NOT map to shadcn o
   people section wrapper), never bake it into the shared component.
 - **Code style:** tabs, single quotes, semicolons, no comments by default, match
   the surrounding file. Verify with `bun run typecheck` and `bun run lint` before
-  a PR (see `CLAUDE.md`; the app hides type errors, so typecheck is the only way).
+  a PR (see `AGENTS.md`; the app hides type errors, so typecheck is the only way).
 
 ## The 12 profile states
 

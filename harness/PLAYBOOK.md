@@ -103,7 +103,7 @@ Artifacts land in `/tmp/people-harness/<run>/` (plus a `latest` symlink):
 ### Guardrails
 
 - After any code edit, before trusting a green: `bun run typecheck` must pass
-  (this repo hides type errors at runtime — see `CLAUDE.md`).
+  (this repo hides type errors at runtime — see `AGENTS.md`).
 - Never edit the Figma PNGs, `figma-sections.json`, or the diff output to force a
   pass. The only legitimate way to move the number is changing the page.
 - Smallest change that fixes the red region. Re-check `/candidate` after touching

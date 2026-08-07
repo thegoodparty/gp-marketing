@@ -9,6 +9,20 @@ export type ElectionApiJsonResult = {
 };
 
 /**
+ * A non-ok response that must not be cached. Carries the status so the caller can
+ * tell a retryable 5xx from a deterministic 4xx without re-parsing a message.
+ */
+export class ElectionApiError extends Error {
+	public readonly status: number;
+
+	public constructor(status: number, url: string) {
+		super(`election-api ${status} ${url}`);
+		this.name = 'ElectionApiError';
+		this.status = status;
+	}
+}
+
+/**
  * Authenticated election-api GET that keeps the rotating M2M Authorization header
  * OUT of the Next.js Data Cache key.
  *
@@ -30,7 +44,13 @@ export async function fetchElectionApiJsonCached(
 		const authHeaders = await electionApiAuthHeaders();
 		const res = await fetch(url, { headers: authHeaders, cache: 'no-store' });
 		if (res.status === 404) return { status: 404, ok: false, json: null };
-		if (!res.ok) return { status: res.status, ok: false, json: null };
+		// Anything else non-ok throws rather than returning: unstable_cache stores
+		// whatever the wrapped function *returns*, so a returned failure would be
+		// memoized under this URL for the full hour — and because the caller retries
+		// through this same cached entry, run() would never re-execute. One transient
+		// 5xx would blank the field site-wide until the window elapsed. 404 is the
+		// exception: it is a real, stable answer worth caching.
+		if (!res.ok) throw new ElectionApiError(res.status, url);
 		return { status: res.status, ok: true, json: await res.json() };
 	};
 

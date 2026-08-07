@@ -24,7 +24,7 @@ import {
 	normalizeCandidateLookupName,
 	stripCountySuffix,
 } from '~/lib/electionsHelpers';
-import { fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
+import { ElectionApiError, fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
 
 const ELECTIONS_API_BASE_URL =
 	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
@@ -105,13 +105,15 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | nul
 			try {
 				const result = await fetchElectionApiJsonCached(url, tags);
 				if (result.status === 404) return null;
-				if (result.ok) return result.json as T;
-				if (result.status > 0 && result.status < 500) {
-					console.error(`[electionsApi] ${result.status} ${url}`);
+				return result.json as T;
+			} catch (err) {
+				// A 4xx is a deterministic answer — retrying just re-asks the same bad
+				// question three times and delays the null by 1.5s. Only 5xx and
+				// transport errors are worth another attempt.
+				if (err instanceof ElectionApiError && err.status < 500) {
+					console.error(`[electionsApi] ${err.status} ${url}`);
 					return null;
 				}
-				console.error(`[electionsApi] ${result.status || 'error'} ${url} (attempt ${attempt + 1})`);
-			} catch (err) {
 				console.error(`[electionsApi] attempt ${attempt + 1}`, err);
 			}
 			if (attempt < FETCH_JSON_MAX_RETRIES) {

@@ -79,4 +79,30 @@ describe('fetchElectionApiJsonCached', () => {
 		expect(fetchCalls).toBe(1);
 		expect(result).toEqual({ status: 200, ok: true, json: OK_BODY });
 	});
+
+	test('returns 404 rather than throwing, so a missing record stays cacheable', async () => {
+		globalThis.fetch = (async () => {
+			fetchCalls += 1;
+			return new Response(null, { status: 404 });
+		}) as unknown as typeof fetch;
+
+		const result = await fetchElectionApiJsonCached(ELECTION_URL);
+
+		expect(result).toEqual({ status: 404, ok: false, json: null });
+	});
+
+	// The throw is what keeps unstable_cache from storing the failure: it caches what
+	// the wrapped function returns, so a returned 5xx would pin this URL to an error
+	// for the full hour and the caller's retries — which go back through this same
+	// cache entry — would never re-run the fetch.
+	test.each([500, 502, 503, 401, 400])('throws on %s so the failure is never cached', async (status) => {
+		globalThis.fetch = (async () => {
+			fetchCalls += 1;
+			return new Response(null, { status });
+		}) as unknown as typeof fetch;
+
+		const promise = fetchElectionApiJsonCached(ELECTION_URL);
+
+		await expect(promise).rejects.toMatchObject({ name: 'ElectionApiError', status });
+	});
 });

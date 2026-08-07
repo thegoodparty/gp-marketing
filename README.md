@@ -41,8 +41,9 @@ rendering pipeline, so it is the quickest way to preview a new or changed block.
 
 ## Working in this repo
 
-This repo is built to be worked through coding agents. Start with **`CLAUDE.md`**
-in the repo root, then follow its pointers into `docs/`:
+This repo is built to be worked through coding agents. Start with **`AGENTS.md`**
+in the repo root, then follow its pointers into `docs/`. (`CLAUDE.md` is a symlink
+to `AGENTS.md`, so Claude Code and Cursor read the same file — edit `AGENTS.md`.)
 
 - `docs/content-vs-code.md` — whether a request needs code at all, or is a Sanity edit
 - `docs/architecture.md` — how the system fits together and how pages render

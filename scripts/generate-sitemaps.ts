@@ -2,7 +2,7 @@
 /**
  * Offline sitemap generation for validation and auditing. Writes XML to .reports/sitemaps/static/.
  * NOT used for production serving -- the Next.js dynamic routes handle that.
- * Usage: npx tsx scripts/generate-sitemaps.ts [--main-only] [--candidates-only] [--validate] [--redirect-handling remove|replace|keep] [--max-redirects N] [--no-follow-redirects]
+ * Usage: npx tsx scripts/generate-sitemaps.ts [--main-only] [--people-only] [--validate] [--redirect-handling remove|replace|keep] [--max-redirects N] [--no-follow-redirects]
  */
 
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -13,7 +13,8 @@ import { formatLastmod, splitUrlsIntoChunks, writeSitemapFile } from './lib/site
 import {
 	fetchMainSitemapEntries,
 	fetchStateElectionSitemapEntries,
-	fetchCandidateSitemapEntries,
+	fetchPeopleSitemapEntries,
+	PEOPLE_SITEMAP_SHARDS,
 	US_STATE_CODES,
 } from '../src/lib/sitemap-entries';
 
@@ -23,7 +24,7 @@ const SITEMAPS_DIR = join(OUTPUT_DIR, 'sitemaps');
 
 interface CliArgs {
 	mainOnly: boolean;
-	candidatesOnly: boolean;
+	peopleOnly: boolean;
 	validate: boolean;
 	redirectHandling: 'remove' | 'replace' | 'keep';
 	maxRedirects: number;
@@ -34,7 +35,7 @@ function parseArgs(): CliArgs {
 	const args = process.argv.slice(2);
 	const result: CliArgs = {
 		mainOnly: false,
-		candidatesOnly: false,
+		peopleOnly: false,
 		validate: false,
 		redirectHandling: 'remove',
 		maxRedirects: 5,
@@ -44,7 +45,7 @@ function parseArgs(): CliArgs {
 	for (let i = 0; i < args.length; i++) {
 		const arg = args[i];
 		if (arg === '--main-only') result.mainOnly = true;
-		else if (arg === '--candidates-only') result.candidatesOnly = true;
+		else if (arg === '--people-only') result.peopleOnly = true;
 		else if (arg === '--validate') result.validate = true;
 		else if (arg === '--redirect-handling' && args[i + 1]) {
 			const v = args[++i] as string;
@@ -54,8 +55,8 @@ function parseArgs(): CliArgs {
 		} else if (arg === '--no-follow-redirects') result.noFollowRedirects = true;
 	}
 
-	if (result.mainOnly && result.candidatesOnly) {
-		console.error('--main-only and --candidates-only are mutually exclusive');
+	if (result.mainOnly && result.peopleOnly) {
+		console.error('--main-only and --people-only are mutually exclusive');
 		process.exit(1);
 	}
 
@@ -89,9 +90,9 @@ async function fetchStateElectionEntries(stateCode: string): Promise<SitemapEntr
 	return entries.map(toSitemapEntry);
 }
 
-async function fetchCandidateEntries(stateCode: string): Promise<SitemapEntry[]> {
+async function fetchPeopleEntries(shard: string): Promise<SitemapEntry[]> {
 	const base = getBaseUrl();
-	const entries = await fetchCandidateSitemapEntries(stateCode, base);
+	const entries = await fetchPeopleSitemapEntries(base, shard);
 	return entries.map(toSitemapEntry);
 }
 
@@ -110,7 +111,7 @@ async function main(): Promise<void> {
 
 	console.log(`Generating sitemaps (base: ${base})...`);
 	if (args.mainOnly) console.log('Mode: main-only');
-	if (args.candidatesOnly) console.log('Mode: candidates-only');
+	if (args.peopleOnly) console.log('Mode: people-only');
 
 	await mkdir(SITEMAPS_DIR, { recursive: true });
 
@@ -119,7 +120,7 @@ async function main(): Promise<void> {
 	const stats: { category: string; urls: number; files: number }[] = [];
 
 	// Main content sitemap
-	if (!args.candidatesOnly) {
+	if (!args.peopleOnly) {
 		const mainEntries = await fetchMainContentEntries();
 		const chunks = splitUrlsIntoChunks(mainEntries);
 		const lastmod = formatLastmod();
@@ -143,7 +144,7 @@ async function main(): Promise<void> {
 	// State sitemaps
 	let stateFileCount = 0;
 	let stateUrlCount = 0;
-	if (!args.mainOnly && !args.candidatesOnly) {
+	if (!args.mainOnly && !args.peopleOnly) {
 		for (const state of US_STATE_CODES) {
 			const entries = await fetchStateElectionEntries(state);
 			if (entries.length === 0) continue;
@@ -165,29 +166,28 @@ async function main(): Promise<void> {
 		stats.push({ category: 'state', urls: stateUrlCount, files: stateFileCount });
 	}
 
-	// Candidate sitemaps
-	let candFileCount = 0;
-	let candUrlCount = 0;
+	// People sitemaps, sharded alphabetically to mirror the served band.
+	let peopleFileCount = 0;
+	let peopleUrlCount = 0;
 	if (!args.mainOnly) {
-		for (const state of US_STATE_CODES) {
-			const entries = await fetchCandidateEntries(state);
+		for (const shard of PEOPLE_SITEMAP_SHARDS) {
+			const entries = await fetchPeopleEntries(shard);
 			if (entries.length === 0) continue;
 
-			candUrlCount += entries.length;
+			peopleUrlCount += entries.length;
 			const chunks = splitUrlsIntoChunks(entries);
 			const lastmod = formatLastmod();
-			const stateLower = state.toLowerCase();
 
 			for (let i = 0; i < chunks.length; i++) {
 				const filename = chunks.length === 1 ? 'index.xml' : `index-${i + 1}.xml`;
-				const path = `sitemaps/candidates/${stateLower}/sitemap/${filename}`;
+				const path = `sitemaps/people/${shard}/sitemap/${filename}`;
 				await writeSitemapFile(OUTPUT_DIR, path, convertToXML(chunks[i]!));
 				indexEntries.push({ loc: `${base}/${path}`, lastmod });
 				allGeneratedUrls.push(...chunks[i]!.map((e) => e.loc));
-				candFileCount++;
+				peopleFileCount++;
 			}
 		}
-		stats.push({ category: 'candidates', urls: candUrlCount, files: candFileCount });
+		stats.push({ category: 'people', urls: peopleUrlCount, files: peopleFileCount });
 	}
 
 	// Root index

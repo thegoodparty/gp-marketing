@@ -40,16 +40,20 @@ export function peopleShardForSlug(slug: string): string {
 }
 
 /**
- * The first people shard id sits immediately after the state-election and
- * candidate bands (id 0 = main, 1..N = state elections, N+1..2N = candidates).
+ * The first people shard id sits immediately after the state-election band
+ * (id 0 = main, 1..N = state elections).
+ *
+ * There used to be a second per-state band listing every /candidate/<slug>.
+ * It was retired when /candidate started permanently redirecting to /people:
+ * a sitemap should advertise destinations, not redirects, and leaving ~248k
+ * 308s in it spent crawl budget re-walking the migration on every pass.
  */
-export const PEOPLE_SITEMAP_BAND_START = 1 + 2 * US_STATE_CODES.length;
+export const PEOPLE_SITEMAP_BAND_START = 1 + US_STATE_CODES.length;
 
 export function getSitemapIds(): { id: number }[] {
 	const ids: { id: number }[] = [{ id: 0 }];
 	for (let i = 0; i < US_STATE_CODES.length; i++) {
 		ids.push({ id: i + 1 });
-		ids.push({ id: i + 1 + US_STATE_CODES.length });
 	}
 	for (let i = 0; i < PEOPLE_SITEMAP_SHARDS.length; i++) {
 		ids.push({ id: PEOPLE_SITEMAP_BAND_START + i });
@@ -110,16 +114,27 @@ export function chunkArray<T>(items: T[], size: number): T[][] {
 	return chunks;
 }
 
+/**
+ * `lastModified` distinguishes "unknown" from "absent": `undefined` stamps today
+ * (the long-standing default for pages whose freshness we can't source), while
+ * an explicit `null` omits the key entirely. The /people band needs the latter —
+ * we have no per-person modification date for a page nobody has claimed, and
+ * dating 200k+ of them "today" on every hourly rebuild would tell crawlers the
+ * whole corpus changes continuously, which is both false and the fastest way to
+ * get lastmod ignored site-wide.
+ */
 function toEntry(
 	baseUrl: string,
 	path: string,
 	priority: number,
 	changeFrequency: MetadataRoute.Sitemap[0]['changeFrequency'],
-	lastModified?: string,
+	lastModified?: string | null,
 ): MetadataRoute.Sitemap[0] {
 	return {
 		url: `${baseUrl}${path.startsWith('/') ? path : `/${path}`}`,
-		lastModified: lastModified ?? new Date().toISOString().slice(0, 10),
+		...(lastModified === null
+			? {}
+			: { lastModified: lastModified ?? new Date().toISOString().slice(0, 10) }),
 		changeFrequency,
 		priority,
 	};
@@ -417,20 +432,44 @@ export async function getCachedElectionRouteParams(): Promise<{
 	return cachedElectionRouteParams;
 }
 
-async function fetchGpApiJson<T>(path: string, tags?: readonly string[]): Promise<T[]> {
+/**
+ * Strict variants for the /people band.
+ *
+ * The soft helpers above degrade a failed upstream to `[]`, which is right for a
+ * band whose worst case is a few missing election URLs. It is wrong here. This
+ * band's inputs are a whole-table enumeration and a privacy exclusion list, and
+ * an empty-on-failure read of either is indistinguishable from a real answer:
+ * one transient 5xx on a single state sweep would publish a sitemap missing that
+ * state's people while claiming to be complete, and a non-200 from the removal
+ * list would advertise every person who asked to be delisted. Both failures are
+ * silent and both look exactly like success.
+ *
+ * So these throw. The shard then fails rather than serving a wrong answer, which
+ * is the recoverable direction: a crawler retries, and the previous good sitemap
+ * stays cached until it does.
+ */
+async function fetchGpApiJsonOrThrow<T>(path: string, tags?: readonly string[]): Promise<T[]> {
 	const url = `${GP_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
-	try {
-		const res = await fetch(url, cacheInit(tags));
-		if (!res.ok) {
-			console.error(`[sitemap] gp-api ${res.status} ${url}`);
-			return [];
-		}
-		const data: unknown = await res.json();
-		return Array.isArray(data) ? (data as T[]) : [];
-	} catch (err) {
-		console.error('[sitemap] gp-api fetch failed', url, err instanceof Error ? err.message : String(err));
-		return [];
+	const res = await fetch(url, cacheInit(tags));
+	if (!res.ok) throw new Error(`[sitemap] gp-api ${res.status} ${url}`);
+	const data: unknown = await res.json();
+	if (!Array.isArray(data)) throw new Error(`[sitemap] gp-api non-array body ${url}`);
+	return data as T[];
+}
+
+async function fetchElectionJsonOrThrow<T>(
+	path: string,
+	params: Record<string, string>,
+	tags?: readonly string[],
+): Promise<T[]> {
+	const search = new URLSearchParams(params).toString();
+	const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}?${search}`;
+	const result = await fetchElectionApiJsonCached(url, tags);
+	if (!result.ok) throw new Error(`[sitemap] Election API ${result.status} ${url}`);
+	if (!Array.isArray(result.json)) {
+		throw new Error(`[sitemap] Election API non-array body ${url}`);
 	}
+	return result.json as T[];
 }
 
 async function fetchElectionJson<T>(
@@ -613,9 +652,126 @@ export async function fetchStateElectionSitemapEntries(
 type PeopleSitemapPerson = { id?: string; slug?: string | null };
 
 type PeopleSitemapData = {
+	/** personId → updatedAt, for the published subset only; also marks "claimed". */
 	updatedByPersonId: Map<string, string | undefined>;
+	/** personIds under a privacy takedown, which must never be advertised. */
+	removedPersonIds: Set<string>;
 	persons: PeopleSitemapPerson[];
 };
+
+/**
+ * Ids per `?ids=` lookup.
+ *
+ * election-api's own documented cap is 500, but that is unreachable: the filter
+ * is a query parameter, and 500 comma-encoded uuids is a ~19.5KB query string,
+ * which the gateway rejects with a 414 before the service ever sees it (measured
+ * — 300 ids / ~11.8KB still answers 200). This sits under the classic 8KB
+ * request-line limit so it survives any proxy in front of the API, at the cost
+ * of more, smaller round trips.
+ */
+const PERSON_ID_BATCH = 150;
+
+/**
+ * Cap on concurrent upstream requests while enumerating the person table.
+ * A full sweep is ~150 calls; firing them at once buys nothing (each returns in
+ * well under a second) and risks starving the same election-api that is serving
+ * live page renders.
+ */
+const ENUMERATION_CONCURRENCY = 8;
+
+async function mapWithConcurrency<T, R>(
+	items: readonly T[],
+	limit: number,
+	fn: (item: T) => Promise<R>,
+): Promise<R[]> {
+	const results: R[] = new Array(items.length) as R[];
+	let next = 0;
+	const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
+		for (let i = next++; i < items.length; i = next++) {
+			results[i] = await fn(items[i] as T);
+		}
+	});
+	await Promise.all(workers);
+	return results;
+}
+
+/**
+ * Every person with a public /people page.
+ *
+ * election-api offers no pagination and no count on `GET /v1/persons` — the
+ * query schema is strict, so `limit`/`offset` are 400s — which leaves `state`
+ * as the only bounded way to walk the table. A state sweep alone is NOT
+ * complete: `Person.state` is nullable, and the people carrying no state are
+ * unreachable through it (~8% of the corpus, 17k of 216k when this was written)
+ * because there is no way to ask for `state IS NULL`.
+ *
+ * The upstream mart defines the Person table as "people with a candidacy or
+ * office term", so the candidacy and officeholder feeds between them name every
+ * person that exists — and both DO carry a usable state. Unioning their
+ * personIds and resolving anything the sweep missed back through the 500-id
+ * batch filter closes the gap exactly, rather than approximately.
+ *
+ * If election-api ever grows a cursor or a dedicated enumeration feed, this
+ * whole dance collapses into a single paged read.
+ */
+async function fetchAllPersons(): Promise<PeopleSitemapPerson[]> {
+	const tags = [PEOPLE_SITEMAP_CACHE_TAG];
+	const states = [...US_STATE_CODES];
+	const byId = new Map<string, PeopleSitemapPerson>();
+
+	const sweeps = await mapWithConcurrency(states, ENUMERATION_CONCURRENCY, async (state) =>
+		fetchElectionJsonOrThrow<PeopleSitemapPerson>(
+			'v1/persons',
+			{ state, columns: 'id,slug' },
+			tags,
+		),
+	);
+	for (const rows of sweeps) {
+		for (const person of rows) {
+			if (person.id) byId.set(person.id.toLowerCase(), person);
+		}
+	}
+
+	const linkedFeeds: { path: string; state: string }[] = states.flatMap((state) => [
+		{ path: 'v1/candidacies', state },
+		{ path: 'v1/officeholders', state },
+	]);
+	const linked = await mapWithConcurrency(
+		linkedFeeds,
+		ENUMERATION_CONCURRENCY,
+		async ({ path, state }) =>
+			fetchElectionJsonOrThrow<{ personId?: string }>(
+				path,
+				{ state, columns: 'personId' },
+				tags,
+			),
+	);
+	const unseen = new Set<string>();
+	for (const rows of linked) {
+		for (const row of rows) {
+			const id = row.personId?.toLowerCase();
+			if (id && !byId.has(id)) unseen.add(id);
+		}
+	}
+
+	const batches = await mapWithConcurrency(
+		chunkArray([...unseen], PERSON_ID_BATCH),
+		ENUMERATION_CONCURRENCY,
+		async (ids) =>
+			fetchElectionJsonOrThrow<PeopleSitemapPerson>(
+				'v1/persons',
+				{ ids: ids.join(','), columns: 'id,slug' },
+				tags,
+			),
+	);
+	for (const rows of batches) {
+		for (const person of rows) {
+			if (person.id) byId.set(person.id.toLowerCase(), person);
+		}
+	}
+
+	return [...byId.values()];
+}
 
 let cachedPeopleSitemapData: Promise<PeopleSitemapData> | null = null;
 
@@ -637,57 +793,60 @@ export function clearPeopleSitemapCache(): void {
 async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
 	if (!cachedPeopleSitemapData) {
 		const load = (async (): Promise<PeopleSitemapData> => {
-			const published = await fetchGpApiJson<{ personId?: string; updatedAt?: string }>(
-				'v1/public-person-profiles/published',
-				[PEOPLE_SITEMAP_CACHE_TAG],
-			);
+			const [published, removed, persons] = await Promise.all([
+				fetchGpApiJsonOrThrow<{ personId?: string; updatedAt?: string }>(
+					'v1/public-person-profiles/published',
+					[PEOPLE_SITEMAP_CACHE_TAG],
+				),
+				fetchGpApiJsonOrThrow<{ personId?: string }>('v1/public-person-profiles/removed', [
+					PEOPLE_SITEMAP_CACHE_TAG,
+				]),
+				fetchAllPersons(),
+			]);
+
 			const updatedByPersonId = new Map<string, string | undefined>();
 			for (const row of published) {
 				if (row.personId) updatedByPersonId.set(row.personId.toLowerCase(), row.updatedAt);
 			}
 
-			if (updatedByPersonId.size === 0) {
-				return { updatedByPersonId, persons: [] };
+			const removedPersonIds = new Set<string>();
+			for (const row of removed) {
+				if (row.personId) removedPersonIds.add(row.personId.toLowerCase());
 			}
 
-			const ids = [...updatedByPersonId.keys()];
-			// election-api caps the `ids` filter at 500 (a larger list is rejected and
-			// returns []), so batch to avoid silently dropping published people.
-			const idBatches = chunkArray(ids, 500);
-			const persons = (
-				await Promise.all(
-					idBatches.map(async (batch) =>
-						fetchElectionJson<PeopleSitemapPerson>(
-							'v1/persons',
-							{
-								ids: batch.join(','),
-								columns: 'id,slug',
-							},
-							[PEOPLE_SITEMAP_CACHE_TAG],
-						),
-					),
-				)
-			).flat();
-
-			return { updatedByPersonId, persons };
+			return { updatedByPersonId, removedPersonIds, persons };
 		})();
 		cachedPeopleSitemapData = load;
-		void load.finally(() => {
+		// Settle via two-arg `then`, not `finally`: the upstream reads throw now, and
+		// `finally` returns a promise that re-raises the rejection with nobody
+		// attached to it — an unhandled rejection that can take the server down
+		// depending on the runtime's policy. Handling both arms here keeps the
+		// rejection observable only to the shard awaiting it, which is where it
+		// belongs. Clearing the slot on failure also means a transient outage costs
+		// one failed shard rather than pinning the band broken.
+		const settle = (): void => {
 			if (cachedPeopleSitemapData === load) {
 				cachedPeopleSitemapData = null;
 			}
-		});
+		};
+		load.then(settle, settle);
 	}
 	return cachedPeopleSitemapData;
 }
 
 /**
- * Fetches public /people profile sitemap entries.
+ * Sitemap entries for the public /people band — every person with a page, not
+ * just the claimed ones.
  *
- * Two-hop join across the service boundary: gp-api owns the publish gate (which
- * personIds are live), election-api owns the authoritative, unique, clean
- * `Person.slug` that is the canonical URL. Anything gp-api reports as published
- * but that has no election-api Person yet is skipped (no slug → no page).
+ * election-api owns the authoritative, unique `Person.slug` that is the
+ * canonical URL, so a person with no spine row has no page and is skipped.
+ * gp-api contributes the two per-person facts it alone knows: which people have
+ * published (worth a higher priority and a real lastmod) and which have
+ * requested removal.
+ *
+ * Removed people are dropped rather than downranked. Their page renders `noindex`
+ * by design, so listing it would both contradict the page's own directive and
+ * point crawlers at someone who asked to be left alone.
  *
  * Upstream fetches are shared across shards via getCachedPeopleSitemapData.
  */
@@ -695,39 +854,32 @@ export async function fetchPeopleSitemapEntries(
 	baseUrl: string,
 	shard?: string,
 ): Promise<MetadataRoute.Sitemap> {
-	const { updatedByPersonId, persons } = await getCachedPeopleSitemapData();
+	const { updatedByPersonId, removedPersonIds, persons } = await getCachedPeopleSitemapData();
 
 	const entries: MetadataRoute.Sitemap = [];
 	for (const p of persons) {
 		if (!p.id || !p.slug) continue;
+		const personId = p.id.toLowerCase();
+		if (removedPersonIds.has(personId)) continue;
 		// When a shard is requested, only emit people whose slug falls in it. The
 		// canonical URL appends the 8-hex id suffix but shares the base's first
 		// char, so sharding on the base is equivalent.
 		if (shard && peopleShardForSlug(p.slug) !== shard) continue;
 		const canonicalSlug = buildPersonSlugFromBase(p.slug, p.id);
-		const updatedAt = updatedByPersonId.get(p.id.toLowerCase());
+		const published = updatedByPersonId.has(personId);
 		entries.push(
-			toEntry(baseUrl, `/people/${canonicalSlug}`, 0.7, 'weekly', updatedAt?.slice(0, 10)),
+			toEntry(
+				baseUrl,
+				`/people/${canonicalSlug}`,
+				// A claimed page carries owner-authored content; an unclaimed one is
+				// the civics spine alone. The split tells crawlers which half of the
+				// corpus to spend budget on first.
+				published ? 0.7 : 0.5,
+				'weekly',
+				published ? (updatedByPersonId.get(personId)?.slice(0, 10) ?? null) : null,
+			),
 		);
 	}
 	return dedupeByUrl(entries);
 }
 
-/**
- * Fetches candidate sitemap entries from Election API.
- */
-export async function fetchCandidateSitemapEntries(
-	stateCode: string,
-	baseUrl: string,
-): Promise<MetadataRoute.Sitemap> {
-	const code = stateCode.toUpperCase();
-	const candidacies = await fetchElectionJson<{ slug?: string }>('v1/candidacies', {
-		state: code,
-		columns: 'slug',
-	});
-	const entries: MetadataRoute.Sitemap = [];
-	for (const c of candidacies) {
-		if (c.slug) entries.push(toEntry(baseUrl, `/candidate/${c.slug}`, 0.7, 'weekly'));
-	}
-	return dedupeByUrl(entries);
-}

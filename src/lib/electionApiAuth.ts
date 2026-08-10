@@ -109,7 +109,11 @@ async function mint(): Promise<string | null> {
 			tokenFormat: 'jwt',
 			secondsUntilExpiration: TOKEN_TTL_SECONDS,
 		});
-		if (!minted.token || minted.expiration == null) {
+		// A successful mint is signalled by a non-null token. Do NOT gate on
+		// `minted.expiration`: it is no longer read (the cache window is derived from
+		// the TTL below), and Clerk types it as nullable, so treating null expiration
+		// as failure would discard an otherwise-valid token and 401 downstream.
+		if (!minted.token) {
 			enterMintCooldown();
 			return usableCachedToken();
 		}

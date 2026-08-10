@@ -59,6 +59,20 @@ describe('getElectionApiToken', () => {
 		expect(createToken).toHaveBeenCalledTimes(1);
 	});
 
+	test('accepts a successful mint even when Clerk returns a null expiration', async () => {
+		// `expiration` is nullable in Clerk's type and unused for timing, so a
+		// non-null token must be treated as success — not discarded into cooldown.
+		createToken.mockImplementation(async () => ({
+			token: 'token-no-exp',
+			expiration: null,
+		}));
+
+		await expect(getElectionApiToken()).resolves.toBe('token-no-exp');
+		// Cached and reused: the TTL-derived window is valid despite null expiration.
+		await expect(getElectionApiToken()).resolves.toBe('token-no-exp');
+		expect(createToken).toHaveBeenCalledTimes(1);
+	});
+
 	test('remints when the cached token is fully expired', async () => {
 		__resetElectionApiAuthForTests({
 			cachedToken: 'stale-token',

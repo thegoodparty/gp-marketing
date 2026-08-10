@@ -109,15 +109,23 @@ async function mint(): Promise<string | null> {
 			tokenFormat: 'jwt',
 			secondsUntilExpiration: TOKEN_TTL_SECONDS,
 		});
-		if (!minted.token || minted.expiration == null) {
+		// A successful mint is signalled by a non-null token. Do NOT gate on
+		// `minted.expiration`: it is no longer read (the cache window is derived from
+		// the TTL below), and Clerk types it as nullable, so treating null expiration
+		// as failure would discard an otherwise-valid token and 401 downstream.
+		if (!minted.token) {
 			enterMintCooldown();
 			return usableCachedToken();
 		}
 		cachedToken = minted.token;
-		// Clerk returns `expiration` as a Unix timestamp in seconds; the cache
-		// checks compare against Date.now() in ms, so convert here or the token
-		// is treated as already expired and re-minted on every request.
-		tokenExpiration = minted.expiration * 1000;
+		// Anchor the cache window to the TTL we requested, NOT to `minted.expiration`.
+		// The JWT's real `exp` claim is (mint time + secondsUntilExpiration). Clerk's
+		// returned `expiration` field is typed as seconds but is actually milliseconds
+		// at runtime, so `* 1000` double-scaled it ~56k years into the future — the
+		// cache then never renewed and replayed one token long past its real `exp`,
+		// which election-api rejected as expired. Deriving from TTL is unit-agnostic
+		// and keeps the cache strictly inside the JWT's actual lifetime.
+		tokenExpiration = Date.now() + TOKEN_TTL_SECONDS * 1000;
 		mintCooldownUntil = 0;
 		return minted.token;
 	} catch (err) {

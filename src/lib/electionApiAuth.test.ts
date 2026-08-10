@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, mock, spyOn, test } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, mock, setSystemTime, spyOn, test } from 'bun:test';
 
 import {
 	__resetElectionApiAuthForTests,
@@ -7,7 +7,9 @@ import {
 	getElectionApiToken,
 } from './electionApiAuth';
 
-// Clerk's createToken returns `expiration` as a Unix timestamp in seconds.
+// mint() only reads `minted.expiration` to detect a failed mint (null => failure);
+// the cache window is anchored to the requested TTL, not to this field. Any
+// non-null value works here — its unit/magnitude is intentionally irrelevant.
 const expirationInSeconds = (secondsFromNow: number): number =>
 	Math.floor(Date.now() / 1000) + secondsFromNow;
 
@@ -54,6 +56,20 @@ describe('getElectionApiToken', () => {
 
 	test('remints when no token is cached', async () => {
 		await expect(getElectionApiToken()).resolves.toBe('fresh-token');
+		expect(createToken).toHaveBeenCalledTimes(1);
+	});
+
+	test('accepts a successful mint even when Clerk returns a null expiration', async () => {
+		// `expiration` is nullable in Clerk's type and unused for timing, so a
+		// non-null token must be treated as success — not discarded into cooldown.
+		createToken.mockImplementation(async () => ({
+			token: 'token-no-exp',
+			expiration: null,
+		}));
+
+		await expect(getElectionApiToken()).resolves.toBe('token-no-exp');
+		// Cached and reused: the TTL-derived window is valid despite null expiration.
+		await expect(getElectionApiToken()).resolves.toBe('token-no-exp');
 		expect(createToken).toHaveBeenCalledTimes(1);
 	});
 
@@ -154,6 +170,31 @@ describe('getElectionApiToken', () => {
 
 		await expect(getElectionApiToken()).resolves.toBe('cached-during-cooldown');
 		expect(createToken).toHaveBeenCalledTimes(0);
+	});
+
+	test('renews on the requested TTL even when Clerk returns a huge expiration (regression: ms double-scale)', async () => {
+		// Reproduces the prod bug: Clerk's `expiration` is milliseconds at runtime,
+		// and the old code did `expiration * 1000`, pushing the cache window ~56k
+		// years out so it never renewed and replayed one JWT long past its real
+		// `exp`. The fix anchors the window to the 600s TTL, so renewal must still
+		// happen after ~600s regardless of what `expiration` reports.
+		createToken.mockImplementation(async () => ({
+			token: 'ttl-anchored',
+			expiration: Date.now() * 1000, // ms-shaped; catastrophic if re-scaled
+		}));
+		const start = Date.now();
+		try {
+			setSystemTime(start);
+			await expect(getElectionApiToken()).resolves.toBe('ttl-anchored');
+			expect(createToken).toHaveBeenCalledTimes(1);
+
+			// Just past the 600s TTL: the token must be re-minted, not replayed.
+			setSystemTime(start + 601_000);
+			await expect(getElectionApiToken()).resolves.toBe('ttl-anchored');
+			expect(createToken).toHaveBeenCalledTimes(2);
+		} finally {
+			setSystemTime();
+		}
 	});
 });
 

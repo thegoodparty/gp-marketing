@@ -432,20 +432,44 @@ export async function getCachedElectionRouteParams(): Promise<{
 	return cachedElectionRouteParams;
 }
 
-async function fetchGpApiJson<T>(path: string, tags?: readonly string[]): Promise<T[]> {
+/**
+ * Strict variants for the /people band.
+ *
+ * The soft helpers above degrade a failed upstream to `[]`, which is right for a
+ * band whose worst case is a few missing election URLs. It is wrong here. This
+ * band's inputs are a whole-table enumeration and a privacy exclusion list, and
+ * an empty-on-failure read of either is indistinguishable from a real answer:
+ * one transient 5xx on a single state sweep would publish a sitemap missing that
+ * state's people while claiming to be complete, and a non-200 from the removal
+ * list would advertise every person who asked to be delisted. Both failures are
+ * silent and both look exactly like success.
+ *
+ * So these throw. The shard then fails rather than serving a wrong answer, which
+ * is the recoverable direction: a crawler retries, and the previous good sitemap
+ * stays cached until it does.
+ */
+async function fetchGpApiJsonOrThrow<T>(path: string, tags?: readonly string[]): Promise<T[]> {
 	const url = `${GP_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
-	try {
-		const res = await fetch(url, cacheInit(tags));
-		if (!res.ok) {
-			console.error(`[sitemap] gp-api ${res.status} ${url}`);
-			return [];
-		}
-		const data: unknown = await res.json();
-		return Array.isArray(data) ? (data as T[]) : [];
-	} catch (err) {
-		console.error('[sitemap] gp-api fetch failed', url, err instanceof Error ? err.message : String(err));
-		return [];
+	const res = await fetch(url, cacheInit(tags));
+	if (!res.ok) throw new Error(`[sitemap] gp-api ${res.status} ${url}`);
+	const data: unknown = await res.json();
+	if (!Array.isArray(data)) throw new Error(`[sitemap] gp-api non-array body ${url}`);
+	return data as T[];
+}
+
+async function fetchElectionJsonOrThrow<T>(
+	path: string,
+	params: Record<string, string>,
+	tags?: readonly string[],
+): Promise<T[]> {
+	const search = new URLSearchParams(params).toString();
+	const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}?${search}`;
+	const result = await fetchElectionApiJsonCached(url, tags);
+	if (!result.ok) throw new Error(`[sitemap] Election API ${result.status} ${url}`);
+	if (!Array.isArray(result.json)) {
+		throw new Error(`[sitemap] Election API non-array body ${url}`);
 	}
+	return result.json as T[];
 }
 
 async function fetchElectionJson<T>(
@@ -696,7 +720,11 @@ async function fetchAllPersons(): Promise<PeopleSitemapPerson[]> {
 	const byId = new Map<string, PeopleSitemapPerson>();
 
 	const sweeps = await mapWithConcurrency(states, ENUMERATION_CONCURRENCY, async (state) =>
-		fetchElectionJson<PeopleSitemapPerson>('v1/persons', { state, columns: 'id,slug' }, tags),
+		fetchElectionJsonOrThrow<PeopleSitemapPerson>(
+			'v1/persons',
+			{ state, columns: 'id,slug' },
+			tags,
+		),
 	);
 	for (const rows of sweeps) {
 		for (const person of rows) {
@@ -712,7 +740,11 @@ async function fetchAllPersons(): Promise<PeopleSitemapPerson[]> {
 		linkedFeeds,
 		ENUMERATION_CONCURRENCY,
 		async ({ path, state }) =>
-			fetchElectionJson<{ personId?: string }>(path, { state, columns: 'personId' }, tags),
+			fetchElectionJsonOrThrow<{ personId?: string }>(
+				path,
+				{ state, columns: 'personId' },
+				tags,
+			),
 	);
 	const unseen = new Set<string>();
 	for (const rows of linked) {
@@ -726,7 +758,7 @@ async function fetchAllPersons(): Promise<PeopleSitemapPerson[]> {
 		chunkArray([...unseen], PERSON_ID_BATCH),
 		ENUMERATION_CONCURRENCY,
 		async (ids) =>
-			fetchElectionJson<PeopleSitemapPerson>(
+			fetchElectionJsonOrThrow<PeopleSitemapPerson>(
 				'v1/persons',
 				{ ids: ids.join(','), columns: 'id,slug' },
 				tags,
@@ -762,11 +794,11 @@ async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
 	if (!cachedPeopleSitemapData) {
 		const load = (async (): Promise<PeopleSitemapData> => {
 			const [published, removed, persons] = await Promise.all([
-				fetchGpApiJson<{ personId?: string; updatedAt?: string }>(
+				fetchGpApiJsonOrThrow<{ personId?: string; updatedAt?: string }>(
 					'v1/public-person-profiles/published',
 					[PEOPLE_SITEMAP_CACHE_TAG],
 				),
-				fetchGpApiJson<{ personId?: string }>('v1/public-person-profiles/removed', [
+				fetchGpApiJsonOrThrow<{ personId?: string }>('v1/public-person-profiles/removed', [
 					PEOPLE_SITEMAP_CACHE_TAG,
 				]),
 				fetchAllPersons(),
@@ -785,11 +817,19 @@ async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
 			return { updatedByPersonId, removedPersonIds, persons };
 		})();
 		cachedPeopleSitemapData = load;
-		void load.finally(() => {
+		// Settle via two-arg `then`, not `finally`: the upstream reads throw now, and
+		// `finally` returns a promise that re-raises the rejection with nobody
+		// attached to it — an unhandled rejection that can take the server down
+		// depending on the runtime's policy. Handling both arms here keeps the
+		// rejection observable only to the shard awaiting it, which is where it
+		// belongs. Clearing the slot on failure also means a transient outage costs
+		// one failed shard rather than pinning the band broken.
+		const settle = (): void => {
 			if (cachedPeopleSitemapData === load) {
 				cachedPeopleSitemapData = null;
 			}
-		});
+		};
+		load.then(settle, settle);
 	}
 	return cachedPeopleSitemapData;
 }

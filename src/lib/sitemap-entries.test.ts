@@ -69,6 +69,8 @@ describe('fetchPeopleSitemapEntries', () => {
 		officeholders?: Record<string, string[]>;
 		published?: { personId: string; updatedAt?: string }[];
 		removed?: { personId: string }[];
+		removedStatus?: number;
+		failPersonsForState?: string;
 	}): string[] {
 		const urls: string[] = [];
 		globalThis.fetch = (async (input: RequestInfo | URL) => {
@@ -85,9 +87,16 @@ describe('fetchPeopleSitemapEntries', () => {
 				return json(opts.published ?? []);
 			}
 			if (url.pathname.endsWith('/public-person-profiles/removed')) {
+				if (opts.removedStatus) return new Response('nope', { status: opts.removedStatus });
 				return json(opts.removed ?? []);
 			}
 			if (url.pathname.endsWith('/v1/persons')) {
+				if (
+					opts.failPersonsForState &&
+					url.searchParams.get('state') === opts.failPersonsForState
+				) {
+					return new Response('boom', { status: 503 });
+				}
 				const ids = url.searchParams.get('ids');
 				const matches = ids
 					? ((): MockPerson[] => {
@@ -267,6 +276,46 @@ describe('fetchPeopleSitemapEntries', () => {
 		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
 
 		clearPeopleSitemapCache();
+		mockUpstream({ persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }] });
+
+		expect((await fetchPeopleSitemapEntries(base, 'a')).map((e) => e.url)).toEqual([
+			`${base}/people/alice-smith-aaaaaaaa`,
+		]);
+	});
+
+	// Both of the following cover the same class of bug: an upstream that answers
+	// "nothing" on failure is indistinguishable from one that answers "no rows",
+	// and for these two inputs the wrong answer is silent and shipped.
+
+	test('a failed state sweep rejects rather than publishing a partial corpus', async () => {
+		mockUpstream({
+			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
+			failPersonsForState: 'CA',
+		});
+
+		await expect(fetchPeopleSitemapEntries(base, 'a')).rejects.toThrow();
+	});
+
+	// A rolling deploy where gp-api has not yet shipped the endpoint 404s here.
+	// Failing open would advertise every person who asked to be delisted.
+	test('an unavailable removal list rejects rather than listing removed people', async () => {
+		mockUpstream({
+			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
+			removedStatus: 404,
+		});
+
+		await expect(fetchPeopleSitemapEntries(base, 'a')).rejects.toThrow();
+	});
+
+	// The band must not stay broken after a blip: the module slot has to clear on
+	// the rejected load too, or the first failure pins every later shard.
+	test('recovers on the next call after a failure', async () => {
+		mockUpstream({
+			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
+			removedStatus: 503,
+		});
+		await expect(fetchPeopleSitemapEntries(base, 'a')).rejects.toThrow();
+
 		mockUpstream({ persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }] });
 
 		expect((await fetchPeopleSitemapEntries(base, 'a')).map((e) => e.url)).toEqual([

@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, mock, setSystemTime, spyOn, te
 
 import {
 	__resetElectionApiAuthForTests,
+	__setCacheModuleForTests,
 	__setCreateTokenForTests,
 	electionApiAuthHeaders,
 	getElectionApiToken,
@@ -261,9 +262,14 @@ describe('token pooling across isolates (L2 Data Cache)', () => {
 		} else {
 			process.env['NEXT_RUNTIME'] = ORIGINAL_RUNTIME;
 		}
+		// Restore the real dynamic import of next/cache.
+		__setCacheModuleForTests(null);
 	});
 
 	test('inside the Next runtime, mints through unstable_cache keyed for fleet-wide reuse', async () => {
+		// Inject a next/cache stand-in via the module's own seam rather than
+		// mock.module: the latter is process-global in bun and would strip
+		// revalidateTag/revalidatePath from sibling test files.
 		let capturedKey: unknown;
 		let capturedOptions: { revalidate?: number } | undefined;
 		const unstable_cache = mock(
@@ -273,7 +279,7 @@ describe('token pooling across isolates (L2 Data Cache)', () => {
 				return (...args: unknown[]) => fn(...args);
 			},
 		);
-		mock.module('next/cache', () => ({ unstable_cache }));
+		__setCacheModuleForTests({ unstable_cache } as never);
 		process.env['NEXT_RUNTIME'] = 'nodejs';
 
 		await expect(getElectionApiToken()).resolves.toBe('fresh-token');
@@ -288,7 +294,7 @@ describe('token pooling across isolates (L2 Data Cache)', () => {
 	test('outside the Next runtime, mints directly without touching the Data Cache', async () => {
 		delete process.env['NEXT_RUNTIME'];
 		const unstable_cache = mock((fn: (...args: unknown[]) => unknown) => fn);
-		mock.module('next/cache', () => ({ unstable_cache }));
+		__setCacheModuleForTests({ unstable_cache } as never);
 
 		await expect(getElectionApiToken()).resolves.toBe('fresh-token');
 

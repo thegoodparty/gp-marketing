@@ -82,8 +82,21 @@ type MintedToken = { token: string; expiration: number };
 /** Thrown when the machine secret is absent — a config state, not a failure. */
 class MissingMachineSecretError extends Error {}
 
+/** Minimal shape of next/cache we depend on, for the test seam below. */
+type CacheModule = {
+	unstable_cache(
+		fn: () => Promise<MintedToken>,
+		keyParts: string[],
+		options: { revalidate: number },
+	): () => Promise<MintedToken>;
+};
+
 let clerkClient: ClerkM2MClient | null = null;
 let createTokenForTests: CreateM2MToken | null = null;
+// Injected in tests so the L2 path can be exercised without `mock.module`, which
+// is process-global in bun and would strip other next/cache exports (revalidateTag,
+// revalidatePath) that sibling test files import.
+let cacheModuleForTests: CacheModule | null = null;
 
 function getClerkClient(): ClerkM2MClient {
 	if (!clerkClient) {
@@ -181,8 +194,9 @@ async function mintPooled(): Promise<MintedToken> {
 		return mintFromClerk();
 	}
 
-	const { unstable_cache } = await import('next/cache');
-	return unstable_cache(mintFromClerk, ['election-api-m2m-token'], {
+	const cacheMod =
+		cacheModuleForTests ?? ((await import('next/cache')) as unknown as CacheModule);
+	return cacheMod.unstable_cache(mintFromClerk, ['election-api-m2m-token'], {
 		revalidate: SHARED_TOKEN_REVALIDATE_SECONDS,
 	})();
 }
@@ -243,6 +257,11 @@ export function __setCreateTokenForTests(fn: CreateM2MToken | null): void {
 	createTokenForTests = fn;
 }
 
+/** Test-only: inject a next/cache stand-in (null restores the real dynamic import). */
+export function __setCacheModuleForTests(mod: CacheModule | null): void {
+	cacheModuleForTests = mod;
+}
+
 /** Test-only: reset module cache / cooldown state (and optionally seed a token). */
 export function __resetElectionApiAuthForTests(seed?: {
 	cachedToken?: string | null;
@@ -258,4 +277,5 @@ export function __resetElectionApiAuthForTests(seed?: {
 	pending = null;
 	clerkClient = null;
 	createTokenForTests = null;
+	cacheModuleForTests = null;
 }

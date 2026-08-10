@@ -654,8 +654,8 @@ type PeopleSitemapPerson = { id?: string; slug?: string | null };
 type PeopleSitemapData = {
 	/** personId → updatedAt, for the published subset only; also marks "claimed". */
 	updatedByPersonId: Map<string, string | undefined>;
-	/** personIds under a privacy takedown, which must never be advertised. */
-	removedPersonIds: Set<string>;
+	/** personIds whose page must never be advertised — see the loader for why. */
+	unlistedPersonIds: Set<string>;
 	persons: PeopleSitemapPerson[];
 };
 
@@ -793,12 +793,12 @@ export function clearPeopleSitemapCache(): void {
 async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
 	if (!cachedPeopleSitemapData) {
 		const load = (async (): Promise<PeopleSitemapData> => {
-			const [published, removed, persons] = await Promise.all([
+			const [published, unlisted, persons] = await Promise.all([
 				fetchGpApiJsonOrThrow<{ personId?: string; updatedAt?: string }>(
 					'v1/public-person-profiles/published',
 					[PEOPLE_SITEMAP_CACHE_TAG],
 				),
-				fetchGpApiJsonOrThrow<{ personId?: string }>('v1/public-person-profiles/removed', [
+				fetchGpApiJsonOrThrow<{ personId?: string }>('v1/public-person-profiles/unlisted', [
 					PEOPLE_SITEMAP_CACHE_TAG,
 				]),
 				fetchAllPersons(),
@@ -809,12 +809,17 @@ async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
 				if (row.personId) updatedByPersonId.set(row.personId.toLowerCase(), row.updatedAt);
 			}
 
-			const removedPersonIds = new Set<string>();
-			for (const row of removed) {
-				if (row.personId) removedPersonIds.add(row.personId.toLowerCase());
+			// Two different reasons, one consequence: a person with a privacy removal
+			// on record renders noindex, and a person whose owner deleted their
+			// profile gets a 410 from gp-api and so has no page at all. gp-api
+			// collapses both into this feed because the sitemap only cares about the
+			// consequence.
+			const unlistedPersonIds = new Set<string>();
+			for (const row of unlisted) {
+				if (row.personId) unlistedPersonIds.add(row.personId.toLowerCase());
 			}
 
-			return { updatedByPersonId, removedPersonIds, persons };
+			return { updatedByPersonId, unlistedPersonIds, persons };
 		})();
 		cachedPeopleSitemapData = load;
 		// Settle via two-arg `then`, not `finally`: the upstream reads throw now, and
@@ -841,12 +846,14 @@ async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
  * election-api owns the authoritative, unique `Person.slug` that is the
  * canonical URL, so a person with no spine row has no page and is skipped.
  * gp-api contributes the two per-person facts it alone knows: which people have
- * published (worth a higher priority and a real lastmod) and which have
- * requested removal.
+ * published (worth a higher priority and a real lastmod) and which must not be
+ * listed at all.
  *
- * Removed people are dropped rather than downranked. Their page renders `noindex`
- * by design, so listing it would both contradict the page's own directive and
- * point crawlers at someone who asked to be left alone.
+ * Unlisted people are dropped rather than downranked, because in both cases the
+ * URL is one we should not be handing to a crawler: a privacy removal renders
+ * `noindex`, so advertising it contradicts the page's own directive and points
+ * crawlers at someone who asked to be left alone, and an owner-deleted profile
+ * has no page to reach at all — gp-api answers 410 and the route 404s.
  *
  * Upstream fetches are shared across shards via getCachedPeopleSitemapData.
  */
@@ -854,13 +861,13 @@ export async function fetchPeopleSitemapEntries(
 	baseUrl: string,
 	shard?: string,
 ): Promise<MetadataRoute.Sitemap> {
-	const { updatedByPersonId, removedPersonIds, persons } = await getCachedPeopleSitemapData();
+	const { updatedByPersonId, unlistedPersonIds, persons } = await getCachedPeopleSitemapData();
 
 	const entries: MetadataRoute.Sitemap = [];
 	for (const p of persons) {
 		if (!p.id || !p.slug) continue;
 		const personId = p.id.toLowerCase();
-		if (removedPersonIds.has(personId)) continue;
+		if (unlistedPersonIds.has(personId)) continue;
 		// When a shard is requested, only emit people whose slug falls in it. The
 		// canonical URL appends the 8-hex id suffix but shares the base's first
 		// char, so sharding on the base is equivalent.

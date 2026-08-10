@@ -68,8 +68,8 @@ describe('fetchPeopleSitemapEntries', () => {
 		candidacies?: Record<string, string[]>;
 		officeholders?: Record<string, string[]>;
 		published?: { personId: string; updatedAt?: string }[];
-		removed?: { personId: string }[];
-		removedStatus?: number;
+		unlisted?: { personId: string }[];
+		unlistedStatus?: number;
 		failPersonsForState?: string;
 	}): string[] {
 		const urls: string[] = [];
@@ -86,9 +86,9 @@ describe('fetchPeopleSitemapEntries', () => {
 			if (url.pathname.endsWith('/public-person-profiles/published')) {
 				return json(opts.published ?? []);
 			}
-			if (url.pathname.endsWith('/public-person-profiles/removed')) {
-				if (opts.removedStatus) return new Response('nope', { status: opts.removedStatus });
-				return json(opts.removed ?? []);
+			if (url.pathname.endsWith('/public-person-profiles/unlisted')) {
+				if (opts.unlistedStatus) return new Response('nope', { status: opts.unlistedStatus });
+				return json(opts.unlisted ?? []);
 			}
 			if (url.pathname.endsWith('/v1/persons')) {
 				if (
@@ -202,15 +202,16 @@ describe('fetchPeopleSitemapEntries', () => {
 		expect(decodeURIComponent(idCalls[0]!)).toContain(`${bobId},${carolId}`);
 	});
 
-	// A removed person's page renders noindex, so advertising it would contradict
-	// the page and point crawlers at someone who asked to be left alone.
-	test('omits people who requested removal', async () => {
+	// gp-api folds two cases into this feed: a privacy removal (page renders
+	// noindex) and an owner-deleted profile (gp-api 410s, so the page 404s). The
+	// band cares only that neither URL should reach a crawler, so it is one set.
+	test('omits people gp-api reports as unlistable', async () => {
 		mockUpstream({
 			persons: [
 				{ id: aliceId, slug: 'alice-smith', state: 'WY' },
 				{ id: bobId, slug: 'bob-jones', state: 'WY' },
 			],
-			removed: [{ personId: bobId }],
+			unlisted: [{ personId: bobId }],
 		});
 
 		const [aShard, bShard] = await Promise.all([
@@ -222,10 +223,10 @@ describe('fetchPeopleSitemapEntries', () => {
 		expect(bShard).toEqual([]);
 	});
 
-	test('matches removal ids case-insensitively, since the id is a uuid from another service', async () => {
+	test('matches unlisted ids case-insensitively, since the id is a uuid from another service', async () => {
 		mockUpstream({
 			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
-			removed: [{ personId: aliceId.toUpperCase() }],
+			unlisted: [{ personId: aliceId.toUpperCase() }],
 		});
 
 		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
@@ -298,10 +299,10 @@ describe('fetchPeopleSitemapEntries', () => {
 
 	// A rolling deploy where gp-api has not yet shipped the endpoint 404s here.
 	// Failing open would advertise every person who asked to be delisted.
-	test('an unavailable removal list rejects rather than listing removed people', async () => {
+	test('an unavailable exclusion list rejects rather than listing everyone', async () => {
 		mockUpstream({
 			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
-			removedStatus: 404,
+			unlistedStatus: 404,
 		});
 
 		await expect(fetchPeopleSitemapEntries(base, 'a')).rejects.toThrow();
@@ -312,7 +313,7 @@ describe('fetchPeopleSitemapEntries', () => {
 	test('recovers on the next call after a failure', async () => {
 		mockUpstream({
 			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
-			removedStatus: 503,
+			unlistedStatus: 503,
 		});
 		await expect(fetchPeopleSitemapEntries(base, 'a')).rejects.toThrow();
 

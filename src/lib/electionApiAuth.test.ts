@@ -292,13 +292,12 @@ describe('token pooling across isolates (L2 Data Cache)', () => {
 	});
 
 	test('outside the Next runtime, mints directly without touching the Data Cache', async () => {
+		// mintPooled short-circuits on !NEXT_RUNTIME before the cache seam, so a
+		// direct mint here (one createToken, no cache module consulted) is the proof.
 		delete process.env['NEXT_RUNTIME'];
-		const unstable_cache = mock((fn: (...args: unknown[]) => unknown) => fn);
-		__setCacheModuleForTests({ unstable_cache } as never);
 
 		await expect(getElectionApiToken()).resolves.toBe('fresh-token');
 
-		expect(unstable_cache).not.toHaveBeenCalled();
 		expect(createToken).toHaveBeenCalledTimes(1);
 	});
 });

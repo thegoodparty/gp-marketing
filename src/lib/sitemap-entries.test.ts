@@ -1,4 +1,4 @@
-import { afterAll, describe, expect, test } from 'bun:test';
+import { afterAll, afterEach, describe, expect, test } from 'bun:test';
 import {
 	buildCountyLookups,
 	buildRaceEntries,
@@ -30,126 +30,256 @@ describe('people sitemap shards', () => {
 		expect(peopleShardForSlug('')).toBe('other');
 	});
 
-	test('there are 27 shards (a–z + other) starting after the candidate band', () => {
+	// The candidate band used to sit between the state elections and the people
+	// band. Retiring it moved the people band down by one state-band's width; if
+	// this drifts from src/app/sitemap.ts's arithmetic the shards silently serve
+	// each other's content.
+	test('there are 27 shards (a–z + other) starting straight after the state band', () => {
 		expect(PEOPLE_SITEMAP_SHARDS).toHaveLength(27);
 		expect(PEOPLE_SITEMAP_SHARDS[26]).toBe('other');
-		expect(PEOPLE_SITEMAP_BAND_START).toBe(1 + 2 * US_STATE_CODES.length);
+		expect(PEOPLE_SITEMAP_BAND_START).toBe(1 + US_STATE_CODES.length);
 	});
 
-	test('getSitemapIds includes main + 2 state bands + the people band, contiguously', () => {
+	test('getSitemapIds includes main + the state band + the people band, contiguously', () => {
 		const ids = getSitemapIds().map((i) => i.id);
-		const expectedLength = 1 + 2 * US_STATE_CODES.length + PEOPLE_SITEMAP_SHARDS.length;
+		const expectedLength = 1 + US_STATE_CODES.length + PEOPLE_SITEMAP_SHARDS.length;
 		expect(ids).toHaveLength(expectedLength);
-		// The set is a contiguous 0..last with no gaps or dupes (ids are emitted
-		// interleaved by band, so compare the sorted set).
+		// The set is a contiguous 0..last with no gaps or dupes.
 		expect([...ids].sort((a, b) => a - b)).toEqual([...Array(expectedLength).keys()]);
 	});
 });
 
-describe('fetchPeopleSitemapEntries cache', () => {
+describe('fetchPeopleSitemapEntries', () => {
 	const originalFetch = globalThis.fetch;
+	const base = 'https://goodparty.org';
 	const aliceId = 'aaaaaaaa-1111-2222-3333-444444444444';
 	const bobId = 'bbbbbbbb-1111-2222-3333-444444444444';
-	const base = 'https://goodparty.org';
+	const carolId = 'cccccccc-1111-2222-3333-444444444444';
+
+	type MockPerson = { id: string; slug: string; state: string | null };
+
+	/**
+	 * Stands in for the four upstream feeds the band reads. `state: null` models
+	 * the ~8% of the real table that no `?state=` sweep can reach, which is the
+	 * whole reason the candidacy/officeholder union exists.
+	 */
+	function mockUpstream(opts: {
+		persons: MockPerson[];
+		candidacies?: Record<string, string[]>;
+		officeholders?: Record<string, string[]>;
+		published?: { personId: string; updatedAt?: string }[];
+		removed?: { personId: string }[];
+	}): string[] {
+		const urls: string[] = [];
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const raw = String(input);
+			urls.push(raw);
+			const url = new URL(raw);
+			const json = (body: unknown) =>
+				new Response(JSON.stringify(body), {
+					status: 200,
+					headers: { 'content-type': 'application/json' },
+				});
+
+			if (url.pathname.endsWith('/public-person-profiles/published')) {
+				return json(opts.published ?? []);
+			}
+			if (url.pathname.endsWith('/public-person-profiles/removed')) {
+				return json(opts.removed ?? []);
+			}
+			if (url.pathname.endsWith('/v1/persons')) {
+				const ids = url.searchParams.get('ids');
+				const matches = ids
+					? ((): MockPerson[] => {
+							const want = new Set(ids.split(','));
+							return opts.persons.filter((p) => want.has(p.id));
+						})()
+					: opts.persons.filter((p) => p.state === url.searchParams.get('state'));
+				return json(matches.map(({ id, slug }) => ({ id, slug })));
+			}
+			if (url.pathname.endsWith('/v1/candidacies')) {
+				const state = url.searchParams.get('state') ?? '';
+				return json((opts.candidacies?.[state] ?? []).map((personId) => ({ personId })));
+			}
+			if (url.pathname.endsWith('/v1/officeholders')) {
+				const state = url.searchParams.get('state') ?? '';
+				return json((opts.officeholders?.[state] ?? []).map((personId) => ({ personId })));
+			}
+			return json([]);
+		}) as typeof fetch;
+		return urls;
+	}
+
+	afterEach(() => {
+		globalThis.fetch = originalFetch;
+		clearPeopleSitemapCache();
+	});
 
 	afterAll(() => {
 		globalThis.fetch = originalFetch;
 		clearPeopleSitemapCache();
 	});
 
-	test('empty upstream is not poisoned; concurrent shards then share one warm fetch', async () => {
-		clearPeopleSitemapCache();
-		const urls: string[] = [];
-		let serveEmpty = true;
-		globalThis.fetch = (async (input: RequestInfo | URL) => {
-			const url = String(input);
-			urls.push(url);
-			if (url.includes('public-person-profiles/published')) {
-				const body = serveEmpty
-					? []
-					: [
-							{ personId: aliceId, updatedAt: '2026-01-15T00:00:00.000Z' },
-							{ personId: bobId, updatedAt: '2026-02-01T00:00:00.000Z' },
-						];
-				return new Response(JSON.stringify(body), {
-					status: 200,
-					headers: { 'content-type': 'application/json' },
-				});
-			}
-			if (url.includes('/v1/persons')) {
-				return new Response(
-					JSON.stringify([
-						{ id: aliceId, slug: 'alice-smith' },
-						{ id: bobId, slug: 'bob-jones' },
-					]),
-					{ status: 200, headers: { 'content-type': 'application/json' } },
-				);
-			}
-			return new Response(JSON.stringify([]), { status: 200 });
-		}) as typeof fetch;
+	// The band's whole purpose after the /candidate retirement: an unclaimed
+	// programmatic page is the destination now, so it has to be listed even
+	// though gp-api knows nothing about it.
+	test('lists people who have never been claimed', async () => {
+		mockUpstream({ persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }] });
 
-		const empty = await fetchPeopleSitemapEntries(base, 'a');
-		expect(empty).toEqual([]);
-		expect(urls.filter((u) => u.includes('public-person-profiles/published'))).toHaveLength(1);
-		expect(urls.filter((u) => u.includes('/v1/persons'))).toHaveLength(0);
+		const entries = await fetchPeopleSitemapEntries(base, 'a');
 
-		serveEmpty = false;
-		urls.length = 0;
+		expect(entries.map((e) => e.url)).toEqual([`${base}/people/alice-smith-aaaaaaaa`]);
+	});
+
+	test('recovers people no state sweep can see, via the candidacy and officeholder feeds', async () => {
+		mockUpstream({
+			persons: [
+				{ id: aliceId, slug: 'alice-smith', state: 'WY' },
+				{ id: bobId, slug: 'bob-jones', state: null },
+				{ id: carolId, slug: 'carol-diaz', state: null },
+			],
+			candidacies: { WY: [bobId] },
+			officeholders: { MT: [carolId] },
+		});
+
+		const urls = await Promise.all([
+			fetchPeopleSitemapEntries(base, 'a'),
+			fetchPeopleSitemapEntries(base, 'b'),
+			fetchPeopleSitemapEntries(base, 'c'),
+		]);
+
+		expect(urls.flat().map((e) => e.url)).toEqual([
+			`${base}/people/alice-smith-aaaaaaaa`,
+			`${base}/people/bob-jones-bbbbbbbb`,
+			`${base}/people/carol-diaz-cccccccc`,
+		]);
+	});
+
+	// election-api advertises a 500-id cap on `?ids=`, but the gateway 414s on the
+	// ~19.5KB query string that many uuids produce, so the real ceiling is the
+	// request line, not the documented count. Batching to the advertised cap
+	// silently dropped every recovered person until this was measured against the
+	// live API.
+	test('keeps each ids lookup under the request-line limit', async () => {
+		const many = Array.from(
+			{ length: 400 },
+			(_, i) => `${i.toString(16).padStart(8, '0')}-1111-2222-3333-444444444444`,
+		);
+		const urls = mockUpstream({
+			persons: many.map((id) => ({ id, slug: `zed-${id.slice(0, 8)}`, state: null })),
+			candidacies: { WY: many },
+		});
+
+		const entries = await fetchPeopleSitemapEntries(base, 'z');
+
+		expect(entries).toHaveLength(many.length);
+		const idCalls = urls.filter((u) => u.includes('ids='));
+		expect(idCalls.length).toBeGreaterThan(1);
+		for (const url of idCalls) expect(url.length).toBeLessThan(8000);
+	});
+	test('resolves the recovered ids through the batch filter, not one call each', async () => {
+		const urls = mockUpstream({
+			persons: [
+				{ id: bobId, slug: 'bob-jones', state: null },
+				{ id: carolId, slug: 'carol-diaz', state: null },
+			],
+			candidacies: { WY: [bobId, carolId] },
+		});
+
+		await fetchPeopleSitemapEntries(base, 'b');
+
+		const idCalls = urls.filter((u) => u.includes('ids='));
+		expect(idCalls).toHaveLength(1);
+		expect(decodeURIComponent(idCalls[0]!)).toContain(`${bobId},${carolId}`);
+	});
+
+	// A removed person's page renders noindex, so advertising it would contradict
+	// the page and point crawlers at someone who asked to be left alone.
+	test('omits people who requested removal', async () => {
+		mockUpstream({
+			persons: [
+				{ id: aliceId, slug: 'alice-smith', state: 'WY' },
+				{ id: bobId, slug: 'bob-jones', state: 'WY' },
+			],
+			removed: [{ personId: bobId }],
+		});
 
 		const [aShard, bShard] = await Promise.all([
 			fetchPeopleSitemapEntries(base, 'a'),
 			fetchPeopleSitemapEntries(base, 'b'),
 		]);
 
-		expect(urls.filter((u) => u.includes('public-person-profiles/published'))).toHaveLength(1);
-		expect(urls.filter((u) => u.includes('/v1/persons'))).toHaveLength(1);
 		expect(aShard.map((e) => e.url)).toEqual([`${base}/people/alice-smith-aaaaaaaa`]);
-		expect(bShard.map((e) => e.url)).toEqual([`${base}/people/bob-jones-bbbbbbbb`]);
+		expect(bShard).toEqual([]);
 	});
 
-	test('empty election-api persons is not poisoned while published ids exist', async () => {
+	test('matches removal ids case-insensitively, since the id is a uuid from another service', async () => {
+		mockUpstream({
+			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
+			removed: [{ personId: aliceId.toUpperCase() }],
+		});
+
+		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+	});
+
+	test('a claimed page carries its publish date and outranks an unclaimed one', async () => {
+		mockUpstream({
+			persons: [
+				{ id: aliceId, slug: 'alice-smith', state: 'WY' },
+				{ id: bobId, slug: 'bob-jones', state: 'WY' },
+			],
+			published: [{ personId: aliceId, updatedAt: '2026-01-15T00:00:00.000Z' }],
+		});
+
+		const [claimed] = await fetchPeopleSitemapEntries(base, 'a');
+		const [unclaimed] = await fetchPeopleSitemapEntries(base, 'b');
+
+		expect(claimed).toMatchObject({ priority: 0.7, lastModified: '2026-01-15' });
+		expect(unclaimed).toMatchObject({ priority: 0.5 });
+		// Not merely absent-ish: stamping today on a page nobody has touched would
+		// tell crawlers the entire unclaimed corpus changes every rebuild.
+		expect(unclaimed).not.toHaveProperty('lastModified');
+	});
+
+	test('concurrent shards share one sweep instead of each re-walking the table', async () => {
+		const urls = mockUpstream({
+			persons: [
+				{ id: aliceId, slug: 'alice-smith', state: 'WY' },
+				{ id: bobId, slug: 'bob-jones', state: 'WY' },
+			],
+		});
+
+		await Promise.all([
+			fetchPeopleSitemapEntries(base, 'a'),
+			fetchPeopleSitemapEntries(base, 'b'),
+		]);
+
+		expect(urls.filter((u) => u.includes('public-person-profiles/published'))).toHaveLength(1);
+		expect(urls.filter((u) => u.includes('state=WY') && u.includes('/v1/persons'))).toHaveLength(
+			1,
+		);
+	});
+
+	// The in-flight promise clears once it settles, so an upstream that was empty
+	// (or failing) at build time must not pin the band empty for the process.
+	test('an empty sweep is not cached for the life of the process', async () => {
+		mockUpstream({ persons: [] });
+		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+
 		clearPeopleSitemapCache();
-		const urls: string[] = [];
-		let servePersons = false;
-		globalThis.fetch = (async (input: RequestInfo | URL) => {
-			const url = String(input);
-			urls.push(url);
-			if (url.includes('public-person-profiles/published')) {
-				return new Response(
-					JSON.stringify([
-						{ personId: aliceId, updatedAt: '2026-01-15T00:00:00.000Z' },
-						{ personId: bobId, updatedAt: '2026-02-01T00:00:00.000Z' },
-					]),
-					{ status: 200, headers: { 'content-type': 'application/json' } },
-				);
-			}
-			if (url.includes('/v1/persons')) {
-				const body = servePersons
-					? [
-							{ id: aliceId, slug: 'alice-smith' },
-							{ id: bobId, slug: 'bob-jones' },
-						]
-					: [];
-				return new Response(JSON.stringify(body), {
-					status: 200,
-					headers: { 'content-type': 'application/json' },
-				});
-			}
-			return new Response(JSON.stringify([]), { status: 200 });
-		}) as typeof fetch;
+		mockUpstream({ persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }] });
 
-		const empty = await fetchPeopleSitemapEntries(base, 'a');
-		expect(empty).toEqual([]);
-		expect(urls.filter((u) => u.includes('public-person-profiles/published'))).toHaveLength(1);
-		expect(urls.filter((u) => u.includes('/v1/persons'))).toHaveLength(1);
+		expect((await fetchPeopleSitemapEntries(base, 'a')).map((e) => e.url)).toEqual([
+			`${base}/people/alice-smith-aaaaaaaa`,
+		]);
+	});
 
-		servePersons = true;
-		urls.length = 0;
+	test('skips a person with no slug, since there is no URL to point at', async () => {
+		mockUpstream({
+			persons: [{ id: aliceId, slug: '', state: 'WY' }],
+		});
 
-		const recovered = await fetchPeopleSitemapEntries(base, 'a');
-		expect(urls.filter((u) => u.includes('public-person-profiles/published'))).toHaveLength(1);
-		expect(urls.filter((u) => u.includes('/v1/persons'))).toHaveLength(1);
-		expect(recovered.map((e) => e.url)).toEqual([`${base}/people/alice-smith-aaaaaaaa`]);
+		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
 	});
 });
 
@@ -162,7 +292,7 @@ describe('chunkArray', () => {
 		expect(chunkArray([], 500)).toEqual([]);
 	});
 
-	test('splits into batches of at most `size` (people sitemap 500-id cap)', () => {
+	test('splits into batches of at most `size` (generic batching helper)', () => {
 		const ids = Array.from({ length: 1201 }, (_, i) => i);
 		const batches = chunkArray(ids, 500);
 		expect(batches.map((b) => b.length)).toEqual([500, 500, 201]);

@@ -3,7 +3,6 @@ import { getBaseUrl } from '~/lib/url';
 import {
 	fetchMainSitemapEntries,
 	fetchStateElectionSitemapEntries,
-	fetchCandidateSitemapEntries,
 	fetchPeopleSitemapEntries,
 	getSitemapIds,
 	PEOPLE_SITEMAP_BAND_START,
@@ -25,11 +24,6 @@ export default async function sitemap({ id }: { id: number }): Promise<MetadataR
 	if (n >= 1 && n <= US_STATE_CODES.length) {
 		const code = US_STATE_CODES[n - 1];
 		if (code) return fetchStateElectionSitemapEntries(code, base);
-	}
-	const candidateIdx = n - US_STATE_CODES.length - 1;
-	if (candidateIdx >= 0 && candidateIdx < US_STATE_CODES.length) {
-		const code = US_STATE_CODES[candidateIdx];
-		if (code) return fetchCandidateSitemapEntries(code, base);
 	}
 	const peopleIdx = n - PEOPLE_SITEMAP_BAND_START;
 	if (peopleIdx >= 0 && peopleIdx < PEOPLE_SITEMAP_SHARDS.length) {

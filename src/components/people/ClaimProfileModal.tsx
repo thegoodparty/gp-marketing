@@ -31,7 +31,12 @@ const NOTIFY_FORM_ID = 'person-claim-notify';
 
 type NotifyValues = { firstname: string; email: string; marketingConsent: boolean };
 
-function NotifyForm({ personId, displayName }: { personId: string; displayName: string }) {
+/**
+ * The "Not [Name]?" form in the dialog body. Exported so the HubSpot id contract
+ * can be asserted directly (see claimFormIds.test.tsx) without standing up
+ * Radix's dialog, whose event delegation does not survive JSDOM.
+ */
+export function NotifyForm({ personId, displayName }: { personId: string; displayName: string }) {
 	const [isSuccess, setIsSuccess] = useState(false);
 	const {
 		register,

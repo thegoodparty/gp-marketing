@@ -14,8 +14,11 @@ import { createRoot, type Root } from 'react-dom/client';
  * marketing workflow was attached to the old one. Nothing throws when that
  * happens, on the site or in HubSpot, so CI is the only place it can be caught.
  *
- * Analytics is deliberately left unmocked: these cases only mount and open, never
- * submit or click through, so no tracking call is reached.
+ * These mount the form components directly rather than driving the dialog open.
+ * Radix's click delegation does not fire under JSDOM once this file shares a
+ * process with the rest of the suite (which is how CI runs it, since bun 1.2.23
+ * ignores the `--path-ignore-patterns` split between the logic and DOM suites).
+ * The id lives on the form element either way, so the dialog buys nothing here.
  */
 
 const DOM_GLOBALS = [
@@ -51,9 +54,8 @@ beforeEach(() => {
 	globalThis.navigator = window.navigator;
 	globalThis.getComputedStyle = window.getComputedStyle.bind(window);
 
-	// These have to come from the JSDOM realm rather than Bun's natives. Radix's
-	// dialog constructs events and walks the tree using the *global* constructors,
-	// and JSDOM rejects foreign instances ("parameter 1 is not of type 'Event'").
+	// These have to come from the JSDOM realm rather than Bun's natives, which
+	// JSDOM rejects as foreign ("parameter 1 is not of type 'Event'").
 	for (const name of DOM_GLOBALS) {
 		(globalThis as Record<string, unknown>)[name] = (window as unknown as Record<string, unknown>)[name];
 	}
@@ -62,8 +64,6 @@ beforeEach(() => {
 });
 
 afterEach(async () => {
-	// Unmount inside act so the dialog's dismissable-layer teardown settles here
-	// rather than warning after the test has finished.
 	if (root) {
 		await act(async () => {
 			root.unmount();
@@ -82,17 +82,14 @@ async function render(element: React.ReactElement) {
 	});
 }
 
+const bandProps = { personId: 'person-1', displayName: 'Example Person', isRunning: true };
+const notifyProps = { personId: 'person-1', displayName: 'Example Person' };
+
 describe('claim form HubSpot ids', () => {
 	test('PersonClaimCTABand renders form#person-claim-owner', async () => {
 		const { PersonClaimCTABand } = await import('./PersonClaimCTABand');
 
-		await render(
-			React.createElement(PersonClaimCTABand, {
-				personId: 'person-1',
-				displayName: 'Example Person',
-				isRunning: true,
-			}),
-		);
+		await render(React.createElement(PersonClaimCTABand, bandProps));
 
 		const form = document.querySelector('form#person-claim-owner');
 		expect(form).not.toBeNull();
@@ -101,30 +98,10 @@ describe('claim form HubSpot ids', () => {
 		expect(form?.querySelector('input[name="email"]')).not.toBeNull();
 	});
 
-	test('ClaimProfileModal renders form#person-claim-notify once opened', async () => {
-		const { ClaimProfileModal } = await import('./ClaimProfileModal');
+	test('the claim dialog notify form renders form#person-claim-notify', async () => {
+		const { NotifyForm } = await import('./ClaimProfileModal');
 
-		await render(
-			React.createElement(ClaimProfileModal, {
-				personId: 'person-1',
-				displayName: 'Example Person',
-				persona: 'candidate',
-				variant: 'voter-card',
-			}),
-		);
-
-		// The notify form only exists once the dialog is open.
-		expect(document.querySelector('form#person-claim-notify')).toBeNull();
-
-		const trigger = [...document.querySelectorAll('button')].find(b => b.textContent?.includes('Notify'));
-		expect(trigger).toBeDefined();
-
-		await act(async () => {
-			trigger!.click();
-			await new Promise<void>(resolve => {
-				window.setTimeout(resolve, 0);
-			});
-		});
+		await render(React.createElement(NotifyForm, notifyProps));
 
 		const form = document.querySelector('form#person-claim-notify');
 		expect(form).not.toBeNull();
@@ -133,39 +110,22 @@ describe('claim form HubSpot ids', () => {
 	});
 
 	test('the two ids differ, so HubSpot files owner claims apart from visitor nudges', async () => {
-		const [{ PersonClaimCTABand }, { ClaimProfileModal }] = await Promise.all([
+		const [{ PersonClaimCTABand }, { NotifyForm }] = await Promise.all([
 			import('./PersonClaimCTABand'),
 			import('./ClaimProfileModal'),
 		]);
 
+		// Both are reachable on an unclaimed empowered profile. Sharing an id would
+		// collapse the two intents into one HubSpot form, besides being invalid markup.
 		await render(
 			React.createElement(
 				React.Fragment,
 				null,
-				React.createElement(PersonClaimCTABand, {
-					personId: 'person-1',
-					displayName: 'Example Person',
-					isRunning: true,
-				}),
-				React.createElement(ClaimProfileModal, {
-					personId: 'person-1',
-					displayName: 'Example Person',
-					persona: 'candidate',
-					variant: 'voter-card',
-				}),
+				React.createElement(PersonClaimCTABand, bandProps),
+				React.createElement(NotifyForm, notifyProps),
 			),
 		);
 
-		const trigger = [...document.querySelectorAll('button')].find(b => b.textContent?.includes('Notify'));
-		await act(async () => {
-			trigger!.click();
-			await new Promise<void>(resolve => {
-				window.setTimeout(resolve, 0);
-			});
-		});
-
-		// Both forms coexist on an unclaimed empowered profile; duplicate ids would
-		// collapse the two intents into one HubSpot form (and be invalid markup).
 		const ids = [...document.querySelectorAll('form')].map(f => f.id);
 		expect(ids).toContain('person-claim-owner');
 		expect(ids).toContain('person-claim-notify');

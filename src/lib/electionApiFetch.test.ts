@@ -20,9 +20,12 @@ let fetchCalls: number;
 beforeEach(() => {
 	resetNextCacheMock();
 	fetchCalls = 0;
-	// Fail-soft auth path: unset the static token so run() sends no bearer.
-	delete process.env['ELECTION_API_M2M_TOKEN'];
-	__resetElectionApiAuthForTests({ warnedMissingToken: true });
+	// Authenticated by default — this is the representative production path: the
+	// static token is present, so run() attaches the bearer. Tests that assert cache
+	// behavior are header-agnostic; the forwarding itself is asserted explicitly in
+	// the "forwards the static M2M token" test below.
+	process.env['ELECTION_API_M2M_TOKEN'] = 'test-m2m-token';
+	__resetElectionApiAuthForTests();
 	globalThis.fetch = (async () => {
 		fetchCalls += 1;
 		return new Response(JSON.stringify(OK_BODY), {

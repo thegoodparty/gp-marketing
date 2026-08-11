@@ -273,7 +273,10 @@ async function main(): Promise<void> {
 }
 
 main().catch(err => {
+	// Normalise before redacting: a non-Error throw would make `.message`
+	// undefined and redact() throw, swallowing the failure diagnosis.
 	// redact: a Vercel validation error can embed the submitted token value.
-	console.error(`Rotation failed: ${redact((err as Error).message)}`);
+	const message = err instanceof Error ? err.message : String(err);
+	console.error(`Rotation failed: ${redact(message)}`);
 	process.exit(1);
 });

@@ -212,7 +212,8 @@ async function main(): Promise<void> {
 			headers: { Authorization: `Bearer ${newToken}` },
 		});
 	} catch (err) {
-		console.warn(`  auth probe inconclusive — transport error (non-fatal): ${redact((err as Error).message)}`);
+		const probeErrMsg = err instanceof Error ? err.message : String(err);
+		console.warn(`  auth probe inconclusive — transport error (non-fatal): ${redact(probeErrMsg)}`);
 	}
 	if (probeRes && (probeRes.status === 401 || probeRes.status === 403)) {
 		throw new Error(`election-api rejected the freshly minted token (HTTP ${probeRes.status}); aborting before rollout`);

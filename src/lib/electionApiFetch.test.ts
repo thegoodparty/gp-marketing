@@ -12,7 +12,7 @@ const ELECTION_URL = 'https://election-api.goodparty.org/v1/positions/1';
 const OK_BODY = { hello: 'world' };
 
 const originalFetch = globalThis.fetch;
-const ORIGINAL_MACHINE_SECRET = process.env['GP_MARKETING_MACHINE_SECRET'];
+const ORIGINAL_M2M_TOKEN = process.env['ELECTION_API_M2M_TOKEN'];
 const ORIGINAL_RUNTIME = process.env['NEXT_RUNTIME'];
 
 let fetchCalls: number;
@@ -20,9 +20,9 @@ let fetchCalls: number;
 beforeEach(() => {
 	resetNextCacheMock();
 	fetchCalls = 0;
-	// Fail-soft auth path: unset secret so run() never touches Clerk.
-	delete process.env['GP_MARKETING_MACHINE_SECRET'];
-	__resetElectionApiAuthForTests({ warnedMissingSecret: true });
+	// Fail-soft auth path: unset the static token so run() sends no bearer.
+	delete process.env['ELECTION_API_M2M_TOKEN'];
+	__resetElectionApiAuthForTests({ warnedMissingToken: true });
 	globalThis.fetch = (async () => {
 		fetchCalls += 1;
 		return new Response(JSON.stringify(OK_BODY), {
@@ -33,10 +33,10 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-	if (ORIGINAL_MACHINE_SECRET === undefined) {
-		delete process.env['GP_MARKETING_MACHINE_SECRET'];
+	if (ORIGINAL_M2M_TOKEN === undefined) {
+		delete process.env['ELECTION_API_M2M_TOKEN'];
 	} else {
-		process.env['GP_MARKETING_MACHINE_SECRET'] = ORIGINAL_MACHINE_SECRET;
+		process.env['ELECTION_API_M2M_TOKEN'] = ORIGINAL_M2M_TOKEN;
 	}
 	if (ORIGINAL_RUNTIME === undefined) {
 		delete process.env['NEXT_RUNTIME'];

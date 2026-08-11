@@ -236,6 +236,23 @@ async function main(): Promise<void> {
 	const existing = await listTokenEnvVars(projectId, vercelToken, teamId);
 	console.log(`Found ${existing.length} existing ${TOKEN_ENV_KEY} entrie(s) in Vercel.`);
 
+	// Refuse to proceed on a manually-created entry that spans targets needing
+	// different types (e.g. one record covering both production and development).
+	// We deliberately do NOT auto-split it: that would require DELETE-then-POST on a
+	// live production credential, and a failure between the two calls would leave
+	// production with no token. Fail loudly before any write so an operator can
+	// split it by hand. Our provisioning creates one single-typed entry per
+	// environment, so this never triggers in practice.
+	for (const env of existing) {
+		const requiredTypes = new Set(env.target.map(t => TARGET_TYPES[t]).filter(Boolean));
+		if (requiredTypes.size > 1) {
+			throw new Error(
+				`Env entry ${env.id} spans targets needing different types (${[...requiredTypes].join(', ')}); ` +
+					`split it into one entry per target in Vercel and re-run — refusing to delete a live credential to fix this automatically`,
+			);
+		}
+	}
+
 	// Update every existing entry that holds this key (one entry may cover several
 	// environments), then create entries for any target that isn't covered yet.
 	for (const env of existing) {

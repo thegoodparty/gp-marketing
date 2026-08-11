@@ -58,13 +58,6 @@ beforeEach(() => {
 		(globalThis as Record<string, unknown>)[name] = (window as unknown as Record<string, unknown>)[name];
 	}
 
-	// Not implemented by JSDOM, and Radix's scroll lock expects it.
-	globalThis.ResizeObserver = class {
-		observe() {}
-		unobserve() {}
-		disconnect() {}
-	} as unknown as typeof ResizeObserver;
-
 	(globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 });
 

@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, mock, setSystemTime, spyOn, te
 
 import {
 	__resetElectionApiAuthForTests,
+	__setCacheModuleForTests,
 	__setCreateTokenForTests,
 	electionApiAuthHeaders,
 	getElectionApiToken,
@@ -176,8 +177,8 @@ describe('getElectionApiToken', () => {
 		// Reproduces the prod bug: Clerk's `expiration` is milliseconds at runtime,
 		// and the old code did `expiration * 1000`, pushing the cache window ~56k
 		// years out so it never renewed and replayed one JWT long past its real
-		// `exp`. The fix anchors the window to the 600s TTL, so renewal must still
-		// happen after ~600s regardless of what `expiration` reports.
+		// `exp`. The fix anchors the window to the 3600s TTL, so renewal must still
+		// happen after ~3600s regardless of what `expiration` reports.
 		createToken.mockImplementation(async () => ({
 			token: 'ttl-anchored',
 			expiration: Date.now() * 1000, // ms-shaped; catastrophic if re-scaled
@@ -188,13 +189,116 @@ describe('getElectionApiToken', () => {
 			await expect(getElectionApiToken()).resolves.toBe('ttl-anchored');
 			expect(createToken).toHaveBeenCalledTimes(1);
 
-			// Just past the 600s TTL: the token must be re-minted, not replayed.
-			setSystemTime(start + 601_000);
+			// Just past the 3600s TTL: the token must be re-minted, not replayed.
+			setSystemTime(start + 3_600_001);
 			await expect(getElectionApiToken()).resolves.toBe('ttl-anchored');
 			expect(createToken).toHaveBeenCalledTimes(2);
 		} finally {
 			setSystemTime();
 		}
+	});
+
+	test('reuses the cached token across the full TTL, not just 10 minutes', async () => {
+		// Guards the #1 change (TTL 600 -> 3600): a token minted now must still be
+		// served ~50 minutes later without re-minting, which is what collapses the
+		// fleet-wide mint volume that was tripping Clerk's M2M quota.
+		const start = Date.now();
+		try {
+			setSystemTime(start);
+			await expect(getElectionApiToken()).resolves.toBe('fresh-token');
+			expect(createToken).toHaveBeenCalledTimes(1);
+
+			// 50 minutes in — old 600s TTL would have re-minted ~5 times by now.
+			setSystemTime(start + 50 * 60_000);
+			await expect(getElectionApiToken()).resolves.toBe('fresh-token');
+			expect(createToken).toHaveBeenCalledTimes(1);
+		} finally {
+			setSystemTime();
+		}
+	});
+
+	test('mint failures back off exponentially, so a Clerk outage is not a retry storm', async () => {
+		// #3: cooldown escalates 30s -> 60s (jitter only shortens by <=1/4, so the
+		// first window is <=30s and the second is >=45s — a clean, non-flaky gap).
+		createToken.mockImplementation(async () => {
+			throw new Error('Clerk throttled');
+		});
+		const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
+		const start = Date.now();
+		try {
+			setSystemTime(start);
+			// Failure #1 -> cooldown ends within (start, start+30s].
+			await expect(getElectionApiToken()).resolves.toBeNull();
+			expect(createToken).toHaveBeenCalledTimes(1);
+
+			// Still inside the first cooldown: no new Clerk call.
+			setSystemTime(start + 20_000);
+			await expect(getElectionApiToken()).resolves.toBeNull();
+			expect(createToken).toHaveBeenCalledTimes(1);
+
+			// Past the max first cooldown (30s): failure #2 escalates toward ~60s.
+			setSystemTime(start + 31_000);
+			await expect(getElectionApiToken()).resolves.toBeNull();
+			expect(createToken).toHaveBeenCalledTimes(2);
+
+			// 40s after failure #2: a flat 30s policy would have retried, but the
+			// escalated (>=45s) window must still suppress the Clerk call.
+			setSystemTime(start + 71_000);
+			await expect(getElectionApiToken()).resolves.toBeNull();
+			expect(createToken).toHaveBeenCalledTimes(2);
+		} finally {
+			setSystemTime();
+			errorSpy.mockRestore();
+		}
+	});
+});
+
+describe('token pooling across isolates (L2 Data Cache)', () => {
+	const ORIGINAL_RUNTIME = process.env['NEXT_RUNTIME'];
+
+	afterEach(() => {
+		if (ORIGINAL_RUNTIME === undefined) {
+			delete process.env['NEXT_RUNTIME'];
+		} else {
+			process.env['NEXT_RUNTIME'] = ORIGINAL_RUNTIME;
+		}
+		// Restore the real dynamic import of next/cache.
+		__setCacheModuleForTests(null);
+	});
+
+	test('inside the Next runtime, mints through unstable_cache keyed for fleet-wide reuse', async () => {
+		// Inject a next/cache stand-in via the module's own seam rather than
+		// mock.module: the latter is process-global in bun and would strip
+		// revalidateTag/revalidatePath from sibling test files.
+		let capturedKey: unknown;
+		let capturedOptions: { revalidate?: number } | undefined;
+		const unstable_cache = mock(
+			(fn: (...args: unknown[]) => unknown, key: unknown, options: { revalidate?: number }) => {
+				capturedKey = key;
+				capturedOptions = options;
+				return (...args: unknown[]) => fn(...args);
+			},
+		);
+		__setCacheModuleForTests({ unstable_cache } as never);
+		process.env['NEXT_RUNTIME'] = 'nodejs';
+
+		await expect(getElectionApiToken()).resolves.toBe('fresh-token');
+
+		expect(unstable_cache).toHaveBeenCalledTimes(1);
+		// Single fixed key => one shared entry for the whole fleet.
+		expect(capturedKey).toEqual(['election-api-m2m-token']);
+		// Revalidate strictly inside the 3600s TTL so an edge read still has margin.
+		expect(capturedOptions?.revalidate).toBe(3300);
+	});
+
+	test('outside the Next runtime, mints directly without touching the Data Cache', async () => {
+		// mintPooled short-circuits on !NEXT_RUNTIME before the cache seam, so a
+		// direct mint here (one createToken, no cache module consulted) is the proof.
+		delete process.env['NEXT_RUNTIME'];
+
+		await expect(getElectionApiToken()).resolves.toBe('fresh-token');
+
+		expect(createToken).toHaveBeenCalledTimes(1);
 	});
 });
 

@@ -23,12 +23,14 @@ export class ElectionApiError extends Error {
 }
 
 /**
- * Authenticated election-api GET that keeps the rotating M2M Authorization header
- * OUT of the Next.js Data Cache key.
+ * Authenticated election-api GET, keyed only on the URL so the shared 1h Data
+ * Cache hits across isolates.
  *
- * Next's fetch cache includes Authorization in its key, so minting a fresh token
- * every ~10 minutes (and per isolate) would bust the shared 1h cache. We mint
- * inside unstable_cache and key only on the URL; fetch itself uses cache:'no-store'.
+ * The M2M Authorization header is acquired OUTSIDE this URL cache. It has its
+ * own cross-isolate pool (see electionApiAuth), so this is cheap on the hot path
+ * (an in-memory hit) and only mints on the rare renewal — and keeping it out of
+ * the wrapped function avoids nesting unstable_cache calls. fetch itself uses
+ * cache:'no-store', so the token never enters the URL cache key regardless.
  *
  * unstable_cache only works inside the Next server runtime. In CLI scripts (bun/tsx)
  * and unit tests the module still imports, but invoking unstable_cache outside the
@@ -40,8 +42,8 @@ export async function fetchElectionApiJsonCached(
 	url: string,
 	tags?: readonly string[],
 ): Promise<ElectionApiJsonResult> {
+	const authHeaders = await electionApiAuthHeaders();
 	const run = async (): Promise<ElectionApiJsonResult> => {
-		const authHeaders = await electionApiAuthHeaders();
 		const res = await fetch(url, { headers: authHeaders, cache: 'no-store' });
 		if (res.status === 404) return { status: 404, ok: false, json: null };
 		// Anything else non-ok throws rather than returning: unstable_cache stores

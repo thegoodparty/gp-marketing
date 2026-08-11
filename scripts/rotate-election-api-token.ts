@@ -73,6 +73,21 @@ function mask(token: string): string {
 	return `${token.slice(0, 8)}…${token.slice(-4)} (len ${token.length})`;
 }
 
+/**
+ * Credentials to scrub from anything we print. GitHub Actions only masks values
+ * declared as `secrets:`; a token minted at runtime is unknown to the masking
+ * engine, and a Vercel validation error can echo the submitted value back inside
+ * a thrown message. Register such values here and redact() before logging.
+ */
+const secretsToRedact = new Set<string>();
+function redact(text: string): string {
+	let out = text;
+	for (const secret of secretsToRedact) {
+		if (secret) out = out.split(secret).join('***');
+	}
+	return out;
+}
+
 /** Parse a JWT's `exp` (seconds) without verifying its signature. */
 function jwtExpMs(jwt: string): number {
 	const segments = jwt.split('.');
@@ -169,6 +184,10 @@ async function main(): Promise<void> {
 
 	console.log(`Minting a ${ttlDays}-day election-api JWT for the gp-marketing machine…`);
 	const newToken = await mintJwt(machineSecretKey, ttlDays);
+	// The machine secret is a declared GitHub secret (already masked), but the
+	// freshly minted token is not — keep it out of any error we might print.
+	secretsToRedact.add(newToken);
+	secretsToRedact.add(machineSecretKey);
 
 	// Trust Clerk's `exp`, not our own arithmetic: reject an unexpectedly
 	// short-lived token before it is pushed, so a bad mint can't silently install
@@ -180,18 +199,26 @@ async function main(): Promise<void> {
 		throw new Error(`Minted token expires in ~${remainingDays.toFixed(1)} days, well under the expected ${ttlDays}; refusing to roll out`);
 	}
 
-	// Best-effort liveness probe: confirm election-api accepts the token at the
-	// network layer. Non-fatal — in observe-only mode election-api answers 2xx/4xx
-	// regardless of auth, so this only guards against a malformed base URL or an
-	// election-api outage, not against a semantically wrong token.
+	// Auth probe against a *guarded* endpoint (not the public /v1/health) so the
+	// token is actually authenticated. A 401/403 is an unambiguous bad-token
+	// signal in any mode and MUST abort before we roll the token out — that is
+	// exactly how a broken token surfaces once ELECTION_API_AUTH_ENFORCED is on.
+	// In observe-only mode election-api still answers 2xx, so this can't fully
+	// validate today; genuine transport/5xx blips stay non-fatal.
 	const electionApiBase = process.env['ELECTION_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
+	let probeRes: Response | undefined;
 	try {
-		const res = await fetch(`${electionApiBase}/v1/health`, {
+		probeRes = await fetch(`${electionApiBase}/v1/candidacies?slug=__token-rotation-probe__`, {
 			headers: { Authorization: `Bearer ${newToken}` },
 		});
-		console.log(`  election-api /v1/health with new token → ${res.status}`);
 	} catch (err) {
-		console.warn(`  liveness probe failed (non-fatal): ${(err as Error).message}`);
+		console.warn(`  auth probe inconclusive — transport error (non-fatal): ${redact((err as Error).message)}`);
+	}
+	if (probeRes && (probeRes.status === 401 || probeRes.status === 403)) {
+		throw new Error(`election-api rejected the freshly minted token (HTTP ${probeRes.status}); aborting before rollout`);
+	}
+	if (probeRes) {
+		console.log(`  election-api auth probe → ${probeRes.status}`);
 	}
 
 	if (dryRun) {
@@ -246,6 +273,7 @@ async function main(): Promise<void> {
 }
 
 main().catch(err => {
-	console.error(`Rotation failed: ${(err as Error).message}`);
+	// redact: a Vercel validation error can embed the submitted token value.
+	console.error(`Rotation failed: ${redact((err as Error).message)}`);
 	process.exit(1);
 });

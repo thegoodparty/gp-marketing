@@ -15,7 +15,7 @@ type FetchMockResponse = {
 };
 
 const originalFetch = globalThis.fetch;
-const ORIGINAL_MACHINE_SECRET = process.env['GP_MARKETING_MACHINE_SECRET'];
+const ORIGINAL_M2M_TOKEN = process.env['ELECTION_API_M2M_TOKEN'];
 
 function withFetchMock(responses: FetchMockResponse[]) {
 	globalThis.fetch = (async (input: RequestInfo | URL) => {
@@ -36,19 +36,19 @@ function slugs(items: PlaceItem[]): string[] {
 }
 
 beforeEach(() => {
-	// Fail-soft path: unset secret so election-api reads go out unauthenticated
-	// without touching Clerk (and without mock.module, which can poison sibling tests).
-	delete process.env['GP_MARKETING_MACHINE_SECRET'];
+	// Fail-soft path: unset the static token so election-api reads go out
+	// unauthenticated (these tests don't assert on auth headers).
+	delete process.env['ELECTION_API_M2M_TOKEN'];
 	// Skip the warn-once log — these tests intentionally exercise the fail-soft path.
-	__resetElectionApiAuthForTests({ warnedMissingSecret: true });
+	__resetElectionApiAuthForTests({ warnedMissingToken: true });
 	globalThis.fetch = originalFetch;
 });
 
 afterEach(() => {
-	if (ORIGINAL_MACHINE_SECRET === undefined) {
-		delete process.env['GP_MARKETING_MACHINE_SECRET'];
+	if (ORIGINAL_M2M_TOKEN === undefined) {
+		delete process.env['ELECTION_API_M2M_TOKEN'];
 	} else {
-		process.env['GP_MARKETING_MACHINE_SECRET'] = ORIGINAL_MACHINE_SECRET;
+		process.env['ELECTION_API_M2M_TOKEN'] = ORIGINAL_M2M_TOKEN;
 	}
 	__resetElectionApiAuthForTests();
 	globalThis.fetch = originalFetch;

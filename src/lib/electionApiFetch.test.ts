@@ -12,7 +12,7 @@ const ELECTION_URL = 'https://election-api.goodparty.org/v1/positions/1';
 const OK_BODY = { hello: 'world' };
 
 const originalFetch = globalThis.fetch;
-const ORIGINAL_MACHINE_SECRET = process.env['GP_MARKETING_MACHINE_SECRET'];
+const ORIGINAL_M2M_TOKEN = process.env['ELECTION_API_M2M_TOKEN'];
 const ORIGINAL_RUNTIME = process.env['NEXT_RUNTIME'];
 
 let fetchCalls: number;
@@ -20,9 +20,12 @@ let fetchCalls: number;
 beforeEach(() => {
 	resetNextCacheMock();
 	fetchCalls = 0;
-	// Fail-soft auth path: unset secret so run() never touches Clerk.
-	delete process.env['GP_MARKETING_MACHINE_SECRET'];
-	__resetElectionApiAuthForTests({ warnedMissingSecret: true });
+	// Authenticated by default — this is the representative production path: the
+	// static token is present, so run() attaches the bearer. Tests that assert cache
+	// behavior are header-agnostic; the forwarding itself is asserted explicitly in
+	// the "forwards the static M2M token" test below.
+	process.env['ELECTION_API_M2M_TOKEN'] = 'test-m2m-token';
+	__resetElectionApiAuthForTests();
 	globalThis.fetch = (async () => {
 		fetchCalls += 1;
 		return new Response(JSON.stringify(OK_BODY), {
@@ -33,10 +36,10 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-	if (ORIGINAL_MACHINE_SECRET === undefined) {
-		delete process.env['GP_MARKETING_MACHINE_SECRET'];
+	if (ORIGINAL_M2M_TOKEN === undefined) {
+		delete process.env['ELECTION_API_M2M_TOKEN'];
 	} else {
-		process.env['GP_MARKETING_MACHINE_SECRET'] = ORIGINAL_MACHINE_SECRET;
+		process.env['ELECTION_API_M2M_TOKEN'] = ORIGINAL_M2M_TOKEN;
 	}
 	if (ORIGINAL_RUNTIME === undefined) {
 		delete process.env['NEXT_RUNTIME'];
@@ -104,5 +107,29 @@ describe('fetchElectionApiJsonCached', () => {
 		const promise = fetchElectionApiJsonCached(ELECTION_URL);
 
 		await expect(promise).rejects.toMatchObject({ name: 'ElectionApiError', status });
+	});
+
+	test('forwards the static M2M token to fetch as a Bearer Authorization header', async () => {
+		// The whole point of this module: prove the token flows into the request.
+		// Without this, deleting the `headers` argument in electionApiFetch would
+		// leave every other test green (they all run the no-token fail-soft path).
+		delete process.env['NEXT_RUNTIME']; // direct fetch path, no cache wrapper
+		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt-abc';
+		__resetElectionApiAuthForTests();
+
+		let capturedHeaders: HeadersInit | undefined;
+		globalThis.fetch = (async (_url: RequestInfo | URL, init?: RequestInit) => {
+			fetchCalls += 1;
+			capturedHeaders = init?.headers;
+			return new Response(JSON.stringify(OK_BODY), {
+				status: 200,
+				headers: { 'content-type': 'application/json' },
+			});
+		}) as unknown as typeof fetch;
+
+		await fetchElectionApiJsonCached(ELECTION_URL);
+
+		expect(fetchCalls).toBe(1);
+		expect(capturedHeaders).toEqual({ Authorization: 'Bearer static-jwt-abc' });
 	});
 });

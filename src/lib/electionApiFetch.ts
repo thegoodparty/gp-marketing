@@ -26,11 +26,10 @@ export class ElectionApiError extends Error {
  * Authenticated election-api GET, keyed only on the URL so the shared 1h Data
  * Cache hits across isolates.
  *
- * The M2M Authorization header is acquired OUTSIDE this URL cache. It has its
- * own cross-isolate pool (see electionApiAuth), so this is cheap on the hot path
- * (an in-memory hit) and only mints on the rare renewal — and keeping it out of
- * the wrapped function avoids nesting unstable_cache calls. fetch itself uses
- * cache:'no-store', so the token never enters the URL cache key regardless.
+ * The M2M Authorization header is acquired OUTSIDE this URL cache: it is a static
+ * env-injected token (see electionApiAuth), so reading it is free, and keeping it
+ * out of the wrapped function means the bearer never enters the URL cache key
+ * (fetch also uses cache:'no-store').
  *
  * unstable_cache only works inside the Next server runtime. In CLI scripts (bun/tsx)
  * and unit tests the module still imports, but invoking unstable_cache outside the
@@ -42,7 +41,7 @@ export async function fetchElectionApiJsonCached(
 	url: string,
 	tags?: readonly string[],
 ): Promise<ElectionApiJsonResult> {
-	const authHeaders = await electionApiAuthHeaders();
+	const authHeaders = electionApiAuthHeaders();
 	const run = async (): Promise<ElectionApiJsonResult> => {
 		const res = await fetch(url, { headers: authHeaders, cache: 'no-store' });
 		if (res.status === 404) return { status: 404, ok: false, json: null };

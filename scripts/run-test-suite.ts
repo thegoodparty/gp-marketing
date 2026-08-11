@@ -65,5 +65,10 @@ if (requested !== 'logic' && requested !== 'dom') {
 }
 
 const files = discover()[requested];
-const { exitCode } = Bun.spawnSync([process.execPath, 'test', ...files], { stdio: ['inherit', 'inherit', 'inherit'] });
+const { exitCode, signalCode } = Bun.spawnSync([process.execPath, 'test', ...files], { stdio: ['inherit', 'inherit', 'inherit'] });
+
+// A signal kill (OOM, timeout) leaves exitCode null, and process.exit(null) exits 0.
+if (exitCode === null) {
+	fail(`the ${requested} suite was killed by ${signalCode ?? 'a signal'} before it finished`);
+}
 process.exit(exitCode);

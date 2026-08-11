@@ -100,7 +100,7 @@ async function fetchElectionJson<T>(path: string, params: Record<string, string>
 	const search = new URLSearchParams(params).toString();
 	const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}?${search}`;
 	try {
-		const authHeaders = await electionApiAuthHeaders();
+		const authHeaders = electionApiAuthHeaders();
 		const res = await fetch(url, { headers: authHeaders });
 		if (!res.ok) return [];
 		const data: unknown = await res.json();

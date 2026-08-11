@@ -11,6 +11,14 @@ import { Text } from '~/ui/Text';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/**
+ * Stable identity for HubSpot's non-HubSpot ("collected") forms tool — see the
+ * matching constant in ClaimProfileModal for why this must not be renamed or
+ * dropped. Deliberately different from that one so HubSpot files owner claims
+ * separately from visitor nudges; they warrant different follow-up.
+ */
+const CLAIM_FORM_ID = 'person-claim-owner';
+
 type NotifyValues = { firstname: string; email: string };
 
 export type PersonClaimCTABandProps = {
@@ -87,6 +95,7 @@ export function PersonClaimCTABand({ personId, displayName, isRunning }: PersonC
 						</div>
 					) : (
 						<form
+							id={CLAIM_FORM_ID}
 							className='flex w-full max-w-md flex-col gap-4 text-left'
 							onSubmit={(e) => void handleSubmit(onSubmit)(e)}
 							noValidate

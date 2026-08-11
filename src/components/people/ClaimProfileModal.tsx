@@ -13,6 +13,22 @@ import { Text } from '~/ui/Text';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/**
+ * Stable identity for HubSpot's non-HubSpot ("collected") forms tool. DO NOT
+ * rename, and do not remove it in favour of styling: the site-wide HubSpot
+ * tracking script keys a collected form on the `<form>` tag's id, falling back to
+ * its class list when there is no id. Without this the form was filed under
+ * `.flex, .w-full, .flex-col, .gap-4, .text-left`, so any change to its spacing
+ * or width silently created a NEW form in HubSpot and orphaned the marketing
+ * workflows attached to the old one — with no error anywhere.
+ *
+ * Distinct from {@link PersonClaimCTABand}'s id on purpose. HubSpot groups
+ * submissions by this value, and the two forms are different intents that want
+ * different follow-up: this one is a visitor asking us to nudge someone else,
+ * that one is the person claiming their own page.
+ */
+const NOTIFY_FORM_ID = 'person-claim-notify';
+
 type NotifyValues = { firstname: string; email: string; marketingConsent: boolean };
 
 function NotifyForm({ personId, displayName }: { personId: string; displayName: string }) {
@@ -60,6 +76,7 @@ function NotifyForm({ personId, displayName }: { personId: string; displayName: 
 
 	return (
 		<form
+			id={NOTIFY_FORM_ID}
 			className='flex w-full flex-col gap-4 text-left'
 			onSubmit={(e) => void handleSubmit(onSubmit)(e)}
 			noValidate

@@ -11,6 +11,14 @@ import { Text } from '~/ui/Text';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/**
+ * Stable identity for HubSpot's non-HubSpot ("collected") forms tool — see the
+ * matching constant in ClaimProfileModal for why this must not be renamed or
+ * dropped. Deliberately different from that one so HubSpot files owner claims
+ * separately from visitor nudges; they warrant different follow-up.
+ */
+const CLAIM_FORM_ID = 'person-claim-owner';
+
 type NotifyValues = { firstname: string; email: string };
 
 export type PersonClaimCTABandProps = {
@@ -27,6 +35,15 @@ export type PersonClaimCTABandProps = {
  * that posts to the same claim-request endpoint as the claim modal. Rendered in
  * the person `person-cta` section slot (below the content well, above the
  * elections index) in place of the claimed "Join the movement" CTA.
+ *
+ * Carries NO marketing-consent checkbox, unlike the claim modal, which is what
+ * the frame specifies (band 1922:92593 has name + email + submit; the modal's
+ * dialog 1901:51851 adds the opt-in). The two forms hit one endpoint but are
+ * different acts: the modal asks a visitor to opt in while notifying someone
+ * else, whereas this band is the person themselves entering their own address to
+ * claim their page. The proxy therefore records `marketingConsent: false` for
+ * every submission from here — absent an opt-in that is the accurate value, not
+ * a dropped field.
  */
 export function PersonClaimCTABand({ personId, displayName, isRunning }: PersonClaimCTABandProps) {
 	const [isSuccess, setIsSuccess] = useState(false);
@@ -73,11 +90,12 @@ export function PersonClaimCTABand({ personId, displayName, isRunning }: PersonC
 							aria-live='polite'
 						>
 							<Text styleType='body-2'>
-								Thanks — we&apos;ll let {displayName} know their GoodParty.org profile is ready to claim.
+								Thanks — we&apos;ll be in touch at that address about claiming your profile.
 							</Text>
 						</div>
 					) : (
 						<form
+							id={CLAIM_FORM_ID}
 							className='flex w-full max-w-md flex-col gap-4 text-left'
 							onSubmit={(e) => void handleSubmit(onSubmit)(e)}
 							noValidate

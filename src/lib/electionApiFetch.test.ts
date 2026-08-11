@@ -105,4 +105,28 @@ describe('fetchElectionApiJsonCached', () => {
 
 		await expect(promise).rejects.toMatchObject({ name: 'ElectionApiError', status });
 	});
+
+	test('forwards the static M2M token to fetch as a Bearer Authorization header', async () => {
+		// The whole point of this module: prove the token flows into the request.
+		// Without this, deleting the `headers` argument in electionApiFetch would
+		// leave every other test green (they all run the no-token fail-soft path).
+		delete process.env['NEXT_RUNTIME']; // direct fetch path, no cache wrapper
+		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt-abc';
+		__resetElectionApiAuthForTests();
+
+		let capturedHeaders: HeadersInit | undefined;
+		globalThis.fetch = (async (_url: RequestInfo | URL, init?: RequestInit) => {
+			fetchCalls += 1;
+			capturedHeaders = init?.headers;
+			return new Response(JSON.stringify(OK_BODY), {
+				status: 200,
+				headers: { 'content-type': 'application/json' },
+			});
+		}) as unknown as typeof fetch;
+
+		await fetchElectionApiJsonCached(ELECTION_URL);
+
+		expect(fetchCalls).toBe(1);
+		expect(capturedHeaders).toEqual({ Authorization: 'Bearer static-jwt-abc' });
+	});
 });

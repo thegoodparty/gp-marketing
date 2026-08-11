@@ -181,13 +181,15 @@ async function main(): Promise<void> {
 	}
 
 	const machineSecretKey = requireEnv('CLERK_MACHINE_SECRET_KEY');
+	// Register before minting: mintJwt() can throw with the key echoed in the
+	// error, and the catch handler redacts against this set. (In CI the key is a
+	// declared GitHub secret and already masked; manual `bun run` has no masking.)
+	secretsToRedact.add(machineSecretKey);
 
 	console.log(`Minting a ${ttlDays}-day election-api JWT for the gp-marketing machine…`);
 	const newToken = await mintJwt(machineSecretKey, ttlDays);
-	// The machine secret is a declared GitHub secret (already masked), but the
-	// freshly minted token is not — keep it out of any error we might print.
+	// The freshly minted token is not a declared secret — keep it out of logs too.
 	secretsToRedact.add(newToken);
-	secretsToRedact.add(machineSecretKey);
 
 	// Trust Clerk's `exp`, not our own arithmetic: reject an unexpectedly
 	// short-lived token before it is pushed, so a bad mint can't silently install
@@ -237,9 +239,17 @@ async function main(): Promise<void> {
 	// Update every existing entry that holds this key (one entry may cover several
 	// environments), then create entries for any target that isn't covered yet.
 	for (const env of existing) {
+		// Also correct the variable type if it drifted (e.g. a production entry
+		// created manually as `encrypted` instead of `sensitive`, which would expose
+		// the bearer to anyone with project read access). Only set it when every
+		// target on the entry maps to one expected type, to avoid guessing on a
+		// mixed-target entry.
+		const expectedTypes = [...new Set(env.target.map(t => TARGET_TYPES[t]).filter(Boolean))];
+		const patchBody: Record<string, unknown> = { value: newToken };
+		if (expectedTypes.length === 1) patchBody['type'] = expectedTypes[0];
 		await vercelFetch(`/v9/projects/${projectId}/env/${env.id}`, vercelToken, teamId, {
 			method: 'PATCH',
-			body: JSON.stringify({ value: newToken }),
+			body: JSON.stringify(patchBody),
 		});
 		console.log(`  updated entry ${env.id} (targets: ${env.target.join(', ')})`);
 	}

@@ -34,7 +34,7 @@ function fail(message: string): never {
 	process.exit(1);
 }
 
-function discover(): Record<SuiteName, string[]> {
+function discover(suite: SuiteName): string[] {
 	const glob = new Bun.Glob(`**/*.test.{${TEST_EXTENSIONS.join(',')}}`);
 	const files = ROOTS.flatMap(root => [...glob.scanSync({ cwd: root })].map(path => `${root}/${path}`)).sort();
 
@@ -47,16 +47,17 @@ function discover(): Record<SuiteName, string[]> {
 		else unclaimed.push(file);
 	}
 
+	// Partitioning needs the whole corpus, because a file that lands in neither half
+	// runs nowhere. Emptiness is only checked for the half being run: `bun run test`
+	// runs both, so an empty half still fails, just on its own invocation.
 	if (unclaimed.length > 0) {
 		fail(`no suite runs these test files, so they would never execute: ${unclaimed.join(', ')}`);
 	}
-	for (const name of Object.keys(suites) as SuiteName[]) {
-		if (suites[name].length === 0) {
-			fail(`the ${name} suite matched no ${SUITE_EXTENSIONS[name]} files under ${ROOTS.join(', ')}; test discovery is broken`);
-		}
+	if (suites[suite].length === 0) {
+		fail(`the ${suite} suite matched no ${SUITE_EXTENSIONS[suite]} files under ${ROOTS.join(', ')}; test discovery is broken`);
 	}
 
-	return suites;
+	return suites[suite];
 }
 
 const requested = process.argv[2];
@@ -64,7 +65,7 @@ if (requested !== 'logic' && requested !== 'dom') {
 	fail(`usage: bun run scripts/run-test-suite.ts <${Object.keys(SUITE_EXTENSIONS).join('|')}>`);
 }
 
-const files = discover()[requested];
+const files = discover(requested);
 const { exitCode, signalCode } = Bun.spawnSync([process.execPath, 'test', ...files], { stdio: ['inherit', 'inherit', 'inherit'] });
 
 // A signal kill (OOM, timeout) leaves exitCode null, and process.exit(null) exits 0.

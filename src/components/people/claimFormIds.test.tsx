@@ -14,11 +14,10 @@ import { createRoot, type Root } from 'react-dom/client';
  * marketing workflow was attached to the old one. Nothing throws when that
  * happens, on the site or in HubSpot, so CI is the only place it can be caught.
  *
- * These mount the form components directly rather than driving the dialog open.
- * Radix's click delegation does not fire under JSDOM once this file shares a
- * process with the rest of the suite (which is how CI runs it, since bun 1.2.23
- * ignores the `--path-ignore-patterns` split between the logic and DOM suites).
- * The id lives on the form element either way, so the dialog buys nothing here.
+ * These mount the form components directly rather than driving the dialog open,
+ * because Radix's click delegation has proven unreliable under JSDOM here. The id
+ * lives on the form element either way, so opening the dialog buys nothing and
+ * only adds a way for the test to fail on something other than the id.
  */
 
 const DOM_GLOBALS = [

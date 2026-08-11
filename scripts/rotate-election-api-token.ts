@@ -92,9 +92,10 @@ function jwtExpMs(jwt: string): number {
 async function mintJwt(machineSecretKey: string, ttlDays: number): Promise<string> {
 	// createToken authenticates with the machine secret, not the instance secret,
 	// so CLERK_SECRET_KEY is optional here; pass a placeholder when it is absent so
-	// the client constructs cleanly.
+	// the client constructs cleanly. Use `||`, not `??`: GitHub Actions injects an
+	// unset optional secret as an empty string, which `??` would pass through.
 	const clerk = createClerkClient({
-		secretKey: process.env['CLERK_SECRET_KEY'] ?? 'sk_unused_for_m2m_mint',
+		secretKey: process.env['CLERK_SECRET_KEY'] || 'sk_unused_for_m2m_mint',
 	});
 
 	const minted = await clerk.m2m.createToken({
@@ -109,12 +110,7 @@ async function mintJwt(machineSecretKey: string, ttlDays: number): Promise<strin
 	return minted.token;
 }
 
-async function vercelFetch<T>(
-	path: string,
-	token: string,
-	teamId: string,
-	init?: RequestInit,
-): Promise<T> {
+async function vercelFetch<T>(path: string, token: string, teamId: string, init?: RequestInit): Promise<T> {
 	const separator = path.includes('?') ? '&' : '?';
 	const res = await fetch(`${VERCEL_API}${path}${separator}teamId=${teamId}`, {
 		...init,
@@ -131,24 +127,35 @@ async function vercelFetch<T>(
 	return (await res.json()) as T;
 }
 
-async function listTokenEnvVars(
-	projectId: string,
-	token: string,
-	teamId: string,
-): Promise<VercelEnvVar[]> {
-	const data = await vercelFetch<{ envs: Array<Omit<VercelEnvVar, 'target'> & { target: string[] | string }> }>(
-		`/v9/projects/${projectId}/env`,
-		token,
-		teamId,
-	);
-	return data.envs
-		.filter(env => env.key === TOKEN_ENV_KEY)
-		.map(env => ({
-			id: env.id,
-			key: env.key,
-			type: env.type,
-			target: Array.isArray(env.target) ? env.target : [env.target],
-		}));
+async function listTokenEnvVars(projectId: string, token: string, teamId: string): Promise<VercelEnvVar[]> {
+	// The project env list is returned in a single page today, but page through
+	// defensively: a project with more variables than the endpoint's page size
+	// would otherwise silently drop an ELECTION_API_M2M_TOKEN entry, leaving it on
+	// the stale token while the rest rotate. `pagination.next` is a timestamp
+	// cursor consumed via `until`.
+	const matches: VercelEnvVar[] = [];
+	let until: string | undefined;
+	for (;;) {
+		const query = new URLSearchParams({ limit: '100' });
+		if (until) query.set('until', until);
+		const data = await vercelFetch<{
+			envs: Array<Omit<VercelEnvVar, 'target'> & { target: string[] | string }>;
+			pagination?: { next: number | null };
+		}>(`/v9/projects/${projectId}/env?${query.toString()}`, token, teamId);
+		for (const env of data.envs) {
+			if (env.key !== TOKEN_ENV_KEY) continue;
+			matches.push({
+				id: env.id,
+				key: env.key,
+				type: env.type,
+				target: Array.isArray(env.target) ? env.target : [env.target],
+			});
+		}
+		const next = data.pagination?.next;
+		if (!next) break;
+		until = String(next);
+	}
+	return matches;
 }
 
 async function main(): Promise<void> {
@@ -170,9 +177,7 @@ async function main(): Promise<void> {
 	const remainingDays = (expMs - Date.now()) / (24 * 60 * 60 * 1000);
 	console.log(`  minted ${mask(newToken)}, expires ${new Date(expMs).toISOString()} (~${remainingDays.toFixed(1)} days)`);
 	if (remainingDays < ttlDays - 2) {
-		throw new Error(
-			`Minted token expires in ~${remainingDays.toFixed(1)} days, well under the expected ${ttlDays}; refusing to roll out`,
-		);
+		throw new Error(`Minted token expires in ~${remainingDays.toFixed(1)} days, well under the expected ${ttlDays}; refusing to roll out`);
 	}
 
 	// Best-effort liveness probe: confirm election-api accepts the token at the
@@ -223,7 +228,12 @@ async function main(): Promise<void> {
 
 	const deployHook = process.env['VERCEL_DEPLOY_HOOK_URL'];
 	if (deployHook) {
+		// fetch does not throw on non-2xx, so check explicitly: a swallowed hook
+		// failure would exit 0 and tell the operator the redeploy fired when it did not.
 		const res = await fetch(deployHook, { method: 'POST' });
+		if (!res.ok) {
+			throw new Error(`Deploy hook POST → ${res.status}: ${await res.text()}`);
+		}
 		console.log(`Triggered deploy hook → ${res.status}`);
 	} else {
 		console.log(

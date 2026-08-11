@@ -44,8 +44,9 @@ jobs:
       - name: Rotate token
         env:
           CLERK_MACHINE_SECRET_KEY: ${{ secrets.CLERK_GP_MARKETING_MACHINE_SECRET }}
-          # Optional — not needed for minting (createToken uses the machine secret).
-          CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+          # CLERK_SECRET_KEY is intentionally not injected: minting authenticates
+          # with the machine secret, and passing an unset optional secret would hand
+          # the script an empty string instead of a clean fallback.
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           # Non-secret project/team identifiers for good-party/gp-marketing.
           VERCEL_PROJECT_ID: prj_xUbQGrErwISW8pqTZtKzk9wN5gFc

@@ -253,13 +253,21 @@ describe('the top claim prompt pulls the person down to the claim form', () => {
 		expect(scrollCalls).toEqual([]);
 	});
 
-	test('the voter prompt is untouched — it does not scroll to the claim form', async () => {
+	/**
+	 * The counterpart to the owner-prompt test above: this is the entry point the
+	 * notify form is left with, so it has to be shown opening the dialog, not
+	 * merely not scrolling.
+	 */
+	test('the voter prompt still opens the dialog and its notify form', async () => {
 		await renderProfileClaimSurfaces('voter-card', true);
+
+		expect(document.querySelector('[role="dialog"]')).toBeNull();
 
 		await click(claimPromptButton('voter-card'));
 
+		expect(document.querySelector('[role="dialog"]')).not.toBeNull();
+		expect(document.querySelector('[role="dialog"] form#person-claim-notify')).not.toBeNull();
 		expect(scrollCalls).toEqual([]);
-		expect(document.querySelector('form#person-claim-owner')).not.toBeNull();
 	});
 });
 

@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 
 import { APP_SIGN_UP_HREF, trackEvent, trackSignUpClicked } from '~/lib/analytics';
 import { buildClaimRequestBody } from '~/lib/claimRequest';
+import { useDecoratedAppHref } from '~/ui/AttributionProvider';
 import { Container } from '~/ui/Container';
 import { Button } from '~/ui/Inputs/Button';
 import { TextInput } from '~/ui/Inputs/TextInput';
@@ -57,6 +58,12 @@ export type PersonClaimCTABandProps = {
  */
 export function PersonClaimCTABand({ personId, displayName, isRunning }: PersonClaimCTABandProps) {
 	const [isSuccess, setIsSuccess] = useState(false);
+	// Every other sign-up link on the site reaches the app through `Anchor`,
+	// which decorates app.goodparty.org URLs with the captured fbclid/utm params.
+	// This branch navigates programmatically and so has to do it by hand, or a
+	// claim that arrived from an ad would land on sign-up stripped of the
+	// attribution that stitches the two halves of the funnel together.
+	const signUpHref = useDecoratedAppHref(APP_SIGN_UP_HREF) ?? APP_SIGN_UP_HREF;
 	const {
 		register,
 		handleSubmit,
@@ -87,8 +94,11 @@ export function PersonClaimCTABand({ personId, displayName, isRunning }: PersonC
 			// still counted in the funnel. Serve stops here: sales follows up from
 			// HubSpot and sends the access link by hand.
 			if (isRunning) {
+				// The event carries the bare href, as every other sign-up link on the
+				// site does, so this point is comparable with the rest of the funnel;
+				// the navigation carries the decorated one.
 				trackSignUpClicked({ href: APP_SIGN_UP_HREF, label: 'Claim profile', formId: CLAIM_FORM_ID });
-				window.location.assign(APP_SIGN_UP_HREF);
+				window.location.assign(signUpHref);
 			}
 		} catch {
 			setError('root', { message: 'Something went wrong. Please try again.' });

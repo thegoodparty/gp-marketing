@@ -241,19 +241,38 @@ function pickCurrentOffice(person: PersonItem | null): PersonOfficeHolder | null
 	return [...offices].sort((a, b) => (b.startAt ?? '').localeCompare(a.startAt ?? ''))[0] ?? null;
 }
 
+/**
+ * Whether the person is running in a race that has not been decided yet.
+ *
+ * Candidacy rows are permanent — election-api keeps every race a person ever
+ * ran in — so the mere existence of one says nothing about whether they are
+ * running *now*. Only a race whose election is still ahead of us counts.
+ *
+ * Undated rows count as current: a missing `Race.electionDate` means "we don't
+ * know when", not "already happened", and treating absent data as concluded
+ * would silently demote a real candidate out of the running personas.
+ */
+function isRunningNow(person: PersonItem | null): boolean {
+	const { upcoming, undated } = candidaciesByRecency(person?.Candidacies ?? []);
+	return upcoming.length > 0 || undated.length > 0;
+}
+
 export function resolvePersona(
 	person: PersonItem | null,
 	office: PersonOfficeHolder | null,
 ): PersonPersona {
-	const hasCandidacy = (person?.Candidacies?.length ?? 0) > 0;
+	const runningNow = isRunningNow(person);
 	const isCurrentlyInOffice = office?.isCurrent === true;
 	const heldOfficeBefore = (person?.OfficeHolders?.length ?? 0) > 0;
 
-	if (hasCandidacy && isCurrentlyInOffice) return 'both';
+	if (runningNow && isCurrentlyInOffice) return 'both';
 	if (isCurrentlyInOffice) return 'officeholder';
-	if (hasCandidacy) return 'candidate';
+	if (runningNow) return 'candidate';
 	if (heldOfficeBefore) return 'past';
-	// A claimed person with no civics rows yet reads best as a candidate.
+	// Nothing current to go on. Someone whose only row is a concluded race has
+	// no officeholder term to say they won and no result field to say they
+	// lost, so the candidate framing stays the least-wrong reading — as it does
+	// for a claimed person with no civics rows at all.
 	return 'candidate';
 }
 

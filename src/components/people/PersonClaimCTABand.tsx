@@ -14,8 +14,9 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 /**
  * Stable identity for HubSpot's non-HubSpot ("collected") forms tool — see the
  * matching constant in ClaimProfileModal for why this must not be renamed or
- * dropped. Deliberately different from that one so HubSpot files owner claims
- * separately from visitor nudges; they warrant different follow-up.
+ * dropped, and why the `<form>` tag below carries no className. Deliberately
+ * different from that one so HubSpot files owner claims separately from visitor
+ * nudges; they warrant different follow-up.
  */
 const CLAIM_FORM_ID = 'person-claim-owner';
 
@@ -94,47 +95,53 @@ export function PersonClaimCTABand({ personId, displayName, isRunning }: PersonC
 							</Text>
 						</div>
 					) : (
-						<form
-							id={CLAIM_FORM_ID}
-							className='flex w-full max-w-md flex-col gap-4 text-left'
-							onSubmit={(e) => void handleSubmit(onSubmit)(e)}
-							noValidate
-						>
-							<TextInput
-								label='Name (optional)'
-								autoComplete='name'
-								error={errors.firstname?.message}
-								{...register('firstname')}
-							/>
-							<TextInput
-								label='Email address'
-								type='email'
-								required
-								autoComplete='email'
-								inputMode='email'
-								error={errors.email?.message}
-								{...register('email', {
-									required: 'Email is required',
-									pattern: { value: EMAIL_PATTERN, message: 'Enter a valid email address' },
-								})}
-							/>
-							{errors.root?.message && (
-								<Text styleType='caption' className='text-error-600' role='alert'>
-									{errors.root.message}
-								</Text>
-							)}
-							<Button
-								parent='PersonClaimCTABand'
-								type='submit'
-								styleType='primary'
-								styleSize='md'
-								isLoading={isSubmitting}
-								disabled={isSubmitting}
-								className='mx-auto w-fit'
-							>
-								Submit
-							</Button>
-						</form>
+						// The sizing sits on the wrapper, not the <form>, because the band is a
+						// `flex flex-col items-center` column: its children do not stretch, so
+						// whichever element is the flex item has to carry `w-full max-w-md` or
+						// the field column collapses to its content width.
+						<div className='w-full max-w-md'>
+							<form id={CLAIM_FORM_ID} onSubmit={(e) => void handleSubmit(onSubmit)(e)} noValidate>
+								<div className='flex flex-col gap-4 text-left'>
+									<TextInput
+										label='Name (optional)'
+										autoComplete='name'
+										error={errors.firstname?.message}
+										{...register('firstname')}
+									/>
+									<TextInput
+										label='Email address'
+										type='email'
+										required
+										autoComplete='email'
+										inputMode='email'
+										error={errors.email?.message}
+										{...register('email', {
+											required: 'Email is required',
+											pattern: {
+												value: EMAIL_PATTERN,
+												message: 'Enter a valid email address',
+											},
+										})}
+									/>
+									{errors.root?.message && (
+										<Text styleType='caption' className='text-error-600' role='alert'>
+											{errors.root.message}
+										</Text>
+									)}
+									<Button
+										parent='PersonClaimCTABand'
+										type='submit'
+										styleType='primary'
+										styleSize='md'
+										isLoading={isSubmitting}
+										disabled={isSubmitting}
+										className='mx-auto w-fit'
+									>
+										Submit
+									</Button>
+								</div>
+							</form>
+						</div>
 					)}
 				</div>
 			</Container>

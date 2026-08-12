@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { APP_SIGN_UP_HREF, trackEvent, trackSignUpClicked } from '~/lib/analytics';
+import { buildClaimRequestBody } from '~/lib/claimRequest';
 import { ClaimProfileBlock } from '~/ui/ClaimProfileBlock';
 import { Button, ButtonLink } from '~/ui/Inputs/Button';
 import { TextInput } from '~/ui/Inputs/TextInput';
@@ -59,11 +60,14 @@ export function NotifyForm({ personId, displayName }: { personId: string; displa
 			const res = await fetch('/api/people/claim-request', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
+				// `notify` marks this as a visitor nudging someone else, which is what
+				// gp-api counts into that person's candidate_profile_requests.
+				body: buildClaimRequestBody({
 					personId,
 					firstname: values.firstname,
 					email: values.email,
 					marketingConsent: values.marketingConsent,
+					source: 'notify',
 				}),
 			});
 			if (!res.ok) throw new Error('Submission failed');

@@ -1,0 +1,62 @@
+name: Rotate election-api M2M token
+
+# gp-marketing talks to election-api with a static, long-lived Clerk JWT
+# (ELECTION_API_M2M_TOKEN). JWTs can't be revoked, so we bound them to ~90 days
+# and rotate on a ~60-day cadence — the old token stays valid long enough for
+# routine deploys to pick up the new one (zero-downtime). See
+# scripts/rotate-election-api-token.ts for the full rationale.
+
+on:
+  schedule:
+    # 08:00 UTC on the 1st of every other month (Jan, Mar, May, Jul, Sep, Nov).
+    # Max gap ~62 days, comfortably under the 90-day token lifetime.
+    - cron: '0 8 1 */2 *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Mint + validate only; do not write to Vercel'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rotate-election-api-token
+  cancel-in-progress: false
+
+jobs:
+  rotate:
+    name: Rotate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.23
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Rotate token
+        env:
+          CLERK_MACHINE_SECRET_KEY: ${{ secrets.CLERK_GP_MARKETING_MACHINE_SECRET }}
+          # CLERK_SECRET_KEY is intentionally not injected: minting authenticates
+          # with the machine secret, and passing an unset optional secret would hand
+          # the script an empty string instead of a clean fallback.
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          # Non-secret project/team identifiers for good-party/gp-marketing.
+          VERCEL_PROJECT_ID: prj_xUbQGrErwISW8pqTZtKzk9wN5gFc
+          VERCEL_TEAM_ID: team_e4HAh1NYJW4yYc38qx66yTtG
+          # Optional — if set, forces an immediate production redeploy.
+          VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        run: |
+          if [ "${DRY_RUN}" = "true" ]; then
+            bun run scripts/rotate-election-api-token.ts --dry-run
+          else
+            bun run scripts/rotate-election-api-token.ts
+          fi

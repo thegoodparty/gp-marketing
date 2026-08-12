@@ -167,7 +167,9 @@ async function listTokenEnvVars(projectId: string, token: string, teamId: string
 			});
 		}
 		const next = data.pagination?.next;
-		if (!next) break;
+		// Strict nullish check: the cursor is `number | null`, so `!next` would stop
+		// early on a legitimate `0` cursor and drop remaining pages.
+		if (next == null) break;
 		until = String(next);
 	}
 	return matches;
@@ -230,6 +232,9 @@ async function main(): Promise<void> {
 	}
 
 	const vercelToken = requireEnv('VERCEL_TOKEN');
+	// Register for redaction like the other runtime credentials — manual runs have
+	// no GitHub Actions masking to fall back on.
+	secretsToRedact.add(vercelToken);
 	const projectId = requireEnv('VERCEL_PROJECT_ID');
 	const teamId = requireEnv('VERCEL_TEAM_ID');
 

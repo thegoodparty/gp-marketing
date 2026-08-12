@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { trackEvent } from '~/lib/analytics';
+import { buildClaimRequestBody } from '~/lib/claimRequest';
 import { Container } from '~/ui/Container';
 import { Button } from '~/ui/Inputs/Button';
 import { TextInput } from '~/ui/Inputs/TextInput';
@@ -60,7 +61,14 @@ export function PersonClaimCTABand({ personId, displayName, isRunning }: PersonC
 			const res = await fetch('/api/people/claim-request', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ personId, firstname: values.firstname, email: values.email }),
+				// `owner` is the person claiming their own page, which is not demand
+				// from other people and must never reach candidate_profile_requests.
+				body: buildClaimRequestBody({
+					personId,
+					firstname: values.firstname,
+					email: values.email,
+					source: 'owner',
+				}),
 			});
 			if (!res.ok) throw new Error('Submission failed');
 			trackEvent('Person Profile Claim CTA Submitted', { personId });

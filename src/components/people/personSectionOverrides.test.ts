@@ -180,6 +180,25 @@ describe('the claim prompt and the claim form ship together', () => {
 			expect([slug, claimPromptVariants(slug)]).toEqual([slug, []]);
 		}
 	});
+
+	function claimPromptLocation(slug: string): unknown {
+		return contentCards(slug)
+			.map(card => (card.content as { props?: { variant?: string; locationLabel?: unknown } } | undefined)?.props)
+			.find(props => props?.variant === 'voter-card')?.locationLabel;
+	}
+
+	/**
+	 * The voter prompt for someone in office opens "[Location] deserves greater
+	 * transparency" (Figma E 1928:99467, F 1928:100987). Nothing on the view is
+	 * that place — `districtLabel` is a ward, `stateLabel` a two-letter code — so
+	 * it is read back off the breadcrumb, and picking the wrong crumb would name
+	 * the state, or the office, where the frame names the town.
+	 */
+	test('the voter prompt is handed the most specific place in the breadcrumb', () => {
+		for (const slug of ['kim-byrd-b77f912d', 'rob-zotti-d8c578fb', 'tim-ficken-0a951485']) {
+			expect([slug, claimPromptLocation(slug)]).toEqual([slug, 'Springfield']);
+		}
+	});
 });
 
 describe('card grouping sets the Figma heading levels', () => {

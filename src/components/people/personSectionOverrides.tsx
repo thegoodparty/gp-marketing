@@ -629,6 +629,25 @@ function buildDistrictMap(view: PersonProfileView): ReactNode | undefined {
 }
 
 /**
+ * The most specific place this profile sits in — city, else county, else state.
+ *
+ * Figma's voter-facing claim card for someone in office opens "[Location]
+ * deserves greater transparency" (E 1928:99467, F 1928:100987). The view carries
+ * no locality field (`districtLabel` is a ward/seat, `stateLabel` a two-letter
+ * code), so this reads the place crumbs off the breadcrumb, which is built from
+ * the canonical elections path `/elections/<state>/<county?>/<city?>/position/…`
+ * and is already humanised. The position crumb and the trailing name crumb are
+ * not places, hence the href filter. Null when the profile resolved to no place
+ * at all (no race and no state).
+ */
+function profileLocationLabel(view: PersonProfileView): string | null {
+	const places = view.breadcrumb.filter(
+		crumb => crumb.href?.startsWith('/elections/') && !crumb.href.includes('/position/'),
+	);
+	return places.at(-1)?.label ?? null;
+}
+
+/**
  * Maps a resolved PersonProfileView onto the `personProfile` template's section
  * overrides (keyed by section `_type`/`_key`). Per-state gating (empowerment,
  * removal, claim/pledge/CTA visibility) is expressed by suppressing sections —
@@ -681,7 +700,8 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	// The Figma content well is one column of cards. For unclaimed empowered pages
 	// two claim cards lead the column: the person-facing "Are you …?" prompt,
 	// whose button scrolls down to the claim form in the band below the well, then
-	// the voter-facing "hear from …" prompt, whose button opens the notify dialog.
+	// the voter-facing "ask them to complete their profile" prompt, whose button
+	// opens the notify dialog.
 	// Between them and the civics cards: authored cards (empowerment-gated) then
 	// the civics-spine cards (Recent Experience → Other candidates → Nearby
 	// officials → About position → District map) that render on every state.
@@ -692,6 +712,7 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 				personId={view.personId}
 				displayName={view.displayName}
 				persona={view.persona}
+				locationLabel={profileLocationLabel(view)}
 				variant={variant}
 			/>
 		),

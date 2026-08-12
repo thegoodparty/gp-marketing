@@ -57,6 +57,10 @@ interface VercelEnvVar {
 	key: string;
 	target: string[];
 	type: string;
+	// Set on branch-scoped preview entries. Such an entry has target ['preview']
+	// but does NOT cover the canonical preview slot, so it must be excluded when
+	// computing which targets already have an entry.
+	gitBranch?: string;
 }
 
 function requireEnv(name: string): string {
@@ -164,6 +168,7 @@ async function listTokenEnvVars(projectId: string, token: string, teamId: string
 				key: env.key,
 				type: env.type,
 				target: Array.isArray(env.target) ? env.target : [env.target],
+				gitBranch: env.gitBranch,
 			});
 		}
 		const next = data.pagination?.next;
@@ -276,7 +281,10 @@ async function main(): Promise<void> {
 		console.log(`  updated entry ${env.id} (targets: ${env.target.join(', ')})`);
 	}
 
-	const covered = new Set(existing.flatMap(env => env.target));
+	// Exclude branch-scoped preview entries: they carry target ['preview'] but do
+	// not cover the canonical preview slot, so counting them would wrongly skip
+	// creating the canonical preview entry and leave preview on the stale token.
+	const covered = new Set(existing.filter(env => !env.gitBranch).flatMap(env => env.target));
 	for (const [target, type] of Object.entries(TARGET_TYPES)) {
 		if (covered.has(target)) continue;
 		await vercelFetch(`/v10/projects/${projectId}/env`, vercelToken, teamId, {

@@ -131,3 +131,22 @@ describe('claim form HubSpot ids', () => {
 		expect(new Set(ids).size).toBe(ids.length);
 	});
 });
+
+describe('claim form marketing consent', () => {
+	/**
+	 * The Figma dialog (1901:51851) draws this box ticked, so the unchecked default
+	 * looks like a parity bug to anyone re-reading the frame and is a one-word revert
+	 * away. It is deliberate: a pre-ticked box opts the sender in unless they notice
+	 * and clear it, which is not consent under GDPR. Nothing else fails if it flips.
+	 */
+	test('the notify form does not pre-check the marketing opt-in', async () => {
+		const { NotifyForm } = await import('./ClaimProfileModal');
+
+		await render(React.createElement(NotifyForm, notifyProps));
+
+		const consent = document.querySelector<HTMLInputElement>('input[name="marketingConsent"]');
+		expect(consent).not.toBeNull();
+		expect(consent?.type).toBe('checkbox');
+		expect(consent?.checked).toBe(false);
+	});
+});

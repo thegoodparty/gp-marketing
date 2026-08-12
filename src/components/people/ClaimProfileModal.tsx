@@ -38,12 +38,15 @@ type NotifyValues = { firstname: string; email: string; marketingConsent: boolea
  */
 export function NotifyForm({ personId, displayName }: { personId: string; displayName: string }) {
 	const [isSuccess, setIsSuccess] = useState(false);
+	// marketingConsent starts false against the Figma dialog (1901:51851), which
+	// draws the box ticked: a pre-ticked box opts the sender in unless they notice
+	// and clear it, which is not consent under GDPR. Do not restore Figma parity.
 	const {
 		register,
 		handleSubmit,
 		setError,
 		formState: { errors, isSubmitting },
-	} = useForm<NotifyValues>({ defaultValues: { firstname: '', email: '', marketingConsent: true } });
+	} = useForm<NotifyValues>({ defaultValues: { firstname: '', email: '', marketingConsent: false } });
 
 	async function onSubmit(values: NotifyValues) {
 		try {

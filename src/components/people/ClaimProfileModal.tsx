@@ -15,12 +15,18 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /**
  * Stable identity for HubSpot's non-HubSpot ("collected") forms tool. DO NOT
- * rename, and do not remove it in favour of styling: the site-wide HubSpot
- * tracking script keys a collected form on the `<form>` tag's id, falling back to
- * its class list when there is no id. Without this the form was filed under
- * `.flex, .w-full, .flex-col, .gap-4, .text-left`, so any change to its spacing
- * or width silently created a NEW form in HubSpot and orphaned the marketing
- * workflows attached to the old one — with no error anywhere.
+ * rename or drop it.
+ *
+ * The site-wide HubSpot tracking script names a collected form after a CSS
+ * selector built from the `<form>` tag's `id` **and** its class list — the id is
+ * not a replacement for the classes, it is a prefix to them. An id alone yields
+ * `#person-claim-notify`; an id plus classes yields
+ * `#person-claim-notify .flex, .w-full, .flex-col, .gap-4, .text-left`, which
+ * re-keys the form in HubSpot the moment anyone touches its spacing or width.
+ * HubSpot then files submissions under a brand-new form and orphans the
+ * workflows attached to the old one, with no error anywhere. That is why the
+ * `<form>` below carries the id and nothing else: every styling class lives on
+ * the wrapper `<div>` inside it, where designers can churn it freely.
  *
  * Distinct from {@link PersonClaimCTABand}'s id on purpose. HubSpot groups
  * submissions by this value, and the two forms are different intents that want
@@ -80,67 +86,64 @@ export function NotifyForm({ personId, displayName }: { personId: string; displa
 	}
 
 	return (
-		<form
-			id={NOTIFY_FORM_ID}
-			className='flex w-full flex-col gap-4 text-left'
-			onSubmit={(e) => void handleSubmit(onSubmit)(e)}
-			noValidate
-		>
-			<TextInput
-				label='Your name (optional)'
-				autoComplete='name'
-				error={errors.firstname?.message}
-				{...register('firstname')}
-			/>
-			<TextInput
-				label='Your email'
-				type='email'
-				required
-				autoComplete='email'
-				inputMode='email'
-				error={errors.email?.message}
-				{...register('email', {
-					required: 'Email is required',
-					pattern: { value: EMAIL_PATTERN, message: 'Enter a valid email address' },
-				})}
-			/>
-			<label htmlFor='notify-marketing-consent' className='flex items-start gap-2.5'>
-				<input
-					id='notify-marketing-consent'
-					type='checkbox'
-					className='mt-0.5 h-5 w-5 shrink-0 rounded border-neutral-300 text-btn-primary-bg accent-btn-primary-bg focus:outline-none focus-visible:ring-2 focus-visible:ring-btn-primary-bg/30'
-					{...register('marketingConsent')}
+		<form id={NOTIFY_FORM_ID} onSubmit={(e) => void handleSubmit(onSubmit)(e)} noValidate>
+			<div className='flex w-full flex-col gap-4 text-left'>
+				<TextInput
+					label='Your name (optional)'
+					autoComplete='name'
+					error={errors.firstname?.message}
+					{...register('firstname')}
 				/>
-				<Text as='span' styleType='body-2'>
-					Sign up for marketing communications from{' '}
-					<a
-						href='https://goodparty.org'
-						target='_blank'
-						rel='noopener noreferrer'
-						className='underline'
-						onClick={(e) => e.stopPropagation()}
-					>
-						GoodParty.org
-					</a>
-					. Unsubscribe at any time.
-				</Text>
-			</label>
-			{errors.root?.message && (
-				<Text styleType='caption' className='text-error-600' role='alert'>
-					{errors.root.message}
-				</Text>
-			)}
-			<Button
-				parent='ClaimProfileModal'
-				type='submit'
-				styleType='secondary'
-				styleSize='md'
-				isLoading={isSubmitting}
-				disabled={isSubmitting}
-				className='w-fit'
-			>
-				Notify {displayName}
-			</Button>
+				<TextInput
+					label='Your email'
+					type='email'
+					required
+					autoComplete='email'
+					inputMode='email'
+					error={errors.email?.message}
+					{...register('email', {
+						required: 'Email is required',
+						pattern: { value: EMAIL_PATTERN, message: 'Enter a valid email address' },
+					})}
+				/>
+				<label htmlFor='notify-marketing-consent' className='flex items-start gap-2.5'>
+					<input
+						id='notify-marketing-consent'
+						type='checkbox'
+						className='mt-0.5 h-5 w-5 shrink-0 rounded border-neutral-300 text-btn-primary-bg accent-btn-primary-bg focus:outline-none focus-visible:ring-2 focus-visible:ring-btn-primary-bg/30'
+						{...register('marketingConsent')}
+					/>
+					<Text as='span' styleType='body-2'>
+						Sign up for marketing communications from{' '}
+						<a
+							href='https://goodparty.org'
+							target='_blank'
+							rel='noopener noreferrer'
+							className='underline'
+							onClick={(e) => e.stopPropagation()}
+						>
+							GoodParty.org
+						</a>
+						. Unsubscribe at any time.
+					</Text>
+				</label>
+				{errors.root?.message && (
+					<Text styleType='caption' className='text-error-600' role='alert'>
+						{errors.root.message}
+					</Text>
+				)}
+				<Button
+					parent='ClaimProfileModal'
+					type='submit'
+					styleType='secondary'
+					styleSize='md'
+					isLoading={isSubmitting}
+					disabled={isSubmitting}
+					className='w-fit'
+				>
+					Notify {displayName}
+				</Button>
+			</div>
 		</form>
 	);
 }

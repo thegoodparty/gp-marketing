@@ -639,6 +639,14 @@ function buildDistrictMap(view: PersonProfileView): ReactNode | undefined {
  * and is already humanised. The position crumb and the trailing name crumb are
  * not places, hence the href filter. Null when the profile resolved to no place
  * at all (no race and no state).
+ *
+ * Someone who only holds office has no candidacy, so today they have no race
+ * slug and their trail stops at the state — the same gap that leaves
+ * `positionHref` null for them (see `composePersonProfileView`). They therefore
+ * get "Wyoming deserves greater transparency" where the frame shows the town.
+ * That is deliberately preferred to a vaguer stand-in: it is still the place
+ * they serve, it is the same place the rest of their page links to, and it
+ * sharpens on its own once election-api threads the office's race slug through.
  */
 function profileLocationLabel(view: PersonProfileView): string | null {
 	const places = view.breadcrumb.filter(

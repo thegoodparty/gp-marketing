@@ -11,6 +11,7 @@ import { Button, ButtonLink } from '~/ui/Inputs/Button';
 import { TextInput } from '~/ui/Inputs/TextInput';
 import { IconResolver } from '~/ui/IconResolver';
 import { Text } from '~/ui/Text';
+import { scrollToPersonClaimForm } from './claimFormAnchor';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -173,12 +174,12 @@ function ClaimPromptCard({
 	displayName,
 	isRunning,
 	variant,
-	onOpen,
+	onClaim,
 }: {
 	displayName: string;
 	isRunning: boolean;
 	variant: 'voter-card' | 'owner-card';
-	onOpen: VoidFunction;
+	onClaim: VoidFunction;
 }) {
 	const owner = variant === 'owner-card';
 	const heading = owner ? `Are you ${displayName}?` : `Want to hear from ${displayName}?`;
@@ -204,7 +205,7 @@ function ClaimPromptCard({
 				styleType='primary'
 				styleSize='md'
 				className='w-fit'
-				onClick={onOpen}
+				onClick={onClaim}
 			>
 				{cta}
 			</Button>
@@ -215,6 +216,17 @@ function ClaimPromptCard({
 export function ClaimProfileModal({ personId, displayName, persona, variant = 'banner' }: ClaimProfileModalProps) {
 	const [open, setOpen] = useState(false);
 	const isRunning = persona === 'candidate' || persona === 'both';
+
+	// The owner-facing prompts ("is this you?") pull the person down to the claim
+	// form at the bottom of their own profile rather than opening this dialog, so
+	// there is one place to claim from and the Win/Serve branch happens once, on
+	// submit. If the band is not on the page the dialog is still the fallback.
+	const claimHere = () => {
+		if (!scrollToPersonClaimForm()) setOpen(true);
+	};
+	// The voter-facing prompt is unchanged: it asks a visitor to nudge someone
+	// else, which is the dialog's "Not [Name]?" notify form, not the claim form.
+	const openDialog = () => setOpen(true);
 
 	const headline = `Is this you, ${displayName}?`;
 	const bannerBody = isRunning
@@ -232,7 +244,7 @@ export function ClaimProfileModal({ personId, displayName, persona, variant = 'b
 					claimButton={{
 						buttonType: 'button',
 						label: 'Claim your profile',
-						onClick: () => setOpen(true),
+						onClick: claimHere,
 						buttonProps: { styleType: 'primary', styleSize: 'md' },
 					}}
 				/>
@@ -241,7 +253,7 @@ export function ClaimProfileModal({ personId, displayName, persona, variant = 'b
 					displayName={displayName}
 					isRunning={isRunning}
 					variant={variant}
-					onOpen={() => setOpen(true)}
+					onClaim={variant === 'owner-card' ? claimHere : openDialog}
 				/>
 			)}
 

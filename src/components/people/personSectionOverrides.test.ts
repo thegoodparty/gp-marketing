@@ -125,6 +125,63 @@ describe('unclaimed pages prompt for every section the claimed page would show',
 	});
 });
 
+describe('the claim prompt and the claim form ship together', () => {
+	/** Every Figma state A–L, so no state can render one half of the pair. */
+	const ALL_STATES = [
+		'allen-slagle-74eee01a',
+		'tracy-good-ecff49d3',
+		'susan-overman-ad914b82',
+		'kim-byrd-b77f912d',
+		'rob-zotti-d8c578fb',
+		'tim-ficken-0a951485',
+		'bill-fortner-61a42912',
+		'gregory-schreurs-136cadf0',
+		'jeb-hanson-3753676b',
+		'deb-craft-f88e7434',
+		'x-27255f40',
+		'x-3412f69c',
+	];
+
+	function claimPromptVariants(slug: string): string[] {
+		return contentCards(slug).flatMap(card => {
+			const variant = (card.content as { props?: { variant?: string } } | undefined)?.props?.variant;
+			return variant ? [variant] : [];
+		});
+	}
+
+	function rendersClaimBand(slug: string): boolean {
+		const view = getDevPersonProfileView(slug);
+		if (!view) throw new Error(`no dev fixture for ${slug}`);
+		const cta = buildPersonSectionOverrides(view).component_ctaBannerBlock as { render?: unknown } | undefined;
+		return cta?.render !== undefined;
+	}
+
+	/**
+	 * The owner prompt's button scrolls to `#person-claim-form`, and that anchor
+	 * only exists inside PersonClaimCTABand. Both hang off the same `showClaim`
+	 * gate today; this pins the pairing so a future change to either gate cannot
+	 * quietly leave the button scrolling to nothing.
+	 */
+	test('no state renders the owner claim prompt without the claim form below it', () => {
+		for (const slug of ALL_STATES) {
+			expect([slug, claimPromptVariants(slug).includes('owner-card')]).toEqual([slug, rendersClaimBand(slug)]);
+		}
+	});
+
+	test('the unclaimed states lead with the owner prompt, then the voter prompt', () => {
+		for (const slug of ['kim-byrd-b77f912d', 'rob-zotti-d8c578fb', 'tim-ficken-0a951485']) {
+			expect([slug, claimPromptVariants(slug)]).toEqual([slug, ['owner-card', 'voter-card']]);
+		}
+	});
+
+	// A claimed profile has nothing to claim, and a removed one asked us to stop.
+	test('claimed and removed states show neither prompt', () => {
+		for (const slug of ['allen-slagle-74eee01a', 'x-27255f40', 'x-3412f69c']) {
+			expect([slug, claimPromptVariants(slug)]).toEqual([slug, []]);
+		}
+	});
+});
+
 describe('card grouping sets the Figma heading levels', () => {
 	/** Headings per white card: the first is the 32/44 one, the rest are 24/32. */
 	function headingsByCard(slug: string): string[][] {

@@ -3,12 +3,13 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { trackEvent } from '~/lib/analytics';
+import { APP_SIGN_UP_HREF, trackEvent, trackSignUpClicked } from '~/lib/analytics';
 import { buildClaimRequestBody } from '~/lib/claimRequest';
 import { Container } from '~/ui/Container';
 import { Button } from '~/ui/Inputs/Button';
 import { TextInput } from '~/ui/Inputs/TextInput';
 import { Text } from '~/ui/Text';
+import { PERSON_CLAIM_ANCHOR_ID } from './claimFormAnchor';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -26,7 +27,14 @@ type NotifyValues = { firstname: string; email: string };
 export type PersonClaimCTABandProps = {
 	personId: string;
 	displayName: string;
-	/** Running personas get "share why you're running"; office personas get "your record". */
+	/**
+	 * Which product this person belongs to, derived from their persona upstream:
+	 * running (candidate/both) is **Win**, in office only is **Serve**.
+	 *
+	 * It picks the body copy ("share why you're running" vs "your record") and,
+	 * on submit, which branch they take — Win self-serves into sign-up, Serve is
+	 * handed to sales, who send an access link by hand.
+	 */
 	isRunning: boolean;
 };
 
@@ -71,8 +79,17 @@ export function PersonClaimCTABand({ personId, displayName, isRunning }: PersonC
 				}),
 			});
 			if (!res.ok) throw new Error('Submission failed');
-			trackEvent('Person Profile Claim CTA Submitted', { personId });
+			trackEvent('Person Profile Claim CTA Submitted', { personId, product: isRunning ? 'win' : 'serve' });
 			setIsSuccess(true);
+
+			// Win only. The lead is stored either way — the redirect happens after a
+			// successful POST so a candidate who abandons sign-up is still a lead and
+			// still counted in the funnel. Serve stops here: sales follows up from
+			// HubSpot and sends the access link by hand.
+			if (isRunning) {
+				trackSignUpClicked({ href: APP_SIGN_UP_HREF, label: 'Claim profile', formId: CLAIM_FORM_ID });
+				window.location.assign(APP_SIGN_UP_HREF);
+			}
 		} catch {
 			setError('root', { message: 'Something went wrong. Please try again.' });
 		}
@@ -82,8 +99,19 @@ export function PersonClaimCTABand({ personId, displayName, isRunning }: PersonC
 		? 'Your community deserves accountable leadership. Claim your profile and share why you\u2019re running and your top priorities with residents. Enter your email to get started.'
 		: 'Your community deserves accountable leadership. Claim your profile and share your record and priorities in office with residents. Enter your email to get started.';
 
+	// Both branches speak to the person themselves, not to a visitor — this band is
+	// only ever the subject entering their own address.
+	const successCopy = isRunning
+		? 'Thanks — taking you to GoodParty.org now to create your free account and finish claiming your profile.'
+		: 'Thanks — someone from our team will email you at that address with a link to access your profile.';
+
 	return (
-		<article className='py-(--container-padding) bg-goodparty-cream' data-component='CTABannerBlock'>
+		<article
+			id={PERSON_CLAIM_ANCHOR_ID}
+			tabIndex={-1}
+			className='py-(--container-padding) scroll-mt-24 bg-goodparty-cream focus:outline-none'
+			data-component='CTABannerBlock'
+		>
 			<Container size='xl'>
 				<div className='flex flex-col items-center gap-6 rounded-2xl bg-blue-100 p-6 text-center text-midnight-900 md:p-12'>
 					<div className='flex max-w-2xl flex-col items-center gap-3 md:gap-4'>
@@ -98,9 +126,7 @@ export function PersonClaimCTABand({ personId, displayName, isRunning }: PersonC
 							role='status'
 							aria-live='polite'
 						>
-							<Text styleType='body-2'>
-								Thanks — we&apos;ll be in touch at that address about claiming your profile.
-							</Text>
+							<Text styleType='body-2'>{successCopy}</Text>
 						</div>
 					) : (
 						// The sizing sits on the wrapper, not the <form>, because the band is a

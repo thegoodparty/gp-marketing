@@ -10,6 +10,7 @@
  */
 import { describe, expect, test } from 'bun:test';
 import { getDevPersonProfileView } from '~/lib/devPeopleProfileFixtures';
+import { buildBreadcrumbTrail } from '~/lib/peopleProfile';
 import { chunkCardGroups } from '~/ui/_lib/chunkCardGroups';
 import { buildPersonSectionOverrides } from './personSectionOverrides';
 
@@ -179,6 +180,55 @@ describe('the claim prompt and the claim form ship together', () => {
 		for (const slug of ['allen-slagle-74eee01a', 'x-27255f40', 'x-3412f69c']) {
 			expect([slug, claimPromptVariants(slug)]).toEqual([slug, []]);
 		}
+	});
+
+	function voterPromptLocation(cards: ReturnType<typeof contentCards>): unknown {
+		return cards
+			.map(card => (card.content as { props?: { variant?: string; locationLabel?: unknown } } | undefined)?.props)
+			.find(props => props?.variant === 'voter-card')?.locationLabel;
+	}
+
+	function claimPromptLocation(slug: string): unknown {
+		return voterPromptLocation(contentCards(slug));
+	}
+
+	/**
+	 * The voter prompt for someone in office opens "[Location] deserves greater
+	 * transparency" (Figma E 1928:99467, F 1928:100987). Nothing on the view is
+	 * that place — `districtLabel` is a ward, `stateLabel` a two-letter code — so
+	 * it is read back off the breadcrumb, and picking the wrong crumb would name
+	 * the state, or the office, where the frame names the town.
+	 */
+	test('the voter prompt is handed the most specific place in the breadcrumb', () => {
+		for (const slug of ['kim-byrd-b77f912d', 'rob-zotti-d8c578fb', 'tim-ficken-0a951485']) {
+			expect([slug, claimPromptLocation(slug)]).toEqual([slug, 'Springfield']);
+		}
+	});
+
+	/**
+	 * The dev fixtures hand every persona a city race, but in production someone
+	 * who only holds office has no candidacy and so no race slug, and their trail
+	 * degrades to `Elections > State > Name`. The card then names the state. That
+	 * is the accepted degradation (see `profileLocationLabel`) — what must not
+	 * happen is the state crumb being skipped for the office, or dropped for the
+	 * generic subject, so this pins the degraded shape rather than assuming the
+	 * fixtures represent it.
+	 */
+	test('an officeholder with no race falls back to the state, not the office', () => {
+		const view = getDevPersonProfileView('rob-zotti-d8c578fb');
+		if (!view) throw new Error('no dev fixture for rob-zotti-d8c578fb');
+		const stateOnly = {
+			...view,
+			breadcrumb: buildBreadcrumbTrail({
+				displayName: view.displayName,
+				stateCode: 'WY',
+				raceSlug: null,
+				positionLevel: null,
+				positionName: null,
+			}),
+		};
+		const cards = buildPersonSectionOverrides(stateOnly).component_profileContentBlock?.contentCards ?? [];
+		expect(voterPromptLocation(cards)).toBe('Wyoming');
 	});
 });
 

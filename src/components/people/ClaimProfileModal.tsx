@@ -156,39 +156,90 @@ export function NotifyForm({ personId, displayName }: { personId: string; displa
 	);
 }
 
+export type Persona = 'candidate' | 'officeholder' | 'both' | 'past';
+
 export type ClaimProfileModalProps = {
 	personId: string;
 	displayName: string;
-	persona: 'candidate' | 'officeholder' | 'both' | 'past';
+	persona: Persona;
+	/**
+	 * Most specific place the profile resolves to (city, else county, else
+	 * state). Fills the "[Location]" the Figma voter card opens with for someone
+	 * in office; omit it and that sentence falls back to a generic subject.
+	 */
+	locationLabel?: string | null;
 	/**
 	 * Which trigger to render (the dialog itself is identical):
 	 *  - `banner`      full-width yellow CMS banner (default; legacy section use)
-	 *  - `voter-card`  in-column light-blue prompt aimed at visitors ("hear from …")
+	 *  - `voter-card`  in-column light-blue prompt aimed at visitors (nudge them to complete their profile)
 	 *  - `owner-card`  in-column light-blue prompt aimed at the person ("Are you …?")
 	 */
 	variant?: 'banner' | 'voter-card' | 'owner-card';
 };
 
+/** Running now — the tense the owner-facing copy is written in. */
+function isRunning(persona: Persona): boolean {
+	return persona === 'candidate' || persona === 'both';
+}
+
+/** Currently serving — the axis the voter-facing copy splits on (see `voterCopy`). */
+function holdsOffice(persona: Persona): boolean {
+	return persona === 'officeholder' || persona === 'both';
+}
+
+/**
+ * Voter-facing card copy, verbatim from the unclaimed Figma frames.
+ *
+ * Note the split is NOT the owner card's "is running" one. The candidate-only
+ * frame (D, card 1958:108619) sells casting an informed vote, while both frames
+ * for someone already in office — officeholder (E, card 1928:99467) and
+ * simultaneous candidate/officeholder (F, card 1928:100987), which are
+ * word-for-word identical — sell transparency about their record. So persona
+ * `both` takes the office copy, the opposite of how `isRunning` groups it.
+ *
+ * `location` fills Figma's "[Location]"; there is no locality on the view, so
+ * the caller derives it and a profile that resolves to no place at all keeps the
+ * sentence readable with a generic subject rather than an empty one.
+ *
+ * Persona `past` never reaches here: past-election profiles lead with the voter
+ * guide disclaimer instead of a claim prompt (Figma H), so no claim card renders.
+ */
+function voterCopy(displayName: string, persona: Persona, location: string | null): { heading: string; body: string } {
+	if (holdsOffice(persona)) {
+		return {
+			heading: `${location ?? 'Your community'} deserves greater transparency. Ask ${displayName} to complete their profile.`,
+			body: `Advocate for transparency in local government. Send a message to ${displayName} to share their top priorities and accomplishments with constituents like you.`,
+		};
+	}
+	return {
+		heading: `Want to learn more about this candidate? Ask ${displayName} to complete their profile.`,
+		body: `Step into the voting booth fully informed. Send a message to ${displayName} to share their top issues.`,
+	};
+}
+
 /** In-column light-blue claim prompt (voter- or owner-facing) — a Figma content-well card. */
 function ClaimPromptCard({
 	displayName,
-	isRunning,
+	persona,
+	locationLabel = null,
 	variant,
 	onClaim,
 }: {
 	displayName: string;
-	isRunning: boolean;
+	persona: Persona;
+	locationLabel?: string | null;
 	variant: 'voter-card' | 'owner-card';
 	onClaim: VoidFunction;
 }) {
 	const owner = variant === 'owner-card';
-	const heading = owner ? `Are you ${displayName}?` : `Want to hear from ${displayName}?`;
+	const voter = voterCopy(displayName, persona, locationLabel);
+	const heading = owner ? `Are you ${displayName}?` : voter.heading;
 	const body = owner
-		? isRunning
+		? isRunning(persona)
 			? 'Complete your profile now to share why you\u2019re running, your top issues, and how voters can reach you.'
 			: 'Complete your profile now to share your record, your priorities in office, and how constituents can reach you.'
-		: `Ask ${displayName} to claim their GoodParty.org profile and share their platform.`;
-	const cta = owner ? 'Complete your profile' : `Notify ${displayName}`;
+		: voter.body;
+	const cta = owner ? 'Complete your profile' : 'Send request';
 
 	return (
 		<div
@@ -206,6 +257,7 @@ function ClaimPromptCard({
 				styleSize='md'
 				className='w-fit'
 				onClick={onClaim}
+				iconRight={owner ? undefined : <IconResolver icon='arrow-up-right' className='h-4 w-4' />}
 			>
 				{cta}
 			</Button>
@@ -213,9 +265,15 @@ function ClaimPromptCard({
 	);
 }
 
-export function ClaimProfileModal({ personId, displayName, persona, variant = 'banner' }: ClaimProfileModalProps) {
+export function ClaimProfileModal({
+	personId,
+	displayName,
+	persona,
+	locationLabel = null,
+	variant = 'banner',
+}: ClaimProfileModalProps) {
 	const [open, setOpen] = useState(false);
-	const isRunning = persona === 'candidate' || persona === 'both';
+	const running = isRunning(persona);
 
 	// The owner-facing prompts ("is this you?") pull the person down to the claim
 	// form at the bottom of their own profile rather than opening this dialog, so
@@ -229,7 +287,7 @@ export function ClaimProfileModal({ personId, displayName, persona, variant = 'b
 	const openDialog = () => setOpen(true);
 
 	const headline = `Is this you, ${displayName}?`;
-	const bannerBody = isRunning
+	const bannerBody = running
 		? 'Claim this profile to share why you\u2019re running, your top issues, and how voters can reach you.'
 		: 'Claim this profile to share your record, your priorities in office, and how constituents can reach you.';
 
@@ -251,7 +309,8 @@ export function ClaimProfileModal({ personId, displayName, persona, variant = 'b
 			) : (
 				<ClaimPromptCard
 					displayName={displayName}
-					isRunning={isRunning}
+					persona={persona}
+					locationLabel={locationLabel}
 					variant={variant}
 					onClaim={variant === 'owner-card' ? claimHere : openDialog}
 				/>

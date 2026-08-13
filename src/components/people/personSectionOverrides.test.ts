@@ -10,6 +10,7 @@
  */
 import { describe, expect, test } from 'bun:test';
 import { getDevPersonProfileView } from '~/lib/devPeopleProfileFixtures';
+import { buildBreadcrumbTrail } from '~/lib/peopleProfile';
 import { chunkCardGroups } from '~/ui/_lib/chunkCardGroups';
 import { buildPersonSectionOverrides } from './personSectionOverrides';
 
@@ -122,6 +123,112 @@ describe('unclaimed pages prompt for every section the claimed page would show',
 		expect(headings).toContain('Campaign Issues');
 		expect(headings).not.toContain('Top Priorities While in Office');
 		expect(headings).not.toContain('Accomplishments During This Term');
+	});
+});
+
+describe('the claim prompt and the claim form ship together', () => {
+	/** Every Figma state A–L, so no state can render one half of the pair. */
+	const ALL_STATES = [
+		'allen-slagle-74eee01a',
+		'tracy-good-ecff49d3',
+		'susan-overman-ad914b82',
+		'kim-byrd-b77f912d',
+		'rob-zotti-d8c578fb',
+		'tim-ficken-0a951485',
+		'bill-fortner-61a42912',
+		'gregory-schreurs-136cadf0',
+		'jeb-hanson-3753676b',
+		'deb-craft-f88e7434',
+		'x-27255f40',
+		'x-3412f69c',
+	];
+
+	function claimPromptVariants(slug: string): string[] {
+		return contentCards(slug).flatMap(card => {
+			const variant = (card.content as { props?: { variant?: string } } | undefined)?.props?.variant;
+			return variant ? [variant] : [];
+		});
+	}
+
+	function rendersClaimBand(slug: string): boolean {
+		const view = getDevPersonProfileView(slug);
+		if (!view) throw new Error(`no dev fixture for ${slug}`);
+		const cta = buildPersonSectionOverrides(view).component_ctaBannerBlock as { render?: unknown } | undefined;
+		return cta?.render !== undefined;
+	}
+
+	/**
+	 * The owner prompt's button scrolls to `#person-claim-form`, and that anchor
+	 * only exists inside PersonClaimCTABand. Both hang off the same `showClaim`
+	 * gate today; this pins the pairing so a future change to either gate cannot
+	 * quietly leave the button scrolling to nothing.
+	 */
+	test('no state renders the owner claim prompt without the claim form below it', () => {
+		for (const slug of ALL_STATES) {
+			expect([slug, claimPromptVariants(slug).includes('owner-card')]).toEqual([slug, rendersClaimBand(slug)]);
+		}
+	});
+
+	test('the unclaimed states lead with the owner prompt, then the voter prompt', () => {
+		for (const slug of ['kim-byrd-b77f912d', 'rob-zotti-d8c578fb', 'tim-ficken-0a951485']) {
+			expect([slug, claimPromptVariants(slug)]).toEqual([slug, ['owner-card', 'voter-card']]);
+		}
+	});
+
+	// A claimed profile has nothing to claim, and a removed one asked us to stop.
+	test('claimed and removed states show neither prompt', () => {
+		for (const slug of ['allen-slagle-74eee01a', 'x-27255f40', 'x-3412f69c']) {
+			expect([slug, claimPromptVariants(slug)]).toEqual([slug, []]);
+		}
+	});
+
+	function voterPromptLocation(cards: ReturnType<typeof contentCards>): unknown {
+		return cards
+			.map(card => (card.content as { props?: { variant?: string; locationLabel?: unknown } } | undefined)?.props)
+			.find(props => props?.variant === 'voter-card')?.locationLabel;
+	}
+
+	function claimPromptLocation(slug: string): unknown {
+		return voterPromptLocation(contentCards(slug));
+	}
+
+	/**
+	 * The voter prompt for someone in office opens "[Location] deserves greater
+	 * transparency" (Figma E 1928:99467, F 1928:100987). Nothing on the view is
+	 * that place — `districtLabel` is a ward, `stateLabel` a two-letter code — so
+	 * it is read back off the breadcrumb, and picking the wrong crumb would name
+	 * the state, or the office, where the frame names the town.
+	 */
+	test('the voter prompt is handed the most specific place in the breadcrumb', () => {
+		for (const slug of ['kim-byrd-b77f912d', 'rob-zotti-d8c578fb', 'tim-ficken-0a951485']) {
+			expect([slug, claimPromptLocation(slug)]).toEqual([slug, 'Springfield']);
+		}
+	});
+
+	/**
+	 * The dev fixtures hand every persona a city race, but in production someone
+	 * who only holds office has no candidacy and so no race slug, and their trail
+	 * degrades to `Elections > State > Name`. The card then names the state. That
+	 * is the accepted degradation (see `profileLocationLabel`) — what must not
+	 * happen is the state crumb being skipped for the office, or dropped for the
+	 * generic subject, so this pins the degraded shape rather than assuming the
+	 * fixtures represent it.
+	 */
+	test('an officeholder with no race falls back to the state, not the office', () => {
+		const view = getDevPersonProfileView('rob-zotti-d8c578fb');
+		if (!view) throw new Error('no dev fixture for rob-zotti-d8c578fb');
+		const stateOnly = {
+			...view,
+			breadcrumb: buildBreadcrumbTrail({
+				displayName: view.displayName,
+				stateCode: 'WY',
+				raceSlug: null,
+				positionLevel: null,
+				positionName: null,
+			}),
+		};
+		const cards = buildPersonSectionOverrides(stateOnly).component_profileContentBlock?.contentCards ?? [];
+		expect(voterPromptLocation(cards)).toBe('Wyoming');
 	});
 });
 

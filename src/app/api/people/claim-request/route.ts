@@ -1,5 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
+import { isClaimRequestSource } from '~/lib/claimRequest';
+
 const ELECTION_API_BASE = process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
 
 const GP_API_BASE =
@@ -10,7 +12,13 @@ const GP_API_BASE =
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PERSON_ID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-type ClaimBody = { personId?: string; email?: string; firstname?: string; marketingConsent?: boolean };
+type ClaimBody = {
+	personId?: string;
+	email?: string;
+	firstname?: string;
+	marketingConsent?: boolean;
+	source?: string;
+};
 
 /**
  * POST /api/people/claim-request
@@ -26,7 +34,7 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
 	}
 
-	const { personId, email, firstname, marketingConsent } = body;
+	const { personId, email, firstname, marketingConsent, source } = body;
 
 	if (!personId || !PERSON_ID_PATTERN.test(personId)) {
 		return NextResponse.json({ error: 'Invalid personId' }, { status: 400 });
@@ -46,6 +54,12 @@ export async function POST(request: NextRequest) {
 				requesterEmail: email,
 				...(firstname ? { requesterName: firstname } : {}),
 				marketingConsent: marketingConsent ?? false,
+				// Only the notify form's submissions count towards a person's HubSpot
+				// candidate_profile_requests, so gp-api needs to know which of the two
+				// forms sent this. An unrecognised value is dropped rather than
+				// forwarded: gp-api validates the enum strictly and would 400 the whole
+				// submission, losing a real lead over a bad discriminator.
+				...(isClaimRequestSource(source) ? { source } : {}),
 			}),
 		});
 		if (!res.ok) {

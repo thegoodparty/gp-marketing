@@ -57,6 +57,17 @@ export interface ExpectedFacts {
 
 // ----- builders --------------------------------------------------------------
 
+/**
+ * Election day for the fixtures' candidacy, always ~1 year out.
+ *
+ * Derived from the clock rather than hardcoded because `resolvePersona` only
+ * treats an UPCOMING race as making someone a current candidate. Every fixture
+ * below that expects a `candidate` or `both` persona depends on this date being
+ * in the future, so a fixed literal would quietly reclassify half the matrix
+ * the moment it went stale — the same class of bug this date guards against.
+ */
+const UPCOMING_ELECTION_DATE = `${new Date().getUTCFullYear() + 1}-11-03`;
+
 function candidacy(over: Partial<PersonCandidacySummary> = {}): PersonCandidacySummary {
 	// No `slug` on purpose: loadPrimaryCandidacy short-circuits without one, so
 	// the matrix stays focused on state/gating rather than the race fetch.
@@ -66,7 +77,7 @@ function candidacy(over: Partial<PersonCandidacySummary> = {}): PersonCandidacyS
 		positionName: 'Mayor of Springfield',
 		party: 'Independent',
 		state: 'CA',
-		Race: { electionDate: '2024-11-05' },
+		Race: { electionDate: UPCOMING_ELECTION_DATE },
 		...over,
 	};
 }

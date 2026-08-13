@@ -247,6 +247,90 @@ describe('composeView persona resolution', () => {
 		expect(view.persona).toBe('both');
 	});
 
+	// Regression: election-api keeps a candidacy row forever, so counting rows
+	// rather than dating them kept every officeholder who had ever run reading
+	// as a current candidate. Shape below is Monique Bryant's live spine — a
+	// 2024 school-board race she won, and the 2025–2028 term she is serving.
+	test('an officeholder whose only race already happened is not still running', () => {
+		const view = composeView(
+			PID,
+			makePerson({
+				fullName: 'Monique Bryant',
+				Candidacies: [
+					{
+						id: 'c1',
+						positionName: 'Detroit Community School District Board',
+						Race: { electionDate: '2024-11-05' },
+					},
+				],
+				OfficeHolders: [
+					makeOffice({
+						isCurrent: true,
+						positionName: 'Detroit Community School District Board',
+						partyNames: ['Nonpartisan'],
+						startAt: '2025-01-01',
+						endAt: '2028-12-31',
+					}),
+				],
+			}),
+			null,
+		);
+		expect(view.persona).toBe('officeholder');
+		expect(view.roleTitle).toBe('Detroit Community School District Board');
+		// The "Candidate for …" line is what the bug report saw; it must be gone.
+		expect(view.secondaryRoleTitle).toBeNull();
+		// Persona drives the template: unclaimed non-partisan officeholder is E,
+		// not the candidate-and-officeholder frame F.
+		expect(view.state).toBe('E');
+	});
+
+	test('serving and running at once still resolves to both when the race is ahead', () => {
+		const view = composeView(
+			PID,
+			makePerson({
+				fullName: 'Santosh Salvi',
+				Candidacies: [
+					{ id: 'c1', positionName: 'Nashua School Board', Race: { electionDate: '2025-11-04' } },
+					{ id: 'c2', positionName: 'State House', Race: { electionDate: '2099-09-08' } },
+				],
+				OfficeHolders: [makeOffice({ isCurrent: true, officeTitle: 'State Representative' })],
+			}),
+			null,
+		);
+		expect(view.persona).toBe('both');
+		expect(view.secondaryRoleTitle).toBe('Candidate for State House');
+	});
+
+	test('a former officeholder whose only race is over reads as past, not running', () => {
+		const view = composeView(
+			PID,
+			makePerson({
+				fullName: 'Jane Doe',
+				Candidacies: [{ id: 'c1', positionName: 'Mayor', Race: { electionDate: '2018-11-06' } }],
+				OfficeHolders: [
+					makeOffice({ isCurrent: false, officeTitle: 'Mayor', startAt: '2014-01-01', endAt: '2018-01-01' }),
+				],
+			}),
+			null,
+		);
+		expect(view.persona).toBe('past');
+		expect(view.roleTitle).toBe('Former Mayor');
+	});
+
+	test('an undated race counts as running — absent data is not a concluded race', () => {
+		const view = composeView(
+			PID,
+			makePerson({
+				fullName: 'Jane Doe',
+				// No Race at all: the spine could not date this run.
+				Candidacies: [{ id: 'c1', positionName: 'Mayor' }],
+				OfficeHolders: [makeOffice({ isCurrent: true, officeTitle: 'City Council' })],
+			}),
+			null,
+		);
+		expect(view.persona).toBe('both');
+	});
+
 	test('the hero names the current race, not whichever candidacy the API returns first', () => {
 		const view = composeView(
 			PID,

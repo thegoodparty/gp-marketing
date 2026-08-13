@@ -5,20 +5,23 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
 /**
- * Guards the `<form id>` on both person-profile claim forms.
+ * Guards the `<form id>` — and the absence of a `<form class>` — on both
+ * person-profile claim forms.
  *
  * These ids are an external contract with HubSpot, not decoration. The site-wide
- * tracking script collects submissions via the non-HubSpot forms tool, which keys
- * a form on its id and silently falls back to the class list when the id is
- * absent — filing submissions under a brand-new form and orphaning whatever
- * marketing workflow was attached to the old one. Nothing throws when that
- * happens, on the site or in HubSpot, so CI is the only place it can be caught.
+ * tracking script collects submissions via the non-HubSpot forms tool, which
+ * names each form after a CSS selector built from the form element's id AND its
+ * class list, concatenated. An id does not replace the classes, it prefixes
+ * them: `id` + `class='flex gap-4'` is filed as `#the-id .flex, .gap-4`, so
+ * bumping `gap-4` to `gap-6` re-keys the form and HubSpot starts a fresh one,
+ * orphaning whatever marketing workflow was attached to the old one. Nothing
+ * throws when that happens, on the site or in HubSpot, so CI is the only place
+ * it can be caught.
  *
- * These mount the form components directly rather than driving the dialog open.
- * Radix's click delegation does not fire under JSDOM once this file shares a
- * process with the rest of the suite (which is how CI runs it, since bun 1.2.23
- * ignores the `--path-ignore-patterns` split between the logic and DOM suites).
- * The id lives on the form element either way, so the dialog buys nothing here.
+ * These mount the form components directly rather than driving the dialog open,
+ * because Radix's click delegation has proven unreliable under JSDOM here. The id
+ * lives on the form element either way, so opening the dialog buys nothing and
+ * only adds a way for the test to fail on something other than the id.
  */
 
 const DOM_GLOBALS = [
@@ -85,6 +88,29 @@ async function render(element: React.ReactElement) {
 const bandProps = { personId: 'person-1', displayName: 'Example Person', isRunning: true };
 const notifyProps = { personId: 'person-1', displayName: 'Example Person' };
 
+/**
+ * The empty class list is load-bearing, not tidiness — do not relax this to make
+ * a styling change easier.
+ *
+ * HubSpot appends the form element's classes to the id when it names a collected
+ * form, so a bare id yields the selector `#person-claim-owner` while a single
+ * Tailwind utility yields `#person-claim-owner .flex`. Every subsequent utility
+ * churn (a designer widening a gap, dropping `max-w-md`, a Figma-parity pass)
+ * then hands HubSpot a name it has never seen and it opens a new form, breaking
+ * submission history and the workflows keyed on the old one. Silently: no error
+ * surfaces anywhere, the numbers just go flat.
+ *
+ * Styling belongs on the wrapper `<div>` inside each form, which HubSpot never
+ * looks at. If a class genuinely must live on the form element, it has to be a
+ * stable semantic name that styling passes will not touch — update this helper
+ * deliberately rather than deleting the assertion.
+ */
+function expectNoStylingClasses(form: Element | null) {
+	if (!form) throw new Error('expected the claim form to be in the document');
+	expect(form.getAttribute('class')).toBeNull();
+	expect(form.classList.length).toBe(0);
+}
+
 describe('claim form HubSpot ids', () => {
 	test('PersonClaimCTABand renders form#person-claim-owner', async () => {
 		const { PersonClaimCTABand } = await import('./PersonClaimCTABand');
@@ -98,6 +124,14 @@ describe('claim form HubSpot ids', () => {
 		expect(form?.querySelector('input[name="email"]')).not.toBeNull();
 	});
 
+	test('the band form carries no classes, so HubSpot sees #person-claim-owner alone', async () => {
+		const { PersonClaimCTABand } = await import('./PersonClaimCTABand');
+
+		await render(React.createElement(PersonClaimCTABand, bandProps));
+
+		expectNoStylingClasses(document.querySelector('form#person-claim-owner'));
+	});
+
 	test('the claim dialog notify form renders form#person-claim-notify', async () => {
 		const { NotifyForm } = await import('./ClaimProfileModal');
 
@@ -107,6 +141,14 @@ describe('claim form HubSpot ids', () => {
 		expect(form).not.toBeNull();
 		expect(form?.querySelector('input[name="firstname"]')).not.toBeNull();
 		expect(form?.querySelector('input[name="email"]')).not.toBeNull();
+	});
+
+	test('the notify form carries no classes, so HubSpot sees #person-claim-notify alone', async () => {
+		const { NotifyForm } = await import('./ClaimProfileModal');
+
+		await render(React.createElement(NotifyForm, notifyProps));
+
+		expectNoStylingClasses(document.querySelector('form#person-claim-notify'));
 	});
 
 	test('the two ids differ, so HubSpot files owner claims apart from visitor nudges', async () => {
@@ -130,5 +172,24 @@ describe('claim form HubSpot ids', () => {
 		expect(ids).toContain('person-claim-owner');
 		expect(ids).toContain('person-claim-notify');
 		expect(new Set(ids).size).toBe(ids.length);
+	});
+});
+
+describe('claim form marketing consent', () => {
+	/**
+	 * The Figma dialog (1901:51851) draws this box ticked, so the unchecked default
+	 * looks like a parity bug to anyone re-reading the frame and is a one-word revert
+	 * away. It is deliberate: a pre-ticked box opts the sender in unless they notice
+	 * and clear it, which is not consent under GDPR. Nothing else fails if it flips.
+	 */
+	test('the notify form does not pre-check the marketing opt-in', async () => {
+		const { NotifyForm } = await import('./ClaimProfileModal');
+
+		await render(React.createElement(NotifyForm, notifyProps));
+
+		const consent = document.querySelector<HTMLInputElement>('input[name="marketingConsent"]');
+		expect(consent).not.toBeNull();
+		expect(consent?.type).toBe('checkbox');
+		expect(consent?.checked).toBe(false);
 	});
 });

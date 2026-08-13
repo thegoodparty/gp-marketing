@@ -629,6 +629,33 @@ function buildDistrictMap(view: PersonProfileView): ReactNode | undefined {
 }
 
 /**
+ * The most specific place this profile sits in — city, else county, else state.
+ *
+ * Figma's voter-facing claim card for someone in office opens "[Location]
+ * deserves greater transparency" (E 1928:99467, F 1928:100987). The view carries
+ * no locality field (`districtLabel` is a ward/seat, `stateLabel` a two-letter
+ * code), so this reads the place crumbs off the breadcrumb, which is built from
+ * the canonical elections path `/elections/<state>/<county?>/<city?>/position/…`
+ * and is already humanised. The position crumb and the trailing name crumb are
+ * not places, hence the href filter. Null when the profile resolved to no place
+ * at all (no race and no state).
+ *
+ * Someone who only holds office has no candidacy, so today they have no race
+ * slug and their trail stops at the state — the same gap that leaves
+ * `positionHref` null for them (see `composePersonProfileView`). They therefore
+ * get "Wyoming deserves greater transparency" where the frame shows the town.
+ * That is deliberately preferred to a vaguer stand-in: it is still the place
+ * they serve, it is the same place the rest of their page links to, and it
+ * sharpens on its own once election-api threads the office's race slug through.
+ */
+function profileLocationLabel(view: PersonProfileView): string | null {
+	const places = view.breadcrumb.filter(
+		crumb => crumb.href?.startsWith('/elections/') && !crumb.href.includes('/position/'),
+	);
+	return places.at(-1)?.label ?? null;
+}
+
+/**
  * Maps a resolved PersonProfileView onto the `personProfile` template's section
  * overrides (keyed by section `_type`/`_key`). Per-state gating (empowerment,
  * removal, claim/pledge/CTA visibility) is expressed by suppressing sections —
@@ -678,11 +705,12 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 				}
 			: { hidden: true };
 
-	// The Figma content well is one column of cards. For unclaimed empowered
-	// pages a voter-facing "hear from …" claim card leads the column; the
-	// person-facing "Are you …?" prompt is NOT in-column — it renders as the
-	// full-width claim CTA band below the well (see `ctaOverride`). Between the
-	// voter card and the civics cards: authored cards (empowerment-gated) then
+	// The Figma content well is one column of cards. For unclaimed empowered pages
+	// two claim cards lead the column: the person-facing "Are you …?" prompt,
+	// whose button scrolls down to the claim form in the band below the well, then
+	// the voter-facing "ask them to complete their profile" prompt, whose button
+	// opens the notify dialog.
+	// Between them and the civics cards: authored cards (empowerment-gated) then
 	// the civics-spine cards (Recent Experience → Other candidates → Nearby
 	// officials → About position → District map) that render on every state.
 	const claimCard = (variant: 'voter-card' | 'owner-card'): ProfileContentCardProps => ({
@@ -692,6 +720,7 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 				personId={view.personId}
 				displayName={view.displayName}
 				persona={view.persona}
+				locationLabel={profileLocationLabel(view)}
 				variant={variant}
 			/>
 		),
@@ -706,7 +735,7 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			: {};
 	const contentCards: ProfileContentCardProps[] = [
 		...(view.persona === 'past' ? [pastElectionDisclaimer(view)] : []),
-		...(showClaim ? [claimCard('voter-card')] : []),
+		...(showClaim ? [claimCard('owner-card'), claimCard('voter-card')] : []),
 		...orderedSectionCards(view, { ...authoredSections, ...buildCivicSections(view) }),
 	];
 	const sidebar = buildSidebar(view);
@@ -741,6 +770,12 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			// The standalone full-width claim banner is always suppressed now: the
 			// claim prompt renders in-column as light-blue cards inside the content
 			// well (see `claimCard` above), matching the Figma layout.
+			//
+			// It also cannot go here: the hero portrait deliberately overflows 104px
+			// (md) / 216px (lg) below the hero box, and the next section is expected
+			// to offset for it the way ProfileContentBlock's sidebar does. A
+			// full-width banner in this slot renders its headline underneath the
+			// photo.
 			claimed: true,
 		},
 		component_profileContentBlock: {

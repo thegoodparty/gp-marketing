@@ -1,7 +1,6 @@
 'use client';
 
 import { stegaClean } from 'next-sanity';
-import type { Field_blockColorCreamMidnight } from 'sanity.types';
 
 import { formatElectionDateFromApi } from '~/lib/electionsHelpers';
 import type { TokenMap } from '~/lib/resolveTokens';
@@ -20,7 +19,7 @@ export function ListOfOfficesBlockSection(props: Props) {
 	const { officesOverride, tokens, ...section } = props;
 	const search = useElectionsLandingSearch();
 	const bgValue = section.listOfOfficesBlockDesignSettings?.field_blockColorCreamMidnight;
-	const backgroundColor = bgValue ? resolveBg(stegaClean(bgValue) as Field_blockColorCreamMidnight) : 'cream';
+	const backgroundColor = bgValue ? resolveBg(stegaClean(bgValue)) : 'cream';
 
 	const offices: OfficeItem[] =
 		officesOverride?.offices ??

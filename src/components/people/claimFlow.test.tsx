@@ -5,11 +5,12 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
 /**
- * Covers the claim flow on an unclaimed person profile: the owner-facing prompt
- * at the top of the content well scrolls down to the claim form rather than
- * opening the dialog, and submitting that form branches on the person's product
- * — Win (currently running) into sign-up, Serve (in office only) into a "a human
- * will be in touch" confirmation.
+ * Covers the claim flow on an unclaimed person profile. Per the Figma frames the
+ * page has exactly two claim-related surfaces and they do different jobs: the
+ * card at the top of the content well is visitor-facing and only opens the
+ * notify dialog, and the band at the bottom is the person's own claim form,
+ * which branches on their product — Win (currently running) into sign-up, Serve
+ * (in office only) into a "a human will be in touch" confirmation.
  *
  * Like claimFormIds.test.tsx these mount components directly instead of driving
  * the Radix dialog, whose click delegation has proven unreliable under JSDOM,
@@ -189,7 +190,7 @@ const winProps = { personId, displayName, isRunning: true };
 /** Serve: in office only (persona `officeholder`). */
 const serveProps = { personId, displayName, isRunning: false };
 
-async function renderProfileClaimSurfaces(variant: 'owner-card' | 'voter-card', isRunning: boolean) {
+async function renderProfileClaimSurfaces(isRunning: boolean) {
 	const [{ ClaimProfileModal }, { PersonClaimCTABand }] = await Promise.all([import('./ClaimProfileModal'), import('./PersonClaimCTABand')]);
 
 	await render(
@@ -200,74 +201,47 @@ async function renderProfileClaimSurfaces(variant: 'owner-card' | 'voter-card', 
 				personId,
 				displayName,
 				persona: isRunning ? 'candidate' : 'officeholder',
-				variant,
 			}),
 			React.createElement(PersonClaimCTABand, { personId, displayName, isRunning }),
 		),
 	);
 }
 
-function claimPromptButton(variant: 'owner-card' | 'voter-card') {
-	return document.querySelector(`[data-component='ClaimPromptCard'][data-variant='${variant}'] button`)!;
+function claimPromptButton() {
+	return document.querySelector(`[data-component='ClaimPromptCard'] button`)!;
 }
 
-describe('the top claim prompt pulls the person down to the claim form', () => {
-	test('the owner prompt scrolls to the claim form instead of opening the dialog', async () => {
-		await renderProfileClaimSurfaces('owner-card', true);
-
-		await click(claimPromptButton('owner-card'));
-
-		expect(scrollCalls).toEqual([{ behavior: 'smooth', id: 'person-claim-form' }]);
-		expect(document.querySelector('[role="dialog"]')).toBeNull();
-	});
-
-	test('the owner prompt moves keyboard focus into the claim form', async () => {
-		await renderProfileClaimSurfaces('owner-card', true);
-
-		await click(claimPromptButton('owner-card'));
-
-		const active = document.activeElement;
-		expect(active?.getAttribute('name')).toBe('firstname');
-		expect(active?.closest('form')?.id).toBe('person-claim-owner');
-	});
-
-	test('the scroll is instant when the visitor asks for reduced motion', async () => {
-		(dom.window as unknown as { matchMedia: unknown }).matchMedia = (query: string) => ({ matches: query.includes('reduce'), media: query });
-
-		await renderProfileClaimSurfaces('owner-card', true);
-		await click(claimPromptButton('owner-card'));
-
-		expect(scrollCalls.map(c => c.behavior)).toEqual(['auto']);
-	});
-
+describe('the top of the content well is notify-only', () => {
 	/**
-	 * Reachable rather than theoretical: the code-default template fallback strips
-	 * the CTA banner block the claim band renders into, which would leave the
-	 * prompt on a page with no form to scroll to. The prompt falls back to the
-	 * dialog there, so it is never a button that does nothing.
+	 * The frames put ONE card at the top of the content well and it is
+	 * visitor-facing. An owner-facing "are you [Name]?" prompt was added here
+	 * once and had to be taken back out; a second card, or this one turning into
+	 * a claim shortcut, is the regression this guards.
 	 */
-	test('the scroll reports failure when the claim band is not on the page', async () => {
-		const { scrollToPersonClaimForm } = await import('./claimFormAnchor');
+	test('the prompt opens the notify dialog rather than the claim form', async () => {
+		await renderProfileClaimSurfaces(true);
 
-		expect(scrollToPersonClaimForm()).toBe(false);
-		expect(scrollCalls).toEqual([]);
-	});
-
-	/**
-	 * The counterpart to the owner-prompt test above: this is the entry point the
-	 * notify form is left with, so it has to be shown opening the dialog, not
-	 * merely not scrolling.
-	 */
-	test('the voter prompt still opens the dialog and its notify form', async () => {
-		await renderProfileClaimSurfaces('voter-card', true);
-
+		expect(document.querySelectorAll(`[data-component='ClaimPromptCard']`)).toHaveLength(1);
 		expect(document.querySelector('[role="dialog"]')).toBeNull();
 
-		await click(claimPromptButton('voter-card'));
+		await click(claimPromptButton());
 
 		expect(document.querySelector('[role="dialog"]')).not.toBeNull();
 		expect(document.querySelector('[role="dialog"] form#person-claim-notify')).not.toBeNull();
+		// Nothing up here reaches the person's own claim form.
 		expect(scrollCalls).toEqual([]);
+		expect(document.querySelector('[role="dialog"] form#person-claim-owner')).toBeNull();
+	});
+
+	test('the dialog closes without submitting when the visitor cancels', async () => {
+		await renderProfileClaimSurfaces(true);
+		await click(claimPromptButton());
+
+		const cancel = [...document.querySelectorAll('[role="dialog"] button')].find(b => b.textContent?.includes('Cancel'))!;
+		await click(cancel);
+
+		expect(document.querySelector('[role="dialog"]')).toBeNull();
+		expect(fetchCalls).toEqual([]);
 	});
 });
 

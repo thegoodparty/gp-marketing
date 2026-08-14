@@ -74,7 +74,7 @@ publishing.
 
 The schema is decomposed under `src/sanity/schema/`:
 
-- `documents/` — content document types (article, faq, person, pricingPlan, the
+- `documents/` — content document types (article, caseStudy, faq, person, pricingPlan, the
   `goodpartyOrg_*` singletons like home/navigation/footer, etc.). Editing these is
   pure content work.
 - `components/` — the page-builder block types (`component_*`), registered through

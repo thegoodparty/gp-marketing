@@ -20,7 +20,7 @@ Studio (the CMS, served at `/studio/main`), do not open a PR:
   options a block already exposes (its colors, layout toggles, etc.).
 - Building or rearranging a page: adding, removing, reordering blocks on a landing
   page or the home page using the drag-and-drop builder.
-- Blog articles, categories, tags; glossary / political terms; FAQs; policy pages;
+- Blog articles, categories, tags; case studies; glossary / political terms; FAQs; policy pages;
   pricing plans; team members; quotes and testimonials.
 - Global content: the navigation menu, footer, social links, SEO settings, the 404
   page.

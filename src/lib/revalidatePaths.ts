@@ -32,6 +32,7 @@ export function shouldRevalidateAllLayouts(_type: string): boolean {
 export function getPathsToRevalidate(_type: string, payload: Record<string, unknown>): string[] {
 	const slugPaths: Record<string, string> = {
 		article: 'editorialOverview.field_slug',
+		caseStudy: 'editorialOverview.field_slug',
 		categories: 'tagOverview.field_slug',
 		topics: 'tagOverview.field_slug',
 		glossary: 'glossaryTermOverview.field_slug',
@@ -44,6 +45,7 @@ export function getPathsToRevalidate(_type: string, payload: Record<string, unkn
 
 	const pathMap: Record<string, string | string[]> = {
 		article: slug ? [`/blog/article/${slug}`, '/blog'] : ['/blog'],
+		caseStudy: ['/case-studies'],
 		categories: slug ? [`/blog/section/${slug}`, '/blog'] : ['/blog'],
 		topics: slug ? [`/blog/tag/${slug}`, '/blog'] : ['/blog'],
 		glossary: slug ? [`/political-terms/${slug}`, '/political-terms'] : ['/political-terms'],

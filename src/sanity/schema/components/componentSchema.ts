@@ -44,7 +44,10 @@ import { component_testimonialAutoScroll } from './component_testimonialAutoScro
 import { component_clickToCallBlock } from './component_clickToCallBlock.ts';
 import { component_voterDensityBlock } from './component_voterDensityBlock.ts';
 
+import { component_caseStudiesBlock } from './component_caseStudiesBlock.ts';
+
 export const componentSchema = [
+	component_caseStudiesBlock,
 	component_jobOpeningsBlock,
 	component_featuresBlock,
 	component_stepperBlock,

@@ -30,6 +30,14 @@ describe('getPathsToRevalidate', () => {
 		).toEqual(['/blog/article/hello-world', '/blog', '/llms.txt']);
 		expect(getPathsToRevalidate('article', {})).toEqual(['/blog', '/llms.txt']);
 	});
+
+	it('revalidates the Case Studies landing page when a case study is published', () => {
+		expect(
+			getPathsToRevalidate('caseStudy', {
+				editorialOverview: { field_slug: 'rock-hill-win' },
+			}),
+		).toEqual(['/case-studies']);
+	});
 });
 
 describe('shouldRevalidateAllLayouts', () => {

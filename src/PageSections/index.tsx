@@ -2,6 +2,7 @@ import { Fragment, type PropsWithChildren } from 'react';
 import type { GoodpartyOrg_homeQueryResult } from 'sanity.types';
 import { BannerBlockSection } from '~/PageSections/BannerBlockSection';
 import { BlogBlockSection } from '~/PageSections/BlogBlockSection';
+import { CaseStudiesBlockSection } from '~/PageSections/CaseStudiesBlockSection';
 import { BlogTopicTagsBlockSection } from '~/PageSections/BlogTopicTagsBlockSection';
 import { BreadcrumbBlockSection } from '~/PageSections/BreadcrumbBlockSection';
 import { CalculatorTextBlockSection } from '~/PageSections/CalculatorTextBlockSection';
@@ -241,6 +242,12 @@ export function PageSections(props: Props) {
 						return (
 							<Boundary key={section._key} componentName='Blog Block'>
 								<BlogBlockSection {...section} />
+							</Boundary>
+						);
+					case 'component_caseStudiesBlock':
+						return (
+							<Boundary key={section._key} componentName='Case Studies Block'>
+								<CaseStudiesBlockSection {...section} />
 							</Boundary>
 						);
 					case 'component_blogTopicTagsBlock':

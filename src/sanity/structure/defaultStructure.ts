@@ -155,6 +155,7 @@ export function defaultStructure(S: StructureBuilder) {
         ]
       }),
       item('glossary'),
+      item('caseStudy'),
       S.divider(),
       group({
         id: 'quotes',

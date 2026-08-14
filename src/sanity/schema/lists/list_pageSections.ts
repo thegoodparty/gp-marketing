@@ -182,7 +182,7 @@ export const list_pageSections = {
 				{
 					name: 'blog',
 					title: 'Blog',
-					of: ['component_blogBlock', 'component_featuredBlogBlock', 'component_blogTopicTagsBlock'],
+					of: ['component_blogBlock', 'component_featuredBlogBlock', 'component_blogTopicTagsBlock', 'component_caseStudiesBlock'],
 				},
 			],
 		},
@@ -300,6 +300,10 @@ export const list_pageSections = {
 		{
 			title: 'Blog Topic Tags Block',
 			type: 'component_blogTopicTagsBlock',
+		},
+		{
+			title: 'Case Studies Block',
+			type: 'component_caseStudiesBlock',
 		},
 		{
 			title: 'Breadcrumb Block',

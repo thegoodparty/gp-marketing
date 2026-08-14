@@ -111,6 +111,7 @@ import { field_heroImageSize } from './field_heroImageSize.ts';
 import { field_slug } from './field_slug.ts';
 import { field_aspectRatio } from './field_aspectRatio.ts';
 import { field_textSize } from './field_textSize.ts';
+import { field_showSeeMoreButton } from './field_showSeeMoreButton.ts';
 
 export const fieldSchema = [
 	field_aspectRatio,
@@ -226,4 +227,5 @@ export const fieldSchema = [
 	field_heroImageSize,
 	field_slug,
 	field_textSize,
+	field_showSeeMoreButton,
 ];

@@ -119,6 +119,7 @@ import { pricingPlanOverview } from './pricingPlanOverview.ts';
 import { stateOverview } from './stateOverview.ts';
 import { ctaCardTwo } from './ctaCardTwo.ts';
 import { blogBlockContent } from './blogBlockContent.ts';
+import { caseStudiesBlockContent } from './caseStudiesBlockContent.ts';
 import { personOverview } from './personOverview.ts';
 import { formOverview } from './formOverview.ts';
 import { blogBlockSummaryInfo } from './blogBlockSummaryInfo.ts';
@@ -271,6 +272,7 @@ export const groupSchema = [
 	stateOverview,
 	ctaCardTwo,
 	blogBlockContent,
+	caseStudiesBlockContent,
 	personOverview,
 	formOverview,
 	blogBlockSummaryInfo,

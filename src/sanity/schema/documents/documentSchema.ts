@@ -9,6 +9,7 @@ import {pricingPlan} from './pricingPlan.ts'
 import {categories} from './categories.ts'
 import {person} from './person.ts'
 import {glossary} from './glossary.ts'
+import {caseStudy} from './caseStudy.ts'
 import {organisation} from './organisation.ts'
 import {cTAs} from './cTAs.ts'
 import {features} from './features.ts'
@@ -43,6 +44,7 @@ pricingPlan,
 categories,
 person,
 glossary,
+caseStudy,
 organisation,
 cTAs,
 features,

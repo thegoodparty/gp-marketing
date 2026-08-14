@@ -7,6 +7,8 @@ export const categoriesHrefGroq = `_type=="categories"=>{"href":"/blog/section/"
 /*language=textmate*/
 export const articleHrefGroq = `_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)}`;
 /*language=textmate*/
+export const caseStudyHrefGroq = `_type=="caseStudy"=>{"href":"/case-studies/"+coalesce(editorialOverview.field_slug,_id)}`;
+/*language=textmate*/
 export const homeHrefGroq = `_type=="goodpartyOrg_home"=>{"href":"/"}`;
 /*language=textmate*/
 export const allArticlesHrefGroq = `_type=="goodpartyOrg_allArticles"=>{"href":"/blog"}`;
@@ -29,7 +31,7 @@ export const allComponentsHrefGroq = `_type=="goodpartyOrg_allComponents"=>{"hre
 /*language=textmate*/
 export const notFoundHrefGroq = `_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}`;
 /*language=textmate*/
-export const hrefGroq = `${homeHrefGroq},${allArticlesHrefGroq},${articleHrefGroq},${categoriesHrefGroq},${topicsHrefGroq},${landingPagesHrefGroq},${glossaryHrefGroq},${glossaryTermHrefGroq},${faqHrefGroq},${contactHrefGroq},${policyHrefGroq},${allComponentsHrefGroq},${notFoundHrefGroq}`;
+export const hrefGroq = `${homeHrefGroq},${allArticlesHrefGroq},${articleHrefGroq},${caseStudyHrefGroq},${categoriesHrefGroq},${topicsHrefGroq},${landingPagesHrefGroq},${glossaryHrefGroq},${glossaryTermHrefGroq},${faqHrefGroq},${contactHrefGroq},${policyHrefGroq},${allComponentsHrefGroq},${notFoundHrefGroq}`;
 /*language=textmate*/
 export const internalLinkGroq = `{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,faqOverview.field_question,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,faqOverview.field_question,null),${hrefGroq}}}`;
 /*language=textmate*/
@@ -126,6 +128,21 @@ export const categoryRelatedArticlesFirstFetchGroq = `*[][0]{
  * End of Blog Block
  */
 
+/**
+ * Start of Case Studies Block
+ */
+/*language=textmate*/
+export const caseStudyCardGroq = `editorialOverview{...,ref_author->},editorialAssets,"category":editorialContentTags.ref_catgories->tagOverview.field_name,${caseStudyHrefGroq}`;
+/*language=textmate*/
+export const allLatestCaseStudiesLimitedGroq = `*[_type=="caseStudy"] | order(coalesce(editorialOverview.field_lastUpdated,editorialOverview.field_publishedDate) desc)[0...6]{${caseStudyCardGroq}}`;
+/*language=textmate*/
+export const allLatestCaseStudiesUnlimitedForLoadMoreGroq = `*[_type=="caseStudy"][]._id`;
+/*language=textmate*/
+export const component_caseStudiesBlock = `_type=="component_caseStudiesBlock"=>{...,summaryInfo{${summaryInfoGroq}},"items":${allLatestCaseStudiesLimitedGroq},"itemsCount":count(${allLatestCaseStudiesUnlimitedForLoadMoreGroq})}`;
+/**
+ * End of Case Studies Block
+ */
+
 /*language=textmate*/
 export const component_bannerBlock = `_type=="component_bannerBlock"=>{...,bannerBlockContent{...,list_Choose3People[]->}}`;
 /*language=textmate*/
@@ -173,7 +190,7 @@ export const component_teamValuesBlock = `_type=="component_teamValuesBlock"=>{.
 /*language=textmate*/
 export const component_testimonialAutoScroll = `_type=="component_testimonialAutoScroll"=>{...,quotesContentCollection{${quotesContentCollectionGroq}},summaryInfo{${summaryInfoGroq}}}`;
 /*language=textmate*/
-export const sectionsGroq = `_key,_type,${component_pricingBlockGroq},${component_heroGroq},${component_profileHeroGroq},${component_comparisonBlock},${component_stepperBlockGroq},${component_iconContentBlock},${component_imageContentBlock},${component_statsBlock},${component_tabbedImageBlock},${component_featuresBlock},${component_jobOpeningsBlock},${component_twoUpCardBlock},${component_carouselBlock},${component_testimonialBlock},${component_testimonialAutoScroll},${component_faqBlock},${component_blogBlock},${component_bannerBlock},${component_calculatorTextBlock},${component_breadcrumbBlock},${component_teamBlock},${component_featuredBlogBlock},${component_allCtaBlocks},${component_ctaBannerBlock},${component_heroWithSubscribe},${component_newsletterBlock},${component_ctaCardsBlock},${component_blogTopicTagsBlock},${component_candidatesBlock},${component_claimProfileBlock},${component_electionsIndexBlock},${component_electionsPositionHero},${component_electionsPositionContentBlock},${component_electionsSearchHero},${component_featuredCitiesBlock},${component_goodPartyOrgPledge},${component_locationFactsBlock},${component_locationLandingPageHero},${component_profileContentBlock},${component_voterDensityBlock},${component_listOfOfficesBlock},${component_embeddedBlock},${component_clickToCallBlock},${component_teamValuesBlock}`;
+export const sectionsGroq = `_key,_type,${component_pricingBlockGroq},${component_heroGroq},${component_profileHeroGroq},${component_comparisonBlock},${component_stepperBlockGroq},${component_iconContentBlock},${component_imageContentBlock},${component_statsBlock},${component_tabbedImageBlock},${component_featuresBlock},${component_jobOpeningsBlock},${component_twoUpCardBlock},${component_carouselBlock},${component_testimonialBlock},${component_testimonialAutoScroll},${component_faqBlock},${component_blogBlock},${component_caseStudiesBlock},${component_bannerBlock},${component_calculatorTextBlock},${component_breadcrumbBlock},${component_teamBlock},${component_featuredBlogBlock},${component_allCtaBlocks},${component_ctaBannerBlock},${component_heroWithSubscribe},${component_newsletterBlock},${component_ctaCardsBlock},${component_blogTopicTagsBlock},${component_candidatesBlock},${component_claimProfileBlock},${component_electionsIndexBlock},${component_electionsPositionHero},${component_electionsPositionContentBlock},${component_electionsSearchHero},${component_featuredCitiesBlock},${component_goodPartyOrgPledge},${component_locationFactsBlock},${component_locationLandingPageHero},${component_profileContentBlock},${component_voterDensityBlock},${component_listOfOfficesBlock},${component_embeddedBlock},${component_clickToCallBlock},${component_teamValuesBlock}`;
 /*language=textmate*/
 export const allCategoriesLinksGroq = `*[_type=="categories"][]{_id,"title":tagOverview.field_name,${categoriesHrefGroq}}`;
 /*language=textmate*/

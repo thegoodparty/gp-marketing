@@ -1,6 +1,6 @@
 import type { BlogCardProps } from '~/ui/BlogCard';
 import type { SanityImage } from '~/ui/types';
-import type { ArticleQueryResult, CategoriesQueryResult, TopicsQueryResult } from 'sanity.types';
+import type { ArticleQueryResult, CategoriesQueryResult, GoodpartyOrg_homeQueryResult, TopicsQueryResult } from 'sanity.types';
 import { format } from 'date-fns';
 import { stegaClean } from 'next-sanity';
 
@@ -9,8 +9,14 @@ type CategoryRelatedArticle = NonNullable<NonNullable<NonNullable<CategoriesQuer
 type ArticleRelatedArticleListItem = NonNullable<
 	NonNullable<NonNullable<NonNullable<ArticleQueryResult>['relatedArticles']>['list_relatedArticles']>
 >[number];
+type HomePageSections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
+type CaseStudyCardItem = NonNullable<Extract<HomePageSections, { _type: 'component_caseStudiesBlock' }>['items']>[number];
 
-export type ResolveBlogCardSource = TopicRelatedArticle | CategoryRelatedArticle | ArticleRelatedArticleListItem;
+export type ResolveBlogCardSource =
+	| TopicRelatedArticle
+	| CategoryRelatedArticle
+	| ArticleRelatedArticleListItem
+	| CaseStudyCardItem;
 
 function resolveBlogCardCategoryLabel(category: ResolveBlogCardSource['category']): string | undefined {
 	if (category == null) return undefined;

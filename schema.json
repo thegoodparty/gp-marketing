@@ -835,6 +835,13 @@
     }
   },
   {
+    "name": "field_showSeeMoreButton",
+    "type": "type",
+    "value": {
+      "type": "boolean"
+    }
+  },
+  {
     "name": "field_textSize",
     "type": "type",
     "value": {
@@ -3057,6 +3064,21 @@
             "rest": {
               "type": "inline",
               "name": "component_blogTopicTagsBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_caseStudiesBlock"
             }
           },
           {
@@ -7965,6 +7987,46 @@
     }
   },
   {
+    "name": "component_caseStudiesBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_caseStudiesBlock"
+          }
+        },
+        "summaryInfo": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "summaryInfo"
+          },
+          "optional": true
+        },
+        "caseStudiesBlockContent": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "caseStudiesBlockContent"
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
     "name": "electionTemplatePreviewTarget",
     "type": "type",
     "value": {
@@ -9154,6 +9216,30 @@
           "value": {
             "type": "inline",
             "name": "img_profilePicture"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "caseStudiesBlockContent",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "caseStudiesBlockContent"
+          }
+        },
+        "field_showSeeMoreButton": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_showSeeMoreButton"
           },
           "optional": true
         }
@@ -15673,6 +15759,32 @@
                     "optional": true
                   }
                 },
+                "dereferencesTo": "caseStudy"
+              },
+              {
+                "type": "object",
+                "attributes": {
+                  "_ref": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "_type": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string",
+                      "value": "reference"
+                    }
+                  },
+                  "_weak": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "boolean"
+                    },
+                    "optional": true
+                  }
+                },
                 "dereferencesTo": "goodpartyOrg_home"
               },
               {
@@ -16165,6 +16277,91 @@
         "value": {
           "type": "inline",
           "name": "pageSections"
+        },
+        "optional": true
+      },
+      "seo": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "seo"
+        },
+        "optional": true
+      }
+    }
+  },
+  {
+    "name": "caseStudy",
+    "type": "document",
+    "attributes": {
+      "_id": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_type": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string",
+          "value": "caseStudy"
+        }
+      },
+      "_createdAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_updatedAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_rev": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "editorialOverview": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "editorialOverview"
+        },
+        "optional": true
+      },
+      "editorialContentTags": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "editorialContentTags"
+        },
+        "optional": true
+      },
+      "editorialAssets": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "editorialAssets"
+        },
+        "optional": true
+      },
+      "contentSections": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "contentSections"
+        },
+        "optional": true
+      },
+      "ctaSection": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "ctaSection"
         },
         "optional": true
       },

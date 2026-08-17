@@ -1,120 +1,46 @@
 'use client';
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-
-import { APP_SIGN_UP_HREF, trackEvent, trackSignUpClicked } from '~/lib/analytics';
-import { buildClaimRequestBody } from '~/lib/claimRequest';
-import { useDecoratedAppHref } from '~/ui/AttributionProvider';
+import { APP_SIGN_UP_HREF, trackSignUpClicked } from '~/lib/analytics';
 import { Container } from '~/ui/Container';
-import { Button } from '~/ui/Inputs/Button';
-import { TextInput } from '~/ui/Inputs/TextInput';
+import { IconResolver } from '~/ui/IconResolver';
+import { ButtonLink } from '~/ui/Inputs/Button';
 import { Text } from '~/ui/Text';
-import { PERSON_CLAIM_ANCHOR_ID } from './claimFormAnchor';
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { PERSON_CLAIM_ACTION_ID, PERSON_CLAIM_ANCHOR_ID } from './claimFormAnchor';
 
 /**
- * Stable identity for HubSpot's non-HubSpot ("collected") forms tool — see the
- * matching constant in ClaimProfileModal for why this must not be renamed or
- * dropped, and why the `<form>` tag below carries no className. Deliberately
- * different from that one so HubSpot files owner claims separately from visitor
- * nudges; they warrant different follow-up.
+ * GTM resolves the sign-up conversion through this id — `trackSignUpClicked`
+ * pushes it into `window.dataLayer` and the Data Layer Variable is keyed on it.
+ *
+ * It was also HubSpot's key for the collected owner form that used to sit here.
+ * That form is gone (marketing, 2026-08-17: send the person to Win instead of
+ * taking their address), so HubSpot will stop receiving submissions under this
+ * name. The id is kept rather than retired so the clicks that replace those
+ * submissions land on the GTM variable already wired up for this surface.
  */
 const CLAIM_FORM_ID = 'person-claim-owner';
 
-type NotifyValues = { firstname: string; email: string };
-
 export type PersonClaimCTABandProps = {
-	personId: string;
 	displayName: string;
-	/**
-	 * Which product this person belongs to, derived from their persona upstream:
-	 * running (candidate/both) is **Win**, in office only is **Serve**.
-	 *
-	 * It picks the body copy ("share why you're running" vs "your record") and,
-	 * on submit, which branch they take — Win self-serves into sign-up, Serve is
-	 * handed to sales, who send an access link by hand.
-	 */
-	isRunning: boolean;
 };
 
 /**
- * Full-width light-blue claim CTA band for UNCLAIMED empowered person profiles
- * (Figma states D/E/F/H). Mirrors the Figma "Are you [Name]? Complete your
- * profile now." band: centered heading + body over an inline name/email form
- * that posts to the same claim-request endpoint as the claim modal. Rendered in
- * the person `person-cta` section slot (below the content well, above the
- * elections index) in place of the claimed "Join the movement" CTA.
+ * Full-width light-blue claim CTA band for UNCLAIMED empowered CANDIDATE
+ * profiles (Figma states D/F). Mirrors the Figma "Are you [Name]? Complete your
+ * profile now." band, with a button into Win sign-up where the frame draws an
+ * inline name/email form. Rendered in the person `person-cta` section slot
+ * (below the content well, above the elections index) in place of the claimed
+ * "Join the movement" CTA.
  *
- * Carries NO marketing-consent checkbox, unlike the claim modal, which is what
- * the frame specifies (band 1922:92593 has name + email + submit; the modal's
- * dialog 1901:51851 adds the opt-in). The two forms hit one endpoint but are
- * different acts: the modal asks a visitor to opt in while notifying someone
- * else, whereas this band is the person themselves entering their own address to
- * claim their page. The proxy therefore records `marketingConsent: false` for
- * every submission from here — absent an opt-in that is the accurate value, not
- * a dropped field.
+ * Candidate-only by construction: `buildPersonSectionOverrides` no longer shows
+ * any claim surface to the officeholder or past personas, so there is no Serve
+ * branch here. Someone reaching this band is running, and running means Win,
+ * which they can self-serve into.
+ *
+ * The band takes no `personId`: nothing is submitted from here any more, and the
+ * `Sign Up Clicked` event carries `page_path`, which is the profile URL — so the
+ * click is still attributable to the person whose page it came from.
  */
-export function PersonClaimCTABand({ personId, displayName, isRunning }: PersonClaimCTABandProps) {
-	const [isSuccess, setIsSuccess] = useState(false);
-	// Every other sign-up link on the site reaches the app through `Anchor`,
-	// which decorates app.goodparty.org URLs with the captured fbclid/utm params.
-	// This branch navigates programmatically and so has to do it by hand, or a
-	// claim that arrived from an ad would land on sign-up stripped of the
-	// attribution that stitches the two halves of the funnel together.
-	const signUpHref = useDecoratedAppHref(APP_SIGN_UP_HREF) ?? APP_SIGN_UP_HREF;
-	const {
-		register,
-		handleSubmit,
-		setError,
-		formState: { errors, isSubmitting },
-	} = useForm<NotifyValues>({ defaultValues: { firstname: '', email: '' } });
-
-	async function onSubmit(values: NotifyValues) {
-		try {
-			const res = await fetch('/api/people/claim-request', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				// `owner` is the person claiming their own page, which is not demand
-				// from other people and must never reach candidate_profile_requests.
-				body: buildClaimRequestBody({
-					personId,
-					firstname: values.firstname,
-					email: values.email,
-					source: 'owner',
-				}),
-			});
-			if (!res.ok) throw new Error('Submission failed');
-			trackEvent('Person Profile Claim CTA Submitted', { personId, product: isRunning ? 'win' : 'serve' });
-			setIsSuccess(true);
-
-			// Win only. The lead is stored either way — the redirect happens after a
-			// successful POST so a candidate who abandons sign-up is still a lead and
-			// still counted in the funnel. Serve stops here: sales follows up from
-			// HubSpot and sends the access link by hand.
-			if (isRunning) {
-				// The event carries the bare href, as every other sign-up link on the
-				// site does, so this point is comparable with the rest of the funnel;
-				// the navigation carries the decorated one.
-				trackSignUpClicked({ href: APP_SIGN_UP_HREF, label: 'Claim profile', formId: CLAIM_FORM_ID });
-				window.location.assign(signUpHref);
-			}
-		} catch {
-			setError('root', { message: 'Something went wrong. Please try again.' });
-		}
-	}
-
-	const body = isRunning
-		? 'Your community deserves accountable leadership. Claim your profile and share why you\u2019re running and your top priorities with residents. Enter your email to get started.'
-		: 'Your community deserves accountable leadership. Claim your profile and share your record and priorities in office with residents. Enter your email to get started.';
-
-	// Both branches speak to the person themselves, not to a visitor — this band is
-	// only ever the subject entering their own address.
-	const successCopy = isRunning
-		? 'Thanks — taking you to GoodParty.org now to create your free account and finish claiming your profile.'
-		: 'Thanks — someone from our team will email you at that address with a link to access your profile.';
-
+export function PersonClaimCTABand({ displayName }: PersonClaimCTABandProps) {
 	return (
 		<article
 			id={PERSON_CLAIM_ANCHOR_ID}
@@ -128,65 +54,32 @@ export function PersonClaimCTABand({ personId, displayName, isRunning }: PersonC
 						<Text as='h2' styleType='heading-lg'>
 							{`Are you ${displayName}? Complete your profile now.`}
 						</Text>
-						<Text styleType='body-1'>{body}</Text>
+						<Text styleType='body-1'>
+							Your community deserves accountable leadership. Claim your profile and share why you&rsquo;re
+							running and your top priorities with residents. Create a free GoodParty.org account to get
+							started.
+						</Text>
 					</div>
-					{isSuccess ? (
-						<div
-							className='w-full max-w-md rounded-md border border-success-200 bg-success-50 px-4 py-3'
-							role='status'
-							aria-live='polite'
-						>
-							<Text styleType='body-2'>{successCopy}</Text>
-						</div>
-					) : (
-						// The sizing sits on the wrapper, not the <form>, because the band is a
-						// `flex flex-col items-center` column: its children do not stretch, so
-						// whichever element is the flex item has to carry `w-full max-w-md` or
-						// the field column collapses to its content width.
-						<div className='w-full max-w-md'>
-							<form id={CLAIM_FORM_ID} onSubmit={(e) => void handleSubmit(onSubmit)(e)} noValidate>
-								<div className='flex flex-col gap-4 text-left'>
-									<TextInput
-										label='Name (optional)'
-										autoComplete='name'
-										error={errors.firstname?.message}
-										{...register('firstname')}
-									/>
-									<TextInput
-										label='Email address'
-										type='email'
-										required
-										autoComplete='email'
-										inputMode='email'
-										error={errors.email?.message}
-										{...register('email', {
-											required: 'Email is required',
-											pattern: {
-												value: EMAIL_PATTERN,
-												message: 'Enter a valid email address',
-											},
-										})}
-									/>
-									{errors.root?.message && (
-										<Text styleType='caption' className='text-error-600' role='alert'>
-											{errors.root.message}
-										</Text>
-									)}
-									<Button
-										parent='PersonClaimCTABand'
-										type='submit'
-										styleType='primary'
-										styleSize='md'
-										isLoading={isSubmitting}
-										disabled={isSubmitting}
-										className='mx-auto w-fit'
-									>
-										Submit
-									</Button>
-								</div>
-							</form>
-						</div>
-					)}
+					{/*
+					  * `ButtonLink` renders through `Anchor`, which decorates
+					  * app.goodparty.org URLs with the captured fbclid/utm params, so a
+					  * candidate who arrived from an ad lands on sign-up with the
+					  * attribution that stitches the two halves of the funnel together.
+					  * The tracked href is the bare one, as everywhere else on the site,
+					  * so this point stays comparable with the rest of the funnel.
+					  */}
+					<ButtonLink
+						parent='PersonClaimCTABand'
+						id={PERSON_CLAIM_ACTION_ID}
+						href={APP_SIGN_UP_HREF}
+						formId={CLAIM_FORM_ID}
+						styleType='primary'
+						styleSize='md'
+						onClick={() => trackSignUpClicked({ href: APP_SIGN_UP_HREF, label: 'Claim profile', formId: CLAIM_FORM_ID })}
+						iconRight={<IconResolver icon='arrow-up-right' className='h-5 w-5' />}
+					>
+						Claim this profile
+					</ButtonLink>
 				</div>
 			</Container>
 		</article>

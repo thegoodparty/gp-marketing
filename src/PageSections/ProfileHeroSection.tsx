@@ -33,6 +33,7 @@ export function ProfileHeroSection({ profileHeroOverride, tokens: _tokens, ...se
 				isEmpowered={profileHeroOverride?.isEmpowered}
 				tags={profileHeroOverride?.tags}
 				attribution={profileHeroOverride?.attribution}
+				showBrandMark={profileHeroOverride?.showBrandMark}
 			/>
 		</section>
 	);

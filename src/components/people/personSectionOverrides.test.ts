@@ -169,8 +169,10 @@ describe('the claim prompt and the claim form ship together', () => {
 		}
 	});
 
+	// State E is absent on purpose: an unclaimed officeholder is no longer asked
+	// to claim anything (see the office-only gating below).
 	test('the unclaimed states lead with the owner prompt, then the voter prompt', () => {
-		for (const slug of ['kim-byrd-b77f912d', 'rob-zotti-d8c578fb', 'tim-ficken-0a951485']) {
+		for (const slug of ['kim-byrd-b77f912d', 'tim-ficken-0a951485']) {
 			expect([slug, claimPromptVariants(slug)]).toEqual([slug, ['owner-card', 'voter-card']]);
 		}
 	});
@@ -200,23 +202,26 @@ describe('the claim prompt and the claim form ship together', () => {
 	 * the state, or the office, where the frame names the town.
 	 */
 	test('the voter prompt is handed the most specific place in the breadcrumb', () => {
-		for (const slug of ['kim-byrd-b77f912d', 'rob-zotti-d8c578fb', 'tim-ficken-0a951485']) {
+		for (const slug of ['kim-byrd-b77f912d', 'tim-ficken-0a951485']) {
 			expect([slug, claimPromptLocation(slug)]).toEqual([slug, 'Springfield']);
 		}
 	});
 
 	/**
-	 * The dev fixtures hand every persona a city race, but in production someone
-	 * who only holds office has no candidacy and so no race slug, and their trail
-	 * degrades to `Elections > State > Name`. The card then names the state. That
-	 * is the accepted degradation (see `profileLocationLabel`) — what must not
-	 * happen is the state crumb being skipped for the office, or dropped for the
-	 * generic subject, so this pins the degraded shape rather than assuming the
-	 * fixtures represent it.
+	 * The dev fixtures hand every persona a city race, but in production a
+	 * candidacy can arrive without a slug, leaving no race for the trail to hang
+	 * off, and it degrades to `Elections > State > Name`. The card then names the
+	 * state. That is the accepted degradation (see `profileLocationLabel`) — what
+	 * must not happen is the state crumb being skipped for the office, or dropped
+	 * for the generic subject, so this pins the degraded shape rather than
+	 * assuming the fixtures represent it.
+	 *
+	 * Driven from state F rather than E: the office-only persona no longer renders
+	 * a prompt for the label to reach.
 	 */
-	test('an officeholder with no race falls back to the state, not the office', () => {
-		const view = getDevPersonProfileView('rob-zotti-d8c578fb');
-		if (!view) throw new Error('no dev fixture for rob-zotti-d8c578fb');
+	test('a profile with no race falls back to the state, not the office', () => {
+		const view = getDevPersonProfileView('tim-ficken-0a951485');
+		if (!view) throw new Error('no dev fixture for tim-ficken-0a951485');
 		const stateOnly = {
 			...view,
 			breadcrumb: buildBreadcrumbTrail({
@@ -229,6 +234,136 @@ describe('the claim prompt and the claim form ship together', () => {
 		};
 		const cards = buildPersonSectionOverrides(stateOnly).component_profileContentBlock?.contentCards ?? [];
 		expect(voterPromptLocation(cards)).toBe('Wyoming');
+	});
+});
+
+/**
+ * Marketing removed the claim CTAs from elected-official-only pages (Slack,
+ * 2026-08-17) — someone who only holds office has no self-serve product to be
+ * sent to. The gate reads `persona !== 'officeholder'`, and the persona that is
+ * easy to lose is 'both': `resolvePersona` returns it for someone currently in
+ * office AND running now, and they keep the candidate treatment because they
+ * have a live candidacy to claim into. Nothing else in the file distinguishes
+ * the two, so a future reading of "elected officials" as "anyone in office"
+ * would silently take state F's CTAs with it.
+ */
+describe('claim CTAs are gone from the office-only pages and nowhere else', () => {
+	function claimSurfaces(slug: string): { prompts: number; band: boolean } {
+		const view = getDevPersonProfileView(slug);
+		if (!view) throw new Error(`no dev fixture for ${slug}`);
+		const overrides = buildPersonSectionOverrides(view);
+		const cta = overrides.component_ctaBannerBlock as { render?: unknown } | undefined;
+		return {
+			prompts: (overrides.component_profileContentBlock?.contentCards ?? []).filter(
+				card => (card.content as { props?: { variant?: string } } | undefined)?.props?.variant,
+			).length,
+			band: cta?.render !== undefined,
+		};
+	}
+
+	test('state E — an unclaimed officeholder is asked for nothing', () => {
+		expect(getDevPersonProfileView('rob-zotti-d8c578fb')?.persona).toBe('officeholder');
+		expect(claimSurfaces('rob-zotti-d8c578fb')).toEqual({ prompts: 0, band: false });
+	});
+
+	test('state E falls through to no CTA band at all, not the claimed sign-up one', () => {
+		const view = getDevPersonProfileView('rob-zotti-d8c578fb');
+		if (!view) throw new Error('no dev fixture for rob-zotti-d8c578fb');
+		expect(buildPersonSectionOverrides(view).component_ctaBannerBlock).toEqual({ hidden: true });
+	});
+
+	test('states D and F — running, so still asked to claim', () => {
+		expect(getDevPersonProfileView('kim-byrd-b77f912d')?.persona).toBe('candidate');
+		expect(getDevPersonProfileView('tim-ficken-0a951485')?.persona).toBe('both');
+		expect(claimSurfaces('kim-byrd-b77f912d')).toEqual({ prompts: 2, band: true });
+		expect(claimSurfaces('tim-ficken-0a951485')).toEqual({ prompts: 2, band: true });
+	});
+
+	test('state E keeps its civics spine — this removed the ask, not the page', () => {
+		const headings = sectionHeadings('rob-zotti-d8c578fb');
+		expect(headings).toContain('Recent Experience');
+		expect(headings).toContain('District information');
+		expect(headings).toContain('Nearby Officials');
+	});
+});
+
+/**
+ * The hero attribution line. Marketing's spec keyed the pledge copy off CLAIM
+ * status; these pin it to the pledge flag instead, because they are separate
+ * facts (see `pledgeAttribution`). State B is the case that proves it: a claimed
+ * officeholder is `pledged: false` in the shared matrix, because `isPledged`
+ * only ever rolls up from candidacies, so the literal spec would have published
+ * "Has Taken the GoodParty.org Pledge" about them.
+ */
+describe('the hero states the pledge fact, not the claim', () => {
+	const EXPECTED: Array<[string, string, string | undefined]> = [
+		['A', 'allen-slagle-74eee01a', 'pledged'],
+		['B', 'tracy-good-ecff49d3', 'notPledged'],
+		['C', 'susan-overman-ad914b82', 'pledged'],
+		['D', 'kim-byrd-b77f912d', 'notPledged'],
+		['E', 'rob-zotti-d8c578fb', 'notPledged'],
+		['F', 'tim-ficken-0a951485', 'notPledged'],
+		['G', 'bill-fortner-61a42912', 'notPledged'],
+		['H', 'gregory-schreurs-136cadf0', 'notPledged'],
+		['I', 'jeb-hanson-3753676b', 'pledgeIneligible'],
+		['J', 'deb-craft-f88e7434', 'pledgeIneligible'],
+		['K', 'x-27255f40', 'none'],
+		['L', 'x-3412f69c', 'none'],
+	];
+
+	function hero(slug: string) {
+		const view = getDevPersonProfileView(slug);
+		if (!view) throw new Error(`no dev fixture for ${slug}`);
+		return buildPersonSectionOverrides(view).component_profileHero;
+	}
+
+	test('every state resolves to its intended line', () => {
+		for (const [state, slug, attribution] of EXPECTED) {
+			expect([state, hero(slug)?.attribution]).toEqual([state, attribution]);
+		}
+	});
+
+	test('state B — claimed, but the flag says they have not pledged', () => {
+		const view = getDevPersonProfileView('tracy-good-ecff49d3');
+		// Guards the premise. If a fixture change ever makes this person pledged,
+		// the assertion above stops testing the divergence and starts agreeing with
+		// the literal spec by accident.
+		expect([view?.claimed, view?.pledged]).toEqual([true, false]);
+	});
+
+	test('the other divergence — unclaimed, but they did take the pledge', () => {
+		// The bug behind this whole decision: pledged people showing up on
+		// unclaimed pages. No fixture carries the combination (the unclaimed
+		// fixtures leave the spine flag off), so it is composed here rather than
+		// left untested.
+		const view = getDevPersonProfileView('kim-byrd-b77f912d');
+		if (!view) throw new Error('no dev fixture for kim-byrd-b77f912d');
+		const hero = buildPersonSectionOverrides({ ...view, pledged: true }).component_profileHero;
+		expect(hero?.attribution).toBe('pledged');
+		// Still unclaimed, so the page carries no GoodParty.org mark: the line
+		// reports a fact about the person, the mark says whose profile this is.
+		expect(hero?.showBrandMark).toBe(false);
+	});
+
+	test('a major-party page says ineligible even if the spine flags a pledge', () => {
+		// A stale flag from a run under another party must not outrank the party
+		// the page currently reports — the two lines would contradict each other.
+		const view = getDevPersonProfileView('jeb-hanson-3753676b');
+		if (!view) throw new Error('no dev fixture for jeb-hanson-3753676b');
+		expect(buildPersonSectionOverrides({ ...view, pledged: true }).component_profileHero?.attribution).toBe(
+			'pledgeIneligible',
+		);
+	});
+
+	test('the GoodParty.org mark still follows the claim, not the pledge', () => {
+		// Every claimed officeholder is unpledgeable, so keying the mark on the
+		// pledge would strip the branding off a whole persona's claimed profiles.
+		for (const [state, slug] of [['A', 'allen-slagle-74eee01a'], ['B', 'tracy-good-ecff49d3'], ['G', 'bill-fortner-61a42912']] as const) {
+			expect([state, hero(slug)?.showBrandMark]).toEqual([state, true]);
+		}
+		for (const [state, slug] of [['D', 'kim-byrd-b77f912d'], ['I', 'jeb-hanson-3753676b'], ['K', 'x-27255f40']] as const) {
+			expect([state, hero(slug)?.showBrandMark]).toEqual([state, false]);
+		}
 	});
 });
 

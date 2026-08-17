@@ -14,6 +14,18 @@ are excluded from the 3% gate by band class in `config.mjs` (not masked).
 | I | Sidebar rows/icons | Unclaimed → no owner overlay/office, so Current Term, Office Contact, Office Mailing Address and the gov/Instagram contact icons have **no data**; live correctly renders only Election Date / Political Affiliation / Contact(3). Figma shows the full filled template | people-api (owner claim / office data) | data gap — flag |
 | K, L | Sidebar top rows | Removal frames use a **generic full template**: figma K (a candidate, holds no office) still shows a "Current Term" row, and figma L (a non-running officeholder) still shows an "Election Date" row — both factually inapplicable placeholders. Live renders the semantically-correct rows per persona. Removal also suppresses owner content (`links=[]`) by design | design file (per-persona removal frames) + product (removal suppression) | reference artifact + data suppression — flag |
 
+**Re-verified 2026-08-17** (fresh Figma re-export of `1997:118777` / `1997:118283`):
+**K gated 3.18%**, **L gated 2.58%** — both improved from the 4.41 / 4.13 recorded
+below, and no band is structurally missing on either side. K's remaining 0.18pp
+over tolerance is the same reference artifact: its Figma sidebar rows still read
+literally `[#### - ####]` and `[space for BallotReady data]`, i.e. the frame was
+never filled in for this state. **No new parity gap was found**, so K is left
+failing rather than masked — masking it would hide the day the frames are
+redrawn per-persona and the gap becomes real. K/L structure is now pinned in
+`src/components/people/personSectionOverrides.test.ts` instead, which is where
+absence (stripped avatar, pledge, links, authored sections) can actually be
+asserted; the blurred layout score treats all of those as rounding errors.
+
 ## RESOLVED — sidebar rebuilt to the Figma structure
 
 The sidebar was structurally wrong (a card of labeled URL rows + an "About

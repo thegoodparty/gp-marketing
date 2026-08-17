@@ -189,6 +189,13 @@ export interface PersonProfileView {
 	majorParty: boolean;
 	/** True when the person requested removal (states K/L). */
 	removed: boolean;
+	/**
+	 * True when someone owns a profile here that is not live. Orthogonal to the
+	 * Figma state letter — the page keeps its normal unclaimed layout and spine
+	 * content — but every "claim this profile" affordance is suppressed, because
+	 * the person it would address has already claimed it.
+	 */
+	unpublished: boolean;
 	/** True when the page uses the empowerment/pledge/claim framing. */
 	empowered: boolean;
 	/** True when the person has taken the GoodParty pledge (renders a badge). */
@@ -658,6 +665,7 @@ export function buildBreadcrumbTrail(params: {
 
 export interface ComposeExtras {
 	removed?: boolean;
+	unpublished?: boolean;
 	positionId?: string | null;
 	electionDate?: string | null;
 	positionDescription?: string | null;
@@ -698,6 +706,10 @@ export function composeView(
 	extras: ComposeExtras = {},
 ): PersonProfileView {
 	const removed = extras.removed ?? false;
+	// Deliberately not folded into `claimed` or the state letter: an unpublished
+	// page is still the unclaimed spine layout, so it keeps the person's public
+	// record. Only the claim affordances differ.
+	const unpublished = extras.unpublished ?? false;
 	const claimed = overlay !== null && !removed;
 	const composedName = [person?.firstName, person?.lastName].filter(Boolean).join(' ');
 	const nameFromPerson = person?.fullName ?? (composedName || null);
@@ -752,6 +764,7 @@ export function composeView(
 		partyClass,
 		majorParty,
 		removed,
+		unpublished,
 		empowered,
 		// Pledge is a factual spine flag; suppress it on removed (K/L) pages along
 		// with the rest of the authored/empowerment framing.
@@ -989,6 +1002,7 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 	if (overlayResult.status === 'gone') return null;
 
 	const removed = overlayResult.status === 'removed';
+	const unpublished = overlayResult.status === 'unpublished';
 	const overlay = overlayResult.status === 'live' ? overlayResult.profile : null;
 
 	// Unclaimed and no removal: only render if the data team has a canonical
@@ -1037,6 +1051,7 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 
 	return composeView(personId, person, overlay, {
 		removed,
+		unpublished,
 		positionId,
 		electionDate,
 		positionDescription,

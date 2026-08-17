@@ -379,23 +379,29 @@ export async function getVoterDensityForDistrict(
 /**
  * Result of resolving a person's product overlay (gp-api). The distinction
  * matters for the render gate:
- *  - `live`   → an owner has claimed + published a profile; enrich the page.
- *  - `absent` → no published overlay (never claimed, or unpublished draft); the
- *               page still renders as an unclaimed, programmatic-SEO profile
- *               from the election-api spine, with claim CTAs.
- *  - `gone`   → the owner deleted their profile; suppress the page entirely.
+ *  - `live`        → an owner has claimed + published a profile; enrich the page.
+ *  - `absent`      → nobody has claimed this person; the page still renders as an
+ *                    unclaimed, programmatic-SEO profile from the election-api
+ *                    spine, with claim CTAs.
+ *  - `unpublished` → someone owns a profile here but it is not live. Renders the
+ *                    same spine page as `absent`, minus every claim CTA — they
+ *                    already claimed it, so asking them to claim it is wrong, and
+ *                    asking voters to nudge them to finish it is worse.
+ *  - `gone`        → the owner deleted their profile; suppress the page entirely.
  */
 export type PublicPersonProfileResult =
 	| { status: 'live'; profile: PublicPersonProfile }
 	| { status: 'absent' }
+	| { status: 'unpublished' }
 	| { status: 'gone' }
 	| { status: 'removed' };
 
 /**
  * The product-owned overlay for a person's public profile (gp-api). gp-api
- * returns 200 (live), 404 (never created / unpublished), or 410 (deleted). We
- * map those to the render-gate outcomes above; any transient/5xx failure falls
- * back to `absent` so the spine page still renders instead of 404-ing.
+ * returns 200 (live, removed, or unpublished), 404 (never created), or 410
+ * (deleted). We map those to the render-gate outcomes above; any transient/5xx
+ * failure falls back to `absent` so the spine page still renders instead of
+ * 404-ing.
  */
 export async function getPublicPersonProfileStatus(
 	personId: string,
@@ -410,6 +416,9 @@ export async function getPublicPersonProfileStatus(
 				// Privacy takedown: gp-api answers 200 with { removed: true } and no
 				// authored content. Render the minimal "removal requested" states.
 				if (profile.removed === true) return { status: 'removed' };
+				// Checked after `removed` because a takedown outranks the owner's own
+				// publish state, and gp-api only ever sends one of the two markers.
+				if (profile.unpublished === true) return { status: 'unpublished' };
 				return { status: 'live', profile };
 			}
 			if (res.status === 410) return { status: 'gone' };

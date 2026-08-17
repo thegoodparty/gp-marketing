@@ -452,6 +452,36 @@ describe('composeView claim + overlay precedence', () => {
 	});
 });
 
+describe('composeView display name casing', () => {
+	test('cases an unformatted spine name without disturbing the canonical slug', () => {
+		const view = composeView(PID, makePerson({ slug: 'chris-lewis', fullName: 'chris lewis' }), null);
+		expect(view.displayName).toBe('Chris Lewis');
+		expect(view.initials).toBe('CL');
+		expect(view.canonicalSlug).toBe('chris-lewis-11111111');
+	});
+
+	test('composes first/last when the spine has no fullName', () => {
+		const view = composeView(PID, makePerson({ firstName: 'ed', lastName: 'johnson' }), null);
+		expect(view.displayName).toBe('Ed Johnson');
+	});
+
+	test('leaves an already-formatted spine name alone', () => {
+		const view = composeView(PID, makePerson({ fullName: 'Blaine K. Bowman' }), null);
+		expect(view.displayName).toBe('Blaine K. Bowman');
+	});
+
+	// An owner who types their name in lowercase means it; only the spine's
+	// lowercase is the unformatted-data signature.
+	test('never re-cases an owner-authored displayName', () => {
+		const view = composeView(
+			PID,
+			makePerson({ fullName: 'bell hooks' }),
+			makeOverlay({ displayName: 'bell hooks' }),
+		);
+		expect(view.displayName).toBe('bell hooks');
+	});
+});
+
 describe('composeView issues, links, labels', () => {
 	test('keeps only visible issues that have a title, preserving order', () => {
 		const view = composeView(

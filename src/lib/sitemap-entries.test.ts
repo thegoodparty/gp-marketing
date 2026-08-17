@@ -59,14 +59,37 @@ describe('fetchPeopleSitemapEntries', () => {
 	type MockPerson = { id: string; slug: string; state: string | null };
 
 	/**
+	 * A row on the candidacy / officeholder feeds. The bare-string form is a row
+	 * that names an office, which is the ordinary case; the object form exists to
+	 * model the rows that carry a personId and nothing else — the shape behind
+	 * the flagged near-duplicate pages.
+	 */
+	type MockLink = string | { personId: string; positionName?: string | null; officeTitle?: string | null };
+
+	function linkRow(link: MockLink): {
+		personId: string;
+		positionName: string | null;
+		officeTitle: string | null;
+	} {
+		if (typeof link === 'string') {
+			return { personId: link, positionName: 'Mayor', officeTitle: null };
+		}
+		return {
+			personId: link.personId,
+			positionName: link.positionName ?? null,
+			officeTitle: link.officeTitle ?? null,
+		};
+	}
+
+	/**
 	 * Stands in for the four upstream feeds the band reads. `state: null` models
 	 * the ~8% of the real table that no `?state=` sweep can reach, which is the
 	 * whole reason the candidacy/officeholder union exists.
 	 */
 	function mockUpstream(opts: {
 		persons: MockPerson[];
-		candidacies?: Record<string, string[]>;
-		officeholders?: Record<string, string[]>;
+		candidacies?: Record<string, MockLink[]>;
+		officeholders?: Record<string, MockLink[]>;
 		published?: { personId: string; updatedAt?: string }[];
 		unlisted?: { personId: string }[];
 		unlistedStatus?: number;
@@ -108,11 +131,11 @@ describe('fetchPeopleSitemapEntries', () => {
 			}
 			if (url.pathname.endsWith('/v1/candidacies')) {
 				const state = url.searchParams.get('state') ?? '';
-				return json((opts.candidacies?.[state] ?? []).map((personId) => ({ personId })));
+				return json((opts.candidacies?.[state] ?? []).map(linkRow));
 			}
 			if (url.pathname.endsWith('/v1/officeholders')) {
 				const state = url.searchParams.get('state') ?? '';
-				return json((opts.officeholders?.[state] ?? []).map((personId) => ({ personId })));
+				return json((opts.officeholders?.[state] ?? []).map(linkRow));
 			}
 			return json([]);
 		}) as typeof fetch;
@@ -133,7 +156,10 @@ describe('fetchPeopleSitemapEntries', () => {
 	// programmatic page is the destination now, so it has to be listed even
 	// though gp-api knows nothing about it.
 	test('lists people who have never been claimed', async () => {
-		mockUpstream({ persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }] });
+		mockUpstream({
+			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
+			candidacies: { WY: [aliceId] },
+		});
 
 		const entries = await fetchPeopleSitemapEntries(base, 'a');
 
@@ -147,7 +173,7 @@ describe('fetchPeopleSitemapEntries', () => {
 				{ id: bobId, slug: 'bob-jones', state: null },
 				{ id: carolId, slug: 'carol-diaz', state: null },
 			],
-			candidacies: { WY: [bobId] },
+			candidacies: { WY: [aliceId, bobId] },
 			officeholders: { MT: [carolId] },
 		});
 
@@ -211,6 +237,7 @@ describe('fetchPeopleSitemapEntries', () => {
 				{ id: aliceId, slug: 'alice-smith', state: 'WY' },
 				{ id: bobId, slug: 'bob-jones', state: 'WY' },
 			],
+			candidacies: { WY: [aliceId, bobId] },
 			unlisted: [{ personId: bobId }],
 		});
 
@@ -226,6 +253,7 @@ describe('fetchPeopleSitemapEntries', () => {
 	test('matches unlisted ids case-insensitively, since the id is a uuid from another service', async () => {
 		mockUpstream({
 			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
+			candidacies: { WY: [aliceId] },
 			unlisted: [{ personId: aliceId.toUpperCase() }],
 		});
 
@@ -238,6 +266,7 @@ describe('fetchPeopleSitemapEntries', () => {
 				{ id: aliceId, slug: 'alice-smith', state: 'WY' },
 				{ id: bobId, slug: 'bob-jones', state: 'WY' },
 			],
+			candidacies: { WY: [bobId] },
 			published: [{ personId: aliceId, updatedAt: '2026-01-15T00:00:00.000Z' }],
 		});
 
@@ -277,7 +306,10 @@ describe('fetchPeopleSitemapEntries', () => {
 		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
 
 		clearPeopleSitemapCache();
-		mockUpstream({ persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }] });
+		mockUpstream({
+			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
+			candidacies: { WY: [aliceId] },
+		});
 
 		expect((await fetchPeopleSitemapEntries(base, 'a')).map((e) => e.url)).toEqual([
 			`${base}/people/alice-smith-aaaaaaaa`,
@@ -317,7 +349,75 @@ describe('fetchPeopleSitemapEntries', () => {
 		});
 		await expect(fetchPeopleSitemapEntries(base, 'a')).rejects.toThrow();
 
+		mockUpstream({
+			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
+			candidacies: { WY: [aliceId] },
+		});
+
+		expect((await fetchPeopleSitemapEntries(base, 'a')).map((e) => e.url)).toEqual([
+			`${base}/people/alice-smith-aaaaaaaa`,
+		]);
+	});
+
+	// The GSC "Duplicate, Google chose different canonical than user" cohort: the
+	// page renders noindex because it has nothing on it, so advertising it would
+	// only swap that report for "Submitted URL marked noindex".
+	test('omits a person whose civics feeds name no office', async () => {
+		mockUpstream({
+			persons: [
+				{ id: aliceId, slug: 'alice-smith', state: 'WY' },
+				{ id: bobId, slug: 'bob-jones', state: 'WY' },
+			],
+			candidacies: { WY: [aliceId, { personId: bobId, positionName: null }] },
+		});
+
+		const [aShard, bShard] = await Promise.all([
+			fetchPeopleSitemapEntries(base, 'a'),
+			fetchPeopleSitemapEntries(base, 'b'),
+		]);
+
+		expect(aShard.map((e) => e.url)).toEqual([`${base}/people/alice-smith-aaaaaaaa`]);
+		expect(bShard).toEqual([]);
+	});
+
+	// A person reachable only by the state sweep has no candidacy or officeholder
+	// row at all, so there is no office to render and nothing to index.
+	test('omits a person who appears on no civics feed at all', async () => {
 		mockUpstream({ persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }] });
+
+		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+	});
+
+	test('an officeholder row that carries only officeTitle still counts as an office', async () => {
+		mockUpstream({
+			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
+			officeholders: { WY: [{ personId: aliceId, officeTitle: 'City Council' }] },
+		});
+
+		expect((await fetchPeopleSitemapEntries(base, 'a')).map((e) => e.url)).toEqual([
+			`${base}/people/alice-smith-aaaaaaaa`,
+		]);
+	});
+
+	// Blank-but-present is the same absence as null, and trimming here keeps the
+	// sitemap agreeing with the renderer, which treats '' as no office too.
+	test('treats a whitespace-only position name as no office', async () => {
+		mockUpstream({
+			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
+			candidacies: { WY: [{ personId: aliceId, positionName: '   ' }] },
+		});
+
+		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+	});
+
+	// The one case where the sitemap must not apply the office test: an owner who
+	// claimed and published gets an indexable page regardless of the spine, so
+	// dropping it here would hide the only pages with authored content.
+	test('keeps a claimed person who has no office on any feed', async () => {
+		mockUpstream({
+			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
+			published: [{ personId: aliceId, updatedAt: '2026-01-15T00:00:00.000Z' }],
+		});
 
 		expect((await fetchPeopleSitemapEntries(base, 'a')).map((e) => e.url)).toEqual([
 			`${base}/people/alice-smith-aaaaaaaa`,

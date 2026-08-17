@@ -240,6 +240,38 @@ export interface PersonProfileView {
 	updatedAt: string;
 }
 
+/**
+ * Whether the profile carries anything that tells it apart from the rest of the
+ * unclaimed corpus.
+ *
+ * A profile with no resolved office, no authored content, no photo and no links
+ * renders a name and a state inside ~114KB of site chrome, and nothing else.
+ * Sampling the URLs Google flagged put 200 of 200 in that shape and within 817
+ * bytes of each other (0.7%), while profiles that do resolve an office spread
+ * across 78% of their size — so the flagged pages are not merely similar, they
+ * are the same document with the name swapped. That is what makes Google
+ * cluster them and elect its own canonical; the canonical tag itself is correct
+ * and self-referential, so nothing about it is worth changing.
+ *
+ * The test is deliberately generous — any single signal is enough to keep the
+ * page indexable — and it is recomputed from the view on every render, so a
+ * page returns to the index on its own once the data team backfills its office.
+ * There is no list to maintain and nothing to re-index by hand.
+ */
+export function isThinProfile(view: PersonProfileView): boolean {
+	// An owner who claimed and published asked for this page to exist; the
+	// population is small enough that indexing it can never drive clustering.
+	if (view.claimed) return false;
+	const hasOffice = Boolean(view.officeName ?? view.positionId);
+	const hasAuthoredContent =
+		Boolean(view.bio ?? view.whyRunning) ||
+		view.issues.length > 0 ||
+		view.accomplishments.length > 0;
+	const hasIdentity = Boolean(view.avatarUrl) || view.links.length > 0;
+	const hasPublicRecord = view.recentExperience.length > 0;
+	return !hasOffice && !hasAuthoredContent && !hasIdentity && !hasPublicRecord;
+}
+
 function pickCurrentOffice(person: PersonItem | null): PersonOfficeHolder | null {
 	const offices = person?.OfficeHolders ?? [];
 	if (offices.length === 0) return null;

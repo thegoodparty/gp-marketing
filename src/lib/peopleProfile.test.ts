@@ -7,6 +7,7 @@ import {
 	buildPersonSlugFromBase,
 	composeView,
 	extractPersonId,
+	isThinProfile,
 	resolveProfileState,
 	type PersonPersona,
 } from './peopleProfile';
@@ -480,6 +481,83 @@ describe('composeView display name casing', () => {
 			makeOverlay({ displayName: 'bell hooks' }),
 		);
 		expect(view.displayName).toBe('bell hooks');
+	});
+});
+
+describe('isThinProfile', () => {
+	// The shape behind the 1,792 GSC flagged: a name, a state, and nothing else.
+	const thinPerson = makePerson({ fullName: 'chris lewis', state: 'VA' });
+
+	test('an unclaimed profile with no office and no content is thin', () => {
+		const view = composeView(PID, thinPerson, null);
+		expect(view.roleTitle).toBe('Candidate');
+		expect(isThinProfile(view)).toBe(true);
+	});
+
+	test('a candidacy that names a position is enough to differentiate', () => {
+		const view = composeView(
+			PID,
+			makePerson({ fullName: 'chris lewis', Candidacies: [{ id: 'c1', positionName: 'Mayor' }] }),
+			null,
+		);
+		expect(isThinProfile(view)).toBe(false);
+	});
+
+	test('an office term is enough to differentiate', () => {
+		const view = composeView(
+			PID,
+			makePerson({
+				fullName: 'chris lewis',
+				OfficeHolders: [makeOffice({ isCurrent: true, officeTitle: 'City Council' })],
+			}),
+			null,
+		);
+		expect(isThinProfile(view)).toBe(false);
+	});
+
+	test('a candidacy with a null position name does not differentiate', () => {
+		const view = composeView(
+			PID,
+			makePerson({ fullName: 'chris lewis', Candidacies: [{ id: 'c1', positionName: null }] }),
+			null,
+		);
+		expect(isThinProfile(view)).toBe(true);
+	});
+
+	describe('any single signal keeps the page indexable', () => {
+		test('a spine bio', () => {
+			expect(isThinProfile(composeView(PID, makePerson({ ...thinPerson, bioText: 'A bio.' }), null))).toBe(false);
+		});
+
+		test('a headshot', () => {
+			expect(
+				isThinProfile(composeView(PID, makePerson({ ...thinPerson, headshotUrl: 'p.png' }), null)),
+			).toBe(false);
+		});
+
+		test('an outbound link', () => {
+			expect(
+				isThinProfile(
+					composeView(PID, makePerson({ ...thinPerson, websiteUrl: 'https://x.example' }), null),
+				),
+			).toBe(false);
+		});
+	});
+
+	// An owner asked for this page; the claimed population is far too small to
+	// drive clustering, so it is never withheld from the index.
+	test('a claimed profile is never thin, even with nothing else on it', () => {
+		const view = composeView(PID, thinPerson, makeOverlay({}));
+		expect(view.claimed).toBe(true);
+		expect(isThinProfile(view)).toBe(false);
+	});
+
+	// Removal already sets noindex on its own; both rules agreeing here means the
+	// K/L pages cannot be re-indexed by one rule while the other suppresses them.
+	test('a removed profile stripped back to the bare spine is thin', () => {
+		const view = composeView(PID, thinPerson, makeOverlay({ bioOverride: 'gone' }), { removed: true });
+		expect(view.removed).toBe(true);
+		expect(isThinProfile(view)).toBe(true);
 	});
 });
 

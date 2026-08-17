@@ -651,12 +651,17 @@ export async function fetchStateElectionSitemapEntries(
 
 type PeopleSitemapPerson = { id?: string; slug?: string | null };
 
-type PeopleSitemapData = {
+type PersonEnumeration = {
+	persons: PeopleSitemapPerson[];
+	/** personIds the civics feeds give a named office or race — see fetchAllPersons. */
+	personIdsWithOffice: Set<string>;
+};
+
+type PeopleSitemapData = PersonEnumeration & {
 	/** personId → updatedAt, for the published subset only; also marks "claimed". */
 	updatedByPersonId: Map<string, string | undefined>;
 	/** personIds whose page must never be advertised — see the loader for why. */
 	unlistedPersonIds: Set<string>;
-	persons: PeopleSitemapPerson[];
 };
 
 /**
@@ -678,6 +683,13 @@ const PERSON_ID_BATCH = 150;
  * live page renders.
  */
 const ENUMERATION_CONCURRENCY = 8;
+
+/** Projected row from the candidacy / officeholder sweeps in fetchAllPersons. */
+type LinkedFeedRow = {
+	personId?: string;
+	positionName?: string | null;
+	officeTitle?: string | null;
+};
 
 async function mapWithConcurrency<T, R>(
 	items: readonly T[],
@@ -713,8 +725,15 @@ async function mapWithConcurrency<T, R>(
  *
  * If election-api ever grows a cursor or a dedicated enumeration feed, this
  * whole dance collapses into a single paged read.
+ *
+ * The candidacy and officeholder sweeps double as the thinness signal. They are
+ * already walked for the union above, and they are the same two feeds the
+ * profile renderer resolves an office from, so asking them for the position
+ * name alongside the personId answers "does this person's page have anything on
+ * it" for the whole corpus at the cost of one extra projected column — rather
+ * than 216k profile loads.
  */
-async function fetchAllPersons(): Promise<PeopleSitemapPerson[]> {
+async function fetchAllPersons(): Promise<PersonEnumeration> {
 	const tags = [PEOPLE_SITEMAP_CACHE_TAG];
 	const states = [...US_STATE_CODES];
 	const byId = new Map<string, PeopleSitemapPerson>();
@@ -732,25 +751,29 @@ async function fetchAllPersons(): Promise<PeopleSitemapPerson[]> {
 		}
 	}
 
-	const linkedFeeds: { path: string; state: string }[] = states.flatMap((state) => [
-		{ path: 'v1/candidacies', state },
-		{ path: 'v1/officeholders', state },
-	]);
+	// Columns differ per feed because the two models name the office differently:
+	// a candidacy carries only positionName, an office term can carry either that
+	// or officeTitle (the renderer reads both, so the sitemap has to as well).
+	const linkedFeeds: { path: string; state: string; columns: string }[] = states.flatMap(
+		(state) => [
+			{ path: 'v1/candidacies', state, columns: 'personId,positionName' },
+			{ path: 'v1/officeholders', state, columns: 'personId,positionName,officeTitle' },
+		],
+	);
 	const linked = await mapWithConcurrency(
 		linkedFeeds,
 		ENUMERATION_CONCURRENCY,
-		async ({ path, state }) =>
-			fetchElectionJsonOrThrow<{ personId?: string }>(
-				path,
-				{ state, columns: 'personId' },
-				tags,
-			),
+		async ({ path, state, columns }) =>
+			fetchElectionJsonOrThrow<LinkedFeedRow>(path, { state, columns }, tags),
 	);
 	const unseen = new Set<string>();
+	const personIdsWithOffice = new Set<string>();
 	for (const rows of linked) {
 		for (const row of rows) {
 			const id = row.personId?.toLowerCase();
-			if (id && !byId.has(id)) unseen.add(id);
+			if (!id) continue;
+			if (row.positionName?.trim() || row.officeTitle?.trim()) personIdsWithOffice.add(id);
+			if (!byId.has(id)) unseen.add(id);
 		}
 	}
 
@@ -770,7 +793,7 @@ async function fetchAllPersons(): Promise<PeopleSitemapPerson[]> {
 		}
 	}
 
-	return [...byId.values()];
+	return { persons: [...byId.values()], personIdsWithOffice };
 }
 
 let cachedPeopleSitemapData: Promise<PeopleSitemapData> | null = null;
@@ -793,7 +816,7 @@ export function clearPeopleSitemapCache(): void {
 async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
 	if (!cachedPeopleSitemapData) {
 		const load = (async (): Promise<PeopleSitemapData> => {
-			const [published, unlisted, persons] = await Promise.all([
+			const [published, unlisted, enumeration] = await Promise.all([
 				fetchGpApiJsonOrThrow<{ personId?: string; updatedAt?: string }>(
 					'v1/public-person-profiles/published',
 					[PEOPLE_SITEMAP_CACHE_TAG],
@@ -819,7 +842,7 @@ async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
 				if (row.personId) unlistedPersonIds.add(row.personId.toLowerCase());
 			}
 
-			return { updatedByPersonId, unlistedPersonIds, persons };
+			return { updatedByPersonId, unlistedPersonIds, ...enumeration };
 		})();
 		cachedPeopleSitemapData = load;
 		// Settle via two-arg `then`, not `finally`: the upstream reads throw now, and
@@ -855,19 +878,35 @@ async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
  * crawlers at someone who asked to be left alone, and an owner-deleted profile
  * has no page to reach at all — gp-api answers 410 and the route 404s.
  *
+ * People whose civics feeds name no office are dropped for the same reason at
+ * one remove: their page renders `noindex` (see isThinProfile) because it has
+ * no content to tell it apart from every other one, and a sitemap that keeps
+ * advertising them would simply trade "Duplicate, Google chose different
+ * canonical" for "Submitted URL marked noindex".
+ *
+ * That test is a projection of the renderer's, not a copy of it — the sitemap
+ * sees offices and claims but not photos or links. The asymmetry is the safe
+ * one: a page this drops but the renderer indexes only loses its sitemap entry
+ * and is still reachable by crawl, whereas the harmful direction (advertising a
+ * page that renders noindex) cannot happen, because everything the renderer
+ * treats as differentiating beyond an office implies either a claim, which is
+ * checked here, or an office, which is what was checked.
+ *
  * Upstream fetches are shared across shards via getCachedPeopleSitemapData.
  */
 export async function fetchPeopleSitemapEntries(
 	baseUrl: string,
 	shard?: string,
 ): Promise<MetadataRoute.Sitemap> {
-	const { updatedByPersonId, unlistedPersonIds, persons } = await getCachedPeopleSitemapData();
+	const { updatedByPersonId, unlistedPersonIds, persons, personIdsWithOffice } =
+		await getCachedPeopleSitemapData();
 
 	const entries: MetadataRoute.Sitemap = [];
 	for (const p of persons) {
 		if (!p.id || !p.slug) continue;
 		const personId = p.id.toLowerCase();
 		if (unlistedPersonIds.has(personId)) continue;
+		if (!updatedByPersonId.has(personId) && !personIdsWithOffice.has(personId)) continue;
 		// When a shard is requested, only emit people whose slug falls in it. The
 		// canonical URL appends the 8-hex id suffix but shares the base's first
 		// char, so sharding on the base is equivalent.

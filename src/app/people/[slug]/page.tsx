@@ -8,6 +8,7 @@ import {
 } from '~/lib/schema';
 import {
 	extractPersonId,
+	isThinProfile,
 	loadPersonProfile,
 	type PersonProfileView,
 } from '~/lib/peopleProfile';
@@ -130,13 +131,20 @@ export async function generateMetadata({
 		view.bio ??
 		`${view.displayName}${view.roleTitle ? `, ${view.roleTitle}` : ''} on GoodParty.org.`;
 
+	// Two different reasons to stay out of the index, one directive. A person who
+	// requested removal keeps a crawlable, stripped URL (K/L) but should not be
+	// actively surfaced; a profile with no differentiating content yet is a
+	// near-duplicate of every other one, which is what Google clustered under
+	// "Duplicate, Google chose different canonical than user". Both keep
+	// `follow: true` so the civics interlinks on the page still carry crawl
+	// signal to the election and profile pages they point at.
+	const indexable = !view.removed && !isThinProfile(view);
+
 	return {
 		title,
 		description,
 		alternates: { canonical },
-		// A person who requested removal keeps a crawlable, stripped URL (K/L) but
-		// should not be actively indexed/surfaced.
-		...(view.removed ? { robots: { index: false, follow: true } } : {}),
+		...(indexable ? {} : { robots: { index: false, follow: true } }),
 		openGraph: {
 			type: 'profile',
 			siteName: SITE_NAME,

@@ -76,6 +76,11 @@ describe('formatPersonName', () => {
 			});
 		}
 
+		test('a single-token name is the whole name, not a suffix', () => {
+			expect(formatPersonName('vi')).toBe('Vi');
+			expect(formatPersonName('iv')).toBe('Iv');
+		});
+
 		test('a real generational suffix is still uppercased', () => {
 			expect(formatPersonName('henry ford iii')).toBe('Henry Ford III');
 			expect(formatPersonName('walter carter iv.')).toBe('Walter Carter IV.');

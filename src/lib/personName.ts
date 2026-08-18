@@ -116,5 +116,8 @@ export function formatPersonName(name: string | null | undefined): string | null
 	if (!trimmed) return null;
 	if (!isUnformatted(trimmed)) return trimmed;
 	const tokens = trimmed.split(' ');
-	return tokens.map((token, i) => formatToken(token, i === tokens.length - 1)).join(' ');
+	// A lone token is the whole name, never a generational suffix — a row
+	// carrying only a first name would otherwise render `vi` as `VI`.
+	const lastIndex = tokens.length > 1 ? tokens.length - 1 : -1;
+	return tokens.map((token, i) => formatToken(token, i === lastIndex)).join(' ');
 }

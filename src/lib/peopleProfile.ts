@@ -565,9 +565,14 @@ export function buildNearbyOfficialCards(
 		const pid = oh.personId ?? null;
 		if (pid && pid.toLowerCase() === excludePersonId.toLowerCase()) continue;
 		const person = pid ? personsById.get(pid.toLowerCase()) : undefined;
+		// The office-title fallback needs the same casing pass: it comes from the
+		// same spine and arrives all-lowercase ("city council member") on the rows
+		// that have no linked person. `formatPersonName` is reused rather than
+		// duplicated because the guard is what matters here — only an entirely
+		// lowercase value is touched — not the person-specific prefix rules.
 		const name =
 			formatPersonName(person?.fullName) ??
-			nameOf(person?.firstName, person?.lastName, oh.officeTitle ?? '');
+			nameOf(person?.firstName, person?.lastName, formatPersonName(oh.officeTitle) ?? '');
 		if (!name) continue;
 		// Dedupe by personId when present, else by name — otherwise null-id rows
 		// with the same office title yield duplicate cards (and colliding React

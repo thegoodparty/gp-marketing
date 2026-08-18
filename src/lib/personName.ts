@@ -25,6 +25,17 @@ function isUnformatted(name: string): boolean {
  * range that actually occurs in personal names — beyond `X` the numerals start
  * colliding with real surnames (`Li`, `Mi`, `Di` are not numerals, and a longer
  * list would eventually swallow one).
+ *
+ * Applied to the FINAL token only. Several entries are also ordinary names in
+ * their own right — `Vi` is a common Vietnamese given name and `Ix` a surname —
+ * so matching position-blindly turned `vi nguyen` into `VI Nguyen`. A trailing
+ * numeral is overwhelmingly a generational suffix; a leading or middle one is
+ * overwhelmingly a name.
+ *
+ * The residual case this cannot reach is a person whose LAST token is one of
+ * these words (`nguyen vi` still yields `Nguyen VI`). Nothing in an
+ * all-lowercase string separates that from a dropped-period `Nguyen VI`, and
+ * the suffix reading is the commoner one in this corpus.
  */
 const ROMAN_SUFFIXES = new Set(['ii', 'iii', 'iv', 'vi', 'vii', 'viii', 'ix', 'x']);
 
@@ -62,10 +73,12 @@ function capitalizeFirst(word: string): string {
  * Cases one whitespace-delimited token, recursing through hyphens so each half
  * of a compound surname is capitalized (`smith-jones` → `Smith-Jones`).
  */
-function formatToken(token: string): string {
+function formatToken(token: string, isSuffix = false): string {
 	if (!token) return token;
-	if (ROMAN_SUFFIXES.has(token.replace(/\./g, ''))) return token.toUpperCase();
-	if (token.includes('-')) return token.split('-').map(formatToken).join('-');
+	if (isSuffix && ROMAN_SUFFIXES.has(token.replace(/\./g, ''))) return token.toUpperCase();
+	// Neither half of a compound surname is in suffix position, so the numeral
+	// rule stays off for both.
+	if (token.includes('-')) return token.split('-').map(part => formatToken(part)).join('-');
 
 	const [, elidedPrefix, elidedApostrophe, elidedRest] = ELIDED_PREFIX_RE.exec(token) ?? [];
 	if (elidedPrefix && elidedApostrophe && elidedRest) {
@@ -102,5 +115,6 @@ export function formatPersonName(name: string | null | undefined): string | null
 	const trimmed = name.trim().replace(/\s+/g, ' ');
 	if (!trimmed) return null;
 	if (!isUnformatted(trimmed)) return trimmed;
-	return trimmed.split(' ').map(formatToken).join(' ');
+	const tokens = trimmed.split(' ');
+	return tokens.map((token, i) => formatToken(token, i === tokens.length - 1)).join(' ');
 }

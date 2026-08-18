@@ -61,6 +61,27 @@ describe('formatPersonName', () => {
 		}
 	});
 
+	// The Roman-numeral rule fires on the final token only: several of those
+	// words are ordinary names elsewhere in a full name.
+	describe('does not uppercase a numeral-word outside suffix position', () => {
+		const cases: [string, string][] = [
+			['vi nguyen', 'Vi Nguyen'],
+			['ix santos', 'Ix Santos'],
+			['x jones', 'X Jones'],
+			['henry vi ford', 'Henry Vi Ford'],
+		];
+		for (const [input, expected] of cases) {
+			test(`${input} → ${expected}`, () => {
+				expect(formatPersonName(input)).toBe(expected);
+			});
+		}
+
+		test('a real generational suffix is still uppercased', () => {
+			expect(formatPersonName('henry ford iii')).toBe('Henry Ford III');
+			expect(formatPersonName('walter carter iv.')).toBe('Walter Carter IV.');
+		});
+	});
+
 	// Documented losses. An all-lowercase source has already destroyed the
 	// distinction, so these assert the deliberate choice rather than a fix.
 	describe('does not guess where lowercase input is genuinely ambiguous', () => {
@@ -71,6 +92,10 @@ describe('formatPersonName', () => {
 
 		test('DeAngelo is not reconstructed, because Deangelo is also a real name', () => {
 			expect(formatPersonName('chris deangelo')).toBe('Chris Deangelo');
+		});
+
+		test('a trailing numeral-word is read as a suffix, which is the commoner case', () => {
+			expect(formatPersonName('nguyen vi')).toBe('Nguyen VI');
 		});
 
 		test('particles are capitalized, matching US civic records over Dutch convention', () => {

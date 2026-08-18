@@ -90,8 +90,11 @@ function formatToken(token: string): string {
  *
  * Whitespace is normalized because the same rows that arrive uncased also
  * arrive with doubled and trailing spaces.
+ *
+ * There is deliberately no `string → string` overload: blank and
+ * whitespace-only input returns null, so promising a string for every string
+ * would hand callers a compile-time guarantee the implementation breaks.
  */
-export function formatPersonName(name: string): string;
 export function formatPersonName(name: null | undefined): null;
 export function formatPersonName(name: string | null | undefined): string | null;
 export function formatPersonName(name: string | null | undefined): string | null {

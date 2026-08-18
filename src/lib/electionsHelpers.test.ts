@@ -16,6 +16,7 @@ import {
 	formatSidebarLinkLabel,
 	formatTermLength,
 	linkHrefAlreadyPresent,
+	mapCandidacyToCard,
 	normalizeCandidateLookupName,
 	normalizeLinkHrefForCompare,
 	prependClaimedWebsiteIfNew,
@@ -1485,5 +1486,29 @@ describe('redirectCityPlaceToFourLevelUrl', () => {
 		};
 
 		await redirectCityPlaceToFourLevelUrl(place, 'OK', 'ok/binger');
+	});
+});
+
+describe('mapCandidacyToCard', () => {
+	test('re-cases unformatted spine names, so the election listings match the profiles', () => {
+		expect(mapCandidacyToCard({ id: 'c1', firstName: 'chris', lastName: 'lewis', slug: 'chris-lewis' }, 0).name).toBe(
+			'Chris Lewis',
+		);
+	});
+
+	test('returns an already-formatted name untouched', () => {
+		expect(mapCandidacyToCard({ id: 'c2', firstName: 'Ian', lastName: 'McDonald', slug: 'ian-mcdonald' }, 0).name).toBe(
+			'Ian McDonald',
+		);
+	});
+
+	test('casing stays out of the slug fallback href, which has to keep matching live URLs', () => {
+		expect(mapCandidacyToCard({ id: 'c3', firstName: 'chris', lastName: 'lewis', raceId: 'r1' }, 0).href).toBe(
+			'/profile?slug=chris-lewis&raceId=r1',
+		);
+	});
+
+	test('falls back to a placeholder when the row carries no name', () => {
+		expect(mapCandidacyToCard({ id: 'c4' }, 0).name).toBe('Candidate');
 	});
 });

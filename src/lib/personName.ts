@@ -46,8 +46,13 @@ const MC_PREFIX_RE = /^mc([a-z]{2,})$/;
  * Only these two, and only in the leading position: an interior apostrophe is
  * usually a possessive or a contraction inside a transliteration, where
  * capitalizing the next letter would be wrong.
+ *
+ * Both the ASCII apostrophe and the curly right single quotation mark (U+2019)
+ * are matched, and whichever one arrived is echoed back: CMS round-trips and
+ * spreadsheet exports routinely substitute the curly form, and matching only
+ * ASCII would drop those names through to the plain path as `O’brien`.
  */
-const ELIDED_PREFIX_RE = /^([od])'([a-z].*)$/;
+const ELIDED_PREFIX_RE = /^([od])([\u2019'])([a-z].*)$/;
 
 function capitalizeFirst(word: string): string {
 	return word.charAt(0).toUpperCase() + word.slice(1);
@@ -62,9 +67,9 @@ function formatToken(token: string): string {
 	if (ROMAN_SUFFIXES.has(token.replace(/\./g, ''))) return token.toUpperCase();
 	if (token.includes('-')) return token.split('-').map(formatToken).join('-');
 
-	const [, elidedPrefix, elidedRest] = ELIDED_PREFIX_RE.exec(token) ?? [];
-	if (elidedPrefix && elidedRest) {
-		return `${elidedPrefix.toUpperCase()}'${capitalizeFirst(elidedRest)}`;
+	const [, elidedPrefix, elidedApostrophe, elidedRest] = ELIDED_PREFIX_RE.exec(token) ?? [];
+	if (elidedPrefix && elidedApostrophe && elidedRest) {
+		return `${elidedPrefix.toUpperCase()}${elidedApostrophe}${capitalizeFirst(elidedRest)}`;
 	}
 
 	const [, mcRest] = MC_PREFIX_RE.exec(token) ?? [];

@@ -42,6 +42,12 @@ describe('formatPersonName', () => {
 			['mccoy', 'McCoy'],
 			["siobhan o'brien", "Siobhan O'Brien"],
 			["chris d'angelo", "Chris D'Angelo"],
+			// The curly apostrophe (U+2019) that CMS round-trips and spreadsheet
+			// exports substitute for the ASCII one has to case identically, and the
+			// variant that arrived has to survive: rewriting it to ASCII would edit a
+			// name we were only asked to re-case.
+			['siobhan o\u2019brien', 'Siobhan O\u2019Brien'],
+			['chris d\u2019angelo', 'Chris D\u2019Angelo'],
 			['mary smith-jones', 'Mary Smith-Jones'],
 			['anne-marie o\'neill-burke', "Anne-Marie O'Neill-Burke"],
 			['henry ford iii', 'Henry Ford III'],

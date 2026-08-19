@@ -30,7 +30,8 @@ export type OverlayFixture =
 	| { status: 'live'; profile: PublicPersonProfile }
 	| { status: 'absent' }
 	| { status: 'gone' }
-	| { status: 'removed' };
+	| { status: 'removed' }
+	| { status: 'unpublished' };
 
 export interface StateFixture {
 	state: ProfileState;
@@ -47,6 +48,12 @@ export interface ExpectedFacts {
 	majorParty: boolean;
 	empowered: boolean;
 	removed: boolean;
+	/**
+	 * The owner has a profile that is not live. Orthogonal to the state letter —
+	 * it suppresses claim affordances without changing the layout — so it is
+	 * false across all twelve Figma states and only set by UNPUBLISHED_FIXTURES.
+	 */
+	unpublished: boolean;
 	pledged: boolean;
 	hasAvatar: boolean;
 	hasBio: boolean;
@@ -186,6 +193,7 @@ const claimedFacts = (persona: PersonPersona, pledged: boolean): ExpectedFacts =
 	majorParty: false,
 	empowered: true,
 	removed: false,
+	unpublished: false,
 	pledged,
 	hasAvatar: true,
 	hasBio: true,
@@ -202,6 +210,7 @@ const unclaimedIndepFacts = (persona: PersonPersona): ExpectedFacts => ({
 	majorParty: false,
 	empowered: true,
 	removed: false,
+	unpublished: false,
 	pledged: false,
 	hasAvatar: true, // spine headshot
 	hasBio: true, // spine bioText
@@ -215,6 +224,7 @@ const unclaimedMajorFacts = (persona: PersonPersona): ExpectedFacts => ({
 	majorParty: true,
 	empowered: false,
 	removed: false,
+	unpublished: false,
 	pledged: false,
 	hasAvatar: true,
 	hasBio: true,
@@ -231,6 +241,7 @@ const removedFacts = (persona: PersonPersona, majorParty: boolean): ExpectedFact
 	majorParty,
 	empowered: false,
 	removed: true,
+	unpublished: false,
 	pledged: false, // suppressed on removal even though the spine flag is set
 	hasAvatar: false, // stripped
 	hasBio: false, // stripped
@@ -345,6 +356,37 @@ export const STATE_FIXTURES: StateFixture[] = [
 	},
 ];
 
+// ----- unpublished overlays (not Figma states) -------------------------------
+
+/**
+ * An owner exists but their profile is not live, so gp-api answers 200
+ * `{ unpublished: true }` instead of the 404 it used to send. This is NOT a
+ * thirteenth Figma state: the page renders its normal unclaimed layout and full
+ * civics spine, so these reuse the same fixtures as D and I. The only thing
+ * that changes is that every claim affordance is suppressed, which the state
+ * letter cannot express — hence a separate list rather than a matrix row.
+ *
+ * Both an empowered (D) and a major-party (I) base are covered because the
+ * claim prompts only exist on the empowered branch; without the I case a
+ * regression that gated on `empowered` alone would look fixed.
+ */
+export const UNPUBLISHED_FIXTURES: StateFixture[] = [
+	{
+		state: 'D',
+		description: 'Unpublished profile — independent candidate spine',
+		person: spine({ Candidacies: [candidacy()] }),
+		overlay: { status: 'unpublished' },
+		expected: { ...unclaimedIndepFacts('candidate'), unpublished: true },
+	},
+	{
+		state: 'I',
+		description: 'Unpublished profile — major-party candidate spine',
+		person: spine({ Candidacies: [candidacy({ party: 'Republican' })] }),
+		overlay: { status: 'unpublished' },
+		expected: { ...unclaimedMajorFacts('candidate'), unpublished: true },
+	},
+];
+
 export function fixtureForState(state: ProfileState): StateFixture {
 	const found = STATE_FIXTURES.find((f) => f.state === state);
 	if (!found) throw new Error(`No fixture for state ${state}`);
@@ -358,10 +400,16 @@ export function fixtureForState(state: ProfileState): StateFixture {
  * integration matrix asserts on.
  */
 export function viewFor(state: ProfileState): PersonProfileView {
-	const fixture = fixtureForState(state);
+	return viewForFixture(fixtureForState(state));
+}
+
+/** `viewFor` for fixtures that are not a Figma state (see UNPUBLISHED_FIXTURES). */
+export function viewForFixture(fixture: StateFixture): PersonProfileView {
 	const overlay = fixture.overlay.status === 'live' ? fixture.overlay.profile : null;
-	const removed = fixture.overlay.status === 'removed';
-	return composeView(PERSON_ID, fixture.person, overlay, { removed });
+	return composeView(PERSON_ID, fixture.person, overlay, {
+		removed: fixture.overlay.status === 'removed',
+		unpublished: fixture.overlay.status === 'unpublished',
+	});
 }
 
 // ----- fetch mock ------------------------------------------------------------
@@ -400,6 +448,8 @@ export function buildPeopleFetchMock(
 					return jsonResponse({}, 404) as unknown as Response;
 				case 'removed':
 					return jsonResponse({ personId: PERSON_ID, removed: true }) as unknown as Response;
+				case 'unpublished':
+					return jsonResponse({ personId: PERSON_ID, unpublished: true }) as unknown as Response;
 				case 'live':
 					return jsonResponse(fixture.overlay.profile) as unknown as Response;
 			}

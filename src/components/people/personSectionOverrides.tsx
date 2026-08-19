@@ -664,7 +664,12 @@ function profileLocationLabel(view: PersonProfileView): string | null {
 export function buildPersonSectionOverrides(view: PersonProfileView): SectionOverrides {
 	// Past-election profiles (G claimed, H unclaimed) lead with the past-election
 	// disclaimer, NOT the claim CTA — so exclude persona 'past' from the claim gate.
-	const showClaim = view.empowered && !view.claimed && view.persona !== 'past';
+	// `unpublished` is excluded too: the profile is already claimed, it just isn't
+	// live, so "Are you …? Claim your profile" addresses someone who owns it and
+	// the voter-facing prompt asks the reader to nudge a person who already
+	// decided. This is the only difference from the equivalent `absent` page.
+	const showClaim =
+		view.empowered && !view.claimed && !view.unpublished && view.persona !== 'past';
 	// The pledge explainer is claimed content across every persona (Figma A/B/C/G
 	// all show it once claimed). Unclaimed empowered pages lead with the claim
 	// prompt instead, so it stays hidden there.
@@ -728,9 +733,12 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	// Authored slot: claimed pages show real owner content; unclaimed but
 	// empowered pages (Figma D/E/F/H) show muted placeholder prompt cards in the
 	// same slot; major-party (I/J) and removed (K/L) pages show neither.
+	// Unpublished pages are excluded as well — every placeholder ends in "once
+	// they claim their profile", so leaving them in would restate the claim
+	// prompt the block above just suppressed.
 	const authoredSections = view.claimed
 		? buildAuthoredSections(view)
-		: view.empowered
+		: view.empowered && !view.unpublished
 			? buildAuthoredPlaceholderSections(view)
 			: {};
 	const contentCards: ProfileContentCardProps[] = [

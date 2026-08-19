@@ -129,6 +129,12 @@ export interface PublicPersonProfile {
 	personId: string;
 	/** Privacy takedown flag from gp-api. When true, render the minimal K/L states. */
 	removed?: boolean;
+	/**
+	 * The person owns a profile that is not live (draft, or deliberately
+	 * unpublished). gp-api sends this instead of a 404 so we can tell them apart
+	 * from someone who never claimed; every authored field is null either way.
+	 */
+	unpublished?: boolean;
 	displayName: string | null;
 	roleTitleOverride: string | null;
 	bioOverride: string | null;

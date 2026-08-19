@@ -18,6 +18,7 @@ import {
 	fixtureForState,
 	PERSON_ID,
 	STATE_FIXTURES,
+	UNPUBLISHED_FIXTURES,
 } from '~/testing/peopleProfileFixtures';
 
 const originalFetch = globalThis.fetch;
@@ -43,6 +44,7 @@ describe('public profile — 12-state data-flow matrix', () => {
 			expect(view.majorParty).toBe(e.majorParty);
 			expect(view.empowered).toBe(e.empowered);
 			expect(view.removed).toBe(e.removed);
+			expect(view.unpublished).toBe(e.unpublished);
 			expect(view.pledged).toBe(e.pledged);
 
 			// Content gating (what actually paints).
@@ -67,6 +69,48 @@ describe('public profile — removal SEO signal', () => {
 			// noindex is applied in the page metadata from view.removed; assert the
 			// flag that drives it matches the spec for every state.
 			expect(fixture.expected.removed).toBe(fixture.expected.noindex);
+		}
+	});
+});
+
+describe('public profile — unpublished overlay', () => {
+	for (const fixture of UNPUBLISHED_FIXTURES) {
+		test(`${fixture.description} resolves like its ${fixture.state} counterpart`, async () => {
+			globalThis.fetch = buildPeopleFetchMock(fixture) as unknown as typeof fetch;
+
+			const view = await loadPersonProfile(PERSON_ID);
+			expect(view).not.toBeNull();
+			if (!view) return;
+
+			const e = fixture.expected;
+			// Layout-driving axes are untouched: an unpublished profile still renders
+			// the unclaimed spine page, so anything that changes here is a regression
+			// in blast radius, not a fix.
+			expect(view.state).toBe(fixture.state);
+			expect(view.claimed).toBe(false);
+			expect(view.empowered).toBe(e.empowered);
+			expect(view.removed).toBe(false);
+			expect(view.unpublished).toBe(true);
+
+			// The spine survives — unlike removal (K/L), this is not a takedown.
+			expect(view.avatarUrl).not.toBeNull();
+			expect(view.bio).not.toBeNull();
+			expect(view.recentExperience.length).toBeGreaterThan(0);
+
+			// Nothing the owner drafted may leak through the marker.
+			expect(view.issues).toEqual([]);
+			expect(view.whyRunning).toBeNull();
+			expect(view.accomplishments).toEqual([]);
+			expect(assertNoPii(view)).toEqual([]);
+		});
+	}
+
+	test('stays indexable — the spine page predates the person signing up', () => {
+		// Deliberately unlike removal: only the CTAs were wrong, so the SEO signal
+		// is left alone. Pinned so a future "unpublished means hide it" reading
+		// cannot quietly deindex a legitimate programmatic-SEO page.
+		for (const fixture of UNPUBLISHED_FIXTURES) {
+			expect(fixture.expected.noindex).toBe(false);
 		}
 	});
 });

@@ -2,6 +2,7 @@ import { describe, expect, test } from 'bun:test';
 import type { PersonItem, PersonOfficeHolder, PublicPersonProfile } from '~/types/people';
 import {
 	buildBreadcrumbTrail,
+	buildNearbyOfficialCards,
 	buildPersonSlug,
 	buildPersonSlugFromBase,
 	composeView,
@@ -452,6 +453,36 @@ describe('composeView claim + overlay precedence', () => {
 	});
 });
 
+describe('composeView display name casing', () => {
+	test('cases an unformatted spine name without disturbing the canonical slug', () => {
+		const view = composeView(PID, makePerson({ slug: 'chris-lewis', fullName: 'chris lewis' }), null);
+		expect(view.displayName).toBe('Chris Lewis');
+		expect(view.initials).toBe('CL');
+		expect(view.canonicalSlug).toBe('chris-lewis-11111111');
+	});
+
+	test('composes first/last when the spine has no fullName', () => {
+		const view = composeView(PID, makePerson({ firstName: 'ed', lastName: 'johnson' }), null);
+		expect(view.displayName).toBe('Ed Johnson');
+	});
+
+	test('leaves an already-formatted spine name alone', () => {
+		const view = composeView(PID, makePerson({ fullName: 'Blaine K. Bowman' }), null);
+		expect(view.displayName).toBe('Blaine K. Bowman');
+	});
+
+	// An owner who types their name in lowercase means it; only the spine's
+	// lowercase is the unformatted-data signature.
+	test('never re-cases an owner-authored displayName', () => {
+		const view = composeView(
+			PID,
+			makePerson({ fullName: 'bell hooks' }),
+			makeOverlay({ displayName: 'bell hooks' }),
+		);
+		expect(view.displayName).toBe('bell hooks');
+	});
+});
+
 describe('composeView issues, links, labels', () => {
 	test('keeps only visible issues that have a title, preserving order', () => {
 		const view = composeView(
@@ -705,5 +736,43 @@ describe('buildBreadcrumbTrail', () => {
 		expect(labels[1]).toBe('California');
 		expect(labels).toContain('Mayor');
 		expect(labels[labels.length - 1]).toBe('Jane Doe');
+	});
+});
+
+describe('buildNearbyOfficialCards', () => {
+	const OTHER = '22222222-2222-2222-2222-222222222222';
+	const personsById = (person: PersonItem) => new Map([[OTHER.toLowerCase(), person]]);
+
+	test('takes the spine fullName, re-cased', () => {
+		const cards = buildNearbyOfficialCards(
+			[makeOffice({ personId: OTHER, officeTitle: 'city council member' })],
+			personsById(makePerson({ id: OTHER, fullName: 'chris lewis' })),
+			PID,
+		);
+		expect(cards.map((c) => c.name)).toEqual(['Chris Lewis']);
+	});
+
+	test('falls through to first + last when fullName is absent', () => {
+		const cards = buildNearbyOfficialCards(
+			[makeOffice({ personId: OTHER })],
+			personsById(makePerson({ id: OTHER, firstName: 'chris', lastName: 'lewis' })),
+			PID,
+		);
+		expect(cards.map((c) => c.name)).toEqual(['Chris Lewis']);
+	});
+
+	// Rows with no linked person still render a card, labelled by the office. The
+	// title comes from the same spine as the names and arrives uncased too.
+	test('falls through to the office title, cased', () => {
+		const cards = buildNearbyOfficialCards([makeOffice({ officeTitle: 'city council member' })], new Map(), PID);
+		expect(cards.map((c) => c.name)).toEqual(['City Council Member']);
+	});
+
+	test('skips a row with no name and no office title', () => {
+		expect(buildNearbyOfficialCards([makeOffice({})], new Map(), PID)).toEqual([]);
+	});
+
+	test('excludes the subject of the profile', () => {
+		expect(buildNearbyOfficialCards([makeOffice({ personId: PID, officeTitle: 'mayor' })], new Map(), PID)).toEqual([]);
 	});
 });

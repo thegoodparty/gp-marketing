@@ -49,8 +49,8 @@ export function PersonClaimCTABand({ displayName }: PersonClaimCTABandProps) {
 			data-component='CTABannerBlock'
 		>
 			<Container size='xl'>
-				<div className='flex flex-col items-center gap-6 rounded-2xl bg-blue-100 p-6 text-center text-midnight-900 md:p-12'>
-					<div className='flex max-w-2xl flex-col items-center gap-3 md:gap-4'>
+				<div className='flex flex-col items-center gap-6 rounded-3xl bg-blue-100 p-6 text-center text-midnight-900 lg:px-32 lg:py-40'>
+					<div className='flex flex-col items-center gap-4'>
 						<Text as='h2' styleType='heading-lg'>
 							{`Are you ${displayName}? Complete your profile now.`}
 						</Text>

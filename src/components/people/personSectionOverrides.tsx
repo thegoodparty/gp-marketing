@@ -693,6 +693,11 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	// Past-election profiles (G claimed, H unclaimed) lead with the past-election
 	// disclaimer, NOT the claim CTA — so exclude persona 'past' from the claim gate.
 	//
+	// `unpublished` is excluded too: the profile is already claimed, it just isn't
+	// live, so "Are you …? Claim your profile" addresses someone who owns it and
+	// the voter-facing prompt asks the reader to nudge a person who already
+	// decided. This is the only difference from the equivalent `absent` page.
+	//
 	// 'officeholder' is excluded too (marketing, 2026-08-17): someone who only
 	// holds office has no self-serve product to be sent to, so their claim
 	// prompts asked for an email that sales then had to action by hand. Note this
@@ -700,7 +705,11 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	// candidate treatment, because they have a live candidacy and Win to claim
 	// into. State E therefore loses its claim surfaces entirely; D/F keep theirs.
 	const showClaim =
-		view.empowered && !view.claimed && view.persona !== 'past' && view.persona !== 'officeholder';
+		view.empowered &&
+		!view.claimed &&
+		!view.unpublished &&
+		view.persona !== 'past' &&
+		view.persona !== 'officeholder';
 	// The pledge explainer is claimed content across every persona (Figma A/B/C/G
 	// all show it once claimed). Unclaimed empowered pages lead with the claim
 	// prompt instead, so it stays hidden there.
@@ -734,14 +743,15 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			: { hidden: true };
 
 	// The Figma content well is one column of cards. For unclaimed empowered pages
-	// two claim cards lead the column: the person-facing "Are you …?" prompt,
-	// whose button scrolls down to the claim form in the band below the well, then
-	// the voter-facing "ask them to complete their profile" prompt, whose button
-	// opens the notify dialog.
-	// Between them and the civics cards: authored cards (empowerment-gated) then
-	// the civics-spine cards (Recent Experience → Other candidates → Nearby
-	// officials → About position → District map) that render on every state.
-	const claimCard = (variant: 'voter-card' | 'owner-card'): ProfileContentCardProps => ({
+	// exactly ONE card leads the column (frames D 1958:108619 / E 1928:99467): the
+	// visitor-facing "ask them to complete their profile" prompt, whose button
+	// opens the notify dialog. The frames put no owner-facing claim prompt up
+	// here — the person's own way in is the claim band below the well — so do not
+	// add a second card.
+	// Below it: authored cards (empowerment-gated) then the civics-spine cards
+	// (Recent Experience → Other candidates → Nearby officials → About position →
+	// District map) that render on every state.
+	const claimCard = (): ProfileContentCardProps => ({
 		raw: true,
 		content: (
 			<ClaimProfileModal
@@ -749,21 +759,23 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 				displayName={view.displayName}
 				persona={view.persona}
 				locationLabel={profileLocationLabel(view)}
-				variant={variant}
 			/>
 		),
 	});
 	// Authored slot: claimed pages show real owner content; unclaimed but
 	// empowered pages (Figma D/E/F/H) show muted placeholder prompt cards in the
 	// same slot; major-party (I/J) and removed (K/L) pages show neither.
+	// Unpublished pages are excluded as well — every placeholder ends in "once
+	// they claim their profile", so leaving them in would restate the claim
+	// prompt the block above just suppressed.
 	const authoredSections = view.claimed
 		? buildAuthoredSections(view)
-		: view.empowered
+		: view.empowered && !view.unpublished
 			? buildAuthoredPlaceholderSections(view)
 			: {};
 	const contentCards: ProfileContentCardProps[] = [
 		...(view.persona === 'past' ? [pastElectionDisclaimer(view)] : []),
-		...(showClaim ? [claimCard('owner-card'), claimCard('voter-card')] : []),
+		...(showClaim ? [claimCard()] : []),
 		...orderedSectionCards(view, { ...authoredSections, ...buildCivicSections(view) }),
 	];
 	const sidebar = buildSidebar(view);

@@ -5,16 +5,19 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
 /**
- * Pins the voter-facing claim prompt card to the Figma unclaimed frames:
- *   D 1958:108619 (candidate only)   E 1928:99467 (elected official only)
- *   F 1928:100987 (serving and running — word-for-word identical to E)
+ * Pins the notify prompt card and its dialog to the Figma unclaimed frames:
+ *   card    D 1958:108619 (candidate only)   E 1928:99467 (elected official only)
+ *           F 1928:100987 (serving and running — word-for-word identical to E)
+ *   dialog  1901:51851
  * Past-election profiles (H 1970:113629) show the voter-guide disclaimer instead
  * of a claim prompt, so no card copy exists for that persona.
  *
- * The copy drifted once already (the shipped card asked "Want to hear from
- * [Name]?" while the frames ask visitors to send a request), which nothing
- * caught because no test read the card's words. The persona split is the part
- * most likely to regress: it is NOT the owner card's running/not-running one.
+ * The copy has drifted twice — first the card asked "Want to hear from [Name]?"
+ * while the frames ask visitors to send a request, then the dialog was rewritten
+ * into a "Claim your GoodParty.org profile" account pitch the frames never had.
+ * Both times nothing caught it because no test read the words. The persona split
+ * is the part most likely to regress next: it splits on holding office, not on
+ * running, so `both` takes the officeholder copy.
  *
  * Like claimFormIds.test.tsx these mount the component directly rather than
  * driving the Radix dialog, whose click delegation has proven unreliable under
@@ -92,7 +95,6 @@ const displayName = 'Example Person';
 
 async function renderPromptCard(options: {
 	persona: 'candidate' | 'officeholder' | 'both';
-	variant?: 'voter-card' | 'owner-card';
 	locationLabel?: string | null;
 }) {
 	const { ClaimProfileModal } = await import('./ClaimProfileModal');
@@ -103,14 +105,13 @@ async function renderPromptCard(options: {
 			displayName,
 			persona: options.persona,
 			locationLabel: options.locationLabel ?? null,
-			variant: options.variant ?? 'voter-card',
 		}),
 	);
 }
 
-function card(variant: 'voter-card' | 'owner-card' = 'voter-card') {
-	const element = document.querySelector(`[data-component='ClaimPromptCard'][data-variant='${variant}']`);
-	if (!element) throw new Error(`expected the ${variant} claim prompt to render`);
+function card() {
+	const element = document.querySelector(`[data-component='ClaimPromptCard']`);
+	if (!element) throw new Error('expected the claim prompt to render');
 	return {
 		heading: element.querySelector('h2')?.textContent ?? '',
 		body: element.querySelector('h2 + div')?.textContent ?? '',
@@ -176,15 +177,86 @@ describe('the voter claim prompt card matches the Figma frames', () => {
 	});
 });
 
-describe('the owner claim prompt card is untouched by the voter copy', () => {
-	/**
-	 * The two cards share a component and sit next to each other in the content
-	 * well, so voter copy leaking into the owner card would be easy to miss.
-	 */
-	test('the owner card keeps its own heading and button', async () => {
-		await renderPromptCard({ persona: 'candidate', variant: 'owner-card', locationLabel: 'Springfield' });
+describe('the notify dialog matches Figma 1901:51851', () => {
+	async function openDialog() {
+		await renderPromptCard({ persona: 'candidate', locationLabel: 'Springfield' });
+		const { NotifyForm } = await import('./ClaimProfileModal');
+		return NotifyForm;
+	}
 
-		expect(card('owner-card').heading).toBe(`Are you ${displayName}?`);
-		expect(card('owner-card').button).toBe('Complete your profile');
+	test('the card is the only claim surface in the content well', async () => {
+		await renderPromptCard({ persona: 'candidate', locationLabel: 'Springfield' });
+
+		expect(document.querySelectorAll(`[data-component='ClaimPromptCard']`)).toHaveLength(1);
+	});
+
+	/**
+	 * The dialog is one sentence asking the visitor to nudge the person. It is
+	 * NOT the "create a free account and take control of this page" pitch that
+	 * replaced it once — that copy sells claiming to a reader who has just told
+	 * us they are somebody else.
+	 */
+	test('the title asks the visitor to nudge the person, not to claim', async () => {
+		const { notifyDialogTitle } = await import('./ClaimProfileModal');
+
+		expect(notifyDialogTitle(displayName)).toBe(
+			`Ask ${displayName} to complete their profile and contribute to transparency.`,
+		);
+	});
+
+	test('the form is name, email, opt-in, Cancel and Submit — nothing else', async () => {
+		const NotifyForm = await openDialog();
+		await render(
+			React.createElement(NotifyForm, {
+				personId: '11111111-1111-4111-8111-111111111111',
+				displayName,
+				onCancel: () => {},
+			}),
+		);
+
+		const labels = [...document.querySelectorAll('label')].map(l => l.textContent?.trim() ?? '');
+		expect(labels[0]).toBe('Name (optional)');
+		expect(labels[1]).toContain('Email address');
+		expect(labels[2]).toContain('Sign up for marketing communications from GoodParty.org');
+
+		const buttons = [...document.querySelectorAll('button')].map(b => b.textContent?.trim());
+		expect(buttons).toEqual(['Cancel', 'Submit']);
+	});
+
+	/** A pre-ticked opt-in is not consent; the frames draw it ticked anyway. */
+	test('the marketing opt-in starts unchecked', async () => {
+		const NotifyForm = await openDialog();
+		await render(
+			React.createElement(NotifyForm, { personId: '11111111-1111-4111-8111-111111111111', displayName }),
+		);
+
+		expect(document.querySelector<HTMLInputElement>('input[type="checkbox"]')?.checked).toBe(false);
+	});
+});
+
+describe('the claim band matches Figma 1922:92593', () => {
+	async function renderBand() {
+		const { PersonClaimCTABand } = await import('./PersonClaimCTABand');
+		await render(React.createElement(PersonClaimCTABand, { displayName }));
+	}
+
+	/**
+	 * The heading is the frame's, verbatim, and it is the page's ONLY "Are you
+	 * [Name]?" — the content well above is notify-only.
+	 *
+	 * The body's last clause is not the frame's. Figma ends "Enter your email to
+	 * get started" because the frame draws an inline form here; marketing replaced
+	 * that form with a link into Win sign-up (2026-08-17), so the sentence had to
+	 * name what the button actually does. The rest is the frame's one body for
+	 * every unclaimed state — it does not branch on running vs in office, and the
+	 * band takes no prop it could branch on.
+	 */
+	test('the band is the page’s only place to claim, and says so in Figma’s words', async () => {
+		await renderBand();
+
+		expect(document.querySelector('h2')?.textContent).toBe(`Are you ${displayName}? Complete your profile now.`);
+		expect(document.querySelector('h2 + div')?.textContent).toBe(
+			'Your community deserves accountable leadership. Claim your profile and share why you\u2019re running and your top priorities with residents. Create a free GoodParty.org account to get started.',
+		);
 	});
 });

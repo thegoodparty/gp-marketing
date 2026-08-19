@@ -5,12 +5,12 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
 /**
- * Covers the claim flow on an unclaimed person profile: the owner-facing prompt
- * at the top of the content well scrolls down to the claim band rather than
- * opening the dialog, and the band's call to action hands the person straight to
- * Win sign-up.
+ * Covers the claim flow on an unclaimed person profile. Per the Figma frames the
+ * page has exactly two claim-related surfaces and they do different jobs: the
+ * card at the top of the content well is visitor-facing and only opens the
+ * notify dialog, and the band at the bottom is the person's own ask.
  *
- * The band used to collect a name and email and branch on the person's product
+ * That band used to collect a name and email and branch on the person's product
  * (Win into sign-up, Serve into "a human will be in touch"). Both halves of that
  * are gone: the band is candidate-only now, so there is no Serve branch, and it
  * sends people to sign-up instead of taking their address.
@@ -152,7 +152,7 @@ async function click(element: Element) {
 const personId = '11111111-1111-4111-8111-111111111111';
 const displayName = 'Example Person';
 
-async function renderProfileClaimSurfaces(variant: 'owner-card' | 'voter-card') {
+async function renderProfileClaimSurfaces() {
 	const [{ ClaimProfileModal }, { PersonClaimCTABand }] = await Promise.all([import('./ClaimProfileModal'), import('./PersonClaimCTABand')]);
 
 	await render(
@@ -165,80 +165,47 @@ async function renderProfileClaimSurfaces(variant: 'owner-card' | 'voter-card') 
 				// Only the running personas still see a claim surface, so this is the
 				// pairing the band is ever rendered beside.
 				persona: 'candidate',
-				variant,
 			}),
 			React.createElement(PersonClaimCTABand, { displayName }),
 		),
 	);
 }
 
-function claimPromptButton(variant: 'owner-card' | 'voter-card') {
-	return document.querySelector(`[data-component='ClaimPromptCard'][data-variant='${variant}'] button`)!;
+function claimPromptButton() {
+	return document.querySelector(`[data-component='ClaimPromptCard'] button`)!;
 }
 
-describe('the top claim prompt pulls the person down to the claim band', () => {
-	test('the owner prompt scrolls to the claim band instead of opening the dialog', async () => {
-		await renderProfileClaimSurfaces('owner-card');
-
-		await click(claimPromptButton('owner-card'));
-
-		expect(scrollCalls).toEqual([{ behavior: 'smooth', id: 'person-claim-form' }]);
-		expect(document.querySelector('[role="dialog"]')).toBeNull();
-	});
-
+describe('the top of the content well is notify-only', () => {
 	/**
-	 * The prompt's whole job is to hand the person to the next step, so it has to
-	 * land on the step itself. With the form replaced by a link there is no field
-	 * to focus, and focusing the band wrapper instead would leave a keyboard user
-	 * one unexplained Tab short of the button they were sent to.
+	 * The frames put ONE card at the top of the content well and it is
+	 * visitor-facing. An owner-facing "are you [Name]?" prompt was added here
+	 * once and had to be taken back out; a second card, or this one turning into
+	 * a claim shortcut, is the regression this guards.
 	 */
-	test('the owner prompt moves keyboard focus onto the band call to action', async () => {
-		await renderProfileClaimSurfaces('owner-card');
+	test('the prompt opens the notify dialog rather than the claim form', async () => {
+		await renderProfileClaimSurfaces();
 
-		await click(claimPromptButton('owner-card'));
-
-		const active = document.activeElement;
-		expect(active?.id).toBe('person-claim-signup');
-		expect(active?.getAttribute('href')).toBe('https://app.goodparty.org/sign-up');
-	});
-
-	test('the scroll is instant when the visitor asks for reduced motion', async () => {
-		(dom.window as unknown as { matchMedia: unknown }).matchMedia = (query: string) => ({ matches: query.includes('reduce'), media: query });
-
-		await renderProfileClaimSurfaces('owner-card');
-		await click(claimPromptButton('owner-card'));
-
-		expect(scrollCalls.map(c => c.behavior)).toEqual(['auto']);
-	});
-
-	/**
-	 * Reachable rather than theoretical: the code-default template fallback strips
-	 * the CTA banner block the claim band renders into, which would leave the
-	 * prompt on a page with no form to scroll to. The prompt falls back to the
-	 * dialog there, so it is never a button that does nothing.
-	 */
-	test('the scroll reports failure when the claim band is not on the page', async () => {
-		const { scrollToPersonClaimForm } = await import('./claimFormAnchor');
-
-		expect(scrollToPersonClaimForm()).toBe(false);
-		expect(scrollCalls).toEqual([]);
-	});
-
-	/**
-	 * The counterpart to the owner-prompt test above: this is the entry point the
-	 * notify form is left with, so it has to be shown opening the dialog, not
-	 * merely not scrolling.
-	 */
-	test('the voter prompt still opens the dialog and its notify form', async () => {
-		await renderProfileClaimSurfaces('voter-card');
-
+		expect(document.querySelectorAll(`[data-component='ClaimPromptCard']`)).toHaveLength(1);
 		expect(document.querySelector('[role="dialog"]')).toBeNull();
 
-		await click(claimPromptButton('voter-card'));
+		await click(claimPromptButton());
 
 		expect(document.querySelector('[role="dialog"]')).not.toBeNull();
 		expect(document.querySelector('[role="dialog"] form#person-claim-notify')).not.toBeNull();
+		// Nothing up here reaches the person's own claim form.
 		expect(scrollCalls).toEqual([]);
+		expect(document.querySelector('[role="dialog"] form#person-claim-owner')).toBeNull();
+	});
+
+	test('the dialog closes without submitting when the visitor cancels', async () => {
+		await renderProfileClaimSurfaces();
+		await click(claimPromptButton());
+
+		const cancel = [...document.querySelectorAll('[role="dialog"] button')].find(b => b.textContent?.includes('Cancel'))!;
+		await click(cancel);
+
+		expect(document.querySelector('[role="dialog"]')).toBeNull();
+		expect(fetchCalls).toEqual([]);
 	});
 });
 

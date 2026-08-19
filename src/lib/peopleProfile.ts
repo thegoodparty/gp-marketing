@@ -16,6 +16,7 @@ import {
 	getStateName,
 } from '~/lib/electionsHelpers';
 import { classifyPartyFrom, isMajorParty, type PartyClass } from '~/lib/party';
+import { formatPersonName } from '~/lib/personName';
 import type { CandidacyItem } from '~/types/elections';
 import type {
 	PersonAccomplishment,
@@ -518,7 +519,7 @@ const PARTY_LABELS: Record<PartyClass, string> = {
 };
 
 function nameOf(first?: string | null, last?: string | null, fallback = ''): string {
-	return [first, last].filter(Boolean).join(' ') || fallback;
+	return formatPersonName([first, last].filter(Boolean).join(' ')) ?? fallback;
 }
 
 /** Maps candidacies sharing a position into "Other Candidates" cards, excluding the subject. */
@@ -564,8 +565,14 @@ export function buildNearbyOfficialCards(
 		const pid = oh.personId ?? null;
 		if (pid && pid.toLowerCase() === excludePersonId.toLowerCase()) continue;
 		const person = pid ? personsById.get(pid.toLowerCase()) : undefined;
+		// The office-title fallback needs the same casing pass: it comes from the
+		// same spine and arrives all-lowercase ("city council member") on the rows
+		// that have no linked person. `formatPersonName` is reused rather than
+		// duplicated because the guard is what matters here — only an entirely
+		// lowercase value is touched — not the person-specific prefix rules.
 		const name =
-			person?.fullName ?? nameOf(person?.firstName, person?.lastName, oh.officeTitle ?? '');
+			formatPersonName(person?.fullName) ??
+			nameOf(person?.firstName, person?.lastName, formatPersonName(oh.officeTitle) ?? '');
 		if (!name) continue;
 		// Dedupe by personId when present, else by name — otherwise null-id rows
 		// with the same office title yield duplicate cards (and colliding React
@@ -700,7 +707,10 @@ export function composeView(
 	const removed = extras.removed ?? false;
 	const claimed = overlay !== null && !removed;
 	const composedName = [person?.firstName, person?.lastName].filter(Boolean).join(' ');
-	const nameFromPerson = person?.fullName ?? (composedName || null);
+	// Casing is applied to the spine name only. The overlay's displayName is
+	// owner-authored, where an all-lowercase value is a deliberate style choice
+	// (bell hooks) rather than the unformatted-data signature it is upstream.
+	const nameFromPerson = formatPersonName(person?.fullName ?? (composedName || null));
 	const displayName = overlay?.displayName ?? nameFromPerson ?? 'Public Official';
 	const office = pickCurrentOffice(person);
 	const persona = resolvePersona(person, office);
@@ -1023,7 +1033,8 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 	const stateCode = office?.state ?? person?.state ?? candidacy?.state ?? null;
 
 	const composedName = [person?.firstName, person?.lastName].filter(Boolean).join(' ');
-	const displayName = overlay?.displayName ?? person?.fullName ?? (composedName || 'Public Official');
+	const displayName =
+		overlay?.displayName ?? formatPersonName(person?.fullName ?? composedName) ?? 'Public Official';
 
 	// The interlink sections are independent; fetch in parallel. Each degrades to
 	// empty on any miss so the core profile always renders.

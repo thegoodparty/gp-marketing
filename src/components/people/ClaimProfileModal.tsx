@@ -4,14 +4,12 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { APP_SIGN_UP_HREF, trackEvent, trackSignUpClicked } from '~/lib/analytics';
+import { trackEvent } from '~/lib/analytics';
 import { buildClaimRequestBody } from '~/lib/claimRequest';
-import { ClaimProfileBlock } from '~/ui/ClaimProfileBlock';
-import { Button, ButtonLink } from '~/ui/Inputs/Button';
+import { Button } from '~/ui/Inputs/Button';
 import { TextInput } from '~/ui/Inputs/TextInput';
 import { IconResolver } from '~/ui/IconResolver';
 import { Text } from '~/ui/Text';
-import { scrollToPersonClaimForm } from './claimFormAnchor';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -40,15 +38,25 @@ const NOTIFY_FORM_ID = 'person-claim-notify';
 type NotifyValues = { firstname: string; email: string; marketingConsent: boolean };
 
 /**
- * The "Not [Name]?" form in the dialog body. Exported so the HubSpot id contract
- * can be asserted directly (see claimFormIds.test.tsx) without standing up
- * Radix's dialog, whose event delegation does not survive JSDOM.
+ * The dialog body from Figma 1901:51851 — name, email, marketing opt-in, and a
+ * Cancel/Submit footer. Exported so the HubSpot id contract can be asserted
+ * directly (see claimFormIds.test.tsx) without standing up Radix's dialog, whose
+ * event delegation does not survive JSDOM; `onCancel` is therefore optional so
+ * the form renders outside a `Dialog.Root` too.
  */
-export function NotifyForm({ personId, displayName }: { personId: string; displayName: string }) {
+export function NotifyForm({
+	personId,
+	displayName,
+	onCancel,
+}: {
+	personId: string;
+	displayName: string;
+	onCancel?: VoidFunction;
+}) {
 	const [isSuccess, setIsSuccess] = useState(false);
-	// marketingConsent starts false against the Figma dialog (1901:51851), which
-	// draws the box ticked: a pre-ticked box opts the sender in unless they notice
-	// and clear it, which is not consent under GDPR. Do not restore Figma parity.
+	// marketingConsent starts false against the Figma dialog, which draws the box
+	// ticked: a pre-ticked box opts the sender in unless they notice and clear it,
+	// which is not consent under GDPR. Do not restore Figma parity here.
 	const {
 		register,
 		handleSubmit,
@@ -97,13 +105,15 @@ export function NotifyForm({ personId, displayName }: { personId: string; displa
 		<form id={NOTIFY_FORM_ID} onSubmit={(e) => void handleSubmit(onSubmit)(e)} noValidate>
 			<div className='flex w-full flex-col gap-4 text-left'>
 				<TextInput
-					label='Your name (optional)'
+					label='Name (optional)'
+					placeholder='First name'
 					autoComplete='name'
 					error={errors.firstname?.message}
 					{...register('firstname')}
 				/>
 				<TextInput
-					label='Your email'
+					label='Email address'
+					placeholder='Email address'
 					type='email'
 					required
 					autoComplete='email'
@@ -114,14 +124,14 @@ export function NotifyForm({ personId, displayName }: { personId: string; displa
 						pattern: { value: EMAIL_PATTERN, message: 'Enter a valid email address' },
 					})}
 				/>
-				<label htmlFor='notify-marketing-consent' className='flex items-start gap-2.5'>
+				<label htmlFor='notify-marketing-consent' className='flex items-start gap-2'>
 					<input
 						id='notify-marketing-consent'
 						type='checkbox'
-						className='mt-0.5 h-5 w-5 shrink-0 rounded border-neutral-300 text-btn-primary-bg accent-btn-primary-bg focus:outline-none focus-visible:ring-2 focus-visible:ring-btn-primary-bg/30'
+						className='mt-1 h-4 w-4 shrink-0 rounded-[4px] border-neutral-300 text-btn-primary-bg accent-btn-primary-bg focus:outline-none focus-visible:ring-2 focus-visible:ring-btn-primary-bg/30'
 						{...register('marketingConsent')}
 					/>
-					<Text as='span' styleType='body-2'>
+					<Text as='span' styleType='caption' className='text-neutral-500'>
 						Sign up for marketing communications from{' '}
 						<a
 							href='https://goodparty.org'
@@ -140,17 +150,29 @@ export function NotifyForm({ personId, displayName }: { personId: string; displa
 						{errors.root.message}
 					</Text>
 				)}
-				<Button
-					parent='ClaimProfileModal'
-					type='submit'
-					styleType='secondary'
-					styleSize='md'
-					isLoading={isSubmitting}
-					disabled={isSubmitting}
-					className='w-fit'
-				>
-					Notify {displayName}
-				</Button>
+				<div className='flex items-center justify-end gap-2'>
+					{onCancel && (
+						<Button
+							parent='ClaimProfileModal'
+							type='button'
+							styleType='outline'
+							styleSize='md'
+							onClick={onCancel}
+						>
+							Cancel
+						</Button>
+					)}
+					<Button
+						parent='ClaimProfileModal'
+						type='submit'
+						styleType='primary'
+						styleSize='md'
+						isLoading={isSubmitting}
+						disabled={isSubmitting}
+					>
+						Submit
+					</Button>
+				</div>
 			</div>
 		</form>
 	);
@@ -164,23 +186,11 @@ export type ClaimProfileModalProps = {
 	persona: Persona;
 	/**
 	 * Most specific place the profile resolves to (city, else county, else
-	 * state). Fills the "[Location]" the Figma voter card opens with for someone
-	 * in office; omit it and that sentence falls back to a generic subject.
+	 * state). Fills the "[Location]" the Figma card opens with for someone in
+	 * office; omit it and that sentence falls back to a generic subject.
 	 */
 	locationLabel?: string | null;
-	/**
-	 * Which trigger to render (the dialog itself is identical):
-	 *  - `banner`      full-width yellow CMS banner (default; legacy section use)
-	 *  - `voter-card`  in-column light-blue prompt aimed at visitors (nudge them to complete their profile)
-	 *  - `owner-card`  in-column light-blue prompt aimed at the person ("Are you …?")
-	 */
-	variant?: 'banner' | 'voter-card' | 'owner-card';
 };
-
-/** Running now — the tense the owner-facing copy is written in. */
-function isRunning(persona: Persona): boolean {
-	return persona === 'candidate' || persona === 'both';
-}
 
 /** Currently serving — the axis the voter-facing copy splits on (see `voterCopy`). */
 function holdsOffice(persona: Persona): boolean {
@@ -190,12 +200,12 @@ function holdsOffice(persona: Persona): boolean {
 /**
  * Voter-facing card copy, verbatim from the unclaimed Figma frames.
  *
- * Note the split is NOT the owner card's "is running" one. The candidate-only
- * frame (D, card 1958:108619) sells casting an informed vote, while both frames
- * for someone already in office — officeholder (E, card 1928:99467) and
- * simultaneous candidate/officeholder (F, card 1928:100987), which are
- * word-for-word identical — sell transparency about their record. So persona
- * `both` takes the office copy, the opposite of how `isRunning` groups it.
+ * The split is on holding office, not on running. The candidate-only frame (D,
+ * card 1958:108619) sells casting an informed vote, while both frames for
+ * someone already in office — officeholder (E, card 1928:99467) and simultaneous
+ * candidate/officeholder (F, card 1928:100987), which are word-for-word
+ * identical — sell transparency about their record. So persona `both` takes the
+ * office copy even though they are also running.
  *
  * `location` fills Figma's "[Location]"; there is no locality on the view, so
  * the caller derives it and a profile that resolves to no place at all keeps the
@@ -217,154 +227,116 @@ function voterCopy(displayName: string, persona: Persona, location: string | nul
 	};
 }
 
-/** In-column light-blue claim prompt (voter- or owner-facing) — a Figma content-well card. */
+/**
+ * The dialog's one line, verbatim from Figma 1901:51851. Exported so it can be
+ * asserted without standing up the Radix dialog, whose click delegation does not
+ * survive JSDOM.
+ *
+ * It asks the reader to nudge someone else. It is deliberately not a pitch to
+ * claim: anyone who opened this dialog has just told us they are not the person.
+ */
+export function notifyDialogTitle(displayName: string): string {
+	return `Ask ${displayName} to complete their profile and contribute to transparency.`;
+}
+
+/**
+ * In-column light-blue notify prompt — the Figma content-well card
+ * (D 1958:108619 / E 1928:99467): a `rounded-3xl` blue-100 panel with centered
+ * 32px heading, 20px body, and one midnight "Send request" button beneath.
+ *
+ * This is the ONLY claim-related card in the content well. The frames put no
+ * owner-facing "are you [Name]?" prompt at the top of the page — the person's
+ * own way in is the claim band below the well (see PersonClaimCTABand) — so do
+ * not reintroduce one here.
+ */
 function ClaimPromptCard({
 	displayName,
 	persona,
 	locationLabel = null,
-	variant,
-	onClaim,
+	onNotify,
 }: {
 	displayName: string;
 	persona: Persona;
 	locationLabel?: string | null;
-	variant: 'voter-card' | 'owner-card';
-	onClaim: VoidFunction;
+	onNotify: VoidFunction;
 }) {
-	const owner = variant === 'owner-card';
-	const voter = voterCopy(displayName, persona, locationLabel);
-	const heading = owner ? `Are you ${displayName}?` : voter.heading;
-	const body = owner
-		? isRunning(persona)
-			? 'Complete your profile now to share why you\u2019re running, your top issues, and how voters can reach you.'
-			: 'Complete your profile now to share your record, your priorities in office, and how constituents can reach you.'
-		: voter.body;
-	const cta = owner ? 'Complete your profile' : 'Send request';
+	const { heading, body } = voterCopy(displayName, persona, locationLabel);
 
 	return (
 		<div
-			className='flex flex-col gap-4 rounded-3xl border border-blue-200 bg-blue-100 p-6'
+			className='flex flex-col items-center gap-6 rounded-3xl bg-blue-100 p-6 text-center text-midnight-900 md:px-10 md:py-12'
 			data-component='ClaimPromptCard'
-			data-variant={variant}
 		>
-			<Text as='h2' styleType='subtitle-1'>
-				{heading}
-			</Text>
-			<Text styleType='body-2'>{body}</Text>
+			<div className='flex flex-col gap-4'>
+				<Text as='h2' styleType='heading-sm'>
+					{heading}
+				</Text>
+				<Text styleType='body-1'>{body}</Text>
+			</div>
 			<Button
 				parent='ClaimProfileModal'
-				styleType='primary'
-				styleSize='md'
+				styleType='secondary'
+				styleSize='lg'
 				className='w-fit'
-				onClick={onClaim}
-				iconRight={owner ? undefined : <IconResolver icon='arrow-up-right' className='h-4 w-4' />}
+				onClick={onNotify}
+				iconRight={<IconResolver icon='arrow-up-right' className='h-4 w-4' />}
 			>
-				{cta}
+				Send request
 			</Button>
 		</div>
 	);
 }
 
-export function ClaimProfileModal({
-	personId,
-	displayName,
-	persona,
-	locationLabel = null,
-	variant = 'banner',
-}: ClaimProfileModalProps) {
+/**
+ * The visitor-facing "ask [Name] to complete their profile" prompt and the
+ * dialog it opens, both from the Figma unclaimed frames.
+ *
+ * Despite the name this is a NOTIFY surface, not a claim one: everything it
+ * submits is a visitor nudging someone else, filed under the `notify` source.
+ * The person's own claim path is entirely in PersonClaimCTABand.
+ */
+export function ClaimProfileModal({ personId, displayName, persona, locationLabel = null }: ClaimProfileModalProps) {
 	const [open, setOpen] = useState(false);
-	const running = isRunning(persona);
-
-	// The owner-facing prompts ("is this you?") pull the person down to the claim
-	// form at the bottom of their own profile rather than opening this dialog, so
-	// there is one place to claim from and the Win/Serve branch happens once, on
-	// submit. If the band is not on the page the dialog is still the fallback.
-	const claimHere = () => {
-		if (!scrollToPersonClaimForm()) setOpen(true);
-	};
-	// The voter-facing prompt is unchanged: it asks a visitor to nudge someone
-	// else, which is the dialog's "Not [Name]?" notify form, not the claim form.
-	const openDialog = () => setOpen(true);
-
-	const headline = `Is this you, ${displayName}?`;
-	const bannerBody = running
-		? 'Claim this profile to share why you\u2019re running, your top issues, and how voters can reach you.'
-		: 'Claim this profile to share your record, your priorities in office, and how constituents can reach you.';
 
 	return (
 		<Dialog.Root open={open} onOpenChange={setOpen}>
-			{variant === 'banner' ? (
-				<ClaimProfileBlock
-					layout='banner'
-					backgroundColor='bright-yellow'
-					headline={headline}
-					body={bannerBody}
-					claimButton={{
-						buttonType: 'button',
-						label: 'Claim your profile',
-						onClick: claimHere,
-						buttonProps: { styleType: 'primary', styleSize: 'md' },
-					}}
-				/>
-			) : (
-				<ClaimPromptCard
-					displayName={displayName}
-					persona={persona}
-					locationLabel={locationLabel}
-					variant={variant}
-					onClaim={variant === 'owner-card' ? claimHere : openDialog}
-				/>
-			)}
+			<ClaimPromptCard
+				displayName={displayName}
+				persona={persona}
+				locationLabel={locationLabel}
+				onNotify={() => setOpen(true)}
+			/>
 
 			<Dialog.Portal>
 				<Dialog.Overlay className='fixed inset-0 z-40 bg-midnight-900/60 backdrop-blur-sm data-[state=open]:animate-in data-[state=open]:fade-in' />
 				<Dialog.Content
-					className='fixed left-1/2 top-1/2 z-50 flex w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 flex-col gap-6 rounded-2xl bg-white p-6 shadow-xl focus:outline-none sm:p-8'
+					className='fixed left-1/2 top-1/2 z-50 flex w-[calc(100%-2rem)] max-w-[425px] -translate-x-1/2 -translate-y-1/2 flex-col gap-4 rounded-lg border border-neutral-300 bg-white p-6 shadow-lg focus:outline-none'
 					aria-describedby={undefined}
 				>
-					<div className='flex items-start justify-between gap-4'>
-						<Dialog.Title asChild>
-							<Text as='h2' styleType='heading-sm'>
-								Claim your GoodParty.org profile
-							</Text>
-						</Dialog.Title>
-						<Dialog.Close asChild>
-							<Button
-								parent='ClaimProfileModal'
-								styleType='ghost'
-								iconOnly
-								aria-label='Close'
-								iconLeft={<IconResolver icon='x' className='h-5 w-5' />}
-							/>
-						</Dialog.Close>
-					</div>
+					<Dialog.Title asChild>
+						{/*
+						 * Pinned to the frame's 18/28 rather than the `subtitle-2` token,
+						 * which steps up to 20px past 1440. The dialog is a fixed 425px
+						 * panel, so scaling its title with the viewport only costs it a
+						 * third line of wrap.
+						 */}
+						<h2 className='font-secondary pr-6 text-[1.125rem]/[1.75rem] font-semibold text-black'>
+							{notifyDialogTitle(displayName)}
+						</h2>
+					</Dialog.Title>
 
-					<Text styleType='body-2'>
-						If you&apos;re {displayName}, create a free account to verify your identity and take control of
-						this page — add your story, issues, and contact details.
-					</Text>
+					<NotifyForm personId={personId} displayName={displayName} onCancel={() => setOpen(false)} />
 
-					<ButtonLink
-						parent='ClaimProfileModal'
-						href={APP_SIGN_UP_HREF}
-						styleType='primary'
-						styleSize='lg'
-						className='w-full'
-						onClick={() =>
-							trackSignUpClicked({ href: APP_SIGN_UP_HREF, label: 'Claim profile', formId: null })
-						}
-						iconRight={<IconResolver icon='arrow-up-right' className='h-5 w-5' />}
-					>
-						Claim this profile
-					</ButtonLink>
-
-					<div className='flex flex-col gap-4 border-t border-gray-200 pt-6'>
-						<Text styleType='subtitle-2'>Not {displayName}?</Text>
-						<Text styleType='body-2'>
-							Let them know their profile is ready to claim on GoodParty.org.
-						</Text>
-						<NotifyForm personId={personId} displayName={displayName} />
-					</div>
+					<Dialog.Close asChild>
+						<Button
+							parent='ClaimProfileModal'
+							styleType='ghost'
+							iconOnly
+							aria-label='Close'
+							className='absolute right-3 top-3 opacity-70'
+							iconLeft={<IconResolver icon='x' className='h-4 w-4' />}
+						/>
+					</Dialog.Close>
 				</Dialog.Content>
 			</Dialog.Portal>
 		</Dialog.Root>

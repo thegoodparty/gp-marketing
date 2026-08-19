@@ -143,10 +143,15 @@ describe('the claim prompt and the claim form ship together', () => {
 		'x-3412f69c',
 	];
 
-	function claimPromptVariants(slug: string): string[] {
+	/**
+	 * The prompt is the only content card handed a person and a place, so it is
+	 * identified by its props rather than by importing the component — this suite
+	 * runs without a DOM and the component pulls in Radix.
+	 */
+	function claimPrompts(slug: string): { locationLabel?: unknown }[] {
 		return contentCards(slug).flatMap(card => {
-			const variant = (card.content as { props?: { variant?: string } } | undefined)?.props?.variant;
-			return variant ? [variant] : [];
+			const props = (card.content as { props?: Record<string, unknown> } | undefined)?.props;
+			return props && 'personId' in props && 'locationLabel' in props ? [props] : [];
 		});
 	}
 
@@ -158,50 +163,52 @@ describe('the claim prompt and the claim form ship together', () => {
 	}
 
 	/**
-	 * The owner prompt's button scrolls to `#person-claim-form`, and that anchor
-	 * only exists inside PersonClaimCTABand. Both hang off the same `showClaim`
-	 * gate today; this pins the pairing so a future change to either gate cannot
-	 * quietly leave the button scrolling to nothing.
+	 * The prompt asks a visitor to nudge the person; the band is where that
+	 * person actually claims. Both hang off the same `showClaim` gate today, and
+	 * a page carrying one without the other is incoherent either way — a nudge
+	 * leading nowhere, or a claim form on a page that never mentions claiming.
 	 */
-	test('no state renders the owner claim prompt without the claim form below it', () => {
+	test('no state renders the claim prompt without the claim band below it', () => {
 		for (const slug of ALL_STATES) {
-			expect([slug, claimPromptVariants(slug).includes('owner-card')]).toEqual([slug, rendersClaimBand(slug)]);
+			expect([slug, claimPrompts(slug).length > 0]).toEqual([slug, rendersClaimBand(slug)]);
 		}
 	});
 
-	test('the unclaimed states lead with the owner prompt, then the voter prompt', () => {
+	/**
+	 * The frames put exactly ONE card at the top of the content well and it is
+	 * visitor-facing (D 1958:108619, E 1928:99467). An owner-facing "are you
+	 * [Name]?" prompt was added alongside it once and had to be taken back out;
+	 * this is what stops a second one reappearing.
+	 */
+	test('the unclaimed states lead with exactly one claim prompt', () => {
 		for (const slug of ['kim-byrd-b77f912d', 'rob-zotti-d8c578fb', 'tim-ficken-0a951485']) {
-			expect([slug, claimPromptVariants(slug)]).toEqual([slug, ['owner-card', 'voter-card']]);
+			expect([slug, claimPrompts(slug).length]).toEqual([slug, 1]);
 		}
 	});
 
 	// A claimed profile has nothing to claim, and a removed one asked us to stop.
-	test('claimed and removed states show neither prompt', () => {
+	test('claimed and removed states show no prompt', () => {
 		for (const slug of ['allen-slagle-74eee01a', 'x-27255f40', 'x-3412f69c']) {
-			expect([slug, claimPromptVariants(slug)]).toEqual([slug, []]);
+			expect([slug, claimPrompts(slug).length]).toEqual([slug, 0]);
 		}
 	});
 
-	function voterPromptLocation(cards: ReturnType<typeof contentCards>): unknown {
+	function promptLocation(cards: ReturnType<typeof contentCards>): unknown {
 		return cards
-			.map(card => (card.content as { props?: { variant?: string; locationLabel?: unknown } } | undefined)?.props)
-			.find(props => props?.variant === 'voter-card')?.locationLabel;
-	}
-
-	function claimPromptLocation(slug: string): unknown {
-		return voterPromptLocation(contentCards(slug));
+			.map(card => (card.content as { props?: Record<string, unknown> } | undefined)?.props)
+			.find(props => props && 'personId' in props && 'locationLabel' in props)?.['locationLabel'];
 	}
 
 	/**
-	 * The voter prompt for someone in office opens "[Location] deserves greater
+	 * The prompt for someone in office opens "[Location] deserves greater
 	 * transparency" (Figma E 1928:99467, F 1928:100987). Nothing on the view is
 	 * that place — `districtLabel` is a ward, `stateLabel` a two-letter code — so
 	 * it is read back off the breadcrumb, and picking the wrong crumb would name
 	 * the state, or the office, where the frame names the town.
 	 */
-	test('the voter prompt is handed the most specific place in the breadcrumb', () => {
+	test('the prompt is handed the most specific place in the breadcrumb', () => {
 		for (const slug of ['kim-byrd-b77f912d', 'rob-zotti-d8c578fb', 'tim-ficken-0a951485']) {
-			expect([slug, claimPromptLocation(slug)]).toEqual([slug, 'Springfield']);
+			expect([slug, promptLocation(contentCards(slug))]).toEqual([slug, 'Springfield']);
 		}
 	});
 
@@ -228,7 +235,7 @@ describe('the claim prompt and the claim form ship together', () => {
 			}),
 		};
 		const cards = buildPersonSectionOverrides(stateOnly).component_profileContentBlock?.contentCards ?? [];
-		expect(voterPromptLocation(cards)).toBe('Wyoming');
+		expect(promptLocation(cards)).toBe('Wyoming');
 	});
 });
 

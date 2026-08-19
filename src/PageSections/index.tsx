@@ -184,13 +184,6 @@ export type SectionOverrides = {
 		candidateName?: string;
 		partyAffiliation?: string;
 		layout?: 'card' | 'banner';
-		// When set, render the interactive claim/notify modal (which posts the
-		// personId to the claim-request endpoint → ProfileClaimRequest) instead of
-		// the static CMS banner. Populated for unclaimed person profiles.
-		interactive?: boolean;
-		personId?: string;
-		displayName?: string;
-		persona?: 'candidate' | 'officeholder' | 'both' | 'past';
 	};
 };
 

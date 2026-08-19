@@ -23,6 +23,15 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  */
 const CLAIM_FORM_ID = 'person-claim-owner';
 
+/**
+ * Verbatim from the Figma band (1922:92593), including its missing final period.
+ * One sentence for everyone: the frames draw the same body on the candidate,
+ * officeholder, and serving-and-running states, so it deliberately does not
+ * branch on `isRunning` the way the routing and the confirmation below do.
+ */
+const CLAIM_BAND_BODY =
+	'Your community deserves accountable leadership. Claim your profile and share your top priorities with residents. Enter your email to get started';
+
 type NotifyValues = { firstname: string; email: string };
 
 export type PersonClaimCTABandProps = {
@@ -105,10 +114,6 @@ export function PersonClaimCTABand({ personId, displayName, isRunning }: PersonC
 		}
 	}
 
-	const body = isRunning
-		? 'Your community deserves accountable leadership. Claim your profile and share why you\u2019re running and your top priorities with residents. Enter your email to get started.'
-		: 'Your community deserves accountable leadership. Claim your profile and share your record and priorities in office with residents. Enter your email to get started.';
-
 	// Both branches speak to the person themselves, not to a visitor — this band is
 	// only ever the subject entering their own address.
 	const successCopy = isRunning
@@ -123,12 +128,12 @@ export function PersonClaimCTABand({ personId, displayName, isRunning }: PersonC
 			data-component='CTABannerBlock'
 		>
 			<Container size='xl'>
-				<div className='flex flex-col items-center gap-6 rounded-2xl bg-blue-100 p-6 text-center text-midnight-900 md:p-12'>
-					<div className='flex max-w-2xl flex-col items-center gap-3 md:gap-4'>
+				<div className='flex flex-col items-center gap-6 rounded-3xl bg-blue-100 p-6 text-center text-midnight-900 lg:px-32 lg:py-40'>
+					<div className='flex flex-col items-center gap-4'>
 						<Text as='h2' styleType='heading-lg'>
 							{`Are you ${displayName}? Complete your profile now.`}
 						</Text>
-						<Text styleType='body-1'>{body}</Text>
+						<Text styleType='body-1'>{CLAIM_BAND_BODY}</Text>
 					</div>
 					{isSuccess ? (
 						<div
@@ -143,17 +148,19 @@ export function PersonClaimCTABand({ personId, displayName, isRunning }: PersonC
 						// `flex flex-col items-center` column: its children do not stretch, so
 						// whichever element is the flex item has to carry `w-full max-w-md` or
 						// the field column collapses to its content width.
-						<div className='w-full max-w-md'>
+						<div className='w-full max-w-[416px]'>
 							<form id={CLAIM_FORM_ID} onSubmit={(e) => void handleSubmit(onSubmit)(e)} noValidate>
 								<div className='flex flex-col gap-4 text-left'>
 									<TextInput
 										label='Name (optional)'
+										placeholder='First name'
 										autoComplete='name'
 										error={errors.firstname?.message}
 										{...register('firstname')}
 									/>
 									<TextInput
 										label='Email address'
+										placeholder='Email address'
 										type='email'
 										required
 										autoComplete='email'
@@ -175,8 +182,8 @@ export function PersonClaimCTABand({ personId, displayName, isRunning }: PersonC
 									<Button
 										parent='PersonClaimCTABand'
 										type='submit'
-										styleType='primary'
-										styleSize='md'
+										styleType='secondary'
+										styleSize='lg'
 										isLoading={isSubmitting}
 										disabled={isSubmitting}
 										className='mx-auto w-fit'

@@ -235,37 +235,28 @@ describe('the notify dialog matches Figma 1901:51851', () => {
 });
 
 describe('the claim band matches Figma 1922:92593', () => {
-	async function renderBand(isRunning: boolean) {
+	async function renderBand() {
 		const { PersonClaimCTABand } = await import('./PersonClaimCTABand');
-		await render(
-			React.createElement(PersonClaimCTABand, {
-				personId: '11111111-1111-4111-8111-111111111111',
-				displayName,
-				isRunning,
-			}),
-		);
+		await render(React.createElement(PersonClaimCTABand, { displayName }));
 	}
 
+	/**
+	 * The heading is the frame's, verbatim, and it is the page's ONLY "Are you
+	 * [Name]?" — the content well above is notify-only.
+	 *
+	 * The body's last clause is not the frame's. Figma ends "Enter your email to
+	 * get started" because the frame draws an inline form here; marketing replaced
+	 * that form with a link into Win sign-up (2026-08-17), so the sentence had to
+	 * name what the button actually does. The rest is the frame's one body for
+	 * every unclaimed state — it does not branch on running vs in office, and the
+	 * band takes no prop it could branch on.
+	 */
 	test('the band is the page’s only place to claim, and says so in Figma’s words', async () => {
-		await renderBand(true);
+		await renderBand();
 
 		expect(document.querySelector('h2')?.textContent).toBe(`Are you ${displayName}? Complete your profile now.`);
 		expect(document.querySelector('h2 + div')?.textContent).toBe(
-			'Your community deserves accountable leadership. Claim your profile and share your top priorities with residents. Enter your email to get started',
+			'Your community deserves accountable leadership. Claim your profile and share why you\u2019re running and your top priorities with residents. Create a free GoodParty.org account to get started.',
 		);
-	});
-
-	/**
-	 * The frames draw one body for every unclaimed state. It briefly branched on
-	 * running vs in office, which is invented copy — the branch belongs on the
-	 * routing and the confirmation, both of which are below the fold on submit.
-	 */
-	test('the body does not branch on the person’s product', async () => {
-		await renderBand(true);
-		const running = document.querySelector('h2 + div')?.textContent;
-
-		await renderBand(false);
-
-		expect(document.querySelector('h2 + div')?.textContent).toBe(running);
 	});
 });

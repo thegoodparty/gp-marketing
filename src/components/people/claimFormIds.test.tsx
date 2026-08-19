@@ -85,7 +85,7 @@ async function render(element: React.ReactElement) {
 	});
 }
 
-const bandProps = { personId: 'person-1', displayName: 'Example Person', isRunning: true };
+const bandProps = { displayName: 'Example Person' };
 const notifyProps = { personId: 'person-1', displayName: 'Example Person' };
 
 /**
@@ -112,24 +112,21 @@ function expectNoStylingClasses(form: Element | null) {
 }
 
 describe('claim form HubSpot ids', () => {
-	test('PersonClaimCTABand renders form#person-claim-owner', async () => {
+	/**
+	 * The owner form was retired deliberately (marketing, 2026-08-17): the band
+	 * sends the candidate to Win sign-up instead of collecting their address, so
+	 * HubSpot's `person-claim-owner` collected form stops receiving submissions.
+	 *
+	 * This is the assertion that would fail if someone re-added a form to the band
+	 * without re-deciding that, which matters because a second owner form under a
+	 * new HubSpot name would silently split the history of the old one.
+	 */
+	test('the claim band no longer collects anything for HubSpot', async () => {
 		const { PersonClaimCTABand } = await import('./PersonClaimCTABand');
 
 		await render(React.createElement(PersonClaimCTABand, bandProps));
 
-		const form = document.querySelector('form#person-claim-owner');
-		expect(form).not.toBeNull();
-		// Field names are what HubSpot maps onto contact properties.
-		expect(form?.querySelector('input[name="firstname"]')).not.toBeNull();
-		expect(form?.querySelector('input[name="email"]')).not.toBeNull();
-	});
-
-	test('the band form carries no classes, so HubSpot sees #person-claim-owner alone', async () => {
-		const { PersonClaimCTABand } = await import('./PersonClaimCTABand');
-
-		await render(React.createElement(PersonClaimCTABand, bandProps));
-
-		expectNoStylingClasses(document.querySelector('form#person-claim-owner'));
+		expect(document.querySelector('form')).toBeNull();
 	});
 
 	test('the claim dialog notify form renders form#person-claim-notify', async () => {
@@ -151,14 +148,16 @@ describe('claim form HubSpot ids', () => {
 		expectNoStylingClasses(document.querySelector('form#person-claim-notify'));
 	});
 
-	test('the two ids differ, so HubSpot files owner claims apart from visitor nudges', async () => {
+	test('the notify form is the only one left on an unclaimed profile', async () => {
 		const [{ PersonClaimCTABand }, { NotifyForm }] = await Promise.all([
 			import('./PersonClaimCTABand'),
 			import('./ClaimProfileModal'),
 		]);
 
-		// Both are reachable on an unclaimed empowered profile. Sharing an id would
-		// collapse the two intents into one HubSpot form, besides being invalid markup.
+		// Both surfaces are reachable on an unclaimed candidate profile. The notify
+		// form is fed by OTHER people asking this person to complete their profile
+		// and feeds `candidate_profile_requests`, so it survives the owner form's
+		// removal untouched — different intent, different audience, different table.
 		await render(
 			React.createElement(
 				React.Fragment,
@@ -168,10 +167,7 @@ describe('claim form HubSpot ids', () => {
 			),
 		);
 
-		const ids = [...document.querySelectorAll('form')].map(f => f.id);
-		expect(ids).toContain('person-claim-owner');
-		expect(ids).toContain('person-claim-notify');
-		expect(new Set(ids).size).toBe(ids.length);
+		expect([...document.querySelectorAll('form')].map(f => f.id)).toEqual(['person-claim-notify']);
 	});
 });
 

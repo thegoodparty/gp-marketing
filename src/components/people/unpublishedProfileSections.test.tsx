@@ -15,7 +15,6 @@
  * stale the next time the civics spine gains a card.
  */
 import { describe, expect, test } from 'bun:test';
-import { isValidElement, type ReactElement, type ReactNode } from 'react';
 import { buildPersonSectionOverrides } from './personSectionOverrides';
 import {
 	composeView,
@@ -33,26 +32,6 @@ function absentView(fixture: StateFixture): PersonProfileView {
 	return composeView(PERSON_ID, fixture.person, null, {});
 }
 
-/**
- * Every string rendered inside a section, including deep inside the claim
- * prompt components, so a claim CTA cannot hide behind a nested element.
- */
-function collectText(node: ReactNode): string[] {
-	if (node == null || typeof node === 'boolean') return [];
-	if (typeof node === 'string' || typeof node === 'number') return [String(node)];
-	if (Array.isArray(node)) return node.flatMap(child => collectText(child as ReactNode));
-	if (isValidElement(node)) {
-		const el = node as ReactElement<Record<string, unknown>>;
-		const props = el.props ?? {};
-		// Component elements are not rendered here, so their copy lives in props
-		// (displayName, variant, heading, …) rather than in children.
-		return Object.entries(props).flatMap(([key, value]) =>
-			key === 'children' || typeof value !== 'string' ? collectText(value as ReactNode) : [value],
-		);
-	}
-	return [];
-}
-
 function cardShapes(view: PersonProfileView): string[] {
 	const overrides = buildPersonSectionOverrides(view);
 	return (overrides.component_profileContentBlock?.contentCards ?? []).map(
@@ -60,11 +39,21 @@ function cardShapes(view: PersonProfileView): string[] {
 	);
 }
 
-function claimPromptVariants(view: PersonProfileView): string[] {
+/**
+ * The claim prompt is the only card handed both a `personId` and a
+ * `locationLabel`, which is how personSectionOverrides.test.ts finds it too.
+ *
+ * Do NOT go back to matching prop text for a `variant`: that prop existed only
+ * to tell the owner and visitor cards apart, and it went with the owner card. A
+ * text match against a prop that no longer exists makes the assertion below pass
+ * no matter what renders.
+ */
+function claimPrompts(view: PersonProfileView): unknown[] {
 	const overrides = buildPersonSectionOverrides(view);
-	return (overrides.component_profileContentBlock?.contentCards ?? [])
-		.flatMap(card => collectText(card.content))
-		.filter(text => text === 'owner-card' || text === 'voter-card');
+	return (overrides.component_profileContentBlock?.contentCards ?? []).flatMap(card => {
+		const props = (card.content as { props?: Record<string, unknown> } | undefined)?.props;
+		return props && 'personId' in props && 'locationLabel' in props ? [props] : [];
+	});
 }
 
 describe('an unpublished profile suppresses every claim affordance', () => {
@@ -72,8 +61,17 @@ describe('an unpublished profile suppresses every claim affordance', () => {
 		describe(fixture.description, () => {
 			const view = viewForFixture(fixture);
 
-			test('renders no owner or voter claim prompt card', () => {
-				expect(claimPromptVariants(view)).toEqual([]);
+			test('renders no claim prompt card', () => {
+				expect(claimPrompts(view)).toEqual([]);
+			});
+
+			// Proves the assertion above is doing work: the same person, merely
+			// unclaimed rather than unpublished, gets the prompt — unless the spine
+			// was never empowered to begin with (a major-party page has no claim
+			// surfaces in either state).
+			test('the equivalent unclaimed profile gets one whenever it is empowered', () => {
+				const absent = absentView(fixture);
+				expect(claimPrompts(absent).length).toBe(absent.empowered ? 1 : 0);
 			});
 
 			test('hides the CTA band instead of offering the claim form', () => {
@@ -88,7 +86,13 @@ describe('an unpublished profile suppresses every claim affordance', () => {
 
 			test('keeps the hero neutral rather than claiming endorsement', () => {
 				const hero = buildPersonSectionOverrides(view).component_profileHero;
-				expect(hero?.attribution).toBe('notEndorsed');
+				// This asserted the 'notEndorsed' line, which the pledge copy replaced.
+				// What has to hold is unchanged: unpublishing must not promote the
+				// page, so the hero reads exactly as the equivalent unclaimed one — and
+				// the GoodParty.org mark, which follows the claim, stays off.
+				const absent = buildPersonSectionOverrides(absentView(fixture)).component_profileHero;
+				expect(hero?.attribution).toBe(absent?.attribution);
+				expect(hero?.showBrandMark).toBe(false);
 			});
 		});
 	}

@@ -656,6 +656,34 @@ function profileLocationLabel(view: PersonProfileView): string | null {
 }
 
 /**
+ * Which pledge statement the hero makes about this person.
+ *
+ * Marketing specified these three lines keyed off CLAIM status ("has taken" for
+ * claimed, "has not" for unclaimed). Claiming and pledging are separate facts
+ * here: `pledged` is the ETL-maintained spine flag `Person.isPledged`, rolled up
+ * from candidacies, and nothing in the claim path writes it. A claimed
+ * officeholder cannot carry it at all — they have no candidacy for it to roll up
+ * from, which is why state B in the shared matrix is `claimed` and `pledged:
+ * false` — and a pledged candidate whose page nobody has claimed carries it
+ * while reading as unclaimed. Keying the sentence to the claim would therefore
+ * publish "Has Taken the GoodParty.org Pledge" about named people who have not,
+ * so each line is keyed to the fact it asserts instead.
+ *
+ * Party wins over the pledge flag: a Democrat or Republican is not eligible to
+ * take the pledge, so their status is ineligibility rather than a choice, and a
+ * stale `isPledged` from a past run under another party must not override that.
+ *
+ * Removal (K/L) says nothing at all. `pledged` is force-cleared for removed
+ * profiles, so "Has Not Taken…" there would be a line we know may be false,
+ * asserted about the one group who asked us to stop publishing them.
+ */
+function pledgeAttribution(view: PersonProfileView): 'pledged' | 'notPledged' | 'pledgeIneligible' | 'none' {
+	if (view.removed) return 'none';
+	if (view.majorParty) return 'pledgeIneligible';
+	return view.pledged ? 'pledged' : 'notPledged';
+}
+
+/**
  * Maps a resolved PersonProfileView onto the `personProfile` template's section
  * overrides (keyed by section `_type`/`_key`). Per-state gating (empowerment,
  * removal, claim/pledge/CTA visibility) is expressed by suppressing sections —
@@ -664,12 +692,24 @@ function profileLocationLabel(view: PersonProfileView): string | null {
 export function buildPersonSectionOverrides(view: PersonProfileView): SectionOverrides {
 	// Past-election profiles (G claimed, H unclaimed) lead with the past-election
 	// disclaimer, NOT the claim CTA — so exclude persona 'past' from the claim gate.
+	//
 	// `unpublished` is excluded too: the profile is already claimed, it just isn't
 	// live, so "Are you …? Claim your profile" addresses someone who owns it and
 	// the voter-facing prompt asks the reader to nudge a person who already
 	// decided. This is the only difference from the equivalent `absent` page.
+	//
+	// 'officeholder' is excluded too (marketing, 2026-08-17): someone who only
+	// holds office has no self-serve product to be sent to, so their claim
+	// prompts asked for an email that sales then had to action by hand. Note this
+	// is the officeholder persona ONLY — 'both' (serving AND running) keeps the
+	// candidate treatment, because they have a live candidacy and Win to claim
+	// into. State E therefore loses its claim surfaces entirely; D/F keep theirs.
 	const showClaim =
-		view.empowered && !view.claimed && !view.unpublished && view.persona !== 'past';
+		view.empowered &&
+		!view.claimed &&
+		!view.unpublished &&
+		view.persona !== 'past' &&
+		view.persona !== 'officeholder';
 	// The pledge explainer is claimed content across every persona (Figma A/B/C/G
 	// all show it once claimed). Unclaimed empowered pages lead with the claim
 	// prompt instead, so it stays hidden there.
@@ -677,9 +717,9 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 
 	// The person-profile CTA band sits below the content well (Figma order):
 	//  - claimed (A/B/C/G)   → generic centered "Join the movement" sign-up CTA
-	//  - unclaimed empowered (D/E/F/H) → full-width interactive claim CTA band
-	//    ("Are you …? Complete your profile now." + inline name/email form)
-	//  - major-party (I/J) + removed (K/L) → no CTA band
+	//  - unclaimed empowered candidates (D/F) → full-width claim CTA band
+	//    ("Are you …? Complete your profile now." + a button into Win sign-up)
+	//  - officeholder-only (E), past (H), major-party (I/J), removed (K/L) → none
 	const ctaOverride: SectionOverrides['component_ctaBannerBlock'] = view.claimed
 		? {
 				align: 'center',
@@ -699,15 +739,7 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 				// center, which is the misalignment marketing reported.
 			}
 		: showClaim
-			? {
-					render: (
-						<PersonClaimCTABand
-							personId={view.personId}
-							displayName={view.displayName}
-							isRunning={view.persona === 'candidate' || view.persona === 'both'}
-						/>
-					),
-				}
+			? { render: <PersonClaimCTABand displayName={view.displayName} /> }
 			: { hidden: true };
 
 	// The Figma content well is one column of cards. For unclaimed empowered pages
@@ -768,11 +800,13 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			profileImageUrl: view.avatarUrl ?? undefined,
 			isEmpowered: view.empowered,
 			tags: personaTags(view.persona),
-			// The GoodParty attribution line + on-photo logo gate on CLAIMED (endorsed):
-			// only claimed pages (A/B/C/G) show "Empowered by GoodParty.org" with the
-			// logo. Every unclaimed page — independent (D/E/F/H), major-party (I/J), and
-			// removed (K/L) — shows the neutral "Not Endorsed by GoodParty.org" line.
-			attribution: view.claimed ? 'empowered' : 'notEndorsed',
+			// The line states the person's pledge status (see `pledgeAttribution`).
+			// The GoodParty mark stays on CLAIMED, which is what it has always meant
+			// here — it marks the page as a GoodParty.org profile rather than making
+			// a claim about the pledge, and moving it onto `pledged` would strip it
+			// from every claimed officeholder.
+			attribution: pledgeAttribution(view),
+			showBrandMark: view.claimed,
 		},
 		component_claimProfileBlock: {
 			// The standalone full-width claim banner is always suppressed now: the

@@ -248,6 +248,14 @@ export function notifyDialogTitle(displayName: string): string {
  * owner-facing "are you [Name]?" prompt at the top of the page — the person's
  * own way in is the claim band below the well (see PersonClaimCTABand) — so do
  * not reintroduce one here.
+ *
+ * The heading is `section-heading`, NOT `heading-sm`. Figma names this type
+ * style `heading-lg`, but its value is 32/44 and gp-marketing's `heading-lg` is
+ * 48/60 — the scales do not line up, so tokens have to be matched by value (see
+ * harness/FOLLOWUPS.md). `heading-sm` was the earlier by-name guess: it reaches
+ * 32px only at ≥1440 and carries a 125% line-height, so it rendered 32/40 on
+ * desktop and 24/30 on the mobile artboard, where the frame is still 32/44.
+ * `section-heading` is the flat 32/44 the frames use on both artboards.
  */
 function ClaimPromptCard({
 	displayName,
@@ -267,8 +275,8 @@ function ClaimPromptCard({
 			className='flex flex-col items-center gap-6 rounded-3xl bg-blue-100 p-6 text-center text-midnight-900 md:px-10 md:py-12'
 			data-component='ClaimPromptCard'
 		>
-			<div className='flex flex-col gap-4'>
-				<Text as='h2' styleType='heading-sm'>
+			<div className='flex flex-col gap-3 md:gap-4'>
+				<Text as='h2' styleType='section-heading'>
 					{heading}
 				</Text>
 				<Text styleType='body-1'>{body}</Text>
@@ -277,7 +285,7 @@ function ClaimPromptCard({
 				parent='ClaimProfileModal'
 				styleType='secondary'
 				styleSize='lg'
-				className='w-fit'
+				className='w-full md:w-fit'
 				onClick={onNotify}
 				iconRight={<IconResolver icon='arrow-up-right' className='h-4 w-4' />}
 			>

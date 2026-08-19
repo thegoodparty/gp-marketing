@@ -6,7 +6,9 @@
 //
 // This file is plain data (no imports) so every harness script can read it.
 
-export const DEV_ORIGIN = 'http://localhost:3009';
+// `bun run dev` serves 3009, but a second checkout (worktree) usually cannot
+// have that port, so allow an override rather than forcing a temporary edit here.
+export const DEV_ORIGIN = process.env.HARNESS_ORIGIN || 'http://localhost:3009';
 
 // Where the cached Figma frame exports live (figma-A.png … figma-L.png).
 // Re-export from Figma into this folder to refresh the source of truth.

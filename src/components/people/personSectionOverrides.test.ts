@@ -232,6 +232,135 @@ describe('the claim prompt and the claim form ship together', () => {
 	});
 });
 
+/**
+ * The removal states (Figma K 1997:118776 / desktop 1997:118777, L 1997:118282 /
+ * desktop 1997:118283) are the two frames with a legal obligation behind them:
+ * someone asked us to stop publishing their profile, and we kept the crawlable
+ * civics spine on the understanding that everything they or we authored comes
+ * off. Nothing pinned that, so any of it could have been restored by a change
+ * aimed at another state — the authored slot, the hero photo, the pledge badge
+ * and the contact links are all shared code paths.
+ *
+ * These assert on absence, which is exactly what a visual diff is worst at: the
+ * harness scores K/L on a blurred layout metric where a re-appearing avatar or
+ * pledge pill is a rounding error.
+ */
+describe('the removal states publish the civics spine and nothing else', () => {
+	const REMOVAL_SLUGS = [
+		['K', 'x-27255f40'],
+		['L', 'x-3412f69c'],
+	] as const;
+
+	/** Every authored section a claimed page can render, in any persona. */
+	const AUTHORED_HEADINGS = [
+		'Why I\u2019m Running for Office',
+		'Why I Served',
+		'Campaign Issues',
+		'Top Priorities While in Office',
+		'Accomplishments During This Term',
+		'About Me',
+	];
+
+	test('state K — a removed candidate keeps only the public record', () => {
+		expect(sectionHeadings('x-27255f40')).toEqual([
+			'Recent Experience',
+			'Other Candidates for Springfield City Council',
+			'About Springfield City Council',
+			'District information',
+		]);
+	});
+
+	test('state L — a removed officeholder keeps only the public record', () => {
+		expect(sectionHeadings('x-3412f69c')).toEqual([
+			'Recent Experience',
+			'District information',
+			'About Springfield City Council',
+			'Nearby Officials',
+		]);
+	});
+
+	test('neither removal state renders a single authored section', () => {
+		for (const [state, slug] of REMOVAL_SLUGS) {
+			const headings = sectionHeadings(slug);
+			for (const authored of AUTHORED_HEADINGS) {
+				expect([state, authored, headings.includes(authored)]).toEqual([state, authored, false]);
+			}
+		}
+	});
+
+	test('the removal frames carry no card without a heading', () => {
+		// The claim prompts are the only chrome-less `raw` cards in the well, and
+		// `claimPromptVariants` above already pins that they are gone. This catches
+		// a future raw card (a banner, a notice) being added to every unclaimed
+		// page and silently landing on a page we are meant to have stripped.
+		for (const [state, slug] of REMOVAL_SLUGS) {
+			expect([state, contentCards(slug).filter(card => !card.heading)]).toEqual([state, []]);
+		}
+	});
+
+	test('the hero is stripped of the photo and never reads as endorsed', () => {
+		for (const [state, slug] of REMOVAL_SLUGS) {
+			const view = getDevPersonProfileView(slug);
+			if (!view) throw new Error(`no dev fixture for ${slug}`);
+			const hero = buildPersonSectionOverrides(view).component_profileHero;
+			expect([state, hero?.profileImageUrl]).toEqual([state, undefined]);
+			expect([state, hero?.isEmpowered]).toEqual([state, false]);
+			expect([state, hero?.attribution]).toEqual([state, 'notEndorsed']);
+		}
+	});
+
+	test('the pledge badge is suppressed even though the spine still flags it', () => {
+		// Both removal fixtures seed `isPledged: true`. Pledging is a factual civics
+		// flag, so the only reason it does not paint is the removal — making this
+		// the one assertion that would catch removal being dropped from `pledged`.
+		for (const [state, slug] of REMOVAL_SLUGS) {
+			expect([state, getDevPersonProfileView(slug)?.pledged]).toEqual([state, false]);
+		}
+	});
+
+	test('the CTA band is hidden rather than swapped for the generic sign-up', () => {
+		for (const [state, slug] of REMOVAL_SLUGS) {
+			const view = getDevPersonProfileView(slug);
+			if (!view) throw new Error(`no dev fixture for ${slug}`);
+			expect([state, buildPersonSectionOverrides(view).component_ctaBannerBlock]).toEqual([
+				state,
+				{ hidden: true },
+			]);
+		}
+	});
+
+	test('the sidebar keeps the persona facts and drops every way to contact them', () => {
+		// Contact icons, office email/phone and the mailing address all hang off
+		// `view.links` / `view.officeAddress`, which removal empties. The office
+		// address in particular is a home-adjacent detail on a page the subject
+		// asked us to take down.
+		for (const [state, slug] of REMOVAL_SLUGS) {
+			const view = getDevPersonProfileView(slug);
+			if (!view) throw new Error(`no dev fixture for ${slug}`);
+			const sidebar = buildPersonSectionOverrides(view).component_profileContentBlock?.sidebar;
+			expect([state, sidebar?.contactIcons ?? []]).toEqual([state, []]);
+			expect([state, sidebar?.officeContacts ?? []]).toEqual([state, []]);
+			expect([state, sidebar?.officeAddress ?? []]).toEqual([state, []]);
+			// Party is public record and stays — losing it would be over-stripping.
+			expect([state, Boolean(sidebar?.politicalAffiliation)]).toEqual([state, true]);
+		}
+	});
+
+	test('K shows its election date; L, who is not running, does not', () => {
+		// The Figma removal frames are one generic template that shows both rows on
+		// both states (logged in harness/FOLLOWUPS.md as a reference artifact), so
+		// the harness cannot arbitrate this. Persona correctness is pinned here.
+		const rowLabels = (slug: string) => {
+			const view = getDevPersonProfileView(slug);
+			if (!view) throw new Error(`no dev fixture for ${slug}`);
+			const sidebar = buildPersonSectionOverrides(view).component_profileContentBlock?.sidebar;
+			return (sidebar?.topInfos ?? []).map(info => info.label);
+		};
+		expect(rowLabels('x-27255f40')).toEqual(['Election Date']);
+		expect(rowLabels('x-3412f69c')).toEqual([]);
+	});
+});
+
 describe('card grouping sets the Figma heading levels', () => {
 	/** Headings per white card: the first is the 32/44 one, the rest are 24/32. */
 	function headingsByCard(slug: string): string[][] {

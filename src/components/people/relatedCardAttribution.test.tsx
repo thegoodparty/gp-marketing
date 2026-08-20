@@ -145,7 +145,13 @@ describe('the related-candidate cards make no GoodParty.org claim about the peop
 	test('the badge and the yellow frame survive \u2014 only the sentence goes', async () => {
 		await renderSection('allen-slagle-74eee01a', 'Other Candidates');
 
-		for (const card of goodPartyCards()) {
+		// Same premise guard as above, and it earns its place twice over here: an
+		// empty list would make the loop below assert nothing at all, so a class
+		// rename or a fixture change that stopped the frame matching would read as
+		// a pass rather than as the lost coverage it is.
+		const branded = goodPartyCards();
+		expect(branded.length).toBeGreaterThan(0);
+		for (const card of branded) {
 			expect(markCount(card)).toBe(1);
 		}
 	});

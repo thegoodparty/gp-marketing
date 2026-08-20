@@ -15,7 +15,7 @@ import {
 	buildElectionPositionHrefFromRaceSlug,
 	getStateName,
 } from '~/lib/electionsHelpers';
-import { classifyPartyFrom, isMajorParty, type PartyClass } from '~/lib/party';
+import { classifyParty, classifyPartyFrom, isMajorParty, type PartyClass } from '~/lib/party';
 import { formatPersonName } from '~/lib/personName';
 import type { CandidacyItem } from '~/types/elections';
 import type {
@@ -121,10 +121,9 @@ export interface RelatedPersonCard {
 	isEmpowered: boolean;
 	/**
 	 * The same ETL-maintained spine flag the hero reads (`Person.isPledged`), so
-	 * a card and the profile it links to can never disagree. Major-party people
-	 * are false regardless of the flag, matching the hero's precedence: party
-	 * decides eligibility, and a stale pledge from a past run under another party
-	 * must not override it.
+	 * a card and the profile it links to read one source. Gated on party
+	 * eligibility by {@link pledgedFromSpine}, which is stricter than the hero
+	 * because a card sees less of the person than their own profile does.
 	 */
 	isPledged: boolean;
 	avatarUrl: string | null;
@@ -622,14 +621,36 @@ function nameOf(first?: string | null, last?: string | null, fallback = ''): str
 }
 
 /**
- * True only when we have looked the person up and the spine says they pledged.
- * Party wins, exactly as it does for the hero (`pledgeAttribution`): a
- * Republican or Democrat is ineligible rather than unpledged, so a stale flag
- * from a past run under another party cannot make a card claim otherwise.
+ * True only when the spine affirms the pledge AND the party evidence within
+ * reach affirms eligibility. Party wins, as it does for the hero
+ * (`pledgeAttribution`): a Republican or Democrat is ineligible rather than
+ * unpledged, so a stale flag from a past run under another party must not make
+ * a card claim otherwise.
+ *
+ * Deliberately STRICTER than the hero rather than merely different. The hero
+ * resolves party office-first then current candidacy across the person's whole
+ * record; a card has only the row it was built from, plus whatever the batched
+ * person payload happens to carry. So an unknown party suppresses the line, and
+ * a major-party signal anywhere in reach suppresses it, instead of the hero's
+ * "most specific class wins". The failure we can afford is a pledged person
+ * whose card stays quiet. The one we cannot is a card asserting a pledge that
+ * the profile it links to calls impossible.
+ *
+ * Residual, and unclosable from here: if the batch payload carries no nested
+ * offices or candidacies and the row's own party disagrees with the office the
+ * hero would read, the two can still differ. Closing it needs the current
+ * office party on the person feed, not more logic here.
  */
-function pledgedFromSpine(person: PersonItem | undefined, ...rawParties: Array<string | null | undefined>): boolean {
+function pledgedFromSpine(person: PersonItem | undefined, ...rowParties: Array<string | null | undefined>): boolean {
 	if (person?.isPledged !== true) return false;
-	return !isMajorParty(classifyPartyFrom(...rawParties));
+	const evidence = [
+		...rowParties,
+		...(person.OfficeHolders ?? []).flatMap((o) => o.partyNames ?? []),
+		...(person.Candidacies ?? []).map((c) => c.party),
+	];
+	const classes = evidence.map(classifyParty).filter((cls): cls is PartyClass => cls !== null);
+	if (classes.length === 0) return false;
+	return !classes.some(isMajorParty);
 }
 
 /**
@@ -707,7 +728,7 @@ export function buildNearbyOfficialCards(
 			subtitle: oh.officeTitle ?? oh.Position?.name ?? oh.positionName ?? null,
 			href,
 			isEmpowered: false,
-			isPledged: pledgedFromSpine(person, oh.partyNames?.[0]),
+			isPledged: pledgedFromSpine(person, ...(oh.partyNames ?? [])),
 			avatarUrl: person?.headshotUrl ?? null,
 		});
 		if (cards.length >= 6) break;

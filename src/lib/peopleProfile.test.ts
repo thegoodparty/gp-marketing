@@ -966,7 +966,7 @@ describe('buildNearbyOfficialCards', () => {
 	// the same persons for their names — and the builder simply never read it.
 	test('carries the spine pledge flag through', () => {
 		const cards = buildNearbyOfficialCards(
-			[makeOffice({ personId: OTHER, officeTitle: 'mayor' })],
+			[makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: ['Independent'] })],
 			personsById(makePerson({ id: OTHER, fullName: 'chris lewis', isPledged: true })),
 			PID,
 		);
@@ -975,7 +975,7 @@ describe('buildNearbyOfficialCards', () => {
 
 	test('is not pledged when the spine says nothing', () => {
 		const cards = buildNearbyOfficialCards(
-			[makeOffice({ personId: OTHER, officeTitle: 'mayor' })],
+			[makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: ['Independent'] })],
 			personsById(makePerson({ id: OTHER, fullName: 'chris lewis' })),
 			PID,
 		);
@@ -996,6 +996,36 @@ describe('buildNearbyOfficialCards', () => {
 		const cards = buildNearbyOfficialCards(
 			[makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: ['Democratic'] })],
 			personsById(makePerson({ id: OTHER, fullName: 'chris lewis', isPledged: true })),
+			PID,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([false]);
+	});
+
+	// An officeholder row carries no party at all far more often than it carries a
+	// wrong one. Unknown has to read as "do not assert", or the card claims a
+	// pledge for someone whose own profile may call them ineligible.
+	test('an unknown party is not enough to claim the pledge', () => {
+		const cards = buildNearbyOfficialCards(
+			[makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: [] })],
+			personsById(makePerson({ id: OTHER, fullName: 'chris lewis', isPledged: true })),
+			PID,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([false]);
+	});
+
+	// The hero would read the major-party candidacy and call them ineligible, so
+	// an Independent office row on its own must not outvote it.
+	test('a major-party signal elsewhere on the person disqualifies', () => {
+		const cards = buildNearbyOfficialCards(
+			[makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: ['Independent'] })],
+			personsById(
+				makePerson({
+					id: OTHER,
+					fullName: 'chris lewis',
+					isPledged: true,
+					Candidacies: [{ id: 'c1', party: 'Republican' }],
+				}),
+			),
 			PID,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
@@ -1035,6 +1065,33 @@ describe('buildOtherCandidateCards', () => {
 		const cards = buildOtherCandidateCards(
 			[candidacy({ party: 'Republican' })],
 			personsById(makePerson({ id: OTHER, isPledged: true })),
+			PID,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([false]);
+	});
+
+	test('an unknown party is not enough to claim the pledge', () => {
+		const cards = buildOtherCandidateCards(
+			[candidacy({ party: undefined })],
+			personsById(makePerson({ id: OTHER, isPledged: true })),
+			PID,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([false]);
+	});
+
+	// The hero resolves party office-first, so a partisan office outranks this
+	// Independent race. The card sees the office only when the batched person
+	// payload carries it — when it does, it must not contradict the profile.
+	test('a major-party office on the person disqualifies an Independent run', () => {
+		const cards = buildOtherCandidateCards(
+			[candidacy({ party: 'Independent' })],
+			personsById(
+				makePerson({
+					id: OTHER,
+					isPledged: true,
+					OfficeHolders: [makeOffice({ partyNames: ['Democratic'] })],
+				}),
+			),
 			PID,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);

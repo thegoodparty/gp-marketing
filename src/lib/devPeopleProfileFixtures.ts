@@ -176,8 +176,10 @@ function richExperience(persona: PersonPersona): ExperienceItem[] {
 function relatedCards(prefix: string, count: number, empoweredEvery = 3): RelatedPersonCard[] {
 	const NAMES = ['Garrett Borton', 'Nathan Todd', 'Don Taylor', 'Henry Nessul', 'Vera Huber', 'Gilian Sears', 'Cheri Steinmetz', 'Eric Barlow', 'Marcia Bean', 'Lori Smallwood', 'Serena Lipp', 'Abby Angelos'];
 	// Realistic party mix, but ONLY non-partisan/independent people can be
-	// GoodParty-empowered — a Republican/Democrat card must never show the
-	// "Empowered by GoodParty.org" badge (we only empower non-partisan/3rd-party).
+	// GoodParty-empowered — a Republican/Democrat card must never carry the
+	// GoodParty badge and frame (we only empower non-partisan/3rd-party). The
+	// cards no longer say "Empowered by GoodParty.org" beneath it; see
+	// `toCandidateCards`.
 	const PARTIES = ['Nonpartisan', 'Republican', 'Independent', 'Democrat'];
 	return Array.from({ length: count }, (_, i) => {
 		const subtitle = PARTIES[i % PARTIES.length]!;

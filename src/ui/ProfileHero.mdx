@@ -60,11 +60,29 @@ The candidate's profile image as a hosted URL. Used on dynamic candidate profile
 
 #### `isEmpowered` (optional)
 
-When true, shows the GoodParty logo badge on the avatar and the "Empowered by GoodParty.org" attribution. Set from claimed campaign lookup on candidate profile pages.
+When true, shows the GoodParty logo badge on the avatar and the "Empowered by GoodParty.org" attribution. Set from claimed campaign lookup on candidate profile pages. This is the legacy fallback, used only where `attribution` is not passed — today that is `/candidate/[...slug]`.
 
 **Type:** `boolean`
 
 **Default:** `false`
+
+#### `attribution` (optional)
+
+The line under the office. Overrides `isEmpowered` when passed.
+
+The `/people` person profiles pass one of the three pledge values: marketing replaced the claim-keyed "Empowered by GoodParty.org" / "Not Endorsed by GoodParty.org" pair there on 2026-08-17 with statements about the GoodParty.org pledge. `personSectionOverrides.pledgeAttribution` decides which; `pledgeAttributionCopy.test.tsx` pins the wording.
+
+**Type:** `'empowered' | 'pledged' | 'notPledged' | 'pledgeIneligible' | 'none'`
+
+**Default:** derived from `isEmpowered`
+
+#### `showBrandMark` (optional)
+
+Whether the GoodParty.org mark paints, on the portrait and beside the attribution. Separate from `attribution` because the mark says the page is a GoodParty.org profile while the line asserts a fact about the person — on `/people` those come from different inputs (claimed vs pledged).
+
+**Type:** `boolean`
+
+**Default:** `attribution === 'empowered'`
 
 #### `backgroundColor` (optional)
 
@@ -96,7 +114,7 @@ When a profile image is provided (`profileImageUrl` or `profileImage`):
 
 ## Attribution
 
-When `isEmpowered` is true, the component displays "Empowered by GoodParty.org" with the GoodParty logo below the office title. Text color adapts to the background variant (white on midnight, dark on cream).
+The line under the office title comes from `attribution`, falling back to `isEmpowered` ("Empowered by GoodParty.org"). Affirmative lines get the semibold Figma treatment beside the GoodParty logo; the negative and ineligible pledge lines get the grey disclaimer style, so a sentence saying someone has *not* done something cannot read as a badge. Text color adapts to the background variant (white on midnight, dark on cream).
 
 ## Image Fallback
 

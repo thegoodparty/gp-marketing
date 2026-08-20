@@ -36,11 +36,27 @@ export type CandidatesCardProps = {
 	partyAffiliation: string;
 	href: string;
 	isGoodPartyCandidate?: boolean;
+	/**
+	 * Whether the card states GoodParty.org's relationship to the person beneath
+	 * their name. Separate from `isGoodPartyCandidate`, which carries the mark
+	 * and the yellow frame — the same split ProfileHero draws between
+	 * `showBrandMark` and `attribution`: the mark says this is one of our
+	 * candidates, the line makes an assertion about the person.
+	 *
+	 * `/people` passes `'none'`. Marketing retired the claim-keyed "Empowered by
+	 * GoodParty.org" framing on that surface (2026-08-17, approved by Emily and
+	 * Jack) in favour of three pledge lines, and this card carries no pledge
+	 * flag to key those to. The default keeps the line, because the only other
+	 * card that sets `isGoodPartyCandidate` is the Sanity claim block's example
+	 * card, on marketing pages the decision did not cover.
+	 */
+	attribution?: 'empowered' | 'none';
 	_key?: string;
 };
 
 export const CandidatesCard = memo(function CandidatesCard(props: CandidatesCardProps) {
 	const isGoodParty = props.isGoodPartyCandidate === true;
+	const showAttribution = isGoodParty && (props.attribution ?? 'empowered') === 'empowered';
 	const { base, baseStandard, baseGoodParty, avatarWrapper, rightColumn, contentWrapper, content, name, empowered, footerWrapper, link, badge } = styles();
 
 	// Generate initials from name if no avatar
@@ -79,7 +95,7 @@ export const CandidatesCard = memo(function CandidatesCard(props: CandidatesCard
 				</div>
 
 				<div className={footerWrapper()}>
-					{isGoodParty ? (
+					{showAttribution ? (
 						<Text as='p' styleType='caption' className={empowered()}>
 							Empowered by GoodParty.org
 						</Text>

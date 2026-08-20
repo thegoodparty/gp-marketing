@@ -56,6 +56,17 @@ export const GoodParty: Story = {
 	},
 };
 
+/** How the card renders on a `/people` person profile — badge and frame, no line. */
+export const GoodPartyNoAttribution: Story = {
+	args: {
+		name: 'Firstname Lastname',
+		partyAffiliation: 'Party Affiliation',
+		href: '/people/firstname-lastname',
+		isGoodPartyCandidate: true,
+		attribution: 'none',
+	},
+};
+
 export const GoodPartyWithPhoto: Story = {
 	args: {
 		name: 'Firstname Lastname',

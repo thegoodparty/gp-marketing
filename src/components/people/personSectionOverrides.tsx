@@ -598,7 +598,22 @@ function buildSidebar(view: PersonProfileView): ElectionsSidebarProps | undefine
 	};
 }
 
-/** Maps interlink cards to CandidatesBlock cards, dropping any without a link. */
+/**
+ * Maps interlink cards to CandidatesBlock cards, dropping any without a link.
+ *
+ * The cards say nothing about GoodParty.org's relationship to the person. They
+ * used to read "Empowered by GoodParty.org", the same claim-keyed line the hero
+ * carried until marketing replaced it with the three pledge lines (2026-08-17,
+ * approved by Emily and Jack — see `pledgeAttribution`); the line was rewritten
+ * on the hero and missed here, on the same page, about other named people.
+ *
+ * They carry none of the three replacements instead of one of them, because
+ * `RelatedPersonCard` has no pledge flag: neither `buildOtherCandidateCards` nor
+ * `buildNearbyOfficialCards` reads one, so the card cannot tell "has not taken
+ * it" from "we did not look". The mark and the yellow frame stay — those follow
+ * `isGoodPartyCandidate` and are branding, not an assertion (Figma draws the
+ * badge on these cards, and `empoweredFirst` still sorts by it).
+ */
 function toCandidateCards(cards: RelatedPersonCard[]): CandidateCard[] {
 	return cards
 		.filter(c => Boolean(c.href))
@@ -608,6 +623,7 @@ function toCandidateCards(cards: RelatedPersonCard[]): CandidateCard[] {
 			partyAffiliation: c.subtitle ?? '',
 			href: c.href!,
 			isGoodPartyCandidate: c.isEmpowered,
+			attribution: 'none' as const,
 			...(c.avatarUrl ? { avatar: c.avatarUrl } : {}),
 		}));
 }

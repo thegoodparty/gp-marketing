@@ -69,11 +69,21 @@ Flag indicating this is a GoodParty-empowered candidate. When `true`, the card d
 - Yellow border (`border-bright-yellow-600`)
 - Yellow hover background (`hover:bg-bright-yellow-50`)
 - GoodParty logo badge overlay on avatar
-- "Empowered by GoodParty.org" text in gray
+- "Empowered by GoodParty.org" text in gray, unless `attribution` is `'none'`
 
 **Type:** `boolean`
 
 **Default:** `false`
+
+#### `attribution` (optional)
+
+Whether the card states GoodParty.org's relationship to the person. `'none'` keeps the badge and the yellow frame but drops the line.
+
+The `/people` person profiles pass `'none'`: marketing retired the claim-keyed "Empowered by GoodParty.org" framing there on 2026-08-17 in favour of three pledge-keyed lines, and these cards carry no pledge flag to key those to. The Sanity claim block's example card keeps the default.
+
+**Type:** `'empowered' | 'none'`
+
+**Default:** `'empowered'`
 
 #### `className` (optional)
 
@@ -118,7 +128,7 @@ Internal key used by CandidatesBlock for React list rendering.
 - Border: `border-bright-yellow-600` (yellow)
 - Hover: Shadow and yellow background (`hover:shadow-md hover:bg-bright-yellow-50`)
 - Badge: GoodParty logo positioned `absolute -bottom-0.5 -right-0.5` on avatar
-- "Empowered by GoodParty.org": Displayed in `text-neutral-500` (gray), `caption` styleType
+- "Empowered by GoodParty.org": Displayed in `text-neutral-500` (gray), `caption` styleType — suppressed when `attribution` is `'none'`
 
 ## Avatar Fallback
 

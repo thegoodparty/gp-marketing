@@ -519,7 +519,15 @@ function buildLinks(
 	const email = overlay?.publicEmail ?? office?.officeEmail ?? null;
 	// Owner's public line wins; their office-line override precedes the spine's.
 	const phone = overlay?.publicPhone ?? overlay?.officePhone ?? office?.officePhone ?? null;
-	const instagram = overlay?.instagramUrl ?? null;
+	// Instagram reads the spine like its four siblings below. It was the one
+	// public link in election-api's `urls[]` block the spine fallback skipped, so
+	// an unclaimed person whose only public link was an Instagram rendered no
+	// link rail at all — and, since isThinProfile reads `links` as the identity
+	// signal, was withheld from the index for having no content while we held a
+	// URL that no other profile in the corpus shares.
+	const instagram = overlay?.instagramUrl ?? person?.instagramUrl ?? null;
+	// No spine fallback: TikTok is owner-authored only. BallotReady's urls[] has
+	// no tiktok type, so there is no spine column to read.
 	const tiktok = overlay?.tiktokUrl ?? null;
 	const facebook = overlay?.facebookUrl ?? person?.facebookUrl ?? null;
 	const twitter = overlay?.twitterUrl ?? person?.twitterUrl ?? null;

@@ -56,6 +56,7 @@ function makePerson(p: Partial<PersonItem> = {}): PersonItem {
 		linkedinUrl: null,
 		facebookUrl: null,
 		twitterUrl: null,
+		instagramUrl: null,
 		state: null,
 		...p,
 	};
@@ -630,6 +631,22 @@ describe('isThinProfile', () => {
 					composeView(PID, makePerson({ ...thinPerson, websiteUrl: 'https://x.example' }), null),
 				),
 			).toBe(false);
+		});
+
+		// Instagram is the one link in election-api's `urls[]` block that
+		// buildLinks did not fall back to the spine for, so a person whose only
+		// public link was an Instagram reached this predicate looking contentless.
+		// Asserting the link too, not just the verdict: the verdict alone would
+		// still pass if the URL were counted but never rendered.
+		test('an Instagram on the spine, which the link rail used to drop', () => {
+			const view = composeView(
+				PID,
+				makePerson({ ...thinPerson, instagramUrl: 'https://instagram.com/chris' }),
+				null,
+			);
+
+			expect(view.links.map((l) => l.kind)).toEqual(['instagram']);
+			expect(isThinProfile(view)).toBe(false);
 		});
 	});
 

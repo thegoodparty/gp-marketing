@@ -93,6 +93,7 @@ function bareCivicsSpine(person: PersonItem): PersonItem {
 		linkedinUrl: null,
 		facebookUrl: null,
 		twitterUrl: null,
+		instagramUrl: null,
 	};
 }
 

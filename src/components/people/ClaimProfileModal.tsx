@@ -4,7 +4,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { trackEvent } from '~/lib/analytics';
+import { trackPersonProfileNotifySubmitted } from '~/lib/analytics';
 import { buildClaimRequestBody } from '~/lib/claimRequest';
 import { Button } from '~/ui/Inputs/Button';
 import { TextInput } from '~/ui/Inputs/TextInput';
@@ -80,7 +80,11 @@ export function NotifyForm({
 				}),
 			});
 			if (!res.ok) throw new Error('Submission failed');
-			trackEvent('Person Profile Notify Submitted', { personId });
+			// After the 201, so the count means completed asks. This is the signal
+			// marketing automates on: gp-api's HubSpot counter only ever sees the
+			// subjects that resolve to a single CRM contact — see
+			// trackPersonProfileNotifySubmitted.
+			trackPersonProfileNotifySubmitted({ personId });
 			setIsSuccess(true);
 		} catch {
 			setError('root', { message: 'Something went wrong. Please try again.' });

@@ -3,7 +3,6 @@ import { isButtonType, transformButton } from '~/lib/buttonTransformer';
 import type { TokenMap } from '~/lib/resolveTokens';
 import { resolveSectionText } from '~/lib/resolveSectionText';
 import { ClaimProfileBlock } from '~/ui/ClaimProfileBlock';
-import { ClaimProfileModal } from '~/components/people/ClaimProfileModal';
 import { stegaClean } from 'next-sanity';
 
 type Props = Extract<Sections, { _type: 'component_claimProfileBlock' }> & {
@@ -40,21 +39,6 @@ export function resolveClaimProfileBlockText(
 export function ClaimProfileBlockSection({ claimProfileOverride, tokens, ...section }: Props) {
 	const bgValue = stegaClean(section.claimProfileBlockDesignSettings?.field_blockColorCreamMidnight);
 	const backgroundColor = resolveClaimProfileBlockBackgroundColor(bgValue);
-
-	// Person profiles: render the interactive claim/notify modal so the "notify"
-	// form posts the real personId to the claim-request endpoint. Falls through
-	// to the static CMS banner for regular marketing pages.
-	if (claimProfileOverride?.interactive && claimProfileOverride.personId) {
-		return (
-			<section data-section='Claim Profile Block'>
-				<ClaimProfileModal
-					personId={claimProfileOverride.personId}
-					displayName={claimProfileOverride.displayName ?? 'this candidate'}
-					persona={claimProfileOverride.persona ?? 'candidate'}
-				/>
-			</section>
-		);
-	}
 
 	const ctaButton = section.ctaAction;
 	const claimButton = ctaButton && isButtonType(ctaButton) ? transformButton(ctaButton) : undefined;

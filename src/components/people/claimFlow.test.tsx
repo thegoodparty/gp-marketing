@@ -5,11 +5,15 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
 /**
- * Covers the claim flow on an unclaimed person profile: the owner-facing prompt
- * at the top of the content well scrolls down to the claim form rather than
- * opening the dialog, and submitting that form branches on the person's product
- * — Win (currently running) into sign-up, Serve (in office only) into a "a human
- * will be in touch" confirmation.
+ * Covers the claim flow on an unclaimed person profile. Per the Figma frames the
+ * page has exactly two claim-related surfaces and they do different jobs: the
+ * card at the top of the content well is visitor-facing and only opens the
+ * notify dialog, and the band at the bottom is the person's own ask.
+ *
+ * That band used to collect a name and email and branch on the person's product
+ * (Win into sign-up, Serve into "a human will be in touch"). Both halves of that
+ * are gone: the band is candidate-only now, so there is no Serve branch, and it
+ * sends people to sign-up instead of taking their address.
  *
  * Like claimFormIds.test.tsx these mount components directly instead of driving
  * the Radix dialog, whose click delegation has proven unreliable under JSDOM,
@@ -43,6 +47,7 @@ let root: Root;
 let scrollCalls: ScrollCall[];
 let navigations: string[];
 let trackedEvents: { name: string; props?: Record<string, unknown> }[];
+let segmentEvents: { name: string; props?: Record<string, unknown> }[];
 let dataLayer: Record<string, unknown>[];
 let fetchCalls: { url: string; body: Record<string, unknown> }[];
 let fetchOk: boolean;
@@ -65,6 +70,7 @@ beforeEach(() => {
 	scrollCalls = [];
 	navigations = [];
 	trackedEvents = [];
+	segmentEvents = [];
 	dataLayer = [];
 	fetchCalls = [];
 	fetchOk = true;
@@ -85,16 +91,18 @@ beforeEach(() => {
 	// react-dom before its JSDOM exists, so react-dom concludes "no" and falls
 	// back to its Internet Explorer path: change tracking via `attachEvent` /
 	// `detachEvent` and `keyup` rather than `input`. JSDOM has neither method, so
-	// focusing an input throws inside React. These no-ops let that path run;
-	// `setInputValue` below then fires the events both paths listen for, which is
-	// what keeps this file independent of which test file bun happens to load
-	// first.
+	// focusing an input throws inside React — which the notify dialog does on
+	// open. These no-ops let that path run, keeping this file independent of
+	// which test file bun happens to load first.
 	const shim = window.HTMLElement.prototype as unknown as Record<string, unknown>;
 	shim['attachEvent'] = () => {};
 	shim['detachEvent'] = () => {};
 
 	(window as unknown as { amplitude: unknown }).amplitude = {
 		track: (name: string, props?: Record<string, unknown>) => trackedEvents.push({ name, props }),
+	};
+	(window as unknown as { analytics: unknown }).analytics = {
+		track: (name: string, props?: Record<string, unknown>) => segmentEvents.push({ name, props }),
 	};
 	(window as unknown as { dataLayer: unknown }).dataLayer = dataLayer;
 
@@ -146,22 +154,6 @@ async function click(element: Element) {
 	});
 }
 
-async function submitClaimForm({ name, email }: { name: string; email: string }) {
-	const firstname = document.querySelector<HTMLInputElement>('#person-claim-owner input[name="firstname"]')!;
-	const address = document.querySelector<HTMLInputElement>('#person-claim-owner input[name="email"]')!;
-
-	await act(async () => {
-		setInputValue(firstname, name);
-		setInputValue(address, email);
-		await flush();
-	});
-	await act(async () => {
-		document.querySelector('form#person-claim-owner')!.dispatchEvent(new dom.window.Event('submit', { bubbles: true, cancelable: true }));
-		await flush();
-		await flush();
-	});
-}
-
 /**
  * Types into a react-hook-form field.
  *
@@ -184,12 +176,7 @@ function setInputValue(input: HTMLInputElement, value: string) {
 const personId = '11111111-1111-4111-8111-111111111111';
 const displayName = 'Example Person';
 
-/** Win: currently running (persona `candidate` or `both`). */
-const winProps = { personId, displayName, isRunning: true };
-/** Serve: in office only (persona `officeholder`). */
-const serveProps = { personId, displayName, isRunning: false };
-
-async function renderProfileClaimSurfaces(variant: 'owner-card' | 'voter-card', isRunning: boolean) {
+async function renderProfileClaimSurfaces() {
 	const [{ ClaimProfileModal }, { PersonClaimCTABand }] = await Promise.all([import('./ClaimProfileModal'), import('./PersonClaimCTABand')]);
 
 	await render(
@@ -199,129 +186,167 @@ async function renderProfileClaimSurfaces(variant: 'owner-card' | 'voter-card', 
 			React.createElement(ClaimProfileModal, {
 				personId,
 				displayName,
-				persona: isRunning ? 'candidate' : 'officeholder',
-				variant,
+				// Only the running personas still see a claim surface, so this is the
+				// pairing the band is ever rendered beside.
+				persona: 'candidate',
 			}),
-			React.createElement(PersonClaimCTABand, { personId, displayName, isRunning }),
+			React.createElement(PersonClaimCTABand, { displayName }),
 		),
 	);
 }
 
-function claimPromptButton(variant: 'owner-card' | 'voter-card') {
-	return document.querySelector(`[data-component='ClaimPromptCard'][data-variant='${variant}'] button`)!;
+function claimPromptButton() {
+	return document.querySelector(`[data-component='ClaimPromptCard'] button`)!;
 }
 
-describe('the top claim prompt pulls the person down to the claim form', () => {
-	test('the owner prompt scrolls to the claim form instead of opening the dialog', async () => {
-		await renderProfileClaimSurfaces('owner-card', true);
-
-		await click(claimPromptButton('owner-card'));
-
-		expect(scrollCalls).toEqual([{ behavior: 'smooth', id: 'person-claim-form' }]);
-		expect(document.querySelector('[role="dialog"]')).toBeNull();
-	});
-
-	test('the owner prompt moves keyboard focus into the claim form', async () => {
-		await renderProfileClaimSurfaces('owner-card', true);
-
-		await click(claimPromptButton('owner-card'));
-
-		const active = document.activeElement;
-		expect(active?.getAttribute('name')).toBe('firstname');
-		expect(active?.closest('form')?.id).toBe('person-claim-owner');
-	});
-
-	test('the scroll is instant when the visitor asks for reduced motion', async () => {
-		(dom.window as unknown as { matchMedia: unknown }).matchMedia = (query: string) => ({ matches: query.includes('reduce'), media: query });
-
-		await renderProfileClaimSurfaces('owner-card', true);
-		await click(claimPromptButton('owner-card'));
-
-		expect(scrollCalls.map(c => c.behavior)).toEqual(['auto']);
-	});
-
+describe('the top of the content well is notify-only', () => {
 	/**
-	 * Reachable rather than theoretical: the code-default template fallback strips
-	 * the CTA banner block the claim band renders into, which would leave the
-	 * prompt on a page with no form to scroll to. The prompt falls back to the
-	 * dialog there, so it is never a button that does nothing.
+	 * The frames put ONE card at the top of the content well and it is
+	 * visitor-facing. An owner-facing "are you [Name]?" prompt was added here
+	 * once and had to be taken back out; a second card, or this one turning into
+	 * a claim shortcut, is the regression this guards.
 	 */
-	test('the scroll reports failure when the claim band is not on the page', async () => {
-		const { scrollToPersonClaimForm } = await import('./claimFormAnchor');
+	test('the prompt opens the notify dialog rather than the claim form', async () => {
+		await renderProfileClaimSurfaces();
 
-		expect(scrollToPersonClaimForm()).toBe(false);
-		expect(scrollCalls).toEqual([]);
-	});
-
-	/**
-	 * The counterpart to the owner-prompt test above: this is the entry point the
-	 * notify form is left with, so it has to be shown opening the dialog, not
-	 * merely not scrolling.
-	 */
-	test('the voter prompt still opens the dialog and its notify form', async () => {
-		await renderProfileClaimSurfaces('voter-card', true);
-
+		expect(document.querySelectorAll(`[data-component='ClaimPromptCard']`)).toHaveLength(1);
 		expect(document.querySelector('[role="dialog"]')).toBeNull();
 
-		await click(claimPromptButton('voter-card'));
+		await click(claimPromptButton());
 
 		expect(document.querySelector('[role="dialog"]')).not.toBeNull();
 		expect(document.querySelector('[role="dialog"] form#person-claim-notify')).not.toBeNull();
+		// Nothing up here reaches the person's own claim form.
 		expect(scrollCalls).toEqual([]);
+		expect(document.querySelector('[role="dialog"] form#person-claim-owner')).toBeNull();
+	});
+
+	test('the dialog closes without submitting when the visitor cancels', async () => {
+		await renderProfileClaimSurfaces();
+		await click(claimPromptButton());
+
+		const cancel = [...document.querySelectorAll('[role="dialog"] button')].find(b => b.textContent?.includes('Cancel'))!;
+		await click(cancel);
+
+		expect(document.querySelector('[role="dialog"]')).toBeNull();
+		expect(fetchCalls).toEqual([]);
 	});
 });
 
-describe('submitting the claim form branches on the person’s product', () => {
-	test('Win stores the claim request and then routes to sign-up', async () => {
+describe('the claim band hands the candidate to Win sign-up', () => {
+	async function renderBand() {
 		const { PersonClaimCTABand } = await import('./PersonClaimCTABand');
-		await render(React.createElement(PersonClaimCTABand, winProps));
+		await render(React.createElement(PersonClaimCTABand, { displayName }));
+		return document.getElementById('person-claim-signup')!;
+	}
 
-		await submitClaimForm({ name: 'Example', email: 'example@example.org' });
+	test('the call to action is a link to sign-up, not a form', async () => {
+		const cta = await renderBand();
 
-		expect(fetchCalls).toHaveLength(1);
-		expect(fetchCalls[0]?.url).toBe('/api/people/claim-request');
-		expect(fetchCalls[0]?.body).toEqual({ personId, firstname: 'Example', email: 'example@example.org', source: 'owner' });
-		// The lead is stored first, so an abandoned sign-up still leaves a lead.
-		expect(navigations).toEqual(['https://app.goodparty.org/sign-up']);
+		expect(cta.tagName).toBe('A');
+		expect(cta.getAttribute('href')).toBe('https://app.goodparty.org/sign-up');
+		expect(document.querySelector('form')).toBeNull();
 	});
 
-	test('Win fires the sign-up event at the point it navigates', async () => {
-		const { PersonClaimCTABand } = await import('./PersonClaimCTABand');
-		await render(React.createElement(PersonClaimCTABand, winProps));
+	/**
+	 * The GTM Data Layer Variable behind the sign-up conversion is keyed on this
+	 * id. It used to arrive from the band's HubSpot form; the form is gone but the
+	 * key has to survive it, or the conversion stops resolving for this surface.
+	 */
+	test('clicking it reports a sign-up under the surface’s existing form id', async () => {
+		const cta = await renderBand();
 
-		await submitClaimForm({ name: 'Example', email: 'example@example.org' });
+		await click(cta);
 
 		const signUp = trackedEvents.filter(e => e.name === 'Sign Up Clicked');
 		expect(signUp).toHaveLength(1);
-		expect(signUp[0]?.props).toMatchObject({ href: 'https://app.goodparty.org/sign-up' });
+		expect(signUp[0]?.props).toMatchObject({ href: 'https://app.goodparty.org/sign-up', label: 'Claim profile' });
 		expect(dataLayer).toEqual([{ event: 'sign_up_click', formId: 'person-claim-owner' }]);
 	});
 
-	test('Serve stores the claim request and promises a human, not self-serve access', async () => {
-		const { PersonClaimCTABand } = await import('./PersonClaimCTABand');
-		await render(React.createElement(PersonClaimCTABand, serveProps));
+	/**
+	 * Owner-side email capture on this surface is deliberately gone — marketing
+	 * chose the sign-up funnel over the lead. Pinned because a well-meaning
+	 * "restore the lead capture" change would quietly reintroduce a second,
+	 * conflicting owner path and a HubSpot form nobody is watching.
+	 */
+	test('nothing is posted to the claim-request endpoint from the band', async () => {
+		const cta = await renderBand();
 
-		await submitClaimForm({ name: 'Example', email: 'example@example.org' });
+		await click(cta);
+
+		expect(fetchCalls).toEqual([]);
+	});
+});
+
+/**
+ * The notify count marketing automates on.
+ *
+ * gp-api also files these into the subject's HubSpot `candidate_profile_requests`,
+ * but only for a subject the civics mart resolves to exactly one HubSpot contact —
+ * a person with none, or with an ambiguous cluster, is skipped without an error
+ * anywhere. Notify is aimed at exactly those thinly-known people, so the CRM
+ * number is a lower bound of unknown tightness and this event is the honest one.
+ *
+ * The form is mounted directly rather than through the dialog, as in
+ * claimFormIds.test.tsx: Radix's click delegation is unreliable under JSDOM and
+ * the submission path is identical either way.
+ */
+describe('a completed notify submission is reported to marketing', () => {
+	const NOTIFY_EVENT = 'Person Profile Notify Submitted';
+	const email = 'visitor@example.com';
+
+	async function submitNotifyForm() {
+		const { NotifyForm } = await import('./ClaimProfileModal');
+		await render(React.createElement(NotifyForm, { personId, displayName }));
+
+		const form = document.querySelector<HTMLFormElement>('form#person-claim-notify')!;
+
+		await act(async () => {
+			setInputValue(form.querySelector<HTMLInputElement>('input[name="email"]')!, email);
+			await flush();
+		});
+		await act(async () => {
+			form.dispatchEvent(new dom.window.Event('submit', { bubbles: true, cancelable: true }));
+			await flush();
+			await flush();
+		});
+	}
+
+	test('fires to Segment with the subject and the page, once gp-api has accepted it', async () => {
+		await submitNotifyForm();
 
 		expect(fetchCalls).toHaveLength(1);
-		expect(fetchCalls[0]?.body).toEqual({ personId, firstname: 'Example', email: 'example@example.org', source: 'owner' });
-		expect(navigations).toEqual([]);
-		expect(trackedEvents.filter(e => e.name === 'Sign Up Clicked')).toHaveLength(0);
-
-		const status = document.querySelector('[role="status"]')?.textContent ?? '';
-		expect(status).toContain('someone from our team will email you');
-		expect(status).toContain('link to access your profile');
+		expect(segmentEvents).toEqual([
+			{ name: NOTIFY_EVENT, props: { personId, page_path: '/people/example-person' } },
+		]);
 	});
 
-	test('a failed submission neither navigates nor claims success', async () => {
+	/**
+	 * Amplitude carried this event before Segment did. Both sinks are kept, and
+	 * kept identical, so a marketing audience and a product funnel built on the
+	 * same name cannot disagree about what a notify is.
+	 */
+	test('fires the same event to Amplitude', async () => {
+		await submitNotifyForm();
+
+		expect(trackedEvents.filter(e => e.name === NOTIFY_EVENT)).toEqual([
+			{ name: NOTIFY_EVENT, props: { personId, page_path: '/people/example-person' } },
+		]);
+	});
+
+	/**
+	 * Firing on click instead of on the response would make the number "people who
+	 * pressed Submit", which is not what a nudge count means and is not something
+	 * an automation can act on.
+	 */
+	test('stays silent when gp-api rejects the submission', async () => {
 		fetchOk = false;
-		const { PersonClaimCTABand } = await import('./PersonClaimCTABand');
-		await render(React.createElement(PersonClaimCTABand, winProps));
 
-		await submitClaimForm({ name: 'Example', email: 'example@example.org' });
+		await submitNotifyForm();
 
-		expect(navigations).toEqual([]);
-		expect(document.querySelector('form#person-claim-owner')).not.toBeNull();
-		expect(document.querySelector('[role="alert"]')?.textContent).toContain('Something went wrong');
+		expect(fetchCalls).toHaveLength(1);
+		expect(segmentEvents).toEqual([]);
+		expect(trackedEvents.filter(e => e.name === NOTIFY_EVENT)).toEqual([]);
 	});
 });

@@ -16,6 +16,7 @@ import {
 	getStateName,
 } from '~/lib/electionsHelpers';
 import { classifyPartyFrom, isMajorParty, type PartyClass } from '~/lib/party';
+import { formatPersonName } from '~/lib/personName';
 import type { CandidacyItem } from '~/types/elections';
 import type {
 	PersonAccomplishment,
@@ -189,6 +190,13 @@ export interface PersonProfileView {
 	majorParty: boolean;
 	/** True when the person requested removal (states K/L). */
 	removed: boolean;
+	/**
+	 * True when someone owns a profile here that is not live. Orthogonal to the
+	 * Figma state letter — the page keeps its normal unclaimed layout and spine
+	 * content — but every "claim this profile" affordance is suppressed, because
+	 * the person it would address has already claimed it.
+	 */
+	unpublished: boolean;
 	/** True when the page uses the empowerment/pledge/claim framing. */
 	empowered: boolean;
 	/** True when the person has taken the GoodParty pledge (renders a badge). */
@@ -230,6 +238,82 @@ export interface PersonProfileView {
 	/** Office mailing address lines for the sidebar "Office Mailing Address" row. */
 	officeAddress: string[] | null;
 	updatedAt: string;
+}
+
+/**
+ * Whether a spine string carries an actual value.
+ *
+ * Shared with the sitemap builder so both halves of the indexing decision
+ * normalize the civics feed the same way. The feed has three spellings for
+ * "absent" — null, '' and whitespace — because the BallotReady S3 export writes
+ * '' rather than null and the dbt mart only nullif()s some of the columns it
+ * lands (see isThinProfile). Anything that tests one of these fields for
+ * presence has to collapse all three or the two rules drift apart.
+ */
+export function hasText(value: string | null | undefined): boolean {
+	return Boolean(value?.trim());
+}
+
+/**
+ * Whether the profile carries anything that tells it apart from the rest of the
+ * unclaimed corpus.
+ *
+ * A profile with no resolved office, no authored content, no photo and no links
+ * renders a name and a state inside ~114KB of site chrome, and nothing else.
+ * Sampling the URLs Google flagged put 200 of 200 in that shape and within 817
+ * bytes of each other (0.7%), while profiles that do resolve an office spread
+ * across 78% of their size — so the flagged pages are not merely similar, they
+ * are the same document with the name swapped. That is what makes Google
+ * cluster them and elect its own canonical; the canonical tag itself is correct
+ * and self-referential, so nothing about it is worth changing.
+ *
+ * The test is deliberately generous — any single signal is enough to keep the
+ * page indexable — and it is recomputed from the view on every render, so a
+ * page returns to the index on its own once the data team backfills its office.
+ * There is no list to maintain and nothing to re-index by hand.
+ */
+export function isThinProfile(view: PersonProfileView): boolean {
+	// An owner who claimed and published asked for this page to exist; the
+	// population is small enough that indexing it can never drive clustering.
+	if (view.claimed) return false;
+	// Every signal goes through `hasText`, and the alternatives are `||` rather
+	// than `??`, because the upstream feed spells "absent" three ways. The dbt
+	// mart wraps some BallotReady columns in nullif(x, '') and not others —
+	// m_election_api__office_holder.sql does it for office_title but not for
+	// position_name, and m_election_api__person.sql does it for neither bio_text
+	// nor headshot_url — so '' arrives as a value. Under `??` that '' is the
+	// answer: `officeName ?? positionId` returns '' and never consults the
+	// positionId, so a profile with a resolved race would be suppressed.
+	const hasOffice = hasText(view.officeName) || hasText(view.positionId);
+	const hasAuthoredContent =
+		hasText(view.bio) ||
+		hasText(view.whyRunning) ||
+		view.issues.length > 0 ||
+		view.accomplishments.length > 0;
+	const hasIdentity = hasText(view.avatarUrl) || view.links.length > 0;
+	// Load-bearing beyond its own line: this is what makes the sitemap's
+	// projection of this rule safe. buildRecentExperience emits a row for every
+	// office term and every named candidacy — the same two feeds the sitemap
+	// sweeps — so anything the sitemap counts as an office lands here even when
+	// `hasOffice` above misses it (the sitemap sees every row; the view's
+	// officeName is only the one `pickCurrentOffice`/`primaryCandidacy` chose).
+	// Narrowing this to, say, current terms only would silently reopen the
+	// "sitemap advertises a page that renders noindex" direction.
+	const hasPublicRecord = view.recentExperience.length > 0;
+	return !hasOffice && !hasAuthoredContent && !hasIdentity && !hasPublicRecord;
+}
+
+/**
+ * Whether the page asks to be indexed.
+ *
+ * Two unrelated reasons to say no — a privacy removal (Figma K/L) keeps a
+ * crawlable URL it should not advertise, and a contentless profile is a
+ * near-duplicate of every other one — resolved into the single directive
+ * `generateMetadata` emits. It lives here rather than inline at the call site so
+ * the 12-state matrix asserts the expression that actually ships.
+ */
+export function isIndexableProfile(view: PersonProfileView): boolean {
+	return !view.removed && !isThinProfile(view);
 }
 
 function pickCurrentOffice(person: PersonItem | null): PersonOfficeHolder | null {
@@ -435,7 +519,15 @@ function buildLinks(
 	const email = overlay?.publicEmail ?? office?.officeEmail ?? null;
 	// Owner's public line wins; their office-line override precedes the spine's.
 	const phone = overlay?.publicPhone ?? overlay?.officePhone ?? office?.officePhone ?? null;
-	const instagram = overlay?.instagramUrl ?? null;
+	// Instagram reads the spine like its four siblings below. It was the one
+	// public link in election-api's `urls[]` block the spine fallback skipped, so
+	// an unclaimed person whose only public link was an Instagram rendered no
+	// link rail at all — and, since isThinProfile reads `links` as the identity
+	// signal, was withheld from the index for having no content while we held a
+	// URL that no other profile in the corpus shares.
+	const instagram = overlay?.instagramUrl ?? person?.instagramUrl ?? null;
+	// No spine fallback: TikTok is owner-authored only. BallotReady's urls[] has
+	// no tiktok type, so there is no spine column to read.
 	const tiktok = overlay?.tiktokUrl ?? null;
 	const facebook = overlay?.facebookUrl ?? person?.facebookUrl ?? null;
 	const twitter = overlay?.twitterUrl ?? person?.twitterUrl ?? null;
@@ -518,7 +610,7 @@ const PARTY_LABELS: Record<PartyClass, string> = {
 };
 
 function nameOf(first?: string | null, last?: string | null, fallback = ''): string {
-	return [first, last].filter(Boolean).join(' ') || fallback;
+	return formatPersonName([first, last].filter(Boolean).join(' ')) ?? fallback;
 }
 
 /** Maps candidacies sharing a position into "Other Candidates" cards, excluding the subject. */
@@ -564,8 +656,14 @@ export function buildNearbyOfficialCards(
 		const pid = oh.personId ?? null;
 		if (pid && pid.toLowerCase() === excludePersonId.toLowerCase()) continue;
 		const person = pid ? personsById.get(pid.toLowerCase()) : undefined;
+		// The office-title fallback needs the same casing pass: it comes from the
+		// same spine and arrives all-lowercase ("city council member") on the rows
+		// that have no linked person. `formatPersonName` is reused rather than
+		// duplicated because the guard is what matters here — only an entirely
+		// lowercase value is touched — not the person-specific prefix rules.
 		const name =
-			person?.fullName ?? nameOf(person?.firstName, person?.lastName, oh.officeTitle ?? '');
+			formatPersonName(person?.fullName) ??
+			nameOf(person?.firstName, person?.lastName, formatPersonName(oh.officeTitle) ?? '');
 		if (!name) continue;
 		// Dedupe by personId when present, else by name — otherwise null-id rows
 		// with the same office title yield duplicate cards (and colliding React
@@ -658,6 +756,7 @@ export function buildBreadcrumbTrail(params: {
 
 export interface ComposeExtras {
 	removed?: boolean;
+	unpublished?: boolean;
 	positionId?: string | null;
 	electionDate?: string | null;
 	positionDescription?: string | null;
@@ -698,9 +797,16 @@ export function composeView(
 	extras: ComposeExtras = {},
 ): PersonProfileView {
 	const removed = extras.removed ?? false;
+	// Deliberately not folded into `claimed` or the state letter: an unpublished
+	// page is still the unclaimed spine layout, so it keeps the person's public
+	// record. Only the claim affordances differ.
+	const unpublished = extras.unpublished ?? false;
 	const claimed = overlay !== null && !removed;
 	const composedName = [person?.firstName, person?.lastName].filter(Boolean).join(' ');
-	const nameFromPerson = person?.fullName ?? (composedName || null);
+	// Casing is applied to the spine name only. The overlay's displayName is
+	// owner-authored, where an all-lowercase value is a deliberate style choice
+	// (bell hooks) rather than the unformatted-data signature it is upstream.
+	const nameFromPerson = formatPersonName(person?.fullName ?? (composedName || null));
 	const displayName = overlay?.displayName ?? nameFromPerson ?? 'Public Official';
 	const office = pickCurrentOffice(person);
 	const persona = resolvePersona(person, office);
@@ -752,6 +858,7 @@ export function composeView(
 		partyClass,
 		majorParty,
 		removed,
+		unpublished,
 		empowered,
 		// Pledge is a factual spine flag; suppress it on removed (K/L) pages along
 		// with the rest of the authored/empowerment framing.
@@ -989,6 +1096,7 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 	if (overlayResult.status === 'gone') return null;
 
 	const removed = overlayResult.status === 'removed';
+	const unpublished = overlayResult.status === 'unpublished';
 	const overlay = overlayResult.status === 'live' ? overlayResult.profile : null;
 
 	// Unclaimed and no removal: only render if the data team has a canonical
@@ -1023,7 +1131,8 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 	const stateCode = office?.state ?? person?.state ?? candidacy?.state ?? null;
 
 	const composedName = [person?.firstName, person?.lastName].filter(Boolean).join(' ');
-	const displayName = overlay?.displayName ?? person?.fullName ?? (composedName || 'Public Official');
+	const displayName =
+		overlay?.displayName ?? formatPersonName(person?.fullName ?? composedName) ?? 'Public Official';
 
 	// The interlink sections are independent; fetch in parallel. Each degrades to
 	// empty on any miss so the core profile always renders.
@@ -1037,6 +1146,7 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 
 	return composeView(personId, person, overlay, {
 		removed,
+		unpublished,
 		positionId,
 		electionDate,
 		positionDescription,

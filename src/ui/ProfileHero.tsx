@@ -63,7 +63,7 @@ const styles = tv({
 		attributionIcon: 'w-[37px] h-[28px]',
 		// Figma "Empowered by GoodParty.org": Outfit SemiBold 20/28.
 		attributionText: 'font-primary text-[1.25rem] font-semibold leading-7',
-		notEndorsed: 'text-sm',
+		attributionMuted: 'text-sm',
 	},
 	variants: {
 		backgroundColor: {
@@ -83,7 +83,7 @@ const styles = tv({
 				office: 'text-white',
 				attribution: 'text-white',
 				tag: 'border-gray-300 text-[color:#0a0a0a]',
-				notEndorsed: 'text-gray-400',
+				attributionMuted: 'text-gray-400',
 			},
 			cream: {
 				base: 'text-midnight-900',
@@ -92,7 +92,7 @@ const styles = tv({
 				office: 'text-midnight-900',
 				attribution: 'text-midnight-900',
 				tag: 'bg-white border-gray-300 text-[color:#0a0a0a]',
-				notEndorsed: 'text-gray-500',
+				attributionMuted: 'text-gray-500',
 			},
 		},
 	},
@@ -122,13 +122,41 @@ export type ProfileHeroProps = {
 	 * Attribution row under the office line. When omitted it falls back to
 	 * `isEmpowered` (empowered → "Empowered by GoodParty.org", otherwise none).
 	 */
-	attribution?: 'empowered' | 'notEndorsed' | 'none';
+	attribution?: AttributionMode;
+	/**
+	 * GoodParty.org mark — the logo on the portrait and the one beside the
+	 * attribution line. Separate from `attribution` because the mark says the
+	 * profile is a GoodParty.org one while the line states a fact about the
+	 * person; on /people those are different inputs (claim vs pledge) and tying
+	 * the mark to the pledge would strip the branding from every claimed
+	 * officeholder, who cannot carry the flag at all. Defaults to the empowerment
+	 * framing, which is what the /candidate pages mean by it.
+	 */
+	showBrandMark?: boolean;
 };
+
+type AttributionMode = 'empowered' | 'pledged' | 'notPledged' | 'pledgeIneligible' | 'none';
+
+const ATTRIBUTION_COPY: Record<Exclude<AttributionMode, 'none'>, string> = {
+	empowered: 'Empowered by GoodParty.org',
+	pledged: 'Has Taken the GoodParty.org Pledge',
+	notPledged: 'Has Not Taken the GoodParty.org Pledge',
+	pledgeIneligible: 'Ineligible for the GoodParty.org Pledge Due to Partisan Affiliation',
+};
+
+/**
+ * Which lines get the Figma 20/28 semibold treatment (with the mark) rather than
+ * the grey disclaimer line. Polarity, not source: a line that says the person
+ * did something with us reads as an affirmation, and one that says they did not
+ * is a footnote — putting "Has Not Taken the GoodParty.org Pledge" in the
+ * affirmative style beside the logo would read as a badge.
+ */
+const AFFIRMATIVE_ATTRIBUTIONS: ReadonlySet<AttributionMode> = new Set<AttributionMode>(['empowered', 'pledged']);
 
 export function ProfileHero(props: ProfileHeroProps) {
 	const backgroundColor = props.backgroundColor ?? 'midnight';
 	const resolvedBackgroundColor = backgroundColor === 'white' ? 'cream' : backgroundColor;
-	const { base, backgroundWrapper, band, belowBand, container, imageWrapper, image, badge, content, tagRow, tag, tagText, nameOffice, officeLines, heading, office, officeLink, attribution, attributionIcon, attributionText, notEndorsed } = styles({ backgroundColor: resolvedBackgroundColor });
+	const { base, backgroundWrapper, band, belowBand, container, imageWrapper, image, badge, content, tagRow, tag, tagText, nameOffice, officeLines, heading, office, officeLink, attribution, attributionIcon, attributionText, attributionMuted } = styles({ backgroundColor: resolvedBackgroundColor });
 
 	const renderOfficeLine = (label: string, href?: string) => (
 		<Text key={label} as="p" styleType="subtitle-1" className={office()}>
@@ -143,7 +171,9 @@ export function ProfileHero(props: ProfileHeroProps) {
 	);
 
 	// `attribution` wins when provided; otherwise fall back to legacy `isEmpowered`.
-	const attributionMode = props.attribution ?? (props.isEmpowered ? 'empowered' : 'none');
+	const attributionMode: AttributionMode = props.attribution ?? (props.isEmpowered ? 'empowered' : 'none');
+	const showBrandMark = props.showBrandMark ?? attributionMode === 'empowered';
+	const isAffirmative = AFFIRMATIVE_ATTRIBUTIONS.has(attributionMode);
 	const tags = props.tags?.filter(Boolean) ?? [];
 
 	// Per Figma the persona pill is colour-coded by label: an in-office "Incumbent"
@@ -185,9 +215,7 @@ export function ProfileHero(props: ProfileHeroProps) {
 								</div>
 							)}
 						</div>
-						{attributionMode === 'empowered' && (
-							<Logo className={badge()} />
-						)}
+						{showBrandMark && <Logo className={badge()} />}
 					</div>
 					<div className={content()}>
 						{tags.length > 0 && (
@@ -208,17 +236,17 @@ export function ProfileHero(props: ProfileHeroProps) {
 								{props.secondaryOffice && renderOfficeLine(props.secondaryOffice, props.secondaryOfficeHref)}
 							</div>
 						</div>
-						{attributionMode === 'empowered' && (
-							<div className={attribution()}>
-								<Logo className={attributionIcon()} />
-								<span className={attributionText()}>Empowered by GoodParty.org</span>
-							</div>
-						)}
-						{attributionMode === 'notEndorsed' && (
-							<Text as="span" styleType="body-2" className={notEndorsed()}>
-								Not Endorsed by GoodParty.org
-							</Text>
-						)}
+						{attributionMode !== 'none' &&
+							(isAffirmative ? (
+								<div className={attribution()}>
+									{showBrandMark && <Logo className={attributionIcon()} />}
+									<span className={attributionText()}>{ATTRIBUTION_COPY[attributionMode]}</span>
+								</div>
+							) : (
+								<Text as="span" styleType="body-2" className={attributionMuted()}>
+									{ATTRIBUTION_COPY[attributionMode]}
+								</Text>
+							))}
 					</div>
 				</div>
 			</Container>

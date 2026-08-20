@@ -118,11 +118,15 @@ export type SectionOverrides = {
 		/** Persona tag pills shown above the name (e.g. "Candidate", "Incumbent"). */
 		tags?: string[];
 		/**
-		 * Attribution line under the office. `empowered` → "Empowered by GoodParty.org"
-		 * (logo + text); `notEndorsed` → grey "Not Endorsed by GoodParty.org"; `none` →
+		 * Attribution line under the office. `empowered` → "Empowered by
+		 * GoodParty.org" (the /candidate framing); the three `pledge` variants are
+		 * the /people ones and state whether the person has taken the GoodParty.org
+		 * pledge, or is ineligible for it as a major-party affiliate; `none` →
 		 * nothing. When omitted, falls back to `isEmpowered`.
 		 */
-		attribution?: 'empowered' | 'notEndorsed' | 'none';
+		attribution?: 'empowered' | 'pledged' | 'notPledged' | 'pledgeIneligible' | 'none';
+		/** GoodParty.org logo on the portrait and beside the attribution line. */
+		showBrandMark?: boolean;
 	};
 	component_goodPartyOrgPledge?: {
 		hidden?: boolean;
@@ -184,13 +188,6 @@ export type SectionOverrides = {
 		candidateName?: string;
 		partyAffiliation?: string;
 		layout?: 'card' | 'banner';
-		// When set, render the interactive claim/notify modal (which posts the
-		// personId to the claim-request endpoint → ProfileClaimRequest) instead of
-		// the static CMS banner. Populated for unclaimed person profiles.
-		interactive?: boolean;
-		personId?: string;
-		displayName?: string;
-		persona?: 'candidate' | 'officeholder' | 'both' | 'past';
 	};
 };
 

@@ -2,10 +2,12 @@ import { describe, expect, test } from 'bun:test';
 import type { PersonItem, PersonOfficeHolder, PublicPersonProfile } from '~/types/people';
 import {
 	buildBreadcrumbTrail,
+	buildNearbyOfficialCards,
 	buildPersonSlug,
 	buildPersonSlugFromBase,
 	composeView,
 	extractPersonId,
+	isThinProfile,
 	resolveProfileState,
 	type PersonPersona,
 } from './peopleProfile';
@@ -54,6 +56,7 @@ function makePerson(p: Partial<PersonItem> = {}): PersonItem {
 		linkedinUrl: null,
 		facebookUrl: null,
 		twitterUrl: null,
+		instagramUrl: null,
 		state: null,
 		...p,
 	};
@@ -452,6 +455,218 @@ describe('composeView claim + overlay precedence', () => {
 	});
 });
 
+describe('composeView display name casing', () => {
+	test('cases an unformatted spine name without disturbing the canonical slug', () => {
+		const view = composeView(PID, makePerson({ slug: 'chris-lewis', fullName: 'chris lewis' }), null);
+		expect(view.displayName).toBe('Chris Lewis');
+		expect(view.initials).toBe('CL');
+		expect(view.canonicalSlug).toBe('chris-lewis-11111111');
+	});
+
+	test('composes first/last when the spine has no fullName', () => {
+		const view = composeView(PID, makePerson({ firstName: 'ed', lastName: 'johnson' }), null);
+		expect(view.displayName).toBe('Ed Johnson');
+	});
+
+	test('leaves an already-formatted spine name alone', () => {
+		const view = composeView(PID, makePerson({ fullName: 'Blaine K. Bowman' }), null);
+		expect(view.displayName).toBe('Blaine K. Bowman');
+	});
+
+	// An owner who types their name in lowercase means it; only the spine's
+	// lowercase is the unformatted-data signature.
+	test('never re-cases an owner-authored displayName', () => {
+		const view = composeView(
+			PID,
+			makePerson({ fullName: 'bell hooks' }),
+			makeOverlay({ displayName: 'bell hooks' }),
+		);
+		expect(view.displayName).toBe('bell hooks');
+	});
+});
+
+describe('isThinProfile', () => {
+	// The shape behind the 1,792 GSC flagged: a name, a state, and nothing else.
+	const thinPerson = makePerson({ fullName: 'chris lewis', state: 'VA' });
+
+	test('an unclaimed profile with no office and no content is thin', () => {
+		const view = composeView(PID, thinPerson, null);
+		expect(view.roleTitle).toBe('Candidate');
+		expect(isThinProfile(view)).toBe(true);
+	});
+
+	test('a candidacy that names a position is enough to differentiate', () => {
+		const view = composeView(
+			PID,
+			makePerson({ fullName: 'chris lewis', Candidacies: [{ id: 'c1', positionName: 'Mayor' }] }),
+			null,
+		);
+		expect(isThinProfile(view)).toBe(false);
+	});
+
+	test('an office term is enough to differentiate', () => {
+		const view = composeView(
+			PID,
+			makePerson({
+				fullName: 'chris lewis',
+				OfficeHolders: [makeOffice({ isCurrent: true, officeTitle: 'City Council' })],
+			}),
+			null,
+		);
+		expect(isThinProfile(view)).toBe(false);
+	});
+
+	test('a candidacy with a null position name does not differentiate', () => {
+		const view = composeView(
+			PID,
+			makePerson({ fullName: 'chris lewis', Candidacies: [{ id: 'c1', positionName: null }] }),
+			null,
+		);
+		expect(isThinProfile(view)).toBe(true);
+	});
+
+	// The dbt mart wraps the BallotReady office columns in nullif(x, '') because
+	// "the S3 feed uses '' (not null) for absent values" — but only some of them.
+	// m_election_api__office_holder.sql does it for office_title and skips
+	// position_name, so '' is a value this feed genuinely sends, and under
+	// `officeName ?? positionId` that '' is the answer: the positionId behind it
+	// is never consulted and a profile whose race resolved gets withheld.
+	test('an empty-string position name does not mask a resolved position', () => {
+		const view = composeView(
+			PID,
+			makePerson({ fullName: 'chris lewis', Candidacies: [{ id: 'c1', positionName: '' }] }),
+			null,
+			{ positionId: 'pos-1' },
+		);
+
+		expect(view.officeName).toBe('');
+		expect(isThinProfile(view)).toBe(false);
+	});
+
+	// Same feed, same reason, one field over: m_election_api__person.sql nullif()s
+	// the social URLs beside it but not bio_text, so a blank bio has to read as
+	// the absence it is rather than as content that keeps the page in the index.
+	test('a whitespace-only spine bio is not content', () => {
+		const view = composeView(PID, makePerson({ fullName: 'chris lewis', bioText: '   ' }), null);
+
+		expect(isThinProfile(view)).toBe(true);
+	});
+
+	/**
+	 * The sitemap builder derives the same signal from the candidacy and
+	 * officeholder sweeps, so it drops any URL those feeds name no office for. If
+	 * this predicate could withhold a page those feeds DO name, the sitemap would
+	 * advertise a URL that renders noindex — trading the current GSC report for
+	 * "Submitted URL marked noindex". These pin the link that prevents it, which
+	 * is `recentExperience` rather than `officeName`: the sweeps see every row,
+	 * while the view names only the row primaryCandidacy/pickCurrentOffice chose.
+	 */
+	describe('anything the civics feeds name keeps the page indexable', () => {
+		test('a named candidacy the view did not choose', () => {
+			const view = composeView(
+				PID,
+				makePerson({
+					fullName: 'chris lewis',
+					// primaryCandidacy prefers a slugged row, so it picks the unnamed
+					// one; the sitemap's sweep sees both.
+					Candidacies: [
+						{ id: 'c1', slug: 'unnamed-race', positionName: null },
+						{ id: 'c2', positionName: 'Mayor' },
+					],
+				}),
+				null,
+			);
+
+			expect(view.officeName).toBeNull();
+			expect(isThinProfile(view)).toBe(false);
+		});
+
+		// #227 stopped a concluded race from making someone a current candidate,
+		// which is a persona change only — the race still names the seat. Worth
+		// pinning because a page whose only civics row is in the past is exactly
+		// the shape that looks discardable, and it is a legitimate voter-guide
+		// page carrying a real office, an election date and a disclaimer.
+		test('a concluded race that still names the seat', () => {
+			const view = composeView(
+				PID,
+				makePerson({
+					fullName: 'chris lewis',
+					Candidacies: [
+						{ id: 'c1', positionName: 'Mayor', Race: { electionDate: '2020-11-03' } },
+					],
+				}),
+				null,
+			);
+
+			expect(view.persona).toBe('candidate');
+			expect(isThinProfile(view)).toBe(false);
+		});
+
+		test('an office term the view could not title', () => {
+			const view = composeView(
+				PID,
+				makePerson({ fullName: 'chris lewis', OfficeHolders: [makeOffice({ isCurrent: true })] }),
+				null,
+			);
+
+			expect(view.officeName).toBeNull();
+			expect(isThinProfile(view)).toBe(false);
+		});
+	});
+
+	describe('any single signal keeps the page indexable', () => {
+		test('a spine bio', () => {
+			expect(isThinProfile(composeView(PID, makePerson({ ...thinPerson, bioText: 'A bio.' }), null))).toBe(false);
+		});
+
+		test('a headshot', () => {
+			expect(
+				isThinProfile(composeView(PID, makePerson({ ...thinPerson, headshotUrl: 'p.png' }), null)),
+			).toBe(false);
+		});
+
+		test('an outbound link', () => {
+			expect(
+				isThinProfile(
+					composeView(PID, makePerson({ ...thinPerson, websiteUrl: 'https://x.example' }), null),
+				),
+			).toBe(false);
+		});
+
+		// Instagram is the one link in election-api's `urls[]` block that
+		// buildLinks did not fall back to the spine for, so a person whose only
+		// public link was an Instagram reached this predicate looking contentless.
+		// Asserting the link too, not just the verdict: the verdict alone would
+		// still pass if the URL were counted but never rendered.
+		test('an Instagram on the spine, which the link rail used to drop', () => {
+			const view = composeView(
+				PID,
+				makePerson({ ...thinPerson, instagramUrl: 'https://instagram.com/chris' }),
+				null,
+			);
+
+			expect(view.links.map((l) => l.kind)).toEqual(['instagram']);
+			expect(isThinProfile(view)).toBe(false);
+		});
+	});
+
+	// An owner asked for this page; the claimed population is far too small to
+	// drive clustering, so it is never withheld from the index.
+	test('a claimed profile is never thin, even with nothing else on it', () => {
+		const view = composeView(PID, thinPerson, makeOverlay({}));
+		expect(view.claimed).toBe(true);
+		expect(isThinProfile(view)).toBe(false);
+	});
+
+	// Removal already sets noindex on its own; both rules agreeing here means the
+	// K/L pages cannot be re-indexed by one rule while the other suppresses them.
+	test('a removed profile stripped back to the bare spine is thin', () => {
+		const view = composeView(PID, thinPerson, makeOverlay({ bioOverride: 'gone' }), { removed: true });
+		expect(view.removed).toBe(true);
+		expect(isThinProfile(view)).toBe(true);
+	});
+});
+
 describe('composeView issues, links, labels', () => {
 	test('keeps only visible issues that have a title, preserving order', () => {
 		const view = composeView(
@@ -705,5 +920,43 @@ describe('buildBreadcrumbTrail', () => {
 		expect(labels[1]).toBe('California');
 		expect(labels).toContain('Mayor');
 		expect(labels[labels.length - 1]).toBe('Jane Doe');
+	});
+});
+
+describe('buildNearbyOfficialCards', () => {
+	const OTHER = '22222222-2222-2222-2222-222222222222';
+	const personsById = (person: PersonItem) => new Map([[OTHER.toLowerCase(), person]]);
+
+	test('takes the spine fullName, re-cased', () => {
+		const cards = buildNearbyOfficialCards(
+			[makeOffice({ personId: OTHER, officeTitle: 'city council member' })],
+			personsById(makePerson({ id: OTHER, fullName: 'chris lewis' })),
+			PID,
+		);
+		expect(cards.map((c) => c.name)).toEqual(['Chris Lewis']);
+	});
+
+	test('falls through to first + last when fullName is absent', () => {
+		const cards = buildNearbyOfficialCards(
+			[makeOffice({ personId: OTHER })],
+			personsById(makePerson({ id: OTHER, firstName: 'chris', lastName: 'lewis' })),
+			PID,
+		);
+		expect(cards.map((c) => c.name)).toEqual(['Chris Lewis']);
+	});
+
+	// Rows with no linked person still render a card, labelled by the office. The
+	// title comes from the same spine as the names and arrives uncased too.
+	test('falls through to the office title, cased', () => {
+		const cards = buildNearbyOfficialCards([makeOffice({ officeTitle: 'city council member' })], new Map(), PID);
+		expect(cards.map((c) => c.name)).toEqual(['City Council Member']);
+	});
+
+	test('skips a row with no name and no office title', () => {
+		expect(buildNearbyOfficialCards([makeOffice({})], new Map(), PID)).toEqual([]);
+	});
+
+	test('excludes the subject of the profile', () => {
+		expect(buildNearbyOfficialCards([makeOffice({ personId: PID, officeTitle: 'mayor' })], new Map(), PID)).toEqual([]);
 	});
 });

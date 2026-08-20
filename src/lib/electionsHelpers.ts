@@ -7,6 +7,7 @@ import type { FactsCardProps } from '~/ui/FactsCard';
 
 import { permanentRedirect } from 'next/navigation';
 import { isCityOrTownMtfcc, looksLikeCountySlugSegment, looksLikeDistrictSlug, resolveCountySlugForPlace } from '~/lib/electionsApi';
+import { formatPersonName } from '~/lib/personName';
 
 const COUNTY_EQUIV_SUFFIX_RE =
 	/\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipality)$/i;
@@ -114,7 +115,10 @@ export function mapCandidacyToCard(
 	candidacy: CandidacyItem,
 	index: number,
 ): { _key: string; name: string; partyAffiliation: string; avatar?: string; href: string } {
-	const name = [candidacy.firstName, candidacy.lastName].filter(Boolean).join(' ') || 'Candidate';
+	// These cards read the same unformatted spine rows the people profiles do, so
+	// they need the same display-time casing. The slug in `href` below stays raw:
+	// it is lowercased by construction and must keep matching existing URLs.
+	const name = formatPersonName([candidacy.firstName, candidacy.lastName].filter(Boolean).join(' ')) ?? 'Candidate';
 	return {
 		_key: candidacy.id ?? `c-${index}`,
 		name,

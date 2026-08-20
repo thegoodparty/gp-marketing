@@ -14,6 +14,18 @@ are excluded from the 3% gate by band class in `config.mjs` (not masked).
 | I | Sidebar rows/icons | Unclaimed → no owner overlay/office, so Current Term, Office Contact, Office Mailing Address and the gov/Instagram contact icons have **no data**; live correctly renders only Election Date / Political Affiliation / Contact(3). Figma shows the full filled template | people-api (owner claim / office data) | data gap — flag |
 | K, L | Sidebar top rows | Removal frames use a **generic full template**: figma K (a candidate, holds no office) still shows a "Current Term" row, and figma L (a non-running officeholder) still shows an "Election Date" row — both factually inapplicable placeholders. Live renders the semantically-correct rows per persona. Removal also suppresses owner content (`links=[]`) by design | design file (per-persona removal frames) + product (removal suppression) | reference artifact + data suppression — flag |
 
+**Re-verified 2026-08-17** (fresh Figma re-export of `1997:118777` / `1997:118283`):
+**K gated 3.18%**, **L gated 2.58%** — both improved from the 4.41 / 4.13 recorded
+below, and no band is structurally missing on either side. K's remaining 0.18pp
+over tolerance is the same reference artifact: its Figma sidebar rows still read
+literally `[#### - ####]` and `[space for BallotReady data]`, i.e. the frame was
+never filled in for this state. **No new parity gap was found**, so K is left
+failing rather than masked — masking it would hide the day the frames are
+redrawn per-persona and the gap becomes real. K/L structure is now pinned in
+`src/components/people/personSectionOverrides.test.ts` instead, which is where
+absence (stripped avatar, pledge, links, authored sections) can actually be
+asserted; the blurred layout score treats all of those as rounding errors.
+
 ## RESOLVED — sidebar rebuilt to the Figma structure
 
 The sidebar was structurally wrong (a card of labeled URL rows + an "About
@@ -258,6 +270,31 @@ intentional? Until that is decided, parity work uses exact values for
 shadcn-derived components. This section is the evidence base — append each new
 "Figma value has no gp-marketing token" case as the loop finds it.
 
+- **Type scale: the SAME name is a different size, and a percentage vs a fixed
+  line-height.** Figma calls the unclaimed content-well card's heading
+  (`1958:108619`) `heading-lg`, but its value is **32/44**; gp-marketing's
+  `heading-lg` is **48/60**. Mapping that name across put the card on
+  `heading-sm`, which only reaches 32px at ≥1440 and carries a **125%**
+  line-height — so it rendered 32/40 at desktop and **24/30** on mobile, where
+  the frame is still 32/44. RESOLVED for this card by using the repo's flat
+  `section-heading` (32/44, deliberately absent from the stepped `@media`
+  blocks — see `_styles/typography.css`), which is the by-value match. The
+  general trap stands: `heading-*` here is a RESPONSIVE ramp, the Figma styles
+  are FLAT, so a name match is a size match at exactly one breakpoint.
+- **`body-1` line-height is a percentage here and fixed in Figma.** Figma's
+  `body 1` is 20/28 desktop and **18/28** mobile — the line-height does not
+  scale. gp-marketing's `--text-body-1--line-height: 140%`, so at the 18px
+  mobile step it computes to **25.2px**, 2.8px tight. Not patched: `body-1` is
+  site-wide type, and overriding it on one card would make that card disagree
+  with every paragraph beside it. Owner: design-system/tokens — decide whether
+  `body-1` should carry a fixed line-height per step.
+- **Button label line-height.** Figma `typography/sm` is 14/20; the shared
+  `Button` renders 14/**21** (default 1.5). One pixel per line on every button
+  on the site — a `Button` change, not a per-surface one.
+- **CTA band panel width.** Figma's CTA Block module is **1280** wide (80px page
+  margin at 1440); live `Container size='xl'` renders **1200** (120px margin),
+  so the blue panel is 40px narrower each side. Shared by the claimed CTA too,
+  so it is a container-token decision rather than a people-profile fix.
 - **Hero band gradient blue `#26498f`** (ProfileHero, Figma frame A `1901:50311`:
   `linear-gradient(156.73deg, #0b1529 68.4%, #26498f 125.1%)`). RESOLVED: promoted
   to the `--goodparty-blue-bright` token (`hsl(220 58% 35%)`, == `#26498f`; a

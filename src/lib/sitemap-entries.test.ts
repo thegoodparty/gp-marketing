@@ -399,15 +399,49 @@ describe('fetchPeopleSitemapEntries', () => {
 		]);
 	});
 
-	// Blank-but-present is the same absence as null, and trimming here keeps the
-	// sitemap agreeing with the renderer, which treats '' as no office too.
-	test('treats a whitespace-only position name as no office', async () => {
-		mockUpstream({
-			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
-			candidacies: { WY: [{ personId: aliceId, positionName: '   ' }] },
-		});
+	// Blank-but-present is the same absence as null. It is not a hypothetical:
+	// the dbt mart wraps office_title in nullif(x, '') because "the S3 feed uses
+	// '' (not null) for absent values", and leaves position_name alone. Both
+	// sides of the decision route these through the same `hasText`, so the
+	// renderer reads a blank the same way.
+	for (const blank of ['', '   ']) {
+		test(`treats a ${blank === '' ? 'empty' : 'whitespace-only'} position name as no office`, async () => {
+			mockUpstream({
+				persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
+				candidacies: { WY: [{ personId: aliceId, positionName: blank }] },
+			});
 
-		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+			expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+		});
+	}
+
+	/**
+	 * Pins the two column projections, because a name election-api does not know
+	 * is not a soft failure: its query schemas are `.strict()` and validate
+	 * `columns` against an allow-list built from the Prisma scalar-field enum, so
+	 * a typo is a 400, and `fetchElectionJsonOrThrow` turns that into a failed
+	 * shard rather than a partial sitemap. Asserting the request here is what
+	 * makes the projection reviewable against those schemas without a token.
+	 */
+	test('projects only the columns the thinness signal needs', async () => {
+		const urls = mockUpstream({
+			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
+			candidacies: { WY: [aliceId] },
+		});
+		await fetchPeopleSitemapEntries(base, 'a');
+
+		const columnsFor = (path: string): Set<string> =>
+			new Set(
+				urls
+					.filter((u) => new URL(u).pathname.endsWith(path))
+					.map((u) => new URL(u).searchParams.get('columns') ?? ''),
+			);
+
+		expect(columnsFor('/v1/candidacies')).toEqual(new Set(['personId,positionName']));
+		expect(columnsFor('/v1/officeholders')).toEqual(
+			new Set(['personId,positionName,officeTitle']),
+		);
+		expect(columnsFor('/v1/persons')).toEqual(new Set(['id,slug']));
 	});
 
 	// The one case where the sitemap must not apply the office test: an owner who

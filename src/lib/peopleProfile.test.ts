@@ -524,6 +524,95 @@ describe('isThinProfile', () => {
 		expect(isThinProfile(view)).toBe(true);
 	});
 
+	// The dbt mart wraps the BallotReady office columns in nullif(x, '') because
+	// "the S3 feed uses '' (not null) for absent values" — but only some of them.
+	// m_election_api__office_holder.sql does it for office_title and skips
+	// position_name, so '' is a value this feed genuinely sends, and under
+	// `officeName ?? positionId` that '' is the answer: the positionId behind it
+	// is never consulted and a profile whose race resolved gets withheld.
+	test('an empty-string position name does not mask a resolved position', () => {
+		const view = composeView(
+			PID,
+			makePerson({ fullName: 'chris lewis', Candidacies: [{ id: 'c1', positionName: '' }] }),
+			null,
+			{ positionId: 'pos-1' },
+		);
+
+		expect(view.officeName).toBe('');
+		expect(isThinProfile(view)).toBe(false);
+	});
+
+	// Same feed, same reason, one field over: m_election_api__person.sql nullif()s
+	// the social URLs beside it but not bio_text, so a blank bio has to read as
+	// the absence it is rather than as content that keeps the page in the index.
+	test('a whitespace-only spine bio is not content', () => {
+		const view = composeView(PID, makePerson({ fullName: 'chris lewis', bioText: '   ' }), null);
+
+		expect(isThinProfile(view)).toBe(true);
+	});
+
+	/**
+	 * The sitemap builder derives the same signal from the candidacy and
+	 * officeholder sweeps, so it drops any URL those feeds name no office for. If
+	 * this predicate could withhold a page those feeds DO name, the sitemap would
+	 * advertise a URL that renders noindex — trading the current GSC report for
+	 * "Submitted URL marked noindex". These pin the link that prevents it, which
+	 * is `recentExperience` rather than `officeName`: the sweeps see every row,
+	 * while the view names only the row primaryCandidacy/pickCurrentOffice chose.
+	 */
+	describe('anything the civics feeds name keeps the page indexable', () => {
+		test('a named candidacy the view did not choose', () => {
+			const view = composeView(
+				PID,
+				makePerson({
+					fullName: 'chris lewis',
+					// primaryCandidacy prefers a slugged row, so it picks the unnamed
+					// one; the sitemap's sweep sees both.
+					Candidacies: [
+						{ id: 'c1', slug: 'unnamed-race', positionName: null },
+						{ id: 'c2', positionName: 'Mayor' },
+					],
+				}),
+				null,
+			);
+
+			expect(view.officeName).toBeNull();
+			expect(isThinProfile(view)).toBe(false);
+		});
+
+		// #227 stopped a concluded race from making someone a current candidate,
+		// which is a persona change only — the race still names the seat. Worth
+		// pinning because a page whose only civics row is in the past is exactly
+		// the shape that looks discardable, and it is a legitimate voter-guide
+		// page carrying a real office, an election date and a disclaimer.
+		test('a concluded race that still names the seat', () => {
+			const view = composeView(
+				PID,
+				makePerson({
+					fullName: 'chris lewis',
+					Candidacies: [
+						{ id: 'c1', positionName: 'Mayor', Race: { electionDate: '2020-11-03' } },
+					],
+				}),
+				null,
+			);
+
+			expect(view.persona).toBe('candidate');
+			expect(isThinProfile(view)).toBe(false);
+		});
+
+		test('an office term the view could not title', () => {
+			const view = composeView(
+				PID,
+				makePerson({ fullName: 'chris lewis', OfficeHolders: [makeOffice({ isCurrent: true })] }),
+				null,
+			);
+
+			expect(view.officeName).toBeNull();
+			expect(isThinProfile(view)).toBe(false);
+		});
+	});
+
 	describe('any single signal keeps the page indexable', () => {
 		test('a spine bio', () => {
 			expect(isThinProfile(composeView(PID, makePerson({ ...thinPerson, bioText: 'A bio.' }), null))).toBe(false);

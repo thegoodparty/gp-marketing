@@ -11,7 +11,8 @@
  * so the Storybook stories render the exact same data.
  */
 import { afterEach, describe, expect, test } from 'bun:test';
-import { loadPersonProfile } from './peopleProfile';
+import type { PersonItem } from '~/types/people';
+import { isIndexableProfile, loadPersonProfile } from './peopleProfile';
 import {
 	assertNoPii,
 	buildPeopleFetchMock,
@@ -19,6 +20,7 @@ import {
 	PERSON_ID,
 	STATE_FIXTURES,
 	UNPUBLISHED_FIXTURES,
+	viewForFixture,
 } from '~/testing/peopleProfileFixtures';
 
 const originalFetch = globalThis.fetch;
@@ -70,6 +72,65 @@ describe('public profile — removal SEO signal', () => {
 			// flag that drives it matches the spec for every state.
 			expect(fixture.expected.removed).toBe(fixture.expected.noindex);
 		}
+	});
+});
+
+/**
+ * The fixture spine minus every field a real unclaimed record routinely lacks:
+ * the BallotReady bio and headshot, and the social/website columns the link rail
+ * is built from. What survives is the civics spine alone — an office term
+ * and/or a candidacy — which is the shape the contentless-profile suppression
+ * has to reason about. The enriched fixtures pass the thinness test on their
+ * bio and photo, so asserting on them unstripped would prove nothing about the
+ * design state itself.
+ */
+function bareCivicsSpine(person: PersonItem): PersonItem {
+	return {
+		...person,
+		bioText: null,
+		headshotUrl: null,
+		websiteUrl: null,
+		linkedinUrl: null,
+		facebookUrl: null,
+		twitterUrl: null,
+	};
+}
+
+/**
+ * The indexing directive for all twelve Figma states plus the two unpublished
+ * overlays, asserted against the same hand-written `expected.noindex` column the
+ * rest of the matrix is specified by.
+ *
+ * This exists because suppressing contentless profiles is a rule that can only
+ * fail in one direction that matters: quietly withholding a legitimate design
+ * state. Every claimed state (A–C, G) is safe by construction — isThinProfile
+ * short-circuits on `claimed` — so the risk is concentrated in the unclaimed
+ * ones, and the past-election states in particular, where a concluded race no
+ * longer makes someone a current candidate. Stripping each fixture to its
+ * civics spine first is what makes the assertion mean "the state is
+ * indexable", rather than "this fixture happened to carry a headshot".
+ */
+describe('public profile — indexing directive across the 12 states', () => {
+	for (const fixture of [...STATE_FIXTURES, ...UNPUBLISHED_FIXTURES]) {
+		test(`state ${fixture.state} — ${fixture.description}`, () => {
+			const view = viewForFixture({ ...fixture, person: bareCivicsSpine(fixture.person) });
+
+			expect(isIndexableProfile(view)).toBe(!fixture.expected.noindex);
+		});
+	}
+
+	// The counterweight: with the civics spine gone too, there is nothing left to
+	// tell the page apart, and that — not the design state — is what suppression
+	// keys on. Without this the matrix above would also pass if isThinProfile
+	// were `() => false`.
+	test('the same spine with no office and no candidacy is the shape that is withheld', () => {
+		const bare = fixtureForState('D');
+		const view = viewForFixture({
+			...bare,
+			person: { ...bareCivicsSpine(bare.person), Candidacies: [], OfficeHolders: [] },
+		});
+
+		expect(isIndexableProfile(view)).toBe(false);
 	});
 });
 

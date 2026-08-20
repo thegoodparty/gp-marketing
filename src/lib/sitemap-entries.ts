@@ -11,7 +11,7 @@ import {
 	resolveElectionPositionFromRaceSlug,
 	stripCountySuffix as stripCountySuffixFromHelpers,
 } from '~/lib/electionsHelpers';
-import { buildPersonSlugFromBase } from '~/lib/peopleProfile';
+import { buildPersonSlugFromBase, hasText } from '~/lib/peopleProfile';
 import { FAQ_BASE_PATH, getFaqSitemapEntries } from '~/lib/faqSlugs';
 import { fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
 import { allFaqsQuery } from '~/sanity/groq';
@@ -754,6 +754,15 @@ async function fetchAllPersons(): Promise<PersonEnumeration> {
 	// Columns differ per feed because the two models name the office differently:
 	// a candidacy carries only positionName, an office term can carry either that
 	// or officeTitle (the renderer reads both, so the sitemap has to as well).
+	//
+	// Both projections are checked against election-api at origin/main: each
+	// endpoint's Zod schema takes a param literally named `columns` and validates
+	// it against an allow-list built from the Prisma scalar-field enum, so a name
+	// this service does not have is a 400 rather than a silently ignored filter —
+	// and `personId`, `positionName` and `officeTitle` are all scalars on those
+	// two models (candidacies.schema.ts, officeHolders.schema.ts). The schemas
+	// are `.strict()`, which is why the param is `columns` here and the
+	// `placeColumns`/`raceColumns` used elsewhere in this file would 400.
 	const linkedFeeds: { path: string; state: string; columns: string }[] = states.flatMap(
 		(state) => [
 			{ path: 'v1/candidacies', state, columns: 'personId,positionName' },
@@ -772,7 +781,7 @@ async function fetchAllPersons(): Promise<PersonEnumeration> {
 		for (const row of rows) {
 			const id = row.personId?.toLowerCase();
 			if (!id) continue;
-			if (row.positionName?.trim() || row.officeTitle?.trim()) personIdsWithOffice.add(id);
+			if (hasText(row.positionName) || hasText(row.officeTitle)) personIdsWithOffice.add(id);
 			if (!byId.has(id)) unseen.add(id);
 		}
 	}
@@ -885,12 +894,29 @@ async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
  * canonical" for "Submitted URL marked noindex".
  *
  * That test is a projection of the renderer's, not a copy of it — the sitemap
- * sees offices and claims but not photos or links. The asymmetry is the safe
- * one: a page this drops but the renderer indexes only loses its sitemap entry
- * and is still reachable by crawl, whereas the harmful direction (advertising a
- * page that renders noindex) cannot happen, because everything the renderer
- * treats as differentiating beyond an office implies either a claim, which is
- * checked here, or an office, which is what was checked.
+ * sees offices and claims but not photos, links or bios. The asymmetry runs one
+ * way only, and it is worth being precise about why, because the argument is
+ * not "an office implies an office".
+ *
+ * Harmful direction (advertise a URL that renders `noindex`) — impossible. This
+ * band lists a person only when gp-api says they published, which makes the
+ * view `claimed` and short-circuits isThinProfile, or when some row on the
+ * candidacy/officeholder sweeps named an office. In that second case the
+ * renderer's escape hatch is `recentExperience`, not `officeName`:
+ * buildRecentExperience emits a row for every office term and every candidacy
+ * carrying a positionName, which is exactly the set these sweeps see, so
+ * `hasPublicRecord` holds even when the one candidacy `primaryCandidacy` picked
+ * happens to be the unnamed one. peopleProfile.test.ts pins that link.
+ *
+ * Benign direction (drop a URL the renderer would index) — real, and accepted.
+ * A person can be dropped here and indexed there in three shapes: an office
+ * term with dates but no title at all (the sweeps see no name; the renderer
+ * still lists a dated "Public office" row), a photo/bio/link with no office,
+ * and a civics row whose own `state` column is null so no `?state=` sweep
+ * reaches it. The cost is the sitemap entry, not the indexing: the page still
+ * renders `index` and is still linked from the profile and election interlinks,
+ * so a crawler finds it anyway. The reverse would put us straight into
+ * "Submitted URL marked noindex", which is the report we are trying to leave.
  *
  * Upstream fetches are shared across shards via getCachedPeopleSitemapData.
  */

@@ -241,6 +241,20 @@ export interface PersonProfileView {
 }
 
 /**
+ * Whether a spine string carries an actual value.
+ *
+ * Shared with the sitemap builder so both halves of the indexing decision
+ * normalize the civics feed the same way. The feed has three spellings for
+ * "absent" — null, '' and whitespace — because the BallotReady S3 export writes
+ * '' rather than null and the dbt mart only nullif()s some of the columns it
+ * lands (see isThinProfile). Anything that tests one of these fields for
+ * presence has to collapse all three or the two rules drift apart.
+ */
+export function hasText(value: string | null | undefined): boolean {
+	return Boolean(value?.trim());
+}
+
+/**
  * Whether the profile carries anything that tells it apart from the rest of the
  * unclaimed corpus.
  *
@@ -262,14 +276,44 @@ export function isThinProfile(view: PersonProfileView): boolean {
 	// An owner who claimed and published asked for this page to exist; the
 	// population is small enough that indexing it can never drive clustering.
 	if (view.claimed) return false;
-	const hasOffice = Boolean(view.officeName ?? view.positionId);
+	// Every signal goes through `hasText`, and the alternatives are `||` rather
+	// than `??`, because the upstream feed spells "absent" three ways. The dbt
+	// mart wraps some BallotReady columns in nullif(x, '') and not others —
+	// m_election_api__office_holder.sql does it for office_title but not for
+	// position_name, and m_election_api__person.sql does it for neither bio_text
+	// nor headshot_url — so '' arrives as a value. Under `??` that '' is the
+	// answer: `officeName ?? positionId` returns '' and never consults the
+	// positionId, so a profile with a resolved race would be suppressed.
+	const hasOffice = hasText(view.officeName) || hasText(view.positionId);
 	const hasAuthoredContent =
-		Boolean(view.bio ?? view.whyRunning) ||
+		hasText(view.bio) ||
+		hasText(view.whyRunning) ||
 		view.issues.length > 0 ||
 		view.accomplishments.length > 0;
-	const hasIdentity = Boolean(view.avatarUrl) || view.links.length > 0;
+	const hasIdentity = hasText(view.avatarUrl) || view.links.length > 0;
+	// Load-bearing beyond its own line: this is what makes the sitemap's
+	// projection of this rule safe. buildRecentExperience emits a row for every
+	// office term and every named candidacy — the same two feeds the sitemap
+	// sweeps — so anything the sitemap counts as an office lands here even when
+	// `hasOffice` above misses it (the sitemap sees every row; the view's
+	// officeName is only the one `pickCurrentOffice`/`primaryCandidacy` chose).
+	// Narrowing this to, say, current terms only would silently reopen the
+	// "sitemap advertises a page that renders noindex" direction.
 	const hasPublicRecord = view.recentExperience.length > 0;
 	return !hasOffice && !hasAuthoredContent && !hasIdentity && !hasPublicRecord;
+}
+
+/**
+ * Whether the page asks to be indexed.
+ *
+ * Two unrelated reasons to say no — a privacy removal (Figma K/L) keeps a
+ * crawlable URL it should not advertise, and a contentless profile is a
+ * near-duplicate of every other one — resolved into the single directive
+ * `generateMetadata` emits. It lives here rather than inline at the call site so
+ * the 12-state matrix asserts the expression that actually ships.
+ */
+export function isIndexableProfile(view: PersonProfileView): boolean {
+	return !view.removed && !isThinProfile(view);
 }
 
 function pickCurrentOffice(person: PersonItem | null): PersonOfficeHolder | null {

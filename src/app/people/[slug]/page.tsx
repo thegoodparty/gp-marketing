@@ -8,7 +8,7 @@ import {
 } from '~/lib/schema';
 import {
 	extractPersonId,
-	isThinProfile,
+	isIndexableProfile,
 	loadPersonProfile,
 	type PersonProfileView,
 } from '~/lib/peopleProfile';
@@ -138,7 +138,7 @@ export async function generateMetadata({
 	// "Duplicate, Google chose different canonical than user". Both keep
 	// `follow: true` so the civics interlinks on the page still carry crawl
 	// signal to the election and profile pages they point at.
-	const indexable = !view.removed && !isThinProfile(view);
+	const indexable = isIndexableProfile(view);
 
 	return {
 		title,

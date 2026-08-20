@@ -1,8 +1,10 @@
 import { describe, expect, test } from 'bun:test';
+import type { CandidacyItem } from '~/types/elections';
 import type { PersonItem, PersonOfficeHolder, PublicPersonProfile } from '~/types/people';
 import {
 	buildBreadcrumbTrail,
 	buildNearbyOfficialCards,
+	buildOtherCandidateCards,
 	buildPersonSlug,
 	buildPersonSlugFromBase,
 	composeView,
@@ -958,5 +960,87 @@ describe('buildNearbyOfficialCards', () => {
 
 	test('excludes the subject of the profile', () => {
 		expect(buildNearbyOfficialCards([makeOffice({ personId: PID, officeTitle: 'mayor' })], new Map(), PID)).toEqual([]);
+	});
+
+	// The pledge flag was already in memory here — `loadNearbyOfficials` resolves
+	// the same persons for their names — and the builder simply never read it.
+	test('carries the spine pledge flag through', () => {
+		const cards = buildNearbyOfficialCards(
+			[makeOffice({ personId: OTHER, officeTitle: 'mayor' })],
+			personsById(makePerson({ id: OTHER, fullName: 'chris lewis', isPledged: true })),
+			PID,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([true]);
+	});
+
+	test('is not pledged when the spine says nothing', () => {
+		const cards = buildNearbyOfficialCards(
+			[makeOffice({ personId: OTHER, officeTitle: 'mayor' })],
+			personsById(makePerson({ id: OTHER, fullName: 'chris lewis' })),
+			PID,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([false]);
+	});
+
+	// A row with no linked person still renders a card, labelled by its office.
+	// There is no one to have pledged, so it must not claim anyone did.
+	test('is not pledged when there is no person to look up', () => {
+		const cards = buildNearbyOfficialCards([makeOffice({ officeTitle: 'city council member' })], new Map(), PID);
+		expect(cards.map((c) => c.isPledged)).toEqual([false]);
+	});
+
+	// Same precedence as the hero: party decides eligibility, so a stale flag from
+	// a past run under another party cannot make the card contradict the profile
+	// it links to.
+	test('a major-party official is not pledged even when the flag says so', () => {
+		const cards = buildNearbyOfficialCards(
+			[makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: ['Democratic'] })],
+			personsById(makePerson({ id: OTHER, fullName: 'chris lewis', isPledged: true })),
+			PID,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([false]);
+	});
+});
+
+describe('buildOtherCandidateCards', () => {
+	const OTHER = '33333333-3333-3333-3333-333333333333';
+	const candidacy = (c: Partial<CandidacyItem> = {}): CandidacyItem => ({
+		id: 'c1',
+		personId: OTHER,
+		firstName: 'chris',
+		lastName: 'lewis',
+		party: 'Independent',
+		...c,
+	});
+	const personsById = (person: PersonItem) => new Map([[OTHER.toLowerCase(), person]]);
+
+	// The candidacy feed carries no pledge field, so the flag can only arrive via
+	// the batched person lookup `loadOtherCandidates` adds.
+	test('carries the pledge flag from the resolved person', () => {
+		const cards = buildOtherCandidateCards(
+			[candidacy()],
+			personsById(makePerson({ id: OTHER, isPledged: true })),
+			PID,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([true]);
+	});
+
+	test('is not pledged when the person lookup found nothing', () => {
+		const cards = buildOtherCandidateCards([candidacy()], new Map(), PID);
+		expect(cards).toHaveLength(1);
+		expect(cards.map((c) => c.isPledged)).toEqual([false]);
+	});
+
+	test('a major-party candidate is not pledged even when the flag says so', () => {
+		const cards = buildOtherCandidateCards(
+			[candidacy({ party: 'Republican' })],
+			personsById(makePerson({ id: OTHER, isPledged: true })),
+			PID,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([false]);
+	});
+
+	test('excludes the subject of the profile', () => {
+		expect(buildOtherCandidateCards([candidacy({ personId: PID })], new Map(), PID)).toEqual([]);
 	});
 });

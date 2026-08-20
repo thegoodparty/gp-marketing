@@ -14,7 +14,7 @@ import { IconResolver } from '~/ui/IconResolver';
 import { cn } from '~/ui/_lib/utils';
 import { Text } from '~/ui/Text';
 import { ButtonLink } from '~/ui/Inputs/Button';
-import { CandidatesCard } from '~/ui/CandidatesCard';
+import { CandidatesCard, type CardAttributionMode } from '~/ui/CandidatesCard';
 import { VoterDensityMapCard } from './VoterDensityMapCard';
 import { ClaimProfileModal } from './ClaimProfileModal';
 import { PersonClaimCTABand } from './PersonClaimCTABand';
@@ -598,6 +598,28 @@ function buildSidebar(view: PersonProfileView): ElectionsSidebarProps | undefine
 	};
 }
 
+/**
+ * Which pledge statement a related-person card makes — the hero's
+ * {@link pledgeAttribution}, narrowed to the affirmative.
+ *
+ * A card says someone HAS pledged, or says nothing. It never carries "Has Not
+ * Taken…" or "Ineligible…", which the hero does carry, because the ETL has never
+ * written `Person.is_pledged`: 0 of 69,385 sampled production rows are true (see
+ * `docs/person-spine-pledge-and-claim-linkage-handoff.md`), and 40 sampled live
+ * profiles on 2026-08-20 rendered "Has Taken…" zero times. The negative line is
+ * therefore a statement we cannot stand behind, and a profile carries six of
+ * these cards — publishing it here would multiply by six a claim the hero is
+ * already under pressure for. An affirmative-only rule cannot be false when it
+ * renders, and it lights up on its own the day the backfill lands.
+ *
+ * When it does land and marketing wants the other two lines here, this function
+ * returns them and `CardAttributionMode` widens to admit them. Nothing else
+ * moves: the flag is already on the card, and the copy is already shared.
+ */
+function relatedCardAttribution(card: RelatedPersonCard): CardAttributionMode {
+	return card.isPledged ? 'pledged' : 'none';
+}
+
 /** Maps interlink cards to CandidatesBlock cards, dropping any without a link. */
 function toCandidateCards(cards: RelatedPersonCard[]): CandidateCard[] {
 	return cards
@@ -607,7 +629,12 @@ function toCandidateCards(cards: RelatedPersonCard[]): CandidateCard[] {
 			name: c.name,
 			partyAffiliation: c.subtitle ?? '',
 			href: c.href!,
+			// The mark and the yellow frame follow this; the line follows the pledge.
+			// They are different facts — one says whose candidate this is, the other
+			// asserts something the person did — and on /people they come from
+			// different sources, so the card must not tie them together.
 			isGoodPartyCandidate: c.isEmpowered,
+			attribution: relatedCardAttribution(c),
 			...(c.avatarUrl ? { avatar: c.avatarUrl } : {}),
 		}));
 }

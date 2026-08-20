@@ -75,6 +75,50 @@ export const GoodPartyWithInitials: Story = {
 	},
 };
 
+/** How a pledged person's card renders on a `/people` profile. */
+export const Pledged: Story = {
+	args: {
+		name: 'Firstname Lastname',
+		partyAffiliation: 'Independent',
+		href: '/people/firstname-lastname',
+		attribution: 'pledged',
+	},
+};
+
+/** Pledged AND a GoodParty candidate — the pledge is the more specific fact. */
+export const PledgedGoodParty: Story = {
+	args: {
+		name: 'Firstname Lastname',
+		partyAffiliation: 'Independent',
+		href: '/people/firstname-lastname',
+		isGoodPartyCandidate: true,
+		attribution: 'pledged',
+	},
+};
+
+/** A GoodParty candidate who has not pledged — badge and frame, no line. */
+export const GoodPartyNoAttribution: Story = {
+	args: {
+		name: 'Firstname Lastname',
+		partyAffiliation: 'Independent',
+		href: '/people/firstname-lastname',
+		isGoodPartyCandidate: true,
+		attribution: 'none',
+	},
+};
+
+/** The longest line the card can carry, next to the longest name and party. */
+export const PledgedLongName: Story = {
+	args: {
+		name: 'Alexandria Martinez',
+		partyAffiliation: 'Independent Party of Delaware',
+		avatar: imageJpg(),
+		href: '/people/alexandria-martinez',
+		isGoodPartyCandidate: true,
+		attribution: 'pledged',
+	},
+};
+
 export const LongPartyName: Story = {
 	args: {
 		name: 'Alexandria Martinez',

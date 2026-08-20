@@ -69,11 +69,21 @@ Flag indicating this is a GoodParty-empowered candidate. When `true`, the card d
 - Yellow border (`border-bright-yellow-600`)
 - Yellow hover background (`hover:bg-bright-yellow-50`)
 - GoodParty logo badge overlay on avatar
-- "Empowered by GoodParty.org" text in gray
+- "Empowered by GoodParty.org" text in gray, unless `attribution` says otherwise
 
 **Type:** `boolean`
 
 **Default:** `false`
+
+#### `attribution` (optional)
+
+The line under the party affiliation. Independent of `isGoodPartyCandidate`, which carries the mark and the yellow frame: the mark says whose candidate this is, the line asserts a fact about the person, and on `/people` those come from different sources (claim vs pledge).
+
+The `/people` person profiles pass `'pledged'` for anyone the spine says has taken the pledge and `'none'` for everyone else. They never pass the negative or ineligible lines the hero carries — see `relatedCardAttribution` for why.
+
+**Type:** `'empowered' | 'pledged' | 'none'`
+
+**Default:** `'empowered'` when `isGoodPartyCandidate`, else `'none'`
 
 #### `className` (optional)
 
@@ -118,7 +128,7 @@ Internal key used by CandidatesBlock for React list rendering.
 - Border: `border-bright-yellow-600` (yellow)
 - Hover: Shadow and yellow background (`hover:shadow-md hover:bg-bright-yellow-50`)
 - Badge: GoodParty logo positioned `absolute -bottom-0.5 -right-0.5` on avatar
-- "Empowered by GoodParty.org": Displayed in `text-neutral-500` (gray), `caption` styleType
+- Attribution line: Displayed in `text-neutral-500` (gray), `caption` styleType. Wraps above the "View profile" link on narrow cards, so the longer pledge wording fits without pushing the link off. Wording comes from `_lib/attributionCopy.ts`, shared with `ProfileHero` so the two cannot drift.
 
 ## Avatar Fallback
 

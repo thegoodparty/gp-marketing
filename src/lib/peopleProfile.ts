@@ -119,6 +119,14 @@ export interface RelatedPersonCard {
 	subtitle: string | null;
 	href: string | null;
 	isEmpowered: boolean;
+	/**
+	 * The same ETL-maintained spine flag the hero reads (`Person.isPledged`), so
+	 * a card and the profile it links to can never disagree. Major-party people
+	 * are false regardless of the flag, matching the hero's precedence: party
+	 * decides eligibility, and a stale pledge from a past run under another party
+	 * must not override it.
+	 */
+	isPledged: boolean;
 	avatarUrl: string | null;
 }
 
@@ -613,9 +621,25 @@ function nameOf(first?: string | null, last?: string | null, fallback = ''): str
 	return formatPersonName([first, last].filter(Boolean).join(' ')) ?? fallback;
 }
 
-/** Maps candidacies sharing a position into "Other Candidates" cards, excluding the subject. */
+/**
+ * True only when we have looked the person up and the spine says they pledged.
+ * Party wins, exactly as it does for the hero (`pledgeAttribution`): a
+ * Republican or Democrat is ineligible rather than unpledged, so a stale flag
+ * from a past run under another party cannot make a card claim otherwise.
+ */
+function pledgedFromSpine(person: PersonItem | undefined, ...rawParties: Array<string | null | undefined>): boolean {
+	if (person?.isPledged !== true) return false;
+	return !isMajorParty(classifyPartyFrom(...rawParties));
+}
+
+/**
+ * Maps candidacies sharing a position into "Other Candidates" cards, excluding
+ * the subject. `personsById` supplies the pledge flag, which the candidacy feed
+ * does not carry — see {@link loadOtherCandidates}.
+ */
 export function buildOtherCandidateCards(
 	candidacies: CandidacyItem[],
+	personsById: Map<string, PersonItem>,
 	excludePersonId: string,
 ): RelatedPersonCard[] {
 	const cards: RelatedPersonCard[] = [];
@@ -637,6 +661,7 @@ export function buildOtherCandidateCards(
 			subtitle: c.party ?? null,
 			href,
 			isEmpowered: false,
+			isPledged: pledgedFromSpine(c.personId ? personsById.get(c.personId.toLowerCase()) : undefined, c.party),
 			avatarUrl: c.image ?? null,
 		});
 		if (cards.length >= 6) break;
@@ -682,6 +707,7 @@ export function buildNearbyOfficialCards(
 			subtitle: oh.officeTitle ?? oh.Position?.name ?? oh.positionName ?? null,
 			href,
 			isEmpowered: false,
+			isPledged: pledgedFromSpine(person, oh.partyNames?.[0]),
 			avatarUrl: person?.headshotUrl ?? null,
 		});
 		if (cards.length >= 6) break;
@@ -951,14 +977,28 @@ async function loadPrimaryCandidacy(
 	return getCandidateBySlug({ slug, includeStances: false, includeRace: true });
 }
 
-/** Fetches "Other Candidates for [Position]" cards for a resolved position. */
+/**
+ * Fetches "Other Candidates for [Position]" cards for a resolved position.
+ *
+ * The candidacy feed carries no pledge flag, so the persons are resolved in a
+ * second batched call — the same shape {@link loadNearbyOfficials} already uses,
+ * and preferred over a candidacy-level flag because it reads the very
+ * `Person.isPledged` the hero reads, so a card cannot contradict the profile it
+ * links to. `getPersonsByIds` dedupes, caps at 500 and is cached, and returns
+ * without a request when the position has no linked people.
+ */
 async function loadOtherCandidates(
 	positionId: string | null,
 	excludePersonId: string,
 ): Promise<RelatedPersonCard[]> {
 	if (!positionId) return [];
 	const candidacies = await getCandidacies({ positionId });
-	return buildOtherCandidateCards(candidacies, excludePersonId);
+	const ids = candidacies
+		.map((c) => c.personId)
+		.filter((id): id is string => Boolean(id) && id!.toLowerCase() !== excludePersonId.toLowerCase());
+	const persons = await getPersonsByIds(ids);
+	const byId = new Map(persons.map((p) => [p.id.toLowerCase(), p]));
+	return buildOtherCandidateCards(candidacies, byId, excludePersonId);
 }
 
 /** Fetches "Nearby Officials" cards for a resolved geo id. */

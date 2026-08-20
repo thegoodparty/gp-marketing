@@ -69,6 +69,7 @@ export interface PersonItem {
 	linkedinUrl: string | null;
 	facebookUrl: string | null;
 	twitterUrl: string | null;
+	instagramUrl: string | null;
 	state: string | null;
 	/** Took the GoodParty pledge (ETL-sourced, read-only). */
 	isPledged?: boolean;

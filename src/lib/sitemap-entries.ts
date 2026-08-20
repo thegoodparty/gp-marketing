@@ -11,7 +11,7 @@ import {
 	resolveElectionPositionFromRaceSlug,
 	stripCountySuffix as stripCountySuffixFromHelpers,
 } from '~/lib/electionsHelpers';
-import { buildPersonSlugFromBase } from '~/lib/peopleProfile';
+import { buildPersonSlugFromBase, hasText } from '~/lib/peopleProfile';
 import { FAQ_BASE_PATH, getFaqSitemapEntries } from '~/lib/faqSlugs';
 import { fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
 import { allFaqsQuery } from '~/sanity/groq';
@@ -651,12 +651,17 @@ export async function fetchStateElectionSitemapEntries(
 
 type PeopleSitemapPerson = { id?: string; slug?: string | null };
 
-type PeopleSitemapData = {
+type PersonEnumeration = {
+	persons: PeopleSitemapPerson[];
+	/** personIds the civics feeds give a named office or race — see fetchAllPersons. */
+	personIdsWithOffice: Set<string>;
+};
+
+type PeopleSitemapData = PersonEnumeration & {
 	/** personId → updatedAt, for the published subset only; also marks "claimed". */
 	updatedByPersonId: Map<string, string | undefined>;
 	/** personIds whose page must never be advertised — see the loader for why. */
 	unlistedPersonIds: Set<string>;
-	persons: PeopleSitemapPerson[];
 };
 
 /**
@@ -678,6 +683,13 @@ const PERSON_ID_BATCH = 150;
  * live page renders.
  */
 const ENUMERATION_CONCURRENCY = 8;
+
+/** Projected row from the candidacy / officeholder sweeps in fetchAllPersons. */
+type LinkedFeedRow = {
+	personId?: string;
+	positionName?: string | null;
+	officeTitle?: string | null;
+};
 
 async function mapWithConcurrency<T, R>(
 	items: readonly T[],
@@ -713,8 +725,15 @@ async function mapWithConcurrency<T, R>(
  *
  * If election-api ever grows a cursor or a dedicated enumeration feed, this
  * whole dance collapses into a single paged read.
+ *
+ * The candidacy and officeholder sweeps double as the thinness signal. They are
+ * already walked for the union above, and they are the same two feeds the
+ * profile renderer resolves an office from, so asking them for the position
+ * name alongside the personId answers "does this person's page have anything on
+ * it" for the whole corpus at the cost of one extra projected column — rather
+ * than 216k profile loads.
  */
-async function fetchAllPersons(): Promise<PeopleSitemapPerson[]> {
+async function fetchAllPersons(): Promise<PersonEnumeration> {
 	const tags = [PEOPLE_SITEMAP_CACHE_TAG];
 	const states = [...US_STATE_CODES];
 	const byId = new Map<string, PeopleSitemapPerson>();
@@ -732,25 +751,38 @@ async function fetchAllPersons(): Promise<PeopleSitemapPerson[]> {
 		}
 	}
 
-	const linkedFeeds: { path: string; state: string }[] = states.flatMap((state) => [
-		{ path: 'v1/candidacies', state },
-		{ path: 'v1/officeholders', state },
-	]);
+	// Columns differ per feed because the two models name the office differently:
+	// a candidacy carries only positionName, an office term can carry either that
+	// or officeTitle (the renderer reads both, so the sitemap has to as well).
+	//
+	// Both projections are checked against election-api at origin/main: each
+	// endpoint's Zod schema takes a param literally named `columns` and validates
+	// it against an allow-list built from the Prisma scalar-field enum, so a name
+	// this service does not have is a 400 rather than a silently ignored filter —
+	// and `personId`, `positionName` and `officeTitle` are all scalars on those
+	// two models (candidacies.schema.ts, officeHolders.schema.ts). The schemas
+	// are `.strict()`, which is why the param is `columns` here and the
+	// `placeColumns`/`raceColumns` used elsewhere in this file would 400.
+	const linkedFeeds: { path: string; state: string; columns: string }[] = states.flatMap(
+		(state) => [
+			{ path: 'v1/candidacies', state, columns: 'personId,positionName' },
+			{ path: 'v1/officeholders', state, columns: 'personId,positionName,officeTitle' },
+		],
+	);
 	const linked = await mapWithConcurrency(
 		linkedFeeds,
 		ENUMERATION_CONCURRENCY,
-		async ({ path, state }) =>
-			fetchElectionJsonOrThrow<{ personId?: string }>(
-				path,
-				{ state, columns: 'personId' },
-				tags,
-			),
+		async ({ path, state, columns }) =>
+			fetchElectionJsonOrThrow<LinkedFeedRow>(path, { state, columns }, tags),
 	);
 	const unseen = new Set<string>();
+	const personIdsWithOffice = new Set<string>();
 	for (const rows of linked) {
 		for (const row of rows) {
 			const id = row.personId?.toLowerCase();
-			if (id && !byId.has(id)) unseen.add(id);
+			if (!id) continue;
+			if (hasText(row.positionName) || hasText(row.officeTitle)) personIdsWithOffice.add(id);
+			if (!byId.has(id)) unseen.add(id);
 		}
 	}
 
@@ -770,7 +802,7 @@ async function fetchAllPersons(): Promise<PeopleSitemapPerson[]> {
 		}
 	}
 
-	return [...byId.values()];
+	return { persons: [...byId.values()], personIdsWithOffice };
 }
 
 let cachedPeopleSitemapData: Promise<PeopleSitemapData> | null = null;
@@ -793,7 +825,7 @@ export function clearPeopleSitemapCache(): void {
 async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
 	if (!cachedPeopleSitemapData) {
 		const load = (async (): Promise<PeopleSitemapData> => {
-			const [published, unlisted, persons] = await Promise.all([
+			const [published, unlisted, enumeration] = await Promise.all([
 				fetchGpApiJsonOrThrow<{ personId?: string; updatedAt?: string }>(
 					'v1/public-person-profiles/published',
 					[PEOPLE_SITEMAP_CACHE_TAG],
@@ -819,7 +851,7 @@ async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
 				if (row.personId) unlistedPersonIds.add(row.personId.toLowerCase());
 			}
 
-			return { updatedByPersonId, unlistedPersonIds, persons };
+			return { updatedByPersonId, unlistedPersonIds, ...enumeration };
 		})();
 		cachedPeopleSitemapData = load;
 		// Settle via two-arg `then`, not `finally`: the upstream reads throw now, and
@@ -855,19 +887,52 @@ async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
  * crawlers at someone who asked to be left alone, and an owner-deleted profile
  * has no page to reach at all — gp-api answers 410 and the route 404s.
  *
+ * People whose civics feeds name no office are dropped for the same reason at
+ * one remove: their page renders `noindex` (see isThinProfile) because it has
+ * no content to tell it apart from every other one, and a sitemap that keeps
+ * advertising them would simply trade "Duplicate, Google chose different
+ * canonical" for "Submitted URL marked noindex".
+ *
+ * That test is a projection of the renderer's, not a copy of it — the sitemap
+ * sees offices and claims but not photos, links or bios. The asymmetry runs one
+ * way only, and it is worth being precise about why, because the argument is
+ * not "an office implies an office".
+ *
+ * Harmful direction (advertise a URL that renders `noindex`) — impossible. This
+ * band lists a person only when gp-api says they published, which makes the
+ * view `claimed` and short-circuits isThinProfile, or when some row on the
+ * candidacy/officeholder sweeps named an office. In that second case the
+ * renderer's escape hatch is `recentExperience`, not `officeName`:
+ * buildRecentExperience emits a row for every office term and every candidacy
+ * carrying a positionName, which is exactly the set these sweeps see, so
+ * `hasPublicRecord` holds even when the one candidacy `primaryCandidacy` picked
+ * happens to be the unnamed one. peopleProfile.test.ts pins that link.
+ *
+ * Benign direction (drop a URL the renderer would index) — real, and accepted.
+ * A person can be dropped here and indexed there in three shapes: an office
+ * term with dates but no title at all (the sweeps see no name; the renderer
+ * still lists a dated "Public office" row), a photo/bio/link with no office,
+ * and a civics row whose own `state` column is null so no `?state=` sweep
+ * reaches it. The cost is the sitemap entry, not the indexing: the page still
+ * renders `index` and is still linked from the profile and election interlinks,
+ * so a crawler finds it anyway. The reverse would put us straight into
+ * "Submitted URL marked noindex", which is the report we are trying to leave.
+ *
  * Upstream fetches are shared across shards via getCachedPeopleSitemapData.
  */
 export async function fetchPeopleSitemapEntries(
 	baseUrl: string,
 	shard?: string,
 ): Promise<MetadataRoute.Sitemap> {
-	const { updatedByPersonId, unlistedPersonIds, persons } = await getCachedPeopleSitemapData();
+	const { updatedByPersonId, unlistedPersonIds, persons, personIdsWithOffice } =
+		await getCachedPeopleSitemapData();
 
 	const entries: MetadataRoute.Sitemap = [];
 	for (const p of persons) {
 		if (!p.id || !p.slug) continue;
 		const personId = p.id.toLowerCase();
 		if (unlistedPersonIds.has(personId)) continue;
+		if (!updatedByPersonId.has(personId) && !personIdsWithOffice.has(personId)) continue;
 		// When a shard is requested, only emit people whose slug falls in it. The
 		// canonical URL appends the 8-hex id suffix but shares the base's first
 		// char, so sharding on the base is equivalent.

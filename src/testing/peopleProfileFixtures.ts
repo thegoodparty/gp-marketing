@@ -131,6 +131,7 @@ function spine(over: Partial<PersonItem> = {}): PersonItem {
 		linkedinUrl: null,
 		facebookUrl: null,
 		twitterUrl: null,
+		instagramUrl: null,
 		state: 'CA',
 		isPledged: false,
 		...over,

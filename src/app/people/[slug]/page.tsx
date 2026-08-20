@@ -8,6 +8,7 @@ import {
 } from '~/lib/schema';
 import {
 	extractPersonId,
+	isIndexableProfile,
 	loadPersonProfile,
 	type PersonProfileView,
 } from '~/lib/peopleProfile';
@@ -130,13 +131,17 @@ export async function generateMetadata({
 		view.bio ??
 		`${view.displayName}${view.roleTitle ? `, ${view.roleTitle}` : ''} on GoodParty.org.`;
 
+	// `follow: true` on both suppression paths (see isIndexableProfile for what
+	// they are): the page stops competing in the index, but its civics
+	// interlinks keep carrying crawl signal to the election and profile pages
+	// they point at.
+	const indexable = isIndexableProfile(view);
+
 	return {
 		title,
 		description,
 		alternates: { canonical },
-		// A person who requested removal keeps a crawlable, stripped URL (K/L) but
-		// should not be actively indexed/surfaced.
-		...(view.removed ? { robots: { index: false, follow: true } } : {}),
+		...(indexable ? {} : { robots: { index: false, follow: true } }),
 		openGraph: {
 			type: 'profile',
 			siteName: SITE_NAME,

@@ -47,6 +47,7 @@ let root: Root;
 let scrollCalls: ScrollCall[];
 let navigations: string[];
 let trackedEvents: { name: string; props?: Record<string, unknown> }[];
+let segmentEvents: { name: string; props?: Record<string, unknown> }[];
 let dataLayer: Record<string, unknown>[];
 let fetchCalls: { url: string; body: Record<string, unknown> }[];
 let fetchOk: boolean;
@@ -69,6 +70,7 @@ beforeEach(() => {
 	scrollCalls = [];
 	navigations = [];
 	trackedEvents = [];
+	segmentEvents = [];
 	dataLayer = [];
 	fetchCalls = [];
 	fetchOk = true;
@@ -98,6 +100,9 @@ beforeEach(() => {
 
 	(window as unknown as { amplitude: unknown }).amplitude = {
 		track: (name: string, props?: Record<string, unknown>) => trackedEvents.push({ name, props }),
+	};
+	(window as unknown as { analytics: unknown }).analytics = {
+		track: (name: string, props?: Record<string, unknown>) => segmentEvents.push({ name, props }),
 	};
 	(window as unknown as { dataLayer: unknown }).dataLayer = dataLayer;
 
@@ -147,6 +152,25 @@ async function click(element: Element) {
 		element.dispatchEvent(new dom.window.MouseEvent('click', { bubbles: true, cancelable: true }));
 		await flush();
 	});
+}
+
+/**
+ * Types into a react-hook-form field.
+ *
+ * The value goes through the prototype setter so it bypasses the setter React
+ * installs on the element, which is what makes React's value tracker notice a
+ * change. `input` is what React listens to normally; the focus and `keyup` are
+ * what its Internet Explorer fallback listens to (see the shims in
+ * `beforeEach`). Firing all of them makes this work whichever path React took,
+ * and the tracker means only one change is delivered either way.
+ */
+function setInputValue(input: HTMLInputElement, value: string) {
+	const setter = Object.getOwnPropertyDescriptor(dom.window.HTMLInputElement.prototype, 'value')!.set!;
+	input.focus();
+	setter.call(input, value);
+	input.dispatchEvent(new dom.window.Event('input', { bubbles: true }));
+	input.dispatchEvent(new dom.window.KeyboardEvent('keyup', { bubbles: true }));
+	input.dispatchEvent(new dom.window.Event('change', { bubbles: true }));
 }
 
 const personId = '11111111-1111-4111-8111-111111111111';
@@ -252,5 +276,77 @@ describe('the claim band hands the candidate to Win sign-up', () => {
 		await click(cta);
 
 		expect(fetchCalls).toEqual([]);
+	});
+});
+
+/**
+ * The notify count marketing automates on.
+ *
+ * gp-api also files these into the subject's HubSpot `candidate_profile_requests`,
+ * but only for a subject the civics mart resolves to exactly one HubSpot contact —
+ * a person with none, or with an ambiguous cluster, is skipped without an error
+ * anywhere. Notify is aimed at exactly those thinly-known people, so the CRM
+ * number is a lower bound of unknown tightness and this event is the honest one.
+ *
+ * The form is mounted directly rather than through the dialog, as in
+ * claimFormIds.test.tsx: Radix's click delegation is unreliable under JSDOM and
+ * the submission path is identical either way.
+ */
+describe('a completed notify submission is reported to marketing', () => {
+	const NOTIFY_EVENT = 'Person Profile Notify Submitted';
+	const email = 'visitor@example.com';
+
+	async function submitNotifyForm() {
+		const { NotifyForm } = await import('./ClaimProfileModal');
+		await render(React.createElement(NotifyForm, { personId, displayName }));
+
+		const form = document.querySelector<HTMLFormElement>('form#person-claim-notify')!;
+
+		await act(async () => {
+			setInputValue(form.querySelector<HTMLInputElement>('input[name="email"]')!, email);
+			await flush();
+		});
+		await act(async () => {
+			form.dispatchEvent(new dom.window.Event('submit', { bubbles: true, cancelable: true }));
+			await flush();
+			await flush();
+		});
+	}
+
+	test('fires to Segment with the subject and the page, once gp-api has accepted it', async () => {
+		await submitNotifyForm();
+
+		expect(fetchCalls).toHaveLength(1);
+		expect(segmentEvents).toEqual([
+			{ name: NOTIFY_EVENT, props: { personId, page_path: '/people/example-person' } },
+		]);
+	});
+
+	/**
+	 * Amplitude carried this event before Segment did. Both sinks are kept, and
+	 * kept identical, so a marketing audience and a product funnel built on the
+	 * same name cannot disagree about what a notify is.
+	 */
+	test('fires the same event to Amplitude', async () => {
+		await submitNotifyForm();
+
+		expect(trackedEvents.filter(e => e.name === NOTIFY_EVENT)).toEqual([
+			{ name: NOTIFY_EVENT, props: { personId, page_path: '/people/example-person' } },
+		]);
+	});
+
+	/**
+	 * Firing on click instead of on the response would make the number "people who
+	 * pressed Submit", which is not what a nudge count means and is not something
+	 * an automation can act on.
+	 */
+	test('stays silent when gp-api rejects the submission', async () => {
+		fetchOk = false;
+
+		await submitNotifyForm();
+
+		expect(fetchCalls).toHaveLength(1);
+		expect(segmentEvents).toEqual([]);
+		expect(trackedEvents.filter(e => e.name === NOTIFY_EVENT)).toEqual([]);
 	});
 });

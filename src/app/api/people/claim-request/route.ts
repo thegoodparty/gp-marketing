@@ -66,7 +66,17 @@ export async function POST(request: NextRequest) {
 			const isClientError = res.status >= 400 && res.status < 500;
 			return NextResponse.json({ error: 'Claim request failed' }, { status: isClientError ? res.status : 502 });
 		}
-		return NextResponse.json({ ok: true });
+		// gp-api's stored-lead id, forwarded so the success event can carry it.
+		// Never fail the submission over it: the lead is already committed at this
+		// point, so a body we cannot read costs the analytics join, not the lead.
+		let claimRequestId: string | null = null;
+		try {
+			const payload = (await res.json()) as { id?: unknown };
+			if (typeof payload.id === 'string' && payload.id !== '') claimRequestId = payload.id;
+		} catch {
+			claimRequestId = null;
+		}
+		return NextResponse.json({ ok: true, claimRequestId });
 	} catch {
 		return NextResponse.json({ error: 'Claim request failed' }, { status: 502 });
 	}

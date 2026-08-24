@@ -6,6 +6,7 @@ import { Text } from './Text.tsx';
 import { ResponsiveImage } from './ResponsiveImage.tsx';
 import type { SanityImage } from './types.ts';
 import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
+import { ATTRIBUTION_COPY, type AttributionMode } from './_lib/attributionCopy.ts';
 import { Logo } from '~/sanity/utils/Logo.tsx';
 
 const styles = tv({
@@ -133,15 +134,6 @@ export type ProfileHeroProps = {
 	 * framing, which is what the /candidate pages mean by it.
 	 */
 	showBrandMark?: boolean;
-};
-
-type AttributionMode = 'empowered' | 'pledged' | 'notPledged' | 'pledgeIneligible' | 'none';
-
-const ATTRIBUTION_COPY: Record<Exclude<AttributionMode, 'none'>, string> = {
-	empowered: 'Empowered by GoodParty.org',
-	pledged: 'Has Taken the GoodParty.org Pledge',
-	notPledged: 'Has Not Taken the GoodParty.org Pledge',
-	pledgeIneligible: 'Ineligible for the GoodParty.org Pledge Due to Partisan Affiliation',
 };
 
 /**

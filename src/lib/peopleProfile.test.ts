@@ -1,8 +1,10 @@
 import { describe, expect, test } from 'bun:test';
+import type { CandidacyItem } from '~/types/elections';
 import type { PersonItem, PersonOfficeHolder, PublicPersonProfile } from '~/types/people';
 import {
 	buildBreadcrumbTrail,
 	buildNearbyOfficialCards,
+	buildOtherCandidateCards,
 	buildPersonSlug,
 	buildPersonSlugFromBase,
 	composeView,
@@ -958,5 +960,144 @@ describe('buildNearbyOfficialCards', () => {
 
 	test('excludes the subject of the profile', () => {
 		expect(buildNearbyOfficialCards([makeOffice({ personId: PID, officeTitle: 'mayor' })], new Map(), PID)).toEqual([]);
+	});
+
+	// The pledge flag was already in memory here — `loadNearbyOfficials` resolves
+	// the same persons for their names — and the builder simply never read it.
+	test('carries the spine pledge flag through', () => {
+		const cards = buildNearbyOfficialCards(
+			[makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: ['Independent'] })],
+			personsById(makePerson({ id: OTHER, fullName: 'chris lewis', isPledged: true })),
+			PID,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([true]);
+	});
+
+	test('is not pledged when the spine says nothing', () => {
+		const cards = buildNearbyOfficialCards(
+			[makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: ['Independent'] })],
+			personsById(makePerson({ id: OTHER, fullName: 'chris lewis' })),
+			PID,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([false]);
+	});
+
+	// A row with no linked person still renders a card, labelled by its office.
+	// There is no one to have pledged, so it must not claim anyone did.
+	test('is not pledged when there is no person to look up', () => {
+		const cards = buildNearbyOfficialCards([makeOffice({ officeTitle: 'city council member' })], new Map(), PID);
+		expect(cards.map((c) => c.isPledged)).toEqual([false]);
+	});
+
+	// Same precedence as the hero: party decides eligibility, so a stale flag from
+	// a past run under another party cannot make the card contradict the profile
+	// it links to.
+	test('a major-party official is not pledged even when the flag says so', () => {
+		const cards = buildNearbyOfficialCards(
+			[makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: ['Democratic'] })],
+			personsById(makePerson({ id: OTHER, fullName: 'chris lewis', isPledged: true })),
+			PID,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([false]);
+	});
+
+	// An officeholder row carries no party at all far more often than it carries a
+	// wrong one. Unknown has to read as "do not assert", or the card claims a
+	// pledge for someone whose own profile may call them ineligible.
+	test('an unknown party is not enough to claim the pledge', () => {
+		const cards = buildNearbyOfficialCards(
+			[makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: [] })],
+			personsById(makePerson({ id: OTHER, fullName: 'chris lewis', isPledged: true })),
+			PID,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([false]);
+	});
+
+	// The hero would read the major-party candidacy and call them ineligible, so
+	// an Independent office row on its own must not outvote it.
+	test('a major-party signal elsewhere on the person disqualifies', () => {
+		const cards = buildNearbyOfficialCards(
+			[makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: ['Independent'] })],
+			personsById(
+				makePerson({
+					id: OTHER,
+					fullName: 'chris lewis',
+					isPledged: true,
+					Candidacies: [{ id: 'c1', party: 'Republican' }],
+				}),
+			),
+			PID,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([false]);
+	});
+});
+
+describe('buildOtherCandidateCards', () => {
+	const OTHER = '33333333-3333-3333-3333-333333333333';
+	const candidacy = (c: Partial<CandidacyItem> = {}): CandidacyItem => ({
+		id: 'c1',
+		personId: OTHER,
+		firstName: 'chris',
+		lastName: 'lewis',
+		party: 'Independent',
+		...c,
+	});
+	const personsById = (person: PersonItem) => new Map([[OTHER.toLowerCase(), person]]);
+
+	// The candidacy feed carries no pledge field, so the flag can only arrive via
+	// the batched person lookup `loadOtherCandidates` adds.
+	test('carries the pledge flag from the resolved person', () => {
+		const cards = buildOtherCandidateCards(
+			[candidacy()],
+			personsById(makePerson({ id: OTHER, isPledged: true })),
+			PID,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([true]);
+	});
+
+	test('is not pledged when the person lookup found nothing', () => {
+		const cards = buildOtherCandidateCards([candidacy()], new Map(), PID);
+		expect(cards).toHaveLength(1);
+		expect(cards.map((c) => c.isPledged)).toEqual([false]);
+	});
+
+	test('a major-party candidate is not pledged even when the flag says so', () => {
+		const cards = buildOtherCandidateCards(
+			[candidacy({ party: 'Republican' })],
+			personsById(makePerson({ id: OTHER, isPledged: true })),
+			PID,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([false]);
+	});
+
+	test('an unknown party is not enough to claim the pledge', () => {
+		const cards = buildOtherCandidateCards(
+			[candidacy({ party: undefined })],
+			personsById(makePerson({ id: OTHER, isPledged: true })),
+			PID,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([false]);
+	});
+
+	// The hero resolves party office-first, so a partisan office outranks this
+	// Independent race. The card sees the office only when the batched person
+	// payload carries it — when it does, it must not contradict the profile.
+	test('a major-party office on the person disqualifies an Independent run', () => {
+		const cards = buildOtherCandidateCards(
+			[candidacy({ party: 'Independent' })],
+			personsById(
+				makePerson({
+					id: OTHER,
+					isPledged: true,
+					OfficeHolders: [makeOffice({ partyNames: ['Democratic'] })],
+				}),
+			),
+			PID,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([false]);
+	});
+
+	test('excludes the subject of the profile', () => {
+		expect(buildOtherCandidateCards([candidacy({ personId: PID })], new Map(), PID)).toEqual([]);
 	});
 });

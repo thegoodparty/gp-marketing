@@ -56,10 +56,30 @@ export function trackClickToCallPhoneSubmitted(props: { page_path: string | null
  * this module attaches it, and Segment's snippet puts the path in event
  * *context* rather than in properties, so a property-keyed audience would not
  * find it otherwise.
+ *
+ * `personId` is the join key to the subject's HubSpot record: it is the same
+ * value as `mart_civics.people.gp_person_id`, whose `hs_contact_id` column is
+ * the contact gp-api writes `candidate_profile_requests` to. The contact id is
+ * deliberately NOT resolved here — that lookup is a warehouse query gp-api runs
+ * off the request path, and it yields null for most of the spine, so putting it
+ * on the event would both slow a public form submit and read as "no contact"
+ * far more often than it read as a real id.
+ *
+ * `claimRequestId` is gp-api's stored-lead id, echoed back through the proxy so
+ * a Segment event can be tied to the exact row that produced it. Null when the
+ * lead was accepted but the id could not be read back; the event still fires,
+ * because a completed ask is the thing being counted.
  */
-export function trackPersonProfileNotifySubmitted(props: { personId: string }): void {
+export function trackPersonProfileNotifySubmitted(props: {
+	personId: string;
+	claimRequestId?: string | null;
+}): void {
 	const pagePath = typeof window !== 'undefined' ? window.location.pathname : null;
-	const properties = { personId: props.personId, page_path: pagePath ?? null };
+	const properties = {
+		personId: props.personId,
+		claimRequestId: props.claimRequestId ?? null,
+		page_path: pagePath ?? null,
+	};
 
 	trackEvent('Person Profile Notify Submitted', properties);
 	trackSegmentEvent('Person Profile Notify Submitted', properties);

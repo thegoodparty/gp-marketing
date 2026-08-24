@@ -182,12 +182,18 @@ function relatedCards(prefix: string, count: number, empoweredEvery = 3): Relate
 	return Array.from({ length: count }, (_, i) => {
 		const subtitle = PARTIES[i % PARTIES.length]!;
 		const isMajorParty = subtitle === 'Republican' || subtitle === 'Democrat';
+		// Pledged is seeded on a different cycle from empowered, and the two overlap
+		// on neither the first nor every card. Production cannot show this at all —
+		// the ETL has never written `is_pledged` — so the fixtures are the only place
+		// the pledge line renders, and they have to prove it does not ride on the
+		// badge: a card can be pledged without being empowered and vice versa.
 		return {
 			personId: `${prefix}-${i}`,
 			name: NAMES[i % NAMES.length]!,
 			subtitle,
 			href: `/people/${prefix}-${i}`,
 			isEmpowered: !isMajorParty && i % empoweredEvery === 0,
+			isPledged: !isMajorParty && i % 4 === 2,
 			avatarUrl: null,
 		};
 	});

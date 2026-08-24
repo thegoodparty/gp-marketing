@@ -41,6 +41,12 @@ bower_components
 build/Release
 
 # Dependency directories
+# Both spellings: the trailing slash matches only a real directory, and the
+# worktree workflow this repo uses often symlinks node_modules at a sibling
+# checkout instead of installing into each one. A symlink is a blob, so the
+# slashed form does not cover it and `git add -A` will happily commit a path
+# that is dangling on every other machine.
+node_modules
 node_modules/
 jspm_packages/
 

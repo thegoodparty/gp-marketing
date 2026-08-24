@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { cn, tv } from './_lib/utils.ts';
+import { ATTRIBUTION_COPY, type AttributionMode } from './_lib/attributionCopy.ts';
 import type { SanityImage } from './types.ts';
 import { Avatar } from './Avatar.tsx';
 import { Text } from './Text.tsx';
@@ -22,12 +23,23 @@ const styles = tv({
 		contentWrapper: 'flex flex-col gap-1',
 		content: 'flex flex-col gap-1',
 		name: 'whitespace-nowrap md:whitespace-normal',
-		empowered: 'text-neutral-500 min-w-0',
+		attributionLine: 'text-neutral-500 min-w-0',
 		footerWrapper: 'flex flex-col w-full gap-2 md:w-full md:flex-row md:flex-wrap md:items-center md:justify-between md:gap-4',
 		link: 'flex items-center gap-2 text-nowrap shrink-0',
 		badge: 'absolute -bottom-0.5 -right-0.5 w-[50px] h-[35px] flex items-center justify-center',
 	},
 });
+
+/**
+ * What the card may state about GoodParty.org's relationship to the person.
+ *
+ * Only the affirmative lines, and deliberately: `ATTRIBUTION_COPY` also carries
+ * "Has Not Taken…" and "Ineligible…", which the hero renders but a card must not
+ * (see `relatedCardAttribution`). Narrowing the union here is what makes that a
+ * type error rather than a judgement call at each call site — and widening it is
+ * the whole of the change when the pledge data lands.
+ */
+export type CardAttributionMode = Extract<AttributionMode, 'empowered' | 'pledged' | 'none'>;
 
 export type CandidatesCardProps = {
 	className?: string;
@@ -36,12 +48,26 @@ export type CandidatesCardProps = {
 	partyAffiliation: string;
 	href: string;
 	isGoodPartyCandidate?: boolean;
+	/**
+	 * The line under the party affiliation. Separate from `isGoodPartyCandidate`,
+	 * which carries the mark and the yellow frame — the same split ProfileHero
+	 * draws between `showBrandMark` and `attribution`: the mark says this is one
+	 * of our candidates, the line asserts a fact about the person. They come from
+	 * different inputs on `/people` (claim vs pledge), so a pledged person who is
+	 * not a GoodParty candidate still gets their line.
+	 *
+	 * Defaults to the legacy behaviour — `isGoodPartyCandidate` implies
+	 * "Empowered by GoodParty.org" — which is what the Sanity claim block's
+	 * example card and `/candidate/[...slug]` still mean by it.
+	 */
+	attribution?: CardAttributionMode;
 	_key?: string;
 };
 
 export const CandidatesCard = memo(function CandidatesCard(props: CandidatesCardProps) {
 	const isGoodParty = props.isGoodPartyCandidate === true;
-	const { base, baseStandard, baseGoodParty, avatarWrapper, rightColumn, contentWrapper, content, name, empowered, footerWrapper, link, badge } = styles();
+	const attributionMode: CardAttributionMode = props.attribution ?? (isGoodParty ? 'empowered' : 'none');
+	const { base, baseStandard, baseGoodParty, avatarWrapper, rightColumn, contentWrapper, content, name, attributionLine, footerWrapper, link, badge } = styles();
 
 	// Generate initials from name if no avatar
 	const initials = props.avatar ? undefined : getInitials(props.name);
@@ -79,9 +105,9 @@ export const CandidatesCard = memo(function CandidatesCard(props: CandidatesCard
 				</div>
 
 				<div className={footerWrapper()}>
-					{isGoodParty ? (
-						<Text as='p' styleType='caption' className={empowered()}>
-							Empowered by GoodParty.org
+					{attributionMode !== 'none' ? (
+						<Text as='p' styleType='caption' className={attributionLine()}>
+							{ATTRIBUTION_COPY[attributionMode]}
 						</Text>
 					) : (
 						<div />

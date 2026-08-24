@@ -15,7 +15,7 @@ import {
 	buildElectionPositionHrefFromRaceSlug,
 	getStateName,
 } from '~/lib/electionsHelpers';
-import { classifyPartyFrom, isMajorParty, type PartyClass } from '~/lib/party';
+import { classifyParty, classifyPartyFrom, isMajorParty, type PartyClass } from '~/lib/party';
 import { formatPersonName } from '~/lib/personName';
 import type { CandidacyItem } from '~/types/elections';
 import type {
@@ -119,6 +119,13 @@ export interface RelatedPersonCard {
 	subtitle: string | null;
 	href: string | null;
 	isEmpowered: boolean;
+	/**
+	 * The same ETL-maintained spine flag the hero reads (`Person.isPledged`), so
+	 * a card and the profile it links to read one source. Gated on party
+	 * eligibility by {@link pledgedFromSpine}, which is stricter than the hero
+	 * because a card sees less of the person than their own profile does.
+	 */
+	isPledged: boolean;
 	avatarUrl: string | null;
 }
 
@@ -613,9 +620,47 @@ function nameOf(first?: string | null, last?: string | null, fallback = ''): str
 	return formatPersonName([first, last].filter(Boolean).join(' ')) ?? fallback;
 }
 
-/** Maps candidacies sharing a position into "Other Candidates" cards, excluding the subject. */
+/**
+ * True only when the spine affirms the pledge AND the party evidence within
+ * reach affirms eligibility. Party wins, as it does for the hero
+ * (`pledgeAttribution`): a Republican or Democrat is ineligible rather than
+ * unpledged, so a stale flag from a past run under another party must not make
+ * a card claim otherwise.
+ *
+ * Deliberately STRICTER than the hero rather than merely different. The hero
+ * resolves party office-first then current candidacy across the person's whole
+ * record; a card has only the row it was built from, plus whatever the batched
+ * person payload happens to carry. So an unknown party suppresses the line, and
+ * a major-party signal anywhere in reach suppresses it, instead of the hero's
+ * "most specific class wins". The failure we can afford is a pledged person
+ * whose card stays quiet. The one we cannot is a card asserting a pledge that
+ * the profile it links to calls impossible.
+ *
+ * Residual, and unclosable from here: if the batch payload carries no nested
+ * offices or candidacies and the row's own party disagrees with the office the
+ * hero would read, the two can still differ. Closing it needs the current
+ * office party on the person feed, not more logic here.
+ */
+function pledgedFromSpine(person: PersonItem | undefined, ...rowParties: Array<string | null | undefined>): boolean {
+	if (person?.isPledged !== true) return false;
+	const evidence = [
+		...rowParties,
+		...(person.OfficeHolders ?? []).flatMap((o) => o.partyNames ?? []),
+		...(person.Candidacies ?? []).map((c) => c.party),
+	];
+	const classes = evidence.map(classifyParty).filter((cls): cls is PartyClass => cls !== null);
+	if (classes.length === 0) return false;
+	return !classes.some(isMajorParty);
+}
+
+/**
+ * Maps candidacies sharing a position into "Other Candidates" cards, excluding
+ * the subject. `personsById` supplies the pledge flag, which the candidacy feed
+ * does not carry — see {@link loadOtherCandidates}.
+ */
 export function buildOtherCandidateCards(
 	candidacies: CandidacyItem[],
+	personsById: Map<string, PersonItem>,
 	excludePersonId: string,
 ): RelatedPersonCard[] {
 	const cards: RelatedPersonCard[] = [];
@@ -637,6 +682,7 @@ export function buildOtherCandidateCards(
 			subtitle: c.party ?? null,
 			href,
 			isEmpowered: false,
+			isPledged: pledgedFromSpine(c.personId ? personsById.get(c.personId.toLowerCase()) : undefined, c.party),
 			avatarUrl: c.image ?? null,
 		});
 		if (cards.length >= 6) break;
@@ -682,6 +728,7 @@ export function buildNearbyOfficialCards(
 			subtitle: oh.officeTitle ?? oh.Position?.name ?? oh.positionName ?? null,
 			href,
 			isEmpowered: false,
+			isPledged: pledgedFromSpine(person, ...(oh.partyNames ?? [])),
 			avatarUrl: person?.headshotUrl ?? null,
 		});
 		if (cards.length >= 6) break;
@@ -951,14 +998,28 @@ async function loadPrimaryCandidacy(
 	return getCandidateBySlug({ slug, includeStances: false, includeRace: true });
 }
 
-/** Fetches "Other Candidates for [Position]" cards for a resolved position. */
+/**
+ * Fetches "Other Candidates for [Position]" cards for a resolved position.
+ *
+ * The candidacy feed carries no pledge flag, so the persons are resolved in a
+ * second batched call — the same shape {@link loadNearbyOfficials} already uses,
+ * and preferred over a candidacy-level flag because it reads the very
+ * `Person.isPledged` the hero reads, so a card cannot contradict the profile it
+ * links to. `getPersonsByIds` dedupes, caps at 500 and is cached, and returns
+ * without a request when the position has no linked people.
+ */
 async function loadOtherCandidates(
 	positionId: string | null,
 	excludePersonId: string,
 ): Promise<RelatedPersonCard[]> {
 	if (!positionId) return [];
 	const candidacies = await getCandidacies({ positionId });
-	return buildOtherCandidateCards(candidacies, excludePersonId);
+	const ids = candidacies
+		.map((c) => c.personId)
+		.filter((id): id is string => Boolean(id) && id!.toLowerCase() !== excludePersonId.toLowerCase());
+	const persons = await getPersonsByIds(ids);
+	const byId = new Map(persons.map((p) => [p.id.toLowerCase(), p]));
+	return buildOtherCandidateCards(candidacies, byId, excludePersonId);
 }
 
 /** Fetches "Nearby Officials" cards for a resolved geo id. */

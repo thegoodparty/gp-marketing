@@ -21,13 +21,25 @@ const { POST } = await import('./route');
 
 let calls: Array<{ url: string; body: Record<string, unknown> }>;
 let originalFetch: typeof globalThis.fetch;
+/** gp-api's response body; `null` stands for a 2xx that cannot be parsed. */
+let upstreamBody: Record<string, unknown> | null;
+
+const CLAIM_REQUEST_ID = 'clr_01HZY8QK5M';
 
 beforeEach(() => {
 	calls = [];
+	upstreamBody = { id: CLAIM_REQUEST_ID, personId: PERSON_ID, createdAt: '2026-08-24T00:00:00.000Z' };
 	originalFetch = globalThis.fetch;
 	globalThis.fetch = (async (url: string, init?: { body?: string }) => {
 		calls.push({ url: String(url), body: JSON.parse(init?.body ?? '{}') as Record<string, unknown> });
-		return { ok: true, status: 200 } as Response;
+		return {
+			ok: true,
+			status: 200,
+			json: async () => {
+				if (upstreamBody === null) throw new Error('unreadable body');
+				return upstreamBody;
+			},
+		} as Response;
 	}) as unknown as typeof globalThis.fetch;
 });
 
@@ -88,6 +100,41 @@ describe('POST /api/people/claim-request', () => {
 		await post({ personId: PERSON_ID, email: EMAIL, source: 'owner' });
 
 		expect(calls[0]?.body['marketingConsent']).toBe(false);
+	});
+
+	/**
+	 * The client needs the stored-lead id to put on the success event, and this
+	 * route is the only place it can come from: the browser never talks to gp-api
+	 * directly. Returning a bare `{ ok: true }` — as this did before — leaves the
+	 * event with nothing to tie it to the row it came from.
+	 */
+	test('hands back the stored-lead id so the success event can carry it', async () => {
+		const res = await post({ personId: PERSON_ID, email: EMAIL, source: 'notify' });
+
+		expect(res.status).toBe(200);
+		expect(await res.json()).toEqual({ ok: true, claimRequestId: CLAIM_REQUEST_ID });
+	});
+
+	/**
+	 * By this point gp-api has committed the lead, so an unreadable body costs the
+	 * analytics join and nothing else. Failing here would turn a stored lead into
+	 * an error on the visitor's screen.
+	 */
+	test('still succeeds when the upstream body cannot be parsed', async () => {
+		upstreamBody = null;
+
+		const res = await post({ personId: PERSON_ID, email: EMAIL, source: 'notify' });
+
+		expect(res.status).toBe(200);
+		expect(await res.json()).toEqual({ ok: true, claimRequestId: null });
+	});
+
+	test('omits an id that is not a usable string', async () => {
+		upstreamBody = { id: '', personId: PERSON_ID };
+
+		const res = await post({ personId: PERSON_ID, email: EMAIL, source: 'notify' });
+
+		expect(await res.json()).toEqual({ ok: true, claimRequestId: null });
 	});
 
 	test('rejects a bad personId before calling gp-api', async () => {

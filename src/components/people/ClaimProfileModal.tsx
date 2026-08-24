@@ -80,11 +80,20 @@ export function NotifyForm({
 				}),
 			});
 			if (!res.ok) throw new Error('Submission failed');
+			// The lead is stored by now, so reading the id back must not be able to
+			// fail the submission — hence the fallback rather than a rethrow.
+			let claimRequestId: string | null = null;
+			try {
+				const payload = (await res.json()) as { claimRequestId?: string | null };
+				claimRequestId = payload.claimRequestId ?? null;
+			} catch {
+				claimRequestId = null;
+			}
 			// After the 201, so the count means completed asks. This is the signal
 			// marketing automates on: gp-api's HubSpot counter only ever sees the
 			// subjects that resolve to a single CRM contact — see
 			// trackPersonProfileNotifySubmitted.
-			trackPersonProfileNotifySubmitted({ personId });
+			trackPersonProfileNotifySubmitted({ personId, claimRequestId });
 			setIsSuccess(true);
 		} catch {
 			setError('root', { message: 'Something went wrong. Please try again.' });

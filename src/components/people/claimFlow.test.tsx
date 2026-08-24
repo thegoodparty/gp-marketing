@@ -51,6 +51,7 @@ let segmentEvents: { name: string; props?: Record<string, unknown> }[];
 let dataLayer: Record<string, unknown>[];
 let fetchCalls: { url: string; body: Record<string, unknown> }[];
 let fetchOk: boolean;
+let fetchBody: Record<string, unknown> | null;
 
 beforeEach(() => {
 	dom = new JSDOM('<!DOCTYPE html><html><body><div id="root"></div></body></html>', {
@@ -74,6 +75,7 @@ beforeEach(() => {
 	dataLayer = [];
 	fetchCalls = [];
 	fetchOk = true;
+	fetchBody = { ok: true, claimRequestId: CLAIM_REQUEST_ID };
 
 	// JSDOM ships no scrollIntoView at all, so the component would silently skip
 	// the optional call. Standing one up is what makes the scroll observable.
@@ -108,7 +110,15 @@ beforeEach(() => {
 
 	globalThis.fetch = (async (url: string, init?: { body?: string }) => {
 		fetchCalls.push({ url: String(url), body: JSON.parse(init?.body ?? '{}') as Record<string, unknown> });
-		return { ok: fetchOk } as Response;
+		// `fetchBody === null` stands for a 2xx whose body cannot be read, which is
+		// the case that must still report the submission.
+		return {
+			ok: fetchOk,
+			json: async () => {
+				if (fetchBody === null) throw new Error('unreadable body');
+				return fetchBody;
+			},
+		} as Response;
 	}) as unknown as typeof fetch;
 
 	// `window.location` is unforgeable in JSDOM — it cannot be reassigned or
@@ -175,6 +185,8 @@ function setInputValue(input: HTMLInputElement, value: string) {
 
 const personId = '11111111-1111-4111-8111-111111111111';
 const displayName = 'Example Person';
+/** gp-api's stored-lead id, echoed back through the proxy. */
+const CLAIM_REQUEST_ID = 'clr_01HZY8QK5M';
 
 async function renderProfileClaimSurfaces() {
 	const [{ ClaimProfileModal }, { PersonClaimCTABand }] = await Promise.all([import('./ClaimProfileModal'), import('./PersonClaimCTABand')]);
@@ -318,7 +330,37 @@ describe('a completed notify submission is reported to marketing', () => {
 
 		expect(fetchCalls).toHaveLength(1);
 		expect(segmentEvents).toEqual([
-			{ name: NOTIFY_EVENT, props: { personId, page_path: '/people/example-person' } },
+			{
+				name: NOTIFY_EVENT,
+				props: { personId, claimRequestId: CLAIM_REQUEST_ID, page_path: '/people/example-person' },
+			},
+		]);
+	});
+
+	/**
+	 * `personId` is the join key marketing resolves to the subject's HubSpot
+	 * contact (`mart_civics.people.gp_person_id` → `hs_contact_id`), so it has to
+	 * survive on the event even though the contact id itself is never fetched
+	 * here. Losing it would leave the event with nothing to join on.
+	 */
+	test('carries the subject id the CRM join needs', async () => {
+		await submitNotifyForm();
+
+		expect(segmentEvents[0]?.props?.['personId']).toBe(personId);
+	});
+
+	/**
+	 * The id is a convenience for tying an event back to its row, never a
+	 * precondition for reporting the ask. A 2xx we cannot parse still means the
+	 * lead was stored, so the event must fire with a null rather than vanish.
+	 */
+	test('still reports the ask when the id cannot be read back', async () => {
+		fetchBody = null;
+
+		await submitNotifyForm();
+
+		expect(segmentEvents).toEqual([
+			{ name: NOTIFY_EVENT, props: { personId, claimRequestId: null, page_path: '/people/example-person' } },
 		]);
 	});
 
@@ -331,7 +373,10 @@ describe('a completed notify submission is reported to marketing', () => {
 		await submitNotifyForm();
 
 		expect(trackedEvents.filter(e => e.name === NOTIFY_EVENT)).toEqual([
-			{ name: NOTIFY_EVENT, props: { personId, page_path: '/people/example-person' } },
+			{
+				name: NOTIFY_EVENT,
+				props: { personId, claimRequestId: CLAIM_REQUEST_ID, page_path: '/people/example-person' },
+			},
 		]);
 	});
 

@@ -838,6 +838,21 @@ describe('composeView issues, links, labels', () => {
 		expect(view.stateLabel).toBe('CA');
 	});
 
+	test('a spelled-out state becomes the code the routes and schema.org expect', () => {
+		// The mart sends `Minnesota` rather than `MN` for rows it created from a
+		// gp-api account instead of from BallotReady — 24,619 of them. stateLabel
+		// fills schema.org `addressRegion` and mirrors the breadcrumb, both of
+		// which are codes, so the full name has to be resolved here and not
+		// passed through.
+		const view = composeView(PID, makePerson({ fullName: 'DeVelle Jackson', state: 'Minnesota' }), null);
+		expect(view.stateLabel).toBe('MN');
+	});
+
+	test('a state that maps to no code is dropped rather than passed through', () => {
+		const view = composeView(PID, makePerson({ fullName: 'Ana Ruiz', state: 'Puerto Rico' }), null);
+		expect(view.stateLabel).toBeNull();
+	});
+
 	test('canonicalSlug uses the spine base slug + id8 suffix, not the overlay display name', () => {
 		const view = composeView(
 			PID,

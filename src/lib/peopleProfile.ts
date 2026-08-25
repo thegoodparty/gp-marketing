@@ -594,8 +594,12 @@ function buildRecentExperience(
 			// Current terms read as "Incumbent"; past terms let the year range speak.
 			status: o.isCurrent === true ? 'Incumbent' : null,
 			// The term's own race slug, flattened onto it by election-api. Prefer the
-			// race's level: Position.level is nullable, and the parser needs a level
-			// to route CITY/LOCAL offices to the right elections depth.
+			// race's level, which is non-null where Position.level is nullable.
+			// The level only changes routing once a citySlugToCountySlug map is in
+			// play (see resolveElectionPositionFromRaceSlug); without one every slug
+			// falls through to the generic segment-count branch, so passing it is
+			// inert today. Kept so this call reads like the breadcrumb's, and so it
+			// stays correct if a county map is ever threaded through.
 			href: positionHrefFor(o.positionSlug, o.positionLevel ?? o.Position?.level),
 		},
 	}));

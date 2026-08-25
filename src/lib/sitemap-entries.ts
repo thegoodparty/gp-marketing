@@ -717,11 +717,19 @@ async function mapWithConcurrency<T, R>(
  * unreachable through it (~8% of the corpus, 17k of 216k when this was written)
  * because there is no way to ask for `state IS NULL`.
  *
- * The upstream mart defines the Person table as "people with a candidacy or
- * office term", so the candidacy and officeholder feeds between them name every
- * person that exists — and both DO carry a usable state. Unioning their
+ * The upstream mart used to define the Person table as "people with a candidacy
+ * or office term", which made the candidacy and officeholder feeds — both of
+ * which DO carry a usable state — name every person that exists. Unioning their
  * personIds and resolving anything the sweep missed back through the 500-id
- * batch filter closes the gap exactly, rather than approximately.
+ * batch filter closed the gap exactly.
+ *
+ * That invariant no longer holds: 132,015 Person rows have neither, most of
+ * them created from a gp-api account rather than from BallotReady. They are
+ * unreachable by every filter here, since the sweep cannot see them (their
+ * `state` is often spelled out, and there is no way to ask for `state IS NULL`)
+ * and they appear in no linked feed. Unpublished that is harmless — they are
+ * thin and belong out of the sitemap — so the gap is closed only where it
+ * matters, by seeding the id batch with the published ids (`seedPersonIds`).
  *
  * If election-api ever grows a cursor or a dedicated enumeration feed, this
  * whole dance collapses into a single paged read.
@@ -733,7 +741,9 @@ async function mapWithConcurrency<T, R>(
  * it" for the whole corpus at the cost of one extra projected column — rather
  * than 216k profile loads.
  */
-async function fetchAllPersons(): Promise<PersonEnumeration> {
+async function fetchAllPersons(
+	seedPersonIds: readonly string[] = [],
+): Promise<PersonEnumeration> {
 	const tags = [PEOPLE_SITEMAP_CACHE_TAG];
 	const states = [...US_STATE_CODES];
 	const byId = new Map<string, PeopleSitemapPerson>();
@@ -786,6 +796,25 @@ async function fetchAllPersons(): Promise<PersonEnumeration> {
 		}
 	}
 
+	// Published people are resolved by id rather than trusted to the sweeps.
+	//
+	// Both the state sweep and the linked feeds filter on `state`, and neither
+	// reaches this cohort: `Person.state` holds a spelled-out `Minnesota` for
+	// rows the ETL creates from a gp-api account (24,619 of them, none with a
+	// candidacy or office term), so no `?state=<code>` sweep returns them, and
+	// having no civics rows there is nothing in the linked feeds to rescue them
+	// with. Unpublished, that is the right answer — they are thin and belong out
+	// of the sitemap. Published, it is not: the page renders `index`, and
+	// dropping it here is the one direction this band is not allowed to take.
+	// Four published profiles were already missing when this was written.
+	//
+	// Seeding by id sidesteps the spelling entirely, so this stays correct even
+	// if the mart never normalizes. An id with no spine row simply resolves to
+	// nothing, exactly as an unmatched linked-feed id does today.
+	for (const id of seedPersonIds) {
+		if (!byId.has(id)) unseen.add(id);
+	}
+
 	const batches = await mapWithConcurrency(
 		chunkArray([...unseen], PERSON_ID_BATCH),
 		ENUMERATION_CONCURRENCY,
@@ -825,7 +854,10 @@ export function clearPeopleSitemapCache(): void {
 async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
 	if (!cachedPeopleSitemapData) {
 		const load = (async (): Promise<PeopleSitemapData> => {
-			const [published, unlisted, enumeration] = await Promise.all([
+			// The two gp-api feeds are one small request each and settle long before
+			// the 153-request enumeration would; awaiting them first costs a round
+			// trip and buys the published ids, which the enumeration needs as seeds.
+			const [published, unlisted] = await Promise.all([
 				fetchGpApiJsonOrThrow<{ personId?: string; updatedAt?: string }>(
 					'v1/public-person-profiles/published',
 					[PEOPLE_SITEMAP_CACHE_TAG],
@@ -833,13 +865,14 @@ async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
 				fetchGpApiJsonOrThrow<{ personId?: string }>('v1/public-person-profiles/unlisted', [
 					PEOPLE_SITEMAP_CACHE_TAG,
 				]),
-				fetchAllPersons(),
 			]);
 
 			const updatedByPersonId = new Map<string, string | undefined>();
 			for (const row of published) {
 				if (row.personId) updatedByPersonId.set(row.personId.toLowerCase(), row.updatedAt);
 			}
+
+			const enumeration = await fetchAllPersons([...updatedByPersonId.keys()]);
 
 			// Two different reasons, one consequence: a person with a privacy removal
 			// on record renders noindex, and a person whose owner deleted their

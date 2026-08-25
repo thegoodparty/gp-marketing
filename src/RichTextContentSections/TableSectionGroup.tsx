@@ -17,7 +17,7 @@ export function TableSectionGroup(section: Extract<ArticleSections, { _type: 'ta
 					<tbody>
 						{section.field_table.rows?.map(
 							(row, i) =>
-								i > 1 && (
+								i > 0 && (
 									<tr key={i} className='odd:bg-white even:bg-neutral-50'>
 										{row.cells?.map((cell, j) => (
 											<td key={j} className='py-2 px-4'>

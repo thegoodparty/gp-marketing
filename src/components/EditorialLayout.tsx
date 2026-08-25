@@ -31,7 +31,7 @@ export function EditorialLayout(props: EditorialLayoutProps) {
 					{props.stickyRelatedArticle?.title && <StickyRelatedArticle {...props.stickyRelatedArticle} />}
 				</div>
 			</div>
-			<div>{props.children}</div>
+			<div className='min-w-0'>{props.children}</div>
 		</Container>
 	);
 }

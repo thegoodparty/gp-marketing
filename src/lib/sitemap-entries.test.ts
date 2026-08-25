@@ -458,6 +458,78 @@ describe('fetchPeopleSitemapEntries', () => {
 		]);
 	});
 
+	/**
+	 * The cohort behind that exemption is exactly the one no sweep can see.
+	 *
+	 * `Person.state` holds a spelled-out `Minnesota` for rows the ETL creates
+	 * from a gp-api account rather than from BallotReady — 24,619 of them, and
+	 * none with a candidacy or office term. So `?state=MN` misses them and the
+	 * linked-feed union has nothing to recover them with. Unpublished that is
+	 * correct; published it silently dropped the page, which is the one
+	 * direction this band is not allowed to take. Four live profiles were in
+	 * that state when this was written.
+	 */
+	test('lists a published person no state sweep and no civics feed can reach', async () => {
+		mockUpstream({
+			persons: [{ id: aliceId, slug: 'alice-smith', state: 'Minnesota' }],
+			published: [{ personId: aliceId, updatedAt: '2026-01-15T00:00:00.000Z' }],
+		});
+
+		expect((await fetchPeopleSitemapEntries(base, 'a')).map((e) => e.url)).toEqual([
+			`${base}/people/alice-smith-aaaaaaaa`,
+		]);
+	});
+
+	test('resolves the seeded published ids through the batch filter, not one call each', async () => {
+		const urls = mockUpstream({
+			persons: [
+				{ id: bobId, slug: 'bob-jones', state: 'Oklahoma' },
+				{ id: carolId, slug: 'carol-diaz', state: 'Tennessee' },
+			],
+			published: [{ personId: bobId }, { personId: carolId }],
+		});
+
+		await fetchPeopleSitemapEntries(base, 'b');
+
+		const idCalls = urls.filter((u) => u.includes('ids='));
+		expect(idCalls).toHaveLength(1);
+		expect(decodeURIComponent(idCalls[0]!)).toContain(`${bobId},${carolId}`);
+	});
+
+	test('does not re-request a published person the sweep already returned', async () => {
+		const urls = mockUpstream({
+			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
+			published: [{ personId: aliceId }],
+		});
+
+		await fetchPeopleSitemapEntries(base, 'a');
+
+		expect(urls.filter((u) => u.includes('ids='))).toEqual([]);
+	});
+
+	// Seeding cannot invent a page: gp-api can hold a profile for a personId the
+	// spine has no row for, and without a slug there is no URL to advertise.
+	test('ignores a published id the spine does not know', async () => {
+		mockUpstream({
+			persons: [],
+			published: [{ personId: aliceId }],
+		});
+
+		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+	});
+
+	// Seeding must not outrank the exclusion list: publish-then-request-removal
+	// would otherwise advertise a page the owner asked us to take down.
+	test('still omits a seeded person who is also unlisted', async () => {
+		mockUpstream({
+			persons: [{ id: aliceId, slug: 'alice-smith', state: 'Minnesota' }],
+			published: [{ personId: aliceId }],
+			unlisted: [{ personId: aliceId }],
+		});
+
+		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+	});
+
 	test('skips a person with no slug, since there is no URL to point at', async () => {
 		mockUpstream({
 			persons: [{ id: aliceId, slug: '', state: 'WY' }],

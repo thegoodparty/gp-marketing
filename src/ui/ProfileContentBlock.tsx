@@ -31,6 +31,14 @@ const styles = tv({
 		// children are individual white cards; the cream page shows through the
 		// 24px gaps between them.
 		separatedColumn: 'flex min-w-0 w-full flex-col gap-6',
+		// The portrait overflows into the FIRST grid column. Normally that column is
+		// the <aside>, which clears it; with no sidebar the content column lands
+		// there instead — squeezed into the 280-400px track AND under the photo.
+		// From `lg` the two-column grid exists, so move content to the wide second
+		// column, which is beside the portrait and needs no clearance. Below `lg`
+		// the grid is a single stacked column, so clear the overflow the same way
+		// the sidebar does (`md` 104px; under `md` the portrait does not overflow).
+		columnWithoutSidebar: 'md:mt-[104px] lg:col-start-2 lg:mt-0',
 		// Figma card: 16px radius (--radius-lg) white fill; the inner sections
 		// carry their own 24px padding (ProfileContentCard), so the card itself
 		// only adds the 16px outer inset the frame shows.
@@ -67,10 +75,13 @@ export type ProfileContentBlockProps = {
 
 export function ProfileContentBlock(props: ProfileContentBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
-	const { base, well, grid, sidebar, sidebarStandalone, content, separatedColumn, separatedCard, title: titleSlot } =
+	const { base, well, grid, sidebar, sidebarStandalone, content, separatedColumn, separatedCard, columnWithoutSidebar, title: titleSlot } =
 		styles({ backgroundColor });
 	const hasContentCards = props.contentCards.length > 0;
 	const separated = props.cardLayout === 'separated';
+	// Without an <aside> the cards become the grid's first child, so they inherit
+	// the slot the hero portrait overflows into. See the slot's comment.
+	const contentColumn = props.sidebar ? undefined : columnWithoutSidebar();
 
 	return (
 		<article className={cn(base(), props.className)} data-component='ProfileContentBlock'>
@@ -83,7 +94,7 @@ export function ProfileContentBlock(props: ProfileContentBlockProps) {
 					)}
 					{hasContentCards &&
 						(separated ? (
-							<div className={cn(separatedColumn())}>
+							<div className={cn(separatedColumn(), contentColumn)}>
 								{chunkCardGroups(props.contentCards).map((group, gi) =>
 									group[0]?.raw ? (
 										group.map((card, ci) => <ProfileContentCard key={`${gi}-${ci}`} {...card} />)
@@ -102,7 +113,7 @@ export function ProfileContentBlock(props: ProfileContentBlockProps) {
 								)}
 							</div>
 						) : (
-							<div className={cn(content())}>
+							<div className={cn(content(), contentColumn)}>
 								{props.title && (
 									<Text as='h2' styleType='heading-sm' className={titleSlot()}>
 										{props.title}

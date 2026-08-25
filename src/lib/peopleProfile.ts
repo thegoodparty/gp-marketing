@@ -561,7 +561,10 @@ function buildLinks(
  * term (and vice versa). Entries without a date sort last.
  * Claimed profiles override this with the owner-authored list (see composeView).
  */
-function buildRecentExperience(person: PersonItem | null): ExperienceItem[] {
+function buildRecentExperience(
+	person: PersonItem | null,
+	positionLink: { candidacySlug: string | null; href: string } | null = null,
+): ExperienceItem[] {
 	const offices = (person?.OfficeHolders ?? []).map((o) => ({
 		sortKey: o.startAt ?? '',
 		item: {
@@ -585,7 +588,16 @@ function buildRecentExperience(person: PersonItem | null): ExperienceItem[] {
 					organization: c.state ?? null,
 					term: formatYear(electionDate),
 					status: 'Candidate',
-					href: c.slug ? `/candidate/${c.slug}` : null,
+					// "View Position" means the /elections position page the breadcrumb
+					// already points at, not the candidate's own page. Only the primary
+					// candidacy resolves to one: the person payload nests just
+					// `Race.electionDate` (see election-api CANDIDACY_INCLUDE), so a race
+					// slug exists only for the candidacy the loader fetched in full. The
+					// rest render unlinked rather than pointing somewhere else.
+					href:
+						positionLink && c.slug && c.slug === positionLink.candidacySlug
+							? positionLink.href
+							: null,
 				},
 			};
 		});
@@ -883,6 +895,16 @@ export function composeView(
 	// Mirror the loader's stateCode (which includes the candidacy fallback) so a
 	// candidate-only person's sidebar label matches their breadcrumb.
 	const stateLabel = extras.stateCode ?? office?.state ?? person?.state ?? null;
+	// `positionHref` was resolved from whichever candidacy selectPrimaryCandidacy
+	// picked, so Recent Experience has to key off that same candidacy — matching
+	// on anything looser would hang the breadcrumb's position link on a different
+	// race than the one it describes.
+	const positionLink = extras.positionHref
+		? {
+				candidacySlug: selectPrimaryCandidacy(person, office?.isCurrent === true)?.slug ?? null,
+				href: extras.positionHref,
+			}
+		: null;
 
 	// Removal strips photo + authored content; keep only the civics spine.
 	const avatarUrl = removed ? null : (overlay?.avatarUrl ?? person?.headshotUrl ?? null);
@@ -951,7 +973,9 @@ export function composeView(
 		// to the public-record spine. Unclaimed pages get the spine list too.
 		recentExperience:
 			extras.recentExperience ??
-			(removed ? buildRecentExperience(person) : (authoredExperience(overlay) ?? buildRecentExperience(person))),
+			(removed
+				? buildRecentExperience(person, positionLink)
+				: (authoredExperience(overlay) ?? buildRecentExperience(person, positionLink))),
 		otherCandidates: extras.otherCandidates ?? [],
 		nearbyOfficials: extras.nearbyOfficials ?? [],
 		breadcrumb: extras.breadcrumb ?? [{ href: '/elections', label: 'Elections' }, { label: displayName }],

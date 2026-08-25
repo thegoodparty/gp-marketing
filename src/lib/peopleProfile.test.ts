@@ -156,6 +156,112 @@ describe('composeView recent experience', () => {
 	});
 });
 
+/**
+ * "View Position" is the row's only link, and its label promises the
+ * `/elections` position page — the same destination the breadcrumb's position
+ * crumb carries. It shipped pointing at `/candidate/<slug>` instead, so the
+ * button took voters to the candidate's own page rather than the seat.
+ */
+describe('Recent Experience links to the position page, not the candidate page', () => {
+	const POSITION_HREF = '/elections/al/lee/auburn/position/city-council-ward-5';
+	const CANDIDACY_SLUG = 'toshiro-jackson/auburn-city-council-ward-5';
+
+	const runningFor = (over: Record<string, unknown> = {}) =>
+		makePerson({
+			state: 'AL',
+			Candidacies: [
+				{
+					id: 'c1',
+					slug: CANDIDACY_SLUG,
+					positionName: 'Auburn City Council - Ward 5',
+					state: 'AL',
+					Race: { electionDate: '2026-11-03' },
+					...over,
+				},
+			],
+		});
+
+	test('the row for the resolved race points at that position page', () => {
+		const view = composeView(PID, runningFor(), null, { positionHref: POSITION_HREF });
+
+		expect(view.recentExperience[0]?.href).toBe(POSITION_HREF);
+	});
+
+	/**
+	 * The reported bug, pinned by destination rather than by absence: any href
+	 * under `/candidate/` here is the old wrong link, whatever its slug.
+	 */
+	test('never points at the candidate page', () => {
+		const view = composeView(PID, runningFor(), null, { positionHref: POSITION_HREF });
+
+		for (const row of view.recentExperience) {
+			expect(row.href ?? '').not.toStartWith('/candidate/');
+		}
+	});
+
+	/**
+	 * The position href is resolved from whichever candidacy the loader fetched
+	 * in full, so it describes that race alone. A second candidacy carries no
+	 * race slug of its own (election-api nests only `Race.electionDate`), and
+	 * hanging this href on it would point at the wrong seat.
+	 */
+	test('a candidacy the position href does not describe stays unlinked', () => {
+		const person = makePerson({
+			state: 'AL',
+			Candidacies: [
+				{
+					id: 'c1',
+					slug: CANDIDACY_SLUG,
+					positionName: 'Auburn City Council - Ward 5',
+					state: 'AL',
+					Race: { electionDate: '2026-11-03' },
+				},
+				{
+					id: 'c2',
+					slug: 'toshiro-jackson/lee-county-commission',
+					positionName: 'Lee County Commission',
+					state: 'AL',
+					Race: { electionDate: '2022-11-08' },
+				},
+			],
+		});
+
+		const view = composeView(PID, person, null, { positionHref: POSITION_HREF });
+		const byTitle = new Map(view.recentExperience.map((r) => [r.title, r.href]));
+
+		expect(byTitle.get('Candidate for Auburn City Council - Ward 5')).toBe(POSITION_HREF);
+		expect(byTitle.get('Candidate for Lee County Commission')).toBeNull();
+	});
+
+	/**
+	 * The requirement is parity with the breadcrumb, so assert against what the
+	 * trail actually builds rather than against a hand-written path: if the
+	 * elections route shape changes, both move together or this fails.
+	 */
+	test('matches the destination the breadcrumb position crumb uses', () => {
+		const raceSlug = 'al/lee/auburn/city-council-ward-5';
+		const trail = buildBreadcrumbTrail({
+			displayName: 'Toshiro Jackson',
+			stateCode: 'AL',
+			raceSlug,
+			positionLevel: 'CITY',
+			positionName: 'Auburn City Council - Ward 5',
+		});
+		const crumbHref = trail.find((c) => c.label === 'Auburn City Council - Ward 5')?.href ?? null;
+
+		const view = composeView(PID, runningFor(), null, { positionHref: crumbHref });
+
+		expect(crumbHref).not.toBeNull();
+		expect(view.recentExperience[0]?.href).toBe(crumbHref);
+	});
+
+	test('renders no link when no position page resolves', () => {
+		const view = composeView(PID, runningFor(), null, {});
+
+		expect(view.recentExperience[0]?.href).toBeNull();
+	});
+});
+
 describe('extractPersonId', () => {
 	test('extracts the trailing UUID from a slug', () => {
 		expect(extractPersonId(`jane-doe-${PID}`)).toBe(PID);

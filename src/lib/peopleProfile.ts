@@ -11,6 +11,7 @@ import {
 	getVoterDensityForDistrict,
 } from '~/lib/electionsApi';
 import { US_STATES_TUPLES } from '~/constants/usStates';
+import { normalizeStateCode } from '~/constants/usStateCodes';
 import {
 	buildElectionPositionHrefFromRaceSlug,
 	getStateName,
@@ -893,8 +894,11 @@ export function composeView(
 	const party = rawParty ?? (partyClass ? PARTY_LABELS[partyClass] : null);
 	const districtLabel = office?.subAreaValue ?? office?.subAreaName ?? null;
 	// Mirror the loader's stateCode (which includes the candidacy fallback) so a
-	// candidate-only person's sidebar label matches their breadcrumb.
-	const stateLabel = extras.stateCode ?? office?.state ?? person?.state ?? null;
+	// candidate-only person's sidebar label matches their breadcrumb. Normalized
+	// for the same reason the loader normalizes: this is a code by contract (it
+	// fills schema.org `addressRegion`) and the feed does not always send one.
+	const stateLabel =
+		extras.stateCode ?? normalizeStateCode(office?.state ?? person?.state) ?? null;
 	// `positionHref` was resolved from whichever candidacy selectPrimaryCandidacy
 	// picked, so Recent Experience has to key off that same candidacy — matching
 	// on anything looser would hang the breadcrumb's position link on a different
@@ -1213,7 +1217,10 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 			slug: raceSlug ?? undefined,
 			positionLevel: positionLevel ?? undefined,
 		}) ?? null;
-	const stateCode = office?.state ?? person?.state ?? candidacy?.state ?? null;
+	// A code by contract — it builds `/elections/<code>` in the breadcrumb — but
+	// the mart sends `Minnesota` for rows it created from a gp-api account
+	// rather than from BallotReady, which lowercased to a 404 crumb.
+	const stateCode = normalizeStateCode(office?.state ?? person?.state ?? candidacy?.state);
 
 	const composedName = [person?.firstName, person?.lastName].filter(Boolean).join(' ');
 	const displayName =

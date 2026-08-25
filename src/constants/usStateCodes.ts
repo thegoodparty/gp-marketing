@@ -24,7 +24,7 @@ export function isValidStateCode(code: string | null | undefined): code is USSta
 
 /** Full state name (lowercased) → code, for normalizing a spelled-out state. */
 const CODE_BY_STATE_NAME = new Map<string, USStateCode>(
-	US_STATES_TUPLES.map(([code, name]) => [name.toLowerCase(), code as USStateCode]),
+	US_STATES_TUPLES.map(([code, name]): [string, USStateCode] => [name.toLowerCase(), code]),
 );
 
 /**

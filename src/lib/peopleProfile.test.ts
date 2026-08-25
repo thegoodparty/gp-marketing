@@ -345,6 +345,47 @@ describe('Recent Experience links every row it has a race slug for', () => {
 	});
 
 	/**
+	 * A CITY slug carrying no county segment resolves to a county-depth URL that
+	 * 308s to the canonical four-level path (redirectCityRaceToFourLevelUrl), so
+	 * it is a working link, not a broken one.
+	 *
+	 * The sitemap deliberately suppresses these (`skipUnmappedCity`) because a
+	 * sitemap should advertise canonical URLs rather than redirects. An in-page
+	 * link is the opposite case: the breadcrumb's position crumb builds this very
+	 * href from the same helper, so suppressing it here would leave the row
+	 * unlinked while the crumb directly above it still worked — the exact
+	 * inconsistency this whole change set exists to remove.
+	 */
+	test('a city slug with no county segment links, matching the breadcrumb', () => {
+		const slug = 'ca/beverly-hills/city-legislature';
+		const person = makePerson({
+			state: 'CA',
+			Candidacies: [
+				{
+					id: 'c1',
+					slug: 'jane-doe-city-council',
+					positionName: 'City Council',
+					state: 'CA',
+					Race: { electionDate: '2026-11-03', slug, positionLevel: 'CITY' },
+				},
+			],
+		});
+
+		const crumbHref = buildBreadcrumbTrail({
+			displayName: 'Jane Doe',
+			stateCode: 'CA',
+			raceSlug: slug,
+			positionLevel: 'CITY',
+			positionName: 'City Council',
+		}).find((c) => c.label === 'City Council')?.href;
+
+		const view = composeView(PID, person, null, {});
+
+		expect(crumbHref).toBe('/elections/ca/beverly-hills/position/city-legislature');
+		expect(view.recentExperience[0]?.href).toBe(crumbHref);
+	});
+
+	/**
 	 * Slugs come from a dbt macro and can be too short to place. Linking anyway
 	 * would point "View Position" at a 404, which is worse than no link.
 	 */

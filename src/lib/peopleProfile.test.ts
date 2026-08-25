@@ -125,6 +125,34 @@ describe('composeView recent experience', () => {
 		]);
 	});
 
+	test('primary candidacy View Position link points to the elections position page, not the profile', () => {
+		const person = makePerson({
+			state: 'CA',
+			Candidacies: [
+				{
+					id: 'c1',
+					slug: 'jane-public/mayor',
+					positionName: 'Mayor',
+					state: 'CA',
+					Race: { electionDate: '2024-11-05' },
+				},
+			],
+		});
+		// The loader resolves the primary candidacy's canonical position page and
+		// passes it as positionHref; the matching experience row must use it (never
+		// the /candidate/<slug> profile URL that caused the bug).
+		const view = composeView(PID, person, null, { positionHref: '/elections/ca/position/mayor' });
+		expect(view.recentExperience).toEqual([
+			{
+				title: 'Candidate for Mayor',
+				organization: 'CA',
+				term: '2024',
+				status: 'Candidate',
+				href: '/elections/ca/position/mayor',
+			},
+		]);
+	});
+
 	test('claimed authored experience overrides the spine list', () => {
 		const person = makePerson({ Candidacies: [{ id: 'c1', positionName: 'Mayor' }] });
 		const overlay = makeOverlay({

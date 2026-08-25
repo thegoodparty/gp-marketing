@@ -443,7 +443,14 @@ function buildLinks(
  * term (and vice versa). Entries without a date sort last.
  * Claimed profiles override this with the owner-authored list (see composeView).
  */
-function buildRecentExperience(person: PersonItem | null): ExperienceItem[] {
+function buildRecentExperience(
+	person: PersonItem | null,
+	// The primary candidacy's canonical /elections position page ("View Position").
+	// Only the primary candidacy is enriched with its race slug (loadPrimaryCandidacy),
+	// so only its row can link to the position; other rows stay unlinked rather than
+	// fall back to the person's own profile URL.
+	primaryPosition?: { slug: string | null; href: string | null },
+): ExperienceItem[] {
 	const offices = (person?.OfficeHolders ?? []).map((o) => ({
 		sortKey: o.startAt ?? '',
 		item: {
@@ -460,6 +467,7 @@ function buildRecentExperience(person: PersonItem | null): ExperienceItem[] {
 		.filter((c) => c.positionName)
 		.map((c) => {
 			const electionDate = c.Race?.electionDate ?? null;
+			const isPrimary = Boolean(primaryPosition?.slug) && c.slug === primaryPosition?.slug;
 			return {
 				sortKey: electionDate ?? '',
 				item: {
@@ -467,7 +475,7 @@ function buildRecentExperience(person: PersonItem | null): ExperienceItem[] {
 					organization: c.state ?? null,
 					term: formatYear(electionDate),
 					status: 'Candidate',
-					href: c.slug ? `/candidate/${c.slug}` : null,
+					href: isPrimary ? (primaryPosition?.href ?? null) : null,
 				},
 			};
 		});
@@ -716,6 +724,14 @@ export function composeView(
 	const avatarUrl = removed ? null : (overlay?.avatarUrl ?? person?.headshotUrl ?? null);
 	const bio = removed ? null : (overlay?.bioOverride ?? person?.bioText ?? null);
 
+	// The loader enriches exactly one candidacy (selectPrimaryCandidacy, same inputs
+	// here) with its race slug, yielding extras.positionHref. Pair that href with the
+	// primary candidacy's slug so buildRecentExperience can link the matching row.
+	const primaryPosition = {
+		slug: selectPrimaryCandidacy(person, office?.isCurrent === true)?.slug ?? null,
+		href: extras.positionHref ?? null,
+	};
+
 	return {
 		personId,
 		// Public URL is /people/<base>-<id8>, where the 8-hex id suffix is what makes
@@ -776,9 +792,14 @@ export function composeView(
 		links: removed ? [] : buildLinks(overlay, person, office),
 		// Owner-authored experience wins on a claimed page; removal strips it back
 		// to the public-record spine. Unclaimed pages get the spine list too.
+		// The primary candidacy row links to its /elections position page (the same
+		// target as the breadcrumb), matched by candidacy slug to the loader's
+		// resolved positionHref.
 		recentExperience:
 			extras.recentExperience ??
-			(removed ? buildRecentExperience(person) : (authoredExperience(overlay) ?? buildRecentExperience(person))),
+			(removed
+				? buildRecentExperience(person, primaryPosition)
+				: (authoredExperience(overlay) ?? buildRecentExperience(person, primaryPosition))),
 		otherCandidates: extras.otherCandidates ?? [],
 		nearbyOfficials: extras.nearbyOfficials ?? [],
 		breadcrumb: extras.breadcrumb ?? [{ href: '/elections', label: 'Elections' }, { label: displayName }],

@@ -29,6 +29,13 @@ export interface PersonOfficeHolder {
 	officeEmail: string | null;
 	mailingCity: string | null;
 	mailingState: string | null;
+	/**
+	 * The office's own most recent race, flattened onto the term by election-api's
+	 * attachOfficeContext. This is the only route to a position page for a pure
+	 * officeholder, who has no candidacy to borrow a race slug from.
+	 */
+	positionSlug?: string | null;
+	positionLevel?: string | null;
 	/** Present when the officeholders feed is fetched with includePosition. */
 	Position?: {
 		id: string;
@@ -49,9 +56,15 @@ export interface PersonCandidacySummary {
 	positionId?: string | null;
 	/**
 	 * The candidacy's race, nested by election-api's persons endpoint (narrow,
-	 * non-PII select). Lets "Recent Experience" date a run without a second fetch.
+	 * non-PII select). Lets "Recent Experience" date a run and link it to its
+	 * position page without a second fetch. `slug`/`positionLevel` arrived after
+	 * `electionDate` (omni#1425), so treat them as absent on older payloads.
 	 */
-	Race?: { electionDate?: string | null } | null;
+	Race?: {
+		electionDate?: string | null;
+		slug?: string | null;
+		positionLevel?: string | null;
+	} | null;
 }
 
 export interface PersonItem {

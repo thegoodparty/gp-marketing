@@ -562,6 +562,26 @@ function buildLinks(
  * term (and vice versa). Entries without a date sort last.
  * Claimed profiles override this with the owner-authored list (see composeView).
  */
+/**
+ * The `/elections` position page for a race slug, or null when none resolves —
+ * the destination "View Position" promises and the breadcrumb's position crumb
+ * already uses. Every hop is optional upstream (a term need not reach a race,
+ * and a slug can be too short to place), so an unresolvable row renders as
+ * plain text rather than a link that 404s.
+ */
+function positionHrefFor(
+	slug: string | null | undefined,
+	positionLevel: string | null | undefined,
+): string | null {
+	if (!slug) return null;
+	return (
+		buildElectionPositionHrefFromRaceSlug({
+			slug,
+			positionLevel: positionLevel ?? undefined,
+		}) ?? null
+	);
+}
+
 function buildRecentExperience(
 	person: PersonItem | null,
 	positionLink: { candidacySlug: string | null; href: string } | null = null,
@@ -574,7 +594,14 @@ function buildRecentExperience(
 			term: formatTerm(o),
 			// Current terms read as "Incumbent"; past terms let the year range speak.
 			status: o.isCurrent === true ? 'Incumbent' : null,
-			href: null,
+			// The term's own race slug, flattened onto it by election-api. Prefer the
+			// race's level, which is non-null where Position.level is nullable.
+			// The level only changes routing once a citySlugToCountySlug map is in
+			// play (see resolveElectionPositionFromRaceSlug); without one every slug
+			// falls through to the generic segment-count branch, so passing it is
+			// inert today. Kept so this call reads like the breadcrumb's, and so it
+			// stays correct if a county map is ever threaded through.
+			href: positionHrefFor(o.positionSlug, o.positionLevel ?? o.Position?.level),
 		},
 	}));
 
@@ -590,15 +617,15 @@ function buildRecentExperience(
 					term: formatYear(electionDate),
 					status: 'Candidate',
 					// "View Position" means the /elections position page the breadcrumb
-					// already points at, not the candidate's own page. Only the primary
-					// candidacy resolves to one: the person payload nests just
-					// `Race.electionDate` (see election-api CANDIDACY_INCLUDE), so a race
-					// slug exists only for the candidacy the loader fetched in full. The
-					// rest render unlinked rather than pointing somewhere else.
+					// already points at, not the candidate's own page. The row's own race
+					// slug is the accurate source; `positionLink` only covers the one
+					// candidacy the loader fetched in full, and stays as a fallback for
+					// payloads predating omni#1425 (which added slug to the nested Race).
 					href:
-						positionLink && c.slug && c.slug === positionLink.candidacySlug
+						positionHrefFor(c.Race?.slug, c.Race?.positionLevel) ??
+						(positionLink && c.slug && c.slug === positionLink.candidacySlug
 							? positionLink.href
-							: null,
+							: null),
 				},
 			};
 		});

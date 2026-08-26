@@ -13,6 +13,7 @@ import {
 	resolveProfileState,
 	type PersonPersona,
 } from './peopleProfile';
+import { buildElectionPositionHrefFromRaceSlug } from './electionsHelpers';
 import { classifyParty, isMajorParty } from './party';
 
 const PID = '11111111-1111-1111-1111-111111111111';
@@ -258,6 +259,153 @@ describe('Recent Experience links to the position page, not the candidate page',
 	test('renders no link when no position page resolves', () => {
 		const view = composeView(PID, runningFor(), null, {});
 
+		expect(view.recentExperience[0]?.href).toBeNull();
+	});
+});
+
+/**
+ * Once election-api nests each candidacy's own race slug (omni#1425) and
+ * flattens the office's onto each term, every row can reach its own position
+ * page — not just the one candidacy the loader fetched in full.
+ */
+describe('Recent Experience links every row it has a race slug for', () => {
+	/** The canonical builder, so these assert parity rather than a hand-written path. */
+	const expectedHref = (slug: string, positionLevel: string) =>
+		buildElectionPositionHrefFromRaceSlug({ slug, positionLevel });
+
+	test('each candidacy links to its own race, not to the primary one', () => {
+		const current = 'al/lee/auburn/city-council-ward-5';
+		const older = 'al/lee/lee-county-commission';
+		const person = makePerson({
+			state: 'AL',
+			Candidacies: [
+				{
+					id: 'c1',
+					slug: 'toshiro-jackson/auburn-city-council-ward-5',
+					positionName: 'Auburn City Council - Ward 5',
+					state: 'AL',
+					Race: { electionDate: '2026-11-03', slug: current, positionLevel: 'CITY' },
+				},
+				{
+					id: 'c2',
+					slug: 'toshiro-jackson/lee-county-commission',
+					positionName: 'Lee County Commission',
+					state: 'AL',
+					Race: { electionDate: '2022-11-08', slug: older, positionLevel: 'COUNTY' },
+				},
+			],
+		});
+
+		const view = composeView(PID, person, null, {});
+		const byTitle = new Map(view.recentExperience.map((r) => [r.title, r.href]));
+
+		expect(byTitle.get('Candidate for Auburn City Council - Ward 5')).toBe(
+			expectedHref(current, 'CITY'),
+		);
+		expect(byTitle.get('Candidate for Lee County Commission')).toBe(expectedHref(older, 'COUNTY'));
+		// Distinct races must not collapse onto one destination.
+		expect(byTitle.get('Candidate for Auburn City Council - Ward 5')).not.toBe(
+			byTitle.get('Candidate for Lee County Commission'),
+		);
+	});
+
+	/**
+	 * A pure officeholder has no candidacy to borrow a slug from, so the term's
+	 * own `positionSlug` is the only route to their seat's page.
+	 */
+	test('an office term links through the slug flattened onto it', () => {
+		const slug = 'ca/los-angeles/mayor';
+		const person = makePerson({
+			state: 'CA',
+			OfficeHolders: [
+				makeOffice({
+					officeTitle: 'Mayor',
+					state: 'CA',
+					startAt: '2022-01-01',
+					isCurrent: true,
+					positionSlug: slug,
+					positionLevel: 'CITY',
+				}),
+			],
+		});
+
+		const view = composeView(PID, person, null, {});
+
+		expect(view.recentExperience[0]?.href).toBe(expectedHref(slug, 'CITY'));
+	});
+
+	test('an office term with no race stays unlinked', () => {
+		const person = makePerson({
+			OfficeHolders: [makeOffice({ officeTitle: 'Mayor', state: 'CA', startAt: '2022-01-01' })],
+		});
+
+		const view = composeView(PID, person, null, {});
+
+		expect(view.recentExperience[0]?.href).toBeNull();
+	});
+
+	/**
+	 * A CITY slug carrying no county segment resolves to a county-depth URL that
+	 * 308s to the canonical four-level path (redirectCityRaceToFourLevelUrl), so
+	 * it is a working link, not a broken one.
+	 *
+	 * The sitemap deliberately suppresses these (`skipUnmappedCity`) because a
+	 * sitemap should advertise canonical URLs rather than redirects. An in-page
+	 * link is the opposite case: the breadcrumb's position crumb builds this very
+	 * href from the same helper, so suppressing it here would leave the row
+	 * unlinked while the crumb directly above it still worked — the exact
+	 * inconsistency this whole change set exists to remove.
+	 */
+	test('a city slug with no county segment links, matching the breadcrumb', () => {
+		const slug = 'ca/beverly-hills/city-legislature';
+		const person = makePerson({
+			state: 'CA',
+			Candidacies: [
+				{
+					id: 'c1',
+					slug: 'jane-doe-city-council',
+					positionName: 'City Council',
+					state: 'CA',
+					Race: { electionDate: '2026-11-03', slug, positionLevel: 'CITY' },
+				},
+			],
+		});
+
+		const crumbHref = buildBreadcrumbTrail({
+			displayName: 'Jane Doe',
+			stateCode: 'CA',
+			raceSlug: slug,
+			positionLevel: 'CITY',
+			positionName: 'City Council',
+		}).find((c) => c.label === 'City Council')?.href;
+
+		const view = composeView(PID, person, null, {});
+
+		expect(crumbHref).toBe('/elections/ca/beverly-hills/position/city-legislature');
+		expect(view.recentExperience[0]?.href).toBe(crumbHref);
+	});
+
+	/**
+	 * Slugs come from a dbt macro and can be too short to place. Linking anyway
+	 * would point "View Position" at a 404, which is worse than no link.
+	 */
+	test('a slug that resolves to no page renders unlinked, not a 404', () => {
+		const person = makePerson({
+			state: 'CA',
+			Candidacies: [
+				{
+					id: 'c1',
+					slug: 'jane-doe-mayor',
+					positionName: 'Mayor',
+					state: 'CA',
+					Race: { electionDate: '2026-11-03', slug: 'ca', positionLevel: 'CITY' },
+				},
+			],
+		});
+
+		const view = composeView(PID, person, null, {});
+
+		expect(expectedHref('ca', 'CITY')).toBeUndefined();
 		expect(view.recentExperience[0]?.href).toBeNull();
 	});
 });

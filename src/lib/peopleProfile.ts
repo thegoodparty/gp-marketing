@@ -8,6 +8,7 @@ import {
 	getPersonsByIds,
 	getPlacesByState,
 	getPublicPersonProfileStatus,
+	getRemovedPersonIds,
 	getVoterDensityForDistrict,
 } from '~/lib/electionsApi';
 import { US_STATES_TUPLES } from '~/constants/usStates';
@@ -694,6 +695,25 @@ function pledgedFromSpine(person: PersonItem | undefined, ...rowParties: Array<s
 }
 
 /**
+ * A removed person's photo must not appear anywhere, including on somebody
+ * else's page. The profile page nulls the subject's own photo at render, but the
+ * candidacy and officeholder feeds carry their own copy of it for these cards,
+ * so the card avatar has to be dropped here too.
+ *
+ * `removedPersonIds` of null means the feed could not be read: suppress every
+ * card photo rather than risk republishing one (see getRemovedPersonIds).
+ */
+function cardAvatarUrl(
+	personId: string | null,
+	avatarUrl: string | null,
+	removedPersonIds: ReadonlySet<string> | null,
+): string | null {
+	if (!removedPersonIds) return null;
+	if (personId && removedPersonIds.has(personId.toLowerCase())) return null;
+	return avatarUrl;
+}
+
+/**
  * Maps candidacies sharing a position into "Other Candidates" cards, excluding
  * the subject. `personsById` supplies the pledge flag, which the candidacy feed
  * does not carry — see {@link loadOtherCandidates}.
@@ -702,6 +722,7 @@ export function buildOtherCandidateCards(
 	candidacies: CandidacyItem[],
 	personsById: Map<string, PersonItem>,
 	excludePersonId: string,
+	removedPersonIds: ReadonlySet<string> | null,
 ): RelatedPersonCard[] {
 	const cards: RelatedPersonCard[] = [];
 	const seen = new Set<string>();
@@ -723,7 +744,7 @@ export function buildOtherCandidateCards(
 			href,
 			isEmpowered: false,
 			isPledged: pledgedFromSpine(c.personId ? personsById.get(c.personId.toLowerCase()) : undefined, c.party),
-			avatarUrl: c.image ?? null,
+			avatarUrl: cardAvatarUrl(c.personId ?? null, c.image ?? null, removedPersonIds),
 		});
 		if (cards.length >= 6) break;
 	}
@@ -735,6 +756,7 @@ export function buildNearbyOfficialCards(
 	officeholders: PersonOfficeHolder[],
 	personsById: Map<string, PersonItem>,
 	excludePersonId: string,
+	removedPersonIds: ReadonlySet<string> | null,
 ): RelatedPersonCard[] {
 	const cards: RelatedPersonCard[] = [];
 	const seen = new Set<string>();
@@ -769,7 +791,7 @@ export function buildNearbyOfficialCards(
 			href,
 			isEmpowered: false,
 			isPledged: pledgedFromSpine(person, ...(oh.partyNames ?? [])),
-			avatarUrl: person?.headshotUrl ?? null,
+			avatarUrl: cardAvatarUrl(pid, person?.headshotUrl ?? null, removedPersonIds),
 		});
 		if (cards.length >= 6) break;
 	}
@@ -1066,6 +1088,7 @@ async function loadPrimaryCandidacy(
 async function loadOtherCandidates(
 	positionId: string | null,
 	excludePersonId: string,
+	removedPersonIds: ReadonlySet<string> | null,
 ): Promise<RelatedPersonCard[]> {
 	if (!positionId) return [];
 	const candidacies = await getCandidacies({ positionId });
@@ -1074,13 +1097,14 @@ async function loadOtherCandidates(
 		.filter((id): id is string => Boolean(id) && id!.toLowerCase() !== excludePersonId.toLowerCase());
 	const persons = await getPersonsByIds(ids);
 	const byId = new Map(persons.map((p) => [p.id.toLowerCase(), p]));
-	return buildOtherCandidateCards(candidacies, byId, excludePersonId);
+	return buildOtherCandidateCards(candidacies, byId, excludePersonId, removedPersonIds);
 }
 
 /** Fetches "Nearby Officials" cards for a resolved geo id. */
 async function loadNearbyOfficials(
 	geoId: string | null,
 	excludePersonId: string,
+	removedPersonIds: ReadonlySet<string> | null,
 ): Promise<RelatedPersonCard[]> {
 	if (!geoId) return [];
 	const officeholders = await getOfficeHoldersByGeoId(geoId);
@@ -1089,7 +1113,7 @@ async function loadNearbyOfficials(
 		.filter((id): id is string => Boolean(id) && id!.toLowerCase() !== excludePersonId.toLowerCase());
 	const persons = await getPersonsByIds(ids);
 	const byId = new Map(persons.map((p) => [p.id.toLowerCase(), p]));
-	return buildNearbyOfficialCards(officeholders, byId, excludePersonId);
+	return buildNearbyOfficialCards(officeholders, byId, excludePersonId, removedPersonIds);
 }
 
 /**
@@ -1257,9 +1281,11 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 	// empty on any miss so the core profile always renders.
 	const { tier, countySlug } = deriveElectionsIndexTier(positionHref, positionLevel);
 	const breadcrumb = buildBreadcrumbTrail({ displayName, stateCode, raceSlug, positionLevel, positionName });
+	// Resolved before the card loaders so both see the same removal set.
+	const removedPersonIds = await getRemovedPersonIds();
 	const [otherCandidates, nearbyOfficials, electionsIndex] = await Promise.all([
-		loadOtherCandidates(positionId, personId),
-		loadNearbyOfficials(geoId, personId),
+		loadOtherCandidates(positionId, personId, removedPersonIds),
+		loadNearbyOfficials(geoId, personId, removedPersonIds),
 		loadElectionsIndex({ stateCode, tier, countySlug }),
 	]);
 

@@ -175,6 +175,30 @@ are good agent targets: read the test, change the function, add a case, run
   `buildJobPostingSchema`, `buildBreadcrumbSchema`, `buildDynamicFAQItems`).
 - Place-facts formatting (`placeToFactsCards`, `hasSuspiciousFactsMatch`).
 
+### Privacy takedowns ("remove this person's page")
+
+Support applies a takedown in the admin console, which records it in gp-api. Two
+things then happen on this site, and they are separate:
+
+1. **The person's own `/people` page.** `loadPersonProfile` reads the removal
+   straight from gp-api and renders the "removal requested" states, which drop
+   the photo, bio and every authored field while keeping a crawlable name.
+2. **Everybody else's page.** A person's photo also travels on their candidacy
+   and officeholder records, which is what the "Other Candidates" and "Nearby
+   Officials" cards on *other* profiles read. Those come from election-api,
+   which knows nothing about removals, so the cards are filtered here instead:
+   `getRemovedPersonIds` reads gp-api's `/v1/public-person-profiles/unlisted`
+   feed and `buildOtherCandidateCards` / `buildNearbyOfficialCards` drop the
+   photo for anyone in it.
+
+If that feed cannot be read, every card photo is dropped rather than risking
+republishing one. A takedown propagates immediately because
+`/api/revalidate-person` busts the feed's cache tag as well as the person's own.
+
+Note this suppresses only what *we* publish. The image itself is usually hosted
+by BallotReady and stays live at its own URL, so a genuine takedown request also
+has to go upstream to them.
+
 ### Not fixable here, escalate
 
 Candidate claimed-vs-unclaimed state and any "my profile is wrong" bug is a data

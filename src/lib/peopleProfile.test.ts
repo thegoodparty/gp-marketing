@@ -17,6 +17,7 @@ import { buildElectionPositionHrefFromRaceSlug } from './electionsHelpers';
 import { classifyParty, isMajorParty } from './party';
 
 const PID = '11111111-1111-1111-1111-111111111111';
+const NO_REMOVALS: ReadonlySet<string> = new Set();
 
 function makeOffice(o: Partial<PersonOfficeHolder> = {}): PersonOfficeHolder {
 	return {
@@ -1203,6 +1204,7 @@ describe('buildNearbyOfficialCards', () => {
 			[makeOffice({ personId: OTHER, officeTitle: 'city council member' })],
 			personsById(makePerson({ id: OTHER, fullName: 'chris lewis' })),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.name)).toEqual(['Chris Lewis']);
 	});
@@ -1212,6 +1214,7 @@ describe('buildNearbyOfficialCards', () => {
 			[makeOffice({ personId: OTHER })],
 			personsById(makePerson({ id: OTHER, firstName: 'chris', lastName: 'lewis' })),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.name)).toEqual(['Chris Lewis']);
 	});
@@ -1219,16 +1222,16 @@ describe('buildNearbyOfficialCards', () => {
 	// Rows with no linked person still render a card, labelled by the office. The
 	// title comes from the same spine as the names and arrives uncased too.
 	test('falls through to the office title, cased', () => {
-		const cards = buildNearbyOfficialCards([makeOffice({ officeTitle: 'city council member' })], new Map(), PID);
+		const cards = buildNearbyOfficialCards([makeOffice({ officeTitle: 'city council member' })], new Map(), PID, NO_REMOVALS);
 		expect(cards.map((c) => c.name)).toEqual(['City Council Member']);
 	});
 
 	test('skips a row with no name and no office title', () => {
-		expect(buildNearbyOfficialCards([makeOffice({})], new Map(), PID)).toEqual([]);
+		expect(buildNearbyOfficialCards([makeOffice({})], new Map(), PID, NO_REMOVALS)).toEqual([]);
 	});
 
 	test('excludes the subject of the profile', () => {
-		expect(buildNearbyOfficialCards([makeOffice({ personId: PID, officeTitle: 'mayor' })], new Map(), PID)).toEqual([]);
+		expect(buildNearbyOfficialCards([makeOffice({ personId: PID, officeTitle: 'mayor' })], new Map(), PID, NO_REMOVALS)).toEqual([]);
 	});
 
 	// The pledge flag was already in memory here — `loadNearbyOfficials` resolves
@@ -1238,6 +1241,7 @@ describe('buildNearbyOfficialCards', () => {
 			[makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: ['Independent'] })],
 			personsById(makePerson({ id: OTHER, fullName: 'chris lewis', isPledged: true })),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([true]);
 	});
@@ -1247,6 +1251,7 @@ describe('buildNearbyOfficialCards', () => {
 			[makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: ['Independent'] })],
 			personsById(makePerson({ id: OTHER, fullName: 'chris lewis' })),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
 	});
@@ -1254,7 +1259,7 @@ describe('buildNearbyOfficialCards', () => {
 	// A row with no linked person still renders a card, labelled by its office.
 	// There is no one to have pledged, so it must not claim anyone did.
 	test('is not pledged when there is no person to look up', () => {
-		const cards = buildNearbyOfficialCards([makeOffice({ officeTitle: 'city council member' })], new Map(), PID);
+		const cards = buildNearbyOfficialCards([makeOffice({ officeTitle: 'city council member' })], new Map(), PID, NO_REMOVALS);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
 	});
 
@@ -1266,6 +1271,7 @@ describe('buildNearbyOfficialCards', () => {
 			[makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: ['Democratic'] })],
 			personsById(makePerson({ id: OTHER, fullName: 'chris lewis', isPledged: true })),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
 	});
@@ -1278,6 +1284,7 @@ describe('buildNearbyOfficialCards', () => {
 			[makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: [] })],
 			personsById(makePerson({ id: OTHER, fullName: 'chris lewis', isPledged: true })),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
 	});
@@ -1296,6 +1303,7 @@ describe('buildNearbyOfficialCards', () => {
 				}),
 			),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
 	});
@@ -1320,12 +1328,13 @@ describe('buildOtherCandidateCards', () => {
 			[candidacy()],
 			personsById(makePerson({ id: OTHER, isPledged: true })),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([true]);
 	});
 
 	test('is not pledged when the person lookup found nothing', () => {
-		const cards = buildOtherCandidateCards([candidacy()], new Map(), PID);
+		const cards = buildOtherCandidateCards([candidacy()], new Map(), PID, NO_REMOVALS);
 		expect(cards).toHaveLength(1);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
 	});
@@ -1335,6 +1344,7 @@ describe('buildOtherCandidateCards', () => {
 			[candidacy({ party: 'Republican' })],
 			personsById(makePerson({ id: OTHER, isPledged: true })),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
 	});
@@ -1344,6 +1354,7 @@ describe('buildOtherCandidateCards', () => {
 			[candidacy({ party: undefined })],
 			personsById(makePerson({ id: OTHER, isPledged: true })),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
 	});
@@ -1362,11 +1373,56 @@ describe('buildOtherCandidateCards', () => {
 				}),
 			),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
 	});
 
 	test('excludes the subject of the profile', () => {
-		expect(buildOtherCandidateCards([candidacy({ personId: PID })], new Map(), PID)).toEqual([]);
+		expect(buildOtherCandidateCards([candidacy({ personId: PID })], new Map(), PID, NO_REMOVALS)).toEqual([]);
+	});
+});
+
+describe('removed people never keep a card photo', () => {
+	const SUBJECT = '11111111-1111-1111-1111-111111111111';
+	const REMOVED = '44444444-4444-4444-4444-444444444444';
+
+	const removedCandidacy = (): CandidacyItem => ({
+		id: 'c1',
+		personId: REMOVED,
+		firstName: 'chris',
+		lastName: 'lewis',
+		party: 'Independent',
+		image: 'https://assets.civicengine.com/uploads/candidate/headshot/1/1.jpg',
+	});
+
+	test('drops the candidacy photo for a removed person, keeping the card', () => {
+		const cards = buildOtherCandidateCards([removedCandidacy()], new Map(), SUBJECT, new Set([REMOVED.toLowerCase()]));
+		expect(cards).toHaveLength(1);
+		expect(cards[0]?.avatarUrl).toBeNull();
+		expect(cards[0]?.name).toBe('Chris Lewis');
+	});
+
+	test('keeps the photo for someone who was not removed', () => {
+		const cards = buildOtherCandidateCards([removedCandidacy()], new Map(), SUBJECT, new Set(['99999999-9999-9999-9999-999999999999']));
+		expect(cards[0]?.avatarUrl).toBe('https://assets.civicengine.com/uploads/candidate/headshot/1/1.jpg');
+	});
+
+	test('matches the removal set case-insensitively', () => {
+		const cards = buildOtherCandidateCards([removedCandidacy()], new Map(), SUBJECT, new Set([REMOVED.toUpperCase().toLowerCase()]));
+		expect(cards[0]?.avatarUrl).toBeNull();
+	});
+
+	test('drops every card photo when the removal feed could not be read', () => {
+		const cards = buildOtherCandidateCards([removedCandidacy()], new Map(), SUBJECT, null);
+		expect(cards[0]?.avatarUrl).toBeNull();
+	});
+
+	test('drops a removed officeholder photo on Nearby Officials too', () => {
+		const officeholder = makeOffice({ personId: REMOVED, officeTitle: 'mayor' });
+		const persons = new Map([[REMOVED.toLowerCase(), makePerson({ id: REMOVED, fullName: 'chris lewis', headshotUrl: 'https://cdn.example.org/x.jpg' })]]);
+		const cards = buildNearbyOfficialCards([officeholder], persons, SUBJECT, new Set([REMOVED.toLowerCase()]));
+		expect(cards).toHaveLength(1);
+		expect(cards[0]?.avatarUrl).toBeNull();
 	});
 });

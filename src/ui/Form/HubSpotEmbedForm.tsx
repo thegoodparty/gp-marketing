@@ -146,6 +146,11 @@ const BRAND_CSS = `
 		box-shadow: none !important;
 	}
 	.hs-form .hs-button:hover { filter: brightness(0.92) !important; }
+	.hs-form .hs-button:focus-visible {
+		outline: none !important;
+		box-shadow: 0 0 0 3px var(--gp-form-primary, #2563eb) !important;
+		box-shadow: 0 0 0 3px color-mix(in srgb, var(--gp-form-primary, #2563eb) 35%, transparent) !important;
+	}
 	.hs-form .hs-form-required { color: var(--gp-form-red, #db1439) !important; }
 	.hs-form label { color: hsl(220 58% 10%) !important; font-weight: 600 !important; }
 	.hs-form .hs-error-msg, .hs-form .hs-error-msgs label { color: var(--gp-form-error, #b80a27) !important; font-weight: 400 !important; }

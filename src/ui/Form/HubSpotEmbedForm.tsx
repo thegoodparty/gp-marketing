@@ -121,6 +121,7 @@ const BRAND_CSS = `
 	.hs-form .hs-input:focus {
 		border-color: var(--gp-form-primary, #2563eb) !important;
 		outline: none !important;
+		box-shadow: 0 0 0 3px var(--gp-form-primary, #2563eb) !important;
 		box-shadow: 0 0 0 3px color-mix(in srgb, var(--gp-form-primary, #2563eb) 35%, transparent) !important;
 	}
 	.hs-form .hs-input.invalid:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=submit]),

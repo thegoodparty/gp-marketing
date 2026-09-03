@@ -53,9 +53,11 @@ beforeEach(() => {
 	globalThis.window = window as unknown as Window & typeof globalThis;
 	globalThis.document = window.document;
 	globalThis.navigator = window.navigator;
+	globalThis.getComputedStyle = window.getComputedStyle.bind(window);
 	globalThis.HTMLIFrameElement = window.HTMLIFrameElement;
 	globalThis.HTMLInputElement = window.HTMLInputElement;
 	globalThis.HTMLButtonElement = window.HTMLButtonElement;
+	globalThis.HTMLStyleElement = window.HTMLStyleElement;
 
 	window.hbspt = {
 		forms: {
@@ -150,6 +152,33 @@ describe('HubSpotEmbedForm', () => {
 		});
 
 		expect(button.textContent).toBe('Subscribe now');
+	});
+
+	test('applyBrandStyles injects the brand stylesheet into the form iframe on form ready', async () => {
+		const { HubSpotEmbedForm } = await import('./HubSpotEmbedForm');
+
+		await act(async () => {
+			root = createRoot(document.getElementById('root')!);
+			root.render(React.createElement(HubSpotEmbedForm, { formId: 'form-123' }));
+			await new Promise<void>(resolve => {
+				window.setTimeout(resolve, 0);
+			});
+		});
+
+		expect(createOptions?.onFormReady).toBeDefined();
+
+		const target = document.querySelector('.gp-hubspot-form-target')!;
+		const iframe = document.createElement('iframe');
+		target.appendChild(iframe);
+
+		await act(async () => {
+			createOptions?.onFormReady?.();
+		});
+
+		const injected = iframe.contentDocument?.getElementById('gp-hubspot-brand');
+		expect(injected).not.toBeNull();
+		expect(injected?.tagName).toBe('STYLE');
+		expect(injected?.textContent).toContain('.hs-button');
 	});
 
 	test('shows fallback with contact link when HubSpot script fails to load', async () => {

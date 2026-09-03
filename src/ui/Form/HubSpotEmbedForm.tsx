@@ -57,7 +57,7 @@ function collectHostFontFaces(): string {
 			if (rule instanceof CSSFontFaceRule) {
 				faces.push(
 					rule.cssText.replace(/url\((["']?)([^"')]+)\1\)/g, (match, _quote, url: string) => {
-						if (/^(data:|https?:|\/)/.test(url)) return match;
+						if (/^(data:|https?:)/.test(url)) return match;
 						try {
 							return `url("${new URL(url, base).href}")`;
 						} catch {
@@ -122,6 +122,10 @@ const BRAND_CSS = `
 		border-color: var(--gp-form-primary, #2563eb) !important;
 		outline: none !important;
 		box-shadow: 0 0 0 3px color-mix(in srgb, var(--gp-form-primary, #2563eb) 35%, transparent) !important;
+	}
+	.hs-form .hs-input.invalid:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=submit]),
+	.hs-form .hs-input.error:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=submit]) {
+		border-color: var(--gp-form-error, #b80a27) !important;
 	}
 	.hs-form .hs-button, .hs-form input[type=submit].hs-button {
 		display: inline-block !important;

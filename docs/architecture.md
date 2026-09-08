@@ -118,13 +118,15 @@ domain model, data sources, and what is and is not fixable in this repo:
 
 ## Deployment
 
-Deployed on Vercel. Branches map to environments: `develop` -> dev, `qa` -> qa,
-`master` -> prod. `develop` is the default branch.
+Deployed on Vercel. Branches map to environments: `develop` -> dev, `master` -> prod.
+`develop` is the default branch. There is no `qa` branch, so nothing deploys to the
+qa environment; releases go straight from `develop` to `master`.
 
 Content changes do not need a deploy. When content is published (or written by
 AirOps), a Sanity webhook calls `POST /api/revalidate`, which triggers Next.js ISR
-revalidation and the change goes live. Code changes go live by merging up the branch
-chain and letting Vercel build and deploy.
+revalidation and the change goes live. Code changes go live by merging `develop` into
+`master` and letting Vercel build and deploy. The `deploy-prod` skill runs that
+release, including confirming the deploy actually landed.
 
 ## Where to look
 

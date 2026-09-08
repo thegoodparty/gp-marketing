@@ -61,6 +61,18 @@ page) -> `bun run typecheck` -> `bun run test`.
 
 To open the PR and drive it to approval, use the **`ship-pr`** skill.
 
+## Deploying to production
+
+`develop` deploys to dev and `master` deploys to prod. Releasing means merging
+`develop` into `master`; use the **`deploy-prod`** skill, which runs the release end
+to end and confirms the deploy actually landed.
+
+**`deploy-prod` is the one workflow permitted to merge a PR autonomously.** It merges
+its own `develop` -> `master` release PR once that PR is green, because asking for a
+prod deploy is itself the instruction to merge. That is the only exception: everywhere
+else, including every `ship-pr` PR into `develop`, a human clicks merge. `--admin` and
+force-merge are forbidden in all cases.
+
 ## How this repo bites you (important)
 
 Failures here are silent by design, which is exactly why verification is mandatory:
@@ -90,6 +102,7 @@ Read the nearest relevant doc rather than loading everything.
 | Anything about election or candidate pages  | `docs/elections.md`                 |
 | How AirOps writes content into Sanity       | `docs/airops-sanity-integration.md` |
 | Opening a PR and getting it approved        | the `ship-pr` skill                 |
+| Releasing to production                     | the `deploy-prod` skill             |
 
 ## Code style
 

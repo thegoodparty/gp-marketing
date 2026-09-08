@@ -53,6 +53,10 @@ to `AGENTS.md`, so Claude Code and Cursor read the same file — edit `AGENTS.md
 
 ## Branches and deploys
 
-`develop` -> `qa` -> `master` deploy to the dev, qa, and prod environments on Vercel.
+`develop` deploys to dev and `master` deploys to prod on Vercel. `develop` is the
+default branch. Releasing to production means merging `develop` into `master`; the
+`deploy-prod` skill does that end to end, including confirming the deploy landed.
+(There is no `qa` branch. The qa Vercel environment exists but nothing tracks it.)
+
 Content published in Sanity Studio goes live without a rebuild (a webhook revalidates
 the affected pages).

@@ -132,7 +132,12 @@ gh api repos/thegoodparty/gp-marketing/commits/$SHA/status \
 The `Vercel` commit status on the merge commit is the authoritative signal.
 
 - `state: pending` -> still building. Keep polling, patiently. This app
-  static-generates a lot of election and candidate pages, so it is slow.
+  static-generates a lot of election and candidate pages, so it is slow; normal
+  builds take 2 to 10 minutes. **Still `pending` after 15 minutes: stop polling.**
+  Tell the user the build looks stuck, hand them the `target_url` from the status
+  payload so they can check the Vercel dashboard, and do not report the release as
+  successful. The merge has landed on `master` either way, so a later retry is a
+  Vercel-side redeploy, not another merge.
 - `state: success` -> built and promoted. Confirm it two more ways:
 
 ```bash

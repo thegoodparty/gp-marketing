@@ -137,9 +137,13 @@ The `Vercel` commit status on the merge commit is the authoritative signal.
 
 ```bash
 gh api "repos/thegoodparty/gp-marketing/deployments?environment=Production" \
-  --jq '.[0] | {ref: .ref[0:8], created_at}'      # ref must match $SHA
+  | jq --arg sha "$SHA" '.[0] | {sha, created_at, matches_release: (.sha == $sha)}'
 curl -sS -o /dev/null -w '%{http_code}\n' https://goodparty.org/
 ```
+
+`matches_release` must be `true`. Compare full SHAs and let `jq` do it: eyeballing a
+truncated SHA against a full one is how you end up reporting a false mismatch after
+a perfectly good deploy.
 
 The Production deployment record is only written **after** a successful build, so
 its absence during the build is normal and is not a failure, so read the commit
@@ -196,4 +200,3 @@ before treating a content problem as a bad deploy.
 | Reading the deployments list while building | The Production record appears only after success. Poll the commit status instead. |
 | Shipping "just this one change" | A release takes all of `develop`. Show the full commit list first. |
 | Gating on `develop..master` being 0 | It never is. Release merge commits pile up on `master` forever; only non-merge commits there matter. |
-| Following `README.md` / `docs/architecture.md` | Both describe `develop` -> `qa` -> `master`. There is no `qa` branch; releases go `develop` -> `master`. |

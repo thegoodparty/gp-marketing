@@ -2,7 +2,7 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 import { revalidateTag } from 'next/cache';
 import { type NextRequest, NextResponse } from 'next/server';
 import { personRevalidateSecret } from '~/lib/env';
-import { personCacheTag } from '~/lib/electionsApi';
+import { PEOPLE_REMOVALS_CACHE_TAG, personCacheTag } from '~/lib/electionsApi';
 import { clearPeopleSitemapCache, PEOPLE_SITEMAP_CACHE_TAG } from '~/lib/sitemap-entries';
 
 const SECRET_HEADER = 'x-revalidate-secret';
@@ -53,6 +53,9 @@ export async function POST(req: NextRequest) {
 		// all instances, then drop this instance's in-memory Promise so shards
 		// re-seed from the freshly invalidated cache.
 		revalidateTag(PEOPLE_SITEMAP_CACHE_TAG);
+		// A takedown also has to reach the OTHER profiles that carry this person's
+		// photo on an "Other Candidates" or "Nearby Officials" card.
+		revalidateTag(PEOPLE_REMOVALS_CACHE_TAG);
 		clearPeopleSitemapCache();
 		return NextResponse.json({ revalidated: true, tag });
 	} catch (err) {

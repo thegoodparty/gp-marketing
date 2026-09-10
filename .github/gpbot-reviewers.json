@@ -1,0 +1,39 @@
+{
+  "_note": [
+    "Reviewer routing for [GP-Bot] PRs, consumed by .github/workflows/gpbot-pr-triage.yml.",
+    "Bot PRs arrive without a human owner. This file says which rotation owns the ticket and how to reach that rotation's holder on GitHub; it does not say who the holder is.",
+    "Editing it is a normal reviewable PR — that is the point of it being here rather than in workflow YAML.",
+    "A SIBLING of the file by the same name in thegoodparty/omni, not a copy of it. The workflow reads the roster from its own repo, and the two repos have different owners: omni's bot PRs belong to the @serve-bugs and @win-bugs engineering rotations, and a marketing-site PR belongs to whoever owns the marketing site. Only githubLogins is genuinely duplicated, and a missing entry there costs one un-requested review rather than a wrong one.",
+    "There is deliberately no reviewer pool. The bug rotations carry exactly one person at a time, so the Slack group already IS the answer to 'who looks at this': the workflow reads the current holder from usergroups.users.list when the PR opens, and a handoff needs no commit here."
+  ],
+
+  "_todo": [
+    "SET slackGroupId ON marketing-site-bugs BELOW. It is empty because the rotation does not exist yet. Until it is set, the workflow still runs and still announces the PR, but with no group mention and no individual review request — the announcement reads 'Whoever is on bug duty could not be resolved'. That is a deliberate degradation and not a substitute for a real owner: this must be filled in before GPBOT_IMPLEMENT_REPOS is widened to include this repo, or the first marketing bot PR is exactly the unowned PR the workflow exists to prevent.",
+    "This repo needs three settings before any of the above works, and none of them can be set from a PR: secrets GPBOT_SLACK_BOT_TOKEN and CLICKUP_API_TOKEN, and variable GPBOT_PR_CHANNEL_ID. Without CLICKUP_API_TOKEN the list lookup is skipped and everything falls to defaultGroup; without the Slack pair nothing is announced at all.",
+    "Add `usergroups:read` to the gp_ai_bot Slack app and reinstall it. Without it usergroups.users.list answers missing_scope, so every bot PR announces to the group and requests no individual review. This is shared with omni, where the same note is recorded."
+  ],
+
+  "githubLogins": {
+    "swain@goodparty.org": "swain",
+    "tomer@goodparty.org": "tomer-tgp",
+    "daniel@goodparty.org": "dealvz",
+    "nikao.hill@goodparty.org": "oakinh",
+    "stephen@goodparty.org": "stephtea"
+  },
+
+  "groups": {
+    "marketing-site-bugs": {
+      "slackGroupId": ""
+    }
+  },
+
+  "listRouting": {
+    "901328971692": "marketing-site-bugs"
+  },
+
+  "_listRoutingNames": {
+    "901328971692": "Growth > Marketing Site Bugs — the list gpbot routes to this repo"
+  },
+
+  "defaultGroup": "marketing-site-bugs"
+}

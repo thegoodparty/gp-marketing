@@ -40,10 +40,13 @@ let createOptions: HubSpotFormCreateOptions | undefined;
 let dom: JSDOM;
 let root: Root;
 
-beforeEach(() => {
+beforeEach(async () => {
 	createOptions = undefined;
 	handleHubSpotFormSubmissionMock.mockClear();
 	waitForHubSpotFormsMock.mockImplementation(defaultWaitForHubSpotForms);
+
+	const { _resetHostFontFacesCacheForTest } = await import('./HubSpotEmbedForm');
+	_resetHostFontFacesCacheForTest();
 
 	dom = new JSDOM('<!DOCTYPE html><html><body><div id="root"></div></body></html>', {
 		url: 'http://localhost/newsletter',
@@ -53,9 +56,11 @@ beforeEach(() => {
 	globalThis.window = window as unknown as Window & typeof globalThis;
 	globalThis.document = window.document;
 	globalThis.navigator = window.navigator;
+	globalThis.getComputedStyle = window.getComputedStyle.bind(window);
 	globalThis.HTMLIFrameElement = window.HTMLIFrameElement;
 	globalThis.HTMLInputElement = window.HTMLInputElement;
 	globalThis.HTMLButtonElement = window.HTMLButtonElement;
+	globalThis.HTMLStyleElement = window.HTMLStyleElement;
 
 	window.hbspt = {
 		forms: {
@@ -150,6 +155,76 @@ describe('HubSpotEmbedForm', () => {
 		});
 
 		expect(button.textContent).toBe('Subscribe now');
+	});
+
+	test('applyBrandStyles injects the brand stylesheet into the form iframe on form ready', async () => {
+		const { HubSpotEmbedForm } = await import('./HubSpotEmbedForm');
+
+		await act(async () => {
+			root = createRoot(document.getElementById('root')!);
+			root.render(React.createElement(HubSpotEmbedForm, { formId: 'form-123' }));
+			await new Promise<void>(resolve => {
+				window.setTimeout(resolve, 0);
+			});
+		});
+
+		expect(createOptions?.onFormReady).toBeDefined();
+
+		const target = document.querySelector('.gp-hubspot-form-target')!;
+		const iframe = document.createElement('iframe');
+		target.appendChild(iframe);
+
+		await act(async () => {
+			createOptions?.onFormReady?.();
+		});
+
+		const injected = iframe.contentDocument?.getElementById('gp-hubspot-brand');
+		expect(injected).not.toBeNull();
+		expect(injected?.tagName).toBe('STYLE');
+		expect(injected?.textContent).toContain('.hs-button');
+	});
+
+	test('an empty first pass does not poison the font cache; later faces still forward', async () => {
+		const { HubSpotEmbedForm } = await import('./HubSpotEmbedForm');
+
+		await act(async () => {
+			root = createRoot(document.getElementById('root')!);
+			root.render(React.createElement(HubSpotEmbedForm, { formId: 'form-123' }));
+			await new Promise<void>(resolve => {
+				window.setTimeout(resolve, 0);
+			});
+		});
+
+		expect(createOptions?.onFormReady).toBeDefined();
+
+		const target = document.querySelector('.gp-hubspot-form-target')!;
+
+		// First form ready fires before any @font-face has parsed: nothing to forward,
+		// and the empty result must not be cached.
+		const emptyIframe = document.createElement('iframe');
+		target.appendChild(emptyIframe);
+		await act(async () => {
+			createOptions?.onFormReady?.();
+		});
+		expect(emptyIframe.contentDocument?.getElementById('gp-hubspot-fonts')).toBeNull();
+
+		// A stylesheet with a font face parses in; a later form ready must pick it up,
+		// which only holds if the earlier empty pass did not poison the cache.
+		const style = document.createElement('style');
+		style.textContent = '@font-face { font-family: "TestFont"; src: url(/fonts/test.woff2); }';
+		document.head.appendChild(style);
+
+		target.removeChild(emptyIframe);
+		const iframe = document.createElement('iframe');
+		target.appendChild(iframe);
+		await act(async () => {
+			createOptions?.onFormReady?.();
+		});
+
+		const fonts = iframe.contentDocument?.getElementById('gp-hubspot-fonts');
+		expect(fonts).not.toBeNull();
+		expect(fonts?.tagName).toBe('STYLE');
+		expect(fonts?.textContent).toContain('TestFont');
 	});
 
 	test('shows fallback with contact link when HubSpot script fails to load', async () => {

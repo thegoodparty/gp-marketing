@@ -14,7 +14,8 @@ only stop to ask them about a genuine decision.
 
 **Done means: at the same commit, delegate says `Approved.` AND every required
 check is green.** You never merge — opening and driving to green is the job; the
-human clicks merge.
+human clicks merge. (The one exception in this repo is the `deploy-prod` skill, which
+merges its own `develop` -> `master` release PR. That does not apply here.)
 
 Repo conventions (from the root `AGENTS.md`): PRs target **`develop`**. PR bodies
 explain **why**, not a file-by-file what. **No** "test plan" section. **No**

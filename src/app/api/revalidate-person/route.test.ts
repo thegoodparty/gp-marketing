@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, mock, test } from 'bun:test';
+import { PEOPLE_REMOVALS_CACHE_TAG } from '~/lib/electionsApi';
 import { PEOPLE_SITEMAP_CACHE_TAG } from '~/lib/sitemap-entries';
 import { resetNextCacheMock, revalidateTag } from '~/testing/nextCacheMock';
 
@@ -74,6 +75,15 @@ describe('POST /api/revalidate-person', () => {
 		await post({ personId: PERSON_ID }, SECRET);
 
 		expect(revalidateTag).toHaveBeenCalledWith(PEOPLE_SITEMAP_CACHE_TAG);
+	});
+
+	// The removals tag is the takedown-propagation path: busting it is what drops a
+	// removed person's photo from other people's profile cards. Pinned like its
+	// siblings so a dropped call or misspelled constant fails loudly here.
+	test('also busts the removals tag so takedowns propagate to sibling cards', async () => {
+		await post({ personId: PERSON_ID }, SECRET);
+
+		expect(revalidateTag).toHaveBeenCalledWith(PEOPLE_REMOVALS_CACHE_TAG);
 	});
 
 	// Postgres hands gp-api lowercase uuids today, but the tag is what pairs this

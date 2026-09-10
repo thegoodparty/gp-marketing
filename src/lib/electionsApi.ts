@@ -309,6 +309,47 @@ function personCacheOptions(personId: string): RequestInit {
 }
 
 /**
+ * Cache tag for the set of people whose pages must never be advertised. Busted
+ * by /api/revalidate-person alongside the per-person tag, so a fresh takedown
+ * reaches the *other* profiles that carry the removed person's photo on a card,
+ * not just their own page.
+ */
+export const PEOPLE_REMOVALS_CACHE_TAG = 'people-removals';
+
+/**
+ * Person ids gp-api has flagged as removed (a privacy takedown, or an owner who
+ * deleted their profile — gp-api collapses both because the consequence is the
+ * same: never advertise this page).
+ *
+ * Returns null, not an empty set, when the feed cannot be read. Callers treat
+ * null as "assume everyone is removed" and drop every card photo: a gp-api blip
+ * should cost us some thumbnails, never republish a photo somebody asked us to
+ * take down.
+ */
+export async function getRemovedPersonIds(): Promise<Set<string> | null> {
+	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles/unlisted`;
+	try {
+		const res = await fetch(url, {
+			next: { revalidate: 300, tags: [PEOPLE_REMOVALS_CACHE_TAG] },
+		});
+		if (!res.ok) {
+			console.error(`[electionsApi] ${res.status} ${url}`);
+			return null;
+		}
+		const rows = (await res.json()) as Array<{ personId?: string }>;
+		if (!Array.isArray(rows)) return null;
+		const ids = new Set<string>();
+		for (const row of rows) {
+			if (row.personId) ids.add(row.personId.toLowerCase());
+		}
+		return ids;
+	} catch (err) {
+		console.error('[electionsApi] removed-person feed unreachable', err);
+		return null;
+	}
+}
+
+/**
  * The read-only civics spine for one person (election-api). Includes their
  * office terms and candidacies. Returns null when no Person row exists yet
  * (e.g. a brand-new user the data team hasn't reconciled).

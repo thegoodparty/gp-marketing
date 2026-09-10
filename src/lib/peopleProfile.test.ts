@@ -13,9 +13,11 @@ import {
 	resolveProfileState,
 	type PersonPersona,
 } from './peopleProfile';
+import { buildElectionPositionHrefFromRaceSlug } from './electionsHelpers';
 import { classifyParty, isMajorParty } from './party';
 
 const PID = '11111111-1111-1111-1111-111111111111';
+const NO_REMOVALS: ReadonlySet<string> = new Set();
 
 function makeOffice(o: Partial<PersonOfficeHolder> = {}): PersonOfficeHolder {
 	return {
@@ -258,6 +260,153 @@ describe('Recent Experience links to the position page, not the candidate page',
 	test('renders no link when no position page resolves', () => {
 		const view = composeView(PID, runningFor(), null, {});
 
+		expect(view.recentExperience[0]?.href).toBeNull();
+	});
+});
+
+/**
+ * Once election-api nests each candidacy's own race slug (omni#1425) and
+ * flattens the office's onto each term, every row can reach its own position
+ * page — not just the one candidacy the loader fetched in full.
+ */
+describe('Recent Experience links every row it has a race slug for', () => {
+	/** The canonical builder, so these assert parity rather than a hand-written path. */
+	const expectedHref = (slug: string, positionLevel: string) =>
+		buildElectionPositionHrefFromRaceSlug({ slug, positionLevel });
+
+	test('each candidacy links to its own race, not to the primary one', () => {
+		const current = 'al/lee/auburn/city-council-ward-5';
+		const older = 'al/lee/lee-county-commission';
+		const person = makePerson({
+			state: 'AL',
+			Candidacies: [
+				{
+					id: 'c1',
+					slug: 'toshiro-jackson/auburn-city-council-ward-5',
+					positionName: 'Auburn City Council - Ward 5',
+					state: 'AL',
+					Race: { electionDate: '2026-11-03', slug: current, positionLevel: 'CITY' },
+				},
+				{
+					id: 'c2',
+					slug: 'toshiro-jackson/lee-county-commission',
+					positionName: 'Lee County Commission',
+					state: 'AL',
+					Race: { electionDate: '2022-11-08', slug: older, positionLevel: 'COUNTY' },
+				},
+			],
+		});
+
+		const view = composeView(PID, person, null, {});
+		const byTitle = new Map(view.recentExperience.map((r) => [r.title, r.href]));
+
+		expect(byTitle.get('Candidate for Auburn City Council - Ward 5')).toBe(
+			expectedHref(current, 'CITY'),
+		);
+		expect(byTitle.get('Candidate for Lee County Commission')).toBe(expectedHref(older, 'COUNTY'));
+		// Distinct races must not collapse onto one destination.
+		expect(byTitle.get('Candidate for Auburn City Council - Ward 5')).not.toBe(
+			byTitle.get('Candidate for Lee County Commission'),
+		);
+	});
+
+	/**
+	 * A pure officeholder has no candidacy to borrow a slug from, so the term's
+	 * own `positionSlug` is the only route to their seat's page.
+	 */
+	test('an office term links through the slug flattened onto it', () => {
+		const slug = 'ca/los-angeles/mayor';
+		const person = makePerson({
+			state: 'CA',
+			OfficeHolders: [
+				makeOffice({
+					officeTitle: 'Mayor',
+					state: 'CA',
+					startAt: '2022-01-01',
+					isCurrent: true,
+					positionSlug: slug,
+					positionLevel: 'CITY',
+				}),
+			],
+		});
+
+		const view = composeView(PID, person, null, {});
+
+		expect(view.recentExperience[0]?.href).toBe(expectedHref(slug, 'CITY'));
+	});
+
+	test('an office term with no race stays unlinked', () => {
+		const person = makePerson({
+			OfficeHolders: [makeOffice({ officeTitle: 'Mayor', state: 'CA', startAt: '2022-01-01' })],
+		});
+
+		const view = composeView(PID, person, null, {});
+
+		expect(view.recentExperience[0]?.href).toBeNull();
+	});
+
+	/**
+	 * A CITY slug carrying no county segment resolves to a county-depth URL that
+	 * 308s to the canonical four-level path (redirectCityRaceToFourLevelUrl), so
+	 * it is a working link, not a broken one.
+	 *
+	 * The sitemap deliberately suppresses these (`skipUnmappedCity`) because a
+	 * sitemap should advertise canonical URLs rather than redirects. An in-page
+	 * link is the opposite case: the breadcrumb's position crumb builds this very
+	 * href from the same helper, so suppressing it here would leave the row
+	 * unlinked while the crumb directly above it still worked — the exact
+	 * inconsistency this whole change set exists to remove.
+	 */
+	test('a city slug with no county segment links, matching the breadcrumb', () => {
+		const slug = 'ca/beverly-hills/city-legislature';
+		const person = makePerson({
+			state: 'CA',
+			Candidacies: [
+				{
+					id: 'c1',
+					slug: 'jane-doe-city-council',
+					positionName: 'City Council',
+					state: 'CA',
+					Race: { electionDate: '2026-11-03', slug, positionLevel: 'CITY' },
+				},
+			],
+		});
+
+		const crumbHref = buildBreadcrumbTrail({
+			displayName: 'Jane Doe',
+			stateCode: 'CA',
+			raceSlug: slug,
+			positionLevel: 'CITY',
+			positionName: 'City Council',
+		}).find((c) => c.label === 'City Council')?.href;
+
+		const view = composeView(PID, person, null, {});
+
+		expect(crumbHref).toBe('/elections/ca/beverly-hills/position/city-legislature');
+		expect(view.recentExperience[0]?.href).toBe(crumbHref);
+	});
+
+	/**
+	 * Slugs come from a dbt macro and can be too short to place. Linking anyway
+	 * would point "View Position" at a 404, which is worse than no link.
+	 */
+	test('a slug that resolves to no page renders unlinked, not a 404', () => {
+		const person = makePerson({
+			state: 'CA',
+			Candidacies: [
+				{
+					id: 'c1',
+					slug: 'jane-doe-mayor',
+					positionName: 'Mayor',
+					state: 'CA',
+					Race: { electionDate: '2026-11-03', slug: 'ca', positionLevel: 'CITY' },
+				},
+			],
+		});
+
+		const view = composeView(PID, person, null, {});
+
+		expect(expectedHref('ca', 'CITY')).toBeUndefined();
 		expect(view.recentExperience[0]?.href).toBeNull();
 	});
 });
@@ -1055,6 +1204,7 @@ describe('buildNearbyOfficialCards', () => {
 			[makeOffice({ personId: OTHER, officeTitle: 'city council member' })],
 			personsById(makePerson({ id: OTHER, fullName: 'chris lewis' })),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.name)).toEqual(['Chris Lewis']);
 	});
@@ -1064,6 +1214,7 @@ describe('buildNearbyOfficialCards', () => {
 			[makeOffice({ personId: OTHER })],
 			personsById(makePerson({ id: OTHER, firstName: 'chris', lastName: 'lewis' })),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.name)).toEqual(['Chris Lewis']);
 	});
@@ -1071,16 +1222,16 @@ describe('buildNearbyOfficialCards', () => {
 	// Rows with no linked person still render a card, labelled by the office. The
 	// title comes from the same spine as the names and arrives uncased too.
 	test('falls through to the office title, cased', () => {
-		const cards = buildNearbyOfficialCards([makeOffice({ officeTitle: 'city council member' })], new Map(), PID);
+		const cards = buildNearbyOfficialCards([makeOffice({ officeTitle: 'city council member' })], new Map(), PID, NO_REMOVALS);
 		expect(cards.map((c) => c.name)).toEqual(['City Council Member']);
 	});
 
 	test('skips a row with no name and no office title', () => {
-		expect(buildNearbyOfficialCards([makeOffice({})], new Map(), PID)).toEqual([]);
+		expect(buildNearbyOfficialCards([makeOffice({})], new Map(), PID, NO_REMOVALS)).toEqual([]);
 	});
 
 	test('excludes the subject of the profile', () => {
-		expect(buildNearbyOfficialCards([makeOffice({ personId: PID, officeTitle: 'mayor' })], new Map(), PID)).toEqual([]);
+		expect(buildNearbyOfficialCards([makeOffice({ personId: PID, officeTitle: 'mayor' })], new Map(), PID, NO_REMOVALS)).toEqual([]);
 	});
 
 	// The pledge flag was already in memory here — `loadNearbyOfficials` resolves
@@ -1090,6 +1241,7 @@ describe('buildNearbyOfficialCards', () => {
 			[makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: ['Independent'] })],
 			personsById(makePerson({ id: OTHER, fullName: 'chris lewis', isPledged: true })),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([true]);
 	});
@@ -1099,6 +1251,7 @@ describe('buildNearbyOfficialCards', () => {
 			[makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: ['Independent'] })],
 			personsById(makePerson({ id: OTHER, fullName: 'chris lewis' })),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
 	});
@@ -1106,7 +1259,7 @@ describe('buildNearbyOfficialCards', () => {
 	// A row with no linked person still renders a card, labelled by its office.
 	// There is no one to have pledged, so it must not claim anyone did.
 	test('is not pledged when there is no person to look up', () => {
-		const cards = buildNearbyOfficialCards([makeOffice({ officeTitle: 'city council member' })], new Map(), PID);
+		const cards = buildNearbyOfficialCards([makeOffice({ officeTitle: 'city council member' })], new Map(), PID, NO_REMOVALS);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
 	});
 
@@ -1118,6 +1271,7 @@ describe('buildNearbyOfficialCards', () => {
 			[makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: ['Democratic'] })],
 			personsById(makePerson({ id: OTHER, fullName: 'chris lewis', isPledged: true })),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
 	});
@@ -1130,6 +1284,7 @@ describe('buildNearbyOfficialCards', () => {
 			[makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: [] })],
 			personsById(makePerson({ id: OTHER, fullName: 'chris lewis', isPledged: true })),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
 	});
@@ -1148,6 +1303,7 @@ describe('buildNearbyOfficialCards', () => {
 				}),
 			),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
 	});
@@ -1172,12 +1328,13 @@ describe('buildOtherCandidateCards', () => {
 			[candidacy()],
 			personsById(makePerson({ id: OTHER, isPledged: true })),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([true]);
 	});
 
 	test('is not pledged when the person lookup found nothing', () => {
-		const cards = buildOtherCandidateCards([candidacy()], new Map(), PID);
+		const cards = buildOtherCandidateCards([candidacy()], new Map(), PID, NO_REMOVALS);
 		expect(cards).toHaveLength(1);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
 	});
@@ -1187,6 +1344,7 @@ describe('buildOtherCandidateCards', () => {
 			[candidacy({ party: 'Republican' })],
 			personsById(makePerson({ id: OTHER, isPledged: true })),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
 	});
@@ -1196,6 +1354,7 @@ describe('buildOtherCandidateCards', () => {
 			[candidacy({ party: undefined })],
 			personsById(makePerson({ id: OTHER, isPledged: true })),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
 	});
@@ -1214,11 +1373,56 @@ describe('buildOtherCandidateCards', () => {
 				}),
 			),
 			PID,
+			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
 	});
 
 	test('excludes the subject of the profile', () => {
-		expect(buildOtherCandidateCards([candidacy({ personId: PID })], new Map(), PID)).toEqual([]);
+		expect(buildOtherCandidateCards([candidacy({ personId: PID })], new Map(), PID, NO_REMOVALS)).toEqual([]);
+	});
+});
+
+describe('removed people never keep a card photo', () => {
+	const SUBJECT = '11111111-1111-1111-1111-111111111111';
+	const REMOVED = '44444444-4444-4444-4444-444444444444';
+
+	const removedCandidacy = (): CandidacyItem => ({
+		id: 'c1',
+		personId: REMOVED,
+		firstName: 'chris',
+		lastName: 'lewis',
+		party: 'Independent',
+		image: 'https://assets.civicengine.com/uploads/candidate/headshot/1/1.jpg',
+	});
+
+	test('drops the candidacy photo for a removed person, keeping the card', () => {
+		const cards = buildOtherCandidateCards([removedCandidacy()], new Map(), SUBJECT, new Set([REMOVED.toLowerCase()]));
+		expect(cards).toHaveLength(1);
+		expect(cards[0]?.avatarUrl).toBeNull();
+		expect(cards[0]?.name).toBe('Chris Lewis');
+	});
+
+	test('keeps the photo for someone who was not removed', () => {
+		const cards = buildOtherCandidateCards([removedCandidacy()], new Map(), SUBJECT, new Set(['99999999-9999-9999-9999-999999999999']));
+		expect(cards[0]?.avatarUrl).toBe('https://assets.civicengine.com/uploads/candidate/headshot/1/1.jpg');
+	});
+
+	test('matches the removal set case-insensitively', () => {
+		const cards = buildOtherCandidateCards([removedCandidacy()], new Map(), SUBJECT, new Set([REMOVED.toUpperCase().toLowerCase()]));
+		expect(cards[0]?.avatarUrl).toBeNull();
+	});
+
+	test('drops every card photo when the removal feed could not be read', () => {
+		const cards = buildOtherCandidateCards([removedCandidacy()], new Map(), SUBJECT, null);
+		expect(cards[0]?.avatarUrl).toBeNull();
+	});
+
+	test('drops a removed officeholder photo on Nearby Officials too', () => {
+		const officeholder = makeOffice({ personId: REMOVED, officeTitle: 'mayor' });
+		const persons = new Map([[REMOVED.toLowerCase(), makePerson({ id: REMOVED, fullName: 'chris lewis', headshotUrl: 'https://cdn.example.org/x.jpg' })]]);
+		const cards = buildNearbyOfficialCards([officeholder], persons, SUBJECT, new Set([REMOVED.toLowerCase()]));
+		expect(cards).toHaveLength(1);
+		expect(cards[0]?.avatarUrl).toBeNull();
 	});
 });

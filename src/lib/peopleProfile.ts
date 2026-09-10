@@ -8,6 +8,7 @@ import {
 	getPersonsByIds,
 	getPlacesByState,
 	getPublicPersonProfileStatus,
+	getRemovedPersonIds,
 	getVoterDensityForDistrict,
 } from '~/lib/electionsApi';
 import { US_STATES_TUPLES } from '~/constants/usStates';
@@ -562,6 +563,26 @@ function buildLinks(
  * term (and vice versa). Entries without a date sort last.
  * Claimed profiles override this with the owner-authored list (see composeView).
  */
+/**
+ * The `/elections` position page for a race slug, or null when none resolves —
+ * the destination "View Position" promises and the breadcrumb's position crumb
+ * already uses. Every hop is optional upstream (a term need not reach a race,
+ * and a slug can be too short to place), so an unresolvable row renders as
+ * plain text rather than a link that 404s.
+ */
+function positionHrefFor(
+	slug: string | null | undefined,
+	positionLevel: string | null | undefined,
+): string | null {
+	if (!slug) return null;
+	return (
+		buildElectionPositionHrefFromRaceSlug({
+			slug,
+			positionLevel: positionLevel ?? undefined,
+		}) ?? null
+	);
+}
+
 function buildRecentExperience(
 	person: PersonItem | null,
 	positionLink: { candidacySlug: string | null; href: string } | null = null,
@@ -574,7 +595,14 @@ function buildRecentExperience(
 			term: formatTerm(o),
 			// Current terms read as "Incumbent"; past terms let the year range speak.
 			status: o.isCurrent === true ? 'Incumbent' : null,
-			href: null,
+			// The term's own race slug, flattened onto it by election-api. Prefer the
+			// race's level, which is non-null where Position.level is nullable.
+			// The level only changes routing once a citySlugToCountySlug map is in
+			// play (see resolveElectionPositionFromRaceSlug); without one every slug
+			// falls through to the generic segment-count branch, so passing it is
+			// inert today. Kept so this call reads like the breadcrumb's, and so it
+			// stays correct if a county map is ever threaded through.
+			href: positionHrefFor(o.positionSlug, o.positionLevel ?? o.Position?.level),
 		},
 	}));
 
@@ -590,15 +618,15 @@ function buildRecentExperience(
 					term: formatYear(electionDate),
 					status: 'Candidate',
 					// "View Position" means the /elections position page the breadcrumb
-					// already points at, not the candidate's own page. Only the primary
-					// candidacy resolves to one: the person payload nests just
-					// `Race.electionDate` (see election-api CANDIDACY_INCLUDE), so a race
-					// slug exists only for the candidacy the loader fetched in full. The
-					// rest render unlinked rather than pointing somewhere else.
+					// already points at, not the candidate's own page. The row's own race
+					// slug is the accurate source; `positionLink` only covers the one
+					// candidacy the loader fetched in full, and stays as a fallback for
+					// payloads predating omni#1425 (which added slug to the nested Race).
 					href:
-						positionLink && c.slug && c.slug === positionLink.candidacySlug
+						positionHrefFor(c.Race?.slug, c.Race?.positionLevel) ??
+						(positionLink && c.slug && c.slug === positionLink.candidacySlug
 							? positionLink.href
-							: null,
+							: null),
 				},
 			};
 		});
@@ -667,6 +695,25 @@ function pledgedFromSpine(person: PersonItem | undefined, ...rowParties: Array<s
 }
 
 /**
+ * A removed person's photo must not appear anywhere, including on somebody
+ * else's page. The profile page nulls the subject's own photo at render, but the
+ * candidacy and officeholder feeds carry their own copy of it for these cards,
+ * so the card avatar has to be dropped here too.
+ *
+ * `removedPersonIds` of null means the feed could not be read: suppress every
+ * card photo rather than risk republishing one (see getRemovedPersonIds).
+ */
+function cardAvatarUrl(
+	personId: string | null,
+	avatarUrl: string | null,
+	removedPersonIds: ReadonlySet<string> | null,
+): string | null {
+	if (!removedPersonIds) return null;
+	if (personId && removedPersonIds.has(personId.toLowerCase())) return null;
+	return avatarUrl;
+}
+
+/**
  * Maps candidacies sharing a position into "Other Candidates" cards, excluding
  * the subject. `personsById` supplies the pledge flag, which the candidacy feed
  * does not carry — see {@link loadOtherCandidates}.
@@ -675,6 +722,7 @@ export function buildOtherCandidateCards(
 	candidacies: CandidacyItem[],
 	personsById: Map<string, PersonItem>,
 	excludePersonId: string,
+	removedPersonIds: ReadonlySet<string> | null,
 ): RelatedPersonCard[] {
 	const cards: RelatedPersonCard[] = [];
 	const seen = new Set<string>();
@@ -696,7 +744,7 @@ export function buildOtherCandidateCards(
 			href,
 			isEmpowered: false,
 			isPledged: pledgedFromSpine(c.personId ? personsById.get(c.personId.toLowerCase()) : undefined, c.party),
-			avatarUrl: c.image ?? null,
+			avatarUrl: cardAvatarUrl(c.personId ?? null, c.image ?? null, removedPersonIds),
 		});
 		if (cards.length >= 6) break;
 	}
@@ -708,6 +756,7 @@ export function buildNearbyOfficialCards(
 	officeholders: PersonOfficeHolder[],
 	personsById: Map<string, PersonItem>,
 	excludePersonId: string,
+	removedPersonIds: ReadonlySet<string> | null,
 ): RelatedPersonCard[] {
 	const cards: RelatedPersonCard[] = [];
 	const seen = new Set<string>();
@@ -742,7 +791,7 @@ export function buildNearbyOfficialCards(
 			href,
 			isEmpowered: false,
 			isPledged: pledgedFromSpine(person, ...(oh.partyNames ?? [])),
-			avatarUrl: person?.headshotUrl ?? null,
+			avatarUrl: cardAvatarUrl(pid, person?.headshotUrl ?? null, removedPersonIds),
 		});
 		if (cards.length >= 6) break;
 	}
@@ -1039,6 +1088,7 @@ async function loadPrimaryCandidacy(
 async function loadOtherCandidates(
 	positionId: string | null,
 	excludePersonId: string,
+	removedPersonIds: ReadonlySet<string> | null,
 ): Promise<RelatedPersonCard[]> {
 	if (!positionId) return [];
 	const candidacies = await getCandidacies({ positionId });
@@ -1047,13 +1097,14 @@ async function loadOtherCandidates(
 		.filter((id): id is string => Boolean(id) && id!.toLowerCase() !== excludePersonId.toLowerCase());
 	const persons = await getPersonsByIds(ids);
 	const byId = new Map(persons.map((p) => [p.id.toLowerCase(), p]));
-	return buildOtherCandidateCards(candidacies, byId, excludePersonId);
+	return buildOtherCandidateCards(candidacies, byId, excludePersonId, removedPersonIds);
 }
 
 /** Fetches "Nearby Officials" cards for a resolved geo id. */
 async function loadNearbyOfficials(
 	geoId: string | null,
 	excludePersonId: string,
+	removedPersonIds: ReadonlySet<string> | null,
 ): Promise<RelatedPersonCard[]> {
 	if (!geoId) return [];
 	const officeholders = await getOfficeHoldersByGeoId(geoId);
@@ -1062,7 +1113,7 @@ async function loadNearbyOfficials(
 		.filter((id): id is string => Boolean(id) && id!.toLowerCase() !== excludePersonId.toLowerCase());
 	const persons = await getPersonsByIds(ids);
 	const byId = new Map(persons.map((p) => [p.id.toLowerCase(), p]));
-	return buildNearbyOfficialCards(officeholders, byId, excludePersonId);
+	return buildNearbyOfficialCards(officeholders, byId, excludePersonId, removedPersonIds);
 }
 
 /**
@@ -1230,10 +1281,16 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 	// empty on any miss so the core profile always renders.
 	const { tier, countySlug } = deriveElectionsIndexTier(positionHref, positionLevel);
 	const breadcrumb = buildBreadcrumbTrail({ displayName, stateCode, raceSlug, positionLevel, positionName });
+	// The removal set gates both card loaders, so it has to resolve first. The
+	// elections index needs nothing, so start it now and only join at the end —
+	// awaiting it up front would make the card loaders wait on the slower of the
+	// two. Safe to leave in flight: getRemovedPersonIds never rejects.
+	const electionsIndexPromise = loadElectionsIndex({ stateCode, tier, countySlug });
+	const removedPersonIds = await getRemovedPersonIds();
 	const [otherCandidates, nearbyOfficials, electionsIndex] = await Promise.all([
-		loadOtherCandidates(positionId, personId),
-		loadNearbyOfficials(geoId, personId),
-		loadElectionsIndex({ stateCode, tier, countySlug }),
+		loadOtherCandidates(positionId, personId, removedPersonIds),
+		loadNearbyOfficials(geoId, personId, removedPersonIds),
+		electionsIndexPromise,
 	]);
 
 	return composeView(personId, person, overlay, {

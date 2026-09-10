@@ -1281,12 +1281,15 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 	// empty on any miss so the core profile always renders.
 	const { tier, countySlug } = deriveElectionsIndexTier(positionHref, positionLevel);
 	const breadcrumb = buildBreadcrumbTrail({ displayName, stateCode, raceSlug, positionLevel, positionName });
-	// Resolved before the card loaders so both see the same removal set.
-	const removedPersonIds = await getRemovedPersonIds();
-	const [otherCandidates, nearbyOfficials, electionsIndex] = await Promise.all([
+	// The removal set gates both card loaders, so it has to resolve first — but
+	// the elections index doesn't need it, so it rides along in the same wave.
+	const [removedPersonIds, electionsIndex] = await Promise.all([
+		getRemovedPersonIds(),
+		loadElectionsIndex({ stateCode, tier, countySlug }),
+	]);
+	const [otherCandidates, nearbyOfficials] = await Promise.all([
 		loadOtherCandidates(positionId, personId, removedPersonIds),
 		loadNearbyOfficials(geoId, personId, removedPersonIds),
-		loadElectionsIndex({ stateCode, tier, countySlug }),
 	]);
 
 	return composeView(personId, person, overlay, {

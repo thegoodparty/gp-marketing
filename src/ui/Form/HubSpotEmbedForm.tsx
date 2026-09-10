@@ -69,8 +69,12 @@ function collectHostFontFaces(): string {
 		}
 	}
 
-	hostFontFacesCache = faces.join('\n');
-	return hostFontFacesCache;
+	const css = faces.join('\n');
+	// Only cache once faces were actually found. onFormReady can fire before a
+	// stylesheet finishes parsing; caching the empty result would poison every
+	// later call and silently skip font injection for the page's lifetime.
+	if (faces.length > 0) hostFontFacesCache = css;
+	return css;
 }
 
 function injectHostFonts(doc: Document) {

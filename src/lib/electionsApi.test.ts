@@ -1,8 +1,9 @@
-import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, spyOn, test } from 'bun:test';
 import type { PlaceItem } from '~/types/elections';
 import { __resetElectionApiAuthForTests } from './electionApiAuth';
 import {
 	getCountyChildPlaces,
+	getRemovedPersonIds,
 	isStateIndexDistrictPlace,
 	resolveCountySlugForPlace,
 	resolveRaceElectionHrefs,
@@ -473,5 +474,52 @@ describe('isStateIndexDistrictPlace', () => {
 				mtfcc: 'G5420',
 			}),
 		).toBe(true);
+	});
+});
+
+describe('getRemovedPersonIds', () => {
+	const isUnlistedFeed = (url: string) => url.includes('/v1/public-person-profiles/unlisted');
+
+	test('returns the removed ids lowercased so callers can match case-insensitively', async () => {
+		withFetchMock([
+			{
+				match: isUnlistedFeed,
+				body: [{ personId: 'AB12CD34-0000-0000-0000-000000000001' }, { personId: 'ef56' }, { personId: '' }, {}],
+			},
+		]);
+
+		expect(await getRemovedPersonIds()).toEqual(new Set(['ab12cd34-0000-0000-0000-000000000001', 'ef56']));
+	});
+
+	test('returns an empty set — not null — when nobody is removed, so cards keep their photos', async () => {
+		withFetchMock([{ match: isUnlistedFeed, body: [] }]);
+
+		expect(await getRemovedPersonIds()).toEqual(new Set());
+	});
+
+	// The three fail-soft branches below all collapse to null, which callers read as
+	// "assume everyone is removed" and drop every card photo.
+	test('returns null when the feed is an envelope rather than a bare array', async () => {
+		withFetchMock([{ match: isUnlistedFeed, body: { data: [{ personId: 'ab12' }] } }]);
+
+		expect(await getRemovedPersonIds()).toBeNull();
+	});
+
+	test('returns null when gp-api errors', async () => {
+		const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
+		withFetchMock([{ match: isUnlistedFeed, body: [], status: 500 }]);
+
+		expect(await getRemovedPersonIds()).toBeNull();
+		errorSpy.mockRestore();
+	});
+
+	test('returns null when the feed is unreachable', async () => {
+		const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
+		globalThis.fetch = (async () => {
+			throw new Error('ECONNREFUSED');
+		}) as unknown as typeof fetch;
+
+		expect(await getRemovedPersonIds()).toBeNull();
+		errorSpy.mockRestore();
 	});
 });

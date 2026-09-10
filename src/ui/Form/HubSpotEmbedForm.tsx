@@ -54,18 +54,19 @@ function collectHostFontFaces(): string {
 		}
 		const base = sheet.href ?? document.baseURI;
 		for (const rule of Array.from(rules)) {
-			if (rule instanceof CSSFontFaceRule) {
-				faces.push(
-					rule.cssText.replace(/url\((["']?)([^"')]+)\1\)/g, (match, _quote, url: string) => {
-						if (/^(data:|https?:)/.test(url)) return match;
-						try {
-							return `url("${new URL(url, base).href}")`;
-						} catch {
-							return match;
-						}
-					}),
-				);
-			}
+			const isFontFace =
+				typeof CSSFontFaceRule === 'undefined' ? rule.constructor?.name === 'CSSFontFaceRule' : rule instanceof CSSFontFaceRule;
+			if (!isFontFace) continue;
+			faces.push(
+				rule.cssText.replace(/url\((["']?)([^"')]+)\1\)/g, (match, _quote, url: string) => {
+					if (/^(data:|https?:)/.test(url)) return match;
+					try {
+						return `url("${new URL(url, base).href}")`;
+					} catch {
+						return match;
+					}
+				}),
+			);
 		}
 	}
 
@@ -91,8 +92,10 @@ function injectHostFonts(doc: Document) {
 
 	/* Font faces load lazily, which can leave the form showing a fallback on first
 	   paint. Kick off the two families the brand styles use so they are ready. */
-	for (const family of ['Outfit', 'Open Sans']) {
-		void doc.fonts.load(`600 16px "${family}"`).catch(() => null);
+	if (doc.fonts) {
+		for (const family of ['Outfit', 'Open Sans']) {
+			void doc.fonts.load(`600 16px "${family}"`).catch(() => null);
+		}
 	}
 }
 

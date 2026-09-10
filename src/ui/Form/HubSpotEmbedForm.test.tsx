@@ -181,6 +181,37 @@ describe('HubSpotEmbedForm', () => {
 		expect(injected?.textContent).toContain('.hs-button');
 	});
 
+	test('forwards host @font-face rules into the form iframe on form ready', async () => {
+		const style = document.createElement('style');
+		style.textContent = '@font-face { font-family: "TestFont"; src: url(/fonts/test.woff2); }';
+		document.head.appendChild(style);
+
+		const { HubSpotEmbedForm } = await import('./HubSpotEmbedForm');
+
+		await act(async () => {
+			root = createRoot(document.getElementById('root')!);
+			root.render(React.createElement(HubSpotEmbedForm, { formId: 'form-123' }));
+			await new Promise<void>(resolve => {
+				window.setTimeout(resolve, 0);
+			});
+		});
+
+		expect(createOptions?.onFormReady).toBeDefined();
+
+		const target = document.querySelector('.gp-hubspot-form-target')!;
+		const iframe = document.createElement('iframe');
+		target.appendChild(iframe);
+
+		await act(async () => {
+			createOptions?.onFormReady?.();
+		});
+
+		const fonts = iframe.contentDocument?.getElementById('gp-hubspot-fonts');
+		expect(fonts).not.toBeNull();
+		expect(fonts?.tagName).toBe('STYLE');
+		expect(fonts?.textContent).toContain('TestFont');
+	});
+
 	test('shows fallback with contact link when HubSpot script fails to load', async () => {
 		waitForHubSpotFormsMock.mockImplementation(async () => Promise.reject(new Error('timeout')));
 

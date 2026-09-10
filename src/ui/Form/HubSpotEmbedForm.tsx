@@ -78,6 +78,12 @@ function collectHostFontFaces(): string {
 	return css;
 }
 
+/* Test-only: the font-face cache is a module singleton that survives between tests
+   in a single process, so reset it per test to keep them order-independent. */
+export function _resetHostFontFacesCacheForTest() {
+	hostFontFacesCache = null;
+}
+
 function injectHostFonts(doc: Document) {
 	const faces = collectHostFontFaces();
 	if (!faces) return;

@@ -40,10 +40,13 @@ let createOptions: HubSpotFormCreateOptions | undefined;
 let dom: JSDOM;
 let root: Root;
 
-beforeEach(() => {
+beforeEach(async () => {
 	createOptions = undefined;
 	handleHubSpotFormSubmissionMock.mockClear();
 	waitForHubSpotFormsMock.mockImplementation(defaultWaitForHubSpotForms);
+
+	const { _resetHostFontFacesCacheForTest } = await import('./HubSpotEmbedForm');
+	_resetHostFontFacesCacheForTest();
 
 	dom = new JSDOM('<!DOCTYPE html><html><body><div id="root"></div></body></html>', {
 		url: 'http://localhost/newsletter',

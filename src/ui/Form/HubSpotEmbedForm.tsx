@@ -54,23 +54,34 @@ function collectHostFontFaces(): string {
 		}
 		const base = sheet.href ?? document.baseURI;
 		for (const rule of Array.from(rules)) {
-			if (rule instanceof CSSFontFaceRule) {
-				faces.push(
-					rule.cssText.replace(/url\((["']?)([^"')]+)\1\)/g, (match, _quote, url: string) => {
-						if (/^(data:|https?:)/.test(url)) return match;
-						try {
-							return `url("${new URL(url, base).href}")`;
-						} catch {
-							return match;
-						}
-					}),
-				);
-			}
+			const isFontFace =
+				typeof CSSFontFaceRule === 'undefined' ? rule.constructor?.name === 'CSSFontFaceRule' : rule instanceof CSSFontFaceRule;
+			if (!isFontFace) continue;
+			faces.push(
+				rule.cssText.replace(/url\((["']?)([^"')]+)\1\)/g, (match, _quote, url: string) => {
+					if (/^(data:|https?:)/.test(url)) return match;
+					try {
+						return `url("${new URL(url, base).href}")`;
+					} catch {
+						return match;
+					}
+				}),
+			);
 		}
 	}
 
-	hostFontFacesCache = faces.join('\n');
-	return hostFontFacesCache;
+	const css = faces.join('\n');
+	// Only cache once faces were actually found. onFormReady can fire before a
+	// stylesheet finishes parsing; caching the empty result would poison every
+	// later call and silently skip font injection for the page's lifetime.
+	if (faces.length > 0) hostFontFacesCache = css;
+	return css;
+}
+
+/* Test-only: the font-face cache is a module singleton that survives between tests
+   in a single process, so reset it per test to keep them order-independent. */
+export function _resetHostFontFacesCacheForTest() {
+	hostFontFacesCache = null;
 }
 
 function injectHostFonts(doc: Document) {
@@ -87,8 +98,10 @@ function injectHostFonts(doc: Document) {
 
 	/* Font faces load lazily, which can leave the form showing a fallback on first
 	   paint. Kick off the two families the brand styles use so they are ready. */
-	for (const family of ['Outfit', 'Open Sans']) {
-		void doc.fonts.load(`600 16px "${family}"`).catch(() => null);
+	if (doc.fonts) {
+		for (const family of ['Outfit', 'Open Sans']) {
+			void doc.fonts.load(`600 16px "${family}"`).catch(() => null);
+		}
 	}
 }
 

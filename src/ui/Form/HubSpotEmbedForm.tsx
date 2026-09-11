@@ -188,9 +188,11 @@ function effectiveBackgroundColor(element: HTMLElement): string | null {
 }
 
 function isDarkColor(color: string): boolean {
-	const match = /rgba?\(([^)]+)\)/.exec(color);
+	const match = /rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/.exec(color);
 	if (!match) return false;
-	const [r, g, b] = match[1].split(',').map(part => parseFloat(part));
+	const r = Number(match[1]);
+	const g = Number(match[2]);
+	const b = Number(match[3]);
 	return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
 }
 

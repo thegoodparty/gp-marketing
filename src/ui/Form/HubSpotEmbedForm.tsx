@@ -182,7 +182,9 @@ const ON_SECTION_LIGHT_TEXT = '#fff';
 function effectiveBackgroundColor(element: HTMLElement): string | null {
 	for (let node: HTMLElement | null = element; node; node = node.parentElement) {
 		const color = getComputedStyle(node).backgroundColor;
-		if (color && color !== 'transparent' && !color.startsWith('rgba(0, 0, 0, 0')) return color;
+		// Skip only the fully-transparent value (the resolved form of `transparent`);
+		// a semi-opaque background such as rgba(0, 0, 0, 0.5) is a real background.
+		if (color && color !== 'transparent' && color !== 'rgba(0, 0, 0, 0)') return color;
 	}
 	return null;
 }

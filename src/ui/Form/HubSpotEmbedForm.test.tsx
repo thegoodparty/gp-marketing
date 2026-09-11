@@ -242,15 +242,19 @@ describe('HubSpotEmbedForm', () => {
 		const iframe = document.createElement('iframe');
 		target.appendChild(iframe);
 
+		// Put the background on an ancestor above the component's own wrapper (as a
+		// page section does), so the test exercises the walk past intermediate nodes.
+		const section = document.getElementById('root')!;
+
 		// Light (cream) section -> dark text.
-		document.body.style.backgroundColor = 'rgb(252, 248, 243)';
+		section.style.backgroundColor = 'rgb(252, 248, 243)';
 		await act(async () => {
 			createOptions?.onFormReady?.();
 		});
 		expect(iframe.contentDocument?.documentElement.style.getPropertyValue('--gp-form-text')).toBe('hsl(220 58% 10%)');
 
 		// Dark (midnight hero) section -> light text.
-		document.body.style.backgroundColor = 'rgb(11, 21, 40)';
+		section.style.backgroundColor = 'rgb(11, 21, 40)';
 		await act(async () => {
 			createOptions?.onFormReady?.();
 		});

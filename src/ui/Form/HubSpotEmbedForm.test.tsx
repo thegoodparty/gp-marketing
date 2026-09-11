@@ -259,6 +259,14 @@ describe('HubSpotEmbedForm', () => {
 			createOptions?.onFormReady?.();
 		});
 		expect(iframe.contentDocument?.documentElement.style.getPropertyValue('--gp-form-text')).toBe('#fff');
+
+		// A semi-opaque black scrim composites to a light-grey on the page, so its
+		// effective colour is light -> dark text (not scored as fully-opaque black).
+		section.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+		await act(async () => {
+			createOptions?.onFormReady?.();
+		});
+		expect(iframe.contentDocument?.documentElement.style.getPropertyValue('--gp-form-text')).toBe('hsl(220 58% 10%)');
 	});
 
 	test('shows fallback with contact link when HubSpot script fails to load', async () => {

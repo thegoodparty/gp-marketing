@@ -227,6 +227,36 @@ describe('HubSpotEmbedForm', () => {
 		expect(fonts?.textContent).toContain('TestFont');
 	});
 
+	test('picks on-section text colour from the background behind the form', async () => {
+		const { HubSpotEmbedForm } = await import('./HubSpotEmbedForm');
+
+		await act(async () => {
+			root = createRoot(document.getElementById('root')!);
+			root.render(React.createElement(HubSpotEmbedForm, { formId: 'form-123' }));
+			await new Promise<void>(resolve => {
+				window.setTimeout(resolve, 0);
+			});
+		});
+
+		const target = document.querySelector('.gp-hubspot-form-target')!;
+		const iframe = document.createElement('iframe');
+		target.appendChild(iframe);
+
+		// Light (cream) section -> dark text.
+		document.body.style.backgroundColor = 'rgb(252, 248, 243)';
+		await act(async () => {
+			createOptions?.onFormReady?.();
+		});
+		expect(iframe.contentDocument?.documentElement.style.getPropertyValue('--gp-form-text')).toBe('hsl(220 58% 10%)');
+
+		// Dark (midnight hero) section -> light text.
+		document.body.style.backgroundColor = 'rgb(11, 21, 40)';
+		await act(async () => {
+			createOptions?.onFormReady?.();
+		});
+		expect(iframe.contentDocument?.documentElement.style.getPropertyValue('--gp-form-text')).toBe('#fff');
+	});
+
 	test('shows fallback with contact link when HubSpot script fails to load', async () => {
 		waitForHubSpotFormsMock.mockImplementation(async () => Promise.reject(new Error('timeout')));
 

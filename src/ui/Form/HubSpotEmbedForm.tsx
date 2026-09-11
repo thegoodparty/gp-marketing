@@ -165,9 +165,34 @@ const BRAND_CSS = `
 		box-shadow: 0 0 0 3px color-mix(in srgb, var(--gp-form-primary, #2563eb) 35%, transparent) !important;
 	}
 	.hs-form .hs-form-required { color: var(--gp-form-red, #db1439) !important; }
-	.hs-form label { color: hsl(220 58% 10%) !important; font-weight: 600 !important; }
+	.hs-form label { color: var(--gp-form-text, hsl(220 58% 10%)) !important; font-weight: 600 !important; }
+	.hs-form .hs-richtext, .hs-form .legal-consent-container, .hs-form .hs-form__legal-text {
+		color: var(--gp-form-text, hsl(220 58% 10%)) !important;
+	}
 	.hs-form .hs-error-msg, .hs-form .hs-error-msgs label { color: var(--gp-form-error, #b80a27) !important; font-weight: 400 !important; }
 `;
+
+/* The form is dropped into sections with different backgrounds (cream, dark hero,
+   etc.), so pick a readable colour for the on-section text — labels and the legal
+   disclaimer — from the luminance of whatever background sits behind the form.
+   Defaults to dark text, which suits the common light/cream sections. */
+const ON_SECTION_DARK_TEXT = 'hsl(220 58% 10%)';
+const ON_SECTION_LIGHT_TEXT = '#fff';
+
+function effectiveBackgroundColor(element: HTMLElement): string | null {
+	for (let node: HTMLElement | null = element; node; node = node.parentElement) {
+		const color = getComputedStyle(node).backgroundColor;
+		if (color && color !== 'transparent' && !color.startsWith('rgba(0, 0, 0, 0')) return color;
+	}
+	return null;
+}
+
+function isDarkColor(color: string): boolean {
+	const match = /rgba?\(([^)]+)\)/.exec(color);
+	if (!match) return false;
+	const [r, g, b] = match[1].split(',').map(part => parseFloat(part));
+	return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
+}
 
 function applyBrandStyles(target: HTMLElement) {
 	const iframe = target.querySelector('iframe');
@@ -188,6 +213,9 @@ function applyBrandStyles(target: HTMLElement) {
 		const value = hostStyles.getPropertyValue(token).trim();
 		if (value) doc.documentElement.style.setProperty(alias, value);
 	}
+
+	const background = effectiveBackgroundColor(target);
+	doc.documentElement.style.setProperty('--gp-form-text', background && isDarkColor(background) ? ON_SECTION_LIGHT_TEXT : ON_SECTION_DARK_TEXT);
 
 	let style = doc.getElementById(BRAND_STYLE_ID);
 	if (!(style instanceof HTMLStyleElement)) {

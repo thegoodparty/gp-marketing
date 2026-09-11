@@ -165,9 +165,46 @@ const BRAND_CSS = `
 		box-shadow: 0 0 0 3px color-mix(in srgb, var(--gp-form-primary, #2563eb) 35%, transparent) !important;
 	}
 	.hs-form .hs-form-required { color: var(--gp-form-red, #db1439) !important; }
-	.hs-form label { color: hsl(220 58% 10%) !important; font-weight: 600 !important; }
+	.hs-form label { color: var(--gp-form-text, hsl(220 58% 10%)) !important; font-weight: 600 !important; }
+	.hs-form .hs-richtext, .hs-form .legal-consent-container, .hs-form .hs-form__legal-text {
+		color: var(--gp-form-text, hsl(220 58% 10%)) !important;
+	}
 	.hs-form .hs-error-msg, .hs-form .hs-error-msgs label { color: var(--gp-form-error, #b80a27) !important; font-weight: 400 !important; }
 `;
+
+/* The form is dropped into sections with different backgrounds (cream, dark hero,
+   etc.), so pick a readable colour for the on-section text — labels and the legal
+   disclaimer — from the luminance of whatever background sits behind the form.
+   Defaults to dark text, which suits the common light/cream sections. */
+const ON_SECTION_DARK_TEXT = 'hsl(220 58% 10%)';
+const ON_SECTION_LIGHT_TEXT = '#fff';
+
+function effectiveBackgroundColor(element: HTMLElement): string | null {
+	for (let node: HTMLElement | null = element; node; node = node.parentElement) {
+		const color = getComputedStyle(node).backgroundColor;
+		// Skip only the fully-transparent value (the resolved form of `transparent`);
+		// a semi-opaque background such as rgba(0, 0, 0, 0.5) is a real background.
+		if (color && color !== 'transparent' && color !== 'rgba(0, 0, 0, 0)') return color;
+	}
+	return null;
+}
+
+function isDarkColor(color: string): boolean {
+	const match = /rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)(?:[,\s]+([\d.]+))?/.exec(color);
+	if (!match) return false;
+	const r = Number(match[1]);
+	const g = Number(match[2]);
+	const b = Number(match[3]);
+	const a = match[4] !== undefined ? Number(match[4]) : 1;
+	// A near-transparent overlay carries no colour signal.
+	if (a < 0.05) return false;
+	// Composite over white using the alpha so a semi-opaque scrim is scored by its
+	// effective colour on the page, not as if it were fully opaque.
+	const effectiveR = a * r + (1 - a) * 255;
+	const effectiveG = a * g + (1 - a) * 255;
+	const effectiveB = a * b + (1 - a) * 255;
+	return (0.299 * effectiveR + 0.587 * effectiveG + 0.114 * effectiveB) / 255 < 0.5;
+}
 
 function applyBrandStyles(target: HTMLElement) {
 	const iframe = target.querySelector('iframe');
@@ -188,6 +225,9 @@ function applyBrandStyles(target: HTMLElement) {
 		const value = hostStyles.getPropertyValue(token).trim();
 		if (value) doc.documentElement.style.setProperty(alias, value);
 	}
+
+	const background = effectiveBackgroundColor(target);
+	doc.documentElement.style.setProperty('--gp-form-text', background && isDarkColor(background) ? ON_SECTION_LIGHT_TEXT : ON_SECTION_DARK_TEXT);
 
 	let style = doc.getElementById(BRAND_STYLE_ID);
 	if (!(style instanceof HTMLStyleElement)) {

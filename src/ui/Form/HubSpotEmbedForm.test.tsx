@@ -227,6 +227,48 @@ describe('HubSpotEmbedForm', () => {
 		expect(fonts?.textContent).toContain('TestFont');
 	});
 
+	test('picks on-section text colour from the background behind the form', async () => {
+		const { HubSpotEmbedForm } = await import('./HubSpotEmbedForm');
+
+		await act(async () => {
+			root = createRoot(document.getElementById('root')!);
+			root.render(React.createElement(HubSpotEmbedForm, { formId: 'form-123' }));
+			await new Promise<void>(resolve => {
+				window.setTimeout(resolve, 0);
+			});
+		});
+
+		const target = document.querySelector('.gp-hubspot-form-target')!;
+		const iframe = document.createElement('iframe');
+		target.appendChild(iframe);
+
+		// Put the background on an ancestor above the component's own wrapper (as a
+		// page section does), so the test exercises the walk past intermediate nodes.
+		const section = document.getElementById('root')!;
+
+		// Light (cream) section -> dark text.
+		section.style.backgroundColor = 'rgb(252, 248, 243)';
+		await act(async () => {
+			createOptions?.onFormReady?.();
+		});
+		expect(iframe.contentDocument?.documentElement.style.getPropertyValue('--gp-form-text')).toBe('hsl(220 58% 10%)');
+
+		// Dark (midnight hero) section -> light text.
+		section.style.backgroundColor = 'rgb(11, 21, 40)';
+		await act(async () => {
+			createOptions?.onFormReady?.();
+		});
+		expect(iframe.contentDocument?.documentElement.style.getPropertyValue('--gp-form-text')).toBe('#fff');
+
+		// A semi-opaque black scrim composites to a light-grey on the page, so its
+		// effective colour is light -> dark text (not scored as fully-opaque black).
+		section.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+		await act(async () => {
+			createOptions?.onFormReady?.();
+		});
+		expect(iframe.contentDocument?.documentElement.style.getPropertyValue('--gp-form-text')).toBe('hsl(220 58% 10%)');
+	});
+
 	test('shows fallback with contact link when HubSpot script fails to load', async () => {
 		waitForHubSpotFormsMock.mockImplementation(async () => Promise.reject(new Error('timeout')));
 

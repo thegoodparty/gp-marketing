@@ -11,7 +11,8 @@ import {
 	resolveElectionPositionFromRaceSlug,
 	stripCountySuffix as stripCountySuffixFromHelpers,
 } from '~/lib/electionsHelpers';
-import { buildPersonSlugFromBase, hasText } from '~/lib/peopleProfile';
+import { hasText } from '~/lib/peopleProfile';
+import { buildPersonSlugFromBase } from '~/lib/personSlug';
 import { FAQ_BASE_PATH, getFaqSitemapEntries } from '~/lib/faqSlugs';
 import { fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
 import { allFaqsQuery } from '~/sanity/groq';

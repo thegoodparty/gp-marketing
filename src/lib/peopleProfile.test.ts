@@ -5,14 +5,13 @@ import {
 	buildBreadcrumbTrail,
 	buildNearbyOfficialCards,
 	buildOtherCandidateCards,
-	buildPersonSlug,
-	buildPersonSlugFromBase,
 	composeView,
 	extractPersonId,
 	isThinProfile,
 	resolveProfileState,
 	type PersonPersona,
 } from './peopleProfile';
+import { buildPersonSlug, buildPersonSlugFromBase } from './personSlug';
 import { buildElectionPositionHrefFromRaceSlug } from './electionsHelpers';
 import { classifyParty, isMajorParty } from './party';
 
@@ -434,7 +433,23 @@ describe('buildPersonSlug', () => {
 	});
 
 	test('strips punctuation and diacritics', () => {
-		expect(buildPersonSlug("José O'Brien-Smith", PID)).toBe(`jose-o-brien-smith-${ID8}`);
+		expect(buildPersonSlug("José O'Brien-Smith", PID)).toBe(`jose-obrien-smith-${ID8}`);
+	});
+
+	/**
+	 * The mart's Person.slug deletes apostrophes and periods instead of folding
+	 * them to a separator, and a base that disagrees is answered with a 307 to the
+	 * real slug. These four shapes are the ones the live candidacy feed actually
+	 * produces: an elided prefix, a curly apostrophe from a CMS round-trip,
+	 * dotted initials, and an interior apostrophe inside a hyphenated surname.
+	 */
+	test.each([
+		["Robert O'Brien", 'robert-obrien'],
+		['Anthony D’Amelio', 'anthony-damelio'],
+		['T.J. McSparrin', 'tj-mcsparrin'],
+		["Katherine Prudhomme-O'Brien", 'katherine-prudhomme-obrien'],
+	])('deletes apostrophes and periods rather than splitting on them: %s', (name, base) => {
+		expect(buildPersonSlug(name, PID)).toBe(`${base}-${ID8}`);
 	});
 
 	test('falls back to just the id suffix when the name has no slug chars', () => {

@@ -8,6 +8,7 @@ import type { FactsCardProps } from '~/ui/FactsCard';
 import { permanentRedirect } from 'next/navigation';
 import { isCityOrTownMtfcc, looksLikeCountySlugSegment, looksLikeDistrictSlug, resolveCountySlugForPlace } from '~/lib/electionsApi';
 import { formatPersonName } from '~/lib/personName';
+import { buildPersonSlug } from '~/lib/personSlug';
 
 const COUNTY_EQUIV_SUFFIX_RE =
 	/\s+(County|Parish|City and Borough|City and County|Borough|Census Area|Municipality)$/i;
@@ -124,9 +125,18 @@ export function mapCandidacyToCard(
 		name,
 		partyAffiliation: candidacy.party ?? 'Unknown',
 		avatar: candidacy.image ?? undefined,
-		href: candidacy.slug
-			? `/candidate/${candidacy.slug}`
-			: `/profile?slug=${encodeURIComponent([candidacy.firstName, candidacy.lastName].filter(Boolean).join('-').toLowerCase())}&raceId=${encodeURIComponent(candidacy.raceId ?? '')}`,
+		// /people is the canonical home for a person, and /candidate/<slug> is a 308
+		// to it whenever the candidacy carries a personId. Linking the legacy path
+		// put a redirect hop under every candidate card on every position page —
+		// 31,211 of them, 85% of the site's internal redirects, each with this card
+		// as its only inlink. So build the /people URL directly and keep /candidate
+		// only for the rows that have no personId to resolve, where it still serves
+		// its own page rather than redirecting.
+		href: candidacy.personId
+			? `/people/${buildPersonSlug(name, candidacy.personId)}`
+			: candidacy.slug
+				? `/candidate/${candidacy.slug}`
+				: `/profile?slug=${encodeURIComponent([candidacy.firstName, candidacy.lastName].filter(Boolean).join('-').toLowerCase())}&raceId=${encodeURIComponent(candidacy.raceId ?? '')}`,
 	};
 }
 

@@ -199,6 +199,41 @@ Note this suppresses only what *we* publish. The image itself is usually hosted
 by BallotReady and stays live at its own URL, so a genuine takedown request also
 has to go upstream to them.
 
+### Linking to a person: always `/people`, never `/candidate`
+
+`/people/<base>-<id8>` is the one canonical home for a person.
+`/candidate/<slug>` is a legacy path that 308s there whenever the candidacy row
+carries a `personId` (see `src/app/candidate/[...slug]/page.tsx`), so linking it
+buys a guaranteed redirect hop and nothing else. A full-site crawl in September
+2026 found 31,211 such hops — 85% of every internal redirect on the site — all
+from the candidate cards on the position pages.
+
+So when you build a link to a person:
+
+- **Have a `personId`?** Build `/people/${buildPersonSlug(name, personId)}`
+  (`src/lib/personSlug.ts`).
+- **Have the person's spine row?** Prefer `buildPersonSlugFromBase(person.slug,
+  id)` — the mart's own `Person.slug` is the authoritative base.
+- **Neither?** `/candidate/<slug>` is still correct. Those rows have no `/people`
+  profile, so that route serves its own page instead of redirecting.
+
+The slug rule is `<slugified name>-<first 8 hex of personId>`, and the id8 suffix
+is what the resolver actually looks up. Getting the *base* wrong is not fatal but
+is not free either: the resolver answers a near-miss base with a 307 to the real
+URL, so a wrong base trades an avoidable 308 for an avoidable 307.
+
+Two traps in the base, both verified against live data:
+
+- **Apostrophes and periods are deleted, not turned into separators.** The mart
+  has `robert-obrien`, not `robert-o-brien`; `tj-mcsparrin`, not `t-j-mcsparrin`.
+  `slugifyName` handles this — do not hand-roll a slugifier.
+- **The candidacy row's name and the person row's name genuinely disagree**
+  for about 0.8% of rows: nicknames (`Eugene Bice` / `ej-bice`), middle names
+  (`Richard Brooks` / `richard-louis-brooks`), and upstream typos
+  (`Chris Bright` / `chirs-bright`). Nothing in this repo can reconcile those, and
+  they are not worth chasing — they land on a single 307. This is the reason to
+  prefer the spine row's slug whenever you have it.
+
 ### Not fixable here, escalate
 
 Candidate claimed-vs-unclaimed state and any "my profile is wrong" bug is a data

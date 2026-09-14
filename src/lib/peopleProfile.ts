@@ -19,6 +19,7 @@ import {
 } from '~/lib/electionsHelpers';
 import { classifyParty, classifyPartyFrom, isMajorParty, type PartyClass } from '~/lib/party';
 import { formatPersonName } from '~/lib/personName';
+import { buildPersonSlug, buildPersonSlugFromBase, slugifyName } from '~/lib/personSlug';
 import type { CandidacyItem } from '~/types/elections';
 import type {
 	PersonAccomplishment,
@@ -36,47 +37,6 @@ const PERSON_ID_RE = /([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{
 export function extractPersonId(slug: string): string | null {
 	const match = PERSON_ID_RE.exec(slug);
 	return match?.[1]?.toLowerCase() ?? null;
-}
-
-function slugifyName(name: string): string {
-	return name
-		.toLowerCase()
-		.normalize('NFKD')
-		.replace(/[\u0300-\u036f]/g, '')
-		.replace(/[^a-z0-9]+/g, '-')
-		.replace(/^-+|-+$/g, '');
-}
-
-/**
- * First 8 hex chars of the personId — the stable, collision-safe slug suffix.
- * The election-api resolves /people/<base>-<id8> by an indexed range scan on the
- * id PK, so this suffix (not the non-unique base slug) is the real lookup key.
- */
-export function personIdSuffix(personId: string): string {
-	return personId.replace(/-/g, '').slice(0, 8).toLowerCase();
-}
-
-/**
- * Builds the public `<base>-<id8>` slug from an already-slugified base.
- *
- * Idempotent, because the two kinds of base this is called with disagree about
- * whether the suffix is already there: a name-derived base (`slugifyName`) never
- * carries it, while the election-api mart's `Person.slug` already ends in it.
- * Appending unconditionally produced `jane-doe-11111111-11111111` for every
- * person sourced from the spine — pages still resolved (the resolver reads the
- * *trailing* 8 hex either way), but the canonical URL, the og:url, the sitemap
- * entries and every inter-profile link carried the doubled suffix, and the clean
- * URL cost a redirect hop to reach it.
- */
-export function buildPersonSlugFromBase(base: string, personId: string): string {
-	const suffix = personIdSuffix(personId);
-	if (!base || base === suffix) return suffix;
-	return base.endsWith(`-${suffix}`) ? base : `${base}-${suffix}`;
-}
-
-/** Builds the public `first-last-<id8>` slug for a person from a display name. */
-export function buildPersonSlug(name: string, personId: string): string {
-	return buildPersonSlugFromBase(slugifyName(name), personId);
 }
 
 export interface PersonProfileLink {

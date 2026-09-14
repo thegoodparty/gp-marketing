@@ -756,7 +756,10 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 				// the `secondary` style (bg-midnight-900); preserveButtonStyle skips the
 				// card-color inverse mapping that would otherwise turn it into a light
 				// `outline` button.
-				button: { buttonType: 'signup', label: 'Learn more', buttonProps: { styleType: 'secondary', styleSize: 'md' } },
+				// `signup` renders a button with no destination, so "Learn more" went
+				// nowhere. The copy points at the mission page, which is an ordinary
+				// internal link.
+				button: { buttonType: 'internal', href: '/about', label: 'Learn more', buttonProps: { styleType: 'secondary', styleSize: 'md' } },
 				preserveButtonStyle: true,
 				// Deliberately NOT `contentColumnAlign`. That prop mirrors the sidebar
 				// grid so the CTA lines up with the content-card column, but the frames

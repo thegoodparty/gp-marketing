@@ -257,10 +257,12 @@ export async function generateMetadata({
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
 	const isNestedDistrict =
 		!countyPlace && placeData != null && isDistrictMtfcc(placeData.mtfcc) && placeData.slug?.toLowerCase() === fullSlug;
+	const canonical = toAbsoluteUrl(`/elections/${fullSlug}`);
 	if (isNestedDistrict) {
 		return {
 			title: `Elections in ${placeData.name}, ${stateName} | Good Party`,
 			description: `Browse elections and positions in ${placeData.name}, ${stateName}.`,
+			alternates: { canonical },
 		};
 	}
 	const countyDisplayName = resolveLocalityName(countyPlace, countyFactsData ?? undefined, countySlug);
@@ -286,5 +288,6 @@ export async function generateMetadata({
 	return {
 		title: `Elections in ${cityName}, ${stateName} | Good Party`,
 		description: `Browse elections and local positions in ${cityName}, ${countyDisplayName}, ${stateName}.`,
+		alternates: { canonical },
 	};
 }

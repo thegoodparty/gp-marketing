@@ -15,12 +15,23 @@
  * work: "T.J. McSparrin" is `tj-mcsparrin` in the mart, and treating `.` as a
  * separator gave `t-j-mcsparrin`.
  *
- * Both the ASCII apostrophe and the curly right single quotation mark (U+2019)
- * are deleted: CMS round-trips and spreadsheet exports routinely substitute the
- * curly form, and NFKD does not decompose it, so matching only ASCII would drop
- * those names back onto the near-miss path.
+ * Every apostrophe-shaped character has to be listed, because NFKD decomposes
+ * none of them: an unlisted one falls through to the `[^a-z0-9]+` separator rule
+ * and lands back on the near-miss path. So alongside the ASCII apostrophe this
+ * deletes both curly quotation marks (U+2018/U+2019, which CMS round-trips and
+ * spreadsheet exports routinely substitute for a typed apostrophe) and the two
+ * modifier letters (U+02BB okina, U+02BC), which is the correctly-encoded
+ * apostrophe in Hawaiian names like `Kaialii Kahele`.
+ *
+ * The 4,993 live candidacy names this was checked against carry only ASCII
+ * apostrophes today, so the rest are defensive — but they cost nothing and the
+ * failure they prevent is silent.
+ *
+ * Deliberately NOT here: the grave accent and the prime (U+2032). Both get typed
+ * for an apostrophe occasionally, but neither is one, and there is no mart
+ * evidence for how it slugs them — a separator stays the safer default.
  */
-const DELETED_PUNCTUATION_RE = /[\u2019'.]/g;
+const DELETED_PUNCTUATION_RE = /[\u2018\u2019\u02bb\u02bc'.]/g;
 
 export function slugifyName(name: string): string {
 	return name

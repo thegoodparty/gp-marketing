@@ -452,6 +452,20 @@ describe('buildPersonSlug', () => {
 		expect(buildPersonSlug(name, PID)).toBe(`${base}-${ID8}`);
 	});
 
+	/**
+	 * NFKD decomposes none of the apostrophe-shaped characters, so each one has to
+	 * be listed explicitly or it falls through to the separator rule. U+02BB is the
+	 * okina, the correctly-encoded apostrophe in Hawaiian names.
+	 */
+	test.each([
+		['U+2018 left curly', 'Anthony D‘Amelio'],
+		['U+2019 right curly', 'Anthony D’Amelio'],
+		['U+02BB okina', 'Anthony DʻAmelio'],
+		['U+02BC modifier letter', 'Anthony DʼAmelio'],
+	])('deletes the %s apostrophe too', (_label, name) => {
+		expect(buildPersonSlug(name, PID)).toBe(`anthony-damelio-${ID8}`);
+	});
+
 	test('falls back to just the id suffix when the name has no slug chars', () => {
 		expect(buildPersonSlug('!!!', PID)).toBe(ID8);
 	});

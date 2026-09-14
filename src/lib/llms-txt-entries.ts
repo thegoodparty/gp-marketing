@@ -197,6 +197,10 @@ export function renderLlmsTxt(doc: LlmsTxtDoc): string {
  * Tags align with the document `_type`s already wired in /api/revalidate.
  */
 export async function fetchLlmsTxtData(): Promise<LlmsTxtSourceData> {
+	// Every query below carries `seo.field_noIndex != true`, matching
+	// sitemap-entries.ts: the toggle is applied by the shared StructureMetaData
+	// rather than per document type, so any query that skips the guard can render
+	// `noindex` and still hand the URL to an AI crawler.
 	const [singletons, articles, glossary, landingPages, policies] = await Promise.all([
 		sanityClient.fetch<{
 			home: string | null;
@@ -205,10 +209,10 @@ export async function fetchLlmsTxtData(): Promise<LlmsTxtSourceData> {
 			glossary: string | null;
 		}>(
 			`{
-				"home": *[_type=="goodpartyOrg_home"][0]._id,
-				"blog": *[_type=="goodpartyOrg_allArticles"][0]._id,
-				"contact": *[_type=="goodpartyOrg_contact"][0]._id,
-				"glossary": *[_type=="goodpartyOrg_glossary"][0]._id
+				"home": *[_type=="goodpartyOrg_home" && seo.field_noIndex != true][0]._id,
+				"blog": *[_type=="goodpartyOrg_allArticles" && seo.field_noIndex != true][0]._id,
+				"contact": *[_type=="goodpartyOrg_contact" && seo.field_noIndex != true][0]._id,
+				"glossary": *[_type=="goodpartyOrg_glossary" && seo.field_noIndex != true][0]._id
 			}`,
 			{},
 			{
@@ -223,7 +227,7 @@ export async function fetchLlmsTxtData(): Promise<LlmsTxtSourceData> {
 			},
 		),
 		sanityClient.fetch<SlugTitleDescRow[]>(
-			`*[_type == "article"]{
+			`*[_type == "article" && seo.field_noIndex != true]{
 				"slug": editorialOverview.field_slug,
 				"title": editorialOverview.field_editorialTitle,
 				"description": seo.field_metaDescription
@@ -232,7 +236,7 @@ export async function fetchLlmsTxtData(): Promise<LlmsTxtSourceData> {
 			{ next: { tags: ['article'] } },
 		),
 		sanityClient.fetch<SlugTitleDescRow[]>(
-			`*[_type == "glossary"]{
+			`*[_type == "glossary" && seo.field_noIndex != true]{
 				"slug": glossaryTermOverview.field_slug,
 				"title": glossaryTermOverview.field_glossaryTerm,
 				"description": seo.field_metaDescription
@@ -240,8 +244,11 @@ export async function fetchLlmsTxtData(): Promise<LlmsTxtSourceData> {
 			{},
 			{ next: { tags: ['glossary'] } },
 		),
+		// Studio's "No Index" toggle is the authoritative signal now that it
+		// actually reaches the page; EXCLUDED_PAGE_TITLE_TERMS stays as the net for
+		// an internal page nobody has marked yet.
 		sanityClient.fetch<SlugTitleDescRow[]>(
-			`*[_type == "goodpartyOrg_landingPages"]{
+			`*[_type == "goodpartyOrg_landingPages" && seo.field_noIndex != true]{
 				"slug": detailPageOverviewNoHero.field_slug,
 				"title": detailPageOverviewNoHero.field_pageName,
 				"description": seo.field_metaDescription
@@ -250,7 +257,7 @@ export async function fetchLlmsTxtData(): Promise<LlmsTxtSourceData> {
 			{ next: { tags: ['goodpartyOrg_landingPages'] } },
 		),
 		sanityClient.fetch<SlugTitleDescRow[]>(
-			`*[_type == "policy"]{
+			`*[_type == "policy" && seo.field_noIndex != true]{
 				"slug": policyOverview.field_slug,
 				"title": policyOverview.field_policyName,
 				"description": seo.field_metaDescription

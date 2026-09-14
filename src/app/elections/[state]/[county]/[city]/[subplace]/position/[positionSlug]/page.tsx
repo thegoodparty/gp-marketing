@@ -130,15 +130,20 @@ export async function generateMetadata({
 	const isRealSubplace =
 		race?.Place?.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`) ?? false;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
+	const canonical = toAbsoluteUrl(
+		`/elections/${countySlug}/${city.toLowerCase()}/${subplace.toLowerCase()}/position/${positionSlug}`,
+	);
 	if (isRealSubplace) {
 		const subplaceName = race!.Place!.name;
 		return {
 			title: `${positionName} in ${subplaceName}, ${cityName}, ${stateName} | Good Party`,
 			description: `Election details and candidates for ${positionName} in ${subplaceName}, ${cityName}, ${countyDisplayName}, ${stateName}.`,
+			alternates: { canonical },
 		};
 	}
 	return {
 		title: `${positionName} in ${cityName}, ${stateName} | Good Party`,
 		description: `Election details and candidates for ${positionName} in ${cityName}, ${countyDisplayName}, ${stateName}.`,
+		alternates: { canonical },
 	};
 }

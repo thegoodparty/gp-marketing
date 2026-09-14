@@ -11,6 +11,7 @@ import {
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
 	buildOfficeItemsFromPlaceRaces,
+	buildPlaceRacePositionHref,
 	canonicalizeCountyEquivalentName,
 	getCountySuffixLabel,
 	getStateName,
@@ -107,10 +108,7 @@ export default async function Page({
 		resolvedDates,
 		{
 			type: officeType,
-			buildHref: race => {
-				const positionSlug = race.slug.split('/').slice(2).join('/');
-				return `/elections/${state.toLowerCase()}/${county.toLowerCase()}/position/${positionSlug}`;
-			},
+			buildHref: race => buildPlaceRacePositionHref([state, county], race.slug),
 		},
 	);
 
@@ -191,5 +189,6 @@ export async function generateMetadata({
 		description: isDistrict
 			? `Browse elections and positions in ${placeName}, ${stateName}.`
 			: `Browse elections and cities in ${placeName}, ${stateName}.`,
+		alternates: { canonical: toAbsoluteUrl(`/elections/${fullSlug}`) },
 	};
 }

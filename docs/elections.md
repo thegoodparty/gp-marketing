@@ -98,6 +98,41 @@ Place facts (population, density, income, and so on) come from `PlaceWithFacts`
 through `placeToFactsCards`, and `hasSuspiciousFactsMatch` guards against a city
 inheriting its county's statistics.
 
+Every route above emits a **self-referencing canonical** from its `generateMetadata`
+(`alternates: { canonical: toAbsoluteUrl(path) }`), built from the same lowercased path
+the page body hands to `toAbsoluteUrl`. Self-referencing is correct here because the
+redirects above already 301 the non-canonical variants; the canonical's remaining job is
+to collapse the variants that still render 200, mainly mixed-case segments
+(`/elections/CA/...`) and tracking query strings. These are the site's largest content
+type, so a route that ships without one puts tens of thousands of URLs back into
+"Google picks the variant", and `src/app/elections/canonicalMetadata.test.ts` fails the
+build if a new election route forgets. Keep the canonical path identical to the sitemap
+URL for the same page (`buildElectionPositionHrefFromRaceSlug`); a canonical that
+disagrees with the sitemap sends conflicting signals.
+
+### Joint offices eat place slots
+
+A combined office (Indiana's Clerk/Treasurer, Montana's Clerk/Recorder/Surveyor,
+California's Clerk/Recorder) is slugged upstream with a real slash per joined office:
+`mt/gallatin-county/county-assessor/treasurer-joint`. Those extra segments have to go
+*between* the place and `/position/`, because the position slug is a single route
+segment and is fed straight back to `getRaceBySlug`. So the URL is
+`/elections/mt/gallatin-county/county-assessor/position/treasurer-joint`, with the
+office name sitting in the slot a city would normally occupy.
+
+The index pages (`/elections/[state]`, `[county]`, `[county]/[city]`) build their
+office links with `buildPlaceRacePositionHref(placeSegments, race.slug)`. Do not
+hand-roll this: slicing the slug at a fixed depth folds the extra segments into the
+position slug, and `.pop()` drops them, and both shapes 404 while looking plausible.
+A September 2026 crawl found 516 such 404s, concentrated in Indiana towns and Montana
+counties but present in at least 17 states.
+
+Because the route tree stops at four place levels, an office combining four or more
+roles cannot be addressed at all. `buildPlaceRacePositionHref` returns `undefined`
+there and `ListOfOfficesBlock` lists the office without a link rather than linking to
+a page that cannot exist. Giving those offices a real page needs a different URL
+shape, which is a separate piece of work.
+
 ### Templates: global vs custom, and three-tier resolution
 
 Editor-facing how-to (Studio steps, preview targets, clone workflow):
@@ -198,6 +233,71 @@ republishing one. A takedown propagates immediately because
 Note this suppresses only what *we* publish. The image itself is usually hosted
 by BallotReady and stays live at its own URL, so a genuine takedown request also
 has to go upstream to them.
+
+### Linking to a person: always `/people`, never `/candidate`
+
+`/people/<base>-<id8>` is the one canonical home for a person.
+`/candidate/<slug>` is a legacy path that 308s there whenever the candidacy row
+carries a `personId` (see `src/app/candidate/[...slug]/page.tsx`), so linking it
+buys a guaranteed redirect hop and nothing else. A full-site crawl in September
+2026 found 31,211 such hops — 85% of every internal redirect on the site — all
+from the candidate cards on the position pages.
+
+So when you build a link to a person:
+
+- **Have a `personId`?** Build `/people/${buildPersonSlug(name, personId)}`
+  (`src/lib/personSlug.ts`).
+- **Have the person's spine row?** Prefer `buildPersonSlugFromBase(person.slug,
+  id)` — the mart's own `Person.slug` is the authoritative base.
+- **Neither?** `/candidate/<slug>` is still correct. Those rows have no `/people`
+  profile, so that route serves its own page instead of redirecting.
+
+The slug rule is `<slugified name>-<first 8 hex of personId>`, and the id8 suffix
+is what the resolver actually looks up. Getting the *base* wrong is not fatal but
+is not free either: the resolver answers a near-miss base with a 307 to the real
+URL, so a wrong base trades an avoidable 308 for an avoidable 307.
+
+Two traps in the base, both verified against live data:
+
+- **Apostrophes and periods are deleted, not turned into separators.** The mart
+  has `robert-obrien`, not `robert-o-brien`; `tj-mcsparrin`, not `t-j-mcsparrin`.
+  `slugifyName` handles this — do not hand-roll a slugifier.
+- **The candidacy row's name and the person row's name genuinely disagree**
+  for about 0.8% of rows: nicknames (`Eugene Bice` / `ej-bice`), middle names
+  (`Richard Brooks` / `richard-louis-brooks`), and upstream typos
+  (`Chris Bright` / `chirs-bright`). Nothing in this repo can reconcile those, and
+  they are not worth chasing — they land on a single 307. This is the reason to
+  prefer the spine row's slug whenever you have it.
+
+### Linking to a race or a place: the county segment is not optional
+
+A city or town race slug usually omits its county (`nc/greensboro/mayor`). Handed
+to `buildElectionPositionHrefFromRaceSlug` with no county lookup it falls through
+to the generic segment-count branch and yields
+`/elections/nc/greensboro/position/mayor`, which is a *working* URL — it 308s to
+`/elections/nc/guilford-county/greensboro/position/mayor` — and therefore a silent
+one. The same September 2026 crawl that found the `/candidate/` hops above found
+4,797 of these, every one of them from the `/people` profile template: ~36,900
+internal link instances pointing at ~4,800 redirects.
+
+So resolve the county before you build the link. There are two ways, and which one
+fits depends on what you are holding:
+
+- **One race, and you can afford a fetch:** `resolveRaceElectionHrefs`
+  (`electionsApi.ts`) takes a slug, fetches the race for its place, and returns
+  both the position and candidates hrefs. `/candidate` uses this.
+- **Several slugs at once:** `getCitySlugToCountySlugMap(state)` builds the whole
+  state's city → county lookup off the cached `/v1/places` responses, and you pass
+  it as `citySlugToCountySlug` to `buildElectionPositionHrefFromRaceSlug`. `/people`
+  uses this — `loadCityCountyLookup` in `peopleProfile.ts` builds it once per
+  profile and every `/elections` link on the page (position href, each breadcrumb
+  crumb, each "Recent Experience" row, and the "Explore Elections" tier, which is
+  read back off the position href) is built through it.
+
+Both degrade to the county-less URL rather than to no link at all when the county
+cannot be resolved: a redirect beats an unlinked row. The sitemap is the one
+deliberate exception — it passes `skipUnmappedCity` and emits nothing, because a
+sitemap should advertise canonical URLs only.
 
 ### Not fixable here, escalate
 

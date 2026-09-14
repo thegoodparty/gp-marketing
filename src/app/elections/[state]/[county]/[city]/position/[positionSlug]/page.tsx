@@ -176,5 +176,6 @@ export async function generateMetadata({
 	return {
 		title: `${positionName} in ${cityName}, ${stateName} | Good Party`,
 		description: `Election details and candidates for ${positionName} in ${cityName}, ${countyDisplayName}, ${stateName}.`,
+		alternates: { canonical: toAbsoluteUrl(`/elections/${fullSlug}/position/${positionSlug}`) },
 	};
 }

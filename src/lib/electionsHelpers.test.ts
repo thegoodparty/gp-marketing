@@ -8,6 +8,7 @@ import {
 	buildRaceCandidatesHref,
 	buildRacePositionHref,
 	buildRaceSlug,
+	buildPlaceRacePositionHref,
 	buildSubplaceRaceSlug,
 	canonicalizeCountyEquivalentName,
 	findCityForDistrictName,
@@ -157,6 +158,76 @@ describe('buildSubplaceRaceSlug', () => {
 		expect(buildSubplaceRaceSlug('AR', 'winchester', 'city-recorder', 'treasurer-joint', 'drew-county')).toBe(
 			'ar/drew-county/winchester/city-recorder/treasurer-joint',
 		);
+	});
+});
+
+describe('buildPlaceRacePositionHref', () => {
+	test('state office', () => {
+		expect(buildPlaceRacePositionHref(['mt'], 'mt/governor')).toBe('/elections/mt/position/governor');
+	});
+
+	test('county office', () => {
+		expect(buildPlaceRacePositionHref(['mt', 'gallatin-county'], 'mt/gallatin-county/county-sheriff')).toBe(
+			'/elections/mt/gallatin-county/position/county-sheriff',
+		);
+	});
+
+	test('city office', () => {
+		expect(buildPlaceRacePositionHref(['in', 'adams-county', 'berne'], 'in/adams-county/berne/city-legislature')).toBe(
+			'/elections/in/adams-county/berne/position/city-legislature',
+		);
+	});
+
+	test('joint state office keeps the combined office in the place path', () => {
+		expect(buildPlaceRacePositionHref(['ca'], 'ca/state-insurance-commissioner/fire-safety-commissioner-joint')).toBe(
+			'/elections/ca/state-insurance-commissioner/position/fire-safety-commissioner-joint',
+		);
+	});
+
+	test('two-office joint county race', () => {
+		expect(buildPlaceRacePositionHref(['mt', 'gallatin-county'], 'mt/gallatin-county/county-assessor/treasurer-joint')).toBe(
+			'/elections/mt/gallatin-county/county-assessor/position/treasurer-joint',
+		);
+	});
+
+	test('three-office joint county race fills the subplace slot', () => {
+		expect(
+			buildPlaceRacePositionHref(['mt', 'lewis-and-clark-county'], 'mt/lewis-and-clark-county/county-recorder/treasurer/clerk-joint'),
+		).toBe('/elections/mt/lewis-and-clark-county/county-recorder/treasurer/position/clerk-joint');
+	});
+
+	test('joint city office keeps the combined office segment', () => {
+		expect(buildPlaceRacePositionHref(['in', 'adams-county', 'berne'], 'in/adams-county/berne/city-clerk/treasurer-joint')).toBe(
+			'/elections/in/adams-county/berne/city-clerk/position/treasurer-joint',
+		);
+	});
+
+	test('joint city office whose API slug omits the county', () => {
+		expect(buildPlaceRacePositionHref(['ok', 'caddo-county', 'binger'], 'ok/binger/city-clerk/treasurer-joint')).toBe(
+			'/elections/ok/caddo-county/binger/city-clerk/position/treasurer-joint',
+		);
+	});
+
+	test('returns undefined when the office needs more place slots than the routes have', () => {
+		expect(
+			buildPlaceRacePositionHref(['mt', 'yellowstone-county'], 'mt/yellowstone-county/county-clerk/recorder/surveyor/auditor-joint'),
+		).toBeUndefined();
+	});
+
+	test('race slugged under another place falls back to the page place plus one office', () => {
+		expect(
+			buildPlaceRacePositionHref(['in', 'adams-county', 'berne'], 'in/adams-county/south-adams-schools/local-school-board'),
+		).toBe('/elections/in/adams-county/berne/position/local-school-board');
+	});
+
+	test('normalizes place segments to lowercase', () => {
+		expect(buildPlaceRacePositionHref(['MT', 'Gallatin-County'], 'mt/gallatin-county/county-sheriff')).toBe(
+			'/elections/mt/gallatin-county/position/county-sheriff',
+		);
+	});
+
+	test('returns undefined for an empty race slug', () => {
+		expect(buildPlaceRacePositionHref(['mt'], '')).toBeUndefined();
 	});
 });
 
@@ -1490,6 +1561,9 @@ describe('redirectCityPlaceToFourLevelUrl', () => {
 });
 
 describe('mapCandidacyToCard', () => {
+	// id8 (the /people slug suffix) is the first 8 hex of this, so '11111111'.
+	const PID = '11111111-1111-1111-1111-111111111111';
+
 	test('re-cases unformatted spine names, so the election listings match the profiles', () => {
 		expect(mapCandidacyToCard({ id: 'c1', firstName: 'chris', lastName: 'lewis', slug: 'chris-lewis' }, 0).name).toBe(
 			'Chris Lewis',
@@ -1510,5 +1584,47 @@ describe('mapCandidacyToCard', () => {
 
 	test('falls back to a placeholder when the row carries no name', () => {
 		expect(mapCandidacyToCard({ id: 'c4' }, 0).name).toBe('Candidate');
+	});
+
+	/**
+	 * /candidate/<slug> is a 308 to /people whenever the row has a personId, so
+	 * linking it made every candidate card on every position page a redirect hop.
+	 */
+	test('links /people directly when the row carries a personId', () => {
+		expect(
+			mapCandidacyToCard(
+				{ id: 'c5', firstName: 'chris', lastName: 'lewis', slug: 'chris-lewis/ny-senate', personId: PID },
+				0,
+			).href,
+		).toBe('/people/chris-lewis-11111111');
+	});
+
+	test('builds the /people slug from the display name, not the legacy candidacy slug', () => {
+		expect(
+			mapCandidacyToCard(
+				{ id: 'c6', firstName: 'robert', lastName: "o'brien", slug: 'robert-obrien/ny-senate', personId: PID },
+				0,
+			).href,
+		).toBe('/people/robert-obrien-11111111');
+	});
+
+	/**
+	 * Rows with no personId have no /people profile to reach, and /candidate still
+	 * serves its own page for them rather than redirecting — so the legacy path
+	 * stays the right link there.
+	 */
+	test('keeps the legacy /candidate href when the row has no personId', () => {
+		expect(
+			mapCandidacyToCard({ id: 'c7', firstName: 'chris', lastName: 'lewis', slug: 'chris-lewis/ny-senate' }, 0).href,
+		).toBe('/candidate/chris-lewis/ny-senate');
+	});
+
+	test('ignores a null personId rather than building a /people href from it', () => {
+		expect(
+			mapCandidacyToCard(
+				{ id: 'c8', firstName: 'chris', lastName: 'lewis', slug: 'chris-lewis/ny-senate', personId: null },
+				0,
+			).href,
+		).toBe('/candidate/chris-lewis/ny-senate');
 	});
 });

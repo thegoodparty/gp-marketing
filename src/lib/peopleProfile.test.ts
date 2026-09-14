@@ -5,14 +5,13 @@ import {
 	buildBreadcrumbTrail,
 	buildNearbyOfficialCards,
 	buildOtherCandidateCards,
-	buildPersonSlug,
-	buildPersonSlugFromBase,
 	composeView,
 	extractPersonId,
 	isThinProfile,
 	resolveProfileState,
 	type PersonPersona,
 } from './peopleProfile';
+import { buildPersonSlug, buildPersonSlugFromBase } from './personSlug';
 import { buildElectionPositionHrefFromRaceSlug } from './electionsHelpers';
 import { classifyParty, isMajorParty } from './party';
 
@@ -346,9 +345,11 @@ describe('Recent Experience links every row it has a race slug for', () => {
 	});
 
 	/**
-	 * A CITY slug carrying no county segment resolves to a county-depth URL that
-	 * 308s to the canonical four-level path (redirectCityRaceToFourLevelUrl), so
-	 * it is a working link, not a broken one.
+	 * The fallback when no county lookup is available (see the county-expansion
+	 * block below, which is what the loader actually does). A CITY slug carrying
+	 * no county segment resolves to a county-depth URL that 308s to the canonical
+	 * four-level path (redirectCityRaceToFourLevelUrl), so it is a working link,
+	 * not a broken one.
 	 *
 	 * The sitemap deliberately suppresses these (`skipUnmappedCity`) because a
 	 * sitemap should advertise canonical URLs rather than redirects. An in-page
@@ -411,6 +412,168 @@ describe('Recent Experience links every row it has a race slug for', () => {
 	});
 });
 
+/**
+ * Every /elections link a profile emits comes out of a race slug, and a city
+ * race's slug omits its county — so each one landed on the pre-restructuring URL
+ * and 308'd (~36,900 internal links across ~4,800 destinations, 2026-09-14
+ * crawl). The loader resolves one city → county lookup and hands it to all three
+ * surfaces; these assert on the canonical path, since a redirect is exactly what
+ * the assertions have to exclude.
+ */
+describe('county-less city race slugs resolve to the canonical /elections URL', () => {
+	const LOOKUP = new Map([
+		['nc/greensboro', 'nc/guilford-county'],
+		['nc/cary', 'nc/wake-county'],
+	]);
+
+	const trailFor = (raceSlug: string, positionLevel: string | null, lookup = LOOKUP) =>
+		buildBreadcrumbTrail({
+			displayName: 'Jane Doe',
+			stateCode: 'NC',
+			raceSlug,
+			positionLevel,
+			positionName: 'Mayor',
+			citySlugToCountySlug: lookup,
+		});
+
+	test('the breadcrumb names the county and links the four-level position page', () => {
+		const trail = trailFor('nc/greensboro/mayor', 'CITY');
+
+		expect(trail.map((c) => c.label)).toEqual([
+			'Elections',
+			'North Carolina',
+			'Guilford County',
+			'Greensboro',
+			'Mayor',
+			'Jane Doe',
+		]);
+		expect(trail.map((c) => c.href)).toEqual([
+			'/elections',
+			'/elections/nc',
+			'/elections/nc/guilford-county',
+			'/elections/nc/guilford-county/greensboro',
+			'/elections/nc/guilford-county/greensboro/position/mayor',
+			undefined,
+		]);
+	});
+
+	/**
+	 * The feed leaves `positionLevel` blank often enough that keying only off
+	 * CITY/LOCAL would leave those links redirecting. A hit in the lookup is
+	 * itself proof the segment is a city place, so it is enough on its own.
+	 */
+	test('a city race with no level still expands', () => {
+		const crumb = trailFor('nc/greensboro/mayor', null).at(-2);
+
+		expect(crumb?.href).toBe('/elections/nc/guilford-county/greensboro/position/mayor');
+	});
+
+	test('a county race is left alone — its slug already carries the county', () => {
+		const trail = trailFor('nc/guilford-county/sheriff', 'COUNTY');
+
+		expect(trail.at(-2)?.href).toBe('/elections/nc/guilford-county/position/sheriff');
+		expect(trail.map((c) => c.label)).not.toContain('Guilford County Sheriff');
+	});
+
+	test('a slug the lookup cannot place keeps the redirecting link rather than none', () => {
+		const trail = trailFor('nc/unlisted-village/mayor', 'CITY');
+
+		expect(trail.at(-2)?.href).toBe('/elections/nc/unlisted-village/position/mayor');
+	});
+
+	test('"Recent Experience" rows expand too, candidacies and office terms alike', () => {
+		const person = makePerson({
+			state: 'NC',
+			Candidacies: [
+				{
+					id: 'c1',
+					slug: 'jane-doe-mayor',
+					positionName: 'Mayor',
+					state: 'NC',
+					Race: { electionDate: '2026-11-03', slug: 'nc/greensboro/mayor', positionLevel: 'CITY' },
+				},
+			],
+			OfficeHolders: [
+				makeOffice({
+					officeTitle: 'Town Council',
+					state: 'NC',
+					startAt: '2020-01-01',
+					positionSlug: 'nc/cary/town-council',
+					positionLevel: 'CITY',
+				}),
+			],
+		});
+
+		const view = composeView(PID, person, null, { citySlugToCountySlug: LOOKUP });
+		const byTitle = new Map(view.recentExperience.map((r) => [r.title, r.href]));
+
+		expect(byTitle.get('Candidate for Mayor')).toBe(
+			'/elections/nc/guilford-county/greensboro/position/mayor',
+		);
+		expect(byTitle.get('Town Council')).toBe(
+			'/elections/nc/wake-county/cary/position/town-council',
+		);
+	});
+
+	/**
+	 * A joint city office carries a subplace segment (`buildSubplaceRaceSlug`),
+	 * and the API omits the county there too — so these need the same expansion.
+	 */
+	test('a joint-office subplace slug expands to the five-level URL', () => {
+		const trail = trailFor('nc/greensboro/ward-1/council-joint', 'CITY');
+
+		expect(trail.at(-2)?.href).toBe(
+			'/elections/nc/guilford-county/greensboro/ward-1/position/council-joint',
+		);
+	});
+
+	/**
+	 * A district-shaped third segment is a district inside a city, which the
+	 * resolver routes without a county on purpose. Expanding it would invent a
+	 * URL depth that has no page.
+	 */
+	test('a district inside a city is not county-expanded', () => {
+		const trail = trailFor('nc/greensboro/school-district-3/board', 'CITY');
+
+		expect(trail.at(-2)?.href).toBe(
+			'/elections/nc/greensboro/school-district-3/position/board',
+		);
+	});
+
+	test('no link anywhere on the page points at a county-less city URL', () => {
+		const raceSlug = 'nc/greensboro/mayor';
+		const person = makePerson({
+			state: 'NC',
+			Candidacies: [
+				{
+					id: 'c1',
+					slug: 'jane-doe-mayor',
+					positionName: 'Mayor',
+					state: 'NC',
+					Race: { electionDate: '2026-11-03', slug: raceSlug, positionLevel: 'CITY' },
+				},
+			],
+		});
+
+		const view = composeView(PID, person, null, {
+			citySlugToCountySlug: LOOKUP,
+			positionHref: '/elections/nc/guilford-county/greensboro/position/mayor',
+			breadcrumb: trailFor(raceSlug, 'CITY'),
+		});
+
+		const hrefs = [
+			view.positionHref,
+			...view.breadcrumb.map((c) => c.href),
+			...view.recentExperience.map((r) => r.href),
+		].filter((href): href is string => Boolean(href));
+
+		expect(hrefs.length).toBeGreaterThan(3);
+		for (const href of hrefs) {
+			expect(href).not.toStartWith('/elections/nc/greensboro');
+		}
+	});
+});
+
 describe('extractPersonId', () => {
 	test('extracts the trailing UUID from a slug', () => {
 		expect(extractPersonId(`jane-doe-${PID}`)).toBe(PID);
@@ -434,7 +597,37 @@ describe('buildPersonSlug', () => {
 	});
 
 	test('strips punctuation and diacritics', () => {
-		expect(buildPersonSlug("José O'Brien-Smith", PID)).toBe(`jose-o-brien-smith-${ID8}`);
+		expect(buildPersonSlug("José O'Brien-Smith", PID)).toBe(`jose-obrien-smith-${ID8}`);
+	});
+
+	/**
+	 * The mart's Person.slug deletes apostrophes and periods instead of folding
+	 * them to a separator, and a base that disagrees is answered with a 307 to the
+	 * real slug. These four shapes are the ones the live candidacy feed actually
+	 * produces: an elided prefix, a curly apostrophe from a CMS round-trip,
+	 * dotted initials, and an interior apostrophe inside a hyphenated surname.
+	 */
+	test.each([
+		["Robert O'Brien", 'robert-obrien'],
+		['Anthony D’Amelio', 'anthony-damelio'],
+		['T.J. McSparrin', 'tj-mcsparrin'],
+		["Katherine Prudhomme-O'Brien", 'katherine-prudhomme-obrien'],
+	])('deletes apostrophes and periods rather than splitting on them: %s', (name, base) => {
+		expect(buildPersonSlug(name, PID)).toBe(`${base}-${ID8}`);
+	});
+
+	/**
+	 * NFKD decomposes none of the apostrophe-shaped characters, so each one has to
+	 * be listed explicitly or it falls through to the separator rule. U+02BB is the
+	 * okina, the correctly-encoded apostrophe in Hawaiian names.
+	 */
+	test.each([
+		['U+2018 left curly', 'Anthony D‘Amelio'],
+		['U+2019 right curly', 'Anthony D’Amelio'],
+		['U+02BB okina', 'Anthony DʻAmelio'],
+		['U+02BC modifier letter', 'Anthony DʼAmelio'],
+	])('deletes the %s apostrophe too', (_label, name) => {
+		expect(buildPersonSlug(name, PID)).toBe(`anthony-damelio-${ID8}`);
 	});
 
 	test('falls back to just the id suffix when the name has no slug chars', () => {

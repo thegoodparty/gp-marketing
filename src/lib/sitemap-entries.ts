@@ -11,7 +11,8 @@ import {
 	resolveElectionPositionFromRaceSlug,
 	stripCountySuffix as stripCountySuffixFromHelpers,
 } from '~/lib/electionsHelpers';
-import { buildPersonSlugFromBase, hasText } from '~/lib/peopleProfile';
+import { hasText } from '~/lib/peopleProfile';
+import { buildPersonSlugFromBase } from '~/lib/personSlug';
 import { FAQ_BASE_PATH, getFaqSitemapEntries } from '~/lib/faqSlugs';
 import { fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
 import { allFaqsQuery } from '~/sanity/groq';
@@ -514,36 +515,49 @@ export async function fetchMainSitemapEntries(baseUrl: string): Promise<Metadata
 				glossary: string | null;
 			}>(
 				`{
-					"home": *[_type=="goodpartyOrg_home"][0]._id,
-					"blog": *[_type=="goodpartyOrg_allArticles"][0]._id,
-					"contact": *[_type=="goodpartyOrg_contact"][0]._id,
-					"glossary": *[_type=="goodpartyOrg_glossary"][0]._id
+					"home": *[_type=="goodpartyOrg_home" && seo.field_noIndex != true][0]._id,
+					"blog": *[_type=="goodpartyOrg_allArticles" && seo.field_noIndex != true][0]._id,
+					"contact": *[_type=="goodpartyOrg_contact" && seo.field_noIndex != true][0]._id,
+					"glossary": *[_type=="goodpartyOrg_glossary" && seo.field_noIndex != true][0]._id
 				}`,
 				{},
 				{ next: { tags: ['goodpartyOrg_home', 'goodpartyOrg_allArticles', 'goodpartyOrg_contact', 'goodpartyOrg_glossary'] } },
 			),
+			// `seo.field_noIndex != true` keeps A/B variants, internal drafts and
+			// thank-you pages out. Marketing marks them in Studio, the page renders
+			// `noindex` from the same flag (StructureMetaData), and a sitemap that
+			// still listed them would only trade one Search Console report for
+			// "Submitted URL marked noindex" — the same trap as the glossary letter
+			// pages below. `!= true` rather than `== false` because the flag is
+			// absent on every page nobody has touched.
+			//
+			// Every query in this block carries the guard, because the toggle is
+			// rendered by the shared StructureMetaData rather than per document
+			// type: the moment one query here skips it, that type can render
+			// `noindex` and still be advertised. `faq` is the one exception — its
+			// schema has no SEO group, so there is no flag to read.
 			sanityClient.fetch<Array<{ slug: string | null }>>(
-				`*[_type in ["goodpartyOrg_landingPages","policy"]][]{"slug": select(_type == "goodpartyOrg_landingPages" => detailPageOverviewNoHero.field_slug, _type == "policy" => policyOverview.field_slug)}`,
+				`*[_type in ["goodpartyOrg_landingPages","policy"] && seo.field_noIndex != true][]{"slug": select(_type == "goodpartyOrg_landingPages" => detailPageOverviewNoHero.field_slug, _type == "policy" => policyOverview.field_slug)}`,
 				{},
 				{ next: { tags: ['goodpartyOrg_landingPages', 'policy'] } },
 			),
 			sanityClient.fetch<Array<{ slug: string | null; updatedAt?: string }>>(
-				`*[_type == "article"][]{"slug": editorialOverview.field_slug, "updatedAt": editorialOverview.field_lastUpdated}`,
+				`*[_type == "article" && seo.field_noIndex != true][]{"slug": editorialOverview.field_slug, "updatedAt": editorialOverview.field_lastUpdated}`,
 				{},
 				{ next: { tags: ['article'] } },
 			),
 			sanityClient.fetch<Array<string | null>>(
-				`*[_type == "categories"][].tagOverview.field_slug`,
+				`*[_type == "categories" && seo.field_noIndex != true][].tagOverview.field_slug`,
 				{},
 				{ next: { tags: ['categories'] } },
 			),
 			sanityClient.fetch<Array<string | null>>(
-				`*[_type == "topics"][].tagOverview.field_slug`,
+				`*[_type == "topics" && seo.field_noIndex != true][].tagOverview.field_slug`,
 				{},
 				{ next: { tags: ['topics'] } },
 			),
-			sanityClient.fetch<Array<{ title: string; slug: string | null }>>(
-				`*[_type == "glossary"][]{"title": glossaryTermOverview.field_glossaryTerm, "slug": glossaryTermOverview.field_slug}`,
+			sanityClient.fetch<Array<{ slug: string | null }>>(
+				`*[_type == "glossary" && seo.field_noIndex != true][]{"slug": glossaryTermOverview.field_slug}`,
 				{},
 				{ next: { tags: ['glossary'] } },
 			),
@@ -577,14 +591,12 @@ export async function fetchMainSitemapEntries(baseUrl: string): Promise<Metadata
 		if (slug) entries.push(toEntry(baseUrl, `/blog/tag/${slug}`, 0.7, 'weekly'));
 	}
 
-	const seenLetters = new Set<string>();
+	// Term pages only. The letter pages (/political-terms/a) render `noindex,
+	// follow` because they are the A–Z menu rather than content meant to rank,
+	// and advertising a noindex URL here would only swap one Search Console
+	// report for "Submitted URL marked noindex".
 	for (const t of glossaryTerms) {
 		if (t.slug) entries.push(toEntry(baseUrl, `/political-terms/${t.slug}`, 0.6, 'monthly'));
-		const letter = t.title?.charAt(0)?.toLowerCase();
-		if (letter && !seenLetters.has(letter)) {
-			seenLetters.add(letter);
-			entries.push(toEntry(baseUrl, `/political-terms/${letter}`, 0.6, 'monthly'));
-		}
 	}
 
 	for (const { slug, faq } of getFaqSitemapEntries(faqs)) {

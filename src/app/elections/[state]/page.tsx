@@ -10,6 +10,7 @@ import {
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
 	buildOfficeItemsFromPlaceRaces,
+	buildPlaceRacePositionHref,
 	getStateName,
 	PLACE_RACE_COLUMNS,
 	resolvePlaceRaceElectionDates,
@@ -104,10 +105,7 @@ export default async function Page({
 	const resolvedDates = await resolvePlaceRaceElectionDates(stateRaces);
 	const { offices: stateOffices, dataYears } = buildOfficeItemsFromPlaceRaces(stateRaces, resolvedDates, {
 		type: 'State',
-		buildHref: race => {
-			const positionSlug = race.slug.split('/').slice(1).join('/');
-			return `/elections/${state}/position/${positionSlug}`;
-		},
+		buildHref: race => buildPlaceRacePositionHref([state], race.slug),
 	});
 
 	const defaultYear = dataYears.includes(currentYear)
@@ -149,5 +147,6 @@ export async function generateMetadata({
 	return {
 		title: `Elections in ${stateName} | Good Party`,
 		description: `Browse elections and positions in ${stateName}.`,
+		alternates: { canonical: toAbsoluteUrl(`/elections/${state.toLowerCase()}`) },
 	};
 }

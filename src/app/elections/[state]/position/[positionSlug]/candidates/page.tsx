@@ -9,6 +9,7 @@ import {
 	getStateName,
 	mapCandidacyToCard,
 } from '~/lib/electionsHelpers';
+import { toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsCandidatesPage } from '~/lib/renderElectionsCandidatesPage';
 
 export default async function Page({
@@ -80,5 +81,8 @@ export async function generateMetadata({
 	return {
 		title: `Candidates for ${positionName} in ${stateName} | Good Party`,
 		description: `View candidates running for ${positionName} in ${stateName}.`,
+		alternates: {
+			canonical: toAbsoluteUrl(`/elections/${stateCode.toLowerCase()}/position/${positionSlug}/candidates`),
+		},
 	};
 }

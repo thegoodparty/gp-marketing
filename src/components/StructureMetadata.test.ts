@@ -62,3 +62,40 @@ describe('StructureMetaData robots', () => {
 		expect(metadata.robots).toEqual({ index: true, follow: true });
 	});
 });
+
+/**
+ * Each toggle decides its own axis. Ticking "No follow" must not hand back
+ * `index: true` and quietly re-index a page some ancestor had suppressed —
+ * the permissive fallback is only for when there is no parent directive at all.
+ * The suite's main fixture is `{ index: true, follow: true }`, which cannot tell
+ * "inherited true" apart from "hardcoded true", so these vary the parent.
+ */
+describe('StructureMetaData robots inheritance per axis', () => {
+	const noindexParent = {
+		description: 'GoodParty.org',
+		openGraph: { images: [] },
+		robots: { index: false, follow: false },
+	} as unknown as ResolvedMetadata;
+
+	test('No follow alone leaves the parent index directive alone', async () => {
+		const metadata = await StructureMetaData(noindexParent, pageWithSeo({ field_noFollow: true }));
+		expect(metadata.robots).toEqual({ index: false, follow: false });
+	});
+
+	test('No Index alone leaves the parent follow directive alone', async () => {
+		const metadata = await StructureMetaData(noindexParent, pageWithSeo({ field_noIndex: true }));
+		expect(metadata.robots).toEqual({ index: false, follow: false });
+	});
+
+	test('a toggle still applies when the parent says nothing', async () => {
+		const bareParent = { description: 'GoodParty.org', openGraph: { images: [] } } as unknown as ResolvedMetadata;
+		expect((await StructureMetaData(bareParent, pageWithSeo({ field_noIndex: true }))).robots).toEqual({
+			index: false,
+			follow: true,
+		});
+		expect((await StructureMetaData(bareParent, pageWithSeo({ field_noFollow: true }))).robots).toEqual({
+			index: true,
+			follow: false,
+		});
+	});
+});

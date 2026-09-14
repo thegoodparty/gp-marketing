@@ -222,8 +222,12 @@ export async function fetchLlmsTxtData(): Promise<LlmsTxtSourceData> {
 				},
 			},
 		),
+		// Same `seo.field_noIndex != true` guard on every query here as in
+		// sitemap-entries.ts, and for the same reason: the toggle is applied by the
+		// shared StructureMetaData, so any type that skips the guard can render
+		// `noindex` and still be handed to AI crawlers.
 		sanityClient.fetch<SlugTitleDescRow[]>(
-			`*[_type == "article"]{
+			`*[_type == "article" && seo.field_noIndex != true]{
 				"slug": editorialOverview.field_slug,
 				"title": editorialOverview.field_editorialTitle,
 				"description": seo.field_metaDescription
@@ -232,7 +236,7 @@ export async function fetchLlmsTxtData(): Promise<LlmsTxtSourceData> {
 			{ next: { tags: ['article'] } },
 		),
 		sanityClient.fetch<SlugTitleDescRow[]>(
-			`*[_type == "glossary"]{
+			`*[_type == "glossary" && seo.field_noIndex != true]{
 				"slug": glossaryTermOverview.field_slug,
 				"title": glossaryTermOverview.field_glossaryTerm,
 				"description": seo.field_metaDescription

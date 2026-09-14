@@ -515,10 +515,10 @@ export async function fetchMainSitemapEntries(baseUrl: string): Promise<Metadata
 				glossary: string | null;
 			}>(
 				`{
-					"home": *[_type=="goodpartyOrg_home"][0]._id,
-					"blog": *[_type=="goodpartyOrg_allArticles"][0]._id,
-					"contact": *[_type=="goodpartyOrg_contact"][0]._id,
-					"glossary": *[_type=="goodpartyOrg_glossary"][0]._id
+					"home": *[_type=="goodpartyOrg_home" && seo.field_noIndex != true][0]._id,
+					"blog": *[_type=="goodpartyOrg_allArticles" && seo.field_noIndex != true][0]._id,
+					"contact": *[_type=="goodpartyOrg_contact" && seo.field_noIndex != true][0]._id,
+					"glossary": *[_type=="goodpartyOrg_glossary" && seo.field_noIndex != true][0]._id
 				}`,
 				{},
 				{ next: { tags: ['goodpartyOrg_home', 'goodpartyOrg_allArticles', 'goodpartyOrg_contact', 'goodpartyOrg_glossary'] } },
@@ -530,28 +530,34 @@ export async function fetchMainSitemapEntries(baseUrl: string): Promise<Metadata
 			// "Submitted URL marked noindex" — the same trap as the glossary letter
 			// pages below. `!= true` rather than `== false` because the flag is
 			// absent on every page nobody has touched.
+			//
+			// Every query in this block carries the guard, because the toggle is
+			// rendered by the shared StructureMetaData rather than per document
+			// type: the moment one query here skips it, that type can render
+			// `noindex` and still be advertised. `faq` is the one exception — its
+			// schema has no SEO group, so there is no flag to read.
 			sanityClient.fetch<Array<{ slug: string | null }>>(
 				`*[_type in ["goodpartyOrg_landingPages","policy"] && seo.field_noIndex != true][]{"slug": select(_type == "goodpartyOrg_landingPages" => detailPageOverviewNoHero.field_slug, _type == "policy" => policyOverview.field_slug)}`,
 				{},
 				{ next: { tags: ['goodpartyOrg_landingPages', 'policy'] } },
 			),
 			sanityClient.fetch<Array<{ slug: string | null; updatedAt?: string }>>(
-				`*[_type == "article"][]{"slug": editorialOverview.field_slug, "updatedAt": editorialOverview.field_lastUpdated}`,
+				`*[_type == "article" && seo.field_noIndex != true][]{"slug": editorialOverview.field_slug, "updatedAt": editorialOverview.field_lastUpdated}`,
 				{},
 				{ next: { tags: ['article'] } },
 			),
 			sanityClient.fetch<Array<string | null>>(
-				`*[_type == "categories"][].tagOverview.field_slug`,
+				`*[_type == "categories" && seo.field_noIndex != true][].tagOverview.field_slug`,
 				{},
 				{ next: { tags: ['categories'] } },
 			),
 			sanityClient.fetch<Array<string | null>>(
-				`*[_type == "topics"][].tagOverview.field_slug`,
+				`*[_type == "topics" && seo.field_noIndex != true][].tagOverview.field_slug`,
 				{},
 				{ next: { tags: ['topics'] } },
 			),
 			sanityClient.fetch<Array<{ slug: string | null }>>(
-				`*[_type == "glossary"][]{"slug": glossaryTermOverview.field_slug}`,
+				`*[_type == "glossary" && seo.field_noIndex != true][]{"slug": glossaryTermOverview.field_slug}`,
 				{},
 				{ next: { tags: ['glossary'] } },
 			),

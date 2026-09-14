@@ -259,7 +259,9 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 															</Text>
 														</div>
 														<div className={tableCell()}>
-															<ArrowRightIcon size={32} className={arrowIcon()} innerClassName='group-hover:animate-slide-in-right' />
+															{office.href && (
+																<ArrowRightIcon size={32} className={arrowIcon()} innerClassName='group-hover:animate-slide-in-right' />
+															)}
 														</div>
 													</>
 												);
@@ -298,7 +300,9 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 													</Text>
 												</div>
 												<div className={cardRight()}>
-													<ArrowRightIcon size={32} className={arrowIcon()} innerClassName='group-hover:animate-slide-in-right' />
+													{office.href && (
+														<ArrowRightIcon size={32} className={arrowIcon()} innerClassName='group-hover:animate-slide-in-right' />
+													)}
 												</div>
 											</div>
 										);

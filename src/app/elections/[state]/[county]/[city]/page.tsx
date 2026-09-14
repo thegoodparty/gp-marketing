@@ -12,6 +12,7 @@ import {
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
 	buildOfficeItemsFromPlaceRaces,
+	buildPlaceRacePositionHref,
 	getStateName,
 	hasSuspiciousFactsMatch,
 	PLACE_RACE_COLUMNS,
@@ -103,10 +104,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		const districtResolvedDates = await resolvePlaceRaceElectionDates(districtRaces);
 		const { offices: districtOffices, dataYears } = buildOfficeItemsFromPlaceRaces(districtRaces, districtResolvedDates, {
 			type: 'District',
-			buildHref: race => {
-				const positionSlug = race.slug.split('/').pop() ?? '';
-				return `/elections/${state.toLowerCase()}/${county.toLowerCase()}/${city.toLowerCase()}/position/${positionSlug}`;
-			},
+			buildHref: race => buildPlaceRacePositionHref([state, county, city], race.slug),
 		});
 		const defaultYear = dataYears.includes(currentYear) ? currentYear : (dataYears[0] ?? currentYear);
 		const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
@@ -202,10 +200,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 	const cityResolvedDates = await resolvePlaceRaceElectionDates(cityRaces);
 	const { offices: cityOffices, dataYears } = buildOfficeItemsFromPlaceRaces(cityRaces, cityResolvedDates, {
 		type: 'City',
-		buildHref: race => {
-			const positionSlug = race.slug.split('/').pop() ?? '';
-			return `/elections/${state.toLowerCase()}/${county.toLowerCase()}/${city.toLowerCase()}/position/${positionSlug}`;
-		},
+		buildHref: race => buildPlaceRacePositionHref([state, county, city], race.slug),
 	});
 
 	const defaultYear = dataYears.includes(currentYear) ? currentYear : (dataYears[0] ?? currentYear);

@@ -1,5 +1,4 @@
 import type { Metadata, ResolvingMetadata } from 'next';
-import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { stegaClean } from 'next-sanity';
 import { format, parseISO } from 'date-fns';
@@ -9,7 +8,6 @@ import { sanityFetch } from '~/sanity/sanityClient';
 import { StructureMetaData } from '~/components/StructureMetadata';
 import type { Params } from '~/lib/types';
 import { RichTextContentSections } from '~/RichTextContentSections';
-import { PageSections } from '~/PageSections';
 import { ExperimentResolver } from '~/experiments/ExperimentResolver';
 import { getFaqSlugMapForPage } from '~/lib/getCachedFaqSlugMap';
 import { HeaderBlock } from '~/ui/HeaderBlock';
@@ -66,9 +64,9 @@ export default async function Page(props: any) {
 			<>
 				<PageSchema schema={landingSchema} />
 				{slug === POSTALYTICS_PIXEL_SLUG && <PostalyticsPixel />}
-				<Suspense fallback={<PageSections pageSections={controlSections} pageSlug={slug} faqSlugMap={faqSlugMap} />}>
-					<ExperimentResolver pageId={page._id} controlSections={controlSections} pageSlug={slug} faqSlugMap={faqSlugMap} />
-				</Suspense>
+				{/* Awaited inline, not wrapped in Suspense: a fallback that renders the control sections would put a
+				    second copy of the whole page (and a second <h1>) into the streamed HTML. */}
+				<ExperimentResolver pageId={page._id} controlSections={controlSections} pageSlug={slug} faqSlugMap={faqSlugMap} />
 			</>
 		);
 	}

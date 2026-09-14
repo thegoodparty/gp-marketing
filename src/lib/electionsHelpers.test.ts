@@ -1490,6 +1490,9 @@ describe('redirectCityPlaceToFourLevelUrl', () => {
 });
 
 describe('mapCandidacyToCard', () => {
+	// id8 (the /people slug suffix) is the first 8 hex of this, so '11111111'.
+	const PID = '11111111-1111-1111-1111-111111111111';
+
 	test('re-cases unformatted spine names, so the election listings match the profiles', () => {
 		expect(mapCandidacyToCard({ id: 'c1', firstName: 'chris', lastName: 'lewis', slug: 'chris-lewis' }, 0).name).toBe(
 			'Chris Lewis',
@@ -1510,5 +1513,47 @@ describe('mapCandidacyToCard', () => {
 
 	test('falls back to a placeholder when the row carries no name', () => {
 		expect(mapCandidacyToCard({ id: 'c4' }, 0).name).toBe('Candidate');
+	});
+
+	/**
+	 * /candidate/<slug> is a 308 to /people whenever the row has a personId, so
+	 * linking it made every candidate card on every position page a redirect hop.
+	 */
+	test('links /people directly when the row carries a personId', () => {
+		expect(
+			mapCandidacyToCard(
+				{ id: 'c5', firstName: 'chris', lastName: 'lewis', slug: 'chris-lewis/ny-senate', personId: PID },
+				0,
+			).href,
+		).toBe('/people/chris-lewis-11111111');
+	});
+
+	test('builds the /people slug from the display name, not the legacy candidacy slug', () => {
+		expect(
+			mapCandidacyToCard(
+				{ id: 'c6', firstName: 'robert', lastName: "o'brien", slug: 'robert-obrien/ny-senate', personId: PID },
+				0,
+			).href,
+		).toBe('/people/robert-obrien-11111111');
+	});
+
+	/**
+	 * Rows with no personId have no /people profile to reach, and /candidate still
+	 * serves its own page for them rather than redirecting — so the legacy path
+	 * stays the right link there.
+	 */
+	test('keeps the legacy /candidate href when the row has no personId', () => {
+		expect(
+			mapCandidacyToCard({ id: 'c7', firstName: 'chris', lastName: 'lewis', slug: 'chris-lewis/ny-senate' }, 0).href,
+		).toBe('/candidate/chris-lewis/ny-senate');
+	});
+
+	test('ignores a null personId rather than building a /people href from it', () => {
+		expect(
+			mapCandidacyToCard(
+				{ id: 'c8', firstName: 'chris', lastName: 'lewis', slug: 'chris-lewis/ny-senate', personId: null },
+				0,
+			).href,
+		).toBe('/candidate/chris-lewis/ny-senate');
 	});
 });

@@ -1,6 +1,9 @@
 /** Canonical app sign-up URL (matches `buttonTransformer` SignUp action). */
 export const APP_SIGN_UP_HREF = 'https://app.goodparty.org/sign-up';
 
+/** Canonical app login URL (matches `buttonTransformer` LogIn action). */
+export const APP_LOG_IN_HREF = 'https://app.goodparty.org/login';
+
 export function trackEvent(eventName: string, eventProperties?: Record<string, unknown>): void {
 	if (typeof window === 'undefined') return;
 	window.amplitude?.track(eventName, eventProperties);

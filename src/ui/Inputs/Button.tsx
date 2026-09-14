@@ -9,7 +9,7 @@ import {
 	type ReactNode,
 } from 'react';
 
-import { APP_SIGN_UP_HREF, isSignUpUrl, trackSignUpClicked } from '~/lib/analytics';
+import { APP_LOG_IN_HREF, APP_SIGN_UP_HREF, isSignUpUrl, trackSignUpClicked } from '~/lib/analytics';
 import { LinkTarget } from '~/types/ui';
 import { tv } from '../_lib/utils.ts';
 import { Anchor, type AnchorProps } from '../Anchor.tsx';
@@ -140,6 +140,10 @@ export type ComponentButtonProps = {
 	| { buttonType: 'anchor'; href: string }
 	| { buttonType: 'download'; href: string }
 	| { buttonType: 'contact'; href: string }
+	// `login` and `signup` carry their own destination — the app's login and
+	// sign-up pages, the same ones Sanity's LogIn/SignUp CTA actions resolve to.
+	// They took no href and rendered an inert <button> until Sep 2026, which is
+	// how a dead "Learn more" shipped on every claimed person profile.
 	| { buttonType: 'login' }
 	| { buttonType: 'signup' }
 	| { buttonType: 'button' }
@@ -247,10 +251,11 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 			);
 		case 'login':
 			return (
-				<Button
+				<ButtonLink
 					parent='ComponentButton'
 					className={props.className}
 					formId={props.formId}
+					href={APP_LOG_IN_HREF}
 					onClick={e => props.onClick?.(e)}
 					iconLeft={props.iconLeft}
 					iconRight={
@@ -260,14 +265,15 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					{...props.buttonProps}
 				>
 					{props.label ?? 'Login'}
-				</Button>
+				</ButtonLink>
 			);
 		case 'signup':
 			return (
-				<Button
+				<ButtonLink
 					parent='ComponentButton'
 					className={props.className}
 					formId={props.formId}
+					href={APP_SIGN_UP_HREF}
 					onClick={e => {
 						trackSignUpClicked({ href: APP_SIGN_UP_HREF, label: labelToString(props.label), formId: props.formId ?? null });
 						props.onClick?.(e);
@@ -280,7 +286,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					{...props.buttonProps}
 				>
 					{props.label ?? 'Sign up'}
-				</Button>
+				</ButtonLink>
 			);
 		case 'button':
 			return (

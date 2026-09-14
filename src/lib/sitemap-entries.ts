@@ -543,8 +543,8 @@ export async function fetchMainSitemapEntries(baseUrl: string): Promise<Metadata
 				{},
 				{ next: { tags: ['topics'] } },
 			),
-			sanityClient.fetch<Array<{ title: string; slug: string | null }>>(
-				`*[_type == "glossary"][]{"title": glossaryTermOverview.field_glossaryTerm, "slug": glossaryTermOverview.field_slug}`,
+			sanityClient.fetch<Array<{ slug: string | null }>>(
+				`*[_type == "glossary"][]{"slug": glossaryTermOverview.field_slug}`,
 				{},
 				{ next: { tags: ['glossary'] } },
 			),
@@ -578,14 +578,12 @@ export async function fetchMainSitemapEntries(baseUrl: string): Promise<Metadata
 		if (slug) entries.push(toEntry(baseUrl, `/blog/tag/${slug}`, 0.7, 'weekly'));
 	}
 
-	const seenLetters = new Set<string>();
+	// Term pages only. The letter pages (/political-terms/a) render `noindex,
+	// follow` because they are the A–Z menu rather than content meant to rank,
+	// and advertising a noindex URL here would only swap one Search Console
+	// report for "Submitted URL marked noindex".
 	for (const t of glossaryTerms) {
 		if (t.slug) entries.push(toEntry(baseUrl, `/political-terms/${t.slug}`, 0.6, 'monthly'));
-		const letter = t.title?.charAt(0)?.toLowerCase();
-		if (letter && !seenLetters.has(letter)) {
-			seenLetters.add(letter);
-			entries.push(toEntry(baseUrl, `/political-terms/${letter}`, 0.6, 'monthly'));
-		}
 	}
 
 	for (const { slug, faq } of getFaqSitemapEntries(faqs)) {

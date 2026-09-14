@@ -101,7 +101,7 @@ test.describe('Sitemap', () => {
 		/^\/blog\/tag\/[^/]+$/,                                                   // blog tag
 		/^\/contact$/,                                                            // contact
 		/^\/political-terms$/,                                                    // glossary index
-		/^\/political-terms\/[^/]+$/,                                             // glossary term or letter
+		/^\/political-terms\/[^/]+$/,                                             // glossary term (letter pages are noindex, so not listed)
 		/^\/elections\/[a-z]{2}$/,                                                 // state
 		/^\/elections\/[a-z]{2}\/position\/[^/]+$/,                               // state position
 		/^\/elections\/[a-z]{2}\/[^/]+\/position\/[^/]+$/,                         // state/county position

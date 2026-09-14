@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, spyOn, test } from 'bun:test';
 import type { PlaceItem } from '~/types/elections';
 import { __resetElectionApiAuthForTests } from './electionApiAuth';
 import {
+	getCitySlugToCountySlugMap,
 	getCountyChildPlaces,
 	getRemovedPersonIds,
 	isStateIndexDistrictPlace,
@@ -314,6 +315,71 @@ describe('resolveCountySlugForPlace', () => {
 		]);
 
 		await expect(resolveCountySlugForPlace('MI', 'Wayne')).resolves.toBe('mi/wayne-county');
+	});
+});
+
+describe('getCitySlugToCountySlugMap', () => {
+	const NC_PLACES: FetchMockResponse[] = [
+		{
+			match: url =>
+				url.includes('/v1/places?') && url.includes('state=NC') && url.includes('mtfcc=G4020'),
+			body: [
+				{ slug: 'nc/guilford-county', name: 'Guilford County', mtfcc: 'G4020', state: 'NC' },
+				{ slug: 'nc/wake-county', name: 'Wake County', mtfcc: 'G4020', state: 'NC' },
+			],
+		},
+		{
+			match: url =>
+				url.includes('/v1/places?') && url.includes('state=NC') && url.includes('mtfcc=G4110'),
+			body: [
+				{ slug: 'nc/greensboro', name: 'Greensboro', mtfcc: 'G4110', state: 'NC', countyName: 'Guilford' },
+				{ slug: 'nc/nowhere', name: 'Nowhere', mtfcc: 'G4110', state: 'NC', countyName: 'Not A County' },
+			],
+		},
+		{
+			match: url =>
+				url.includes('/v1/places?') && url.includes('state=NC') && url.includes('mtfcc=G4040'),
+			// The feed sends the county name both bare and suffixed.
+			body: [{ slug: 'nc/cary', name: 'Cary', mtfcc: 'G4040', state: 'NC', countyName: 'Wake County' }],
+		},
+	];
+
+	test('maps city and town slugs onto their county slug', async () => {
+		withFetchMock(NC_PLACES);
+
+		const map = await getCitySlugToCountySlugMap('nc');
+
+		expect(map.get('nc/greensboro')).toBe('nc/guilford-county');
+		expect(map.get('nc/cary')).toBe('nc/wake-county');
+	});
+
+	/** An unmappable city has to be absent, so callers fall back rather than guess. */
+	test('omits a city whose county name matches no county place', async () => {
+		withFetchMock(NC_PLACES);
+
+		const map = await getCitySlugToCountySlugMap('nc');
+
+		expect(map.has('nc/nowhere')).toBe(false);
+	});
+
+	/** Louisiana parishes and Alaska boroughs go through canonicalizeCountyEquivalentName. */
+	test('matches a parish by its base name', async () => {
+		withFetchMock([
+			{
+				match: url =>
+					url.includes('/v1/places?') && url.includes('state=LA') && url.includes('mtfcc=G4020'),
+				body: [{ slug: 'la/jefferson-parish', name: 'Jefferson Parish', mtfcc: 'G4020', state: 'LA' }],
+			},
+			{
+				match: url =>
+					url.includes('/v1/places?') && url.includes('state=LA') && url.includes('mtfcc=G4110'),
+				body: [{ slug: 'la/kenner', name: 'Kenner', mtfcc: 'G4110', state: 'LA', countyName: 'Jefferson' }],
+			},
+		]);
+
+		const map = await getCitySlugToCountySlugMap('LA');
+
+		expect(map.get('la/kenner')).toBe('la/jefferson-parish');
 	});
 });
 

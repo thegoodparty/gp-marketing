@@ -1,8 +1,6 @@
 import type { ResolvingMetadata } from 'next';
 import type { Params } from '~/lib/types';
-import { Suspense } from 'react';
 import { stegaClean } from 'next-sanity';
-import { PageSections } from '~/PageSections';
 import { sanityFetch } from '~/sanity/sanityClient';
 import { goodpartyOrg_homeQuery } from '~/sanity/groq';
 import { notFound } from 'next/navigation';
@@ -15,6 +13,11 @@ import {
 	buildWebPageSchema,
 } from '~/lib/schema';
 import { getBaseUrl } from '~/lib/url';
+
+// SSR per request so ExperimentResolver reads the visitor's AMP_* cookie and resolves the variant
+// on the server. Without the Suspense boundary the cookie read no longer sits behind a streamed
+// hole, so the route has to opt out of static generation explicitly, as `/[slug]` already does.
+export const dynamic = 'force-dynamic';
 
 export default async function Page() {
 	const page = await sanityFetch({ query: goodpartyOrg_homeQuery, tags: ['goodpartyOrg_home'] });
@@ -48,9 +51,9 @@ export default async function Page() {
 	return (
 		<>
 			<PageSchema schema={homeSchema ?? undefined} />
-			<Suspense fallback={<PageSections pageSections={controlSections} />}>
-				<ExperimentResolver pageId={page._id} controlSections={controlSections} />
-			</Suspense>
+			{/* Awaited inline, not wrapped in Suspense: a fallback that renders the control sections would put a
+			    second copy of the whole page (and a second <h1>) into the streamed HTML. */}
+			<ExperimentResolver pageId={page._id} controlSections={controlSections} />
 		</>
 	);
 }

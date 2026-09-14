@@ -197,6 +197,10 @@ export function renderLlmsTxt(doc: LlmsTxtDoc): string {
  * Tags align with the document `_type`s already wired in /api/revalidate.
  */
 export async function fetchLlmsTxtData(): Promise<LlmsTxtSourceData> {
+	// Every query below carries `seo.field_noIndex != true`, matching
+	// sitemap-entries.ts: the toggle is applied by the shared StructureMetaData
+	// rather than per document type, so any query that skips the guard can render
+	// `noindex` and still hand the URL to an AI crawler.
 	const [singletons, articles, glossary, landingPages, policies] = await Promise.all([
 		sanityClient.fetch<{
 			home: string | null;
@@ -205,10 +209,10 @@ export async function fetchLlmsTxtData(): Promise<LlmsTxtSourceData> {
 			glossary: string | null;
 		}>(
 			`{
-				"home": *[_type=="goodpartyOrg_home"][0]._id,
-				"blog": *[_type=="goodpartyOrg_allArticles"][0]._id,
-				"contact": *[_type=="goodpartyOrg_contact"][0]._id,
-				"glossary": *[_type=="goodpartyOrg_glossary"][0]._id
+				"home": *[_type=="goodpartyOrg_home" && seo.field_noIndex != true][0]._id,
+				"blog": *[_type=="goodpartyOrg_allArticles" && seo.field_noIndex != true][0]._id,
+				"contact": *[_type=="goodpartyOrg_contact" && seo.field_noIndex != true][0]._id,
+				"glossary": *[_type=="goodpartyOrg_glossary" && seo.field_noIndex != true][0]._id
 			}`,
 			{},
 			{
@@ -222,10 +226,6 @@ export async function fetchLlmsTxtData(): Promise<LlmsTxtSourceData> {
 				},
 			},
 		),
-		// Same `seo.field_noIndex != true` guard on every query here as in
-		// sitemap-entries.ts, and for the same reason: the toggle is applied by the
-		// shared StructureMetaData, so any type that skips the guard can render
-		// `noindex` and still be handed to AI crawlers.
 		sanityClient.fetch<SlugTitleDescRow[]>(
 			`*[_type == "article" && seo.field_noIndex != true]{
 				"slug": editorialOverview.field_slug,

@@ -3,6 +3,7 @@ import {
 	getCandidacies,
 	getCandidateBySlug,
 	getCityPlacesByCounty,
+	getCitySlugToCountySlugMap,
 	getOfficeHoldersByGeoId,
 	getPersonByPersonId,
 	getPersonsByIds,
@@ -10,6 +11,8 @@ import {
 	getPublicPersonProfileStatus,
 	getRemovedPersonIds,
 	getVoterDensityForDistrict,
+	looksLikeCountySlugSegment,
+	looksLikeDistrictSlug,
 } from '~/lib/electionsApi';
 import { US_STATES_TUPLES } from '~/constants/usStates';
 import { normalizeStateCode } from '~/constants/usStateCodes';
@@ -524,28 +527,77 @@ function buildLinks(
  * Claimed profiles override this with the owner-authored list (see composeView).
  */
 /**
+ * The city-slug prefix of a race slug that only resolves to a canonical
+ * `/elections` URL once its county is known, or null when the slug needs no help.
+ *
+ * City and town races routinely carry county-less slugs (`nc/greensboro/mayor`,
+ * or `nc/greensboro/ward-1/council` for a joint office). Handed to
+ * `buildElectionPositionHrefFromRaceSlug` without a county lookup they fall
+ * through to its generic segment-count branch and produce the pre-restructuring
+ * URL `/elections/nc/greensboro/position/mayor`, which now 308s to
+ * `/elections/nc/guilford-county/greensboro/position/mayor`. That is the redirect
+ * every /people profile was emitting (~36,900 internal links across ~4,800
+ * destinations in the 2026-09-14 crawl).
+ *
+ * The tests here mirror the resolver's own branches, so a prefix comes back only
+ * where the resolver would actually consult the lookup: a county-shaped second
+ * segment is already a county race, a district-shaped third segment is a
+ * district inside a city and is routed without a county, and a non-city level
+ * never takes the city branch at all. A blank level is left in — the feed omits
+ * it often enough, and a hit in the lookup is itself proof the segment is a city.
+ */
+function cityPrefixNeedingCounty(
+	slug: string | null | undefined,
+	positionLevel: string | null | undefined,
+): string | null {
+	if (!slug) return null;
+	const level = (positionLevel ?? '').toUpperCase();
+	if (level && level !== 'CITY' && level !== 'LOCAL') return null;
+
+	const parts = slug.split('/').filter(Boolean);
+	parts.pop();
+	const [state, place, third] = parts;
+	if (!state || !place || looksLikeCountySlugSegment(place)) return null;
+	if (parts.length === 2) return `${state}/${place}`;
+	if (parts.length === 3 && third && !looksLikeDistrictSlug(third)) return `${state}/${place}`;
+	return null;
+}
+
+/**
  * The `/elections` position page for a race slug, or null when none resolves —
  * the destination "View Position" promises and the breadcrumb's position crumb
  * already uses. Every hop is optional upstream (a term need not reach a race,
  * and a slug can be too short to place), so an unresolvable row renders as
  * plain text rather than a link that 404s.
+ *
+ * `citySlugToCountySlug` (see {@link cityPrefixNeedingCounty}) is what keeps a
+ * city race off the redirecting, county-less URL. The level is forced to CITY on
+ * a lookup hit because the resolver only consults the map for CITY/LOCAL races,
+ * and a blank level would otherwise skip it.
  */
 function positionHrefFor(
 	slug: string | null | undefined,
 	positionLevel: string | null | undefined,
+	citySlugToCountySlug?: Map<string, string> | null,
 ): string | null {
 	if (!slug) return null;
+	const cityPrefix = citySlugToCountySlug ? cityPrefixNeedingCounty(slug, positionLevel) : null;
+	const mapped = Boolean(cityPrefix && citySlugToCountySlug?.has(cityPrefix));
 	return (
-		buildElectionPositionHrefFromRaceSlug({
-			slug,
-			positionLevel: positionLevel ?? undefined,
-		}) ?? null
+		buildElectionPositionHrefFromRaceSlug(
+			{
+				slug,
+				positionLevel: mapped ? 'CITY' : (positionLevel ?? undefined),
+			},
+			citySlugToCountySlug ? { citySlugToCountySlug } : undefined,
+		) ?? null
 	);
 }
 
 function buildRecentExperience(
 	person: PersonItem | null,
 	positionLink: { candidacySlug: string | null; href: string } | null = null,
+	citySlugToCountySlug?: Map<string, string> | null,
 ): ExperienceItem[] {
 	const offices = (person?.OfficeHolders ?? []).map((o) => ({
 		sortKey: o.startAt ?? '',
@@ -556,13 +608,14 @@ function buildRecentExperience(
 			// Current terms read as "Incumbent"; past terms let the year range speak.
 			status: o.isCurrent === true ? 'Incumbent' : null,
 			// The term's own race slug, flattened onto it by election-api. Prefer the
-			// race's level, which is non-null where Position.level is nullable.
-			// The level only changes routing once a citySlugToCountySlug map is in
-			// play (see resolveElectionPositionFromRaceSlug); without one every slug
-			// falls through to the generic segment-count branch, so passing it is
-			// inert today. Kept so this call reads like the breadcrumb's, and so it
-			// stays correct if a county map is ever threaded through.
-			href: positionHrefFor(o.positionSlug, o.positionLevel ?? o.Position?.level),
+			// race's level, which is non-null where Position.level is nullable — the
+			// level is what sends a city slug down the county-expanding branch of
+			// resolveElectionPositionFromRaceSlug rather than the generic one.
+			href: positionHrefFor(
+				o.positionSlug,
+				o.positionLevel ?? o.Position?.level,
+				citySlugToCountySlug,
+			),
 		},
 	}));
 
@@ -583,7 +636,7 @@ function buildRecentExperience(
 					// candidacy the loader fetched in full, and stays as a fallback for
 					// payloads predating omni#1425 (which added slug to the nested Race).
 					href:
-						positionHrefFor(c.Race?.slug, c.Race?.positionLevel) ??
+						positionHrefFor(c.Race?.slug, c.Race?.positionLevel, citySlugToCountySlug) ??
 						(positionLink && c.slug && c.slug === positionLink.candidacySlug
 							? positionLink.href
 							: null),
@@ -775,6 +828,13 @@ function humanizeSlugSegment(segment: string): string {
  * match the canonical elections routes exactly. When no race slug is available
  * (e.g. an office holder with no linked race), the trail degrades to
  * `Elections > State? > Name`.
+ *
+ * Because every crumb is a slice of that one path, `citySlugToCountySlug` is what
+ * decides whether a city profile's trail links the live
+ * `…/guilford-county/greensboro` pages or the county-less ones that redirect (see
+ * {@link cityPrefixNeedingCounty}). Omitting it keeps the previous shape, which
+ * is what lets the dev fixtures and the pure unit tests pass a ready-made 4-part
+ * slug and need no lookup.
  */
 export function buildBreadcrumbTrail(params: {
 	displayName: string;
@@ -782,8 +842,9 @@ export function buildBreadcrumbTrail(params: {
 	raceSlug: string | null;
 	positionLevel: string | null;
 	positionName: string | null;
+	citySlugToCountySlug?: Map<string, string> | null;
 }): ProfileBreadcrumb[] {
-	const { displayName, stateCode, raceSlug, positionLevel, positionName } = params;
+	const { displayName, stateCode, raceSlug, positionLevel, positionName, citySlugToCountySlug } = params;
 	const trail: ProfileBreadcrumb[] = [{ href: '/elections', label: 'Elections' }];
 
 	if (!raceSlug) {
@@ -794,10 +855,7 @@ export function buildBreadcrumbTrail(params: {
 		return trail;
 	}
 
-	const positionHref = buildElectionPositionHrefFromRaceSlug({
-		slug: raceSlug,
-		positionLevel: positionLevel ?? undefined,
-	});
+	const positionHref = positionHrefFor(raceSlug, positionLevel, citySlugToCountySlug);
 
 	if (positionHref) {
 		// /elections/<state>/<county?>/<city?>/position/<slug>
@@ -840,6 +898,13 @@ export interface ComposeExtras {
 	officeAddress?: string[] | null;
 	/** Authoritative state resolved by the loader (office → person → candidacy). */
 	stateCode?: string | null;
+	/**
+	 * City slug → county slug, so the spine-built "Recent Experience" rows link
+	 * the canonical 4-level `/elections` pages instead of the county-less URLs
+	 * that redirect. The loader passes the lookup it already built for the
+	 * breadcrumb and the position href; see {@link cityPrefixNeedingCounty}.
+	 */
+	citySlugToCountySlug?: Map<string, string> | null;
 }
 
 /**
@@ -987,8 +1052,9 @@ export function composeView(
 		recentExperience:
 			extras.recentExperience ??
 			(removed
-				? buildRecentExperience(person, positionLink)
-				: (authoredExperience(overlay) ?? buildRecentExperience(person, positionLink))),
+				? buildRecentExperience(person, positionLink, extras.citySlugToCountySlug)
+				: (authoredExperience(overlay) ??
+					buildRecentExperience(person, positionLink, extras.citySlugToCountySlug))),
 		otherCandidates: extras.otherCandidates ?? [],
 		nearbyOfficials: extras.nearbyOfficials ?? [],
 		breadcrumb: extras.breadcrumb ?? [{ href: '/elections', label: 'Elections' }, { label: displayName }],
@@ -1074,6 +1140,40 @@ async function loadNearbyOfficials(
 	const persons = await getPersonsByIds(ids);
 	const byId = new Map(persons.map((p) => [p.id.toLowerCase(), p]));
 	return buildNearbyOfficialCards(officeholders, byId, excludePersonId, removedPersonIds);
+}
+
+/**
+ * The city → county lookup every `/elections` link on this profile is built
+ * from, or null when none of its races needs one.
+ *
+ * A profile links at most a handful of races — the primary candidacy plus the
+ * "Recent Experience" rows — and almost always all in one state, so the lookup
+ * is fetched per state rather than per race: a `/v1/races` detail fetch for each
+ * row just to learn its county would cost more than the state's place lists,
+ * which are cached and which the page's own "Explore Elections" band already
+ * reads. Returning null when nothing needs expanding keeps the extra request
+ * off state and county profiles entirely.
+ */
+async function loadCityCountyLookup(
+	person: PersonItem | null,
+	raceSlug: string | null,
+	positionLevel: string | null,
+): Promise<Map<string, string> | null> {
+	const prefixes = [
+		cityPrefixNeedingCounty(raceSlug, positionLevel),
+		...(person?.OfficeHolders ?? []).map((o) =>
+			cityPrefixNeedingCounty(o.positionSlug, o.positionLevel ?? o.Position?.level),
+		),
+		...(person?.Candidacies ?? []).map((c) =>
+			cityPrefixNeedingCounty(c.Race?.slug, c.Race?.positionLevel),
+		),
+	].filter((prefix): prefix is string => Boolean(prefix));
+	if (prefixes.length === 0) return null;
+
+	const states = [...new Set(prefixes.map((prefix) => prefix.split('/')[0]).filter(Boolean))];
+	const maps = await Promise.all(states.map(async (state) => getCitySlugToCountySlugMap(state)));
+	// Keys carry their state, so merging states cannot collide.
+	return new Map(maps.flatMap((map) => [...map]));
 }
 
 /**
@@ -1219,15 +1319,17 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 		candidacy?.positionDescription ??
 		office?.Position?.description ??
 		null;
+	// Every /elections link this page emits — the position href below, the
+	// breadcrumb's location and position crumbs, and the "View Position" link on
+	// each Recent Experience row — is built from a race slug, and a city race's
+	// slug omits its county. One lookup, resolved here, so all of them land on the
+	// canonical 4-level URL instead of the pre-restructuring one that redirects.
+	const citySlugToCountySlug = await loadCityCountyLookup(person, raceSlug, positionLevel);
 	// Canonical /elections position href for the person's OWN office ("Learn more").
 	// Only resolvable from a candidacy's race slug today, so this is populated for
 	// candidate/"both" personas; pure office-holders get null until election-api
 	// threads the office race slug (tracked follow-up).
-	const positionHref =
-		buildElectionPositionHrefFromRaceSlug({
-			slug: raceSlug ?? undefined,
-			positionLevel: positionLevel ?? undefined,
-		}) ?? null;
+	const positionHref = positionHrefFor(raceSlug, positionLevel, citySlugToCountySlug);
 	// A code by contract — it builds `/elections/<code>` in the breadcrumb — but
 	// the mart sends `Minnesota` for rows it created from a gp-api account
 	// rather than from BallotReady, which lowercased to a 404 crumb.
@@ -1240,7 +1342,14 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 	// The interlink sections are independent; fetch in parallel. Each degrades to
 	// empty on any miss so the core profile always renders.
 	const { tier, countySlug } = deriveElectionsIndexTier(positionHref, positionLevel);
-	const breadcrumb = buildBreadcrumbTrail({ displayName, stateCode, raceSlug, positionLevel, positionName });
+	const breadcrumb = buildBreadcrumbTrail({
+		displayName,
+		stateCode,
+		raceSlug,
+		positionLevel,
+		positionName,
+		citySlugToCountySlug,
+	});
 	// The removal set gates both card loaders, so it has to resolve first. The
 	// elections index needs nothing, so start it now and only join at the end —
 	// awaiting it up front would make the card loaders wait on the slower of the
@@ -1266,5 +1375,6 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 		electionsIndex,
 		voterDensity,
 		stateCode,
+		citySlugToCountySlug,
 	});
 }

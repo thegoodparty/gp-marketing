@@ -269,6 +269,36 @@ Two traps in the base, both verified against live data:
   they are not worth chasing — they land on a single 307. This is the reason to
   prefer the spine row's slug whenever you have it.
 
+### Linking to a race or a place: the county segment is not optional
+
+A city or town race slug usually omits its county (`nc/greensboro/mayor`). Handed
+to `buildElectionPositionHrefFromRaceSlug` with no county lookup it falls through
+to the generic segment-count branch and yields
+`/elections/nc/greensboro/position/mayor`, which is a *working* URL — it 308s to
+`/elections/nc/guilford-county/greensboro/position/mayor` — and therefore a silent
+one. The same September 2026 crawl that found the `/candidate/` hops above found
+4,797 of these, every one of them from the `/people` profile template: ~36,900
+internal link instances pointing at ~4,800 redirects.
+
+So resolve the county before you build the link. There are two ways, and which one
+fits depends on what you are holding:
+
+- **One race, and you can afford a fetch:** `resolveRaceElectionHrefs`
+  (`electionsApi.ts`) takes a slug, fetches the race for its place, and returns
+  both the position and candidates hrefs. `/candidate` uses this.
+- **Several slugs at once:** `getCitySlugToCountySlugMap(state)` builds the whole
+  state's city → county lookup off the cached `/v1/places` responses, and you pass
+  it as `citySlugToCountySlug` to `buildElectionPositionHrefFromRaceSlug`. `/people`
+  uses this — `loadCityCountyLookup` in `peopleProfile.ts` builds it once per
+  profile and every `/elections` link on the page (position href, each breadcrumb
+  crumb, each "Recent Experience" row, and the "Explore Elections" tier, which is
+  read back off the position href) is built through it.
+
+Both degrade to the county-less URL rather than to no link at all when the county
+cannot be resolved: a redirect beats an unlinked row. The sitemap is the one
+deliberate exception — it passes `skipUnmappedCity` and emits nothing, because a
+sitemap should advertise canonical URLs only.
+
 ### Not fixable here, escalate
 
 Candidate claimed-vs-unclaimed state and any "my profile is wrong" bug is a data

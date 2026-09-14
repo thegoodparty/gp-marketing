@@ -596,6 +596,45 @@ export async function resolveCountySlugForPlace(
 	return undefined;
 }
 
+/**
+ * Every city/town slug in one state mapped to its canonical county slug
+ * (`nc/greensboro` → `nc/guilford-county`), the lookup
+ * `buildElectionPositionHrefFromRaceSlug` needs to expand a county-less race
+ * slug into the 4-level `/elections` URL.
+ *
+ * `resolveCountySlugForPlace` answers the same question one place at a time, but
+ * it needs a `countyName` the caller already holds. A caller holding only race
+ * slugs — the /people profile, whose links come from the person spine and never
+ * carry a place payload — would have to fetch each race just to learn its county,
+ * so this builds the whole state's lookup in one pass instead. All three
+ * requests are the same cached `/v1/places` responses the elections pages and the
+ * profile's own "Explore Elections" band already read, so in practice this costs
+ * a cache hit rather than a round trip.
+ */
+export async function getCitySlugToCountySlugMap(state: string): Promise<Map<string, string>> {
+	const code = state.toUpperCase();
+	const [counties, cities, towns] = await Promise.all([
+		getPlacesByState({ state: code, mtfcc: COUNTY_MTFCC }),
+		getPlacesByState({ state: code, mtfcc: CITY_MTFCC }),
+		getPlacesByState({ state: code, mtfcc: TOWN_MTFCC }),
+	]);
+
+	const countySlugByBaseName = new Map<string, string>();
+	for (const county of counties) {
+		if (!county.slug || !county.name) continue;
+		countySlugByBaseName.set(normalizeName(stripCountySuffix(county.name)), county.slug);
+	}
+
+	const citySlugToCountySlug = new Map<string, string>();
+	for (const place of [...cities, ...towns]) {
+		if (!place.slug || !place.countyName) continue;
+		const base = canonicalizeCountyEquivalentName(code, place.countyName).baseName;
+		const countySlug = countySlugByBaseName.get(normalizeName(base));
+		if (countySlug) citySlugToCountySlug.set(place.slug, countySlug);
+	}
+	return citySlugToCountySlug;
+}
+
 export type RaceElectionHrefs = {
 	positionHref?: string;
 	candidatesHref?: string;

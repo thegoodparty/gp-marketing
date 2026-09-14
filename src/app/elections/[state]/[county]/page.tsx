@@ -191,5 +191,6 @@ export async function generateMetadata({
 		description: isDistrict
 			? `Browse elections and positions in ${placeName}, ${stateName}.`
 			: `Browse elections and cities in ${placeName}, ${stateName}.`,
+		alternates: { canonical: toAbsoluteUrl(`/elections/${fullSlug}`) },
 	};
 }

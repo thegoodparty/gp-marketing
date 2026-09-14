@@ -1,0 +1,69 @@
+import { describe, expect, it } from 'bun:test';
+
+/**
+ * Every /elections/* route once shipped without a canonical link, which left ~46,800 URLs
+ * (the site's largest content type) letting Google pick its own authoritative variant. The
+ * routes 301 their non-canonical variants, so each page's canonical is self-referencing and
+ * built from the same lowercased path its body hands to `toAbsoluteUrl`. Scanning source keeps
+ * a newly added election route from quietly reintroducing the gap: the pages are React Server
+ * Components wired to the live election API, so importing them here is not an option.
+ */
+
+const ELECTIONS_ROOT = 'src/app/elections';
+
+async function electionPageFiles(): Promise<string[]> {
+	const glob = new Bun.Glob('**/page.tsx');
+	return [...glob.scanSync({ cwd: ELECTIONS_ROOT })].map(path => `${ELECTIONS_ROOT}/${path}`).sort();
+}
+
+function metadataBody(source: string): string {
+	const start = source.indexOf('export async function generateMetadata');
+	return start === -1 ? '' : source.slice(start);
+}
+
+describe('/elections canonical metadata', () => {
+	it('finds every elections route variant', async () => {
+		const files = await electionPageFiles();
+		expect(files.length).toBeGreaterThanOrEqual(12);
+	});
+
+	it('emits a canonical from every generateMetadata return', async () => {
+		for (const file of await electionPageFiles()) {
+			const source = await Bun.file(file).text();
+			const body = metadataBody(source);
+			expect(body, `${file} has no generateMetadata`).not.toBe('');
+
+			// The index page canonicals through StructureMetaData; the rest do it inline.
+			if (body.includes('StructureMetaData')) {
+				expect(body, `${file} must pass a url to StructureMetaData`).toMatch(/url:/);
+				continue;
+			}
+
+			// Every metadata return other than the invalid-state `return {}` (that route 404s)
+			// has to carry a canonical, so count returns against canonicals.
+			const returns = body.match(/\n\t+return \{$/gm) ?? [];
+			const canonicals = body.match(/canonical/g) ?? [];
+			expect(canonicals.length, `${file} returns metadata without a canonical`).toBeGreaterThanOrEqual(
+				returns.length,
+			);
+			expect(body, `${file} must build its canonical with toAbsoluteUrl`).toMatch(
+				/canonical: toAbsoluteUrl\(|const canonical = toAbsoluteUrl\(/,
+			);
+		}
+	});
+
+	it('canonicalizes to a lowercased /elections path', async () => {
+		for (const file of await electionPageFiles()) {
+			const body = metadataBody(await Bun.file(file).text());
+			if (body.includes('StructureMetaData')) continue;
+			const [, path] = /toAbsoluteUrl\(\s*`(\/elections[^`]*)`/.exec(body) ?? [];
+			expect(path, `${file} canonical is not an /elections path`).toBeDefined();
+			// Route params reach the page in whatever case the visitor typed.
+			const rawSegments = path!.match(/\$\{(?!.*toLowerCase)[^}]+\}/g) ?? [];
+			const allowed = rawSegments.every(s => s.includes('positionSlug') || s.includes('Slug}'));
+			expect(allowed, `${file} canonical interpolates un-lowercased segments: ${rawSegments.join(', ')}`).toBe(
+				true,
+			);
+		}
+	});
+});

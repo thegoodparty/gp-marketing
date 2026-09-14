@@ -48,6 +48,6 @@ export async function generateMetadata(parent: ResolvingMetadata): Promise<Metad
 	return StructureMetaData(parentMetadata, {
 		name: page?.detailPageOverviewNoHero?.field_pageName,
 		seo: page?.seo,
-		url: page?.href ?? undefined,
+		url: page?.href ?? '/elections',
 	});
 }

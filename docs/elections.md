@@ -98,6 +98,18 @@ Place facts (population, density, income, and so on) come from `PlaceWithFacts`
 through `placeToFactsCards`, and `hasSuspiciousFactsMatch` guards against a city
 inheriting its county's statistics.
 
+Every route above emits a **self-referencing canonical** from its `generateMetadata`
+(`alternates: { canonical: toAbsoluteUrl(path) }`), built from the same lowercased path
+the page body hands to `toAbsoluteUrl`. Self-referencing is correct here because the
+redirects above already 301 the non-canonical variants; the canonical's remaining job is
+to collapse the variants that still render 200, mainly mixed-case segments
+(`/elections/CA/...`) and tracking query strings. These are the site's largest content
+type, so a route that ships without one puts tens of thousands of URLs back into
+"Google picks the variant", and `src/app/elections/canonicalMetadata.test.ts` fails the
+build if a new election route forgets. Keep the canonical path identical to the sitemap
+URL for the same page (`buildElectionPositionHrefFromRaceSlug`); a canonical that
+disagrees with the sitemap sends conflicting signals.
+
 ### Templates: global vs custom, and three-tier resolution
 
 Editor-facing how-to (Studio steps, preview targets, clone workflow):

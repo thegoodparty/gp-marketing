@@ -15,6 +15,7 @@ import {
 	mapCandidacyToCard,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
+import { toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsCandidatesPage } from '~/lib/renderElectionsCandidatesPage';
 
 export default async function Page({
@@ -124,15 +125,20 @@ export async function generateMetadata({
 	const isRealSubplace =
 		race?.Place?.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`) ?? false;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
+	const canonical = toAbsoluteUrl(
+		`/elections/${countySlug}/${city.toLowerCase()}/${subplace.toLowerCase()}/position/${positionSlug}/candidates`,
+	);
 	if (isRealSubplace) {
 		const subplaceName = race!.Place!.name;
 		return {
 			title: `Candidates for ${positionName} in ${subplaceName}, ${cityName}, ${stateName} | Good Party`,
 			description: `View candidates running for ${positionName} in ${subplaceName}, ${cityName}, ${countyDisplayName}, ${stateName}.`,
+			alternates: { canonical },
 		};
 	}
 	return {
 		title: `Candidates for ${positionName} in ${cityName}, ${stateName} | Good Party`,
 		description: `View candidates running for ${positionName} in ${cityName}, ${countyDisplayName}, ${stateName}.`,
+		alternates: { canonical },
 	};
 }

@@ -228,6 +228,20 @@ export async function generateMetadata(props: Params, parent: ResolvingMetadata)
 	const slug = (await props.params)['slug'];
 
 	const parentMetadata = await parent;
+
+	// A single-letter slug is the A–Z menu, not a page meant to rank. It has no
+	// glossary document behind it, so it used to fall through to the bare site
+	// root as its canonical — asserting it was a duplicate of the homepage and
+	// handing the homepage the equity of every term it links to. `noindex` keeps
+	// it out of the index on its own terms and `follow` leaves that equity with
+	// the term pages. The sitemap drops these URLs to match (sitemap-entries.ts).
+	if (slug?.length === 1) {
+		return {
+			...(await StructureMetaData(parentMetadata, { url: `/political-terms/${slug}` })),
+			robots: { index: false, follow: true },
+		};
+	}
+
 	const page = await sanityFetch({
 		query: glossaryQuery,
 		params: {

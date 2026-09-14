@@ -523,8 +523,15 @@ export async function fetchMainSitemapEntries(baseUrl: string): Promise<Metadata
 				{},
 				{ next: { tags: ['goodpartyOrg_home', 'goodpartyOrg_allArticles', 'goodpartyOrg_contact', 'goodpartyOrg_glossary'] } },
 			),
+			// `seo.field_noIndex != true` keeps A/B variants, internal drafts and
+			// thank-you pages out. Marketing marks them in Studio, the page renders
+			// `noindex` from the same flag (StructureMetaData), and a sitemap that
+			// still listed them would only trade one Search Console report for
+			// "Submitted URL marked noindex" — the same trap as the glossary letter
+			// pages below. `!= true` rather than `== false` because the flag is
+			// absent on every page nobody has touched.
 			sanityClient.fetch<Array<{ slug: string | null }>>(
-				`*[_type in ["goodpartyOrg_landingPages","policy"]][]{"slug": select(_type == "goodpartyOrg_landingPages" => detailPageOverviewNoHero.field_slug, _type == "policy" => policyOverview.field_slug)}`,
+				`*[_type in ["goodpartyOrg_landingPages","policy"] && seo.field_noIndex != true][]{"slug": select(_type == "goodpartyOrg_landingPages" => detailPageOverviewNoHero.field_slug, _type == "policy" => policyOverview.field_slug)}`,
 				{},
 				{ next: { tags: ['goodpartyOrg_landingPages', 'policy'] } },
 			),

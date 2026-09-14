@@ -14,7 +14,14 @@ export async function StructureMetaData(parentMetadata: ResolvedMetadata, page?:
 	const metaDescription = metaString(page?.seo?.field_metaDescription) ?? metaString(parentMetadata.description);
 	const ogImage = page?.seo?.img_openGraphImage ?? undefined;
 
-	const robots = parentMetadata.robots as Robots;
+	// The SEO group's "No Index" / "No follow" toggles were never read here, so a
+	// page marked noindex in Studio still shipped an indexable page and the flag
+	// was decorative. Only override when a toggle is actually on: every other page
+	// keeps inheriting the parent's directive, which is what it did before.
+	const noIndex = page?.seo?.field_noIndex === true;
+	const noFollow = page?.seo?.field_noFollow === true;
+	const robots: Robots =
+		noIndex || noFollow ? { index: !noIndex, follow: !noFollow } : (parentMetadata.robots as Robots);
 
 	const absoluteUrl = page?.url ? toAbsoluteUrl(page.url) : getBaseUrl();
 	const ogImages = [ogImage, ...(parentMetadata.openGraph?.images || [])]

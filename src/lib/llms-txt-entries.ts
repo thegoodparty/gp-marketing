@@ -240,8 +240,11 @@ export async function fetchLlmsTxtData(): Promise<LlmsTxtSourceData> {
 			{},
 			{ next: { tags: ['glossary'] } },
 		),
+		// Studio's "No Index" toggle is the authoritative signal now that it
+		// actually reaches the page; EXCLUDED_PAGE_TITLE_TERMS stays as the net for
+		// an internal page nobody has marked yet.
 		sanityClient.fetch<SlugTitleDescRow[]>(
-			`*[_type == "goodpartyOrg_landingPages"]{
+			`*[_type == "goodpartyOrg_landingPages" && seo.field_noIndex != true]{
 				"slug": detailPageOverviewNoHero.field_slug,
 				"title": detailPageOverviewNoHero.field_pageName,
 				"description": seo.field_metaDescription
@@ -250,7 +253,7 @@ export async function fetchLlmsTxtData(): Promise<LlmsTxtSourceData> {
 			{ next: { tags: ['goodpartyOrg_landingPages'] } },
 		),
 		sanityClient.fetch<SlugTitleDescRow[]>(
-			`*[_type == "policy"]{
+			`*[_type == "policy" && seo.field_noIndex != true]{
 				"slug": policyOverview.field_slug,
 				"title": policyOverview.field_policyName,
 				"description": seo.field_metaDescription

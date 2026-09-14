@@ -22,11 +22,6 @@ export async function renderElectionsPositionPage(ctx: PositionTemplateContext) 
 		},
 		sectionOverrides: buildPositionSectionOverrides(ctx),
 		tokens: buildPositionTokens(ctx),
-		schemas: [
-			schemas.positionPageSchema,
-			schemas.jobPostingSchema || undefined,
-			schemas.breadcrumbSchema,
-			schemas.faqSchema,
-		],
+		schemas: [schemas.positionPageSchema, schemas.breadcrumbSchema, schemas.faqSchema],
 	});
 }

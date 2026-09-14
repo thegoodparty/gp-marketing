@@ -207,7 +207,7 @@ are good agent targets: read the test, change the function, add a case, run
 - Template scoring and selection (`scoreCustomTemplate`, `pickBestCustomTemplate`).
 - Token maps (the `build*Tokens` helpers and `resolveTokens`).
 - SEO and JSON-LD builders (`buildFAQSchema`, `buildPositionPageSchema`,
-  `buildJobPostingSchema`, `buildBreadcrumbSchema`, `buildDynamicFAQItems`).
+  `buildBreadcrumbSchema`, `buildDynamicFAQItems`).
 - Place-facts formatting (`placeToFactsCards`, `hasSuspiciousFactsMatch`).
 
 ### Privacy takedowns ("remove this person's page")

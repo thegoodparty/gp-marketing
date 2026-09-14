@@ -12,7 +12,6 @@ import { secondaryButtonStyleType } from '~/ui/_lib/designTypesStore';
 import {
 	buildDynamicFAQItems,
 	buildPositionPageSchema,
-	buildJobPostingSchema,
 } from '~/lib/electionsHelpers';
 import {
 	buildBreadcrumbSchema,
@@ -230,23 +229,12 @@ export function buildPositionPageSchemas(ctx: PositionPageContext) {
 					pageUrl,
 				})
 			: undefined;
-	const jobPostingSchema =
-		race &&
-		pageUrl &&
-		buildJobPostingSchema({
-			race,
-			officeName: ctx.officeName,
-			stateName: ctx.stateName,
-			countyName: ctx.countyName,
-			cityName: ctx.cityName,
-			pageUrl,
-		});
 	const breadcrumbSchema = buildBreadcrumbSchema(ctx.breadcrumbs, toAbsoluteUrl);
 	const faqItems = race
 		? buildDynamicFAQItems(race, ctx.officeName, ctx.stateName)
 		: POSITION_PAGE_FAQ.items.map(item => ({ title: item.title, copy: item.copy }));
 	const faqSchema = buildFAQSchema(faqItems);
-	return { positionPageSchema, jobPostingSchema, breadcrumbSchema, faqSchema };
+	return { positionPageSchema, breadcrumbSchema, faqSchema };
 }
 
 export function buildCandidatesPageSchema(ctx: PositionPageContext) {

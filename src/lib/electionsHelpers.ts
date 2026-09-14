@@ -357,7 +357,7 @@ export async function resolvePlaceRaceElectionDates(
 
 export type BuildOfficeItemsFromPlaceRacesConfig = {
 	type: string;
-	buildHref(race: PlaceRace): string;
+	buildHref(race: PlaceRace): string | undefined;
 };
 
 export function buildOfficeItemsFromPlaceRaces(
@@ -456,6 +456,40 @@ export function buildRaceSlug(
 	if (city) parts.push(city.toLowerCase());
 	parts.push(positionSlug);
 	return parts.join('/');
+}
+
+/** Deepest place path the /elections route tree can address: state/county/city/subplace. */
+const MAX_ELECTION_PLACE_SEGMENTS = 4;
+
+/**
+ * Position page href for a race listed on an /elections index page.
+ *
+ * `placeSegments` is the index page's own place path, which is authoritative. Whatever the
+ * race slug carries after that place is the office, and a joint office carries one extra
+ * segment per combined office (`mt/gallatin-county/county-assessor/treasurer-joint`). Those
+ * extra segments occupy place slots in the URL, so they belong between the place and
+ * `/position/`, not inside the position slug and not dropped.
+ *
+ * Returns undefined when the office needs more place slots than the route tree has, so the
+ * caller lists the office unlinked rather than linking to a page that cannot exist.
+ */
+export function buildPlaceRacePositionHref(placeSegments: string[], raceSlug: string): string | undefined {
+	const place = placeSegments.filter(Boolean).map(s => s.toLowerCase());
+	const raceParts = raceSlug.split('/').filter(Boolean).map(s => s.toLowerCase());
+	const placeTail = place.at(-1);
+	if (!placeTail || raceParts.length === 0) return undefined;
+
+	const tailIndex = raceParts.lastIndexOf(placeTail);
+	// No tail match means the race is slugged under some other place (a school district
+	// listed on its city's page); fall back to treating the slug as place plus one office.
+	const officeParts = tailIndex >= 0 ? raceParts.slice(tailIndex + 1) : raceParts.slice(-1);
+
+	const positionSlug = officeParts.pop();
+	if (!positionSlug) return undefined;
+
+	const path = [...place, ...officeParts];
+	if (path.length > MAX_ELECTION_PLACE_SEGMENTS) return undefined;
+	return `/elections/${path.join('/')}/position/${positionSlug}`;
 }
 
 /** Joint city office race slug: state/city/subplace/position, optionally with county segment. */

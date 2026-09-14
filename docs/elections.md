@@ -98,6 +98,29 @@ Place facts (population, density, income, and so on) come from `PlaceWithFacts`
 through `placeToFactsCards`, and `hasSuspiciousFactsMatch` guards against a city
 inheriting its county's statistics.
 
+### Joint offices eat place slots
+
+A combined office (Indiana's Clerk/Treasurer, Montana's Clerk/Recorder/Surveyor,
+California's Clerk/Recorder) is slugged upstream with a real slash per joined office:
+`mt/gallatin-county/county-assessor/treasurer-joint`. Those extra segments have to go
+*between* the place and `/position/`, because the position slug is a single route
+segment and is fed straight back to `getRaceBySlug`. So the URL is
+`/elections/mt/gallatin-county/county-assessor/position/treasurer-joint`, with the
+office name sitting in the slot a city would normally occupy.
+
+The index pages (`/elections/[state]`, `[county]`, `[county]/[city]`) build their
+office links with `buildPlaceRacePositionHref(placeSegments, race.slug)`. Do not
+hand-roll this: slicing the slug at a fixed depth folds the extra segments into the
+position slug, and `.pop()` drops them, and both shapes 404 while looking plausible.
+A September 2026 crawl found 516 such 404s, concentrated in Indiana towns and Montana
+counties but present in at least 17 states.
+
+Because the route tree stops at four place levels, an office combining four or more
+roles cannot be addressed at all. `buildPlaceRacePositionHref` returns `undefined`
+there and `ListOfOfficesBlock` lists the office without a link rather than linking to
+a page that cannot exist. Giving those offices a real page needs a different URL
+shape, which is a separate piece of work.
+
 ### Templates: global vs custom, and three-tier resolution
 
 Editor-facing how-to (Studio steps, preview targets, clone workflow):

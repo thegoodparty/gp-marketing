@@ -8,6 +8,7 @@ import {
 	buildRaceCandidatesHref,
 	buildRacePositionHref,
 	buildRaceSlug,
+	buildPlaceRacePositionHref,
 	buildSubplaceRaceSlug,
 	canonicalizeCountyEquivalentName,
 	findCityForDistrictName,
@@ -157,6 +158,76 @@ describe('buildSubplaceRaceSlug', () => {
 		expect(buildSubplaceRaceSlug('AR', 'winchester', 'city-recorder', 'treasurer-joint', 'drew-county')).toBe(
 			'ar/drew-county/winchester/city-recorder/treasurer-joint',
 		);
+	});
+});
+
+describe('buildPlaceRacePositionHref', () => {
+	test('state office', () => {
+		expect(buildPlaceRacePositionHref(['mt'], 'mt/governor')).toBe('/elections/mt/position/governor');
+	});
+
+	test('county office', () => {
+		expect(buildPlaceRacePositionHref(['mt', 'gallatin-county'], 'mt/gallatin-county/county-sheriff')).toBe(
+			'/elections/mt/gallatin-county/position/county-sheriff',
+		);
+	});
+
+	test('city office', () => {
+		expect(buildPlaceRacePositionHref(['in', 'adams-county', 'berne'], 'in/adams-county/berne/city-legislature')).toBe(
+			'/elections/in/adams-county/berne/position/city-legislature',
+		);
+	});
+
+	test('joint state office keeps the combined office in the place path', () => {
+		expect(buildPlaceRacePositionHref(['ca'], 'ca/state-insurance-commissioner/fire-safety-commissioner-joint')).toBe(
+			'/elections/ca/state-insurance-commissioner/position/fire-safety-commissioner-joint',
+		);
+	});
+
+	test('two-office joint county race', () => {
+		expect(buildPlaceRacePositionHref(['mt', 'gallatin-county'], 'mt/gallatin-county/county-assessor/treasurer-joint')).toBe(
+			'/elections/mt/gallatin-county/county-assessor/position/treasurer-joint',
+		);
+	});
+
+	test('three-office joint county race fills the subplace slot', () => {
+		expect(
+			buildPlaceRacePositionHref(['mt', 'lewis-and-clark-county'], 'mt/lewis-and-clark-county/county-recorder/treasurer/clerk-joint'),
+		).toBe('/elections/mt/lewis-and-clark-county/county-recorder/treasurer/position/clerk-joint');
+	});
+
+	test('joint city office keeps the combined office segment', () => {
+		expect(buildPlaceRacePositionHref(['in', 'adams-county', 'berne'], 'in/adams-county/berne/city-clerk/treasurer-joint')).toBe(
+			'/elections/in/adams-county/berne/city-clerk/position/treasurer-joint',
+		);
+	});
+
+	test('joint city office whose API slug omits the county', () => {
+		expect(buildPlaceRacePositionHref(['ok', 'caddo-county', 'binger'], 'ok/binger/city-clerk/treasurer-joint')).toBe(
+			'/elections/ok/caddo-county/binger/city-clerk/position/treasurer-joint',
+		);
+	});
+
+	test('returns undefined when the office needs more place slots than the routes have', () => {
+		expect(
+			buildPlaceRacePositionHref(['mt', 'yellowstone-county'], 'mt/yellowstone-county/county-clerk/recorder/surveyor/auditor-joint'),
+		).toBeUndefined();
+	});
+
+	test('race slugged under another place falls back to the page place plus one office', () => {
+		expect(
+			buildPlaceRacePositionHref(['in', 'adams-county', 'berne'], 'in/adams-county/south-adams-schools/local-school-board'),
+		).toBe('/elections/in/adams-county/berne/position/local-school-board');
+	});
+
+	test('normalizes place segments to lowercase', () => {
+		expect(buildPlaceRacePositionHref(['MT', 'Gallatin-County'], 'mt/gallatin-county/county-sheriff')).toBe(
+			'/elections/mt/gallatin-county/position/county-sheriff',
+		);
+	});
+
+	test('returns undefined for an empty race slug', () => {
+		expect(buildPlaceRacePositionHref(['mt'], '')).toBeUndefined();
 	});
 });
 

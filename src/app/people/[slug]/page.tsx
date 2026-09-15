@@ -17,7 +17,7 @@ import {
 	buildPersonSectionOverrides,
 } from '~/components/people/personSectionOverrides';
 import { renderElectionTemplatePage } from '~/lib/renderElectionTemplatePage';
-import { getPersonBySlug, getPersonMergeSurvivorId } from '~/lib/electionsApi';
+import { getPersonBySlug, getPersonMergeSurvivorChain } from '~/lib/electionsApi';
 import { getDevPersonProfileView, isDevPeopleFixturesEnabled } from '~/lib/devPeopleProfileFixtures';
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 
@@ -57,8 +57,11 @@ async function resolveView(slug: string): Promise<PersonProfileView | null> {
 		// it has to follow the forwarding address itself or the URL dies here.
 		// The survivor's own profile rules still apply, so a takedown or an
 		// owner-deleted profile on the survivor keeps 404-ing.
-		const survivingId = await getPersonMergeSurvivorId(legacyPersonId);
-		return survivingId ? loadPersonProfile(survivingId) : null;
+		for (const survivingId of await getPersonMergeSurvivorChain(legacyPersonId)) {
+			const survivorView = await loadPersonProfile(survivingId);
+			if (survivorView) return survivorView;
+		}
+		return null;
 	}
 
 	// Current /people/<base>-<id8>: election-api parses the 8-hex suffix and

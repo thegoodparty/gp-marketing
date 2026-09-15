@@ -5,6 +5,7 @@ import { field_inlineMediaAlignmentRightLeft } from './field_inlineMediaAlignmen
 import { field_primaryPostalAddress } from './field_primaryPostalAddress.ts';
 import { field_statValue } from './field_statValue.ts';
 import { field_pageName } from './field_pageName.ts';
+import { field_columnLayout12Columns } from './field_columnLayout12Columns.ts';
 import { field_columnLayout23Columns } from './field_columnLayout23Columns.ts';
 import { field_socialChannelUrl } from './field_socialChannelUrl.ts';
 import { field_registeredOfficeAddress } from './field_registeredOfficeAddress.ts';
@@ -121,6 +122,7 @@ export const fieldSchema = [
 	field_primaryPostalAddress,
 	field_statValue,
 	field_pageName,
+	field_columnLayout12Columns,
 	field_columnLayout23Columns,
 	field_socialChannelUrl,
 	field_registeredOfficeAddress,

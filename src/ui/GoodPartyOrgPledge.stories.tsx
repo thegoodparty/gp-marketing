@@ -114,6 +114,22 @@ export const WithHeaderButtons: Story = {
 	},
 };
 
+export const SingleColumn: Story = {
+	args: {
+		...defaultArgs,
+		backgroundColor: 'midnight',
+		columnLayout: '1Col',
+		pledgeCards: defaultArgs.pledgeCards.slice(0, 3).map(({ button: _button, ...rest }) => rest),
+		footerButtons: [{ buttonType: 'internal' as const, href: '/about', label: 'Learn more' }],
+	},
+	parameters: {
+		design: {
+			type: 'figma',
+			url: 'https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23714-25633&t=Y3gXgfteJfMmhQjG-0',
+		},
+	},
+};
+
 export const RedIcons: Story = {
 	args: {
 		...defaultArgs,

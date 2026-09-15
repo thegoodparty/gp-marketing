@@ -628,3 +628,82 @@ describe('the claimed CTA band button goes somewhere', () => {
 		}
 	});
 });
+
+/**
+ * The pledge band and the hero line that points at it, across all twelve states.
+ *
+ * The band is an explainer written in the third person ("Candidates run and
+ * serve as…"), so it states nothing about the person whose page it is on. That
+ * is what lets it run everywhere (marketing, 2026-09-15) and what lets the
+ * negative and ineligible hero lines link to it: the reader who is told this
+ * person has not taken the pledge can still go find out what the pledge is.
+ *
+ * The button is the one thing that reads the person's status — "Take the pledge"
+ * only where the hero says they have not taken it. Ineligible keeps "Learn more"
+ * deliberately: a major-party affiliate cannot take it, so inviting them to is a
+ * dead end.
+ *
+ * Asserted per state off the real fixtures, because these three outputs are
+ * driven by two different flags (`claimed` and `isPledged`) plus party class,
+ * and eyeballing one profile proves nothing about the other eleven.
+ */
+describe('the pledge band across the twelve profile states', () => {
+	const PLEDGE_ANCHOR = '#goodparty-pledge';
+	const LEARN_MORE = { buttonType: 'internal', href: '/about', label: 'Learn more' } as const;
+	const TAKE_THE_PLEDGE = { buttonType: 'signup', label: 'Take the pledge' } as const;
+
+	/** slug → [expected hero attribution, expected band button] */
+	const STATES = {
+		'allen-slagle-74eee01a': ['pledged', LEARN_MORE], // A claimed candidate
+		'tracy-good-ecff49d3': ['notPledged', TAKE_THE_PLEDGE], // B claimed officeholder
+		'susan-overman-ad914b82': ['pledged', LEARN_MORE], // C claimed both
+		'kim-byrd-b77f912d': ['notPledged', TAKE_THE_PLEDGE], // D unclaimed candidate
+		'rob-zotti-d8c578fb': ['notPledged', TAKE_THE_PLEDGE], // E unclaimed officeholder
+		'tim-ficken-0a951485': ['notPledged', TAKE_THE_PLEDGE], // F unclaimed both
+		'bill-fortner-61a42912': ['notPledged', TAKE_THE_PLEDGE], // G claimed past
+		'gregory-schreurs-136cadf0': ['notPledged', TAKE_THE_PLEDGE], // H unclaimed past
+		'jeb-hanson-3753676b': ['pledgeIneligible', LEARN_MORE], // I major-party candidate
+		'deb-craft-f88e7434': ['pledgeIneligible', LEARN_MORE], // J major-party officeholder
+		'x-27255f40': ['none', LEARN_MORE], // K removal requested
+		'x-3412f69c': ['none', LEARN_MORE], // L removal requested
+	} as const;
+
+	const overridesFor = (slug: string) => {
+		const view = getDevPersonProfileView(slug);
+		if (!view) throw new Error(`no dev fixture for ${slug}`);
+		return buildPersonSectionOverrides(view);
+	};
+
+	test('the band renders on every state', () => {
+		for (const slug of Object.keys(STATES)) {
+			expect([slug, overridesFor(slug).component_goodPartyOrgPledge?.hidden]).toEqual([slug, false]);
+		}
+	});
+
+	test('every hero attribution line links down to the band', () => {
+		for (const [slug, [attribution]] of Object.entries(STATES)) {
+			const hero = overridesFor(slug).component_profileHero;
+			expect([slug, hero?.attribution]).toEqual([slug, attribution]);
+			// 'none' renders no line at all, so there is nothing to link.
+			const expected = attribution === 'none' ? undefined : PLEDGE_ANCHOR;
+			expect([slug, hero?.attributionHref]).toEqual([slug, expected]);
+		}
+	});
+
+	test('only the "has not taken" states invite you to take the pledge', () => {
+		for (const [slug, [, button]] of Object.entries(STATES)) {
+			expect([slug, overridesFor(slug).component_goodPartyOrgPledge?.button]).toEqual([slug, button]);
+		}
+	});
+
+	/**
+	 * `signup` and `login` rendered a bare <button> with no destination until
+	 * 2026-09-14, which is how a dead "Learn more" shipped on every claimed
+	 * profile. Assert the type still carries one so this button cannot regress
+	 * into the same dead end.
+	 */
+	test('the take-the-pledge button has a destination', async () => {
+		const { APP_SIGN_UP_HREF } = await import('~/lib/analytics');
+		expect(APP_SIGN_UP_HREF).toMatch(/^https:\/\/app\.goodparty\.org\/sign-up$/);
+	});
+});

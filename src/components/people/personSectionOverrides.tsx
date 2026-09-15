@@ -5,6 +5,7 @@ import { formatElectionDateFromApi } from '~/lib/electionsHelpers';
 import type { PersonAccomplishment, PersonProfileIssueStatus } from '~/types/people';
 import { mapAttribution, mapStyleUrl } from '~/lib/env';
 import type { SectionOverrides } from '~/PageSections';
+import { GOODPARTY_PLEDGE_ANCHOR_ID } from '~/PageSections/GoodPartyOrgPledgeSection';
 import type { TokenMap } from '~/lib/resolveTokens';
 import type { CandidateCard } from '~/ui/CandidatesBlock';
 import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
@@ -737,10 +738,32 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 		!view.unpublished &&
 		view.persona !== 'past' &&
 		view.persona !== 'officeholder';
-	// The pledge explainer is claimed content across every persona (Figma A/B/C/G
-	// all show it once claimed). Unclaimed empowered pages lead with the claim
-	// prompt instead, so it stays hidden there.
-	const showPledge = view.claimed;
+	// The pledge band explains what the GoodParty.org pledge IS, in the third
+	// person ("Candidates run and serve as…"), so it asserts nothing about the
+	// person whose page it sits on. That is what lets it run on every profile
+	// (marketing, 2026-09-15): the hero states this person's pledge status and the
+	// band defines the thing being referred to, whichever way the status went.
+	//
+	// It was claimed-only while the copy was first-person; if the copy ever goes
+	// back to "I will…", this gate has to come back with it, because a pledge
+	// written in the person's own voice on the page of someone who has not taken
+	// it is a false statement about a named person.
+	const showPledge = true;
+
+	// So the hero's status line always has somewhere to go: the band defines the
+	// pledge for the negative and ineligible lines as much as the affirmative one.
+	// `none` (removed profiles) renders no line at all, so it gets no link.
+	const attribution = pledgeAttribution(view);
+	const attributionHref = attribution === 'none' ? undefined : `#${GOODPARTY_PLEDGE_ANCHOR_ID}`;
+
+	// Someone who has not taken the pledge gets an invitation to take it instead
+	// of an invitation to read about it. `signup` carries the app sign-up URL of
+	// its own (see componentButtonDestinations.test.tsx); it did not always, so do
+	// not swap it for a type that renders a bare <button>.
+	const pledgeButton: NonNullable<SectionOverrides['component_goodPartyOrgPledge']>['button'] =
+		attribution === 'notPledged'
+			? { buttonType: 'signup', label: 'Take the pledge' }
+			: { buttonType: 'internal', href: '/about', label: 'Learn more' };
 
 	// The person-profile CTA band sits below the content well (Figma order):
 	//  - claimed (A/B/C/G)   → generic centered "Join the movement" sign-up CTA
@@ -835,7 +858,8 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			// here — it marks the page as a GoodParty.org profile rather than making
 			// a claim about the pledge, and moving it onto `pledged` would strip it
 			// from every claimed officeholder.
-			attribution: pledgeAttribution(view),
+			attribution,
+			attributionHref,
 			showBrandMark: view.claimed,
 		},
 		component_claimProfileBlock: {
@@ -858,7 +882,7 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			cardLayout: 'separated',
 			hidden: contentCards.length === 0 && !sidebar,
 		},
-		component_goodPartyOrgPledge: { hidden: !showPledge },
+		component_goodPartyOrgPledge: { hidden: !showPledge, button: pledgeButton },
 		component_electionsIndexBlock: {
 			elections,
 			stateSlug: view.electionsIndex?.stateSlug,

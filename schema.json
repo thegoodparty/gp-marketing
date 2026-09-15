@@ -2130,6 +2130,23 @@
     }
   },
   {
+    "name": "field_columnLayout12Columns",
+    "type": "type",
+    "value": {
+      "type": "union",
+      "of": [
+        {
+          "type": "string",
+          "value": "1Col"
+        },
+        {
+          "type": "string",
+          "value": "2Col"
+        }
+      ]
+    }
+  },
+  {
     "name": "field_pageName",
     "type": "type",
     "value": {
@@ -13313,6 +13330,14 @@
           "value": {
             "type": "inline",
             "name": "field_blockColorCreamMidnight"
+          },
+          "optional": true
+        },
+        "field_columnLayout12Columns": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_columnLayout12Columns"
           },
           "optional": true
         }

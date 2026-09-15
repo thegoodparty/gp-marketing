@@ -1,6 +1,6 @@
 import { stegaClean } from 'next-sanity';
 
-import type { Sections } from '~/PageSections';
+import type { Sections, SectionOverrides } from '~/PageSections';
 import { transformButtons, normalizeRawCtaToButton } from '~/lib/buttonTransformer.tsx';
 import type { TokenMap } from '~/lib/resolveTokens';
 import { resolveSectionText, resolveRichTextTokens } from '~/lib/resolveSectionText';
@@ -13,7 +13,15 @@ import { RichData } from '~/ui/RichData.tsx';
 
 type Props = Extract<Sections, { _type: 'component_goodPartyOrgPledge' }> & {
 	tokens?: TokenMap;
+	pledgeOverride?: SectionOverrides['component_goodPartyOrgPledge'];
 };
+
+/**
+ * Anchor the band carries when an editor has not authored one, so in-page links
+ * to it (the /people hero's pledge line) have a target that does not depend on
+ * a Sanity field being filled in. An authored `field_anchorId` still wins.
+ */
+export const GOODPARTY_PLEDGE_ANCHOR_ID = 'goodparty-pledge';
 
 type PledgeSection = Extract<Sections, { _type: 'component_goodPartyOrgPledge' }>;
 type PledgeSummaryInfo = PledgeSection['summaryInfo'];
@@ -40,7 +48,7 @@ export function resolveGoodPartyOrgPledgeCard(card: PledgeCardFields, tokens?: T
 	};
 }
 
-export function GoodPartyOrgPledgeSection({ tokens, ...section }: Props) {
+export function GoodPartyOrgPledgeSection({ tokens, pledgeOverride, ...section }: Props) {
 	const backgroundColor = section.goodPartyOrgPledgeDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(stegaClean(section.goodPartyOrgPledgeDesignSettings.field_blockColorCreamMidnight))
 		: 'cream';
@@ -49,19 +57,28 @@ export function GoodPartyOrgPledgeSection({ tokens, ...section }: Props) {
 		? resolveIconColor(stegaClean(section.goodPartyOrgPledgeDesignSettings.field_iconColor6ColorsWhiteMixed))
 		: 'blue';
 	const iconColor = resolvedIconColor === 'white' ? 'blue' : resolvedIconColor;
+	const columnLayout = stegaClean(section.goodPartyOrgPledgeDesignSettings?.field_columnLayout12Columns) === '1Col' ? '1Col' : '2Col';
 	const header = resolveGoodPartyOrgPledgeHeader(section.summaryInfo, tokens);
+	// Person profiles supply this button per state (the pledge status decides
+	// whether it invites you to read the pledge or to take it), so the override
+	// replaces the authored one outright rather than appending to it.
+	const footerButtons = pledgeOverride?.button ? [pledgeOverride.button] : transformButtons(section.summaryInfo?.list_buttons);
 
 	return (
-		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='GoodParty.org Pledge'>
+		<section
+			id={stegaClean(section.componentSettings?.field_anchorId) || GOODPARTY_PLEDGE_ANCHOR_ID}
+			data-section='GoodParty.org Pledge'
+		>
 			<GoodPartyOrgPledge
 				backgroundColor={backgroundColor}
 				iconBg={iconColor}
+				columnLayout={columnLayout}
+				footerButtons={footerButtons}
 				header={{
 					title: header.title,
 					label: header.label,
 					caption: header.caption,
 					copy: <RichData value={header.copy} />,
-					buttons: transformButtons(section.summaryInfo?.list_buttons),
 					textSize: resolveTextSize(section.summaryInfo?.field_textSize),
 				}}
 				pledgeCards={section.goodPartyOrgPledgeItems?.list_pledgeCards?.map(card => {

@@ -45,6 +45,7 @@ import { ListOfOfficesBlockSection } from '~/PageSections/ListOfOfficesBlockSect
 import { EmbeddedBlockSection } from '~/PageSections/EmbeddedBlockSection';
 import { TeamValuesBlockSection } from '~/PageSections/TeamValuesBlockSection';
 import { TestimonialAutoScrollSection } from '~/PageSections/TestimonialAutoScrollSection';
+import { TestimonialBlockWithLinkSection } from '~/PageSections/TestimonialBlockWithLinkSection';
 import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
 import type { TokenMap } from '~/lib/resolveTokens';
 
@@ -588,6 +589,12 @@ export function PageSections(props: Props) {
 						return (
 							<Boundary key={section._key} componentName='Testimonials Auto Scroll'>
 								<TestimonialAutoScrollSection {...section} />
+							</Boundary>
+						);
+					case 'component_testimonialBlockWithLink':
+						return (
+							<Boundary key={section._key} componentName='Testimonial Block With Link'>
+								<TestimonialBlockWithLinkSection {...section} tokens={props.tokens} />
 							</Boundary>
 						);
 					default:

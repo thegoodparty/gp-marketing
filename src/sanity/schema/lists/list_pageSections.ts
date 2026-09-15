@@ -117,7 +117,13 @@ export const list_pageSections = {
 				{
 					name: 'quote',
 					title: 'Quote',
-					of: ['component_twoUpCardBlock', 'component_carouselBlock', 'component_testimonialBlock', 'component_testimonialAutoScroll'],
+					of: [
+						'component_testimonialBlockWithLink',
+						'component_twoUpCardBlock',
+						'component_carouselBlock',
+						'component_testimonialBlock',
+						'component_testimonialAutoScroll',
+					],
 				},
 				{
 					name: 'cards',
@@ -189,6 +195,10 @@ export const list_pageSections = {
 	},
 	type: 'array',
 	of: [
+		{
+			title: 'Testimonial Block With Link',
+			type: 'component_testimonialBlockWithLink',
+		},
 		{
 			title: 'Hero',
 			type: 'component_hero',

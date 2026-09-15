@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import {
 	buildBreadcrumbSchema,
 	buildPersonSchema,
@@ -17,7 +17,7 @@ import {
 	buildPersonSectionOverrides,
 } from '~/components/people/personSectionOverrides';
 import { renderElectionTemplatePage } from '~/lib/renderElectionTemplatePage';
-import { getPersonBySlug } from '~/lib/electionsApi';
+import { getPersonBySlug, getPersonMergeSurvivorChain } from '~/lib/electionsApi';
 import { getDevPersonProfileView, isDevPeopleFixturesEnabled } from '~/lib/devPeopleProfileFixtures';
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 
@@ -35,6 +35,36 @@ function canonicalPath(view: PersonProfileView): string {
 	return `/people/${view.canonicalSlug}`;
 }
 
+/**
+ * Loads a profile by id, following the purge forwarding chain when that id no
+ * longer resolves.
+ *
+ * Both URL forms need this, for different reasons. The legacy full-uuid form
+ * never reaches election-api's by-slug route, so nothing else would follow the
+ * forwarding address for it. The current `<base>-<id8>` form does reach by-slug
+ * — but that response is cached for an hour and carries no per-person tag (we
+ * only learn the id from the response, so there is nothing to tag it with),
+ * which means gp-api cannot bust it on a purge. Until it expires it keeps
+ * naming the retired person, whose profile no longer loads.
+ *
+ * The survivor's own profile rules still apply, so a privacy takedown or an
+ * owner-deleted profile on the survivor keeps 404-ing rather than being
+ * resurfaced by a forward.
+ */
+async function loadProfileFollowingMerges(personId: string): Promise<PersonProfileView | null> {
+	const view = await loadPersonProfile(personId);
+	if (view) return view;
+
+	// Only reached by a request already bound for a 404, so the extra lookups
+	// cost nothing on any path that renders.
+	for (const survivingId of await getPersonMergeSurvivorChain(personId)) {
+		const survivorView = await loadPersonProfile(survivingId);
+		if (survivorView) return survivorView;
+	}
+
+	return null;
+}
+
 async function resolveView(slug: string): Promise<PersonProfileView | null> {
 	// Dev-only Figma-parity aid: when PEOPLE_DEV_FIXTURES=true, serve the enriched
 	// (mock-volume) harness fixtures through the real render pipeline. No-op in
@@ -48,14 +78,14 @@ async function resolveView(slug: string): Promise<PersonProfileView | null> {
 	// their trailing full personId; the canonical redirect below sends them to the
 	// current /people/<base>-<id8>.
 	const legacyPersonId = extractPersonId(slug);
-	if (legacyPersonId) return loadPersonProfile(legacyPersonId);
+	if (legacyPersonId) return loadProfileFollowingMerges(legacyPersonId);
 
 	// Current /people/<base>-<id8>: election-api parses the 8-hex suffix and
 	// resolves the person via an indexed id-range scan; then load the full
 	// profile by id (so per-person `person:<uuid>` cache-busting still applies).
 	const person = await getPersonBySlug(slug);
 	if (!person) return null;
-	return loadPersonProfile(person.id);
+	return loadProfileFollowingMerges(person.id);
 }
 
 export default async function Page({ params }: { params: Promise<PageParams> }) {
@@ -68,9 +98,16 @@ export default async function Page({ params }: { params: Promise<PageParams> }) 
 
 	// Keep a single canonical URL: redirect stale/name-only slugs to the
 	// name-based slug the profile currently resolves to.
+	//
+	// 308, not 307: every reason we get here is durable — a rename, the legacy
+	// full-uuid scheme, or a duplicate the data team purged. A temporary
+	// redirect leaves Google indexing the old URL and transfers none of its link
+	// equity to the survivor, which is most of the point of forwarding at all.
+	// Resolution is by id, not name, so even a browser-cached 308 from before a
+	// later rename still lands somewhere that resolves.
 	const canonical = canonicalPath(view);
 	if (`/people/${slug}` !== canonical) {
-		redirect(canonical);
+		permanentRedirect(canonical);
 	}
 
 	const url = toAbsoluteUrl(canonical);

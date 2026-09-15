@@ -4,6 +4,8 @@ import { __resetElectionApiAuthForTests } from './electionApiAuth';
 import {
 	getCitySlugToCountySlugMap,
 	getCountyChildPlaces,
+	getPersonMergeSurvivorChain,
+	getPersonMergeSurvivorId,
 	getRemovedPersonIds,
 	isStateIndexDistrictPlace,
 	resolveCountySlugForPlace,
@@ -587,5 +589,98 @@ describe('getRemovedPersonIds', () => {
 
 		expect(await getRemovedPersonIds()).toBeNull();
 		errorSpy.mockRestore();
+	});
+});
+
+describe('getPersonMergeSurvivorId', () => {
+	const RETIRED = '11111111-1111-1111-1111-111111111111';
+	const SURVIVOR = '22222222-2222-2222-2222-222222222222';
+	const isMergeLookup = (url: string) => url.includes(`/v1/person-merges/${RETIRED}`);
+
+	test('returns the survivor for a purged duplicate', async () => {
+		withFetchMock([
+			{ match: isMergeLookup, body: { retiredId: RETIRED, survivingId: SURVIVOR } },
+		]);
+
+		expect(await getPersonMergeSurvivorId(RETIRED)).toBe(SURVIVOR);
+	});
+
+	// Overwhelmingly the common case: the id was simply never retired, which
+	// election-api answers with a 404. Only a real merge row may forward a URL.
+	test('returns null when the id was never retired', async () => {
+		withFetchMock([{ match: isMergeLookup, body: null, status: 404 }]);
+
+		expect(await getPersonMergeSurvivorId(RETIRED)).toBeNull();
+	});
+
+	test('returns null rather than a partial row when survivingId is absent', async () => {
+		withFetchMock([{ match: isMergeLookup, body: { retiredId: RETIRED } }]);
+
+		expect(await getPersonMergeSurvivorId(RETIRED)).toBeNull();
+	});
+});
+
+describe('getPersonMergeSurvivorChain', () => {
+	const R = '11111111-1111-1111-1111-111111111111';
+	const S = '22222222-2222-2222-2222-222222222222';
+	const T = '33333333-3333-3333-3333-333333333333';
+	const mergeFor = (id: string) => (url: string) => url.includes(`/v1/person-merges/${id}`);
+
+	test('returns nothing for an id that was never retired', async () => {
+		withFetchMock([{ match: mergeFor(R), body: null, status: 404 }]);
+
+		expect(await getPersonMergeSurvivorChain(R)).toEqual([]);
+	});
+
+	test('stops at the terminal survivor', async () => {
+		withFetchMock([
+			{ match: mergeFor(R), body: { survivingId: S } },
+			{ match: mergeFor(S), body: null, status: 404 },
+		]);
+
+		expect(await getPersonMergeSurvivorChain(R)).toEqual([S]);
+	});
+
+	// The stale-cache case. Our answer for R is cached under R's own tag, so a
+	// later purge of S busts S's tag and not R's: the cached hop points at
+	// someone already gone. Re-asking about S is what reaches T.
+	test('keeps walking when the cached survivor was itself purged later', async () => {
+		withFetchMock([
+			{ match: mergeFor(R), body: { survivingId: S } },
+			{ match: mergeFor(S), body: { survivingId: T } },
+			{ match: mergeFor(T), body: null, status: 404 },
+		]);
+
+		expect(await getPersonMergeSurvivorChain(R)).toEqual([S, T]);
+	});
+
+	test('does not spin on a row that points at itself', async () => {
+		withFetchMock([{ match: mergeFor(R), body: { survivingId: R } }]);
+
+		expect(await getPersonMergeSurvivorChain(R)).toEqual([]);
+	});
+
+	test('does not spin on a cycle between two ids', async () => {
+		withFetchMock([
+			{ match: mergeFor(R), body: { survivingId: S } },
+			{ match: mergeFor(S), body: { survivingId: R } },
+		]);
+
+		// S only: R is where we started, and the caller has already tried it.
+		expect(await getPersonMergeSurvivorChain(R)).toEqual([S]);
+	});
+
+	test('bounds the walk on an unterminated chain', async () => {
+		// Every id forwards to a fresh one, so only the hop cap stops this.
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = String(input);
+			const id = url.slice(url.lastIndexOf('/') + 1);
+			return new Response(JSON.stringify({ survivingId: `${id}-next` }), {
+				status: 200,
+				headers: { 'content-type': 'application/json' },
+			});
+		}) as typeof fetch;
+
+		expect((await getPersonMergeSurvivorChain(R)).length).toBe(3);
 	});
 });

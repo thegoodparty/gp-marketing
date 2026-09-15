@@ -371,6 +371,62 @@ export async function getPersonBySlug(slug: string): Promise<PersonItem | null> 
 	return fetchJson<PersonItem>(url, CACHE_OPTIONS);
 }
 
+/**
+ * The person a purged duplicate forwards to, or null if this id was never
+ * retired. The data team purges duplicate Person rows on an ongoing basis;
+ * election-api keeps the forwarding address in PersonMerge and resolves it to
+ * the *terminal* survivor, so a survivor later purged itself still answers.
+ *
+ * Only `/people/<name>-<full-uuid>` (legacy) URLs need this: the current
+ * `<base>-<id8>` form is resolved by election-api's by-slug route, which
+ * consults PersonMerge itself. See PERSON_ID_RETIREMENT_HANDOFF.md.
+ *
+ * Tagged with the *retired* id so gp-api busting `person:<retiredId>` on the
+ * merge event reaches this lookup too.
+ */
+export async function getPersonMergeSurvivorId(retiredId: string): Promise<string | null> {
+	const url = `${ELECTIONS_API_BASE_URL}/v1/person-merges/${encodeURIComponent(retiredId)}`;
+	const merge = await fetchJson<{ survivingId?: string }>(url, personCacheOptions(retiredId));
+	return merge?.survivingId ?? null;
+}
+
+const MAX_PERSON_MERGE_HOPS = 3;
+
+/**
+ * Successive survivors for a purged id, nearest first, so a caller can try each
+ * until one actually loads. Empty when the id was never retired.
+ *
+ * Usually one id: election-api resolves to the *terminal* survivor, so the hop
+ * after it 404s and ends the walk. The extra hops exist because our answer is
+ * cached under the id we asked about — when that survivor is itself purged
+ * later, gp-api busts the survivor's tag, not this one, so the cached hop can
+ * point at someone already gone. Re-asking about that survivor reads a tag that
+ * *was* busted, which is what gets us to the real terminal survivor rather than
+ * 404-ing until the hour elapses.
+ */
+export async function getPersonMergeSurvivorChain(retiredId: string): Promise<string[]> {
+	const chain: string[] = [];
+	// Seeded with the id we were asked about: the caller has already tried that
+	// one, and a cycle pointing back at it must not put it in the chain again.
+	const seen = new Set([retiredId]);
+	let currentId = retiredId;
+
+	for (let hop = 0; hop < MAX_PERSON_MERGE_HOPS; hop++) {
+		const survivingId = await getPersonMergeSurvivorId(currentId);
+		// Not retired: for the first hop that means "never purged"; later it means
+		// we have reached the end of the chain.
+		if (!survivingId) break;
+		// A row pointing at itself, or back into the chain, is a data error the
+		// walk must not spin on.
+		if (seen.has(survivingId)) break;
+		seen.add(survivingId);
+		chain.push(survivingId);
+		currentId = survivingId;
+	}
+
+	return chain;
+}
+
 /** Office terms held by a person (election-api). */
 export async function getOfficeHoldersByPerson(personId: string): Promise<PersonOfficeHolder[]> {
 	const searchParams = new URLSearchParams({ personId, includePosition: 'true' });

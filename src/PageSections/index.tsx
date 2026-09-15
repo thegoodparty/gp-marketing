@@ -125,6 +125,12 @@ export type SectionOverrides = {
 		 * nothing. When omitted, falls back to `isEmpowered`.
 		 */
 		attribution?: 'empowered' | 'pledged' | 'notPledged' | 'pledgeIneligible' | 'none';
+		/**
+		 * When set, the attribution line links here — on /people, the in-page
+		 * anchor for the pledge band. Only pass it when the destination is
+		 * actually on the page; the hero cannot tell.
+		 */
+		attributionHref?: string;
 		/** GoodParty.org logo on the portrait and beside the attribution line. */
 		showBrandMark?: boolean;
 	};

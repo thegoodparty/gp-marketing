@@ -22,6 +22,11 @@ export const goodPartyOrgPledgeDesignSettings = {
 			name: 'field_blockColorCreamMidnight',
 			type: 'field_blockColorCreamMidnight',
 		},
+		{
+			title: 'Column Layout',
+			name: 'field_columnLayout12Columns',
+			type: 'field_columnLayout12Columns',
+		},
 	],
 	preview: {
 		select: {

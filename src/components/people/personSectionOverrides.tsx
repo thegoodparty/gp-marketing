@@ -5,6 +5,7 @@ import { formatElectionDateFromApi } from '~/lib/electionsHelpers';
 import type { PersonAccomplishment, PersonProfileIssueStatus } from '~/types/people';
 import { mapAttribution, mapStyleUrl } from '~/lib/env';
 import type { SectionOverrides } from '~/PageSections';
+import { GOODPARTY_PLEDGE_ANCHOR_ID } from '~/PageSections/GoodPartyOrgPledgeSection';
 import type { TokenMap } from '~/lib/resolveTokens';
 import type { CandidateCard } from '~/ui/CandidatesBlock';
 import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
@@ -742,6 +743,14 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	// prompt instead, so it stays hidden there.
 	const showPledge = view.claimed;
 
+	// The hero's pledge line links down to the band that spells the pledge out —
+	// but only when that band is on the page AND the line is the affirmative one.
+	// Claimed-but-unpledged profiles (B/G) render the band while the hero says
+	// "Has Not Taken…", and linking that sentence to the pledge would read as if
+	// it were a badge.
+	const attribution = pledgeAttribution(view);
+	const attributionHref = showPledge && attribution === 'pledged' ? `#${GOODPARTY_PLEDGE_ANCHOR_ID}` : undefined;
+
 	// The person-profile CTA band sits below the content well (Figma order):
 	//  - claimed (A/B/C/G)   → generic centered "Join the movement" sign-up CTA
 	//  - unclaimed empowered candidates (D/F) → full-width claim CTA band
@@ -835,7 +844,8 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			// here — it marks the page as a GoodParty.org profile rather than making
 			// a claim about the pledge, and moving it onto `pledged` would strip it
 			// from every claimed officeholder.
-			attribution: pledgeAttribution(view),
+			attribution,
+			attributionHref,
 			showBrandMark: view.claimed,
 		},
 		component_claimProfileBlock: {

@@ -15,6 +15,13 @@ type Props = Extract<Sections, { _type: 'component_goodPartyOrgPledge' }> & {
 	tokens?: TokenMap;
 };
 
+/**
+ * Anchor the band carries when an editor has not authored one, so in-page links
+ * to it (the /people hero's pledge line) have a target that does not depend on
+ * a Sanity field being filled in. An authored `field_anchorId` still wins.
+ */
+export const GOODPARTY_PLEDGE_ANCHOR_ID = 'goodparty-pledge';
+
 type PledgeSection = Extract<Sections, { _type: 'component_goodPartyOrgPledge' }>;
 type PledgeSummaryInfo = PledgeSection['summaryInfo'];
 type PledgeCardFields = NonNullable<
@@ -49,19 +56,24 @@ export function GoodPartyOrgPledgeSection({ tokens, ...section }: Props) {
 		? resolveIconColor(stegaClean(section.goodPartyOrgPledgeDesignSettings.field_iconColor6ColorsWhiteMixed))
 		: 'blue';
 	const iconColor = resolvedIconColor === 'white' ? 'blue' : resolvedIconColor;
+	const columnLayout = stegaClean(section.goodPartyOrgPledgeDesignSettings?.field_columnLayout12Columns) === '1Col' ? '1Col' : '2Col';
 	const header = resolveGoodPartyOrgPledgeHeader(section.summaryInfo, tokens);
 
 	return (
-		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='GoodParty.org Pledge'>
+		<section
+			id={stegaClean(section.componentSettings?.field_anchorId) || GOODPARTY_PLEDGE_ANCHOR_ID}
+			data-section='GoodParty.org Pledge'
+		>
 			<GoodPartyOrgPledge
 				backgroundColor={backgroundColor}
 				iconBg={iconColor}
+				columnLayout={columnLayout}
+				footerButtons={transformButtons(section.summaryInfo?.list_buttons)}
 				header={{
 					title: header.title,
 					label: header.label,
 					caption: header.caption,
 					copy: <RichData value={header.copy} />,
-					buttons: transformButtons(section.summaryInfo?.list_buttons),
 					textSize: resolveTextSize(section.summaryInfo?.field_textSize),
 				}}
 				pledgeCards={section.goodPartyOrgPledgeItems?.list_pledgeCards?.map(card => {

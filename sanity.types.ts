@@ -391,6 +391,8 @@ export type Field_socialChannelUrl = string;
 
 export type Field_columnLayout23Columns = '2Col' | '3Col';
 
+export type Field_columnLayout12Columns = '1Col' | '2Col';
+
 export type Field_pageName = string;
 
 export type Field_statValue = string;
@@ -2362,6 +2364,7 @@ export type GoodPartyOrgPledgeDesignSettings = {
 	_type: 'goodPartyOrgPledgeDesignSettings';
 	field_iconColor6ColorsWhiteMixed?: Field_iconColor6ColorsWhiteMixed;
 	field_blockColorCreamMidnight?: Field_blockColorCreamMidnight;
+	field_columnLayout12Columns?: Field_columnLayout12Columns;
 };
 
 export type StepperBlockItem = {
@@ -3494,6 +3497,7 @@ export type AllSanitySchemaTypes =
 	| Field_registeredOfficeAddress
 	| Field_socialChannelUrl
 	| Field_columnLayout23Columns
+	| Field_columnLayout12Columns
 	| Field_pageName
 	| Field_statValue
 	| Field_primaryPostalAddress

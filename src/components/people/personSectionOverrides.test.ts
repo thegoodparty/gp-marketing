@@ -628,3 +628,61 @@ describe('the claimed CTA band button goes somewhere', () => {
 		}
 	});
 });
+
+/**
+ * The hero's pledge line links down to the band that spells the pledge out.
+ *
+ * The gate is the affirmative line, not the band's own visibility: `showPledge`
+ * is `claimed`, but B and G are claimed with `isPledged` unset, so they render
+ * the band under a hero that says "Has Not Taken the GoodParty.org Pledge".
+ * Linking that sentence to the pledge would dress a negative as a badge, and on
+ * unclaimed pages the band is not on the page to scroll to at all.
+ */
+describe('the hero pledge line links to the pledge band', () => {
+	const hero = (slug: string) => {
+		const view = getDevPersonProfileView(slug);
+		if (!view) throw new Error(`no dev fixture for ${slug}`);
+		return { view, override: buildPersonSectionOverrides(view).component_profileHero };
+	};
+
+	test('pledged claimed profiles link to the band anchor', () => {
+		for (const [state, slug] of [
+			['A', 'allen-slagle-74eee01a'],
+			['C', 'susan-overman-ad914b82'],
+		] as const) {
+			const { view, override } = hero(slug);
+			expect([state, view.claimed, view.pledged]).toEqual([state, true, true]);
+			expect([state, override?.attribution]).toEqual([state, 'pledged']);
+			expect([state, override?.attributionHref]).toEqual([state, '#goodparty-pledge']);
+		}
+	});
+
+	test('claimed but unpledged profiles carry no link', () => {
+		for (const [state, slug] of [
+			['B', 'tracy-good-ecff49d3'],
+			['G', 'bill-fortner-61a42912'],
+		] as const) {
+			const { view, override } = hero(slug);
+			expect([state, view.claimed, view.pledged]).toEqual([state, true, false]);
+			expect([state, override?.attribution]).toEqual([state, 'notPledged']);
+			expect([state, override?.attributionHref]).toEqual([state, undefined]);
+		}
+	});
+
+	test('unclaimed and removed profiles carry no link, because the band is not there', () => {
+		for (const slug of [
+			'kim-byrd-b77f912d',
+			'rob-zotti-d8c578fb',
+			'tim-ficken-0a951485',
+			'gregory-schreurs-136cadf0',
+			'jeb-hanson-3753676b',
+			'deb-craft-f88e7434',
+			'x-27255f40',
+			'x-3412f69c',
+		]) {
+			const { view, override } = hero(slug);
+			expect([slug, view.claimed]).toEqual([slug, false]);
+			expect([slug, override?.attributionHref]).toEqual([slug, undefined]);
+		}
+	});
+});

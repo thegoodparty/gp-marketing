@@ -1,6 +1,6 @@
 import { stegaClean } from 'next-sanity';
 
-import type { Sections } from '~/PageSections';
+import type { Sections, SectionOverrides } from '~/PageSections';
 import { transformButtons, normalizeRawCtaToButton } from '~/lib/buttonTransformer.tsx';
 import type { TokenMap } from '~/lib/resolveTokens';
 import { resolveSectionText, resolveRichTextTokens } from '~/lib/resolveSectionText';
@@ -13,6 +13,7 @@ import { RichData } from '~/ui/RichData.tsx';
 
 type Props = Extract<Sections, { _type: 'component_goodPartyOrgPledge' }> & {
 	tokens?: TokenMap;
+	pledgeOverride?: SectionOverrides['component_goodPartyOrgPledge'];
 };
 
 /**
@@ -47,7 +48,7 @@ export function resolveGoodPartyOrgPledgeCard(card: PledgeCardFields, tokens?: T
 	};
 }
 
-export function GoodPartyOrgPledgeSection({ tokens, ...section }: Props) {
+export function GoodPartyOrgPledgeSection({ tokens, pledgeOverride, ...section }: Props) {
 	const backgroundColor = section.goodPartyOrgPledgeDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(stegaClean(section.goodPartyOrgPledgeDesignSettings.field_blockColorCreamMidnight))
 		: 'cream';
@@ -58,6 +59,10 @@ export function GoodPartyOrgPledgeSection({ tokens, ...section }: Props) {
 	const iconColor = resolvedIconColor === 'white' ? 'blue' : resolvedIconColor;
 	const columnLayout = stegaClean(section.goodPartyOrgPledgeDesignSettings?.field_columnLayout12Columns) === '1Col' ? '1Col' : '2Col';
 	const header = resolveGoodPartyOrgPledgeHeader(section.summaryInfo, tokens);
+	// Person profiles supply this button per state (the pledge status decides
+	// whether it invites you to read the pledge or to take it), so the override
+	// replaces the authored one outright rather than appending to it.
+	const footerButtons = pledgeOverride?.button ? [pledgeOverride.button] : transformButtons(section.summaryInfo?.list_buttons);
 
 	return (
 		<section
@@ -68,7 +73,7 @@ export function GoodPartyOrgPledgeSection({ tokens, ...section }: Props) {
 				backgroundColor={backgroundColor}
 				iconBg={iconColor}
 				columnLayout={columnLayout}
-				footerButtons={transformButtons(section.summaryInfo?.list_buttons)}
+				footerButtons={footerButtons}
 				header={{
 					title: header.title,
 					label: header.label,

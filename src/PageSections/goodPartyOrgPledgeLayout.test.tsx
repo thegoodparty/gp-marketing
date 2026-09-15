@@ -81,14 +81,15 @@ async function render(element: React.ReactElement) {
 }
 
 /** The pledge block exactly as the person-profile seed ships it. */
-async function renderSeededPledge() {
+async function renderSeededPledge(pledgeOverride?: { button?: unknown }) {
 	const { PERSON_PROFILE_SECTIONS } = await import('~/components/people/personProfileSections');
 	const { GoodPartyOrgPledgeSection } = await import('./GoodPartyOrgPledgeSection');
 
 	const section = PERSON_PROFILE_SECTIONS.find(s => s._type === 'component_goodPartyOrgPledge');
 	if (!section) throw new Error('no pledge block in PERSON_PROFILE_SECTIONS');
 
-	await render(<GoodPartyOrgPledgeSection {...(section as Parameters<typeof GoodPartyOrgPledgeSection>[0])} />);
+	const props = { ...section, pledgeOverride } as Parameters<typeof GoodPartyOrgPledgeSection>[0];
+	await render(<GoodPartyOrgPledgeSection {...props} />);
 	const band = document.querySelector('[data-component="GoodPartyOrgPledge"]');
 	if (!band) throw new Error('pledge band did not render');
 	return band;
@@ -119,6 +120,20 @@ describe('the person-profile pledge band', () => {
 		expect(band.textContent).toContain('as long as they pledge to be:');
 	});
 
+	/**
+	 * The band runs on every profile, including people who have not taken the
+	 * pledge, so the copy has to describe the pledge rather than voice it. First
+	 * person ("I will run and serve…") would make it a false statement about
+	 * those people — the reason the band used to be claimed-only.
+	 */
+	test('describes the pledge in the third person', async () => {
+		const band = await renderSeededPledge();
+		const text = band.textContent ?? '';
+
+		expect(text).toContain('Candidates run and serve as nonpartisan');
+		expect(text).not.toMatch(/\bI will\b|\bmy funding\b|\bmy constituents\b/);
+	});
+
 	test('has one Learn more link for the whole band, pointing at /about', async () => {
 		const band = await renderSeededPledge();
 		const links = [...band.querySelectorAll('a')];
@@ -131,6 +146,18 @@ describe('the person-profile pledge band', () => {
 		await renderSeededPledge();
 
 		expect(document.getElementById(GOODPARTY_PLEDGE_ANCHOR_ID)).not.toBeNull();
+	});
+
+	test('a per-profile button override replaces the authored one', async () => {
+		const band = await renderSeededPledge({ button: { buttonType: 'signup', label: 'Take the pledge' } });
+		const links = [...band.querySelectorAll('a')];
+
+		// One button still, and the authored "Learn more" is gone rather than joined.
+		// `signup` adds the out-to-the-app arrow glyph, so match the label loosely.
+		expect(links.length).toBe(1);
+		expect(links[0]?.textContent).toContain('Take the pledge');
+		expect(links[0]?.textContent).not.toContain('Learn more');
+		expect(links[0]?.getAttribute('href')).toBe('https://app.goodparty.org/sign-up');
 	});
 
 	test('renders no per-element buttons', async () => {

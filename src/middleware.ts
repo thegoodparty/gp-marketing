@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { lpRedirectDestination } from '~/lib/lp-redirects';
 import {
 	type RedirectMap,
 	fetchRedirectMapFromSanityCdn,
@@ -79,6 +80,14 @@ function maybeBootstrapAmplitudeDeviceCookie(request: NextRequest): NextResponse
 }
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
+	const lpDestination = lpRedirectDestination(request.headers.get('host'), request.nextUrl.pathname);
+	if (lpDestination) {
+		// Keep the query string so UTM/ad params on old lp links survive the hop.
+		const destination = new URL(lpDestination);
+		destination.search = request.nextUrl.search;
+		return withPreviewNoIndex(NextResponse.redirect(destination, 308));
+	}
+
 	const withoutHubSpot = urlWithoutHubSpotTrackingParams(request.nextUrl);
 	if (withoutHubSpot) {
 		return withPreviewNoIndex(NextResponse.redirect(withoutHubSpot, 308));

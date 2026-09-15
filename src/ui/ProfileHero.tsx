@@ -125,6 +125,16 @@ export type ProfileHeroProps = {
 	 */
 	attribution?: AttributionMode;
 	/**
+	 * When set, the attribution line becomes a link to this href — on /people the
+	 * in-page anchor for the pledge band, so the reader can jump from "Has Taken
+	 * the GoodParty.org Pledge" to what the pledge says.
+	 *
+	 * The caller decides: the hero cannot tell whether the pledge band is on the
+	 * page (it is gated per profile state), and a link to a missing anchor is a
+	 * dead click.
+	 */
+	attributionHref?: string;
+	/**
 	 * GoodParty.org mark — the logo on the portrait and the one beside the
 	 * attribution line. Separate from `attribution` because the mark says the
 	 * profile is a GoodParty.org one while the line states a fact about the
@@ -161,6 +171,15 @@ export function ProfileHero(props: ProfileHeroProps) {
 			)}
 		</Text>
 	);
+
+	const renderAttributionCopy = (mode: Exclude<AttributionMode, 'none'>) =>
+		props.attributionHref ? (
+			<Anchor href={props.attributionHref} className='underline underline-offset-4'>
+				{ATTRIBUTION_COPY[mode]}
+			</Anchor>
+		) : (
+			ATTRIBUTION_COPY[mode]
+		);
 
 	// `attribution` wins when provided; otherwise fall back to legacy `isEmpowered`.
 	const attributionMode: AttributionMode = props.attribution ?? (props.isEmpowered ? 'empowered' : 'none');
@@ -232,11 +251,11 @@ export function ProfileHero(props: ProfileHeroProps) {
 							(isAffirmative ? (
 								<div className={attribution()}>
 									{showBrandMark && <Logo className={attributionIcon()} />}
-									<span className={attributionText()}>{ATTRIBUTION_COPY[attributionMode]}</span>
+									<span className={attributionText()}>{renderAttributionCopy(attributionMode)}</span>
 								</div>
 							) : (
 								<Text as="span" styleType="body-2" className={attributionMuted()}>
-									{ATTRIBUTION_COPY[attributionMode]}
+									{renderAttributionCopy(attributionMode)}
 								</Text>
 							))}
 					</div>

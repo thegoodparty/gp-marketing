@@ -125,11 +125,23 @@ export type SectionOverrides = {
 		 * nothing. When omitted, falls back to `isEmpowered`.
 		 */
 		attribution?: 'empowered' | 'pledged' | 'notPledged' | 'pledgeIneligible' | 'none';
+		/**
+		 * When set, the attribution line links here — on /people, the in-page
+		 * anchor for the pledge band. Only pass it when the destination is
+		 * actually on the page; the hero cannot tell.
+		 */
+		attributionHref?: string;
 		/** GoodParty.org logo on the portrait and beside the attribution line. */
 		showBrandMark?: boolean;
 	};
 	component_goodPartyOrgPledge?: {
 		hidden?: boolean;
+		/**
+		 * Replaces the CMS-authored button under the band. Person profiles set it
+		 * per state: "Take the pledge" into sign-up for someone who has not taken
+		 * it, "Learn more" otherwise.
+		 */
+		button?: import('~/ui/Inputs/Button').ComponentButtonProps;
 	};
 	component_ctaBannerBlock?: {
 		hidden?: boolean;
@@ -500,15 +512,17 @@ export function PageSections(props: Props) {
 								<FeaturedCitiesBlockSection {...section} />
 							</Boundary>
 						);
-					case 'component_goodPartyOrgPledge':
-						if (props.sectionOverrides?.component_goodPartyOrgPledge?.hidden) {
+					case 'component_goodPartyOrgPledge': {
+						const pledgeOverride = props.sectionOverrides?.component_goodPartyOrgPledge;
+						if (pledgeOverride?.hidden) {
 							return <Fragment key={section._key} />;
 						}
 						return (
 							<Boundary key={section._key} componentName='GoodParty.org Pledge'>
-								<GoodPartyOrgPledgeSection {...section} tokens={props.tokens} />
+								<GoodPartyOrgPledgeSection {...section} tokens={props.tokens} pledgeOverride={pledgeOverride} />
 							</Boundary>
 						);
+					}
 					case 'component_locationLandingPageHero':
 						return (
 							<Boundary key={section._key} componentName='Location Landing Page Hero'>

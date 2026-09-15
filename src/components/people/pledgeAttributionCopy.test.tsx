@@ -3,19 +3,27 @@ import { JSDOM } from 'jsdom';
 import * as React from 'react';
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
+import { ATTRIBUTION_COPY } from '~/ui/_lib/attributionCopy';
 
 /**
  * Pins the three hero attribution lines word for word (marketing, 2026-08-17,
- * approved by Emily and Jack):
- *   pledged          → "Has Taken the GoodParty.org Pledge"
- *   notPledged       → "Has Not Taken the GoodParty.org Pledge"
- *   pledgeIneligible → "Ineligible for the GoodParty.org Pledge Due to Partisan Affiliation"
+ * approved by Emily and Jack; recased to sentence case 2026-09-15 by Emily):
+ *   pledged          → "Has taken the GoodParty.org Pledge"
+ *   notPledged       → "Has not taken the GoodParty.org Pledge"
+ *   pledgeIneligible → "Ineligible for the GoodParty.org Pledge due to partisan affiliation"
  *
  * These are statements about named real people, so the wording is not ours to
- * tidy: "Has Not Taken" is not "Has not taken the pledge", and the partisan line
- * names the reason rather than implying a choice. `personSectionOverrides.test`
- * pins which state gets which line; this pins what those lines say, which
- * nothing else reads.
+ * tidy: the negative line says the person has not taken it rather than softening
+ * to something vaguer, and the partisan line names the reason rather than
+ * implying a choice. Only the casing changed in September; every assertion the
+ * lines make is the one marketing approved in August.
+ *
+ * "GoodParty.org Pledge" stays title case inside all three — it is the pledge's
+ * name, and it is also the only part of the line that carries the link to the
+ * pledge band (see the linking suite below).
+ *
+ * `personSectionOverrides.test` pins which state gets which line; this pins what
+ * those lines say, which nothing else reads.
  *
  * Also pins that the /candidate framing ("Empowered by GoodParty.org") is
  * untouched — it shares this component and was not part of the request.
@@ -122,19 +130,19 @@ describe('the hero pledge lines say exactly what marketing approved', () => {
 	test('a person who has taken the pledge', async () => {
 		await renderHero({ attribution: 'pledged', showBrandMark: true });
 
-		expect(attributionText()).toBe('Has Taken the GoodParty.org Pledge');
+		expect(attributionText()).toBe('Has taken the GoodParty.org Pledge');
 	});
 
 	test('a person who has not', async () => {
 		await renderHero({ attribution: 'notPledged', showBrandMark: false });
 
-		expect(attributionText()).toBe('Has Not Taken the GoodParty.org Pledge');
+		expect(attributionText()).toBe('Has not taken the GoodParty.org Pledge');
 	});
 
 	test('a major-party affiliate, who cannot', async () => {
 		await renderHero({ attribution: 'pledgeIneligible', showBrandMark: false });
 
-		expect(attributionText()).toBe('Ineligible for the GoodParty.org Pledge Due to Partisan Affiliation');
+		expect(attributionText()).toBe('Ineligible for the GoodParty.org Pledge due to partisan affiliation');
 	});
 
 	test('a removed profile says nothing about the pledge either way', async () => {
@@ -154,14 +162,67 @@ describe('the GoodParty.org mark is independent of the line', () => {
 	test('a claimed profile carries the mark even when the line is negative', async () => {
 		await renderHero({ attribution: 'notPledged', showBrandMark: true });
 
-		expect(attributionText()).toBe('Has Not Taken the GoodParty.org Pledge');
+		expect(attributionText()).toBe('Has not taken the GoodParty.org Pledge');
 		expect(markCount()).toBeGreaterThan(0);
 	});
 
 	test('an unclaimed profile carries none, however affirmative the line', async () => {
 		await renderHero({ attribution: 'pledged', showBrandMark: false });
 
-		expect(attributionText()).toBe('Has Taken the GoodParty.org Pledge');
+		expect(attributionText()).toBe('Has taken the GoodParty.org Pledge');
 		expect(markCount()).toBe(0);
+	});
+});
+
+/**
+ * Only the pledge's name carries the link (marketing, 2026-09-15). The sentence
+ * asserts something about a named person; the link points at the pledge, so
+ * linking the whole sentence would read as if the assertion itself were the
+ * destination. Asserted on the anchor's own text rather than on the line, since
+ * the line's text is identical either way.
+ */
+describe('only "GoodParty.org Pledge" is the link', () => {
+	const PLEDGE_ANCHOR = '#goodparty-pledge';
+
+	function anchors(): { text: string; href: string | null }[] {
+		const hero = document.querySelector("[data-component='ProfileHero']");
+		if (!hero) throw new Error('expected the hero to render');
+		return [...hero.querySelectorAll('a')].map(a => ({
+			text: a.textContent?.trim() ?? '',
+			href: a.getAttribute('href'),
+		}));
+	}
+
+	for (const mode of ['pledged', 'notPledged', 'pledgeIneligible'] as const) {
+		test(`${mode} links the pledge name and nothing more`, async () => {
+			await renderHero({ attribution: mode, attributionHref: PLEDGE_ANCHOR });
+
+			expect(anchors()).toEqual([{ text: 'GoodParty.org Pledge', href: PLEDGE_ANCHOR }]);
+		});
+
+		test(`${mode} still reads as the full approved sentence`, async () => {
+			await renderHero({ attribution: mode, attributionHref: PLEDGE_ANCHOR });
+
+			// Splitting the line around the anchor must not drop or duplicate words.
+			expect(attributionText()).toBe(ATTRIBUTION_COPY[mode]);
+		});
+	}
+
+	test('without an href the line carries no link at all', async () => {
+		await renderHero({ attribution: 'pledged' });
+
+		expect(anchors()).toEqual([]);
+		expect(attributionText()).toBe('Has taken the GoodParty.org Pledge');
+	});
+
+	/**
+	 * The /candidate empowerment line has no pledge phrase in it. It shares this
+	 * component, so an href must not fall back to linking the whole sentence.
+	 */
+	test('the empowerment line is never linked, even when an href is passed', async () => {
+		await renderHero({ isEmpowered: true, attributionHref: PLEDGE_ANCHOR });
+
+		expect(anchors()).toEqual([]);
+		expect(attributionText()).toBe('Empowered by GoodParty.org');
 	});
 });

@@ -694,7 +694,7 @@ function profileLocationLabel(view: PersonProfileView): string | null {
  * from, which is why state B in the shared matrix is `claimed` and `pledged:
  * false` — and a pledged candidate whose page nobody has claimed carries it
  * while reading as unclaimed. Keying the sentence to the claim would therefore
- * publish "Has Taken the GoodParty.org Pledge" about named people who have not,
+ * publish "Has taken the GoodParty.org Pledge" about named people who have not,
  * so each line is keyed to the fact it asserts instead.
  *
  * Party wins over the pledge flag: a Democrat or Republican is not eligible to

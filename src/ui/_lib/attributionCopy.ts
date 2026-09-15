@@ -9,6 +9,10 @@
  * the retired sentence went on being published about six other named people per
  * profile. These live in one place now: a surface can only fall behind a copy
  * decision if it holds its own copy.
+ *
+ * Recased to sentence case on 2026-09-15 (Emily). The assertions are unchanged —
+ * "Has not taken…" claims exactly what "Has Not Taken…" did — so the reasoning
+ * about what these lines assert about real people still holds.
  */
 export type AttributionMode =
 	| 'empowered'
@@ -19,7 +23,18 @@ export type AttributionMode =
 
 export const ATTRIBUTION_COPY: Record<Exclude<AttributionMode, 'none'>, string> = {
 	empowered: 'Empowered by GoodParty.org',
-	pledged: 'Has Taken the GoodParty.org Pledge',
-	notPledged: 'Has Not Taken the GoodParty.org Pledge',
-	pledgeIneligible: 'Ineligible for the GoodParty.org Pledge Due to Partisan Affiliation',
+	pledged: 'Has taken the GoodParty.org Pledge',
+	notPledged: 'Has not taken the GoodParty.org Pledge',
+	pledgeIneligible: 'Ineligible for the GoodParty.org Pledge due to partisan affiliation',
 };
+
+/**
+ * The name of the pledge inside the three pledge lines. Surfaces that link the
+ * line to the pledge itself link this phrase alone, not the whole sentence: the
+ * sentence is a statement about a person, and only the name of the pledge is the
+ * thing being pointed at.
+ *
+ * Stays title case while the sentences around it are sentence case — it is the
+ * pledge's name, not prose.
+ */
+export const ATTRIBUTION_PLEDGE_PHRASE = 'GoodParty.org Pledge';

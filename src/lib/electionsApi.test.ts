@@ -4,6 +4,7 @@ import { __resetElectionApiAuthForTests } from './electionApiAuth';
 import {
 	getCitySlugToCountySlugMap,
 	getCountyChildPlaces,
+	getPersonMergeSurvivorId,
 	getRemovedPersonIds,
 	isStateIndexDistrictPlace,
 	resolveCountySlugForPlace,
@@ -587,5 +588,33 @@ describe('getRemovedPersonIds', () => {
 
 		expect(await getRemovedPersonIds()).toBeNull();
 		errorSpy.mockRestore();
+	});
+});
+
+describe('getPersonMergeSurvivorId', () => {
+	const RETIRED = '11111111-1111-1111-1111-111111111111';
+	const SURVIVOR = '22222222-2222-2222-2222-222222222222';
+	const isMergeLookup = (url: string) => url.includes(`/v1/person-merges/${RETIRED}`);
+
+	test('returns the survivor for a purged duplicate', async () => {
+		withFetchMock([
+			{ match: isMergeLookup, body: { retiredId: RETIRED, survivingId: SURVIVOR } },
+		]);
+
+		expect(await getPersonMergeSurvivorId(RETIRED)).toBe(SURVIVOR);
+	});
+
+	// Overwhelmingly the common case: the id was simply never retired, which
+	// election-api answers with a 404. Only a real merge row may forward a URL.
+	test('returns null when the id was never retired', async () => {
+		withFetchMock([{ match: isMergeLookup, body: null, status: 404 }]);
+
+		expect(await getPersonMergeSurvivorId(RETIRED)).toBeNull();
+	});
+
+	test('returns null rather than a partial row when survivingId is absent', async () => {
+		withFetchMock([{ match: isMergeLookup, body: { retiredId: RETIRED } }]);
+
+		expect(await getPersonMergeSurvivorId(RETIRED)).toBeNull();
 	});
 });

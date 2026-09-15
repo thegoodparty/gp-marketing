@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import {
 	buildBreadcrumbSchema,
 	buildPersonSchema,
@@ -17,7 +17,7 @@ import {
 	buildPersonSectionOverrides,
 } from '~/components/people/personSectionOverrides';
 import { renderElectionTemplatePage } from '~/lib/renderElectionTemplatePage';
-import { getPersonBySlug } from '~/lib/electionsApi';
+import { getPersonBySlug, getPersonMergeSurvivorId } from '~/lib/electionsApi';
 import { getDevPersonProfileView, isDevPeopleFixturesEnabled } from '~/lib/devPeopleProfileFixtures';
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 
@@ -48,7 +48,18 @@ async function resolveView(slug: string): Promise<PersonProfileView | null> {
 	// their trailing full personId; the canonical redirect below sends them to the
 	// current /people/<base>-<id8>.
 	const legacyPersonId = extractPersonId(slug);
-	if (legacyPersonId) return loadPersonProfile(legacyPersonId);
+	if (legacyPersonId) {
+		const legacyView = await loadPersonProfile(legacyPersonId);
+		if (legacyView) return legacyView;
+
+		// The id names a person the data team has since purged as a duplicate.
+		// Unlike the <base>-<id8> form below, this path never reaches by-slug, so
+		// it has to follow the forwarding address itself or the URL dies here.
+		// The survivor's own profile rules still apply, so a takedown or an
+		// owner-deleted profile on the survivor keeps 404-ing.
+		const survivingId = await getPersonMergeSurvivorId(legacyPersonId);
+		return survivingId ? loadPersonProfile(survivingId) : null;
+	}
 
 	// Current /people/<base>-<id8>: election-api parses the 8-hex suffix and
 	// resolves the person via an indexed id-range scan; then load the full
@@ -68,9 +79,16 @@ export default async function Page({ params }: { params: Promise<PageParams> }) 
 
 	// Keep a single canonical URL: redirect stale/name-only slugs to the
 	// name-based slug the profile currently resolves to.
+	//
+	// 308, not 307: every reason we get here is durable — a rename, the legacy
+	// full-uuid scheme, or a duplicate the data team purged. A temporary
+	// redirect leaves Google indexing the old URL and transfers none of its link
+	// equity to the survivor, which is most of the point of forwarding at all.
+	// Resolution is by id, not name, so even a browser-cached 308 from before a
+	// later rename still lands somewhere that resolves.
 	const canonical = canonicalPath(view);
 	if (`/people/${slug}` !== canonical) {
-		redirect(canonical);
+		permanentRedirect(canonical);
 	}
 
 	const url = toAbsoluteUrl(canonical);

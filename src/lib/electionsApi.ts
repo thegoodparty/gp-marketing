@@ -371,6 +371,25 @@ export async function getPersonBySlug(slug: string): Promise<PersonItem | null> 
 	return fetchJson<PersonItem>(url, CACHE_OPTIONS);
 }
 
+/**
+ * The person a purged duplicate forwards to, or null if this id was never
+ * retired. The data team purges duplicate Person rows on an ongoing basis;
+ * election-api keeps the forwarding address in PersonMerge and resolves it to
+ * the *terminal* survivor, so a survivor later purged itself still answers.
+ *
+ * Only `/people/<name>-<full-uuid>` (legacy) URLs need this: the current
+ * `<base>-<id8>` form is resolved by election-api's by-slug route, which
+ * consults PersonMerge itself. See PERSON_ID_RETIREMENT_HANDOFF.md.
+ *
+ * Tagged with the *retired* id so gp-api busting `person:<retiredId>` on the
+ * merge event reaches this lookup too.
+ */
+export async function getPersonMergeSurvivorId(retiredId: string): Promise<string | null> {
+	const url = `${ELECTIONS_API_BASE_URL}/v1/person-merges/${encodeURIComponent(retiredId)}`;
+	const merge = await fetchJson<{ survivingId?: string }>(url, personCacheOptions(retiredId));
+	return merge?.survivingId ?? null;
+}
+
 /** Office terms held by a person (election-api). */
 export async function getOfficeHoldersByPerson(personId: string): Promise<PersonOfficeHolder[]> {
 	const searchParams = new URLSearchParams({ personId, includePosition: 'true' });

@@ -6,7 +6,7 @@ import { Text } from './Text.tsx';
 import { ResponsiveImage } from './ResponsiveImage.tsx';
 import type { SanityImage } from './types.ts';
 import type { backgroundTypeValues } from './_lib/designTypesStore.ts';
-import { ATTRIBUTION_COPY, type AttributionMode } from './_lib/attributionCopy.ts';
+import { ATTRIBUTION_COPY, ATTRIBUTION_PLEDGE_PHRASE, type AttributionMode } from './_lib/attributionCopy.ts';
 import { Logo } from '~/sanity/utils/Logo.tsx';
 
 const styles = tv({
@@ -125,9 +125,11 @@ export type ProfileHeroProps = {
 	 */
 	attribution?: AttributionMode;
 	/**
-	 * When set, the attribution line becomes a link to this href — on /people the
-	 * in-page anchor for the pledge band, so the reader can jump from "Has Taken
-	 * the GoodParty.org Pledge" to what the pledge says.
+	 * When set, the words "GoodParty.org Pledge" inside the attribution line link
+	 * here — on /people the in-page anchor for the pledge band, so the reader can
+	 * jump from the claim to what the pledge actually says. The rest of the
+	 * sentence is deliberately not part of the link: it states something about
+	 * this person, while the link points at the pledge.
 	 *
 	 * The caller decides: the hero cannot tell whether the pledge band is on the
 	 * page (it is gated per profile state), and a link to a missing anchor is a
@@ -150,7 +152,7 @@ export type ProfileHeroProps = {
  * Which lines get the Figma 20/28 semibold treatment (with the mark) rather than
  * the grey disclaimer line. Polarity, not source: a line that says the person
  * did something with us reads as an affirmation, and one that says they did not
- * is a footnote — putting "Has Not Taken the GoodParty.org Pledge" in the
+ * is a footnote — putting "Has not taken the GoodParty.org Pledge" in the
  * affirmative style beside the logo would read as a badge.
  */
 const AFFIRMATIVE_ATTRIBUTIONS: ReadonlySet<AttributionMode> = new Set<AttributionMode>(['empowered', 'pledged']);
@@ -172,14 +174,25 @@ export function ProfileHero(props: ProfileHeroProps) {
 		</Text>
 	);
 
-	const renderAttributionCopy = (mode: Exclude<AttributionMode, 'none'>) =>
-		props.attributionHref ? (
-			<Anchor href={props.attributionHref} className='underline underline-offset-4'>
-				{ATTRIBUTION_COPY[mode]}
-			</Anchor>
-		) : (
-			ATTRIBUTION_COPY[mode]
+	// Only the pledge's name is the link, not the sentence around it: the sentence
+	// states something about this person, and the link goes to the pledge. The
+	// empowerment line carries no pledge phrase, so it links nothing at all.
+	const renderAttributionCopy = (mode: Exclude<AttributionMode, 'none'>) => {
+		const copy = ATTRIBUTION_COPY[mode];
+		const href = props.attributionHref;
+		const at = copy.indexOf(ATTRIBUTION_PLEDGE_PHRASE);
+		if (!href || at < 0) return copy;
+
+		return (
+			<>
+				{copy.slice(0, at)}
+				<Anchor href={href} className='underline underline-offset-4'>
+					{ATTRIBUTION_PLEDGE_PHRASE}
+				</Anchor>
+				{copy.slice(at + ATTRIBUTION_PLEDGE_PHRASE.length)}
+			</>
 		);
+	};
 
 	// `attribution` wins when provided; otherwise fall back to legacy `isEmpowered`.
 	const attributionMode: AttributionMode = props.attribution ?? (props.isEmpowered ? 'empowered' : 'none');

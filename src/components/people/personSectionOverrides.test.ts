@@ -308,7 +308,7 @@ describe('claim CTAs are gone from the office-only pages and nowhere else', () =
  * facts (see `pledgeAttribution`). State B is the case that proves it: a claimed
  * officeholder is `pledged: false` in the shared matrix, because `isPledged`
  * only ever rolls up from candidacies, so the literal spec would have published
- * "Has Taken the GoodParty.org Pledge" about them.
+ * "Has taken the GoodParty.org Pledge" about them.
  */
 describe('the hero states the pledge fact, not the claim', () => {
 	const EXPECTED: Array<[string, string, string | undefined]> = [

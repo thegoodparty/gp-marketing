@@ -110,7 +110,11 @@ domain model, data sources, and what is and is not fixable in this repo:
   server-side. Experiment variants are also modeled as Sanity content
   (`experiment_variant`). The client loads the plain Amplitude SDK plus the
   experiment-only script — never the all-in-one `script/<key>.js` build, which
-  bundles session replay capture (see `src/ui/Amplitude.tsx`).
+  bundles session replay capture (see `src/ui/Amplitude.tsx`). `ExperimentResolver`
+  must be awaited inline on the page, never wrapped in a `<Suspense>` whose fallback
+  renders `PageSections`: React streams the fallback into the initial HTML and the
+  resolved output into a hidden div, so the entire page (including its `<h1>`) ends up
+  in the markup twice. Both experiment-aware routes are therefore `force-dynamic`.
 - **AirOps -> Sanity** — AirOps writes content (articles, glossary, landing pages,
   policy) into Sanity via the Editor API, then a Sanity webhook hits
   `POST /api/revalidate` to make it live. Details, auth, and troubleshooting:

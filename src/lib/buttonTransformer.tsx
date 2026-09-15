@@ -1,6 +1,8 @@
 import { stegaClean } from '@sanity/client/stega';
 import type { Sections } from '~/PageSections';
 
+import { APP_LOG_IN_HREF, APP_SIGN_UP_HREF } from '~/lib/analytics';
+
 import type { ComponentButtonProps } from '~/ui/Inputs/Button';
 
 export type ButtonsType = Exclude<Extract<Sections, { _type: 'component_hero' }>['summaryInfo'], null | undefined>['list_buttons'];
@@ -83,10 +85,10 @@ export function resolveButtonHref(button: ButtonType): string | undefined {
 			href = button.ref_download?.file?.url ?? undefined;
 			break;
 		case 'LogIn':
-			href = 'https://app.goodparty.org/login';
+			href = APP_LOG_IN_HREF;
 			break;
 		case 'SignUp':
-			href = 'https://app.goodparty.org/sign-up';
+			href = APP_SIGN_UP_HREF;
 			break;
 		default:
 			href = undefined;

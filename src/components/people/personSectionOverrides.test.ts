@@ -602,3 +602,29 @@ describe('breadcrumb', () => {
 		}
 	});
 });
+
+/**
+ * The claimed-state CTA band shipped with `buttonType: 'signup'`, which renders
+ * a bare <button> — no href, no click handler — so "Learn more" was a dead end
+ * on every claimed profile while still firing a sign-up analytics event. The
+ * button types that carry no destination of their own are the trap, so assert
+ * the destination rather than the type.
+ */
+describe('the claimed CTA band button goes somewhere', () => {
+	const CLAIMED_STATES = [
+		['A', 'allen-slagle-74eee01a'],
+		['B', 'tracy-good-ecff49d3'],
+		['C', 'susan-overman-ad914b82'],
+		['G', 'bill-fortner-61a42912'],
+	] as const;
+
+	test('every claimed state renders the band with a real link', () => {
+		for (const [state, slug] of CLAIMED_STATES) {
+			const view = getDevPersonProfileView(slug);
+			if (!view) throw new Error(`no dev fixture for ${slug}`);
+			expect([state, view.claimed]).toEqual([state, true]);
+			const button = buildPersonSectionOverrides(view).component_ctaBannerBlock?.button;
+			expect([state, button && 'href' in button ? button.href : undefined]).toEqual([state, '/about']);
+		}
+	});
+});

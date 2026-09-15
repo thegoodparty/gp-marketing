@@ -43,7 +43,8 @@ export const globalCtaPrimaryButtonGroq = `"text":field_buttonText,"action":fiel
 /*language=textmate*/
 export const buttonGroq = `_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":field_internalLink${internalLinkGroq},field_externalLink,"anchor":${anchorIdGroq},ref_download->{${downloadGroq}},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{${globalCtaPrimaryButtonGroq}}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)`;
 /*language=textmate*/
-export const ctaBaseGroq = `"overview":ctaMessaging{...,block_summaryText[]{...,${textBlockGroq}}},"primaryCTA":{...ctaAction{${globalCtaPrimaryButtonGroq}}},"secondaryCTA":secondaryCta.ctaActionWithShared{${buttonGroq}}`;
+// imageCta stores its manual text in ctaMessagingSimple; every other CTA uses ctaMessaging.
+export const ctaBaseGroq = `"overview":coalesce(ctaMessaging,ctaMessagingSimple){...,block_summaryText[]{...,${textBlockGroq}}},"primaryCTA":{...ctaAction{${globalCtaPrimaryButtonGroq}}},"secondaryCTA":secondaryCta.ctaActionWithShared{${buttonGroq}}`;
 /*language=textmate*/
 export const summaryInfoGroq = `...,list_buttons[]{${buttonGroq}},block_summaryText[]{...,${textBlockGroq}}`;
 /*language=textmate*/

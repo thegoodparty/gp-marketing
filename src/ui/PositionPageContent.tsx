@@ -16,7 +16,6 @@ import {
 import { primaryButtonStyleType, secondaryButtonStyleType } from '~/ui/_lib/designTypesStore';
 import {
 	buildPositionPageSchema,
-	buildJobPostingSchema,
 	buildBreadcrumbSchema,
 	buildFAQSchema,
 	buildDynamicFAQItems,
@@ -117,18 +116,6 @@ export function PositionPageContent(props: PositionPageContentProps) {
 			})
 		: undefined;
 
-	// Omit JobPosting when the elections API has no filing or election date (required datePosted).
-	const jobPostingSchema = race
-		? (buildJobPostingSchema({
-				race,
-				officeName,
-				stateName,
-				countyName,
-				cityName,
-				pageUrl,
-			}) ?? undefined)
-		: undefined;
-
 	const breadcrumbSchema = buildBreadcrumbSchema(
 		breadcrumbs.map(({ href, label }) => ({ href: href ?? '', label })),
 		toAbsoluteUrl,
@@ -142,7 +129,6 @@ export function PositionPageContent(props: PositionPageContentProps) {
 	return (
 		<>
 			<PageSchema schema={positionPageSchema} />
-			<PageSchema schema={jobPostingSchema} />
 			<PageSchema schema={breadcrumbSchema} />
 			<PageSchema schema={faqSchema} />
 			<BreadcrumbBlock backgroundColor='midnight' breadcrumbs={breadcrumbs} />

@@ -14,6 +14,11 @@ The person you are helping is usually not an engineer. Gather what they want in
 plain language, do the technical work yourself, and verify before you open a PR.
 Full background: `docs/adding-a-component.md`.
 
+If the block is for the election location / position / Voter Hub redesign, read
+`docs/election-redesign-components.md` first. It carries the batch's decisions, the
+reuse check that comes before any build, and the extra wiring a block needs when it
+displays live election data rather than Sanity content.
+
 ## Why use the generator
 
 Adding a block by hand means editing five files that must all agree, and if you miss

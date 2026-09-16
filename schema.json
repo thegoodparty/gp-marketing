@@ -1632,6 +1632,13 @@
     }
   },
   {
+    "name": "field_quoteResult",
+    "type": "type",
+    "value": {
+      "type": "string"
+    }
+  },
+  {
     "name": "field_quote",
     "type": "type",
     "value": {
@@ -2656,6 +2663,21 @@
       "of": {
         "type": "union",
         "of": [
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "component_testimonialBlockWithLink"
+            }
+          },
           {
             "type": "object",
             "attributes": {
@@ -7982,6 +8004,54 @@
     }
   },
   {
+    "name": "component_testimonialBlockWithLink",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_testimonialBlockWithLink"
+          }
+        },
+        "summaryInfo": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "summaryInfo"
+          },
+          "optional": true
+        },
+        "quotesContentCollection": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "quotesContentCollection"
+          },
+          "optional": true
+        },
+        "testimonialBlockWithLinkDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "testimonialBlockWithLinkDesignSettings"
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
     "name": "electionTemplatePreviewTarget",
     "type": "type",
     "value": {
@@ -10377,6 +10447,22 @@
             "name": "ref_quoteBy"
           },
           "optional": true
+        },
+        "field_quoteResult": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_quoteResult"
+          },
+          "optional": true
+        },
+        "button": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "button"
+          },
+          "optional": true
         }
       }
     }
@@ -10926,6 +11012,38 @@
           "value": {
             "type": "inline",
             "name": "field_registeredCompanyNumber"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "testimonialBlockWithLinkDesignSettings",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "testimonialBlockWithLinkDesignSettings"
+          }
+        },
+        "field_maxNumberToDisplay": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_maxNumberToDisplay"
+          },
+          "optional": true
+        },
+        "field_blockColorCreamMidnight": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_blockColorCreamMidnight"
           },
           "optional": true
         }

@@ -27,6 +27,16 @@ export const quote = {
       name: 'ref_quoteBy',
       type: 'ref_quoteBy',
     },
+    {
+      title: 'Result',
+      name: 'field_quoteResult',
+      type: 'field_quoteResult',
+    },
+    {
+      title: 'Story Link',
+      name: 'button',
+      type: 'button',
+    },
   ],
   preview: {
     select: {

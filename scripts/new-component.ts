@@ -61,6 +61,17 @@ const edit = (relPath: string, anchor: string, replacement: string): void => {
 	writeFileSync(path, src.replace(anchor, replacement));
 };
 
+// --- Same, but matching a pattern, for anchors whose surrounding indentation may change.
+const editRe = (relPath: string, anchor: RegExp, replacement: (match: string) => string): void => {
+	const path = join(root, relPath);
+	const src = readFileSync(path, 'utf8');
+	const match = src.match(anchor);
+	if (!match) {
+		fail(`could not find the expected anchor in ${relPath}. The file may have changed shape; update scripts/new-component.ts.`);
+	}
+	writeFileSync(path, src.replace(anchor, replacement(match![0])));
+};
+
 const write = (path: string, contents: string): void => writeFileSync(path, contents);
 
 // --- New file: schema
@@ -185,10 +196,10 @@ edit(
 );
 
 // --- Edit: list_pageSections.ts (top-level page-sections array + insert-menu group)
-edit(
+editRe(
 	'src/sanity/schema/lists/list_pageSections.ts',
-	"type: 'array',\n  of: [\n",
-	`type: 'array',\n  of: [\n    { title: '${title}', type: '${componentType}' },\n`,
+	/type: 'array',\s*\n\s*of: \[\n/,
+	match => `${match}\t\t{ title: '${title}', type: '${componentType}' },\n`,
 );
 {
 	const path = join(root, 'src/sanity/schema/lists/list_pageSections.ts');
@@ -229,7 +240,9 @@ edit(
 edit(
 	'src/PageSections/index.tsx',
 	'\t\t\t\tdefault:',
-	`\t\t\t\tcase '${componentType}':\n\t\t\t\t\treturn (\n\t\t\t\t\t\t<ComponentErrorBoundary key={section._key} componentName='${title}'>\n\t\t\t\t\t\t\t<${sectionName} {...section} />\n\t\t\t\t\t\t</ComponentErrorBoundary>\n\t\t\t\t\t);\n\t\t\t\tdefault:`,
+	// `Boundary`, not `ComponentErrorBoundary`: the latter is an async server component and
+	// breaks the client/preview render path that `disableErrorBoundary` exists to support.
+	`\t\t\t\tcase '${componentType}':\n\t\t\t\t\treturn (\n\t\t\t\t\t\t<Boundary key={section._key} componentName='${title}'>\n\t\t\t\t\t\t\t<${sectionName} {...section} />\n\t\t\t\t\t\t</Boundary>\n\t\t\t\t\t);\n\t\t\t\tdefault:`,
 );
 
 console.log(`

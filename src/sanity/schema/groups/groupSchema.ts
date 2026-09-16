@@ -70,6 +70,7 @@ import { ctaMessaging } from './ctaMessaging.ts';
 import { twoUpCardBlockDesignSettings } from './twoUpCardBlockDesignSettings.ts';
 import { ctaAssets } from './ctaAssets.ts';
 import { testimonialBlockDesignSettings } from './testimonialBlockDesignSettings.ts';
+import { testimonialBlockWithLinkDesignSettings } from './testimonialBlockWithLinkDesignSettings.ts';
 import { registeredCompanyInfo } from './registeredCompanyInfo.ts';
 import { ctaCardOne } from './ctaCardOne.ts';
 import { navigationCollection } from './navigationCollection.ts';
@@ -223,6 +224,7 @@ export const groupSchema = [
 	twoUpCardBlockDesignSettings,
 	ctaAssets,
 	testimonialBlockDesignSettings,
+	testimonialBlockWithLinkDesignSettings,
 	registeredCompanyInfo,
 	ctaCardOne,
 	navigationCollection,

@@ -21,8 +21,11 @@ export function TestimonialBlockWithLinkSection(section: Props) {
 		? resolveBg(section.testimonialBlockWithLinkDesignSettings.field_blockColorCreamMidnight)
 		: 'cream';
 
-	const quotes = section.quotesContentCollection?.quotes;
-	if (!quotes || quotes.length === 0) return null;
+	const allQuotes = section.quotesContentCollection?.quotes;
+	if (!allQuotes || allQuotes.length === 0) return null;
+
+	const maxToDisplay = section.testimonialBlockWithLinkDesignSettings?.field_maxNumberToDisplay;
+	const quotes = typeof maxToDisplay === 'number' && maxToDisplay > 0 ? allQuotes.slice(0, maxToDisplay) : allQuotes;
 
 	const cards = quotes.map((row, index) => {
 		const rawLink = row.quote?.button;

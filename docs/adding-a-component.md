@@ -37,7 +37,7 @@ Throughout, replace `<Name>` with your block's name in PascalCase (for example `
 | 3   | `src/sanity/schema/lists/list_pageSections.ts`          | Two required edits (plus one optional): (a) add `{ title: '...', type: 'component_<name>Block' }` to the top-level `of[]` array; (b) add the `'component_<name>Block'` string to at least one `insertMenu` group bucket. (c) Optional: add a thumbnail URL to the grid-view preview map. | Skip (a): the block is not a valid page section. Skip (b): the block never appears in the editor's add-block menu, so a marketer can never place it. |
 | 4   | `src/sanity/groq.ts`                                    | Two edits in this one file: (a) declare an `export const component_<name>Block` query fragment; (b) append `,${component_<name>Block}` to the big `sectionsGroq` template literal at the bottom.                                                                                         | Skip (b): the block renders but fetches no data, so it shows up empty. This is the classic bug.                                                      |
 | 5   | `src/PageSections/<Name>BlockSection.tsx`               | Create the React wrapper that maps the CMS field names to the UI component's props.                                                                                                                                                                                                      | The page has no way to turn the block's saved data into something on screen.                                                                         |
-| 6   | `src/PageSections/index.tsx`                            | Two edits in this one file: (a) add an `import` for your wrapper; (b) add a `case 'component_<name>Block':` to the `switch` that renders your wrapper inside a `<ComponentErrorBoundary>`.                                                                                               | The block falls through to the default case and renders nothing (with a console warning you will not see in production).                             |
+| 6   | `src/PageSections/index.tsx`                            | Two edits in this one file: (a) add an `import` for your wrapper; (b) add a `case 'component_<name>Block':` to the `switch` that renders your wrapper inside a `<Boundary>`.                                                                                               | The block falls through to the default case and renders nothing (with a console warning you will not see in production).                             |
 
 There is also the presentational UI component itself, `src/ui/<Name>Block.tsx`, which is the actual markup and styles. Step 5's wrapper renders this. If your block reuses an existing UI component you may not need a new one. A Storybook stories file (`src/ui/<Name>Block.stories.tsx`) is genuinely optional. Click to call shipped without one.
 
@@ -234,16 +234,21 @@ Two edits, same file. Add the import near the other section imports:
 import { ClickToCallBlockSection } from '~/PageSections/ClickToCallBlockSection';
 ```
 
-Then add a `case` to the switch. Always wrap in `ComponentErrorBoundary` with a `key` and a human-readable `componentName`:
+Then add a `case` to the switch. Always wrap in `Boundary` with a `key` and a human-readable `componentName`:
 
 ```tsx
 case 'component_clickToCallBlock':
 	return (
-		<ComponentErrorBoundary key={section._key} componentName='Click to Call Block'>
+		<Boundary key={section._key} componentName='Click to Call Block'>
 			<ClickToCallBlockSection {...section} />
-		</ComponentErrorBoundary>
+		</Boundary>
 	);
 ```
+
+Use `Boundary`, the local alias defined at the top of the render, not `ComponentErrorBoundary`
+directly. `ComponentErrorBoundary` is an async server component, so it cannot render in the
+client/preview path; `Boundary` swaps in a synchronous passthrough there (see
+`disableErrorBoundary`).
 
 Some blocks also receive extra props here, such as `tokens={props.tokens}` or a `...Override={props.sectionOverrides?.component_...}`. Copy the pattern from a neighboring case only if your block needs those.
 

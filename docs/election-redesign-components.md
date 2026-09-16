@@ -52,7 +52,7 @@ trust:
 | Siderail | the sidebar inside `component_electionsPositionContentBlock` |
 | About [Position Name] | `component_electionsPositionContentBlock` |
 | 3-column icon block | `component_iconContentBlock` |
-| Testimonial block with link | `component_testimonialBlock`, plus a link field |
+| Testimonial block with link | ~~`component_testimonialBlock`, plus a link field~~ — audited, rejected. Built as `component_testimonialBlockWithLink`; see below |
 | Branded CTA with icon | `component_ctaBlock`, `component_ctaBannerBlock` |
 | 3-block CTA with icon | `component_ctaCardsBlock` |
 | 3-column e-book support block | `component_ctaCardsBlock`, `component_twoUpCardBlock` |
@@ -62,6 +62,33 @@ trust:
 | Browse elections in Location Hero | `component_locationLandingPageHero` + the search hero |
 
 `src/sanity/schema/lists/list_pageSections.ts` has the full list of existing blocks.
+
+### Audit results so far
+
+**Testimonial block with link** (location pages, Voter Hub) — built as
+`component_testimonialBlockWithLink`, content-only.
+
+The starting hypothesis above was wrong. `component_testimonialBlock` is a static three-across
+grid of tall cards; the design is a side-scrolling carousel of wide two-column cards. The real
+near-match was `component_carouselBlock`, which already has the header, the prev/next arrows and
+the pagination pills at the exact Figma sizes — the Figma frame is even named "Carousel Block".
+Marketing chose a separate block anyway (Emily, 2026-09-15) rather than adding a card-style
+option to the carousel, so the two now sit next to each other in the Quote menu group.
+
+Two things that came out of it and affect other components in the batch:
+
+- **Per-quote data lives on the `quote` object**, not on the block. The block reads quote
+  documents through the shared `quotesContentCollection`, so a field only a single block needs
+  still has to be added to `src/sanity/schema/groups/quote.ts` and it then appears on every quote
+  in Studio. This added `field_quoteResult` (the short outcome line) and `button` (the
+  "Read the story" link). Both are optional, and the other quote blocks ignore them.
+- **A nested object on a quote needs a GROQ projection.** `quoteGroq` spreads `...`, so a plain
+  text field flows through on its own, but the link had to be projected explicitly
+  (`button{${buttonGroq}}`) or it would have arrived as unusable raw data with no type error.
+
+Note for whoever wires up the links: a case study that lives as an `article` can be picked with
+the internal link picker, but `/people/*` profiles are rendered from election-api and have no
+Sanity document, so a profile link has to be the External option with a pasted path.
 
 ## The two kinds of block, and the wiring most sessions miss
 

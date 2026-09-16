@@ -43,8 +43,10 @@ import { component_teamValuesBlock } from './component_teamValuesBlock.ts';
 import { component_testimonialAutoScroll } from './component_testimonialAutoScroll.ts';
 import { component_clickToCallBlock } from './component_clickToCallBlock.ts';
 import { component_voterDensityBlock } from './component_voterDensityBlock.ts';
+import { component_testimonialBlockWithLink } from './component_testimonialBlockWithLink.ts';
 
 export const componentSchema = [
+	component_testimonialBlockWithLink,
 	component_jobOpeningsBlock,
 	component_featuresBlock,
 	component_stepperBlock,

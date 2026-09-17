@@ -70,8 +70,27 @@ and the styling.
      right. Visual confirmation is the only thing that catches a wiring or data gap,
      because none of those are type errors.
 
-6. **Ship it** with the `ship-pr` skill. Tell the person, in plain language, what the
+6. **Give it a thumbnail in the add-block menu.** Studio's grid view shows a picture
+   per block, from a hardcoded map in `list_pageSections.ts`. A block with no entry
+   falls back to a plain icon and sits next to blocks that show a picture, which reads
+   to an editor as unfinished. This gets skipped a lot — most of the newer blocks have
+   no thumbnail — so do it rather than leave it.
+
+   Now is the moment, because you have just rendered the block to verify it:
+   - Capture a **3000x2000** PNG (3:2, like every existing entry) of the block's real
+     render, framed the way the existing thumbnails are.
+   - Upload it to Sanity for a `cdn.sanity.io` URL. **Ask the person first** — the
+     asset library is shared production content.
+   - Add the entry, keyed by the `component_*` type, to the map in
+     `src/sanity/schema/lists/list_pageSections.ts`.
+
+   If they would rather design produced a styled export, skip the capture and say so
+   in the PR; swapping the URL later is a one-line change. See the thumbnail section
+   in `docs/adding-a-component.md`.
+
+7. **Ship it** with the `ship-pr` skill. Tell the person, in plain language, what the
    new block does and that it will show up in the page builder once the PR merges.
+   Say whether it has a thumbnail yet.
 
 ## If the generator errors
 

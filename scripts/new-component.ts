@@ -259,4 +259,7 @@ console.log(`
     2. bun run typecheck
     3. bun run dev  ->  add the block to the /all page in Studio  ->  open http://localhost:3009/all
     4. Customize the fields (schema), the mapping (${sectionName}), and the styling (ui/${reactName}) for what you need.
+    5. Add a 3000x2000 thumbnail for '${componentType}' to the grid-view preview map in
+       src/sanity/schema/lists/list_pageSections.ts. Without one the block shows a plain icon
+       next to blocks that show a picture. See the thumbnail section in docs/adding-a-component.md.
 `);

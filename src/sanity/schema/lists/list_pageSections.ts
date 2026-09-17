@@ -40,6 +40,11 @@ export const list_pageSections = {
 								'https://cdn.sanity.io/images/3100uthq/goodparty/ba104250aeb7e08922ec3385b6bfb715f2046d5c-3000x2000.png',
 							component_testimonialBlock:
 								'https://cdn.sanity.io/images/3100uthq/goodparty/03ca591118db48ec8c5d90890556f545974712a2-3000x2000.png',
+							// This one lives in this project's own dataset (3rbseux7/production); the older
+							// entries above are hosted in a separate project. Either works — the menu just
+							// renders the URL.
+							component_testimonialBlockWithLink:
+								'https://cdn.sanity.io/images/3rbseux7/production/4bfdac1dbb3eb5f7820b1dc438168b67e8453f86-3000x2000.png',
 							component_faqBlock: 'https://cdn.sanity.io/images/3100uthq/goodparty/02b94c15685969331f055c3763218196ad0b0e7c-3000x2000.png',
 							component_ctaBannerBlock:
 								'https://cdn.sanity.io/images/3100uthq/goodparty/e656091c37779cb88b594952eba9b111daba3f53-3000x2000.png',

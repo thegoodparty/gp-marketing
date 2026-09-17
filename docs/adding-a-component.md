@@ -30,14 +30,14 @@ For a simple block with flat fields (like Click to call), there are 6 edit sites
 
 Throughout, replace `<Name>` with your block's name in PascalCase (for example `ClickToCall`) and `<name>` with camelCase (for example `clickToCall`). The block's internal type name is always `component_<name>Block` (for example `component_clickToCallBlock`).
 
-| #   | File                                                    | What to add                                                                                                                                                                                                                                                                              | What breaks if you skip it                                                                                                                           |
-| --- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | `src/sanity/schema/components/component_<Name>Block.ts` | Create the block's schema object: `title`, `name` (must equal `component_<name>Block`), `type: 'object'`, `icon`, `fields[]`, `preview`, `groups[]`.                                                                                                                                     | The block does not exist at all. Nothing else can reference it.                                                                                      |
-| 2   | `src/sanity/schema/components/componentSchema.ts`       | Two edits in this one file: (a) add an `import` for your new schema; (b) add the schema to the exported `componentSchema` array.                                                                                                                                                         | Studio does not know the block type. It never loads.                                                                                                 |
-| 3   | `src/sanity/schema/lists/list_pageSections.ts`          | Two required edits (plus one optional): (a) add `{ title: '...', type: 'component_<name>Block' }` to the top-level `of[]` array; (b) add the `'component_<name>Block'` string to at least one `insertMenu` group bucket. (c) Optional: add a thumbnail URL to the grid-view preview map. | Skip (a): the block is not a valid page section. Skip (b): the block never appears in the editor's add-block menu, so a marketer can never place it. |
-| 4   | `src/sanity/groq.ts`                                    | Two edits in this one file: (a) declare an `export const component_<name>Block` query fragment; (b) append `,${component_<name>Block}` to the big `sectionsGroq` template literal at the bottom.                                                                                         | Skip (b): the block renders but fetches no data, so it shows up empty. This is the classic bug.                                                      |
-| 5   | `src/PageSections/<Name>BlockSection.tsx`               | Create the React wrapper that maps the CMS field names to the UI component's props.                                                                                                                                                                                                      | The page has no way to turn the block's saved data into something on screen.                                                                         |
-| 6   | `src/PageSections/index.tsx`                            | Two edits in this one file: (a) add an `import` for your wrapper; (b) add a `case 'component_<name>Block':` to the `switch` that renders your wrapper inside a `<Boundary>`.                                                                                               | The block falls through to the default case and renders nothing (with a console warning you will not see in production).                             |
+| #   | File                                                    | What to add                                                                                                                                                                                                                                                                    | What breaks if you skip it                                                                                                                                                                                                                                  |
+| --- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | `src/sanity/schema/components/component_<Name>Block.ts` | Create the block's schema object: `title`, `name` (must equal `component_<name>Block`), `type: 'object'`, `icon`, `fields[]`, `preview`, `groups[]`.                                                                                                                           | The block does not exist at all. Nothing else can reference it.                                                                                                                                                                                             |
+| 2   | `src/sanity/schema/components/componentSchema.ts`       | Two edits in this one file: (a) add an `import` for your new schema; (b) add the schema to the exported `componentSchema` array.                                                                                                                                               | Studio does not know the block type. It never loads.                                                                                                                                                                                                        |
+| 3   | `src/sanity/schema/lists/list_pageSections.ts`          | Two required edits (plus one optional): (a) add `{ title: '...', type: 'component_<name>Block' }` to the top-level `of[]` array; (b) add the `'component_<name>Block'` string to at least one `insertMenu` group bucket. (c) add a thumbnail URL to the grid-view preview map. | Skip (a): the block is not a valid page section. Skip (b): the block never appears in the editor's add-block menu, so a marketer can never place it. Skip (c): the block shows a plain icon where its neighbours show a picture, which reads as unfinished. |
+| 4   | `src/sanity/groq.ts`                                    | Two edits in this one file: (a) declare an `export const component_<name>Block` query fragment; (b) append `,${component_<name>Block}` to the big `sectionsGroq` template literal at the bottom.                                                                               | Skip (b): the block renders but fetches no data, so it shows up empty. This is the classic bug.                                                                                                                                                             |
+| 5   | `src/PageSections/<Name>BlockSection.tsx`               | Create the React wrapper that maps the CMS field names to the UI component's props.                                                                                                                                                                                            | The page has no way to turn the block's saved data into something on screen.                                                                                                                                                                                |
+| 6   | `src/PageSections/index.tsx`                            | Two edits in this one file: (a) add an `import` for your wrapper; (b) add a `case 'component_<name>Block':` to the `switch` that renders your wrapper inside a `<Boundary>`.                                                                                                   | The block falls through to the default case and renders nothing (with a console warning you will not see in production).                                                                                                                                    |
 
 There is also the presentational UI component itself, `src/ui/<Name>Block.tsx`, which is the actual markup and styles. Step 5's wrapper renders this. If your block reuses an existing UI component you may not need a new one. A Storybook stories file (`src/ui/<Name>Block.stories.tsx`) is genuinely optional. Click to call shipped without one.
 
@@ -168,7 +168,39 @@ Second, add the type string to at least one `insertMenu` group bucket. This is w
 },
 ```
 
-Optional third edit: there is a grid-view preview-image map keyed by block type. Only about 25 blocks have a thumbnail. Click to call does not, so a thumbnail is not required.
+Third edit: the grid-view preview-image map. Studio's add-block menu has a grid view
+that shows a thumbnail per block, and `previewImageUrl` resolves it from a hardcoded
+map keyed by block type:
+
+```ts
+previewImageUrl: function (s) {
+	const i = {
+		component_hero: 'https://cdn.sanity.io/images/.../<hash>-3000x2000.png',
+		// ...
+	};
+	return s in i ? i[s] : undefined;
+},
+```
+
+Returning `undefined` is not a failure: Studio falls back to the block's `icon`. That
+is why a block with no entry shows a plain glyph next to blocks that show a picture,
+which reads to an editor as unfinished.
+
+This is technically optional and has been skipped often enough that **22 of the 46
+blocks have no thumbnail** — every election and profile block among them. Treat it as
+expected work for a new block, not a nicety.
+
+Adding one takes three steps:
+
+1. **Produce a 3000x2000 PNG.** Every existing entry is that size (3:2). Either a
+   design export or a screenshot of the block's real render is fine; match the
+   existing ones' framing — the block roughly filling the frame on its own background.
+2. **Upload it to Sanity** so it gets a `cdn.sanity.io` URL. The asset library is
+   shared production content, so ask before uploading.
+3. **Add the map entry** keyed by the block's `component_*` type.
+
+Swapping a thumbnail later is a one-line change, so a screenshot now and a design
+export later is a perfectly good sequence.
 
 ### 4. Register in `groq.ts` (the data query)
 

@@ -7,7 +7,7 @@ const meta: Meta<typeof LocationLandingPageHero> = {
 	parameters: {
 		design: {
 			type: 'figma',
-			url: 'https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23657-17212&t=6DQyxTAl7Ola6AF3-0',
+			url: 'https://www.figma.com/design/qIOT4lO1nRw4reuj6LjLwn/GoodParty---Marketing-Design-System?node-id=3096-2855',
 		},
 	},
 	render: args => <LocationLandingPageHero {...args} />,
@@ -15,6 +15,23 @@ const meta: Meta<typeof LocationLandingPageHero> = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+const designStats = [
+	{ _key: 'days', value: '[##]', description: 'days until the next election', color: 'bright-yellow' as const },
+	{ _key: 'positions', value: '[##]', description: 'positions up for election', color: 'halo-green' as const },
+	{ _key: 'independents', value: '[##]', description: 'independents on the ballot', color: 'lavender' as const },
+	{ _key: 'uncontested', value: '[##]', description: 'uncontested elections in Illinois', color: 'blue' as const },
+];
+
+export const WithStats: Story = {
+	args: {
+		locationLevel: 'state',
+		stateName: 'Browse elections in Illinois',
+		bodyCopy: 'Your anti-corruption voter guide. Find independent candidates on your ballot and representatives in office.',
+		backgroundColor: 'midnight',
+		stats: designStats,
+	},
+};
 
 export const StateLevel: Story = {
 	args: {
@@ -85,13 +102,13 @@ export const CustomBodyCopy: Story = {
 	},
 };
 
-export const CustomSearchPlaceholder: Story = {
+export const WithStatsCream: Story = {
 	args: {
 		locationLevel: 'state',
-		stateName: 'Texas',
-		bodyCopy: 'Explore elections in this state',
-		backgroundColor: 'midnight',
-		searchPlaceholder: 'Search by city or county name',
+		stateName: 'Browse elections in Texas',
+		bodyCopy: 'Your anti-corruption voter guide. Find independent candidates on your ballot and representatives in office.',
+		backgroundColor: 'cream',
+		stats: designStats,
 	},
 };
 

@@ -9,17 +9,21 @@ import * as LocationLandingPageHeroStories from './LocationLandingPageHero.stori
 
 ## Overview
 
-The LocationLandingPageHero component displays a hero section for location landing pages (state, county, or city). It dynamically generates the headline based on the location level and includes a search input for finding elections. The component adapts its styling based on the background color variant.
+The LocationLandingPageHero component displays a hero section for location landing pages (state, county, or city). It dynamically generates the headline based on the location level and can show up to four stat cards beside the headline. The component adapts its styling based on the background color variant.
 
 ## Usage
 
 Use this component when:
 - Creating hero sections for state, county, or city landing pages
-- Providing search functionality for elections
 - Displaying location-specific headlines
+- Summarising a location's elections in a few headline figures
 - Setting the tone for location-based election browsing
 
 ## Variants
+
+<Canvas of={LocationLandingPageHeroStories.WithStats} />
+
+<Canvas of={LocationLandingPageHeroStories.WithStatsCream} />
 
 <Canvas of={LocationLandingPageHeroStories.StateLevel} />
 
@@ -30,8 +34,6 @@ Use this component when:
 <Canvas of={LocationLandingPageHeroStories.CityLevel} />
 
 <Canvas of={LocationLandingPageHeroStories.CustomBodyCopy} />
-
-<Canvas of={LocationLandingPageHeroStories.CustomSearchPlaceholder} />
 
 <Canvas of={LocationLandingPageHeroStories.LeftAligned} />
 
@@ -75,13 +77,11 @@ Custom body copy text. If not provided, defaults to text based on location level
 
 **Type:** `ReactNode`
 
-#### `searchPlaceholder` (optional)
+#### `stats` (optional)
 
-Placeholder text for the search input.
+Up to four stat cards rendered beside the headline (stacked under the copy on small screens). Uses the shared `Stat` card in its compact size. When empty, the hero renders as a single column.
 
-**Type:** `string`
-
-**Default:** `'Search elections by county and city'`
+**Type:** `StatProps[]`
 
 #### `backgroundColor` (optional)
 
@@ -122,36 +122,29 @@ If `bodyCopy` is not provided, the component generates default text:
 - County: "Explore elections in this county"
 - City: "Explore elections in this city"
 
-## Search Input
+## Stat Cards
 
-The search input:
-- Uses a search icon (left side)
-- Placeholder text is customizable
-- Styling adapts to background color variant
-- Currently non-functional (placeholder for future implementation)
+The stat cards:
+- Use the shared `Stat` card in its compact size, so colors match the Stats Block
+- Lay out two across beside the headline on large screens, and stack full width below the copy on small screens
+- Count up from zero when the value starts with a number; non-numeric values such as a placeholder render as written
 
 ## Background Variants
 
 **Midnight (default):**
 - Dark background with white text
-- Search input: White/transparent with white text
-- Search icon: White/60 opacity
 
 **Cream:**
 - Light background with dark text
-- Search input: Neutral background with dark text
-- Search icon: Neutral-500 color
 
 ## Accessibility
 
 - Uses semantic `<section>` element
 - Main heading uses `heading-xl` style type
-- Search input includes proper `aria-label`
-- Search icon is decorative (pointer-events-none)
 
 ## Design Reference
 
-[View in Figma](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23657-17212&t=6DQyxTAl7Ola6AF3-0)
+[View in Figma](https://www.figma.com/design/qIOT4lO1nRw4reuj6LjLwn/GoodParty---Marketing-Design-System?node-id=3096-2855)
 
 ## Related Components
 

@@ -20,14 +20,16 @@ export const component_locationLandingPageHero = {
 					description:
 						'Static copy that references location level (state, county, or city). Location names are populated dynamically from the URL.',
 				},
-				{
-					title: 'Search Placeholder',
-					name: 'field_searchPlaceholder',
-					type: 'string',
-					description: 'Placeholder text for the search input (defaults to "Search elections by county and city")',
-				},
 			],
 			group: 'locationLandingPageHeroContent',
+		},
+		{
+			title: 'Stats',
+			name: 'stats',
+			type: 'stats',
+			description:
+				'Up to four cards shown beside the headline. Location names can be written as tokens such as [State], [County], [City] or [District].',
+			group: 'stats',
 		},
 		{
 			title: 'Design Settings',
@@ -89,6 +91,11 @@ export const component_locationLandingPageHero = {
 			title: 'Content',
 			name: 'locationLandingPageHeroContent',
 			icon: getIcon('Text'),
+		},
+		{
+			title: 'Stats',
+			name: 'stats',
+			icon: getIcon('CharacterWholeNumber'),
 		},
 		{
 			title: 'Design Settings',

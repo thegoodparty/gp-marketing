@@ -1038,8 +1038,8 @@ export type Component_locationLandingPageHero = {
 	_type: 'component_locationLandingPageHero';
 	locationLandingPageHeroContent?: {
 		field_bodyCopy?: string;
-		field_searchPlaceholder?: string;
 	};
+	stats?: Stats;
 	locationLandingPageHeroDesignSettings?: {
 		field_blockColorCreamMidnight?: 'cream' | 'midnight';
 	};
@@ -18416,8 +18416,8 @@ export type GoodpartyOrg_homeQueryResult = {
 					_type: 'component_locationLandingPageHero';
 					locationLandingPageHeroContent?: {
 						field_bodyCopy?: string;
-						field_searchPlaceholder?: string;
 					};
+					stats?: Stats;
 					locationLandingPageHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -40267,8 +40267,8 @@ export type Experiment_variantsByExperimentIdQueryResult = Array<{
 					_type: 'component_locationLandingPageHero';
 					locationLandingPageHeroContent?: {
 						field_bodyCopy?: string;
-						field_searchPlaceholder?: string;
 					};
+					stats?: Stats;
 					locationLandingPageHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -62119,8 +62119,8 @@ export type ActiveVariantsByPageIdQueryResult = Array<{
 					_type: 'component_locationLandingPageHero';
 					locationLandingPageHeroContent?: {
 						field_bodyCopy?: string;
-						field_searchPlaceholder?: string;
 					};
+					stats?: Stats;
 					locationLandingPageHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -83973,8 +83973,8 @@ export type GoodpartyOrg_allArticlesQueryResult = {
 					_type: 'component_locationLandingPageHero';
 					locationLandingPageHeroContent?: {
 						field_bodyCopy?: string;
-						field_searchPlaceholder?: string;
 					};
+					stats?: Stats;
 					locationLandingPageHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -105865,8 +105865,8 @@ export type CategoriesQueryResult = {
 					_type: 'component_locationLandingPageHero';
 					locationLandingPageHeroContent?: {
 						field_bodyCopy?: string;
-						field_searchPlaceholder?: string;
 					};
+					stats?: Stats;
 					locationLandingPageHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -127785,8 +127785,8 @@ export type TopicsQueryResult = {
 					_type: 'component_locationLandingPageHero';
 					locationLandingPageHeroContent?: {
 						field_bodyCopy?: string;
-						field_searchPlaceholder?: string;
 					};
+					stats?: Stats;
 					locationLandingPageHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -151765,8 +151765,8 @@ export type GoodpartyOrg_contactQueryResult = {
 					_type: 'component_locationLandingPageHero';
 					locationLandingPageHeroContent?: {
 						field_bodyCopy?: string;
-						field_searchPlaceholder?: string;
 					};
+					stats?: Stats;
 					locationLandingPageHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -173622,8 +173622,8 @@ export type GoodpartyOrg_landingPagesAndPolicyQueryResult =
 							_type: 'component_locationLandingPageHero';
 							locationLandingPageHeroContent?: {
 								field_bodyCopy?: string;
-								field_searchPlaceholder?: string;
 							};
+							stats?: Stats;
 							locationLandingPageHeroDesignSettings?: {
 								field_blockColorCreamMidnight?: 'cream' | 'midnight';
 							};
@@ -195490,8 +195490,8 @@ export type GoodpartyOrg_electionsQueryResult = {
 					_type: 'component_locationLandingPageHero';
 					locationLandingPageHeroContent?: {
 						field_bodyCopy?: string;
-						field_searchPlaceholder?: string;
 					};
+					stats?: Stats;
 					locationLandingPageHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -217346,8 +217346,8 @@ export type GoodpartyOrg_candidatesQueryResult = {
 					_type: 'component_locationLandingPageHero';
 					locationLandingPageHeroContent?: {
 						field_bodyCopy?: string;
-						field_searchPlaceholder?: string;
 					};
+					stats?: Stats;
 					locationLandingPageHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -239202,8 +239202,8 @@ export type GoodpartyOrg_profileQueryResult = {
 					_type: 'component_locationLandingPageHero';
 					locationLandingPageHeroContent?: {
 						field_bodyCopy?: string;
-						field_searchPlaceholder?: string;
 					};
+					stats?: Stats;
 					locationLandingPageHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -261058,8 +261058,8 @@ export type GoodpartyOrg_allComponentsQueryResult = {
 					_type: 'component_locationLandingPageHero';
 					locationLandingPageHeroContent?: {
 						field_bodyCopy?: string;
-						field_searchPlaceholder?: string;
 					};
+					stats?: Stats;
 					locationLandingPageHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -288726,8 +288726,8 @@ export type GlobalElectionTemplateQueryResult = {
 					_type: 'component_locationLandingPageHero';
 					locationLandingPageHeroContent?: {
 						field_bodyCopy?: string;
-						field_searchPlaceholder?: string;
 					};
+					stats?: Stats;
 					locationLandingPageHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -310610,8 +310610,8 @@ export type CustomElectionTemplateByIdQueryResult = {
 					_type: 'component_locationLandingPageHero';
 					locationLandingPageHeroContent?: {
 						field_bodyCopy?: string;
-						field_searchPlaceholder?: string;
 					};
+					stats?: Stats;
 					locationLandingPageHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};

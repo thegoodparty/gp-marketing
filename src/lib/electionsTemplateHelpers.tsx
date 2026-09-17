@@ -263,6 +263,7 @@ export type ElectionsIndexPageContext = {
 	cityName?: string;
 	bodyCopy?: string;
 	heroTitle?: string;
+	/** Kept for the search block that takes over the input the location hero used to render. */
 	searchPlaceholder?: string;
 	listHeading?: string;
 	listHeadline?: string;
@@ -292,7 +293,6 @@ export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageConte
 			countyName: ctx.countyName,
 			cityName: ctx.cityName,
 			bodyCopy: ctx.bodyCopy,
-			searchPlaceholder: ctx.searchPlaceholder,
 		},
 		component_listOfOfficesBlock: {
 			heading: ctx.listHeading,

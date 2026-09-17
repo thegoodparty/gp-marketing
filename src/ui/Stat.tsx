@@ -40,9 +40,16 @@ const styles = tv({
 				base: 'bg-goodparty-cream',
 			},
 		},
+		size: {
+			default: {},
+			compact: {
+				base: 'p-5',
+			},
+		},
 	},
 	defaultVariants: {
 		color: 'cream',
+		size: 'default',
 	},
 });
 
@@ -102,17 +109,19 @@ export type StatProps = {
 	color?: Exclude<(typeof componentColorValues)[number], 'inverse'>;
 	value?: string;
 	description?: string;
+	size?: 'default' | 'compact';
 };
 
 export function Stat(props: StatProps) {
 	const color = props.color ?? 'cream';
-	const { base, value } = styles({ color });
+	const size = props.size ?? 'default';
+	const { base, value } = styles({ color, size });
 	const parsed = props.value ? parseAnimatedValue(props.value) : null;
 
 	return (
 		<article className={base()} data-component='Stat'>
 			{props.value && (
-				<Text as='span' styleType='heading-xl' className={value()}>
+				<Text as='span' styleType={size === 'compact' ? 'heading-lg' : 'heading-xl'} className={value()}>
 					{parsed ? <AnimatedNumber value={props.value} /> : props.value}
 				</Text>
 			)}

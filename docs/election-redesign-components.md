@@ -59,7 +59,7 @@ trust:
 | Find elections container | `component_electionsSearchHero`, `component_electionsIndexBlock` |
 | Find more elections block | `component_electionsIndexBlock` |
 | Local election rows block | `component_electionsIndexBlock` |
-| Browse elections in Location Hero | `component_locationLandingPageHero` + the search hero |
+| Browse elections in Location Hero | ~~`component_locationLandingPageHero` + the search hero~~ — audited, extended the hero alone; see below |
 
 `src/sanity/schema/lists/list_pageSections.ts` has the full list of existing blocks.
 
@@ -85,6 +85,32 @@ Two things that came out of it and affect other components in the batch:
 - **A nested object on a quote needs a GROQ projection.** `quoteGroq` spreads `...`, so a plain
   text field flows through on its own, but the link had to be projected explicitly
   (`button{${buttonGroq}}`) or it would have arrived as unusable raw data with no type error.
+
+**Browse elections in Location Hero** (location pages) — extended the existing
+`component_locationLandingPageHero`; no new block.
+
+The hypothesis above was right, with one correction: the design is not the hero plus the search
+hero. The Figma frame has no search input at all (marketing confirmed the search moves to its own
+component, Emily 2026-09-17), so the hero's input was removed. The rest of the redesign is a
+two-column layout with up to four stat cards beside the headline, and those cards are the existing
+`Stat` component from the Stats Block — same four design-system colors the Figma uses, same
+count-up behaviour. `Stat` gained a `compact` size (20px padding, `heading-lg` value) to match the
+Figma card; the default size is untouched, so the Stats Block renders as before.
+
+Three things worth carrying to the rest of the batch:
+
+- **A midnight block must not put `text-white` on its section wrapper** if it contains pastel
+  cards. The cards inherit it and their text disappears. Put the text color on the copy column
+  instead, which is what the Stats Block already does.
+- **The four figures are Sanity fields, not live data yet.** Only two of them are computable from
+  what a location page already fetches (days until the next election, positions up for election).
+  Independents on the ballot and uncontested elections both need a candidate count or party per
+  race, and `/v1/candidacies` has no place filter — only per-race calls or a whole-state sweep
+  joined on `raceId`. That aggregate is worth asking election-api for once, because the
+  candidates and "who's currently in office" blocks will want the same thing.
+- **This block is going onto the existing location templates**, not freshly seeded ones, so the
+  cards are empty until an editor fills them. The hero renders as a single column when it has no
+  stats, which is the pre-redesign layout minus the search input.
 
 Note for whoever wires up the links: a case study that lives as an `article` can be picked with
 the internal link picker, but `/people/*` profiles are rendered from election-api and have no

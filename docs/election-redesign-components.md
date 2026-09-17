@@ -90,6 +90,42 @@ Note for whoever wires up the links: a case study that lives as an `article` can
 the internal link picker, but `/people/*` profiles are rendered from election-api and have no
 Sanity document, so a profile link has to be the External option with a pasted path.
 
+## The shared election counts, as marketing defined them
+
+Settled with Emily on 2026-09-17 while building the location hero's four stat cards.
+Several other blocks in the batch want the same counts, so treat these as the batch's
+definitions rather than one block's, and state them verbatim in any request to the
+election data team.
+
+- **Year scope.** Every figure follows the year the offices list opens on: the current
+  year when it has elections, else the soonest year ahead
+  (`resolveDefaultElectionYear` in `src/lib/electionsHelpers.ts`).
+- **Geographic scope.** The whole location including its sub-locations, so a state
+  figure counts county and city races too. This makes a hero figure larger than the
+  list of offices below it, which is accepted because that list carries its own
+  heading.
+- **Independent** means the person has taken the GoodParty.org Pledge, by the same
+  rule the candidate cards and profiles use (`pledgedFromSpine`: the spine's
+  `isPledged`, and no major-party evidence). It does not mean party affiliation, so
+  `classifyParty` is the wrong tool for this count.
+- **Uncontested** means exactly one candidate on the ballot per seat, counted for any
+  race where we hold candidate data, including races whose filing window is still
+  open.
+- **Zero versus unknown.** Show 0 when the data genuinely says zero; hide the element
+  when there is no data. These differ: `Person.isPledged` is unpopulated across
+  production today (see `docs/person-spine-pledge-and-claim-linkage-handoff.md`), so a
+  zero pledge count is a no-data zero and must not be published as "0 independents".
+- **Editor versus data.** The label is editable in Sanity, with location tokens; the
+  number always comes from the data. These blocks live on global templates, so a
+  number typed in Studio would otherwise freeze the same figure across thousands of
+  pages.
+
+None of these counts is available from a location page today. `/v1/candidacies` has no
+place filter, so they need either per-race calls or a whole-state sweep joined on
+`raceId`. The right fix is one aggregate from election-api, keyed by place and year,
+which the candidates rows, "who's currently in office" and nearby offices blocks will
+all want too.
+
 ## The two kinds of block, and the wiring most sessions miss
 
 This is the most important technical point in this doc, because getting it wrong
@@ -145,6 +181,38 @@ Apply these across the whole batch so the blocks stay consistent.
   `src/experiments/` today holds only experiment resolution machinery, no components.
 - **Build one component per PR.** Twenty-eight blocks in one branch is unreviewable,
   and each one needs its own visual check.
+- **Updating an existing block? Hold the PR as a draft and batch it.** (Emily,
+  2026-09-17.) Still one component per PR, but the merges are not all alike:
+  - A **new** block shows nothing on the live site until an editor drops it onto a
+    page, so its PR can merge as soon as it is green. Content controls go-live.
+  - A PR that **updates a block already on the live templates** has no such safety.
+    The moment that code reaches production, every page carrying that block changes,
+    with no content step and nothing to stage behind. Location and position pages are
+    template-driven, so that is thousands of pages at once, mid-redesign, with the
+    other components not built yet.
+
+  So for an update: get it green, then convert the PR to a draft rather than leaving
+  it in the merge queue (`gh pr ready <n> --undo`), and say in the body which batch it
+  is waiting on. Release those together once the set that makes up a page is ready,
+  instead of letting the page change in pieces. The reuse audit in Step 0 already
+  tells you which kind you have: "Extend" and "Already covered" mean draft and batch,
+  "New block" can ship on its own.
+- **Build for the finished system, not for today's data.** (Emily, 2026-09-17.) These
+  components are being built one at a time, but they are designed as one page. Build
+  each one so it works the way the design intends once the whole batch and its data
+  wiring exist. Do not shrink a component to what today's data can fill, do not drop
+  a part of a design because its data source is missing, and do not fold another
+  component's job into yours because that one is not built yet.
+
+  In practice that means: model the full shape of the thing now, leave an obvious
+  seam where the live data will attach, and decide an honest interim state for the
+  part that has none. Prefer hiding an element over publishing a wrong or invented
+  figure on a public voter page, and say in the PR exactly what is waiting on which
+  data. A Sanity field is a reasonable placeholder for a figure that will later be
+  live, but only when the label stays editable and the number is what gets replaced.
+
+  What this rules out is a component that "works" today and has to be redesigned to
+  accept its data later.
 - **Visual verification is not optional.** A block that is half-wired renders as
   nothing and an error boundary swallows render errors, so nothing fails. Confirm on
   `http://localhost:3009/all` before opening a PR. For pixel parity against Figma,

@@ -387,6 +387,22 @@ export function buildOfficeItemsFromPlaceRaces(
 	return { offices, dataYears };
 }
 
+/**
+ * The year the offices list opens on: this year when it has elections, else the
+ * soonest year ahead. Falls back to the most recent past year only when a place
+ * has nothing upcoming at all, because a place whose data runs 2020, 2022, 2027
+ * should open on 2027 rather than on an election held six years ago.
+ */
+export function resolveDefaultElectionYear(dataYears: number[], currentYear: number = new Date().getFullYear()): number {
+	if (dataYears.length === 0) return currentYear;
+	if (dataYears.includes(currentYear)) return currentYear;
+
+	const upcoming = dataYears.filter(year => year > currentYear);
+	if (upcoming.length > 0) return Math.min(...upcoming);
+
+	return Math.max(...dataYears);
+}
+
 export function formatFilingPeriod(
 	periods: Array<{ startOn: string; endOn: string }> | undefined,
 ): string {

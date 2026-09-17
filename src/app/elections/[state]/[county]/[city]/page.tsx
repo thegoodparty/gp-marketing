@@ -18,6 +18,7 @@ import {
 	PLACE_RACE_COLUMNS,
 	placeToFactsCards,
 	resolveLocalityName,
+	resolveDefaultElectionYear,
 	resolvePlaceRaceElectionDates,
 } from '~/lib/electionsHelpers';
 import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
@@ -106,7 +107,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 			type: 'District',
 			buildHref: race => buildPlaceRacePositionHref([state, county, city], race.slug),
 		});
-		const defaultYear = dataYears.includes(currentYear) ? currentYear : (dataYears[0] ?? currentYear);
+		const defaultYear = resolveDefaultElectionYear(dataYears, currentYear);
 		const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
 		const factsCards = placeToFactsCards(districtPlace);
 		const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);
@@ -203,7 +204,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		buildHref: race => buildPlaceRacePositionHref([state, county, city], race.slug),
 	});
 
-	const defaultYear = dataYears.includes(currentYear) ? currentYear : (dataYears[0] ?? currentYear);
+	const defaultYear = resolveDefaultElectionYear(dataYears, currentYear);
 	const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
 	const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);
 

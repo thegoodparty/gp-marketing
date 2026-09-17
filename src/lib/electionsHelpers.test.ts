@@ -32,6 +32,7 @@ import {
 	redirectCityRaceToFourLevelUrl,
 	resolveClaimedCustomIssueText,
 	resolveClaimedTextField,
+	resolveDefaultElectionYear,
 	resolveLocalityName,
 	resolvePlaceRaceElectionDates,
 	resolveProfileAboutText,
@@ -1311,5 +1312,36 @@ describe('mapCandidacyToCard', () => {
 				0,
 			).href,
 		).toBe('/candidate/chris-lewis/ny-senate');
+	});
+});
+
+describe('resolveDefaultElectionYear', () => {
+	test('opens on the current year when it has elections', () => {
+		expect(resolveDefaultElectionYear([2020, 2022, 2026, 2028], 2026)).toBe(2026);
+	});
+
+	/**
+	 * The live case this fixed: Kane County, IL held 2020, 2022, 2024, 2025, 2027
+	 * and 2028, and opened on 2020 because the old rule took the first year in an
+	 * ascending list whenever the current year was missing.
+	 */
+	test('opens on the soonest year ahead when the current year has none', () => {
+		expect(resolveDefaultElectionYear([2020, 2022, 2024, 2025, 2027, 2028], 2026)).toBe(2027);
+	});
+
+	test('opens on the most recent year when nothing is upcoming', () => {
+		expect(resolveDefaultElectionYear([2020, 2021, 2023], 2026)).toBe(2023);
+	});
+
+	test('handles a place with a single past year', () => {
+		expect(resolveDefaultElectionYear([2021], 2026)).toBe(2021);
+	});
+
+	test('falls back to the current year when the place has no election data', () => {
+		expect(resolveDefaultElectionYear([], 2026)).toBe(2026);
+	});
+
+	test('does not assume the years arrive sorted', () => {
+		expect(resolveDefaultElectionYear([2028, 2020, 2027], 2026)).toBe(2027);
 	});
 });

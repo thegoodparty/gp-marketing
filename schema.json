@@ -5705,15 +5705,16 @@
                   "type": "string"
                 },
                 "optional": true
-              },
-              "field_searchPlaceholder": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                },
-                "optional": true
               }
             }
+          },
+          "optional": true
+        },
+        "stats": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "stats"
           },
           "optional": true
         },

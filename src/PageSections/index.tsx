@@ -87,7 +87,6 @@ export type SectionOverrides = {
 		countyName?: string;
 		cityName?: string;
 		bodyCopy?: string;
-		searchPlaceholder?: string;
 	};
 	component_listOfOfficesBlock?: {
 		heading?: string;

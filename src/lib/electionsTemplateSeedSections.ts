@@ -32,6 +32,41 @@ export { tmplPersonProfileSections };
 
 const profileStepperSection = tmplCandidateProfileSections.find(section => section._type === 'component_stepperBlock');
 
+// Values are placeholders until election-api can return per-location counts;
+// editors fill or overwrite any of the four in Studio.
+const locationHeroStats = (keyPrefix: string, locationToken: string) => ({
+	list_stats: [
+		{
+			_key: `${keyPrefix}-stat-days`,
+			_type: 'stat',
+			field_statValue: '[##]',
+			field_statDescription: 'days until the next election',
+			field_componentColor6ColorsCreamMidnight: 'BrightYellow',
+		},
+		{
+			_key: `${keyPrefix}-stat-positions`,
+			_type: 'stat',
+			field_statValue: '[##]',
+			field_statDescription: 'positions up for election',
+			field_componentColor6ColorsCreamMidnight: 'HaloGreen',
+		},
+		{
+			_key: `${keyPrefix}-stat-independents`,
+			_type: 'stat',
+			field_statValue: '[##]',
+			field_statDescription: 'independents on the ballot',
+			field_componentColor6ColorsCreamMidnight: 'Lavender',
+		},
+		{
+			_key: `${keyPrefix}-stat-uncontested`,
+			_type: 'stat',
+			field_statValue: '[##]',
+			field_statDescription: `uncontested elections in ${locationToken}`,
+			field_componentColor6ColorsCreamMidnight: 'Blue',
+		},
+	],
+});
+
 export const tmplElectionsPositionSections = [
 	{
 		_key: 'pos-breadcrumb',
@@ -343,8 +378,8 @@ export const tmplElectionsStateIndexSections = [
 		locationLandingPageHeroDesignSettings: { field_blockColorCreamMidnight: 'MidnightDark' },
 		locationLandingPageHeroContent: {
 			field_bodyCopy: 'Learn what state positions are up for election and who is currently running for office in [State].',
-			field_searchPlaceholder: 'Search positions',
 		},
+		stats: locationHeroStats('idx-hero', '[State]'),
 	},
 	{
 		_key: 'idx-offices',
@@ -394,8 +429,8 @@ export const tmplElectionsCountyIndexSections = [
 		locationLandingPageHeroDesignSettings: { field_blockColorCreamMidnight: 'MidnightDark' },
 		locationLandingPageHeroContent: {
 			field_bodyCopy: 'Learn what positions are up for election and who is currently running for office in [County].',
-			field_searchPlaceholder: 'Search positions',
 		},
+		stats: locationHeroStats('county-hero', '[County]'),
 	},
 	{
 		_key: 'county-offices',
@@ -445,8 +480,8 @@ export const tmplElectionsCityIndexSections = [
 		locationLandingPageHeroDesignSettings: { field_blockColorCreamMidnight: 'MidnightDark' },
 		locationLandingPageHeroContent: {
 			field_bodyCopy: 'Learn what positions are up for election and who is currently running for office in [City].',
-			field_searchPlaceholder: 'Search positions',
 		},
+		stats: locationHeroStats('city-hero', '[City]'),
 	},
 	{
 		_key: 'city-offices',
@@ -475,8 +510,8 @@ export const tmplElectionsDistrictIndexSections = [
 		locationLandingPageHeroDesignSettings: { field_blockColorCreamMidnight: 'MidnightDark' },
 		locationLandingPageHeroContent: {
 			field_bodyCopy: 'Learn what positions are up for election and who is currently running for office in [District].',
-			field_searchPlaceholder: 'Search positions',
 		},
+		stats: locationHeroStats('district-hero', '[District]'),
 	},
 	{
 		_key: 'district-offices',

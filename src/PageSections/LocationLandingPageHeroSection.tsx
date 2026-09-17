@@ -7,7 +7,7 @@ import { resolveSectionText } from '~/lib/resolveSectionText';
 import type { TokenMap } from '~/lib/resolveTokens';
 import { LocationLandingPageHero } from '~/ui/LocationLandingPageHero';
 import { resolveBg } from '~/ui/_lib/resolveBg';
-import { useElectionsLandingSearch } from '~/ui/ElectionsLandingSearchContext';
+import { resolveStats } from '~/ui/_lib/resolveStats';
 
 type Props = Extract<Sections, { _type: 'component_locationLandingPageHero' }> & {
 	locationOverride?: SectionOverrides['component_locationLandingPageHero'];
@@ -16,7 +16,6 @@ type Props = Extract<Sections, { _type: 'component_locationLandingPageHero' }> &
 
 export function LocationLandingPageHeroSection(props: Props) {
 	const { locationOverride, tokens, ...section } = props;
-	const search = useElectionsLandingSearch();
 	const backgroundColor = section.locationLandingPageHeroDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(stegaClean(section.locationLandingPageHeroDesignSettings.field_blockColorCreamMidnight))
 		: 'midnight';
@@ -28,8 +27,10 @@ export function LocationLandingPageHeroSection(props: Props) {
 	const bodyCopy =
 		resolveSectionText(locationOverride?.bodyCopy, tokens) ??
 		resolveSectionText(section.locationLandingPageHeroContent?.field_bodyCopy, tokens);
-	const searchPlaceholder =
-		locationOverride?.searchPlaceholder ?? section.locationLandingPageHeroContent?.field_searchPlaceholder ?? 'Search positions';
+	const stats = resolveStats(section.stats?.list_stats)?.map(stat => ({
+		...stat,
+		description: resolveSectionText(stat.description, tokens) ?? stat.description,
+	}));
 
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Location Landing Page Hero'>
@@ -40,9 +41,7 @@ export function LocationLandingPageHeroSection(props: Props) {
 				countyName={countyName}
 				cityName={cityName}
 				bodyCopy={bodyCopy}
-				searchPlaceholder={searchPlaceholder}
-				value={search?.searchQuery}
-				onChange={value => search?.setSearchQuery(value)}
+				stats={stats}
 			/>
 		</section>
 	);

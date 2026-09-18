@@ -23,7 +23,7 @@ export const redirectItem = {
       type: 'field_toUrl',
     },
     {
-      title: 'Mark as Permanent (301)',
+      title: 'Mark as Permanent (308)',
       name: 'field_permanentRedirect',
       type: 'field_permanentRedirect',
     },

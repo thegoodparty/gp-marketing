@@ -305,19 +305,26 @@ shadcn-derived components. This section is the evidence base — append each new
   short 224px band, making it read as one flat color. Flag for design: bless
   `--goodparty-blue-bright` as an official token / sync it to Figma.
 
-### Related infra bug: tailwind-merge drops font-size when combined with text color
+### ~~Related infra bug: tailwind-merge drops font-size when combined with text color~~ — FIXED
 
-The tailwind-merge used by the `Text` component / `cn` / `tv` slots does not
-recognize gp-marketing's custom `text-*` **color** utilities (`text-midnight-900`)
-or **size** utilities (`text-caption`, `text-body-2`, arbitrary `text-[…]`). It
-therefore treats a text-size and a text-color on the same element as one
-conflicting `text-*` group and keeps only the last (the color), **silently
-dropping the size** — even with `text-[length:…]`/`text-[color:…]` type hints. This
-is why the two hero pills rendered at 16px vs 12px until size and color were split
-onto separate elements (`ProfileHero` `tag`/`tagText`/`pledgeTag`). Per-component
-workaround: keep text-size and text-color on different elements. **Proper fix
-(owner: design-system/tokens):** extend the tailwind-merge config with classGroups
-for the custom `text-*` sizes and the brand color scales so they stop colliding.
+The tailwind-merge used by the `Text` component / `cn` / `tv` slots did not
+recognize gp-marketing's custom `text-*` **size** utilities (`text-caption`,
+`text-body-2`, arbitrary `text-[…]`), so it lumped a text-size and a text-color
+into one conflicting `text-*` group and kept only the last, **silently dropping
+the size** — even with `text-[length:…]`/`text-[color:…]` type hints. This is why
+the two hero pills rendered at 16px vs 12px until size and color were split onto
+separate elements (`ProfileHero` `tag`/`tagText`/`pledgeTag`).
+
+Fixed as described: `_lib/utils.ts` now names every `--text-*` token from
+`_styles/typography.css` in the `font-size` class group, and uses `extend`
+rather than `override` so tailwind-merge keeps its own arbitrary-length handling
+(an `override` dropped `text-[0.875rem]` into the color group the same way).
+Size and color can now sit on the same element. `typeScaleMerge.test.ts` fails if
+a token is added to `typography.css` without being added to the config.
+
+The split-element workarounds already in the tree (`ProfileHero`,
+`personSectionOverrides`) still render correctly and were left alone; new code
+does not need them.
 
 <!-- Add rows as the loop uncovers genuine data gaps. Do NOT use this file to
      excuse real layout bugs — only true data/heatmap/chrome exceptions belong. -->

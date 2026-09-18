@@ -20,7 +20,7 @@ import {
 	buildElectionPositionHrefFromRaceSlug,
 	getStateName,
 } from '~/lib/electionsHelpers';
-import { classifyParty, classifyPartyFrom, isMajorParty, type PartyClass } from '~/lib/party';
+import { classifyParty, classifyPartyFrom, isMajorParty, orderPartyNames, type PartyClass } from '~/lib/party';
 import { formatPersonName } from '~/lib/personName';
 import { buildPersonSlug, buildPersonSlugFromBase, slugifyName } from '~/lib/personSlug';
 import type { CandidacyItem } from '~/types/elections';
@@ -160,6 +160,14 @@ export interface PersonProfileView {
 	partyClass: PartyClass | null;
 	/** True for Republican/Democrat — strips the empowerment framing (states I/J). */
 	majorParty: boolean;
+	/**
+	 * True when the person cannot have taken the pledge at all: a major-party
+	 * affiliate, or one the CRM marks "Partisan Candidate". Checked BEFORE
+	 * {@link pledged}, so a bad `Pledge Status` cannot publish a pledge we know
+	 * to be impossible. Wider than {@link majorParty}, which still gates the
+	 * page's state letter and empowerment framing on party alone.
+	 */
+	pledgeIneligible: boolean;
 	/** True when the person requested removal (states K/L). */
 	removed: boolean;
 	/**
@@ -183,7 +191,13 @@ export interface PersonProfileView {
 	secondaryRoleTitle: string | null;
 	/** Bare office name for the sidebar "About Office" row. */
 	officeName: string | null;
+	/** Display label: {@link partyNames} joined with commas, major party first. */
 	party: string | null;
+	/**
+	 * The same parties unjoined, for consumers that must not treat the label as
+	 * one party's name (structured data emits one PoliticalParty per entry).
+	 */
+	partyNames: string[];
 	avatarUrl: string | null;
 	coverImageUrl: string | null;
 	initials: string;
@@ -674,6 +688,25 @@ function nameOf(first?: string | null, last?: string | null, fallback = ''): str
 	return formatPersonName([first, last].filter(Boolean).join(' ')) ?? fallback;
 }
 
+// HubSpot "Confirmed Candidate" (`verified_candidates`) as it arrives on the
+// person feed. These are the STORED values, which are not the labels the CRM
+// shows an editor: "Yes" is displayed there as "Running".
+const CONFIRMED_RUNNING = 'Yes';
+const CONFIRMED_PARTISAN = 'Partisan Candidate';
+
+/**
+ * `Confirmed Candidate = Running` is required alongside `Pledge Status = Yes`
+ * before we publish a pledge, so that one mistyped CRM field cannot assert one
+ * on its own.
+ *
+ * An ABSENT value passes. The field is not on the person feed yet, and treating
+ * "we were not told" as "not running" would silently clear the pledge line from
+ * every profile on the site the moment this shipped.
+ */
+function confirmedRunning(confirmedCandidate: string | null | undefined): boolean {
+	return confirmedCandidate == null ? true : confirmedCandidate === CONFIRMED_RUNNING;
+}
+
 /**
  * True only when the spine affirms the pledge AND the party evidence within
  * reach affirms eligibility. Party wins, as it does for the hero
@@ -697,6 +730,7 @@ function nameOf(first?: string | null, last?: string | null, fallback = ''): str
  */
 function pledgedFromSpine(person: PersonItem | undefined, ...rowParties: Array<string | null | undefined>): boolean {
 	if (person?.isPledged !== true) return false;
+	if (!confirmedRunning(person.confirmedCandidate)) return false;
 	const evidence = [
 		...rowParties,
 		...(person.OfficeHolders ?? []).flatMap((o) => o.partyNames ?? []),
@@ -944,17 +978,23 @@ export function composeView(
 	const displayName = overlay?.displayName ?? nameFromPerson ?? 'Public Official';
 	const office = pickCurrentOffice(person);
 	const persona = resolvePersona(person, office);
-	// Label and class must share one source precedence, or a "both" persona whose
-	// office and candidacy parties differ would show one party while being gated
-	// (majorParty → I/J empowerment) by the other. Office-first for both.
 	// Read the party off the CURRENT race, not whichever candidacy the API
 	// happens to return first: someone who ran as a Democrat in 2020 and is now
 	// running as an Independent would otherwise be gated as major-party (I/J)
 	// and lose the empowerment framing they qualify for.
 	const primaryCand = primaryCandidacy(person);
-	const rawParty = office?.partyNames?.[0] ?? primaryCand?.party ?? null;
-	const partyClass = classifyPartyFrom(office?.partyNames?.[0], primaryCand?.party);
+	// The label keeps the office-first precedence: a held office describes the
+	// person now, where a candidacy may be the seat they are only running for.
+	const partyNames = orderPartyNames(office?.partyNames?.length ? office.partyNames : [primaryCand?.party]);
+	const rawParty = partyNames.length > 0 ? partyNames.join(', ') : null;
+	// Class and label deliberately DIVERGE, where they used to share a source.
+	// Eligibility reads every line of the current office and candidacy, so a
+	// major-party nomination disqualifies wherever it sits in the list, even when
+	// the label leads with a minor line. Still scoped to the current office and
+	// race, so the 2020-Democrat-now-Independent case above is untouched.
+	const partyClass = classifyPartyFrom(...orderPartyNames([...(office?.partyNames ?? []), primaryCand?.party]));
 	const majorParty = isMajorParty(partyClass);
+	const pledgeIneligible = majorParty || person?.confirmedCandidate === CONFIRMED_PARTISAN;
 	const state = resolveProfileState(persona, { claimed, removed, partyClass });
 	// Empowerment framing applies to claimed pages and unclaimed non-partisan
 	// pages; it is stripped for major-party (I/J) and removal (K/L) states.
@@ -1008,8 +1048,15 @@ export function composeView(
 		unpublished,
 		empowered,
 		// Pledge is a factual spine flag; suppress it on removed (K/L) pages along
-		// with the rest of the authored/empowerment framing.
-		pledged: !removed && (person?.isPledged ?? false),
+		// with the rest of the authored/empowerment framing. Eligibility is read
+		// BEFORE the flag: a CRM `Pledge Status = Yes` on someone the same CRM
+		// calls partisan is a data error, not a pledge (Mamdani, Cuomo).
+		pledged:
+			!removed &&
+			!pledgeIneligible &&
+			confirmedRunning(person?.confirmedCandidate) &&
+			(person?.isPledged ?? false),
+		pledgeIneligible,
 		displayName,
 		roleTitle,
 		secondaryRoleTitle,
@@ -1017,6 +1064,9 @@ export function composeView(
 		// position so section headings ("About …", "Other Candidates for …") still
 		// name the seat they're running for, matching the Figma candidate frames.
 		officeName: office?.positionName ?? office?.officeTitle ?? candidacyTarget,
+		// Falls back to the class label so this never disagrees with `party`, which
+		// uses the same fallback when the spine names no party at all.
+		partyNames: partyNames.length > 0 ? partyNames : party ? [party] : [],
 		party,
 		avatarUrl,
 		coverImageUrl: removed ? null : (overlay?.coverImageUrl ?? null),

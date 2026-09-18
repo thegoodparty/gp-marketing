@@ -276,18 +276,17 @@ Experience row; avatar + "Pro Blocks / Tagline" cards are a people section.
   card-grouping restructure, not a gap value. Never tune a spacing number to make a
   delta go to zero without confirming the structure matches first (that is the
   harness's optimize-the-number failure in a new disguise).
-- **Font size silently vanishes when combined with a text color.** gp-marketing's
-  tailwind-merge (used by the `Text` component, `cn`, and `tv` slots) does NOT know
-  the repo's custom text COLORS (`text-midnight-900`) or SIZES (`text-caption`,
-  `text-[0.875rem]`), so it lumps them into one `text-*` group and keeps only the
-  last — usually the color — and DROPS the size. Symptom: an element renders at the
-  inherited 16px despite a size class, and two "identical" pills differ because one
-  has the color on a separate element. Even type hints (`text-[length:…]` /
-  `text-[color:…]`) don't save it. Fix: put size and color on SEPARATE elements
-  (container = color + shape; inner span = size + weight, no color). Always confirm
-  with a computed-style read (`getComputedStyle(el).fontSize`), never the source
-  class — the class you wrote may not be the class that landed. (Root cause + the
-  proper config fix are logged in `harness/FOLLOWUPS.md`.)
+- **Font size combined with a text color — FIXED, but still verify by measuring.**
+  This used to silently drop the size: tailwind-merge did not know the repo's custom
+  SIZES (`text-caption`, `text-[0.875rem]`), lumped them in with the color, and kept
+  only the last one. `_lib/utils.ts` now names every `--text-*` token from
+  `_styles/typography.css` in the `font-size` group, so size and color may sit on the
+  same element and the split-element workaround is no longer needed. Two things still
+  matter: (1) a NEW token added to `typography.css` must also be added to
+  `fontSizeUtilities` in `_lib/utils.ts` or it silently rejoins the color group —
+  `typeScaleMerge.test.ts` fails if you forget; (2) always confirm a size with a
+  computed-style read (`getComputedStyle(el).fontSize`), never the source class, since
+  a same-group conflict (two sizes, or two colors) still legitimately collapses.
 - **Coupled magic numbers.** A fixed-size element can also feed a layout offset:
   e.g. the hero avatar size drives the straddle negative-margin in `ProfileHero`
   (`-mb = avatarSize - 200`) AND the sidebar clearance in `ProfileContentBlock`.

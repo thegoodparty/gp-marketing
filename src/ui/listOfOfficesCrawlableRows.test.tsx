@@ -141,6 +141,22 @@ describe('ListOfOfficesBlock level filter', () => {
 		expect(html).toContain('Filter offices by election year');
 	});
 
+	test('a level whose races are in other years is still offered, and still linked', () => {
+		// Municipal races are often odd-year where county races are even-year, so a
+		// level frequently has no race in the year the page opened on.
+		const offices: OfficeItem[] = [
+			{ id: 'c1', type: 'CITY', level: 'local', position: 'Mayor', nextElectionDate: '2027-11-02', href: '/p/mayor' },
+			{ id: 'o1', type: 'COUNTY', level: 'county', position: 'County Judge', nextElectionDate: '2026-11-03', href: '/p/judge' },
+		];
+		const html = renderToStaticMarkup(
+			<ListOfOfficesBlock offices={offices} defaultYear={2027} availableYears={[2026, 2027]} pageLevel='local' />,
+		);
+		expect(html).toContain('>County</option>');
+		expect(html).toContain('href="/p/judge"');
+		expect(isRowHidden(html, '/p/mayor')).toBe(false);
+		expect(isRowHidden(html, '/p/judge')).toBe(true);
+	});
+
 	test('does not offer a level the page has no offices for', () => {
 		const noCounty = MULTI_LEVEL.filter(office => office.level !== 'county');
 		const html = renderToStaticMarkup(

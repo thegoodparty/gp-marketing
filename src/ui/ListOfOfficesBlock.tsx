@@ -12,7 +12,7 @@ import { IconResolver } from './IconResolver.tsx';
 import { ArrowRightIcon } from './icons/ArrowRightIcon.tsx';
 import { Button } from './Inputs/Button.tsx';
 import { DEFAULT_YEAR_OFFSET } from '~/constants/display';
-import { formatElectionDateFromApi, getYearFromDateString } from '~/lib/electionsHelpers';
+import { formatElectionDateFromApi, getYearFromDateString, resolveDefaultElectionYear } from '~/lib/electionsHelpers';
 
 const styles = tv({
 	slots: {
@@ -210,10 +210,32 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 		props.onYearChange?.(year);
 	};
 
+	/**
+	 * Switching level moves the year too when the current one has nothing at that
+	 * level. Levels genuinely run on different cycles — municipal races are often
+	 * odd-year where county and state races are even-year — so holding the year
+	 * would drop a visitor on "No offices found" for most of the switches they
+	 * make, with the races they asked for sitting one year away.
+	 */
 	const handleLevelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const level = e.target.value as OfficeLevel;
 		setSelectedLevel(level);
 		setVisibleCount(pageSize);
+
+		const yearsAtLevel = [
+			...new Set(
+				props.offices
+					.filter(office => (office.level ?? pageLevel) === level)
+					.map(office => getYearFromDateString(office.nextElectionDate))
+					.filter(year => !Number.isNaN(year)),
+			),
+		];
+		if (yearsAtLevel.length > 0 && !yearsAtLevel.includes(selectedYear)) {
+			const nextYear = resolveDefaultElectionYear(yearsAtLevel);
+			setSelectedYear(nextYear);
+			props.onYearChange?.(nextYear);
+		}
+
 		props.onLevelChange?.(level);
 	};
 

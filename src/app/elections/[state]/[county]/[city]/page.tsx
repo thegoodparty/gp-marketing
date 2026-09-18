@@ -3,6 +3,7 @@ import { notFound, permanentRedirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	getCountyChildPlaces,
+	getFeaturedCities,
 	getPlacesByState,
 	getPlaceBySlug,
 	isCityOrTownMtfcc,
@@ -45,7 +46,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 
 	const shortSlug = `${state.toLowerCase()}/${city.toLowerCase()}`;
 
-	const [counties, placeData, countyFactsData, countyChildPlaces] = await Promise.all([
+	const [counties, placeData, countyFactsData, countyChildPlaces, featuredCities] = await Promise.all([
 		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
 		getPlaceBySlug({
 			slug: fullSlug,
@@ -60,6 +61,9 @@ export default async function Page({ params }: { params: Promise<{ state: string
 			includeRaces: false,
 		}),
 		getCountyChildPlaces({ state: stateCode, countySlug }),
+		// The rest of the surrounding county: a city page features its neighbours,
+		// never itself.
+		getFeaturedCities({ stateCode, countySlug, citySlug: fullSlug }),
 	]);
 
 	let resolvedPlaceData = placeData;
@@ -126,6 +130,8 @@ export default async function Page({ params }: { params: Promise<{ state: string
 			availableYears,
 			offices: districtOffices,
 			electionsIndexHidden: true,
+			// A district page has no cities of its own, so it features none.
+			featuredCities: [],
 			locationFacts: factsCards.length > 0 ? { title: `${districtName} facts`, factsCards } : { hidden: true },
 			pageUrl,
 			pageTitle: `Elections in ${districtName}, ${stateName}`,
@@ -223,6 +229,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		availableYears,
 		offices: cityOffices,
 		electionsIndexHidden: true,
+		featuredCities,
 		locationFacts: factsCards.length > 0 ? { title: `${cityName} facts`, factsCards } : { hidden: true },
 		pageUrl,
 		pageTitle: `Elections in ${cityName}, ${stateName}`,

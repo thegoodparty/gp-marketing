@@ -298,6 +298,74 @@ export function getYearFromDateString(dateStr: string): number {
 export const PLACE_RACE_COLUMNS =
 	'slug,normalizedPositionName,electionDate,positionDescription,positionLevel,isPrimary';
 
+/**
+ * Race columns for the Featured Cities carousel. Deliberately the two fields the
+ * count needs and nothing else: this read pulls every city in a state, so each
+ * extra column multiplies by the whole state's race table.
+ */
+export const FEATURED_CITY_RACE_COLUMNS = 'slug,electionDate';
+
+/**
+ * How many elections a Featured Cities card reports: the races in that city's next
+ * election cycle — this year when it has any, else the soonest year ahead.
+ *
+ * Per-city rather than per-page on purpose. A state page's offices list opens on the
+ * year of its *state* races, and counting every city against that one year would
+ * report 0 for a city whose own cycle falls a year later. Races only in past years
+ * count as none, because a card headed "Open Elections" must not count an election
+ * that has already happened.
+ */
+export function countOpenElections(races: PlaceRace[] | undefined, currentYear: number = new Date().getFullYear()): number {
+	const years = (races ?? [])
+		.map(race => (race.electionDate ? getYearFromDateString(race.electionDate) : NaN))
+		.filter(year => Number.isFinite(year) && year >= currentYear);
+	if (years.length === 0) return 0;
+	const cycleYear = years.includes(currentYear) ? currentYear : Math.min(...years);
+	return years.filter(year => year === cycleYear).length;
+}
+
+export type RankFeaturedCitiesConfig = {
+	count: number;
+	/**
+	 * Slug of the place the page is about, so a city page never features itself.
+	 * Matched on the trailing segment as well as the whole slug, because the same
+	 * city comes back as `ca/anytown` from one read and
+	 * `ca/some-county/anytown` from another, and two cities in one county cannot
+	 * share a name.
+	 */
+	excludeSlug?: string;
+	currentYear?: number;
+};
+
+function lastSlugSegment(slug: string): string {
+	return slug.toLowerCase().split('/').pop() ?? '';
+}
+
+/**
+ * The `count` cities with the most open elections, highest first. Cities with none
+ * are dropped rather than shown as "0 Open Elections": a place with nothing on the
+ * ballot is not a featured city, and a zero here is as likely to mean "no data yet"
+ * as a genuinely empty ballot.
+ */
+export function rankFeaturedCities(
+	places: PlaceItem[],
+	config: RankFeaturedCitiesConfig,
+): Array<{ place: PlaceItem; openElectionsCount: number }> {
+	const exclude = config.excludeSlug?.toLowerCase();
+	const excludeSegment = exclude ? lastSlugSegment(exclude) : '';
+	return places
+		.filter(place => {
+			if (!place.slug || !place.name) return false;
+			if (!exclude) return true;
+			const slug = place.slug.toLowerCase();
+			return slug !== exclude && lastSlugSegment(slug) !== excludeSegment;
+		})
+		.map(place => ({ place, openElectionsCount: countOpenElections(place.Races, config.currentYear) }))
+		.filter(entry => entry.openElectionsCount > 0)
+		.sort((a, b) => b.openElectionsCount - a.openElectionsCount || a.place.name.localeCompare(b.place.name))
+		.slice(0, config.count);
+}
+
 function startOfLocalDay(date: Date): Date {
 	return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }

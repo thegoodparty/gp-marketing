@@ -2,6 +2,7 @@ import { describe, expect, test } from 'bun:test';
 
 import {
 	buildCandidatesTokens,
+	buildElectionsIndexSectionOverrides,
 	buildPositionSectionOverrides,
 	buildPositionTokens,
 } from '~/lib/electionsTemplateHelpers';
@@ -81,5 +82,33 @@ describe('buildCandidatesTokens', () => {
 	test('does not supply [candidate name]', () => {
 		const tokens = buildCandidatesTokens(tokenCtx);
 		expect(resolveTokens('Meet [candidate name]', tokens)).toBe('Meet ');
+	});
+});
+
+describe('buildElectionsIndexSectionOverrides', () => {
+	const indexCtx = {
+		breadcrumbs: [{ href: '/elections', label: 'Elections' }],
+		locationLevel: 'state' as const,
+		stateName: 'Tennessee',
+	};
+
+	test('passes the page’s own featured cities to the block', () => {
+		const overrides = buildElectionsIndexSectionOverrides({
+			...indexCtx,
+			featuredCities: [{ name: 'Nashville', stateAbbreviation: 'TN', openElectionsCount: 12, href: '/elections/tn/davidson-county/nashville' }],
+		});
+
+		expect(overrides.component_featuredCitiesBlock?.cities).toEqual([
+			{ name: 'Nashville', stateAbbreviation: 'TN', openElectionsCount: 12, href: '/elections/tn/davidson-county/nashville' },
+		]);
+	});
+
+	/**
+	 * The silent-wrong-data case: an unset value must hide the block, not let it
+	 * fall through to the national city list on a Tennessee page.
+	 */
+	test('sends an empty list rather than nothing when the page has no featured cities', () => {
+		const overrides = buildElectionsIndexSectionOverrides(indexCtx);
+		expect(overrides.component_featuredCitiesBlock?.cities).toEqual([]);
 	});
 });

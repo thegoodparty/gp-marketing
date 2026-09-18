@@ -4,6 +4,7 @@ import { __resetElectionApiAuthForTests } from './electionApiAuth';
 import {
 	getCitySlugToCountySlugMap,
 	getCountyChildPlaces,
+	getFeaturedCities,
 	getPersonMergeSurvivorChain,
 	getPersonMergeSurvivorId,
 	getRemovedPersonIds,
@@ -682,5 +683,128 @@ describe('getPersonMergeSurvivorChain', () => {
 		}) as typeof fetch;
 
 		expect((await getPersonMergeSurvivorChain(R)).length).toBe(3);
+	});
+});
+
+describe('getFeaturedCities', () => {
+	const nextYear = new Date().getFullYear() + 1;
+	const city = (slug: string, name: string, races: number, mtfcc = 'G4110') => ({
+		slug,
+		name,
+		mtfcc,
+		state: 'TN',
+		countyName: 'Davidson',
+		Races: Array.from({ length: races }, (_, i) => ({
+			id: `${slug}-${i}`,
+			slug: `${slug}-race-${i}`,
+			electionDate: `${nextYear}-11-03`,
+		})),
+	});
+
+	test('ranks the cities of a county and links them under that county', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('slug=tn%2Fdavidson-county'),
+				body: [
+					{
+						slug: 'tn/davidson-county',
+						name: 'Davidson County',
+						mtfcc: 'G4020',
+						children: [city('tn/davidson-county/belle-meade', 'Belle Meade', 1), city('tn/davidson-county/nashville', 'Nashville', 4)],
+					},
+				],
+			},
+		]);
+
+		const result = await getFeaturedCities({ stateCode: 'TN', countySlug: 'tn/davidson-county' });
+		expect(result).toEqual([
+			{ name: 'Nashville', stateAbbreviation: 'TN', openElectionsCount: 4, href: '/elections/tn/davidson-county/nashville' },
+			{ name: 'Belle Meade', stateAbbreviation: 'TN', openElectionsCount: 1, href: '/elections/tn/davidson-county/belle-meade' },
+		]);
+	});
+
+	test('leaves the page’s own city out of its neighbours', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('slug=tn%2Fdavidson-county'),
+				body: [
+					{
+						slug: 'tn/davidson-county',
+						name: 'Davidson County',
+						mtfcc: 'G4020',
+						children: [city('tn/davidson-county/nashville', 'Nashville', 4), city('tn/davidson-county/belle-meade', 'Belle Meade', 1)],
+					},
+				],
+			},
+		]);
+
+		const result = await getFeaturedCities({
+			stateCode: 'TN',
+			countySlug: 'tn/davidson-county',
+			citySlug: 'tn/davidson-county/nashville',
+		});
+		expect(result.map(c => c.name)).toEqual(['Belle Meade']);
+	});
+
+	test('sweeps the state on a state page and resolves each city’s county for the link', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('state=TN') && url.includes('mtfcc=G4110'),
+				body: [city('tn/nashville', 'Nashville', 4)],
+			},
+			{
+				match: url => url.includes('/v1/places?') && url.includes('state=TN') && url.includes('mtfcc=G4040'),
+				body: [city('tn/smallville', 'Smallville', 2, 'G4040')],
+			},
+			{
+				match: url => url.includes('/v1/places?') && url.includes('state=TN') && url.includes('mtfcc=G4020'),
+				body: [{ slug: 'tn/davidson-county', name: 'Davidson County', mtfcc: 'G4020', state: 'TN' }],
+			},
+		]);
+
+		const result = await getFeaturedCities({ stateCode: 'TN' });
+		expect(result).toEqual([
+			{ name: 'Nashville', stateAbbreviation: 'TN', openElectionsCount: 4, href: '/elections/tn/davidson-county/nashville' },
+			{ name: 'Smallville', stateAbbreviation: 'TN', openElectionsCount: 2, href: '/elections/tn/davidson-county/smallville' },
+		]);
+	});
+
+	test('does not sweep the state for a school district, which has no cities', async () => {
+		let sweeps = 0;
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('slug=tn%2Fsome-school-district'),
+				body: [{ slug: 'tn/some-school-district', name: 'Some School District', mtfcc: 'G5420', state: 'TN', children: [] }],
+			},
+			{
+				match: url => {
+					const isSweep = url.includes('/v1/places?') && url.includes('mtfcc=G4110');
+					if (isSweep) sweeps += 1;
+					return isSweep;
+				},
+				body: [city('tn/nashville', 'Nashville', 4)],
+			},
+		]);
+
+		expect(await getFeaturedCities({ stateCode: 'TN', countySlug: 'tn/some-school-district' })).toEqual([]);
+		expect(sweeps).toBe(0);
+	});
+
+	test('returns nothing when the place has no cities with elections', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('slug=tn%2Fempty-county'),
+				body: [
+					{
+						slug: 'tn/empty-county',
+						name: 'Empty County',
+						mtfcc: 'G4020',
+						children: [{ slug: 'tn/empty-county/nowhere', name: 'Nowhere', mtfcc: 'G4110', state: 'TN', countyName: 'Empty', Races: [] }],
+					},
+				],
+			},
+		]);
+
+		expect(await getFeaturedCities({ stateCode: 'TN', countySlug: 'tn/empty-county' })).toEqual([]);
 	});
 });

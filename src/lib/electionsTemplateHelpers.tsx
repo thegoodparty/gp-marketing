@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 
 import type { SectionOverrides } from '~/PageSections';
 import type { TokenMap } from '~/lib/resolveTokens';
-import type { RaceDetail } from '~/types/elections';
+import type { FeaturedCityCard, RaceDetail } from '~/types/elections';
 import type { CandidateCard } from '~/ui/CandidatesBlock';
 import type { BreadcrumbItem } from '~/ui/BreadcrumbBlock';
 import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
@@ -276,6 +276,7 @@ export type ElectionsIndexPageContext = {
 	pageDescription?: string;
 	electionsIndexHeader?: { title?: string; copy?: string; searchPlaceholder?: string };
 	electionsIndexHidden?: boolean;
+	featuredCities?: FeaturedCityCard[];
 	locationFacts?: {
 		title?: string;
 		factsCards?: Array<{ factType: string; label: string; value: string }>;
@@ -307,6 +308,9 @@ export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageConte
 			hidden: ctx.electionsIndexHidden,
 			header: ctx.electionsIndexHeader,
 		},
+		// Always set, even to []: a location page must never fall through to the
+		// block's national city list (see the SectionOverrides comment).
+		component_featuredCitiesBlock: { cities: ctx.featuredCities ?? [] },
 		component_locationFactsBlock: ctx.locationFacts
 			? {
 					headerTitle: ctx.locationFacts.title,

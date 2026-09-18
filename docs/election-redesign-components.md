@@ -40,7 +40,7 @@ trust:
 
 | Requested | Existing block worth checking first |
 | --- | --- |
-| Featured cities carousel | `component_featuredCitiesBlock` |
+| Featured cities carousel | ~~`component_featuredCitiesBlock`~~ — audited, confirmed. Extended in place; see below |
 | Animated map block | `component_voterDensityBlock` (the map itself is built) |
 | Animated number block | `component_statsBlock`, plus the animation |
 | 3-step How to run for [Position Name] | `component_stepperBlock` |
@@ -89,6 +89,49 @@ Two things that came out of it and affect other components in the batch:
 Note for whoever wires up the links: a case study that lives as an `article` can be picked with
 the internal link picker, but `/people/*` profiles are rendered from election-api and have no
 Sanity document, so a profile link has to be the External option with a pasted path.
+
+**Featured cities carousel** (location pages) — extended `component_featuredCitiesBlock`,
+data-backed. The hypothesis held: the block existed and its `LocationCard` was already the Figma
+card. Two things were missing, and only the second was real work.
+
+- **The layout.** It was a static three-across grid; the design is a carousel. The chrome came
+  free from `Carousel.tsx` (`PrevButton`/`NextButton`/`useDotButton`/`usePrevNextButtons` and
+  `CarouselIndicator`) exactly as `component_testimonialBlockWithLink` borrows it. Pagination
+  pills are mobile-only per the design; desktop navigates with the arrows.
+- **The scope.** The block showed the top three cities *nationally* on every page it appeared on,
+  because it self-fetched `/v1/places/most-elections`. It now takes its cities from
+  `SectionOverrides`, populated per page by `getFeaturedCities` (five cards, fewer when a place
+  has fewer cities): the cities of a county on a county page, the surrounding county's other
+  cities on a city page, every city in the state on a state page, and nothing on a district page.
+  Pages that set no override — /elections, landing pages — keep the national list, which is why
+  `buildElectionsIndexSectionOverrides` always sets `cities`, to `[]` if it has none. An unset
+  value would silently put national cities back on a state page.
+
+Three things that came out of it and affect other components in the batch:
+
+- **`/v1/places/most-elections` cannot be scoped.** It takes `count` and nothing else, ranks by
+  all-time race count, and excludes only states (`mtfcc <> 'G4000'`), so counties can come back
+  as "cities". That is why the scoped counts are computed here instead: a county read with
+  `includeChildRaces=true` returns its cities with their races in one call, but a state has no
+  such read (cities are its grandchildren), so a state page sweeps every city and town in the
+  state. The sweep is cached per state and shared by every page in it, but it is still the
+  expensive half of this block, and it is the same aggregate-by-place-and-year that the hero
+  stat cards, the candidates rows and nearby offices all want from election-api.
+- **`/v1/places` supports `includeChildRaces`**, which is not obvious and is not what
+  `includeRaces` does: `includeRaces` returns the parent's races, `includeChildRaces` returns
+  each child's. Both need `includeChildren` for the children to appear at all.
+- **"Open Elections" on a card means that city's next election cycle** — races this year when
+  it has any, else the soonest year ahead — not the page's year and not an all-time total.
+  Counting every city against the page's `defaultYear` would report 0 for a city whose own cycle
+  falls a year later, and most cities would tie at zero. Cities with nothing upcoming are dropped
+  rather than shown as "0 Open Elections". The exception is /elections, still on the national
+  endpoint's all-time `race_count`; settle that when the aggregate lands.
+
+Two things left alone deliberately: the state silhouettes in `public/icons/states/` are wrong for
+some states (`tn.svg`, `ca.svg` and `fl.svg` are square-ish rather than the real outline), which
+predates this work and needs the assets redrawn, not code; and the manual city list in Studio was
+kept as the no-data fallback rather than deleted, because deleting the field would delete the
+content already in it.
 
 ## The shared election counts, as marketing defined them
 

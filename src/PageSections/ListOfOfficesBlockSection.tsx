@@ -33,6 +33,16 @@ export function ListOfOfficesBlockSection(props: Props) {
 			href: stegaClean(office.field_href) || undefined,
 		})) ?? []);
 
+	/**
+	 * The editor's heading wins, with its location tokens resolved — the templates
+	 * already carry one ("State Elections in [State]", "City Elections in [City]").
+	 * The route's computed heading is the fallback, so a page still has a sensible
+	 * heading if the field is ever cleared.
+	 */
+	const heading =
+		resolveSectionText(stegaClean(section.field_heading), tokens) ||
+		resolveSectionText(officesOverride?.headline, tokens);
+
 	const availableYears =
 		officesOverride?.availableYears ??
 		(section.field_availableYears && section.field_availableYears.length > 0
@@ -52,13 +62,14 @@ export function ListOfOfficesBlockSection(props: Props) {
 		>
 			<ListOfOfficesBlock
 				backgroundColor={backgroundColor}
-				heading={resolveSectionText(officesOverride?.heading ?? stegaClean(section.field_heading), tokens)}
-				headline={resolveSectionText(officesOverride?.headline ?? stegaClean(section.field_headline), tokens)}
+				heading={heading}
 				defaultYear={defaultYear}
 				availableYears={availableYears}
 				offices={offices}
+				pageLevel={officesOverride?.pageLevel}
 				searchQuery={search?.searchQuery}
 				onYearChange={() => search?.setSearchQuery('')}
+				onLevelChange={() => search?.setSearchQuery('')}
 			/>
 		</section>
 	);

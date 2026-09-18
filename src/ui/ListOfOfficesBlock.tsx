@@ -12,81 +12,72 @@ import { IconResolver } from './IconResolver.tsx';
 import { ArrowRightIcon } from './icons/ArrowRightIcon.tsx';
 import { Button } from './Inputs/Button.tsx';
 import { DEFAULT_YEAR_OFFSET } from '~/constants/display';
-import { formatElectionDateFromApi, getYearFromDateString } from '~/lib/electionsHelpers';
+import { formatElectionDateFromApi, getYearFromDateString, resolveDefaultElectionYear } from '~/lib/electionsHelpers';
 
+/**
+ * Text colour is set once on `base` and inherited, and never written as a
+ * `text-<colour>` next to a `text-<size>` in the same slot.
+ *
+ * tailwind-merge (inside `tv`) cannot tell this design system's font-size names
+ * from colour names, so it reads `text-subtitle-1 text-black` as two colours and
+ * keeps only the last — silently dropping the size. That is how the whole block
+ * came to render at 16px while looking deliberate: heading 32px because it was
+ * the one slot with no colour beside it, everything else collapsed. The few
+ * colours that must differ from the inherited one use the arbitrary-property
+ * form, which sits in its own group and cannot collide with a size.
+ */
 const styles = tv({
 	slots: {
-		base: 'py-(--container-padding)',
-		wrapper: 'flex flex-col gap-6',
-		headingWrapper: 'flex items-center gap-2 justify-center',
-		headingIcon: 'w-4 h-4 text-lavender-600',
-		card: 'bg-goodparty-cream rounded-lg p-6 md:p-8',
-		headerRow: 'flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6',
-		headline: 'font-primary text-heading-md md:text-heading-lg',
-		yearSelectorWrapper: 'relative flex items-center gap-2',
-		yearLabel: 'font-secondary text-subtitle-2 text-neutral-600',
-		yearSelect: [
-			'appearance-none rounded-lg border border-neutral-300 bg-white px-4 py-2 pr-10',
-			'text-black focus:border-goodparty-blue focus:outline-none focus:ring-2 focus:ring-goodparty-blue/30',
-			'cursor-pointer font-secondary text-body-2 min-w-[120px]',
+		base: 'py-(--container-padding) bg-goodparty-cream text-black',
+		wrapper: 'flex flex-col gap-8',
+		headerRow: 'flex flex-col gap-4 md:flex-row md:items-end md:justify-between',
+		heading: 'font-primary text-section-heading',
+		filters: 'flex items-end gap-6',
+		filter: 'flex flex-col gap-1',
+		filterLabel: 'font-secondary text-text-875',
+		selectShell: 'relative',
+		select: [
+			'h-10 w-[6.6875rem] appearance-none rounded-full border border-black/15 bg-white pl-4 pr-9',
+			'cursor-pointer font-secondary text-text-875',
+			'focus:border-goodparty-blue focus:outline-none focus:ring-2 focus:ring-goodparty-blue/30',
 		],
-		yearSelectIcon: 'absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500',
-		tableWrapper: 'overflow-x-auto',
-		table: 'w-full border-collapse',
-		tableHeader: 'flex items-center gap-4 px-4 py-3 mb-2',
-		tableHeaderCell: 'font-secondary text-subtitle-2 text-neutral-600 font-semibold',
-		headerPositionCell: 'ml-8',
-		headerDateCell: 'ml-auto',
-		tableBody: 'flex flex-col gap-3',
-		tableRow:
-			'group bg-white rounded-lg border border-neutral-200 hover:border-goodparty-blue transition-colors flex items-center gap-4 px-4 py-4',
-		tableCell: 'flex items-center',
-		positionCell: 'flex items-center ml-2',
-		typeTag:
-			'inline-block px-3 py-1 rounded-sm bg-goodparty-blue text-white font-secondary text-text-xs font-semibold uppercase whitespace-nowrap',
-		positionText: 'font-secondary text-body-2 text-neutral-900',
-		dateText: 'font-secondary text-body-2 text-neutral-600',
-		dateCell: 'flex items-center ml-auto',
-		arrowIcon: 'text-neutral-900',
-		cardList: 'flex flex-col gap-3 md:hidden',
-		// `block` because the card is an <a>: it used to be a flex child of cardList
-		// and got blockified, and it now sits inside a per-row wrapper instead.
-		officeCard: 'group block bg-neutral-50 rounded-lg p-4 border border-neutral-200 hover:border-goodparty-blue transition-colors',
-		cardContent: 'flex items-start justify-between gap-4',
-		cardLeft: 'flex-1 flex flex-col gap-2',
-		cardRight: 'flex-shrink-0 self-end',
-		desktopTable: 'hidden md:block',
-		showMoreWrapper: 'flex justify-center pt-4',
+		selectIcon: 'pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2',
+		list: 'flex flex-col gap-4',
+		// Mirrors the row grid so the labels sit over their own columns.
+		listHeader: 'hidden md:grid md:grid-cols-[7.6875rem_1fr_auto_2.5rem] md:items-center md:gap-x-4 md:px-3.5',
+		listHeaderCell: 'font-secondary text-text-875 font-semibold',
+		headerDateCell: 'text-right',
+		row: [
+			'group grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2 rounded-lg border border-black/10 bg-white p-3',
+			'transition-colors hover:border-goodparty-blue',
+			'md:h-15 md:grid-cols-[7.6875rem_1fr_auto_2.5rem] md:gap-y-0 md:px-3.5 md:py-0',
+		],
+		tagCell: 'col-span-2 md:col-span-1 md:col-start-1 md:row-start-1',
+		// The tag is white on navy in both variants, so it sets its own colour.
+		tag: 'inline-block w-fit rounded-sm bg-blue-900 px-2 py-1 font-primary text-caption font-medium tracking-[0.0625rem] [color:white] uppercase',
+		positionCell: 'col-span-2 font-primary text-row-title md:col-span-1 md:col-start-2 md:row-start-1',
+		dateCell: 'font-secondary text-row-meta md:col-start-3 md:row-start-1 md:text-right',
+		arrowCell: 'justify-self-end md:col-start-4 md:row-start-1',
+		empty: 'py-8 text-center font-secondary text-body-2 [color:var(--color-neutral-500)]',
+		showMoreWrapper: 'flex justify-center pt-2',
 	},
 	variants: {
 		backgroundColor: {
+			// Everything that is plain white on midnight inherits it from `base`.
 			midnight: {
 				base: 'bg-midnight-900 text-white',
-				card: 'bg-neutral-900 border-lavender-500',
-				headline: 'text-white',
-				yearLabel: 'text-neutral-300',
-				yearSelect: 'bg-neutral-800 border-neutral-600 text-white focus:border-lavender-400',
-				yearSelectIcon: 'text-neutral-400',
-				tableHeaderCell: 'text-neutral-300',
-				positionText: 'text-neutral-900',
-				dateText: 'text-neutral-300',
-				officeCard: 'bg-neutral-800 border-neutral-700',
+				select: 'border-white/20 bg-midnight-800 focus:border-lavender-400',
+				row: 'border-white/10 bg-midnight-800 hover:border-lavender-400',
+				dateCell: '[color:var(--color-neutral-300)]',
+				empty: '[color:var(--color-neutral-300)]',
 			},
-			cream: {
-				base: '',
-				card: 'bg-goodparty-cream',
-				headline: 'text-neutral-900',
-				yearLabel: 'text-neutral-600',
-				yearSelect: 'bg-white border-neutral-300 text-black',
-				yearSelectIcon: 'text-neutral-500',
-				tableHeaderCell: 'text-neutral-600',
-				positionText: 'text-neutral-900',
-				dateText: 'text-neutral-700',
-				officeCard: 'bg-neutral-50 border-neutral-200',
-			},
+			cream: {},
 		},
 	},
 });
+
+/** Which Level view an office belongs to. */
+export type OfficeLevel = 'local' | 'county' | 'state';
 
 export interface OfficeItem {
 	id: string;
@@ -94,85 +85,114 @@ export interface OfficeItem {
 	position: string;
 	nextElectionDate: string;
 	href?: string;
+	/**
+	 * Which Level view this office appears under. Offices without one are treated
+	 * as belonging to the page's own level, which is every office on a page whose
+	 * route does not yet supply the overlapping levels.
+	 */
+	level?: OfficeLevel;
 }
 
-export type HeadlineLabelType = 'state' | 'municipal' | 'county' | 'district';
+const LEVEL_LABELS: Record<OfficeLevel, string> = {
+	local: 'Local',
+	county: 'County',
+	state: 'State',
+};
+
+/**
+ * The levels a page can show, in menu order. A voter in a city also votes in
+ * that city's county and state races, so a city page can look *up*; the reverse
+ * is not a ballot relationship (and a state's every municipal race is far too
+ * many rows), so nothing looks down. See docs/election-redesign-components.md.
+ */
+const LEVELS_BY_PAGE: Record<OfficeLevel, OfficeLevel[]> = {
+	local: ['local', 'county', 'state'],
+	county: ['county', 'state'],
+	state: ['state'],
+};
 
 export interface ListOfOfficesBlockProps {
 	className?: string;
 	backgroundColor?: 'cream' | 'midnight';
+	/** The section heading, e.g. "Local elections in Austin". */
 	heading?: string;
-	/** Pre-built headline string (used when headlineLabel is not set). */
-	headline?: string;
-	/** When set, headline is derived as "{count} {label} positions up for election in {selectedYear}". */
-	headlineLabel?: HeadlineLabelType;
 	defaultYear?: number;
 	availableYears?: number[];
 	pageSize?: number;
 	offices: OfficeItem[];
+	/**
+	 * The level the page itself represents. Sets the Level dropdown's default and
+	 * which levels it offers. A state page offers only its own, so it gets no
+	 * dropdown at all rather than one with a single choice.
+	 */
+	pageLevel?: OfficeLevel;
 	/** When true and there are no offices, show "Loading…" instead of "No offices found". */
 	isLoading?: boolean;
 	/** When set, filter offices by position name (case-insensitive substring). */
 	searchQuery?: string;
 	onYearChange?(year: number): void;
+	onLevelChange?(level: OfficeLevel): void;
 	onOfficeClick?(office: OfficeItem): void;
 }
 
 export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
 	const defaultYear = props.defaultYear ?? new Date().getFullYear() + DEFAULT_YEAR_OFFSET;
-	const availableYears = props.availableYears ?? [defaultYear - 4, defaultYear - 3, defaultYear - 2, defaultYear - 1, defaultYear];
+	const availableYears = props.availableYears ?? [defaultYear];
 	const pageSize = props.pageSize ?? 10;
+	const pageLevel = props.pageLevel ?? 'state';
 
 	const [selectedYear, setSelectedYear] = useState(defaultYear);
+	const [selectedLevel, setSelectedLevel] = useState<OfficeLevel>(pageLevel);
 	const [visibleCount, setVisibleCount] = useState(pageSize);
 
 	const {
 		base,
 		wrapper,
-		card,
 		headerRow,
-		headline: headlineStyle,
-		yearSelectorWrapper,
-		yearLabel,
-		yearSelect,
-		yearSelectIcon,
-		tableWrapper,
-		tableHeader,
-		tableHeaderCell,
-		headerPositionCell,
+		heading: headingStyle,
+		filters,
+		filter,
+		filterLabel,
+		selectShell,
+		select,
+		selectIcon,
+		list,
+		listHeader,
+		listHeaderCell,
 		headerDateCell,
-		tableBody,
-		tableRow,
-		tableCell,
+		row,
+		tagCell,
+		tag,
 		positionCell,
-		typeTag,
-		positionText,
-		dateText,
 		dateCell,
-		arrowIcon,
-		cardList,
-		officeCard,
-		cardContent,
-		cardLeft,
-		cardRight,
-		desktopTable,
+		arrowCell,
+		empty,
 		showMoreWrapper,
 	} = styles({ backgroundColor });
 
-	// Filter offices by selected year and optional search query (position name, case-insensitive substring)
+	/**
+	 * Only offer a level the page actually has offices for. A city whose county
+	 * has no races should not get a County option that leads to an empty list.
+	 */
+	const levelOptions = useMemo(() => {
+		const present = new Set(props.offices.map(office => office.level ?? pageLevel));
+		return LEVELS_BY_PAGE[pageLevel].filter(level => level === pageLevel || present.has(level));
+	}, [props.offices, pageLevel]);
+
 	const filteredOffices = useMemo(() => {
-		let list = props.offices.filter(office => {
+		let matches = props.offices.filter(office => {
+			if ((office.level ?? pageLevel) !== selectedLevel) return false;
 			const dateYear = getYearFromDateString(office.nextElectionDate);
 			return !Number.isNaN(dateYear) && dateYear === selectedYear;
 		});
 		const q = props.searchQuery?.trim();
 		if (q) {
 			const lower = q.toLowerCase();
-			list = list.filter(office => office.position.toLowerCase().includes(lower));
+			matches = matches.filter(office => office.position.toLowerCase().includes(lower));
 		}
-		return list;
-	}, [props.offices, selectedYear, props.searchQuery]);
+		return matches;
+	}, [props.offices, pageLevel, selectedYear, selectedLevel, props.searchQuery]);
 
 	/**
 	 * Every office stays in the markup and the ones outside the current view are
@@ -198,38 +218,80 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 		props.onYearChange?.(year);
 	};
 
-	const handleOfficeClick = (office: OfficeItem) => {
-		props.onOfficeClick?.(office);
-	};
+	/**
+	 * Switching level moves the year too when the current one has nothing at that
+	 * level. Levels genuinely run on different cycles — municipal races are often
+	 * odd-year where county and state races are even-year — so holding the year
+	 * would drop a visitor on "No offices found" for most of the switches they
+	 * make, with the races they asked for sitting one year away.
+	 */
+	const handleLevelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const level = e.target.value as OfficeLevel;
+		setSelectedLevel(level);
+		setVisibleCount(pageSize);
 
-	const displayHeadline = props.headlineLabel
-		? `${filteredOffices.length} ${props.headlineLabel} positions up for election in ${selectedYear}`
-		: props.headline;
+		const yearsAtLevel = [
+			...new Set(
+				props.offices
+					.filter(office => (office.level ?? pageLevel) === level)
+					.map(office => getYearFromDateString(office.nextElectionDate))
+					.filter(year => !Number.isNaN(year)),
+			),
+		];
+		if (yearsAtLevel.length > 0 && !yearsAtLevel.includes(selectedYear)) {
+			const nextYear = resolveDefaultElectionYear(yearsAtLevel);
+			setSelectedYear(nextYear);
+			props.onYearChange?.(nextYear);
+		}
+
+		props.onLevelChange?.(level);
+	};
 
 	return (
 		<article className={cn(base(), props.className)} data-component='ListOfOfficesBlock'>
 			<Container size='xl'>
 				<div className={wrapper()}>
-					{/* Main Card */}
-					<div className={card()}>
-						{/* Header Row: Headline + Year Selector */}
-						<div className={headerRow()}>
-							{displayHeadline && (
-								<Text as='h3' styleType='heading-md' className={headlineStyle()}>
-									{displayHeadline}
-								</Text>
+					<div className={headerRow()}>
+						{props.heading && (
+							<Text as='h2' styleType='section-heading' className={headingStyle()}>
+								{props.heading}
+							</Text>
+						)}
+						<div className={filters()}>
+							{levelOptions.length > 1 && (
+								<div className={filter()}>
+									<Text as='label' styleType='text-875' className={filterLabel()} htmlFor='offices-level-select'>
+										Level
+									</Text>
+									<div className={selectShell()}>
+										<select
+											id='offices-level-select'
+											className={select()}
+											value={selectedLevel}
+											onChange={handleLevelChange}
+											aria-label='Filter offices by level of government'
+										>
+											{levelOptions.map(level => (
+												<option key={level} value={level}>
+													{LEVEL_LABELS[level]}
+												</option>
+											))}
+										</select>
+										<IconResolver icon='chevron-down' className={selectIcon()} />
+									</div>
+								</div>
 							)}
-							<div className={yearSelectorWrapper()}>
-								<Text as='label' styleType='subtitle-2' className={yearLabel()} htmlFor='year-select'>
+							<div className={filter()}>
+								<Text as='label' styleType='text-875' className={filterLabel()} htmlFor='offices-year-select'>
 									Year
 								</Text>
-								<div className='relative'>
+								<div className={selectShell()}>
 									<select
-										id='year-select'
-										className={yearSelect()}
+										id='offices-year-select'
+										className={select()}
 										value={selectedYear}
 										onChange={handleYearChange}
-										aria-label='Select year'
+										aria-label='Filter offices by election year'
 									>
 										{availableYears.map(year => (
 											<option key={year} value={year}>
@@ -237,129 +299,75 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 											</option>
 										))}
 									</select>
-									<IconResolver icon='calendar-days' className={yearSelectIcon()} />
+									<IconResolver icon='chevron-down' className={selectIcon()} />
 								</div>
 							</div>
 						</div>
+					</div>
 
-						{filteredOffices.length === 0 && (
-							<div className='py-8 text-center'>
-								<Text styleType='body-2' className='text-neutral-500'>
-									{props.searchQuery?.trim()
-										? 'No positions match your search'
-										: props.isLoading
-											? 'Loading…'
-											: `No offices found for ${selectedYear}`}
-								</Text>
+					{filteredOffices.length === 0 && (
+						<Text styleType='body-2' className={empty()}>
+							{props.searchQuery?.trim()
+								? 'No positions match your search'
+								: props.isLoading
+									? 'Loading…'
+									: `No offices found for ${selectedYear}`}
+						</Text>
+					)}
+
+					<div className={list()}>
+						{filteredOffices.length > 0 && (
+							<div className={listHeader()}>
+								<div className={listHeaderCell()}>Type</div>
+								<div className={listHeaderCell()}>Position</div>
+								<div className={cn(listHeaderCell(), headerDateCell())}>Election date</div>
+								<div aria-hidden='true' />
 							</div>
 						)}
 
-						{/* Desktop Table Layout */}
-						<div className={desktopTable()}>
-							<div className={tableWrapper()}>
-								{filteredOffices.length > 0 && (
-									<div className={tableHeader()}>
-										<div className={tableHeaderCell()}>Type</div>
-										<div className={cn(tableHeaderCell(), headerPositionCell())}>Position</div>
-										<div className={cn(tableHeaderCell(), headerDateCell())}>Next Election Date</div>
-										<div className={tableHeaderCell()} aria-label='Actions'></div>
+						{props.offices.map(office => {
+							const RowContent = (
+								<>
+									<div className={tagCell()}>
+										<span className={tag()}>{office.type}</span>
 									</div>
-								)}
-								<div className={tableBody()}>
-									{props.offices.map(office => {
-										const RowContent = (
-											<>
-												<div className={tableCell()}>
-													<span className={typeTag()}>{office.type}</span>
-												</div>
-												<div className={positionCell()}>
-													<Text styleType='body-2' className={positionText()}>
-														{office.position}
-													</Text>
-												</div>
-												<div className={dateCell()}>
-													<Text styleType='body-2' className={dateText()}>
-														{formatElectionDateFromApi(office.nextElectionDate)}
-													</Text>
-												</div>
-												<div className={tableCell()}>
-													{office.href && (
-														<ArrowRightIcon size={32} className={arrowIcon()} innerClassName='group-hover:animate-slide-in-right' />
-													)}
-												</div>
-											</>
-										);
-
-										// The wrapper carries the hidden attribute because it has no display
-										// class of its own; putting it on the row itself loses to `flex`.
-										return (
-											<div key={office.id} hidden={!visibleIds.has(office.id)}>
-												{office.href ? (
-													<Anchor
-														href={office.href}
-														className={cn(tableRow(), 'cursor-pointer')}
-														onClick={() => handleOfficeClick(office)}
-													>
-														{RowContent}
-													</Anchor>
-												) : (
-													<div className={tableRow()}>{RowContent}</div>
-												)}
-											</div>
-										);
-									})}
-								</div>
-							</div>
-						</div>
-
-						{/* Mobile Card Layout */}
-						<div className={cardList()}>
-							{props.offices.map(office => {
-								const CardContent = (
-									<div className={cardContent()}>
-										<div className={cardLeft()}>
-											<span className={typeTag()}>{office.type}</span>
-											<Text styleType='body-2' className={positionText()}>
-												{office.position}
-											</Text>
-											<Text styleType='body-2' className={dateText()}>
-												{formatElectionDateFromApi(office.nextElectionDate)}
-											</Text>
-										</div>
-										<div className={cardRight()}>
-											{office.href && (
-												<ArrowRightIcon size={32} className={arrowIcon()} innerClassName='group-hover:animate-slide-in-right' />
-											)}
-										</div>
-									</div>
-								);
-
-								return (
-									<div key={office.id} hidden={!visibleIds.has(office.id)}>
-										{office.href ? (
-											<Anchor href={office.href} onClick={() => handleOfficeClick(office)} className={officeCard()}>
-												{CardContent}
-											</Anchor>
-										) : (
-											<div className={officeCard()}>{CardContent}</div>
+									<div className={positionCell()}>{office.position}</div>
+									<div className={dateCell()}>{formatElectionDateFromApi(office.nextElectionDate)}</div>
+									<div className={arrowCell()}>
+										{office.href && (
+											<ArrowRightIcon size={24} innerClassName='group-hover:animate-slide-in-right' />
 										)}
 									</div>
-								);
-							})}
-						</div>
+								</>
+							);
 
-						{hasMore && (
-							<div className={showMoreWrapper()}>
-								<Button
-									parent='ListOfOfficesBlock'
-									styleType={secondaryButtonStyleType}
-									onClick={() => setVisibleCount(prev => prev + pageSize)}
-								>
-									Show More
-								</Button>
-							</div>
-						)}
+							// The wrapper carries the hidden attribute because it has no display
+							// class of its own; putting it on the row itself loses to `grid`.
+							return (
+								<div key={office.id} hidden={!visibleIds.has(office.id)}>
+									{office.href ? (
+										<Anchor href={office.href} className={cn(row(), 'cursor-pointer')} onClick={() => props.onOfficeClick?.(office)}>
+											{RowContent}
+										</Anchor>
+									) : (
+										<div className={row()}>{RowContent}</div>
+									)}
+								</div>
+							);
+						})}
 					</div>
+
+					{hasMore && (
+						<div className={showMoreWrapper()}>
+							<Button
+								parent='ListOfOfficesBlock'
+								styleType={secondaryButtonStyleType}
+								onClick={() => setVisibleCount(prev => prev + pageSize)}
+							>
+								Show More
+							</Button>
+						</div>
+					)}
 				</div>
 			</Container>
 		</article>

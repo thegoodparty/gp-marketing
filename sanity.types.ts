@@ -1008,7 +1008,6 @@ export type Component_embeddedBlock = {
 export type Component_listOfOfficesBlock = {
 	_type: 'component_listOfOfficesBlock';
 	field_heading?: string;
-	field_headline?: string;
 	field_defaultYear?: number;
 	field_availableYears?: Array<number>;
 	list_offices?: List_officeItems;
@@ -17984,7 +17983,6 @@ export type GoodpartyOrg_homeQueryResult = {
 					_key: string;
 					_type: 'component_listOfOfficesBlock';
 					field_heading?: string;
-					field_headline?: string;
 					field_defaultYear?: number;
 					field_availableYears?: Array<number>;
 					list_offices?: List_officeItems;
@@ -39835,7 +39833,6 @@ export type Experiment_variantsByExperimentIdQueryResult = Array<{
 					_key: string;
 					_type: 'component_listOfOfficesBlock';
 					field_heading?: string;
-					field_headline?: string;
 					field_defaultYear?: number;
 					field_availableYears?: Array<number>;
 					list_offices?: List_officeItems;
@@ -61687,7 +61684,6 @@ export type ActiveVariantsByPageIdQueryResult = Array<{
 					_key: string;
 					_type: 'component_listOfOfficesBlock';
 					field_heading?: string;
-					field_headline?: string;
 					field_defaultYear?: number;
 					field_availableYears?: Array<number>;
 					list_offices?: List_officeItems;
@@ -83541,7 +83537,6 @@ export type GoodpartyOrg_allArticlesQueryResult = {
 					_key: string;
 					_type: 'component_listOfOfficesBlock';
 					field_heading?: string;
-					field_headline?: string;
 					field_defaultYear?: number;
 					field_availableYears?: Array<number>;
 					list_offices?: List_officeItems;
@@ -105433,7 +105428,6 @@ export type CategoriesQueryResult = {
 					_key: string;
 					_type: 'component_listOfOfficesBlock';
 					field_heading?: string;
-					field_headline?: string;
 					field_defaultYear?: number;
 					field_availableYears?: Array<number>;
 					list_offices?: List_officeItems;
@@ -127353,7 +127347,6 @@ export type TopicsQueryResult = {
 					_key: string;
 					_type: 'component_listOfOfficesBlock';
 					field_heading?: string;
-					field_headline?: string;
 					field_defaultYear?: number;
 					field_availableYears?: Array<number>;
 					list_offices?: List_officeItems;
@@ -151333,7 +151326,6 @@ export type GoodpartyOrg_contactQueryResult = {
 					_key: string;
 					_type: 'component_listOfOfficesBlock';
 					field_heading?: string;
-					field_headline?: string;
 					field_defaultYear?: number;
 					field_availableYears?: Array<number>;
 					list_offices?: List_officeItems;
@@ -173190,7 +173182,6 @@ export type GoodpartyOrg_landingPagesAndPolicyQueryResult =
 							_key: string;
 							_type: 'component_listOfOfficesBlock';
 							field_heading?: string;
-							field_headline?: string;
 							field_defaultYear?: number;
 							field_availableYears?: Array<number>;
 							list_offices?: List_officeItems;
@@ -195058,7 +195049,6 @@ export type GoodpartyOrg_electionsQueryResult = {
 					_key: string;
 					_type: 'component_listOfOfficesBlock';
 					field_heading?: string;
-					field_headline?: string;
 					field_defaultYear?: number;
 					field_availableYears?: Array<number>;
 					list_offices?: List_officeItems;
@@ -216914,7 +216904,6 @@ export type GoodpartyOrg_candidatesQueryResult = {
 					_key: string;
 					_type: 'component_listOfOfficesBlock';
 					field_heading?: string;
-					field_headline?: string;
 					field_defaultYear?: number;
 					field_availableYears?: Array<number>;
 					list_offices?: List_officeItems;
@@ -238770,7 +238759,6 @@ export type GoodpartyOrg_profileQueryResult = {
 					_key: string;
 					_type: 'component_listOfOfficesBlock';
 					field_heading?: string;
-					field_headline?: string;
 					field_defaultYear?: number;
 					field_availableYears?: Array<number>;
 					list_offices?: List_officeItems;
@@ -260626,7 +260614,6 @@ export type GoodpartyOrg_allComponentsQueryResult = {
 					_key: string;
 					_type: 'component_listOfOfficesBlock';
 					field_heading?: string;
-					field_headline?: string;
 					field_defaultYear?: number;
 					field_availableYears?: Array<number>;
 					list_offices?: List_officeItems;
@@ -288294,7 +288281,6 @@ export type GlobalElectionTemplateQueryResult = {
 					_key: string;
 					_type: 'component_listOfOfficesBlock';
 					field_heading?: string;
-					field_headline?: string;
 					field_defaultYear?: number;
 					field_availableYears?: Array<number>;
 					list_offices?: List_officeItems;
@@ -310178,7 +310164,6 @@ export type CustomElectionTemplateByIdQueryResult = {
 					_key: string;
 					_type: 'component_listOfOfficesBlock';
 					field_heading?: string;
-					field_headline?: string;
 					field_defaultYear?: number;
 					field_availableYears?: Array<number>;
 					list_offices?: List_officeItems;

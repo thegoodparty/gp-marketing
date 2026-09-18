@@ -294,13 +294,14 @@ export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageConte
 			searchPlaceholder: ctx.searchPlaceholder,
 		},
 		component_listOfOfficesBlock: {
-			// The block renders `headline`, so that is where the location-named
-			// heading has to go. It used to be sent the bare level label instead,
-			// which published a card headed "state" / "county" / "municipal".
+			// Fallback only: the templates carry their own heading with location
+			// tokens, and that is what normally renders.
 			headline: ctx.listHeading,
 			defaultYear: ctx.defaultYear,
 			availableYears: ctx.availableYears,
 			offices: ctx.offices,
+			// A district page is a local ballot like a city's, so it opens on Local.
+			pageLevel: ctx.locationLevel === 'city' || ctx.locationLevel === 'district' ? 'local' : ctx.locationLevel,
 		},
 		component_electionsIndexBlock: {
 			elections: ctx.elections,

@@ -830,14 +830,27 @@ describe('getFeaturedCities', () => {
 				],
 			},
 			{
+				// Towns sweep separately from cities and are just as much a featured
+				// city — in New England they are the primary local unit.
+				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4040'),
+				body: [
+					{ ...city('tn/dekalb-county/dowelltown', 'Dowelltown', 3, 'G4040'), countyName: 'DeKalb' },
+					{ ...city('tn/bedford-county/shelbyville', 'Shelbyville', 7, 'G4040'), countyName: 'Bedford' },
+				],
+			},
+			{
 				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4020'),
 				body: [{ slug: 'tn/dekalb-county', name: 'DeKalb County', mtfcc: 'G4020', state: 'TN' }],
 			},
 		]);
 
 		const result = await getFeaturedCities({ stateCode: 'TN', countySlug: 'tn/dekalb-county' });
-		expect(result.map(c => c.name)).toEqual(['Smithville', 'Alexandria']);
-		expect(result.map(c => c.href)).toEqual(['/elections/tn/dekalb-county/smithville', '/elections/tn/dekalb-county/alexandria']);
+		expect(result.map(c => c.name)).toEqual(['Smithville', 'Dowelltown', 'Alexandria']);
+		expect(result.map(c => c.href)).toEqual([
+			'/elections/tn/dekalb-county/smithville',
+			'/elections/tn/dekalb-county/dowelltown',
+			'/elections/tn/dekalb-county/alexandria',
+		]);
 	});
 
 	test('does not sweep the state for a school district, which has no cities', async () => {

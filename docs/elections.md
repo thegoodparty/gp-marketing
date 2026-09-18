@@ -254,8 +254,8 @@ So when you build a link to a person:
 
 The slug rule is `<slugified name>-<first 8 hex of personId>`, and the id8 suffix
 is what the resolver actually looks up. Getting the *base* wrong is not fatal but
-is not free either: the resolver answers a near-miss base with a 307 to the real
-URL, so a wrong base trades an avoidable 308 for an avoidable 307.
+is not free either: the resolver answers a near-miss base with a 308 to the real
+URL, so a wrong base costs an avoidable redirect hop.
 
 Two traps in the base, both verified against live data:
 
@@ -266,7 +266,7 @@ Two traps in the base, both verified against live data:
   for about 0.8% of rows: nicknames (`Eugene Bice` / `ej-bice`), middle names
   (`Richard Brooks` / `richard-louis-brooks`), and upstream typos
   (`Chris Bright` / `chirs-bright`). Nothing in this repo can reconcile those, and
-  they are not worth chasing — they land on a single 307. This is the reason to
+  they are not worth chasing — they land on a single 308. This is the reason to
   prefer the spine row's slug whenever you have it.
 
 ### Linking to a race or a place: the county segment is not optional

@@ -3,6 +3,7 @@ import type {
 	DistrictNameItem,
 	DistrictTypeItem,
 	FeaturedCity,
+	FeaturedCityCard,
 	FindByRaceIdResponse,
 	PlaceItem,
 	PlaceWithFacts,
@@ -21,7 +22,9 @@ import {
 	buildRaceCandidatesHref,
 	buildSubplaceRaceSlug,
 	canonicalizeCountyEquivalentName,
+	FEATURED_CITY_RACE_COLUMNS,
 	normalizeCandidateLookupName,
+	rankFeaturedCities,
 	stripCountySuffix,
 } from '~/lib/electionsHelpers';
 import { ElectionApiError, fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
@@ -544,11 +547,17 @@ export async function getMostElections(count = 3): Promise<FeaturedCity[]> {
 export async function getPlacesByState(params: {
 	state: string;
 	mtfcc?: string;
+	includeRaces?: boolean;
+	placeColumns?: string;
+	raceColumns?: string;
 }): Promise<PlaceItem[]> {
 	const searchParams = new URLSearchParams({
 		state: params.state.toUpperCase(),
 	});
 	if (params.mtfcc) searchParams.set('mtfcc', params.mtfcc);
+	if (params.includeRaces) searchParams.set('includeRaces', 'true');
+	if (params.placeColumns) searchParams.set('placeColumns', params.placeColumns);
+	if (params.raceColumns) searchParams.set('raceColumns', params.raceColumns);
 	const url = `${ELECTIONS_API_BASE_URL}/v1/places?${searchParams}`;
 	const data = await fetchJson<PlaceItem[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) ? data : [];
@@ -618,10 +627,137 @@ export async function getCountyChildPlaces(params: {
 	return dedupePlacesBySlug([...hierarchyChildren, ...fallbackCities]);
 }
 
+/** Cards in the Featured Cities carousel, per the redesign (fewer when a place has fewer cities). */
+export const FEATURED_CITIES_COUNT = 5;
+
+/**
+ * The cities of one place, each carrying its own races so they can be ranked by
+ * how many elections they have open.
+ *
+ * A county hands its cities back in one read. A state cannot: cities are its
+ * grandchildren, so this sweeps every city and town in the state and counts the
+ * races locally. That sweep is the expensive half of the Featured Cities block and
+ * should be replaced by an aggregate on election-api keyed by place and year —
+ * `/v1/places/most-elections` takes only `count` today and is national, so there is
+ * nothing to scope it with. The other redesign blocks want the same aggregate; see
+ * docs/election-redesign-components.md.
+ */
+async function getCityPlacesWithRaces(params: { state: string; countySlug?: string }): Promise<PlaceItem[]> {
+	const placeColumns = 'slug,name,mtfcc,countyName';
+	let hierarchyChildren: PlaceItem[] = [];
+
+	if (params.countySlug) {
+		const county = await getPlaceBySlug({
+			slug: params.countySlug,
+			includeChildren: true,
+			includeChildRaces: true,
+			placeColumns,
+			raceColumns: FEATURED_CITY_RACE_COLUMNS,
+		});
+		// A school district has no cities under it, and its slug carries no county name
+		// to narrow the sweep by — so stop here rather than sweep the state for nothing.
+		if (isDistrictMtfcc(county?.mtfcc)) return [];
+		hierarchyChildren = (county?.children ?? []).filter(p => isCityOrTownMtfcc(p.mtfcc) && !isDistrictMtfcc(p.mtfcc));
+	}
+
+	const [cities, towns] = await Promise.all([
+		getPlacesByState({
+			state: params.state,
+			mtfcc: CITY_MTFCC,
+			includeRaces: true,
+			placeColumns,
+			raceColumns: FEATURED_CITY_RACE_COLUMNS,
+		}),
+		getPlacesByState({
+			state: params.state,
+			mtfcc: TOWN_MTFCC,
+			includeRaces: true,
+			placeColumns,
+			raceColumns: FEATURED_CITY_RACE_COLUMNS,
+		}),
+	]);
+	const swept = [...cities, ...towns];
+
+	if (!params.countySlug) return dedupePlacesBySlug(swept);
+
+	// Both sources, merged, because the place hierarchy is patchy: a county can come
+	// back with some of its cities as children and the rest only in the state list,
+	// which would otherwise rank an incomplete set. `getCountyChildPlaces` merges for
+	// the same reason, and the city list elsewhere on the page comes from it — a
+	// carousel built from the children alone can omit a city that list still shows.
+	const countyBase = normalizeName(canonicalizeCountyEquivalentName(params.state, countyNameFromSlug(params.countySlug)).baseName);
+	const sweptInCounty = swept.filter(
+		p => p.countyName && normalizeName(canonicalizeCountyEquivalentName(params.state, p.countyName).baseName) === countyBase,
+	);
+	// Deduped on the city segment, not the whole slug: the same city arrives as
+	// `tn/franklin` from the state list and `tn/williamson-county/franklin` as a
+	// child, and within one county no two cities share a name.
+	return dedupeCitiesByName([...hierarchyChildren, ...sweptInCounty]);
+}
+
+/**
+ * One place per trailing slug segment, preferring whichever copy came back with
+ * races — the two reads disagree about slug depth, and a copy with no races would
+ * count as no elections and drop the city. Only safe within one county, where no
+ * two cities share a name.
+ */
+function dedupeCitiesByName(places: PlaceItem[]): PlaceItem[] {
+	const byName = new Map<string, PlaceItem>();
+	for (const p of places) {
+		const key = p.slug?.toLowerCase().split('/').pop();
+		if (!key) continue;
+		const kept = byName.get(key);
+		if (kept && (kept.Races?.length ?? 0) >= (p.Races?.length ?? 0)) continue;
+		byName.set(key, { ...p, name: (p.name ?? '').trim() });
+	}
+	return [...byName.values()];
+}
+
+/**
+ * The cities to feature for one location page, most open elections first.
+ *
+ * Scope is the page's own place: the cities of a county on a county page, the other
+ * cities of the surrounding county on a city page, every city in the state on a
+ * state page. Returns fewer than `count` when the place has fewer cities with
+ * anything on the ballot, and an empty list when it has none — the block hides
+ * itself rather than render an empty shell.
+ */
+export async function getFeaturedCities(params: {
+	stateCode: string;
+	/** County slug (`ca/los-angeles-county`) on a county or city page; omit on a state page. */
+	countySlug?: string;
+	/** Slug of the city the page is about, so a city page never features itself. */
+	citySlug?: string;
+	count?: number;
+}): Promise<FeaturedCityCard[]> {
+	const state = params.stateCode.toUpperCase();
+	const places = await getCityPlacesWithRaces({ state, countySlug: params.countySlug });
+	const ranked = rankFeaturedCities(places, {
+		count: params.count ?? FEATURED_CITIES_COUNT,
+		excludeSlug: params.citySlug,
+	});
+
+	return Promise.all(
+		ranked.map(async ({ place, openElectionsCount }) => {
+			const countySlug =
+				params.countySlug ?? (place.countyName ? await resolveCountySlugForPlace(state, place.countyName) : undefined);
+			const citySegment = place.slug.split('/').pop() ?? '';
+			return {
+				name: place.name,
+				stateAbbreviation: state,
+				openElectionsCount,
+				href: countySlug && citySegment ? `/elections/${countySlug}/${citySegment}` : `/elections/${place.slug}`,
+			};
+		}),
+	);
+}
+
 export async function getPlaceBySlug(params: {
 	slug: string;
 	includeChildren?: boolean;
 	includeRaces?: boolean;
+	/** Returns each child place with its own races. Needs `includeChildren` as well. */
+	includeChildRaces?: boolean;
 	placeColumns?: string;
 	raceColumns?: string;
 }): Promise<PlaceWithFacts | null> {
@@ -630,6 +766,7 @@ export async function getPlaceBySlug(params: {
 		includeChildren: (params.includeChildren ?? false).toString(),
 		includeRaces: (params.includeRaces ?? false).toString(),
 	});
+	if (params.includeChildRaces) searchParams.set('includeChildRaces', 'true');
 	if (params.placeColumns) searchParams.set('placeColumns', params.placeColumns);
 	if (params.raceColumns) searchParams.set('raceColumns', params.raceColumns);
 	const url = `${ELECTIONS_API_BASE_URL}/v1/places?${searchParams}`;

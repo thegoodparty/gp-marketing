@@ -4,6 +4,7 @@ import { __resetElectionApiAuthForTests } from './electionApiAuth';
 import {
 	getCitySlugToCountySlugMap,
 	getCountyChildPlaces,
+	getFeaturedCities,
 	getPersonMergeSurvivorChain,
 	getPersonMergeSurvivorId,
 	getRemovedPersonIds,
@@ -682,5 +683,212 @@ describe('getPersonMergeSurvivorChain', () => {
 		}) as typeof fetch;
 
 		expect((await getPersonMergeSurvivorChain(R)).length).toBe(3);
+	});
+});
+
+describe('getFeaturedCities', () => {
+	const nextYear = new Date().getFullYear() + 1;
+	const city = (slug: string, name: string, races: number, mtfcc = 'G4110') => ({
+		slug,
+		name,
+		mtfcc,
+		state: 'TN',
+		countyName: 'Davidson',
+		Races: Array.from({ length: races }, (_, i) => ({
+			id: `${slug}-${i}`,
+			slug: `${slug}-race-${i}`,
+			electionDate: `${nextYear}-11-03`,
+		})),
+	});
+
+	test('ranks the cities of a county and links them under that county', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('slug=tn%2Fdavidson-county'),
+				body: [
+					{
+						slug: 'tn/davidson-county',
+						name: 'Davidson County',
+						mtfcc: 'G4020',
+						children: [city('tn/davidson-county/belle-meade', 'Belle Meade', 1), city('tn/davidson-county/nashville', 'Nashville', 4)],
+					},
+				],
+			},
+			{
+				// The same two cities in the state list, at the shorter slug the API uses
+				// there: they must merge into one card each, not duplicate.
+				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4110'),
+				body: [city('tn/nashville', 'Nashville', 4), city('tn/belle-meade', 'Belle Meade', 1)],
+			},
+		]);
+
+		const result = await getFeaturedCities({ stateCode: 'TN', countySlug: 'tn/davidson-county' });
+		expect(result).toEqual([
+			{ name: 'Nashville', stateAbbreviation: 'TN', openElectionsCount: 4, href: '/elections/tn/davidson-county/nashville' },
+			{ name: 'Belle Meade', stateAbbreviation: 'TN', openElectionsCount: 1, href: '/elections/tn/davidson-county/belle-meade' },
+		]);
+	});
+
+	test('leaves the page’s own city out of its neighbours', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('slug=tn%2Fdavidson-county'),
+				body: [
+					{
+						slug: 'tn/davidson-county',
+						name: 'Davidson County',
+						mtfcc: 'G4020',
+						children: [city('tn/davidson-county/nashville', 'Nashville', 4), city('tn/davidson-county/belle-meade', 'Belle Meade', 1)],
+					},
+				],
+			},
+		]);
+
+		const result = await getFeaturedCities({
+			stateCode: 'TN',
+			countySlug: 'tn/davidson-county',
+			citySlug: 'tn/davidson-county/nashville',
+		});
+		expect(result.map(c => c.name)).toEqual(['Belle Meade']);
+	});
+
+	test('sweeps the state on a state page and resolves each city’s county for the link', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('state=TN') && url.includes('mtfcc=G4110'),
+				body: [city('tn/nashville', 'Nashville', 4)],
+			},
+			{
+				match: url => url.includes('/v1/places?') && url.includes('state=TN') && url.includes('mtfcc=G4040'),
+				body: [city('tn/smallville', 'Smallville', 2, 'G4040')],
+			},
+			{
+				match: url => url.includes('/v1/places?') && url.includes('state=TN') && url.includes('mtfcc=G4020'),
+				body: [{ slug: 'tn/davidson-county', name: 'Davidson County', mtfcc: 'G4020', state: 'TN' }],
+			},
+		]);
+
+		const result = await getFeaturedCities({ stateCode: 'TN' });
+		expect(result).toEqual([
+			{ name: 'Nashville', stateAbbreviation: 'TN', openElectionsCount: 4, href: '/elections/tn/davidson-county/nashville' },
+			{ name: 'Smallville', stateAbbreviation: 'TN', openElectionsCount: 2, href: '/elections/tn/davidson-county/smallville' },
+		]);
+	});
+
+	/**
+	 * The patchy-hierarchy case: a county returns only some of its cities as
+	 * children and the rest appear only in the state list. Both sources have to be
+	 * merged, or the carousel ranks an incomplete set and can omit a city that the
+	 * page's own city list (from getCountyChildPlaces, which merges) still shows.
+	 */
+	test('merges cities the county hierarchy omits, and keeps other counties out', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('slug=tn%2Fdavidson-county'),
+				body: [
+					{
+						slug: 'tn/davidson-county',
+						name: 'Davidson County',
+						mtfcc: 'G4020',
+						children: [city('tn/davidson-county/belle-meade', 'Belle Meade', 1)],
+					},
+				],
+			},
+			{
+				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4110'),
+				body: [
+					city('tn/nashville', 'Nashville', 6),
+					{ ...city('tn/franklin', 'Franklin', 9), countyName: 'Williamson' },
+				],
+			},
+		]);
+
+		const result = await getFeaturedCities({ stateCode: 'TN', countySlug: 'tn/davidson-county' });
+		expect(result.map(c => c.name)).toEqual(['Nashville', 'Belle Meade']);
+		expect(result[0]?.href).toBe('/elections/tn/davidson-county/nashville');
+	});
+
+	/**
+	 * The same hierarchy gap at its extreme: a county whose children come back empty,
+	 * leaving the state sweep as the only source of cities. Everything then rests on
+	 * matching each city's `countyName` to the county slug through
+	 * `canonicalizeCountyEquivalentName`, so this uses a name whose casing and suffix
+	 * differ from the slug ("DeKalb" vs `tn/dekalb-county`).
+	 */
+	test('falls back to the state sweep for a childless county, narrowed by county name', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('slug=tn%2Fdekalb-county'),
+				body: [{ slug: 'tn/dekalb-county', name: 'DeKalb County', mtfcc: 'G4020', state: 'TN', children: [] }],
+			},
+			{
+				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4110'),
+				body: [
+					{ ...city('tn/smithville', 'Smithville', 5), countyName: 'DeKalb' },
+					{ ...city('tn/alexandria', 'Alexandria', 2), countyName: 'DeKalb' },
+					{ ...city('tn/nashville', 'Nashville', 14), countyName: 'Davidson' },
+				],
+			},
+			{
+				// Towns sweep separately from cities and are just as much a featured
+				// city — in New England they are the primary local unit.
+				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4040'),
+				body: [
+					{ ...city('tn/dekalb-county/dowelltown', 'Dowelltown', 3, 'G4040'), countyName: 'DeKalb' },
+					{ ...city('tn/bedford-county/shelbyville', 'Shelbyville', 7, 'G4040'), countyName: 'Bedford' },
+				],
+			},
+			{
+				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4020'),
+				body: [{ slug: 'tn/dekalb-county', name: 'DeKalb County', mtfcc: 'G4020', state: 'TN' }],
+			},
+		]);
+
+		const result = await getFeaturedCities({ stateCode: 'TN', countySlug: 'tn/dekalb-county' });
+		expect(result.map(c => c.name)).toEqual(['Smithville', 'Dowelltown', 'Alexandria']);
+		expect(result.map(c => c.href)).toEqual([
+			'/elections/tn/dekalb-county/smithville',
+			'/elections/tn/dekalb-county/dowelltown',
+			'/elections/tn/dekalb-county/alexandria',
+		]);
+	});
+
+	test('does not sweep the state for a school district, which has no cities', async () => {
+		let sweeps = 0;
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('slug=tn%2Fsome-school-district'),
+				body: [{ slug: 'tn/some-school-district', name: 'Some School District', mtfcc: 'G5420', state: 'TN', children: [] }],
+			},
+			{
+				match: url => {
+					const isSweep = url.includes('/v1/places?') && url.includes('mtfcc=G4110');
+					if (isSweep) sweeps += 1;
+					return isSweep;
+				},
+				body: [city('tn/nashville', 'Nashville', 4)],
+			},
+		]);
+
+		expect(await getFeaturedCities({ stateCode: 'TN', countySlug: 'tn/some-school-district' })).toEqual([]);
+		expect(sweeps).toBe(0);
+	});
+
+	test('returns nothing when the place has no cities with elections', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('slug=tn%2Fempty-county'),
+				body: [
+					{
+						slug: 'tn/empty-county',
+						name: 'Empty County',
+						mtfcc: 'G4020',
+						children: [{ slug: 'tn/empty-county/nowhere', name: 'Nowhere', mtfcc: 'G4110', state: 'TN', countyName: 'Empty', Races: [] }],
+					},
+				],
+			},
+		]);
+
+		expect(await getFeaturedCities({ stateCode: 'TN', countySlug: 'tn/empty-county' })).toEqual([]);
 	});
 });

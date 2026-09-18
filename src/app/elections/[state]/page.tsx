@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	CITY_MTFCC,
+	getFeaturedCities,
 	getPlacesByState,
 	getPlaceBySlug,
 	isStateIndexDistrictPlace,
@@ -41,7 +42,7 @@ export default async function Page({
 	const stateName = getStateName(stateCode);
 	const currentYear = new Date().getFullYear();
 
-	const [allPlaces, placeData] = await Promise.all([
+	const [allPlaces, placeData, featuredCities] = await Promise.all([
 		getPlacesByState({ state: stateCode }),
 		getPlaceBySlug({
 			slug: state.toLowerCase(),
@@ -49,6 +50,7 @@ export default async function Page({
 			includeRaces: true,
 			raceColumns: PLACE_RACE_COLUMNS,
 		}),
+		getFeaturedCities({ stateCode }),
 	]);
 
 	const countyPlaces = allPlaces.filter(p => p.mtfcc === COUNTY_MTFCC);
@@ -127,6 +129,7 @@ export default async function Page({
 		offices: stateOffices,
 		elections: locationItems,
 		stateSlug: state.toLowerCase(),
+		featuredCities,
 		pageUrl,
 		pageTitle: `Elections in ${stateName}`,
 		pageDescription: `Browse elections and positions in ${stateName}.`,

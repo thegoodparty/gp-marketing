@@ -265,7 +265,6 @@ export type ElectionsIndexPageContext = {
 	heroTitle?: string;
 	searchPlaceholder?: string;
 	listHeading?: string;
-	listHeadline?: string;
 	defaultYear?: number;
 	availableYears?: number[];
 	offices?: OfficeItem[];
@@ -295,8 +294,10 @@ export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageConte
 			searchPlaceholder: ctx.searchPlaceholder,
 		},
 		component_listOfOfficesBlock: {
-			heading: ctx.listHeading,
-			headline: ctx.listHeadline,
+			// The block renders `headline`, so that is where the location-named
+			// heading has to go. It used to be sent the bare level label instead,
+			// which published a card headed "state" / "county" / "municipal".
+			headline: ctx.listHeading,
 			defaultYear: ctx.defaultYear,
 			availableYears: ctx.availableYears,
 			offices: ctx.offices,

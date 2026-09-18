@@ -122,7 +122,6 @@ export default async function Page({
 		bodyCopy: `Learn what state positions are up for election and who is currently running for office in ${stateName}.`,
 		searchPlaceholder: 'Search positions',
 		listHeading: isSingleCounty ? `Elections in ${stateName}` : `State Elections in ${stateName}`,
-		listHeadline: 'state',
 		defaultYear,
 		availableYears,
 		offices: stateOffices,

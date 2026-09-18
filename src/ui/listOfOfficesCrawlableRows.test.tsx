@@ -166,3 +166,35 @@ describe('ListOfOfficesBlock level filter', () => {
 		expect(html).not.toContain('>County</option>');
 	});
 });
+
+/**
+ * tailwind-merge, inside `tv`, cannot tell this design system's font-size names
+ * from colour names, so a slot written as `text-row-title text-black` loses the
+ * size and silently falls back to 16px. It cost this block its whole type scale
+ * once: only the heading survived, because it was the one slot with no colour
+ * beside it, and the result looked deliberate rather than broken.
+ *
+ * Colour now lives on the section and is inherited. These assertions fail if a
+ * `text-<colour>` is ever put back next to a `text-<size>` in the same slot.
+ */
+describe('ListOfOfficesBlock type scale survives class merging', () => {
+	const SIZE_UTILITIES = ['text-section-heading', 'text-row-title', 'text-row-meta', 'text-text-875', 'text-caption'];
+
+	for (const backgroundColor of ['cream', 'midnight'] as const) {
+		test(`keeps every font-size utility on the ${backgroundColor} variant`, () => {
+			const html = renderToStaticMarkup(
+				<ListOfOfficesBlock
+					offices={MULTI_LEVEL}
+					defaultYear={2026}
+					availableYears={[2026]}
+					pageLevel='local'
+					heading='Local elections in Houston'
+					backgroundColor={backgroundColor}
+				/>,
+			);
+			for (const utility of SIZE_UTILITIES) {
+				expect(html).toContain(utility);
+			}
+		});
+	}
+});

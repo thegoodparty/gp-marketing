@@ -14,26 +14,38 @@ import { Button } from './Inputs/Button.tsx';
 import { DEFAULT_YEAR_OFFSET } from '~/constants/display';
 import { formatElectionDateFromApi, getYearFromDateString, resolveDefaultElectionYear } from '~/lib/electionsHelpers';
 
+/**
+ * Text colour is set once on `base` and inherited, and never written as a
+ * `text-<colour>` next to a `text-<size>` in the same slot.
+ *
+ * tailwind-merge (inside `tv`) cannot tell this design system's font-size names
+ * from colour names, so it reads `text-subtitle-1 text-black` as two colours and
+ * keeps only the last — silently dropping the size. That is how the whole block
+ * came to render at 16px while looking deliberate: heading 32px because it was
+ * the one slot with no colour beside it, everything else collapsed. The few
+ * colours that must differ from the inherited one use the arbitrary-property
+ * form, which sits in its own group and cannot collide with a size.
+ */
 const styles = tv({
 	slots: {
-		base: 'py-(--container-padding) bg-goodparty-cream',
+		base: 'py-(--container-padding) bg-goodparty-cream text-black',
 		wrapper: 'flex flex-col gap-8',
 		headerRow: 'flex flex-col gap-4 md:flex-row md:items-end md:justify-between',
 		heading: 'font-primary text-section-heading',
 		filters: 'flex items-end gap-6',
 		filter: 'flex flex-col gap-1',
-		filterLabel: 'font-secondary text-text-875 text-black',
+		filterLabel: 'font-secondary text-text-875',
 		selectShell: 'relative',
 		select: [
 			'h-10 w-[6.6875rem] appearance-none rounded-full border border-black/15 bg-white pl-4 pr-9',
-			'cursor-pointer font-secondary text-text-875 text-black',
+			'cursor-pointer font-secondary text-text-875',
 			'focus:border-goodparty-blue focus:outline-none focus:ring-2 focus:ring-goodparty-blue/30',
 		],
-		selectIcon: 'pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black',
+		selectIcon: 'pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2',
 		list: 'flex flex-col gap-4',
 		// Mirrors the row grid so the labels sit over their own columns.
 		listHeader: 'hidden md:grid md:grid-cols-[7.6875rem_1fr_auto_2.5rem] md:items-center md:gap-x-4 md:px-3.5',
-		listHeaderCell: 'font-secondary text-text-875 font-semibold text-black',
+		listHeaderCell: 'font-secondary text-text-875 font-semibold',
 		headerDateCell: 'text-right',
 		row: [
 			'group grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2 rounded-lg border border-black/10 bg-white p-3',
@@ -41,27 +53,23 @@ const styles = tv({
 			'md:h-15 md:grid-cols-[7.6875rem_1fr_auto_2.5rem] md:gap-y-0 md:px-3.5 md:py-0',
 		],
 		tagCell: 'col-span-2 md:col-span-1 md:col-start-1 md:row-start-1',
-		tag: 'inline-block w-fit rounded-sm bg-blue-900 px-2 py-1 font-primary text-caption font-medium tracking-[0.0625rem] text-white uppercase',
-		positionCell: 'col-span-2 font-primary text-subtitle-1 text-black md:col-span-1 md:col-start-2 md:row-start-1',
-		dateCell: 'font-secondary text-body-2 text-black md:col-start-3 md:row-start-1 md:text-right',
-		arrowCell: 'justify-self-end text-black md:col-start-4 md:row-start-1',
-		empty: 'py-8 text-center font-secondary text-body-2 text-neutral-500',
+		// The tag is white on navy in both variants, so it sets its own colour.
+		tag: 'inline-block w-fit rounded-sm bg-blue-900 px-2 py-1 font-primary text-caption font-medium tracking-[0.0625rem] [color:white] uppercase',
+		positionCell: 'col-span-2 font-primary text-row-title md:col-span-1 md:col-start-2 md:row-start-1',
+		dateCell: 'font-secondary text-row-meta md:col-start-3 md:row-start-1 md:text-right',
+		arrowCell: 'justify-self-end md:col-start-4 md:row-start-1',
+		empty: 'py-8 text-center font-secondary text-body-2 [color:var(--color-neutral-500)]',
 		showMoreWrapper: 'flex justify-center pt-2',
 	},
 	variants: {
 		backgroundColor: {
+			// Everything that is plain white on midnight inherits it from `base`.
 			midnight: {
-				base: 'bg-midnight-900',
-				heading: 'text-white',
-				filterLabel: 'text-white',
-				select: 'border-white/20 bg-midnight-800 text-white focus:border-lavender-400',
-				selectIcon: 'text-white',
-				listHeaderCell: 'text-white',
+				base: 'bg-midnight-900 text-white',
+				select: 'border-white/20 bg-midnight-800 focus:border-lavender-400',
 				row: 'border-white/10 bg-midnight-800 hover:border-lavender-400',
-				positionCell: 'text-white',
-				dateCell: 'text-neutral-300',
-				arrowCell: 'text-white',
-				empty: 'text-neutral-300',
+				dateCell: '[color:var(--color-neutral-300)]',
+				empty: '[color:var(--color-neutral-300)]',
 			},
 			cream: {},
 		},

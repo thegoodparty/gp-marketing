@@ -714,6 +714,12 @@ describe('getFeaturedCities', () => {
 					},
 				],
 			},
+			{
+				// The same two cities in the state list, at the shorter slug the API uses
+				// there: they must merge into one card each, not duplicate.
+				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4110'),
+				body: [city('tn/nashville', 'Nashville', 4), city('tn/belle-meade', 'Belle Meade', 1)],
+			},
 		]);
 
 		const result = await getFeaturedCities({ stateCode: 'TN', countySlug: 'tn/davidson-county' });
@@ -767,6 +773,39 @@ describe('getFeaturedCities', () => {
 			{ name: 'Nashville', stateAbbreviation: 'TN', openElectionsCount: 4, href: '/elections/tn/davidson-county/nashville' },
 			{ name: 'Smallville', stateAbbreviation: 'TN', openElectionsCount: 2, href: '/elections/tn/davidson-county/smallville' },
 		]);
+	});
+
+	/**
+	 * The patchy-hierarchy case: a county returns only some of its cities as
+	 * children and the rest appear only in the state list. Both sources have to be
+	 * merged, or the carousel ranks an incomplete set and can omit a city that the
+	 * page's own city list (from getCountyChildPlaces, which merges) still shows.
+	 */
+	test('merges cities the county hierarchy omits, and keeps other counties out', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('slug=tn%2Fdavidson-county'),
+				body: [
+					{
+						slug: 'tn/davidson-county',
+						name: 'Davidson County',
+						mtfcc: 'G4020',
+						children: [city('tn/davidson-county/belle-meade', 'Belle Meade', 1)],
+					},
+				],
+			},
+			{
+				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4110'),
+				body: [
+					city('tn/nashville', 'Nashville', 6),
+					{ ...city('tn/franklin', 'Franklin', 9), countyName: 'Williamson' },
+				],
+			},
+		]);
+
+		const result = await getFeaturedCities({ stateCode: 'TN', countySlug: 'tn/davidson-county' });
+		expect(result.map(c => c.name)).toEqual(['Nashville', 'Belle Meade']);
+		expect(result[0]?.href).toBe('/elections/tn/davidson-county/nashville');
 	});
 
 	test('does not sweep the state for a school district, which has no cities', async () => {

@@ -80,7 +80,9 @@ export function FeaturedCitiesBlock(props: FeaturedCitiesBlockProps) {
 										: 0,
 							}}
 						>
-							<LocationCard {...card} className='w-full' />
+							{/* The card is midnight itself, so on a midnight section it needs an
+							    edge or it dissolves into the background. */}
+							<LocationCard {...card} className={cn('w-full', backgroundColor === 'midnight' && 'ring-1 ring-neutral-500')} />
 						</li>
 					))}
 				</ul>

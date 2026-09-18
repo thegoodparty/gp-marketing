@@ -328,10 +328,8 @@ export type RankFeaturedCitiesConfig = {
 	count: number;
 	/**
 	 * Slug of the place the page is about, so a city page never features itself.
-	 * Matched on the trailing segment as well as the whole slug, because the same
-	 * city comes back as `ca/anytown` from one read and
-	 * `ca/some-county/anytown` from another, and two cities in one county cannot
-	 * share a name.
+	 * Matched across slug shapes, because the same city comes back as `ca/anytown`
+	 * from one read and `ca/some-county/anytown` from another.
 	 */
 	excludeSlug?: string;
 	currentYear?: number;
@@ -339,6 +337,22 @@ export type RankFeaturedCitiesConfig = {
 
 function lastSlugSegment(slug: string): string {
 	return slug.toLowerCase().split('/').pop() ?? '';
+}
+
+/**
+ * Whether `slug` is the place `exclude` names, allowing for either slug shape.
+ *
+ * A fully qualified `exclude` (`tn/williamson-county/franklin`) is matched against
+ * the whole slug or against the same city written short (`tn/franklin`) — never on
+ * the city segment alone, which would also drop a same-named city in another county
+ * (Tennessee has more than one Franklin). Only a short `exclude`, which names no
+ * county, falls back to the city segment.
+ */
+function isSamePlaceSlug(slug: string, exclude: string): boolean {
+	if (slug === exclude) return true;
+	const parts = exclude.split('/').filter(Boolean);
+	if (parts.length <= 2) return lastSlugSegment(slug) === lastSlugSegment(exclude);
+	return slug === `${parts[0]}/${parts[parts.length - 1]}`;
 }
 
 /**
@@ -352,13 +366,10 @@ export function rankFeaturedCities(
 	config: RankFeaturedCitiesConfig,
 ): Array<{ place: PlaceItem; openElectionsCount: number }> {
 	const exclude = config.excludeSlug?.toLowerCase();
-	const excludeSegment = exclude ? lastSlugSegment(exclude) : '';
 	return places
 		.filter(place => {
 			if (!place.slug || !place.name) return false;
-			if (!exclude) return true;
-			const slug = place.slug.toLowerCase();
-			return slug !== exclude && lastSlugSegment(slug) !== excludeSegment;
+			return !exclude || !isSamePlaceSlug(place.slug.toLowerCase(), exclude);
 		})
 		.map(place => ({ place, openElectionsCount: countOpenElections(place.Races, config.currentYear) }))
 		.filter(entry => entry.openElectionsCount > 0)

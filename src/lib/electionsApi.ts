@@ -644,6 +644,7 @@ export const FEATURED_CITIES_COUNT = 5;
  */
 async function getCityPlacesWithRaces(params: { state: string; countySlug?: string }): Promise<PlaceItem[]> {
 	const placeColumns = 'slug,name,mtfcc,countyName';
+	let hierarchyChildren: PlaceItem[] = [];
 
 	if (params.countySlug) {
 		const county = await getPlaceBySlug({
@@ -653,11 +654,10 @@ async function getCityPlacesWithRaces(params: { state: string; countySlug?: stri
 			placeColumns,
 			raceColumns: FEATURED_CITY_RACE_COLUMNS,
 		});
-		// A school district has no cities under it, and its slug has no county name to
-		// filter a sweep by — so stop here rather than sweep the state for nothing.
+		// A school district has no cities under it, and its slug carries no county name
+		// to narrow the sweep by — so stop here rather than sweep the state for nothing.
 		if (isDistrictMtfcc(county?.mtfcc)) return [];
-		const children = (county?.children ?? []).filter(p => isCityOrTownMtfcc(p.mtfcc) && !isDistrictMtfcc(p.mtfcc));
-		if (children.length > 0) return dedupePlacesBySlug(children);
+		hierarchyChildren = (county?.children ?? []).filter(p => isCityOrTownMtfcc(p.mtfcc) && !isDistrictMtfcc(p.mtfcc));
 	}
 
 	const [cities, towns] = await Promise.all([
@@ -676,13 +676,41 @@ async function getCityPlacesWithRaces(params: { state: string; countySlug?: stri
 			raceColumns: FEATURED_CITY_RACE_COLUMNS,
 		}),
 	]);
-	const all = dedupePlacesBySlug([...cities, ...towns]);
-	if (!params.countySlug) return all;
+	const swept = [...cities, ...towns];
 
-	// County read came back childless (the hierarchy is patchy in places), so fall
-	// back to the state sweep narrowed by county name, as getCountyChildPlaces does.
+	if (!params.countySlug) return dedupePlacesBySlug(swept);
+
+	// Both sources, merged, because the place hierarchy is patchy: a county can come
+	// back with some of its cities as children and the rest only in the state list,
+	// which would otherwise rank an incomplete set. `getCountyChildPlaces` merges for
+	// the same reason, and the city list elsewhere on the page comes from it — a
+	// carousel built from the children alone can omit a city that list still shows.
 	const countyBase = normalizeName(canonicalizeCountyEquivalentName(params.state, countyNameFromSlug(params.countySlug)).baseName);
-	return all.filter(p => p.countyName && normalizeName(canonicalizeCountyEquivalentName(params.state, p.countyName).baseName) === countyBase);
+	const sweptInCounty = swept.filter(
+		p => p.countyName && normalizeName(canonicalizeCountyEquivalentName(params.state, p.countyName).baseName) === countyBase,
+	);
+	// Deduped on the city segment, not the whole slug: the same city arrives as
+	// `tn/franklin` from the state list and `tn/williamson-county/franklin` as a
+	// child, and within one county no two cities share a name.
+	return dedupeCitiesByName([...hierarchyChildren, ...sweptInCounty]);
+}
+
+/**
+ * One place per trailing slug segment, preferring whichever copy came back with
+ * races — the two reads disagree about slug depth, and a copy with no races would
+ * count as no elections and drop the city. Only safe within one county, where no
+ * two cities share a name.
+ */
+function dedupeCitiesByName(places: PlaceItem[]): PlaceItem[] {
+	const byName = new Map<string, PlaceItem>();
+	for (const p of places) {
+		const key = p.slug?.toLowerCase().split('/').pop();
+		if (!key) continue;
+		const kept = byName.get(key);
+		if (kept && (kept.Races?.length ?? 0) >= (p.Races?.length ?? 0)) continue;
+		byName.set(key, { ...p, name: (p.name ?? '').trim() });
+	}
+	return [...byName.values()];
 }
 
 /**

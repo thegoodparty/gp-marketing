@@ -1427,6 +1427,28 @@ describe('rankFeaturedCities', () => {
 		expect(ranked.map(r => r.place.name)).toEqual(['Midtown', 'Smalltown']);
 	});
 
+	/** Tennessee has a Franklin in more than one county; only the page's own goes. */
+	test('keeps a same-named city in another county', () => {
+		const franklins = [
+			cityWithRaces('Franklin', 'tn/williamson-county/franklin', ['2026-11-03', '2026-11-03']),
+			cityWithRaces('Franklin', 'tn/shelby-county/franklin', ['2026-11-03']),
+		];
+		const ranked = rankFeaturedCities(franklins, {
+			count: 5,
+			currentYear: 2026,
+			excludeSlug: 'tn/williamson-county/franklin',
+		});
+		expect(ranked.map(r => r.place.slug)).toEqual(['tn/shelby-county/franklin']);
+	});
+
+	test('excludes on the city segment only when the page slug names no county', () => {
+		const franklins = [
+			cityWithRaces('Franklin', 'tn/williamson-county/franklin', ['2026-11-03', '2026-11-03']),
+			cityWithRaces('Franklin', 'tn/shelby-county/franklin', ['2026-11-03']),
+		];
+		expect(rankFeaturedCities(franklins, { count: 5, currentYear: 2026, excludeSlug: 'tn/franklin' })).toEqual([]);
+	});
+
 	test('skips places missing a name or slug', () => {
 		const broken: PlaceItem[] = [
 			{ id: 'x', name: '', slug: 'tn/x', state: 'TN', Races: [{ id: '1', slug: 'r', electionDate: '2026-11-03' }] },

@@ -370,6 +370,20 @@ describe('the hero states the pledge fact, not the claim', () => {
 		);
 	});
 
+	test('a CRM "Partisan Candidate" says ineligible without naming a party', () => {
+		// The second failsafe behind Mamdani/Cuomo: the CRM can mark someone
+		// partisan without a party ever reaching the party spine, and a bad
+		// `Pledge Status = Yes` must not outrank that either.
+		const view = getDevPersonProfileView('kim-byrd-b77f912d');
+		if (!view) throw new Error('no dev fixture for kim-byrd-b77f912d');
+		const hero = buildPersonSectionOverrides({
+			...view,
+			pledged: true,
+			pledgeIneligible: true,
+		}).component_profileHero;
+		expect(hero?.attribution).toBe('pledgeIneligible');
+	});
+
 	test('the GoodParty.org mark still follows the claim, not the pledge', () => {
 		// Every claimed officeholder is unpledgeable, so keying the mark on the
 		// pledge would strip the branding off a whole persona's claimed profiles.

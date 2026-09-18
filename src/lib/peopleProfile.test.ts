@@ -13,7 +13,7 @@ import {
 } from './peopleProfile';
 import { buildPersonSlug, buildPersonSlugFromBase } from './personSlug';
 import { buildElectionPositionHrefFromRaceSlug } from './electionsHelpers';
-import { classifyParty, isMajorParty } from './party';
+import { classifyParty, isMajorParty, orderPartyNames } from './party';
 
 const PID = '11111111-1111-1111-1111-111111111111';
 const NO_REMOVALS: ReadonlySet<string> = new Set();
@@ -1251,6 +1251,125 @@ describe('classifyParty', () => {
 		expect(isMajorParty('independent')).toBe(false);
 		expect(isMajorParty('other')).toBe(false);
 		expect(isMajorParty(null)).toBe(false);
+	});
+});
+
+describe('orderPartyNames', () => {
+	test('sorts a major-party line first, whatever order it arrives in', () => {
+		expect(orderPartyNames(['Working Families', 'Democratic'])).toEqual(['Democratic', 'Working Families']);
+		expect(orderPartyNames(['Conservative', 'Republican'])).toEqual(['Republican', 'Conservative']);
+	});
+
+	test('leaves a list with no major party in the order received', () => {
+		expect(orderPartyNames(['Working Families', 'Independent'])).toEqual(['Working Families', 'Independent']);
+	});
+
+	test('drops blanks and dedupes case-insensitively', () => {
+		expect(orderPartyNames(['Independent', null, ' ', 'independent', undefined])).toEqual(['Independent']);
+	});
+});
+
+// New York's fusion voting nominates one person on several party lines at once.
+// The feed's order is arbitrary, so neither the label nor the eligibility check
+// may read `partyNames[0]` (Chuck Schumer arrives Working Families first).
+describe('fusion voting: multiple party lines', () => {
+	const fusionOffice = (partyNames: string[]) =>
+		makeOffice({ positionName: 'U.S. Senate', isCurrent: true, partyNames });
+
+	test('the label lists every party, major first', () => {
+		const view = composeView(PID, makePerson({ OfficeHolders: [fusionOffice(['Working Families', 'Democratic'])] }), null);
+		expect(view.party).toBe('Democratic, Working Families');
+	});
+
+	test('a major line anywhere in the list disqualifies, not just at [0]', () => {
+		const view = composeView(PID, makePerson({ OfficeHolders: [fusionOffice(['Working Families', 'Democratic'])] }), null);
+		expect([view.partyClass, view.majorParty, view.pledgeIneligible, view.state, view.empowered]).toEqual([
+			'democrat',
+			true,
+			true,
+			'J',
+			false,
+		]);
+	});
+
+	test('list order does not change the outcome', () => {
+		const reversed = composeView(PID, makePerson({ OfficeHolders: [fusionOffice(['Democratic', 'Working Families'])] }), null);
+		expect([reversed.party, reversed.majorParty, reversed.state]).toEqual(['Democratic, Working Families', true, 'J']);
+	});
+
+	test('a genuine minor-party-only list keeps the empowerment framing', () => {
+		const view = composeView(PID, makePerson({ OfficeHolders: [fusionOffice(['Working Families', 'Independent'])] }), null);
+		expect([view.party, view.majorParty, view.pledgeIneligible, view.empowered]).toEqual([
+			'Working Families, Independent',
+			false,
+			false,
+			true,
+		]);
+	});
+
+	test('a major line on the current candidacy disqualifies an officeholder labelled otherwise', () => {
+		const person = makePerson({
+			OfficeHolders: [fusionOffice(['Working Families'])],
+			Candidacies: [{ id: 'c1', positionName: 'Governor', party: 'Democratic' }],
+		});
+		const view = composeView(PID, person, null);
+		expect([view.party, view.majorParty, view.pledgeIneligible]).toEqual(['Working Families', true, true]);
+	});
+});
+
+describe('pledge eligibility is decided before the pledge flag', () => {
+	test('a fusion Democrat flagged pledged in the CRM is published as ineligible, not pledged', () => {
+		const person = makePerson({
+			isPledged: true,
+			OfficeHolders: [makeOffice({ isCurrent: true, partyNames: ['Working Families', 'Democratic'] })],
+		});
+		const view = composeView(PID, person, null);
+		expect([view.pledged, view.pledgeIneligible]).toEqual([false, true]);
+	});
+
+	test('Confirmed Candidate = Partisan Candidate disqualifies even a nonpartisan label', () => {
+		const person = makePerson({
+			isPledged: true,
+			confirmedCandidate: 'Partisan Candidate',
+			OfficeHolders: [makeOffice({ isCurrent: true, partyNames: ['Independent'] })],
+		});
+		const view = composeView(PID, person, null);
+		// Party alone still drives the state letter / empowerment; only the pledge
+		// claim is withdrawn.
+		expect([view.pledged, view.pledgeIneligible, view.majorParty]).toEqual([false, true, false]);
+	});
+
+	test('Pledge Status alone is not enough once Confirmed Candidate is present', () => {
+		const base = { isPledged: true, OfficeHolders: [makeOffice({ isCurrent: true, partyNames: ['Independent'] })] };
+		// 'Yes' is the stored value the CRM displays as "Running".
+		expect(composeView(PID, makePerson({ ...base, confirmedCandidate: 'Yes' }), null).pledged).toBe(true);
+		expect(composeView(PID, makePerson({ ...base, confirmedCandidate: 'No' }), null).pledged).toBe(false);
+		expect(composeView(PID, makePerson({ ...base, confirmedCandidate: 'Write In' }), null).pledged).toBe(false);
+		expect(composeView(PID, makePerson({ ...base, confirmedCandidate: "Can't Determine" }), null).pledged).toBe(false);
+	});
+
+	test('an absent Confirmed Candidate leaves the pledge as it is today', () => {
+		const person = makePerson({
+			isPledged: true,
+			OfficeHolders: [makeOffice({ isCurrent: true, partyNames: ['Independent'] })],
+		});
+		expect(composeView(PID, person, null).pledged).toBe(true);
+	});
+
+	test('related-person cards apply the same Confirmed Candidate gate', () => {
+		const OTHER = '22222222-2222-2222-2222-222222222222';
+		const office = makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: ['Independent'] });
+		const pledged = (confirmedCandidate?: string) =>
+			buildNearbyOfficialCards(
+				[office],
+				new Map([[OTHER, makePerson({ id: OTHER, fullName: 'Ada Lee', isPledged: true, confirmedCandidate })]]),
+				PID,
+				NO_REMOVALS,
+			)[0]?.isPledged;
+
+		expect(pledged('Yes')).toBe(true);
+		expect(pledged('Partisan Candidate')).toBe(false);
+		expect(pledged(undefined)).toBe(true);
 	});
 });
 

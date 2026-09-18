@@ -31,7 +31,14 @@ Neither is produced or written:
 
 Note that `people.gp_api_user_id` **already exists** in `dbt/project/models/marts/civics/people.sql` — it is computed and then simply not carried through to the serving mart. That makes fix (2) below mostly a plumbing change rather than new modelling.
 
-## Evidence (production, 2026-08-12)
+## Evidence (production, 2026-08-12) — PARTLY SUPERSEDED, see note
+
+> **Superseded 2026-09-18.** The "`is_pledged` is universally false" finding below
+> no longer holds. Pledge lines render on production today —
+> `/people/zohran-mamdani-568df699` and `/people/andrew-como-e0f5cc90` both read
+> "Has taken the GoodParty.org Pledge". Something now writes the flag, at least
+> for some people. Re-measure before relying on any count in this section. The
+> claim/linkage half (`gp_api_user_id`) has not been re-checked.
 
 - **`is_pledged` is universally false.** Sampled `GET /v1/persons?state=<st>&columns=id,isPledged` across 15 states — MI, FL, CA, NH, TX, NY, PA, OH, GA, AZ, NC, VA, WA, CO, MA — for **69,385 person rows**. Count with `isPledged = true`: **0**.
 - **No profile has ever been published.** `GET https://gp-api.goodparty.org/v1/public-person-profiles/published` returns `[]`, and `.../unlisted` returns `[]`. Zero published profiles and zero removals across all of production.
@@ -136,6 +143,6 @@ Run in order; each step is independently checkable.
 
 ## Notes / non-goals
 
-- **No app-side change is required or wanted to make a pledge render.** `gp-marketing` reads `person.isPledged` and gp-api reads the `gpApiUserId` filter already. Patching the frontend to infer "pledged" or "claimed" from some other signal would hide the pipeline gap behind a heuristic, so we are deliberately not doing it. The 2026-09-18 change above is the opposite direction and does not conflict with this: it only ever *withholds* a pledge, and never infers one.
+- **No app-side change is required or wanted to make a pledge render.** (Written when the flag was thought to be universally false; see the superseded note above.) `gp-marketing` reads `person.isPledged` and gp-api reads the `gpApiUserId` filter already. Patching the frontend to infer "pledged" or "claimed" from some other signal would hide the pipeline gap behind a heuristic, so we are deliberately not doing it. The 2026-09-18 change above is the opposite direction and does not conflict with this: it only ever *withholds* a pledge, and never infers one.
 - **Separate from the origination gap.** `PERSON_ID_ORIGINATION_HANDOFF.md` in this repo's sibling data repo covers users who have **no** canonical person at all (self-registered, absent from BallotReady/L2/HubSpot). This handoff is the complementary case: people who **do** have a canonical person row, where the row simply is not carrying the pledge flag or the user linkage. That doc's §2 assumed `gp_api_user_id` would "ride the person feed you already populate, exactly like `is_pledged`" — the finding here is that `is_pledged` is not populated either, so there is no working precedent to ride.
 - **One product question remains after the data fix,** and it is the marketing team's call, not a bug: once `is_pledged` is true, a pledged person who has never authored a profile will render the pledge badge *and* the unclaimed framing with the claim CTA. That combination is correct per the current Figma states (claimed-ness is overlay presence; pledging is a separate factual flag), but if it reads wrong, changing it is a design decision on the D–F/H frames rather than a code defect.

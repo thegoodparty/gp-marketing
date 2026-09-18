@@ -570,6 +570,7 @@ describe('buildOfficeItemsFromPlaceRaces', () => {
 
 		const { offices, dataYears } = buildOfficeItemsFromPlaceRaces(races, resolvedDates, {
 			type: 'State',
+			level: 'state',
 			buildHref: race => `/elections/ca/position/${race.slug.split('/').slice(1).join('/')}`,
 		});
 
@@ -588,6 +589,7 @@ describe('buildOfficeItemsFromPlaceRaces', () => {
 
 		const { dataYears } = buildOfficeItemsFromPlaceRaces(races, resolvedDates, {
 			type: 'State',
+			level: 'state',
 			buildHref: race => `/elections/ca/position/${race.slug.split('/').slice(1).join('/')}`,
 		});
 

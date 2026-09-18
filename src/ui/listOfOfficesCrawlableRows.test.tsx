@@ -87,3 +87,66 @@ describe('ListOfOfficesBlock server markup', () => {
 		expect(isRowHidden(emptyYear, '/elections/tx/position/current-0')).toBe(true);
 	});
 });
+
+/**
+ * The overlapping levels a location page offers. A city voter also votes in
+ * their county's and state's races, so those appear under the Level dropdown —
+ * and their links must be in the markup whichever level is selected.
+ */
+const MULTI_LEVEL: OfficeItem[] = [
+	{ id: 'c1', type: 'CITY', level: 'local', position: 'Mayor', nextElectionDate: '2026-11-03', href: '/elections/tx/harris-county/houston/position/mayor' },
+	{ id: 'o1', type: 'COUNTY', level: 'county', position: 'County Judge', nextElectionDate: '2026-11-03', href: '/elections/tx/harris-county/position/county-judge' },
+	{ id: 's1', type: 'STATE', level: 'state', position: 'Governor', nextElectionDate: '2026-11-03', href: '/elections/tx/position/governor' },
+];
+
+describe('ListOfOfficesBlock level filter', () => {
+	test('a city page opens on its own offices and hides the overlapping levels', () => {
+		const html = renderToStaticMarkup(
+			<ListOfOfficesBlock offices={MULTI_LEVEL} defaultYear={2026} availableYears={[2026]} pageLevel='local' />,
+		);
+		expect(isRowHidden(html, '/elections/tx/harris-county/houston/position/mayor')).toBe(false);
+		expect(isRowHidden(html, '/elections/tx/harris-county/position/county-judge')).toBe(true);
+		expect(isRowHidden(html, '/elections/tx/position/governor')).toBe(true);
+	});
+
+	test('every level stays linked in the markup whatever is selected', () => {
+		const html = renderToStaticMarkup(
+			<ListOfOfficesBlock offices={MULTI_LEVEL} defaultYear={2026} availableYears={[2026]} pageLevel='local' />,
+		);
+		for (const office of MULTI_LEVEL) {
+			expect(html).toContain(`href="${office.href}"`);
+		}
+	});
+
+	test('offers Local, County and State on a city page', () => {
+		const html = renderToStaticMarkup(
+			<ListOfOfficesBlock offices={MULTI_LEVEL} defaultYear={2026} availableYears={[2026]} pageLevel='local' />,
+		);
+		expect(html).toContain('Filter offices by level of government');
+		expect(html).toContain('>Local</option>');
+		expect(html).toContain('>County</option>');
+		expect(html).toContain('>State</option>');
+	});
+
+	test('a state page gets no level dropdown, because it has only its own level', () => {
+		const html = renderToStaticMarkup(
+			<ListOfOfficesBlock
+				offices={MULTI_LEVEL.filter(o => o.level === 'state')}
+				defaultYear={2026}
+				availableYears={[2026]}
+				pageLevel='state'
+			/>,
+		);
+		expect(html).not.toContain('Filter offices by level of government');
+		expect(html).toContain('Filter offices by election year');
+	});
+
+	test('does not offer a level the page has no offices for', () => {
+		const noCounty = MULTI_LEVEL.filter(office => office.level !== 'county');
+		const html = renderToStaticMarkup(
+			<ListOfOfficesBlock offices={noCounty} defaultYear={2026} availableYears={[2026]} pageLevel='local' />,
+		);
+		expect(html).toContain('>State</option>');
+		expect(html).not.toContain('>County</option>');
+	});
+});

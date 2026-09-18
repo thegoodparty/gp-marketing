@@ -12,13 +12,10 @@ export const component_listOfOfficesBlock = {
 			title: 'Heading',
 			name: 'field_heading',
 			type: 'string',
-			description: 'Optional heading text above the card (defaults to "List of Offices")',
-		},
-		{
-			title: 'Headline',
-			name: 'field_headline',
-			type: 'string',
-			description: 'Headline text inside the card',
+			description:
+				'Heading above the list. On an election template you can use a location token — [State], [County], [City] or [District] — ' +
+				'which is replaced with the real place name on each page, e.g. "Local elections in [City]". ' +
+				'Leave empty to use the heading the page works out for itself.',
 		},
 		{
 			title: 'Default Year',
@@ -78,7 +75,6 @@ export const component_listOfOfficesBlock = {
 	preview: {
 		select: {
 			heading: 'field_heading',
-			headline: 'field_headline',
 			_type: '_type',
 		},
 		prepare: (x: Record<string, unknown>) => {
@@ -86,12 +82,12 @@ export const component_listOfOfficesBlock = {
 				singletonTitle: null,
 				icon: getIcon('Building'),
 				fallback: {
-					previewTitle: 'field_headline',
+					previewTitle: 'field_heading',
 					previewSubTitle: '*List of Offices Block',
 					title: 'List of Offices Block',
 				},
 			};
-			const title = x['headline'] || x['heading'];
+			const title = x['heading'];
 			const subtitle = resolveValue('subtitle', component_listOfOfficesBlock.preview.select, x);
 			const media = resolveValue('media', component_listOfOfficesBlock.preview.select, x);
 			return handleReplacements(

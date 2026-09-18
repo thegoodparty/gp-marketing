@@ -90,11 +90,21 @@ export type SectionOverrides = {
 		searchPlaceholder?: string;
 	};
 	component_listOfOfficesBlock?: {
-		heading?: string;
+		/**
+		 * Fallback heading, used only when the template's own heading field is
+		 * empty. The editor's field (with its location tokens) normally wins.
+		 */
 		headline?: string;
 		defaultYear?: number;
 		availableYears?: number[];
 		offices?: import('~/ui/ListOfOfficesBlock').OfficeItem[];
+		/**
+		 * The level of the page itself, which sets the Level dropdown's default and
+		 * which levels it offers. Populated by the location index routes; a block
+		 * dropped on any other page falls back to showing its offices with no
+		 * dropdown.
+		 */
+		pageLevel?: import('~/ui/ListOfOfficesBlock').OfficeLevel;
 	};
 	component_faqBlock?: {
 		items?: Array<{ title: string; copy: string }>;

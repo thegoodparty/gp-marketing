@@ -2,7 +2,7 @@ import { convert } from 'html-to-text';
 
 import { US_STATES } from '~/constants/usStates';
 import type { CandidacyItem, FindByRaceIdResponse, PlaceItem, PlaceRace, PlaceWithFacts, RaceDetail } from '~/types/elections';
-import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
+import type { OfficeItem, OfficeLevel } from '~/ui/ListOfOfficesBlock';
 import type { FactsCardProps } from '~/ui/FactsCard';
 
 import { permanentRedirect } from 'next/navigation';
@@ -357,6 +357,12 @@ export async function resolvePlaceRaceElectionDates(
 
 export type BuildOfficeItemsFromPlaceRacesConfig = {
 	type: string;
+	/**
+	 * Which Level view these offices belong to. A location page lists its own
+	 * offices plus the overlapping races a voter there also votes in, and this is
+	 * what the block's Level dropdown switches between.
+	 */
+	level: OfficeLevel;
 	buildHref(race: PlaceRace): string | undefined;
 };
 
@@ -368,6 +374,7 @@ export function buildOfficeItemsFromPlaceRaces(
 	const offices: OfficeItem[] = races.map(race => ({
 		id: String(race.id),
 		type: config.type,
+		level: config.level,
 		position: race.normalizedPositionName ?? race.name ?? 'Position',
 		nextElectionDate: resolvedDates.get(race.slug) ?? race.electionDate ?? '',
 		href: config.buildHref(race),
@@ -385,6 +392,78 @@ export function buildOfficeItemsFromPlaceRaces(
 	].sort((a, b) => a - b);
 
 	return { offices, dataYears };
+}
+
+/**
+ * The races a voter in this place also votes in, from the places above it.
+ *
+ * A city ballot carries that city's own races plus its county's and its state's,
+ * so the offices list can offer County and State views alongside Local. It only
+ * ever looks up: a state page listing every municipal race in the state is not a
+ * ballot relationship and would be thousands of rows.
+ *
+ * Costs one extra place read for the state, and one for the county when the
+ * caller does not already hold it. Both sit in the tagged 1h data cache and
+ * these routes are statically generated, so it is a build-time cost.
+ *
+ * Hrefs point at each race's own canonical position page (a state race links to
+ * `/elections/tx/position/...`, not to a path under the city), which is both
+ * correct and more inbound links for those pages.
+ */
+export async function buildOverlappingOfficeItems(params: {
+	stateSlug: string;
+	/** Already-loaded county races, when the caller has them; skips the county read. */
+	countyRaces?: PlaceRace[];
+	countySlug?: string;
+}): Promise<{ offices: OfficeItem[]; dataYears: number[] }> {
+	const { getPlaceBySlug } = await import('~/lib/electionsApi');
+	const placeArgs = {
+		includeChildren: false,
+		includeRaces: true,
+		placeColumns: 'slug,name,mtfcc',
+		raceColumns: PLACE_RACE_COLUMNS,
+	};
+
+	const [statePlace, countyPlace] = await Promise.all([
+		getPlaceBySlug({ slug: params.stateSlug, ...placeArgs }),
+		params.countyRaces || !params.countySlug
+			? Promise.resolve(null)
+			: getPlaceBySlug({ slug: params.countySlug, ...placeArgs }),
+	]);
+
+	const stateRaces = (statePlace?.Races ?? []).filter(r => r.positionLevel?.toUpperCase() === 'STATE');
+	const countyRaces =
+		params.countyRaces ??
+		(countyPlace?.Races ?? []).filter(r => {
+			const level = r.positionLevel?.toUpperCase();
+			return level === 'COUNTY' || level === 'LOCAL';
+		});
+
+	const [stateDates, countyDates] = await Promise.all([
+		resolvePlaceRaceElectionDates(stateRaces),
+		resolvePlaceRaceElectionDates(countyRaces),
+	]);
+
+	const state = buildOfficeItemsFromPlaceRaces(stateRaces, stateDates, {
+		type: 'State',
+		level: 'state',
+		buildHref: race => buildPlaceRacePositionHref([params.stateSlug], race.slug),
+	});
+
+	const countySegments = params.countySlug?.split('/').filter(Boolean) ?? [];
+	const county =
+		countySegments.length > 0
+			? buildOfficeItemsFromPlaceRaces(countyRaces, countyDates, {
+					type: 'County',
+					level: 'county',
+					buildHref: race => buildPlaceRacePositionHref(countySegments, race.slug),
+				})
+			: { offices: [], dataYears: [] };
+
+	return {
+		offices: [...county.offices, ...state.offices],
+		dataYears: [...new Set([...county.dataYears, ...state.dataYears])].sort((a, b) => a - b),
+	};
 }
 
 /**

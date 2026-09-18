@@ -5522,13 +5522,6 @@
           },
           "optional": true
         },
-        "field_headline": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          },
-          "optional": true
-        },
         "field_defaultYear": {
           "type": "objectAttribute",
           "value": {

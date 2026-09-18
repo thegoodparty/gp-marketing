@@ -12,6 +12,7 @@ import {
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
 	buildOfficeItemsFromPlaceRaces,
+	buildOverlappingOfficeItems,
 	buildPlaceRacePositionHref,
 	getStateName,
 	hasSuspiciousFactsMatch,
@@ -105,10 +106,17 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		const districtResolvedDates = await resolvePlaceRaceElectionDates(districtRaces);
 		const { offices: districtOffices, dataYears } = buildOfficeItemsFromPlaceRaces(districtRaces, districtResolvedDates, {
 			type: 'District',
+			level: 'local',
 			buildHref: race => buildPlaceRacePositionHref([state, county, city], race.slug),
 		});
+		// The county and state races this district's voters also vote in.
+		const districtOverlapping = await buildOverlappingOfficeItems({
+			stateSlug: state.toLowerCase(),
+			countySlug,
+		});
+		const districtAllYears = [...new Set([...dataYears, ...districtOverlapping.dataYears])].sort((a, b) => a - b);
 		const defaultYear = resolveDefaultElectionYear(dataYears, currentYear);
-		const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
+		const availableYears = districtAllYears.length > 0 ? districtAllYears : [currentYear];
 		const factsCards = placeToFactsCards(districtPlace);
 		const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);
 
@@ -123,7 +131,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 			listHeading: `Elections in ${districtName}`,
 			defaultYear,
 			availableYears,
-			offices: districtOffices,
+			offices: [...districtOffices, ...districtOverlapping.offices],
 			electionsIndexHidden: true,
 			locationFacts: factsCards.length > 0 ? { title: `${districtName} facts`, factsCards } : { hidden: true },
 			pageUrl,
@@ -200,11 +208,20 @@ export default async function Page({ params }: { params: Promise<{ state: string
 	const cityResolvedDates = await resolvePlaceRaceElectionDates(cityRaces);
 	const { offices: cityOffices, dataYears } = buildOfficeItemsFromPlaceRaces(cityRaces, cityResolvedDates, {
 		type: 'City',
+		level: 'local',
 		buildHref: race => buildPlaceRacePositionHref([state, county, city], race.slug),
 	});
 
+	// The county and state races this city's voters also vote in. The county place
+	// is already loaded here, but without its races, so this reads it again.
+	const overlapping = await buildOverlappingOfficeItems({
+		stateSlug: state.toLowerCase(),
+		countySlug,
+	});
+
+	const allYears = [...new Set([...dataYears, ...overlapping.dataYears])].sort((a, b) => a - b);
 	const defaultYear = resolveDefaultElectionYear(dataYears, currentYear);
-	const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
+	const availableYears = allYears.length > 0 ? allYears : [currentYear];
 	const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);
 
 	return renderElectionsIndexPage({
@@ -219,7 +236,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		listHeading: `City Elections in ${cityName}`,
 		defaultYear,
 		availableYears,
-		offices: cityOffices,
+		offices: [...cityOffices, ...overlapping.offices],
 		electionsIndexHidden: true,
 		locationFacts: factsCards.length > 0 ? { title: `${cityName} facts`, factsCards } : { hidden: true },
 		pageUrl,

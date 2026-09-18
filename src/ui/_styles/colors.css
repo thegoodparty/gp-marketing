@@ -67,6 +67,9 @@
 		--waxflower-950: hsl(11 82% 17% / 1);
 
 		--blue-200: hsl(213 97% 87% / 1);
+		/* == #051d78, the design system's blue/900. Deeper and far more saturated
+		   than any midnight stop; used for the level tag on the offices list. */
+		--blue-900: hsl(228 92% 25% / 1);
 		--red-200: hsl(0 96% 89% / 1);
 
 		--goodparty-red: hsl(349 83% 47% / 1);
@@ -218,6 +221,7 @@
 	--color-waxflower-950: var(--waxflower-950);
 
 	--color-blue-200: var(--blue-200);
+	--color-blue-900: var(--blue-900);
 	--color-red-200: var(--red-200);
 
 	--color-goodparty-red: var(--goodparty-red);

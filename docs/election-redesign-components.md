@@ -44,7 +44,7 @@ trust:
 | Animated map block | `component_voterDensityBlock` (the map itself is built) |
 | Animated number block | `component_statsBlock`, plus the animation |
 | 3-step How to run for [Position Name] | `component_stepperBlock` |
-| Nearby offices | `component_listOfOfficesBlock` |
+| Nearby offices | `component_listOfOfficesBlock` — audited as the location-page list; see below |
 | "Who's currently in office" | `component_listOfOfficesBlock` |
 | Candidates/Representatives rows | `component_candidatesBlock` |
 | Featured candidates/Representatives | `component_candidatesBlock` |
@@ -89,6 +89,44 @@ Two things that came out of it and affect other components in the batch:
 Note for whoever wires up the links: a case study that lives as an `article` can be picked with
 the internal link picker, but `/people/*` profiles are rendered from election-api and have no
 Sanity document, so a profile link has to be the External option with a pasted path.
+
+**List of Offices Block** (location pages) — **Extend**, not a new block. The existing
+`component_listOfOfficesBlock` already had the bones of the design: cream section, white bordered
+rows, the level tag, Type / Position / date columns, the arrow, the year dropdown and the mobile
+card stack. The redesign adds the Level dropdown, the pill-shaped selects, an editable heading, and
+tightens type and colour to the Figma frame (which is named "Candidates block" — it is the offices
+table).
+
+Four things from it that affect other components in the batch:
+
+- **The Level filter goes up, never down.** A city page opens on Local and can switch to County and
+  State; a county page opens on County and can switch to State; a state page has only its own level
+  and so shows no dropdown at all rather than one with a single choice (Emily, 2026-09-18). Upward
+  is a real ballot relationship — a city voter also votes in their county's and state's races. The
+  reverse is not, and a state's every municipal race would be hundreds of rows. Downward navigation
+  stays with the counties-and-cities list (`component_electionsIndexBlock`).
+- **The page level reaches the block as data, not as an editor's choice.** `locationLevel` was
+  already in the index override context for the hero; the offices block now takes it too as
+  `pageLevel`. One block serves all four location templates. Apply the same approach to the position
+  headers rather than shipping four blocks.
+- **The overlapping levels need no new API.** Each place arrives with its own races attached, so
+  `buildOverlappingOfficeItems` in `src/lib/electionsHelpers.ts` reads the parent county and state
+  places and takes theirs. That is one or two extra place reads per page, at ISR build time, inside
+  the tagged 1h cache. The aggregate endpoint this doc asks for above is still wanted for the hero
+  *counts*; it is not a blocker for listing overlapping races.
+- **A client-side filter silently strips links from the HTML.** These blocks are `'use client'` but
+  still server-render, so a `useMemo` that filters the array leaves the non-matching rows in no
+  `<a>` at all — only in the RSC payload, as data. `/elections/tx` linked 3 of its 15 positions and
+  `/elections/tx/harris-county` 5 of 20. Render every row and hide the ones outside the current view
+  (`hidden` on a classless wrapper — it loses to a display class such as `flex` or `grid` on the row
+  itself). Do this in any block in this batch that filters or paginates links. Do **not** solve it by
+  putting the filter in the URL: these routes are statically generated with hourly revalidation, and
+  reading `searchParams` would opt thousands of prebuilt pages into per-request rendering.
+
+The heading is now the editor's `field_heading` with its location tokens resolved, falling back to
+the heading the route computes. The templates already carried one ("State Elections in [State]",
+"City Elections in [City]"); the block simply never rendered it, and published the bare level label
+instead. That fix shipped separately, ahead of the redesign, as it was a live bug.
 
 ## The shared election counts, as marketing defined them
 

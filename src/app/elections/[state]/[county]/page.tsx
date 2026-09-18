@@ -130,7 +130,6 @@ export default async function Page({
 		listHeading: isDistrict
 			? `Elections in ${placeName}`
 			: `${normalizedCounty?.suffixLabel ?? getCountySuffixLabel(countyPlace!.name)} Elections in ${normalizedCounty?.displayName ?? countyPlace!.name}`,
-		listHeadline: isDistrict ? 'district' : 'county',
 		defaultYear,
 		availableYears,
 		offices: countyOffices,

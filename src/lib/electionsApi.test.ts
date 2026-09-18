@@ -808,6 +808,38 @@ describe('getFeaturedCities', () => {
 		expect(result[0]?.href).toBe('/elections/tn/davidson-county/nashville');
 	});
 
+	/**
+	 * The same hierarchy gap at its extreme: a county whose children come back empty,
+	 * leaving the state sweep as the only source of cities. Everything then rests on
+	 * matching each city's `countyName` to the county slug through
+	 * `canonicalizeCountyEquivalentName`, so this uses a name whose casing and suffix
+	 * differ from the slug ("DeKalb" vs `tn/dekalb-county`).
+	 */
+	test('falls back to the state sweep for a childless county, narrowed by county name', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('slug=tn%2Fdekalb-county'),
+				body: [{ slug: 'tn/dekalb-county', name: 'DeKalb County', mtfcc: 'G4020', state: 'TN', children: [] }],
+			},
+			{
+				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4110'),
+				body: [
+					{ ...city('tn/smithville', 'Smithville', 5), countyName: 'DeKalb' },
+					{ ...city('tn/alexandria', 'Alexandria', 2), countyName: 'DeKalb' },
+					{ ...city('tn/nashville', 'Nashville', 14), countyName: 'Davidson' },
+				],
+			},
+			{
+				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4020'),
+				body: [{ slug: 'tn/dekalb-county', name: 'DeKalb County', mtfcc: 'G4020', state: 'TN' }],
+			},
+		]);
+
+		const result = await getFeaturedCities({ stateCode: 'TN', countySlug: 'tn/dekalb-county' });
+		expect(result.map(c => c.name)).toEqual(['Smithville', 'Alexandria']);
+		expect(result.map(c => c.href)).toEqual(['/elections/tn/dekalb-county/smithville', '/elections/tn/dekalb-county/alexandria']);
+	});
+
 	test('does not sweep the state for a school district, which has no cities', async () => {
 		let sweeps = 0;
 		withFetchMock([

@@ -1347,3 +1347,50 @@ describe('resolveDefaultElectionYear', () => {
 		expect(resolveDefaultElectionYear([2028, 2020, 2027], 2026)).toBe(2027);
 	});
 });
+
+/**
+ * A location page's offices list opens on its own level (Local on a city page),
+ * while the year dropdown is the union across the levels it can switch to. Those
+ * two have to agree: the opening year must be populated at the page's own level
+ * *and* be one the dropdown offers.
+ */
+describe('the year a location page opens its offices list on', () => {
+	const openingYear = (ownYears: number[], overlapYears: number[], today = 2026) => {
+		const allYears = [...new Set([...ownYears, ...overlapYears])].sort((a, b) => a - b);
+		return {
+			defaultYear: resolveDefaultElectionYear(ownYears.length > 0 ? ownYears : allYears, today),
+			availableYears: allYears.length > 0 ? allYears : [today],
+		};
+	};
+
+	test('opens on a year its own level has races in, not the soonest overall', () => {
+		// A city voting in 2027 alongside state races in 2026 must open on 2027,
+		// or it opens on a Local list that is empty.
+		const { defaultYear, availableYears } = openingYear([2027], [2026]);
+		expect(defaultYear).toBe(2027);
+		expect(availableYears).toContain(defaultYear);
+	});
+
+	test('falls back to the overlapping years when it has no races of its own', () => {
+		// Otherwise it opens on the current year while the dropdown offers only 2027.
+		const { defaultYear, availableYears } = openingYear([], [2027]);
+		expect(defaultYear).toBe(2027);
+		expect(availableYears).toContain(defaultYear);
+	});
+
+	test('opening year is always one the dropdown offers', () => {
+		const combinations: Array<[number[], number[]]> = [
+			[[], []],
+			[[], [2026]],
+			[[], [2027, 2029]],
+			[[2026], []],
+			[[2027], [2026]],
+			[[2024], [2028]],
+			[[2026, 2028], [2027]],
+		];
+		for (const [own, overlap] of combinations) {
+			const { defaultYear, availableYears } = openingYear(own, overlap);
+			expect(availableYears).toContain(defaultYear);
+		}
+	});
+});

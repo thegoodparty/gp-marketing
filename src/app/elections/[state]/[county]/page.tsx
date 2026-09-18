@@ -123,7 +123,13 @@ export default async function Page({
 	const overlapping = await buildOverlappingOfficeItems({ stateSlug: state.toLowerCase() });
 
 	const allYears = [...new Set([...dataYears, ...overlapping.dataYears])].sort((a, b) => a - b);
-	const defaultYear = resolveDefaultElectionYear(dataYears, currentYear);
+	/**
+	 * Open on a year this place's own level has races in, so the list it opens on
+	 * is populated, and fall back to the union only when it has none — otherwise
+	 * a place with no races of its own could open on a year the dropdown (built
+	 * from the union) does not offer.
+	 */
+	const defaultYear = resolveDefaultElectionYear(dataYears.length > 0 ? dataYears : allYears, currentYear);
 	const availableYears = allYears.length > 0 ? allYears : [currentYear];
 
 	const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);

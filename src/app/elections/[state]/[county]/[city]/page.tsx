@@ -115,7 +115,9 @@ export default async function Page({ params }: { params: Promise<{ state: string
 			countySlug,
 		});
 		const districtAllYears = [...new Set([...dataYears, ...districtOverlapping.dataYears])].sort((a, b) => a - b);
-		const defaultYear = resolveDefaultElectionYear(dataYears, currentYear);
+		// Own level first so the opening list is populated; union as the fallback so
+		// the opening year is always one the dropdown offers. See the county route.
+		const defaultYear = resolveDefaultElectionYear(dataYears.length > 0 ? dataYears : districtAllYears, currentYear);
 		const availableYears = districtAllYears.length > 0 ? districtAllYears : [currentYear];
 		const factsCards = placeToFactsCards(districtPlace);
 		const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);
@@ -220,7 +222,9 @@ export default async function Page({ params }: { params: Promise<{ state: string
 	});
 
 	const allYears = [...new Set([...dataYears, ...overlapping.dataYears])].sort((a, b) => a - b);
-	const defaultYear = resolveDefaultElectionYear(dataYears, currentYear);
+	// Own level first so the opening list is populated; union as the fallback so
+	// the opening year is always one the dropdown offers. See the county route.
+	const defaultYear = resolveDefaultElectionYear(dataYears.length > 0 ? dataYears : allYears, currentYear);
 	const availableYears = allYears.length > 0 ? allYears : [currentYear];
 	const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);
 

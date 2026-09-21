@@ -49,6 +49,19 @@ describe('LocationEditorialBlockSection', () => {
 		expect(html).not.toContain('Authored fallback copy.');
 	});
 
+	test("the page's own heading replaces the CMS heading", () => {
+		const html = renderToStaticMarkup(
+			<LocationEditorialBlockSection
+				{...section}
+				tokens={{ '[location]': 'Tucson' }}
+				editorialOverride={{ heading: 'More about Pima County' }}
+			/>,
+		);
+
+		expect(html).toContain('More about Pima County');
+		expect(html).not.toContain('More about Tucson');
+	});
+
 	test('renders nothing when neither the page nor the CMS has copy', () => {
 		const html = renderToStaticMarkup(
 			<LocationEditorialBlockSection {...section} locationEditorialBlockContent={null} tokens={{ '[location]': 'Tucson' }} />,

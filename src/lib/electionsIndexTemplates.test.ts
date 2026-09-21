@@ -36,6 +36,19 @@ describe('buildElectionsIndexTokens', () => {
 
 		expect(resolveTokens('More about [location]', tokens)).toBe('More about Tucson');
 	});
+
+	// District pages carry the district's own name in `countyName`, which is what
+	// `[District]` reads, so `[location]` has to resolve to it too rather than
+	// falling back to the state.
+	test('[location] is the district on a district page', () => {
+		const tokens = buildElectionsIndexTokens({
+			locationLevel: 'district',
+			stateName: 'Arizona',
+			countyName: 'Tucson Unified School District',
+		});
+
+		expect(resolveTokens('More about [location]', tokens)).toBe('More about Tucson Unified School District');
+	});
 });
 
 describe('buildElectionsIndexSectionOverrides', () => {

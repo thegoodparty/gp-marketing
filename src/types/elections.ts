@@ -173,6 +173,8 @@ export interface PlaceItem {
 	children?: PlaceItem[];
 	/** County name from API (e.g. "Los Angeles"); used for filtering cities by county. */
 	countyName?: string;
+	/** Present when the read asked for races (`includeRaces`, or `includeChildRaces` on a child). */
+	Races?: PlaceRace[];
 }
 
 export interface PlaceWithFacts extends PlaceItem {
@@ -182,5 +184,12 @@ export interface PlaceWithFacts extends PlaceItem {
 	incomeHouseholdMedian?: number;
 	unemploymentRate?: number;
 	homeValue?: number;
-	Races?: PlaceRace[];
+}
+
+/** One city card in the Featured Cities carousel. */
+export interface FeaturedCityCard {
+	name: string;
+	stateAbbreviation: string;
+	openElectionsCount: number;
+	href: string;
 }

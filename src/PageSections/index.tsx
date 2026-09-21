@@ -79,6 +79,18 @@ export type SectionOverrides = {
 		factsCards?: Array<{ factType: string; label: string; value: string }>;
 		hidden?: boolean;
 	};
+	component_featuredCitiesBlock?: {
+		/**
+		 * Cities of the page's own place, ranked by open elections. Set by the
+		 * location index routes (state / county / city) from `getFeaturedCities`.
+		 *
+		 * An empty array hides the block: it means this place has no cities with
+		 * anything on the ballot. Leaving `cities` unset is different — the block
+		 * then reads the national "most elections" list, which is right for
+		 * /elections and wrong for a location page, so location routes always set it.
+		 */
+		cities?: import('~/types/elections').FeaturedCityCard[];
+	};
 	component_electionsPositionHero?: import('~/PageSections/ElectionsPositionHeroSection').OfficeData;
 	component_electionsPositionContentBlock?: import('~/PageSections/ElectionsPositionContentBlockSection').ElectionsPositionContentBlockOverride;
 	component_locationLandingPageHero?: {
@@ -510,7 +522,10 @@ export function PageSections(props: Props) {
 					case 'component_featuredCitiesBlock':
 						return (
 							<Boundary key={section._key} componentName='Featured Cities Block'>
-								<FeaturedCitiesBlockSection {...section} />
+								<FeaturedCitiesBlockSection
+									{...section}
+									citiesOverride={props.sectionOverrides?.component_featuredCitiesBlock?.cities}
+								/>
 							</Boundary>
 						);
 					case 'component_goodPartyOrgPledge': {

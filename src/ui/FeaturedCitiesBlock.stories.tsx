@@ -10,7 +10,7 @@ const meta: Meta<typeof FeaturedCitiesBlock> = {
 	parameters: {
 		design: {
 			type: 'figma',
-			url: 'https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23038-14414&t=e6w52MjiSjms8Cyt-0',
+			url: 'https://www.figma.com/design/qIOT4lO1nRw4reuj6LjLwn/GoodParty---Marketing-Design-System?node-id=3105-12841',
 		},
 	},
 };
@@ -110,6 +110,15 @@ export const ThreeCards: Story = {
 	args: {
 		...Default.args,
 		locationCards: sampleLocationCards.slice(0, 3),
+	},
+};
+
+/** The redesign's default: five cities, the fifth running off the edge of the viewport. */
+export const FiveCards: Story = {
+	args: {
+		...Default.args,
+		header: { title: 'Featured cities' },
+		locationCards: sampleLocationCards.slice(0, 5),
 	},
 };
 

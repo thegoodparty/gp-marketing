@@ -10,6 +10,7 @@ import {
 	buildPlaceRacePositionHref,
 	buildSubplaceRaceSlug,
 	canonicalizeCountyEquivalentName,
+	countOpenElections,
 	findCityForDistrictName,
 	formatElectionDateFromApi,
 	formatFilingPeriodFromRace,
@@ -28,6 +29,7 @@ import {
 	inferSidebarLinkIcon,
 	isElectionDateBeforeToday,
 	placeToFactsCards,
+	rankFeaturedCities,
 	redirectCityPlaceToFourLevelUrl,
 	redirectCityRaceToFourLevelUrl,
 	resolveClaimedCustomIssueText,
@@ -1343,5 +1345,114 @@ describe('resolveDefaultElectionYear', () => {
 
 	test('does not assume the years arrive sorted', () => {
 		expect(resolveDefaultElectionYear([2028, 2020, 2027], 2026)).toBe(2027);
+	});
+});
+
+function cityWithRaces(name: string, slug: string, dates: string[]): PlaceItem {
+	return {
+		id: slug,
+		name,
+		slug,
+		state: slug.split('/')[0]?.toUpperCase() ?? '',
+		Races: dates.map((electionDate, i) => ({ id: `${slug}-${i}`, slug: `${slug}-race-${i}`, electionDate })),
+	};
+}
+
+describe('countOpenElections', () => {
+	test('counts this year when the city has elections in it', () => {
+		const city = cityWithRaces('Anytown', 'tn/anytown', ['2026-05-05', '2026-11-03', '2028-11-07']);
+		expect(countOpenElections(city.Races, 2026)).toBe(2);
+	});
+
+	test('counts the soonest year ahead when this year has none', () => {
+		const city = cityWithRaces('Anytown', 'tn/anytown', ['2027-03-02', '2027-11-02', '2028-11-07']);
+		expect(countOpenElections(city.Races, 2026)).toBe(2);
+	});
+
+	test('counts nothing when every election is in the past', () => {
+		const city = cityWithRaces('Anytown', 'tn/anytown', ['2022-11-08', '2024-11-05']);
+		expect(countOpenElections(city.Races, 2026)).toBe(0);
+	});
+
+	test('counts nothing for a city with no races at all', () => {
+		expect(countOpenElections(undefined, 2026)).toBe(0);
+		expect(countOpenElections([], 2026)).toBe(0);
+	});
+
+	test('ignores races with no usable election date', () => {
+		const races: PlaceRace[] = [
+			{ id: '1', slug: 'a', electionDate: '2026-11-03' },
+			{ id: '2', slug: 'b' },
+			{ id: '3', slug: 'c', electionDate: 'not a date' },
+		];
+		expect(countOpenElections(races, 2026)).toBe(1);
+	});
+});
+
+describe('rankFeaturedCities', () => {
+	const cities = [
+		cityWithRaces('Bigtown', 'tn/bigtown', ['2026-11-03', '2026-11-03', '2026-11-03']),
+		cityWithRaces('Midtown', 'tn/midtown', ['2026-11-03', '2026-11-03']),
+		cityWithRaces('Smalltown', 'tn/smalltown', ['2026-11-03']),
+		cityWithRaces('Pasttown', 'tn/pasttown', ['2022-11-08']),
+	];
+
+	test('returns the most open elections first, capped at count', () => {
+		const ranked = rankFeaturedCities(cities, { count: 2, currentYear: 2026 });
+		expect(ranked.map(r => r.place.name)).toEqual(['Bigtown', 'Midtown']);
+		expect(ranked.map(r => r.openElectionsCount)).toEqual([3, 2]);
+	});
+
+	test('returns fewer than count when the place has fewer cities with elections', () => {
+		const ranked = rankFeaturedCities(cities, { count: 5, currentYear: 2026 });
+		expect(ranked.map(r => r.place.name)).toEqual(['Bigtown', 'Midtown', 'Smalltown']);
+	});
+
+	test('drops cities with nothing on the ballot rather than showing a zero', () => {
+		const ranked = rankFeaturedCities(cities, { count: 5, currentYear: 2026 });
+		expect(ranked.map(r => r.place.name)).not.toContain('Pasttown');
+	});
+
+	test('breaks ties by name so the order is stable across renders', () => {
+		const tied = [cityWithRaces('Zeta', 'tn/zeta', ['2026-11-03']), cityWithRaces('Alpha', 'tn/alpha', ['2026-11-03'])];
+		expect(rankFeaturedCities(tied, { count: 2, currentYear: 2026 }).map(r => r.place.name)).toEqual(['Alpha', 'Zeta']);
+	});
+
+	test('never features the city the page is about, whichever slug shape it arrives as', () => {
+		const ranked = rankFeaturedCities(cities, {
+			count: 5,
+			currentYear: 2026,
+			excludeSlug: 'tn/some-county/bigtown',
+		});
+		expect(ranked.map(r => r.place.name)).toEqual(['Midtown', 'Smalltown']);
+	});
+
+	/** Tennessee has a Franklin in more than one county; only the page's own goes. */
+	test('keeps a same-named city in another county', () => {
+		const franklins = [
+			cityWithRaces('Franklin', 'tn/williamson-county/franklin', ['2026-11-03', '2026-11-03']),
+			cityWithRaces('Franklin', 'tn/shelby-county/franklin', ['2026-11-03']),
+		];
+		const ranked = rankFeaturedCities(franklins, {
+			count: 5,
+			currentYear: 2026,
+			excludeSlug: 'tn/williamson-county/franklin',
+		});
+		expect(ranked.map(r => r.place.slug)).toEqual(['tn/shelby-county/franklin']);
+	});
+
+	test('excludes on the city segment only when the page slug names no county', () => {
+		const franklins = [
+			cityWithRaces('Franklin', 'tn/williamson-county/franklin', ['2026-11-03', '2026-11-03']),
+			cityWithRaces('Franklin', 'tn/shelby-county/franklin', ['2026-11-03']),
+		];
+		expect(rankFeaturedCities(franklins, { count: 5, currentYear: 2026, excludeSlug: 'tn/franklin' })).toEqual([]);
+	});
+
+	test('skips places missing a name or slug', () => {
+		const broken: PlaceItem[] = [
+			{ id: 'x', name: '', slug: 'tn/x', state: 'TN', Races: [{ id: '1', slug: 'r', electionDate: '2026-11-03' }] },
+		];
+		expect(rankFeaturedCities(broken, { count: 5, currentYear: 2026 })).toEqual([]);
 	});
 });

@@ -258,6 +258,30 @@ Apply these across the whole batch so the blocks stay consistent.
   nothing and an error boundary swallows render errors, so nothing fails. Confirm on
   `http://localhost:3009/all` before opening a PR. For pixel parity against Figma,
   use the `marketing-ui-clone` skill.
+
+  Note that `/all` carries none of the election blocks, so a block in this batch
+  cannot be seen there until an editor adds it — and that means editing shared
+  production content. Rendering the block's own Storybook story and measuring its
+  geometry against the frame is the practical substitute; pair it with a test that
+  runs the section wrapper through the real props so a schema-vs-GROQ name mismatch
+  still gets caught.
+- **Where this Figma file and the live scale disagree, the live scale wins.**
+  (Measured while building the location editorial block, 2026-09-21.) Two systemic
+  gaps, neither of them a bug to fix in a single block:
+  - **Width.** The frames draw page content 1280 wide on a 1440 artboard (80px
+    gutters). The site's widest container, `Container size='xl'`, is 85rem centred,
+    which is 1200 of content at 1440. Use the container. A section 40px wider than
+    the facts cards above it reads as broken, and there is no 1280 container in the
+    scale.
+  - **Body text size.** The frames use a fixed 18px. The site's type tokens step up
+    with the viewport (`body-large` is 18/28 at phone width and 20/31 at 1440). Use
+    the token; the frames simply do not model the ramp.
+
+  Headings are worth checking per block, because the ramp does not always match
+  either: the editorial block's frames are 32px on mobile and 48px on desktop, which
+  no single token gives, so it pairs `heading-lg` with a `max-md:text-heading-md`
+  override. Both are registered in the tailwind-merge font-size list; a size that is
+  not in that list is silently dropped (see `.cursor/BUGBOT.md`).
 - **Page state comes from data, not from an editor's choice.** Where a component
   varies by where an election is in its cycle (pre-filing, mid-election,
   post-election), that is a fact derived from filing dates and certified results, not

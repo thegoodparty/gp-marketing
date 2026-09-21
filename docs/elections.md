@@ -110,6 +110,17 @@ build if a new election route forgets. Keep the canonical path identical to the 
 URL for the same page (`buildElectionPositionHrefFromRaceSlug`); a canonical that
 disagrees with the sitemap sends conflicting signals.
 
+### What the per-state sitemap band lists
+
+`fetchStateElectionSitemapEntries` (`src/lib/sitemap-entries.ts`) owns one shard per
+state (`/sitemap/1.xml` … `/sitemap/51.xml`) and emits four things: the **state index
+itself** at priority 0.8, then counties and districts, cities, and position pages at
+0.7. The state is the only one of those that is not a row in the `/v1/places` response
+— the place rows are the tiers *inside* the state — so it has to be pushed explicitly
+from the state code. It was missed for a long time, which left all 51 `/elections/[state]`
+pages out of every shard while everything beneath them was listed. If you touch this
+function, keep that entry.
+
 ### Joint offices eat place slots
 
 A combined office (Indiana's Clerk/Treasurer, Montana's Clerk/Recorder/Surveyor,

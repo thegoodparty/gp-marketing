@@ -874,6 +874,32 @@ describe('getFeaturedCities', () => {
 		expect(sweeps).toBe(0);
 	});
 
+	/**
+	 * A city page lives at /elections/<state>/<county>/<city>, so a card that can
+	 * only manage /elections/<state>/<city> is read as a county, fails to resolve,
+	 * and lands the reader back on the state page they came from. Better no card.
+	 */
+	test('skips a city whose county cannot be resolved, and promotes the next one', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4110'),
+				body: [
+					{ ...city('tn/mystery-city', 'Mystery City', 20), countyName: undefined },
+					city('tn/nashville', 'Nashville', 4),
+				],
+			},
+			{
+				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4020'),
+				body: [{ slug: 'tn/davidson-county', name: 'Davidson County', mtfcc: 'G4020', state: 'TN' }],
+			},
+		]);
+
+		const result = await getFeaturedCities({ stateCode: 'TN', count: 1 });
+		expect(result).toEqual([
+			{ name: 'Nashville', stateAbbreviation: 'TN', openElectionsCount: 4, href: '/elections/tn/davidson-county/nashville' },
+		]);
+	});
+
 	test('returns nothing when the place has no cities with elections', async () => {
 		withFetchMock([
 			{

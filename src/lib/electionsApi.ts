@@ -721,6 +721,13 @@ function dedupeCitiesByName(places: PlaceItem[]): PlaceItem[] {
  * state page. Returns fewer than `count` when the place has fewer cities with
  * anything on the ballot, and an empty list when it has none — the block hides
  * itself rather than render an empty shell.
+ *
+ * A city only becomes a card once its full `/elections/<county>/<city>` path is
+ * known. A city page lives four levels deep, so the shorter `/elections/<state>/<city>`
+ * is read as a county, and a city the router cannot place that way is bounced back
+ * to the state page — a card that returns the reader to the page they are on. When a
+ * city's county cannot be resolved (its `countyName` is missing or matches nothing)
+ * it is skipped and the next-ranked city takes the slot.
  */
 export async function getFeaturedCities(params: {
 	stateCode: string;
@@ -731,25 +738,28 @@ export async function getFeaturedCities(params: {
 	count?: number;
 }): Promise<FeaturedCityCard[]> {
 	const state = params.stateCode.toUpperCase();
+	const count = params.count ?? FEATURED_CITIES_COUNT;
 	const places = await getCityPlacesWithRaces({ state, countySlug: params.countySlug });
-	const ranked = rankFeaturedCities(places, {
-		count: params.count ?? FEATURED_CITIES_COUNT,
-		excludeSlug: params.citySlug,
-	});
+	// Ranked in full rather than to `count`, so a city that turns out to be
+	// unlinkable gives its place up to the next one instead of leaving a gap.
+	const ranked = rankFeaturedCities(places, { count: places.length, excludeSlug: params.citySlug });
 
-	return Promise.all(
-		ranked.map(async ({ place, openElectionsCount }) => {
-			const countySlug =
-				params.countySlug ?? (place.countyName ? await resolveCountySlugForPlace(state, place.countyName) : undefined);
-			const citySegment = place.slug.split('/').pop() ?? '';
-			return {
-				name: place.name,
-				stateAbbreviation: state,
-				openElectionsCount,
-				href: countySlug && citySegment ? `/elections/${countySlug}/${citySegment}` : `/elections/${place.slug}`,
-			};
-		}),
-	);
+	const cards: FeaturedCityCard[] = [];
+	for (const { place, openElectionsCount } of ranked) {
+		if (cards.length === count) break;
+		// One cached read of the state's counties, shared by every city after the first.
+		const countySlug =
+			params.countySlug ?? (place.countyName ? await resolveCountySlugForPlace(state, place.countyName) : undefined);
+		const citySegment = place.slug.split('/').pop();
+		if (!countySlug || !citySegment) continue;
+		cards.push({
+			name: place.name,
+			stateAbbreviation: state,
+			openElectionsCount,
+			href: `/elections/${countySlug}/${citySegment}`,
+		});
+	}
+	return cards;
 }
 
 export async function getPlaceBySlug(params: {

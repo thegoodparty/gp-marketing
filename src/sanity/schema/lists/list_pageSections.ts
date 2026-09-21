@@ -131,6 +131,7 @@ export const list_pageSections = {
 					name: 'text',
 					title: 'Text',
 					of: [
+            'component_locationEditorialBlock',
 						'component_bannerBlock',
 						'component_calculatorTextBlock',
 						'component_twoUpCardBlock',
@@ -241,6 +242,7 @@ export const list_pageSections = {
 	},
 	type: 'array',
 	of: [
+		{ title: 'Location Editorial Block', type: 'component_locationEditorialBlock' },
 		{
 			title: 'Testimonial Block With Link',
 			type: 'component_testimonialBlockWithLink',

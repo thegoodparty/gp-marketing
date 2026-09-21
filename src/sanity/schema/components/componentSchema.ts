@@ -45,7 +45,10 @@ import { component_clickToCallBlock } from './component_clickToCallBlock.ts';
 import { component_voterDensityBlock } from './component_voterDensityBlock.ts';
 import { component_testimonialBlockWithLink } from './component_testimonialBlockWithLink.ts';
 
+import { component_locationEditorialBlock } from './component_locationEditorialBlock.ts';
+
 export const componentSchema = [
+	component_locationEditorialBlock,
 	component_testimonialBlockWithLink,
 	component_jobOpeningsBlock,
 	component_featuresBlock,

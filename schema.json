@@ -2675,6 +2675,21 @@
             },
             "rest": {
               "type": "inline",
+              "name": "component_locationEditorialBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
               "name": "component_testimonialBlockWithLink"
             }
           },
@@ -8037,6 +8052,81 @@
           "value": {
             "type": "inline",
             "name": "testimonialBlockWithLinkDesignSettings"
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "component_locationEditorialBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_locationEditorialBlock"
+          }
+        },
+        "locationEditorialBlockHeader": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_title": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "field_title"
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "locationEditorialBlockContent": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "block_summaryText": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "block_summaryText"
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "locationEditorialBlockDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_blockColorCreamMidnight": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "field_blockColorCreamMidnight"
+                },
+                "optional": true
+              }
+            }
           },
           "optional": true
         },

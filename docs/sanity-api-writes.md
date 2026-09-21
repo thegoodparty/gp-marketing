@@ -132,9 +132,17 @@ to enforce the same slug contract the Studio does:
 1. **Format:** lowercase letters, numbers, and hyphens only
    (`^[a-z0-9]+(?:-[a-z0-9]+)*$`). No spaces, uppercase, or slashes.
 2. **Generate from the question** using the same algorithm as `slugifyFaqQuestion`
-   in [src/lib/faqSlugFormat.ts](../src/lib/faqSlugFormat.ts): lowercase, strip
-   non-alphanumerics except spaces and hyphens, collapse whitespace to `-`. Example:
-   `What is GoodParty.org?` becomes `what-is-goodpartyorg`.
+   in [src/lib/faqSlugFormat.ts](../src/lib/faqSlugFormat.ts):
+   1. Lowercase.
+   2. Strip characters that are not `a-z`, `0-9`, spaces, or hyphens.
+   3. Replace runs of whitespace with a single `-`.
+   4. Collapse consecutive hyphens to a single `-`.
+   5. Strip any leading or trailing `-`.
+
+   Example: `What is GoodParty.org?` becomes `what-is-goodpartyorg`. Example:
+   `FAQ - General` becomes `faq-general`, where step 4 collapses the triple hyphen
+   that steps 2 and 3 leave behind. Skipping steps 4 and 5 produces slugs that fail
+   `FAQ_SLUG_PATTERN` and diverge from what the Studio generates.
 3. **Collision suffix:** if that slug already belongs to another FAQ, append
    `-{last6 of published document id}` and repeat until unique, for example
    `what-is-goodpartyorg-bbb222`.

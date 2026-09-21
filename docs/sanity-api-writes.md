@@ -201,11 +201,12 @@ Content can be read back with GROQ, for example:
 
 ## Troubleshooting
 
-| Issue                            | Check                                                                    |
-| -------------------------------- | ------------------------------------------------------------------------ |
-| 503 Revalidation not configured  | `SANITY_REVALIDATE_SECRET` is set in the deployment environment            |
-| 401 Invalid signature            | The webhook secret matches the env var; HMAC needs the raw request body    |
-| 401 Invalid header / Authorization failed | The webhook sends `x-sanity-webhook-secret` or `sanity-webhook-signature` |
-| 400 Invalid payload: missing `_type` | The webhook projection is dropping `_type` from the body               |
-| Content not updating             | The webhook filter may exclude that document type; check webhook attempts  |
-| Wrong paths revalidated          | `_type` and the slug path in the payload must match the schema             |
+| Issue | Check |
+| ----- | ----- |
+| 503 Revalidation not configured | `SANITY_REVALIDATE_SECRET` is not set in the deployment environment |
+| 401 Invalid `x-sanity-webhook-secret` header | The header was sent but its value does not match `SANITY_REVALIDATE_SECRET`. Confirm both sides use the same secret |
+| 401 Invalid signature | No `x-sanity-webhook-secret` header, and the HMAC in `sanity-webhook-signature` did not verify. The webhook secret must match the env var, and HMAC needs the raw request body |
+| 401 Authorization failed | `parseBody` threw. Check that `sanity-webhook-signature` is well formed and that nothing buffers or rewrites the raw body before it reaches the route |
+| 400 Invalid payload: missing `_type` | The webhook projection is dropping `_type` from the body |
+| Content not updating | The webhook filter may exclude that document type; check the webhook attempts |
+| Wrong paths revalidated | `_type` and the slug path in the payload must match the schema |

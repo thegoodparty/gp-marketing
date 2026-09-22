@@ -1299,4 +1299,28 @@ describe('fetchStateElectionRouteParams', () => {
 
 		expect(fromParams).toEqual(fromSitemap);
 	});
+
+	// The position tier needs its own assertion: cityParams can be correct while
+	// cityPositionParams is empty, because the latter resolves the town through
+	// citySlugToCountySlug inside buildRaceRouteParams. That combination prerenders
+	// the town index pages and none of the office pages under them, while the
+	// sitemap advertises both.
+	test('a town race produces cityPositionParams, not just cityParams', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/windham-county', mtfcc: 'G4020', name: 'Windham County' }],
+			towns: [{ slug: 'vt/brattleboro-town', countyName: 'Windham County' }],
+			races: [{ slug: 'vt/brattleboro-town/town-moderator', positionLevel: 'CITY' }],
+		});
+
+		const { cityPositionParams } = await fetchStateElectionRouteParams('VT');
+
+		expect(cityPositionParams).toEqual([
+			{
+				state: 'vt',
+				county: 'windham-county',
+				city: 'brattleboro-town',
+				positionSlug: 'town-moderator',
+			},
+		]);
+	});
 });

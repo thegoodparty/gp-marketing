@@ -155,11 +155,22 @@ to enforce the same slug contract the Studio does:
 3. **Collision suffix:** if that slug already belongs to another FAQ, append
    `-{last6 of published document id}` and repeat until unique, for example
    `what-is-goodpartyorg-bbb222`.
-4. **Preflight uniqueness query** (raw perspective, authenticated):
+4. **Preflight uniqueness query.** This must run authenticated, with
+   `perspective: 'raw'` and `useCdn: false`:
 
    ```groq
    count(*[_type == "faq" && faqOverview.field_slug == $slug && _id != $publishedId && !sanity::versionOf($publishedId)])
    ```
+
+   ```js
+   createClient({ ...config, token: '<editor-token>', useCdn: false, perspective: 'raw' });
+   ```
+
+   Both options matter, and `@sanity/client` defaults to neither (it defaults to
+   `perspective: 'published'` and `useCdn: true`). Only the `raw` perspective can see
+   draft and version documents, so under the defaults a collision that exists only as
+   a draft returns a count of zero, the preflight reports all clear, and the duplicate
+   is written anyway. `scripts/backfill-faq-slugs.ts` sets both for this reason.
 
    Abort the write when the count is greater than zero.
 

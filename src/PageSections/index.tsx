@@ -49,6 +49,8 @@ import { TestimonialBlockWithLinkSection } from '~/PageSections/TestimonialBlock
 import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
 import type { TokenMap } from '~/lib/resolveTokens';
 
+import { LocationEditorialBlockSection } from '~/PageSections/LocationEditorialBlockSection';
+
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
 
 export type { TokenMap };
@@ -77,6 +79,25 @@ export type SectionOverrides = {
 	component_locationFactsBlock?: {
 		headerTitle?: string;
 		factsCards?: Array<{ factType: string; label: string; value: string }>;
+		hidden?: boolean;
+	};
+	component_locationEditorialBlock?: {
+		/**
+		 * Overrides the Sanity-authored heading (location index pages could set it
+		 * per page, though today the token-driven CMS heading covers it).
+		 */
+		heading?: string;
+		/**
+		 * The page's own editorial prose, one string per paragraph. This is the
+		 * seam the per-location copy attaches to: the block sits on the shared
+		 * location templates, so a paragraph typed into Sanity would be identical
+		 * on every page in that family. No route populates this yet — the writing
+		 * pipeline that fills it is separate work — so on a real location page
+		 * today the block falls back to the CMS field and, with that empty,
+		 * renders nothing.
+		 */
+		paragraphs?: string[];
+		/** When true the section renders nothing. */
 		hidden?: boolean;
 	};
 	component_electionsPositionHero?: import('~/PageSections/ElectionsPositionHeroSection').OfficeData;
@@ -595,6 +616,16 @@ export function PageSections(props: Props) {
 						return (
 							<Boundary key={section._key} componentName='Testimonial Block With Link'>
 								<TestimonialBlockWithLinkSection {...section} tokens={props.tokens} />
+							</Boundary>
+						);
+					case 'component_locationEditorialBlock':
+						return (
+							<Boundary key={section._key} componentName='Location Editorial Block'>
+								<LocationEditorialBlockSection
+									{...section}
+									editorialOverride={props.sectionOverrides?.component_locationEditorialBlock}
+									tokens={props.tokens}
+								/>
 							</Boundary>
 						);
 					default:

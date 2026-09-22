@@ -280,6 +280,16 @@ export type ElectionsIndexPageContext = {
 		factsCards?: Array<{ factType: string; label: string; value: string }>;
 		hidden?: boolean;
 	};
+	/**
+	 * The page's editorial prose for `component_locationEditorialBlock`, one
+	 * string per paragraph. No route sets it yet: the copy is written per
+	 * location outside this repo and the source it will be read from is not
+	 * decided, so the block stays hidden on location pages until this is fed.
+	 */
+	locationEditorial?: {
+		heading?: string;
+		paragraphs?: string[];
+	};
 };
 
 export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageContext): SectionOverrides {
@@ -313,6 +323,12 @@ export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageConte
 					headerTitle: ctx.locationFacts.title,
 					factsCards: ctx.locationFacts.factsCards,
 					hidden: ctx.locationFacts.hidden,
+				}
+			: undefined,
+		component_locationEditorialBlock: ctx.locationEditorial
+			? {
+					heading: ctx.locationEditorial.heading,
+					paragraphs: ctx.locationEditorial.paragraphs,
 				}
 			: undefined,
 	};

@@ -53,6 +53,7 @@ trust:
 | About [Position Name] | `component_electionsPositionContentBlock` |
 | 3-column icon block | `component_iconContentBlock` |
 | Testimonial block with link | ~~`component_testimonialBlock`, plus a link field~~ — audited, rejected. Built as `component_testimonialBlockWithLink`; see below |
+| More about location container | ~~`component_locationFactsBlock`~~ — audited, rejected. Built as `component_locationEditorialBlock`; see below |
 | Branded CTA with icon | `component_ctaBlock`, `component_ctaBannerBlock` |
 | 3-block CTA with icon | `component_ctaCardsBlock` |
 | 3-column e-book support block | `component_ctaCardsBlock`, `component_twoUpCardBlock` |
@@ -89,6 +90,46 @@ Two things that came out of it and affect other components in the batch:
 Note for whoever wires up the links: a case study that lives as an `article` can be picked with
 the internal link picker, but `/people/*` profiles are rendered from election-api and have no
 Sanity document, so a profile link has to be the External option with a pasted path.
+
+**More about location container / Location editorial block** (location pages) — built as
+`component_locationEditorialBlock`. The inventory below calls it content-only; it is not. Treat
+that row as corrected.
+
+Nothing existing covered it. `component_locationFactsBlock` was the starting hypothesis and is
+the wrong base: it is built around its fact cards, returns `null` without them, and reads in the
+Studio menu as the stats block. `component_electionsPositionContentBlock` is the two-column
+sidebar layout, `component_bannerBlock` is a one-line banner with avatars, and
+`component_imageContentBlock` needs an image. There is no plain prose block on the site.
+
+The reason it cannot be content-only is the one that applies to every block in this batch that
+wants per-page words rather than per-page numbers:
+
+- **One block instance serves the whole family.** Location pages render from the global Location
+  templates, so a paragraph typed into the block's Sanity field is the same paragraph on every
+  state, or every city, in that family. Per-location prose therefore has to arrive through
+  `SectionOverrides`, exactly like the facts and the office list, even though it is editorial
+  copy rather than election data. This is the first block in the batch whose override carries
+  *words* instead of figures, and the same will be true of "About [Position Name]".
+- **The seam is `locationEditorial` on `ElectionsIndexPageContext`**, mapped in
+  `buildElectionsIndexSectionOverrides`. No route populates it yet. Where the AI-written copy
+  will be read from is not decided (Emily, 2026-09-21: parked). Until it is, the block is
+  hidden on location pages, which is deliberate — see the empty state below.
+- **The Sanity body field stayed, as a fallback only**, for pages that are not template-driven.
+  Its Studio description says not to fill it on the location templates. The override wins over
+  it, so the field is what gets replaced when the copy starts flowing.
+- **The empty state is "render nothing at all".** The block returns `null` when neither source
+  has copy, rather than publishing a heading over an empty white card. That card would be the
+  silent-failure shape this doc warns about: nothing throws, so no boundary catches it.
+  `src/ui/locationEditorialBlock.test.tsx` pins it.
+
+One thing that came out of it and affects other blocks in the batch:
+
+- **`[location]` was a known token that no location page supplied.** `KNOWN_ELECTION_TOKENS` has
+  always listed it, but `buildElectionsIndexTokens` only built `[State]`, `[County]`, `[City]`
+  and `[District]`, and an unsupplied known token is stripped to empty. So the Figma heading
+  "More about [Location]" would have published as "More about" with the name silently gone. It
+  now resolves to the most specific place the page represents (city, else county, else state).
+  Any other block in this batch with a location-named editable heading can now use it.
 
 ## The shared election counts, as marketing defined them
 
@@ -217,6 +258,30 @@ Apply these across the whole batch so the blocks stay consistent.
   nothing and an error boundary swallows render errors, so nothing fails. Confirm on
   `http://localhost:3009/all` before opening a PR. For pixel parity against Figma,
   use the `marketing-ui-clone` skill.
+
+  Note that `/all` carries none of the election blocks, so a block in this batch
+  cannot be seen there until an editor adds it — and that means editing shared
+  production content. Rendering the block's own Storybook story and measuring its
+  geometry against the frame is the practical substitute; pair it with a test that
+  runs the section wrapper through the real props so a schema-vs-GROQ name mismatch
+  still gets caught.
+- **Where this Figma file and the live scale disagree, the live scale wins.**
+  (Measured while building the location editorial block, 2026-09-21.) Two systemic
+  gaps, neither of them a bug to fix in a single block:
+  - **Width.** The frames draw page content 1280 wide on a 1440 artboard (80px
+    gutters). The site's widest container, `Container size='xl'`, is 85rem centred,
+    which is 1200 of content at 1440. Use the container. A section 40px wider than
+    the facts cards above it reads as broken, and there is no 1280 container in the
+    scale.
+  - **Body text size.** The frames use a fixed 18px. The site's type tokens step up
+    with the viewport (`body-large` is 18/28 at phone width and 20/31 at 1440). Use
+    the token; the frames simply do not model the ramp.
+
+  Headings are worth checking per block, because the ramp does not always match
+  either: the editorial block's frames are 32px on mobile and 48px on desktop, which
+  no single token gives, so it pairs `heading-lg` with a `max-md:text-heading-md`
+  override. Both are registered in the tailwind-merge font-size list; a size that is
+  not in that list is silently dropped (see `.cursor/BUGBOT.md`).
 - **Page state comes from data, not from an editor's choice.** Where a component
   varies by where an election is in its cycle (pre-filing, mid-election,
   post-election), that is a fact derived from filing dates and certified results, not
@@ -284,7 +349,7 @@ audit to confirm; `data` means it needs the `SectionOverrides` pass.
 | Find elections container | location | data |
 | Featured cities carousel | location | data |
 | Featured candidates/Representatives | location | data |
-| More about location container | location | content |
+| More about location container | location | data (audited — built, see above) |
 | Header_Pre-Filing | position | data |
 | Header_Mid-Election | position | data |
 | Header_Post-Election | position | data |

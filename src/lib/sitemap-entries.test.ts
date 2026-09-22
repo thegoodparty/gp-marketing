@@ -1013,8 +1013,18 @@ describe('fetchStateElectionSitemapEntries', () => {
 	type MockCity = { slug: string; countyName: string };
 	type MockRace = { slug: string; positionLevel: string };
 
-	/** Stands in for the three /v1 sweeps the state band reads. */
-	function mockUpstream(opts: { places?: MockPlace[]; cities?: MockCity[]; races?: MockRace[] }) {
+	/**
+	 * Stands in for the four /v1 sweeps the state band reads. `cities` and `towns`
+	 * are separate because they are separate upstream queries keyed on mtfcc —
+	 * serving `towns` from the G4110 sweep would hide the very bug these tests
+	 * cover.
+	 */
+	function mockUpstream(opts: {
+		places?: MockPlace[];
+		cities?: MockCity[];
+		towns?: MockCity[];
+		races?: MockRace[];
+	}) {
 		globalThis.fetch = (async (input: RequestInfo | URL) => {
 			const url = new URL(String(input));
 			const json = (body: unknown) =>
@@ -1024,8 +1034,9 @@ describe('fetchStateElectionSitemapEntries', () => {
 				});
 
 			if (url.pathname.endsWith('/v1/races')) return json(opts.races ?? []);
-			// The cities sweep is the /v1/places call that filters on mtfcc.
+			// The municipal sweeps are the /v1/places calls that filter on mtfcc.
 			if (url.searchParams.get('mtfcc') === 'G4110') return json(opts.cities ?? []);
+			if (url.searchParams.get('mtfcc') === 'G4040') return json(opts.towns ?? []);
 			return json(opts.places ?? []);
 		}) as typeof fetch;
 	}
@@ -1085,5 +1096,107 @@ describe('fetchStateElectionSitemapEntries', () => {
 		const entries = await fetchStateElectionSitemapEntries('AL', base);
 
 		expect(entries.filter((e) => e.url === `${base}/elections/al`)).toHaveLength(1);
+	});
+
+	// Towns are TOWN_MTFCC, not CITY_MTFCC. This query used to ask for G4110 only,
+	// so New England town pages were in no shard at all even though they render
+	// and their own county pages link to them.
+	test('lists G4040 towns, not just G4110 cities', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/windham-county', mtfcc: 'G4020', name: 'Windham County' }],
+			towns: [{ slug: 'vt/brattleboro-town', countyName: 'Windham County' }],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('VT', base);
+
+		expect(entries.map((e) => e.url)).toContain(
+			`${base}/elections/vt/windham-county/brattleboro-town`,
+		);
+	});
+
+	// The "-town" suffix is part of the slug: /elections/vt/windham-county/brattleboro
+	// 404s. Deriving the segment by stripping the suffix would advertise dead URLs.
+	test('keeps the -town suffix rather than stripping it', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/windham-county', mtfcc: 'G4020', name: 'Windham County' }],
+			towns: [{ slug: 'vt/brattleboro-town', countyName: 'Windham County' }],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('VT', base);
+		const urls = entries.map((e) => e.url);
+
+		expect(urls).not.toContain(`${base}/elections/vt/windham-county/brattleboro`);
+	});
+
+	// Connecticut is all towns and no cities, so under the G4110-only query it
+	// contributed zero municipal URLs to its shard.
+	test('an all-town state still gets municipal entries', async () => {
+		mockUpstream({
+			places: [{ slug: 'ct/fairfield-county', mtfcc: 'G4020', name: 'Fairfield County' }],
+			cities: [],
+			towns: [
+				{ slug: 'ct/greenwich-town', countyName: 'Fairfield County' },
+				{ slug: 'ct/stamford-town', countyName: 'Fairfield County' },
+			],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('CT', base);
+		const municipal = entries.filter((e) => e.url.split('/').length === 7);
+
+		expect(municipal.map((e) => e.url)).toEqual([
+			`${base}/elections/ct/fairfield-county/greenwich-town`,
+			`${base}/elections/ct/fairfield-county/stamford-town`,
+		]);
+	});
+
+	test('cities and towns both land, without double-counting either', async () => {
+		mockUpstream({
+			places: [{ slug: 'ma/worcester-county', mtfcc: 'G4020', name: 'Worcester County' }],
+			cities: [{ slug: 'ma/worcester', countyName: 'Worcester County' }],
+			towns: [{ slug: 'ma/brookfield-town', countyName: 'Worcester County' }],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('MA', base);
+		const urls = entries.map((e) => e.url);
+
+		expect(urls).toContain(`${base}/elections/ma/worcester-county/worcester`);
+		expect(urls).toContain(`${base}/elections/ma/worcester-county/brookfield-town`);
+		expect(new Set(urls).size).toBe(urls.length);
+	});
+
+	// Maine tags some district rows as municipality-shaped; the district filter has
+	// to keep applying to the town sweep, not just the city sweep.
+	test('still filters school districts out of the town sweep', async () => {
+		mockUpstream({
+			places: [{ slug: 'me/androscoggin-county', mtfcc: 'G4020', name: 'Androscoggin County' }],
+			towns: [
+				{ slug: 'me/auburn-town', countyName: 'Androscoggin County' },
+				{ slug: 'me/rsu-52-school-district', countyName: 'Androscoggin County' },
+			],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('ME', base);
+		const urls = entries.map((e) => e.url);
+
+		expect(urls).toContain(`${base}/elections/me/androscoggin-county/auburn-town`);
+		expect(urls).not.toContain(
+			`${base}/elections/me/androscoggin-county/rsu-52-school-district`,
+		);
+	});
+
+	// Town-level *position* pages were collateral damage: buildRaceEntries skips a
+	// city race it cannot map to a county, and towns had no mapping at all.
+	test('town position pages resolve now that towns are in the county lookup', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/windham-county', mtfcc: 'G4020', name: 'Windham County' }],
+			towns: [{ slug: 'vt/brattleboro-town', countyName: 'Windham County' }],
+			races: [{ slug: 'vt/brattleboro-town/town-moderator', positionLevel: 'CITY' }],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('VT', base);
+
+		expect(entries.map((e) => e.url)).toContain(
+			`${base}/elections/vt/windham-county/brattleboro-town/position/town-moderator`,
+		);
 	});
 });

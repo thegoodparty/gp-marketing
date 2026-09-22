@@ -121,6 +121,23 @@ from the state code. It was missed for a long time, which left all 51 `/election
 pages out of every shard while everything beneath them was listed. If you touch this
 function, keep that entry.
 
+The municipal tier reads **two** `/v1/places` sweeps, `CITY_MTFCC` *and* `TOWN_MTFCC`,
+concatenated before `buildCountyLookups`. Querying only `CITY_MTFCC` is the mistake
+this band shipped with for a long time: towns are a different code, and in New England
+— Connecticut entirely, plus VT/NH/ME/MA/RI — the town is the primary local unit, so a
+city-only sweep returns almost nothing there. Because that same sweep also builds
+`citySlugToCountySlug`, towns had no county mapping, so `buildRaceEntries` dropped
+their position pages too (`skipUnmappedCity`). `fetchStateElectionRouteParams` reads
+the same pair for the same reason — if the two functions disagree, the sitemap
+advertises URLs that were never prerendered. Use the constants, not the literals.
+
+Two things not to "fix" while in here. Town slugs carry their suffix (`brattleboro-town`);
+the bare form 404s, so never derive the segment by stripping it. And upstream sometimes
+mislabels a town as a county — `vt/halifax` is tagged county-tier while the real page is
+`/elections/vt/windham-county/halifax-town` — so one place can surface at two tiers.
+`dedupeByUrl` will not collapse that, because the two URLs genuinely differ; it is an
+upstream data problem, not a bug in this function.
+
 ### Joint offices eat place slots
 
 A combined office (Indiana's Clerk/Treasurer, Montana's Clerk/Recorder/Surveyor,

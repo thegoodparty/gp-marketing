@@ -5,7 +5,7 @@
 
 import type { MetadataRoute } from 'next';
 import { sanityClient } from '~/sanity/sanityClient';
-import { looksLikeDistrictSlug } from '~/lib/electionsApi';
+import { CITY_MTFCC, looksLikeDistrictSlug, TOWN_MTFCC } from '~/lib/electionsApi';
 import {
 	buildElectionPositionHrefFromRaceSlug,
 	resolveElectionPositionFromRaceSlug,
@@ -310,14 +310,19 @@ export async function fetchStateElectionRouteParams(stateCode: string): Promise<
 }> {
 	const code = stateCode.toUpperCase();
 
-	const [places, cities, races] = await Promise.all([
+	const [places, cityPlaces, townPlaces, races] = await Promise.all([
 		fetchElectionJson<{ slug?: string; mtfcc?: string; name?: string }>('v1/places', {
 			state: code,
 			placeColumns: 'slug,mtfcc,name',
 		}),
 		fetchElectionJson<{ slug?: string; countyName?: string }>('v1/places', {
 			state: code,
-			mtfcc: 'G4110',
+			mtfcc: CITY_MTFCC,
+			placeColumns: 'slug,countyName',
+		}),
+		fetchElectionJson<{ slug?: string; countyName?: string }>('v1/places', {
+			state: code,
+			mtfcc: TOWN_MTFCC,
 			placeColumns: 'slug,countyName',
 		}),
 		fetchElectionJson<{ slug?: string; positionLevel?: string }>('v1/races', {
@@ -325,6 +330,8 @@ export async function fetchStateElectionRouteParams(stateCode: string): Promise<
 			raceColumns: 'slug,positionLevel',
 		}),
 	]);
+
+	const cities = [...cityPlaces, ...townPlaces];
 
 	const { citySlugToCountySlug } = buildCountyLookups(places, cities);
 
@@ -611,9 +618,10 @@ export async function fetchMainSitemapEntries(baseUrl: string): Promise<Metadata
 /**
  * Fetches state election sitemap entries (places + races) from Election API.
  *
- * City-level races and city listing pages are included by fetching city places
- * (mtfcc G4110) with countyName, building a citySlug->countySlug lookup, and
- * emitting correct 4-level URLs (/elections/[state]/[county]/[city]/position/[positionSlug]).
+ * City-level races and city listing pages are included by fetching municipal places
+ * (both CITY_MTFCC and TOWN_MTFCC) with countyName, building a citySlug->countySlug
+ * lookup, and emitting correct 4-level URLs
+ * (/elections/[state]/[county]/[city]/position/[positionSlug]).
  */
 export async function fetchStateElectionSitemapEntries(
 	stateCode: string,
@@ -622,14 +630,19 @@ export async function fetchStateElectionSitemapEntries(
 	const entries: MetadataRoute.Sitemap = [];
 	const code = stateCode.toUpperCase();
 
-	const [places, cities, races] = await Promise.all([
+	const [places, cityPlaces, townPlaces, races] = await Promise.all([
 		fetchElectionJson<{ slug?: string; mtfcc?: string; name?: string }>('v1/places', {
 			state: code,
 			placeColumns: 'slug,mtfcc,name',
 		}),
 		fetchElectionJson<{ slug?: string; countyName?: string }>('v1/places', {
 			state: code,
-			mtfcc: 'G4110',
+			mtfcc: CITY_MTFCC,
+			placeColumns: 'slug,countyName',
+		}),
+		fetchElectionJson<{ slug?: string; countyName?: string }>('v1/places', {
+			state: code,
+			mtfcc: TOWN_MTFCC,
 			placeColumns: 'slug,countyName',
 		}),
 		fetchElectionJson<{ slug?: string; positionLevel?: string }>('v1/races', {
@@ -637,6 +650,19 @@ export async function fetchStateElectionSitemapEntries(
 			raceColumns: 'slug,positionLevel',
 		}),
 	]);
+
+	// Towns (TOWN_MTFCC) are a separate code from cities (CITY_MTFCC), and where the
+	// town or township is the primary local unit — New England, and the Midwest
+	// township states — a CITY_MTFCC-only query returns a small fraction of the
+	// municipalities. This asked for G4110 alone, which left those pages out of both
+	// this sitemap and the prerendered params even though they render and their
+	// county pages link to them. A place carries one mtfcc, so the two queries are
+	// disjoint and concatenating cannot double-count.
+	//
+	// This does NOT rescue Connecticut. CT has no municipal place rows under either
+	// code, so it still emits no municipal URLs; its town pages exist only because
+	// the race slugs carry the county. That is an upstream data gap, not this query.
+	const cities = [...cityPlaces, ...townPlaces];
 
 	const { citySlugToCountySlug } = buildCountyLookups(places, cities);
 

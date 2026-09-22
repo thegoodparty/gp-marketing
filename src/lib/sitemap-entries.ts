@@ -5,7 +5,7 @@
 
 import type { MetadataRoute } from 'next';
 import { sanityClient } from '~/sanity/sanityClient';
-import { CITY_MTFCC, looksLikeDistrictSlug, TOWN_MTFCC } from '~/lib/electionsApi';
+import { CITY_MTFCC, isCityOrTownMtfcc, looksLikeDistrictSlug, TOWN_MTFCC } from '~/lib/electionsApi';
 import {
 	buildElectionPositionHrefFromRaceSlug,
 	resolveElectionPositionFromRaceSlug,
@@ -139,6 +139,74 @@ function toEntry(
 		changeFrequency,
 		priority,
 	};
+}
+
+/**
+ * Municipalities found by walking the counties instead of sweeping the state.
+ *
+ * Connecticut contributes no municipal URL from the state-level sweeps, and adding the
+ * town sweep did not change that by a single URL. The data is not missing upstream:
+ * `/v1/places?slug=ct/<county>&includeChildren=true` returns the towns carrying a
+ * municipal mtfcc, which is why `/elections/ct/fairfield-county` links to 19 towns this
+ * band never listed and each of those pages returns 200. Only the state-level path is
+ * broken, so ask the counties instead. `getCountyChildPlaces` reads the same hierarchy
+ * for the county index pages.
+ *
+ * See `resolveMunicipalPlaces` for when this runs and why the gate is what it is. Do
+ * not make it unconditional without counting the cost — walking every county
+ * nationwide is roughly 3,255 extra calls per full sitemap build.
+ *
+ * `countyName` is set from the county we walked rather than from the child row, so
+ * `buildCountyLookups` maps each child back to exactly that county by construction
+ * instead of depending on the child carrying a matching `countyName`.
+ */
+async function fetchMunicipalitiesByCountyWalk(places: CountyPlace[]): Promise<CityPlace[]> {
+	const counties = places.filter(p => p.slug && (p.mtfcc ?? '') === 'G4020');
+
+	const childLists = await Promise.all(
+		counties.map(async county => {
+			// Params kept identical to getPlaceBySlug's known-working call, including
+			// the explicit includeRaces=false, rather than only the ones that look
+			// necessary.
+			const rows = await fetchElectionJson<{
+				children?: Array<{ slug?: string; mtfcc?: string }>;
+			}>('v1/places', {
+				slug: county.slug ?? '',
+				includeChildren: 'true',
+				includeRaces: 'false',
+				placeColumns: 'slug,name,mtfcc,countyName',
+			});
+
+			return (rows[0]?.children ?? [])
+				.filter(child => child.slug && isCityOrTownMtfcc(child.mtfcc))
+				.map(child => ({ slug: child.slug, countyName: county.name }));
+		}),
+	);
+
+	return childLists.flat();
+}
+
+/**
+ * The municipal rows for one state: the state sweeps when any of them can actually be
+ * placed under a county, plus the county walk when none can.
+ *
+ * The gate is "did anything map", not "did the sweep return rows", because those are
+ * different failures and Connecticut may be either. A row the sweep returns is still
+ * dropped by `buildCountyLookups` unless its `countyName` matches a county place, and
+ * CT is exactly where that is unreliable: it abolished county government, its
+ * county-equivalents were replaced by planning regions in 2022, and its municipal
+ * tier came out empty on a preview build that gated on the sweep being empty. Gating
+ * on the mapping covers both, and still costs nothing for the 50 states where the
+ * sweep maps fine.
+ *
+ * The extra `buildCountyLookups` call is pure and runs over already-fetched arrays.
+ */
+async function resolveMunicipalPlaces(
+	places: CountyPlace[],
+	sweptCities: CityPlace[],
+): Promise<CityPlace[]> {
+	if (buildCountyLookups(places, sweptCities).citySlugToCountySlug.size > 0) return sweptCities;
+	return [...sweptCities, ...(await fetchMunicipalitiesByCountyWalk(places))];
 }
 
 export function buildCountyLookups(
@@ -331,7 +399,7 @@ export async function fetchStateElectionRouteParams(stateCode: string): Promise<
 		}),
 	]);
 
-	const cities = [...cityPlaces, ...townPlaces];
+	const cities = await resolveMunicipalPlaces(places, [...cityPlaces, ...townPlaces]);
 
 	const { citySlugToCountySlug } = buildCountyLookups(places, cities);
 
@@ -659,10 +727,10 @@ export async function fetchStateElectionSitemapEntries(
 	// county pages link to them. A place carries one mtfcc, so the two queries are
 	// disjoint and concatenating cannot double-count.
 	//
-	// This does NOT rescue Connecticut. CT has no municipal place rows under either
-	// code, so it still emits no municipal URLs; its town pages exist only because
-	// the race slugs carry the county. That is an upstream data gap, not this query.
-	const cities = [...cityPlaces, ...townPlaces];
+	// Neither sweep rescues Connecticut, whose state-level municipal queries are both
+	// empty whatever mtfcc you ask for — see fetchMunicipalitiesByCountyWalk, which
+	// picks it up from the counties instead.
+	const cities = await resolveMunicipalPlaces(places, [...cityPlaces, ...townPlaces]);
 
 	const { citySlugToCountySlug } = buildCountyLookups(places, cities);
 

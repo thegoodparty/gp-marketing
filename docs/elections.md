@@ -141,11 +141,15 @@ Three things not to "fix" while in here:
 
 - **Town slugs carry their suffix** (`brattleboro-town`); the bare form 404s, so never
   derive the segment by stripping it.
-- **Connecticut still emits no municipal URLs**, and the two-sweep fix did not change
-  that by even one URL. CT has no municipal place rows under either code; its town pages
-  exist only because the *race* slugs carry the county (`ct/fairfield-county/bethel-town/…`),
-  which is why CT has ~857 town position pages and zero town index pages. That is an
-  upstream data gap, not a bug in this query, and no MTFCC change will close it.
+- **Connecticut needs the county walk, not a sweep.** Both state-level municipal
+  queries come back empty for CT whatever mtfcc you ask for, so the two-sweep fix did
+  not give it a single municipal URL. The data is there:
+  `/v1/places?slug=ct/<county>&includeChildren=true` returns the towns with a municipal
+  mtfcc, which is how `/elections/ct/fairfield-county` links to 19 towns and why each of
+  those pages returns 200. `fetchMunicipalitiesByCountyWalk` picks them up from the
+  counties, and it fires **only when the state sweep finds nothing at all** — CT alone
+  today, 8 extra requests on that one shard. Do not relax that gate to "the sweep looks
+  sparse": walking every county nationwide is roughly 3,255 extra calls per build.
 - **Upstream sometimes mislabels a town as a county.** `vt/halifax` is tagged county-tier
   while the real page is `/elections/vt/windham-county/halifax-town`, so one place can
   surface at two tiers. `dedupeByUrl` will not collapse that, because the two URLs

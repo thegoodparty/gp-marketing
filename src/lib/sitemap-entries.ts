@@ -640,6 +640,13 @@ export async function fetchStateElectionSitemapEntries(
 
 	const { citySlugToCountySlug } = buildCountyLookups(places, cities);
 
+	// The state's own index page. It is not in `places` — the place rows are the
+	// counties, districts and cities *inside* the state — so nothing below emits
+	// it, and for a long time all 51 of these pages were missing from every shard
+	// while every tier under them was listed. Lowercased to match the
+	// self-referencing canonical in src/app/elections/[state]/page.tsx.
+	entries.push(toEntry(baseUrl, `/elections/${code.toLowerCase()}`, 0.8, 'weekly'));
+
 	for (const p of places) {
 		if (!p.slug) continue;
 		const mtfcc = p.mtfcc ?? '';

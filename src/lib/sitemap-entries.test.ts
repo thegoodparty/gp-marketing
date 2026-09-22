@@ -6,6 +6,7 @@ import {
 	chunkArray,
 	clearPeopleSitemapCache,
 	fetchPeopleSitemapEntries,
+	fetchStateElectionSitemapEntries,
 	getSitemapIds,
 	normalizeName,
 	peopleShardForSlug,
@@ -1001,5 +1002,88 @@ describe('buildRaceRouteParams', () => {
 			},
 		]);
 		expect(cityPositionParams).toEqual([]);
+	});
+});
+
+describe('fetchStateElectionSitemapEntries', () => {
+	const originalFetch = globalThis.fetch;
+	const base = 'https://goodparty.org';
+
+	type MockPlace = { slug: string; mtfcc: string; name: string };
+	type MockCity = { slug: string; countyName: string };
+	type MockRace = { slug: string; positionLevel: string };
+
+	/** Stands in for the three /v1 sweeps the state band reads. */
+	function mockUpstream(opts: { places?: MockPlace[]; cities?: MockCity[]; races?: MockRace[] }) {
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = new URL(String(input));
+			const json = (body: unknown) =>
+				new Response(JSON.stringify(body), {
+					status: 200,
+					headers: { 'content-type': 'application/json' },
+				});
+
+			if (url.pathname.endsWith('/v1/races')) return json(opts.races ?? []);
+			// The cities sweep is the /v1/places call that filters on mtfcc.
+			if (url.searchParams.get('mtfcc') === 'G4110') return json(opts.cities ?? []);
+			return json(opts.places ?? []);
+		}) as typeof fetch;
+	}
+
+	afterEach(() => {
+		globalThis.fetch = originalFetch;
+	});
+
+	afterAll(() => {
+		globalThis.fetch = originalFetch;
+	});
+
+	// All 51 of these pages were absent from every shard while the counties,
+	// cities and position pages beneath them were listed: the state is not a row
+	// in `places`, so nothing else emits it.
+	test('emits the state index page itself', async () => {
+		mockUpstream({});
+
+		const entries = await fetchStateElectionSitemapEntries('AL', base);
+
+		expect(entries.map((e) => e.url)).toEqual([`${base}/elections/al`]);
+	});
+
+	// A sitemap URL that disagrees with the page's self-referencing canonical
+	// (built from the lowercased path) sends conflicting signals.
+	test('lowercases the state segment to match the page canonical', async () => {
+		mockUpstream({});
+
+		const entries = await fetchStateElectionSitemapEntries('dc', base);
+
+		expect(entries[0]?.url).toBe(`${base}/elections/dc`);
+	});
+
+	test('gives the state a priority at least as high as its counties and cities', async () => {
+		mockUpstream({
+			places: [{ slug: 'al/autauga-county', mtfcc: 'G4020', name: 'Autauga County' }],
+			cities: [{ slug: 'al/prattville', countyName: 'Autauga County' }],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('AL', base);
+		const byUrl = new Map(entries.map((e) => [e.url, e]));
+
+		expect(byUrl.get(`${base}/elections/al`)?.priority).toBe(0.8);
+		expect(byUrl.get(`${base}/elections/al`)?.changeFrequency).toBe('weekly');
+		expect(byUrl.get(`${base}/elections/al/autauga-county`)?.priority).toBe(0.7);
+		expect(byUrl.get(`${base}/elections/al/autauga-county/prattville`)?.priority).toBe(0.7);
+	});
+
+	test('lists the state once even if a place row carries the state slug', async () => {
+		mockUpstream({
+			places: [
+				{ slug: 'al', mtfcc: 'G4020', name: 'Alabama' },
+				{ slug: 'al', mtfcc: 'G5420', name: 'Alabama' },
+			],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('AL', base);
+
+		expect(entries.filter((e) => e.url === `${base}/elections/al`)).toHaveLength(1);
 	});
 });

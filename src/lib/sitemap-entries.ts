@@ -651,13 +651,17 @@ export async function fetchStateElectionSitemapEntries(
 		}),
 	]);
 
-	// Towns (TOWN_MTFCC) are a separate code from cities (CITY_MTFCC), and in New
-	// England — Connecticut entirely, plus VT/NH/ME/MA/RI — the town *is* the
-	// primary local unit, so a CITY_MTFCC-only query returns almost nothing there.
-	// This query used to ask for G4110 alone, which left those town pages out of
-	// both this sitemap and the prerendered params, even though they render and
-	// their county pages link to them. A place carries one mtfcc, so the two
-	// queries are disjoint and concatenating cannot double-count.
+	// Towns (TOWN_MTFCC) are a separate code from cities (CITY_MTFCC), and where the
+	// town or township is the primary local unit — New England, and the Midwest
+	// township states — a CITY_MTFCC-only query returns a small fraction of the
+	// municipalities. This asked for G4110 alone, which left those pages out of both
+	// this sitemap and the prerendered params even though they render and their
+	// county pages link to them. A place carries one mtfcc, so the two queries are
+	// disjoint and concatenating cannot double-count.
+	//
+	// This does NOT rescue Connecticut. CT has no municipal place rows under either
+	// code, so it still emits no municipal URLs; its town pages exist only because
+	// the race slugs carry the county. That is an upstream data gap, not this query.
 	const cities = [...cityPlaces, ...townPlaces];
 
 	const { citySlugToCountySlug } = buildCountyLookups(places, cities);

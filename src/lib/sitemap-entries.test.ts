@@ -6,6 +6,7 @@ import {
 	chunkArray,
 	clearPeopleSitemapCache,
 	fetchPeopleSitemapEntries,
+	fetchStateElectionRouteParams,
 	fetchStateElectionSitemapEntries,
 	getSitemapIds,
 	normalizeName,
@@ -1128,24 +1129,24 @@ describe('fetchStateElectionSitemapEntries', () => {
 		expect(urls).not.toContain(`${base}/elections/vt/windham-county/brattleboro`);
 	});
 
-	// Connecticut is all towns and no cities, so under the G4110-only query it
-	// contributed zero municipal URLs to its shard.
-	test('an all-town state still gets municipal entries', async () => {
+	// A state whose municipal rows are all towns contributed zero municipal URLs
+	// under the G4110-only query, however many towns it had.
+	test('a state with no city rows at all still gets municipal entries', async () => {
 		mockUpstream({
-			places: [{ slug: 'ct/fairfield-county', mtfcc: 'G4020', name: 'Fairfield County' }],
+			places: [{ slug: 'vt/orange-county', mtfcc: 'G4020', name: 'Orange County' }],
 			cities: [],
 			towns: [
-				{ slug: 'ct/greenwich-town', countyName: 'Fairfield County' },
-				{ slug: 'ct/stamford-town', countyName: 'Fairfield County' },
+				{ slug: 'vt/randolph-town', countyName: 'Orange County' },
+				{ slug: 'vt/chelsea-town', countyName: 'Orange County' },
 			],
 		});
 
-		const entries = await fetchStateElectionSitemapEntries('CT', base);
+		const entries = await fetchStateElectionSitemapEntries('VT', base);
 		const municipal = entries.filter((e) => e.url.split('/').length === 7);
 
 		expect(municipal.map((e) => e.url)).toEqual([
-			`${base}/elections/ct/fairfield-county/greenwich-town`,
-			`${base}/elections/ct/fairfield-county/stamford-town`,
+			`${base}/elections/vt/orange-county/randolph-town`,
+			`${base}/elections/vt/orange-county/chelsea-town`,
 		]);
 	});
 
@@ -1198,5 +1199,104 @@ describe('fetchStateElectionSitemapEntries', () => {
 		expect(entries.map((e) => e.url)).toContain(
 			`${base}/elections/vt/windham-county/brattleboro-town/position/town-moderator`,
 		);
+	});
+});
+
+/**
+ * The route-params twin of the band above. These two functions read the same
+ * upstream sweeps and must agree: this one feeds generateStaticParams, so if it
+ * drops a tier the sitemap still advertises it and we publish URLs that were
+ * never prerendered. Covered separately because nothing else fails when only one
+ * of the pair regresses.
+ */
+describe('fetchStateElectionRouteParams', () => {
+	const originalFetch = globalThis.fetch;
+
+	type MockPlace = { slug: string; mtfcc: string; name: string };
+	type MockCity = { slug: string; countyName: string };
+	type MockRace = { slug: string; positionLevel: string };
+
+	function mockUpstream(opts: {
+		places?: MockPlace[];
+		cities?: MockCity[];
+		towns?: MockCity[];
+		races?: MockRace[];
+	}) {
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = new URL(String(input));
+			const json = (body: unknown) =>
+				new Response(JSON.stringify(body), {
+					status: 200,
+					headers: { 'content-type': 'application/json' },
+				});
+
+			if (url.pathname.endsWith('/v1/races')) return json(opts.races ?? []);
+			if (url.searchParams.get('mtfcc') === 'G4110') return json(opts.cities ?? []);
+			if (url.searchParams.get('mtfcc') === 'G4040') return json(opts.towns ?? []);
+			return json(opts.places ?? []);
+		}) as typeof fetch;
+	}
+
+	afterEach(() => {
+		globalThis.fetch = originalFetch;
+	});
+
+	afterAll(() => {
+		globalThis.fetch = originalFetch;
+	});
+
+	test('includes G4040 towns in cityParams, not just G4110 cities', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/windham-county', mtfcc: 'G4020', name: 'Windham County' }],
+			towns: [{ slug: 'vt/brattleboro-town', countyName: 'Windham County' }],
+		});
+
+		const { cityParams } = await fetchStateElectionRouteParams('VT');
+
+		expect(cityParams).toEqual([
+			{ state: 'vt', county: 'windham-county', city: 'brattleboro-town' },
+		]);
+	});
+
+	test('a state with no city rows at all still gets cityParams entries', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/orange-county', mtfcc: 'G4020', name: 'Orange County' }],
+			cities: [],
+			towns: [
+				{ slug: 'vt/randolph-town', countyName: 'Orange County' },
+				{ slug: 'vt/chelsea-town', countyName: 'Orange County' },
+			],
+		});
+
+		const { cityParams } = await fetchStateElectionRouteParams('VT');
+
+		expect(cityParams.map((p) => p.city)).toEqual(['randolph-town', 'chelsea-town']);
+	});
+
+	// The pairing that matters: whatever the sitemap advertises at the municipal
+	// tier has to be prerenderable from these params, or we publish URLs that
+	// were never built.
+	test('emits the same municipal set the sitemap band advertises', async () => {
+		const upstream = {
+			places: [{ slug: 'nh/hillsborough-county', mtfcc: 'G4020', name: 'Hillsborough County' }],
+			cities: [{ slug: 'nh/nashua', countyName: 'Hillsborough County' }],
+			towns: [{ slug: 'nh/merrimack-town', countyName: 'Hillsborough County' }],
+		};
+
+		mockUpstream(upstream);
+		const { cityParams } = await fetchStateElectionRouteParams('NH');
+
+		mockUpstream(upstream);
+		const entries = await fetchStateElectionSitemapEntries('NH', 'https://goodparty.org');
+
+		const fromParams = cityParams
+			.map((p) => `https://goodparty.org/elections/${p.state}/${p.county}/${p.city}`)
+			.sort();
+		const fromSitemap = entries
+			.map((e) => e.url)
+			.filter((u) => u.split('/').length === 7 && !u.includes('/position/'))
+			.sort();
+
+		expect(fromParams).toEqual(fromSitemap);
 	});
 });

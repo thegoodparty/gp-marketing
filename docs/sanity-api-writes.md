@@ -76,12 +76,21 @@ project > **API** > **Webhooks**:
 - **Secret:** paste the generated secret to use HMAC verification. Alternatively,
   leave **Secret** empty and add a header `x-sanity-webhook-secret` with that value;
   the route accepts either.
-- **Filter:** leave empty to fire on every document, or narrow it with a GROQ filter,
-  for example:
+- **Filter:** leave empty to fire on every document. **Prefer empty.** A filter that
+  omits a type silently leaves those pages on stale HTML forever, with nothing to
+  show that anything is wrong. If you do narrow it, every type the route handles has
+  to be listed:
 
   ```
-  _type in ["article", "glossary", "faq", "goodpartyOrg_landingPages", "policy", "categories", "topics", "goodpartyOrg_home", "goodpartyOrg_contact", "goodpartyOrg_navigation", "goodpartyOrg_footer", "goodpartyOrg_allArticles", "goodpartyOrg_glossary", "goodpartyOrg_404Page", "goodpartyOrg_allComponents", "quoteCollections"]
+  _type in ["article", "glossary", "faq", "goodpartyOrg_landingPages", "policy", "categories", "topics", "goodpartyOrg_home", "goodpartyOrg_contact", "goodpartyOrg_navigation", "goodpartyOrg_footer", "goodpartyOrg_allArticles", "goodpartyOrg_glossary", "goodpartyOrg_404Page", "goodpartyOrg_allComponents", "quoteCollections", "goodpartyOrg_globalTemplate", "goodpartyOrg_customTemplate", "experiment_variant"]
   ```
+
+  That list is a snapshot and will drift. The authoritative set is whatever
+  [src/lib/revalidatePaths.ts](../src/lib/revalidatePaths.ts) and the special cases in
+  [src/app/api/revalidate/route.ts](../src/app/api/revalidate/route.ts) handle
+  (`goodpartyOrg_globalTemplate`, `goodpartyOrg_customTemplate`, and
+  `experiment_variant` are handled in the route itself, which is why they are easy to
+  miss). Check both before trusting a filter.
 
 **3. Set the same secret as an environment variable.** On Vercel: **Settings** >
 **Environment Variables** > add `SANITY_REVALIDATE_SECRET`, apply it to Production
@@ -207,6 +216,7 @@ Content can be read back with GROQ, for example:
 | 401 Invalid `x-sanity-webhook-secret` header | The header was sent but its value does not match `SANITY_REVALIDATE_SECRET`. Confirm both sides use the same secret |
 | 401 Invalid signature | No `x-sanity-webhook-secret` header, and the HMAC in `sanity-webhook-signature` did not verify. The webhook secret must match the env var, and HMAC needs the raw request body |
 | 401 Authorization failed | `parseBody` threw. Check that `sanity-webhook-signature` is well formed and that nothing buffers or rewrites the raw body before it reaches the route |
+| 400 Invalid JSON body | The `x-sanity-webhook-secret` header was accepted but the body could not be parsed as JSON. Confirm the body is well-formed JSON sent with `Content-Type: application/json` |
 | 400 Invalid payload: missing `_type` | The webhook projection is dropping `_type` from the body |
 | Content not updating | The webhook filter may exclude that document type; check the webhook attempts |
 | Wrong paths revalidated | `_type` and the slug path in the payload must match the schema |

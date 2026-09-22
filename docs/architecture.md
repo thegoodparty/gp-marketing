@@ -134,6 +134,30 @@ goes live. Code changes go live by merging `develop` into
 `master` and letting Vercel build and deploy. The `deploy-prod` skill runs that
 release, including confirming the deploy actually landed.
 
+### Only goodparty.org is indexable
+
+The dev environment is served on a `*.vercel.app` hostname and is a complete, working
+copy of the site, so it has to be kept out of search results. **Do not rely on
+`VERCEL_ENV` to tell you which environment you are in.** The dev environment deploys
+with `VERCEL_ENV=production`, which makes `getBaseUrl()` resolve it to
+`https://goodparty.org` and every env-keyed guard report "production" while it is being
+served on a preview hostname. That is why the permissive production `robots.txt` was
+served there and Googlebot crawled it: Search Console listed
+`gp-marketing-peach.vercel.app` as a discovery source for goodparty.org URLs.
+
+The gate is therefore the **request host**, in `src/middleware.ts` via
+`shouldNoIndexHost` (`src/lib/crawlableHosts.ts`), which sets
+`X-Robots-Tag: noindex, nofollow` on every response whose Host is not
+`goodparty.org` or a `*.goodparty.org` subdomain. Middleware is the only layer that
+can see the served host; `robots.txt` and `/llms.txt` are generated at build time and
+cannot. It is an allowlist, so **a new production domain must be added to
+`isGoodPartyProductionHost` or the whole site goes noindex on it.**
+
+The preview deliberately still allows crawling rather than blocking it in
+`robots.txt`. A disallowed page cannot be re-crawled, so Google would never see the
+`noindex` and the URLs it already indexed would linger. Allow the crawl, serve
+`noindex`, let them drop out. Blocking in `robots.txt` is only safe once they are gone.
+
 ## Where to look
 
 | You're doing                                   | Read                                |

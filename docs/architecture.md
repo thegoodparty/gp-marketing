@@ -115,10 +115,12 @@ domain model, data sources, and what is and is not fixable in this repo:
   renders `PageSections`: React streams the fallback into the initial HTML and the
   resolved output into a hidden div, so the entire page (including its `<h1>`) ends up
   in the markup twice. Both experiment-aware routes are therefore `force-dynamic`.
-- **AirOps -> Sanity** — AirOps writes content (articles, glossary, landing pages,
-  policy) into Sanity via the Editor API, then a Sanity webhook hits
-  `POST /api/revalidate` to make it live. Details, auth, and troubleshooting:
-  `docs/airops-sanity-integration.md`.
+- **Sanity revalidation webhook** — every content change in Sanity fires a webhook at
+  `POST /api/revalidate`, which busts the Next.js cache tag and paths for that
+  document and makes the change live without a deploy. Content can also be written
+  into Sanity over the API rather than typed in Studio (nothing does that today;
+  AirOps used to). Webhook setup, auth, the rules an API writer has to follow, and
+  troubleshooting: `docs/sanity-api-writes.md`.
 
 ## Deployment
 
@@ -126,9 +128,9 @@ Deployed on Vercel. Branches map to environments: `develop` -> dev, `master` -> 
 `develop` is the default branch. There is no `qa` branch, so nothing deploys to the
 qa environment; releases go straight from `develop` to `master`.
 
-Content changes do not need a deploy. When content is published (or written by
-AirOps), a Sanity webhook calls `POST /api/revalidate`, which triggers Next.js ISR
-revalidation and the change goes live. Code changes go live by merging `develop` into
+Content changes do not need a deploy. When content is published, a Sanity webhook
+calls `POST /api/revalidate`, which triggers Next.js ISR revalidation and the change
+goes live. Code changes go live by merging `develop` into
 `master` and letting Vercel build and deploy. The `deploy-prod` skill runs that
 release, including confirming the deploy actually landed.
 
@@ -140,7 +142,7 @@ release, including confirming the deploy actually landed.
 | Deciding if a change is content or code        | `docs/content-vs-code.md`           |
 | Adding or changing a page-builder block        | `docs/adding-a-component.md`        |
 | Election / candidate programmatic pages        | `docs/elections.md`                 |
-| AirOps content pipeline + revalidation webhook | `docs/airops-sanity-integration.md` |
+| Revalidation webhook + API writes into Sanity   | `docs/sanity-api-writes.md`        |
 
 ## Keep docs current
 

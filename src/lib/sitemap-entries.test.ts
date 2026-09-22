@@ -1218,9 +1218,31 @@ describe('fetchStateElectionSitemapEntries', () => {
 		expect(urls).toContain(`${base}/elections/ct/fairfield-county/greenwich-town`);
 	});
 
+	// The first attempt at this gated on the sweep being empty, and a preview build
+	// showed CT still emitting zero municipal URLs. A row the sweep returns is still
+	// dropped unless its countyName matches a county place, so "returned rows" and
+	// "produced a usable municipality" are different things and the gate has to be
+	// the second one.
+	test('walks the counties when the sweep returns rows that map to no county', async () => {
+		mockUpstream({
+			places: [{ slug: 'ct/fairfield-county', mtfcc: 'G4020', name: 'Fairfield County' }],
+			towns: [{ slug: 'ct/orphan-town', countyName: 'Greater Bridgeport Planning Region' }],
+			countyChildren: {
+				'ct/fairfield-county': [{ slug: 'ct/fairfield-county/darien-town', mtfcc: 'G4040' }],
+			},
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('CT', base);
+		const urls = entries.map((e) => e.url);
+
+		expect(urls).toContain(`${base}/elections/ct/fairfield-county/darien-town`);
+		// The unmappable row is still dropped; it has no county to sit under.
+		expect(urls.some((u) => u.includes('orphan-town'))).toBe(false);
+	});
+
 	// The walk costs one request per county, so it must stay off for the 50 states
-	// whose sweep works. Widening it to "sparse" would be ~3,255 extra calls.
-	test('does not walk the counties when the state sweep returned anything', async () => {
+	// whose sweep works. Widening it would be ~3,255 extra calls.
+	test('does not walk the counties when the sweep maps to a county', async () => {
 		const urls = mockUpstream({
 			places: [{ slug: 'al/autauga-county', mtfcc: 'G4020', name: 'Autauga County' }],
 			cities: [{ slug: 'al/prattville', countyName: 'Autauga County' }],

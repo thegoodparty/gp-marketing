@@ -144,18 +144,17 @@ function toEntry(
 /**
  * Municipalities found by walking the counties instead of sweeping the state.
  *
- * Both state-level municipal sweeps come back empty for Connecticut —
- * `/v1/places?state=CT&mtfcc=G4110` and `&mtfcc=G4040` — so CT contributed no
- * municipal URL at all, and adding the town sweep did not change that by a single
- * URL. The data is not missing upstream: `/v1/places?slug=ct/<county>&includeChildren=true`
- * returns the towns carrying a municipal mtfcc, which is why `/elections/ct/fairfield-county`
- * links to 19 towns this band never listed and each of those pages returns 200. Only
- * the state-level sweep is broken, so ask the counties instead.
+ * Connecticut contributes no municipal URL from the state-level sweeps, and adding the
+ * town sweep did not change that by a single URL. The data is not missing upstream:
+ * `/v1/places?slug=ct/<county>&includeChildren=true` returns the towns carrying a
+ * municipal mtfcc, which is why `/elections/ct/fairfield-county` links to 19 towns this
+ * band never listed and each of those pages returns 200. Only the state-level path is
+ * broken, so ask the counties instead. `getCountyChildPlaces` reads the same hierarchy
+ * for the county index pages.
  *
- * Deliberately gated on the sweep finding **nothing**, which today is Connecticut
- * alone: 8 extra requests on that one shard and none on the other 50. Do not widen
- * this to "the sweep looks sparse" without counting the cost first — walking every
- * county nationwide is roughly 3,255 extra calls per full sitemap build.
+ * See `resolveMunicipalPlaces` for when this runs and why the gate is what it is. Do
+ * not make it unconditional without counting the cost — walking every county
+ * nationwide is roughly 3,255 extra calls per full sitemap build.
  *
  * `countyName` is set from the county we walked rather than from the child row, so
  * `buildCountyLookups` maps each child back to exactly that county by construction
@@ -166,11 +165,15 @@ async function fetchMunicipalitiesByCountyWalk(places: CountyPlace[]): Promise<C
 
 	const childLists = await Promise.all(
 		counties.map(async county => {
+			// Params kept identical to getPlaceBySlug's known-working call, including
+			// the explicit includeRaces=false, rather than only the ones that look
+			// necessary.
 			const rows = await fetchElectionJson<{
 				children?: Array<{ slug?: string; mtfcc?: string }>;
 			}>('v1/places', {
 				slug: county.slug ?? '',
 				includeChildren: 'true',
+				includeRaces: 'false',
 				placeColumns: 'slug,name,mtfcc,countyName',
 			});
 
@@ -181,6 +184,29 @@ async function fetchMunicipalitiesByCountyWalk(places: CountyPlace[]): Promise<C
 	);
 
 	return childLists.flat();
+}
+
+/**
+ * The municipal rows for one state: the state sweeps when any of them can actually be
+ * placed under a county, plus the county walk when none can.
+ *
+ * The gate is "did anything map", not "did the sweep return rows", because those are
+ * different failures and Connecticut may be either. A row the sweep returns is still
+ * dropped by `buildCountyLookups` unless its `countyName` matches a county place, and
+ * CT is exactly where that is unreliable: it abolished county government, its
+ * county-equivalents were replaced by planning regions in 2022, and its municipal
+ * tier came out empty on a preview build that gated on the sweep being empty. Gating
+ * on the mapping covers both, and still costs nothing for the 50 states where the
+ * sweep maps fine.
+ *
+ * The extra `buildCountyLookups` call is pure and runs over already-fetched arrays.
+ */
+async function resolveMunicipalPlaces(
+	places: CountyPlace[],
+	sweptCities: CityPlace[],
+): Promise<CityPlace[]> {
+	if (buildCountyLookups(places, sweptCities).citySlugToCountySlug.size > 0) return sweptCities;
+	return [...sweptCities, ...(await fetchMunicipalitiesByCountyWalk(places))];
 }
 
 export function buildCountyLookups(
@@ -373,8 +399,7 @@ export async function fetchStateElectionRouteParams(stateCode: string): Promise<
 		}),
 	]);
 
-	const sweptCities = [...cityPlaces, ...townPlaces];
-	const cities = sweptCities.length > 0 ? sweptCities : await fetchMunicipalitiesByCountyWalk(places);
+	const cities = await resolveMunicipalPlaces(places, [...cityPlaces, ...townPlaces]);
 
 	const { citySlugToCountySlug } = buildCountyLookups(places, cities);
 
@@ -705,8 +730,7 @@ export async function fetchStateElectionSitemapEntries(
 	// Neither sweep rescues Connecticut, whose state-level municipal queries are both
 	// empty whatever mtfcc you ask for — see fetchMunicipalitiesByCountyWalk, which
 	// picks it up from the counties instead.
-	const sweptCities = [...cityPlaces, ...townPlaces];
-	const cities = sweptCities.length > 0 ? sweptCities : await fetchMunicipalitiesByCountyWalk(places);
+	const cities = await resolveMunicipalPlaces(places, [...cityPlaces, ...townPlaces]);
 
 	const { citySlugToCountySlug } = buildCountyLookups(places, cities);
 

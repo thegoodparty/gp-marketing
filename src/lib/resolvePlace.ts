@@ -9,7 +9,7 @@ import {
 	isCityOrTownMtfcc,
 	normalizeName,
 } from '~/lib/electionsApi';
-import { canonicalizeCountyEquivalentName } from '~/lib/electionsHelpers';
+import { canonicalizeCountyEquivalentName, stripCityTypeSuffix } from '~/lib/electionsHelpers';
 
 export type ResolvePlaceInput = {
 	city?: string;
@@ -41,8 +41,16 @@ export function resolvePlaceUrl(input: ResolvePlaceInput, data: ResolvePlaceData
 
 	const cityQuery = input.city?.trim();
 	if (state && cityQuery) {
-		const target = normalizeName(cityQuery);
-		const cityMatch = data.cityAndTownPlaces.find(p => normalizeName(p.name) === target);
+		// Compare on the base name (stripping a "Town"/"City"/"Township"/"Village"
+		// suffix): a Google locality like "Avon" must match a walked child named
+		// "Avon Town" the way findCityForDistrictName already does for districts.
+		const target = normalizeName(stripCityTypeSuffix(cityQuery));
+		const candidates = data.cityAndTownPlaces.filter(p => normalizeName(stripCityTypeSuffix(p.name)) === target);
+		// Same-named rows can appear twice under an empty-mapping county sweep (the
+		// unmapped sweep row) and the county walk (the same city, correctly mapped).
+		// Prefer whichever candidate actually has a county mapping so the mapped one
+		// is never shadowed by an earlier, unmapped duplicate.
+		const cityMatch = candidates.find(p => data.citySlugToCountySlug.has(p.slug)) ?? candidates[0];
 		const countySlug = cityMatch ? data.citySlugToCountySlug.get(cityMatch.slug) : undefined;
 		const countyTail = countySlug ? slugTail(countySlug) : undefined;
 		const cityTail = cityMatch ? slugTail(cityMatch.slug) : undefined;

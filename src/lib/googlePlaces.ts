@@ -75,8 +75,14 @@ export function parsePlacePrediction(prediction: AutocompletePlacePrediction): P
 	const secondaryText = prediction.secondaryText?.text?.trim();
 	if (!mainText || !secondaryText) return undefined;
 
-	const stateToken = secondaryText.split(',')[0]?.trim();
-	const state = normalizeStateCode(stateToken);
+	// secondaryText can lead with a disambiguating county before the state
+	// (e.g. "Greene County, Missouri, USA" for Springfield, MO), so scan every
+	// comma-separated token for the first one that resolves to a state rather
+	// than assuming the state is always first.
+	const state = secondaryText.split(',').reduce<ReturnType<typeof normalizeStateCode>>(
+		(found, token) => found ?? normalizeStateCode(token.trim()),
+		null,
+	);
 	if (!state) return undefined;
 
 	return prediction.types.includes(COUNTY_PRIMARY_TYPE) ? { county: mainText, state } : { city: mainText, state };

@@ -61,6 +61,18 @@ describe('parsePlacePrediction', () => {
 		expect(parsed).toEqual({ county: 'Guilford County', state: 'NC' });
 	});
 
+	test('parses a city prediction whose secondaryText leads with a disambiguating county', () => {
+		const parsed = parsePlacePrediction({
+			placeId: 'place-springfield',
+			text: { text: 'Springfield, Greene County, Missouri, USA' },
+			mainText: { text: 'Springfield' },
+			secondaryText: { text: 'Greene County, Missouri, USA' },
+			types: ['locality', 'political'],
+		});
+
+		expect(parsed).toEqual({ city: 'Springfield', state: 'MO' });
+	});
+
 	test('returns undefined when the secondary text carries no resolvable state', () => {
 		const parsed = parsePlacePrediction({
 			placeId: 'place-unknown',

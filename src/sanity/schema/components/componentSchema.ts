@@ -47,7 +47,10 @@ import { component_testimonialBlockWithLink } from './component_testimonialBlock
 
 import { component_locationEditorialBlock } from './component_locationEditorialBlock.ts';
 
+import { component_electionsNearYouBlock } from './component_electionsNearYouBlock.ts';
+
 export const componentSchema = [
+	component_electionsNearYouBlock,
 	component_locationEditorialBlock,
 	component_testimonialBlockWithLink,
 	component_jobOpeningsBlock,

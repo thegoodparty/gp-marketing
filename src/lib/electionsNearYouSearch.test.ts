@@ -27,7 +27,7 @@ function makeDeps(resolveResult: () => Promise<ResolvedPlace>) {
 
 	return {
 		deps: {
-			resolvePlace: () => resolveResult(),
+			resolvePlace: async () => resolveResult(),
 			trackEvent: (eventName: string, eventProperties?: Record<string, unknown>) => {
 				trackCalls.push({ eventName, eventProperties });
 			},
@@ -113,7 +113,7 @@ describe('submitElectionsNearYouSearchOnce', () => {
 	test('two calls fired before the first settles (a double-click) run the search exactly once', async () => {
 		let resolveCallCount = 0;
 		const request = deferred<ResolvedPlace>();
-		const { deps, navigateCalls } = makeDeps(() => {
+		const { deps, navigateCalls } = makeDeps(async () => {
 			resolveCallCount += 1;
 			return request.promise;
 		});

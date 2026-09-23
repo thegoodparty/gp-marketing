@@ -84,7 +84,7 @@ export function parsePlacePrediction(prediction: AutocompletePlacePrediction): P
 
 let scriptLoadPromise: Promise<void> | undefined;
 
-function injectGooglePlacesScript(apiKey: string): Promise<void> {
+async function injectGooglePlacesScript(apiKey: string): Promise<void> {
 	return new Promise((resolve, reject) => {
 		const existing = document.getElementById(GOOGLE_PLACES_SCRIPT_ID);
 		if (existing instanceof HTMLScriptElement) {
@@ -114,7 +114,7 @@ function injectGooglePlacesScript(apiKey: string): Promise<void> {
  * is unset or the script fails to load; callers degrade to a free-text
  * submit rather than surfacing this as a user-facing error.
  */
-export function ensureGooglePlacesLoaded(): Promise<void> {
+export async function ensureGooglePlacesLoaded(): Promise<void> {
 	if (scriptLoadPromise) return scriptLoadPromise;
 
 	const apiKey = process.env['NEXT_PUBLIC_GOOGLE_PLACES_BROWSER_KEY'];

@@ -1,0 +1,163 @@
+import { normalizeStateCode } from '~/constants/usStateCodes';
+
+/**
+ * Lazy loader + session-token management for the Places API (New) JS library.
+ * Loaded via a plain script tag rather than the `importLibrary` bootstrap
+ * snippet: the classic `libraries=places` query param exposes the same New
+ * Places classes (`AutocompleteSuggestion`, `AutocompleteSessionToken`) under
+ * `google.maps.places`, so a script tag needs no extra bootstrap code and no
+ * new npm dependency.
+ */
+
+const GOOGLE_PLACES_SCRIPT_ID = 'gp-google-places-loader';
+
+// administrative_area_level_2 is the county-equivalent primary type in the US
+// (parishes, boroughs, etc. all resolve under it); the only other type this
+// request can return, locality, is a city or a New England town.
+const COUNTY_PRIMARY_TYPE = 'administrative_area_level_2';
+
+type AutocompleteSessionToken = object;
+
+type AutocompletePlacePrediction = {
+	placeId: string;
+	text: { text: string };
+	mainText?: { text: string };
+	secondaryText?: { text: string };
+	types: string[];
+};
+
+type AutocompleteSuggestionResult = {
+	placePrediction?: AutocompletePlacePrediction;
+};
+
+type AutocompleteRequest = {
+	input: string;
+	sessionToken: AutocompleteSessionToken;
+	includedRegionCodes?: string[];
+	includedPrimaryTypes?: string[];
+};
+
+type GooglePlacesLibrary = {
+	AutocompleteSuggestion: {
+		fetchAutocompleteSuggestions(request: AutocompleteRequest): Promise<{ suggestions: AutocompleteSuggestionResult[] }>;
+	};
+	AutocompleteSessionToken: new () => AutocompleteSessionToken;
+};
+
+declare global {
+	interface Window {
+		google?: {
+			maps?: {
+				places?: GooglePlacesLibrary;
+			};
+		};
+	}
+}
+
+export type ParsedPlaceSuggestion = { city: string; state: string } | { county: string; state: string };
+
+export type PlaceSuggestion = {
+	id: string;
+	description: string;
+	parsed: ParsedPlaceSuggestion | undefined;
+};
+
+/**
+ * Parses one AutocompleteSuggestion's structured prediction text into the
+ * `{ city, state } | { county, state }` shape `resolvePlace` expects. Pure
+ * and exported for testing; the caller decides what to do with `undefined`
+ * (a prediction Google returned without a resolvable state token).
+ */
+export function parsePlacePrediction(prediction: AutocompletePlacePrediction): ParsedPlaceSuggestion | undefined {
+	const mainText = prediction.mainText?.text?.trim();
+	const secondaryText = prediction.secondaryText?.text?.trim();
+	if (!mainText || !secondaryText) return undefined;
+
+	const stateToken = secondaryText.split(',')[0]?.trim();
+	const state = normalizeStateCode(stateToken);
+	if (!state) return undefined;
+
+	return prediction.types.includes(COUNTY_PRIMARY_TYPE) ? { county: mainText, state } : { city: mainText, state };
+}
+
+let scriptLoadPromise: Promise<void> | undefined;
+
+function injectGooglePlacesScript(apiKey: string): Promise<void> {
+	return new Promise((resolve, reject) => {
+		const existing = document.getElementById(GOOGLE_PLACES_SCRIPT_ID);
+		if (existing instanceof HTMLScriptElement) {
+			if (window.google?.maps?.places) {
+				resolve();
+				return;
+			}
+			existing.addEventListener('load', () => resolve(), { once: true });
+			existing.addEventListener('error', () => reject(new Error('Google Places script failed to load')), { once: true });
+			return;
+		}
+
+		const script = document.createElement('script');
+		script.id = GOOGLE_PLACES_SCRIPT_ID;
+		script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&libraries=places&loading=async`;
+		script.async = true;
+		script.addEventListener('load', () => resolve(), { once: true });
+		script.addEventListener('error', () => reject(new Error('Google Places script failed to load')), { once: true });
+		document.head.appendChild(script);
+	});
+}
+
+/**
+ * Lazily loads the Places API (New) JS library on first call, caching the
+ * promise so a re-focus or a second keystroke awaits the same load instead of
+ * injecting a second script tag. Rejects (never throws) when the browser key
+ * is unset or the script fails to load; callers degrade to a free-text
+ * submit rather than surfacing this as a user-facing error.
+ */
+export function ensureGooglePlacesLoaded(): Promise<void> {
+	if (scriptLoadPromise) return scriptLoadPromise;
+
+	const apiKey = process.env['NEXT_PUBLIC_GOOGLE_PLACES_BROWSER_KEY'];
+	if (typeof window === 'undefined' || !apiKey) {
+		scriptLoadPromise = Promise.reject(new Error('Google Places browser key is not configured'));
+		return scriptLoadPromise;
+	}
+
+	scriptLoadPromise = injectGooglePlacesScript(apiKey).then(() => {
+		if (!window.google?.maps?.places) throw new Error('Google Places script loaded without google.maps.places');
+	});
+	return scriptLoadPromise;
+}
+
+/** Starts one session token for a search cycle (first keystroke through selection). */
+export function startPlacesSession(): AutocompleteSessionToken {
+	const places = window.google?.maps?.places;
+	if (!places) throw new Error('Google Places library is not loaded');
+	return new places.AutocompleteSessionToken();
+}
+
+/**
+ * Fetches suggestions for one input value. Only `locality` (cities/towns,
+ * including New England towns) and `administrative_area_level_2` (counties
+ * and county-equivalents) come back, per the US-only, city/county scope this
+ * search covers. Never calls Place Details, so billing stays scoped to the
+ * autocomplete session the caller's token belongs to.
+ */
+export async function fetchPlaceSuggestions(input: string, sessionToken: AutocompleteSessionToken): Promise<PlaceSuggestion[]> {
+	const places = window.google?.maps?.places;
+	if (!places) return [];
+
+	const { suggestions } = await places.AutocompleteSuggestion.fetchAutocompleteSuggestions({
+		input,
+		sessionToken,
+		includedRegionCodes: ['us'],
+		includedPrimaryTypes: ['locality', 'administrative_area_level_2'],
+	});
+
+	return suggestions
+		.map(suggestion => suggestion.placePrediction)
+		.filter((prediction): prediction is AutocompletePlacePrediction => Boolean(prediction))
+		.map(prediction => ({
+			id: prediction.placeId,
+			description: prediction.text.text,
+			parsed: parsePlacePrediction(prediction),
+		}));
+}

@@ -106,6 +106,13 @@ export function stripCountySuffix(name: string): string {
 	return name.replace(COUNTY_EQUIV_SUFFIX_RE, '') || name;
 }
 
+const CITY_TYPE_SUFFIX_RE = /\s+(Town|City|Township|Village)$/i;
+
+/** Strip a city/town-type suffix from a place name: "Quincy City" -> "Quincy", "Avon Town" -> "Avon" */
+export function stripCityTypeSuffix(name: string): string {
+	return name.replace(CITY_TYPE_SUFFIX_RE, '') || name;
+}
+
 /** Get the suffix word from a county-equivalent name: "Jefferson Parish" -> "Parish", fallback "County" */
 export function getCountySuffixLabel(name: string): string {
 	const match = COUNTY_EQUIV_SUFFIX_RE.exec(name);
@@ -450,7 +457,7 @@ export function findCityForDistrictName(
 	const lower = districtName.toLowerCase();
 	const withBase = children.map(c => ({
 		...c,
-		baseName: c.name.replace(/\s+(Town|City|Township|Village)$/i, '').toLowerCase(),
+		baseName: stripCityTypeSuffix(c.name).toLowerCase(),
 	}));
 	const matching = withBase.filter(c => lower.includes(c.baseName));
 	if (matching.length === 0) return null;

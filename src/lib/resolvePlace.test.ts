@@ -91,6 +91,35 @@ describe('resolvePlaceUrl: city match', () => {
 		});
 	});
 
+	test('matches a city query against a place name carrying a Town/City/etc suffix', () => {
+		const data: ResolvePlaceData = {
+			cityAndTownPlaces: [{ name: 'Avon Town', slug: 'ct/hartford-county/avon', countyName: 'Hartford County' }],
+			countyPlaces: [{ name: 'Hartford County', slug: 'ct/hartford-county' }],
+			citySlugToCountySlug: new Map([['ct/hartford-county/avon', 'ct/hartford-county']]),
+		};
+		expect(resolvePlaceUrl({ city: 'Avon', state: 'CT' }, data)).toEqual({
+			url: '/elections/ct/hartford-county/avon',
+			matchedLevel: 'city',
+		});
+	});
+
+	test('a mapped city is not shadowed by an earlier, unmapped same-named row', () => {
+		const data: ResolvePlaceData = {
+			// The unmapped sweep row comes first (as it does in resolvePlace's
+			// [...sweep, ...walked] order); the correctly-mapped walked row is second.
+			cityAndTownPlaces: [
+				{ name: 'Hartford', slug: 'ct/somewhere', countyName: 'Capitol Planning Region' },
+				{ name: 'Hartford', slug: 'ct/hartford-county/hartford', countyName: 'Hartford County' },
+			],
+			countyPlaces: [{ name: 'Hartford County', slug: 'ct/hartford-county' }],
+			citySlugToCountySlug: new Map([['ct/hartford-county/hartford', 'ct/hartford-county']]),
+		};
+		expect(resolvePlaceUrl({ city: 'Hartford', state: 'CT' }, data)).toEqual({
+			url: '/elections/ct/hartford-county/hartford',
+			matchedLevel: 'city',
+		});
+	});
+
 	test('falls through to state when a city match has no known county mapping', () => {
 		const data: ResolvePlaceData = {
 			cityAndTownPlaces: [{ name: 'Portland', slug: 'me/portland', countyName: 'Cumberland' }],

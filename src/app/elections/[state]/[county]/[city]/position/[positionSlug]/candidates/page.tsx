@@ -21,6 +21,7 @@ import {
 } from '~/lib/electionsHelpers';
 import { toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsCandidatesPage } from '~/lib/renderElectionsCandidatesPage';
+import { heroCandidatesFromCandidacies } from '~/lib/positionHeroCandidates';
 
 export default async function Page({
 	params,
@@ -98,6 +99,7 @@ export default async function Page({
 	const candidacies = await getCandidacies({ raceSlug });
 
 	const candidates = candidacies.map((c, i) => mapCandidacyToCard(c, i));
+	const heroCandidates = await heroCandidatesFromCandidacies(candidacies);
 
 	const positionHref = `/elections/${fullSlug}/position/${positionSlug}`;
 	const locationHref = `/elections/${fullSlug}`;
@@ -124,6 +126,7 @@ export default async function Page({
 		locationHref,
 		candidates,
 		race,
+		heroCandidates,
 	});
 }
 

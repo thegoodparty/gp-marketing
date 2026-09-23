@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 
 import {
+	buildCandidatesSectionOverrides,
 	buildCandidatesTokens,
 	buildPositionSectionOverrides,
 	buildPositionTokens,
@@ -43,6 +44,54 @@ describe('buildPositionSectionOverrides', () => {
 		const overrides = buildPositionSectionOverrides(positionOverrideCtx);
 
 		expect(overrides.component_electionsPositionContentBlock?.rightColumnCTA).toBeUndefined();
+	});
+});
+
+describe('buildPositionSectionOverrides hero', () => {
+	const race = {
+		id: 'r1',
+		slug: 'mn/morrison-county/county-attorney',
+		name: 'County Attorney',
+		state: 'MN',
+		electionDate: '2026-11-03T00:00:00.000Z',
+		filingDateStart: '2026-05-19T00:00:00.000Z',
+		filingDateEnd: '2026-06-02T00:00:00.000Z',
+		numberOfSeats: 2,
+	};
+
+	test('hands the hero the race dates, the seat count and the candidates page link', () => {
+		const overrides = buildPositionSectionOverrides({
+			...positionOverrideCtx,
+			race,
+			candidatesHref: '/elections/mn/morrison-county/position/county-attorney/candidates',
+			heroCandidates: [{ name: 'Ada Lovelace', party: 'Independent', partyClass: 'independent' }],
+		});
+
+		expect(overrides.component_electionsPositionHero).toMatchObject({
+			officeName: 'County Attorney',
+			stateName: 'Minnesota',
+			countyName: 'Morrison County',
+			electionDateIso: '2026-11-03T00:00:00.000Z',
+			filingDateStartIso: '2026-05-19T00:00:00.000Z',
+			filingDateEndIso: '2026-06-02T00:00:00.000Z',
+			seatCount: 2,
+			candidatesHref: '/elections/mn/morrison-county/position/county-attorney/candidates',
+		});
+		expect(overrides.component_electionsPositionHero?.candidates).toHaveLength(1);
+	});
+
+	test('leaves candidates undefined, not empty, when the route supplied none', () => {
+		const overrides = buildPositionSectionOverrides({ ...positionOverrideCtx, race });
+
+		expect(overrides.component_electionsPositionHero?.candidates).toBeUndefined();
+		expect(overrides.component_electionsPositionHero?.winners).toBeUndefined();
+	});
+
+	test('uses the same hero data on the candidates page', () => {
+		const overrides = buildCandidatesSectionOverrides({ ...positionOverrideCtx, race, candidates: [], heroCandidates: [] });
+
+		expect(overrides.component_electionsPositionHero?.electionDateIso).toBe('2026-11-03T00:00:00.000Z');
+		expect(overrides.component_electionsPositionHero?.candidates).toEqual([]);
 	});
 });
 

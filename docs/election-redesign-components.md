@@ -131,6 +131,53 @@ One thing that came out of it and affects other blocks in the batch:
   now resolves to the most specific place the page represents (city, else county, else state).
   Any other block in this batch with a location-named editable heading can now use it.
 
+**Header_Pre-Filing / Mid-Election / Post-Election / Post-Election multiple winners**
+(position pages) — one block, not four: `component_electionsPositionHero`, updated in place.
+Settled with Emily on 2026-09-23; the spreadsheet's four rows are the four states of this block.
+
+The starting hypothesis held. The existing hero already carried the office, the location and the
+two dates and was already fed per page through `SectionOverrides`, so this was an "Extend", which
+means the PR is a draft that waits for the rest of the position page set (see "Updating an existing
+block" below). Things that came out of it:
+
+- **The state is derived, never chosen.** `resolvePositionHeroState` in
+  `src/lib/positionHeroState.ts` reads the filing window, the general election date and the
+  winners, and returns `filing`, `midElection` or `decided`. The rules, as marketing set them:
+  `filing` runs from six months before the filing window opens until the deadline (before the
+  window opens the copy switches to "Filing opens" and "Days until filing opens"); `midElection`
+  runs from the deadline until results are in; `decided` needs at least one winner, and splits on
+  one versus several. After election day with no result, the mid-election layout stays, the
+  countdown goes and the ballot card hides. More than six months before the next window, the
+  previous cycle's result holds the page in `decided`. Any other position block that varies with
+  the cycle should read this resolver rather than invent its own thresholds.
+- **"Election date" means the general.** `getRaceBySlug` already prefers the general race for a
+  slug (election-api orders general → primary → runoff), so a page is mid-election after its
+  primary and before the general without extra work here.
+- **The ballot card follows the zero-versus-unknown rule.** `candidates` is `undefined` when the
+  route could not read the race's candidacies and the card is not rendered; an empty list is a
+  real zero and renders "0 candidates filed so far". The candidate rows are fetched per page by
+  `loadPositionHeroCandidates`, which joins `/v1/persons` so the pledge mark follows
+  `pledgedFromSpine`, the same rule the candidate cards use.
+- **Winners are a seam, not a feature yet.** election-api records no result on a candidacy (the
+  `ElectionResult` enum exists in its Prisma schema but no column uses it), so `winners` and
+  `priorWinners` on the hero override are never populated and no live page reaches the decided
+  state. The seat count for the multiple-winner button is `Race.numberOfSeats` (BallotReady's
+  `number_of_seats`), which the API already returns and `RaceDetail` now types. Ask the election
+  data team for per-candidacy results and current terms before expecting states 3 and 4 live.
+- **The hero's own button is gone.** The frames hide the left-hand CTA; the links live in the
+  cards and come from the route (`candidatesHref`, later `resultsHref`). The Sanity `ctaAction`
+  field is kept but hidden and marked deprecated so the live template documents that still carry a
+  value raise no "unknown field" warning in Studio. The three intro sentences are editable per
+  state (`field_filingIntro`, `field_midElectionIntro`, `field_decidedIntro`) with the Figma copy
+  as the default, and accept the office and location tokens.
+- **Where the frames and the live scale disagreed.** The body sizes ramp, as the width note below
+  says, and two places needed a token other than the obvious one: the location line uses
+  `text-3xl` (24 on mobile, 32 at 1440, exactly the frames) rather than a heading token, and the
+  countdown labels use `text-md`, because `body-2` grows to 18px at 1440 and the two countdowns no
+  longer fit side by side in a 308px card. The timeline's three anchors sit at fixed thirds rather
+  than at their real dates, because a filing window that closes a month before election day put
+  "Filing deadline" on top of "Election day".
+
 ## The shared election counts, as marketing defined them
 
 Settled with Emily on 2026-09-17 while building the location hero's four stat cards.
@@ -302,9 +349,8 @@ how many blocks get built.
   candidates/representatives block?
 - **Find more elections vs the other search block:** is the only difference the
   social proof line at the bottom? If so this is one block with an option, not two.
-- **The four position headers:** per the settled decision above, these should be one
-  block with a data-derived state rather than four. Needs marketing's sign-off, as
-  the spreadsheet currently lists four.
+- ~~**The four position headers:** one block or four?~~ Settled 2026-09-23: one block,
+  `component_electionsPositionHero`, with a data-derived state. See the audit results above.
 
 ## How these blocks actually reach the live pages
 
@@ -350,10 +396,10 @@ audit to confirm; `data` means it needs the `SectionOverrides` pass.
 | Featured cities carousel | location | data |
 | Featured candidates/Representatives | location | data |
 | More about location container | location | data (audited — built, see above) |
-| Header_Pre-Filing | position | data |
-| Header_Mid-Election | position | data |
-| Header_Post-Election | position | data |
-| Header_Post-Election_Multiple winners | position | data |
+| Header_Pre-Filing | position | data (audited — one state of the existing hero, see above) |
+| Header_Mid-Election | position | data (audited — one state of the existing hero, see above) |
+| Header_Post-Election | position | data (audited — one state of the existing hero, see above) |
+| Header_Post-Election_Multiple winners | position | data (audited — one state of the existing hero, see above) |
 | Siderail | position | data (share opens a modal) |
 | Badge callout | position | content |
 | Filter by seat/district | position | data, interactive |

@@ -728,7 +728,7 @@ function confirmedRunning(confirmedCandidate: string | null | undefined): boolea
  * hero would read, the two can still differ. Closing it needs the current
  * office party on the person feed, not more logic here.
  */
-function pledgedFromSpine(person: PersonItem | undefined, ...rowParties: Array<string | null | undefined>): boolean {
+export function pledgedFromSpine(person: PersonItem | undefined, ...rowParties: Array<string | null | undefined>): boolean {
 	if (person?.isPledged !== true) return false;
 	if (!confirmedRunning(person.confirmedCandidate)) return false;
 	const evidence = [

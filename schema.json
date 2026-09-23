@@ -6349,6 +6349,27 @@
             "value": "component_electionsPositionHero"
           }
         },
+        "field_filingIntro": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "field_midElectionIntro": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "field_decidedIntro": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
         "ctaAction": {
           "type": "objectAttribute",
           "value": {

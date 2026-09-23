@@ -51,6 +51,8 @@ import type { TokenMap } from '~/lib/resolveTokens';
 
 import { LocationEditorialBlockSection } from '~/PageSections/LocationEditorialBlockSection';
 
+import { ElectionsNearYouBlockSection } from '~/PageSections/ElectionsNearYouBlockSection';
+
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
 
 export type { TokenMap };
@@ -626,6 +628,12 @@ export function PageSections(props: Props) {
 									editorialOverride={props.sectionOverrides?.component_locationEditorialBlock}
 									tokens={props.tokens}
 								/>
+							</Boundary>
+						);
+					case 'component_electionsNearYouBlock':
+						return (
+							<Boundary key={section._key} componentName='Elections Near You Block'>
+								<ElectionsNearYouBlockSection {...section} />
 							</Boundary>
 						);
 					default:

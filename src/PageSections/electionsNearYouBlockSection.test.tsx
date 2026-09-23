@@ -30,7 +30,7 @@ describe('ElectionsNearYouBlockSection', () => {
 	});
 
 	test('falls back to the default button label when none is set', () => {
-		const html = renderToStaticMarkup(<ElectionsNearYouBlockSection {...section} field_buttonLabel={null} />);
+		const html = renderToStaticMarkup(<ElectionsNearYouBlockSection {...section} field_buttonLabel={undefined} />);
 
 		expect(html).toContain('Search');
 	});

@@ -71,6 +71,21 @@ describe('submitElectionsNearYouSearch', () => {
 		expect(navigateCalls).toEqual(['/elections/ma/suffolk-county?gp_src=search']);
 	});
 
+	test('a place that resolves only to state-level fires Completed with resolvedCityCount 0 and navigates to the state page', async () => {
+		const { deps, trackCalls, navigateCalls } = makeDeps(async () => ({ url: '/elections/ma', matchedLevel: 'state' }));
+
+		const result = await submitElectionsNearYouSearch({ rawInput: 'Massachusetts', place: { city: 'Massachusetts', state: 'MA' } }, deps);
+
+		expect(result).toEqual({ ok: true });
+		expect(trackCalls).toEqual([
+			{
+				eventName: ELECTIONS_SEARCH_COMPLETED_EVENT,
+				eventProperties: { inputType: 'city', resolvedCityCount: 0, hasDistrictMatch: false },
+			},
+		]);
+		expect(navigateCalls).toEqual(['/elections/ma?gp_src=search']);
+	});
+
 	test('unresolvable free text shows an inline error and fires Errored with unresolved, without navigating', async () => {
 		const { deps, trackCalls, navigateCalls } = makeDeps(async () => ({ error: 'unresolved' }));
 

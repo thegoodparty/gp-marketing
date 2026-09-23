@@ -163,11 +163,14 @@ export async function fetchPlaceSuggestions(input: string, sessionToken: Autocom
 	return suggestions
 		.map(suggestion => suggestion.placePrediction)
 		.filter((prediction): prediction is AutocompletePlacePrediction => Boolean(prediction))
-		.map(prediction => ({
-			id: prediction.placeId,
-			description: prediction.text.text,
-			parsed: parsePlacePrediction(prediction),
-		}));
+		.flatMap(prediction => {
+			const parsed = parsePlacePrediction(prediction);
+			// Drop suggestions we can't parse rather than list them: selecting one
+			// would store an undefined place and silently fall back to an
+			// unresolvable free-text submit with no indication anything was lost.
+			if (!parsed) return [];
+			return [{ id: prediction.placeId, description: prediction.text.text, parsed }];
+		});
 }
 
 export type SuggestionQueryRefs = {

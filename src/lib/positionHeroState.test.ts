@@ -29,6 +29,22 @@ describe('resolvePositionHeroState', () => {
 		});
 	});
 
+	test('the six-month mark clamps to the end of a shorter month instead of overflowing', () => {
+		const lateStart = { ...race, filingDateStart: '2026-08-31T00:00:00.000Z', filingDateEnd: '2026-10-02T00:00:00.000Z' };
+		expect(resolvePositionHeroState({ ...lateStart, priorWinnerCount: 1, now: at('2026-02-27') })).toEqual({
+			phase: 'decided',
+			multipleWinners: false,
+		});
+		expect(resolvePositionHeroState({ ...lateStart, priorWinnerCount: 1, now: at('2026-02-28') })).toEqual({
+			phase: 'filing',
+			filingOpen: false,
+		});
+		expect(resolvePositionHeroState({ ...lateStart, priorWinnerCount: 1, now: at('2026-03-02') })).toEqual({
+			phase: 'filing',
+			filingOpen: false,
+		});
+	});
+
 	test('more than six months out with no previous result falls back to filing not yet open', () => {
 		expect(resolvePositionHeroState({ ...race, now: at('2025-11-20') })).toEqual({ phase: 'filing', filingOpen: false });
 	});

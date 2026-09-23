@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getCandidacies, getRaceBySlug } from '~/lib/electionsApi';
+import { getCandidaciesOrNull, getRaceBySlug } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
 	buildRaceSlug,
@@ -28,7 +28,7 @@ export default async function Page({
 	const raceSlug = buildRaceSlug(stateCode, positionSlug);
 	const [race, candidacies] = await Promise.all([
 		getRaceBySlug(raceSlug),
-		getCandidacies({ raceSlug }),
+		getCandidaciesOrNull({ raceSlug }),
 	]);
 
 	if (!race) {
@@ -40,8 +40,8 @@ export default async function Page({
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 
-	const candidates = candidacies.map((c, i) => mapCandidacyToCard(c, i));
-	const heroCandidates = await heroCandidatesFromCandidacies(candidacies);
+	const candidates = (candidacies ?? []).map((c, i) => mapCandidacyToCard(c, i));
+	const heroCandidates = candidacies ? await heroCandidatesFromCandidacies(candidacies) : undefined;
 
 	const statePath = stateCode.toLowerCase();
 	const positionHref = `/elections/${statePath}/position/${positionSlug}`;

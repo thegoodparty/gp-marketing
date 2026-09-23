@@ -122,6 +122,34 @@ describe('ElectionsPositionHeroSection', () => {
 		expect(html).toContain('+2 other winners');
 	});
 
+	test('more than six months before filing opens, the previous winner holds the decided state', () => {
+		const html = render(
+			{
+				...office,
+				winners: [],
+				priorWinners: [{ key: 'p1', name: 'Grace Hopper', party: 'Independent', term: '2023 to 2027' }],
+			},
+			'2025-11-20',
+		);
+
+		expect(html).toContain('data-phase="decided"');
+		expect(html).toContain('data-testid="position-hero-winner-card"');
+		expect(html).toContain('Grace Hopper');
+		expect(html).toContain('Independent · Current term 2023 to 2027');
+		expect(html).toContain('This race has been decided.');
+	});
+
+	test('inside six months of filing opening, the previous winner gives way to the filing state', () => {
+		const html = render(
+			{ ...office, winners: [], priorWinners: [{ key: 'p1', name: 'Grace Hopper' }] },
+			'2026-02-10',
+		);
+
+		expect(html).toContain('data-phase="filing"');
+		expect(html).not.toContain('Grace Hopper');
+		expect(html).toContain('Days until filing opens');
+	});
+
 	test('hides the ballot card when we hold no candidate data, but shows a real zero', () => {
 		const noData = render({ ...office, candidates: undefined }, '2026-08-15');
 		expect(noData).not.toContain('data-testid="position-hero-ballot-card"');

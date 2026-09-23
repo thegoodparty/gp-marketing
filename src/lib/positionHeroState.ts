@@ -74,8 +74,12 @@ export function resolvePositionHeroState(input: PositionHeroStateInput): Positio
 	}
 
 	if (filingStart) {
-		const windowOpens = new Date(filingStart);
-		windowOpens.setMonth(windowOpens.getMonth() - PRE_FILING_WINDOW_MONTHS);
+		const year = filingStart.getFullYear();
+		const month = filingStart.getMonth() - PRE_FILING_WINDOW_MONTHS;
+		// Day 0 of the following month is the last day of the target month, so an
+		// Aug 31 start clamps to Feb 28 instead of overflowing into March.
+		const lastDay = new Date(year, month + 1, 0).getDate();
+		const windowOpens = new Date(year, month, Math.min(filingStart.getDate(), lastDay));
 		if (today < windowOpens && input.priorWinnerCount && input.priorWinnerCount > 0) {
 			return { phase: 'decided', multipleWinners: input.priorWinnerCount > 1 };
 		}

@@ -16,7 +16,9 @@ const GOOGLE_PLACES_SCRIPT_ID = 'gp-google-places-loader';
 // request can return, locality, is a city or a New England town.
 const COUNTY_PRIMARY_TYPE = 'administrative_area_level_2';
 
-type AutocompleteSessionToken = object;
+// Opaque: callers only ever store and pass this back, never inspect it.
+export type PlacesSessionToken = object;
+type AutocompleteSessionToken = PlacesSessionToken;
 
 type AutocompletePlacePrediction = {
 	placeId: string;
@@ -160,4 +162,51 @@ export async function fetchPlaceSuggestions(input: string, sessionToken: Autocom
 			description: prediction.text.text,
 			parsed: parsePlacePrediction(prediction),
 		}));
+}
+
+export type SuggestionQueryRefs = {
+	latestQuery: { current: string };
+	sessionToken: { current: PlacesSessionToken | null };
+};
+
+export type SuggestionQueryDeps = {
+	ensureGooglePlacesLoaded(): Promise<void>;
+	startPlacesSession(): AutocompleteSessionToken;
+	fetchPlaceSuggestions(input: string, sessionToken: AutocompleteSessionToken): Promise<PlaceSuggestion[]>;
+};
+
+const defaultSuggestionQueryDeps: SuggestionQueryDeps = { ensureGooglePlacesLoaded, startPlacesSession, fetchPlaceSuggestions };
+
+/**
+ * Orchestrates one input change's suggestion fetch: loads the library if it
+ * hasn't loaded yet, reuses or starts a session token, fetches, and returns
+ * `undefined` (a "discard this response" sentinel) unless `value` is still
+ * the latest thing the caller's ref says was typed - an earlier keystroke's
+ * slower response must not overwrite a later one's result. Exported (with
+ * injectable deps) so that ordering guarantee is testable against
+ * controllable dependency promises, not just read off the source.
+ */
+export async function runSuggestionQuery(
+	value: string,
+	refs: SuggestionQueryRefs,
+	deps: SuggestionQueryDeps = defaultSuggestionQueryDeps,
+): Promise<PlaceSuggestion[] | undefined> {
+	try {
+		await deps.ensureGooglePlacesLoaded();
+	} catch {
+		return refs.latestQuery.current === value ? [] : undefined;
+	}
+	if (refs.latestQuery.current !== value) return undefined;
+
+	const token = refs.sessionToken.current ?? deps.startPlacesSession();
+	refs.sessionToken.current = token;
+
+	let results: PlaceSuggestion[];
+	try {
+		results = await deps.fetchPlaceSuggestions(value, token);
+	} catch {
+		return refs.latestQuery.current === value ? [] : undefined;
+	}
+
+	return refs.latestQuery.current === value ? results : undefined;
 }

@@ -1,6 +1,16 @@
 /// <reference types="bun-types" />
 import { describe, expect, test } from 'bun:test';
-import { parsePlacePrediction } from './googlePlaces';
+import { parsePlacePrediction, runSuggestionQuery, type PlaceSuggestion, type SuggestionQueryDeps } from './googlePlaces';
+
+function deferred<T>() {
+	let resolve!: (value: T) => void;
+	let reject!: (error: unknown) => void;
+	const promise = new Promise<T>((res, rej) => {
+		resolve = res;
+		reject = rej;
+	});
+	return { promise, resolve, reject };
+}
 
 describe('parsePlacePrediction', () => {
 	test('parses a single-word city prediction into { city, state }', () => {
@@ -72,5 +82,80 @@ describe('parsePlacePrediction', () => {
 		});
 
 		expect(parsed).toBeUndefined();
+	});
+});
+
+describe('runSuggestionQuery', () => {
+	const bostonSuggestion: PlaceSuggestion = { id: 'boston', description: 'Boston, MA, USA', parsed: { city: 'Boston', state: 'MA' } };
+	const staleSuggestion: PlaceSuggestion = {
+		id: 'boston-heights',
+		description: 'Boston Heights, OH, USA',
+		parsed: { city: 'Boston Heights', state: 'OH' },
+	};
+
+	test('a slower response for an earlier keystroke does not overwrite a later keystroke\'s result', async () => {
+		const latestQuery = { current: 'Bos' };
+		const sessionToken: { current: object | null } = { current: null };
+
+		const bosRequest = deferred<PlaceSuggestion[]>();
+		const bostonRequest = deferred<PlaceSuggestion[]>();
+
+		const deps: SuggestionQueryDeps = {
+			ensureGooglePlacesLoaded: async () => undefined,
+			startPlacesSession: () => ({}),
+			fetchPlaceSuggestions: async (input: string) => (input === 'Bos' ? bosRequest.promise : bostonRequest.promise),
+		};
+
+		// "Bos" is issued first (the earlier keystroke); "Boston" is issued once
+		// the user has kept typing, and is now the latest query the ref knows about.
+		const bosResult = runSuggestionQuery('Bos', { latestQuery, sessionToken }, deps);
+		latestQuery.current = 'Boston';
+		const bostonResult = runSuggestionQuery('Boston', { latestQuery, sessionToken }, deps);
+
+		// The later keystroke's request resolves first.
+		bostonRequest.resolve([bostonSuggestion]);
+		await expect(bostonResult).resolves.toEqual([bostonSuggestion]);
+
+		// The earlier keystroke's request resolves after: its result must be discarded, not applied.
+		bosRequest.resolve([staleSuggestion]);
+		await expect(bosResult).resolves.toBeUndefined();
+	});
+
+	test('reuses the same session token across two queries in one search cycle', async () => {
+		const latestQuery = { current: 'Bost' };
+		const sessionToken: { current: object | null } = { current: null };
+		const startPlacesSession = () => ({ id: 'one-session' });
+		const seenTokens: unknown[] = [];
+
+		const deps: SuggestionQueryDeps = {
+			ensureGooglePlacesLoaded: async () => undefined,
+			startPlacesSession,
+			fetchPlaceSuggestions: async (_input, token) => {
+				seenTokens.push(token);
+				return [];
+			},
+		};
+
+		await runSuggestionQuery('Bost', { latestQuery, sessionToken }, deps);
+		latestQuery.current = 'Bosto';
+		await runSuggestionQuery('Bosto', { latestQuery, sessionToken }, deps);
+
+		expect(seenTokens).toHaveLength(2);
+		expect(seenTokens[0]).toBe(seenTokens[1]);
+	});
+
+	test('a failed suggestion fetch clears suggestions for the current query rather than throwing', async () => {
+		const latestQuery = { current: 'Bost' };
+		const sessionToken: { current: object | null } = { current: null };
+
+		const deps: SuggestionQueryDeps = {
+			ensureGooglePlacesLoaded: async () => undefined,
+			startPlacesSession: () => ({}),
+			fetchPlaceSuggestions: async () => {
+				throw new Error('network error');
+			},
+		};
+
+		await expect(runSuggestionQuery('Bost', { latestQuery, sessionToken }, deps)).resolves.toEqual([]);
 	});
 });

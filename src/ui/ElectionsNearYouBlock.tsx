@@ -18,15 +18,15 @@ import { primaryButtonStyleType } from './_lib/designTypesStore.ts';
 import { trackEvent } from '~/lib/analytics';
 import {
 	ELECTIONS_SEARCH_VIEWED_EVENT,
-	submitElectionsNearYouSearch,
+	submitElectionsNearYouSearchOnce,
 	type ElectionsNearYouSearchDeps,
 } from '~/lib/electionsNearYouSearch';
 import {
 	ensureGooglePlacesLoaded,
-	fetchPlaceSuggestions,
-	startPlacesSession,
+	runSuggestionQuery,
 	type ParsedPlaceSuggestion,
 	type PlaceSuggestion,
+	type PlacesSessionToken,
 } from '~/lib/googlePlaces';
 import type { ResolvedPlace } from '~/lib/resolvePlace';
 
@@ -83,12 +83,17 @@ const BLOCK_PLACEMENT = 'elections_near_you_block';
 
 const MIN_QUERY_LENGTH = 3;
 
+const RESOLVED_PLACE_MATCHED_LEVELS = new Set(['city', 'county', 'state']);
+
 // fetch's `.json()` types as `unknown` in this repo's DOM lib; narrow it at the
 // boundary rather than casting; anything that isn't this shape is treated the
 // same as a network failure by the caller.
 function isResolvedPlace(data: unknown): data is ResolvedPlace {
 	if (typeof data !== 'object' || data === null) return false;
-	if ('url' in data) return typeof (data as { url: unknown }).url === 'string';
+	if ('url' in data) {
+		const { url, matchedLevel } = data as { url: unknown; matchedLevel: unknown };
+		return typeof url === 'string' && typeof matchedLevel === 'string' && RESOLVED_PLACE_MATCHED_LEVELS.has(matchedLevel);
+	}
 	if ('error' in data) return (data as { error: unknown }).error === 'unresolved';
 	return false;
 }
@@ -118,7 +123,7 @@ export function ElectionsNearYouBlock(props: ElectionsNearYouBlockProps) {
 
 	// Guards, not state: none of these should trigger a re-render on their own.
 	const placesLoadStartedRef = useRef(false);
-	const sessionTokenRef = useRef<ReturnType<typeof startPlacesSession> | null>(null);
+	const sessionTokenRef = useRef<PlacesSessionToken | null>(null);
 	const latestQueryRef = useRef('');
 	const isSubmittingRef = useRef(false);
 
@@ -152,23 +157,11 @@ export function ElectionsNearYouBlock(props: ElectionsNearYouBlockProps) {
 			return;
 		}
 
-		void ensureGooglePlacesLoaded()
-			.then(() => {
-				if (latestQueryRef.current !== value) return undefined;
-				const token = sessionTokenRef.current ?? startPlacesSession();
-				sessionTokenRef.current = token;
-				return fetchPlaceSuggestions(value, token);
-			})
-			.then(results => {
-				// Stale-response guard: fast typing can resolve an earlier
-				// keystroke's request after a later one, which would otherwise
-				// replace the current suggestions with an outdated list.
-				if (!results || latestQueryRef.current !== value) return;
-				setSuggestions(results);
-			})
-			.catch(() => {
-				if (latestQueryRef.current === value) setSuggestions([]);
-			});
+		void runSuggestionQuery(value, { latestQuery: latestQueryRef, sessionToken: sessionTokenRef }).then(results => {
+			// `undefined` is runSuggestionQuery's "discard this response" sentinel
+			// for a keystroke that is no longer the latest one.
+			if (results !== undefined) setSuggestions(results);
+		});
 	}, []);
 
 	const handleSelectionChange = useCallback(
@@ -193,7 +186,6 @@ export function ElectionsNearYouBlock(props: ElectionsNearYouBlockProps) {
 		(e: React.FormEvent) => {
 			e.preventDefault();
 			if (isSubmittingRef.current) return;
-			isSubmittingRef.current = true;
 			setIsSubmitting(true);
 
 			const deps: ElectionsNearYouSearchDeps = {
@@ -206,12 +198,11 @@ export function ElectionsNearYouBlock(props: ElectionsNearYouBlockProps) {
 				navigate: url => window.location.assign(url),
 			};
 
-			void submitElectionsNearYouSearch({ rawInput: inputValue, place: selectedPlace }, deps)
+			void submitElectionsNearYouSearchOnce({ rawInput: inputValue, place: selectedPlace }, deps, { isSubmitting: isSubmittingRef })
 				.then(result => {
-					if (!result.ok) setError(result.error);
+					if (result && !result.ok) setError(result.error);
 				})
 				.finally(() => {
-					isSubmittingRef.current = false;
 					setIsSubmitting(false);
 				});
 		},

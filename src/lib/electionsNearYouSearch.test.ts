@@ -7,8 +7,17 @@ import {
 	ELECTIONS_SEARCH_NETWORK_ERROR,
 	ELECTIONS_SEARCH_UNRESOLVED_ERROR,
 	submitElectionsNearYouSearch,
+	submitElectionsNearYouSearchOnce,
 } from './electionsNearYouSearch';
 import type { ResolvedPlace } from '~/lib/resolvePlace';
+
+function deferred<T>() {
+	let resolve!: (value: T) => void;
+	const promise = new Promise<T>(res => {
+		resolve = res;
+	});
+	return { promise, resolve };
+}
 
 type TrackCall = { eventName: string; eventProperties?: Record<string, unknown> };
 
@@ -97,5 +106,40 @@ describe('submitElectionsNearYouSearch', () => {
 		expect(trackCalls).toEqual([{ eventName: ELECTIONS_SEARCH_ERRORED_EVENT, eventProperties: { inputType: 'city', failureReason: 'empty_input' } }]);
 		expect(navigateCalls).toEqual([]);
 		expect(resolveCallCount).toBe(0);
+	});
+});
+
+describe('submitElectionsNearYouSearchOnce', () => {
+	test('two calls fired before the first settles (a double-click) run the search exactly once', async () => {
+		let resolveCallCount = 0;
+		const request = deferred<ResolvedPlace>();
+		const { deps, navigateCalls } = makeDeps(() => {
+			resolveCallCount += 1;
+			return request.promise;
+		});
+		const refs = { isSubmitting: { current: false } };
+
+		const firstCall = submitElectionsNearYouSearchOnce({ rawInput: 'Boston', place: { city: 'Boston', state: 'MA' } }, deps, refs);
+		// Fired synchronously, before the first call's resolvePlace has settled.
+		const secondCall = submitElectionsNearYouSearchOnce({ rawInput: 'Boston', place: { city: 'Boston', state: 'MA' } }, deps, refs);
+
+		expect(resolveCallCount).toBe(1);
+		await expect(secondCall).resolves.toBeUndefined();
+
+		request.resolve({ url: '/elections/ma/suffolk-county/boston', matchedLevel: 'city' });
+		await expect(firstCall).resolves.toEqual({ ok: true });
+		expect(navigateCalls).toEqual(['/elections/ma/suffolk-county/boston?gp_src=search']);
+	});
+
+	test('the guard clears after the first call settles, so a later call runs normally', async () => {
+		const { deps } = makeDeps(async () => ({ url: '/elections/ma/suffolk-county/boston', matchedLevel: 'city' }));
+		const refs = { isSubmitting: { current: false } };
+
+		const first = await submitElectionsNearYouSearchOnce({ rawInput: 'Boston', place: { city: 'Boston', state: 'MA' } }, deps, refs);
+		expect(first).toEqual({ ok: true });
+		expect(refs.isSubmitting.current).toBe(false);
+
+		const second = await submitElectionsNearYouSearchOnce({ rawInput: 'Boston', place: { city: 'Boston', state: 'MA' } }, deps, refs);
+		expect(second).toEqual({ ok: true });
 	});
 });

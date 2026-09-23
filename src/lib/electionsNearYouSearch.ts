@@ -72,16 +72,41 @@ export async function submitElectionsNearYouSearch(
 		return { ok: false, error: ELECTIONS_SEARCH_UNRESOLVED_ERROR };
 	}
 
-	// Fired before navigate, not in a `.then` after it: `navigate` is a
-	// synchronous `router.push` in the real caller, but Amplitude's transport
-	// is fire-and-forget over the network, so ordering here (not a race with
-	// the unload) is what keeps the event from being lost to the redirect.
+	// Fired before navigate, not in a `.then` after it: the real caller's
+	// `navigate` triggers a full page navigation, and Amplitude's transport is
+	// fire-and-forget over the network, so ordering here (not a race with the
+	// unload) is what keeps the event from being lost to the redirect.
 	deps.trackEvent(ELECTIONS_SEARCH_COMPLETED_EVENT, {
 		inputType,
 		resolvedCityCount: result.matchedLevel === 'city' ? 1 : 0,
+		// District matching isn't implemented yet - ResolvedPlace's matchedLevel
+		// union has no 'district' member, so this can only ever be false today.
 		hasDistrictMatch: false,
 	});
 	deps.navigate(`${result.url}?gp_src=search`);
 
 	return { ok: true };
+}
+
+export type SubmitGuardRefs = { isSubmitting: { current: boolean } };
+
+/**
+ * Wraps `submitElectionsNearYouSearch` with a synchronous in-flight guard:
+ * two calls fired before the first settles (a double-click before React
+ * re-renders the button disabled) run the search exactly once. Exported so
+ * that guarantee is testable against the real function, not a reimplemented
+ * stand-in for it.
+ */
+export async function submitElectionsNearYouSearchOnce(
+	input: ElectionsNearYouSearchInput,
+	deps: ElectionsNearYouSearchDeps,
+	refs: SubmitGuardRefs,
+): Promise<ElectionsNearYouSearchResult | undefined> {
+	if (refs.isSubmitting.current) return undefined;
+	refs.isSubmitting.current = true;
+	try {
+		return await submitElectionsNearYouSearch(input, deps);
+	} finally {
+		refs.isSubmitting.current = false;
+	}
 }

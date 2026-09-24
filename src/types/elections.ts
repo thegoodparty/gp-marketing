@@ -156,7 +156,7 @@ export interface FeaturedCity {
 }
 
 export interface PlaceRace {
-	id: number | string;
+	id?: number | string;
 	slug: string;
 	normalizedPositionName?: string;
 	name?: string;

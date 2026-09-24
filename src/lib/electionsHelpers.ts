@@ -372,8 +372,8 @@ export function buildOfficeItemsFromPlaceRaces(
 	resolvedDates: Map<string, string>,
 	config: BuildOfficeItemsFromPlaceRacesConfig,
 ): { offices: OfficeItem[]; dataYears: number[] } {
-	const offices: OfficeItem[] = races.map(race => ({
-		id: String(race.id),
+	const offices: OfficeItem[] = races.map((race, index) => ({
+		id: race.id != null ? String(race.id) : `${race.slug}-${index}`,
 		type: config.type,
 		position: race.normalizedPositionName ?? race.name ?? 'Position',
 		nextElectionDate: resolvedDates.get(race.slug) ?? race.electionDate ?? '',

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
-import { COUNTY_MTFCC, getCandidacies, getPlacesByState, getRaceBySlug } from '~/lib/electionsApi';
+import { COUNTY_MTFCC, getCandidaciesOrNull, getPlacesByState, getRaceBySlug } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
 	buildRaceSlug,
@@ -13,6 +13,7 @@ import {
 } from '~/lib/electionsHelpers';
 import { toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsCandidatesPage } from '~/lib/renderElectionsCandidatesPage';
+import { heroCandidatesFromCandidacies } from '~/lib/positionHeroCandidates';
 
 export default async function Page({
 	params,
@@ -53,9 +54,10 @@ export default async function Page({
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 
-	const candidacies = await getCandidacies({ raceSlug });
+	const candidacies = await getCandidaciesOrNull({ raceSlug });
 
-	const candidates = candidacies.map((c, i) => mapCandidacyToCard(c, i));
+	const candidates = (candidacies ?? []).map((c, i) => mapCandidacyToCard(c, i));
+	const heroCandidates = candidacies ? await heroCandidatesFromCandidacies(candidacies) : undefined;
 
 	const positionHref = `/elections/${countySlug}/position/${positionSlug}`;
 	const locationHref = `/elections/${countySlug}`;
@@ -80,6 +82,7 @@ export default async function Page({
 		locationHref,
 		candidates,
 		race,
+		heroCandidates,
 	});
 }
 

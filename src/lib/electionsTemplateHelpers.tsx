@@ -8,6 +8,7 @@ import type { CandidateCard } from '~/ui/CandidatesBlock';
 import type { BreadcrumbItem } from '~/ui/BreadcrumbBlock';
 import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
 import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
+import type { ElectionsPositionHeroCandidate } from '~/ui/ElectionsPositionHero';
 import { secondaryButtonStyleType } from '~/ui/_lib/designTypesStore';
 import {
 	buildDynamicFAQItems,
@@ -38,7 +39,34 @@ export type PositionPageContext = {
 	race?: RaceDetail | null;
 	// Used only by the position-page schema builders; optional for candidates pages.
 	pageUrl?: string;
+	/**
+	 * The hero's ballot rows. `undefined` means the route could not read the
+	 * race's candidates and the hero hides its ballot card.
+	 */
+	heroCandidates?: ElectionsPositionHeroCandidate[];
 };
+
+/**
+ * The hero reads the same race the page does. Winners and the previous cycle's
+ * winners are left unset because election-api records no results yet; the
+ * resolver reads that as "results pending" after election day.
+ */
+export function buildPositionHeroOverride(ctx: PositionPageContext): NonNullable<SectionOverrides['component_electionsPositionHero']> {
+	return {
+		officeName: ctx.officeName,
+		stateName: ctx.stateName,
+		countyName: ctx.countyName,
+		cityName: ctx.cityName,
+		electionDate: ctx.electionDate,
+		filingDate: ctx.filingDate,
+		electionDateIso: ctx.race?.electionDate ?? null,
+		filingDateStartIso: ctx.race?.filingDateStart ?? null,
+		filingDateEndIso: ctx.race?.filingDateEnd ?? null,
+		candidates: ctx.heroCandidates,
+		seatCount: ctx.race?.numberOfSeats ?? null,
+		candidatesHref: ctx.candidatesHref,
+	};
+}
 
 function formatFrequency(frequency: (string | number)[]): string {
 	return frequency
@@ -138,16 +166,7 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 	const race = ctx.race;
 	return {
 		component_breadcrumbBlock: { breadcrumbs: ctx.breadcrumbs },
-		component_electionsPositionHero: {
-			officeName: ctx.officeName,
-			stateName: ctx.stateName,
-			countyName: ctx.countyName,
-			cityName: ctx.cityName,
-			electionDate: ctx.electionDate,
-			filingDate: ctx.filingDate,
-			ctaHref: ctx.candidatesHref,
-			ctaLabel: 'Run for office',
-		},
+		component_electionsPositionHero: buildPositionHeroOverride(ctx),
 		component_electionsPositionContentBlock: {
 			topHeadline: 'Position Details',
 			gridItems: race ? buildPositionGridItems(race) : [],
@@ -192,16 +211,7 @@ export function buildCandidatesSectionOverrides(
 ): SectionOverrides {
 	return {
 		component_breadcrumbBlock: { breadcrumbs: ctx.breadcrumbs },
-		component_electionsPositionHero: {
-			officeName: ctx.officeName,
-			stateName: ctx.stateName,
-			countyName: ctx.countyName,
-			cityName: ctx.cityName,
-			electionDate: ctx.electionDate,
-			filingDate: ctx.filingDate,
-			ctaHref: ctx.positionHref,
-			ctaLabel: 'Back to position',
-		},
+		component_electionsPositionHero: buildPositionHeroOverride(ctx),
 		component_candidatesBlock: {
 			candidates: ctx.candidates,
 			header: {

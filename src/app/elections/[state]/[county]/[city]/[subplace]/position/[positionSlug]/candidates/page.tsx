@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
-	getCandidacies,
+	getCandidaciesOrNull,
 	getCityPlacesByCounty,
 	getPlacesByState,
 	getSubplaceRaceBySlug,
@@ -17,6 +17,7 @@ import {
 } from '~/lib/electionsHelpers';
 import { toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsCandidatesPage } from '~/lib/renderElectionsCandidatesPage';
+import { heroCandidatesFromCandidacies } from '~/lib/positionHeroCandidates';
 
 export default async function Page({
 	params,
@@ -63,9 +64,10 @@ export default async function Page({
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 
-	const candidacies = await getCandidacies({ raceSlug: race.slug });
+	const candidacies = await getCandidaciesOrNull({ raceSlug: race.slug });
 
-	const candidates = candidacies.map((c, i) => mapCandidacyToCard(c, i));
+	const candidates = (candidacies ?? []).map((c, i) => mapCandidacyToCard(c, i));
+	const heroCandidates = candidacies ? await heroCandidatesFromCandidacies(candidacies) : undefined;
 
 	const positionHref = `/elections/${pathBeforePosition}/position/${positionSlug}`;
 	const locationHref = `/elections/${cityPathSlug}`;
@@ -93,6 +95,7 @@ export default async function Page({
 		locationHref,
 		candidates,
 		race,
+		heroCandidates,
 	});
 }
 

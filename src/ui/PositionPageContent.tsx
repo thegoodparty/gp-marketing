@@ -4,6 +4,7 @@ import { BreadcrumbBlock, type BreadcrumbItem } from '~/ui/BreadcrumbBlock';
 import { CTABannerBlock } from '~/ui/CTABannerBlock';
 import { CTABlock } from '~/ui/CTABlock';
 import { ElectionsPositionHero } from '~/ui/ElectionsPositionHero';
+import { resolvePositionHeroState } from '~/lib/positionHeroState';
 import { ElectionsPositionContentBlock } from '~/ui/ElectionsPositionContentBlock';
 import { FAQBlock } from '~/ui/FAQBlock';
 import { TwoUpCardBlock } from '~/ui/TwoUpCardBlock';
@@ -97,7 +98,7 @@ function formatFrequency(frequency: (string | number)[]): string {
 }
 
 export function PositionPageContent(props: PositionPageContentProps) {
-	const { officeName, stateName, countyName, cityName, electionDate, filingDate, breadcrumbs, candidatesHref, race, pageUrl } = props;
+	const { officeName, stateName, countyName, cityName, breadcrumbs, candidatesHref, race, pageUrl } = props;
 
 	const gridItems = race ? buildGridItems(race) : [];
 	const bottomItems = race ? buildBottomItems(race) : [];
@@ -138,14 +139,15 @@ export function PositionPageContent(props: PositionPageContentProps) {
 				stateName={stateName}
 				countyName={countyName}
 				cityName={cityName}
-				electionDate={electionDate}
-				filingDate={filingDate}
-				cta={{
-					buttonType: 'internal',
-					href: candidatesHref,
-					label: 'Run for office',
-					buttonProps: { styleType: primaryButtonStyleType },
-				}}
+				state={resolvePositionHeroState({
+					filingDateStart: race?.filingDateStart,
+					filingDateEnd: race?.filingDateEnd,
+					electionDate: race?.electionDate,
+				})}
+				electionDate={race?.electionDate}
+				filingDateStart={race?.filingDateStart}
+				filingDateEnd={race?.filingDateEnd}
+				seatCount={race?.numberOfSeats}
 			/>
 
 			<CTABannerBlock

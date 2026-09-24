@@ -78,6 +78,17 @@ describe('ListOfOfficesBlock server markup', () => {
 		expect(isRowHidden(html, '/elections/tx/position/current-11')).toBe(true);
 	});
 
+	test('hides other years even when every office shares one id', () => {
+		// Place races from the election API carry no id, so location pages
+		// rendered every office as "undefined" and one visible row matched them all.
+		const sameId = officesAcrossYears().map(office => ({ ...office, id: 'undefined' }));
+		const collided = render(sameId);
+		expect(isRowHidden(collided, '/elections/tx/position/past')).toBe(true);
+		expect(isRowHidden(collided, '/elections/tx/position/future')).toBe(true);
+		expect(isRowHidden(collided, '/elections/tx/position/current-10')).toBe(true);
+		expect(isRowHidden(collided, '/elections/tx/position/current-0')).toBe(false);
+	});
+
 	test('still links every office when the selected year has none', () => {
 		const emptyYear = renderToStaticMarkup(
 			<ListOfOfficesBlock offices={officesAcrossYears()} defaultYear={2024} availableYears={[2024, 2026]} />,

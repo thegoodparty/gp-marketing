@@ -20,5 +20,11 @@ export function buildElectionsIndexTokens(
 		tokens['[District]'] = ctx.countyName;
 	}
 
+	// The most specific place the page represents, for headings that name the
+	// page's own location without the editor having to pick a level per template
+	// ("More about [location]"). Without it a template typed against [location]
+	// publishes the heading with the name stripped out, which is not a type error.
+	tokens['[location]'] = ctx.cityName ?? ctx.countyName ?? ctx.stateName;
+
 	return tokens;
 }

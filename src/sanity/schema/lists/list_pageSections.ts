@@ -125,12 +125,13 @@ export const list_pageSections = {
 				{
 					name: 'form',
 					title: 'Form',
-					of: ['component_heroWithSubscribe', 'component_newsletterBlock', 'component_clickToCallBlock'],
+					of: ['component_demoRequestBlock', 'component_electionsNearYouBlock', 'component_heroWithSubscribe', 'component_newsletterBlock', 'component_clickToCallBlock'],
 				},
 				{
 					name: 'text',
 					title: 'Text',
 					of: [
+						'component_locationEditorialBlock',
 						'component_bannerBlock',
 						'component_calculatorTextBlock',
 						'component_twoUpCardBlock',
@@ -241,6 +242,9 @@ export const list_pageSections = {
 	},
 	type: 'array',
 	of: [
+		{ title: 'Demo Request Block', type: 'component_demoRequestBlock' },
+		{ title: 'Elections Near You Block', type: 'component_electionsNearYouBlock' },
+		{ title: 'Location Editorial Block', type: 'component_locationEditorialBlock' },
 		{
 			title: 'Testimonial Block With Link',
 			type: 'component_testimonialBlockWithLink',

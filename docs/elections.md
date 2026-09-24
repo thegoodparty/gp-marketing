@@ -110,6 +110,51 @@ build if a new election route forgets. Keep the canonical path identical to the 
 URL for the same page (`buildElectionPositionHrefFromRaceSlug`); a canonical that
 disagrees with the sitemap sends conflicting signals.
 
+### What the per-state sitemap band lists
+
+`fetchStateElectionSitemapEntries` (`src/lib/sitemap-entries.ts`) owns one shard per
+state (`/sitemap/1.xml` … `/sitemap/51.xml`) and emits four things: the **state index
+itself** at priority 0.8, then counties and districts, cities, and position pages at
+0.7. The state is the only one of those that is not a row in the `/v1/places` response
+— the place rows are the tiers *inside* the state — so it has to be pushed explicitly
+from the state code. It was missed for a long time, which left all 51 `/elections/[state]`
+pages out of every shard while everything beneath them was listed. If you touch this
+function, keep that entry.
+
+The municipal tier reads **two** `/v1/places` sweeps, `CITY_MTFCC` *and* `TOWN_MTFCC`,
+concatenated before `buildCountyLookups`. Querying only `CITY_MTFCC` is the mistake
+this band shipped with for a long time. Towns and townships are a different code from
+cities, and wherever the township is the primary local unit — New England, but far more
+of the corpus in the Midwest township states — a city-only sweep returned a fraction of
+the municipalities. Measured against production when the second sweep was added, the 51
+state shards went from 74,991 URLs to 90,369: **+15,327 municipal and municipal-position
+URLs**, biggest gains PA +1,547, IL +1,397, KS +1,331, OH +1,315, MI +1,243. New England
+was where the pattern was first spotted but it is a small part of the total.
+
+Because that same sweep builds `citySlugToCountySlug`, towns also had no county mapping,
+so `buildRaceEntries` dropped their position pages via `skipUnmappedCity` — which is why
+fixing one query moved two tiers. `fetchStateElectionRouteParams` reads the same pair for
+the same reason: if the two functions disagree, the sitemap advertises URLs that were
+never prerendered. Use the constants, not the literals, and keep the two in step.
+
+Three things not to "fix" while in here:
+
+- **Town slugs carry their suffix** (`brattleboro-town`); the bare form 404s, so never
+  derive the segment by stripping it.
+- **Connecticut needs the county walk, not a sweep.** Both state-level municipal
+  queries come back empty for CT whatever mtfcc you ask for, so the two-sweep fix did
+  not give it a single municipal URL. The data is there:
+  `/v1/places?slug=ct/<county>&includeChildren=true` returns the towns with a municipal
+  mtfcc, which is how `/elections/ct/fairfield-county` links to 19 towns and why each of
+  those pages returns 200. `fetchMunicipalitiesByCountyWalk` picks them up from the
+  counties, and it fires **only when the state sweep finds nothing at all** — CT alone
+  today, 8 extra requests on that one shard. Do not relax that gate to "the sweep looks
+  sparse": walking every county nationwide is roughly 3,255 extra calls per build.
+- **Upstream sometimes mislabels a town as a county.** `vt/halifax` is tagged county-tier
+  while the real page is `/elections/vt/windham-county/halifax-town`, so one place can
+  surface at two tiers. `dedupeByUrl` will not collapse that, because the two URLs
+  genuinely differ.
+
 ### Joint offices eat place slots
 
 A combined office (Indiana's Clerk/Treasurer, Montana's Clerk/Recorder/Surveyor,

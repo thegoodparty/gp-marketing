@@ -6,6 +6,8 @@ import {
 	chunkArray,
 	clearPeopleSitemapCache,
 	fetchPeopleSitemapEntries,
+	fetchStateElectionRouteParams,
+	fetchStateElectionSitemapEntries,
 	getSitemapIds,
 	normalizeName,
 	peopleShardForSlug,
@@ -1001,5 +1003,440 @@ describe('buildRaceRouteParams', () => {
 			},
 		]);
 		expect(cityPositionParams).toEqual([]);
+	});
+});
+
+describe('fetchStateElectionSitemapEntries', () => {
+	const originalFetch = globalThis.fetch;
+	const base = 'https://goodparty.org';
+
+	type MockPlace = { slug: string; mtfcc: string; name: string };
+	type MockCity = { slug: string; countyName: string };
+	type MockRace = { slug: string; positionLevel: string };
+
+	/**
+	 * Stands in for the /v1 sweeps the state band reads, and returns the URLs it was
+	 * asked for so a test can assert which queries did *not* happen. `cities`,
+	 * `towns` and `countyChildren` are separate because they are separate upstream
+	 * queries — serving `towns` from the G4110 sweep, or the children from the state
+	 * sweep, would hide the very bugs these tests cover.
+	 */
+	function mockUpstream(opts: {
+		places?: MockPlace[];
+		cities?: MockCity[];
+		towns?: MockCity[];
+		races?: MockRace[];
+		/** county slug → its `children`, as /v1/places?slug=…&includeChildren=true returns them. */
+		countyChildren?: Record<string, Array<{ slug: string; mtfcc: string }>>;
+	}): string[] {
+		const urls: string[] = [];
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = new URL(String(input));
+			urls.push(String(input));
+			const json = (body: unknown) =>
+				new Response(JSON.stringify(body), {
+					status: 200,
+					headers: { 'content-type': 'application/json' },
+				});
+
+			if (url.pathname.endsWith('/v1/races')) return json(opts.races ?? []);
+			// The county walk is the /v1/places call keyed on one slug, not on state.
+			const slug = url.searchParams.get('slug');
+			if (slug) return json([{ children: opts.countyChildren?.[slug] ?? [] }]);
+			// The municipal sweeps are the /v1/places calls that filter on mtfcc.
+			if (url.searchParams.get('mtfcc') === 'G4110') return json(opts.cities ?? []);
+			if (url.searchParams.get('mtfcc') === 'G4040') return json(opts.towns ?? []);
+			return json(opts.places ?? []);
+		}) as typeof fetch;
+		return urls;
+	}
+
+	afterEach(() => {
+		globalThis.fetch = originalFetch;
+	});
+
+	afterAll(() => {
+		globalThis.fetch = originalFetch;
+	});
+
+	// All 51 of these pages were absent from every shard while the counties,
+	// cities and position pages beneath them were listed: the state is not a row
+	// in `places`, so nothing else emits it.
+	test('emits the state index page itself', async () => {
+		mockUpstream({});
+
+		const entries = await fetchStateElectionSitemapEntries('AL', base);
+
+		expect(entries.map((e) => e.url)).toEqual([`${base}/elections/al`]);
+	});
+
+	// A sitemap URL that disagrees with the page's self-referencing canonical
+	// (built from the lowercased path) sends conflicting signals.
+	test('lowercases the state segment to match the page canonical', async () => {
+		mockUpstream({});
+
+		const entries = await fetchStateElectionSitemapEntries('dc', base);
+
+		expect(entries[0]?.url).toBe(`${base}/elections/dc`);
+	});
+
+	test('gives the state a priority at least as high as its counties and cities', async () => {
+		mockUpstream({
+			places: [{ slug: 'al/autauga-county', mtfcc: 'G4020', name: 'Autauga County' }],
+			cities: [{ slug: 'al/prattville', countyName: 'Autauga County' }],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('AL', base);
+		const byUrl = new Map(entries.map((e) => [e.url, e]));
+
+		expect(byUrl.get(`${base}/elections/al`)?.priority).toBe(0.8);
+		expect(byUrl.get(`${base}/elections/al`)?.changeFrequency).toBe('weekly');
+		expect(byUrl.get(`${base}/elections/al/autauga-county`)?.priority).toBe(0.7);
+		expect(byUrl.get(`${base}/elections/al/autauga-county/prattville`)?.priority).toBe(0.7);
+	});
+
+	test('lists the state once even if a place row carries the state slug', async () => {
+		mockUpstream({
+			places: [
+				{ slug: 'al', mtfcc: 'G4020', name: 'Alabama' },
+				{ slug: 'al', mtfcc: 'G5420', name: 'Alabama' },
+			],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('AL', base);
+
+		expect(entries.filter((e) => e.url === `${base}/elections/al`)).toHaveLength(1);
+	});
+
+	// Towns are TOWN_MTFCC, not CITY_MTFCC. This query used to ask for G4110 only,
+	// so New England town pages were in no shard at all even though they render
+	// and their own county pages link to them.
+	test('lists G4040 towns, not just G4110 cities', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/windham-county', mtfcc: 'G4020', name: 'Windham County' }],
+			towns: [{ slug: 'vt/brattleboro-town', countyName: 'Windham County' }],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('VT', base);
+
+		expect(entries.map((e) => e.url)).toContain(
+			`${base}/elections/vt/windham-county/brattleboro-town`,
+		);
+	});
+
+	// The "-town" suffix is part of the slug: /elections/vt/windham-county/brattleboro
+	// 404s. Deriving the segment by stripping the suffix would advertise dead URLs.
+	test('keeps the -town suffix rather than stripping it', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/windham-county', mtfcc: 'G4020', name: 'Windham County' }],
+			towns: [{ slug: 'vt/brattleboro-town', countyName: 'Windham County' }],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('VT', base);
+		const urls = entries.map((e) => e.url);
+
+		expect(urls).not.toContain(`${base}/elections/vt/windham-county/brattleboro`);
+	});
+
+	// A state whose municipal rows are all towns contributed zero municipal URLs
+	// under the G4110-only query, however many towns it had.
+	test('a state with no city rows at all still gets municipal entries', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/orange-county', mtfcc: 'G4020', name: 'Orange County' }],
+			cities: [],
+			towns: [
+				{ slug: 'vt/randolph-town', countyName: 'Orange County' },
+				{ slug: 'vt/chelsea-town', countyName: 'Orange County' },
+			],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('VT', base);
+		const municipal = entries.filter((e) => e.url.split('/').length === 7);
+
+		expect(municipal.map((e) => e.url)).toEqual([
+			`${base}/elections/vt/orange-county/randolph-town`,
+			`${base}/elections/vt/orange-county/chelsea-town`,
+		]);
+	});
+
+	test('cities and towns both land, without double-counting either', async () => {
+		mockUpstream({
+			places: [{ slug: 'ma/worcester-county', mtfcc: 'G4020', name: 'Worcester County' }],
+			cities: [{ slug: 'ma/worcester', countyName: 'Worcester County' }],
+			towns: [{ slug: 'ma/brookfield-town', countyName: 'Worcester County' }],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('MA', base);
+		const urls = entries.map((e) => e.url);
+
+		expect(urls).toContain(`${base}/elections/ma/worcester-county/worcester`);
+		expect(urls).toContain(`${base}/elections/ma/worcester-county/brookfield-town`);
+		expect(new Set(urls).size).toBe(urls.length);
+	});
+
+	// Maine tags some district rows as municipality-shaped; the district filter has
+	// to keep applying to the town sweep, not just the city sweep.
+	test('still filters school districts out of the town sweep', async () => {
+		mockUpstream({
+			places: [{ slug: 'me/androscoggin-county', mtfcc: 'G4020', name: 'Androscoggin County' }],
+			towns: [
+				{ slug: 'me/auburn-town', countyName: 'Androscoggin County' },
+				{ slug: 'me/rsu-52-school-district', countyName: 'Androscoggin County' },
+			],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('ME', base);
+		const urls = entries.map((e) => e.url);
+
+		expect(urls).toContain(`${base}/elections/me/androscoggin-county/auburn-town`);
+		expect(urls).not.toContain(
+			`${base}/elections/me/androscoggin-county/rsu-52-school-district`,
+		);
+	});
+
+	// Connecticut: both state-level municipal sweeps return nothing whatever mtfcc
+	// you ask for, so CT contributed zero municipal URLs even after the town sweep
+	// was added. The towns are reachable from the counties, which is how the county
+	// index pages link to them.
+	test('falls back to walking the counties when the state sweep finds no municipality', async () => {
+		mockUpstream({
+			places: [{ slug: 'ct/fairfield-county', mtfcc: 'G4020', name: 'Fairfield County' }],
+			cities: [],
+			towns: [],
+			countyChildren: {
+				'ct/fairfield-county': [
+					{ slug: 'ct/fairfield-county/bethel-town', mtfcc: 'G4040' },
+					{ slug: 'ct/fairfield-county/greenwich-town', mtfcc: 'G4040' },
+				],
+			},
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('CT', base);
+		const urls = entries.map((e) => e.url);
+
+		expect(urls).toContain(`${base}/elections/ct/fairfield-county/bethel-town`);
+		expect(urls).toContain(`${base}/elections/ct/fairfield-county/greenwich-town`);
+	});
+
+	// The first attempt at this gated on the sweep being empty, and a preview build
+	// showed CT still emitting zero municipal URLs. A row the sweep returns is still
+	// dropped unless its countyName matches a county place, so "returned rows" and
+	// "produced a usable municipality" are different things and the gate has to be
+	// the second one.
+	test('walks the counties when the sweep returns rows that map to no county', async () => {
+		mockUpstream({
+			places: [{ slug: 'ct/fairfield-county', mtfcc: 'G4020', name: 'Fairfield County' }],
+			towns: [{ slug: 'ct/orphan-town', countyName: 'Greater Bridgeport Planning Region' }],
+			countyChildren: {
+				'ct/fairfield-county': [{ slug: 'ct/fairfield-county/darien-town', mtfcc: 'G4040' }],
+			},
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('CT', base);
+		const urls = entries.map((e) => e.url);
+
+		expect(urls).toContain(`${base}/elections/ct/fairfield-county/darien-town`);
+		// The unmappable row is still dropped; it has no county to sit under.
+		expect(urls.some((u) => u.includes('orphan-town'))).toBe(false);
+	});
+
+	// The walk costs one request per county, so it must stay off for the 50 states
+	// whose sweep works. Widening it would be ~3,255 extra calls.
+	test('does not walk the counties when the sweep maps to a county', async () => {
+		const urls = mockUpstream({
+			places: [{ slug: 'al/autauga-county', mtfcc: 'G4020', name: 'Autauga County' }],
+			cities: [{ slug: 'al/prattville', countyName: 'Autauga County' }],
+			countyChildren: {
+				'al/autauga-county': [{ slug: 'al/autauga-county/should-not-appear', mtfcc: 'G4110' }],
+			},
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('AL', base);
+
+		expect(urls.filter((u) => u.includes('includeChildren'))).toHaveLength(0);
+		expect(entries.map((e) => e.url)).not.toContain(
+			`${base}/elections/al/autauga-county/should-not-appear`,
+		);
+	});
+
+	// The children list carries school districts too, and the walk must not turn
+	// them into municipal URLs.
+	test('keeps non-municipal children out of the county walk', async () => {
+		mockUpstream({
+			places: [{ slug: 'ct/hartford-county', mtfcc: 'G4020', name: 'Hartford County' }],
+			countyChildren: {
+				'ct/hartford-county': [
+					{ slug: 'ct/hartford-county/berlin-town', mtfcc: 'G4040' },
+					{ slug: 'ct/hartford-county/berlin-school-district', mtfcc: 'G5420' },
+				],
+			},
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('CT', base);
+		const urls = entries.map((e) => e.url);
+
+		expect(urls).toContain(`${base}/elections/ct/hartford-county/berlin-town`);
+		expect(urls).not.toContain(`${base}/elections/ct/hartford-county/berlin-school-district`);
+	});
+
+	// Town-level *position* pages were collateral damage: buildRaceEntries skips a
+	// city race it cannot map to a county, and towns had no mapping at all.
+	test('town position pages resolve now that towns are in the county lookup', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/windham-county', mtfcc: 'G4020', name: 'Windham County' }],
+			towns: [{ slug: 'vt/brattleboro-town', countyName: 'Windham County' }],
+			races: [{ slug: 'vt/brattleboro-town/town-moderator', positionLevel: 'CITY' }],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('VT', base);
+
+		expect(entries.map((e) => e.url)).toContain(
+			`${base}/elections/vt/windham-county/brattleboro-town/position/town-moderator`,
+		);
+	});
+});
+
+/**
+ * The route-params twin of the band above. These two functions read the same
+ * upstream sweeps and must agree: this one feeds generateStaticParams, so if it
+ * drops a tier the sitemap still advertises it and we publish URLs that were
+ * never prerendered. Covered separately because nothing else fails when only one
+ * of the pair regresses.
+ */
+describe('fetchStateElectionRouteParams', () => {
+	const originalFetch = globalThis.fetch;
+
+	type MockPlace = { slug: string; mtfcc: string; name: string };
+	type MockCity = { slug: string; countyName: string };
+	type MockRace = { slug: string; positionLevel: string };
+
+	function mockUpstream(opts: {
+		places?: MockPlace[];
+		cities?: MockCity[];
+		towns?: MockCity[];
+		races?: MockRace[];
+		countyChildren?: Record<string, Array<{ slug: string; mtfcc: string }>>;
+	}) {
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = new URL(String(input));
+			const json = (body: unknown) =>
+				new Response(JSON.stringify(body), {
+					status: 200,
+					headers: { 'content-type': 'application/json' },
+				});
+
+			if (url.pathname.endsWith('/v1/races')) return json(opts.races ?? []);
+			const slug = url.searchParams.get('slug');
+			if (slug) return json([{ children: opts.countyChildren?.[slug] ?? [] }]);
+			if (url.searchParams.get('mtfcc') === 'G4110') return json(opts.cities ?? []);
+			if (url.searchParams.get('mtfcc') === 'G4040') return json(opts.towns ?? []);
+			return json(opts.places ?? []);
+		}) as typeof fetch;
+	}
+
+	afterEach(() => {
+		globalThis.fetch = originalFetch;
+	});
+
+	afterAll(() => {
+		globalThis.fetch = originalFetch;
+	});
+
+	test('includes G4040 towns in cityParams, not just G4110 cities', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/windham-county', mtfcc: 'G4020', name: 'Windham County' }],
+			towns: [{ slug: 'vt/brattleboro-town', countyName: 'Windham County' }],
+		});
+
+		const { cityParams } = await fetchStateElectionRouteParams('VT');
+
+		expect(cityParams).toEqual([
+			{ state: 'vt', county: 'windham-county', city: 'brattleboro-town' },
+		]);
+	});
+
+	test('a state with no city rows at all still gets cityParams entries', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/orange-county', mtfcc: 'G4020', name: 'Orange County' }],
+			cities: [],
+			towns: [
+				{ slug: 'vt/randolph-town', countyName: 'Orange County' },
+				{ slug: 'vt/chelsea-town', countyName: 'Orange County' },
+			],
+		});
+
+		const { cityParams } = await fetchStateElectionRouteParams('VT');
+
+		expect(cityParams.map((p) => p.city)).toEqual(['randolph-town', 'chelsea-town']);
+	});
+
+	// The pairing that matters: whatever the sitemap advertises at the municipal
+	// tier has to be prerenderable from these params, or we publish URLs that
+	// were never built.
+	test('emits the same municipal set the sitemap band advertises', async () => {
+		const upstream = {
+			places: [{ slug: 'nh/hillsborough-county', mtfcc: 'G4020', name: 'Hillsborough County' }],
+			cities: [{ slug: 'nh/nashua', countyName: 'Hillsborough County' }],
+			towns: [{ slug: 'nh/merrimack-town', countyName: 'Hillsborough County' }],
+		};
+
+		mockUpstream(upstream);
+		const { cityParams } = await fetchStateElectionRouteParams('NH');
+
+		mockUpstream(upstream);
+		const entries = await fetchStateElectionSitemapEntries('NH', 'https://goodparty.org');
+
+		const fromParams = cityParams
+			.map((p) => `https://goodparty.org/elections/${p.state}/${p.county}/${p.city}`)
+			.sort();
+		const fromSitemap = entries
+			.map((e) => e.url)
+			.filter((u) => u.split('/').length === 7 && !u.includes('/position/'))
+			.sort();
+
+		expect(fromParams).toEqual(fromSitemap);
+	});
+
+	// The pair must agree on Connecticut too, or the sitemap advertises CT towns
+	// that were never prerendered.
+	test('walks the counties for a state whose sweep finds no municipality', async () => {
+		mockUpstream({
+			places: [{ slug: 'ct/fairfield-county', mtfcc: 'G4020', name: 'Fairfield County' }],
+			cities: [],
+			towns: [],
+			countyChildren: {
+				'ct/fairfield-county': [{ slug: 'ct/fairfield-county/bethel-town', mtfcc: 'G4040' }],
+			},
+		});
+
+		const { cityParams } = await fetchStateElectionRouteParams('CT');
+
+		expect(cityParams).toEqual([
+			{ state: 'ct', county: 'fairfield-county', city: 'bethel-town' },
+		]);
+	});
+
+	// The position tier needs its own assertion: cityParams can be correct while
+	// cityPositionParams is empty, because the latter resolves the town through
+	// citySlugToCountySlug inside buildRaceRouteParams. That combination prerenders
+	// the town index pages and none of the office pages under them, while the
+	// sitemap advertises both.
+	test('a town race produces cityPositionParams, not just cityParams', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/windham-county', mtfcc: 'G4020', name: 'Windham County' }],
+			towns: [{ slug: 'vt/brattleboro-town', countyName: 'Windham County' }],
+			races: [{ slug: 'vt/brattleboro-town/town-moderator', positionLevel: 'CITY' }],
+		});
+
+		const { cityPositionParams } = await fetchStateElectionRouteParams('VT');
+
+		expect(cityPositionParams).toEqual([
+			{
+				state: 'vt',
+				county: 'windham-county',
+				city: 'brattleboro-town',
+				positionSlug: 'town-moderator',
+			},
+		]);
 	});
 });

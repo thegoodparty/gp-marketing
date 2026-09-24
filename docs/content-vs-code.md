@@ -31,8 +31,8 @@ Studio (the CMS, served at `/studio/main`), do not open a PR:
   `docs/election-templates-manual.md`.
 
 Content published in Studio goes live without a rebuild (a webhook revalidates the
-affected pages). Some content is also written programmatically by AirOps — see
-`docs/airops-sanity-integration.md`.
+affected pages). Content can also be written into Sanity programmatically over the
+API, though nothing is doing that today — see `docs/sanity-api-writes.md`.
 
 ## Code needed — this is a change in this repo
 

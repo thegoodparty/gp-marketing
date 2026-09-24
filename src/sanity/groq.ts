@@ -176,7 +176,13 @@ export const component_testimonialAutoScroll = `_type=="component_testimonialAut
 /*language=textmate*/
 export const component_testimonialBlockWithLink = `_type=="component_testimonialBlockWithLink"=>{...,quotesContentCollection{${quotesContentCollectionGroq}},summaryInfo{${summaryInfoGroq}}}`;
 /*language=textmate*/
-export const sectionsGroq = `_key,_type,${component_pricingBlockGroq},${component_heroGroq},${component_profileHeroGroq},${component_comparisonBlock},${component_stepperBlockGroq},${component_iconContentBlock},${component_imageContentBlock},${component_statsBlock},${component_tabbedImageBlock},${component_featuresBlock},${component_jobOpeningsBlock},${component_twoUpCardBlock},${component_carouselBlock},${component_testimonialBlock},${component_testimonialAutoScroll},${component_faqBlock},${component_blogBlock},${component_bannerBlock},${component_calculatorTextBlock},${component_breadcrumbBlock},${component_teamBlock},${component_featuredBlogBlock},${component_allCtaBlocks},${component_ctaBannerBlock},${component_heroWithSubscribe},${component_newsletterBlock},${component_ctaCardsBlock},${component_blogTopicTagsBlock},${component_candidatesBlock},${component_claimProfileBlock},${component_electionsIndexBlock},${component_electionsPositionHero},${component_electionsPositionContentBlock},${component_electionsSearchHero},${component_featuredCitiesBlock},${component_goodPartyOrgPledge},${component_locationFactsBlock},${component_locationLandingPageHero},${component_profileContentBlock},${component_voterDensityBlock},${component_listOfOfficesBlock},${component_embeddedBlock},${component_clickToCallBlock},${component_teamValuesBlock},${component_testimonialBlockWithLink}`;
+export const component_locationEditorialBlock = `_type=="component_locationEditorialBlock"=>{...,locationEditorialBlockHeader,locationEditorialBlockContent{block_summaryText[]{...,${textBlockGroq}}},locationEditorialBlockDesignSettings,componentSettings}`;
+/*language=textmate*/
+export const component_electionsNearYouBlock = `_type=="component_electionsNearYouBlock"=>{...,componentSettings}`;
+/*language=textmate*/
+export const component_demoRequestBlock = `_type=="component_demoRequestBlock"=>{...,componentSettings}`;
+/*language=textmate*/
+export const sectionsGroq = `_key,_type,${component_pricingBlockGroq},${component_heroGroq},${component_profileHeroGroq},${component_comparisonBlock},${component_stepperBlockGroq},${component_iconContentBlock},${component_imageContentBlock},${component_statsBlock},${component_tabbedImageBlock},${component_featuresBlock},${component_jobOpeningsBlock},${component_twoUpCardBlock},${component_carouselBlock},${component_testimonialBlock},${component_testimonialAutoScroll},${component_faqBlock},${component_blogBlock},${component_bannerBlock},${component_calculatorTextBlock},${component_breadcrumbBlock},${component_teamBlock},${component_featuredBlogBlock},${component_allCtaBlocks},${component_ctaBannerBlock},${component_heroWithSubscribe},${component_newsletterBlock},${component_ctaCardsBlock},${component_blogTopicTagsBlock},${component_candidatesBlock},${component_claimProfileBlock},${component_electionsIndexBlock},${component_electionsPositionHero},${component_electionsPositionContentBlock},${component_electionsSearchHero},${component_featuredCitiesBlock},${component_goodPartyOrgPledge},${component_locationFactsBlock},${component_locationLandingPageHero},${component_profileContentBlock},${component_voterDensityBlock},${component_listOfOfficesBlock},${component_embeddedBlock},${component_clickToCallBlock},${component_teamValuesBlock},${component_testimonialBlockWithLink},${component_locationEditorialBlock},${component_electionsNearYouBlock},${component_demoRequestBlock}`;
 /*language=textmate*/
 export const allCategoriesLinksGroq = `*[_type=="categories"][]{_id,"title":tagOverview.field_name,${categoriesHrefGroq}}`;
 /*language=textmate*/
@@ -308,9 +314,7 @@ export const allArticlesForSearchGroq = `*[_type=="article"] | order(editorialOv
 export const allTermsForSearchGroq = `*[_type=="glossary"] | order(glossaryTermOverview.field_glossaryTerm asc)[]{_id,"title":glossaryTermOverview.field_glossaryTerm,${glossaryTermHrefGroq}}`;
 
 /*language=textmate*/
-export const allFaqsQuery = defineQuery(
-	`*[_type=="faq"] | order(faqOverview.field_question asc, _id asc){_id,_updatedAt,${faQGroq}}`,
-);
+export const allFaqsQuery = defineQuery(`*[_type=="faq"] | order(faqOverview.field_question asc, _id asc){_id,_updatedAt,${faQGroq}}`);
 /*language=textmate*/
 export const faqByIdQuery = defineQuery(`*[_type=="faq"&&_id==$id][0]{_id,_updatedAt,${faQGroq}}`);
 

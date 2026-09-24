@@ -101,7 +101,8 @@ Read the nearest relevant doc rather than loading everything.
 | Changing an existing page-builder block     | `docs/adding-a-component.md`        |
 | Building a block for the election redesign  | `docs/election-redesign-components.md` |
 | Anything about election or candidate pages  | `docs/elections.md`                 |
-| How AirOps writes content into Sanity       | `docs/airops-sanity-integration.md` |
+| The demo request form and its qualifier API | `docs/demo-request-block.md`        |
+| Content written into Sanity over the API    | `docs/sanity-api-writes.md`         |
 | Opening a PR and getting it approved        | the `ship-pr` skill                 |
 | Releasing to production                     | the `deploy-prod` skill             |
 

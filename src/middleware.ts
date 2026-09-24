@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { isGoodPartyProductionHost, shouldNoIndexHost } from '~/lib/crawlableHosts';
 import { lpRedirectDestination } from '~/lib/lp-redirects';
 import {
 	type RedirectMap,
@@ -6,14 +7,6 @@ import {
 	normalizePath,
 } from '~/lib/redirect-map';
 import { urlWithoutHubSpotTrackingParams } from '~/lib/stripHubSpotTrackingParams';
-
-/** Runtime gate — avoids baking preview-only headers into the build (next.config headers). */
-function withPreviewNoIndex(response: NextResponse): NextResponse {
-	if (process.env['VERCEL_ENV'] === 'preview') {
-		response.headers.set('X-Robots-Tag', 'noindex, nofollow');
-	}
-	return response;
-}
 
 /**
  * Browser SDK 2.0 cookie name. Must match {@link AmplitudeCookie.cookieName} in
@@ -32,10 +25,6 @@ function encodeAmplitudeBrowserSdk20Cookie(deviceId: string): string {
 	const json = JSON.stringify({ deviceId });
 	const encoded = encodeURIComponent(json);
 	return btoa(encoded);
-}
-
-function isGoodPartyProductionHost(hostname: string): boolean {
-	return hostname === 'goodparty.org' || hostname.endsWith('.goodparty.org');
 }
 
 /**
@@ -80,17 +69,23 @@ function maybeBootstrapAmplitudeDeviceCookie(request: NextRequest): NextResponse
 }
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
+	const noIndex = shouldNoIndexHost(request.headers.get('host') ?? request.nextUrl.hostname);
+	const withNoIndex = (response: NextResponse): NextResponse => {
+		if (noIndex) response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+		return response;
+	};
+
 	const lpDestination = lpRedirectDestination(request.headers.get('host'), request.nextUrl.pathname);
 	if (lpDestination) {
 		// Keep the query string so UTM/ad params on old lp links survive the hop.
 		const destination = new URL(lpDestination);
 		destination.search = request.nextUrl.search;
-		return withPreviewNoIndex(NextResponse.redirect(destination, 308));
+		return withNoIndex(NextResponse.redirect(destination, 308));
 	}
 
 	const withoutHubSpot = urlWithoutHubSpotTrackingParams(request.nextUrl);
 	if (withoutHubSpot) {
-		return withPreviewNoIndex(NextResponse.redirect(withoutHubSpot, 308));
+		return withNoIndex(NextResponse.redirect(withoutHubSpot, 308));
 	}
 
 	let map: RedirectMap = {};
@@ -108,15 +103,15 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
 			? match.to
 			: new URL(match.to, request.url).toString();
 
-		return withPreviewNoIndex(
+		return withNoIndex(
 			NextResponse.redirect(destination, match.permanent ? 308 : 307),
 		);
 	}
 
 	const bootstrapped = maybeBootstrapAmplitudeDeviceCookie(request);
-	if (bootstrapped) return withPreviewNoIndex(bootstrapped);
+	if (bootstrapped) return withNoIndex(bootstrapped);
 
-	return withPreviewNoIndex(NextResponse.next());
+	return withNoIndex(NextResponse.next());
 }
 
 export const config = {

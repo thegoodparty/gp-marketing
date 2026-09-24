@@ -28,8 +28,11 @@ export async function POST(request: NextRequest) {
 	}
 
 	// The qualifier rate-limits per visitor IP; without this every request would look
-	// like it came from Vercel.
-	const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
+	// like it came from Vercel. Vercel sets x-real-ip from the TCP connection and appends
+	// the same address as the LAST x-forwarded-for entry; anything to the left of it is
+	// visitor-supplied and untrusted.
+	const forwarded = request.headers.get('x-forwarded-for')?.split(',').map(s => s.trim()).filter(Boolean);
+	const clientIp = request.headers.get('x-real-ip')?.trim() || forwarded?.at(-1);
 
 	try {
 		const res = await fetch(QUALIFIER_URL, {

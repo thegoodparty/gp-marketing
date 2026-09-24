@@ -54,14 +54,27 @@ async function post(body: unknown, headers: Record<string, string> = {}): Promis
 
 describe('POST /api/demo-request', () => {
 	test('forwards the answers to the fixed qualifier endpoint and returns its verdict', async () => {
-		const res = await post(ANSWERS, { 'x-forwarded-for': '203.0.113.9, 10.0.0.1' });
+		const res = await post(ANSWERS, { 'x-real-ip': '198.51.100.7' });
 
 		expect(res.status).toBe(200);
 		expect(calls).toHaveLength(1);
 		expect(calls[0]?.url).toBe('https://demo-qualifier-production.up.railway.app/qualify');
 		expect(calls[0]?.body).toMatchObject(ANSWERS);
-		expect(calls[0]?.headers['X-Forwarded-For']).toBe('203.0.113.9');
+		expect(calls[0]?.headers['X-Forwarded-For']).toBe('198.51.100.7');
 		expect(await res.json()).toMatchObject({ outcome: 'pass', calendar_url: 'https://meetings.hubspot.com/example' });
+	});
+
+	test('ignores a visitor-supplied x-forwarded-for prefix and forwards the platform-appended address', async () => {
+		// A visitor can send their own x-forwarded-for; Vercel appends the real address last.
+		await post(ANSWERS, { 'x-forwarded-for': '1.2.3.4, 203.0.113.9' });
+
+		expect(calls[0]?.headers['X-Forwarded-For']).toBe('203.0.113.9');
+	});
+
+	test('sends no forwarded address when the platform provided none', async () => {
+		await post(ANSWERS);
+
+		expect(calls[0]?.headers).not.toHaveProperty('X-Forwarded-For');
 	});
 
 	test('passes a qualifier validation message through with its 400 status', async () => {

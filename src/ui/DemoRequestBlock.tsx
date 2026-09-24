@@ -313,7 +313,8 @@ export function DemoRequestBlock(props: DemoRequestBlockProps) {
 		tourCard,
 	} = styles({ backgroundColor: props.backgroundColor ?? 'cream' });
 
-	const firstName = result?.first_name?.trim() || 'there';
+	const firstName = result?.first_name?.trim() || answers.firstName.trim() || 'there';
+	const cityName = result?.city?.trim() || answers.city.trim() || 'your city';
 
 	return (
 		<article className={cn(base(), props.className)} data-component='DemoRequestBlock'>
@@ -584,8 +585,8 @@ export function DemoRequestBlock(props: DemoRequestBlockProps) {
 									Pick a time, {firstName}
 								</Text>
 								<Text styleType='body-2'>
-									Fifteen to twenty minutes with someone from our team. We will pull up the voter file for {result.city ?? 'your city'}{' '}
-									and walk through what the next two weeks should look like.
+									Fifteen to twenty minutes with someone from our team. We will pull up the voter file for {cityName} and walk
+									through what the next two weeks should look like.
 								</Text>
 								{result.calendar_url && (
 									<>

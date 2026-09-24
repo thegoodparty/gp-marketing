@@ -25,7 +25,6 @@ export const Default: Story = {
 			},
 			{ title: 'Your next two weeks', copy: 'What to do first, and how Campaign Success works alongside you.' },
 		],
-		apiEndpoint: 'https://demo-qualifier-production.up.railway.app/qualify',
 	},
 };
 

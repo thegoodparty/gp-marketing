@@ -16,7 +16,6 @@ const section = {
 	field_talkingPoints: [
 		{ _key: 'a', _type: 'talkingPoint', field_title: 'Your race', field_copy: 'Who is voting and what it takes to win.' },
 	],
-	field_apiEndpoint: 'https://demo-qualifier-production.up.railway.app/qualify',
 	field_backgroundVariant: 'cream',
 	componentSettings: null,
 } as unknown as Parameters<typeof DemoRequestBlockSection>[0];

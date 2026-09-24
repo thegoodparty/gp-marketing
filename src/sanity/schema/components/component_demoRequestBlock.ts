@@ -6,7 +6,7 @@ export const component_demoRequestBlock = {
 	title: 'Demo Request Block',
 	name: 'component_demoRequestBlock',
 	description:
-		'Three-step demo request form. Answers are checked by the demo qualifier service; candidates who pass see the sales calendar, everyone else is sent to the product tour.',
+		'Three-step demo request form. Answers are checked by the demo qualifier service (via /api/demo-request); candidates who pass see the sales calendar, everyone else is sent to the product tour.',
 	type: 'object',
 	icon: getIcon('Development'),
 	fields: [
@@ -40,14 +40,6 @@ export const component_demoRequestBlock = {
 					preview: { select: { title: 'field_title', subtitle: 'field_copy' } },
 				},
 			],
-		},
-		{
-			title: 'Qualifier API Endpoint',
-			name: 'field_apiEndpoint',
-			description: 'POST endpoint of the demo qualifier service. It decides calendar vs. product tour and writes the contact to HubSpot.',
-			type: 'url',
-			initialValue: 'https://demo-qualifier-production.up.railway.app/qualify',
-			validation: (rule: any) => rule.uri({ scheme: ['https'] }),
 		},
 		{
 			title: 'Background Variant',

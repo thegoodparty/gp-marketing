@@ -13,8 +13,9 @@ the calendar. Everyone else is sent to the product tour.
 2. **Step 2, goals and stage:** what they want help with (multi-select) and where the
    campaign is today.
 3. **Step 3, contact:** name, email, mobile, and an SMS consent checkbox.
-4. On submit the block POSTs the answers to the qualifier API and shows a short
-   "checking" state.
+4. On submit the block POSTs the answers to the same-origin route
+   `/api/demo-request` ([src/app/api/demo-request/route.ts](../src/app/api/demo-request/route.ts)),
+   which forwards them to the qualifier service, and shows a short "checking" state.
 5. **Pass:** the HubSpot meetings calendar renders inline (through `EmbedHtml`, so the
    usual host allowlist applies) with a fallback link.
 6. **Tour:** a product tour card with a countdown, then a redirect to `/product-tour`.
@@ -26,10 +27,12 @@ in the page source.
 
 The decision is made by a small service that marketing owns, outside this repo:
 
-- **Endpoint:** the block's `Qualifier API Endpoint` field, default
+- **Endpoint:** fixed in the proxy route as
   `https://demo-qualifier-production.up.railway.app/qualify` (Railway project
-  `demo-qualifier`). Source and env reference live in the Growth team's
-  `demo-qualifier/service` folder (Jack Nagel).
+  `demo-qualifier`), overridable only through the `DEMO_QUALIFIER_URL` environment
+  variable. It is deliberately not a Sanity field: the form posts PII, and a content
+  field would let any Studio account redirect it. Source and env reference live in the
+  Growth team's `demo-qualifier/service` folder (Jack Nagel).
 - **What it does:** estimates the town's population (Census, with a model fallback),
   normalizes a free-text office onto a fixed taxonomy, applies hard gates (population
   floor, office type, at least one qualifying goal, campaign stage), writes the contact
@@ -37,9 +40,9 @@ The decision is made by a small service that marketing owns, outside this repo:
   `{ outcome: 'tour', redirect_url, redirect_seconds }`.
 - **Rules and thresholds** are environment variables on that service, not code here. To
   change who qualifies, change them there.
-- **CORS:** the service allows `goodparty.org`, `www.goodparty.org`,
-  `http://localhost:3009`, and `https://*.vercel.app`, so the flow works on local dev
-  and on Vercel preview deployments as well as production.
+- **Origins:** the browser only ever calls the same-origin proxy, so local dev and
+  Vercel previews work without any CORS setup. The service itself still restricts
+  cross-origin callers to `goodparty.org`, `localhost:3009`, and `*.vercel.app`.
 
 If the API is unreachable the block returns the visitor to the contact step with a
 generic error and nothing is lost on the visitor's side, but no contact is written.
@@ -50,7 +53,6 @@ generic error and nothing is lost on the visitor's side, but no contact is writt
 | ------------------------ | ------------------------------------------------------------ |
 | Heading, Body            | Left-column copy                                             |
 | Talking Points           | Numbered list of what the demo covers                        |
-| Qualifier API Endpoint   | Where answers are posted (https only)                        |
 | Background Variant       | `cream` (default) or `midnight`                              |
 
 ## Analytics

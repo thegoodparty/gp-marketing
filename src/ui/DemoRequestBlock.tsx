@@ -12,7 +12,8 @@ import { Button, ComponentButton } from './Inputs/Button.tsx';
 import { TextInput } from './Inputs/TextInput.tsx';
 import { Text } from './Text.tsx';
 
-const DEFAULT_API_ENDPOINT = 'https://demo-qualifier-production.up.railway.app/qualify';
+// Same-origin proxy (src/app/api/demo-request/route.ts); the qualifier's real address lives there.
+const API_ENDPOINT = '/api/demo-request';
 const DEFAULT_TOUR_URL = '/product-tour';
 const MIN_CHECKING_MS = 1800;
 
@@ -99,7 +100,6 @@ export type DemoRequestBlockProps = {
 	heading?: string;
 	body?: string;
 	talkingPoints?: DemoRequestTalkingPoint[];
-	apiEndpoint?: string;
 	backgroundColor?: 'cream' | 'midnight';
 };
 
@@ -175,7 +175,6 @@ export function DemoRequestBlock(props: DemoRequestBlockProps) {
 	const submittingRef = useRef(false);
 	const cardRef = useRef<HTMLDivElement>(null);
 
-	const apiEndpoint = props.apiEndpoint || DEFAULT_API_ENDPOINT;
 	const stepIndex = step === 'race' ? 1 : step === 'goals' ? 2 : 3;
 
 	useEffect(() => {
@@ -259,10 +258,10 @@ export function DemoRequestBlock(props: DemoRequestBlockProps) {
 			source_url: typeof window !== 'undefined' ? window.location.href : '',
 		};
 
-		fetch(apiEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+		fetch(API_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
 			.then(async response => {
 				const data: unknown = await response.json().catch(() => null);
-				if (!response.ok || !isQualifyResponse(data) || !data.outcome) {
+				if (!response.ok || !isQualifyResponse(data) || (data.outcome !== 'pass' && data.outcome !== 'tour')) {
 					// Only a message the qualifier wrote for the candidate (a 400 validation reply) is shown
 					// verbatim; anything else falls back to the generic copy below.
 					const apiMessage = response.status === 400 && isQualifyResponse(data) && data.error ? data.error : null;

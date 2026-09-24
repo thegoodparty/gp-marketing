@@ -8311,13 +8311,6 @@
           },
           "optional": true
         },
-        "field_apiEndpoint": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          },
-          "optional": true
-        },
         "field_backgroundVariant": {
           "type": "objectAttribute",
           "value": {

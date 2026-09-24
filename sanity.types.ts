@@ -1462,7 +1462,6 @@ export type Component_demoRequestBlock = {
 		_type: 'talkingPoint';
 		_key: string;
 	}>;
-	field_apiEndpoint?: string;
 	field_backgroundVariant?: 'cream' | 'midnight';
 	componentSettings?: ComponentSettings;
 };
@@ -10724,7 +10723,6 @@ export type GoodpartyOrg_homeQueryResult = {
 						_type: 'talkingPoint';
 						_key: string;
 					}>;
-					field_apiEndpoint?: string;
 					field_backgroundVariant?: 'cream' | 'midnight';
 					componentSettings: ComponentSettings | null;
 			  }
@@ -32741,7 +32739,6 @@ export type Experiment_variantsByExperimentIdQueryResult = Array<{
 						_type: 'talkingPoint';
 						_key: string;
 					}>;
-					field_apiEndpoint?: string;
 					field_backgroundVariant?: 'cream' | 'midnight';
 					componentSettings: ComponentSettings | null;
 			  }
@@ -54759,7 +54756,6 @@ export type ActiveVariantsByPageIdQueryResult = Array<{
 						_type: 'talkingPoint';
 						_key: string;
 					}>;
-					field_apiEndpoint?: string;
 					field_backgroundVariant?: 'cream' | 'midnight';
 					componentSettings: ComponentSettings | null;
 			  }
@@ -76779,7 +76775,6 @@ export type GoodpartyOrg_allArticlesQueryResult = {
 						_type: 'talkingPoint';
 						_key: string;
 					}>;
-					field_apiEndpoint?: string;
 					field_backgroundVariant?: 'cream' | 'midnight';
 					componentSettings: ComponentSettings | null;
 			  }
@@ -98837,7 +98832,6 @@ export type CategoriesQueryResult = {
 						_type: 'talkingPoint';
 						_key: string;
 					}>;
-					field_apiEndpoint?: string;
 					field_backgroundVariant?: 'cream' | 'midnight';
 					componentSettings: ComponentSettings | null;
 			  }
@@ -120923,7 +120917,6 @@ export type TopicsQueryResult = {
 						_type: 'talkingPoint';
 						_key: string;
 					}>;
-					field_apiEndpoint?: string;
 					field_backgroundVariant?: 'cream' | 'midnight';
 					componentSettings: ComponentSettings | null;
 			  }
@@ -145069,7 +145062,6 @@ export type GoodpartyOrg_contactQueryResult = {
 						_type: 'talkingPoint';
 						_key: string;
 					}>;
-					field_apiEndpoint?: string;
 					field_backgroundVariant?: 'cream' | 'midnight';
 					componentSettings: ComponentSettings | null;
 			  }
@@ -167092,7 +167084,6 @@ export type GoodpartyOrg_landingPagesAndPolicyQueryResult =
 								_type: 'talkingPoint';
 								_key: string;
 							}>;
-							field_apiEndpoint?: string;
 							field_backgroundVariant?: 'cream' | 'midnight';
 							componentSettings: ComponentSettings | null;
 					  }
@@ -189126,7 +189117,6 @@ export type GoodpartyOrg_electionsQueryResult = {
 						_type: 'talkingPoint';
 						_key: string;
 					}>;
-					field_apiEndpoint?: string;
 					field_backgroundVariant?: 'cream' | 'midnight';
 					componentSettings: ComponentSettings | null;
 			  }
@@ -211148,7 +211138,6 @@ export type GoodpartyOrg_candidatesQueryResult = {
 						_type: 'talkingPoint';
 						_key: string;
 					}>;
-					field_apiEndpoint?: string;
 					field_backgroundVariant?: 'cream' | 'midnight';
 					componentSettings: ComponentSettings | null;
 			  }
@@ -233170,7 +233159,6 @@ export type GoodpartyOrg_profileQueryResult = {
 						_type: 'talkingPoint';
 						_key: string;
 					}>;
-					field_apiEndpoint?: string;
 					field_backgroundVariant?: 'cream' | 'midnight';
 					componentSettings: ComponentSettings | null;
 			  }
@@ -255192,7 +255180,6 @@ export type GoodpartyOrg_allComponentsQueryResult = {
 						_type: 'talkingPoint';
 						_key: string;
 					}>;
-					field_apiEndpoint?: string;
 					field_backgroundVariant?: 'cream' | 'midnight';
 					componentSettings: ComponentSettings | null;
 			  }
@@ -283026,7 +283013,6 @@ export type GlobalElectionTemplateQueryResult = {
 						_type: 'talkingPoint';
 						_key: string;
 					}>;
-					field_apiEndpoint?: string;
 					field_backgroundVariant?: 'cream' | 'midnight';
 					componentSettings: ComponentSettings | null;
 			  }
@@ -305076,7 +305062,6 @@ export type CustomElectionTemplateByIdQueryResult = {
 						_type: 'talkingPoint';
 						_key: string;
 					}>;
-					field_apiEndpoint?: string;
 					field_backgroundVariant?: 'cream' | 'midnight';
 					componentSettings: ComponentSettings | null;
 			  }

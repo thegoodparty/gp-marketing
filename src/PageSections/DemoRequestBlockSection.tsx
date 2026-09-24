@@ -13,7 +13,6 @@ export function DemoRequestBlockSection(section: Extract<Sections, { _type: 'com
 					title: point.field_title ?? '',
 					copy: point.field_copy ?? '',
 				}))}
-				apiEndpoint={section.field_apiEndpoint ? stegaClean(section.field_apiEndpoint) : undefined}
 				backgroundColor={section.field_backgroundVariant ? stegaClean(section.field_backgroundVariant) : undefined}
 			/>
 		</section>

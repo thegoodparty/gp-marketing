@@ -287,4 +287,29 @@ describe('DemoRequestBlock', () => {
 		release?.();
 		await waitUntil(() => card().textContent?.includes('Pick a time') ?? false);
 	});
+	test('escapes the calendar URL before it enters the embed markup, so a quote cannot truncate it', async () => {
+		// A value with a double quote closes the data-src attribute early in the raw
+		// template. DOMParser then sees a truncated URL with no ?embed=true, and the
+		// rest of the string lands as junk children of the container.
+		const hostile = 'https://meetings.hubspot.com/x"><img src=x>';
+		fetchResponse = async () => ({ ok: true, status: 200, body: { outcome: 'pass', calendar_url: hostile } });
+
+		await render();
+		await fillRaceAndGoals();
+		await fillContact();
+		await submitForm();
+		await waitUntil(() => card().textContent?.includes('Pick a time, Jordan') ?? false);
+		await waitUntil(() => card().querySelector('iframe') !== null);
+
+		const src = card().querySelector('iframe')!.getAttribute('src')!;
+		// The attribute boundary held: the query string survived instead of being cut at the quote.
+		expect(src.endsWith('?embed=true')).toBe(true);
+		expect(src).toContain('%22');
+		expect(src).not.toContain('"');
+		// Still on an allowed host, and the parsed embed came from the container we wrote, not junk.
+		expect(new URL(src).hostname).toBe('meetings.hubspot.com');
+		// The plain link is untouched: React escapes that attribute itself.
+		expect(card().querySelector('a[target="_blank"]')?.getAttribute('href')).toBe(hostile);
+	});
+
 });

@@ -568,7 +568,7 @@ export async function getPlacesByState(params: {
 }
 
 /** Normalize place name for comparison (strip punctuation, lowercase). */
-function normalizeName(name: string): string {
+export function normalizeName(name: string): string {
 	return name.replace(/[.\s''\-]/g, '').toLowerCase();
 }
 

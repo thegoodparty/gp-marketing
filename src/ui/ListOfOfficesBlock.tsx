@@ -180,11 +180,13 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 	 * are in the HTML, and filtering the array meant a location page linked just
 	 * the first page of the default year: 5 of Harris County's 20 positions,
 	 * 3 of Texas's 15. The rows the filters exclude carry no visible weight.
+	 *
+	 * The set holds the office objects themselves rather than their ids. The
+	 * election API sends place races without an id, so every office on a
+	 * location page arrived as "undefined", one visible row matched them all,
+	 * and the page showed every year at once.
 	 */
-	const visibleIds = useMemo(
-		() => new Set(filteredOffices.slice(0, visibleCount).map(office => office.id)),
-		[filteredOffices, visibleCount],
-	);
+	const visibleOffices = useMemo(() => new Set(filteredOffices.slice(0, visibleCount)), [filteredOffices, visibleCount]);
 	const hasMore = visibleCount < filteredOffices.length;
 
 	useEffect(() => {
@@ -293,7 +295,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 										// The wrapper carries the hidden attribute because it has no display
 										// class of its own; putting it on the row itself loses to `flex`.
 										return (
-											<div key={office.id} hidden={!visibleIds.has(office.id)}>
+											<div key={office.id} hidden={!visibleOffices.has(office)}>
 												{office.href ? (
 													<Anchor
 														href={office.href}
@@ -335,7 +337,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 								);
 
 								return (
-									<div key={office.id} hidden={!visibleIds.has(office.id)}>
+									<div key={office.id} hidden={!visibleOffices.has(office)}>
 										{office.href ? (
 											<Anchor href={office.href} onClick={() => handleOfficeClick(office)} className={officeCard()}>
 												{CardContent}

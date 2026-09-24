@@ -288,6 +288,17 @@ export function formatElectionDateFromApi(dateStr: string | undefined): string {
 	return new Date(dateStr).toLocaleDateString('en-US', LOCALE_DATE_OPTIONS);
 }
 
+const SHORT_DATE_OPTIONS: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+
+/** "Nov 4, 2026": the compact form the nearby offices rows use so the date fits one line. */
+export function formatElectionDateShortFromApi(dateStr: string | undefined): string {
+	if (!dateStr) return 'TBD';
+	if (DATE_ONLY_REGEX.test(dateStr)) {
+		return parseDateOnlyAsLocal(dateStr).toLocaleDateString('en-US', SHORT_DATE_OPTIONS);
+	}
+	return new Date(dateStr).toLocaleDateString('en-US', SHORT_DATE_OPTIONS);
+}
+
 /**
  * Returns the calendar year from a date string that may be ISO date-only (YYYY-MM-DD)
  * or a pre-formatted string like "November 5, 2026". Uses local-date parsing for ISO to avoid timezone shift.

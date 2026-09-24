@@ -53,6 +53,8 @@ import { LocationEditorialBlockSection } from '~/PageSections/LocationEditorialB
 
 import { ElectionsNearYouBlockSection } from '~/PageSections/ElectionsNearYouBlockSection';
 
+import { DemoRequestBlockSection } from '~/PageSections/DemoRequestBlockSection';
+
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
 
 export type { TokenMap };
@@ -634,6 +636,12 @@ export function PageSections(props: Props) {
 						return (
 							<Boundary key={section._key} componentName='Elections Near You Block'>
 								<ElectionsNearYouBlockSection {...section} />
+							</Boundary>
+						);
+					case 'component_demoRequestBlock':
+						return (
+							<Boundary key={section._key} componentName='Demo Request Block'>
+								<DemoRequestBlockSection {...section} />
 							</Boundary>
 						);
 					default:

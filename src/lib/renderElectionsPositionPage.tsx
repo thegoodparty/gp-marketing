@@ -4,6 +4,7 @@ import {
 	buildPositionTokens,
 	type PositionPageContext,
 } from '~/lib/electionsTemplateHelpers';
+import { loadPositionOfficeholders } from '~/lib/positionOfficeholders';
 import { renderElectionTemplatePage } from '~/lib/renderElectionTemplatePage';
 
 export type PositionTemplateContext = PositionPageContext & {
@@ -11,7 +12,13 @@ export type PositionTemplateContext = PositionPageContext & {
 	raceSlug?: string;
 };
 
-export async function renderElectionsPositionPage(ctx: PositionTemplateContext) {
+export async function renderElectionsPositionPage(input: PositionTemplateContext) {
+	// Every position route renders through here, so the content block's
+	// officeholder rows are loaded once, in one place, rather than in each route.
+	const ctx: PositionTemplateContext = {
+		...input,
+		officeholders: input.officeholders ?? (await loadPositionOfficeholders(input.race?.positionId)),
+	};
 	const schemas = buildPositionPageSchemas(ctx);
 
 	return renderElectionTemplatePage({

@@ -54,6 +54,9 @@ export type ElectionsPositionHeroCandidate = {
 	href?: string;
 	isWinner?: boolean;
 	avatar?: string;
+	/** The seat within the office, when the candidacy carries one; the content block's filter reads it. */
+	seatName?: string;
+	seatValue?: string;
 };
 
 export type ElectionsPositionHeroWinner = {
@@ -124,7 +127,16 @@ function ArrowDownIcon(props: SVGProps<SVGSVGElement>) {
 
 function CheckIcon(props: SVGProps<SVGSVGElement>) {
 	return (
-		<svg width={20} height={20} viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg' aria-label='Winner' role='img' {...props}>
+		<svg
+			width={20}
+			height={20}
+			viewBox='0 0 20 20'
+			fill='none'
+			xmlns='http://www.w3.org/2000/svg'
+			aria-label='Winner'
+			role='img'
+			{...props}
+		>
 			<path d='m4 10.5 4 4 8-9' stroke='currentColor' strokeWidth={1.75} strokeLinecap='round' strokeLinejoin='round' />
 		</svg>
 	);
@@ -135,7 +147,11 @@ function PartyMark({ candidate, className }: { candidate: ElectionsPositionHeroC
 		return <Logo width={27} height={20} aria-label='Took the GoodParty.org Pledge' role='img' />;
 	}
 	const color =
-		candidate.partyClass === 'democrat' ? 'bg-goodparty-blue' : candidate.partyClass === 'republican' ? 'bg-goodparty-red' : 'bg-midnight-300';
+		candidate.partyClass === 'democrat'
+			? 'bg-goodparty-blue'
+			: candidate.partyClass === 'republican'
+				? 'bg-goodparty-red'
+				: 'bg-midnight-300';
 	return <span className={cn(className, color)} aria-hidden />;
 }
 
@@ -218,12 +234,15 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 				const from = legs[i]?.getTime();
 				const to = legs[i + 1]?.getTime();
 				if (from === undefined || to === undefined) continue;
-				if (today <= to) return today <= from ? anchorAt(i) : anchorAt(i) + ((today - from) / (to - from)) * (anchorAt(i + 1) - anchorAt(i));
+				if (today <= to)
+					return today <= from ? anchorAt(i) : anchorAt(i) + ((today - from) / (to - from)) * (anchorAt(i + 1) - anchorAt(i));
 			}
 			return 1;
 		})();
 		const pct = (value: number) => `${(value * 100).toFixed(1)}%`;
-		const labels = [start ? 'Filing opens' : null, deadline ? 'Filing deadline' : null, 'Election day'].filter((label): label is string => label !== null);
+		const labels = [start ? 'Filing opens' : null, deadline ? 'Filing deadline' : null, 'Election day'].filter(
+			(label): label is string => label !== null,
+		);
 		return (
 			<div className='mt-auto flex flex-col gap-2.5' data-testid='position-hero-timeline'>
 				<div className={s.track()}>
@@ -400,7 +419,11 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 						))}
 					</ul>
 				)}
-				<CardButton href={decided ? (props.resultsHref ?? props.candidatesHref) : props.candidatesHref} label={buttonLabel} className={s.button()} />
+				<CardButton
+					href={decided ? (props.resultsHref ?? props.candidatesHref) : props.candidatesHref}
+					label={buttonLabel}
+					className={s.button()}
+				/>
 			</div>
 		);
 	};

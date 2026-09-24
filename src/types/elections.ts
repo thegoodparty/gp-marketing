@@ -51,6 +51,14 @@ export interface CandidacyItem {
 	urls?: string[];
 	positionDescription?: string;
 	electionFrequency?: number[];
+	/**
+	 * The seat within the office ("District" / "3"). Not on the feed yet; requested
+	 * from the election data team on 2026-09-24 to mirror the officeholders feed.
+	 * The position page's seat filter switches on once every row carries one.
+	 */
+	subAreaName?: string | null;
+	subAreaValue?: string | null;
+	Position?: { subAreaName?: string | null; subAreaValue?: string | null } | null;
 	Stances?: Array<{
 		Issue?: { name?: string };
 		stanceStatement?: string;
@@ -91,6 +99,8 @@ export interface RaceDetail {
 	partisanType?: string;
 	/** Seats up in this race (BallotReady number_of_seats). Drives the hero's multiple-winner state. */
 	numberOfSeats?: number | null;
+	/** BallotReady position id. Joins the race to its current officeholders on the position page. */
+	positionId?: string | null;
 	Place?: PlaceWithFacts & {
 		parent?: { name: string; slug: string; state: string; geoId?: string };
 	};
@@ -132,14 +142,12 @@ export interface FindByRaceIdResponse {
 		id: number;
 		vanityPath: string;
 		status: string;
-		content:
-			| {
-					about?: {
-						bio?: string;
-						issues?: Array<{ title?: string; description?: string }>;
-					};
-			  }
-			| null;
+		content: {
+			about?: {
+				bio?: string;
+				issues?: Array<{ title?: string; description?: string }>;
+			};
+		} | null;
 		domain: { name: string; status: string } | null;
 	} | null;
 	campaignPositions: Array<{

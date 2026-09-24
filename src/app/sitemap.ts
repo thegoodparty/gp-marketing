@@ -33,7 +33,7 @@ export function generateSitemaps() {
 export default async function sitemap({ id }: { id: number }): Promise<MetadataRoute.Sitemap> {
 	const n = Number(id);
 	const base = getBaseUrl();
-	// Shard 0 is marketing pages only; /people now lives in its own alphabetical band.
+	// Shard 0 is marketing pages only; /people now lives in its own id-sharded band.
 	if (n === 0) {
 		return fetchMainSitemapEntries(base);
 	}
@@ -44,7 +44,9 @@ export default async function sitemap({ id }: { id: number }): Promise<MetadataR
 	const peopleIdx = n - PEOPLE_SITEMAP_BAND_START;
 	if (peopleIdx >= 0 && peopleIdx < PEOPLE_SITEMAP_SHARDS.length) {
 		const shard = PEOPLE_SITEMAP_SHARDS[peopleIdx];
-		if (shard) return fetchPeopleSitemapEntries(base, shard);
+		// Shard 0 is a real shard, so this cannot be a truthiness test: the
+		// previous `if (shard)` would have served the first people shard empty.
+		if (shard !== undefined) return fetchPeopleSitemapEntries(base, shard);
 	}
 	return [];
 }

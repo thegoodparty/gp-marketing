@@ -10,8 +10,9 @@ import {
 	fetchStateElectionSitemapEntries,
 	getSitemapIds,
 	normalizeName,
-	peopleShardForSlug,
+	peopleShardForPersonId,
 	PEOPLE_SITEMAP_BAND_START,
+	PEOPLE_SITEMAP_SHARD_COUNT,
 	PEOPLE_SITEMAP_SHARDS,
 	stripCountySuffix,
 	US_STATE_CODES,
@@ -21,24 +22,56 @@ import {
 } from './sitemap-entries';
 
 describe('people sitemap shards', () => {
-	test('maps slugs to a–z shards by first character', () => {
-		expect(peopleShardForSlug('jane-doe')).toBe('j');
-		expect(peopleShardForSlug('Abe-Lincoln')).toBe('a');
+	const uuid = (hex8: string) => `${hex8}-1111-2222-3333-444444444444`;
+
+	test('shards on the 8 hex chars the canonical URL ends in', () => {
+		expect(peopleShardForPersonId(uuid('00000000'))).toBe(0);
+		expect(peopleShardForPersonId(uuid('00000041'))).toBe(0x41 % PEOPLE_SITEMAP_SHARD_COUNT);
+		// The dashes are not part of the suffix, and the suffix is lowercased, so
+		// the same id in either casing has to land in the same file.
+		expect(peopleShardForPersonId(uuid('AAAAAAAA'))).toBe(peopleShardForPersonId(uuid('aaaaaaaa')));
 	});
 
-	test('non-letter leading characters fall into the "other" shard', () => {
-		expect(peopleShardForSlug('123-numeric')).toBe('other');
-		expect(peopleShardForSlug('-leading-hyphen')).toBe('other');
-		expect(peopleShardForSlug('')).toBe('other');
+	test('every shard is in range, and an unparseable id still gets one', () => {
+		for (const hex of ['ffffffff', '0000000f', 'deadbeef', 'b30c2996']) {
+			const shard = peopleShardForPersonId(uuid(hex));
+			expect(shard).toBeGreaterThanOrEqual(0);
+			expect(shard).toBeLessThan(PEOPLE_SITEMAP_SHARD_COUNT);
+		}
+		// Not a throw and not -1: a person with no shard is a person with no
+		// sitemap entry, which is the one outcome this band must never produce.
+		expect(peopleShardForPersonId('')).toBe(0);
+		expect(peopleShardForPersonId('----')).toBe(0);
+	});
+
+	/**
+	 * The point of the whole scheme. Alphabetical shards put 71,025 URLs in `j`,
+	 * over the protocol's 50,000 ceiling, because first names cluster on a few
+	 * letters. Ids do not cluster, so this asserts the property that replaced
+	 * the letter — an even split — rather than re-asserting today's corpus size.
+	 */
+	test('spreads ids evenly enough to stay under the 50k ceiling', () => {
+		const counts = new Array<number>(PEOPLE_SITEMAP_SHARD_COUNT).fill(0);
+		const sample = 64_000;
+		for (let i = 0; i < sample; i++) {
+			// Walks the suffix space rather than sampling it, so the test is
+			// deterministic and still covers every low-bit pattern.
+			const hex = (i * 2654435761 % 0x100000000).toString(16).padStart(8, '0');
+			const shard = peopleShardForPersonId(uuid(hex));
+			counts[shard] = (counts[shard] ?? 0) + 1;
+		}
+		const mean = sample / PEOPLE_SITEMAP_SHARD_COUNT;
+		expect(Math.max(...counts)).toBeLessThan(mean * 1.2);
+		expect(Math.min(...counts)).toBeGreaterThan(mean * 0.8);
 	});
 
 	// The candidate band used to sit between the state elections and the people
 	// band. Retiring it moved the people band down by one state-band's width; if
 	// this drifts from src/app/sitemap.ts's arithmetic the shards silently serve
 	// each other's content.
-	test('there are 27 shards (a–z + other) starting straight after the state band', () => {
-		expect(PEOPLE_SITEMAP_SHARDS).toHaveLength(27);
-		expect(PEOPLE_SITEMAP_SHARDS[26]).toBe('other');
+	test('the shard list runs 0..N-1 straight after the state band', () => {
+		expect(PEOPLE_SITEMAP_SHARDS).toHaveLength(PEOPLE_SITEMAP_SHARD_COUNT);
+		expect([...PEOPLE_SITEMAP_SHARDS]).toEqual([...Array(PEOPLE_SITEMAP_SHARD_COUNT).keys()]);
 		expect(PEOPLE_SITEMAP_BAND_START).toBe(1 + US_STATE_CODES.length);
 	});
 
@@ -57,6 +90,14 @@ describe('fetchPeopleSitemapEntries', () => {
 	const aliceId = 'aaaaaaaa-1111-2222-3333-444444444444';
 	const bobId = 'bbbbbbbb-1111-2222-3333-444444444444';
 	const carolId = 'cccccccc-1111-2222-3333-444444444444';
+
+	/**
+	 * These three fixtures used to be isolated from each other by the first
+	 * letter of their slug. Shards are keyed on the id now, so the isolation has
+	 * to be read off the id — the three land in shards 42, 59 and 12, which is
+	 * what keeps "alice's shard" a meaningful assertion.
+	 */
+	const shardOf = peopleShardForPersonId;
 
 	type MockPerson = { id: string; slug: string; state: string | null };
 
@@ -163,7 +204,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			candidacies: { WY: [aliceId] },
 		});
 
-		const entries = await fetchPeopleSitemapEntries(base, 'a');
+		const entries = await fetchPeopleSitemapEntries(base, shardOf(aliceId));
 
 		expect(entries.map((e) => e.url)).toEqual([`${base}/people/alice-smith-aaaaaaaa`]);
 	});
@@ -180,9 +221,9 @@ describe('fetchPeopleSitemapEntries', () => {
 		});
 
 		const urls = await Promise.all([
-			fetchPeopleSitemapEntries(base, 'a'),
-			fetchPeopleSitemapEntries(base, 'b'),
-			fetchPeopleSitemapEntries(base, 'c'),
+			fetchPeopleSitemapEntries(base, shardOf(aliceId)),
+			fetchPeopleSitemapEntries(base, shardOf(bobId)),
+			fetchPeopleSitemapEntries(base, shardOf(carolId)),
 		]);
 
 		expect(urls.flat().map((e) => e.url)).toEqual([
@@ -207,7 +248,9 @@ describe('fetchPeopleSitemapEntries', () => {
 			candidacies: { WY: many },
 		});
 
-		const entries = await fetchPeopleSitemapEntries(base, 'z');
+		// These 400 ids walk the suffix space, so they land in 400 different
+		// shards; the corpus-wide call is the one that can see them all.
+		const entries = await fetchPeopleSitemapEntries(base);
 
 		expect(entries).toHaveLength(many.length);
 		const idCalls = urls.filter((u) => u.includes('ids='));
@@ -223,7 +266,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			candidacies: { WY: [bobId, carolId] },
 		});
 
-		await fetchPeopleSitemapEntries(base, 'b');
+		await fetchPeopleSitemapEntries(base, shardOf(bobId));
 
 		const idCalls = urls.filter((u) => u.includes('ids='));
 		expect(idCalls).toHaveLength(1);
@@ -244,8 +287,8 @@ describe('fetchPeopleSitemapEntries', () => {
 		});
 
 		const [aShard, bShard] = await Promise.all([
-			fetchPeopleSitemapEntries(base, 'a'),
-			fetchPeopleSitemapEntries(base, 'b'),
+			fetchPeopleSitemapEntries(base, shardOf(aliceId)),
+			fetchPeopleSitemapEntries(base, shardOf(bobId)),
 		]);
 
 		expect(aShard.map((e) => e.url)).toEqual([`${base}/people/alice-smith-aaaaaaaa`]);
@@ -259,7 +302,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			unlisted: [{ personId: aliceId.toUpperCase() }],
 		});
 
-		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+		expect(await fetchPeopleSitemapEntries(base, shardOf(aliceId))).toEqual([]);
 	});
 
 	test('a claimed page carries its publish date and outranks an unclaimed one', async () => {
@@ -272,8 +315,8 @@ describe('fetchPeopleSitemapEntries', () => {
 			published: [{ personId: aliceId, updatedAt: '2026-01-15T00:00:00.000Z' }],
 		});
 
-		const [claimed] = await fetchPeopleSitemapEntries(base, 'a');
-		const [unclaimed] = await fetchPeopleSitemapEntries(base, 'b');
+		const [claimed] = await fetchPeopleSitemapEntries(base, shardOf(aliceId));
+		const [unclaimed] = await fetchPeopleSitemapEntries(base, shardOf(bobId));
 
 		expect(claimed).toMatchObject({ priority: 0.7, lastModified: '2026-01-15' });
 		expect(unclaimed).toMatchObject({ priority: 0.5 });
@@ -291,8 +334,8 @@ describe('fetchPeopleSitemapEntries', () => {
 		});
 
 		await Promise.all([
-			fetchPeopleSitemapEntries(base, 'a'),
-			fetchPeopleSitemapEntries(base, 'b'),
+			fetchPeopleSitemapEntries(base, shardOf(aliceId)),
+			fetchPeopleSitemapEntries(base, shardOf(bobId)),
 		]);
 
 		expect(urls.filter((u) => u.includes('public-person-profiles/published'))).toHaveLength(1);
@@ -305,7 +348,7 @@ describe('fetchPeopleSitemapEntries', () => {
 	// (or failing) at build time must not pin the band empty for the process.
 	test('an empty sweep is not cached for the life of the process', async () => {
 		mockUpstream({ persons: [] });
-		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+		expect(await fetchPeopleSitemapEntries(base, shardOf(aliceId))).toEqual([]);
 
 		clearPeopleSitemapCache();
 		mockUpstream({
@@ -313,7 +356,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			candidacies: { WY: [aliceId] },
 		});
 
-		expect((await fetchPeopleSitemapEntries(base, 'a')).map((e) => e.url)).toEqual([
+		expect((await fetchPeopleSitemapEntries(base, shardOf(aliceId))).map((e) => e.url)).toEqual([
 			`${base}/people/alice-smith-aaaaaaaa`,
 		]);
 	});
@@ -328,7 +371,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			failPersonsForState: 'CA',
 		});
 
-		await expect(fetchPeopleSitemapEntries(base, 'a')).rejects.toThrow();
+		await expect(fetchPeopleSitemapEntries(base, shardOf(aliceId))).rejects.toThrow();
 	});
 
 	// A rolling deploy where gp-api has not yet shipped the endpoint 404s here.
@@ -339,7 +382,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			unlistedStatus: 404,
 		});
 
-		await expect(fetchPeopleSitemapEntries(base, 'a')).rejects.toThrow();
+		await expect(fetchPeopleSitemapEntries(base, shardOf(aliceId))).rejects.toThrow();
 	});
 
 	// The band must not stay broken after a blip: the module slot has to clear on
@@ -349,14 +392,14 @@ describe('fetchPeopleSitemapEntries', () => {
 			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
 			unlistedStatus: 503,
 		});
-		await expect(fetchPeopleSitemapEntries(base, 'a')).rejects.toThrow();
+		await expect(fetchPeopleSitemapEntries(base, shardOf(aliceId))).rejects.toThrow();
 
 		mockUpstream({
 			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
 			candidacies: { WY: [aliceId] },
 		});
 
-		expect((await fetchPeopleSitemapEntries(base, 'a')).map((e) => e.url)).toEqual([
+		expect((await fetchPeopleSitemapEntries(base, shardOf(aliceId))).map((e) => e.url)).toEqual([
 			`${base}/people/alice-smith-aaaaaaaa`,
 		]);
 	});
@@ -374,8 +417,8 @@ describe('fetchPeopleSitemapEntries', () => {
 		});
 
 		const [aShard, bShard] = await Promise.all([
-			fetchPeopleSitemapEntries(base, 'a'),
-			fetchPeopleSitemapEntries(base, 'b'),
+			fetchPeopleSitemapEntries(base, shardOf(aliceId)),
+			fetchPeopleSitemapEntries(base, shardOf(bobId)),
 		]);
 
 		expect(aShard.map((e) => e.url)).toEqual([`${base}/people/alice-smith-aaaaaaaa`]);
@@ -387,7 +430,7 @@ describe('fetchPeopleSitemapEntries', () => {
 	test('omits a person who appears on no civics feed at all', async () => {
 		mockUpstream({ persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }] });
 
-		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+		expect(await fetchPeopleSitemapEntries(base, shardOf(aliceId))).toEqual([]);
 	});
 
 	test('an officeholder row that carries only officeTitle still counts as an office', async () => {
@@ -396,7 +439,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			officeholders: { WY: [{ personId: aliceId, officeTitle: 'City Council' }] },
 		});
 
-		expect((await fetchPeopleSitemapEntries(base, 'a')).map((e) => e.url)).toEqual([
+		expect((await fetchPeopleSitemapEntries(base, shardOf(aliceId))).map((e) => e.url)).toEqual([
 			`${base}/people/alice-smith-aaaaaaaa`,
 		]);
 	});
@@ -413,7 +456,7 @@ describe('fetchPeopleSitemapEntries', () => {
 				candidacies: { WY: [{ personId: aliceId, positionName: blank }] },
 			});
 
-			expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+			expect(await fetchPeopleSitemapEntries(base, shardOf(aliceId))).toEqual([]);
 		});
 	}
 
@@ -430,7 +473,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
 			candidacies: { WY: [aliceId] },
 		});
-		await fetchPeopleSitemapEntries(base, 'a');
+		await fetchPeopleSitemapEntries(base, shardOf(aliceId));
 
 		const columnsFor = (path: string): Set<string> =>
 			new Set(
@@ -455,7 +498,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			published: [{ personId: aliceId, updatedAt: '2026-01-15T00:00:00.000Z' }],
 		});
 
-		expect((await fetchPeopleSitemapEntries(base, 'a')).map((e) => e.url)).toEqual([
+		expect((await fetchPeopleSitemapEntries(base, shardOf(aliceId))).map((e) => e.url)).toEqual([
 			`${base}/people/alice-smith-aaaaaaaa`,
 		]);
 	});
@@ -477,7 +520,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			published: [{ personId: aliceId, updatedAt: '2026-01-15T00:00:00.000Z' }],
 		});
 
-		expect((await fetchPeopleSitemapEntries(base, 'a')).map((e) => e.url)).toEqual([
+		expect((await fetchPeopleSitemapEntries(base, shardOf(aliceId))).map((e) => e.url)).toEqual([
 			`${base}/people/alice-smith-aaaaaaaa`,
 		]);
 	});
@@ -491,7 +534,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			published: [{ personId: bobId }, { personId: carolId }],
 		});
 
-		await fetchPeopleSitemapEntries(base, 'b');
+		await fetchPeopleSitemapEntries(base, shardOf(bobId));
 
 		const idCalls = urls.filter((u) => u.includes('ids='));
 		expect(idCalls).toHaveLength(1);
@@ -504,7 +547,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			published: [{ personId: aliceId }],
 		});
 
-		await fetchPeopleSitemapEntries(base, 'a');
+		await fetchPeopleSitemapEntries(base, shardOf(aliceId));
 
 		expect(urls.filter((u) => u.includes('ids='))).toEqual([]);
 	});
@@ -517,7 +560,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			published: [{ personId: aliceId }],
 		});
 
-		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+		expect(await fetchPeopleSitemapEntries(base, shardOf(aliceId))).toEqual([]);
 	});
 
 	// Seeding must not outrank the exclusion list: publish-then-request-removal
@@ -529,7 +572,34 @@ describe('fetchPeopleSitemapEntries', () => {
 			unlisted: [{ personId: aliceId }],
 		});
 
-		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+		expect(await fetchPeopleSitemapEntries(base, shardOf(aliceId))).toEqual([]);
+	});
+
+	/**
+	 * The safety property behind the whole re-shard: splitting the band differently
+	 * is only safe if it is a partition. Every URL the unsharded corpus lists has
+	 * to appear in exactly one shard — not zero (a page silently dropped from the
+	 * sitemap) and not two (a duplicate across files).
+	 */
+	test('the shards partition the corpus: every URL in exactly one file', async () => {
+		const many = Array.from(
+			{ length: 400 },
+			(_, i) => `${(i * 7919).toString(16).padStart(8, '0')}-1111-2222-3333-444444444444`,
+		);
+		mockUpstream({
+			persons: many.map((id) => ({ id, slug: `person-${id.slice(0, 8)}`, state: null })),
+			candidacies: { WY: many },
+		});
+
+		const whole = (await fetchPeopleSitemapEntries(base)).map((e) => e.url);
+		const perShard = await Promise.all(
+			PEOPLE_SITEMAP_SHARDS.map(async (shard) => fetchPeopleSitemapEntries(base, shard)),
+		);
+		const sharded = perShard.flat().map((e) => e.url);
+
+		expect(whole).toHaveLength(many.length);
+		expect(sharded).toHaveLength(whole.length);
+		expect([...sharded].sort()).toEqual([...whole].sort());
 	});
 
 	test('skips a person with no slug, since there is no URL to point at', async () => {
@@ -537,7 +607,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			persons: [{ id: aliceId, slug: '', state: 'WY' }],
 		});
 
-		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+		expect(await fetchPeopleSitemapEntries(base, shardOf(aliceId))).toEqual([]);
 	});
 });
 

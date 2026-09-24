@@ -25,7 +25,7 @@ import {
 	runWithConcurrency,
 	type ValidationResult,
 } from '../scripts/validate-sitemap-urls';
-import { getSitemapIds, US_STATE_CODES } from '../src/lib/sitemap-entries';
+import { getSitemapIds, PEOPLE_SITEMAP_BAND_START, US_STATE_CODES } from '../src/lib/sitemap-entries';
 
 const BASE_URL = (() => {
 	const url = process.env['SITEMAP_BASE_URL'];
@@ -41,11 +41,13 @@ const BASE_URL = (() => {
 const CONCURRENCY = Number(process.env['SITEMAP_CONCURRENCY']) || 20;
 const TIMEOUT_MS = Number(process.env['SITEMAP_TIMEOUT_MS']) || 10_000;
 
+// The band after the states has been /people, not /candidate, since the
+// candidate band was retired; labelling its shards with a state code named the
+// wrong band and ran off the end of the array once there were more than 51.
 function sitemapLabel(id: number): string {
 	if (id === 0) return 'main';
 	if (id <= US_STATE_CODES.length) return `elections/${US_STATE_CODES[id - 1]}`;
-	const i = id - US_STATE_CODES.length - 1;
-	return `candidates/${US_STATE_CODES[i] ?? id}`;
+	return `people/shard-${id - PEOPLE_SITEMAP_BAND_START}`;
 }
 
 function formatFailureReport(

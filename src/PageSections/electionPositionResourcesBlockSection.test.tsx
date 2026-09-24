@@ -110,6 +110,12 @@ describe('resolveGuideButton', () => {
 		});
 	});
 
+	test('an emptied button text field still gets the default label', () => {
+		const card = { ...section.guideCard, button: { ...section.guideCard.button, text: '' } };
+
+		expect(resolveGuideButton(card, '/blog/article/how-to-run-for-mayor')?.label).toBe('Read the guide');
+	});
+
 	test('keeps the editor link when the page supplies none', () => {
 		const button = resolveGuideButton(section.guideCard, undefined);
 

@@ -47,7 +47,7 @@ export function resolveGuideButton(card: RawCard, guideHref: string | undefined,
 	return {
 		buttonType: 'internal',
 		href: guideHref,
-		label: text ?? editorButton?.label ?? DEFAULT_GUIDE_BUTTON_TEXT,
+		label: text || editorButton?.label || DEFAULT_GUIDE_BUTTON_TEXT,
 	};
 }
 

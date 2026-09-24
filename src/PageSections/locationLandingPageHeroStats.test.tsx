@@ -5,8 +5,9 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
 /**
- * Pins the redesigned location hero (Figma 3096-2855, built 2026-09-17): the stat
- * cards beside the headline, and the search input that moved out to its own block.
+ * Pins the redesigned location hero (Figma 2032-21473, updated 2026-09-24): the
+ * stat cards and jump buttons beside and under the copy, the search input that
+ * moved out to its own block, and the headline the page hands in.
  *
  * Drives the real section off the shipped template seed rather than hand-built
  * props, because the wiring is the risk: the cards come from the shared `stats`
@@ -51,6 +52,18 @@ beforeEach(() => {
 	}
 
 	(globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
+
+	// The animated value watches for the card scrolling into view; jsdom has no
+	// observer, and one that never fires leaves the count at its starting zero.
+	class NoopIntersectionObserver {
+		public observe() {}
+		public unobserve() {}
+		public disconnect() {}
+		public takeRecords() {
+			return [];
+		}
+	}
+	(globalThis as { IntersectionObserver?: unknown }).IntersectionObserver = NoopIntersectionObserver;
 });
 
 afterEach(async () => {
@@ -83,15 +96,46 @@ async function renderSeededHero(withStats = true) {
 	const { tmplElectionsStateIndexSections } = await import('~/lib/electionsTemplateSeedSections');
 	const { LocationLandingPageHeroSection } = await import('./LocationLandingPageHeroSection');
 
+	// The seed array is a union of every block on the template, so name the one shape this reads.
+	type SeededHero = {
+		locationLandingPageHeroContent?: {
+			list_buttons?: Array<{
+				_key: string;
+				field_ctaActionWithShared: string;
+				field_buttonHierarchy: string;
+				field_buttonText: string;
+				field_anchorId: string;
+			}>;
+		};
+	};
 	const seeded = tmplElectionsStateIndexSections.find(s => s._type === 'component_locationLandingPageHero');
 	if (!seeded) throw new Error('no location hero in tmplElectionsStateIndexSections');
+	const seededContent = (seeded as SeededHero).locationLandingPageHeroContent;
 
-	const section = withStats ? seeded : { ...seeded, stats: undefined };
+	// GROQ turns the seed's `field_anchorId` into the `anchor` the button
+	// transformer reads, so the buttons go in the way the query hands them over.
+	const projectedButtons = (seededContent?.list_buttons ?? []).map(button => ({
+		_key: button._key,
+		action: button.field_ctaActionWithShared,
+		hierarchy: button.field_buttonHierarchy,
+		text: button.field_buttonText,
+		anchor: `#${button.field_anchorId}`,
+	}));
+	const section = withStats
+		? {
+				...seeded,
+				locationLandingPageHeroContent: { ...seededContent, list_buttons: projectedButtons },
+			}
+		: { ...seeded, stats: undefined, locationLandingPageHeroContent: undefined };
 	const props = {
 		...section,
-		locationOverride: { locationLevel: 'state' as const, stateName: 'Illinois' },
+		locationOverride: {
+			headline: 'Upcoming elections in Illinois',
+			locationLevel: 'state' as const,
+			stateName: 'Illinois',
+		},
 		tokens: { '[State]': 'Illinois' },
-	} as Parameters<typeof LocationLandingPageHeroSection>[0];
+	} as unknown as Parameters<typeof LocationLandingPageHeroSection>[0];
 
 	await render(<LocationLandingPageHeroSection {...props} />);
 	const hero = document.querySelector('[data-component="LocationLandingPageHero"]');
@@ -100,15 +144,14 @@ async function renderSeededHero(withStats = true) {
 }
 
 describe('the location landing page hero', () => {
-	test('renders the four seeded stat cards', async () => {
+	test('renders the three seeded stat cards', async () => {
 		const hero = await renderSeededHero();
 		const cards = [...hero.querySelectorAll('[data-component="Stat"]')];
 
 		expect(cards.map(card => card.textContent)).toEqual([
-			'[##]days until the next election',
-			'[##]positions up for election',
-			'[##]independents on the ballot',
-			'[##]uncontested elections in Illinois',
+			'[Date]Election day',
+			'[##]Races on the ballot',
+			'[##]Independent candidates',
 		]);
 	});
 
@@ -120,8 +163,31 @@ describe('the location landing page hero', () => {
 			expect.stringContaining('bg-bright-yellow-100'),
 			expect.stringContaining('bg-halo-green-100'),
 			expect.stringContaining('bg-lavender-100'),
-			expect.stringContaining('bg-blue-100'),
 		]);
+	});
+
+	/**
+	 * The route phrases the headline. When the block rebuilt it from the location
+	 * parts instead, county pages published "Kane County, Upcoming elections in
+	 * Kane County, Illinois".
+	 */
+	test('shows the headline the page hands in, verbatim', async () => {
+		const hero = await renderSeededHero();
+
+		expect(hero.querySelector('h1')?.textContent).toBe('Upcoming elections in Illinois');
+	});
+
+	test('renders the seeded jump buttons as anchors', async () => {
+		const hero = await renderSeededHero();
+		const links = [...hero.querySelectorAll('a')];
+
+		expect(links.map(a => a.getAttribute('href'))).toEqual(['#local-races', '#all-elections']);
+		expect(links.map(a => a.textContent)).toEqual([
+			expect.stringContaining('Browse local races'),
+			expect.stringContaining('Search all elections'),
+		]);
+		// The arrow is decoration, so it must not end up in the button's name.
+		expect(links.every(a => a.querySelector('svg')?.getAttribute('aria-hidden') === 'true')).toBe(true);
 	});
 
 	/**
@@ -135,10 +201,11 @@ describe('the location landing page hero', () => {
 		expect(hero.querySelector('h1')?.parentElement?.className).toContain('text-white');
 	});
 
-	test('renders as a single column when no stats are authored', async () => {
+	test('renders as a single column when nothing but copy is authored', async () => {
 		const hero = await renderSeededHero(false);
 
 		expect(hero.querySelectorAll('[data-component="Stat"]').length).toBe(0);
+		expect(hero.querySelectorAll('a').length).toBe(0);
 		expect(hero.innerHTML).not.toContain('lg:grid-cols-');
 	});
 
@@ -146,5 +213,28 @@ describe('the location landing page hero', () => {
 		const hero = await renderSeededHero();
 
 		expect(hero.querySelectorAll('input').length).toBe(0);
+	});
+});
+
+describe('the hero stat cards', () => {
+	/**
+	 * The card values are a mix of counts and an election date. Counting a date up
+	 * from zero renders "Nov. 0, 2026" on the way, which reads as broken data.
+	 */
+	test('counts a plain number up but leaves a date alone', async () => {
+		const { Stat } = await import('~/ui/Stat');
+
+		await render(
+			<>
+				<Stat value='1,240' description='Races on the ballot' size='compact' />
+				<Stat value='Nov. 4, 2026' description='Election day' size='compact' />
+			</>,
+		);
+		const [count, date] = [...document.querySelectorAll('[data-component="Stat"]')];
+
+		// A count that has not scrolled into view yet still sits at its starting zero,
+		// which is how we know it took the animated path. The date never should.
+		expect(count?.textContent).toBe('0Races on the ballot');
+		expect(date?.textContent).toBe('Nov. 4, 2026Election day');
 	});
 });

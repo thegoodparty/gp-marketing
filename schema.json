@@ -5780,6 +5780,14 @@
                   "type": "string"
                 },
                 "optional": true
+              },
+              "list_buttons": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "list_buttons"
+                },
+                "optional": true
               }
             }
           },

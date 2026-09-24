@@ -5,137 +5,101 @@ import * as LocationLandingPageHeroStories from './LocationLandingPageHero.stori
 
 # Location Landing Page Hero
 
-<Description of={LocationLandingPageHeroStories.StateLevel} />
+<Description of={LocationLandingPageHeroStories.Default} />
 
 ## Overview
 
-The LocationLandingPageHero component displays a hero section for location landing pages (state, county, or city). It dynamically generates the headline based on the location level and can show up to four stat cards beside the headline. The component adapts its styling based on the background color variant.
+The hero at the top of a location landing page (state, county, city or district). The page supplies the headline and the body copy; beside them the block can show up to three stat cards, and under them up to two buttons that jump further down the page.
 
 ## Usage
 
 Use this component when:
-- Creating hero sections for state, county, or city landing pages
-- Displaying location-specific headlines
+- Creating hero sections for state, county, city or district landing pages
 - Summarising a location's elections in a few headline figures
-- Setting the tone for location-based election browsing
+- Giving people a way into the races further down the page
 
 ## Variants
 
-<Canvas of={LocationLandingPageHeroStories.WithStats} />
+<Canvas of={LocationLandingPageHeroStories.Default} />
 
-<Canvas of={LocationLandingPageHeroStories.WithStatsCream} />
-
-<Canvas of={LocationLandingPageHeroStories.StateLevel} />
-
-<Canvas of={LocationLandingPageHeroStories.StateLevelCream} />
+<Canvas of={LocationLandingPageHeroStories.Cream} />
 
 <Canvas of={LocationLandingPageHeroStories.CountyLevel} />
 
-<Canvas of={LocationLandingPageHeroStories.CityLevel} />
+<Canvas of={LocationLandingPageHeroStories.CopyOnly} />
 
-<Canvas of={LocationLandingPageHeroStories.CustomBodyCopy} />
-
-<Canvas of={LocationLandingPageHeroStories.LeftAligned} />
+<Canvas of={LocationLandingPageHeroStories.HeadlineFallback} />
 
 <Canvas of={LocationLandingPageHeroStories.CenterAligned} />
 
-<Canvas of={LocationLandingPageHeroStories.RightAligned} />
-
 ## Props
 
-<Controls of={LocationLandingPageHeroStories.StateLevel} />
+<Controls of={LocationLandingPageHeroStories.Default} />
 
 ### Prop Details
 
+#### `headline` (optional)
+
+The whole headline, phrased by the page (for example "Upcoming elections in Cook County, Illinois"). Without it the block falls back to the bare location name built from the props below.
+
+**Type:** `string`
+
 #### `locationLevel` (required)
 
-The level of location being displayed. Determines headline format.
+The level of location being displayed. Determines the fallback headline format.
 
-**Type:** `'state' | 'county' | 'city'`
+**Type:** `'state' | 'county' | 'city' | 'district'`
 
 #### `stateName` (required)
 
-The state name.
+The state name, used by the fallback headline.
 
 **Type:** `string`
 
-#### `countyName` (optional)
+#### `countyName` / `cityName` (optional)
 
-The county name (required for county and city levels).
-
-**Type:** `string`
-
-#### `cityName` (optional)
-
-The city name (required for city level).
+Used by the fallback headline at county, district and city level.
 
 **Type:** `string`
 
 #### `bodyCopy` (optional)
 
-Custom body copy text. If not provided, defaults to text based on location level (e.g., "Explore elections in this state").
+Body copy under the headline. If not provided, defaults to text based on location level.
 
 **Type:** `ReactNode`
 
 #### `stats` (optional)
 
-Up to four stat cards rendered beside the headline (stacked under the copy on small screens). Uses the shared `Stat` card in its compact size. When empty, the hero renders as a single column.
+Up to three stat cards, rendered beside the headline on large screens and stacked under the copy on small ones. Uses the shared `Stat` card in its compact size. When empty, the hero renders as a single column.
 
 **Type:** `StatProps[]`
 
+#### `buttons` (optional)
+
+Up to two buttons under the body copy, usually anchors to sections further down the page. They pick up the outline style that suits the background, and a down arrow, unless the caller overrides either.
+
+**Type:** `ComponentButtonProps[]`
+
 #### `backgroundColor` (optional)
 
-Background color variant for the hero section.
-
-**Type:** `'cream' | 'midnight'`
-
-**Default:** `'cream'`
+**Type:** `'cream' | 'midnight'` — **Default:** `'cream'`
 
 #### `textAlign` (optional)
 
-Text alignment for the hero content.
-
-**Type:** `'left' | 'center' | 'right'`
-
-**Default:** `'left'`
-
-#### `className` (optional)
-
-Additional CSS classes to apply to the component.
-
-**Type:** `string`
-
-## Dynamic Headline Generation
-
-The component builds the headline based on `locationLevel`:
-
-- **State**: Uses `stateName` only (e.g., "Illinois")
-- **County**: Uses `countyName` followed by `stateName` (e.g., "Cook County, Illinois")
-- **City**: Uses `cityName` followed by `stateName` (e.g., "Chicago, Illinois")
-
-If required names are missing, falls back to available names.
-
-## Body Copy
-
-If `bodyCopy` is not provided, the component generates default text:
-- State: "Explore elections in this state"
-- County: "Explore elections in this county"
-- City: "Explore elections in this city"
+**Type:** `'left' | 'center' | 'right'` — **Default:** `'left'`
 
 ## Stat Cards
 
-The stat cards:
 - Use the shared `Stat` card in its compact size, so colors match the Stats Block
-- Lay out two across beside the headline on large screens, and stack full width below the copy on small screens
-- Count up from zero when the value starts with a number; non-numeric values such as a placeholder render as written
+- Sit three across beside the headline on large screens, and stack full width below the copy on small ones
+- Count up from zero when the value starts with a number; a value that is not a number, such as a placeholder or a date, renders as written
+- Drop one type size when the value is long, so a spelled-out election date fits the card the same way a short count does
 
 ## Background Variants
 
-**Midnight (default):**
-- Dark background with white text
+**Midnight (default):** dark background, white copy, white outline buttons.
 
-**Cream:**
-- Light background with dark text
+**Cream:** light background, dark copy, dark outline buttons.
 
 ## Accessibility
 
@@ -144,10 +108,10 @@ The stat cards:
 
 ## Design Reference
 
-[View in Figma](https://www.figma.com/design/qIOT4lO1nRw4reuj6LjLwn/GoodParty---Marketing-Design-System?node-id=3096-2855)
+[View in Figma](https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2032-21473)
 
 ## Related Components
 
 - `ElectionsIndexBlock` - Index block that follows this hero
-- `FeaturedCitiesBlock` - Featured cities section
+- `ListOfOfficesBlock` - The races list the first button jumps to
 - `LocationFactsBlock` - Location facts section

@@ -20,6 +20,12 @@ export const component_locationLandingPageHero = {
 					description:
 						'Static copy that references location level (state, county, or city). Location names are populated dynamically from the URL.',
 				},
+				{
+					title: 'Buttons',
+					name: 'list_buttons',
+					type: 'list_buttons',
+					description: 'Up to two buttons under the copy. Use the Anchor action to jump to a section further down the page.',
+				},
 			],
 			group: 'locationLandingPageHeroContent',
 		},

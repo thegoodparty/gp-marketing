@@ -7,7 +7,7 @@ const meta: Meta<typeof LocationLandingPageHero> = {
 	parameters: {
 		design: {
 			type: 'figma',
-			url: 'https://www.figma.com/design/qIOT4lO1nRw4reuj6LjLwn/GoodParty---Marketing-Design-System?node-id=3096-2855',
+			url: 'https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2032-21473',
 		},
 	},
 	render: args => <LocationLandingPageHero {...args} />,
@@ -17,127 +17,75 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const designStats = [
-	{ _key: 'days', value: '[##]', description: 'days until the next election', color: 'bright-yellow' as const },
-	{ _key: 'positions', value: '[##]', description: 'positions up for election', color: 'halo-green' as const },
-	{ _key: 'independents', value: '[##]', description: 'independents on the ballot', color: 'lavender' as const },
-	{ _key: 'uncontested', value: '[##]', description: 'uncontested elections in Illinois', color: 'blue' as const },
+	{ _key: 'election-day', value: 'Nov. 4, 2026', description: 'Election day', color: 'bright-yellow' as const },
+	{ _key: 'races', value: '[##]', description: 'Races on the ballot', color: 'halo-green' as const },
+	{ _key: 'independents', value: '[##]', description: 'Independent candidates', color: 'lavender' as const },
 ];
 
-export const WithStats: Story = {
+const localRacesButton = { _key: 'local-races', buttonType: 'anchor' as const, href: '#local-races', label: 'Browse local races' };
+const allElectionsButton = { _key: 'all-elections', buttonType: 'anchor' as const, href: '#all-elections', label: 'Search all elections' };
+const designButtons = [localRacesButton, allElectionsButton];
+
+const designBodyCopy = 'Your anti-corruption voter guide. Find independent candidates on your ballot and representatives in office.';
+
+export const Default: Story = {
 	args: {
+		headline: 'Upcoming elections in Illinois',
 		locationLevel: 'state',
-		stateName: 'Browse elections in Illinois',
-		bodyCopy: 'Your anti-corruption voter guide. Find independent candidates on your ballot and representatives in office.',
+		stateName: 'Illinois',
+		bodyCopy: designBodyCopy,
 		backgroundColor: 'midnight',
 		stats: designStats,
+		buttons: designButtons,
 	},
 };
 
-export const StateLevel: Story = {
+export const Cream: Story = {
 	args: {
-		locationLevel: 'state',
-		stateName: 'Illinois',
-		bodyCopy: 'Explore elections in this state',
-		backgroundColor: 'midnight',
-	},
-};
-
-export const StateLevelCream: Story = {
-	args: {
-		locationLevel: 'state',
-		stateName: 'Illinois',
-		bodyCopy: 'Explore elections in this state',
+		...Default.args,
+		headline: 'Upcoming elections in Texas',
+		stateName: 'Texas',
 		backgroundColor: 'cream',
 	},
 };
 
 export const CountyLevel: Story = {
 	args: {
+		...Default.args,
+		headline: 'Upcoming elections in Cook County, Illinois',
 		locationLevel: 'county',
-		stateName: 'Illinois',
 		countyName: 'Cook County',
-		bodyCopy: 'Explore elections in this county',
-		backgroundColor: 'midnight',
-	},
-};
-
-export const CountyLevelCream: Story = {
-	args: {
-		locationLevel: 'county',
-		stateName: 'Illinois',
-		countyName: 'Cook County',
-		bodyCopy: 'Explore elections in this county',
-		backgroundColor: 'cream',
-	},
-};
-
-export const CityLevel: Story = {
-	args: {
-		locationLevel: 'city',
-		stateName: 'Illinois',
-		countyName: 'Cook County',
-		cityName: 'Chicago',
-		bodyCopy: 'Explore elections in this city',
-		backgroundColor: 'midnight',
-	},
-};
-
-export const CityLevelCream: Story = {
-	args: {
-		locationLevel: 'city',
-		stateName: 'Illinois',
-		countyName: 'Cook County',
-		cityName: 'Chicago',
-		bodyCopy: 'Explore elections in this city',
-		backgroundColor: 'cream',
-	},
-};
-
-export const CustomBodyCopy: Story = {
-	args: {
-		locationLevel: 'state',
-		stateName: 'California',
-		bodyCopy: 'Find independent, third-party, and non-partisan candidates running for office in California',
-		backgroundColor: 'midnight',
-	},
-};
-
-export const WithStatsCream: Story = {
-	args: {
-		locationLevel: 'state',
-		stateName: 'Browse elections in Texas',
-		bodyCopy: 'Your anti-corruption voter guide. Find independent candidates on your ballot and representatives in office.',
-		backgroundColor: 'cream',
 		stats: designStats,
+		buttons: [localRacesButton],
 	},
 };
 
-export const LeftAligned: Story = {
+/** No stats and no buttons authored yet: the state every existing location template starts in. */
+export const CopyOnly: Story = {
 	args: {
 		locationLevel: 'state',
 		stateName: 'Illinois',
 		bodyCopy: 'Explore elections in this state',
 		backgroundColor: 'midnight',
-		textAlign: 'left',
+	},
+};
+
+/** Without an explicit headline the block falls back to the bare location name. */
+export const HeadlineFallback: Story = {
+	args: {
+		locationLevel: 'city',
+		stateName: 'Illinois',
+		countyName: 'Cook County',
+		cityName: 'Chicago',
+		bodyCopy: designBodyCopy,
+		backgroundColor: 'midnight',
+		stats: designStats,
 	},
 };
 
 export const CenterAligned: Story = {
 	args: {
-		locationLevel: 'state',
-		stateName: 'Illinois',
-		bodyCopy: 'Explore elections in this state',
-		backgroundColor: 'midnight',
+		...CopyOnly.args,
 		textAlign: 'center',
-	},
-};
-
-export const RightAligned: Story = {
-	args: {
-		locationLevel: 'state',
-		stateName: 'Illinois',
-		bodyCopy: 'Explore elections in this state',
-		backgroundColor: 'midnight',
-		textAlign: 'right',
 	},
 };

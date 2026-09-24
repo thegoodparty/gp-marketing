@@ -2,6 +2,7 @@ import { describe, expect, test } from 'bun:test';
 
 import {
 	buildCandidatesTokens,
+	buildElectionsIndexSectionOverrides,
 	buildPositionSectionOverrides,
 	buildPositionTokens,
 } from '~/lib/electionsTemplateHelpers';
@@ -97,5 +98,35 @@ describe('buildCandidatesTokens', () => {
 	test('does not supply [candidate name]', () => {
 		const tokens = buildCandidatesTokens(tokenCtx);
 		expect(resolveTokens('Meet [candidate name]', tokens)).toBe('Meet ');
+	});
+});
+
+describe('buildElectionsIndexSectionOverrides', () => {
+	const countyCtx = {
+		breadcrumbs: [],
+		locationLevel: 'county' as const,
+		stateName: 'Illinois',
+		countyName: 'Kane County',
+		heroTitle: 'Upcoming elections in Kane County, Illinois',
+	};
+
+	/**
+	 * The route phrases the whole headline. It used to be handed over as `stateName`,
+	 * and the hero rebuilt a headline around it, so every county, city and district
+	 * page published "Kane County, Upcoming elections in Kane County, Illinois".
+	 */
+	test('hands the hero the route headline, and the bare state name separately', () => {
+		const hero = buildElectionsIndexSectionOverrides(countyCtx).component_locationLandingPageHero;
+
+		expect(hero?.headline).toBe('Upcoming elections in Kane County, Illinois');
+		expect(hero?.stateName).toBe('Illinois');
+		expect(hero?.countyName).toBe('Kane County');
+	});
+
+	test('leaves the headline unset when the route does not phrase one', () => {
+		const hero = buildElectionsIndexSectionOverrides({ ...countyCtx, heroTitle: undefined }).component_locationLandingPageHero;
+
+		expect(hero?.headline).toBeUndefined();
+		expect(hero?.stateName).toBe('Illinois');
 	});
 });

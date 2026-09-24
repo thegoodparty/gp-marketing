@@ -4,15 +4,19 @@ import { cn, tv } from './_lib/utils.ts';
 import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
 import { Stat, type StatProps } from './Stat.tsx';
+import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
+import { IconResolver } from './IconResolver.tsx';
+import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
 
 const styles = tv({
 	slots: {
-		base: 'py-6 md:py-20',
-		layout: 'grid gap-8 lg:items-center lg:gap-20',
-		content: 'flex flex-col gap-2 max-w-[39.5rem]',
+		base: 'py-6 lg:py-16',
+		layout: 'grid gap-6 lg:items-center lg:gap-4',
+		content: 'flex flex-col',
 		headline: '',
-		bodyCopy: 'text-white/80',
-		stats: 'grid gap-6 sm:grid-cols-2 lg:gap-5',
+		bodyCopy: 'text-white/80 mt-2',
+		buttons: 'flex flex-col sm:flex-row gap-4 mt-6 lg:mt-10 w-full sm:w-auto',
+		stats: 'grid gap-2 lg:grid-cols-3 lg:gap-4',
 	},
 	variants: {
 		backgroundColor: {
@@ -39,7 +43,7 @@ const styles = tv({
 		},
 		hasStats: {
 			true: {
-				layout: 'lg:grid-cols-[minmax(0,1fr)_32.75rem]',
+				layout: 'lg:grid-cols-[minmax(0,1fr)_39.5rem]',
 			},
 		},
 	},
@@ -49,6 +53,8 @@ export type LocationLevel = 'state' | 'county' | 'city' | 'district';
 
 export type LocationLandingPageHeroProps = {
 	className?: string;
+	/** The whole headline, as the page phrases it. Falls back to the location name. */
+	headline?: string;
 	locationLevel: LocationLevel;
 	stateName: string;
 	countyName?: string;
@@ -57,10 +63,15 @@ export type LocationLandingPageHeroProps = {
 	backgroundColor?: 'cream' | 'midnight';
 	textAlign?: 'left' | 'center' | 'right';
 	stats?: StatProps[];
+	buttons?: ComponentButtonProps[];
 };
 
 function buildHeadline(props: LocationLandingPageHeroProps): string {
-	const { locationLevel, stateName, countyName, cityName } = props;
+	const { headline, locationLevel, stateName, countyName, cityName } = props;
+
+	if (headline) {
+		return headline;
+	}
 
 	switch (locationLevel) {
 		case 'city':
@@ -90,6 +101,7 @@ export function LocationLandingPageHero(props: LocationLandingPageHeroProps) {
 	const headline = buildHeadline(props);
 	const bodyCopyText = buildBodyCopy(props);
 	const stats = props.stats ?? [];
+	const buttons = props.buttons ?? [];
 
 	const {
 		base,
@@ -97,6 +109,7 @@ export function LocationLandingPageHero(props: LocationLandingPageHeroProps) {
 		content,
 		headline: headlineStyle,
 		bodyCopy,
+		buttons: buttonsStyle,
 		stats: statsStyle,
 	} = styles({ backgroundColor, textAlign, hasStats: stats.length > 0 });
 
@@ -112,6 +125,23 @@ export function LocationLandingPageHero(props: LocationLandingPageHeroProps) {
 							<Text styleType='body-2' className={bodyCopy()}>
 								{bodyCopyText}
 							</Text>
+						)}
+						{buttons.length > 0 && (
+							<div className={buttonsStyle()}>
+								{buttons.map((button, index) => (
+									<ComponentButton
+										key={button._key ?? `location-hero-button-${index}`}
+										{...button}
+										buttonProps={{
+											...button.buttonProps,
+											styleType: resolveButtonStyleType(button.buttonProps?.styleType ?? 'secondary', backgroundColor),
+											styleSize: button.buttonProps?.styleSize ?? 'md',
+										}}
+										iconRight={button.iconRight ?? <IconResolver icon='arrow-down' aria-hidden className='w-4 h-4' />}
+										className={cn('max-sm:w-full', button.className)}
+									/>
+								))}
+							</div>
 						)}
 					</div>
 					{stats.length > 0 && (

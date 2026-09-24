@@ -307,8 +307,12 @@ export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageConte
 	return {
 		component_breadcrumbBlock: { breadcrumbs: ctx.breadcrumbs },
 		component_locationLandingPageHero: {
+			// The route phrases the whole headline. Passing it as `stateName` instead
+			// left the block to rebuild the headline around it, which published
+			// "Kane County, Upcoming elections in Kane County, Illinois".
+			headline: ctx.heroTitle,
 			locationLevel: ctx.locationLevel,
-			stateName: ctx.heroTitle ?? ctx.stateName,
+			stateName: ctx.stateName,
 			countyName: ctx.countyName,
 			cityName: ctx.cityName,
 			bodyCopy: ctx.bodyCopy,

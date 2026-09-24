@@ -79,6 +79,9 @@ describe('buildPositionSectionOverrides content block', () => {
 				href: '/people/tom-nguyen-c1',
 				avatar: undefined,
 				isWinner: undefined,
+				seatName: undefined,
+				seatValue: undefined,
+				seatLabel: undefined,
 			},
 		]);
 		expect(block?.officeholders?.[0]?.name).toBe('Grace Hopper');
@@ -138,6 +141,21 @@ describe('buildPositionSectionOverrides content block', () => {
 		});
 		expect(buildPositionSeatFilter([...withSeats, { key: 'd', name: 'D' }], 'District')).toBeUndefined();
 		expect(buildPositionSeatFilter([{ key: 'a', name: 'A', seatValue: '1' }], 'District')).toBeUndefined();
+	});
+
+	test('candidates that carry a seat feed the filter alongside the officeholders', () => {
+		const block = buildPositionSectionOverrides({
+			...positionOverrideCtx,
+			race,
+			heroCandidates: [
+				{ key: 'c1', name: 'A', party: 'Independent', partyClass: 'independent', seatName: 'District', seatValue: '1' },
+				{ key: 'c2', name: 'B', party: 'Democratic', partyClass: 'democrat', seatName: 'District', seatValue: '2' },
+			],
+			officeholders: [{ key: 'o1', name: 'C', seatValue: '2', seatName: 'District' }],
+		}).component_electionsPositionContentBlock;
+		expect(block?.candidates?.[0]?.seatLabel).toBe('District 1');
+		expect(block?.seatFilter?.label).toBe('Filter by District');
+		expect(block?.seatFilter?.options.map(option => option.value)).toEqual(['1', '2']);
 	});
 
 	test("names the seat filter after the office's own sub-area when every row carries a seat", () => {

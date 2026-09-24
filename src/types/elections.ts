@@ -51,6 +51,14 @@ export interface CandidacyItem {
 	urls?: string[];
 	positionDescription?: string;
 	electionFrequency?: number[];
+	/**
+	 * The seat within the office ("District" / "3"). Not on the feed yet; requested
+	 * from the election data team on 2026-09-24 to mirror the officeholders feed.
+	 * The position page's seat filter switches on once every row carries one.
+	 */
+	subAreaName?: string | null;
+	subAreaValue?: string | null;
+	Position?: { subAreaName?: string | null; subAreaValue?: string | null } | null;
 	Stances?: Array<{
 		Issue?: { name?: string };
 		stanceStatement?: string;

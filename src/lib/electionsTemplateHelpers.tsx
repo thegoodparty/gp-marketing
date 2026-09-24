@@ -88,6 +88,9 @@ function heroCandidateToPerson(candidate: ElectionsPositionHeroCandidate, index:
 		party: candidate.party,
 		isPledged: candidate.isPledged,
 		isWinner: candidate.isWinner,
+		seatName: candidate.seatName,
+		seatValue: candidate.seatValue,
+		seatLabel: candidate.seatName && candidate.seatValue ? `${candidate.seatName} ${candidate.seatValue}` : undefined,
 	};
 }
 

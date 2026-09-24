@@ -182,7 +182,15 @@ export function ElectionsPositionPeopleLists(props: ElectionsPositionPeopleLists
 					<label htmlFor={filterId} className='sr-only'>
 						{props.seatFilter.label}
 					</label>
-					<select id={filterId} value={seat} onChange={event => setSeat(event.target.value)} className={cn(s.select(), 'text-text-md')}>
+					<select
+						id={filterId}
+						value={seat}
+						onChange={event => {
+							setSeat(event.target.value);
+							setExpanded(false);
+						}}
+						className={cn(s.select(), 'text-text-md')}
+					>
 						<option value=''>{props.seatFilter.label}</option>
 						{props.seatFilter.options.map(option => (
 							<option key={option.value} value={option.value}>

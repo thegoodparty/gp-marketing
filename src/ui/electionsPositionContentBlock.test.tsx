@@ -83,6 +83,7 @@ describe('ElectionsPositionContentBlockSection', () => {
 		expect(html).toContain('How to run for City Council Member');
 		expect(html).toContain('Meet eligibility requirements');
 		expect(html).toContain('File for office');
+		expect(html).toContain('>Step 3<');
 		expect(html).toContain('Launch your campaign');
 		expect(html).toContain('href="/run-for-office"');
 		expect(html).toContain('GoodParty.org Community');
@@ -165,7 +166,8 @@ describe('ElectionsPositionContentBlockSection', () => {
 		expect(html).not.toContain('data-testid="position-share-card"');
 		expect(html).not.toContain('Meet eligibility requirements');
 		expect(html).not.toContain('File for office');
-		expect(html).toContain('Step 1');
+		expect(html).not.toContain('>Step 1<');
+		expect(html).not.toContain('>Step 3<');
 		expect(html).toContain('Launch your campaign');
 		expect(html).toContain('data-testid="position-branded-cta"');
 		expect(html).toContain('data-testid="position-voter-readiness"');

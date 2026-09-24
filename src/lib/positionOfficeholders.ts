@@ -22,9 +22,13 @@ export function formatOfficeholderTerm(office: Pick<PersonOfficeHolder, 'startAt
 
 /**
  * One "Who's currently in office" row. Rows with no linked person still render
- * (the office title stands in for the name) but cannot link anywhere; a person
- * under a privacy takedown keeps their row but loses the photo and the link,
- * the same rule the profile pages' related-person cards apply.
+ * (the office title stands in for the name) but cannot link anywhere. A person
+ * under a privacy takedown keeps their row but loses the photo and the link.
+ * When the takedown list itself could not be read (`removedPersonIds` is null)
+ * every photo is withheld, per `getRemovedPersonIds`'s contract: a gp-api blip
+ * may cost thumbnails, it must never republish a photo somebody asked to take
+ * down. Links stay in that case, as they do on the profile pages' cards, since
+ * the profile route applies the takedown itself.
  */
 export function mapOfficeholderToPerson(
 	office: PersonOfficeHolder,
@@ -35,13 +39,14 @@ export function mapOfficeholderToPerson(
 	const fromPerson = formatPersonName(person?.fullName) ?? [person?.firstName, person?.lastName].filter(Boolean).join(' ');
 	const name = fromPerson || formatPersonName(office.officeTitle) || '';
 	if (!name) return null;
-	const removed = personId !== null && removedPersonIds?.has(personId) === true;
+	const removed = personId !== null && removedPersonIds !== null && removedPersonIds.has(personId);
+	const photoAllowed = personId !== null && removedPersonIds !== null && !removed;
 	const seatLabel = [office.subAreaName, office.subAreaValue].filter(Boolean).join(' ') || undefined;
 	return {
 		key: office.id,
 		name,
 		href: personId && !removed ? `/people/${buildPersonSlugFromBase(person?.slug ?? slugifyName(name), personId)}` : undefined,
-		avatar: removed ? undefined : (person?.headshotUrl ?? undefined),
+		avatar: photoAllowed ? (person?.headshotUrl ?? undefined) : undefined,
 		party: office.partyNames?.[0] ?? undefined,
 		isPledged: pledgedFromSpine(person, ...(office.partyNames ?? [])),
 		term: formatOfficeholderTerm(office) ?? undefined,

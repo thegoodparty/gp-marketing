@@ -71,7 +71,8 @@ export type ElectionsPositionAttribute = { label: string; value: string };
 export type ElectionsPositionElectionType = { label: string; checked: boolean };
 
 export type ElectionsPositionHowToRunStep = {
-	number: string;
+	/** "Step 1" and so on; omitted when the step stands alone. */
+	number?: string;
 	title: string;
 	icon: string;
 	body?: ReactNode;
@@ -398,16 +399,18 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 										</Text>
 									)}
 									<ol className={s.steps()}>
-										{props.howToRun.steps.map(step => (
-											<li key={step.number} className={s.step()}>
+										{props.howToRun.steps.map((step, index) => (
+											<li key={step.number ?? index} className={s.step()}>
 												<div className={s.stepIcon()}>
 													<IconResolver icon={step.icon} className='size-6' />
 												</div>
 												<div className={s.stepBody()}>
 													<div className='flex flex-col gap-2'>
-														<Text as='span' styleType='text-md' className='font-primary font-semibold'>
-															{step.number}
-														</Text>
+														{step.number && (
+															<Text as='span' styleType='text-md' className='font-primary font-semibold'>
+																{step.number}
+															</Text>
+														)}
 														<Text as='h3' styleType='subtitle-1'>
 															{step.title}
 														</Text>

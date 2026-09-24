@@ -67,6 +67,13 @@ describe('mapOfficeholderToPerson', () => {
 		expect(row?.isPledged).toBe(false);
 	});
 
+	test('when the takedown list could not be read, every photo is withheld but the links stay', () => {
+		const row = mapOfficeholderToPerson(office, person, null);
+		expect(row?.name).toBe('Grace Hopper');
+		expect(row?.avatar).toBeUndefined();
+		expect(row?.href).toBe('/people/grace-hopper-aaaaaaaa');
+	});
+
 	test('a person under a takedown keeps the row but loses the photo and the link', () => {
 		const row = mapOfficeholderToPerson(office, person, new Set(['aaaaaaaa-0000-0000-0000-000000000001']));
 		expect(row?.name).toBe('Grace Hopper');

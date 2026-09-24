@@ -197,8 +197,10 @@ export function ElectionsPositionContentBlockSection(props: ElectionsPositionCon
 			attributes: data.howToRun.filing,
 		});
 	}
+	// A lone editorial step is not "Step 1" of anything, so it carries no number
+	// unless the data steps in front of it rendered.
 	steps.push({
-		number: `Step ${steps.length + 1}`,
+		number: steps.length > 0 ? `Step ${steps.length + 1}` : undefined,
 		icon: 'trending-up',
 		title: text(run?.field_step3Title, d.howToRun.step3Title, tokens),
 		body: <p>{text(run?.field_step3Body, d.howToRun.step3Body, tokens)}</p>,

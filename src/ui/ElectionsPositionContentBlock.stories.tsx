@@ -291,7 +291,7 @@ export const SparseRaceData: Story = {
 		officeholders: undefined,
 		about: undefined,
 		siderail: { onThisPageTitle: 'On this page', share: base.siderail.share },
-		howToRun: { ...howToRun, steps: howToRun.steps.slice(2).map(step => ({ ...step, number: 'Step 1' })) },
+		howToRun: { ...howToRun, steps: howToRun.steps.slice(2).map(step => ({ ...step, number: undefined })) },
 	},
 };
 

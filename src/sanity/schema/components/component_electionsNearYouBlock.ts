@@ -20,7 +20,7 @@ export const component_electionsNearYouBlock = {
 			name: 'field_body',
 			type: 'text',
 			rows: 4,
-			initialValue: 'Find upcoming elections in your city or county.',
+			initialValue: "Enter your city to see every race on your ballot and discover independent candidates who've pledged to put voters first.",
 		},
 		{
 			title: 'Button Label',

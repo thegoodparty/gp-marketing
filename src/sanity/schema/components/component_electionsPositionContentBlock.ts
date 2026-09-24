@@ -138,7 +138,7 @@ export const component_electionsPositionContentBlock = {
 	title: 'Elections Position Content Block',
 	name: 'component_electionsPositionContentBlock',
 	description:
-		'The body of a Position Page below the hero: the side rail, the candidate and officeholder lists, the branded CTA, the voter readiness links, the About card and the How to run steps. Its state follows the hero (filing, mid-election, decided) from the race data, never by hand, and any section with no data for a page is hidden. Sanity controls the copy and the design settings; every field has a default.',
+		'The body of a Position Page below the hero: the side rail, the candidate and officeholder lists, the branded CTA, the voter readiness links, the About card and the How to run steps. Its state follows the hero (filing, mid-election, decided) from the race data, never by hand. The data-fed sections (candidates, officeholders, About, the eligibility and filing steps, the explore and share cards) hide on any page with no data for them; the editorial sections (badge callout next to a list, branded CTA, voter readiness, the launch step) always show. Sanity controls the copy and the design settings; every field has a default.',
 	type: 'object',
 	icon: getIcon('FileText'),
 	fields: [

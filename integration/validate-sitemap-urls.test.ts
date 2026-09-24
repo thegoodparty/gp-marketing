@@ -18,14 +18,19 @@
  * 30–60 minutes. Run nightly on a schedule and/or manually after deploys.
  */
 
-import { describe, test } from 'bun:test';
+import { describe, expect, test } from 'bun:test';
 import {
 	fetchSitemapUrls,
 	validateUrl,
 	runWithConcurrency,
 	type ValidationResult,
 } from '../scripts/validate-sitemap-urls';
-import { getSitemapIds, US_STATE_CODES } from '../src/lib/sitemap-entries';
+import {
+	getSitemapIds,
+	MAX_URLS_PER_SITEMAP,
+	PEOPLE_SITEMAP_BAND_START,
+	US_STATE_CODES,
+} from '../src/lib/sitemap-entries';
 
 const BASE_URL = (() => {
 	const url = process.env['SITEMAP_BASE_URL'];
@@ -41,11 +46,13 @@ const BASE_URL = (() => {
 const CONCURRENCY = Number(process.env['SITEMAP_CONCURRENCY']) || 20;
 const TIMEOUT_MS = Number(process.env['SITEMAP_TIMEOUT_MS']) || 10_000;
 
+// The band after the states has been /people, not /candidate, since the
+// candidate band was retired; labelling its shards with a state code named the
+// wrong band and ran off the end of the array once there were more than 51.
 function sitemapLabel(id: number): string {
 	if (id === 0) return 'main';
 	if (id <= US_STATE_CODES.length) return `elections/${US_STATE_CODES[id - 1]}`;
-	const i = id - US_STATE_CODES.length - 1;
-	return `candidates/${US_STATE_CODES[i] ?? id}`;
+	return `people/shard-${id - PEOPLE_SITEMAP_BAND_START}`;
 }
 
 function formatFailureReport(
@@ -89,6 +96,17 @@ describe('Sitemap URL Resolution', () => {
 			`sitemap/${id}.xml (${label}): all URLs return HTTP 200`,
 			async () => {
 				const urls = await fetchSitemapUrls(`${BASE_URL}/sitemap/${id}.xml`);
+
+				/**
+				 * The ceiling is a protocol limit, not a soft one: a file over it can
+				 * be rejected whole, taking every URL in it out of the sitemap. The
+				 * /people band grows with the upstream person table rather than with
+				 * anything in this repo, so no unit test can see it coming — this
+				 * assertion, run against a real host, is the thing that does. When it
+				 * trips, raise PEOPLE_SITEMAP_SHARD_COUNT; the band grows on the end
+				 * and every existing shard id keeps serving.
+				 */
+				expect(urls.length).toBeLessThanOrEqual(MAX_URLS_PER_SITEMAP);
 
 				// Empty sitemaps are valid — a state may have no candidates yet
 				if (urls.length === 0) return;

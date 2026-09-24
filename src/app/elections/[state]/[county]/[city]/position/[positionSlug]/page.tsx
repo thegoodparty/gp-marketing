@@ -15,6 +15,7 @@ import {
 	formatElectionDateFromApi,
 	formatFilingPeriodFromRace,
 	getStateName,
+	isRealPlaceSegment,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
 import { toAbsoluteUrl } from '~/lib/url';
@@ -110,11 +111,12 @@ export default async function Page({
 	if (!cityPlace) notFound();
 
 	const cityName = cityPlace.name;
+	const isRealCity = isRealPlaceSegment(cityPlace.slug, city);
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
 		{ href: `/elections/${state.toLowerCase()}`, label: stateName },
 		{ href: `/elections/${countySlug}`, label: countyPlace!.name },
-		{ href: `/elections/${fullSlug}`, label: cityName },
+		...(isRealCity ? [{ href: `/elections/${fullSlug}`, label: cityName }] : []),
 		{ href: '', label: officeName },
 	];
 
@@ -124,7 +126,7 @@ export default async function Page({
 		officeName,
 		stateName,
 		countyName: countyPlace!.name,
-		cityName,
+		cityName: isRealCity ? cityName : undefined,
 		electionDate,
 		filingDate,
 		breadcrumbs,
@@ -172,10 +174,15 @@ export async function generateMetadata({
 			racePlace ??
 			null);
 	const cityName = cityPlace?.name ?? city;
+	// A joint office fills the city slot with an office name, and the place then resolves to the
+	// county, so naming it as both city and county would say the county twice.
+	const isRealCity = isRealPlaceSegment(cityPlace?.slug, city);
+	const localityName = isRealCity ? cityName : countyDisplayName;
+	const placePhrase = isRealCity ? `${cityName}, ${countyDisplayName}` : countyDisplayName;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
 	return {
-		title: `${positionName} in ${cityName}, ${stateName} | Good Party`,
-		description: `Election details and candidates for ${positionName} in ${cityName}, ${countyDisplayName}, ${stateName}.`,
+		title: `${positionName} in ${localityName}, ${stateName} | Good Party`,
+		description: `Election details and candidates for ${positionName} in ${placePhrase}, ${stateName}.`,
 		alternates: { canonical: toAbsoluteUrl(`/elections/${fullSlug}/position/${positionSlug}`) },
 	};
 }

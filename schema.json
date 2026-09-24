@@ -2675,6 +2675,21 @@
             },
             "rest": {
               "type": "inline",
+              "name": "component_electionPositionResourcesBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
               "name": "component_nearbyOffices"
             }
           },
@@ -8393,6 +8408,215 @@
                       "value": "midnight"
                     }
                   ]
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "component_electionPositionResourcesBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_electionPositionResourcesBlock"
+          }
+        },
+        "guideCard": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_label": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "field_label"
+                },
+                "optional": true
+              },
+              "field_title": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "field_title"
+                },
+                "optional": true
+              },
+              "field_description": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_icon": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "field_icon"
+                },
+                "optional": true
+              },
+              "field_componentColor6ColorsInverse": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "field_componentColor6ColorsInverse"
+                },
+                "optional": true
+              },
+              "button": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "button"
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "ebookCard": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_label": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "field_label"
+                },
+                "optional": true
+              },
+              "field_title": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "field_title"
+                },
+                "optional": true
+              },
+              "field_description": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_icon": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "field_icon"
+                },
+                "optional": true
+              },
+              "field_componentColor6ColorsInverse": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "field_componentColor6ColorsInverse"
+                },
+                "optional": true
+              },
+              "button": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "button"
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "supportCard": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_label": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "field_label"
+                },
+                "optional": true
+              },
+              "field_title": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "field_title"
+                },
+                "optional": true
+              },
+              "field_description": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_icon": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "field_icon"
+                },
+                "optional": true
+              },
+              "field_componentColor6ColorsInverse": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "field_componentColor6ColorsInverse"
+                },
+                "optional": true
+              },
+              "button": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "button"
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "electionPositionResourcesBlockDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_blockColorCreamMidnight": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "field_blockColorCreamMidnight"
                 },
                 "optional": true
               }

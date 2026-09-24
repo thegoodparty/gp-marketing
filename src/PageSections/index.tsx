@@ -55,6 +55,7 @@ import { ElectionsNearYouBlockSection } from '~/PageSections/ElectionsNearYouBlo
 
 import { DemoRequestBlockSection } from '~/PageSections/DemoRequestBlockSection';
 
+import { ElectionPositionResourcesBlockSection } from '~/PageSections/ElectionPositionResourcesBlockSection';
 import { NearbyOfficesSection } from '~/PageSections/NearbyOfficesSection';
 
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
@@ -103,6 +104,17 @@ export type SectionOverrides = {
 		 * renders nothing.
 		 */
 		paragraphs?: string[];
+		/** When true the section renders nothing. */
+		hidden?: boolean;
+	};
+	component_electionPositionResourcesBlock?: {
+		/**
+		 * The "how to run" article for this page's office, chosen from marketing's
+		 * blog article matrix (`resolveHowToRunGuide`). It replaces the guide card's
+		 * editor-set link. Only position pages supply it; without it the card falls
+		 * back to the link set in Studio and, with neither, is left out.
+		 */
+		guideHref?: string;
 		/** When true the section renders nothing. */
 		hidden?: boolean;
 	};
@@ -668,6 +680,16 @@ export function PageSections(props: Props) {
 							</Boundary>
 						);
 					}
+					case 'component_electionPositionResourcesBlock':
+						return (
+							<Boundary key={section._key} componentName='Election Position Resources Block'>
+								<ElectionPositionResourcesBlockSection
+									{...section}
+									resourcesOverride={props.sectionOverrides?.component_electionPositionResourcesBlock}
+									tokens={props.tokens}
+								/>
+							</Boundary>
+						);
 					default:
 						console.warn('unknown section._type', section['_type']);
 						return <Fragment key={`unknown section._type' ${i}`} />;

@@ -304,6 +304,33 @@ For example, the CTA block's schema field `ctaMessaging` is projected to the nam
 
 Rule: when your block uses a projection, read the wrapper's field names off the GROQ fragment, not off the schema. See `.cursor/BUGBOT.md` (the "Sanity Seed vs GROQ Projection" section) and the elections notes for the full explanation, including the separate in-code template path where the raw schema names are used instead.
 
+### Query size budget
+
+Every page query embeds `sectionsGroq`, the comma-joined list of all `component_*` fragments, so a
+projection you add to one block is sent with every page. Sanity rejects query bodies over 300 KB with
+`The request body is N, exceeding the limit of 300 KB`, and `next build` only surfaces that as a failed
+prerender on some unrelated page (first seen on `/blog/section/politics`).
+
+The shared link and button projections are the expensive part, so they are declared once per query as
+custom GROQ functions (`gp::link` and `gp::button`, defined in `groqFunctions`) instead of being inlined.
+Keep using `${buttonGroq}` and `${textBlockGroq}` in a block fragment exactly as before; they expand to a
+function call. Two rules follow from this:
+
+- Any **new top-level query** that uses buttons, links, or rich text (directly or through a shared
+  fragment) must start with `${groqFunctions}`. Forgetting it is a hard query error, not a silent one,
+  and `src/sanity/groq.test.ts` catches it.
+- Never paste the body of `internalLinkGroq` or `buttonBodyGroq` back into a fragment. One inlined
+  copy is about 1.4 KB and 3.7 KB respectively, and the old inlined layout put `sectionsGroq` at
+  286 KB, within 2 KB of the limit.
+
+Budget: every exported query stays under 200 KB (the test enforces this). Measure with:
+
+```bash
+bun -e "import('./src/sanity/groq.ts').then(m => console.log('sectionsGroq', m.sectionsGroq.length, '| largest query', Math.max(...Object.values(m).filter(v => typeof v === 'string').map(v => v.length))))"
+```
+
+After the move to functions `sectionsGroq` is about 18 KB and the largest page query about 21 KB.
+
 ## Regenerate types
 
 After any schema or GROQ change, regenerate the Sanity types:

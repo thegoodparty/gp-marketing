@@ -158,6 +158,9 @@
     "prettier-plugin-tailwindcss": "^0.7.2",
     "vitest": "^3.2.4"
   },
+  "overrides": {
+    "groq-js": "^1.30.3"
+  },
   "prettier": {
     "printWidth": 140,
     "arrowParens": "avoid",

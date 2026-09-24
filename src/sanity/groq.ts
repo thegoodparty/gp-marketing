@@ -35,13 +35,19 @@ export const internalLinkGroq = `{...href->{_id,_type,"name":coalesce(singlePage
 /*language=textmate*/
 const downloadGroq = `_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->`;
 /*language=textmate*/
-const textBlockGroq = `markDefs[]{...,_type=="inlineInternalLink"=>{field_internalLink${internalLinkGroq}}}`;
+const textBlockGroq = `markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}`;
 /*language=textmate*/
 const planFeatureGroq = `markDefs[]{...,ref_inlineFeaturesItem->{...,"planColor":^.^.^.^.^.pricingPlanDesignSettings.field_componentColor6ColorsMidnight}}`;
 /*language=textmate*/
-export const globalCtaPrimaryButtonGroq = `"text":field_buttonText,"action":field_ctaAction,"link":field_internalLink${internalLinkGroq},field_externalLink,"anchor":${anchorIdGroq},ref_download->{${downloadGroq}},"formId":field_formId`;
+export const globalCtaPrimaryButtonGroq = `"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":${anchorIdGroq},ref_download->{${downloadGroq}},"formId":field_formId`;
 /*language=textmate*/
-export const buttonGroq = `_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":field_internalLink${internalLinkGroq},field_externalLink,"anchor":${anchorIdGroq},ref_download->{${downloadGroq}},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{${globalCtaPrimaryButtonGroq}}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)`;
+export const buttonBodyGroq = `_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":gp::link(field_internalLink),field_externalLink,"anchor":${anchorIdGroq},ref_download->{${downloadGroq}},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{${globalCtaPrimaryButtonGroq}}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)`;
+/*language=textmate*/
+export const buttonGroq = `...gp::button(@)`;
+/*language=textmate*/
+// Declared once at the top of every query that projects links or buttons. Inlining these two
+// projections put sectionsGroq within 2 KB of the 300 KB request body limit (see docs/adding-a-component.md).
+export const groqFunctions = `fn gp::link($link)=$link${internalLinkGroq};fn gp::button($button)=$button{${buttonBodyGroq}};`;
 /*language=textmate*/
 // imageCta stores its manual text in ctaMessagingSimple; every other CTA uses ctaMessaging.
 export const ctaBaseGroq = `"overview":coalesce(ctaMessaging,ctaMessagingSimple){...,block_summaryText[]{...,${textBlockGroq}}},"primaryCTA":{...ctaAction{${globalCtaPrimaryButtonGroq}}},"secondaryCTA":secondaryCta.ctaActionWithShared{${buttonGroq}}`;
@@ -191,14 +197,14 @@ export const sectionsGroq = `_key,_type,${component_pricingBlockGroq},${componen
 export const allCategoriesLinksGroq = `*[_type=="categories"][]{_id,"title":tagOverview.field_name,${categoriesHrefGroq}}`;
 /*language=textmate*/
 export const goodpartyOrg_homeQuery = defineQuery(
-	`*[_type=="goodpartyOrg_home"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},${homeHrefGroq}}`,
+	`${groqFunctions}*[_type=="goodpartyOrg_home"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},${homeHrefGroq}}`,
 );
 /*language=textmate*/
 export const experiment_variantsByExperimentIdQuery = defineQuery(
-	`*[_type == "experiment_variant" && field_experimentId == $experimentId]{field_variantName,pageSections{...,list_pageSections[]{${sectionsGroq}}}}`,
+	`${groqFunctions}*[_type == "experiment_variant" && field_experimentId == $experimentId]{field_variantName,pageSections{...,list_pageSections[]{${sectionsGroq}}}}`,
 );
 /*language=textmate*/
-export const activeVariantsByPageIdQuery = defineQuery(`
+export const activeVariantsByPageIdQuery = defineQuery(`${groqFunctions}
   *[
     _type == "experiment_variant" &&
     $pageId in field_targetPages[]._ref &&
@@ -217,7 +223,7 @@ export const activeVariantsByPageIdQuery = defineQuery(`
 
 /*language=textmate*/
 export const goodpartyOrg_allArticlesQuery = defineQuery(
-	`*[_type=="goodpartyOrg_allArticles"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},"categories":${allCategoriesLinksGroq},${allArticlesHrefGroq}}`,
+	`${groqFunctions}*[_type=="goodpartyOrg_allArticles"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},"categories":${allCategoriesLinksGroq},${allArticlesHrefGroq}}`,
 );
 /*language=textmate*/
 export const categoryLinkGroq = `...,tagOverview,${categoriesHrefGroq}`;
@@ -227,57 +233,57 @@ export const relatedArticlesGroq = `_id,_type,editorialAssets,editorialOverview{
 export const categoryAndTagPageBaseGroq = `_id,_type,tagOverview,seo,"featuredArticle":featuredBlogBlockContent.ref_chooseArticle->{${relatedArticlesGroq}},pageSections{...,list_pageSections[]{${sectionsGroq}}}`;
 /*language=textmate*/
 export const categoriesQuery = defineQuery(
-	`*[_type=="categories"&&tagOverview.field_slug==$slug][0]{${categoryAndTagPageBaseGroq},"categories":${allCategoriesLinksGroq},"categoryRelatedArticles":${categoryRelatedArticlesFirstFetchGroq},"topics":*[_type=="topics"][]{_id,_type,tagOverview,${topicsHrefGroq}},${categoriesHrefGroq}}`,
+	`${groqFunctions}*[_type=="categories"&&tagOverview.field_slug==$slug][0]{${categoryAndTagPageBaseGroq},"categories":${allCategoriesLinksGroq},"categoryRelatedArticles":${categoryRelatedArticlesFirstFetchGroq},"topics":*[_type=="topics"][]{_id,_type,tagOverview,${topicsHrefGroq}},${categoriesHrefGroq}}`,
 );
 /*language=textmate*/
 export const topicsQuery = defineQuery(
-	`*[_type=="topics"&&tagOverview.field_slug==$slug][0]{${categoryAndTagPageBaseGroq},"categories":${allCategoriesLinksGroq},"topicRelatedArticles":${topicRelatedArticlesFirstFetchGroq},"topics":*[_type=="topics"][]{_id,_type,tagOverview,${topicsHrefGroq}},${topicsHrefGroq}}`,
+	`${groqFunctions}*[_type=="topics"&&tagOverview.field_slug==$slug][0]{${categoryAndTagPageBaseGroq},"categories":${allCategoriesLinksGroq},"topicRelatedArticles":${topicRelatedArticlesFirstFetchGroq},"topics":*[_type=="topics"][]{_id,_type,tagOverview,${topicsHrefGroq}},${topicsHrefGroq}}`,
 );
 export const glossaryItemBaseGroq = `...,glossaryTermOverview{...,block_glossaryTermDefinition[0]{...,${textBlockGroq}}},${glossaryTermHrefGroq}`;
 /*language=textmate*/
 export const glossaryByLetterArrayQuery = defineQuery(
-	`*[_type=="glossary"&&string::startsWith(lower(glossaryTermOverview.field_glossaryTerm),$slug)] | order(glossaryTermOverview.field_glossaryTerm asc)[]{${glossaryItemBaseGroq}}`,
+	`${groqFunctions}*[_type=="glossary"&&string::startsWith(lower(glossaryTermOverview.field_glossaryTerm),$slug)] | order(glossaryTermOverview.field_glossaryTerm asc)[]{${glossaryItemBaseGroq}}`,
 );
 /*language=textmate*/
 export const glossaryHeroGroq = defineQuery(
-	`*[_type=="goodpartyOrg_glossary"][0]{...,glossaryOverview,"cta":glossaryPageCta{...,ref_sharedCta->{ctaAssets,${ctaBaseGroq}}}}`,
+	`${groqFunctions}*[_type=="goodpartyOrg_glossary"][0]{...,glossaryOverview,"cta":glossaryPageCta{...,ref_sharedCta->{ctaAssets,${ctaBaseGroq}}}}`,
 );
 
 /*language=textmate*/
 export const glossaryQuery = defineQuery(
-	`*[_type=="glossary"&&glossaryTermOverview.field_slug==$slug][0]{...,glossaryTermOverview{...,block_glossaryTermDefinition[]{...,${textBlockGroq}}},glossaryTermCta{...,ref_sharedCta->{ctaAssets,${ctaBaseGroq}}},${glossaryTermHrefGroq}}`,
+	`${groqFunctions}*[_type=="glossary"&&glossaryTermOverview.field_slug==$slug][0]{...,glossaryTermOverview{...,block_glossaryTermDefinition[]{...,${textBlockGroq}}},glossaryTermCta{...,ref_sharedCta->{ctaAssets,${ctaBaseGroq}}},${glossaryTermHrefGroq}}`,
 );
 /*language=textmate*/
 export const goodpartyOrg_glossaryQuery = defineQuery(
-	`*[_type=="goodpartyOrg_glossary"][0]{...,glossaryPageCta{...,ref_sharedCta->{ctaAssets,${ctaBaseGroq}}},"aTerms":*[_type=="glossary"&&string::startsWith(lower(glossaryTermOverview.field_glossaryTerm),"a")] | order(glossaryTermOverview.field_glossaryTerm asc)[]{${glossaryItemBaseGroq}},${glossaryHrefGroq}}`,
+	`${groqFunctions}*[_type=="goodpartyOrg_glossary"][0]{...,glossaryPageCta{...,ref_sharedCta->{ctaAssets,${ctaBaseGroq}}},"aTerms":*[_type=="glossary"&&string::startsWith(lower(glossaryTermOverview.field_glossaryTerm),"a")] | order(glossaryTermOverview.field_glossaryTerm asc)[]{${glossaryItemBaseGroq}},${glossaryHrefGroq}}`,
 );
 /*language=textmate*/
 export const goodpartyOrg_contactQuery = defineQuery(
-	`*[_type=="goodpartyOrg_contact"][0]{...,seo,pageSections{...,list_pageSections[]{${sectionsGroq}}},${contactHrefGroq}}`,
+	`${groqFunctions}*[_type=="goodpartyOrg_contact"][0]{...,seo,pageSections{...,list_pageSections[]{${sectionsGroq}}},${contactHrefGroq}}`,
 );
 /*language=textmate*/
 export const goodpartyOrg_landingPagesAndPolicyQuery = defineQuery(
-	`*[(_type=="goodpartyOrg_landingPages"&&detailPageOverviewNoHero.field_slug==$slug)||(_type=="policy"&&policyOverview.field_slug==$slug)][0]{...,_type=="goodpartyOrg_landingPages"=>{pageSections{...,list_pageSections[]{${sectionsGroq}}}},${landingPagesHrefGroq},${policyHrefGroq}}`,
+	`${groqFunctions}*[(_type=="goodpartyOrg_landingPages"&&detailPageOverviewNoHero.field_slug==$slug)||(_type=="policy"&&policyOverview.field_slug==$slug)][0]{...,_type=="goodpartyOrg_landingPages"=>{pageSections{...,list_pageSections[]{${sectionsGroq}}}},${landingPagesHrefGroq},${policyHrefGroq}}`,
 );
 /*language=textmate*/
 export const goodpartyOrg_electionsQuery = defineQuery(
-	`*[_type=="goodpartyOrg_landingPages"&&detailPageOverviewNoHero.field_slug=="elections"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},${landingPagesHrefGroq}}`,
+	`${groqFunctions}*[_type=="goodpartyOrg_landingPages"&&detailPageOverviewNoHero.field_slug=="elections"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},${landingPagesHrefGroq}}`,
 );
 /*language=textmate*/
 export const goodpartyOrg_candidatesQuery = defineQuery(
-	`*[_type=="goodpartyOrg_landingPages"&&detailPageOverviewNoHero.field_slug=="candidates"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},${landingPagesHrefGroq}}`,
+	`${groqFunctions}*[_type=="goodpartyOrg_landingPages"&&detailPageOverviewNoHero.field_slug=="candidates"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},${landingPagesHrefGroq}}`,
 );
 /*language=textmate*/
 export const goodpartyOrg_profileQuery = defineQuery(
-	`*[_type=="goodpartyOrg_landingPages"&&detailPageOverviewNoHero.field_slug=="profile"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},${landingPagesHrefGroq}}`,
+	`${groqFunctions}*[_type=="goodpartyOrg_landingPages"&&detailPageOverviewNoHero.field_slug=="profile"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},${landingPagesHrefGroq}}`,
 );
 /*language=textmate*/
 export const goodpartyOrg_allComponentsQuery = defineQuery(
-	`*[_type=="goodpartyOrg_allComponents"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},${allComponentsHrefGroq}}`,
+	`${groqFunctions}*[_type=="goodpartyOrg_allComponents"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},${allComponentsHrefGroq}}`,
 );
 /*language=textmate*/
 export const goodpartyOrg_404PageQuery = defineQuery(
-	`*[_type=="goodpartyOrg_404Page"][0]{...,ErrorMessage{...,list_buttons[]{${buttonGroq}}},${notFoundHrefGroq}}`,
+	`${groqFunctions}*[_type=="goodpartyOrg_404Page"][0]{...,ErrorMessage{...,list_buttons[]{${buttonGroq}}},${notFoundHrefGroq}}`,
 );
 /*language=textmate*/
 export const goodpartyOrg_seoSettingsQuery = defineQuery(`*[_type=="goodpartyOrg_seoSettings"][0]{...}`);
@@ -286,7 +292,7 @@ export const goodpartyOrg_redirectsQuery = defineQuery(`*[_type=="goodpartyOrg_r
 /*language=textmate*/
 export const goodpartyOrg_socialChannelsQuery = defineQuery(`*[_type=="goodpartyOrg_socialChannels"][0]{...}`);
 /*language=textmate*/
-export const groupInternalLinkGroq = `_key,_type,"label":field_linkText,"link":field_internalLink${internalLinkGroq},"icon":field_linkIcon`;
+export const groupInternalLinkGroq = `_key,_type,"label":field_linkText,"link":gp::link(field_internalLink),"icon":field_linkIcon`;
 /*language=textmate*/
 export const groupExternalLinkGroq = `_key,_type,"label":field_linkText,"link":{"href":field_externalLink},"icon":field_linkIcon`;
 /*language=textmate*/
@@ -294,12 +300,12 @@ export const groupNavigationGroupGroq = `_key,_type,"label":field_linkText,"list
 /*language=textmate*/
 export const navigationListGroq = `"navigationList":primaryNavigation.list_primaryNavigation[]{_type=="internalLink"=>{${groupInternalLinkGroq}},_type=="externalLink"=>{${groupExternalLinkGroq}},_type=="navigationGroup"=>{${groupNavigationGroupGroq}}},"primaryCTA":primaryNavigation.loggedOutCtAs.ref_navigationPrimaryCTA->{...ctaAction{${globalCtaPrimaryButtonGroq}}},"secondaryCTA":primaryNavigation.loggedOutCtAs.ref_navigationSecondaryCTA->{...ctaAction{${globalCtaPrimaryButtonGroq}}}`;
 /*language=textmate*/
-export const goodpartyOrg_navigationQuery = defineQuery(`*[_type=="goodpartyOrg_navigation"][0]{${navigationListGroq}}`);
+export const goodpartyOrg_navigationQuery = defineQuery(`${groqFunctions}*[_type=="goodpartyOrg_navigation"][0]{${navigationListGroq}}`);
 /*language=textmate*/
 export const groupFooterNavigationGroupGroq = `_key,_type,"groupTitle":field_title,"list_footerNavigationGroup":list_footerNavigationGroup[]{_type=="externalLink"=>{${groupExternalLinkGroq}},_type=="internalLink"=>{${groupInternalLinkGroq}}}`;
 /*language=textmate*/
 export const goodpartyOrg_footerQuery = defineQuery(
-	`*[_type=="goodpartyOrg_footer"][0]{...footer,"list_footerLegalNavigation":footer.list_footerLegalNavigation[]{_type=="internalLink"=>{${groupInternalLinkGroq}},_type=="externalLink"=>{${groupExternalLinkGroq}}},"list_footerNavigation":footer.list_footerNavigation[]{${groupFooterNavigationGroupGroq}}}`,
+	`${groqFunctions}*[_type=="goodpartyOrg_footer"][0]{...footer,"list_footerLegalNavigation":footer.list_footerLegalNavigation[]{_type=="internalLink"=>{${groupInternalLinkGroq}},_type=="externalLink"=>{${groupExternalLinkGroq}}},"list_footerNavigation":footer.list_footerNavigation[]{${groupFooterNavigationGroupGroq}}}`,
 );
 
 /** Article - Rich Text Content Sections */
@@ -310,7 +316,7 @@ export const imageCtaGroq = `field_componentColor6Colors,"image":coalesce(ctaAss
 export const articleSectionsGroq = `_key,_type,_type=="block"||_type=="imageContentSection"||_type=="tableGroup"=>{...},_type=="videoSection"=>{field_videoEmbedCode,field_caption},_type=="imageCta"=>{${imageCtaGroq}},_type=="ctaSection"=>{${imageCtaGroq}},_type=="inlineQuoteSection"=>{...,ref_quoteBy->},_type=="button"=>{${buttonGroq}},_type=="faqs"=>{...,list_faQs[]->{${faQGroq}}},_type=="callout"=>{...,block_summaryText[]{...,${textBlockGroq}}}`;
 /*language=textmate*/
 export const articleQuery = defineQuery(
-	`*[_type=="article"&&editorialOverview.field_slug==$slug][0]{...,editorialOverview{...,ref_author->},relatedArticles{...,ref_stickyRelatedArticle->{${relatedArticlesGroq}},list_relatedArticles[]->{${relatedArticlesGroq}}},ctaSection{...,${imageCtaGroq}},stickySidebarCta{field_showStickySidebarCta,ctaConfig{...,${imageCtaGroq}}},editorialContentTags{"topics":list_topics[]->{...,${topicsHrefGroq}},"category":ref_catgories->{${categoryLinkGroq}}},contentSections{...,block_editorialContentSections[]{${articleSectionsGroq},${textBlockGroq}},${hrefGroq}},${articleHrefGroq}}`,
+	`${groqFunctions}*[_type=="article"&&editorialOverview.field_slug==$slug][0]{...,editorialOverview{...,ref_author->},relatedArticles{...,ref_stickyRelatedArticle->{${relatedArticlesGroq}},list_relatedArticles[]->{${relatedArticlesGroq}}},ctaSection{...,${imageCtaGroq}},stickySidebarCta{field_showStickySidebarCta,ctaConfig{...,${imageCtaGroq}}},editorialContentTags{"topics":list_topics[]->{...,${topicsHrefGroq}},"category":ref_catgories->{${categoryLinkGroq}}},contentSections{...,block_editorialContentSections[]{${articleSectionsGroq},${textBlockGroq}},${hrefGroq}},${articleHrefGroq}}`,
 );
 /*language=textmate*/
 export const allArticlesForSearchGroq = `*[_type=="article"] | order(editorialOverview.field_editorialTitle asc)[]{_id,"title":editorialOverview.field_editorialTitle,${articleHrefGroq}}`;
@@ -318,9 +324,9 @@ export const allArticlesForSearchGroq = `*[_type=="article"] | order(editorialOv
 export const allTermsForSearchGroq = `*[_type=="glossary"] | order(glossaryTermOverview.field_glossaryTerm asc)[]{_id,"title":glossaryTermOverview.field_glossaryTerm,${glossaryTermHrefGroq}}`;
 
 /*language=textmate*/
-export const allFaqsQuery = defineQuery(`*[_type=="faq"] | order(faqOverview.field_question asc, _id asc){_id,_updatedAt,${faQGroq}}`);
+export const allFaqsQuery = defineQuery(`${groqFunctions}*[_type=="faq"] | order(faqOverview.field_question asc, _id asc){_id,_updatedAt,${faQGroq}}`);
 /*language=textmate*/
-export const faqByIdQuery = defineQuery(`*[_type=="faq"&&_id==$id][0]{_id,_updatedAt,${faQGroq}}`);
+export const faqByIdQuery = defineQuery(`${groqFunctions}*[_type=="faq"&&_id==$id][0]{_id,_updatedAt,${faQGroq}}`);
 
 /*language=textmate*/
 export const quoteCollectionByIdQuery = defineQuery(
@@ -329,7 +335,7 @@ export const quoteCollectionByIdQuery = defineQuery(
 
 /*language=textmate*/
 export const globalElectionTemplateQuery = defineQuery(
-	`*[_type=="goodpartyOrg_globalTemplate"&&field_electionTemplateType==$templateType][0]{_id,_type,field_title,field_electionTemplateType,previewTarget,pageSections{...,list_pageSections[]{${sectionsGroq}}}}`,
+	`${groqFunctions}*[_type=="goodpartyOrg_globalTemplate"&&field_electionTemplateType==$templateType][0]{_id,_type,field_title,field_electionTemplateType,previewTarget,pageSections{...,list_pageSections[]{${sectionsGroq}}}}`,
 );
 
 /**
@@ -344,5 +350,5 @@ export const customElectionTemplateTargetsQuery = defineQuery(
 
 /*language=textmate*/
 export const customElectionTemplateByIdQuery = defineQuery(
-	`*[_type=="goodpartyOrg_customTemplate"&&_id==$id][0]{_id,_type,field_title,field_electionTemplateType,pageSections{...,list_pageSections[]{${sectionsGroq}}}}`,
+	`${groqFunctions}*[_type=="goodpartyOrg_customTemplate"&&_id==$id][0]{_id,_type,field_title,field_electionTemplateType,pageSections{...,list_pageSections[]{${sectionsGroq}}}}`,
 );

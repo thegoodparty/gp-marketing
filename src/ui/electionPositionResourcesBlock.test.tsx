@@ -24,7 +24,13 @@ describe('ElectionPositionResourcesBlock', () => {
 		expect(html).toContain('A step-by-step guide.');
 		expect(html).toContain('href="/blog/article/how-to-run-for-mayor"');
 		expect(html).toContain('bg-waxflower-200');
-		expect(html).toContain('bg-midnight-900');
+	});
+
+	test('defaults to the cream block background with the dark pill button', () => {
+		const html = renderToStaticMarkup(<ElectionPositionResourcesBlock cards={[{ ...card, color: 'waxflower' }]} />);
+
+		expect(html).toContain('bg-goodparty-cream');
+		expect(html).toMatch(/<a[^>]*class="[^"]*bg-midnight-900/);
 	});
 
 	test('a midnight card swaps the dark button for the outline one so it stays visible', () => {

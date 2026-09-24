@@ -185,7 +185,9 @@ Why it is data-backed: the guide card's link is chosen per page. Marketing's blo
 office is only known at render time, so the link cannot be an editor field on a template that
 serves every position page. `src/lib/howToRunGuide.ts` holds the matrix and the classifier that
 applies it to a race's normalized name, full name, position names and level, falling back to the
-general campaign guide. `buildPositionSectionOverrides` hands the result in as `guideHref`, which
+general campaign guide. Special-purpose county boards (a county health commission, a planning
+commission) go to the special-district article, not the county-commissioner one, which is for the
+county's governing body (Emily, 2026-09-24). `buildPositionSectionOverrides` hands the result in as `guideHref`, which
 wins over the guide card's editor-set link. The editor link only matters on pages that are not
 position pages; with neither, the guide card is left out and the other two render. The other two
 cards are plain editorial content ("Connect with us" goes to community.goodparty.org, Emily,

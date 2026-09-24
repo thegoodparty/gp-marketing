@@ -99,6 +99,16 @@ describe('classifyHowToRunGuide', () => {
 			expect(classifyHowToRunGuide({ race: race('County Water District Board') })).toBe('specialDistrict');
 		});
 
+		test('special-purpose county boards are special districts, not the county governing body (Emily, 2026-09-24)', () => {
+			expect(classifyHowToRunGuide({ race: race('County Health Commission') })).toBe('specialDistrict');
+			expect(classifyHowToRunGuide({ race: race('Metropolitan Planning Commission', { positionLevel: 'COUNTY' }) })).toBe('specialDistrict');
+		});
+
+		test('the county governing body itself never reads as a special district', () => {
+			expect(classifyHowToRunGuide({ race: race('County Commission') })).toBe('countyCommissioner');
+			expect(classifyHowToRunGuide({ race: race('Board of Supervisors') })).toBe('countyCommissioner');
+		});
+
 		test('a school district board is a school board, not a special district', () => {
 			expect(classifyHowToRunGuide({ race: race('School District Board Member') })).toBe('schoolBoard');
 		});

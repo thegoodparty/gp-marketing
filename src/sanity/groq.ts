@@ -157,7 +157,7 @@ export const component_candidatesBlock = `_type=="component_candidatesBlock"=>{.
 export const component_claimProfileBlock = `_type=="component_claimProfileBlock"=>{...,claimProfileBlockContent,ctaAction{${buttonGroq}},claimProfileBlockDesignSettings}`;
 export const component_electionsIndexBlock = `_type=="component_electionsIndexBlock"=>{...,electionsIndexBlockHeader{${summaryInfoGroq}}}`;
 export const component_electionsPositionHero = `_type=="component_electionsPositionHero"=>{...,ctaAction{${buttonGroq}}}`;
-export const component_electionsPositionContentBlock = `_type=="component_electionsPositionContentBlock"=>{...,electionsPositionContentBlockDesignSettings,componentSettings}`;
+export const component_electionsPositionContentBlock = `_type=="component_electionsPositionContentBlock"=>{...,siderail{...,block_exploreBody[]{...,${textBlockGroq}}},badgeCallout{...,block_summaryText[]{...,${textBlockGroq}}},peopleLists,brandedCta{...,ctaActionWithShared{${buttonGroq}}},voterReadiness{...,list_iconContentItems[]{...,ctaActionWithShared{${buttonGroq}}}},aboutPosition,howToRun{...,ctaActionWithShared{${buttonGroq}},block_needHelp[]{...,${textBlockGroq}}},electionsPositionContentBlockDesignSettings,componentSettings}`;
 export const component_electionsSearchHero = `_type=="component_electionsSearchHero"=>{...}`;
 export const component_featuredCitiesBlock = `_type=="component_featuredCitiesBlock"=>{...,featuredCitiesBlockHeader{${summaryInfoGroq}}}`;
 export const component_goodPartyOrgPledge = `_type=="component_goodPartyOrgPledge"=>{...,summaryInfo{${summaryInfoGroq}},goodPartyOrgPledgeItems{...,list_pledgeCards[]{...,ctaActionWithShared{${buttonGroq}}}}}`;

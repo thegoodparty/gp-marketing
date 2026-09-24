@@ -10,12 +10,7 @@ import type {
 	RaceDetail,
 	RaceNode,
 } from '~/types/elections';
-import type {
-	PersonItem,
-	PersonOfficeHolder,
-	PublicPersonProfile,
-	VoterDensity,
-} from '~/types/people';
+import type { PersonItem, PersonOfficeHolder, PublicPersonProfile, VoterDensity } from '~/types/people';
 import {
 	buildElectionPositionHrefFromRaceSlug,
 	buildRaceCandidatesHref,
@@ -26,13 +21,10 @@ import {
 } from '~/lib/electionsHelpers';
 import { ElectionApiError, fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
 
-const ELECTIONS_API_BASE_URL =
-	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
+const ELECTIONS_API_BASE_URL = process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
 
 const GP_API_BASE_URL =
-	process.env['GP_API_BASE_URL'] ??
-	process.env['NEXT_PUBLIC_API_BASE'] ??
-	ELECTIONS_API_BASE_URL.replace('election-api', 'gp-api');
+	process.env['GP_API_BASE_URL'] ?? process.env['NEXT_PUBLIC_API_BASE'] ?? ELECTIONS_API_BASE_URL.replace('election-api', 'gp-api');
 
 const CACHE_OPTIONS = { next: { revalidate: 3600 } } satisfies RequestInit;
 
@@ -55,12 +47,10 @@ export function isDistrictMtfcc(mtfcc?: string): boolean {
 	return mtfcc?.startsWith('G54') ?? false;
 }
 
-const COUNTY_EQUIVALENT_SLUG_SUFFIX_RE =
-	/(?:-county|-parish|-borough|-census-area|-city-and-borough|-city-and-county)$/i;
+const COUNTY_EQUIVALENT_SLUG_SUFFIX_RE = /(?:-county|-parish|-borough|-census-area|-city-and-borough|-city-and-county)$/i;
 
 /** Matches common school / district naming (incl. VT UHSD and supervisory-union phrases). */
-const DISTRICT_KEYWORD_RE =
-	/\b(district|schools?|isd|usd|csd|sd|rsu|sau|uhsd)\b|\bsupervisory(?:\s+|-)union\b/i;
+const DISTRICT_KEYWORD_RE = /\b(district|schools?|isd|usd|csd|sd|rsu|sau|uhsd)\b|\bsupervisory(?:\s+|-)union\b/i;
 
 export function looksLikeCountySlugSegment(segment: string): boolean {
 	return COUNTY_EQUIVALENT_SLUG_SUFFIX_RE.test(segment);
@@ -91,7 +81,7 @@ export function isStateIndexDistrictPlace(place: Pick<PlaceItem, 'name' | 'slug'
 const FETCH_JSON_MAX_RETRIES = 2;
 
 async function sleep(ms: number): Promise<void> {
-	return new Promise((resolve) => setTimeout(resolve, ms));
+	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | null> {
@@ -196,11 +186,7 @@ export async function getPositionById(id: string): Promise<PositionDetail | null
 	return fetchJson<PositionDetail>(url, CACHE_OPTIONS);
 }
 
-export async function getRaceBySlug(
-	raceSlug: string,
-	includePlace = true,
-	filters?: { isPrimary?: boolean },
-): Promise<RaceDetail | null> {
+export async function getRaceBySlug(raceSlug: string, includePlace = true, filters?: { isPrimary?: boolean }): Promise<RaceDetail | null> {
 	const searchParams = new URLSearchParams({
 		raceSlug,
 		includePlace: includePlace.toString(),
@@ -222,20 +208,14 @@ export async function getSubplaceRaceBySlug(params: {
 	positionSlug: string;
 }): Promise<RaceDetail | null> {
 	const { state, county, city, subplace, positionSlug } = params;
-	let race = await getRaceBySlug(
-		buildSubplaceRaceSlug(state, city, subplace, positionSlug, county),
-	);
+	let race = await getRaceBySlug(buildSubplaceRaceSlug(state, city, subplace, positionSlug, county));
 	if (!race) {
 		race = await getRaceBySlug(buildSubplaceRaceSlug(state, city, subplace, positionSlug));
 	}
 	return race;
 }
 
-export async function getCandidacies(params: {
-	raceId?: string;
-	positionId?: string;
-	raceSlug?: string;
-}): Promise<CandidacyItem[]> {
+export async function getCandidacies(params: { raceId?: string; positionId?: string; raceSlug?: string }): Promise<CandidacyItem[]> {
 	return (await getCandidaciesOrNull(params)) ?? [];
 }
 
@@ -285,7 +265,7 @@ export async function fetchCandidacySlugs(stateCode: string): Promise<string[]> 
 	const url = `${ELECTIONS_API_BASE_URL}/v1/candidacies?${searchParams}`;
 	const data = await fetchJson<Array<{ slug?: string }>>(url, CACHE_OPTIONS);
 	if (!Array.isArray(data)) return [];
-	return data.map((c) => c.slug).filter((s): s is string => typeof s === 'string' && s.length > 0);
+	return data.map(c => c.slug).filter((s): s is string => typeof s === 'string' && s.length > 0);
 }
 
 export async function findCampaignByRace(params: {
@@ -460,6 +440,20 @@ export async function getOfficeHoldersByGeoId(geoId: string): Promise<PersonOffi
 	return Array.isArray(data) ? data : [];
 }
 
+/**
+ * Office holders for one BallotReady position id: the "Who's currently in
+ * office" rows on a position page. Returns null, not [], when election-api gave
+ * no answer, so the caller can hide the section rather than publish an empty
+ * one. Callers must still filter on `positionId` themselves: if the API were to
+ * ignore the parameter the unfiltered feed would list every officeholder.
+ */
+export async function getOfficeHoldersByPositionIdOrNull(positionId: string): Promise<PersonOfficeHolder[] | null> {
+	const searchParams = new URLSearchParams({ positionId, includePosition: 'true' });
+	const url = `${ELECTIONS_API_BASE_URL}/v1/officeholders?${searchParams}`;
+	const data = await fetchJson<PersonOfficeHolder[]>(url, CACHE_OPTIONS);
+	return Array.isArray(data) ? data : null;
+}
+
 /** Batch-resolves canonical Person rows by id (election-api caps `ids` at 500). */
 export async function getPersonsByIds(ids: string[]): Promise<PersonItem[]> {
 	const unique = Array.from(new Set(ids.filter(Boolean))).slice(0, 500);
@@ -478,9 +472,7 @@ export async function getPersonsByIds(ids: string[]): Promise<PersonItem[]> {
  * lives on the heatmap track and may not exist in every environment yet; the
  * null-on-miss contract keeps the profile fully functional regardless.
  */
-export async function getVoterDensityForDistrict(
-	personId: string,
-): Promise<VoterDensity | null> {
+export async function getVoterDensityForDistrict(personId: string): Promise<VoterDensity | null> {
 	const searchParams = new URLSearchParams({ personId });
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles/voter-density?${searchParams}`;
 	return fetchJson<VoterDensity>(url, personCacheOptions(personId));
@@ -513,9 +505,7 @@ export type PublicPersonProfileResult =
  * failure falls back to `absent` so the spine page still renders instead of
  * 404-ing.
  */
-export async function getPublicPersonProfileStatus(
-	personId: string,
-): Promise<PublicPersonProfileResult> {
+export async function getPublicPersonProfileStatus(personId: string): Promise<PublicPersonProfileResult> {
 	const searchParams = new URLSearchParams({ personId });
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles?${searchParams}`;
 	for (let attempt = 0; attempt <= FETCH_JSON_MAX_RETRIES; attempt++) {
@@ -554,10 +544,7 @@ export async function getMostElections(count = 3): Promise<FeaturedCity[]> {
 	return Array.isArray(data) ? data : [];
 }
 
-export async function getPlacesByState(params: {
-	state: string;
-	mtfcc?: string;
-}): Promise<PlaceItem[]> {
+export async function getPlacesByState(params: { state: string; mtfcc?: string }): Promise<PlaceItem[]> {
 	const searchParams = new URLSearchParams({
 		state: params.state.toUpperCase(),
 	});
@@ -575,17 +562,11 @@ export function normalizeName(name: string): string {
 /** Derives county name from county slug (e.g. "ca/los-angeles-county" -> "Los Angeles"). */
 function countyNameFromSlug(countySlug: string): string {
 	const part = countySlug.split('/').pop() ?? '';
-	const withoutSuffix = part.replace(
-		/-(county|parish|city-and-borough|city-and-county|borough|census-area)$/i,
-		'',
-	);
+	const withoutSuffix = part.replace(/-(county|parish|city-and-borough|city-and-county|borough|census-area)$/i, '');
 	return withoutSuffix.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 }
 
-export async function getCityPlacesByCounty(params: {
-	state: string;
-	countySlug: string;
-}): Promise<PlaceItem[]> {
+export async function getCityPlacesByCounty(params: { state: string; countySlug: string }): Promise<PlaceItem[]> {
 	const [allCities, allTowns] = await Promise.all([
 		getPlacesByState({ state: params.state, mtfcc: CITY_MTFCC }),
 		getPlacesByState({ state: params.state, mtfcc: TOWN_MTFCC }),
@@ -614,19 +595,14 @@ function dedupePlacesBySlug(places: PlaceItem[]): PlaceItem[] {
 	return out;
 }
 
-export async function getCountyChildPlaces(params: {
-	state: string;
-	countySlug: string;
-}): Promise<PlaceItem[]> {
+export async function getCountyChildPlaces(params: { state: string; countySlug: string }): Promise<PlaceItem[]> {
 	const county = await getPlaceBySlug({
 		slug: params.countySlug,
 		includeChildren: true,
 		includeRaces: false,
 		placeColumns: 'slug,name,mtfcc,countyName',
 	});
-	const hierarchyChildren = (county?.children ?? []).filter(
-		p => isCityOrTownMtfcc(p.mtfcc) && !isDistrictMtfcc(p.mtfcc),
-	);
+	const hierarchyChildren = (county?.children ?? []).filter(p => isCityOrTownMtfcc(p.mtfcc) && !isDistrictMtfcc(p.mtfcc));
 	const fallbackCities = await getCityPlacesByCounty(params);
 	return dedupePlacesBySlug([...hierarchyChildren, ...fallbackCities]);
 }
@@ -651,10 +627,7 @@ export async function getPlaceBySlug(params: {
 }
 
 /** Resolves a county place slug from a state code and county name on a city/town place. */
-export async function resolveCountySlugForPlace(
-	state: string,
-	countyName: string,
-): Promise<string | undefined> {
+export async function resolveCountySlugForPlace(state: string, countyName: string): Promise<string | undefined> {
 	const counties = await getPlacesByState({ state, mtfcc: COUNTY_MTFCC });
 	const target = normalizeName(canonicalizeCountyEquivalentName(state, countyName).baseName);
 	for (const county of counties) {
@@ -713,18 +686,14 @@ export type RaceElectionHrefs = {
  * Resolves canonical elections position and candidates listing paths for a race slug.
  * Expands city/town 3-part slugs to 4-level URLs when county can be resolved.
  */
-export async function resolveRaceElectionHrefs(
-	raceSlug: string | undefined,
-	positionLevel?: string,
-): Promise<RaceElectionHrefs> {
+export async function resolveRaceElectionHrefs(raceSlug: string | undefined, positionLevel?: string): Promise<RaceElectionHrefs> {
 	if (!raceSlug) return {};
 
 	const raceEntry = { slug: raceSlug, positionLevel };
 	const parts = raceSlug.split('/').filter(Boolean);
 	const prefixParts = parts.slice(0, -1);
 	const level = (positionLevel ?? '').toUpperCase();
-	const mightNeedCountyExpansion =
-		prefixParts.length === 2 && (level === '' || level === 'CITY' || level === 'LOCAL');
+	const mightNeedCountyExpansion = prefixParts.length === 2 && (level === '' || level === 'CITY' || level === 'LOCAL');
 
 	if (!mightNeedCountyExpansion) {
 		const positionHref = buildElectionPositionHrefFromRaceSlug(raceEntry);

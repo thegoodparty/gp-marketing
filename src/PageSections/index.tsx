@@ -522,6 +522,7 @@ export function PageSections(props: Props) {
 							<Boundary key={section._key} componentName='Elections Position Content Block'>
 								<ElectionsPositionContentBlockSection
 									{...section}
+									tokens={props.tokens}
 									contentOverride={props.sectionOverrides?.component_electionsPositionContentBlock}
 								/>
 							</Boundary>

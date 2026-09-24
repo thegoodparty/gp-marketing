@@ -3,6 +3,7 @@ import { describe, expect, test } from 'bun:test';
 import {
 	buildCandidatesSectionOverrides,
 	buildCandidatesTokens,
+	buildPositionSeatFilter,
 	buildPositionSectionOverrides,
 	buildPositionTokens,
 } from '~/lib/electionsTemplateHelpers';
@@ -25,25 +26,123 @@ const positionOverrideCtx = {
 	pageUrl: 'https://goodparty.org/elections/mn/morrison-county/position/county-attorney',
 };
 
-describe('buildPositionSectionOverrides', () => {
-	test('includes rightColumnCTA when candidatesHref is set', () => {
+describe('buildPositionSectionOverrides content block', () => {
+	const race = {
+		id: 'r1',
+		slug: 'mn/morrison-county/county-attorney',
+		name: 'County Attorney',
+		state: 'MN',
+		electionDate: '2026-11-03T00:00:00.000Z',
+		filingDateStart: '2026-05-19T00:00:00.000Z',
+		filingDateEnd: '2026-06-02T00:00:00.000Z',
+		positionLevel: 'county',
+		salary: '$90,000 / year',
+		employmentType: 'Full Time',
+		partisanType: 'partisan',
+		frequency: ['4'],
+		numberOfSeats: 1,
+		isRunoff: false,
+		positionDescription: 'The county attorney prosecutes crimes.',
+		eligibilityRequirements: 'Must be a licensed attorney.',
+		filingRequirements: 'Affidavit of candidacy and $500 fee.',
+		filingOfficeAddress: '213 1st Ave SE, Little Falls, MN 56345',
+	};
+
+	test('carries the same race dates the hero reads, the page URL and the location crumb', () => {
 		const overrides = buildPositionSectionOverrides({
 			...positionOverrideCtx,
-			candidatesHref: '/elections/mn/morrison-county/position/county-attorney/candidates',
+			race,
+			breadcrumbs: [
+				{ href: '/elections', label: 'Elections' },
+				{ href: '/elections/mn', label: 'Minnesota' },
+				{ href: '/elections/mn/morrison-county', label: 'Morrison County' },
+				{ href: '', label: 'County Attorney' },
+			],
+			heroCandidates: [
+				{ key: 'c1', name: 'Tom Nguyen', party: 'Independent', partyClass: 'independent', isPledged: true, href: '/people/tom-nguyen-c1' },
+			],
+			officeholders: [{ key: 'o1', name: 'Grace Hopper', party: 'Independent', term: '2023 to 2027' }],
 		});
+		const block = overrides.component_electionsPositionContentBlock;
 
-		expect(overrides.component_electionsPositionContentBlock?.rightColumnCTA).toEqual({
-			buttonType: 'internal',
-			href: '/elections/mn/morrison-county/position/county-attorney/candidates',
-			label: 'View candidates',
-			buttonProps: { styleType: 'secondary' },
-		});
+		expect(block?.electionDateIso).toBe(race.electionDate);
+		expect(block?.filingDateStartIso).toBe(race.filingDateStart);
+		expect(block?.filingDateEndIso).toBe(race.filingDateEnd);
+		expect(block?.shareUrl).toBe(positionOverrideCtx.pageUrl);
+		expect(block?.locationHref).toBe('/elections/mn/morrison-county');
+		expect(block?.candidates).toEqual([
+			{
+				key: 'c1',
+				name: 'Tom Nguyen',
+				party: 'Independent',
+				isPledged: true,
+				href: '/people/tom-nguyen-c1',
+				avatar: undefined,
+				isWinner: undefined,
+			},
+		]);
+		expect(block?.officeholders?.[0]?.name).toBe('Grace Hopper');
 	});
 
-	test('omits rightColumnCTA when candidatesHref is not set', () => {
-		const overrides = buildPositionSectionOverrides(positionOverrideCtx);
+	test('maps the race facts onto the About card and the filing step', () => {
+		const block = buildPositionSectionOverrides({
+			...positionOverrideCtx,
+			race,
+			filingDate: 'May 19, 2026 - June 2, 2026',
+		}).component_electionsPositionContentBlock;
 
-		expect(overrides.component_electionsPositionContentBlock?.rightColumnCTA).toBeUndefined();
+		expect(block?.about?.description).toBe(race.positionDescription);
+		expect(block?.about?.attributes).toEqual([
+			{ label: 'Office level', value: 'County' },
+			{ label: 'Election frequency', value: 'Every 4 years' },
+			{ label: 'Typical salary', value: '$90,000 / year' },
+			{ label: 'Commitment level', value: 'Full Time' },
+			{ label: 'Affiliation', value: 'partisan' },
+			{ label: 'Positions', value: '1 open seat' },
+		]);
+		expect(block?.about?.electionTypes).toEqual([
+			{ label: 'Partisan election (party labels appear on ballots)', checked: true },
+			{ label: 'Run-off election', checked: false },
+		]);
+		expect(block?.howToRun?.eligibility).toBe(race.eligibilityRequirements);
+		expect(block?.howToRun?.filing).toEqual([
+			{ label: 'Filing requirements', value: race.filingRequirements },
+			{ label: 'Filing period', value: 'May 19, 2026 - June 2, 2026' },
+			{ label: 'Where to file', value: race.filingOfficeAddress },
+		]);
+	});
+
+	test('leaves candidates and officeholders undefined when the route could not read them', () => {
+		const block = buildPositionSectionOverrides(positionOverrideCtx).component_electionsPositionContentBlock;
+
+		expect(block?.candidates).toBeUndefined();
+		expect(block?.officeholders).toBeUndefined();
+		expect(block?.about).toBeUndefined();
+		expect(block?.howToRun).toBeUndefined();
+		expect(block?.seatFilter).toBeUndefined();
+	});
+
+	test('offers the seat filter only when every row carries a seat and there is a choice', () => {
+		const withSeats = [
+			{ key: 'a', name: 'A', seatValue: '2' },
+			{ key: 'b', name: 'B', seatValue: '1' },
+			{ key: 'c', name: 'C', seatValue: '10' },
+		];
+		expect(buildPositionSeatFilter(withSeats, 'District')).toEqual({
+			label: 'Filter by District',
+			options: [
+				{ value: '1', label: 'District 1' },
+				{ value: '2', label: 'District 2' },
+				{ value: '10', label: 'District 10' },
+			],
+		});
+		expect(buildPositionSeatFilter([...withSeats, { key: 'd', name: 'D' }], 'District')).toBeUndefined();
+		expect(buildPositionSeatFilter([{ key: 'a', name: 'A', seatValue: '1' }], 'District')).toBeUndefined();
+	});
+
+	test('resolves the [Position Name] alias the Figma copy uses', () => {
+		const tokens = buildPositionTokens(tokenCtx);
+		expect(resolveTokens('About [Position Name]', tokens)).toBe('About Mayor');
 	});
 });
 

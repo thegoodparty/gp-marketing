@@ -91,6 +91,8 @@ export interface RaceDetail {
 	partisanType?: string;
 	/** Seats up in this race (BallotReady number_of_seats). Drives the hero's multiple-winner state. */
 	numberOfSeats?: number | null;
+	/** BallotReady position id. Joins the race to its current officeholders on the position page. */
+	positionId?: string | null;
 	Place?: PlaceWithFacts & {
 		parent?: { name: string; slug: string; state: string; geoId?: string };
 	};
@@ -132,14 +134,12 @@ export interface FindByRaceIdResponse {
 		id: number;
 		vanityPath: string;
 		status: string;
-		content:
-			| {
-					about?: {
-						bio?: string;
-						issues?: Array<{ title?: string; description?: string }>;
-					};
-			  }
-			| null;
+		content: {
+			about?: {
+				bio?: string;
+				issues?: Array<{ title?: string; description?: string }>;
+			};
+		} | null;
 		domain: { name: string; status: string } | null;
 	} | null;
 	campaignPositions: Array<{

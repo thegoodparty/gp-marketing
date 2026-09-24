@@ -48,25 +48,29 @@ function injectedScript(): Element {
 }
 
 describe('ensureGooglePlacesLoaded', () => {
-	test('a failed script load is not cached: the next call retries and can succeed', async () => {
+	test('a failed script load is not cached, and the retry replaces the dead tag rather than listening on it', async () => {
 		const { ensureGooglePlacesLoaded } = await import('./googlePlaces');
 
-		// First keystroke: the tag is injected, then the network fails.
+		// First keystroke: tag A is injected, then the network fails.
 		const first = ensureGooglePlacesLoaded();
-		const script = injectedScript();
-		script.dispatchEvent(new dom.window.Event('error'));
+		const tagA = injectedScript();
+		tagA.dispatchEvent(new dom.window.Event('error'));
 		await expect(first).rejects.toThrow('Google Places script failed to load');
 
-		// The script did in fact arrive late (or the blip cleared). The library is
-		// present on window, so a retry that re-checks the existing tag should resolve.
-		(window as unknown as { google: unknown }).google = { maps: { places: {} } };
-
+		// Second keystroke, with the library still absent. This is the path that used
+		// to hang: a tag that already fired `error` never fires anything again, so
+		// listening on it waits forever. The retry has to replace it instead.
 		const second = ensureGooglePlacesLoaded();
 		expect(second).not.toBe(first);
-		await expect(second).resolves.toBeUndefined();
+		const tags = document.head.querySelectorAll('script[src*="maps.googleapis.com"]');
+		expect(tags.length).toBe(1);
+		const tagB = tags[0]!;
+		expect(tagB).not.toBe(tagA);
+		expect(tagA.isConnected).toBe(false);
 
-		// And only ever one tag: recovery reuses the existing element rather than
-		// appending a second script.
-		expect(document.head.querySelectorAll('script[src*="maps.googleapis.com"]').length).toBe(1);
+		// The fresh tag loads. Only now should the second call settle.
+		(window as unknown as { google: unknown }).google = { maps: { places: {} } };
+		tagB.dispatchEvent(new dom.window.Event('load'));
+		await expect(second).resolves.toBeUndefined();
 	});
 });

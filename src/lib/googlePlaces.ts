@@ -98,9 +98,22 @@ async function injectGooglePlacesScript(apiKey: string): Promise<void> {
 				resolve();
 				return;
 			}
-			existing.addEventListener('load', () => resolve(), { once: true });
-			existing.addEventListener('error', () => reject(new Error('Google Places script failed to load')), { once: true });
-			return;
+			// A tag that already fired `error` will never fire `load` or `error` again, so
+			// listening on it would hang forever. Drop it and inject a fresh one below.
+			if (existing.dataset['failed']) {
+				existing.remove();
+			} else {
+				existing.addEventListener('load', () => resolve(), { once: true });
+				existing.addEventListener(
+					'error',
+					() => {
+						existing.dataset['failed'] = '1';
+						reject(new Error('Google Places script failed to load'));
+					},
+					{ once: true },
+				);
+				return;
+			}
 		}
 
 		const script = document.createElement('script');
@@ -108,7 +121,14 @@ async function injectGooglePlacesScript(apiKey: string): Promise<void> {
 		script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&libraries=places&loading=async`;
 		script.async = true;
 		script.addEventListener('load', () => resolve(), { once: true });
-		script.addEventListener('error', () => reject(new Error('Google Places script failed to load')), { once: true });
+		script.addEventListener(
+			'error',
+			() => {
+				script.dataset['failed'] = '1';
+				reject(new Error('Google Places script failed to load'));
+			},
+			{ once: true },
+		);
 		document.head.appendChild(script);
 	});
 }

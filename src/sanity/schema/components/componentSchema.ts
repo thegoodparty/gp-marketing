@@ -49,7 +49,10 @@ import { component_locationEditorialBlock } from './component_locationEditorialB
 
 import { component_electionsNearYouBlock } from './component_electionsNearYouBlock.ts';
 
+import { component_demoRequestBlock } from './component_demoRequestBlock.ts';
+
 export const componentSchema = [
+	component_demoRequestBlock,
 	component_electionsNearYouBlock,
 	component_locationEditorialBlock,
 	component_testimonialBlockWithLink,

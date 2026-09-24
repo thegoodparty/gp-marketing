@@ -111,7 +111,10 @@ describe('resolveGuideButton', () => {
 	});
 
 	test('an emptied button text field still gets the default label', () => {
-		const card = { ...section.guideCard, button: { ...section.guideCard.button, text: '' } };
+		const card = {
+			...section.guideCard,
+			button: { ...section.guideCard?.button, text: '' },
+		} as unknown as Parameters<typeof resolveGuideButton>[0];
 
 		expect(resolveGuideButton(card, '/blog/article/how-to-run-for-mayor')?.label).toBe('Read the guide');
 	});

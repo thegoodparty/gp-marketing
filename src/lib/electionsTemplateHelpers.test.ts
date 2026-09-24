@@ -180,15 +180,13 @@ describe('buildPositionSectionOverrides hero', () => {
 		expect(overrides.component_electionsPositionHero?.candidates).toHaveLength(1);
 	});
 
-	test('keeps the candidates page link when no candidate rows will render on the page', () => {
+	test('never links the hero to the /candidates page: with no rows on the page the button has nowhere to go', () => {
 		const href = '/elections/mn/morrison-county/position/county-attorney/candidates';
-		expect(
-			buildPositionSectionOverrides({ ...positionOverrideCtx, race, candidatesHref: href, heroCandidates: [] })
-				.component_electionsPositionHero?.candidatesHref,
-		).toBe(href);
-		expect(
-			buildPositionSectionOverrides({ ...positionOverrideCtx, race, candidatesHref: href }).component_electionsPositionHero?.candidatesHref,
-		).toBe(href);
+		const withEmptyRows = buildPositionSectionOverrides({ ...positionOverrideCtx, race, candidatesHref: href, heroCandidates: [] });
+		const withNoData = buildPositionSectionOverrides({ ...positionOverrideCtx, race, candidatesHref: href });
+		expect(withEmptyRows.component_electionsPositionHero?.candidatesHref).toBeUndefined();
+		expect(withNoData.component_electionsPositionHero?.candidatesHref).toBeUndefined();
+		expect(withNoData.component_electionsPositionHero?.resultsHref).toBeUndefined();
 	});
 
 	test('leaves candidates undefined, not empty, when the route supplied none', () => {

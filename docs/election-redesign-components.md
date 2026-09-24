@@ -395,6 +395,11 @@ Apply these across the whole batch so the blocks stay consistent.
   no single token gives, so it pairs `heading-lg` with a `max-md:text-heading-md`
   override. Both are registered in the tailwind-merge font-size list; a size that is
   not in that list is silently dropped (see `.cursor/BUGBOT.md`).
+- **The `/candidates` pages are going away with the redesign** (Emily, 2026-09-24). No
+  redesign block links to `/elections/.../position/<slug>/candidates`. Candidate rows live on the
+  position page itself (the content block's list, anchored at `#position-candidates`), and the
+  hero's ballot button points there or does not render. The old template's CTA block still
+  carries a candidates page link; it is replaced with the rest of the position page set.
 - **Page state comes from data, not from an editor's choice.** Where a component
   varies by where an election is in its cycle (pre-filing, mid-election,
   post-election), that is a fact derived from filing dates and certified results, not

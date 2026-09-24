@@ -4,9 +4,9 @@
 
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
+import { MAX_URLS_PER_SITEMAP } from '../../src/lib/sitemap-entries';
 import type { SitemapEntry } from './xml';
 
-const MAX_URLS_PER_SITEMAP = 50_000;
 const MAX_BYTES_PER_SITEMAP = 50 * 1024 * 1024; // 50 MB
 const BYTES_PER_ENTRY_ESTIMATE = 180;
 const SPLIT_CHECK_INTERVAL = 1_000;

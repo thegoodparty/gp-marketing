@@ -155,6 +155,39 @@ Three things not to "fix" while in here:
   surface at two tiers. `dedupeByUrl` will not collapse that, because the two URLs
   genuinely differ.
 
+### How the /people band is sharded
+
+The band after the 51 state shards is `/people`, one profile per URL, and at 478,442
+URLs (September 2026) it is the bulk of the site. It is split across
+`PEOPLE_SITEMAP_SHARD_COUNT` files, `/sitemap/52.xml` upward.
+
+**Shard on the person id, never on the name.** The band originally used the first letter
+of the slug, which put 71,025 URLs in the `j` shard — over the sitemap protocol's
+50,000-URL ceiling, which is a hard limit a crawler may reject the whole file for, and
+`m` (44,915) and `d` (41,357) were next. First names cluster on a few letters and no
+amount of re-splitting letters fixes that. Person ids are random uuids, so
+`peopleShardForPersonId` (`parseInt(id8, 16) % PEOPLE_SITEMAP_SHARD_COUNT`) splits evenly
+by construction: measured across all 478,442 live ids, the 64 shards land within a few
+percent of 7,476 each.
+
+Two things to keep in mind if you touch this:
+
+- **Shard 0 is a real shard.** `if (shard)` is false for it, so a truthiness test hands
+  it the whole corpus or nothing. Compare against `undefined`.
+- **The shard is readable off the URL.** Any `/people/<name>-<id8>` lives in
+  `/sitemap/${PEOPLE_SITEMAP_BAND_START + (parseInt(id8, 16) % 64)}.xml`, which is how you
+  check a missing profile without running the sweep.
+
+**When to raise the count.** The band's size is set by the upstream person table, so it
+can cross the ceiling with no commit behind it and no failing unit test. Two things watch
+for that: `peopleShardSizeWarning` logs from the serving route once any shard passes 80%
+of the ceiling (40,000 URLs), and `integration/validate-sitemap-urls.test.ts` asserts the
+limit per file when it is run against a real host. Either one firing means raise
+`PEOPLE_SITEMAP_SHARD_COUNT`.
+
+Raising it is safe and does not remove any file — the band grows on the end and every
+existing id keeps serving. Lowering it would orphan the tail ids, so don't.
+
 ### Joint offices eat place slots
 
 A combined office (Indiana's Clerk/Treasurer, Montana's Clerk/Recorder/Surveyor,

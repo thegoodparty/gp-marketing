@@ -12,7 +12,7 @@ import {
 	stripCountySuffix as stripCountySuffixFromHelpers,
 } from '~/lib/electionsHelpers';
 import { hasText } from '~/lib/peopleProfile';
-import { buildPersonSlugFromBase } from '~/lib/personSlug';
+import { buildPersonSlugFromBase, personIdSuffix } from '~/lib/personSlug';
 import { FAQ_BASE_PATH, getFaqSitemapEntries } from '~/lib/faqSlugs';
 import { fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
 import { allFaqsQuery } from '~/sanity/groq';
@@ -23,21 +23,48 @@ export const US_STATE_CODES = [
 ] as const;
 
 /** Single source of truth for sitemap IDs. Used by generateSitemaps() and sitemap-index route. */
-/**
- * Alphabetical shards for the /people sitemaps (a–z + a catch-all "other" for
- * slugs that don't start with a letter). People are sharded by the first
- * character of their canonical slug so each people-*.xml stays crawlable and
- * bounded, instead of being lumped into shard 0 with the marketing pages.
- */
-export const PEOPLE_SITEMAP_SHARDS = [
-	...'abcdefghijklmnopqrstuvwxyz'.split(''),
-	'other',
-] as const;
+/** The sitemap protocol's hard ceiling on URLs in a single sitemap file. */
+export const MAX_URLS_PER_SITEMAP = 50_000;
 
-/** Maps a person slug to its alphabetical sitemap shard key. */
-export function peopleShardForSlug(slug: string): string {
-	const first = slug.trim().charAt(0).toLowerCase();
-	return first >= 'a' && first <= 'z' ? first : 'other';
+/**
+ * How many files the /people band is split across.
+ *
+ * People used to be sharded by the first letter of their slug, which is the
+ * obvious scheme and the wrong one: American first names are not evenly spread
+ * over the alphabet. That band put 71,025 URLs in the `j` shard — 42% over the
+ * 50,000-URL ceiling above, which is a protocol violation, not a soft limit, so
+ * a crawler is entitled to reject the whole file. `m` (44,915) and `d` (41,357)
+ * were next in line, and the cure for each would have been another one-off
+ * split.
+ *
+ * Sharding on the person id instead makes the split independent of names. The
+ * id is a random uuid, so the shards are uniform by construction: against the
+ * 71,025 live `j` URLs, 64 buckets ranged 1,037–1,176 around a mean of 1,110.
+ * Against the whole 478k-URL corpus that is roughly 7.5k URLs per file, and the
+ * ceiling is not reachable until the corpus is about six times larger.
+ */
+export const PEOPLE_SITEMAP_SHARD_COUNT = 64;
+
+/** The people band's shard keys, in the order their sitemap ids run. */
+export const PEOPLE_SITEMAP_SHARDS: readonly number[] = Array.from(
+	{ length: PEOPLE_SITEMAP_SHARD_COUNT },
+	(_, i) => i,
+);
+
+/**
+ * Maps a person to their sitemap shard.
+ *
+ * Keyed on the same 8 hex chars the canonical URL ends in, so the shard holding
+ * any /people/<name>-<id8> URL is `parseInt(id8, 16) % PEOPLE_SITEMAP_SHARD_COUNT`
+ * — readable straight off the URL, which is what makes a bad shard debuggable.
+ *
+ * An id that yields no hex at all falls in shard 0 rather than being dropped: a
+ * person with no shard is a person with no sitemap entry, and silently losing a
+ * page is the one failure this band is built to avoid.
+ */
+export function peopleShardForPersonId(personId: string): number {
+	const parsed = parseInt(personIdSuffix(personId), 16);
+	return Number.isNaN(parsed) ? 0 : parsed % PEOPLE_SITEMAP_SHARD_COUNT;
 }
 
 /**
@@ -49,6 +76,22 @@ export function peopleShardForSlug(slug: string): string {
  * a sitemap should advertise destinations, not redirects, and leaving ~248k
  * 308s in it spent crawl budget re-walking the migration on every pass.
  */
+/**
+ * The warning a shard should emit for holding `count` URLs, or null if it is
+ * comfortably inside the ceiling.
+ *
+ * Split out as a pure function because the interesting case — a shard actually
+ * over the threshold — costs 40,001 fixture people to reach through the fetch
+ * path, and a test that can only afford the quiet side proves nothing about
+ * where the line is.
+ */
+export const PEOPLE_SHARD_WARN_AT = MAX_URLS_PER_SITEMAP * 0.8;
+
+export function peopleShardSizeWarning(shard: number, count: number): string | null {
+	if (count <= PEOPLE_SHARD_WARN_AT) return null;
+	return `[sitemap] people shard ${shard} holds ${count} URLs, over ${PEOPLE_SHARD_WARN_AT} of the ${MAX_URLS_PER_SITEMAP} ceiling. Raise PEOPLE_SITEMAP_SHARD_COUNT.`;
+}
+
 export const PEOPLE_SITEMAP_BAND_START = 1 + US_STATE_CODES.length;
 
 export function getSitemapIds(): { id: number }[] {
@@ -1068,7 +1111,7 @@ async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
  */
 export async function fetchPeopleSitemapEntries(
 	baseUrl: string,
-	shard?: string,
+	shard?: number,
 ): Promise<MetadataRoute.Sitemap> {
 	const { updatedByPersonId, unlistedPersonIds, persons, personIdsWithOffice } =
 		await getCachedPeopleSitemapData();
@@ -1079,10 +1122,10 @@ export async function fetchPeopleSitemapEntries(
 		const personId = p.id.toLowerCase();
 		if (unlistedPersonIds.has(personId)) continue;
 		if (!updatedByPersonId.has(personId) && !personIdsWithOffice.has(personId)) continue;
-		// When a shard is requested, only emit people whose slug falls in it. The
-		// canonical URL appends the 8-hex id suffix but shares the base's first
-		// char, so sharding on the base is equivalent.
-		if (shard && peopleShardForSlug(p.slug) !== shard) continue;
+		// When a shard is requested, only emit people who fall in it. Compared
+		// against `undefined` rather than tested for truthiness, because shard 0
+		// is a real shard and `if (shard)` would quietly serve it the whole corpus.
+		if (shard !== undefined && peopleShardForPersonId(p.id) !== shard) continue;
 		const canonicalSlug = buildPersonSlugFromBase(p.slug, p.id);
 		const published = updatedByPersonId.has(personId);
 		entries.push(
@@ -1098,6 +1141,19 @@ export async function fetchPeopleSitemapEntries(
 			),
 		);
 	}
-	return dedupeByUrl(entries);
+	const deduped = dedupeByUrl(entries);
+	/**
+	 * The band's size is set by the upstream person table, not by anything in
+	 * this repo, so it can cross the protocol ceiling with no code change and no
+	 * failing test. Warning at 80% puts the signal in the Vercel logs while there
+	 * is still a fifth of the file spare; the fix is to raise
+	 * PEOPLE_SITEMAP_SHARD_COUNT, which grows the band on the end and leaves
+	 * every existing shard id serving.
+	 */
+	if (shard !== undefined) {
+		const warning = peopleShardSizeWarning(shard, deduped.length);
+		if (warning) console.warn(warning);
+	}
+	return deduped;
 }
 

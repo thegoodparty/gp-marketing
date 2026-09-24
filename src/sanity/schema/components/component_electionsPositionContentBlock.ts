@@ -16,6 +16,14 @@ export const POSITION_CONTENT_LINKS = {
 	mailBallot: 'https://www.vote.org/absentee-ballot/',
 } as const;
 
+/*
+ * Every copy field here is a plain string or text, and every link is a pasted
+ * path, deliberately. The shared sections query that fetches every block on a
+ * page sits within a few kilobytes of Sanity's 300 KB request limit, and each
+ * rich text or button picker projection adds 2 to 4 KB to it; a version of this
+ * block with three of each pushed every page build over the limit.
+ */
+
 /**
  * The Figma copy, used whenever the matching Sanity field is empty. Keep in step
  * with the field descriptions below: every string here is what an editor sees
@@ -107,6 +115,7 @@ export const POSITION_CONTENT_DEFAULTS = {
 } as const;
 
 const TOKEN_NOTE = 'Supports [office name] and location tokens such as [County or City].';
+const LINK_NOTE = 'A site path such as /run-for-office, or a full https:// address.';
 
 const stringField = (name: string, title: string, defaultValue: string, description?: string) => ({
 	title,
@@ -141,12 +150,7 @@ export const component_electionsPositionContentBlock = {
 			fields: [
 				stringField('field_onThisPageTitle', '"On this page" title', POSITION_CONTENT_DEFAULTS.siderail.onThisPageTitle),
 				stringField('field_exploreTitle', 'Explore card title', POSITION_CONTENT_DEFAULTS.siderail.exploreTitle, TOKEN_NOTE),
-				{
-					title: 'Explore card body',
-					name: 'block_exploreBody',
-					type: 'block_summaryText',
-					description: `${TOKEN_NOTE} Default: "${POSITION_CONTENT_DEFAULTS.siderail.exploreBody}"`,
-				},
+				textField('field_exploreBody', 'Explore card body', POSITION_CONTENT_DEFAULTS.siderail.exploreBody, TOKEN_NOTE),
 				stringField(
 					'field_exploreButtonLabel',
 					'Explore card button label',
@@ -166,12 +170,7 @@ export const component_electionsPositionContentBlock = {
 			description: 'The blue strip explaining the heart and star mark. Only shown when a candidate or officeholder list is on the page.',
 			fields: [
 				stringField('field_title', 'Title', POSITION_CONTENT_DEFAULTS.badgeCallout.title),
-				{
-					title: 'Body',
-					name: 'block_summaryText',
-					type: 'block_summaryText',
-					description: `Default: "${POSITION_CONTENT_DEFAULTS.badgeCallout.body}"`,
-				},
+				textField('field_body', 'Body', POSITION_CONTENT_DEFAULTS.badgeCallout.body),
 			],
 		},
 		{
@@ -242,12 +241,8 @@ export const component_electionsPositionContentBlock = {
 					TOKEN_NOTE,
 				),
 				textField('field_noPledgedWonBody', 'No pledged winner: body', POSITION_CONTENT_DEFAULTS.brandedCta.noPledgedWonBody, TOKEN_NOTE),
-				{
-					title: 'Button',
-					name: 'ctaActionWithShared',
-					type: 'ctaActionWithShared',
-					description: `Default: "${POSITION_CONTENT_DEFAULTS.brandedCta.buttonLabel}" linking to ${POSITION_CONTENT_LINKS.run}`,
-				},
+				stringField('field_buttonLabel', 'Button label', POSITION_CONTENT_DEFAULTS.brandedCta.buttonLabel),
+				stringField('field_buttonHref', 'Button link', POSITION_CONTENT_LINKS.run, LINK_NOTE),
 			],
 		},
 		{
@@ -262,8 +257,25 @@ export const component_electionsPositionContentBlock = {
 				stringField('field_subtitle', 'Subheading', POSITION_CONTENT_DEFAULTS.voterReadiness.subtitle),
 				{
 					title: 'Items',
-					name: 'list_iconContentItems',
-					type: 'list_iconContentItems',
+					name: 'list_voterLinks',
+					type: 'array',
+					description: 'Up to three. Leave empty for the defaults.',
+					validation: (rule: { max(n: number): unknown }) => rule.max(3),
+					of: [
+						{
+							title: 'Voter link',
+							name: 'voterLink',
+							type: 'object',
+							fields: [
+								{ title: 'Icon', name: 'field_icon', type: 'field_icon' },
+								{ title: 'Heading', name: 'field_title', type: 'string' },
+								{ title: 'Body', name: 'field_copy', type: 'text', rows: 2 },
+								{ title: 'Link label', name: 'field_linkLabel', type: 'string' },
+								{ title: 'Link', name: 'field_href', type: 'string', description: LINK_NOTE },
+							],
+							preview: { select: { title: 'field_title', subtitle: 'field_linkLabel' } },
+						},
+					],
 				},
 			],
 		},
@@ -296,18 +308,14 @@ export const component_electionsPositionContentBlock = {
 				stringField('field_step2Title', 'Step 2 title', POSITION_CONTENT_DEFAULTS.howToRun.step2Title),
 				stringField('field_step3Title', 'Step 3 title', POSITION_CONTENT_DEFAULTS.howToRun.step3Title),
 				textField('field_step3Body', 'Step 3 body', POSITION_CONTENT_DEFAULTS.howToRun.step3Body, TOKEN_NOTE),
-				{
-					title: 'Step 3 button',
-					name: 'ctaActionWithShared',
-					type: 'ctaActionWithShared',
-					description: `Default: "${POSITION_CONTENT_DEFAULTS.howToRun.step3ButtonLabel}" linking to ${POSITION_CONTENT_LINKS.run}`,
-				},
-				{
-					title: '"Need help?" line',
-					name: 'block_needHelp',
-					type: 'block_summaryText',
-					description: `Default: "${POSITION_CONTENT_DEFAULTS.howToRun.needHelp}"`,
-				},
+				stringField('field_step3ButtonLabel', 'Step 3 button label', POSITION_CONTENT_DEFAULTS.howToRun.step3ButtonLabel),
+				stringField('field_step3ButtonHref', 'Step 3 button link', POSITION_CONTENT_LINKS.run, LINK_NOTE),
+				textField(
+					'field_needHelp',
+					'"Need help?" line',
+					POSITION_CONTENT_DEFAULTS.howToRun.needHelp,
+					'The words "GoodParty.org Community" link to the community site automatically.',
+				),
 			],
 		},
 		{

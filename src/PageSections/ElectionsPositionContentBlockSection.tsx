@@ -2,10 +2,9 @@ import type { ReactNode } from 'react';
 import { stegaClean } from 'next-sanity';
 
 import type { Sections } from '~/PageSections';
-import { normalizeRawCtaToButton, type RawCtaInput, transformButton } from '~/lib/buttonTransformer';
 import { resolvePositionHeroState, type PositionHeroState } from '~/lib/positionHeroState';
 import type { TokenMap } from '~/lib/resolveTokens';
-import { resolveRichTextTokens, resolveSectionText } from '~/lib/resolveSectionText';
+import { resolveSectionText } from '~/lib/resolveSectionText';
 import { POSITION_CONTENT_DEFAULTS, POSITION_CONTENT_LINKS } from '~/sanity/schema/components/component_electionsPositionContentBlock';
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { Anchor } from '~/ui/Anchor';
@@ -19,7 +18,6 @@ import {
 	type ElectionsPositionVoterItem,
 } from '~/ui/ElectionsPositionContentBlock';
 import type { ComponentButtonProps } from '~/ui/Inputs/Button';
-import { RichData } from '~/ui/RichData';
 
 /**
  * Everything the block needs from the route. `buildPositionSectionOverrides`
@@ -67,22 +65,19 @@ type ElectionsPositionContentBlockSectionProps = Extract<Sections, { _type: 'com
 	now?: Date;
 };
 
-type RichTextValue = Parameters<typeof resolveRichTextTokens>[0];
-
 function text(value: string | null | undefined, fallback: string, tokens?: TokenMap): string {
 	return resolveSectionText(value ?? fallback, tokens) ?? fallback;
 }
 
-/** Rich text from Sanity wins; otherwise the default sentence, tokens resolved. */
-function rich(value: RichTextValue, fallback: ReactNode, tokens?: TokenMap): ReactNode {
-	const resolved = resolveRichTextTokens(value, tokens);
-	return Array.isArray(resolved) && resolved.length > 0 ? <RichData value={resolved} /> : fallback;
-}
-
-function button(raw: unknown, key: string, fallback: { label: string; href: string }): ComponentButtonProps {
-	const normalized = raw ? normalizeRawCtaToButton(raw as RawCtaInput, key) : undefined;
-	const fromSanity = normalized ? transformButton(normalized) : undefined;
-	return fromSanity ?? { buttonType: 'internal', href: fallback.href, label: fallback.label };
+/** A pasted path or address from Studio, or the default. Anything off this site opens as an external link. */
+function link(
+	label: string | null | undefined,
+	href: string | null | undefined,
+	fallback: { label: string; href: string },
+	tokens?: TokenMap,
+): ComponentButtonProps {
+	const target = stegaClean(href)?.trim() || fallback.href;
+	return { buttonType: /^https?:\/\//i.test(target) ? 'external' : 'internal', href: target, label: text(label, fallback.label, tokens) };
 }
 
 function communityLine(copy: string): ReactNode {
@@ -167,19 +162,16 @@ export function ElectionsPositionContentBlockSection(props: ElectionsPositionCon
 	}[variant];
 
 	const voterItems: ElectionsPositionVoterItem[] =
-		voter?.list_iconContentItems && voter.list_iconContentItems.length > 0
-			? voter.list_iconContentItems.map(item => {
-					const normalized = item.ctaActionWithShared
-						? normalizeRawCtaToButton(item.ctaActionWithShared, `${item._key ?? ''}-voter-cta`)
-						: undefined;
-					return {
-						key: item._key,
-						icon: item.field_icon ? stegaClean(item.field_icon) : undefined,
-						title: resolveSectionText(item.field_title, tokens),
-						copy: rich(item.block_summaryText, undefined, tokens),
-						button: normalized ? transformButton(normalized) : undefined,
-					};
-				})
+		voter?.list_voterLinks && voter.list_voterLinks.length > 0
+			? voter.list_voterLinks.map(item => ({
+					key: item._key,
+					icon: item.field_icon ? stegaClean(item.field_icon) : undefined,
+					title: resolveSectionText(item.field_title, tokens),
+					copy: item.field_copy ? <p>{resolveSectionText(item.field_copy, tokens)}</p> : undefined,
+					button: item.field_href
+						? link(item.field_linkLabel, item.field_href, { label: item.field_linkLabel ?? '', href: item.field_href }, tokens)
+						: undefined,
+				}))
 			: d.voterReadiness.items.map(item => ({
 					key: item.key,
 					icon: item.icon,
@@ -210,10 +202,12 @@ export function ElectionsPositionContentBlockSection(props: ElectionsPositionCon
 		icon: 'trending-up',
 		title: text(run?.field_step3Title, d.howToRun.step3Title, tokens),
 		body: <p>{text(run?.field_step3Body, d.howToRun.step3Body, tokens)}</p>,
-		button: button(run?.ctaActionWithShared, `${section._key ?? 'position-content'}-run-cta`, {
-			label: d.howToRun.step3ButtonLabel,
-			href: POSITION_CONTENT_LINKS.run,
-		}),
+		button: link(
+			run?.field_step3ButtonLabel,
+			run?.field_step3ButtonHref,
+			{ label: d.howToRun.step3ButtonLabel, href: POSITION_CONTENT_LINKS.run },
+			tokens,
+		),
 	});
 
 	return (
@@ -227,7 +221,7 @@ export function ElectionsPositionContentBlockSection(props: ElectionsPositionCon
 					explore: data.locationHref
 						? {
 								title: text(rail?.field_exploreTitle, d.siderail.exploreTitle, tokens),
-								body: rich(rail?.block_exploreBody, <p>{text(undefined, d.siderail.exploreBody, tokens)}</p>, tokens),
+								body: <p>{text(rail?.field_exploreBody, d.siderail.exploreBody, tokens)}</p>,
 								buttonLabel: text(rail?.field_exploreButtonLabel, d.siderail.exploreButtonLabel, tokens),
 								href: data.locationHref,
 							}
@@ -243,7 +237,7 @@ export function ElectionsPositionContentBlockSection(props: ElectionsPositionCon
 				}}
 				badgeCallout={{
 					title: text(section.badgeCallout?.field_title, d.badgeCallout.title, tokens),
-					body: rich(section.badgeCallout?.block_summaryText, <p>{d.badgeCallout.body}</p>, tokens),
+					body: <p>{text(section.badgeCallout?.field_body, d.badgeCallout.body, tokens)}</p>,
 				}}
 				candidates={candidates}
 				officeholders={data.officeholders}
@@ -261,10 +255,12 @@ export function ElectionsPositionContentBlockSection(props: ElectionsPositionCon
 				brandedCta={{
 					headline: brandedCopy.headline,
 					body: <p>{brandedCopy.body}</p>,
-					button: button(cta?.ctaActionWithShared, `${section._key ?? 'position-content'}-branded-cta`, {
-						label: d.brandedCta.buttonLabel,
-						href: POSITION_CONTENT_LINKS.run,
-					}),
+					button: link(
+						cta?.field_buttonLabel,
+						cta?.field_buttonHref,
+						{ label: d.brandedCta.buttonLabel, href: POSITION_CONTENT_LINKS.run },
+						tokens,
+					),
 				}}
 				voterReadiness={{ items: voterItems }}
 				about={
@@ -281,7 +277,7 @@ export function ElectionsPositionContentBlockSection(props: ElectionsPositionCon
 				howToRun={{
 					electionOverBanner: text(run?.field_electionOverBanner, d.howToRun.electionOverBanner, tokens),
 					steps,
-					needHelp: rich(run?.block_needHelp, communityLine(d.howToRun.needHelp), tokens),
+					needHelp: communityLine(text(run?.field_needHelp, d.howToRun.needHelp, tokens)),
 				}}
 			/>
 		</section>

@@ -6357,11 +6357,10 @@
                 },
                 "optional": true
               },
-              "block_exploreBody": {
+              "field_exploreBody": {
                 "type": "objectAttribute",
                 "value": {
-                  "type": "inline",
-                  "name": "block_summaryText"
+                  "type": "string"
                 },
                 "optional": true
               },
@@ -6409,11 +6408,10 @@
                 },
                 "optional": true
               },
-              "block_summaryText": {
+              "field_body": {
                 "type": "objectAttribute",
                 "value": {
-                  "type": "inline",
-                  "name": "block_summaryText"
+                  "type": "string"
                 },
                 "optional": true
               }
@@ -6519,11 +6517,17 @@
                 },
                 "optional": true
               },
-              "ctaActionWithShared": {
+              "field_buttonLabel": {
                 "type": "objectAttribute",
                 "value": {
-                  "type": "inline",
-                  "name": "ctaActionWithShared"
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_buttonHref": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
                 },
                 "optional": true
               }
@@ -6550,11 +6554,69 @@
                 },
                 "optional": true
               },
-              "list_iconContentItems": {
+              "list_voterLinks": {
                 "type": "objectAttribute",
                 "value": {
-                  "type": "inline",
-                  "name": "list_iconContentItems"
+                  "type": "array",
+                  "of": {
+                    "type": "object",
+                    "attributes": {
+                      "field_icon": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "inline",
+                          "name": "field_icon"
+                        },
+                        "optional": true
+                      },
+                      "field_title": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "string"
+                        },
+                        "optional": true
+                      },
+                      "field_copy": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "string"
+                        },
+                        "optional": true
+                      },
+                      "field_linkLabel": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "string"
+                        },
+                        "optional": true
+                      },
+                      "field_href": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "string"
+                        },
+                        "optional": true
+                      },
+                      "_type": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "string",
+                          "value": "voterLink"
+                        }
+                      }
+                    },
+                    "rest": {
+                      "type": "object",
+                      "attributes": {
+                        "_key": {
+                          "type": "objectAttribute",
+                          "value": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
                 },
                 "optional": true
               }
@@ -6632,19 +6694,24 @@
                 },
                 "optional": true
               },
-              "ctaActionWithShared": {
+              "field_step3ButtonLabel": {
                 "type": "objectAttribute",
                 "value": {
-                  "type": "inline",
-                  "name": "ctaActionWithShared"
+                  "type": "string"
                 },
                 "optional": true
               },
-              "block_needHelp": {
+              "field_step3ButtonHref": {
                 "type": "objectAttribute",
                 "value": {
-                  "type": "inline",
-                  "name": "block_summaryText"
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_needHelp": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
                 },
                 "optional": true
               }

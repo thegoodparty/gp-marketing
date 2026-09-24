@@ -205,11 +205,20 @@ its own when a page has no data for it. That is how it is built. Things that cam
   rendered. `src/ui/electionsPositionContentBlock.test.tsx` pins each rule.
 - **Every sentence is editable in Studio and has a default in code.** The block is on the live
   Position template with none of the new fields filled, so `POSITION_CONTENT_DEFAULTS` in the
-  schema file is what every page shows until an editor changes a field. Rich text fields
-  (`block_summaryText`) take a plain-sentence default rendered in code. The branded CTA carries
+  schema file is what every page shows until an editor changes a field. The branded CTA carries
   four copy pairs, chosen by state and by whether anyone listed took the Pledge: no pledged
   candidate, a pledged candidate running, a pledged winner, and no pledged winner (copy from Emily,
   2026-09-24). The "pledged candidate running" default is new copy and needs a marketing read.
+- **Plain strings and pasted links only, and this matters for the whole batch.** The shared
+  `sectionsGroq` query that fetches every block on a page measured 302,483 characters with this
+  block's first version, which projected three rich text fields and three button pickers. Sanity
+  rejects request bodies over 300 KB, so every page prerender failed on Vercel. Without those
+  projections the query is about 286 KB, which means **the sections query sits within roughly 2 KB
+  of the limit before any new block is added**. A `buttonGroq` projection costs about 3.7 KB and a
+  `block_summaryText` one about 1.5 KB. Until the query is restructured (a separate task), a new
+  block in this batch should use plain `string`/`text` fields and a pasted path for its links, and
+  should measure `sectionsGroq.length` before opening its PR. This block's links are label + path
+  pairs; the "Need help?" community phrase is linked in code.
 - **`[Position Name]` is now a token.** The Figma copy uses it throughout, so it resolves to the
   office name alongside `[office name]`. Location wording uses `[County or City]`, which is the
   most specific place the page represents.
@@ -225,8 +234,8 @@ its own when a page has no data for it. That is how it is built. Things that cam
   choice), the judicial and retention election types (no flag in election-api; only partisan and
   run-off are asserted), and everything decided-state, for the same reason as the hero.
 - **Links.** `/run` on goodparty.org returns 404 today; the run CTAs here point at
-  `/run-for-office`. No pledge page exists, so the pledge phrase in the default copy is not a link;
-  editors can add one in the rich text fields. The three voter-readiness links default to vote.gov
+  `/run-for-office`. No pledge page exists, so the pledge phrase in the default copy is not a link.
+  The "Need help?" line links "GoodParty.org Community" in code. The three voter-readiness links default to vote.gov
   and vote.org and need marketing's confirmation.
 - **Share** uses the device share sheet where the browser has one and copies the link elsewhere.
   No custom modal was built.

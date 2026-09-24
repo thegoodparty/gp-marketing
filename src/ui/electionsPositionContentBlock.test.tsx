@@ -16,13 +16,6 @@ import {
 const section = {
 	_type: 'component_electionsPositionContentBlock' as const,
 	_key: 'content',
-	siderail: null,
-	badgeCallout: null,
-	peopleLists: null,
-	brandedCta: null,
-	voterReadiness: null,
-	aboutPosition: null,
-	howToRun: null,
 	electionsPositionContentBlockDesignSettings: null,
 	componentSettings: null,
 };

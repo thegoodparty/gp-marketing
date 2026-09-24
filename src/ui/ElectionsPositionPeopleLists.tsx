@@ -134,7 +134,7 @@ function PersonRow({ person, decided }: { person: ElectionsPositionPerson; decid
 					<Text as='span' styleType='text-sm' className='font-semibold'>
 						View profile
 					</Text>
-					<IconResolver icon='arrow-up-right' className='size-4' />
+					<IconResolver icon='arrow-up-right' className='min-w-4 min-h-4 w-4 h-4 max-w-4 max-h-4' />
 				</span>
 			)}
 		</>
@@ -218,7 +218,7 @@ export function ElectionsPositionPeopleLists(props: ElectionsPositionPeopleLists
 								styleSize='md'
 								className='border-transparent bg-white'
 								onClick={() => setExpanded(true)}
-								iconRight={<IconResolver icon='circle-chevron-down' className='size-4' />}
+								iconRight={<IconResolver icon='circle-chevron-down' className='min-w-4 min-h-4 w-4 h-4 max-w-4 max-h-4' />}
 							>
 								{props.showMoreLabel}
 							</Button>

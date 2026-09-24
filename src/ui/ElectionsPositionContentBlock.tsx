@@ -47,9 +47,11 @@ const styles = tv({
 		voterLink: 'mt-auto flex w-fit items-center gap-2 py-2.5 font-secondary text-goodparty-blue hover:underline',
 		attributes: 'grid gap-6 sm:grid-cols-2 md:grid-cols-3',
 		attribute: 'flex flex-col gap-2',
+		// Figma: 16px box with a 4px radius, 8px from an 18/28 label, in a 44px row.
 		typeList: 'flex flex-col divide-y divide-neutral-300 overflow-hidden rounded-md border border-neutral-200',
-		typeRow: 'flex items-center gap-2 px-3 py-2',
-		checkbox: 'flex size-4 shrink-0 items-center justify-center rounded-[4px] border',
+		typeRow: 'flex items-start gap-2 px-3 py-2',
+		typeLabel: 'leading-7',
+		checkbox: 'mt-1.5 flex size-4 shrink-0 items-center justify-center rounded-[4px] border',
 		steps: 'flex flex-col gap-8',
 		step: 'flex flex-col gap-4 border-t border-neutral-200 pt-8 first:border-t-0 first:pt-0 md:flex-row md:items-start',
 		stepIcon: 'flex size-12 shrink-0 items-center justify-center rounded-full bg-blue-200 text-midnight-900',
@@ -137,6 +139,11 @@ export type ElectionsPositionContentBlockProps = {
 	};
 };
 
+// The md button is a fixed 40px tall, which pins a wrapped label against its
+// edges. Labels here carry place names ("See all Harris County races") and
+// live in a 244px rail, so they wrap; let the pill grow and keep its padding.
+const WRAPPING_BUTTON = 'h-auto min-h-10 leading-5 text-left';
+
 export const POSITION_CONTENT_IDS = {
 	candidates: 'position-candidates',
 	officeholders: 'position-officeholders',
@@ -159,8 +166,9 @@ function Attribute({ label, value }: ElectionsPositionAttribute) {
 	);
 }
 
+// IconResolver's md size pins a 24px minimum, which would make a 40px pill 44px tall.
 function ArrowUpRight() {
-	return <IconResolver icon='arrow-up-right' className='size-4' />;
+	return <IconResolver icon='arrow-up-right' className='min-w-4 min-h-4 w-4 h-4 max-w-4 max-h-4' />;
 }
 
 export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlockProps) {
@@ -196,7 +204,7 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 				url={props.siderail.share.url}
 				title={props.officeName}
 				label={props.siderail.share.buttonLabel}
-				className='w-fit max-md:w-full'
+				className={cn(WRAPPING_BUTTON, 'w-fit max-md:w-full')}
 			/>
 		</div>
 	) : null;
@@ -238,7 +246,7 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 									href={props.siderail.explore.href}
 									label={props.siderail.explore.buttonLabel}
 									iconRight={<ArrowUpRight />}
-									className='w-fit max-md:w-full'
+									className={cn(WRAPPING_BUTTON, 'w-fit max-md:w-full')}
 									buttonProps={{ styleType: 'secondary', styleSize: 'md' }}
 								/>
 							</div>
@@ -287,6 +295,7 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 								{props.brandedCta.button && (
 									<ComponentButton
 										{...props.brandedCta.button}
+										className={cn(WRAPPING_BUTTON, 'text-center')}
 										iconRight={props.brandedCta.button.iconRight ?? <ArrowUpRight />}
 										buttonProps={{ ...(props.brandedCta.button.buttonProps ?? {}), styleType: 'secondary', styleSize: 'md' }}
 									/>
@@ -373,9 +382,9 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 															role='img'
 															aria-label={type.checked ? 'Yes' : 'No'}
 														>
-															{type.checked && <IconResolver icon='check' className='size-3.5' />}
+															{type.checked && <IconResolver icon='check' className='size-3' strokeWidth={3} />}
 														</span>
-														<Text as='span' styleType='body-1'>
+														<Text as='span' styleType='body-2' className={s.typeLabel()}>
 															{type.label}
 														</Text>
 													</li>
@@ -431,7 +440,7 @@ export function ElectionsPositionContentBlock(props: ElectionsPositionContentBlo
 														<ComponentButton
 															{...step.button}
 															iconRight={step.button.iconRight ?? <ArrowUpRight />}
-															className='w-fit max-md:w-full'
+															className={cn(WRAPPING_BUTTON, 'w-fit max-md:w-full')}
 															buttonProps={{ ...(step.button.buttonProps ?? {}), styleType: 'secondary', styleSize: 'md' }}
 														/>
 													)}

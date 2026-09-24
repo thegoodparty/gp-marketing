@@ -103,10 +103,12 @@ const base: ElectionsPositionContentBlockProps = {
 	siderail: {
 		onThisPageTitle: 'On this page',
 		explore: {
-			title: 'Explore more races in Austin',
-			body: <p>Browse every upcoming election in Austin and find independent candidates who&apos;ve taken the GoodParty.org Pledge.</p>,
-			buttonLabel: 'See all Austin races',
-			href: '/elections/tx/travis-county/austin',
+			title: 'Explore more races in Harris County',
+			body: (
+				<p>Browse every upcoming election in Harris County and find independent candidates who&apos;ve taken the GoodParty.org Pledge.</p>
+			),
+			buttonLabel: 'See all Harris County races',
+			href: '/elections/tx/harris-county',
 		},
 		share: {
 			title: 'Know someone who should run for City Council Member?',

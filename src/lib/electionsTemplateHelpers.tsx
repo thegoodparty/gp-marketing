@@ -72,8 +72,10 @@ export function buildPositionHeroOverride(ctx: PositionPageContext): NonNullable
 	};
 }
 
-function capitalize(value: string): string {
-	return value.charAt(0).toUpperCase() + value.slice(1);
+/** election-api sends these as it stores them ("COUNTY", "partisan"); the card reads them as words. */
+function sentenceCase(value: string): string {
+	const trimmed = value.trim();
+	return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
 }
 
 function heroCandidateToPerson(candidate: ElectionsPositionHeroCandidate, index: number): ElectionsPositionPerson {
@@ -113,11 +115,11 @@ export function buildPositionSeatFilter(
 
 export function buildPositionAboutAttributes(race: RaceDetail): ElectionsPositionAttribute[] {
 	const items: ElectionsPositionAttribute[] = [];
-	if (race.positionLevel) items.push({ label: 'Office level', value: capitalize(race.positionLevel) });
+	if (race.positionLevel) items.push({ label: 'Office level', value: sentenceCase(race.positionLevel) });
 	if (race.frequency?.length) items.push({ label: 'Election frequency', value: formatFrequency(race.frequency) });
 	if (race.salary) items.push({ label: 'Typical salary', value: race.salary });
 	if (race.employmentType) items.push({ label: 'Commitment level', value: race.employmentType });
-	if (race.partisanType) items.push({ label: 'Affiliation', value: race.partisanType });
+	if (race.partisanType) items.push({ label: 'Affiliation', value: sentenceCase(race.partisanType) });
 	if (typeof race.numberOfSeats === 'number' && race.numberOfSeats > 0) {
 		items.push({ label: 'Positions', value: race.numberOfSeats === 1 ? '1 open seat' : `${race.numberOfSeats} open seats` });
 	}

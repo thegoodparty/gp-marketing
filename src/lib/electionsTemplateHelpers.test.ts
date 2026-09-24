@@ -97,7 +97,7 @@ describe('buildPositionSectionOverrides content block', () => {
 			{ label: 'Election frequency', value: 'Every 4 years' },
 			{ label: 'Typical salary', value: '$90,000 / year' },
 			{ label: 'Commitment level', value: 'Full Time' },
-			{ label: 'Affiliation', value: 'partisan' },
+			{ label: 'Affiliation', value: 'Partisan' },
 			{ label: 'Positions', value: '1 open seat' },
 		]);
 		expect(block?.about?.electionTypes).toEqual([

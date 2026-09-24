@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
+import { cn } from './_lib/utils.ts';
 import { ComponentButton } from './Inputs/Button.tsx';
 import { IconResolver } from './IconResolver.tsx';
 
@@ -50,8 +51,8 @@ export function ElectionsPositionShareButton(props: ElectionsPositionShareButton
 			buttonType='button'
 			label={copied ? 'Link copied' : props.label}
 			onClick={() => void share()}
-			iconRight={<IconResolver icon={copied ? 'check' : 'share'} className='size-4' />}
-			className={props.className}
+			iconRight={<IconResolver icon={copied ? 'check' : 'share'} className='min-w-4 min-h-4 w-4 h-4 max-w-4 max-h-4' />}
+			className={cn('h-auto min-h-10 leading-5 text-left', props.className)}
 			buttonProps={{ styleType: 'secondary', styleSize: 'md' }}
 		/>
 	);

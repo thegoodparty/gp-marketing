@@ -9,6 +9,7 @@ import {
 	buildRaceSlug,
 	buildPlaceRacePositionHref,
 	buildSubplaceRaceSlug,
+	isRealPlaceSegment,
 	canonicalizeCountyEquivalentName,
 	findCityForDistrictName,
 	formatElectionDateFromApi,
@@ -228,6 +229,36 @@ describe('buildPlaceRacePositionHref', () => {
 
 	test('returns undefined for an empty race slug', () => {
 		expect(buildPlaceRacePositionHref(['mt'], '')).toBeUndefined();
+	});
+});
+
+describe('isRealPlaceSegment', () => {
+	test('city segment the resolved place is slugged at', () => {
+		expect(isRealPlaceSegment('in/adams-county/berne', 'berne')).toBe(true);
+	});
+
+	test('city segment when the API slug omits the county', () => {
+		expect(isRealPlaceSegment('in/berne', 'berne')).toBe(true);
+	});
+
+	test('city segment above the resolved place, a real subplace', () => {
+		expect(isRealPlaceSegment('in/adams-county/berne/french-township', 'berne')).toBe(true);
+	});
+
+	test('joint county office in the city slot is not a place', () => {
+		expect(isRealPlaceSegment('mt/gallatin-county', 'county-clerk')).toBe(false);
+	});
+
+	test('joint city office in the subplace slot is not a place', () => {
+		expect(isRealPlaceSegment('in/adams-county/berne', 'city-clerk')).toBe(false);
+	});
+
+	test('ignores case on both sides', () => {
+		expect(isRealPlaceSegment('IN/Adams-County/Berne', 'BERNE')).toBe(true);
+	});
+
+	test('an unknown place slug leaves the segment alone', () => {
+		expect(isRealPlaceSegment(undefined, 'county-clerk')).toBe(true);
 	});
 });
 

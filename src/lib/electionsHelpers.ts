@@ -526,6 +526,25 @@ export function buildPlaceRacePositionHref(placeSegments: string[], raceSlug: st
 	return `/elections/${path.join('/')}/position/${positionSlug}`;
 }
 
+/**
+ * Whether a place segment in a position page's URL names a real place.
+ *
+ * A joint office spends one URL segment per combined role, and those segments sit in the
+ * route's place slots: `/elections/mt/gallatin-county/county-clerk/recorder/position/surveyor-joint`
+ * parses as county `gallatin-county`, city `county-clerk`, subplace `recorder`. The place the
+ * page resolved is authoritative, so a segment its slug does not contain is an office name and
+ * must not be linked or labelled as a place.
+ *
+ * Membership rather than the tail segment, because the resolved place can sit below the segment
+ * being checked (a real subplace under its city) as well as at it, and place slugs come in both
+ * `state/county/city` and short `state/city` forms. An unknown slug returns true, which leaves
+ * the breadcrumb as it was.
+ */
+export function isRealPlaceSegment(placeSlug: string | undefined, segment: string): boolean {
+	if (!placeSlug) return true;
+	return placeSlug.toLowerCase().split('/').filter(Boolean).includes(segment.toLowerCase());
+}
+
 /** Joint city office race slug: state/city/subplace/position, optionally with county segment. */
 export function buildSubplaceRaceSlug(
 	state: string,

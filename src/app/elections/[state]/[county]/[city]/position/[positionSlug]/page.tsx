@@ -19,6 +19,7 @@ import {
 } from '~/lib/electionsHelpers';
 import { toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsPositionPage } from '~/lib/renderElectionsPositionPage';
+import { loadPositionHeroCandidates } from '~/lib/positionHeroCandidates';
 
 export const revalidate = 3600;
 
@@ -69,6 +70,7 @@ export default async function Page({
 		notFound();
 	}
 
+	const heroCandidates = await loadPositionHeroCandidates(raceSlug);
 	const stateName = getStateName(stateCode);
 	const officeName = race.normalizedPositionName ?? race.name ?? 'Position';
 	const electionDate = formatElectionDateFromApi(race.electionDate);
@@ -96,6 +98,7 @@ export default async function Page({
 			breadcrumbs,
 			candidatesHref,
 			race,
+			heroCandidates,
 			pageUrl,
 		});
 	}
@@ -130,6 +133,7 @@ export default async function Page({
 		breadcrumbs,
 		candidatesHref,
 		race,
+		heroCandidates,
 		pageUrl,
 	});
 }

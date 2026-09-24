@@ -6,10 +6,16 @@ import {
 	chunkArray,
 	clearPeopleSitemapCache,
 	fetchPeopleSitemapEntries,
+	fetchStateElectionRouteParams,
+	fetchStateElectionSitemapEntries,
 	getSitemapIds,
+	MAX_URLS_PER_SITEMAP,
 	normalizeName,
-	peopleShardForSlug,
+	peopleShardForPersonId,
+	peopleShardSizeWarning,
+	PEOPLE_SHARD_WARN_AT,
 	PEOPLE_SITEMAP_BAND_START,
+	PEOPLE_SITEMAP_SHARD_COUNT,
 	PEOPLE_SITEMAP_SHARDS,
 	stripCountySuffix,
 	US_STATE_CODES,
@@ -19,24 +25,56 @@ import {
 } from './sitemap-entries';
 
 describe('people sitemap shards', () => {
-	test('maps slugs to a–z shards by first character', () => {
-		expect(peopleShardForSlug('jane-doe')).toBe('j');
-		expect(peopleShardForSlug('Abe-Lincoln')).toBe('a');
+	const uuid = (hex8: string) => `${hex8}-1111-2222-3333-444444444444`;
+
+	test('shards on the 8 hex chars the canonical URL ends in', () => {
+		expect(peopleShardForPersonId(uuid('00000000'))).toBe(0);
+		expect(peopleShardForPersonId(uuid('00000041'))).toBe(0x41 % PEOPLE_SITEMAP_SHARD_COUNT);
+		// The dashes are not part of the suffix, and the suffix is lowercased, so
+		// the same id in either casing has to land in the same file.
+		expect(peopleShardForPersonId(uuid('AAAAAAAA'))).toBe(peopleShardForPersonId(uuid('aaaaaaaa')));
 	});
 
-	test('non-letter leading characters fall into the "other" shard', () => {
-		expect(peopleShardForSlug('123-numeric')).toBe('other');
-		expect(peopleShardForSlug('-leading-hyphen')).toBe('other');
-		expect(peopleShardForSlug('')).toBe('other');
+	test('every shard is in range, and an unparseable id still gets one', () => {
+		for (const hex of ['ffffffff', '0000000f', 'deadbeef', 'b30c2996']) {
+			const shard = peopleShardForPersonId(uuid(hex));
+			expect(shard).toBeGreaterThanOrEqual(0);
+			expect(shard).toBeLessThan(PEOPLE_SITEMAP_SHARD_COUNT);
+		}
+		// Not a throw and not -1: a person with no shard is a person with no
+		// sitemap entry, which is the one outcome this band must never produce.
+		expect(peopleShardForPersonId('')).toBe(0);
+		expect(peopleShardForPersonId('----')).toBe(0);
+	});
+
+	/**
+	 * The point of the whole scheme. Alphabetical shards put 71,025 URLs in `j`,
+	 * over the protocol's 50,000 ceiling, because first names cluster on a few
+	 * letters. Ids do not cluster, so this asserts the property that replaced
+	 * the letter — an even split — rather than re-asserting today's corpus size.
+	 */
+	test('spreads ids evenly enough to stay under the 50k ceiling', () => {
+		const counts = new Array<number>(PEOPLE_SITEMAP_SHARD_COUNT).fill(0);
+		const sample = 64_000;
+		for (let i = 0; i < sample; i++) {
+			// Walks the suffix space rather than sampling it, so the test is
+			// deterministic and still covers every low-bit pattern.
+			const hex = (i * 2654435761 % 0x100000000).toString(16).padStart(8, '0');
+			const shard = peopleShardForPersonId(uuid(hex));
+			counts[shard] = (counts[shard] ?? 0) + 1;
+		}
+		const mean = sample / PEOPLE_SITEMAP_SHARD_COUNT;
+		expect(Math.max(...counts)).toBeLessThan(mean * 1.2);
+		expect(Math.min(...counts)).toBeGreaterThan(mean * 0.8);
 	});
 
 	// The candidate band used to sit between the state elections and the people
 	// band. Retiring it moved the people band down by one state-band's width; if
 	// this drifts from src/app/sitemap.ts's arithmetic the shards silently serve
 	// each other's content.
-	test('there are 27 shards (a–z + other) starting straight after the state band', () => {
-		expect(PEOPLE_SITEMAP_SHARDS).toHaveLength(27);
-		expect(PEOPLE_SITEMAP_SHARDS[26]).toBe('other');
+	test('the shard list runs 0..N-1 straight after the state band', () => {
+		expect(PEOPLE_SITEMAP_SHARDS).toHaveLength(PEOPLE_SITEMAP_SHARD_COUNT);
+		expect([...PEOPLE_SITEMAP_SHARDS]).toEqual([...Array(PEOPLE_SITEMAP_SHARD_COUNT).keys()]);
 		expect(PEOPLE_SITEMAP_BAND_START).toBe(1 + US_STATE_CODES.length);
 	});
 
@@ -49,12 +87,48 @@ describe('people sitemap shards', () => {
 	});
 });
 
+describe('peopleShardSizeWarning', () => {
+	test('stays quiet while a shard has room', () => {
+		expect(peopleShardSizeWarning(0, 0)).toBeNull();
+		expect(peopleShardSizeWarning(9, 7_658)).toBeNull();
+		expect(peopleShardSizeWarning(9, PEOPLE_SHARD_WARN_AT)).toBeNull();
+	});
+
+	/**
+	 * The band grows with the upstream person table, so the day it outgrows the
+	 * shard count arrives with no code change behind it. This warning is the only
+	 * signal that fires on its own before a crawler meets an over-size file, and
+	 * it has to fire with room to spare, not at the ceiling itself.
+	 */
+	test('warns past 80% of the ceiling, while a fifth of the file is still spare', () => {
+		expect(PEOPLE_SHARD_WARN_AT).toBe(40_000);
+		const warning = peopleShardSizeWarning(9, PEOPLE_SHARD_WARN_AT + 1);
+		expect(warning).toContain('shard 9');
+		expect(warning).toContain('40001');
+		// Names the fix, because whoever reads this log line will not have this
+		// file open and the remedy is one constant.
+		expect(warning).toContain('PEOPLE_SITEMAP_SHARD_COUNT');
+	});
+
+	test('the 50k ceiling itself is the protocol number, not a local guess', () => {
+		expect(MAX_URLS_PER_SITEMAP).toBe(50_000);
+	});
+});
+
 describe('fetchPeopleSitemapEntries', () => {
 	const originalFetch = globalThis.fetch;
 	const base = 'https://goodparty.org';
 	const aliceId = 'aaaaaaaa-1111-2222-3333-444444444444';
 	const bobId = 'bbbbbbbb-1111-2222-3333-444444444444';
 	const carolId = 'cccccccc-1111-2222-3333-444444444444';
+
+	/**
+	 * These three fixtures used to be isolated from each other by the first
+	 * letter of their slug. Shards are keyed on the id now, so the isolation has
+	 * to be read off the id — the three land in shards 42, 59 and 12, which is
+	 * what keeps "alice's shard" a meaningful assertion.
+	 */
+	const shardOf = peopleShardForPersonId;
 
 	type MockPerson = { id: string; slug: string; state: string | null };
 
@@ -161,7 +235,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			candidacies: { WY: [aliceId] },
 		});
 
-		const entries = await fetchPeopleSitemapEntries(base, 'a');
+		const entries = await fetchPeopleSitemapEntries(base, shardOf(aliceId));
 
 		expect(entries.map((e) => e.url)).toEqual([`${base}/people/alice-smith-aaaaaaaa`]);
 	});
@@ -178,9 +252,9 @@ describe('fetchPeopleSitemapEntries', () => {
 		});
 
 		const urls = await Promise.all([
-			fetchPeopleSitemapEntries(base, 'a'),
-			fetchPeopleSitemapEntries(base, 'b'),
-			fetchPeopleSitemapEntries(base, 'c'),
+			fetchPeopleSitemapEntries(base, shardOf(aliceId)),
+			fetchPeopleSitemapEntries(base, shardOf(bobId)),
+			fetchPeopleSitemapEntries(base, shardOf(carolId)),
 		]);
 
 		expect(urls.flat().map((e) => e.url)).toEqual([
@@ -205,7 +279,9 @@ describe('fetchPeopleSitemapEntries', () => {
 			candidacies: { WY: many },
 		});
 
-		const entries = await fetchPeopleSitemapEntries(base, 'z');
+		// These 400 ids walk the suffix space, so they land in 400 different
+		// shards; the corpus-wide call is the one that can see them all.
+		const entries = await fetchPeopleSitemapEntries(base);
 
 		expect(entries).toHaveLength(many.length);
 		const idCalls = urls.filter((u) => u.includes('ids='));
@@ -221,7 +297,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			candidacies: { WY: [bobId, carolId] },
 		});
 
-		await fetchPeopleSitemapEntries(base, 'b');
+		await fetchPeopleSitemapEntries(base, shardOf(bobId));
 
 		const idCalls = urls.filter((u) => u.includes('ids='));
 		expect(idCalls).toHaveLength(1);
@@ -242,8 +318,8 @@ describe('fetchPeopleSitemapEntries', () => {
 		});
 
 		const [aShard, bShard] = await Promise.all([
-			fetchPeopleSitemapEntries(base, 'a'),
-			fetchPeopleSitemapEntries(base, 'b'),
+			fetchPeopleSitemapEntries(base, shardOf(aliceId)),
+			fetchPeopleSitemapEntries(base, shardOf(bobId)),
 		]);
 
 		expect(aShard.map((e) => e.url)).toEqual([`${base}/people/alice-smith-aaaaaaaa`]);
@@ -257,7 +333,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			unlisted: [{ personId: aliceId.toUpperCase() }],
 		});
 
-		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+		expect(await fetchPeopleSitemapEntries(base, shardOf(aliceId))).toEqual([]);
 	});
 
 	test('a claimed page carries its publish date and outranks an unclaimed one', async () => {
@@ -270,8 +346,8 @@ describe('fetchPeopleSitemapEntries', () => {
 			published: [{ personId: aliceId, updatedAt: '2026-01-15T00:00:00.000Z' }],
 		});
 
-		const [claimed] = await fetchPeopleSitemapEntries(base, 'a');
-		const [unclaimed] = await fetchPeopleSitemapEntries(base, 'b');
+		const [claimed] = await fetchPeopleSitemapEntries(base, shardOf(aliceId));
+		const [unclaimed] = await fetchPeopleSitemapEntries(base, shardOf(bobId));
 
 		expect(claimed).toMatchObject({ priority: 0.7, lastModified: '2026-01-15' });
 		expect(unclaimed).toMatchObject({ priority: 0.5 });
@@ -289,8 +365,8 @@ describe('fetchPeopleSitemapEntries', () => {
 		});
 
 		await Promise.all([
-			fetchPeopleSitemapEntries(base, 'a'),
-			fetchPeopleSitemapEntries(base, 'b'),
+			fetchPeopleSitemapEntries(base, shardOf(aliceId)),
+			fetchPeopleSitemapEntries(base, shardOf(bobId)),
 		]);
 
 		expect(urls.filter((u) => u.includes('public-person-profiles/published'))).toHaveLength(1);
@@ -303,7 +379,7 @@ describe('fetchPeopleSitemapEntries', () => {
 	// (or failing) at build time must not pin the band empty for the process.
 	test('an empty sweep is not cached for the life of the process', async () => {
 		mockUpstream({ persons: [] });
-		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+		expect(await fetchPeopleSitemapEntries(base, shardOf(aliceId))).toEqual([]);
 
 		clearPeopleSitemapCache();
 		mockUpstream({
@@ -311,7 +387,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			candidacies: { WY: [aliceId] },
 		});
 
-		expect((await fetchPeopleSitemapEntries(base, 'a')).map((e) => e.url)).toEqual([
+		expect((await fetchPeopleSitemapEntries(base, shardOf(aliceId))).map((e) => e.url)).toEqual([
 			`${base}/people/alice-smith-aaaaaaaa`,
 		]);
 	});
@@ -326,7 +402,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			failPersonsForState: 'CA',
 		});
 
-		await expect(fetchPeopleSitemapEntries(base, 'a')).rejects.toThrow();
+		await expect(fetchPeopleSitemapEntries(base, shardOf(aliceId))).rejects.toThrow();
 	});
 
 	// A rolling deploy where gp-api has not yet shipped the endpoint 404s here.
@@ -337,7 +413,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			unlistedStatus: 404,
 		});
 
-		await expect(fetchPeopleSitemapEntries(base, 'a')).rejects.toThrow();
+		await expect(fetchPeopleSitemapEntries(base, shardOf(aliceId))).rejects.toThrow();
 	});
 
 	// The band must not stay broken after a blip: the module slot has to clear on
@@ -347,14 +423,14 @@ describe('fetchPeopleSitemapEntries', () => {
 			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
 			unlistedStatus: 503,
 		});
-		await expect(fetchPeopleSitemapEntries(base, 'a')).rejects.toThrow();
+		await expect(fetchPeopleSitemapEntries(base, shardOf(aliceId))).rejects.toThrow();
 
 		mockUpstream({
 			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
 			candidacies: { WY: [aliceId] },
 		});
 
-		expect((await fetchPeopleSitemapEntries(base, 'a')).map((e) => e.url)).toEqual([
+		expect((await fetchPeopleSitemapEntries(base, shardOf(aliceId))).map((e) => e.url)).toEqual([
 			`${base}/people/alice-smith-aaaaaaaa`,
 		]);
 	});
@@ -372,8 +448,8 @@ describe('fetchPeopleSitemapEntries', () => {
 		});
 
 		const [aShard, bShard] = await Promise.all([
-			fetchPeopleSitemapEntries(base, 'a'),
-			fetchPeopleSitemapEntries(base, 'b'),
+			fetchPeopleSitemapEntries(base, shardOf(aliceId)),
+			fetchPeopleSitemapEntries(base, shardOf(bobId)),
 		]);
 
 		expect(aShard.map((e) => e.url)).toEqual([`${base}/people/alice-smith-aaaaaaaa`]);
@@ -385,7 +461,7 @@ describe('fetchPeopleSitemapEntries', () => {
 	test('omits a person who appears on no civics feed at all', async () => {
 		mockUpstream({ persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }] });
 
-		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+		expect(await fetchPeopleSitemapEntries(base, shardOf(aliceId))).toEqual([]);
 	});
 
 	test('an officeholder row that carries only officeTitle still counts as an office', async () => {
@@ -394,7 +470,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			officeholders: { WY: [{ personId: aliceId, officeTitle: 'City Council' }] },
 		});
 
-		expect((await fetchPeopleSitemapEntries(base, 'a')).map((e) => e.url)).toEqual([
+		expect((await fetchPeopleSitemapEntries(base, shardOf(aliceId))).map((e) => e.url)).toEqual([
 			`${base}/people/alice-smith-aaaaaaaa`,
 		]);
 	});
@@ -411,7 +487,7 @@ describe('fetchPeopleSitemapEntries', () => {
 				candidacies: { WY: [{ personId: aliceId, positionName: blank }] },
 			});
 
-			expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+			expect(await fetchPeopleSitemapEntries(base, shardOf(aliceId))).toEqual([]);
 		});
 	}
 
@@ -428,7 +504,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
 			candidacies: { WY: [aliceId] },
 		});
-		await fetchPeopleSitemapEntries(base, 'a');
+		await fetchPeopleSitemapEntries(base, shardOf(aliceId));
 
 		const columnsFor = (path: string): Set<string> =>
 			new Set(
@@ -453,7 +529,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			published: [{ personId: aliceId, updatedAt: '2026-01-15T00:00:00.000Z' }],
 		});
 
-		expect((await fetchPeopleSitemapEntries(base, 'a')).map((e) => e.url)).toEqual([
+		expect((await fetchPeopleSitemapEntries(base, shardOf(aliceId))).map((e) => e.url)).toEqual([
 			`${base}/people/alice-smith-aaaaaaaa`,
 		]);
 	});
@@ -475,7 +551,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			published: [{ personId: aliceId, updatedAt: '2026-01-15T00:00:00.000Z' }],
 		});
 
-		expect((await fetchPeopleSitemapEntries(base, 'a')).map((e) => e.url)).toEqual([
+		expect((await fetchPeopleSitemapEntries(base, shardOf(aliceId))).map((e) => e.url)).toEqual([
 			`${base}/people/alice-smith-aaaaaaaa`,
 		]);
 	});
@@ -489,7 +565,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			published: [{ personId: bobId }, { personId: carolId }],
 		});
 
-		await fetchPeopleSitemapEntries(base, 'b');
+		await fetchPeopleSitemapEntries(base, shardOf(bobId));
 
 		const idCalls = urls.filter((u) => u.includes('ids='));
 		expect(idCalls).toHaveLength(1);
@@ -502,7 +578,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			published: [{ personId: aliceId }],
 		});
 
-		await fetchPeopleSitemapEntries(base, 'a');
+		await fetchPeopleSitemapEntries(base, shardOf(aliceId));
 
 		expect(urls.filter((u) => u.includes('ids='))).toEqual([]);
 	});
@@ -515,7 +591,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			published: [{ personId: aliceId }],
 		});
 
-		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+		expect(await fetchPeopleSitemapEntries(base, shardOf(aliceId))).toEqual([]);
 	});
 
 	// Seeding must not outrank the exclusion list: publish-then-request-removal
@@ -527,7 +603,34 @@ describe('fetchPeopleSitemapEntries', () => {
 			unlisted: [{ personId: aliceId }],
 		});
 
-		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+		expect(await fetchPeopleSitemapEntries(base, shardOf(aliceId))).toEqual([]);
+	});
+
+	/**
+	 * The safety property behind the whole re-shard: splitting the band differently
+	 * is only safe if it is a partition. Every URL the unsharded corpus lists has
+	 * to appear in exactly one shard — not zero (a page silently dropped from the
+	 * sitemap) and not two (a duplicate across files).
+	 */
+	test('the shards partition the corpus: every URL in exactly one file', async () => {
+		const many = Array.from(
+			{ length: 400 },
+			(_, i) => `${(i * 7919).toString(16).padStart(8, '0')}-1111-2222-3333-444444444444`,
+		);
+		mockUpstream({
+			persons: many.map((id) => ({ id, slug: `person-${id.slice(0, 8)}`, state: null })),
+			candidacies: { WY: many },
+		});
+
+		const whole = (await fetchPeopleSitemapEntries(base)).map((e) => e.url);
+		const perShard = await Promise.all(
+			PEOPLE_SITEMAP_SHARDS.map(async (shard) => fetchPeopleSitemapEntries(base, shard)),
+		);
+		const sharded = perShard.flat().map((e) => e.url);
+
+		expect(whole).toHaveLength(many.length);
+		expect(sharded).toHaveLength(whole.length);
+		expect([...sharded].sort()).toEqual([...whole].sort());
 	});
 
 	test('skips a person with no slug, since there is no URL to point at', async () => {
@@ -535,7 +638,7 @@ describe('fetchPeopleSitemapEntries', () => {
 			persons: [{ id: aliceId, slug: '', state: 'WY' }],
 		});
 
-		expect(await fetchPeopleSitemapEntries(base, 'a')).toEqual([]);
+		expect(await fetchPeopleSitemapEntries(base, shardOf(aliceId))).toEqual([]);
 	});
 });
 
@@ -1001,5 +1104,440 @@ describe('buildRaceRouteParams', () => {
 			},
 		]);
 		expect(cityPositionParams).toEqual([]);
+	});
+});
+
+describe('fetchStateElectionSitemapEntries', () => {
+	const originalFetch = globalThis.fetch;
+	const base = 'https://goodparty.org';
+
+	type MockPlace = { slug: string; mtfcc: string; name: string };
+	type MockCity = { slug: string; countyName: string };
+	type MockRace = { slug: string; positionLevel: string };
+
+	/**
+	 * Stands in for the /v1 sweeps the state band reads, and returns the URLs it was
+	 * asked for so a test can assert which queries did *not* happen. `cities`,
+	 * `towns` and `countyChildren` are separate because they are separate upstream
+	 * queries — serving `towns` from the G4110 sweep, or the children from the state
+	 * sweep, would hide the very bugs these tests cover.
+	 */
+	function mockUpstream(opts: {
+		places?: MockPlace[];
+		cities?: MockCity[];
+		towns?: MockCity[];
+		races?: MockRace[];
+		/** county slug → its `children`, as /v1/places?slug=…&includeChildren=true returns them. */
+		countyChildren?: Record<string, Array<{ slug: string; mtfcc: string }>>;
+	}): string[] {
+		const urls: string[] = [];
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = new URL(String(input));
+			urls.push(String(input));
+			const json = (body: unknown) =>
+				new Response(JSON.stringify(body), {
+					status: 200,
+					headers: { 'content-type': 'application/json' },
+				});
+
+			if (url.pathname.endsWith('/v1/races')) return json(opts.races ?? []);
+			// The county walk is the /v1/places call keyed on one slug, not on state.
+			const slug = url.searchParams.get('slug');
+			if (slug) return json([{ children: opts.countyChildren?.[slug] ?? [] }]);
+			// The municipal sweeps are the /v1/places calls that filter on mtfcc.
+			if (url.searchParams.get('mtfcc') === 'G4110') return json(opts.cities ?? []);
+			if (url.searchParams.get('mtfcc') === 'G4040') return json(opts.towns ?? []);
+			return json(opts.places ?? []);
+		}) as typeof fetch;
+		return urls;
+	}
+
+	afterEach(() => {
+		globalThis.fetch = originalFetch;
+	});
+
+	afterAll(() => {
+		globalThis.fetch = originalFetch;
+	});
+
+	// All 51 of these pages were absent from every shard while the counties,
+	// cities and position pages beneath them were listed: the state is not a row
+	// in `places`, so nothing else emits it.
+	test('emits the state index page itself', async () => {
+		mockUpstream({});
+
+		const entries = await fetchStateElectionSitemapEntries('AL', base);
+
+		expect(entries.map((e) => e.url)).toEqual([`${base}/elections/al`]);
+	});
+
+	// A sitemap URL that disagrees with the page's self-referencing canonical
+	// (built from the lowercased path) sends conflicting signals.
+	test('lowercases the state segment to match the page canonical', async () => {
+		mockUpstream({});
+
+		const entries = await fetchStateElectionSitemapEntries('dc', base);
+
+		expect(entries[0]?.url).toBe(`${base}/elections/dc`);
+	});
+
+	test('gives the state a priority at least as high as its counties and cities', async () => {
+		mockUpstream({
+			places: [{ slug: 'al/autauga-county', mtfcc: 'G4020', name: 'Autauga County' }],
+			cities: [{ slug: 'al/prattville', countyName: 'Autauga County' }],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('AL', base);
+		const byUrl = new Map(entries.map((e) => [e.url, e]));
+
+		expect(byUrl.get(`${base}/elections/al`)?.priority).toBe(0.8);
+		expect(byUrl.get(`${base}/elections/al`)?.changeFrequency).toBe('weekly');
+		expect(byUrl.get(`${base}/elections/al/autauga-county`)?.priority).toBe(0.7);
+		expect(byUrl.get(`${base}/elections/al/autauga-county/prattville`)?.priority).toBe(0.7);
+	});
+
+	test('lists the state once even if a place row carries the state slug', async () => {
+		mockUpstream({
+			places: [
+				{ slug: 'al', mtfcc: 'G4020', name: 'Alabama' },
+				{ slug: 'al', mtfcc: 'G5420', name: 'Alabama' },
+			],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('AL', base);
+
+		expect(entries.filter((e) => e.url === `${base}/elections/al`)).toHaveLength(1);
+	});
+
+	// Towns are TOWN_MTFCC, not CITY_MTFCC. This query used to ask for G4110 only,
+	// so New England town pages were in no shard at all even though they render
+	// and their own county pages link to them.
+	test('lists G4040 towns, not just G4110 cities', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/windham-county', mtfcc: 'G4020', name: 'Windham County' }],
+			towns: [{ slug: 'vt/brattleboro-town', countyName: 'Windham County' }],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('VT', base);
+
+		expect(entries.map((e) => e.url)).toContain(
+			`${base}/elections/vt/windham-county/brattleboro-town`,
+		);
+	});
+
+	// The "-town" suffix is part of the slug: /elections/vt/windham-county/brattleboro
+	// 404s. Deriving the segment by stripping the suffix would advertise dead URLs.
+	test('keeps the -town suffix rather than stripping it', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/windham-county', mtfcc: 'G4020', name: 'Windham County' }],
+			towns: [{ slug: 'vt/brattleboro-town', countyName: 'Windham County' }],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('VT', base);
+		const urls = entries.map((e) => e.url);
+
+		expect(urls).not.toContain(`${base}/elections/vt/windham-county/brattleboro`);
+	});
+
+	// A state whose municipal rows are all towns contributed zero municipal URLs
+	// under the G4110-only query, however many towns it had.
+	test('a state with no city rows at all still gets municipal entries', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/orange-county', mtfcc: 'G4020', name: 'Orange County' }],
+			cities: [],
+			towns: [
+				{ slug: 'vt/randolph-town', countyName: 'Orange County' },
+				{ slug: 'vt/chelsea-town', countyName: 'Orange County' },
+			],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('VT', base);
+		const municipal = entries.filter((e) => e.url.split('/').length === 7);
+
+		expect(municipal.map((e) => e.url)).toEqual([
+			`${base}/elections/vt/orange-county/randolph-town`,
+			`${base}/elections/vt/orange-county/chelsea-town`,
+		]);
+	});
+
+	test('cities and towns both land, without double-counting either', async () => {
+		mockUpstream({
+			places: [{ slug: 'ma/worcester-county', mtfcc: 'G4020', name: 'Worcester County' }],
+			cities: [{ slug: 'ma/worcester', countyName: 'Worcester County' }],
+			towns: [{ slug: 'ma/brookfield-town', countyName: 'Worcester County' }],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('MA', base);
+		const urls = entries.map((e) => e.url);
+
+		expect(urls).toContain(`${base}/elections/ma/worcester-county/worcester`);
+		expect(urls).toContain(`${base}/elections/ma/worcester-county/brookfield-town`);
+		expect(new Set(urls).size).toBe(urls.length);
+	});
+
+	// Maine tags some district rows as municipality-shaped; the district filter has
+	// to keep applying to the town sweep, not just the city sweep.
+	test('still filters school districts out of the town sweep', async () => {
+		mockUpstream({
+			places: [{ slug: 'me/androscoggin-county', mtfcc: 'G4020', name: 'Androscoggin County' }],
+			towns: [
+				{ slug: 'me/auburn-town', countyName: 'Androscoggin County' },
+				{ slug: 'me/rsu-52-school-district', countyName: 'Androscoggin County' },
+			],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('ME', base);
+		const urls = entries.map((e) => e.url);
+
+		expect(urls).toContain(`${base}/elections/me/androscoggin-county/auburn-town`);
+		expect(urls).not.toContain(
+			`${base}/elections/me/androscoggin-county/rsu-52-school-district`,
+		);
+	});
+
+	// Connecticut: both state-level municipal sweeps return nothing whatever mtfcc
+	// you ask for, so CT contributed zero municipal URLs even after the town sweep
+	// was added. The towns are reachable from the counties, which is how the county
+	// index pages link to them.
+	test('falls back to walking the counties when the state sweep finds no municipality', async () => {
+		mockUpstream({
+			places: [{ slug: 'ct/fairfield-county', mtfcc: 'G4020', name: 'Fairfield County' }],
+			cities: [],
+			towns: [],
+			countyChildren: {
+				'ct/fairfield-county': [
+					{ slug: 'ct/fairfield-county/bethel-town', mtfcc: 'G4040' },
+					{ slug: 'ct/fairfield-county/greenwich-town', mtfcc: 'G4040' },
+				],
+			},
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('CT', base);
+		const urls = entries.map((e) => e.url);
+
+		expect(urls).toContain(`${base}/elections/ct/fairfield-county/bethel-town`);
+		expect(urls).toContain(`${base}/elections/ct/fairfield-county/greenwich-town`);
+	});
+
+	// The first attempt at this gated on the sweep being empty, and a preview build
+	// showed CT still emitting zero municipal URLs. A row the sweep returns is still
+	// dropped unless its countyName matches a county place, so "returned rows" and
+	// "produced a usable municipality" are different things and the gate has to be
+	// the second one.
+	test('walks the counties when the sweep returns rows that map to no county', async () => {
+		mockUpstream({
+			places: [{ slug: 'ct/fairfield-county', mtfcc: 'G4020', name: 'Fairfield County' }],
+			towns: [{ slug: 'ct/orphan-town', countyName: 'Greater Bridgeport Planning Region' }],
+			countyChildren: {
+				'ct/fairfield-county': [{ slug: 'ct/fairfield-county/darien-town', mtfcc: 'G4040' }],
+			},
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('CT', base);
+		const urls = entries.map((e) => e.url);
+
+		expect(urls).toContain(`${base}/elections/ct/fairfield-county/darien-town`);
+		// The unmappable row is still dropped; it has no county to sit under.
+		expect(urls.some((u) => u.includes('orphan-town'))).toBe(false);
+	});
+
+	// The walk costs one request per county, so it must stay off for the 50 states
+	// whose sweep works. Widening it would be ~3,255 extra calls.
+	test('does not walk the counties when the sweep maps to a county', async () => {
+		const urls = mockUpstream({
+			places: [{ slug: 'al/autauga-county', mtfcc: 'G4020', name: 'Autauga County' }],
+			cities: [{ slug: 'al/prattville', countyName: 'Autauga County' }],
+			countyChildren: {
+				'al/autauga-county': [{ slug: 'al/autauga-county/should-not-appear', mtfcc: 'G4110' }],
+			},
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('AL', base);
+
+		expect(urls.filter((u) => u.includes('includeChildren'))).toHaveLength(0);
+		expect(entries.map((e) => e.url)).not.toContain(
+			`${base}/elections/al/autauga-county/should-not-appear`,
+		);
+	});
+
+	// The children list carries school districts too, and the walk must not turn
+	// them into municipal URLs.
+	test('keeps non-municipal children out of the county walk', async () => {
+		mockUpstream({
+			places: [{ slug: 'ct/hartford-county', mtfcc: 'G4020', name: 'Hartford County' }],
+			countyChildren: {
+				'ct/hartford-county': [
+					{ slug: 'ct/hartford-county/berlin-town', mtfcc: 'G4040' },
+					{ slug: 'ct/hartford-county/berlin-school-district', mtfcc: 'G5420' },
+				],
+			},
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('CT', base);
+		const urls = entries.map((e) => e.url);
+
+		expect(urls).toContain(`${base}/elections/ct/hartford-county/berlin-town`);
+		expect(urls).not.toContain(`${base}/elections/ct/hartford-county/berlin-school-district`);
+	});
+
+	// Town-level *position* pages were collateral damage: buildRaceEntries skips a
+	// city race it cannot map to a county, and towns had no mapping at all.
+	test('town position pages resolve now that towns are in the county lookup', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/windham-county', mtfcc: 'G4020', name: 'Windham County' }],
+			towns: [{ slug: 'vt/brattleboro-town', countyName: 'Windham County' }],
+			races: [{ slug: 'vt/brattleboro-town/town-moderator', positionLevel: 'CITY' }],
+		});
+
+		const entries = await fetchStateElectionSitemapEntries('VT', base);
+
+		expect(entries.map((e) => e.url)).toContain(
+			`${base}/elections/vt/windham-county/brattleboro-town/position/town-moderator`,
+		);
+	});
+});
+
+/**
+ * The route-params twin of the band above. These two functions read the same
+ * upstream sweeps and must agree: this one feeds generateStaticParams, so if it
+ * drops a tier the sitemap still advertises it and we publish URLs that were
+ * never prerendered. Covered separately because nothing else fails when only one
+ * of the pair regresses.
+ */
+describe('fetchStateElectionRouteParams', () => {
+	const originalFetch = globalThis.fetch;
+
+	type MockPlace = { slug: string; mtfcc: string; name: string };
+	type MockCity = { slug: string; countyName: string };
+	type MockRace = { slug: string; positionLevel: string };
+
+	function mockUpstream(opts: {
+		places?: MockPlace[];
+		cities?: MockCity[];
+		towns?: MockCity[];
+		races?: MockRace[];
+		countyChildren?: Record<string, Array<{ slug: string; mtfcc: string }>>;
+	}) {
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = new URL(String(input));
+			const json = (body: unknown) =>
+				new Response(JSON.stringify(body), {
+					status: 200,
+					headers: { 'content-type': 'application/json' },
+				});
+
+			if (url.pathname.endsWith('/v1/races')) return json(opts.races ?? []);
+			const slug = url.searchParams.get('slug');
+			if (slug) return json([{ children: opts.countyChildren?.[slug] ?? [] }]);
+			if (url.searchParams.get('mtfcc') === 'G4110') return json(opts.cities ?? []);
+			if (url.searchParams.get('mtfcc') === 'G4040') return json(opts.towns ?? []);
+			return json(opts.places ?? []);
+		}) as typeof fetch;
+	}
+
+	afterEach(() => {
+		globalThis.fetch = originalFetch;
+	});
+
+	afterAll(() => {
+		globalThis.fetch = originalFetch;
+	});
+
+	test('includes G4040 towns in cityParams, not just G4110 cities', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/windham-county', mtfcc: 'G4020', name: 'Windham County' }],
+			towns: [{ slug: 'vt/brattleboro-town', countyName: 'Windham County' }],
+		});
+
+		const { cityParams } = await fetchStateElectionRouteParams('VT');
+
+		expect(cityParams).toEqual([
+			{ state: 'vt', county: 'windham-county', city: 'brattleboro-town' },
+		]);
+	});
+
+	test('a state with no city rows at all still gets cityParams entries', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/orange-county', mtfcc: 'G4020', name: 'Orange County' }],
+			cities: [],
+			towns: [
+				{ slug: 'vt/randolph-town', countyName: 'Orange County' },
+				{ slug: 'vt/chelsea-town', countyName: 'Orange County' },
+			],
+		});
+
+		const { cityParams } = await fetchStateElectionRouteParams('VT');
+
+		expect(cityParams.map((p) => p.city)).toEqual(['randolph-town', 'chelsea-town']);
+	});
+
+	// The pairing that matters: whatever the sitemap advertises at the municipal
+	// tier has to be prerenderable from these params, or we publish URLs that
+	// were never built.
+	test('emits the same municipal set the sitemap band advertises', async () => {
+		const upstream = {
+			places: [{ slug: 'nh/hillsborough-county', mtfcc: 'G4020', name: 'Hillsborough County' }],
+			cities: [{ slug: 'nh/nashua', countyName: 'Hillsborough County' }],
+			towns: [{ slug: 'nh/merrimack-town', countyName: 'Hillsborough County' }],
+		};
+
+		mockUpstream(upstream);
+		const { cityParams } = await fetchStateElectionRouteParams('NH');
+
+		mockUpstream(upstream);
+		const entries = await fetchStateElectionSitemapEntries('NH', 'https://goodparty.org');
+
+		const fromParams = cityParams
+			.map((p) => `https://goodparty.org/elections/${p.state}/${p.county}/${p.city}`)
+			.sort();
+		const fromSitemap = entries
+			.map((e) => e.url)
+			.filter((u) => u.split('/').length === 7 && !u.includes('/position/'))
+			.sort();
+
+		expect(fromParams).toEqual(fromSitemap);
+	});
+
+	// The pair must agree on Connecticut too, or the sitemap advertises CT towns
+	// that were never prerendered.
+	test('walks the counties for a state whose sweep finds no municipality', async () => {
+		mockUpstream({
+			places: [{ slug: 'ct/fairfield-county', mtfcc: 'G4020', name: 'Fairfield County' }],
+			cities: [],
+			towns: [],
+			countyChildren: {
+				'ct/fairfield-county': [{ slug: 'ct/fairfield-county/bethel-town', mtfcc: 'G4040' }],
+			},
+		});
+
+		const { cityParams } = await fetchStateElectionRouteParams('CT');
+
+		expect(cityParams).toEqual([
+			{ state: 'ct', county: 'fairfield-county', city: 'bethel-town' },
+		]);
+	});
+
+	// The position tier needs its own assertion: cityParams can be correct while
+	// cityPositionParams is empty, because the latter resolves the town through
+	// citySlugToCountySlug inside buildRaceRouteParams. That combination prerenders
+	// the town index pages and none of the office pages under them, while the
+	// sitemap advertises both.
+	test('a town race produces cityPositionParams, not just cityParams', async () => {
+		mockUpstream({
+			places: [{ slug: 'vt/windham-county', mtfcc: 'G4020', name: 'Windham County' }],
+			towns: [{ slug: 'vt/brattleboro-town', countyName: 'Windham County' }],
+			races: [{ slug: 'vt/brattleboro-town/town-moderator', positionLevel: 'CITY' }],
+		});
+
+		const { cityPositionParams } = await fetchStateElectionRouteParams('VT');
+
+		expect(cityPositionParams).toEqual([
+			{
+				state: 'vt',
+				county: 'windham-county',
+				city: 'brattleboro-town',
+				positionSlug: 'town-moderator',
+			},
+		]);
 	});
 });

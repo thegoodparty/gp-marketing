@@ -18,6 +18,7 @@ import {
 	PLACE_RACE_COLUMNS,
 	placeToFactsCards,
 	redirectCityPlaceToFourLevelUrl,
+	resolveDefaultElectionYear,
 	resolvePlaceRaceElectionDates,
 } from '~/lib/electionsHelpers';
 import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
@@ -112,9 +113,7 @@ export default async function Page({
 		},
 	);
 
-	const defaultYear = dataYears.includes(currentYear)
-		? currentYear
-		: (dataYears[0] ?? currentYear);
+	const defaultYear = resolveDefaultElectionYear(dataYears, currentYear);
 	const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
 
 	const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);
@@ -131,7 +130,6 @@ export default async function Page({
 		listHeading: isDistrict
 			? `Elections in ${placeName}`
 			: `${normalizedCounty?.suffixLabel ?? getCountySuffixLabel(countyPlace!.name)} Elections in ${normalizedCounty?.displayName ?? countyPlace!.name}`,
-		listHeadline: isDistrict ? 'district' : 'county',
 		defaultYear,
 		availableYears,
 		offices: countyOffices,

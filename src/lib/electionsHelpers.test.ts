@@ -9,6 +9,7 @@ import {
 	buildRaceSlug,
 	buildPlaceRacePositionHref,
 	buildSubplaceRaceSlug,
+	isRealPlaceSegment,
 	canonicalizeCountyEquivalentName,
 	findCityForDistrictName,
 	formatElectionDateFromApi,
@@ -32,6 +33,7 @@ import {
 	redirectCityRaceToFourLevelUrl,
 	resolveClaimedCustomIssueText,
 	resolveClaimedTextField,
+	resolveDefaultElectionYear,
 	resolveLocalityName,
 	resolvePlaceRaceElectionDates,
 	resolveProfileAboutText,
@@ -227,6 +229,36 @@ describe('buildPlaceRacePositionHref', () => {
 
 	test('returns undefined for an empty race slug', () => {
 		expect(buildPlaceRacePositionHref(['mt'], '')).toBeUndefined();
+	});
+});
+
+describe('isRealPlaceSegment', () => {
+	test('city segment the resolved place is slugged at', () => {
+		expect(isRealPlaceSegment('in/adams-county/berne', 'berne')).toBe(true);
+	});
+
+	test('city segment when the API slug omits the county', () => {
+		expect(isRealPlaceSegment('in/berne', 'berne')).toBe(true);
+	});
+
+	test('city segment above the resolved place, a real subplace', () => {
+		expect(isRealPlaceSegment('in/adams-county/berne/french-township', 'berne')).toBe(true);
+	});
+
+	test('joint county office in the city slot is not a place', () => {
+		expect(isRealPlaceSegment('mt/gallatin-county', 'county-clerk')).toBe(false);
+	});
+
+	test('joint city office in the subplace slot is not a place', () => {
+		expect(isRealPlaceSegment('in/adams-county/berne', 'city-clerk')).toBe(false);
+	});
+
+	test('ignores case on both sides', () => {
+		expect(isRealPlaceSegment('IN/Adams-County/Berne', 'BERNE')).toBe(true);
+	});
+
+	test('an unknown place slug leaves the segment alone', () => {
+		expect(isRealPlaceSegment(undefined, 'county-clerk')).toBe(true);
 	});
 });
 
@@ -575,6 +607,20 @@ describe('buildOfficeItemsFromPlaceRaces', () => {
 		expect(offices[0]?.nextElectionDate).toBe('2026-11-03T00:00:00.000Z');
 		expect(offices[1]?.nextElectionDate).toBe('2028-03-07T00:00:00.000Z');
 		expect(dataYears).toEqual([2026, 2028]);
+	});
+
+	test('gives every office a distinct id when the API sends none', () => {
+		const races = [
+			placeRace({ id: undefined, slug: 'tx/harris-county/county-attorney' }),
+			placeRace({ id: undefined, slug: 'tx/harris-county/county-constable' }),
+		];
+
+		const { offices } = buildOfficeItemsFromPlaceRaces(races, new Map(), {
+			type: 'County',
+			buildHref: () => undefined,
+		});
+
+		expect(offices.map(o => o.id)).toEqual(['tx/harris-county/county-attorney-0', 'tx/harris-county/county-constable-1']);
 	});
 
 	test('handles year-boundary ISO datetime correctly', () => {
@@ -1311,5 +1357,36 @@ describe('mapCandidacyToCard', () => {
 				0,
 			).href,
 		).toBe('/candidate/chris-lewis/ny-senate');
+	});
+});
+
+describe('resolveDefaultElectionYear', () => {
+	test('opens on the current year when it has elections', () => {
+		expect(resolveDefaultElectionYear([2020, 2022, 2026, 2028], 2026)).toBe(2026);
+	});
+
+	/**
+	 * The live case this fixed: Kane County, IL held 2020, 2022, 2024, 2025, 2027
+	 * and 2028, and opened on 2020 because the old rule took the first year in an
+	 * ascending list whenever the current year was missing.
+	 */
+	test('opens on the soonest year ahead when the current year has none', () => {
+		expect(resolveDefaultElectionYear([2020, 2022, 2024, 2025, 2027, 2028], 2026)).toBe(2027);
+	});
+
+	test('opens on the most recent year when nothing is upcoming', () => {
+		expect(resolveDefaultElectionYear([2020, 2021, 2023], 2026)).toBe(2023);
+	});
+
+	test('handles a place with a single past year', () => {
+		expect(resolveDefaultElectionYear([2021], 2026)).toBe(2021);
+	});
+
+	test('falls back to the current year when the place has no election data', () => {
+		expect(resolveDefaultElectionYear([], 2026)).toBe(2026);
+	});
+
+	test('does not assume the years arrive sorted', () => {
+		expect(resolveDefaultElectionYear([2028, 2020, 2027], 2026)).toBe(2027);
 	});
 });

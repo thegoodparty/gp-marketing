@@ -123,7 +123,7 @@ export default async function Page({ params }: { params: Promise<PageParams> }) 
 		description,
 		sameAs: view.links.filter((l) => l.href.startsWith('http')).map((l) => l.href),
 		addressRegion: view.stateLabel,
-		affiliation: view.party,
+		affiliations: view.partyNames,
 	});
 
 	const schema = buildSchemaGraph([

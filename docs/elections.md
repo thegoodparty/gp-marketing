@@ -110,6 +110,84 @@ build if a new election route forgets. Keep the canonical path identical to the 
 URL for the same page (`buildElectionPositionHrefFromRaceSlug`); a canonical that
 disagrees with the sitemap sends conflicting signals.
 
+### What the per-state sitemap band lists
+
+`fetchStateElectionSitemapEntries` (`src/lib/sitemap-entries.ts`) owns one shard per
+state (`/sitemap/1.xml` … `/sitemap/51.xml`) and emits four things: the **state index
+itself** at priority 0.8, then counties and districts, cities, and position pages at
+0.7. The state is the only one of those that is not a row in the `/v1/places` response
+— the place rows are the tiers *inside* the state — so it has to be pushed explicitly
+from the state code. It was missed for a long time, which left all 51 `/elections/[state]`
+pages out of every shard while everything beneath them was listed. If you touch this
+function, keep that entry.
+
+The municipal tier reads **two** `/v1/places` sweeps, `CITY_MTFCC` *and* `TOWN_MTFCC`,
+concatenated before `buildCountyLookups`. Querying only `CITY_MTFCC` is the mistake
+this band shipped with for a long time. Towns and townships are a different code from
+cities, and wherever the township is the primary local unit — New England, but far more
+of the corpus in the Midwest township states — a city-only sweep returned a fraction of
+the municipalities. Measured against production when the second sweep was added, the 51
+state shards went from 74,991 URLs to 90,369: **+15,327 municipal and municipal-position
+URLs**, biggest gains PA +1,547, IL +1,397, KS +1,331, OH +1,315, MI +1,243. New England
+was where the pattern was first spotted but it is a small part of the total.
+
+Because that same sweep builds `citySlugToCountySlug`, towns also had no county mapping,
+so `buildRaceEntries` dropped their position pages via `skipUnmappedCity` — which is why
+fixing one query moved two tiers. `fetchStateElectionRouteParams` reads the same pair for
+the same reason: if the two functions disagree, the sitemap advertises URLs that were
+never prerendered. Use the constants, not the literals, and keep the two in step.
+
+Three things not to "fix" while in here:
+
+- **Town slugs carry their suffix** (`brattleboro-town`); the bare form 404s, so never
+  derive the segment by stripping it.
+- **Connecticut needs the county walk, not a sweep.** Both state-level municipal
+  queries come back empty for CT whatever mtfcc you ask for, so the two-sweep fix did
+  not give it a single municipal URL. The data is there:
+  `/v1/places?slug=ct/<county>&includeChildren=true` returns the towns with a municipal
+  mtfcc, which is how `/elections/ct/fairfield-county` links to 19 towns and why each of
+  those pages returns 200. `fetchMunicipalitiesByCountyWalk` picks them up from the
+  counties, and it fires **only when the state sweep finds nothing at all** — CT alone
+  today, 8 extra requests on that one shard. Do not relax that gate to "the sweep looks
+  sparse": walking every county nationwide is roughly 3,255 extra calls per build.
+- **Upstream sometimes mislabels a town as a county.** `vt/halifax` is tagged county-tier
+  while the real page is `/elections/vt/windham-county/halifax-town`, so one place can
+  surface at two tiers. `dedupeByUrl` will not collapse that, because the two URLs
+  genuinely differ.
+
+### How the /people band is sharded
+
+The band after the 51 state shards is `/people`, one profile per URL, and at 478,442
+URLs (September 2026) it is the bulk of the site. It is split across
+`PEOPLE_SITEMAP_SHARD_COUNT` files, `/sitemap/52.xml` upward.
+
+**Shard on the person id, never on the name.** The band originally used the first letter
+of the slug, which put 71,025 URLs in the `j` shard — over the sitemap protocol's
+50,000-URL ceiling, which is a hard limit a crawler may reject the whole file for, and
+`m` (44,915) and `d` (41,357) were next. First names cluster on a few letters and no
+amount of re-splitting letters fixes that. Person ids are random uuids, so
+`peopleShardForPersonId` (`parseInt(id8, 16) % PEOPLE_SITEMAP_SHARD_COUNT`) splits evenly
+by construction: measured across all 478,442 live ids, the 64 shards land within a few
+percent of 7,476 each.
+
+Two things to keep in mind if you touch this:
+
+- **Shard 0 is a real shard.** `if (shard)` is false for it, so a truthiness test hands
+  it the whole corpus or nothing. Compare against `undefined`.
+- **The shard is readable off the URL.** Any `/people/<name>-<id8>` lives in
+  `/sitemap/${PEOPLE_SITEMAP_BAND_START + (parseInt(id8, 16) % 64)}.xml`, which is how you
+  check a missing profile without running the sweep.
+
+**When to raise the count.** The band's size is set by the upstream person table, so it
+can cross the ceiling with no commit behind it and no failing unit test. Two things watch
+for that: `peopleShardSizeWarning` logs from the serving route once any shard passes 80%
+of the ceiling (40,000 URLs), and `integration/validate-sitemap-urls.test.ts` asserts the
+limit per file when it is run against a real host. Either one firing means raise
+`PEOPLE_SITEMAP_SHARD_COUNT`.
+
+Raising it is safe and does not remove any file — the band grows on the end and every
+existing id keeps serving. Lowering it would orphan the tail ids, so don't.
+
 ### Joint offices eat place slots
 
 A combined office (Indiana's Clerk/Treasurer, Montana's Clerk/Recorder/Surveyor,
@@ -126,6 +204,25 @@ hand-roll this: slicing the slug at a fixed depth folds the extra segments into 
 position slug, and `.pop()` drops them, and both shapes 404 while looking plausible.
 A September 2026 crawl found 516 such 404s, concentrated in Indiana towns and Montana
 counties but present in at least 17 states.
+
+The position pages have the mirror-image problem. They receive those extra segments as
+route params, so `/elections/mt/gallatin-county/county-clerk/recorder/position/surveyor-joint`
+parses as city `county-clerk`, subplace `recorder`. Building a breadcrumb straight from the
+params links back to `/elections/mt/gallatin-county/county-clerk`, which 404s, and writes that
+404 into the BreadcrumbList JSON-LD as well. A September 2026 crawl found 466 such breadcrumb
+targets across 20 states.
+
+`buildPlaceRacePositionHref` cannot fix that: it builds forward `/position/` hrefs and needs
+the place handed to it. On a position page the authoritative place is the one the page already
+resolved (`cityPlace`, which falls back to `race.Place`), so the position routes gate each place
+crumb on `isRealPlaceSegment(cityPlace.slug, city)` and drop the ones the place slug does not
+contain. It is membership rather than a tail match because the resolved place can sit *below*
+the segment being checked, which is the real-subplace case the neighbouring `isRealSubplace`
+check covers.
+
+The matching `/candidates` pages still build the broken crumb, and a broken `locationHref`
+with it. That is deliberate: those pages are being removed, so they were left alone rather
+than fixed twice.
 
 Because the route tree stops at four place levels, an office combining four or more
 roles cannot be addressed at all. `buildPlaceRacePositionHref` returns `undefined`
@@ -254,8 +351,8 @@ So when you build a link to a person:
 
 The slug rule is `<slugified name>-<first 8 hex of personId>`, and the id8 suffix
 is what the resolver actually looks up. Getting the *base* wrong is not fatal but
-is not free either: the resolver answers a near-miss base with a 307 to the real
-URL, so a wrong base trades an avoidable 308 for an avoidable 307.
+is not free either: the resolver answers a near-miss base with a 308 to the real
+URL, so a wrong base costs an avoidable redirect hop.
 
 Two traps in the base, both verified against live data:
 
@@ -266,7 +363,7 @@ Two traps in the base, both verified against live data:
   for about 0.8% of rows: nicknames (`Eugene Bice` / `ej-bice`), middle names
   (`Richard Brooks` / `richard-louis-brooks`), and upstream typos
   (`Chris Bright` / `chirs-bright`). Nothing in this repo can reconcile those, and
-  they are not worth chasing — they land on a single 307. This is the reason to
+  they are not worth chasing — they land on a single 308. This is the reason to
   prefer the spine row's slug whenever you have it.
 
 ### Linking to a race or a place: the county segment is not optional

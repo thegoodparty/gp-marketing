@@ -49,7 +49,9 @@ const styles = tv({
 		dateCell: 'flex items-center ml-auto',
 		arrowIcon: 'text-neutral-900',
 		cardList: 'flex flex-col gap-3 md:hidden',
-		officeCard: 'group bg-neutral-50 rounded-lg p-4 border border-neutral-200 hover:border-goodparty-blue transition-colors',
+		// `block` because the card is an <a>: it used to be a flex child of cardList
+		// and got blockified, and it now sits inside a per-row wrapper instead.
+		officeCard: 'group block bg-neutral-50 rounded-lg p-4 border border-neutral-200 hover:border-goodparty-blue transition-colors',
 		cardContent: 'flex items-start justify-between gap-4',
 		cardLeft: 'flex-1 flex flex-col gap-2',
 		cardRight: 'flex-shrink-0 self-end',
@@ -172,7 +174,19 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 		return list;
 	}, [props.offices, selectedYear, props.searchQuery]);
 
-	const visibleOffices = filteredOffices.slice(0, visibleCount);
+	/**
+	 * Every office stays in the markup and the ones outside the current view are
+	 * hidden, rather than being left out of it. A crawler only follows links that
+	 * are in the HTML, and filtering the array meant a location page linked just
+	 * the first page of the default year: 5 of Harris County's 20 positions,
+	 * 3 of Texas's 15. The rows the filters exclude carry no visible weight.
+	 *
+	 * The set holds the office objects themselves rather than their ids. The
+	 * election API sends place races without an id, so every office on a
+	 * location page arrived as "undefined", one visible row matched them all,
+	 * and the page showed every year at once.
+	 */
+	const visibleOffices = useMemo(() => new Set(filteredOffices.slice(0, visibleCount)), [filteredOffices, visibleCount]);
 	const hasMore = visibleCount < filteredOffices.length;
 
 	useEffect(() => {
@@ -230,108 +244,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 							</div>
 						</div>
 
-						{/* Desktop Table Layout */}
-						{filteredOffices.length > 0 ? (
-							<>
-								<div className={desktopTable()}>
-									<div className={tableWrapper()}>
-										<div className={tableHeader()}>
-											<div className={tableHeaderCell()}>Type</div>
-											<div className={cn(tableHeaderCell(), headerPositionCell())}>Position</div>
-											<div className={cn(tableHeaderCell(), headerDateCell())}>Next Election Date</div>
-											<div className={tableHeaderCell()} aria-label='Actions'></div>
-										</div>
-										<div className={tableBody()}>
-											{visibleOffices.map(office => {
-												const RowContent = (
-													<>
-														<div className={tableCell()}>
-															<span className={typeTag()}>{office.type}</span>
-														</div>
-														<div className={positionCell()}>
-															<Text styleType='body-2' className={positionText()}>
-																{office.position}
-															</Text>
-														</div>
-														<div className={dateCell()}>
-															<Text styleType='body-2' className={dateText()}>
-																{formatElectionDateFromApi(office.nextElectionDate)}
-															</Text>
-														</div>
-														<div className={tableCell()}>
-															{office.href && (
-																<ArrowRightIcon size={32} className={arrowIcon()} innerClassName='group-hover:animate-slide-in-right' />
-															)}
-														</div>
-													</>
-												);
-
-												return office.href ? (
-													<Anchor
-														key={office.id}
-														href={office.href}
-														className={cn(tableRow(), 'cursor-pointer')}
-														onClick={() => handleOfficeClick(office)}
-													>
-														{RowContent}
-													</Anchor>
-												) : (
-													<div key={office.id} className={tableRow()}>
-														{RowContent}
-													</div>
-												);
-											})}
-										</div>
-									</div>
-								</div>
-
-								{/* Mobile Card Layout */}
-								<div className={cardList()}>
-									{visibleOffices.map(office => {
-										const CardContent = (
-											<div className={cardContent()}>
-												<div className={cardLeft()}>
-													<span className={typeTag()}>{office.type}</span>
-													<Text styleType='body-2' className={positionText()}>
-														{office.position}
-													</Text>
-													<Text styleType='body-2' className={dateText()}>
-														{formatElectionDateFromApi(office.nextElectionDate)}
-													</Text>
-												</div>
-												<div className={cardRight()}>
-													{office.href && (
-														<ArrowRightIcon size={32} className={arrowIcon()} innerClassName='group-hover:animate-slide-in-right' />
-													)}
-												</div>
-											</div>
-										);
-
-										return office.href ? (
-											<Anchor key={office.id} href={office.href} onClick={() => handleOfficeClick(office)} className={officeCard()}>
-												{CardContent}
-											</Anchor>
-										) : (
-											<div key={office.id} className={officeCard()}>
-												{CardContent}
-											</div>
-										);
-									})}
-								</div>
-
-								{hasMore && (
-									<div className={showMoreWrapper()}>
-										<Button
-											parent='ListOfOfficesBlock'
-											styleType={secondaryButtonStyleType}
-											onClick={() => setVisibleCount(prev => prev + pageSize)}
-										>
-											Show More
-										</Button>
-									</div>
-								)}
-							</>
-						) : (
+						{filteredOffices.length === 0 && (
 							<div className='py-8 text-center'>
 								<Text styleType='body-2' className='text-neutral-500'>
 									{props.searchQuery?.trim()
@@ -340,6 +253,112 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 											? 'Loading…'
 											: `No offices found for ${selectedYear}`}
 								</Text>
+							</div>
+						)}
+
+						{/* Desktop Table Layout */}
+						<div className={desktopTable()}>
+							<div className={tableWrapper()}>
+								{filteredOffices.length > 0 && (
+									<div className={tableHeader()}>
+										<div className={tableHeaderCell()}>Type</div>
+										<div className={cn(tableHeaderCell(), headerPositionCell())}>Position</div>
+										<div className={cn(tableHeaderCell(), headerDateCell())}>Next Election Date</div>
+										<div className={tableHeaderCell()} aria-label='Actions'></div>
+									</div>
+								)}
+								<div className={tableBody()}>
+									{props.offices.map(office => {
+										const RowContent = (
+											<>
+												<div className={tableCell()}>
+													<span className={typeTag()}>{office.type}</span>
+												</div>
+												<div className={positionCell()}>
+													<Text styleType='body-2' className={positionText()}>
+														{office.position}
+													</Text>
+												</div>
+												<div className={dateCell()}>
+													<Text styleType='body-2' className={dateText()}>
+														{formatElectionDateFromApi(office.nextElectionDate)}
+													</Text>
+												</div>
+												<div className={tableCell()}>
+													{office.href && (
+														<ArrowRightIcon size={32} className={arrowIcon()} innerClassName='group-hover:animate-slide-in-right' />
+													)}
+												</div>
+											</>
+										);
+
+										// The wrapper carries the hidden attribute because it has no display
+										// class of its own; putting it on the row itself loses to `flex`.
+										return (
+											<div key={office.id} hidden={!visibleOffices.has(office)}>
+												{office.href ? (
+													<Anchor
+														href={office.href}
+														className={cn(tableRow(), 'cursor-pointer')}
+														onClick={() => handleOfficeClick(office)}
+													>
+														{RowContent}
+													</Anchor>
+												) : (
+													<div className={tableRow()}>{RowContent}</div>
+												)}
+											</div>
+										);
+									})}
+								</div>
+							</div>
+						</div>
+
+						{/* Mobile Card Layout */}
+						<div className={cardList()}>
+							{props.offices.map(office => {
+								const CardContent = (
+									<div className={cardContent()}>
+										<div className={cardLeft()}>
+											<span className={typeTag()}>{office.type}</span>
+											<Text styleType='body-2' className={positionText()}>
+												{office.position}
+											</Text>
+											<Text styleType='body-2' className={dateText()}>
+												{formatElectionDateFromApi(office.nextElectionDate)}
+											</Text>
+										</div>
+										<div className={cardRight()}>
+											{office.href && (
+												<ArrowRightIcon size={32} className={arrowIcon()} innerClassName='group-hover:animate-slide-in-right' />
+											)}
+										</div>
+									</div>
+								);
+
+								return (
+									<div key={office.id} hidden={!visibleOffices.has(office)}>
+										{office.href ? (
+											<Anchor href={office.href} onClick={() => handleOfficeClick(office)} className={officeCard()}>
+												{CardContent}
+											</Anchor>
+										) : (
+											<div className={officeCard()}>{CardContent}</div>
+										)}
+									</div>
+								);
+							})}
+						</div>
+
+						{hasMore && (
+							<div className={showMoreWrapper()}>
+								<Button
+									parent='ListOfOfficesBlock'
+									styleType={secondaryButtonStyleType}
+									onClick={() => setVisibleCount(prev => prev + pageSize)}
+								>
+									Show More
+								</Button>
 							</div>
 						)}
 					</div>

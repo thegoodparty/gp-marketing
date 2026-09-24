@@ -13,6 +13,7 @@ import {
 	buildPlaceRacePositionHref,
 	getStateName,
 	PLACE_RACE_COLUMNS,
+	resolveDefaultElectionYear,
 	resolvePlaceRaceElectionDates,
 } from '~/lib/electionsHelpers';
 import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
@@ -108,9 +109,7 @@ export default async function Page({
 		buildHref: race => buildPlaceRacePositionHref([state], race.slug),
 	});
 
-	const defaultYear = dataYears.includes(currentYear)
-		? currentYear
-		: (dataYears[0] ?? currentYear);
+	const defaultYear = resolveDefaultElectionYear(dataYears, currentYear);
 	const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
 	const pageUrl = toAbsoluteUrl(`/elections/${state.toLowerCase()}`);
 
@@ -123,7 +122,6 @@ export default async function Page({
 		bodyCopy: `Learn what state positions are up for election and who is currently running for office in ${stateName}.`,
 		searchPlaceholder: 'Search positions',
 		listHeading: isSingleCounty ? `Elections in ${stateName}` : `State Elections in ${stateName}`,
-		listHeadline: 'state',
 		defaultYear,
 		availableYears,
 		offices: stateOffices,

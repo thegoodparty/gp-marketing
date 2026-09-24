@@ -39,8 +39,25 @@ export function isDevPeopleFixturesEnabled(): boolean {
 	return process.env['PEOPLE_DEV_FIXTURES'] === 'true';
 }
 
-/** Harness slug → target Figma state + display name (mirrors harness/config.mjs). */
-const DEV_PEOPLE: Record<string, { state: ProfileState; first: string; last: string }> = {
+/**
+ * Harness slug → target Figma state + display name (mirrors harness/config.mjs).
+ *
+ * `partyNames` seeds the held office with more than one party line, which no
+ * Figma state covers: fusion voting is a data shape, not a design. The composed
+ * page state is then whatever the party rules decide, NOT the `state` here —
+ * that only selects the spine/persona shape to start from.
+ */
+const DEV_PEOPLE: Record<
+	string,
+	{
+		state: ProfileState;
+		first: string;
+		last: string;
+		partyNames?: string[];
+		isPledged?: boolean;
+		confirmedCandidate?: string;
+	}
+> = {
 	'allen-slagle-74eee01a': { state: 'A', first: 'Allen', last: 'Slagle' },
 	'tracy-good-ecff49d3': { state: 'B', first: 'Tracy', last: 'Good' },
 	'susan-overman-ad914b82': { state: 'C', first: 'Susan', last: 'Overman' },
@@ -53,6 +70,37 @@ const DEV_PEOPLE: Record<string, { state: ProfileState; first: string; last: str
 	'deb-craft-f88e7434': { state: 'J', first: 'Deb', last: 'Craft' },
 	'x-27255f40': { state: 'K', first: 'Jordan', last: 'Reyes' },
 	'x-3412f69c': { state: 'L', first: 'Morgan', last: 'Ellis' },
+	// Fusion voting, in the order the feed actually sends it: the minor line
+	// first. All three start from E (unclaimed officeholder, which E would render
+	// empowered) so what the party rules change is visible on the page.
+	//
+	// A major line hidden at [1] — the Schumer shape. Resolves to the major-party
+	// treatment despite leading with Working Families.
+	'pat-fusion-fa5104e1': {
+		state: 'E',
+		first: 'Pat',
+		last: 'Fusion',
+		partyNames: ['Working Families', 'Democratic'],
+		isPledged: true,
+	},
+	// Several lines, none of them major: still empowered, still pledgeable.
+	'wren-coalition-fa5104e2': {
+		state: 'E',
+		first: 'Wren',
+		last: 'Coalition',
+		partyNames: ['Working Families', 'Independent'],
+		isPledged: true,
+		confirmedCandidate: 'Yes',
+	},
+	// No party says partisan, but the CRM does — the second failsafe.
+	'sam-verity-fa5104e3': {
+		state: 'E',
+		first: 'Sam',
+		last: 'Verity',
+		partyNames: ['Independent'],
+		isPledged: true,
+		confirmedCandidate: 'Partisan Candidate',
+	},
 };
 
 /** Deterministic personId from the slug suffix so caching/keys stay stable. */
@@ -237,6 +285,8 @@ export function getDevPersonProfileView(slug: string): PersonProfileView | null 
 		firstName: entry.first,
 		lastName: entry.last,
 		fullName: name,
+		...(entry.isPledged === undefined ? {} : { isPledged: entry.isPledged }),
+		...(entry.confirmedCandidate === undefined ? {} : { confirmedCandidate: entry.confirmedCandidate }),
 		// The shared matrix runs its candidacies for a different office (Mayor)
 		// than it holds (city council), which is fine for state/gating tests but
 		// would show a dev page whose hero names one race while the breadcrumb
@@ -252,6 +302,7 @@ export function getDevPersonProfileView(slug: string): PersonProfileView | null 
 		// Address" rows for anyone currently in office (Figma officeholder frames).
 		OfficeHolders: (fixture.person.OfficeHolders ?? []).map((o) => ({
 			...o,
+			...(entry.partyNames ? { partyNames: entry.partyNames } : {}),
 			officeEmail: 'office@townofexample.gov',
 			officePhone: '(307) 555-0100',
 			mailingCity: 'Cheyenne',

@@ -45,7 +45,21 @@ import { component_clickToCallBlock } from './component_clickToCallBlock.ts';
 import { component_voterDensityBlock } from './component_voterDensityBlock.ts';
 import { component_testimonialBlockWithLink } from './component_testimonialBlockWithLink.ts';
 
+import { component_locationEditorialBlock } from './component_locationEditorialBlock.ts';
+
+import { component_electionsNearYouBlock } from './component_electionsNearYouBlock.ts';
+
+import { component_demoRequestBlock } from './component_demoRequestBlock.ts';
+
+import { component_electionPositionResourcesBlock } from './component_electionPositionResourcesBlock.ts';
+import { component_nearbyOffices } from './component_nearbyOffices.ts';
+
 export const componentSchema = [
+	component_electionPositionResourcesBlock,
+	component_nearbyOffices,
+	component_demoRequestBlock,
+	component_electionsNearYouBlock,
+	component_locationEditorialBlock,
 	component_testimonialBlockWithLink,
 	component_jobOpeningsBlock,
 	component_featuresBlock,

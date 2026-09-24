@@ -44,7 +44,7 @@ trust:
 | Animated map block | `component_voterDensityBlock` (the map itself is built) |
 | Animated number block | `component_statsBlock`, plus the animation |
 | 3-step How to run for [Position Name] | `component_stepperBlock` |
-| Nearby offices | `component_listOfOfficesBlock` |
+| Nearby offices | ~~`component_listOfOfficesBlock`~~ — audited, rejected. Built as `component_nearbyOffices`; see below |
 | "Who's currently in office" | `component_listOfOfficesBlock` |
 | Candidates/Representatives rows | `component_candidatesBlock` |
 | Featured candidates/Representatives | `component_candidatesBlock` |
@@ -53,9 +53,10 @@ trust:
 | About [Position Name] | `component_electionsPositionContentBlock` |
 | 3-column icon block | `component_iconContentBlock` |
 | Testimonial block with link | ~~`component_testimonialBlock`, plus a link field~~ — audited, rejected. Built as `component_testimonialBlockWithLink`; see below |
+| More about location container | ~~`component_locationFactsBlock`~~ — audited, rejected. Built as `component_locationEditorialBlock`; see below |
 | Branded CTA with icon | `component_ctaBlock`, `component_ctaBannerBlock` |
 | 3-block CTA with icon | `component_ctaCardsBlock` |
-| 3-column e-book support block | `component_ctaCardsBlock`, `component_twoUpCardBlock` |
+| 3-column e-book support block | ~~`component_ctaCardsBlock`, `component_twoUpCardBlock`~~ — audited, rejected. Built as `component_electionPositionResourcesBlock`; see below |
 | Find elections container | `component_electionsSearchHero`, `component_electionsIndexBlock` |
 | Find more elections block | `component_electionsIndexBlock` |
 | Local election rows block | `component_electionsIndexBlock` |
@@ -116,6 +117,153 @@ Note for whoever wires up the links: a case study that lives as an `article` can
 the internal link picker, but `/people/*` profiles are rendered from election-api and have no
 Sanity document, so a profile link has to be the External option with a pasted path.
 
+**More about location container / Location editorial block** (location pages) — built as
+`component_locationEditorialBlock`. The inventory below calls it content-only; it is not. Treat
+that row as corrected.
+
+Nothing existing covered it. `component_locationFactsBlock` was the starting hypothesis and is
+the wrong base: it is built around its fact cards, returns `null` without them, and reads in the
+Studio menu as the stats block. `component_electionsPositionContentBlock` is the two-column
+sidebar layout, `component_bannerBlock` is a one-line banner with avatars, and
+`component_imageContentBlock` needs an image. There is no plain prose block on the site.
+
+The reason it cannot be content-only is the one that applies to every block in this batch that
+wants per-page words rather than per-page numbers:
+
+- **One block instance serves the whole family.** Location pages render from the global Location
+  templates, so a paragraph typed into the block's Sanity field is the same paragraph on every
+  state, or every city, in that family. Per-location prose therefore has to arrive through
+  `SectionOverrides`, exactly like the facts and the office list, even though it is editorial
+  copy rather than election data. This is the first block in the batch whose override carries
+  *words* instead of figures, and the same will be true of "About [Position Name]".
+- **The seam is `locationEditorial` on `ElectionsIndexPageContext`**, mapped in
+  `buildElectionsIndexSectionOverrides`. No route populates it yet. Where the AI-written copy
+  will be read from is not decided (Emily, 2026-09-21: parked). Until it is, the block is
+  hidden on location pages, which is deliberate — see the empty state below.
+- **The Sanity body field stayed, as a fallback only**, for pages that are not template-driven.
+  Its Studio description says not to fill it on the location templates. The override wins over
+  it, so the field is what gets replaced when the copy starts flowing.
+- **The empty state is "render nothing at all".** The block returns `null` when neither source
+  has copy, rather than publishing a heading over an empty white card. That card would be the
+  silent-failure shape this doc warns about: nothing throws, so no boundary catches it.
+  `src/ui/locationEditorialBlock.test.tsx` pins it.
+
+One thing that came out of it and affects other blocks in the batch:
+
+- **`[location]` was a known token that no location page supplied.** `KNOWN_ELECTION_TOKENS` has
+  always listed it, but `buildElectionsIndexTokens` only built `[State]`, `[County]`, `[City]`
+  and `[District]`, and an unsupplied known token is stripped to empty. So the Figma heading
+  "More about [Location]" would have published as "More about" with the name silently gone. It
+  now resolves to the most specific place the page represents (city, else county, else state).
+  Any other block in this batch with a location-named editable heading can now use it.
+
+**Nearby offices** (position pages) — built as `component_nearbyOffices`, data-backed.
+
+The starting hypothesis was `component_listOfOfficesBlock`, and marketing rejected extending it
+(Emily, 2026-09-24): that block serves a separate purpose. It is the location pages' full offices
+list, built around a year dropdown, a search filter and Show More inside a cream card, and it is
+live on three global templates, so any change to it reaches thousands of pages with nothing to
+stage behind. The design here is a plain heading over flat rows with no controls. The two blocks
+share the row shape (`OfficeItem`) and nothing else.
+
+Decisions that came out of it:
+
+- **"Nearby" means the same place, then one level up.** Same city on a city position page, same
+  county on a county page, same state on a state page. When the page's own place has no *other*
+  upcoming position, the search moves one level up (city → county → state) and stops at the first
+  tier that has any. The tiers come from the route segments, never from the place name, because
+  some cities are named after a county they are not in. `nearbyOfficesTiers` in
+  `src/lib/nearbyOffices.ts` is the rule; `getNearbyOffices` runs it.
+- **Cap of eight rows** (Emily, 2026-09-24), applied in the data helper and again in the component.
+- **Upcoming only, soonest first.** A row whose election has already happened is a dead end for a
+  voter, so past races are dropped, and a place with only past races counts as empty for the
+  level-up rule. Stale primary dates are re-resolved the same way the location pages do it.
+- **The level tag is per row, from the race's own `positionLevel`** (Federal / State / County /
+  Local), matching the mixed list in the Figma frame rather than the one-label-per-page tag the
+  location list uses. The Figma tag colour is `blue/900`, which had no token; it is now
+  `--blue-900` in `colors.css`.
+- **The seam is `nearbyOffices` on `PositionPageContext`.** `renderElectionsPositionPage` fetches
+  it, so all three position routes get it without touching their `page.tsx`. The candidates
+  template does not populate it, and the block hides itself wherever the override is empty.
+- **The empty state is "render nothing"**, pinned by `src/ui/nearbyOffices.test.tsx`.
+
+Waiting on data: races are attached to places, and federal races are not attached to any place,
+so a Federal tag can appear only once election-api exposes them per place. True proximity
+(neighbouring cities, not just the parent county) needs the place-and-year aggregate the counts
+section below already asks for.
+
+**3-column e-book support block / Election position resources block** (position pages) — built
+as `component_electionPositionResourcesBlock`. The inventory below calls it content-only; it is not.
+Treat that row as corrected. The Figma frame is named "CTA Card Block": three equal cards (guide,
+e-book, free support), each a white circle icon with a short label, a heading, a paragraph and a
+dark pill button.
+
+Nothing existing covered it. `component_ctaCardsBlock` was the starting hypothesis and is the wrong
+base: it is fixed to two cards, each only a label and one large heading with the whole card as the
+click target, and it is live on existing pages, so any change to it ships immediately (see the
+draft-and-batch rule below). `component_twoUpCardBlock` has the closest card anatomy but is a
+two-column list layout; `component_iconContentBlock` is the inverse of the design (a coloured icon
+on a plain background). Marketing chose a purpose-built block over a generic one-to-three card
+block (Emily, 2026-09-24) because of the data wiring the first card needs.
+
+Why it is data-backed: the guide card's link is chosen per page. Marketing's blog article matrix
+(in the position page design brief) maps office types to thirteen "how to run" articles, and the
+office is only known at render time, so the link cannot be an editor field on a template that
+serves every position page. `src/lib/howToRunGuide.ts` holds the matrix and the classifier that
+applies it to a race's normalized name, full name, position names and level, falling back to the
+general campaign guide. Special-purpose county boards (a county health commission, a planning
+commission) go to the special-district article, not the county-commissioner one, which is for the
+county's governing body (Emily, 2026-09-24). `buildPositionSectionOverrides` hands the result in as `guideHref`, which
+wins over the guide card's editor-set link. The editor link only matters on pages that are not
+position pages; with neither, the guide card is left out and the other two render. The other two
+cards are plain editorial content ("Connect with us" goes to community.goodparty.org, Emily,
+2026-09-24). Every card's heading and description accept `[office name]`.
+
+Two things from it that affect other blocks in the batch:
+
+- **Reuse the `button` object for editor-set links.** It is the same object the quote's story
+  link uses, projects through `buttonGroq`, and `normalizeRawCtaToButton` + `transformButton`
+  turn it into button props. No new link fields were needed.
+- **A figure-versus-words override can also be a link.** This is the first block whose override
+  carries an `href` rather than data to display. The same "editor field is the fallback, the
+  override wins" shape applies, and the Studio description on the field says so.
+
+## The shared election counts, as marketing defined them
+
+Settled with Emily on 2026-09-17 while building the location hero's four stat cards.
+Several other blocks in the batch want the same counts, so treat these as the batch's
+definitions rather than one block's, and state them verbatim in any request to the
+election data team.
+
+- **Year scope.** Every figure follows the year the offices list opens on: the current
+  year when it has elections, else the soonest year ahead
+  (`resolveDefaultElectionYear` in `src/lib/electionsHelpers.ts`).
+- **Geographic scope.** The whole location including its sub-locations, so a state
+  figure counts county and city races too. This makes a hero figure larger than the
+  list of offices below it, which is accepted because that list carries its own
+  heading.
+- **Independent** means the person has taken the GoodParty.org Pledge, by the same
+  rule the candidate cards and profiles use (`pledgedFromSpine`: the spine's
+  `isPledged`, and no major-party evidence). It does not mean party affiliation, so
+  `classifyParty` is the wrong tool for this count.
+- **Uncontested** means exactly one candidate on the ballot per seat, counted for any
+  race where we hold candidate data, including races whose filing window is still
+  open.
+- **Zero versus unknown.** Show 0 when the data genuinely says zero; hide the element
+  when there is no data. These differ: `Person.isPledged` is unpopulated across
+  production today (see `docs/person-spine-pledge-and-claim-linkage-handoff.md`), so a
+  zero pledge count is a no-data zero and must not be published as "0 independents".
+- **Editor versus data.** The label is editable in Sanity, with location tokens; the
+  number always comes from the data. These blocks live on global templates, so a
+  number typed in Studio would otherwise freeze the same figure across thousands of
+  pages.
+
+None of these counts is available from a location page today. `/v1/candidacies` has no
+place filter, so they need either per-race calls or a whole-state sweep joined on
+`raceId`. The right fix is one aggregate from election-api, keyed by place and year,
+which the candidates rows, "who's currently in office" and nearby offices blocks will
+all want too.
+
 ## The two kinds of block, and the wiring most sessions miss
 
 This is the most important technical point in this doc, because getting it wrong
@@ -171,10 +319,66 @@ Apply these across the whole batch so the blocks stay consistent.
   `src/experiments/` today holds only experiment resolution machinery, no components.
 - **Build one component per PR.** Twenty-eight blocks in one branch is unreviewable,
   and each one needs its own visual check.
+- **Updating an existing block? Hold the PR as a draft and batch it.** (Emily,
+  2026-09-17.) Still one component per PR, but the merges are not all alike:
+  - A **new** block shows nothing on the live site until an editor drops it onto a
+    page, so its PR can merge as soon as it is green. Content controls go-live.
+  - A PR that **updates a block already on the live templates** has no such safety.
+    The moment that code reaches production, every page carrying that block changes,
+    with no content step and nothing to stage behind. Location and position pages are
+    template-driven, so that is thousands of pages at once, mid-redesign, with the
+    other components not built yet.
+
+  So for an update: get it green, then convert the PR to a draft rather than leaving
+  it in the merge queue (`gh pr ready <n> --undo`), and say in the body which batch it
+  is waiting on. Release those together once the set that makes up a page is ready,
+  instead of letting the page change in pieces. The reuse audit in Step 0 already
+  tells you which kind you have: "Extend" and "Already covered" mean draft and batch,
+  "New block" can ship on its own.
+- **Build for the finished system, not for today's data.** (Emily, 2026-09-17.) These
+  components are being built one at a time, but they are designed as one page. Build
+  each one so it works the way the design intends once the whole batch and its data
+  wiring exist. Do not shrink a component to what today's data can fill, do not drop
+  a part of a design because its data source is missing, and do not fold another
+  component's job into yours because that one is not built yet.
+
+  In practice that means: model the full shape of the thing now, leave an obvious
+  seam where the live data will attach, and decide an honest interim state for the
+  part that has none. Prefer hiding an element over publishing a wrong or invented
+  figure on a public voter page, and say in the PR exactly what is waiting on which
+  data. A Sanity field is a reasonable placeholder for a figure that will later be
+  live, but only when the label stays editable and the number is what gets replaced.
+
+  What this rules out is a component that "works" today and has to be redesigned to
+  accept its data later.
 - **Visual verification is not optional.** A block that is half-wired renders as
   nothing and an error boundary swallows render errors, so nothing fails. Confirm on
   `http://localhost:3009/all` before opening a PR. For pixel parity against Figma,
   use the `marketing-ui-clone` skill.
+
+  Note that `/all` carries none of the election blocks, so a block in this batch
+  cannot be seen there until an editor adds it — and that means editing shared
+  production content. Rendering the block's own Storybook story and measuring its
+  geometry against the frame is the practical substitute; pair it with a test that
+  runs the section wrapper through the real props so a schema-vs-GROQ name mismatch
+  still gets caught.
+- **Where this Figma file and the live scale disagree, the live scale wins.**
+  (Measured while building the location editorial block, 2026-09-21.) Two systemic
+  gaps, neither of them a bug to fix in a single block:
+  - **Width.** The frames draw page content 1280 wide on a 1440 artboard (80px
+    gutters). The site's widest container, `Container size='xl'`, is 85rem centred,
+    which is 1200 of content at 1440. Use the container. A section 40px wider than
+    the facts cards above it reads as broken, and there is no 1280 container in the
+    scale.
+  - **Body text size.** The frames use a fixed 18px. The site's type tokens step up
+    with the viewport (`body-large` is 18/28 at phone width and 20/31 at 1440). Use
+    the token; the frames simply do not model the ramp.
+
+  Headings are worth checking per block, because the ramp does not always match
+  either: the editorial block's frames are 32px on mobile and 48px on desktop, which
+  no single token gives, so it pairs `heading-lg` with a `max-md:text-heading-md`
+  override. Both are registered in the tailwind-merge font-size list; a size that is
+  not in that list is silently dropped (see `.cursor/BUGBOT.md`).
 - **Page state comes from data, not from an editor's choice.** Where a component
   varies by where an election is in its cycle (pre-filing, mid-election,
   post-election), that is a fact derived from filing dates and certified results, not
@@ -242,7 +446,7 @@ audit to confirm; `data` means it needs the `SectionOverrides` pass.
 | Find elections container | location | data |
 | Featured cities carousel | location | data |
 | Featured candidates/Representatives | location | data |
-| More about location container | location | content |
+| More about location container | location | data (audited — built, see above) |
 | Header_Pre-Filing | position | data |
 | Header_Mid-Election | position | data |
 | Header_Post-Election | position | data |
@@ -255,8 +459,8 @@ audit to confirm; `data` means it needs the `SectionOverrides` pass.
 | "Who's currently in office" block | position | data |
 | About [Position Name] | position | data (token-driven copy) |
 | 3-step How to run for [Position Name] | position | content + post-election state |
-| 3-column e-book support block | position | content |
-| Nearby offices | position | data |
+| 3-column e-book support block | position | data (audited — built, see above) |
+| Nearby offices | position | data (audited — built, see above) |
 | Find more elections block | position | data |
 | Video hero with search | Voter Hub | content + search, video modal |
 | Animated number block | Voter Hub | content |

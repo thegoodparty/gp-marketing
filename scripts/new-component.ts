@@ -211,7 +211,7 @@ editRe(
 		fail(`could not find the '${menuGroup}' insert-menu group in list_pageSections.ts.`);
 	}
 	const insertAt = ofIdx + 'of: ['.length;
-	writeFileSync(path, `${src.slice(0, insertAt)}\n            '${componentType}',${src.slice(insertAt)}`);
+	writeFileSync(path, `${src.slice(0, insertAt)}\n\t\t\t\t\t\t'${componentType}',${src.slice(insertAt)}`);
 }
 
 // --- Edit: groq.ts (projection + append to sectionsGroq before its closing backtick)

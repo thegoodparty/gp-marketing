@@ -106,6 +106,13 @@ export function stripCountySuffix(name: string): string {
 	return name.replace(COUNTY_EQUIV_SUFFIX_RE, '') || name;
 }
 
+const CITY_TYPE_SUFFIX_RE = /\s+(Town|City|Township|Village)$/i;
+
+/** Strip a city/town-type suffix from a place name: "Quincy City" -> "Quincy", "Avon Town" -> "Avon" */
+export function stripCityTypeSuffix(name: string): string {
+	return name.replace(CITY_TYPE_SUFFIX_RE, '') || name;
+}
+
 /** Get the suffix word from a county-equivalent name: "Jefferson Parish" -> "Parish", fallback "County" */
 export function getCountySuffixLabel(name: string): string {
 	const match = COUNTY_EQUIV_SUFFIX_RE.exec(name);
@@ -281,6 +288,17 @@ export function formatElectionDateFromApi(dateStr: string | undefined): string {
 	return new Date(dateStr).toLocaleDateString('en-US', LOCALE_DATE_OPTIONS);
 }
 
+const SHORT_DATE_OPTIONS: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+
+/** "Nov 4, 2026": the compact form the nearby offices rows use so the date fits one line. */
+export function formatElectionDateShortFromApi(dateStr: string | undefined): string {
+	if (!dateStr) return 'TBD';
+	if (DATE_ONLY_REGEX.test(dateStr)) {
+		return parseDateOnlyAsLocal(dateStr).toLocaleDateString('en-US', SHORT_DATE_OPTIONS);
+	}
+	return new Date(dateStr).toLocaleDateString('en-US', SHORT_DATE_OPTIONS);
+}
+
 /**
  * Returns the calendar year from a date string that may be ISO date-only (YYYY-MM-DD)
  * or a pre-formatted string like "November 5, 2026". Uses local-date parsing for ISO to avoid timezone shift.
@@ -365,8 +383,8 @@ export function buildOfficeItemsFromPlaceRaces(
 	resolvedDates: Map<string, string>,
 	config: BuildOfficeItemsFromPlaceRacesConfig,
 ): { offices: OfficeItem[]; dataYears: number[] } {
-	const offices: OfficeItem[] = races.map(race => ({
-		id: String(race.id),
+	const offices: OfficeItem[] = races.map((race, index) => ({
+		id: race.id != null ? String(race.id) : `${race.slug}-${index}`,
 		type: config.type,
 		position: race.normalizedPositionName ?? race.name ?? 'Position',
 		nextElectionDate: resolvedDates.get(race.slug) ?? race.electionDate ?? '',
@@ -385,6 +403,22 @@ export function buildOfficeItemsFromPlaceRaces(
 	].sort((a, b) => a - b);
 
 	return { offices, dataYears };
+}
+
+/**
+ * The year the offices list opens on: this year when it has elections, else the
+ * soonest year ahead. Falls back to the most recent past year only when a place
+ * has nothing upcoming at all, because a place whose data runs 2020, 2022, 2027
+ * should open on 2027 rather than on an election held six years ago.
+ */
+export function resolveDefaultElectionYear(dataYears: number[], currentYear: number = new Date().getFullYear()): number {
+	if (dataYears.length === 0) return currentYear;
+	if (dataYears.includes(currentYear)) return currentYear;
+
+	const upcoming = dataYears.filter(year => year > currentYear);
+	if (upcoming.length > 0) return Math.min(...upcoming);
+
+	return Math.max(...dataYears);
 }
 
 export function formatFilingPeriod(
@@ -434,7 +468,7 @@ export function findCityForDistrictName(
 	const lower = districtName.toLowerCase();
 	const withBase = children.map(c => ({
 		...c,
-		baseName: c.name.replace(/\s+(Town|City|Township|Village)$/i, '').toLowerCase(),
+		baseName: stripCityTypeSuffix(c.name).toLowerCase(),
 	}));
 	const matching = withBase.filter(c => lower.includes(c.baseName));
 	if (matching.length === 0) return null;
@@ -490,6 +524,25 @@ export function buildPlaceRacePositionHref(placeSegments: string[], raceSlug: st
 	const path = [...place, ...officeParts];
 	if (path.length > MAX_ELECTION_PLACE_SEGMENTS) return undefined;
 	return `/elections/${path.join('/')}/position/${positionSlug}`;
+}
+
+/**
+ * Whether a place segment in a position page's URL names a real place.
+ *
+ * A joint office spends one URL segment per combined role, and those segments sit in the
+ * route's place slots: `/elections/mt/gallatin-county/county-clerk/recorder/position/surveyor-joint`
+ * parses as county `gallatin-county`, city `county-clerk`, subplace `recorder`. The place the
+ * page resolved is authoritative, so a segment its slug does not contain is an office name and
+ * must not be linked or labelled as a place.
+ *
+ * Membership rather than the tail segment, because the resolved place can sit below the segment
+ * being checked (a real subplace under its city) as well as at it, and place slugs come in both
+ * `state/county/city` and short `state/city` forms. An unknown slug returns true, which leaves
+ * the breadcrumb as it was.
+ */
+export function isRealPlaceSegment(placeSlug: string | undefined, segment: string): boolean {
+	if (!placeSlug) return true;
+	return placeSlug.toLowerCase().split('/').filter(Boolean).includes(segment.toLowerCase());
 }
 
 /** Joint city office race slug: state/city/subplace/position, optionally with county segment. */

@@ -90,7 +90,7 @@ async function fetchStateElectionEntries(stateCode: string): Promise<SitemapEntr
 	return entries.map(toSitemapEntry);
 }
 
-async function fetchPeopleEntries(shard: string): Promise<SitemapEntry[]> {
+async function fetchPeopleEntries(shard: number): Promise<SitemapEntry[]> {
 	const base = getBaseUrl();
 	const entries = await fetchPeopleSitemapEntries(base, shard);
 	return entries.map(toSitemapEntry);
@@ -166,7 +166,7 @@ async function main(): Promise<void> {
 		stats.push({ category: 'state', urls: stateUrlCount, files: stateFileCount });
 	}
 
-	// People sitemaps, sharded alphabetically to mirror the served band.
+	// People sitemaps, sharded by person id to mirror the served band.
 	let peopleFileCount = 0;
 	let peopleUrlCount = 0;
 	if (!args.mainOnly) {
@@ -180,7 +180,7 @@ async function main(): Promise<void> {
 
 			for (let i = 0; i < chunks.length; i++) {
 				const filename = chunks.length === 1 ? 'index.xml' : `index-${i + 1}.xml`;
-				const path = `sitemaps/people/${shard}/sitemap/${filename}`;
+				const path = `sitemaps/people/shard-${String(shard).padStart(2, '0')}/sitemap/${filename}`;
 				await writeSitemapFile(OUTPUT_DIR, path, convertToXML(chunks[i]!));
 				indexEntries.push({ loc: `${base}/${path}`, lastmod });
 				allGeneratedUrls.push(...chunks[i]!.map((e) => e.loc));

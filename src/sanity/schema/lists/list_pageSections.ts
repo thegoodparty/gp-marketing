@@ -93,6 +93,8 @@ export const list_pageSections = {
 								'https://cdn.sanity.io/images/3rbseux7/production/841e57ddb41eec71c6ea56ea03641490de55acf2-3000x2000.png',
 							component_locationLandingPageHero:
 								'https://cdn.sanity.io/images/3rbseux7/production/4512520a6cb1dc681b1d8d41e920642985f744c2-3000x2000.png',
+							component_nearbyOffices:
+								'https://cdn.sanity.io/images/3rbseux7/production/7515a2bb33cb82d2b9e97474b46d686562d1ad07-3000x2000.png',
 							component_profileContentBlock:
 								'https://cdn.sanity.io/images/3rbseux7/production/bcb4df7f8952f9539a1b73119201b6a75a0593f4-3000x2000.png',
 							component_profileHero:

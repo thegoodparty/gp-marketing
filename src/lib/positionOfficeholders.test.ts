@@ -57,6 +57,7 @@ describe('mapOfficeholderToPerson', () => {
 			term: '2023 to 2027',
 			seatLabel: 'District 3',
 			seatValue: '3',
+			seatName: 'District',
 		});
 	});
 

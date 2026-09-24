@@ -52,6 +52,7 @@ export function mapOfficeholderToPerson(
 		term: formatOfficeholderTerm(office) ?? undefined,
 		seatLabel,
 		seatValue: office.subAreaValue ?? undefined,
+		seatName: office.subAreaName ?? undefined,
 	};
 }
 

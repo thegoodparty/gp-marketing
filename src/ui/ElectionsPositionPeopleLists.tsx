@@ -62,6 +62,8 @@ export type ElectionsPositionPerson = {
 	seatLabel?: string;
 	/** The seat or district this row belongs to, matched against the seat filter. */
 	seatValue?: string;
+	/** What the sub-area is called for this office ("District", "Ward"); names the filter and its options. */
+	seatName?: string;
 };
 
 export type ElectionsPositionSeatFilter = {

@@ -67,6 +67,8 @@ describe('classifyHowToRunGuide', () => {
 
 		test('the attorney general is not a prosecutor for this purpose', () => {
 			expect(classifyHowToRunGuide({ race: race('Attorney General', { positionLevel: 'STATE' }) })).toBe('general');
+			expect(classifyHowToRunGuide({ race: race('State Attorney General', { positionLevel: 'STATE' }) })).toBe('general');
+			expect(classifyHowToRunGuide({ race: race("State's Attorney General") })).toBe('general');
 		});
 
 		test('a clerk of court is not a judge', () => {

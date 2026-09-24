@@ -44,7 +44,7 @@ trust:
 | Animated map block | `component_voterDensityBlock` (the map itself is built) |
 | Animated number block | `component_statsBlock`, plus the animation |
 | 3-step How to run for [Position Name] | `component_stepperBlock` |
-| Nearby offices | `component_listOfOfficesBlock` |
+| Nearby offices | ~~`component_listOfOfficesBlock`~~ — audited, rejected. Built as `component_nearbyOffices`; see below |
 | "Who's currently in office" | `component_listOfOfficesBlock` |
 | Candidates/Representatives rows | `component_candidatesBlock` |
 | Featured candidates/Representatives | `component_candidatesBlock` |
@@ -130,6 +130,41 @@ One thing that came out of it and affects other blocks in the batch:
   "More about [Location]" would have published as "More about" with the name silently gone. It
   now resolves to the most specific place the page represents (city, else county, else state).
   Any other block in this batch with a location-named editable heading can now use it.
+
+**Nearby offices** (position pages) — built as `component_nearbyOffices`, data-backed.
+
+The starting hypothesis was `component_listOfOfficesBlock`, and marketing rejected extending it
+(Emily, 2026-09-24): that block serves a separate purpose. It is the location pages' full offices
+list, built around a year dropdown, a search filter and Show More inside a cream card, and it is
+live on three global templates, so any change to it reaches thousands of pages with nothing to
+stage behind. The design here is a plain heading over flat rows with no controls. The two blocks
+share the row shape (`OfficeItem`) and nothing else.
+
+Decisions that came out of it:
+
+- **"Nearby" means the same place, then one level up.** Same city on a city position page, same
+  county on a county page, same state on a state page. When the page's own place has no *other*
+  upcoming position, the search moves one level up (city → county → state) and stops at the first
+  tier that has any. The tiers come from the route segments, never from the place name, because
+  some cities are named after a county they are not in. `nearbyOfficesTiers` in
+  `src/lib/nearbyOffices.ts` is the rule; `getNearbyOffices` runs it.
+- **Cap of eight rows** (Emily, 2026-09-24), applied in the data helper and again in the component.
+- **Upcoming only, soonest first.** A row whose election has already happened is a dead end for a
+  voter, so past races are dropped, and a place with only past races counts as empty for the
+  level-up rule. Stale primary dates are re-resolved the same way the location pages do it.
+- **The level tag is per row, from the race's own `positionLevel`** (Federal / State / County /
+  Local), matching the mixed list in the Figma frame rather than the one-label-per-page tag the
+  location list uses. The Figma tag colour is `blue/900`, which had no token; it is now
+  `--blue-900` in `colors.css`.
+- **The seam is `nearbyOffices` on `PositionPageContext`.** `renderElectionsPositionPage` fetches
+  it, so all three position routes get it without touching their `page.tsx`. The candidates
+  template does not populate it, and the block hides itself wherever the override is empty.
+- **The empty state is "render nothing"**, pinned by `src/ui/nearbyOffices.test.tsx`.
+
+Waiting on data: races are attached to places, and federal races are not attached to any place,
+so a Federal tag can appear only once election-api exposes them per place. True proximity
+(neighbouring cities, not just the parent county) needs the place-and-year aggregate the counts
+section below already asks for.
 
 ## The shared election counts, as marketing defined them
 
@@ -363,7 +398,7 @@ audit to confirm; `data` means it needs the `SectionOverrides` pass.
 | About [Position Name] | position | data (token-driven copy) |
 | 3-step How to run for [Position Name] | position | content + post-election state |
 | 3-column e-book support block | position | content |
-| Nearby offices | position | data |
+| Nearby offices | position | data (audited — built, see above) |
 | Find more elections block | position | data |
 | Video hero with search | Voter Hub | content + search, video modal |
 | Animated number block | Voter Hub | content |

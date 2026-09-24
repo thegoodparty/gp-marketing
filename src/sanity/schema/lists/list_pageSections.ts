@@ -196,6 +196,7 @@ export const list_pageSections = {
 					name: 'grid',
 					title: 'Grid',
 					of: [
+						'component_nearbyOffices',
 						'component_comparisonBlock',
 						'component_iconContentBlock',
 						'component_imageContentBlock',
@@ -242,6 +243,7 @@ export const list_pageSections = {
 	},
 	type: 'array',
 	of: [
+		{ title: 'Nearby Offices', type: 'component_nearbyOffices' },
 		{ title: 'Demo Request Block', type: 'component_demoRequestBlock' },
 		{ title: 'Elections Near You Block', type: 'component_electionsNearYouBlock' },
 		{ title: 'Location Editorial Block', type: 'component_locationEditorialBlock' },

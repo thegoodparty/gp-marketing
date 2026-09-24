@@ -178,8 +178,15 @@ Two things to keep in mind if you touch this:
   `/sitemap/${PEOPLE_SITEMAP_BAND_START + (parseInt(id8, 16) % 64)}.xml`, which is how you
   check a missing profile without running the sweep.
 
-Raising the shard count is safe and does not remove any file — the band grows on the end
-and every existing id keeps serving. Lowering it would orphan the tail ids, so don't.
+**When to raise the count.** The band's size is set by the upstream person table, so it
+can cross the ceiling with no commit behind it and no failing unit test. Two things watch
+for that: `peopleShardSizeWarning` logs from the serving route once any shard passes 80%
+of the ceiling (40,000 URLs), and `integration/validate-sitemap-urls.test.ts` asserts the
+limit per file when it is run against a real host. Either one firing means raise
+`PEOPLE_SITEMAP_SHARD_COUNT`.
+
+Raising it is safe and does not remove any file — the band grows on the end and every
+existing id keeps serving. Lowering it would orphan the tail ids, so don't.
 
 ### Joint offices eat place slots
 

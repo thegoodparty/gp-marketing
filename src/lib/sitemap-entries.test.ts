@@ -9,8 +9,11 @@ import {
 	fetchStateElectionRouteParams,
 	fetchStateElectionSitemapEntries,
 	getSitemapIds,
+	MAX_URLS_PER_SITEMAP,
 	normalizeName,
 	peopleShardForPersonId,
+	peopleShardSizeWarning,
+	PEOPLE_SHARD_WARN_AT,
 	PEOPLE_SITEMAP_BAND_START,
 	PEOPLE_SITEMAP_SHARD_COUNT,
 	PEOPLE_SITEMAP_SHARDS,
@@ -81,6 +84,34 @@ describe('people sitemap shards', () => {
 		expect(ids).toHaveLength(expectedLength);
 		// The set is a contiguous 0..last with no gaps or dupes.
 		expect([...ids].sort((a, b) => a - b)).toEqual([...Array(expectedLength).keys()]);
+	});
+});
+
+describe('peopleShardSizeWarning', () => {
+	test('stays quiet while a shard has room', () => {
+		expect(peopleShardSizeWarning(0, 0)).toBeNull();
+		expect(peopleShardSizeWarning(9, 7_658)).toBeNull();
+		expect(peopleShardSizeWarning(9, PEOPLE_SHARD_WARN_AT)).toBeNull();
+	});
+
+	/**
+	 * The band grows with the upstream person table, so the day it outgrows the
+	 * shard count arrives with no code change behind it. This warning is the only
+	 * signal that fires on its own before a crawler meets an over-size file, and
+	 * it has to fire with room to spare, not at the ceiling itself.
+	 */
+	test('warns past 80% of the ceiling, while a fifth of the file is still spare', () => {
+		expect(PEOPLE_SHARD_WARN_AT).toBe(40_000);
+		const warning = peopleShardSizeWarning(9, PEOPLE_SHARD_WARN_AT + 1);
+		expect(warning).toContain('shard 9');
+		expect(warning).toContain('40001');
+		// Names the fix, because whoever reads this log line will not have this
+		// file open and the remedy is one constant.
+		expect(warning).toContain('PEOPLE_SITEMAP_SHARD_COUNT');
+	});
+
+	test('the 50k ceiling itself is the protocol number, not a local guess', () => {
+		expect(MAX_URLS_PER_SITEMAP).toBe(50_000);
 	});
 });
 

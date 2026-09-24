@@ -76,6 +76,22 @@ export function peopleShardForPersonId(personId: string): number {
  * a sitemap should advertise destinations, not redirects, and leaving ~248k
  * 308s in it spent crawl budget re-walking the migration on every pass.
  */
+/**
+ * The warning a shard should emit for holding `count` URLs, or null if it is
+ * comfortably inside the ceiling.
+ *
+ * Split out as a pure function because the interesting case — a shard actually
+ * over the threshold — costs 40,001 fixture people to reach through the fetch
+ * path, and a test that can only afford the quiet side proves nothing about
+ * where the line is.
+ */
+export const PEOPLE_SHARD_WARN_AT = MAX_URLS_PER_SITEMAP * 0.8;
+
+export function peopleShardSizeWarning(shard: number, count: number): string | null {
+	if (count <= PEOPLE_SHARD_WARN_AT) return null;
+	return `[sitemap] people shard ${shard} holds ${count} URLs, over ${PEOPLE_SHARD_WARN_AT} of the ${MAX_URLS_PER_SITEMAP} ceiling. Raise PEOPLE_SITEMAP_SHARD_COUNT.`;
+}
+
 export const PEOPLE_SITEMAP_BAND_START = 1 + US_STATE_CODES.length;
 
 export function getSitemapIds(): { id: number }[] {
@@ -1125,6 +1141,19 @@ export async function fetchPeopleSitemapEntries(
 			),
 		);
 	}
-	return dedupeByUrl(entries);
+	const deduped = dedupeByUrl(entries);
+	/**
+	 * The band's size is set by the upstream person table, not by anything in
+	 * this repo, so it can cross the protocol ceiling with no code change and no
+	 * failing test. Warning at 80% puts the signal in the Vercel logs while there
+	 * is still a fifth of the file spare; the fix is to raise
+	 * PEOPLE_SITEMAP_SHARD_COUNT, which grows the band on the end and leaves
+	 * every existing shard id serving.
+	 */
+	if (shard !== undefined) {
+		const warning = peopleShardSizeWarning(shard, deduped.length);
+		if (warning) console.warn(warning);
+	}
+	return deduped;
 }
 

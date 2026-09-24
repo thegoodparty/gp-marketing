@@ -129,9 +129,18 @@ export async function ensureGooglePlacesLoaded(): Promise<void> {
 		return scriptLoadPromise;
 	}
 
-	scriptLoadPromise = injectGooglePlacesScript(apiKey).then(() => {
-		if (!window.google?.maps?.places) throw new Error('Google Places script loaded without google.maps.places');
-	});
+	scriptLoadPromise = injectGooglePlacesScript(apiKey)
+		.then(() => {
+			if (!window.google?.maps?.places) throw new Error('Google Places script loaded without google.maps.places');
+		})
+		.catch((error: unknown) => {
+			// A rejected promise is still truthy, so without this the guard above would
+			// hand every later caller the same cached failure and the existing-tag retry
+			// in injectGooglePlacesScript could never run. Only the load path resets: a
+			// missing key is a config error and stays rejected on purpose.
+			scriptLoadPromise = undefined;
+			throw error;
+		});
 	return scriptLoadPromise;
 }
 

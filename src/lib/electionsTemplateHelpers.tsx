@@ -39,6 +39,8 @@ export type PositionPageContext = {
 	race?: RaceDetail | null;
 	// Used only by the position-page schema builders; optional for candidates pages.
 	pageUrl?: string;
+	/** From `getNearbyOffices`; set by the position page renderer, absent on candidates pages. */
+	nearbyOffices?: OfficeItem[];
 };
 
 function formatFrequency(frequency: (string | number)[]): string {
@@ -187,6 +189,10 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 		},
 		component_electionPositionResourcesBlock: {
 			guideHref: resolveHowToRunGuide({ officeName: ctx.officeName, race }).href,
+		},
+		component_nearbyOffices: {
+			offices: ctx.nearbyOffices ?? [],
+			hidden: !ctx.nearbyOffices || ctx.nearbyOffices.length === 0,
 		},
 	};
 }

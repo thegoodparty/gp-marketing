@@ -56,6 +56,7 @@ import { ElectionsNearYouBlockSection } from '~/PageSections/ElectionsNearYouBlo
 import { DemoRequestBlockSection } from '~/PageSections/DemoRequestBlockSection';
 
 import { ElectionPositionResourcesBlockSection } from '~/PageSections/ElectionPositionResourcesBlockSection';
+import { NearbyOfficesSection } from '~/PageSections/NearbyOfficesSection';
 
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
 
@@ -133,6 +134,17 @@ export type SectionOverrides = {
 		defaultYear?: number;
 		availableYears?: number[];
 		offices?: import('~/ui/ListOfOfficesBlock').OfficeItem[];
+	};
+	component_nearbyOffices?: {
+		/**
+		 * The other upcoming positions near the one on the page, already picked and
+		 * ordered (same place first, else one level up; capped at eight). Only the
+		 * position page routes populate this, through `getNearbyOffices`; with no
+		 * offices the section renders nothing.
+		 */
+		offices?: import('~/ui/ListOfOfficesBlock').OfficeItem[];
+		/** When true the section renders nothing. */
+		hidden?: boolean;
 	};
 	component_faqBlock?: {
 		items?: Array<{ title: string; copy: string }>;
@@ -657,17 +669,28 @@ export function PageSections(props: Props) {
 								<DemoRequestBlockSection {...section} />
 							</Boundary>
 						);
+					case 'component_nearbyOffices': {
+						const nearbyOverride = props.sectionOverrides?.component_nearbyOffices;
+						if (nearbyOverride?.hidden) {
+							return <Fragment key={section._key} />;
+						}
+						return (
+							<Boundary key={section._key} componentName='Nearby Offices'>
+								<NearbyOfficesSection {...section} tokens={props.tokens} nearbyOverride={nearbyOverride} />
+							</Boundary>
+						);
+					}
 					case 'component_electionPositionResourcesBlock':
-					return (
-						<Boundary key={section._key} componentName='Election Position Resources Block'>
-							<ElectionPositionResourcesBlockSection
-								{...section}
-								resourcesOverride={props.sectionOverrides?.component_electionPositionResourcesBlock}
-								tokens={props.tokens}
-							/>
-						</Boundary>
-					);
-				default:
+						return (
+							<Boundary key={section._key} componentName='Election Position Resources Block'>
+								<ElectionPositionResourcesBlockSection
+									{...section}
+									resourcesOverride={props.sectionOverrides?.component_electionPositionResourcesBlock}
+									tokens={props.tokens}
+								/>
+							</Boundary>
+						);
+					default:
 						console.warn('unknown section._type', section['_type']);
 						return <Fragment key={`unknown section._type' ${i}`} />;
 				}

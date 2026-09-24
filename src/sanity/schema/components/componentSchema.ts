@@ -52,9 +52,11 @@ import { component_electionsNearYouBlock } from './component_electionsNearYouBlo
 import { component_demoRequestBlock } from './component_demoRequestBlock.ts';
 
 import { component_electionPositionResourcesBlock } from './component_electionPositionResourcesBlock.ts';
+import { component_nearbyOffices } from './component_nearbyOffices.ts';
 
 export const componentSchema = [
 	component_electionPositionResourcesBlock,
+	component_nearbyOffices,
 	component_demoRequestBlock,
 	component_electionsNearYouBlock,
 	component_locationEditorialBlock,

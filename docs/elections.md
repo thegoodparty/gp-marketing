@@ -172,6 +172,25 @@ position slug, and `.pop()` drops them, and both shapes 404 while looking plausi
 A September 2026 crawl found 516 such 404s, concentrated in Indiana towns and Montana
 counties but present in at least 17 states.
 
+The position pages have the mirror-image problem. They receive those extra segments as
+route params, so `/elections/mt/gallatin-county/county-clerk/recorder/position/surveyor-joint`
+parses as city `county-clerk`, subplace `recorder`. Building a breadcrumb straight from the
+params links back to `/elections/mt/gallatin-county/county-clerk`, which 404s, and writes that
+404 into the BreadcrumbList JSON-LD as well. A September 2026 crawl found 466 such breadcrumb
+targets across 20 states.
+
+`buildPlaceRacePositionHref` cannot fix that: it builds forward `/position/` hrefs and needs
+the place handed to it. On a position page the authoritative place is the one the page already
+resolved (`cityPlace`, which falls back to `race.Place`), so the position routes gate each place
+crumb on `isRealPlaceSegment(cityPlace.slug, city)` and drop the ones the place slug does not
+contain. It is membership rather than a tail match because the resolved place can sit *below*
+the segment being checked, which is the real-subplace case the neighbouring `isRealSubplace`
+check covers.
+
+The matching `/candidates` pages still build the broken crumb, and a broken `locationHref`
+with it. That is deliberate: those pages are being removed, so they were left alone rather
+than fixed twice.
+
 Because the route tree stops at four place levels, an office combining four or more
 roles cannot be addressed at all. `buildPlaceRacePositionHref` returns `undefined`
 there and `ListOfOfficesBlock` lists the office without a link rather than linking to

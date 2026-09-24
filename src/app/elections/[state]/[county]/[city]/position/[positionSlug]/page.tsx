@@ -15,6 +15,7 @@ import {
 	formatElectionDateFromApi,
 	formatFilingPeriodFromRace,
 	getStateName,
+	isRealPlaceSegment,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
 import { toAbsoluteUrl } from '~/lib/url';
@@ -110,11 +111,12 @@ export default async function Page({
 	if (!cityPlace) notFound();
 
 	const cityName = cityPlace.name;
+	const isRealCity = isRealPlaceSegment(cityPlace.slug, city);
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
 		{ href: `/elections/${state.toLowerCase()}`, label: stateName },
 		{ href: `/elections/${countySlug}`, label: countyPlace!.name },
-		{ href: `/elections/${fullSlug}`, label: cityName },
+		...(isRealCity ? [{ href: `/elections/${fullSlug}`, label: cityName }] : []),
 		{ href: '', label: officeName },
 	];
 
@@ -124,7 +126,7 @@ export default async function Page({
 		officeName,
 		stateName,
 		countyName: countyPlace!.name,
-		cityName,
+		cityName: isRealCity ? cityName : undefined,
 		electionDate,
 		filingDate,
 		breadcrumbs,

@@ -11,6 +11,7 @@ import {
 	formatElectionDateFromApi,
 	formatFilingPeriodFromRace,
 	getStateName,
+	isRealPlaceSegment,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
 import { getCachedElectionRouteParams } from '~/lib/sitemap-entries';
@@ -65,6 +66,7 @@ export default async function Page({
 
 	const isRealSubplace =
 		race.Place?.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`) ?? false;
+	const isRealCity = isRealPlaceSegment(cityPlace.slug, city);
 
 	const stateName = getStateName(stateCode);
 	const cityName = cityPlace.name;
@@ -78,7 +80,7 @@ export default async function Page({
 		{ href: '/elections', label: 'Elections' },
 		{ href: `/elections/${state.toLowerCase()}`, label: stateName },
 		{ href: `/elections/${countySlug}`, label: countyPlace.name },
-		{ href: `/elections/${cityPathSlug}`, label: cityName },
+		...(isRealCity ? [{ href: `/elections/${cityPathSlug}`, label: cityName }] : []),
 		...(isRealSubplace ? [{ href: '', label: race.Place!.name }] : []),
 		{ href: '', label: officeName },
 	];
@@ -91,7 +93,7 @@ export default async function Page({
 		officeName,
 		stateName,
 		countyName: countyPlace.name,
-		cityName,
+		cityName: isRealCity ? cityName : undefined,
 		electionDate,
 		filingDate,
 		breadcrumbs,

@@ -78,6 +78,11 @@ describe('classifyHowToRunGuide', () => {
 			expect(classifyHowToRunGuide({ race: race('Township Assessor') })).toBe('township');
 		});
 
+		test('a state assessor is not the county assessor article', () => {
+			expect(classifyHowToRunGuide({ race: race('State Assessor', { positionLevel: 'STATE' }) })).toBe('general');
+			expect(classifyHowToRunGuide({ race: race('Assessor', { positionLevel: 'STATE' }) })).toBe('general');
+		});
+
 		test('a county treasurer is not the city treasurer article', () => {
 			expect(classifyHowToRunGuide({ race: race('County Treasurer') })).toBe('general');
 		});

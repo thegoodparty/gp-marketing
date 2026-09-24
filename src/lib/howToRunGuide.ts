@@ -92,7 +92,7 @@ export function classifyHowToRunGuide(input: HowToRunGuideInput): HowToRunGuideK
 
 	if (/\btreasurer\b/.test(text) && !/\b(county|parish|state)\b/.test(text)) return 'cityTreasurer';
 
-	if (/\bassessor\b/.test(text) && !MUNICIPAL.test(text)) return 'countyAssessor';
+	if (/\bassessor\b/.test(text) && !MUNICIPAL.test(text) && !/\bstate\b/.test(text) && level !== 'STATE') return 'countyAssessor';
 
 	if (
 		(/\b(county|parish)\b/.test(text) && COUNTY_BODIES.test(text)) ||

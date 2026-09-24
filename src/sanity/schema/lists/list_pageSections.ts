@@ -223,6 +223,7 @@ export const list_pageSections = {
 					name: 'cta',
 					title: 'CTA',
 					of: [
+						'component_electionPositionResourcesBlock',
 						'component_ctaBannerBlock',
 						'component_ctaBlock',
 						'component_ctaImageBlock',
@@ -242,6 +243,7 @@ export const list_pageSections = {
 	},
 	type: 'array',
 	of: [
+		{ title: 'Election Position Resources Block', type: 'component_electionPositionResourcesBlock' },
 		{ title: 'Demo Request Block', type: 'component_demoRequestBlock' },
 		{ title: 'Elections Near You Block', type: 'component_electionsNearYouBlock' },
 		{ title: 'Location Editorial Block', type: 'component_locationEditorialBlock' },

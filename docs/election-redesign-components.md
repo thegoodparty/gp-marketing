@@ -56,7 +56,7 @@ trust:
 | More about location container | ~~`component_locationFactsBlock`~~ — audited, rejected. Built as `component_locationEditorialBlock`; see below |
 | Branded CTA with icon | `component_ctaBlock`, `component_ctaBannerBlock` |
 | 3-block CTA with icon | `component_ctaCardsBlock` |
-| 3-column e-book support block | `component_ctaCardsBlock`, `component_twoUpCardBlock` |
+| 3-column e-book support block | ~~`component_ctaCardsBlock`, `component_twoUpCardBlock`~~ — audited, rejected. Built as `component_electionPositionResourcesBlock`; see below |
 | Find elections container | `component_electionsSearchHero`, `component_electionsIndexBlock` |
 | Find more elections block | `component_electionsIndexBlock` |
 | Local election rows block | `component_electionsIndexBlock` |
@@ -130,6 +130,40 @@ One thing that came out of it and affects other blocks in the batch:
   "More about [Location]" would have published as "More about" with the name silently gone. It
   now resolves to the most specific place the page represents (city, else county, else state).
   Any other block in this batch with a location-named editable heading can now use it.
+
+**3-column e-book support block / Election position resources block** (position pages) — built
+as `component_electionPositionResourcesBlock`. The inventory below calls it content-only; it is not.
+Treat that row as corrected. The Figma frame is named "CTA Card Block": three equal cards (guide,
+e-book, free support), each a white circle icon with a short label, a heading, a paragraph and a
+dark pill button.
+
+Nothing existing covered it. `component_ctaCardsBlock` was the starting hypothesis and is the wrong
+base: it is fixed to two cards, each only a label and one large heading with the whole card as the
+click target, and it is live on existing pages, so any change to it ships immediately (see the
+draft-and-batch rule below). `component_twoUpCardBlock` has the closest card anatomy but is a
+two-column list layout; `component_iconContentBlock` is the inverse of the design (a coloured icon
+on a plain background). Marketing chose a purpose-built block over a generic one-to-three card
+block (Emily, 2026-09-24) because of the data wiring the first card needs.
+
+Why it is data-backed: the guide card's link is chosen per page. Marketing's blog article matrix
+(in the position page design brief) maps office types to thirteen "how to run" articles, and the
+office is only known at render time, so the link cannot be an editor field on a template that
+serves every position page. `src/lib/howToRunGuide.ts` holds the matrix and the classifier that
+applies it to a race's normalized name, full name, position names and level, falling back to the
+general campaign guide. `buildPositionSectionOverrides` hands the result in as `guideHref`, which
+wins over the guide card's editor-set link. The editor link only matters on pages that are not
+position pages; with neither, the guide card is left out and the other two render. The other two
+cards are plain editorial content ("Connect with us" goes to community.goodparty.org, Emily,
+2026-09-24). Every card's heading and description accept `[office name]`.
+
+Two things from it that affect other blocks in the batch:
+
+- **Reuse the `button` object for editor-set links.** It is the same object the quote's story
+  link uses, projects through `buttonGroq`, and `normalizeRawCtaToButton` + `transformButton`
+  turn it into button props. No new link fields were needed.
+- **A figure-versus-words override can also be a link.** This is the first block whose override
+  carries an `href` rather than data to display. The same "editor field is the fallback, the
+  override wins" shape applies, and the Studio description on the field says so.
 
 ## The shared election counts, as marketing defined them
 
@@ -362,7 +396,7 @@ audit to confirm; `data` means it needs the `SectionOverrides` pass.
 | "Who's currently in office" block | position | data |
 | About [Position Name] | position | data (token-driven copy) |
 | 3-step How to run for [Position Name] | position | content + post-election state |
-| 3-column e-book support block | position | content |
+| 3-column e-book support block | position | data (audited — built, see above) |
 | Nearby offices | position | data |
 | Find more elections block | position | data |
 | Video hero with search | Voter Hub | content + search, video modal |

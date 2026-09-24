@@ -20,6 +20,7 @@ import {
 	buildSchemaGraph,
 	buildWebPageSchema,
 } from '~/lib/schema';
+import { resolveHowToRunGuide } from '~/lib/howToRunGuide';
 import { toAbsoluteUrl } from '~/lib/url';
 import { POSITION_PAGE_FAQ } from '~/constants/positionPageStaticSections';
 
@@ -183,6 +184,9 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 		},
 		component_ctaBlock: {
 			primaryButtonHref: ctx.candidatesHref,
+		},
+		component_electionPositionResourcesBlock: {
+			guideHref: resolveHowToRunGuide({ officeName: ctx.officeName, race }).href,
 		},
 	};
 }

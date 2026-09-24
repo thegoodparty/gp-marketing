@@ -591,7 +591,7 @@ export function DemoRequestBlock(props: DemoRequestBlockProps) {
 								{result.calendar_url && (
 									<>
 										<EmbedHtml
-											html={`<div class="meetings-iframe-container" data-src="${result.calendar_url}?embed=true"></div>`}
+											html={`<div class="meetings-iframe-container" data-src="${encodeURI(result.calendar_url)}?embed=true"></div>`}
 											height={720}
 										/>
 										<Text styleType='caption' className='text-neutral-600'>

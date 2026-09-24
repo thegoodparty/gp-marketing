@@ -51,7 +51,10 @@ import { component_electionsNearYouBlock } from './component_electionsNearYouBlo
 
 import { component_demoRequestBlock } from './component_demoRequestBlock.ts';
 
+import { component_nearbyOffices } from './component_nearbyOffices.ts';
+
 export const componentSchema = [
+	component_nearbyOffices,
 	component_demoRequestBlock,
 	component_electionsNearYouBlock,
 	component_locationEditorialBlock,

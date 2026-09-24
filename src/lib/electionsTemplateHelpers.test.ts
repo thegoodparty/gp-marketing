@@ -140,6 +140,19 @@ describe('buildPositionSectionOverrides content block', () => {
 		expect(buildPositionSeatFilter([{ key: 'a', name: 'A', seatValue: '1' }], 'District')).toBeUndefined();
 	});
 
+	test("names the seat filter after the office's own sub-area when every row carries a seat", () => {
+		const block = buildPositionSectionOverrides({
+			...positionOverrideCtx,
+			race,
+			officeholders: [
+				{ key: 'o1', name: 'A', seatValue: '1', seatName: 'Ward' },
+				{ key: 'o2', name: 'B', seatValue: '2', seatName: 'Ward' },
+			],
+		}).component_electionsPositionContentBlock;
+		expect(block?.seatFilter?.label).toBe('Filter by Ward');
+		expect(block?.seatFilter?.options.map(option => option.label)).toEqual(['Ward 1', 'Ward 2']);
+	});
+
 	test('resolves the [Position Name] alias the Figma copy uses', () => {
 		const tokens = buildPositionTokens(tokenCtx);
 		expect(resolveTokens('About [Position Name]', tokens)).toBe('About Mayor');

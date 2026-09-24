@@ -164,6 +164,7 @@ export function buildPositionContentOverride(
 ): NonNullable<SectionOverrides['component_electionsPositionContentBlock']> {
 	const race = ctx.race;
 	const candidates = ctx.heroCandidates?.map(heroCandidateToPerson);
+	const people = [...(candidates ?? []), ...(ctx.officeholders ?? [])];
 	const locationHref =
 		ctx.locationHref ??
 		[...ctx.breadcrumbs].reverse().find(crumb => crumb.href && crumb.href !== '/elections' && crumb.label !== ctx.officeName)?.href;
@@ -180,7 +181,7 @@ export function buildPositionContentOverride(
 		filingDateEndIso: race?.filingDateEnd ?? null,
 		candidates,
 		officeholders: ctx.officeholders,
-		seatFilter: buildPositionSeatFilter([...(candidates ?? []), ...(ctx.officeholders ?? [])], null),
+		seatFilter: buildPositionSeatFilter(people, people.find(person => person.seatName)?.seatName ?? null),
 		locationHref: locationHref || undefined,
 		shareUrl: ctx.pageUrl,
 		about: about && (about.description || about.attributes.length > 0) ? about : undefined,

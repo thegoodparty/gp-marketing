@@ -237,13 +237,13 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 	return {
 		component_breadcrumbBlock: { breadcrumbs: ctx.breadcrumbs },
 		// The hero's ballot card points down the page at the content block's
-		// candidate rows (Emily, 2026-09-24), but only when that list will render;
-		// with no rows the list hides, so the card keeps the candidates page link.
+		// candidate rows, never at the /candidates page, which goes away with the
+		// redesign (Emily, 2026-09-24). With no rows the list hides, and so does
+		// the button: the card already says how many candidates there are.
 		component_electionsPositionHero: {
 			...buildPositionHeroOverride(ctx),
-			...(ctx.heroCandidates && ctx.heroCandidates.length > 0
-				? { candidatesHref: `#${POSITION_CONTENT_IDS.candidates}`, resultsHref: `#${POSITION_CONTENT_IDS.candidates}` }
-				: {}),
+			candidatesHref: ctx.heroCandidates && ctx.heroCandidates.length > 0 ? `#${POSITION_CONTENT_IDS.candidates}` : undefined,
+			resultsHref: ctx.heroCandidates && ctx.heroCandidates.length > 0 ? `#${POSITION_CONTENT_IDS.candidates}` : undefined,
 		},
 		component_electionsPositionContentBlock: buildPositionContentOverride(ctx),
 		component_faqBlock: {

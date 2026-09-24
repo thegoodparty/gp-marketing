@@ -158,7 +158,7 @@ describe('buildPositionSectionOverrides hero', () => {
 		numberOfSeats: 2,
 	};
 
-	test('hands the hero the race dates, the seat count and the candidates page link', () => {
+	test('hands the hero the race dates, the seat count and an anchor to the on-page candidate rows', () => {
 		const overrides = buildPositionSectionOverrides({
 			...positionOverrideCtx,
 			race,
@@ -174,9 +174,21 @@ describe('buildPositionSectionOverrides hero', () => {
 			filingDateStartIso: '2026-05-19T00:00:00.000Z',
 			filingDateEndIso: '2026-06-02T00:00:00.000Z',
 			seatCount: 2,
-			candidatesHref: '/elections/mn/morrison-county/position/county-attorney/candidates',
+			candidatesHref: '#position-candidates',
+			resultsHref: '#position-candidates',
 		});
 		expect(overrides.component_electionsPositionHero?.candidates).toHaveLength(1);
+	});
+
+	test('keeps the candidates page link when no candidate rows will render on the page', () => {
+		const href = '/elections/mn/morrison-county/position/county-attorney/candidates';
+		expect(
+			buildPositionSectionOverrides({ ...positionOverrideCtx, race, candidatesHref: href, heroCandidates: [] })
+				.component_electionsPositionHero?.candidatesHref,
+		).toBe(href);
+		expect(
+			buildPositionSectionOverrides({ ...positionOverrideCtx, race, candidatesHref: href }).component_electionsPositionHero?.candidatesHref,
+		).toBe(href);
 	});
 
 	test('leaves candidates undefined, not empty, when the route supplied none', () => {

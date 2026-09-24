@@ -6,10 +6,11 @@ import type { BreadcrumbItem } from '~/ui/BreadcrumbBlock';
 import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
 import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
 import type { ElectionsPositionHeroCandidate } from '~/ui/ElectionsPositionHero';
-import type {
-	ElectionsPositionAttribute,
-	ElectionsPositionElectionType,
-	ElectionsPositionPerson,
+import {
+	POSITION_CONTENT_IDS,
+	type ElectionsPositionAttribute,
+	type ElectionsPositionElectionType,
+	type ElectionsPositionPerson,
 } from '~/ui/ElectionsPositionContentBlock';
 import { buildDynamicFAQItems, buildPositionPageSchema } from '~/lib/electionsHelpers';
 import {
@@ -235,7 +236,15 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 	const race = ctx.race;
 	return {
 		component_breadcrumbBlock: { breadcrumbs: ctx.breadcrumbs },
-		component_electionsPositionHero: buildPositionHeroOverride(ctx),
+		// The hero's ballot card points down the page at the content block's
+		// candidate rows (Emily, 2026-09-24), but only when that list will render;
+		// with no rows the list hides, so the card keeps the candidates page link.
+		component_electionsPositionHero: {
+			...buildPositionHeroOverride(ctx),
+			...(ctx.heroCandidates && ctx.heroCandidates.length > 0
+				? { candidatesHref: `#${POSITION_CONTENT_IDS.candidates}`, resultsHref: `#${POSITION_CONTENT_IDS.candidates}` }
+				: {}),
+		},
 		component_electionsPositionContentBlock: buildPositionContentOverride(ctx),
 		component_faqBlock: {
 			items: race

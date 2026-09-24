@@ -578,6 +578,20 @@ describe('buildOfficeItemsFromPlaceRaces', () => {
 		expect(dataYears).toEqual([2026, 2028]);
 	});
 
+	test('gives every office a distinct id when the API sends none', () => {
+		const races = [
+			placeRace({ id: undefined, slug: 'tx/harris-county/county-attorney' }),
+			placeRace({ id: undefined, slug: 'tx/harris-county/county-constable' }),
+		];
+
+		const { offices } = buildOfficeItemsFromPlaceRaces(races, new Map(), {
+			type: 'County',
+			buildHref: () => undefined,
+		});
+
+		expect(offices.map(o => o.id)).toEqual(['tx/harris-county/county-attorney-0', 'tx/harris-county/county-constable-1']);
+	});
+
 	test('handles year-boundary ISO datetime correctly', () => {
 		const races = [
 			placeRace({

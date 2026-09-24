@@ -84,7 +84,7 @@ export function classifyHowToRunGuide(input: HowToRunGuideInput): HowToRunGuideK
 		return 'judge';
 	}
 
-	if (/\b(district|states?|county|commonwealths?|city) attorney\b/.test(text) || /\b(prosecut(or|ing)|solicitor)\b/.test(text)) {
+	if (/\b(district|states?|county|commonwealths?|city) attorney\b(?! general)/.test(text) || /\b(prosecut(or|ing)|solicitor)\b/.test(text)) {
 		return 'districtAttorney';
 	}
 

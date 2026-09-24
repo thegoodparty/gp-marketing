@@ -23,9 +23,17 @@ export type NearbyOfficesTier = {
  * its county and a county to its state (Emily, 2026-09-24). The county comes
  * from the route rather than from the place name because some cities are named
  * after a county they are not in.
+ *
+ * `routePlaceSlug` is the page's route path, not an election-api place slug:
+ * `tx` (state route), `tx/harris-county` (county route) or
+ * `tx/harris-county/houston` (city route). Segment count therefore says which
+ * level the page is. A two-segment route is always a county (or a state-level
+ * district, which the county page also treats as county): the county position
+ * route redirects city races to the four-level URL before rendering. The API's
+ * short `state/city` slug appears only in `slugs`, as one form to try.
  */
-export function nearbyOfficesTiers(placeSlug: string): NearbyOfficesTier[] {
-	const segments = placeSlug.toLowerCase().split('/').filter(Boolean);
+export function nearbyOfficesTiers(routePlaceSlug: string): NearbyOfficesTier[] {
+	const segments = routePlaceSlug.toLowerCase().split('/').filter(Boolean);
 	const tiers: NearbyOfficesTier[] = [];
 	for (let length = segments.length; length >= 1; length--) {
 		const tierSegments = segments.slice(0, length);

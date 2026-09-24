@@ -18,6 +18,8 @@ type Props = Extract<Sections, { _type: 'component_nearbyOffices' }> & {
  */
 export function NearbyOfficesSection(props: Props) {
 	const { nearbyOverride, tokens, ...section } = props;
+	const offices = nearbyOverride?.offices ?? [];
+	if (offices.length === 0) return null;
 	const bgValue = section.nearbyOfficesDesignSettings?.field_blockColorCreamMidnight;
 	const backgroundColor = bgValue ? resolveBg(stegaClean(bgValue)) : 'cream';
 
@@ -26,7 +28,7 @@ export function NearbyOfficesSection(props: Props) {
 			<NearbyOffices
 				backgroundColor={backgroundColor}
 				heading={resolveSectionText(section.field_heading, tokens)}
-				offices={nearbyOverride?.offices ?? []}
+				offices={offices}
 			/>
 		</section>
 	);

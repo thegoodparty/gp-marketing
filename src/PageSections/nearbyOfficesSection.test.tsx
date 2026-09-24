@@ -38,11 +38,10 @@ describe('NearbyOfficesSection', () => {
 		expect(html).toContain('href="/elections/tx/harris-county/houston/position/controller"');
 	});
 
-	test('renders nothing visible when the page supplies no offices', () => {
+	test('renders nothing at all, not even the section wrapper, when the page supplies no offices', () => {
 		const html = renderToStaticMarkup(<NearbyOfficesSection {...section} tokens={{ '[County or City]': 'Houston' }} />);
 
-		expect(html).not.toContain('Other offices in Houston');
-		expect(html).not.toContain('data-component="NearbyOffices"');
+		expect(html).toBe('');
 	});
 
 	test('reads the background colour from the design settings', () => {

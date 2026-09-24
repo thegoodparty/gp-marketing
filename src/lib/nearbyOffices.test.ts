@@ -33,6 +33,18 @@ describe('nearbyOfficesTiers', () => {
 		expect(nearbyOfficesTiers('TX/Harris-County').map(t => t.slugs[0])).toEqual(['tx/harris-county', 'tx']);
 	});
 
+	test('a two-segment route is a county tier even when the segment is a city name', () => {
+		// The county position route redirects city races to the four-level URL, so a
+		// page rendered at /elections/tx/houston/position/* is a county or a
+		// state-level district, never a city. The API's short city slug is only
+		// ever tried as an alternative form inside the city tier.
+		const [tier] = nearbyOfficesTiers('tx/houston');
+
+		expect(tier?.level).toBe('county');
+		expect(tier?.slugs).toEqual(['tx/houston']);
+		expect(nearbyOfficesTiers('tx/harris-county/houston')[0]?.slugs).toContain('tx/houston');
+	});
+
 	test('a state page has nowhere to go up to', () => {
 		expect(nearbyOfficesTiers('tx')).toEqual([{ level: 'state', segments: ['tx'], slugs: ['tx'] }]);
 	});

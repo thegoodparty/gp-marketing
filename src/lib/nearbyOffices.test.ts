@@ -45,6 +45,14 @@ describe('nearbyOfficesTiers', () => {
 		expect(nearbyOfficesTiers('tx/harris-county/houston')[0]?.slugs).toContain('tx/houston');
 	});
 
+	test('a subplace page starts at its parent city and never tries a four-segment slug', () => {
+		const tiers = nearbyOfficesTiers('tx/harris-county/houston/spring-branch');
+
+		expect(tiers.map(t => t.level)).toEqual(['city', 'county', 'state']);
+		expect(tiers[0]?.slugs).toEqual(['tx/harris-county/houston', 'tx/houston']);
+		expect(tiers.flatMap(t => t.slugs)).not.toContain('tx/spring-branch');
+	});
+
 	test('a state page has nowhere to go up to', () => {
 		expect(nearbyOfficesTiers('tx')).toEqual([{ level: 'state', segments: ['tx'], slugs: ['tx'] }]);
 	});

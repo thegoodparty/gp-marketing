@@ -31,14 +31,18 @@ export type NearbyOfficesTier = {
  * district, which the county page also treats as county): the county position
  * route redirects city races to the four-level URL before rendering. The API's
  * short `state/city` slug appears only in `slugs`, as one form to try.
+ *
+ * A four-segment route (`state/county/city/subplace`, the joint-office and
+ * sub-place races) starts at its parent city: a subplace is not a tier of its
+ * own, and only the three place levels have a position route to link to.
  */
 export function nearbyOfficesTiers(routePlaceSlug: string): NearbyOfficesTier[] {
 	const segments = routePlaceSlug.toLowerCase().split('/').filter(Boolean);
 	const tiers: NearbyOfficesTier[] = [];
-	for (let length = segments.length; length >= 1; length--) {
+	for (let length = Math.min(segments.length, 3); length >= 1; length--) {
 		const tierSegments = segments.slice(0, length);
 		const slug = tierSegments.join('/');
-		if (length >= 3) {
+		if (length === 3) {
 			// City places are slugged either state/county/city or state/city; the city
 			// location page tries both, so this does too.
 			tiers.push({ level: 'city', segments: tierSegments, slugs: [slug, `${tierSegments[0]}/${tierSegments.at(-1)}`] });

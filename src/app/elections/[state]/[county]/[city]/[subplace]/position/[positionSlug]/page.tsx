@@ -132,7 +132,11 @@ export async function generateMetadata({
 	// A joint office fills the city slot with an office name, and the place then resolves to the
 	// county, so naming it as both city and county would say the county twice.
 	const isRealCity = isRealPlaceSegment(cityPlace?.slug, city);
-	const placePhrase = isRealCity ? `${cityName}, ${countyDisplayName}` : countyDisplayName;
+	// Equal names mean the city and county slots resolved to the same place, which happens on a
+	// district nested under the city slot: the race's own place fills both, so the join would
+	// read "Dutton/Brady K-12 Schools, Dutton/Brady K-12 Schools".
+	const placePhrase =
+		isRealCity && cityName !== countyDisplayName ? `${cityName}, ${countyDisplayName}` : countyDisplayName;
 	const isRealSubplace =
 		race?.Place?.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`) ?? false;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';

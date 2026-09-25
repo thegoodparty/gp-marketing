@@ -89,6 +89,23 @@ describe('/elections page titles', () => {
 	 * county lives in `placePhrase`, which already skips the county for a joint office whose
 	 * "city" segment is really an office name.
 	 */
+	/**
+	 * A district nested under the city slot resolves the race's own place into both the city and
+	 * the county slot, so the join read "Dutton/Brady K-12 Schools, Dutton/Brady K-12 Schools" on
+	 * `/elections/mt/dutton/brady-k-12-schools/position/local-school-board`. The description had
+	 * carried it for a while; the title inherited it when city-level titles moved onto placePhrase.
+	 */
+	it('never names the same place twice in a city-level title', async () => {
+		const cityRoutes = (await electionPageFiles()).filter(f => f.includes('[city]') && !f.endsWith('[city]/page.tsx'));
+		expect(cityRoutes.length).toBeGreaterThanOrEqual(4);
+		for (const file of cityRoutes) {
+			const body = metadataBody(await Bun.file(file).text());
+			expect(body, `${file} joins city to county without checking they are different places`).toMatch(
+				/cityName !== countyDisplayName/,
+			);
+		}
+	});
+
 	it('names the county in every city-level title', async () => {
 		// The city index page is excluded: it has no race in scope, so an unresolvable segment
 		// leaves `cityPlace` null and the page 404s before a title is served. `placePhrase` there

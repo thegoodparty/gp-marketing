@@ -90,6 +90,9 @@ describe('/elections page titles', () => {
 	 * "city" segment is really an office name.
 	 */
 	it('names the county in every city-level title', async () => {
+		// The city index page is excluded: it has no race in scope, so an unresolvable segment
+		// leaves `cityPlace` null and the page 404s before a title is served. `placePhrase` there
+		// would be a no-op, since isRealPlaceSegment returns true for an undefined place slug.
 		const cityRoutes = (await electionPageFiles()).filter(f => f.includes('[city]') && !f.endsWith('[city]/page.tsx'));
 		expect(cityRoutes.length).toBeGreaterThanOrEqual(4);
 		for (const file of cityRoutes) {

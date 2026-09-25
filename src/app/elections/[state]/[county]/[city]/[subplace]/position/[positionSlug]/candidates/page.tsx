@@ -12,10 +12,11 @@ import {
 	formatElectionDateFromApi,
 	formatFilingPeriodFromRace,
 	getStateName,
+	isRealPlaceSegment,
 	mapCandidacyToCard,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
-import { toAbsoluteUrl } from '~/lib/url';
+import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsCandidatesPage } from '~/lib/renderElectionsCandidatesPage';
 
 export default async function Page({
@@ -122,6 +123,10 @@ export async function generateMetadata({
 		race?.Place ??
 		null;
 	const cityName = cityPlace?.name ?? city;
+	// A joint office fills the city slot with an office name, and the place then resolves to the
+	// county, so naming it as both city and county would say the county twice.
+	const isRealCity = isRealPlaceSegment(cityPlace?.slug, city);
+	const placePhrase = isRealCity ? `${cityName}, ${countyDisplayName}` : countyDisplayName;
 	const isRealSubplace =
 		race?.Place?.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`) ?? false;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
@@ -131,14 +136,14 @@ export async function generateMetadata({
 	if (isRealSubplace) {
 		const subplaceName = race!.Place!.name;
 		return {
-			title: `Candidates for ${positionName} in ${subplaceName}, ${cityName}, ${stateName} | Good Party`,
-			description: `View candidates running for ${positionName} in ${subplaceName}, ${cityName}, ${countyDisplayName}, ${stateName}.`,
+			title: `Candidates for ${positionName} in ${subplaceName}, ${placePhrase}, ${stateName} | ${SITE_NAME}`,
+			description: `View candidates running for ${positionName} in ${subplaceName}, ${placePhrase}, ${stateName}.`,
 			alternates: { canonical },
 		};
 	}
 	return {
-		title: `Candidates for ${positionName} in ${cityName}, ${stateName} | Good Party`,
-		description: `View candidates running for ${positionName} in ${cityName}, ${countyDisplayName}, ${stateName}.`,
+		title: `Candidates for ${positionName} in ${placePhrase}, ${stateName} | ${SITE_NAME}`,
+		description: `View candidates running for ${positionName} in ${placePhrase}, ${stateName}.`,
 		alternates: { canonical },
 	};
 }

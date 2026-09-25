@@ -18,7 +18,7 @@ import {
 	isRealPlaceSegment,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
-import { toAbsoluteUrl } from '~/lib/url';
+import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsPositionPage } from '~/lib/renderElectionsPositionPage';
 
 export const revalidate = 3600;
@@ -177,11 +177,10 @@ export async function generateMetadata({
 	// A joint office fills the city slot with an office name, and the place then resolves to the
 	// county, so naming it as both city and county would say the county twice.
 	const isRealCity = isRealPlaceSegment(cityPlace?.slug, city);
-	const localityName = isRealCity ? cityName : countyDisplayName;
 	const placePhrase = isRealCity ? `${cityName}, ${countyDisplayName}` : countyDisplayName;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
 	return {
-		title: `${positionName} in ${localityName}, ${stateName} | Good Party`,
+		title: `${positionName} in ${placePhrase}, ${stateName} | ${SITE_NAME}`,
 		description: `Election details and candidates for ${positionName} in ${placePhrase}, ${stateName}.`,
 		alternates: { canonical: toAbsoluteUrl(`/elections/${fullSlug}/position/${positionSlug}`) },
 	};

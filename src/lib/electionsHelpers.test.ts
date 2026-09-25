@@ -962,6 +962,23 @@ describe('buildRacePositionHref', () => {
 		expect(buildRacePositionHref(undefined)).toBeUndefined();
 		expect(buildRacePositionHref('single-part')).toBeUndefined();
 	});
+
+	/**
+	 * The feed sometimes drops the state from a race slug, which slides the place name into the
+	 * state slot: `st-george/city-legislature` (St. George, Louisiana) built
+	 * `/elections/st-george/position/city-legislature`, and every position route rejects a state
+	 * segment that is not a state code, so that link could only ever 404.
+	 */
+	test('returns undefined when the first segment is not a state code', () => {
+		expect(buildRacePositionHref('st-george/city-legislature')).toBeUndefined();
+		expect(buildRacePositionHref('east-baton-rouge-parish/st-george/city-legislature')).toBeUndefined();
+	});
+
+	test('still builds when the first segment is a state code', () => {
+		expect(buildRacePositionHref('la/east-baton-rouge-parish/city-legislature')).toBe(
+			'/elections/la/east-baton-rouge-parish/position/city-legislature',
+		);
+	});
 });
 
 describe('buildElectionPositionHrefFromRaceSlug', () => {

@@ -100,17 +100,14 @@ describe('/elections page titles', () => {
 		expect(cityRoutes.length).toBeGreaterThanOrEqual(4);
 		for (const file of cityRoutes) {
 			const body = metadataBody(await Bun.file(file).text());
-			expect(body, `${file} joins city to county without checking they are different places`).toMatch(
-				/cityName !== countyDisplayName/,
+			// joinPlaceNames owns the dedupe and is unit-tested in electionsHelpers.test.ts; what a
+			// source scan can still add is that these routes go through it rather than joining by hand.
+			expect(body, `${file} must build placePhrase with joinPlaceNames`).toMatch(
+				/const placePhrase =[^;]*joinPlaceNames\(/,
 			);
-			// The subplace routes join once more. The check has to be against the names placePhrase was
-			// built from, not the joined string, or a half-collapsed phrase slips a repeat through.
 			if (body.includes('isRealSubplace')) {
-				expect(body, `${file} joins subplace to place without checking the city slot`).toMatch(
-					/subplaceName === cityName/,
-				);
-				expect(body, `${file} joins subplace to place without checking the county slot`).toMatch(
-					/subplaceName === countyDisplayName/,
+				expect(body, `${file} must build locationPhrase with joinPlaceNames`).toMatch(
+					/const locationPhrase =[^;]*joinPlaceNames\(/,
 				);
 			}
 		}
@@ -125,11 +122,11 @@ describe('/elections page titles', () => {
 		for (const file of cityRoutes) {
 			const body = metadataBody(await Bun.file(file).text());
 			expect(body, `${file} must derive its title place from placePhrase`).toMatch(/const placePhrase =/);
-			// The subplace branch wraps placePhrase in locationPhrase so it can drop a repeated name;
-			// the county still reaches the title through it, which the next assertion pins.
+			// The subplace branch builds its own phrase so it can order the subplace ahead of the city;
+			// the county has to be one of the names it is given, or that title loses its county.
 			if (body.includes('${locationPhrase}')) {
-				expect(body, `${file} locationPhrase must be built from placePhrase`).toMatch(
-					/const locationPhrase =[^;]*placePhrase/,
+				expect(body, `${file} locationPhrase must still name the county`).toMatch(
+					/const locationPhrase =[^;]*countyDisplayName/,
 				);
 			}
 			for (const [title] of body.matchAll(/title: `[^`]*`/g)) {

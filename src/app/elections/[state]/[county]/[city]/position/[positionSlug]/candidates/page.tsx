@@ -17,6 +17,7 @@ import {
 	formatFilingPeriodFromRace,
 	getStateName,
 	isRealPlaceSegment,
+	joinPlaceNames,
 	mapCandidacyToCard,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
@@ -157,11 +158,9 @@ export async function generateMetadata({
 	// A joint office fills the city slot with an office name, and the place then resolves to the
 	// county, so naming it as both city and county would say the county twice.
 	const isRealCity = isRealPlaceSegment(cityPlace?.slug, city);
-	// Equal names mean the city and county slots resolved to the same place, which happens on a
-	// district nested under the city slot: the race's own place fills both, so the join would
-	// read "Dutton/Brady K-12 Schools, Dutton/Brady K-12 Schools".
-	const placePhrase =
-		isRealCity && cityName !== countyDisplayName ? `${cityName}, ${countyDisplayName}` : countyDisplayName;
+	// Either slot can resolve to the race's own place, so the names are deduplicated rather than
+	// joined blindly; see joinPlaceNames.
+	const placePhrase = isRealCity ? joinPlaceNames(cityName, countyDisplayName) : countyDisplayName;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
 	return {
 		title: `Candidates for ${positionName} in ${placePhrase}, ${stateName} | ${SITE_NAME}`,

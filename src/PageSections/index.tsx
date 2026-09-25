@@ -121,12 +121,13 @@ export type SectionOverrides = {
 	component_electionsPositionHero?: import('~/PageSections/ElectionsPositionHeroSection').OfficeData;
 	component_electionsPositionContentBlock?: import('~/PageSections/ElectionsPositionContentBlockSection').ElectionsPositionContentBlockOverride;
 	component_locationLandingPageHero?: {
+		/** The whole headline. Without it the block falls back to the bare location name. */
+		headline?: string;
 		locationLevel?: 'state' | 'county' | 'city' | 'district';
 		stateName?: string;
 		countyName?: string;
 		cityName?: string;
 		bodyCopy?: string;
-		searchPlaceholder?: string;
 	};
 	component_listOfOfficesBlock?: {
 		heading?: string;

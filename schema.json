@@ -5781,14 +5781,23 @@
                 },
                 "optional": true
               },
-              "field_searchPlaceholder": {
+              "list_buttons": {
                 "type": "objectAttribute",
                 "value": {
-                  "type": "string"
+                  "type": "inline",
+                  "name": "list_buttons"
                 },
                 "optional": true
               }
             }
+          },
+          "optional": true
+        },
+        "stats": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "stats"
           },
           "optional": true
         },

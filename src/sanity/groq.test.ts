@@ -35,6 +35,21 @@ describe('custom groq functions', () => {
 		expect(declared.size).toBeGreaterThan(0);
 	});
 
+	/**
+	 * A block that renders Sanity buttons has to project them. Without it the raw
+	 * fields arrive, `transformButtons` finds no `anchor` or `link` to build an
+	 * href from, and the buttons render as nothing with no type error.
+	 */
+	test('every block that authors buttons projects them', () => {
+		const authorsButtons = exportedStrings.filter(
+			([name, value]) => name.startsWith('component_') && value.includes('list_buttons'),
+		);
+		const unprojected = authorsButtons.filter(([, value]) => !value.includes(`list_buttons[]{${groq.buttonGroq}}`)).map(([name]) => name);
+
+		expect(unprojected).toEqual([]);
+		expect(authorsButtons.length).toBeGreaterThan(0);
+	});
+
 	test('the shared fragments keep their projected field names', () => {
 		expect(groq.buttonGroq).toBe('...gp::button(@)');
 		expect(groq.buttonBodyGroq).toContain('"link":gp::link(field_internalLink)');

@@ -60,7 +60,7 @@ trust:
 | Find elections container | `component_electionsSearchHero`, `component_electionsIndexBlock` |
 | Find more elections block | `component_electionsIndexBlock` |
 | Local election rows block | `component_electionsIndexBlock` |
-| Browse elections in Location Hero | `component_locationLandingPageHero` + the search hero |
+| Browse elections in Location Hero | ~~`component_locationLandingPageHero` + the search hero~~ — audited, extended the hero alone; see below |
 
 `src/sanity/schema/lists/list_pageSections.ts` has the full list of existing blocks.
 
@@ -86,6 +86,41 @@ Two things that came out of it and affect other components in the batch:
 - **A nested object on a quote needs a GROQ projection.** `quoteGroq` spreads `...`, so a plain
   text field flows through on its own, but the link had to be projected explicitly
   (`button{${buttonGroq}}`) or it would have arrived as unusable raw data with no type error.
+
+**Browse elections in Location Hero** (location pages) — extended the existing
+`component_locationLandingPageHero`; no new block.
+
+The hypothesis above was right, with one correction: the design is not the hero plus the search
+hero. The Figma frame has no search input at all (marketing confirmed the search moves to its own
+component, Emily 2026-09-17), so the hero's input was removed. The rest of the redesign is a
+two-column layout: headline, copy and up to two jump buttons on the left, up to three stat cards on
+the right. The cards are the existing `Stat` component from the Stats Block — same design-system
+colors the Figma uses, same count-up behaviour. `Stat` gained a `compact` size (16/20px padding,
+`heading-lg` value) to match the Figma card; the default size is untouched, so the Stats Block
+renders as before.
+
+The design was revised on 2026-09-24 (Figma 2032-21473 desktop, 2032-21815 mobile): four cards in a
+2x2 grid became three across, the figures changed (see below), and the two buttons were added. The
+buttons are ordinary Sanity buttons using the Anchor action, and the templates carry matching anchor
+ids on the offices list and the elections index so they have somewhere to jump to. City and district
+templates have no elections index, so their seed ships the one button.
+
+Three things worth carrying to the rest of the batch:
+
+- **A midnight block must not put `text-white` on its section wrapper** if it contains pastel
+  cards. The cards inherit it and their text disappears. Put the text color on the copy column
+  instead, which is what the Stats Block already does.
+- **The figures are Sanity fields, not live data yet.** Only the election date and the race count
+  are computable from what a location page already fetches. The independent count needs the pledge
+  flag per candidate, and `/v1/candidacies` has no place filter — only per-race calls or a
+  whole-state sweep joined on `raceId`. That aggregate is worth asking election-api for once,
+  because the candidates and "who's currently in office" blocks will want the same thing.
+- **A value that is not a count must not animate.** `Stat` counts a numeric value up from zero, so
+  the election date rendered as "Nov. 0, 2026" on the way to "Nov. 4, 2026" until the parser learned
+  to skip values with digits after the first run.
+- **This block is going onto the existing location templates**, not freshly seeded ones, so the
+  cards are empty until an editor fills them. The hero renders as a single column when it has no
+  stats, which is the pre-redesign layout minus the search input.
 
 Note for whoever wires up the links: a case study that lives as an `article` can be picked with
 the internal link picker, but `/people/*` profiles are rendered from election-api and have no
@@ -204,10 +239,16 @@ Two things from it that affect other blocks in the batch:
 
 ## The shared election counts, as marketing defined them
 
-Settled with Emily on 2026-09-17 while building the location hero's four stat cards.
-Several other blocks in the batch want the same counts, so treat these as the batch's
-definitions rather than one block's, and state them verbatim in any request to the
-election data team.
+Settled with Emily on 2026-09-17 while building the location hero's stat cards, and
+trimmed on 2026-09-24 when the design went from four cards to three. Several other
+blocks in the batch want the same counts, so treat these as the batch's definitions
+rather than one block's, and state them verbatim in any request to the election data
+team.
+
+The hero now shows three: the election date ("Election day"), the race count ("Races on
+the ballot") and the independent count ("Independent candidates"). Days until the next
+election and the uncontested count were dropped from this block; the uncontested
+definition is kept below because the position pages still want it.
 
 - **Year scope.** Every figure follows the year the offices list opens on: the current
   year when it has elections, else the soonest year ahead

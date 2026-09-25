@@ -67,3 +67,40 @@ describe('/elections canonical metadata', () => {
 		}
 	});
 });
+
+/**
+ * Two title defects the Sept 2026 crawl caught across ~90k election URLs. Both are invisible
+ * locally (the routes need a live election API), so they are guarded by scanning source.
+ */
+describe('/elections page titles', () => {
+	it('suffixes every title with the SITE_NAME constant, never a literal brand name', async () => {
+		for (const file of await electionPageFiles()) {
+			const body = metadataBody(await Bun.file(file).text());
+			expect(body, `${file} hardcodes a brand name instead of SITE_NAME`).not.toMatch(/\| Good ?Party/);
+			for (const [, suffix] of body.matchAll(/title: `[^`]*?\| ([^`]*)`/g)) {
+				expect(suffix, `${file} title ends in "${suffix}" rather than \${SITE_NAME}`).toBe('${SITE_NAME}');
+			}
+		}
+	});
+
+	/**
+	 * Same-named townships are the common case — Indiana alone has 46 Washington townships — so a
+	 * city-level title that names only the city collides with every namesake in the state. The
+	 * county lives in `placePhrase`, which already skips the county for a joint office whose
+	 * "city" segment is really an office name.
+	 */
+	it('names the county in every city-level title', async () => {
+		// The city index page is excluded: it has no race in scope, so an unresolvable segment
+		// leaves `cityPlace` null and the page 404s before a title is served. `placePhrase` there
+		// would be a no-op, since isRealPlaceSegment returns true for an undefined place slug.
+		const cityRoutes = (await electionPageFiles()).filter(f => f.includes('[city]') && !f.endsWith('[city]/page.tsx'));
+		expect(cityRoutes.length).toBeGreaterThanOrEqual(4);
+		for (const file of cityRoutes) {
+			const body = metadataBody(await Bun.file(file).text());
+			expect(body, `${file} must derive its title place from placePhrase`).toMatch(/const placePhrase =/);
+			for (const [title] of body.matchAll(/title: `[^`]*`/g)) {
+				expect(title, `${file} title omits the county: ${title}`).toContain('${placePhrase}');
+			}
+		}
+	});
+});

@@ -22,7 +22,7 @@ import {
 	resolvePlaceRaceElectionDates,
 } from '~/lib/electionsHelpers';
 import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
-import { toAbsoluteUrl } from '~/lib/url';
+import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 
 export const revalidate = 3600;
 
@@ -259,7 +259,7 @@ export async function generateMetadata({
 	const canonical = toAbsoluteUrl(`/elections/${fullSlug}`);
 	if (isNestedDistrict) {
 		return {
-			title: `Elections in ${placeData.name}, ${stateName} | Good Party`,
+			title: `Elections in ${placeData.name}, ${stateName} | ${SITE_NAME}`,
 			description: `Browse elections and positions in ${placeData.name}, ${stateName}.`,
 			alternates: { canonical },
 		};
@@ -285,7 +285,7 @@ export async function generateMetadata({
 	}
 	const cityName = cityPlace?.name ?? city;
 	return {
-		title: `Elections in ${cityName}, ${stateName} | Good Party`,
+		title: `Elections in ${cityName}, ${countyDisplayName}, ${stateName} | ${SITE_NAME}`,
 		description: `Browse elections and local positions in ${cityName}, ${countyDisplayName}, ${stateName}.`,
 		alternates: { canonical },
 	};

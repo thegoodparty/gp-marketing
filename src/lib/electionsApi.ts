@@ -196,21 +196,45 @@ export async function getPositionById(id: string): Promise<PositionDetail | null
 	return fetchJson<PositionDetail>(url, CACHE_OPTIONS);
 }
 
-export async function getRaceBySlug(
+async function fetchRaceBySlug(
 	raceSlug: string,
-	includePlace = true,
-	filters?: { isPrimary?: boolean },
+	includePlace: boolean,
+	isPrimary?: boolean,
 ): Promise<RaceDetail | null> {
 	const searchParams = new URLSearchParams({
 		raceSlug,
 		includePlace: includePlace.toString(),
 	});
-	if (filters?.isPrimary !== undefined) {
-		searchParams.set('isPrimary', filters.isPrimary.toString());
+	if (isPrimary !== undefined) {
+		searchParams.set('isPrimary', isPrimary.toString());
 	}
 	const url = `${ELECTIONS_API_BASE_URL}/v1/races?${searchParams}`;
 	const data = await fetchJson<RaceDetail[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) && data.length > 0 ? (data[0] ?? null) : null;
+}
+
+/**
+ * A race by its slug, general election first and the primary only if there is no general.
+ *
+ * `/v1/races` coerces an absent `isPrimary` to `false` rather than leaving it unset, so the
+ * unfiltered call is really a general-elections-only call. Offices whose feed carries a primary
+ * row and no general one (MN's county auditor and recorder seats, NY's county court judge) came
+ * back empty, and every position page for them 404'd while the county index page and the
+ * "View Position" link on each officeholder's /people profile went on listing them (25 of the
+ * 26 dead position-page URLs under /elections in the 2026-09-18 crawl).
+ *
+ * The retry costs a second request only on the path that would otherwise render a 404, so a
+ * page that resolves today still makes exactly one call. An explicit `isPrimary` is the
+ * caller's own filter and is never second-guessed.
+ */
+export async function getRaceBySlug(
+	raceSlug: string,
+	includePlace = true,
+	filters?: { isPrimary?: boolean },
+): Promise<RaceDetail | null> {
+	const race = await fetchRaceBySlug(raceSlug, includePlace, filters?.isPrimary);
+	if (race || filters?.isPrimary !== undefined) return race;
+	return fetchRaceBySlug(raceSlug, includePlace, true);
 }
 
 /** Resolves joint city office races; API slugs omit the county segment. */
@@ -667,7 +691,10 @@ export async function resolveCountySlugForPlace(
  * profile's own "Explore Elections" band already read, so in practice this costs
  * a cache hit rather than a round trip.
  */
-export async function getCitySlugToCountySlugMap(state: string): Promise<Map<string, string>> {
+export async function getCitySlugToCountySlugMap(
+	state: string,
+	options?: { walkCountiesWhenEmpty?: boolean },
+): Promise<Map<string, string>> {
 	const code = state.toUpperCase();
 	const [counties, cities, towns] = await Promise.all([
 		getPlacesByState({ state: code, mtfcc: COUNTY_MTFCC }),
@@ -688,7 +715,69 @@ export async function getCitySlugToCountySlugMap(state: string): Promise<Map<str
 		const countySlug = countySlugByBaseName.get(normalizeName(base));
 		if (countySlug) citySlugToCountySlug.set(place.slug, countySlug);
 	}
-	return citySlugToCountySlug;
+	if (citySlugToCountySlug.size > 0 || !options?.walkCountiesWhenEmpty) return citySlugToCountySlug;
+	return walkCountiesForCitySlugMap(counties);
+}
+
+/**
+ * The same city → county lookup, read off the counties instead of the state.
+ *
+ * Connecticut maps nothing from the state-level sweeps: it abolished county government
+ * and its county-equivalents became planning regions in 2022. The data is there —
+ * `/v1/places?slug=ct/<county>&includeChildren=true` returns the towns, which is why
+ * `/elections/ct/fairfield-county` links to 19 of them — only the state-level path is
+ * broken. `sitemap-entries.ts` and `resolvePlace.ts` each already work around this the
+ * same way; this is the callers-of-the-map version, behind the opt-in flag because
+ * walking every county nationwide would be roughly 3,255 extra calls.
+ *
+ * The county is known exactly for each child (we just walked it), so the mapping is
+ * built directly rather than depending on the child's own `countyName` matching.
+ */
+async function walkCountiesForCitySlugMap(counties: PlaceItem[]): Promise<Map<string, string>> {
+	const childLists = await Promise.all(
+		counties
+			.filter((county): county is PlaceItem & { slug: string } => Boolean(county.slug))
+			.map(async county => {
+				// Params kept identical to getPlaceBySlug's known-working call, including
+				// the explicit includeRaces: false.
+				const result = await getPlaceBySlug({
+					slug: county.slug,
+					includeChildren: true,
+					includeRaces: false,
+					placeColumns: 'slug,name,mtfcc,countyName',
+				});
+				const children = (result?.children ?? []).filter(
+					(child): child is PlaceItem & { slug: string } => Boolean(child.slug) && isCityOrTownMtfcc(child.mtfcc),
+				);
+				return children.map(child => [child.slug, county.slug] as const);
+			}),
+	);
+	return new Map(childLists.flat());
+}
+
+/** Every county-equivalent slug in one state, for checking that a URL segment names a real county. */
+export async function getCountySlugsByState(state: string): Promise<Set<string>> {
+	const counties = await getPlacesByState({ state, mtfcc: COUNTY_MTFCC });
+	return new Set(counties.map(county => county.slug).filter((slug): slug is string => Boolean(slug)));
+}
+
+/**
+ * The county slug for one city slug, asked of that city directly.
+ *
+ * {@link getCitySlugToCountySlugMap} answers this for a whole state in one pass, but a
+ * city the state sweep never returned, or whose `countyName` matches no county row, is
+ * simply absent from it — Coeur d'Alene ID, Princes Lakes IN, D'Iberville MS, Reiles
+ * Acres ND and Suffolk VA were each missing that way in the 2026-09-18 crawl, leaving
+ * their profiles linking county-less URLs. A profile links a handful of races, so asking
+ * per place for the few the bulk map missed is affordable where doing it for every race
+ * would not be.
+ */
+export async function resolveCountySlugForCitySlug(citySlug: string): Promise<string | undefined> {
+	const state = citySlug.split('/')[0];
+	if (!state) return undefined;
+	const place = await getPlaceBySlug({ slug: citySlug, placeColumns: 'slug,name,mtfcc,countyName' });
+	if (!place?.countyName) return undefined;
+	return resolveCountySlugForPlace(state, place.countyName);
 }
 
 export type RaceElectionHrefs = {

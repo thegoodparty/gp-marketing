@@ -396,6 +396,53 @@ cannot be resolved: a redirect beats an unlinked row. The sitemap is the one
 deliberate exception — it passes `skipUnmappedCity` and emits nothing, because a
 sitemap should advertise canonical URLs only.
 
+#### Ask the lookup, do not read the slug
+
+A follow-up crawl (2026-09-18) found 347 of these links still redirecting, in
+shapes the first pass had pre-filtered out before ever consulting the lookup.
+Each pre-filter looked like a cheap way to skip a pointless fetch and was wrong:
+
+- **The position level is not the place level.** A judicial, county or
+  district-attorney office is routinely seated in a city
+  (`nv/las-vegas/justice-of-the-peace-judicial`), so gating the city branch on
+  `CITY`/`LOCAL` misses them.
+- **A `-county` tail does not mean the segment is a county.** Where two cities in
+  a state share a name the feed disambiguates the *city's* slug with a county
+  suffix, so `tx/reno-lamar-county` and `oh/oakwood-cuyahoga-county` are cities.
+  `looksLikeCountySlugSegment` cannot tell them apart, and note that the feed's
+  `countyName` for these rows names the *other* county — `oh/oakwood-cuyahoga-county`
+  canonicalises under `oh/montgomery-county`. That is an upstream data problem;
+  read it off the lookup rather than trying to correct it here.
+
+A hit in the lookup is itself proof the segment is a city, so ask it and let a
+miss be a miss. A genuine county race costs one cached place-list read.
+
+Two fallbacks sit behind the state sweep, both in `getCitySlugToCountySlugMap`
+and `resolveCountySlugForCitySlug`: the county walk for Connecticut, whose
+statewide municipal queries return nothing at all (the same workaround
+`sitemap-entries.ts` and `resolvePlace.ts` each carry), and a per-place lookup
+for the scattered cities a healthy state's sweep still misses.
+
+#### Not every URL segment is a place
+
+The position routes fill their place slots positionally, and a joint office
+spends one segment per combined role, so
+`ga/state-insurance-commissioner/fire-safety-commissioner-joint` puts an office
+name in the county slot. Anything that slices a position href back into place
+crumbs has to check each segment against the slot it sits in, or it links office
+names as places: that was 346 breadcrumb 404s on `/people` in the same crawl, and
+the same bug the position pages fixed with `isRealPlaceSegment`. `/people` has no
+resolved place to check against, so `isRealPlaceSlot` in `peopleProfile.ts`
+checks slot 1 against the state's county slugs and slot 2 against the city
+lookup. Counties only in slot 1 — a city there means the expansion never
+happened. Nothing below the city is ever linked, because every subplace-depth
+`/elections` URL in the sitemap is a joint office.
+
+Slot-aware matters as much as the check itself: a place name containing a slash
+("Choctaw/Nicoma Park Schools") splits across two slots, and `ok/choctaw` is a
+real city, so in the county slot it resolved — and sent the "Explore Elections"
+band to a different county's towns.
+
 ### Not fixable here, escalate
 
 Candidate claimed-vs-unclaimed state and any "my profile is wrong" bug is a data

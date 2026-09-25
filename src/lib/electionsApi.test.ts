@@ -4,10 +4,12 @@ import { __resetElectionApiAuthForTests } from './electionApiAuth';
 import {
 	getCitySlugToCountySlugMap,
 	getCountyChildPlaces,
+	getCountySlugsByState,
 	getPersonMergeSurvivorChain,
 	getPersonMergeSurvivorId,
 	getRemovedPersonIds,
 	isStateIndexDistrictPlace,
+	resolveCountySlugForCitySlug,
 	resolveCountySlugForPlace,
 	resolveRaceElectionHrefs,
 } from './electionsApi';
@@ -382,6 +384,123 @@ describe('getCitySlugToCountySlugMap', () => {
 		const map = await getCitySlugToCountySlugMap('LA');
 
 		expect(map.get('la/kenner')).toBe('la/jefferson-parish');
+	});
+});
+
+/**
+ * Connecticut maps nothing from the state-level sweeps — it abolished county
+ * government and its county-equivalents became planning regions in 2022 — but
+ * the towns are there on the counties. Sitemaps and the search resolver each
+ * already walk them; this is the same escape hatch for callers of the map.
+ */
+describe('getCitySlugToCountySlugMap with walkCountiesWhenEmpty', () => {
+	const CT_EMPTY_SWEEP: FetchMockResponse[] = [
+		{
+			match: url => url.includes('/v1/places?') && url.includes('state=CT') && url.includes('mtfcc=G4020'),
+			body: [{ slug: 'ct/fairfield-county', name: 'Fairfield County', mtfcc: 'G4020', state: 'CT' }],
+		},
+		{
+			match: url => url.includes('/v1/places?') && url.includes('slug=ct%2Ffairfield-county'),
+			body: [
+				{
+					slug: 'ct/fairfield-county',
+					name: 'Fairfield County',
+					children: [
+						{ slug: 'ct/stamford', name: 'Stamford', mtfcc: 'G4110' },
+						{ slug: 'ct/greenwich-town', name: 'Greenwich', mtfcc: 'G4040' },
+						{ slug: 'ct/some-school-district', name: 'Some School District', mtfcc: 'G5420' },
+					],
+				},
+			],
+		},
+	];
+
+	test('walks the counties for their towns when the sweep maps nothing', async () => {
+		withFetchMock(CT_EMPTY_SWEEP);
+
+		const map = await getCitySlugToCountySlugMap('CT', { walkCountiesWhenEmpty: true });
+
+		expect(map.get('ct/stamford')).toBe('ct/fairfield-county');
+		expect(map.get('ct/greenwich-town')).toBe('ct/fairfield-county');
+	});
+
+	/** Only municipalities: a school district is not a place the city slot can hold. */
+	test('keeps non-municipal children out of the lookup', async () => {
+		withFetchMock(CT_EMPTY_SWEEP);
+
+		const map = await getCitySlugToCountySlugMap('CT', { walkCountiesWhenEmpty: true });
+
+		expect(map.has('ct/some-school-district')).toBe(false);
+	});
+
+	/** The walk is the fallback, not the path: 50 states must not pay for it. */
+	test('does not walk when the sweep mapped something', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('state=NC') && url.includes('mtfcc=G4020'),
+				body: [{ slug: 'nc/guilford-county', name: 'Guilford County', mtfcc: 'G4020', state: 'NC' }],
+			},
+			{
+				match: url => url.includes('/v1/places?') && url.includes('state=NC') && url.includes('mtfcc=G4110'),
+				body: [{ slug: 'nc/greensboro', name: 'Greensboro', mtfcc: 'G4110', state: 'NC', countyName: 'Guilford' }],
+			},
+			{
+				match: url => url.includes('/v1/places?') && url.includes('includeChildren=true'),
+				body: [{ slug: 'nc/guilford-county', children: [{ slug: 'nc/should-not-appear', mtfcc: 'G4110' }] }],
+			},
+		]);
+
+		const map = await getCitySlugToCountySlugMap('NC', { walkCountiesWhenEmpty: true });
+
+		expect(map.has('nc/should-not-appear')).toBe(false);
+	});
+});
+
+describe('getCountySlugsByState', () => {
+	test('collects the state county-equivalent slugs', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('state=VA') && url.includes('mtfcc=G4020'),
+				body: [
+					{ slug: 'va/accomack-county', name: 'Accomack County', mtfcc: 'G4020', state: 'VA' },
+					// An independent city is a county-equivalent, and its slug says "city".
+					{ slug: 'va/alexandria-city', name: 'Alexandria City', mtfcc: 'G4020', state: 'VA' },
+				],
+			},
+		]);
+
+		await expect(getCountySlugsByState('VA')).resolves.toEqual(
+			new Set(['va/accomack-county', 'va/alexandria-city']),
+		);
+	});
+});
+
+/** For the cities a state sweep simply never returns. */
+describe('resolveCountySlugForCitySlug', () => {
+	test('asks the city for its county, then the county for its slug', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('slug=id%2Fcoeur-dalene'),
+				body: [{ slug: 'id/coeur-dalene', name: "Coeur d'Alene", mtfcc: 'G4110', countyName: 'Kootenai' }],
+			},
+			{
+				match: url => url.includes('/v1/places?') && url.includes('state=ID') && url.includes('mtfcc=G4020'),
+				body: [{ slug: 'id/kootenai-county', name: 'Kootenai County', mtfcc: 'G4020', state: 'ID' }],
+			},
+		]);
+
+		await expect(resolveCountySlugForCitySlug('id/coeur-dalene')).resolves.toBe('id/kootenai-county');
+	});
+
+	test('resolves to nothing when the place carries no county', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/places?') && url.includes('slug=va%2Fsuffolk'),
+				body: [{ slug: 'va/suffolk', name: 'Suffolk', mtfcc: 'G4110' }],
+			},
+		]);
+
+		await expect(resolveCountySlugForCitySlug('va/suffolk')).resolves.toBeUndefined();
 	});
 });
 

@@ -228,7 +228,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
 	const { slug: slugParts } = await params;
 	if (!slugParts || slugParts.length < 2) {
-		return { title: 'Candidate Not Found | Good Party' };
+		return { title: `Candidate Not Found | ${SITE_NAME}` };
 	}
 	const slug = slugParts.join('/');
 
@@ -239,7 +239,7 @@ export async function generateMetadata({
 	});
 
 	if (!candidate) {
-		return { title: 'Candidate Not Found | Good Party' };
+		return { title: `Candidate Not Found | ${SITE_NAME}` };
 	}
 
 	const claimed = await loadClaimedCampaignForCandidate(candidate);
@@ -248,7 +248,7 @@ export async function generateMetadata({
 	const profileImageUrl = resolveProfileImageUrl(candidate.image, claimed?.avatar);
 
 	return {
-		title: `${candidateName} for ${positionName} | Good Party`,
+		title: `${candidateName} for ${positionName} | ${SITE_NAME}`,
 		description:
 			resolveProfileAboutText(candidate.about, claimed) ??
 			`View ${candidateName}'s profile for ${positionName}.`,

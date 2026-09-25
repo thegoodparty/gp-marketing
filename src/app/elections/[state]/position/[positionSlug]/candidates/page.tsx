@@ -9,7 +9,7 @@ import {
 	getStateName,
 	mapCandidacyToCard,
 } from '~/lib/electionsHelpers';
-import { toAbsoluteUrl } from '~/lib/url';
+import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsCandidatesPage } from '~/lib/renderElectionsCandidatesPage';
 
 export default async function Page({
@@ -79,7 +79,7 @@ export async function generateMetadata({
 	const race = await getRaceBySlug(raceSlug);
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
 	return {
-		title: `Candidates for ${positionName} in ${stateName} | Good Party`,
+		title: `Candidates for ${positionName} in ${stateName} | ${SITE_NAME}`,
 		description: `View candidates running for ${positionName} in ${stateName}.`,
 		alternates: {
 			canonical: toAbsoluteUrl(`/elections/${stateCode.toLowerCase()}/position/${positionSlug}/candidates`),

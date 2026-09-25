@@ -1,6 +1,7 @@
 import { stegaClean } from 'next-sanity';
 
 import type { Sections } from '~/PageSections';
+import { resolveAvatars } from '~/ui/_lib/resolveAvatars';
 import { ElectionsNearYouBlock } from '~/ui/ElectionsNearYouBlock';
 
 export function ElectionsNearYouBlockSection(section: Extract<Sections, { _type: 'component_electionsNearYouBlock' }>) {
@@ -11,7 +12,10 @@ export function ElectionsNearYouBlockSection(section: Extract<Sections, { _type:
 				body={section.field_body ?? ''}
 				buttonLabel={section.field_buttonLabel ?? 'Search'}
 				backgroundColor={section.field_backgroundVariant ? stegaClean(section.field_backgroundVariant) : undefined}
+				layout={section.field_layoutVariant ? stegaClean(section.field_layoutVariant) : undefined}
 				showSocialProof={section.field_showSocialProof ?? false}
+				socialProofText={section.field_socialProofText ?? undefined}
+				socialProofAvatars={resolveAvatars(section.list_Choose3People)}
 			/>
 		</section>
 	);

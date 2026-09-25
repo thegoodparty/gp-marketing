@@ -145,9 +145,11 @@ export async function generateMetadata({
 	);
 	if (isRealSubplace) {
 		const subplaceName = race!.Place!.name;
-		// Same collapse one level up: when the county lookup misses, the race's place fills the
-		// subplace slot and placePhrase too.
-		const locationPhrase = subplaceName !== placePhrase ? `${subplaceName}, ${placePhrase}` : placePhrase;
+		// Same collapse one level up. Either slot below can fall back to the race's own place, so
+		// compare against the names placePhrase was built from rather than against the joined
+		// string: "Brady K-12, Teton County" matches neither slot but already carries the subplace.
+		const alreadyNamed = subplaceName === cityName || subplaceName === countyDisplayName;
+		const locationPhrase = alreadyNamed ? placePhrase : `${subplaceName}, ${placePhrase}`;
 		return {
 			title: `${positionName} in ${locationPhrase}, ${stateName} | ${SITE_NAME}`,
 			description: `Election details and candidates for ${positionName} in ${locationPhrase}, ${stateName}.`,

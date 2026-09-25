@@ -103,10 +103,14 @@ describe('/elections page titles', () => {
 			expect(body, `${file} joins city to county without checking they are different places`).toMatch(
 				/cityName !== countyDisplayName/,
 			);
-			// The subplace routes join once more, and the same miss doubles the name there too.
+			// The subplace routes join once more. The check has to be against the names placePhrase was
+			// built from, not the joined string, or a half-collapsed phrase slips a repeat through.
 			if (body.includes('isRealSubplace')) {
-				expect(body, `${file} joins subplace to place without checking they are different`).toMatch(
-					/subplaceName !== placePhrase/,
+				expect(body, `${file} joins subplace to place without checking the city slot`).toMatch(
+					/subplaceName === cityName/,
+				);
+				expect(body, `${file} joins subplace to place without checking the county slot`).toMatch(
+					/subplaceName === countyDisplayName/,
 				);
 			}
 		}

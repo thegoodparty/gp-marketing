@@ -667,7 +667,10 @@ export async function resolveCountySlugForPlace(
  * profile's own "Explore Elections" band already read, so in practice this costs
  * a cache hit rather than a round trip.
  */
-export async function getCitySlugToCountySlugMap(state: string): Promise<Map<string, string>> {
+export async function getCitySlugToCountySlugMap(
+	state: string,
+	options?: { walkCountiesWhenEmpty?: boolean },
+): Promise<Map<string, string>> {
 	const code = state.toUpperCase();
 	const [counties, cities, towns] = await Promise.all([
 		getPlacesByState({ state: code, mtfcc: COUNTY_MTFCC }),
@@ -688,7 +691,69 @@ export async function getCitySlugToCountySlugMap(state: string): Promise<Map<str
 		const countySlug = countySlugByBaseName.get(normalizeName(base));
 		if (countySlug) citySlugToCountySlug.set(place.slug, countySlug);
 	}
-	return citySlugToCountySlug;
+	if (citySlugToCountySlug.size > 0 || !options?.walkCountiesWhenEmpty) return citySlugToCountySlug;
+	return walkCountiesForCitySlugMap(counties);
+}
+
+/**
+ * The same city → county lookup, read off the counties instead of the state.
+ *
+ * Connecticut maps nothing from the state-level sweeps: it abolished county government
+ * and its county-equivalents became planning regions in 2022. The data is there —
+ * `/v1/places?slug=ct/<county>&includeChildren=true` returns the towns, which is why
+ * `/elections/ct/fairfield-county` links to 19 of them — only the state-level path is
+ * broken. `sitemap-entries.ts` and `resolvePlace.ts` each already work around this the
+ * same way; this is the callers-of-the-map version, behind the opt-in flag because
+ * walking every county nationwide would be roughly 3,255 extra calls.
+ *
+ * The county is known exactly for each child (we just walked it), so the mapping is
+ * built directly rather than depending on the child's own `countyName` matching.
+ */
+async function walkCountiesForCitySlugMap(counties: PlaceItem[]): Promise<Map<string, string>> {
+	const childLists = await Promise.all(
+		counties
+			.filter((county): county is PlaceItem & { slug: string } => Boolean(county.slug))
+			.map(async county => {
+				// Params kept identical to getPlaceBySlug's known-working call, including
+				// the explicit includeRaces: false.
+				const result = await getPlaceBySlug({
+					slug: county.slug,
+					includeChildren: true,
+					includeRaces: false,
+					placeColumns: 'slug,name,mtfcc,countyName',
+				});
+				const children = (result?.children ?? []).filter(
+					(child): child is PlaceItem & { slug: string } => Boolean(child.slug) && isCityOrTownMtfcc(child.mtfcc),
+				);
+				return children.map(child => [child.slug, county.slug] as const);
+			}),
+	);
+	return new Map(childLists.flat());
+}
+
+/** Every county-equivalent slug in one state, for checking that a URL segment names a real county. */
+export async function getCountySlugsByState(state: string): Promise<Set<string>> {
+	const counties = await getPlacesByState({ state, mtfcc: COUNTY_MTFCC });
+	return new Set(counties.map(county => county.slug).filter((slug): slug is string => Boolean(slug)));
+}
+
+/**
+ * The county slug for one city slug, asked of that city directly.
+ *
+ * {@link getCitySlugToCountySlugMap} answers this for a whole state in one pass, but a
+ * city the state sweep never returned, or whose `countyName` matches no county row, is
+ * simply absent from it — Coeur d'Alene ID, Princes Lakes IN, D'Iberville MS, Reiles
+ * Acres ND and Suffolk VA were each missing that way in the 2026-09-18 crawl, leaving
+ * their profiles linking county-less URLs. A profile links a handful of races, so asking
+ * per place for the few the bulk map missed is affordable where doing it for every race
+ * would not be.
+ */
+export async function resolveCountySlugForCitySlug(citySlug: string): Promise<string | undefined> {
+	const state = citySlug.split('/')[0];
+	if (!state) return undefined;
+	const place = await getPlaceBySlug({ slug: citySlug, placeColumns: 'slug,name,mtfcc,countyName' });
+	if (!place?.countyName) return undefined;
+	return resolveCountySlugForPlace(state, place.countyName);
 }
 
 export type RaceElectionHrefs = {

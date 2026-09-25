@@ -6,6 +6,7 @@ import {
 	getCountyChildPlaces,
 	getPersonMergeSurvivorChain,
 	getPersonMergeSurvivorId,
+	getRaceBySlug,
 	getRemovedPersonIds,
 	isStateIndexDistrictPlace,
 	resolveCountySlugForPlace,
@@ -542,6 +543,64 @@ describe('isStateIndexDistrictPlace', () => {
 				mtfcc: 'G5420',
 			}),
 		).toBe(true);
+	});
+});
+
+/**
+ * `/v1/races` coerces an absent `isPrimary` to `false`, so the unfiltered lookup is really a
+ * general-elections-only lookup. Offices that exist in the feed only as a primary row came back
+ * empty and their position page 404'd, while the county index page and the "View Position" link
+ * on every officeholder's /people profile kept listing them (25 of the 26 dead
+ * position-page URLs under /elections in the 2026-09-18 crawl).
+ */
+describe('getRaceBySlug falls back to the primary when there is no general', () => {
+	const SLUG = 'mn/steele-county/county-auditor';
+	const PRIMARY = { slug: SLUG, name: 'County Auditor', electionDate: '2022-08-09', isPrimary: true };
+	const GENERAL = { slug: SLUG, name: 'County Auditor', electionDate: '2022-11-08', isPrimary: false };
+
+	function recordingFetch(bodyFor: (url: string) => unknown): string[] {
+		const calls: string[] = [];
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = String(input);
+			calls.push(url);
+			return new Response(JSON.stringify(bodyFor(url)), {
+				status: 200,
+				headers: { 'content-type': 'application/json' },
+			});
+		}) as typeof fetch;
+		return calls;
+	}
+
+	test('a race with a general row resolves in a single request', async () => {
+		const calls = recordingFetch(() => [GENERAL]);
+
+		expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2022-11-08' });
+		expect(calls).toHaveLength(1);
+		expect(calls[0]).not.toContain('isPrimary');
+	});
+
+	test('a primary-only race resolves on the retry rather than 404ing the page', async () => {
+		const calls = recordingFetch(url => (url.includes('isPrimary=true') ? [PRIMARY] : []));
+
+		expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2022-08-09', isPrimary: true });
+		expect(calls).toHaveLength(2);
+		expect(calls[1]).toContain('isPrimary=true');
+	});
+
+	test('a slug with no race at all still returns null', async () => {
+		const calls = recordingFetch(() => []);
+
+		expect(await getRaceBySlug(SLUG)).toBeNull();
+		expect(calls).toHaveLength(2);
+	});
+
+	/** resolvePlaceRaceElectionDates asks for the general on purpose; a primary would be wrong. */
+	test('an explicit isPrimary filter is never second-guessed', async () => {
+		const calls = recordingFetch(() => []);
+
+		expect(await getRaceBySlug(SLUG, false, { isPrimary: false })).toBeNull();
+		expect(calls).toHaveLength(1);
+		expect(calls[0]).toContain('isPrimary=false');
 	});
 });
 

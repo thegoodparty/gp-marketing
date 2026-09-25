@@ -1,6 +1,7 @@
 import { convert } from 'html-to-text';
 
 import { US_STATES } from '~/constants/usStates';
+import { isValidStateCode } from '~/constants/usStateCodes';
 import type { CandidacyItem, FindByRaceIdResponse, PlaceItem, PlaceRace, PlaceWithFacts, RaceDetail } from '~/types/elections';
 import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
 import type { FactsCardProps } from '~/ui/FactsCard';
@@ -986,6 +987,12 @@ export function resolveElectionPositionFromRaceSlug(
 	const parts = race.slug.split('/').filter(Boolean);
 	const positionSlug = parts.pop();
 	if (!positionSlug || parts.length === 0) return undefined;
+
+	// Every /elections position route rejects a state segment that is not a US state code, so a
+	// slug whose first segment is not one can only ever build a 404. The feed emits these where
+	// the state is missing from the slug entirely (`st-george/city-legislature`, St. George,
+	// Louisiana), and the place name then lands in the state slot.
+	if (!isValidStateCode(parts[0])) return undefined;
 
 	const level = (race.positionLevel ?? '').toUpperCase();
 	const skipUnmapped = options?.skipUnmappedCity ?? false;

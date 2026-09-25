@@ -39,6 +39,19 @@ backoff, returns `null` on 404 or any non-500 error, and caches most responses w
 `{ next: { revalidate: 3600 } }` (one hour). Pages themselves also set
 `revalidate = 3600`.
 
+**`/v1/races` is general-elections-only unless you say otherwise.** The endpoint coerces
+an absent `isPrimary` to `false` instead of leaving it unset, so an unfiltered slug lookup
+never sees a primary row. Offices that exist in the feed only as a primary (Minnesota's
+county auditor, treasurer and recorder seats, New York's county court judge) came back
+empty, and their position pages 404'd while the county index page and the "View Position"
+link on each officeholder's `/people` profile kept listing them. That was 25 of the 26 dead
+position-page URLs in the 2026-09-18 crawl. `getRaceBySlug` therefore retries once with
+`isPrimary: true` when the first lookup finds nothing, which costs a second request only on
+the path that would otherwise render a 404. A caller that passes `isPrimary` itself (as
+`resolvePlaceRaceElectionDates` does, wanting the general) is never second-guessed. The fix
+belongs upstream in `election-api`'s `raceFilterSchema`, where the `z.preprocess` around
+`isPrimary`/`isRunoff` turns `undefined` into `false`; until that lands, keep the retry.
+
 ## Domain vocabulary the agent needs
 
 ### MTFCC codes

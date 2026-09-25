@@ -196,21 +196,45 @@ export async function getPositionById(id: string): Promise<PositionDetail | null
 	return fetchJson<PositionDetail>(url, CACHE_OPTIONS);
 }
 
-export async function getRaceBySlug(
+async function fetchRaceBySlug(
 	raceSlug: string,
-	includePlace = true,
-	filters?: { isPrimary?: boolean },
+	includePlace: boolean,
+	isPrimary?: boolean,
 ): Promise<RaceDetail | null> {
 	const searchParams = new URLSearchParams({
 		raceSlug,
 		includePlace: includePlace.toString(),
 	});
-	if (filters?.isPrimary !== undefined) {
-		searchParams.set('isPrimary', filters.isPrimary.toString());
+	if (isPrimary !== undefined) {
+		searchParams.set('isPrimary', isPrimary.toString());
 	}
 	const url = `${ELECTIONS_API_BASE_URL}/v1/races?${searchParams}`;
 	const data = await fetchJson<RaceDetail[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) && data.length > 0 ? (data[0] ?? null) : null;
+}
+
+/**
+ * A race by its slug, general election first and the primary only if there is no general.
+ *
+ * `/v1/races` coerces an absent `isPrimary` to `false` rather than leaving it unset, so the
+ * unfiltered call is really a general-elections-only call. Offices whose feed carries a primary
+ * row and no general one (MN's county auditor and recorder seats, NY's county court judge) came
+ * back empty, and every position page for them 404'd while the county index page and the
+ * "View Position" link on each officeholder's /people profile went on listing them (25 of the
+ * 26 dead position-page URLs under /elections in the 2026-09-18 crawl).
+ *
+ * The retry costs a second request only on the path that would otherwise render a 404, so a
+ * page that resolves today still makes exactly one call. An explicit `isPrimary` is the
+ * caller's own filter and is never second-guessed.
+ */
+export async function getRaceBySlug(
+	raceSlug: string,
+	includePlace = true,
+	filters?: { isPrimary?: boolean },
+): Promise<RaceDetail | null> {
+	const race = await fetchRaceBySlug(raceSlug, includePlace, filters?.isPrimary);
+	if (race || filters?.isPrimary !== undefined) return race;
+	return fetchRaceBySlug(raceSlug, includePlace, true);
 }
 
 /** Resolves joint city office races; API slugs omit the county segment. */

@@ -388,6 +388,60 @@ describe('Recent Experience links every row it has a race slug for', () => {
 	});
 
 	/**
+	 * A race slug that omits its state slides the place name into the state slot, so
+	 * `st-george/city-legislature` (St. George, Louisiana) built
+	 * `/elections/st-george/position/city-legislature`. One profile carried it on both of its
+	 * rows, the current term and the 2025 candidacy, which is how a single page put two dead
+	 * "View Position" links in the 2026-09-18 crawl.
+	 */
+	test('a slug with no state code renders unlinked on every row that carries it', () => {
+		const person = makePerson({
+			state: 'LA',
+			Candidacies: [
+				{
+					id: 'c1',
+					slug: 'jane-doe/st-george-city-council',
+					positionName: 'City Council',
+					state: 'LA',
+					Race: { electionDate: '2025-11-15', slug: 'st-george/city-legislature', positionLevel: 'CITY' },
+				},
+			],
+			OfficeHolders: [
+				{
+					id: 'o1',
+					positionName: 'City Council',
+					normalizedPositionName: 'City Council',
+					officeTitle: 'St. George City Council - At Large',
+					partyNames: [],
+					startAt: '2025-01-01',
+					endAt: '2029-01-01',
+					termDateSpecificity: null,
+					isCurrent: true,
+					isAppointed: null,
+					numberOfSeats: null,
+					state: 'LA',
+					subAreaName: null,
+					subAreaValue: null,
+					websiteUrl: null,
+					officePhone: null,
+					officeEmail: null,
+					mailingCity: null,
+					mailingState: null,
+					positionSlug: 'st-george/city-legislature',
+					positionLevel: 'CITY',
+				},
+			],
+		});
+
+		const view = composeView(PID, person, null, {});
+
+		expect(view.recentExperience).toHaveLength(2);
+		for (const row of view.recentExperience) {
+			expect(row.href).toBeNull();
+		}
+	});
+
+	/**
 	 * Slugs come from a dbt macro and can be too short to place. Linking anyway
 	 * would point "View Position" at a 404, which is worse than no link.
 	 */

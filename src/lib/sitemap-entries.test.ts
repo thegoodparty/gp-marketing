@@ -1,4 +1,5 @@
 import { afterAll, afterEach, describe, expect, test } from 'bun:test';
+import { resetNextCacheMock, unstable_cache } from '~/testing/nextCacheMock';
 import {
 	buildCountyLookups,
 	buildRaceEntries,
@@ -13,6 +14,7 @@ import {
 	normalizeName,
 	peopleShardForPersonId,
 	peopleShardSizeWarning,
+	PEOPLE_SITEMAP_CACHE_TAG,
 	PEOPLE_SHARD_WARN_AT,
 	PEOPLE_SITEMAP_BAND_START,
 	PEOPLE_SITEMAP_SHARD_COUNT,
@@ -84,6 +86,105 @@ describe('people sitemap shards', () => {
 		expect(ids).toHaveLength(expectedLength);
 		// The set is a contiguous 0..last with no gaps or dupes.
 		expect([...ids].sort((a, b) => a - b)).toEqual([...Array(expectedLength).keys()]);
+	});
+});
+
+describe('people shard response cache', () => {
+	const aliceId = 'aaaaaaaa-1111-2222-3333-444444444444';
+	const base = 'https://goodparty.org';
+	const originalFetch = globalThis.fetch;
+	const originalRuntime = process.env['NEXT_RUNTIME'];
+
+	afterEach(() => {
+		globalThis.fetch = originalFetch;
+		if (originalRuntime === undefined) delete process.env['NEXT_RUNTIME'];
+		else process.env['NEXT_RUNTIME'] = originalRuntime;
+		clearPeopleSitemapCache();
+		resetNextCacheMock();
+	});
+
+	function mockMinimalUpstream(): void {
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = new URL(String(input));
+			const json = (body: unknown) =>
+				new Response(JSON.stringify(body), {
+					status: 200,
+					headers: { 'content-type': 'application/json' },
+				});
+			if (url.pathname.endsWith('/public-person-profiles/published')) return json([]);
+			if (url.pathname.endsWith('/public-person-profiles/unlisted')) return json([]);
+			if (url.pathname.endsWith('/v1/persons')) {
+				return json(
+					url.searchParams.get('state') === 'WY' ? [{ id: aliceId, slug: 'alice-smith' }] : [],
+				);
+			}
+			if (url.pathname.endsWith('/v1/candidacies')) {
+				return json(
+					url.searchParams.get('state') === 'WY'
+						? [{ personId: aliceId, positionName: 'Mayor', officeTitle: null }]
+						: [],
+				);
+			}
+			return json([]);
+		}) as typeof fetch;
+	}
+
+	/**
+	 * The upstream election-api reads go through `unstable_cache` too, and they
+	 * carry PEOPLE_SITEMAP_CACHE_TAG as well — so reading "the last cache call"
+	 * passes this test whether or not the shard itself is cached at all. Pick the
+	 * shard's own entry out by its key.
+	 */
+	function shardCacheCalls(): { keyParts: string[]; options: { tags?: readonly string[] } }[] {
+		return unstable_cache.mock.calls
+			.map((call) => ({
+				keyParts: call[1] as string[],
+				options: call[2] as { tags?: readonly string[] },
+			}))
+			.filter((call) => call.keyParts[0] === 'people-sitemap-shard');
+	}
+
+	/**
+	 * The takedown guarantee lives on this tag. `revalidate-person` busts
+	 * PEOPLE_SITEMAP_CACHE_TAG when someone asks to be delisted; if the shard's
+	 * cached list does not carry it, that webhook stops reaching the sitemap and
+	 * a delisted person keeps being advertised for the life of the entry. That is
+	 * the failure a CDN `s-maxage` would have shipped, so it is pinned here.
+	 */
+	test('a shard is cached under the tag the takedown webhook busts', async () => {
+		process.env['NEXT_RUNTIME'] = 'nodejs';
+		mockMinimalUpstream();
+
+		await fetchPeopleSitemapEntries(base, peopleShardForPersonId(aliceId));
+
+		const calls = shardCacheCalls();
+		expect(calls).toHaveLength(1);
+		expect(calls[0]!.options.tags).toContain(PEOPLE_SITEMAP_CACHE_TAG);
+	});
+
+	test('each shard and base url gets its own entry, so shards cannot serve each other', async () => {
+		process.env['NEXT_RUNTIME'] = 'nodejs';
+		mockMinimalUpstream();
+
+		await fetchPeopleSitemapEntries(base, 3);
+		await fetchPeopleSitemapEntries(base, 4);
+
+		const keys = shardCacheCalls().map((c) => c.keyParts);
+		expect(keys).toHaveLength(2);
+		expect(keys[0]).not.toEqual(keys[1]!);
+		expect(keys[1]).toEqual(['people-sitemap-shard', base, '4']);
+	});
+
+	// Mirrors fetchElectionApiJsonCached: unstable_cache misbehaves outside the
+	// Next server runtime, and the CLI sitemap generator runs there.
+	test('outside the Next runtime the uncached builder runs instead', async () => {
+		delete process.env['NEXT_RUNTIME'];
+		mockMinimalUpstream();
+
+		const entries = await fetchPeopleSitemapEntries(base, peopleShardForPersonId(aliceId));
+
+		expect(entries.map((e) => e.url)).toEqual([`${base}/people/alice-smith-aaaaaaaa`]);
+		expect(shardCacheCalls()).toEqual([]);
 	});
 });
 

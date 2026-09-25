@@ -139,9 +139,12 @@ export async function generateMetadata({
 	);
 	if (isRealSubplace) {
 		const subplaceName = race!.Place!.name;
+		// Same collapse one level up: when the county lookup misses, the race's place fills the
+		// subplace slot and placePhrase too.
+		const locationPhrase = subplaceName !== placePhrase ? `${subplaceName}, ${placePhrase}` : placePhrase;
 		return {
-			title: `Candidates for ${positionName} in ${subplaceName}, ${placePhrase}, ${stateName} | ${SITE_NAME}`,
-			description: `View candidates running for ${positionName} in ${subplaceName}, ${placePhrase}, ${stateName}.`,
+			title: `Candidates for ${positionName} in ${locationPhrase}, ${stateName} | ${SITE_NAME}`,
+			description: `View candidates running for ${positionName} in ${locationPhrase}, ${stateName}.`,
 			alternates: { canonical },
 		};
 	}

@@ -103,6 +103,12 @@ describe('/elections page titles', () => {
 			expect(body, `${file} joins city to county without checking they are different places`).toMatch(
 				/cityName !== countyDisplayName/,
 			);
+			// The subplace routes join once more, and the same miss doubles the name there too.
+			if (body.includes('isRealSubplace')) {
+				expect(body, `${file} joins subplace to place without checking they are different`).toMatch(
+					/subplaceName !== placePhrase/,
+				);
+			}
 		}
 	});
 
@@ -115,8 +121,15 @@ describe('/elections page titles', () => {
 		for (const file of cityRoutes) {
 			const body = metadataBody(await Bun.file(file).text());
 			expect(body, `${file} must derive its title place from placePhrase`).toMatch(/const placePhrase =/);
+			// The subplace branch wraps placePhrase in locationPhrase so it can drop a repeated name;
+			// the county still reaches the title through it, which the next assertion pins.
+			if (body.includes('${locationPhrase}')) {
+				expect(body, `${file} locationPhrase must be built from placePhrase`).toMatch(
+					/const locationPhrase =[^;]*placePhrase/,
+				);
+			}
 			for (const [title] of body.matchAll(/title: `[^`]*`/g)) {
-				expect(title, `${file} title omits the county: ${title}`).toContain('${placePhrase}');
+				expect(title, `${file} title omits the county: ${title}`).toMatch(/\$\{(placePhrase|locationPhrase)\}/);
 			}
 		}
 	});

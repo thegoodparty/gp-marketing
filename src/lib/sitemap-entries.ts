@@ -1109,7 +1109,7 @@ async function getCachedPeopleSitemapData(): Promise<PeopleSitemapData> {
  *
  * Upstream fetches are shared across shards via getCachedPeopleSitemapData.
  */
-export async function fetchPeopleSitemapEntries(
+async function buildPeopleSitemapEntries(
 	baseUrl: string,
 	shard?: number,
 ): Promise<MetadataRoute.Sitemap> {
@@ -1155,5 +1155,52 @@ export async function fetchPeopleSitemapEntries(
 		if (warning) console.warn(warning);
 	}
 	return deduped;
+}
+
+/**
+ * Serves one people shard, from the tagged data cache when there is one.
+ *
+ * Why the derived list is cached and not just the upstream reads it is built
+ * from: those reads were already cached, and the shard still took 9-17s on
+ * every request in production, because the cache hit only skips the network.
+ * Each request still deserialized ~478k person rows out of 153 cache entries,
+ * rebuilt the maps and walked the whole corpus to keep the ~7.5k rows that fall
+ * in this shard. Caching the finished list skips all of that. Measured against
+ * production 2026-09-25: `/sitemap/59.xml` answered in 9.1, 10.7, 11.5, 14.5 and
+ * 17.5 seconds across five sequential fetches, every one a CDN MISS, which is
+ * what Search Console reports as a sitemap it could not read.
+ *
+ * Cached here rather than at the CDN **because of takedowns**. A CDN copy is a
+ * finished file that `revalidate-person` cannot reach, so a person who asked to
+ * be delisted would keep being advertised for the life of the TTL. This entry
+ * carries PEOPLE_SITEMAP_CACHE_TAG, the tag that webhook already busts, so a
+ * takedown still takes effect on the next request. Do not swap this for
+ * `Cache-Control: s-maxage` without solving that.
+ *
+ * Failures are not cached: `buildPeopleSitemapEntries` throws on a bad upstream
+ * and `unstable_cache` stores only what the wrapped function returns, so the
+ * band stays fail-closed.
+ *
+ * The runtime gate mirrors `fetchElectionApiJsonCached`: outside the Next server
+ * runtime (CLI scripts, the logic suite) `unstable_cache` misbehaves, so the
+ * uncached builder runs instead.
+ */
+export async function fetchPeopleSitemapEntries(
+	baseUrl: string,
+	shard?: number,
+): Promise<MetadataRoute.Sitemap> {
+	// The unsharded call walks the whole corpus and is only reachable from CLI
+	// scripts and tests; caching an entry that large would buy nothing and risks
+	// silently exceeding the data-cache entry limit.
+	if (shard === undefined || !process.env['NEXT_RUNTIME']) {
+		return buildPeopleSitemapEntries(baseUrl, shard);
+	}
+
+	const { unstable_cache } = await import('next/cache');
+	return await unstable_cache(
+		async () => buildPeopleSitemapEntries(baseUrl, shard),
+		['people-sitemap-shard', baseUrl, String(shard)],
+		{ revalidate: 3600, tags: [PEOPLE_SITEMAP_CACHE_TAG] },
+	)();
 }
 

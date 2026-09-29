@@ -27,6 +27,7 @@ import re
 import subprocess
 import sys
 import time
+import unicodedata
 
 BASE = "https://goodparty.org"
 INDEX = f"{BASE}/sitemap.xml"
@@ -50,6 +51,26 @@ LOC = re.compile(r"<loc>([^<]+)</loc>")
 # The 8 hex chars a canonical /people URL ends in.
 ID8 = re.compile(r"-([0-9a-f]{8})$", re.I)
 
+# Punctuation slugifyName() deletes outright rather than turning into a hyphen:
+# curly and straight apostrophes, the okina, the modifier apostrophe, and the
+# period. "O'Brien" becomes "obrien" and "T.J." becomes "tj", so a query has to
+# be put through the same transform or it can never match the slug.
+DELETED_PUNCTUATION = "\u2018\u2019\u02bb\u02bc'."
+
+
+def slugify_name(name: str) -> str:
+    """The Python twin of slugifyName() in src/lib/personSlug.ts.
+
+    Kept deliberately in step with it: accents are folded (NFKD, drop combining
+    marks), the punctuation above is deleted, every other non-alphanumeric run
+    collapses to a hyphen. If that function changes, change this with it.
+    """
+    s = unicodedata.normalize("NFKD", name.lower())
+    s = "".join(c for c in s if not unicodedata.combining(c))
+    s = "".join(c for c in s if c not in DELETED_PUNCTUATION)
+    s = re.sub(r"[^a-z0-9]+", "-", s)
+    return s.strip("-")
+
 
 def cache_dir() -> pathlib.Path:
     root = os.environ.get("SITEMAP_CACHE_DIR")
@@ -65,8 +86,11 @@ def people_shard_for(url_or_slug: str) -> int | None:
     """The shard id holding a /people URL, read straight off its id suffix.
 
     Mirrors peopleShardForPersonId: parseInt(id8, 16) % 64, offset by the band
-    start. An id with no hex tail falls in shard 0 of the band rather than being
-    dropped, because a person with no shard would be a person with no entry.
+    start. Returns None when the slug has no hex tail, which differs on purpose
+    from the TS original's fallback to shard 0. Generating a sitemap entry and
+    resolving a URL someone typed are different jobs: there a missing tail must
+    not drop a person, here it means "this is not a profile URL", and answering
+    with a shard anyway would be a confident wrong answer.
     """
     slug = url_or_slug.rstrip("/").split("/")[-1]
     m = ID8.search(slug)
@@ -82,7 +106,10 @@ def shard_for_url(url: str) -> tuple[int | None, str]:
     if path.startswith("/people/"):
         s = people_shard_for(path)
         if s is None:
-            return PEOPLE_BAND_START, "people band, but the slug has no 8-hex id tail"
+            return None, ("a /people slug must end in the 8-hex person id, as in "
+                          "/people/joy-page-1424135b. Without it there is no shard to "
+                          "compute and the URL is itself a 404, so search by name "
+                          "instead of trusting a guessed slug.")
         return s, "people band"
     if path.startswith("/elections/"):
         parts = [p for p in path.split("/") if p]
@@ -107,7 +134,11 @@ def shards_for_band(band: str, state: str | None) -> list[int]:
         if state:
             code = state.upper()
             if code not in STATE_CODES:
-                sys.exit(f"error: {state!r} is not one of the 51 state/DC codes")
+                # Exit 2, not 1: a bad flag value is bad usage, and 1 is reserved
+                # for "searched successfully, found nothing".
+                print(f"error: {state!r} is not one of the 51 state/DC codes",
+                      file=sys.stderr)
+                sys.exit(2)
             return [STATE_CODES.index(code) + 1]
         return list(range(1, len(STATE_CODES) + 1))
     if band == "people":
@@ -241,6 +272,11 @@ def main() -> int:
 
     if not args.query:
         ap.error("give a query, or use --shard-for URL")
+    if not args.query.strip():
+        # An empty pattern matches every URL, so this would "succeed" with the
+        # whole band as hits. That reads as a result and is not one.
+        ap.error("the query is empty or whitespace only, which would match every "
+                 "URL in the band; give something to search for")
 
     # A /people URL or full slug pins one file, so skip the band sweep.
     if args.band == "people" and not args.regex:
@@ -265,8 +301,14 @@ def main() -> int:
         needle = args.query.strip()
         if "/" in needle:
             needle = needle.rstrip("/").split("/")[-1]
-        parts = [re.escape(p) for p in re.split(r"[\s_-]+", needle) if p]
-        pattern = re.compile(r"[-/]".join(parts), re.I) if parts else re.compile(re.escape(needle), re.I)
+        # Joining on [-/] rather than a literal hyphen lets a place query span a
+        # path boundary, so "gallatin county bozeman" still finds
+        # /elections/mt/gallatin-county/bozeman.
+        parts = [re.escape(p) for p in slugify_name(needle).split("-") if p]
+        if not parts:
+            ap.error(f"{args.query!r} has no letters or digits to search for once "
+                     f"slugified, and an empty pattern would match every URL")
+        pattern = re.compile(r"[-/]".join(parts), re.I)
 
     if not args.quiet:
         print(f"Searching {len(shards)} sitemap file(s) for {args.query!r} "

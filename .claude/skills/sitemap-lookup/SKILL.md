@@ -141,6 +141,13 @@ verify the candidates and use the page title (it carries the office and place,
 e.g. "Commissioner, ANC SMD 8C08") to pick, or show the person the options
 rather than guessing which one they meant.
 
+**Type the name as it is written; the script slugifies it for you.** Profile
+slugs delete apostrophes and periods and fold accents, so `O'Brien` is `obrien`,
+`T.J.` is `tj` and `José` is `jose`. The script mirrors `slugifyName()` from
+`src/lib/personSlug.ts` so `"Pat O'Brien"` finds `pat-obrien-e5a0bdd4`. If that
+function ever changes, `slugify_name()` in the script has to change with it —
+otherwise names with punctuation silently stop matching.
+
 **Take a county from the slug, never from a place name.** Place and county names
 collide — 20 Missouri cities are named after a county they are not in — so read
 the county segment out of the URL you found instead of inferring it.

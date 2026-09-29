@@ -83,6 +83,8 @@ export const list_pageSections = {
 								'https://cdn.sanity.io/images/3rbseux7/production/db3caeddd65e25c3ef1f8fecf395943a41cc417d-3000x2000.png',
 							component_featuredCitiesBlock:
 								'https://cdn.sanity.io/images/3rbseux7/production/9dff636003ac0fe08810dab73ab5d85704104836-3000x2000.png',
+							component_featuredCandidatesBlock:
+								'https://cdn.sanity.io/images/3rbseux7/production/8bfe607111dbfc6a0a017794be8c302ffd6e6510-3000x2000.png',
 							component_goodPartyOrgPledge:
 								'https://cdn.sanity.io/images/3rbseux7/production/3af863344c213d146cc5c28a2fd63efd4c381631-3000x2000.png',
 							component_jobOpeningsBlock:

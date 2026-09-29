@@ -235,9 +235,14 @@ describe('buildRepresentativeCards', () => {
 		expect(card?.location).toBe('Austin, TX');
 	});
 
-	test('skips past terms and rows without a person', () => {
+	test('skips past terms, terms whose current flag is unknown, and rows without a person', () => {
 		const persons = new Map([[UNPLEDGED_ID, personRow(UNPLEDGED_ID)]]);
-		const cards = buildRepresentativeCards([officeholder({ isCurrent: false }), officeholder({ personId: null })], persons, place, new Set());
+		const cards = buildRepresentativeCards(
+			[officeholder({ isCurrent: false }), officeholder({ isCurrent: null }), officeholder({ personId: null })],
+			persons,
+			place,
+			new Set(),
+		);
 
 		expect(cards).toHaveLength(0);
 	});

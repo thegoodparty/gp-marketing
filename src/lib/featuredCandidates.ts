@@ -81,7 +81,8 @@ export function buildRepresentativeCards(
 ): FeaturedPersonCard[] {
 	const cards: FeaturedPersonCard[] = [];
 	for (const oh of officeholders) {
-		if (oh.isCurrent === false) continue;
+		// Only an explicit current term counts, as the profile's role and Incumbent pill decide it; null is unknown.
+		if (oh.isCurrent !== true) continue;
 		const personId = oh.personId ?? null;
 		if (!personId) continue;
 		const person = personsById.get(personId.toLowerCase());

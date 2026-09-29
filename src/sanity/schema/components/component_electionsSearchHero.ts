@@ -5,30 +5,10 @@ import { getIcon } from '../../utils/getIcon.tsx';
 export const component_electionsSearchHero = {
 	title: 'Elections Search Hero',
 	name: 'component_electionsSearchHero',
-	description: 'Hero section for Elections Pages with search functionality and state selection dropdown.',
+	description: 'Hero for the Elections page: a headline, a city or county search, and a carousel of photos with quotes.',
 	type: 'object',
 	icon: getIcon('Search'),
 	fields: [
-		{
-			title: 'Logo Settings',
-			name: 'logoSettings',
-			type: 'object',
-			fields: [
-				{
-					title: 'Show Logo',
-					name: 'showLogo',
-					type: 'boolean',
-					initialValue: true,
-				},
-				{
-					title: 'Logo Image',
-					name: 'img_logoImage',
-					type: 'image',
-					description: 'Optional custom logo image. If not provided, default logo will be used.',
-				},
-			],
-			group: 'logoSettings',
-		},
 		{
 			title: 'Content',
 			name: 'electionsSearchHeroContent',
@@ -59,35 +39,68 @@ export const component_electionsSearchHero = {
 					title: 'Button Text',
 					name: 'field_buttonText',
 					type: 'string',
+					description: 'Label on the search button. The search itself works the same as the Elections Near You Block.',
 					initialValue: 'Search',
-				},
-				{
-					title: 'Button Style',
-					name: 'field_buttonStyle',
-					type: 'string',
-					options: {
-						list: [
-							{ title: 'Primary', value: 'primary' },
-							{ title: 'Secondary', value: 'secondary' },
-							{ title: 'Outline', value: 'outline' },
-						],
-					},
-					initialValue: 'primary',
 				},
 			],
 			group: 'ctaAction',
+		},
+		{
+			title: 'Carousel Slides',
+			name: 'list_slides',
+			type: 'array',
+			description:
+				'Photos with a quote card, shown beside the search. Add as many as you like; with none the hero shows the text and search alone.',
+			of: [
+				{
+					title: 'Slide',
+					name: 'slide',
+					type: 'object',
+					fields: [
+						{
+							title: 'Photo',
+							name: 'img_photo',
+							type: 'image',
+							description: 'Shown as a large square. A slide with no photo is skipped.',
+							options: { hotspot: true },
+							validation: (R: any) => R.required(),
+						},
+						{
+							title: 'Quote',
+							name: 'field_quote',
+							type: 'text',
+							rows: 3,
+							description: 'Short. About two or three lines fit on the card.',
+						},
+						{
+							title: 'Quote By',
+							name: 'ref_quoteBy',
+							type: 'ref_quoteBy',
+							description: 'Supplies the name, title, and small photo on the quote card.',
+						},
+					],
+					preview: {
+						select: {
+							title: 'ref_quoteBy.personOverview.field_personName',
+							organisation: 'ref_quoteBy.organisationOverview.field_organisationName',
+							subtitle: 'field_quote',
+							media: 'img_photo',
+						},
+						prepare: (x: Record<string, unknown>) => ({
+							title: (x['title'] as string | undefined) || (x['organisation'] as string | undefined) || 'Slide',
+							subtitle: x['subtitle'] as string | undefined,
+							media: x['media'],
+						}),
+					},
+				},
+			],
+			group: 'carousel',
 		},
 		{
 			title: 'Design Settings',
 			name: 'electionsSearchHeroDesignSettings',
 			type: 'object',
 			fields: [
-				{
-					title: 'Background Image',
-					name: 'img_backgroundImage',
-					type: 'image',
-					description: 'Background image for the hero section.',
-				},
 				{
 					title: 'Background Color',
 					name: 'field_backgroundColor',
@@ -98,8 +111,7 @@ export const component_electionsSearchHero = {
 							{ title: 'Midnight', value: 'midnight' },
 						],
 					},
-					initialValue: 'midnight',
-					description: 'Background color when no background image is provided.',
+					initialValue: 'cream',
 				},
 			],
 			group: 'electionsSearchHeroDesignSettings',
@@ -115,7 +127,7 @@ export const component_electionsSearchHero = {
 		select: {
 			title: 'electionsSearchHeroContent.field_headerText',
 			_type: '_type',
-			media: 'electionsSearchHeroDesignSettings.img_backgroundImage',
+			media: 'list_slides.0.img_photo',
 		},
 		prepare: (x: Record<string, unknown>) => {
 			const infer = {
@@ -124,7 +136,7 @@ export const component_electionsSearchHero = {
 				fallback: {
 					previewTitle: 'electionsSearchHeroContent.field_headerText',
 					previewSubTitle: '*Elections Search Hero',
-					previewMedia: 'electionsSearchHeroDesignSettings.img_backgroundImage',
+					previewMedia: 'list_slides.0.img_photo',
 					title: 'Elections Search Hero',
 				},
 			};
@@ -144,11 +156,6 @@ export const component_electionsSearchHero = {
 	},
 	groups: [
 		{
-			title: 'Logo Settings',
-			name: 'logoSettings',
-			icon: getIcon('Image'),
-		},
-		{
 			title: 'Content',
 			name: 'electionsSearchHeroContent',
 			icon: getIcon('TextFont'),
@@ -157,6 +164,11 @@ export const component_electionsSearchHero = {
 			title: 'CTA',
 			name: 'ctaAction',
 			icon: getIcon('Rocket'),
+		},
+		{
+			title: 'Carousel',
+			name: 'carousel',
+			icon: getIcon('Image'),
 		},
 		{
 			title: 'Design Settings',

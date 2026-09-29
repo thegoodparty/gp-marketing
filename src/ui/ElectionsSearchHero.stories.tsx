@@ -1,112 +1,85 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { primaryButtonStyleType, secondaryButtonStyleType } from './_lib/designTypesStore.ts';
-import { imageJpg, logoSVG } from './_data/media.tsx';
-import { ElectionsSearchHero } from './ElectionsSearchHero.tsx';
-import { US_STATES } from '~/constants/usStates';
+import { avatarJpg, imageJpg, imageJpgAlt, imagePng } from './_data/media.tsx';
+import { ElectionsSearchHero, type ElectionsSearchHeroSlide } from './ElectionsSearchHero.tsx';
 
 const meta: Meta<typeof ElectionsSearchHero> = {
 	title: 'New Components/Page Sections/Elections Search Hero',
 	component: ElectionsSearchHero,
 	render: args => <ElectionsSearchHero {...args} />,
+	parameters: {
+		design: {
+			type: 'figma',
+			url: 'https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2035-1471',
+		},
+	},
 };
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const baseArgs = {
-	showLogo: true,
-	headerText: 'Find Elections Near You',
-	bodyCopy: 'Search for elections in your area and discover local candidates running for office.',
-	states: US_STATES,
-	cta: {
-		buttonType: 'button' as const,
-		label: 'Search',
-		buttonProps: {
-			styleType: primaryButtonStyleType,
-		},
+const slides: ElectionsSearchHeroSlide[] = [
+	{
+		_key: 'one',
+		image: imageJpg(),
+		quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.',
+		author: { name: 'Angel Johnston', meta: ['Three Rivers City Mayor'], image: avatarJpg() },
 	},
+	{
+		_key: 'two',
+		image: imageJpgAlt(),
+		quote: 'Running as an independent meant I answered to my neighbors, not a party.',
+		author: { name: 'Jordan Reyes', meta: ['School Board Trustee'], image: avatarJpg() },
+	},
+	{
+		_key: 'three',
+		image: imagePng(),
+		quote: 'GoodParty.org helped me reach voters I never could have on my own.',
+		author: { name: 'Sam Okafor', meta: ['County Commissioner'], image: avatarJpg() },
+	},
+];
+
+const baseArgs = {
+	headerText: 'Find independents on your ballot.',
+	bodyCopy: 'Explore upcoming elections near you. Browse candidates, elected officials, and local requirements to run for office.',
+	buttonLabel: 'Search',
+	slides,
 };
 
 export const Default: Story = {
 	args: {
 		...baseArgs,
-		backgroundColor: 'midnight',
-	},
-	parameters: {
-		design: {
-			type: 'figma',
-			url: 'https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=22892-255964',
-		},
+		backgroundColor: 'cream',
 	},
 };
 
-export const WithBackgroundImage: Story = {
+export const Midnight: Story = {
 	args: {
 		...baseArgs,
 		backgroundColor: 'midnight',
-		backgroundImage: imageJpg(),
 	},
 };
 
-export const WithoutLogo: Story = {
+export const SingleSlide: Story = {
 	args: {
 		...baseArgs,
-		showLogo: false,
-		backgroundColor: 'midnight',
+		backgroundColor: 'cream',
+		slides: slides.slice(0, 1),
 	},
 };
 
-export const WithCustomLogo: Story = {
+export const PhotoOnly: Story = {
 	args: {
 		...baseArgs,
-		logoImage: logoSVG(),
-		backgroundColor: 'midnight',
+		backgroundColor: 'cream',
+		slides: slides.map(slide => ({ _key: slide._key, image: slide.image })),
 	},
 };
 
-export const WithDefaultState: Story = {
+export const NoSlides: Story = {
 	args: {
 		...baseArgs,
-		backgroundColor: 'midnight',
-		defaultStateValue: 'CA',
-	},
-};
-
-export const WithCustomCTA: Story = {
-	args: {
-		...baseArgs,
-		backgroundColor: 'midnight',
-		cta: {
-			buttonType: 'button' as const,
-			label: 'Find My Elections',
-			buttonProps: {
-				styleType: secondaryButtonStyleType,
-			},
-		},
-	},
-};
-
-export const Minimal: Story = {
-	args: {
-		showLogo: false,
-		headerText: 'Find Elections',
-		states: US_STATES,
-		backgroundColor: 'midnight',
-		cta: {
-			buttonType: 'button' as const,
-			label: 'Search',
-			buttonProps: {
-				styleType: primaryButtonStyleType,
-			},
-		},
-	},
-};
-
-export const LongBodyCopy: Story = {
-	args: {
-		...baseArgs,
-		backgroundColor: 'midnight',
-		bodyCopy: 'Search for elections in your area and discover local candidates running for office. Learn about their platforms, voting records, and policy positions. Make informed decisions about who represents you at every level of government.',
+		backgroundColor: 'cream',
+		slides: [],
 	},
 };

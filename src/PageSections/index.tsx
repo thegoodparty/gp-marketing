@@ -58,6 +58,8 @@ import { DemoRequestBlockSection } from '~/PageSections/DemoRequestBlockSection'
 import { ElectionPositionResourcesBlockSection } from '~/PageSections/ElectionPositionResourcesBlockSection';
 import { NearbyOfficesSection } from '~/PageSections/NearbyOfficesSection';
 
+import { IllustratedColumnsBlockSection } from '~/PageSections/IllustratedColumnsBlockSection';
+
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
 
 export type { TokenMap };
@@ -688,6 +690,12 @@ export function PageSections(props: Props) {
 									resourcesOverride={props.sectionOverrides?.component_electionPositionResourcesBlock}
 									tokens={props.tokens}
 								/>
+							</Boundary>
+						);
+					case 'component_illustratedColumnsBlock':
+						return (
+							<Boundary key={section._key} componentName='Illustrated Columns Block'>
+								<IllustratedColumnsBlockSection {...section} tokens={props.tokens} />
 							</Boundary>
 						);
 					default:

@@ -105,6 +105,8 @@ export const list_pageSections = {
 								'https://cdn.sanity.io/images/3rbseux7/production/5207be991898bbbd9ba558c4a4ddb93f1e75351b-3000x2000.png',
 							component_testimonialAutoScroll:
 								'https://cdn.sanity.io/images/3rbseux7/production/4cc26cd73a3b57c6d5e31c1016978191cf217e45-3000x2000.png',
+							component_illustratedColumnsBlock:
+								'https://cdn.sanity.io/images/3rbseux7/production/fd3fdb442852e7d8c3bbd21fecc00ed43bbdf245-3000x2000.png',
 						};
 						return s in i ? i[s] : undefined;
 					},
@@ -200,6 +202,7 @@ export const list_pageSections = {
 					name: 'grid',
 					title: 'Grid',
 					of: [
+						'component_illustratedColumnsBlock',
 						'component_nearbyOffices',
 						'component_comparisonBlock',
 						'component_iconContentBlock',
@@ -248,6 +251,7 @@ export const list_pageSections = {
 	},
 	type: 'array',
 	of: [
+		{ title: 'Illustrated Columns Block', type: 'component_illustratedColumnsBlock' },
 		{ title: 'Election Position Resources Block', type: 'component_electionPositionResourcesBlock' },
 		{ title: 'Nearby Offices', type: 'component_nearbyOffices' },
 		{ title: 'Demo Request Block', type: 'component_demoRequestBlock' },

@@ -2675,6 +2675,21 @@
             },
             "rest": {
               "type": "inline",
+              "name": "component_illustratedColumnsBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
               "name": "component_electionPositionResourcesBlock"
             }
           },
@@ -8644,6 +8659,124 @@
           "value": {
             "type": "object",
             "attributes": {
+              "field_blockColorCreamMidnight": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "field_blockColorCreamMidnight"
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "componentSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "componentSettings"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "component_illustratedColumnsBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "component_illustratedColumnsBlock"
+          }
+        },
+        "summaryInfo": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "summaryInfo"
+          },
+          "optional": true
+        },
+        "list_illustratedColumns": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "array",
+            "of": {
+              "type": "object",
+              "attributes": {
+                "img_image": {
+                  "type": "objectAttribute",
+                  "value": {
+                    "type": "inline",
+                    "name": "img_image"
+                  },
+                  "optional": true
+                },
+                "field_title": {
+                  "type": "objectAttribute",
+                  "value": {
+                    "type": "inline",
+                    "name": "field_title"
+                  },
+                  "optional": true
+                },
+                "field_description": {
+                  "type": "objectAttribute",
+                  "value": {
+                    "type": "string"
+                  },
+                  "optional": true
+                },
+                "button": {
+                  "type": "objectAttribute",
+                  "value": {
+                    "type": "inline",
+                    "name": "button"
+                  },
+                  "optional": true
+                },
+                "_type": {
+                  "type": "objectAttribute",
+                  "value": {
+                    "type": "string",
+                    "value": "illustratedColumn"
+                  }
+                }
+              },
+              "rest": {
+                "type": "object",
+                "attributes": {
+                  "_key": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "optional": true
+        },
+        "illustratedColumnsBlockDesignSettings": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_columnLayout234Columns": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "field_columnLayout234Columns"
+                },
+                "optional": true
+              },
               "field_blockColorCreamMidnight": {
                 "type": "objectAttribute",
                 "value": {

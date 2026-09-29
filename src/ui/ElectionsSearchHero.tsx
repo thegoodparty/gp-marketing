@@ -151,10 +151,12 @@ export function ElectionsSearchHero(props: ElectionsSearchHeroProps) {
 													{item.quote && <blockquote className={quoteText()}>&ldquo;{item.quote}&rdquo;</blockquote>}
 													{item.author && (
 														<figcaption className={quoteAuthor()}>
-															<div className={quoteAvatar()}>
-																<Avatar image={item.author.image ?? item.image} size='sm' />
-																<Logo width={20} height={15} className='absolute -bottom-px -right-px' aria-hidden='true' />
-															</div>
+															{item.author.image && (
+																<div className={quoteAvatar()}>
+																	<Avatar image={item.author.image} size='sm' />
+																	<Logo width={20} height={15} className='absolute -bottom-px -right-px' aria-hidden='true' />
+																</div>
+															)}
 															<div className='flex flex-col gap-1'>
 																<span className={quoteName()}>{item.author.name}</span>
 																{item.author.meta?.[0] && <span className={quoteMeta()}>{item.author.meta[0]}</span>}

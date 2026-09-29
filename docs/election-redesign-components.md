@@ -250,7 +250,7 @@ Decisions that came out of it and affect other blocks in the batch:
   repeatable list (photo, quote, and a `ref_quoteBy` person for the name, title and avatar), so an
   editor adds as many as they want and picks a large photo per slide. The quote library was rejected
   because a person's profile picture is a small headshot and would be the only source for the 524px
-  square (Emily, 2026-09-29). The avatar on the quote card falls back to the slide photo.
+  square (Emily, 2026-09-29). A person with no profile picture gets a quote card with no avatar.
 - **Old fields were removed, not hidden.** The logo settings and background image had no home in the
   new design, so the schema no longer declares them. Studio shows the leftover values on the live
   document as unknown fields with a remove button; that is the one content cleanup the batch needs.

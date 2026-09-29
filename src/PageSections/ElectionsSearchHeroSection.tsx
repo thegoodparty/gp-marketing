@@ -15,7 +15,7 @@ export function ElectionsSearchHeroSection(section: Extract<Sections, { _type: '
 			{
 				_key: slide._key,
 				image: slide.img_photo as unknown as SanityImage,
-				quote: slide.field_quote ?? undefined,
+				quote: stegaClean(slide.field_quote) ?? undefined,
 				author: resolveAuthor(slide.ref_quoteBy),
 			},
 		];

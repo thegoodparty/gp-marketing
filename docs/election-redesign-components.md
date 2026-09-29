@@ -57,7 +57,7 @@ trust:
 | Branded CTA with icon | `component_ctaBlock`, `component_ctaBannerBlock` |
 | 3-block CTA with icon | `component_ctaCardsBlock` |
 | 3-column e-book support block | ~~`component_ctaCardsBlock`, `component_twoUpCardBlock`~~ — audited, rejected. Built as `component_electionPositionResourcesBlock`; see below |
-| Find elections container | `component_electionsSearchHero`, `component_electionsIndexBlock` |
+| Find elections container | ~~`component_electionsSearchHero`, `component_electionsIndexBlock`~~ — audited: the hero is `component_electionsSearchHero`, extended; see below |
 | Find more elections block | `component_electionsIndexBlock` |
 | Local election rows block | `component_electionsIndexBlock` |
 | Browse elections in Location Hero | `component_locationLandingPageHero` + the search hero |
@@ -227,6 +227,42 @@ Noted and not acted on: both full-width frames label the search box "Enter your 
 and the body copy says "Enter your address". The search resolves cities and counties only, so the
 live copy was kept (Emily, 2026-09-25). Design owns whether the block should accept a street
 address; that would be a change to `electionsNearYouSearch`, not to the block.
+
+**Elections Search Hero** (Elections page) — extended, not rebuilt. `component_electionsSearchHero`
+already existed and is live on exactly one page, the Elections landing page, as a centred dark hero with
+a logo, a state dropdown and a button to that state's page. The redesign (Figma 2035:1471 desktop,
+2035:2402 mobile) is a light two-column hero: left-aligned headline and body over a city or county
+search, and a photo carousel with a floating quote card beside them. Marketing chose to redesign the
+block in place rather than add a second hero (Emily, 2026-09-29), so this PR is held as a draft and
+batched with the rest of the Elections page redesign.
+
+Decisions that came out of it and affect other blocks in the batch:
+
+- **The search is one component now.** The city-or-county search that lived inside
+  `ElectionsNearYouBlock` (Google Places suggestions, the resolve-place lookup, the analytics events,
+  the navigation) was pulled out into `src/ui/ElectionsNearYouSearch.tsx`, and both blocks render it.
+  Any other block in the batch that wants "the same search bar" (the Voter Hub video hero, for one)
+  should render that component, not copy the form. It takes a `placement` string so the Viewed,
+  Completed and Errored events can tell the blocks apart, and `layout` / `appearance` variants for the
+  two looks the designs draw (the Near You pill with a map pin, the hero's squared field with a search
+  icon). The placeholder stays "Enter your city or county" on both, for the reason recorded above.
+- **The carousel content is block-local, not the quote library.** Slides live on the hero as a
+  repeatable list (photo, quote, and a `ref_quoteBy` person for the name, title and avatar), so an
+  editor adds as many as they want and picks a large photo per slide. The quote library was rejected
+  because a person's profile picture is a small headshot and would be the only source for the 524px
+  square (Emily, 2026-09-29). The avatar on the quote card falls back to the slide photo.
+- **Old fields were removed, not hidden.** The logo settings and background image had no home in the
+  new design, so the schema no longer declares them. Studio shows the leftover values on the live
+  document as unknown fields with a remove button; that is the one content cleanup the batch needs.
+  The background colour field stayed and the component still defaults to midnight, because the live
+  document was saved with that value and the redesign is cream; the editor switches it when the
+  batch goes live.
+- **Empty state is "text and search only".** With no slides the carousel column is left out and the
+  hero collapses to one column, which is exactly what the live document renders until slides are
+  added. `src/PageSections/electionsSearchHeroSection.test.tsx` pins it.
+- **Default text sizes do not exist here.** `typography.css` clears Tailwind's `--text-*` scale, so
+  `text-sm` and `text-base` are silently no-ops; a 14px label has to be `text-[0.875rem]`. The Near
+  You block's listbox already did this, which is how it was noticed.
 
 ## The shared election counts, as marketing defined them
 

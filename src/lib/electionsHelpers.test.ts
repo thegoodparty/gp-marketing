@@ -6,6 +6,7 @@ import {
 	buildOfficeItemsFromPlaceRaces,
 	buildRaceCandidatesHref,
 	buildRacePositionHref,
+	joinPlaceNames,
 	buildRaceSlug,
 	buildPlaceRacePositionHref,
 	buildSubplaceRaceSlug,
@@ -948,6 +949,36 @@ describe('prependClaimedWebsiteIfNew', () => {
 describe('linkHrefAlreadyPresent', () => {
 	test('returns false when href is not in links', () => {
 		expect(linkHrefAlreadyPresent([{ href: 'https://example.com' }], 'https://other.com')).toBe(false);
+	});
+});
+
+/**
+ * The title defect this exists for: a district nested under the city slot resolves the race's own
+ * place into more than one slot, so the title read "Local School Board in Dutton/Brady K-12
+ * Schools, Dutton/Brady K-12 Schools, Montana". Source-scanning guards in canonicalMetadata.test.ts
+ * pin that the routes call this; the behaviour is pinned here, where it can catch an inversion.
+ */
+describe('joinPlaceNames', () => {
+	test('keeps distinct names in the order given', () => {
+		expect(joinPlaceNames('Center City', 'Chisago County')).toBe('Center City, Chisago County');
+		expect(joinPlaceNames('Lincoln Township', 'Choteau', 'Teton County')).toBe('Lincoln Township, Choteau, Teton County');
+	});
+
+	test('names a repeated place once', () => {
+		const district = 'Dutton/Brady K-12 Schools';
+		expect(joinPlaceNames(district, district)).toBe(district);
+		expect(joinPlaceNames(district, district, 'Teton County')).toBe(`${district}, Teton County`);
+	});
+
+	/** The half-collapsed phrase that a comparison against the joined string let through. */
+	test('drops a repeat that is not adjacent', () => {
+		expect(joinPlaceNames('Brady K-12', 'Choteau', 'Brady K-12')).toBe('Brady K-12, Choteau');
+	});
+
+	test('skips blank slots rather than emitting empty segments', () => {
+		expect(joinPlaceNames('Choteau', null, 'Teton County')).toBe('Choteau, Teton County');
+		expect(joinPlaceNames(undefined, '', 'Teton County')).toBe('Teton County');
+		expect(joinPlaceNames(null, undefined)).toBe('');
 	});
 });
 

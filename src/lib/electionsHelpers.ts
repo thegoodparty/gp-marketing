@@ -528,6 +528,29 @@ export function buildPlaceRacePositionHref(placeSegments: string[], raceSlug: st
 }
 
 /**
+ * The place names for a page title, in order, with repeats dropped and blanks skipped.
+ *
+ * Every slot in an /elections title can fall back to the race's own place: a district nested
+ * under the city slot fills city and county alike, and a subplace route can have any one of its
+ * three slots resolve to the same place as another. Joining them blindly said the name twice
+ * ("Local School Board in Dutton/Brady K-12 Schools, Dutton/Brady K-12 Schools, Montana").
+ *
+ * Deduplicating on the names rather than on the joined string is what makes this total: a
+ * half-collapsed phrase matches no single slot, so a comparison against the phrase lets a repeat
+ * back in. Names are compared as displayed, which is the level the defect lives at.
+ */
+export function joinPlaceNames(...names: Array<string | null | undefined>): string {
+	const seen = new Set<string>();
+	const parts: string[] = [];
+	for (const name of names) {
+		if (!name || seen.has(name)) continue;
+		seen.add(name);
+		parts.push(name);
+	}
+	return parts.join(', ');
+}
+
+/**
  * Whether a place segment in a position page's URL names a real place.
  *
  * A joint office spends one URL segment per combined role, and those segments sit in the

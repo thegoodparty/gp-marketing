@@ -89,6 +89,30 @@ describe('/elections page titles', () => {
 	 * county lives in `placePhrase`, which already skips the county for a joint office whose
 	 * "city" segment is really an office name.
 	 */
+	/**
+	 * A district nested under the city slot resolves the race's own place into both the city and
+	 * the county slot, so the join read "Dutton/Brady K-12 Schools, Dutton/Brady K-12 Schools" on
+	 * `/elections/mt/dutton/brady-k-12-schools/position/local-school-board`. The description had
+	 * carried it for a while; the title inherited it when city-level titles moved onto placePhrase.
+	 */
+	it('never names the same place twice in a city-level title', async () => {
+		const cityRoutes = (await electionPageFiles()).filter(f => f.includes('[city]') && !f.endsWith('[city]/page.tsx'));
+		expect(cityRoutes.length).toBeGreaterThanOrEqual(4);
+		for (const file of cityRoutes) {
+			const body = metadataBody(await Bun.file(file).text());
+			// joinPlaceNames owns the dedupe and is unit-tested in electionsHelpers.test.ts; what a
+			// source scan can still add is that these routes go through it rather than joining by hand.
+			expect(body, `${file} must build placePhrase with joinPlaceNames`).toMatch(
+				/const placePhrase =[^;]*joinPlaceNames\(/,
+			);
+			if (body.includes('isRealSubplace')) {
+				expect(body, `${file} must build locationPhrase with joinPlaceNames`).toMatch(
+					/const locationPhrase =[^;]*joinPlaceNames\(/,
+				);
+			}
+		}
+	});
+
 	it('names the county in every city-level title', async () => {
 		// The city index page is excluded: it has no race in scope, so an unresolvable segment
 		// leaves `cityPlace` null and the page 404s before a title is served. `placePhrase` there
@@ -98,8 +122,15 @@ describe('/elections page titles', () => {
 		for (const file of cityRoutes) {
 			const body = metadataBody(await Bun.file(file).text());
 			expect(body, `${file} must derive its title place from placePhrase`).toMatch(/const placePhrase =/);
+			// The subplace branch builds its own phrase so it can order the subplace ahead of the city;
+			// the county has to be one of the names it is given, or that title loses its county.
+			if (body.includes('${locationPhrase}')) {
+				expect(body, `${file} locationPhrase must still name the county`).toMatch(
+					/const locationPhrase =[^;]*countyDisplayName/,
+				);
+			}
 			for (const [title] of body.matchAll(/title: `[^`]*`/g)) {
-				expect(title, `${file} title omits the county: ${title}`).toContain('${placePhrase}');
+				expect(title, `${file} title omits the county: ${title}`).toMatch(/\$\{(placePhrase|locationPhrase)\}/);
 			}
 		}
 	});

@@ -24,9 +24,9 @@ export function ElectionsSearchHeroSection(section: Extract<Sections, { _type: '
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Elections Search Hero'>
 			<ElectionsSearchHero
-				headerText={section.electionsSearchHeroContent?.field_headerText ?? undefined}
-				bodyCopy={section.electionsSearchHeroContent?.field_bodyCopy ?? undefined}
-				buttonLabel={section.ctaAction?.field_buttonText ?? 'Search'}
+				headerText={stegaClean(section.electionsSearchHeroContent?.field_headerText) ?? undefined}
+				bodyCopy={stegaClean(section.electionsSearchHeroContent?.field_bodyCopy) ?? undefined}
+				buttonLabel={stegaClean(section.ctaAction?.field_buttonText) ?? 'Search'}
 				backgroundColor={
 					section.electionsSearchHeroDesignSettings?.field_backgroundColor
 						? stegaClean(section.electionsSearchHeroDesignSettings.field_backgroundColor)

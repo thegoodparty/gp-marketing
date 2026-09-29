@@ -71,7 +71,9 @@ export default async function Page({
 	const candidates = candidacies.map((c, i) => mapCandidacyToCard(c, i));
 
 	const positionHref = `/elections/${pathBeforePosition}/position/${positionSlug}`;
-	const locationHref = `/elections/${cityPathSlug}`;
+	// A joint office in the city slot has no location page of its own — that path 404s —
+	// so the CTA falls back to the county, which is the nearest place that does resolve.
+	const locationHref = isRealCity ? `/elections/${cityPathSlug}` : `/elections/${countySlug}`;
 
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },

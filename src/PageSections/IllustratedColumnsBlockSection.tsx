@@ -53,7 +53,12 @@ export function IllustratedColumnsBlockSection(props: Props) {
 
 	const backgroundColor = settings?.field_blockColorCreamMidnight ? resolveBg(stegaClean(settings.field_blockColorCreamMidnight)) : 'cream';
 
-	const items = (section.list_illustratedColumns ?? []).map(column => buildColumn(column, tokens));
+	const items = (section.list_illustratedColumns ?? [])
+		.map(column => buildColumn(column, tokens))
+		.filter(item => Boolean(item.title) || Boolean(item.image) || item.description !== undefined);
+
+	// No columns means no block at all, not an empty anchor: the same rule as the other election blocks.
+	if (items.length === 0) return null;
 
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Illustrated Columns Block'>

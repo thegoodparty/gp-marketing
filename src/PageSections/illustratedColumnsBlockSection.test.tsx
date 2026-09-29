@@ -126,12 +126,11 @@ describe('IllustratedColumnsBlockSection', () => {
 		expect(html).toContain('Find my polling place');
 	});
 
-	test('renders nothing at all when there are no columns', () => {
-		expect(renderToStaticMarkup(<IllustratedColumnsBlockSection {...section} list_illustratedColumns={[]} />)).not.toContain(
-			'data-component="IllustratedColumnsBlock"',
-		);
-		expect(renderToStaticMarkup(<IllustratedColumnsBlockSection {...section} list_illustratedColumns={null} />)).not.toContain(
-			'data-component="IllustratedColumnsBlock"',
-		);
+	test('renders nothing at all when there are no columns, not even the section wrapper', () => {
+		expect(renderToStaticMarkup(<IllustratedColumnsBlockSection {...section} list_illustratedColumns={[]} />)).toBe('');
+		expect(renderToStaticMarkup(<IllustratedColumnsBlockSection {...section} list_illustratedColumns={null} />)).toBe('');
+
+		const blank = [{ _key: 'blank', _type: 'illustratedColumn' }] as unknown as NonNullable<typeof section.list_illustratedColumns>;
+		expect(renderToStaticMarkup(<IllustratedColumnsBlockSection {...section} list_illustratedColumns={blank} />)).toBe('');
 	});
 });

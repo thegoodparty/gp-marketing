@@ -250,7 +250,9 @@ def main() -> int:
     ap.add_argument("--band", choices=["people", "elections", "main", "all"],
                     default="people",
                     help="which band to search (default: people)")
-    ap.add_argument("--state", help="two-letter state/DC code, narrows --band elections to one file")
+    ap.add_argument("--state",
+                    help="two-letter state/DC code, narrows --band elections to one "
+                         "file; rejected with any other band, which is not state-split")
     ap.add_argument("--shard-for", metavar="URL",
                     help="print which sitemap file advertises this URL, without downloading")
     ap.add_argument("--regex", action="store_true",
@@ -275,6 +277,10 @@ def main() -> int:
 
     if not args.query:
         ap.error("give a query, or use --shard-for URL")
+    if args.state and args.band != "elections":
+        ap.error(f"--state only applies to --band elections (got --band {args.band}); "
+                 f"only the elections band is split by state. Did you mean "
+                 f"--band elections --state {args.state}?")
     if args.jobs < 1 or args.jobs > MAX_JOBS:
         ap.error(f"--jobs must be between 1 and {MAX_JOBS} (got {args.jobs}); the "
                  f"server starts returning 500s past about 6, so more is not faster")

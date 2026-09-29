@@ -69,6 +69,18 @@ describe('ElectionsSearchHeroSection', () => {
 		expect(html).toContain('School Board Trustee');
 	});
 
+	test('renders the dots and arrows with two or more slides, and neither with one', () => {
+		const two = renderToStaticMarkup(<ElectionsSearchHeroSection {...section} />);
+		const one = renderToStaticMarkup(<ElectionsSearchHeroSection {...section} list_slides={section.list_slides?.slice(0, 1) ?? null} />);
+
+		expect(two).toContain('aria-label="Previous slide"');
+		expect(two).toContain('aria-label="Next slide"');
+		expect(two).toContain('aria-label="Choose a slide"');
+		expect(one).not.toContain('aria-label="Previous slide"');
+		expect(one).not.toContain('aria-label="Next slide"');
+		expect(one).not.toContain('aria-label="Choose a slide"');
+	});
+
 	test('skips a slide that has no photo', () => {
 		const withoutPhoto = { ...slide('three', 'Sam Okafor', 'County Commissioner', 'No photo here.'), img_photo: null };
 		const html = renderToStaticMarkup(

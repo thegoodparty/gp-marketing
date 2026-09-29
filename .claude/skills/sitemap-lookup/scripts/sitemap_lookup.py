@@ -43,6 +43,9 @@ STATE_CODES = [
     "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA",
     "WV", "WI", "WY",
 ]
+# Past ~6 the server starts 500ing on sitemap generation, which silently truncates
+# a sweep; 16 is a hard stop well beyond any useful setting.
+MAX_JOBS = 16
 PEOPLE_SHARD_COUNT = 64
 PEOPLE_BAND_START = 1 + len(STATE_CODES)  # 52
 LAST_SHARD = PEOPLE_BAND_START + PEOPLE_SHARD_COUNT - 1  # 115
@@ -272,6 +275,12 @@ def main() -> int:
 
     if not args.query:
         ap.error("give a query, or use --shard-for URL")
+    if args.jobs < 1 or args.jobs > MAX_JOBS:
+        ap.error(f"--jobs must be between 1 and {MAX_JOBS} (got {args.jobs}); the "
+                 f"server starts returning 500s past about 6, so more is not faster")
+    if args.limit < 0:
+        ap.error(f"--limit cannot be negative (got {args.limit}); use 0 to count "
+                 f"matches without listing them")
     if not args.query.strip():
         # An empty pattern matches every URL, so this would "succeed" with the
         # whole band as hits. That reads as a result and is not one.
@@ -279,10 +288,12 @@ def main() -> int:
                  "URL in the band; give something to search for")
 
     # A /people URL or full slug pins one file, so skip the band sweep.
+    pinned = False
     if args.band == "people" and not args.regex:
         direct = people_shard_for(args.query)
         if direct is not None:
             shards = [direct]
+            pinned = True
             print(f"The id tail pins this to one file, {BASE}/sitemap/{direct}.xml",
                   file=sys.stderr)
         else:
@@ -291,7 +302,10 @@ def main() -> int:
         shards = shards_for_band(args.band, args.state)
 
     if args.regex:
-        pattern = re.compile(args.query, re.I)
+        try:
+            pattern = re.compile(args.query, re.I)
+        except re.error as exc:
+            ap.error(f"--regex given invalid regular expression {args.query!r}: {exc}")
     else:
         # "Joy Page" should match /people/joy-page-1424135b, so spaces and
         # underscores are all treated as the slug's hyphen.
@@ -323,6 +337,16 @@ def main() -> int:
                   f"retrying them gently", file=sys.stderr)
         more_hits, failures = search(retry, pattern, 2, True, args.quiet)
         hits.extend(more_hits)
+
+    if pinned and not hits:
+        # The pin was a guess off the query's tail and it did not pay off, so it
+        # may not have been an id at all. Sweeping is slow but a false "not
+        # found" is the one answer this tool must never give.
+        shards = shards_for_band(args.band, args.state)
+        if not args.quiet:
+            print(f"  nothing in the pinned file, so that tail was probably not an "
+                  f"id; sweeping all {len(shards)} people files", file=sys.stderr)
+        hits, failures = search(shards, pattern, args.jobs, args.refresh, args.quiet)
 
     seen = set()
     unique = []

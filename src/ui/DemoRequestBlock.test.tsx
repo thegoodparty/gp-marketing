@@ -192,6 +192,8 @@ describe('DemoRequestBlock', () => {
 
 	test('posts the answers to the same-origin proxy and shows the calendar on a pass', async () => {
 		await render();
+		dom.window.document.cookie = 'hubspotutk=0123456789abcdef0123456789abcdef';
+		dom.window.document.title = 'Request a demo | GoodParty.org';
 		await fillRaceAndGoals();
 		await fillContact();
 		await submitForm();
@@ -208,6 +210,8 @@ describe('DemoRequestBlock', () => {
 			first_name: 'Jordan',
 			email: 'jordan@example.com',
 			sms_consent: false,
+			hutk: '0123456789abcdef0123456789abcdef',
+			page_name: 'Request a demo | GoodParty.org',
 		});
 
 		await waitUntil(() => card().textContent?.includes('Pick a time, Jordan') ?? false);
@@ -215,6 +219,18 @@ describe('DemoRequestBlock', () => {
 		expect(card().querySelector('a[href="https://meetings.hubspot.com/example/demo"]')).not.toBeNull();
 		expect(trackedEvents.map(e => e.name)).toContain('Demo Request Submitted');
 		expect(trackedEvents.find(e => e.name === 'Demo Request Qualified')?.props).toMatchObject({ outcome: 'pass' });
+	});
+
+	test('submits with an empty hutk when the HubSpot cookie is malformed', async () => {
+		await render();
+		dom.window.document.cookie = 'hubspotutk=%GG-not-decodable';
+		await fillRaceAndGoals();
+		await fillContact();
+		await submitForm();
+
+		expect(fetchCalls).toHaveLength(1);
+		expect(fetchCalls[0]?.body).toMatchObject({ email: 'jordan@example.com', hutk: '' });
+		await waitUntil(() => card().textContent?.includes('Pick a time, Jordan') ?? false);
 	});
 
 	test('shows the tour card and redirects when the verdict is tour', async () => {

@@ -13,6 +13,7 @@ import {
 	formatFilingPeriodFromRace,
 	getStateName,
 	isRealPlaceSegment,
+	joinPlaceNames,
 	mapCandidacyToCard,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
@@ -57,6 +58,7 @@ export default async function Page({
 
 	const isRealSubplace =
 		race.Place?.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`) ?? false;
+	const isRealCity = isRealPlaceSegment(cityPlace.slug, city);
 
 	const stateName = getStateName(stateCode);
 	const cityName = cityPlace.name;
@@ -69,13 +71,15 @@ export default async function Page({
 	const candidates = candidacies.map((c, i) => mapCandidacyToCard(c, i));
 
 	const positionHref = `/elections/${pathBeforePosition}/position/${positionSlug}`;
-	const locationHref = `/elections/${cityPathSlug}`;
+	// A joint office in the city slot has no location page of its own — that path 404s —
+	// so the CTA falls back to the county, which is the nearest place that does resolve.
+	const locationHref = isRealCity ? `/elections/${cityPathSlug}` : `/elections/${countySlug}`;
 
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
 		{ href: `/elections/${state.toLowerCase()}`, label: stateName },
 		{ href: `/elections/${countySlug}`, label: countyName },
-		{ href: `/elections/${cityPathSlug}`, label: cityName },
+		...(isRealCity ? [{ href: `/elections/${cityPathSlug}`, label: cityName }] : []),
 		...(isRealSubplace ? [{ href: '', label: race.Place!.name }] : []),
 		{ href: '', label: `Candidates for ${officeName}` },
 	];
@@ -86,7 +90,7 @@ export default async function Page({
 		officeName,
 		stateName,
 		countyName,
-		cityName,
+		cityName: isRealCity ? cityName : undefined,
 		electionDate,
 		filingDate,
 		breadcrumbs,
@@ -126,7 +130,9 @@ export async function generateMetadata({
 	// A joint office fills the city slot with an office name, and the place then resolves to the
 	// county, so naming it as both city and county would say the county twice.
 	const isRealCity = isRealPlaceSegment(cityPlace?.slug, city);
-	const placePhrase = isRealCity ? `${cityName}, ${countyDisplayName}` : countyDisplayName;
+	// Either slot can resolve to the race's own place, so the names are deduplicated rather than
+	// joined blindly; see joinPlaceNames.
+	const placePhrase = isRealCity ? joinPlaceNames(cityName, countyDisplayName) : countyDisplayName;
 	const isRealSubplace =
 		race?.Place?.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`) ?? false;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
@@ -135,9 +141,11 @@ export async function generateMetadata({
 	);
 	if (isRealSubplace) {
 		const subplaceName = race!.Place!.name;
+		// The same slots again, with the subplace ahead of them; any two can be one place.
+		const locationPhrase = joinPlaceNames(subplaceName, isRealCity ? cityName : null, countyDisplayName);
 		return {
-			title: `Candidates for ${positionName} in ${subplaceName}, ${placePhrase}, ${stateName} | ${SITE_NAME}`,
-			description: `View candidates running for ${positionName} in ${subplaceName}, ${placePhrase}, ${stateName}.`,
+			title: `Candidates for ${positionName} in ${locationPhrase}, ${stateName} | ${SITE_NAME}`,
+			description: `View candidates running for ${positionName} in ${locationPhrase}, ${stateName}.`,
 			alternates: { canonical },
 		};
 	}

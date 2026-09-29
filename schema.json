@@ -8235,6 +8235,23 @@
           },
           "optional": true
         },
+        "field_layoutVariant": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "contained"
+              },
+              {
+                "type": "string",
+                "value": "fullWidth"
+              }
+            ]
+          },
+          "optional": true
+        },
         "field_backgroundVariant": {
           "type": "objectAttribute",
           "value": {
@@ -8256,6 +8273,21 @@
           "type": "objectAttribute",
           "value": {
             "type": "boolean"
+          },
+          "optional": true
+        },
+        "field_socialProofText": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "list_Choose3People": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "list_Choose3People"
           },
           "optional": true
         },

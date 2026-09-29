@@ -202,6 +202,32 @@ Two things from it that affect other blocks in the batch:
   carries an `href` rather than data to display. The same "editor field is the fallback, the
   override wins" shape applies, and the Studio description on the field says so.
 
+**Find more elections block / Elections Near You Block** (location pages, position pages, Voter
+Hub) — extended, not rebuilt. `component_electionsNearYouBlock` already existed; it gained a
+Layout field (Contained / Full Width) and the social proof row its Figma frame draws.
+
+Two things from it that affect other blocks in the batch:
+
+- **An added option must default to what already ships.** Documents saved before the field
+  existed have no value for it, so `initialValue` in the schema does not reach them and the
+  *component's* fallback is what they render as. The layout prop defaults to `contained` for
+  exactly that reason, and `src/PageSections/electionsNearYouBlockSection.test.tsx` pins the
+  absent case. Any other "Extend" item in Step 0 has the same trap.
+- **Figma coupling is not the same as editor coupling.** The full-width frame (3093:3901) draws
+  the social proof row and the contained frame (3096:3858) does not, so the obvious build ties
+  the row to the layout. Marketing chose to keep them separate controls (Emily, 2026-09-25): the
+  existing `field_showSocialProof` toggle now works, and either layout can carry the row.
+
+This block is the batch's one exception to the draft-and-batch rule above, because it is not
+actually on a live template. It sits only on `goodpartyOrg_allComponents` (the `/all` page), so
+shipping it changes one internal showcase page and nothing a voter sees. Re-check that with a
+query before assuming it still holds.
+
+Noted and not acted on: both full-width frames label the search box "Enter your street address",
+and the body copy says "Enter your address". The search resolves cities and counties only, so the
+live copy was kept (Emily, 2026-09-25). Design owns whether the block should accept a street
+address; that would be a change to `electionsNearYouSearch`, not to the block.
+
 ## The shared election counts, as marketing defined them
 
 Settled with Emily on 2026-09-17 while building the location hero's four stat cards.

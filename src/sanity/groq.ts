@@ -184,7 +184,7 @@ export const component_testimonialBlockWithLink = `_type=="component_testimonial
 /*language=textmate*/
 export const component_locationEditorialBlock = `_type=="component_locationEditorialBlock"=>{...,locationEditorialBlockHeader,locationEditorialBlockContent{block_summaryText[]{...,${textBlockGroq}}},locationEditorialBlockDesignSettings,componentSettings}`;
 /*language=textmate*/
-export const component_electionsNearYouBlock = `_type=="component_electionsNearYouBlock"=>{...,componentSettings}`;
+export const component_electionsNearYouBlock = `_type=="component_electionsNearYouBlock"=>{...,list_Choose3People[]->,componentSettings}`;
 /*language=textmate*/
 export const component_demoRequestBlock = `_type=="component_demoRequestBlock"=>{...,componentSettings}`;
 /*language=textmate*/

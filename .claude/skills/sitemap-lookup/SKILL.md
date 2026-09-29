@@ -114,12 +114,21 @@ Never present a sitemap result as an indexing result.
 `/people/joy-page-1424135b` is the page. Never truncate the 8-hex suffix, and
 never construct a profile URL from a name alone.
 
-**There is no working `/candidate/...` or `/candidates/<name>` profile URL.**
-Those paths are absent from the sitemap by design, and today they return 404.
-(A comment in `sitemap-entries.ts` describes them as permanent redirects to
-`/people/*`; that is no longer how they respond, so trust the fetch over the
-comment.) Profile pages are `/people/...` only. Separately, `/elections/.../candidates`
-pages are being retired, so do not link to them either.
+**Legacy `/candidate/...` URLs work, but they have two segments.** The shape is
+`/candidate/<name>/<office>` — e.g. `/candidate/aaron-achten/netawaka-city-council`
+— and it 308s to `/people/<name>-<id8>`. They are absent from the sitemap by
+design, because a sitemap should advertise destinations rather than redirects,
+so a lookup will not surface one; that is not a sign they are broken.
+
+Do not infer the shape from a `/people` slug. A one-segment `/candidate/<name>`
+never existed and returns 404, which looks exactly like a broken redirect and is
+not one. If you need to test a legacy URL, get a real one first — the Wayback
+CDX API lists them:
+`http://web.archive.org/cdx/search/cdx?url=goodparty.org/candidate/*&output=text&fl=original,statuscode&collapse=urlkey&limit=40`.
+
+Report `/people/...` as the canonical answer regardless, since that is where the
+redirect lands. Separately, the `/elections/.../candidates` pages are being
+retired, so do not link to those.
 
 **Check whether a hit redirects.** `--verify` reports the final URL, and that
 matters: some county-suffixed city URLs 308 to a path with the *wrong* county.

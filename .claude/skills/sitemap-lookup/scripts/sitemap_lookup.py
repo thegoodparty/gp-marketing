@@ -92,9 +92,11 @@ def shard_for_url(url: str) -> tuple[int | None, str]:
                 return STATE_CODES.index(code) + 1, f"elections band, state {code}"
         return None, "elections band, but no state code in the URL to pin the file"
     if path.startswith("/candidate/") or path.startswith("/candidates/"):
-        return None, ("no /candidate* URL is in the sitemap - profile pages live "
-                      "under /people/<name>-<id8>. Search the people band by name "
-                      "instead. (These paths 404 today, so do not hand one out.)")
+        return None, ("no /candidate* URL is in the sitemap by design - the band was "
+                      "retired because /candidate/<name>/<office> 308s to "
+                      "/people/<name>-<id8>, and a sitemap should advertise "
+                      "destinations, not redirects. Search the people band by name "
+                      "and report the /people URL the redirect lands on.")
     return 0, "main site pages"
 
 

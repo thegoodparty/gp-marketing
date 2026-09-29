@@ -221,6 +221,17 @@ describe('DemoRequestBlock', () => {
 		expect(trackedEvents.find(e => e.name === 'Demo Request Qualified')?.props).toMatchObject({ outcome: 'pass' });
 	});
 
+	test('submits with an empty hutk when the HubSpot cookie is malformed', async () => {
+		dom.window.document.cookie = 'hubspotutk=%GG-not-decodable';
+		await fillRaceAndGoals();
+		await fillContact();
+		await submitForm();
+
+		expect(fetchCalls).toHaveLength(1);
+		expect(fetchCalls[0]?.body).toMatchObject({ email: 'jordan@example.com', hutk: '' });
+		await waitUntil(() => card().textContent?.includes('Pick a time, Jordan') ?? false);
+	});
+
 	test('shows the tour card and redirects when the verdict is tour', async () => {
 		fetchResponse = async () => ({ ok: true, status: 200, body: { outcome: 'tour', redirect_url: '/product-tour', redirect_seconds: 1 } });
 		await render();

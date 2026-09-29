@@ -24,7 +24,14 @@ const HUBSPOT_COOKIE_PATTERN = /^[0-9a-f]{32}$/;
 function readHubSpotCookie(): string {
 	if (typeof document === 'undefined') return '';
 	const match = document.cookie.split(';').map(part => part.trim()).find(part => part.startsWith(`${HUBSPOT_COOKIE}=`));
-	const value = match ? decodeURIComponent(match.slice(HUBSPOT_COOKIE.length + 1)) : '';
+	if (!match) return '';
+	let value = '';
+	try {
+		value = decodeURIComponent(match.slice(HUBSPOT_COOKIE.length + 1));
+	} catch {
+		// A malformed percent sequence throws synchronously; a missing cookie must never block the submit.
+		return '';
+	}
 	return HUBSPOT_COOKIE_PATTERN.test(value) ? value : '';
 }
 

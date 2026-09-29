@@ -192,6 +192,8 @@ describe('DemoRequestBlock', () => {
 
 	test('posts the answers to the same-origin proxy and shows the calendar on a pass', async () => {
 		await render();
+		dom.window.document.cookie = 'hubspotutk=0123456789abcdef0123456789abcdef';
+		dom.window.document.title = 'Request a demo | GoodParty.org';
 		await fillRaceAndGoals();
 		await fillContact();
 		await submitForm();
@@ -208,6 +210,8 @@ describe('DemoRequestBlock', () => {
 			first_name: 'Jordan',
 			email: 'jordan@example.com',
 			sms_consent: false,
+			hutk: '0123456789abcdef0123456789abcdef',
+			page_name: 'Request a demo | GoodParty.org',
 		});
 
 		await waitUntil(() => card().textContent?.includes('Pick a time, Jordan') ?? false);

@@ -182,6 +182,7 @@ export const list_pageSections = {
 					name: 'cards',
 					title: 'Cards',
 					of: [
+						'component_featuredCandidatesBlock',
 						'component_twoUpCardBlock',
 						'component_comparisonBlock',
 						'component_stepperBlock',
@@ -251,6 +252,7 @@ export const list_pageSections = {
 	},
 	type: 'array',
 	of: [
+		{ title: 'Featured Candidates Block', type: 'component_featuredCandidatesBlock' },
 		{ title: 'Illustrated Columns Block', type: 'component_illustratedColumnsBlock' },
 		{ title: 'Election Position Resources Block', type: 'component_electionPositionResourcesBlock' },
 		{ title: 'Nearby Offices', type: 'component_nearbyOffices' },

@@ -51,7 +51,7 @@ trust:
 | Header_* (all four position headers) | `component_electionsPositionHero` |
 | Siderail | the sidebar inside `component_electionsPositionContentBlock` |
 | About [Position Name] | `component_electionsPositionContentBlock` |
-| 3-column icon block | `component_iconContentBlock` |
+| 3-column icon block | ~~`component_iconContentBlock`~~ — audited, rejected. Built as `component_illustratedColumnsBlock`; see below |
 | Testimonial block with link | ~~`component_testimonialBlock`, plus a link field~~ — audited, rejected. Built as `component_testimonialBlockWithLink`; see below |
 | More about location container | ~~`component_locationFactsBlock`~~ — audited, rejected. Built as `component_locationEditorialBlock`; see below |
 | Branded CTA with icon | `component_ctaBlock`, `component_ctaBannerBlock` |
@@ -227,6 +227,44 @@ Noted and not acted on: both full-width frames label the search box "Enter your 
 and the body copy says "Enter your address". The search resolves cities and counties only, so the
 live copy was kept (Emily, 2026-09-25). Design owns whether the block should accept a street
 address; that would be a change to `electionsNearYouSearch`, not to the block.
+
+**3-column icon block / Illustrated columns block** (location pages; the spreadsheet also lists it for
+position pages and the Voter Hub) — built as `component_illustratedColumnsBlock`, content-only. The Figma
+frame is named "Icon Conent Block" [sic]: a centred heading and intro over three equal columns divided by
+hairlines, each an uploaded 3D illustration, a heading, a grey sentence and a small blue text link with an
+arrow. The heading is "Are you ready for [Location]'s next election?", so it leans on the `[location]` token
+fix above.
+
+`component_iconContentBlock` was the starting hypothesis and is the wrong base, for five reasons at once: its
+icons come from the icon set inside a 48px coloured circle rather than an uploaded picture, its text is
+centred rather than left-aligned, it has no dividers, its link is a filled pill rather than a text link, and
+it is live on 28 landing pages, so every one of those options would have shipped as a draft-and-batch change
+to live pages. The closest visual match is the voter readiness section inside the draft
+`component_electionsPositionContentBlock` (PR #327), which is where the design came from, but that is one
+section inside a single block that only position pages populate. `component_featuresBlock` has the card
+anatomy but its items are references to product feature documents. Marketing confirmed a new block
+(Emily, 2026-09-29).
+
+Decisions that came out of it:
+
+- **Column count is a Studio setting, not derived from the items.** (Emily, 2026-09-29.) The Design
+  Settings tab reuses the existing Column Layout dropdown (2 / 3 / 4), defaulting to three. Items beyond
+  the row wrap onto a second row and the vertical hairline is drawn per column with an `nth-child` rule
+  rather than `divide-x`, so a wrapped row still divides correctly. Two columns go side by side from `md`,
+  three and four from `lg`; below that the columns stack, centred, with a horizontal hairline between them
+  (the mobile frame).
+- **Pictures, not icons.** Each column has an image field. The Figma illustrations are placeholder renders
+  and are not baked into code; marketing uploads the final artwork in Studio.
+- **The link reuses the `button` object** (same as the resources block and the quote's story link) and is
+  always drawn as the blue text link from the frame, whatever hierarchy the editor picks. The colour is
+  `info-500`, which is the frame's `theme/info` exactly.
+- **Sizes follow the live scale.** The heading pairs `heading-lg` with `max-md:text-heading-md` (48 → 32,
+  as the editorial block does); the column heading is `subtitle-1` (24 → 20, matching both frames) and the
+  sentence is `body-2`. Measured at 1440 and 390 before the PR.
+- **The empty state is "render nothing"**, pinned by `src/PageSections/illustratedColumnsBlockSection.test.tsx`.
+
+The block reads `tokens` like the other content blocks, so the location templates fill `[Location]` in the
+heading, intro, column text and link labels.
 
 **Elections Search Hero** (Elections page) — extended, not rebuilt. `component_electionsSearchHero`
 already existed and is live on exactly one page, the Elections landing page, as a centred dark hero with
@@ -475,7 +513,7 @@ audit to confirm; `data` means it needs the `SectionOverrides` pass.
 
 | Component | Page | Kind |
 | --- | --- | --- |
-| 3-column icon block | Voter Hub, position, location | content |
+| 3-column icon block | Voter Hub, position, location | content (audited — built, see above) |
 | Testimonial block with link | Voter Hub, location | content |
 | Browse elections in Location Hero | location | data |
 | Local election rows block | location | data |

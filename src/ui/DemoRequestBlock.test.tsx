@@ -222,6 +222,7 @@ describe('DemoRequestBlock', () => {
 	});
 
 	test('submits with an empty hutk when the HubSpot cookie is malformed', async () => {
+		await render();
 		dom.window.document.cookie = 'hubspotutk=%GG-not-decodable';
 		await fillRaceAndGoals();
 		await fillContact();

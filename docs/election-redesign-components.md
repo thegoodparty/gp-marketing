@@ -47,11 +47,11 @@ trust:
 | Nearby offices | ~~`component_listOfOfficesBlock`~~ — audited, rejected. Built as `component_nearbyOffices`; see below |
 | "Who's currently in office" | `component_listOfOfficesBlock` |
 | Candidates/Representatives rows | `component_candidatesBlock` |
-| Featured candidates/Representatives | `component_candidatesBlock` |
+| Featured candidates/Representatives | ~~`component_candidatesBlock`~~ — audited, rejected. Built as `component_featuredCandidatesBlock`; see below |
 | Header_* (all four position headers) | `component_electionsPositionHero` |
 | Siderail | the sidebar inside `component_electionsPositionContentBlock` |
 | About [Position Name] | `component_electionsPositionContentBlock` |
-| 3-column icon block | `component_iconContentBlock` |
+| 3-column icon block | ~~`component_iconContentBlock`~~ — audited, rejected. Built as `component_illustratedColumnsBlock`; see below |
 | Testimonial block with link | ~~`component_testimonialBlock`, plus a link field~~ — audited, rejected. Built as `component_testimonialBlockWithLink`; see below |
 | More about location container | ~~`component_locationFactsBlock`~~ — audited, rejected. Built as `component_locationEditorialBlock`; see below |
 | Branded CTA with icon | `component_ctaBlock`, `component_ctaBannerBlock` |
@@ -228,6 +228,90 @@ and the body copy says "Enter your address". The search resolves cities and coun
 live copy was kept (Emily, 2026-09-25). Design owns whether the block should accept a street
 address; that would be a change to `electionsNearYouSearch`, not to the block.
 
+**3-column icon block / Illustrated columns block** (location pages; the spreadsheet also lists it for
+position pages and the Voter Hub) — built as `component_illustratedColumnsBlock`, content-only. The Figma
+frame is named "Icon Conent Block" [sic]: a centred heading and intro over three equal columns divided by
+hairlines, each an uploaded 3D illustration, a heading, a grey sentence and a small blue text link with an
+arrow. The heading is "Are you ready for [Location]'s next election?", so it leans on the `[location]` token
+fix above.
+
+`component_iconContentBlock` was the starting hypothesis and is the wrong base, for five reasons at once: its
+icons come from the icon set inside a 48px coloured circle rather than an uploaded picture, its text is
+centred rather than left-aligned, it has no dividers, its link is a filled pill rather than a text link, and
+it is live on 28 landing pages, so every one of those options would have shipped as a draft-and-batch change
+to live pages. The closest visual match is the voter readiness section inside the draft
+`component_electionsPositionContentBlock` (PR #327), which is where the design came from, but that is one
+section inside a single block that only position pages populate. `component_featuresBlock` has the card
+anatomy but its items are references to product feature documents. Marketing confirmed a new block
+(Emily, 2026-09-29).
+
+Decisions that came out of it:
+
+- **Column count is a Studio setting, not derived from the items.** (Emily, 2026-09-29.) The Design
+  Settings tab reuses the existing Column Layout dropdown (2 / 3 / 4), defaulting to three. Items beyond
+  the row wrap onto a second row and the vertical hairline is drawn per column with an `nth-child` rule
+  rather than `divide-x`, so a wrapped row still divides correctly. Two columns go side by side from `md`,
+  three and four from `lg`; below that the columns stack, centred, with a horizontal hairline between them
+  (the mobile frame).
+- **Pictures, not icons.** Each column has an image field. The Figma illustrations are placeholder renders
+  and are not baked into code; marketing uploads the final artwork in Studio.
+- **The link reuses the `button` object** (same as the resources block and the quote's story link) and is
+  always drawn as the blue text link from the frame, whatever hierarchy the editor picks. The colour is
+  `info-500`, which is the frame's `theme/info` exactly.
+- **Sizes follow the live scale.** The heading pairs `heading-lg` with `max-md:text-heading-md` (48 → 32,
+  as the editorial block does); the column heading is `subtitle-1` (24 → 20, matching both frames) and the
+  sentence is `body-2`. Measured at 1440 and 390 before the PR.
+- **The empty state is "render nothing"**, pinned by `src/PageSections/illustratedColumnsBlockSection.test.tsx`.
+
+The block reads `tokens` like the other content blocks, so the location templates fill `[Location]` in the
+heading, intro, column text and link labels.
+
+**Featured candidates/Representatives** (location pages) — built as
+`component_featuredCandidatesBlock`, data-backed. The Figma frame is named "Blog Block" on desktop and
+"Carousel Block" on mobile: a heading with prev/next arrows opposite it, a blue callout explaining the
+Heart & Star badge, and a side-scrolling row of white portrait cards (200px round photo with the badge
+over its corner, name, office, "City, ST", a dark "View profile" pill), pagination pills on the phone.
+
+`component_candidatesBlock` was the starting hypothesis and is the wrong base: it is a two-column grid
+of wide horizontal cards with a party line and a Show More button, it is live on the position
+candidates template and rendered twice on every `/people` profile, and it has nowhere to put the
+callout. The carousel chrome (`PrevButton`, `NextButton`, `CarouselIndicator`) and the badge (`Logo`)
+were reused; the card is new (`FeaturedCandidateCard`).
+
+Decisions that came out of it (Emily, 2026-09-29):
+
+- **One block for candidates and representatives**, with a Who To Feature radio in Design Settings
+  (both / candidates only / representatives only). Nothing on the page shows which was picked. A
+  document saved without the field renders both.
+- **The pledge callout is part of the block**, with its copy as a rich text field in Studio and a
+  show/hide toggle. There is no `/pledge` page on the live site today, so the default copy carries no
+  link; the field description says to add one when the page exists.
+- **Order: pledged first, then unpledged people with no major party, then everyone else.** Inside a
+  group, candidates by soonest election, then representatives by name. `rankFeaturedPeople` in
+  `src/lib/featuredCandidates.ts` is the rule. Capped at eight, in the section and in the ranking.
+- **The pledge is read by the same rule the `/people` cards use.** `pledgedFromSpine` (the spine
+  flag, confirmed running, no major party in the evidence) is now exported from
+  `src/lib/peopleProfile.ts` for it, so a badge in the carousel can never disagree with the person's
+  own profile. The redesign doc's earlier line that the flag was unpopulated was stale; see the
+  corrected counts section below.
+- **The seam is `featuredPeople` on `ElectionsIndexPageContext`**, carrying two lists (candidates and
+  representatives) so the Studio setting can choose at render time. `renderElectionsIndexPage`
+  fetches it with `getFeaturedPeople`, so every location route feeds the block without touching its
+  `page.tsx`. Absent, the override is `{ hidden: true }`.
+- **Where the people come from.** Candidates: the place's own upcoming races (same level filter as
+  its offices list), each asked through `/v1/candidacies?raceSlug=`, soonest election first, within
+  a budget of sixteen races (`FEATURED_RACE_BUDGET`), six requests at a time. Representatives:
+  `/v1/officeholders?geoId=` with the place's own `geoId` (now on `PlaceItem`; ask for it with
+  `placeColumns`), current terms only. Both lists then read the person rows in one batch for the
+  pledge flag, party evidence, photo and canonical slug, and honour the removed-people list the
+  profiles honour.
+- **The empty state is "render nothing"**, pinned by
+  `src/PageSections/featuredCandidatesBlockSection.test.tsx`.
+
+Waiting on data: the race budget means a state page whose legislature has more seats than sixteen on
+one ballot only features candidates from the first sixteen, and the "pledged first" rule cannot see
+the rest. The place-and-year aggregate the counts section asks for would remove the budget.
+
 ## The shared election counts, as marketing defined them
 
 Settled with Emily on 2026-09-17 while building the location hero's four stat cards.
@@ -250,9 +334,11 @@ election data team.
   race where we hold candidate data, including races whose filing window is still
   open.
 - **Zero versus unknown.** Show 0 when the data genuinely says zero; hide the element
-  when there is no data. These differ: `Person.isPledged` is unpopulated across
-  production today (see `docs/person-spine-pledge-and-claim-linkage-handoff.md`), so a
-  zero pledge count is a no-data zero and must not be published as "0 independents".
+  when there is no data. These differ: `Person.isPledged` was unpopulated across
+  production until mid-September 2026 (see the superseded note in
+  `docs/person-spine-pledge-and-claim-linkage-handoff.md`); it is being written now, but
+  re-measure coverage before publishing a pledge count, because a zero from a sparsely
+  written flag is a no-data zero and must not be published as "0 independents".
 - **Editor versus data.** The label is editable in Sanity, with location tokens; the
   number always comes from the data. These blocks live on global templates, so a
   number typed in Studio would otherwise freeze the same figure across thousands of
@@ -391,12 +477,14 @@ Apply these across the whole batch so the blocks stay consistent.
 Several are marketing's own, from the spreadsheet. Do not guess at these; they change
 how many blocks get built.
 
-- **Featured candidates vs Featured representatives:** one block or two? The pledge
-  block differs between them. Leaning two, for editor clarity (Emily).
+- ~~**Featured candidates vs Featured representatives:** one block or two?~~ Settled:
+  one block with a Studio dropdown (Emily, 2026-09-29); see the audit result above.
 - **Candidates/Representatives rows vs "Who's currently in office":** leaning
   separate blocks because the data differs (Emily).
-- **Badge callout:** standalone block, or part of the Featured
-  candidates/representatives block?
+- ~~**Badge callout:** standalone block, or part of the Featured
+  candidates/representatives block?~~ Settled: part of the featured block, with
+  editable copy (Emily, 2026-09-29). The position pages' badge callout, if it is still
+  wanted there, is a separate question.
 - **Find more elections vs the other search block:** is the only difference the
   social proof line at the bottom? If so this is one block with an option, not two.
 - **The four position headers:** per the settled decision above, these should be one
@@ -439,13 +527,13 @@ audit to confirm; `data` means it needs the `SectionOverrides` pass.
 
 | Component | Page | Kind |
 | --- | --- | --- |
-| 3-column icon block | Voter Hub, position, location | content |
+| 3-column icon block | Voter Hub, position, location | content (audited — built, see above) |
 | Testimonial block with link | Voter Hub, location | content |
 | Browse elections in Location Hero | location | data |
 | Local election rows block | location | data |
 | Find elections container | location | data |
 | Featured cities carousel | location | data |
-| Featured candidates/Representatives | location | data |
+| Featured candidates/Representatives | location | data (audited — built, see above) |
 | More about location container | location | data (audited — built, see above) |
 | Header_Pre-Filing | position | data |
 | Header_Mid-Election | position | data |

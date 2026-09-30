@@ -26,6 +26,10 @@ Studio (the CMS, served at `/studio/main`), do not open a PR:
   page.
 - Redirects (managed as content; they take effect without a deploy).
 - A/B experiment variants.
+- Embeds via the Embedded Block, as long as the provider is one the block supports:
+  HubSpot (forms, meetings), YouTube, Vimeo, Calendly, Navattic, VoteAmerica. Any
+  other provider's snippet is stripped of scripts for security and usually renders as
+  an empty section; supporting it is a code change (see the next section).
 - Election page templates: which blocks appear and the token-driven copy on the
   global template or a per-location custom template. Step-by-step editor guide:
   `docs/election-templates-manual.md`.
@@ -48,6 +52,9 @@ Open a PR (use the `ship-pr` skill) when the request requires any of these:
 - **SEO plumbing**: sitemaps, canonical tags, structured data / schema, `llms.txt`,
   redirect logic, middleware.
 - A **new page route** or a **new document type** in Sanity.
+- A **new embed provider** for the Embedded Block. The approved hosts and the
+  per-provider parsing live in `src/ui/EmbedHtml.tsx`; script-based snippets need a
+  branch that builds the provider's iframe URL, since scripts never run.
 
 ## Not a marketing-site change at all
 

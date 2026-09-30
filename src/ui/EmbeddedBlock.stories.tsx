@@ -30,6 +30,12 @@ export const HubSpotMeeting: Story = {
 	},
 };
 
+export const VoteAmericaVerify: Story = {
+	args: {
+		html: '<script src="https://cdn.voteamerica.org/embed/tools.js" async></script>\n<div class="voteamerica-embed" data-subscriber="goodpartyorg-sstqynbv" data-tool="verify"></div>',
+	},
+};
+
 export const RawHtml: Story = {
 	args: {
 		html: '<div style="padding:2rem;background:#f5f5f5;border-radius:8px;text-align:center;"><h2 style="margin:0 0 1rem;">Custom HTML Block</h2><p style="margin:0;">This demonstrates rendering sanitized HTML content within the Embedded Block component.</p></div>',

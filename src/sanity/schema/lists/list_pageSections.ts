@@ -83,6 +83,8 @@ export const list_pageSections = {
 								'https://cdn.sanity.io/images/3rbseux7/production/db3caeddd65e25c3ef1f8fecf395943a41cc417d-3000x2000.png',
 							component_featuredCitiesBlock:
 								'https://cdn.sanity.io/images/3rbseux7/production/9dff636003ac0fe08810dab73ab5d85704104836-3000x2000.png',
+							component_featuredCandidatesBlock:
+								'https://cdn.sanity.io/images/3rbseux7/production/8bfe607111dbfc6a0a017794be8c302ffd6e6510-3000x2000.png',
 							component_goodPartyOrgPledge:
 								'https://cdn.sanity.io/images/3rbseux7/production/3af863344c213d146cc5c28a2fd63efd4c381631-3000x2000.png',
 							component_jobOpeningsBlock:
@@ -105,6 +107,8 @@ export const list_pageSections = {
 								'https://cdn.sanity.io/images/3rbseux7/production/5207be991898bbbd9ba558c4a4ddb93f1e75351b-3000x2000.png',
 							component_testimonialAutoScroll:
 								'https://cdn.sanity.io/images/3rbseux7/production/4cc26cd73a3b57c6d5e31c1016978191cf217e45-3000x2000.png',
+							component_illustratedColumnsBlock:
+								'https://cdn.sanity.io/images/3rbseux7/production/fd3fdb442852e7d8c3bbd21fecc00ed43bbdf245-3000x2000.png',
 						};
 						return s in i ? i[s] : undefined;
 					},
@@ -180,6 +184,7 @@ export const list_pageSections = {
 					name: 'cards',
 					title: 'Cards',
 					of: [
+						'component_featuredCandidatesBlock',
 						'component_twoUpCardBlock',
 						'component_comparisonBlock',
 						'component_stepperBlock',
@@ -200,6 +205,7 @@ export const list_pageSections = {
 					name: 'grid',
 					title: 'Grid',
 					of: [
+						'component_illustratedColumnsBlock',
 						'component_nearbyOffices',
 						'component_comparisonBlock',
 						'component_iconContentBlock',
@@ -248,6 +254,8 @@ export const list_pageSections = {
 	},
 	type: 'array',
 	of: [
+		{ title: 'Featured Candidates Block', type: 'component_featuredCandidatesBlock' },
+		{ title: 'Illustrated Columns Block', type: 'component_illustratedColumnsBlock' },
 		{ title: 'Election Position Resources Block', type: 'component_electionPositionResourcesBlock' },
 		{ title: 'Nearby Offices', type: 'component_nearbyOffices' },
 		{ title: 'Demo Request Block', type: 'component_demoRequestBlock' },

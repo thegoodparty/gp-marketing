@@ -56,7 +56,10 @@ import { component_nearbyOffices } from './component_nearbyOffices.ts';
 
 import { component_illustratedColumnsBlock } from './component_illustratedColumnsBlock.ts';
 
+import { component_featuredCandidatesBlock } from './component_featuredCandidatesBlock.ts';
+
 export const componentSchema = [
+	component_featuredCandidatesBlock,
 	component_illustratedColumnsBlock,
 	component_electionPositionResourcesBlock,
 	component_nearbyOffices,

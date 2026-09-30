@@ -740,7 +740,7 @@ function confirmedRunning(confirmedCandidate: string | null | undefined): boolea
  * hero would read, the two can still differ. Closing it needs the current
  * office party on the person feed, not more logic here.
  */
-function pledgedFromSpine(person: PersonItem | undefined, ...rowParties: Array<string | null | undefined>): boolean {
+export function pledgedFromSpine(person: PersonItem | undefined, ...rowParties: Array<string | null | undefined>): boolean {
 	if (person?.isPledged !== true) return false;
 	if (!confirmedRunning(person.confirmedCandidate)) return false;
 	const evidence = [
@@ -762,7 +762,7 @@ function pledgedFromSpine(person: PersonItem | undefined, ...rowParties: Array<s
  * `removedPersonIds` of null means the feed could not be read: suppress every
  * card photo rather than risk republishing one (see getRemovedPersonIds).
  */
-function cardAvatarUrl(
+export function cardAvatarUrl(
 	personId: string | null,
 	avatarUrl: string | null,
 	removedPersonIds: ReadonlySet<string> | null,

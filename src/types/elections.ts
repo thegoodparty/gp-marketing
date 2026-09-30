@@ -170,6 +170,8 @@ export interface PlaceItem {
 	slug: string;
 	state: string;
 	mtfcc?: string;
+	/** BallotReady geo id, the key `/v1/officeholders?geoId=` filters on. Ask for it with `placeColumns`. */
+	geoId?: string;
 	children?: PlaceItem[];
 	/** County name from API (e.g. "Los Angeles"); used for filtering cities by county. */
 	countyName?: string;

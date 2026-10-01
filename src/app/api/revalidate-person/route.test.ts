@@ -30,7 +30,15 @@ const PERSON_ID = '74eee01a-1111-4222-8333-444444444444';
 // binds it at import; the unconfigured (503) branch is a guard clause and is not
 // covered here.
 const realEnv = await import('~/lib/env');
-mock.module('~/lib/env', () => ({ ...realEnv, personRevalidateSecret: SECRET }));
+// `githubSitemapDispatchToken` is pinned to undefined rather than inherited from
+// the spread: under bun 1.2.x the sibling route.dispatch.test.ts shares this
+// module registry and has already re-mocked `~/lib/env` with a token by the time
+// this file imports it, so the spread alone would flip the dispatch branch on.
+mock.module('~/lib/env', () => ({
+	...realEnv,
+	personRevalidateSecret: SECRET,
+	githubSitemapDispatchToken: undefined,
+}));
 
 // `~/lib/sitemap-entries` is deliberately NOT mocked. Stubbing
 // `clearPeopleSitemapCache` would hand the stub to `sitemap-entries.test.ts`,

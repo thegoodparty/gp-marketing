@@ -14,6 +14,12 @@ export const revalidateSecret = process.env['SANITY_REVALIDATE_SECRET'];
 // public /people/* page after a publish/unpublish/delete/edit.
 export const personRevalidateSecret = process.env['MARKETING_REVALIDATE_SECRET'];
 
+// Fine-grained PAT (or GitHub App token) scoped to `actions:write` on
+// thegoodparty/gp-marketing only. Gates the single-shard workflow_dispatch that
+// /api/revalidate-person fires after a takedown/edit. Unset in local dev and
+// preview, where the dispatch is skipped and the hourly cron run is the backstop.
+export const githubSitemapDispatchToken = process.env['GITHUB_SITEMAP_DISPATCH_TOKEN'];
+
 // Used by `sanity-plugin-iframe-pane` to verify that draft mode was initiated by a valid Studio session
 export const urlSecretId = `preview.secret`;
 

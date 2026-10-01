@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, mock, test } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, mock, spyOn, test } from 'bun:test';
 import { PEOPLE_REMOVALS_CACHE_TAG } from '~/lib/electionsApi';
 import { PEOPLE_SITEMAP_CACHE_TAG } from '~/lib/sitemap-entries';
 import { resetNextCacheMock, revalidateTag } from '~/testing/nextCacheMock';
@@ -30,7 +30,15 @@ const PERSON_ID = '74eee01a-1111-4222-8333-444444444444';
 // binds it at import; the unconfigured (503) branch is a guard clause and is not
 // covered here.
 const realEnv = await import('~/lib/env');
-mock.module('~/lib/env', () => ({ ...realEnv, personRevalidateSecret: SECRET }));
+// `githubSitemapDispatchToken` is pinned to undefined rather than inherited from
+// the spread: under bun 1.2.x the sibling route.dispatch.test.ts shares this
+// module registry and has already re-mocked `~/lib/env` with a token by the time
+// this file imports it, so the spread alone would flip the dispatch branch on.
+mock.module('~/lib/env', () => ({
+	...realEnv,
+	personRevalidateSecret: SECRET,
+	githubSitemapDispatchToken: undefined,
+}));
 
 // `~/lib/sitemap-entries` is deliberately NOT mocked. Stubbing
 // `clearPeopleSitemapCache` would hand the stub to `sitemap-entries.test.ts`,
@@ -55,8 +63,24 @@ async function post(body: unknown, secret?: string | null): Promise<Response> {
 	return POST(req as never);
 }
 
+let originalFetch: typeof globalThis.fetch;
+let fetchCalls: Array<{ url: string }>;
+
 beforeEach(() => {
 	resetNextCacheMock();
+	fetchCalls = [];
+	originalFetch = globalThis.fetch;
+	// GITHUB_SITEMAP_DISPATCH_TOKEN is unset in this file's env mock, so the
+	// dispatch path should never reach fetch — asserted below. A real fetch
+	// firing here would mean the skip-when-unset guard regressed.
+	globalThis.fetch = (async (url: string) => {
+		fetchCalls.push({ url: String(url) });
+		return { ok: true, status: 204 } as Response;
+	}) as unknown as typeof globalThis.fetch;
+});
+
+afterEach(() => {
+	globalThis.fetch = originalFetch;
 });
 
 describe('POST /api/revalidate-person', () => {
@@ -137,5 +161,25 @@ describe('POST /api/revalidate-person', () => {
 
 		expect(res.status).toBe(400);
 		expect(revalidateTag).not.toHaveBeenCalled();
+	});
+
+	// GITHUB_SITEMAP_DISPATCH_TOKEN is unset in this file's `~/lib/env` mock —
+	// the token-set dispatch path is covered in route.dispatch.test.ts, which
+	// binds the route against its own module registry with the token present.
+	test('skips the sitemap dispatch and warns when the token is unset, response unchanged', async () => {
+		const warnSpy = spyOn(console, 'warn').mockImplementation(() => undefined);
+
+		const res = await post({ personId: PERSON_ID }, SECRET);
+
+		expect(res.status).toBe(200);
+		expect(await res.json()).toEqual({ revalidated: true, tag: `person:${PERSON_ID}` });
+		expect(fetchCalls).toHaveLength(0);
+		expect(
+			warnSpy.mock.calls.filter((call) =>
+				String(call[0]).includes('GITHUB_SITEMAP_DISPATCH_TOKEN'),
+			),
+		).toHaveLength(1);
+
+		warnSpy.mockRestore();
 	});
 });

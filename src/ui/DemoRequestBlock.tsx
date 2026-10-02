@@ -165,6 +165,29 @@ function isQualifyResponse(data: unknown): data is QualifyResponse {
 	return typeof data === 'object' && data !== null;
 }
 
+/**
+ * Build the HubSpot meetings URL for a passed request. HubSpot's booking page asks for
+ * an email before it shows the calendar unless firstName, lastName and email arrive as
+ * query parameters, so we pass the contact details the candidate just typed. `embed`
+ * adds the ?embed=true flag the iframe needs; the "open in a new tab" link omits it.
+ * URL.toString() percent-encodes quotes and angle brackets, so the result is safe inside the
+ * data-src attribute; the fallback for an unparseable value runs encodeURI for the same reason.
+ */
+export function calendarUrl(base: string, answers: Pick<Answers, 'firstName' | 'lastName' | 'email'>, embed: boolean): string {
+	try {
+		const url = new URL(base);
+		if (embed) url.searchParams.set('embed', 'true');
+		if (answers.firstName.trim()) url.searchParams.set('firstName', answers.firstName.trim());
+		if (answers.lastName.trim()) url.searchParams.set('lastName', answers.lastName.trim());
+		if (answers.email.trim()) url.searchParams.set('email', answers.email.trim());
+		return url.toString();
+	} catch {
+		// Not a parseable URL: encode it so a stray quote cannot break out of the data-src attribute.
+		const safe = encodeURI(base);
+		return embed ? `${safe}${safe.includes('?') ? '&' : '?'}embed=true` : safe;
+	}
+}
+
 export function DemoRequestBlock(props: DemoRequestBlockProps) {
 	const id = useId();
 	const [step, setStep] = useState<Step>('race');
@@ -591,12 +614,17 @@ export function DemoRequestBlock(props: DemoRequestBlockProps) {
 								{result.calendar_url && (
 									<>
 										<EmbedHtml
-											html={`<div class="meetings-iframe-container" data-src="${encodeURI(result.calendar_url)}?embed=true"></div>`}
+											html={`<div class="meetings-iframe-container" data-src="${calendarUrl(result.calendar_url, answers, true)}"></div>`}
 											height={720}
 										/>
 										<Text styleType='caption' className='text-neutral-600'>
 											Calendar not loading?{' '}
-											<a href={result.calendar_url} target='_blank' rel='noopener noreferrer' className='underline'>
+											<a
+												href={calendarUrl(result.calendar_url, answers, false)}
+												target='_blank'
+												rel='noopener noreferrer'
+												className='underline'
+											>
 												Open it in a new tab
 											</a>
 											.

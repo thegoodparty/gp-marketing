@@ -172,6 +172,7 @@ describe('buildCandidateCards', () => {
 			isNonpartisan: true,
 			role: 'candidate',
 			electionDate: '2026-11-03',
+			raceSlug: 'tx/houston/mayor',
 		});
 	});
 

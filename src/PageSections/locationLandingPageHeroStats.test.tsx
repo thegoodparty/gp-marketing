@@ -5,7 +5,7 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
 /**
- * Pins the redesigned location hero (Figma 2032-21473, updated 2026-09-24): the
+ * Pins the redesigned location hero (Figma 2188-38655, updated 2026-10-05): the
  * stat cards and jump buttons beside and under the copy, the search input that
  * moved out to its own block, and the headline the page hands in.
  *
@@ -91,8 +91,10 @@ async function render(element: React.ReactElement) {
 	});
 }
 
+type Independents = { candidateCount: number | null; hasAny: boolean };
+
 /** The location hero exactly as the state index template seed ships it. */
-async function renderSeededHero(withStats = true) {
+async function renderSeededHero({ withStats = true, independents }: { withStats?: boolean; independents?: Independents } = {}) {
 	const { tmplElectionsStateIndexSections } = await import('~/lib/electionsTemplateSeedSections');
 	const { LocationLandingPageHeroSection } = await import('./LocationLandingPageHeroSection');
 
@@ -133,6 +135,7 @@ async function renderSeededHero(withStats = true) {
 			headline: 'Upcoming elections in Illinois',
 			locationLevel: 'state' as const,
 			stateName: 'Illinois',
+			independents,
 		},
 		tokens: { '[State]': 'Illinois' },
 	} as unknown as Parameters<typeof LocationLandingPageHeroSection>[0];
@@ -181,10 +184,10 @@ describe('the location landing page hero', () => {
 		const hero = await renderSeededHero();
 		const links = [...hero.querySelectorAll('a')];
 
-		expect(links.map(a => a.getAttribute('href'))).toEqual(['#local-races', '#all-elections']);
+		expect(links.map(a => a.getAttribute('href'))).toEqual(['#local-races', '#independents']);
 		expect(links.map(a => a.textContent)).toEqual([
 			expect.stringContaining('Browse local races'),
-			expect.stringContaining('Search all elections'),
+			expect.stringContaining("See who's an independent"),
 		]);
 		// The arrow is decoration, so it must not end up in the button's name.
 		expect(links.every(a => a.querySelector('svg')?.getAttribute('aria-hidden') === 'true')).toBe(true);
@@ -202,7 +205,7 @@ describe('the location landing page hero', () => {
 	});
 
 	test('renders as a single column when nothing but copy is authored', async () => {
-		const hero = await renderSeededHero(false);
+		const hero = await renderSeededHero({ withStats: false });
 
 		expect(hero.querySelectorAll('[data-component="Stat"]').length).toBe(0);
 		expect(hero.querySelectorAll('a').length).toBe(0);
@@ -213,6 +216,58 @@ describe('the location landing page hero', () => {
 		const hero = await renderSeededHero();
 
 		expect(hero.querySelectorAll('input').length).toBe(0);
+	});
+});
+
+/**
+ * Emily, 2026-10-05: the lavender card's number is the live count of pledged
+ * candidates, zero included, and the card hides when the count cannot be
+ * trusted. The "See who's an independent" button hides when the location has no
+ * pledged candidate or officeholder at all. The editor's label is never touched.
+ */
+describe('the independents rules on a location page', () => {
+	const cardTexts = (hero: Element) => [...hero.querySelectorAll('[data-component="Stat"]')].map(card => card.textContent);
+	const hrefs = (hero: Element) => [...hero.querySelectorAll('a')].map(a => a.getAttribute('href'));
+
+	test('a location with no independents shows a real zero and drops the button', async () => {
+		const hero = await renderSeededHero({ independents: { candidateCount: 0, hasAny: false } });
+
+		expect(cardTexts(hero)).toEqual(['[Date]Election day', '[##]Races on the ballot', '0Independent candidates']);
+		expect(hrefs(hero)).toEqual(['#local-races']);
+	});
+
+	test('a trusted count replaces the editor placeholder', async () => {
+		const hero = await renderSeededHero({ independents: { candidateCount: 12345678, hasAny: true } });
+
+		// A count has not scrolled into view here, so the card shows its starting zero
+		// rather than the figure. The figure still leaves two marks: the placeholder is
+		// gone, and a ten-character "12,345,678" steps the value down a type size,
+		// which the four-character placeholder never would.
+		const lavender = hero.querySelectorAll('[data-component="Stat"]')[2];
+		expect(lavender?.textContent).toBe('0Independent candidates');
+		expect(lavender?.querySelector('span')?.className).toContain('text-heading-md');
+		expect(hrefs(hero)).toEqual(['#local-races', '#independents']);
+	});
+
+	test('an untrusted count hides the lavender card but keeps a button that has someone to show', async () => {
+		const hero = await renderSeededHero({ independents: { candidateCount: null, hasAny: true } });
+
+		expect(cardTexts(hero)).toEqual(['[Date]Election day', '[##]Races on the ballot']);
+		expect(hrefs(hero)).toEqual(['#local-races', '#independents']);
+	});
+
+	test('no data at all hides both', async () => {
+		const hero = await renderSeededHero({ independents: { candidateCount: null, hasAny: false } });
+
+		expect(cardTexts(hero)).toEqual(['[Date]Election day', '[##]Races on the ballot']);
+		expect(hrefs(hero)).toEqual(['#local-races']);
+	});
+
+	test("off the location pages the editor's cards and buttons render as written", async () => {
+		const hero = await renderSeededHero();
+
+		expect(cardTexts(hero)[2]).toBe('[##]Independent candidates');
+		expect(hrefs(hero)).toEqual(['#local-races', '#independents']);
 	});
 });
 

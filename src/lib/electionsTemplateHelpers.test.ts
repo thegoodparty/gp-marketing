@@ -129,4 +129,28 @@ describe('buildElectionsIndexSectionOverrides', () => {
 		expect(hero?.headline).toBeUndefined();
 		expect(hero?.stateName).toBe('Illinois');
 	});
+
+	/** The hero reads its independents from the same people the featured block gets, so the two can never disagree. */
+	test("summarises the featured people into the hero's independents, and hides both without them", () => {
+		const pledged = {
+			personId: 'p1',
+			name: 'A',
+			office: null,
+			location: null,
+			href: '/people/a',
+			avatarUrl: null,
+			isPledged: true,
+			isNonpartisan: true,
+			role: 'candidate' as const,
+			electionDate: null,
+		};
+		const withPeople = buildElectionsIndexSectionOverrides({
+			...countyCtx,
+			featuredPeople: { candidates: [pledged], representatives: [], candidatesComplete: true },
+		}).component_locationLandingPageHero;
+		const withoutPeople = buildElectionsIndexSectionOverrides(countyCtx).component_locationLandingPageHero;
+
+		expect(withPeople?.independents).toEqual({ candidateCount: 1, hasAny: true });
+		expect(withoutPeople?.independents).toEqual({ candidateCount: null, hasAny: false });
+	});
 });

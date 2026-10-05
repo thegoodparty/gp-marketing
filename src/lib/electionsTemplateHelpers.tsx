@@ -7,7 +7,7 @@ import type { RaceDetail } from '~/types/elections';
 import type { CandidateCard } from '~/ui/CandidatesBlock';
 import type { BreadcrumbItem } from '~/ui/BreadcrumbBlock';
 import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
-import type { FeaturedPeople } from '~/lib/featuredPeople';
+import { type FeaturedPeople, summarizeIndependents } from '~/lib/featuredPeople';
 import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
 import { secondaryButtonStyleType } from '~/ui/_lib/designTypesStore';
 import {
@@ -324,6 +324,7 @@ export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageConte
 			countyName: ctx.countyName,
 			cityName: ctx.cityName,
 			bodyCopy: ctx.bodyCopy,
+			independents: summarizeIndependents(ctx.featuredPeople),
 		},
 		component_listOfOfficesBlock: {
 			// The block renders `headline`, so that is where the location-named

@@ -9,6 +9,7 @@ import {
 	rankFeaturedPeople,
 	selectFeaturedPeople,
 	selectFeaturedRaces,
+	summarizeIndependents,
 } from './featuredCandidates.ts';
 import type { CandidacyItem, PlaceRace, PlaceWithFacts } from '~/types/elections';
 import type { PersonItem, PersonOfficeHolder } from '~/types/people';
@@ -303,9 +304,59 @@ describe('getFeaturedPeople', () => {
 		expect(selectFeaturedPeople(people, 'both').map(p => p.name)).toEqual(['Jane Doe', 'Sam Holder', 'Bob Ray']);
 	});
 
-	test('returns two empty lists when the place cannot be found', async () => {
+	test('returns two empty lists, and no trusted count, when the place cannot be found', async () => {
 		const people = await getFeaturedPeople({ placeSlug: 'tx/nowhere-county/nowhere', locationLevel: 'city' }, deps);
 
-		expect(people).toEqual({ candidates: [], representatives: [] });
+		expect(people).toEqual({ candidates: [], representatives: [], candidatesComplete: false });
+	});
+
+	/**
+	 * The hero's independent count is only published when every upcoming race was
+	 * asked. Two races fit the budget; seventeen do not.
+	 */
+	test('says whether the race budget covered every upcoming race', async () => {
+		const covered = await getFeaturedPeople({ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) }, deps);
+		expect(covered.candidatesComplete).toBe(true);
+
+		const manyRaces: PlaceWithFacts & { geoId?: string } = {
+			...cityPlace,
+			Races: Array.from({ length: 17 }, (_, i) => race(`tx/houston/seat-${i}`)),
+		};
+		const overBudget = await getFeaturedPeople(
+			{ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) },
+			{ ...deps, getPlaceBySlug: async () => manyRaces },
+		);
+		expect(overBudget.candidatesComplete).toBe(false);
+	});
+});
+
+describe('summarizeIndependents', () => {
+	const pledged = (i: number, overrides: Partial<FeaturedPersonCard> = {}) => person(i, { isPledged: true, ...overrides });
+
+	test('counts distinct pledged candidates when the list is complete, zero included', () => {
+		expect(summarizeIndependents({ candidates: [pledged(1), pledged(1), pledged(2), person(3)], representatives: [], candidatesComplete: true })).toEqual({
+			candidateCount: 2,
+			hasAny: true,
+		});
+		expect(summarizeIndependents({ candidates: [person(1)], representatives: [person(2, { role: 'representative' })], candidatesComplete: true })).toEqual({
+			candidateCount: 0,
+			hasAny: false,
+		});
+	});
+
+	test('withholds the count when the list is partial, but one pledged person found is still proof', () => {
+		expect(summarizeIndependents({ candidates: [pledged(1)], representatives: [], candidatesComplete: false })).toEqual({ candidateCount: null, hasAny: true });
+		expect(summarizeIndependents({ candidates: [], representatives: [pledged(2, { role: 'representative' })], candidatesComplete: true })).toEqual({
+			candidateCount: 0,
+			hasAny: true,
+		});
+	});
+
+	test('a pledged officeholder does not count as a candidate', () => {
+		expect(summarizeIndependents({ candidates: [], representatives: [pledged(1, { role: 'representative' })], candidatesComplete: true }).candidateCount).toBe(0);
+	});
+
+	test('no data hides both', () => {
+		expect(summarizeIndependents(undefined)).toEqual({ candidateCount: null, hasAny: false });
 	});
 });

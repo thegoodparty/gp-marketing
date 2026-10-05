@@ -7,7 +7,7 @@ const meta: Meta<typeof LocationLandingPageHero> = {
 	parameters: {
 		design: {
 			type: 'figma',
-			url: 'https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2032-21473',
+			url: 'https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2188-38655',
 		},
 	},
 	render: args => <LocationLandingPageHero {...args} />,
@@ -16,17 +16,22 @@ const meta: Meta<typeof LocationLandingPageHero> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const designStats = [
-	{ _key: 'election-day', value: 'Nov. 4, 2026', description: 'Election day', color: 'bright-yellow' as const },
-	{ _key: 'races', value: '[##]', description: 'Races on the ballot', color: 'halo-green' as const },
-	{ _key: 'independents', value: '[##]', description: 'Independent candidates', color: 'lavender' as const },
-];
+const electionDayStat = { _key: 'election-day', value: 'Nov. 4, 2026', description: 'Election day', color: 'bright-yellow' as const };
+const racesStat = { _key: 'races', value: '[##]', description: 'Races on the ballot', color: 'halo-green' as const };
+const independentsStat = { _key: 'independents', value: '[##]', description: 'Independent candidates', color: 'lavender' as const };
+const designStats = [electionDayStat, racesStat, independentsStat];
 
 const localRacesButton = { _key: 'local-races', buttonType: 'anchor' as const, href: '#local-races', label: 'Browse local races' };
-const allElectionsButton = { _key: 'all-elections', buttonType: 'anchor' as const, href: '#all-elections', label: 'Search all elections' };
-const designButtons = [localRacesButton, allElectionsButton];
+const independentsButton = {
+	_key: 'independents',
+	buttonType: 'anchor' as const,
+	href: '#independents',
+	label: "See who's an independent",
+};
+const designButtons = [localRacesButton, independentsButton];
 
-const designBodyCopy = 'Your anti-corruption voter guide. Find independent candidates on your ballot and representatives in office.';
+const designBodyCopy =
+	'A free, nonpartisan guide to local elections in Illinois. Learn about candidates and officials on your ballot, including who is independent of partisan and big-money influence.';
 
 export const Default: Story = {
 	args: {
@@ -57,6 +62,27 @@ export const CountyLevel: Story = {
 		countyName: 'Cook County',
 		stats: designStats,
 		buttons: [localRacesButton],
+	},
+};
+
+/**
+ * A location with no independents (Figma 2188-38655): the lavender card shows a
+ * real zero and the "See who's an independent" button is gone. The section
+ * wrapper applies both rules; the UI simply draws what it is handed.
+ */
+export const NoIndependents: Story = {
+	args: {
+		...Default.args,
+		stats: [electionDayStat, racesStat, { ...independentsStat, value: '0' }],
+		buttons: [localRacesButton],
+	},
+};
+
+/** The independent count could not be trusted, so the lavender card is hidden; the button stays because at least one independent was found. */
+export const IndependentCountUnknown: Story = {
+	args: {
+		...Default.args,
+		stats: [electionDayStat, racesStat],
 	},
 };
 

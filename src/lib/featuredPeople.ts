@@ -31,7 +31,37 @@ export type FeaturedPeopleMode = 'both' | 'candidates' | 'representatives';
 export type FeaturedPeople = {
 	candidates: FeaturedPersonCard[];
 	representatives: FeaturedPersonCard[];
+	/**
+	 * True when every one of the place's upcoming races at the page's level was
+	 * asked for its candidates, so a count taken from `candidates` is the whole
+	 * picture. False, or absent, when the race budget cut the list short or the
+	 * place could not be found: the people listed are real, a count of them is not.
+	 */
+	candidatesComplete?: boolean;
 };
+
+export type IndependentsSummary = {
+	/** Distinct pledged candidates, or null when the count cannot be trusted. */
+	candidateCount: number | null;
+	/** At least one pledged candidate or officeholder was found, whether or not the list is complete. */
+	hasAny: boolean;
+};
+
+/**
+ * What the location hero says about independents (Emily, 2026-10-05). The
+ * lavender card counts pledged candidates and shows a genuine zero, but hides
+ * when the candidate list is known to be partial. The "See who's an independent"
+ * button needs only one pledged person, candidate or officeholder, because one
+ * found is proof even from a partial list. Without data both hide.
+ */
+export function summarizeIndependents(people: FeaturedPeople | undefined): IndependentsSummary {
+	if (!people) return { candidateCount: null, hasAny: false };
+	const pledgedCandidates = new Set(
+		people.candidates.filter(person => person.isPledged).map(person => (person.personId ?? person.href).toLowerCase()),
+	);
+	const hasAny = pledgedCandidates.size > 0 || people.representatives.some(person => person.isPledged);
+	return { candidateCount: people.candidatesComplete ? pledgedCandidates.size : null, hasAny };
+}
 
 export type FeaturedLocationLevel = 'state' | 'county' | 'city' | 'district';
 

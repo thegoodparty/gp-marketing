@@ -24,7 +24,8 @@ export const component_locationLandingPageHero = {
 					title: 'Buttons',
 					name: 'list_buttons',
 					type: 'list_buttons',
-					description: 'Up to two buttons under the copy. Use the Anchor action to jump to a section further down the page.',
+					description:
+						'Up to two buttons under the copy. Use the Anchor action to jump to a section further down the page. A button anchored to "independents" jumps to the featured candidates block and hides itself on a location with no independent candidates or officials.',
 				},
 			],
 			group: 'locationLandingPageHeroContent',
@@ -34,7 +35,7 @@ export const component_locationLandingPageHero = {
 			name: 'stats',
 			type: 'stats',
 			description:
-				'Up to four cards shown beside the headline. Location names can be written as tokens such as [State], [County], [City] or [District].',
+				'Up to three cards shown beside the headline. Location names can be written as tokens such as [State], [County], [City] or [District]. On location pages the Lavender card shows the live count of independent candidates (its label stays yours), and hides when that count is not known.',
 			group: 'stats',
 		},
 		{

@@ -132,6 +132,14 @@ export type SectionOverrides = {
 		countyName?: string;
 		cityName?: string;
 		bodyCopy?: string;
+		/**
+		 * What the page knows about its independents, from the fetch that feeds
+		 * `component_featuredCandidatesBlock`. The lavender card shows `candidateCount`
+		 * (a real zero included) and hides when it is null; a button anchored to the
+		 * featured block hides unless `hasAny`. Absent on pages that are not location
+		 * pages, where the editor's figures and buttons render as written.
+		 */
+		independents?: import('~/lib/featuredPeople').IndependentsSummary;
 	};
 	component_listOfOfficesBlock?: {
 		heading?: string;

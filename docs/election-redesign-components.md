@@ -102,19 +102,40 @@ renders as before.
 The design was revised on 2026-09-24 (Figma 2032-21473 desktop, 2032-21815 mobile): four cards in a
 2x2 grid became three across, the figures changed (see below), and the two buttons were added. The
 buttons are ordinary Sanity buttons using the Anchor action, and the templates carry matching anchor
-ids on the offices list and the elections index so they have somewhere to jump to. City and district
-templates have no elections index, so their seed ships the one button.
+ids so they have somewhere to jump to.
+
+Revised again on 2026-10-05 (Figma 2188-38655 desktop, 2188-38397 mobile) after design feedback.
+The three cards were already right. The second button changed from "Search all elections" (the
+elections index) to "See who's an independent", an anchor to the featured candidates block, on all
+four location levels. Decisions settled with Emily, 2026-10-05:
+
+- **The independent count is live data, zero included, and hides when it cannot be trusted.** The
+  hero reads the same candidates and officeholders the featured block gets (`featuredPeople` on
+  `ElectionsIndexPageContext`), summarised by `summarizeIndependents` in `src/lib/featuredPeople.ts`
+  into the `independents` override. The lavender card is the independents card, identified by its
+  colour, since the design gives that colour to no other card: its number becomes the count of
+  distinct pledged candidates, and the card is left out when `candidatesComplete` is false, which is
+  when the place had more upcoming races than `FEATURED_RACE_BUDGET` covers or could not be found.
+  The editor's label and the other two placeholder figures are untouched. Off the location pages
+  the override is absent and the card renders as written.
+- **The button hides only when nobody is pledged.** A button anchored to `#independents` is left out
+  unless a pledged candidate or officeholder was found; one found is proof even from a partial list,
+  so the button can show while the card hides. The anchor ids live in
+  `src/constants/electionAnchors.ts`, and the featured candidates block answers to `#independents`
+  when an editor sets no anchor id, so the seeded button lands without matching ids being typed.
+- **Scope caveat, waiting on data.** The fetch covers the page's own-level races (state races on a
+  state page), which is narrower than the counts section's "whole location including sub-locations".
+  Until election-api offers the place-and-year aggregate, the published count is the pledged
+  candidates in the races the offices list below shows.
 
 Three things worth carrying to the rest of the batch:
 
 - **A midnight block must not put `text-white` on its section wrapper** if it contains pastel
   cards. The cards inherit it and their text disappears. Put the text color on the copy column
   instead, which is what the Stats Block already does.
-- **The figures are Sanity fields, not live data yet.** Only the election date and the race count
-  are computable from what a location page already fetches. The independent count needs the pledge
-  flag per candidate, and `/v1/candidacies` has no place filter — only per-race calls or a
-  whole-state sweep joined on `raceId`. That aggregate is worth asking election-api for once,
-  because the candidates and "who's currently in office" blocks will want the same thing.
+- **The date and race figures are still Sanity fields.** Only the independent count is live (see
+  above). The election date and the race count are computable from what a location page already
+  fetches and are the next to wire; the counts section below has the definitions.
 - **A value that is not a count must not animate.** `Stat` counts a numeric value up from zero, so
   the election date rendered as "Nov. 0, 2026" on the way to "Nov. 4, 2026" until the parser learned
   to skip values with digits after the first run.
@@ -387,11 +408,13 @@ definition is kept below because the position pages still want it.
   number typed in Studio would otherwise freeze the same figure across thousands of
   pages.
 
-None of these counts is available from a location page today. `/v1/candidacies` has no
-place filter, so they need either per-race calls or a whole-state sweep joined on
-`raceId`. The right fix is one aggregate from election-api, keyed by place and year,
-which the candidates rows, "who's currently in office" and nearby offices blocks will
-all want too.
+Of these, only the independent count reaches a location page today, through the featured
+people fetch (per-race `/v1/candidacies` calls within a budget of sixteen races, so the
+hero hides the figure when the budget was exceeded; see the hero entry above).
+`/v1/candidacies` has no place filter, so the others need either per-race calls or a
+whole-state sweep joined on `raceId`. The right fix is one aggregate from election-api,
+keyed by place and year, which the candidates rows, "who's currently in office" and
+nearby offices blocks will all want too.
 
 ## The two kinds of block, and the wiring most sessions miss
 
@@ -576,7 +599,7 @@ this table; it is here to orient, and to show the shape of the answer.
 
 | Block | Code | Placed on (published) | An update ships as |
 | --- | --- | --- | --- |
-| Location landing page hero | develop + draft PR #300 | all five Location globals | into #300, stays draft |
+| Location landing page hero | develop + draft PR #300 | all five Location globals (drafts view adds the `template-elections-subset` landing page) | into #300, stays draft |
 | List of offices | develop + draft PR #304 (base still points at merged #303) | all five Location globals | into #304, stays draft |
 | Location facts | develop | State / County / City / District globals | draft and batch |
 | Elections index | develop | Location globals, Person Profile global | draft and batch |

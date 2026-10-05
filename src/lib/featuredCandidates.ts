@@ -10,7 +10,7 @@ import type { PersonItem, PersonOfficeHolder } from '~/types/people';
 import type { FeaturedLocationLevel, FeaturedPeople, FeaturedPersonCard } from '~/lib/featuredPeople';
 
 export type { FeaturedLocationLevel, FeaturedPeople, FeaturedPeopleMode, FeaturedPersonCard, FeaturedPersonRole } from '~/lib/featuredPeople';
-export { FEATURED_PEOPLE_LIMIT, rankFeaturedPeople, selectFeaturedPeople } from '~/lib/featuredPeople';
+export { FEATURED_PEOPLE_LIMIT, rankFeaturedPeople, selectFeaturedPeople, summarizeIndependents } from '~/lib/featuredPeople';
 
 /**
  * How many of a place's upcoming races are asked for their candidates. Each race
@@ -186,7 +186,7 @@ export async function getFeaturedPeople(
 	params: { placeSlug: string; locationLevel: FeaturedLocationLevel; today?: Date },
 	deps: FeaturedPeopleDeps = defaultDeps,
 ): Promise<FeaturedPeople> {
-	const empty: FeaturedPeople = { candidates: [], representatives: [] };
+	const empty: FeaturedPeople = { candidates: [], representatives: [], candidatesComplete: false };
 	const tier = nearbyOfficesTiers(params.placeSlug)[0];
 	if (!tier) return empty;
 
@@ -200,7 +200,15 @@ export async function getFeaturedPeople(
 	const placeContext: PlaceContext = { name: place.name, state: place.state, level: params.locationLevel };
 	const races = place.Races ?? [];
 	const resolvedDates = races.length > 0 ? await deps.resolvePlaceRaceElectionDates(races, params.today) : new Map<string, string>();
-	const selectedRaces = selectFeaturedRaces(races, { level: params.locationLevel, resolvedDates, today: params.today });
+	// Asked without the budget first, so the result can say whether the budget cut
+	// anything: the hero's independent count hides when it did.
+	const eligibleRaces = selectFeaturedRaces(races, {
+		level: params.locationLevel,
+		resolvedDates,
+		today: params.today,
+		budget: Number.POSITIVE_INFINITY,
+	});
+	const selectedRaces = eligibleRaces.slice(0, FEATURED_RACE_BUDGET);
 
 	const [candidaciesByRace, officeholders, removedPersonIds] = await Promise.all([
 		mapConcurrently(selectedRaces, CONCURRENT_RACE_REQUESTS, async ({ race, electionDate }) =>
@@ -221,5 +229,6 @@ export async function getFeaturedPeople(
 	return {
 		candidates: buildCandidateCards(candidacies, personsById, placeContext, removedPersonIds),
 		representatives: buildRepresentativeCards(officeholders, personsById, placeContext, removedPersonIds),
+		candidatesComplete: selectedRaces.length === eligibleRaces.length,
 	};
 }

@@ -3,6 +3,7 @@
  * Used by scripts/seed-elections-cms-templates.ts to populate Sanity.
  */
 import { PROFILE_PAGE_SECTIONS } from '~/app/candidate/[...slug]/profilePageSections';
+import { ALL_ELECTIONS_ANCHOR, INDEPENDENTS_ANCHOR, LOCAL_RACES_ANCHOR } from '~/constants/electionAnchors';
 import { CAROUSEL_QUOTE_COLLECTION_ID, CAROUSEL_HEADER, STEPPER_HEADER } from '~/constants/electionsStaticSections';
 import {
 	POSITION_PAGE_CTA_BANNER,
@@ -60,11 +61,9 @@ const locationHeroStats = (keyPrefix: string) => ({
 	],
 });
 
-// The offices list and the elections index carry these anchors, so the hero's
-// buttons have somewhere to jump to.
-const LOCAL_RACES_ANCHOR = 'local-races';
-const ALL_ELECTIONS_ANCHOR = 'all-elections';
-
+// The offices list carries the first anchor and the featured candidates block
+// answers to the second by default, so the hero's buttons have somewhere to jump
+// to. The second button hides on a location with no independents (Emily, 2026-10-05).
 const localRacesButton = (keyPrefix: string) => ({
 	_key: `${keyPrefix}-btn-local-races`,
 	_type: 'button',
@@ -74,13 +73,13 @@ const localRacesButton = (keyPrefix: string) => ({
 	field_anchorId: LOCAL_RACES_ANCHOR,
 });
 
-const allElectionsButton = (keyPrefix: string) => ({
-	_key: `${keyPrefix}-btn-all-elections`,
+const independentsButton = (keyPrefix: string) => ({
+	_key: `${keyPrefix}-btn-independents`,
 	_type: 'button',
 	field_buttonHierarchy: 'Secondary',
-	field_buttonText: 'Search all elections',
+	field_buttonText: "See who's an independent",
 	field_ctaActionWithShared: 'Anchor',
-	field_anchorId: ALL_ELECTIONS_ANCHOR,
+	field_anchorId: INDEPENDENTS_ANCHOR,
 });
 
 export const tmplElectionsPositionSections = [
@@ -394,7 +393,7 @@ export const tmplElectionsStateIndexSections = [
 		locationLandingPageHeroDesignSettings: { field_blockColorCreamMidnight: 'MidnightDark' },
 		locationLandingPageHeroContent: {
 			field_bodyCopy: 'Learn what state positions are up for election and who is currently running for office in [State].',
-			list_buttons: [localRacesButton('idx-hero'), allElectionsButton('idx-hero')],
+			list_buttons: [localRacesButton('idx-hero'), independentsButton('idx-hero')],
 		},
 		stats: locationHeroStats('idx-hero'),
 	},
@@ -448,7 +447,7 @@ export const tmplElectionsCountyIndexSections = [
 		locationLandingPageHeroDesignSettings: { field_blockColorCreamMidnight: 'MidnightDark' },
 		locationLandingPageHeroContent: {
 			field_bodyCopy: 'Learn what positions are up for election and who is currently running for office in [County].',
-			list_buttons: [localRacesButton('county-hero'), allElectionsButton('county-hero')],
+			list_buttons: [localRacesButton('county-hero'), independentsButton('county-hero')],
 		},
 		stats: locationHeroStats('county-hero'),
 	},
@@ -502,7 +501,7 @@ export const tmplElectionsCityIndexSections = [
 		locationLandingPageHeroDesignSettings: { field_blockColorCreamMidnight: 'MidnightDark' },
 		locationLandingPageHeroContent: {
 			field_bodyCopy: 'Learn what positions are up for election and who is currently running for office in [City].',
-			list_buttons: [localRacesButton('city-hero')],
+			list_buttons: [localRacesButton('city-hero'), independentsButton('city-hero')],
 		},
 		stats: locationHeroStats('city-hero'),
 	},
@@ -534,7 +533,7 @@ export const tmplElectionsDistrictIndexSections = [
 		locationLandingPageHeroDesignSettings: { field_blockColorCreamMidnight: 'MidnightDark' },
 		locationLandingPageHeroContent: {
 			field_bodyCopy: 'Learn what positions are up for election and who is currently running for office in [District].',
-			list_buttons: [localRacesButton('district-hero')],
+			list_buttons: [localRacesButton('district-hero'), independentsButton('district-hero')],
 		},
 		stats: locationHeroStats('district-hero'),
 	},

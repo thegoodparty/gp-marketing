@@ -137,7 +137,7 @@ describe('getNearbyOffices', () => {
 	const depsFor = (places: Record<string, PlaceWithFacts | null>, calls: string[] = []) => ({
 		calls,
 		deps: {
-			getPlaceBySlug: async ({ slug }: { slug: string }) => {
+			getElectionsPagePlace: async ({ slug }: { slug: string }) => {
 				calls.push(slug);
 				return await Promise.resolve(places[slug] ?? null);
 			},

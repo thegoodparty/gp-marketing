@@ -7,6 +7,7 @@ import type { RaceDetail } from '~/types/elections';
 import type { CandidateCard } from '~/ui/CandidatesBlock';
 import type { BreadcrumbItem } from '~/ui/BreadcrumbBlock';
 import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
+import type { FeaturedPeople } from '~/lib/featuredPeople';
 import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
 import { secondaryButtonStyleType } from '~/ui/_lib/designTypesStore';
 import {
@@ -301,6 +302,13 @@ export type ElectionsIndexPageContext = {
 		heading?: string;
 		paragraphs?: string[];
 	};
+	/**
+	 * The page's candidates and current officeholders for
+	 * `component_featuredCandidatesBlock`, from `getFeaturedPeople`. Fetched by
+	 * `renderElectionsIndexPage` when a route does not supply it; absent means
+	 * the block hides.
+	 */
+	featuredPeople?: FeaturedPeople;
 };
 
 export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageContext): SectionOverrides {
@@ -345,6 +353,12 @@ export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageConte
 					paragraphs: ctx.locationEditorial.paragraphs,
 				}
 			: undefined,
+		component_featuredCandidatesBlock: ctx.featuredPeople
+			? {
+					candidates: ctx.featuredPeople.candidates,
+					representatives: ctx.featuredPeople.representatives,
+				}
+			: { hidden: true },
 	};
 }
 

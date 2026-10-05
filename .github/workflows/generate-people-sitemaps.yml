@@ -1,0 +1,168 @@
+name: Generate and publish people sitemaps
+
+# The hourly heart of the /people sitemap band (see the sharding rationale in
+# src/lib/sitemap-entries.ts): one corpus walk emits all 64 shard files
+# (scripts/generate-sitemaps.ts --people-shards-out, the gated generator) and
+# syncs them to s3://gp-marketing-sitemaps/sitemap/people/.
+#
+# Generation runs, and its fail-closed gates are checked, BEFORE any AWS
+# credential exists in the job -- a bad corpus walk (wrong shard count, a
+# shard over the URL ceiling, the total floor tripped, malformed XML) never
+# reaches a step that can touch S3, and nothing already published is ever
+# removed (no `--delete` is ever passed to `aws s3 sync`).
+#
+# workflow_dispatch accepts an optional single `shard` so the takedown path
+# can refresh one file within minutes instead of waiting for the whole band.
+# It shares the hourly cron's concurrency group so a dispatched takedown
+# queues behind an in-flight run instead of racing it.
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+    inputs:
+      shard:
+        description: 'Single shard (0-63) to regenerate; empty regenerates all 64'
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: generate-people-sitemaps
+  cancel-in-progress: false
+
+env:
+  ELECTIONS_API_BASE_URL: https://election-api.goodparty.org
+  GP_API_BASE_URL: https://gp-api.goodparty.org
+  # getBaseUrl() (src/lib/siteBaseUrl.ts) writes this into every emitted <loc>.
+  # It already falls back to the production host with nothing set, but this
+  # keeps that fallback explicit rather than implicit, and keeps the shard
+  # emitter's local-host refusal gate (runPeopleShardsOut) meaningful.
+  NEXT_PUBLIC_SITE_URL: https://goodparty.org
+  # Job level, not step level: a step's own `env` block is not visible to that
+  # step's `if` condition (see the identical note in gpbot-pr-triage.yml), so
+  # the Slack guard below would always evaluate true and the step would fail
+  # on an unset channel instead of skipping.
+  SLACK_TOKEN: ${{ secrets.GPBOT_SLACK_BOT_TOKEN }}
+  CHANNEL: ${{ vars.BOT_DEV_CHANNEL_ID }}
+  # Job level so both `if:` conditions and `run:` steps can read it as a real
+  # shell variable ($SHARD) instead of interpolating `${{ inputs.shard }}`
+  # directly into script text.
+  SHARD: ${{ inputs.shard }}
+
+jobs:
+  generate-and-publish:
+    name: Generate and publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Validate shard input
+        if: env.SHARD != ''
+        run: |
+          set -euo pipefail
+          if ! [[ "$SHARD" =~ ^[0-9]+$ ]] || [ "$SHARD" -ge 64 ]; then
+            echo "::error::shard must be an integer in [0, 64), got '$SHARD'"
+            exit 1
+          fi
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.23
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # Per-run token, minted fresh and never written anywhere but this job's
+      # own masked env -- not the long-lived ELECTION_API_M2M_TOKEN that
+      # rotate-election-api-token.yml manages in Vercel. No Vercel write, no
+      # Vercel env needed here.
+      - name: Mint election-api token
+        id: mint-token
+        env:
+          CLERK_MACHINE_SECRET_KEY: ${{ secrets.CLERK_GP_MARKETING_MACHINE_SECRET }}
+        run: bun run scripts/mint-election-api-token.ts
+
+      - name: Generate people shards
+        id: generate-shards
+        env:
+          ELECTION_API_M2M_TOKEN: ${{ steps.mint-token.outputs.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/people-shards"
+          if [ -n "$SHARD" ]; then
+            bun run scripts/generate-sitemaps.ts --people-shards-out "$RUNNER_TEMP/people-shards" --shard "$SHARD"
+          else
+            bun run scripts/generate-sitemaps.ts --people-shards-out "$RUNNER_TEMP/people-shards"
+          fi
+
+      # Everything above this line can fail without an AWS credential ever
+      # existing in the job. SITEMAPS_PUBLISHER_ROLE_ARN (task 01) may not be
+      # set yet on a fresh merge -- skip publishing rather than fail loudly on
+      # a known, temporary gap; the "Note" step below makes that visible.
+      - name: Configure AWS credentials
+        id: configure-aws
+        if: vars.SITEMAPS_PUBLISHER_ROLE_ARN != ''
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.SITEMAPS_PUBLISHER_ROLE_ARN }}
+          aws-region: us-west-2
+
+      - name: Publish all shards
+        id: publish-full
+        if: vars.SITEMAPS_PUBLISHER_ROLE_ARN != '' && env.SHARD == ''
+        run: |
+          aws s3 sync "$RUNNER_TEMP/people-shards" s3://gp-marketing-sitemaps/sitemap/people/ \
+            --content-type application/xml \
+            --cache-control "public, max-age=300" \
+            --exact-timestamps
+
+      - name: Publish single shard
+        id: publish-shard
+        if: vars.SITEMAPS_PUBLISHER_ROLE_ARN != '' && env.SHARD != ''
+        run: |
+          aws s3 cp "$RUNNER_TEMP/people-shards/$SHARD.xml" \
+            "s3://gp-marketing-sitemaps/sitemap/people/$SHARD.xml" \
+            --content-type application/xml \
+            --cache-control "public, max-age=300"
+
+      - name: Note publisher role not configured yet
+        if: vars.SITEMAPS_PUBLISHER_ROLE_ARN == ''
+        run: echo "::notice::SITEMAPS_PUBLISHER_ROLE_ARN is not set (task 01 pending) -- shards were generated and gate-validated but not published"
+
+      # chat.postMessage answers 200 even when it refuses the message, so -f
+      # proves nothing; the -e check at the end catches a revoked token or a
+      # channel gp_ai_bot was never invited to, same trap gpbot-pr-triage.yml
+      # documents. Runs regardless of which prior step failed -- `if: failure()`
+      # overrides the default "only run after success" behavior.
+      - name: Alert #bot-dev on failure
+        if: failure() && env.SLACK_TOKEN != '' && env.CHANNEL != ''
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          FAILING_STEP: >-
+            ${{
+              steps.mint-token.outcome == 'failure' && 'Mint election-api token'
+              || steps.generate-shards.outcome == 'failure' && 'Generate people shards'
+              || steps.configure-aws.outcome == 'failure' && 'Configure AWS credentials'
+              || steps.publish-full.outcome == 'failure' && 'Publish all shards'
+              || steps.publish-shard.outcome == 'failure' && 'Publish single shard'
+              || 'unknown step'
+            }}
+        run: |
+          set -euo pipefail
+          jq -n \
+            --arg channel "$CHANNEL" \
+            --arg text "generate-people-sitemaps failed at *${FAILING_STEP}*: <${RUN_URL}|${{ github.workflow }} run>. No partial band is ever synced and \`--delete\` is never passed, so the previously published shards keep serving." \
+            '{channel: $channel, text: $text}' \
+            | curl -sSf -X POST https://slack.com/api/chat.postMessage \
+                -H "Authorization: Bearer $SLACK_TOKEN" \
+                -H 'Content-type: application/json; charset=utf-8' \
+                --data @- \
+            | tee /dev/stderr \
+            | jq -e '.ok' > /dev/null

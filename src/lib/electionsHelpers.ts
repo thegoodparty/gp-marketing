@@ -1,6 +1,7 @@
 import { convert } from 'html-to-text';
 
 import { US_STATES } from '~/constants/usStates';
+import { isValidStateCode } from '~/constants/usStateCodes';
 import type { CandidacyItem, FindByRaceIdResponse, PlaceItem, PlaceRace, PlaceWithFacts, RaceDetail } from '~/types/elections';
 import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
 import type { FactsCardProps } from '~/ui/FactsCard';
@@ -527,6 +528,29 @@ export function buildPlaceRacePositionHref(placeSegments: string[], raceSlug: st
 }
 
 /**
+ * The place names for a page title, in order, with repeats dropped and blanks skipped.
+ *
+ * Every slot in an /elections title can fall back to the race's own place: a district nested
+ * under the city slot fills city and county alike, and a subplace route can have any one of its
+ * three slots resolve to the same place as another. Joining them blindly said the name twice
+ * ("Local School Board in Dutton/Brady K-12 Schools, Dutton/Brady K-12 Schools, Montana").
+ *
+ * Deduplicating on the names rather than on the joined string is what makes this total: a
+ * half-collapsed phrase matches no single slot, so a comparison against the phrase lets a repeat
+ * back in. Names are compared as displayed, which is the level the defect lives at.
+ */
+export function joinPlaceNames(...names: Array<string | null | undefined>): string {
+	const seen = new Set<string>();
+	const parts: string[] = [];
+	for (const name of names) {
+		if (!name || seen.has(name)) continue;
+		seen.add(name);
+		parts.push(name);
+	}
+	return parts.join(', ');
+}
+
+/**
  * Whether a place segment in a position page's URL names a real place.
  *
  * A joint office spends one URL segment per combined role, and those segments sit in the
@@ -986,6 +1010,12 @@ export function resolveElectionPositionFromRaceSlug(
 	const parts = race.slug.split('/').filter(Boolean);
 	const positionSlug = parts.pop();
 	if (!positionSlug || parts.length === 0) return undefined;
+
+	// Every /elections position route rejects a state segment that is not a US state code, so a
+	// slug whose first segment is not one can only ever build a 404. The feed emits these where
+	// the state is missing from the slug entirely (`st-george/city-legislature`, St. George,
+	// Louisiana), and the place name then lands in the state slot.
+	if (!isValidStateCode(parts[0])) return undefined;
 
 	const level = (race.positionLevel ?? '').toUpperCase();
 	const skipUnmapped = options?.skipUnmappedCity ?? false;

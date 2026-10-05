@@ -16,6 +16,24 @@ import { Text } from './Text.tsx';
 const API_ENDPOINT = '/api/demo-request';
 const DEFAULT_TOUR_URL = '/product-tour';
 const MIN_CHECKING_MS = 1800;
+// HubSpot's visitor cookie. The qualifier forwards it with the Forms API submission so the
+// request is logged on the contact as a form fill with the visitor's original source intact.
+const HUBSPOT_COOKIE = 'hubspotutk';
+const HUBSPOT_COOKIE_PATTERN = /^[0-9a-f]{32}$/;
+
+function readHubSpotCookie(): string {
+	if (typeof document === 'undefined') return '';
+	const match = document.cookie.split(';').map(part => part.trim()).find(part => part.startsWith(`${HUBSPOT_COOKIE}=`));
+	if (!match) return '';
+	let value = '';
+	try {
+		value = decodeURIComponent(match.slice(HUBSPOT_COOKIE.length + 1));
+	} catch {
+		// A malformed percent sequence throws synchronously; a missing cookie must never block the submit.
+		return '';
+	}
+	return HUBSPOT_COOKIE_PATTERN.test(value) ? value : '';
+}
 
 const STATES = [
 	'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA',
@@ -256,6 +274,8 @@ export function DemoRequestBlock(props: DemoRequestBlockProps) {
 			phone: answers.phone,
 			sms_consent: answers.smsConsent,
 			source_url: typeof window !== 'undefined' ? window.location.href : '',
+			page_name: typeof document !== 'undefined' ? document.title : '',
+			hutk: readHubSpotCookie(),
 		};
 
 		fetch(API_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })

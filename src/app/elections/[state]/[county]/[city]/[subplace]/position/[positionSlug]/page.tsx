@@ -12,10 +12,11 @@ import {
 	formatFilingPeriodFromRace,
 	getStateName,
 	isRealPlaceSegment,
+	joinPlaceNames,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
 import { getCachedElectionRouteParams } from '~/lib/sitemap-entries';
-import { toAbsoluteUrl } from '~/lib/url';
+import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsPositionPage } from '~/lib/renderElectionsPositionPage';
 
 export const revalidate = 3600;
@@ -132,8 +133,9 @@ export async function generateMetadata({
 	// A joint office fills the city slot with an office name, and the place then resolves to the
 	// county, so naming it as both city and county would say the county twice.
 	const isRealCity = isRealPlaceSegment(cityPlace?.slug, city);
-	const localityName = isRealCity ? cityName : countyDisplayName;
-	const placePhrase = isRealCity ? `${cityName}, ${countyDisplayName}` : countyDisplayName;
+	// Either slot can resolve to the race's own place, so the names are deduplicated rather than
+	// joined blindly; see joinPlaceNames.
+	const placePhrase = isRealCity ? joinPlaceNames(cityName, countyDisplayName) : countyDisplayName;
 	const isRealSubplace =
 		race?.Place?.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`) ?? false;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
@@ -142,14 +144,16 @@ export async function generateMetadata({
 	);
 	if (isRealSubplace) {
 		const subplaceName = race!.Place!.name;
+		// The same slots again, with the subplace ahead of them; any two can be one place.
+		const locationPhrase = joinPlaceNames(subplaceName, isRealCity ? cityName : null, countyDisplayName);
 		return {
-			title: `${positionName} in ${subplaceName}, ${localityName}, ${stateName} | Good Party`,
-			description: `Election details and candidates for ${positionName} in ${subplaceName}, ${placePhrase}, ${stateName}.`,
+			title: `${positionName} in ${locationPhrase}, ${stateName} | ${SITE_NAME}`,
+			description: `Election details and candidates for ${positionName} in ${locationPhrase}, ${stateName}.`,
 			alternates: { canonical },
 		};
 	}
 	return {
-		title: `${positionName} in ${localityName}, ${stateName} | Good Party`,
+		title: `${positionName} in ${placePhrase}, ${stateName} | ${SITE_NAME}`,
 		description: `Election details and candidates for ${positionName} in ${placePhrase}, ${stateName}.`,
 		alternates: { canonical },
 	};

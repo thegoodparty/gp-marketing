@@ -71,6 +71,7 @@ export function buildCandidateCards(
 			isNonpartisan: nonpartisan(candidacy.party),
 			role: 'candidate',
 			electionDate,
+			raceSlug: race.slug.toLowerCase(),
 		});
 	}
 	return cards;
@@ -103,6 +104,7 @@ export function buildRepresentativeCards(
 			isNonpartisan: nonpartisan(...(oh.partyNames ?? [])),
 			role: 'representative',
 			electionDate: null,
+			raceSlug: null,
 		});
 	}
 	return cards;

@@ -24,6 +24,8 @@ export type FeaturedPersonCard = {
 	role: FeaturedPersonRole;
 	/** ISO date of the candidate's election; representatives have none. */
 	electionDate: string | null;
+	/** The race the candidacy is in, lower-cased, so a block can group candidates by office; representatives have none. */
+	raceSlug?: string | null;
 };
 
 export type FeaturedPeopleMode = 'both' | 'candidates' | 'representatives';

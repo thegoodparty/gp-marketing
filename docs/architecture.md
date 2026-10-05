@@ -56,7 +56,8 @@ list and turns each block into a React component. The chain, in order:
 
 Every case is wrapped in a `ComponentErrorBoundary`, so a single broken block will
 not take down the whole page. There are roughly 45 registered block types today.
-Adding one touches about five files. Full recipe: `docs/adding-a-component.md`.
+Adding one touches about five files. Use the `new-component` skill, which runs the
+generator that wires them all; `docs/adding-a-component.md` documents what it wires.
 
 Warning: type and lint errors are enforced (`next.config.ts` sets
 `typescript.ignoreBuildErrors: false` and `eslint.ignoreDuringBuilds: false`, and CI

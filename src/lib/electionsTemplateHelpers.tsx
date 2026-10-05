@@ -313,6 +313,7 @@ export type ElectionsIndexPageContext = {
 };
 
 export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageContext): SectionOverrides {
+	const independents = summarizeIndependents(ctx.featuredPeople, ctx.defaultYear);
 	return {
 		component_breadcrumbBlock: { breadcrumbs: ctx.breadcrumbs },
 		component_locationLandingPageHero: {
@@ -327,12 +328,14 @@ export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageConte
 			bodyCopy: ctx.bodyCopy,
 			// Both figures describe the ballot the offices list shows, in the year it
 			// opens on (Emily, 2026-10-05): the races are counted off the same rows,
-			// and the independents off the same races' candidates.
+			// and the independents off the same races' candidates. Without that year
+			// neither figure can be scoped, so both cards hide rather than one showing
+			// an all-years total beside the other's absence.
 			raceCount:
 				ctx.offices && ctx.defaultYear !== undefined
 					? ctx.offices.filter(office => getYearFromDateString(office.nextElectionDate) === ctx.defaultYear).length
 					: null,
-			independents: summarizeIndependents(ctx.featuredPeople, ctx.defaultYear),
+			independents: ctx.defaultYear === undefined ? { ...independents, candidateCount: null } : independents,
 		},
 		component_listOfOfficesBlock: {
 			// The block renders `headline`, so that is where the location-named

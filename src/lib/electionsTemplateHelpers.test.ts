@@ -194,6 +194,30 @@ describe('buildElectionsIndexSectionOverrides', () => {
 		expect(hero?.independents).toEqual({ candidateCount: 1, hasAny: true });
 	});
 
+	/** Without the list's opening year neither figure can be scoped, so both hide together; the button still knows someone is pledged. */
+	test('without an opening year the independent count hides along with the race count', () => {
+		const pledged = {
+			personId: 'p1',
+			name: 'A',
+			office: null,
+			location: null,
+			href: '/people/a',
+			avatarUrl: null,
+			isPledged: true,
+			isNonpartisan: true,
+			role: 'candidate' as const,
+			electionDate: '2026-11-03',
+		};
+		const hero = buildElectionsIndexSectionOverrides({
+			...countyCtx,
+			offices: [],
+			featuredPeople: { candidates: [pledged], representatives: [], candidatesComplete: true },
+		}).component_locationLandingPageHero;
+
+		expect(hero?.raceCount).toBeNull();
+		expect(hero?.independents).toEqual({ candidateCount: null, hasAny: true });
+	});
+
 	test('the race count is unknown, not zero, when the page has no offices data', () => {
 		expect(buildElectionsIndexSectionOverrides(countyCtx).component_locationLandingPageHero?.raceCount).toBeNull();
 		const emptyList = buildElectionsIndexSectionOverrides({ ...countyCtx, defaultYear: 2026, offices: [] });

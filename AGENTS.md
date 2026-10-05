@@ -98,7 +98,7 @@ Read the nearest relevant doc rather than loading everything.
 | Deciding if a request needs code at all     | `docs/content-vs-code.md`           |
 | Understanding the system / how pages render | `docs/architecture.md`              |
 | Adding a page-builder block                 | the `new-component` skill           |
-| Changing an existing page-builder block     | `docs/adding-a-component.md`        |
+| Changing an existing page-builder block     | the `update-component` skill        |
 | Building a block for the election redesign  | `docs/election-redesign-components.md` |
 | Anything about election or candidate pages  | `docs/elections.md`                 |
 | Finding the live URL for any page           | the `sitemap-lookup` skill          |

@@ -240,9 +240,12 @@ export async function getFeaturedPeople(
 		}),
 	);
 	// Ordered without the budget first, so the result can say whether the budget
-	// cut anything: the hero's independent count hides when it did.
+	// cut anything: the hero's independent count hides when it did. Undated races
+	// sort last and cannot be placed in any year, so they can neither join a year's
+	// count nor make it incomplete; only a dated race left out breaks completeness.
 	const eligibleRaces = orderSoonest(tierRaces.flat(), Number.POSITIVE_INFINITY);
 	const selectedRaces = eligibleRaces.slice(0, FEATURED_RACE_BUDGET);
+	const datedRacesCovered = eligibleRaces.filter(({ electionDate }) => electionDate).every(entry => selectedRaces.includes(entry));
 
 	const [candidaciesByRace, officeholders, removedPersonIds] = await Promise.all([
 		mapConcurrently(selectedRaces, CONCURRENT_RACE_REQUESTS, async ({ race, electionDate }) =>
@@ -263,6 +266,6 @@ export async function getFeaturedPeople(
 	return {
 		candidates: buildCandidateCards(candidacies, personsById, placeContext, removedPersonIds),
 		representatives: buildRepresentativeCards(officeholders, personsById, placeContext, removedPersonIds),
-		candidatesComplete: selectedRaces.length === eligibleRaces.length,
+		candidatesComplete: datedRacesCovered,
 	};
 }

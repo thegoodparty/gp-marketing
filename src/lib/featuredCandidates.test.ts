@@ -328,6 +328,26 @@ describe('getFeaturedPeople', () => {
 		);
 		expect(overBudget.candidatesComplete).toBe(false);
 	});
+
+	/**
+	 * A race with no date cannot be placed in any year, so it cannot make a year's
+	 * count incomplete: forty-eight dated races plus five undated ones still count
+	 * as covered, even though the undated ones fall past the budget.
+	 */
+	test('undated races past the budget do not make the count incomplete', async () => {
+		const withUndated: PlaceWithFacts & { geoId?: string } = {
+			...cityPlace,
+			Races: [
+				...Array.from({ length: 48 }, (_, i) => race(`tx/houston/seat-${i}`)),
+				...Array.from({ length: 5 }, (_, i) => race(`tx/houston/undated-${i}`, { electionDate: undefined })),
+			],
+		};
+		const people = await getFeaturedPeople(
+			{ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) },
+			{ ...deps, getPlaceBySlug: async () => withUndated },
+		);
+		expect(people.candidatesComplete).toBe(true);
+	});
 });
 
 describe('getFeaturedPeople across the ballot', () => {

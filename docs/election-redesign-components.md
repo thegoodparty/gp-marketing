@@ -32,7 +32,7 @@ The audit should produce, for each item on the list, one of:
 - **Already covered.** An existing block does this. Name it.
 - **Extend.** An existing block does this with one added field or option. Name the
   block and the field. This is a much smaller change than a new block, and is
-  covered by `docs/adding-a-component.md` rather than the `new-component` skill.
+  covered by the `update-component` skill rather than the `new-component` skill.
 - **New block.** Nothing covers it. Say which of the two kinds it is (see below).
 
 Unverified starting hypotheses, for the audit to confirm or reject rather than

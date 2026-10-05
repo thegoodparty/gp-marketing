@@ -4,6 +4,7 @@ import {
 	getCandidateBySlug,
 	getCityPlacesByCounty,
 	getCitySlugToCountySlugMap,
+	getCountySlugsByState,
 	getOfficeHoldersByGeoId,
 	getPersonByPersonId,
 	getPersonsByIds,
@@ -11,8 +12,8 @@ import {
 	getPublicPersonProfileStatus,
 	getRemovedPersonIds,
 	getVoterDensityForDistrict,
-	looksLikeCountySlugSegment,
 	looksLikeDistrictSlug,
+	resolveCountySlugForCitySlug,
 } from '~/lib/electionsApi';
 import { US_STATES_TUPLES } from '~/constants/usStates';
 import { normalizeStateCode } from '~/constants/usStateCodes';
@@ -20,7 +21,7 @@ import {
 	buildElectionPositionHrefFromRaceSlug,
 	getStateName,
 } from '~/lib/electionsHelpers';
-import { classifyParty, classifyPartyFrom, isMajorParty, type PartyClass } from '~/lib/party';
+import { classifyParty, classifyPartyFrom, isMajorParty, orderPartyNames, type PartyClass } from '~/lib/party';
 import { formatPersonName } from '~/lib/personName';
 import { buildPersonSlug, buildPersonSlugFromBase, slugifyName } from '~/lib/personSlug';
 import type { CandidacyItem } from '~/types/elections';
@@ -160,6 +161,14 @@ export interface PersonProfileView {
 	partyClass: PartyClass | null;
 	/** True for Republican/Democrat — strips the empowerment framing (states I/J). */
 	majorParty: boolean;
+	/**
+	 * True when the person cannot have taken the pledge at all: a major-party
+	 * affiliate, or one the CRM marks "Partisan Candidate". Checked BEFORE
+	 * {@link pledged}, so a bad `Pledge Status` cannot publish a pledge we know
+	 * to be impossible. Wider than {@link majorParty}, which still gates the
+	 * page's state letter and empowerment framing on party alone.
+	 */
+	pledgeIneligible: boolean;
 	/** True when the person requested removal (states K/L). */
 	removed: boolean;
 	/**
@@ -183,7 +192,13 @@ export interface PersonProfileView {
 	secondaryRoleTitle: string | null;
 	/** Bare office name for the sidebar "About Office" row. */
 	officeName: string | null;
+	/** Display label: {@link partyNames} joined with commas, major party first. */
 	party: string | null;
+	/**
+	 * The same parties unjoined, for consumers that must not treat the label as
+	 * one party's name (structured data emits one PoliticalParty per entry).
+	 */
+	partyNames: string[];
 	avatarUrl: string | null;
 	coverImageUrl: string | null;
 	initials: string;
@@ -539,25 +554,36 @@ function buildLinks(
  * every /people profile was emitting (~36,900 internal links across ~4,800
  * destinations in the 2026-09-14 crawl).
  *
- * The tests here mirror the resolver's own branches, so a prefix comes back only
- * where the resolver would actually consult the lookup: a county-shaped second
- * segment is already a county race, a district-shaped third segment is a
- * district inside a city and is routed without a county, and a non-city level
- * never takes the city branch at all. A blank level is left in — the feed omits
- * it often enough, and a hit in the lookup is itself proof the segment is a city.
+ * A hit in the lookup is itself proof the segment is a city, so this asks about
+ * slug shape only and lets the map decide. It used to pre-filter on two signals
+ * that both turned out to be wrong, and the 2026-09-18 crawl measured what each
+ * cost:
+ *
+ * - The position level (142 links). Only CITY and LOCAL were let through, but a
+ *   judicial, county or district-attorney office is routinely seated in a city:
+ *   `nv/las-vegas/justice-of-the-peace-judicial`,
+ *   `ar/pocahontas/county-constable`.
+ * - A county-shaped second segment (91 links). Where two cities in a state share
+ *   a name the feed disambiguates the city's own slug with a county suffix, so
+ *   `tx/reno-lamar-county` and `oh/oakwood-cuyahoga-county` are cities, not
+ *   counties, and `looksLikeCountySlugSegment` cannot tell them apart.
+ *
+ * A genuine county race costs a lookup miss rather than a wrong URL: county
+ * slugs are not city slugs, so they are never in the map. The miss does mean
+ * county-level profiles now resolve the state's place lists where they used to
+ * skip them, which is a hit on the same cached `/v1/places` responses the
+ * profile's own "Explore Elections" band already reads.
+ *
+ * A district-shaped third segment is still excluded: that is a district inside a
+ * city, which the resolver routes without a county.
  */
-function cityPrefixNeedingCounty(
-	slug: string | null | undefined,
-	positionLevel: string | null | undefined,
-): string | null {
+function cityPrefixNeedingCounty(slug: string | null | undefined): string | null {
 	if (!slug) return null;
-	const level = (positionLevel ?? '').toUpperCase();
-	if (level && level !== 'CITY' && level !== 'LOCAL') return null;
 
 	const parts = slug.split('/').filter(Boolean);
 	parts.pop();
 	const [state, place, third] = parts;
-	if (!state || !place || looksLikeCountySlugSegment(place)) return null;
+	if (!state || !place) return null;
 	if (parts.length === 2) return `${state}/${place}`;
 	if (parts.length === 3 && third && !looksLikeDistrictSlug(third)) return `${state}/${place}`;
 	return null;
@@ -581,7 +607,7 @@ function positionHrefFor(
 	citySlugToCountySlug?: Map<string, string> | null,
 ): string | null {
 	if (!slug) return null;
-	const cityPrefix = citySlugToCountySlug ? cityPrefixNeedingCounty(slug, positionLevel) : null;
+	const cityPrefix = citySlugToCountySlug ? cityPrefixNeedingCounty(slug) : null;
 	const mapped = Boolean(cityPrefix && citySlugToCountySlug?.has(cityPrefix));
 	return (
 		buildElectionPositionHrefFromRaceSlug(
@@ -674,6 +700,25 @@ function nameOf(first?: string | null, last?: string | null, fallback = ''): str
 	return formatPersonName([first, last].filter(Boolean).join(' ')) ?? fallback;
 }
 
+// HubSpot "Confirmed Candidate" (`verified_candidates`) as it arrives on the
+// person feed. These are the STORED values, which are not the labels the CRM
+// shows an editor: "Yes" is displayed there as "Running".
+const CONFIRMED_RUNNING = 'Yes';
+const CONFIRMED_PARTISAN = 'Partisan Candidate';
+
+/**
+ * `Confirmed Candidate = Running` is required alongside `Pledge Status = Yes`
+ * before we publish a pledge, so that one mistyped CRM field cannot assert one
+ * on its own.
+ *
+ * An ABSENT value passes. The field is not on the person feed yet, and treating
+ * "we were not told" as "not running" would silently clear the pledge line from
+ * every profile on the site the moment this shipped.
+ */
+function confirmedRunning(confirmedCandidate: string | null | undefined): boolean {
+	return confirmedCandidate == null ? true : confirmedCandidate === CONFIRMED_RUNNING;
+}
+
 /**
  * True only when the spine affirms the pledge AND the party evidence within
  * reach affirms eligibility. Party wins, as it does for the hero
@@ -695,8 +740,9 @@ function nameOf(first?: string | null, last?: string | null, fallback = ''): str
  * hero would read, the two can still differ. Closing it needs the current
  * office party on the person feed, not more logic here.
  */
-function pledgedFromSpine(person: PersonItem | undefined, ...rowParties: Array<string | null | undefined>): boolean {
+export function pledgedFromSpine(person: PersonItem | undefined, ...rowParties: Array<string | null | undefined>): boolean {
 	if (person?.isPledged !== true) return false;
+	if (!confirmedRunning(person.confirmedCandidate)) return false;
 	const evidence = [
 		...rowParties,
 		...(person.OfficeHolders ?? []).flatMap((o) => o.partyNames ?? []),
@@ -716,7 +762,7 @@ function pledgedFromSpine(person: PersonItem | undefined, ...rowParties: Array<s
  * `removedPersonIds` of null means the feed could not be read: suppress every
  * card photo rather than risk republishing one (see getRemovedPersonIds).
  */
-function cardAvatarUrl(
+export function cardAvatarUrl(
 	personId: string | null,
 	avatarUrl: string | null,
 	removedPersonIds: ReadonlySet<string> | null,
@@ -836,6 +882,44 @@ function humanizeSlugSegment(segment: string): string {
  * is what lets the dev fixtures and the pure unit tests pass a ready-made 4-part
  * slug and need no lookup.
  */
+/**
+ * Whether a location segment of an `/elections` path really names a place, given
+ * the slot it sits in.
+ *
+ * The position route's place slots are filled positionally, and a joint office
+ * spends one segment per combined role, so the segments after the state are not
+ * all places: `ga/state-insurance-commissioner/fire-safety-commissioner-joint`
+ * puts an office name in the county slot, and "Choctaw/Nicoma Park Schools"
+ * slugifies into two. Linking those produced 346 breadcrumb 404s in the
+ * 2026-09-18 crawl, and a further set of redirects where the segment happened to
+ * name something real at the wrong depth — `ok/choctaw` is a city, so in the
+ * county slot it sent the "Explore Elections" band to the wrong county's towns.
+ * Hence the check is per slot, not "is this string a place anywhere".
+ *
+ * Slot 3 is never a place: every subplace-depth `/elections` URL in the sitemap
+ * is a joint office, so nothing below the city is linkable.
+ *
+ * Without the lookups (dev fixtures, pure unit tests) every segment passes,
+ * which keeps the previous shape. This is the /people counterpart of
+ * `isRealPlaceSegment`, which does the same job on the elections position pages
+ * from the place those pages have already resolved.
+ */
+function isRealPlaceSlot(params: {
+	slot: number;
+	state: string;
+	segment: string;
+	citySlugToCountySlug?: Map<string, string> | null;
+	countySlugs?: Set<string> | null;
+}): boolean {
+	const { slot, state, segment, citySlugToCountySlug, countySlugs } = params;
+	if (!countySlugs || !citySlugToCountySlug) return true;
+	// Counties only in slot 1, deliberately: a city there means the expansion did
+	// not happen, and that county-less URL is itself the redirect being chased.
+	if (slot === 1) return countySlugs.has(`${state}/${segment}`);
+	if (slot === 2) return citySlugToCountySlug.has(`${state}/${segment}`);
+	return false;
+}
+
 export function buildBreadcrumbTrail(params: {
 	displayName: string;
 	stateCode: string | null;
@@ -843,8 +927,10 @@ export function buildBreadcrumbTrail(params: {
 	positionLevel: string | null;
 	positionName: string | null;
 	citySlugToCountySlug?: Map<string, string> | null;
+	countySlugs?: Set<string> | null;
 }): ProfileBreadcrumb[] {
-	const { displayName, stateCode, raceSlug, positionLevel, positionName, citySlugToCountySlug } = params;
+	const { displayName, stateCode, raceSlug, positionLevel, positionName, citySlugToCountySlug, countySlugs } =
+		params;
 	const trail: ProfileBreadcrumb[] = [{ href: '/elections', label: 'Elections' }];
 
 	if (!raceSlug) {
@@ -863,12 +949,16 @@ export function buildBreadcrumbTrail(params: {
 		const positionIdx = segments.indexOf('position');
 		const locationSegments =
 			positionIdx > 1 ? segments.slice(1, positionIdx) : segments.slice(1);
+		const state = locationSegments[0] ?? '';
 		let cumulative = '/elections';
-		locationSegments.forEach((segment, i) => {
+		// A crumb's href is its ancestors' path, so one unreal segment invalidates
+		// everything below it as well: stop rather than skip.
+		for (const [i, segment] of locationSegments.entries()) {
+			if (i > 0 && !isRealPlaceSlot({ slot: i, state, segment, citySlugToCountySlug, countySlugs })) break;
 			cumulative += `/${segment}`;
 			const label = i === 0 ? getStateName(segment) : humanizeSlugSegment(segment);
 			trail.push({ href: cumulative, label });
-		});
+		}
 		if (positionName) {
 			trail.push({ href: positionHref, label: positionName });
 		}
@@ -944,17 +1034,23 @@ export function composeView(
 	const displayName = overlay?.displayName ?? nameFromPerson ?? 'Public Official';
 	const office = pickCurrentOffice(person);
 	const persona = resolvePersona(person, office);
-	// Label and class must share one source precedence, or a "both" persona whose
-	// office and candidacy parties differ would show one party while being gated
-	// (majorParty → I/J empowerment) by the other. Office-first for both.
 	// Read the party off the CURRENT race, not whichever candidacy the API
 	// happens to return first: someone who ran as a Democrat in 2020 and is now
 	// running as an Independent would otherwise be gated as major-party (I/J)
 	// and lose the empowerment framing they qualify for.
 	const primaryCand = primaryCandidacy(person);
-	const rawParty = office?.partyNames?.[0] ?? primaryCand?.party ?? null;
-	const partyClass = classifyPartyFrom(office?.partyNames?.[0], primaryCand?.party);
+	// The label keeps the office-first precedence: a held office describes the
+	// person now, where a candidacy may be the seat they are only running for.
+	const partyNames = orderPartyNames(office?.partyNames?.length ? office.partyNames : [primaryCand?.party]);
+	const rawParty = partyNames.length > 0 ? partyNames.join(', ') : null;
+	// Class and label deliberately DIVERGE, where they used to share a source.
+	// Eligibility reads every line of the current office and candidacy, so a
+	// major-party nomination disqualifies wherever it sits in the list, even when
+	// the label leads with a minor line. Still scoped to the current office and
+	// race, so the 2020-Democrat-now-Independent case above is untouched.
+	const partyClass = classifyPartyFrom(...orderPartyNames([...(office?.partyNames ?? []), primaryCand?.party]));
 	const majorParty = isMajorParty(partyClass);
+	const pledgeIneligible = majorParty || person?.confirmedCandidate === CONFIRMED_PARTISAN;
 	const state = resolveProfileState(persona, { claimed, removed, partyClass });
 	// Empowerment framing applies to claimed pages and unclaimed non-partisan
 	// pages; it is stripped for major-party (I/J) and removal (K/L) states.
@@ -1008,8 +1104,15 @@ export function composeView(
 		unpublished,
 		empowered,
 		// Pledge is a factual spine flag; suppress it on removed (K/L) pages along
-		// with the rest of the authored/empowerment framing.
-		pledged: !removed && (person?.isPledged ?? false),
+		// with the rest of the authored/empowerment framing. Eligibility is read
+		// BEFORE the flag: a CRM `Pledge Status = Yes` on someone the same CRM
+		// calls partisan is a data error, not a pledge (Mamdani, Cuomo).
+		pledged:
+			!removed &&
+			!pledgeIneligible &&
+			confirmedRunning(person?.confirmedCandidate) &&
+			(person?.isPledged ?? false),
+		pledgeIneligible,
 		displayName,
 		roleTitle,
 		secondaryRoleTitle,
@@ -1017,6 +1120,9 @@ export function composeView(
 		// position so section headings ("About …", "Other Candidates for …") still
 		// name the seat they're running for, matching the Figma candidate frames.
 		officeName: office?.positionName ?? office?.officeTitle ?? candidacyTarget,
+		// Falls back to the class label so this never disagrees with `party`, which
+		// uses the same fallback when the spine names no party at all.
+		partyNames: partyNames.length > 0 ? partyNames : party ? [party] : [],
 		party,
 		avatarUrl,
 		coverImageUrl: removed ? null : (overlay?.coverImageUrl ?? null),
@@ -1143,37 +1249,88 @@ async function loadNearbyOfficials(
 }
 
 /**
+ * What one profile needs to know about its state's geography to link `/elections`:
+ * the city → county expansion, and the county slugs that say which URL segments
+ * name a real county.
+ */
+export type CityCountyLookup = {
+	citySlugToCountySlug: Map<string, string>;
+	countySlugs: Set<string>;
+};
+
+/** Every race slug this profile can link, in one list. */
+function profileRaceSlugs(person: PersonItem | null, raceSlug: string | null): string[] {
+	return [
+		raceSlug,
+		...(person?.OfficeHolders ?? []).map((o) => o.positionSlug),
+		...(person?.Candidacies ?? []).map((c) => c.Race?.slug),
+	].filter((slug): slug is string => Boolean(slug));
+}
+
+/**
+ * Whether a race slug's `/elections` URL carries a place segment below the state.
+ *
+ * Those are the segments the breadcrumb has to vouch for, so their presence is
+ * what makes the lookup worth loading even when nothing needs expanding — a
+ * joint office spends a URL segment per combined role
+ * (`ga/state-insurance-commissioner/fire-safety-commissioner-joint`), and
+ * without the county set to check it against, the trail links that office name
+ * as if it were a place.
+ */
+function hasPlaceSegmentBelowState(slug: string): boolean {
+	return slug.split('/').filter(Boolean).length >= 3;
+}
+
+/**
  * The city → county lookup every `/elections` link on this profile is built
- * from, or null when none of its races needs one.
+ * from, plus the state's county slugs, or null when the profile's races carry no
+ * place segment below the state for either to bear on.
  *
  * A profile links at most a handful of races — the primary candidacy plus the
  * "Recent Experience" rows — and almost always all in one state, so the lookup
  * is fetched per state rather than per race: a `/v1/races` detail fetch for each
  * row just to learn its county would cost more than the state's place lists,
  * which are cached and which the page's own "Explore Elections" band already
- * reads. Returning null when nothing needs expanding keeps the extra request
- * off state and county profiles entirely.
+ * reads.
+ *
+ * Two fallbacks sit behind the state sweep, for the 107 links the 2026-09-18
+ * crawl found still county-less because the bulk map simply did not contain the
+ * city. `walkCountiesWhenEmpty` covers Connecticut, whose statewide municipal
+ * queries return nothing at all. The per-place pass covers the scattered
+ * singles the sweep misses in states that otherwise map fine (Coeur d'Alene ID,
+ * Princes Lakes IN, D'Iberville MS, Reiles Acres ND, Suffolk VA); it runs only
+ * for the prefixes still unresolved, which is nothing on a healthy profile.
  */
 async function loadCityCountyLookup(
 	person: PersonItem | null,
 	raceSlug: string | null,
-	positionLevel: string | null,
-): Promise<Map<string, string> | null> {
-	const prefixes = [
-		cityPrefixNeedingCounty(raceSlug, positionLevel),
-		...(person?.OfficeHolders ?? []).map((o) =>
-			cityPrefixNeedingCounty(o.positionSlug, o.positionLevel ?? o.Position?.level),
-		),
-		...(person?.Candidacies ?? []).map((c) =>
-			cityPrefixNeedingCounty(c.Race?.slug, c.Race?.positionLevel),
-		),
-	].filter((prefix): prefix is string => Boolean(prefix));
-	if (prefixes.length === 0) return null;
+): Promise<CityCountyLookup | null> {
+	const slugs = profileRaceSlugs(person, raceSlug);
+	if (!slugs.some(hasPlaceSegmentBelowState)) return null;
 
-	const states = [...new Set(prefixes.map((prefix) => prefix.split('/')[0]).filter(Boolean))];
-	const maps = await Promise.all(states.map(async (state) => getCitySlugToCountySlugMap(state)));
+	const prefixes = [...new Set(slugs.map(cityPrefixNeedingCounty).filter((p): p is string => Boolean(p)))];
+	const states = [
+		...new Set(slugs.map((slug) => slug.split('/')[0]).filter((s): s is string => Boolean(s))),
+	];
+	const [maps, countySlugSets] = await Promise.all([
+		Promise.all(states.map(async (state) => getCitySlugToCountySlugMap(state, { walkCountiesWhenEmpty: true }))),
+		Promise.all(states.map(async (state) => getCountySlugsByState(state))),
+	]);
+	const countySlugs = new Set(countySlugSets.flatMap((set) => [...set]));
 	// Keys carry their state, so merging states cannot collide.
-	return new Map(maps.flatMap((map) => [...map]));
+	const citySlugToCountySlug = new Map(maps.flatMap((map) => [...map]));
+
+	const unresolved = prefixes.filter(
+		(prefix) => !citySlugToCountySlug.has(prefix) && !countySlugs.has(prefix),
+	);
+	const resolved = await Promise.all(
+		unresolved.map(async (prefix) => [prefix, await resolveCountySlugForCitySlug(prefix)] as const),
+	);
+	for (const [prefix, countySlug] of resolved) {
+		if (countySlug) citySlugToCountySlug.set(prefix, countySlug);
+	}
+
+	return { citySlugToCountySlug, countySlugs };
 }
 
 /**
@@ -1186,9 +1343,10 @@ async function loadCityCountyLookup(
  * (`/elections/<state>/<county>/<city?>/position/<slug>`) since the persons
  * spine does not carry a clean county reference for city-level offices.
  */
-function deriveElectionsIndexTier(
+export function deriveElectionsIndexTier(
 	positionHref: string | null,
 	positionLevel: string | null,
+	countySlugs?: Set<string> | null,
 ): { tier: 'state' | 'county' | 'city'; countySlug: string | null } {
 	if (positionHref) {
 		const segments = positionHref.split('/').filter(Boolean); // ['elections', state, ...]
@@ -1197,7 +1355,13 @@ function deriveElectionsIndexTier(
 			positionIdx > 1 ? segments.slice(1, positionIdx) : segments.slice(1);
 		// [state] | [state, county] | [state, county, city(, subplace)]
 		if (locationSegments.length >= 3) {
-			return { tier: 'city', countySlug: `${locationSegments[0]}/${locationSegments[1]}` };
+			const countySlug = `${locationSegments[0]}/${locationSegments[1]}`;
+			// The county slot can hold an office name (a joint office) or a
+			// same-named city, and the band would then list a different county's
+			// towns as this person's neighbours. Fall through to the state list
+			// rather than answer confidently and wrongly.
+			if (countySlugs && !countySlugs.has(countySlug)) return { tier: 'state', countySlug: null };
+			return { tier: 'city', countySlug };
 		}
 		if (locationSegments.length === 2) return { tier: 'county', countySlug: null };
 		return { tier: 'state', countySlug: null };
@@ -1324,7 +1488,9 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 	// each Recent Experience row — is built from a race slug, and a city race's
 	// slug omits its county. One lookup, resolved here, so all of them land on the
 	// canonical 4-level URL instead of the pre-restructuring one that redirects.
-	const citySlugToCountySlug = await loadCityCountyLookup(person, raceSlug, positionLevel);
+	const cityCountyLookup = await loadCityCountyLookup(person, raceSlug);
+	const citySlugToCountySlug = cityCountyLookup?.citySlugToCountySlug ?? null;
+	const countySlugs = cityCountyLookup?.countySlugs ?? null;
 	// Canonical /elections position href for the person's OWN office ("Learn more").
 	// Only resolvable from a candidacy's race slug today, so this is populated for
 	// candidate/"both" personas; pure office-holders get null until election-api
@@ -1341,7 +1507,7 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 
 	// The interlink sections are independent; fetch in parallel. Each degrades to
 	// empty on any miss so the core profile always renders.
-	const { tier, countySlug } = deriveElectionsIndexTier(positionHref, positionLevel);
+	const { tier, countySlug } = deriveElectionsIndexTier(positionHref, positionLevel, countySlugs);
 	const breadcrumb = buildBreadcrumbTrail({
 		displayName,
 		stateCode,
@@ -1349,6 +1515,7 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 		positionLevel,
 		positionName,
 		citySlugToCountySlug,
+		countySlugs,
 	});
 	// The removal set gates both card loaders, so it has to resolve first. The
 	// elections index needs nothing, so start it now and only join at the end —

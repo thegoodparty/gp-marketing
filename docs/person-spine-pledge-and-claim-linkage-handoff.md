@@ -21,7 +21,7 @@ The columns exist in Postgres — the Prisma migrations were applied:
 
 | Column | Migration | App usage |
 | --- | --- | --- |
-| `Person.is_pledged` | `20260721173000_add_person_is_pledged` | Read by election-api and returned in the default person response; drives the pledge badge in `gp-marketing/src/lib/peopleProfile.ts` (`pledged: !removed && (person?.isPledged ?? false)`). |
+| `Person.is_pledged` | `20260721173000_add_person_is_pledged` | Read by election-api and returned in the default person response; drives the pledge badge in `gp-marketing/src/lib/peopleProfile.ts`. No longer sufficient on its own — see "Pledge eligibility is checked first" below. |
 | `Person.gp_api_user_id` | `20260805000000_add_person_gp_api_user_id` | Filter-only in election-api (`GET /v1/persons?gpApiUserId=<numeric user id>`, M2M-gated). Consumed by gp-api's `PersonIdBackfillService` to set its own `User.person_id`. |
 
 Neither is produced or written:
@@ -31,7 +31,14 @@ Neither is produced or written:
 
 Note that `people.gp_api_user_id` **already exists** in `dbt/project/models/marts/civics/people.sql` — it is computed and then simply not carried through to the serving mart. That makes fix (2) below mostly a plumbing change rather than new modelling.
 
-## Evidence (production, 2026-08-12)
+## Evidence (production, 2026-08-12) — PARTLY SUPERSEDED, see note
+
+> **Superseded 2026-09-18.** The "`is_pledged` is universally false" finding below
+> no longer holds. Pledge lines render on production today —
+> `/people/zohran-mamdani-568df699` and `/people/andrew-como-e0f5cc90` both read
+> "Has taken the GoodParty.org Pledge". Something now writes the flag, at least
+> for some people. Re-measure before relying on any count in this section. The
+> claim/linkage half (`gp_api_user_id`) has not been re-checked.
 
 - **`is_pledged` is universally false.** Sampled `GET /v1/persons?state=<st>&columns=id,isPledged` across 15 states — MI, FL, CA, NH, TX, NY, PA, OH, GA, AZ, NC, VA, WA, CO, MA — for **69,385 person rows**. Count with `isPledged = true`: **0**.
 - **No profile has ever been published.** `GET https://gp-api.goodparty.org/v1/public-person-profiles/published` returns `[]`, and `.../unlisted` returns `[]`. Zero published profiles and zero removals across all of production.
@@ -48,6 +55,26 @@ Note that `people.gp_api_user_id` **already exists** in `dbt/project/models/mart
 - gp-api's own code already anticipates the empty column — `person-profiles.controller.ts` `GET mine` comments that the backfill "is a graceful no-op (returns null) until the data platform populates the linkage — so `canCreate` is identical to today when the election-api column is empty." That is the state production is in.
 
 The apps are behaving exactly as designed given the data they are served. Nothing needs to change in `gp-marketing` or `gp-api` for either symptom.
+
+## Pledge eligibility is checked first (2026-09-18)
+
+Separate from the two gaps above, `gp-marketing` no longer publishes a pledge on
+the strength of `is_pledged` alone. `composeView` decides eligibility before it
+reads the flag, and an ineligible person renders "Ineligible for the
+GoodParty.org Pledge due to partisan affiliation" whatever the flag says:
+
+- **A major party anywhere in the current party list disqualifies.** Fusion
+  voting (New York) nominates one person on several lines at once and
+  `OfficeHolder.partyNames` arrives in no meaningful order, so reading
+  `partyNames[0]` both mislabelled people and hid the disqualifying line. Chuck
+  Schumer rendered as Working Families, pledge-eligible. The whole list is read
+  now, and the label lists every line with the major party first.
+- **`confirmedCandidate === 'Partisan Candidate'` disqualifies** on its own, with
+  no party involved (see request 3 below).
+
+Scope note for whoever changes this next: eligibility reads the **current**
+office and candidacy only. A past run under another party still does not
+disqualify, which is deliberate and separately tested.
 
 ## What we need
 
@@ -78,9 +105,31 @@ The contract in the election-api schema is "a person is pledged if pledged on an
   ```
   A person cluster that maps to two or more gp-api users yields **null**, silently. Those users will still be unable to claim after this fix. Please report how many `people` rows have `is_candidate or is_elected_official` true, a gp_api member record, and a null `gp_api_user_id` — that is the residual population, and if it is large it needs its own resolution (probably de-duplication upstream, not a change here).
 
-### 3. Writer — add both columns to `PERSON_UPSERT_QUERY`
+### 3. `confirmed_candidate` — carry HubSpot's "Confirmed Candidate" to person grain
 
-Add `is_pledged` and `gp_api_user_id` to the `INSERT` column list, the `SELECT`, and the `ON CONFLICT (id) DO UPDATE SET` clause in `write__election_api_db.py`. Without the `DO UPDATE SET` entries, existing rows never pick up the values — only newly inserted ones would, which would look like a partial fix and be worse to debug than the current clean failure.
+Requested by marketing on 2026-09-18 after Mamdani and Cuomo rendered as pledged
+off a `Pledge Status = Yes` that nobody could account for. `is_pledged` alone is
+one CRM field deep, so a single mistyped value publishes a pledge claim about a
+named person. The site now requires a second, independent field to agree.
+
+- **Source:** HubSpot company property `verified_candidates`, labelled
+  "Confirmed Candidate" in the CRM UI.
+- **Send the STORED value, not the label.** The option displayed as "Running" is
+  stored as `Yes`. The others are `No`, `Can't Determine`, `Unresponsive`
+  (displayed "Cold Lead"), `Partisan Candidate`, `Write In`, `Ended Pro`.
+- **Type:** nullable text, passed through verbatim. Do not coerce to a boolean —
+  the site distinguishes `Partisan Candidate` (disqualifying) from merely
+  not-running, and a boolean would collapse the two.
+- **Expose as `confirmedCandidate`** on the person response, alongside `isPledged`.
+
+Until this lands the field is absent and `gp-marketing` treats it as unknown, so
+the pledge line behaves exactly as it does today. It is a fail-open default,
+chosen so shipping the gate could not silently clear the pledge line from every
+profile at once — it does mean the gate is inert until the ETL sends the field.
+
+### 4. Writer — add all three columns to `PERSON_UPSERT_QUERY`
+
+Add `is_pledged`, `gp_api_user_id` and `confirmed_candidate` to the `INSERT` column list, the `SELECT`, and the `ON CONFLICT (id) DO UPDATE SET` clause in `write__election_api_db.py`. Without the `DO UPDATE SET` entries, existing rows never pick up the values — only newly inserted ones would, which would look like a partial fix and be worse to debug than the current clean failure.
 
 ## Acceptance / how to verify
 
@@ -90,10 +139,10 @@ Run in order; each step is independently checkable.
 2. **Linkage reaches the API.** For a known gp-api user id that owns a Win campaign or a Serve elected-office record, `GET /v1/persons?gpApiUserId=<id>&columns=id` (M2M token required) returns exactly one person, and that person's id equals the `gp_person_id` the mart holds for them.
 3. **The editor unlocks.** That user's `GET /v1/person-profiles/mine` returns `canCreate: true` — either immediately via the lazy backfill on that call, or after the 4am reconcile cron. Their gp-api `User.person_id` is now set.
 4. **Claiming works end to end.** That user can `POST /v1/person-profiles` (201, no longer 409), publish, and `https://goodparty.org/people/<first-last>-<id8>` renders the claimed template. `GET /v1/public-person-profiles/published` is no longer empty.
-5. **Idempotent.** A second ETL run does not flip `is_pledged` back to false or null out `gp_api_user_id` on existing rows (this is what the `DO UPDATE SET` additions in step 3 above guarantee).
+5. **Idempotent.** A second ETL run does not flip `is_pledged` back to false or null out `gp_api_user_id` on existing rows (this is what the `DO UPDATE SET` additions in step 4 above guarantee).
 
 ## Notes / non-goals
 
-- **No app-side change is required or wanted.** `gp-marketing` reads `person.isPledged` and gp-api reads the `gpApiUserId` filter already. Patching the frontend to infer "pledged" or "claimed" from some other signal would hide the pipeline gap behind a heuristic, so we are deliberately not doing it.
+- **No app-side change is required or wanted to make a pledge render.** (Written when the flag was thought to be universally false; see the superseded note above.) `gp-marketing` reads `person.isPledged` and gp-api reads the `gpApiUserId` filter already. Patching the frontend to infer "pledged" or "claimed" from some other signal would hide the pipeline gap behind a heuristic, so we are deliberately not doing it. The 2026-09-18 change above is the opposite direction and does not conflict with this: it only ever *withholds* a pledge, and never infers one.
 - **Separate from the origination gap.** `PERSON_ID_ORIGINATION_HANDOFF.md` in this repo's sibling data repo covers users who have **no** canonical person at all (self-registered, absent from BallotReady/L2/HubSpot). This handoff is the complementary case: people who **do** have a canonical person row, where the row simply is not carrying the pledge flag or the user linkage. That doc's §2 assumed `gp_api_user_id` would "ride the person feed you already populate, exactly like `is_pledged`" — the finding here is that `is_pledged` is not populated either, so there is no working precedent to ride.
 - **One product question remains after the data fix,** and it is the marketing team's call, not a bug: once `is_pledged` is true, a pledged person who has never authored a profile will render the pledge badge *and* the unclaimed framing with the claim CTA. That combination is correct per the current Figma states (claimed-ness is overlay presence; pledging is a separate factual flag), but if it reads wrong, changing it is a design decision on the D–F/H frames rather than a code defect.

@@ -1,18 +1,63 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { revalidateTag } from 'next/cache';
 import { type NextRequest, NextResponse } from 'next/server';
-import { personRevalidateSecret } from '~/lib/env';
+import { githubSitemapDispatchToken, personRevalidateSecret } from '~/lib/env';
 import { PEOPLE_REMOVALS_CACHE_TAG, personCacheTag } from '~/lib/electionsApi';
-import { clearPeopleSitemapCache, PEOPLE_SITEMAP_CACHE_TAG } from '~/lib/sitemap-entries';
+import {
+	clearPeopleSitemapCache,
+	peopleShardForPersonId,
+	PEOPLE_SITEMAP_CACHE_TAG,
+} from '~/lib/sitemap-entries';
 
 const SECRET_HEADER = 'x-revalidate-secret';
 const HMAC_KEY = 'personRevalidate';
 const PERSON_ID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+const GITHUB_SITEMAP_DISPATCH_URL =
+	'https://api.github.com/repos/thegoodparty/gp-marketing/actions/workflows/generate-people-sitemaps.yml/dispatches';
+
 function safeCompare(a: string, b: string): boolean {
 	const da = createHmac('sha256', HMAC_KEY).update(a).digest();
 	const db = createHmac('sha256', HMAC_KEY).update(b).digest();
 	return timingSafeEqual(da, db);
+}
+
+/**
+ * Fires the single-shard regeneration for this person's static sitemap file.
+ * Static files can't be busted by a cache tag, so without this the delisting
+ * (or new page) would only reach the sitemap on the next hourly cron run.
+ *
+ * Fire-and-forget by design: the webhook's response must not depend on GitHub's
+ * availability, so this is never awaited by the caller and the promise carries
+ * its own `.catch`, attached synchronously, so a rejection never reaches the
+ * runtime as unhandled.
+ */
+function dispatchPeopleSitemapShard(personId: string): void {
+	if (!githubSitemapDispatchToken) {
+		console.warn(
+			'People sitemap shard dispatch skipped: GITHUB_SITEMAP_DISPATCH_TOKEN is not set',
+		);
+		return;
+	}
+
+	const shard = peopleShardForPersonId(personId);
+	void fetch(GITHUB_SITEMAP_DISPATCH_URL, {
+		method: 'POST',
+		headers: {
+			Authorization: `Bearer ${githubSitemapDispatchToken}`,
+			Accept: 'application/vnd.github+json',
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ ref: 'develop', inputs: { shard: String(shard) } }),
+	})
+		.then((res) => {
+			if (res.status !== 204) {
+				console.error(`People sitemap shard dispatch failed: GitHub responded ${res.status}`);
+			}
+		})
+		.catch((err) => {
+			console.error('People sitemap shard dispatch failed:', err);
+		});
 }
 
 /**
@@ -57,6 +102,7 @@ export async function POST(req: NextRequest) {
 		// photo on an "Other Candidates" or "Nearby Officials" card.
 		revalidateTag(PEOPLE_REMOVALS_CACHE_TAG);
 		clearPeopleSitemapCache();
+		dispatchPeopleSitemapShard(personId);
 		return NextResponse.json({ revalidated: true, tag });
 	} catch (err) {
 		// Log the detail server-side; don't echo the raw error text to the caller.

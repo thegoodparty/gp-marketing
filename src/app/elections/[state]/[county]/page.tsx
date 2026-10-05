@@ -23,7 +23,7 @@ import {
 	resolvePlaceRaceElectionDates,
 } from '~/lib/electionsHelpers';
 import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
-import { toAbsoluteUrl } from '~/lib/url';
+import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 
 export const revalidate = 3600;
 
@@ -199,7 +199,7 @@ export async function generateMetadata({
 		? (placeData?.name ?? county)
 		: (normalizedCounty?.displayName ?? county);
 	return {
-		title: `Elections in ${placeName}, ${stateName} | Good Party`,
+		title: `Elections in ${placeName}, ${stateName} | ${SITE_NAME}`,
 		description: isDistrict
 			? `Browse elections and positions in ${placeName}, ${stateName}.`
 			: `Browse elections and cities in ${placeName}, ${stateName}.`,

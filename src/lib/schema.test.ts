@@ -6,6 +6,7 @@ import {
 	buildFAQSchema,
 	buildGovernmentOrganizationSchema,
 	buildOrganizationSchema,
+	buildPersonSchema,
 	buildSchemaGraph,
 	buildSoftwareApplicationSchema,
 	buildWebPageSchema,
@@ -282,5 +283,25 @@ describe('buildSchemaGraph', () => {
 
 	test('returns null when all entries are nullish', () => {
 		expect(buildSchemaGraph([null, undefined])).toBeNull();
+	});
+});
+
+describe('buildPersonSchema party affiliation', () => {
+	const person = (affiliations: string[]) =>
+		asRecord(buildPersonSchema({ url: 'https://goodparty.org/people/x', name: 'Pat Fusion', affiliations }));
+
+	test('one party stays a single PoliticalParty', () => {
+		expect(person(['Independent'])['memberOf']).toEqual({ '@type': 'PoliticalParty', name: 'Independent' });
+	});
+
+	test('fusion voting emits one PoliticalParty per line, never a joined name', () => {
+		expect(person(['Democratic', 'Working Families'])['memberOf']).toEqual([
+			{ '@type': 'PoliticalParty', name: 'Democratic' },
+			{ '@type': 'PoliticalParty', name: 'Working Families' },
+		]);
+	});
+
+	test('no party emits no memberOf at all', () => {
+		expect('memberOf' in person([])).toBe(false);
 	});
 });

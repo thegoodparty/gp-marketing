@@ -44,6 +44,22 @@ describe('buildPositionSectionOverrides', () => {
 
 		expect(overrides.component_electionsPositionContentBlock?.rightColumnCTA).toBeUndefined();
 	});
+
+	test('chooses the how-to-run guide for the office from the blog article matrix', () => {
+		const overrides = buildPositionSectionOverrides(positionOverrideCtx);
+
+		expect(overrides.component_electionPositionResourcesBlock?.guideHref).toBe('/blog/article/how-to-run-for-district-attorney');
+	});
+
+	test('reads the race when it has one, not only the office name', () => {
+		const overrides = buildPositionSectionOverrides({
+			...positionOverrideCtx,
+			officeName: 'Commissioner',
+			race: { id: 1, slug: 'mn/morrison-county/commissioner', name: 'Morrison County Commissioner', state: 'MN', positionLevel: 'COUNTY' },
+		});
+
+		expect(overrides.component_electionPositionResourcesBlock?.guideHref).toBe('/blog/article/how-to-run-for-county-commissioner');
+	});
 });
 
 describe('buildPositionTokens', () => {

@@ -98,10 +98,12 @@ Read the nearest relevant doc rather than loading everything.
 | Deciding if a request needs code at all     | `docs/content-vs-code.md`           |
 | Understanding the system / how pages render | `docs/architecture.md`              |
 | Adding a page-builder block                 | the `new-component` skill           |
-| Changing an existing page-builder block     | `docs/adding-a-component.md`        |
+| Changing an existing page-builder block     | the `update-component` skill        |
 | Building a block for the election redesign  | `docs/election-redesign-components.md` |
 | Anything about election or candidate pages  | `docs/elections.md`                 |
-| How AirOps writes content into Sanity       | `docs/airops-sanity-integration.md` |
+| Finding the live URL for any page           | the `sitemap-lookup` skill          |
+| The demo request form and its qualifier API | `docs/demo-request-block.md`        |
+| Content written into Sanity over the API    | `docs/sanity-api-writes.md`         |
 | Opening a PR and getting it approved        | the `ship-pr` skill                 |
 | Releasing to production                     | the `deploy-prod` skill             |
 

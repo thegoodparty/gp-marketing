@@ -697,9 +697,11 @@ function profileLocationLabel(view: PersonProfileView): string | null {
  * publish "Has taken the GoodParty.org Pledge" about named people who have not,
  * so each line is keyed to the fact it asserts instead.
  *
- * Party wins over the pledge flag: a Democrat or Republican is not eligible to
- * take the pledge, so their status is ineligibility rather than a choice, and a
- * stale `isPledged` from a past run under another party must not override that.
+ * Eligibility wins over the pledge flag: a Democrat or Republican is not
+ * eligible to take the pledge, so their status is ineligibility rather than a
+ * choice, and a stale `isPledged` from a past run under another party must not
+ * override that. `pledgeIneligible` also covers a CRM "Partisan Candidate",
+ * which asserts the same thing without naming a party.
  *
  * Removal (K/L) says nothing at all. `pledged` is force-cleared for removed
  * profiles, so "Has Not Taken…" there would be a line we know may be false,
@@ -707,7 +709,7 @@ function profileLocationLabel(view: PersonProfileView): string | null {
  */
 function pledgeAttribution(view: PersonProfileView): 'pledged' | 'notPledged' | 'pledgeIneligible' | 'none' {
 	if (view.removed) return 'none';
-	if (view.majorParty) return 'pledgeIneligible';
+	if (view.pledgeIneligible) return 'pledgeIneligible';
 	return view.pledged ? 'pledged' : 'notPledged';
 }
 

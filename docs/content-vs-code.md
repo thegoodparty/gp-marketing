@@ -42,9 +42,12 @@ API, though nothing is doing that today — see `docs/sanity-api-writes.md`.
 
 Open a PR (use the `ship-pr` skill) when the request requires any of these:
 
-- A **new block type**, or a **new field or option** on an existing block (for
-  example "add a subtitle field" or "add a new background color choice"). See
+- A **new block type**. Use the `new-component` skill; the recipe behind it is
   `docs/adding-a-component.md`.
+- A **new field or option** on an existing block (for example "add a subtitle
+  field" or "add a new background color choice"), or any other change to a block
+  that already ships. Use the `update-component` skill, which also works out which
+  live pages the change reaches.
 - **Styling or responsive behavior** — how a block looks or reflows. Lives in
   `src/ui/` and CSS, not in Studio.
 - The **election or candidate pages'** behavior, templates, tokens, or the data they

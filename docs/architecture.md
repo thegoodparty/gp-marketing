@@ -164,7 +164,8 @@ The preview deliberately still allows crawling rather than blocking it in
 | ---------------------------------------------- | ----------------------------------- |
 | Repo-wide conventions, commands, style         | root `AGENTS.md`                    |
 | Deciding if a change is content or code        | `docs/content-vs-code.md`           |
-| Adding or changing a page-builder block        | `docs/adding-a-component.md`        |
+| Adding a page-builder block                    | the `new-component` skill           |
+| Changing an existing page-builder block        | the `update-component` skill        |
 | Election / candidate programmatic pages        | `docs/elections.md`                 |
 | Revalidation webhook + API writes into Sanity   | `docs/sanity-api-writes.md`        |
 

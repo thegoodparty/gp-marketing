@@ -619,6 +619,7 @@ describe('buildOfficeItemsFromPlaceRaces', () => {
 
 		const { offices } = buildOfficeItemsFromPlaceRaces(races, new Map(), {
 			type: 'County',
+			level: 'county',
 			buildHref: () => undefined,
 		});
 

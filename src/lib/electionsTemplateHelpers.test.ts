@@ -142,10 +142,11 @@ describe('buildElectionsIndexSectionOverrides', () => {
 			isPledged: true,
 			isNonpartisan: true,
 			role: 'candidate' as const,
-			electionDate: null,
+			electionDate: '2026-11-03',
 		};
 		const withPeople = buildElectionsIndexSectionOverrides({
 			...countyCtx,
+			defaultYear: 2026,
 			featuredPeople: { candidates: [pledged], representatives: [], candidatesComplete: true },
 		}).component_locationLandingPageHero;
 		const withoutPeople = buildElectionsIndexSectionOverrides(countyCtx).component_locationLandingPageHero;

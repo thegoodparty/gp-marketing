@@ -150,10 +150,17 @@ tokens, `get_screenshot` to see it) and open the block's Storybook story. Storyb
 ```
 
 The story renders alone at
-`http://localhost:6006/iframe.html?id=new-components-page-sections-<kebab-title>--default&viewMode=story`,
-where the kebab title comes from the story's `title` (for example `Nearby Offices` →
-`nearby-offices`). Put the frame and the story side by side and write the change list in
-your own words: what moves, what appears, what is removed, which sizes and colours differ.
+`http://localhost:6006/iframe.html?id=<story-id>--default&viewMode=story`, where
+`<story-id>` is the story file's full `title` lower-cased with every `/` and space turned
+into `-`. The hierarchy is part of the id, and the blocks are split across two: the
+election batch uses `New Components/Page Sections/Nearby Offices` →
+`new-components-page-sections-nearby-offices`, while older blocks use
+`Page Sections/Banner Block` → `page-sections-banner-block`. Read the `title` line in
+`src/ui/<Name>.stories.tsx` rather than guessing the prefix; a wrong one is a blank page,
+not an error. If the story exports something other than `Default`, use that export's name
+in kebab case after the `--`. Put the frame and the story side by side and write the
+change list in your own words: what moves, what appears, what is removed, which sizes and
+colours differ.
 
 Then reconcile it with the requester's list. Three kinds of mismatch come up every
 round:

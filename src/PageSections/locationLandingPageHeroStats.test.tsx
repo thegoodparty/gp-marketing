@@ -116,6 +116,7 @@ async function renderSeededHero({ withStats = true, independents }: { withStats?
 
 	// GROQ turns the seed's `field_anchorId` into the `anchor` the button
 	// transformer reads, so the buttons go in the way the query hands them over.
+	// That the query really prepends the `#` is pinned in `src/sanity/groq.test.ts`.
 	const projectedButtons = (seededContent?.list_buttons ?? []).map(button => ({
 		_key: button._key,
 		action: button.field_ctaActionWithShared,

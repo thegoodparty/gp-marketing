@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'bun:test';
+import { evaluate, parse } from 'groq-js';
 import * as groq from './groq';
 
 // Sanity rejects POST bodies over 300 KB ("The request body is N, exceeding the limit of 300 KB"), and
@@ -57,5 +58,21 @@ describe('custom groq functions', () => {
 		expect(groq.internalLinkGroq).toContain('"title":');
 		expect(groq.internalLinkGroq).toContain('"label":');
 		expect(groq.internalLinkGroq).toContain('"href":');
+	});
+
+	/**
+	 * Anchor buttons render whatever `anchor` the query hands over as their href, so
+	 * the `#` has to be put there by the query. The hero and the position hero both
+	 * jump by it; a test that pre-writes `#` into its fixture cannot see this break.
+	 */
+	test('an Anchor button is projected with its anchor id as a ready-to-use hash href', async () => {
+		expect(groq.buttonBodyGroq).toContain(`"anchor":${groq.anchorIdGroq}`);
+
+		const dataset = [
+			{ _id: 'a', _type: 'button', field_anchorId: 'local-races' },
+			{ _id: 'b', _type: 'button' },
+		];
+		const result = await evaluate(parse(`*[_type=="button"] | order(_id){"anchor":${groq.anchorIdGroq}}`), { dataset });
+		expect(await result.get()).toEqual([{ anchor: '#local-races' }, { anchor: '' }]);
 	});
 });

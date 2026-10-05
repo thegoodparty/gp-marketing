@@ -171,7 +171,7 @@ export const component_locationFactsBlock = `_type=="component_locationFactsBloc
 export const component_locationLandingPageHero = `_type=="component_locationLandingPageHero"=>{...,locationLandingPageHeroContent{...,list_buttons[]{${buttonGroq}}}}`;
 export const component_profileContentBlock = `_type=="component_profileContentBlock"=>{...,profileContentBlockDesignSettings,componentSettings}`;
 export const component_voterDensityBlock = `_type=="component_voterDensityBlock"=>{...,voterDensityBlockContent,componentSettings}`;
-export const component_listOfOfficesBlock = `_type=="component_listOfOfficesBlock"=>{...}`;
+export const component_listOfOfficesBlock = `_type=="component_listOfOfficesBlock"=>{...,listOfOfficesBlockDescription{...,block_description[]{...,${textBlockGroq}}}}`;
 export const component_embeddedBlock = `_type=="component_embeddedBlock"=>{...}`;
 /*language=textmate*/
 export const component_clickToCallBlock = `_type=="component_clickToCallBlock"=>{...,ctaBlockDesignSettings,componentSettings}`;

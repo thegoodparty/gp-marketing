@@ -3,10 +3,13 @@
 import { stegaClean } from 'next-sanity';
 
 import { formatElectionDateFromApi } from '~/lib/electionsHelpers';
+import { insertPledgeSymbols, plainTextBlocks } from '~/lib/pledgeSymbolToken';
 import type { TokenMap } from '~/lib/resolveTokens';
-import { resolveSectionText } from '~/lib/resolveSectionText';
+import { resolveRichTextTokens, resolveSectionText } from '~/lib/resolveSectionText';
 import type { Sections, SectionOverrides } from '~/PageSections';
+import { LIST_OF_OFFICES_DEFAULT_DESCRIPTION } from '~/sanity/schema/components/component_listOfOfficesBlock';
 import { ListOfOfficesBlock, type OfficeItem } from '~/ui/ListOfOfficesBlock';
+import { RichData } from '~/ui/RichData';
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { useElectionsLandingSearch } from '~/ui/ElectionsLandingSearchContext';
 
@@ -43,6 +46,24 @@ export function ListOfOfficesBlockSection(props: Props) {
 		resolveSectionText(stegaClean(section.field_heading), tokens) ||
 		resolveSectionText(officesOverride?.headline, tokens);
 
+	/**
+	 * The paragraph explaining the Heart & Star badge. Documents saved before the
+	 * field existed have no value, so the default copy renders unless an editor
+	 * turns it off or writes their own; `[symbol]` in either becomes the badge.
+	 */
+	const descriptionSettings = section.listOfOfficesBlockDescription;
+	const descriptionText = descriptionSettings?.block_description;
+	const description =
+		descriptionSettings?.field_showDescription === false ? undefined : (
+			<RichData
+				value={insertPledgeSymbols(
+					descriptionText && descriptionText.length > 0
+						? resolveRichTextTokens(descriptionText, tokens)
+						: plainTextBlocks(LIST_OF_OFFICES_DEFAULT_DESCRIPTION),
+				)}
+			/>
+		);
+
 	const availableYears =
 		officesOverride?.availableYears ??
 		(section.field_availableYears && section.field_availableYears.length > 0
@@ -63,6 +84,7 @@ export function ListOfOfficesBlockSection(props: Props) {
 			<ListOfOfficesBlock
 				backgroundColor={backgroundColor}
 				heading={heading}
+				description={description}
 				defaultYear={defaultYear}
 				availableYears={availableYears}
 				offices={offices}

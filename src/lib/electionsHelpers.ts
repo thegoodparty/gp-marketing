@@ -394,6 +394,7 @@ export function buildOfficeItemsFromPlaceRaces(
 		id: race.id != null ? String(race.id) : `${race.slug}-${index}`,
 		type: config.type,
 		level: config.level,
+		raceSlug: race.slug,
 		position: race.normalizedPositionName ?? race.name ?? 'Position',
 		nextElectionDate: resolvedDates.get(race.slug) ?? race.electionDate ?? '',
 		href: config.buildHref(race),

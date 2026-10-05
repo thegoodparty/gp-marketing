@@ -1,5 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ListOfOfficesBlock, type OfficeItem } from './ListOfOfficesBlock.tsx';
+import { RichData } from './RichData.tsx';
+import { insertPledgeSymbols, plainTextBlocks } from '~/lib/pledgeSymbolToken';
+import { LIST_OF_OFFICES_DEFAULT_DESCRIPTION } from '~/sanity/schema/components/component_listOfOfficesBlock';
+
+/** The paragraph the section renders when an editor has not written one, badge and all. */
+const sampleDescription = <RichData value={insertPledgeSymbols(plainTextBlocks(LIST_OF_OFFICES_DEFAULT_DESCRIPTION))} />;
 
 const meta: Meta<typeof ListOfOfficesBlock> = {
 	title: 'New Components/Page Sections/List of Offices Block',
@@ -27,6 +33,7 @@ const sampleOffices: OfficeItem[] = [
 		position: 'Name of office position',
 		nextElectionDate: 'November 5, 2028',
 		href: '/offices/1',
+		pledgedCount: 2,
 	},
 	{
 		id: '2',
@@ -34,6 +41,7 @@ const sampleOffices: OfficeItem[] = [
 		position: 'Name of office position',
 		nextElectionDate: 'November 5, 2028',
 		href: '/offices/2',
+		pledgedCount: 1,
 	},
 	{
 		id: '3',
@@ -167,6 +175,7 @@ const offices2024: OfficeItem[] = [
 export const Default: Story = {
 	args: {
 		heading: 'Local elections in Austin',
+		description: sampleDescription,
 		defaultYear: 2028,
 		availableYears: [2024, 2025, 2026, 2027, 2028],
 		offices: sampleOffices,
@@ -220,9 +229,11 @@ export const WithoutHeading: Story = {
 };
 
 /** A city page: opens on Local, and can look up to its county and its state. */
+/** Opens on All, with the city's own races beside the county's and the state's; the dropdown narrows to one level. */
 export const CityPageLevels: Story = {
 	args: {
 		heading: 'Local elections in Austin',
+		description: sampleDescription,
 		defaultYear: 2028,
 		availableYears: [2024, 2025, 2026, 2027, 2028],
 		pageLevel: 'local',
@@ -235,6 +246,7 @@ export const CityPageLevels: Story = {
 				position: 'County Commissioner',
 				nextElectionDate: 'November 7, 2028',
 				href: '/offices/county-commissioner',
+				pledgedCount: 3,
 			},
 			{
 				id: 'state-1',

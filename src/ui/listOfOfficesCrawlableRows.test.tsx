@@ -111,13 +111,15 @@ const MULTI_LEVEL: OfficeItem[] = [
 ];
 
 describe('ListOfOfficesBlock level filter', () => {
-	test('a city page opens on its own offices and hides the overlapping levels', () => {
+	test('a city page opens on All, showing its own offices and the overlapping levels together', () => {
+		// Emily, 2026-10-05: the list opens on the page's own level and every level above it.
 		const html = renderToStaticMarkup(
 			<ListOfOfficesBlock offices={MULTI_LEVEL} defaultYear={2026} availableYears={[2026]} pageLevel='local' />,
 		);
 		expect(isRowHidden(html, '/elections/tx/harris-county/houston/position/mayor')).toBe(false);
-		expect(isRowHidden(html, '/elections/tx/harris-county/position/county-judge')).toBe(true);
-		expect(isRowHidden(html, '/elections/tx/position/governor')).toBe(true);
+		expect(isRowHidden(html, '/elections/tx/harris-county/position/county-judge')).toBe(false);
+		expect(isRowHidden(html, '/elections/tx/position/governor')).toBe(false);
+		expect(html).toContain('<option value="all" selected="">All</option>');
 	});
 
 	test('every level stays linked in the markup whatever is selected', () => {
@@ -134,6 +136,7 @@ describe('ListOfOfficesBlock level filter', () => {
 			<ListOfOfficesBlock offices={MULTI_LEVEL} defaultYear={2026} availableYears={[2026]} pageLevel='local' />,
 		);
 		expect(html).toContain('Filter offices by level of government');
+		expect(html).toContain('>All</option>');
 		expect(html).toContain('>Local</option>');
 		expect(html).toContain('>County</option>');
 		expect(html).toContain('>State</option>');
@@ -164,6 +167,7 @@ describe('ListOfOfficesBlock level filter', () => {
 		);
 		expect(html).toContain('>County</option>');
 		expect(html).toContain('href="/p/judge"');
+		// All is selected, so the year alone decides: the 2026 county race is outside 2027.
 		expect(isRowHidden(html, '/p/mayor')).toBe(false);
 		expect(isRowHidden(html, '/p/judge')).toBe(true);
 	});
@@ -175,6 +179,48 @@ describe('ListOfOfficesBlock level filter', () => {
 		);
 		expect(html).toContain('>State</option>');
 		expect(html).not.toContain('>County</option>');
+	});
+});
+
+/**
+ * The "# of independents running" column counts the row's pledged candidates.
+ * Only a count above zero is drawn: a zero and an unknown look the same, so a
+ * row never claims "0 independents" off a pledge flag that may be unwritten.
+ */
+describe('ListOfOfficesBlock independents column', () => {
+	const offices: OfficeItem[] = [
+		{ id: 'r1', type: 'STATE', position: 'State Representative', nextElectionDate: '2026-11-03', href: '/p/rep', pledgedCount: 2 },
+		{ id: 'r2', type: 'STATE', position: 'State Senate', nextElectionDate: '2026-11-03', href: '/p/senate', pledgedCount: 1 },
+		{ id: 'r3', type: 'COUNTY', position: 'County Assessor', nextElectionDate: '2026-11-03', href: '/p/assessor', pledgedCount: 0 },
+		{ id: 'r4', type: 'COUNTY', position: 'County Sheriff', nextElectionDate: '2026-11-03', href: '/p/sheriff' },
+	];
+	const html = renderToStaticMarkup(<ListOfOfficesBlock offices={offices} defaultYear={2026} availableYears={[2026]} />);
+	const rowOf = (href: string) => {
+		const start = html.indexOf(`href="${href}"`);
+		return html.slice(start, html.indexOf('</a>', start));
+	};
+	// The badge's own viewBox; the row's arrow is an SVG too, so `<svg` alone proves nothing.
+	const BADGE = 'viewBox="35 42 137 116"';
+
+	test('labels the column and shows a count with the badge, singular when it is one', () => {
+		expect(html).toContain('# of independents running');
+		expect(rowOf('/p/rep')).toContain('2<span class="md:sr-only"> independents running</span>');
+		expect(rowOf('/p/rep')).toContain(BADGE);
+		expect(rowOf('/p/senate')).toContain('1<span class="md:sr-only"> independent running</span>');
+	});
+
+	test('draws nothing for a zero or an unknown count', () => {
+		expect(rowOf('/p/assessor')).not.toContain('independent');
+		expect(rowOf('/p/assessor')).not.toContain(BADGE);
+		expect(rowOf('/p/sheriff')).not.toContain(BADGE);
+		expect(rowOf('/p/sheriff')).not.toContain('independent');
+	});
+
+	test('renders the description under the heading', () => {
+		const withDescription = renderToStaticMarkup(
+			<ListOfOfficesBlock offices={offices} defaultYear={2026} availableYears={[2026]} heading='Local elections' description={<p>Badge explainer</p>} />,
+		);
+		expect(withDescription).toContain('Badge explainer');
 	});
 });
 

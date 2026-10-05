@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, type ReactNode } from 'react';
 
 import { cn, tv } from './_lib/utils.ts';
 import { secondaryButtonStyleType } from './_lib/designTypesStore.ts';
@@ -11,6 +11,7 @@ import { Anchor } from './Anchor.tsx';
 import { IconResolver } from './IconResolver.tsx';
 import { ArrowRightIcon } from './icons/ArrowRightIcon.tsx';
 import { Button } from './Inputs/Button.tsx';
+import { Logo } from '~/sanity/utils/Logo.tsx';
 import { DEFAULT_YEAR_OFFSET } from '~/constants/display';
 import { formatElectionDateFromApi, getYearFromDateString, resolveDefaultElectionYear } from '~/lib/electionsHelpers';
 
@@ -31,7 +32,9 @@ const styles = tv({
 		base: 'py-(--container-padding) bg-goodparty-cream text-black',
 		wrapper: 'flex flex-col gap-8',
 		headerRow: 'flex flex-col gap-4 md:flex-row md:items-end md:justify-between',
+		headerText: 'flex flex-col gap-2 md:max-w-[53.25rem]',
 		heading: 'font-primary text-section-heading',
+		description: 'font-secondary text-body-1',
 		filters: 'flex items-end gap-6',
 		filter: 'flex flex-col gap-1',
 		filterLabel: 'font-secondary text-text-875',
@@ -43,21 +46,31 @@ const styles = tv({
 		],
 		selectIcon: 'pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2',
 		list: 'flex flex-col gap-4',
-		// Mirrors the row grid so the labels sit over their own columns.
-		listHeader: 'hidden md:grid md:grid-cols-[7.6875rem_1fr_auto_2.5rem] md:items-center md:gap-x-4 md:px-3.5',
+		// Mirrors the row grid so the labels sit over their own columns. The date
+		// track is fixed, not content-sized: "Election date" is narrower than any
+		// date, and a content-sized track would shift the middle columns between
+		// the header and the rows.
+		listHeader: 'hidden md:grid md:grid-cols-[7.6875rem_1.1fr_1fr_9.5rem_2.5rem] md:items-center md:gap-x-4 md:px-3.5',
 		listHeaderCell: 'font-secondary text-text-875 font-semibold',
 		headerDateCell: 'text-right',
 		row: [
 			'group grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2 rounded-lg border border-black/10 bg-white p-3',
 			'transition-colors hover:border-goodparty-blue',
-			'md:h-15 md:grid-cols-[7.6875rem_1fr_auto_2.5rem] md:gap-y-0 md:px-3.5 md:py-0',
+			'md:h-15 md:grid-cols-[7.6875rem_1.1fr_1fr_9.5rem_2.5rem] md:gap-y-0 md:px-3.5 md:py-0',
 		],
 		tagCell: 'col-span-2 md:col-span-1 md:col-start-1 md:row-start-1',
 		// The tag is white on navy in both variants, so it sets its own colour.
 		tag: 'inline-block w-fit rounded-sm bg-blue-900 px-2 py-1 font-primary text-caption font-medium tracking-[0.0625rem] [color:white] uppercase',
 		positionCell: 'col-span-2 font-primary text-row-title md:col-span-1 md:col-start-2 md:row-start-1',
-		dateCell: 'font-secondary text-row-meta md:col-start-3 md:row-start-1 md:text-right',
-		arrowCell: 'justify-self-end md:col-start-4 md:row-start-1',
+		// The badge leads the sentence on the phone card and trails the bare number
+		// on the desktop row, so the DOM order (number, badge) is reversed below md.
+		countCell: [
+			'col-span-2 flex flex-row-reverse items-center justify-end gap-0.5 font-secondary text-row-meta',
+			'md:col-span-1 md:col-start-3 md:row-start-1 md:flex-row md:justify-start md:gap-2',
+		],
+		countIcon: 'h-[1.3rem] w-8 shrink-0',
+		dateCell: 'font-secondary text-row-meta md:col-start-4 md:row-start-1 md:text-right',
+		arrowCell: 'justify-self-end md:col-start-5 md:row-start-1',
 		empty: 'py-8 text-center font-secondary text-body-2 [color:var(--color-neutral-500)]',
 		showMoreWrapper: 'flex justify-center pt-2',
 	},
@@ -91,7 +104,18 @@ export interface OfficeItem {
 	 * route does not yet supply the overlapping levels.
 	 */
 	level?: OfficeLevel;
+	/** The election-api race slug behind the row, which is how its candidates are counted. */
+	raceSlug?: string;
+	/**
+	 * How many candidates in the row's race have taken the GoodParty.org Pledge.
+	 * Only a count above zero is shown: a zero and an unknown look the same, so a
+	 * row never claims "0 independents" off a flag that may simply be unwritten.
+	 */
+	pledgedCount?: number;
 }
+
+/** What the Level dropdown can be set to: one level, or every level the page offers. */
+export type LevelSelection = OfficeLevel | 'all';
 
 const LEVEL_LABELS: Record<OfficeLevel, string> = {
 	local: 'Local',
@@ -100,10 +124,11 @@ const LEVEL_LABELS: Record<OfficeLevel, string> = {
 };
 
 /**
- * The levels a page can show, in menu order. A voter in a city also votes in
- * that city's county and state races, so a city page can look *up*; the reverse
- * is not a ballot relationship (and a state's every municipal race is far too
- * many rows), so nothing looks down. See docs/election-redesign-components.md.
+ * The levels a page can show, in menu order, under an All option that shows
+ * them together. A voter in a city also votes in that city's county and state
+ * races, so a city page can look *up*; the reverse is not a ballot relationship
+ * (and a state's every municipal race is far too many rows), so nothing looks
+ * down. See docs/election-redesign-components.md.
  */
 const LEVELS_BY_PAGE: Record<OfficeLevel, OfficeLevel[]> = {
 	local: ['local', 'county', 'state'],
@@ -116,14 +141,17 @@ export interface ListOfOfficesBlockProps {
 	backgroundColor?: 'cream' | 'midnight';
 	/** The section heading, e.g. "Local elections in Austin". */
 	heading?: string;
+	/** The paragraph under the heading that explains the Heart & Star badge. */
+	description?: ReactNode;
 	defaultYear?: number;
 	availableYears?: number[];
 	pageSize?: number;
 	offices: OfficeItem[];
 	/**
-	 * The level the page itself represents. Sets the Level dropdown's default and
-	 * which levels it offers. A state page offers only its own, so it gets no
-	 * dropdown at all rather than one with a single choice.
+	 * The level the page itself represents, which decides which levels the Level
+	 * dropdown offers. The dropdown opens on All, showing the page's own level and
+	 * every level above it (Emily, 2026-10-05). A state page offers only its own,
+	 * so it gets no dropdown at all rather than one with a single choice.
 	 */
 	pageLevel?: OfficeLevel;
 	/** When true and there are no offices, show "Loading…" instead of "No offices found". */
@@ -131,7 +159,7 @@ export interface ListOfOfficesBlockProps {
 	/** When set, filter offices by position name (case-insensitive substring). */
 	searchQuery?: string;
 	onYearChange?(year: number): void;
-	onLevelChange?(level: OfficeLevel): void;
+	onLevelChange?(level: LevelSelection): void;
 	onOfficeClick?(office: OfficeItem): void;
 }
 
@@ -143,14 +171,16 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 	const pageLevel = props.pageLevel ?? 'state';
 
 	const [selectedYear, setSelectedYear] = useState(defaultYear);
-	const [selectedLevel, setSelectedLevel] = useState<OfficeLevel>(pageLevel);
+	const [selectedLevel, setSelectedLevel] = useState<LevelSelection>('all');
 	const [visibleCount, setVisibleCount] = useState(pageSize);
 
 	const {
 		base,
 		wrapper,
 		headerRow,
+		headerText,
 		heading: headingStyle,
+		description,
 		filters,
 		filter,
 		filterLabel,
@@ -165,6 +195,8 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 		tagCell,
 		tag,
 		positionCell,
+		countCell,
+		countIcon,
 		dateCell,
 		arrowCell,
 		empty,
@@ -182,7 +214,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 
 	const filteredOffices = useMemo(() => {
 		let matches = props.offices.filter(office => {
-			if ((office.level ?? pageLevel) !== selectedLevel) return false;
+			if (selectedLevel !== 'all' && (office.level ?? pageLevel) !== selectedLevel) return false;
 			const dateYear = getYearFromDateString(office.nextElectionDate);
 			return !Number.isNaN(dateYear) && dateYear === selectedYear;
 		});
@@ -228,14 +260,14 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 	 * make, with the races they asked for sitting one year away.
 	 */
 	const handleLevelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		const level = e.target.value as OfficeLevel;
+		const level = e.target.value as LevelSelection;
 		setSelectedLevel(level);
 		setVisibleCount(pageSize);
 
 		const yearsAtLevel = [
 			...new Set(
 				props.offices
-					.filter(office => (office.level ?? pageLevel) === level)
+					.filter(office => level === 'all' || (office.level ?? pageLevel) === level)
 					.map(office => getYearFromDateString(office.nextElectionDate))
 					.filter(year => !Number.isNaN(year)),
 			),
@@ -254,10 +286,15 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 			<Container size='xl'>
 				<div className={wrapper()}>
 					<div className={headerRow()}>
-						{props.heading && (
-							<Text as='h2' styleType='section-heading' className={headingStyle()}>
-								{props.heading}
-							</Text>
+						{(props.heading || props.description) && (
+							<div className={headerText()}>
+								{props.heading && (
+									<Text as='h2' styleType='section-heading' className={headingStyle()}>
+										{props.heading}
+									</Text>
+								)}
+								{props.description && <div className={description()}>{props.description}</div>}
+							</div>
 						)}
 						<div className={filters()}>
 							{levelOptions.length > 1 && (
@@ -273,6 +310,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 											onChange={handleLevelChange}
 											aria-label='Filter offices by level of government'
 										>
+											<option value='all'>All</option>
 											{levelOptions.map(level => (
 												<option key={level} value={level}>
 													{LEVEL_LABELS[level]}
@@ -322,6 +360,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 							<div className={listHeader()}>
 								<div className={listHeaderCell()}>Type</div>
 								<div className={listHeaderCell()}>Position</div>
+								<div className={listHeaderCell()}># of independents running</div>
 								<div className={cn(listHeaderCell(), headerDateCell())}>Election date</div>
 								<div aria-hidden='true' />
 							</div>
@@ -334,6 +373,15 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 										<span className={tag()}>{office.type}</span>
 									</div>
 									<div className={positionCell()}>{office.position}</div>
+									{office.pledgedCount ? (
+										<div className={countCell()}>
+											<span>
+												{office.pledgedCount}
+												<span className='md:sr-only'>{office.pledgedCount === 1 ? ' independent running' : ' independents running'}</span>
+											</span>
+											<Logo className={countIcon()} aria-hidden='true' />
+										</div>
+									) : null}
 									<div className={dateCell()}>{formatElectionDateFromApi(office.nextElectionDate)}</div>
 									<div className={arrowCell()}>
 										{office.href && (

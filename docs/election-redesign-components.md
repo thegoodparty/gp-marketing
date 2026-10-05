@@ -172,9 +172,10 @@ table).
 
 Four things from it that affect other components in the batch:
 
-- **The Level filter goes up, never down.** A city page opens on Local and can switch to County and
-  State; a county page opens on County and can switch to State; a state page has only its own level
-  and so shows no dropdown at all rather than one with a single choice (Emily, 2026-09-18). Upward
+- **The Level filter goes up, never down, and opens on All.** A city page shows its own races together
+  with its county's and its state's, and can narrow to Local, County or State; a county page shows County
+  and State; a state page has only its own level and so shows no dropdown at all rather than one with a
+  single choice (Emily, 2026-09-18; the All default replaced opening on the page's own level on 2026-10-05). Upward
   is a real ballot relationship — a city voter also votes in their county's and state's races. The
   reverse is not, and a state's every municipal race would be hundreds of rows. Downward navigation
   stays with the counties-and-cities list (`component_electionsIndexBlock`).
@@ -200,6 +201,30 @@ The heading is now the editor's `field_heading` with its location tokens resolve
 the heading the route computes. The templates already carried one ("State Elections in [State]",
 "City Elections in [City]"); the block simply never rendered it, and published the bare level label
 instead. That fix shipped separately, ahead of the redesign, as it was a live bug.
+
+Revised after design feedback (Emily, 2026-10-05), in the same draft PR:
+
+- **A "# of independents running" column** sits between Position and Election date, showing the
+  row's pledged candidate count beside the Heart & Star badge; the phone card says "2 independents
+  running" under the position. The count is the number of candidates in the row's race who have
+  taken the Pledge, by the same rule as every other badge (`pledgedFromSpine`), summed across the
+  race's districts because a position row stands for the whole race. Only a count above zero is
+  drawn: zero and unknown look the same, so a row never publishes "0 independents" off a pledge
+  flag that may be unwritten. `src/ui/listOfOfficesCrawlableRows.test.tsx` pins it.
+- **The counts ride on the featured people fetch, not a second one.** `OfficeItem` now carries
+  `raceSlug`, `FeaturedPersonCard` carries it too, and `withPledgedCounts` in
+  `src/lib/electionsTemplateHelpers.tsx` groups the pledged candidates by race onto the rows. That
+  makes this PR depend on the location hero's draft (#300), which widened the fetch to the parent
+  county and state and raised `FEATURED_RACE_BUDGET` to 48; the two ship together with the location
+  batch. Races past the budget have no count, which shows as nothing.
+- **An editable description** (`listOfOfficesBlockDescription`: a show toggle and a rich text
+  field) explains the badge under the heading. Documents saved before the field existed render the
+  default copy. The editor types `[symbol]` where the badge belongs in the sentence and
+  `insertPledgeSymbols` (`src/lib/pledgeSymbolToken.ts`) turns it into an inline badge; any block
+  with a sentence that needs the badge can reuse it through `RichData`. The default copy has no
+  "Read the full pledge" link because there is no pledge page on the live site, as the featured
+  candidates callout found; add the link in Studio when the page exists.
+- **Figma's 20px body is rendered at the live 18px `body-1`**, per the batch's settled scale.
 
 **More about location container / Location editorial block** (location pages) — built as
 `component_locationEditorialBlock`. The inventory below calls it content-only; it is not. Treat
@@ -658,7 +683,7 @@ this table; it is here to orient, and to show the shape of the answer.
 | Block | Code | Placed on (published) | An update ships as |
 | --- | --- | --- | --- |
 | Location landing page hero | develop + draft PR #300 | all five Location globals (drafts view adds the `template-elections-subset` landing page) | into #300, stays draft |
-| List of offices | develop + draft PR #304 (base still points at merged #303) | all five Location globals | into #304, stays draft |
+| List of offices | develop + draft PR #304 (stacked on #300 since 2026-10-05) | all five Location globals (drafts view adds the `template-elections-subset` landing page) | into #304, stays draft |
 | Location facts | develop | State / County / City / District globals | draft and batch |
 | Elections index | develop | Location globals, Person Profile global | draft and batch |
 | Position hero | develop + draft PR #320 | Position and Position Candidates globals | into #320, stays draft |

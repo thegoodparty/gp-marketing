@@ -50,16 +50,21 @@ export type IndependentsSummary = {
 /**
  * What the location hero says about independents (Emily, 2026-10-05). The
  * lavender card counts pledged candidates and shows a genuine zero, but hides
- * when the candidate list is known to be partial. The "See who's an independent"
- * button needs only one pledged person, candidate or officeholder, because one
- * found is proof even from a partial list. Without data both hide.
+ * when the candidate list is known to be partial. With a `year` the count is
+ * scoped to candidates whose election falls in it, which is how it matches the
+ * offices list's opening year. The "See who's an independent" button needs only
+ * one pledged person, candidate or officeholder, in any upcoming election,
+ * because one found is proof even from a partial list. Without data both hide.
  */
-export function summarizeIndependents(people: FeaturedPeople | undefined): IndependentsSummary {
+export function summarizeIndependents(people: FeaturedPeople | undefined, year?: number): IndependentsSummary {
 	if (!people) return { candidateCount: null, hasAny: false };
+	const inYear = (person: FeaturedPersonCard) => year === undefined || Number(person.electionDate?.slice(0, 4)) === year;
 	const pledgedCandidates = new Set(
-		people.candidates.filter(person => person.isPledged).map(person => (person.personId ?? person.href).toLowerCase()),
+		people.candidates
+			.filter(person => person.isPledged && inYear(person))
+			.map(person => (person.personId ?? person.href).toLowerCase()),
 	);
-	const hasAny = pledgedCandidates.size > 0 || people.representatives.some(person => person.isPledged);
+	const hasAny = people.candidates.some(person => person.isPledged) || people.representatives.some(person => person.isPledged);
 	return { candidateCount: people.candidatesComplete ? pledgedCandidates.size : null, hasAny };
 }
 

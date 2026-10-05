@@ -35,7 +35,7 @@ export const component_locationLandingPageHero = {
 			name: 'stats',
 			type: 'stats',
 			description:
-				'Up to three cards shown beside the headline. Location names can be written as tokens such as [State], [County], [City] or [District]. On location pages the Lavender card shows the live count of independent candidates (its label stays yours), and hides when that count is not known.',
+				'Up to three cards shown beside the headline. Location names can be written as tokens such as [State], [County], [City] or [District]. On location pages two cards show live figures from the offices list below, in the year it opens on: the Halo Green card the races on the ballot, the Lavender card the independent candidates. Their labels stay yours, and a card hides when its figure is not known.',
 			group: 'stats',
 		},
 		{

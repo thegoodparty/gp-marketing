@@ -92,9 +92,10 @@ async function render(element: React.ReactElement) {
 }
 
 type Independents = { candidateCount: number | null; hasAny: boolean };
+type Live = { withStats?: boolean; independents?: Independents; raceCount?: number | null };
 
 /** The location hero exactly as the state index template seed ships it. */
-async function renderSeededHero({ withStats = true, independents }: { withStats?: boolean; independents?: Independents } = {}) {
+async function renderSeededHero({ withStats = true, independents, raceCount }: Live = {}) {
 	const { tmplElectionsStateIndexSections } = await import('~/lib/electionsTemplateSeedSections');
 	const { LocationLandingPageHeroSection } = await import('./LocationLandingPageHeroSection');
 
@@ -137,6 +138,7 @@ async function renderSeededHero({ withStats = true, independents }: { withStats?
 			locationLevel: 'state' as const,
 			stateName: 'Illinois',
 			independents,
+			raceCount,
 		},
 		tokens: { '[State]': 'Illinois' },
 	} as unknown as Parameters<typeof LocationLandingPageHeroSection>[0];
@@ -267,8 +269,38 @@ describe('the independents rules on a location page', () => {
 	test("off the location pages the editor's cards and buttons render as written", async () => {
 		const hero = await renderSeededHero();
 
-		expect(cardTexts(hero)[2]).toBe('[##]Independent candidates');
+		expect(cardTexts(hero)).toEqual(['[Date]Election day', '[##]Races on the ballot', '[##]Independent candidates']);
 		expect(hrefs(hero)).toEqual(['#local-races', '#independents']);
+	});
+});
+
+/**
+ * Emily, 2026-10-05: the halo green card counts the rows the offices list shows
+ * for its opening year, so the two can never disagree. Zero shows; unknown hides.
+ */
+describe('the races-on-the-ballot rule on a location page', () => {
+	const cardTexts = (hero: Element) => [...hero.querySelectorAll('[data-component="Stat"]')].map(card => card.textContent);
+
+	test('a ballot with no races in the opening year shows a real zero', async () => {
+		const hero = await renderSeededHero({ raceCount: 0 });
+
+		expect(cardTexts(hero)).toEqual(['[Date]Election day', '0Races on the ballot', '[##]Independent candidates']);
+	});
+
+	test('a count replaces the editor placeholder', async () => {
+		const hero = await renderSeededHero({ raceCount: 1234567 });
+
+		// Not scrolled into view, so the card sits at its starting zero; the nine-character
+		// "1,234,567" still steps the value down a type size, which "[##]" never would.
+		const green = hero.querySelectorAll('[data-component="Stat"]')[1];
+		expect(green?.textContent).toBe('0Races on the ballot');
+		expect(green?.querySelector('span')?.className).toContain('text-heading-md');
+	});
+
+	test('an unknown count hides the card and leaves the other two alone', async () => {
+		const hero = await renderSeededHero({ raceCount: null, independents: { candidateCount: 3, hasAny: true } });
+
+		expect(cardTexts(hero)).toEqual(['[Date]Election day', '0Independent candidates']);
 	});
 });
 

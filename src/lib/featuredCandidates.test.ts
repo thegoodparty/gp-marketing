@@ -312,7 +312,7 @@ describe('getFeaturedPeople', () => {
 
 	/**
 	 * The hero's independent count is only published when every upcoming race was
-	 * asked. Two races fit the budget; seventeen do not.
+	 * asked. Two races fit the budget; forty-nine do not.
 	 */
 	test('says whether the race budget covered every upcoming race', async () => {
 		const covered = await getFeaturedPeople({ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) }, deps);
@@ -320,7 +320,7 @@ describe('getFeaturedPeople', () => {
 
 		const manyRaces: PlaceWithFacts & { geoId?: string } = {
 			...cityPlace,
-			Races: Array.from({ length: 17 }, (_, i) => race(`tx/houston/seat-${i}`)),
+			Races: Array.from({ length: 49 }, (_, i) => race(`tx/houston/seat-${i}`)),
 		};
 		const overBudget = await getFeaturedPeople(
 			{ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) },
@@ -330,30 +330,99 @@ describe('getFeaturedPeople', () => {
 	});
 });
 
+describe('getFeaturedPeople across the ballot', () => {
+	/**
+	 * The ballot is the offices list's: a city page's own races plus its county's and
+	 * its state's, each tier filtered by level the way the list filters it, so the
+	 * county's own municipal races stay off the city page's count.
+	 */
+	test('asks the parent county and state for their races too, filtered to their level', async () => {
+		const calls: string[] = [];
+		const places: Record<string, PlaceWithFacts> = {
+			'tx/harris-county/houston': {
+				id: 'p-1',
+				name: 'Houston',
+				slug: 'tx/harris-county/houston',
+				state: 'TX',
+				Races: [race('tx/houston/mayor')],
+			},
+			'tx/harris-county': {
+				id: 'p-2',
+				name: 'Harris County',
+				slug: 'tx/harris-county',
+				state: 'TX',
+				Races: [race('tx/harris-county/judge', { positionLevel: 'COUNTY' }), race('tx/pasadena/mayor', { positionLevel: 'CITY' })],
+			},
+			tx: { id: 'p-3', name: 'Texas', slug: 'tx', state: 'TX', Races: [race('tx/governor', { positionLevel: 'STATE' })] },
+		};
+		const deps: FeaturedPeopleDeps = {
+			async getPlaceBySlug({ slug }) {
+				return Promise.resolve(places[slug] ?? null);
+			},
+			async resolvePlaceRaceElectionDates() {
+				return Promise.resolve(new Map());
+			},
+			async getCandidacies({ raceSlug }) {
+				calls.push(raceSlug);
+				return Promise.resolve([candidacy({ id: raceSlug, slug: `${raceSlug}-c`, personId: PLEDGED_ID, positionName: raceSlug })]);
+			},
+			async getOfficeHoldersByGeoId() {
+				return Promise.resolve([]);
+			},
+			async getPersonsByIds() {
+				return Promise.resolve([personRow(PLEDGED_ID, { isPledged: true })]);
+			},
+			async getRemovedPersonIds() {
+				return Promise.resolve(new Set<string>());
+			},
+		};
+
+		const people = await getFeaturedPeople(
+			{ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) },
+			deps,
+		);
+
+		const ballot = ['tx/governor', 'tx/harris-county/judge', 'tx/houston/mayor'];
+		const sorted = (values: string[]) => [...values].sort((a, b) => a.localeCompare(b));
+		expect(sorted(calls)).toEqual(ballot);
+		expect(sorted(people.candidates.map(c => c.office ?? ''))).toEqual(ballot);
+		expect(people.candidatesComplete).toBe(true);
+	});
+});
+
 describe('summarizeIndependents', () => {
 	const pledged = (i: number, overrides: Partial<FeaturedPersonCard> = {}) => person(i, { isPledged: true, ...overrides });
 
+	const complete = (candidates: FeaturedPersonCard[], representatives: FeaturedPersonCard[] = []) => ({
+		candidates,
+		representatives,
+		candidatesComplete: true,
+	});
+
 	test('counts distinct pledged candidates when the list is complete, zero included', () => {
-		expect(summarizeIndependents({ candidates: [pledged(1), pledged(1), pledged(2), person(3)], representatives: [], candidatesComplete: true })).toEqual({
-			candidateCount: 2,
-			hasAny: true,
-		});
-		expect(summarizeIndependents({ candidates: [person(1)], representatives: [person(2, { role: 'representative' })], candidatesComplete: true })).toEqual({
-			candidateCount: 0,
-			hasAny: false,
-		});
+		expect(summarizeIndependents(complete([pledged(1), pledged(1), pledged(2), person(3)]))).toEqual({ candidateCount: 2, hasAny: true });
+		expect(summarizeIndependents(complete([person(1)], [person(2, { role: 'representative' })]))).toEqual({ candidateCount: 0, hasAny: false });
 	});
 
 	test('withholds the count when the list is partial, but one pledged person found is still proof', () => {
-		expect(summarizeIndependents({ candidates: [pledged(1)], representatives: [], candidatesComplete: false })).toEqual({ candidateCount: null, hasAny: true });
-		expect(summarizeIndependents({ candidates: [], representatives: [pledged(2, { role: 'representative' })], candidatesComplete: true })).toEqual({
-			candidateCount: 0,
-			hasAny: true,
-		});
+		const partial = { candidates: [pledged(1)], representatives: [], candidatesComplete: false };
+		expect(summarizeIndependents(partial)).toEqual({ candidateCount: null, hasAny: true });
+		expect(summarizeIndependents(complete([], [pledged(2, { role: 'representative' })]))).toEqual({ candidateCount: 0, hasAny: true });
+	});
+
+	test('a year scopes the count to that year\'s elections but not the button', () => {
+		const people = {
+			candidates: [pledged(1, { electionDate: '2026-11-03' }), pledged(2, { electionDate: '2028-11-07' }), pledged(3, { electionDate: null })],
+			representatives: [],
+			candidatesComplete: true,
+		};
+		expect(summarizeIndependents(people, 2026)).toEqual({ candidateCount: 1, hasAny: true });
+		expect(summarizeIndependents(people, 2030)).toEqual({ candidateCount: 0, hasAny: true });
+		expect(summarizeIndependents(people)).toEqual({ candidateCount: 3, hasAny: true });
 	});
 
 	test('a pledged officeholder does not count as a candidate', () => {
-		expect(summarizeIndependents({ candidates: [], representatives: [pledged(1, { role: 'representative' })], candidatesComplete: true }).candidateCount).toBe(0);
+		expect(summarizeIndependents(complete([], [pledged(1, { role: 'representative' })])).candidateCount).toBe(0);
 	});
 
 	test('no data hides both', () => {

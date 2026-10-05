@@ -13,6 +13,7 @@ import { secondaryButtonStyleType } from '~/ui/_lib/designTypesStore';
 import {
 	buildDynamicFAQItems,
 	buildPositionPageSchema,
+	getYearFromDateString,
 } from '~/lib/electionsHelpers';
 import {
 	buildBreadcrumbSchema,
@@ -324,7 +325,14 @@ export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageConte
 			countyName: ctx.countyName,
 			cityName: ctx.cityName,
 			bodyCopy: ctx.bodyCopy,
-			independents: summarizeIndependents(ctx.featuredPeople),
+			// Both figures describe the ballot the offices list shows, in the year it
+			// opens on (Emily, 2026-10-05): the races are counted off the same rows,
+			// and the independents off the same races' candidates.
+			raceCount:
+				ctx.offices && ctx.defaultYear !== undefined
+					? ctx.offices.filter(office => getYearFromDateString(office.nextElectionDate) === ctx.defaultYear).length
+					: null,
+			independents: summarizeIndependents(ctx.featuredPeople, ctx.defaultYear),
 		},
 		component_listOfOfficesBlock: {
 			// The block renders `headline`, so that is where the location-named

@@ -153,4 +153,50 @@ describe('buildElectionsIndexSectionOverrides', () => {
 		expect(withPeople?.independents).toEqual({ candidateCount: 1, hasAny: true });
 		expect(withoutPeople?.independents).toEqual({ candidateCount: null, hasAny: false });
 	});
+
+	/**
+	 * Both hero figures describe the ballot the offices list shows, in the year it
+	 * opens on: the races are the list's own rows for that year, and the
+	 * independents are scoped to it too.
+	 */
+	test('counts the races and the independents off the offices list, in its opening year', () => {
+		const office = (slug: string, nextElectionDate: string) => ({
+			id: slug,
+			type: 'County',
+			position: slug,
+			nextElectionDate,
+			href: `/${slug}`,
+		});
+		const candidate = (personId: string, electionDate: string) => ({
+			personId,
+			name: personId,
+			office: null,
+			location: null,
+			href: `/people/${personId}`,
+			avatarUrl: null,
+			isPledged: true,
+			isNonpartisan: true,
+			role: 'candidate' as const,
+			electionDate,
+		});
+		const hero = buildElectionsIndexSectionOverrides({
+			...countyCtx,
+			defaultYear: 2026,
+			offices: [office('clerk', '2026-11-03'), office('sheriff', '2026-11-03'), office('judge', '2028-11-07')],
+			featuredPeople: {
+				candidates: [candidate('p1', '2026-11-03'), candidate('p2', '2028-11-07')],
+				representatives: [],
+				candidatesComplete: true,
+			},
+		}).component_locationLandingPageHero;
+
+		expect(hero?.raceCount).toBe(2);
+		expect(hero?.independents).toEqual({ candidateCount: 1, hasAny: true });
+	});
+
+	test('the race count is unknown, not zero, when the page has no offices data', () => {
+		expect(buildElectionsIndexSectionOverrides(countyCtx).component_locationLandingPageHero?.raceCount).toBeNull();
+		const emptyList = buildElectionsIndexSectionOverrides({ ...countyCtx, defaultYear: 2026, offices: [] });
+		expect(emptyList.component_locationLandingPageHero?.raceCount).toBe(0);
+	});
 });

@@ -109,33 +109,49 @@ The three cards were already right. The second button changed from "Search all e
 elections index) to "See who's an independent", an anchor to the featured candidates block, on all
 four location levels. Decisions settled with Emily, 2026-10-05:
 
-- **The independent count is live data, zero included, and hides when it cannot be trusted.** The
-  hero reads the same candidates and officeholders the featured block gets (`featuredPeople` on
-  `ElectionsIndexPageContext`), summarised by `summarizeIndependents` in `src/lib/featuredPeople.ts`
-  into the `independents` override. The lavender card is the independents card, identified by its
-  colour, since the design gives that colour to no other card: its number becomes the count of
-  distinct pledged candidates, and the card is left out when `candidatesComplete` is false, which is
-  when the place had more upcoming races than `FEATURED_RACE_BUDGET` covers or could not be found.
-  The editor's label and the other two placeholder figures are untouched. Off the location pages
-  the override is absent and the card renders as written.
+- **Two figures are live data, zero included, and hide when they cannot be trusted.** Both describe
+  the ballot the offices list below shows, in the year it opens on, so the hero and the list can
+  never disagree (Emily, 2026-10-05: "the counts in this hero block match the counts in the list of
+  offices"). The cards are told apart by colour, since the design gives each colour to one card:
+  - **Halo green, races on the ballot**: the count of the list's own rows (`ctx.offices`) whose date
+    falls in `ctx.defaultYear`, handed in as `raceCount`. It needs no extra fetch, and it follows
+    whatever the list shows, so when the list gains the parent levels (draft PR #304) the count does
+    too, without a code change here. Unknown (no offices data) hides the card; an empty list is 0.
+  - **Lavender, independent candidates**: the pledged candidates on that ballot in that year,
+    summarised by `summarizeIndependents` in `src/lib/featuredPeople.ts` from the same people the
+    featured block gets (`featuredPeople` on `ElectionsIndexPageContext`), handed in as
+    `independents`. The card is left out when `candidatesComplete` is false, which is when the
+    ballot had more upcoming races than `FEATURED_RACE_BUDGET` covers or the place could not be found.
+
+  The editor's labels and the election-day placeholder are untouched. Off the location pages the
+  overrides are absent and the cards render as written.
+- **The ballot is own level and up, never down.** `getFeaturedPeople` now reads the parent county
+  and state places as well as the page's own (the same tiers `nearbyOfficesTiers` returns), filters
+  each tier by level the way the offices list does, and asks every upcoming race on that ballot for
+  its candidates, soonest first. This is the offices list's own rule from PR #304 ("a voter in
+  Houston also votes in Harris County and Texas races; someone on the Texas page does not vote in
+  every municipal race in the state"). It widens the featured candidates carousel the same way, on
+  purpose: the "See who's an independent" button lands on that carousel, and a count that included
+  state candidates over a carousel that excluded them would disagree with itself. Representatives
+  stay the page's own officeholders. The race budget rose from 16 to 48 to fit real city ballots
+  (Houston's offices list carries 38 races across all years; the hero only asks upcoming ones).
+  This replaces the counts section's earlier "whole location including sub-locations" scope.
 - **The button hides only when nobody is pledged.** A button anchored to `#independents` is left out
-  unless a pledged candidate or officeholder was found; one found is proof even from a partial list,
-  so the button can show while the card hides. The anchor ids live in
+  unless a pledged candidate or officeholder was found in any upcoming election; one found is proof
+  even from a partial list, so the button can show while the card hides. The anchor ids live in
   `src/constants/electionAnchors.ts`, and the featured candidates block answers to `#independents`
   when an editor sets no anchor id, so the seeded button lands without matching ids being typed.
-- **Scope caveat, waiting on data.** The fetch covers the page's own-level races (state races on a
-  state page), which is narrower than the counts section's "whole location including sub-locations".
-  Until election-api offers the place-and-year aggregate, the published count is the pledged
-  candidates in the races the offices list below shows.
+- **District pages do not exist** (Emily, 2026-10-05), so nothing here handles a district tier
+  specially; the district template and routes keep whatever they did before.
 
 Three things worth carrying to the rest of the batch:
 
 - **A midnight block must not put `text-white` on its section wrapper** if it contains pastel
   cards. The cards inherit it and their text disappears. Put the text color on the copy column
   instead, which is what the Stats Block already does.
-- **The date and race figures are still Sanity fields.** Only the independent count is live (see
-  above). The election date and the race count are computable from what a location page already
-  fetches and are the next to wire; the counts section below has the definitions.
+- **The election date is still a Sanity field.** The race count and the independent count are live
+  (see above). The date is computable from what a location page already fetches and is the next to
+  wire; the counts section below has the definitions.
 - **A value that is not a count must not animate.** `Stat` counts a numeric value up from zero, so
   the election date rendered as "Nov. 0, 2026" on the way to "Nov. 4, 2026" until the parser learned
   to skip values with digits after the first run.
@@ -386,10 +402,13 @@ definition is kept below because the position pages still want it.
 - **Year scope.** Every figure follows the year the offices list opens on: the current
   year when it has elections, else the soonest year ahead
   (`resolveDefaultElectionYear` in `src/lib/electionsHelpers.ts`).
-- **Geographic scope.** The whole location including its sub-locations, so a state
-  figure counts county and city races too. This makes a hero figure larger than the
-  list of offices below it, which is accepted because that list carries its own
-  heading.
+- **Geographic scope.** The ballot a voter in the location sees: the location's own
+  races plus those of the places above it (a city page counts its county's and its
+  state's races; a state page counts state races only). Never the places below it:
+  someone on the Texas page does not vote in every municipal race in Texas. This is
+  the offices list's rule (PR #304) and the hero follows it so the two agree
+  (Emily, 2026-10-05). It replaces an earlier "whole location including
+  sub-locations" definition that was never built.
 - **Independent** means the person has taken the GoodParty.org Pledge, by the same
   rule the candidate cards and profiles use (`pledgedFromSpine`: the spine's
   `isPledged`, and no major-party evidence). It does not mean party affiliation, so
@@ -408,10 +427,11 @@ definition is kept below because the position pages still want it.
   number typed in Studio would otherwise freeze the same figure across thousands of
   pages.
 
-Of these, only the independent count reaches a location page today, through the featured
-people fetch (per-race `/v1/candidacies` calls within a budget of sixteen races, so the
-hero hides the figure when the budget was exceeded; see the hero entry above).
-`/v1/candidacies` has no place filter, so the others need either per-race calls or a
+Of these, the race count and the independent count reach a location page today: the
+races off the offices list's own rows, the independents through the featured people
+fetch (per-race `/v1/candidacies` calls within a budget of 48 races, so the hero hides
+the figure when the budget was exceeded; see the hero entry above). `/v1/candidacies`
+has no place filter, so the uncontested count needs either per-race calls or a
 whole-state sweep joined on `raceId`. The right fix is one aggregate from election-api,
 keyed by place and year, which the candidates rows, "who's currently in office" and
 nearby offices blocks will all want too.

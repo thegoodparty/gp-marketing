@@ -30,16 +30,20 @@ export function LocationLandingPageHeroSection(props: Props) {
 	const bodyCopy =
 		resolveSectionText(locationOverride?.bodyCopy, tokens) ??
 		resolveSectionText(section.locationLandingPageHeroContent?.field_bodyCopy, tokens);
-	// On a location page the lavender card is the independents card (the design
-	// gives it that colour and no other), so its number comes from the data: a real
-	// zero shows, and the card hides when the count cannot be trusted. The editor
-	// keeps the label. Anywhere else the card renders as written.
+	// On a location page two cards carry live figures, told apart by the colour
+	// the design gives each and no other: halo green is the races on the ballot,
+	// lavender is the independent candidates. A real zero shows, and a card hides
+	// when its figure cannot be trusted (null). The editor keeps the labels, and
+	// anywhere else the cards render as written.
 	const independents = locationOverride?.independents;
+	const liveFigures = new Map<string, number | null>();
+	if (locationOverride?.raceCount !== undefined) liveFigures.set('halo-green', locationOverride.raceCount);
+	if (independents) liveFigures.set('lavender', independents.candidateCount);
 	const stats = resolveStats(section.stats?.list_stats)
-		?.filter(stat => !(independents && stat.color === 'lavender' && independents.candidateCount === null))
+		?.filter(stat => !(stat.color && liveFigures.has(stat.color) && liveFigures.get(stat.color) === null))
 		.map(stat => ({
 			...stat,
-			value: independents && stat.color === 'lavender' ? independents.candidateCount?.toLocaleString('en-US') : stat.value,
+			value: stat.color && liveFigures.has(stat.color) ? liveFigures.get(stat.color)?.toLocaleString('en-US') : stat.value,
 			description: resolveSectionText(stat.description, tokens) ?? stat.description,
 		}));
 	const buttons = transformButtons(section.locationLandingPageHeroContent?.list_buttons)

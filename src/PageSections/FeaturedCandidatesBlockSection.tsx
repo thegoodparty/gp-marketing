@@ -1,5 +1,6 @@
 import { stegaClean } from 'next-sanity';
 
+import { INDEPENDENTS_ANCHOR } from '~/constants/electionAnchors';
 import { type FeaturedPeopleMode, selectFeaturedPeople } from '~/lib/featuredPeople';
 import { resolveRichTextTokens, resolveSectionText } from '~/lib/resolveSectionText';
 import type { TokenMap } from '~/lib/resolveTokens';
@@ -27,7 +28,10 @@ export function resolveFeaturedPeopleMode(value: ModeValue | undefined): Feature
 /**
  * Data-backed: the people come from the location page route, not from Sanity.
  * Only the location pages populate the override today, so anywhere else the
- * block renders nothing. The heading and the callout are the editor's.
+ * block renders nothing. The heading and the callout are the editor's. The
+ * section id falls back to the anchor the location hero's "See who's an
+ * independent" button is seeded with, so the jump lands without an editor
+ * having to type matching ids.
  */
 export function FeaturedCandidatesBlockSection(props: Props) {
 	const { featuredOverride, tokens, ...section } = props;
@@ -49,7 +53,7 @@ export function FeaturedCandidatesBlockSection(props: Props) {
 	);
 
 	return (
-		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Featured Candidates Block'>
+		<section id={stegaClean(section.componentSettings?.field_anchorId) || INDEPENDENTS_ANCHOR} data-section='Featured Candidates Block'>
 			<FeaturedCandidatesBlock
 				backgroundColor={resolveBg(settings?.field_blockColorCreamMidnight)}
 				heading={resolveSectionText(section.field_heading, tokens)}

@@ -66,6 +66,15 @@ describe('FeaturedCandidatesBlockSection', () => {
 		expect(html).toContain('https://img.example/1.jpg');
 	});
 
+	/** The location hero's seeded "See who's an independent" button jumps to #independents, so the block answers to it unless an editor picked another id. */
+	test('answers to the independents anchor when no anchor id is set', () => {
+		const html = renderToStaticMarkup(<FeaturedCandidatesBlockSection {...section} componentSettings={null} featuredOverride={featuredOverride} />);
+		expect(html).toContain('id="independents"');
+
+		const custom = renderToStaticMarkup(<FeaturedCandidatesBlockSection {...section} featuredOverride={featuredOverride} />);
+		expect(custom).toContain('id="featured"');
+	});
+
 	test('renders nothing at all, not even the section wrapper, when the page supplies nobody', () => {
 		expect(renderToStaticMarkup(<FeaturedCandidatesBlockSection {...section} tokens={tokens} />)).toBe('');
 		expect(renderToStaticMarkup(<FeaturedCandidatesBlockSection {...section} featuredOverride={{ candidates: [], representatives: [] }} />)).toBe('');

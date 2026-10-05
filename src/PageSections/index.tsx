@@ -125,12 +125,28 @@ export type SectionOverrides = {
 	component_electionsPositionHero?: import('~/PageSections/ElectionsPositionHeroSection').OfficeData;
 	component_electionsPositionContentBlock?: import('~/PageSections/ElectionsPositionContentBlockSection').ElectionsPositionContentBlockOverride;
 	component_locationLandingPageHero?: {
+		/** The whole headline. Without it the block falls back to the bare location name. */
+		headline?: string;
 		locationLevel?: 'state' | 'county' | 'city' | 'district';
 		stateName?: string;
 		countyName?: string;
 		cityName?: string;
 		bodyCopy?: string;
-		searchPlaceholder?: string;
+		/**
+		 * The races on the page's ballot in the year the offices list opens on,
+		 * counted off the same rows that list shows. The halo green card shows it
+		 * (a real zero included) and hides when it is null.
+		 */
+		raceCount?: number | null;
+		/**
+		 * What the page knows about its independents, from the fetch that feeds
+		 * `component_featuredCandidatesBlock`, scoped to the same year. The lavender
+		 * card shows `candidateCount` (a real zero included) and hides when it is
+		 * null; a button anchored to the featured block hides unless `hasAny`. Both
+		 * this and `raceCount` are absent on pages that are not location pages,
+		 * where the editor's figures and buttons render as written.
+		 */
+		independents?: import('~/lib/featuredPeople').IndependentsSummary;
 	};
 	component_listOfOfficesBlock?: {
 		/**

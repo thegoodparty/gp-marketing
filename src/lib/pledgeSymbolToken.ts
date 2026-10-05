@@ -30,7 +30,7 @@ export function insertPledgeSymbols(value: PortableTextProps['value'] | null | u
 		Boolean(block.children?.some(child => typeof child.text === 'string' && stegaClean(child.text).includes(PLEDGE_SYMBOL_TOKEN)));
 	if (!(value as Block[]).some(hasToken)) return value;
 	return (value as Block[]).map(block => {
-		if (!hasToken(block)) return block;
+		if (!block.children || !hasToken(block)) return block;
 		const children: Span[] = [];
 		for (const child of block.children) {
 			const text = typeof child.text === 'string' ? stegaClean(child.text) : null;

@@ -3,6 +3,7 @@ import { notFound, permanentRedirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	getCountyChildPlaces,
+	getElectionsPagePlace,
 	getPlacesByState,
 	getPlaceBySlug,
 	isCityOrTownMtfcc,
@@ -15,7 +16,6 @@ import {
 	buildPlaceRacePositionHref,
 	getStateName,
 	hasSuspiciousFactsMatch,
-	PLACE_RACE_COLUMNS,
 	placeToFactsCards,
 	resolveLocalityName,
 	resolveDefaultElectionYear,
@@ -47,13 +47,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 
 	const [counties, placeData, countyFactsData, countyChildPlaces] = await Promise.all([
 		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
-		getPlaceBySlug({
-			slug: fullSlug,
-			includeChildren: false,
-			includeRaces: true,
-			placeColumns: 'slug,name,mtfcc,countyName',
-			raceColumns: PLACE_RACE_COLUMNS,
-		}),
+		getElectionsPagePlace({ slug: fullSlug }),
 		getPlaceBySlug({
 			slug: countySlug,
 			includeChildren: false,
@@ -64,13 +58,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 
 	let resolvedPlaceData = placeData;
 	if (!resolvedPlaceData) {
-		resolvedPlaceData = await getPlaceBySlug({
-			slug: shortSlug,
-			includeChildren: false,
-			includeRaces: true,
-			placeColumns: 'slug,name,mtfcc,countyName',
-			raceColumns: PLACE_RACE_COLUMNS,
-		});
+		resolvedPlaceData = await getElectionsPagePlace({ slug: shortSlug });
 	}
 
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
@@ -247,11 +235,7 @@ export async function generateMetadata({
 			includeChildren: false,
 			includeRaces: false,
 		}),
-		getPlaceBySlug({
-			slug: fullSlug,
-			includeChildren: false,
-			includeRaces: false,
-		}),
+		getElectionsPagePlace({ slug: fullSlug }),
 	]);
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
 	const isNestedDistrict =
@@ -274,11 +258,7 @@ export async function generateMetadata({
 		return slug.split('/').pop() === citySegment;
 	});
 	if (!cityPlace) {
-		const placeByShortSlug = await getPlaceBySlug({
-			slug: shortSlug,
-			includeChildren: false,
-			includeRaces: false,
-		});
+		const placeByShortSlug = await getElectionsPagePlace({ slug: shortSlug });
 		if (placeByShortSlug?.slug?.toLowerCase() === shortSlug) {
 			cityPlace = placeByShortSlug;
 		}

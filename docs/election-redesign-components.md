@@ -32,7 +32,7 @@ The audit should produce, for each item on the list, one of:
 - **Already covered.** An existing block does this. Name it.
 - **Extend.** An existing block does this with one added field or option. Name the
   block and the field. This is a much smaller change than a new block, and is
-  covered by `docs/adding-a-component.md` rather than the `new-component` skill.
+  covered by the `update-component` skill rather than the `new-component` skill.
 - **New block.** Nothing covers it. Say which of the two kinds it is (see below).
 
 Unverified starting hypotheses, for the audit to confirm or reject rather than
@@ -218,10 +218,12 @@ Two things from it that affect other blocks in the batch:
   the row to the layout. Marketing chose to keep them separate controls (Emily, 2026-09-25): the
   existing `field_showSocialProof` toggle now works, and either layout can carry the row.
 
-This block is the batch's one exception to the draft-and-batch rule above, because it is not
-actually on a live template. It sits only on `goodpartyOrg_allComponents` (the `/all` page), so
-shipping it changes one internal showcase page and nothing a voter sees. Re-check that with a
-query before assuming it still holds.
+When this shipped (2026-09-25) the block sat only on `goodpartyOrg_allComponents` (the `/all`
+page), so it was the batch's one exception to the draft-and-batch rule: nothing a voter sees
+changed. That no longer holds. By 2026-10-05 editors had placed it on three live landing pages
+(`check-voter-registration`, `find-polling-place`, `request-mail-in-ballot`), so a change to it
+now reaches those pages on deploy. Run the placement query in the `update-component` skill
+before assuming anything about where a block is placed.
 
 Noted and not acted on: both full-width frames label the search box "Enter your street address",
 and the body copy says "Enter your address". The search resolves cities and counties only, so the
@@ -507,6 +509,49 @@ Two consequences worth stating to whoever is waiting on the work:
   or the template references a block production does not have. See
   `docs/content-vs-code.md`.
 
+## Updating a block after design feedback
+
+Once a block is built, feedback rounds change it, and a change is a different job from a
+build. The **`update-component`** skill owns it. What makes it different, in short:
+
+- **The code can be in three places at once.** On `develop`, in a draft PR waiting for its
+  page batch, and in a second PR stacked on the first. The change has to land in the most
+  downstream one, or two PRs fight over the same file. Several drafts are also far behind
+  `develop`; bring it in with a merge before changing anything.
+- **Who is affected is a query, not a memory.** Editors place blocks on templates and landing
+  pages between rounds, so this doc's notes about where a block sits go stale (the Near You
+  note above is one example). The skill runs the placement query against both the published
+  and the drafts perspective before deciding whether the PR can merge or must park.
+- **Existing pages have no value for a new field.** The component's fallback is what they
+  render, and it must match today's render unless the change is meant to alter the default.
+- **Tests pin earlier decisions.** A failing assertion may be guarding a rule from an earlier
+  round that this feedback did not revisit. Read it before changing it.
+
+### Placement snapshot, 2026-10-05
+
+Where each block's code lives and what carries it in Sanity, from the placement query
+(published view; the drafts view added one hit, noted). Re-run the query rather than trusting
+this table; it is here to orient, and to show the shape of the answer.
+
+| Block | Code | Placed on (published) | An update ships as |
+| --- | --- | --- | --- |
+| Location landing page hero | develop + draft PR #300 | all five Location globals | into #300, stays draft |
+| List of offices | develop + draft PR #304 (base still points at merged #303) | all five Location globals | into #304, stays draft |
+| Location facts | develop | State / County / City / District globals | draft and batch |
+| Elections index | develop | Location globals, Person Profile global | draft and batch |
+| Position hero | develop + draft PR #320 | Position and Position Candidates globals | into #320, stays draft |
+| Position content block | develop + draft PR #327 (stacked on #320) | Position global | into #327, stays draft |
+| Candidates block | develop | Position Candidates global, every `/people` profile | draft and batch |
+| Elections search hero | develop + draft PR #351 | the `/elections` landing page | into #351 |
+| Featured cities | develop + draft PR #307 | the `/elections` landing page | into #307 |
+| Elections near you | develop | `/all` plus three landing pages (see the note above) | ready to merge, list the pages |
+| Election position resources | develop | nowhere published; a **draft** of the Position Page global adds it | ready to merge, tell the editor holding that draft |
+| Nearby offices | develop | nowhere | ready to merge |
+| Featured candidates | develop | nowhere | ready to merge |
+| Illustrated columns | develop | nowhere | ready to merge |
+| Testimonial block with link | develop | nowhere | ready to merge |
+| Location editorial | develop | nowhere (hidden on location pages by design) | ready to merge |
+
 ## The build loop
 
 Once the audit says an item is a new block:
@@ -558,7 +603,8 @@ audit to confirm; `data` means it needs the `SectionOverrides` pass.
 
 ## Kickoff prompt
 
-Paste this to start a session on one of these components:
+Paste this to start a session on one of these components. For a revision to a block
+that already exists, use the kickoff prompt in the `update-component` skill instead.
 
 ```
 We're building page sections for the election location and position page redesign.

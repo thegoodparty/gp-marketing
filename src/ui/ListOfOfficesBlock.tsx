@@ -53,10 +53,12 @@ const styles = tv({
 		listHeader: 'hidden md:grid md:grid-cols-[7.6875rem_1.1fr_1fr_9.5rem_2.5rem] md:items-center md:gap-x-4 md:px-3.5',
 		listHeaderCell: 'font-secondary text-text-875 font-semibold',
 		headerDateCell: 'text-right',
+		// 60px is the row's floor, not its height: the position column is narrower
+		// now that the count sits beside it, and a long office name wraps.
 		row: [
 			'group grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2 rounded-lg border border-black/10 bg-white p-3',
 			'transition-colors hover:border-goodparty-blue',
-			'md:h-15 md:grid-cols-[7.6875rem_1.1fr_1fr_9.5rem_2.5rem] md:gap-y-0 md:px-3.5 md:py-0',
+			'md:min-h-15 md:grid-cols-[7.6875rem_1.1fr_1fr_9.5rem_2.5rem] md:gap-y-0 md:px-3.5 md:py-3',
 		],
 		tagCell: 'col-span-2 md:col-span-1 md:col-start-1 md:row-start-1',
 		// The tag is white on navy in both variants, so it sets its own colour.

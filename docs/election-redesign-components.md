@@ -372,7 +372,7 @@ with the block itself at 2139:26748 phone / 2156:34712 unclaimed phone). The blo
 fields in Studio: everything inside it on a `/people` page is assembled in
 `src/components/people/personSectionOverrides.tsx` from election-api data, so all three changes
 are code, none is a template edit. Built on the hero PR's branch (#374), because both edit that
-file and the content block's clearance, and both wait for the `/people` batch.
+file and the content block's clearance, and both wait for the `/people` batch (PR #375).
 
 - **A "Took the GoodParty.org Pledge" row in the siderail**, under Political Affiliation, with
   the heart-and-star mark, for anyone the pledge rule affirms (the same `pledged` flag the hero
@@ -634,7 +634,7 @@ this table; it is here to orient, and to show the shape of the answer.
 | Position content block | develop + draft PR #327 (stacked on #320) | Position global | into #327, stays draft |
 | Candidates block | develop | Position Candidates global, every `/people` profile | draft and batch |
 | Profile hero | develop + draft PR #374 | Person Profile global, Candidate Profile global | into #374, stays draft |
-| Profile content block | develop + draft PR stacked on #374 | Person Profile global, Candidate Profile global | into the stacked PR, stays draft |
+| Profile content block | develop + draft PR #375 (stacked on #374) | Person Profile global, Candidate Profile global | into #375, stays draft |
 | Profile hero | develop | Person Profile global (every `/people` profile), the retired Candidate Profile global, twelve disabled per-state scaffolds; a landing page **draft** also carries it | draft and batch with the `/people` pages (PR for the 2026-10-06 revision) |
 | Elections search hero | develop + draft PR #351 | the `/elections` landing page | into #351 |
 | Featured cities | develop + draft PR #307 | the `/elections` landing page | into #307 |

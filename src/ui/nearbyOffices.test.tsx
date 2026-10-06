@@ -55,6 +55,32 @@ describe('NearbyOffices', () => {
 		expect(html).not.toContain('<svg');
 	});
 
+	/**
+	 * The count mirrors the offices list: a number and the badge on the desktop
+	 * row, the badge and a sentence on the phone card. Nothing is drawn without a
+	 * count above zero, because an unknown and a genuine zero are the same value
+	 * here and neither may publish as "0 independents".
+	 */
+	test('shows the pledged candidate count with its badge, worded for one or many', () => {
+		const many = renderToStaticMarkup(<NearbyOffices offices={[office(1, { pledgedCount: 2 })]} />);
+		const one = renderToStaticMarkup(<NearbyOffices offices={[office(1, { pledgedCount: 1 })]} />);
+
+		expect(many).toContain('# of independents running');
+		expect(many).toContain('2<span class="md:sr-only"> independents running</span>');
+		expect(many.match(/<svg/g)).toHaveLength(3);
+		expect(one).toContain('1<span class="md:sr-only"> independent running</span>');
+	});
+
+	test('draws no count for a row with zero or no pledged candidates', () => {
+		const zero = renderToStaticMarkup(<NearbyOffices offices={[office(1, { pledgedCount: 0 })]} />);
+		const unknown = renderToStaticMarkup(<NearbyOffices offices={[office(1)]} />);
+
+		for (const html of [zero, unknown]) {
+			expect(html).not.toContain('md:sr-only');
+			expect(html.match(/<svg/g)).toHaveLength(2);
+		}
+	});
+
 	test('inverts the heading on a midnight background', () => {
 		const html = renderToStaticMarkup(<NearbyOffices backgroundColor='midnight' offices={[office(1)]} />);
 

@@ -63,6 +63,9 @@ export interface CandidacyItem {
 		electionDate?: string;
 		positionDescription?: string;
 		frequency?: number[];
+		/** The seat's district or ward ("District" / "21"): this candidacy's own race row, not the slug's first. */
+		subAreaName?: string | null;
+		subAreaValue?: string | null;
 	};
 }
 

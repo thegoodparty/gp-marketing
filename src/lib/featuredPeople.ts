@@ -107,9 +107,17 @@ export function rankFeaturedPeople(people: FeaturedPersonCard[], options: { limi
 		.slice(0, limit);
 }
 
-/** The people the Studio dropdown asks for, ranked and capped. */
+/**
+ * The people the Studio dropdown asks for, pledged only, ranked and capped.
+ * Unpledged people used to fill the remaining slots; since the block's heading
+ * now says everyone in it took the Pledge, they are left out (Emily, 2026-10-06),
+ * and a place with nobody pledged shows no block at all.
+ */
 export function selectFeaturedPeople(people: FeaturedPeople, mode: FeaturedPeopleMode, limit = FEATURED_PEOPLE_LIMIT): FeaturedPersonCard[] {
 	const pool =
 		mode === 'candidates' ? people.candidates : mode === 'representatives' ? people.representatives : [...people.candidates, ...people.representatives];
-	return rankFeaturedPeople(pool, { limit });
+	return rankFeaturedPeople(
+		pool.filter(person => person.isPledged),
+		{ limit },
+	);
 }

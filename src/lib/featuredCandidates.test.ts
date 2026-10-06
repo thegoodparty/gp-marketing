@@ -66,8 +66,8 @@ describe('rankFeaturedPeople', () => {
 
 describe('selectFeaturedPeople', () => {
 	const people = {
-		candidates: [person(1)],
-		representatives: [person(2, { role: 'representative', electionDate: null })],
+		candidates: [person(1, { isPledged: true })],
+		representatives: [person(2, { isPledged: true, role: 'representative', electionDate: null })],
 	};
 
 	test('both merges the two lists', () => {
@@ -77,6 +77,17 @@ describe('selectFeaturedPeople', () => {
 	test('candidates and representatives pick one list each', () => {
 		expect(selectFeaturedPeople(people, 'candidates').map(p => p.personId)).toEqual(['person-1']);
 		expect(selectFeaturedPeople(people, 'representatives').map(p => p.personId)).toEqual(['person-2']);
+	});
+
+	/** The heading says everyone shown took the Pledge, so unpledged people no longer fill the spare slots (Emily, 2026-10-06). */
+	test('leaves unpledged people out even when nothing else would fill the carousel', () => {
+		const mixed = {
+			candidates: [person(1, { isPledged: false, isNonpartisan: true }), person(2, { isPledged: true })],
+			representatives: [person(3, { isPledged: false, isNonpartisan: false, role: 'representative', electionDate: null })],
+		};
+
+		expect(selectFeaturedPeople(mixed, 'both').map(p => p.personId)).toEqual(['person-2']);
+		expect(selectFeaturedPeople({ candidates: [person(1, { isPledged: false })], representatives: [] }, 'both')).toEqual([]);
 	});
 });
 
@@ -302,7 +313,7 @@ describe('getFeaturedPeople', () => {
 
 		expect(people.candidates.map(c => c.name)).toEqual(['Jane Doe', 'Bob Ray']);
 		expect(people.representatives.map(r => r.name)).toEqual(['Sam Holder']);
-		expect(selectFeaturedPeople(people, 'both').map(p => p.name)).toEqual(['Jane Doe', 'Sam Holder', 'Bob Ray']);
+		expect(selectFeaturedPeople(people, 'both').map(p => p.name)).toEqual(['Jane Doe']);
 	});
 
 	test('returns two empty lists, and no trusted count, when the place cannot be found', async () => {
@@ -408,6 +419,64 @@ describe('getFeaturedPeople across the ballot', () => {
 		expect(sorted(calls)).toEqual(ballot);
 		expect(sorted(people.candidates.map(c => c.office ?? ''))).toEqual(ballot);
 		expect(people.candidatesComplete).toBe(true);
+	});
+
+	/**
+	 * Officials follow the ballot up as well (Emily, 2026-10-06): a city page carries
+	 * its county's and its state's current officeholders, each named with its own
+	 * tier's place rather than the city's.
+	 */
+	test('asks every tier for its officeholders and names each with its own place', async () => {
+		const COUNTY_ID = '44444444-4444-4444-8444-444444444444';
+		const STATE_ID = '55555555-5555-4555-8555-555555555555';
+		const places: Record<string, PlaceWithFacts & { geoId?: string }> = {
+			'tx/harris-county/houston': { id: 'p-1', name: 'Houston', slug: 'tx/harris-county/houston', state: 'TX', geoId: 'geo-houston', Races: [] },
+			'tx/harris-county': { id: 'p-2', name: 'Harris County', slug: 'tx/harris-county', state: 'TX', geoId: 'geo-harris', Races: [] },
+			tx: { id: 'p-3', name: 'Texas', slug: 'tx', state: 'TX', geoId: 'geo-tx', Races: [] },
+		};
+		const byGeo: Record<string, PersonOfficeHolder[]> = {
+			'geo-houston': [officeholder({ id: 'oh-city', personId: UNPLEDGED_ID })],
+			'geo-harris': [officeholder({ id: 'oh-county', personId: COUNTY_ID, officeTitle: 'County Judge' })],
+			'geo-tx': [officeholder({ id: 'oh-state', personId: STATE_ID, officeTitle: 'Governor', mailingCity: 'Austin' })],
+		};
+		const asked: string[] = [];
+		const deps: FeaturedPeopleDeps = {
+			async getElectionsPagePlace({ slug }) {
+				return Promise.resolve(places[slug] ?? null);
+			},
+			async resolvePlaceRaceElectionDates() {
+				return Promise.resolve(new Map());
+			},
+			async getCandidacies() {
+				return Promise.resolve([]);
+			},
+			async getOfficeHoldersByGeoId(geoId) {
+				asked.push(geoId);
+				return Promise.resolve(byGeo[geoId] ?? []);
+			},
+			async getPersonsByIds() {
+				return Promise.resolve([
+					personRow(UNPLEDGED_ID, { fullName: 'Sam Holder' }),
+					personRow(COUNTY_ID, { fullName: 'Cora County', isPledged: true }),
+					personRow(STATE_ID, { fullName: 'Stan State', isPledged: true }),
+				]);
+			},
+			async getRemovedPersonIds() {
+				return Promise.resolve(new Set<string>());
+			},
+		};
+
+		const people = await getFeaturedPeople(
+			{ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) },
+			deps,
+		);
+
+		expect([...asked].sort((a, b) => a.localeCompare(b))).toEqual(['geo-harris', 'geo-houston', 'geo-tx']);
+		expect(people.representatives.map(r => [r.name, r.office, r.location])).toEqual([
+			['Sam Holder', 'Council Member', 'Houston, TX'],
+			['Cora County', 'County Judge', 'Harris County, TX'],
+			['Stan State', 'Governor', 'Austin, TX'],
+		]);
 	});
 });
 

@@ -166,6 +166,16 @@ export type SectionOverrides = {
 		 */
 		candidates?: import('~/lib/featuredPeople').FeaturedPersonCard[];
 		representatives?: import('~/lib/featuredPeople').FeaturedPersonCard[];
+		/**
+		 * The number of pledged people in the page's place and everything inside
+		 * it, for the body copy's `[count of candidates]` placeholder. No route
+		 * supplies it yet: election-api has no place-with-descendants filter on
+		 * persons, so a count of all of Texas cannot be taken from a location page
+		 * today (docs/election-redesign-components.md asks for one). Absent, the
+		 * placeholder is left out of the sentence rather than published as a
+		 * number taken from the partial carousel pool.
+		 */
+		pledgedCount?: number | null;
 		/** When true the section renders nothing. */
 		hidden?: boolean;
 	};

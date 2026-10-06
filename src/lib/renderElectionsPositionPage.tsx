@@ -4,11 +4,8 @@ import {
 	buildPositionTokens,
 	type PositionPageContext,
 } from '~/lib/electionsTemplateHelpers';
-<<<<<<< HEAD
 import { loadPositionOfficeholders } from '~/lib/positionOfficeholders';
-=======
 import { resolveHowToRunGuide } from '~/lib/howToRunGuide';
->>>>>>> origin/claude/position-resources-article-title
 import { getNearbyOffices } from '~/lib/nearbyOffices';
 import { renderElectionTemplatePage } from '~/lib/renderElectionTemplatePage';
 import { articleTitleBySlugQuery } from '~/sanity/groq';

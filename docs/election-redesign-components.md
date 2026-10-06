@@ -364,10 +364,12 @@ Decisions that came out of it (Emily, 2026-09-29):
   (both / candidates only / representatives only). Nothing on the page shows which was picked. A
   document saved without the field renders both.
 - **The pledge callout is part of the block**, with its copy as a rich text field in Studio and a
-  show/hide toggle. There is no `/pledge` page on the live site today, so the default copy carries no
-  link; the field description says to add one when the page exists.
-- **Order: pledged first, then unpledged people with no major party, then everyone else.** Inside a
-  group, candidates by soonest election, then representatives by name. `rankFeaturedPeople` in
+  show/hide toggle. ~~There is no `/pledge` page on the live site today, so the default copy carries no
+  link; the field description says to add one when the page exists.~~ Superseded 2026-10-06: the
+  callout's link opens the pledge pop-up; see the revision below.
+- ~~**Order: pledged first, then unpledged people with no major party, then everyone else.**~~
+  Superseded 2026-10-06: pledged people only; see the revision below. Inside the pledged group,
+  candidates by soonest election, then representatives by name. `rankFeaturedPeople` in
   `src/lib/featuredCandidates.ts` is the rule. Capped at eight, in the section and in the ranking.
 - **The pledge is read by the same rule the `/people` cards use.** `pledgedFromSpine` (the spine
   flag, confirmed running, no major party in the evidence) is now exported from
@@ -388,9 +390,49 @@ Decisions that came out of it (Emily, 2026-09-29):
 - **The empty state is "render nothing"**, pinned by
   `src/PageSections/featuredCandidatesBlockSection.test.tsx`.
 
-Waiting on data: the race budget means a state page whose legislature has more seats than sixteen on
-one ballot only features candidates from the first sixteen, and the "pledged first" rule cannot see
-the rest. The place-and-year aggregate the counts section asks for would remove the budget.
+**Revised after design feedback (Emily, 2026-10-06; Figma 2188:38821 desktop, 2188:38534 mobile).**
+The heading became "Candidates and officials who took the GoodParty.org Pledge", a body paragraph
+appeared under it, and the callout box was redrawn: a bold title, the heart in its own column behind a
+hairline (stacked on top on the phone), "GoodParty.org Pledge" in bold, and a blue "Read the full
+pledge" link at the end. The code sits on the location hero's draft branch (PR #300), because the
+people now follow the ballot that branch built. Decisions:
+
+- **Pledged people only.** Unpledged people no longer fill the spare slots, since the heading says
+  everyone shown took the Pledge. The filter is in `selectFeaturedPeople`, at render time, so the
+  hero's independent count (which reads the raw lists) is unaffected. A place with nobody pledged
+  shows no block at all.
+- **Upward for people, officials included.** The carousel draws on the voter's ballot the way the
+  hero's count does (the page's own races, then its county's, then its state's), and the current
+  officeholders of every tier, each named with its own tier's place. Chosen over same-level-only
+  because pledged people are sparse and most city and county pages would otherwise show nothing.
+  The body copy therefore says "near you", not "in [location]".
+- **The count is a seam, not a figure.** The body copy accepts `[count of candidates]`, meaning
+  the number of pledged people in the page's place *and everything inside it* (all of Texas on the
+  Texas page). That is a downward count, and election-api cannot answer it today: a person row
+  carries a state and the pledge flag but no county or city, and candidacies and officeholders can
+  only be filtered by race, position, geo id or state. So no route supplies `pledgedCount` on the
+  override, and the placeholder is left out of the sentence (the gap closes up) rather than filled
+  from the partial carousel pool. The default copy carries no number. When the count is withheld,
+  only the number is hidden, not the sentence.
+- **Editable in Studio:** the heading (already was), the body copy, the callout title, the callout
+  text, a Show Pledge Link toggle and its label. Nothing is placed anywhere yet, so the defaults
+  could change to the frame's copy with no page affected.
+- **The link opens a pop-up, not a page.** `PledgeModal` in `src/ui/PledgeModal.tsx` is a plain
+  component any block can wrap a trigger in (Radix dialog, the same plumbing as the profile's
+  notify form); it is deliberately not a Studio block. Its copy (title, intro, the three pillars)
+  lives in code; its "Learn more" button goes to `/about`, there being no pledge page. Figma
+  2156:29105 and 2156:29080. Move the copy into a settings document if marketing needs to edit it.
+
+Noted and not acted on: the frame's heading is `gray-900` where the site's headings are black; the
+mobile frame bolds the callout title where the desktop frame uses semibold (semibold on both).
+
+**Request to the election data team** (the one query that finishes this block): a persons read
+filtered by **place including its descendants** and by **pledge**, with the person's current
+candidacy or office for the card, e.g. `/v1/persons?placeSlug=tx/harris-county&includeDescendants=true&isPledged=true&includeCandidacies=true&includeOfficeHolders=true`.
+"Pledged" must mean the rule the profiles use (`isPledged` on the spine and no major-party evidence
+on the candidacy or office). With it, `pledgedCount` becomes the result's length, the carousel can
+switch from the ballot to the place, and the race budget goes away. Until then the budget still
+means a ballot with more than forty-eight upcoming races is only partly featured.
 
 ## The shared election counts, as marketing defined them
 
@@ -637,7 +679,7 @@ this table; it is here to orient, and to show the shape of the answer.
 | Elections near you | develop | `/all` plus three landing pages (see the note above) | ready to merge, list the pages |
 | Election position resources | develop | nowhere published; a **draft** of the Position Page global adds it | ready to merge, tell the editor holding that draft |
 | Nearby offices | develop | nowhere | ready to merge |
-| Featured candidates | develop | nowhere | ready to merge |
+| Featured candidates | develop + draft PR #300's branch (the 2026-10-06 revision is stacked on it) | nowhere | into the #300 branch, ships with the location batch |
 | Illustrated columns | develop | nowhere | ready to merge |
 | Testimonial block with link | develop | nowhere | ready to merge |
 | Location editorial | develop | nowhere (hidden on location pages by design) | ready to merge |

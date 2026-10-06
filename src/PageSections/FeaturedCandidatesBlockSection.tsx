@@ -5,7 +5,12 @@ import { type FeaturedPeopleMode, selectFeaturedPeople } from '~/lib/featuredPeo
 import { resolveRichTextTokens, resolveSectionText } from '~/lib/resolveSectionText';
 import type { TokenMap } from '~/lib/resolveTokens';
 import type { SectionOverrides, Sections } from '~/PageSections';
-import { FEATURED_CANDIDATES_DEFAULT_CALLOUT } from '~/sanity/schema/components/component_featuredCandidatesBlock';
+import {
+	FEATURED_CANDIDATES_DEFAULT_BODY,
+	FEATURED_CANDIDATES_DEFAULT_CALLOUT,
+	FEATURED_CANDIDATES_DEFAULT_CALLOUT_TITLE,
+	FEATURED_CANDIDATES_DEFAULT_PLEDGE_LINK,
+} from '~/sanity/schema/components/component_featuredCandidatesBlock';
 import { FeaturedCandidatesBlock } from '~/ui/FeaturedCandidatesBlock';
 import { RichData } from '~/ui/RichData';
 import { resolveBg } from '~/ui/_lib/resolveBg';
@@ -25,11 +30,43 @@ export function resolveFeaturedPeopleMode(value: ModeValue | undefined): Feature
 	return cleaned === 'candidates' || cleaned === 'representatives' ? cleaned : 'both';
 }
 
+export const COUNT_OF_CANDIDATES_TOKEN = '[count of candidates]';
+
+/**
+ * The body copy, with its count placeholder either filled from the page or left
+ * out of the sentence (Emily, 2026-10-06) and the gap it leaves closed up. The
+ * placeholder is handled here, before the page tokens, so it reads the same on a
+ * page that supplies no tokens at all.
+ */
+export function resolveFeaturedBodyCopy(value: string | null | undefined, count: number | null | undefined, tokens?: TokenMap): string {
+	const cleaned = value == null ? '' : stegaClean(value).trim();
+	const copy = cleaned || FEATURED_CANDIDATES_DEFAULT_BODY;
+	const withCount = copy.split(COUNT_OF_CANDIDATES_TOKEN).join(typeof count === 'number' ? String(count) : '');
+	const resolved = resolveSectionText(withCount, tokens) ?? withCount;
+	return resolved
+		.replace(/[ \t]{2,}/g, ' ')
+		.replace(/ ([,.;:!?])/g, '$1')
+		.trim();
+}
+
+/** The frame bolds "GoodParty.org Pledge" inside the default copy; an editor's own rich text carries its own marks. */
+function defaultCalloutBody() {
+	const phrase = 'GoodParty.org Pledge';
+	const [before, after] = FEATURED_CANDIDATES_DEFAULT_CALLOUT.split(phrase);
+	return (
+		<p>
+			{before}
+			<strong>{phrase}</strong>
+			{after}
+		</p>
+	);
+}
+
 /**
  * Data-backed: the people come from the location page route, not from Sanity.
  * Only the location pages populate the override today, so anywhere else the
- * block renders nothing. The heading and the callout are the editor's. The
- * section id falls back to the anchor the location hero's "See who's an
+ * block renders nothing. The heading, body copy and callout are the editor's.
+ * The section id falls back to the anchor the location hero's "See who's an
  * independent" button is seeded with, so the jump lands without an editor
  * having to type matching ids.
  */
@@ -46,17 +83,23 @@ export function FeaturedCandidatesBlockSection(props: Props) {
 	const calloutSettings = section.featuredCandidatesBlockCallout;
 	const showCallout = calloutSettings?.field_showCallout !== false;
 	const calloutText = calloutSettings?.block_calloutText;
-	const callout = !showCallout ? undefined : calloutText && calloutText.length > 0 ? (
-		<RichData value={resolveRichTextTokens(calloutText, tokens)} />
-	) : (
-		<p>{FEATURED_CANDIDATES_DEFAULT_CALLOUT}</p>
-	);
+	const showPledgeLink = calloutSettings?.field_showPledgeLink !== false;
+	const callout = !showCallout
+		? undefined
+		: {
+				title: resolveSectionText(calloutSettings?.field_calloutTitle, tokens) || FEATURED_CANDIDATES_DEFAULT_CALLOUT_TITLE,
+				body: calloutText && calloutText.length > 0 ? <RichData value={resolveRichTextTokens(calloutText, tokens)} /> : defaultCalloutBody(),
+				pledgeLinkLabel: showPledgeLink
+					? resolveSectionText(calloutSettings?.field_pledgeLinkLabel, tokens) || FEATURED_CANDIDATES_DEFAULT_PLEDGE_LINK
+					: undefined,
+			};
 
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId) || INDEPENDENTS_ANCHOR} data-section='Featured Candidates Block'>
 			<FeaturedCandidatesBlock
 				backgroundColor={resolveBg(settings?.field_blockColorCreamMidnight)}
 				heading={resolveSectionText(section.field_heading, tokens)}
+				bodyCopy={resolveFeaturedBodyCopy(section.field_bodyCopy, featuredOverride?.pledgedCount, tokens)}
 				callout={callout}
 				people={people.map(person => ({
 					key: person.personId ?? person.href,

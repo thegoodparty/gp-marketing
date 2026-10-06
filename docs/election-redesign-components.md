@@ -832,6 +832,17 @@ template's pledge block needs Column Layout set to 3 Columns and its copy brough
 preset, or profiles keep the single column. Code first: production does not know the 3 Columns value
 until it ships, so a draft saved earlier previews as two columns.
 
+**Breadcrumb block** (every election template and the two position landing pages) —
+`component_breadcrumbBlock`, an **Extend**, revised for the phone in the Voter Guide round
+(Emily, 2026-10-06; frames 2139:26708 profile and 2139:21609 position). Below `md` the trail
+shows its first and last crumb with a "..." between them, at the frames' sizes (Open Sans 14/20,
+6px gaps, 15px chevrons, 24px above and below); tapping the "..." reveals the rest in place.
+Every crumb stays in the DOM, so the links and the BreadcrumbList schema do not change. Desktop
+is untouched. The treatment is the `collapseOnMobile` switch on `Breadcrumbs`, turned on by the
+block's section wrapper and the two election page components that render the block directly; the
+blog article hero and the political-terms glossary share the component and were not in the round,
+so they keep the full trail.
+
 ## The shared election counts, as marketing defined them
 
 Settled with Emily on 2026-09-17 while building the location hero's stat cards, and
@@ -1080,6 +1091,7 @@ this table; it is here to orient, and to show the shape of the answer.
 | Profile hero | develop + draft PR #374 | Person Profile global, Candidate Profile global | into #374, stays draft |
 | Profile content block | develop + draft PR #375 (stacked on #374) | Person Profile global, Candidate Profile global | into #375, stays draft |
 | Profile hero | develop | Person Profile global (every `/people` profile), the retired Candidate Profile global, twelve disabled per-state scaffolds; a landing page **draft** also carries it | draft and batch with the `/people` pages (PR for the 2026-10-06 revision) |
+| Breadcrumb block | develop + draft PR #377 (phone collapse) | every election global, two position landing pages | into #377, stays draft |
 | Elections search hero | develop + draft PR #351 | the `/elections` landing page | into #351 |
 | Featured cities | develop + draft PR #307 | the `/elections` landing page | into #307 |
 | Elections near you | develop | `/all` plus three landing pages (see the note above) | ready to merge, list the pages |

@@ -96,3 +96,29 @@ export const CurrentPageWithoutHref: Story = {
 		],
 	},
 };
+
+/**
+ * The Voter Guide phone treatment: first crumb, "...", last crumb, with the
+ * rest revealed on tap. Frames 2139:26708 (profile) and 2139:21609 (position).
+ */
+export const CollapsedOnMobile: Story = {
+	args: {
+		backgroundColor: 'midnight',
+		collapseOnMobile: true,
+		breadcrumbs: [
+			{ href: '/elections', label: 'Elections' },
+			{ href: '/elections/mn', label: 'Minnesota' },
+			{ href: '/elections/mn/hennepin-county', label: 'Hennepin County' },
+			{ href: '/elections/mn/hennepin-county/minneapolis', label: 'Minneapolis' },
+			{ href: '/elections/mn/hennepin-county/minneapolis/position/city-council', label: 'City Council' },
+			{ label: 'DeVelle Jackson' },
+		],
+	},
+	parameters: {
+		viewport: { defaultViewport: 'mobile1' },
+		design: {
+			type: 'figma',
+			url: 'https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2139-26708',
+		},
+	},
+};

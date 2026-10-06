@@ -30,6 +30,8 @@ export type BreadcrumbBlockProps = {
 	className?: string;
 	backgroundColor?: BreadcrumbBackgroundColor;
 	breadcrumbs: BreadcrumbItem[];
+	/** The Voter Guide phone treatment; see `Breadcrumbs`. */
+	collapseOnMobile?: boolean;
 };
 
 export function BreadcrumbBlock(props: BreadcrumbBlockProps) {
@@ -39,7 +41,7 @@ export function BreadcrumbBlock(props: BreadcrumbBlockProps) {
 	return (
 		<section className={cn(base(), props.className)} data-component='BreadcrumbBlock'>
 			<Container size='xl'>
-				<Breadcrumbs items={props.breadcrumbs} backgroundColor={backgroundColor} />
+				<Breadcrumbs items={props.breadcrumbs} backgroundColor={backgroundColor} collapseOnMobile={props.collapseOnMobile} />
 			</Container>
 		</section>
 	);

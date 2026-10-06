@@ -71,7 +71,7 @@ export function CandidatesPageContent(props: CandidatesPageContentProps) {
 	return (
 		<>
 			<PageSchema schema={candidatesGraph ?? undefined} />
-			<BreadcrumbBlock backgroundColor="midnight" breadcrumbs={breadcrumbs} />
+			<BreadcrumbBlock backgroundColor="midnight" breadcrumbs={breadcrumbs} collapseOnMobile />
 			<ElectionsPositionHero
 				backgroundColor='midnight'
 				officeName={officeName}

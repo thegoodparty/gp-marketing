@@ -65,6 +65,44 @@ describe('ElectionPositionResourcesBlockSection', () => {
 		expect(html).toContain('Read the guide');
 	});
 
+	test("the article's own title replaces the token heading on the guide card", () => {
+		const html = renderToStaticMarkup(
+			<ElectionPositionResourcesBlockSection
+				{...section}
+				tokens={tokens}
+				resourcesOverride={{ guideHref: '/blog/article/how-to-run-for-city-council', guideTitle: 'How to Run for City Council: A Complete Guide' }}
+			/>,
+		);
+
+		expect(html).toContain('How to Run for City Council: A Complete Guide');
+		expect(html).not.toContain('>How to Run for City Council<');
+		// Only the heading moves; the description still comes from Studio.
+		expect(html).toContain('How to Run for City Council description.');
+	});
+
+	test('the e-book and support cards get their default buttons when the editor set none', () => {
+		const bare = {
+			...section,
+			ebookCard: { ...(section as { ebookCard: object }).ebookCard, button: undefined },
+			supportCard: { ...(section as { supportCard: object }).supportCard, button: undefined },
+		} as typeof section;
+		const html = renderToStaticMarkup(<ElectionPositionResourcesBlockSection {...bare} tokens={tokens} />);
+
+		expect(html).toContain('href="/e-book"');
+		expect(html).toContain('Read the guide');
+		expect(html).toContain('href="https://community.goodparty.org/"');
+		expect(html).toContain('Join the community');
+		expect(html).not.toContain('Connect with us');
+	});
+
+	test('an editor-set button on those cards still wins over the default', () => {
+		const html = renderToStaticMarkup(<ElectionPositionResourcesBlockSection {...section} tokens={tokens} />);
+
+		expect(html).toContain('href="https://community.goodparty.org"');
+		expect(html).toContain('Connect with us');
+		expect(html).not.toContain('Join the community');
+	});
+
 	test('without a guide link from either source the guide card is left out and the others stay', () => {
 		const html = renderToStaticMarkup(
 			<ElectionPositionResourcesBlockSection {...section} guideCard={{ ...section.guideCard, button: null }} tokens={tokens} />,

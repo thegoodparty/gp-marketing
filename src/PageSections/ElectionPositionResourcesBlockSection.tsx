@@ -22,6 +22,19 @@ type RawCard = Section['guideCard'] | undefined;
 
 const DEFAULT_GUIDE_BUTTON_TEXT = 'Read the guide';
 
+/**
+ * Where the other two cards go when the editor set no button (Emily,
+ * 2026-10-06). The Position Page template was saved before this block had
+ * buttons to set, so without these the e-book and support cards rendered
+ * with no button at all. An editor-set button still wins.
+ */
+export const DEFAULT_EBOOK_BUTTON: ComponentButtonProps = { buttonType: 'internal', href: '/e-book', label: 'Read the guide' };
+export const DEFAULT_SUPPORT_BUTTON: ComponentButtonProps = {
+	buttonType: 'external',
+	href: 'https://community.goodparty.org/',
+	label: 'Join the community',
+};
+
 function resolveEditorButton(card: RawCard, key: string, tokens?: TokenMap): ComponentButtonProps | undefined {
 	const raw = card?.button;
 	if (!raw) return undefined;
@@ -56,8 +69,9 @@ function buildCard(
 	button: ComponentButtonProps | undefined,
 	backgroundColor: 'cream' | 'midnight',
 	tokens?: TokenMap,
+	titleOverride?: string,
 ): ElectionPositionResourceCardProps | undefined {
-	const title = resolveSectionText(card?.field_title, tokens);
+	const title = titleOverride || resolveSectionText(card?.field_title, tokens);
 	if (!title) return undefined;
 	return {
 		label: resolveSectionText(card?.field_label, tokens),
@@ -81,9 +95,17 @@ export function ElectionPositionResourcesBlockSection(props: Props) {
 		: 'cream';
 
 	const guideButton = resolveGuideButton(section.guideCard, resourcesOverride?.guideHref, tokens);
-	const guideCard = guideButton ? buildCard(section.guideCard, guideButton, backgroundColor, tokens) : undefined;
-	const ebookCard = buildCard(section.ebookCard, resolveEditorButton(section.ebookCard, 'ebook', tokens), backgroundColor, tokens);
-	const supportCard = buildCard(section.supportCard, resolveEditorButton(section.supportCard, 'support', tokens), backgroundColor, tokens);
+	// The article's own title wins over the editor heading on position pages (see the override's doc).
+	const guideCard = guideButton
+		? buildCard(section.guideCard, guideButton, backgroundColor, tokens, resourcesOverride?.guideTitle)
+		: undefined;
+	const ebookCard = buildCard(section.ebookCard, resolveEditorButton(section.ebookCard, 'ebook', tokens) ?? DEFAULT_EBOOK_BUTTON, backgroundColor, tokens);
+	const supportCard = buildCard(
+		section.supportCard,
+		resolveEditorButton(section.supportCard, 'support', tokens) ?? DEFAULT_SUPPORT_BUTTON,
+		backgroundColor,
+		tokens,
+	);
 
 	const cards = [guideCard, ebookCard, supportCard].filter((card): card is ElectionPositionResourceCardProps => card !== undefined);
 

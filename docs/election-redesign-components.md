@@ -346,8 +346,9 @@ Decisions that came with it:
 
 - **Removed profiles (K/L) carry the same callout as if they were not removed** (Emily,
   2026-10-06). The pledge flag is therefore no longer cleared on removal in `peopleProfile.ts`;
-  removal still strips the photo and the authored content. A side effect worth knowing: a removed
-  person who has not pledged now gets the band's "Take the pledge" button like anyone else.
+  removal still strips the photo and the authored content, and the pledge band's "Take the pledge"
+  button stays off removed profiles: the page states the fact but does not invite someone who asked
+  us to stop publishing them to sign up (Emily, 2026-10-06).
 - **The hero no longer links down to the pledge band.** The callout explains the pledge through
   its own pop-up, so the `attributionHref` override is gone. The band itself is unchanged and
   still renders on every profile.

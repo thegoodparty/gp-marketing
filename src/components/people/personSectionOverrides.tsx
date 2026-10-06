@@ -770,8 +770,12 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	// of an invitation to read about it. `signup` carries the app sign-up URL of
 	// its own (see componentButtonDestinations.test.tsx); it did not always, so do
 	// not swap it for a type that renders a bare <button>.
+	//
+	// Not on a removed profile (Emily, 2026-10-06): the hero still states their
+	// pledge fact, but the page must not invite someone who asked us to stop
+	// publishing them to sign up with us.
 	const pledgeButton: NonNullable<SectionOverrides['component_goodPartyOrgPledge']>['button'] =
-		attribution === 'notPledged'
+		attribution === 'notPledged' && !view.removed
 			? { buttonType: 'signup', label: 'Take the pledge' }
 			: { buttonType: 'internal', href: '/about', label: 'Learn more' };
 

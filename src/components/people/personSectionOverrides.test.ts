@@ -722,6 +722,18 @@ describe('the pledge band across the twelve profile states', () => {
 		}
 	});
 
+	test('a removed profile is never invited to take the pledge, even when unpledged', () => {
+		// Neither removal fixture is "has not taken" (K is partisan, L pledged), so
+		// the case is composed: a removed, non-partisan, unpledged person keeps the
+		// "has not yet taken" callout in the hero but gets "Learn more" below
+		// (Emily, 2026-10-06). It used to fall out of `attribution === 'none'`.
+		const view = getDevPersonProfileView('x-3412f69c');
+		if (!view) throw new Error('no dev fixture for x-3412f69c');
+		const overrides = buildPersonSectionOverrides({ ...view, pledged: false });
+		expect(overrides.component_profileHero?.attribution).toBe('notPledged');
+		expect(overrides.component_goodPartyOrgPledge?.button).toEqual(LEARN_MORE);
+	});
+
 	/**
 	 * `signup` and `login` rendered a bare <button> with no destination until
 	 * 2026-09-14, which is how a dead "Learn more" shipped on every claimed

@@ -192,6 +192,9 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 			guideHref: resolveHowToRunGuide({ officeName: ctx.officeName, race }).href,
 		},
 		component_nearbyOffices: {
+			// "More offices in Bay City, Michigan"; a state page names the state once,
+			// not "Michigan, Michigan" (Emily, 2026-10-06).
+			heading: `More offices in ${[ctx.cityName ?? ctx.countyName, ctx.stateName].filter(Boolean).join(', ')}`,
 			offices: ctx.nearbyOffices ?? [],
 			hidden: !ctx.nearbyOffices || ctx.nearbyOffices.length === 0,
 		},

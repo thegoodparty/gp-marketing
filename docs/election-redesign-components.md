@@ -160,6 +160,32 @@ Decisions that came out of it:
   it, so all three position routes get it without touching their `page.tsx`. The candidates
   template does not populate it, and the block hides itself wherever the override is empty.
 - **The empty state is "render nothing"**, pinned by `src/ui/nearbyOffices.test.tsx`.
+- **Each row shows its "# of independents running"** (design feedback round, Emily, 2026-10-06;
+  frames [desktop](https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2156-30518),
+  [mobile](https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2139-21952)):
+  the number beside the Heart & Star badge in a middle column on desktop, the badge and
+  "2 independents running" under the position on the phone card. It is the same figure the
+  offices list draft (PR #304) shows for a row: the candidates in the row's race who have taken
+  the Pledge by `pledgedFromSpine`, counted once per person. Position pages had no candidate
+  fetch, so `withPledgedCounts` in `src/lib/nearbyOffices.ts` asks `/v1/candidacies?raceSlug=`
+  once per row (at most eight) plus one person lookup. Only a count above zero is drawn: a zero
+  and an unknown look the same (see the counts section below), so a row never publishes
+  "0 independents" off a flag that may be unwritten, and a race whose request fails shows
+  nothing. The row grid was realigned to the new frame, which shares the offices list's
+  geometry (123px type column, 16px gaps, 14px inset, 60px row floor). `OfficeItem` gained
+  `raceSlug` and `pledgedCount` with the same names and wording as #304, so that draft's next
+  merge of `develop` resolves trivially.
+- **The sentence under the heading is an editable string field**, `field_description`, and
+  the frame copy ("Explore offices coming up for election near you:") is the component's
+  fallback, so documents saved before the field existed render it too (Emily, 2026-10-06).
+- **The heading defaults to the page's own place** (Emily, 2026-10-06): "More offices in Bay
+  City, Michigan", or just "More offices in Michigan" on a state position page, where
+  `[County or City]` and `[State]` are the same name and the token form would double it. The
+  route computes it (`heading` on the override) and an editor's Heading field, with tokens,
+  wins over it. There is no two-letter state token, so the frame's "MI" is "Michigan".
+- **Noted and not acted on** (2026-10-06): "Election Date" stays sentence case; the mobile
+  frame places the count both above and below the date on different cards, and the block
+  follows the above-the-date cards, as the offices list does.
 
 Waiting on data: races are attached to places, and federal races are not attached to any place,
 so a Federal tag can appear only once election-api exposes them per place. True proximity

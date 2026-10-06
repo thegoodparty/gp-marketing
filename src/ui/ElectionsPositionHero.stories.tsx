@@ -11,6 +11,7 @@ const race = {
 	filingDateEnd: '2026-10-02T00:00:00.000Z',
 	electionDate: '2026-11-03T00:00:00.000Z',
 	candidatesHref: '/elections/tx/travis-county/austin/position/city-council-member/candidates',
+	intro: 'A nonpartisan guide to City Council Member in Austin. Find candidates and elected officials who have turned down partisan and big-money influence.',
 	now: NOW,
 };
 
@@ -40,7 +41,7 @@ const meta: Meta<typeof ElectionsPositionHero> = {
 		layout: 'fullscreen',
 		design: {
 			type: 'figma',
-			url: 'https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2001-6222',
+			url: 'https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2156-29711',
 		},
 	},
 };
@@ -51,7 +52,6 @@ type Story = StoryObj<typeof meta>;
 export const FilingOpen: Story = {
 	args: {
 		...race,
-		intro: "Filing is open for this race. See what it takes to run, or find out who's already on the ballot.",
 		state: { phase: 'filing', filingOpen: true },
 		candidates,
 	},
@@ -60,7 +60,6 @@ export const FilingOpen: Story = {
 export const FilingNotYetOpen: Story = {
 	args: {
 		...race,
-		intro: "Filing is open for this race. See what it takes to run, or find out who's already on the ballot.",
 		state: { phase: 'filing', filingOpen: false },
 		candidates: [],
 		now: new Date('2026-02-10T12:00:00'),
@@ -70,7 +69,6 @@ export const FilingNotYetOpen: Story = {
 export const FilingNoCandidateData: Story = {
 	args: {
 		...race,
-		intro: "Filing is open for this race. See what it takes to run, or find out who's already on the ballot.",
 		state: { phase: 'filing', filingOpen: true },
 		candidates: undefined,
 	},
@@ -79,7 +77,6 @@ export const FilingNoCandidateData: Story = {
 export const MidElection: Story = {
 	args: {
 		...race,
-		intro: "Everything you need to know about this race. See who's running, who holds the seat, and how to run yourself.",
 		state: { phase: 'midElection', resultsPending: false },
 		candidates,
 		now: new Date('2026-10-20T12:00:00'),
@@ -89,7 +86,6 @@ export const MidElection: Story = {
 export const ResultsPending: Story = {
 	args: {
 		...race,
-		intro: "Everything you need to know about this race. See who's running, who holds the seat, and how to run yourself.",
 		state: { phase: 'midElection', resultsPending: true },
 		candidates,
 		now: new Date('2026-11-10T12:00:00'),
@@ -99,7 +95,6 @@ export const ResultsPending: Story = {
 export const Decided: Story = {
 	args: {
 		...race,
-		intro: 'This race has been decided. See who won and what comes next.',
 		state: { phase: 'decided', multipleWinners: false },
 		candidates,
 		winners: [winner],
@@ -110,7 +105,6 @@ export const Decided: Story = {
 export const DecidedMultipleWinners: Story = {
 	args: {
 		...race,
-		intro: 'This race has been decided. See who won and what comes next.',
 		state: { phase: 'decided', multipleWinners: true },
 		candidates: candidates.map(c => ({ ...c, isWinner: true })),
 		winners: [

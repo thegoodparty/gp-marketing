@@ -6,6 +6,7 @@ import {
 	buildNearbyOfficialCards,
 	buildOtherCandidateCards,
 	composeView,
+	deriveElectionsIndexTier,
 	extractPersonId,
 	isThinProfile,
 	resolveProfileState,
@@ -385,6 +386,60 @@ describe('Recent Experience links every row it has a race slug for', () => {
 
 		expect(crumbHref).toBe('/elections/ca/beverly-hills/position/city-legislature');
 		expect(view.recentExperience[0]?.href).toBe(crumbHref);
+	});
+
+	/**
+	 * A race slug that omits its state slides the place name into the state slot, so
+	 * `st-george/city-legislature` (St. George, Louisiana) built
+	 * `/elections/st-george/position/city-legislature`. One profile carried it on both of its
+	 * rows, the current term and the 2025 candidacy, which is how a single page put two dead
+	 * "View Position" links in the 2026-09-18 crawl.
+	 */
+	test('a slug with no state code renders unlinked on every row that carries it', () => {
+		const person = makePerson({
+			state: 'LA',
+			Candidacies: [
+				{
+					id: 'c1',
+					slug: 'jane-doe/st-george-city-council',
+					positionName: 'City Council',
+					state: 'LA',
+					Race: { electionDate: '2025-11-15', slug: 'st-george/city-legislature', positionLevel: 'CITY' },
+				},
+			],
+			OfficeHolders: [
+				{
+					id: 'o1',
+					positionName: 'City Council',
+					normalizedPositionName: 'City Council',
+					officeTitle: 'St. George City Council - At Large',
+					partyNames: [],
+					startAt: '2025-01-01',
+					endAt: '2029-01-01',
+					termDateSpecificity: null,
+					isCurrent: true,
+					isAppointed: null,
+					numberOfSeats: null,
+					state: 'LA',
+					subAreaName: null,
+					subAreaValue: null,
+					websiteUrl: null,
+					officePhone: null,
+					officeEmail: null,
+					mailingCity: null,
+					mailingState: null,
+					positionSlug: 'st-george/city-legislature',
+					positionLevel: 'CITY',
+				},
+			],
+		});
+
+		const view = composeView(PID, person, null, {});
+
+		expect(view.recentExperience).toHaveLength(2);
+		for (const row of view.recentExperience) {
+			expect(row.href).toBeNull();
+		}
 	});
 
 	/**
@@ -1736,5 +1791,134 @@ describe('removed people never keep a card photo', () => {
 		const cards = buildNearbyOfficialCards([officeholder], persons, SUBJECT, new Set([REMOVED.toLowerCase()]));
 		expect(cards).toHaveLength(1);
 		expect(cards[0]?.avatarUrl).toBeNull();
+	});
+});
+
+/**
+ * What the 2026-09-18 crawl still found after the county lookup shipped: 347
+ * redirecting /elections links across 79 destinations, plus 346 breadcrumb 404s.
+ * Four shapes, each asserted here on the canonical URL, since a redirect or a
+ * 404 is exactly what these have to exclude.
+ */
+describe('the link shapes the first county-lookup pass missed', () => {
+	// Real production geography. Where two cities in a state share a name the feed
+	// disambiguates the city's own slug with a county suffix, and its countyName
+	// then names the other county — so Oakwood (Cuyahoga) really does canonicalise
+	// under Montgomery County. The lookup is the authority either way; the point
+	// here is that the county segment comes from it rather than from the slug text.
+	const COUNTY_SLUGS = new Set([
+		'ga/fulton-county',
+		'nv/clark-county',
+		'oh/montgomery-county',
+		'ok/choctaw-county',
+		'ok/oklahoma-county',
+	]);
+	const LOOKUP = new Map([
+		['nv/las-vegas', 'nv/clark-county'],
+		['oh/oakwood-cuyahoga-county', 'oh/montgomery-county'],
+		['ok/choctaw', 'ok/oklahoma-county'],
+	]);
+
+	const trailFor = (stateCode: string, raceSlug: string, positionLevel: string | null) =>
+		buildBreadcrumbTrail({
+			displayName: 'Jane Doe',
+			stateCode,
+			raceSlug,
+			positionLevel,
+			positionName: 'The Office',
+			citySlugToCountySlug: LOOKUP,
+			countySlugs: COUNTY_SLUGS,
+		});
+	const hrefs = (trail: ReturnType<typeof buildBreadcrumbTrail>) => trail.map(c => c.href);
+
+	/** 142 links. `looksLikeCountySlugSegment` read the city's own suffix as a county. */
+	test('a city whose slug carries a county suffix still gets its county', () => {
+		expect(hrefs(trailFor('OH', 'oh/oakwood-cuyahoga-county/city-legislature', 'CITY'))).toContain(
+			'/elections/oh/montgomery-county/oakwood-cuyahoga-county/position/city-legislature',
+		);
+	});
+
+	/** 91 links. A judicial or county office seated in a city took no city branch at all. */
+	test('a non-city office seated in a city still gets its county', () => {
+		expect(hrefs(trailFor('NV', 'nv/las-vegas/justice-of-the-peace-judicial', 'JUDICIAL'))).toContain(
+			'/elections/nv/clark-county/las-vegas/position/justice-of-the-peace-judicial',
+		);
+	});
+
+	/** A genuine county race has no city to expand, and keeps the county crumb it had. */
+	test('a county race is left alone', () => {
+		const trail = trailFor('GA', 'ga/fulton-county/county-clerk', 'COUNTY');
+		expect(hrefs(trail)).toEqual([
+			'/elections',
+			'/elections/ga',
+			'/elections/ga/fulton-county',
+			'/elections/ga/fulton-county/position/county-clerk',
+			undefined,
+		]);
+	});
+
+	/** 346 of the 370 broken links: a joint office's role segment sat in the county slot. */
+	test('a joint office role is not linked as a place', () => {
+		const trail = trailFor('GA', 'ga/state-insurance-commissioner/fire-safety-commissioner-joint', 'STATE');
+		expect(hrefs(trail)).not.toContain('/elections/ga/state-insurance-commissioner');
+		expect(trail.map(c => c.label)).toEqual(['Elections', 'Georgia', 'The Office', 'Jane Doe']);
+	});
+
+	/**
+	 * A place name with a slash in it ("Choctaw/Nicoma Park Schools") splits across
+	 * two slots. Choctaw is a real city, which is why the county slot is checked
+	 * against counties only: linked there it sent the trail, and the "Explore
+	 * Elections" band, to a different county's towns.
+	 */
+	test('a slashed place name is not linked as a county', () => {
+		const trail = trailFor('OK', 'ok/choctaw/nicoma-park-schools/local-school-board', 'LOCAL');
+		expect(hrefs(trail)).not.toContain('/elections/ok/choctaw');
+		expect(hrefs(trail)).not.toContain('/elections/ok/choctaw/nicoma-park-schools');
+	});
+
+	/**
+	 * Every subplace-depth /elections URL in the sitemap is a joint office, so the
+	 * slot below the city is never a place even when the county and city above it
+	 * both check out.
+	 */
+	test('nothing below the city is linked', () => {
+		const trail = trailFor('NV', 'nv/clark-county/las-vegas/ward-1/city-legislature', 'CITY');
+		expect(hrefs(trail)).toEqual([
+			'/elections',
+			'/elections/nv',
+			'/elections/nv/clark-county',
+			'/elections/nv/clark-county/las-vegas',
+			'/elections/nv/clark-county/las-vegas/ward-1/position/city-legislature',
+			undefined,
+		]);
+	});
+
+	/** Without the lookups the guard is inert, so fixtures and pure unit tests are unchanged. */
+	test('omitting the lookups keeps the previous shape', () => {
+		const trail = buildBreadcrumbTrail({
+			displayName: 'Jane Doe',
+			stateCode: 'GA',
+			raceSlug: 'ga/state-insurance-commissioner/fire-safety-commissioner-joint',
+			positionLevel: 'STATE',
+			positionName: 'The Office',
+		});
+		expect(hrefs(trail)).toContain('/elections/ga/state-insurance-commissioner');
+	});
+});
+
+describe('deriveElectionsIndexTier', () => {
+	const COUNTY_SLUGS = new Set(['ok/choctaw-county', 'ok/oklahoma-county']);
+
+	test('lists sibling cities when the county slot holds a real county', () => {
+		expect(
+			deriveElectionsIndexTier('/elections/ok/oklahoma-county/choctaw/position/city-legislature', 'CITY', COUNTY_SLUGS),
+		).toEqual({ tier: 'city', countySlug: 'ok/oklahoma-county' });
+	});
+
+	/** `ok/choctaw` is a city, so the band was listing Choctaw County's towns as neighbours. */
+	test('falls back to the state list when the county slot is not a county', () => {
+		expect(
+			deriveElectionsIndexTier('/elections/ok/choctaw/nicoma-park-schools/position/local-school-board', 'LOCAL', COUNTY_SLUGS),
+		).toEqual({ tier: 'state', countySlug: null });
 	});
 });

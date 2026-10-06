@@ -5,6 +5,7 @@ import {
 	type PositionPageContext,
 } from '~/lib/electionsTemplateHelpers';
 import { loadPositionOfficeholders } from '~/lib/positionOfficeholders';
+import { getNearbyOffices } from '~/lib/nearbyOffices';
 import { renderElectionTemplatePage } from '~/lib/renderElectionTemplatePage';
 
 export type PositionTemplateContext = PositionPageContext & {
@@ -20,14 +21,17 @@ export async function renderElectionsPositionPage(input: PositionTemplateContext
 		officeholders: input.officeholders ?? (await loadPositionOfficeholders(input.race?.positionId)),
 	};
 	const schemas = buildPositionPageSchemas(ctx);
+	const raceSlug = ctx.raceSlug ?? ctx.race?.slug;
+	const nearbyOffices =
+		ctx.nearbyOffices ?? (ctx.placeSlug ? await getNearbyOffices({ placeSlug: ctx.placeSlug, currentRaceSlug: raceSlug }) : []);
 
 	return renderElectionTemplatePage({
 		context: {
 			templateType: 'position',
 			placeSlug: ctx.placeSlug,
-			raceSlug: ctx.raceSlug ?? ctx.race?.slug,
+			raceSlug,
 		},
-		sectionOverrides: buildPositionSectionOverrides(ctx),
+		sectionOverrides: buildPositionSectionOverrides({ ...ctx, nearbyOffices }),
 		tokens: buildPositionTokens(ctx),
 		schemas: [schemas.positionPageSchema, schemas.breadcrumbSchema, schemas.faqSchema],
 	});

@@ -20,13 +20,26 @@ export const component_electionsNearYouBlock = {
 			name: 'field_body',
 			type: 'text',
 			rows: 4,
-			initialValue: 'Find upcoming elections in your city or county.',
+			initialValue: "Enter your city to see every race on your ballot and discover independent candidates who've pledged to put voters first.",
 		},
 		{
 			title: 'Button Label',
 			name: 'field_buttonLabel',
 			type: 'string',
 			initialValue: 'Search',
+		},
+		{
+			title: 'Layout',
+			name: 'field_layoutVariant',
+			type: 'string',
+			description: 'Contained sits inside the page as a rounded card. Full Width runs edge to edge with no card.',
+			options: {
+				list: [
+					{ title: 'Contained', value: 'contained' },
+					{ title: 'Full Width', value: 'fullWidth' },
+				],
+			},
+			initialValue: 'contained',
 		},
 		{
 			title: 'Background Variant',
@@ -44,8 +57,23 @@ export const component_electionsNearYouBlock = {
 			title: 'Show Social Proof',
 			name: 'field_showSocialProof',
 			type: 'boolean',
-			description: 'Pending confirmation from marketing before enabling.',
+			description: 'Shows the photo row and stat line beneath the search box. Needs both the text and the three people below.',
 			initialValue: false,
+		},
+		{
+			title: 'Social Proof Text',
+			name: 'field_socialProofText',
+			type: 'string',
+			description: 'Only shown when Show Social Proof is on.',
+			initialValue: '13,000+ independents won with GoodParty.org',
+			hidden: (x: any) => !x.parent?.field_showSocialProof,
+		},
+		{
+			title: 'Social Proof People',
+			name: 'list_Choose3People',
+			type: 'list_Choose3People',
+			description: 'The three photos shown beside the social proof text. Only shown when Show Social Proof is on.',
+			hidden: (x: any) => !x.parent?.field_showSocialProof,
 		},
 		{
 			title: 'Settings',

@@ -1,5 +1,6 @@
 import type { SVGProps } from 'react';
 import Link from 'next/link';
+import { normalizeStateCode } from '~/constants/usStateCodes';
 import type { PartyClass } from '~/lib/party';
 import { daysUntil, startOfLocalDay, toLocalDay, type PositionHeroState } from '~/lib/positionHeroState';
 import { Logo } from '~/sanity/utils/Logo.tsx';
@@ -79,7 +80,7 @@ export type ElectionsPositionHeroProps = {
 	stateName: string;
 	countyName?: string;
 	cityName?: string;
-	/** The sentence under the location; the section wrapper picks it per state. */
+	/** The sentence under the heading; the same copy in every state. */
 	intro?: string;
 	state: PositionHeroState;
 	/** ISO dates. The election date is the general election. */
@@ -102,6 +103,17 @@ export type ElectionsPositionHeroProps = {
 };
 
 const DATE_FORMAT: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', year: 'numeric' };
+
+/**
+ * The place the heading names: the most specific tier plus the state code
+ * ("Bay City, MI", "Bay County, MI"), or the bare state name on a state page.
+ * A city page never names its county here; the breadcrumb already does.
+ */
+export function heroLocation({ cityName, countyName, stateName }: Pick<ElectionsPositionHeroProps, 'cityName' | 'countyName' | 'stateName'>): string {
+	const place = cityName ?? countyName;
+	if (!place) return stateName;
+	return `${place}, ${normalizeStateCode(stateName) ?? stateName}`;
+}
 
 function formatDay(value: string | null | undefined): string | null {
 	const day = toLocalDay(value);
@@ -177,7 +189,7 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 	const now = props.now ?? new Date();
 	const { state } = props;
 
-	const location = [props.cityName, props.countyName, props.stateName].filter(Boolean).join(', ');
+	const location = heroLocation(props);
 
 	const electionDay = formatDay(props.electionDate);
 	const filingOpens = formatDay(props.filingDateStart);
@@ -434,13 +446,8 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 				<div className={s.layout()}>
 					<div className={s.intro()}>
 						<Text as='h1' styleType='heading-xl'>
-							{props.officeName}
+							{location ? `${props.officeName} in ${location}` : props.officeName}
 						</Text>
-						{location && (
-							<Text as='p' styleType='text-3xl'>
-								{location}
-							</Text>
-						)}
 						{props.intro && <Text styleType='body-1'>{props.intro}</Text>}
 					</div>
 					<div className={s.cards()}>

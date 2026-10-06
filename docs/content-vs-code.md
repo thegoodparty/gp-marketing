@@ -26,6 +26,10 @@ Studio (the CMS, served at `/studio/main`), do not open a PR:
   page.
 - Redirects (managed as content; they take effect without a deploy).
 - A/B experiment variants.
+- Embeds via the Embedded Block, as long as the provider is one the block supports:
+  HubSpot (forms, meetings), YouTube, Vimeo, Calendly, Navattic, VoteAmerica. Any
+  other provider's snippet is stripped of scripts for security and usually renders as
+  an empty section; supporting it is a code change (see the next section).
 - Election page templates: which blocks appear and the token-driven copy on the
   global template or a per-location custom template. Step-by-step editor guide:
   `docs/election-templates-manual.md`.
@@ -38,9 +42,12 @@ API, though nothing is doing that today — see `docs/sanity-api-writes.md`.
 
 Open a PR (use the `ship-pr` skill) when the request requires any of these:
 
-- A **new block type**, or a **new field or option** on an existing block (for
-  example "add a subtitle field" or "add a new background color choice"). See
+- A **new block type**. Use the `new-component` skill; the recipe behind it is
   `docs/adding-a-component.md`.
+- A **new field or option** on an existing block (for example "add a subtitle
+  field" or "add a new background color choice"), or any other change to a block
+  that already ships. Use the `update-component` skill, which also works out which
+  live pages the change reaches.
 - **Styling or responsive behavior** — how a block looks or reflows. Lives in
   `src/ui/` and CSS, not in Studio.
 - The **election or candidate pages'** behavior, templates, tokens, or the data they
@@ -48,6 +55,9 @@ Open a PR (use the `ship-pr` skill) when the request requires any of these:
 - **SEO plumbing**: sitemaps, canonical tags, structured data / schema, `llms.txt`,
   redirect logic, middleware.
 - A **new page route** or a **new document type** in Sanity.
+- A **new embed provider** for the Embedded Block. The approved hosts and the
+  per-provider parsing live in `src/ui/EmbedHtml.tsx`; script-based snippets need a
+  branch that builds the provider's iframe URL, since scripts never run.
 
 ## Not a marketing-site change at all
 

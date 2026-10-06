@@ -9,9 +9,11 @@ import * as ElectionsPositionHeroStories from './ElectionsPositionHero.stories';
 
 ## Overview
 
-The hero at the top of every election position page. It names the office and its location,
-gives one sentence of context, and carries two dark cards on the right that change with where
-the race is in its cycle. There is one component and one Sanity block; the state is read from
+The hero at the top of every election position page. Its one H1 reads "[office] in [place]",
+where the place is the most specific tier with its state code ("Bay City, MI", "Bay County, MI")
+or the bare state name. Under it sits one sentence of context, the same in every state and
+editable in Sanity, and two dark cards on the right that change with where the race is in its
+cycle. There is one component and one Sanity block; the state is read from
 the race dates and results by `resolvePositionHeroState` in `src/lib/positionHeroState.ts`,
 never chosen by an editor.
 

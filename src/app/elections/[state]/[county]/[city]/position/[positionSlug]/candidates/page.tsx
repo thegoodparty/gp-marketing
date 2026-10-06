@@ -16,10 +16,12 @@ import {
 	formatElectionDateFromApi,
 	formatFilingPeriodFromRace,
 	getStateName,
+	isRealPlaceSegment,
+	joinPlaceNames,
 	mapCandidacyToCard,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
-import { toAbsoluteUrl } from '~/lib/url';
+import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsCandidatesPage } from '~/lib/renderElectionsCandidatesPage';
 import { heroCandidatesFromCandidacies } from '~/lib/positionHeroCandidates';
 
@@ -156,10 +158,16 @@ export async function generateMetadata({
 		race?.Place ??
 		null;
 	const cityName = cityPlace?.name ?? city;
+	// A joint office fills the city slot with an office name, and the place then resolves to the
+	// county, so naming it as both city and county would say the county twice.
+	const isRealCity = isRealPlaceSegment(cityPlace?.slug, city);
+	// Either slot can resolve to the race's own place, so the names are deduplicated rather than
+	// joined blindly; see joinPlaceNames.
+	const placePhrase = isRealCity ? joinPlaceNames(cityName, countyDisplayName) : countyDisplayName;
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
 	return {
-		title: `Candidates for ${positionName} in ${cityName}, ${stateName} | Good Party`,
-		description: `View candidates running for ${positionName} in ${cityName}, ${countyDisplayName}, ${stateName}.`,
+		title: `Candidates for ${positionName} in ${placePhrase}, ${stateName} | ${SITE_NAME}`,
+		description: `View candidates running for ${positionName} in ${placePhrase}, ${stateName}.`,
 		alternates: {
 			canonical: toAbsoluteUrl(`/elections/${countySlug}/${city.toLowerCase()}/position/${positionSlug}/candidates`),
 		},

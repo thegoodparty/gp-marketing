@@ -1,19 +1,33 @@
 #!/usr/bin/env npx tsx
 /**
- * Offline sitemap generation for validation and auditing. Writes XML to .reports/sitemaps/static/.
- * NOT used for production serving -- the Next.js dynamic routes handle that.
+ * Offline sitemap generation.
+ * `--people-shards-out <dir>` emits the /people band's per-shard XML files for
+ * production serving -- the scheduled workflow (task 03) publishes them to S3.
+ * Every other mode here (the default report-based run, `--main-only`,
+ * `--people-only`, `--validate`) remains for validation and auditing only; the
+ * Next.js dynamic routes handle the rest of production serving.
  * Usage: npx tsx scripts/generate-sitemaps.ts [--main-only] [--people-only] [--validate] [--redirect-handling remove|replace|keep] [--max-redirects N] [--no-follow-redirects]
+ * Usage: npx tsx scripts/generate-sitemaps.ts --people-shards-out <dir> [--shard N]
  */
 
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { convertToXML, generateRootIndex, type SitemapEntry, type SitemapIndexEntry } from './lib/xml';
 import { getBaseUrl } from '../src/lib/url';
-import { formatLastmod, splitUrlsIntoChunks, writeSitemapFile } from './lib/sitemap-helpers';
+import {
+	fetchPeopleShards,
+	formatLastmod,
+	isLocalBaseUrl,
+	PEOPLE_SITEMAP_TOTAL_FLOOR,
+	runPeopleShardGates,
+	splitUrlsIntoChunks,
+	writeSitemapFile,
+} from './lib/sitemap-helpers';
 import {
 	fetchMainSitemapEntries,
 	fetchStateElectionSitemapEntries,
 	fetchPeopleSitemapEntries,
+	PEOPLE_SITEMAP_SHARD_COUNT,
 	PEOPLE_SITEMAP_SHARDS,
 	US_STATE_CODES,
 } from '../src/lib/sitemap-entries';
@@ -29,6 +43,8 @@ interface CliArgs {
 	redirectHandling: 'remove' | 'replace' | 'keep';
 	maxRedirects: number;
 	noFollowRedirects: boolean;
+	peopleShardsOut: string | null;
+	shard: number | null;
 }
 
 function parseArgs(): CliArgs {
@@ -40,6 +56,8 @@ function parseArgs(): CliArgs {
 		redirectHandling: 'remove',
 		maxRedirects: 5,
 		noFollowRedirects: false,
+		peopleShardsOut: null,
+		shard: null,
 	};
 
 	for (let i = 0; i < args.length; i++) {
@@ -53,10 +71,36 @@ function parseArgs(): CliArgs {
 		} else if (arg === '--max-redirects' && args[i + 1]) {
 			result.maxRedirects = Number.parseInt(args[++i]!, 10) || 5;
 		} else if (arg === '--no-follow-redirects') result.noFollowRedirects = true;
+		else if (arg === '--people-shards-out' && args[i + 1]) {
+			result.peopleShardsOut = args[++i] as string;
+		} else if (arg === '--shard' && args[i + 1]) {
+			result.shard = Number.parseInt(args[++i]!, 10);
+		}
 	}
 
 	if (result.mainOnly && result.peopleOnly) {
 		console.error('--main-only and --people-only are mutually exclusive');
+		process.exit(1);
+	}
+
+	if (result.shard !== null && result.peopleShardsOut === null) {
+		console.error('--shard requires --people-shards-out');
+		process.exit(1);
+	}
+
+	if (
+		result.peopleShardsOut !== null &&
+		(result.mainOnly || result.peopleOnly || result.validate)
+	) {
+		console.error('--people-shards-out cannot be combined with --main-only, --people-only, or --validate');
+		process.exit(1);
+	}
+
+	if (
+		result.shard !== null &&
+		(!Number.isInteger(result.shard) || result.shard < 0 || result.shard >= PEOPLE_SITEMAP_SHARD_COUNT)
+	) {
+		console.error(`--shard must be an integer in [0, ${PEOPLE_SITEMAP_SHARD_COUNT})`);
 		process.exit(1);
 	}
 
@@ -90,10 +134,65 @@ async function fetchStateElectionEntries(stateCode: string): Promise<SitemapEntr
 	return entries.map(toSitemapEntry);
 }
 
-async function fetchPeopleEntries(shard: string): Promise<SitemapEntry[]> {
+async function fetchPeopleEntries(shard: number): Promise<SitemapEntry[]> {
 	const base = getBaseUrl();
 	const entries = await fetchPeopleSitemapEntries(base, shard);
 	return entries.map(toSitemapEntry);
+}
+
+/**
+ * Emits the /people band as one XML file per shard, gated so a bad band is
+ * never handed off: every check below runs against the fetched entries before
+ * any file is written, so a gate failure (thrown as an Error) leaves `outDir`
+ * untouched rather than partially written.
+ */
+export async function runPeopleShardsOut(outDir: string, onlyShard: number | null): Promise<void> {
+	const base = getBaseUrl();
+	if (isLocalBaseUrl(base)) {
+		throw new Error(
+			`[sitemap] getBaseUrl() resolved to ${base}; refusing to emit people shards with a local base URL. ` +
+				'Set NEXT_PUBLIC_APP_BASE/NEXT_PUBLIC_SITE_URL so it resolves to the production host in the Action context.',
+		);
+	}
+
+	const shardsToBuild = onlyShard !== null ? [onlyShard] : [...PEOPLE_SITEMAP_SHARDS];
+	const isFullRun = onlyShard === null;
+
+	console.log(`Fetching ${shardsToBuild.length} people shard(s) (base: ${base})...`);
+	const start = Date.now();
+
+	// fetchPeopleSitemapEntries already warns per-shard at 80% of the ceiling
+	// (it is called with a defined shard here, never the whole-corpus path).
+	const fetched = await fetchPeopleShards(shardsToBuild, fetchPeopleEntries);
+	const built = fetched.map(({ shard, entries }) => ({
+		shard,
+		urlCount: entries.length,
+		xml: convertToXML(entries),
+	}));
+
+	const failures = runPeopleShardGates(built, {
+		expectedShardCount: isFullRun ? PEOPLE_SITEMAP_SHARD_COUNT : undefined,
+		totalFloor: isFullRun ? PEOPLE_SITEMAP_TOTAL_FLOOR : undefined,
+	});
+
+	if (failures.length > 0) {
+		throw new Error(
+			`[sitemap] people shard validation failed; no files written:\n${failures
+				.map((f) => `  [${f.gate}] ${f.message}`)
+				.join('\n')}`,
+		);
+	}
+
+	await mkdir(outDir, { recursive: true });
+	for (const { shard, xml } of built) {
+		await writeSitemapFile(outDir, `${shard}.xml`, xml);
+	}
+
+	const durationMs = Date.now() - start;
+	const totalUrls = built.reduce((sum, b) => sum + b.urlCount, 0);
+	console.log(
+		`Wrote ${built.length} people shard file(s), ${totalUrls} URLs total, to ${outDir} (${(durationMs / 1000).toFixed(1)}s)`,
+	);
 }
 
 async function runValidation(
@@ -106,6 +205,12 @@ async function runValidation(
 
 async function main(): Promise<void> {
 	const args = parseArgs();
+
+	if (args.peopleShardsOut !== null) {
+		await runPeopleShardsOut(args.peopleShardsOut, args.shard);
+		return;
+	}
+
 	const start = Date.now();
 	const base = getBaseUrl();
 
@@ -166,7 +271,7 @@ async function main(): Promise<void> {
 		stats.push({ category: 'state', urls: stateUrlCount, files: stateFileCount });
 	}
 
-	// People sitemaps, sharded alphabetically to mirror the served band.
+	// People sitemaps, sharded by person id to mirror the served band.
 	let peopleFileCount = 0;
 	let peopleUrlCount = 0;
 	if (!args.mainOnly) {
@@ -180,7 +285,7 @@ async function main(): Promise<void> {
 
 			for (let i = 0; i < chunks.length; i++) {
 				const filename = chunks.length === 1 ? 'index.xml' : `index-${i + 1}.xml`;
-				const path = `sitemaps/people/${shard}/sitemap/${filename}`;
+				const path = `sitemaps/people/shard-${String(shard).padStart(2, '0')}/sitemap/${filename}`;
 				await writeSitemapFile(OUTPUT_DIR, path, convertToXML(chunks[i]!));
 				indexEntries.push({ loc: `${base}/${path}`, lastmod });
 				allGeneratedUrls.push(...chunks[i]!.map((e) => e.loc));
@@ -229,7 +334,9 @@ async function main(): Promise<void> {
 	}
 }
 
-main().catch((err) => {
-	console.error(err);
-	process.exit(1);
-});
+if (import.meta.main) {
+	main().catch((err) => {
+		console.error(err);
+		process.exit(1);
+	});
+}

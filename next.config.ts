@@ -1,4 +1,5 @@
 import { breakpoints } from './src/ui/_lib/breakpoints';
+import { peopleSitemapRewrites } from './src/lib/sitemap-rewrites';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -6,7 +7,13 @@ const nextConfig = {
 		BUILD_TIMESTAMP: new Date().toISOString(),
 	},
 	async rewrites() {
-		return [{ source: '/sitemap.xml', destination: '/api/sitemap-index' }];
+		return [
+			{ source: '/sitemap.xml', destination: '/api/sitemap-index' },
+			// Gated on PEOPLE_SITEMAP_S3_BASE: unset (local dev, preview before
+			// cutover), this is a no-op and the /people band keeps serving from the
+			// dynamic route in src/app/sitemap.ts.
+			...peopleSitemapRewrites(process.env['PEOPLE_SITEMAP_S3_BASE']),
+		];
 	},
 	async redirects() {
 		return [

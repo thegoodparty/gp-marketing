@@ -4,6 +4,7 @@ import type { RaceDetail } from '~/types/elections';
 import type { CandidateCard } from '~/ui/CandidatesBlock';
 import type { BreadcrumbItem } from '~/ui/BreadcrumbBlock';
 import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
+import type { FeaturedPeople } from '~/lib/featuredPeople';
 import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
 import type { ElectionsPositionHeroCandidate } from '~/ui/ElectionsPositionHero';
 import {
@@ -20,6 +21,7 @@ import {
 	buildSchemaGraph,
 	buildWebPageSchema,
 } from '~/lib/schema';
+import { resolveHowToRunGuide } from '~/lib/howToRunGuide';
 import { toAbsoluteUrl } from '~/lib/url';
 import { POSITION_PAGE_FAQ } from '~/constants/positionPageStaticSections';
 
@@ -49,6 +51,8 @@ export type PositionPageContext = {
 	 * list hides. `renderElectionsPositionPage` loads it when a route does not.
 	 */
 	officeholders?: ElectionsPositionPerson[];
+	/** From `getNearbyOffices`; set by the position page renderer, absent on candidates pages. */
+	nearbyOffices?: OfficeItem[];
 };
 
 /**
@@ -258,6 +262,13 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 		component_ctaBlock: {
 			primaryButtonHref: ctx.candidatesHref,
 		},
+		component_electionPositionResourcesBlock: {
+			guideHref: resolveHowToRunGuide({ officeName: ctx.officeName, race }).href,
+		},
+		component_nearbyOffices: {
+			offices: ctx.nearbyOffices ?? [],
+			hidden: !ctx.nearbyOffices || ctx.nearbyOffices.length === 0,
+		},
 	};
 }
 
@@ -353,6 +364,13 @@ export type ElectionsIndexPageContext = {
 		heading?: string;
 		paragraphs?: string[];
 	};
+	/**
+	 * The page's candidates and current officeholders for
+	 * `component_featuredCandidatesBlock`, from `getFeaturedPeople`. Fetched by
+	 * `renderElectionsIndexPage` when a route does not supply it; absent means
+	 * the block hides.
+	 */
+	featuredPeople?: FeaturedPeople;
 };
 
 export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageContext): SectionOverrides {
@@ -394,6 +412,12 @@ export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageConte
 					paragraphs: ctx.locationEditorial.paragraphs,
 				}
 			: undefined,
+		component_featuredCandidatesBlock: ctx.featuredPeople
+			? {
+					candidates: ctx.featuredPeople.candidates,
+					representatives: ctx.featuredPeople.representatives,
+				}
+			: { hidden: true },
 	};
 }
 

@@ -95,6 +95,20 @@ export async function sanityFetch<Q extends QueryKey>({
 }): Promise<SanityQueries[Q]> {
 	const isDraft = (await draftMode()).isEnabled;
 
+	// QA INTEGRATION BRANCH ONLY (never merge): every page on the voter guide QA
+	// preview renders Studio's pending drafts, so marketing can stage template
+	// changes without publishing them to production, which shares the dataset
+	// (Emily, 2026-10-06). Falls back to published content if the deployment has
+	// no read token. No stega here: the overlays' hidden characters are noise in QA.
+	if (QA_PREVIEW_DRAFTS) {
+		return sanityClient.fetch(query, params, {
+			perspective: 'drafts',
+			token: token,
+			useCdn: false,
+			next: { tags },
+		});
+	}
+
 	if (!isDraft) {
 		return sanityClient.fetch(query, params, {
 			perspective: 'published',
@@ -110,3 +124,5 @@ export async function sanityFetch<Q extends QueryKey>({
 		},
 	});
 }
+
+const QA_PREVIEW_DRAFTS = Boolean(token);

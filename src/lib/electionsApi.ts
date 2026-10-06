@@ -277,6 +277,10 @@ export async function getCandidaciesOrNull(params: {
 	if (params.positionId) searchParams.set('positionId', params.positionId);
 	if (params.raceSlug) searchParams.set('raceSlug', params.raceSlug);
 	if (searchParams.toString() === '') return null;
+	// Each candidacy's own Race row, which carries its seat (subAreaName /
+	// subAreaValue). A shared race slug names every district's race, so the
+	// slug's race is the wrong place to read a seat from (Emily, 2026-10-06).
+	searchParams.set('includeRace', 'true');
 	const url = `${ELECTIONS_API_BASE_URL}/v1/candidacies?${searchParams}`;
 	const data = await fetchJson<CandidacyItem[]>(url);
 	return Array.isArray(data) ? data : null;

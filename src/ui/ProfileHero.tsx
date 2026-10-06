@@ -77,16 +77,19 @@ const styles = tv({
 		intro: '',
 		// The pledge callout: an 8px-radius box with a hairline border and a faint
 		// fill over the band (Figma: midnight/200 line, midnight/50 at 10%). On the
-		// phone the mark sits above the sentence; from md they share a row.
-		callout: 'flex w-full flex-col gap-1 rounded-sm border p-4 md:flex-row md:items-start md:gap-4',
+		// phone the mark sits above the sentence; from md they share a row with the
+		// mark centred on the text block, as the frame draws it.
+		callout: 'flex w-full flex-col gap-1 rounded-sm border p-4 md:flex-row md:items-center md:gap-4',
 		// Figma: 48x40 glyph on the phone, 49x42 on desktop.
 		calloutIcon: 'h-10 w-12 shrink-0 md:h-[2.625rem] md:w-[3.0625rem]',
 		// Figma: Open Sans 16/24 on both frames, which no ramping token gives.
 		calloutText: 'font-secondary text-[1rem]/[1.5rem]',
 		calloutPhrase: 'font-semibold',
 		// The pop-up trigger reads as a link at the end of the sentence (underlined,
-		// semibold, arrow). It is a button because it opens a dialog, not a page.
-		calloutLink: 'ml-2 inline-flex items-center gap-1 align-baseline font-semibold underline underline-offset-4 hover:no-underline',
+		// semibold, arrow), separated from it by an ordinary word space so it sits
+		// flush when it wraps to a new line. It is a button because it opens a
+		// dialog, not a page; nowrap keeps the label and its arrow together.
+		calloutLink: 'inline-flex items-center gap-1 whitespace-nowrap align-baseline font-semibold underline underline-offset-4 hover:no-underline',
 		// Container carries the text COLOR (via variant); the inner span carries the
 		// size/weight so tailwind-merge can't collapse them into one another.
 		attribution: 'mt-1 flex items-center justify-start gap-1.5',
@@ -331,7 +334,7 @@ export function ProfileHero(props: ProfileHeroProps) {
 							<div className={callout()} data-component="ProfileHeroPledgeCallout">
 								{attributionMode === 'pledged' && <Logo className={calloutIcon()} aria-hidden="true" />}
 								<p className={calloutText()}>
-									{renderCalloutSentence(attributionMode)}
+									{renderCalloutSentence(attributionMode)}{' '}
 									<PledgeModal>
 										<button type="button" className={calloutLink()}>
 											{PLEDGE_CALLOUT_LINK_LABEL}

@@ -123,6 +123,51 @@ describe('buildElectionsIndexSectionOverrides', () => {
 		expect(hero?.countyName).toBe('Kane County');
 	});
 
+	/** The offices list counts each row's pledged candidates off the same people the hero and featured block read. */
+	test('gives each office its pledged candidate count by race slug, counting a person once per race', () => {
+		const card = (overrides: Partial<{ personId: string | null; href: string; raceSlug: string | null; isPledged: boolean }>) => ({
+			personId: 'p1',
+			name: 'Person',
+			office: null,
+			location: null,
+			href: '/people/person-p1',
+			avatarUrl: null,
+			isPledged: true,
+			isNonpartisan: true,
+			role: 'candidate' as const,
+			electionDate: '2026-11-03',
+			raceSlug: 'il/kane-county/county-board',
+			...overrides,
+		});
+		const offices = [
+			{ id: 'a', type: 'County', position: 'County Board', nextElectionDate: '2026-11-03', raceSlug: 'IL/kane-county/county-board' },
+			{ id: 'b', type: 'County', position: 'Sheriff', nextElectionDate: '2026-11-03', raceSlug: 'il/kane-county/sheriff' },
+			{ id: 'c', type: 'County', position: 'Unslugged', nextElectionDate: '2026-11-03' },
+		];
+		const list = buildElectionsIndexSectionOverrides({
+			...countyCtx,
+			offices,
+			featuredPeople: {
+				candidates: [
+					card({}),
+					card({ personId: 'P1' }),
+					card({ personId: 'p2', href: '/people/two-p2' }),
+					card({ personId: 'p3', href: '/people/three-p3', isPledged: false }),
+					card({ personId: 'p4', href: '/people/four-p4', raceSlug: 'il/kane-county/sheriff', isPledged: false }),
+				],
+				representatives: [],
+				candidatesComplete: true,
+			},
+		}).component_listOfOfficesBlock;
+
+		expect(list?.offices?.map(office => office.pledgedCount)).toEqual([2, undefined, undefined]);
+	});
+
+	test('leaves the offices untouched without featured people', () => {
+		const offices = [{ id: 'a', type: 'County', position: 'County Board', nextElectionDate: '2026-11-03', raceSlug: 'il/kane-county/county-board' }];
+		expect(buildElectionsIndexSectionOverrides({ ...countyCtx, offices }).component_listOfOfficesBlock?.offices).toBe(offices);
+	});
+
 	test('leaves the headline unset when the route does not phrase one', () => {
 		const hero = buildElectionsIndexSectionOverrides({ ...countyCtx, heroTitle: undefined }).component_locationLandingPageHero;
 

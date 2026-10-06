@@ -312,6 +312,28 @@ export type ElectionsIndexPageContext = {
 	featuredPeople?: FeaturedPeople;
 };
 
+/**
+ * Pledged candidates per race, keyed by race slug, from the same people the
+ * featured block and the hero read, so the three can never disagree. A person
+ * counts once per race. Races the budget left unasked have no entry, and the
+ * offices list shows nothing for them rather than a zero.
+ */
+function withPledgedCounts(offices: OfficeItem[] | undefined, people: FeaturedPeople | undefined): OfficeItem[] | undefined {
+	if (!offices || !people) return offices;
+	const peopleByRace = new Map<string, Set<string>>();
+	for (const person of people.candidates) {
+		if (!person.isPledged || !person.raceSlug) continue;
+		const key = person.raceSlug.toLowerCase();
+		const set = peopleByRace.get(key) ?? new Set<string>();
+		set.add((person.personId ?? person.href).toLowerCase());
+		peopleByRace.set(key, set);
+	}
+	return offices.map(office => {
+		const pledgedCount = office.raceSlug ? peopleByRace.get(office.raceSlug.toLowerCase())?.size : undefined;
+		return pledgedCount ? { ...office, pledgedCount } : office;
+	});
+}
+
 export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageContext): SectionOverrides {
 	const independents = summarizeIndependents(ctx.featuredPeople, ctx.defaultYear);
 	return {
@@ -338,13 +360,14 @@ export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageConte
 			independents: ctx.defaultYear === undefined ? { ...independents, candidateCount: null } : independents,
 		},
 		component_listOfOfficesBlock: {
-			// The block renders `headline`, so that is where the location-named
-			// heading has to go. It used to be sent the bare level label instead,
-			// which published a card headed "state" / "county" / "municipal".
+			// Fallback only: the templates carry their own heading with location
+			// tokens, and that is what normally renders.
 			headline: ctx.listHeading,
 			defaultYear: ctx.defaultYear,
 			availableYears: ctx.availableYears,
-			offices: ctx.offices,
+			offices: withPledgedCounts(ctx.offices, ctx.featuredPeople),
+			// A district page is a local ballot like a city's, so it offers Local, County and State.
+			pageLevel: ctx.locationLevel === 'city' || ctx.locationLevel === 'district' ? 'local' : ctx.locationLevel,
 		},
 		component_electionsIndexBlock: {
 			elections: ctx.elections,

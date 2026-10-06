@@ -726,7 +726,6 @@ describe('getRaceBySlug falls back to the primary when there is no general', () 
 	});
 });
 
-<<<<<<< HEAD
 /**
  * A slug shared by many races (every California Assembly district is
  * `ca/state-representative`, in every year) comes back from the API as one row
@@ -774,7 +773,9 @@ describe('getRaceBySlug prefers an upcoming race for a shared slug', () => {
 		expect(await getRaceBySlug(SLUG, false, { isPrimary: false })).toMatchObject({ electionDate: '2022-11-08' });
 		expect(calls).toHaveLength(1);
 		expect(calls[0]).not.toContain('electionDateStart');
-=======
+	});
+});
+
 /** Each candidacy carries its own race so a card's seat comes from its own district row (Emily, 2026-10-06). */
 describe('getCandidacies asks for each candidacy\u2019s race', () => {
 	test('every filter form includes the race', async () => {
@@ -798,7 +799,6 @@ describe('getCandidacies asks for each candidacy\u2019s race', () => {
 		}) as typeof fetch;
 		expect(await getCandidacies({})).toEqual([]);
 		expect(called).toBe(false);
->>>>>>> origin/claude/candidacies-carry-their-race
 	});
 });
 

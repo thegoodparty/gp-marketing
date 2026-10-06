@@ -264,6 +264,12 @@ Decisions that came out of it:
   as the editorial block does); the column heading is `subtitle-1` (24 → 20, matching both frames) and the
   sentence is `body-2`. Measured at 1440 and 390 before the PR.
 - **The empty state is "render nothing"**, pinned by `src/PageSections/illustratedColumnsBlockSection.test.tsx`.
+- **Links share a baseline across a row** (Emily, 2026-10-05, from the revised frames 2188-38792 and
+  2188-38505). The link is pinned to the foot of its column with `mt-auto`, so a one-line sentence next to a
+  two-line one no longer leaves the links at different heights. The same round tightened the phone layout to
+  the mobile frame: 24px between the intro and the first column, 8px between picture, heading, sentence and
+  link inside a stacked column, and 48px clear on each side of the hairline between stacked columns. Desktop
+  spacing was already on the frame and did not move.
 
 The block reads `tokens` like the other content blocks, so the location templates fill `[Location]` in the
 heading, intro, column text and link labels.

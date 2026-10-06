@@ -89,6 +89,9 @@ export interface RaceDetail {
 	isRunoff?: boolean;
 	isPrimary?: boolean;
 	partisanType?: string;
+	/** The seat's district or ward ("District" / "5"); the row's own columns, present when no raceColumns filter is sent. */
+	subAreaName?: string | null;
+	subAreaValue?: string | null;
 	Place?: PlaceWithFacts & {
 		parent?: { name: string; slug: string; state: string; geoId?: string };
 	};

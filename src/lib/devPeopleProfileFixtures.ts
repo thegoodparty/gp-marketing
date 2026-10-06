@@ -223,7 +223,7 @@ function richExperience(persona: PersonPersona): ExperienceItem[] {
 	return rows;
 }
 
-function relatedCards(prefix: string, count: number, empoweredEvery = 3): RelatedPersonCard[] {
+function relatedCards(prefix: string, count: number, tag: (index: number) => string | null, empoweredEvery = 3): RelatedPersonCard[] {
 	const NAMES = ['Garrett Borton', 'Nathan Todd', 'Don Taylor', 'Henry Nessul', 'Vera Huber', 'Gilian Sears', 'Cheri Steinmetz', 'Eric Barlow', 'Marcia Bean', 'Lori Smallwood', 'Serena Lipp', 'Abby Angelos'];
 	// Realistic party mix, but ONLY non-partisan/independent people can be
 	// GoodParty-empowered — a Republican/Democrat card must never show the
@@ -244,6 +244,7 @@ function relatedCards(prefix: string, count: number, empoweredEvery = 3): Relate
 			href: `/people/${prefix}-${i}`,
 			isEmpowered: !isMajorParty && i % empoweredEvery === 0,
 			isPledged: !isMajorParty && i % 4 === 2,
+			tag: tag(i),
 			avatarUrl: null,
 		};
 	});
@@ -345,8 +346,10 @@ export function getDevPersonProfileView(slug: string): PersonProfileView | null 
 		recentExperience: richExperience(persona),
 		// Running personas get "Other candidates"; the Figma "past" mocks (G/H) are
 		// the tallest frames and also carry this section, so include it there too.
-		otherCandidates: running || persona === 'past' ? relatedCards('other-candidate', 5) : [],
-		nearbyOfficials: relatedCards('nearby-official', 6),
+		// Other candidates share the subject's race, so one district for all of
+		// them; nearby officials hold different seats, so one ward each.
+		otherCandidates: running || persona === 'past' ? relatedCards('other-candidate', 5, () => 'District 5') : [],
+		nearbyOfficials: relatedCards('nearby-official', 6, i => `Ward ${i + 1}`),
 		voterDensity: richVoterDensity(),
 		electionsIndex: richElectionsIndex(),
 		officeAddress: ['123 Capitol Avenue', 'Suite 200', 'Cheyenne, WY 82001'],

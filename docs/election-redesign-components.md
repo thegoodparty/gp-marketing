@@ -385,25 +385,32 @@ file and the content block's clearance, and both wait for the `/people` batch (P
   (the earliest closed-won is the natural rule), whether closed-won is in fact when the pledge is
   taken (if not, "Signed on" overstates it), and that the deal is joined to the person the way
   "Confirmed Candidate" is.
-- **A disclaimer under the two authored sections**: "These statements come from [name] and do not
+- **A disclaimer under the authored sections**: "These statements come from [name] and do not
   reflect any positions or stances on individual issues held by GoodParty.org." as a 12px grey
   caption. It closes the platform card (after Campaign Issues, or after Why I'm Running when the
-  owner wrote no issues) and the About Me section (before Recent Experience, which shares the
-  card). Claimed pages only: the unclaimed placeholders are our copy, not the person's, and the
-  unclaimed frame shows none. The name is the page's display name; the frames show a first name,
-  but splitting names is unreliable. The in-office record (Top Priorities, Accomplishments) is
-  also person-authored and the frames do not draw it; it carries no disclaimer today.
+  owner wrote no issues), the About Me section (before Recent Experience, which shares the card),
+  and the in-office card (after Accomplishments, or after Top Priorities when there are none).
+  The frames only draw candidates, so the in-office card was Emily's call (2026-10-06): it is the
+  person's own words as much as the platform is. Claimed pages only: the unclaimed placeholders
+  are our copy, not the person's, and the unclaimed frame shows none. The name is the page's
+  display name; the frames show a first name, but splitting names is unreliable.
 - **A "What this symbol means" box above Other Candidates**: the heart-and-star mark, "Candidates
   and elected officials with this symbol took the GoodParty.org Pledge, promising to serve people
   first, independent of both major parties and big-money interests." and a "Read the full pledge"
   link opening `PledgeModal`. Third-person copy, so it renders on every profile that has the list
-  (`PledgeSymbolCallout`, copy in `PLEDGE_SYMBOL_CALLOUT`). The cards under it are unchanged: the
-  mark still follows the claim and the pledge line still follows the pledge flag, which marketing
-  asked to keep. Nearby Officials is not in the frames and keeps its plain list.
-
-Noted and not acted on: a "District 5" tag pill on each other-candidate card, a "See more" button
-under the list (today the list shows everyone), and the mark drawn on the pledged person's card
-rather than the claimed one. None was in the change list.
+  (`PledgeSymbolCallout`, copy in `PLEDGE_SYMBOL_CALLOUT`). Nearby Officials is not in the frames
+  and gets no box.
+- **The cards, in the same round (Emily, 2026-10-06)**: a district pill beside the name
+  ("District 5"; above the name on the phone), the heart-and-star mark on every pledged person's
+  photo, and the lists showing three cards at a time with a "See more" button (`RelatedPeopleList`,
+  the Candidates block's reveal rule with the frame's label), on both rails. The pill reads the
+  feed's sub-area pair (`districtTag`: name and value, "Ward 3"): a nearby official's from their own
+  office row; the other candidates' from the subject's race, which the candidacy rows do not carry,
+  so the profile loader reads the race record once (`loadRaceDistrictTag`) and a miss leaves the
+  cards untagged. **Pledged and claimed are the same thing** (Emily, 2026-10-06), so the mark follows
+  the pledge flag on these cards (`showMark` on `CandidatesCard`), without the yellow frame the
+  legacy `isGoodPartyCandidate` treatment draws; the frames draw no frame, and the production
+  builders never set that flag anyway. The pledge line is unchanged.
 
 ## The shared election counts, as marketing defined them
 

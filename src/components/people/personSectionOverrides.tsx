@@ -14,11 +14,12 @@ import { IconResolver } from '~/ui/IconResolver';
 import { cn } from '~/ui/_lib/utils';
 import { Text } from '~/ui/Text';
 import { ButtonLink } from '~/ui/Inputs/Button';
-import { CandidatesCard, type CardAttributionMode } from '~/ui/CandidatesCard';
+import type { CardAttributionMode } from '~/ui/CandidatesCard';
 import { VoterDensityMapCard } from './VoterDensityMapCard';
 import { ClaimProfileModal } from './ClaimProfileModal';
 import { PersonClaimCTABand } from './PersonClaimCTABand';
 import { PledgeSymbolCallout } from './PledgeSymbolCallout';
+import { RelatedPeopleList } from './RelatedPeopleList';
 
 // Below this rendered-voter coverage the density surface is too partial to be
 // trustworthy, so the map is hidden. Coverage may be null when upstream has no
@@ -338,13 +339,17 @@ function buildAuthoredSections(view: PersonProfileView): SectionMap {
 	}
 	// The Voter Guide frames close the platform card (Why + Campaign Issues) and
 	// the About Me section with the disclaimer (2156:30656 / 2156:30728; Emily,
-	// 2026-10-06). It sits on the LAST platform section so it ends the card
-	// whichever of the two the owner wrote, and on About Me itself because Recent
-	// Experience follows it inside the same card. Only authored text gets one:
-	// the unclaimed placeholders are ours, not the person's.
+	// 2026-10-06). The in-office card (Top Priorities + Accomplishments) is also
+	// the person's own words, so it gets one too (Emily, 2026-10-06); the frames
+	// only draw candidates. It sits on the LAST section of each card so it ends
+	// the card whichever sections the owner wrote, and on About Me itself because
+	// Recent Experience follows it inside the same card. Only authored text gets
+	// one: the unclaimed placeholders are ours, not the person's.
 	const disclaimer = <AuthoredDisclaimer name={view.displayName} />;
 	const platformTail = sections.campaignIssues ?? sections.why;
 	if (platformTail) platformTail.footer = disclaimer;
+	const inOfficeTail = sections.accomplishments ?? sections.inOfficePriorities;
+	if (inOfficeTail) inOfficeTail.footer = disclaimer;
 	if (sections.aboutMe) sections.aboutMe.footer = disclaimer;
 	return sections;
 }
@@ -500,18 +505,6 @@ function pastElectionDisclaimer(view: PersonProfileView): ProfileContentCardProp
 	};
 }
 
-/** In-column "Other candidates" list — a vertical stack of candidate cards, under an optional callout. */
-function OtherCandidatesContent({ cards, callout }: { cards: CandidateCard[]; callout?: ReactNode }): ReactNode {
-	return (
-		<div className='flex flex-col gap-4'>
-			{callout}
-			{cards.map(card => (
-				<CandidatesCard key={card._key ?? card.name} {...card} />
-			))}
-		</div>
-	);
-}
-
 /**
  * Civics-spine sections, available on every state (data permitting). These are
  * NOT empowerment-gated, so unclaimed major-party (I/J) and removed (K/L)
@@ -544,12 +537,12 @@ function buildCivicSections(view: PersonProfileView): SectionMap {
 	if (otherCandidates.length > 0) {
 		sections.otherCandidates = {
 			heading: view.officeName ? `Other Candidates for ${view.officeName}` : 'Other Candidates',
-			content: <OtherCandidatesContent cards={otherCandidates} callout={<PledgeSymbolCallout />} />,
+			content: <RelatedPeopleList cards={otherCandidates} callout={<PledgeSymbolCallout />} />,
 		};
 	}
 	const nearby = empoweredFirst(toCandidateCards(view.nearbyOfficials));
 	if (nearby.length > 0) {
-		sections.nearbyOfficials = { heading: 'Nearby Officials', content: <OtherCandidatesContent cards={nearby} /> };
+		sections.nearbyOfficials = { heading: 'Nearby Officials', content: <RelatedPeopleList cards={nearby} /> };
 	}
 	return sections;
 }
@@ -666,12 +659,14 @@ function toCandidateCards(cards: RelatedPersonCard[]): CandidateCard[] {
 			name: c.name,
 			partyAffiliation: c.subtitle ?? '',
 			href: c.href!,
-			// The mark and the yellow frame follow this; the line follows the pledge.
-			// They are different facts — one says whose candidate this is, the other
-			// asserts something the person did — and on /people they come from
-			// different sources, so the card must not tie them together.
+			// The yellow frame follows this (the legacy GoodParty treatment, which the
+			// production builders never set); the line and the mark follow the pledge.
+			// Pledged and claimed are the same thing to marketing (Emily, 2026-10-06),
+			// and the Voter Guide frames draw the mark on the pledged card.
 			isGoodPartyCandidate: c.isEmpowered,
+			showMark: c.isPledged,
 			attribution: relatedCardAttribution(c),
+			tag: c.tag,
 			...(c.avatarUrl ? { avatar: c.avatarUrl } : {}),
 		}));
 }

@@ -94,7 +94,7 @@ describe('the siderail states the pledge', () => {
 	});
 });
 
-describe('the disclaimer closes the two authored sections', () => {
+describe('the disclaimer closes the authored sections', () => {
 	test('state A: the platform card and About Me each end with it, naming the person', () => {
 		const v = view('allen-slagle-74eee01a');
 		const { cards } = block(v);
@@ -103,7 +103,7 @@ describe('the disclaimer closes the two authored sections', () => {
 			'These statements come from Allen Slagle and do not reflect any positions or stances on individual issues held by GoodParty.org.',
 		);
 
-		// Exactly two sections carry it: the last of Why + Campaign Issues, and About Me.
+		// A candidate has two authored cards: the last of Why + Campaign Issues, and About Me.
 		const carriers = cards.filter(card => card.footer !== undefined);
 		expect(carriers.map(card => card.heading)).toEqual(['Campaign Issues', 'About Me']);
 
@@ -115,6 +115,36 @@ describe('the disclaimer closes the two authored sections', () => {
 		}
 		// Why I'm Running shares the platform card and must not carry a second copy.
 		expect(cardHtml(cardWithHeading(cards, 'Why I’m Running for Office'))).not.toContain(copy);
+	});
+
+	test('state B: the in-office card ends with it too, on Accomplishments', () => {
+		const v = view('tracy-good-ecff49d3');
+		expect(v.persona).toBe('officeholder');
+		const { cards } = block(v);
+		expect(cards.filter(card => card.footer !== undefined).map(card => card.heading)).toEqual([
+			'Accomplishments During This Term',
+			'About Me',
+		]);
+		const html = cardHtml(cardWithHeading(cards, 'Accomplishments During This Term'));
+		expect(html).toContain(authoredDisclaimerCopy(v.displayName));
+		expect(cardHtml(cardWithHeading(cards, 'Top Priorities While in Office'))).not.toContain('These statements come from');
+	});
+
+	test('without accomplishments, Top Priorities carries it instead', () => {
+		const { cards } = block(view('tracy-good-ecff49d3', { accomplishments: [] }));
+		expect(cards.filter(card => card.footer !== undefined).map(card => card.heading)).toEqual([
+			'Top Priorities While in Office',
+			'About Me',
+		]);
+	});
+
+	test('state C: serving and running closes all three authored cards', () => {
+		const { cards } = block(view('susan-overman-ad914b82'));
+		expect(cards.filter(card => card.footer !== undefined).map(card => card.heading)).toEqual([
+			'Campaign Issues',
+			'About Me',
+			'Accomplishments During This Term',
+		]);
 	});
 
 	test('when the owner wrote no issues, the Why section carries it instead', () => {
@@ -145,10 +175,67 @@ describe('the Other Candidates list explains the mark', () => {
 		expect(html.indexOf('PledgeSymbolCallout')).toBeLessThan(html.indexOf('CandidatesCard'));
 	});
 
-	test('Nearby Officials is left as it was', () => {
+	test('Nearby Officials gets no box', () => {
 		const { cards } = block(view('tracy-good-ecff49d3'));
 		const html = cardHtml(cardWithHeading(cards, 'Nearby Officials'));
 		expect(html).toContain('CandidatesCard');
 		expect(html).not.toContain(PLEDGE_SYMBOL_CALLOUT.heading);
+	});
+});
+
+describe('the related-people rails show three cards, then "See more"', () => {
+	function count(html: string, marker: string): number {
+		return html.split(marker).length - 1;
+	}
+
+	test('Other Candidates: three of five on first paint, with the button', () => {
+		const v = view('allen-slagle-74eee01a');
+		expect(v.otherCandidates.length).toBe(5);
+		const html = cardHtml(cardWithHeading(block(v).cards, 'Other Candidates'));
+		expect(count(html, 'data-component="CandidatesCard"')).toBe(3);
+		expect(html).toContain('See more');
+	});
+
+	test('Nearby Officials: the same rule', () => {
+		const v = view('tracy-good-ecff49d3');
+		expect(v.nearbyOfficials.length).toBe(6);
+		const html = cardHtml(cardWithHeading(block(v).cards, 'Nearby Officials'));
+		expect(count(html, 'data-component="CandidatesCard"')).toBe(3);
+		expect(html).toContain('See more');
+	});
+
+	test('a short list has no button', () => {
+		const v = view('allen-slagle-74eee01a');
+		const html = cardHtml(cardWithHeading(block({ ...v, otherCandidates: v.otherCandidates.slice(0, 2) }).cards, 'Other Candidates'));
+		expect(count(html, 'data-component="CandidatesCard"')).toBe(2);
+		expect(html).not.toContain('See more');
+	});
+});
+
+describe('the cards carry the district tag and the mark', () => {
+	test('other candidates share the race\u2019s district; nearby officials each have their own', () => {
+		const a = cardHtml(cardWithHeading(block(view('allen-slagle-74eee01a')).cards, 'Other Candidates'));
+		expect(a.split('District 5').length - 1).toBe(3);
+		const b = cardHtml(cardWithHeading(block(view('tracy-good-ecff49d3')).cards, 'Nearby Officials'));
+		expect(b).toContain('Ward 1');
+		expect(b).toContain('Ward 3');
+	});
+
+	test('a card with no district has no tag', () => {
+		const v = view('allen-slagle-74eee01a');
+		const html = cardHtml(
+			cardWithHeading(block({ ...v, otherCandidates: v.otherCandidates.map(c => ({ ...c, tag: null })) }).cards, 'Other Candidates'),
+		);
+		expect(html).not.toContain('CandidatesCardTag');
+	});
+
+	test('the mark follows the pledge, without the yellow frame', () => {
+		const v = view('allen-slagle-74eee01a');
+		const pledged = v.otherCandidates.filter(c => c.isPledged && !c.isEmpowered);
+		expect(pledged.length).toBeGreaterThan(0);
+		const html = cardHtml(cardWithHeading(block({ ...v, otherCandidates: pledged }).cards, 'Other Candidates'));
+		// One mark in the box, one per pledged card, none in a yellow frame.
+		expect(html.split('viewBox="35 42 137 116"').length - 1).toBe(1 + pledged.length);
+		expect(html).not.toContain('border-bright-yellow-600');
 	});
 });

@@ -39,6 +39,19 @@ backoff, returns `null` on 404 or any non-500 error, and caches most responses w
 `{ next: { revalidate: 3600 } }` (one hour). Pages themselves also set
 `revalidate = 3600`.
 
+**`/v1/races` is general-elections-only unless you say otherwise.** The endpoint coerces
+an absent `isPrimary` to `false` instead of leaving it unset, so an unfiltered slug lookup
+never sees a primary row. Offices that exist in the feed only as a primary (Minnesota's
+county auditor, treasurer and recorder seats, New York's county court judge) came back
+empty, and their position pages 404'd while the county index page and the "View Position"
+link on each officeholder's `/people` profile kept listing them. That was 25 of the 26 dead
+position-page URLs in the 2026-09-18 crawl. `getRaceBySlug` therefore retries once with
+`isPrimary: true` when the first lookup finds nothing, which costs a second request only on
+the path that would otherwise render a 404. A caller that passes `isPrimary` itself (as
+`resolvePlaceRaceElectionDates` does, wanting the general) is never second-guessed. The fix
+belongs upstream in `election-api`'s `raceFilterSchema`, where the `z.preprocess` around
+`isPrimary`/`isRunoff` turns `undefined` into `false`; until that lands, keep the retry.
+
 ## Domain vocabulary the agent needs
 
 ### MTFCC codes
@@ -155,6 +168,39 @@ Three things not to "fix" while in here:
   surface at two tiers. `dedupeByUrl` will not collapse that, because the two URLs
   genuinely differ.
 
+### How the /people band is sharded
+
+The band after the 51 state shards is `/people`, one profile per URL, and at 478,442
+URLs (September 2026) it is the bulk of the site. It is split across
+`PEOPLE_SITEMAP_SHARD_COUNT` files, `/sitemap/52.xml` upward.
+
+**Shard on the person id, never on the name.** The band originally used the first letter
+of the slug, which put 71,025 URLs in the `j` shard — over the sitemap protocol's
+50,000-URL ceiling, which is a hard limit a crawler may reject the whole file for, and
+`m` (44,915) and `d` (41,357) were next. First names cluster on a few letters and no
+amount of re-splitting letters fixes that. Person ids are random uuids, so
+`peopleShardForPersonId` (`parseInt(id8, 16) % PEOPLE_SITEMAP_SHARD_COUNT`) splits evenly
+by construction: measured across all 478,442 live ids, the 64 shards land within a few
+percent of 7,476 each.
+
+Two things to keep in mind if you touch this:
+
+- **Shard 0 is a real shard.** `if (shard)` is false for it, so a truthiness test hands
+  it the whole corpus or nothing. Compare against `undefined`.
+- **The shard is readable off the URL.** Any `/people/<name>-<id8>` lives in
+  `/sitemap/${PEOPLE_SITEMAP_BAND_START + (parseInt(id8, 16) % 64)}.xml`, which is how you
+  check a missing profile without running the sweep.
+
+**When to raise the count.** The band's size is set by the upstream person table, so it
+can cross the ceiling with no commit behind it and no failing unit test. Two things watch
+for that: `peopleShardSizeWarning` logs from the serving route once any shard passes 80%
+of the ceiling (40,000 URLs), and `integration/validate-sitemap-urls.test.ts` asserts the
+limit per file when it is run against a real host. Either one firing means raise
+`PEOPLE_SITEMAP_SHARD_COUNT`.
+
+Raising it is safe and does not remove any file — the band grows on the end and every
+existing id keeps serving. Lowering it would orphan the tail ids, so don't.
+
 ### Joint offices eat place slots
 
 A combined office (Indiana's Clerk/Treasurer, Montana's Clerk/Recorder/Surveyor,
@@ -171,6 +217,25 @@ hand-roll this: slicing the slug at a fixed depth folds the extra segments into 
 position slug, and `.pop()` drops them, and both shapes 404 while looking plausible.
 A September 2026 crawl found 516 such 404s, concentrated in Indiana towns and Montana
 counties but present in at least 17 states.
+
+The position pages have the mirror-image problem. They receive those extra segments as
+route params, so `/elections/mt/gallatin-county/county-clerk/recorder/position/surveyor-joint`
+parses as city `county-clerk`, subplace `recorder`. Building a breadcrumb straight from the
+params links back to `/elections/mt/gallatin-county/county-clerk`, which 404s, and writes that
+404 into the BreadcrumbList JSON-LD as well. A September 2026 crawl found 466 such breadcrumb
+targets across 20 states.
+
+`buildPlaceRacePositionHref` cannot fix that: it builds forward `/position/` hrefs and needs
+the place handed to it. On a position page the authoritative place is the one the page already
+resolved (`cityPlace`, which falls back to `race.Place`), so the position routes gate each place
+crumb on `isRealPlaceSegment(cityPlace.slug, city)` and drop the ones the place slug does not
+contain. It is membership rather than a tail match because the resolved place can sit *below*
+the segment being checked, which is the real-subplace case the neighbouring `isRealSubplace`
+check covers.
+
+The matching `/candidates` pages still build the broken crumb, and a broken `locationHref`
+with it. That is deliberate: those pages are being removed, so they were left alone rather
+than fixed twice.
 
 Because the route tree stops at four place levels, an office combining four or more
 roles cannot be addressed at all. `buildPlaceRacePositionHref` returns `undefined`
@@ -343,6 +408,53 @@ Both degrade to the county-less URL rather than to no link at all when the count
 cannot be resolved: a redirect beats an unlinked row. The sitemap is the one
 deliberate exception — it passes `skipUnmappedCity` and emits nothing, because a
 sitemap should advertise canonical URLs only.
+
+#### Ask the lookup, do not read the slug
+
+A follow-up crawl (2026-09-18) found 347 of these links still redirecting, in
+shapes the first pass had pre-filtered out before ever consulting the lookup.
+Each pre-filter looked like a cheap way to skip a pointless fetch and was wrong:
+
+- **The position level is not the place level.** A judicial, county or
+  district-attorney office is routinely seated in a city
+  (`nv/las-vegas/justice-of-the-peace-judicial`), so gating the city branch on
+  `CITY`/`LOCAL` misses them.
+- **A `-county` tail does not mean the segment is a county.** Where two cities in
+  a state share a name the feed disambiguates the *city's* slug with a county
+  suffix, so `tx/reno-lamar-county` and `oh/oakwood-cuyahoga-county` are cities.
+  `looksLikeCountySlugSegment` cannot tell them apart, and note that the feed's
+  `countyName` for these rows names the *other* county — `oh/oakwood-cuyahoga-county`
+  canonicalises under `oh/montgomery-county`. That is an upstream data problem;
+  read it off the lookup rather than trying to correct it here.
+
+A hit in the lookup is itself proof the segment is a city, so ask it and let a
+miss be a miss. A genuine county race costs one cached place-list read.
+
+Two fallbacks sit behind the state sweep, both in `getCitySlugToCountySlugMap`
+and `resolveCountySlugForCitySlug`: the county walk for Connecticut, whose
+statewide municipal queries return nothing at all (the same workaround
+`sitemap-entries.ts` and `resolvePlace.ts` each carry), and a per-place lookup
+for the scattered cities a healthy state's sweep still misses.
+
+#### Not every URL segment is a place
+
+The position routes fill their place slots positionally, and a joint office
+spends one segment per combined role, so
+`ga/state-insurance-commissioner/fire-safety-commissioner-joint` puts an office
+name in the county slot. Anything that slices a position href back into place
+crumbs has to check each segment against the slot it sits in, or it links office
+names as places: that was 346 breadcrumb 404s on `/people` in the same crawl, and
+the same bug the position pages fixed with `isRealPlaceSegment`. `/people` has no
+resolved place to check against, so `isRealPlaceSlot` in `peopleProfile.ts`
+checks slot 1 against the state's county slugs and slot 2 against the city
+lookup. Counties only in slot 1 — a city there means the expansion never
+happened. Nothing below the city is ever linked, because every subplace-depth
+`/elections` URL in the sitemap is a joint office.
+
+Slot-aware matters as much as the check itself: a place name containing a slash
+("Choctaw/Nicoma Park Schools") splits across two slots, and `ok/choctaw` is a
+real city, so in the county slot it resolved — and sent the "Explore Elections"
+band to a different county's towns.
 
 ### Not fixable here, escalate
 

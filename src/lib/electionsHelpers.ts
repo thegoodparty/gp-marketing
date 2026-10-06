@@ -1,6 +1,7 @@
 import { convert } from 'html-to-text';
 
 import { US_STATES } from '~/constants/usStates';
+import { isValidStateCode } from '~/constants/usStateCodes';
 import type { CandidacyItem, FindByRaceIdResponse, PlaceItem, PlaceRace, PlaceWithFacts, RaceDetail } from '~/types/elections';
 import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
 import type { FactsCardProps } from '~/ui/FactsCard';
@@ -288,6 +289,17 @@ export function formatElectionDateFromApi(dateStr: string | undefined): string {
 	return new Date(dateStr).toLocaleDateString('en-US', LOCALE_DATE_OPTIONS);
 }
 
+const SHORT_DATE_OPTIONS: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+
+/** "Nov 4, 2026": the compact form the nearby offices rows use so the date fits one line. */
+export function formatElectionDateShortFromApi(dateStr: string | undefined): string {
+	if (!dateStr) return 'TBD';
+	if (DATE_ONLY_REGEX.test(dateStr)) {
+		return parseDateOnlyAsLocal(dateStr).toLocaleDateString('en-US', SHORT_DATE_OPTIONS);
+	}
+	return new Date(dateStr).toLocaleDateString('en-US', SHORT_DATE_OPTIONS);
+}
+
 /**
  * Returns the calendar year from a date string that may be ISO date-only (YYYY-MM-DD)
  * or a pre-formatted string like "November 5, 2026". Uses local-date parsing for ISO to avoid timezone shift.
@@ -513,6 +525,48 @@ export function buildPlaceRacePositionHref(placeSegments: string[], raceSlug: st
 	const path = [...place, ...officeParts];
 	if (path.length > MAX_ELECTION_PLACE_SEGMENTS) return undefined;
 	return `/elections/${path.join('/')}/position/${positionSlug}`;
+}
+
+/**
+ * The place names for a page title, in order, with repeats dropped and blanks skipped.
+ *
+ * Every slot in an /elections title can fall back to the race's own place: a district nested
+ * under the city slot fills city and county alike, and a subplace route can have any one of its
+ * three slots resolve to the same place as another. Joining them blindly said the name twice
+ * ("Local School Board in Dutton/Brady K-12 Schools, Dutton/Brady K-12 Schools, Montana").
+ *
+ * Deduplicating on the names rather than on the joined string is what makes this total: a
+ * half-collapsed phrase matches no single slot, so a comparison against the phrase lets a repeat
+ * back in. Names are compared as displayed, which is the level the defect lives at.
+ */
+export function joinPlaceNames(...names: Array<string | null | undefined>): string {
+	const seen = new Set<string>();
+	const parts: string[] = [];
+	for (const name of names) {
+		if (!name || seen.has(name)) continue;
+		seen.add(name);
+		parts.push(name);
+	}
+	return parts.join(', ');
+}
+
+/**
+ * Whether a place segment in a position page's URL names a real place.
+ *
+ * A joint office spends one URL segment per combined role, and those segments sit in the
+ * route's place slots: `/elections/mt/gallatin-county/county-clerk/recorder/position/surveyor-joint`
+ * parses as county `gallatin-county`, city `county-clerk`, subplace `recorder`. The place the
+ * page resolved is authoritative, so a segment its slug does not contain is an office name and
+ * must not be linked or labelled as a place.
+ *
+ * Membership rather than the tail segment, because the resolved place can sit below the segment
+ * being checked (a real subplace under its city) as well as at it, and place slugs come in both
+ * `state/county/city` and short `state/city` forms. An unknown slug returns true, which leaves
+ * the breadcrumb as it was.
+ */
+export function isRealPlaceSegment(placeSlug: string | undefined, segment: string): boolean {
+	if (!placeSlug) return true;
+	return placeSlug.toLowerCase().split('/').filter(Boolean).includes(segment.toLowerCase());
 }
 
 /** Joint city office race slug: state/city/subplace/position, optionally with county segment. */
@@ -956,6 +1010,12 @@ export function resolveElectionPositionFromRaceSlug(
 	const parts = race.slug.split('/').filter(Boolean);
 	const positionSlug = parts.pop();
 	if (!positionSlug || parts.length === 0) return undefined;
+
+	// Every /elections position route rejects a state segment that is not a US state code, so a
+	// slug whose first segment is not one can only ever build a 404. The feed emits these where
+	// the state is missing from the slug entirely (`st-george/city-legislature`, St. George,
+	// Louisiana), and the place name then lands in the state slot.
+	if (!isValidStateCode(parts[0])) return undefined;
 
 	const level = (race.positionLevel ?? '').toUpperCase();
 	const skipUnmapped = options?.skipUnmappedCity ?? false;

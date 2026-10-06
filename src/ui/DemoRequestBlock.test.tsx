@@ -192,6 +192,8 @@ describe('DemoRequestBlock', () => {
 
 	test('posts the answers to the same-origin proxy and shows the calendar on a pass', async () => {
 		await render();
+		dom.window.document.cookie = 'hubspotutk=0123456789abcdef0123456789abcdef';
+		dom.window.document.title = 'Request a demo | GoodParty.org';
 		await fillRaceAndGoals();
 		await fillContact();
 		await submitForm();
@@ -208,6 +210,8 @@ describe('DemoRequestBlock', () => {
 			first_name: 'Jordan',
 			email: 'jordan@example.com',
 			sms_consent: false,
+			hutk: '0123456789abcdef0123456789abcdef',
+			page_name: 'Request a demo | GoodParty.org',
 		});
 
 		await waitUntil(() => card().textContent?.includes('Pick a time, Jordan') ?? false);
@@ -215,6 +219,18 @@ describe('DemoRequestBlock', () => {
 		expect(card().querySelector('a[href="https://meetings.hubspot.com/example/demo"]')).not.toBeNull();
 		expect(trackedEvents.map(e => e.name)).toContain('Demo Request Submitted');
 		expect(trackedEvents.find(e => e.name === 'Demo Request Qualified')?.props).toMatchObject({ outcome: 'pass' });
+	});
+
+	test('submits with an empty hutk when the HubSpot cookie is malformed', async () => {
+		await render();
+		dom.window.document.cookie = 'hubspotutk=%GG-not-decodable';
+		await fillRaceAndGoals();
+		await fillContact();
+		await submitForm();
+
+		expect(fetchCalls).toHaveLength(1);
+		expect(fetchCalls[0]?.body).toMatchObject({ email: 'jordan@example.com', hutk: '' });
+		await waitUntil(() => card().textContent?.includes('Pick a time, Jordan') ?? false);
 	});
 
 	test('shows the tour card and redirects when the verdict is tour', async () => {
@@ -287,4 +303,29 @@ describe('DemoRequestBlock', () => {
 		release?.();
 		await waitUntil(() => card().textContent?.includes('Pick a time') ?? false);
 	});
+	test('escapes the calendar URL before it enters the embed markup, so a quote cannot truncate it', async () => {
+		// A value with a double quote closes the data-src attribute early in the raw
+		// template. DOMParser then sees a truncated URL with no ?embed=true, and the
+		// rest of the string lands as junk children of the container.
+		const hostile = 'https://meetings.hubspot.com/x"><img src=x>';
+		fetchResponse = async () => ({ ok: true, status: 200, body: { outcome: 'pass', calendar_url: hostile } });
+
+		await render();
+		await fillRaceAndGoals();
+		await fillContact();
+		await submitForm();
+		await waitUntil(() => card().textContent?.includes('Pick a time, Jordan') ?? false);
+		await waitUntil(() => card().querySelector('iframe') !== null);
+
+		const src = card().querySelector('iframe')!.getAttribute('src')!;
+		// The attribute boundary held: the query string survived instead of being cut at the quote.
+		expect(src.endsWith('?embed=true')).toBe(true);
+		expect(src).toContain('%22');
+		expect(src).not.toContain('"');
+		// Still on an allowed host, and the parsed embed came from the container we wrote, not junk.
+		expect(new URL(src).hostname).toBe('meetings.hubspot.com');
+		// The plain link is untouched: React escapes that attribute itself.
+		expect(card().querySelector('a[target="_blank"]')?.getAttribute('href')).toBe(hostile);
+	});
+
 });

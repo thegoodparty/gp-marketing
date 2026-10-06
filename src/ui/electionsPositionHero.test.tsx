@@ -50,7 +50,7 @@ describe('ElectionsPositionHeroSection', () => {
 		expect(html).toContain('<strong>2</strong> candidates filed so far');
 		expect(html).toContain('Tom Nguyen');
 		expect(html).toContain('View all candidates');
-		expect(html).toContain('Filing is open for this race.');
+		expect(html).toContain('A nonpartisan guide to [office name] in [County or City].');
 	});
 
 	test('before the window opens it counts down to filing opening instead', () => {
@@ -70,7 +70,7 @@ describe('ElectionsPositionHeroSection', () => {
 		expect(html).toContain('Days until election');
 		expect(html).toContain('data-testid="position-hero-timeline"');
 		expect(html).toContain('Election day');
-		expect(html).toContain('Everything you need to know about this race.');
+		expect(html).toContain('A nonpartisan guide to [office name] in [County or City].');
 	});
 
 	test('after election day with no results it keeps the date and timeline but loses the countdown and the ballot card', () => {
@@ -101,7 +101,7 @@ describe('ElectionsPositionHeroSection', () => {
 		expect(html).toContain('candidates ran');
 		expect(html).toContain('aria-label="Winner"');
 		expect(html).toContain('View full results');
-		expect(html).toContain('This race has been decided.');
+		expect(html).toContain('A nonpartisan guide to [office name] in [County or City].');
 	});
 
 	test('with several winners it labels the button with the seat count and lists the others', () => {
@@ -136,7 +136,7 @@ describe('ElectionsPositionHeroSection', () => {
 		expect(html).toContain('data-testid="position-hero-winner-card"');
 		expect(html).toContain('Grace Hopper');
 		expect(html).toContain('Independent · Current term 2023 to 2027');
-		expect(html).toContain('This race has been decided.');
+		expect(html).toContain('A nonpartisan guide to [office name] in [County or City].');
 	});
 
 	test('inside six months of filing opening, the previous winner gives way to the filing state', () => {
@@ -166,13 +166,37 @@ describe('ElectionsPositionHeroSection', () => {
 		expect(html).toContain('bg-goodparty-blue');
 	});
 
+	test('the default intro resolves its tokens and is the same sentence in every state', () => {
+		const tokens = { '[office name]': 'City Council Member', '[County or City]': 'Austin' };
+		const expected = 'A nonpartisan guide to City Council Member in Austin.';
+
+		expect(render(office, '2026-08-15', { tokens })).toContain(expected);
+		expect(render(office, '2026-10-20', { tokens })).toContain(expected);
+		expect(render({ ...office, winners: [{ key: '1', name: 'Tom Nguyen' }] }, '2026-12-01', { tokens })).toContain(expected);
+	});
+
 	test('an editor-supplied intro wins over the default and resolves tokens', () => {
 		const html = render(office, '2026-08-15', {
-			field_filingIntro: 'Run for [office name] in [location].',
+			field_intro: 'Run for [office name] in [location].',
 			tokens: { '[office name]': 'City Council Member', '[location]': 'Austin, Texas' },
 		});
 
 		expect(html).toContain('Run for City Council Member in Austin, Texas.');
-		expect(html).not.toContain('Filing is open for this race.');
+		expect(html).not.toContain('A nonpartisan guide to');
+	});
+
+	test('the heading is one H1 naming the office and the most specific place with its state code', () => {
+		const h1 = (html: string) => /<h1[^>]*>(.*?)<\/h1>/.exec(html)?.[1];
+
+		expect(h1(render(office, '2026-08-15'))).toBe('City Council Member in Austin, TX');
+		expect(h1(render({ ...office, cityName: 'Bay City', countyName: 'Bay County', stateName: 'Michigan' }, '2026-08-15'))).toBe(
+			'City Council Member in Bay City, MI',
+		);
+		expect(h1(render({ ...office, cityName: undefined, countyName: 'Bay County', stateName: 'Michigan' }, '2026-08-15'))).toBe(
+			'City Council Member in Bay County, MI',
+		);
+		expect(h1(render({ ...office, cityName: undefined, countyName: undefined, stateName: 'Texas' }, '2026-08-15'))).toBe(
+			'City Council Member in Texas',
+		);
 	});
 });

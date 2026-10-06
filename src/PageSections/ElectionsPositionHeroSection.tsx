@@ -11,7 +11,7 @@ import {
 	type ElectionsPositionHeroCandidate,
 	type ElectionsPositionHeroWinner,
 } from '~/ui/ElectionsPositionHero';
-import { HERO_INTRO_DEFAULTS } from '~/sanity/schema/components/component_electionsPositionHero';
+import { HERO_INTRO_DEFAULT } from '~/sanity/schema/components/component_electionsPositionHero';
 
 /**
  * Everything the hero needs from the route. The position and candidates pages
@@ -82,13 +82,7 @@ export function ElectionsPositionHeroSection(props: ElectionsPositionHeroSection
 
 	const winners = state.phase === 'decided' && (data.winners?.length ?? 0) === 0 ? data.priorWinners : data.winners;
 
-	const introField =
-		state.phase === 'filing'
-			? (stegaClean(section.field_filingIntro) ?? HERO_INTRO_DEFAULTS.filing)
-			: state.phase === 'midElection'
-				? (stegaClean(section.field_midElectionIntro) ?? HERO_INTRO_DEFAULTS.midElection)
-				: (stegaClean(section.field_decidedIntro) ?? HERO_INTRO_DEFAULTS.decided);
-	const intro = resolveSectionText(introField, tokens) ?? undefined;
+	const intro = resolveSectionText(stegaClean(section.field_intro) ?? HERO_INTRO_DEFAULT, tokens) ?? undefined;
 
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Elections Position Hero'>

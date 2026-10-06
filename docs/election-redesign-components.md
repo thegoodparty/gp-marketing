@@ -167,16 +167,27 @@ block" below). Things that came out of it:
 - **The hero's own button is gone.** The frames hide the left-hand CTA; the links live in the
   cards and come from the route (`candidatesHref`, later `resultsHref`). The Sanity `ctaAction`
   field is kept but hidden and marked deprecated so the live template documents that still carry a
-  value raise no "unknown field" warning in Studio. The three intro sentences are editable per
-  state (`field_filingIntro`, `field_midElectionIntro`, `field_decidedIntro`) with the Figma copy
-  as the default, and accept the office and location tokens.
+  value raise no "unknown field" warning in Studio. The intro sentence is editable
+  (`field_intro`) and accepts the office and location tokens.
 - **Where the frames and the live scale disagreed.** The body sizes ramp, as the width note below
-  says, and two places needed a token other than the obvious one: the location line uses
-  `text-3xl` (24 on mobile, 32 at 1440, exactly the frames) rather than a heading token, and the
-  countdown labels use `text-md`, because `body-2` grows to 18px at 1440 and the two countdowns no
-  longer fit side by side in a 308px card. The timeline's three anchors sit at fixed thirds rather
-  than at their real dates, because a filing window that closes a month before election day put
-  "Filing deadline" on top of "Election day".
+  says, and one place needed a token other than the obvious one: the countdown labels use
+  `text-md`, because `body-2` grows to 18px at 1440 and the two countdowns no longer fit side by
+  side in a 308px card. The timeline's three anchors sit at fixed thirds rather than at their real
+  dates, because a filing window that closes a month before election day put "Filing deadline" on
+  top of "Election day".
+- **One H1 again, "[office] in [place]"** (Emily, 2026-10-06, from the revised frames 2156-29711
+  and 2139-21610). The first round split the heading into the office as the H1 and the location as
+  a `text-3xl` line under it; design went back to the single heading the live site has, but with a
+  shorter place: the most specific tier plus the state code ("City Council in Bay City, MI",
+  "County Attorney in Bay County, MI"), or the bare state name on a state page. A city page no
+  longer names its county in the H1 (the breadcrumb still does), so two same-named townships in
+  different counties now share an H1, as they already share a `<title>`. `heroLocation` in
+  `src/ui/ElectionsPositionHero.tsx` is the rule, and the code comes from `normalizeStateCode`, so
+  the route contract (city, county, state name) did not change. The same round collapsed the three
+  per-state intro sentences into one `field_intro`, the same copy in every state, defaulting to the
+  frame's "A nonpartisan guide to [office name] in [County or City]. Find candidates and elected
+  officials who have turned down partisan and big-money influence." The three per-state fields had
+  never reached Studio, so nothing carries them.
 
 **Nearby offices** (position pages) — built as `component_nearbyOffices`, data-backed.
 

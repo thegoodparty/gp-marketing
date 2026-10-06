@@ -155,6 +155,12 @@ export type SectionOverrides = {
 	};
 	component_nearbyOffices?: {
 		/**
+		 * The heading the page computes for itself, used when the editor leaves the
+		 * Heading field empty: "More offices in Bay City, Michigan", or just the state
+		 * on a state position page, where the place and the state are the same name.
+		 */
+		heading?: string;
+		/**
 		 * The other upcoming positions near the one on the page, already picked and
 		 * ordered (same place first, else one level up; capped at eight). Only the
 		 * position page routes populate this, through `getNearbyOffices`; with no

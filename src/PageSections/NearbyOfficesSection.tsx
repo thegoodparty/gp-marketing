@@ -27,7 +27,8 @@ export function NearbyOfficesSection(props: Props) {
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Nearby Offices'>
 			<NearbyOffices
 				backgroundColor={backgroundColor}
-				heading={resolveSectionText(section.field_heading, tokens)}
+				heading={resolveSectionText(section.field_heading, tokens) || nearbyOverride?.heading}
+				description={resolveSectionText(section.field_description, tokens)}
 				offices={offices}
 			/>
 		</section>

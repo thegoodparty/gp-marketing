@@ -90,7 +90,7 @@ export const list_pageSections = {
 							component_jobOpeningsBlock:
 								'https://cdn.sanity.io/images/3rbseux7/production/77d6cb0e8a4704d6ee9983a26391ed71cdb54d47-3000x2000.png',
 							component_listOfOfficesBlock:
-								'https://cdn.sanity.io/images/3rbseux7/production/f52200ea2ce2b87acd58736b478d6aa385c404ad-3000x2000.png',
+								'https://cdn.sanity.io/images/3rbseux7/production/ad854fb88420af9aa2eb31c92845dbec71aa858b-3000x2000.png',
 							component_locationFactsBlock:
 								'https://cdn.sanity.io/images/3rbseux7/production/841e57ddb41eec71c6ea56ea03641490de55acf2-3000x2000.png',
 							component_locationLandingPageHero:

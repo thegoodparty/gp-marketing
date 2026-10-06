@@ -13,6 +13,13 @@ import {
 /**
  * Rendered per request instead of prerendered at build.
  *
+ * In production, the /people band (ids PEOPLE_SITEMAP_BAND_START..+63) is no
+ * longer served from here: next.config.ts rewrites those 64 paths straight to
+ * the pre-published S3 objects at the Vercel edge once PEOPLE_SITEMAP_S3_BASE
+ * is set, so no function runs and this branch never executes for them. The
+ * branch below stays in place as the local-dev path (no env var set) and as
+ * the fallback for any environment that hasn't been cut over yet.
+ *
  * The people band is a live enumeration of ~216k pages across ~150 election-api
  * calls plus two gp-api reads, and those reads now fail closed so a wrong
  * sitemap can't be published. Prerendering makes that failure a *build* failure:
@@ -20,9 +27,10 @@ import {
  * the entire marketing site stops shipping over a file only crawlers read.
  *
  * Dynamic keeps the strictness where it belongs — a bad upstream fails the
- * sitemap request, not the deploy — and costs nothing, because the underlying
- * fetches are still served from the tagged 1h data cache and this route is hit
- * by crawlers rather than users.
+ * sitemap request, not the deploy. In production the people band (ids 52-115)
+ * never reaches this route: next.config rewrites proxy it to the static files
+ * on S3 when PEOPLE_SITEMAP_S3_BASE is set, so this code path serves the main
+ * and state shards, local dev, and the fallback while that var is unset.
  */
 export const dynamic = 'force-dynamic';
 
@@ -33,7 +41,7 @@ export function generateSitemaps() {
 export default async function sitemap({ id }: { id: number }): Promise<MetadataRoute.Sitemap> {
 	const n = Number(id);
 	const base = getBaseUrl();
-	// Shard 0 is marketing pages only; /people now lives in its own alphabetical band.
+	// Shard 0 is marketing pages only; /people now lives in its own id-sharded band.
 	if (n === 0) {
 		return fetchMainSitemapEntries(base);
 	}
@@ -44,7 +52,9 @@ export default async function sitemap({ id }: { id: number }): Promise<MetadataR
 	const peopleIdx = n - PEOPLE_SITEMAP_BAND_START;
 	if (peopleIdx >= 0 && peopleIdx < PEOPLE_SITEMAP_SHARDS.length) {
 		const shard = PEOPLE_SITEMAP_SHARDS[peopleIdx];
-		if (shard) return fetchPeopleSitemapEntries(base, shard);
+		// Shard 0 is a real shard, so this cannot be a truthiness test: the
+		// previous `if (shard)` would have served the first people shard empty.
+		if (shard !== undefined) return fetchPeopleSitemapEntries(base, shard);
 	}
 	return [];
 }

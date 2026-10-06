@@ -8,7 +8,7 @@ import {
 	formatFilingPeriodFromRace,
 	getStateName,
 } from '~/lib/electionsHelpers';
-import { toAbsoluteUrl } from '~/lib/url';
+import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsPositionPage } from '~/lib/renderElectionsPositionPage';
 
 export const revalidate = 3600;
@@ -78,7 +78,7 @@ export async function generateMetadata({
 	const race = await getRaceBySlug(raceSlug);
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
 	return {
-		title: `${positionName} in ${stateName} | Good Party`,
+		title: `${positionName} in ${stateName} | ${SITE_NAME}`,
 		description: `Election details and candidates for ${positionName} in ${stateName}.`,
 		alternates: { canonical: toAbsoluteUrl(`/elections/${stateCode.toLowerCase()}/position/${positionSlug}`) },
 	};

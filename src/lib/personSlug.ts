@@ -7,7 +7,7 @@
  * Apostrophes are DELETED rather than folded to a separator, because the
  * election-api mart's `Person.slug` deletes them: the real slug for
  * "Robert O'Brien" is `robert-obrien`, not `robert-o-brien`. Folding to `-`
- * produced a near-miss base that the /people resolver answered with a 307 to
+ * produced a near-miss base that the /people resolver answered with a 308 to
  * the real slug — so every O'/D' name cost an extra redirect hop on links built
  * from a name rather than read off the spine row.
  *

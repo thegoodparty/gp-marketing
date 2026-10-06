@@ -6,9 +6,11 @@ import {
 	buildOfficeItemsFromPlaceRaces,
 	buildRaceCandidatesHref,
 	buildRacePositionHref,
+	joinPlaceNames,
 	buildRaceSlug,
 	buildPlaceRacePositionHref,
 	buildSubplaceRaceSlug,
+	isRealPlaceSegment,
 	canonicalizeCountyEquivalentName,
 	countOpenElections,
 	findCityForDistrictName,
@@ -230,6 +232,36 @@ describe('buildPlaceRacePositionHref', () => {
 
 	test('returns undefined for an empty race slug', () => {
 		expect(buildPlaceRacePositionHref(['mt'], '')).toBeUndefined();
+	});
+});
+
+describe('isRealPlaceSegment', () => {
+	test('city segment the resolved place is slugged at', () => {
+		expect(isRealPlaceSegment('in/adams-county/berne', 'berne')).toBe(true);
+	});
+
+	test('city segment when the API slug omits the county', () => {
+		expect(isRealPlaceSegment('in/berne', 'berne')).toBe(true);
+	});
+
+	test('city segment above the resolved place, a real subplace', () => {
+		expect(isRealPlaceSegment('in/adams-county/berne/french-township', 'berne')).toBe(true);
+	});
+
+	test('joint county office in the city slot is not a place', () => {
+		expect(isRealPlaceSegment('mt/gallatin-county', 'county-clerk')).toBe(false);
+	});
+
+	test('joint city office in the subplace slot is not a place', () => {
+		expect(isRealPlaceSegment('in/adams-county/berne', 'city-clerk')).toBe(false);
+	});
+
+	test('ignores case on both sides', () => {
+		expect(isRealPlaceSegment('IN/Adams-County/Berne', 'BERNE')).toBe(true);
+	});
+
+	test('an unknown place slug leaves the segment alone', () => {
+		expect(isRealPlaceSegment(undefined, 'county-clerk')).toBe(true);
 	});
 });
 
@@ -580,6 +612,20 @@ describe('buildOfficeItemsFromPlaceRaces', () => {
 		expect(dataYears).toEqual([2026, 2028]);
 	});
 
+	test('gives every office a distinct id when the API sends none', () => {
+		const races = [
+			placeRace({ id: undefined, slug: 'tx/harris-county/county-attorney' }),
+			placeRace({ id: undefined, slug: 'tx/harris-county/county-constable' }),
+		];
+
+		const { offices } = buildOfficeItemsFromPlaceRaces(races, new Map(), {
+			type: 'County',
+			buildHref: () => undefined,
+		});
+
+		expect(offices.map(o => o.id)).toEqual(['tx/harris-county/county-attorney-0', 'tx/harris-county/county-constable-1']);
+	});
+
 	test('handles year-boundary ISO datetime correctly', () => {
 		const races = [
 			placeRace({
@@ -908,6 +954,36 @@ describe('linkHrefAlreadyPresent', () => {
 	});
 });
 
+/**
+ * The title defect this exists for: a district nested under the city slot resolves the race's own
+ * place into more than one slot, so the title read "Local School Board in Dutton/Brady K-12
+ * Schools, Dutton/Brady K-12 Schools, Montana". Source-scanning guards in canonicalMetadata.test.ts
+ * pin that the routes call this; the behaviour is pinned here, where it can catch an inversion.
+ */
+describe('joinPlaceNames', () => {
+	test('keeps distinct names in the order given', () => {
+		expect(joinPlaceNames('Center City', 'Chisago County')).toBe('Center City, Chisago County');
+		expect(joinPlaceNames('Lincoln Township', 'Choteau', 'Teton County')).toBe('Lincoln Township, Choteau, Teton County');
+	});
+
+	test('names a repeated place once', () => {
+		const district = 'Dutton/Brady K-12 Schools';
+		expect(joinPlaceNames(district, district)).toBe(district);
+		expect(joinPlaceNames(district, district, 'Teton County')).toBe(`${district}, Teton County`);
+	});
+
+	/** The half-collapsed phrase that a comparison against the joined string let through. */
+	test('drops a repeat that is not adjacent', () => {
+		expect(joinPlaceNames('Brady K-12', 'Choteau', 'Brady K-12')).toBe('Brady K-12, Choteau');
+	});
+
+	test('skips blank slots rather than emitting empty segments', () => {
+		expect(joinPlaceNames('Choteau', null, 'Teton County')).toBe('Choteau, Teton County');
+		expect(joinPlaceNames(undefined, '', 'Teton County')).toBe('Teton County');
+		expect(joinPlaceNames(null, undefined)).toBe('');
+	});
+});
+
 describe('buildRacePositionHref', () => {
 	test('builds position page path from race slug', () => {
 		expect(buildRacePositionHref('ok/tecumseh-public-schools/local-school-board')).toBe(
@@ -918,6 +994,23 @@ describe('buildRacePositionHref', () => {
 	test('returns undefined for invalid slug', () => {
 		expect(buildRacePositionHref(undefined)).toBeUndefined();
 		expect(buildRacePositionHref('single-part')).toBeUndefined();
+	});
+
+	/**
+	 * The feed sometimes drops the state from a race slug, which slides the place name into the
+	 * state slot: `st-george/city-legislature` (St. George, Louisiana) built
+	 * `/elections/st-george/position/city-legislature`, and every position route rejects a state
+	 * segment that is not a state code, so that link could only ever 404.
+	 */
+	test('returns undefined when the first segment is not a state code', () => {
+		expect(buildRacePositionHref('st-george/city-legislature')).toBeUndefined();
+		expect(buildRacePositionHref('east-baton-rouge-parish/st-george/city-legislature')).toBeUndefined();
+	});
+
+	test('still builds when the first segment is a state code', () => {
+		expect(buildRacePositionHref('la/east-baton-rouge-parish/city-legislature')).toBe(
+			'/elections/la/east-baton-rouge-parish/position/city-legislature',
+		);
 	});
 });
 

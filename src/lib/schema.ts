@@ -229,8 +229,13 @@ export type PersonSchemaParams = {
 	sameAs?: ReadonlyArray<string>;
 	/** State code / region for the person's office. */
 	addressRegion?: string | null;
-	/** Party affiliation label, emitted as a memberOf PoliticalParty. */
-	affiliation?: string | null;
+	/**
+	 * Every party the person is listed with, each emitted as its own memberOf
+	 * PoliticalParty. A list rather than the page's label, because fusion voting
+	 * puts one person on several lines and the label joins them with commas —
+	 * emitting that string would name a party that does not exist.
+	 */
+	affiliations?: ReadonlyArray<string>;
 };
 
 /**
@@ -251,8 +256,10 @@ export function buildPersonSchema(params: PersonSchemaParams): object {
 	if (params.image) schema['image'] = params.image;
 	const sameAs = (params.sameAs ?? []).filter((u) => u.startsWith('http'));
 	if (sameAs.length > 0) schema['sameAs'] = sameAs;
-	if (params.affiliation) {
-		schema['memberOf'] = { '@type': 'PoliticalParty', name: params.affiliation };
+	const affiliations = (params.affiliations ?? []).filter(name => name.trim().length > 0);
+	if (affiliations.length > 0) {
+		const parties = affiliations.map(name => ({ '@type': 'PoliticalParty', name }));
+		schema['memberOf'] = parties.length === 1 ? parties[0] : parties;
 	}
 	if (params.addressRegion) {
 		schema['address'] = { '@type': 'PostalAddress', addressRegion: params.addressRegion };

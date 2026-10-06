@@ -10,7 +10,7 @@ import {
 	redirectCityRaceToFourLevelUrl,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
-import { toAbsoluteUrl } from '~/lib/url';
+import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsPositionPage } from '~/lib/renderElectionsPositionPage';
 
 export const revalidate = 3600;
@@ -101,7 +101,7 @@ export async function generateMetadata({
 	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
 	const countyDisplayName = resolveLocalityName(countyPlace, race?.Place, countySlug);
 	return {
-		title: `${positionName} in ${countyDisplayName}, ${stateName} | Good Party`,
+		title: `${positionName} in ${countyDisplayName}, ${stateName} | ${SITE_NAME}`,
 		description: `Election details and candidates for ${positionName} in ${countyDisplayName}, ${stateName}.`,
 		alternates: { canonical: toAbsoluteUrl(`/elections/${countySlug}/position/${positionSlug}`) },
 	};

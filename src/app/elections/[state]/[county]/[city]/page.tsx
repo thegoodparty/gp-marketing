@@ -4,6 +4,7 @@ import {
 	COUNTY_MTFCC,
 	getCountyChildPlaces,
 	getFeaturedCities,
+	getElectionsPagePlace,
 	getPlacesByState,
 	getPlaceBySlug,
 	isCityOrTownMtfcc,
@@ -16,14 +17,13 @@ import {
 	buildPlaceRacePositionHref,
 	getStateName,
 	hasSuspiciousFactsMatch,
-	PLACE_RACE_COLUMNS,
 	placeToFactsCards,
 	resolveLocalityName,
 	resolveDefaultElectionYear,
 	resolvePlaceRaceElectionDates,
 } from '~/lib/electionsHelpers';
 import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
-import { toAbsoluteUrl } from '~/lib/url';
+import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 
 export const revalidate = 3600;
 
@@ -48,13 +48,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 
 	const [counties, placeData, countyFactsData, countyChildPlaces, featuredCities] = await Promise.all([
 		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
-		getPlaceBySlug({
-			slug: fullSlug,
-			includeChildren: false,
-			includeRaces: true,
-			placeColumns: 'slug,name,mtfcc,countyName',
-			raceColumns: PLACE_RACE_COLUMNS,
-		}),
+		getElectionsPagePlace({ slug: fullSlug }),
 		getPlaceBySlug({
 			slug: countySlug,
 			includeChildren: false,
@@ -68,13 +62,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 
 	let resolvedPlaceData = placeData;
 	if (!resolvedPlaceData) {
-		resolvedPlaceData = await getPlaceBySlug({
-			slug: shortSlug,
-			includeChildren: false,
-			includeRaces: true,
-			placeColumns: 'slug,name,mtfcc,countyName',
-			raceColumns: PLACE_RACE_COLUMNS,
-		});
+		resolvedPlaceData = await getElectionsPagePlace({ slug: shortSlug });
 	}
 
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
@@ -125,7 +113,6 @@ export default async function Page({ params }: { params: Promise<{ state: string
 			countyName: districtName,
 			bodyCopy: `Learn what positions are up for election and who is currently running for office in ${districtName}.`,
 			listHeading: `Elections in ${districtName}`,
-			listHeadline: 'district',
 			defaultYear,
 			availableYears,
 			offices: districtOffices,
@@ -224,7 +211,6 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		cityName,
 		bodyCopy: `Learn what positions are up for election and who is currently running for office in ${cityName}.`,
 		listHeading: `City Elections in ${cityName}`,
-		listHeadline: 'municipal',
 		defaultYear,
 		availableYears,
 		offices: cityOffices,
@@ -256,11 +242,7 @@ export async function generateMetadata({
 			includeChildren: false,
 			includeRaces: false,
 		}),
-		getPlaceBySlug({
-			slug: fullSlug,
-			includeChildren: false,
-			includeRaces: false,
-		}),
+		getElectionsPagePlace({ slug: fullSlug }),
 	]);
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
 	const isNestedDistrict =
@@ -268,7 +250,7 @@ export async function generateMetadata({
 	const canonical = toAbsoluteUrl(`/elections/${fullSlug}`);
 	if (isNestedDistrict) {
 		return {
-			title: `Elections in ${placeData.name}, ${stateName} | Good Party`,
+			title: `Elections in ${placeData.name}, ${stateName} | ${SITE_NAME}`,
 			description: `Browse elections and positions in ${placeData.name}, ${stateName}.`,
 			alternates: { canonical },
 		};
@@ -283,18 +265,14 @@ export async function generateMetadata({
 		return slug.split('/').pop() === citySegment;
 	});
 	if (!cityPlace) {
-		const placeByShortSlug = await getPlaceBySlug({
-			slug: shortSlug,
-			includeChildren: false,
-			includeRaces: false,
-		});
+		const placeByShortSlug = await getElectionsPagePlace({ slug: shortSlug });
 		if (placeByShortSlug?.slug?.toLowerCase() === shortSlug) {
 			cityPlace = placeByShortSlug;
 		}
 	}
 	const cityName = cityPlace?.name ?? city;
 	return {
-		title: `Elections in ${cityName}, ${stateName} | Good Party`,
+		title: `Elections in ${cityName}, ${countyDisplayName}, ${stateName} | ${SITE_NAME}`,
 		description: `Browse elections and local positions in ${cityName}, ${countyDisplayName}, ${stateName}.`,
 		alternates: { canonical },
 	};

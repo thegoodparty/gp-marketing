@@ -7,6 +7,7 @@ import type { FeaturedCityCard, RaceDetail } from '~/types/elections';
 import type { CandidateCard } from '~/ui/CandidatesBlock';
 import type { BreadcrumbItem } from '~/ui/BreadcrumbBlock';
 import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
+import type { FeaturedPeople } from '~/lib/featuredPeople';
 import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
 import { secondaryButtonStyleType } from '~/ui/_lib/designTypesStore';
 import {
@@ -20,6 +21,7 @@ import {
 	buildSchemaGraph,
 	buildWebPageSchema,
 } from '~/lib/schema';
+import { resolveHowToRunGuide } from '~/lib/howToRunGuide';
 import { toAbsoluteUrl } from '~/lib/url';
 import { POSITION_PAGE_FAQ } from '~/constants/positionPageStaticSections';
 
@@ -38,6 +40,8 @@ export type PositionPageContext = {
 	race?: RaceDetail | null;
 	// Used only by the position-page schema builders; optional for candidates pages.
 	pageUrl?: string;
+	/** From `getNearbyOffices`; set by the position page renderer, absent on candidates pages. */
+	nearbyOffices?: OfficeItem[];
 };
 
 function formatFrequency(frequency: (string | number)[]): string {
@@ -184,6 +188,13 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 		component_ctaBlock: {
 			primaryButtonHref: ctx.candidatesHref,
 		},
+		component_electionPositionResourcesBlock: {
+			guideHref: resolveHowToRunGuide({ officeName: ctx.officeName, race }).href,
+		},
+		component_nearbyOffices: {
+			offices: ctx.nearbyOffices ?? [],
+			hidden: !ctx.nearbyOffices || ctx.nearbyOffices.length === 0,
+		},
 	};
 }
 
@@ -265,7 +276,6 @@ export type ElectionsIndexPageContext = {
 	heroTitle?: string;
 	searchPlaceholder?: string;
 	listHeading?: string;
-	listHeadline?: string;
 	defaultYear?: number;
 	availableYears?: number[];
 	offices?: OfficeItem[];
@@ -282,6 +292,23 @@ export type ElectionsIndexPageContext = {
 		factsCards?: Array<{ factType: string; label: string; value: string }>;
 		hidden?: boolean;
 	};
+	/**
+	 * The page's editorial prose for `component_locationEditorialBlock`, one
+	 * string per paragraph. No route sets it yet: the copy is written per
+	 * location outside this repo and the source it will be read from is not
+	 * decided, so the block stays hidden on location pages until this is fed.
+	 */
+	locationEditorial?: {
+		heading?: string;
+		paragraphs?: string[];
+	};
+	/**
+	 * The page's candidates and current officeholders for
+	 * `component_featuredCandidatesBlock`, from `getFeaturedPeople`. Fetched by
+	 * `renderElectionsIndexPage` when a route does not supply it; absent means
+	 * the block hides.
+	 */
+	featuredPeople?: FeaturedPeople;
 };
 
 export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageContext): SectionOverrides {
@@ -296,8 +323,10 @@ export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageConte
 			searchPlaceholder: ctx.searchPlaceholder,
 		},
 		component_listOfOfficesBlock: {
-			heading: ctx.listHeading,
-			headline: ctx.listHeadline,
+			// The block renders `headline`, so that is where the location-named
+			// heading has to go. It used to be sent the bare level label instead,
+			// which published a card headed "state" / "county" / "municipal".
+			headline: ctx.listHeading,
 			defaultYear: ctx.defaultYear,
 			availableYears: ctx.availableYears,
 			offices: ctx.offices,
@@ -318,6 +347,18 @@ export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageConte
 					hidden: ctx.locationFacts.hidden,
 				}
 			: undefined,
+		component_locationEditorialBlock: ctx.locationEditorial
+			? {
+					heading: ctx.locationEditorial.heading,
+					paragraphs: ctx.locationEditorial.paragraphs,
+				}
+			: undefined,
+		component_featuredCandidatesBlock: ctx.featuredPeople
+			? {
+					candidates: ctx.featuredPeople.candidates,
+					representatives: ctx.featuredPeople.representatives,
+				}
+			: { hidden: true },
 	};
 }
 

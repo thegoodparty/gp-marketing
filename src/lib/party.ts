@@ -47,3 +47,34 @@ export function classifyPartyFrom(
 export function isMajorParty(cls: PartyClass | null): boolean {
 	return cls === 'republican' || cls === 'democrat';
 }
+
+function distinctParties(raws: Array<string | null | undefined>): string[] {
+	const out: string[] = [];
+	const seen = new Set<string>();
+	for (const raw of raws) {
+		const value = raw?.trim();
+		if (!value) continue;
+		const key = value.toLowerCase();
+		if (seen.has(key)) continue;
+		seen.add(key);
+		out.push(value);
+	}
+	return out;
+}
+
+/**
+ * Every party the person is listed with, deduped, with any major-party line
+ * sorted to the front.
+ *
+ * Under fusion voting (New York) one person is nominated on several lines at
+ * once, and the order the feed sends them in carries no meaning — Chuck Schumer
+ * arrives Working Families first. Reading `[0]` therefore both mislabels him and
+ * hides the Democratic line from the eligibility check, so callers read the
+ * whole list and let this decide what leads.
+ */
+export function orderPartyNames(raws: Array<string | null | undefined>): string[] {
+	const parties = distinctParties(raws);
+	const major = parties.filter(p => isMajorParty(classifyParty(p)));
+	if (major.length === 0) return parties;
+	return [...major, ...parties.filter(p => !major.includes(p))];
+}

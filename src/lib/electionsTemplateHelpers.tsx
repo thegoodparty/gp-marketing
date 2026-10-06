@@ -42,6 +42,8 @@ export type PositionPageContext = {
 	positionHref?: string;
 	locationHref?: string;
 	race?: RaceDetail | null;
+	/** The how-to-run article's title for the guide card, resolved by the renderer; see the override's doc. */
+	guideTitle?: string | null;
 	// Used only by the position-page schema builders; optional for candidates pages.
 	pageUrl?: string;
 	/**
@@ -266,6 +268,7 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 		},
 		component_electionPositionResourcesBlock: {
 			guideHref: resolveHowToRunGuide({ officeName: ctx.officeName, race }).href,
+			guideTitle: ctx.guideTitle ?? undefined,
 		},
 		component_testimonialBlockWithLink: { stateName: ctx.stateName },
 		component_nearbyOffices: {

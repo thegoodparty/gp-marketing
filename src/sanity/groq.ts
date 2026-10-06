@@ -319,6 +319,11 @@ export const imageCtaGroq = `field_componentColor6Colors,"image":coalesce(ctaAss
 /*language=textmate*/
 export const articleSectionsGroq = `_key,_type,_type=="block"||_type=="imageContentSection"||_type=="tableGroup"=>{...},_type=="videoSection"=>{field_videoEmbedCode,field_caption},_type=="imageCta"=>{${imageCtaGroq}},_type=="ctaSection"=>{${imageCtaGroq}},_type=="inlineQuoteSection"=>{...,ref_quoteBy->},_type=="button"=>{${buttonGroq}},_type=="faqs"=>{...,list_faQs[]->{${faQGroq}}},_type=="callout"=>{...,block_summaryText[]{...,${textBlockGroq}}}`;
 /*language=textmate*/
+/** The title of one article by slug, for the position pages' guide card (see `renderElectionsPositionPage`). */
+export const articleTitleBySlugQuery = defineQuery(
+	`*[_type=="article"&&editorialOverview.field_slug==$slug][0]{"title":editorialOverview.field_editorialTitle}`,
+);
+
 export const articleQuery = defineQuery(
 	`${groqFunctions}*[_type=="article"&&editorialOverview.field_slug==$slug][0]{...,editorialOverview{...,ref_author->},relatedArticles{...,ref_stickyRelatedArticle->{${relatedArticlesGroq}},list_relatedArticles[]->{${relatedArticlesGroq}}},ctaSection{...,${imageCtaGroq}},stickySidebarCta{field_showStickySidebarCta,ctaConfig{...,${imageCtaGroq}}},editorialContentTags{"topics":list_topics[]->{...,${topicsHrefGroq}},"category":ref_catgories->{${categoryLinkGroq}}},contentSections{...,block_editorialContentSections[]{${articleSectionsGroq},${textBlockGroq}},${hrefGroq}},${articleHrefGroq}}`,
 );

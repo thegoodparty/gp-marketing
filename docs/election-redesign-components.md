@@ -398,6 +398,13 @@ block" below). Things that came out of it:
   position and candidates templates reads "Brooklyn, NY" rather than "Brooklyn, Kings, New York";
   the location pages' `[location]` (most specific place, no state) is unchanged.
 
+Revised from QA on the integration preview (Emily, 2026-10-06): **candidates are listed pledged first,
+then the unpledged with no major party, then Republicans and Democrats**, stable inside each group (the
+featured candidates block's rule). `rankPositionCandidates` in `src/lib/positionHeroCandidates.ts` orders
+the one list the hero's "On the ballot" card (first four) and the position content block (all of it) both
+read, so the two can never disagree. Before this, a pledged candidate could sit seventh in a nonpartisan
+field and never reach the hero's card.
+
 **Nearby offices** (position pages) — built as `component_nearbyOffices`, data-backed.
 
 The starting hypothesis was `component_listOfOfficesBlock`, and marketing rejected extending it

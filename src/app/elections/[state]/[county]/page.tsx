@@ -3,8 +3,8 @@ import { notFound, redirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	getCountyChildPlaces,
+	getElectionsPagePlace,
 	getPlacesByState,
-	getPlaceBySlug,
 	isDistrictMtfcc,
 	TOWN_MTFCC,
 } from '~/lib/electionsApi';
@@ -16,7 +16,6 @@ import {
 	canonicalizeCountyEquivalentName,
 	getCountySuffixLabel,
 	getStateName,
-	PLACE_RACE_COLUMNS,
 	placeToFactsCards,
 	redirectCityPlaceToFourLevelUrl,
 	resolveDefaultElectionYear,
@@ -49,13 +48,7 @@ export default async function Page({
 
 	const [counties, placeData] = await Promise.all([
 		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
-		getPlaceBySlug({
-			slug: fullSlug,
-			includeChildren: false,
-			includeRaces: true,
-			placeColumns: 'slug,name,mtfcc,countyName',
-			raceColumns: PLACE_RACE_COLUMNS,
-		}),
+		getElectionsPagePlace({ slug: fullSlug }),
 	]);
 
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === fullSlug);
@@ -188,7 +181,7 @@ export async function generateMetadata({
 	const fullSlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const [counties, placeData] = await Promise.all([
 		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
-		getPlaceBySlug({ slug: fullSlug, includeChildren: false, includeRaces: false }),
+		getElectionsPagePlace({ slug: fullSlug }),
 	]);
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === fullSlug);
 	const isDistrict = placeData != null && isDistrictMtfcc(placeData.mtfcc);

@@ -1547,9 +1547,13 @@ export type Component_illustratedColumnsBlock = {
 export type Component_featuredCandidatesBlock = {
 	_type: 'component_featuredCandidatesBlock';
 	field_heading?: string;
+	field_bodyCopy?: string;
 	featuredCandidatesBlockCallout?: {
 		field_showCallout?: boolean;
+		field_calloutTitle?: string;
 		block_calloutText?: Block_summaryText;
+		field_showPledgeLink?: boolean;
+		field_pledgeLinkLabel?: string;
 	};
 	featuredCandidatesBlockDesignSettings?: {
 		field_featuredPeople?: 'both' | 'candidates' | 'representatives';
@@ -13280,8 +13284,10 @@ export type GoodpartyOrg_homeQueryResult = {
 					_key: string;
 					_type: 'component_featuredCandidatesBlock';
 					field_heading?: string;
+					field_bodyCopy?: string;
 					featuredCandidatesBlockCallout: {
 						field_showCallout?: boolean;
+						field_calloutTitle?: string;
 						block_calloutText: Array<{
 							children?: Array<{
 								marks?: Array<string>;
@@ -13410,6 +13416,8 @@ export type GoodpartyOrg_homeQueryResult = {
 							_type: 'block';
 							_key: string;
 						}> | null;
+						field_showPledgeLink?: boolean;
+						field_pledgeLinkLabel?: string;
 					} | null;
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
@@ -37386,8 +37394,10 @@ export type Experiment_variantsByExperimentIdQueryResult = Array<{
 					_key: string;
 					_type: 'component_featuredCandidatesBlock';
 					field_heading?: string;
+					field_bodyCopy?: string;
 					featuredCandidatesBlockCallout: {
 						field_showCallout?: boolean;
+						field_calloutTitle?: string;
 						block_calloutText: Array<{
 							children?: Array<{
 								marks?: Array<string>;
@@ -37516,6 +37526,8 @@ export type Experiment_variantsByExperimentIdQueryResult = Array<{
 							_type: 'block';
 							_key: string;
 						}> | null;
+						field_showPledgeLink?: boolean;
+						field_pledgeLinkLabel?: string;
 					} | null;
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
@@ -61493,8 +61505,10 @@ export type ActiveVariantsByPageIdQueryResult = Array<{
 					_key: string;
 					_type: 'component_featuredCandidatesBlock';
 					field_heading?: string;
+					field_bodyCopy?: string;
 					featuredCandidatesBlockCallout: {
 						field_showCallout?: boolean;
+						field_calloutTitle?: string;
 						block_calloutText: Array<{
 							children?: Array<{
 								marks?: Array<string>;
@@ -61623,6 +61637,8 @@ export type ActiveVariantsByPageIdQueryResult = Array<{
 							_type: 'block';
 							_key: string;
 						}> | null;
+						field_showPledgeLink?: boolean;
+						field_pledgeLinkLabel?: string;
 					} | null;
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
@@ -85602,8 +85618,10 @@ export type GoodpartyOrg_allArticlesQueryResult = {
 					_key: string;
 					_type: 'component_featuredCandidatesBlock';
 					field_heading?: string;
+					field_bodyCopy?: string;
 					featuredCandidatesBlockCallout: {
 						field_showCallout?: boolean;
+						field_calloutTitle?: string;
 						block_calloutText: Array<{
 							children?: Array<{
 								marks?: Array<string>;
@@ -85732,6 +85750,8 @@ export type GoodpartyOrg_allArticlesQueryResult = {
 							_type: 'block';
 							_key: string;
 						}> | null;
+						field_showPledgeLink?: boolean;
+						field_pledgeLinkLabel?: string;
 					} | null;
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
@@ -109749,8 +109769,10 @@ export type CategoriesQueryResult = {
 					_key: string;
 					_type: 'component_featuredCandidatesBlock';
 					field_heading?: string;
+					field_bodyCopy?: string;
 					featuredCandidatesBlockCallout: {
 						field_showCallout?: boolean;
+						field_calloutTitle?: string;
 						block_calloutText: Array<{
 							children?: Array<{
 								marks?: Array<string>;
@@ -109879,6 +109901,8 @@ export type CategoriesQueryResult = {
 							_type: 'block';
 							_key: string;
 						}> | null;
+						field_showPledgeLink?: boolean;
+						field_pledgeLinkLabel?: string;
 					} | null;
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
@@ -133924,8 +133948,10 @@ export type TopicsQueryResult = {
 					_key: string;
 					_type: 'component_featuredCandidatesBlock';
 					field_heading?: string;
+					field_bodyCopy?: string;
 					featuredCandidatesBlockCallout: {
 						field_showCallout?: boolean;
+						field_calloutTitle?: string;
 						block_calloutText: Array<{
 							children?: Array<{
 								marks?: Array<string>;
@@ -134054,6 +134080,8 @@ export type TopicsQueryResult = {
 							_type: 'block';
 							_key: string;
 						}> | null;
+						field_showPledgeLink?: boolean;
+						field_pledgeLinkLabel?: string;
 					} | null;
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
@@ -160159,8 +160187,10 @@ export type GoodpartyOrg_contactQueryResult = {
 					_key: string;
 					_type: 'component_featuredCandidatesBlock';
 					field_heading?: string;
+					field_bodyCopy?: string;
 					featuredCandidatesBlockCallout: {
 						field_showCallout?: boolean;
+						field_calloutTitle?: string;
 						block_calloutText: Array<{
 							children?: Array<{
 								marks?: Array<string>;
@@ -160289,6 +160319,8 @@ export type GoodpartyOrg_contactQueryResult = {
 							_type: 'block';
 							_key: string;
 						}> | null;
+						field_showPledgeLink?: boolean;
+						field_pledgeLinkLabel?: string;
 					} | null;
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
@@ -184271,8 +184303,10 @@ export type GoodpartyOrg_landingPagesAndPolicyQueryResult =
 							_key: string;
 							_type: 'component_featuredCandidatesBlock';
 							field_heading?: string;
+							field_bodyCopy?: string;
 							featuredCandidatesBlockCallout: {
 								field_showCallout?: boolean;
+								field_calloutTitle?: string;
 								block_calloutText: Array<{
 									children?: Array<{
 										marks?: Array<string>;
@@ -184401,6 +184435,8 @@ export type GoodpartyOrg_landingPagesAndPolicyQueryResult =
 									_type: 'block';
 									_key: string;
 								}> | null;
+								field_showPledgeLink?: boolean;
+								field_pledgeLinkLabel?: string;
 							} | null;
 							featuredCandidatesBlockDesignSettings?: {
 								field_featuredPeople?: 'both' | 'candidates' | 'representatives';
@@ -208394,8 +208430,10 @@ export type GoodpartyOrg_electionsQueryResult = {
 					_key: string;
 					_type: 'component_featuredCandidatesBlock';
 					field_heading?: string;
+					field_bodyCopy?: string;
 					featuredCandidatesBlockCallout: {
 						field_showCallout?: boolean;
+						field_calloutTitle?: string;
 						block_calloutText: Array<{
 							children?: Array<{
 								marks?: Array<string>;
@@ -208524,6 +208562,8 @@ export type GoodpartyOrg_electionsQueryResult = {
 							_type: 'block';
 							_key: string;
 						}> | null;
+						field_showPledgeLink?: boolean;
+						field_pledgeLinkLabel?: string;
 					} | null;
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
@@ -232505,8 +232545,10 @@ export type GoodpartyOrg_candidatesQueryResult = {
 					_key: string;
 					_type: 'component_featuredCandidatesBlock';
 					field_heading?: string;
+					field_bodyCopy?: string;
 					featuredCandidatesBlockCallout: {
 						field_showCallout?: boolean;
+						field_calloutTitle?: string;
 						block_calloutText: Array<{
 							children?: Array<{
 								marks?: Array<string>;
@@ -232635,6 +232677,8 @@ export type GoodpartyOrg_candidatesQueryResult = {
 							_type: 'block';
 							_key: string;
 						}> | null;
+						field_showPledgeLink?: boolean;
+						field_pledgeLinkLabel?: string;
 					} | null;
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
@@ -256616,8 +256660,10 @@ export type GoodpartyOrg_profileQueryResult = {
 					_key: string;
 					_type: 'component_featuredCandidatesBlock';
 					field_heading?: string;
+					field_bodyCopy?: string;
 					featuredCandidatesBlockCallout: {
 						field_showCallout?: boolean;
+						field_calloutTitle?: string;
 						block_calloutText: Array<{
 							children?: Array<{
 								marks?: Array<string>;
@@ -256746,6 +256792,8 @@ export type GoodpartyOrg_profileQueryResult = {
 							_type: 'block';
 							_key: string;
 						}> | null;
+						field_showPledgeLink?: boolean;
+						field_pledgeLinkLabel?: string;
 					} | null;
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
@@ -280727,8 +280775,10 @@ export type GoodpartyOrg_allComponentsQueryResult = {
 					_key: string;
 					_type: 'component_featuredCandidatesBlock';
 					field_heading?: string;
+					field_bodyCopy?: string;
 					featuredCandidatesBlockCallout: {
 						field_showCallout?: boolean;
+						field_calloutTitle?: string;
 						block_calloutText: Array<{
 							children?: Array<{
 								marks?: Array<string>;
@@ -280857,6 +280907,8 @@ export type GoodpartyOrg_allComponentsQueryResult = {
 							_type: 'block';
 							_key: string;
 						}> | null;
+						field_showPledgeLink?: boolean;
+						field_pledgeLinkLabel?: string;
 					} | null;
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
@@ -310650,8 +310702,10 @@ export type GlobalElectionTemplateQueryResult = {
 					_key: string;
 					_type: 'component_featuredCandidatesBlock';
 					field_heading?: string;
+					field_bodyCopy?: string;
 					featuredCandidatesBlockCallout: {
 						field_showCallout?: boolean;
+						field_calloutTitle?: string;
 						block_calloutText: Array<{
 							children?: Array<{
 								marks?: Array<string>;
@@ -310780,6 +310834,8 @@ export type GlobalElectionTemplateQueryResult = {
 							_type: 'block';
 							_key: string;
 						}> | null;
+						field_showPledgeLink?: boolean;
+						field_pledgeLinkLabel?: string;
 					} | null;
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
@@ -334789,8 +334845,10 @@ export type CustomElectionTemplateByIdQueryResult = {
 					_key: string;
 					_type: 'component_featuredCandidatesBlock';
 					field_heading?: string;
+					field_bodyCopy?: string;
 					featuredCandidatesBlockCallout: {
 						field_showCallout?: boolean;
+						field_calloutTitle?: string;
 						block_calloutText: Array<{
 							children?: Array<{
 								marks?: Array<string>;
@@ -334919,6 +334977,8 @@ export type CustomElectionTemplateByIdQueryResult = {
 							_type: 'block';
 							_key: string;
 						}> | null;
+						field_showPledgeLink?: boolean;
+						field_pledgeLinkLabel?: string;
 					} | null;
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';

@@ -1,5 +1,11 @@
-import { getCandidacies, getOfficeHoldersByGeoId, getPersonsByIds, getPlaceBySlug, getRemovedPersonIds } from '~/lib/electionsApi';
-import { isElectionDateBeforeToday, PLACE_RACE_COLUMNS, resolvePlaceRaceElectionDates } from '~/lib/electionsHelpers';
+import {
+	getCandidacies,
+	getElectionsPagePlace,
+	getOfficeHoldersByGeoId,
+	getPersonsByIds,
+	getRemovedPersonIds,
+} from '~/lib/electionsApi';
+import { isElectionDateBeforeToday, resolvePlaceRaceElectionDates } from '~/lib/electionsHelpers';
 import { type NearbyOfficesTier, nearbyOfficesTiers, raceBelongsToTier } from '~/lib/nearbyOffices';
 import { classifyPartyFrom, isMajorParty, orderPartyNames } from '~/lib/party';
 import { cardAvatarUrl, pledgedFromSpine } from '~/lib/peopleProfile';
@@ -111,7 +117,7 @@ export function buildRepresentativeCards(
 }
 
 export type FeaturedPeopleDeps = {
-	getPlaceBySlug(params: { slug: string; includeRaces: boolean; placeColumns: string; raceColumns: string }): Promise<PlaceWithFacts | null>;
+	getElectionsPagePlace(params: { slug: string }): Promise<PlaceWithFacts | null>;
 	resolvePlaceRaceElectionDates(races: PlaceRace[], today?: Date): Promise<Map<string, string>>;
 	getCandidacies(params: { raceSlug: string }): Promise<CandidacyItem[]>;
 	getOfficeHoldersByGeoId(geoId: string): Promise<PersonOfficeHolder[]>;
@@ -120,7 +126,7 @@ export type FeaturedPeopleDeps = {
 };
 
 const defaultDeps: FeaturedPeopleDeps = {
-	getPlaceBySlug,
+	getElectionsPagePlace,
 	resolvePlaceRaceElectionDates,
 	getCandidacies,
 	getOfficeHoldersByGeoId,
@@ -192,12 +198,7 @@ async function mapConcurrently<T, R>(items: T[], limit: number, fn: (item: T) =>
 
 async function resolveTierPlace(tier: NearbyOfficesTier, deps: FeaturedPeopleDeps): Promise<PlaceWithFacts | null> {
 	for (const slug of tier.slugs) {
-		const place = await deps.getPlaceBySlug({
-			slug,
-			includeRaces: true,
-			placeColumns: 'slug,name,state,geoId',
-			raceColumns: PLACE_RACE_COLUMNS,
-		});
+		const place = await deps.getElectionsPagePlace({ slug });
 		if (place) return place;
 	}
 	return null;
@@ -219,8 +220,10 @@ async function resolveTierPlace(tier: NearbyOfficesTier, deps: FeaturedPeopleDep
  * `tx/harris-county/houston`), resolved to election-api places the same way
  * nearby offices does it. Candidates come from the races through
  * `/v1/candidacies?raceSlug=`; representatives from `/v1/officeholders?geoId=`
- * with the page's own place's geo id only. The pledge flag and party evidence
- * come from the person rows, exactly as the `/people` profile cards read them.
+ * for every tier's place, so a city page also carries the county's and the
+ * state's current officials (Emily, 2026-10-06), each named with its own tier's
+ * place. The pledge flag and party evidence come from the person rows, exactly
+ * as the `/people` profile cards read them.
  */
 export async function getFeaturedPeople(
 	params: { placeSlug: string; locationLevel: FeaturedLocationLevel; today?: Date },
@@ -234,6 +237,12 @@ export async function getFeaturedPeople(
 
 	const today = params.today ?? new Date();
 	const placeContext: PlaceContext = { name: place.name, state: place.state, level: params.locationLevel };
+	// Officials above the page are named with their own tier's place, so a county
+	// official on a city page reads "Harris County, TX", not the city.
+	const tierContexts: PlaceContext[] = places.map((tierPlace, index) => {
+		const level = tiers[index]?.level;
+		return index === 0 || !tierPlace || !level ? placeContext : { name: tierPlace.name, state: tierPlace.state, level };
+	});
 	const tierRaces = await Promise.all(
 		tiers.map(async (tier, index) => {
 			const races = places[index]?.Races ?? [];
@@ -249,25 +258,27 @@ export async function getFeaturedPeople(
 	const selectedRaces = eligibleRaces.slice(0, FEATURED_RACE_BUDGET);
 	const datedRacesCovered = eligibleRaces.filter(({ electionDate }) => electionDate).every(entry => selectedRaces.includes(entry));
 
-	const [candidaciesByRace, officeholders, removedPersonIds] = await Promise.all([
+	const [candidaciesByRace, officeholdersByTier, removedPersonIds] = await Promise.all([
 		mapConcurrently(selectedRaces, CONCURRENT_RACE_REQUESTS, async ({ race, electionDate }) =>
 			(await deps.getCandidacies({ raceSlug: race.slug })).map(candidacy => ({ candidacy, race, electionDate })),
 		),
-		place.geoId ? deps.getOfficeHoldersByGeoId(place.geoId) : Promise.resolve([]),
+		Promise.all(places.map(async tierPlace => (tierPlace?.geoId ? deps.getOfficeHoldersByGeoId(tierPlace.geoId) : []))),
 		deps.getRemovedPersonIds(),
 	]);
 	const candidacies = candidaciesByRace.flat();
 
 	const personIds = [
 		...candidacies.map(({ candidacy }) => candidacy.personId),
-		...officeholders.map(oh => oh.personId),
+		...officeholdersByTier.flat().map(oh => oh.personId),
 	].filter((id): id is string => Boolean(id));
 	const persons = personIds.length > 0 ? await deps.getPersonsByIds(personIds) : [];
 	const personsById = new Map(persons.map(person => [person.id.toLowerCase(), person]));
 
 	return {
 		candidates: buildCandidateCards(candidacies, personsById, placeContext, removedPersonIds),
-		representatives: buildRepresentativeCards(officeholders, personsById, placeContext, removedPersonIds),
+		representatives: officeholdersByTier.flatMap((officeholders, index) =>
+			buildRepresentativeCards(officeholders, personsById, tierContexts[index] ?? placeContext, removedPersonIds),
+		),
 		candidatesComplete: datedRacesCovered,
 	};
 }

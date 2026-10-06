@@ -8861,6 +8861,13 @@
           },
           "optional": true
         },
+        "field_bodyCopy": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
         "featuredCandidatesBlockCallout": {
           "type": "objectAttribute",
           "value": {
@@ -8873,11 +8880,32 @@
                 },
                 "optional": true
               },
+              "field_calloutTitle": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
               "block_calloutText": {
                 "type": "objectAttribute",
                 "value": {
                   "type": "inline",
                   "name": "block_summaryText"
+                },
+                "optional": true
+              },
+              "field_showPledgeLink": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "boolean"
+                },
+                "optional": true
+              },
+              "field_pledgeLinkLabel": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
                 },
                 "optional": true
               }

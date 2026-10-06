@@ -80,6 +80,14 @@ describe('IllustratedColumnsBlockSection', () => {
 		expect(html.match(/data-component="IllustratedColumn"/g)).toHaveLength(3);
 	});
 
+	test('every column link is pinned to the foot of its column so a row of links shares a baseline', () => {
+		const html = renderToStaticMarkup(<IllustratedColumnsBlockSection {...section} />);
+		const links = html.match(/<a [^>]*href="https:\/\/[^"]+"[^>]*>/g) ?? [];
+
+		expect(links).toHaveLength(3);
+		for (const link of links) expect(link).toContain('mt-auto');
+	});
+
 	test('the Studio column layout drives the row width, and three is the default', () => {
 		const three = renderToStaticMarkup(<IllustratedColumnsBlockSection {...section} />);
 		const two = renderToStaticMarkup(

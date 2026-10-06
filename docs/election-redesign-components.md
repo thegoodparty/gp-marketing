@@ -32,7 +32,7 @@ The audit should produce, for each item on the list, one of:
 - **Already covered.** An existing block does this. Name it.
 - **Extend.** An existing block does this with one added field or option. Name the
   block and the field. This is a much smaller change than a new block, and is
-  covered by `docs/adding-a-component.md` rather than the `new-component` skill.
+  covered by the `update-component` skill rather than the `new-component` skill.
 - **New block.** Nothing covers it. Say which of the two kinds it is (see below).
 
 Unverified starting hypotheses, for the audit to confirm or reject rather than
@@ -47,7 +47,7 @@ trust:
 | Nearby offices | ~~`component_listOfOfficesBlock`~~ — audited, rejected. Built as `component_nearbyOffices`; see below |
 | "Who's currently in office" | `component_listOfOfficesBlock` |
 | Candidates/Representatives rows | `component_candidatesBlock` |
-| Featured candidates/Representatives | `component_candidatesBlock` |
+| Featured candidates/Representatives | ~~`component_candidatesBlock`~~ — audited, rejected. Built as `component_featuredCandidatesBlock`; see below |
 | Header_* (all four position headers) | `component_electionsPositionHero` |
 | Siderail | the sidebar inside `component_electionsPositionContentBlock` |
 | About [Position Name] | `component_electionsPositionContentBlock` |
@@ -160,6 +160,32 @@ Decisions that came out of it:
   it, so all three position routes get it without touching their `page.tsx`. The candidates
   template does not populate it, and the block hides itself wherever the override is empty.
 - **The empty state is "render nothing"**, pinned by `src/ui/nearbyOffices.test.tsx`.
+- **Each row shows its "# of independents running"** (design feedback round, Emily, 2026-10-06;
+  frames [desktop](https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2156-30518),
+  [mobile](https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2139-21952)):
+  the number beside the Heart & Star badge in a middle column on desktop, the badge and
+  "2 independents running" under the position on the phone card. It is the same figure the
+  offices list draft (PR #304) shows for a row: the candidates in the row's race who have taken
+  the Pledge by `pledgedFromSpine`, counted once per person. Position pages had no candidate
+  fetch, so `withPledgedCounts` in `src/lib/nearbyOffices.ts` asks `/v1/candidacies?raceSlug=`
+  once per row (at most eight) plus one person lookup. Only a count above zero is drawn: a zero
+  and an unknown look the same (see the counts section below), so a row never publishes
+  "0 independents" off a flag that may be unwritten, and a race whose request fails shows
+  nothing. The row grid was realigned to the new frame, which shares the offices list's
+  geometry (123px type column, 16px gaps, 14px inset, 60px row floor). `OfficeItem` gained
+  `raceSlug` and `pledgedCount` with the same names and wording as #304, so that draft's next
+  merge of `develop` resolves trivially.
+- **The sentence under the heading is an editable string field**, `field_description`, and
+  the frame copy ("Explore offices coming up for election near you:") is the component's
+  fallback, so documents saved before the field existed render it too (Emily, 2026-10-06).
+- **The heading defaults to the page's own place** (Emily, 2026-10-06): "More offices in Bay
+  City, Michigan", or just "More offices in Michigan" on a state position page, where
+  `[County or City]` and `[State]` are the same name and the token form would double it. The
+  route computes it (`heading` on the override) and an editor's Heading field, with tokens,
+  wins over it. There is no two-letter state token, so the frame's "MI" is "Michigan".
+- **Noted and not acted on** (2026-10-06): "Election Date" stays sentence case; the mobile
+  frame places the count both above and below the date on different cards, and the block
+  follows the above-the-date cards, as the offices list does.
 
 Waiting on data: races are attached to places, and federal races are not attached to any place,
 so a Federal tag can appear only once election-api exposes them per place. True proximity
@@ -218,10 +244,12 @@ Two things from it that affect other blocks in the batch:
   the row to the layout. Marketing chose to keep them separate controls (Emily, 2026-09-25): the
   existing `field_showSocialProof` toggle now works, and either layout can carry the row.
 
-This block is the batch's one exception to the draft-and-batch rule above, because it is not
-actually on a live template. It sits only on `goodpartyOrg_allComponents` (the `/all` page), so
-shipping it changes one internal showcase page and nothing a voter sees. Re-check that with a
-query before assuming it still holds.
+When this shipped (2026-09-25) the block sat only on `goodpartyOrg_allComponents` (the `/all`
+page), so it was the batch's one exception to the draft-and-batch rule: nothing a voter sees
+changed. That no longer holds. By 2026-10-05 editors had placed it on three live landing pages
+(`check-voter-registration`, `find-polling-place`, `request-mail-in-ballot`), so a change to it
+now reaches those pages on deploy. Run the placement query in the `update-component` skill
+before assuming anything about where a block is placed.
 
 Noted and not acted on: both full-width frames label the search box "Enter your street address",
 and the body copy says "Enter your address". The search resolves cities and counties only, so the
@@ -262,6 +290,12 @@ Decisions that came out of it:
   as the editorial block does); the column heading is `subtitle-1` (24 → 20, matching both frames) and the
   sentence is `body-2`. Measured at 1440 and 390 before the PR.
 - **The empty state is "render nothing"**, pinned by `src/PageSections/illustratedColumnsBlockSection.test.tsx`.
+- **Links share a baseline across a row** (Emily, 2026-10-05, from the revised frames 2188-38792 and
+  2188-38505). The link is pinned to the foot of its column with `mt-auto`, so a one-line sentence next to a
+  two-line one no longer leaves the links at different heights. The same round tightened the phone layout to
+  the mobile frame: 24px between the intro and the first column, 8px between picture, heading, sentence and
+  link inside a stacked column, and 48px clear on each side of the hairline between stacked columns. Desktop
+  spacing was already on the frame and did not move.
 
 The block reads `tokens` like the other content blocks, so the location templates fill `[Location]` in the
 heading, intro, column text and link labels.
@@ -301,6 +335,51 @@ Decisions that came out of it and affect other blocks in the batch:
 - **Default text sizes do not exist here.** `typography.css` clears Tailwind's `--text-*` scale, so
   `text-sm` and `text-base` are silently no-ops; a 14px label has to be `text-[0.875rem]`. The Near
   You block's listbox already did this, which is how it was noticed.
+**Featured candidates/Representatives** (location pages) — built as
+`component_featuredCandidatesBlock`, data-backed. The Figma frame is named "Blog Block" on desktop and
+"Carousel Block" on mobile: a heading with prev/next arrows opposite it, a blue callout explaining the
+Heart & Star badge, and a side-scrolling row of white portrait cards (200px round photo with the badge
+over its corner, name, office, "City, ST", a dark "View profile" pill), pagination pills on the phone.
+
+`component_candidatesBlock` was the starting hypothesis and is the wrong base: it is a two-column grid
+of wide horizontal cards with a party line and a Show More button, it is live on the position
+candidates template and rendered twice on every `/people` profile, and it has nowhere to put the
+callout. The carousel chrome (`PrevButton`, `NextButton`, `CarouselIndicator`) and the badge (`Logo`)
+were reused; the card is new (`FeaturedCandidateCard`).
+
+Decisions that came out of it (Emily, 2026-09-29):
+
+- **One block for candidates and representatives**, with a Who To Feature radio in Design Settings
+  (both / candidates only / representatives only). Nothing on the page shows which was picked. A
+  document saved without the field renders both.
+- **The pledge callout is part of the block**, with its copy as a rich text field in Studio and a
+  show/hide toggle. There is no `/pledge` page on the live site today, so the default copy carries no
+  link; the field description says to add one when the page exists.
+- **Order: pledged first, then unpledged people with no major party, then everyone else.** Inside a
+  group, candidates by soonest election, then representatives by name. `rankFeaturedPeople` in
+  `src/lib/featuredCandidates.ts` is the rule. Capped at eight, in the section and in the ranking.
+- **The pledge is read by the same rule the `/people` cards use.** `pledgedFromSpine` (the spine
+  flag, confirmed running, no major party in the evidence) is now exported from
+  `src/lib/peopleProfile.ts` for it, so a badge in the carousel can never disagree with the person's
+  own profile. The redesign doc's earlier line that the flag was unpopulated was stale; see the
+  corrected counts section below.
+- **The seam is `featuredPeople` on `ElectionsIndexPageContext`**, carrying two lists (candidates and
+  representatives) so the Studio setting can choose at render time. `renderElectionsIndexPage`
+  fetches it with `getFeaturedPeople`, so every location route feeds the block without touching its
+  `page.tsx`. Absent, the override is `{ hidden: true }`.
+- **Where the people come from.** Candidates: the place's own upcoming races (same level filter as
+  its offices list), each asked through `/v1/candidacies?raceSlug=`, soonest election first, within
+  a budget of sixteen races (`FEATURED_RACE_BUDGET`), six requests at a time. Representatives:
+  `/v1/officeholders?geoId=` with the place's own `geoId` (now on `PlaceItem`; ask for it with
+  `placeColumns`), current terms only. Both lists then read the person rows in one batch for the
+  pledge flag, party evidence, photo and canonical slug, and honour the removed-people list the
+  profiles honour.
+- **The empty state is "render nothing"**, pinned by
+  `src/PageSections/featuredCandidatesBlockSection.test.tsx`.
+
+Waiting on data: the race budget means a state page whose legislature has more seats than sixteen on
+one ballot only features candidates from the first sixteen, and the "pledged first" rule cannot see
+the rest. The place-and-year aggregate the counts section asks for would remove the budget.
 
 ## The shared election counts, as marketing defined them
 
@@ -324,9 +403,11 @@ election data team.
   race where we hold candidate data, including races whose filing window is still
   open.
 - **Zero versus unknown.** Show 0 when the data genuinely says zero; hide the element
-  when there is no data. These differ: `Person.isPledged` is unpopulated across
-  production today (see `docs/person-spine-pledge-and-claim-linkage-handoff.md`), so a
-  zero pledge count is a no-data zero and must not be published as "0 independents".
+  when there is no data. These differ: `Person.isPledged` was unpopulated across
+  production until mid-September 2026 (see the superseded note in
+  `docs/person-spine-pledge-and-claim-linkage-handoff.md`); it is being written now, but
+  re-measure coverage before publishing a pledge count, because a zero from a sparsely
+  written flag is a no-data zero and must not be published as "0 independents".
 - **Editor versus data.** The label is editable in Sanity, with location tokens; the
   number always comes from the data. These blocks live on global templates, so a
   number typed in Studio would otherwise freeze the same figure across thousands of
@@ -465,12 +546,14 @@ Apply these across the whole batch so the blocks stay consistent.
 Several are marketing's own, from the spreadsheet. Do not guess at these; they change
 how many blocks get built.
 
-- **Featured candidates vs Featured representatives:** one block or two? The pledge
-  block differs between them. Leaning two, for editor clarity (Emily).
+- ~~**Featured candidates vs Featured representatives:** one block or two?~~ Settled:
+  one block with a Studio dropdown (Emily, 2026-09-29); see the audit result above.
 - **Candidates/Representatives rows vs "Who's currently in office":** leaning
   separate blocks because the data differs (Emily).
-- **Badge callout:** standalone block, or part of the Featured
-  candidates/representatives block?
+- ~~**Badge callout:** standalone block, or part of the Featured
+  candidates/representatives block?~~ Settled: part of the featured block, with
+  editable copy (Emily, 2026-09-29). The position pages' badge callout, if it is still
+  wanted there, is a separate question.
 - **Find more elections vs the other search block:** is the only difference the
   social proof line at the bottom? If so this is one block with an option, not two.
 - **The four position headers:** per the settled decision above, these should be one
@@ -492,6 +575,49 @@ Two consequences worth stating to whoever is waiting on the work:
   per branch. **Code must reach production before the template edit that uses it**,
   or the template references a block production does not have. See
   `docs/content-vs-code.md`.
+
+## Updating a block after design feedback
+
+Once a block is built, feedback rounds change it, and a change is a different job from a
+build. The **`update-component`** skill owns it. What makes it different, in short:
+
+- **The code can be in three places at once.** On `develop`, in a draft PR waiting for its
+  page batch, and in a second PR stacked on the first. The change has to land in the most
+  downstream one, or two PRs fight over the same file. Several drafts are also far behind
+  `develop`; bring it in with a merge before changing anything.
+- **Who is affected is a query, not a memory.** Editors place blocks on templates and landing
+  pages between rounds, so this doc's notes about where a block sits go stale (the Near You
+  note above is one example). The skill runs the placement query against both the published
+  and the drafts perspective before deciding whether the PR can merge or must park.
+- **Existing pages have no value for a new field.** The component's fallback is what they
+  render, and it must match today's render unless the change is meant to alter the default.
+- **Tests pin earlier decisions.** A failing assertion may be guarding a rule from an earlier
+  round that this feedback did not revisit. Read it before changing it.
+
+### Placement snapshot, 2026-10-05
+
+Where each block's code lives and what carries it in Sanity, from the placement query
+(published view; the drafts view added one hit, noted). Re-run the query rather than trusting
+this table; it is here to orient, and to show the shape of the answer.
+
+| Block | Code | Placed on (published) | An update ships as |
+| --- | --- | --- | --- |
+| Location landing page hero | develop + draft PR #300 | all five Location globals | into #300, stays draft |
+| List of offices | develop + draft PR #304 (base still points at merged #303) | all five Location globals | into #304, stays draft |
+| Location facts | develop | State / County / City / District globals | draft and batch |
+| Elections index | develop | Location globals, Person Profile global | draft and batch |
+| Position hero | develop + draft PR #320 | Position and Position Candidates globals | into #320, stays draft |
+| Position content block | develop + draft PR #327 (stacked on #320) | Position global | into #327, stays draft |
+| Candidates block | develop | Position Candidates global, every `/people` profile | draft and batch |
+| Elections search hero | develop + draft PR #351 | the `/elections` landing page | into #351 |
+| Featured cities | develop + draft PR #307 | the `/elections` landing page | into #307 |
+| Elections near you | develop | `/all` plus three landing pages (see the note above) | ready to merge, list the pages |
+| Election position resources | develop | nowhere published; a **draft** of the Position Page global adds it | ready to merge, tell the editor holding that draft |
+| Nearby offices | develop | nowhere | ready to merge |
+| Featured candidates | develop | nowhere | ready to merge |
+| Illustrated columns | develop | nowhere | ready to merge |
+| Testimonial block with link | develop | nowhere | ready to merge |
+| Location editorial | develop | nowhere (hidden on location pages by design) | ready to merge |
 
 ## The build loop
 
@@ -519,7 +645,7 @@ audit to confirm; `data` means it needs the `SectionOverrides` pass.
 | Local election rows block | location | data |
 | Find elections container | location | data |
 | Featured cities carousel | location | data |
-| Featured candidates/Representatives | location | data |
+| Featured candidates/Representatives | location | data (audited — built, see above) |
 | More about location container | location | data (audited — built, see above) |
 | Header_Pre-Filing | position | data |
 | Header_Mid-Election | position | data |
@@ -544,7 +670,8 @@ audit to confirm; `data` means it needs the `SectionOverrides` pass.
 
 ## Kickoff prompt
 
-Paste this to start a session on one of these components:
+Paste this to start a session on one of these components. For a revision to a block
+that already exists, use the kickoff prompt in the `update-component` skill instead.
 
 ```
 We're building page sections for the election location and position page redesign.

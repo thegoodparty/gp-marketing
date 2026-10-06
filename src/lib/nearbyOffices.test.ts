@@ -5,9 +5,12 @@ import {
 	nearbyOfficesTiers,
 	officeLevelLabel,
 	selectNearbyOffices,
+	withPledgedCounts,
 	type NearbyOfficesTier,
 } from '~/lib/nearbyOffices';
-import type { PlaceRace, PlaceWithFacts } from '~/types/elections';
+import type { CandidacyItem, PlaceRace, PlaceWithFacts } from '~/types/elections';
+import type { PersonItem } from '~/types/people';
+import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
 
 const today = new Date('2026-09-24T12:00:00');
 
@@ -118,10 +121,11 @@ describe('selectNearbyOffices', () => {
 		expect(offices[0]?.type).toBe('Local');
 	});
 
-	test('links each row to its position page under the tier place', () => {
-		const offices = selectNearbyOffices([race('tx/houston/controller')], { tier, today });
+	test('links each row to its position page under the tier place and carries the race slug', () => {
+		const offices = selectNearbyOffices([race('TX/Houston/Controller')], { tier, today });
 
 		expect(offices[0]?.href).toBe('/elections/tx/harris-county/houston/position/controller');
+		expect(offices[0]?.raceSlug).toBe('tx/houston/controller');
 	});
 
 	test('drops a race listed twice under the same slug', () => {
@@ -137,11 +141,13 @@ describe('getNearbyOffices', () => {
 	const depsFor = (places: Record<string, PlaceWithFacts | null>, calls: string[] = []) => ({
 		calls,
 		deps: {
-			getPlaceBySlug: async ({ slug }: { slug: string }) => {
+			getElectionsPagePlace: async ({ slug }: { slug: string }) => {
 				calls.push(slug);
 				return await Promise.resolve(places[slug] ?? null);
 			},
 			resolvePlaceRaceElectionDates: async () => await Promise.resolve(new Map<string, string>()),
+			getCandidacies: async () => await Promise.resolve([]),
+			getPersonsByIds: async () => await Promise.resolve([]),
 		},
 	});
 
@@ -199,5 +205,100 @@ describe('getNearbyOffices', () => {
 		const { deps } = depsFor({});
 
 		expect(await getNearbyOffices({ placeSlug: 'tx/harris-county/houston', today }, deps)).toEqual([]);
+	});
+});
+
+describe('withPledgedCounts', () => {
+	const PLEDGED_ID = '11111111-1111-4111-8111-111111111111';
+	const SECOND_PLEDGED_ID = '22222222-2222-4222-8222-222222222222';
+	const DEMOCRAT_ID = '33333333-3333-4333-8333-333333333333';
+	const UNPLEDGED_ID = '44444444-4444-4444-8444-444444444444';
+
+	const office = (raceSlug: string): OfficeItem => ({
+		id: raceSlug,
+		type: 'Local',
+		position: raceSlug.split('/').pop() ?? '',
+		nextElectionDate: '2026-11-03',
+		href: `/elections/tx/harris-county/houston/position/${raceSlug.split('/').pop()}`,
+		raceSlug,
+	});
+	const candidacy = (id: string, personId: string | null, party = 'Independent'): CandidacyItem => ({ id, personId, party });
+	const personRow = (id: string, overrides: Partial<PersonItem> = {}): PersonItem =>
+		({ id, slug: `person-${id.slice(0, 8)}`, firstName: 'First', lastName: 'Last', isPledged: true, ...overrides }) as PersonItem;
+
+	const depsFor = (candidaciesByRace: Record<string, CandidacyItem[]>, persons: PersonItem[], calls: string[] = []) => ({
+		calls,
+		deps: {
+			getCandidacies: async ({ raceSlug }: { raceSlug: string }) => {
+				calls.push(`candidacies:${raceSlug}`);
+				return await Promise.resolve(candidaciesByRace[raceSlug] ?? []);
+			},
+			getPersonsByIds: async (ids: string[]) => {
+				calls.push(`persons:${ids.length}`);
+				return await Promise.resolve(persons.filter(person => ids.includes(person.id)));
+			},
+		},
+	});
+
+	/** The same rule as every pledge badge: the person's flag, and no major-party evidence, counted once per person. */
+	test('counts each race\'s pledged candidates once per person and leaves out everyone else', async () => {
+		const { deps, calls } = depsFor(
+			{
+				'tx/houston/mayor': [
+					candidacy('c-1', PLEDGED_ID),
+					candidacy('c-2', PLEDGED_ID),
+					candidacy('c-3', SECOND_PLEDGED_ID),
+					candidacy('c-4', DEMOCRAT_ID, 'Democratic'),
+					candidacy('c-5', UNPLEDGED_ID),
+					candidacy('c-6', null),
+				],
+				'tx/houston/controller': [candidacy('c-7', SECOND_PLEDGED_ID)],
+			},
+			[personRow(PLEDGED_ID), personRow(SECOND_PLEDGED_ID), personRow(DEMOCRAT_ID), personRow(UNPLEDGED_ID, { isPledged: false })],
+		);
+
+		const offices = await withPledgedCounts([office('tx/houston/mayor'), office('tx/houston/controller'), office('tx/houston/clerk')], deps);
+
+		expect(offices.map(o => o.pledgedCount)).toEqual([2, 1, undefined]);
+		expect(calls).toEqual(['candidacies:tx/houston/mayor', 'candidacies:tx/houston/controller', 'candidacies:tx/houston/clerk', 'persons:6']);
+	});
+
+	test('a race with nobody pledged, or whose candidates could not be read, gets no count rather than a zero', async () => {
+		const { deps } = depsFor({ 'tx/houston/mayor': [candidacy('c-1', UNPLEDGED_ID)] }, [personRow(UNPLEDGED_ID, { isPledged: false })]);
+
+		const offices = await withPledgedCounts([office('tx/houston/mayor'), office('tx/houston/clerk')], deps);
+
+		expect(offices.every(o => !('pledgedCount' in o))).toBe(true);
+	});
+
+	test('asks nothing when no row carries a race slug', async () => {
+		const { deps, calls } = depsFor({}, []);
+
+		await withPledgedCounts([{ ...office('tx/houston/mayor'), raceSlug: undefined }], deps);
+
+		expect(calls).toEqual([]);
+	});
+
+	test('getNearbyOffices attaches the counts to the rows it returns', async () => {
+		const cityPlace: PlaceWithFacts = {
+			id: 'p',
+			name: 'Houston',
+			slug: 'tx/harris-county/houston',
+			state: 'TX',
+			Races: [race('tx/houston/mayor'), race('tx/houston/controller')],
+		};
+		const { deps } = depsFor({ 'tx/houston/controller': [candidacy('c-1', PLEDGED_ID)] }, [personRow(PLEDGED_ID)]);
+
+		const offices = await getNearbyOffices(
+			{ placeSlug: 'tx/harris-county/houston', currentRaceSlug: 'tx/houston/mayor', today },
+			{
+				...deps,
+				getElectionsPagePlace: async () => await Promise.resolve(cityPlace),
+				resolvePlaceRaceElectionDates: async () => await Promise.resolve(new Map<string, string>()),
+			},
+		);
+
+		expect(offices).toHaveLength(1);
+		expect(offices[0]?.pledgedCount).toBe(1);
 	});
 });

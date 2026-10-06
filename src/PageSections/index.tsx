@@ -60,6 +60,8 @@ import { NearbyOfficesSection } from '~/PageSections/NearbyOfficesSection';
 
 import { IllustratedColumnsBlockSection } from '~/PageSections/IllustratedColumnsBlockSection';
 
+import { FeaturedCandidatesBlockSection } from '~/PageSections/FeaturedCandidatesBlockSection';
+
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
 
 export type { TokenMap };
@@ -137,7 +139,27 @@ export type SectionOverrides = {
 		availableYears?: number[];
 		offices?: import('~/ui/ListOfOfficesBlock').OfficeItem[];
 	};
+	component_featuredCandidatesBlock?: {
+		/**
+		 * The candidates running in the page's own races and the people who
+		 * currently hold its offices, as two lists so the block's Studio setting
+		 * (candidates / representatives / both) can choose at render time. Only the
+		 * location page routes populate this, through `getFeaturedPeople`; the
+		 * section ranks pledged people first and caps at eight, and with nobody to
+		 * show it renders nothing.
+		 */
+		candidates?: import('~/lib/featuredPeople').FeaturedPersonCard[];
+		representatives?: import('~/lib/featuredPeople').FeaturedPersonCard[];
+		/** When true the section renders nothing. */
+		hidden?: boolean;
+	};
 	component_nearbyOffices?: {
+		/**
+		 * The heading the page computes for itself, used when the editor leaves the
+		 * Heading field empty: "More offices in Bay City, Michigan", or just the state
+		 * on a state position page, where the place and the state are the same name.
+		 */
+		heading?: string;
 		/**
 		 * The other upcoming positions near the one on the page, already picked and
 		 * ordered (same place first, else one level up; capped at eight). Only the
@@ -698,7 +720,18 @@ export function PageSections(props: Props) {
 								<IllustratedColumnsBlockSection {...section} tokens={props.tokens} />
 							</Boundary>
 						);
-					default:
+					case 'component_featuredCandidatesBlock': {
+					const featuredOverride = props.sectionOverrides?.component_featuredCandidatesBlock;
+					if (featuredOverride?.hidden) {
+						return <Fragment key={section._key} />;
+					}
+					return (
+						<Boundary key={section._key} componentName='Featured Candidates Block'>
+							<FeaturedCandidatesBlockSection {...section} tokens={props.tokens} featuredOverride={featuredOverride} />
+						</Boundary>
+					);
+				}
+				default:
 						console.warn('unknown section._type', section['_type']);
 						return <Fragment key={`unknown section._type' ${i}`} />;
 				}

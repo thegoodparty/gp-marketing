@@ -11,6 +11,8 @@ const ALLOWED_EMBED_HOSTS = [
 	'player.vimeo.com',
 	'calendly.com',
 	'capture.navattic.com',
+	'voteamerica.org',
+	'voteamerica.com',
 ];
 
 function isAllowedUrl(raw: string): boolean {
@@ -26,7 +28,7 @@ type EmbedResult =
 	| { type: 'iframe'; src: string }
 	| { type: 'html'; sanitized: string };
 
-function parseEmbed(html: string, DOMPurify: typeof import('dompurify').default): EmbedResult | null {
+export function parseEmbed(html: string, DOMPurify: typeof import('dompurify').default): EmbedResult | null {
 	const doc = new DOMParser().parseFromString(html, 'text/html');
 
 	const hubspot = doc.querySelector('.meetings-iframe-container[data-src]');
@@ -39,6 +41,18 @@ function parseEmbed(html: string, DOMPurify: typeof import('dompurify').default)
 	if (calendly) {
 		const src = calendly.getAttribute('data-url')!;
 		if (isAllowedUrl(src)) return { type: 'iframe', src };
+	}
+
+	// VoteAmerica's snippet is a script plus a placeholder div; the script (which we strip) would
+	// build this same iframe URL, so we build it ourselves from the placeholder's attributes.
+	const voteAmerica = doc.querySelector('.voteamerica-embed');
+	const subscriber = voteAmerica?.getAttribute('data-subscriber');
+	const tool = voteAmerica?.getAttribute('data-tool');
+	if (subscriber && tool) {
+		return {
+			type: 'iframe',
+			src: `https://www.voteamerica.org/embed/${encodeURIComponent(tool)}/?subscriber=${encodeURIComponent(subscriber)}`,
+		};
 	}
 
 	const iframe = doc.querySelector('iframe[src]');

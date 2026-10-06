@@ -10,7 +10,7 @@ const meta: Meta<typeof IllustratedColumnsBlock> = {
 	parameters: {
 		design: {
 			type: 'figma',
-			url: 'https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2032-21613',
+			url: 'https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2188-38792',
 		},
 	},
 };
@@ -90,6 +90,18 @@ export const WrappedRow: Story = {
 		...Default.args,
 		columns: '3',
 		items: [registration, polling, mailIn, deadlines, registration, polling],
+	},
+};
+
+const longPolling: IllustratedColumnProps = {
+	...polling,
+	description: <p>Learn where to go to vote in person, what to bring with you, and when the polls open and close on election day.</p>,
+};
+
+export const UnevenSentences: Story = {
+	args: {
+		...Default.args,
+		items: [registration, longPolling, mailIn],
 	},
 };
 

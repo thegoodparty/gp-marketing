@@ -55,10 +55,12 @@ const DEV_PEOPLE: Record<
 		last: string;
 		partyNames?: string[];
 		isPledged?: boolean;
+		/** Only A carries a date, so the other pledged fixtures show the row without its "Signed on" line. */
+		pledgedAt?: string;
 		confirmedCandidate?: string;
 	}
 > = {
-	'allen-slagle-74eee01a': { state: 'A', first: 'Allen', last: 'Slagle' },
+	'allen-slagle-74eee01a': { state: 'A', first: 'Allen', last: 'Slagle', pledgedAt: '2026-01-01' },
 	'tracy-good-ecff49d3': { state: 'B', first: 'Tracy', last: 'Good' },
 	'susan-overman-ad914b82': { state: 'C', first: 'Susan', last: 'Overman' },
 	'kim-byrd-b77f912d': { state: 'D', first: 'Kim', last: 'Byrd' },
@@ -221,7 +223,7 @@ function richExperience(persona: PersonPersona): ExperienceItem[] {
 	return rows;
 }
 
-function relatedCards(prefix: string, count: number, empoweredEvery = 3): RelatedPersonCard[] {
+function relatedCards(prefix: string, count: number, tag: (index: number) => string | null, empoweredEvery = 3): RelatedPersonCard[] {
 	const NAMES = ['Garrett Borton', 'Nathan Todd', 'Don Taylor', 'Henry Nessul', 'Vera Huber', 'Gilian Sears', 'Cheri Steinmetz', 'Eric Barlow', 'Marcia Bean', 'Lori Smallwood', 'Serena Lipp', 'Abby Angelos'];
 	// Realistic party mix, but ONLY non-partisan/independent people can be
 	// GoodParty-empowered — a Republican/Democrat card must never show the
@@ -242,6 +244,8 @@ function relatedCards(prefix: string, count: number, empoweredEvery = 3): Relate
 			href: `/people/${prefix}-${i}`,
 			isEmpowered: !isMajorParty && i % empoweredEvery === 0,
 			isPledged: !isMajorParty && i % 4 === 2,
+			majorParty: isMajorParty,
+			tag: tag(i),
 			avatarUrl: null,
 		};
 	});
@@ -286,6 +290,7 @@ export function getDevPersonProfileView(slug: string): PersonProfileView | null 
 		lastName: entry.last,
 		fullName: name,
 		...(entry.isPledged === undefined ? {} : { isPledged: entry.isPledged }),
+		...(entry.pledgedAt === undefined ? {} : { pledgedAt: entry.pledgedAt }),
 		...(entry.confirmedCandidate === undefined ? {} : { confirmedCandidate: entry.confirmedCandidate }),
 		// The shared matrix runs its candidacies for a different office (Mayor)
 		// than it holds (city council), which is fine for state/gating tests but
@@ -342,8 +347,10 @@ export function getDevPersonProfileView(slug: string): PersonProfileView | null 
 		recentExperience: richExperience(persona),
 		// Running personas get "Other candidates"; the Figma "past" mocks (G/H) are
 		// the tallest frames and also carry this section, so include it there too.
-		otherCandidates: running || persona === 'past' ? relatedCards('other-candidate', 5) : [],
-		nearbyOfficials: relatedCards('nearby-official', 6),
+		// Other candidates share the subject's race, so one district for all of
+		// them; nearby officials hold different seats, so one ward each.
+		otherCandidates: running || persona === 'past' ? relatedCards('other-candidate', 5, () => 'District 5') : [],
+		nearbyOfficials: relatedCards('nearby-official', 6, i => `Ward ${i + 1}`),
 		voterDensity: richVoterDensity(),
 		electionsIndex: richElectionsIndex(),
 		officeAddress: ['123 Capitol Avenue', 'Suite 200', 'Cheyenne, WY 82001'],

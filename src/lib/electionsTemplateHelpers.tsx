@@ -12,12 +12,12 @@ import {
 	buildPositionPageSchema,
 	getYearFromDateString,
 } from '~/lib/electionsHelpers';
+import {
 	POSITION_CONTENT_IDS,
 	type ElectionsPositionAttribute,
 	type ElectionsPositionElectionType,
 	type ElectionsPositionPerson,
 } from '~/ui/ElectionsPositionContentBlock';
-import { buildDynamicFAQItems, buildPositionPageSchema } from '~/lib/electionsHelpers';
 import {
 	buildBreadcrumbSchema,
 	buildFAQSchema,

@@ -14,10 +14,12 @@ import { IconResolver } from '~/ui/IconResolver';
 import { cn } from '~/ui/_lib/utils';
 import { Text } from '~/ui/Text';
 import { ButtonLink } from '~/ui/Inputs/Button';
-import { CandidatesCard, type CardAttributionMode } from '~/ui/CandidatesCard';
+import type { CardAttributionMode } from '~/ui/CandidatesCard';
 import { VoterDensityMapCard } from './VoterDensityMapCard';
 import { ClaimProfileModal } from './ClaimProfileModal';
 import { PersonClaimCTABand } from './PersonClaimCTABand';
+import { PledgeSymbolCallout } from './PledgeSymbolCallout';
+import { RelatedPeopleList } from './RelatedPeopleList';
 
 // Below this rendered-voter coverage the density surface is too partial to be
 // trustworthy, so the map is hidden. Coverage may be null when upstream has no
@@ -110,12 +112,16 @@ function splitIssues(issues: PersonProfileView['issues']) {
 	};
 }
 
-/** Stable empowered-first ordering (Figma puts the GoodParty candidate on top). */
-function empoweredFirst(cards: CandidateCard[]): CandidateCard[] {
-	return [
-		...cards.filter(c => c.isGoodPartyCandidate),
-		...cards.filter(c => !c.isGoodPartyCandidate),
-	];
+/**
+ * Rail order (Emily, 2026-10-06), the featured candidates block's rule: pledged
+ * people first, then the unpledged with no major party, then Republicans and
+ * Democrats. Stable inside each group, so the feed's order survives. Pledged
+ * and claimed are the same thing to marketing, so an empowered card ranks with
+ * the pledged ones.
+ */
+function rankRelatedPeople(cards: RelatedPersonCard[]): RelatedPersonCard[] {
+	const tier = (c: RelatedPersonCard): number => (c.isPledged || c.isEmpowered ? 0 : c.majorParty ? 2 : 1);
+	return [0, 1, 2].flatMap(t => cards.filter(c => tier(c) === t));
 }
 
 /** Small persona tag pill(s) rendered above the hero name (Figma). */
@@ -335,7 +341,34 @@ function buildAuthoredSections(view: PersonProfileView): SectionMap {
 	if (view.bio) {
 		sections.aboutMe = { cardType: 'about-me', heading: 'About Me', content: view.bio };
 	}
+	// The Voter Guide frames close the platform card (Why + Campaign Issues) and
+	// the About Me section with the disclaimer (2156:30656 / 2156:30728; Emily,
+	// 2026-10-06). The in-office card (Top Priorities + Accomplishments) is also
+	// the person's own words, so it gets one too (Emily, 2026-10-06); the frames
+	// only draw candidates. It sits on the LAST section of each card so it ends
+	// the card whichever sections the owner wrote, and on About Me itself because
+	// Recent Experience follows it inside the same card. Only authored text gets
+	// one: the unclaimed placeholders are ours, not the person's.
+	const disclaimer = <AuthoredDisclaimer name={view.displayName} />;
+	const platformTail = sections.campaignIssues ?? sections.why;
+	if (platformTail) platformTail.footer = disclaimer;
+	const inOfficeTail = sections.accomplishments ?? sections.inOfficePriorities;
+	if (inOfficeTail) inOfficeTail.footer = disclaimer;
+	if (sections.aboutMe) sections.aboutMe.footer = disclaimer;
 	return sections;
+}
+
+export function authoredDisclaimerCopy(name: string): string {
+	return `These statements come from ${name} and do not reflect any positions or stances on individual issues held by GoodParty.org.`;
+}
+
+/** Figma: 12/16 Open Sans in gray-500 under the authored text. */
+function AuthoredDisclaimer({ name }: { name: string }): ReactNode {
+	return (
+		<Text as='p' styleType='caption' className='text-gray-500' data-component='AuthoredDisclaimer'>
+			{authoredDisclaimerCopy(name)}
+		</Text>
+	);
 }
 
 /** Muted, italic prompt copy used inside unclaimed placeholder cards. */
@@ -476,17 +509,6 @@ function pastElectionDisclaimer(view: PersonProfileView): ProfileContentCardProp
 	};
 }
 
-/** In-column "Other candidates" list — a vertical stack of candidate cards. */
-function OtherCandidatesContent({ cards }: { cards: CandidateCard[] }): ReactNode {
-	return (
-		<div className='flex flex-col gap-4'>
-			{cards.map(card => (
-				<CandidatesCard key={card._key ?? card.name} {...card} />
-			))}
-		</div>
-	);
-}
-
 /**
  * Civics-spine sections, available on every state (data permitting). These are
  * NOT empowerment-gated, so unclaimed major-party (I/J) and removed (K/L)
@@ -507,20 +529,23 @@ function buildCivicSections(view: PersonProfileView): SectionMap {
 	if (districtMap) {
 		sections.district = { heading: 'District information', content: districtMap };
 	}
-	// Figma title-cases the heading and leads with the empowered (GoodParty)
-	// candidate. FLAG: the frame reads "Other Candidates for [Position] in
+	// Figma title-cases the heading. FLAG: the frame reads "Other Candidates for [Position] in
 	// <Location>" but the view has no clean locality field distinct from the
 	// position name, so the "in <Location>" clause is omitted rather than invented.
-	const otherCandidates = empoweredFirst(toCandidateCards(view.otherCandidates));
+	// The "What this symbol means" box leads the list (Voter Guide frames; Emily,
+	// 2026-10-06). It explains the mark in the third person, so it renders on every
+	// profile that has the list; the cards themselves are unchanged. The frames do
+	// not draw it on Nearby Officials, so that list stays as it was.
+	const otherCandidates = toCandidateCards(rankRelatedPeople(view.otherCandidates));
 	if (otherCandidates.length > 0) {
 		sections.otherCandidates = {
 			heading: view.officeName ? `Other Candidates for ${view.officeName}` : 'Other Candidates',
-			content: <OtherCandidatesContent cards={otherCandidates} />,
+			content: <RelatedPeopleList cards={otherCandidates} callout={<PledgeSymbolCallout />} />,
 		};
 	}
-	const nearby = empoweredFirst(toCandidateCards(view.nearbyOfficials));
+	const nearby = toCandidateCards(rankRelatedPeople(view.nearbyOfficials));
 	if (nearby.length > 0) {
-		sections.nearbyOfficials = { heading: 'Nearby Officials', content: <OtherCandidatesContent cards={nearby} /> };
+		sections.nearbyOfficials = { heading: 'Nearby Officials', content: <RelatedPeopleList cards={nearby} /> };
 	}
 	return sections;
 }
@@ -579,9 +604,16 @@ function buildSidebar(view: PersonProfileView): ElectionsSidebarProps | undefine
 		: [];
 	const officeAddress = inOffice ? (view.officeAddress ?? []) : [];
 
+	// The pledge row reads the same flag as the hero's callout and the cards' line.
+	// Its date is a seam: election-api carries no pledge date yet (the source is to
+	// be the HubSpot deal's closed-won date, carried by the ETL; Emily,
+	// 2026-10-06), so until it does the row is the heading and the mark alone.
+	const pledge = view.pledged ? { signedOn: view.pledgedAt ? formatElectionDateFromApi(view.pledgedAt) : null } : undefined;
+
 	if (
 		topInfos.length === 0 &&
 		!view.party &&
+		!pledge &&
 		contactIcons.length === 0 &&
 		officeContacts.length === 0 &&
 		officeAddress.length === 0
@@ -592,6 +624,7 @@ function buildSidebar(view: PersonProfileView): ElectionsSidebarProps | undefine
 	return {
 		topInfos: topInfos.length > 0 ? topInfos : undefined,
 		politicalAffiliation: view.party ?? undefined,
+		pledge,
 		contactIcons: contactIcons.length > 0 ? contactIcons : undefined,
 		officeContacts: officeContacts.length > 0 ? officeContacts : undefined,
 		officeAddress: officeAddress.length > 0 ? officeAddress : undefined,
@@ -629,12 +662,14 @@ function toCandidateCards(cards: RelatedPersonCard[]): CandidateCard[] {
 			name: c.name,
 			partyAffiliation: c.subtitle ?? '',
 			href: c.href!,
-			// The mark and the yellow frame follow this; the line follows the pledge.
-			// They are different facts — one says whose candidate this is, the other
-			// asserts something the person did — and on /people they come from
-			// different sources, so the card must not tie them together.
+			// The yellow frame follows this (the legacy GoodParty treatment, which the
+			// production builders never set); the line and the mark follow the pledge.
+			// Pledged and claimed are the same thing to marketing (Emily, 2026-10-06),
+			// and the Voter Guide frames draw the mark on the pledged card.
 			isGoodPartyCandidate: c.isEmpowered,
+			showMark: c.isPledged,
 			attribution: relatedCardAttribution(c),
+			tag: c.tag,
 			...(c.avatarUrl ? { avatar: c.avatarUrl } : {}),
 		}));
 }

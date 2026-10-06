@@ -101,6 +101,9 @@ export interface RaceDetail {
 	numberOfSeats?: number | null;
 	/** BallotReady position id. Joins the race to its current officeholders on the position page. */
 	positionId?: string | null;
+	/** The seat's district or ward ("District" / "5"); the row's own columns, present when no raceColumns filter is sent. */
+	subAreaName?: string | null;
+	subAreaValue?: string | null;
 	Place?: PlaceWithFacts & {
 		parent?: { name: string; slug: string; state: string; geoId?: string };
 	};

@@ -559,7 +559,7 @@ this table; it is here to orient, and to show the shape of the answer.
 | Position hero | develop + draft PR #320 | Position and Position Candidates globals | into #320, stays draft |
 | Position content block | develop + draft PR #327 (stacked on #320) | Position global | into #327, stays draft |
 | Candidates block | develop | Position Candidates global, every `/people` profile | draft and batch |
-| Breadcrumb block | develop + draft PR (phone collapse) | every election global, two position landing pages | draft and batch |
+| Breadcrumb block | develop + draft PR #377 (phone collapse) | every election global, two position landing pages | into #377, stays draft |
 | Elections search hero | develop + draft PR #351 | the `/elections` landing page | into #351 |
 | Featured cities | develop + draft PR #307 | the `/elections` landing page | into #307 |
 | Elections near you | develop | `/all` plus three landing pages (see the note above) | ready to merge, list the pages |

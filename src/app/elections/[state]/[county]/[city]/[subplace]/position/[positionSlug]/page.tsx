@@ -18,6 +18,7 @@ import {
 import { getCachedElectionRouteParams } from '~/lib/sitemap-entries';
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsPositionPage } from '~/lib/renderElectionsPositionPage';
+import { loadPositionHeroCandidates } from '~/lib/positionHeroCandidates';
 
 export const revalidate = 3600;
 
@@ -69,6 +70,7 @@ export default async function Page({
 		race.Place?.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`) ?? false;
 	const isRealCity = isRealPlaceSegment(cityPlace.slug, city);
 
+	const heroCandidates = await loadPositionHeroCandidates(race.slug);
 	const stateName = getStateName(stateCode);
 	const cityName = cityPlace.name;
 	const officeName = race.normalizedPositionName ?? race.name ?? 'Position';
@@ -100,6 +102,7 @@ export default async function Page({
 		breadcrumbs,
 		candidatesHref,
 		race,
+		heroCandidates,
 		pageUrl,
 	});
 }

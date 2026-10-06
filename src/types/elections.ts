@@ -89,6 +89,8 @@ export interface RaceDetail {
 	isRunoff?: boolean;
 	isPrimary?: boolean;
 	partisanType?: string;
+	/** Seats up in this race (BallotReady number_of_seats). Drives the hero's multiple-winner state. */
+	numberOfSeats?: number | null;
 	Place?: PlaceWithFacts & {
 		parent?: { name: string; slug: string; state: string; geoId?: string };
 	};

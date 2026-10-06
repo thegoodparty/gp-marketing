@@ -64,11 +64,15 @@ mapfile -t STATES < <(
 	bun -e "import { US_STATE_CODES } from './src/lib/sitemap-entries.ts'; console.log(US_STATE_CODES.join('\n'))"
 )
 
+PEOPLE_SHARDS=$(
+	bun -e "import { PEOPLE_SITEMAP_SHARD_COUNT } from './src/lib/sitemap-entries.ts'; console.log(PEOPLE_SITEMAP_SHARD_COUNT)"
+)
+
 state_batch_count=$(( (${#STATES[@]} + BATCH_SIZE - 1) / BATCH_SIZE ))
-if [[ "$SKIP_MAIN" == true ]]; then
-	total_batches=$state_batch_count
-else
-	total_batches=$((state_batch_count + 1))
+people_batch_count=$(( (PEOPLE_SHARDS + BATCH_SIZE - 1) / BATCH_SIZE ))
+total_batches=$((state_batch_count + people_batch_count))
+if [[ "$SKIP_MAIN" == false ]]; then
+	total_batches=$((total_batches + 1))
 fi
 
 batch_num=0
@@ -92,7 +96,22 @@ for ((i = 0; i < ${#STATES[@]}; i += BATCH_SIZE)); do
 	batch_states=("${STATES[@]:i:BATCH_SIZE}")
 	states_label=$(IFS=,; echo "${batch_states[*]}")
 	states_pattern=$(IFS='|'; echo "${batch_states[*]}")
-	run_batch "states ${states_label}" "elections/(${states_pattern})|candidates/(${states_pattern})"
+	run_batch "states ${states_label}" "elections/(${states_pattern})"
+done
+
+# The people band is batched on its own. It used to ride along on the state
+# batches via a `candidates/<state>` label, which stopped being what the band
+# emits — and a selector that matches nothing still prints "all batches passed",
+# so the miss was invisible. `\)` anchors on the label's closing paren, without
+# which `shard-1` also selects shards 10-19.
+for ((i = 0; i < PEOPLE_SHARDS; i += BATCH_SIZE)); do
+	shard_batch=()
+	for ((j = i; j < i + BATCH_SIZE && j < PEOPLE_SHARDS; j++)); do
+		shard_batch+=("$j")
+	done
+	shards_label=$(IFS=,; echo "${shard_batch[*]}")
+	shards_pattern=$(IFS='|'; echo "${shard_batch[*]}")
+	run_batch "people shards ${shards_label}" "people/shard-(${shards_pattern})\\)"
 done
 
 echo ""

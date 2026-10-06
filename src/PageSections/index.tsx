@@ -49,6 +49,19 @@ import { TestimonialBlockWithLinkSection } from '~/PageSections/TestimonialBlock
 import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
 import type { TokenMap } from '~/lib/resolveTokens';
 
+import { LocationEditorialBlockSection } from '~/PageSections/LocationEditorialBlockSection';
+
+import { ElectionsNearYouBlockSection } from '~/PageSections/ElectionsNearYouBlockSection';
+
+import { DemoRequestBlockSection } from '~/PageSections/DemoRequestBlockSection';
+
+import { ElectionPositionResourcesBlockSection } from '~/PageSections/ElectionPositionResourcesBlockSection';
+import { NearbyOfficesSection } from '~/PageSections/NearbyOfficesSection';
+
+import { IllustratedColumnsBlockSection } from '~/PageSections/IllustratedColumnsBlockSection';
+
+import { FeaturedCandidatesBlockSection } from '~/PageSections/FeaturedCandidatesBlockSection';
+
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
 
 export type { TokenMap };
@@ -79,6 +92,36 @@ export type SectionOverrides = {
 		factsCards?: Array<{ factType: string; label: string; value: string }>;
 		hidden?: boolean;
 	};
+	component_locationEditorialBlock?: {
+		/**
+		 * Overrides the Sanity-authored heading (location index pages could set it
+		 * per page, though today the token-driven CMS heading covers it).
+		 */
+		heading?: string;
+		/**
+		 * The page's own editorial prose, one string per paragraph. This is the
+		 * seam the per-location copy attaches to: the block sits on the shared
+		 * location templates, so a paragraph typed into Sanity would be identical
+		 * on every page in that family. No route populates this yet — the writing
+		 * pipeline that fills it is separate work — so on a real location page
+		 * today the block falls back to the CMS field and, with that empty,
+		 * renders nothing.
+		 */
+		paragraphs?: string[];
+		/** When true the section renders nothing. */
+		hidden?: boolean;
+	};
+	component_electionPositionResourcesBlock?: {
+		/**
+		 * The "how to run" article for this page's office, chosen from marketing's
+		 * blog article matrix (`resolveHowToRunGuide`). It replaces the guide card's
+		 * editor-set link. Only position pages supply it; without it the card falls
+		 * back to the link set in Studio and, with neither, is left out.
+		 */
+		guideHref?: string;
+		/** When true the section renders nothing. */
+		hidden?: boolean;
+	};
 	component_electionsPositionHero?: import('~/PageSections/ElectionsPositionHeroSection').OfficeData;
 	component_electionsPositionContentBlock?: import('~/PageSections/ElectionsPositionContentBlockSection').ElectionsPositionContentBlockOverride;
 	component_locationLandingPageHero?: {
@@ -95,6 +138,37 @@ export type SectionOverrides = {
 		defaultYear?: number;
 		availableYears?: number[];
 		offices?: import('~/ui/ListOfOfficesBlock').OfficeItem[];
+	};
+	component_featuredCandidatesBlock?: {
+		/**
+		 * The candidates running in the page's own races and the people who
+		 * currently hold its offices, as two lists so the block's Studio setting
+		 * (candidates / representatives / both) can choose at render time. Only the
+		 * location page routes populate this, through `getFeaturedPeople`; the
+		 * section ranks pledged people first and caps at eight, and with nobody to
+		 * show it renders nothing.
+		 */
+		candidates?: import('~/lib/featuredPeople').FeaturedPersonCard[];
+		representatives?: import('~/lib/featuredPeople').FeaturedPersonCard[];
+		/** When true the section renders nothing. */
+		hidden?: boolean;
+	};
+	component_nearbyOffices?: {
+		/**
+		 * The heading the page computes for itself, used when the editor leaves the
+		 * Heading field empty: "More offices in Bay City, Michigan", or just the state
+		 * on a state position page, where the place and the state are the same name.
+		 */
+		heading?: string;
+		/**
+		 * The other upcoming positions near the one on the page, already picked and
+		 * ordered (same place first, else one level up; capped at eight). Only the
+		 * position page routes populate this, through `getNearbyOffices`; with no
+		 * offices the section renders nothing.
+		 */
+		offices?: import('~/ui/ListOfOfficesBlock').OfficeItem[];
+		/** When true the section renders nothing. */
+		hidden?: boolean;
 	};
 	component_faqBlock?: {
 		items?: Array<{ title: string; copy: string }>;
@@ -597,7 +671,67 @@ export function PageSections(props: Props) {
 								<TestimonialBlockWithLinkSection {...section} tokens={props.tokens} />
 							</Boundary>
 						);
-					default:
+					case 'component_locationEditorialBlock':
+						return (
+							<Boundary key={section._key} componentName='Location Editorial Block'>
+								<LocationEditorialBlockSection
+									{...section}
+									editorialOverride={props.sectionOverrides?.component_locationEditorialBlock}
+									tokens={props.tokens}
+								/>
+							</Boundary>
+						);
+					case 'component_electionsNearYouBlock':
+						return (
+							<Boundary key={section._key} componentName='Elections Near You Block'>
+								<ElectionsNearYouBlockSection {...section} />
+							</Boundary>
+						);
+					case 'component_demoRequestBlock':
+						return (
+							<Boundary key={section._key} componentName='Demo Request Block'>
+								<DemoRequestBlockSection {...section} />
+							</Boundary>
+						);
+					case 'component_nearbyOffices': {
+						const nearbyOverride = props.sectionOverrides?.component_nearbyOffices;
+						if (nearbyOverride?.hidden) {
+							return <Fragment key={section._key} />;
+						}
+						return (
+							<Boundary key={section._key} componentName='Nearby Offices'>
+								<NearbyOfficesSection {...section} tokens={props.tokens} nearbyOverride={nearbyOverride} />
+							</Boundary>
+						);
+					}
+					case 'component_electionPositionResourcesBlock':
+						return (
+							<Boundary key={section._key} componentName='Election Position Resources Block'>
+								<ElectionPositionResourcesBlockSection
+									{...section}
+									resourcesOverride={props.sectionOverrides?.component_electionPositionResourcesBlock}
+									tokens={props.tokens}
+								/>
+							</Boundary>
+						);
+					case 'component_illustratedColumnsBlock':
+						return (
+							<Boundary key={section._key} componentName='Illustrated Columns Block'>
+								<IllustratedColumnsBlockSection {...section} tokens={props.tokens} />
+							</Boundary>
+						);
+					case 'component_featuredCandidatesBlock': {
+					const featuredOverride = props.sectionOverrides?.component_featuredCandidatesBlock;
+					if (featuredOverride?.hidden) {
+						return <Fragment key={section._key} />;
+					}
+					return (
+						<Boundary key={section._key} componentName='Featured Candidates Block'>
+							<FeaturedCandidatesBlockSection {...section} tokens={props.tokens} featuredOverride={featuredOverride} />
+						</Boundary>
+					);
+				}
+				default:
 						console.warn('unknown section._type', section['_type']);
 						return <Fragment key={`unknown section._type' ${i}`} />;
 				}

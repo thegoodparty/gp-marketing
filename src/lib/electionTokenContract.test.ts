@@ -24,14 +24,14 @@ function expectTokensInclude(contract: string[], tokenMap: TokenMap) {
 describe('election token contract', () => {
 	test('location state builder supplies documented tokens', () => {
 		expectTokensInclude(
-			['[State]'],
+			['[State]', '[location]'],
 			buildElectionsIndexTokens({ locationLevel: 'state', stateName: tokenCtx.stateName }),
 		);
 	});
 
 	test('location county builder supplies documented tokens', () => {
 		expectTokensInclude(
-			['[State]', '[County]'],
+			['[State]', '[County]', '[location]'],
 			buildElectionsIndexTokens({
 				locationLevel: 'county',
 				stateName: tokenCtx.stateName,
@@ -42,7 +42,7 @@ describe('election token contract', () => {
 
 	test('location city builder supplies documented tokens', () => {
 		expectTokensInclude(
-			['[State]', '[County]', '[City]'],
+			['[State]', '[County]', '[City]', '[location]'],
 			buildElectionsIndexTokens({
 				locationLevel: 'city',
 				stateName: tokenCtx.stateName,
@@ -54,7 +54,7 @@ describe('election token contract', () => {
 
 	test('location district builder supplies documented tokens', () => {
 		expectTokensInclude(
-			['[State]', '[District]'],
+			['[State]', '[District]', '[location]'],
 			buildElectionsIndexTokens({
 				locationLevel: 'district',
 				stateName: tokenCtx.stateName,

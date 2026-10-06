@@ -38,7 +38,7 @@
  *   --dry-run  Mint + validate the token, but do not write anything to Vercel.
  */
 
-import { createClerkClient } from '@clerk/backend';
+import { createRedactor, jwtExpMs, mask, mintJwt } from './lib/election-api-token-mint';
 
 const TOKEN_ENV_KEY = 'ELECTION_API_M2M_TOKEN';
 const VERCEL_API = 'https://api.vercel.com';
@@ -71,63 +71,7 @@ function requireEnv(name: string): string {
 	return value;
 }
 
-/** Mask a bearer for logs: keep the first/last few chars, hide the middle. */
-function mask(token: string): string {
-	if (token.length <= 12) return '***';
-	return `${token.slice(0, 8)}…${token.slice(-4)} (len ${token.length})`;
-}
-
-/**
- * Credentials to scrub from anything we print. GitHub Actions only masks values
- * declared as `secrets:`; a token minted at runtime is unknown to the masking
- * engine, and a Vercel validation error can echo the submitted value back inside
- * a thrown message. Register such values here and redact() before logging.
- */
-const secretsToRedact = new Set<string>();
-function redact(text: string): string {
-	let out = text;
-	for (const secret of secretsToRedact) {
-		if (secret) out = out.split(secret).join('***');
-	}
-	return out;
-}
-
-/** Parse a JWT's `exp` (seconds) without verifying its signature. */
-function jwtExpMs(jwt: string): number {
-	const segments = jwt.split('.');
-	const payloadSegment = segments[1];
-	if (segments.length !== 3 || !payloadSegment) {
-		throw new Error(`Minted value is not a JWT (${segments.length} segments, expected 3)`);
-	}
-	const payload = JSON.parse(Buffer.from(payloadSegment, 'base64url').toString('utf8')) as {
-		exp?: number;
-	};
-	if (typeof payload.exp !== 'number') {
-		throw new Error('Minted JWT has no numeric `exp` claim');
-	}
-	return payload.exp * 1000;
-}
-
-async function mintJwt(machineSecretKey: string, ttlDays: number): Promise<string> {
-	// createToken authenticates with the machine secret, not the instance secret,
-	// so CLERK_SECRET_KEY is optional here; pass a placeholder when it is absent so
-	// the client constructs cleanly. Use `||`, not `??`: GitHub Actions injects an
-	// unset optional secret as an empty string, which `??` would pass through.
-	const clerk = createClerkClient({
-		secretKey: process.env['CLERK_SECRET_KEY'] || 'sk_unused_for_m2m_mint',
-	});
-
-	const minted = await clerk.m2m.createToken({
-		machineSecretKey,
-		tokenFormat: 'jwt',
-		secondsUntilExpiration: ttlDays * 24 * 60 * 60,
-	});
-
-	if (!minted.token) {
-		throw new Error('Clerk returned an M2M token with no `token` string');
-	}
-	return minted.token;
-}
+const { add: registerSecret, redact } = createRedactor();
 
 async function vercelFetch<T>(path: string, token: string, teamId: string, init?: RequestInit): Promise<T> {
 	const separator = path.includes('?') ? '&' : '?';
@@ -191,12 +135,12 @@ async function main(): Promise<void> {
 	// Register before minting: mintJwt() can throw with the key echoed in the
 	// error, and the catch handler redacts against this set. (In CI the key is a
 	// declared GitHub secret and already masked; manual `bun run` has no masking.)
-	secretsToRedact.add(machineSecretKey);
+	registerSecret(machineSecretKey);
 
 	console.log(`Minting a ${ttlDays}-day election-api JWT for the gp-marketing machine…`);
-	const newToken = await mintJwt(machineSecretKey, ttlDays);
+	const newToken = await mintJwt(machineSecretKey, ttlDays * 24 * 60 * 60);
 	// The freshly minted token is not a declared secret — keep it out of logs too.
-	secretsToRedact.add(newToken);
+	registerSecret(newToken);
 
 	// Trust Clerk's `exp`, not our own arithmetic: reject an unexpectedly
 	// short-lived token before it is pushed, so a bad mint can't silently install
@@ -239,7 +183,7 @@ async function main(): Promise<void> {
 	const vercelToken = requireEnv('VERCEL_TOKEN');
 	// Register for redaction like the other runtime credentials — manual runs have
 	// no GitHub Actions masking to fall back on.
-	secretsToRedact.add(vercelToken);
+	registerSecret(vercelToken);
 	const projectId = requireEnv('VERCEL_PROJECT_ID');
 	const teamId = requireEnv('VERCEL_TEAM_ID');
 

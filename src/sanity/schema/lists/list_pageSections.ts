@@ -83,6 +83,8 @@ export const list_pageSections = {
 								'https://cdn.sanity.io/images/3rbseux7/production/db3caeddd65e25c3ef1f8fecf395943a41cc417d-3000x2000.png',
 							component_featuredCitiesBlock:
 								'https://cdn.sanity.io/images/3rbseux7/production/9dff636003ac0fe08810dab73ab5d85704104836-3000x2000.png',
+							component_featuredCandidatesBlock:
+								'https://cdn.sanity.io/images/3rbseux7/production/8bfe607111dbfc6a0a017794be8c302ffd6e6510-3000x2000.png',
 							component_goodPartyOrgPledge:
 								'https://cdn.sanity.io/images/3rbseux7/production/3af863344c213d146cc5c28a2fd63efd4c381631-3000x2000.png',
 							component_jobOpeningsBlock:
@@ -93,6 +95,10 @@ export const list_pageSections = {
 								'https://cdn.sanity.io/images/3rbseux7/production/841e57ddb41eec71c6ea56ea03641490de55acf2-3000x2000.png',
 							component_locationLandingPageHero:
 								'https://cdn.sanity.io/images/3rbseux7/production/4512520a6cb1dc681b1d8d41e920642985f744c2-3000x2000.png',
+							component_nearbyOffices:
+								'https://cdn.sanity.io/images/3rbseux7/production/4cc940c78feefc5673a71225e7244aff55393522-3000x2000.png',
+							component_electionPositionResourcesBlock:
+								'https://cdn.sanity.io/images/3rbseux7/production/cc4db689d5793109699cc0255364c87e8998403a-3000x2000.png',
 							component_profileContentBlock:
 								'https://cdn.sanity.io/images/3rbseux7/production/bcb4df7f8952f9539a1b73119201b6a75a0593f4-3000x2000.png',
 							component_profileHero:
@@ -101,6 +107,8 @@ export const list_pageSections = {
 								'https://cdn.sanity.io/images/3rbseux7/production/5207be991898bbbd9ba558c4a4ddb93f1e75351b-3000x2000.png',
 							component_testimonialAutoScroll:
 								'https://cdn.sanity.io/images/3rbseux7/production/4cc26cd73a3b57c6d5e31c1016978191cf217e45-3000x2000.png',
+							component_illustratedColumnsBlock:
+								'https://cdn.sanity.io/images/3rbseux7/production/fd3fdb442852e7d8c3bbd21fecc00ed43bbdf245-3000x2000.png',
 						};
 						return s in i ? i[s] : undefined;
 					},
@@ -125,12 +133,13 @@ export const list_pageSections = {
 				{
 					name: 'form',
 					title: 'Form',
-					of: ['component_heroWithSubscribe', 'component_newsletterBlock', 'component_clickToCallBlock'],
+					of: ['component_demoRequestBlock', 'component_electionsNearYouBlock', 'component_heroWithSubscribe', 'component_newsletterBlock', 'component_clickToCallBlock'],
 				},
 				{
 					name: 'text',
 					title: 'Text',
 					of: [
+						'component_locationEditorialBlock',
 						'component_bannerBlock',
 						'component_calculatorTextBlock',
 						'component_twoUpCardBlock',
@@ -175,6 +184,7 @@ export const list_pageSections = {
 					name: 'cards',
 					title: 'Cards',
 					of: [
+						'component_featuredCandidatesBlock',
 						'component_twoUpCardBlock',
 						'component_comparisonBlock',
 						'component_stepperBlock',
@@ -195,6 +205,8 @@ export const list_pageSections = {
 					name: 'grid',
 					title: 'Grid',
 					of: [
+						'component_illustratedColumnsBlock',
+						'component_nearbyOffices',
 						'component_comparisonBlock',
 						'component_iconContentBlock',
 						'component_imageContentBlock',
@@ -222,6 +234,7 @@ export const list_pageSections = {
 					name: 'cta',
 					title: 'CTA',
 					of: [
+						'component_electionPositionResourcesBlock',
 						'component_ctaBannerBlock',
 						'component_ctaBlock',
 						'component_ctaImageBlock',
@@ -241,6 +254,13 @@ export const list_pageSections = {
 	},
 	type: 'array',
 	of: [
+		{ title: 'Featured Candidates Block', type: 'component_featuredCandidatesBlock' },
+		{ title: 'Illustrated Columns Block', type: 'component_illustratedColumnsBlock' },
+		{ title: 'Election Position Resources Block', type: 'component_electionPositionResourcesBlock' },
+		{ title: 'Nearby Offices', type: 'component_nearbyOffices' },
+		{ title: 'Demo Request Block', type: 'component_demoRequestBlock' },
+		{ title: 'Elections Near You Block', type: 'component_electionsNearYouBlock' },
+		{ title: 'Location Editorial Block', type: 'component_locationEditorialBlock' },
 		{
 			title: 'Testimonial Block With Link',
 			type: 'component_testimonialBlockWithLink',

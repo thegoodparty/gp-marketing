@@ -18,7 +18,7 @@ import {
 } from '~/lib/electionsHelpers';
 import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
 import { US_STATE_CODES } from '~/lib/sitemap-entries';
-import { toAbsoluteUrl } from '~/lib/url';
+import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 
 export const revalidate = 3600;
 
@@ -122,7 +122,6 @@ export default async function Page({
 		bodyCopy: `Learn what state positions are up for election and who is currently running for office in ${stateName}.`,
 		searchPlaceholder: 'Search positions',
 		listHeading: isSingleCounty ? `Elections in ${stateName}` : `State Elections in ${stateName}`,
-		listHeadline: 'state',
 		defaultYear,
 		availableYears,
 		offices: stateOffices,
@@ -144,7 +143,7 @@ export async function generateMetadata({
 	if (!isValidStateCode(stateCode)) return {};
 	const stateName = getStateName(stateCode);
 	return {
-		title: `Elections in ${stateName} | Good Party`,
+		title: `Elections in ${stateName} | ${SITE_NAME}`,
 		description: `Browse elections and positions in ${stateName}.`,
 		alternates: { canonical: toAbsoluteUrl(`/elections/${state.toLowerCase()}`) },
 	};

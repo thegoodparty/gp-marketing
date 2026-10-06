@@ -44,6 +44,33 @@ describe('buildPositionSectionOverrides', () => {
 
 		expect(overrides.component_electionsPositionContentBlock?.rightColumnCTA).toBeUndefined();
 	});
+
+	test('chooses the how-to-run guide for the office from the blog article matrix', () => {
+		const overrides = buildPositionSectionOverrides(positionOverrideCtx);
+
+		expect(overrides.component_electionPositionResourcesBlock?.guideHref).toBe('/blog/article/how-to-run-for-district-attorney');
+	});
+
+	/** The nearby offices heading names the page's own place once: a state page is "in Michigan", not "in Michigan, Michigan". */
+	test('names the place and state in the nearby offices heading, and only the state on a state page', () => {
+		const county = buildPositionSectionOverrides(positionOverrideCtx);
+		const city = buildPositionSectionOverrides({ ...positionOverrideCtx, cityName: 'Little Falls' });
+		const state = buildPositionSectionOverrides({ ...positionOverrideCtx, countyName: undefined });
+
+		expect(county.component_nearbyOffices?.heading).toBe('More offices in Morrison County, Minnesota');
+		expect(city.component_nearbyOffices?.heading).toBe('More offices in Little Falls, Minnesota');
+		expect(state.component_nearbyOffices?.heading).toBe('More offices in Minnesota');
+	});
+
+	test('reads the race when it has one, not only the office name', () => {
+		const overrides = buildPositionSectionOverrides({
+			...positionOverrideCtx,
+			officeName: 'Commissioner',
+			race: { id: 1, slug: 'mn/morrison-county/commissioner', name: 'Morrison County Commissioner', state: 'MN', positionLevel: 'COUNTY' },
+		});
+
+		expect(overrides.component_electionPositionResourcesBlock?.guideHref).toBe('/blog/article/how-to-run-for-county-commissioner');
+	});
 });
 
 describe('buildPositionTokens', () => {

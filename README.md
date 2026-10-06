@@ -49,7 +49,7 @@ to `AGENTS.md`, so Claude Code and Cursor read the same file — edit `AGENTS.md
 - `docs/architecture.md` — how the system fits together and how pages render
 - `docs/adding-a-component.md` — how to add a new page-builder block
 - `docs/elections.md` — the election and candidate pages
-- `docs/airops-sanity-integration.md` — how AirOps writes content into Sanity
+- `docs/sanity-api-writes.md` — the revalidation webhook, and writing content into Sanity over the API
 
 ## Branches and deploys
 

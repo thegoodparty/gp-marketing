@@ -3,8 +3,8 @@ import { notFound, redirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	getCountyChildPlaces,
+	getElectionsPagePlace,
 	getPlacesByState,
-	getPlaceBySlug,
 	isDistrictMtfcc,
 	TOWN_MTFCC,
 } from '~/lib/electionsApi';
@@ -15,14 +15,13 @@ import {
 	canonicalizeCountyEquivalentName,
 	getCountySuffixLabel,
 	getStateName,
-	PLACE_RACE_COLUMNS,
 	placeToFactsCards,
 	redirectCityPlaceToFourLevelUrl,
 	resolveDefaultElectionYear,
 	resolvePlaceRaceElectionDates,
 } from '~/lib/electionsHelpers';
 import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
-import { toAbsoluteUrl } from '~/lib/url';
+import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 
 export const revalidate = 3600;
 
@@ -48,13 +47,7 @@ export default async function Page({
 
 	const [counties, placeData] = await Promise.all([
 		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
-		getPlaceBySlug({
-			slug: fullSlug,
-			includeChildren: false,
-			includeRaces: true,
-			placeColumns: 'slug,name,mtfcc,countyName',
-			raceColumns: PLACE_RACE_COLUMNS,
-		}),
+		getElectionsPagePlace({ slug: fullSlug }),
 	]);
 
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === fullSlug);
@@ -130,7 +123,6 @@ export default async function Page({
 		listHeading: isDistrict
 			? `Elections in ${placeName}`
 			: `${normalizedCounty?.suffixLabel ?? getCountySuffixLabel(countyPlace!.name)} Elections in ${normalizedCounty?.displayName ?? countyPlace!.name}`,
-		listHeadline: isDistrict ? 'district' : 'county',
 		defaultYear,
 		availableYears,
 		offices: countyOffices,
@@ -173,7 +165,7 @@ export async function generateMetadata({
 	const fullSlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const [counties, placeData] = await Promise.all([
 		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
-		getPlaceBySlug({ slug: fullSlug, includeChildren: false, includeRaces: false }),
+		getElectionsPagePlace({ slug: fullSlug }),
 	]);
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === fullSlug);
 	const isDistrict = placeData != null && isDistrictMtfcc(placeData.mtfcc);
@@ -184,7 +176,7 @@ export async function generateMetadata({
 		? (placeData?.name ?? county)
 		: (normalizedCounty?.displayName ?? county);
 	return {
-		title: `Elections in ${placeName}, ${stateName} | Good Party`,
+		title: `Elections in ${placeName}, ${stateName} | ${SITE_NAME}`,
 		description: isDistrict
 			? `Browse elections and positions in ${placeName}, ${stateName}.`
 			: `Browse elections and cities in ${placeName}, ${stateName}.`,

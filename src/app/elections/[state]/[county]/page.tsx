@@ -3,6 +3,7 @@ import { notFound, redirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	getCountyChildPlaces,
+	getFeaturedCities,
 	getElectionsPagePlace,
 	getPlacesByState,
 	isDistrictMtfcc,
@@ -46,9 +47,10 @@ export default async function Page({
 	const fullSlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const currentYear = new Date().getFullYear();
 
-	const [counties, placeData] = await Promise.all([
+	const [counties, placeData, featuredCities] = await Promise.all([
 		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
 		getElectionsPagePlace({ slug: fullSlug }),
+		getFeaturedCities({ stateCode, countySlug: fullSlug }),
 	]);
 
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === fullSlug);
@@ -144,6 +146,8 @@ export default async function Page({
 		offices: [...countyOffices, ...overlapping.offices],
 		elections: cities,
 		stateSlug: fullSlug,
+		// A district page has no cities of its own, so it features none.
+		featuredCities: isDistrict ? [] : featuredCities,
 		pageUrl,
 		pageTitle: `Elections in ${placeName}, ${stateName}`,
 		pageDescription: isDistrict

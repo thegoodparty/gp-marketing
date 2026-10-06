@@ -20,11 +20,14 @@ export const component_featuredCitiesBlock = {
       name: 'featuredCitiesBlockCards',
       type: 'object',
       group: 'featuredCitiesBlockCards',
+      description:
+        'The cities and their election counts come from live election data: on a state, county or city page, the cities of that place with the most open elections; anywhere else, the cities with the most elections nationally. The list below is only a fallback for when no live data is available.',
       fields: [
         {
           title: 'Cities',
           name: 'list_locationCards',
           type: 'array',
+          description: 'Fallback cities, shown only if live election data cannot be loaded.',
           of: [
             {
               type: 'object',

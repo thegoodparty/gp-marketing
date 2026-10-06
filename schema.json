@@ -6430,33 +6430,12 @@
                   "type": "string"
                 },
                 "optional": true
-              },
-              "field_shareTitle": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                },
-                "optional": true
-              },
-              "field_shareBody": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                },
-                "optional": true
-              },
-              "field_shareButtonLabel": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                },
-                "optional": true
               }
             }
           },
           "optional": true
         },
-        "badgeCallout": {
+        "pledgeExplainer": {
           "type": "objectAttribute",
           "value": {
             "type": "object",
@@ -6469,6 +6448,20 @@
                 "optional": true
               },
               "field_body": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_showPledgeLink": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "boolean"
+                },
+                "optional": true
+              },
+              "field_linkLabel": {
                 "type": "objectAttribute",
                 "value": {
                   "type": "string"
@@ -6491,6 +6484,13 @@
                 },
                 "optional": true
               },
+              "field_candidatesIntro": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
               "field_resultsHeading": {
                 "type": "objectAttribute",
                 "value": {
@@ -6505,86 +6505,14 @@
                 },
                 "optional": true
               },
+              "field_officeholdersIntro": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
               "field_showMoreLabel": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                },
-                "optional": true
-              }
-            }
-          },
-          "optional": true
-        },
-        "brandedCta": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "object",
-            "attributes": {
-              "field_noPledgedHeadline": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                },
-                "optional": true
-              },
-              "field_noPledgedBody": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                },
-                "optional": true
-              },
-              "field_pledgedRunningHeadline": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                },
-                "optional": true
-              },
-              "field_pledgedRunningBody": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                },
-                "optional": true
-              },
-              "field_pledgedWonHeadline": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                },
-                "optional": true
-              },
-              "field_pledgedWonBody": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                },
-                "optional": true
-              },
-              "field_noPledgedWonHeadline": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                },
-                "optional": true
-              },
-              "field_noPledgedWonBody": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                },
-                "optional": true
-              },
-              "field_buttonLabel": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                },
-                "optional": true
-              },
-              "field_buttonHref": {
                 "type": "objectAttribute",
                 "value": {
                   "type": "string"
@@ -6621,11 +6549,11 @@
                   "of": {
                     "type": "object",
                     "attributes": {
-                      "field_icon": {
+                      "img_image": {
                         "type": "objectAttribute",
                         "value": {
                           "type": "inline",
-                          "name": "field_icon"
+                          "name": "img_image"
                         },
                         "optional": true
                       },

@@ -9,31 +9,37 @@ import * as ElectionsPositionContentBlockStories from './ElectionsPositionConten
 
 ## Overview
 
-The body of a position page below the hero. A side rail on the left ("On this page" links, an
-"Explore more races" card and a share card) and a column on the right holding, in order: the badge
-callout, the seat filter, the candidates list, the officeholders list, the branded CTA, the voter
-readiness card, the About card and the How to run steps.
+The body of a position page below the hero. A side rail on the left, shown on desktop only ("On this
+page" links and an "Explore more races" card whose "GoodParty.org Pledge" opens the pledge pop-up),
+and a column on the right holding: the candidates list and the officeholders list (each with an intro
+sentence, the pledge explainer and, where the route built one, the seat filter in the heading row),
+the voter readiness card, the About card and the How to run steps.
 
 The block has one `state`, shared with the hero (`resolvePositionHeroState`), so the two can never
-disagree about where the race is in its cycle. Filing and mid-election render the same body. Once
-decided, the list heading becomes the results heading, winners get an ELECTED tag, the branded CTA
-speaks about the winner and the "This election is over" banner appears above the steps.
+disagree about where the race is in its cycle. Before the filing window opens the About card and the
+How to run steps lead and the people lists follow (`leadsWithAbout`); from the day filing opens the
+people lead. Filing and mid-election otherwise render the same body. Once decided, the list heading
+becomes the results heading, winners get an ELECTED tag and the "This election is over" banner
+appears above the steps.
 
 ## Hiding rules
 
 Every data-fed section hides on its own when a page has nothing for it, and the "On this page"
-links name only the sections that rendered:
+links name only the sections that rendered, in the order they render:
 
 - Candidates and officeholders: hidden when `undefined` (no data) and when empty.
-- Badge callout: hidden unless a people list is showing.
+- Pledge explainer: drawn inside each people list, so it goes with the list.
 - Seat filter: hidden unless the route built one with more than one option.
 - About: hidden without a description or an attribute.
 - How to run steps 1 and 2: hidden without eligibility or filing data. Step 3 is editorial and always shows.
-- Explore card: hidden without a location href. Share card: hidden without a URL.
+- Explore card: hidden without a location href. The whole rail is hidden below desktop width.
+- Voter readiness illustrations: only drawn when an editor has uploaded them; the defaults are text and links.
 
 ## Variants
 
 <Canvas of={ElectionsPositionContentBlockStories.Filing} />
+
+<Canvas of={ElectionsPositionContentBlockStories.PreFiling} />
 
 <Canvas of={ElectionsPositionContentBlockStories.MidElection} />
 
@@ -48,6 +54,8 @@ links name only the sections that rendered:
 <Canvas of={ElectionsPositionContentBlockStories.OfficeholdersOnly} />
 
 <Canvas of={ElectionsPositionContentBlockStories.WithSeatFilter} />
+
+<Canvas of={ElectionsPositionContentBlockStories.DefaultVoterItems} />
 
 <Canvas of={ElectionsPositionContentBlockStories.SparseRaceData} />
 

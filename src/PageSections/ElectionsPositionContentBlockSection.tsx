@@ -2,10 +2,11 @@ import type { ReactNode } from 'react';
 import { stegaClean } from 'next-sanity';
 
 import type { Sections } from '~/PageSections';
-import { resolvePositionHeroState, type PositionHeroState } from '~/lib/positionHeroState';
+import { resolvePositionHeroState } from '~/lib/positionHeroState';
 import type { TokenMap } from '~/lib/resolveTokens';
 import { resolveSectionText } from '~/lib/resolveSectionText';
 import { POSITION_CONTENT_DEFAULTS, POSITION_CONTENT_LINKS } from '~/sanity/schema/components/component_electionsPositionContentBlock';
+import { ATTRIBUTION_PLEDGE_PHRASE } from '~/ui/_lib/attributionCopy';
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { Anchor } from '~/ui/Anchor';
 import {
@@ -18,6 +19,7 @@ import {
 	type ElectionsPositionVoterItem,
 } from '~/ui/ElectionsPositionContentBlock';
 import type { ComponentButtonProps } from '~/ui/Inputs/Button';
+import { PledgeModal } from '~/ui/PledgeModal';
 
 /**
  * Everything the block needs from the route. `buildPositionSectionOverrides`
@@ -45,7 +47,7 @@ export type ElectionsPositionContentBlockOverride = {
 	seatFilter?: ElectionsPositionSeatFilter;
 	/** The location page the "Explore more races" card links to. Without it the card hides. */
 	locationHref?: string;
-	/** The page's own URL, for the share card. Without it the card hides. */
+	/** The page's own URL. Kept on the seam for the route; the block no longer draws a share card. */
 	shareUrl?: string;
 	about?: {
 		description?: string;
@@ -95,22 +97,17 @@ function communityLine(copy: string): ReactNode {
 	);
 }
 
-type BrandedCtaVariant = 'noPledged' | 'pledgedRunning' | 'pledgedWon' | 'noPledgedWon';
-
-/**
- * Which pair of headline and body the heart and star card shows. Decided races
- * speak about winners, open races about candidates, and each splits on whether
- * anyone in that group took the Pledge.
- */
-export function pickBrandedCtaVariant(
-	state: PositionHeroState,
-	candidates: ElectionsPositionPerson[] | undefined,
-	winners: ElectionsPositionPerson[] | undefined,
-): BrandedCtaVariant {
-	if (state.phase === 'decided') {
-		return (winners ?? []).some(person => person.isPledged) ? 'pledgedWon' : 'noPledgedWon';
-	}
-	return (candidates ?? []).some(person => person.isPledged) ? 'pledgedRunning' : 'noPledged';
+/** The name of the pledge inside a sentence, wrapped by `render`; the rest of the sentence is left as typed. */
+function withPledgePhrase(copy: string, render: (phrase: string) => ReactNode): ReactNode {
+	const at = copy.indexOf(ATTRIBUTION_PLEDGE_PHRASE);
+	if (at < 0) return <p>{copy}</p>;
+	return (
+		<p>
+			{copy.slice(0, at)}
+			{render(ATTRIBUTION_PLEDGE_PHRASE)}
+			{copy.slice(at + ATTRIBUTION_PLEDGE_PHRASE.length)}
+		</p>
+	);
 }
 
 export function ElectionsPositionContentBlockSection(props: ElectionsPositionContentBlockSectionProps) {
@@ -135,37 +132,18 @@ export function ElectionsPositionContentBlockSection(props: ElectionsPositionCon
 	const officeName = tokens?.['[office name]'] ?? '';
 	const d = POSITION_CONTENT_DEFAULTS;
 	const rail = section.siderail;
+	const explainer = section.pledgeExplainer;
 	const lists = section.peopleLists;
-	const cta = section.brandedCta;
 	const voter = section.voterReadiness;
 	const about = section.aboutPosition;
 	const run = section.howToRun;
-
-	const variant = pickBrandedCtaVariant(state, candidates, winners);
-	const brandedCopy = {
-		noPledged: {
-			headline: text(cta?.field_noPledgedHeadline, d.brandedCta.noPledgedHeadline, tokens),
-			body: text(cta?.field_noPledgedBody, d.brandedCta.noPledgedBody, tokens),
-		},
-		pledgedRunning: {
-			headline: text(cta?.field_pledgedRunningHeadline, d.brandedCta.pledgedRunningHeadline, tokens),
-			body: text(cta?.field_pledgedRunningBody, d.brandedCta.pledgedRunningBody, tokens),
-		},
-		pledgedWon: {
-			headline: text(cta?.field_pledgedWonHeadline, d.brandedCta.pledgedWonHeadline, tokens),
-			body: text(cta?.field_pledgedWonBody, d.brandedCta.pledgedWonBody, tokens),
-		},
-		noPledgedWon: {
-			headline: text(cta?.field_noPledgedWonHeadline, d.brandedCta.noPledgedWonHeadline, tokens),
-			body: text(cta?.field_noPledgedWonBody, d.brandedCta.noPledgedWonBody, tokens),
-		},
-	}[variant];
 
 	const voterItems: ElectionsPositionVoterItem[] =
 		voter?.list_voterLinks && voter.list_voterLinks.length > 0
 			? voter.list_voterLinks.map(item => ({
 					key: item._key,
-					icon: item.field_icon ? stegaClean(item.field_icon) : undefined,
+					image: item.img_image ?? undefined,
+					imageAlt: item.img_image?.alt ?? undefined,
 					title: resolveSectionText(item.field_title, tokens),
 					copy: item.field_copy ? <p>{resolveSectionText(item.field_copy, tokens)}</p> : undefined,
 					button: item.field_href
@@ -174,10 +152,9 @@ export function ElectionsPositionContentBlockSection(props: ElectionsPositionCon
 				}))
 			: d.voterReadiness.items.map(item => ({
 					key: item.key,
-					icon: item.icon,
 					title: item.title,
 					copy: <p>{item.copy}</p>,
-					button: { buttonType: 'external', href: item.href, label: item.buttonLabel },
+					button: { buttonType: 'internal', href: item.href, label: item.buttonLabel },
 				}));
 
 	const steps: ElectionsPositionHowToRunStep[] = [];
@@ -223,46 +200,37 @@ export function ElectionsPositionContentBlockSection(props: ElectionsPositionCon
 					explore: data.locationHref
 						? {
 								title: text(rail?.field_exploreTitle, d.siderail.exploreTitle, tokens),
-								body: <p>{text(rail?.field_exploreBody, d.siderail.exploreBody, tokens)}</p>,
+								body: withPledgePhrase(text(rail?.field_exploreBody, d.siderail.exploreBody, tokens), phrase => (
+									<PledgeModal>
+										<button type='button' className='font-medium text-info-500 underline underline-offset-2'>
+											{phrase}
+										</button>
+									</PledgeModal>
+								)),
 								buttonLabel: text(rail?.field_exploreButtonLabel, d.siderail.exploreButtonLabel, tokens),
 								href: data.locationHref,
 							}
 						: undefined,
-					share: data.shareUrl
-						? {
-								title: text(rail?.field_shareTitle, d.siderail.shareTitle, tokens),
-								body: <p>{text(rail?.field_shareBody, d.siderail.shareBody, tokens)}</p>,
-								buttonLabel: text(rail?.field_shareButtonLabel, d.siderail.shareButtonLabel, tokens),
-								url: data.shareUrl,
-							}
-						: undefined,
 				}}
-				badgeCallout={{
-					title: text(section.badgeCallout?.field_title, d.badgeCallout.title, tokens),
-					body: <p>{text(section.badgeCallout?.field_body, d.badgeCallout.body, tokens)}</p>,
+				pledgeExplainer={{
+					title: text(explainer?.field_title, d.pledgeExplainer.title, tokens),
+					body: withPledgePhrase(text(explainer?.field_body, d.pledgeExplainer.body, tokens), phrase => <strong>{phrase}</strong>),
+					linkLabel: explainer?.field_showPledgeLink === false ? undefined : text(explainer?.field_linkLabel, d.pledgeExplainer.linkLabel, tokens),
 				}}
 				candidates={candidates}
 				officeholders={data.officeholders}
 				seatFilter={data.seatFilter}
 				headings={{
 					candidates: text(lists?.field_candidatesHeading, d.peopleLists.candidatesHeading, tokens),
+					candidatesIntro: text(lists?.field_candidatesIntro, d.peopleLists.candidatesIntro, tokens),
 					results: text(lists?.field_resultsHeading, d.peopleLists.resultsHeading, tokens),
 					officeholders: text(lists?.field_officeholdersHeading, d.peopleLists.officeholdersHeading, tokens),
+					officeholdersIntro: text(lists?.field_officeholdersIntro, d.peopleLists.officeholdersIntro, tokens),
 					showMore: text(lists?.field_showMoreLabel, d.peopleLists.showMoreLabel, tokens),
 					voter: text(voter?.field_title, d.voterReadiness.title, tokens),
 					voterSubtitle: text(voter?.field_subtitle, d.voterReadiness.subtitle, tokens),
 					about: text(about?.field_heading, d.aboutPosition.heading, tokens),
 					howToRun: text(run?.field_heading, d.howToRun.heading, tokens),
-				}}
-				brandedCta={{
-					headline: brandedCopy.headline,
-					body: <p>{brandedCopy.body}</p>,
-					button: link(
-						cta?.field_buttonLabel,
-						cta?.field_buttonHref,
-						{ label: d.brandedCta.buttonLabel, href: POSITION_CONTENT_LINKS.run },
-						tokens,
-					),
 				}}
 				voterReadiness={{ items: voterItems }}
 				about={

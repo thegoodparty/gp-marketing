@@ -1154,37 +1154,26 @@ export type Component_electionsPositionContentBlock = {
 		field_exploreTitle?: string;
 		field_exploreBody?: string;
 		field_exploreButtonLabel?: string;
-		field_shareTitle?: string;
-		field_shareBody?: string;
-		field_shareButtonLabel?: string;
 	};
-	badgeCallout?: {
+	pledgeExplainer?: {
 		field_title?: string;
 		field_body?: string;
+		field_showPledgeLink?: boolean;
+		field_linkLabel?: string;
 	};
 	peopleLists?: {
 		field_candidatesHeading?: string;
+		field_candidatesIntro?: string;
 		field_resultsHeading?: string;
 		field_officeholdersHeading?: string;
+		field_officeholdersIntro?: string;
 		field_showMoreLabel?: string;
-	};
-	brandedCta?: {
-		field_noPledgedHeadline?: string;
-		field_noPledgedBody?: string;
-		field_pledgedRunningHeadline?: string;
-		field_pledgedRunningBody?: string;
-		field_pledgedWonHeadline?: string;
-		field_pledgedWonBody?: string;
-		field_noPledgedWonHeadline?: string;
-		field_noPledgedWonBody?: string;
-		field_buttonLabel?: string;
-		field_buttonHref?: string;
 	};
 	voterReadiness?: {
 		field_title?: string;
 		field_subtitle?: string;
 		list_voterLinks?: Array<{
-			field_icon?: Field_icon;
+			img_image?: Img_image;
 			field_title?: string;
 			field_copy?: string;
 			field_linkLabel?: string;
@@ -12162,37 +12151,26 @@ export type GoodpartyOrg_homeQueryResult = {
 						field_exploreTitle?: string;
 						field_exploreBody?: string;
 						field_exploreButtonLabel?: string;
-						field_shareTitle?: string;
-						field_shareBody?: string;
-						field_shareButtonLabel?: string;
 					};
-					badgeCallout?: {
+					pledgeExplainer?: {
 						field_title?: string;
 						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
 					};
 					peopleLists?: {
 						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
 						field_resultsHeading?: string;
 						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
 						field_showMoreLabel?: string;
-					};
-					brandedCta?: {
-						field_noPledgedHeadline?: string;
-						field_noPledgedBody?: string;
-						field_pledgedRunningHeadline?: string;
-						field_pledgedRunningBody?: string;
-						field_pledgedWonHeadline?: string;
-						field_pledgedWonBody?: string;
-						field_noPledgedWonHeadline?: string;
-						field_noPledgedWonBody?: string;
-						field_buttonLabel?: string;
-						field_buttonHref?: string;
 					};
 					voterReadiness?: {
 						field_title?: string;
 						field_subtitle?: string;
 						list_voterLinks?: Array<{
-							field_icon?: Field_icon;
+							img_image?: Img_image;
 							field_title?: string;
 							field_copy?: string;
 							field_linkLabel?: string;
@@ -35928,37 +35906,26 @@ export type Experiment_variantsByExperimentIdQueryResult = Array<{
 						field_exploreTitle?: string;
 						field_exploreBody?: string;
 						field_exploreButtonLabel?: string;
-						field_shareTitle?: string;
-						field_shareBody?: string;
-						field_shareButtonLabel?: string;
 					};
-					badgeCallout?: {
+					pledgeExplainer?: {
 						field_title?: string;
 						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
 					};
 					peopleLists?: {
 						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
 						field_resultsHeading?: string;
 						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
 						field_showMoreLabel?: string;
-					};
-					brandedCta?: {
-						field_noPledgedHeadline?: string;
-						field_noPledgedBody?: string;
-						field_pledgedRunningHeadline?: string;
-						field_pledgedRunningBody?: string;
-						field_pledgedWonHeadline?: string;
-						field_pledgedWonBody?: string;
-						field_noPledgedWonHeadline?: string;
-						field_noPledgedWonBody?: string;
-						field_buttonLabel?: string;
-						field_buttonHref?: string;
 					};
 					voterReadiness?: {
 						field_title?: string;
 						field_subtitle?: string;
 						list_voterLinks?: Array<{
-							field_icon?: Field_icon;
+							img_image?: Img_image;
 							field_title?: string;
 							field_copy?: string;
 							field_linkLabel?: string;
@@ -59695,37 +59662,26 @@ export type ActiveVariantsByPageIdQueryResult = Array<{
 						field_exploreTitle?: string;
 						field_exploreBody?: string;
 						field_exploreButtonLabel?: string;
-						field_shareTitle?: string;
-						field_shareBody?: string;
-						field_shareButtonLabel?: string;
 					};
-					badgeCallout?: {
+					pledgeExplainer?: {
 						field_title?: string;
 						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
 					};
 					peopleLists?: {
 						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
 						field_resultsHeading?: string;
 						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
 						field_showMoreLabel?: string;
-					};
-					brandedCta?: {
-						field_noPledgedHeadline?: string;
-						field_noPledgedBody?: string;
-						field_pledgedRunningHeadline?: string;
-						field_pledgedRunningBody?: string;
-						field_pledgedWonHeadline?: string;
-						field_pledgedWonBody?: string;
-						field_noPledgedWonHeadline?: string;
-						field_noPledgedWonBody?: string;
-						field_buttonLabel?: string;
-						field_buttonHref?: string;
 					};
 					voterReadiness?: {
 						field_title?: string;
 						field_subtitle?: string;
 						list_voterLinks?: Array<{
-							field_icon?: Field_icon;
+							img_image?: Img_image;
 							field_title?: string;
 							field_copy?: string;
 							field_linkLabel?: string;
@@ -83464,37 +83420,26 @@ export type GoodpartyOrg_allArticlesQueryResult = {
 						field_exploreTitle?: string;
 						field_exploreBody?: string;
 						field_exploreButtonLabel?: string;
-						field_shareTitle?: string;
-						field_shareBody?: string;
-						field_shareButtonLabel?: string;
 					};
-					badgeCallout?: {
+					pledgeExplainer?: {
 						field_title?: string;
 						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
 					};
 					peopleLists?: {
 						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
 						field_resultsHeading?: string;
 						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
 						field_showMoreLabel?: string;
-					};
-					brandedCta?: {
-						field_noPledgedHeadline?: string;
-						field_noPledgedBody?: string;
-						field_pledgedRunningHeadline?: string;
-						field_pledgedRunningBody?: string;
-						field_pledgedWonHeadline?: string;
-						field_pledgedWonBody?: string;
-						field_noPledgedWonHeadline?: string;
-						field_noPledgedWonBody?: string;
-						field_buttonLabel?: string;
-						field_buttonHref?: string;
 					};
 					voterReadiness?: {
 						field_title?: string;
 						field_subtitle?: string;
 						list_voterLinks?: Array<{
-							field_icon?: Field_icon;
+							img_image?: Img_image;
 							field_title?: string;
 							field_copy?: string;
 							field_linkLabel?: string;
@@ -107271,37 +107216,26 @@ export type CategoriesQueryResult = {
 						field_exploreTitle?: string;
 						field_exploreBody?: string;
 						field_exploreButtonLabel?: string;
-						field_shareTitle?: string;
-						field_shareBody?: string;
-						field_shareButtonLabel?: string;
 					};
-					badgeCallout?: {
+					pledgeExplainer?: {
 						field_title?: string;
 						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
 					};
 					peopleLists?: {
 						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
 						field_resultsHeading?: string;
 						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
 						field_showMoreLabel?: string;
-					};
-					brandedCta?: {
-						field_noPledgedHeadline?: string;
-						field_noPledgedBody?: string;
-						field_pledgedRunningHeadline?: string;
-						field_pledgedRunningBody?: string;
-						field_pledgedWonHeadline?: string;
-						field_pledgedWonBody?: string;
-						field_noPledgedWonHeadline?: string;
-						field_noPledgedWonBody?: string;
-						field_buttonLabel?: string;
-						field_buttonHref?: string;
 					};
 					voterReadiness?: {
 						field_title?: string;
 						field_subtitle?: string;
 						list_voterLinks?: Array<{
-							field_icon?: Field_icon;
+							img_image?: Img_image;
 							field_title?: string;
 							field_copy?: string;
 							field_linkLabel?: string;
@@ -131106,37 +131040,26 @@ export type TopicsQueryResult = {
 						field_exploreTitle?: string;
 						field_exploreBody?: string;
 						field_exploreButtonLabel?: string;
-						field_shareTitle?: string;
-						field_shareBody?: string;
-						field_shareButtonLabel?: string;
 					};
-					badgeCallout?: {
+					pledgeExplainer?: {
 						field_title?: string;
 						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
 					};
 					peopleLists?: {
 						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
 						field_resultsHeading?: string;
 						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
 						field_showMoreLabel?: string;
-					};
-					brandedCta?: {
-						field_noPledgedHeadline?: string;
-						field_noPledgedBody?: string;
-						field_pledgedRunningHeadline?: string;
-						field_pledgedRunningBody?: string;
-						field_pledgedWonHeadline?: string;
-						field_pledgedWonBody?: string;
-						field_noPledgedWonHeadline?: string;
-						field_noPledgedWonBody?: string;
-						field_buttonLabel?: string;
-						field_buttonHref?: string;
 					};
 					voterReadiness?: {
 						field_title?: string;
 						field_subtitle?: string;
 						list_voterLinks?: Array<{
-							field_icon?: Field_icon;
+							img_image?: Img_image;
 							field_title?: string;
 							field_copy?: string;
 							field_linkLabel?: string;
@@ -157001,37 +156924,26 @@ export type GoodpartyOrg_contactQueryResult = {
 						field_exploreTitle?: string;
 						field_exploreBody?: string;
 						field_exploreButtonLabel?: string;
-						field_shareTitle?: string;
-						field_shareBody?: string;
-						field_shareButtonLabel?: string;
 					};
-					badgeCallout?: {
+					pledgeExplainer?: {
 						field_title?: string;
 						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
 					};
 					peopleLists?: {
 						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
 						field_resultsHeading?: string;
 						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
 						field_showMoreLabel?: string;
-					};
-					brandedCta?: {
-						field_noPledgedHeadline?: string;
-						field_noPledgedBody?: string;
-						field_pledgedRunningHeadline?: string;
-						field_pledgedRunningBody?: string;
-						field_pledgedWonHeadline?: string;
-						field_pledgedWonBody?: string;
-						field_noPledgedWonHeadline?: string;
-						field_noPledgedWonBody?: string;
-						field_buttonLabel?: string;
-						field_buttonHref?: string;
 					};
 					voterReadiness?: {
 						field_title?: string;
 						field_subtitle?: string;
 						list_voterLinks?: Array<{
-							field_icon?: Field_icon;
+							img_image?: Img_image;
 							field_title?: string;
 							field_copy?: string;
 							field_linkLabel?: string;
@@ -180773,37 +180685,26 @@ export type GoodpartyOrg_landingPagesAndPolicyQueryResult =
 								field_exploreTitle?: string;
 								field_exploreBody?: string;
 								field_exploreButtonLabel?: string;
-								field_shareTitle?: string;
-								field_shareBody?: string;
-								field_shareButtonLabel?: string;
 							};
-							badgeCallout?: {
+							pledgeExplainer?: {
 								field_title?: string;
 								field_body?: string;
+								field_showPledgeLink?: boolean;
+								field_linkLabel?: string;
 							};
 							peopleLists?: {
 								field_candidatesHeading?: string;
+								field_candidatesIntro?: string;
 								field_resultsHeading?: string;
 								field_officeholdersHeading?: string;
+								field_officeholdersIntro?: string;
 								field_showMoreLabel?: string;
-							};
-							brandedCta?: {
-								field_noPledgedHeadline?: string;
-								field_noPledgedBody?: string;
-								field_pledgedRunningHeadline?: string;
-								field_pledgedRunningBody?: string;
-								field_pledgedWonHeadline?: string;
-								field_pledgedWonBody?: string;
-								field_noPledgedWonHeadline?: string;
-								field_noPledgedWonBody?: string;
-								field_buttonLabel?: string;
-								field_buttonHref?: string;
 							};
 							voterReadiness?: {
 								field_title?: string;
 								field_subtitle?: string;
 								list_voterLinks?: Array<{
-									field_icon?: Field_icon;
+									img_image?: Img_image;
 									field_title?: string;
 									field_copy?: string;
 									field_linkLabel?: string;
@@ -204556,37 +204457,26 @@ export type GoodpartyOrg_electionsQueryResult = {
 						field_exploreTitle?: string;
 						field_exploreBody?: string;
 						field_exploreButtonLabel?: string;
-						field_shareTitle?: string;
-						field_shareBody?: string;
-						field_shareButtonLabel?: string;
 					};
-					badgeCallout?: {
+					pledgeExplainer?: {
 						field_title?: string;
 						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
 					};
 					peopleLists?: {
 						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
 						field_resultsHeading?: string;
 						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
 						field_showMoreLabel?: string;
-					};
-					brandedCta?: {
-						field_noPledgedHeadline?: string;
-						field_noPledgedBody?: string;
-						field_pledgedRunningHeadline?: string;
-						field_pledgedRunningBody?: string;
-						field_pledgedWonHeadline?: string;
-						field_pledgedWonBody?: string;
-						field_noPledgedWonHeadline?: string;
-						field_noPledgedWonBody?: string;
-						field_buttonLabel?: string;
-						field_buttonHref?: string;
 					};
 					voterReadiness?: {
 						field_title?: string;
 						field_subtitle?: string;
 						list_voterLinks?: Array<{
-							field_icon?: Field_icon;
+							img_image?: Img_image;
 							field_title?: string;
 							field_copy?: string;
 							field_linkLabel?: string;
@@ -228327,37 +228217,26 @@ export type GoodpartyOrg_candidatesQueryResult = {
 						field_exploreTitle?: string;
 						field_exploreBody?: string;
 						field_exploreButtonLabel?: string;
-						field_shareTitle?: string;
-						field_shareBody?: string;
-						field_shareButtonLabel?: string;
 					};
-					badgeCallout?: {
+					pledgeExplainer?: {
 						field_title?: string;
 						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
 					};
 					peopleLists?: {
 						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
 						field_resultsHeading?: string;
 						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
 						field_showMoreLabel?: string;
-					};
-					brandedCta?: {
-						field_noPledgedHeadline?: string;
-						field_noPledgedBody?: string;
-						field_pledgedRunningHeadline?: string;
-						field_pledgedRunningBody?: string;
-						field_pledgedWonHeadline?: string;
-						field_pledgedWonBody?: string;
-						field_noPledgedWonHeadline?: string;
-						field_noPledgedWonBody?: string;
-						field_buttonLabel?: string;
-						field_buttonHref?: string;
 					};
 					voterReadiness?: {
 						field_title?: string;
 						field_subtitle?: string;
 						list_voterLinks?: Array<{
-							field_icon?: Field_icon;
+							img_image?: Img_image;
 							field_title?: string;
 							field_copy?: string;
 							field_linkLabel?: string;
@@ -252098,37 +251977,26 @@ export type GoodpartyOrg_profileQueryResult = {
 						field_exploreTitle?: string;
 						field_exploreBody?: string;
 						field_exploreButtonLabel?: string;
-						field_shareTitle?: string;
-						field_shareBody?: string;
-						field_shareButtonLabel?: string;
 					};
-					badgeCallout?: {
+					pledgeExplainer?: {
 						field_title?: string;
 						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
 					};
 					peopleLists?: {
 						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
 						field_resultsHeading?: string;
 						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
 						field_showMoreLabel?: string;
-					};
-					brandedCta?: {
-						field_noPledgedHeadline?: string;
-						field_noPledgedBody?: string;
-						field_pledgedRunningHeadline?: string;
-						field_pledgedRunningBody?: string;
-						field_pledgedWonHeadline?: string;
-						field_pledgedWonBody?: string;
-						field_noPledgedWonHeadline?: string;
-						field_noPledgedWonBody?: string;
-						field_buttonLabel?: string;
-						field_buttonHref?: string;
 					};
 					voterReadiness?: {
 						field_title?: string;
 						field_subtitle?: string;
 						list_voterLinks?: Array<{
-							field_icon?: Field_icon;
+							img_image?: Img_image;
 							field_title?: string;
 							field_copy?: string;
 							field_linkLabel?: string;
@@ -275869,37 +275737,26 @@ export type GoodpartyOrg_allComponentsQueryResult = {
 						field_exploreTitle?: string;
 						field_exploreBody?: string;
 						field_exploreButtonLabel?: string;
-						field_shareTitle?: string;
-						field_shareBody?: string;
-						field_shareButtonLabel?: string;
 					};
-					badgeCallout?: {
+					pledgeExplainer?: {
 						field_title?: string;
 						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
 					};
 					peopleLists?: {
 						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
 						field_resultsHeading?: string;
 						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
 						field_showMoreLabel?: string;
-					};
-					brandedCta?: {
-						field_noPledgedHeadline?: string;
-						field_noPledgedBody?: string;
-						field_pledgedRunningHeadline?: string;
-						field_pledgedRunningBody?: string;
-						field_pledgedWonHeadline?: string;
-						field_pledgedWonBody?: string;
-						field_noPledgedWonHeadline?: string;
-						field_noPledgedWonBody?: string;
-						field_buttonLabel?: string;
-						field_buttonHref?: string;
 					};
 					voterReadiness?: {
 						field_title?: string;
 						field_subtitle?: string;
 						list_voterLinks?: Array<{
-							field_icon?: Field_icon;
+							img_image?: Img_image;
 							field_title?: string;
 							field_copy?: string;
 							field_linkLabel?: string;
@@ -305452,37 +305309,26 @@ export type GlobalElectionTemplateQueryResult = {
 						field_exploreTitle?: string;
 						field_exploreBody?: string;
 						field_exploreButtonLabel?: string;
-						field_shareTitle?: string;
-						field_shareBody?: string;
-						field_shareButtonLabel?: string;
 					};
-					badgeCallout?: {
+					pledgeExplainer?: {
 						field_title?: string;
 						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
 					};
 					peopleLists?: {
 						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
 						field_resultsHeading?: string;
 						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
 						field_showMoreLabel?: string;
-					};
-					brandedCta?: {
-						field_noPledgedHeadline?: string;
-						field_noPledgedBody?: string;
-						field_pledgedRunningHeadline?: string;
-						field_pledgedRunningBody?: string;
-						field_pledgedWonHeadline?: string;
-						field_pledgedWonBody?: string;
-						field_noPledgedWonHeadline?: string;
-						field_noPledgedWonBody?: string;
-						field_buttonLabel?: string;
-						field_buttonHref?: string;
 					};
 					voterReadiness?: {
 						field_title?: string;
 						field_subtitle?: string;
 						list_voterLinks?: Array<{
-							field_icon?: Field_icon;
+							img_image?: Img_image;
 							field_title?: string;
 							field_copy?: string;
 							field_linkLabel?: string;
@@ -329251,37 +329097,26 @@ export type CustomElectionTemplateByIdQueryResult = {
 						field_exploreTitle?: string;
 						field_exploreBody?: string;
 						field_exploreButtonLabel?: string;
-						field_shareTitle?: string;
-						field_shareBody?: string;
-						field_shareButtonLabel?: string;
 					};
-					badgeCallout?: {
+					pledgeExplainer?: {
 						field_title?: string;
 						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
 					};
 					peopleLists?: {
 						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
 						field_resultsHeading?: string;
 						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
 						field_showMoreLabel?: string;
-					};
-					brandedCta?: {
-						field_noPledgedHeadline?: string;
-						field_noPledgedBody?: string;
-						field_pledgedRunningHeadline?: string;
-						field_pledgedRunningBody?: string;
-						field_pledgedWonHeadline?: string;
-						field_pledgedWonBody?: string;
-						field_noPledgedWonHeadline?: string;
-						field_noPledgedWonBody?: string;
-						field_buttonLabel?: string;
-						field_buttonHref?: string;
 					};
 					voterReadiness?: {
 						field_title?: string;
 						field_subtitle?: string;
 						list_voterLinks?: Array<{
-							field_icon?: Field_icon;
+							img_image?: Img_image;
 							field_title?: string;
 							field_copy?: string;
 							field_linkLabel?: string;

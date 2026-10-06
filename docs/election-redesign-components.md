@@ -447,6 +447,51 @@ its own when a page has no data for it. That is how it is built. Things that cam
   are the two ramps, so this holds 32 at both ends), `body-1` for the 18px body, `text-md` and `text-sm` for the 14px and 12px
   row text, the xl container (308px rail, 44px gap, 848px column at 1440).
 
+**Position content block, second round** (position pages) — revised in draft PR #327 after design
+feedback (Emily, 2026-10-06; frames 2139-20108 / 2360-15568, and the pre-filing frames 2360-19703 /
+2360-19298). Still one block; the Studio fields changed shape.
+
+Decisions that came out of it:
+
+- **The rail is desktop-only and has two cards.** The share card and its button component are gone,
+  with their Studio fields; the "On this page" links and the "Explore more races" card remain, and the
+  whole rail is hidden below the `lg` breakpoint because the phone frame carries none of it. The
+  "GoodParty.org Pledge" in the explore card's body opens the pledge pop-up.
+- **The branded CTA ("Tired of choosing between red and blue?") is gone**, with its nine fields and
+  the four-way copy switch. No editor had filled any of them, so nothing is orphaned in Studio.
+- **The pledge explainer is drawn inside each people list**, under the intro sentence, in the shape
+  the featured candidates block settled on the same day (PR #371): heart in a divided 112px cell on
+  desktop and stacked on the phone, "What this symbol means", the pledge's name in bold, and a
+  "Read the full pledge" link that opens `PledgeModal`. One set of Studio fields serves both copies,
+  with a show/hide toggle for the link. The old single callout above both lists is gone.
+- **`PledgeModal` is copied in, byte for byte, from the location hero branch (#300)**, where #371
+  merged it; it is not on `develop` yet. Both drafts add the identical file, which git merges without
+  conflict. If the featured block changes the pop-up before either lands, resolve the merge in favour
+  of that branch.
+- **Each list has an intro sentence** ("Learn about candidates who have filed to run for [office]",
+  "Learn about who represents you in [County or City]"), two new editable fields.
+- **The seat is a chip next to the name** (Figma "Tagline": white, 6px radius, 28px tall), on
+  candidates and officeholders alike, and leaves the meta line. The seat filter moved into the
+  heading row of the first list that renders, full width under the intro on the phone.
+- **The voter readiness card uses uploaded illustrations, not icons**, like the illustrated columns
+  block: `img_image` on each item replaces `field_icon`. The default three items carry no picture
+  until an editor fills the items in Studio with artwork, which is the same rule as that block. The
+  phone stacks the three centred with hairlines between them (112px pictures); desktop keeps three
+  divided columns (64px).
+- **The three default links point at this site's voter pages**: `/check-voter-registration`,
+  `/find-polling-place` and `/request-mail-in-ballot` (all live, checked 2026-10-06), replacing the
+  vote.gov and vote.org links.
+- **Before the filing window opens the About card and the How to run steps lead.** The block reads
+  the hero's state, and `leadsWithAbout` is true only for `filing` with `filingOpen` false (the six
+  months before the window). The "On this page" links follow the rendered order. Every other phase,
+  including decided, leads with the people lists. `src/ui/electionsPositionContentBlock.test.tsx`
+  pins both orders.
+
+Noted and not acted on: the pre-filing desktop frame still lists the "On this page" links in the
+people-first order; the block follows the sections as rendered instead. The frames prefix the
+officeholder meta line with the office name ("City Council · Independent · …"); the line stays
+party and term only.
+
 ## The shared election counts, as marketing defined them
 
 Settled with Emily on 2026-09-17 while building the location hero's four stat cards.
@@ -678,7 +723,7 @@ this table; it is here to orient, and to show the shape of the answer.
 | Location facts | develop | State / County / City / District globals | draft and batch |
 | Elections index | develop | Location globals, Person Profile global | draft and batch |
 | Position hero | develop + draft PR #320 | Position and Position Candidates globals | into #320, stays draft |
-| Position content block | develop + draft PR #327 (stacked on #320) | Position global | into #327, stays draft |
+| Position content block | develop + draft PR #327 (stacked on #320) | Position global, plus the landing page `template-elections-position-subset` | into #327, stays draft |
 | Candidates block | develop | Position Candidates global, every `/people` profile | draft and batch |
 | Elections search hero | develop + draft PR #351 | the `/elections` landing page | into #351 |
 | Featured cities | develop + draft PR #307 | the `/elections` landing page | into #307 |

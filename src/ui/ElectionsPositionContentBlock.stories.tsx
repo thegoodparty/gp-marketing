@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { imageJpg } from '~/ui/_data/media.tsx';
 import {
 	ElectionsPositionContentBlock,
 	type ElectionsPositionContentBlockProps,
@@ -14,6 +15,7 @@ const candidates: ElectionsPositionPerson[] = [
 		href: '/people/tom-nguyen-1',
 		avatar: 'https://i.pravatar.cc/128?img=12',
 		isWinner: true,
+		seatLabel: 'District 1',
 	},
 	{
 		key: '2',
@@ -22,9 +24,10 @@ const candidates: ElectionsPositionPerson[] = [
 		isPledged: true,
 		href: '/people/maria-hernandez-2',
 		avatar: 'https://i.pravatar.cc/128?img=32',
+		seatLabel: 'District 2',
 	},
-	{ key: '3', name: 'Aisha Okonkwo', party: 'Democratic party', href: '/people/aisha-okonkwo-3' },
-	{ key: '4', name: 'James Whitfield', party: 'Republican party', href: '/people/james-whitfield-4' },
+	{ key: '3', name: 'Aisha Okonkwo', party: 'Democratic party', href: '/people/aisha-okonkwo-3', seatLabel: 'District 1' },
+	{ key: '4', name: 'James Whitfield', party: 'Republican party', href: '/people/james-whitfield-4', seatLabel: 'District 2' },
 	{ key: '5', name: 'Priya Raman', party: 'Libertarian party', href: '/people/priya-raman-5' },
 	{ key: '6', name: 'Daniel Okafor', party: 'Democratic party', href: '/people/daniel-okafor-6' },
 ];
@@ -36,8 +39,8 @@ const officeholders: ElectionsPositionPerson[] = [
 		party: 'Independent',
 		isPledged: true,
 		term: '2023 to 2027',
-		seatLabel: 'Seat 2',
-		seatValue: '2',
+		seatLabel: 'District 1',
+		seatValue: '1',
 		href: '/people/grace-hopper-o1',
 		avatar: 'https://i.pravatar.cc/128?img=47',
 	},
@@ -46,11 +49,22 @@ const officeholders: ElectionsPositionPerson[] = [
 		name: 'Carlos Mendes',
 		party: 'Democratic',
 		term: '2025 to 2029',
-		seatLabel: 'Seat 1',
-		seatValue: '1',
+		seatLabel: 'District 2',
+		seatValue: '2',
 		href: '/people/carlos-mendes-o2',
 	},
 ];
+
+const pledgeExplainer: ElectionsPositionContentBlockProps['pledgeExplainer'] = {
+	title: 'What this symbol means',
+	body: (
+		<p>
+			Candidates and elected officials with this symbol took the <strong>GoodParty.org Pledge</strong>, promising to serve people first,
+			independent of both major parties and big-money interests.
+		</p>
+	),
+	linkLabel: 'Read the full pledge',
+};
 
 const howToRun: NonNullable<ElectionsPositionContentBlockProps['howToRun']> = {
 	electionOverBanner:
@@ -96,6 +110,33 @@ const howToRun: NonNullable<ElectionsPositionContentBlockProps['howToRun']> = {
 	),
 };
 
+const voterItems: NonNullable<ElectionsPositionContentBlockProps['voterReadiness']>['items'] = [
+		{
+			key: 'r',
+			image: imageJpg(),
+			imageAlt: 'A clipboard with a checked ballot',
+			title: 'Check your voter registration',
+			copy: <p>Verify your voter registration in under a minute.</p>,
+			button: { buttonType: 'internal', href: '/check-voter-registration', label: 'Check my registration' },
+		},
+		{
+			key: 'p',
+			image: imageJpg(),
+			imageAlt: 'A ballot box',
+			title: 'Find your polling location',
+			copy: <p>Learn where to go to vote in person.</p>,
+			button: { buttonType: 'internal', href: '/find-polling-place', label: 'Find my polling place' },
+		},
+		{
+			key: 'm',
+			image: imageJpg(),
+			imageAlt: 'An envelope holding a ballot',
+			title: 'Request a mail-in ballot',
+			copy: <p>Apply for an absentee ballot to vote by mail.</p>,
+			button: { buttonType: 'internal', href: '/request-mail-in-ballot', label: 'Request my ballot' },
+		},
+];
+
 const base: ElectionsPositionContentBlockProps = {
 	backgroundColor: 'cream',
 	state: { phase: 'filing', filingOpen: true },
@@ -105,80 +146,34 @@ const base: ElectionsPositionContentBlockProps = {
 		explore: {
 			title: 'Explore more races in Harris County',
 			body: (
-				<p>Browse every upcoming election in Harris County and find independent candidates who&apos;ve taken the GoodParty.org Pledge.</p>
+				<p>
+					Browse every upcoming election in Harris County and find independent candidates who&apos;ve taken the{' '}
+					<a href='#' className='font-medium text-info-500 underline underline-offset-2'>
+						GoodParty.org Pledge
+					</a>
+					.
+				</p>
 			),
 			buttonLabel: 'See all Harris County races',
 			href: '/elections/tx/harris-county',
 		},
-		share: {
-			title: 'Know someone who should run for City Council Member?',
-			body: (
-				<p>
-					Our democracy is stronger when everyday people step up. Share this page to nominate someone you trust to run for City Council
-					Member.
-				</p>
-			),
-			buttonLabel: 'Share',
-			url: 'https://goodparty.org/elections/tx/travis-county/austin/position/city-council-member',
-		},
 	},
-	badgeCallout: {
-		title: 'What this badge means',
-		body: (
-			<p>
-				Candidates with the heart and star badge pledged to run without money or endorsement from either major party. Any candidate can take
-				the GoodParty.org Pledge, and those without the badge haven&apos;t yet. It&apos;s not an endorsement, but it&apos;s worth weighing
-				when you fill out your ballot.
-			</p>
-		),
-	},
+	pledgeExplainer,
 	candidates,
 	officeholders,
 	headings: {
 		candidates: 'Candidates for City Council Member',
+		candidatesIntro: 'Learn about candidates who have filed to run for City Council Member.',
 		results: 'Results for City Council Member',
 		officeholders: "Who's currently in office",
+		officeholdersIntro: 'Learn about who represents you in Austin.',
 		showMore: 'See more candidates',
 		voter: "Are you ready for Austin's next election?",
 		voterSubtitle: 'Get registered and ready to vote, whether in person or by mail.',
 		about: 'About City Council Member',
 		howToRun: 'How to run for City Council Member',
 	},
-	brandedCta: {
-		headline: 'Tired of choosing between red and blue?',
-		body: (
-			<p>
-				Candidates for City Council Member have taken the GoodParty.org Pledge to serve people, not parties or big money. See who they are
-				above, or learn how you can step up to run.
-			</p>
-		),
-		button: { buttonType: 'internal', href: '/run-for-office', label: 'Learn more' },
-	},
-	voterReadiness: {
-		items: [
-			{
-				key: 'r',
-				icon: 'clipboard-check',
-				title: 'Check your voter registration',
-				copy: <p>Check your voter registration in under a minute.</p>,
-				button: { buttonType: 'external', href: 'https://vote.gov', label: 'Check my registration' },
-			},
-			{
-				key: 'p',
-				icon: 'vote',
-				title: 'Find your polling location',
-				copy: <p>Learn where to go to vote in person.</p>,
-				button: { buttonType: 'external', href: 'https://www.vote.org/polling-place-locator/', label: 'Find my polling place' },
-			},
-			{
-				key: 'm',
-				icon: 'mail-open',
-				title: 'Request a mail-in ballot',
-				copy: <p>Apply for an absentee ballot to vote by mail.</p>,
-				button: { buttonType: 'external', href: 'https://www.vote.org/absentee-ballot/', label: 'Request my ballot' },
-			},
-		],
-	},
+	voterReadiness: { items: voterItems },
 	about: {
 		cardTitle: 'About this position',
 		description:
@@ -208,7 +203,7 @@ const meta: Meta<typeof ElectionsPositionContentBlock> = {
 		layout: 'fullscreen',
 		design: {
 			type: 'figma',
-			url: 'https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2001-6295',
+			url: 'https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2139-20108',
 		},
 	},
 };
@@ -216,25 +211,22 @@ const meta: Meta<typeof ElectionsPositionContentBlock> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** State 1: filing is open. Candidates listed, four shown, the rest behind "See more". */
+/** State 1, filing open: candidates listed with the pledge explainer, four shown, the rest behind "See more". */
 export const Filing: Story = { args: base };
+
+/** State 1 before the window opens: nobody has filed, so About and How to run lead and the people lists follow. */
+export const PreFiling: Story = {
+	args: { ...base, state: { phase: 'filing', filingOpen: false }, candidates: [] },
+};
 
 /** State 2: the filing deadline has passed. Same body as filing; only the hero changes. */
 export const MidElection: Story = {
 	args: { ...base, state: { phase: 'midElection', resultsPending: false } },
 };
 
-/** State 3: the race is decided and a pledged candidate won. Results heading, ELECTED tag, winner copy, "election is over" banner. */
+/** State 3: the race is decided and a pledged candidate won. Results heading, ELECTED tag, "election is over" banner. */
 export const DecidedPledgedWinner: Story = {
-	args: {
-		...base,
-		state: { phase: 'decided', multipleWinners: false },
-		brandedCta: {
-			headline: 'A GoodParty.org candidate won this race.',
-			body: <p>Proof that people-first, independent candidates win. Want to be next? The next election is already on the horizon.</p>,
-			button: { buttonType: 'internal', href: '/run-for-office', label: 'Learn more' },
-		},
-	},
+	args: { ...base, state: { phase: 'decided', multipleWinners: false } },
 };
 
 /** State 3 again, but nobody who won took the Pledge. */
@@ -243,11 +235,6 @@ export const DecidedNoPledgedWinner: Story = {
 		...base,
 		state: { phase: 'decided', multipleWinners: false },
 		candidates: candidates.map(c => ({ ...c, isPledged: false, isWinner: c.key === '3' })),
-		brandedCta: {
-			headline: 'Tired of choosing between red and blue?',
-			body: <p>There weren&apos;t any winners this cycle who took the GoodParty.org Pledge. Learn how you can step up to run next.</p>,
-			button: { buttonType: 'internal', href: '/run-for-office', label: 'Learn more' },
-		},
 	},
 };
 
@@ -260,7 +247,7 @@ export const DecidedMultipleWinners: Story = {
 	},
 };
 
-/** No candidate data: the candidates list, its nav link and the badge callout's reason to exist go with it. */
+/** No candidate data: the candidates list, its nav link and the pledge explainer's reason to exist go with it. */
 export const NoCandidateData: Story = {
 	args: { ...base, candidates: undefined, officeholders: undefined },
 };
@@ -270,18 +257,26 @@ export const OfficeholdersOnly: Story = {
 	args: { ...base, candidates: [] },
 };
 
-/** With seat data on every row the filter appears and narrows both lists. */
+/** With seat data on every row the filter sits in the heading row and narrows both lists. */
 export const WithSeatFilter: Story = {
 	args: {
 		...base,
-		candidates: candidates.slice(0, 4).map((c, i) => ({ ...c, seatValue: String((i % 2) + 1), seatLabel: `Seat ${(i % 2) + 1}` })),
+		candidates: candidates.slice(0, 4).map((c, i) => ({ ...c, seatValue: String((i % 2) + 1), seatLabel: `District ${(i % 2) + 1}` })),
 		seatFilter: {
-			label: 'Filter by Seat',
+			label: 'Filter by district',
 			options: [
-				{ value: '1', label: 'Seat 1' },
-				{ value: '2', label: 'Seat 2' },
+				{ value: '1', label: 'District 1' },
+				{ value: '2', label: 'District 2' },
 			],
 		},
+	},
+};
+
+/** The Studio defaults: no illustrations uploaded yet, so the voter card is text and links only. */
+export const DefaultVoterItems: Story = {
+	args: {
+		...base,
+		voterReadiness: { items: voterItems.map(item => ({ ...item, image: undefined, imageAlt: undefined })) },
 	},
 };
 
@@ -292,7 +287,7 @@ export const SparseRaceData: Story = {
 		candidates: undefined,
 		officeholders: undefined,
 		about: undefined,
-		siderail: { onThisPageTitle: 'On this page', share: base.siderail.share },
+		siderail: { onThisPageTitle: 'On this page' },
 		howToRun: { ...howToRun, steps: howToRun.steps.slice(2).map(step => ({ ...step, number: undefined })) },
 	},
 };

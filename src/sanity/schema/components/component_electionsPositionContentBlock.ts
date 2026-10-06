@@ -9,11 +9,10 @@ import { getIcon } from '../../utils/getIcon.tsx';
  */
 export const POSITION_CONTENT_LINKS = {
 	run: '/run-for-office',
-	pledge: '/run-for-office',
 	community: 'https://community.goodparty.org',
-	voterRegistration: 'https://vote.gov',
-	pollingPlace: 'https://www.vote.org/polling-place-locator/',
-	mailBallot: 'https://www.vote.org/absentee-ballot/',
+	voterRegistration: '/check-voter-registration',
+	pollingPlace: '/find-polling-place',
+	mailBallot: '/request-mail-in-ballot',
 } as const;
 
 /*
@@ -36,33 +35,19 @@ export const POSITION_CONTENT_DEFAULTS = {
 		exploreBody:
 			"Browse every upcoming election in [County or City] and find independent candidates who've taken the GoodParty.org Pledge.",
 		exploreButtonLabel: 'See all [County or City] races',
-		shareTitle: 'Know someone who should run for [office name]?',
-		shareBody:
-			'Our democracy is stronger when everyday people step up. Share this page to nominate someone you trust to run for [office name].',
-		shareButtonLabel: 'Share',
 	},
-	badgeCallout: {
-		title: 'What this badge means',
-		body: "Candidates with the heart and star badge pledged to run without money or endorsement from either major party. Any candidate can take the GoodParty.org Pledge, and those without the badge haven't yet. It's not an endorsement, but it's worth weighing when you fill out your ballot.",
+	pledgeExplainer: {
+		title: 'What this symbol means',
+		body: 'Candidates and elected officials with this symbol took the GoodParty.org Pledge, promising to serve people first, independent of both major parties and big-money interests.',
+		linkLabel: 'Read the full pledge',
 	},
 	peopleLists: {
 		candidatesHeading: 'Candidates for [office name]',
+		candidatesIntro: 'Learn about candidates who have filed to run for [office name].',
 		resultsHeading: 'Results for [office name]',
 		officeholdersHeading: "Who's currently in office",
+		officeholdersIntro: 'Learn about who represents you in [County or City].',
 		showMoreLabel: 'See more candidates',
-	},
-	brandedCta: {
-		noPledgedHeadline: 'Tired of choosing between red and blue?',
-		noPledgedBody:
-			"There aren't any candidates for [office name] who've taken the GoodParty.org Pledge to serve people, not parties or big money. Learn how you can step up to run.",
-		pledgedRunningHeadline: 'Tired of choosing between red and blue?',
-		pledgedRunningBody:
-			'Candidates for [office name] have taken the GoodParty.org Pledge to serve people, not parties or big money. See who they are above, or learn how you can step up to run.',
-		pledgedWonHeadline: 'A GoodParty.org candidate won this race.',
-		pledgedWonBody: 'Proof that people-first, independent candidates win. Want to be next? The next election is already on the horizon.',
-		noPledgedWonHeadline: 'Tired of choosing between red and blue?',
-		noPledgedWonBody: "There weren't any winners this cycle who took the GoodParty.org Pledge. Learn how you can step up to run next.",
-		buttonLabel: 'Learn more',
 	},
 	voterReadiness: {
 		title: "Are you ready for [County or City]'s next election?",
@@ -70,15 +55,13 @@ export const POSITION_CONTENT_DEFAULTS = {
 		items: [
 			{
 				key: 'registration',
-				icon: 'clipboard-check',
 				title: 'Check your voter registration',
-				copy: 'Check your voter registration in under a minute.',
+				copy: 'Verify your voter registration in under a minute.',
 				buttonLabel: 'Check my registration',
 				href: POSITION_CONTENT_LINKS.voterRegistration,
 			},
 			{
 				key: 'polling',
-				icon: 'vote',
 				title: 'Find your polling location',
 				copy: 'Learn where to go to vote in person.',
 				buttonLabel: 'Find my polling place',
@@ -86,7 +69,6 @@ export const POSITION_CONTENT_DEFAULTS = {
 			},
 			{
 				key: 'mail',
-				icon: 'mail-open',
 				title: 'Request a mail-in ballot',
 				copy: 'Apply for an absentee ballot to vote by mail.',
 				buttonLabel: 'Request my ballot',
@@ -138,7 +120,7 @@ export const component_electionsPositionContentBlock = {
 	title: 'Elections Position Content Block',
 	name: 'component_electionsPositionContentBlock',
 	description:
-		'The body of a Position Page below the hero: the side rail, the candidate and officeholder lists, the branded CTA, the voter readiness links, the About card and the How to run steps. Its state follows the hero (filing, mid-election, decided) from the race data, never by hand. The data-fed sections (candidates, officeholders, About, the eligibility and filing steps, the explore and share cards) hide on any page with no data for them; the editorial sections (badge callout next to a list, branded CTA, voter readiness, the launch step) always show. Sanity controls the copy and the design settings; every field has a default.',
+		'The body of a Position Page below the hero: the side rail (desktop only), the candidate and officeholder lists with their pledge explainers, the voter readiness links, the About card and the How to run steps. Its state follows the hero (filing, mid-election, decided) from the race data, never by hand: before the filing window opens the About card and the How to run steps move to the top. The data-fed sections (candidates, officeholders, About, the eligibility and filing steps, the explore card) hide on any page with no data for them; the editorial sections (voter readiness, the launch step) always show. Sanity controls the copy and the design settings; every field has a default.',
 	type: 'object',
 	icon: getIcon('FileText'),
 	fields: [
@@ -147,30 +129,52 @@ export const component_electionsPositionContentBlock = {
 			name: 'siderail',
 			type: 'object',
 			group: 'siderail',
+			description: 'Shown beside the content on desktop only; phones and tablets hide the rail.',
 			fields: [
 				stringField('field_onThisPageTitle', '"On this page" title', POSITION_CONTENT_DEFAULTS.siderail.onThisPageTitle),
 				stringField('field_exploreTitle', 'Explore card title', POSITION_CONTENT_DEFAULTS.siderail.exploreTitle, TOKEN_NOTE),
-				textField('field_exploreBody', 'Explore card body', POSITION_CONTENT_DEFAULTS.siderail.exploreBody, TOKEN_NOTE),
+				textField(
+					'field_exploreBody',
+					'Explore card body',
+					POSITION_CONTENT_DEFAULTS.siderail.exploreBody,
+					`The words "GoodParty.org Pledge" open the pledge pop-up automatically. ${TOKEN_NOTE}`,
+				),
 				stringField(
 					'field_exploreButtonLabel',
 					'Explore card button label',
 					POSITION_CONTENT_DEFAULTS.siderail.exploreButtonLabel,
 					TOKEN_NOTE,
 				),
-				stringField('field_shareTitle', 'Share card title', POSITION_CONTENT_DEFAULTS.siderail.shareTitle, TOKEN_NOTE),
-				textField('field_shareBody', 'Share card body', POSITION_CONTENT_DEFAULTS.siderail.shareBody, TOKEN_NOTE),
-				stringField('field_shareButtonLabel', 'Share button label', POSITION_CONTENT_DEFAULTS.siderail.shareButtonLabel),
 			],
 		},
 		{
-			title: 'Badge callout',
-			name: 'badgeCallout',
+			title: 'Pledge explainer',
+			name: 'pledgeExplainer',
 			type: 'object',
 			group: 'lists',
-			description: 'The blue strip explaining the heart and star mark. Only shown when a candidate or officeholder list is on the page.',
+			description:
+				'The blue box explaining the heart and star symbol, shown at the top of the candidates list and of the officeholders list. Its link opens the pledge pop-up.',
 			fields: [
-				stringField('field_title', 'Title', POSITION_CONTENT_DEFAULTS.badgeCallout.title),
-				textField('field_body', 'Body', POSITION_CONTENT_DEFAULTS.badgeCallout.body),
+				stringField('field_title', 'Title', POSITION_CONTENT_DEFAULTS.pledgeExplainer.title),
+				textField(
+					'field_body',
+					'Body',
+					POSITION_CONTENT_DEFAULTS.pledgeExplainer.body,
+					'The words "GoodParty.org Pledge" are shown in bold automatically.',
+				),
+				{
+					title: 'Show pledge link',
+					name: 'field_showPledgeLink',
+					type: 'boolean',
+					initialValue: true,
+					description: 'The link at the end of the explainer that opens the pledge pop-up.',
+				},
+				stringField(
+					'field_linkLabel',
+					'Link label',
+					POSITION_CONTENT_DEFAULTS.pledgeExplainer.linkLabel,
+					'Only shown when the pledge link is on.',
+				),
 			],
 		},
 		{
@@ -186,6 +190,12 @@ export const component_electionsPositionContentBlock = {
 					`Shown while the race is open. ${TOKEN_NOTE}`,
 				),
 				stringField(
+					'field_candidatesIntro',
+					'Candidates intro',
+					POSITION_CONTENT_DEFAULTS.peopleLists.candidatesIntro,
+					`The sentence under the candidates heading. ${TOKEN_NOTE}`,
+				),
+				stringField(
 					'field_resultsHeading',
 					'Results heading',
 					POSITION_CONTENT_DEFAULTS.peopleLists.resultsHeading,
@@ -197,52 +207,13 @@ export const component_electionsPositionContentBlock = {
 					POSITION_CONTENT_DEFAULTS.peopleLists.officeholdersHeading,
 					TOKEN_NOTE,
 				),
+				stringField(
+					'field_officeholdersIntro',
+					'Officeholders intro',
+					POSITION_CONTENT_DEFAULTS.peopleLists.officeholdersIntro,
+					`The sentence under the officeholders heading. ${TOKEN_NOTE}`,
+				),
 				stringField('field_showMoreLabel', '"See more" button label', POSITION_CONTENT_DEFAULTS.peopleLists.showMoreLabel),
-			],
-		},
-		{
-			title: 'Branded CTA',
-			name: 'brandedCta',
-			type: 'object',
-			group: 'brandedCta',
-			description:
-				'The heart and star card. Which pair of headline and body shows depends on the race state and on whether anyone listed has taken the Pledge.',
-			fields: [
-				stringField(
-					'field_noPledgedHeadline',
-					'No pledged candidate: headline',
-					POSITION_CONTENT_DEFAULTS.brandedCta.noPledgedHeadline,
-					TOKEN_NOTE,
-				),
-				textField('field_noPledgedBody', 'No pledged candidate: body', POSITION_CONTENT_DEFAULTS.brandedCta.noPledgedBody, TOKEN_NOTE),
-				stringField(
-					'field_pledgedRunningHeadline',
-					'Pledged candidate running: headline',
-					POSITION_CONTENT_DEFAULTS.brandedCta.pledgedRunningHeadline,
-					TOKEN_NOTE,
-				),
-				textField(
-					'field_pledgedRunningBody',
-					'Pledged candidate running: body',
-					POSITION_CONTENT_DEFAULTS.brandedCta.pledgedRunningBody,
-					TOKEN_NOTE,
-				),
-				stringField(
-					'field_pledgedWonHeadline',
-					'Pledged candidate won: headline',
-					POSITION_CONTENT_DEFAULTS.brandedCta.pledgedWonHeadline,
-					TOKEN_NOTE,
-				),
-				textField('field_pledgedWonBody', 'Pledged candidate won: body', POSITION_CONTENT_DEFAULTS.brandedCta.pledgedWonBody, TOKEN_NOTE),
-				stringField(
-					'field_noPledgedWonHeadline',
-					'No pledged winner: headline',
-					POSITION_CONTENT_DEFAULTS.brandedCta.noPledgedWonHeadline,
-					TOKEN_NOTE,
-				),
-				textField('field_noPledgedWonBody', 'No pledged winner: body', POSITION_CONTENT_DEFAULTS.brandedCta.noPledgedWonBody, TOKEN_NOTE),
-				stringField('field_buttonLabel', 'Button label', POSITION_CONTENT_DEFAULTS.brandedCta.buttonLabel),
-				stringField('field_buttonHref', 'Button link', POSITION_CONTENT_LINKS.run, LINK_NOTE),
 			],
 		},
 		{
@@ -251,7 +222,7 @@ export const component_electionsPositionContentBlock = {
 			type: 'object',
 			group: 'voterReadiness',
 			description:
-				'The three-column "Are you ready to vote" card. Leave the items empty to show the default three (registration, polling place, mail-in ballot).',
+				'The three-column "Are you ready to vote" card. Leave the items empty to show the default three (registration, polling place, mail-in ballot), which link to the matching pages on this site and carry no illustration until items with images are added here.',
 			fields: [
 				stringField('field_title', 'Heading', POSITION_CONTENT_DEFAULTS.voterReadiness.title, TOKEN_NOTE),
 				stringField('field_subtitle', 'Subheading', POSITION_CONTENT_DEFAULTS.voterReadiness.subtitle),
@@ -267,13 +238,18 @@ export const component_electionsPositionContentBlock = {
 							name: 'voterLink',
 							type: 'object',
 							fields: [
-								{ title: 'Icon', name: 'field_icon', type: 'field_icon' },
+								{
+									title: 'Illustration',
+									name: 'img_image',
+									type: 'img_image',
+									description: 'Shown at 64px square on desktop and 112px on phones, so upload a square image with a transparent background.',
+								},
 								{ title: 'Heading', name: 'field_title', type: 'string' },
 								{ title: 'Body', name: 'field_copy', type: 'text', rows: 2 },
 								{ title: 'Link label', name: 'field_linkLabel', type: 'string' },
 								{ title: 'Link', name: 'field_href', type: 'string', description: LINK_NOTE },
 							],
-							preview: { select: { title: 'field_title', subtitle: 'field_linkLabel' } },
+							preview: { select: { title: 'field_title', subtitle: 'field_linkLabel', media: 'img_image' } },
 						},
 					],
 				},
@@ -369,7 +345,6 @@ export const component_electionsPositionContentBlock = {
 	groups: [
 		{ title: 'Side rail', name: 'siderail', icon: getIcon('Link') },
 		{ title: 'People lists', name: 'lists', icon: getIcon('UserMultiple') },
-		{ title: 'Branded CTA', name: 'brandedCta', icon: getIcon('Rocket') },
 		{ title: 'Voter readiness', name: 'voterReadiness', icon: getIcon('Grid') },
 		{ title: 'About the position', name: 'aboutPosition', icon: getIcon('Document') },
 		{ title: 'How to run', name: 'howToRun', icon: getIcon('ListChecked') },

@@ -1,5 +1,11 @@
-import { getCandidacies, getOfficeHoldersByGeoId, getPersonsByIds, getPlaceBySlug, getRemovedPersonIds } from '~/lib/electionsApi';
-import { isElectionDateBeforeToday, PLACE_RACE_COLUMNS, resolvePlaceRaceElectionDates } from '~/lib/electionsHelpers';
+import {
+	getCandidacies,
+	getElectionsPagePlace,
+	getOfficeHoldersByGeoId,
+	getPersonsByIds,
+	getRemovedPersonIds,
+} from '~/lib/electionsApi';
+import { isElectionDateBeforeToday, resolvePlaceRaceElectionDates } from '~/lib/electionsHelpers';
 import { type NearbyOfficesTier, nearbyOfficesTiers, raceBelongsToTier } from '~/lib/nearbyOffices';
 import { classifyPartyFrom, isMajorParty, orderPartyNames } from '~/lib/party';
 import { cardAvatarUrl, pledgedFromSpine } from '~/lib/peopleProfile';
@@ -111,7 +117,7 @@ export function buildRepresentativeCards(
 }
 
 export type FeaturedPeopleDeps = {
-	getPlaceBySlug(params: { slug: string; includeRaces: boolean; placeColumns: string; raceColumns: string }): Promise<PlaceWithFacts | null>;
+	getElectionsPagePlace(params: { slug: string }): Promise<PlaceWithFacts | null>;
 	resolvePlaceRaceElectionDates(races: PlaceRace[], today?: Date): Promise<Map<string, string>>;
 	getCandidacies(params: { raceSlug: string }): Promise<CandidacyItem[]>;
 	getOfficeHoldersByGeoId(geoId: string): Promise<PersonOfficeHolder[]>;
@@ -120,7 +126,7 @@ export type FeaturedPeopleDeps = {
 };
 
 const defaultDeps: FeaturedPeopleDeps = {
-	getPlaceBySlug,
+	getElectionsPagePlace,
 	resolvePlaceRaceElectionDates,
 	getCandidacies,
 	getOfficeHoldersByGeoId,
@@ -192,12 +198,7 @@ async function mapConcurrently<T, R>(items: T[], limit: number, fn: (item: T) =>
 
 async function resolveTierPlace(tier: NearbyOfficesTier, deps: FeaturedPeopleDeps): Promise<PlaceWithFacts | null> {
 	for (const slug of tier.slugs) {
-		const place = await deps.getPlaceBySlug({
-			slug,
-			includeRaces: true,
-			placeColumns: 'slug,name,state,geoId',
-			raceColumns: PLACE_RACE_COLUMNS,
-		});
+		const place = await deps.getElectionsPagePlace({ slug });
 		if (place) return place;
 	}
 	return null;

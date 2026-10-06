@@ -1,8 +1,7 @@
-import { getPlaceBySlug } from '~/lib/electionsApi';
+import { getElectionsPagePlace } from '~/lib/electionsApi';
 import {
 	buildPlaceRacePositionHref,
 	isElectionDateBeforeToday,
-	PLACE_RACE_COLUMNS,
 	resolvePlaceRaceElectionDates,
 } from '~/lib/electionsHelpers';
 import type { PlaceRace, PlaceWithFacts } from '~/types/elections';
@@ -123,11 +122,11 @@ export function selectNearbyOffices(races: PlaceRace[], options: SelectNearbyOff
 }
 
 export type NearbyOfficesDeps = {
-	getPlaceBySlug(params: { slug: string; includeRaces: boolean; placeColumns: string; raceColumns: string }): Promise<PlaceWithFacts | null>;
+	getElectionsPagePlace(params: { slug: string }): Promise<PlaceWithFacts | null>;
 	resolvePlaceRaceElectionDates(races: PlaceRace[], today?: Date): Promise<Map<string, string>>;
 };
 
-const defaultDeps: NearbyOfficesDeps = { getPlaceBySlug, resolvePlaceRaceElectionDates };
+const defaultDeps: NearbyOfficesDeps = { getElectionsPagePlace, resolvePlaceRaceElectionDates };
 
 /**
  * Nearby offices for a position page: the other upcoming positions in the same
@@ -141,12 +140,7 @@ export async function getNearbyOffices(
 	for (const tier of nearbyOfficesTiers(params.placeSlug)) {
 		let races: PlaceRace[] = [];
 		for (const slug of tier.slugs) {
-			const place = await deps.getPlaceBySlug({
-				slug,
-				includeRaces: true,
-				placeColumns: 'slug,name',
-				raceColumns: PLACE_RACE_COLUMNS,
-			});
+			const place = await deps.getElectionsPagePlace({ slug });
 			if (place) {
 				races = place.Races ?? [];
 				break;

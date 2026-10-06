@@ -12,19 +12,22 @@ import { Text } from './Text.tsx';
 const styles = tv({
 	slots: {
 		base: 'py-(--container-padding)',
-		wrapper: 'flex flex-col gap-10 md:gap-20',
+		wrapper: 'flex flex-col gap-6 md:gap-20',
 		// Figma draws the heading 48px on desktop and 32px on mobile; heading-lg ramps
 		// 40 → 48, so the phone end is pulled down to heading-md the way the editorial block does.
 		header: '[&_h2]:max-md:text-heading-md',
-		// Stacked columns are centred with a hairline between them (the mobile frame). Once
-		// they sit in a row the hairline turns vertical and sits on every column that is not
-		// first in its row, so a wrapped second row still divides correctly.
-		grid: 'grid grid-cols-1 divide-y divide-black/12',
-		column: 'flex flex-col items-center gap-4 p-6 text-center',
+		// Stacked columns are centred with a hairline between them, 48px clear on either side
+		// (the mobile frame: 24px column padding plus the 24px gap). Once they sit in a row the
+		// hairline turns vertical and sits on every column that is not first in its row, so a
+		// wrapped second row still divides correctly.
+		grid: 'grid grid-cols-1 [&>*]:border-black/12',
+		column: 'flex flex-col items-center gap-2 p-6 text-center',
 		illustration: 'relative size-28 shrink-0',
 		body: 'flex w-full flex-col gap-2',
 		description: 'text-neutral-600',
-		link: 'text-info-500 hover:text-info-600 hover:opacity-100 focus:ring-info-500/30 h-10! py-2.5',
+		// mt-auto pins the link to the foot of the column, so every link in a row shares a
+		// baseline however many lines the sentences above it take.
+		link: 'mt-auto text-info-500 hover:text-info-600 hover:opacity-100 focus:ring-info-500/30 h-10! py-2.5',
 	},
 	variants: {
 		backgroundColor: {
@@ -33,15 +36,15 @@ const styles = tv({
 		},
 		columns: {
 			'2': {
-				grid: 'md:grid-cols-2 md:gap-y-4 md:divide-y-0 md:[&>*:not(:nth-child(2n+1))]:border-l md:[&>*]:border-black/12',
+				grid: 'max-md:[&>*+*]:mt-6 max-md:[&>*+*]:border-t max-md:[&>*+*]:pt-12 md:grid-cols-2 md:gap-y-4 md:[&>*:not(:nth-child(2n+1))]:border-l',
 				column: 'md:items-start md:gap-6 md:text-left',
 			},
 			'3': {
-				grid: 'lg:grid-cols-3 lg:gap-y-4 lg:divide-y-0 lg:[&>*:not(:nth-child(3n+1))]:border-l lg:[&>*]:border-black/12',
+				grid: 'max-lg:[&>*+*]:mt-6 max-lg:[&>*+*]:border-t max-lg:[&>*+*]:pt-12 lg:grid-cols-3 lg:gap-y-4 lg:[&>*:not(:nth-child(3n+1))]:border-l',
 				column: 'lg:items-start lg:gap-6 lg:text-left',
 			},
 			'4': {
-				grid: 'lg:grid-cols-4 lg:gap-y-4 lg:divide-y-0 lg:[&>*:not(:nth-child(4n+1))]:border-l lg:[&>*]:border-black/12',
+				grid: 'max-lg:[&>*+*]:mt-6 max-lg:[&>*+*]:border-t max-lg:[&>*+*]:pt-12 lg:grid-cols-4 lg:gap-y-4 lg:[&>*:not(:nth-child(4n+1))]:border-l',
 				column: 'lg:items-start lg:gap-6 lg:text-left',
 			},
 		},
@@ -49,7 +52,7 @@ const styles = tv({
 	compoundVariants: [
 		{
 			backgroundColor: 'midnight',
-			className: { grid: 'divide-white/20 [&>*]:border-white/20 md:[&>*]:border-white/20 lg:[&>*]:border-white/20' },
+			className: { grid: '[&>*]:border-white/20' },
 		},
 	],
 });

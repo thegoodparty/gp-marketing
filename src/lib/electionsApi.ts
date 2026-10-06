@@ -22,6 +22,7 @@ import {
 	buildSubplaceRaceSlug,
 	canonicalizeCountyEquivalentName,
 	normalizeCandidateLookupName,
+	PLACE_RACE_COLUMNS,
 	stripCountySuffix,
 } from '~/lib/electionsHelpers';
 import { ElectionApiError, fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
@@ -90,6 +91,20 @@ export function isStateIndexDistrictPlace(place: Pick<PlaceItem, 'name' | 'slug'
 
 const FETCH_JSON_MAX_RETRIES = 2;
 
+const RETRY_BASE_DELAY_MS = 500;
+
+/**
+ * Backoff with jitter. The delays used to be exactly 500ms then 1000ms, so when
+ * election-api tipped over every render that had failed re-asked at the same two
+ * instants, tripling the load on an already-saturated service — one of the
+ * things that deepened the 2026-10-05 outage. Spreading each delay across a
+ * window keeps the same average wait without the lockstep.
+ */
+export function retryDelayMs(attempt: number, random: () => number = Math.random): number {
+	const base = RETRY_BASE_DELAY_MS * (attempt + 1);
+	return Math.round(base * (0.5 + random()));
+}
+
 async function sleep(ms: number): Promise<void> {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -117,7 +132,7 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | nul
 				console.error(`[electionsApi] attempt ${attempt + 1}`, err);
 			}
 			if (attempt < FETCH_JSON_MAX_RETRIES) {
-				await sleep(500 * (attempt + 1));
+				await sleep(retryDelayMs(attempt));
 			}
 		}
 		return null;
@@ -138,7 +153,7 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | nul
 			console.error(`[electionsApi] attempt ${attempt + 1}`, err);
 		}
 		if (attempt < FETCH_JSON_MAX_RETRIES) {
-			await sleep(500 * (attempt + 1));
+			await sleep(retryDelayMs(attempt));
 		}
 	}
 	return null;
@@ -553,7 +568,7 @@ export async function getPublicPersonProfileStatus(
 			console.error(`[electionsApi] overlay attempt ${attempt + 1}`, err);
 		}
 		if (attempt < FETCH_JSON_MAX_RETRIES) {
-			await sleep(500 * (attempt + 1));
+			await sleep(retryDelayMs(attempt));
 		}
 	}
 	return { status: 'absent' };
@@ -659,6 +674,39 @@ export async function getPlaceBySlug(params: {
 	const url = `${ELECTIONS_API_BASE_URL}/v1/places?${searchParams}`;
 	const data = await fetchJson<PlaceWithFacts[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) && data.length > 0 ? (data[0] ?? null) : null;
+}
+
+/**
+ * The columns every /elections page needs from its own place, as one set.
+ *
+ * They used to be four different sets: the county/city page asked for
+ * `slug,name,mtfcc,countyName`, the featured-people block asked for
+ * `slug,name,state,geoId`, the nearby-offices block asked for `slug,name`, and
+ * `generateMetadata` asked for every column. The 1-hour cache in front of these
+ * reads is keyed on the URL, so four shapes of the same row meant four cache
+ * entries and up to four reads of election-api per page render. On 2026-10-05 a
+ * crawl of these pages hit two of those shapes 1,406 and 1,420 times in three
+ * minutes for one California county, and the duplication was a large part of
+ * what pushed election-api past its CPU ceiling.
+ *
+ * A superset read once is cheaper than four narrow reads, so keep this as the
+ * only shape and read it through `getElectionsPagePlace`.
+ */
+export const ELECTIONS_PAGE_PLACE_COLUMNS = 'slug,name,mtfcc,countyName,state,geoId';
+
+/**
+ * The one way an /elections page reads its own place. Every caller gets the
+ * same URL, so the cache holds one entry per place slug and a page render asks
+ * election-api once however many blocks on it need the place.
+ */
+export async function getElectionsPagePlace(params: { slug: string }): Promise<PlaceWithFacts | null> {
+	return getPlaceBySlug({
+		slug: params.slug,
+		includeChildren: false,
+		includeRaces: true,
+		placeColumns: ELECTIONS_PAGE_PLACE_COLUMNS,
+		raceColumns: PLACE_RACE_COLUMNS,
+	});
 }
 
 /** Resolves a county place slug from a state code and county name on a city/town place. */

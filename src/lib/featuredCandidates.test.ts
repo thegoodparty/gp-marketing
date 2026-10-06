@@ -261,8 +261,8 @@ describe('getFeaturedPeople', () => {
 		Races: [race('tx/houston/mayor'), race('tx/houston/controller', { electionDate: '2027-11-02' }), race('tx/harris-county/judge', { positionLevel: 'COUNTY' })],
 	};
 	const deps: FeaturedPeopleDeps = {
-		async getPlaceBySlug({ slug, placeColumns }) {
-			calls.push(`place:${slug}:${placeColumns}`);
+		async getElectionsPagePlace({ slug }) {
+			calls.push(`place:${slug}`);
 			return Promise.resolve(slug === 'tx/harris-county/houston' ? cityPlace : null);
 		},
 		async resolvePlaceRaceElectionDates() {
@@ -293,7 +293,7 @@ describe('getFeaturedPeople', () => {
 		calls.length = 0;
 		const people = await getFeaturedPeople({ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) }, deps);
 
-		expect(calls).toContain('place:tx/harris-county/houston:slug,name,state,geoId');
+		expect(calls).toContain('place:tx/harris-county/houston');
 		expect(calls).toContain('candidacies:tx/houston/mayor');
 		expect(calls).toContain('candidacies:tx/houston/controller');
 		expect(calls).not.toContain('candidacies:tx/harris-county/judge');
@@ -325,7 +325,7 @@ describe('getFeaturedPeople', () => {
 		};
 		const overBudget = await getFeaturedPeople(
 			{ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) },
-			{ ...deps, getPlaceBySlug: async () => manyRaces },
+			{ ...deps, getElectionsPagePlace: async () => manyRaces },
 		);
 		expect(overBudget.candidatesComplete).toBe(false);
 	});
@@ -345,7 +345,7 @@ describe('getFeaturedPeople', () => {
 		};
 		const people = await getFeaturedPeople(
 			{ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) },
-			{ ...deps, getPlaceBySlug: async () => withUndated },
+			{ ...deps, getElectionsPagePlace: async () => withUndated },
 		);
 		expect(people.candidatesComplete).toBe(true);
 	});
@@ -377,7 +377,7 @@ describe('getFeaturedPeople across the ballot', () => {
 			tx: { id: 'p-3', name: 'Texas', slug: 'tx', state: 'TX', Races: [race('tx/governor', { positionLevel: 'STATE' })] },
 		};
 		const deps: FeaturedPeopleDeps = {
-			async getPlaceBySlug({ slug }) {
+			async getElectionsPagePlace({ slug }) {
 				return Promise.resolve(places[slug] ?? null);
 			},
 			async resolvePlaceRaceElectionDates() {

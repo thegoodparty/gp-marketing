@@ -380,8 +380,8 @@ file and the content block's clearance, and both wait for the `/people` batch (P
   exists in the data**: election-api carries a yes/no flag only. Marketing's source for the date
   is the HubSpot deal's closed-won date, to be carried onto the person record by the ETL the way
   `isPledged` is (Emily, 2026-10-06). The site reads an optional `pledgedAt` on the person and
-  shows the "Signed on" line when it is there; until then the row is the heading and the mark
-  alone. To settle with the data team before it ships: which deal when a person has several
+  shows the row with its "Signed on" line when it is there; until then the row is not shown at all
+  (Emily, 2026-10-06: a heading with only the mark under it was not worth showing in the meantime). To settle with the data team before it ships: which deal when a person has several
   (the earliest closed-won is the natural rule), whether closed-won is in fact when the pledge is
   taken (if not, "Signed on" overstates it), and that the deal is joined to the person the way
   "Confirmed Candidate" is.

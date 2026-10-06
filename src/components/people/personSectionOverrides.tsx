@@ -112,12 +112,16 @@ function splitIssues(issues: PersonProfileView['issues']) {
 	};
 }
 
-/** Stable empowered-first ordering (Figma puts the GoodParty candidate on top). */
-function empoweredFirst(cards: CandidateCard[]): CandidateCard[] {
-	return [
-		...cards.filter(c => c.isGoodPartyCandidate),
-		...cards.filter(c => !c.isGoodPartyCandidate),
-	];
+/**
+ * Rail order (Emily, 2026-10-06), the featured candidates block's rule: pledged
+ * people first, then the unpledged with no major party, then Republicans and
+ * Democrats. Stable inside each group, so the feed's order survives. Pledged
+ * and claimed are the same thing to marketing, so an empowered card ranks with
+ * the pledged ones.
+ */
+function rankRelatedPeople(cards: RelatedPersonCard[]): RelatedPersonCard[] {
+	const tier = (c: RelatedPersonCard): number => (c.isPledged || c.isEmpowered ? 0 : c.majorParty ? 2 : 1);
+	return [0, 1, 2].flatMap(t => cards.filter(c => tier(c) === t));
 }
 
 /** Small persona tag pill(s) rendered above the hero name (Figma). */
@@ -525,22 +529,21 @@ function buildCivicSections(view: PersonProfileView): SectionMap {
 	if (districtMap) {
 		sections.district = { heading: 'District information', content: districtMap };
 	}
-	// Figma title-cases the heading and leads with the empowered (GoodParty)
-	// candidate. FLAG: the frame reads "Other Candidates for [Position] in
+	// Figma title-cases the heading. FLAG: the frame reads "Other Candidates for [Position] in
 	// <Location>" but the view has no clean locality field distinct from the
 	// position name, so the "in <Location>" clause is omitted rather than invented.
 	// The "What this symbol means" box leads the list (Voter Guide frames; Emily,
 	// 2026-10-06). It explains the mark in the third person, so it renders on every
 	// profile that has the list; the cards themselves are unchanged. The frames do
 	// not draw it on Nearby Officials, so that list stays as it was.
-	const otherCandidates = empoweredFirst(toCandidateCards(view.otherCandidates));
+	const otherCandidates = toCandidateCards(rankRelatedPeople(view.otherCandidates));
 	if (otherCandidates.length > 0) {
 		sections.otherCandidates = {
 			heading: view.officeName ? `Other Candidates for ${view.officeName}` : 'Other Candidates',
 			content: <RelatedPeopleList cards={otherCandidates} callout={<PledgeSymbolCallout />} />,
 		};
 	}
-	const nearby = empoweredFirst(toCandidateCards(view.nearbyOfficials));
+	const nearby = toCandidateCards(rankRelatedPeople(view.nearbyOfficials));
 	if (nearby.length > 0) {
 		sections.nearbyOfficials = { heading: 'Nearby Officials', content: <RelatedPeopleList cards={nearby} /> };
 	}

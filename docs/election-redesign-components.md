@@ -411,6 +411,11 @@ file and the content block's clearance, and both wait for the `/people` batch (P
   the pledge flag on these cards (`showMark` on `CandidatesCard`), without the yellow frame the
   legacy `isGoodPartyCandidate` treatment draws; the frames draw no frame, and the production
   builders never set that flag anyway. The pledge line is unchanged.
+- **Rail order: pledged people first, then the unpledged with no major party, then Republicans and
+  Democrats** (Emily, 2026-10-06), the featured candidates block's rule, stable inside each group.
+  `rankRelatedPeople` in `personSectionOverrides.tsx`; the cards carry `majorParty` from the same
+  party rule the profile's own gating uses. It replaced the older "empowered first" sort, which the
+  production builders could never trigger.
 
 ## The shared election counts, as marketing defined them
 

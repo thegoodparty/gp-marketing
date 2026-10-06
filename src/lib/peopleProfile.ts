@@ -94,6 +94,13 @@ export interface RelatedPersonCard {
 	 */
 	isPledged: boolean;
 	/**
+	 * Republican or Democrat, by the same party rule the profile's own gating
+	 * uses. Orders the rail: pledged people first, then the unpledged with no
+	 * major party, then everyone else (Emily, 2026-10-06; the featured
+	 * candidates block's rule).
+	 */
+	majorParty: boolean;
+	/**
 	 * The seat's district or ward as a short pill, e.g. "District 5" (Voter Guide
 	 * frames). Other candidates share the subject's race, so theirs is the race's
 	 * district; a nearby official's is their own office's. Null when the feed
@@ -831,6 +838,7 @@ export function buildOtherCandidateCards(
 			href,
 			isEmpowered: false,
 			isPledged: pledgedFromSpine(c.personId ? personsById.get(c.personId.toLowerCase()) : undefined, c.party),
+			majorParty: isMajorParty(classifyParty(c.party)),
 			tag,
 			avatarUrl: cardAvatarUrl(c.personId ?? null, c.image ?? null, removedPersonIds),
 		});
@@ -879,6 +887,7 @@ export function buildNearbyOfficialCards(
 			href,
 			isEmpowered: false,
 			isPledged: pledgedFromSpine(person, ...(oh.partyNames ?? [])),
+			majorParty: isMajorParty(classifyPartyFrom(...orderPartyNames(oh.partyNames ?? []))),
 			tag: districtTag(oh.subAreaName, oh.subAreaValue),
 			avatarUrl: cardAvatarUrl(pid, person?.headshotUrl ?? null, removedPersonIds),
 		});

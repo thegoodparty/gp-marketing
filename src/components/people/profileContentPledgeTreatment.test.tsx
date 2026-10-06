@@ -212,6 +212,39 @@ describe('the related-people rails show three cards, then "See more"', () => {
 	});
 });
 
+describe('the rails lead with the pledged people', () => {
+	test('state A: pledged, then unpledged non-partisan, then major party, stable within each', () => {
+		const v = view('allen-slagle-74eee01a');
+		const source = v.otherCandidates;
+		// The premise: the fixture mixes all three groups out of order.
+		expect(source.some(c => c.isPledged)).toBe(true);
+		expect(source.some(c => c.majorParty)).toBe(true);
+		expect(source.findIndex(c => c.majorParty)).toBeLessThan(source.findIndex(c => c.isPledged));
+
+		const cards = block(v).cards;
+		const rail = cardWithHeading(cards, 'Other Candidates');
+		// Three render on first paint; rank the source the same way and compare the names.
+		const tier = (c: (typeof source)[number]) => (c.isPledged || c.isEmpowered ? 0 : c.majorParty ? 2 : 1);
+		const expected = [0, 1, 2].flatMap(t => source.filter(c => tier(c) === t)).map(c => c.name);
+		const html = cardHtml(rail);
+		const rendered = [...html.matchAll(/<h3[^>]*>([^<]+)<\/h3>/g)].map(m => m[1] ?? '');
+		expect(rendered).toEqual(expected.slice(0, 3));
+		// The Republican the feed puts second is not on the first page at all.
+		const republican = source.find(c => c.majorParty);
+		expect(rendered).not.toContain(republican?.name);
+	});
+
+	test('Nearby Officials follows the same rule', () => {
+		const v = view('tracy-good-ecff49d3');
+		const source = v.nearbyOfficials;
+		const tier = (c: (typeof source)[number]) => (c.isPledged || c.isEmpowered ? 0 : c.majorParty ? 2 : 1);
+		const expected = [0, 1, 2].flatMap(t => source.filter(c => tier(c) === t)).map(c => c.name);
+		const html = cardHtml(cardWithHeading(block(v).cards, 'Nearby Officials'));
+		const rendered = [...html.matchAll(/<h3[^>]*>([^<]+)<\/h3>/g)].map(m => m[1] ?? '');
+		expect(rendered).toEqual(expected.slice(0, 3));
+	});
+});
+
 describe('the cards carry the district tag and the mark', () => {
 	test('other candidates share the race\u2019s district; nearby officials each have their own', () => {
 		const a = cardHtml(cardWithHeading(block(view('allen-slagle-74eee01a')).cards, 'Other Candidates'));

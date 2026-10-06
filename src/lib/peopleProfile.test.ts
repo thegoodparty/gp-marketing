@@ -1593,6 +1593,16 @@ describe('districtTag', () => {
 			'District 5',
 		);
 		expect(others.map(c => c.tag)).toEqual(['District 5', 'District 5']);
+		expect(others.map(c => c.majorParty)).toEqual([false, false]);
+		expect(nearby?.majorParty).toBe(false);
+		expect(
+			buildOtherCandidateCards([{ id: 'c3', personId: OTHER, firstName: 'Cy', lastName: 'Dem', party: 'Democratic' }], new Map(), PID, NO_REMOVALS)[0]
+				?.majorParty,
+		).toBe(true);
+		expect(
+			buildNearbyOfficialCards([makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: ['Working Families', 'Democratic'] })], new Map(), PID, NO_REMOVALS)[0]
+				?.majorParty,
+		).toBe(true);
 		expect(buildOtherCandidateCards([{ id: 'c1', personId: OTHER, firstName: 'Ada', lastName: 'Lee' }], new Map(), PID, NO_REMOVALS)[0]?.tag).toBeNull();
 	});
 });

@@ -244,6 +244,7 @@ function relatedCards(prefix: string, count: number, tag: (index: number) => str
 			href: `/people/${prefix}-${i}`,
 			isEmpowered: !isMajorParty && i % empoweredEvery === 0,
 			isPledged: !isMajorParty && i % 4 === 2,
+			majorParty: isMajorParty,
 			tag: tag(i),
 			avatarUrl: null,
 		};

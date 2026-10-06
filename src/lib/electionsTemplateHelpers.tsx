@@ -9,7 +9,7 @@ import type { BreadcrumbItem } from '~/ui/BreadcrumbBlock';
 import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
 import type { FeaturedPeople } from '~/lib/featuredPeople';
 import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
-import type { ElectionsPositionHeroCandidate } from '~/ui/ElectionsPositionHero';
+import { type ElectionsPositionHeroCandidate, heroLocation } from '~/ui/ElectionsPositionHero';
 import { secondaryButtonStyleType } from '~/ui/_lib/designTypesStore';
 import {
 	buildDynamicFAQItems,
@@ -135,13 +135,12 @@ export function buildPositionBottomItems(race: RaceDetail) {
 
 export function buildPositionTokens(ctx: Pick<PositionPageContext, 'officeName' | 'stateName' | 'countyName' | 'cityName'>): TokenMap {
 	const locationName = ctx.cityName ?? ctx.countyName ?? ctx.stateName;
-	const locationParts = [ctx.cityName, ctx.countyName, ctx.stateName].filter(Boolean);
 	return {
 		'[office name]': ctx.officeName,
 		'[office]': ctx.officeName,
 		'[State]': ctx.stateName,
 		'[County or City]': locationName,
-		'[location]': locationParts.join(', '),
+		'[location]': heroLocation(ctx),
 	};
 }
 
@@ -149,13 +148,12 @@ export function buildCandidatesTokens(
 	ctx: Pick<PositionPageContext, 'officeName' | 'stateName' | 'countyName' | 'cityName'>,
 ): TokenMap {
 	const locationName = ctx.cityName ?? ctx.countyName ?? ctx.stateName;
-	const locationParts = [ctx.cityName, ctx.countyName, ctx.stateName].filter(Boolean);
 	return {
 		'[office]': ctx.officeName,
 		'[office name]': ctx.officeName,
 		'[State]': ctx.stateName,
 		'[County or City]': locationName,
-		'[location]': locationParts.join(', '),
+		'[location]': heroLocation(ctx),
 	};
 }
 

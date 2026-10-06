@@ -1,7 +1,7 @@
 export const list_pledgeCards = {
 	name: 'list_pledgeCards',
 	title: 'Pledge Cards',
-	description: 'A list of pledge cards with icon, title, content, and button. Max 4.',
+	description: 'A list of pledge cards with icon, title and content. Max 4.',
 	options: {
 		collapsible: false,
 	},

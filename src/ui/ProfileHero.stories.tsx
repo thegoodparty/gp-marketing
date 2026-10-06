@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ProfileHero } from './ProfileHero.tsx';
-import { customProfileImage } from './_data/media.tsx';
 import { PROFILE_HERO_INTRO_DEFAULTS } from '~/lib/profileHeroDefaults';
 
 const FIGMA_DESKTOP = 'https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2139-26365';
@@ -16,6 +15,13 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+/**
+ * A plain headshot. The repo's sample avatar (`customProfileImage`) has the
+ * heart-and-star badge baked into the photo, so the hero's own badge landed on
+ * top of it and read as doubled.
+ */
+const HEADSHOT = '/images/profile-hero-headshot.jpg';
+
 const intro = (name: string, subject: 'candidate' | 'officeholder' = 'candidate') =>
 	PROFILE_HERO_INTRO_DEFAULTS[subject].replace('[candidate name]', name);
 
@@ -27,7 +33,7 @@ const Default = {
 		office: "Candidate U.S. Congress - Minnesota's 5th Congressional District",
 		tags: ['Candidate'],
 		intro: intro('DeVelle Jackson'),
-		profileImage: customProfileImage(),
+		profileImageUrl: HEADSHOT,
 		attribution: 'pledged' as const,
 		showBrandMark: true,
 	},
@@ -54,7 +60,7 @@ export const NotPledged: Story = {
 		...Default.args,
 		candidateName: 'Jordan Avery',
 		intro: intro('Jordan Avery'),
-		profileImage: undefined,
+		profileImageUrl: undefined,
 		attribution: 'notPledged',
 		showBrandMark: false,
 	},
@@ -69,7 +75,7 @@ export const Ineligible: Story = {
 		...Default.args,
 		candidateName: 'Jordan Avery',
 		intro: intro('Jordan Avery'),
-		profileImage: undefined,
+		profileImageUrl: undefined,
 		attribution: 'pledgeIneligible',
 		showBrandMark: false,
 	},
@@ -138,7 +144,7 @@ export const LegacyEmpowered: Story = {
 		backgroundColor: 'midnight',
 		candidateName: 'Jhon Doe',
 		office: 'Mayor of Chicago',
-		profileImage: customProfileImage(),
+		profileImageUrl: HEADSHOT,
 		isEmpowered: true,
 	},
 	parameters: {

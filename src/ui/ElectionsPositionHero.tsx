@@ -369,7 +369,9 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 			return (
 				<div className={s.card()} data-testid='position-hero-dates-card'>
 					<dl className='flex flex-col gap-4'>
-						{state.filingOpen ? renderDate('Filing deadline', filingDeadline) : renderDate('Filing opens', filingOpens)}
+						{state.filingOpen
+							? (renderDate('Filing deadline', filingDeadline) ?? renderDate('Filing opened', filingOpens))
+							: renderDate('Filing opens', filingOpens)}
 						{renderDate('Election date', electionDay)}
 					</dl>
 					<div className={cn(s.countdown(), 'mt-auto')}>

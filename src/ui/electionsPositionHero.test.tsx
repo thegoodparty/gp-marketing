@@ -150,6 +150,25 @@ describe('ElectionsPositionHeroSection', () => {
 		expect(html).toContain('Days until filing opens');
 	});
 
+	test('open filing with no deadline on record still says filing has opened', () => {
+		const html = render({ ...office, filingDateEndIso: null }, '2026-08-15');
+
+		expect(html).toContain('data-phase="filing"');
+		expect(html).toContain('Filing opened');
+		expect(html).toContain('June 1, 2026');
+		expect(html).not.toContain('Filing deadline');
+		expect(html).not.toContain('Days to file');
+		expect(html).toContain('Days until election');
+	});
+
+	test('prior-cycle winners reach the winner card when this cycle has no winners at all', () => {
+		const html = render({ ...office, winners: undefined, priorWinners: [{ key: 'p1', name: 'Grace Hopper' }] }, '2025-11-20');
+
+		expect(html).toContain('data-phase="decided"');
+		expect(html).toContain('data-testid="position-hero-winner-card"');
+		expect(html).toContain('Grace Hopper');
+	});
+
 	test('hides the ballot card when we hold no candidate data, but shows a real zero', () => {
 		const noData = render({ ...office, candidates: undefined }, '2026-08-15');
 		expect(noData).not.toContain('data-testid="position-hero-ballot-card"');

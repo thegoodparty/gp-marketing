@@ -14,7 +14,14 @@ export const component_nearbyOffices = {
 			title: 'Heading',
 			name: 'field_heading',
 			type: 'string',
-			description: 'Defaults to "Nearby offices". Location tokens such as [County or City] work here.',
+			description:
+				'Leave empty for the page to name its own place: "More offices in Bay City, Michigan", or just "More offices in Michigan" on a state position page. Location tokens such as [County or City] and [State] work here.',
+		},
+		{
+			title: 'Description',
+			name: 'field_description',
+			type: 'string',
+			description: 'The sentence under the heading. Defaults to "Explore offices coming up for election near you:". Location tokens work here.',
 		},
 		{
 			title: 'Design Settings',

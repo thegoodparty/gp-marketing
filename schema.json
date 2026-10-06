@@ -8820,6 +8820,13 @@
           },
           "optional": true
         },
+        "field_description": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
         "nearbyOfficesDesignSettings": {
           "type": "objectAttribute",
           "value": {

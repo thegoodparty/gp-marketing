@@ -703,15 +703,16 @@ describe('getRaceBySlug falls back to the primary when there is no general', () 
 		const calls = recordingFetch(url => (url.includes('isPrimary=true') ? [PRIMARY] : []));
 
 		expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2022-08-09', isPrimary: true });
-		expect(calls).toHaveLength(2);
-		expect(calls[1]).toContain('isPrimary=true');
+		// Upcoming first, then the unfiltered general, then the primary.
+		expect(calls).toHaveLength(3);
+		expect(calls[2]).toContain('isPrimary=true');
 	});
 
 	test('a slug with no race at all still returns null', async () => {
 		const calls = recordingFetch(() => []);
 
 		expect(await getRaceBySlug(SLUG)).toBeNull();
-		expect(calls).toHaveLength(2);
+		expect(calls).toHaveLength(3);
 	});
 
 	/** resolvePlaceRaceElectionDates asks for the general on purpose; a primary would be wrong. */
@@ -721,6 +722,56 @@ describe('getRaceBySlug falls back to the primary when there is no general', () 
 		expect(await getRaceBySlug(SLUG, false, { isPrimary: false })).toBeNull();
 		expect(calls).toHaveLength(1);
 		expect(calls[0]).toContain('isPrimary=false');
+	});
+});
+
+/**
+ * A slug shared by many races (every California Assembly district is
+ * `ca/state-representative`, in every year) comes back from the API as one row
+ * picked by id, which put a 2022 race on a page whose candidates were running
+ * in 2026. The lookup asks for an upcoming race first and keeps the old answer
+ * as the fallback (Emily, 2026-10-06).
+ */
+describe('getRaceBySlug prefers an upcoming race for a shared slug', () => {
+	const SLUG = 'ca/state-representative';
+	const OLD = { slug: SLUG, name: 'State Representative', electionDate: '2022-11-08', isPrimary: false };
+	const NEXT = { slug: SLUG, name: 'State Representative', electionDate: '2099-11-03', isPrimary: false };
+
+	function recordingFetch(bodyFor: (url: string) => unknown): string[] {
+		const calls: string[] = [];
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = String(input);
+			calls.push(url);
+			return new Response(JSON.stringify(bodyFor(url)), {
+				status: 200,
+				headers: { 'content-type': 'application/json' },
+			});
+		}) as typeof fetch;
+		return calls;
+	}
+
+	test('asks for races from today first, and takes the upcoming one', async () => {
+		const calls = recordingFetch(url => (url.includes('electionDateStart=') ? [NEXT] : [OLD]));
+
+		expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2099-11-03' });
+		expect(calls).toHaveLength(1);
+		expect(calls[0]).toMatch(/electionDateStart=\d{4}-\d{2}-\d{2}/);
+	});
+
+	test('an office with no upcoming election still resolves to its last race', async () => {
+		const calls = recordingFetch(url => (url.includes('electionDateStart=') ? [] : [OLD]));
+
+		expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2022-11-08' });
+		expect(calls).toHaveLength(2);
+		expect(calls[1]).not.toContain('electionDateStart');
+	});
+
+	test('an explicit filter skips the upcoming-first step', async () => {
+		const calls = recordingFetch(() => [OLD]);
+
+		expect(await getRaceBySlug(SLUG, false, { isPrimary: false })).toMatchObject({ electionDate: '2022-11-08' });
+		expect(calls).toHaveLength(1);
+		expect(calls[0]).not.toContain('electionDateStart');
 	});
 });
 

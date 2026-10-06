@@ -215,6 +215,7 @@ async function fetchRaceBySlug(
 	raceSlug: string,
 	includePlace: boolean,
 	isPrimary?: boolean,
+	electionDateStart?: string,
 ): Promise<RaceDetail | null> {
 	const searchParams = new URLSearchParams({
 		raceSlug,
@@ -222,6 +223,9 @@ async function fetchRaceBySlug(
 	});
 	if (isPrimary !== undefined) {
 		searchParams.set('isPrimary', isPrimary.toString());
+	}
+	if (electionDateStart) {
+		searchParams.set('electionDateStart', electionDateStart);
 	}
 	const url = `${ELECTIONS_API_BASE_URL}/v1/races?${searchParams}`;
 	const data = await fetchJson<RaceDetail[]>(url, CACHE_OPTIONS);
@@ -247,9 +251,25 @@ export async function getRaceBySlug(
 	includePlace = true,
 	filters?: { isPrimary?: boolean },
 ): Promise<RaceDetail | null> {
+	// A slug can name many race rows: every California Assembly district shares
+	// `ca/state-representative`, across every election year, and the API folds
+	// them into one answer picked by id, which on that page was a 2022 race while
+	// the candidates linking to it were running in 2026. Ask for an upcoming race
+	// first (election day itself still counts), and only then fall back to the
+	// unfiltered read, so an office with no upcoming election still resolves to
+	// its last race the way it always did. The explicit-filter path is left as
+	// it was: those callers ask for a specific row on purpose.
+	if (filters?.isPrimary === undefined) {
+		const upcoming = await fetchRaceBySlug(raceSlug, includePlace, undefined, todayAsDateOnly());
+		if (upcoming) return upcoming;
+	}
 	const race = await fetchRaceBySlug(raceSlug, includePlace, filters?.isPrimary);
 	if (race || filters?.isPrimary !== undefined) return race;
 	return fetchRaceBySlug(raceSlug, includePlace, true);
+}
+
+function todayAsDateOnly(): string {
+	return new Date().toISOString().slice(0, 10);
 }
 
 /** Resolves joint city office races; API slugs omit the county segment. */

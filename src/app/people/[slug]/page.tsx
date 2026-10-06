@@ -21,7 +21,7 @@ import { getPersonBySlug, getPersonMergeSurvivorChain } from '~/lib/electionsApi
 import { getDevPersonProfileView, isDevPeopleFixturesEnabled } from '~/lib/devPeopleProfileFixtures';
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 
-export const revalidate = 3600;
+export const revalidate = 60; // QA branch: an hour on develop, a minute here so drafts show up fast
 
 // Pages are generated on-demand (ISR) and then cached; nothing is prebuilt at
 // build time because the person set is large and data-team driven.

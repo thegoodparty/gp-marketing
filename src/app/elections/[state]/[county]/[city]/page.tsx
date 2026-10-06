@@ -26,7 +26,7 @@ import {
 import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 
-export const revalidate = 3600;
+export const revalidate = 60; // QA branch: an hour on develop, a minute here so drafts show up fast
 
 export async function generateStaticParams() {
 	return [];

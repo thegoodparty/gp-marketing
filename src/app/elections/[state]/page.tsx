@@ -21,7 +21,7 @@ import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
 import { US_STATE_CODES } from '~/lib/sitemap-entries';
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 
-export const revalidate = 3600;
+export const revalidate = 60; // QA branch: an hour on develop, a minute here so drafts show up fast
 
 export async function generateStaticParams() {
 	return US_STATE_CODES.map((code) => ({ state: code.toLowerCase() }));

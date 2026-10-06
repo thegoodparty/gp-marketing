@@ -20,7 +20,7 @@ import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsPositionPage } from '~/lib/renderElectionsPositionPage';
 import { loadPositionHeroCandidates } from '~/lib/positionHeroCandidates';
 
-export const revalidate = 3600;
+export const revalidate = 60; // QA branch: an hour on develop, a minute here so drafts show up fast
 
 export async function generateStaticParams() {
 	const { subplacePositionParams } = await getCachedElectionRouteParams();

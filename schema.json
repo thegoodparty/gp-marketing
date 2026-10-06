@@ -2149,6 +2149,10 @@
         {
           "type": "string",
           "value": "2Col"
+        },
+        {
+          "type": "string",
+          "value": "3Col"
         }
       ]
     }
@@ -14643,14 +14647,6 @@
           "value": {
             "type": "inline",
             "name": "block_summaryText"
-          },
-          "optional": true
-        },
-        "ctaActionWithShared": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "inline",
-            "name": "ctaActionWithShared"
           },
           "optional": true
         }

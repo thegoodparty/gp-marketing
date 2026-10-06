@@ -260,7 +260,7 @@ describe('buildPositionTokens', () => {
 
 	test('resolves [location]', () => {
 		const tokens = buildPositionTokens(tokenCtx);
-		expect(resolveTokens('Running in [location]', tokens)).toBe('Running in Brooklyn, Kings, New York');
+		expect(resolveTokens('Running in [location]', tokens)).toBe('Running in Brooklyn, NY');
 	});
 
 	test('does not supply [candidate name]', () => {
@@ -278,7 +278,7 @@ describe('buildCandidatesTokens', () => {
 
 	test('resolves [location], [State], and [County or City]', () => {
 		const tokens = buildCandidatesTokens(tokenCtx);
-		expect(resolveTokens('Candidates in [location]', tokens)).toBe('Candidates in Brooklyn, Kings, New York');
+		expect(resolveTokens('Candidates in [location]', tokens)).toBe('Candidates in Brooklyn, NY');
 		expect(resolveTokens('Candidates in [State]', tokens)).toBe('Candidates in New York');
 		expect(resolveTokens('Candidates in [County or City]', tokens)).toBe('Candidates in Brooklyn');
 	});

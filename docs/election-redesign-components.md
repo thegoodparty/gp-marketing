@@ -187,7 +187,10 @@ block" below). Things that came out of it:
   per-state intro sentences into one `field_intro`, the same copy in every state, defaulting to the
   frame's "A nonpartisan guide to [office name] in [County or City]. Find candidates and elected
   officials who have turned down partisan and big-money influence." The three per-state fields had
-  never reached Studio, so nothing carries them.
+  never reached Studio, so nothing carries them. The position pages' `[location]` token now
+  resolves through the same `heroLocation` rule (Emily, 2026-10-06), so editor copy on the
+  position and candidates templates reads "Brooklyn, NY" rather than "Brooklyn, Kings, New York";
+  the location pages' `[location]` (most specific place, no state) is unchanged.
 
 **Nearby offices** (position pages) — built as `component_nearbyOffices`, data-backed.
 

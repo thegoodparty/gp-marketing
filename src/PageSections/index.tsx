@@ -111,6 +111,16 @@ export type SectionOverrides = {
 		/** When true the section renders nothing. */
 		hidden?: boolean;
 	};
+	component_testimonialBlockWithLink?: {
+		/**
+		 * The state the page is about, as its full name ("Texas"). Location and
+		 * position pages supply it; with the block's "only show quotes from the
+		 * page's state" toggle on, the section puts that state's quotes first and
+		 * fills from the nearest states. Pages without a state (the Voter Hub,
+		 * landing pages) leave it out and get the full list.
+		 */
+		stateName?: string;
+	};
 	component_electionPositionResourcesBlock?: {
 		/**
 		 * The "how to run" article for this page's office, chosen from marketing's
@@ -706,7 +716,11 @@ export function PageSections(props: Props) {
 					case 'component_testimonialBlockWithLink':
 						return (
 							<Boundary key={section._key} componentName='Testimonial Block With Link'>
-								<TestimonialBlockWithLinkSection {...section} tokens={props.tokens} />
+								<TestimonialBlockWithLinkSection
+									{...section}
+									tokens={props.tokens}
+									pageState={props.sectionOverrides?.component_testimonialBlockWithLink}
+								/>
 							</Boundary>
 						);
 					case 'component_locationEditorialBlock':

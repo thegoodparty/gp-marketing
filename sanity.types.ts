@@ -309,6 +309,61 @@ export type Field_defaultMetaTitle = string;
 
 export type Field_caption = string;
 
+export type Field_filterQuotesByPageState = boolean;
+
+export type Field_quoteState =
+	| 'Alabama'
+	| 'Alaska'
+	| 'Arizona'
+	| 'Arkansas'
+	| 'California'
+	| 'Colorado'
+	| 'Connecticut'
+	| 'Delaware'
+	| 'District of Columbia'
+	| 'Florida'
+	| 'Georgia'
+	| 'Hawaii'
+	| 'Idaho'
+	| 'Illinois'
+	| 'Indiana'
+	| 'Iowa'
+	| 'Kansas'
+	| 'Kentucky'
+	| 'Louisiana'
+	| 'Maine'
+	| 'Maryland'
+	| 'Massachusetts'
+	| 'Michigan'
+	| 'Minnesota'
+	| 'Mississippi'
+	| 'Missouri'
+	| 'Montana'
+	| 'Nebraska'
+	| 'Nevada'
+	| 'New Hampshire'
+	| 'New Jersey'
+	| 'New Mexico'
+	| 'New York'
+	| 'North Carolina'
+	| 'North Dakota'
+	| 'Ohio'
+	| 'Oklahoma'
+	| 'Oregon'
+	| 'Pennsylvania'
+	| 'Rhode Island'
+	| 'South Carolina'
+	| 'South Dakota'
+	| 'Tennessee'
+	| 'Texas'
+	| 'Utah'
+	| 'Vermont'
+	| 'Virginia'
+	| 'Washington'
+	| 'West Virginia'
+	| 'Wisconsin'
+	| 'Wyoming';
+
 export type Field_quoteResult = string;
 
 export type Field_quote = string;
@@ -1978,6 +2033,7 @@ export type Quote = {
 	field_quote?: Field_quote;
 	ref_quoteBy?: Ref_quoteBy;
 	field_quoteResult?: Field_quoteResult;
+	field_quoteState?: Field_quoteState;
 	button?: Button;
 };
 
@@ -2086,6 +2142,7 @@ export type TestimonialBlockWithLinkDesignSettings = {
 	_type: 'testimonialBlockWithLinkDesignSettings';
 	field_maxNumberToDisplay?: Field_maxNumberToDisplay;
 	field_blockColorCreamMidnight?: Field_blockColorCreamMidnight;
+	field_filterQuotesByPageState?: Field_filterQuotesByPageState;
 };
 
 export type TestimonialBlockDesignSettings = {
@@ -3612,6 +3669,8 @@ export type AllSanitySchemaTypes =
 	| Field_telephoneNumber
 	| Field_defaultMetaTitle
 	| Field_caption
+	| Field_filterQuotesByPageState
+	| Field_quoteState
 	| Field_quoteResult
 	| Field_quote
 	| Field_pricingPlanPrice
@@ -6860,6 +6919,7 @@ export type GoodpartyOrg_homeQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -24391,6 +24451,7 @@ export type GoodpartyOrg_homeQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -25139,6 +25200,7 @@ export type GoodpartyOrg_homeQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -25887,6 +25949,7 @@ export type GoodpartyOrg_homeQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -26502,6 +26565,7 @@ export type GoodpartyOrg_homeQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -27111,6 +27175,7 @@ export type GoodpartyOrg_homeQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -30288,6 +30353,7 @@ export type Experiment_variantsByExperimentIdQueryResult = Array<{
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -47819,6 +47885,7 @@ export type Experiment_variantsByExperimentIdQueryResult = Array<{
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -48567,6 +48634,7 @@ export type Experiment_variantsByExperimentIdQueryResult = Array<{
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -49315,6 +49383,7 @@ export type Experiment_variantsByExperimentIdQueryResult = Array<{
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -49930,6 +49999,7 @@ export type Experiment_variantsByExperimentIdQueryResult = Array<{
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -50539,6 +50609,7 @@ export type Experiment_variantsByExperimentIdQueryResult = Array<{
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -53717,6 +53788,7 @@ export type ActiveVariantsByPageIdQueryResult = Array<{
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -71248,6 +71320,7 @@ export type ActiveVariantsByPageIdQueryResult = Array<{
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -71996,6 +72069,7 @@ export type ActiveVariantsByPageIdQueryResult = Array<{
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -72744,6 +72818,7 @@ export type ActiveVariantsByPageIdQueryResult = Array<{
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -73359,6 +73434,7 @@ export type ActiveVariantsByPageIdQueryResult = Array<{
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -73968,6 +74044,7 @@ export type ActiveVariantsByPageIdQueryResult = Array<{
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -77148,6 +77225,7 @@ export type GoodpartyOrg_allArticlesQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -94679,6 +94757,7 @@ export type GoodpartyOrg_allArticlesQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -95427,6 +95506,7 @@ export type GoodpartyOrg_allArticlesQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -96175,6 +96255,7 @@ export type GoodpartyOrg_allArticlesQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -96790,6 +96871,7 @@ export type GoodpartyOrg_allArticlesQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -97399,6 +97481,7 @@ export type GoodpartyOrg_allArticlesQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -100617,6 +100700,7 @@ export type CategoriesQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -118148,6 +118232,7 @@ export type CategoriesQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -118896,6 +118981,7 @@ export type CategoriesQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -119644,6 +119730,7 @@ export type CategoriesQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -120259,6 +120346,7 @@ export type CategoriesQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -120868,6 +120956,7 @@ export type CategoriesQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -124114,6 +124203,7 @@ export type TopicsQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -141645,6 +141735,7 @@ export type TopicsQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -142393,6 +142484,7 @@ export type TopicsQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -143141,6 +143233,7 @@ export type TopicsQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -143756,6 +143849,7 @@ export type TopicsQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -144365,6 +144459,7 @@ export type TopicsQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -149671,6 +149766,7 @@ export type GoodpartyOrg_contactQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -167202,6 +167298,7 @@ export type GoodpartyOrg_contactQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -167950,6 +168047,7 @@ export type GoodpartyOrg_contactQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -168698,6 +168796,7 @@ export type GoodpartyOrg_contactQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -169313,6 +169412,7 @@ export type GoodpartyOrg_contactQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -169922,6 +170022,7 @@ export type GoodpartyOrg_contactQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -173105,6 +173206,7 @@ export type GoodpartyOrg_landingPagesAndPolicyQueryResult =
 													  }
 													| null;
 												field_quoteResult?: Field_quoteResult;
+												field_quoteState?: Field_quoteState;
 												button:
 													| {
 															_key: null;
@@ -190636,6 +190738,7 @@ export type GoodpartyOrg_landingPagesAndPolicyQueryResult =
 													  }
 													| null;
 												field_quoteResult?: Field_quoteResult;
+												field_quoteState?: Field_quoteState;
 												button:
 													| {
 															_key: null;
@@ -191384,6 +191487,7 @@ export type GoodpartyOrg_landingPagesAndPolicyQueryResult =
 													  }
 													| null;
 												field_quoteResult?: Field_quoteResult;
+												field_quoteState?: Field_quoteState;
 												button:
 													| {
 															_key: null;
@@ -192132,6 +192236,7 @@ export type GoodpartyOrg_landingPagesAndPolicyQueryResult =
 													  }
 													| null;
 												field_quoteResult?: Field_quoteResult;
+												field_quoteState?: Field_quoteState;
 												button:
 													| {
 															_key: null;
@@ -192747,6 +192852,7 @@ export type GoodpartyOrg_landingPagesAndPolicyQueryResult =
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -193356,6 +193462,7 @@ export type GoodpartyOrg_landingPagesAndPolicyQueryResult =
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -196550,6 +196657,7 @@ export type GoodpartyOrg_electionsQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -214081,6 +214189,7 @@ export type GoodpartyOrg_electionsQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -214829,6 +214938,7 @@ export type GoodpartyOrg_electionsQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -215577,6 +215687,7 @@ export type GoodpartyOrg_electionsQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -216192,6 +216303,7 @@ export type GoodpartyOrg_electionsQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -216801,6 +216913,7 @@ export type GoodpartyOrg_electionsQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -219983,6 +220096,7 @@ export type GoodpartyOrg_candidatesQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -237514,6 +237628,7 @@ export type GoodpartyOrg_candidatesQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -238262,6 +238377,7 @@ export type GoodpartyOrg_candidatesQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -239010,6 +239126,7 @@ export type GoodpartyOrg_candidatesQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -239625,6 +239742,7 @@ export type GoodpartyOrg_candidatesQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -240234,6 +240352,7 @@ export type GoodpartyOrg_candidatesQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -243416,6 +243535,7 @@ export type GoodpartyOrg_profileQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -260947,6 +261067,7 @@ export type GoodpartyOrg_profileQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -261695,6 +261816,7 @@ export type GoodpartyOrg_profileQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -262443,6 +262565,7 @@ export type GoodpartyOrg_profileQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -263058,6 +263181,7 @@ export type GoodpartyOrg_profileQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -263667,6 +263791,7 @@ export type GoodpartyOrg_profileQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -266849,6 +266974,7 @@ export type GoodpartyOrg_allComponentsQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -284380,6 +284506,7 @@ export type GoodpartyOrg_allComponentsQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -285128,6 +285255,7 @@ export type GoodpartyOrg_allComponentsQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -285876,6 +286004,7 @@ export type GoodpartyOrg_allComponentsQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -286491,6 +286620,7 @@ export type GoodpartyOrg_allComponentsQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -287100,6 +287230,7 @@ export type GoodpartyOrg_allComponentsQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -296094,6 +296225,7 @@ export type GlobalElectionTemplateQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -313625,6 +313757,7 @@ export type GlobalElectionTemplateQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -314373,6 +314506,7 @@ export type GlobalElectionTemplateQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -315121,6 +315255,7 @@ export type GlobalElectionTemplateQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -315736,6 +315871,7 @@ export type GlobalElectionTemplateQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -316345,6 +316481,7 @@ export type GlobalElectionTemplateQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -319555,6 +319692,7 @@ export type CustomElectionTemplateByIdQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -337086,6 +337224,7 @@ export type CustomElectionTemplateByIdQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -337834,6 +337973,7 @@ export type CustomElectionTemplateByIdQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -338582,6 +338722,7 @@ export type CustomElectionTemplateByIdQueryResult = {
 											  }
 											| null;
 										field_quoteResult?: Field_quoteResult;
+										field_quoteState?: Field_quoteState;
 										button:
 											| {
 													_key: null;
@@ -339197,6 +339338,7 @@ export type CustomElectionTemplateByIdQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;
@@ -339806,6 +339948,7 @@ export type CustomElectionTemplateByIdQueryResult = {
 									  }
 									| null;
 								field_quoteResult?: Field_quoteResult;
+								field_quoteState?: Field_quoteState;
 								button:
 									| {
 											_key: null;

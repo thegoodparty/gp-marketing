@@ -87,6 +87,13 @@ export interface PersonItem {
 	/** Took the GoodParty pledge (ETL-sourced, read-only). */
 	isPledged?: boolean;
 	/**
+	 * When the person took the pledge, as an ISO date. Not on the election-api
+	 * person feed yet: marketing's source for it is the HubSpot deal's closed-won
+	 * date, to be carried by the ETL the way `isPledged` is (Emily, 2026-10-06).
+	 * Absent until then, and only ever read when `isPledged` is true.
+	 */
+	pledgedAt?: string | null;
+	/**
 	 * HubSpot "Confirmed Candidate" (`verified_candidates`), ETL-sourced. Carries
 	 * the STORED value, not the CRM's label: `'Yes'` is shown there as "Running".
 	 * `'Partisan Candidate'` makes the person ineligible for the pledge outright.

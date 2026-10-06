@@ -18,6 +18,7 @@ import { CandidatesCard, type CardAttributionMode } from '~/ui/CandidatesCard';
 import { VoterDensityMapCard } from './VoterDensityMapCard';
 import { ClaimProfileModal } from './ClaimProfileModal';
 import { PersonClaimCTABand } from './PersonClaimCTABand';
+import { PledgeSymbolCallout } from './PledgeSymbolCallout';
 
 // Below this rendered-voter coverage the density surface is too partial to be
 // trustworthy, so the map is hidden. Coverage may be null when upstream has no
@@ -335,7 +336,30 @@ function buildAuthoredSections(view: PersonProfileView): SectionMap {
 	if (view.bio) {
 		sections.aboutMe = { cardType: 'about-me', heading: 'About Me', content: view.bio };
 	}
+	// The Voter Guide frames close the platform card (Why + Campaign Issues) and
+	// the About Me section with the disclaimer (2156:30656 / 2156:30728; Emily,
+	// 2026-10-06). It sits on the LAST platform section so it ends the card
+	// whichever of the two the owner wrote, and on About Me itself because Recent
+	// Experience follows it inside the same card. Only authored text gets one:
+	// the unclaimed placeholders are ours, not the person's.
+	const disclaimer = <AuthoredDisclaimer name={view.displayName} />;
+	const platformTail = sections.campaignIssues ?? sections.why;
+	if (platformTail) platformTail.footer = disclaimer;
+	if (sections.aboutMe) sections.aboutMe.footer = disclaimer;
 	return sections;
+}
+
+export function authoredDisclaimerCopy(name: string): string {
+	return `These statements come from ${name} and do not reflect any positions or stances on individual issues held by GoodParty.org.`;
+}
+
+/** Figma: 12/16 Open Sans in gray-500 under the authored text. */
+function AuthoredDisclaimer({ name }: { name: string }): ReactNode {
+	return (
+		<Text as='p' styleType='caption' className='text-gray-500' data-component='AuthoredDisclaimer'>
+			{authoredDisclaimerCopy(name)}
+		</Text>
+	);
 }
 
 /** Muted, italic prompt copy used inside unclaimed placeholder cards. */
@@ -476,10 +500,11 @@ function pastElectionDisclaimer(view: PersonProfileView): ProfileContentCardProp
 	};
 }
 
-/** In-column "Other candidates" list — a vertical stack of candidate cards. */
-function OtherCandidatesContent({ cards }: { cards: CandidateCard[] }): ReactNode {
+/** In-column "Other candidates" list — a vertical stack of candidate cards, under an optional callout. */
+function OtherCandidatesContent({ cards, callout }: { cards: CandidateCard[]; callout?: ReactNode }): ReactNode {
 	return (
 		<div className='flex flex-col gap-4'>
+			{callout}
 			{cards.map(card => (
 				<CandidatesCard key={card._key ?? card.name} {...card} />
 			))}
@@ -511,11 +536,15 @@ function buildCivicSections(view: PersonProfileView): SectionMap {
 	// candidate. FLAG: the frame reads "Other Candidates for [Position] in
 	// <Location>" but the view has no clean locality field distinct from the
 	// position name, so the "in <Location>" clause is omitted rather than invented.
+	// The "What this symbol means" box leads the list (Voter Guide frames; Emily,
+	// 2026-10-06). It explains the mark in the third person, so it renders on every
+	// profile that has the list; the cards themselves are unchanged. The frames do
+	// not draw it on Nearby Officials, so that list stays as it was.
 	const otherCandidates = empoweredFirst(toCandidateCards(view.otherCandidates));
 	if (otherCandidates.length > 0) {
 		sections.otherCandidates = {
 			heading: view.officeName ? `Other Candidates for ${view.officeName}` : 'Other Candidates',
-			content: <OtherCandidatesContent cards={otherCandidates} />,
+			content: <OtherCandidatesContent cards={otherCandidates} callout={<PledgeSymbolCallout />} />,
 		};
 	}
 	const nearby = empoweredFirst(toCandidateCards(view.nearbyOfficials));
@@ -579,9 +608,16 @@ function buildSidebar(view: PersonProfileView): ElectionsSidebarProps | undefine
 		: [];
 	const officeAddress = inOffice ? (view.officeAddress ?? []) : [];
 
+	// The pledge row reads the same flag as the hero's callout and the cards' line.
+	// Its date is a seam: election-api carries no pledge date yet (the source is to
+	// be the HubSpot deal's closed-won date, carried by the ETL; Emily,
+	// 2026-10-06), so until it does the row is the heading and the mark alone.
+	const pledge = view.pledged ? { signedOn: view.pledgedAt ? formatElectionDateFromApi(view.pledgedAt) : null } : undefined;
+
 	if (
 		topInfos.length === 0 &&
 		!view.party &&
+		!pledge &&
 		contactIcons.length === 0 &&
 		officeContacts.length === 0 &&
 		officeAddress.length === 0
@@ -592,6 +628,7 @@ function buildSidebar(view: PersonProfileView): ElectionsSidebarProps | undefine
 	return {
 		topInfos: topInfos.length > 0 ? topInfos : undefined,
 		politicalAffiliation: view.party ?? undefined,
+		pledge,
 		contactIcons: contactIcons.length > 0 ? contactIcons : undefined,
 		officeContacts: officeContacts.length > 0 ? officeContacts : undefined,
 		officeAddress: officeAddress.length > 0 ? officeAddress : undefined,

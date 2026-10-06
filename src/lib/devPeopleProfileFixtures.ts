@@ -55,10 +55,12 @@ const DEV_PEOPLE: Record<
 		last: string;
 		partyNames?: string[];
 		isPledged?: boolean;
+		/** Only A carries a date, so the other pledged fixtures show the row without its "Signed on" line. */
+		pledgedAt?: string;
 		confirmedCandidate?: string;
 	}
 > = {
-	'allen-slagle-74eee01a': { state: 'A', first: 'Allen', last: 'Slagle' },
+	'allen-slagle-74eee01a': { state: 'A', first: 'Allen', last: 'Slagle', pledgedAt: '2026-01-01' },
 	'tracy-good-ecff49d3': { state: 'B', first: 'Tracy', last: 'Good' },
 	'susan-overman-ad914b82': { state: 'C', first: 'Susan', last: 'Overman' },
 	'kim-byrd-b77f912d': { state: 'D', first: 'Kim', last: 'Byrd' },
@@ -286,6 +288,7 @@ export function getDevPersonProfileView(slug: string): PersonProfileView | null 
 		lastName: entry.last,
 		fullName: name,
 		...(entry.isPledged === undefined ? {} : { isPledged: entry.isPledged }),
+		...(entry.pledgedAt === undefined ? {} : { pledgedAt: entry.pledgedAt }),
 		...(entry.confirmedCandidate === undefined ? {} : { confirmedCandidate: entry.confirmedCandidate }),
 		// The shared matrix runs its candidacies for a different office (Mayor)
 		// than it holds (city council), which is fine for state/gating tests but

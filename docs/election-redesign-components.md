@@ -366,6 +366,45 @@ layer. The request was the intro and the callout, so the fitted radial glow stay
 `/candidate` route shares the component and is untouched: no intro, no callout, the "Empowered by
 GoodParty.org" line.
 
+**Profile content block** (every `/people` profile) — `component_profileContentBlock`, an
+**Extend**. Revised in the same Voter Guide round (Emily, 2026-10-06; same frames as the hero,
+with the block itself at 2139:26748 phone / 2156:34712 unclaimed phone). The block has no content
+fields in Studio: everything inside it on a `/people` page is assembled in
+`src/components/people/personSectionOverrides.tsx` from election-api data, so all three changes
+are code, none is a template edit. Built on the hero PR's branch (#374), because both edit that
+file and the content block's clearance, and both wait for the `/people` batch.
+
+- **A "Took the GoodParty.org Pledge" row in the siderail**, under Political Affiliation, with
+  the heart-and-star mark, for anyone the pledge rule affirms (the same `pledged` flag the hero
+  and the cards read). The frame puts "Signed on January 1, 2026" under it. **No pledge date
+  exists in the data**: election-api carries a yes/no flag only. Marketing's source for the date
+  is the HubSpot deal's closed-won date, to be carried onto the person record by the ETL the way
+  `isPledged` is (Emily, 2026-10-06). The site reads an optional `pledgedAt` on the person and
+  shows the "Signed on" line when it is there; until then the row is the heading and the mark
+  alone. To settle with the data team before it ships: which deal when a person has several
+  (the earliest closed-won is the natural rule), whether closed-won is in fact when the pledge is
+  taken (if not, "Signed on" overstates it), and that the deal is joined to the person the way
+  "Confirmed Candidate" is.
+- **A disclaimer under the two authored sections**: "These statements come from [name] and do not
+  reflect any positions or stances on individual issues held by GoodParty.org." as a 12px grey
+  caption. It closes the platform card (after Campaign Issues, or after Why I'm Running when the
+  owner wrote no issues) and the About Me section (before Recent Experience, which shares the
+  card). Claimed pages only: the unclaimed placeholders are our copy, not the person's, and the
+  unclaimed frame shows none. The name is the page's display name; the frames show a first name,
+  but splitting names is unreliable. The in-office record (Top Priorities, Accomplishments) is
+  also person-authored and the frames do not draw it; it carries no disclaimer today.
+- **A "What this symbol means" box above Other Candidates**: the heart-and-star mark, "Candidates
+  and elected officials with this symbol took the GoodParty.org Pledge, promising to serve people
+  first, independent of both major parties and big-money interests." and a "Read the full pledge"
+  link opening `PledgeModal`. Third-person copy, so it renders on every profile that has the list
+  (`PledgeSymbolCallout`, copy in `PLEDGE_SYMBOL_CALLOUT`). The cards under it are unchanged: the
+  mark still follows the claim and the pledge line still follows the pledge flag, which marketing
+  asked to keep. Nearby Officials is not in the frames and keeps its plain list.
+
+Noted and not acted on: a "District 5" tag pill on each other-candidate card, a "See more" button
+under the list (today the list shows everyone), and the mark drawn on the pledged person's card
+rather than the claimed one. None was in the change list.
+
 ## The shared election counts, as marketing defined them
 
 Settled with Emily on 2026-09-17 while building the location hero's four stat cards.
@@ -594,6 +633,8 @@ this table; it is here to orient, and to show the shape of the answer.
 | Position hero | develop + draft PR #320 | Position and Position Candidates globals | into #320, stays draft |
 | Position content block | develop + draft PR #327 (stacked on #320) | Position global | into #327, stays draft |
 | Candidates block | develop | Position Candidates global, every `/people` profile | draft and batch |
+| Profile hero | develop + draft PR #374 | Person Profile global, Candidate Profile global | into #374, stays draft |
+| Profile content block | develop + draft PR stacked on #374 | Person Profile global, Candidate Profile global | into the stacked PR, stays draft |
 | Profile hero | develop | Person Profile global (every `/people` profile), the retired Candidate Profile global, twelve disabled per-state scaffolds; a landing page **draft** also carries it | draft and batch with the `/people` pages (PR for the 2026-10-06 revision) |
 | Elections search hero | develop + draft PR #351 | the `/elections` landing page | into #351 |
 | Featured cities | develop + draft PR #307 | the `/elections` landing page | into #307 |

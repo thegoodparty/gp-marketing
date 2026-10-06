@@ -182,6 +182,13 @@ export interface PersonProfileView {
 	empowered: boolean;
 	/** True when the person has taken the GoodParty pledge (renders a badge). */
 	pledged: boolean;
+	/**
+	 * When they took it, as the feed sends it (ISO date), for the sidebar's
+	 * "Signed on" line. Null whenever {@link pledged} is false, so a date can
+	 * never be published without the pledge it belongs to, and null while the
+	 * feed carries no date at all (see `PersonItem.pledgedAt`).
+	 */
+	pledgedAt: string | null;
 	displayName: string;
 	/** Hero line under the name, e.g. "Candidate for Mayor" or "City Council". */
 	roleTitle: string | null;
@@ -1080,6 +1087,14 @@ export function composeView(
 			}
 		: null;
 
+	// Pledge is a factual spine flag, and it survives removal (K/L): a removed
+	// profile states the same pledge fact it would otherwise (Emily,
+	// 2026-10-06), unlike the authored content and photo, which are stripped.
+	// Eligibility is read BEFORE the flag: a CRM `Pledge Status = Yes` on
+	// someone the same CRM calls partisan is a data error, not a pledge
+	// (Mamdani, Cuomo).
+	const pledged = !pledgeIneligible && confirmedRunning(person?.confirmedCandidate) && (person?.isPledged ?? false);
+
 	// Removal strips photo + authored content; keep only the civics spine.
 	const avatarUrl = removed ? null : (overlay?.avatarUrl ?? person?.headshotUrl ?? null);
 	const bio = removed ? null : (overlay?.bioOverride ?? person?.bioText ?? null);
@@ -1103,16 +1118,8 @@ export function composeView(
 		removed,
 		unpublished,
 		empowered,
-		// Pledge is a factual spine flag, and it survives removal (K/L): a removed
-		// profile states the same pledge fact it would otherwise (Emily,
-		// 2026-10-06), unlike the authored content and photo, which are stripped.
-		// Eligibility is read BEFORE the flag: a CRM `Pledge Status = Yes` on
-		// someone the same CRM calls partisan is a data error, not a pledge
-		// (Mamdani, Cuomo).
-		pledged:
-			!pledgeIneligible &&
-			confirmedRunning(person?.confirmedCandidate) &&
-			(person?.isPledged ?? false),
+		pledged,
+		pledgedAt: pledged ? (person?.pledgedAt ?? null) : null,
 		pledgeIneligible,
 		displayName,
 		roleTitle,

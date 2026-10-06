@@ -1484,6 +1484,7 @@ export type Component_demoRequestBlock = {
 export type Component_nearbyOffices = {
 	_type: 'component_nearbyOffices';
 	field_heading?: string;
+	field_description?: string;
 	nearbyOfficesDesignSettings?: {
 		field_blockColorCreamMidnight?: 'cream' | 'midnight';
 	};
@@ -20415,6 +20416,7 @@ export type GoodpartyOrg_homeQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -44121,6 +44123,7 @@ export type Experiment_variantsByExperimentIdQueryResult = Array<{
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -67828,6 +67831,7 @@ export type ActiveVariantsByPageIdQueryResult = Array<{
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -91537,6 +91541,7 @@ export type GoodpartyOrg_allArticlesQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -115284,6 +115289,7 @@ export type CategoriesQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -139059,6 +139065,7 @@ export type TopicsQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -164894,6 +164901,7 @@ export type GoodpartyOrg_contactQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -188606,6 +188614,7 @@ export type GoodpartyOrg_landingPagesAndPolicyQueryResult =
 							_key: string;
 							_type: 'component_nearbyOffices';
 							field_heading?: string;
+							field_description?: string;
 							nearbyOfficesDesignSettings?: {
 								field_blockColorCreamMidnight?: 'cream' | 'midnight';
 							};
@@ -212329,6 +212338,7 @@ export type GoodpartyOrg_electionsQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -236040,6 +236050,7 @@ export type GoodpartyOrg_candidatesQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -259751,6 +259762,7 @@ export type GoodpartyOrg_profileQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -283462,6 +283474,7 @@ export type GoodpartyOrg_allComponentsQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -312985,6 +312998,7 @@ export type GlobalElectionTemplateQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -336724,6 +336738,7 @@ export type CustomElectionTemplateByIdQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};

@@ -11,12 +11,18 @@ import { formatElectionDateShortFromApi } from '~/lib/electionsHelpers';
 /** Marketing's cap for the block (Emily, 2026-09-24). The data helper applies it too. */
 export const NEARBY_OFFICES_LIMIT = 8;
 
+/** The sentence under the heading when the editor has not written one (frame copy, Emily, 2026-10-06). */
+export const NEARBY_OFFICES_DEFAULT_DESCRIPTION = 'Explore offices coming up for election near you:';
+
 const styles = tv({
 	slots: {
 		base: 'py-(--container-padding)',
 		wrapper: 'flex flex-col gap-4 md:gap-8',
+		// Figma: 16px between heading and sentence on the phone, 8px on desktop.
+		header: 'flex flex-col gap-4 md:gap-2',
 		// Figma: 32px at every width; heading-sm reaches 32 only at 1440, heading-md starts there.
 		heading: 'text-black max-md:text-heading-md',
+		description: 'text-black',
 		list: 'flex flex-col gap-4',
 		// The header mirrors the row grid so each label sits over its own column.
 		// The count column is the frame's: type 123, position and count sharing the
@@ -56,6 +62,7 @@ const styles = tv({
 			midnight: {
 				base: 'bg-midnight-900',
 				heading: 'text-white',
+				description: 'text-white',
 				columnHeaderCell: 'text-white',
 			},
 		},
@@ -66,6 +73,8 @@ export type NearbyOfficesProps = {
 	className?: string;
 	backgroundColor?: 'cream' | 'midnight';
 	heading?: string;
+	/** The sentence under the heading; an empty string hides it. */
+	description?: string;
 	/** Already selected and ordered by the page; anything past the cap is dropped here as well. */
 	offices: OfficeItem[];
 };
@@ -80,16 +89,40 @@ export const NearbyOffices = (props: NearbyOfficesProps) => {
 	if (offices.length === 0) return null;
 
 	const backgroundColor = props.backgroundColor ?? 'cream';
-	const { base, wrapper, heading, list, columnHeader, columnHeaderCell, row, rowLink, tag, position, count, countBadge, date, arrow } =
-		styles({ backgroundColor });
+	const description = props.description ?? NEARBY_OFFICES_DEFAULT_DESCRIPTION;
+	const {
+		base,
+		wrapper,
+		header,
+		heading,
+		description: descriptionStyle,
+		list,
+		columnHeader,
+		columnHeaderCell,
+		row,
+		rowLink,
+		tag,
+		position,
+		count,
+		countBadge,
+		date,
+		arrow,
+	} = styles({ backgroundColor });
 
 	return (
 		<article className={cn(base(), props.className)} data-component='NearbyOffices'>
 			<Container size='xl'>
 				<div className={wrapper()}>
-					<Text as='h2' styleType='heading-sm' className={heading()}>
-						{props.heading || 'Nearby offices'}
-					</Text>
+					<div className={header()}>
+						<Text as='h2' styleType='heading-sm' className={heading()}>
+							{props.heading || 'Nearby offices'}
+						</Text>
+						{description && (
+							<Text as='p' styleType='body-1' className={descriptionStyle()}>
+								{description}
+							</Text>
+						)}
+					</div>
 					<div className={list()}>
 						<div className={columnHeader()} aria-hidden='true'>
 							<Text as='span' styleType='subtitle-2' className={columnHeaderCell()}>

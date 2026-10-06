@@ -33,6 +33,17 @@ describe('NearbyOffices', () => {
 		expect(html).toContain('Nov 3, 2026');
 	});
 
+	test('shows the default sentence under the heading, the supplied one instead, or none for an empty string', () => {
+		const byDefault = renderToStaticMarkup(<NearbyOffices offices={[office(1)]} />);
+		const supplied = renderToStaticMarkup(<NearbyOffices description='Other races nearby.' offices={[office(1)]} />);
+		const hidden = renderToStaticMarkup(<NearbyOffices description='' offices={[office(1)]} />);
+
+		expect(byDefault).toContain('Explore offices coming up for election near you:');
+		expect(supplied).toContain('Other races nearby.');
+		expect(supplied).not.toContain('Explore offices');
+		expect(hidden).not.toContain('<p class');
+	});
+
 	test('uses the editable heading when one is supplied', () => {
 		const html = renderToStaticMarkup(<NearbyOffices heading='Other offices in Houston' offices={[office(1)]} />);
 

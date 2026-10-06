@@ -175,12 +175,17 @@ Decisions that came out of it:
   geometry (123px type column, 16px gaps, 14px inset, 60px row floor). `OfficeItem` gained
   `raceSlug` and `pledgedCount` with the same names and wording as #304, so that draft's next
   merge of `develop` resolves trivially.
-- **Noted and not acted on** (2026-10-06): the frame's paragraph under the heading ("Explore
-  offices coming up for election near you:") has no field and was not in the feedback; the
-  heading "More offices in Bay City, MI" is a Studio edit (`[County or City]` and `[State]`
-  resolve here, and there is no two-letter state token); "Election Date" stays sentence case;
-  the mobile frame places the count both above and below the date on different cards, and the
-  block follows the above-the-date cards, as the offices list does.
+- **The sentence under the heading is an editable string field**, `field_description`, and
+  the frame copy ("Explore offices coming up for election near you:") is the component's
+  fallback, so documents saved before the field existed render it too (Emily, 2026-10-06).
+- **The heading defaults to the page's own place** (Emily, 2026-10-06): "More offices in Bay
+  City, Michigan", or just "More offices in Michigan" on a state position page, where
+  `[County or City]` and `[State]` are the same name and the token form would double it. The
+  route computes it (`heading` on the override) and an editor's Heading field, with tokens,
+  wins over it. There is no two-letter state token, so the frame's "MI" is "Michigan".
+- **Noted and not acted on** (2026-10-06): "Election Date" stays sentence case; the mobile
+  frame places the count both above and below the date on different cards, and the block
+  follows the above-the-date cards, as the offices list does.
 
 Waiting on data: races are attached to places, and federal races are not attached to any place,
 so a Federal tag can appear only once election-api exposes them per place. True proximity

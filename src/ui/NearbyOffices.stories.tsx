@@ -50,6 +50,14 @@ export const Midnight: Story = {
 	},
 };
 
+export const CustomDescription: Story = {
+	args: {
+		heading: 'More offices in Bay City, Michigan',
+		description: 'Other races on the same ballot, soonest first.',
+		offices: sampleOffices,
+	},
+};
+
 export const CappedAtEight: Story = {
 	args: {
 		heading: 'Nearby offices',

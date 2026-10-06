@@ -89,8 +89,10 @@ export function resolvePositionHeroState(input: PositionHeroStateInput): Positio
 		return { phase: 'filing', filingOpen: !filingStart || today >= filingStart };
 	}
 
-	if (!filingEnd && filingStart && today < filingStart) {
-		return { phase: 'filing', filingOpen: false };
+	// With no deadline we cannot tell when filing closes, so a window that has
+	// opened stays open until election day rather than reading as mid-election.
+	if (!filingEnd && filingStart) {
+		return { phase: 'filing', filingOpen: today >= filingStart };
 	}
 
 	return { phase: 'midElection', resultsPending: false };

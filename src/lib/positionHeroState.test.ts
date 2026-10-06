@@ -89,10 +89,12 @@ describe('resolvePositionHeroState', () => {
 		});
 	});
 
-	test('a filing start with no deadline is filing until it opens', () => {
-		expect(resolvePositionHeroState({ filingDateStart: race.filingDateStart, electionDate: race.electionDate, now: at('2026-05-01') })).toEqual(
-			{ phase: 'filing', filingOpen: false },
-		);
+	test('a filing start with no deadline is filing until it opens, then open filing until election day', () => {
+		const noDeadline = { filingDateStart: race.filingDateStart, electionDate: race.electionDate };
+		expect(resolvePositionHeroState({ ...noDeadline, now: at('2026-05-01') })).toEqual({ phase: 'filing', filingOpen: false });
+		expect(resolvePositionHeroState({ ...noDeadline, now: at('2026-08-15') })).toEqual({ phase: 'filing', filingOpen: true });
+		expect(resolvePositionHeroState({ ...noDeadline, now: at('2026-11-03') })).toEqual({ phase: 'filing', filingOpen: true });
+		expect(resolvePositionHeroState({ ...noDeadline, now: at('2026-11-10') })).toEqual({ phase: 'midElection', resultsPending: true });
 	});
 
 	test('date-only strings are read the same as timestamps', () => {

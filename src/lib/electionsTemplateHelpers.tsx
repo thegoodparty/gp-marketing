@@ -227,6 +227,7 @@ export function buildCandidatesSectionOverrides(
 		component_ctaImageBlock: {
 			primaryButtonHref: ctx.locationHref,
 		},
+		component_testimonialBlockWithLink: { stateName: ctx.stateName },
 	};
 }
 

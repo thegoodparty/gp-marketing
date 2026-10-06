@@ -1,7 +1,9 @@
 import { describe, expect, test } from 'bun:test';
 
 import {
+	buildCandidatesSectionOverrides,
 	buildCandidatesTokens,
+	buildElectionsIndexSectionOverrides,
 	buildPositionSectionOverrides,
 	buildPositionTokens,
 } from '~/lib/electionsTemplateHelpers';
@@ -108,5 +110,39 @@ describe('buildCandidatesTokens', () => {
 	test('does not supply [candidate name]', () => {
 		const tokens = buildCandidatesTokens(tokenCtx);
 		expect(resolveTokens('Meet [candidate name]', tokens)).toBe('Meet ');
+	});
+});
+
+/**
+ * The testimonial block's state filter reads `stateName` off the override. Every
+ * template helper has to pass it, or the toggle silently does nothing on that
+ * template (the candidates helper did not, which the review caught).
+ */
+describe('every template helper hands the testimonial block the page state', () => {
+	const base = {
+		breadcrumbs: [],
+		officeName: 'Mayor',
+		stateName: 'Tennessee',
+		electionDate: null,
+		filingDate: null,
+		positionHref: '/elections/tn/x/position/mayor',
+		locationHref: '/elections/tn',
+	};
+
+	test('position page', () => {
+		expect(buildPositionSectionOverrides(base as never).component_testimonialBlockWithLink).toEqual({ stateName: 'Tennessee' });
+	});
+
+	test('candidates page', () => {
+		expect(buildCandidatesSectionOverrides({ ...base, candidates: [] } as never).component_testimonialBlockWithLink).toEqual({
+			stateName: 'Tennessee',
+		});
+	});
+
+	test('location index page', () => {
+		expect(
+			buildElectionsIndexSectionOverrides({ breadcrumbs: [], locationLevel: 'state', stateName: 'Tennessee' } as never)
+				.component_testimonialBlockWithLink,
+		).toEqual({ stateName: 'Tennessee' });
 	});
 });

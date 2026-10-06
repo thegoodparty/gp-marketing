@@ -5,7 +5,6 @@ import { formatElectionDateFromApi } from '~/lib/electionsHelpers';
 import type { PersonAccomplishment, PersonProfileIssueStatus } from '~/types/people';
 import { mapAttribution, mapStyleUrl } from '~/lib/env';
 import type { SectionOverrides } from '~/PageSections';
-import { GOODPARTY_PLEDGE_ANCHOR_ID } from '~/PageSections/GoodPartyOrgPledgeSection';
 import type { TokenMap } from '~/lib/resolveTokens';
 import type { CandidateCard } from '~/ui/CandidatesBlock';
 import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
@@ -703,14 +702,24 @@ function profileLocationLabel(view: PersonProfileView): string | null {
  * override that. `pledgeIneligible` also covers a CRM "Partisan Candidate",
  * which asserts the same thing without naming a party.
  *
- * Removal (K/L) says nothing at all. `pledged` is force-cleared for removed
- * profiles, so "Has Not Taken…" there would be a line we know may be false,
- * asserted about the one group who asked us to stop publishing them.
+ * Removal (K/L) changes nothing here (Emily, 2026-10-06): a removed profile
+ * carries the same callout it would without the request, read from the same
+ * flags. `pledged` is no longer cleared on removal for that reason.
  */
-function pledgeAttribution(view: PersonProfileView): 'pledged' | 'notPledged' | 'pledgeIneligible' | 'none' {
-	if (view.removed) return 'none';
+function pledgeAttribution(view: PersonProfileView): 'pledged' | 'notPledged' | 'pledgeIneligible' {
 	if (view.pledgeIneligible) return 'pledgeIneligible';
 	return view.pledged ? 'pledged' : 'notPledged';
+}
+
+/**
+ * Who the hero's intro and pledge callout are about. The frames only draw
+ * candidates; for someone who holds or held office the sentences say "elected
+ * official" and the intro says "public service" instead of "candidacy" (Emily,
+ * 2026-10-06). Someone serving AND running (state C) keeps the candidate
+ * wording, since the page leads with the candidacy.
+ */
+function pledgeSubject(view: PersonProfileView): 'candidate' | 'elected official' {
+	return view.persona === 'officeholder' || view.persona === 'past' ? 'elected official' : 'candidate';
 }
 
 /**
@@ -752,11 +761,10 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	// it is a false statement about a named person.
 	const showPledge = true;
 
-	// So the hero's status line always has somewhere to go: the band defines the
-	// pledge for the negative and ineligible lines as much as the affirmative one.
-	// `none` (removed profiles) renders no line at all, so it gets no link.
+	// The hero's callout explains the pledge itself through the pop-up ("Read the
+	// full pledge"), so it no longer links down to the band.
 	const attribution = pledgeAttribution(view);
-	const attributionHref = attribution === 'none' ? undefined : `#${GOODPARTY_PLEDGE_ANCHOR_ID}`;
+	const subject = pledgeSubject(view);
 
 	// Someone who has not taken the pledge gets an invitation to take it instead
 	// of an invitation to read about it. `signup` carries the app sign-up URL of
@@ -855,13 +863,14 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			profileImageUrl: view.avatarUrl ?? undefined,
 			isEmpowered: view.empowered,
 			tags: personaTags(view.persona),
-			// The line states the person's pledge status (see `pledgeAttribution`).
-			// The GoodParty mark stays on CLAIMED, which is what it has always meant
+			// The callout states the person's pledge status (see `pledgeAttribution`)
+			// about the subject the page is about (see `pledgeSubject`). The GoodParty
+			// mark on the portrait stays on CLAIMED, which is what it has always meant
 			// here — it marks the page as a GoodParty.org profile rather than making
 			// a claim about the pledge, and moving it onto `pledged` would strip it
 			// from every claimed officeholder.
 			attribution,
-			attributionHref,
+			subject,
 			showBrandMark: view.claimed,
 		},
 		component_claimProfileBlock: {
@@ -869,8 +878,8 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			// claim prompt renders in-column as light-blue cards inside the content
 			// well (see `claimCard` above), matching the Figma layout.
 			//
-			// It also cannot go here: the hero portrait deliberately overflows 104px
-			// (md) / 216px (lg) below the hero box, and the next section is expected
+			// It also cannot go here: the hero portrait deliberately overflows 48px
+			// (md) / 68px (lg) below the hero box, and the next section is expected
 			// to offset for it the way ProfileContentBlock's sidebar does. A
 			// full-width banner in this slot renders its headline underneath the
 			// photo.

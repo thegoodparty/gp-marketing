@@ -1267,6 +1267,10 @@ export type Component_blogTopicTagsBlock = {
 
 export type Component_profileHero = {
 	_type: 'component_profileHero';
+	profileHeroContent?: {
+		field_introCandidates?: string;
+		field_introOfficeholders?: string;
+	};
 	profileHeroDesignSettings?: {
 		field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 	};
@@ -21177,6 +21181,10 @@ export type GoodpartyOrg_homeQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -44883,6 +44891,10 @@ export type Experiment_variantsByExperimentIdQueryResult = Array<{
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -68590,6 +68602,10 @@ export type ActiveVariantsByPageIdQueryResult = Array<{
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -92299,6 +92315,10 @@ export type GoodpartyOrg_allArticlesQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -116046,6 +116066,10 @@ export type CategoriesQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -139821,6 +139845,10 @@ export type TopicsQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -165656,6 +165684,10 @@ export type GoodpartyOrg_contactQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -189368,6 +189400,10 @@ export type GoodpartyOrg_landingPagesAndPolicyQueryResult =
 					| {
 							_key: string;
 							_type: 'component_profileHero';
+							profileHeroContent?: {
+								field_introCandidates?: string;
+								field_introOfficeholders?: string;
+							};
 							profileHeroDesignSettings?: {
 								field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 							};
@@ -213091,6 +213127,10 @@ export type GoodpartyOrg_electionsQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -236802,6 +236842,10 @@ export type GoodpartyOrg_candidatesQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -260513,6 +260557,10 @@ export type GoodpartyOrg_profileQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -284224,6 +284272,10 @@ export type GoodpartyOrg_allComponentsQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -313747,6 +313799,10 @@ export type GlobalElectionTemplateQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -337486,6 +337542,10 @@ export type CustomElectionTemplateByIdQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};

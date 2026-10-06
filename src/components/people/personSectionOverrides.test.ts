@@ -303,27 +303,34 @@ describe('claim CTAs are gone from the office-only pages and nowhere else', () =
 });
 
 /**
- * The hero attribution line. Marketing's spec keyed the pledge copy off CLAIM
+ * The hero pledge callout. Marketing's spec keyed the pledge copy off CLAIM
  * status; these pin it to the pledge flag instead, because they are separate
  * facts (see `pledgeAttribution`). State B is the case that proves it: a claimed
  * officeholder is `pledged: false` in the shared matrix, because `isPledged`
  * only ever rolls up from candidacies, so the literal spec would have published
- * "Has taken the GoodParty.org Pledge" about them.
+ * "took the GoodParty.org Pledge" about them.
+ *
+ * The removal states (K/L) read the same flags as everyone else (Emily,
+ * 2026-10-06): K is a Republican, so ineligible; L's spine flag stands.
+ *
+ * The subject is the persona's: "elected official" for someone who holds or
+ * held office, "candidate" for everyone running, including state C (serving
+ * and running), whose page leads with the candidacy.
  */
 describe('the hero states the pledge fact, not the claim', () => {
-	const EXPECTED: Array<[string, string, string | undefined]> = [
-		['A', 'allen-slagle-74eee01a', 'pledged'],
-		['B', 'tracy-good-ecff49d3', 'notPledged'],
-		['C', 'susan-overman-ad914b82', 'pledged'],
-		['D', 'kim-byrd-b77f912d', 'notPledged'],
-		['E', 'rob-zotti-d8c578fb', 'notPledged'],
-		['F', 'tim-ficken-0a951485', 'notPledged'],
-		['G', 'bill-fortner-61a42912', 'notPledged'],
-		['H', 'gregory-schreurs-136cadf0', 'notPledged'],
-		['I', 'jeb-hanson-3753676b', 'pledgeIneligible'],
-		['J', 'deb-craft-f88e7434', 'pledgeIneligible'],
-		['K', 'x-27255f40', 'none'],
-		['L', 'x-3412f69c', 'none'],
+	const EXPECTED: Array<[string, string, string, string]> = [
+		['A', 'allen-slagle-74eee01a', 'pledged', 'candidate'],
+		['B', 'tracy-good-ecff49d3', 'notPledged', 'elected official'],
+		['C', 'susan-overman-ad914b82', 'pledged', 'candidate'],
+		['D', 'kim-byrd-b77f912d', 'notPledged', 'candidate'],
+		['E', 'rob-zotti-d8c578fb', 'notPledged', 'elected official'],
+		['F', 'tim-ficken-0a951485', 'notPledged', 'candidate'],
+		['G', 'bill-fortner-61a42912', 'notPledged', 'elected official'],
+		['H', 'gregory-schreurs-136cadf0', 'notPledged', 'elected official'],
+		['I', 'jeb-hanson-3753676b', 'pledgeIneligible', 'candidate'],
+		['J', 'deb-craft-f88e7434', 'pledgeIneligible', 'elected official'],
+		['K', 'x-27255f40', 'pledgeIneligible', 'candidate'],
+		['L', 'x-3412f69c', 'pledged', 'elected official'],
 	];
 
 	function hero(slug: string) {
@@ -332,9 +339,15 @@ describe('the hero states the pledge fact, not the claim', () => {
 		return buildPersonSectionOverrides(view).component_profileHero;
 	}
 
-	test('every state resolves to its intended line', () => {
+	test('every state resolves to its intended sentence', () => {
 		for (const [state, slug, attribution] of EXPECTED) {
 			expect([state, hero(slug)?.attribution]).toEqual([state, attribution]);
+		}
+	});
+
+	test('every state names the right subject', () => {
+		for (const [state, slug, , subject] of EXPECTED) {
+			expect([state, hero(slug)?.subject]).toEqual([state, subject]);
 		}
 	});
 
@@ -462,29 +475,29 @@ describe('the removal states publish the civics spine and nothing else', () => {
 		}
 	});
 
-	test('the hero is stripped of the photo and says nothing about the pledge', () => {
-		// This asserted `notEndorsed` when it was written. The pledge copy replaced
-		// that line, and removal now resolves to no line at all rather than "Has
-		// Not Taken the GoodParty.org Pledge": `pledged` is force-cleared on
-		// removal, so the negative would be a claim we cannot stand behind, made
-		// about the one group who asked us to stop publishing them.
+	test('the hero is stripped of the photo but keeps the pledge callout', () => {
+		// This asserted `notEndorsed` when it was written, then `none` while
+		// removal cleared the pledge flag. Since 2026-10-06 (Emily) a removed
+		// profile carries the same callout it would without the request, so the
+		// callout here is whatever the flags say — pinned by the matrix above.
 		for (const [state, slug] of REMOVAL_SLUGS) {
 			const view = getDevPersonProfileView(slug);
 			if (!view) throw new Error(`no dev fixture for ${slug}`);
 			const hero = buildPersonSectionOverrides(view).component_profileHero;
 			expect([state, hero?.profileImageUrl]).toEqual([state, undefined]);
 			expect([state, hero?.isEmpowered]).toEqual([state, false]);
-			expect([state, hero?.attribution]).toEqual([state, 'none']);
+			expect([state, hero?.attribution]).not.toEqual([state, 'none']);
 		}
 	});
 
-	test('the pledge badge is suppressed even though the spine still flags it', () => {
+	test('the pledge flag survives removal; only party can outrank it', () => {
 		// Both removal fixtures seed `isPledged: true`. Pledging is a factual civics
-		// flag, so the only reason it does not paint is the removal — making this
-		// the one assertion that would catch removal being dropped from `pledged`.
-		for (const [state, slug] of REMOVAL_SLUGS) {
-			expect([state, getDevPersonProfileView(slug)?.pledged]).toEqual([state, false]);
-		}
+		// flag and removal no longer clears it (Emily, 2026-10-06): K's is outranked
+		// by the Republican candidacy, L's stands. This is the assertion that would
+		// catch removal creeping back into `pledged`.
+		expect(getDevPersonProfileView('x-27255f40')?.pledged).toBe(false);
+		expect(getDevPersonProfileView('x-27255f40')?.pledgeIneligible).toBe(true);
+		expect(getDevPersonProfileView('x-3412f69c')?.pledged).toBe(true);
 	});
 
 	test('the CTA band is hidden rather than swapped for the generic sign-up', () => {
@@ -662,7 +675,6 @@ describe('the claimed CTA band button goes somewhere', () => {
  * and eyeballing one profile proves nothing about the other eleven.
  */
 describe('the pledge band across the twelve profile states', () => {
-	const PLEDGE_ANCHOR = '#goodparty-pledge';
 	const LEARN_MORE = { buttonType: 'internal', href: '/about', label: 'Learn more' } as const;
 	const TAKE_THE_PLEDGE = { buttonType: 'signup', label: 'Take the pledge' } as const;
 
@@ -678,8 +690,9 @@ describe('the pledge band across the twelve profile states', () => {
 		'gregory-schreurs-136cadf0': ['notPledged', TAKE_THE_PLEDGE], // H unclaimed past
 		'jeb-hanson-3753676b': ['pledgeIneligible', LEARN_MORE], // I major-party candidate
 		'deb-craft-f88e7434': ['pledgeIneligible', LEARN_MORE], // J major-party officeholder
-		'x-27255f40': ['none', LEARN_MORE], // K removal requested
-		'x-3412f69c': ['none', LEARN_MORE], // L removal requested
+		// Removal reads the same flags as everyone else (Emily, 2026-10-06).
+		'x-27255f40': ['pledgeIneligible', LEARN_MORE], // K removal requested, Republican candidate
+		'x-3412f69c': ['pledged', LEARN_MORE], // L removal requested, pledged officeholder
 	} as const;
 
 	const overridesFor = (slug: string) => {
@@ -694,13 +707,12 @@ describe('the pledge band across the twelve profile states', () => {
 		}
 	});
 
-	test('every hero attribution line links down to the band', () => {
+	test('every hero callout agrees with the band on the pledge fact', () => {
+		// The callout explains the pledge through its own pop-up now, so it no
+		// longer links down to the band; the two just have to tell one story.
 		for (const [slug, [attribution]] of Object.entries(STATES)) {
 			const hero = overridesFor(slug).component_profileHero;
 			expect([slug, hero?.attribution]).toEqual([slug, attribution]);
-			// 'none' renders no line at all, so there is nothing to link.
-			const expected = attribution === 'none' ? undefined : PLEDGE_ANCHOR;
-			expect([slug, hero?.attributionHref]).toEqual([slug, expected]);
 		}
 	});
 

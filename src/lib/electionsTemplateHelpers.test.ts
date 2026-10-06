@@ -363,6 +363,41 @@ describe('buildElectionsIndexSectionOverrides', () => {
 		expect(list?.offices?.map(office => office.pledgedCount)).toEqual([2, undefined, undefined]);
 	});
 
+	/** Offices with independents on the ballot lead the list; the rest keep their order (Emily, 2026-10-06). */
+	test('moves offices with independents running to the top, keeping the order inside each group', () => {
+		const pledged = (raceSlug: string, personId: string) => ({
+			personId,
+			name: 'Person',
+			office: null,
+			location: null,
+			href: `/people/person-${personId}`,
+			avatarUrl: null,
+			isPledged: true,
+			isNonpartisan: true,
+			role: 'candidate' as const,
+			electionDate: '2026-11-03',
+			raceSlug,
+		});
+		const offices = [
+			{ id: 'a', type: 'City', position: 'City Legislature', nextElectionDate: '2026-11-02', raceSlug: 'mi/sterling/city-legislature' },
+			{ id: 'b', type: 'State', position: 'State Senator', nextElectionDate: '2026-11-02', raceSlug: 'mi/state-senator' },
+			{ id: 'c', type: 'State', position: 'Secretary of State', nextElectionDate: '2026-11-02', raceSlug: 'mi/secretary-of-state' },
+			{ id: 'd', type: 'State', position: 'State Higher Education Board', nextElectionDate: '2026-11-02', raceSlug: 'mi/higher-ed-board' },
+		];
+		const list = buildElectionsIndexSectionOverrides({
+			...countyCtx,
+			offices,
+			featuredPeople: {
+				candidates: [pledged('mi/state-senator', 'p1'), pledged('mi/higher-ed-board', 'p2')],
+				representatives: [],
+				candidatesComplete: true,
+			},
+		}).component_listOfOfficesBlock;
+
+		expect(list?.offices?.map(office => office.id)).toEqual(['b', 'd', 'a', 'c']);
+		expect(list?.offices?.map(office => office.pledgedCount)).toEqual([1, 1, undefined, undefined]);
+	});
+
 	test('leaves the offices untouched without featured people', () => {
 		const offices = [{ id: 'a', type: 'County', position: 'County Board', nextElectionDate: '2026-11-03', raceSlug: 'il/kane-county/county-board' }];
 		expect(buildElectionsIndexSectionOverrides({ ...countyCtx, offices }).component_listOfOfficesBlock?.offices).toBe(offices);

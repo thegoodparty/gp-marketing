@@ -397,10 +397,15 @@ function withPledgedCounts(offices: OfficeItem[] | undefined, people: FeaturedPe
 		set.add((person.personId ?? person.href).toLowerCase());
 		peopleByRace.set(key, set);
 	}
-	return offices.map(office => {
+	const counted = offices.map(office => {
 		const pledgedCount = office.raceSlug ? peopleByRace.get(office.raceSlug.toLowerCase())?.size : undefined;
 		return pledgedCount ? { ...office, pledgedCount } : office;
 	});
+	// Offices with independents on the ballot lead the list (Emily, 2026-10-06),
+	// and the rows keep their order inside each half, so the date order the
+	// route built survives within the two groups. The block filters by level
+	// and year on top of this order without re-sorting, so it holds in every view.
+	return [...counted.filter(office => (office.pledgedCount ?? 0) > 0), ...counted.filter(office => !((office.pledgedCount ?? 0) > 0))];
 }
 
 export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageContext): SectionOverrides {

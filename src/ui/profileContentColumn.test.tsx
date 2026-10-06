@@ -4,8 +4,8 @@ import { ProfileContentBlock } from './ProfileContentBlock.tsx';
 
 /**
  * The hero portrait is a circle that straddles the dark band: ProfileHero caps
- * how much height it contributes with a negative bottom margin (`md` 104px,
- * `lg` 216px), so the photo renders *past* the hero and lands in the first
+ * how much height it contributes with a negative bottom margin (`md` 48px,
+ * `lg` 68px), so the photo renders *past* the hero and lands in the first
  * column of this block's grid.
  *
  * With a sidebar that first column is the <aside>, which offsets by the same
@@ -57,7 +57,7 @@ describe('the content column clears the hero portrait when there is no sidebar',
 			const column = contentColumnClasses(html);
 			// Below `lg` the grid is a single column, so the card stacks directly
 			// under the photo and has to reserve its `md` overflow.
-			expect(column).toContain('md:mt-[104px]');
+			expect(column).toContain('md:mt-12');
 			// ...but not at `lg`, where col-start-2 already moves it clear.
 			expect(column).toContain('lg:mt-0');
 		});
@@ -70,7 +70,7 @@ describe('the content column clears the hero portrait when there is no sidebar',
 			// The <aside> is the first grid child and carries the clearance, so the
 			// content column must stay in its natural second track.
 			expect(column).not.toContain('lg:col-start-2');
-			expect(column).not.toContain('md:mt-[104px]');
+			expect(column).not.toContain('md:mt-12');
 		});
 	}
 
@@ -79,7 +79,7 @@ describe('the content column clears the hero portrait when there is no sidebar',
 			<ProfileContentBlock cardLayout='separated' contentCards={CARDS} sidebar={SIDEBAR} />,
 		);
 		const aside = /<aside class="([^"]*)"/.exec(html)?.[1] ?? '';
-		expect(aside).toContain('md:mt-[104px]');
-		expect(aside).toContain('lg:mt-[216px]');
+		expect(aside).toContain('md:mt-12');
+		expect(aside).toContain('lg:mt-[68px]');
 	});
 });

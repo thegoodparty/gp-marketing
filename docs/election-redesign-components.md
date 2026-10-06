@@ -669,6 +669,52 @@ people-first order; the block follows the sections as rendered instead. The fram
 officeholder meta line with the office name ("City Council · Independent · …"); the line stays
 party and term only.
 
+**Profile hero** (every `/people` profile) — `component_profileHero`, an **Extend** of the block
+already on the Person Profile global. Revised after the Voter Guide feedback round (Emily,
+2026-10-06; frames 2139:26364 desktop and 2139:26634 mobile, plus the unclaimed pair
+2156:34361 / 2156:34632). Two things were added under the name and office:
+
+- **An intro paragraph** about the voter guide ("Learn about [candidate name]’s candidacy and
+  positions on the issues. This guide is built by GoodParty.org, …"). It is a Studio text field on
+  the block's new Text tab, one per subject, with the frame's copy as the preset in
+  `src/lib/profileHeroDefaults.ts`; a template saved before the field existed renders the preset.
+  The frames only draw candidates, so for someone who holds or held office the preset says
+  "public service" instead of "candidacy" (Emily, 2026-10-06).
+- **A pledge callout** replacing the one-line pledge status: a bordered box with one sentence and
+  a "Read the full pledge" link that opens `PledgeModal`, the pop-up the featured candidates and
+  position pages use (there is still no pledge page). The three sentences are marketing's and
+  live in `pledgeCalloutCopy` next to the older lines: "This candidate took the GoodParty.org
+  Pledge, promising to serve people first, independent of both major parties and big-money
+  interests." / "…has not yet taken the GoodParty.org Pledge to serve people first, …" / "…is
+  ineligible for the GoodParty.org Pledge due to partisan affiliation." The heart-and-star mark
+  sits in the box only when the person took the pledge. "Candidate" becomes "elected official"
+  for officeholders and past officeholders; someone serving and running keeps "candidate"
+  (`pledgeSubject` in `personSectionOverrides.tsx`).
+
+Decisions that came with it:
+
+- **Removed profiles (K/L) carry the same callout as if they were not removed** (Emily,
+  2026-10-06). The pledge flag is therefore no longer cleared on removal in `peopleProfile.ts`;
+  removal still strips the photo and the authored content, and the pledge band's "Take the pledge"
+  button stays off removed profiles: the page states the fact but does not invite someone who asked
+  us to stop publishing them to sign up (Emily, 2026-10-06).
+- **The hero no longer links down to the pledge band.** The callout explains the pledge through
+  its own pop-up, so the `attributionHref` override is gone. The band itself is unchanged and
+  still renders on every profile.
+- **The band's height follows the text column** instead of being fixed at 240px, so the taller
+  content (intro plus callout) cannot spill white text onto the cream. The portrait is anchored
+  to the bottom of the row and overflows the band by a fixed 48px (`md`) / 68px (`lg`) as the
+  frame draws it; `ProfileContentBlock`'s sidebar clearance moved with it (was 104/216).
+- **Live scale over the frame**, per the settled decision: the intro is `body-2`, whose ramp
+  (16 on the phone, 18 from 1280) happens to land on the frame's two fixed sizes, and the
+  content sits in the 1200px container rather than the frame's 1280. At 1440 the callout's
+  sentence therefore wraps to three lines where the frame fits two plus the link.
+
+Noted and not acted on: the frames redraw the band's gradient as a linear ramp with a shader
+layer. The request was the intro and the callout, so the fitted radial glow stays. The legacy
+`/candidate` route shares the component and is untouched: no intro, no callout, the "Empowered by
+GoodParty.org" line.
+
 ## The shared election counts, as marketing defined them
 
 Settled with Emily on 2026-09-17 while building the location hero's stat cards, and
@@ -914,6 +960,7 @@ this table; it is here to orient, and to show the shape of the answer.
 | Position hero | develop + draft PR #320 | Position and Position Candidates globals | into #320, stays draft |
 | Position content block | develop + draft PR #327 (stacked on #320) | Position global, plus the landing page `template-elections-position-subset` | into #327, stays draft |
 | Candidates block | develop | Position Candidates global, every `/people` profile | draft and batch |
+| Profile hero | develop | Person Profile global (every `/people` profile), the retired Candidate Profile global, twelve disabled per-state scaffolds; a landing page **draft** also carries it | draft and batch with the `/people` pages (PR for the 2026-10-06 revision) |
 | Elections search hero | develop + draft PR #351 | the `/elections` landing page | into #351 |
 | Featured cities | develop + draft PR #307 | the `/elections` landing page | into #307 |
 | Elections near you | develop | `/all` plus three landing pages (see the note above) | ready to merge, list the pages |

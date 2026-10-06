@@ -243,7 +243,10 @@ const removedFacts = (persona: PersonPersona, majorParty: boolean): ExpectedFact
 	empowered: false,
 	removed: true,
 	unpublished: false,
-	pledged: false, // suppressed on removal even though the spine flag is set
+	// The spine flag survives removal (Emily, 2026-10-06): a removed profile
+	// states the same pledge fact it would otherwise. Both removal fixtures set
+	// the flag; K's is outranked by the Republican candidacy, L's stands.
+	pledged: !majorParty,
 	hasAvatar: false, // stripped
 	hasBio: false, // stripped
 	hasIssues: false, // stripped

@@ -604,11 +604,12 @@ function buildSidebar(view: PersonProfileView): ElectionsSidebarProps | undefine
 		: [];
 	const officeAddress = inOffice ? (view.officeAddress ?? []) : [];
 
-	// The pledge row reads the same flag as the hero's callout and the cards' line.
-	// Its date is a seam: election-api carries no pledge date yet (the source is to
-	// be the HubSpot deal's closed-won date, carried by the ETL; Emily,
-	// 2026-10-06), so until it does the row is the heading and the mark alone.
-	const pledge = view.pledged ? { signedOn: view.pledgedAt ? formatElectionDateFromApi(view.pledgedAt) : null } : undefined;
+	// The pledge row reads the same flag as the hero's callout and the cards' line,
+	// and it waits for its date: election-api carries no pledge date yet (the source
+	// is to be the HubSpot deal's closed-won date, carried by the ETL), and a heading
+	// with only the mark under it was not worth showing in the meantime (Emily,
+	// 2026-10-06). The row appears on its own the day the date arrives.
+	const pledge = view.pledged && view.pledgedAt ? { signedOn: formatElectionDateFromApi(view.pledgedAt) } : undefined;
 
 	if (
 		topInfos.length === 0 &&

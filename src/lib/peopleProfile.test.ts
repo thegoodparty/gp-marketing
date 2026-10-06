@@ -1585,14 +1585,18 @@ describe('districtTag', () => {
 			NO_REMOVALS,
 		);
 		expect(nearby?.tag).toBe('Ward 3');
+		// Each card reads its OWN race row: two candidates under one shared slug can sit in different districts.
+		const race = (value: string) => ({ brHashId: `br-${value}`, slug: 'mi/state-senator', subAreaName: 'District', subAreaValue: value });
 		const others = buildOtherCandidateCards(
-			[{ id: 'c1', personId: OTHER, firstName: 'Ada', lastName: 'Lee' }, { id: 'c2', personId: '33333333-3333-3333-3333-333333333333', firstName: 'Bo', lastName: 'Ray' }],
+			[
+				{ id: 'c1', personId: OTHER, firstName: 'Ada', lastName: 'Lee', Race: race('21') },
+				{ id: 'c2', personId: '33333333-3333-3333-3333-333333333333', firstName: 'Bo', lastName: 'Ray', Race: race('29') },
+			],
 			new Map(),
 			PID,
 			NO_REMOVALS,
-			'District 5',
 		);
-		expect(others.map(c => c.tag)).toEqual(['District 5', 'District 5']);
+		expect(others.map(c => c.tag)).toEqual(['District 21', 'District 29']);
 		expect(others.map(c => c.majorParty)).toEqual([false, false]);
 		expect(nearby?.majorParty).toBe(false);
 		expect(

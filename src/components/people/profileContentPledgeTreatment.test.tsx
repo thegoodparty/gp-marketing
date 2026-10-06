@@ -63,11 +63,14 @@ describe('the siderail states the pledge', () => {
 		expect(html).toContain('viewBox="35 42 137 116"');
 	});
 
-	test('without a date the row is the heading and the mark alone', () => {
-		// Every live profile today: election-api carries no pledge date yet.
+	test('without a date there is no row yet', () => {
+		// Every live profile today: election-api carries no pledge date yet, and
+		// the heading with only the mark under it waits for the date (Emily,
+		// 2026-10-06). The sidebar must still render its other rows.
 		const html = sidebarHtml(view('allen-slagle-74eee01a', { pledgedAt: null }));
-		expect(html).toContain(PLEDGE_ROW);
+		expect(html).not.toContain(PLEDGE_ROW);
 		expect(html).not.toContain('Signed on');
+		expect(html).toContain('Political Affiliation');
 	});
 
 	test('someone who has not pledged gets no row', () => {

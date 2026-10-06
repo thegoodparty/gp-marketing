@@ -14,7 +14,6 @@ import {
 	getVoterDensityForDistrict,
 	looksLikeDistrictSlug,
 	resolveCountySlugForCitySlug,
-	getRaceBySlug,
 } from '~/lib/electionsApi';
 import { US_STATES_TUPLES } from '~/constants/usStates';
 import { normalizeStateCode } from '~/constants/usStateCodes';
@@ -808,15 +807,16 @@ export function districtTag(subAreaName: string | null | undefined, subAreaValue
 /**
  * Maps candidacies sharing a position into "Other Candidates" cards, excluding
  * the subject. `personsById` supplies the pledge flag, which the candidacy feed
- * does not carry — see {@link loadOtherCandidates}. `tag` is the race's district,
- * which the candidacy rows do not carry either, so it is one value for every card.
+ * does not carry — see {@link loadOtherCandidates}. The seat tag is each
+ * candidacy's own race row (`Race.subAreaName` / `subAreaValue`, asked for by
+ * `getCandidacies`): a shared race slug names every district's race, so the
+ * slug's race is the wrong place to read a seat from (Emily, 2026-10-06).
  */
 export function buildOtherCandidateCards(
 	candidacies: CandidacyItem[],
 	personsById: Map<string, PersonItem>,
 	excludePersonId: string,
 	removedPersonIds: ReadonlySet<string> | null,
-	tag: string | null = null,
 ): RelatedPersonCard[] {
 	const cards: RelatedPersonCard[] = [];
 	const seen = new Set<string>();
@@ -839,7 +839,7 @@ export function buildOtherCandidateCards(
 			isEmpowered: false,
 			isPledged: pledgedFromSpine(c.personId ? personsById.get(c.personId.toLowerCase()) : undefined, c.party),
 			majorParty: isMajorParty(classifyParty(c.party)),
-			tag,
+			tag: districtTag(c.Race?.subAreaName, c.Race?.subAreaValue),
 			avatarUrl: cardAvatarUrl(c.personId ?? null, c.image ?? null, removedPersonIds),
 		});
 		if (cards.length >= 6) break;
@@ -1261,7 +1261,6 @@ async function loadOtherCandidates(
 	positionId: string | null,
 	excludePersonId: string,
 	removedPersonIds: ReadonlySet<string> | null,
-	tag: Promise<string | null>,
 ): Promise<RelatedPersonCard[]> {
 	if (!positionId) return [];
 	const candidacies = await getCandidacies({ positionId });
@@ -1270,22 +1269,7 @@ async function loadOtherCandidates(
 		.filter((id): id is string => Boolean(id) && id!.toLowerCase() !== excludePersonId.toLowerCase());
 	const persons = await getPersonsByIds(ids);
 	const byId = new Map(persons.map((p) => [p.id.toLowerCase(), p]));
-	return buildOtherCandidateCards(candidacies, byId, excludePersonId, removedPersonIds, await tag);
-}
-
-/**
- * The district of the subject's own race, for the Other Candidates tags. The
- * candidacy rows carry no sub-area, so it is read off the race record; a miss
- * or an error leaves the cards untagged rather than failing the page.
- */
-async function loadRaceDistrictTag(raceSlug: string | null): Promise<string | null> {
-	if (!raceSlug) return null;
-	try {
-		const race = await getRaceBySlug(raceSlug, false);
-		return districtTag(race?.subAreaName, race?.subAreaValue);
-	} catch {
-		return null;
-	}
+	return buildOtherCandidateCards(candidacies, byId, excludePersonId, removedPersonIds);
 }
 
 /** Fetches "Nearby Officials" cards for a resolved geo id. */
@@ -1578,10 +1562,9 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 	// awaiting it up front would make the card loaders wait on the slower of the
 	// two. Safe to leave in flight: getRemovedPersonIds never rejects.
 	const electionsIndexPromise = loadElectionsIndex({ stateCode, tier, countySlug });
-	const raceDistrictTag = loadRaceDistrictTag(raceSlug);
 	const removedPersonIds = await getRemovedPersonIds();
 	const [otherCandidates, nearbyOfficials, electionsIndex] = await Promise.all([
-		loadOtherCandidates(positionId, personId, removedPersonIds, raceDistrictTag),
+		loadOtherCandidates(positionId, personId, removedPersonIds),
 		loadNearbyOfficials(geoId, personId, removedPersonIds),
 		electionsIndexPromise,
 	]);

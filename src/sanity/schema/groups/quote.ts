@@ -33,6 +33,11 @@ export const quote = {
       type: 'field_quoteResult',
     },
     {
+      title: 'State',
+      name: 'field_quoteState',
+      type: 'field_quoteState',
+    },
+    {
       title: 'Story Link',
       name: 'button',
       type: 'button',

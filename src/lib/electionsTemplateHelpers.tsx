@@ -191,6 +191,7 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 		component_electionPositionResourcesBlock: {
 			guideHref: resolveHowToRunGuide({ officeName: ctx.officeName, race }).href,
 		},
+		component_testimonialBlockWithLink: { stateName: ctx.stateName },
 		component_nearbyOffices: {
 			offices: ctx.nearbyOffices ?? [],
 			hidden: !ctx.nearbyOffices || ctx.nearbyOffices.length === 0,
@@ -355,6 +356,7 @@ export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageConte
 					representatives: ctx.featuredPeople.representatives,
 				}
 			: { hidden: true },
+		component_testimonialBlockWithLink: { stateName: ctx.stateName },
 	};
 }
 

@@ -1,8 +1,9 @@
 import { stegaClean } from 'next-sanity';
 
-import type { Sections } from '~/PageSections';
+import type { SectionOverrides, Sections } from '~/PageSections';
 
 import { normalizeRawCtaToButton, transformButton, transformButtons, type RawCtaInput } from '~/lib/buttonTransformer';
+import { pickItemsForState } from '~/lib/nearestStates';
 import type { TokenMap } from '~/lib/resolveTokens';
 import { resolveSectionText, resolveRichTextTokens } from '~/lib/resolveSectionText';
 import { resolveAuthor } from '~/ui/_lib/resolveAuthor';
@@ -14,9 +15,13 @@ import { TestimonialBlockWithLink } from '~/ui/TestimonialBlockWithLink';
 
 type Props = Extract<Sections, { _type: 'component_testimonialBlockWithLink' }> & {
 	tokens?: TokenMap;
+	pageState?: SectionOverrides['component_testimonialBlockWithLink'];
 };
 
-export function TestimonialBlockWithLinkSection(section: Props) {
+const DEFAULT_STATE_CARD_COUNT = 3;
+
+export function TestimonialBlockWithLinkSection(props: Props) {
+	const { pageState, ...section } = props;
 	const backgroundColor = section.testimonialBlockWithLinkDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(section.testimonialBlockWithLinkDesignSettings.field_blockColorCreamMidnight)
 		: 'cream';
@@ -25,7 +30,23 @@ export function TestimonialBlockWithLinkSection(section: Props) {
 	if (!allQuotes || allQuotes.length === 0) return null;
 
 	const maxToDisplay = section.testimonialBlockWithLinkDesignSettings?.field_maxNumberToDisplay;
-	const quotes = typeof maxToDisplay === 'number' && maxToDisplay > 0 ? allQuotes.slice(0, maxToDisplay) : allQuotes;
+	const hasMax = typeof maxToDisplay === 'number' && maxToDisplay > 0;
+	const filterByState = section.testimonialBlockWithLinkDesignSettings?.field_filterQuotesByPageState === true;
+
+	// With the toggle on, the page's state picks and orders the quotes: its own
+	// first, then the nearest states', then quotes with no state. The toggle
+	// never reaches outside the editor's chosen collection, and a page with no
+	// state (the Voter Hub) shows the collection as is.
+	const ordered =
+		filterByState && pageState?.stateName
+			? pickItemsForState(
+					allQuotes,
+					row => (row.quote?.field_quoteState ? stegaClean(row.quote.field_quoteState) : undefined),
+					pageState.stateName,
+					hasMax ? maxToDisplay : DEFAULT_STATE_CARD_COUNT,
+				)
+			: allQuotes;
+	const quotes = hasMax ? ordered.slice(0, maxToDisplay) : ordered;
 
 	const cards = quotes.map((row, index) => {
 		const rawLink = row.quote?.button;

@@ -320,6 +320,17 @@ Waiting on data: the race budget means a state page whose legislature has more s
 one ballot only features candidates from the first sixteen, and the "pledged first" rule cannot see
 the rest. The place-and-year aggregate the counts section asks for would remove the budget.
 
+**Breadcrumb block** (every election template and the two position landing pages) —
+`component_breadcrumbBlock`, an **Extend**, revised for the phone in the Voter Guide round
+(Emily, 2026-10-06; frames 2139:26708 profile and 2139:21609 position). Below `md` the trail
+shows its first and last crumb with a "..." between them, at the frames' sizes (Open Sans 14/20,
+6px gaps, 15px chevrons, 24px above and below); tapping the "..." reveals the rest in place.
+Every crumb stays in the DOM, so the links and the BreadcrumbList schema do not change. Desktop
+is untouched. The treatment is the `collapseOnMobile` switch on `Breadcrumbs`, turned on by the
+block's section wrapper and the two election page components that render the block directly; the
+blog article hero and the political-terms glossary share the component and were not in the round,
+so they keep the full trail.
+
 ## The shared election counts, as marketing defined them
 
 Settled with Emily on 2026-09-17 while building the location hero's four stat cards.
@@ -548,6 +559,7 @@ this table; it is here to orient, and to show the shape of the answer.
 | Position hero | develop + draft PR #320 | Position and Position Candidates globals | into #320, stays draft |
 | Position content block | develop + draft PR #327 (stacked on #320) | Position global | into #327, stays draft |
 | Candidates block | develop | Position Candidates global, every `/people` profile | draft and batch |
+| Breadcrumb block | develop + draft PR (phone collapse) | every election global, two position landing pages | draft and batch |
 | Elections search hero | develop + draft PR #351 | the `/elections` landing page | into #351 |
 | Featured cities | develop + draft PR #307 | the `/elections` landing page | into #307 |
 | Elections near you | develop | `/all` plus three landing pages (see the note above) | ready to merge, list the pages |

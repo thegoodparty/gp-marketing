@@ -23,11 +23,15 @@ export function BreadcrumbBlockSection({ breadcrumbOverride, ...section }: Props
 			<BreadcrumbBlock
 				backgroundColor={backgroundColor}
 				breadcrumbs={breadcrumbs}
+				// Every page this block is placed on is a Voter Guide page (the
+				// election templates), so it gets the phone treatment.
+				collapseOnMobile
 				// Figma breadcrumb strip is a compact 68px band between the 80px nav
-				// and the hero (24px above/below the line). The shared block defaults
-				// to py-(--container-padding) (~80px), which stacks a big dark gap
+				// and the hero (24px above/below the line, on the phone too per the
+				// Voter Guide frames). The shared block defaults to
+				// py-(--container-padding) (~80px), which stacks a big dark gap
 				// above the hero — collapse it to the Figma rhythm here.
-				className='py-4 md:py-6'
+				className='py-6'
 			/>
 		</section>
 	);

@@ -131,7 +131,7 @@ export function PositionPageContent(props: PositionPageContentProps) {
 			<PageSchema schema={positionPageSchema} />
 			<PageSchema schema={breadcrumbSchema} />
 			<PageSchema schema={faqSchema} />
-			<BreadcrumbBlock backgroundColor='midnight' breadcrumbs={breadcrumbs} />
+			<BreadcrumbBlock backgroundColor='midnight' breadcrumbs={breadcrumbs} collapseOnMobile />
 			<ElectionsPositionHero
 				backgroundColor='midnight'
 				officeName={officeName}

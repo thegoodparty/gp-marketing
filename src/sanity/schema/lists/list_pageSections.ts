@@ -96,13 +96,13 @@ export const list_pageSections = {
 							component_locationLandingPageHero:
 								'https://cdn.sanity.io/images/3rbseux7/production/4512520a6cb1dc681b1d8d41e920642985f744c2-3000x2000.png',
 							component_nearbyOffices:
-								'https://cdn.sanity.io/images/3rbseux7/production/7515a2bb33cb82d2b9e97474b46d686562d1ad07-3000x2000.png',
+								'https://cdn.sanity.io/images/3rbseux7/production/4cc940c78feefc5673a71225e7244aff55393522-3000x2000.png',
 							component_electionPositionResourcesBlock:
 								'https://cdn.sanity.io/images/3rbseux7/production/cc4db689d5793109699cc0255364c87e8998403a-3000x2000.png',
 							component_profileContentBlock:
 								'https://cdn.sanity.io/images/3rbseux7/production/bcb4df7f8952f9539a1b73119201b6a75a0593f4-3000x2000.png',
 							component_profileHero:
-								'https://cdn.sanity.io/images/3rbseux7/production/3ebd906f91238b4940ea04b493a90c9a0e22a1cd-3000x2000.png',
+								'https://cdn.sanity.io/images/3rbseux7/production/96e60f488b34a6ff140767edf385cfbf0c1818e5-3000x2000.png',
 							component_teamValuesBlock:
 								'https://cdn.sanity.io/images/3rbseux7/production/5207be991898bbbd9ba558c4a4ddb93f1e75351b-3000x2000.png',
 							component_testimonialAutoScroll:

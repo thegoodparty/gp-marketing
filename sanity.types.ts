@@ -1271,6 +1271,10 @@ export type Component_blogTopicTagsBlock = {
 
 export type Component_profileHero = {
 	_type: 'component_profileHero';
+	profileHeroContent?: {
+		field_introCandidates?: string;
+		field_introOfficeholders?: string;
+	};
 	profileHeroDesignSettings?: {
 		field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 	};
@@ -1488,6 +1492,7 @@ export type Component_demoRequestBlock = {
 export type Component_nearbyOffices = {
 	_type: 'component_nearbyOffices';
 	field_heading?: string;
+	field_description?: string;
 	nearbyOfficesDesignSettings?: {
 		field_blockColorCreamMidnight?: 'cream' | 'midnight';
 	};
@@ -20827,6 +20832,7 @@ export type GoodpartyOrg_homeQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -21589,6 +21595,10 @@ export type GoodpartyOrg_homeQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -44937,6 +44947,7 @@ export type Experiment_variantsByExperimentIdQueryResult = Array<{
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -45699,6 +45710,10 @@ export type Experiment_variantsByExperimentIdQueryResult = Array<{
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -69048,6 +69063,7 @@ export type ActiveVariantsByPageIdQueryResult = Array<{
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -69810,6 +69826,10 @@ export type ActiveVariantsByPageIdQueryResult = Array<{
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -93161,6 +93181,7 @@ export type GoodpartyOrg_allArticlesQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -93923,6 +93944,10 @@ export type GoodpartyOrg_allArticlesQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -117312,6 +117337,7 @@ export type CategoriesQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -118074,6 +118100,10 @@ export type CategoriesQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -141491,6 +141521,7 @@ export type TopicsQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -142253,6 +142284,10 @@ export type TopicsQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -167730,6 +167765,7 @@ export type GoodpartyOrg_contactQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -168492,6 +168528,10 @@ export type GoodpartyOrg_contactQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -191846,6 +191886,7 @@ export type GoodpartyOrg_landingPagesAndPolicyQueryResult =
 							_key: string;
 							_type: 'component_nearbyOffices';
 							field_heading?: string;
+							field_description?: string;
 							nearbyOfficesDesignSettings?: {
 								field_blockColorCreamMidnight?: 'cream' | 'midnight';
 							};
@@ -192608,6 +192649,10 @@ export type GoodpartyOrg_landingPagesAndPolicyQueryResult =
 					| {
 							_key: string;
 							_type: 'component_profileHero';
+							profileHeroContent?: {
+								field_introCandidates?: string;
+								field_introOfficeholders?: string;
+							};
 							profileHeroDesignSettings?: {
 								field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 							};
@@ -215973,6 +216018,7 @@ export type GoodpartyOrg_electionsQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -216735,6 +216781,10 @@ export type GoodpartyOrg_electionsQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -240088,6 +240138,7 @@ export type GoodpartyOrg_candidatesQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -240850,6 +240901,10 @@ export type GoodpartyOrg_candidatesQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -264203,6 +264258,7 @@ export type GoodpartyOrg_profileQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -264965,6 +265021,10 @@ export type GoodpartyOrg_profileQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -288318,6 +288378,7 @@ export type GoodpartyOrg_allComponentsQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -289080,6 +289141,10 @@ export type GoodpartyOrg_allComponentsQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -296922,6 +296987,11 @@ export type GoodpartyOrg_footerQueryResult =
 			}> | null;
 	  }
 	| null;
+// Variable: articleTitleBySlugQuery
+// Query: *[_type=="article"&&editorialOverview.field_slug==$slug][0]{"title":editorialOverview.field_editorialTitle}
+export type ArticleTitleBySlugQueryResult = {
+	title: Field_editorialTitle | null;
+} | null;
 // Variable: articleQuery
 // Query: fn gp::link($link)=$link{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,faqOverview.field_question,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,faqOverview.field_question,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="faq"=>{"href":"/frequently-asked-questions/"+coalesce(faqOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}};fn gp::button($button)=$button{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)};*[_type=="article"&&editorialOverview.field_slug==$slug][0]{...,editorialOverview{...,ref_author->},relatedArticles{...,ref_stickyRelatedArticle->{_id,_type,editorialAssets,editorialOverview{...,ref_author->},"category":editorialContentTags.ref_catgories->{...,tagOverview,_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)}},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)}},list_relatedArticles[]->{_id,_type,editorialAssets,editorialOverview{...,ref_author->},"category":editorialContentTags.ref_catgories->{...,tagOverview,_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)}},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)}}},ctaSection{...,field_componentColor6Colors,"image":coalesce(ctaAssets,campaignPromotion.ref_promotion->ctaAssets),_key,_type,field_ctaType,field_ctaType=="Reference"=>{"cta":campaignPromotion.ref_promotion->{"overview":coalesce(ctaMessaging,ctaMessagingSimple){...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{...gp::button(@)}}}.cta,field_ctaType=="Manual"=>{"cta":{"overview":coalesce(ctaMessaging,ctaMessagingSimple){...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{...gp::button(@)}}}.cta},stickySidebarCta{field_showStickySidebarCta,ctaConfig{...,field_componentColor6Colors,"image":coalesce(ctaAssets,campaignPromotion.ref_promotion->ctaAssets),_key,_type,field_ctaType,field_ctaType=="Reference"=>{"cta":campaignPromotion.ref_promotion->{"overview":coalesce(ctaMessaging,ctaMessagingSimple){...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{...gp::button(@)}}}.cta,field_ctaType=="Manual"=>{"cta":{"overview":coalesce(ctaMessaging,ctaMessagingSimple){...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{...gp::button(@)}}}.cta}},editorialContentTags{"topics":list_topics[]->{...,_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)}},"category":ref_catgories->{...,tagOverview,_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)}}},contentSections{...,block_editorialContentSections[]{_key,_type,_type=="block"||_type=="imageContentSection"||_type=="tableGroup"=>{...},_type=="videoSection"=>{field_videoEmbedCode,field_caption},_type=="imageCta"=>{field_componentColor6Colors,"image":coalesce(ctaAssets,campaignPromotion.ref_promotion->ctaAssets),_key,_type,field_ctaType,field_ctaType=="Reference"=>{"cta":campaignPromotion.ref_promotion->{"overview":coalesce(ctaMessaging,ctaMessagingSimple){...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{...gp::button(@)}}}.cta,field_ctaType=="Manual"=>{"cta":{"overview":coalesce(ctaMessaging,ctaMessagingSimple){...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{...gp::button(@)}}}.cta},_type=="ctaSection"=>{field_componentColor6Colors,"image":coalesce(ctaAssets,campaignPromotion.ref_promotion->ctaAssets),_key,_type,field_ctaType,field_ctaType=="Reference"=>{"cta":campaignPromotion.ref_promotion->{"overview":coalesce(ctaMessaging,ctaMessagingSimple){...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{...gp::button(@)}}}.cta,field_ctaType=="Manual"=>{"cta":{"overview":coalesce(ctaMessaging,ctaMessagingSimple){...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{...gp::button(@)}}}.cta},_type=="inlineQuoteSection"=>{...,ref_quoteBy->},_type=="button"=>{...gp::button(@)},_type=="faqs"=>{...,list_faQs[]->{...,faqOverview{...,block_answer[]{_type=="button"=>{...gp::button(@)},_type!="button"=>{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}}}}},_type=="callout"=>{...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}},markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}},_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="faq"=>{"href":"/frequently-asked-questions/"+coalesce(faqOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)}}
 export type ArticleQueryResult = {
@@ -318245,6 +318315,7 @@ export type GlobalElectionTemplateQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -319007,6 +319078,10 @@ export type GlobalElectionTemplateQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -342388,6 +342463,7 @@ export type CustomElectionTemplateByIdQueryResult = {
 					_key: string;
 					_type: 'component_nearbyOffices';
 					field_heading?: string;
+					field_description?: string;
 					nearbyOfficesDesignSettings?: {
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
@@ -343150,6 +343226,10 @@ export type CustomElectionTemplateByIdQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_profileHero';
+					profileHeroContent?: {
+						field_introCandidates?: string;
+						field_introOfficeholders?: string;
+					};
 					profileHeroDesignSettings?: {
 						field_blockColorCreamMidnight?: 'Cream' | 'MidnightDark';
 					};
@@ -349704,6 +349784,7 @@ declare module '@sanity/client' {
 		'*[_type=="goodpartyOrg_socialChannels"][0]{...}': GoodpartyOrg_socialChannelsQueryResult;
 		'fn gp::link($link)=$link{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,faqOverview.field_question,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,faqOverview.field_question,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="faq"=>{"href":"/frequently-asked-questions/"+coalesce(faqOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}};fn gp::button($button)=$button{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)};*[_type=="goodpartyOrg_navigation"][0]{"navigationList":primaryNavigation.list_primaryNavigation[]{_type=="internalLink"=>{_key,_type,"label":field_linkText,"link":gp::link(field_internalLink),"icon":field_linkIcon},_type=="externalLink"=>{_key,_type,"label":field_linkText,"link":{"href":field_externalLink},"icon":field_linkIcon},_type=="navigationGroup"=>{_key,_type,"label":field_linkText,"list_navigationGroup":list_navigationGroup[]{_type=="internalLinkWithIcon"=>{_key,_type,"label":field_linkText,"link":gp::link(field_internalLink),"icon":field_linkIcon},_type=="externalLinkWithIcon"=>{_key,_type,"label":field_linkText,"link":{"href":field_externalLink},"icon":field_linkIcon}}}},"primaryCTA":primaryNavigation.loggedOutCtAs.ref_navigationPrimaryCTA->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":primaryNavigation.loggedOutCtAs.ref_navigationSecondaryCTA->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}}': GoodpartyOrg_navigationQueryResult;
 		'fn gp::link($link)=$link{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,faqOverview.field_question,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,faqOverview.field_question,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="faq"=>{"href":"/frequently-asked-questions/"+coalesce(faqOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}};fn gp::button($button)=$button{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)};*[_type=="goodpartyOrg_footer"][0]{...footer,"list_footerLegalNavigation":footer.list_footerLegalNavigation[]{_type=="internalLink"=>{_key,_type,"label":field_linkText,"link":gp::link(field_internalLink),"icon":field_linkIcon},_type=="externalLink"=>{_key,_type,"label":field_linkText,"link":{"href":field_externalLink},"icon":field_linkIcon}},"list_footerNavigation":footer.list_footerNavigation[]{_key,_type,"groupTitle":field_title,"list_footerNavigationGroup":list_footerNavigationGroup[]{_type=="externalLink"=>{_key,_type,"label":field_linkText,"link":{"href":field_externalLink},"icon":field_linkIcon},_type=="internalLink"=>{_key,_type,"label":field_linkText,"link":gp::link(field_internalLink),"icon":field_linkIcon}}}}': GoodpartyOrg_footerQueryResult;
+		'*[_type=="article"&&editorialOverview.field_slug==$slug][0]{"title":editorialOverview.field_editorialTitle}': ArticleTitleBySlugQueryResult;
 		'fn gp::link($link)=$link{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,faqOverview.field_question,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,faqOverview.field_question,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="faq"=>{"href":"/frequently-asked-questions/"+coalesce(faqOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}};fn gp::button($button)=$button{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)};*[_type=="article"&&editorialOverview.field_slug==$slug][0]{...,editorialOverview{...,ref_author->},relatedArticles{...,ref_stickyRelatedArticle->{_id,_type,editorialAssets,editorialOverview{...,ref_author->},"category":editorialContentTags.ref_catgories->{...,tagOverview,_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)}},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)}},list_relatedArticles[]->{_id,_type,editorialAssets,editorialOverview{...,ref_author->},"category":editorialContentTags.ref_catgories->{...,tagOverview,_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)}},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)}}},ctaSection{...,field_componentColor6Colors,"image":coalesce(ctaAssets,campaignPromotion.ref_promotion->ctaAssets),_key,_type,field_ctaType,field_ctaType=="Reference"=>{"cta":campaignPromotion.ref_promotion->{"overview":coalesce(ctaMessaging,ctaMessagingSimple){...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{...gp::button(@)}}}.cta,field_ctaType=="Manual"=>{"cta":{"overview":coalesce(ctaMessaging,ctaMessagingSimple){...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{...gp::button(@)}}}.cta},stickySidebarCta{field_showStickySidebarCta,ctaConfig{...,field_componentColor6Colors,"image":coalesce(ctaAssets,campaignPromotion.ref_promotion->ctaAssets),_key,_type,field_ctaType,field_ctaType=="Reference"=>{"cta":campaignPromotion.ref_promotion->{"overview":coalesce(ctaMessaging,ctaMessagingSimple){...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{...gp::button(@)}}}.cta,field_ctaType=="Manual"=>{"cta":{"overview":coalesce(ctaMessaging,ctaMessagingSimple){...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{...gp::button(@)}}}.cta}},editorialContentTags{"topics":list_topics[]->{...,_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)}},"category":ref_catgories->{...,tagOverview,_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)}}},contentSections{...,block_editorialContentSections[]{_key,_type,_type=="block"||_type=="imageContentSection"||_type=="tableGroup"=>{...},_type=="videoSection"=>{field_videoEmbedCode,field_caption},_type=="imageCta"=>{field_componentColor6Colors,"image":coalesce(ctaAssets,campaignPromotion.ref_promotion->ctaAssets),_key,_type,field_ctaType,field_ctaType=="Reference"=>{"cta":campaignPromotion.ref_promotion->{"overview":coalesce(ctaMessaging,ctaMessagingSimple){...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{...gp::button(@)}}}.cta,field_ctaType=="Manual"=>{"cta":{"overview":coalesce(ctaMessaging,ctaMessagingSimple){...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{...gp::button(@)}}}.cta},_type=="ctaSection"=>{field_componentColor6Colors,"image":coalesce(ctaAssets,campaignPromotion.ref_promotion->ctaAssets),_key,_type,field_ctaType,field_ctaType=="Reference"=>{"cta":campaignPromotion.ref_promotion->{"overview":coalesce(ctaMessaging,ctaMessagingSimple){...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{...gp::button(@)}}}.cta,field_ctaType=="Manual"=>{"cta":{"overview":coalesce(ctaMessaging,ctaMessagingSimple){...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}},"primaryCTA":{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}},"secondaryCTA":secondaryCta.ctaActionWithShared{...gp::button(@)}}}.cta},_type=="inlineQuoteSection"=>{...,ref_quoteBy->},_type=="button"=>{...gp::button(@)},_type=="faqs"=>{...,list_faQs[]->{...,faqOverview{...,block_answer[]{_type=="button"=>{...gp::button(@)},_type!="button"=>{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}}}}},_type=="callout"=>{...,block_summaryText[]{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}},markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}},_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="faq"=>{"href":"/frequently-asked-questions/"+coalesce(faqOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)}}': ArticleQueryResult;
 		'fn gp::link($link)=$link{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,faqOverview.field_question,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,faqOverview.field_question,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="faq"=>{"href":"/frequently-asked-questions/"+coalesce(faqOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}};fn gp::button($button)=$button{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)};*[_type=="faq"] | order(faqOverview.field_question asc, _id asc){_id,_updatedAt,...,faqOverview{...,block_answer[]{_type=="button"=>{...gp::button(@)},_type!="button"=>{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}}}}': AllFaqsQueryResult;
 		'fn gp::link($link)=$link{...href->{_id,_type,"name":coalesce(singlePageOverviewNoHero.field_pageName,detailPageOverviewNoHero.field_pageName,singlePageOverview.field_pageName,tagOverview.field_name,glossaryOverview.field_name,policyOverview.field_policyName,faqOverview.field_question,null),"label":coalesce(tagOverview.field_pageSubtitle,glossaryOverview.field_pageSubtitle,null),"title":coalesce(singlePageOverview.field_pageTitle,editorialOverview.field_editorialTitle,glossaryTermOverview.field_glossaryTerm,faqOverview.field_question,null),_type=="goodpartyOrg_home"=>{"href":"/"},_type=="goodpartyOrg_allArticles"=>{"href":"/blog"},_type=="article"=>{"href":"/blog/article/"+coalesce(editorialOverview.field_slug,_id)},_type=="categories"=>{"href":"/blog/section/"+coalesce(tagOverview.field_slug,_id)},_type=="topics"=>{"href":"/blog/tag/"+coalesce(tagOverview.field_slug,_id)},_type=="goodpartyOrg_landingPages"=>{"href":"/"+coalesce(detailPageOverviewNoHero.field_slug,_id)},_type=="goodpartyOrg_glossary"=>{"href":"/political-terms"},_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)},_type=="faq"=>{"href":"/frequently-asked-questions/"+coalesce(faqOverview.field_slug,_id)},_type=="goodpartyOrg_contact"=>{"href":"/contact"},_type=="policy"=>{"href":"/"+coalesce(policyOverview.field_slug,_id)},_type=="goodpartyOrg_allComponents"=>{"href":"/all"},_type=="goodpartyOrg_404Page"=>{"href":"/not-found"}}};fn gp::button($button)=$button{_key,"action":field_ctaActionWithShared,"hierarchy":field_buttonHierarchy,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},field_ctaActionWithShared=="Reference"=>{...ref_sharedCta->{...ctaAction{"text":field_buttonText,"action":field_ctaAction,"link":gp::link(field_internalLink),field_externalLink,"anchor":select(defined(field_anchorId)=>"#"+field_anchorId,""),ref_download->{_id,_type,"name":downloadOverview.field_documentName,"file":downloadOverview.field_file.asset->},"formId":field_formId}}},"text":coalesce(field_buttonText,ref_sharedCta->ctaAction.field_buttonText),"formId":coalesce(field_formId,ref_sharedCta->ctaAction.field_formId)};*[_type=="faq"&&_id==$id][0]{_id,_updatedAt,...,faqOverview{...,block_answer[]{_type=="button"=>{...gp::button(@)},_type!="button"=>{...,markDefs[]{...,_type=="inlineInternalLink"=>{"field_internalLink":gp::link(field_internalLink)}}}}}}': FaqByIdQueryResult;

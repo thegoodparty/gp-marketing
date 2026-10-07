@@ -33,6 +33,17 @@ describe('NearbyOffices', () => {
 		expect(html).toContain('Nov 3, 2026');
 	});
 
+	test('shows the default sentence under the heading, the supplied one instead, or none for an empty string', () => {
+		const byDefault = renderToStaticMarkup(<NearbyOffices offices={[office(1)]} />);
+		const supplied = renderToStaticMarkup(<NearbyOffices description='Other races nearby.' offices={[office(1)]} />);
+		const hidden = renderToStaticMarkup(<NearbyOffices description='' offices={[office(1)]} />);
+
+		expect(byDefault).toContain('Explore offices coming up for election near you:');
+		expect(supplied).toContain('Other races nearby.');
+		expect(supplied).not.toContain('Explore offices');
+		expect(hidden).not.toContain('<p class');
+	});
+
 	test('uses the editable heading when one is supplied', () => {
 		const html = renderToStaticMarkup(<NearbyOffices heading='Other offices in Houston' offices={[office(1)]} />);
 
@@ -53,6 +64,32 @@ describe('NearbyOffices', () => {
 
 		expect(html).not.toContain('<a ');
 		expect(html).not.toContain('<svg');
+	});
+
+	/**
+	 * The count mirrors the offices list: a number and the badge on the desktop
+	 * row, the badge and a sentence on the phone card. Nothing is drawn without a
+	 * count above zero, because an unknown and a genuine zero are the same value
+	 * here and neither may publish as "0 independents".
+	 */
+	test('shows the pledged candidate count with its badge, worded for one or many', () => {
+		const many = renderToStaticMarkup(<NearbyOffices offices={[office(1, { pledgedCount: 2 })]} />);
+		const one = renderToStaticMarkup(<NearbyOffices offices={[office(1, { pledgedCount: 1 })]} />);
+
+		expect(many).toContain('# of independents running');
+		expect(many).toContain('2<span class="md:sr-only"> independents running</span>');
+		expect(many.match(/<svg/g)).toHaveLength(3);
+		expect(one).toContain('1<span class="md:sr-only"> independent running</span>');
+	});
+
+	test('draws no count for a row with zero or no pledged candidates', () => {
+		const zero = renderToStaticMarkup(<NearbyOffices offices={[office(1, { pledgedCount: 0 })]} />);
+		const unknown = renderToStaticMarkup(<NearbyOffices offices={[office(1)]} />);
+
+		for (const html of [zero, unknown]) {
+			expect(html).not.toContain('md:sr-only');
+			expect(html.match(/<svg/g)).toHaveLength(2);
+		}
 	});
 
 	test('inverts the heading on a midnight background', () => {

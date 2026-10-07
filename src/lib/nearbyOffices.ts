@@ -1,10 +1,12 @@
-import { getElectionsPagePlace } from '~/lib/electionsApi';
+import { getCandidacies, getElectionsPagePlace, getPersonsByIds } from '~/lib/electionsApi';
 import {
 	buildPlaceRacePositionHref,
 	isElectionDateBeforeToday,
 	resolvePlaceRaceElectionDates,
 } from '~/lib/electionsHelpers';
-import type { PlaceRace, PlaceWithFacts } from '~/types/elections';
+import { pledgedFromSpine } from '~/lib/peopleProfile';
+import type { CandidacyItem, PlaceRace, PlaceWithFacts } from '~/types/elections';
+import type { PersonItem } from '~/types/people';
 import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
 import { NEARBY_OFFICES_LIMIT } from '~/ui/NearbyOffices';
 
@@ -118,20 +120,70 @@ export function selectNearbyOffices(races: PlaceRace[], options: SelectNearbyOff
 		position: race.normalizedPositionName ?? race.name ?? 'Position',
 		nextElectionDate: electionDate,
 		href: buildPlaceRacePositionHref(tier.segments, race.slug),
+		raceSlug: race.slug.toLowerCase(),
 	}));
 }
+
+const CONCURRENT_RACE_REQUESTS = 6;
 
 export type NearbyOfficesDeps = {
 	getElectionsPagePlace(params: { slug: string }): Promise<PlaceWithFacts | null>;
 	resolvePlaceRaceElectionDates(races: PlaceRace[], today?: Date): Promise<Map<string, string>>;
+	getCandidacies(params: { raceSlug: string }): Promise<CandidacyItem[]>;
+	getPersonsByIds(ids: string[]): Promise<PersonItem[]>;
 };
 
-const defaultDeps: NearbyOfficesDeps = { getElectionsPagePlace, resolvePlaceRaceElectionDates };
+const defaultDeps: NearbyOfficesDeps = { getElectionsPagePlace, resolvePlaceRaceElectionDates, getCandidacies, getPersonsByIds };
+
+/**
+ * Each row's "# of independents running" (Emily, 2026-10-06): the candidates in
+ * its race who have taken the GoodParty.org Pledge, by the same `pledgedFromSpine`
+ * rule the offices list, the candidate cards and the profiles apply, counted once
+ * per person. The figure therefore never disagrees with the offices list on a
+ * location page or with a person's own profile.
+ *
+ * Candidacies cannot be filtered by place, so this is one `/v1/candidacies`
+ * request per row (at most eight) and one person lookup, which is the same shape
+ * the location pages already use. A race whose request fails has no count, and
+ * the row shows nothing rather than a zero: an unknown and a genuine zero look the
+ * same, and the pledge flag is still being written across production.
+ */
+export async function withPledgedCounts(
+	offices: OfficeItem[],
+	deps: Pick<NearbyOfficesDeps, 'getCandidacies' | 'getPersonsByIds'> = defaultDeps,
+): Promise<OfficeItem[]> {
+	const slugs = offices.map(office => office.raceSlug).filter((slug): slug is string => Boolean(slug));
+	if (slugs.length === 0) return offices;
+
+	const candidaciesByRace = new Map<string, CandidacyItem[]>();
+	for (let i = 0; i < slugs.length; i += CONCURRENT_RACE_REQUESTS) {
+		await Promise.all(
+			slugs.slice(i, i + CONCURRENT_RACE_REQUESTS).map(async raceSlug => {
+				candidaciesByRace.set(raceSlug, await deps.getCandidacies({ raceSlug }));
+			}),
+		);
+	}
+
+	const personIds = [...candidaciesByRace.values()].flat().map(candidacy => candidacy.personId).filter((id): id is string => Boolean(id));
+	const persons = personIds.length > 0 ? await deps.getPersonsByIds(personIds) : [];
+	const personsById = new Map(persons.map(person => [person.id.toLowerCase(), person]));
+
+	return offices.map(office => {
+		const pledged = new Set<string>();
+		for (const candidacy of candidaciesByRace.get(office.raceSlug ?? '') ?? []) {
+			if (!candidacy.personId) continue;
+			const person = personsById.get(candidacy.personId.toLowerCase());
+			if (pledgedFromSpine(person, candidacy.party)) pledged.add(candidacy.personId.toLowerCase());
+		}
+		return pledged.size > 0 ? { ...office, pledgedCount: pledged.size } : office;
+	});
+}
 
 /**
  * Nearby offices for a position page: the other upcoming positions in the same
- * place, else the first tier above it that has any. Returns an empty list when
- * no tier does, and the block hides itself.
+ * place, else the first tier above it that has any, each with its pledged
+ * candidate count. Returns an empty list when no tier has anything, and the
+ * block hides itself.
  */
 export async function getNearbyOffices(
 	params: { placeSlug: string; currentRaceSlug?: string; today?: Date },
@@ -155,7 +207,17 @@ export async function getNearbyOffices(
 			resolvedDates,
 			today: params.today,
 		});
-		if (offices.length > 0) return offices;
+		if (offices.length > 0) return independentsFirst(await withPledgedCounts(offices, deps));
 	}
 	return [];
+}
+
+/**
+ * Offices with independents on the ballot lead the list (Emily, 2026-10-06), the
+ * rest follow, and each half keeps the soonest-first order `selectNearbyOffices`
+ * built. The same rule the offices list block applies.
+ */
+export function independentsFirst(offices: OfficeItem[]): OfficeItem[] {
+	const has = (office: OfficeItem) => (office.pledgedCount ?? 0) > 0;
+	return [...offices.filter(has), ...offices.filter(office => !has(office))];
 }

@@ -4,7 +4,6 @@ import {
 	buildElectionPositionHrefFromRaceSlug,
 	buildFAQSchema,
 	buildOfficeItemsFromPlaceRaces,
-	buildRaceCandidatesHref,
 	buildRacePositionHref,
 	joinPlaceNames,
 	buildRaceSlug,
@@ -1105,19 +1104,6 @@ describe('buildElectionPositionHrefFromRaceSlug', () => {
 	});
 });
 
-describe('buildRaceCandidatesHref', () => {
-	const citySlugToCountySlug = new Map([['mi/northville', 'mi/wayne-county']]);
-
-	test('appends /candidates to position path', () => {
-		expect(buildRaceCandidatesHref({ slug: 'mi/northville/city-legislature', positionLevel: 'CITY' }, { citySlugToCountySlug })).toBe(
-			'/elections/mi/wayne-county/northville/position/city-legislature/candidates',
-		);
-	});
-
-	test('returns undefined for invalid slug', () => {
-		expect(buildRaceCandidatesHref({ slug: undefined })).toBeUndefined();
-	});
-});
 
 describe('buildFAQSchema', () => {
 	test('uses FAQPage as root @type', () => {

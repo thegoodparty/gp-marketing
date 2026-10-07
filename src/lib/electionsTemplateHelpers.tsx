@@ -39,6 +39,8 @@ export type PositionPageContext = {
 	positionHref?: string;
 	locationHref?: string;
 	race?: RaceDetail | null;
+	/** The how-to-run article's title for the guide card, resolved by the renderer; see the override's doc. */
+	guideTitle?: string | null;
 	// Used only by the position-page schema builders; optional for candidates pages.
 	pageUrl?: string;
 	/** From `getNearbyOffices`; set by the position page renderer, absent on candidates pages. */
@@ -191,8 +193,12 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 		},
 		component_electionPositionResourcesBlock: {
 			guideHref: resolveHowToRunGuide({ officeName: ctx.officeName, race }).href,
+			guideTitle: ctx.guideTitle ?? undefined,
 		},
 		component_nearbyOffices: {
+			// "More offices in Bay City, Michigan"; a state page names the state once,
+			// not "Michigan, Michigan" (Emily, 2026-10-06).
+			heading: `More offices in ${[ctx.cityName ?? ctx.countyName, ctx.stateName].filter(Boolean).join(', ')}`,
 			offices: ctx.nearbyOffices ?? [],
 			hidden: !ctx.nearbyOffices || ctx.nearbyOffices.length === 0,
 		},

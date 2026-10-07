@@ -1,5 +1,6 @@
 import { breakpoints } from './src/ui/_lib/breakpoints';
 import { peopleSitemapRewrites } from './src/lib/sitemap-rewrites';
+import { candidatesPageRedirects } from './src/lib/candidates-redirects';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -42,6 +43,8 @@ const nextConfig = {
 				destination: '/llms.txt',
 				permanent: true,
 			},
+			// The retired candidate listing pages, back to their position pages.
+			...candidatesPageRedirects,
 		];
 	},
 	devIndicators: false,

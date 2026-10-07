@@ -27,17 +27,19 @@ const styles = tv({
 		// viewport: 108px to the left of the photo at desktop, 82px below it on
 		// mobile. 39.5rem is the 524px photo plus that left overhang.
 		carousel: 'w-full lg:ml-auto lg:max-w-[39.5rem]',
-		// Clip sideways only, and 2.5rem past the edge, so the photo and card
-		// shadows are not cut off in a straight line. Each slide carries 2.5rem of
-		// empty padding on its left (the track pulls the first one back by the
-		// same amount), so the clip margin only ever reveals that empty gap.
-		viewport: 'overflow-x-clip [overflow-clip-margin:2.5rem]',
-		track: '-ml-10 flex touch-pan-y',
-		slide: 'relative min-w-0 flex-[0_0_100%] pb-[5.125rem] pl-10 lg:pb-0 lg:pl-[9.25rem]',
+		// The viewport has to clip sideways so neighbouring slides stay hidden, and
+		// once one axis clips the browser clips the other too. So the clip margin
+		// must clear the biggest shadow: the quote card's reaches 63px (25px offset,
+		// 50px blur, -12px spread) and the photo's 40px. Each slide carries the same
+		// 4.5rem of empty padding on its left (the track pulls the first one back by
+		// that amount), so the margin only ever reveals that empty gap, never a slide.
+		viewport: 'overflow-x-clip [overflow-clip-margin:4.5rem]',
+		track: '-ml-[4.5rem] flex touch-pan-y',
+		slide: 'relative min-w-0 flex-[0_0_100%] pb-[5.125rem] pl-[4.5rem] lg:pb-0 lg:pl-[11.25rem]',
 		photo: 'relative aspect-square w-full overflow-hidden rounded-3xl shadow-xl-duo [&>div]:h-full [&>div]:w-full',
 		quoteCard: [
-			'absolute bottom-0 left-14 right-4 flex flex-col gap-4 rounded-lg bg-bright-yellow-100 p-5 text-black shadow-2xl',
-			'lg:bottom-5 lg:left-10 lg:right-auto lg:w-[19.25rem]',
+			'absolute bottom-0 left-[5.5rem] right-4 flex flex-col gap-4 rounded-lg bg-bright-yellow-100 p-5 text-black shadow-2xl',
+			'lg:bottom-5 lg:left-[4.5rem] lg:right-auto lg:w-[19.25rem]',
 		],
 		quoteText: 'font-secondary text-[0.875rem] leading-5',
 		quoteAuthor: 'flex items-center gap-4',

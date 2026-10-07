@@ -20,8 +20,13 @@ const styles = tv({
 		baseGoodParty: 'border-bright-yellow-600 hover:bg-bright-yellow-50',
 		avatarWrapper: 'relative flex-shrink-0 size-20 md:size-24 overflow-visible',
 		rightColumn: 'flex flex-col flex-1 min-w-0 gap-2 md:gap-4',
-		contentWrapper: 'flex flex-col gap-1',
+		// The district tag sits above the name on the phone and opposite it from md
+		// (Voter Guide frames 2139:26561 / 2139:26861).
+		contentWrapper: 'flex flex-col gap-2 md:flex-row md:items-start md:justify-between md:gap-4',
 		content: 'flex flex-col gap-1',
+		// Figma "Tagline": 28px tall, 6px radius, hairline border, 14/20 medium text.
+		tag: 'order-first inline-flex w-fit shrink-0 items-center rounded-[6px] border border-gray-300 bg-white px-2.5 py-1 text-midnight-900 shadow-xs md:order-last',
+		tagText: 'font-secondary text-[0.875rem]/[1.25rem] font-medium',
 		name: 'whitespace-nowrap md:whitespace-normal',
 		attributionLine: 'text-neutral-500 min-w-0',
 		footerWrapper: 'flex flex-col w-full gap-2 md:w-full md:flex-row md:flex-wrap md:items-center md:justify-between md:gap-4',
@@ -61,13 +66,28 @@ export type CandidatesCardProps = {
 	 * example card and `/candidate/[...slug]` still mean by it.
 	 */
 	attribution?: CardAttributionMode;
+	/**
+	 * A short pill beside the name, e.g. "District 5" (the seat's district or
+	 * ward). Nothing renders without one.
+	 */
+	tag?: string | null;
+	/**
+	 * Draws the heart-and-star mark on the photo WITHOUT the yellow frame that
+	 * `isGoodPartyCandidate` brings. The `/people` rails set it from the pledge
+	 * flag: pledged and claimed are the same thing to marketing (Emily,
+	 * 2026-10-06), and the Voter Guide frames draw the mark on the pledged card
+	 * with no frame around it. `isGoodPartyCandidate` still draws the mark too.
+	 */
+	showMark?: boolean;
 	_key?: string;
 };
 
 export const CandidatesCard = memo(function CandidatesCard(props: CandidatesCardProps) {
 	const isGoodParty = props.isGoodPartyCandidate === true;
 	const attributionMode: CardAttributionMode = props.attribution ?? (isGoodParty ? 'empowered' : 'none');
-	const { base, baseStandard, baseGoodParty, avatarWrapper, rightColumn, contentWrapper, content, name, attributionLine, footerWrapper, link, badge } = styles();
+	const showMark = isGoodParty || props.showMark === true;
+	const { base, baseStandard, baseGoodParty, avatarWrapper, rightColumn, contentWrapper, content, tag, tagText, name, attributionLine, footerWrapper, link, badge } =
+		styles();
 
 	// Generate initials from name if no avatar
 	const initials = props.avatar ? undefined : getInitials(props.name);
@@ -85,7 +105,7 @@ export const CandidatesCard = memo(function CandidatesCard(props: CandidatesCard
 						{initials}
 					</div>
 				)}
-				{isGoodParty && (
+				{showMark && (
 					<div className={badge()}>
 						<Logo width={85} height={24} />
 					</div>
@@ -102,6 +122,11 @@ export const CandidatesCard = memo(function CandidatesCard(props: CandidatesCard
 							{props.partyAffiliation}
 						</Text>
 					</div>
+					{props.tag && (
+						<span className={tag()} data-component='CandidatesCardTag'>
+							<span className={tagText()}>{props.tag}</span>
+						</span>
+					)}
 				</div>
 
 				<div className={footerWrapper()}>

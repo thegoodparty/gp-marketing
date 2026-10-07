@@ -4,13 +4,13 @@ import { CTABannerBlock } from '~/ui/CTABannerBlock';
 import { CTAImageBlock } from '~/ui/CTAImageBlock';
 import { CandidatesBlock, type CandidateCard } from '~/ui/CandidatesBlock';
 import { ElectionsPositionHero } from '~/ui/ElectionsPositionHero';
+import { resolvePositionHeroState } from '~/lib/positionHeroState';
 import { TwoUpCardBlock } from '~/ui/TwoUpCardBlock';
 import {
 	CANDIDATES_PAGE_CTA_BANNER,
 	CANDIDATES_PAGE_CTA_IMAGE,
 	CANDIDATES_PAGE_TWO_UP_CARD,
 } from '~/constants/candidatesPageStaticSections';
-import { primaryButtonStyleType } from '~/ui/_lib/designTypesStore';
 import { PageSchema } from '~/ui/PageSchema';
 import { buildBreadcrumbSchema, buildSchemaGraph, buildWebPageSchema } from '~/lib/schema';
 import { toAbsoluteUrl } from '~/lib/url';
@@ -41,12 +41,10 @@ export function CandidatesPageContent(props: CandidatesPageContentProps) {
 		stateName,
 		countyName,
 		cityName,
-		electionDate,
-		filingDate,
 		breadcrumbs,
-		positionHref,
 		locationHref,
 		candidates,
+		race,
 	} = props;
 
 	const locationParts = [cityName, countyName, stateName].filter(Boolean);
@@ -75,19 +73,20 @@ export function CandidatesPageContent(props: CandidatesPageContentProps) {
 			<PageSchema schema={candidatesGraph ?? undefined} />
 			<BreadcrumbBlock backgroundColor="midnight" breadcrumbs={breadcrumbs} />
 			<ElectionsPositionHero
-				backgroundColor="midnight"
+				backgroundColor='midnight'
 				officeName={officeName}
 				stateName={stateName}
 				countyName={countyName}
 				cityName={cityName}
-				electionDate={electionDate}
-				filingDate={filingDate}
-				cta={{
-					buttonType: 'internal',
-					href: positionHref,
-					label: 'Back to position',
-					buttonProps: { styleType: primaryButtonStyleType },
-				}}
+				state={resolvePositionHeroState({
+					filingDateStart: race?.filingDateStart,
+					filingDateEnd: race?.filingDateEnd,
+					electionDate: race?.electionDate,
+				})}
+				electionDate={race?.electionDate}
+				filingDateStart={race?.filingDateStart}
+				filingDateEnd={race?.filingDateEnd}
+				seatCount={race?.numberOfSeats}
 			/>
 			<CandidatesBlock
 				backgroundColor="cream"

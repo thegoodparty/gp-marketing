@@ -166,12 +166,12 @@ export const component_electionsPositionHero = `_type=="component_electionsPosit
 export const component_electionsPositionContentBlock = `_type=="component_electionsPositionContentBlock"=>{...,electionsPositionContentBlockDesignSettings,componentSettings}`;
 export const component_electionsSearchHero = `_type=="component_electionsSearchHero"=>{...}`;
 export const component_featuredCitiesBlock = `_type=="component_featuredCitiesBlock"=>{...,featuredCitiesBlockHeader{${summaryInfoGroq}}}`;
-export const component_goodPartyOrgPledge = `_type=="component_goodPartyOrgPledge"=>{...,summaryInfo{${summaryInfoGroq}},goodPartyOrgPledgeItems{...,list_pledgeCards[]{...,ctaActionWithShared{${buttonGroq}}}}}`;
+export const component_goodPartyOrgPledge = `_type=="component_goodPartyOrgPledge"=>{...,summaryInfo{${summaryInfoGroq}},goodPartyOrgPledgeItems}`;
 export const component_locationFactsBlock = `_type=="component_locationFactsBlock"=>{...,locationFactsBlockHeader{${summaryInfoGroq}}}`;
 export const component_locationLandingPageHero = `_type=="component_locationLandingPageHero"=>{...,locationLandingPageHeroContent{...,list_buttons[]{${buttonGroq}}}}`;
 export const component_profileContentBlock = `_type=="component_profileContentBlock"=>{...,profileContentBlockDesignSettings,componentSettings}`;
 export const component_voterDensityBlock = `_type=="component_voterDensityBlock"=>{...,voterDensityBlockContent,componentSettings}`;
-export const component_listOfOfficesBlock = `_type=="component_listOfOfficesBlock"=>{...}`;
+export const component_listOfOfficesBlock = `_type=="component_listOfOfficesBlock"=>{...,listOfOfficesBlockDescription{...,block_description[]{...,${textBlockGroq}}}}`;
 export const component_embeddedBlock = `_type=="component_embeddedBlock"=>{...}`;
 /*language=textmate*/
 export const component_clickToCallBlock = `_type=="component_clickToCallBlock"=>{...,ctaBlockDesignSettings,componentSettings}`;

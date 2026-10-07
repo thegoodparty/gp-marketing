@@ -1,7 +1,9 @@
 import { describe, expect, test } from 'bun:test';
 
 import {
+	buildCandidatesSectionOverrides,
 	buildCandidatesTokens,
+	buildPositionSeatFilter,
 	buildElectionsIndexSectionOverrides,
 	buildPositionSectionOverrides,
 	buildPositionTokens,
@@ -25,25 +27,154 @@ const positionOverrideCtx = {
 	pageUrl: 'https://goodparty.org/elections/mn/morrison-county/position/county-attorney',
 };
 
-describe('buildPositionSectionOverrides', () => {
-	test('includes rightColumnCTA when candidatesHref is set', () => {
+describe('buildPositionSectionOverrides content block', () => {
+	const race = {
+		id: 'r1',
+		slug: 'mn/morrison-county/county-attorney',
+		name: 'County Attorney',
+		state: 'MN',
+		electionDate: '2026-11-03T00:00:00.000Z',
+		filingDateStart: '2026-05-19T00:00:00.000Z',
+		filingDateEnd: '2026-06-02T00:00:00.000Z',
+		positionLevel: 'county',
+		salary: '$90,000 / year',
+		employmentType: 'Full Time',
+		partisanType: 'partisan',
+		frequency: ['4'],
+		numberOfSeats: 1,
+		isRunoff: false,
+		positionDescription: 'The county attorney prosecutes crimes.',
+		eligibilityRequirements: 'Must be a licensed attorney.',
+		filingRequirements: 'Affidavit of candidacy and $500 fee.',
+		filingOfficeAddress: '213 1st Ave SE, Little Falls, MN 56345',
+	};
+
+	test('carries the same race dates the hero reads, the page URL and the location crumb', () => {
 		const overrides = buildPositionSectionOverrides({
 			...positionOverrideCtx,
-			candidatesHref: '/elections/mn/morrison-county/position/county-attorney/candidates',
+			race,
+			breadcrumbs: [
+				{ href: '/elections', label: 'Elections' },
+				{ href: '/elections/mn', label: 'Minnesota' },
+				{ href: '/elections/mn/morrison-county', label: 'Morrison County' },
+				{ href: '', label: 'County Attorney' },
+			],
+			heroCandidates: [
+				{ key: 'c1', name: 'Tom Nguyen', party: 'Independent', partyClass: 'independent', isPledged: true, href: '/people/tom-nguyen-c1' },
+			],
+			officeholders: [{ key: 'o1', name: 'Grace Hopper', party: 'Independent', term: '2023 to 2027' }],
 		});
+		const block = overrides.component_electionsPositionContentBlock;
 
-		expect(overrides.component_electionsPositionContentBlock?.rightColumnCTA).toEqual({
-			buttonType: 'internal',
-			href: '/elections/mn/morrison-county/position/county-attorney/candidates',
-			label: 'View candidates',
-			buttonProps: { styleType: 'secondary' },
-		});
+		expect(block?.electionDateIso).toBe(race.electionDate);
+		expect(block?.filingDateStartIso).toBe(race.filingDateStart);
+		expect(block?.filingDateEndIso).toBe(race.filingDateEnd);
+		expect(block?.shareUrl).toBe(positionOverrideCtx.pageUrl);
+		expect(block?.locationHref).toBe('/elections/mn/morrison-county');
+		expect(block?.candidates).toEqual([
+			{
+				key: 'c1',
+				name: 'Tom Nguyen',
+				party: 'Independent',
+				isPledged: true,
+				href: '/people/tom-nguyen-c1',
+				avatar: undefined,
+				isWinner: undefined,
+				seatName: undefined,
+				seatValue: undefined,
+				seatLabel: undefined,
+			},
+		]);
+		expect(block?.officeholders?.[0]?.name).toBe('Grace Hopper');
 	});
 
-	test('omits rightColumnCTA when candidatesHref is not set', () => {
-		const overrides = buildPositionSectionOverrides(positionOverrideCtx);
+	test('maps the race facts onto the About card and the filing step', () => {
+		const block = buildPositionSectionOverrides({
+			...positionOverrideCtx,
+			race,
+			filingDate: 'May 19, 2026 - June 2, 2026',
+		}).component_electionsPositionContentBlock;
 
-		expect(overrides.component_electionsPositionContentBlock?.rightColumnCTA).toBeUndefined();
+		expect(block?.about?.description).toBe(race.positionDescription);
+		expect(block?.about?.attributes).toEqual([
+			{ label: 'Office level', value: 'County' },
+			{ label: 'Election frequency', value: 'Every 4 years' },
+			{ label: 'Typical salary', value: '$90,000 / year' },
+			{ label: 'Commitment level', value: 'Full Time' },
+			{ label: 'Affiliation', value: 'Partisan' },
+			{ label: 'Positions', value: '1 open seat' },
+		]);
+		expect(block?.about?.electionTypes).toEqual([
+			{ label: 'Partisan election (party labels appear on ballots)', checked: true },
+			{ label: 'Run-off election', checked: false },
+		]);
+		expect(block?.howToRun?.eligibility).toBe(race.eligibilityRequirements);
+		expect(block?.howToRun?.filing).toEqual([
+			{ label: 'Filing requirements', value: race.filingRequirements },
+			{ label: 'Filing period', value: 'May 19, 2026 - June 2, 2026' },
+			{ label: 'Where to file', value: race.filingOfficeAddress },
+		]);
+	});
+
+	test('leaves candidates and officeholders undefined when the route could not read them', () => {
+		const block = buildPositionSectionOverrides(positionOverrideCtx).component_electionsPositionContentBlock;
+
+		expect(block?.candidates).toBeUndefined();
+		expect(block?.officeholders).toBeUndefined();
+		expect(block?.about).toBeUndefined();
+		expect(block?.howToRun).toBeUndefined();
+		expect(block?.seatFilter).toBeUndefined();
+	});
+
+	test('offers the seat filter only when every row carries a seat and there is a choice', () => {
+		const withSeats = [
+			{ key: 'a', name: 'A', seatValue: '2' },
+			{ key: 'b', name: 'B', seatValue: '1' },
+			{ key: 'c', name: 'C', seatValue: '10' },
+		];
+		expect(buildPositionSeatFilter(withSeats, 'District')).toEqual({
+			label: 'Filter by District',
+			options: [
+				{ value: '1', label: 'District 1' },
+				{ value: '2', label: 'District 2' },
+				{ value: '10', label: 'District 10' },
+			],
+		});
+		expect(buildPositionSeatFilter([...withSeats, { key: 'd', name: 'D' }], 'District')).toBeUndefined();
+		expect(buildPositionSeatFilter([{ key: 'a', name: 'A', seatValue: '1' }], 'District')).toBeUndefined();
+	});
+
+	test('candidates that carry a seat feed the filter alongside the officeholders', () => {
+		const block = buildPositionSectionOverrides({
+			...positionOverrideCtx,
+			race,
+			heroCandidates: [
+				{ key: 'c1', name: 'A', party: 'Independent', partyClass: 'independent', seatName: 'District', seatValue: '1' },
+				{ key: 'c2', name: 'B', party: 'Democratic', partyClass: 'democrat', seatName: 'District', seatValue: '2' },
+			],
+			officeholders: [{ key: 'o1', name: 'C', seatValue: '2', seatName: 'District' }],
+		}).component_electionsPositionContentBlock;
+		expect(block?.candidates?.[0]?.seatLabel).toBe('District 1');
+		expect(block?.seatFilter?.label).toBe('Filter by District');
+		expect(block?.seatFilter?.options.map(option => option.value)).toEqual(['1', '2']);
+	});
+
+	test("names the seat filter after the office's own sub-area when every row carries a seat", () => {
+		const block = buildPositionSectionOverrides({
+			...positionOverrideCtx,
+			race,
+			officeholders: [
+				{ key: 'o1', name: 'A', seatValue: '1', seatName: 'Ward' },
+				{ key: 'o2', name: 'B', seatValue: '2', seatName: 'Ward' },
+			],
+		}).component_electionsPositionContentBlock;
+		expect(block?.seatFilter?.label).toBe('Filter by Ward');
+		expect(block?.seatFilter?.options.map(option => option.label)).toEqual(['Ward 1', 'Ward 2']);
+	});
+
+	test('resolves the [Position Name] alias the Figma copy uses', () => {
+		const tokens = buildPositionTokens(tokenCtx);
+		expect(resolveTokens('About [Position Name]', tokens)).toBe('About Mayor');
 	});
 
 	test('chooses the how-to-run guide for the office from the blog article matrix', () => {
@@ -74,6 +205,64 @@ describe('buildPositionSectionOverrides', () => {
 	});
 });
 
+describe('buildPositionSectionOverrides hero', () => {
+	const race = {
+		id: 'r1',
+		slug: 'mn/morrison-county/county-attorney',
+		name: 'County Attorney',
+		state: 'MN',
+		electionDate: '2026-11-03T00:00:00.000Z',
+		filingDateStart: '2026-05-19T00:00:00.000Z',
+		filingDateEnd: '2026-06-02T00:00:00.000Z',
+		numberOfSeats: 2,
+	};
+
+	test('hands the hero the race dates, the seat count and an anchor to the on-page candidate rows', () => {
+		const overrides = buildPositionSectionOverrides({
+			...positionOverrideCtx,
+			race,
+			candidatesHref: '/elections/mn/morrison-county/position/county-attorney/candidates',
+			heroCandidates: [{ name: 'Ada Lovelace', party: 'Independent', partyClass: 'independent' }],
+		});
+
+		expect(overrides.component_electionsPositionHero).toMatchObject({
+			officeName: 'County Attorney',
+			stateName: 'Minnesota',
+			countyName: 'Morrison County',
+			electionDateIso: '2026-11-03T00:00:00.000Z',
+			filingDateStartIso: '2026-05-19T00:00:00.000Z',
+			filingDateEndIso: '2026-06-02T00:00:00.000Z',
+			seatCount: 2,
+			candidatesHref: '#position-candidates',
+			resultsHref: '#position-candidates',
+		});
+		expect(overrides.component_electionsPositionHero?.candidates).toHaveLength(1);
+	});
+
+	test('never links the hero to the /candidates page: with no rows on the page the button has nowhere to go', () => {
+		const href = '/elections/mn/morrison-county/position/county-attorney/candidates';
+		const withEmptyRows = buildPositionSectionOverrides({ ...positionOverrideCtx, race, candidatesHref: href, heroCandidates: [] });
+		const withNoData = buildPositionSectionOverrides({ ...positionOverrideCtx, race, candidatesHref: href });
+		expect(withEmptyRows.component_electionsPositionHero?.candidatesHref).toBeUndefined();
+		expect(withNoData.component_electionsPositionHero?.candidatesHref).toBeUndefined();
+		expect(withNoData.component_electionsPositionHero?.resultsHref).toBeUndefined();
+	});
+
+	test('leaves candidates undefined, not empty, when the route supplied none', () => {
+		const overrides = buildPositionSectionOverrides({ ...positionOverrideCtx, race });
+
+		expect(overrides.component_electionsPositionHero?.candidates).toBeUndefined();
+		expect(overrides.component_electionsPositionHero?.winners).toBeUndefined();
+	});
+
+	test('uses the same hero data on the candidates page', () => {
+		const overrides = buildCandidatesSectionOverrides({ ...positionOverrideCtx, race, candidates: [], heroCandidates: [] });
+
+		expect(overrides.component_electionsPositionHero?.electionDateIso).toBe('2026-11-03T00:00:00.000Z');
+		expect(overrides.component_electionsPositionHero?.candidates).toEqual([]);
+	});
+});
+
 describe('buildPositionTokens', () => {
 	test('resolves both [office name] and [office]', () => {
 		const tokens = buildPositionTokens(tokenCtx);
@@ -83,7 +272,7 @@ describe('buildPositionTokens', () => {
 
 	test('resolves [location]', () => {
 		const tokens = buildPositionTokens(tokenCtx);
-		expect(resolveTokens('Running in [location]', tokens)).toBe('Running in Brooklyn, Kings, New York');
+		expect(resolveTokens('Running in [location]', tokens)).toBe('Running in Brooklyn, NY');
 	});
 
 	test('does not supply [candidate name]', () => {
@@ -101,7 +290,7 @@ describe('buildCandidatesTokens', () => {
 
 	test('resolves [location], [State], and [County or City]', () => {
 		const tokens = buildCandidatesTokens(tokenCtx);
-		expect(resolveTokens('Candidates in [location]', tokens)).toBe('Candidates in Brooklyn, Kings, New York');
+		expect(resolveTokens('Candidates in [location]', tokens)).toBe('Candidates in Brooklyn, NY');
 		expect(resolveTokens('Candidates in [State]', tokens)).toBe('Candidates in New York');
 		expect(resolveTokens('Candidates in [County or City]', tokens)).toBe('Candidates in Brooklyn');
 	});
@@ -158,6 +347,86 @@ describe('buildElectionsIndexSectionOverrides', () => {
 		expect(hero?.headline).toBe('Upcoming elections in Kane County, Illinois');
 		expect(hero?.stateName).toBe('Illinois');
 		expect(hero?.countyName).toBe('Kane County');
+	});
+
+	/** The offices list counts each row's pledged candidates off the same people the hero and featured block read. */
+	test('gives each office its pledged candidate count by race slug, counting a person once per race', () => {
+		const card = (overrides: Partial<{ personId: string | null; href: string; raceSlug: string | null; isPledged: boolean }>) => ({
+			personId: 'p1',
+			name: 'Person',
+			office: null,
+			location: null,
+			href: '/people/person-p1',
+			avatarUrl: null,
+			isPledged: true,
+			isNonpartisan: true,
+			role: 'candidate' as const,
+			electionDate: '2026-11-03',
+			raceSlug: 'il/kane-county/county-board',
+			...overrides,
+		});
+		const offices = [
+			{ id: 'a', type: 'County', position: 'County Board', nextElectionDate: '2026-11-03', raceSlug: 'IL/kane-county/county-board' },
+			{ id: 'b', type: 'County', position: 'Sheriff', nextElectionDate: '2026-11-03', raceSlug: 'il/kane-county/sheriff' },
+			{ id: 'c', type: 'County', position: 'Unslugged', nextElectionDate: '2026-11-03' },
+		];
+		const list = buildElectionsIndexSectionOverrides({
+			...countyCtx,
+			offices,
+			featuredPeople: {
+				candidates: [
+					card({}),
+					card({ personId: 'P1' }),
+					card({ personId: 'p2', href: '/people/two-p2' }),
+					card({ personId: 'p3', href: '/people/three-p3', isPledged: false }),
+					card({ personId: 'p4', href: '/people/four-p4', raceSlug: 'il/kane-county/sheriff', isPledged: false }),
+				],
+				representatives: [],
+				candidatesComplete: true,
+			},
+		}).component_listOfOfficesBlock;
+
+		expect(list?.offices?.map(office => office.pledgedCount)).toEqual([2, undefined, undefined]);
+	});
+
+	/** Offices with independents on the ballot lead the list; the rest keep their order (Emily, 2026-10-06). */
+	test('moves offices with independents running to the top, keeping the order inside each group', () => {
+		const pledged = (raceSlug: string, personId: string) => ({
+			personId,
+			name: 'Person',
+			office: null,
+			location: null,
+			href: `/people/person-${personId}`,
+			avatarUrl: null,
+			isPledged: true,
+			isNonpartisan: true,
+			role: 'candidate' as const,
+			electionDate: '2026-11-03',
+			raceSlug,
+		});
+		const offices = [
+			{ id: 'a', type: 'City', position: 'City Legislature', nextElectionDate: '2026-11-02', raceSlug: 'mi/sterling/city-legislature' },
+			{ id: 'b', type: 'State', position: 'State Senator', nextElectionDate: '2026-11-02', raceSlug: 'mi/state-senator' },
+			{ id: 'c', type: 'State', position: 'Secretary of State', nextElectionDate: '2026-11-02', raceSlug: 'mi/secretary-of-state' },
+			{ id: 'd', type: 'State', position: 'State Higher Education Board', nextElectionDate: '2026-11-02', raceSlug: 'mi/higher-ed-board' },
+		];
+		const list = buildElectionsIndexSectionOverrides({
+			...countyCtx,
+			offices,
+			featuredPeople: {
+				candidates: [pledged('mi/state-senator', 'p1'), pledged('mi/higher-ed-board', 'p2')],
+				representatives: [],
+				candidatesComplete: true,
+			},
+		}).component_listOfOfficesBlock;
+
+		expect(list?.offices?.map(office => office.id)).toEqual(['b', 'd', 'a', 'c']);
+		expect(list?.offices?.map(office => office.pledgedCount)).toEqual([1, 1, undefined, undefined]);
+	});
+
+	test('leaves the offices untouched without featured people', () => {
+		const offices = [{ id: 'a', type: 'County', position: 'County Board', nextElectionDate: '2026-11-03', raceSlug: 'il/kane-county/county-board' }];
+		expect(buildElectionsIndexSectionOverrides({ ...countyCtx, offices }).component_listOfOfficesBlock?.offices).toBe(offices);
 	});
 
 	test('leaves the headline unset when the route does not phrase one', () => {

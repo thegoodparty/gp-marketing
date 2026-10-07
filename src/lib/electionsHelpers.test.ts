@@ -4,6 +4,7 @@ import {
 	buildElectionPositionHrefFromRaceSlug,
 	buildFAQSchema,
 	buildOfficeItemsFromPlaceRaces,
+	mergeOfficeItems,
 	buildRacePositionHref,
 	joinPlaceNames,
 	buildRaceSlug,
@@ -603,6 +604,7 @@ describe('buildOfficeItemsFromPlaceRaces', () => {
 
 		const { offices, dataYears } = buildOfficeItemsFromPlaceRaces(races, resolvedDates, {
 			type: 'State',
+			level: 'state',
 			buildHref: race => `/elections/ca/position/${race.slug.split('/').slice(1).join('/')}`,
 		});
 
@@ -619,6 +621,7 @@ describe('buildOfficeItemsFromPlaceRaces', () => {
 
 		const { offices } = buildOfficeItemsFromPlaceRaces(races, new Map(), {
 			type: 'County',
+			level: 'county',
 			buildHref: () => undefined,
 		});
 
@@ -635,6 +638,7 @@ describe('buildOfficeItemsFromPlaceRaces', () => {
 
 		const { dataYears } = buildOfficeItemsFromPlaceRaces(races, resolvedDates, {
 			type: 'State',
+			level: 'state',
 			buildHref: race => `/elections/ca/position/${race.slug.split('/').slice(1).join('/')}`,
 		});
 
@@ -1533,5 +1537,70 @@ describe('rankFeaturedCities', () => {
 			{ id: 'x', name: '', slug: 'tn/x', state: 'TN', Races: [{ id: '1', slug: 'r', electionDate: '2026-11-03' }] },
 		];
 		expect(rankFeaturedCities(broken, { count: 5, currentYear: 2026 })).toEqual([]);
+	});
+});
+
+/**
+ * A location page's offices list opens on its own level (Local on a city page),
+ * while the year dropdown is the union across the levels it can switch to. Those
+ * two have to agree: the opening year must be populated at the page's own level
+ * *and* be one the dropdown offers.
+ */
+describe('the year a location page opens its offices list on', () => {
+	const openingYear = (ownYears: number[], overlapYears: number[], today = 2026) => {
+		const allYears = [...new Set([...ownYears, ...overlapYears])].sort((a, b) => a - b);
+		return {
+			defaultYear: resolveDefaultElectionYear(ownYears.length > 0 ? ownYears : allYears, today),
+			availableYears: allYears.length > 0 ? allYears : [today],
+		};
+	};
+
+	test('opens on a year its own level has races in, not the soonest overall', () => {
+		// A city voting in 2027 alongside state races in 2026 must open on 2027,
+		// or it opens on a Local list that is empty.
+		const { defaultYear, availableYears } = openingYear([2027], [2026]);
+		expect(defaultYear).toBe(2027);
+		expect(availableYears).toContain(defaultYear);
+	});
+
+	test('falls back to the overlapping years when it has no races of its own', () => {
+		// Otherwise it opens on the current year while the dropdown offers only 2027.
+		const { defaultYear, availableYears } = openingYear([], [2027]);
+		expect(defaultYear).toBe(2027);
+		expect(availableYears).toContain(defaultYear);
+	});
+
+	test('opening year is always one the dropdown offers', () => {
+		const combinations: Array<[number[], number[]]> = [
+			[[], []],
+			[[], [2026]],
+			[[], [2027, 2029]],
+			[[2026], []],
+			[[2027], [2026]],
+			[[2024], [2028]],
+			[[2026, 2028], [2027]],
+		];
+		for (const [own, overlap] of combinations) {
+			const { defaultYear, availableYears } = openingYear(own, overlap);
+			expect(availableYears).toContain(defaultYear);
+		}
+	});
+});
+
+describe('mergeOfficeItems', () => {
+	const office = (id: string, raceSlug?: string) => ({ id, type: 'Local', position: id, nextElectionDate: '2026-11-03', ...(raceSlug ? { raceSlug } : {}) });
+
+	test('keeps the first row for a race that the district and its county both report', () => {
+		const own = [office('a', 'mi/sterling/city-legislature'), office('b', 'mi/arenac-county/clerk')];
+		const overlapping = [office('c', 'MI/Arenac-County/Clerk'), office('d', 'mi/state-senator')];
+		expect(mergeOfficeItems(own, overlapping).map(o => o.id)).toEqual(['a', 'b', 'd']);
+	});
+
+	test('rows without a race slug fall back to their id, so two slugless rows both stay', () => {
+		expect(mergeOfficeItems([office('a'), office('b')], [office('a')]).map(o => o.id)).toEqual(['a', 'b']);
+	});
+
+	test('a plain concatenation is unchanged when nothing overlaps', () => {
+		expect(mergeOfficeItems([office('a', 'x/one')], [office('b', 'x/two')]).map(o => o.id)).toEqual(['a', 'b']);
 	});
 });

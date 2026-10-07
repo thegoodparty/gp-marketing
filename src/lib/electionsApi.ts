@@ -18,7 +18,6 @@ import type {
 } from '~/types/people';
 import {
 	buildElectionPositionHrefFromRaceSlug,
-	buildRaceCandidatesHref,
 	buildSubplaceRaceSlug,
 	canonicalizeCountyEquivalentName,
 	normalizeCandidateLookupName,
@@ -840,12 +839,13 @@ export async function resolveCountySlugForCitySlug(citySlug: string): Promise<st
 
 export type RaceElectionHrefs = {
 	positionHref?: string;
-	candidatesHref?: string;
 };
 
 /**
- * Resolves canonical elections position and candidates listing paths for a race slug.
- * Expands city/town 3-part slugs to 4-level URLs when county can be resolved.
+ * Resolves the canonical elections position path for a race slug. Expands
+ * city/town 3-part slugs to 4-level URLs when county can be resolved. (It used
+ * to resolve the candidate listing path too; those pages are retired and
+ * redirect to the position page, see `candidates-redirects.ts`.)
  */
 export async function resolveRaceElectionHrefs(
 	raceSlug: string | undefined,
@@ -864,7 +864,6 @@ export async function resolveRaceElectionHrefs(
 		const positionHref = buildElectionPositionHrefFromRaceSlug(raceEntry);
 		return {
 			positionHref,
-			candidatesHref: buildRaceCandidatesHref(raceEntry),
 		};
 	}
 
@@ -877,7 +876,6 @@ export async function resolveRaceElectionHrefs(
 		});
 		return {
 			positionHref,
-			candidatesHref: positionHref ? `${positionHref}/candidates` : undefined,
 		};
 	}
 
@@ -888,7 +886,6 @@ export async function resolveRaceElectionHrefs(
 		});
 		return {
 			positionHref,
-			candidatesHref: positionHref ? `${positionHref}/candidates` : undefined,
 		};
 	}
 
@@ -901,7 +898,6 @@ export async function resolveRaceElectionHrefs(
 		});
 		return {
 			positionHref,
-			candidatesHref: positionHref ? `${positionHref}/candidates` : undefined,
 		};
 	}
 
@@ -913,7 +909,6 @@ export async function resolveRaceElectionHrefs(
 		});
 		return {
 			positionHref,
-			candidatesHref: positionHref ? `${positionHref}/candidates` : undefined,
 		};
 	}
 
@@ -921,6 +916,5 @@ export async function resolveRaceElectionHrefs(
 	const expandedRace = { slug: raceSlug, positionLevel: effectiveLevel };
 	return {
 		positionHref: buildElectionPositionHrefFromRaceSlug(expandedRace, { citySlugToCountySlug }),
-		candidatesHref: buildRaceCandidatesHref(expandedRace, { citySlugToCountySlug }),
 	};
 }

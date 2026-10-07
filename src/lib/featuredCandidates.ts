@@ -279,7 +279,16 @@ export async function getFeaturedPeople(
 		Promise.all(places.map(async tierPlace => (tierPlace?.geoId ? deps.getOfficeHoldersByGeoId(tierPlace.geoId) : []))),
 		deps.getRemovedPersonIds(),
 	]);
-	const candidacies = candidaciesByRace.flat();
+	// A race slug is shared across cycles, so the candidacies feed returns past
+	// cycles too. Only people on the upcoming ballot belong here (Emily,
+	// 2026-10-07): a candidacy whose own race date has passed is dropped, and one
+	// that carries a date uses it on the card rather than the slug's date.
+	const candidacies = candidaciesByRace.flat().flatMap(entry => {
+		const ownDate = entry.candidacy.Race?.electionDate;
+		if (!ownDate) return [entry];
+		if (isElectionDateBeforeToday(ownDate, today)) return [];
+		return [{ ...entry, electionDate: ownDate }];
+	});
 
 	const personIds = [
 		...candidacies.map(({ candidacy }) => candidacy.personId),

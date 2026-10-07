@@ -616,12 +616,16 @@ batched with the rest of the Elections page redesign.
 
 Decisions that came out of it and affect other blocks in the batch:
 
-- **The carousel's clip margin clears the shadows.** `overflow-hidden` on the viewport cut the
-  photo's and quote card's shadows off in a straight line (Emily, 2026-10-07, on the live page). A
-  first fix used `overflow-x: clip` with a 2.5rem margin, but once one axis clips the browser clips
-  the other too, so the shadows were still cut, 40px out. The margin is now 4.5rem, more than the
-  card's 63px shadow reach, and each slide carries the same 4.5rem of empty left padding (the track
-  pulls the first one back by that amount), so the margin only ever reveals that gap, never a slide.
+- **The carousel viewport is padded for the shadows, not clip-margined.** `overflow-hidden` on the
+  viewport cut the photo's and quote card's shadows off in a straight line (Emily, 2026-10-07, on
+  the live page). Two attempts used `overflow: clip` with `overflow-clip-margin`; both still looked
+  wrong because Chrome paints the margin area as a pale box over the page background (confirmed by
+  toggling the clip off in devtools: the box vanished and the shadows matched Figma). The viewport
+  now keeps `overflow: hidden` and is widened with padding on the left, right and bottom, cancelled
+  by negative margins so the layout does not move. Each slide carries 5.75rem of empty left padding
+  (the track pulls the first one back by that amount): the 4.5rem the viewport reveals plus the 20px
+  the previous photo's shadow reaches into the gap, so the padding only ever shows empty gap, never a
+  slide or its shadow; the right side only takes the page gutter (1rem, 1.25rem from `lg`).
 - **A submit waits for the suggestions.** The Google Places script only starts loading on the box's
   first focus, so a quick "marion" + Enter used to submit the bare word; the resolve route cannot
   pick a state for it and the search failed until the second try (Emily, 2026-10-07, on both the
@@ -714,6 +718,10 @@ people now follow the ballot that branch built. Decisions:
   officeholders of every tier, each named with its own tier's place. Chosen over same-level-only
   because pledged people are sparse and most city and county pages would otherwise show nothing.
   The body copy therefore says "near you", not "in [location]".
+- **Only the upcoming ballot.** `/v1/candidacies?raceSlug=` returns every cycle of a slug, so past
+  candidates appeared beside current ones (Emily, 2026-10-07, Holland, MI). A candidacy whose own
+  `Race.electionDate` has passed is dropped before the cards are built; one with a date uses it on
+  the card. Officeholders were already limited to `isCurrent`.
 - **The count is a seam, not a figure.** The body copy accepts `[count of candidates]`, meaning
   the number of pledged people in the page's place *and everything inside it* (all of Texas on the
   Texas page). That is a downward count, and election-api cannot answer it today: a person row

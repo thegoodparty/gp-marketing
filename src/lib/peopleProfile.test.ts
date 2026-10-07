@@ -5,6 +5,7 @@ import {
 	buildBreadcrumbTrail,
 	buildNearbyOfficialCards,
 	buildOtherCandidateCards,
+	districtTag,
 	composeView,
 	deriveElectionsIndexTier,
 	extractPersonId,
@@ -1562,6 +1563,51 @@ describe('buildBreadcrumbTrail', () => {
 		expect(labels[1]).toBe('California');
 		expect(labels).toContain('Mayor');
 		expect(labels[labels.length - 1]).toBe('Jane Doe');
+	});
+});
+
+describe('districtTag', () => {
+	test('joins the sub-area pair, and stands each half on its own', () => {
+		expect(districtTag('District', '5')).toBe('District 5');
+		expect(districtTag('Ward', '3')).toBe('Ward 3');
+		expect(districtTag('At-Large', null)).toBe('At-Large');
+		expect(districtTag(null, '7')).toBe('7');
+		expect(districtTag(' ', '')).toBeNull();
+		expect(districtTag(undefined, undefined)).toBeNull();
+	});
+
+	test('a nearby official is tagged with their own seat; other candidates with the race\u2019s', () => {
+		const OTHER = '22222222-2222-2222-2222-222222222222';
+		const [nearby] = buildNearbyOfficialCards(
+			[makeOffice({ personId: OTHER, officeTitle: 'mayor', subAreaName: 'Ward', subAreaValue: '3' })],
+			new Map(),
+			PID,
+			NO_REMOVALS,
+		);
+		expect(nearby?.tag).toBe('Ward 3');
+		// Each card reads its OWN race row: two candidates under one shared slug can sit in different districts.
+		const race = (value: string) => ({ brHashId: `br-${value}`, slug: 'mi/state-senator', subAreaName: 'District', subAreaValue: value });
+		const others = buildOtherCandidateCards(
+			[
+				{ id: 'c1', personId: OTHER, firstName: 'Ada', lastName: 'Lee', Race: race('21') },
+				{ id: 'c2', personId: '33333333-3333-3333-3333-333333333333', firstName: 'Bo', lastName: 'Ray', Race: race('29') },
+			],
+			new Map(),
+			PID,
+			NO_REMOVALS,
+		);
+		expect(others.map(c => c.tag)).toEqual(['District 21', 'District 29']);
+		expect(others.map(c => c.majorParty)).toEqual([false, false]);
+		expect(nearby?.majorParty).toBe(false);
+		expect(
+			buildOtherCandidateCards([{ id: 'c3', personId: OTHER, firstName: 'Cy', lastName: 'Dem', party: 'Democratic' }], new Map(), PID, NO_REMOVALS)[0]
+				?.majorParty,
+		).toBe(true);
+		expect(
+			buildNearbyOfficialCards([makeOffice({ personId: OTHER, officeTitle: 'mayor', partyNames: ['Working Families', 'Democratic'] })], new Map(), PID, NO_REMOVALS)[0]
+				?.majorParty,
+		).toBe(true);
+		expect(buildOtherCandidateCards([{ id: 'c1', personId: OTHER, firstName: 'Ada', lastName: 'Lee' }], new Map(), PID, NO_REMOVALS)[0]?.tag).toBeNull();
 	});
 });
 

@@ -588,6 +588,56 @@ layer. The request was the intro and the callout, so the fitted radial glow stay
 `/candidate` route shares the component and is untouched: no intro, no callout, the "Empowered by
 GoodParty.org" line.
 
+**Profile content block** (every `/people` profile) — `component_profileContentBlock`, an
+**Extend**. Revised in the same Voter Guide round (Emily, 2026-10-06; same frames as the hero,
+with the block itself at 2139:26748 phone / 2156:34712 unclaimed phone). The block has no content
+fields in Studio: everything inside it on a `/people` page is assembled in
+`src/components/people/personSectionOverrides.tsx` from election-api data, so all three changes
+are code, none is a template edit. Built on the hero PR's branch (#374), because both edit that
+file and the content block's clearance, and both wait for the `/people` batch (PR #375).
+
+- **A "Took the GoodParty.org Pledge" row in the siderail**, under Political Affiliation, with
+  the heart-and-star mark, for anyone the pledge rule affirms (the same `pledged` flag the hero
+  and the cards read). The frame puts "Signed on January 1, 2026" under it. **No pledge date
+  exists in the data**: election-api carries a yes/no flag only. Marketing's source for the date
+  is the HubSpot deal's closed-won date, to be carried onto the person record by the ETL the way
+  `isPledged` is (Emily, 2026-10-06). The site reads an optional `pledgedAt` on the person and
+  shows the row with its "Signed on" line when it is there; until then the row is not shown at all
+  (Emily, 2026-10-06: a heading with only the mark under it was not worth showing in the meantime). To settle with the data team before it ships: which deal when a person has several
+  (the earliest closed-won is the natural rule), whether closed-won is in fact when the pledge is
+  taken (if not, "Signed on" overstates it), and that the deal is joined to the person the way
+  "Confirmed Candidate" is.
+- **A disclaimer under the authored sections**: "These statements come from [name] and do not
+  reflect any positions or stances on individual issues held by GoodParty.org." as a 12px grey
+  caption. It closes the platform card (after Campaign Issues, or after Why I'm Running when the
+  owner wrote no issues), the About Me section (before Recent Experience, which shares the card),
+  and the in-office card (after Accomplishments, or after Top Priorities when there are none).
+  The frames only draw candidates, so the in-office card was Emily's call (2026-10-06): it is the
+  person's own words as much as the platform is. Claimed pages only: the unclaimed placeholders
+  are our copy, not the person's, and the unclaimed frame shows none. The name is the page's
+  display name; the frames show a first name, but splitting names is unreliable.
+- **A "What this symbol means" box above Other Candidates**: the heart-and-star mark, "Candidates
+  and elected officials with this symbol took the GoodParty.org Pledge, promising to serve people
+  first, independent of both major parties and big-money interests." and a "Read the full pledge"
+  link opening `PledgeModal`. Third-person copy, so it renders on every profile that has the list
+  (`PledgeSymbolCallout`, copy in `PLEDGE_SYMBOL_CALLOUT`). Nearby Officials is not in the frames
+  and gets no box.
+- **The cards, in the same round (Emily, 2026-10-06)**: a district pill beside the name
+  ("District 5"; above the name on the phone), the heart-and-star mark on every pledged person's
+  photo, and the lists showing three cards at a time with a "See more" button (`RelatedPeopleList`,
+  the Candidates block's reveal rule with the frame's label), on both rails. The pill reads the
+  feed's sub-area pair (`districtTag`: name and value, "Ward 3"): a nearby official's from their own
+  office row; the other candidates' from the subject's race, which the candidacy rows do not carry,
+  so the profile loader reads the race record once (`loadRaceDistrictTag`) and a miss leaves the
+  cards untagged. **Pledged and claimed are the same thing** (Emily, 2026-10-06), so the mark follows
+  the pledge flag on these cards (`showMark` on `CandidatesCard`), without the yellow frame the
+  legacy `isGoodPartyCandidate` treatment draws; the frames draw no frame, and the production
+  builders never set that flag anyway. The pledge line is unchanged.
+- **Rail order: pledged people first, then the unpledged with no major party, then Republicans and
+  Democrats** (Emily, 2026-10-06), the featured candidates block's rule, stable inside each group.
+  `rankRelatedPeople` in `personSectionOverrides.tsx`; the cards carry `majorParty` from the same
+  party rule the profile's own gating uses. It replaced the older "empowered first" sort, which the
+  production builders could never trigger.
 **GoodParty.org Pledge block** (person profile pages first; location and position pages once editors
 place it) — extended, not rebuilt: `component_goodPartyOrgPledge`, the Studio block "GoodParty.org
 Pledge". The Voter Guide frames (2156-34297 desktop, 2188-38249 mobile) show a centred heading and intro
@@ -983,6 +1033,8 @@ this table; it is here to orient, and to show the shape of the answer.
 | Position hero | develop + draft PR #320 | Position and Position Candidates globals | into #320, stays draft |
 | Position content block | develop + draft PR #327 (stacked on #320) | Position global, plus the landing page `template-elections-position-subset` | into #327, stays draft |
 | Candidates block | develop | Position Candidates global, every `/people` profile | draft and batch |
+| Profile hero | develop + draft PR #374 | Person Profile global, Candidate Profile global | into #374, stays draft |
+| Profile content block | develop + draft PR #375 (stacked on #374) | Person Profile global, Candidate Profile global | into #375, stays draft |
 | Profile hero | develop | Person Profile global (every `/people` profile), the retired Candidate Profile global, twelve disabled per-state scaffolds; a landing page **draft** also carries it | draft and batch with the `/people` pages (PR for the 2026-10-06 revision) |
 | Elections search hero | develop + draft PR #351 | the `/elections` landing page | into #351 |
 | Featured cities | develop + draft PR #307 | the `/elections` landing page | into #307 |

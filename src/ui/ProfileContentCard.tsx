@@ -55,6 +55,12 @@ export type ProfileContentCardProps = {
 	raw?: boolean;
 	/** Drops the inter-section divider (used by the grouped/separated layout). */
 	bare?: boolean;
+	/**
+	 * Rendered after `content`, inside the card: the people profiles' disclaimer
+	 * line under an authored section. Kept apart from `content` so a plain-string
+	 * body keeps its `whitespace-pre-line` paragraphs.
+	 */
+	footer?: ReactNode;
 };
 
 export function ProfileContentCard(props: ProfileContentCardProps) {
@@ -80,6 +86,7 @@ export function ProfileContentCard(props: ProfileContentCardProps) {
 					<Text styleType='body-2'>{props.content}</Text>
 				</div>
 			)}
+			{props.footer}
 		</article>
 	);
 }

@@ -655,6 +655,7 @@ export function PageSections(props: Props) {
 							<Boundary key={section._key} componentName='Featured Cities Block'>
 								<FeaturedCitiesBlockSection
 									{...section}
+									tokens={props.tokens}
 									citiesOverride={props.sectionOverrides?.component_featuredCitiesBlock?.cities}
 								/>
 							</Boundary>

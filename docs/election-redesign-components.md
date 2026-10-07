@@ -209,6 +209,10 @@ card. Two things were missing, and only the second was real work.
   `buildElectionsIndexSectionOverrides` always sets `cities`, to `[]` if it has none. An unset
   value would silently put national cities back on a state page.
 
+- **The header resolves location tokens** like every other template block. "Cities in [County]"
+  published literally on the county pages until the section passed `tokens` through
+  (Emily, 2026-10-07).
+
 Three things that came out of it and affect other components in the batch:
 
 - **`/v1/places/most-elections` cannot be scoped.** It takes `count` and nothing else, ranks by
@@ -568,6 +572,13 @@ Decisions that came out of it:
   rather than `divide-x`, so a wrapped row still divides correctly. Two columns go side by side from `md`,
   three and four from `lg`; below that the columns stack, centred, with a horizontal hairline between them
   (the mobile frame).
+- **The block renders on the server, so its image passes no function props.** The first time the
+  block met real content (the location template drafts, Emily, 2026-10-07) every location page showed
+  "Something went wrong in Illustrated Columns Block", and the QA preview branch stopped building: the
+  shared `ResponsiveImage` always attached an `onLoad` handler, and React refuses to pass a function from
+  a server component into `next/image`. The handler is now attached only when a caller passes
+  `setImageLoaded`. A plain `renderToStaticMarkup` test cannot catch this class of bug; the regression test
+  inspects the element's props instead (`src/ui/responsiveImage.serverProps.test.tsx`).
 - **Pictures, not icons.** Each column has an image field. The Figma illustrations are placeholder renders
   and are not baked into code; marketing uploads the final artwork in Studio.
 - **The link reuses the `button` object** (same as the resources block and the quote's story link) and is

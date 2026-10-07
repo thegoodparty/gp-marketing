@@ -104,8 +104,11 @@ export default async function Page({
 				r => r.positionLevel?.toUpperCase() === 'STATE',
 			);
 	const resolvedDates = await resolvePlaceRaceElectionDates(stateRaces);
+	// A state page has no places above it, so the offices list has one level and
+	// shows no Level dropdown.
 	const { offices: stateOffices, dataYears } = buildOfficeItemsFromPlaceRaces(stateRaces, resolvedDates, {
 		type: 'State',
+		level: 'state',
 		buildHref: race => buildPlaceRacePositionHref([state], race.slug),
 	});
 

@@ -5631,10 +5631,27 @@
           },
           "optional": true
         },
-        "field_headline": {
+        "listOfOfficesBlockDescription": {
           "type": "objectAttribute",
           "value": {
-            "type": "string"
+            "type": "object",
+            "attributes": {
+              "field_showDescription": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "boolean"
+                },
+                "optional": true
+              },
+              "block_description": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "block_summaryText"
+                },
+                "optional": true
+              }
+            }
           },
           "optional": true
         },

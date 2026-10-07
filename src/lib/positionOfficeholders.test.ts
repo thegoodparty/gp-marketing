@@ -137,6 +137,14 @@ describe('loadPositionOfficeholders', () => {
 		expect(people?.map(p => p.seatValue)).toEqual(['1', '3', '7', '9', '15']);
 	});
 
+	test('a race row without a district value does not stop the numbered seats from sorting', async () => {
+		const people = await loadPositionOfficeholders(
+			la,
+			deps({ getOfficeHoldersByPositionIdOrNull: async () => Promise.resolve([seat(9, { id: 'oh-at-large', personId: 'cccccccc-0000-4000-8000-000000000900', subAreaValue: null })]) }),
+		);
+		expect(people?.map(p => p.seatValue)).toEqual(['1', '3', '7', '9', '15', undefined]);
+	});
+
 	test('two seats with no linked person are two rows, not one', async () => {
 		const vacant = (district: number) => seat(district, { personId: null, officeTitle: 'city council member' });
 		const people = await loadPositionOfficeholders(

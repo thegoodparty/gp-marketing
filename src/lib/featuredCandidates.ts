@@ -5,7 +5,7 @@ import {
 	getPersonsByIds,
 	getRemovedPersonIds,
 } from '~/lib/electionsApi';
-import { isElectionDateBeforeToday, resolvePlaceRaceElectionDates } from '~/lib/electionsHelpers';
+import { getStateName, isElectionDateBeforeToday, resolvePlaceRaceElectionDates } from '~/lib/electionsHelpers';
 import { type NearbyOfficesTier, nearbyOfficesTiers, raceBelongsToTier } from '~/lib/nearbyOffices';
 import { classifyPartyFrom, isMajorParty, orderPartyNames } from '~/lib/party';
 import { cardAvatarUrl, pledgedFromSpine } from '~/lib/peopleProfile';
@@ -52,6 +52,20 @@ function locationLine(place: PlaceContext, ownCity: string | null | undefined): 
 	return ownCity ? `${ownCity}, ${place.state}` : null;
 }
 
+/**
+ * "Houston, TX", or just "Texas" when the place is the state itself: a statewide
+ * candidacy's place is the state, and "Indiana, IN" reads as a mistake (Emily, 2026-10-07).
+ */
+export function placeWithState(placeName: string, state: string): string {
+	return isStateName(placeName, state) ? placeName : `${placeName}, ${state}`;
+}
+
+function isStateName(placeName: string, state: string): boolean {
+	const name = placeName.trim().toLowerCase();
+	const code = state.trim().toLowerCase();
+	return name === code || name === getStateName(state).toLowerCase();
+}
+
 export function buildCandidateCards(
 	candidacies: Array<{ candidacy: CandidacyItem; race: PlaceRace; electionDate: string }>,
 	personsById: Map<string, PersonItem>,
@@ -70,7 +84,7 @@ export function buildCandidateCards(
 			personId,
 			name,
 			office: candidacy.positionName ?? race.normalizedPositionName ?? race.name ?? null,
-			location: candidacy.placeName && candidacy.state ? `${candidacy.placeName}, ${candidacy.state}` : locationLine(place, null),
+			location: candidacy.placeName && candidacy.state ? placeWithState(candidacy.placeName, candidacy.state) : locationLine(place, null),
 			href,
 			avatarUrl: cardAvatarUrl(personId, candidacy.image ?? person?.headshotUrl ?? null, removedPersonIds),
 			isPledged: pledgedFromSpine(person, candidacy.party),

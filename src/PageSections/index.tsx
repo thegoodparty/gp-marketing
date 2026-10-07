@@ -228,19 +228,20 @@ export type SectionOverrides = {
 		/** Persona tag pills shown above the name (e.g. "Candidate", "Incumbent"). */
 		tags?: string[];
 		/**
-		 * Attribution line under the office. `empowered` → "Empowered by
-		 * GoodParty.org" (the /candidate framing); the three `pledge` variants are
-		 * the /people ones and state whether the person has taken the GoodParty.org
-		 * pledge, or is ineligible for it as a major-party affiliate; `none` →
-		 * nothing. When omitted, falls back to `isEmpowered`.
+		 * What the hero says about the person. `empowered` → the "Empowered by
+		 * GoodParty.org" line (the /candidate framing); the three `pledge` variants
+		 * are the /people ones and render the pledge callout, stating whether the
+		 * person has taken the GoodParty.org Pledge, or is ineligible for it as a
+		 * major-party affiliate; `none` → nothing. When omitted, falls back to
+		 * `isEmpowered`.
 		 */
 		attribution?: 'empowered' | 'pledged' | 'notPledged' | 'pledgeIneligible' | 'none';
 		/**
-		 * When set, the attribution line links here — on /people, the in-page
-		 * anchor for the pledge band. Only pass it when the destination is
-		 * actually on the page; the hero cannot tell.
+		 * Who the page is about, for the intro paragraph and the callout sentence
+		 * ("This candidate…" / "This elected official…"). Only /people sets it; the
+		 * legacy /candidate pages leave it out and render no intro.
 		 */
-		attributionHref?: string;
+		subject?: 'candidate' | 'elected official';
 		/** GoodParty.org logo on the portrait and beside the attribution line. */
 		showBrandMark?: boolean;
 	};

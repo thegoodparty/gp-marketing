@@ -7126,6 +7126,29 @@
             "value": "component_profileHero"
           }
         },
+        "profileHeroContent": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_introCandidates": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_introOfficeholders": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
         "profileHeroDesignSettings": {
           "type": "objectAttribute",
           "value": {

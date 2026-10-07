@@ -3,27 +3,29 @@ import { JSDOM } from 'jsdom';
 import * as React from 'react';
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import { ATTRIBUTION_COPY } from '~/ui/_lib/attributionCopy';
+import { PLEDGE_CALLOUT_LINK_LABEL, pledgeCalloutCopy } from '~/ui/_lib/attributionCopy';
 
 /**
- * Pins the three hero attribution lines word for word (marketing, 2026-08-17,
- * approved by Emily and Jack; recased to sentence case 2026-09-15 by Emily):
- *   pledged          → "Has taken the GoodParty.org Pledge"
- *   notPledged       → "Has not taken the GoodParty.org Pledge"
- *   pledgeIneligible → "Ineligible for the GoodParty.org Pledge due to partisan affiliation"
+ * Pins the hero's pledge callout word for word (Voter Guide frames; Emily,
+ * 2026-10-06, replacing the one-line status approved 2026-08-17):
+ *   pledged          → "This candidate took the GoodParty.org Pledge, promising to
+ *                       serve people first, independent of both major parties and
+ *                       big-money interests."
+ *   notPledged       → "This candidate has not yet taken the GoodParty.org Pledge to
+ *                       serve people first, independent of both major parties and
+ *                       big-money interests."
+ *   pledgeIneligible → "This candidate is ineligible for the GoodParty.org Pledge due
+ *                       to partisan affiliation."
+ * with "candidate" swapped for "elected official" on an officeholder's page, and
+ * "Read the full pledge" opening the pledge pop-up after each sentence.
  *
  * These are statements about named real people, so the wording is not ours to
  * tidy: the negative line says the person has not taken it rather than softening
  * to something vaguer, and the partisan line names the reason rather than
- * implying a choice. Only the casing changed in September; every assertion the
- * lines make is the one marketing approved in August.
+ * implying a choice.
  *
- * "GoodParty.org Pledge" stays title case inside all three — it is the pledge's
- * name, and it is also the only part of the line that carries the link to the
- * pledge band (see the linking suite below).
- *
- * `personSectionOverrides.test` pins which state gets which line; this pins what
- * those lines say, which nothing else reads.
+ * `personSectionOverrides.test` pins which state gets which sentence and which
+ * subject; this pins what those sentences say, which nothing else reads.
  *
  * Also pins that the /candidate framing ("Empowered by GoodParty.org") is
  * untouched — it shares this component and was not part of the request.
@@ -37,6 +39,7 @@ const DOM_GLOBALS = [
 	'Element',
 	'HTMLElement',
 	'HTMLAnchorElement',
+	'HTMLButtonElement',
 	'DocumentFragment',
 	'DOMRect',
 	'Event',
@@ -103,126 +106,189 @@ async function renderHero(props: Record<string, unknown>) {
 	});
 }
 
+const MARK_SELECTOR = "svg[viewBox='35 42 137 116']";
+
+function hero(): Element {
+	const el = document.querySelector("[data-component='ProfileHero']");
+	if (!el) throw new Error('expected the hero to render');
+	return el;
+}
+
+function callout(): Element | null {
+	return hero().querySelector("[data-component='ProfileHeroPledgeCallout']");
+}
+
+/** The callout's sentence, without the pop-up link that follows it. */
+function calloutSentence(): string {
+	const box = callout();
+	if (!box) throw new Error('expected the pledge callout to render');
+	const paragraph = box.querySelector('p');
+	if (!paragraph) throw new Error('expected the callout sentence');
+	return [...paragraph.childNodes]
+		.filter(node => !(node instanceof HTMLButtonElement))
+		.map(node => node.textContent ?? '')
+		.join('')
+		.trim();
+}
+
+function calloutButton(): HTMLButtonElement {
+	const button = callout()?.querySelector('button');
+	if (!button) throw new Error('expected the pop-up link');
+	return button;
+}
+
+/** The trigger's own words, without the arrow icon's accessible title. */
+function calloutButtonLabel(): string {
+	return [...calloutButton().childNodes]
+		.filter(node => node.nodeType === Node.TEXT_NODE)
+		.map(node => node.textContent ?? '')
+		.join('')
+		.trim();
+}
+
 /**
- * The attribution line is whichever text sits under the office line — read off
- * the rendered hero rather than a test id, so a refactor that drops the line
- * fails here instead of passing against a selector nothing renders.
+ * The legacy attribution line is whichever text sits under the office line —
+ * read off the rendered hero rather than a test id, so a refactor that drops the
+ * line fails here instead of passing against a selector nothing renders.
  */
 function attributionText(): string {
-	const hero = document.querySelector("[data-component='ProfileHero']");
-	if (!hero) throw new Error('expected the hero to render');
-	const line = [...hero.querySelectorAll('span, p')]
+	const line = [...hero().querySelectorAll('span, p')]
+		.filter(node => !node.closest("[data-component='ProfileHeroPledgeCallout']"))
 		.map(node => node.textContent?.trim() ?? '')
 		.find(text => text.includes('GoodParty.org'));
 	return line ?? '';
 }
 
 /**
- * The GoodParty.org logo, by the viewBox of its artwork — the hero also renders
- * an anonymous-avatar svg when there is no headshot, so a bare `svg` count would
- * never reach zero.
+ * The GoodParty.org mark on the portrait, by the viewBox of its artwork — the
+ * hero also renders an anonymous-avatar svg when there is no headshot, so a bare
+ * `svg` count would never reach zero. The mark inside the callout is counted
+ * separately: it follows the pledge, not the claim.
  */
-function markCount(): number {
-	return document.querySelectorAll("[data-component='ProfileHero'] svg[viewBox='35 42 137 116']").length;
+function portraitMarkCount(): number {
+	return [...hero().querySelectorAll(MARK_SELECTOR)].filter(svg => !svg.closest("[data-component='ProfileHeroPledgeCallout']")).length;
 }
 
-describe('the hero pledge lines say exactly what marketing approved', () => {
-	test('a person who has taken the pledge', async () => {
+function calloutMarkCount(): number {
+	return callout()?.querySelectorAll(MARK_SELECTOR).length ?? 0;
+}
+
+describe('the hero pledge callout says exactly what marketing approved', () => {
+	test('a candidate who has taken the pledge', async () => {
 		await renderHero({ attribution: 'pledged', showBrandMark: true });
 
-		expect(attributionText()).toBe('Has taken the GoodParty.org Pledge');
+		expect(calloutSentence()).toBe(
+			'This candidate took the GoodParty.org Pledge, promising to serve people first, independent of both major parties and big-money interests.',
+		);
 	});
 
-	test('a person who has not', async () => {
+	test('a candidate who has not', async () => {
 		await renderHero({ attribution: 'notPledged', showBrandMark: false });
 
-		expect(attributionText()).toBe('Has not taken the GoodParty.org Pledge');
+		expect(calloutSentence()).toBe(
+			'This candidate has not yet taken the GoodParty.org Pledge to serve people first, independent of both major parties and big-money interests.',
+		);
 	});
 
-	test('a major-party affiliate, who cannot', async () => {
+	test('a major-party candidate, who cannot', async () => {
 		await renderHero({ attribution: 'pledgeIneligible', showBrandMark: false });
 
-		expect(attributionText()).toBe('Ineligible for the GoodParty.org Pledge due to partisan affiliation');
+		expect(calloutSentence()).toBe('This candidate is ineligible for the GoodParty.org Pledge due to partisan affiliation.');
 	});
 
-	test('a removed profile says nothing about the pledge either way', async () => {
+	test('an elected official gets the same sentences about an elected official', async () => {
+		await renderHero({ attribution: 'pledged', pledgeSubject: 'elected official' });
+		expect(calloutSentence()).toBe(
+			'This elected official took the GoodParty.org Pledge, promising to serve people first, independent of both major parties and big-money interests.',
+		);
+
+		await renderHero({ attribution: 'notPledged', pledgeSubject: 'elected official' });
+		expect(calloutSentence()).toBe(
+			'This elected official has not yet taken the GoodParty.org Pledge to serve people first, independent of both major parties and big-money interests.',
+		);
+
+		await renderHero({ attribution: 'pledgeIneligible', pledgeSubject: 'elected official' });
+		expect(calloutSentence()).toBe('This elected official is ineligible for the GoodParty.org Pledge due to partisan affiliation.');
+	});
+
+	test('the sentence on screen is the shared copy, split around the bold pledge name without losing a word', async () => {
+		for (const mode of ['pledged', 'notPledged', 'pledgeIneligible'] as const) {
+			await renderHero({ attribution: mode });
+			expect(calloutSentence()).toBe(pledgeCalloutCopy(mode, 'candidate'));
+			expect(callout()?.querySelector('.font-semibold')?.textContent).toBe('GoodParty.org Pledge');
+		}
+	});
+
+	test('a profile with nothing to say renders no callout', async () => {
 		await renderHero({ attribution: 'none', showBrandMark: false });
 
+		expect(callout()).toBeNull();
 		expect(attributionText()).toBe('');
 	});
 
-	test('the /candidate pages keep the empowerment line they always had', async () => {
+	test('the /candidate pages keep the empowerment line they always had, and no callout', async () => {
 		await renderHero({ isEmpowered: true });
 
 		expect(attributionText()).toBe('Empowered by GoodParty.org');
-	});
-});
-
-describe('the GoodParty.org mark is independent of the line', () => {
-	test('a claimed profile carries the mark even when the line is negative', async () => {
-		await renderHero({ attribution: 'notPledged', showBrandMark: true });
-
-		expect(attributionText()).toBe('Has not taken the GoodParty.org Pledge');
-		expect(markCount()).toBeGreaterThan(0);
-	});
-
-	test('an unclaimed profile carries none, however affirmative the line', async () => {
-		await renderHero({ attribution: 'pledged', showBrandMark: false });
-
-		expect(attributionText()).toBe('Has taken the GoodParty.org Pledge');
-		expect(markCount()).toBe(0);
+		expect(callout()).toBeNull();
 	});
 });
 
 /**
- * Only the pledge's name carries the link (marketing, 2026-09-15). The sentence
- * asserts something about a named person; the link points at the pledge, so
- * linking the whole sentence would read as if the assertion itself were the
- * destination. Asserted on the anchor's own text rather than on the line, since
- * the line's text is identical either way.
+ * "Read the full pledge" opens the pledge pop-up (the same one the featured
+ * candidates and position pages use); there is no pledge page on the site, so
+ * it is a button, not a link, and nothing in the callout navigates anywhere.
  */
-describe('only "GoodParty.org Pledge" is the link', () => {
-	const PLEDGE_ANCHOR = '#goodparty-pledge';
-
-	function anchors(): { text: string; href: string | null }[] {
-		const hero = document.querySelector("[data-component='ProfileHero']");
-		if (!hero) throw new Error('expected the hero to render');
-		return [...hero.querySelectorAll('a')].map(a => ({
-			text: a.textContent?.trim() ?? '',
-			href: a.getAttribute('href'),
-		}));
-	}
-
+describe('"Read the full pledge" opens the pop-up', () => {
 	for (const mode of ['pledged', 'notPledged', 'pledgeIneligible'] as const) {
-		test(`${mode} links the pledge name and nothing more`, async () => {
-			await renderHero({ attribution: mode, attributionHref: PLEDGE_ANCHOR });
+		test(`${mode} carries the pop-up trigger and no link`, async () => {
+			await renderHero({ attribution: mode });
 
-			expect(anchors()).toEqual([{ text: 'GoodParty.org Pledge', href: PLEDGE_ANCHOR }]);
-		});
-
-		test(`${mode} still reads as the full approved sentence`, async () => {
-			await renderHero({ attribution: mode, attributionHref: PLEDGE_ANCHOR });
-
-			// Splitting the line around the anchor must not drop or duplicate words.
-			expect(attributionText()).toBe(ATTRIBUTION_COPY[mode]);
+			expect(calloutButtonLabel()).toBe(PLEDGE_CALLOUT_LINK_LABEL);
+			expect(calloutButton().getAttribute('aria-haspopup')).toBe('dialog');
+			expect(callout()?.querySelectorAll('a')).toHaveLength(0);
 		});
 	}
+});
 
-	test('without an href the line carries no link at all', async () => {
-		await renderHero({ attribution: 'pledged' });
+describe('the GoodParty.org marks', () => {
+	test('the callout carries the mark only when the person took the pledge', async () => {
+		await renderHero({ attribution: 'pledged', showBrandMark: false });
+		expect(calloutMarkCount()).toBe(1);
 
-		expect(anchors()).toEqual([]);
-		expect(attributionText()).toBe('Has taken the GoodParty.org Pledge');
+		await renderHero({ attribution: 'notPledged', showBrandMark: true });
+		expect(calloutMarkCount()).toBe(0);
+
+		await renderHero({ attribution: 'pledgeIneligible', showBrandMark: true });
+		expect(calloutMarkCount()).toBe(0);
 	});
 
-	/**
-	 * The /candidate empowerment line has no pledge phrase in it. It shares this
-	 * component, so an href must not fall back to linking the whole sentence.
-	 */
-	test('the empowerment line is never linked, even when an href is passed', async () => {
-		await renderHero({ isEmpowered: true, attributionHref: PLEDGE_ANCHOR });
+	test('the portrait mark follows the claim, not the pledge', async () => {
+		// A claimed profile carries the mark even when the sentence is negative.
+		await renderHero({ attribution: 'notPledged', showBrandMark: true });
+		expect(portraitMarkCount()).toBeGreaterThan(0);
 
-		expect(anchors()).toEqual([]);
-		expect(attributionText()).toBe('Empowered by GoodParty.org');
+		// An unclaimed profile carries none, however affirmative the sentence.
+		await renderHero({ attribution: 'pledged', showBrandMark: false });
+		expect(portraitMarkCount()).toBe(0);
+	});
+});
+
+describe('the intro paragraph', () => {
+	test('renders between the office line and the callout when supplied', async () => {
+		await renderHero({ attribution: 'pledged', intro: 'Learn about Example Person’s candidacy and positions on the issues.' });
+
+		const paragraphs = [...hero().querySelectorAll('p')].map(p => p.textContent?.trim() ?? '');
+		const introAt = paragraphs.findIndex(text => text.startsWith('Learn about Example Person'));
+		const officeAt = paragraphs.findIndex(text => text === 'City Council');
+		const calloutAt = paragraphs.findIndex(text => text.startsWith('This candidate took'));
+		expect(introAt).toBeGreaterThan(officeAt);
+		expect(calloutAt).toBeGreaterThan(introAt);
+	});
+
+	test('renders nothing without one (the legacy /candidate pages)', async () => {
+		await renderHero({ isEmpowered: true });
+
+		expect([...hero().querySelectorAll('p')].some(p => p.textContent?.startsWith('Learn about'))).toBe(false);
 	});
 });

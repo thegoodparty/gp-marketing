@@ -38,3 +38,30 @@ export const ATTRIBUTION_COPY: Record<Exclude<AttributionMode, 'none'>, string> 
  * pledge's name, not prose.
  */
 export const ATTRIBUTION_PLEDGE_PHRASE = 'GoodParty.org Pledge';
+
+/**
+ * The pledge callout that replaced the one-line status in the Profile Hero
+ * (Voter Guide frames, Emily, 2026-10-06). Still a statement about a named
+ * person, so the same rules hold: the wording is marketing's, not ours to tidy,
+ * and the negative and ineligible lines say exactly what they say.
+ *
+ * The frames only draw candidates. For someone who holds or held office the
+ * subject is "elected official" (Emily, 2026-10-06); the rest of each sentence
+ * is unchanged.
+ */
+export type PledgeCalloutMode = Extract<AttributionMode, 'pledged' | 'notPledged' | 'pledgeIneligible'>;
+
+export type PledgeSubject = 'candidate' | 'elected official';
+
+export const PLEDGE_CALLOUT_LINK_LABEL = 'Read the full pledge';
+
+export function pledgeCalloutCopy(mode: PledgeCalloutMode, subject: PledgeSubject): string {
+	switch (mode) {
+		case 'pledged':
+			return `This ${subject} took the ${ATTRIBUTION_PLEDGE_PHRASE}, promising to serve people first, independent of both major parties and big-money interests.`;
+		case 'notPledged':
+			return `This ${subject} has not yet taken the ${ATTRIBUTION_PLEDGE_PHRASE} to serve people first, independent of both major parties and big-money interests.`;
+		case 'pledgeIneligible':
+			return `This ${subject} is ineligible for the ${ATTRIBUTION_PLEDGE_PHRASE} due to partisan affiliation.`;
+	}
+}

@@ -744,7 +744,7 @@ describe('getCandidacies asks for each candidacy\u2019s race', () => {
 		globalThis.fetch = (async () => {
 			called = true;
 			return new Response('[]');
-		}) as typeof fetch;
+		}) as unknown as typeof fetch;
 		expect(await getCandidacies({})).toEqual([]);
 		expect(called).toBe(false);
 	});

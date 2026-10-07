@@ -164,6 +164,76 @@ Note for whoever wires up the links: a case study that lives as an `article` can
 the internal link picker, but `/people/*` profiles are rendered from election-api and have no
 Sanity document, so a profile link has to be the External option with a pasted path.
 
+**Revision, 2026-10-06 (Emily): quotes picked by the page's state.** Marketing keeps a sheet of
+quotes organised by state and wants each location and position page to show its own state's
+quotes. The block stays content-only in the sense that every quote still comes from the editor's
+chosen collection, but it now also reads the page's state through `SectionOverrides`
+(`component_testimonialBlockWithLink.stateName`, set by both override builders), so it is the first
+quote block with a data seam. How it works, and the decisions behind it:
+
+- **The state lives on the quote** (`field_quoteState`, a dropdown of the 50 states and DC, storing
+  the full name so it compares directly with the page's `stateName`). Same reasoning as the result
+  and link fields above: per-quote data goes on the `quote` object, so it shows on every quote in
+  Studio and is optional everywhere. One tagged collection beats a collection per state (33 to
+  maintain by hand); the alternative, a list on the block pairing states with collections, was
+  considered and set aside unless per-state ordering ever needs it.
+- **The behaviour is behind a toggle** on the block's design settings
+  (`field_filterQuotesByPageState`, off by default), so the block on any page today is unchanged.
+- **Fill order** (`src/lib/nearestStates.ts`): the page's state's quotes, then the nearest states'
+  quotes closest first, then quotes with no state. Nearness is distance between state centres, not
+  shared borders: borders leave Alaska and Hawaii with nothing, and a state whose neighbours are all
+  empty (Wyoming today) would need a second rule. Within a group the collection's order is kept.
+- **How many**: "Max Number to Display", or 3 when it is blank, so a state with one quote does not
+  drag in the whole country. Pages with no state (the Voter Hub, landing pages) show the collection
+  as is, and a collection with no tagged quotes is shown untouched, so the block never goes empty
+  because of the toggle. `src/lib/nearestStates.test.ts` and
+  `src/PageSections/testimonialBlockWithLinkSection.test.tsx` pin all of this.
+- **The content step is separate**: the sheet's quotes have to exist as tagged `quotes` documents in
+  one collection, loaded after the Studio deploys (see `docs/sanity-api-writes.md`). Where a person
+  already has a quote with different wording, the sheet's wording goes in as a new quote so the
+  pages using the old one do not change.
+**Featured cities carousel** (location pages) — extended `component_featuredCitiesBlock`,
+data-backed. The hypothesis held: the block existed and its `LocationCard` was already the Figma
+card. Two things were missing, and only the second was real work.
+
+- **The layout.** It was a static three-across grid; the design is a carousel. The chrome came
+  free from `Carousel.tsx` (`PrevButton`/`NextButton`/`useDotButton`/`usePrevNextButtons` and
+  `CarouselIndicator`) exactly as `component_testimonialBlockWithLink` borrows it. Pagination
+  pills are mobile-only per the design; desktop navigates with the arrows.
+- **The scope.** The block showed the top three cities *nationally* on every page it appeared on,
+  because it self-fetched `/v1/places/most-elections`. It now takes its cities from
+  `SectionOverrides`, populated per page by `getFeaturedCities` (five cards, fewer when a place
+  has fewer cities): the cities of a county on a county page, the surrounding county's other
+  cities on a city page, every city in the state on a state page, and nothing on a district page.
+  Pages that set no override — /elections, landing pages — keep the national list, which is why
+  `buildElectionsIndexSectionOverrides` always sets `cities`, to `[]` if it has none. An unset
+  value would silently put national cities back on a state page.
+
+Three things that came out of it and affect other components in the batch:
+
+- **`/v1/places/most-elections` cannot be scoped.** It takes `count` and nothing else, ranks by
+  all-time race count, and excludes only states (`mtfcc <> 'G4000'`), so counties can come back
+  as "cities". That is why the scoped counts are computed here instead: a county read with
+  `includeChildRaces=true` returns its cities with their races in one call, but a state has no
+  such read (cities are its grandchildren), so a state page sweeps every city and town in the
+  state. The sweep is cached per state and shared by every page in it, but it is still the
+  expensive half of this block, and it is the same aggregate-by-place-and-year that the hero
+  stat cards, the candidates rows and nearby offices all want from election-api.
+- **`/v1/places` supports `includeChildRaces`**, which is not obvious and is not what
+  `includeRaces` does: `includeRaces` returns the parent's races, `includeChildRaces` returns
+  each child's. Both need `includeChildren` for the children to appear at all.
+- **"Open Elections" on a card means that city's next election cycle** — races this year when
+  it has any, else the soonest year ahead — not the page's year and not an all-time total.
+  Counting every city against the page's `defaultYear` would report 0 for a city whose own cycle
+  falls a year later, and most cities would tie at zero. Cities with nothing upcoming are dropped
+  rather than shown as "0 Open Elections". The exception is /elections, still on the national
+  endpoint's all-time `race_count`; settle that when the aggregate lands.
+
+Two things left alone deliberately: the state silhouettes in `public/icons/states/` are wrong for
+some states (`tn.svg`, `ca.svg` and `fl.svg` are square-ish rather than the real outline), which
+predates this work and needs the assets redrawn, not code; and the manual city list in Studio was
+kept as the no-data fallback rather than deleted, because deleting the field would delete the
+content already in it.
 **List of Offices Block** (location pages) — **Extend**, not a new block. The existing
 `component_listOfOfficesBlock` already had the bones of the design: cream section, white bordered
 rows, the level tag, Type / Position / date columns, the arrow, the year dropdown and the mobile
@@ -226,77 +296,7 @@ Revised after design feedback (Emily, 2026-10-05), in the same draft PR:
   "Read the full pledge" link because there is no pledge page on the live site, as the featured
   candidates callout found; add the link in Studio when the page exists.
 - **Figma's 20px body is rendered at the live 18px `body-1`**, per the batch's settled scale.
-**Revision, 2026-10-06 (Emily): quotes picked by the page's state.** Marketing keeps a sheet of
-quotes organised by state and wants each location and position page to show its own state's
-quotes. The block stays content-only in the sense that every quote still comes from the editor's
-chosen collection, but it now also reads the page's state through `SectionOverrides`
-(`component_testimonialBlockWithLink.stateName`, set by both override builders), so it is the first
-quote block with a data seam. How it works, and the decisions behind it:
 
-- **The state lives on the quote** (`field_quoteState`, a dropdown of the 50 states and DC, storing
-  the full name so it compares directly with the page's `stateName`). Same reasoning as the result
-  and link fields above: per-quote data goes on the `quote` object, so it shows on every quote in
-  Studio and is optional everywhere. One tagged collection beats a collection per state (33 to
-  maintain by hand); the alternative, a list on the block pairing states with collections, was
-  considered and set aside unless per-state ordering ever needs it.
-- **The behaviour is behind a toggle** on the block's design settings
-  (`field_filterQuotesByPageState`, off by default), so the block on any page today is unchanged.
-- **Fill order** (`src/lib/nearestStates.ts`): the page's state's quotes, then the nearest states'
-  quotes closest first, then quotes with no state. Nearness is distance between state centres, not
-  shared borders: borders leave Alaska and Hawaii with nothing, and a state whose neighbours are all
-  empty (Wyoming today) would need a second rule. Within a group the collection's order is kept.
-- **How many**: "Max Number to Display", or 3 when it is blank, so a state with one quote does not
-  drag in the whole country. Pages with no state (the Voter Hub, landing pages) show the collection
-  as is, and a collection with no tagged quotes is shown untouched, so the block never goes empty
-  because of the toggle. `src/lib/nearestStates.test.ts` and
-  `src/PageSections/testimonialBlockWithLinkSection.test.tsx` pin all of this.
-- **The content step is separate**: the sheet's quotes have to exist as tagged `quotes` documents in
-  one collection, loaded after the Studio deploys (see `docs/sanity-api-writes.md`). Where a person
-  already has a quote with different wording, the sheet's wording goes in as a new quote so the
-  pages using the old one do not change.
-
-**Featured cities carousel** (location pages) — extended `component_featuredCitiesBlock`,
-data-backed. The hypothesis held: the block existed and its `LocationCard` was already the Figma
-card. Two things were missing, and only the second was real work.
-
-- **The layout.** It was a static three-across grid; the design is a carousel. The chrome came
-  free from `Carousel.tsx` (`PrevButton`/`NextButton`/`useDotButton`/`usePrevNextButtons` and
-  `CarouselIndicator`) exactly as `component_testimonialBlockWithLink` borrows it. Pagination
-  pills are mobile-only per the design; desktop navigates with the arrows.
-- **The scope.** The block showed the top three cities *nationally* on every page it appeared on,
-  because it self-fetched `/v1/places/most-elections`. It now takes its cities from
-  `SectionOverrides`, populated per page by `getFeaturedCities` (five cards, fewer when a place
-  has fewer cities): the cities of a county on a county page, the surrounding county's other
-  cities on a city page, every city in the state on a state page, and nothing on a district page.
-  Pages that set no override — /elections, landing pages — keep the national list, which is why
-  `buildElectionsIndexSectionOverrides` always sets `cities`, to `[]` if it has none. An unset
-  value would silently put national cities back on a state page.
-
-Three things that came out of it and affect other components in the batch:
-
-- **`/v1/places/most-elections` cannot be scoped.** It takes `count` and nothing else, ranks by
-  all-time race count, and excludes only states (`mtfcc <> 'G4000'`), so counties can come back
-  as "cities". That is why the scoped counts are computed here instead: a county read with
-  `includeChildRaces=true` returns its cities with their races in one call, but a state has no
-  such read (cities are its grandchildren), so a state page sweeps every city and town in the
-  state. The sweep is cached per state and shared by every page in it, but it is still the
-  expensive half of this block, and it is the same aggregate-by-place-and-year that the hero
-  stat cards, the candidates rows and nearby offices all want from election-api.
-- **`/v1/places` supports `includeChildRaces`**, which is not obvious and is not what
-  `includeRaces` does: `includeRaces` returns the parent's races, `includeChildRaces` returns
-  each child's. Both need `includeChildren` for the children to appear at all.
-- **"Open Elections" on a card means that city's next election cycle** — races this year when
-  it has any, else the soonest year ahead — not the page's year and not an all-time total.
-  Counting every city against the page's `defaultYear` would report 0 for a city whose own cycle
-  falls a year later, and most cities would tie at zero. Cities with nothing upcoming are dropped
-  rather than shown as "0 Open Elections". The exception is /elections, still on the national
-  endpoint's all-time `race_count`; settle that when the aggregate lands.
-
-Two things left alone deliberately: the state silhouettes in `public/icons/states/` are wrong for
-some states (`tn.svg`, `ca.svg` and `fl.svg` are square-ish rather than the real outline), which
-predates this work and needs the assets redrawn, not code; and the manual city list in Studio was
-kept as the no-data fallback rather than deleted, because deleting the field would delete the
-content already in it.
 **More about location container / Location editorial block** (location pages) — built as
 `component_locationEditorialBlock`. The inventory below calls it content-only; it is not. Treat
 that row as corrected.
@@ -460,12 +460,6 @@ Decisions that came out of it:
 - **Noted and not acted on** (2026-10-06): "Election Date" stays sentence case; the mobile
   frame places the count both above and below the date on different cards, and the block
   follows the above-the-date cards, as the offices list does.
-- **Candidates are listed pledged first, then the unpledged with no major party, then Republicans
-  and Democrats**, stable inside each group (Emily, 2026-10-06; the featured candidates block's rule).
-  `rankPositionCandidates` in `src/lib/positionHeroCandidates.ts` orders the one list the hero's
-  "On the ballot" card (first four) and the position content block (all of it) both read, so the two
-  can never disagree. Before this, a pledged candidate could sit seventh in a nonpartisan field and
-  never reach the hero's card.
 
 Waiting on data: races are attached to places, and federal races are not attached to any place,
 so a Federal tag can appear only once election-api exposes them per place. True proximity
@@ -593,6 +587,46 @@ Decisions that came out of it:
 The block reads `tokens` like the other content blocks, so the location templates fill `[Location]` in the
 heading, intro, column text and link labels.
 
+**Elections Search Hero** (Elections page) — extended, not rebuilt. `component_electionsSearchHero`
+already existed and is live on exactly one page, the Elections landing page, as a centred dark hero with
+a logo, a state dropdown and a button to that state's page. The redesign (Figma 2035:1471 desktop,
+2035:2402 mobile) is a light two-column hero: left-aligned headline and body over a city or county
+search, and a photo carousel with a floating quote card beside them. Marketing chose to redesign the
+block in place rather than add a second hero (Emily, 2026-09-29), so this PR is held as a draft and
+batched with the rest of the Elections page redesign.
+
+Decisions that came out of it and affect other blocks in the batch:
+
+- **The carousel clips sideways only.** `overflow-hidden` on the viewport cut the photo's and quote
+  card's shadows off in a straight line below and beside the photo (Emily, 2026-10-07, on the live
+  page). The viewport now uses `overflow-x: clip` with a 2.5rem clip margin, and each slide carries
+  2.5rem of empty left padding (the track pulls the first one back by the same amount), so the
+  margin only ever reveals that gap and never a neighbouring slide.
+- **The search is one component now.** The city-or-county search that lived inside
+  `ElectionsNearYouBlock` (Google Places suggestions, the resolve-place lookup, the analytics events,
+  the navigation) was pulled out into `src/ui/ElectionsNearYouSearch.tsx`, and both blocks render it.
+  Any other block in the batch that wants "the same search bar" (the Voter Hub video hero, for one)
+  should render that component, not copy the form. It takes a `placement` string so the Viewed,
+  Completed and Errored events can tell the blocks apart, and `layout` / `appearance` variants for the
+  two looks the designs draw (the Near You pill with a map pin, the hero's squared field with a search
+  icon). The placeholder stays "Enter your city or county" on both, for the reason recorded above.
+- **The carousel content is block-local, not the quote library.** Slides live on the hero as a
+  repeatable list (photo, quote, and a `ref_quoteBy` person for the name, title and avatar), so an
+  editor adds as many as they want and picks a large photo per slide. The quote library was rejected
+  because a person's profile picture is a small headshot and would be the only source for the 524px
+  square (Emily, 2026-09-29). A person with no profile picture gets a quote card with no avatar.
+- **Old fields were removed, not hidden.** The logo settings and background image had no home in the
+  new design, so the schema no longer declares them. Studio shows the leftover values on the live
+  document as unknown fields with a remove button; that is the one content cleanup the batch needs.
+  The background colour field stayed and the component still defaults to midnight, because the live
+  document was saved with that value and the redesign is cream; the editor switches it when the
+  batch goes live.
+- **Empty state is "text and search only".** With no slides the carousel column is left out and the
+  hero collapses to one column, which is exactly what the live document renders until slides are
+  added. `src/PageSections/electionsSearchHeroSection.test.tsx` pins it.
+- **Default text sizes do not exist here.** `typography.css` clears Tailwind's `--text-*` scale, so
+  `text-sm` and `text-base` are silently no-ops; a 14px label has to be `text-[0.875rem]`. The Near
+  You block's listbox already did this, which is how it was noticed.
 **Featured candidates/Representatives** (location pages) — built as
 `component_featuredCandidatesBlock`, data-backed. The Figma frame is named "Blog Block" on desktop and
 "Carousel Block" on mobile: a heading with prev/next arrows opposite it, a blue callout explaining the
@@ -680,6 +714,151 @@ candidacy or office for the card, e.g. `/v1/persons?placeSlug=tx/harris-county&i
 on the candidacy or office). With it, `pledgedCount` becomes the result's length, the carousel can
 switch from the ballot to the place, and the race budget goes away. Until then the budget still
 means a ballot with more than forty-eight upcoming races is only partly featured.
+
+**Profile hero** (every `/people` profile) — `component_profileHero`, an **Extend** of the block
+already on the Person Profile global. Revised after the Voter Guide feedback round (Emily,
+2026-10-06; frames 2139:26364 desktop and 2139:26634 mobile, plus the unclaimed pair
+2156:34361 / 2156:34632). Two things were added under the name and office:
+
+- **An intro paragraph** about the voter guide ("Learn about [candidate name]’s candidacy and
+  positions on the issues. This guide is built by GoodParty.org, …"). It is a Studio text field on
+  the block's new Text tab, one per subject, with the frame's copy as the preset in
+  `src/lib/profileHeroDefaults.ts`; a template saved before the field existed renders the preset.
+  The frames only draw candidates, so for someone who holds or held office the preset says
+  "public service" instead of "candidacy" (Emily, 2026-10-06).
+- **A pledge callout** replacing the one-line pledge status: a bordered box with one sentence and
+  a "Read the full pledge" link that opens `PledgeModal`, the pop-up the featured candidates and
+  position pages use (there is still no pledge page). The three sentences are marketing's and
+  live in `pledgeCalloutCopy` next to the older lines: "This candidate took the GoodParty.org
+  Pledge, promising to serve people first, independent of both major parties and big-money
+  interests." / "…has not yet taken the GoodParty.org Pledge to serve people first, …" / "…is
+  ineligible for the GoodParty.org Pledge due to partisan affiliation." The heart-and-star mark
+  sits in the box only when the person took the pledge. "Candidate" becomes "elected official"
+  for officeholders and past officeholders; someone serving and running keeps "candidate"
+  (`pledgeSubject` in `personSectionOverrides.tsx`).
+
+Decisions that came with it:
+
+- **Removed profiles (K/L) carry the same callout as if they were not removed** (Emily,
+  2026-10-06). The pledge flag is therefore no longer cleared on removal in `peopleProfile.ts`;
+  removal still strips the photo and the authored content, and the pledge band's "Take the pledge"
+  button stays off removed profiles: the page states the fact but does not invite someone who asked
+  us to stop publishing them to sign up (Emily, 2026-10-06).
+- **The hero no longer links down to the pledge band.** The callout explains the pledge through
+  its own pop-up, so the `attributionHref` override is gone. The band itself is unchanged and
+  still renders on every profile.
+- **The band's height follows the text column** instead of being fixed at 240px, so the taller
+  content (intro plus callout) cannot spill white text onto the cream. The portrait is anchored
+  to the bottom of the row and overflows the band by a fixed 48px (`md`) / 68px (`lg`) as the
+  frame draws it; `ProfileContentBlock`'s sidebar clearance moved with it (was 104/216).
+- **Live scale over the frame**, per the settled decision: the intro is `body-2`, whose ramp
+  (16 on the phone, 18 from 1280) happens to land on the frame's two fixed sizes, and the
+  content sits in the 1200px container rather than the frame's 1280. At 1440 the callout's
+  sentence therefore wraps to three lines where the frame fits two plus the link.
+
+Noted and not acted on: the frames redraw the band's gradient as a linear ramp with a shader
+layer. The request was the intro and the callout, so the fitted radial glow stays. The legacy
+`/candidate` route shares the component and is untouched: no intro, no callout, the "Empowered by
+GoodParty.org" line.
+
+**Breadcrumb block** (every election template and the two position landing pages) —
+`component_breadcrumbBlock`, an **Extend**, revised for the phone in the Voter Guide round
+(Emily, 2026-10-06; frames 2139:26708 profile and 2139:21609 position). Below `md` the trail
+shows its first and last crumb with a "..." between them, at the frames' sizes (Open Sans 14/20,
+6px gaps, 15px chevrons, 24px above and below); tapping the "..." reveals the rest in place.
+Every crumb stays in the DOM, so the links and the BreadcrumbList schema do not change. Desktop
+is untouched. The treatment is the `collapseOnMobile` switch on `Breadcrumbs`, turned on by the
+block's section wrapper and the two election page components that render the block directly; the
+blog article hero and the political-terms glossary share the component and were not in the round,
+so they keep the full trail.
+**Profile content block** (every `/people` profile) — `component_profileContentBlock`, an
+**Extend**. Revised in the same Voter Guide round (Emily, 2026-10-06; same frames as the hero,
+with the block itself at 2139:26748 phone / 2156:34712 unclaimed phone). The block has no content
+fields in Studio: everything inside it on a `/people` page is assembled in
+`src/components/people/personSectionOverrides.tsx` from election-api data, so all three changes
+are code, none is a template edit. Built on the hero PR's branch (#374), because both edit that
+file and the content block's clearance, and both wait for the `/people` batch (PR #375).
+
+- **A "Took the GoodParty.org Pledge" row in the siderail**, under Political Affiliation, with
+  the heart-and-star mark, for anyone the pledge rule affirms (the same `pledged` flag the hero
+  and the cards read). The frame puts "Signed on January 1, 2026" under it. **No pledge date
+  exists in the data**: election-api carries a yes/no flag only. Marketing's source for the date
+  is the HubSpot deal's closed-won date, to be carried onto the person record by the ETL the way
+  `isPledged` is (Emily, 2026-10-06). The site reads an optional `pledgedAt` on the person and
+  shows the row with its "Signed on" line when it is there; until then the row is not shown at all
+  (Emily, 2026-10-06: a heading with only the mark under it was not worth showing in the meantime). To settle with the data team before it ships: which deal when a person has several
+  (the earliest closed-won is the natural rule), whether closed-won is in fact when the pledge is
+  taken (if not, "Signed on" overstates it), and that the deal is joined to the person the way
+  "Confirmed Candidate" is.
+- **A disclaimer under the authored sections**: "These statements come from [name] and do not
+  reflect any positions or stances on individual issues held by GoodParty.org." as a 12px grey
+  caption. It closes the platform card (after Campaign Issues, or after Why I'm Running when the
+  owner wrote no issues), the About Me section (before Recent Experience, which shares the card),
+  and the in-office card (after Accomplishments, or after Top Priorities when there are none).
+  The frames only draw candidates, so the in-office card was Emily's call (2026-10-06): it is the
+  person's own words as much as the platform is. Claimed pages only: the unclaimed placeholders
+  are our copy, not the person's, and the unclaimed frame shows none. The name is the page's
+  display name; the frames show a first name, but splitting names is unreliable.
+- **A "What this symbol means" box above Other Candidates**: the heart-and-star mark, "Candidates
+  and elected officials with this symbol took the GoodParty.org Pledge, promising to serve people
+  first, independent of both major parties and big-money interests." and a "Read the full pledge"
+  link opening `PledgeModal`. Third-person copy, so it renders on every profile that has the list
+  (`PledgeSymbolCallout`, copy in `PLEDGE_SYMBOL_CALLOUT`). Nearby Officials is not in the frames
+  and gets no box.
+- **The cards, in the same round (Emily, 2026-10-06)**: a district pill beside the name
+  ("District 5"; above the name on the phone), the heart-and-star mark on every pledged person's
+  photo, and the lists showing three cards at a time with a "See more" button (`RelatedPeopleList`,
+  the Candidates block's reveal rule with the frame's label), on both rails. The pill reads the
+  feed's sub-area pair (`districtTag`: name and value, "Ward 3"): a nearby official's from their own
+  office row; the other candidates' from the subject's race, which the candidacy rows do not carry,
+  so the profile loader reads the race record once (`loadRaceDistrictTag`) and a miss leaves the
+  cards untagged. **Pledged and claimed are the same thing** (Emily, 2026-10-06), so the mark follows
+  the pledge flag on these cards (`showMark` on `CandidatesCard`), without the yellow frame the
+  legacy `isGoodPartyCandidate` treatment draws; the frames draw no frame, and the production
+  builders never set that flag anyway. The pledge line is unchanged.
+- **Rail order: pledged people first, then the unpledged with no major party, then Republicans and
+  Democrats** (Emily, 2026-10-06), the featured candidates block's rule, stable inside each group.
+  `rankRelatedPeople` in `personSectionOverrides.tsx`; the cards carry `majorParty` from the same
+  party rule the profile's own gating uses. It replaced the older "empowered first" sort, which the
+  production builders could never trigger.
+**GoodParty.org Pledge block** (person profile pages first; location and position pages once editors
+place it) — extended, not rebuilt: `component_goodPartyOrgPledge`, the Studio block "GoodParty.org
+Pledge". The Voter Guide frames (2156-34297 desktop, 2188-38249 mobile) show a centred heading and intro
+over three columns of icon, heading and sentence, no buttons anywhere, on midnight. The block already had
+the header, the cards, the mixed icon colours and the midnight background; it lacked a three-column
+layout, a way to carry no buttons, and any preset content, so an editor adding it got an empty form.
+
+Decisions that came out of it (Emily, 2026-10-06):
+
+- **The `/people` profile band is the primary target.** The frames live in the Voter Guide file, but the
+  block's one live placement is the Person Profile global, and marketing treats the profile pages as part
+  of the voter guide. The band changes there, not only on the election pages when they get it.
+- **Three columns is a third option in the existing Column Layout dropdown**, and the preset for a new
+  block. That dropdown (`field_columnLayout12Columns`) is used by this block alone, so the new option
+  reaches nothing else. Two columns from `md`, three from `lg`, stacked below. A block saved without a
+  value keeps rendering two columns, pinned in `src/PageSections/goodPartyOrgPledgeLayout.test.tsx`.
+- **Card buttons are gone.** The Button field on each pledge card is removed from the schema and the
+  render. The section-level Buttons list on the Text tab stays, empty by default, because the `/people`
+  band supplies one button per state through it ("Take the pledge" or "Learn more"). The retired
+  Candidate Profile global still carries card buttons, which Studio now shows as an unknown field.
+- **Studio pre-fills the block.** `src/lib/goodPartyOrgPledgeDefaults.ts` holds the heading, the intro,
+  the three cards (Independent / People First / Anti-Corruption), midnight, mixed icon colours and three
+  columns; the schema's `initialValue` and the person-profile code seed both read it so they cannot
+  drift. The frame cuts the Anti-Corruption sentence off mid-way, so the full sentence that was already
+  live is used. The frame also underlines "GoodParty.org" as a link to the homepage; that was left out
+  of the preset (it is our own homepage, and the round was about removing links). An editor can still
+  link it in Studio.
+- **Sizes follow the live scale.** `heading-lg` with `max-md:text-heading-md` (48 → 32, as the editorial
+  and illustrated columns blocks do), intro `body-1`, card heading `subtitle-1`, sentence `body-2`.
+  Measured at 1440 and 390: the frame's 32px line-height on the card heading and 28px on the sentence
+  are not in the scale and were not chased.
+
+Content step that code cannot do: live `/people` pages render the Person Profile global template from
+Sanity, not the code seed (`resolveElectionTemplate` goes custom → global → code default), and that
+document explicitly says 1 Column, "People-First" and the earlier intro. After this code deploys, the
+template's pledge block needs Column Layout set to 3 Columns and its copy brought in line with the
+preset, or profiles keep the single column. Code first: production does not know the 3 Columns value
+until it ships, so a draft saved earlier previews as two columns.
 
 **Elections Position Content Block: Siderail, Badge callout, Filter by seat/district,
 Candidates/Representatives rows, "Who's currently in office", Branded CTA with icon, 3-column icon
@@ -791,188 +970,6 @@ Noted and not acted on: the pre-filing desktop frame still lists the "On this pa
 people-first order; the block follows the sections as rendered instead. The frames prefix the
 officeholder meta line with the office name ("City Council · Independent · …"); the line stays
 party and term only.
-
-**Profile hero** (every `/people` profile) — `component_profileHero`, an **Extend** of the block
-already on the Person Profile global. Revised after the Voter Guide feedback round (Emily,
-2026-10-06; frames 2139:26364 desktop and 2139:26634 mobile, plus the unclaimed pair
-2156:34361 / 2156:34632). Two things were added under the name and office:
-
-- **An intro paragraph** about the voter guide ("Learn about [candidate name]’s candidacy and
-  positions on the issues. This guide is built by GoodParty.org, …"). It is a Studio text field on
-  the block's new Text tab, one per subject, with the frame's copy as the preset in
-  `src/lib/profileHeroDefaults.ts`; a template saved before the field existed renders the preset.
-  The frames only draw candidates, so for someone who holds or held office the preset says
-  "public service" instead of "candidacy" (Emily, 2026-10-06).
-- **A pledge callout** replacing the one-line pledge status: a bordered box with one sentence and
-  a "Read the full pledge" link that opens `PledgeModal`, the pop-up the featured candidates and
-  position pages use (there is still no pledge page). The three sentences are marketing's and
-  live in `pledgeCalloutCopy` next to the older lines: "This candidate took the GoodParty.org
-  Pledge, promising to serve people first, independent of both major parties and big-money
-  interests." / "…has not yet taken the GoodParty.org Pledge to serve people first, …" / "…is
-  ineligible for the GoodParty.org Pledge due to partisan affiliation." The heart-and-star mark
-  sits in the box only when the person took the pledge. "Candidate" becomes "elected official"
-  for officeholders and past officeholders; someone serving and running keeps "candidate"
-  (`pledgeSubject` in `personSectionOverrides.tsx`).
-
-Decisions that came with it:
-
-- **Removed profiles (K/L) carry the same callout as if they were not removed** (Emily,
-  2026-10-06). The pledge flag is therefore no longer cleared on removal in `peopleProfile.ts`;
-  removal still strips the photo and the authored content, and the pledge band's "Take the pledge"
-  button stays off removed profiles: the page states the fact but does not invite someone who asked
-  us to stop publishing them to sign up (Emily, 2026-10-06).
-- **The hero no longer links down to the pledge band.** The callout explains the pledge through
-  its own pop-up, so the `attributionHref` override is gone. The band itself is unchanged and
-  still renders on every profile.
-- **The band's height follows the text column** instead of being fixed at 240px, so the taller
-  content (intro plus callout) cannot spill white text onto the cream. The portrait is anchored
-  to the bottom of the row and overflows the band by a fixed 48px (`md`) / 68px (`lg`) as the
-  frame draws it; `ProfileContentBlock`'s sidebar clearance moved with it (was 104/216).
-- **Live scale over the frame**, per the settled decision: the intro is `body-2`, whose ramp
-  (16 on the phone, 18 from 1280) happens to land on the frame's two fixed sizes, and the
-  content sits in the 1200px container rather than the frame's 1280. At 1440 the callout's
-  sentence therefore wraps to three lines where the frame fits two plus the link.
-
-Noted and not acted on: the frames redraw the band's gradient as a linear ramp with a shader
-layer. The request was the intro and the callout, so the fitted radial glow stays. The legacy
-`/candidate` route shares the component and is untouched: no intro, no callout, the "Empowered by
-GoodParty.org" line.
-
-**Profile content block** (every `/people` profile) — `component_profileContentBlock`, an
-**Extend**. Revised in the same Voter Guide round (Emily, 2026-10-06; same frames as the hero,
-with the block itself at 2139:26748 phone / 2156:34712 unclaimed phone). The block has no content
-fields in Studio: everything inside it on a `/people` page is assembled in
-`src/components/people/personSectionOverrides.tsx` from election-api data, so all three changes
-are code, none is a template edit. Built on the hero PR's branch (#374), because both edit that
-file and the content block's clearance, and both wait for the `/people` batch (PR #375).
-
-- **A "Took the GoodParty.org Pledge" row in the siderail**, under Political Affiliation, with
-  the heart-and-star mark, for anyone the pledge rule affirms (the same `pledged` flag the hero
-  and the cards read). The frame puts "Signed on January 1, 2026" under it. **No pledge date
-  exists in the data**: election-api carries a yes/no flag only. Marketing's source for the date
-  is the HubSpot deal's closed-won date, to be carried onto the person record by the ETL the way
-  `isPledged` is (Emily, 2026-10-06). The site reads an optional `pledgedAt` on the person and
-  shows the row with its "Signed on" line when it is there; until then the row is not shown at all
-  (Emily, 2026-10-06: a heading with only the mark under it was not worth showing in the meantime). To settle with the data team before it ships: which deal when a person has several
-  (the earliest closed-won is the natural rule), whether closed-won is in fact when the pledge is
-  taken (if not, "Signed on" overstates it), and that the deal is joined to the person the way
-  "Confirmed Candidate" is.
-- **A disclaimer under the authored sections**: "These statements come from [name] and do not
-  reflect any positions or stances on individual issues held by GoodParty.org." as a 12px grey
-  caption. It closes the platform card (after Campaign Issues, or after Why I'm Running when the
-  owner wrote no issues), the About Me section (before Recent Experience, which shares the card),
-  and the in-office card (after Accomplishments, or after Top Priorities when there are none).
-  The frames only draw candidates, so the in-office card was Emily's call (2026-10-06): it is the
-  person's own words as much as the platform is. Claimed pages only: the unclaimed placeholders
-  are our copy, not the person's, and the unclaimed frame shows none. The name is the page's
-  display name; the frames show a first name, but splitting names is unreliable.
-- **A "What this symbol means" box above Other Candidates**: the heart-and-star mark, "Candidates
-  and elected officials with this symbol took the GoodParty.org Pledge, promising to serve people
-  first, independent of both major parties and big-money interests." and a "Read the full pledge"
-  link opening `PledgeModal`. Third-person copy, so it renders on every profile that has the list
-  (`PledgeSymbolCallout`, copy in `PLEDGE_SYMBOL_CALLOUT`). Nearby Officials is not in the frames
-  and gets no box.
-- **The cards, in the same round (Emily, 2026-10-06)**: a district pill beside the name
-  ("District 5"; above the name on the phone), the heart-and-star mark on every pledged person's
-  photo, and the lists showing three cards at a time with a "See more" button (`RelatedPeopleList`,
-  the Candidates block's reveal rule with the frame's label), on both rails. The pill reads the
-  feed's sub-area pair (`districtTag`: name and value, "Ward 3"): a nearby official's from their own
-  office row; the other candidates' from the subject's race, which the candidacy rows do not carry,
-  so the profile loader reads the race record once (`loadRaceDistrictTag`) and a miss leaves the
-  cards untagged. **Pledged and claimed are the same thing** (Emily, 2026-10-06), so the mark follows
-  the pledge flag on these cards (`showMark` on `CandidatesCard`), without the yellow frame the
-  legacy `isGoodPartyCandidate` treatment draws; the frames draw no frame, and the production
-  builders never set that flag anyway. The pledge line is unchanged.
-- **Rail order: pledged people first, then the unpledged with no major party, then Republicans and
-  Democrats** (Emily, 2026-10-06), the featured candidates block's rule, stable inside each group.
-  `rankRelatedPeople` in `personSectionOverrides.tsx`; the cards carry `majorParty` from the same
-  party rule the profile's own gating uses. It replaced the older "empowered first" sort, which the
-  production builders could never trigger.
-
-**GoodParty.org Pledge block** (person profile pages first; location and position pages once editors
-place it) — extended, not rebuilt: `component_goodPartyOrgPledge`, the Studio block "GoodParty.org
-Pledge". The Voter Guide frames (2156-34297 desktop, 2188-38249 mobile) show a centred heading and intro
-over three columns of icon, heading and sentence, no buttons anywhere, on midnight. The block already had
-the header, the cards, the mixed icon colours and the midnight background; it lacked a three-column
-layout, a way to carry no buttons, and any preset content, so an editor adding it got an empty form.
-
-Decisions that came out of it (Emily, 2026-10-06):
-
-- **The `/people` profile band is the primary target.** The frames live in the Voter Guide file, but the
-  block's one live placement is the Person Profile global, and marketing treats the profile pages as part
-  of the voter guide. The band changes there, not only on the election pages when they get it.
-- **Three columns is a third option in the existing Column Layout dropdown**, and the preset for a new
-  block. That dropdown (`field_columnLayout12Columns`) is used by this block alone, so the new option
-  reaches nothing else. Two columns from `md`, three from `lg`, stacked below. A block saved without a
-  value keeps rendering two columns, pinned in `src/PageSections/goodPartyOrgPledgeLayout.test.tsx`.
-- **Card buttons are gone.** The Button field on each pledge card is removed from the schema and the
-  render. The section-level Buttons list on the Text tab stays, empty by default, because the `/people`
-  band supplies one button per state through it ("Take the pledge" or "Learn more"). The retired
-  Candidate Profile global still carries card buttons, which Studio now shows as an unknown field.
-- **Studio pre-fills the block.** `src/lib/goodPartyOrgPledgeDefaults.ts` holds the heading, the intro,
-  the three cards (Independent / People First / Anti-Corruption), midnight, mixed icon colours and three
-  columns; the schema's `initialValue` and the person-profile code seed both read it so they cannot
-  drift. The frame cuts the Anti-Corruption sentence off mid-way, so the full sentence that was already
-  live is used. The frame also underlines "GoodParty.org" as a link to the homepage; that was left out
-  of the preset (it is our own homepage, and the round was about removing links). An editor can still
-  link it in Studio.
-- **Sizes follow the live scale.** `heading-lg` with `max-md:text-heading-md` (48 → 32, as the editorial
-  and illustrated columns blocks do), intro `body-1`, card heading `subtitle-1`, sentence `body-2`.
-  Measured at 1440 and 390: the frame's 32px line-height on the card heading and 28px on the sentence
-  are not in the scale and were not chased.
-
-Content step that code cannot do: live `/people` pages render the Person Profile global template from
-Sanity, not the code seed (`resolveElectionTemplate` goes custom → global → code default), and that
-document explicitly says 1 Column, "People-First" and the earlier intro. After this code deploys, the
-template's pledge block needs Column Layout set to 3 Columns and its copy brought in line with the
-preset, or profiles keep the single column. Code first: production does not know the 3 Columns value
-until it ships, so a draft saved earlier previews as two columns.
-
-**Breadcrumb block** (every election template and the two position landing pages) —
-`component_breadcrumbBlock`, an **Extend**, revised for the phone in the Voter Guide round
-(Emily, 2026-10-06; frames 2139:26708 profile and 2139:21609 position). Below `md` the trail
-shows its first and last crumb with a "..." between them, at the frames' sizes (Open Sans 14/20,
-6px gaps, 15px chevrons, 24px above and below); tapping the "..." reveals the rest in place.
-Every crumb stays in the DOM, so the links and the BreadcrumbList schema do not change. Desktop
-is untouched. The treatment is the `collapseOnMobile` switch on `Breadcrumbs`, turned on by the
-block's section wrapper and the two election page components that render the block directly; the
-blog article hero and the political-terms glossary share the component and were not in the round,
-so they keep the full trail.
-**Elections Search Hero** (Elections page) — extended, not rebuilt. `component_electionsSearchHero`
-already existed and is live on exactly one page, the Elections landing page, as a centred dark hero with
-a logo, a state dropdown and a button to that state's page. The redesign (Figma 2035:1471 desktop,
-2035:2402 mobile) is a light two-column hero: left-aligned headline and body over a city or county
-search, and a photo carousel with a floating quote card beside them. Marketing chose to redesign the
-block in place rather than add a second hero (Emily, 2026-09-29), so this PR is held as a draft and
-batched with the rest of the Elections page redesign.
-
-Decisions that came out of it and affect other blocks in the batch:
-
-- **The search is one component now.** The city-or-county search that lived inside
-  `ElectionsNearYouBlock` (Google Places suggestions, the resolve-place lookup, the analytics events,
-  the navigation) was pulled out into `src/ui/ElectionsNearYouSearch.tsx`, and both blocks render it.
-  Any other block in the batch that wants "the same search bar" (the Voter Hub video hero, for one)
-  should render that component, not copy the form. It takes a `placement` string so the Viewed,
-  Completed and Errored events can tell the blocks apart, and `layout` / `appearance` variants for the
-  two looks the designs draw (the Near You pill with a map pin, the hero's squared field with a search
-  icon). The placeholder stays "Enter your city or county" on both, for the reason recorded above.
-- **The carousel content is block-local, not the quote library.** Slides live on the hero as a
-  repeatable list (photo, quote, and a `ref_quoteBy` person for the name, title and avatar), so an
-  editor adds as many as they want and picks a large photo per slide. The quote library was rejected
-  because a person's profile picture is a small headshot and would be the only source for the 524px
-  square (Emily, 2026-09-29). A person with no profile picture gets a quote card with no avatar.
-- **Old fields were removed, not hidden.** The logo settings and background image had no home in the
-  new design, so the schema no longer declares them. Studio shows the leftover values on the live
-  document as unknown fields with a remove button; that is the one content cleanup the batch needs.
-  The background colour field stayed and the component still defaults to midnight, because the live
-  document was saved with that value and the redesign is cream; the editor switches it when the
-  batch goes live.
-- **Empty state is "text and search only".** With no slides the carousel column is left out and the
-  hero collapses to one column, which is exactly what the live document renders until slides are
-  added. `src/PageSections/electionsSearchHeroSection.test.tsx` pins it.
-- **Default text sizes do not exist here.** `typography.css` clears Tailwind's `--text-*` scale, so
-  `text-sm` and `text-base` are silently no-ops; a 14px label has to be `text-[0.875rem]`. The Near
-  You block's listbox already did this, which is how it was noticed.
 
 ## The shared election counts, as marketing defined them
 
@@ -1219,10 +1216,10 @@ this table; it is here to orient, and to show the shape of the answer.
 | Position hero | develop + draft PR #320 | Position and Position Candidates globals | into #320, stays draft |
 | Position content block | develop + draft PR #327 (stacked on #320) | Position global, plus the landing page `template-elections-position-subset` | into #327, stays draft |
 | Candidates block | develop | Position Candidates global, every `/people` profile | draft and batch |
+| Breadcrumb block | develop + draft PR #377 (phone collapse) | every election global, two position landing pages | into #377, stays draft |
 | Profile hero | develop + draft PR #374 | Person Profile global, Candidate Profile global | into #374, stays draft |
 | Profile content block | develop + draft PR #375 (stacked on #374) | Person Profile global, Candidate Profile global | into #375, stays draft |
 | Profile hero | develop | Person Profile global (every `/people` profile), the retired Candidate Profile global, twelve disabled per-state scaffolds; a landing page **draft** also carries it | draft and batch with the `/people` pages (PR for the 2026-10-06 revision) |
-| Breadcrumb block | develop + draft PR #377 (phone collapse) | every election global, two position landing pages | into #377, stays draft |
 | Elections search hero | develop + draft PR #351 | the `/elections` landing page | into #351 |
 | Featured cities | develop + draft PR #307 | the `/elections` landing page | into #307 |
 | Elections near you | develop | `/all` plus three landing pages (see the note above) | ready to merge, list the pages |
@@ -1254,10 +1251,10 @@ audit to confirm; `data` means it needs the `SectionOverrides` pass.
 
 | Component | Page | Kind |
 | --- | --- | --- |
-| 3-column icon block | Voter Hub, position, location | content (audited — built as the illustrated columns block, see above; on position pages the voter readiness section of the content block covers it) |
-| Testimonial block with link | Voter Hub, location | content |
 | 3-column icon block | Voter Hub, position, location | content (audited — built, see above) |
 | Testimonial block with link | Voter Hub, location, position | content, plus the page's state via overrides (revised 2026-10-06, see above) |
+| 3-column icon block | Voter Hub, position, location | content (audited — built as the illustrated columns block, see above; on position pages the voter readiness section of the content block covers it) |
+| Testimonial block with link | Voter Hub, location | content |
 | Browse elections in Location Hero | location | data |
 | Local election rows block | location | data |
 | Find elections container | location | data |

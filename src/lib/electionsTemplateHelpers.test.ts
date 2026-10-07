@@ -3,8 +3,8 @@ import { describe, expect, test } from 'bun:test';
 import {
 	buildCandidatesSectionOverrides,
 	buildCandidatesTokens,
-	buildElectionsIndexSectionOverrides,
 	buildPositionSeatFilter,
+	buildElectionsIndexSectionOverrides,
 	buildPositionSectionOverrides,
 	buildPositionTokens,
 } from '~/lib/electionsTemplateHelpers';
@@ -301,7 +301,67 @@ describe('buildCandidatesTokens', () => {
 	});
 });
 
+/**
+ * The testimonial block's state filter reads `stateName` off the override. Every
+ * template helper has to pass it, or the toggle silently does nothing on that
+ * template (the candidates helper did not, which the review caught).
+ */
+describe('every template helper hands the testimonial block the page state', () => {
+	const base = {
+		breadcrumbs: [],
+		officeName: 'Mayor',
+		stateName: 'Tennessee',
+		electionDate: null,
+		filingDate: null,
+		positionHref: '/elections/tn/x/position/mayor',
+		locationHref: '/elections/tn',
+	};
+
+	test('position page', () => {
+		expect(buildPositionSectionOverrides(base as never).component_testimonialBlockWithLink).toEqual({ stateName: 'Tennessee' });
+	});
+
+	test('candidates page', () => {
+		expect(buildCandidatesSectionOverrides({ ...base, candidates: [] } as never).component_testimonialBlockWithLink).toEqual({
+			stateName: 'Tennessee',
+		});
+	});
+
+	test('location index page', () => {
+		expect(
+			buildElectionsIndexSectionOverrides({ breadcrumbs: [], locationLevel: 'state', stateName: 'Tennessee' } as never)
+				.component_testimonialBlockWithLink,
+		).toEqual({ stateName: 'Tennessee' });
+	});
+});
+
 describe('buildElectionsIndexSectionOverrides', () => {
+	const indexCtx = {
+		breadcrumbs: [{ href: '/elections', label: 'Elections' }],
+		locationLevel: 'state' as const,
+		stateName: 'Tennessee',
+	};
+
+	test('passes the page’s own featured cities to the block', () => {
+		const overrides = buildElectionsIndexSectionOverrides({
+			...indexCtx,
+			featuredCities: [{ name: 'Nashville', stateAbbreviation: 'TN', openElectionsCount: 12, href: '/elections/tn/davidson-county/nashville' }],
+		});
+
+		expect(overrides.component_featuredCitiesBlock?.cities).toEqual([
+			{ name: 'Nashville', stateAbbreviation: 'TN', openElectionsCount: 12, href: '/elections/tn/davidson-county/nashville' },
+		]);
+	});
+
+	/**
+	 * The silent-wrong-data case: an unset value must hide the block, not let it
+	 * fall through to the national city list on a Tennessee page.
+	 */
+	test('sends an empty list rather than nothing when the page has no featured cities', () => {
+		const overrides = buildElectionsIndexSectionOverrides(indexCtx);
+		expect(overrides.component_featuredCitiesBlock?.cities).toEqual([]);
+	});
+
 	const countyCtx = {
 		breadcrumbs: [],
 		locationLevel: 'county' as const,
@@ -503,31 +563,5 @@ describe('buildElectionsIndexSectionOverrides', () => {
 		expect(buildElectionsIndexSectionOverrides(countyCtx).component_locationLandingPageHero?.raceCount).toBeNull();
 		const emptyList = buildElectionsIndexSectionOverrides({ ...countyCtx, defaultYear: 2026, offices: [] });
 		expect(emptyList.component_locationLandingPageHero?.raceCount).toBe(0);
-	});
-
-	const indexCtx = {
-		breadcrumbs: [{ href: '/elections', label: 'Elections' }],
-		locationLevel: 'state' as const,
-		stateName: 'Tennessee',
-	};
-
-	test('passes the page’s own featured cities to the block', () => {
-		const overrides = buildElectionsIndexSectionOverrides({
-			...indexCtx,
-			featuredCities: [{ name: 'Nashville', stateAbbreviation: 'TN', openElectionsCount: 12, href: '/elections/tn/davidson-county/nashville' }],
-		});
-
-		expect(overrides.component_featuredCitiesBlock?.cities).toEqual([
-			{ name: 'Nashville', stateAbbreviation: 'TN', openElectionsCount: 12, href: '/elections/tn/davidson-county/nashville' },
-		]);
-	});
-
-	/**
-	 * The silent-wrong-data case: an unset value must hide the block, not let it
-	 * fall through to the national city list on a Tennessee page.
-	 */
-	test('sends an empty list rather than nothing when the page has no featured cities', () => {
-		const overrides = buildElectionsIndexSectionOverrides(indexCtx);
-		expect(overrides.component_featuredCitiesBlock?.cities).toEqual([]);
 	});
 });

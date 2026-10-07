@@ -76,9 +76,16 @@ describe('ElectionsSearchHeroSection', () => {
 		expect(two).toContain('aria-label="Previous slide"');
 		expect(two).toContain('aria-label="Next slide"');
 		expect(two).toContain('aria-label="Choose a slide"');
+		// Every slide fills the viewport, so there is one dot per slide and they
+		// render on the server rather than waiting for Embla to measure.
+		expect(two).toContain('aria-label="Go to slide 1"');
+		expect(two).toContain('aria-label="Go to slide 2"');
+		expect(two).not.toContain('aria-label="Go to slide 3"');
+		expect(two.match(/role="tab" aria-selected="true"/g)).toHaveLength(1);
 		expect(one).not.toContain('aria-label="Previous slide"');
 		expect(one).not.toContain('aria-label="Next slide"');
 		expect(one).not.toContain('aria-label="Choose a slide"');
+		expect(one).not.toContain('aria-label="Go to slide');
 	});
 
 	test('skips a slide that has no photo', () => {

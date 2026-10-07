@@ -8,16 +8,16 @@ import { type FeaturedPeople, summarizeIndependents } from '~/lib/featuredPeople
 import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
 import { type ElectionsPositionHeroCandidate, heroLocation } from '~/ui/ElectionsPositionHero';
 import {
-	buildDynamicFAQItems,
-	buildPositionPageSchema,
-	getYearFromDateString,
-} from '~/lib/electionsHelpers';
-import {
 	POSITION_CONTENT_IDS,
 	type ElectionsPositionAttribute,
 	type ElectionsPositionElectionType,
 	type ElectionsPositionPerson,
 } from '~/ui/ElectionsPositionContentBlock';
+import {
+	buildDynamicFAQItems,
+	buildPositionPageSchema,
+	getYearFromDateString,
+} from '~/lib/electionsHelpers';
 import {
 	buildBreadcrumbSchema,
 	buildFAQSchema,
@@ -295,6 +295,7 @@ export function buildCandidatesSectionOverrides(ctx: PositionPageContext & { can
 		component_ctaImageBlock: {
 			primaryButtonHref: ctx.locationHref,
 		},
+		component_testimonialBlockWithLink: { stateName: ctx.stateName },
 	};
 }
 

@@ -464,6 +464,28 @@ export type BuildOfficeItemsFromPlaceRacesConfig = {
 	buildHref(race: PlaceRace): string | undefined;
 };
 
+/**
+ * Joins a page's own offices with the overlapping ones from the places above it,
+ * keeping the first row for any race that appears twice. election-api can hand
+ * the same LOCAL race back under a district and under its parent county, and a
+ * plain spread would list it twice (review finding, 2026-10-06). Keyed by race
+ * slug, which is what the row links and counts by, with the id as the fallback
+ * for a row the feed left slugless.
+ */
+export function mergeOfficeItems(...lists: OfficeItem[][]): OfficeItem[] {
+	const seen = new Set<string>();
+	const out: OfficeItem[] = [];
+	for (const list of lists) {
+		for (const office of list) {
+			const key = (office.raceSlug ?? '').toLowerCase() || `id:${office.id}`;
+			if (seen.has(key)) continue;
+			seen.add(key);
+			out.push(office);
+		}
+	}
+	return out;
+}
+
 export function buildOfficeItemsFromPlaceRaces(
 	races: PlaceRace[],
 	resolvedDates: Map<string, string>,

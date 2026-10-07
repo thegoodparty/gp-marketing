@@ -14,6 +14,7 @@ import {
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
 	buildOfficeItemsFromPlaceRaces,
+	mergeOfficeItems,
 	buildOverlappingOfficeItems,
 	buildPlaceRacePositionHref,
 	getStateName,
@@ -125,7 +126,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 			listHeading: `Elections in ${districtName}`,
 			defaultYear,
 			availableYears,
-			offices: [...districtOffices, ...districtOverlapping.offices],
+			offices: mergeOfficeItems(districtOffices, districtOverlapping.offices),
 			electionsIndexHidden: true,
 			// A district page has no cities of its own, so it features none.
 			featuredCities: [],
@@ -234,7 +235,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		listHeading: `City Elections in ${cityName}`,
 		defaultYear,
 		availableYears,
-		offices: [...cityOffices, ...overlapping.offices],
+		offices: mergeOfficeItems(cityOffices, overlapping.offices),
 		electionsIndexHidden: true,
 		featuredCities,
 		locationFacts: factsCards.length > 0 ? { title: `${cityName} facts`, factsCards } : { hidden: true },

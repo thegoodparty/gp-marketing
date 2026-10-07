@@ -7,12 +7,13 @@ import type { RaceDetail } from '~/types/elections';
 import type { CandidateCard } from '~/ui/CandidatesBlock';
 import type { BreadcrumbItem } from '~/ui/BreadcrumbBlock';
 import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
-import type { FeaturedPeople } from '~/lib/featuredPeople';
+import { type FeaturedPeople, summarizeIndependents } from '~/lib/featuredPeople';
 import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
 import { secondaryButtonStyleType } from '~/ui/_lib/designTypesStore';
 import {
 	buildDynamicFAQItems,
 	buildPositionPageSchema,
+	getYearFromDateString,
 } from '~/lib/electionsHelpers';
 import {
 	buildBreadcrumbSchema,
@@ -280,6 +281,7 @@ export type ElectionsIndexPageContext = {
 	cityName?: string;
 	bodyCopy?: string;
 	heroTitle?: string;
+	/** Kept for the search block that takes over the input the location hero used to render. */
 	searchPlaceholder?: string;
 	listHeading?: string;
 	defaultYear?: number;
@@ -317,15 +319,29 @@ export type ElectionsIndexPageContext = {
 };
 
 export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageContext): SectionOverrides {
+	const independents = summarizeIndependents(ctx.featuredPeople, ctx.defaultYear);
 	return {
 		component_breadcrumbBlock: { breadcrumbs: ctx.breadcrumbs },
 		component_locationLandingPageHero: {
+			// The route phrases the whole headline. Passing it as `stateName` instead
+			// left the block to rebuild the headline around it, which published
+			// "Kane County, Upcoming elections in Kane County, Illinois".
+			headline: ctx.heroTitle,
 			locationLevel: ctx.locationLevel,
-			stateName: ctx.heroTitle ?? ctx.stateName,
+			stateName: ctx.stateName,
 			countyName: ctx.countyName,
 			cityName: ctx.cityName,
 			bodyCopy: ctx.bodyCopy,
-			searchPlaceholder: ctx.searchPlaceholder,
+			// Both figures describe the ballot the offices list shows, in the year it
+			// opens on (Emily, 2026-10-05): the races are counted off the same rows,
+			// and the independents off the same races' candidates. Without that year
+			// neither figure can be scoped, so both cards hide rather than one showing
+			// an all-years total beside the other's absence.
+			raceCount:
+				ctx.offices && ctx.defaultYear !== undefined
+					? ctx.offices.filter(office => getYearFromDateString(office.nextElectionDate) === ctx.defaultYear).length
+					: null,
+			independents: ctx.defaultYear === undefined ? { ...independents, candidateCount: null } : independents,
 		},
 		component_listOfOfficesBlock: {
 			// The block renders `headline`, so that is where the location-named

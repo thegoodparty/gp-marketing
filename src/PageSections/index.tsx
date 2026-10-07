@@ -134,12 +134,28 @@ export type SectionOverrides = {
 	component_electionsPositionHero?: import('~/PageSections/ElectionsPositionHeroSection').OfficeData;
 	component_electionsPositionContentBlock?: import('~/PageSections/ElectionsPositionContentBlockSection').ElectionsPositionContentBlockOverride;
 	component_locationLandingPageHero?: {
+		/** The whole headline. Without it the block falls back to the bare location name. */
+		headline?: string;
 		locationLevel?: 'state' | 'county' | 'city' | 'district';
 		stateName?: string;
 		countyName?: string;
 		cityName?: string;
 		bodyCopy?: string;
-		searchPlaceholder?: string;
+		/**
+		 * The races on the page's ballot in the year the offices list opens on,
+		 * counted off the same rows that list shows. The halo green card shows it
+		 * (a real zero included) and hides when it is null.
+		 */
+		raceCount?: number | null;
+		/**
+		 * What the page knows about its independents, from the fetch that feeds
+		 * `component_featuredCandidatesBlock`, scoped to the same year. The lavender
+		 * card shows `candidateCount` (a real zero included) and hides when it is
+		 * null; a button anchored to the featured block hides unless `hasAny`. Both
+		 * this and `raceCount` are absent on pages that are not location pages,
+		 * where the editor's figures and buttons render as written.
+		 */
+		independents?: import('~/lib/featuredPeople').IndependentsSummary;
 	};
 	component_listOfOfficesBlock?: {
 		heading?: string;
@@ -159,6 +175,16 @@ export type SectionOverrides = {
 		 */
 		candidates?: import('~/lib/featuredPeople').FeaturedPersonCard[];
 		representatives?: import('~/lib/featuredPeople').FeaturedPersonCard[];
+		/**
+		 * The number of pledged people in the page's place and everything inside
+		 * it, for the body copy's `[count of candidates]` placeholder. No route
+		 * supplies it yet: election-api has no place-with-descendants filter on
+		 * persons, so a count of all of Texas cannot be taken from a location page
+		 * today (docs/election-redesign-components.md asks for one). Absent, the
+		 * placeholder is left out of the sentence rather than published as a
+		 * number taken from the partial carousel pool.
+		 */
+		pledgedCount?: number | null;
 		/** When true the section renders nothing. */
 		hidden?: boolean;
 	};

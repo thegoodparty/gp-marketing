@@ -268,6 +268,12 @@ export async function getFeaturedPeople(
 	// cut anything: the hero's independent count hides when it did. Undated races
 	// sort last and cannot be placed in any year, so they can neither join a year's
 	// count nor make it incomplete; only a dated race left out breaks completeness.
+	// Which tier each race came from, so a person rescued from a past cycle below
+	// is named with that tier's place like the officeholders feed's own rows.
+	const tierOfRace = new Map<PlaceRace, number>();
+	tierRaces.forEach((entries, index) => {
+		for (const entry of entries) tierOfRace.set(entry.race, index);
+	});
 	const eligibleRaces = orderSoonest(tierRaces.flat(), Number.POSITIVE_INFINITY);
 	const selectedRaces = eligibleRaces.slice(0, FEATURED_RACE_BUDGET);
 	const datedRacesCovered = eligibleRaces.filter(({ electionDate }) => electionDate).every(entry => selectedRaces.includes(entry));
@@ -311,13 +317,14 @@ export async function getFeaturedPeople(
 	// current term, so they stay, as the officeholder they are, when the feed
 	// did not already list them.
 	const listed = new Set(representatives.map(card => card.personId?.toLowerCase()));
-	for (const { candidacy } of pastCandidacies) {
+	for (const { candidacy, race } of pastCandidacies) {
 		const personId = candidacy.personId;
 		if (!personId || listed.has(personId.toLowerCase())) continue;
 		const person = personsById.get(personId.toLowerCase());
 		const currentOffice = person?.OfficeHolders?.find(office => office.isCurrent === true);
 		if (!currentOffice) continue;
-		representatives.push(...buildRepresentativeCards([{ ...currentOffice, personId }], personsById, placeContext, removedPersonIds));
+		const context = tierContexts[tierOfRace.get(race) ?? 0] ?? placeContext;
+		representatives.push(...buildRepresentativeCards([{ ...currentOffice, personId }], personsById, context, removedPersonIds));
 		listed.add(personId.toLowerCase());
 	}
 

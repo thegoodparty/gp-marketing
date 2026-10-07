@@ -480,6 +480,46 @@ describe('getFeaturedPeople across the ballot', () => {
 		expect(people.candidatesComplete).toBe(true);
 	});
 
+	test('a past-cycle county candidate who holds office now is named with the county, not the city', async () => {
+		const JUDGE_ID = 'eeeeeeee-0000-4000-8000-000000000005';
+		const places: Record<string, PlaceWithFacts> = {
+			'tx/harris-county/houston': { id: 'p-1', name: 'Houston', slug: 'tx/harris-county/houston', state: 'TX', Races: [race('tx/houston/mayor')] },
+			'tx/harris-county': { id: 'p-2', name: 'Harris County', slug: 'tx/harris-county', state: 'TX', Races: [race('tx/harris-county/judge', { positionLevel: 'COUNTY' })] },
+		};
+		const deps: FeaturedPeopleDeps = {
+			async getElectionsPagePlace({ slug }) {
+				return Promise.resolve(places[slug] ?? null);
+			},
+			async resolvePlaceRaceElectionDates() {
+				return Promise.resolve(new Map());
+			},
+			async getCandidacies({ raceSlug }) {
+				if (raceSlug !== 'tx/harris-county/judge') return Promise.resolve([]);
+				return Promise.resolve([candidacy({ id: 'c-judge', personId: JUDGE_ID, firstName: 'Lina', lastName: 'Hidalgo', Race: { brHashId: 'r-2022', electionDate: '2022-11-08' } })]);
+			},
+			async getOfficeHoldersByGeoId() {
+				return Promise.resolve([]);
+			},
+			async getPersonsByIds() {
+				return Promise.resolve([
+					personRow(JUDGE_ID, {
+						fullName: 'Lina Hidalgo',
+						slug: 'lina-hidalgo',
+						OfficeHolders: [officeholder({ id: 'oh-judge', personId: JUDGE_ID, officeTitle: 'County Judge', mailingCity: null })],
+					}),
+				]);
+			},
+			async getRemovedPersonIds() {
+				return Promise.resolve(new Set<string>());
+			},
+		};
+
+		const people = await getFeaturedPeople({ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) }, deps);
+
+		expect(people.candidates).toEqual([]);
+		expect(people.representatives.map(r => [r.name, r.location])).toEqual([['Lina Hidalgo', 'Harris County, TX']]);
+	});
+
 	/**
 	 * Officials follow the ballot up as well (Emily, 2026-10-06): a city page carries
 	 * its county's and its state's current officeholders, each named with its own

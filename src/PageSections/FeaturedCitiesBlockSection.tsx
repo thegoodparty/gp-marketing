@@ -11,6 +11,8 @@ import {
 	getPlacesByState,
 } from '~/lib/electionsApi';
 import { transformButtons } from '~/lib/buttonTransformer';
+import { resolveRichTextTokens, resolveSectionText } from '~/lib/resolveSectionText';
+import type { TokenMap } from '~/lib/resolveTokens';
 
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { resolveTextSize } from '~/ui/_lib/resolveTextSize';
@@ -59,7 +61,7 @@ async function getNationalLocationCards(): Promise<LocationCardProps[]> {
 }
 
 export async function FeaturedCitiesBlockSection(
-	section: Extract<Sections, { _type: 'component_featuredCitiesBlock' }> & { citiesOverride?: FeaturedCityCard[] },
+	section: Extract<Sections, { _type: 'component_featuredCitiesBlock' }> & { citiesOverride?: FeaturedCityCard[]; tokens?: TokenMap },
 ) {
 	const backgroundColor = section.featuredCitiesBlockDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(stegaClean(section.featuredCitiesBlockDesignSettings.field_blockColorCreamMidnight))
@@ -94,10 +96,10 @@ export async function FeaturedCitiesBlockSection(
 			<FeaturedCitiesBlock
 				backgroundColor={backgroundColor}
 				header={{
-					title: section.featuredCitiesBlockHeader?.field_title,
-					label: section.featuredCitiesBlockHeader?.field_label,
-					caption: section.featuredCitiesBlockHeader?.field_caption,
-					copy: <RichData value={section.featuredCitiesBlockHeader?.block_summaryText} />,
+					title: resolveSectionText(section.featuredCitiesBlockHeader?.field_title, section.tokens),
+					label: resolveSectionText(section.featuredCitiesBlockHeader?.field_label, section.tokens),
+					caption: resolveSectionText(section.featuredCitiesBlockHeader?.field_caption, section.tokens),
+					copy: <RichData value={resolveRichTextTokens(section.featuredCitiesBlockHeader?.block_summaryText, section.tokens)} />,
 					backgroundColor,
 					buttons: transformButtons(section.featuredCitiesBlockHeader?.list_buttons),
 					textSize: resolveTextSize(section.featuredCitiesBlockHeader?.field_textSize),

@@ -45,4 +45,11 @@ describe('LocationLandingPageHeroSection body copy', () => {
 		const html = await render({ ...base, locationOverride: override } as unknown as Props);
 		expect(html).toContain('Learn what positions are up for election in Peoria County.');
 	});
+
+	test("a cleared field counts as no copy, so the route's default still fills in", async () => {
+		for (const field_bodyCopy of ['', '   ']) {
+			const html = await render({ ...base, locationLandingPageHeroContent: { field_bodyCopy }, locationOverride: override } as unknown as Props);
+			expect(html).toContain('Learn what positions are up for election in Peoria County.');
+		}
+	});
 });

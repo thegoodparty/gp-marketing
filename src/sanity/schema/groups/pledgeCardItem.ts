@@ -27,11 +27,6 @@ export const pledgeCardItem = {
 			name: 'block_summaryText',
 			type: 'block_summaryText',
 		},
-		{
-			title: 'Button',
-			name: 'ctaActionWithShared',
-			type: 'ctaActionWithShared',
-		},
 	],
 	preview: {
 		select: {

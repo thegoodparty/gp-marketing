@@ -135,7 +135,7 @@ export type FeaturedPeopleDeps = {
 	resolvePlaceRaceElectionDates(races: PlaceRace[], today?: Date): Promise<Map<string, string>>;
 	getCandidacies(params: { raceSlug: string }): Promise<CandidacyItem[]>;
 	getOfficeHoldersByGeoId(geoId: string): Promise<PersonOfficeHolder[]>;
-	getPersonsByIds(ids: string[]): Promise<PersonItem[]>;
+	getPersonsByIds(ids: string[], options?: { includeOfficeHolders?: boolean }): Promise<PersonItem[]>;
 	getRemovedPersonIds(): Promise<Set<string> | null>;
 };
 
@@ -307,7 +307,10 @@ export async function getFeaturedPeople(
 		...candidacies.map(({ candidacy }) => candidacy.personId),
 		...pastCandidacies.map(({ candidacy }) => candidacy.personId),
 	].filter((id): id is string => Boolean(id));
-	const persons = personIds.length > 0 ? await deps.getPersonsByIds(personIds) : [];
+	// The rescue below reads a past candidate's current term off the person row,
+	// and the list endpoint only carries `OfficeHolders` when asked (it never
+	// fired on the live site until it did; Holland, MI, 2026-10-07).
+	const persons = personIds.length > 0 ? await deps.getPersonsByIds(personIds, { includeOfficeHolders: pastCandidacies.length > 0 }) : [];
 	const personsById = new Map(persons.map(person => [person.id.toLowerCase(), person]));
 
 	const representatives = officeholdersByTier.flatMap((officeholders, index) =>

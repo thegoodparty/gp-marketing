@@ -65,7 +65,17 @@ export function resolvePlaceUrl(input: ResolvePlaceInput, data: ResolvePlaceData
 	const countyQuery = input.county?.trim() || cityQuery;
 	if (state && countyQuery) {
 		const target = normalizeName(canonicalizeCountyEquivalentName(state, countyQuery).baseName);
-		const countyMatch = data.countyPlaces.find(p => normalizeName(canonicalizeCountyEquivalentName(state, p.name).baseName) === target);
+		// An independent city sits at the county level beside a county of the same
+		// name: Virginia's "Fairfax city" next to "Fairfax County" (also Baltimore,
+		// St. Louis, Carson City). A visitor who picked the city from the search
+		// gets the city (Emily, 2026-10-07: "Fairfax, VA" landed on Fairfax County);
+		// a county query still gets the county, because its text carries the suffix.
+		const independentCity =
+			!input.county && cityQuery
+				? data.countyPlaces.find(p => normalizeName(p.name) === normalizeName(`${stripCityTypeSuffix(cityQuery)} city`))
+				: undefined;
+		const countyMatch =
+			independentCity ?? data.countyPlaces.find(p => normalizeName(canonicalizeCountyEquivalentName(state, p.name).baseName) === target);
 		const countyTail = countyMatch ? slugTail(countyMatch.slug) : undefined;
 		if (countyTail) {
 			return { url: `/elections/${state.toLowerCase()}/${countyTail}`, matchedLevel: 'county' };

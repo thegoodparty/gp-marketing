@@ -524,10 +524,10 @@ describe('resolvePlaceRaceElectionDates', () => {
 		expect(resolved.size).toBe(0);
 	});
 
-	test('fetches general election date when place date is in the past', async () => {
+	test('fetches the upcoming race when the place date is a past primary', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/races?') && url.includes('raceSlug=ca%2Flieutenant-governor') && url.includes('isPrimary=false'),
+				match: url => url.includes('/v1/races?') && url.includes('raceSlug=ca%2Flieutenant-governor') && url.includes('electionDateStart='),
 				body: [
 					{
 						id: 1,
@@ -546,21 +546,22 @@ describe('resolvePlaceRaceElectionDates', () => {
 		expect(resolved.get('ca/lieutenant-governor')).toBe('2026-11-03T00:00:00.000Z');
 	});
 
-	test('does not fetch races API for a past general-election race', async () => {
-		let fetchCount = 0;
-		globalThis.fetch = (async () => {
-			fetchCount += 1;
-			return new Response(JSON.stringify([]), { status: 200 });
-		}) as unknown as typeof fetch;
+	/** Los Angeles's city offices: the place feed held their November 2022 general while a November 2026 race existed. */
+	test('a past general is refreshed too, to the slug\'s upcoming race', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/races?') && url.includes('raceSlug=ca%2Flos-angeles%2Fcity-executive-mayor') && url.includes('electionDateStart='),
+				body: [{ id: 9, slug: 'ca/los-angeles/city-executive-mayor', name: 'Mayor', state: 'CA', electionDate: '2026-11-03T00:00:00.000Z', isPrimary: false }],
+			},
+		]);
 
-		const races = [placeRace({ electionDate: '2025-11-04T00:00:00.000Z', isPrimary: false })];
+		const races = [placeRace({ slug: 'ca/los-angeles/city-executive-mayor', electionDate: '2022-11-08T00:00:00.000Z', isPrimary: false })];
 		const resolved = await resolvePlaceRaceElectionDates(races, today);
 
-		expect(fetchCount).toBe(0);
-		expect(resolved.size).toBe(0);
+		expect(resolved.get('ca/los-angeles/city-executive-mayor')).toBe('2026-11-03T00:00:00.000Z');
 	});
 
-	test('does not fetch races API when isPrimary is undefined', async () => {
+	test('a past date with no primary flag is refreshed as well', async () => {
 		let fetchCount = 0;
 		globalThis.fetch = (async () => {
 			fetchCount += 1;
@@ -568,6 +569,20 @@ describe('resolvePlaceRaceElectionDates', () => {
 		}) as unknown as typeof fetch;
 
 		const races = [placeRace({ electionDate: '2026-06-02T00:00:00.000Z', isPrimary: undefined })];
+		const resolved = await resolvePlaceRaceElectionDates(races, today);
+
+		expect(fetchCount).toBeGreaterThan(0);
+		expect(resolved.get('ca/lieutenant-governor')).toBe('2026-06-02T00:00:00.000Z');
+	});
+
+	test('does not fetch for a general that is still ahead', async () => {
+		let fetchCount = 0;
+		globalThis.fetch = (async () => {
+			fetchCount += 1;
+			return new Response(JSON.stringify([]), { status: 200 });
+		}) as unknown as typeof fetch;
+
+		const races = [placeRace({ electionDate: '2026-11-03T00:00:00.000Z', isPrimary: false })];
 		const resolved = await resolvePlaceRaceElectionDates(races, today);
 
 		expect(fetchCount).toBe(0);

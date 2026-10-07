@@ -423,8 +423,14 @@ export function isElectionDateBeforeToday(
 }
 
 /**
- * For place races whose electionDate is already past, fetches the general-election
- * record via getRaceBySlug with isPrimary:false.
+ * A fresh election date for every place race whose own date has passed. The
+ * place feed carries one row per office with the date of the last race it
+ * knew, so Los Angeles's mayor, council and city attorney all read November
+ * 2022 while the position pages for the same slugs showed November 2026
+ * (Emily, 2026-10-07). Only past primaries were refreshed before, which left
+ * every past general where it was; now any past date asks `getRaceBySlug`,
+ * upcoming first, and keeps the place date when the office has nothing ahead.
+ * Six requests at a time: a state page can carry a dozen stale rows.
  */
 export async function resolvePlaceRaceElectionDates(
 	races: PlaceRace[],
@@ -434,21 +440,19 @@ export async function resolvePlaceRaceElectionDates(
 	const resolved = new Map<string, string>();
 
 	const staleSlugs = [
-		...new Set(
-			races
-				.filter(r => r.slug && r.electionDate && r.isPrimary === true && isElectionDateBeforeToday(r.electionDate, today))
-				.map(r => r.slug),
-		),
+		...new Set(races.filter(r => r.slug && r.electionDate && isElectionDateBeforeToday(r.electionDate, today)).map(r => r.slug)),
 	];
 
-	await Promise.all(
-		staleSlugs.map(async slug => {
-			const placeRace = races.find(r => r.slug === slug);
-			const fallback = placeRace?.electionDate ?? '';
-			const race = await getRaceBySlug(slug, false, { isPrimary: false });
-			resolved.set(slug, race?.electionDate ?? fallback);
-		}),
-	);
+	for (let i = 0; i < staleSlugs.length; i += 6) {
+		await Promise.all(
+			staleSlugs.slice(i, i + 6).map(async slug => {
+				const placeRace = races.find(r => r.slug === slug);
+				const fallback = placeRace?.electionDate ?? '';
+				const race = await getRaceBySlug(slug, false);
+				resolved.set(slug, race?.electionDate ?? fallback);
+			}),
+		);
+	}
 
 	return resolved;
 }

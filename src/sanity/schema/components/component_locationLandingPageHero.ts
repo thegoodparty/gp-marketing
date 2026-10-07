@@ -21,13 +21,22 @@ export const component_locationLandingPageHero = {
 						'Static copy that references location level (state, county, or city). Location names are populated dynamically from the URL.',
 				},
 				{
-					title: 'Search Placeholder',
-					name: 'field_searchPlaceholder',
-					type: 'string',
-					description: 'Placeholder text for the search input (defaults to "Search elections by county and city")',
+					title: 'Buttons',
+					name: 'list_buttons',
+					type: 'list_buttons',
+					description:
+						'Up to two buttons under the copy. Use the Anchor action to jump to a section further down the page. A button anchored to "independents" jumps to the featured candidates block and hides itself on a location with no independent candidates or officials.',
 				},
 			],
 			group: 'locationLandingPageHeroContent',
+		},
+		{
+			title: 'Stats',
+			name: 'stats',
+			type: 'stats',
+			description:
+				'Up to three cards shown beside the headline. Location names can be written as tokens such as [State], [County], [City] or [District]. On location pages two cards show live figures from the offices list below, in the year it opens on: the Halo Green card the races on the ballot, the Lavender card the independent candidates. Their labels stay yours, and a card hides when its figure is not known.',
+			group: 'stats',
 		},
 		{
 			title: 'Design Settings',
@@ -89,6 +98,11 @@ export const component_locationLandingPageHero = {
 			title: 'Content',
 			name: 'locationLandingPageHeroContent',
 			icon: getIcon('Text'),
+		},
+		{
+			title: 'Stats',
+			name: 'stats',
+			icon: getIcon('CharacterWholeNumber'),
 		},
 		{
 			title: 'Design Settings',

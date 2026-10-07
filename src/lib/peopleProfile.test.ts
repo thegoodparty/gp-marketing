@@ -1489,7 +1489,7 @@ describe('composeView state + empowerment gating', () => {
 		expect(view.empowered).toBe(true);
 	});
 
-	test('pledged spine flag surfaces on the view; removal suppresses it', () => {
+	test('pledged spine flag surfaces on the view, and survives removal', () => {
 		const pledged = composeView(
 			PID,
 			makePerson({ fullName: 'Jane Doe', isPledged: true, Candidacies: [{ id: 'c1', positionName: 'Mayor' }] }),
@@ -1497,13 +1497,16 @@ describe('composeView state + empowerment gating', () => {
 		);
 		expect(pledged.pledged).toBe(true);
 
+		// A removed profile (K/L) states the same pledge fact it would otherwise
+		// (Emily, 2026-10-06); removal strips the authored content and the photo,
+		// not the flag. It used to be cleared here.
 		const removed = composeView(
 			PID,
 			makePerson({ fullName: 'Jane Doe', isPledged: true, Candidacies: [{ id: 'c1', positionName: 'Mayor' }] }),
 			null,
 			{ removed: true },
 		);
-		expect(removed.pledged).toBe(false);
+		expect(removed.pledged).toBe(true);
 	});
 
 	test('removal strips authored content and photo (state K/L)', () => {

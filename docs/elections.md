@@ -94,11 +94,19 @@ The hierarchy is state, county, city, then subplace. The route tree under
 /elections/[state]
 /elections/[state]/[county]
 /elections/[state]/[county]/[city]
-/elections/[state]/position/[positionSlug]                              (+ /candidates)
-/elections/[state]/[county]/position/[positionSlug]                     (+ /candidates)
-/elections/[state]/[county]/[city]/position/[positionSlug]              (+ /candidates)
-/elections/[state]/[county]/[city]/[subplace]/position/[positionSlug]   (+ /candidates)
+/elections/[state]/position/[positionSlug]                              (+ /candidates, a 308 to the position page)
+/elections/[state]/[county]/position/[positionSlug]                     (+ /candidates, a 308 to the position page)
+/elections/[state]/[county]/[city]/position/[positionSlug]              (+ /candidates, a 308 to the position page)
+/elections/[state]/[county]/[city]/[subplace]/position/[positionSlug]   (+ /candidates, a 308 to the position page)
 ```
+
+**The `/candidates` listing pages are retired** (strategy doc "Programmatic Overhaul Pt. 2", August
+2026; Emily, 2026-10-06). The position page carries the candidate list itself, so each listing URL
+is a permanent redirect to its position page (`src/lib/candidates-redirects.ts`, wired into
+`next.config.ts`). They were never in the sitemap, and nothing on the redesigned pages links to
+them. The route files behind them, and the `candidatesHref` the position routes still compute for
+the old hero, come out in a follow-up once the position page batch has merged, because that batch
+edits the same files.
 
 Race slugs look like `state/[county]/[city]/[subplace]/positionSlug`. City and town
 races often carry 3-part slugs that must be expanded to 4-level URLs by resolving the

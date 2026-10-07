@@ -532,8 +532,6 @@ describe('resolveRaceElectionHrefs', () => {
 			),
 		).resolves.toEqual({
 			positionHref: '/elections/ok/tecumseh-public-schools/position/local-school-board',
-			candidatesHref:
-				'/elections/ok/tecumseh-public-schools/position/local-school-board/candidates',
 		});
 	});
 
@@ -565,7 +563,6 @@ describe('resolveRaceElectionHrefs', () => {
 			resolveRaceElectionHrefs('mi/northville/city-legislature', 'CITY'),
 		).resolves.toEqual({
 			positionHref: '/elections/mi/wayne-county/northville/position/city-legislature',
-			candidatesHref: '/elections/mi/wayne-county/northville/position/city-legislature/candidates',
 		});
 	});
 
@@ -597,7 +594,6 @@ describe('resolveRaceElectionHrefs', () => {
 			resolveRaceElectionHrefs('mi/northville/city-legislature', ''),
 		).resolves.toEqual({
 			positionHref: '/elections/mi/wayne-county/northville/position/city-legislature',
-			candidatesHref: '/elections/mi/wayne-county/northville/position/city-legislature/candidates',
 		});
 	});
 
@@ -608,7 +604,6 @@ describe('resolveRaceElectionHrefs', () => {
 	test('builds state-level paths without race fetch', async () => {
 		await expect(resolveRaceElectionHrefs('az/governor', 'STATE')).resolves.toEqual({
 			positionHref: '/elections/az/position/governor',
-			candidatesHref: '/elections/az/position/governor/candidates',
 		});
 	});
 });

@@ -442,7 +442,8 @@ Decisions that came out of it:
 - **Cap of eight rows** (Emily, 2026-09-24), applied in the data helper and again in the component.
 - **Upcoming only, soonest first.** A row whose election has already happened is a dead end for a
   voter, so past races are dropped, and a place with only past races counts as empty for the
-  level-up rule. Stale primary dates are re-resolved the same way the location pages do it.
+  level-up rule. Stale dates are refreshed the same way the location pages do it (any past date,
+  not only primaries, since 2026-10-07).
 - **The level tag is per row, from the race's own `positionLevel`** (Federal / State / County /
   Local), matching the mixed list in the Figma frame rather than the one-label-per-page tag the
   location list uses. The Figma tag colour is `blue/900`, which had no token; it is now

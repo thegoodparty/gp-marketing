@@ -47,8 +47,8 @@ empty, and their position pages 404'd while the county index page and the "View 
 link on each officeholder's `/people` profile kept listing them. That was 25 of the 26 dead
 position-page URLs in the 2026-09-18 crawl. `getRaceBySlug` therefore retries once with
 `isPrimary: true` when the first lookup finds nothing, which costs a second request only on
-the path that would otherwise render a 404. A caller that passes `isPrimary` itself (as
-`resolvePlaceRaceElectionDates` does, wanting the general) is never second-guessed. The fix
+the path that would otherwise render a 404. A caller that passes `isPrimary` itself is never
+second-guessed. The fix
 belongs upstream in `election-api`'s `raceFilterSchema`, where the `z.preprocess` around
 `isPrimary`/`isRunoff` turns `undefined` into `false`; until that lands, keep the retry.
 
@@ -57,7 +57,11 @@ A slug can also name many race rows. Every California Assembly district is
 answer picked by id, which put a 2022 race on a page whose candidates were running in 2026.
 `getRaceBySlug` therefore asks for a race with an election date from today first and falls back
 to the unfiltered read only when there is none, so an office with no upcoming election still
-resolves to its last race. One position page per office slug, all districts together, is
+resolves to its last race. The location pages lean on the same lookup: the place feed carries
+one row per office dated by the last race it knew, so `resolvePlaceRaceElectionDates` refreshes
+every row whose date has passed, general or primary (Los Angeles's mayor, council and city
+attorney all read November 2022 while their position pages said November 2026; Emily,
+2026-10-07). One position page per office slug, all districts together, is
 intentional (Emily, 2026-10-06); this only makes that page describe the current cycle.
 
 ## Domain vocabulary the agent needs

@@ -343,6 +343,61 @@ describe('getFeaturedPeople', () => {
 		expect(people.candidates[0]?.electionDate).toBe('2026-11-03');
 	});
 
+	test('a past-cycle candidate who holds office now stays, as an officeholder, when the feed missed them', async () => {
+		const OFFICIAL_ID = 'cccccccc-0000-4000-8000-000000000003';
+		const LOSER_ID = 'dddddddd-0000-4000-8000-000000000004';
+		const withPastWinner: FeaturedPeopleDeps = {
+			...deps,
+			async getCandidacies({ raceSlug }) {
+				if (raceSlug !== 'tx/houston/mayor') return Promise.resolve([]);
+				return Promise.resolve([
+					candidacy({ id: 'c-won', personId: OFFICIAL_ID, firstName: 'Scott', lastName: 'Corbin', Race: { brHashId: 'r-2025', electionDate: '2025-11-04' } }),
+					candidacy({ id: 'c-lost', personId: LOSER_ID, firstName: 'Lost', lastName: 'Out', Race: { brHashId: 'r-2025', electionDate: '2025-11-04' } }),
+				]);
+			},
+			async getOfficeHoldersByGeoId() {
+				return Promise.resolve([]);
+			},
+			async getPersonsByIds() {
+				return Promise.resolve([
+					personRow(OFFICIAL_ID, {
+						fullName: 'Scott Corbin',
+						slug: 'scott-corbin',
+						OfficeHolders: [officeholder({ id: 'oh-corbin', personId: OFFICIAL_ID, officeTitle: 'Houston City Council - Ward 5', mailingCity: 'Houston' })],
+					}),
+					personRow(LOSER_ID, { fullName: 'Lost Out', slug: 'lost-out', OfficeHolders: [officeholder({ id: 'oh-old', personId: LOSER_ID, isCurrent: false })] }),
+				]);
+			},
+		};
+		const people = await getFeaturedPeople({ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) }, withPastWinner);
+
+		expect(people.candidates).toEqual([]);
+		expect(people.representatives.map(r => [r.name, r.office, r.role])).toEqual([['Scott Corbin', 'Houston City Council - Ward 5', 'representative']]);
+	});
+
+	test('asks for sitting officials and the upcoming ballot before past candidates, so the 500-id cap never drops them', async () => {
+		const pastIds = Array.from({ length: 600 }, (_, i) => `eeeeeeee-0000-4000-8000-${String(i).padStart(12, '0')}`);
+		let asked: string[] = [];
+		const crowded: FeaturedPeopleDeps = {
+			...deps,
+			async getCandidacies({ raceSlug }) {
+				if (raceSlug !== 'tx/houston/mayor') return Promise.resolve([]);
+				return Promise.resolve([
+					candidacy({ personId: PLEDGED_ID }),
+					...pastIds.map((id, i) => candidacy({ id: `c-past-${i}`, personId: id, Race: { brHashId: 'r-2025', electionDate: '2025-11-04' } })),
+				]);
+			},
+			async getPersonsByIds(ids) {
+				asked = [...ids];
+				return deps.getPersonsByIds(ids);
+			},
+		};
+		await getFeaturedPeople({ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) }, crowded);
+
+		expect(asked.slice(0, 2).sort()).toEqual([PLEDGED_ID, UNPLEDGED_ID].sort());
+		expect(asked.slice(2)).toEqual(pastIds);
+	});
+
 	test('returns two empty lists, and no trusted count, when the place cannot be found', async () => {
 		const people = await getFeaturedPeople({ placeSlug: 'tx/nowhere-county/nowhere', locationLevel: 'city' }, deps);
 
@@ -446,6 +501,46 @@ describe('getFeaturedPeople across the ballot', () => {
 		expect(sorted(calls)).toEqual(ballot);
 		expect(sorted(people.candidates.map(c => c.office ?? ''))).toEqual(ballot);
 		expect(people.candidatesComplete).toBe(true);
+	});
+
+	test('a past-cycle county candidate who holds office now is named with the county, not the city', async () => {
+		const JUDGE_ID = 'eeeeeeee-0000-4000-8000-000000000005';
+		const places: Record<string, PlaceWithFacts> = {
+			'tx/harris-county/houston': { id: 'p-1', name: 'Houston', slug: 'tx/harris-county/houston', state: 'TX', Races: [race('tx/houston/mayor')] },
+			'tx/harris-county': { id: 'p-2', name: 'Harris County', slug: 'tx/harris-county', state: 'TX', Races: [race('tx/harris-county/judge', { positionLevel: 'COUNTY' })] },
+		};
+		const deps: FeaturedPeopleDeps = {
+			async getElectionsPagePlace({ slug }) {
+				return Promise.resolve(places[slug] ?? null);
+			},
+			async resolvePlaceRaceElectionDates() {
+				return Promise.resolve(new Map());
+			},
+			async getCandidacies({ raceSlug }) {
+				if (raceSlug !== 'tx/harris-county/judge') return Promise.resolve([]);
+				return Promise.resolve([candidacy({ id: 'c-judge', personId: JUDGE_ID, firstName: 'Lina', lastName: 'Hidalgo', Race: { brHashId: 'r-2022', electionDate: '2022-11-08' } })]);
+			},
+			async getOfficeHoldersByGeoId() {
+				return Promise.resolve([]);
+			},
+			async getPersonsByIds() {
+				return Promise.resolve([
+					personRow(JUDGE_ID, {
+						fullName: 'Lina Hidalgo',
+						slug: 'lina-hidalgo',
+						OfficeHolders: [officeholder({ id: 'oh-judge', personId: JUDGE_ID, officeTitle: 'County Judge', mailingCity: null })],
+					}),
+				]);
+			},
+			async getRemovedPersonIds() {
+				return Promise.resolve(new Set<string>());
+			},
+		};
+
+		const people = await getFeaturedPeople({ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) }, deps);
+
+		expect(people.candidates).toEqual([]);
+		expect(people.representatives.map(r => [r.name, r.location])).toEqual([['Lina Hidalgo', 'Harris County, TX']]);
 	});
 
 	/**

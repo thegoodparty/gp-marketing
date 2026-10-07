@@ -271,6 +271,11 @@ Four things from it that affect other components in the batch:
   places and takes theirs. That is one or two extra place reads per page, at ISR build time, inside
   the tagged 1h cache. The aggregate endpoint this doc asks for above is still wanted for the hero
   *counts*; it is not a blocker for listing overlapping races.
+- **The opening year prefers the own level only while it has something upcoming.** Encinitas, CA's
+  city races stop at 2024 while San Diego County and California vote in 2026, and the page opened
+  on 2024 under an "Upcoming elections" headline (Emily, 2026-10-07). `resolveLocationDefaultYear`
+  takes the own level's years when they hold this year or a year ahead, otherwise the union the
+  dropdown offers, so only a place with nothing upcoming anywhere opens on a past year.
 - **A client-side filter silently strips links from the HTML.** These blocks are `'use client'` but
   still server-render, so a `useMemo` that filters the array leaves the non-matching rows in no
   `<a>` at all — only in the RSC payload, as data. `/elections/tx` linked 3 of its 15 positions and
@@ -720,8 +725,11 @@ people now follow the ballot that branch built. Decisions:
   The body copy therefore says "near you", not "in [location]".
 - **Only the upcoming ballot.** `/v1/candidacies?raceSlug=` returns every cycle of a slug, so past
   candidates appeared beside current ones (Emily, 2026-10-07, Holland, MI). A candidacy whose own
-  `Race.electionDate` has passed is dropped before the cards are built; one with a date uses it on
-  the card. Officeholders were already limited to `isCurrent`.
+  `Race.electionDate` has passed leaves the candidates; one with a date uses it on the card.
+  Officeholders were already limited to `isCurrent`. The first cut dropped Holland's sitting council
+  members, who reached the block only through their 2025 race because `/v1/officeholders?geoId=`
+  for the city did not list them: a past-cycle candidate whose person record carries a current
+  `OfficeHolders` term now stays, as a representative card, when the feed missed them.
 - **The count is a seam, not a figure.** The body copy accepts `[count of candidates]`, meaning
   the number of pledged people in the page's place *and everything inside it* (all of Texas on the
   Texas page). That is a downward count, and election-api cannot answer it today: a person row
@@ -1171,6 +1179,15 @@ Apply these across the whole batch so the blocks stay consistent.
   no single token gives, so it pairs `heading-lg` with a `max-md:text-heading-md`
   override. Both are registered in the tailwind-merge font-size list; a size that is
   not in that list is silently dropped (see `.cursor/BUGBOT.md`).
+- **"Who's currently in office" reads every seat of a multi-district office.** A race carries one
+  BallotReady position id, and `/v1/officeholders?positionId=` answers for that seat alone, so Los
+  Angeles' city council page listed District 9 and nobody else (Emily, 2026-10-07). The loader now
+  also reads the page place's officeholders (`getElectionsPagePlace` for the geo id, then
+  `/v1/officeholders?geoId=`) and keeps those whose normalised position name matches the race's,
+  merged and deduped with the position-id read and ordered by district when every seat is numbered.
+  Only the race's `normalizedPositionName` is compared (the display name never matches the rows);
+  a race without one lists the single seat its position id answers for. A failed place read keeps
+  the race's own seat rather than hiding the section.
 - **The `/candidates` pages are going away with the redesign** (Emily, 2026-09-24). No
   redesign block links to `/elections/.../position/<slug>/candidates`. Candidate rows live on the
   position page itself (the content block's list, anchored at `#position-candidates`), and the

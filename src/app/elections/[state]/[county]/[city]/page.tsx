@@ -21,7 +21,7 @@ import {
 	hasSuspiciousFactsMatch,
 	placeToFactsCards,
 	resolveLocalityName,
-	resolveDefaultElectionYear,
+	resolveLocationDefaultYear,
 	resolvePlaceRaceElectionDates,
 } from '~/lib/electionsHelpers';
 import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
@@ -108,9 +108,9 @@ export default async function Page({ params }: { params: Promise<{ state: string
 			countySlug,
 		});
 		const districtAllYears = [...new Set([...dataYears, ...districtOverlapping.dataYears])].sort((a, b) => a - b);
-		// Own level first so the opening list is populated; union as the fallback so
-		// the opening year is always one the dropdown offers. See the county route.
-		const defaultYear = resolveDefaultElectionYear(dataYears.length > 0 ? dataYears : districtAllYears, currentYear);
+		// Own level first so the opening list is populated, the union when the own
+		// level has nothing upcoming. See `resolveLocationDefaultYear`.
+		const defaultYear = resolveLocationDefaultYear(dataYears, districtAllYears, currentYear);
 		const availableYears = districtAllYears.length > 0 ? districtAllYears : [currentYear];
 		const factsCards = placeToFactsCards(districtPlace);
 		const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);
@@ -217,9 +217,10 @@ export default async function Page({ params }: { params: Promise<{ state: string
 	});
 
 	const allYears = [...new Set([...dataYears, ...overlapping.dataYears])].sort((a, b) => a - b);
-	// Own level first so the opening list is populated; union as the fallback so
-	// the opening year is always one the dropdown offers. See the county route.
-	const defaultYear = resolveDefaultElectionYear(dataYears.length > 0 ? dataYears : allYears, currentYear);
+	// Own level first so the opening list is populated, the union when the own
+	// level has nothing upcoming, so the page never opens on a past year while
+	// its county or state still vote. See `resolveLocationDefaultYear`.
+	const defaultYear = resolveLocationDefaultYear(dataYears, allYears, currentYear);
 	const availableYears = allYears.length > 0 ? allYears : [currentYear];
 	const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);
 

@@ -21,7 +21,15 @@ export async function renderElectionsPositionPage(input: PositionTemplateContext
 	// officeholder rows are loaded once, in one place, rather than in each route.
 	const ctx: PositionTemplateContext = {
 		...input,
-		officeholders: input.officeholders ?? (await loadPositionOfficeholders(input.race?.positionId)),
+		officeholders:
+			input.officeholders ??
+			(await loadPositionOfficeholders({
+				positionId: input.race?.positionId,
+				placeSlug: input.placeSlug,
+				// Only election-api's own normalised name can match its officeholder rows;
+				// a race without one gets the single seat its position id answers for.
+				positionName: input.race?.normalizedPositionName,
+			})),
 	};
 	const schemas = buildPositionPageSchemas(ctx);
 	const raceSlug = ctx.raceSlug ?? ctx.race?.slug;

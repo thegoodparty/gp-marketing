@@ -37,6 +37,7 @@ import {
 	resolveClaimedCustomIssueText,
 	resolveClaimedTextField,
 	resolveDefaultElectionYear,
+	resolveLocationDefaultYear,
 	resolveLocalityName,
 	resolvePlaceRaceElectionDates,
 	resolveProfileAboutText,
@@ -1602,5 +1603,26 @@ describe('mergeOfficeItems', () => {
 
 	test('a plain concatenation is unchanged when nothing overlaps', () => {
 		expect(mergeOfficeItems([office('a', 'x/one')], [office('b', 'x/two')]).map(o => o.id)).toEqual(['a', 'b']);
+	});
+});
+
+describe('resolveLocationDefaultYear', () => {
+	test("opens on the own level's year while it is this year or ahead", () => {
+		expect(resolveLocationDefaultYear([2024, 2026], [2024, 2026, 2028], 2026)).toBe(2026);
+		expect(resolveLocationDefaultYear([2027], [2026, 2027], 2026)).toBe(2027);
+	});
+
+	/** Encinitas, CA: city races stop at 2024 while the county and state vote in 2026. */
+	test('falls back to the union when the own level has nothing upcoming', () => {
+		expect(resolveLocationDefaultYear([2020, 2022, 2024], [2020, 2022, 2024, 2026, 2028], 2026)).toBe(2026);
+	});
+
+	test('a place with no races of its own opens on the union', () => {
+		expect(resolveLocationDefaultYear([], [2026, 2028], 2026)).toBe(2026);
+	});
+
+	test('only a place with nothing upcoming anywhere opens on a past year', () => {
+		expect(resolveLocationDefaultYear([2022], [2020, 2022], 2026)).toBe(2022);
+		expect(resolveLocationDefaultYear([], [], 2026)).toBe(2026);
 	});
 });

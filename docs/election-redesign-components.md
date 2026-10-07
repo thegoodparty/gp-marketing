@@ -271,6 +271,11 @@ Four things from it that affect other components in the batch:
   places and takes theirs. That is one or two extra place reads per page, at ISR build time, inside
   the tagged 1h cache. The aggregate endpoint this doc asks for above is still wanted for the hero
   *counts*; it is not a blocker for listing overlapping races.
+- **The opening year prefers the own level only while it has something upcoming.** Encinitas, CA's
+  city races stop at 2024 while San Diego County and California vote in 2026, and the page opened
+  on 2024 under an "Upcoming elections" headline (Emily, 2026-10-07). `resolveLocationDefaultYear`
+  takes the own level's years when they hold this year or a year ahead, otherwise the union the
+  dropdown offers, so only a place with nothing upcoming anywhere opens on a past year.
 - **A client-side filter silently strips links from the HTML.** These blocks are `'use client'` but
   still server-render, so a `useMemo` that filters the array leaves the non-matching rows in no
   `<a>` at all — only in the RSC payload, as data. `/elections/tx` linked 3 of its 15 positions and

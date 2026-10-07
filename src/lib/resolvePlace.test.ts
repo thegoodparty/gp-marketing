@@ -52,6 +52,17 @@ const washingtonDc: ResolvePlaceData = {
 	citySlugToCountySlug: new Map(),
 };
 
+// Virginia: the independent city "Fairfax city" is a county-level place beside
+// "Fairfax County", and the city sweep row for it maps to no county.
+const fairfaxVirginia: ResolvePlaceData = {
+	cityAndTownPlaces: [{ name: 'Fairfax city', slug: 'va/fairfax-city' }],
+	countyPlaces: [
+		{ name: 'Fairfax County', slug: 'va/fairfax-county' },
+		{ name: 'Fairfax city', slug: 'va/fairfax-city' },
+	],
+	citySlugToCountySlug: new Map(),
+};
+
 const emptyData: ResolvePlaceData = {
 	cityAndTownPlaces: [],
 	countyPlaces: [],
@@ -151,6 +162,21 @@ describe('resolvePlaceUrl: county match', () => {
 	test('resolves Washington DC at the county level', () => {
 		expect(resolvePlaceUrl({ county: 'District of Columbia', state: 'DC' }, washingtonDc)).toEqual({
 			url: '/elections/dc/district-of-columbia',
+			matchedLevel: 'county',
+		});
+	});
+
+	test('a city query that names an independent city goes to the city, not the county of the same name', () => {
+		// Emily, 2026-10-07: picking "Fairfax, VA" from the search dropdown landed on Fairfax County.
+		expect(resolvePlaceUrl({ city: 'Fairfax', state: 'VA' }, fairfaxVirginia)).toEqual({
+			url: '/elections/va/fairfax-city',
+			matchedLevel: 'county',
+		});
+	});
+
+	test('a county query still reaches the county when an independent city shares its name', () => {
+		expect(resolvePlaceUrl({ county: 'Fairfax County', state: 'VA' }, fairfaxVirginia)).toEqual({
+			url: '/elections/va/fairfax-county',
 			matchedLevel: 'county',
 		});
 	});

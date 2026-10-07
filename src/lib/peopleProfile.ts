@@ -1270,14 +1270,21 @@ async function loadOtherCandidates(
 		.filter((id): id is string => Boolean(id) && id!.toLowerCase() !== excludePersonId.toLowerCase());
 	const persons = await getPersonsByIds(ids);
 	const byId = new Map(persons.map((p) => [p.id.toLowerCase(), p]));
-	return withChosenPhotos(buildOtherCandidateCards(candidacies, byId, excludePersonId, removedPersonIds));
+	return withChosenPhotos(buildOtherCandidateCards(candidacies, byId, excludePersonId, removedPersonIds), removedPersonIds);
 }
 
-/** The person's own profile photo outranks the feed's on a card, as it does on their page. */
-async function withChosenPhotos(cards: RelatedPersonCard[]): Promise<RelatedPersonCard[]> {
+/**
+ * The person's own profile photo outranks the feed's on a card, as it does on
+ * their page. A takedown outranks both: the removals list and the profile come
+ * from two systems, so a photo the list suppressed is never put back, and an
+ * unreadable list (null) keeps every photo off, as `cardAvatarUrl` does.
+ */
+async function withChosenPhotos(cards: RelatedPersonCard[], removedPersonIds: ReadonlySet<string> | null): Promise<RelatedPersonCard[]> {
+	if (!removedPersonIds) return cards;
 	const avatars = await resolveProductAvatars(cards.map((card) => card.personId));
 	return cards.map((card) => {
-		const chosen = card.personId ? avatars.get(card.personId.toLowerCase()) : undefined;
+		const id = card.personId?.toLowerCase();
+		const chosen = id && !removedPersonIds.has(id) ? avatars.get(id) : undefined;
 		return chosen ? { ...card, avatarUrl: chosen } : card;
 	});
 }
@@ -1295,7 +1302,7 @@ async function loadNearbyOfficials(
 		.filter((id): id is string => Boolean(id) && id!.toLowerCase() !== excludePersonId.toLowerCase());
 	const persons = await getPersonsByIds(ids);
 	const byId = new Map(persons.map((p) => [p.id.toLowerCase(), p]));
-	return withChosenPhotos(buildNearbyOfficialCards(officeholders, byId, excludePersonId, removedPersonIds));
+	return withChosenPhotos(buildNearbyOfficialCards(officeholders, byId, excludePersonId, removedPersonIds), removedPersonIds);
 }
 
 /**

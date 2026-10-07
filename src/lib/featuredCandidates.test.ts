@@ -412,6 +412,18 @@ describe('getFeaturedPeople', () => {
 		expect(people.candidates.find(c => c.personId === PLEDGED_ID)?.avatarUrl).toBe('https://assets.goodparty.org/chosen.png');
 	});
 
+	test('a removed person keeps no photo even when their profile is live', async () => {
+		const people = await getFeaturedPeople(
+			{ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) },
+			{
+				...deps,
+				getRemovedPersonIds: async () => Promise.resolve(new Set([PLEDGED_ID.toLowerCase()])),
+				resolveProductAvatars: async () => Promise.resolve(new Map([[PLEDGED_ID.toLowerCase(), 'https://assets.goodparty.org/chosen.png']])),
+			},
+		);
+		expect(people.candidates.find(c => c.personId === PLEDGED_ID)?.avatarUrl).toBeNull();
+	});
+
 	test('returns two empty lists, and no trusted count, when the place cannot be found', async () => {
 		const people = await getFeaturedPeople({ placeSlug: 'tx/nowhere-county/nowhere', locationLevel: 'city' }, deps);
 

@@ -173,7 +173,10 @@ export async function loadPositionOfficeholders(
 		const person = row.personId ? personsById.get(row.personId.toLowerCase()) : undefined;
 		const built = mapOfficeholderToPerson(row, person, removed);
 		if (!built) continue;
-		const chosen = row.personId ? avatars.get(row.personId.toLowerCase()) : undefined;
+		// A takedown outranks the profile photo: the removals list and the profile
+		// come from two systems, and an unreadable list keeps every photo off.
+		const id = row.personId?.toLowerCase();
+		const chosen = id && removed !== null && !removed.has(id) ? avatars.get(id) : undefined;
 		const mapped = chosen ? { ...built, avatar: chosen } : built;
 		// A person holds one seat, so the person id dedupes a seat the two reads both
 		// returned. A row with no linked person falls back to its own id: two vacant

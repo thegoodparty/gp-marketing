@@ -160,6 +160,17 @@ describe('loadPositionOfficeholders', () => {
 		expect(people?.map(p => p.avatar)).toEqual(['https://assets.goodparty.org/chosen.png']);
 	});
 
+	test('a removed person keeps no photo even when their profile is live', async () => {
+		const people = await loadPositionOfficeholders(
+			{ positionId: 'pos-d9' },
+			deps({
+				getRemovedPersonIds: async () => Promise.resolve(new Set([seat(9).personId!.toLowerCase()])),
+				resolveProductAvatars: async () => Promise.resolve(new Map([[seat(9).personId!.toLowerCase(), 'https://assets.goodparty.org/chosen.png']])),
+			}),
+		);
+		expect(people?.map(p => p.avatar)).toEqual([undefined]);
+	});
+
 	test('two seats with no linked person are two rows, not one', async () => {
 		const vacant = (district: number) => seat(district, { personId: null, officeTitle: 'city council member' });
 		const people = await loadPositionOfficeholders(

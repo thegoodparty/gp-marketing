@@ -339,9 +339,14 @@ export async function getFeaturedPeople(
 
 	const candidates = buildCandidateCards(candidacies, personsById, placeContext, removedPersonIds);
 	// The person's own profile photo outranks the feed's, as on their profile page.
+	// A takedown outranks both: the removals list and the profile come from two
+	// systems, so a photo the list suppressed is never put back by the profile,
+	// and an unreadable list (null) keeps every photo off, as cardAvatarUrl does.
 	const avatars = await deps.resolveProductAvatars([...candidates, ...representatives].map(card => card.personId));
 	const withChosenPhoto = (card: FeaturedPersonCard): FeaturedPersonCard => {
-		const chosen = card.personId ? avatars.get(card.personId.toLowerCase()) : undefined;
+		const id = card.personId?.toLowerCase();
+		if (!id || !removedPersonIds || removedPersonIds.has(id)) return card;
+		const chosen = avatars.get(id);
 		return chosen ? { ...card, avatarUrl: chosen } : card;
 	};
 	return {

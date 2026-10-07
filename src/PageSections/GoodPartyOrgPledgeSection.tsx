@@ -1,7 +1,7 @@
 import { stegaClean } from 'next-sanity';
 
 import type { Sections, SectionOverrides } from '~/PageSections';
-import { transformButtons, normalizeRawCtaToButton } from '~/lib/buttonTransformer.tsx';
+import { transformButtons } from '~/lib/buttonTransformer.tsx';
 import type { TokenMap } from '~/lib/resolveTokens';
 import { resolveSectionText, resolveRichTextTokens } from '~/lib/resolveSectionText';
 import { resolveBg } from '~/ui/_lib/resolveBg.ts';
@@ -48,6 +48,12 @@ export function resolveGoodPartyOrgPledgeCard(card: PledgeCardFields, tokens?: T
 	};
 }
 
+// Documents saved before the 3 Columns option existed have no value and keep
+// rendering two columns; only an authored choice changes the layout.
+export function resolveGoodPartyOrgPledgeColumnLayout(authored: string | undefined): '1Col' | '2Col' | '3Col' {
+	return authored === '1Col' || authored === '3Col' ? authored : '2Col';
+}
+
 export function GoodPartyOrgPledgeSection({ tokens, pledgeOverride, ...section }: Props) {
 	const backgroundColor = section.goodPartyOrgPledgeDesignSettings?.field_blockColorCreamMidnight
 		? resolveBg(stegaClean(section.goodPartyOrgPledgeDesignSettings.field_blockColorCreamMidnight))
@@ -57,7 +63,7 @@ export function GoodPartyOrgPledgeSection({ tokens, pledgeOverride, ...section }
 		? resolveIconColor(stegaClean(section.goodPartyOrgPledgeDesignSettings.field_iconColor6ColorsWhiteMixed))
 		: 'blue';
 	const iconColor = resolvedIconColor === 'white' ? 'blue' : resolvedIconColor;
-	const columnLayout = stegaClean(section.goodPartyOrgPledgeDesignSettings?.field_columnLayout12Columns) === '1Col' ? '1Col' : '2Col';
+	const columnLayout = resolveGoodPartyOrgPledgeColumnLayout(stegaClean(section.goodPartyOrgPledgeDesignSettings?.field_columnLayout12Columns));
 	const header = resolveGoodPartyOrgPledgeHeader(section.summaryInfo, tokens);
 	// Person profiles supply this button per state (the pledge status decides
 	// whether it invites you to read the pledge or to take it), so the override
@@ -82,17 +88,12 @@ export function GoodPartyOrgPledgeSection({ tokens, pledgeOverride, ...section }
 					textSize: resolveTextSize(section.summaryInfo?.field_textSize),
 				}}
 				pledgeCards={section.goodPartyOrgPledgeItems?.list_pledgeCards?.map(card => {
-					const cta = card.ctaActionWithShared;
-					const pledgeButton = cta
-						? normalizeRawCtaToButton(cta, `${card._key ?? ''}-pledge-cta`)
-						: undefined;
 					const resolvedCard = resolveGoodPartyOrgPledgeCard(card, tokens);
 
 					return {
 						icon: card.field_icon,
 						title: resolvedCard.title,
 						content: <RichData value={resolvedCard.content} />,
-						button: pledgeButton ? transformButtons([pledgeButton])?.[0] : undefined,
 					};
 				})}
 			/>

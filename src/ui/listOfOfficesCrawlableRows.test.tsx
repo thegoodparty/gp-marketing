@@ -98,3 +98,160 @@ describe('ListOfOfficesBlock server markup', () => {
 		expect(isRowHidden(emptyYear, '/elections/tx/position/current-0')).toBe(true);
 	});
 });
+
+/**
+ * The overlapping levels a location page offers. A city voter also votes in
+ * their county's and state's races, so those appear under the Level dropdown —
+ * and their links must be in the markup whichever level is selected.
+ */
+const MULTI_LEVEL: OfficeItem[] = [
+	{ id: 'c1', type: 'CITY', level: 'local', position: 'Mayor', nextElectionDate: '2026-11-03', href: '/elections/tx/harris-county/houston/position/mayor' },
+	{ id: 'o1', type: 'COUNTY', level: 'county', position: 'County Judge', nextElectionDate: '2026-11-03', href: '/elections/tx/harris-county/position/county-judge' },
+	{ id: 's1', type: 'STATE', level: 'state', position: 'Governor', nextElectionDate: '2026-11-03', href: '/elections/tx/position/governor' },
+];
+
+describe('ListOfOfficesBlock level filter', () => {
+	test('a city page opens on All, showing its own offices and the overlapping levels together', () => {
+		// Emily, 2026-10-05: the list opens on the page's own level and every level above it.
+		const html = renderToStaticMarkup(
+			<ListOfOfficesBlock offices={MULTI_LEVEL} defaultYear={2026} availableYears={[2026]} pageLevel='local' />,
+		);
+		expect(isRowHidden(html, '/elections/tx/harris-county/houston/position/mayor')).toBe(false);
+		expect(isRowHidden(html, '/elections/tx/harris-county/position/county-judge')).toBe(false);
+		expect(isRowHidden(html, '/elections/tx/position/governor')).toBe(false);
+		expect(html).toContain('<option value="all" selected="">All</option>');
+	});
+
+	test('every level stays linked in the markup whatever is selected', () => {
+		const html = renderToStaticMarkup(
+			<ListOfOfficesBlock offices={MULTI_LEVEL} defaultYear={2026} availableYears={[2026]} pageLevel='local' />,
+		);
+		for (const office of MULTI_LEVEL) {
+			expect(html).toContain(`href="${office.href}"`);
+		}
+	});
+
+	test('offers Local, County and State on a city page', () => {
+		const html = renderToStaticMarkup(
+			<ListOfOfficesBlock offices={MULTI_LEVEL} defaultYear={2026} availableYears={[2026]} pageLevel='local' />,
+		);
+		expect(html).toContain('Filter offices by level of government');
+		expect(html).toContain('>All</option>');
+		expect(html).toContain('>Local</option>');
+		expect(html).toContain('>County</option>');
+		expect(html).toContain('>State</option>');
+	});
+
+	test('a state page gets no level dropdown, because it has only its own level', () => {
+		const html = renderToStaticMarkup(
+			<ListOfOfficesBlock
+				offices={MULTI_LEVEL.filter(o => o.level === 'state')}
+				defaultYear={2026}
+				availableYears={[2026]}
+				pageLevel='state'
+			/>,
+		);
+		expect(html).not.toContain('Filter offices by level of government');
+		expect(html).toContain('Filter offices by election year');
+	});
+
+	test('a level whose races are in other years is still offered, and still linked', () => {
+		// Municipal races are often odd-year where county races are even-year, so a
+		// level frequently has no race in the year the page opened on.
+		const offices: OfficeItem[] = [
+			{ id: 'c1', type: 'CITY', level: 'local', position: 'Mayor', nextElectionDate: '2027-11-02', href: '/p/mayor' },
+			{ id: 'o1', type: 'COUNTY', level: 'county', position: 'County Judge', nextElectionDate: '2026-11-03', href: '/p/judge' },
+		];
+		const html = renderToStaticMarkup(
+			<ListOfOfficesBlock offices={offices} defaultYear={2027} availableYears={[2026, 2027]} pageLevel='local' />,
+		);
+		expect(html).toContain('>County</option>');
+		expect(html).toContain('href="/p/judge"');
+		// All is selected, so the year alone decides: the 2026 county race is outside 2027.
+		expect(isRowHidden(html, '/p/mayor')).toBe(false);
+		expect(isRowHidden(html, '/p/judge')).toBe(true);
+	});
+
+	test('does not offer a level the page has no offices for', () => {
+		const noCounty = MULTI_LEVEL.filter(office => office.level !== 'county');
+		const html = renderToStaticMarkup(
+			<ListOfOfficesBlock offices={noCounty} defaultYear={2026} availableYears={[2026]} pageLevel='local' />,
+		);
+		expect(html).toContain('>State</option>');
+		expect(html).not.toContain('>County</option>');
+	});
+});
+
+/**
+ * The "# of independents running" column counts the row's pledged candidates.
+ * Only a count above zero is drawn: a zero and an unknown look the same, so a
+ * row never claims "0 independents" off a pledge flag that may be unwritten.
+ */
+describe('ListOfOfficesBlock independents column', () => {
+	const offices: OfficeItem[] = [
+		{ id: 'r1', type: 'STATE', position: 'State Representative', nextElectionDate: '2026-11-03', href: '/p/rep', pledgedCount: 2 },
+		{ id: 'r2', type: 'STATE', position: 'State Senate', nextElectionDate: '2026-11-03', href: '/p/senate', pledgedCount: 1 },
+		{ id: 'r3', type: 'COUNTY', position: 'County Assessor', nextElectionDate: '2026-11-03', href: '/p/assessor', pledgedCount: 0 },
+		{ id: 'r4', type: 'COUNTY', position: 'County Sheriff', nextElectionDate: '2026-11-03', href: '/p/sheriff' },
+	];
+	const html = renderToStaticMarkup(<ListOfOfficesBlock offices={offices} defaultYear={2026} availableYears={[2026]} />);
+	const rowOf = (href: string) => {
+		const start = html.indexOf(`href="${href}"`);
+		return html.slice(start, html.indexOf('</a>', start));
+	};
+	// The badge's own viewBox; the row's arrow is an SVG too, so `<svg` alone proves nothing.
+	const BADGE = 'viewBox="35 42 137 116"';
+
+	test('labels the column and shows a count with the badge, singular when it is one', () => {
+		expect(html).toContain('# of independents running');
+		expect(rowOf('/p/rep')).toContain('2<span class="md:sr-only"> independents running</span>');
+		expect(rowOf('/p/rep')).toContain(BADGE);
+		expect(rowOf('/p/senate')).toContain('1<span class="md:sr-only"> independent running</span>');
+	});
+
+	test('draws nothing for a zero or an unknown count', () => {
+		expect(rowOf('/p/assessor')).not.toContain('independent');
+		expect(rowOf('/p/assessor')).not.toContain(BADGE);
+		expect(rowOf('/p/sheriff')).not.toContain(BADGE);
+		expect(rowOf('/p/sheriff')).not.toContain('independent');
+	});
+
+	test('renders the description under the heading', () => {
+		const withDescription = renderToStaticMarkup(
+			<ListOfOfficesBlock offices={offices} defaultYear={2026} availableYears={[2026]} heading='Local elections' description={<p>Badge explainer</p>} />,
+		);
+		expect(withDescription).toContain('Badge explainer');
+	});
+});
+
+/**
+ * tailwind-merge, inside `tv`, cannot tell this design system's font-size names
+ * from colour names, so a slot written as `text-row-title text-black` loses the
+ * size and silently falls back to 16px. It cost this block its whole type scale
+ * once: only the heading survived, because it was the one slot with no colour
+ * beside it, and the result looked deliberate rather than broken.
+ *
+ * Colour now lives on the section and is inherited. These assertions fail if a
+ * `text-<colour>` is ever put back next to a `text-<size>` in the same slot.
+ */
+describe('ListOfOfficesBlock type scale survives class merging', () => {
+	const SIZE_UTILITIES = ['text-section-heading', 'text-row-title', 'text-row-meta', 'text-text-875', 'text-caption'];
+
+	for (const backgroundColor of ['cream', 'midnight'] as const) {
+		test(`keeps every font-size utility on the ${backgroundColor} variant`, () => {
+			const html = renderToStaticMarkup(
+				<ListOfOfficesBlock
+					offices={MULTI_LEVEL}
+					defaultYear={2026}
+					availableYears={[2026]}
+					pageLevel='local'
+					heading='Local elections in Houston'
+					backgroundColor={backgroundColor}
+				/>,
+			);
+			for (const utility of SIZE_UTILITIES) {
+				expect(html).toContain(utility);
+			}
+		});
+	}
+});

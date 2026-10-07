@@ -23,6 +23,8 @@ const fontSizeUtilities = [
 	'heading-xs',
 	'section-heading',
 	'section-subheading',
+	'row-title',
+	'row-meta',
 	'subtitle-1',
 	'subtitle-2',
 	'body-1',

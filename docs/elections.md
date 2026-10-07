@@ -52,6 +52,14 @@ the path that would otherwise render a 404. A caller that passes `isPrimary` its
 belongs upstream in `election-api`'s `raceFilterSchema`, where the `z.preprocess` around
 `isPrimary`/`isRunoff` turns `undefined` into `false`; until that lands, keep the retry.
 
+A slug can also name many race rows. Every California Assembly district is
+`ca/state-representative`, in every election year, and `/v1/races` folds the rows into one
+answer picked by id, which put a 2022 race on a page whose candidates were running in 2026.
+`getRaceBySlug` therefore asks for a race with an election date from today first and falls back
+to the unfiltered read only when there is none, so an office with no upcoming election still
+resolves to its last race. One position page per office slug, all districts together, is
+intentional (Emily, 2026-10-06); this only makes that page describe the current cycle.
+
 ## Domain vocabulary the agent needs
 
 ### MTFCC codes
@@ -94,11 +102,19 @@ The hierarchy is state, county, city, then subplace. The route tree under
 /elections/[state]
 /elections/[state]/[county]
 /elections/[state]/[county]/[city]
-/elections/[state]/position/[positionSlug]                              (+ /candidates)
-/elections/[state]/[county]/position/[positionSlug]                     (+ /candidates)
-/elections/[state]/[county]/[city]/position/[positionSlug]              (+ /candidates)
-/elections/[state]/[county]/[city]/[subplace]/position/[positionSlug]   (+ /candidates)
+/elections/[state]/position/[positionSlug]                              (+ /candidates, a 308 to the position page)
+/elections/[state]/[county]/position/[positionSlug]                     (+ /candidates, a 308 to the position page)
+/elections/[state]/[county]/[city]/position/[positionSlug]              (+ /candidates, a 308 to the position page)
+/elections/[state]/[county]/[city]/[subplace]/position/[positionSlug]   (+ /candidates, a 308 to the position page)
 ```
+
+**The `/candidates` listing pages are retired** (strategy doc "Programmatic Overhaul Pt. 2", August
+2026; Emily, 2026-10-06). The position page carries the candidate list itself, so each listing URL
+is a permanent redirect to its position page (`src/lib/candidates-redirects.ts`, wired into
+`next.config.ts`). They were never in the sitemap, and nothing on the redesigned pages links to
+them. The route files behind them, and the `candidatesHref` the position routes still compute for
+the old hero, come out in a follow-up once the position page batch has merged, because that batch
+edits the same files.
 
 Race slugs look like `state/[county]/[city]/[subplace]/positionSlug`. City and town
 races often carry 3-part slugs that must be expanded to 4-level URLs by resolving the

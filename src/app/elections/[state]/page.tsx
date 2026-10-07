@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	CITY_MTFCC,
+	getFeaturedCities,
 	getPlacesByState,
 	getPlaceBySlug,
 	isStateIndexDistrictPlace,
@@ -41,7 +42,7 @@ export default async function Page({
 	const stateName = getStateName(stateCode);
 	const currentYear = new Date().getFullYear();
 
-	const [allPlaces, placeData] = await Promise.all([
+	const [allPlaces, placeData, featuredCities] = await Promise.all([
 		getPlacesByState({ state: stateCode }),
 		getPlaceBySlug({
 			slug: state.toLowerCase(),
@@ -49,6 +50,7 @@ export default async function Page({
 			includeRaces: true,
 			raceColumns: PLACE_RACE_COLUMNS,
 		}),
+		getFeaturedCities({ stateCode }),
 	]);
 
 	const countyPlaces = allPlaces.filter(p => p.mtfcc === COUNTY_MTFCC);
@@ -104,8 +106,11 @@ export default async function Page({
 				r => r.positionLevel?.toUpperCase() === 'STATE',
 			);
 	const resolvedDates = await resolvePlaceRaceElectionDates(stateRaces);
+	// A state page has no places above it, so the offices list has one level and
+	// shows no Level dropdown.
 	const { offices: stateOffices, dataYears } = buildOfficeItemsFromPlaceRaces(stateRaces, resolvedDates, {
 		type: 'State',
+		level: 'state',
 		buildHref: race => buildPlaceRacePositionHref([state], race.slug),
 	});
 
@@ -127,6 +132,7 @@ export default async function Page({
 		offices: stateOffices,
 		elections: locationItems,
 		stateSlug: state.toLowerCase(),
+		featuredCities,
 		pageUrl,
 		pageTitle: `Elections in ${stateName}`,
 		pageDescription: `Browse elections and positions in ${stateName}.`,

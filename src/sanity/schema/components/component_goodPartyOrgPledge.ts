@@ -1,12 +1,14 @@
 import { resolveValue } from '../../utils/resolveValue.ts';
 import { handleReplacements } from '../../utils/handleReplacements.ts';
 import { getIcon } from '../../utils/getIcon.tsx';
+import { goodPartyOrgPledgeInitialValue } from '../../../lib/goodPartyOrgPledgeDefaults.ts';
 
 export const component_goodPartyOrgPledge = {
 	title: 'GoodParty.org Pledge',
 	name: 'component_goodPartyOrgPledge',
 	type: 'object',
 	icon: getIcon('Heart'),
+	initialValue: goodPartyOrgPledgeInitialValue,
 	fields: [
 		{
 			title: 'Text',

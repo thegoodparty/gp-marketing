@@ -92,6 +92,20 @@ export interface RelatedPersonCard {
 	 * because a card sees less of the person than their own profile does.
 	 */
 	isPledged: boolean;
+	/**
+	 * Republican or Democrat, by the same party rule the profile's own gating
+	 * uses. Orders the rail: pledged people first, then the unpledged with no
+	 * major party, then everyone else (Emily, 2026-10-06; the featured
+	 * candidates block's rule).
+	 */
+	majorParty: boolean;
+	/**
+	 * The seat's district or ward as a short pill, e.g. "District 5" (Voter Guide
+	 * frames). Other candidates share the subject's race, so theirs is the race's
+	 * district; a nearby official's is their own office's. Null when the feed
+	 * names none.
+	 */
+	tag: string | null;
 	avatarUrl: string | null;
 }
 
@@ -182,6 +196,13 @@ export interface PersonProfileView {
 	empowered: boolean;
 	/** True when the person has taken the GoodParty pledge (renders a badge). */
 	pledged: boolean;
+	/**
+	 * When they took it, as the feed sends it (ISO date), for the sidebar's
+	 * "Signed on" line. Null whenever {@link pledged} is false, so a date can
+	 * never be published without the pledge it belongs to, and null while the
+	 * feed carries no date at all (see `PersonItem.pledgedAt`).
+	 */
+	pledgedAt: string | null;
 	displayName: string;
 	/** Hero line under the name, e.g. "Candidate for Mayor" or "City Council". */
 	roleTitle: string | null;
@@ -773,9 +794,23 @@ export function cardAvatarUrl(
 }
 
 /**
+ * "District 5" / "Ward 3" from the feed's sub-area pair, for the card tag. The
+ * name alone ("At-Large") and the value alone ("5") each stand on their own.
+ */
+export function districtTag(subAreaName: string | null | undefined, subAreaValue: string | null | undefined): string | null {
+	const name = subAreaName?.trim() || null;
+	const value = subAreaValue?.trim() || null;
+	if (name && value) return `${name} ${value}`;
+	return name ?? value;
+}
+
+/**
  * Maps candidacies sharing a position into "Other Candidates" cards, excluding
  * the subject. `personsById` supplies the pledge flag, which the candidacy feed
- * does not carry — see {@link loadOtherCandidates}.
+ * does not carry — see {@link loadOtherCandidates}. The seat tag is each
+ * candidacy's own race row (`Race.subAreaName` / `subAreaValue`, asked for by
+ * `getCandidacies`): a shared race slug names every district's race, so the
+ * slug's race is the wrong place to read a seat from (Emily, 2026-10-06).
  */
 export function buildOtherCandidateCards(
 	candidacies: CandidacyItem[],
@@ -803,6 +838,8 @@ export function buildOtherCandidateCards(
 			href,
 			isEmpowered: false,
 			isPledged: pledgedFromSpine(c.personId ? personsById.get(c.personId.toLowerCase()) : undefined, c.party),
+			majorParty: isMajorParty(classifyParty(c.party)),
+			tag: districtTag(c.Race?.subAreaName, c.Race?.subAreaValue),
 			avatarUrl: cardAvatarUrl(c.personId ?? null, c.image ?? null, removedPersonIds),
 		});
 		if (cards.length >= 6) break;
@@ -850,6 +887,8 @@ export function buildNearbyOfficialCards(
 			href,
 			isEmpowered: false,
 			isPledged: pledgedFromSpine(person, ...(oh.partyNames ?? [])),
+			majorParty: isMajorParty(classifyPartyFrom(...orderPartyNames(oh.partyNames ?? []))),
+			tag: districtTag(oh.subAreaName, oh.subAreaValue),
 			avatarUrl: cardAvatarUrl(pid, person?.headshotUrl ?? null, removedPersonIds),
 		});
 		if (cards.length >= 6) break;
@@ -1080,6 +1119,14 @@ export function composeView(
 			}
 		: null;
 
+	// Pledge is a factual spine flag, and it survives removal (K/L): a removed
+	// profile states the same pledge fact it would otherwise (Emily,
+	// 2026-10-06), unlike the authored content and photo, which are stripped.
+	// Eligibility is read BEFORE the flag: a CRM `Pledge Status = Yes` on
+	// someone the same CRM calls partisan is a data error, not a pledge
+	// (Mamdani, Cuomo).
+	const pledged = !pledgeIneligible && confirmedRunning(person?.confirmedCandidate) && (person?.isPledged ?? false);
+
 	// Removal strips photo + authored content; keep only the civics spine.
 	const avatarUrl = removed ? null : (overlay?.avatarUrl ?? person?.headshotUrl ?? null);
 	const bio = removed ? null : (overlay?.bioOverride ?? person?.bioText ?? null);
@@ -1103,15 +1150,8 @@ export function composeView(
 		removed,
 		unpublished,
 		empowered,
-		// Pledge is a factual spine flag; suppress it on removed (K/L) pages along
-		// with the rest of the authored/empowerment framing. Eligibility is read
-		// BEFORE the flag: a CRM `Pledge Status = Yes` on someone the same CRM
-		// calls partisan is a data error, not a pledge (Mamdani, Cuomo).
-		pledged:
-			!removed &&
-			!pledgeIneligible &&
-			confirmedRunning(person?.confirmedCandidate) &&
-			(person?.isPledged ?? false),
+		pledged,
+		pledgedAt: pledged ? (person?.pledgedAt ?? null) : null,
 		pledgeIneligible,
 		displayName,
 		roleTitle,

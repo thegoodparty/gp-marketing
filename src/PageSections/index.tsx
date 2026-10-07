@@ -92,6 +92,18 @@ export type SectionOverrides = {
 		factsCards?: Array<{ factType: string; label: string; value: string }>;
 		hidden?: boolean;
 	};
+	component_featuredCitiesBlock?: {
+		/**
+		 * Cities of the page's own place, ranked by open elections. Set by the
+		 * location index routes (state / county / city) from `getFeaturedCities`.
+		 *
+		 * An empty array hides the block: it means this place has no cities with
+		 * anything on the ballot. Leaving `cities` unset is different — the block
+		 * then reads the national "most elections" list, which is right for
+		 * /elections and wrong for a location page, so location routes always set it.
+		 */
+		cities?: import('~/types/elections').FeaturedCityCard[];
+	};
 	component_locationEditorialBlock?: {
 		/**
 		 * Overrides the Sanity-authored heading (location index pages could set it
@@ -129,25 +141,60 @@ export type SectionOverrides = {
 		 * back to the link set in Studio and, with neither, is left out.
 		 */
 		guideHref?: string;
+		/**
+		 * That article's own title, read from Sanity by the position renderer. It
+		 * replaces the guide card's editor-set heading, whose "[office name]" token
+		 * printed the raw office name ("How to Run for County Recorder-Register of
+		 * Deeds-Register of Mesne Conveyance"); the article is written for the office
+		 * type, so its title reads properly (Emily, 2026-10-06). Absent when the
+		 * lookup fails, and the heading falls back to the editor copy.
+		 */
+		guideTitle?: string;
 		/** When true the section renders nothing. */
 		hidden?: boolean;
 	};
 	component_electionsPositionHero?: import('~/PageSections/ElectionsPositionHeroSection').OfficeData;
 	component_electionsPositionContentBlock?: import('~/PageSections/ElectionsPositionContentBlockSection').ElectionsPositionContentBlockOverride;
 	component_locationLandingPageHero?: {
+		/** The whole headline. Without it the block falls back to the bare location name. */
+		headline?: string;
 		locationLevel?: 'state' | 'county' | 'city' | 'district';
 		stateName?: string;
 		countyName?: string;
 		cityName?: string;
 		bodyCopy?: string;
-		searchPlaceholder?: string;
+		/**
+		 * The races on the page's ballot in the year the offices list opens on,
+		 * counted off the same rows that list shows. The halo green card shows it
+		 * (a real zero included) and hides when it is null.
+		 */
+		raceCount?: number | null;
+		/**
+		 * What the page knows about its independents, from the fetch that feeds
+		 * `component_featuredCandidatesBlock`, scoped to the same year. The lavender
+		 * card shows `candidateCount` (a real zero included) and hides when it is
+		 * null; a button anchored to the featured block hides unless `hasAny`. Both
+		 * this and `raceCount` are absent on pages that are not location pages,
+		 * where the editor's figures and buttons render as written.
+		 */
+		independents?: import('~/lib/featuredPeople').IndependentsSummary;
 	};
 	component_listOfOfficesBlock?: {
-		heading?: string;
+		/**
+		 * Fallback heading, used only when the template's own heading field is
+		 * empty. The editor's field (with its location tokens) normally wins.
+		 */
 		headline?: string;
 		defaultYear?: number;
 		availableYears?: number[];
 		offices?: import('~/ui/ListOfOfficesBlock').OfficeItem[];
+		/**
+		 * The level of the page itself, which sets the Level dropdown's default and
+		 * which levels it offers. Populated by the location index routes; a block
+		 * dropped on any other page falls back to showing its offices with no
+		 * dropdown.
+		 */
+		pageLevel?: import('~/ui/ListOfOfficesBlock').OfficeLevel;
 	};
 	component_featuredCandidatesBlock?: {
 		/**
@@ -160,6 +207,16 @@ export type SectionOverrides = {
 		 */
 		candidates?: import('~/lib/featuredPeople').FeaturedPersonCard[];
 		representatives?: import('~/lib/featuredPeople').FeaturedPersonCard[];
+		/**
+		 * The number of pledged people in the page's place and everything inside
+		 * it, for the body copy's `[count of candidates]` placeholder. No route
+		 * supplies it yet: election-api has no place-with-descendants filter on
+		 * persons, so a count of all of Texas cannot be taken from a location page
+		 * today (docs/election-redesign-components.md asks for one). Absent, the
+		 * placeholder is left out of the sentence rather than published as a
+		 * number taken from the partial carousel pool.
+		 */
+		pledgedCount?: number | null;
 		/** When true the section renders nothing. */
 		hidden?: boolean;
 	};
@@ -203,19 +260,20 @@ export type SectionOverrides = {
 		/** Persona tag pills shown above the name (e.g. "Candidate", "Incumbent"). */
 		tags?: string[];
 		/**
-		 * Attribution line under the office. `empowered` → "Empowered by
-		 * GoodParty.org" (the /candidate framing); the three `pledge` variants are
-		 * the /people ones and state whether the person has taken the GoodParty.org
-		 * pledge, or is ineligible for it as a major-party affiliate; `none` →
-		 * nothing. When omitted, falls back to `isEmpowered`.
+		 * What the hero says about the person. `empowered` → the "Empowered by
+		 * GoodParty.org" line (the /candidate framing); the three `pledge` variants
+		 * are the /people ones and render the pledge callout, stating whether the
+		 * person has taken the GoodParty.org Pledge, or is ineligible for it as a
+		 * major-party affiliate; `none` → nothing. When omitted, falls back to
+		 * `isEmpowered`.
 		 */
 		attribution?: 'empowered' | 'pledged' | 'notPledged' | 'pledgeIneligible' | 'none';
 		/**
-		 * When set, the attribution line links here — on /people, the in-page
-		 * anchor for the pledge band. Only pass it when the destination is
-		 * actually on the page; the hero cannot tell.
+		 * Who the page is about, for the intro paragraph and the callout sentence
+		 * ("This candidate…" / "This elected official…"). Only /people sets it; the
+		 * legacy /candidate pages leave it out and render no intro.
 		 */
-		attributionHref?: string;
+		subject?: 'candidate' | 'elected official';
 		/** GoodParty.org logo on the portrait and beside the attribution line. */
 		showBrandMark?: boolean;
 	};
@@ -581,6 +639,7 @@ export function PageSections(props: Props) {
 							<Boundary key={section._key} componentName='Elections Position Content Block'>
 								<ElectionsPositionContentBlockSection
 									{...section}
+									tokens={props.tokens}
 									contentOverride={props.sectionOverrides?.component_electionsPositionContentBlock}
 								/>
 							</Boundary>
@@ -594,7 +653,10 @@ export function PageSections(props: Props) {
 					case 'component_featuredCitiesBlock':
 						return (
 							<Boundary key={section._key} componentName='Featured Cities Block'>
-								<FeaturedCitiesBlockSection {...section} />
+								<FeaturedCitiesBlockSection
+									{...section}
+									citiesOverride={props.sectionOverrides?.component_featuredCitiesBlock?.cities}
+								/>
 							</Boundary>
 						);
 					case 'component_goodPartyOrgPledge': {

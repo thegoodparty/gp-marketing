@@ -4,7 +4,7 @@ import {
 	buildElectionPositionHrefFromRaceSlug,
 	buildFAQSchema,
 	buildOfficeItemsFromPlaceRaces,
-	buildRaceCandidatesHref,
+	mergeOfficeItems,
 	buildRacePositionHref,
 	joinPlaceNames,
 	buildRaceSlug,
@@ -12,6 +12,7 @@ import {
 	buildSubplaceRaceSlug,
 	isRealPlaceSegment,
 	canonicalizeCountyEquivalentName,
+	countOpenElections,
 	findCityForDistrictName,
 	formatElectionDateFromApi,
 	formatFilingPeriodFromRace,
@@ -30,6 +31,7 @@ import {
 	inferSidebarLinkIcon,
 	isElectionDateBeforeToday,
 	placeToFactsCards,
+	rankFeaturedCities,
 	redirectCityPlaceToFourLevelUrl,
 	redirectCityRaceToFourLevelUrl,
 	resolveClaimedCustomIssueText,
@@ -602,6 +604,7 @@ describe('buildOfficeItemsFromPlaceRaces', () => {
 
 		const { offices, dataYears } = buildOfficeItemsFromPlaceRaces(races, resolvedDates, {
 			type: 'State',
+			level: 'state',
 			buildHref: race => `/elections/ca/position/${race.slug.split('/').slice(1).join('/')}`,
 		});
 
@@ -618,6 +621,7 @@ describe('buildOfficeItemsFromPlaceRaces', () => {
 
 		const { offices } = buildOfficeItemsFromPlaceRaces(races, new Map(), {
 			type: 'County',
+			level: 'county',
 			buildHref: () => undefined,
 		});
 
@@ -634,6 +638,7 @@ describe('buildOfficeItemsFromPlaceRaces', () => {
 
 		const { dataYears } = buildOfficeItemsFromPlaceRaces(races, resolvedDates, {
 			type: 'State',
+			level: 'state',
 			buildHref: race => `/elections/ca/position/${race.slug.split('/').slice(1).join('/')}`,
 		});
 
@@ -1102,19 +1107,6 @@ describe('buildElectionPositionHrefFromRaceSlug', () => {
 	});
 });
 
-describe('buildRaceCandidatesHref', () => {
-	const citySlugToCountySlug = new Map([['mi/northville', 'mi/wayne-county']]);
-
-	test('appends /candidates to position path', () => {
-		expect(buildRaceCandidatesHref({ slug: 'mi/northville/city-legislature', positionLevel: 'CITY' }, { citySlugToCountySlug })).toBe(
-			'/elections/mi/wayne-county/northville/position/city-legislature/candidates',
-		);
-	});
-
-	test('returns undefined for invalid slug', () => {
-		expect(buildRaceCandidatesHref({ slug: undefined })).toBeUndefined();
-	});
-});
 
 describe('buildFAQSchema', () => {
 	test('uses FAQPage as root @type', () => {
@@ -1436,5 +1428,179 @@ describe('resolveDefaultElectionYear', () => {
 
 	test('does not assume the years arrive sorted', () => {
 		expect(resolveDefaultElectionYear([2028, 2020, 2027], 2026)).toBe(2027);
+	});
+});
+
+function cityWithRaces(name: string, slug: string, dates: string[]): PlaceItem {
+	return {
+		id: slug,
+		name,
+		slug,
+		state: slug.split('/')[0]?.toUpperCase() ?? '',
+		Races: dates.map((electionDate, i) => ({ id: `${slug}-${i}`, slug: `${slug}-race-${i}`, electionDate })),
+	};
+}
+
+describe('countOpenElections', () => {
+	test('counts this year when the city has elections in it', () => {
+		const city = cityWithRaces('Anytown', 'tn/anytown', ['2026-05-05', '2026-11-03', '2028-11-07']);
+		expect(countOpenElections(city.Races, 2026)).toBe(2);
+	});
+
+	test('counts the soonest year ahead when this year has none', () => {
+		const city = cityWithRaces('Anytown', 'tn/anytown', ['2027-03-02', '2027-11-02', '2028-11-07']);
+		expect(countOpenElections(city.Races, 2026)).toBe(2);
+	});
+
+	test('counts nothing when every election is in the past', () => {
+		const city = cityWithRaces('Anytown', 'tn/anytown', ['2022-11-08', '2024-11-05']);
+		expect(countOpenElections(city.Races, 2026)).toBe(0);
+	});
+
+	test('counts nothing for a city with no races at all', () => {
+		expect(countOpenElections(undefined, 2026)).toBe(0);
+		expect(countOpenElections([], 2026)).toBe(0);
+	});
+
+	test('ignores races with no usable election date', () => {
+		const races: PlaceRace[] = [
+			{ id: '1', slug: 'a', electionDate: '2026-11-03' },
+			{ id: '2', slug: 'b' },
+			{ id: '3', slug: 'c', electionDate: 'not a date' },
+		];
+		expect(countOpenElections(races, 2026)).toBe(1);
+	});
+});
+
+describe('rankFeaturedCities', () => {
+	const cities = [
+		cityWithRaces('Bigtown', 'tn/bigtown', ['2026-11-03', '2026-11-03', '2026-11-03']),
+		cityWithRaces('Midtown', 'tn/midtown', ['2026-11-03', '2026-11-03']),
+		cityWithRaces('Smalltown', 'tn/smalltown', ['2026-11-03']),
+		cityWithRaces('Pasttown', 'tn/pasttown', ['2022-11-08']),
+	];
+
+	test('returns the most open elections first, capped at count', () => {
+		const ranked = rankFeaturedCities(cities, { count: 2, currentYear: 2026 });
+		expect(ranked.map(r => r.place.name)).toEqual(['Bigtown', 'Midtown']);
+		expect(ranked.map(r => r.openElectionsCount)).toEqual([3, 2]);
+	});
+
+	test('returns fewer than count when the place has fewer cities with elections', () => {
+		const ranked = rankFeaturedCities(cities, { count: 5, currentYear: 2026 });
+		expect(ranked.map(r => r.place.name)).toEqual(['Bigtown', 'Midtown', 'Smalltown']);
+	});
+
+	test('drops cities with nothing on the ballot rather than showing a zero', () => {
+		const ranked = rankFeaturedCities(cities, { count: 5, currentYear: 2026 });
+		expect(ranked.map(r => r.place.name)).not.toContain('Pasttown');
+	});
+
+	test('breaks ties by name so the order is stable across renders', () => {
+		const tied = [cityWithRaces('Zeta', 'tn/zeta', ['2026-11-03']), cityWithRaces('Alpha', 'tn/alpha', ['2026-11-03'])];
+		expect(rankFeaturedCities(tied, { count: 2, currentYear: 2026 }).map(r => r.place.name)).toEqual(['Alpha', 'Zeta']);
+	});
+
+	test('never features the city the page is about, whichever slug shape it arrives as', () => {
+		const ranked = rankFeaturedCities(cities, {
+			count: 5,
+			currentYear: 2026,
+			excludeSlug: 'tn/some-county/bigtown',
+		});
+		expect(ranked.map(r => r.place.name)).toEqual(['Midtown', 'Smalltown']);
+	});
+
+	/** Tennessee has a Franklin in more than one county; only the page's own goes. */
+	test('keeps a same-named city in another county', () => {
+		const franklins = [
+			cityWithRaces('Franklin', 'tn/williamson-county/franklin', ['2026-11-03', '2026-11-03']),
+			cityWithRaces('Franklin', 'tn/shelby-county/franklin', ['2026-11-03']),
+		];
+		const ranked = rankFeaturedCities(franklins, {
+			count: 5,
+			currentYear: 2026,
+			excludeSlug: 'tn/williamson-county/franklin',
+		});
+		expect(ranked.map(r => r.place.slug)).toEqual(['tn/shelby-county/franklin']);
+	});
+
+	test('excludes on the city segment only when the page slug names no county', () => {
+		const franklins = [
+			cityWithRaces('Franklin', 'tn/williamson-county/franklin', ['2026-11-03', '2026-11-03']),
+			cityWithRaces('Franklin', 'tn/shelby-county/franklin', ['2026-11-03']),
+		];
+		expect(rankFeaturedCities(franklins, { count: 5, currentYear: 2026, excludeSlug: 'tn/franklin' })).toEqual([]);
+	});
+
+	test('skips places missing a name or slug', () => {
+		const broken: PlaceItem[] = [
+			{ id: 'x', name: '', slug: 'tn/x', state: 'TN', Races: [{ id: '1', slug: 'r', electionDate: '2026-11-03' }] },
+		];
+		expect(rankFeaturedCities(broken, { count: 5, currentYear: 2026 })).toEqual([]);
+	});
+});
+
+/**
+ * A location page's offices list opens on its own level (Local on a city page),
+ * while the year dropdown is the union across the levels it can switch to. Those
+ * two have to agree: the opening year must be populated at the page's own level
+ * *and* be one the dropdown offers.
+ */
+describe('the year a location page opens its offices list on', () => {
+	const openingYear = (ownYears: number[], overlapYears: number[], today = 2026) => {
+		const allYears = [...new Set([...ownYears, ...overlapYears])].sort((a, b) => a - b);
+		return {
+			defaultYear: resolveDefaultElectionYear(ownYears.length > 0 ? ownYears : allYears, today),
+			availableYears: allYears.length > 0 ? allYears : [today],
+		};
+	};
+
+	test('opens on a year its own level has races in, not the soonest overall', () => {
+		// A city voting in 2027 alongside state races in 2026 must open on 2027,
+		// or it opens on a Local list that is empty.
+		const { defaultYear, availableYears } = openingYear([2027], [2026]);
+		expect(defaultYear).toBe(2027);
+		expect(availableYears).toContain(defaultYear);
+	});
+
+	test('falls back to the overlapping years when it has no races of its own', () => {
+		// Otherwise it opens on the current year while the dropdown offers only 2027.
+		const { defaultYear, availableYears } = openingYear([], [2027]);
+		expect(defaultYear).toBe(2027);
+		expect(availableYears).toContain(defaultYear);
+	});
+
+	test('opening year is always one the dropdown offers', () => {
+		const combinations: Array<[number[], number[]]> = [
+			[[], []],
+			[[], [2026]],
+			[[], [2027, 2029]],
+			[[2026], []],
+			[[2027], [2026]],
+			[[2024], [2028]],
+			[[2026, 2028], [2027]],
+		];
+		for (const [own, overlap] of combinations) {
+			const { defaultYear, availableYears } = openingYear(own, overlap);
+			expect(availableYears).toContain(defaultYear);
+		}
+	});
+});
+
+describe('mergeOfficeItems', () => {
+	const office = (id: string, raceSlug?: string) => ({ id, type: 'Local', position: id, nextElectionDate: '2026-11-03', ...(raceSlug ? { raceSlug } : {}) });
+
+	test('keeps the first row for a race that the district and its county both report', () => {
+		const own = [office('a', 'mi/sterling/city-legislature'), office('b', 'mi/arenac-county/clerk')];
+		const overlapping = [office('c', 'MI/Arenac-County/Clerk'), office('d', 'mi/state-senator')];
+		expect(mergeOfficeItems(own, overlapping).map(o => o.id)).toEqual(['a', 'b', 'd']);
+	});
+
+	test('rows without a race slug fall back to their id, so two slugless rows both stay', () => {
+		expect(mergeOfficeItems([office('a'), office('b')], [office('a')]).map(o => o.id)).toEqual(['a', 'b']);
+	});
+
+	test('a plain concatenation is unchanged when nothing overlaps', () => {
+		expect(mergeOfficeItems([office('a', 'x/one')], [office('b', 'x/two')]).map(o => o.id)).toEqual(['a', 'b']);
 	});
 });

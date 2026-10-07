@@ -40,9 +40,16 @@ const styles = tv({
 				base: 'bg-goodparty-cream',
 			},
 		},
+		size: {
+			default: {},
+			compact: {
+				base: 'p-4 lg:p-5',
+			},
+		},
 	},
 	defaultVariants: {
 		color: 'cream',
+		size: 'default',
 	},
 });
 
@@ -52,6 +59,9 @@ function parseAnimatedValue(value: string): { prefix: string; target: number; su
 	const [, prefix = '', numStr = '', suffix = ''] = match;
 	const target = parseInt(numStr.replace(/,/g, ''), 10);
 	if (Number.isNaN(target)) return null;
+	// More digits after the first run means this is not a count that can sensibly
+	// climb from zero: an election date would count "Nov. 0, 2026" up to "Nov. 4, 2026".
+	if (/\d/.test(suffix)) return null;
 	return { prefix, target, suffix };
 }
 
@@ -102,17 +112,25 @@ export type StatProps = {
 	color?: Exclude<(typeof componentColorValues)[number], 'inverse'>;
 	value?: string;
 	description?: string;
+	size?: 'default' | 'compact';
 };
+
+// A compact card is sized for a short count, so a long value (a spelled-out
+// election date, say) drops a step rather than wrapping past the card.
+function compactValueStyleType(value: string | undefined) {
+	return value && value.length > 8 ? 'heading-md' : 'heading-lg';
+}
 
 export function Stat(props: StatProps) {
 	const color = props.color ?? 'cream';
-	const { base, value } = styles({ color });
+	const size = props.size ?? 'default';
+	const { base, value } = styles({ color, size });
 	const parsed = props.value ? parseAnimatedValue(props.value) : null;
 
 	return (
 		<article className={base()} data-component='Stat'>
 			{props.value && (
-				<Text as='span' styleType='heading-xl' className={value()}>
+				<Text as='span' styleType={size === 'compact' ? compactValueStyleType(props.value) : 'heading-xl'} className={value()}>
 					{parsed ? <AnimatedNumber value={props.value} /> : props.value}
 				</Text>
 			)}

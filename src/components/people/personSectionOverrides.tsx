@@ -5,7 +5,6 @@ import { formatElectionDateFromApi } from '~/lib/electionsHelpers';
 import type { PersonAccomplishment, PersonProfileIssueStatus } from '~/types/people';
 import { mapAttribution, mapStyleUrl } from '~/lib/env';
 import type { SectionOverrides } from '~/PageSections';
-import { GOODPARTY_PLEDGE_ANCHOR_ID } from '~/PageSections/GoodPartyOrgPledgeSection';
 import type { TokenMap } from '~/lib/resolveTokens';
 import type { CandidateCard } from '~/ui/CandidatesBlock';
 import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
@@ -15,10 +14,12 @@ import { IconResolver } from '~/ui/IconResolver';
 import { cn } from '~/ui/_lib/utils';
 import { Text } from '~/ui/Text';
 import { ButtonLink } from '~/ui/Inputs/Button';
-import { CandidatesCard, type CardAttributionMode } from '~/ui/CandidatesCard';
+import type { CardAttributionMode } from '~/ui/CandidatesCard';
 import { VoterDensityMapCard } from './VoterDensityMapCard';
 import { ClaimProfileModal } from './ClaimProfileModal';
 import { PersonClaimCTABand } from './PersonClaimCTABand';
+import { PledgeSymbolCallout } from './PledgeSymbolCallout';
+import { RelatedPeopleList } from './RelatedPeopleList';
 
 // Below this rendered-voter coverage the density surface is too partial to be
 // trustworthy, so the map is hidden. Coverage may be null when upstream has no
@@ -111,12 +112,16 @@ function splitIssues(issues: PersonProfileView['issues']) {
 	};
 }
 
-/** Stable empowered-first ordering (Figma puts the GoodParty candidate on top). */
-function empoweredFirst(cards: CandidateCard[]): CandidateCard[] {
-	return [
-		...cards.filter(c => c.isGoodPartyCandidate),
-		...cards.filter(c => !c.isGoodPartyCandidate),
-	];
+/**
+ * Rail order (Emily, 2026-10-06), the featured candidates block's rule: pledged
+ * people first, then the unpledged with no major party, then Republicans and
+ * Democrats. Stable inside each group, so the feed's order survives. Pledged
+ * and claimed are the same thing to marketing, so an empowered card ranks with
+ * the pledged ones.
+ */
+function rankRelatedPeople(cards: RelatedPersonCard[]): RelatedPersonCard[] {
+	const tier = (c: RelatedPersonCard): number => (c.isPledged || c.isEmpowered ? 0 : c.majorParty ? 2 : 1);
+	return [0, 1, 2].flatMap(t => cards.filter(c => tier(c) === t));
 }
 
 /** Small persona tag pill(s) rendered above the hero name (Figma). */
@@ -336,7 +341,34 @@ function buildAuthoredSections(view: PersonProfileView): SectionMap {
 	if (view.bio) {
 		sections.aboutMe = { cardType: 'about-me', heading: 'About Me', content: view.bio };
 	}
+	// The Voter Guide frames close the platform card (Why + Campaign Issues) and
+	// the About Me section with the disclaimer (2156:30656 / 2156:30728; Emily,
+	// 2026-10-06). The in-office card (Top Priorities + Accomplishments) is also
+	// the person's own words, so it gets one too (Emily, 2026-10-06); the frames
+	// only draw candidates. It sits on the LAST section of each card so it ends
+	// the card whichever sections the owner wrote, and on About Me itself because
+	// Recent Experience follows it inside the same card. Only authored text gets
+	// one: the unclaimed placeholders are ours, not the person's.
+	const disclaimer = <AuthoredDisclaimer name={view.displayName} />;
+	const platformTail = sections.campaignIssues ?? sections.why;
+	if (platformTail) platformTail.footer = disclaimer;
+	const inOfficeTail = sections.accomplishments ?? sections.inOfficePriorities;
+	if (inOfficeTail) inOfficeTail.footer = disclaimer;
+	if (sections.aboutMe) sections.aboutMe.footer = disclaimer;
 	return sections;
+}
+
+export function authoredDisclaimerCopy(name: string): string {
+	return `These statements come from ${name} and do not reflect any positions or stances on individual issues held by GoodParty.org.`;
+}
+
+/** Figma: 12/16 Open Sans in gray-500 under the authored text. */
+function AuthoredDisclaimer({ name }: { name: string }): ReactNode {
+	return (
+		<Text as='p' styleType='caption' className='text-gray-500' data-component='AuthoredDisclaimer'>
+			{authoredDisclaimerCopy(name)}
+		</Text>
+	);
 }
 
 /** Muted, italic prompt copy used inside unclaimed placeholder cards. */
@@ -477,17 +509,6 @@ function pastElectionDisclaimer(view: PersonProfileView): ProfileContentCardProp
 	};
 }
 
-/** In-column "Other candidates" list — a vertical stack of candidate cards. */
-function OtherCandidatesContent({ cards }: { cards: CandidateCard[] }): ReactNode {
-	return (
-		<div className='flex flex-col gap-4'>
-			{cards.map(card => (
-				<CandidatesCard key={card._key ?? card.name} {...card} />
-			))}
-		</div>
-	);
-}
-
 /**
  * Civics-spine sections, available on every state (data permitting). These are
  * NOT empowerment-gated, so unclaimed major-party (I/J) and removed (K/L)
@@ -508,20 +529,23 @@ function buildCivicSections(view: PersonProfileView): SectionMap {
 	if (districtMap) {
 		sections.district = { heading: 'District information', content: districtMap };
 	}
-	// Figma title-cases the heading and leads with the empowered (GoodParty)
-	// candidate. FLAG: the frame reads "Other Candidates for [Position] in
+	// Figma title-cases the heading. FLAG: the frame reads "Other Candidates for [Position] in
 	// <Location>" but the view has no clean locality field distinct from the
 	// position name, so the "in <Location>" clause is omitted rather than invented.
-	const otherCandidates = empoweredFirst(toCandidateCards(view.otherCandidates));
+	// The "What this symbol means" box leads the list (Voter Guide frames; Emily,
+	// 2026-10-06). It explains the mark in the third person, so it renders on every
+	// profile that has the list; the cards themselves are unchanged. The frames do
+	// not draw it on Nearby Officials, so that list stays as it was.
+	const otherCandidates = toCandidateCards(rankRelatedPeople(view.otherCandidates));
 	if (otherCandidates.length > 0) {
 		sections.otherCandidates = {
 			heading: view.officeName ? `Other Candidates for ${view.officeName}` : 'Other Candidates',
-			content: <OtherCandidatesContent cards={otherCandidates} />,
+			content: <RelatedPeopleList cards={otherCandidates} callout={<PledgeSymbolCallout />} />,
 		};
 	}
-	const nearby = empoweredFirst(toCandidateCards(view.nearbyOfficials));
+	const nearby = toCandidateCards(rankRelatedPeople(view.nearbyOfficials));
 	if (nearby.length > 0) {
-		sections.nearbyOfficials = { heading: 'Nearby Officials', content: <OtherCandidatesContent cards={nearby} /> };
+		sections.nearbyOfficials = { heading: 'Nearby Officials', content: <RelatedPeopleList cards={nearby} /> };
 	}
 	return sections;
 }
@@ -580,9 +604,17 @@ function buildSidebar(view: PersonProfileView): ElectionsSidebarProps | undefine
 		: [];
 	const officeAddress = inOffice ? (view.officeAddress ?? []) : [];
 
+	// The pledge row reads the same flag as the hero's callout and the cards' line,
+	// and it waits for its date: election-api carries no pledge date yet (the source
+	// is to be the HubSpot deal's closed-won date, carried by the ETL), and a heading
+	// with only the mark under it was not worth showing in the meantime (Emily,
+	// 2026-10-06). The row appears on its own the day the date arrives.
+	const pledge = view.pledged && view.pledgedAt ? { signedOn: formatElectionDateFromApi(view.pledgedAt) } : undefined;
+
 	if (
 		topInfos.length === 0 &&
 		!view.party &&
+		!pledge &&
 		contactIcons.length === 0 &&
 		officeContacts.length === 0 &&
 		officeAddress.length === 0
@@ -593,6 +625,7 @@ function buildSidebar(view: PersonProfileView): ElectionsSidebarProps | undefine
 	return {
 		topInfos: topInfos.length > 0 ? topInfos : undefined,
 		politicalAffiliation: view.party ?? undefined,
+		pledge,
 		contactIcons: contactIcons.length > 0 ? contactIcons : undefined,
 		officeContacts: officeContacts.length > 0 ? officeContacts : undefined,
 		officeAddress: officeAddress.length > 0 ? officeAddress : undefined,
@@ -630,12 +663,14 @@ function toCandidateCards(cards: RelatedPersonCard[]): CandidateCard[] {
 			name: c.name,
 			partyAffiliation: c.subtitle ?? '',
 			href: c.href!,
-			// The mark and the yellow frame follow this; the line follows the pledge.
-			// They are different facts — one says whose candidate this is, the other
-			// asserts something the person did — and on /people they come from
-			// different sources, so the card must not tie them together.
+			// The yellow frame follows this (the legacy GoodParty treatment, which the
+			// production builders never set); the line and the mark follow the pledge.
+			// Pledged and claimed are the same thing to marketing (Emily, 2026-10-06),
+			// and the Voter Guide frames draw the mark on the pledged card.
 			isGoodPartyCandidate: c.isEmpowered,
+			showMark: c.isPledged,
 			attribution: relatedCardAttribution(c),
+			tag: c.tag,
 			...(c.avatarUrl ? { avatar: c.avatarUrl } : {}),
 		}));
 }
@@ -703,14 +738,24 @@ function profileLocationLabel(view: PersonProfileView): string | null {
  * override that. `pledgeIneligible` also covers a CRM "Partisan Candidate",
  * which asserts the same thing without naming a party.
  *
- * Removal (K/L) says nothing at all. `pledged` is force-cleared for removed
- * profiles, so "Has Not Taken…" there would be a line we know may be false,
- * asserted about the one group who asked us to stop publishing them.
+ * Removal (K/L) changes nothing here (Emily, 2026-10-06): a removed profile
+ * carries the same callout it would without the request, read from the same
+ * flags. `pledged` is no longer cleared on removal for that reason.
  */
-function pledgeAttribution(view: PersonProfileView): 'pledged' | 'notPledged' | 'pledgeIneligible' | 'none' {
-	if (view.removed) return 'none';
+function pledgeAttribution(view: PersonProfileView): 'pledged' | 'notPledged' | 'pledgeIneligible' {
 	if (view.pledgeIneligible) return 'pledgeIneligible';
 	return view.pledged ? 'pledged' : 'notPledged';
+}
+
+/**
+ * Who the hero's intro and pledge callout are about. The frames only draw
+ * candidates; for someone who holds or held office the sentences say "elected
+ * official" and the intro says "public service" instead of "candidacy" (Emily,
+ * 2026-10-06). Someone serving AND running (state C) keeps the candidate
+ * wording, since the page leads with the candidacy.
+ */
+function pledgeSubject(view: PersonProfileView): 'candidate' | 'elected official' {
+	return view.persona === 'officeholder' || view.persona === 'past' ? 'elected official' : 'candidate';
 }
 
 /**
@@ -752,18 +797,21 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	// it is a false statement about a named person.
 	const showPledge = true;
 
-	// So the hero's status line always has somewhere to go: the band defines the
-	// pledge for the negative and ineligible lines as much as the affirmative one.
-	// `none` (removed profiles) renders no line at all, so it gets no link.
+	// The hero's callout explains the pledge itself through the pop-up ("Read the
+	// full pledge"), so it no longer links down to the band.
 	const attribution = pledgeAttribution(view);
-	const attributionHref = attribution === 'none' ? undefined : `#${GOODPARTY_PLEDGE_ANCHOR_ID}`;
+	const subject = pledgeSubject(view);
 
 	// Someone who has not taken the pledge gets an invitation to take it instead
 	// of an invitation to read about it. `signup` carries the app sign-up URL of
 	// its own (see componentButtonDestinations.test.tsx); it did not always, so do
 	// not swap it for a type that renders a bare <button>.
+	//
+	// Not on a removed profile (Emily, 2026-10-06): the hero still states their
+	// pledge fact, but the page must not invite someone who asked us to stop
+	// publishing them to sign up with us.
 	const pledgeButton: NonNullable<SectionOverrides['component_goodPartyOrgPledge']>['button'] =
-		attribution === 'notPledged'
+		attribution === 'notPledged' && !view.removed
 			? { buttonType: 'signup', label: 'Take the pledge' }
 			: { buttonType: 'internal', href: '/about', label: 'Learn more' };
 
@@ -855,13 +903,14 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			profileImageUrl: view.avatarUrl ?? undefined,
 			isEmpowered: view.empowered,
 			tags: personaTags(view.persona),
-			// The line states the person's pledge status (see `pledgeAttribution`).
-			// The GoodParty mark stays on CLAIMED, which is what it has always meant
+			// The callout states the person's pledge status (see `pledgeAttribution`)
+			// about the subject the page is about (see `pledgeSubject`). The GoodParty
+			// mark on the portrait stays on CLAIMED, which is what it has always meant
 			// here — it marks the page as a GoodParty.org profile rather than making
 			// a claim about the pledge, and moving it onto `pledged` would strip it
 			// from every claimed officeholder.
 			attribution,
-			attributionHref,
+			subject,
 			showBrandMark: view.claimed,
 		},
 		component_claimProfileBlock: {
@@ -869,8 +918,8 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			// claim prompt renders in-column as light-blue cards inside the content
 			// well (see `claimCard` above), matching the Figma layout.
 			//
-			// It also cannot go here: the hero portrait deliberately overflows 104px
-			// (md) / 216px (lg) below the hero box, and the next section is expected
+			// It also cannot go here: the hero portrait deliberately overflows 48px
+			// (md) / 68px (lg) below the hero box, and the next section is expected
 			// to offset for it the way ProfileContentBlock's sidebar does. A
 			// full-width banner in this slot renders its headline underneath the
 			// photo.

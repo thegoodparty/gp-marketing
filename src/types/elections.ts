@@ -51,6 +51,14 @@ export interface CandidacyItem {
 	urls?: string[];
 	positionDescription?: string;
 	electionFrequency?: number[];
+	/**
+	 * The seat within the office ("District" / "3"). Not on the feed yet; requested
+	 * from the election data team on 2026-09-24 to mirror the officeholders feed.
+	 * The position page's seat filter switches on once every row carries one.
+	 */
+	subAreaName?: string | null;
+	subAreaValue?: string | null;
+	Position?: { subAreaName?: string | null; subAreaValue?: string | null } | null;
 	Stances?: Array<{
 		Issue?: { name?: string };
 		stanceStatement?: string;
@@ -63,6 +71,9 @@ export interface CandidacyItem {
 		electionDate?: string;
 		positionDescription?: string;
 		frequency?: number[];
+		/** The seat's district or ward ("District" / "21"): this candidacy's own race row, not the slug's first. */
+		subAreaName?: string | null;
+		subAreaValue?: string | null;
 	};
 }
 
@@ -89,6 +100,10 @@ export interface RaceDetail {
 	isRunoff?: boolean;
 	isPrimary?: boolean;
 	partisanType?: string;
+	/** Seats up in this race (BallotReady number_of_seats). Drives the hero's multiple-winner state. */
+	numberOfSeats?: number | null;
+	/** BallotReady position id. Joins the race to its current officeholders on the position page. */
+	positionId?: string | null;
 	Place?: PlaceWithFacts & {
 		parent?: { name: string; slug: string; state: string; geoId?: string };
 	};
@@ -130,14 +145,12 @@ export interface FindByRaceIdResponse {
 		id: number;
 		vanityPath: string;
 		status: string;
-		content:
-			| {
-					about?: {
-						bio?: string;
-						issues?: Array<{ title?: string; description?: string }>;
-					};
-			  }
-			| null;
+		content: {
+			about?: {
+				bio?: string;
+				issues?: Array<{ title?: string; description?: string }>;
+			};
+		} | null;
 		domain: { name: string; status: string } | null;
 	} | null;
 	campaignPositions: Array<{
@@ -175,6 +188,8 @@ export interface PlaceItem {
 	children?: PlaceItem[];
 	/** County name from API (e.g. "Los Angeles"); used for filtering cities by county. */
 	countyName?: string;
+	/** Present when the read asked for races (`includeRaces`, or `includeChildRaces` on a child). */
+	Races?: PlaceRace[];
 }
 
 export interface PlaceWithFacts extends PlaceItem {
@@ -184,5 +199,12 @@ export interface PlaceWithFacts extends PlaceItem {
 	incomeHouseholdMedian?: number;
 	unemploymentRate?: number;
 	homeValue?: number;
-	Races?: PlaceRace[];
+}
+
+/** One city card in the Featured Cities carousel. */
+export interface FeaturedCityCard {
+	name: string;
+	stateAbbreviation: string;
+	openElectionsCount: number;
+	href: string;
 }

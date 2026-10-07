@@ -207,7 +207,17 @@ export async function getNearbyOffices(
 			resolvedDates,
 			today: params.today,
 		});
-		if (offices.length > 0) return withPledgedCounts(offices, deps);
+		if (offices.length > 0) return independentsFirst(await withPledgedCounts(offices, deps));
 	}
 	return [];
+}
+
+/**
+ * Offices with independents on the ballot lead the list (Emily, 2026-10-06), the
+ * rest follow, and each half keeps the soonest-first order `selectNearbyOffices`
+ * built. The same rule the offices list block applies.
+ */
+export function independentsFirst(offices: OfficeItem[]): OfficeItem[] {
+	const has = (office: OfficeItem) => (office.pledgedCount ?? 0) > 0;
+	return [...offices.filter(has), ...offices.filter(office => !has(office))];
 }

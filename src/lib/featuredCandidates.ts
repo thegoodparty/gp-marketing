@@ -6,7 +6,7 @@ import {
 	getRemovedPersonIds,
 } from '~/lib/electionsApi';
 import { isElectionDateBeforeToday, resolvePlaceRaceElectionDates } from '~/lib/electionsHelpers';
-import { nearbyOfficesTiers, raceBelongsToTier } from '~/lib/nearbyOffices';
+import { type NearbyOfficesTier, nearbyOfficesTiers, raceBelongsToTier } from '~/lib/nearbyOffices';
 import { classifyPartyFrom, isMajorParty, orderPartyNames } from '~/lib/party';
 import { cardAvatarUrl, pledgedFromSpine } from '~/lib/peopleProfile';
 import { formatPersonName } from '~/lib/personName';
@@ -16,16 +16,19 @@ import type { PersonItem, PersonOfficeHolder } from '~/types/people';
 import type { FeaturedLocationLevel, FeaturedPeople, FeaturedPersonCard } from '~/lib/featuredPeople';
 
 export type { FeaturedLocationLevel, FeaturedPeople, FeaturedPeopleMode, FeaturedPersonCard, FeaturedPersonRole } from '~/lib/featuredPeople';
-export { FEATURED_PEOPLE_LIMIT, rankFeaturedPeople, selectFeaturedPeople } from '~/lib/featuredPeople';
+export { FEATURED_PEOPLE_LIMIT, rankFeaturedPeople, selectFeaturedPeople, summarizeIndependents } from '~/lib/featuredPeople';
 
 /**
- * How many of a place's upcoming races are asked for their candidates. Each race
- * is one `/v1/candidacies?raceSlug=` request, because candidacies cannot be
- * filtered by place. Soonest elections first, so a state legislature with more
- * seats than this on one ballot is only partly covered until election-api offers
- * a place-and-year aggregate (docs/election-redesign-components.md asks for one).
+ * How many upcoming races on a page's ballot are asked for their candidates. Each
+ * race is one `/v1/candidacies?raceSlug=` request, because candidacies cannot be
+ * filtered by place. Soonest elections first, so a ballot with more races than
+ * this is only partly covered, and the hero then hides its independent count,
+ * until election-api offers a place-and-year aggregate
+ * (docs/election-redesign-components.md asks for one). Raised from 16 when the
+ * ballot grew to include the parent county and state (Emily, 2026-10-05): real
+ * city pages carry 20 to 40 races across all years in the offices list.
  */
-export const FEATURED_RACE_BUDGET = 16;
+export const FEATURED_RACE_BUDGET = 48;
 
 const CONCURRENT_RACE_REQUESTS = 6;
 
@@ -74,6 +77,7 @@ export function buildCandidateCards(
 			isNonpartisan: nonpartisan(candidacy.party),
 			role: 'candidate',
 			electionDate,
+			raceSlug: race.slug.toLowerCase(),
 		});
 	}
 	return cards;
@@ -106,6 +110,7 @@ export function buildRepresentativeCards(
 			isNonpartisan: nonpartisan(...(oh.partyNames ?? [])),
 			role: 'representative',
 			electionDate: null,
+			raceSlug: null,
 		});
 	}
 	return cards;
@@ -134,23 +139,25 @@ function tierLevelFor(level: FeaturedLocationLevel): 'state' | 'county' | 'city'
 	return level === 'district' ? 'county' : level;
 }
 
-/**
- * Upcoming races in the place, soonest first, within the request budget. Past
- * elections are left out because their candidates are no longer "running" here;
- * a race whose primary has passed is re-dated the way the offices list does it.
- */
-export function selectFeaturedRaces(
+type DatedRace = { race: PlaceRace; electionDate: string };
+
+/** The tier's upcoming races, each with the date the offices list would show for it. */
+function upcomingTierRaces(
 	races: PlaceRace[],
-	options: { level: FeaturedLocationLevel; resolvedDates?: Map<string, string>; today?: Date; budget?: number },
-): Array<{ race: PlaceRace; electionDate: string }> {
-	const { level, resolvedDates, today = new Date(), budget = FEATURED_RACE_BUDGET } = options;
-	const tierLevel = tierLevelFor(level);
-	const seen = new Set<string>();
+	tierLevel: NearbyOfficesTier['level'],
+	options: { resolvedDates?: Map<string, string>; today: Date },
+): DatedRace[] {
 	return races
 		.filter(race => race.slug && raceBelongsToTier(race, tierLevel))
-		.map(race => ({ race, electionDate: resolvedDates?.get(race.slug) ?? race.electionDate ?? '' }))
-		.filter(({ race, electionDate }) => {
-			if (isElectionDateBeforeToday(electionDate, today)) return false;
+		.map(race => ({ race, electionDate: options.resolvedDates?.get(race.slug) ?? race.electionDate ?? '' }))
+		.filter(({ electionDate }) => !isElectionDateBeforeToday(electionDate, options.today));
+}
+
+/** Soonest first, one entry per race slug, within the request budget. */
+function orderSoonest(entries: DatedRace[], budget: number): DatedRace[] {
+	const seen = new Set<string>();
+	return entries
+		.filter(({ race }) => {
 			const key = race.slug.toLowerCase();
 			if (seen.has(key)) return false;
 			seen.add(key);
@@ -167,6 +174,20 @@ export function selectFeaturedRaces(
 		.slice(0, budget);
 }
 
+/**
+ * Upcoming races in the place at the page's level, soonest first, within the
+ * request budget. Past elections are left out because their candidates are no
+ * longer "running" here; a race whose primary has passed is re-dated the way the
+ * offices list does it.
+ */
+export function selectFeaturedRaces(
+	races: PlaceRace[],
+	options: { level: FeaturedLocationLevel; resolvedDates?: Map<string, string>; today?: Date; budget?: number },
+): DatedRace[] {
+	const { level, resolvedDates, today = new Date(), budget = FEATURED_RACE_BUDGET } = options;
+	return orderSoonest(upcomingTierRaces(races, tierLevelFor(level), { resolvedDates, today }), budget);
+}
+
 async function mapConcurrently<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>): Promise<R[]> {
 	const results: R[] = [];
 	for (let i = 0; i < items.length; i += limit) {
@@ -175,57 +196,89 @@ async function mapConcurrently<T, R>(items: T[], limit: number, fn: (item: T) =>
 	return results;
 }
 
+async function resolveTierPlace(tier: NearbyOfficesTier, deps: FeaturedPeopleDeps): Promise<PlaceWithFacts | null> {
+	for (const slug of tier.slugs) {
+		const place = await deps.getElectionsPagePlace({ slug });
+		if (place) return place;
+	}
+	return null;
+}
+
 /**
- * The candidates running in a location page's own races and the people who
+ * The candidates running on a location page's ballot and the people who
  * currently hold its offices, as separate lists so the Studio setting can pick
  * either or both at render time. Both lists are empty when the place cannot be
  * found, and the block hides itself.
  *
+ * The ballot is the same one the offices list shows (Emily, 2026-10-05): the
+ * place's own races plus those of the places above it, because a voter in a city
+ * also votes in its county's and its state's races. It never looks down. Each
+ * tier is filtered by level the way the list filters it, so a county's municipal
+ * races do not leak onto a county page.
+ *
  * `placeSlug` is the page's route path (`tx`, `tx/harris-county`,
- * `tx/harris-county/houston`), resolved to an election-api place the same way
- * nearby offices does it. Candidates come from the place's races through
+ * `tx/harris-county/houston`), resolved to election-api places the same way
+ * nearby offices does it. Candidates come from the races through
  * `/v1/candidacies?raceSlug=`; representatives from `/v1/officeholders?geoId=`
- * with the place's own geo id. The pledge flag and party evidence come from the
- * person rows, exactly as the `/people` profile cards read them.
+ * for every tier's place, so a city page also carries the county's and the
+ * state's current officials (Emily, 2026-10-06), each named with its own tier's
+ * place. The pledge flag and party evidence come from the person rows, exactly
+ * as the `/people` profile cards read them.
  */
 export async function getFeaturedPeople(
 	params: { placeSlug: string; locationLevel: FeaturedLocationLevel; today?: Date },
 	deps: FeaturedPeopleDeps = defaultDeps,
 ): Promise<FeaturedPeople> {
-	const empty: FeaturedPeople = { candidates: [], representatives: [] };
-	const tier = nearbyOfficesTiers(params.placeSlug)[0];
-	if (!tier) return empty;
-
-	let place: PlaceWithFacts | null = null;
-	for (const slug of tier.slugs) {
-		place = await deps.getElectionsPagePlace({ slug });
-		if (place) break;
-	}
+	const empty: FeaturedPeople = { candidates: [], representatives: [], candidatesComplete: false };
+	const tiers = nearbyOfficesTiers(params.placeSlug);
+	const places = await Promise.all(tiers.map(async tier => resolveTierPlace(tier, deps)));
+	const place = places[0];
 	if (!place) return empty;
 
+	const today = params.today ?? new Date();
 	const placeContext: PlaceContext = { name: place.name, state: place.state, level: params.locationLevel };
-	const races = place.Races ?? [];
-	const resolvedDates = races.length > 0 ? await deps.resolvePlaceRaceElectionDates(races, params.today) : new Map<string, string>();
-	const selectedRaces = selectFeaturedRaces(races, { level: params.locationLevel, resolvedDates, today: params.today });
+	// Officials above the page are named with their own tier's place, so a county
+	// official on a city page reads "Harris County, TX", not the city.
+	const tierContexts: PlaceContext[] = places.map((tierPlace, index) => {
+		const level = tiers[index]?.level;
+		return index === 0 || !tierPlace || !level ? placeContext : { name: tierPlace.name, state: tierPlace.state, level };
+	});
+	const tierRaces = await Promise.all(
+		tiers.map(async (tier, index) => {
+			const races = places[index]?.Races ?? [];
+			const resolvedDates = races.length > 0 ? await deps.resolvePlaceRaceElectionDates(races, today) : new Map<string, string>();
+			return upcomingTierRaces(races, tier.level, { resolvedDates, today });
+		}),
+	);
+	// Ordered without the budget first, so the result can say whether the budget
+	// cut anything: the hero's independent count hides when it did. Undated races
+	// sort last and cannot be placed in any year, so they can neither join a year's
+	// count nor make it incomplete; only a dated race left out breaks completeness.
+	const eligibleRaces = orderSoonest(tierRaces.flat(), Number.POSITIVE_INFINITY);
+	const selectedRaces = eligibleRaces.slice(0, FEATURED_RACE_BUDGET);
+	const datedRacesCovered = eligibleRaces.filter(({ electionDate }) => electionDate).every(entry => selectedRaces.includes(entry));
 
-	const [candidaciesByRace, officeholders, removedPersonIds] = await Promise.all([
+	const [candidaciesByRace, officeholdersByTier, removedPersonIds] = await Promise.all([
 		mapConcurrently(selectedRaces, CONCURRENT_RACE_REQUESTS, async ({ race, electionDate }) =>
 			(await deps.getCandidacies({ raceSlug: race.slug })).map(candidacy => ({ candidacy, race, electionDate })),
 		),
-		place.geoId ? deps.getOfficeHoldersByGeoId(place.geoId) : Promise.resolve([]),
+		Promise.all(places.map(async tierPlace => (tierPlace?.geoId ? deps.getOfficeHoldersByGeoId(tierPlace.geoId) : []))),
 		deps.getRemovedPersonIds(),
 	]);
 	const candidacies = candidaciesByRace.flat();
 
 	const personIds = [
 		...candidacies.map(({ candidacy }) => candidacy.personId),
-		...officeholders.map(oh => oh.personId),
+		...officeholdersByTier.flat().map(oh => oh.personId),
 	].filter((id): id is string => Boolean(id));
 	const persons = personIds.length > 0 ? await deps.getPersonsByIds(personIds) : [];
 	const personsById = new Map(persons.map(person => [person.id.toLowerCase(), person]));
 
 	return {
 		candidates: buildCandidateCards(candidacies, personsById, placeContext, removedPersonIds),
-		representatives: buildRepresentativeCards(officeholders, personsById, placeContext, removedPersonIds),
+		representatives: officeholdersByTier.flatMap((officeholders, index) =>
+			buildRepresentativeCards(officeholders, personsById, tierContexts[index] ?? placeContext, removedPersonIds),
+		),
+		candidatesComplete: datedRacesCovered,
 	};
 }

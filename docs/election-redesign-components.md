@@ -617,6 +617,13 @@ Decisions that came out of it and affect other blocks in the batch:
   the other too, so the shadows were still cut, 40px out. The margin is now 4.5rem, more than the
   card's 63px shadow reach, and each slide carries the same 4.5rem of empty left padding (the track
   pulls the first one back by that amount), so the margin only ever reveals that gap, never a slide.
+- **A submit waits for the suggestions.** The Google Places script only starts loading on the box's
+  first focus, so a quick "marion" + Enter used to submit the bare word; the resolve route cannot
+  pick a state for it and the search failed until the second try (Emily, 2026-10-07, on both the
+  hero and the Elections Near You block). `placeForSubmit` in `src/lib/electionsNearYouSearch.ts` now
+  takes the picked suggestion, else the first one on screen, else fetches them for the typed text
+  before resolving, and only then falls back to free text.
+
 - **The search is one component now.** The city-or-county search that lived inside
   `ElectionsNearYouBlock` (Google Places suggestions, the resolve-place lookup, the analytics events,
   the navigation) was pulled out into `src/ui/ElectionsNearYouSearch.tsx`, and both blocks render it.

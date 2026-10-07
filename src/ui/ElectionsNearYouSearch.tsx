@@ -15,7 +15,9 @@ import { Button } from './Inputs/Button.tsx';
 import { primaryButtonStyleType } from './_lib/designTypesStore.ts';
 import { trackEvent } from '~/lib/analytics';
 import {
+	ELECTIONS_SEARCH_MIN_QUERY_LENGTH,
 	ELECTIONS_SEARCH_VIEWED_EVENT,
+	placeForSubmit,
 	submitElectionsNearYouSearchOnce,
 	type ElectionsNearYouSearchDeps,
 } from '~/lib/electionsNearYouSearch';
@@ -115,7 +117,7 @@ export type ElectionsNearYouSearchProps = {
 	appearance?: 'pill' | 'field';
 };
 
-const MIN_QUERY_LENGTH = 3;
+const MIN_QUERY_LENGTH = ELECTIONS_SEARCH_MIN_QUERY_LENGTH;
 
 const RESOLVED_PLACE_MATCHED_LEVELS = new Set(['city', 'county', 'state']);
 
@@ -240,7 +242,16 @@ export function ElectionsNearYouSearch(props: ElectionsNearYouSearchProps) {
 				navigate: url => window.location.assign(url),
 			};
 
-			void submitElectionsNearYouSearchOnce({ rawInput: inputValue, place: selectedPlace }, deps, { isSubmitting: isSubmittingRef })
+			// A submit before the suggestions have arrived (the Google script loads
+			// on first focus) waits for them, so the first try resolves a real
+			// place instead of the bare text.
+			const fetchSuggestions = async (value: string) => {
+				latestQueryRef.current = value;
+				return runSuggestionQuery(value, { latestQuery: latestQueryRef, sessionToken: sessionTokenRef });
+			};
+
+			void placeForSubmit({ rawInput: inputValue, selected: selectedPlace, suggestions, fetchSuggestions })
+				.then(async place => submitElectionsNearYouSearchOnce({ rawInput: inputValue, place }, deps, { isSubmitting: isSubmittingRef }))
 				.then(result => {
 					if (result && !result.ok) setError(result.error);
 				})
@@ -248,7 +259,7 @@ export function ElectionsNearYouSearch(props: ElectionsNearYouSearchProps) {
 					setIsSubmitting(false);
 				});
 		},
-		[inputValue, selectedPlace],
+		[inputValue, selectedPlace, suggestions],
 	);
 
 	const layout = props.layout ?? 'inline';

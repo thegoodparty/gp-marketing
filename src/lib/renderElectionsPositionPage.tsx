@@ -29,6 +29,7 @@ export async function renderElectionsPositionPage(input: PositionTemplateContext
 				// Only election-api's own normalised name can match its officeholder rows;
 				// a race without one gets the single seat its position id answers for.
 				positionName: input.race?.normalizedPositionName,
+				raceSlug: input.raceSlug ?? input.race?.slug,
 			})),
 	};
 	const schemas = buildPositionPageSchemas(ctx);

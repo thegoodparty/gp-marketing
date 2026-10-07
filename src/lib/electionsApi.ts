@@ -546,20 +546,34 @@ export async function getOfficeHoldersByPositionIdOrNull(positionId: string): Pr
 	return Array.isArray(data) ? data : null;
 }
 
+/** Ids per `/v1/persons?ids=` request. 500 made an 18.5 KB URL that election-api answers with 414. */
+export const PERSONS_BY_IDS_BATCH = 200;
+/** Ids resolved per call in all; the caller orders the list so the people it is about come first. */
+export const PERSONS_BY_IDS_MAX = 1000;
+
 /**
- * Batch-resolves canonical Person rows by id (election-api caps `ids` at 500).
- * `OfficeHolders` rides along only when asked for: the list endpoint leaves
- * relations out by default, so a caller that reads a person's current term
- * off the row must say so.
+ * Batch-resolves canonical Person rows by id. election-api accepts up to 500
+ * ids per request, but 500 UUIDs make a URL past its header limit and the
+ * whole request fails with 414 (every location page lost its featured people
+ * for an hour, 2026-10-07), so the ids go in requests of 200. `OfficeHolders`
+ * rides along only when asked for: the list endpoint leaves relations out by
+ * default, so a caller that reads a person's current term off the row must say so.
  */
 export async function getPersonsByIds(ids: string[], options: { includeOfficeHolders?: boolean } = {}): Promise<PersonItem[]> {
-	const unique = Array.from(new Set(ids.filter(Boolean))).slice(0, 500);
+	const unique = Array.from(new Set(ids.filter(Boolean))).slice(0, PERSONS_BY_IDS_MAX);
 	if (unique.length === 0) return [];
-	const searchParams = new URLSearchParams({ ids: unique.join(',') });
-	if (options.includeOfficeHolders) searchParams.set('includeOfficeHolders', 'true');
-	const url = `${ELECTIONS_API_BASE_URL}/v1/persons?${searchParams}`;
-	const data = await fetchJson<PersonItem[]>(url, CACHE_OPTIONS);
-	return Array.isArray(data) ? data : [];
+	const batches: string[][] = [];
+	for (let i = 0; i < unique.length; i += PERSONS_BY_IDS_BATCH) batches.push(unique.slice(i, i + PERSONS_BY_IDS_BATCH));
+	const results = await Promise.all(
+		batches.map(async batch => {
+			const searchParams = new URLSearchParams({ ids: batch.join(',') });
+			if (options.includeOfficeHolders) searchParams.set('includeOfficeHolders', 'true');
+			const url = `${ELECTIONS_API_BASE_URL}/v1/persons?${searchParams}`;
+			const data = await fetchJson<PersonItem[]>(url, CACHE_OPTIONS);
+			return Array.isArray(data) ? data : [];
+		}),
+	);
+	return results.flat();
 }
 
 /**

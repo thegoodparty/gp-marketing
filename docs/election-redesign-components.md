@@ -1174,6 +1174,13 @@ Apply these across the whole batch so the blocks stay consistent.
   no single token gives, so it pairs `heading-lg` with a `max-md:text-heading-md`
   override. Both are registered in the tailwind-merge font-size list; a size that is
   not in that list is silently dropped (see `.cursor/BUGBOT.md`).
+- **"Who's currently in office" reads every seat of a multi-district office.** A race carries one
+  BallotReady position id, and `/v1/officeholders?positionId=` answers for that seat alone, so Los
+  Angeles' city council page listed District 9 and nobody else (Emily, 2026-10-07). The loader now
+  also reads the page place's officeholders (`getElectionsPagePlace` for the geo id, then
+  `/v1/officeholders?geoId=`) and keeps those whose normalised position name matches the race's,
+  merged and deduped with the position-id read and ordered by district when every seat is numbered.
+  A failed place read keeps the race's own seat rather than hiding the section.
 - **The `/candidates` pages are going away with the redesign** (Emily, 2026-09-24). No
   redesign block links to `/elections/.../position/<slug>/candidates`. Candidate rows live on the
   position page itself (the content block's list, anchored at `#position-candidates`), and the

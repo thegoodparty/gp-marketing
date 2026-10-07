@@ -85,6 +85,10 @@ export async function FeaturedCitiesBlockSection(
 			? nationalCards
 			: sanityCards;
 
+	// Nothing to feature, nothing in the DOM: an empty <section> shell would still
+	// take the template's spacing and answer [data-section] selectors.
+	if (locationCards.length === 0) return null;
+
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Featured Cities Block'>
 			<FeaturedCitiesBlock

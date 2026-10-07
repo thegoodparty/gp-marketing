@@ -329,14 +329,14 @@ describe('canonicalizeCountyEquivalentName', () => {
 		});
 	});
 
-	test('an independent city keeps its own name instead of gaining a County suffix', () => {
-		// Virginia's "Fairfax city" page read "Fairfax city County, Virginia" (Emily, 2026-10-07).
+	test('an independent city is shown by its plain name, with no County suffix', () => {
+		// Virginia's "Fairfax city" page read "Fairfax city County, Virginia"; Emily wants "Fairfax" (2026-10-07).
 		expect(canonicalizeCountyEquivalentName('VA', 'Fairfax city')).toEqual({
-			displayName: 'Fairfax City',
+			displayName: 'Fairfax',
 			baseName: 'Fairfax city',
 			suffixLabel: 'City',
 		});
-		expect(canonicalizeCountyEquivalentName('MD', 'Baltimore City').displayName).toBe('Baltimore City');
+		expect(canonicalizeCountyEquivalentName('MD', 'Baltimore City').displayName).toBe('Baltimore');
 		expect(canonicalizeCountyEquivalentName('CO', 'Denver City and County').displayName).toBe('Denver City and County');
 	});
 

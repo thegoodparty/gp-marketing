@@ -741,6 +741,12 @@ people now follow the ballot that branch built. Decisions:
   list (a few dozen ids, cached five minutes), fetches the profile of each card person on it, and
   the live profile's `avatarUrl` replaces the feed photo on position candidates and officeholders,
   the featured carousel, and the profile's own related cards; the same rule the profile hero uses.
+- **Seats both officeholder feeds miss come from past winners.** Garden Grove, CA's council page
+  listed one member while District 5's 2024 winner (term 2025 to 2028 on her profile) was absent
+  from both `/v1/officeholders?positionId=` and the place's `?geoId=` read (Emily, 2026-10-07).
+  `loadSeatsFromPastCandidates` reads the office's candidacies, asks for up to 200 of those people
+  with `includeOfficeHolders=true`, most recent cycle first, and keeps a current term for this
+  office (same position id or normalised name). Same idea as the featured carousel's rescue.
 - **A position page lists one cycle.** `/v1/candidacies?raceSlug=` returns every cycle of a slug,
   so Garden Grove's council page showed two 2024 District 5 candidates, one of them the sitting
   member, as filed for 2026, and "5 candidates filed" where the location page counted 2 (Emily,

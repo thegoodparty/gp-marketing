@@ -375,6 +375,29 @@ describe('getFeaturedPeople', () => {
 		expect(people.representatives.map(r => [r.name, r.office, r.role])).toEqual([['Scott Corbin', 'Houston City Council - Ward 5', 'representative']]);
 	});
 
+	test('asks for sitting officials and the upcoming ballot before past candidates, so the 500-id cap never drops them', async () => {
+		const pastIds = Array.from({ length: 600 }, (_, i) => `eeeeeeee-0000-4000-8000-${String(i).padStart(12, '0')}`);
+		let asked: string[] = [];
+		const crowded: FeaturedPeopleDeps = {
+			...deps,
+			async getCandidacies({ raceSlug }) {
+				if (raceSlug !== 'tx/houston/mayor') return Promise.resolve([]);
+				return Promise.resolve([
+					candidacy({ personId: PLEDGED_ID }),
+					...pastIds.map((id, i) => candidacy({ id: `c-past-${i}`, personId: id, Race: { brHashId: 'r-2025', electionDate: '2025-11-04' } })),
+				]);
+			},
+			async getPersonsByIds(ids) {
+				asked = [...ids];
+				return deps.getPersonsByIds(ids);
+			},
+		};
+		await getFeaturedPeople({ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) }, crowded);
+
+		expect(asked.slice(0, 2).sort()).toEqual([PLEDGED_ID, UNPLEDGED_ID].sort());
+		expect(asked.slice(2)).toEqual(pastIds);
+	});
+
 	test('returns two empty lists, and no trusted count, when the place cannot be found', async () => {
 		const people = await getFeaturedPeople({ placeSlug: 'tx/nowhere-county/nowhere', locationLevel: 'city' }, deps);
 

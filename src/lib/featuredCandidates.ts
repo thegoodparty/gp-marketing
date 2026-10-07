@@ -299,10 +299,13 @@ export async function getFeaturedPeople(
 		else candidacies.push({ ...entry, electionDate: ownDate });
 	}
 
+	// election-api answers the first 500 ids only. Sitting officials and the
+	// upcoming ballot go first, so a long history of past candidates can never
+	// push the people the carousel is actually about past the cap.
 	const personIds = [
+		...officeholdersByTier.flat().map(oh => oh.personId),
 		...candidacies.map(({ candidacy }) => candidacy.personId),
 		...pastCandidacies.map(({ candidacy }) => candidacy.personId),
-		...officeholdersByTier.flat().map(oh => oh.personId),
 	].filter((id): id is string => Boolean(id));
 	const persons = personIds.length > 0 ? await deps.getPersonsByIds(personIds) : [];
 	const personsById = new Map(persons.map(person => [person.id.toLowerCase(), person]));

@@ -1,5 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ListOfOfficesBlock, type OfficeItem } from './ListOfOfficesBlock.tsx';
+import { RichData } from './RichData.tsx';
+import { insertPledgeSymbols, plainTextBlocks } from '~/lib/pledgeSymbolToken';
+import { LIST_OF_OFFICES_DEFAULT_DESCRIPTION } from '~/sanity/schema/components/component_listOfOfficesBlock';
+
+/** The paragraph the section renders when an editor has not written one, badge and all. */
+const sampleDescription = <RichData value={insertPledgeSymbols(plainTextBlocks(LIST_OF_OFFICES_DEFAULT_DESCRIPTION))} />;
 
 const meta: Meta<typeof ListOfOfficesBlock> = {
 	title: 'New Components/Page Sections/List of Offices Block',
@@ -27,6 +33,7 @@ const sampleOffices: OfficeItem[] = [
 		position: 'Name of office position',
 		nextElectionDate: 'November 5, 2028',
 		href: '/offices/1',
+		pledgedCount: 2,
 	},
 	{
 		id: '2',
@@ -34,6 +41,7 @@ const sampleOffices: OfficeItem[] = [
 		position: 'Name of office position',
 		nextElectionDate: 'November 5, 2028',
 		href: '/offices/2',
+		pledgedCount: 1,
 	},
 	{
 		id: '3',
@@ -166,8 +174,8 @@ const offices2024: OfficeItem[] = [
 
 export const Default: Story = {
 	args: {
-		heading: 'List of Offices',
-		headline: 'Headline',
+		heading: 'Local elections in Austin',
+		description: sampleDescription,
 		defaultYear: 2028,
 		availableYears: [2024, 2025, 2026, 2027, 2028],
 		offices: sampleOffices,
@@ -183,8 +191,7 @@ export const Default: Story = {
 
 export const MidnightBackground: Story = {
 	args: {
-		heading: 'List of Offices',
-		headline: 'Headline',
+		heading: 'Local elections in Austin',
 		defaultYear: 2028,
 		availableYears: [2024, 2025, 2026, 2027, 2028],
 		offices: sampleOffices,
@@ -194,8 +201,7 @@ export const MidnightBackground: Story = {
 
 export const MixedOfficeTypes: Story = {
 	args: {
-		heading: 'List of Offices',
-		headline: 'Headline',
+		heading: 'Local elections in Austin',
 		defaultYear: 2028,
 		availableYears: [2024, 2025, 2026, 2027, 2028],
 		offices: mixedOffices,
@@ -205,8 +211,7 @@ export const MixedOfficeTypes: Story = {
 
 export const YearFiltering: Story = {
 	args: {
-		heading: 'List of Offices',
-		headline: 'Headline',
+		heading: 'Local elections in Austin',
 		defaultYear: 2024,
 		availableYears: [2024, 2025, 2026, 2027, 2028],
 		offices: [...offices2024, ...sampleOffices],
@@ -216,7 +221,6 @@ export const YearFiltering: Story = {
 
 export const WithoutHeading: Story = {
 	args: {
-		headline: 'Headline',
 		defaultYear: 2028,
 		availableYears: [2024, 2025, 2026, 2027, 2028],
 		offices: sampleOffices,
@@ -224,20 +228,57 @@ export const WithoutHeading: Story = {
 	},
 };
 
-export const WithoutHeadline: Story = {
+/** A city page: opens on Local, and can look up to its county and its state. */
+/** Opens on All, with the city's own races beside the county's and the state's; the dropdown narrows to one level. */
+export const CityPageLevels: Story = {
 	args: {
-		heading: 'List of Offices',
+		heading: 'Local elections in Austin',
+		description: sampleDescription,
 		defaultYear: 2028,
 		availableYears: [2024, 2025, 2026, 2027, 2028],
-		offices: sampleOffices,
+		pageLevel: 'local',
+		offices: [
+			...sampleOffices.slice(0, 3).map(office => ({ ...office, type: 'CITY', level: 'local' as const })),
+			{
+				id: 'county-1',
+				type: 'COUNTY',
+				level: 'county' as const,
+				position: 'County Commissioner',
+				nextElectionDate: 'November 7, 2028',
+				href: '/offices/county-commissioner',
+				pledgedCount: 3,
+			},
+			{
+				id: 'state-1',
+				type: 'STATE',
+				level: 'state' as const,
+				position: 'Attorney General',
+				nextElectionDate: 'November 7, 2028',
+				href: '/offices/attorney-general',
+			},
+		],
+		backgroundColor: 'cream',
+	},
+};
+
+/**
+ * A state page has no places above it, so there is no Level dropdown at all
+ * rather than one offering a single choice.
+ */
+export const StatePageHasNoLevelDropdown: Story = {
+	args: {
+		heading: 'State elections in Texas',
+		defaultYear: 2028,
+		availableYears: [2024, 2025, 2026, 2027, 2028],
+		pageLevel: 'state',
+		offices: sampleOffices.map(office => ({ ...office, level: 'state' as const })),
 		backgroundColor: 'cream',
 	},
 };
 
 export const EmptyState: Story = {
 	args: {
-		heading: 'List of Offices',
-		headline: 'Headline',
+		heading: 'Local elections in Austin',
 		defaultYear: 2028,
 		availableYears: [2024, 2025, 2026, 2027, 2028],
 		offices: [],
@@ -247,8 +288,7 @@ export const EmptyState: Story = {
 
 export const SingleOffice: Story = {
 	args: {
-		heading: 'List of Offices',
-		headline: 'Headline',
+		heading: 'Local elections in Austin',
 		defaultYear: 2028,
 		availableYears: [2024, 2025, 2026, 2027, 2028],
 		offices: sampleOffices.slice(0, 1),
@@ -266,8 +306,7 @@ const manyOfficesData = Array.from({ length: 25 }, (_, i) => ({
 
 export const ManyOffices: Story = {
 	args: {
-		heading: 'List of Offices',
-		headline: 'Headline',
+		heading: 'Local elections in Austin',
 		defaultYear: 2028,
 		availableYears: [2024, 2025, 2026, 2027, 2028],
 		offices: manyOfficesData,
@@ -277,8 +316,7 @@ export const ManyOffices: Story = {
 
 export const CustomPageSize: Story = {
 	args: {
-		heading: 'List of Offices',
-		headline: 'Headline',
+		heading: 'Local elections in Austin',
 		defaultYear: 2028,
 		availableYears: [2024, 2025, 2026, 2027, 2028],
 		pageSize: 5,
@@ -295,8 +333,7 @@ export const CustomPageSize: Story = {
 
 export const ExactPageSize: Story = {
 	args: {
-		heading: 'List of Offices',
-		headline: 'Headline',
+		heading: 'Local elections in Austin',
 		defaultYear: 2028,
 		availableYears: [2024, 2025, 2026, 2027, 2028],
 		pageSize: 10,
@@ -313,8 +350,7 @@ export const ExactPageSize: Story = {
 
 export const WithoutLinks: Story = {
 	args: {
-		heading: 'List of Offices',
-		headline: 'Headline',
+		heading: 'Local elections in Austin',
 		defaultYear: 2028,
 		availableYears: [2024, 2025, 2026, 2027, 2028],
 		offices: sampleOffices.map(office => ({ ...office, href: undefined })),

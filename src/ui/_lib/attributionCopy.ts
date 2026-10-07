@@ -65,3 +65,15 @@ export function pledgeCalloutCopy(mode: PledgeCalloutMode, subject: PledgeSubjec
 			return `This ${subject} is ineligible for the ${ATTRIBUTION_PLEDGE_PHRASE} due to partisan affiliation.`;
 	}
 }
+
+/**
+ * The "What this symbol means" box above a profile's Other Candidates list
+ * (Voter Guide frames 2247:45824 desktop / 2247:45980 phone; Emily, 2026-10-06).
+ * It explains the heart-and-star mark in the third person, so it asserts nothing
+ * about the person whose page it sits on and can render on every profile. The
+ * pledge's name is set in bold, as in the hero's callout.
+ */
+export const PLEDGE_SYMBOL_CALLOUT = {
+	heading: 'What this symbol means',
+	sentence: `Candidates and elected officials with this symbol took the ${ATTRIBUTION_PLEDGE_PHRASE}, promising to serve people first, independent of both major parties and big-money interests.`,
+} as const;

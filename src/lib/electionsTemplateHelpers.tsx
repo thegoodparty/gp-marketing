@@ -1,6 +1,3 @@
-import Link from 'next/link';
-import type { ReactNode } from 'react';
-
 import type { SectionOverrides } from '~/PageSections';
 import type { TokenMap } from '~/lib/resolveTokens';
 import type { RaceDetail } from '~/types/elections';
@@ -9,7 +6,13 @@ import type { BreadcrumbItem } from '~/ui/BreadcrumbBlock';
 import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
 import { type FeaturedPeople, summarizeIndependents } from '~/lib/featuredPeople';
 import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
-import { secondaryButtonStyleType } from '~/ui/_lib/designTypesStore';
+import { type ElectionsPositionHeroCandidate, heroLocation } from '~/ui/ElectionsPositionHero';
+import {
+	POSITION_CONTENT_IDS,
+	type ElectionsPositionAttribute,
+	type ElectionsPositionElectionType,
+	type ElectionsPositionPerson,
+} from '~/ui/ElectionsPositionContentBlock';
 import {
 	buildDynamicFAQItems,
 	buildPositionPageSchema,
@@ -43,9 +46,161 @@ export type PositionPageContext = {
 	guideTitle?: string | null;
 	// Used only by the position-page schema builders; optional for candidates pages.
 	pageUrl?: string;
+	/**
+	 * The hero's ballot rows. `undefined` means the route could not read the
+	 * race's candidates and the hero hides its ballot card.
+	 */
+	heroCandidates?: ElectionsPositionHeroCandidate[];
+	/**
+	 * Current holders of the position, for the content block's "Who's currently
+	 * in office" list. `undefined` means election-api gave no answer and the
+	 * list hides. `renderElectionsPositionPage` loads it when a route does not.
+	 */
+	officeholders?: ElectionsPositionPerson[];
 	/** From `getNearbyOffices`; set by the position page renderer, absent on candidates pages. */
 	nearbyOffices?: OfficeItem[];
 };
+
+/**
+ * The hero reads the same race the page does. Winners and the previous cycle's
+ * winners are left unset because election-api records no results yet; the
+ * resolver reads that as "results pending" after election day.
+ */
+export function buildPositionHeroOverride(ctx: PositionPageContext): NonNullable<SectionOverrides['component_electionsPositionHero']> {
+	return {
+		officeName: ctx.officeName,
+		stateName: ctx.stateName,
+		countyName: ctx.countyName,
+		cityName: ctx.cityName,
+		electionDate: ctx.electionDate,
+		filingDate: ctx.filingDate,
+		electionDateIso: ctx.race?.electionDate ?? null,
+		filingDateStartIso: ctx.race?.filingDateStart ?? null,
+		filingDateEndIso: ctx.race?.filingDateEnd ?? null,
+		candidates: ctx.heroCandidates,
+		seatCount: ctx.race?.numberOfSeats ?? null,
+		candidatesHref: ctx.candidatesHref,
+	};
+}
+
+/** election-api sends these as it stores them ("COUNTY", "partisan"); the card reads them as words. */
+function sentenceCase(value: string): string {
+	const trimmed = value.trim();
+	return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+}
+
+function heroCandidateToPerson(candidate: ElectionsPositionHeroCandidate, index: number): ElectionsPositionPerson {
+	return {
+		key: candidate.key ?? `c-${index}`,
+		name: candidate.name,
+		href: candidate.href,
+		avatar: candidate.avatar,
+		party: candidate.party,
+		isPledged: candidate.isPledged,
+		isWinner: candidate.isWinner,
+		seatName: candidate.seatName,
+		seatValue: candidate.seatValue,
+		seatLabel: candidate.seatName && candidate.seatValue ? `${candidate.seatName} ${candidate.seatValue}` : undefined,
+	};
+}
+
+/**
+ * The seat or district dropdown. Only offered when every row it would narrow
+ * carries a seat and there is more than one seat to choose from: a filter that
+ * silently leaves half the rows in place is worse than none. Candidate rows do
+ * not carry their sub-area yet, so today this stays hidden whenever candidates
+ * are listed.
+ */
+export function buildPositionSeatFilter(
+	people: ElectionsPositionPerson[],
+	subAreaName: string | null | undefined,
+): NonNullable<SectionOverrides['component_electionsPositionContentBlock']>['seatFilter'] {
+	if (people.length === 0 || people.some(person => !person.seatValue)) return undefined;
+	const values = Array.from(new Set(people.flatMap(person => (person.seatValue ? [person.seatValue] : [])))).sort((a, b) =>
+		a.localeCompare(b, 'en', { numeric: true }),
+	);
+	if (values.length < 2) return undefined;
+	const name = subAreaName?.trim() || 'seat';
+	return {
+		label: `Filter by ${name}`,
+		options: values.map(value => ({ value, label: `${name} ${value}` })),
+	};
+}
+
+export function buildPositionAboutAttributes(race: RaceDetail): ElectionsPositionAttribute[] {
+	const items: ElectionsPositionAttribute[] = [];
+	if (race.positionLevel) items.push({ label: 'Office level', value: sentenceCase(race.positionLevel) });
+	if (race.frequency?.length) items.push({ label: 'Election frequency', value: formatFrequency(race.frequency) });
+	if (race.salary) items.push({ label: 'Typical salary', value: race.salary });
+	if (race.employmentType) items.push({ label: 'Commitment level', value: race.employmentType });
+	if (race.partisanType) items.push({ label: 'Affiliation', value: sentenceCase(race.partisanType) });
+	if (typeof race.numberOfSeats === 'number' && race.numberOfSeats > 0) {
+		items.push({ label: 'Positions', value: race.numberOfSeats === 1 ? '1 open seat' : `${race.numberOfSeats} open seats` });
+	}
+	return items;
+}
+
+/**
+ * Only the election types the race data can vouch for. Judicial and retention
+ * elections are in the design, but election-api carries no flag for either, so
+ * they are left out rather than shown unchecked as if we knew.
+ */
+export function buildPositionElectionTypes(race: RaceDetail): ElectionsPositionElectionType[] | undefined {
+	const items: ElectionsPositionElectionType[] = [];
+	if (race.partisanType) {
+		const partisan = /partisan/i.test(race.partisanType) && !/non/i.test(race.partisanType);
+		items.push({ label: 'Partisan election (party labels appear on ballots)', checked: partisan });
+	}
+	if (typeof race.isRunoff === 'boolean') items.push({ label: 'Run-off election', checked: race.isRunoff });
+	return items.length > 0 ? items : undefined;
+}
+
+export function buildPositionFilingAttributes(ctx: Pick<PositionPageContext, 'race' | 'filingDate'>): ElectionsPositionAttribute[] {
+	const race = ctx.race;
+	const items: ElectionsPositionAttribute[] = [];
+	if (!race) return items;
+	if (race.filingRequirements) items.push({ label: 'Filing requirements', value: race.filingRequirements });
+	if (race.filingDateStart || race.filingDateEnd) items.push({ label: 'Filing period', value: ctx.filingDate });
+	if (race.paperworkInstructions) items.push({ label: 'Paperwork instructions', value: race.paperworkInstructions });
+	if (race.filingOfficeAddress) items.push({ label: 'Where to file', value: race.filingOfficeAddress });
+	if (race.filingPhoneNumber) items.push({ label: 'Filing phone', value: race.filingPhoneNumber });
+	return items;
+}
+
+/**
+ * The content block reads the same race and the same candidate rows as the
+ * hero, so the two derive one state. The "Explore more races" card links to the
+ * page's own location, which is the crumb before the position in the trail.
+ */
+export function buildPositionContentOverride(
+	ctx: PositionPageContext,
+): NonNullable<SectionOverrides['component_electionsPositionContentBlock']> {
+	const race = ctx.race;
+	const candidates = ctx.heroCandidates?.map(heroCandidateToPerson);
+	const people = [...(candidates ?? []), ...(ctx.officeholders ?? [])];
+	const locationHref =
+		ctx.locationHref ??
+		[...ctx.breadcrumbs].reverse().find(crumb => crumb.href && crumb.href !== '/elections' && crumb.label !== ctx.officeName)?.href;
+	const about = race
+		? {
+				description: race.positionDescription,
+				attributes: buildPositionAboutAttributes(race),
+				electionTypes: buildPositionElectionTypes(race),
+			}
+		: undefined;
+	return {
+		electionDateIso: race?.electionDate ?? null,
+		filingDateStartIso: race?.filingDateStart ?? null,
+		filingDateEndIso: race?.filingDateEnd ?? null,
+		candidates,
+		officeholders: ctx.officeholders,
+		seatFilter: buildPositionSeatFilter(people, people.find(person => person.seatName)?.seatName ?? null),
+		locationHref: locationHref || undefined,
+		shareUrl: ctx.pageUrl,
+		about: about && (about.description || about.attributes.length > 0) ? about : undefined,
+		howToRun: race ? { eligibility: race.eligibilityRequirements, filing: buildPositionFilingAttributes(ctx) } : undefined,
+	};
+}
 
 function formatFrequency(frequency: (string | number)[]): string {
 	return frequency
@@ -58,79 +213,27 @@ function formatFrequency(frequency: (string | number)[]): string {
 		.join(', ');
 }
 
-export function buildPositionGridItems(race: RaceDetail) {
-	const items: { subhead: string; bodyCopy: ReactNode }[] = [];
-	if (race.employmentType) items.push({ subhead: 'Employment Type', bodyCopy: race.employmentType });
-	if (race.salary) items.push({ subhead: 'Salary', bodyCopy: race.salary });
-	if (race.partisanType) items.push({ subhead: 'Partisan Type', bodyCopy: race.partisanType });
-	if (race.frequency?.length) {
-		items.push({ subhead: 'Election Frequency', bodyCopy: formatFrequency(race.frequency) });
-	}
-	return items;
-}
-
-export function buildPositionBottomItems(race: RaceDetail) {
-	const items: { headline: string; bodyCopy: ReactNode }[] = [];
-	if (race.eligibilityRequirements) {
-		items.push({ headline: 'Eligibility Requirements', bodyCopy: race.eligibilityRequirements });
-	}
-	if (race.filingRequirements) {
-		items.push({ headline: 'Filing Requirements', bodyCopy: race.filingRequirements });
-	}
-	if (race.paperworkInstructions) {
-		items.push({ headline: 'Paperwork Instructions', bodyCopy: race.paperworkInstructions });
-	}
-	if (race.filingOfficeAddress) {
-		items.push({
-			headline: 'Filing Office',
-			bodyCopy: (
-				<Link
-					href={`https://maps.google.com/?q=${encodeURIComponent(race.filingOfficeAddress)}`}
-					target='_blank'
-					rel='noopener noreferrer'
-					className='text-goodparty-blue hover:underline'
-				>
-					{race.filingOfficeAddress}
-				</Link>
-			),
-		});
-	}
-	if (race.filingPhoneNumber) {
-		items.push({
-			headline: 'Filing Phone',
-			bodyCopy: (
-				<Link href={`tel:${race.filingPhoneNumber}`} className='text-goodparty-blue hover:underline'>
-					{race.filingPhoneNumber}
-				</Link>
-			),
-		});
-	}
-	return items;
-}
-
 export function buildPositionTokens(ctx: Pick<PositionPageContext, 'officeName' | 'stateName' | 'countyName' | 'cityName'>): TokenMap {
 	const locationName = ctx.cityName ?? ctx.countyName ?? ctx.stateName;
-	const locationParts = [ctx.cityName, ctx.countyName, ctx.stateName].filter(Boolean);
 	return {
 		'[office name]': ctx.officeName,
 		'[office]': ctx.officeName,
+		'[Position Name]': ctx.officeName,
 		'[State]': ctx.stateName,
 		'[County or City]': locationName,
-		'[location]': locationParts.join(', '),
+		'[location]': heroLocation(ctx),
 	};
 }
 
-export function buildCandidatesTokens(
-	ctx: Pick<PositionPageContext, 'officeName' | 'stateName' | 'countyName' | 'cityName'>,
-): TokenMap {
+export function buildCandidatesTokens(ctx: Pick<PositionPageContext, 'officeName' | 'stateName' | 'countyName' | 'cityName'>): TokenMap {
 	const locationName = ctx.cityName ?? ctx.countyName ?? ctx.stateName;
-	const locationParts = [ctx.cityName, ctx.countyName, ctx.stateName].filter(Boolean);
 	return {
 		'[office]': ctx.officeName,
 		'[office name]': ctx.officeName,
+		'[Position Name]': ctx.officeName,
 		'[State]': ctx.stateName,
 		'[County or City]': locationName,
-		'[location]': locationParts.join(', '),
+		'[location]': heroLocation(ctx),
 	};
 }
 
@@ -145,44 +248,16 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 	const race = ctx.race;
 	return {
 		component_breadcrumbBlock: { breadcrumbs: ctx.breadcrumbs },
+		// The hero's ballot card points down the page at the content block's
+		// candidate rows, never at the /candidates page, which goes away with the
+		// redesign (Emily, 2026-09-24). With no rows the list hides, and so does
+		// the button: the card already says how many candidates there are.
 		component_electionsPositionHero: {
-			officeName: ctx.officeName,
-			stateName: ctx.stateName,
-			countyName: ctx.countyName,
-			cityName: ctx.cityName,
-			electionDate: ctx.electionDate,
-			filingDate: ctx.filingDate,
-			ctaHref: ctx.candidatesHref,
-			ctaLabel: 'Run for office',
+			...buildPositionHeroOverride(ctx),
+			candidatesHref: ctx.heroCandidates && ctx.heroCandidates.length > 0 ? `#${POSITION_CONTENT_IDS.candidates}` : undefined,
+			resultsHref: ctx.heroCandidates && ctx.heroCandidates.length > 0 ? `#${POSITION_CONTENT_IDS.candidates}` : undefined,
 		},
-		component_electionsPositionContentBlock: {
-			topHeadline: 'Position Details',
-			gridItems: race ? buildPositionGridItems(race) : [],
-			bottomItems: race ? buildPositionBottomItems(race) : [],
-			card: race?.positionDescription
-				? {
-						headline: ctx.officeName,
-						subhead: 'About this position',
-						bodyCopy: race.positionDescription,
-						primaryCTA: {
-							buttonType: 'external',
-							href: '/get-a-demo',
-							label: 'Book now',
-							buttonProps: { styleType: secondaryButtonStyleType },
-						},
-					}
-				: undefined,
-			...(ctx.candidatesHref
-				? {
-						rightColumnCTA: {
-							buttonType: 'internal' as const,
-							href: ctx.candidatesHref,
-							label: 'View candidates',
-							buttonProps: { styleType: secondaryButtonStyleType },
-						},
-					}
-				: {}),
-		},
+		component_electionsPositionContentBlock: buildPositionContentOverride(ctx),
 		component_faqBlock: {
 			items: race
 				? buildDynamicFAQItems(race, ctx.officeName, ctx.stateName)
@@ -205,21 +280,10 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 	};
 }
 
-export function buildCandidatesSectionOverrides(
-	ctx: PositionPageContext & { candidates: CandidateCard[] },
-): SectionOverrides {
+export function buildCandidatesSectionOverrides(ctx: PositionPageContext & { candidates: CandidateCard[] }): SectionOverrides {
 	return {
 		component_breadcrumbBlock: { breadcrumbs: ctx.breadcrumbs },
-		component_electionsPositionHero: {
-			officeName: ctx.officeName,
-			stateName: ctx.stateName,
-			countyName: ctx.countyName,
-			cityName: ctx.cityName,
-			electionDate: ctx.electionDate,
-			filingDate: ctx.filingDate,
-			ctaHref: ctx.positionHref,
-			ctaLabel: 'Back to position',
-		},
+		component_electionsPositionHero: buildPositionHeroOverride(ctx),
 		component_candidatesBlock: {
 			candidates: ctx.candidates,
 			header: {
@@ -318,6 +382,33 @@ export type ElectionsIndexPageContext = {
 	featuredPeople?: FeaturedPeople;
 };
 
+/**
+ * Pledged candidates per race, keyed by race slug, from the same people the
+ * featured block and the hero read, so the three can never disagree. A person
+ * counts once per race. Races the budget left unasked have no entry, and the
+ * offices list shows nothing for them rather than a zero.
+ */
+function withPledgedCounts(offices: OfficeItem[] | undefined, people: FeaturedPeople | undefined): OfficeItem[] | undefined {
+	if (!offices || !people) return offices;
+	const peopleByRace = new Map<string, Set<string>>();
+	for (const person of people.candidates) {
+		if (!person.isPledged || !person.raceSlug) continue;
+		const key = person.raceSlug.toLowerCase();
+		const set = peopleByRace.get(key) ?? new Set<string>();
+		set.add((person.personId ?? person.href).toLowerCase());
+		peopleByRace.set(key, set);
+	}
+	const counted = offices.map(office => {
+		const pledgedCount = office.raceSlug ? peopleByRace.get(office.raceSlug.toLowerCase())?.size : undefined;
+		return pledgedCount ? { ...office, pledgedCount } : office;
+	});
+	// Offices with independents on the ballot lead the list (Emily, 2026-10-06),
+	// and the rows keep their order inside each half, so the date order the
+	// route built survives within the two groups. The block filters by level
+	// and year on top of this order without re-sorting, so it holds in every view.
+	return [...counted.filter(office => (office.pledgedCount ?? 0) > 0), ...counted.filter(office => !((office.pledgedCount ?? 0) > 0))];
+}
+
 export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageContext): SectionOverrides {
 	const independents = summarizeIndependents(ctx.featuredPeople, ctx.defaultYear);
 	return {
@@ -344,13 +435,14 @@ export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageConte
 			independents: ctx.defaultYear === undefined ? { ...independents, candidateCount: null } : independents,
 		},
 		component_listOfOfficesBlock: {
-			// The block renders `headline`, so that is where the location-named
-			// heading has to go. It used to be sent the bare level label instead,
-			// which published a card headed "state" / "county" / "municipal".
+			// Fallback only: the templates carry their own heading with location
+			// tokens, and that is what normally renders.
 			headline: ctx.listHeading,
 			defaultYear: ctx.defaultYear,
 			availableYears: ctx.availableYears,
-			offices: ctx.offices,
+			offices: withPledgedCounts(ctx.offices, ctx.featuredPeople),
+			// A district page is a local ballot like a city's, so it offers Local, County and State.
+			pageLevel: ctx.locationLevel === 'city' || ctx.locationLevel === 'district' ? 'local' : ctx.locationLevel,
 		},
 		component_electionsIndexBlock: {
 			elections: ctx.elections,

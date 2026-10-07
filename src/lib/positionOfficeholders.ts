@@ -106,7 +106,7 @@ async function loadPlaceSeats(query: PositionOfficeholderQuery, deps: PositionOf
 		const place = await deps.getElectionsPagePlace({ slug: query.placeSlug });
 		if (!place?.geoId) return [];
 		const rows = await deps.getOfficeHoldersByGeoId(place.geoId);
-		return rows.filter(row => normalizePositionName(row.normalizedPositionName ?? row.positionName) === wanted);
+		return rows.filter(row => normalizePositionName(row.normalizedPositionName) === wanted);
 	} catch {
 		return [];
 	}

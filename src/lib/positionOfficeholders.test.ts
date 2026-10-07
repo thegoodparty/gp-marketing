@@ -131,6 +131,12 @@ describe('loadPositionOfficeholders', () => {
 		expect(people?.some(p => p.name.toLowerCase().includes('mayor'))).toBe(false);
 	});
 
+	test('a place row without a normalised position name is never matched on its display name', async () => {
+		const unnamed = seat(5, { normalizedPositionName: null, positionName: 'City Legislature' });
+		const people = await loadPositionOfficeholders(la, deps({ getOfficeHoldersByGeoId: async () => Promise.resolve([...council, unnamed]) }));
+		expect(people?.map(p => p.seatValue)).toEqual(['1', '3', '7', '9', '15']);
+	});
+
 	test('two seats with no linked person are two rows, not one', async () => {
 		const vacant = (district: number) => seat(district, { personId: null, officeTitle: 'city council member' });
 		const people = await loadPositionOfficeholders(

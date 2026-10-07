@@ -27,13 +27,17 @@ const styles = tv({
 		// viewport: 108px to the left of the photo at desktop, 82px below it on
 		// mobile. 39.5rem is the 524px photo plus that left overhang.
 		carousel: 'w-full lg:ml-auto lg:max-w-[39.5rem]',
-		viewport: 'overflow-hidden',
-		track: 'flex touch-pan-y',
-		slide: 'relative min-w-0 flex-[0_0_100%] pb-[5.125rem] lg:pb-0 lg:pl-[6.75rem]',
+		// Clip sideways only, and 2.5rem past the edge, so the photo and card
+		// shadows are not cut off in a straight line. Each slide carries 2.5rem of
+		// empty padding on its left (the track pulls the first one back by the
+		// same amount), so the clip margin only ever reveals that empty gap.
+		viewport: 'overflow-x-clip [overflow-clip-margin:2.5rem]',
+		track: '-ml-10 flex touch-pan-y',
+		slide: 'relative min-w-0 flex-[0_0_100%] pb-[5.125rem] pl-10 lg:pb-0 lg:pl-[9.25rem]',
 		photo: 'relative aspect-square w-full overflow-hidden rounded-3xl shadow-xl-duo [&>div]:h-full [&>div]:w-full',
 		quoteCard: [
-			'absolute inset-x-4 bottom-0 flex flex-col gap-4 rounded-lg bg-bright-yellow-100 p-5 text-black shadow-2xl',
-			'lg:inset-x-auto lg:bottom-5 lg:left-0 lg:w-[19.25rem]',
+			'absolute bottom-0 left-14 right-4 flex flex-col gap-4 rounded-lg bg-bright-yellow-100 p-5 text-black shadow-2xl',
+			'lg:bottom-5 lg:left-10 lg:right-auto lg:w-[19.25rem]',
 		],
 		quoteText: 'font-secondary text-[0.875rem] leading-5',
 		quoteAuthor: 'flex items-center gap-4',

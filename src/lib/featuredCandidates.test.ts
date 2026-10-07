@@ -307,6 +307,9 @@ describe('getFeaturedPeople', () => {
 		async getRemovedPersonIds() {
 			return Promise.resolve(new Set<string>());
 		},
+		async resolveProductAvatars() {
+			return Promise.resolve(new Map<string, string>());
+		},
 	};
 
 	test('resolves the place from the route, asks each upcoming race for its candidates and the geo id for its officeholders', async () => {
@@ -401,6 +404,26 @@ describe('getFeaturedPeople', () => {
 		expect(asked.slice(2)).toEqual(pastIds);
 	});
 
+	test('a candidate with a published profile is shown with the photo they chose', async () => {
+		const people = await getFeaturedPeople(
+			{ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) },
+			{ ...deps, resolveProductAvatars: async () => Promise.resolve(new Map([[PLEDGED_ID.toLowerCase(), 'https://assets.goodparty.org/chosen.png']])) },
+		);
+		expect(people.candidates.find(c => c.personId === PLEDGED_ID)?.avatarUrl).toBe('https://assets.goodparty.org/chosen.png');
+	});
+
+	test('a removed person keeps no photo even when their profile is live', async () => {
+		const people = await getFeaturedPeople(
+			{ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) },
+			{
+				...deps,
+				getRemovedPersonIds: async () => Promise.resolve(new Set([PLEDGED_ID.toLowerCase()])),
+				resolveProductAvatars: async () => Promise.resolve(new Map([[PLEDGED_ID.toLowerCase(), 'https://assets.goodparty.org/chosen.png']])),
+			},
+		);
+		expect(people.candidates.find(c => c.personId === PLEDGED_ID)?.avatarUrl).toBeNull();
+	});
+
 	test('returns two empty lists, and no trusted count, when the place cannot be found', async () => {
 		const people = await getFeaturedPeople({ placeSlug: 'tx/nowhere-county/nowhere', locationLevel: 'city' }, deps);
 
@@ -492,6 +515,9 @@ describe('getFeaturedPeople across the ballot', () => {
 			async getRemovedPersonIds() {
 				return Promise.resolve(new Set<string>());
 			},
+			async resolveProductAvatars() {
+				return Promise.resolve(new Map<string, string>());
+			},
 		};
 
 		const people = await getFeaturedPeople(
@@ -537,6 +563,9 @@ describe('getFeaturedPeople across the ballot', () => {
 			},
 			async getRemovedPersonIds() {
 				return Promise.resolve(new Set<string>());
+			},
+			async resolveProductAvatars() {
+				return Promise.resolve(new Map<string, string>());
 			},
 		};
 
@@ -588,6 +617,9 @@ describe('getFeaturedPeople across the ballot', () => {
 			},
 			async getRemovedPersonIds() {
 				return Promise.resolve(new Set<string>());
+			},
+			async resolveProductAvatars() {
+				return Promise.resolve(new Map<string, string>());
 			},
 		};
 

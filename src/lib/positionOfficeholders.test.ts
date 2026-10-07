@@ -123,6 +123,9 @@ describe('loadPositionOfficeholders', () => {
 		async getRemovedPersonIds() {
 			return Promise.resolve(new Set<string>());
 		},
+		async resolveProductAvatars() {
+			return Promise.resolve(new Map<string, string>());
+		},
 		...overrides,
 	});
 
@@ -146,6 +149,29 @@ describe('loadPositionOfficeholders', () => {
 			deps({ getOfficeHoldersByPositionIdOrNull: async () => Promise.resolve([seat(9, { id: 'oh-at-large', personId: 'cccccccc-0000-4000-8000-000000000900', subAreaValue: null })]) }),
 		);
 		expect(people?.map(p => p.seatValue)).toEqual(['1', '3', '7', '9', '15', undefined]);
+	});
+
+	test('a seat holder with a published profile shows the photo they chose, not the feed\'s', async () => {
+		const people = await loadPositionOfficeholders(
+			{ positionId: 'pos-d9' },
+			deps({
+				getPersonsByIds: async ids =>
+					Promise.resolve(ids.map(id => ({ id, fullName: 'Nithya Raman', slug: 'nithya-raman', headshotUrl: 'https://assets.civicengine.com/feed.jpg' }) as never)),
+				resolveProductAvatars: async () => Promise.resolve(new Map([[seat(9).personId!.toLowerCase(), 'https://assets.goodparty.org/chosen.png']])),
+			}),
+		);
+		expect(people?.map(p => p.avatar)).toEqual(['https://assets.goodparty.org/chosen.png']);
+	});
+
+	test('a removed person keeps no photo even when their profile is live', async () => {
+		const people = await loadPositionOfficeholders(
+			{ positionId: 'pos-d9' },
+			deps({
+				getRemovedPersonIds: async () => Promise.resolve(new Set([seat(9).personId!.toLowerCase()])),
+				resolveProductAvatars: async () => Promise.resolve(new Map([[seat(9).personId!.toLowerCase(), 'https://assets.goodparty.org/chosen.png']])),
+			}),
+		);
+		expect(people?.map(p => p.avatar)).toEqual([undefined]);
 	});
 
 	/** Garden Grove, CA: both feeds knew District 1 only; District 5's 2024 winner holds a current term on her person row. */

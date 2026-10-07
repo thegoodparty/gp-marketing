@@ -735,6 +735,12 @@ people now follow the ballot that branch built. Decisions:
   endpoint carries no relations by default), which the first cut forgot, so the rescue never fired
   on the live site; `getPersonsByIds` takes the flag and the featured-people loader sets it whenever
   it holds a past candidacy.
+- **A person's own profile photo wins on every card.** The position page showed Thomas Nguyen
+  (Garden Grove, CA) in BallotReady's photo while his profile showed the one he uploaded (Emily,
+  2026-10-07). `resolveProductAvatars` in `src/lib/productAvatars.ts` reads gp-api's published
+  list (a few dozen ids, cached five minutes), fetches the profile of each card person on it, and
+  the live profile's `avatarUrl` replaces the feed photo on position candidates and officeholders,
+  the featured carousel, and the profile's own related cards; the same rule the profile hero uses.
 - **Seats both officeholder feeds miss come from past winners.** Garden Grove, CA's council page
   listed one member while District 5's 2024 winner (term 2025 to 2028 on her profile) was absent
   from both `/v1/officeholders?positionId=` and the place's `?geoId=` read (Emily, 2026-10-07).

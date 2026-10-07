@@ -735,6 +735,11 @@ people now follow the ballot that branch built. Decisions:
   endpoint carries no relations by default), which the first cut forgot, so the rescue never fired
   on the live site; `getPersonsByIds` takes the flag and the featured-people loader sets it whenever
   it holds a past candidacy.
+- **Person ids go to election-api 200 at a time.** `/v1/persons?ids=` takes 500 ids on paper, but
+  500 UUIDs make an 18.5 KB URL and the server answers 414 before it reads the request. Refreshing
+  every past race date (2026-10-07) put enough races on the upcoming ballot that location pages hit
+  the cap, the lookup returned nothing, nobody counted as pledged, and the block hid everywhere for
+  about an hour. `getPersonsByIds` now splits the list into requests of 200 and resolves up to 1,000.
 - **The count is a seam, not a figure.** The body copy accepts `[count of candidates]`, meaning
   the number of pledged people in the page's place *and everything inside it* (all of Texas on the
   Texas page). That is a downward count, and election-api cannot answer it today: a person row

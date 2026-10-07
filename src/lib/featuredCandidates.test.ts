@@ -378,7 +378,7 @@ describe('getFeaturedPeople', () => {
 		expect(personOptions).toEqual({ includeOfficeHolders: true });
 	});
 
-	test('asks for sitting officials and the upcoming ballot before past candidates, so the 500-id cap never drops them', async () => {
+	test('asks for sitting officials and the upcoming ballot before past candidates, so the lookup cap never drops them', async () => {
 		const pastIds = Array.from({ length: 600 }, (_, i) => `eeeeeeee-0000-4000-8000-${String(i).padStart(12, '0')}`);
 		let asked: string[] = [];
 		const crowded: FeaturedPeopleDeps = {

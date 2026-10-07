@@ -11,7 +11,7 @@ import {
 } from '~/lib/electionsHelpers';
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsCandidatesPage } from '~/lib/renderElectionsCandidatesPage';
-import { heroCandidatesFromCandidacies } from '~/lib/positionHeroCandidates';
+import { currentCycleCandidacies, heroCandidatesFromCandidacies } from '~/lib/positionHeroCandidates';
 
 export default async function Page({
 	params,
@@ -40,8 +40,8 @@ export default async function Page({
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 
-	const candidates = (candidacies ?? []).map((c, i) => mapCandidacyToCard(c, i));
-	const heroCandidates = candidacies ? await heroCandidatesFromCandidacies(candidacies) : undefined;
+	const candidates = currentCycleCandidacies(candidacies ?? [], { raceElectionDate: race?.electionDate }).map((c, i) => mapCandidacyToCard(c, i));
+	const heroCandidates = candidacies ? await heroCandidatesFromCandidacies(candidacies, { raceElectionDate: race?.electionDate }) : undefined;
 
 	const statePath = stateCode.toLowerCase();
 	const positionHref = `/elections/${statePath}/position/${positionSlug}`;

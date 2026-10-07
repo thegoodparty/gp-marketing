@@ -72,7 +72,7 @@ export default async function Page({
 		notFound();
 	}
 
-	const heroCandidates = await loadPositionHeroCandidates(raceSlug);
+	const heroCandidates = await loadPositionHeroCandidates(raceSlug, { raceElectionDate: race.electionDate });
 	const stateName = getStateName(stateCode);
 	const officeName = race.normalizedPositionName ?? race.name ?? 'Position';
 	const electionDate = formatElectionDateFromApi(race.electionDate);

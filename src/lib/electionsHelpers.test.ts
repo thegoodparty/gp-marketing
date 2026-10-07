@@ -329,6 +329,17 @@ describe('canonicalizeCountyEquivalentName', () => {
 		});
 	});
 
+	test('an independent city is shown by its plain name, with no County suffix', () => {
+		// Virginia's "Fairfax city" page read "Fairfax city County, Virginia"; Emily wants "Fairfax" (2026-10-07).
+		expect(canonicalizeCountyEquivalentName('VA', 'Fairfax city')).toEqual({
+			displayName: 'Fairfax',
+			baseName: 'Fairfax city',
+			suffixLabel: 'City',
+		});
+		expect(canonicalizeCountyEquivalentName('MD', 'Baltimore City').displayName).toBe('Baltimore');
+		expect(canonicalizeCountyEquivalentName('CO', 'Denver City and County').displayName).toBe('Denver City and County');
+	});
+
 	test('preserves Alaska borough naming', () => {
 		expect(canonicalizeCountyEquivalentName('AK', 'Haines Borough')).toEqual({
 			displayName: 'Haines Borough',

@@ -7,7 +7,7 @@ const meta: Meta<typeof LocationLandingPageHero> = {
 	parameters: {
 		design: {
 			type: 'figma',
-			url: 'https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=23657-17212&t=6DQyxTAl7Ola6AF3-0',
+			url: 'https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2188-38655',
 		},
 	},
 	render: args => <LocationLandingPageHero {...args} />,
@@ -16,111 +16,102 @@ const meta: Meta<typeof LocationLandingPageHero> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const StateLevel: Story = {
+const electionDayStat = { _key: 'election-day', value: 'Nov. 4, 2026', description: 'Election day', color: 'bright-yellow' as const };
+const racesStat = { _key: 'races', value: '[##]', description: 'Races on the ballot', color: 'halo-green' as const };
+const independentsStat = { _key: 'independents', value: '[##]', description: 'Independent candidates', color: 'lavender' as const };
+const designStats = [electionDayStat, racesStat, independentsStat];
+
+const localRacesButton = { _key: 'local-races', buttonType: 'anchor' as const, href: '#local-races', label: 'Browse local races' };
+const independentsButton = {
+	_key: 'independents',
+	buttonType: 'anchor' as const,
+	href: '#independents',
+	label: "See who's an independent",
+};
+const designButtons = [localRacesButton, independentsButton];
+
+const designBodyCopy =
+	'A free, nonpartisan guide to local elections in Illinois. Learn about candidates and officials on your ballot, including who is independent of partisan and big-money influence.';
+
+export const Default: Story = {
 	args: {
+		headline: 'Upcoming elections in Illinois',
 		locationLevel: 'state',
 		stateName: 'Illinois',
-		bodyCopy: 'Explore elections in this state',
+		bodyCopy: designBodyCopy,
 		backgroundColor: 'midnight',
+		stats: designStats,
+		buttons: designButtons,
 	},
 };
 
-export const StateLevelCream: Story = {
+export const Cream: Story = {
 	args: {
-		locationLevel: 'state',
-		stateName: 'Illinois',
-		bodyCopy: 'Explore elections in this state',
+		...Default.args,
+		headline: 'Upcoming elections in Texas',
+		stateName: 'Texas',
 		backgroundColor: 'cream',
 	},
 };
 
 export const CountyLevel: Story = {
 	args: {
+		...Default.args,
+		headline: 'Upcoming elections in Cook County, Illinois',
 		locationLevel: 'county',
-		stateName: 'Illinois',
 		countyName: 'Cook County',
-		bodyCopy: 'Explore elections in this county',
-		backgroundColor: 'midnight',
+		stats: designStats,
+		buttons: [localRacesButton],
 	},
 };
 
-export const CountyLevelCream: Story = {
+/**
+ * A location with no independents (Figma 2188-38655): the lavender card shows a
+ * real zero and the "See who's an independent" button is gone. The section
+ * wrapper applies both rules; the UI simply draws what it is handed.
+ */
+export const NoIndependents: Story = {
 	args: {
-		locationLevel: 'county',
-		stateName: 'Illinois',
-		countyName: 'Cook County',
-		bodyCopy: 'Explore elections in this county',
-		backgroundColor: 'cream',
+		...Default.args,
+		stats: [electionDayStat, racesStat, { ...independentsStat, value: '0' }],
+		buttons: [localRacesButton],
 	},
 };
 
-export const CityLevel: Story = {
+/** The independent count could not be trusted, so the lavender card is hidden; the button stays because at least one independent was found. */
+export const IndependentCountUnknown: Story = {
 	args: {
-		locationLevel: 'city',
-		stateName: 'Illinois',
-		countyName: 'Cook County',
-		cityName: 'Chicago',
-		bodyCopy: 'Explore elections in this city',
-		backgroundColor: 'midnight',
+		...Default.args,
+		stats: [electionDayStat, racesStat],
 	},
 };
 
-export const CityLevelCream: Story = {
-	args: {
-		locationLevel: 'city',
-		stateName: 'Illinois',
-		countyName: 'Cook County',
-		cityName: 'Chicago',
-		bodyCopy: 'Explore elections in this city',
-		backgroundColor: 'cream',
-	},
-};
-
-export const CustomBodyCopy: Story = {
-	args: {
-		locationLevel: 'state',
-		stateName: 'California',
-		bodyCopy: 'Find independent, third-party, and non-partisan candidates running for office in California',
-		backgroundColor: 'midnight',
-	},
-};
-
-export const CustomSearchPlaceholder: Story = {
-	args: {
-		locationLevel: 'state',
-		stateName: 'Texas',
-		bodyCopy: 'Explore elections in this state',
-		backgroundColor: 'midnight',
-		searchPlaceholder: 'Search by city or county name',
-	},
-};
-
-export const LeftAligned: Story = {
+/** No stats and no buttons authored yet: the state every existing location template starts in. */
+export const CopyOnly: Story = {
 	args: {
 		locationLevel: 'state',
 		stateName: 'Illinois',
 		bodyCopy: 'Explore elections in this state',
 		backgroundColor: 'midnight',
-		textAlign: 'left',
+	},
+};
+
+/** Without an explicit headline the block falls back to the bare location name. */
+export const HeadlineFallback: Story = {
+	args: {
+		locationLevel: 'city',
+		stateName: 'Illinois',
+		countyName: 'Cook County',
+		cityName: 'Chicago',
+		bodyCopy: designBodyCopy,
+		backgroundColor: 'midnight',
+		stats: designStats,
 	},
 };
 
 export const CenterAligned: Story = {
 	args: {
-		locationLevel: 'state',
-		stateName: 'Illinois',
-		bodyCopy: 'Explore elections in this state',
-		backgroundColor: 'midnight',
+		...CopyOnly.args,
 		textAlign: 'center',
-	},
-};
-
-export const RightAligned: Story = {
-	args: {
-		locationLevel: 'state',
-		stateName: 'Illinois',
-		bodyCopy: 'Explore elections in this state',
-		backgroundColor: 'midnight',
-		textAlign: 'right',
 	},
 };

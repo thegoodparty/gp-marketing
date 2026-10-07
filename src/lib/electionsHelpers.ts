@@ -1275,15 +1275,6 @@ export function buildRacePositionHref(raceSlug: string | undefined): string | un
 	return buildElectionPositionHrefFromRaceSlug({ slug: raceSlug });
 }
 
-/** Builds elections candidates listing path from a race slug entry. */
-export function buildRaceCandidatesHref(
-	race: RaceSlugEntry,
-	options?: BuildElectionPositionHrefOptions,
-): string | undefined {
-	const positionHref = buildElectionPositionHrefFromRaceSlug(race, options);
-	return positionHref ? `${positionHref}/candidates` : undefined;
-}
-
 /**
  * On 3-level county routes (`/elections/[state]/[county]/position/...`), city/town
  * races must redirect to the 4-level URL that includes the city segment. This is

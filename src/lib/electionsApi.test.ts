@@ -688,6 +688,27 @@ describe('getPersonsByIds', () => {
 		expect(calls[0]).not.toContain('includeOfficeHolders');
 		expect(calls[1]).toContain('includeOfficeHolders=true');
 	});
+
+	/** 500 UUIDs in one URL came back 414 from election-api, and every location page lost its featured people. */
+	test('splits a long id list into requests of 200 and merges the answers', async () => {
+		const ids = Array.from({ length: 450 }, (_, i) => `cccccccc-0000-4000-8000-${String(i).padStart(12, '0')}`);
+		const calls: string[] = [];
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = String(input);
+			calls.push(url);
+			const batch = decodeURIComponent(new URL(url).searchParams.get('ids') ?? '').split(',');
+			return new Response(JSON.stringify(batch.map(id => ({ id, slug: id.slice(-4) }))), {
+				status: 200,
+				headers: { 'content-type': 'application/json' },
+			});
+		}) as typeof fetch;
+
+		const persons = await getPersonsByIds([...ids, ids[0]!]);
+
+		expect(calls).toHaveLength(3);
+		for (const url of calls) expect(url.length).toBeLessThan(9000);
+		expect(persons.map(p => p.id)).toEqual(ids);
+	});
 });
 
 describe('getRaceBySlug falls back to the primary when there is no general', () => {

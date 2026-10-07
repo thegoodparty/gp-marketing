@@ -131,6 +131,15 @@ describe('loadPositionOfficeholders', () => {
 		expect(people?.some(p => p.name.toLowerCase().includes('mayor'))).toBe(false);
 	});
 
+	test('two seats with no linked person are two rows, not one', async () => {
+		const vacant = (district: number) => seat(district, { personId: null, officeTitle: 'city council member' });
+		const people = await loadPositionOfficeholders(
+			{ positionId: 'pos-d9' },
+			deps({ getOfficeHoldersByPositionIdOrNull: async () => Promise.resolve([vacant(4), vacant(12)].map(row => ({ ...row, positionId: 'pos-d9' }))) }),
+		);
+		expect(people?.map(p => p.seatValue)).toEqual(['4', '12']);
+	});
+
 	test('answers from the position id alone when the page has no place', async () => {
 		const people = await loadPositionOfficeholders({ positionId: 'pos-d9' }, deps());
 		expect(people?.map(p => p.seatValue)).toEqual(['9']);

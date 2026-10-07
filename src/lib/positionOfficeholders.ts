@@ -163,7 +163,10 @@ export async function loadPositionOfficeholders(
 		const person = row.personId ? personsById.get(row.personId.toLowerCase()) : undefined;
 		const mapped = mapOfficeholderToPerson(row, person, removed);
 		if (!mapped) continue;
-		const dedupeKey = row.personId?.toLowerCase() ?? mapped.name.toLowerCase();
+		// A person holds one seat, so the person id dedupes a seat the two reads both
+		// returned. A row with no linked person falls back to its own id: two vacant
+		// seats share an office title but are still two seats.
+		const dedupeKey = row.personId?.toLowerCase() ?? `row:${row.id}`;
 		if (seen.has(dedupeKey)) continue;
 		seen.add(dedupeKey);
 		people.push(mapped);

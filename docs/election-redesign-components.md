@@ -287,6 +287,19 @@ position pages; with neither, the guide card is left out and the other two rende
 cards are plain editorial content ("Connect with us" goes to community.goodparty.org, Emily,
 2026-09-24). Every card's heading and description accept `[office name]`.
 
+Revised from QA on the integration preview (Emily, 2026-10-06):
+
+- **The guide card shows its article's own title.** The editor heading's `[office name]` token
+  printed the raw office name ("How to Run for County Recorder-Register of Deeds-Register of Mesne
+  Conveyance"); the article the matrix picks is written for the office type, so its title reads
+  properly. `renderElectionsPositionPage` reads the title from Sanity by the article's slug
+  (`articleTitleBySlugQuery`) and hands it in as `guideTitle`; a miss falls back to the editor copy.
+  The description still comes from Studio.
+- **The e-book and support cards have default buttons** so a template saved before the block had
+  buttons still renders them: "Read the guide" to `/e-book` and "Join the community" to
+  community.goodparty.org (`DEFAULT_EBOOK_BUTTON` / `DEFAULT_SUPPORT_BUTTON`). An editor-set button
+  wins. The Studio presets carry the same links and label, so a new document starts there too.
+
 Two things from it that affect other blocks in the batch:
 
 - **Reuse the `button` object for editor-set links.** It is the same object the quote's story

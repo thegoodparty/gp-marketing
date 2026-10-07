@@ -112,11 +112,16 @@ async function loadPlaceSeats(query: PositionOfficeholderQuery, deps: PositionOf
 	}
 }
 
-/** Seats in district order when every seat is numbered, otherwise as election-api returned them. */
+/**
+ * Numbered seats in district order, then the unnumbered ones as election-api
+ * returned them. The race's own row may carry no district value while every
+ * seat from the place read is numbered, and that must not leave the whole
+ * list in arrival order.
+ */
 function orderSeats(rows: PersonOfficeHolder[]): PersonOfficeHolder[] {
-	const numbered = rows.every(row => row.subAreaValue != null && /^\d+$/.test(row.subAreaValue));
-	if (!numbered) return rows;
-	return [...rows].sort((a, b) => Number(a.subAreaValue) - Number(b.subAreaValue));
+	const district = (row: PersonOfficeHolder) => (row.subAreaValue != null && /^\d+$/.test(row.subAreaValue) ? Number(row.subAreaValue) : null);
+	const numbered = rows.filter(row => district(row) !== null).sort((a, b) => (district(a) ?? 0) - (district(b) ?? 0));
+	return [...numbered, ...rows.filter(row => district(row) === null)];
 }
 
 /**

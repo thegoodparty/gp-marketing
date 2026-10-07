@@ -290,7 +290,20 @@ export async function getSubplaceRaceBySlug(params: {
 	return race;
 }
 
-export async function getCandidacies(params: { raceId?: string; positionId?: string; raceSlug?: string }): Promise<CandidacyItem[]> {
+/**
+ * Candidacies by race, position or race slug, each carrying its own `Race` row.
+ *
+ * The race is asked for on purpose: a race slug can name many rows (every
+ * Michigan Senate district is `mi/state-senator`), and a candidate's seat lives
+ * on their own row's `subAreaName` / `subAreaValue`. Reading the seat off the
+ * slug's race instead tagged every card on a profile with the one district the
+ * API happened to return first (Emily, 2026-10-06).
+ */
+export async function getCandidacies(params: {
+	raceId?: string;
+	positionId?: string;
+	raceSlug?: string;
+}): Promise<CandidacyItem[]> {
 	return (await getCandidaciesOrNull(params)) ?? [];
 }
 

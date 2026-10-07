@@ -603,6 +603,19 @@ export function resolveDefaultElectionYear(dataYears: number[], currentYear: num
 	return Math.max(...dataYears);
 }
 
+/**
+ * The year a location page opens on. Its own level's years come first so the
+ * list it opens on is populated, but only while they hold this year or a year
+ * ahead: a city whose own races stop at 2024 while its county and state vote in
+ * 2026 opens on 2026 (Encinitas, CA opened on 2024; Emily, 2026-10-07). The
+ * union, which is what the dropdown offers, is the fallback, and only a place
+ * with nothing upcoming anywhere opens on a past year.
+ */
+export function resolveLocationDefaultYear(ownYears: number[], allYears: number[], currentYear: number = new Date().getFullYear()): number {
+	const ownHasUpcoming = ownYears.some(year => year >= currentYear);
+	return resolveDefaultElectionYear(ownHasUpcoming ? ownYears : allYears.length > 0 ? allYears : ownYears, currentYear);
+}
+
 export function formatFilingPeriod(
 	periods: Array<{ startOn: string; endOn: string }> | undefined,
 ): string {

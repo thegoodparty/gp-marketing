@@ -20,7 +20,7 @@ import {
 	getStateName,
 	placeToFactsCards,
 	redirectCityPlaceToFourLevelUrl,
-	resolveDefaultElectionYear,
+	resolveLocationDefaultYear,
 	resolvePlaceRaceElectionDates,
 } from '~/lib/electionsHelpers';
 import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
@@ -121,11 +121,11 @@ export default async function Page({
 	const allYears = [...new Set([...dataYears, ...overlapping.dataYears])].sort((a, b) => a - b);
 	/**
 	 * Open on a year this place's own level has races in, so the list it opens on
-	 * is populated, and fall back to the union only when it has none — otherwise
-	 * a place with no races of its own could open on a year the dropdown (built
-	 * from the union) does not offer.
+	 * is populated, and fall back to the union (what the dropdown offers) when the
+	 * own level has nothing this year or ahead, so a page never opens on a past
+	 * year while the state still votes. See `resolveLocationDefaultYear`.
 	 */
-	const defaultYear = resolveDefaultElectionYear(dataYears.length > 0 ? dataYears : allYears, currentYear);
+	const defaultYear = resolveLocationDefaultYear(dataYears, allYears, currentYear);
 	const availableYears = allYears.length > 0 ? allYears : [currentYear];
 
 	const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);

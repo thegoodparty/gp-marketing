@@ -119,6 +119,15 @@ export type SectionOverrides = {
 		 * back to the link set in Studio and, with neither, is left out.
 		 */
 		guideHref?: string;
+		/**
+		 * That article's own title, read from Sanity by the position renderer. It
+		 * replaces the guide card's editor-set heading, whose "[office name]" token
+		 * printed the raw office name ("How to Run for County Recorder-Register of
+		 * Deeds-Register of Mesne Conveyance"); the article is written for the office
+		 * type, so its title reads properly (Emily, 2026-10-06). Absent when the
+		 * lookup fails, and the heading falls back to the editor copy.
+		 */
+		guideTitle?: string;
 		/** When true the section renders nothing. */
 		hidden?: boolean;
 	};

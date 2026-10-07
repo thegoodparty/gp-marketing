@@ -8,6 +8,7 @@ import {
 	getCountySlugsByState,
 	getPersonMergeSurvivorChain,
 	getPersonMergeSurvivorId,
+	getPersonsByIds,
 	getCandidacies,
 	getRaceBySlug,
 	getRemovedPersonIds,
@@ -669,6 +670,26 @@ describe('isStateIndexDistrictPlace', () => {
  * on every officeholder's /people profile kept listing them (25 of the 26 dead
  * position-page URLs under /elections in the 2026-09-18 crawl).
  */
+describe('getPersonsByIds', () => {
+	const ID = 'cccccccc-0000-4000-8000-000000000001';
+
+	test('asks for office terms only when the caller needs them', async () => {
+		const calls: string[] = [];
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			calls.push(String(input));
+			return new Response(JSON.stringify([]), { status: 200, headers: { 'content-type': 'application/json' } });
+		}) as typeof fetch;
+
+		await getPersonsByIds([ID]);
+		await getPersonsByIds([ID], { includeOfficeHolders: true });
+
+		expect(calls).toHaveLength(2);
+		expect(calls[0]).toContain(`ids=${ID}`);
+		expect(calls[0]).not.toContain('includeOfficeHolders');
+		expect(calls[1]).toContain('includeOfficeHolders=true');
+	});
+});
+
 describe('getRaceBySlug falls back to the primary when there is no general', () => {
 	const SLUG = 'mn/steele-county/county-auditor';
 	const PRIMARY = { slug: SLUG, name: 'County Auditor', electionDate: '2022-08-09', isPrimary: true };

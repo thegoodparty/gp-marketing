@@ -17,7 +17,8 @@ export const component_embeddedBlock = {
     {
       title: 'Height (px)',
       name: 'field_embedHeight',
-      description: 'Height of the embed in pixels. Ignored when "Full Page" is enabled. Defaults to 900.',
+      description:
+        'Height of the embed in pixels. Ignored when "Full Page" is enabled. Defaults to 900. VoteAmerica embeds size themselves to the form, so for them this is only the height shown while the form loads.',
       type: 'number',
       initialValue: 900,
       validation: (Rule: any) => Rule.min(100).max(5000),
@@ -25,7 +26,7 @@ export const component_embeddedBlock = {
     {
       title: 'Full Page',
       name: 'field_embedFullPage',
-      description: 'When enabled, the embed fills the available viewport height.',
+      description: 'When enabled, the embed fills the available viewport height and the block loses its padding. Leave off for forms such as VoteAmerica.',
       type: 'boolean',
       initialValue: false,
     },

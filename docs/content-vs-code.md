@@ -30,6 +30,10 @@ Studio (the CMS, served at `/studio/main`), do not open a PR:
   HubSpot (forms, meetings), YouTube, Vimeo, Calendly, Navattic, VoteAmerica. Any
   other provider's snippet is stripped of scripts for security and usually renders as
   an empty section; supporting it is a code change (see the next section).
+  VoteAmerica embeds size themselves to the form and sit inside a padded white card,
+  so the block's Height field is only the height shown until the form reports its
+  own; leave "Full Page" off for them, since it removes the block's padding and
+  the card.
 - Election page templates: which blocks appear and the token-driven copy on the
   global template or a per-location custom template. Step-by-step editor guide:
   `docs/election-templates-manual.md`.

@@ -9,6 +9,9 @@ import { PageSchema } from '~/ui/PageSchema';
 import { buildBreadcrumbSchema, buildSchemaGraph, buildWebPageSchema } from '~/lib/schema';
 import { toAbsoluteUrl } from '~/lib/url';
 
+// QA preview only: re-read Studio drafts every minute, like the other voter guide routes on this branch.
+export const revalidate = 60;
+
 export default async function Page() {
 	const page = await sanityFetch({ query: goodpartyOrg_electionsQuery, tags: ['goodpartyOrg_landingPages'] });
 

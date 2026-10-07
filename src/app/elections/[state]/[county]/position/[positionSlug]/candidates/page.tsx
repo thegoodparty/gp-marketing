@@ -57,7 +57,7 @@ export default async function Page({
 	const candidacies = await getCandidaciesOrNull({ raceSlug });
 
 	const candidates = (candidacies ?? []).map((c, i) => mapCandidacyToCard(c, i));
-	const heroCandidates = candidacies ? await heroCandidatesFromCandidacies(candidacies) : undefined;
+	const heroCandidates = candidacies ? await heroCandidatesFromCandidacies(candidacies, { raceElectionDate: race?.electionDate }) : undefined;
 
 	const positionHref = `/elections/${countySlug}/position/${positionSlug}`;
 	const locationHref = `/elections/${countySlug}`;

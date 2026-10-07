@@ -41,7 +41,7 @@ export default async function Page({
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 
 	const candidates = (candidacies ?? []).map((c, i) => mapCandidacyToCard(c, i));
-	const heroCandidates = candidacies ? await heroCandidatesFromCandidacies(candidacies) : undefined;
+	const heroCandidates = candidacies ? await heroCandidatesFromCandidacies(candidacies, { raceElectionDate: race?.electionDate }) : undefined;
 
 	const statePath = stateCode.toLowerCase();
 	const positionHref = `/elections/${statePath}/position/${positionSlug}`;

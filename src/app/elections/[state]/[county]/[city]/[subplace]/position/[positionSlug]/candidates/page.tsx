@@ -70,7 +70,7 @@ export default async function Page({
 	const candidacies = await getCandidaciesOrNull({ raceSlug: race.slug });
 
 	const candidates = (candidacies ?? []).map((c, i) => mapCandidacyToCard(c, i));
-	const heroCandidates = candidacies ? await heroCandidatesFromCandidacies(candidacies) : undefined;
+	const heroCandidates = candidacies ? await heroCandidatesFromCandidacies(candidacies, { raceElectionDate: race?.electionDate }) : undefined;
 
 	const positionHref = `/elections/${pathBeforePosition}/position/${positionSlug}`;
 	// A joint office in the city slot has no location page of its own — that path 404s —

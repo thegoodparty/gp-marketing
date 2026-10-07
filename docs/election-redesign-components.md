@@ -611,11 +611,12 @@ batched with the rest of the Elections page redesign.
 
 Decisions that came out of it and affect other blocks in the batch:
 
-- **The carousel clips sideways only.** `overflow-hidden` on the viewport cut the photo's and quote
-  card's shadows off in a straight line below and beside the photo (Emily, 2026-10-07, on the live
-  page). The viewport now uses `overflow-x: clip` with a 2.5rem clip margin, and each slide carries
-  2.5rem of empty left padding (the track pulls the first one back by the same amount), so the
-  margin only ever reveals that gap and never a neighbouring slide.
+- **The carousel's clip margin clears the shadows.** `overflow-hidden` on the viewport cut the
+  photo's and quote card's shadows off in a straight line (Emily, 2026-10-07, on the live page). A
+  first fix used `overflow-x: clip` with a 2.5rem margin, but once one axis clips the browser clips
+  the other too, so the shadows were still cut, 40px out. The margin is now 4.5rem, more than the
+  card's 63px shadow reach, and each slide carries the same 4.5rem of empty left padding (the track
+  pulls the first one back by that amount), so the margin only ever reveals that gap, never a slide.
 - **The search is one component now.** The city-or-county search that lived inside
   `ElectionsNearYouBlock` (Google Places suggestions, the resolve-place lookup, the analytics events,
   the navigation) was pulled out into `src/ui/ElectionsNearYouSearch.tsx`, and both blocks render it.

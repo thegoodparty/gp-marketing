@@ -729,7 +729,11 @@ people now follow the ballot that branch built. Decisions:
   Officeholders were already limited to `isCurrent`. The first cut dropped Holland's sitting council
   members, who reached the block only through their 2025 race because `/v1/officeholders?geoId=`
   for the city did not list them: a past-cycle candidate whose person record carries a current
-  `OfficeHolders` term now stays, as a representative card, when the feed missed them.
+  `OfficeHolders` term now stays, as a representative card, when the feed missed them. That term
+  only reaches the row when `/v1/persons?ids=` is asked for `includeOfficeHolders=true` (the list
+  endpoint carries no relations by default), which the first cut forgot, so the rescue never fired
+  on the live site; `getPersonsByIds` takes the flag and the featured-people loader sets it whenever
+  it holds a past candidacy.
 - **The count is a seam, not a figure.** The body copy accepts `[count of candidates]`, meaning
   the number of pledged people in the page's place *and everything inside it* (all of Texas on the
   Texas page). That is a downward count, and election-api cannot answer it today: a person row

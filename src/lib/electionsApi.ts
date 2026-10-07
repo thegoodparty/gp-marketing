@@ -546,11 +546,17 @@ export async function getOfficeHoldersByPositionIdOrNull(positionId: string): Pr
 	return Array.isArray(data) ? data : null;
 }
 
-/** Batch-resolves canonical Person rows by id (election-api caps `ids` at 500). */
-export async function getPersonsByIds(ids: string[]): Promise<PersonItem[]> {
+/**
+ * Batch-resolves canonical Person rows by id (election-api caps `ids` at 500).
+ * `OfficeHolders` rides along only when asked for: the list endpoint leaves
+ * relations out by default, so a caller that reads a person's current term
+ * off the row must say so.
+ */
+export async function getPersonsByIds(ids: string[], options: { includeOfficeHolders?: boolean } = {}): Promise<PersonItem[]> {
 	const unique = Array.from(new Set(ids.filter(Boolean))).slice(0, 500);
 	if (unique.length === 0) return [];
 	const searchParams = new URLSearchParams({ ids: unique.join(',') });
+	if (options.includeOfficeHolders) searchParams.set('includeOfficeHolders', 'true');
 	const url = `${ELECTIONS_API_BASE_URL}/v1/persons?${searchParams}`;
 	const data = await fetchJson<PersonItem[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) ? data : [];

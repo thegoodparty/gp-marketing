@@ -346,6 +346,7 @@ describe('getFeaturedPeople', () => {
 	test('a past-cycle candidate who holds office now stays, as an officeholder, when the feed missed them', async () => {
 		const OFFICIAL_ID = 'cccccccc-0000-4000-8000-000000000003';
 		const LOSER_ID = 'dddddddd-0000-4000-8000-000000000004';
+		let personOptions: { includeOfficeHolders?: boolean } | undefined;
 		const withPastWinner: FeaturedPeopleDeps = {
 			...deps,
 			async getCandidacies({ raceSlug }) {
@@ -358,7 +359,8 @@ describe('getFeaturedPeople', () => {
 			async getOfficeHoldersByGeoId() {
 				return Promise.resolve([]);
 			},
-			async getPersonsByIds() {
+			async getPersonsByIds(_ids, options) {
+				personOptions = options;
 				return Promise.resolve([
 					personRow(OFFICIAL_ID, {
 						fullName: 'Scott Corbin',
@@ -373,6 +375,7 @@ describe('getFeaturedPeople', () => {
 
 		expect(people.candidates).toEqual([]);
 		expect(people.representatives.map(r => [r.name, r.office, r.role])).toEqual([['Scott Corbin', 'Houston City Council - Ward 5', 'representative']]);
+		expect(personOptions).toEqual({ includeOfficeHolders: true });
 	});
 
 	test('asks for sitting officials and the upcoming ballot before past candidates, so the 500-id cap never drops them', async () => {

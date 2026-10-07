@@ -9,6 +9,7 @@ import { getStateName, isElectionDateBeforeToday, resolvePlaceRaceElectionDates 
 import { type NearbyOfficesTier, nearbyOfficesTiers, raceBelongsToTier } from '~/lib/nearbyOffices';
 import { classifyPartyFrom, isMajorParty, orderPartyNames } from '~/lib/party';
 import { cardAvatarUrl, pledgedFromSpine } from '~/lib/peopleProfile';
+import { resolveProductAvatars } from '~/lib/productAvatars';
 import { formatPersonName } from '~/lib/personName';
 import { buildPersonSlug, buildPersonSlugFromBase, slugifyName } from '~/lib/personSlug';
 import type { CandidacyItem, PlaceRace, PlaceWithFacts } from '~/types/elections';
@@ -137,6 +138,7 @@ export type FeaturedPeopleDeps = {
 	getOfficeHoldersByGeoId(geoId: string): Promise<PersonOfficeHolder[]>;
 	getPersonsByIds(ids: string[], options?: { includeOfficeHolders?: boolean }): Promise<PersonItem[]>;
 	getRemovedPersonIds(): Promise<Set<string> | null>;
+	resolveProductAvatars(personIds: Iterable<string | null | undefined>): Promise<Map<string, string>>;
 };
 
 const defaultDeps: FeaturedPeopleDeps = {
@@ -146,6 +148,7 @@ const defaultDeps: FeaturedPeopleDeps = {
 	getOfficeHoldersByGeoId,
 	getPersonsByIds,
 	getRemovedPersonIds,
+	resolveProductAvatars,
 };
 
 /** Mirrors the level filter the location page applies to its own offices list. */
@@ -334,9 +337,16 @@ export async function getFeaturedPeople(
 		listed.add(personId.toLowerCase());
 	}
 
+	const candidates = buildCandidateCards(candidacies, personsById, placeContext, removedPersonIds);
+	// The person's own profile photo outranks the feed's, as on their profile page.
+	const avatars = await deps.resolveProductAvatars([...candidates, ...representatives].map(card => card.personId));
+	const withChosenPhoto = (card: FeaturedPersonCard): FeaturedPersonCard => {
+		const chosen = card.personId ? avatars.get(card.personId.toLowerCase()) : undefined;
+		return chosen ? { ...card, avatarUrl: chosen } : card;
+	};
 	return {
-		candidates: buildCandidateCards(candidacies, personsById, placeContext, removedPersonIds),
-		representatives,
+		candidates: candidates.map(withChosenPhoto),
+		representatives: representatives.map(withChosenPhoto),
 		candidatesComplete: datedRacesCovered,
 	};
 }

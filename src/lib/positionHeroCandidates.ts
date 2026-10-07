@@ -2,6 +2,7 @@ import { getCandidaciesOrNull, getPersonsByIds } from '~/lib/electionsApi';
 import { mapCandidacyToCard } from '~/lib/electionsHelpers';
 import { classifyParty, isMajorParty } from '~/lib/party';
 import { pledgedFromSpine } from '~/lib/peopleProfile';
+import { resolveProductAvatars } from '~/lib/productAvatars';
 import type { CandidacyItem } from '~/types/elections';
 import type { PersonItem } from '~/types/people';
 import type { ElectionsPositionHeroCandidate } from '~/ui/ElectionsPositionHero';
@@ -50,8 +51,13 @@ export async function heroCandidatesFromCandidacies(candidacies: CandidacyItem[]
 		}
 	}
 	const personsById = new Map(persons.map(p => [p.id.toLowerCase(), p]));
+	const avatars = await resolveProductAvatars(personIds);
 	return rankPositionCandidates(
-		candidacies.map((c, i) => mapCandidacyToHeroCandidate(c, i, c.personId ? personsById.get(c.personId.toLowerCase()) : undefined)),
+		candidacies.map((c, i) => {
+			const card = mapCandidacyToHeroCandidate(c, i, c.personId ? personsById.get(c.personId.toLowerCase()) : undefined);
+			const chosen = c.personId ? avatars.get(c.personId.toLowerCase()) : undefined;
+			return chosen ? { ...card, avatar: chosen } : card;
+		}),
 	);
 }
 

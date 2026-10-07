@@ -6,6 +6,7 @@ import {
 	getRemovedPersonIds,
 } from '~/lib/electionsApi';
 import { pledgedFromSpine } from '~/lib/peopleProfile';
+import { resolveProductAvatars } from '~/lib/productAvatars';
 import { formatPersonName } from '~/lib/personName';
 import { buildPersonSlugFromBase, slugifyName } from '~/lib/personSlug';
 import type { PersonItem, PersonOfficeHolder } from '~/types/people';
@@ -68,6 +69,7 @@ export type PositionOfficeholderDeps = {
 	getElectionsPagePlace: typeof getElectionsPagePlace;
 	getPersonsByIds: typeof getPersonsByIds;
 	getRemovedPersonIds: typeof getRemovedPersonIds;
+	resolveProductAvatars: typeof resolveProductAvatars;
 };
 
 const defaultDeps: PositionOfficeholderDeps = {
@@ -76,6 +78,7 @@ const defaultDeps: PositionOfficeholderDeps = {
 	getElectionsPagePlace,
 	getPersonsByIds,
 	getRemovedPersonIds,
+	resolveProductAvatars,
 };
 
 export type PositionOfficeholderQuery = {
@@ -162,12 +165,16 @@ export async function loadPositionOfficeholders(
 		persons = [];
 	}
 	const personsById = new Map(persons.map(p => [p.id.toLowerCase(), p]));
+	// The person's own profile photo outranks the feed's, as on their profile page.
+	const avatars = await deps.resolveProductAvatars(current.map(row => row.personId));
 	const seen = new Set<string>();
 	const people: ElectionsPositionPerson[] = [];
 	for (const row of current) {
 		const person = row.personId ? personsById.get(row.personId.toLowerCase()) : undefined;
-		const mapped = mapOfficeholderToPerson(row, person, removed);
-		if (!mapped) continue;
+		const built = mapOfficeholderToPerson(row, person, removed);
+		if (!built) continue;
+		const chosen = row.personId ? avatars.get(row.personId.toLowerCase()) : undefined;
+		const mapped = chosen ? { ...built, avatar: chosen } : built;
 		// A person holds one seat, so the person id dedupes a seat the two reads both
 		// returned. A row with no linked person falls back to its own id: two vacant
 		// seats share an office title but are still two seats.

@@ -15,6 +15,7 @@ import {
 	looksLikeDistrictSlug,
 	resolveCountySlugForCitySlug,
 } from '~/lib/electionsApi';
+import { resolveProductAvatars } from '~/lib/productAvatars';
 import { US_STATES_TUPLES } from '~/constants/usStates';
 import { normalizeStateCode } from '~/constants/usStateCodes';
 import {
@@ -1269,7 +1270,16 @@ async function loadOtherCandidates(
 		.filter((id): id is string => Boolean(id) && id!.toLowerCase() !== excludePersonId.toLowerCase());
 	const persons = await getPersonsByIds(ids);
 	const byId = new Map(persons.map((p) => [p.id.toLowerCase(), p]));
-	return buildOtherCandidateCards(candidacies, byId, excludePersonId, removedPersonIds);
+	return withChosenPhotos(buildOtherCandidateCards(candidacies, byId, excludePersonId, removedPersonIds));
+}
+
+/** The person's own profile photo outranks the feed's on a card, as it does on their page. */
+async function withChosenPhotos(cards: RelatedPersonCard[]): Promise<RelatedPersonCard[]> {
+	const avatars = await resolveProductAvatars(cards.map((card) => card.personId));
+	return cards.map((card) => {
+		const chosen = card.personId ? avatars.get(card.personId.toLowerCase()) : undefined;
+		return chosen ? { ...card, avatarUrl: chosen } : card;
+	});
 }
 
 /** Fetches "Nearby Officials" cards for a resolved geo id. */
@@ -1285,7 +1295,7 @@ async function loadNearbyOfficials(
 		.filter((id): id is string => Boolean(id) && id!.toLowerCase() !== excludePersonId.toLowerCase());
 	const persons = await getPersonsByIds(ids);
 	const byId = new Map(persons.map((p) => [p.id.toLowerCase(), p]));
-	return buildNearbyOfficialCards(officeholders, byId, excludePersonId, removedPersonIds);
+	return withChosenPhotos(buildNearbyOfficialCards(officeholders, byId, excludePersonId, removedPersonIds));
 }
 
 /**

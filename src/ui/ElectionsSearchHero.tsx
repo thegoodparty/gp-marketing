@@ -172,7 +172,7 @@ export function ElectionsSearchHero(props: ElectionsSearchHeroProps) {
 							{slides.length > 1 && (
 								<div className={footer()}>
 									<div className={dots()} role='tablist' aria-label='Choose a slide'>
-										{dotNav.scrollSnaps.map((_, index) => (
+										{slides.map((_, index) => (
 											<button
 												key={index}
 												type='button'

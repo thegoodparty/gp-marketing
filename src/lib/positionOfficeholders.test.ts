@@ -145,6 +145,21 @@ describe('loadPositionOfficeholders', () => {
 		expect(people?.map(p => p.seatValue)).toEqual(['9']);
 	});
 
+	test('a race with no normalised position name answers from the position id alone and never reads the place', async () => {
+		let placeReads = 0;
+		const people = await loadPositionOfficeholders(
+			{ positionId: 'pos-d9', placeSlug: 'ca/los-angeles-county/los-angeles', positionName: undefined },
+			deps({
+				getOfficeHoldersByGeoId: async () => {
+					placeReads += 1;
+					return Promise.resolve([...council, mayor]);
+				},
+			}),
+		);
+		expect(people?.map(p => p.seatValue)).toEqual(['9']);
+		expect(placeReads).toBe(0);
+	});
+
 	test('a failed place read keeps the race\'s own seat rather than hiding the list', async () => {
 		const people = await loadPositionOfficeholders(la, deps({ getOfficeHoldersByGeoId: async () => Promise.reject(new Error('boom')) }));
 		expect(people?.map(p => p.seatValue)).toEqual(['9']);

@@ -26,7 +26,9 @@ export async function renderElectionsPositionPage(input: PositionTemplateContext
 			(await loadPositionOfficeholders({
 				positionId: input.race?.positionId,
 				placeSlug: input.placeSlug,
-				positionName: input.race?.normalizedPositionName ?? input.officeName,
+				// Only election-api's own normalised name can match its officeholder rows;
+				// a race without one gets the single seat its position id answers for.
+				positionName: input.race?.normalizedPositionName,
 			})),
 	};
 	const schemas = buildPositionPageSchemas(ctx);

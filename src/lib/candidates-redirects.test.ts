@@ -14,7 +14,7 @@ describe('candidatesPageRedirects', () => {
 
 	test('sends each one to the position page it hangs off, permanently', () => {
 		for (const rule of candidatesPageRedirects) {
-			expect(rule.destination).toBe(rule.source.replace(/\/candidates$/, ''));
+			expect<string>(rule.destination).toBe(rule.source.replace(/\/candidates$/, ''));
 			expect(rule.permanent).toBe(true);
 		}
 	});

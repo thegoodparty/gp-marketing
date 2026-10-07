@@ -1103,12 +1103,13 @@ export function composeView(
 		removed,
 		unpublished,
 		empowered,
-		// Pledge is a factual spine flag; suppress it on removed (K/L) pages along
-		// with the rest of the authored/empowerment framing. Eligibility is read
-		// BEFORE the flag: a CRM `Pledge Status = Yes` on someone the same CRM
-		// calls partisan is a data error, not a pledge (Mamdani, Cuomo).
+		// Pledge is a factual spine flag, and it survives removal (K/L): a removed
+		// profile states the same pledge fact it would otherwise (Emily,
+		// 2026-10-06), unlike the authored content and photo, which are stripped.
+		// Eligibility is read BEFORE the flag: a CRM `Pledge Status = Yes` on
+		// someone the same CRM calls partisan is a data error, not a pledge
+		// (Mamdani, Cuomo).
 		pledged:
-			!removed &&
 			!pledgeIneligible &&
 			confirmedRunning(person?.confirmedCandidate) &&
 			(person?.isPledged ?? false),

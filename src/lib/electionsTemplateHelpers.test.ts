@@ -52,6 +52,17 @@ describe('buildPositionSectionOverrides', () => {
 		expect(overrides.component_electionPositionResourcesBlock?.guideHref).toBe('/blog/article/how-to-run-for-district-attorney');
 	});
 
+	/** The nearby offices heading names the page's own place once: a state page is "in Michigan", not "in Michigan, Michigan". */
+	test('names the place and state in the nearby offices heading, and only the state on a state page', () => {
+		const county = buildPositionSectionOverrides(positionOverrideCtx);
+		const city = buildPositionSectionOverrides({ ...positionOverrideCtx, cityName: 'Little Falls' });
+		const state = buildPositionSectionOverrides({ ...positionOverrideCtx, countyName: undefined });
+
+		expect(county.component_nearbyOffices?.heading).toBe('More offices in Morrison County, Minnesota');
+		expect(city.component_nearbyOffices?.heading).toBe('More offices in Little Falls, Minnesota');
+		expect(state.component_nearbyOffices?.heading).toBe('More offices in Minnesota');
+	});
+
 	test('reads the race when it has one, not only the office name', () => {
 		const overrides = buildPositionSectionOverrides({
 			...positionOverrideCtx,
@@ -126,5 +137,128 @@ describe('buildElectionsIndexSectionOverrides', () => {
 	test('sends an empty list rather than nothing when the page has no featured cities', () => {
 		const overrides = buildElectionsIndexSectionOverrides(indexCtx);
 		expect(overrides.component_featuredCitiesBlock?.cities).toEqual([]);
+	});
+
+	const countyCtx = {
+		breadcrumbs: [],
+		locationLevel: 'county' as const,
+		stateName: 'Illinois',
+		countyName: 'Kane County',
+		heroTitle: 'Upcoming elections in Kane County, Illinois',
+	};
+
+	/**
+	 * The route phrases the whole headline. It used to be handed over as `stateName`,
+	 * and the hero rebuilt a headline around it, so every county, city and district
+	 * page published "Kane County, Upcoming elections in Kane County, Illinois".
+	 */
+	test('hands the hero the route headline, and the bare state name separately', () => {
+		const hero = buildElectionsIndexSectionOverrides(countyCtx).component_locationLandingPageHero;
+
+		expect(hero?.headline).toBe('Upcoming elections in Kane County, Illinois');
+		expect(hero?.stateName).toBe('Illinois');
+		expect(hero?.countyName).toBe('Kane County');
+	});
+
+	test('leaves the headline unset when the route does not phrase one', () => {
+		const hero = buildElectionsIndexSectionOverrides({ ...countyCtx, heroTitle: undefined }).component_locationLandingPageHero;
+
+		expect(hero?.headline).toBeUndefined();
+		expect(hero?.stateName).toBe('Illinois');
+	});
+
+	/** The hero reads its independents from the same people the featured block gets, so the two can never disagree. */
+	test("summarises the featured people into the hero's independents, and hides both without them", () => {
+		const pledged = {
+			personId: 'p1',
+			name: 'A',
+			office: null,
+			location: null,
+			href: '/people/a',
+			avatarUrl: null,
+			isPledged: true,
+			isNonpartisan: true,
+			role: 'candidate' as const,
+			electionDate: '2026-11-03',
+		};
+		const withPeople = buildElectionsIndexSectionOverrides({
+			...countyCtx,
+			defaultYear: 2026,
+			featuredPeople: { candidates: [pledged], representatives: [], candidatesComplete: true },
+		}).component_locationLandingPageHero;
+		const withoutPeople = buildElectionsIndexSectionOverrides(countyCtx).component_locationLandingPageHero;
+
+		expect(withPeople?.independents).toEqual({ candidateCount: 1, hasAny: true });
+		expect(withoutPeople?.independents).toEqual({ candidateCount: null, hasAny: false });
+	});
+
+	/**
+	 * Both hero figures describe the ballot the offices list shows, in the year it
+	 * opens on: the races are the list's own rows for that year, and the
+	 * independents are scoped to it too.
+	 */
+	test('counts the races and the independents off the offices list, in its opening year', () => {
+		const office = (slug: string, nextElectionDate: string) => ({
+			id: slug,
+			type: 'County',
+			position: slug,
+			nextElectionDate,
+			href: `/${slug}`,
+		});
+		const candidate = (personId: string, electionDate: string) => ({
+			personId,
+			name: personId,
+			office: null,
+			location: null,
+			href: `/people/${personId}`,
+			avatarUrl: null,
+			isPledged: true,
+			isNonpartisan: true,
+			role: 'candidate' as const,
+			electionDate,
+		});
+		const hero = buildElectionsIndexSectionOverrides({
+			...countyCtx,
+			defaultYear: 2026,
+			offices: [office('clerk', '2026-11-03'), office('sheriff', '2026-11-03'), office('judge', '2028-11-07')],
+			featuredPeople: {
+				candidates: [candidate('p1', '2026-11-03'), candidate('p2', '2028-11-07')],
+				representatives: [],
+				candidatesComplete: true,
+			},
+		}).component_locationLandingPageHero;
+
+		expect(hero?.raceCount).toBe(2);
+		expect(hero?.independents).toEqual({ candidateCount: 1, hasAny: true });
+	});
+
+	/** Without the list's opening year neither figure can be scoped, so both hide together; the button still knows someone is pledged. */
+	test('without an opening year the independent count hides along with the race count', () => {
+		const pledged = {
+			personId: 'p1',
+			name: 'A',
+			office: null,
+			location: null,
+			href: '/people/a',
+			avatarUrl: null,
+			isPledged: true,
+			isNonpartisan: true,
+			role: 'candidate' as const,
+			electionDate: '2026-11-03',
+		};
+		const hero = buildElectionsIndexSectionOverrides({
+			...countyCtx,
+			offices: [],
+			featuredPeople: { candidates: [pledged], representatives: [], candidatesComplete: true },
+		}).component_locationLandingPageHero;
+
+		expect(hero?.raceCount).toBeNull();
+		expect(hero?.independents).toEqual({ candidateCount: null, hasAny: true });
+	});
+
+	test('the race count is unknown, not zero, when the page has no offices data', () => {
+		expect(buildElectionsIndexSectionOverrides(countyCtx).component_locationLandingPageHero?.raceCount).toBeNull();
+		const emptyList = buildElectionsIndexSectionOverrides({ ...countyCtx, defaultYear: 2026, offices: [] });
+		expect(emptyList.component_locationLandingPageHero?.raceCount).toBe(0);
 	});
 });

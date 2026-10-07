@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'bun:test';
+import { evaluate, parse } from 'groq-js';
 import * as groq from './groq';
 
 // Sanity rejects POST bodies over 300 KB ("The request body is N, exceeding the limit of 300 KB"), and
@@ -35,6 +36,21 @@ describe('custom groq functions', () => {
 		expect(declared.size).toBeGreaterThan(0);
 	});
 
+	/**
+	 * A block that renders Sanity buttons has to project them. Without it the raw
+	 * fields arrive, `transformButtons` finds no `anchor` or `link` to build an
+	 * href from, and the buttons render as nothing with no type error.
+	 */
+	test('every block that authors buttons projects them', () => {
+		const authorsButtons = exportedStrings.filter(
+			([name, value]) => name.startsWith('component_') && value.includes('list_buttons'),
+		);
+		const unprojected = authorsButtons.filter(([, value]) => !value.includes(`list_buttons[]{${groq.buttonGroq}}`)).map(([name]) => name);
+
+		expect(unprojected).toEqual([]);
+		expect(authorsButtons.length).toBeGreaterThan(0);
+	});
+
 	test('the shared fragments keep their projected field names', () => {
 		expect(groq.buttonGroq).toBe('...gp::button(@)');
 		expect(groq.buttonBodyGroq).toContain('"link":gp::link(field_internalLink)');
@@ -42,5 +58,21 @@ describe('custom groq functions', () => {
 		expect(groq.internalLinkGroq).toContain('"title":');
 		expect(groq.internalLinkGroq).toContain('"label":');
 		expect(groq.internalLinkGroq).toContain('"href":');
+	});
+
+	/**
+	 * Anchor buttons render whatever `anchor` the query hands over as their href, so
+	 * the `#` has to be put there by the query. The hero and the position hero both
+	 * jump by it; a test that pre-writes `#` into its fixture cannot see this break.
+	 */
+	test('an Anchor button is projected with its anchor id as a ready-to-use hash href', async () => {
+		expect(groq.buttonBodyGroq).toContain(`"anchor":${groq.anchorIdGroq}`);
+
+		const dataset = [
+			{ _id: 'a', _type: 'button', field_anchorId: 'local-races' },
+			{ _id: 'b', _type: 'button' },
+		];
+		const result = await evaluate(parse(`*[_type=="button"] | order(_id){"anchor":${groq.anchorIdGroq}}`), { dataset });
+		expect(await result.get()).toEqual([{ anchor: '#local-races' }, { anchor: '' }]);
 	});
 });

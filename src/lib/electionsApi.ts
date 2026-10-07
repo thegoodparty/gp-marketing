@@ -313,15 +313,31 @@ export async function getCandidacies(params: {
 	positionId?: string;
 	raceSlug?: string;
 }): Promise<CandidacyItem[]> {
+	return (await getCandidaciesOrNull(params)) ?? [];
+}
+
+/**
+ * `null` when election-api gave no usable answer (transport failure, 5xx after
+ * retries, or 404), as opposed to a race that genuinely has no candidacies.
+ * Callers that publish a count need the distinction; `getCandidacies` folds it.
+ */
+export async function getCandidaciesOrNull(params: {
+	raceId?: string;
+	positionId?: string;
+	raceSlug?: string;
+}): Promise<CandidacyItem[] | null> {
 	const searchParams = new URLSearchParams();
 	if (params.raceId) searchParams.set('raceId', params.raceId);
 	if (params.positionId) searchParams.set('positionId', params.positionId);
 	if (params.raceSlug) searchParams.set('raceSlug', params.raceSlug);
-	if (searchParams.toString() === '') return [];
+	if (searchParams.toString() === '') return null;
+	// Each candidacy's own Race row, which carries its seat (subAreaName /
+	// subAreaValue). A shared race slug names every district's race, so the
+	// slug's race is the wrong place to read a seat from (Emily, 2026-10-06).
 	searchParams.set('includeRace', 'true');
 	const url = `${ELECTIONS_API_BASE_URL}/v1/candidacies?${searchParams}`;
 	const data = await fetchJson<CandidacyItem[]>(url);
-	return Array.isArray(data) ? data : [];
+	return Array.isArray(data) ? data : null;
 }
 
 export async function getCandidateBySlug(params: {

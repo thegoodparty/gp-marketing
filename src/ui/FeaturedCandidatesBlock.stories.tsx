@@ -14,13 +14,20 @@ const meta: Meta<typeof FeaturedCandidatesBlock> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const callout = (
-	<p>
-		This voter guide was built by GoodParty.org, a public benefit corporation that helps independents run for office, win elections, and serve
-		their local communities. The Heart & Star badge marks candidates and officials who have signed the{' '}
-		<a href='https://goodparty.org'>GoodParty.org Pledge</a> to serve people, not political parties or big money.
-	</p>
-);
+const heading = 'Candidates and officials who took the GoodParty.org Pledge';
+
+const bodyCopy = 'Candidates and elected officials near you who have taken the GoodParty.org Pledge. Read why they’re running and serving, in their own words.';
+
+const callout = {
+	title: 'What this symbol means',
+	body: (
+		<p>
+			Candidates and elected officials with this symbol took the <strong>GoodParty.org Pledge</strong>, promising to serve people first,
+			independent of both major parties and big-money interests.
+		</p>
+	),
+	pledgeLinkLabel: 'Read the full pledge',
+};
 
 const people = Array.from({ length: 6 }, (_, i) => ({
 	key: `person-${i}`,
@@ -29,12 +36,22 @@ const people = Array.from({ length: 6 }, (_, i) => ({
 	location: '[City, SS]',
 	href: `/people/person-${i}`,
 	avatarUrl: `https://i.pravatar.cc/400?img=${i + 11}`,
-	isPledged: i < 4,
+	isPledged: true,
 }));
 
 export const Default: Story = {
 	args: {
-		heading: 'Featured candidates and representatives',
+		heading,
+		bodyCopy,
+		callout,
+		people,
+	},
+};
+
+export const WithCount: Story = {
+	args: {
+		heading,
+		bodyCopy: 'There are 5 candidates and elected officials who have taken the GoodParty.org Pledge in Bay County. Read why they’re running and serving, in their own words.',
 		callout,
 		people,
 	},
@@ -43,7 +60,8 @@ export const Default: Story = {
 export const Midnight: Story = {
 	args: {
 		backgroundColor: 'midnight',
-		heading: 'Featured candidates and representatives',
+		heading,
+		bodyCopy,
 		callout,
 		people,
 	},
@@ -51,14 +69,15 @@ export const Midnight: Story = {
 
 export const WithoutCalloutOrPhotos: Story = {
 	args: {
-		heading: 'Featured candidates in Houston',
+		heading: 'Pledged candidates in Houston',
 		people: people.map(person => ({ ...person, avatarUrl: null, name: 'Jane Q. Doe' })),
 	},
 };
 
 export const Empty: Story = {
 	args: {
-		heading: 'Featured candidates and representatives',
+		heading,
+		bodyCopy,
 		callout,
 		people: [],
 	},

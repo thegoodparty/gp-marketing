@@ -86,9 +86,8 @@ function buildSectionOverrides(
 		component_breadcrumbBlock: {
 			breadcrumbs: [
 				{ href: '/', label: 'Home' },
-				...(electionHrefs.candidatesHref
-					? [{ href: electionHrefs.candidatesHref, label: 'Candidates' }]
-					: [{ label: 'Candidates' }]),
+				// The candidate listing pages are retired; the position page carries the list.
+				...(electionHrefs.positionHref ? [{ href: electionHrefs.positionHref, label: 'Candidates' }] : [{ label: 'Candidates' }]),
 				{ label: candidateName },
 			],
 		},

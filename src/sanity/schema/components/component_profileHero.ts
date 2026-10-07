@@ -1,6 +1,7 @@
 import { resolveValue } from '../../utils/resolveValue.ts';
 import { handleReplacements } from '../../utils/handleReplacements.ts';
 import { getIcon } from '../../utils/getIcon.tsx';
+import { PROFILE_HERO_INTRO_DEFAULTS } from '../../../lib/profileHeroDefaults.ts';
 
 export const component_profileHero = {
   title: 'Profile Hero',
@@ -9,6 +10,32 @@ export const component_profileHero = {
   type: 'object',
   icon: getIcon('User'),
   fields: [
+    {
+      title: 'Text',
+      name: 'profileHeroContent',
+      type: 'object',
+      fields: [
+        {
+          title: 'Intro for candidates',
+          name: 'field_introCandidates',
+          type: 'text',
+          rows: 4,
+          description:
+            'The paragraph under the name and office on a candidate’s profile. [candidate name] is replaced with the person’s name. Leave empty to use the default wording.',
+          initialValue: PROFILE_HERO_INTRO_DEFAULTS.candidate,
+        },
+        {
+          title: 'Intro for elected officials',
+          name: 'field_introOfficeholders',
+          type: 'text',
+          rows: 4,
+          description:
+            'The same paragraph on the profile of someone who holds or held office. [candidate name] is replaced with the person’s name. Leave empty to use the default wording.',
+          initialValue: PROFILE_HERO_INTRO_DEFAULTS.officeholder,
+        },
+      ],
+      group: 'profileHeroContent',
+    },
     {
       title: 'Design Settings',
       name: 'profileHeroDesignSettings',
@@ -61,6 +88,11 @@ export const component_profileHero = {
     },
   },
   groups: [
+    {
+      title: 'Text',
+      name: 'profileHeroContent',
+      icon: getIcon('Text'),
+    },
     {
       title: 'Design Settings',
       name: 'profileHeroDesignSettings',

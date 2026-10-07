@@ -2,7 +2,15 @@ import { resolveValue } from '../../utils/resolveValue.ts';
 import { handleReplacements } from '../../utils/handleReplacements.ts';
 import { getIcon } from '../../utils/getIcon.tsx';
 
-const cardFields = (defaults: { label: string; title: string; description: string; icon: string; color: string; buttonText: string }) => [
+const cardFields = (defaults: {
+	label: string;
+	title: string;
+	description: string;
+	icon: string;
+	color: string;
+	buttonText: string;
+	buttonHref?: string;
+}) => [
 	{
 		title: 'Label',
 		name: 'field_label',
@@ -14,7 +22,8 @@ const cardFields = (defaults: { label: string; title: string; description: strin
 		title: 'Heading',
 		name: 'field_title',
 		type: 'field_title',
-		description: 'Supports position tokens, e.g. "How to Run for [office name]".',
+		description:
+			'Supports position tokens, e.g. "How to Run for [office name]". On position pages the guide card shows its article\'s own title instead.',
 		initialValue: defaults.title,
 	},
 	{
@@ -41,7 +50,11 @@ const cardFields = (defaults: { label: string; title: string; description: strin
 		title: 'Button',
 		name: 'button',
 		type: 'button',
-		initialValue: { field_buttonText: defaults.buttonText, field_ctaActionWithShared: 'External' },
+		initialValue: {
+			field_buttonText: defaults.buttonText,
+			field_ctaActionWithShared: 'External',
+			...(defaults.buttonHref ? { field_externalLink: defaults.buttonHref } : {}),
+		},
 	},
 ];
 
@@ -82,6 +95,7 @@ export const component_electionPositionResourcesBlock = {
 				icon: 'book-open',
 				color: 'Lavender',
 				buttonText: 'Read the guide',
+				buttonHref: 'https://goodparty.org/e-book',
 			}),
 		},
 		{
@@ -95,7 +109,8 @@ export const component_electionPositionResourcesBlock = {
 				description: "Free coaching and training from our team and candidates who've run and won.",
 				icon: 'headset',
 				color: 'BrightYellow',
-				buttonText: 'Connect with us',
+				buttonText: 'Join the community',
+				buttonHref: 'https://community.goodparty.org/',
 			}),
 		},
 		{

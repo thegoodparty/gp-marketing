@@ -9,24 +9,31 @@ import * as ProfileHeroStories from './ProfileHero.stories';
 
 ## Overview
 
-The ProfileHero component displays a candidate's profile header with their name, office title, profile image, and optional GoodParty branding. When `isEmpowered` is true, it shows the logo badge on the avatar and the "Empowered by GoodParty.org" attribution.
+The ProfileHero component is the header of a person's profile: persona tag, name, office line, a short intro paragraph about the voter guide, and a pledge callout that states whether the person took the GoodParty.org Pledge, with a "Read the full pledge" link that opens the pledge pop-up. The portrait straddles the dark band and hangs into the content below.
+
+The intro and the callout were added after design feedback on the Voter Guide frames (Emily, 2026-10-06); before that the hero carried a one-line pledge status under the office. The legacy `/candidate` pages still render the older framing: no intro, no callout, and the "Empowered by GoodParty.org" line.
 
 ## Usage
 
 Use this component when:
-- Displaying the hero section on candidate profile pages
-- Showing candidate information with GoodParty branding for claimed product users
-- Providing visual identification of GoodParty-empowered candidates
+- Displaying the hero section on `/people` profile pages (through `ProfileHeroSection`, which fills the intro from Studio)
+- Showing the person's pledge status and GoodParty.org branding for claimed profiles
 
 ## Variants
 
 <Canvas of={ProfileHeroStories.DefaultStory} />
 
-<Canvas of={ProfileHeroStories.Unclaimed} />
+<Canvas of={ProfileHeroStories.NotPledged} />
+
+<Canvas of={ProfileHeroStories.Ineligible} />
+
+<Canvas of={ProfileHeroStories.ElectedOfficial} />
 
 <Canvas of={ProfileHeroStories.CreamBackground} />
 
 <Canvas of={ProfileHeroStories.LongName} />
+
+<Canvas of={ProfileHeroStories.LegacyEmpowered} />
 
 ## Props
 
@@ -68,19 +75,39 @@ When true, shows the GoodParty logo badge on the avatar and the "Empowered by Go
 
 #### `attribution` (optional)
 
-The line under the office. Overrides `isEmpowered` when passed.
+What the hero says about the person. Overrides `isEmpowered` when passed.
 
-The `/people` person profiles pass one of the three pledge values: marketing replaced the claim-keyed "Empowered by GoodParty.org" / "Not Endorsed by GoodParty.org" pair there on 2026-08-17 with statements about the GoodParty.org pledge. `personSectionOverrides.pledgeAttribution` decides which; `pledgeAttributionCopy.test.tsx` pins the wording.
+The three pledge values render the **pledge callout**: a bordered box under the intro with one sentence and the "Read the full pledge" pop-up link. The `/people` person profiles pass one of them; `personSectionOverrides.pledgeAttribution` decides which from the pledge flag and party evidence, and `pledgeAttributionCopy.test.tsx` pins the wording:
 
-The sentences themselves live in `~/ui/_lib/attributionCopy`, shared with the related-person cards. Take the wording from there rather than restating it — the cards went on publishing the retired sentence precisely because they held their own copy of it.
+- `pledged` → "This candidate took the GoodParty.org Pledge, promising to serve people first, independent of both major parties and big-money interests." (with the heart-and-star mark beside it)
+- `notPledged` → "This candidate has not yet taken the GoodParty.org Pledge to serve people first, independent of both major parties and big-money interests."
+- `pledgeIneligible` → "This candidate is ineligible for the GoodParty.org Pledge due to partisan affiliation."
+
+`empowered` renders the legacy "Empowered by GoodParty.org" line (the `/candidate` framing); `none` renders nothing.
+
+The sentences live in `~/ui/_lib/attributionCopy` (`pledgeCalloutCopy`), next to the short lines the related-person cards still use. Take the wording from there rather than restating it — the cards went on publishing a retired sentence precisely because they held their own copy of it.
 
 **Type:** `AttributionMode` — `'empowered' | 'pledged' | 'notPledged' | 'pledgeIneligible' | 'none'`
 
 **Default:** derived from `isEmpowered`
 
+#### `pledgeSubject` (optional)
+
+Who the callout sentence is about: `'candidate'` ("This candidate…") or `'elected official'` ("This elected official…"). The frames only draw candidates; the swap for people who hold or held office is marketing's (Emily, 2026-10-06). `/people` sets it from the persona: officeholders and past officeholders are elected officials, everyone running (including someone serving and running) is a candidate.
+
+**Type:** `'candidate' | 'elected official'`
+
+**Default:** `'candidate'`
+
+#### `intro` (optional)
+
+The paragraph between the office line and the callout. Tokens are already resolved by the caller. On `/people`, `ProfileHeroSection` reads it from the block's Text tab in Studio ("Intro for candidates" / "Intro for elected officials"), falling back to the preset in `~/lib/profileHeroDefaults` when the field is empty, and fills `[candidate name]`. Nothing here means no paragraph, which is what the `/candidate` pages render.
+
+**Type:** `string`
+
 #### `showBrandMark` (optional)
 
-Whether the GoodParty.org mark paints, on the portrait and beside the attribution. Separate from `attribution` because the mark says the page is a GoodParty.org profile while the line asserts a fact about the person — on `/people` those come from different inputs (claimed vs pledged).
+Whether the GoodParty.org mark paints on the portrait (and beside the legacy attribution line). Separate from `attribution` because the mark says the page is a GoodParty.org profile while the callout asserts a fact about the person — on `/people` those come from different inputs (claimed vs pledged). The mark inside the pledge callout is not this one: it follows the pledge, because there it illustrates the sentence beside it.
 
 **Type:** `boolean`
 
@@ -103,20 +130,20 @@ Additional CSS classes to apply to the component.
 ## Layout
 
 The component uses a responsive flex layout:
-- **Mobile**: Vertical stack (image, then content)
-- **Desktop**: Horizontal layout with image on left, content on right
-- Image is centered on mobile, left-aligned on desktop
+- **Mobile**: Vertical stack (image, then tag, name, office, intro, callout), the dark band covering the whole hero
+- **Desktop**: Portrait on the left, text column on the right; the band's height follows the text column, so a long office line or a wrapped intro makes the band taller rather than spilling onto the cream below
+- The portrait is anchored to the bottom of the row and overflows the band by a fixed amount (48px from `md`, 68px from `lg`, per the frames). `ProfileContentBlock`'s sidebar offsets by the same amount to clear it, so the two must move together.
 
 ## Avatar and Badge
 
 When a profile image is provided (`profileImageUrl` or `profileImage`):
 - Image is displayed in a circular container
-- The GoodParty logo badge overlays the avatar only when `isEmpowered` is true
-- Avatar size is responsive: `w-48 h-48` on mobile, `w-56 md:h-56` on tablet, `w-64 lg:h-64` on desktop
+- The GoodParty logo badge overlays the avatar only when `showBrandMark` is true (or, for the legacy pages, `isEmpowered`)
+- Avatar size is responsive: 160px on mobile, 288px from `md`, 416px from `lg`
 
-## Attribution
+## Pledge callout
 
-The line under the office title comes from `attribution`, falling back to `isEmpowered` ("Empowered by GoodParty.org"). Affirmative lines get the semibold Figma treatment beside the GoodParty logo; the negative and ineligible pledge lines get the grey disclaimer style, so a sentence saying someone has *not* done something cannot read as a badge. Text color adapts to the background variant (white on midnight, dark on cream).
+An 8px-radius box with a hairline border and a faint fill over the band (midnight/200 line, midnight/50 at 10%). The heart-and-star mark sits on the left only when the person took the pledge; on the phone it sits above the sentence. "GoodParty.org Pledge" is set in bold inside the sentence, and "Read the full pledge" is a button that opens `PledgeModal`, the same pop-up the featured candidates and position pages use, because there is no pledge page on the site. Text color adapts to the background variant (white on midnight, dark on cream).
 
 ## Image Fallback
 
@@ -127,15 +154,17 @@ If no profile image is provided, a generic person icon placeholder is rendered i
 - Uses semantic `<section>` element
 - Main heading uses `heading-lg` or `heading-md` style type depending on name length
 - Office title uses `subtitle-1` style type
-- Attribution text uses `body-2` style type
+- Intro uses `body-2`, which ramps from 16px on the phone to 18px from 1280px wide
+- The pledge pop-up trigger is a `<button aria-haspopup="dialog">`, not a link
 - Image includes alt text derived from the candidate name
 
 ## Design Reference
 
-[View in Figma](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=24614-15150&t=6DQyxTAl7Ola6AF3-0)
+Voter Guide frames: [desktop](https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2139-26365) and [mobile](https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2139-26635) (claimed, pledged); the unclaimed, not-pledged variant is on the same page (2156:34361 / 2156:34632). The original design-system frame is [here](https://www.figma.com/design/dmMrTWyBirANhArKs5mTmr/GoodParty-Design-System----shadcn-ui?node-id=24614-15150&t=6DQyxTAl7Ola6AF3-0).
 
 ## Related Components
 
 - `ProfileContentBlock` - Content section that follows ProfileHero
+- `PledgeModal` - The pop-up "Read the full pledge" opens
 - `ResponsiveImage` - Image component used for Sanity profile images
-- `Logo` - GoodParty logo component used for badge and attribution
+- `Logo` - GoodParty logo component used for badge and the callout

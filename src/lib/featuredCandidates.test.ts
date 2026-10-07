@@ -343,6 +343,38 @@ describe('getFeaturedPeople', () => {
 		expect(people.candidates[0]?.electionDate).toBe('2026-11-03');
 	});
 
+	test('a past-cycle candidate who holds office now stays, as an officeholder, when the feed missed them', async () => {
+		const OFFICIAL_ID = 'cccccccc-0000-4000-8000-000000000003';
+		const LOSER_ID = 'dddddddd-0000-4000-8000-000000000004';
+		const withPastWinner: FeaturedPeopleDeps = {
+			...deps,
+			async getCandidacies({ raceSlug }) {
+				if (raceSlug !== 'tx/houston/mayor') return Promise.resolve([]);
+				return Promise.resolve([
+					candidacy({ id: 'c-won', personId: OFFICIAL_ID, firstName: 'Scott', lastName: 'Corbin', Race: { brHashId: 'r-2025', electionDate: '2025-11-04' } }),
+					candidacy({ id: 'c-lost', personId: LOSER_ID, firstName: 'Lost', lastName: 'Out', Race: { brHashId: 'r-2025', electionDate: '2025-11-04' } }),
+				]);
+			},
+			async getOfficeHoldersByGeoId() {
+				return Promise.resolve([]);
+			},
+			async getPersonsByIds() {
+				return Promise.resolve([
+					personRow(OFFICIAL_ID, {
+						fullName: 'Scott Corbin',
+						slug: 'scott-corbin',
+						OfficeHolders: [officeholder({ id: 'oh-corbin', personId: OFFICIAL_ID, officeTitle: 'Houston City Council - Ward 5', mailingCity: 'Houston' })],
+					}),
+					personRow(LOSER_ID, { fullName: 'Lost Out', slug: 'lost-out', OfficeHolders: [officeholder({ id: 'oh-old', personId: LOSER_ID, isCurrent: false })] }),
+				]);
+			},
+		};
+		const people = await getFeaturedPeople({ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) }, withPastWinner);
+
+		expect(people.candidates).toEqual([]);
+		expect(people.representatives.map(r => [r.name, r.office, r.role])).toEqual([['Scott Corbin', 'Houston City Council - Ward 5', 'representative']]);
+	});
+
 	test('returns two empty lists, and no trusted count, when the place cannot be found', async () => {
 		const people = await getFeaturedPeople({ placeSlug: 'tx/nowhere-county/nowhere', locationLevel: 'city' }, deps);
 

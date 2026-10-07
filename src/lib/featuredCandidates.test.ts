@@ -187,6 +187,15 @@ describe('buildCandidateCards', () => {
 		});
 	});
 
+	test('a statewide candidacy names the state once, not "Indiana, IN"', () => {
+		const statewide = { name: 'Indiana', state: 'IN', level: 'state' as const };
+		const [card] = buildCandidateCards([entry(candidacy({ placeName: 'Indiana', state: 'IN' }))], new Map(), statewide, new Set());
+		const [local] = buildCandidateCards([entry(candidacy({ placeName: 'Marion', state: 'IN' }))], new Map(), statewide, new Set());
+
+		expect(card?.location).toBe('Indiana');
+		expect(local?.location).toBe('Marion, IN');
+	});
+
 	test('a pledge flag does not count for a major-party candidate', () => {
 		const persons = new Map([[DEMOCRAT_ID, personRow(DEMOCRAT_ID, { isPledged: true })]]);
 		const [card] = buildCandidateCards([entry(candidacy({ personId: DEMOCRAT_ID, party: 'Democratic' }))], persons, place, new Set());

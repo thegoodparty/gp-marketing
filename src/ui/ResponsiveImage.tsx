@@ -132,7 +132,9 @@ export function ResponsiveImage(props: ResponsiveImageProps) {
 				width={maxWidth}
 				height={maxHeight}
 				priority={props.priority}
-				onLoad={() => props.setImageLoaded?.(true)}
+				// Only attach a handler when a caller asked for one: a function prop cannot
+				// cross from a server component into next/image, and most blocks render on the server.
+				onLoad={props.setImageLoaded ? () => props.setImageLoaded?.(true) : undefined}
 			/>
 		</span>
 	);

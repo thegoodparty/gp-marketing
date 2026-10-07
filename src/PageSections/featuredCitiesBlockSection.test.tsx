@@ -32,4 +32,23 @@ describe('FeaturedCitiesBlockSection', () => {
 		expect(html).toContain('data-section="Featured Cities Block"');
 		expect(html).toContain('Nashville');
 	});
+
+	test('resolves location tokens in the heading and copy, like every other template block', async () => {
+		const element = await FeaturedCitiesBlockSection({
+			...section,
+			featuredCitiesBlockHeader: {
+				field_title: 'Cities in [County]',
+				block_summaryText: [
+					{ _key: 'b', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 's', _type: 'span', marks: [], text: 'Pick a city in [State]:' }] },
+				],
+			},
+			tokens: { '[County]': 'Peoria County', '[State]': 'Illinois' },
+			citiesOverride: [{ name: 'Peoria', stateAbbreviation: 'IL', openElectionsCount: 4, href: '/elections/il/peoria-county/peoria' }],
+		} as unknown as Props);
+		if (!element) throw new Error('expected the block to render');
+		const html = renderToStaticMarkup(element);
+		expect(html).toContain('Cities in Peoria County');
+		expect(html).toContain('Pick a city in Illinois:');
+		expect(html).not.toContain('[County]');
+	});
 });

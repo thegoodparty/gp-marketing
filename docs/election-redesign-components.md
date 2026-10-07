@@ -714,6 +714,10 @@ people now follow the ballot that branch built. Decisions:
   officeholders of every tier, each named with its own tier's place. Chosen over same-level-only
   because pledged people are sparse and most city and county pages would otherwise show nothing.
   The body copy therefore says "near you", not "in [location]".
+- **Only the upcoming ballot.** `/v1/candidacies?raceSlug=` returns every cycle of a slug, so past
+  candidates appeared beside current ones (Emily, 2026-10-07, Holland, MI). A candidacy whose own
+  `Race.electionDate` has passed is dropped before the cards are built; one with a date uses it on
+  the card. Officeholders were already limited to `isCurrent`.
 - **The count is a seam, not a figure.** The body copy accepts `[count of candidates]`, meaning
   the number of pledged people in the page's place *and everything inside it* (all of Texas on the
   Texas page). That is a downward count, and election-api cannot answer it today: a person row

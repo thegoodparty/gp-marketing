@@ -325,6 +325,24 @@ describe('getFeaturedPeople', () => {
 		expect(selectFeaturedPeople(people, 'both').map(p => p.name)).toEqual(['Jane Doe']);
 	});
 
+	test('drops a candidacy from a past cycle of the same race, and dates the card from its own race', async () => {
+		const pastAndPresent: FeaturedPeopleDeps = {
+			...deps,
+			async getCandidacies({ raceSlug }) {
+				if (raceSlug !== 'tx/houston/mayor') return Promise.resolve([]);
+				return Promise.resolve([
+					candidacy({ id: 'c-old', slug: 'old-timer-mayor', firstName: 'Old', lastName: 'Timer', Race: { brHashId: 'r-2022', electionDate: '2022-11-08' } }),
+					candidacy({ personId: PLEDGED_ID, Race: { brHashId: 'r-2026', electionDate: '2026-11-03' } }),
+					candidacy({ id: 'c-undated', slug: 'no-date-mayor', firstName: 'No', lastName: 'Date' }),
+				]);
+			},
+		};
+		const people = await getFeaturedPeople({ placeSlug: 'tx/harris-county/houston', locationLevel: 'city', today: new Date(2026, 8, 29) }, pastAndPresent);
+
+		expect(people.candidates.map(c => c.name)).toEqual(['Jane Doe', 'No Date']);
+		expect(people.candidates[0]?.electionDate).toBe('2026-11-03');
+	});
+
 	test('returns two empty lists, and no trusted count, when the place cannot be found', async () => {
 		const people = await getFeaturedPeople({ placeSlug: 'tx/nowhere-county/nowhere', locationLevel: 'city' }, deps);
 

@@ -735,6 +735,12 @@ people now follow the ballot that branch built. Decisions:
   endpoint carries no relations by default), which the first cut forgot, so the rescue never fired
   on the live site; `getPersonsByIds` takes the flag and the featured-people loader sets it whenever
   it holds a past candidacy.
+- **Seats both officeholder feeds miss come from past winners.** Garden Grove, CA's council page
+  listed one member while District 5's 2024 winner (term 2025 to 2028 on her profile) was absent
+  from both `/v1/officeholders?positionId=` and the place's `?geoId=` read (Emily, 2026-10-07).
+  `loadSeatsFromPastCandidates` reads the office's candidacies, asks for up to 200 of those people
+  with `includeOfficeHolders=true`, most recent cycle first, and keeps a current term for this
+  office (same position id or normalised name). Same idea as the featured carousel's rescue.
 - **Person ids go to election-api 200 at a time.** `/v1/persons?ids=` takes 500 ids on paper, but
   500 UUIDs make an 18.5 KB URL and the server answers 414 before it reads the request. Refreshing
   every past race date (2026-10-07) put enough races on the upcoming ballot that location pages hit

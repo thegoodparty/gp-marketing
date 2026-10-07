@@ -1,4 +1,5 @@
 import {
+	getCandidaciesOrNull,
 	getElectionsPagePlace,
 	getOfficeHoldersByGeoId,
 	getOfficeHoldersByPositionIdOrNull,
@@ -63,6 +64,7 @@ export function mapOfficeholderToPerson(
 }
 
 export type PositionOfficeholderDeps = {
+	getCandidaciesOrNull: typeof getCandidaciesOrNull;
 	getOfficeHoldersByPositionIdOrNull: typeof getOfficeHoldersByPositionIdOrNull;
 	getOfficeHoldersByGeoId: typeof getOfficeHoldersByGeoId;
 	getElectionsPagePlace: typeof getElectionsPagePlace;
@@ -71,6 +73,7 @@ export type PositionOfficeholderDeps = {
 };
 
 const defaultDeps: PositionOfficeholderDeps = {
+	getCandidaciesOrNull,
 	getOfficeHoldersByPositionIdOrNull,
 	getOfficeHoldersByGeoId,
 	getElectionsPagePlace,
@@ -85,6 +88,8 @@ export type PositionOfficeholderQuery = {
 	placeSlug?: string | null;
 	/** The office's name as election-api normalises it, to pick its seats out of the place's officeholders. */
 	positionName?: string | null;
+	/** The page race's slug; past candidates of the office who hold a seat today fill in what the feeds miss. */
+	raceSlug?: string | null;
 };
 
 function normalizePositionName(value: string | null | undefined): string {
@@ -124,6 +129,52 @@ function orderSeats(rows: PersonOfficeHolder[]): PersonOfficeHolder[] {
 	return [...numbered, ...rows.filter(row => district(row) === null)];
 }
 
+/** Most recent past candidates first, so a long shared slug spends its id budget on the people likeliest to hold a seat today. */
+const RESCUE_PERSON_LIMIT = 200;
+
+/**
+ * Seats the two officeholder feeds missed, read off the office's past candidates:
+ * `/v1/candidacies?raceSlug=` returns every cycle, and a candidate who won holds
+ * a current `OfficeHolders` term on their person row (Garden Grove, CA's council
+ * listed one member while District 5's 2024 winner, term 2025 to 2028, was
+ * absent; Emily, 2026-10-07). Only a current term for this office counts: the
+ * race's position id, or election-api's normalised name. The person rows come
+ * back too, so the caller need not look them up again.
+ */
+async function loadSeatsFromPastCandidates(
+	q: PositionOfficeholderQuery,
+	known: ReadonlySet<string>,
+	deps: PositionOfficeholderDeps,
+): Promise<{ rows: PersonOfficeHolder[]; persons: PersonItem[] }> {
+	const wanted = normalizePositionName(q.positionName);
+	if (!q.raceSlug || (!q.positionId && !wanted)) return { rows: [], persons: [] };
+	try {
+		const candidacies = (await deps.getCandidaciesOrNull({ raceSlug: q.raceSlug })) ?? [];
+		const byRecency = [...candidacies].sort((a, b) => (b.Race?.electionDate ?? '').localeCompare(a.Race?.electionDate ?? ''));
+		const ids: string[] = [];
+		for (const candidacy of byRecency) {
+			const id = candidacy.personId?.toLowerCase();
+			if (!id || known.has(id) || ids.includes(id)) continue;
+			ids.push(id);
+			if (ids.length >= RESCUE_PERSON_LIMIT) break;
+		}
+		if (ids.length === 0) return { rows: [], persons: [] };
+		const persons = await deps.getPersonsByIds(ids, { includeOfficeHolders: true });
+		const rows = persons.flatMap(person =>
+			(person.OfficeHolders ?? [])
+				.filter(
+					office =>
+						office.isCurrent === true &&
+						((q.positionId && office.positionId === q.positionId) || (wanted && normalizePositionName(office.normalizedPositionName) === wanted)),
+				)
+				.map(office => ({ ...office, personId: office.personId ?? person.id })),
+		);
+		return { rows, persons };
+	} catch {
+		return { rows: [], persons: [] };
+	}
+}
+
 /**
  * The current holders of a position, for the position page's "Who's currently
  * in office" list. `undefined` means election-api gave no answer (or the query
@@ -132,7 +183,9 @@ function orderSeats(rows: PersonOfficeHolder[]): PersonOfficeHolder[] {
  *
  * Two reads are merged: the race's own position id, and the page place's
  * officeholders filtered to the same office, which is how a multi-district
- * council lists every seat rather than the one the race happens to carry.
+ * council lists every seat rather than the one the race happens to carry. A
+ * seat both feeds miss is recovered from the office's past candidates who hold
+ * a current term (see `loadSeatsFromPastCandidates`).
  */
 export async function loadPositionOfficeholders(
 	query: PositionOfficeholderQuery | string | null | undefined,
@@ -148,9 +201,11 @@ export async function loadPositionOfficeholders(
 	]);
 	if (byPosition === null && byPlace.length === 0) return undefined;
 
-	const rows = [...(byPosition ?? []).filter(row => row.positionId === q.positionId), ...byPlace];
-	const current = orderSeats(rows.filter(row => row.isCurrent !== false));
-	const personIds = current.map(row => row.personId).filter((id): id is string => typeof id === 'string' && id.length > 0);
+	const fedRows = [...(byPosition ?? []).filter(row => row.positionId === q.positionId), ...byPlace].filter(row => row.isCurrent !== false);
+	const fedPersonIds = new Set(fedRows.map(row => row.personId?.toLowerCase()).filter((id): id is string => Boolean(id)));
+	const rescued = await loadSeatsFromPastCandidates(q, fedPersonIds, deps);
+	const current = orderSeats([...fedRows, ...rescued.rows]);
+	const personIds = [...fedPersonIds];
 	let persons: PersonItem[] = [];
 	let removed: ReadonlySet<string> | null = null;
 	try {
@@ -161,7 +216,7 @@ export async function loadPositionOfficeholders(
 	} catch {
 		persons = [];
 	}
-	const personsById = new Map(persons.map(p => [p.id.toLowerCase(), p]));
+	const personsById = new Map([...persons, ...rescued.persons].map(p => [p.id.toLowerCase(), p]));
 	const seen = new Set<string>();
 	const people: ElectionsPositionPerson[] = [];
 	for (const row of current) {

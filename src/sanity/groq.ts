@@ -166,9 +166,9 @@ export const component_electionsPositionHero = `_type=="component_electionsPosit
 export const component_electionsPositionContentBlock = `_type=="component_electionsPositionContentBlock"=>{...,electionsPositionContentBlockDesignSettings,componentSettings}`;
 export const component_electionsSearchHero = `_type=="component_electionsSearchHero"=>{...}`;
 export const component_featuredCitiesBlock = `_type=="component_featuredCitiesBlock"=>{...,featuredCitiesBlockHeader{${summaryInfoGroq}}}`;
-export const component_goodPartyOrgPledge = `_type=="component_goodPartyOrgPledge"=>{...,summaryInfo{${summaryInfoGroq}},goodPartyOrgPledgeItems{...,list_pledgeCards[]{...,ctaActionWithShared{${buttonGroq}}}}}`;
+export const component_goodPartyOrgPledge = `_type=="component_goodPartyOrgPledge"=>{...,summaryInfo{${summaryInfoGroq}},goodPartyOrgPledgeItems}`;
 export const component_locationFactsBlock = `_type=="component_locationFactsBlock"=>{...,locationFactsBlockHeader{${summaryInfoGroq}}}`;
-export const component_locationLandingPageHero = `_type=="component_locationLandingPageHero"=>{...}`;
+export const component_locationLandingPageHero = `_type=="component_locationLandingPageHero"=>{...,locationLandingPageHeroContent{...,list_buttons[]{${buttonGroq}}}}`;
 export const component_profileContentBlock = `_type=="component_profileContentBlock"=>{...,profileContentBlockDesignSettings,componentSettings}`;
 export const component_voterDensityBlock = `_type=="component_voterDensityBlock"=>{...,voterDensityBlockContent,componentSettings}`;
 export const component_listOfOfficesBlock = `_type=="component_listOfOfficesBlock"=>{...}`;
@@ -319,6 +319,11 @@ export const imageCtaGroq = `field_componentColor6Colors,"image":coalesce(ctaAss
 /*language=textmate*/
 export const articleSectionsGroq = `_key,_type,_type=="block"||_type=="imageContentSection"||_type=="tableGroup"=>{...},_type=="videoSection"=>{field_videoEmbedCode,field_caption},_type=="imageCta"=>{${imageCtaGroq}},_type=="ctaSection"=>{${imageCtaGroq}},_type=="inlineQuoteSection"=>{...,ref_quoteBy->},_type=="button"=>{${buttonGroq}},_type=="faqs"=>{...,list_faQs[]->{${faQGroq}}},_type=="callout"=>{...,block_summaryText[]{...,${textBlockGroq}}}`;
 /*language=textmate*/
+/** The title of one article by slug, for the position pages' guide card (see `renderElectionsPositionPage`). */
+export const articleTitleBySlugQuery = defineQuery(
+	`*[_type=="article"&&editorialOverview.field_slug==$slug][0]{"title":editorialOverview.field_editorialTitle}`,
+);
+
 export const articleQuery = defineQuery(
 	`${groqFunctions}*[_type=="article"&&editorialOverview.field_slug==$slug][0]{...,editorialOverview{...,ref_author->},relatedArticles{...,ref_stickyRelatedArticle->{${relatedArticlesGroq}},list_relatedArticles[]->{${relatedArticlesGroq}}},ctaSection{...,${imageCtaGroq}},stickySidebarCta{field_showStickySidebarCta,ctaConfig{...,${imageCtaGroq}}},editorialContentTags{"topics":list_topics[]->{...,${topicsHrefGroq}},"category":ref_catgories->{${categoryLinkGroq}}},contentSections{...,block_editorialContentSections[]{${articleSectionsGroq},${textBlockGroq}},${hrefGroq}},${articleHrefGroq}}`,
 );

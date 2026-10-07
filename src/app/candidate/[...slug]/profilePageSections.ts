@@ -1,4 +1,5 @@
 import type { Sections } from '~/PageSections';
+import { goodPartyOrgPledgeInitialValue } from '~/lib/goodPartyOrgPledgeDefaults';
 
 /**
  * Static profile page section layout (from profile.json template).
@@ -58,103 +59,9 @@ export const PROFILE_PAGE_SECTIONS = [
 	{
 		_key: 'c157b05c22e8',
 		_type: 'component_goodPartyOrgPledge',
-		goodPartyOrgPledgeDesignSettings: {
-			_type: 'goodPartyOrgPledgeDesignSettings',
-			field_blockColorCreamMidnight: 'MidnightDark',
-			field_iconColor6ColorsWhiteMixed: 'Mixed',
-			field_columnLayout12Columns: '1Col',
-		},
-		goodPartyOrgPledgeItems: {
-			_type: 'goodPartyOrgPledgeItems',
-			list_pledgeCards: [
-				{
-					_key: '5658a7d1b802',
-					_type: 'pledgeCardItem',
-					block_summaryText: [
-						{
-							_key: '366896addb3b',
-							_type: 'block',
-							children: [
-								{
-									_key: '07cc0287a5f2',
-									_type: 'span',
-									marks: [],
-									text: 'Candidates run and serve as nonpartisan, independent, or third-party candidates, not as Democrats or Republicans. They agree to not accept endorsements from either the Republican or Democratic party.',
-								},
-							],
-							markDefs: [],
-							style: 'normal',
-						},
-					],
-					field_icon: 'heart',
-					field_title: 'Independent',
-				},
-				{
-					_key: '70dd0b257564',
-					_type: 'pledgeCardItem',
-					block_summaryText: [
-						{
-							_key: '6b028741a856',
-							_type: 'block',
-							children: [
-								{
-									_key: 'd49883dabfea',
-									_type: 'span',
-									marks: [],
-									text: 'Candidates get a majority of their funding from individuals, not from political action committees (PACs), lobbies, unions, or corporations. Once elected, they pledge to focus on solving the problems facing their constituents, not serving themselves or special interests.',
-								},
-							],
-							markDefs: [],
-							style: 'normal',
-						},
-					],
-					field_icon: 'users',
-					field_title: 'People-First',
-				},
-				{
-					_key: 'ce8782486805',
-					_type: 'pledgeCardItem',
-					block_summaryText: [
-						{
-							_key: 'e3f098e6cf0d',
-							_type: 'block',
-							children: [
-								{
-									_key: 'c4bb0a120950',
-									_type: 'span',
-									marks: [],
-									text: 'Candidates and officials pledge to uphold the highest level of integrity by being open, transparent, and accountable about their donors, positions, and progress. They agree to only serve the people, and to use the best tools and data available to stay connected and responsive to their constituents.',
-								},
-							],
-							markDefs: [],
-							style: 'normal',
-						},
-					],
-					field_icon: 'star',
-					field_title: 'Anti-Corruption',
-				},
-			],
-		},
+		...goodPartyOrgPledgeInitialValue,
 		summaryInfo: {
-			_type: 'summaryInfo',
-			block_summaryText: [
-				{
-					_key: '61e38cb0f97f',
-					_type: 'block',
-					children: [
-						{
-							_key: '31a12482ccf9',
-							_type: 'span',
-							marks: [],
-							text: 'We only work with candidates and elected officials who are independent of both major parties and the influence of big money. They can take any positions on issues for their constituents, as long as they pledge to be:',
-						},
-					],
-					markDefs: [],
-					style: 'normal',
-				},
-			],
-			field_textSize: 'Medium',
-			field_title: 'The GoodParty.org Pledge',
+			...goodPartyOrgPledgeInitialValue.summaryInfo,
 			list_buttons: [
 				{
 					_key: 'a3f2c8d91b6e',

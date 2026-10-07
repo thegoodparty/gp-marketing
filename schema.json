@@ -2149,6 +2149,10 @@
         {
           "type": "string",
           "value": "2Col"
+        },
+        {
+          "type": "string",
+          "value": "3Col"
         }
       ]
     }
@@ -5811,14 +5815,23 @@
                 },
                 "optional": true
               },
-              "field_searchPlaceholder": {
+              "list_buttons": {
                 "type": "objectAttribute",
                 "value": {
-                  "type": "string"
+                  "type": "inline",
+                  "name": "list_buttons"
                 },
                 "optional": true
               }
             }
+          },
+          "optional": true
+        },
+        "stats": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "stats"
           },
           "optional": true
         },
@@ -8474,6 +8487,13 @@
           },
           "optional": true
         },
+        "field_description": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
         "nearbyOfficesDesignSettings": {
           "type": "objectAttribute",
           "value": {
@@ -8858,6 +8878,13 @@
           },
           "optional": true
         },
+        "field_bodyCopy": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
         "featuredCandidatesBlockCallout": {
           "type": "objectAttribute",
           "value": {
@@ -8870,11 +8897,32 @@
                 },
                 "optional": true
               },
+              "field_calloutTitle": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
               "block_calloutText": {
                 "type": "objectAttribute",
                 "value": {
                   "type": "inline",
                   "name": "block_summaryText"
+                },
+                "optional": true
+              },
+              "field_showPledgeLink": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "boolean"
+                },
+                "optional": true
+              },
+              "field_pledgeLinkLabel": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
                 },
                 "optional": true
               }
@@ -14273,14 +14321,6 @@
           "value": {
             "type": "inline",
             "name": "block_summaryText"
-          },
-          "optional": true
-        },
-        "ctaActionWithShared": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "inline",
-            "name": "ctaActionWithShared"
           },
           "optional": true
         }

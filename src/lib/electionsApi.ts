@@ -18,7 +18,6 @@ import type {
 } from '~/types/people';
 import {
 	buildElectionPositionHrefFromRaceSlug,
-	buildRaceCandidatesHref,
 	buildSubplaceRaceSlug,
 	canonicalizeCountyEquivalentName,
 	normalizeCandidateLookupName,
@@ -215,6 +214,7 @@ async function fetchRaceBySlug(
 	raceSlug: string,
 	includePlace: boolean,
 	isPrimary?: boolean,
+	electionDateStart?: string,
 ): Promise<RaceDetail | null> {
 	const searchParams = new URLSearchParams({
 		raceSlug,
@@ -222,6 +222,9 @@ async function fetchRaceBySlug(
 	});
 	if (isPrimary !== undefined) {
 		searchParams.set('isPrimary', isPrimary.toString());
+	}
+	if (electionDateStart) {
+		searchParams.set('electionDateStart', electionDateStart);
 	}
 	const url = `${ELECTIONS_API_BASE_URL}/v1/races?${searchParams}`;
 	const data = await fetchJson<RaceDetail[]>(url, CACHE_OPTIONS);
@@ -247,9 +250,35 @@ export async function getRaceBySlug(
 	includePlace = true,
 	filters?: { isPrimary?: boolean },
 ): Promise<RaceDetail | null> {
+	// A slug can name many race rows: every California Assembly district shares
+	// `ca/state-representative`, across every election year, and the API folds
+	// them into one answer picked by id, which on that page was a 2022 race while
+	// the candidates linking to it were running in 2026. Ask for an upcoming race
+	// first (election day itself still counts), and only then fall back to the
+	// unfiltered read, so an office with no upcoming election still resolves to
+	// its last race the way it always did. The explicit-filter path is left as
+	// it was: those callers ask for a specific row on purpose.
+	if (filters?.isPrimary === undefined) {
+		const upcoming = await fetchRaceBySlug(raceSlug, includePlace, undefined, upcomingSinceDateOnly());
+		if (upcoming) return upcoming;
+	}
 	const race = await fetchRaceBySlug(raceSlug, includePlace, filters?.isPrimary);
 	if (race || filters?.isPrimary !== undefined) return race;
 	return fetchRaceBySlug(raceSlug, includePlace, true);
+}
+
+/**
+ * The lower bound for "upcoming". Yesterday in UTC, not today: a US election
+ * day is still in progress after midnight UTC (4pm Pacific), and a "from today"
+ * filter would drop it for the rest of the evening. Reaching one day back keeps
+ * the day's race upcoming everywhere in the country; the cost is that a race
+ * counts as upcoming for up to a day after it closes, which the decided state
+ * (read from winners, not from this) is unaffected by.
+ */
+function upcomingSinceDateOnly(): string {
+	const d = new Date();
+	d.setUTCDate(d.getUTCDate() - 1);
+	return d.toISOString().slice(0, 10);
 }
 
 /** Resolves joint city office races; API slugs omit the county segment. */
@@ -270,6 +299,15 @@ export async function getSubplaceRaceBySlug(params: {
 	return race;
 }
 
+/**
+ * Candidacies by race, position or race slug, each carrying its own `Race` row.
+ *
+ * The race is asked for on purpose: a race slug can name many rows (every
+ * Michigan Senate district is `mi/state-senator`), and a candidate's seat lives
+ * on their own row's `subAreaName` / `subAreaValue`. Reading the seat off the
+ * slug's race instead tagged every card on a profile with the one district the
+ * API happened to return first (Emily, 2026-10-06).
+ */
 export async function getCandidacies(params: {
 	raceId?: string;
 	positionId?: string;
@@ -831,12 +869,13 @@ export async function resolveCountySlugForCitySlug(citySlug: string): Promise<st
 
 export type RaceElectionHrefs = {
 	positionHref?: string;
-	candidatesHref?: string;
 };
 
 /**
- * Resolves canonical elections position and candidates listing paths for a race slug.
- * Expands city/town 3-part slugs to 4-level URLs when county can be resolved.
+ * Resolves the canonical elections position path for a race slug. Expands
+ * city/town 3-part slugs to 4-level URLs when county can be resolved. (It used
+ * to resolve the candidate listing path too; those pages are retired and
+ * redirect to the position page, see `candidates-redirects.ts`.)
  */
 export async function resolveRaceElectionHrefs(
 	raceSlug: string | undefined,
@@ -855,7 +894,6 @@ export async function resolveRaceElectionHrefs(
 		const positionHref = buildElectionPositionHrefFromRaceSlug(raceEntry);
 		return {
 			positionHref,
-			candidatesHref: buildRaceCandidatesHref(raceEntry),
 		};
 	}
 
@@ -868,7 +906,6 @@ export async function resolveRaceElectionHrefs(
 		});
 		return {
 			positionHref,
-			candidatesHref: positionHref ? `${positionHref}/candidates` : undefined,
 		};
 	}
 
@@ -879,7 +916,6 @@ export async function resolveRaceElectionHrefs(
 		});
 		return {
 			positionHref,
-			candidatesHref: positionHref ? `${positionHref}/candidates` : undefined,
 		};
 	}
 
@@ -892,7 +928,6 @@ export async function resolveRaceElectionHrefs(
 		});
 		return {
 			positionHref,
-			candidatesHref: positionHref ? `${positionHref}/candidates` : undefined,
 		};
 	}
 
@@ -904,7 +939,6 @@ export async function resolveRaceElectionHrefs(
 		});
 		return {
 			positionHref,
-			candidatesHref: positionHref ? `${positionHref}/candidates` : undefined,
 		};
 	}
 
@@ -912,6 +946,5 @@ export async function resolveRaceElectionHrefs(
 	const expandedRace = { slug: raceSlug, positionLevel: effectiveLevel };
 	return {
 		positionHref: buildElectionPositionHrefFromRaceSlug(expandedRace, { citySlugToCountySlug }),
-		candidatesHref: buildRaceCandidatesHref(expandedRace, { citySlugToCountySlug }),
 	};
 }

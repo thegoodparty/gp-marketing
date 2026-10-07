@@ -741,6 +741,11 @@ people now follow the ballot that branch built. Decisions:
   list (a few dozen ids, cached five minutes), fetches the profile of each card person on it, and
   the live profile's `avatarUrl` replaces the feed photo on position candidates and officeholders,
   the featured carousel, and the profile's own related cards; the same rule the profile hero uses.
+- **A position page lists one cycle.** `/v1/candidacies?raceSlug=` returns every cycle of a slug,
+  so Garden Grove's council page showed two 2024 District 5 candidates, one of them the sitting
+  member, as filed for 2026, and "5 candidates filed" where the location page counted 2 (Emily,
+  2026-10-07). `currentCycleCandidacies` keeps a candidacy whose race date is still ahead, is the
+  page race's own date, or is missing; the location page's count already worked this way.
 - **Person ids go to election-api 200 at a time.** `/v1/persons?ids=` takes 500 ids on paper, but
   500 UUIDs make an 18.5 KB URL and the server answers 414 before it reads the request. Refreshing
   every past race date (2026-10-07) put enough races on the upcoming ballot that location pages hit

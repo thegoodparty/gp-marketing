@@ -11,6 +11,7 @@ import {
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
 	buildOfficeItemsFromPlaceRaces,
+	mergeOfficeItems,
 	buildOverlappingOfficeItems,
 	buildPlaceRacePositionHref,
 	canonicalizeCountyEquivalentName,
@@ -141,7 +142,7 @@ export default async function Page({
 			: `${normalizedCounty?.suffixLabel ?? getCountySuffixLabel(countyPlace!.name)} Elections in ${normalizedCounty?.displayName ?? countyPlace!.name}`,
 		defaultYear,
 		availableYears,
-		offices: [...countyOffices, ...overlapping.offices],
+		offices: mergeOfficeItems(countyOffices, overlapping.offices),
 		elections: cities,
 		stateSlug: fullSlug,
 		pageUrl,

@@ -13,6 +13,7 @@ import {
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
 	buildOfficeItemsFromPlaceRaces,
+	mergeOfficeItems,
 	buildOverlappingOfficeItems,
 	buildPlaceRacePositionHref,
 	getStateName,
@@ -121,7 +122,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 			listHeading: `Elections in ${districtName}`,
 			defaultYear,
 			availableYears,
-			offices: [...districtOffices, ...districtOverlapping.offices],
+			offices: mergeOfficeItems(districtOffices, districtOverlapping.offices),
 			electionsIndexHidden: true,
 			locationFacts: factsCards.length > 0 ? { title: `${districtName} facts`, factsCards } : { hidden: true },
 			pageUrl,
@@ -228,7 +229,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		listHeading: `City Elections in ${cityName}`,
 		defaultYear,
 		availableYears,
-		offices: [...cityOffices, ...overlapping.offices],
+		offices: mergeOfficeItems(cityOffices, overlapping.offices),
 		electionsIndexHidden: true,
 		locationFacts: factsCards.length > 0 ? { title: `${cityName} facts`, factsCards } : { hidden: true },
 		pageUrl,

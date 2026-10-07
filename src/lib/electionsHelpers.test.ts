@@ -4,6 +4,7 @@ import {
 	buildElectionPositionHrefFromRaceSlug,
 	buildFAQSchema,
 	buildOfficeItemsFromPlaceRaces,
+	mergeOfficeItems,
 	buildRacePositionHref,
 	joinPlaceNames,
 	buildRaceSlug,
@@ -1472,5 +1473,23 @@ describe('the year a location page opens its offices list on', () => {
 			const { defaultYear, availableYears } = openingYear(own, overlap);
 			expect(availableYears).toContain(defaultYear);
 		}
+	});
+});
+
+describe('mergeOfficeItems', () => {
+	const office = (id: string, raceSlug?: string) => ({ id, type: 'Local', position: id, nextElectionDate: '2026-11-03', ...(raceSlug ? { raceSlug } : {}) });
+
+	test('keeps the first row for a race that the district and its county both report', () => {
+		const own = [office('a', 'mi/sterling/city-legislature'), office('b', 'mi/arenac-county/clerk')];
+		const overlapping = [office('c', 'MI/Arenac-County/Clerk'), office('d', 'mi/state-senator')];
+		expect(mergeOfficeItems(own, overlapping).map(o => o.id)).toEqual(['a', 'b', 'd']);
+	});
+
+	test('rows without a race slug fall back to their id, so two slugless rows both stay', () => {
+		expect(mergeOfficeItems([office('a'), office('b')], [office('a')]).map(o => o.id)).toEqual(['a', 'b']);
+	});
+
+	test('a plain concatenation is unchanged when nothing overlaps', () => {
+		expect(mergeOfficeItems([office('a', 'x/one')], [office('b', 'x/two')]).map(o => o.id)).toEqual(['a', 'b']);
 	});
 });

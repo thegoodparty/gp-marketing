@@ -27,19 +27,24 @@ const styles = tv({
 		// viewport: 108px to the left of the photo at desktop, 82px below it on
 		// mobile. 39.5rem is the 524px photo plus that left overhang.
 		carousel: 'w-full lg:ml-auto lg:max-w-[39.5rem]',
-		// The viewport has to clip sideways so neighbouring slides stay hidden, and
-		// once one axis clips the browser clips the other too. So the clip margin
-		// must clear the biggest shadow: the quote card's reaches 63px (25px offset,
-		// 50px blur, -12px spread) and the photo's 40px. Each slide carries the same
-		// 4.5rem of empty padding on its left (the track pulls the first one back by
-		// that amount), so the margin only ever reveals that empty gap, never a slide.
-		viewport: 'overflow-x-clip [overflow-clip-margin:4.5rem]',
-		track: '-ml-[4.5rem] flex touch-pan-y',
-		slide: 'relative min-w-0 flex-[0_0_100%] pb-[5.125rem] pl-[4.5rem] lg:pb-0 lg:pl-[11.25rem]',
+		// The viewport clips so neighbouring slides stay hidden, but a plain clip
+		// cut the photo's and quote card's shadows in a straight line, and Chrome
+		// paints `overflow: clip` with a clip margin as a pale box over the page.
+		// So the clip stays `hidden` and the box is widened instead: padding on the
+		// left, right and bottom makes room for the shadows (the card's reaches
+		// 63px), with matching negative margins so nothing else moves. Each slide
+		// carries 5.75rem of empty padding on its left (the track pulls the first
+		// one back by that amount): the 4.5rem the viewport reveals plus the 20px
+		// the previous photo's shadow reaches into the gap, so the extra room only
+		// ever shows empty gap, never a neighbouring slide or its shadow. The right
+		// side only takes the page gutter.
+		viewport: 'overflow-hidden -mb-[4.5rem] -ml-[4.5rem] -mr-4 pb-[4.5rem] pl-[4.5rem] pr-4 lg:-mr-5 lg:pr-5',
+		track: '-ml-[5.75rem] flex touch-pan-y',
+		slide: 'relative min-w-0 flex-[0_0_100%] pb-[5.125rem] pl-[5.75rem] lg:pb-0 lg:pl-[12.5rem]',
 		photo: 'relative aspect-square w-full overflow-hidden rounded-3xl shadow-xl-duo [&>div]:h-full [&>div]:w-full',
 		quoteCard: [
-			'absolute bottom-0 left-[5.5rem] right-4 flex flex-col gap-4 rounded-lg bg-bright-yellow-100 p-5 text-black shadow-2xl',
-			'lg:bottom-5 lg:left-[4.5rem] lg:right-auto lg:w-[19.25rem]',
+			'absolute bottom-0 left-[6.75rem] right-4 flex flex-col gap-4 rounded-lg bg-bright-yellow-100 p-5 text-black shadow-2xl',
+			'lg:bottom-5 lg:left-[5.75rem] lg:right-auto lg:w-[19.25rem]',
 		],
 		quoteText: 'font-secondary text-[0.875rem] leading-5',
 		quoteAuthor: 'flex items-center gap-4',

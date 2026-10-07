@@ -100,7 +100,10 @@ describe('parseResizerMessage', () => {
 
 	test('does not mistake a scroll instruction for a height', () => {
 		expect(parseResizerMessage('[iFrameSizer]embed-abc123:0:300:scrollTo', id)).toBeNull();
-		expect(parseResizerMessage('[iFrameSizer]embed-abc123:0:0:pageInfo', id)).toBeNull();
+		// pageInfo carries the page's scroll offset in the height slot, so a scrolled page
+		// would otherwise shrink the frame to wherever the reader happens to be.
+		expect(parseResizerMessage('[iFrameSizer]embed-abc123:450:0:pageInfo', id)).toBeNull();
+		expect(parseResizerMessage('[iFrameSizer]embed-abc123:450:0:inPageLink', id)).toBeNull();
 	});
 
 	test('turns the scroll-to-top message into a scroll request', () => {

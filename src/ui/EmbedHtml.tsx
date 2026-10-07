@@ -87,7 +87,7 @@ export function parseEmbed(html: string, DOMPurify: typeof import('dompurify').d
 // how tall the form is; without it the frame is a fixed box that clips the form.
 const RESIZER_PREFIX = '[iFrameSizer]';
 const RESIZER_READY = '[iFrameResizerChild]Ready';
-const RESIZER_NON_SIZE_TYPES = new Set(['scrollTo', 'scrollToOffset']);
+const RESIZER_NON_SIZE_TYPES = new Set(['scrollTo', 'scrollToOffset', 'pageInfo', 'inPageLink', 'reset', 'close']);
 
 export function resizerInitMessage(id: string): string {
 	return `${RESIZER_PREFIX}${id}:8:false:false:32:true:true:0 0:taggedElement:null:null:0:false:parent:scroll`;
@@ -190,7 +190,9 @@ export function EmbedHtml({
 
 	const iframeStyle: React.CSSProperties = fullPage
 		? { width: '100%', height: '100dvh', border: 'none' }
-		: { width, height, border: 'none' };
+		: selfSizing
+			? { width, border: 'none' }
+			: { width, height, border: 'none' };
 
 	if (iframeSrc) {
 		const iframe = (

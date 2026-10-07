@@ -270,6 +270,7 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 			guideHref: resolveHowToRunGuide({ officeName: ctx.officeName, race }).href,
 			guideTitle: ctx.guideTitle ?? undefined,
 		},
+		component_testimonialBlockWithLink: { stateName: ctx.stateName },
 		component_nearbyOffices: {
 			// "More offices in Bay City, Michigan"; a state page names the state once,
 			// not "Michigan, Michigan" (Emily, 2026-10-06).
@@ -294,6 +295,7 @@ export function buildCandidatesSectionOverrides(ctx: PositionPageContext & { can
 		component_ctaImageBlock: {
 			primaryButtonHref: ctx.locationHref,
 		},
+		component_testimonialBlockWithLink: { stateName: ctx.stateName },
 	};
 }
 
@@ -473,6 +475,7 @@ export function buildElectionsIndexSectionOverrides(ctx: ElectionsIndexPageConte
 					representatives: ctx.featuredPeople.representatives,
 				}
 			: { hidden: true },
+		component_testimonialBlockWithLink: { stateName: ctx.stateName },
 	};
 }
 

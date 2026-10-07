@@ -164,6 +164,34 @@ Note for whoever wires up the links: a case study that lives as an `article` can
 the internal link picker, but `/people/*` profiles are rendered from election-api and have no
 Sanity document, so a profile link has to be the External option with a pasted path.
 
+**Revision, 2026-10-06 (Emily): quotes picked by the page's state.** Marketing keeps a sheet of
+quotes organised by state and wants each location and position page to show its own state's
+quotes. The block stays content-only in the sense that every quote still comes from the editor's
+chosen collection, but it now also reads the page's state through `SectionOverrides`
+(`component_testimonialBlockWithLink.stateName`, set by both override builders), so it is the first
+quote block with a data seam. How it works, and the decisions behind it:
+
+- **The state lives on the quote** (`field_quoteState`, a dropdown of the 50 states and DC, storing
+  the full name so it compares directly with the page's `stateName`). Same reasoning as the result
+  and link fields above: per-quote data goes on the `quote` object, so it shows on every quote in
+  Studio and is optional everywhere. One tagged collection beats a collection per state (33 to
+  maintain by hand); the alternative, a list on the block pairing states with collections, was
+  considered and set aside unless per-state ordering ever needs it.
+- **The behaviour is behind a toggle** on the block's design settings
+  (`field_filterQuotesByPageState`, off by default), so the block on any page today is unchanged.
+- **Fill order** (`src/lib/nearestStates.ts`): the page's state's quotes, then the nearest states'
+  quotes closest first, then quotes with no state. Nearness is distance between state centres, not
+  shared borders: borders leave Alaska and Hawaii with nothing, and a state whose neighbours are all
+  empty (Wyoming today) would need a second rule. Within a group the collection's order is kept.
+- **How many**: "Max Number to Display", or 3 when it is blank, so a state with one quote does not
+  drag in the whole country. Pages with no state (the Voter Hub, landing pages) show the collection
+  as is, and a collection with no tagged quotes is shown untouched, so the block never goes empty
+  because of the toggle. `src/lib/nearestStates.test.ts` and
+  `src/PageSections/testimonialBlockWithLinkSection.test.tsx` pin all of this.
+- **The content step is separate**: the sheet's quotes have to exist as tagged `quotes` documents in
+  one collection, loaded after the Studio deploys (see `docs/sanity-api-writes.md`). Where a person
+  already has a quote with different wording, the sheet's wording goes in as a new quote so the
+  pages using the old one do not change.
 **Featured cities carousel** (location pages) — extended `component_featuredCitiesBlock`,
 data-backed. The hypothesis held: the block existed and its `LocationCard` was already the Figma
 card. Two things were missing, and only the second was real work.
@@ -1218,6 +1246,8 @@ audit to confirm; `data` means it needs the `SectionOverrides` pass.
 
 | Component | Page | Kind |
 | --- | --- | --- |
+| 3-column icon block | Voter Hub, position, location | content (audited — built, see above) |
+| Testimonial block with link | Voter Hub, location, position | content, plus the page's state via overrides (revised 2026-10-06, see above) |
 | 3-column icon block | Voter Hub, position, location | content (audited — built as the illustrated columns block, see above; on position pages the voter readiness section of the content block covers it) |
 | Testimonial block with link | Voter Hub, location | content |
 | Browse elections in Location Hero | location | data |

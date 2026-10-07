@@ -1632,6 +1632,226 @@
     }
   },
   {
+    "name": "field_filterQuotesByPageState",
+    "type": "type",
+    "value": {
+      "type": "boolean"
+    }
+  },
+  {
+    "name": "field_quoteState",
+    "type": "type",
+    "value": {
+      "type": "union",
+      "of": [
+        {
+          "type": "string",
+          "value": "Alabama"
+        },
+        {
+          "type": "string",
+          "value": "Alaska"
+        },
+        {
+          "type": "string",
+          "value": "Arizona"
+        },
+        {
+          "type": "string",
+          "value": "Arkansas"
+        },
+        {
+          "type": "string",
+          "value": "California"
+        },
+        {
+          "type": "string",
+          "value": "Colorado"
+        },
+        {
+          "type": "string",
+          "value": "Connecticut"
+        },
+        {
+          "type": "string",
+          "value": "Delaware"
+        },
+        {
+          "type": "string",
+          "value": "District of Columbia"
+        },
+        {
+          "type": "string",
+          "value": "Florida"
+        },
+        {
+          "type": "string",
+          "value": "Georgia"
+        },
+        {
+          "type": "string",
+          "value": "Hawaii"
+        },
+        {
+          "type": "string",
+          "value": "Idaho"
+        },
+        {
+          "type": "string",
+          "value": "Illinois"
+        },
+        {
+          "type": "string",
+          "value": "Indiana"
+        },
+        {
+          "type": "string",
+          "value": "Iowa"
+        },
+        {
+          "type": "string",
+          "value": "Kansas"
+        },
+        {
+          "type": "string",
+          "value": "Kentucky"
+        },
+        {
+          "type": "string",
+          "value": "Louisiana"
+        },
+        {
+          "type": "string",
+          "value": "Maine"
+        },
+        {
+          "type": "string",
+          "value": "Maryland"
+        },
+        {
+          "type": "string",
+          "value": "Massachusetts"
+        },
+        {
+          "type": "string",
+          "value": "Michigan"
+        },
+        {
+          "type": "string",
+          "value": "Minnesota"
+        },
+        {
+          "type": "string",
+          "value": "Mississippi"
+        },
+        {
+          "type": "string",
+          "value": "Missouri"
+        },
+        {
+          "type": "string",
+          "value": "Montana"
+        },
+        {
+          "type": "string",
+          "value": "Nebraska"
+        },
+        {
+          "type": "string",
+          "value": "Nevada"
+        },
+        {
+          "type": "string",
+          "value": "New Hampshire"
+        },
+        {
+          "type": "string",
+          "value": "New Jersey"
+        },
+        {
+          "type": "string",
+          "value": "New Mexico"
+        },
+        {
+          "type": "string",
+          "value": "New York"
+        },
+        {
+          "type": "string",
+          "value": "North Carolina"
+        },
+        {
+          "type": "string",
+          "value": "North Dakota"
+        },
+        {
+          "type": "string",
+          "value": "Ohio"
+        },
+        {
+          "type": "string",
+          "value": "Oklahoma"
+        },
+        {
+          "type": "string",
+          "value": "Oregon"
+        },
+        {
+          "type": "string",
+          "value": "Pennsylvania"
+        },
+        {
+          "type": "string",
+          "value": "Rhode Island"
+        },
+        {
+          "type": "string",
+          "value": "South Carolina"
+        },
+        {
+          "type": "string",
+          "value": "South Dakota"
+        },
+        {
+          "type": "string",
+          "value": "Tennessee"
+        },
+        {
+          "type": "string",
+          "value": "Texas"
+        },
+        {
+          "type": "string",
+          "value": "Utah"
+        },
+        {
+          "type": "string",
+          "value": "Vermont"
+        },
+        {
+          "type": "string",
+          "value": "Virginia"
+        },
+        {
+          "type": "string",
+          "value": "Washington"
+        },
+        {
+          "type": "string",
+          "value": "West Virginia"
+        },
+        {
+          "type": "string",
+          "value": "Wisconsin"
+        },
+        {
+          "type": "string",
+          "value": "Wyoming"
+        }
+      ]
+    }
+  },
+  {
     "name": "field_quoteResult",
     "type": "type",
     "value": {
@@ -11665,6 +11885,14 @@
           },
           "optional": true
         },
+        "field_quoteState": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_quoteState"
+          },
+          "optional": true
+        },
         "button": {
           "type": "objectAttribute",
           "value": {
@@ -12253,6 +12481,14 @@
           "value": {
             "type": "inline",
             "name": "field_blockColorCreamMidnight"
+          },
+          "optional": true
+        },
+        "field_filterQuotesByPageState": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_filterQuotesByPageState"
           },
           "optional": true
         }

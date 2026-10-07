@@ -6452,6 +6452,13 @@
             "value": "component_electionsPositionHero"
           }
         },
+        "field_intro": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
         "ctaAction": {
           "type": "objectAttribute",
           "value": {

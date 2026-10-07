@@ -1180,7 +1180,9 @@ Apply these across the whole batch so the blocks stay consistent.
   also reads the page place's officeholders (`getElectionsPagePlace` for the geo id, then
   `/v1/officeholders?geoId=`) and keeps those whose normalised position name matches the race's,
   merged and deduped with the position-id read and ordered by district when every seat is numbered.
-  A failed place read keeps the race's own seat rather than hiding the section.
+  Only the race's `normalizedPositionName` is compared (the display name never matches the rows);
+  a race without one lists the single seat its position id answers for. A failed place read keeps
+  the race's own seat rather than hiding the section.
 - **The `/candidates` pages are going away with the redesign** (Emily, 2026-09-24). No
   redesign block links to `/elections/.../position/<slug>/candidates`. Candidate rows live on the
   position page itself (the content block's list, anchored at `#position-candidates`), and the

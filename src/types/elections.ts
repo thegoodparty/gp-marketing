@@ -207,4 +207,6 @@ export interface FeaturedCityCard {
 	stateAbbreviation: string;
 	openElectionsCount: number;
 	href: string;
+	/** Census class of the place: a township or town is a 'town', an incorporated city a 'city'. Unset for the national fallback list. */
+	kind?: 'city' | 'town';
 }

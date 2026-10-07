@@ -91,15 +91,22 @@ export async function FeaturedCitiesBlockSection(
 	// take the template's spacing and answer [data-section] selectors.
 	if (locationCards.length === 0) return null;
 
+	// "Cities" only while every featured place is a city. States such as
+	// Michigan fill the carousel with townships, where "Cities in Michigan"
+	// reads wrong, so the templates write "[Cities] in [State]" and the block
+	// supplies the word (Emily, 2026-10-07).
+	const placesLabel = section.citiesOverride?.some(city => city.kind === 'town') ? 'Municipalities' : 'Cities';
+	const tokens: TokenMap = { ...section.tokens, '[Cities]': placesLabel, '[cities]': placesLabel.toLowerCase() };
+
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Featured Cities Block'>
 			<FeaturedCitiesBlock
 				backgroundColor={backgroundColor}
 				header={{
-					title: resolveSectionText(section.featuredCitiesBlockHeader?.field_title, section.tokens),
-					label: resolveSectionText(section.featuredCitiesBlockHeader?.field_label, section.tokens),
-					caption: resolveSectionText(section.featuredCitiesBlockHeader?.field_caption, section.tokens),
-					copy: <RichData value={resolveRichTextTokens(section.featuredCitiesBlockHeader?.block_summaryText, section.tokens)} />,
+					title: resolveSectionText(section.featuredCitiesBlockHeader?.field_title, tokens),
+					label: resolveSectionText(section.featuredCitiesBlockHeader?.field_label, tokens),
+					caption: resolveSectionText(section.featuredCitiesBlockHeader?.field_caption, tokens),
+					copy: <RichData value={resolveRichTextTokens(section.featuredCitiesBlockHeader?.block_summaryText, tokens)} />,
 					backgroundColor,
 					buttons: transformButtons(section.featuredCitiesBlockHeader?.list_buttons),
 					textSize: resolveTextSize(section.featuredCitiesBlockHeader?.field_textSize),

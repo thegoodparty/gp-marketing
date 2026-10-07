@@ -51,4 +51,17 @@ describe('FeaturedCitiesBlockSection', () => {
 		expect(html).toContain('Pick a city in Illinois:');
 		expect(html).not.toContain('[County]');
 	});
+
+	test('"[Cities]" reads Municipalities when any featured place is a township, and Cities otherwise', async () => {
+		const header = { field_title: '[Cities] in [State]' };
+		const township = { name: 'Alcona Township', stateAbbreviation: 'MI', openElectionsCount: 4, href: '/elections/mi/alcona-county/alcona-township', kind: 'town' as const };
+		const city = { name: 'Detroit', stateAbbreviation: 'MI', openElectionsCount: 9, href: '/elections/mi/wayne-county/detroit', kind: 'city' as const };
+
+		const mixed = await FeaturedCitiesBlockSection({ ...section, featuredCitiesBlockHeader: header, tokens: { '[State]': 'Michigan' }, citiesOverride: [city, township] } as unknown as Props);
+		const citiesOnly = await FeaturedCitiesBlockSection({ ...section, featuredCitiesBlockHeader: header, tokens: { '[State]': 'Michigan' }, citiesOverride: [city] } as unknown as Props);
+		if (!mixed || !citiesOnly) throw new Error('expected both blocks to render');
+
+		expect(renderToStaticMarkup(mixed)).toContain('Municipalities in Michigan');
+		expect(renderToStaticMarkup(citiesOnly)).toContain('Cities in Michigan');
+	});
 });

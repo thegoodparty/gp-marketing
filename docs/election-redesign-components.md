@@ -212,6 +212,11 @@ card. Two things were missing, and only the second was real work.
   `buildElectionsIndexSectionOverrides` always sets `cities`, to `[]` if it has none. An unset
   value would silently put national cities back on a state page.
 
+- **"[Cities]" is a block-supplied token.** Michigan's carousel is all townships, where "Cities in
+  Michigan" reads wrong (Emily, 2026-10-07). Each card now carries the place's Census class (`kind`:
+  city or town) and the block resolves `[Cities]` to "Municipalities" when any featured place is a
+  town, "Cities" otherwise; `[cities]` is the lower-case form. The State and County templates write
+  "[Cities] in [State]" / "[Cities] in [County]" and "Pick a location to see its upcoming races".
 - **The header resolves location tokens** like every other template block. "Cities in [County]"
   published literally on the county pages until the section passed `tokens` through
   (Emily, 2026-10-07).

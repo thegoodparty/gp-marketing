@@ -1,158 +1,213 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { useState } from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
 
 import { cn, tv } from './_lib/utils.ts';
+import { Avatar } from './Avatar.tsx';
 import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
 import { Media } from './Media.tsx';
-import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { IconResolver } from './IconResolver.tsx';
-import { Logo } from '~/sanity/utils/Logo.tsx';
+import { ElectionsNearYouSearch } from './ElectionsNearYouSearch.tsx';
+import { useDotButton, usePrevNextButtons } from './Carousel.tsx';
+import type { AuthorProps } from './Author.tsx';
 import type { SanityImage } from './types.ts';
-import { primaryButtonStyleType } from './_lib/designTypesStore.ts';
+import { Logo } from '~/sanity/utils/Logo.tsx';
 
 const styles = tv({
 	slots: {
-		base: 'relative bg-midnight-900',
-		wrapper: 'relative',
-		media: 'absolute inset-0 [&>div]:h-full [&>div]:w-full after:absolute after:inset-0 after:z-0',
-		content: 'relative z-1 flex flex-col gap-6 py-16 px-4 text-center text-white md:items-center lg:min-h-[36rem] lg:justify-center',
-		logo: 'flex justify-center',
-		logoImage: 'h-12 w-auto',
-		textContainer: 'flex flex-col gap-3 md:gap-4 max-w-[50rem] mx-auto',
-		searchContainer: 'flex flex-col gap-4 w-full max-w-md mx-auto sm:flex-row sm:items-center',
-		selectWrapper: 'relative w-full',
-		select: [
-			'w-full appearance-none rounded-lg border border-black/30 bg-white px-4 py-3 pr-10',
-			'text-black placeholder:text-black/70',
-			'focus:border-black focus:outline-none focus:ring-2 focus:ring-black/30',
-			'cursor-pointer font-secondary text-[0.875rem]',
+		base: 'relative',
+		// Figma 2035:1471: 60px of vertical padding around a 524px photo at 1440,
+		// 24px around the stacked mobile frame (2035:2402).
+		grid: 'flex flex-col gap-[5.5rem] py-6 lg:grid lg:grid-cols-[minmax(0,33.75rem)_1fr] lg:items-center lg:gap-x-10 lg:py-[3.75rem]',
+		content: 'flex flex-col gap-6 lg:gap-10',
+		textContainer: 'flex flex-col gap-3 md:gap-4',
+		// The slide keeps room for the quote card's overhang inside the clipped
+		// viewport: 108px to the left of the photo at desktop, 82px below it on
+		// mobile. 39.5rem is the 524px photo plus that left overhang.
+		carousel: 'w-full lg:ml-auto lg:max-w-[39.5rem]',
+		viewport: 'overflow-hidden',
+		track: 'flex touch-pan-y',
+		slide: 'relative min-w-0 flex-[0_0_100%] pb-[5.125rem] lg:pb-0 lg:pl-[6.75rem]',
+		photo: 'relative aspect-square w-full overflow-hidden rounded-3xl shadow-xl-duo [&>div]:h-full [&>div]:w-full',
+		quoteCard: [
+			'absolute inset-x-4 bottom-0 flex flex-col gap-4 rounded-lg bg-bright-yellow-100 p-5 text-black shadow-2xl',
+			'lg:inset-x-auto lg:bottom-5 lg:left-0 lg:w-[19.25rem]',
 		],
-		selectIcon: 'absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-black',
-		buttons: 'flex flex-wrap gap-4 justify-center',
+		quoteText: 'font-secondary text-[0.875rem] leading-5',
+		quoteAuthor: 'flex items-center gap-4',
+		quoteAvatar: 'relative shrink-0',
+		quoteName: 'font-secondary text-[1rem] font-bold leading-6',
+		quoteMeta: 'font-secondary text-[0.875rem] leading-5',
+		footer: 'mt-6 grid grid-cols-[1fr_auto_1fr] items-start lg:mt-4 lg:pl-[6.75rem]',
+		dots: 'col-start-2 flex items-center gap-2',
+		dot: 'size-2 rounded-full transition-opacity duration-fast ease-smooth',
+		arrows: 'col-start-3 hidden justify-end gap-[0.6875rem] lg:flex',
+		arrow: 'flex size-12 items-center justify-center rounded-full border disabled:cursor-not-allowed disabled:opacity-50',
 	},
 	variants: {
 		backgroundColor: {
 			cream: {
-				base: 'bg-goodparty-cream',
-				content: 'text-black',
-				media: 'after:bg-white/20',
-				select: 'border-black/30 bg-black/5 text-black placeholder:text-black/70 focus:border-black focus:ring-black/30',
-				selectIcon: 'text-black',
+				base: 'bg-goodparty-cream text-black',
+				dot: 'bg-black',
+				arrow: 'border-black text-black',
 			},
 			midnight: {
-				base: 'bg-midnight-900',
-				content: 'text-white',
-				media: 'after:bg-[#0A0A0A]/60',
+				base: 'bg-midnight-900 text-white',
+				dot: 'bg-white',
+				arrow: 'border-white text-white',
 			},
 		},
 	},
 });
 
-export type StateOption = {
-	value: string;
-	label: string;
+export type ElectionsSearchHeroSlide = {
+	_key?: string;
+	image: SanityImage;
+	quote?: string;
+	author?: AuthorProps;
 };
 
 export type ElectionsSearchHeroProps = {
 	className?: string;
-	showLogo?: boolean;
-	logoImage?: SanityImage;
 	headerText?: string;
 	bodyCopy?: ReactNode;
-	cta?: ComponentButtonProps;
-	backgroundImage?: SanityImage | string;
+	buttonLabel?: string;
 	backgroundColor?: 'cream' | 'midnight';
-	states?: StateOption[];
-	defaultStateValue?: string;
-	onStateChange?(stateValue: string): void;
-	onSearch?(stateValue: string): void;
+	slides?: ElectionsSearchHeroSlide[];
 };
 
+// Sent with the shared search's analytics events so this hero can be told
+// apart from the Near You block when both sit on one page.
+const HERO_PLACEMENT = 'elections_search_hero';
+
 export function ElectionsSearchHero(props: ElectionsSearchHeroProps) {
-	const backgroundImage = props.backgroundImage ?? '/images/unites-states.svg';
-	const isStaticImage = typeof backgroundImage === 'string';
+	// The live document predates the redesign and was saved as midnight, so the
+	// fallback matches what it renders as until an editor switches it.
+	const backgroundColor = props.backgroundColor ?? 'midnight';
+	const slides = props.slides ?? [];
+	const hasSlides = slides.length > 0;
 
-	const [selectedState, setSelectedState] = useState(props.defaultStateValue ?? '');
+	const {
+		base,
+		grid,
+		content,
+		textContainer,
+		carousel,
+		viewport,
+		track,
+		slide,
+		photo,
+		quoteCard,
+		quoteText,
+		quoteAuthor,
+		quoteAvatar,
+		quoteName,
+		quoteMeta,
+		footer,
+		dots,
+		dot,
+		arrows,
+		arrow,
+	} = styles({ backgroundColor });
 
-	const { base, wrapper, media, content, logo, textContainer, searchContainer, selectWrapper, select, selectIcon, buttons } = styles({
-		backgroundColor: props.backgroundColor ?? 'midnight',
-	});
-
-	const handleStateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		const value = e.target.value;
-		setSelectedState(value);
-		props.onStateChange?.(value);
-	};
-
-	const handleSearch = () => {
-		if (selectedState) {
-			props.onSearch?.(selectedState);
-		}
-	};
+	const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start' }, []);
+	const dotNav = useDotButton(emblaApi);
+	const arrowNav = usePrevNextButtons(emblaApi);
 
 	return (
 		<article className={cn(base(), props.className)} data-component='ElectionsSearchHero'>
-			<Container size='unset'>
-				<div className={wrapper()}>
-					<div className={media()}>
-						{isStaticImage ? (
-							<img src={backgroundImage} alt='' aria-hidden='true' className={cn('h-full w-full object-cover')} />
-						) : (
-							<Media image={backgroundImage} objectFit='cover' />
-						)}
-					</div>
+			<Container size='xl'>
+				<div className={cn(grid(), !hasSlides && 'lg:grid-cols-1')}>
 					<div className={content()}>
-						{props.showLogo && (
-							<div className={logo()}>
-								{props.logoImage ? <Media image={props.logoImage} className='h-12 w-auto' /> : <Logo width={96} height={72} />}
-							</div>
-						)}
 						<div className={textContainer()}>
 							{props.headerText && (
-								<Text as='h1' styleType='heading-lg'>
+								<Text as='h1' styleType='heading-xl'>
 									{props.headerText}
 								</Text>
 							)}
-							{props.bodyCopy && (
-								<Text styleType='body-1' className='max-w-[40rem] mx-auto'>
-									{props.bodyCopy}
-								</Text>
+							{props.bodyCopy && <Text styleType='body-1'>{props.bodyCopy}</Text>}
+						</div>
+						<ElectionsNearYouSearch
+							parent='ElectionsSearchHero'
+							placement={HERO_PLACEMENT}
+							buttonLabel={props.buttonLabel}
+							layout='fluid'
+							appearance='field'
+						/>
+					</div>
+					{hasSlides && (
+						<div className={carousel()} data-component='ElectionsSearchHeroCarousel'>
+							<div className={viewport()} ref={emblaRef}>
+								<div className={track()}>
+									{slides.map((item, index) => (
+										<div key={item._key ?? index} className={slide()} aria-roledescription='slide' aria-label={`${index + 1} of ${slides.length}`}>
+											<div className={photo()}>
+												<Media image={item.image} objectFit='cover' priority={index === 0} />
+											</div>
+											{(item.quote || item.author) && (
+												<figure className={quoteCard()}>
+													{item.quote && <blockquote className={quoteText()}>&ldquo;{item.quote}&rdquo;</blockquote>}
+													{item.author && (
+														<figcaption className={quoteAuthor()}>
+															{item.author.image && (
+																<div className={quoteAvatar()}>
+																	<Avatar image={item.author.image} size='sm' />
+																	<Logo width={20} height={15} className='absolute -bottom-px -right-px' aria-hidden='true' />
+																</div>
+															)}
+															<div className='flex flex-col gap-1'>
+																<span className={quoteName()}>{item.author.name}</span>
+																{item.author.meta?.[0] && <span className={quoteMeta()}>{item.author.meta[0]}</span>}
+															</div>
+														</figcaption>
+													)}
+												</figure>
+											)}
+										</div>
+									))}
+								</div>
+							</div>
+							{slides.length > 1 && (
+								<div className={footer()}>
+									<div className={dots()} role='tablist' aria-label='Choose a slide'>
+										{slides.map((_, index) => (
+											<button
+												key={index}
+												type='button'
+												role='tab'
+												aria-selected={index === dotNav.selectedIndex}
+												aria-label={`Go to slide ${index + 1}`}
+												onClick={() => dotNav.onDotButtonClick(index)}
+												className={cn(dot(), index !== dotNav.selectedIndex && 'opacity-30')}
+											/>
+										))}
+									</div>
+									<div className={arrows()}>
+										<button
+											type='button'
+											aria-label='Previous slide'
+											onClick={() => arrowNav.onPrevButtonClick()}
+											disabled={arrowNav.prevBtnDisabled}
+											className={arrow()}
+										>
+											<IconResolver icon='arrow-left' />
+										</button>
+										<button
+											type='button'
+											aria-label='Next slide'
+											onClick={() => arrowNav.onNextButtonClick()}
+											disabled={arrowNav.nextBtnDisabled}
+											className={arrow()}
+										>
+											<IconResolver icon='arrow-right' />
+										</button>
+									</div>
+								</div>
 							)}
 						</div>
-						<div className={searchContainer()}>
-							<div className={selectWrapper()}>
-								<select
-									className={select()}
-									value={selectedState}
-									onChange={handleStateChange}
-									aria-label='Select a state'
-									style={{ color: 'black' }}
-								>
-									<option value=''>Select state</option>
-									{props.states?.map(state => (
-										<option key={state.value} value={state.value}>
-											{state.label}
-										</option>
-									))}
-								</select>
-								<IconResolver icon='chevron-down' className={selectIcon()} />
-							</div>
-							{props.cta && <ComponentButton {...props.cta} buttonType='button' onClick={handleSearch} className='w-full sm:w-auto' />}
-						</div>
-						{!props.cta && (
-							<div className={buttons()}>
-								<ComponentButton
-									buttonType='button'
-									label='Search Elections'
-									buttonProps={{ styleType: primaryButtonStyleType }}
-									onClick={handleSearch}
-								/>
-							</div>
-						)}
-					</div>
+					)}
 				</div>
 			</Container>
 		</article>

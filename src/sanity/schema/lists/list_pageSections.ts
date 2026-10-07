@@ -78,7 +78,7 @@ export const list_pageSections = {
 							component_electionsPositionHero:
 								'https://cdn.sanity.io/images/3rbseux7/production/98517979044bb0b346f468e72ccf36e11ea55c9d-3000x2000.png',
 							component_electionsSearchHero:
-								'https://cdn.sanity.io/images/3rbseux7/production/f314244f8dd92cc652b6f997b08ecf8786a87029-3000x2000.png',
+								'https://cdn.sanity.io/images/3rbseux7/production/1d9e4c104f365a43ed81ae3758b3799d073a1537-3000x2000.png',
 							component_embeddedBlock:
 								'https://cdn.sanity.io/images/3rbseux7/production/db3caeddd65e25c3ef1f8fecf395943a41cc417d-3000x2000.png',
 							component_featuredCitiesBlock:

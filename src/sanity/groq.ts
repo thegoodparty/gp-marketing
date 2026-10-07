@@ -164,7 +164,7 @@ export const component_claimProfileBlock = `_type=="component_claimProfileBlock"
 export const component_electionsIndexBlock = `_type=="component_electionsIndexBlock"=>{...,electionsIndexBlockHeader{${summaryInfoGroq}}}`;
 export const component_electionsPositionHero = `_type=="component_electionsPositionHero"=>{...,ctaAction{${buttonGroq}}}`;
 export const component_electionsPositionContentBlock = `_type=="component_electionsPositionContentBlock"=>{...,electionsPositionContentBlockDesignSettings,componentSettings}`;
-export const component_electionsSearchHero = `_type=="component_electionsSearchHero"=>{...}`;
+export const component_electionsSearchHero = `_type=="component_electionsSearchHero"=>{...,list_slides[]{...,ref_quoteBy->}}`;
 export const component_featuredCitiesBlock = `_type=="component_featuredCitiesBlock"=>{...,featuredCitiesBlockHeader{${summaryInfoGroq}}}`;
 export const component_goodPartyOrgPledge = `_type=="component_goodPartyOrgPledge"=>{...,summaryInfo{${summaryInfoGroq}},goodPartyOrgPledgeItems}`;
 export const component_locationFactsBlock = `_type=="component_locationFactsBlock"=>{...,locationFactsBlockHeader{${summaryInfoGroq}}}`;

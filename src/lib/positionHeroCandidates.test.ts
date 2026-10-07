@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { rankPositionCandidates } from './positionHeroCandidates';
+import { mapCandidacyToHeroCandidate, rankPositionCandidates } from './positionHeroCandidates';
 import type { ElectionsPositionHeroCandidate } from '~/ui/ElectionsPositionHero';
 
 /**
@@ -45,5 +45,29 @@ describe('rankPositionCandidates', () => {
 
 	test('an empty field stays empty', () => {
 		expect(rankPositionCandidates([])).toEqual([]);
+	});
+});
+
+/**
+ * The seat comes from the candidacy's OWN race row. Under a shared slug such as
+ * mi/state-senator every district's race shares the slug, so this is the only
+ * row that knows which district a candidate is in (Emily, 2026-10-06). It is
+ * what lights up the seat tags and the seat filter on the position page.
+ */
+describe('mapCandidacyToHeroCandidate reads the seat off the candidacy\u2019s race', () => {
+	test('District 21 from the race row', () => {
+		const candidate = mapCandidacyToHeroCandidate(
+			{ id: 'c1', firstName: 'Sarah', lastName: 'Anthony', party: 'Democratic', Race: { brHashId: 'br1', slug: 'mi/state-senator', subAreaName: 'District', subAreaValue: '21' } },
+			0,
+			undefined,
+		);
+		expect(candidate.seatName).toBe('District');
+		expect(candidate.seatValue).toBe('21');
+	});
+
+	test('no race row, no seat', () => {
+		const candidate = mapCandidacyToHeroCandidate({ id: 'c2', firstName: 'Pat', lastName: 'Lee' }, 1, undefined);
+		expect(candidate.seatName).toBeUndefined();
+		expect(candidate.seatValue).toBeUndefined();
 	});
 });

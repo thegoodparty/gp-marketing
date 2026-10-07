@@ -1150,6 +1150,54 @@ export type Component_electionsSearchHero = {
 
 export type Component_electionsPositionContentBlock = {
 	_type: 'component_electionsPositionContentBlock';
+	siderail?: {
+		field_onThisPageTitle?: string;
+		field_exploreTitle?: string;
+		field_exploreBody?: string;
+		field_exploreButtonLabel?: string;
+	};
+	pledgeExplainer?: {
+		field_title?: string;
+		field_body?: string;
+		field_showPledgeLink?: boolean;
+		field_linkLabel?: string;
+	};
+	peopleLists?: {
+		field_candidatesHeading?: string;
+		field_candidatesIntro?: string;
+		field_resultsHeading?: string;
+		field_officeholdersHeading?: string;
+		field_officeholdersIntro?: string;
+		field_showMoreLabel?: string;
+	};
+	voterReadiness?: {
+		field_title?: string;
+		field_subtitle?: string;
+		list_voterLinks?: Array<{
+			img_image?: Img_image;
+			field_title?: string;
+			field_copy?: string;
+			field_linkLabel?: string;
+			field_href?: string;
+			_type: 'voterLink';
+			_key: string;
+		}>;
+	};
+	aboutPosition?: {
+		field_heading?: string;
+		field_cardTitle?: string;
+	};
+	howToRun?: {
+		field_heading?: string;
+		field_electionOverBanner?: string;
+		field_step1Title?: string;
+		field_step2Title?: string;
+		field_step3Title?: string;
+		field_step3Body?: string;
+		field_step3ButtonLabel?: string;
+		field_step3ButtonHref?: string;
+		field_needHelp?: string;
+	};
 	electionsPositionContentBlockDesignSettings?: {
 		field_blockColorCreamMidnight?: Field_blockColorCreamMidnight;
 	};
@@ -12107,6 +12155,54 @@ export type GoodpartyOrg_homeQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_electionsPositionContentBlock';
+					siderail?: {
+						field_onThisPageTitle?: string;
+						field_exploreTitle?: string;
+						field_exploreBody?: string;
+						field_exploreButtonLabel?: string;
+					};
+					pledgeExplainer?: {
+						field_title?: string;
+						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
+					};
+					peopleLists?: {
+						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
+						field_resultsHeading?: string;
+						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
+						field_showMoreLabel?: string;
+					};
+					voterReadiness?: {
+						field_title?: string;
+						field_subtitle?: string;
+						list_voterLinks?: Array<{
+							img_image?: Img_image;
+							field_title?: string;
+							field_copy?: string;
+							field_linkLabel?: string;
+							field_href?: string;
+							_type: 'voterLink';
+							_key: string;
+						}>;
+					};
+					aboutPosition?: {
+						field_heading?: string;
+						field_cardTitle?: string;
+					};
+					howToRun?: {
+						field_heading?: string;
+						field_electionOverBanner?: string;
+						field_step1Title?: string;
+						field_step2Title?: string;
+						field_step3Title?: string;
+						field_step3Body?: string;
+						field_step3ButtonLabel?: string;
+						field_step3ButtonHref?: string;
+						field_needHelp?: string;
+					};
 					electionsPositionContentBlockDesignSettings: {
 						field_blockColorCreamMidnight?: Field_blockColorCreamMidnight;
 					} | null;
@@ -35814,6 +35910,54 @@ export type Experiment_variantsByExperimentIdQueryResult = Array<{
 			| {
 					_key: string;
 					_type: 'component_electionsPositionContentBlock';
+					siderail?: {
+						field_onThisPageTitle?: string;
+						field_exploreTitle?: string;
+						field_exploreBody?: string;
+						field_exploreButtonLabel?: string;
+					};
+					pledgeExplainer?: {
+						field_title?: string;
+						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
+					};
+					peopleLists?: {
+						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
+						field_resultsHeading?: string;
+						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
+						field_showMoreLabel?: string;
+					};
+					voterReadiness?: {
+						field_title?: string;
+						field_subtitle?: string;
+						list_voterLinks?: Array<{
+							img_image?: Img_image;
+							field_title?: string;
+							field_copy?: string;
+							field_linkLabel?: string;
+							field_href?: string;
+							_type: 'voterLink';
+							_key: string;
+						}>;
+					};
+					aboutPosition?: {
+						field_heading?: string;
+						field_cardTitle?: string;
+					};
+					howToRun?: {
+						field_heading?: string;
+						field_electionOverBanner?: string;
+						field_step1Title?: string;
+						field_step2Title?: string;
+						field_step3Title?: string;
+						field_step3Body?: string;
+						field_step3ButtonLabel?: string;
+						field_step3ButtonHref?: string;
+						field_needHelp?: string;
+					};
 					electionsPositionContentBlockDesignSettings: {
 						field_blockColorCreamMidnight?: Field_blockColorCreamMidnight;
 					} | null;
@@ -59522,6 +59666,54 @@ export type ActiveVariantsByPageIdQueryResult = Array<{
 			| {
 					_key: string;
 					_type: 'component_electionsPositionContentBlock';
+					siderail?: {
+						field_onThisPageTitle?: string;
+						field_exploreTitle?: string;
+						field_exploreBody?: string;
+						field_exploreButtonLabel?: string;
+					};
+					pledgeExplainer?: {
+						field_title?: string;
+						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
+					};
+					peopleLists?: {
+						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
+						field_resultsHeading?: string;
+						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
+						field_showMoreLabel?: string;
+					};
+					voterReadiness?: {
+						field_title?: string;
+						field_subtitle?: string;
+						list_voterLinks?: Array<{
+							img_image?: Img_image;
+							field_title?: string;
+							field_copy?: string;
+							field_linkLabel?: string;
+							field_href?: string;
+							_type: 'voterLink';
+							_key: string;
+						}>;
+					};
+					aboutPosition?: {
+						field_heading?: string;
+						field_cardTitle?: string;
+					};
+					howToRun?: {
+						field_heading?: string;
+						field_electionOverBanner?: string;
+						field_step1Title?: string;
+						field_step2Title?: string;
+						field_step3Title?: string;
+						field_step3Body?: string;
+						field_step3ButtonLabel?: string;
+						field_step3ButtonHref?: string;
+						field_needHelp?: string;
+					};
 					electionsPositionContentBlockDesignSettings: {
 						field_blockColorCreamMidnight?: Field_blockColorCreamMidnight;
 					} | null;
@@ -83232,6 +83424,54 @@ export type GoodpartyOrg_allArticlesQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_electionsPositionContentBlock';
+					siderail?: {
+						field_onThisPageTitle?: string;
+						field_exploreTitle?: string;
+						field_exploreBody?: string;
+						field_exploreButtonLabel?: string;
+					};
+					pledgeExplainer?: {
+						field_title?: string;
+						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
+					};
+					peopleLists?: {
+						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
+						field_resultsHeading?: string;
+						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
+						field_showMoreLabel?: string;
+					};
+					voterReadiness?: {
+						field_title?: string;
+						field_subtitle?: string;
+						list_voterLinks?: Array<{
+							img_image?: Img_image;
+							field_title?: string;
+							field_copy?: string;
+							field_linkLabel?: string;
+							field_href?: string;
+							_type: 'voterLink';
+							_key: string;
+						}>;
+					};
+					aboutPosition?: {
+						field_heading?: string;
+						field_cardTitle?: string;
+					};
+					howToRun?: {
+						field_heading?: string;
+						field_electionOverBanner?: string;
+						field_step1Title?: string;
+						field_step2Title?: string;
+						field_step3Title?: string;
+						field_step3Body?: string;
+						field_step3ButtonLabel?: string;
+						field_step3ButtonHref?: string;
+						field_needHelp?: string;
+					};
 					electionsPositionContentBlockDesignSettings: {
 						field_blockColorCreamMidnight?: Field_blockColorCreamMidnight;
 					} | null;
@@ -106980,6 +107220,54 @@ export type CategoriesQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_electionsPositionContentBlock';
+					siderail?: {
+						field_onThisPageTitle?: string;
+						field_exploreTitle?: string;
+						field_exploreBody?: string;
+						field_exploreButtonLabel?: string;
+					};
+					pledgeExplainer?: {
+						field_title?: string;
+						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
+					};
+					peopleLists?: {
+						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
+						field_resultsHeading?: string;
+						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
+						field_showMoreLabel?: string;
+					};
+					voterReadiness?: {
+						field_title?: string;
+						field_subtitle?: string;
+						list_voterLinks?: Array<{
+							img_image?: Img_image;
+							field_title?: string;
+							field_copy?: string;
+							field_linkLabel?: string;
+							field_href?: string;
+							_type: 'voterLink';
+							_key: string;
+						}>;
+					};
+					aboutPosition?: {
+						field_heading?: string;
+						field_cardTitle?: string;
+					};
+					howToRun?: {
+						field_heading?: string;
+						field_electionOverBanner?: string;
+						field_step1Title?: string;
+						field_step2Title?: string;
+						field_step3Title?: string;
+						field_step3Body?: string;
+						field_step3ButtonLabel?: string;
+						field_step3ButtonHref?: string;
+						field_needHelp?: string;
+					};
 					electionsPositionContentBlockDesignSettings: {
 						field_blockColorCreamMidnight?: Field_blockColorCreamMidnight;
 					} | null;
@@ -130756,6 +131044,54 @@ export type TopicsQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_electionsPositionContentBlock';
+					siderail?: {
+						field_onThisPageTitle?: string;
+						field_exploreTitle?: string;
+						field_exploreBody?: string;
+						field_exploreButtonLabel?: string;
+					};
+					pledgeExplainer?: {
+						field_title?: string;
+						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
+					};
+					peopleLists?: {
+						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
+						field_resultsHeading?: string;
+						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
+						field_showMoreLabel?: string;
+					};
+					voterReadiness?: {
+						field_title?: string;
+						field_subtitle?: string;
+						list_voterLinks?: Array<{
+							img_image?: Img_image;
+							field_title?: string;
+							field_copy?: string;
+							field_linkLabel?: string;
+							field_href?: string;
+							_type: 'voterLink';
+							_key: string;
+						}>;
+					};
+					aboutPosition?: {
+						field_heading?: string;
+						field_cardTitle?: string;
+					};
+					howToRun?: {
+						field_heading?: string;
+						field_electionOverBanner?: string;
+						field_step1Title?: string;
+						field_step2Title?: string;
+						field_step3Title?: string;
+						field_step3Body?: string;
+						field_step3ButtonLabel?: string;
+						field_step3ButtonHref?: string;
+						field_needHelp?: string;
+					};
 					electionsPositionContentBlockDesignSettings: {
 						field_blockColorCreamMidnight?: Field_blockColorCreamMidnight;
 					} | null;
@@ -156592,6 +156928,54 @@ export type GoodpartyOrg_contactQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_electionsPositionContentBlock';
+					siderail?: {
+						field_onThisPageTitle?: string;
+						field_exploreTitle?: string;
+						field_exploreBody?: string;
+						field_exploreButtonLabel?: string;
+					};
+					pledgeExplainer?: {
+						field_title?: string;
+						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
+					};
+					peopleLists?: {
+						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
+						field_resultsHeading?: string;
+						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
+						field_showMoreLabel?: string;
+					};
+					voterReadiness?: {
+						field_title?: string;
+						field_subtitle?: string;
+						list_voterLinks?: Array<{
+							img_image?: Img_image;
+							field_title?: string;
+							field_copy?: string;
+							field_linkLabel?: string;
+							field_href?: string;
+							_type: 'voterLink';
+							_key: string;
+						}>;
+					};
+					aboutPosition?: {
+						field_heading?: string;
+						field_cardTitle?: string;
+					};
+					howToRun?: {
+						field_heading?: string;
+						field_electionOverBanner?: string;
+						field_step1Title?: string;
+						field_step2Title?: string;
+						field_step3Title?: string;
+						field_step3Body?: string;
+						field_step3ButtonLabel?: string;
+						field_step3ButtonHref?: string;
+						field_needHelp?: string;
+					};
 					electionsPositionContentBlockDesignSettings: {
 						field_blockColorCreamMidnight?: Field_blockColorCreamMidnight;
 					} | null;
@@ -180305,6 +180689,54 @@ export type GoodpartyOrg_landingPagesAndPolicyQueryResult =
 					| {
 							_key: string;
 							_type: 'component_electionsPositionContentBlock';
+							siderail?: {
+								field_onThisPageTitle?: string;
+								field_exploreTitle?: string;
+								field_exploreBody?: string;
+								field_exploreButtonLabel?: string;
+							};
+							pledgeExplainer?: {
+								field_title?: string;
+								field_body?: string;
+								field_showPledgeLink?: boolean;
+								field_linkLabel?: string;
+							};
+							peopleLists?: {
+								field_candidatesHeading?: string;
+								field_candidatesIntro?: string;
+								field_resultsHeading?: string;
+								field_officeholdersHeading?: string;
+								field_officeholdersIntro?: string;
+								field_showMoreLabel?: string;
+							};
+							voterReadiness?: {
+								field_title?: string;
+								field_subtitle?: string;
+								list_voterLinks?: Array<{
+									img_image?: Img_image;
+									field_title?: string;
+									field_copy?: string;
+									field_linkLabel?: string;
+									field_href?: string;
+									_type: 'voterLink';
+									_key: string;
+								}>;
+							};
+							aboutPosition?: {
+								field_heading?: string;
+								field_cardTitle?: string;
+							};
+							howToRun?: {
+								field_heading?: string;
+								field_electionOverBanner?: string;
+								field_step1Title?: string;
+								field_step2Title?: string;
+								field_step3Title?: string;
+								field_step3Body?: string;
+								field_step3ButtonLabel?: string;
+								field_step3ButtonHref?: string;
+								field_needHelp?: string;
+							};
 							electionsPositionContentBlockDesignSettings: {
 								field_blockColorCreamMidnight?: Field_blockColorCreamMidnight;
 							} | null;
@@ -204029,6 +204461,54 @@ export type GoodpartyOrg_electionsQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_electionsPositionContentBlock';
+					siderail?: {
+						field_onThisPageTitle?: string;
+						field_exploreTitle?: string;
+						field_exploreBody?: string;
+						field_exploreButtonLabel?: string;
+					};
+					pledgeExplainer?: {
+						field_title?: string;
+						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
+					};
+					peopleLists?: {
+						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
+						field_resultsHeading?: string;
+						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
+						field_showMoreLabel?: string;
+					};
+					voterReadiness?: {
+						field_title?: string;
+						field_subtitle?: string;
+						list_voterLinks?: Array<{
+							img_image?: Img_image;
+							field_title?: string;
+							field_copy?: string;
+							field_linkLabel?: string;
+							field_href?: string;
+							_type: 'voterLink';
+							_key: string;
+						}>;
+					};
+					aboutPosition?: {
+						field_heading?: string;
+						field_cardTitle?: string;
+					};
+					howToRun?: {
+						field_heading?: string;
+						field_electionOverBanner?: string;
+						field_step1Title?: string;
+						field_step2Title?: string;
+						field_step3Title?: string;
+						field_step3Body?: string;
+						field_step3ButtonLabel?: string;
+						field_step3ButtonHref?: string;
+						field_needHelp?: string;
+					};
 					electionsPositionContentBlockDesignSettings: {
 						field_blockColorCreamMidnight?: Field_blockColorCreamMidnight;
 					} | null;
@@ -227741,6 +228221,54 @@ export type GoodpartyOrg_candidatesQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_electionsPositionContentBlock';
+					siderail?: {
+						field_onThisPageTitle?: string;
+						field_exploreTitle?: string;
+						field_exploreBody?: string;
+						field_exploreButtonLabel?: string;
+					};
+					pledgeExplainer?: {
+						field_title?: string;
+						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
+					};
+					peopleLists?: {
+						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
+						field_resultsHeading?: string;
+						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
+						field_showMoreLabel?: string;
+					};
+					voterReadiness?: {
+						field_title?: string;
+						field_subtitle?: string;
+						list_voterLinks?: Array<{
+							img_image?: Img_image;
+							field_title?: string;
+							field_copy?: string;
+							field_linkLabel?: string;
+							field_href?: string;
+							_type: 'voterLink';
+							_key: string;
+						}>;
+					};
+					aboutPosition?: {
+						field_heading?: string;
+						field_cardTitle?: string;
+					};
+					howToRun?: {
+						field_heading?: string;
+						field_electionOverBanner?: string;
+						field_step1Title?: string;
+						field_step2Title?: string;
+						field_step3Title?: string;
+						field_step3Body?: string;
+						field_step3ButtonLabel?: string;
+						field_step3ButtonHref?: string;
+						field_needHelp?: string;
+					};
 					electionsPositionContentBlockDesignSettings: {
 						field_blockColorCreamMidnight?: Field_blockColorCreamMidnight;
 					} | null;
@@ -251453,6 +251981,54 @@ export type GoodpartyOrg_profileQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_electionsPositionContentBlock';
+					siderail?: {
+						field_onThisPageTitle?: string;
+						field_exploreTitle?: string;
+						field_exploreBody?: string;
+						field_exploreButtonLabel?: string;
+					};
+					pledgeExplainer?: {
+						field_title?: string;
+						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
+					};
+					peopleLists?: {
+						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
+						field_resultsHeading?: string;
+						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
+						field_showMoreLabel?: string;
+					};
+					voterReadiness?: {
+						field_title?: string;
+						field_subtitle?: string;
+						list_voterLinks?: Array<{
+							img_image?: Img_image;
+							field_title?: string;
+							field_copy?: string;
+							field_linkLabel?: string;
+							field_href?: string;
+							_type: 'voterLink';
+							_key: string;
+						}>;
+					};
+					aboutPosition?: {
+						field_heading?: string;
+						field_cardTitle?: string;
+					};
+					howToRun?: {
+						field_heading?: string;
+						field_electionOverBanner?: string;
+						field_step1Title?: string;
+						field_step2Title?: string;
+						field_step3Title?: string;
+						field_step3Body?: string;
+						field_step3ButtonLabel?: string;
+						field_step3ButtonHref?: string;
+						field_needHelp?: string;
+					};
 					electionsPositionContentBlockDesignSettings: {
 						field_blockColorCreamMidnight?: Field_blockColorCreamMidnight;
 					} | null;
@@ -275165,6 +275741,54 @@ export type GoodpartyOrg_allComponentsQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_electionsPositionContentBlock';
+					siderail?: {
+						field_onThisPageTitle?: string;
+						field_exploreTitle?: string;
+						field_exploreBody?: string;
+						field_exploreButtonLabel?: string;
+					};
+					pledgeExplainer?: {
+						field_title?: string;
+						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
+					};
+					peopleLists?: {
+						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
+						field_resultsHeading?: string;
+						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
+						field_showMoreLabel?: string;
+					};
+					voterReadiness?: {
+						field_title?: string;
+						field_subtitle?: string;
+						list_voterLinks?: Array<{
+							img_image?: Img_image;
+							field_title?: string;
+							field_copy?: string;
+							field_linkLabel?: string;
+							field_href?: string;
+							_type: 'voterLink';
+							_key: string;
+						}>;
+					};
+					aboutPosition?: {
+						field_heading?: string;
+						field_cardTitle?: string;
+					};
+					howToRun?: {
+						field_heading?: string;
+						field_electionOverBanner?: string;
+						field_step1Title?: string;
+						field_step2Title?: string;
+						field_step3Title?: string;
+						field_step3Body?: string;
+						field_step3ButtonLabel?: string;
+						field_step3ButtonHref?: string;
+						field_needHelp?: string;
+					};
 					electionsPositionContentBlockDesignSettings: {
 						field_blockColorCreamMidnight?: Field_blockColorCreamMidnight;
 					} | null;
@@ -304694,6 +305318,54 @@ export type GlobalElectionTemplateQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_electionsPositionContentBlock';
+					siderail?: {
+						field_onThisPageTitle?: string;
+						field_exploreTitle?: string;
+						field_exploreBody?: string;
+						field_exploreButtonLabel?: string;
+					};
+					pledgeExplainer?: {
+						field_title?: string;
+						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
+					};
+					peopleLists?: {
+						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
+						field_resultsHeading?: string;
+						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
+						field_showMoreLabel?: string;
+					};
+					voterReadiness?: {
+						field_title?: string;
+						field_subtitle?: string;
+						list_voterLinks?: Array<{
+							img_image?: Img_image;
+							field_title?: string;
+							field_copy?: string;
+							field_linkLabel?: string;
+							field_href?: string;
+							_type: 'voterLink';
+							_key: string;
+						}>;
+					};
+					aboutPosition?: {
+						field_heading?: string;
+						field_cardTitle?: string;
+					};
+					howToRun?: {
+						field_heading?: string;
+						field_electionOverBanner?: string;
+						field_step1Title?: string;
+						field_step2Title?: string;
+						field_step3Title?: string;
+						field_step3Body?: string;
+						field_step3ButtonLabel?: string;
+						field_step3ButtonHref?: string;
+						field_needHelp?: string;
+					};
 					electionsPositionContentBlockDesignSettings: {
 						field_blockColorCreamMidnight?: Field_blockColorCreamMidnight;
 					} | null;
@@ -328434,6 +329106,54 @@ export type CustomElectionTemplateByIdQueryResult = {
 			| {
 					_key: string;
 					_type: 'component_electionsPositionContentBlock';
+					siderail?: {
+						field_onThisPageTitle?: string;
+						field_exploreTitle?: string;
+						field_exploreBody?: string;
+						field_exploreButtonLabel?: string;
+					};
+					pledgeExplainer?: {
+						field_title?: string;
+						field_body?: string;
+						field_showPledgeLink?: boolean;
+						field_linkLabel?: string;
+					};
+					peopleLists?: {
+						field_candidatesHeading?: string;
+						field_candidatesIntro?: string;
+						field_resultsHeading?: string;
+						field_officeholdersHeading?: string;
+						field_officeholdersIntro?: string;
+						field_showMoreLabel?: string;
+					};
+					voterReadiness?: {
+						field_title?: string;
+						field_subtitle?: string;
+						list_voterLinks?: Array<{
+							img_image?: Img_image;
+							field_title?: string;
+							field_copy?: string;
+							field_linkLabel?: string;
+							field_href?: string;
+							_type: 'voterLink';
+							_key: string;
+						}>;
+					};
+					aboutPosition?: {
+						field_heading?: string;
+						field_cardTitle?: string;
+					};
+					howToRun?: {
+						field_heading?: string;
+						field_electionOverBanner?: string;
+						field_step1Title?: string;
+						field_step2Title?: string;
+						field_step3Title?: string;
+						field_step3Body?: string;
+						field_step3ButtonLabel?: string;
+						field_step3ButtonHref?: string;
+						field_needHelp?: string;
+					};
 					electionsPositionContentBlockDesignSettings: {
 						field_blockColorCreamMidnight?: Field_blockColorCreamMidnight;
 					} | null;

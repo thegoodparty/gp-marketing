@@ -20,6 +20,10 @@ export function mapCandidacyToHeroCandidate(
 		isPledged: pledgedFromSpine(person, candidacy.party),
 		href: card.href,
 		avatar: card.avatar,
+		// The candidacy's own race row carries the seat (asked for by getCandidaciesOrNull);
+		// the older candidacy-level fields are kept as fallbacks (Emily, 2026-10-06).
+		seatName: candidacy.Race?.subAreaName ?? candidacy.subAreaName ?? candidacy.Position?.subAreaName ?? undefined,
+		seatValue: candidacy.Race?.subAreaValue ?? candidacy.subAreaValue ?? candidacy.Position?.subAreaValue ?? undefined,
 	};
 }
 

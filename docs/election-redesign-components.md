@@ -1,9 +1,10 @@
 # Election page redesign: building the new page sections
 
 Context for the batch of page sections being built for the redesign of the election
-**location** pages, election **position** pages, and the **For Voters / Voter Hub**
-page. Marketing owns the component list; this doc is what a Claude Code session
-needs to know before building one of them.
+**location** pages, election **position** pages, the **For Voters / Voter Hub** page,
+and the **person profile** pages (`/people`), which marketing treats as part of the
+voter guide (Emily, 2026-10-06). Marketing owns the component list; this doc is what
+a Claude Code session needs to know before building one of them.
 
 Read this together with the **`new-component`** skill, which owns the mechanics of
 adding a block. This doc does not repeat those steps. It covers what the skill does
@@ -519,6 +520,45 @@ layer. The request was the intro and the callout, so the fitted radial glow stay
 `/candidate` route shares the component and is untouched: no intro, no callout, the "Empowered by
 GoodParty.org" line.
 
+**GoodParty.org Pledge block** (person profile pages first; location and position pages once editors
+place it) — extended, not rebuilt: `component_goodPartyOrgPledge`, the Studio block "GoodParty.org
+Pledge". The Voter Guide frames (2156-34297 desktop, 2188-38249 mobile) show a centred heading and intro
+over three columns of icon, heading and sentence, no buttons anywhere, on midnight. The block already had
+the header, the cards, the mixed icon colours and the midnight background; it lacked a three-column
+layout, a way to carry no buttons, and any preset content, so an editor adding it got an empty form.
+
+Decisions that came out of it (Emily, 2026-10-06):
+
+- **The `/people` profile band is the primary target.** The frames live in the Voter Guide file, but the
+  block's one live placement is the Person Profile global, and marketing treats the profile pages as part
+  of the voter guide. The band changes there, not only on the election pages when they get it.
+- **Three columns is a third option in the existing Column Layout dropdown**, and the preset for a new
+  block. That dropdown (`field_columnLayout12Columns`) is used by this block alone, so the new option
+  reaches nothing else. Two columns from `md`, three from `lg`, stacked below. A block saved without a
+  value keeps rendering two columns, pinned in `src/PageSections/goodPartyOrgPledgeLayout.test.tsx`.
+- **Card buttons are gone.** The Button field on each pledge card is removed from the schema and the
+  render. The section-level Buttons list on the Text tab stays, empty by default, because the `/people`
+  band supplies one button per state through it ("Take the pledge" or "Learn more"). The retired
+  Candidate Profile global still carries card buttons, which Studio now shows as an unknown field.
+- **Studio pre-fills the block.** `src/lib/goodPartyOrgPledgeDefaults.ts` holds the heading, the intro,
+  the three cards (Independent / People First / Anti-Corruption), midnight, mixed icon colours and three
+  columns; the schema's `initialValue` and the person-profile code seed both read it so they cannot
+  drift. The frame cuts the Anti-Corruption sentence off mid-way, so the full sentence that was already
+  live is used. The frame also underlines "GoodParty.org" as a link to the homepage; that was left out
+  of the preset (it is our own homepage, and the round was about removing links). An editor can still
+  link it in Studio.
+- **Sizes follow the live scale.** `heading-lg` with `max-md:text-heading-md` (48 → 32, as the editorial
+  and illustrated columns blocks do), intro `body-1`, card heading `subtitle-1`, sentence `body-2`.
+  Measured at 1440 and 390: the frame's 32px line-height on the card heading and 28px on the sentence
+  are not in the scale and were not chased.
+
+Content step that code cannot do: live `/people` pages render the Person Profile global template from
+Sanity, not the code seed (`resolveElectionTemplate` goes custom → global → code default), and that
+document explicitly says 1 Column, "People-First" and the earlier intro. After this code deploys, the
+template's pledge block needs Column Layout set to 3 Columns and its copy brought in line with the
+preset, or profiles keep the single column. Code first: production does not know the 3 Columns value
+until it ships, so a draft saved earlier previews as two columns.
+
 ## The shared election counts, as marketing defined them
 
 Settled with Emily on 2026-09-17 while building the location hero's stat cards, and
@@ -769,6 +809,7 @@ this table; it is here to orient, and to show the shape of the answer.
 | Illustrated columns | develop | nowhere | ready to merge |
 | Testimonial block with link | develop | nowhere | ready to merge |
 | Location editorial | develop | nowhere (hidden on location pages by design) | ready to merge |
+| GoodParty.org Pledge | develop | Person Profile global (every `/people` page), the retired Candidate Profile global; a **draft** landing page | draft and batch, then the template content edit above |
 
 ## The build loop
 

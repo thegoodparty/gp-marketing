@@ -1,7 +1,7 @@
-import { getCandidaciesOrNull, getPersonsByIds } from '~/lib/electionsApi';
+import { getCandidaciesOrNull, getPersonsByIds, getRemovedPersonIds } from '~/lib/electionsApi';
 import { isElectionDateBeforeToday, mapCandidacyToCard } from '~/lib/electionsHelpers';
 import { classifyParty, isMajorParty } from '~/lib/party';
-import { pledgedFromSpine } from '~/lib/peopleProfile';
+import { cardAvatarUrl, pledgedFromSpine } from '~/lib/peopleProfile';
 import { resolveProductAvatars } from '~/lib/productAvatars';
 import type { CandidacyItem } from '~/types/elections';
 import type { PersonItem } from '~/types/people';
@@ -83,12 +83,17 @@ export async function heroCandidatesFromCandidacies(
 		}
 	}
 	const personsById = new Map(persons.map(p => [p.id.toLowerCase(), p]));
-	const avatars = await resolveProductAvatars(personIds);
+	// The person's own profile photo outranks the feed's, as on their profile
+	// page, and a takedown outranks both: the removals list and the profile come
+	// from two systems, so a photo the list suppressed is never put back, and an
+	// unreadable list (null) keeps every photo off, as cardAvatarUrl does.
+	const [avatars, removed] = await Promise.all([resolveProductAvatars(personIds), getRemovedPersonIds()]);
 	return rankPositionCandidates(
 		candidacies.map((c, i) => {
 			const card = mapCandidacyToHeroCandidate(c, i, c.personId ? personsById.get(c.personId.toLowerCase()) : undefined);
-			const chosen = c.personId ? avatars.get(c.personId.toLowerCase()) : undefined;
-			return chosen ? { ...card, avatar: chosen } : card;
+			const id = c.personId?.toLowerCase() ?? null;
+			const chosen = id && removed !== null && !removed.has(id) ? avatars.get(id) : undefined;
+			return { ...card, avatar: cardAvatarUrl(id, chosen ?? card.avatar ?? null, removed) ?? undefined };
 		}),
 	);
 }

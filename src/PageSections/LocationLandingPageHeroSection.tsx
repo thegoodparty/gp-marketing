@@ -27,9 +27,12 @@ export function LocationLandingPageHeroSection(props: Props) {
 	const stateName = locationOverride?.stateName ?? 'State Name';
 	const countyName = locationOverride?.countyName;
 	const cityName = locationOverride?.cityName;
+	// The editor's template copy wins; the route's sentence is only the fallback
+	// for a template saved without one. Marketing rewrote the copy for the redesign
+	// and the route's default was overriding it on every page (Emily, 2026-10-07).
 	const bodyCopy =
-		resolveSectionText(locationOverride?.bodyCopy, tokens) ??
-		resolveSectionText(section.locationLandingPageHeroContent?.field_bodyCopy, tokens);
+		resolveSectionText(section.locationLandingPageHeroContent?.field_bodyCopy, tokens) ??
+		resolveSectionText(locationOverride?.bodyCopy, tokens);
 	// On a location page two cards carry live figures, told apart by the colour
 	// the design gives each and no other: halo green is the races on the ballot,
 	// lavender is the independent candidates. A real zero shows, and a card hides

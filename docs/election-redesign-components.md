@@ -137,6 +137,9 @@ four location levels. Decisions settled with Emily, 2026-10-05:
   stay the page's own officeholders. The race budget rose from 16 to 48 to fit real city ballots
   (Houston's offices list carries 38 races across all years; the hero only asks upcoming ones).
   This replaces the counts section's earlier "whole location including sub-locations" scope.
+- **The template's body copy wins over the route's default** (Emily, 2026-10-07). Each location route
+  still hands the hero a default sentence, but it only fills in when the template field is empty.
+  Before this the route's line overrode the redesign copy marketing wrote in Studio, on every page.
 - **The button hides only when nobody is pledged.** A button anchored to `#independents` is left out
   unless a pledged candidate or officeholder was found in any upcoming election; one found is proof
   even from a partial list, so the button can show while the card hides. The anchor ids live in

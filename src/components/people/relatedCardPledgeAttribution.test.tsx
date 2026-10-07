@@ -115,7 +115,20 @@ async function renderRail(slug: string, rail: Rail) {
 	if (!section) throw new Error(`no "${RAIL_HEADING[rail]}…" section on ${slug}`);
 
 	await render(<>{section.content}</>);
+	await revealAll();
 	return { source };
+}
+
+/** The rail shows three cards at a time; press "See more" until every card is out. */
+async function revealAll() {
+	for (let guard = 0; guard < 10; guard++) {
+		const more = [...document.querySelectorAll('button')].find(b => b.textContent?.includes('See more'));
+		if (!more) return;
+		await act(async () => {
+			more.click();
+		});
+	}
+	throw new Error('"See more" never ran out');
 }
 
 function cards(): Element[] {
@@ -173,10 +186,12 @@ describe('a related-person card states the pledge when the spine affirms it', ()
 		});
 	}
 
-	// The line follows the pledge and the frame follows empowerment. They are
-	// different facts from different sources, and the fixtures seed them on
-	// different cycles precisely so a card that ties them together fails here.
-	test('the pledge line does not ride on the GoodParty badge', async () => {
+	// The line and the mark follow the pledge; the yellow frame follows
+	// empowerment (the legacy treatment). Pledged and claimed are the same thing
+	// to marketing (Emily, 2026-10-06), so a pledged card gets the mark, but it
+	// does not get the frame, and the fixtures seed the two flags on different
+	// cycles so a card that ties the frame to the pledge fails here.
+	test('the pledge line and the mark do not ride on the GoodParty frame', async () => {
 		const { source } = await renderRail('allen-slagle-74eee01a', 'otherCandidates');
 
 		const pledgedNotEmpowered = source.filter(card => card.isPledged && !card.isEmpowered);
@@ -186,13 +201,21 @@ describe('a related-person card states the pledge when the spine affirms it', ()
 
 		for (const card of pledgedNotEmpowered) {
 			const node = cards().find(el => el.textContent?.includes(card.name));
-			expect(node?.textContent).toContain(PLEDGED);
-			expect(node?.className).not.toContain('border-bright-yellow-600');
+			if (!node) throw new Error(`no card for ${card.name}`);
+			expect(node.textContent).toContain(PLEDGED);
+			expect(node.className).not.toContain('border-bright-yellow-600');
+			expect(markCount(node)).toBe(1);
 		}
 		for (const card of empoweredNotPledged) {
 			const node = cards().find(el => el.textContent?.includes(card.name));
 			expect(node?.textContent).not.toContain(PLEDGED);
 			expect(node?.className).toContain('border-bright-yellow-600');
+		}
+		// Neither flag, no mark.
+		for (const card of source.filter(c => !c.isPledged && !c.isEmpowered)) {
+			const node = cards().find(el => el.textContent?.includes(card.name));
+			if (!node) throw new Error(`no card for ${card.name}`);
+			expect(markCount(node)).toBe(0);
 		}
 	});
 

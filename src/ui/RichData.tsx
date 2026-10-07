@@ -9,6 +9,8 @@ import { FeatureTooltip } from './FeatureTooltip.tsx';
 import { ResponsiveImage } from './ResponsiveImage.tsx';
 import { IconResolver } from './IconResolver.tsx';
 import { isExternalToEcosystem } from './_lib/linkBehavior.ts';
+import { Logo } from '~/sanity/utils/Logo.tsx';
+import { PLEDGE_SYMBOL_TYPE } from '~/lib/pledgeSymbolToken';
 
 export function isRecord(value: unknown): value is Record<string, unknown> {
 	return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
@@ -17,6 +19,10 @@ export function isRecord(value: unknown): value is Record<string, unknown> {
 const types = () => ({
 	image(component) {
 		return <ResponsiveImage image={component.value} />;
+	},
+	// The Heart & Star badge inline in a sentence, where `insertPledgeSymbols` put it.
+	[PLEDGE_SYMBOL_TYPE]() {
+		return <Logo className='mx-0.5 inline-block h-[1.3rem] w-8 align-text-bottom' role='img' aria-label='the Heart & Star badge' />;
 	},
 });
 

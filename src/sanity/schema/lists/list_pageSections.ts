@@ -74,7 +74,7 @@ export const list_pageSections = {
 							component_electionsIndexBlock:
 								'https://cdn.sanity.io/images/3rbseux7/production/fc29edac069a168edd399f75e1a8e50daa223b47-3000x2000.png',
 							component_electionsPositionContentBlock:
-								'https://cdn.sanity.io/images/3rbseux7/production/07cbd1cca10eebd1e3ae9617949e7cb6c56f2375-3000x2000.png',
+								'https://cdn.sanity.io/images/3rbseux7/production/ea38137d2071a2e0890ca4a1f1391efaddf963f6-3000x2000.png',
 							component_electionsPositionHero:
 								'https://cdn.sanity.io/images/3rbseux7/production/98517979044bb0b346f468e72ccf36e11ea55c9d-3000x2000.png',
 							component_electionsSearchHero:
@@ -90,7 +90,7 @@ export const list_pageSections = {
 							component_jobOpeningsBlock:
 								'https://cdn.sanity.io/images/3rbseux7/production/77d6cb0e8a4704d6ee9983a26391ed71cdb54d47-3000x2000.png',
 							component_listOfOfficesBlock:
-								'https://cdn.sanity.io/images/3rbseux7/production/f52200ea2ce2b87acd58736b478d6aa385c404ad-3000x2000.png',
+								'https://cdn.sanity.io/images/3rbseux7/production/ad854fb88420af9aa2eb31c92845dbec71aa858b-3000x2000.png',
 							component_locationFactsBlock:
 								'https://cdn.sanity.io/images/3rbseux7/production/841e57ddb41eec71c6ea56ea03641490de55acf2-3000x2000.png',
 							component_locationLandingPageHero:

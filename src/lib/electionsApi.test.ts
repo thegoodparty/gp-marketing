@@ -998,8 +998,8 @@ describe('getFeaturedCities', () => {
 
 		const result = await getFeaturedCities({ stateCode: 'TN', countySlug: 'tn/davidson-county' });
 		expect(result).toEqual([
-			{ name: 'Nashville', stateAbbreviation: 'TN', openElectionsCount: 4, href: '/elections/tn/davidson-county/nashville' },
-			{ name: 'Belle Meade', stateAbbreviation: 'TN', openElectionsCount: 1, href: '/elections/tn/davidson-county/belle-meade' },
+			{ name: 'Nashville', stateAbbreviation: 'TN', openElectionsCount: 4, href: '/elections/tn/davidson-county/nashville', kind: 'city' },
+			{ name: 'Belle Meade', stateAbbreviation: 'TN', openElectionsCount: 1, href: '/elections/tn/davidson-county/belle-meade', kind: 'city' },
 		]);
 	});
 
@@ -1044,8 +1044,8 @@ describe('getFeaturedCities', () => {
 
 		const result = await getFeaturedCities({ stateCode: 'TN' });
 		expect(result).toEqual([
-			{ name: 'Nashville', stateAbbreviation: 'TN', openElectionsCount: 4, href: '/elections/tn/davidson-county/nashville' },
-			{ name: 'Smallville', stateAbbreviation: 'TN', openElectionsCount: 2, href: '/elections/tn/davidson-county/smallville' },
+			{ name: 'Nashville', stateAbbreviation: 'TN', openElectionsCount: 4, href: '/elections/tn/davidson-county/nashville', kind: 'city' },
+			{ name: 'Smallville', stateAbbreviation: 'TN', openElectionsCount: 2, href: '/elections/tn/davidson-county/smallville', kind: 'town' },
 		]);
 	});
 
@@ -1170,7 +1170,7 @@ describe('getFeaturedCities', () => {
 
 		const result = await getFeaturedCities({ stateCode: 'TN', count: 1 });
 		expect(result).toEqual([
-			{ name: 'Nashville', stateAbbreviation: 'TN', openElectionsCount: 4, href: '/elections/tn/davidson-county/nashville' },
+			{ name: 'Nashville', stateAbbreviation: 'TN', openElectionsCount: 4, href: '/elections/tn/davidson-county/nashville', kind: 'city' },
 		]);
 	});
 

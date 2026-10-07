@@ -838,6 +838,7 @@ export async function getFeaturedCities(params: {
 			stateAbbreviation: state,
 			openElectionsCount,
 			href: `/elections/${countySlug}/${citySegment}`,
+			kind: place.mtfcc === TOWN_MTFCC ? 'town' : 'city',
 		});
 	}
 	return cards;

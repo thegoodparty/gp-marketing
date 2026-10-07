@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { mapCandidacyToHeroCandidate, rankPositionCandidates } from './positionHeroCandidates';
+import { currentCycleCandidacies, mapCandidacyToHeroCandidate, rankPositionCandidates } from './positionHeroCandidates';
 import type { ElectionsPositionHeroCandidate } from '~/ui/ElectionsPositionHero';
 
 /**
@@ -69,5 +69,28 @@ describe('mapCandidacyToHeroCandidate reads the seat off the candidacy\u2019s ra
 		const candidate = mapCandidacyToHeroCandidate({ id: 'c2', firstName: 'Pat', lastName: 'Lee' }, 1, undefined);
 		expect(candidate.seatName).toBeUndefined();
 		expect(candidate.seatValue).toBeUndefined();
+	});
+});
+
+describe('currentCycleCandidacies', () => {
+	const today = new Date(2026, 9, 7);
+	const run = (id: string, electionDate?: string) =>
+		({ id, firstName: id, lastName: 'X', party: 'Nonpartisan', Race: electionDate ? { brHashId: `r-${id}`, electionDate } : undefined }) as never;
+
+	/** Garden Grove, CA council: two District 5 candidates from 2024 sat beside the 2026 field. */
+	test('drops a candidacy from a past cycle and keeps the upcoming and undated ones', () => {
+		const kept = currentCycleCandidacies([run('zylla', '2026-11-03'), run('muneton', '2024-11-05'), run('undated')], {
+			raceElectionDate: '2026-11-03',
+			today,
+		});
+		expect(kept.map(c => c.id)).toEqual(['zylla', 'undated']);
+	});
+
+	test('a decided page keeps the field of its own past race', () => {
+		const kept = currentCycleCandidacies([run('won', '2025-11-04T00:00:00.000Z'), run('older', '2021-11-02')], {
+			raceElectionDate: '2025-11-04T00:00:00.000Z',
+			today,
+		});
+		expect(kept.map(c => c.id)).toEqual(['won']);
 	});
 });

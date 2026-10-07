@@ -735,6 +735,11 @@ people now follow the ballot that branch built. Decisions:
   endpoint carries no relations by default), which the first cut forgot, so the rescue never fired
   on the live site; `getPersonsByIds` takes the flag and the featured-people loader sets it whenever
   it holds a past candidacy.
+- **A position page lists one cycle.** `/v1/candidacies?raceSlug=` returns every cycle of a slug,
+  so Garden Grove's council page showed two 2024 District 5 candidates, one of them the sitting
+  member, as filed for 2026, and "5 candidates filed" where the location page counted 2 (Emily,
+  2026-10-07). `currentCycleCandidacies` keeps a candidacy whose race date is still ahead, is the
+  page race's own date, or is missing; the location page's count already worked this way.
 - **Person ids go to election-api 200 at a time.** `/v1/persons?ids=` takes 500 ids on paper, but
   500 UUIDs make an 18.5 KB URL and the server answers 414 before it reads the request. Refreshing
   every past race date (2026-10-07) put enough races on the upcoming ballot that location pages hit

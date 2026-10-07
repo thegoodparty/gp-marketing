@@ -85,7 +85,7 @@ describe('ElectionPositionResourcesBlockSection', () => {
 			...section,
 			ebookCard: { ...(section as { ebookCard: object }).ebookCard, button: undefined },
 			supportCard: { ...(section as { supportCard: object }).supportCard, button: undefined },
-		} as typeof section;
+		} as unknown as typeof section;
 		const html = renderToStaticMarkup(<ElectionPositionResourcesBlockSection {...bare} tokens={tokens} />);
 
 		expect(html).toContain('href="/e-book"');

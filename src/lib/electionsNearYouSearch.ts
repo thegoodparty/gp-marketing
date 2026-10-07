@@ -1,5 +1,5 @@
 import type { ResolvedPlace } from '~/lib/resolvePlace';
-import type { ParsedPlaceSuggestion } from '~/lib/googlePlaces';
+import type { ParsedPlaceSuggestion, PlaceSuggestion } from '~/lib/googlePlaces';
 
 /**
  * The block's submit logic as a plain function so it is testable without a
@@ -109,4 +109,33 @@ export async function submitElectionsNearYouSearchOnce(
 	} finally {
 		refs.isSubmitting.current = false;
 	}
+}
+
+/** Shortest input worth asking Google about; mirrors the search box's own keystroke threshold. */
+export const ELECTIONS_SEARCH_MIN_QUERY_LENGTH = 3;
+
+export type PlaceForSubmitInput = {
+	rawInput: string;
+	selected?: ParsedPlaceSuggestion;
+	suggestions: PlaceSuggestion[];
+	/** The same query the keystrokes run; `undefined` means the response was superseded. */
+	fetchSuggestions(value: string): Promise<PlaceSuggestion[] | undefined>;
+};
+
+/**
+ * The place a submit should resolve. A picked suggestion wins. Otherwise the
+ * first suggestion already on screen, and if none has arrived yet, one fetched
+ * now for the typed text. The Google script only starts loading on first
+ * focus, so a quick "marion" + Enter used to submit the bare word, which no
+ * state can disambiguate, and fail until the second try (Emily, 2026-10-07).
+ * `undefined` means free text is all there is.
+ */
+export async function placeForSubmit(input: PlaceForSubmitInput): Promise<ParsedPlaceSuggestion | undefined> {
+	if (input.selected) return input.selected;
+	const onScreen = input.suggestions[0]?.parsed;
+	if (onScreen) return onScreen;
+	const trimmed = input.rawInput.trim();
+	if (trimmed.length < ELECTIONS_SEARCH_MIN_QUERY_LENGTH) return undefined;
+	const fetched = await input.fetchSuggestions(trimmed);
+	return fetched?.[0]?.parsed;
 }

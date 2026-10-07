@@ -52,10 +52,12 @@ const washingtonDc: ResolvePlaceData = {
 	citySlugToCountySlug: new Map(),
 };
 
-// Virginia: the independent city "Fairfax city" is a county-level place beside
-// "Fairfax County", and the city sweep row for it maps to no county.
+// Virginia: the independent city "Fairfax city" is a county-equivalent, so
+// election-api returns it from the county sweep only, beside "Fairfax County"
+// (checked live on 2026-10-07: /elections/va links both va/fairfax-city and
+// va/fairfax-county from its county list). It is in no city sweep.
 const fairfaxVirginia: ResolvePlaceData = {
-	cityAndTownPlaces: [{ name: 'Fairfax city', slug: 'va/fairfax-city' }],
+	cityAndTownPlaces: [],
 	countyPlaces: [
 		{ name: 'Fairfax County', slug: 'va/fairfax-county' },
 		{ name: 'Fairfax city', slug: 'va/fairfax-city' },

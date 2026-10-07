@@ -252,7 +252,7 @@ export async function getRaceBySlug(
 	// its last race the way it always did. The explicit-filter path is left as
 	// it was: those callers ask for a specific row on purpose.
 	if (filters?.isPrimary === undefined) {
-		const upcoming = await fetchRaceBySlug(raceSlug, includePlace, undefined, todayAsDateOnly());
+		const upcoming = await fetchRaceBySlug(raceSlug, includePlace, undefined, upcomingSinceDateOnly());
 		if (upcoming) return upcoming;
 	}
 	const race = await fetchRaceBySlug(raceSlug, includePlace, filters?.isPrimary);
@@ -260,8 +260,18 @@ export async function getRaceBySlug(
 	return fetchRaceBySlug(raceSlug, includePlace, true);
 }
 
-function todayAsDateOnly(): string {
-	return new Date().toISOString().slice(0, 10);
+/**
+ * The lower bound for "upcoming". Yesterday in UTC, not today: a US election
+ * day is still in progress after midnight UTC (4pm Pacific), and a "from today"
+ * filter would drop it for the rest of the evening. Reaching one day back keeps
+ * the day's race upcoming everywhere in the country; the cost is that a race
+ * counts as upcoming for up to a day after it closes, which the decided state
+ * (read from winners, not from this) is unaffected by.
+ */
+function upcomingSinceDateOnly(): string {
+	const d = new Date();
+	d.setUTCDate(d.getUTCDate() - 1);
+	return d.toISOString().slice(0, 10);
 }
 
 /** Resolves joint city office races; API slugs omit the county segment. */

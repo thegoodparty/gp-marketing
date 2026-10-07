@@ -673,6 +673,8 @@ describe('getRaceBySlug falls back to the primary when there is no general', () 
 	const SLUG = 'mn/steele-county/county-auditor';
 	const PRIMARY = { slug: SLUG, name: 'County Auditor', electionDate: '2022-08-09', isPrimary: true };
 	const GENERAL = { slug: SLUG, name: 'County Auditor', electionDate: '2022-11-08', isPrimary: false };
+	// A race still ahead of us, which the upcoming-first request legitimately returns.
+	const UPCOMING_GENERAL = { slug: SLUG, name: 'County Auditor', electionDate: '2099-11-02', isPrimary: false };
 
 	function recordingFetch(bodyFor: (url: string) => unknown): string[] {
 		const calls: string[] = [];
@@ -687,12 +689,24 @@ describe('getRaceBySlug falls back to the primary when there is no general', () 
 		return calls;
 	}
 
-	test('a race with a general row resolves in a single request', async () => {
-		const calls = recordingFetch(() => [GENERAL]);
+	test('a race with an upcoming general row resolves in a single request', async () => {
+		// Only the upcoming-first request may return it: the API would not hand a
+		// future race back from a query it does not match, and a mock that
+		// answered every URL would hide which path resolved.
+		const calls = recordingFetch(url => (url.includes('electionDateStart=') ? [UPCOMING_GENERAL] : []));
 
-		expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2022-11-08' });
+		expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2099-11-02' });
 		expect(calls).toHaveLength(1);
 		expect(calls[0]).not.toContain('isPrimary');
+	});
+
+	test('a race whose general is in the past resolves on the unfiltered read', async () => {
+		const calls = recordingFetch(url => (url.includes('electionDateStart=') ? [] : [GENERAL]));
+
+		expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2022-11-08' });
+		expect(calls).toHaveLength(2);
+		expect(calls[1]).not.toContain('electionDateStart');
+		expect(calls[1]).not.toContain('isPrimary');
 	});
 
 	test('a primary-only race resolves on the retry rather than 404ing the page', async () => {
@@ -746,12 +760,21 @@ describe('getRaceBySlug prefers an upcoming race for a shared slug', () => {
 		return calls;
 	}
 
-	test('asks for races from today first, and takes the upcoming one', async () => {
+	test('asks for upcoming races first, and takes the upcoming one', async () => {
 		const calls = recordingFetch(url => (url.includes('electionDateStart=') ? [NEXT] : [OLD]));
 
 		expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2099-11-03' });
 		expect(calls).toHaveLength(1);
 		expect(calls[0]).toMatch(/electionDateStart=\d{4}-\d{2}-\d{2}/);
+	});
+
+	test('the lower bound reaches one day back, so a US election day in progress after midnight UTC is still upcoming', async () => {
+		const calls = recordingFetch(url => (url.includes('electionDateStart=') ? [NEXT] : [OLD]));
+		await getRaceBySlug(SLUG);
+		const sent = /electionDateStart=(\d{4}-\d{2}-\d{2})/.exec(calls[0] ?? '')?.[1];
+		const yesterday = new Date();
+		yesterday.setUTCDate(yesterday.getUTCDate() - 1);
+		expect(sent).toBe(yesterday.toISOString().slice(0, 10));
 	});
 
 	test('an office with no upcoming election still resolves to its last race', async () => {

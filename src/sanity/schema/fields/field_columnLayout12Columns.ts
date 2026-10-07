@@ -1,7 +1,7 @@
 
 export const field_columnLayout12Columns = {
   name: 'field_columnLayout12Columns',
-  title: 'Column Layout | 1 + 2 Columns',
+  title: 'Column Layout | 1, 2 + 3 Columns',
   description: 'Defines the arrangement of content in columns.',
   options: {
     collapsible: false,
@@ -18,8 +18,14 @@ export const field_columnLayout12Columns = {
         title: '2 Columns',
         value: '2Col',
       },
+      {
+        _key: '9c3e51d7a2f8',
+        _type: 'item',
+        title: '3 Columns',
+        value: '3Col',
+      },
     ],
   },
-  initialValue: '2Col',
+  initialValue: '3Col',
   type: 'string',
 }

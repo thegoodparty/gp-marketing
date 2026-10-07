@@ -23,7 +23,8 @@ type CanonicalSuffix =
 	| 'Census Area'
 	| 'City and Borough'
 	| 'City and County'
-	| 'Municipality';
+	| 'Municipality'
+	| 'City';
 
 type CanonicalCountyName = {
 	displayName: string;
@@ -80,6 +81,14 @@ export function canonicalizeCountyEquivalentName(
 	rawPlaceName: string,
 ): CanonicalCountyName {
 	const normalizedName = normalizeWhitespace(rawPlaceName);
+	// An independent city at the county level is shown by its plain name: Census
+	// style is "Fairfax city", which read "Fairfax city County, Virginia" on its
+	// page, and Emily wants "Fairfax, Virginia" (2026-10-07). The base name stays
+	// whole so the county matching built on it keeps telling "Fairfax city" and
+	// "Fairfax County" apart.
+	if (/\scity$/i.test(normalizedName) && !COUNTY_EQUIV_TAIL_RE.test(normalizedName)) {
+		return { displayName: normalizedName.replace(/\scity$/i, ''), baseName: normalizedName, suffixLabel: 'City' };
+	}
 	const tailMatch = COUNTY_EQUIV_TAIL_RE.exec(normalizedName);
 	const existingSuffix = tailMatch ? toCanonicalSuffix(tailMatch[1] ?? '') : null;
 	const suffixLabel = pickSuffixByState(stateCode, existingSuffix);

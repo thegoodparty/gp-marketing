@@ -105,6 +105,9 @@ describe('loadPositionOfficeholders', () => {
 	const council = [15, 9, 1, 3, 7].map(d => seat(d));
 
 	const deps = (overrides: Partial<PositionOfficeholderDeps> = {}): PositionOfficeholderDeps => ({
+		async getCandidaciesOrNull() {
+			return Promise.resolve([]);
+		},
 		async getOfficeHoldersByPositionIdOrNull(positionId) {
 			return Promise.resolve(positionId === 'pos-d9' ? [seat(9)] : []);
 		},
@@ -119,6 +122,9 @@ describe('loadPositionOfficeholders', () => {
 		},
 		async getRemovedPersonIds() {
 			return Promise.resolve(new Set<string>());
+		},
+		async resolveProductAvatars() {
+			return Promise.resolve(new Map<string, string>());
 		},
 		...overrides,
 	});
@@ -143,6 +149,62 @@ describe('loadPositionOfficeholders', () => {
 			deps({ getOfficeHoldersByPositionIdOrNull: async () => Promise.resolve([seat(9, { id: 'oh-at-large', personId: 'cccccccc-0000-4000-8000-000000000900', subAreaValue: null })]) }),
 		);
 		expect(people?.map(p => p.seatValue)).toEqual(['1', '3', '7', '9', '15', undefined]);
+	});
+
+	test('a seat holder with a published profile shows the photo they chose, not the feed\'s', async () => {
+		const people = await loadPositionOfficeholders(
+			{ positionId: 'pos-d9' },
+			deps({
+				getPersonsByIds: async ids =>
+					Promise.resolve(ids.map(id => ({ id, fullName: 'Nithya Raman', slug: 'nithya-raman', headshotUrl: 'https://assets.civicengine.com/feed.jpg' }) as never)),
+				resolveProductAvatars: async () => Promise.resolve(new Map([[seat(9).personId!.toLowerCase(), 'https://assets.goodparty.org/chosen.png']])),
+			}),
+		);
+		expect(people?.map(p => p.avatar)).toEqual(['https://assets.goodparty.org/chosen.png']);
+	});
+
+	test('a removed person keeps no photo even when their profile is live', async () => {
+		const people = await loadPositionOfficeholders(
+			{ positionId: 'pos-d9' },
+			deps({
+				getRemovedPersonIds: async () => Promise.resolve(new Set([seat(9).personId!.toLowerCase()])),
+				resolveProductAvatars: async () => Promise.resolve(new Map([[seat(9).personId!.toLowerCase(), 'https://assets.goodparty.org/chosen.png']])),
+			}),
+		);
+		expect(people?.map(p => p.avatar)).toEqual([undefined]);
+	});
+
+	/** Garden Grove, CA: both feeds knew District 1 only; District 5's 2024 winner holds a current term on her person row. */
+	test('a past candidate who holds a seat today fills in a district both feeds missed', async () => {
+		const WINNER_ID = 'cccccccc-0000-4000-8000-000000000555';
+		const LOSER_ID = 'dddddddd-0000-4000-8000-000000000556';
+		const asked: Array<{ ids: string[]; options?: { includeOfficeHolders?: boolean } }> = [];
+		const people = await loadPositionOfficeholders(
+			{ positionId: 'pos-d1', placeSlug: 'ca/orange-county/garden-grove', positionName: 'City Legislature', raceSlug: 'ca/garden-grove/city-legislature' },
+			deps({
+				getOfficeHoldersByPositionIdOrNull: async () => Promise.resolve([seat(1, { positionId: 'pos-d1' })]),
+				getOfficeHoldersByGeoId: async () => Promise.resolve([]),
+				getCandidaciesOrNull: async () =>
+					Promise.resolve([
+						{ id: 'c-2026', personId: 'cccccccc-0000-4000-8000-000000000001', Race: { brHashId: 'r-2026', electionDate: '2026-11-03' } },
+						{ id: 'c-won', personId: WINNER_ID, Race: { brHashId: 'r-2024', electionDate: '2024-11-05' } },
+						{ id: 'c-lost', personId: LOSER_ID, Race: { brHashId: 'r-2024', electionDate: '2024-11-05' } },
+					] as never),
+				async getPersonsByIds(ids, options) {
+					asked.push({ ids: [...ids], options });
+					if (!options?.includeOfficeHolders) return Promise.resolve([]);
+					return Promise.resolve([
+						{ id: WINNER_ID, fullName: 'Yesenia Muneton', slug: 'yesenia-muneton', OfficeHolders: [seat(5, { id: 'oh-d5', personId: WINNER_ID, positionId: 'pos-d5' })] },
+						{ id: LOSER_ID, fullName: 'Lost Out', slug: 'lost-out', OfficeHolders: [seat(5, { id: 'oh-old', personId: LOSER_ID, isCurrent: false })] },
+					] as never);
+				},
+			}),
+		);
+		expect(people?.map(p => [p.seatValue, p.name])).toEqual([
+			['1', expect.any(String)],
+			['5', 'Yesenia Muneton'],
+		]);
+		expect(asked.some(a => a.options?.includeOfficeHolders && !a.ids.includes(seat(1).personId!.toLowerCase()))).toBe(true);
 	});
 
 	test('two seats with no linked person are two rows, not one', async () => {

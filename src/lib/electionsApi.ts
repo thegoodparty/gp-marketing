@@ -650,6 +650,29 @@ export async function getPublicPersonProfileStatus(personId: string): Promise<Pu
 	return { status: 'absent' };
 }
 
+/**
+ * Person ids with a live GoodParty.org profile (gp-api `/published`; a few
+ * dozen rows). Null when the feed cannot be read, so a caller can tell "nobody"
+ * from "unknown". Short cache: a newly published profile should reach the
+ * cards within minutes, as its page does.
+ */
+export async function getPublishedPersonProfileIds(): Promise<Set<string> | null> {
+	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles/published`;
+	try {
+		const res = await fetch(url, { next: { revalidate: 300 } });
+		if (!res.ok) {
+			console.error(`[electionsApi] ${res.status} ${url}`);
+			return null;
+		}
+		const rows = (await res.json()) as Array<{ personId?: string }>;
+		if (!Array.isArray(rows)) return null;
+		return new Set(rows.flatMap(row => (row.personId ? [row.personId.toLowerCase()] : [])));
+	} catch (err) {
+		console.error(`[electionsApi] ${url}`, err);
+		return null;
+	}
+}
+
 export async function getMostElections(count = 3): Promise<FeaturedCity[]> {
 	const url = `${ELECTIONS_API_BASE_URL}/v1/places/most-elections?count=${count}`;
 	const data = await fetchJson<FeaturedCity[]>(url, CACHE_OPTIONS);

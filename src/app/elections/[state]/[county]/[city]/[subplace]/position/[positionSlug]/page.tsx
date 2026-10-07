@@ -70,7 +70,7 @@ export default async function Page({
 		race.Place?.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`) ?? false;
 	const isRealCity = isRealPlaceSegment(cityPlace.slug, city);
 
-	const heroCandidates = await loadPositionHeroCandidates(race.slug);
+	const heroCandidates = await loadPositionHeroCandidates(race.slug, { raceElectionDate: race.electionDate });
 	const stateName = getStateName(stateCode);
 	const cityName = cityPlace.name;
 	const officeName = race.normalizedPositionName ?? race.name ?? 'Position';

@@ -7,6 +7,7 @@ import {
 	getCountySlugsByState,
 	getPersonMergeSurvivorChain,
 	getPersonMergeSurvivorId,
+	getCandidacies,
 	getRaceBySlug,
 	getRemovedPersonIds,
 	isStateIndexDistrictPlace,
@@ -532,8 +533,6 @@ describe('resolveRaceElectionHrefs', () => {
 			),
 		).resolves.toEqual({
 			positionHref: '/elections/ok/tecumseh-public-schools/position/local-school-board',
-			candidatesHref:
-				'/elections/ok/tecumseh-public-schools/position/local-school-board/candidates',
 		});
 	});
 
@@ -565,7 +564,6 @@ describe('resolveRaceElectionHrefs', () => {
 			resolveRaceElectionHrefs('mi/northville/city-legislature', 'CITY'),
 		).resolves.toEqual({
 			positionHref: '/elections/mi/wayne-county/northville/position/city-legislature',
-			candidatesHref: '/elections/mi/wayne-county/northville/position/city-legislature/candidates',
 		});
 	});
 
@@ -597,7 +595,6 @@ describe('resolveRaceElectionHrefs', () => {
 			resolveRaceElectionHrefs('mi/northville/city-legislature', ''),
 		).resolves.toEqual({
 			positionHref: '/elections/mi/wayne-county/northville/position/city-legislature',
-			candidatesHref: '/elections/mi/wayne-county/northville/position/city-legislature/candidates',
 		});
 	});
 
@@ -608,7 +605,6 @@ describe('resolveRaceElectionHrefs', () => {
 	test('builds state-level paths without race fetch', async () => {
 		await expect(resolveRaceElectionHrefs('az/governor', 'STATE')).resolves.toEqual({
 			positionHref: '/elections/az/position/governor',
-			candidatesHref: '/elections/az/position/governor/candidates',
 		});
 	});
 });
@@ -676,6 +672,8 @@ describe('getRaceBySlug falls back to the primary when there is no general', () 
 	const SLUG = 'mn/steele-county/county-auditor';
 	const PRIMARY = { slug: SLUG, name: 'County Auditor', electionDate: '2022-08-09', isPrimary: true };
 	const GENERAL = { slug: SLUG, name: 'County Auditor', electionDate: '2022-11-08', isPrimary: false };
+	// A race still ahead of us, which the upcoming-first request legitimately returns.
+	const UPCOMING_GENERAL = { slug: SLUG, name: 'County Auditor', electionDate: '2099-11-02', isPrimary: false };
 
 	function recordingFetch(bodyFor: (url: string) => unknown): string[] {
 		const calls: string[] = [];
@@ -690,27 +688,40 @@ describe('getRaceBySlug falls back to the primary when there is no general', () 
 		return calls;
 	}
 
-	test('a race with a general row resolves in a single request', async () => {
-		const calls = recordingFetch(() => [GENERAL]);
+	test('a race with an upcoming general row resolves in a single request', async () => {
+		// Only the upcoming-first request may return it: the API would not hand a
+		// future race back from a query it does not match, and a mock that
+		// answered every URL would hide which path resolved.
+		const calls = recordingFetch(url => (url.includes('electionDateStart=') ? [UPCOMING_GENERAL] : []));
 
-		expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2022-11-08' });
+		expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2099-11-02' });
 		expect(calls).toHaveLength(1);
 		expect(calls[0]).not.toContain('isPrimary');
+	});
+
+	test('a race whose general is in the past resolves on the unfiltered read', async () => {
+		const calls = recordingFetch(url => (url.includes('electionDateStart=') ? [] : [GENERAL]));
+
+		expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2022-11-08' });
+		expect(calls).toHaveLength(2);
+		expect(calls[1]).not.toContain('electionDateStart');
+		expect(calls[1]).not.toContain('isPrimary');
 	});
 
 	test('a primary-only race resolves on the retry rather than 404ing the page', async () => {
 		const calls = recordingFetch(url => (url.includes('isPrimary=true') ? [PRIMARY] : []));
 
 		expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2022-08-09', isPrimary: true });
-		expect(calls).toHaveLength(2);
-		expect(calls[1]).toContain('isPrimary=true');
+		// Upcoming first, then the unfiltered general, then the primary.
+		expect(calls).toHaveLength(3);
+		expect(calls[2]).toContain('isPrimary=true');
 	});
 
 	test('a slug with no race at all still returns null', async () => {
 		const calls = recordingFetch(() => []);
 
 		expect(await getRaceBySlug(SLUG)).toBeNull();
-		expect(calls).toHaveLength(2);
+		expect(calls).toHaveLength(3);
 	});
 
 	/** resolvePlaceRaceElectionDates asks for the general on purpose; a primary would be wrong. */
@@ -720,6 +731,91 @@ describe('getRaceBySlug falls back to the primary when there is no general', () 
 		expect(await getRaceBySlug(SLUG, false, { isPrimary: false })).toBeNull();
 		expect(calls).toHaveLength(1);
 		expect(calls[0]).toContain('isPrimary=false');
+	});
+});
+
+/**
+ * A slug shared by many races (every California Assembly district is
+ * `ca/state-representative`, in every year) comes back from the API as one row
+ * picked by id, which put a 2022 race on a page whose candidates were running
+ * in 2026. The lookup asks for an upcoming race first and keeps the old answer
+ * as the fallback (Emily, 2026-10-06).
+ */
+describe('getRaceBySlug prefers an upcoming race for a shared slug', () => {
+	const SLUG = 'ca/state-representative';
+	const OLD = { slug: SLUG, name: 'State Representative', electionDate: '2022-11-08', isPrimary: false };
+	const NEXT = { slug: SLUG, name: 'State Representative', electionDate: '2099-11-03', isPrimary: false };
+
+	function recordingFetch(bodyFor: (url: string) => unknown): string[] {
+		const calls: string[] = [];
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = String(input);
+			calls.push(url);
+			return new Response(JSON.stringify(bodyFor(url)), {
+				status: 200,
+				headers: { 'content-type': 'application/json' },
+			});
+		}) as typeof fetch;
+		return calls;
+	}
+
+	test('asks for upcoming races first, and takes the upcoming one', async () => {
+		const calls = recordingFetch(url => (url.includes('electionDateStart=') ? [NEXT] : [OLD]));
+
+		expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2099-11-03' });
+		expect(calls).toHaveLength(1);
+		expect(calls[0]).toMatch(/electionDateStart=\d{4}-\d{2}-\d{2}/);
+	});
+
+	test('the lower bound reaches one day back, so a US election day in progress after midnight UTC is still upcoming', async () => {
+		const calls = recordingFetch(url => (url.includes('electionDateStart=') ? [NEXT] : [OLD]));
+		await getRaceBySlug(SLUG);
+		const sent = /electionDateStart=(\d{4}-\d{2}-\d{2})/.exec(calls[0] ?? '')?.[1];
+		const yesterday = new Date();
+		yesterday.setUTCDate(yesterday.getUTCDate() - 1);
+		expect(sent).toBe(yesterday.toISOString().slice(0, 10));
+	});
+
+	test('an office with no upcoming election still resolves to its last race', async () => {
+		const calls = recordingFetch(url => (url.includes('electionDateStart=') ? [] : [OLD]));
+
+		expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2022-11-08' });
+		expect(calls).toHaveLength(2);
+		expect(calls[1]).not.toContain('electionDateStart');
+	});
+
+	test('an explicit filter skips the upcoming-first step', async () => {
+		const calls = recordingFetch(() => [OLD]);
+
+		expect(await getRaceBySlug(SLUG, false, { isPrimary: false })).toMatchObject({ electionDate: '2022-11-08' });
+		expect(calls).toHaveLength(1);
+		expect(calls[0]).not.toContain('electionDateStart');
+	});
+});
+
+/** Each candidacy carries its own race so a card's seat comes from its own district row (Emily, 2026-10-06). */
+describe('getCandidacies asks for each candidacy\u2019s race', () => {
+	test('every filter form includes the race', async () => {
+		const calls: string[] = [];
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			calls.push(String(input));
+			return new Response(JSON.stringify([]), { status: 200, headers: { 'content-type': 'application/json' } });
+		}) as typeof fetch;
+
+		await getCandidacies({ raceSlug: 'mi/state-senator' });
+		await getCandidacies({ positionId: '11111111-1111-4111-8111-111111111111' });
+		expect(calls).toHaveLength(2);
+		for (const url of calls) expect(url).toContain('includeRace=true');
+	});
+
+	test('with no filter at all it makes no request', async () => {
+		let called = false;
+		globalThis.fetch = (async () => {
+			called = true;
+			return new Response('[]');
+		}) as unknown as typeof fetch;
+		expect(await getCandidacies({})).toEqual([]);
+		expect(called).toBe(false);
 	});
 });
 

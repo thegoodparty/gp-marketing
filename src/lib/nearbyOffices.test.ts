@@ -2,6 +2,7 @@ import { describe, expect, test } from 'bun:test';
 
 import {
 	getNearbyOffices,
+	independentsFirst,
 	nearbyOfficesTiers,
 	officeLevelLabel,
 	selectNearbyOffices,
@@ -132,6 +133,26 @@ describe('selectNearbyOffices', () => {
 		const offices = selectNearbyOffices([race('tx/houston/mayor'), race('tx/houston/mayor')], { tier, today });
 
 		expect(offices).toHaveLength(1);
+	});
+});
+
+describe('independentsFirst', () => {
+	const office = (id: string, pledgedCount?: number) => ({
+		id,
+		type: 'State',
+		position: id,
+		nextElectionDate: '2026-11-02',
+		...(pledgedCount ? { pledgedCount } : {}),
+	});
+
+	test('offices with independents running lead, and each group keeps its order', () => {
+		const ranked = independentsFirst([office('a'), office('b', 1), office('c'), office('d', 2)]);
+		expect(ranked.map(o => o.id)).toEqual(['b', 'd', 'a', 'c']);
+	});
+
+	test('a list with no independents is unchanged', () => {
+		const list = [office('a'), office('b'), office('c')];
+		expect(independentsFirst(list).map(o => o.id)).toEqual(['a', 'b', 'c']);
 	});
 });
 

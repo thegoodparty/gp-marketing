@@ -300,6 +300,15 @@ export async function getSubplaceRaceBySlug(params: {
 	return race;
 }
 
+/**
+ * Candidacies by race, position or race slug, each carrying its own `Race` row.
+ *
+ * The race is asked for on purpose: a race slug can name many rows (every
+ * Michigan Senate district is `mi/state-senator`), and a candidate's seat lives
+ * on their own row's `subAreaName` / `subAreaValue`. Reading the seat off the
+ * slug's race instead tagged every card on a profile with the one district the
+ * API happened to return first (Emily, 2026-10-06).
+ */
 export async function getCandidacies(params: {
 	raceId?: string;
 	positionId?: string;
@@ -310,6 +319,7 @@ export async function getCandidacies(params: {
 	if (params.positionId) searchParams.set('positionId', params.positionId);
 	if (params.raceSlug) searchParams.set('raceSlug', params.raceSlug);
 	if (searchParams.toString() === '') return [];
+	searchParams.set('includeRace', 'true');
 	const url = `${ELECTIONS_API_BASE_URL}/v1/candidacies?${searchParams}`;
 	const data = await fetchJson<CandidacyItem[]>(url);
 	return Array.isArray(data) ? data : [];

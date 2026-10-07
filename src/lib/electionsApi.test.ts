@@ -7,6 +7,7 @@ import {
 	getCountySlugsByState,
 	getPersonMergeSurvivorChain,
 	getPersonMergeSurvivorId,
+	getCandidacies,
 	getRaceBySlug,
 	getRemovedPersonIds,
 	isStateIndexDistrictPlace,
@@ -794,6 +795,32 @@ describe('getRaceBySlug prefers an upcoming race for a shared slug', () => {
 		expect(await getRaceBySlug(SLUG, false, { isPrimary: false })).toMatchObject({ electionDate: '2022-11-08' });
 		expect(calls).toHaveLength(1);
 		expect(calls[0]).not.toContain('electionDateStart');
+	});
+});
+
+/** Each candidacy carries its own race so a card's seat comes from its own district row (Emily, 2026-10-06). */
+describe('getCandidacies asks for each candidacy\u2019s race', () => {
+	test('every filter form includes the race', async () => {
+		const calls: string[] = [];
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			calls.push(String(input));
+			return new Response(JSON.stringify([]), { status: 200, headers: { 'content-type': 'application/json' } });
+		}) as typeof fetch;
+
+		await getCandidacies({ raceSlug: 'mi/state-senator' });
+		await getCandidacies({ positionId: '11111111-1111-4111-8111-111111111111' });
+		expect(calls).toHaveLength(2);
+		for (const url of calls) expect(url).toContain('includeRace=true');
+	});
+
+	test('with no filter at all it makes no request', async () => {
+		let called = false;
+		globalThis.fetch = (async () => {
+			called = true;
+			return new Response('[]');
+		}) as unknown as typeof fetch;
+		expect(await getCandidacies({})).toEqual([]);
+		expect(called).toBe(false);
 	});
 });
 

@@ -651,6 +651,16 @@ layer. The request was the intro and the callout, so the fitted radial glow stay
 `/candidate` route shares the component and is untouched: no intro, no callout, the "Empowered by
 GoodParty.org" line.
 
+**Breadcrumb block** (every election template and the two position landing pages) —
+`component_breadcrumbBlock`, an **Extend**, revised for the phone in the Voter Guide round
+(Emily, 2026-10-06; frames 2139:26708 profile and 2139:21609 position). Below `md` the trail
+shows its first and last crumb with a "..." between them, at the frames' sizes (Open Sans 14/20,
+6px gaps, 15px chevrons, 24px above and below); tapping the "..." reveals the rest in place.
+Every crumb stays in the DOM, so the links and the BreadcrumbList schema do not change. Desktop
+is untouched. The treatment is the `collapseOnMobile` switch on `Breadcrumbs`, turned on by the
+block's section wrapper and the two election page components that render the block directly; the
+blog article hero and the political-terms glossary share the component and were not in the round,
+so they keep the full trail.
 **Profile content block** (every `/people` profile) — `component_profileContentBlock`, an
 **Extend**. Revised in the same Voter Guide round (Emily, 2026-10-06; same frames as the hero,
 with the block itself at 2139:26748 phone / 2156:34712 unclaimed phone). The block has no content
@@ -1096,6 +1106,7 @@ this table; it is here to orient, and to show the shape of the answer.
 | Position hero | develop + draft PR #320 | Position and Position Candidates globals | into #320, stays draft |
 | Position content block | develop + draft PR #327 (stacked on #320) | Position global, plus the landing page `template-elections-position-subset` | into #327, stays draft |
 | Candidates block | develop | Position Candidates global, every `/people` profile | draft and batch |
+| Breadcrumb block | develop + draft PR #377 (phone collapse) | every election global, two position landing pages | into #377, stays draft |
 | Profile hero | develop + draft PR #374 | Person Profile global, Candidate Profile global | into #374, stays draft |
 | Profile content block | develop + draft PR #375 (stacked on #374) | Person Profile global, Candidate Profile global | into #375, stays draft |
 | Profile hero | develop | Person Profile global (every `/people` profile), the retired Candidate Profile global, twelve disabled per-state scaffolds; a landing page **draft** also carries it | draft and batch with the `/people` pages (PR for the 2026-10-06 revision) |

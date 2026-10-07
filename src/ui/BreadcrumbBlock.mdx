@@ -39,6 +39,12 @@ The component adapts to different breadcrumb trail lengths:
 
 <Canvas of={BreadcrumbBlockStories.LongBreadcrumb} />
 
+### On the phone (Voter Guide pages)
+
+With `collapseOnMobile`, the trail shows its first and last crumb with a "..." between them below the `md` breakpoint; tapping the "..." reveals the rest in place. Every crumb stays in the DOM, so the links and the BreadcrumbList schema do not change. The election templates turn this on; the blog and glossary pages do not.
+
+<Canvas of={BreadcrumbBlockStories.CollapsedOnMobile} />
+
 ## Props
 
 <Controls of={BreadcrumbBlockStories.Default} />

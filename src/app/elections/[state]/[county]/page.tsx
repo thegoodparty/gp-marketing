@@ -3,19 +3,21 @@ import { notFound, redirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	getCountyChildPlaces,
+	getFeaturedCities,
+	getElectionsPagePlace,
 	getPlacesByState,
-	getPlaceBySlug,
 	isDistrictMtfcc,
 	TOWN_MTFCC,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
 	buildOfficeItemsFromPlaceRaces,
+	mergeOfficeItems,
+	buildOverlappingOfficeItems,
 	buildPlaceRacePositionHref,
 	canonicalizeCountyEquivalentName,
 	getCountySuffixLabel,
 	getStateName,
-	PLACE_RACE_COLUMNS,
 	placeToFactsCards,
 	redirectCityPlaceToFourLevelUrl,
 	resolveDefaultElectionYear,
@@ -46,15 +48,10 @@ export default async function Page({
 	const fullSlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const currentYear = new Date().getFullYear();
 
-	const [counties, placeData] = await Promise.all([
+	const [counties, placeData, featuredCities] = await Promise.all([
 		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
-		getPlaceBySlug({
-			slug: fullSlug,
-			includeChildren: false,
-			includeRaces: true,
-			placeColumns: 'slug,name,mtfcc,countyName',
-			raceColumns: PLACE_RACE_COLUMNS,
-		}),
+		getElectionsPagePlace({ slug: fullSlug }),
+		getFeaturedCities({ stateCode, countySlug: fullSlug }),
 	]);
 
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === fullSlug);
@@ -104,17 +101,32 @@ export default async function Page({
 	});
 	const resolvedDates = await resolvePlaceRaceElectionDates(countyRaces);
 	const officeType = isDistrict ? 'District' : 'County';
+	// A district page is a local ballot, so it opens on Local; a county page on County.
+	const ownLevel = isDistrict ? 'local' : 'county';
 	const { offices: countyOffices, dataYears } = buildOfficeItemsFromPlaceRaces(
 		countyRaces,
 		resolvedDates,
 		{
 			type: officeType,
+			level: ownLevel,
 			buildHref: race => buildPlaceRacePositionHref([state, county], race.slug),
 		},
 	);
 
-	const defaultYear = resolveDefaultElectionYear(dataYears, currentYear);
-	const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
+	// The state races this place's voters also vote in, for the Level dropdown.
+	// A district reached on this route has no county in its path (the slug is the
+	// district itself), so it offers Local and State but not County.
+	const overlapping = await buildOverlappingOfficeItems({ stateSlug: state.toLowerCase() });
+
+	const allYears = [...new Set([...dataYears, ...overlapping.dataYears])].sort((a, b) => a - b);
+	/**
+	 * Open on a year this place's own level has races in, so the list it opens on
+	 * is populated, and fall back to the union only when it has none — otherwise
+	 * a place with no races of its own could open on a year the dropdown (built
+	 * from the union) does not offer.
+	 */
+	const defaultYear = resolveDefaultElectionYear(dataYears.length > 0 ? dataYears : allYears, currentYear);
+	const availableYears = allYears.length > 0 ? allYears : [currentYear];
 
 	const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);
 
@@ -132,9 +144,11 @@ export default async function Page({
 			: `${normalizedCounty?.suffixLabel ?? getCountySuffixLabel(countyPlace!.name)} Elections in ${normalizedCounty?.displayName ?? countyPlace!.name}`,
 		defaultYear,
 		availableYears,
-		offices: countyOffices,
+		offices: mergeOfficeItems(countyOffices, overlapping.offices),
 		elections: cities,
 		stateSlug: fullSlug,
+		// A district page has no cities of its own, so it features none.
+		featuredCities: isDistrict ? [] : featuredCities,
 		pageUrl,
 		pageTitle: `Elections in ${placeName}, ${stateName}`,
 		pageDescription: isDistrict
@@ -172,7 +186,7 @@ export async function generateMetadata({
 	const fullSlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const [counties, placeData] = await Promise.all([
 		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
-		getPlaceBySlug({ slug: fullSlug, includeChildren: false, includeRaces: false }),
+		getElectionsPagePlace({ slug: fullSlug }),
 	]);
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === fullSlug);
 	const isDistrict = placeData != null && isDistrictMtfcc(placeData.mtfcc);

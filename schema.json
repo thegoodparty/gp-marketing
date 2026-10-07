@@ -1632,6 +1632,226 @@
     }
   },
   {
+    "name": "field_filterQuotesByPageState",
+    "type": "type",
+    "value": {
+      "type": "boolean"
+    }
+  },
+  {
+    "name": "field_quoteState",
+    "type": "type",
+    "value": {
+      "type": "union",
+      "of": [
+        {
+          "type": "string",
+          "value": "Alabama"
+        },
+        {
+          "type": "string",
+          "value": "Alaska"
+        },
+        {
+          "type": "string",
+          "value": "Arizona"
+        },
+        {
+          "type": "string",
+          "value": "Arkansas"
+        },
+        {
+          "type": "string",
+          "value": "California"
+        },
+        {
+          "type": "string",
+          "value": "Colorado"
+        },
+        {
+          "type": "string",
+          "value": "Connecticut"
+        },
+        {
+          "type": "string",
+          "value": "Delaware"
+        },
+        {
+          "type": "string",
+          "value": "District of Columbia"
+        },
+        {
+          "type": "string",
+          "value": "Florida"
+        },
+        {
+          "type": "string",
+          "value": "Georgia"
+        },
+        {
+          "type": "string",
+          "value": "Hawaii"
+        },
+        {
+          "type": "string",
+          "value": "Idaho"
+        },
+        {
+          "type": "string",
+          "value": "Illinois"
+        },
+        {
+          "type": "string",
+          "value": "Indiana"
+        },
+        {
+          "type": "string",
+          "value": "Iowa"
+        },
+        {
+          "type": "string",
+          "value": "Kansas"
+        },
+        {
+          "type": "string",
+          "value": "Kentucky"
+        },
+        {
+          "type": "string",
+          "value": "Louisiana"
+        },
+        {
+          "type": "string",
+          "value": "Maine"
+        },
+        {
+          "type": "string",
+          "value": "Maryland"
+        },
+        {
+          "type": "string",
+          "value": "Massachusetts"
+        },
+        {
+          "type": "string",
+          "value": "Michigan"
+        },
+        {
+          "type": "string",
+          "value": "Minnesota"
+        },
+        {
+          "type": "string",
+          "value": "Mississippi"
+        },
+        {
+          "type": "string",
+          "value": "Missouri"
+        },
+        {
+          "type": "string",
+          "value": "Montana"
+        },
+        {
+          "type": "string",
+          "value": "Nebraska"
+        },
+        {
+          "type": "string",
+          "value": "Nevada"
+        },
+        {
+          "type": "string",
+          "value": "New Hampshire"
+        },
+        {
+          "type": "string",
+          "value": "New Jersey"
+        },
+        {
+          "type": "string",
+          "value": "New Mexico"
+        },
+        {
+          "type": "string",
+          "value": "New York"
+        },
+        {
+          "type": "string",
+          "value": "North Carolina"
+        },
+        {
+          "type": "string",
+          "value": "North Dakota"
+        },
+        {
+          "type": "string",
+          "value": "Ohio"
+        },
+        {
+          "type": "string",
+          "value": "Oklahoma"
+        },
+        {
+          "type": "string",
+          "value": "Oregon"
+        },
+        {
+          "type": "string",
+          "value": "Pennsylvania"
+        },
+        {
+          "type": "string",
+          "value": "Rhode Island"
+        },
+        {
+          "type": "string",
+          "value": "South Carolina"
+        },
+        {
+          "type": "string",
+          "value": "South Dakota"
+        },
+        {
+          "type": "string",
+          "value": "Tennessee"
+        },
+        {
+          "type": "string",
+          "value": "Texas"
+        },
+        {
+          "type": "string",
+          "value": "Utah"
+        },
+        {
+          "type": "string",
+          "value": "Vermont"
+        },
+        {
+          "type": "string",
+          "value": "Virginia"
+        },
+        {
+          "type": "string",
+          "value": "Washington"
+        },
+        {
+          "type": "string",
+          "value": "West Virginia"
+        },
+        {
+          "type": "string",
+          "value": "Wisconsin"
+        },
+        {
+          "type": "string",
+          "value": "Wyoming"
+        }
+      ]
+    }
+  },
+  {
     "name": "field_quoteResult",
     "type": "type",
     "value": {
@@ -2149,6 +2369,10 @@
         {
           "type": "string",
           "value": "2Col"
+        },
+        {
+          "type": "string",
+          "value": "3Col"
         }
       ]
     }
@@ -5627,10 +5851,27 @@
           },
           "optional": true
         },
-        "field_headline": {
+        "listOfOfficesBlockDescription": {
           "type": "objectAttribute",
           "value": {
-            "type": "string"
+            "type": "object",
+            "attributes": {
+              "field_showDescription": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "boolean"
+                },
+                "optional": true
+              },
+              "block_description": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "block_summaryText"
+                },
+                "optional": true
+              }
+            }
           },
           "optional": true
         },
@@ -5811,14 +6052,23 @@
                 },
                 "optional": true
               },
-              "field_searchPlaceholder": {
+              "list_buttons": {
                 "type": "objectAttribute",
                 "value": {
-                  "type": "string"
+                  "type": "inline",
+                  "name": "list_buttons"
                 },
                 "optional": true
               }
             }
+          },
+          "optional": true
+        },
+        "stats": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "stats"
           },
           "optional": true
         },
@@ -6134,91 +6384,6 @@
             "value": "component_electionsSearchHero"
           }
         },
-        "logoSettings": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "object",
-            "attributes": {
-              "showLogo": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "boolean"
-                },
-                "optional": true
-              },
-              "img_logoImage": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "object",
-                  "attributes": {
-                    "asset": {
-                      "type": "objectAttribute",
-                      "value": {
-                        "type": "object",
-                        "attributes": {
-                          "_ref": {
-                            "type": "objectAttribute",
-                            "value": {
-                              "type": "string"
-                            }
-                          },
-                          "_type": {
-                            "type": "objectAttribute",
-                            "value": {
-                              "type": "string",
-                              "value": "reference"
-                            }
-                          },
-                          "_weak": {
-                            "type": "objectAttribute",
-                            "value": {
-                              "type": "boolean"
-                            },
-                            "optional": true
-                          }
-                        },
-                        "dereferencesTo": "sanity.imageAsset"
-                      },
-                      "optional": true
-                    },
-                    "media": {
-                      "type": "objectAttribute",
-                      "value": {
-                        "type": "unknown"
-                      },
-                      "optional": true
-                    },
-                    "hotspot": {
-                      "type": "objectAttribute",
-                      "value": {
-                        "type": "inline",
-                        "name": "sanity.imageHotspot"
-                      },
-                      "optional": true
-                    },
-                    "crop": {
-                      "type": "objectAttribute",
-                      "value": {
-                        "type": "inline",
-                        "name": "sanity.imageCrop"
-                      },
-                      "optional": true
-                    },
-                    "_type": {
-                      "type": "objectAttribute",
-                      "value": {
-                        "type": "string",
-                        "value": "image"
-                      }
-                    }
-                  }
-                },
-                "optional": true
-              }
-            }
-          },
-          "optional": true
-        },
         "electionsSearchHeroContent": {
           "type": "objectAttribute",
           "value": {
@@ -6253,27 +6418,120 @@
                   "type": "string"
                 },
                 "optional": true
-              },
-              "field_buttonStyle": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "union",
-                  "of": [
-                    {
-                      "type": "string",
-                      "value": "primary"
-                    },
-                    {
-                      "type": "string",
-                      "value": "secondary"
-                    },
-                    {
-                      "type": "string",
-                      "value": "outline"
+              }
+            }
+          },
+          "optional": true
+        },
+        "list_slides": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "array",
+            "of": {
+              "type": "object",
+              "attributes": {
+                "img_photo": {
+                  "type": "objectAttribute",
+                  "value": {
+                    "type": "object",
+                    "attributes": {
+                      "asset": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "object",
+                          "attributes": {
+                            "_ref": {
+                              "type": "objectAttribute",
+                              "value": {
+                                "type": "string"
+                              }
+                            },
+                            "_type": {
+                              "type": "objectAttribute",
+                              "value": {
+                                "type": "string",
+                                "value": "reference"
+                              }
+                            },
+                            "_weak": {
+                              "type": "objectAttribute",
+                              "value": {
+                                "type": "boolean"
+                              },
+                              "optional": true
+                            }
+                          },
+                          "dereferencesTo": "sanity.imageAsset"
+                        },
+                        "optional": true
+                      },
+                      "media": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "unknown"
+                        },
+                        "optional": true
+                      },
+                      "hotspot": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "inline",
+                          "name": "sanity.imageHotspot"
+                        },
+                        "optional": true
+                      },
+                      "crop": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "inline",
+                          "name": "sanity.imageCrop"
+                        },
+                        "optional": true
+                      },
+                      "_type": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "string",
+                          "value": "image"
+                        }
+                      }
                     }
-                  ]
+                  },
+                  "optional": true
                 },
-                "optional": true
+                "field_quote": {
+                  "type": "objectAttribute",
+                  "value": {
+                    "type": "string"
+                  },
+                  "optional": true
+                },
+                "ref_quoteBy": {
+                  "type": "objectAttribute",
+                  "value": {
+                    "type": "inline",
+                    "name": "ref_quoteBy"
+                  },
+                  "optional": true
+                },
+                "_type": {
+                  "type": "objectAttribute",
+                  "value": {
+                    "type": "string",
+                    "value": "slide"
+                  }
+                }
+              },
+              "rest": {
+                "type": "object",
+                "attributes": {
+                  "_key": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string"
+                    }
+                  }
+                }
               }
             }
           },
@@ -6284,75 +6542,6 @@
           "value": {
             "type": "object",
             "attributes": {
-              "img_backgroundImage": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "object",
-                  "attributes": {
-                    "asset": {
-                      "type": "objectAttribute",
-                      "value": {
-                        "type": "object",
-                        "attributes": {
-                          "_ref": {
-                            "type": "objectAttribute",
-                            "value": {
-                              "type": "string"
-                            }
-                          },
-                          "_type": {
-                            "type": "objectAttribute",
-                            "value": {
-                              "type": "string",
-                              "value": "reference"
-                            }
-                          },
-                          "_weak": {
-                            "type": "objectAttribute",
-                            "value": {
-                              "type": "boolean"
-                            },
-                            "optional": true
-                          }
-                        },
-                        "dereferencesTo": "sanity.imageAsset"
-                      },
-                      "optional": true
-                    },
-                    "media": {
-                      "type": "objectAttribute",
-                      "value": {
-                        "type": "unknown"
-                      },
-                      "optional": true
-                    },
-                    "hotspot": {
-                      "type": "objectAttribute",
-                      "value": {
-                        "type": "inline",
-                        "name": "sanity.imageHotspot"
-                      },
-                      "optional": true
-                    },
-                    "crop": {
-                      "type": "objectAttribute",
-                      "value": {
-                        "type": "inline",
-                        "name": "sanity.imageCrop"
-                      },
-                      "optional": true
-                    },
-                    "_type": {
-                      "type": "objectAttribute",
-                      "value": {
-                        "type": "string",
-                        "value": "image"
-                      }
-                    }
-                  }
-                },
-                "optional": true
-              },
               "field_backgroundColor": {
                 "type": "objectAttribute",
                 "value": {
@@ -6398,6 +6587,315 @@
             "value": "component_electionsPositionContentBlock"
           }
         },
+        "siderail": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_onThisPageTitle": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_exploreTitle": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_exploreBody": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_exploreButtonLabel": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "pledgeExplainer": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_title": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_body": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_showPledgeLink": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "boolean"
+                },
+                "optional": true
+              },
+              "field_linkLabel": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "peopleLists": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_candidatesHeading": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_candidatesIntro": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_resultsHeading": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_officeholdersHeading": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_officeholdersIntro": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_showMoreLabel": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "voterReadiness": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_title": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_subtitle": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "list_voterLinks": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "array",
+                  "of": {
+                    "type": "object",
+                    "attributes": {
+                      "img_image": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "inline",
+                          "name": "img_image"
+                        },
+                        "optional": true
+                      },
+                      "field_title": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "string"
+                        },
+                        "optional": true
+                      },
+                      "field_copy": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "string"
+                        },
+                        "optional": true
+                      },
+                      "field_linkLabel": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "string"
+                        },
+                        "optional": true
+                      },
+                      "field_href": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "string"
+                        },
+                        "optional": true
+                      },
+                      "_type": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "string",
+                          "value": "voterLink"
+                        }
+                      }
+                    },
+                    "rest": {
+                      "type": "object",
+                      "attributes": {
+                        "_key": {
+                          "type": "objectAttribute",
+                          "value": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "aboutPosition": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_heading": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_cardTitle": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
+        "howToRun": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_heading": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_electionOverBanner": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_step1Title": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_step2Title": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_step3Title": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_step3Body": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_step3ButtonLabel": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_step3ButtonHref": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_needHelp": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
         "electionsPositionContentBlockDesignSettings": {
           "type": "objectAttribute",
           "value": {
@@ -6438,6 +6936,13 @@
             "type": "string",
             "value": "component_electionsPositionHero"
           }
+        },
+        "field_intro": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
         },
         "ctaAction": {
           "type": "objectAttribute",
@@ -7116,6 +7621,29 @@
             "type": "string",
             "value": "component_profileHero"
           }
+        },
+        "profileHeroContent": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "field_introCandidates": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "field_introOfficeholders": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
         },
         "profileHeroDesignSettings": {
           "type": "objectAttribute",
@@ -8451,6 +8979,13 @@
           },
           "optional": true
         },
+        "field_description": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
         "nearbyOfficesDesignSettings": {
           "type": "objectAttribute",
           "value": {
@@ -8835,6 +9370,13 @@
           },
           "optional": true
         },
+        "field_bodyCopy": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
         "featuredCandidatesBlockCallout": {
           "type": "objectAttribute",
           "value": {
@@ -8847,11 +9389,32 @@
                 },
                 "optional": true
               },
+              "field_calloutTitle": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
               "block_calloutText": {
                 "type": "objectAttribute",
                 "value": {
                   "type": "inline",
                   "name": "block_summaryText"
+                },
+                "optional": true
+              },
+              "field_showPledgeLink": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "boolean"
+                },
+                "optional": true
+              },
+              "field_pledgeLinkLabel": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
                 },
                 "optional": true
               }
@@ -11322,6 +11885,14 @@
           },
           "optional": true
         },
+        "field_quoteState": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_quoteState"
+          },
+          "optional": true
+        },
         "button": {
           "type": "objectAttribute",
           "value": {
@@ -11910,6 +12481,14 @@
           "value": {
             "type": "inline",
             "name": "field_blockColorCreamMidnight"
+          },
+          "optional": true
+        },
+        "field_filterQuotesByPageState": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_filterQuotesByPageState"
           },
           "optional": true
         }
@@ -14252,14 +14831,6 @@
             "name": "block_summaryText"
           },
           "optional": true
-        },
-        "ctaActionWithShared": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "inline",
-            "name": "ctaActionWithShared"
-          },
-          "optional": true
         }
       }
     }
@@ -16154,96 +16725,6 @@
     }
   },
   {
-    "name": "organisation",
-    "type": "document",
-    "attributes": {
-      "_id": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        }
-      },
-      "_type": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string",
-          "value": "organisation"
-        }
-      },
-      "_createdAt": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        }
-      },
-      "_updatedAt": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        }
-      },
-      "_rev": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        }
-      },
-      "organisationOverview": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "organisationOverview"
-        },
-        "optional": true
-      }
-    }
-  },
-  {
-    "name": "person",
-    "type": "document",
-    "attributes": {
-      "_id": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        }
-      },
-      "_type": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string",
-          "value": "person"
-        }
-      },
-      "_createdAt": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        }
-      },
-      "_updatedAt": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        }
-      },
-      "_rev": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        }
-      },
-      "personOverview": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "personOverview"
-        },
-        "optional": true
-      }
-    }
-  },
-  {
     "name": "pricingPlan",
     "type": "document",
     "attributes": {
@@ -17604,6 +18085,96 @@
         "value": {
           "type": "inline",
           "name": "seo"
+        },
+        "optional": true
+      }
+    }
+  },
+  {
+    "name": "organisation",
+    "type": "document",
+    "attributes": {
+      "_id": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_type": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string",
+          "value": "organisation"
+        }
+      },
+      "_createdAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_updatedAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_rev": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "organisationOverview": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "organisationOverview"
+        },
+        "optional": true
+      }
+    }
+  },
+  {
+    "name": "person",
+    "type": "document",
+    "attributes": {
+      "_id": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_type": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string",
+          "value": "person"
+        }
+      },
+      "_createdAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_updatedAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_rev": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "personOverview": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "personOverview"
         },
         "optional": true
       }

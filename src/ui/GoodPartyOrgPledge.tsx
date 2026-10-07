@@ -17,6 +17,7 @@ const styles = tv({
 		base: 'py-[calc(var(--container-padding))]',
 		wrapper: 'flex flex-col gap-12 md:gap-20',
 		cards: 'flex flex-col gap-12',
+		header: '[&_h2]:max-md:text-heading-md',
 		grid: 'grid gap-8 md:grid-cols-2',
 		card: 'flex flex-col items-start gap-8 min-w-80 p-6 flex-1',
 		footer: 'flex flex-wrap justify-center gap-4',
@@ -36,6 +37,10 @@ const styles = tv({
 				card: 'min-w-0',
 			},
 			'2Col': {},
+			'3Col': {
+				grid: 'lg:grid-cols-3',
+				card: 'min-w-0 max-md:p-0',
+			},
 		},
 	},
 });
@@ -44,7 +49,6 @@ export type PledgeCard = {
 	icon?: IconType;
 	title?: string;
 	content?: ReactNode;
-	button?: ComponentButtonProps;
 	iconBg?: Exclude<(typeof componentColorValues)[number], 'inverse'>;
 };
 
@@ -54,7 +58,7 @@ export type GoodPartyOrgPledgeProps = {
 	header?: HeaderBlockProps;
 	pledgeCards?: PledgeCard[];
 	iconBg?: Exclude<(typeof componentColorValues)[number], 'inverse'> | 'mixed';
-	columnLayout?: '1Col' | '2Col';
+	columnLayout?: '1Col' | '2Col' | '3Col';
 	/** Section-level buttons, rendered once below the cards rather than in the header. */
 	footerButtons?: ComponentButtonProps[];
 };
@@ -70,9 +74,7 @@ export function GoodPartyOrgPledge(props: GoodPartyOrgPledgeProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
 	const iconBg = props.iconBg ?? 'blue';
 	const columnLayout = props.columnLayout ?? '2Col';
-	const { base, wrapper, cards, grid, card, footer } = styles({ backgroundColor, columnLayout });
-
-	const resolvedStyle = resolveButtonStyleType('min-ghost', backgroundColor);
+	const { base, wrapper, cards, header, grid, card, footer } = styles({ backgroundColor, columnLayout });
 
 	const resolveCardIconBg = (card: PledgeCard, index: number): Exclude<(typeof componentColorValues)[number], 'inverse'> => {
 		if (card.iconBg) return card.iconBg;
@@ -86,7 +88,7 @@ export function GoodPartyOrgPledge(props: GoodPartyOrgPledgeProps) {
 		<article className={cn(base(), props.className)} data-component='GoodPartyOrgPledge'>
 			<Container size='xl'>
 				<div className={wrapper()}>
-					{props.header && <HeaderBlock {...props.header} backgroundColor={backgroundColor} layout='center' />}
+					{props.header && <HeaderBlock {...props.header} className={header()} backgroundColor={backgroundColor} layout='center' />}
 					<div className={cards()}>
 						<div className={grid()}>
 							{props.pledgeCards?.map((pledgeCard, index) => (
@@ -100,13 +102,6 @@ export function GoodPartyOrgPledge(props: GoodPartyOrgPledgeProps) {
 										)}
 										{isValidRichText(pledgeCard.content) && <Text styleType='body-2'>{pledgeCard.content}</Text>}
 									</div>
-									{pledgeCard.button && (
-										<ComponentButton
-											className='w-fit'
-											{...pledgeCard.button}
-											buttonProps={{ ...(pledgeCard.button.buttonProps ?? {}), styleType: resolvedStyle }}
-										/>
-									)}
 								</div>
 							))}
 						</div>

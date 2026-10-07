@@ -14,8 +14,10 @@ export const KNOWN_ELECTION_TOKENS = [
 	'[County or City]',
 	'[office name]',
 	'[office]',
+	'[Position Name]',
 	'[location]',
 	'[candidate name]',
+	'[count of candidates]',
 ] as const;
 
 /**

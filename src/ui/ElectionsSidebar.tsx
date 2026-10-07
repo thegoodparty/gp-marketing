@@ -3,6 +3,7 @@ import { Text } from './Text.tsx';
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { IconResolver } from './IconResolver.tsx';
 import { Anchor } from './Anchor.tsx';
+import { Logo } from '~/sanity/utils/Logo.tsx';
 
 const styles = tv({
 	slots: {
@@ -68,6 +69,13 @@ export type ElectionsSidebarProps = {
 	topInfos?: { icon: string; label: string; value: string }[];
 	/** "Political Affiliation" row value. */
 	politicalAffiliation?: string;
+	/**
+	 * The "Took the GoodParty.org Pledge" row (Voter Guide frames 2156:30664 /
+	 * 2178:37826). Present only for someone the pledge rule affirms. `signedOn` is
+	 * the formatted date under the heading; without it the row is the heading and
+	 * the mark alone, which is every profile until election-api carries a date.
+	 */
+	pledge?: { signedOn?: string | null };
 	/** "Contact" row — a horizontal row of circular icon-only buttons. */
 	contactIcons?: SidebarContactIcon[];
 	/** "Office Contact" row — labeled email/phone links (officeholders). */
@@ -103,6 +111,7 @@ export function ElectionsSidebar(props: ElectionsSidebarProps) {
 	const hasFigmaCard =
 		(props.topInfos?.length ?? 0) > 0 ||
 		Boolean(props.politicalAffiliation) ||
+		Boolean(props.pledge) ||
 		(props.contactIcons?.length ?? 0) > 0 ||
 		(props.officeContacts?.length ?? 0) > 0 ||
 		(props.officeAddress?.length ?? 0) > 0;
@@ -134,6 +143,21 @@ export function ElectionsSidebar(props: ElectionsSidebarProps) {
 								<Text as='dd' styleType='body-2' className={iconValue()}>
 									{props.politicalAffiliation}
 								</Text>
+							</div>
+						</div>
+					)}
+					{props.pledge && (
+						<div className={figmaRow()} data-component='ElectionsSidebarPledge'>
+							<Text as='dt' styleType='subtitle-2' className={label()}>
+								Took the GoodParty.org Pledge
+							</Text>
+							<div className={iconValueRow()}>
+								<Logo className='h-[1.125rem] w-6 shrink-0' aria-hidden='true' />
+								{props.pledge.signedOn && (
+									<Text as='dd' styleType='body-2' className={iconValue()}>
+										{`Signed on ${props.pledge.signedOn}`}
+									</Text>
+								)}
 							</div>
 						</div>
 					)}

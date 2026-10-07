@@ -3,31 +3,30 @@ import type { ReactNode } from 'react';
 import { cn, tv } from './_lib/utils.ts';
 import { Container } from './Container.tsx';
 import { Text } from './Text.tsx';
-import { IconWrapper } from './IconResolver.tsx';
+import { Stat, type StatProps } from './Stat.tsx';
+import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
+import { IconResolver } from './IconResolver.tsx';
+import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
 
 const styles = tv({
 	slots: {
-		base: 'pt-6 pb-6 md:pt-20 md:pb-10',
-		content: 'flex flex-col gap-6',
+		base: 'py-6 lg:py-16',
+		layout: 'grid gap-6 lg:items-center lg:gap-4',
+		content: 'flex flex-col',
 		headline: '',
-		bodyCopy: 'text-white/80 max-w-[50rem]',
-		searchWrapper: 'w-full max-w-[28rem] mt-2',
-		searchContainer: 'relative w-full',
-		searchIcon: 'absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60 pointer-events-none',
-		searchInput:
-			'w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder:text-white focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/40 transition-all font-secondary text-[14px] font-normal leading-[20px] overflow-hidden text-ellipsis',
+		bodyCopy: 'text-white/80 mt-2',
+		buttons: 'flex flex-col sm:flex-row gap-4 mt-6 lg:mt-10 w-full sm:w-auto',
+		stats: 'grid gap-2 lg:grid-cols-3 lg:gap-4',
 	},
 	variants: {
 		backgroundColor: {
 			cream: {
 				base: 'bg-goodparty-cream',
 				bodyCopy: 'text-neutral-700',
-				searchInput:
-					'bg-neutral-100 border-neutral-300 text-neutral-900 placeholder:text-neutral-500 focus:ring-blue-500/30 focus:border-blue-500/40',
-				searchIcon: 'text-neutral-500',
 			},
 			midnight: {
-				base: 'bg-midnight-900 text-white',
+				base: 'bg-midnight-900',
+				content: 'text-white',
 				bodyCopy: 'text-white/80',
 			},
 		},
@@ -42,6 +41,11 @@ const styles = tv({
 				content: 'text-right items-end',
 			},
 		},
+		hasStats: {
+			true: {
+				layout: 'lg:grid-cols-[minmax(0,1fr)_39.5rem]',
+			},
+		},
 	},
 });
 
@@ -49,21 +53,25 @@ export type LocationLevel = 'state' | 'county' | 'city' | 'district';
 
 export type LocationLandingPageHeroProps = {
 	className?: string;
+	/** The whole headline, as the page phrases it. Falls back to the location name. */
+	headline?: string;
 	locationLevel: LocationLevel;
 	stateName: string;
 	countyName?: string;
 	cityName?: string;
 	bodyCopy?: ReactNode;
 	backgroundColor?: 'cream' | 'midnight';
-	searchPlaceholder?: string;
 	textAlign?: 'left' | 'center' | 'right';
-	/** When provided with onChange, the search input is controlled. */
-	value?: string;
-	onChange?(value: string): void;
+	stats?: StatProps[];
+	buttons?: ComponentButtonProps[];
 };
 
 function buildHeadline(props: LocationLandingPageHeroProps): string {
-	const { locationLevel, stateName, countyName, cityName } = props;
+	const { headline, locationLevel, stateName, countyName, cityName } = props;
+
+	if (headline) {
+		return headline;
+	}
 
 	switch (locationLevel) {
 		case 'city':
@@ -92,47 +100,57 @@ export function LocationLandingPageHero(props: LocationLandingPageHeroProps) {
 	const textAlign = props.textAlign ?? 'left';
 	const headline = buildHeadline(props);
 	const bodyCopyText = buildBodyCopy(props);
-	const searchPlaceholder = props.searchPlaceholder ?? 'Search elections by county and city';
+	const stats = props.stats ?? [];
+	const buttons = props.buttons ?? [];
 
 	const {
 		base,
+		layout,
 		content,
 		headline: headlineStyle,
 		bodyCopy,
-		searchWrapper,
-		searchContainer,
-		searchIcon,
-		searchInput,
-	} = styles({ backgroundColor, textAlign });
+		buttons: buttonsStyle,
+		stats: statsStyle,
+	} = styles({ backgroundColor, textAlign, hasStats: stats.length > 0 });
 
 	return (
 		<section className={cn(base(), props.className)} data-component='LocationLandingPageHero'>
 			<Container size='xl'>
-				<div className={content()}>
-					<div className='flex flex-col gap-3 md:gap-4'>
+				<div className={layout()}>
+					<div className={content()}>
 						<Text as='h1' styleType='heading-xl' className={headlineStyle()}>
 							{headline}
 						</Text>
 						{bodyCopyText && (
-							<Text styleType='body-1' className={bodyCopy()}>
+							<Text styleType='body-2' className={bodyCopy()}>
 								{bodyCopyText}
 							</Text>
 						)}
+						{buttons.length > 0 && (
+							<div className={buttonsStyle()}>
+								{buttons.map((button, index) => (
+									<ComponentButton
+										key={button._key ?? `location-hero-button-${index}`}
+										{...button}
+										buttonProps={{
+											...button.buttonProps,
+											styleType: resolveButtonStyleType(button.buttonProps?.styleType ?? 'secondary', backgroundColor),
+											styleSize: button.buttonProps?.styleSize ?? 'md',
+										}}
+										iconRight={button.iconRight ?? <IconResolver icon='arrow-down' aria-hidden className='w-4 h-4' />}
+										className={cn('max-sm:w-full', button.className)}
+									/>
+								))}
+							</div>
+						)}
 					</div>
-					<div className={searchWrapper()}>
-						<div className={searchContainer()}>
-							<IconWrapper code='search' className={searchIcon()} />
-							<input
-								type='search'
-								placeholder={searchPlaceholder}
-								className={searchInput()}
-								aria-label='Search elections'
-								{...(props.value !== undefined && props.onChange
-									? { value: props.value, onChange: (e: React.ChangeEvent<HTMLInputElement>) => props.onChange?.(e.target.value) }
-									: {})}
-							/>
+					{stats.length > 0 && (
+						<div className={statsStyle()}>
+							{stats.map((stat, index) => (
+								<Stat key={stat._key ?? `location-hero-stat-${index}`} {...stat} size='compact' />
+							))}
 						</div>
-					</div>
+					)}
 				</div>
 			</Container>
 		</section>

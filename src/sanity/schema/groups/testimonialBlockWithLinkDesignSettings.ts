@@ -22,6 +22,11 @@ export const testimonialBlockWithLinkDesignSettings = {
       name: 'field_blockColorCreamMidnight',
       type: 'field_blockColorCreamMidnight',
     },
+    {
+      title: "Only show quotes from the page's state",
+      name: 'field_filterQuotesByPageState',
+      type: 'field_filterQuotesByPageState',
+    },
   ],
   preview: {
     select: {

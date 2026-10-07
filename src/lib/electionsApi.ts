@@ -3,6 +3,7 @@ import type {
 	DistrictNameItem,
 	DistrictTypeItem,
 	FeaturedCity,
+	FeaturedCityCard,
 	FindByRaceIdResponse,
 	PlaceItem,
 	PlaceWithFacts,
@@ -10,29 +11,23 @@ import type {
 	RaceDetail,
 	RaceNode,
 } from '~/types/elections';
-import type {
-	PersonItem,
-	PersonOfficeHolder,
-	PublicPersonProfile,
-	VoterDensity,
-} from '~/types/people';
+import type { PersonItem, PersonOfficeHolder, PublicPersonProfile, VoterDensity } from '~/types/people';
 import {
 	buildElectionPositionHrefFromRaceSlug,
-	buildRaceCandidatesHref,
 	buildSubplaceRaceSlug,
 	canonicalizeCountyEquivalentName,
+	FEATURED_CITY_RACE_COLUMNS,
 	normalizeCandidateLookupName,
+	rankFeaturedCities,
+	PLACE_RACE_COLUMNS,
 	stripCountySuffix,
 } from '~/lib/electionsHelpers';
 import { ElectionApiError, fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
 
-const ELECTIONS_API_BASE_URL =
-	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
+const ELECTIONS_API_BASE_URL = process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
 
 const GP_API_BASE_URL =
-	process.env['GP_API_BASE_URL'] ??
-	process.env['NEXT_PUBLIC_API_BASE'] ??
-	ELECTIONS_API_BASE_URL.replace('election-api', 'gp-api');
+	process.env['GP_API_BASE_URL'] ?? process.env['NEXT_PUBLIC_API_BASE'] ?? ELECTIONS_API_BASE_URL.replace('election-api', 'gp-api');
 
 const CACHE_OPTIONS = { next: { revalidate: 3600 } } satisfies RequestInit;
 
@@ -55,12 +50,10 @@ export function isDistrictMtfcc(mtfcc?: string): boolean {
 	return mtfcc?.startsWith('G54') ?? false;
 }
 
-const COUNTY_EQUIVALENT_SLUG_SUFFIX_RE =
-	/(?:-county|-parish|-borough|-census-area|-city-and-borough|-city-and-county)$/i;
+const COUNTY_EQUIVALENT_SLUG_SUFFIX_RE = /(?:-county|-parish|-borough|-census-area|-city-and-borough|-city-and-county)$/i;
 
 /** Matches common school / district naming (incl. VT UHSD and supervisory-union phrases). */
-const DISTRICT_KEYWORD_RE =
-	/\b(district|schools?|isd|usd|csd|sd|rsu|sau|uhsd)\b|\bsupervisory(?:\s+|-)union\b/i;
+const DISTRICT_KEYWORD_RE = /\b(district|schools?|isd|usd|csd|sd|rsu|sau|uhsd)\b|\bsupervisory(?:\s+|-)union\b/i;
 
 export function looksLikeCountySlugSegment(segment: string): boolean {
 	return COUNTY_EQUIVALENT_SLUG_SUFFIX_RE.test(segment);
@@ -90,8 +83,22 @@ export function isStateIndexDistrictPlace(place: Pick<PlaceItem, 'name' | 'slug'
 
 const FETCH_JSON_MAX_RETRIES = 2;
 
+const RETRY_BASE_DELAY_MS = 500;
+
+/**
+ * Backoff with jitter. The delays used to be exactly 500ms then 1000ms, so when
+ * election-api tipped over every render that had failed re-asked at the same two
+ * instants, tripling the load on an already-saturated service — one of the
+ * things that deepened the 2026-10-05 outage. Spreading each delay across a
+ * window keeps the same average wait without the lockstep.
+ */
+export function retryDelayMs(attempt: number, random: () => number = Math.random): number {
+	const base = RETRY_BASE_DELAY_MS * (attempt + 1);
+	return Math.round(base * (0.5 + random()));
+}
+
 async function sleep(ms: number): Promise<void> {
-	return new Promise((resolve) => setTimeout(resolve, ms));
+	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | null> {
@@ -117,7 +124,7 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | nul
 				console.error(`[electionsApi] attempt ${attempt + 1}`, err);
 			}
 			if (attempt < FETCH_JSON_MAX_RETRIES) {
-				await sleep(500 * (attempt + 1));
+				await sleep(retryDelayMs(attempt));
 			}
 		}
 		return null;
@@ -138,7 +145,7 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | nul
 			console.error(`[electionsApi] attempt ${attempt + 1}`, err);
 		}
 		if (attempt < FETCH_JSON_MAX_RETRIES) {
-			await sleep(500 * (attempt + 1));
+			await sleep(retryDelayMs(attempt));
 		}
 	}
 	return null;
@@ -200,6 +207,7 @@ async function fetchRaceBySlug(
 	raceSlug: string,
 	includePlace: boolean,
 	isPrimary?: boolean,
+	electionDateStart?: string,
 ): Promise<RaceDetail | null> {
 	const searchParams = new URLSearchParams({
 		raceSlug,
@@ -207,6 +215,9 @@ async function fetchRaceBySlug(
 	});
 	if (isPrimary !== undefined) {
 		searchParams.set('isPrimary', isPrimary.toString());
+	}
+	if (electionDateStart) {
+		searchParams.set('electionDateStart', electionDateStart);
 	}
 	const url = `${ELECTIONS_API_BASE_URL}/v1/races?${searchParams}`;
 	const data = await fetchJson<RaceDetail[]>(url, CACHE_OPTIONS);
@@ -232,9 +243,35 @@ export async function getRaceBySlug(
 	includePlace = true,
 	filters?: { isPrimary?: boolean },
 ): Promise<RaceDetail | null> {
+	// A slug can name many race rows: every California Assembly district shares
+	// `ca/state-representative`, across every election year, and the API folds
+	// them into one answer picked by id, which on that page was a 2022 race while
+	// the candidates linking to it were running in 2026. Ask for an upcoming race
+	// first (election day itself still counts), and only then fall back to the
+	// unfiltered read, so an office with no upcoming election still resolves to
+	// its last race the way it always did. The explicit-filter path is left as
+	// it was: those callers ask for a specific row on purpose.
+	if (filters?.isPrimary === undefined) {
+		const upcoming = await fetchRaceBySlug(raceSlug, includePlace, undefined, upcomingSinceDateOnly());
+		if (upcoming) return upcoming;
+	}
 	const race = await fetchRaceBySlug(raceSlug, includePlace, filters?.isPrimary);
 	if (race || filters?.isPrimary !== undefined) return race;
 	return fetchRaceBySlug(raceSlug, includePlace, true);
+}
+
+/**
+ * The lower bound for "upcoming". Yesterday in UTC, not today: a US election
+ * day is still in progress after midnight UTC (4pm Pacific), and a "from today"
+ * filter would drop it for the rest of the evening. Reaching one day back keeps
+ * the day's race upcoming everywhere in the country; the cost is that a race
+ * counts as upcoming for up to a day after it closes, which the decided state
+ * (read from winners, not from this) is unaffected by.
+ */
+function upcomingSinceDateOnly(): string {
+	const d = new Date();
+	d.setUTCDate(d.getUTCDate() - 1);
+	return d.toISOString().slice(0, 10);
 }
 
 /** Resolves joint city office races; API slugs omit the county segment. */
@@ -246,28 +283,52 @@ export async function getSubplaceRaceBySlug(params: {
 	positionSlug: string;
 }): Promise<RaceDetail | null> {
 	const { state, county, city, subplace, positionSlug } = params;
-	let race = await getRaceBySlug(
-		buildSubplaceRaceSlug(state, city, subplace, positionSlug, county),
-	);
+	let race = await getRaceBySlug(buildSubplaceRaceSlug(state, city, subplace, positionSlug, county));
 	if (!race) {
 		race = await getRaceBySlug(buildSubplaceRaceSlug(state, city, subplace, positionSlug));
 	}
 	return race;
 }
 
+/**
+ * Candidacies by race, position or race slug, each carrying its own `Race` row.
+ *
+ * The race is asked for on purpose: a race slug can name many rows (every
+ * Michigan Senate district is `mi/state-senator`), and a candidate's seat lives
+ * on their own row's `subAreaName` / `subAreaValue`. Reading the seat off the
+ * slug's race instead tagged every card on a profile with the one district the
+ * API happened to return first (Emily, 2026-10-06).
+ */
 export async function getCandidacies(params: {
 	raceId?: string;
 	positionId?: string;
 	raceSlug?: string;
 }): Promise<CandidacyItem[]> {
+	return (await getCandidaciesOrNull(params)) ?? [];
+}
+
+/**
+ * `null` when election-api gave no usable answer (transport failure, 5xx after
+ * retries, or 404), as opposed to a race that genuinely has no candidacies.
+ * Callers that publish a count need the distinction; `getCandidacies` folds it.
+ */
+export async function getCandidaciesOrNull(params: {
+	raceId?: string;
+	positionId?: string;
+	raceSlug?: string;
+}): Promise<CandidacyItem[] | null> {
 	const searchParams = new URLSearchParams();
 	if (params.raceId) searchParams.set('raceId', params.raceId);
 	if (params.positionId) searchParams.set('positionId', params.positionId);
 	if (params.raceSlug) searchParams.set('raceSlug', params.raceSlug);
-	if (searchParams.toString() === '') return [];
+	if (searchParams.toString() === '') return null;
+	// Each candidacy's own Race row, which carries its seat (subAreaName /
+	// subAreaValue). A shared race slug names every district's race, so the
+	// slug's race is the wrong place to read a seat from (Emily, 2026-10-06).
+	searchParams.set('includeRace', 'true');
 	const url = `${ELECTIONS_API_BASE_URL}/v1/candidacies?${searchParams}`;
 	const data = await fetchJson<CandidacyItem[]>(url);
-	return Array.isArray(data) ? data : [];
+	return Array.isArray(data) ? data : null;
 }
 
 export async function getCandidateBySlug(params: {
@@ -296,7 +357,7 @@ export async function fetchCandidacySlugs(stateCode: string): Promise<string[]> 
 	const url = `${ELECTIONS_API_BASE_URL}/v1/candidacies?${searchParams}`;
 	const data = await fetchJson<Array<{ slug?: string }>>(url, CACHE_OPTIONS);
 	if (!Array.isArray(data)) return [];
-	return data.map((c) => c.slug).filter((s): s is string => typeof s === 'string' && s.length > 0);
+	return data.map(c => c.slug).filter((s): s is string => typeof s === 'string' && s.length > 0);
 }
 
 export async function findCampaignByRace(params: {
@@ -471,6 +532,20 @@ export async function getOfficeHoldersByGeoId(geoId: string): Promise<PersonOffi
 	return Array.isArray(data) ? data : [];
 }
 
+/**
+ * Office holders for one BallotReady position id: the "Who's currently in
+ * office" rows on a position page. Returns null, not [], when election-api gave
+ * no answer, so the caller can hide the section rather than publish an empty
+ * one. Callers must still filter on `positionId` themselves: if the API were to
+ * ignore the parameter the unfiltered feed would list every officeholder.
+ */
+export async function getOfficeHoldersByPositionIdOrNull(positionId: string): Promise<PersonOfficeHolder[] | null> {
+	const searchParams = new URLSearchParams({ positionId, includePosition: 'true' });
+	const url = `${ELECTIONS_API_BASE_URL}/v1/officeholders?${searchParams}`;
+	const data = await fetchJson<PersonOfficeHolder[]>(url, CACHE_OPTIONS);
+	return Array.isArray(data) ? data : null;
+}
+
 /** Batch-resolves canonical Person rows by id (election-api caps `ids` at 500). */
 export async function getPersonsByIds(ids: string[]): Promise<PersonItem[]> {
 	const unique = Array.from(new Set(ids.filter(Boolean))).slice(0, 500);
@@ -489,9 +564,7 @@ export async function getPersonsByIds(ids: string[]): Promise<PersonItem[]> {
  * lives on the heatmap track and may not exist in every environment yet; the
  * null-on-miss contract keeps the profile fully functional regardless.
  */
-export async function getVoterDensityForDistrict(
-	personId: string,
-): Promise<VoterDensity | null> {
+export async function getVoterDensityForDistrict(personId: string): Promise<VoterDensity | null> {
 	const searchParams = new URLSearchParams({ personId });
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles/voter-density?${searchParams}`;
 	return fetchJson<VoterDensity>(url, personCacheOptions(personId));
@@ -524,9 +597,7 @@ export type PublicPersonProfileResult =
  * failure falls back to `absent` so the spine page still renders instead of
  * 404-ing.
  */
-export async function getPublicPersonProfileStatus(
-	personId: string,
-): Promise<PublicPersonProfileResult> {
+export async function getPublicPersonProfileStatus(personId: string): Promise<PublicPersonProfileResult> {
 	const searchParams = new URLSearchParams({ personId });
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles?${searchParams}`;
 	for (let attempt = 0; attempt <= FETCH_JSON_MAX_RETRIES; attempt++) {
@@ -553,7 +624,7 @@ export async function getPublicPersonProfileStatus(
 			console.error(`[electionsApi] overlay attempt ${attempt + 1}`, err);
 		}
 		if (attempt < FETCH_JSON_MAX_RETRIES) {
-			await sleep(500 * (attempt + 1));
+			await sleep(retryDelayMs(attempt));
 		}
 	}
 	return { status: 'absent' };
@@ -568,11 +639,17 @@ export async function getMostElections(count = 3): Promise<FeaturedCity[]> {
 export async function getPlacesByState(params: {
 	state: string;
 	mtfcc?: string;
+	includeRaces?: boolean;
+	placeColumns?: string;
+	raceColumns?: string;
 }): Promise<PlaceItem[]> {
 	const searchParams = new URLSearchParams({
 		state: params.state.toUpperCase(),
 	});
 	if (params.mtfcc) searchParams.set('mtfcc', params.mtfcc);
+	if (params.includeRaces) searchParams.set('includeRaces', 'true');
+	if (params.placeColumns) searchParams.set('placeColumns', params.placeColumns);
+	if (params.raceColumns) searchParams.set('raceColumns', params.raceColumns);
 	const url = `${ELECTIONS_API_BASE_URL}/v1/places?${searchParams}`;
 	const data = await fetchJson<PlaceItem[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) ? data : [];
@@ -586,17 +663,11 @@ export function normalizeName(name: string): string {
 /** Derives county name from county slug (e.g. "ca/los-angeles-county" -> "Los Angeles"). */
 function countyNameFromSlug(countySlug: string): string {
 	const part = countySlug.split('/').pop() ?? '';
-	const withoutSuffix = part.replace(
-		/-(county|parish|city-and-borough|city-and-county|borough|census-area)$/i,
-		'',
-	);
+	const withoutSuffix = part.replace(/-(county|parish|city-and-borough|city-and-county|borough|census-area)$/i, '');
 	return withoutSuffix.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 }
 
-export async function getCityPlacesByCounty(params: {
-	state: string;
-	countySlug: string;
-}): Promise<PlaceItem[]> {
+export async function getCityPlacesByCounty(params: { state: string; countySlug: string }): Promise<PlaceItem[]> {
 	const [allCities, allTowns] = await Promise.all([
 		getPlacesByState({ state: params.state, mtfcc: CITY_MTFCC }),
 		getPlacesByState({ state: params.state, mtfcc: TOWN_MTFCC }),
@@ -625,27 +696,159 @@ function dedupePlacesBySlug(places: PlaceItem[]): PlaceItem[] {
 	return out;
 }
 
-export async function getCountyChildPlaces(params: {
-	state: string;
-	countySlug: string;
-}): Promise<PlaceItem[]> {
+export async function getCountyChildPlaces(params: { state: string; countySlug: string }): Promise<PlaceItem[]> {
 	const county = await getPlaceBySlug({
 		slug: params.countySlug,
 		includeChildren: true,
 		includeRaces: false,
 		placeColumns: 'slug,name,mtfcc,countyName',
 	});
-	const hierarchyChildren = (county?.children ?? []).filter(
-		p => isCityOrTownMtfcc(p.mtfcc) && !isDistrictMtfcc(p.mtfcc),
-	);
+	const hierarchyChildren = (county?.children ?? []).filter(p => isCityOrTownMtfcc(p.mtfcc) && !isDistrictMtfcc(p.mtfcc));
 	const fallbackCities = await getCityPlacesByCounty(params);
 	return dedupePlacesBySlug([...hierarchyChildren, ...fallbackCities]);
+}
+
+/** Cards in the Featured Cities carousel, per the redesign (fewer when a place has fewer cities). */
+export const FEATURED_CITIES_COUNT = 5;
+
+/**
+ * The cities of one place, each carrying its own races so they can be ranked by
+ * how many elections they have open.
+ *
+ * A county hands its cities back in one read. A state cannot: cities are its
+ * grandchildren, so this sweeps every city and town in the state and counts the
+ * races locally. That sweep is the expensive half of the Featured Cities block and
+ * should be replaced by an aggregate on election-api keyed by place and year —
+ * `/v1/places/most-elections` takes only `count` today and is national, so there is
+ * nothing to scope it with. The other redesign blocks want the same aggregate; see
+ * docs/election-redesign-components.md.
+ */
+async function getCityPlacesWithRaces(params: { state: string; countySlug?: string }): Promise<PlaceItem[]> {
+	const placeColumns = 'slug,name,mtfcc,countyName';
+	let hierarchyChildren: PlaceItem[] = [];
+
+	if (params.countySlug) {
+		const county = await getPlaceBySlug({
+			slug: params.countySlug,
+			includeChildren: true,
+			includeChildRaces: true,
+			placeColumns,
+			raceColumns: FEATURED_CITY_RACE_COLUMNS,
+		});
+		// A school district has no cities under it, and its slug carries no county name
+		// to narrow the sweep by — so stop here rather than sweep the state for nothing.
+		if (isDistrictMtfcc(county?.mtfcc)) return [];
+		hierarchyChildren = (county?.children ?? []).filter(p => isCityOrTownMtfcc(p.mtfcc) && !isDistrictMtfcc(p.mtfcc));
+	}
+
+	const [cities, towns] = await Promise.all([
+		getPlacesByState({
+			state: params.state,
+			mtfcc: CITY_MTFCC,
+			includeRaces: true,
+			placeColumns,
+			raceColumns: FEATURED_CITY_RACE_COLUMNS,
+		}),
+		getPlacesByState({
+			state: params.state,
+			mtfcc: TOWN_MTFCC,
+			includeRaces: true,
+			placeColumns,
+			raceColumns: FEATURED_CITY_RACE_COLUMNS,
+		}),
+	]);
+	const swept = [...cities, ...towns];
+
+	if (!params.countySlug) return dedupePlacesBySlug(swept);
+
+	// Both sources, merged, because the place hierarchy is patchy: a county can come
+	// back with some of its cities as children and the rest only in the state list,
+	// which would otherwise rank an incomplete set. `getCountyChildPlaces` merges for
+	// the same reason, and the city list elsewhere on the page comes from it — a
+	// carousel built from the children alone can omit a city that list still shows.
+	const countyBase = normalizeName(canonicalizeCountyEquivalentName(params.state, countyNameFromSlug(params.countySlug)).baseName);
+	const sweptInCounty = swept.filter(
+		p => p.countyName && normalizeName(canonicalizeCountyEquivalentName(params.state, p.countyName).baseName) === countyBase,
+	);
+	// Deduped on the city segment, not the whole slug: the same city arrives as
+	// `tn/franklin` from the state list and `tn/williamson-county/franklin` as a
+	// child, and within one county no two cities share a name.
+	return dedupeCitiesByName([...hierarchyChildren, ...sweptInCounty]);
+}
+
+/**
+ * One place per trailing slug segment, preferring whichever copy came back with
+ * races — the two reads disagree about slug depth, and a copy with no races would
+ * count as no elections and drop the city. Only safe within one county, where no
+ * two cities share a name.
+ */
+function dedupeCitiesByName(places: PlaceItem[]): PlaceItem[] {
+	const byName = new Map<string, PlaceItem>();
+	for (const p of places) {
+		const key = p.slug?.toLowerCase().split('/').pop();
+		if (!key) continue;
+		const kept = byName.get(key);
+		if (kept && (kept.Races?.length ?? 0) >= (p.Races?.length ?? 0)) continue;
+		byName.set(key, { ...p, name: (p.name ?? '').trim() });
+	}
+	return [...byName.values()];
+}
+
+/**
+ * The cities to feature for one location page, most open elections first.
+ *
+ * Scope is the page's own place: the cities of a county on a county page, the other
+ * cities of the surrounding county on a city page, every city in the state on a
+ * state page. Returns fewer than `count` when the place has fewer cities with
+ * anything on the ballot, and an empty list when it has none — the block hides
+ * itself rather than render an empty shell.
+ *
+ * A city only becomes a card once its full `/elections/<county>/<city>` path is
+ * known. A city page lives four levels deep, so the shorter `/elections/<state>/<city>`
+ * is read as a county, and a city the router cannot place that way is bounced back
+ * to the state page — a card that returns the reader to the page they are on. When a
+ * city's county cannot be resolved (its `countyName` is missing or matches nothing)
+ * it is skipped and the next-ranked city takes the slot.
+ */
+export async function getFeaturedCities(params: {
+	stateCode: string;
+	/** County slug (`ca/los-angeles-county`) on a county or city page; omit on a state page. */
+	countySlug?: string;
+	/** Slug of the city the page is about, so a city page never features itself. */
+	citySlug?: string;
+	count?: number;
+}): Promise<FeaturedCityCard[]> {
+	const state = params.stateCode.toUpperCase();
+	const count = params.count ?? FEATURED_CITIES_COUNT;
+	const places = await getCityPlacesWithRaces({ state, countySlug: params.countySlug });
+	// Ranked in full rather than to `count`, so a city that turns out to be
+	// unlinkable gives its place up to the next one instead of leaving a gap.
+	const ranked = rankFeaturedCities(places, { count: places.length, excludeSlug: params.citySlug });
+
+	const cards: FeaturedCityCard[] = [];
+	for (const { place, openElectionsCount } of ranked) {
+		if (cards.length === count) break;
+		// One cached read of the state's counties, shared by every city after the first.
+		const countySlug =
+			params.countySlug ?? (place.countyName ? await resolveCountySlugForPlace(state, place.countyName) : undefined);
+		const citySegment = place.slug.split('/').pop();
+		if (!countySlug || !citySegment) continue;
+		cards.push({
+			name: place.name,
+			stateAbbreviation: state,
+			openElectionsCount,
+			href: `/elections/${countySlug}/${citySegment}`,
+		});
+	}
+	return cards;
 }
 
 export async function getPlaceBySlug(params: {
 	slug: string;
 	includeChildren?: boolean;
 	includeRaces?: boolean;
+	/** Returns each child place with its own races. Needs `includeChildren` as well. */
+	includeChildRaces?: boolean;
 	placeColumns?: string;
 	raceColumns?: string;
 }): Promise<PlaceWithFacts | null> {
@@ -654,6 +857,7 @@ export async function getPlaceBySlug(params: {
 		includeChildren: (params.includeChildren ?? false).toString(),
 		includeRaces: (params.includeRaces ?? false).toString(),
 	});
+	if (params.includeChildRaces) searchParams.set('includeChildRaces', 'true');
 	if (params.placeColumns) searchParams.set('placeColumns', params.placeColumns);
 	if (params.raceColumns) searchParams.set('raceColumns', params.raceColumns);
 	const url = `${ELECTIONS_API_BASE_URL}/v1/places?${searchParams}`;
@@ -661,11 +865,41 @@ export async function getPlaceBySlug(params: {
 	return Array.isArray(data) && data.length > 0 ? (data[0] ?? null) : null;
 }
 
+/**
+ * The columns every /elections page needs from its own place, as one set.
+ *
+ * They used to be four different sets: the county/city page asked for
+ * `slug,name,mtfcc,countyName`, the featured-people block asked for
+ * `slug,name,state,geoId`, the nearby-offices block asked for `slug,name`, and
+ * `generateMetadata` asked for every column. The 1-hour cache in front of these
+ * reads is keyed on the URL, so four shapes of the same row meant four cache
+ * entries and up to four reads of election-api per page render. On 2026-10-05 a
+ * crawl of these pages hit two of those shapes 1,406 and 1,420 times in three
+ * minutes for one California county, and the duplication was a large part of
+ * what pushed election-api past its CPU ceiling.
+ *
+ * A superset read once is cheaper than four narrow reads, so keep this as the
+ * only shape and read it through `getElectionsPagePlace`.
+ */
+export const ELECTIONS_PAGE_PLACE_COLUMNS = 'slug,name,mtfcc,countyName,state,geoId';
+
+/**
+ * The one way an /elections page reads its own place. Every caller gets the
+ * same URL, so the cache holds one entry per place slug and a page render asks
+ * election-api once however many blocks on it need the place.
+ */
+export async function getElectionsPagePlace(params: { slug: string }): Promise<PlaceWithFacts | null> {
+	return getPlaceBySlug({
+		slug: params.slug,
+		includeChildren: false,
+		includeRaces: true,
+		placeColumns: ELECTIONS_PAGE_PLACE_COLUMNS,
+		raceColumns: PLACE_RACE_COLUMNS,
+	});
+}
+
 /** Resolves a county place slug from a state code and county name on a city/town place. */
-export async function resolveCountySlugForPlace(
-	state: string,
-	countyName: string,
-): Promise<string | undefined> {
+export async function resolveCountySlugForPlace(state: string, countyName: string): Promise<string | undefined> {
 	const counties = await getPlacesByState({ state, mtfcc: COUNTY_MTFCC });
 	const target = normalizeName(canonicalizeCountyEquivalentName(state, countyName).baseName);
 	for (const county of counties) {
@@ -782,31 +1016,27 @@ export async function resolveCountySlugForCitySlug(citySlug: string): Promise<st
 
 export type RaceElectionHrefs = {
 	positionHref?: string;
-	candidatesHref?: string;
 };
 
 /**
- * Resolves canonical elections position and candidates listing paths for a race slug.
- * Expands city/town 3-part slugs to 4-level URLs when county can be resolved.
+ * Resolves the canonical elections position path for a race slug. Expands
+ * city/town 3-part slugs to 4-level URLs when county can be resolved. (It used
+ * to resolve the candidate listing path too; those pages are retired and
+ * redirect to the position page, see `candidates-redirects.ts`.)
  */
-export async function resolveRaceElectionHrefs(
-	raceSlug: string | undefined,
-	positionLevel?: string,
-): Promise<RaceElectionHrefs> {
+export async function resolveRaceElectionHrefs(raceSlug: string | undefined, positionLevel?: string): Promise<RaceElectionHrefs> {
 	if (!raceSlug) return {};
 
 	const raceEntry = { slug: raceSlug, positionLevel };
 	const parts = raceSlug.split('/').filter(Boolean);
 	const prefixParts = parts.slice(0, -1);
 	const level = (positionLevel ?? '').toUpperCase();
-	const mightNeedCountyExpansion =
-		prefixParts.length === 2 && (level === '' || level === 'CITY' || level === 'LOCAL');
+	const mightNeedCountyExpansion = prefixParts.length === 2 && (level === '' || level === 'CITY' || level === 'LOCAL');
 
 	if (!mightNeedCountyExpansion) {
 		const positionHref = buildElectionPositionHrefFromRaceSlug(raceEntry);
 		return {
 			positionHref,
-			candidatesHref: buildRaceCandidatesHref(raceEntry),
 		};
 	}
 
@@ -819,7 +1049,6 @@ export async function resolveRaceElectionHrefs(
 		});
 		return {
 			positionHref,
-			candidatesHref: positionHref ? `${positionHref}/candidates` : undefined,
 		};
 	}
 
@@ -830,7 +1059,6 @@ export async function resolveRaceElectionHrefs(
 		});
 		return {
 			positionHref,
-			candidatesHref: positionHref ? `${positionHref}/candidates` : undefined,
 		};
 	}
 
@@ -843,7 +1071,6 @@ export async function resolveRaceElectionHrefs(
 		});
 		return {
 			positionHref,
-			candidatesHref: positionHref ? `${positionHref}/candidates` : undefined,
 		};
 	}
 
@@ -855,7 +1082,6 @@ export async function resolveRaceElectionHrefs(
 		});
 		return {
 			positionHref,
-			candidatesHref: positionHref ? `${positionHref}/candidates` : undefined,
 		};
 	}
 
@@ -863,6 +1089,5 @@ export async function resolveRaceElectionHrefs(
 	const expandedRace = { slug: raceSlug, positionLevel: effectiveLevel };
 	return {
 		positionHref: buildElectionPositionHrefFromRaceSlug(expandedRace, { citySlugToCountySlug }),
-		candidatesHref: buildRaceCandidatesHref(expandedRace, { citySlugToCountySlug }),
 	};
 }

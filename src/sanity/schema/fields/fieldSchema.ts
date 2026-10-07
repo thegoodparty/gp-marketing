@@ -47,6 +47,8 @@ import { field_featureName } from './field_featureName.ts';
 import { field_pricingPlanPrice } from './field_pricingPlanPrice.ts';
 import { field_quote } from './field_quote.ts';
 import { field_quoteResult } from './field_quoteResult.ts';
+import { field_quoteState } from './field_quoteState.ts';
+import { field_filterQuotesByPageState } from './field_filterQuotesByPageState.ts';
 import { field_calculatorLayout } from './field_calculatorLayout.ts';
 import { field_caption } from './field_caption.ts';
 import { field_defaultMetaTitle } from './field_defaultMetaTitle.ts';
@@ -166,6 +168,8 @@ export const fieldSchema = [
 	field_pricingPlanPrice,
 	field_quote,
 	field_quoteResult,
+	field_quoteState,
+	field_filterQuotesByPageState,
 	field_caption,
 	field_defaultMetaTitle,
 	field_telephoneNumber,

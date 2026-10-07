@@ -3,7 +3,7 @@ import { convert } from 'html-to-text';
 import { US_STATES } from '~/constants/usStates';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import type { CandidacyItem, FindByRaceIdResponse, PlaceItem, PlaceRace, PlaceWithFacts, RaceDetail } from '~/types/elections';
-import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
+import type { OfficeItem, OfficeLevel } from '~/ui/ListOfOfficesBlock';
 import type { FactsCardProps } from '~/ui/FactsCard';
 
 import { permanentRedirect } from 'next/navigation';
@@ -317,6 +317,85 @@ export function getYearFromDateString(dateStr: string): number {
 export const PLACE_RACE_COLUMNS =
 	'slug,normalizedPositionName,electionDate,positionDescription,positionLevel,isPrimary';
 
+/**
+ * Race columns for the Featured Cities carousel. Deliberately the two fields the
+ * count needs and nothing else: this read pulls every city in a state, so each
+ * extra column multiplies by the whole state's race table.
+ */
+export const FEATURED_CITY_RACE_COLUMNS = 'slug,electionDate';
+
+/**
+ * How many elections a Featured Cities card reports: the races in that city's next
+ * election cycle — this year when it has any, else the soonest year ahead.
+ *
+ * Per-city rather than per-page on purpose. A state page's offices list opens on the
+ * year of its *state* races, and counting every city against that one year would
+ * report 0 for a city whose own cycle falls a year later. Races only in past years
+ * count as none, because a card headed "Open Elections" must not count an election
+ * that has already happened.
+ */
+export function countOpenElections(races: PlaceRace[] | undefined, currentYear: number = new Date().getFullYear()): number {
+	const years = (races ?? [])
+		.map(race => (race.electionDate ? getYearFromDateString(race.electionDate) : NaN))
+		.filter(year => Number.isFinite(year) && year >= currentYear);
+	if (years.length === 0) return 0;
+	const cycleYear = years.includes(currentYear) ? currentYear : Math.min(...years);
+	return years.filter(year => year === cycleYear).length;
+}
+
+export type RankFeaturedCitiesConfig = {
+	count: number;
+	/**
+	 * Slug of the place the page is about, so a city page never features itself.
+	 * Matched across slug shapes, because the same city comes back as `ca/anytown`
+	 * from one read and `ca/some-county/anytown` from another.
+	 */
+	excludeSlug?: string;
+	currentYear?: number;
+};
+
+function lastSlugSegment(slug: string): string {
+	return slug.toLowerCase().split('/').pop() ?? '';
+}
+
+/**
+ * Whether `slug` is the place `exclude` names, allowing for either slug shape.
+ *
+ * A fully qualified `exclude` (`tn/williamson-county/franklin`) is matched against
+ * the whole slug or against the same city written short (`tn/franklin`) — never on
+ * the city segment alone, which would also drop a same-named city in another county
+ * (Tennessee has more than one Franklin). Only a short `exclude`, which names no
+ * county, falls back to the city segment.
+ */
+function isSamePlaceSlug(slug: string, exclude: string): boolean {
+	if (slug === exclude) return true;
+	const parts = exclude.split('/').filter(Boolean);
+	if (parts.length <= 2) return lastSlugSegment(slug) === lastSlugSegment(exclude);
+	return slug === `${parts[0]}/${parts[parts.length - 1]}`;
+}
+
+/**
+ * The `count` cities with the most open elections, highest first. Cities with none
+ * are dropped rather than shown as "0 Open Elections": a place with nothing on the
+ * ballot is not a featured city, and a zero here is as likely to mean "no data yet"
+ * as a genuinely empty ballot.
+ */
+export function rankFeaturedCities(
+	places: PlaceItem[],
+	config: RankFeaturedCitiesConfig,
+): Array<{ place: PlaceItem; openElectionsCount: number }> {
+	const exclude = config.excludeSlug?.toLowerCase();
+	return places
+		.filter(place => {
+			if (!place.slug || !place.name) return false;
+			return !exclude || !isSamePlaceSlug(place.slug.toLowerCase(), exclude);
+		})
+		.map(place => ({ place, openElectionsCount: countOpenElections(place.Races, config.currentYear) }))
+		.filter(entry => entry.openElectionsCount > 0)
+		.sort((a, b) => b.openElectionsCount - a.openElectionsCount || a.place.name.localeCompare(b.place.name))
+		.slice(0, config.count);
+}
+
 function startOfLocalDay(date: Date): Date {
 	return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
@@ -376,8 +455,36 @@ export async function resolvePlaceRaceElectionDates(
 
 export type BuildOfficeItemsFromPlaceRacesConfig = {
 	type: string;
+	/**
+	 * Which Level view these offices belong to. A location page lists its own
+	 * offices plus the overlapping races a voter there also votes in, and this is
+	 * what the block's Level dropdown switches between.
+	 */
+	level: OfficeLevel;
 	buildHref(race: PlaceRace): string | undefined;
 };
+
+/**
+ * Joins a page's own offices with the overlapping ones from the places above it,
+ * keeping the first row for any race that appears twice. election-api can hand
+ * the same LOCAL race back under a district and under its parent county, and a
+ * plain spread would list it twice (review finding, 2026-10-06). Keyed by race
+ * slug, which is what the row links and counts by, with the id as the fallback
+ * for a row the feed left slugless.
+ */
+export function mergeOfficeItems(...lists: OfficeItem[][]): OfficeItem[] {
+	const seen = new Set<string>();
+	const out: OfficeItem[] = [];
+	for (const list of lists) {
+		for (const office of list) {
+			const key = (office.raceSlug ?? '').toLowerCase() || `id:${office.id}`;
+			if (seen.has(key)) continue;
+			seen.add(key);
+			out.push(office);
+		}
+	}
+	return out;
+}
 
 export function buildOfficeItemsFromPlaceRaces(
 	races: PlaceRace[],
@@ -387,6 +494,8 @@ export function buildOfficeItemsFromPlaceRaces(
 	const offices: OfficeItem[] = races.map((race, index) => ({
 		id: race.id != null ? String(race.id) : `${race.slug}-${index}`,
 		type: config.type,
+		level: config.level,
+		raceSlug: race.slug,
 		position: race.normalizedPositionName ?? race.name ?? 'Position',
 		nextElectionDate: resolvedDates.get(race.slug) ?? race.electionDate ?? '',
 		href: config.buildHref(race),
@@ -404,6 +513,78 @@ export function buildOfficeItemsFromPlaceRaces(
 	].sort((a, b) => a - b);
 
 	return { offices, dataYears };
+}
+
+/**
+ * The races a voter in this place also votes in, from the places above it.
+ *
+ * A city ballot carries that city's own races plus its county's and its state's,
+ * so the offices list can offer County and State views alongside Local. It only
+ * ever looks up: a state page listing every municipal race in the state is not a
+ * ballot relationship and would be thousands of rows.
+ *
+ * Costs one extra place read for the state, and one for the county when the
+ * caller does not already hold it. Both sit in the tagged 1h data cache and
+ * these routes are statically generated, so it is a build-time cost.
+ *
+ * Hrefs point at each race's own canonical position page (a state race links to
+ * `/elections/tx/position/...`, not to a path under the city), which is both
+ * correct and more inbound links for those pages.
+ */
+export async function buildOverlappingOfficeItems(params: {
+	stateSlug: string;
+	/** Already-loaded county races, when the caller has them; skips the county read. */
+	countyRaces?: PlaceRace[];
+	countySlug?: string;
+}): Promise<{ offices: OfficeItem[]; dataYears: number[] }> {
+	const { getPlaceBySlug } = await import('~/lib/electionsApi');
+	const placeArgs = {
+		includeChildren: false,
+		includeRaces: true,
+		placeColumns: 'slug,name,mtfcc',
+		raceColumns: PLACE_RACE_COLUMNS,
+	};
+
+	const [statePlace, countyPlace] = await Promise.all([
+		getPlaceBySlug({ slug: params.stateSlug, ...placeArgs }),
+		params.countyRaces || !params.countySlug
+			? Promise.resolve(null)
+			: getPlaceBySlug({ slug: params.countySlug, ...placeArgs }),
+	]);
+
+	const stateRaces = (statePlace?.Races ?? []).filter(r => r.positionLevel?.toUpperCase() === 'STATE');
+	const countyRaces =
+		params.countyRaces ??
+		(countyPlace?.Races ?? []).filter(r => {
+			const level = r.positionLevel?.toUpperCase();
+			return level === 'COUNTY' || level === 'LOCAL';
+		});
+
+	const [stateDates, countyDates] = await Promise.all([
+		resolvePlaceRaceElectionDates(stateRaces),
+		resolvePlaceRaceElectionDates(countyRaces),
+	]);
+
+	const state = buildOfficeItemsFromPlaceRaces(stateRaces, stateDates, {
+		type: 'State',
+		level: 'state',
+		buildHref: race => buildPlaceRacePositionHref([params.stateSlug], race.slug),
+	});
+
+	const countySegments = params.countySlug?.split('/').filter(Boolean) ?? [];
+	const county =
+		countySegments.length > 0
+			? buildOfficeItemsFromPlaceRaces(countyRaces, countyDates, {
+					type: 'County',
+					level: 'county',
+					buildHref: race => buildPlaceRacePositionHref(countySegments, race.slug),
+				})
+			: { offices: [], dataYears: [] };
+
+	return {
+		offices: [...county.offices, ...state.offices],
+		dataYears: [...new Set([...county.dataYears, ...state.dataYears])].sort((a, b) => a - b),
+	};
 }
 
 /**
@@ -1114,15 +1295,6 @@ export function buildElectionPositionHrefFromRaceSlug(
 /** Builds elections position page path from a race slug (e.g. ok/foo/local-school-board). */
 export function buildRacePositionHref(raceSlug: string | undefined): string | undefined {
 	return buildElectionPositionHrefFromRaceSlug({ slug: raceSlug });
-}
-
-/** Builds elections candidates listing path from a race slug entry. */
-export function buildRaceCandidatesHref(
-	race: RaceSlugEntry,
-	options?: BuildElectionPositionHrefOptions,
-): string | undefined {
-	const positionHref = buildElectionPositionHrefFromRaceSlug(race, options);
-	return positionHref ? `${positionHref}/candidates` : undefined;
 }
 
 /**

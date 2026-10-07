@@ -9,7 +9,7 @@ import * as ListOfOfficesBlockStories from './ListOfOfficesBlock.stories';
 
 ## Overview
 
-The ListOfOfficesBlock component displays a list of office positions with filtering by year. It features a responsive design with a table layout on desktop and a card-based list on mobile. The component includes a year selector dropdown, purple dashed border card styling, and blue office type tags.
+The ListOfOfficesBlock component displays a list of office positions with filtering by year and by level of government. It is one responsive grid: a row with Type, Position, "# of independents running" and Election date columns on desktop, a stacked card on mobile. The Level dropdown opens on All (the page's own level and every level above it) and the independents column shows each row's pledged candidate count beside the Heart & Star badge, only when it is above zero. An optional description paragraph under the heading explains the badge.
 
 ## Usage
 
@@ -21,10 +21,10 @@ Use this component when:
 
 ## Design Features
 
-- **Purple Dashed Border**: Card with `border-dashed border-lavender-600` styling
-- **Blue Type Tags**: Office types (STATE, COUNTY, CITY) displayed as blue tags
-- **Year Filtering**: Dropdown selector with calendar icon to filter by election year
-- **Responsive Layout**: Table on desktop, card list on mobile
+- **Navy Type Tags**: Office types (STATE, COUNTY, CITY) displayed as tags
+- **Year and Level Filtering**: Pill dropdowns; Level offers All plus the levels the page has offices for
+- **Independents Column**: `pledgedCount` on an office draws the count and the badge; zero or absent draws nothing
+- **Responsive Layout**: One grid, rows on desktop and cards on mobile
 - **Clickable Rows**: Each office row/card is clickable when href is provided
 
 ## Variants

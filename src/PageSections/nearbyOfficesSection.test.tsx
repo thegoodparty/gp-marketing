@@ -38,6 +38,33 @@ describe('NearbyOfficesSection', () => {
 		expect(html).toContain('href="/elections/tx/harris-county/houston/position/controller"');
 	});
 
+	test('falls back to the heading the page computes, and the default sentence, when the editor wrote neither', () => {
+		const html = renderToStaticMarkup(
+			<NearbyOfficesSection
+				{...section}
+				field_heading={undefined}
+				nearbyOverride={{ offices, heading: 'More offices in Houston, Texas' }}
+			/>,
+		);
+
+		expect(html).toContain('More offices in Houston, Texas');
+		expect(html).toContain('Explore offices coming up for election near you:');
+	});
+
+	test('the editor\'s description, with tokens, replaces the default sentence', () => {
+		const html = renderToStaticMarkup(
+			<NearbyOfficesSection
+				{...section}
+				field_description='Other races on the ballot in [County or City].'
+				tokens={{ '[County or City]': 'Houston' }}
+				nearbyOverride={{ offices }}
+			/>,
+		);
+
+		expect(html).toContain('Other races on the ballot in Houston.');
+		expect(html).not.toContain('Explore offices coming up');
+	});
+
 	test('renders nothing at all, not even the section wrapper, when the page supplies no offices', () => {
 		const html = renderToStaticMarkup(<NearbyOfficesSection {...section} tokens={{ '[County or City]': 'Houston' }} />);
 

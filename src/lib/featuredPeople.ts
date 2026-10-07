@@ -24,6 +24,8 @@ export type FeaturedPersonCard = {
 	role: FeaturedPersonRole;
 	/** ISO date of the candidate's election; representatives have none. */
 	electionDate: string | null;
+	/** The race the candidacy is in, lower-cased, so a block can group candidates by office; representatives have none. */
+	raceSlug?: string | null;
 };
 
 export type FeaturedPeopleMode = 'both' | 'candidates' | 'representatives';
@@ -31,7 +33,42 @@ export type FeaturedPeopleMode = 'both' | 'candidates' | 'representatives';
 export type FeaturedPeople = {
 	candidates: FeaturedPersonCard[];
 	representatives: FeaturedPersonCard[];
+	/**
+	 * True when every one of the place's upcoming races at the page's level was
+	 * asked for its candidates, so a count taken from `candidates` is the whole
+	 * picture. False, or absent, when the race budget cut the list short or the
+	 * place could not be found: the people listed are real, a count of them is not.
+	 */
+	candidatesComplete?: boolean;
 };
+
+export type IndependentsSummary = {
+	/** Distinct pledged candidates, or null when the count cannot be trusted. */
+	candidateCount: number | null;
+	/** At least one pledged candidate or officeholder was found, whether or not the list is complete. */
+	hasAny: boolean;
+};
+
+/**
+ * What the location hero says about independents (Emily, 2026-10-05). The
+ * lavender card counts pledged candidates and shows a genuine zero, but hides
+ * when the candidate list is known to be partial. With a `year` the count is
+ * scoped to candidates whose election falls in it, which is how it matches the
+ * offices list's opening year. The "See who's an independent" button needs only
+ * one pledged person, candidate or officeholder, in any upcoming election,
+ * because one found is proof even from a partial list. Without data both hide.
+ */
+export function summarizeIndependents(people: FeaturedPeople | undefined, year?: number): IndependentsSummary {
+	if (!people) return { candidateCount: null, hasAny: false };
+	const inYear = (person: FeaturedPersonCard) => year === undefined || Number(person.electionDate?.slice(0, 4)) === year;
+	const pledgedCandidates = new Set(
+		people.candidates
+			.filter(person => person.isPledged && inYear(person))
+			.map(person => (person.personId ?? person.href).toLowerCase()),
+	);
+	const hasAny = people.candidates.some(person => person.isPledged) || people.representatives.some(person => person.isPledged);
+	return { candidateCount: people.candidatesComplete ? pledgedCandidates.size : null, hasAny };
+}
 
 export type FeaturedLocationLevel = 'state' | 'county' | 'city' | 'district';
 
@@ -70,9 +107,17 @@ export function rankFeaturedPeople(people: FeaturedPersonCard[], options: { limi
 		.slice(0, limit);
 }
 
-/** The people the Studio dropdown asks for, ranked and capped. */
+/**
+ * The people the Studio dropdown asks for, pledged only, ranked and capped.
+ * Unpledged people used to fill the remaining slots; since the block's heading
+ * now says everyone in it took the Pledge, they are left out (Emily, 2026-10-06),
+ * and a place with nobody pledged shows no block at all.
+ */
 export function selectFeaturedPeople(people: FeaturedPeople, mode: FeaturedPeopleMode, limit = FEATURED_PEOPLE_LIMIT): FeaturedPersonCard[] {
 	const pool =
 		mode === 'candidates' ? people.candidates : mode === 'representatives' ? people.representatives : [...people.candidates, ...people.representatives];
-	return rankFeaturedPeople(pool, { limit });
+	return rankFeaturedPeople(
+		pool.filter(person => person.isPledged),
+		{ limit },
+	);
 }

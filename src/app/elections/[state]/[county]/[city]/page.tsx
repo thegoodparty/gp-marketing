@@ -3,6 +3,8 @@ import { notFound, permanentRedirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	getCountyChildPlaces,
+	getFeaturedCities,
+	getElectionsPagePlace,
 	getPlacesByState,
 	getPlaceBySlug,
 	isCityOrTownMtfcc,
@@ -12,10 +14,11 @@ import {
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
 	buildOfficeItemsFromPlaceRaces,
+	mergeOfficeItems,
+	buildOverlappingOfficeItems,
 	buildPlaceRacePositionHref,
 	getStateName,
 	hasSuspiciousFactsMatch,
-	PLACE_RACE_COLUMNS,
 	placeToFactsCards,
 	resolveLocalityName,
 	resolveDefaultElectionYear,
@@ -45,32 +48,23 @@ export default async function Page({ params }: { params: Promise<{ state: string
 
 	const shortSlug = `${state.toLowerCase()}/${city.toLowerCase()}`;
 
-	const [counties, placeData, countyFactsData, countyChildPlaces] = await Promise.all([
+	const [counties, placeData, countyFactsData, countyChildPlaces, featuredCities] = await Promise.all([
 		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
-		getPlaceBySlug({
-			slug: fullSlug,
-			includeChildren: false,
-			includeRaces: true,
-			placeColumns: 'slug,name,mtfcc,countyName',
-			raceColumns: PLACE_RACE_COLUMNS,
-		}),
+		getElectionsPagePlace({ slug: fullSlug }),
 		getPlaceBySlug({
 			slug: countySlug,
 			includeChildren: false,
 			includeRaces: false,
 		}),
 		getCountyChildPlaces({ state: stateCode, countySlug }),
+		// The rest of the surrounding county: a city page features its neighbours,
+		// never itself.
+		getFeaturedCities({ stateCode, countySlug, citySlug: fullSlug }),
 	]);
 
 	let resolvedPlaceData = placeData;
 	if (!resolvedPlaceData) {
-		resolvedPlaceData = await getPlaceBySlug({
-			slug: shortSlug,
-			includeChildren: false,
-			includeRaces: true,
-			placeColumns: 'slug,name,mtfcc,countyName',
-			raceColumns: PLACE_RACE_COLUMNS,
-		});
+		resolvedPlaceData = await getElectionsPagePlace({ slug: shortSlug });
 	}
 
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
@@ -105,10 +99,19 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		const districtResolvedDates = await resolvePlaceRaceElectionDates(districtRaces);
 		const { offices: districtOffices, dataYears } = buildOfficeItemsFromPlaceRaces(districtRaces, districtResolvedDates, {
 			type: 'District',
+			level: 'local',
 			buildHref: race => buildPlaceRacePositionHref([state, county, city], race.slug),
 		});
-		const defaultYear = resolveDefaultElectionYear(dataYears, currentYear);
-		const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
+		// The county and state races this district's voters also vote in.
+		const districtOverlapping = await buildOverlappingOfficeItems({
+			stateSlug: state.toLowerCase(),
+			countySlug,
+		});
+		const districtAllYears = [...new Set([...dataYears, ...districtOverlapping.dataYears])].sort((a, b) => a - b);
+		// Own level first so the opening list is populated; union as the fallback so
+		// the opening year is always one the dropdown offers. See the county route.
+		const defaultYear = resolveDefaultElectionYear(dataYears.length > 0 ? dataYears : districtAllYears, currentYear);
+		const availableYears = districtAllYears.length > 0 ? districtAllYears : [currentYear];
 		const factsCards = placeToFactsCards(districtPlace);
 		const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);
 
@@ -123,8 +126,10 @@ export default async function Page({ params }: { params: Promise<{ state: string
 			listHeading: `Elections in ${districtName}`,
 			defaultYear,
 			availableYears,
-			offices: districtOffices,
+			offices: mergeOfficeItems(districtOffices, districtOverlapping.offices),
 			electionsIndexHidden: true,
+			// A district page has no cities of its own, so it features none.
+			featuredCities: [],
 			locationFacts: factsCards.length > 0 ? { title: `${districtName} facts`, factsCards } : { hidden: true },
 			pageUrl,
 			pageTitle: `Elections in ${districtName}, ${stateName}`,
@@ -200,11 +205,22 @@ export default async function Page({ params }: { params: Promise<{ state: string
 	const cityResolvedDates = await resolvePlaceRaceElectionDates(cityRaces);
 	const { offices: cityOffices, dataYears } = buildOfficeItemsFromPlaceRaces(cityRaces, cityResolvedDates, {
 		type: 'City',
+		level: 'local',
 		buildHref: race => buildPlaceRacePositionHref([state, county, city], race.slug),
 	});
 
-	const defaultYear = resolveDefaultElectionYear(dataYears, currentYear);
-	const availableYears = dataYears.length > 0 ? dataYears : [currentYear];
+	// The county and state races this city's voters also vote in. The county place
+	// is already loaded here, but without its races, so this reads it again.
+	const overlapping = await buildOverlappingOfficeItems({
+		stateSlug: state.toLowerCase(),
+		countySlug,
+	});
+
+	const allYears = [...new Set([...dataYears, ...overlapping.dataYears])].sort((a, b) => a - b);
+	// Own level first so the opening list is populated; union as the fallback so
+	// the opening year is always one the dropdown offers. See the county route.
+	const defaultYear = resolveDefaultElectionYear(dataYears.length > 0 ? dataYears : allYears, currentYear);
+	const availableYears = allYears.length > 0 ? allYears : [currentYear];
 	const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}`);
 
 	return renderElectionsIndexPage({
@@ -219,8 +235,9 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		listHeading: `City Elections in ${cityName}`,
 		defaultYear,
 		availableYears,
-		offices: cityOffices,
+		offices: mergeOfficeItems(cityOffices, overlapping.offices),
 		electionsIndexHidden: true,
+		featuredCities,
 		locationFacts: factsCards.length > 0 ? { title: `${cityName} facts`, factsCards } : { hidden: true },
 		pageUrl,
 		pageTitle: `Elections in ${cityName}, ${stateName}`,
@@ -247,11 +264,7 @@ export async function generateMetadata({
 			includeChildren: false,
 			includeRaces: false,
 		}),
-		getPlaceBySlug({
-			slug: fullSlug,
-			includeChildren: false,
-			includeRaces: false,
-		}),
+		getElectionsPagePlace({ slug: fullSlug }),
 	]);
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
 	const isNestedDistrict =
@@ -274,11 +287,7 @@ export async function generateMetadata({
 		return slug.split('/').pop() === citySegment;
 	});
 	if (!cityPlace) {
-		const placeByShortSlug = await getPlaceBySlug({
-			slug: shortSlug,
-			includeChildren: false,
-			includeRaces: false,
-		});
+		const placeByShortSlug = await getElectionsPagePlace({ slug: shortSlug });
 		if (placeByShortSlug?.slug?.toLowerCase() === shortSlug) {
 			cityPlace = placeByShortSlug;
 		}

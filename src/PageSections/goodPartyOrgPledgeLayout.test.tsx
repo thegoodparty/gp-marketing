@@ -5,10 +5,10 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
 /**
- * Pins the single-column presentation the person-profile pledge band moved to
- * (2026-09-15, requested by Emily): one centered column of left-aligned pledge
- * elements, and one "Learn more" button under the whole band instead of one per
- * element.
+ * Pins the presentation of the pledge band on person profiles: three columns of
+ * left-aligned pledge elements under a centered header (the Voter Guide frame,
+ * 2026-10-06, requested by Emily; it replaced the single column from 2026-09-15),
+ * no button on any element, and one "Learn more" button under the whole band.
  *
  * Drives the real section component off the shipped code seed rather than
  * hand-built props, because the wiring is the risk: `field_columnLayout12Columns`
@@ -81,14 +81,14 @@ async function render(element: React.ReactElement) {
 }
 
 /** The pledge block exactly as the person-profile seed ships it. */
-async function renderSeededPledge(pledgeOverride?: { button?: unknown }) {
+async function renderSeededPledge(pledgeOverride?: { button?: unknown }, patch?: Record<string, unknown>) {
 	const { PERSON_PROFILE_SECTIONS } = await import('~/components/people/personProfileSections');
 	const { GoodPartyOrgPledgeSection } = await import('./GoodPartyOrgPledgeSection');
 
 	const section = PERSON_PROFILE_SECTIONS.find(s => s._type === 'component_goodPartyOrgPledge');
 	if (!section) throw new Error('no pledge block in PERSON_PROFILE_SECTIONS');
 
-	const props = { ...section, pledgeOverride } as Parameters<typeof GoodPartyOrgPledgeSection>[0];
+	const props = { ...section, ...patch, pledgeOverride } as Parameters<typeof GoodPartyOrgPledgeSection>[0];
 	await render(<GoodPartyOrgPledgeSection {...props} />);
 	const band = document.querySelector('[data-component="GoodPartyOrgPledge"]');
 	if (!band) throw new Error('pledge band did not render');
@@ -96,28 +96,63 @@ async function renderSeededPledge(pledgeOverride?: { button?: unknown }) {
 }
 
 describe('the person-profile pledge band', () => {
-	test('stacks the pledge elements in one centered column', async () => {
+	test('lays the pledge elements out in three columns', async () => {
 		const band = await renderSeededPledge();
 		const grid = band.querySelector('.grid');
 		if (!grid) throw new Error('no pledge grid');
 
-		expect(grid.className).toContain('md:grid-cols-1');
-		expect(grid.className).not.toContain('md:grid-cols-2');
-		// A capped width plus auto side margins is what centers the column.
-		expect(grid.className).toContain('mx-auto');
+		expect(grid.className).toContain('lg:grid-cols-3');
+		expect(grid.className).not.toContain('md:grid-cols-1');
+	});
+
+	/**
+	 * Templates saved before the 3 Columns option existed carry no value for it.
+	 * They must keep rendering what they rendered before this round: two columns.
+	 */
+	test('a block saved without a column layout keeps two columns', async () => {
+		const { PERSON_PROFILE_SECTIONS } = await import('~/components/people/personProfileSections');
+		const seeded = PERSON_PROFILE_SECTIONS.find(s => s._type === 'component_goodPartyOrgPledge') as unknown as {
+			goodPartyOrgPledgeDesignSettings: Record<string, unknown>;
+		};
+		const { field_columnLayout12Columns: _dropped, ...settings } = seeded.goodPartyOrgPledgeDesignSettings;
+		const band = await renderSeededPledge(undefined, { goodPartyOrgPledgeDesignSettings: settings });
+		const grid = band.querySelector('.grid');
+		if (!grid) throw new Error('no pledge grid');
+
+		expect(grid.className).toContain('md:grid-cols-2');
+		expect(grid.className).not.toContain('lg:grid-cols-3');
+	});
+
+	/**
+	 * Studio pre-fills a newly added pledge block from the same object the seed
+	 * renders, so what an editor gets and what the code default shows cannot drift.
+	 */
+	test('the Studio preset is the seed content: three cards, no buttons, three columns', async () => {
+		const { component_goodPartyOrgPledge } = await import('~/sanity/schema/components/component_goodPartyOrgPledge');
+		const { goodPartyOrgPledgeInitialValue } = await import('~/lib/goodPartyOrgPledgeDefaults');
+		const preset = (component_goodPartyOrgPledge as { initialValue: typeof goodPartyOrgPledgeInitialValue }).initialValue;
+
+		expect(preset).toBe(goodPartyOrgPledgeInitialValue);
+		expect(preset.goodPartyOrgPledgeItems.list_pledgeCards.map(card => card.field_title)).toEqual([
+			'Independent',
+			'People First',
+			'Anti-Corruption',
+		]);
+		expect(preset.goodPartyOrgPledgeDesignSettings.field_columnLayout12Columns).toBe('3Col');
+		expect('list_buttons' in preset.summaryInfo).toBe(false);
 	});
 
 	test('shows the three pledge elements, and not the retired Civility one', async () => {
 		const band = await renderSeededPledge();
 		const titles = [...band.querySelectorAll('h3')].map(h => h.textContent);
 
-		expect(titles).toEqual(['Independent', 'People-First', 'Anti-Corruption']);
+		expect(titles).toEqual(['Independent', 'People First', 'Anti-Corruption']);
 	});
 
 	test('carries the intro line that frames the pledge', async () => {
 		const band = await renderSeededPledge();
 
-		expect(band.textContent).toContain('as long as they pledge to be:');
+		expect(band.textContent).toContain('if they commit to being:');
 	});
 
 	/**

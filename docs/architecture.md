@@ -31,7 +31,7 @@ changing what a block is or how it behaves is code.
 | CMS             | Sanity v4, Studio embedded at `/studio/main`                                                                                 |
 | Styling         | Tailwind CSS v4 (PostCSS), design tokens in `src/ui/_styles/`, `tailwind-variants` + `clsx`/`tailwind-merge`. No CSS modules |
 | Component docs  | Storybook 10 (`bun run sb:dev`, port 6006), Chromatic for visual regression                                                  |
-| Analytics       | Amplitude (browser SDK + Experiment for A/B tests), Vercel Analytics + Speed Insights                                        |
+| Analytics       | Amplitude (browser SDK + Experiment for A/B tests), Vercel Analytics + Speed Insights, LogRocket (election and people pages) |
 | Video           | Mux (`@mux/mux-player-react`, `sanity-plugin-mux-input`)                                                                     |
 | Dev server      | `bun run dev` on http://localhost:3009 (Turbopack)                                                                           |
 
@@ -116,6 +116,10 @@ domain model, data sources, and what is and is not fixable in this repo:
   renders `PageSections`: React streams the fallback into the initial HTML and the
   resolved output into a hidden div, so the entire page (including its `<h1>`) ends up
   in the markup twice. Both experiment-aware routes are therefore `force-dynamic`.
+- **LogRocket** — session recording on the programmatic pages only: everything under
+  `/elections` and the `/people` profiles, on the production host only. The path and
+  host gates live in `src/ui/LogRocket.tsx` (path rule in `src/lib/logrocketPaths.ts`);
+  the SDK is imported on demand so it is not in the bundle for the rest of the site.
 - **Sanity revalidation webhook** — every content change in Sanity fires a webhook at
   `POST /api/revalidate`, which busts the Next.js cache tag and paths for that
   document and makes the change live without a deploy. Content can also be written

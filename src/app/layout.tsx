@@ -5,6 +5,7 @@ import { VisualEditing } from 'next-sanity/visual-editing';
 import { type ReactNode } from 'react';
 import '~/ui/_styles/globals.css';
 import { Amplitude } from '~/ui/Amplitude';
+import { LogRocket } from '~/ui/LogRocket';
 import { AttributionProvider } from '~/ui/AttributionProvider';
 import { ScrollDepthTracker } from '~/ui/ScrollDepthTracker';
 import { PageSchema } from '~/ui/PageSchema';
@@ -92,6 +93,7 @@ export default async function RootLayout({ children }: Props) {
 				<FacebookPixel />
 				<Segment />
 				<Amplitude />
+				<LogRocket />
 				<ScrollDepthTracker />
 				{(await draftMode()).isEnabled && <VisualEditing />}
 				<AttributionProvider>

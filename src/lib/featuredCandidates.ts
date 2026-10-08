@@ -304,7 +304,7 @@ export async function getFeaturedPeople(
 	const candidacies: typeof candidaciesByRace[number] = [];
 	const pastCandidacies: typeof candidaciesByRace[number] = [];
 	for (const entry of candidaciesByRace.flat()) {
-		const districted = Boolean(entry.candidacy.Race?.subAreaValue ?? entry.candidacy.subAreaValue);
+		const districted = Boolean(entry.candidacy.Race?.subAreaValue ?? entry.candidacy.subAreaValue ?? entry.candidacy.Position?.subAreaValue);
 		if (districted && (tierOfRace.get(entry.race) ?? 0) > 0) continue;
 		const ownDate = entry.candidacy.Race?.electionDate;
 		if (!ownDate) candidacies.push(entry);

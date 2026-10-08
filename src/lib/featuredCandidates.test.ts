@@ -470,6 +470,60 @@ describe('getFeaturedPeople', () => {
 	});
 });
 
+describe('getFeaturedPeople and districted offices above the page', () => {
+	const ASSEMBLY_ID = 'eeeeeeee-0000-4000-8000-000000000015';
+	const places: Record<string, PlaceWithFacts> = {
+		'ca/san-francisco-county/san-francisco': { id: 'p-1', name: 'San Francisco', slug: 'ca/san-francisco-county/san-francisco', state: 'CA', Races: [] },
+		'ca/san-francisco-county': { id: 'p-2', name: 'San Francisco County', slug: 'ca/san-francisco-county', state: 'CA', Races: [] },
+		ca: {
+			id: 'p-3',
+			name: 'California',
+			slug: 'ca',
+			state: 'CA',
+			Races: [race('ca/state-representative', { positionLevel: 'STATE' }), race('ca/governor', { positionLevel: 'STATE' })],
+		},
+	};
+	const deps: FeaturedPeopleDeps = {
+		async getElectionsPagePlace({ slug }) {
+			return Promise.resolve(places[slug] ?? null);
+		},
+		async resolvePlaceRaceElectionDates() {
+			return Promise.resolve(new Map());
+		},
+		async getCandidacies({ raceSlug }) {
+			if (raceSlug === 'ca/state-representative') {
+				return Promise.resolve([
+					candidacy({ id: 'c-webb', slug: 'arthur-webb', firstName: 'Arthur', lastName: 'Webb', personId: ASSEMBLY_ID, Race: { brHashId: 'r-ad15', electionDate: '2026-11-03', subAreaName: 'District', subAreaValue: '15' } }),
+				]);
+			}
+			return Promise.resolve([candidacy({ id: 'c-gov', slug: 'jane-doe-governor', personId: PLEDGED_ID, positionName: 'Governor' })]);
+		},
+		async getOfficeHoldersByGeoId() {
+			return Promise.resolve([]);
+		},
+		async getPersonsByIds() {
+			return Promise.resolve([personRow(PLEDGED_ID, { isPledged: true }), personRow(ASSEMBLY_ID, { fullName: 'Arthur Webb', slug: 'arthur-webb', isPledged: true })]);
+		},
+		async getRemovedPersonIds() {
+			return Promise.resolve(new Set<string>());
+		},
+		async resolveProductAvatars() {
+			return Promise.resolve(new Map<string, string>());
+		},
+	};
+
+	/** San Francisco showed an Assembly candidate from District 15, in Contra Costa (Emily, 2026-10-08). */
+	test('a city page keeps the statewide candidate and leaves the districted one out', async () => {
+		const people = await getFeaturedPeople({ placeSlug: 'ca/san-francisco-county/san-francisco', locationLevel: 'city', today: new Date(2026, 9, 8) }, deps);
+		expect(people.candidates.map(c => c.name)).toEqual(['Jane Doe']);
+	});
+
+	test('the state page, which owns the race, lists the districted candidate', async () => {
+		const people = await getFeaturedPeople({ placeSlug: 'ca', locationLevel: 'state', today: new Date(2026, 9, 8) }, deps);
+		expect(people.candidates.map(c => c.name).sort()).toEqual(['Arthur Webb', 'Jane Doe']);
+	});
+});
+
 describe('getFeaturedPeople across the ballot', () => {
 	/**
 	 * The ballot is the offices list's: a city page's own races plus its county's and

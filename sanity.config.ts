@@ -240,7 +240,7 @@ export default defineConfig({
 		enabled: false,
 	},
 	releases: {
-		enabled: false,
+		enabled: true,
 	},
 	scheduledPublishing: {
 		enabled: false,

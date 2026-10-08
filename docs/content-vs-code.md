@@ -42,6 +42,12 @@ Content published in Studio goes live without a rebuild (a webhook revalidates t
 affected pages). Content can also be written into Sanity programmatically over the
 API, though nothing is doing that today — see `docs/sanity-api-writes.md`.
 
+Studio has content releases turned on (the Releases button in the top bar). A release
+bundles many documents, new and edited, so an editor can look through them and publish
+them all in one click. Content written over the API in bulk (for example a batch of
+state-tagged quotes) should be put in a release rather than left as loose drafts, so it
+can be reviewed and published as one unit.
+
 ## Code needed — this is a change in this repo
 
 Open a PR (use the `ship-pr` skill) when the request requires any of these:

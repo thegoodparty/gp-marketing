@@ -100,6 +100,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		const { offices: districtOffices, dataYears } = buildOfficeItemsFromPlaceRaces(districtRaces, districtResolvedDates, {
 			type: 'District',
 			level: 'local',
+			placeName: districtName,
 			buildHref: race => buildPlaceRacePositionHref([state, county, city], race.slug),
 		});
 		// The county and state races this district's voters also vote in.
@@ -206,6 +207,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 	const { offices: cityOffices, dataYears } = buildOfficeItemsFromPlaceRaces(cityRaces, cityResolvedDates, {
 		type: 'City',
 		level: 'local',
+		placeName: cityName,
 		buildHref: race => buildPlaceRacePositionHref([state, county, city], race.slug),
 	});
 

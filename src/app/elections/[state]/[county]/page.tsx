@@ -109,6 +109,7 @@ export default async function Page({
 		{
 			type: officeType,
 			level: ownLevel,
+			placeName: countyPlace?.name ?? placeData?.name,
 			buildHref: race => buildPlaceRacePositionHref([state, county], race.slug),
 		},
 	);

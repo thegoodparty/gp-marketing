@@ -22,6 +22,7 @@ import {
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsPositionPage } from '~/lib/renderElectionsPositionPage';
 import { loadPositionHeroCandidates } from '~/lib/positionHeroCandidates';
+import { officeDisplayName } from '~/lib/officeDisplayName';
 
 export const revalidate = 3600;
 
@@ -74,7 +75,7 @@ export default async function Page({
 
 	const heroCandidates = await loadPositionHeroCandidates(raceSlug, { raceElectionDate: race.electionDate });
 	const stateName = getStateName(stateCode);
-	const officeName = race.normalizedPositionName ?? race.name ?? 'Position';
+	const officeName = officeDisplayName(race, race.Place);
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 	const candidatesHref = `/elections/${fullSlug}/position/${positionSlug}/candidates`;
@@ -185,7 +186,7 @@ export async function generateMetadata({
 	// Either slot can resolve to the race's own place, so the names are deduplicated rather than
 	// joined blindly; see joinPlaceNames.
 	const placePhrase = isRealCity ? joinPlaceNames(cityName, countyDisplayName) : countyDisplayName;
-	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
+	const positionName = (race ? officeDisplayName(race, race.Place) : 'Position');
 	return {
 		title: `${positionName} in ${placePhrase}, ${stateName} | ${SITE_NAME}`,
 		description: `Election details and candidates for ${positionName} in ${placePhrase}, ${stateName}.`,

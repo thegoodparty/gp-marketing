@@ -724,6 +724,10 @@ people now follow the ballot that branch built. Decisions:
   officeholders of every tier, each named with its own tier's place. Chosen over same-level-only
   because pledged people are sparse and most city and county pages would otherwise show nothing.
   The body copy therefore says "near you", not "in [location]".
+- **A candidate card says "Candidate for".** The card shows one office line with no role, so a
+  council member running for mayor read as the mayor (Japjeet Uppal, Livingston, CA; Emily,
+  2026-10-08). A candidate's line is now "Candidate for [office]"; an official's stays the plain
+  office. The position page rows were left as they are on purpose (Emily held that change).
 - **Only the upcoming ballot.** `/v1/candidacies?raceSlug=` returns every cycle of a slug, so past
   candidates appeared beside current ones (Emily, 2026-10-07, Holland, MI). A candidacy whose own
   `Race.electionDate` has passed leaves the candidates; one with a date uses it on the card.

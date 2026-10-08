@@ -290,12 +290,22 @@ export function formatElectionDate(year: number): string {
 	return date.toLocaleDateString('en-US', LOCALE_DATE_OPTIONS);
 }
 
+/**
+ * The calendar day of an election, read off the first ten characters of the
+ * API's value. election-api sends midnight UTC ("2026-11-03T00:00:00.000Z"),
+ * and formatting that as an instant put the day before on screen for every
+ * visitor west of Greenwich: the offices list said November 2 while the
+ * position hero said November 3 (Emily, 2026-10-08). The day is the fact; the
+ * time of day was never one.
+ */
+function electionCalendarDay(dateStr: string): Date {
+	const dateOnly = dateStr.slice(0, 10);
+	return DATE_ONLY_REGEX.test(dateOnly) ? parseDateOnlyAsLocal(dateOnly) : new Date(dateStr);
+}
+
 export function formatElectionDateFromApi(dateStr: string | undefined): string {
 	if (!dateStr) return 'TBD';
-	if (DATE_ONLY_REGEX.test(dateStr)) {
-		return parseDateOnlyAsLocal(dateStr).toLocaleDateString('en-US', LOCALE_DATE_OPTIONS);
-	}
-	return new Date(dateStr).toLocaleDateString('en-US', LOCALE_DATE_OPTIONS);
+	return electionCalendarDay(dateStr).toLocaleDateString('en-US', LOCALE_DATE_OPTIONS);
 }
 
 const SHORT_DATE_OPTIONS: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' };
@@ -303,10 +313,7 @@ const SHORT_DATE_OPTIONS: Intl.DateTimeFormatOptions = { month: 'short', day: 'n
 /** "Nov 4, 2026": the compact form the nearby offices rows use so the date fits one line. */
 export function formatElectionDateShortFromApi(dateStr: string | undefined): string {
 	if (!dateStr) return 'TBD';
-	if (DATE_ONLY_REGEX.test(dateStr)) {
-		return parseDateOnlyAsLocal(dateStr).toLocaleDateString('en-US', SHORT_DATE_OPTIONS);
-	}
-	return new Date(dateStr).toLocaleDateString('en-US', SHORT_DATE_OPTIONS);
+	return electionCalendarDay(dateStr).toLocaleDateString('en-US', SHORT_DATE_OPTIONS);
 }
 
 /**

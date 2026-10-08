@@ -104,7 +104,11 @@ export function FeaturedCandidatesBlockSection(props: Props) {
 				people={people.map(person => ({
 					key: person.personId ?? person.href,
 					name: person.name,
-					office: person.office,
+					// A candidate's card names the office they are running for, not one
+					// they hold: a council member running for mayor read as the mayor
+					// (Japjeet Uppal, Livingston, CA; Emily, 2026-10-08). Officials keep
+					// the plain office name.
+					office: person.role === 'candidate' && person.office ? `Candidate for ${person.office}` : person.office,
 					location: person.location,
 					href: person.href,
 					avatarUrl: person.avatarUrl,

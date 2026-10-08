@@ -711,6 +711,28 @@ describe('getPersonsByIds', () => {
 	});
 });
 
+describe('getRaceBySlug carries the whole race row', () => {
+	/** The office display name reads BallotReady's names off this row; no raceColumns is asked for, so the API sends every column. */
+	test('positionNames and positionLevel come back without asking for columns', async () => {
+		const calls: string[] = [];
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			calls.push(String(input));
+			return new Response(
+				JSON.stringify([
+					{ id: 1, slug: 'ca/orange/county-legislature-executive-board', name: 'County Legislature-Executive Board', state: 'CA', electionDate: '2099-11-02', positionLevel: 'COUNTY', positionNames: ['Orange County Board of Supervisors - District 2'] },
+				]),
+				{ status: 200, headers: { 'content-type': 'application/json' } },
+			);
+		}) as typeof fetch;
+
+		const race = await getRaceBySlug('ca/orange/county-legislature-executive-board');
+
+		expect(calls[0]).not.toContain('raceColumns');
+		expect(race?.positionNames).toEqual(['Orange County Board of Supervisors - District 2']);
+		expect(race?.positionLevel).toBe('COUNTY');
+	});
+});
+
 describe('getRaceBySlug falls back to the primary when there is no general', () => {
 	const SLUG = 'mn/steele-county/county-auditor';
 	const PRIMARY = { slug: SLUG, name: 'County Auditor', electionDate: '2022-08-09', isPrimary: true };

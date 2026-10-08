@@ -19,6 +19,7 @@ import { getCachedElectionRouteParams } from '~/lib/sitemap-entries';
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsPositionPage } from '~/lib/renderElectionsPositionPage';
 import { loadPositionHeroCandidates } from '~/lib/positionHeroCandidates';
+import { officeDisplayName } from '~/lib/officeDisplayName';
 
 export const revalidate = 3600;
 
@@ -73,7 +74,7 @@ export default async function Page({
 	const heroCandidates = await loadPositionHeroCandidates(race.slug, { raceElectionDate: race.electionDate });
 	const stateName = getStateName(stateCode);
 	const cityName = cityPlace.name;
-	const officeName = race.normalizedPositionName ?? race.name ?? 'Position';
+	const officeName = officeDisplayName(race, race.Place);
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 
@@ -141,7 +142,7 @@ export async function generateMetadata({
 	const placePhrase = isRealCity ? joinPlaceNames(cityName, countyDisplayName) : countyDisplayName;
 	const isRealSubplace =
 		race?.Place?.slug?.toLowerCase().endsWith(`/${subplace.toLowerCase()}`) ?? false;
-	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
+	const positionName = (race ? officeDisplayName(race, race.Place) : 'Position');
 	const canonical = toAbsoluteUrl(
 		`/elections/${countySlug}/${city.toLowerCase()}/${subplace.toLowerCase()}/position/${positionSlug}`,
 	);

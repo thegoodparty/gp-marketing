@@ -760,6 +760,16 @@ people now follow the ballot that branch built. Decisions:
   `loadSeatsFromPastCandidates` reads the office's candidacies, asks for up to 200 of those people
   with `includeOfficeHolders=true`, most recent cycle first, and keeps a current term for this
   office (same position id or normalised name). Same idea as the featured carousel's rescue.
+- **Office names read the way voters say them.** election-api's normalised names ("City
+  Legislature", "County Legislature-Executive Board", "Local Higher Education Board-Community College
+  Board") headed every page (Emily, 2026-10-08). `officeDisplayName` in `src/lib/officeDisplayName.ts`
+  takes BallotReady's own names for a local office (`positionNames`, now in `PLACE_RACE_COLUMNS`),
+  drops the seat and the page place's own name, and shows what is left: "City Council", "Board of
+  Supervisors", "County Commission", "Mayor". When those names disagree on one page or are missing it
+  falls back to Emily's table (`OFFICE_NAME_FALLBACKS`), then a generic cleanup of "(Joint)" and
+  hyphen-joined alternatives. State and federal offices keep their normalised names on purpose
+  ("State Representative" stays). URLs are untouched. Shows in position headings, titles, breadcrumbs,
+  the `[office name]` token, the offices list rows and the nearby offices block.
 - **A position page lists one cycle.** `/v1/candidacies?raceSlug=` returns every cycle of a slug,
   so Garden Grove's council page showed two 2024 District 5 candidates, one of them the sitting
   member, as filed for 2026, and "5 candidates filed" where the location page counted 2 (Emily,

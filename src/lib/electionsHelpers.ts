@@ -8,6 +8,7 @@ import type { FactsCardProps } from '~/ui/FactsCard';
 
 import { permanentRedirect } from 'next/navigation';
 import { isCityOrTownMtfcc, looksLikeCountySlugSegment, looksLikeDistrictSlug, resolveCountySlugForPlace } from '~/lib/electionsApi';
+import { officeDisplayName } from '~/lib/officeDisplayName';
 import { formatPersonName } from '~/lib/personName';
 import { buildPersonSlug } from '~/lib/personSlug';
 
@@ -331,7 +332,7 @@ export function getYearFromDateString(dateStr: string): number {
 
 /** Race columns for location pages that build office lists from place races. */
 export const PLACE_RACE_COLUMNS =
-	'slug,normalizedPositionName,electionDate,positionDescription,positionLevel,isPrimary';
+	'slug,normalizedPositionName,positionNames,electionDate,positionDescription,positionLevel,isPrimary';
 
 /**
  * Race columns for the Featured Cities carousel. Deliberately the two fields the
@@ -482,6 +483,8 @@ export type BuildOfficeItemsFromPlaceRacesConfig = {
 	 */
 	level: OfficeLevel;
 	buildHref(race: PlaceRace): string | undefined;
+	/** The place these races belong to; its name is taken off BallotReady's office names. */
+	placeName?: string | null;
 };
 
 /**
@@ -516,7 +519,7 @@ export function buildOfficeItemsFromPlaceRaces(
 		type: config.type,
 		level: config.level,
 		raceSlug: race.slug,
-		position: race.normalizedPositionName ?? race.name ?? 'Position',
+		position: officeDisplayName(race, { name: config.placeName }),
 		nextElectionDate: resolvedDates.get(race.slug) ?? race.electionDate ?? '',
 		href: config.buildHref(race),
 	}));
@@ -556,6 +559,8 @@ export async function buildOverlappingOfficeItems(params: {
 	/** Already-loaded county races, when the caller has them; skips the county read. */
 	countyRaces?: PlaceRace[];
 	countySlug?: string;
+	/** The county's name when its races are supplied, for the office names. */
+	countyName?: string | null;
 }): Promise<{ offices: OfficeItem[]; dataYears: number[] }> {
 	const { getPlaceBySlug } = await import('~/lib/electionsApi');
 	const placeArgs = {
@@ -588,6 +593,7 @@ export async function buildOverlappingOfficeItems(params: {
 	const state = buildOfficeItemsFromPlaceRaces(stateRaces, stateDates, {
 		type: 'State',
 		level: 'state',
+		placeName: statePlace?.name,
 		buildHref: race => buildPlaceRacePositionHref([params.stateSlug], race.slug),
 	});
 
@@ -597,6 +603,7 @@ export async function buildOverlappingOfficeItems(params: {
 			? buildOfficeItemsFromPlaceRaces(countyRaces, countyDates, {
 					type: 'County',
 					level: 'county',
+					placeName: countyPlace?.name ?? params.countyName,
 					buildHref: race => buildPlaceRacePositionHref(countySegments, race.slug),
 				})
 			: { offices: [], dataYears: [] };

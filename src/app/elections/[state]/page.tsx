@@ -111,6 +111,7 @@ export default async function Page({
 	const { offices: stateOffices, dataYears } = buildOfficeItemsFromPlaceRaces(stateRaces, resolvedDates, {
 		type: 'State',
 		level: 'state',
+		placeName: stateName,
 		buildHref: race => buildPlaceRacePositionHref([state], race.slug),
 	});
 

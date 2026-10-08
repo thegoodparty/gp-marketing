@@ -29,6 +29,10 @@ export function LogRocket() {
 		if (!isGoodPartyProductionHost(window.location.hostname)) return;
 		initialized = true;
 		void import('logrocket').then(mod => {
+			// The package ships a CommonJS build typed with `export =`, so TypeScript sees the
+			// namespace as the SDK itself with no `default`, while the bundler hands a dynamic
+			// import of a CommonJS module back as `{ default: module.exports }`. Read `default`
+			// when it is there and fall back to the namespace so either shape reaches `init`.
 			const sdk = (mod as unknown as { default?: typeof mod }).default ?? mod;
 			sdk.init(LOGROCKET_APP_ID, { rootHostname: 'goodparty.org' });
 		});

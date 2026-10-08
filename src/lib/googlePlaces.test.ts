@@ -1,6 +1,6 @@
 /// <reference types="bun-types" />
 import { describe, expect, test } from 'bun:test';
-import { parsePlacePrediction, runSuggestionQuery, type PlaceSuggestion, type SuggestionQueryDeps } from './googlePlaces';
+import { parsePlacePrediction, runSuggestionQuery, type PlaceSuggestion, type SuggestionQueryDeps, awaitPlacesReady } from './googlePlaces';
 
 function deferred<T>() {
 	let resolve!: (value: T) => void;
@@ -169,5 +169,23 @@ describe('runSuggestionQuery', () => {
 		};
 
 		await expect(runSuggestionQuery('Bost', { latestQuery, sessionToken }, deps)).resolves.toEqual([]);
+	});
+});
+
+describe('awaitPlacesReady', () => {
+	/** The thrown-away first search: the script's load event fired before the Places classes existed. */
+	test('waits for importLibrary to populate the Places classes before resolving', async () => {
+		const maps: NonNullable<Parameters<typeof awaitPlacesReady>[0]> = {
+			async importLibrary() {
+				maps.places = { AutocompleteSuggestion: { fetchAutocompleteSuggestions: async () => Promise.resolve({ suggestions: [] }) }, AutocompleteSessionToken: (() => ({})) as unknown as new () => never };
+				return Promise.resolve(undefined);
+			},
+		};
+		await expect(awaitPlacesReady(maps)).resolves.toBeUndefined();
+	});
+
+	test('rejects when the classes never appear, so the caller falls back to free text', async () => {
+		await expect(awaitPlacesReady({ async importLibrary() { return Promise.resolve(undefined); } })).rejects.toThrow('without google.maps.places');
+		await expect(awaitPlacesReady(undefined)).rejects.toThrow();
 	});
 });

@@ -13,6 +13,7 @@ import {
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsPositionPage } from '~/lib/renderElectionsPositionPage';
 import { loadPositionHeroCandidates } from '~/lib/positionHeroCandidates';
+import { officeDisplayName } from '~/lib/officeDisplayName';
 
 export const revalidate = 3600;
 
@@ -55,7 +56,7 @@ export default async function Page({
 
 	const heroCandidates = await loadPositionHeroCandidates(raceSlug, { raceElectionDate: race.electionDate });
 	const stateName = getStateName(stateCode);
-	const officeName = race.normalizedPositionName ?? race.name ?? 'Position';
+	const officeName = officeDisplayName(race, race.Place);
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 

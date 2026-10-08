@@ -14,6 +14,7 @@ import {
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsCandidatesPage } from '~/lib/renderElectionsCandidatesPage';
 import { currentCycleCandidacies, heroCandidatesFromCandidacies } from '~/lib/positionHeroCandidates';
+import { officeDisplayName } from '~/lib/officeDisplayName';
 
 export default async function Page({
 	params,
@@ -50,7 +51,7 @@ export default async function Page({
 	const countyName = resolveLocalityName(countyPlace, race.Place, countySlug);
 
 	const stateName = getStateName(stateCode);
-	const officeName = race.normalizedPositionName ?? race.name ?? 'Position';
+	const officeName = officeDisplayName(race, race.Place);
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 

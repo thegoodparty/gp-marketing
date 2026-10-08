@@ -64,6 +64,7 @@
         "embla-carousel-react": "^8.6.0",
         "html-to-text": "^10.0.0",
         "jotai": "^2.15.0",
+        "logrocket": "^12.4.0",
         "luxon": "^3.7.2",
         "maplibre-gl": "^5.24.0",
         "motion": "^12.23.22",
@@ -2895,6 +2896,8 @@
     "lodash.merge": ["lodash.merge@4.6.2", "", {}, "sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ=="],
 
     "log-symbols": ["log-symbols@2.2.0", "", { "dependencies": { "chalk": "^2.0.1" } }, "sha512-VeIAFslyIerEJLXHziedo2basKbMKtTw3vfn5IzG0XTjhAVEJyNHnL2p7vc+wBDSdQuUpNw3M2u6xb9QsAY5Eg=="],
+
+    "logrocket": ["logrocket@12.4.0", "", {}, "sha512-bLfsBzlpeQ+pKb9z79SbCdiIYt4hwgmsynF5AAOcRee63UZzKUMYUezie4NryISuqn9S1Qc21bYeeO5G2Cn6ug=="],
 
     "loose-envify": ["loose-envify@1.4.0", "", { "dependencies": { "js-tokens": "^3.0.0 || ^4.0.0" }, "bin": { "loose-envify": "cli.js" } }, "sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q=="],
 

@@ -24,6 +24,7 @@ import {
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsCandidatesPage } from '~/lib/renderElectionsCandidatesPage';
 import { currentCycleCandidacies, heroCandidatesFromCandidacies } from '~/lib/positionHeroCandidates';
+import { officeDisplayName } from '~/lib/officeDisplayName';
 
 export default async function Page({
 	params,
@@ -94,7 +95,7 @@ export default async function Page({
 
 	const stateName = getStateName(stateCode);
 	const cityName = cityPlace.name;
-	const officeName = race.normalizedPositionName ?? race.name ?? 'Position';
+	const officeName = officeDisplayName(race, race.Place);
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 
@@ -164,7 +165,7 @@ export async function generateMetadata({
 	// Either slot can resolve to the race's own place, so the names are deduplicated rather than
 	// joined blindly; see joinPlaceNames.
 	const placePhrase = isRealCity ? joinPlaceNames(cityName, countyDisplayName) : countyDisplayName;
-	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
+	const positionName = (race ? officeDisplayName(race, race.Place) : 'Position');
 	return {
 		title: `Candidates for ${positionName} in ${placePhrase}, ${stateName} | ${SITE_NAME}`,
 		description: `View candidates running for ${positionName} in ${placePhrase}, ${stateName}.`,

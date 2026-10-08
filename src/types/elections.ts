@@ -171,6 +171,8 @@ export interface PlaceRace {
 	slug: string;
 	normalizedPositionName?: string;
 	name?: string;
+	/** BallotReady's own names for the seats behind this slug, merged by election-api; ask for them with `raceColumns`. */
+	positionNames?: string[];
 	positionLevel?: string;
 	positionDescription?: string;
 	electionDate?: string;

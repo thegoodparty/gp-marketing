@@ -15,6 +15,7 @@ import {
 	countOpenElections,
 	findCityForDistrictName,
 	formatElectionDateFromApi,
+	formatElectionDateShortFromApi,
 	formatFilingPeriodFromRace,
 	formatSidebarLinkLabel,
 	formatTermLength,
@@ -440,10 +441,10 @@ describe('formatElectionDateFromApi', () => {
 		expect(result).toMatch(/November 5, 2026/);
 	});
 
-	test('formats ISO datetime', () => {
-		const result = formatElectionDateFromApi('2026-11-05T00:00:00.000Z');
-		expect(result).toMatch(/November/);
-		expect(result).toMatch(/2026/);
+	/** Midnight UTC is the day itself in every US time zone; the list said November 2 in Pacific (Emily, 2026-10-08). */
+	test('formats an ISO midnight-UTC datetime as its calendar day whatever the time zone', () => {
+		expect(formatElectionDateFromApi('2026-11-03T00:00:00.000Z')).toBe('November 3, 2026');
+		expect(formatElectionDateShortFromApi('2026-11-03T00:00:00.000Z')).toBe('Nov 3, 2026');
 	});
 
 	test('throws for invalid calendar date that matches date-only pattern', () => {

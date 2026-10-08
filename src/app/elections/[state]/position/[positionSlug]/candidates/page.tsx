@@ -81,7 +81,7 @@ export async function generateMetadata({
 	const stateName = getStateName(stateCode);
 	const raceSlug = buildRaceSlug(stateCode, positionSlug);
 	const race = await getRaceBySlug(raceSlug);
-	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
+	const positionName = (race ? officeDisplayName(race, race.Place) : 'Position');
 	return {
 		title: `Candidates for ${positionName} in ${stateName} | ${SITE_NAME}`,
 		description: `View candidates running for ${positionName} in ${stateName}.`,

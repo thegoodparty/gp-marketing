@@ -102,7 +102,7 @@ export async function generateMetadata({
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
 	const countyDisplayName = resolveLocalityName(countyPlace, race?.Place, countySlug);
-	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
+	const positionName = (race ? officeDisplayName(race, race.Place) : 'Position');
 	return {
 		title: `Candidates for ${positionName} in ${countyDisplayName}, ${stateName} | ${SITE_NAME}`,
 		description: `View candidates running for ${positionName} in ${countyDisplayName}, ${stateName}.`,

@@ -165,7 +165,7 @@ export async function generateMetadata({
 	// Either slot can resolve to the race's own place, so the names are deduplicated rather than
 	// joined blindly; see joinPlaceNames.
 	const placePhrase = isRealCity ? joinPlaceNames(cityName, countyDisplayName) : countyDisplayName;
-	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
+	const positionName = (race ? officeDisplayName(race, race.Place) : 'Position');
 	return {
 		title: `Candidates for ${positionName} in ${placePhrase}, ${stateName} | ${SITE_NAME}`,
 		description: `View candidates running for ${positionName} in ${placePhrase}, ${stateName}.`,

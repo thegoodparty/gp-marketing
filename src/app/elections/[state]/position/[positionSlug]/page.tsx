@@ -80,7 +80,7 @@ export async function generateMetadata({
 	const stateName = getStateName(stateCode);
 	const raceSlug = buildRaceSlug(stateCode, positionSlug);
 	const race = await getRaceBySlug(raceSlug);
-	const positionName = race?.normalizedPositionName ?? race?.name ?? 'Position';
+	const positionName = (race ? officeDisplayName(race, race.Place) : 'Position');
 	return {
 		title: `${positionName} in ${stateName} | ${SITE_NAME}`,
 		description: `Election details and candidates for ${positionName} in ${stateName}.`,

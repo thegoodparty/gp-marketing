@@ -293,9 +293,19 @@ export async function getFeaturedPeople(
 	// (Emily, 2026-10-07): a candidacy whose own race date has passed is set
 	// aside, and one that carries a date uses it on the card rather than the
 	// slug's date.
+	// An office above the page that is split into districts (the Assembly, the
+	// county board) cannot be counted here: election-api folds every district
+	// into one race row per place and has no feed saying which districts cover a
+	// city, so San Francisco listed an Assembly candidate from District 15, in
+	// Contra Costa (Emily, 2026-10-08). Such a race counts only on the page of
+	// the place that owns it; a statewide office, with no district, counts on
+	// every page beneath it. Lifted when election-api can say which districts
+	// cover a place.
 	const candidacies: typeof candidaciesByRace[number] = [];
 	const pastCandidacies: typeof candidaciesByRace[number] = [];
 	for (const entry of candidaciesByRace.flat()) {
+		const districted = Boolean(entry.candidacy.Race?.subAreaValue ?? entry.candidacy.subAreaValue ?? entry.candidacy.Position?.subAreaValue);
+		if (districted && (tierOfRace.get(entry.race) ?? 0) > 0) continue;
 		const ownDate = entry.candidacy.Race?.electionDate;
 		if (!ownDate) candidacies.push(entry);
 		else if (isElectionDateBeforeToday(ownDate, today)) pastCandidacies.push(entry);

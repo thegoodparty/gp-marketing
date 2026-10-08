@@ -728,6 +728,15 @@ people now follow the ballot that branch built. Decisions:
   council member running for mayor read as the mayor (Japjeet Uppal, Livingston, CA; Emily,
   2026-10-08). A candidate's line is now "Candidate for [office]"; an official's stays the plain
   office. The position page rows were left as they are on purpose (Emily held that change).
+- **A districted office above the page is not counted on it.** election-api folds every district
+  of a shared slug into one race row per place (`getDedupedRacesBySlug`, on both `/v1/places` and
+  `/v1/races`) and no feed says which districts cover a city, so San Francisco counted and featured
+  an Assembly candidate from District 15, in Contra Costa (Emily, 2026-10-08). A candidacy with a
+  `subAreaValue` from a tier above the page is left out of the candidates, the counts and the
+  rescue; the office row still links to the position page, with no count. A statewide office counts
+  everywhere beneath it, and a districted office counts on the page of the place that owns it. The
+  real fix needs election-api to say which districts cover a place (position-to-place coverage from
+  BallotReady); lift this rule when it does.
 - **Only the upcoming ballot.** `/v1/candidacies?raceSlug=` returns every cycle of a slug, so past
   candidates appeared beside current ones (Emily, 2026-10-07, Holland, MI). A candidacy whose own
   `Race.electionDate` has passed leaves the candidates; one with a date uses it on the card.

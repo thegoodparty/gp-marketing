@@ -46,13 +46,32 @@ type GooglePlacesLibrary = {
 	AutocompleteSessionToken: new () => AutocompleteSessionToken;
 };
 
+type GoogleMapsNamespace = {
+	places?: Partial<GooglePlacesLibrary>;
+	/** The async bootstrap's library loader; `places` classes exist only once it has resolved. */
+	importLibrary?(name: string): Promise<unknown>;
+};
+
 declare global {
 	interface Window {
 		google?: {
-			maps?: {
-				places?: GooglePlacesLibrary;
-			};
+			maps?: GoogleMapsNamespace;
 		};
+	}
+}
+
+/**
+ * Resolves once the Places classes can be used. With `loading=async` the
+ * script tag's `load` event fires before `google.maps.places` is populated,
+ * and the first query typed while it loaded threw on
+ * `places.AutocompleteSuggestion` being undefined, was swallowed, and showed
+ * nothing until the next keystroke (the thrown-away first search; Emily's QA,
+ * 2026-10-08). `importLibrary('places')` is what actually populates it.
+ */
+export async function awaitPlacesReady(maps: GoogleMapsNamespace | undefined): Promise<void> {
+	if (maps?.importLibrary) await maps.importLibrary('places');
+	if (!maps?.places?.AutocompleteSuggestion || !maps.places.AutocompleteSessionToken) {
+		throw new Error('Google Places script loaded without google.maps.places');
 	}
 }
 
@@ -150,9 +169,7 @@ export async function ensureGooglePlacesLoaded(): Promise<void> {
 	}
 
 	scriptLoadPromise = injectGooglePlacesScript(apiKey)
-		.then(() => {
-			if (!window.google?.maps?.places) throw new Error('Google Places script loaded without google.maps.places');
-		})
+		.then(async () => awaitPlacesReady(window.google?.maps))
 		.catch((error: unknown) => {
 			// A rejected promise is still truthy, so without this the guard above would
 			// hand every later caller the same cached failure and the existing-tag retry
@@ -166,9 +183,9 @@ export async function ensureGooglePlacesLoaded(): Promise<void> {
 
 /** Starts one session token for a search cycle (first keystroke through selection). */
 export function startPlacesSession(): AutocompleteSessionToken {
-	const places = window.google?.maps?.places;
-	if (!places) throw new Error('Google Places library is not loaded');
-	return new places.AutocompleteSessionToken();
+	const SessionToken = window.google?.maps?.places?.AutocompleteSessionToken;
+	if (!SessionToken) throw new Error('Google Places library is not loaded');
+	return new SessionToken();
 }
 
 /**
@@ -179,10 +196,10 @@ export function startPlacesSession(): AutocompleteSessionToken {
  * autocomplete session the caller's token belongs to.
  */
 export async function fetchPlaceSuggestions(input: string, sessionToken: AutocompleteSessionToken): Promise<PlaceSuggestion[]> {
-	const places = window.google?.maps?.places;
-	if (!places) return [];
+	const autocomplete = window.google?.maps?.places?.AutocompleteSuggestion;
+	if (!autocomplete) return [];
 
-	const { suggestions } = await places.AutocompleteSuggestion.fetchAutocompleteSuggestions({
+	const { suggestions } = await autocomplete.fetchAutocompleteSuggestions({
 		input,
 		sessionToken,
 		includedRegionCodes: ['us'],

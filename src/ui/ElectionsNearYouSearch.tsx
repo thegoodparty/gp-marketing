@@ -181,6 +181,24 @@ export function ElectionsNearYouSearch(props: ElectionsNearYouSearchProps) {
 		// Fires once per mount, matching "once per page view per block instance".
 	}, [placement]);
 
+	// The Google script is fetched once the page has settled rather than on the
+	// first click into the box, so the first suggestion is not half a second to
+	// three quarters behind the first keystroke (Emily's QA, 2026-10-08). Idle
+	// time when the browser offers it; a short delay otherwise.
+	useEffect(() => {
+		const load = () => {
+			if (placesLoadStartedRef.current) return;
+			placesLoadStartedRef.current = true;
+			void ensureGooglePlacesLoaded().catch(() => undefined);
+		};
+		if (typeof window.requestIdleCallback === 'function') {
+			const handle = window.requestIdleCallback(load, { timeout: 2000 });
+			return () => window.cancelIdleCallback(handle);
+		}
+		const timer = window.setTimeout(load, 1000);
+		return () => window.clearTimeout(timer);
+	}, []);
+
 	const handleFocus = useCallback(() => {
 		if (placesLoadStartedRef.current) return;
 		placesLoadStartedRef.current = true;

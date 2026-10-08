@@ -69,7 +69,9 @@ describe('ensureGooglePlacesLoaded', () => {
 		expect(tagA.isConnected).toBe(false);
 
 		// The fresh tag loads. Only now should the second call settle.
-		(window as unknown as { google: unknown }).google = { maps: { places: {} } };
+		(window as unknown as { google: unknown }).google = {
+			maps: { places: { AutocompleteSuggestion: { fetchAutocompleteSuggestions: async () => Promise.resolve({ suggestions: [] }) }, AutocompleteSessionToken: (() => ({})) as unknown as new () => never } },
+		};
 		tagB.dispatchEvent(new dom.window.Event('load'));
 		await expect(second).resolves.toBeUndefined();
 	});

@@ -724,6 +724,14 @@ people now follow the ballot that branch built. Decisions:
   officeholders of every tier, each named with its own tier's place. Chosen over same-level-only
   because pledged people are sparse and most city and county pages would otherwise show nothing.
   The body copy therefore says "near you", not "in [location]".
+- **The search's first query is answered, and its script is fetched early.** With `loading=async`
+  the Google script's `load` event fires before `google.maps.places` is populated, so the query a
+  visitor typed while it loaded threw, was swallowed, and showed nothing until the next keystroke;
+  the loader now awaits `importLibrary('places')` and checks the classes (`awaitPlacesReady`). The
+  script is also fetched once the page is idle rather than on the first click into the box, which
+  put the first suggestion 0.5 to 0.75 s behind the first keystroke (timed live, 2026-10-08).
+  Destination pages still take 1.7 to 2.4 s to first byte when uncached; that is page caching, not
+  the search.
 - **A candidate card says "Candidate for".** The card shows one office line with no role, so a
   council member running for mayor read as the mayor (Japjeet Uppal, Livingston, CA; Emily,
   2026-10-08). A candidate's line is now "Candidate for [office]"; an official's stays the plain

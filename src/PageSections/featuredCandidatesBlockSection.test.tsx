@@ -75,6 +75,13 @@ describe('FeaturedCandidatesBlockSection', () => {
 	});
 
 	/** No route supplies the count yet; when one does, the number lands in the sentence. */
+	test('a candidate card says what they are running for; an official keeps the plain office', () => {
+		const html = renderToStaticMarkup(<FeaturedCandidatesBlockSection {...section} tokens={tokens} featuredOverride={featuredOverride} />);
+		expect(html).toContain('Candidate for Mayor');
+		expect(html).toContain('>Council Member<');
+		expect(html).not.toContain('Candidate for Council Member');
+	});
+
 	test('fills the count placeholder from the page when it is supplied', () => {
 		const html = renderToStaticMarkup(
 			<FeaturedCandidatesBlockSection {...section} tokens={tokens} featuredOverride={{ ...featuredOverride, pledgedCount: 12 }} />,

@@ -18,9 +18,11 @@ import { Logo } from '~/sanity/utils/Logo.tsx';
 const styles = tv({
 	slots: {
 		base: 'relative',
-		// Figma 2035:1471: 60px of vertical padding around a 524px photo at 1440,
-		// 24px around the stacked mobile frame (2035:2402).
-		grid: 'flex flex-col gap-[5.5rem] py-6 lg:grid lg:grid-cols-[minmax(0,33.75rem)_1fr] lg:items-center lg:gap-x-10 lg:py-[3.75rem]',
+		// Figma 2143:27957: 60px of vertical padding around a 524px photo at 1440,
+		// 24px around the stacked mobile frame (2143:28267). The content column is
+		// the frame's 554px: at the 60px heading size the live headline's second
+		// line needs 547px, so anything narrower pushes it onto a third line.
+		grid: 'flex flex-col gap-[5.5rem] py-6 lg:grid lg:grid-cols-[minmax(0,34.625rem)_1fr] lg:items-center lg:gap-x-10 lg:py-[3.75rem]',
 		content: 'flex flex-col gap-6 lg:gap-10',
 		textContainer: 'flex flex-col gap-3 md:gap-4',
 		// The slide keeps room for the quote card's overhang inside the clipped

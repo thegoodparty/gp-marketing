@@ -108,7 +108,10 @@ export const Anchor = forwardRef<HTMLAnchorElement, PropsWithChildren<AnchorProp
 			const rawId = fragmentHref.slice(1);
 			const id = decodeFragmentId(rawId);
 			url.href = '';
+			// The caller's handler runs first: a tracked anchor button (the location
+			// hero's "Local races") would otherwise lose its click to the scroll.
 			url.onClick = event => {
+				rest.onClick?.(event);
 				event.preventDefault();
 				setTimeout(() => {
 					const scrollTarget = id === '' || id === 'top' ? document.body : document.getElementById(id);

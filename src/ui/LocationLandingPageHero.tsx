@@ -132,6 +132,7 @@ export function LocationLandingPageHero(props: LocationLandingPageHeroProps) {
 									<ComponentButton
 										key={button._key ?? `location-hero-button-${index}`}
 										{...button}
+										analytics={{ event: 'heroButtonClick', properties: { location_level: props.locationLevel, state: props.stateName } }}
 										buttonProps={{
 											...button.buttonProps,
 											styleType: resolveButtonStyleType(button.buttonProps?.styleType ?? 'secondary', backgroundColor),

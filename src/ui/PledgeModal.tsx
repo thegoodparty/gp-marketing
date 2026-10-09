@@ -8,6 +8,7 @@ import { IconResolver } from './IconResolver.tsx';
 import { Button, ButtonLink } from './Inputs/Button.tsx';
 import { Text } from './Text.tsx';
 import { Logo } from '~/sanity/utils/Logo.tsx';
+import { trackVoterGuideEvent } from '~/lib/analytics';
 
 /**
  * The pledge explainer's copy lives here rather than in Studio: the pop-up is
@@ -67,6 +68,8 @@ export type PledgeModalProps = {
 	/** The element that opens the pop-up: a button or link of the caller's own styling. */
 	children: ReactNode;
 	className?: string;
+	/** Which opener this is, for the opened event: the pop-up has five, on three page types. */
+	source?: string;
 };
 
 /**
@@ -79,7 +82,11 @@ export function PledgeModal(props: PledgeModalProps) {
 		styles();
 
 	return (
-		<Dialog.Root>
+		<Dialog.Root
+			onOpenChange={open => {
+				if (open) trackVoterGuideEvent('pledgeModalOpen', { source: props.source ?? null });
+			}}
+		>
 			<Dialog.Trigger asChild>{props.children}</Dialog.Trigger>
 			<Dialog.Portal>
 				<Dialog.Overlay className={overlay()} />

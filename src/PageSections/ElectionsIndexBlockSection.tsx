@@ -1,4 +1,5 @@
 import { stegaClean } from 'next-sanity';
+import { displayPlaceName } from '~/lib/placeDisplayName';
 
 import type { Sections } from '~/PageSections';
 import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
@@ -109,7 +110,7 @@ async function ElectionsIndexBlockSectionAsync(props: ElectionsIndexBlockSection
 		const cityPlaces = await getCityPlacesByCounty({ state: statePart.toUpperCase(), countySlug: slug });
 		elections = cityPlaces.length > 0
 			? cityPlaces.map(c => ({
-					name: c.name,
+					name: displayPlaceName(c.name),
 					href: `/elections/${slug}/${c.slug.split('/').pop() ?? c.name.toLowerCase().replace(/\s+/g, '-')}`,
 					level: 'city' as const,
 				}))

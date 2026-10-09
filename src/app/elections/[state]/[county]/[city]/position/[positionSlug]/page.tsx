@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { displayPlaceName } from '~/lib/placeDisplayName';
 import { notFound, permanentRedirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
@@ -82,7 +83,7 @@ export default async function Page({
 	const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}/position/${positionSlug}`);
 
 	if (isNestedDistrict) {
-		const districtName = race.Place!.name;
+		const districtName = displayPlaceName(race.Place!.name);
 		const breadcrumbs = [
 			{ href: '/elections', label: 'Elections' },
 			{ href: `/elections/${state.toLowerCase()}`, label: stateName },
@@ -115,7 +116,7 @@ export default async function Page({
 		null;
 	if (!cityPlace) notFound();
 
-	const cityName = cityPlace.name;
+	const cityName = displayPlaceName(cityPlace.name);
 	const isRealCity = isRealPlaceSegment(cityPlace.slug, city);
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
@@ -179,7 +180,7 @@ export async function generateMetadata({
 		: (cityPlaces.find(c => c.slug.toLowerCase() === `${state.toLowerCase()}/${city.toLowerCase()}`) ??
 			racePlace ??
 			null);
-	const cityName = cityPlace?.name ?? city;
+	const cityName = displayPlaceName(cityPlace?.name ?? city);
 	// A joint office fills the city slot with an office name, and the place then resolves to the
 	// county, so naming it as both city and county would say the county twice.
 	const isRealCity = isRealPlaceSegment(cityPlace?.slug, city);

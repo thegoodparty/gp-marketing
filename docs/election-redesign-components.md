@@ -262,6 +262,16 @@ Four things from it that affect other components in the batch:
   is a real ballot relationship — a city voter also votes in their county's and state's races. The
   reverse is not, and a state's every municipal race would be hundreds of rows. Downward navigation
   stays with the counties-and-cities list (`component_electionsIndexBlock`).
+- **Towns, townships and villages are shown in display form** (Emily, 2026-10-09). Election data names
+  them the way the Census does, proper name then a lowercase legal descriptor ("Bethlehem town",
+  "Evesham township"), and the page showed them as delivered. `displayPlaceName` in
+  `src/lib/placeDisplayName.ts` turns "X town" into "Town of X" and capitalizes the other descriptors
+  ("Evesham Township", "Colonie Village"). It touches only a lowercase descriptor at the very end and
+  never lowercases anything, so names with lowercase words inside them (Coeur d'Alene, Fond du Lac,
+  Isle of Palms) and internal capitals (DeKalb, Bend-La Pine) are untouched, which is why there is no
+  exceptions list. The raw name stays on the data: slugs, the office-name trim in `officeDisplayName`
+  and the dedupe rules compare raw names, so the display form is applied where names are composed into
+  headings, titles, breadcrumbs, cards, lists and the "City, ST" line, not in the fetchers.
 - **An empty place list hides the index block; it never falls back to the states.** The block lists
   every state only when no page list is given at all (the /elections landing page). A county page
   whose place has nothing below it, such as a Virginia independent city like Virginia Beach, hands over

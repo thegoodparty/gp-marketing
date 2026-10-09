@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { displayPlaceName } from '~/lib/placeDisplayName';
 import { notFound } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
@@ -63,7 +64,7 @@ export default async function Page({
 	const isRealCity = isRealPlaceSegment(cityPlace.slug, city);
 
 	const stateName = getStateName(stateCode);
-	const cityName = cityPlace.name;
+	const cityName = displayPlaceName(cityPlace.name);
 	const officeName = officeDisplayName(race, race.Place);
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
@@ -130,7 +131,7 @@ export async function generateMetadata({
 		cityPlaces.find(c => c.slug.toLowerCase() === `${state.toLowerCase()}/${city.toLowerCase()}`) ??
 		race?.Place ??
 		null;
-	const cityName = cityPlace?.name ?? city;
+	const cityName = displayPlaceName(cityPlace?.name ?? city);
 	// A joint office fills the city slot with an office name, and the place then resolves to the
 	// county, so naming it as both city and county would say the county twice.
 	const isRealCity = isRealPlaceSegment(cityPlace?.slug, city);
@@ -144,7 +145,7 @@ export async function generateMetadata({
 		`/elections/${countySlug}/${city.toLowerCase()}/${subplace.toLowerCase()}/position/${positionSlug}/candidates`,
 	);
 	if (isRealSubplace) {
-		const subplaceName = race!.Place!.name;
+		const subplaceName = displayPlaceName(race!.Place!.name);
 		// The same slots again, with the subplace ahead of them; any two can be one place.
 		const locationPhrase = joinPlaceNames(subplaceName, isRealCity ? cityName : null, countyDisplayName);
 		return {

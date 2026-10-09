@@ -9,7 +9,7 @@ const meta: Meta<typeof ElectionsSearchHero> = {
 	parameters: {
 		design: {
 			type: 'figma',
-			url: 'https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2035-1471',
+			url: 'https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2143-27957',
 		},
 	},
 };
@@ -40,7 +40,7 @@ const slides: ElectionsSearchHeroSlide[] = [
 ];
 
 const baseArgs = {
-	headerText: 'Find independents on your ballot.',
+	headerText: 'Find independent candidates near you',
 	bodyCopy: 'Explore upcoming elections near you. Browse candidates, elected officials, and local requirements to run for office.',
 	buttonLabel: 'Search',
 	slides,

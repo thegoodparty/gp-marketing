@@ -506,6 +506,31 @@ function candidateOfficeName(person: PersonItem | null): string | null {
 	return primaryCandidacy(person)?.positionName ?? null;
 }
 
+/**
+ * The party lines a person is shown with, everywhere the site names them: the
+ * profile hero's "Political Affiliation" and every related-person card that
+ * links to that profile.
+ *
+ * Office first: the lines on the office the person holds (or last held)
+ * describe them now, where a candidacy may be a seat they are only running
+ * for; only someone with no office at all reads their current or latest run.
+ * The list is deduped and leads with a major party (see `orderPartyNames`).
+ *
+ * One rule rather than one per surface, because the two drifted. A card used to
+ * read the one ballot line on the candidacy row it was built from, and under
+ * New York's fusion voting that is often the minor line: Bruce Blakeman's card
+ * on Andrew Cuomo's page said "Vote Affordable" while his own profile, reading
+ * his office, said "Republican, Conservative Party" (Emily, 2026-10-09).
+ *
+ * Empty when the record names no party at all. Callers with a ballot row in
+ * hand fall back to the row's own line then, which is still more than nothing.
+ */
+export function personPartyNames(person: PersonItem | null | undefined): string[] {
+	if (!person) return [];
+	const office = pickCurrentOffice(person);
+	return orderPartyNames(office?.partyNames?.length ? office.partyNames : [primaryCandidacy(person)?.party]);
+}
+
 function resolveRoleTitle(
 	persona: PersonPersona,
 	person: PersonItem | null,
@@ -828,10 +853,16 @@ export function districtTag(subAreaName: string | null | undefined, subAreaValue
  * slug's race is the wrong place to read a seat from (Emily, 2026-10-06).
  *
  * One person can arrive on several rows, one per ballot line under fusion
- * voting, each carrying a single `party`. The rows fold into one card that
- * reads every line, the way the profile reads every line of an office term:
- * the label leads with a major party, and a major line anywhere disqualifies
- * the pledge mark.
+ * voting, each carrying a single `party`. The rows fold into one card, and a
+ * major line anywhere, on the rows or on the record, disqualifies the pledge
+ * mark and sets `majorParty`.
+ *
+ * The label is the person's, not the race's. A candidacy row carries the one
+ * ballot line it was filed on, and in New York that is often a minor line
+ * ("Vote Affordable", "Working Families Party") standing in for a major-party
+ * nominee, so the card reads the same record the person's own hero reads
+ * (`personPartyNames`, office first) and only falls back to the rows' lines
+ * when the record names no party, or no record came back for the row.
  */
 export function buildOtherCandidateCards(
 	candidacies: CandidacyItem[],
@@ -852,7 +883,10 @@ export function buildOtherCandidateCards(
 		const c = rows[0];
 		if (!c) continue;
 		const name = nameOf(c.firstName, c.lastName, 'Candidate');
-		const parties = orderPartyNames(rows.map((row) => row.party));
+		const person = c.personId ? personsById.get(c.personId.toLowerCase()) : undefined;
+		const rowParties = orderPartyNames(rows.map((row) => row.party));
+		const recordParties = personPartyNames(person);
+		const parties = recordParties.length > 0 ? recordParties : rowParties;
 		const href = c.personId
 			? `/people/${buildPersonSlug(name, c.personId)}`
 			: c.slug
@@ -864,8 +898,8 @@ export function buildOtherCandidateCards(
 			subtitle: parties.length > 0 ? parties.join(', ') : null,
 			href,
 			isEmpowered: false,
-			isPledged: pledgedFromSpine(c.personId ? personsById.get(c.personId.toLowerCase()) : undefined, ...parties),
-			majorParty: isMajorParty(classifyPartyFrom(...parties)),
+			isPledged: pledgedFromSpine(person, ...rowParties),
+			majorParty: isMajorParty(classifyPartyFrom(...orderPartyNames([...parties, ...rowParties]))),
 			tag: districtTag(c.Race?.subAreaName, c.Race?.subAreaValue),
 			avatarUrl: cardAvatarUrl(c.personId ?? null, c.image ?? null, removedPersonIds),
 		});
@@ -1109,7 +1143,9 @@ export function composeView(
 	const primaryCand = primaryCandidacy(person);
 	// The label keeps the office-first precedence: a held office describes the
 	// person now, where a candidacy may be the seat they are only running for.
-	const partyNames = orderPartyNames(office?.partyNames?.length ? office.partyNames : [primaryCand?.party]);
+	// Shared with the related-person cards so a card can never label someone
+	// differently from the page it links to.
+	const partyNames = personPartyNames(person);
 	const rawParty = partyNames.length > 0 ? partyNames.join(', ') : null;
 	// Class and label deliberately DIVERGE, where they used to share a source.
 	// Eligibility reads every line of the current office and candidacy, so a
@@ -1295,7 +1331,7 @@ async function loadPrimaryCandidacy(
  * from, which is not what the person's own profile reads (see
  * {@link pledgedFromSpine}).
  */
-const CARD_PERSON_RELATIONS = { includeOfficeHolders: true, includeCandidacies: true } as const;
+export const CARD_PERSON_RELATIONS = { includeOfficeHolders: true, includeCandidacies: true } as const;
 
 /**
  * Fetches "Other Candidates for [Position]" cards for a resolved position.

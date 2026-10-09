@@ -122,7 +122,9 @@ const DEV_PEOPLE: Record<
 	// Other Candidates list carries the fusion case from the same report: a
 	// pledge flag on someone listed on a minor line whose own record carries a
 	// Democratic line gets no mark, and a pledged person on a minor line with
-	// nothing major anywhere keeps it.
+	// nothing major anywhere keeps it. The fourth card is the Blakeman shape
+	// (2026-10-09): filed on a minor line, in office on two others, labelled
+	// "Republican, Conservative Party" the way his own page is.
 	'drew-former-fa5104e4': {
 		state: 'H',
 		first: 'Drew',
@@ -136,6 +138,7 @@ const DEV_PEOPLE: Record<
 function cuomoShapeOtherCandidates(): RelatedPersonCard[] {
 	const fusion = '568df699-0000-4000-8000-000000000000';
 	const minor = '9bde2363-0000-4000-8000-000000000000';
+	const twoLines = '7f0fc558-0000-4000-8000-000000000000';
 	const rival = (id: string, fullName: string, over: Partial<PersonItem>): [string, PersonItem] => [
 		id,
 		{
@@ -186,12 +189,40 @@ function cuomoShapeOtherCandidates(): RelatedPersonCard[] {
 			],
 		}),
 		rival(minor, 'Jo Integrity', { Candidacies: [{ id: 'c-minor', positionName: DEV_POSITION_NAME, party: 'Integrity' }] }),
+		rival(twoLines, 'Lee Twolines', {
+			isPledged: false,
+			OfficeHolders: [
+				{
+					id: 'off-twolines',
+					positionName: 'Springfield County Executive',
+					normalizedPositionName: null,
+					officeTitle: 'County Executive',
+					partyNames: ['Republican', 'Conservative Party'],
+					startAt: '2022-01-01',
+					endAt: null,
+					termDateSpecificity: null,
+					isCurrent: true,
+					isAppointed: null,
+					numberOfSeats: null,
+					state: 'WY',
+					subAreaName: null,
+					subAreaValue: null,
+					websiteUrl: null,
+					officePhone: null,
+					officeEmail: null,
+					mailingCity: null,
+					mailingState: null,
+				},
+			],
+			Candidacies: [{ id: 'c-twolines', positionName: DEV_POSITION_NAME, party: 'Vote Affordable' }],
+		}),
 	]);
 	return buildOtherCandidateCards(
 		[
 			{ id: 'row-1', personId: fusion, firstName: 'Zed', lastName: 'Fusion', party: 'Working Families', positionName: DEV_POSITION_NAME },
 			{ id: 'row-2', personId: minor, firstName: 'Jo', lastName: 'Integrity', party: 'Integrity', positionName: DEV_POSITION_NAME },
 			{ id: 'row-3', personId: 'aaaa0003-0000-4000-8000-000000000000', firstName: 'Pat', lastName: 'Major', party: 'Republican', positionName: DEV_POSITION_NAME },
+			{ id: 'row-4', personId: twoLines, firstName: 'Lee', lastName: 'Twolines', party: 'Vote Affordable', positionName: DEV_POSITION_NAME },
 		],
 		persons,
 		'nobody',

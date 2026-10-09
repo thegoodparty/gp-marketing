@@ -971,6 +971,20 @@ file and the content block's clearance, and both wait for the `/people` batch (P
   of one race folds into one card that reads every line (`buildOtherCandidateCards`), labelled
   major party first like the profile. The mark stays on a pledged person with no major line
   anywhere on record (Jim Walden), because his own page says the same.
+- **A related-person card is labelled the way its own profile is** (Blakeman on Cuomo's page,
+  2026-10-09). A candidacy row carries the one ballot line it was filed on, and under New York's
+  fusion voting that is often a minor line standing in for a major-party nominee: Bruce Blakeman's
+  card under "Other Candidates for New York Governor" said "Vote Affordable" while his own profile
+  said "Republican, Conservative Party", and Kathy Hochul's said "Working Families Party" over a
+  Democratic profile. One rule now names the party everywhere, `personPartyNames` in
+  `src/lib/peopleProfile.ts`: the lines on the office the person holds or last held, else the
+  party on their current or latest run, deduped and major party first (`orderPartyNames`),
+  joined with commas. The hero's Political Affiliation, the Other Candidates cards (which already
+  had the person records from the pledge fix above) and the position page's ballot rows
+  (`mapCandidacyToHeroCandidate`, which now asks the batch for the same relations) all read it.
+  A card falls back to its row's line only when the record names no party, or no record came
+  back for it. The pledge mark and `majorParty` are unchanged in direction: a major line on the
+  row or on the record still disqualifies, so nothing marked major before is unmarked now.
 **GoodParty.org Pledge block** (person profile pages first; location and position pages once editors
 place it) — extended, not rebuilt: `component_goodPartyOrgPledge`, the Studio block "GoodParty.org
 Pledge". The Voter Guide frames (2156-34297 desktop, 2188-38249 mobile) show a centred heading and intro

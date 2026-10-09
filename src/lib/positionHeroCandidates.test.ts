@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 import { currentCycleCandidacies, mapCandidacyToHeroCandidate, rankPositionCandidates } from './positionHeroCandidates';
+import type { PersonItem, PersonOfficeHolder } from '~/types/people';
 import type { ElectionsPositionHeroCandidate } from '~/ui/ElectionsPositionHero';
 
 /**
@@ -69,6 +70,77 @@ describe('mapCandidacyToHeroCandidate reads the seat off the candidacy\u2019s ra
 		const candidate = mapCandidacyToHeroCandidate({ id: 'c2', firstName: 'Pat', lastName: 'Lee' }, 1, undefined);
 		expect(candidate.seatName).toBeUndefined();
 		expect(candidate.seatValue).toBeUndefined();
+	});
+});
+
+/**
+ * The party on a position page row is the person's, read as their profile
+ * reads it, not the one ballot line the row was filed on: under New York's
+ * fusion voting a major-party nominee's row often carries the minor line
+ * (Bruce Blakeman, "Vote Affordable"; Emily, 2026-10-09).
+ */
+describe('mapCandidacyToHeroCandidate labels the person, not the ballot line', () => {
+	const row = { id: 'c1', personId: 'p-bb', firstName: 'Bruce', lastName: 'Blakeman', party: 'Vote Affordable' };
+	const record = (over: Partial<PersonItem>): PersonItem => ({
+		id: 'p-bb',
+		slug: 'bruce-blakeman',
+		firstName: 'Bruce',
+		middleName: null,
+		lastName: 'Blakeman',
+		nickname: null,
+		suffix: null,
+		fullName: 'Bruce Blakeman',
+		bioText: null,
+		headshotUrl: null,
+		websiteUrl: null,
+		linkedinUrl: null,
+		facebookUrl: null,
+		twitterUrl: null,
+		instagramUrl: null,
+		state: 'NY',
+		...over,
+	});
+	const office = (partyNames: string[]): PersonOfficeHolder => ({
+		id: 'o1',
+		positionName: 'Nassau County Executive',
+		normalizedPositionName: null,
+		officeTitle: 'County Executive',
+		partyNames,
+		startAt: '2022-01-01',
+		endAt: null,
+		termDateSpecificity: null,
+		isCurrent: true,
+		isAppointed: null,
+		numberOfSeats: null,
+		state: 'NY',
+		subAreaName: null,
+		subAreaValue: null,
+		websiteUrl: null,
+		officePhone: null,
+		officeEmail: null,
+		mailingCity: null,
+		mailingState: null,
+	});
+
+	test('the office on the record names the party and the class', () => {
+		const candidate = mapCandidacyToHeroCandidate(row, 0, record({ OfficeHolders: [office(['Conservative Party', 'Republican'])] }));
+		expect([candidate.party, candidate.partyClass]).toEqual(['Republican, Conservative Party', 'republican']);
+	});
+
+	test('a record with no party keeps the row\u2019s line', () => {
+		const candidate = mapCandidacyToHeroCandidate(row, 0, record({}));
+		expect([candidate.party, candidate.partyClass]).toEqual(['Vote Affordable', 'other']);
+	});
+
+	test('no record, the row is all there is', () => {
+		const candidate = mapCandidacyToHeroCandidate(row, 0, undefined);
+		expect([candidate.party, candidate.partyClass]).toEqual(['Vote Affordable', 'other']);
+		expect(mapCandidacyToHeroCandidate({ id: 'c2', firstName: 'Pat', lastName: 'Lee' }, 1, undefined).party).toBe('Unknown');
+	});
+
+	test('a major line on the row still classes the row major when the record leads with a minor one', () => {
+		const candidate = mapCandidacyToHeroCandidate({ ...row, party: 'Democratic' }, 0, record({ OfficeHolders: [office(['Working Families'])] }));
+		expect([candidate.party, candidate.partyClass]).toEqual(['Working Families', 'democrat']);
 	});
 });
 

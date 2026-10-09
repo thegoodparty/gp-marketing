@@ -23,6 +23,7 @@ afterEach(() => {
 
 const MAMDANI = '568df699-cb5f-4372-0ba8-39c1e58f9357';
 const WALDEN = '9bde2363-8f5c-5382-ea7b-9d9a2b7eb4aa';
+const BLAKEMAN = '7f0fc558-1c1e-4b1a-9a0e-2d4c6e8f0a1b';
 const UPCOMING = `${new Date().getUTCFullYear() + 1}-11-03`;
 const MAYOR_SLUG = 'ny/new-york/city-executive-mayor';
 
@@ -189,6 +190,7 @@ describe('a related-person card reads the whole record its profile reads', () =>
 				'pos-mayor': [
 					mayoralRival({ personId: MAMDANI, firstName: 'Zohran', lastName: 'Mamdani', party: 'Working Families Party' }),
 					mayoralRival({ personId: WALDEN, firstName: 'Curtis', lastName: 'Sliwa', party: 'Independence' }),
+					mayoralRival({ personId: BLAKEMAN, firstName: 'Bruce', lastName: 'Blakeman', party: 'Vote Affordable' }),
 				],
 			},
 			// What `/v1/persons?ids=` sends: scalars always, relations only when asked for.
@@ -212,6 +214,14 @@ describe('a related-person card reads the whole record its profile reads', () =>
 						OfficeHolders: [],
 						Candidacies: withRuns ? [{ id: 'c-s', positionName: 'New York City Mayor', party: 'Independence' }] : [],
 					},
+					// The Blakeman shape (2026-10-09): filed on a minor line, holds office on two others.
+					{
+						...fixtureForState('H').person,
+						id: BLAKEMAN,
+						fullName: 'Bruce Blakeman',
+						OfficeHolders: withOffices ? [{ ...governorTerm(), isCurrent: true, partyNames: ['Republican', 'Conservative Party'] }] : [],
+						Candidacies: withRuns ? [{ id: 'c-b', positionName: 'New York City Mayor', party: 'Vote Affordable' }] : [],
+					},
 				];
 			},
 		});
@@ -227,5 +237,10 @@ describe('a related-person card reads the whole record its profile reads', () =>
 		const byName = new Map(view.otherCandidates.map((c) => [c.name, c]));
 		expect(byName.get('Zohran Mamdani')?.isPledged).toBe(false);
 		expect(byName.get('Curtis Sliwa')?.isPledged).toBe(true);
+		// The label is the person's, as their own hero reads it, not the row's one line.
+		expect(byName.get('Zohran Mamdani')?.subtitle).toBe('Democratic, Working Families Party');
+		expect(byName.get('Bruce Blakeman')?.subtitle).toBe('Republican, Conservative Party');
+		expect(byName.get('Bruce Blakeman')?.majorParty).toBe(true);
+		expect(byName.get('Curtis Sliwa')?.subtitle).toBe('Independence');
 	});
 });

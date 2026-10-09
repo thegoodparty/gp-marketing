@@ -139,6 +139,32 @@ describe('buildRotationPool', () => {
 		]);
 	});
 
+	test('a pledged officeholder with no party on record still qualifies, as on their own profile', () => {
+		const pool = buildRotationPool(
+			[person(uuid(1), { Candidacies: [], OfficeHolders: [{ id: 'o', isCurrent: true, partyNames: [], officeTitle: 'Director' } as never] })],
+			context,
+		);
+		expect(pool.map(entry => entry.person.id)).toEqual([uuid(1)]);
+	});
+
+	test('asks the person feed for office terms and runs, since neither comes by default', async () => {
+		let asked: unknown;
+		await getWeeklyFeaturedPeople(
+			{ today: TODAY },
+			{
+				getPublishedPersonProfileIds: async () => new Set([uuid(1)]),
+				getPersonsByIds: async (ids, options) => {
+					asked = options;
+					return ids.map(id => person(id));
+				},
+				getRemovedPersonIds: async () => new Set<string>(),
+				resolveProductAvatars: async () => new Map<string, string>(),
+				getCandidacies: async () => [],
+			},
+		);
+		expect(asked).toEqual({ includeOfficeHolders: true, includeCandidacies: true });
+	});
+
 	test('an unreadable takedown list keeps every photo off, so nobody is drawn', () => {
 		expect(buildRotationPool([person(uuid(1))], { ...context, removedPersonIds: null })).toEqual([]);
 	});

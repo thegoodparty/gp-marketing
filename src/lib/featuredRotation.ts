@@ -4,7 +4,7 @@ import { getStateName, isElectionDateBeforeToday } from '~/lib/electionsHelpers'
 import { placeWithState } from '~/lib/featuredCandidates';
 import { FEATURED_PEOPLE_LIMIT, type FeaturedPeople, type FeaturedPersonCard } from '~/lib/featuredPeople';
 import { classifyPartyFrom, isMajorParty, orderPartyNames } from '~/lib/party';
-import { cardAvatarUrl, pledgedFromSpine } from '~/lib/peopleProfile';
+import { cardAvatarUrl, pledgedFromFullRecord } from '~/lib/peopleProfile';
 import { formatPersonName } from '~/lib/personName';
 import { buildPersonSlugFromBase, personIdSuffix, slugifyName } from '~/lib/personSlug';
 import { resolveProductAvatars } from '~/lib/productAvatars';
@@ -16,7 +16,9 @@ import type { PersonItem, PersonOfficeHolder } from '~/types/people';
  * page). The pool is everyone with a published GoodParty.org profile, narrowed
  * to pledged people who are running in an upcoming election or hold office now
  * and have a photo (Emily, 2026-10-09: no past candidates who are not in
- * office). Eight are drawn at random, weighted towards a product photo and an
+ * office). The person feed carries no office terms or runs unless asked, so
+ * both are requested; without the runs no candidate could ever qualify (the
+ * first preview showed one officeholder out of thirty published profiles). Eight are drawn at random, weighted towards a product photo and an
  * election close at hand, with the ISO week as the seed, so the set changes on
  * Monday and nothing has to run on a schedule. Editors pin or exclude people
  * from the block's Weekly Rotation settings in Studio.
@@ -112,7 +114,7 @@ export function pickWeeklyPeople(
 
 export type FeaturedRotationDeps = {
 	getPublishedPersonProfileIds(): Promise<Set<string> | null>;
-	getPersonsByIds(ids: string[], options?: { includeOfficeHolders?: boolean }): Promise<PersonItem[]>;
+	getPersonsByIds(ids: string[], options?: { includeOfficeHolders?: boolean; includeCandidacies?: boolean }): Promise<PersonItem[]>;
 	getRemovedPersonIds(): Promise<Set<string> | null>;
 	resolveProductAvatars(personIds: Iterable<string | null | undefined>): Promise<Map<string, string>>;
 	getCandidacies(params: { raceSlug: string }): Promise<CandidacyItem[]>;
@@ -168,7 +170,7 @@ export function buildRotationPool(
 		const candidacy = upcoming[0] ?? null;
 		const office = person.OfficeHolders?.find(o => o.isCurrent === true) ?? null;
 		if (!candidacy && !office) continue;
-		if (!pledgedFromSpine(person, candidacy?.party)) continue;
+		if (!pledgedFromFullRecord(person, candidacy?.party)) continue;
 		const name = formatPersonName(person.fullName) ?? formatPersonName([person.firstName, person.lastName].filter(Boolean).join(' '));
 		if (!name) continue;
 		const chosen = context.avatars.get(id) ?? null;
@@ -208,7 +210,7 @@ export async function getWeeklyFeaturedPeople(
 	const ids = [...new Set([...(published ?? []), ...pins.flatMap(ref => (ref.id ? [ref.id] : []))])];
 	if (ids.length === 0) return empty;
 
-	const [persons, removedPersonIds] = await Promise.all([deps.getPersonsByIds(ids, { includeOfficeHolders: true }), deps.getRemovedPersonIds()]);
+	const [persons, removedPersonIds] = await Promise.all([deps.getPersonsByIds(ids, { includeOfficeHolders: true, includeCandidacies: true }), deps.getRemovedPersonIds()]);
 	const avatars = await deps.resolveProductAvatars(persons.map(person => person.id));
 	const pool = buildRotationPool(persons, { today, avatars, removedPersonIds });
 	if (pool.length === 0) return empty;

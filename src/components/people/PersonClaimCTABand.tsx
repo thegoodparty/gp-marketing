@@ -1,6 +1,6 @@
 'use client';
 
-import { APP_SIGN_UP_HREF, trackSignUpClicked } from '~/lib/analytics';
+import { APP_SIGN_UP_HREF, trackSignUpClicked, trackVoterGuideEvent } from '~/lib/analytics';
 import { Container } from '~/ui/Container';
 import { IconResolver } from '~/ui/IconResolver';
 import { ButtonLink } from '~/ui/Inputs/Button';
@@ -75,7 +75,10 @@ export function PersonClaimCTABand({ displayName }: PersonClaimCTABandProps) {
 						formId={CLAIM_FORM_ID}
 						styleType='primary'
 						styleSize='md'
-						onClick={() => trackSignUpClicked({ href: APP_SIGN_UP_HREF, label: 'Claim profile', formId: CLAIM_FORM_ID })}
+						onClick={() => {
+							trackSignUpClicked({ href: APP_SIGN_UP_HREF, label: 'Claim profile', formId: CLAIM_FORM_ID });
+							trackVoterGuideEvent('claimProfileClick', { source: 'claim_band', label: 'Claim this profile', href: APP_SIGN_UP_HREF });
+						}}
 						iconRight={<IconResolver icon='arrow-up-right' className='h-5 w-5' />}
 					>
 						Claim this profile

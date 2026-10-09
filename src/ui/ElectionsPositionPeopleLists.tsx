@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 import { Logo } from '~/sanity/utils/Logo.tsx';
 import { getInitials } from '~/utils/getInitials';
+import { trackVoterGuideEvent } from '~/lib/analytics';
 import { ATTRIBUTION_COPY } from './_lib/attributionCopy.ts';
 import { cn, tv } from './_lib/utils.ts';
 import { Avatar } from './Avatar.tsx';
@@ -116,8 +117,19 @@ export type ElectionsPositionPeopleListsProps = {
 
 const DEFAULT_INITIAL_COUNT = 4;
 
-function PersonRow({ person, decided }: { person: ElectionsPositionPerson; decided: boolean }) {
+function PersonRow({ person, decided, list }: { person: ElectionsPositionPerson; decided: boolean; list: 'candidates' | 'officeholders' }) {
 	const s = styles();
+	const reportClick = () =>
+		trackVoterGuideEvent('positionPersonClick', {
+			list,
+			name: person.name,
+			href: person.href ?? null,
+			party: person.party ?? null,
+			is_pledged: person.isPledged ?? false,
+			is_winner: person.isWinner ?? false,
+			seat: person.seatValue ?? null,
+			decided,
+		});
 	const meta = decided || !person.term ? person.party : [person.party, `Current term ${person.term}`].filter(Boolean).join(' · ');
 	const body = (
 		<>
@@ -174,7 +186,7 @@ function PersonRow({ person, decided }: { person: ElectionsPositionPerson; decid
 	return (
 		<li>
 			{person.href ? (
-				<Link href={person.href} className={cn(s.card(), s.cardLinked())} data-testid='position-person-row'>
+				<Link href={person.href} className={cn(s.card(), s.cardLinked())} data-testid='position-person-row' onClick={reportClick}>
 					{body}
 				</Link>
 			) : (
@@ -199,7 +211,7 @@ function PledgeExplainer({ explainer }: { explainer: ElectionsPositionPledgeExpl
 				<div className={s.explainerText()}>
 					{explainer.body}
 					{explainer.linkLabel && (
-						<PledgeModal>
+						<PledgeModal source='position_people_lists'>
 							<button type='button' className={s.explainerLink()}>
 								{explainer.linkLabel}
 								<IconResolver icon='arrow-up-right' className='min-w-4 min-h-4 w-4 h-4 max-w-4 max-h-4' />
@@ -282,7 +294,7 @@ export function ElectionsPositionPeopleLists(props: ElectionsPositionPeopleLists
 					{visibleCandidates.length > 0 ? (
 						<ul className={s.list()}>
 							{visibleCandidates.map(person => (
-								<PersonRow key={person.key} person={person} decided={props.decided} />
+								<PersonRow key={person.key} person={person} decided={props.decided} list='candidates' />
 							))}
 						</ul>
 					) : (
@@ -295,7 +307,10 @@ export function ElectionsPositionPeopleLists(props: ElectionsPositionPeopleLists
 								styleType='outline'
 								styleSize='md'
 								className='border-transparent bg-white max-md:w-full'
-								onClick={() => setExpanded(true)}
+								onClick={() => {
+									trackVoterGuideEvent('showMoreClick', { list: 'position_candidates', hidden_count: candidates.length - initialCount });
+									setExpanded(true);
+								}}
 								iconRight={<IconResolver icon='circle-chevron-down' className='min-w-4 min-h-4 w-4 h-4 max-w-4 max-h-4' />}
 							>
 								{props.showMoreLabel}
@@ -326,7 +341,7 @@ export function ElectionsPositionPeopleLists(props: ElectionsPositionPeopleLists
 					{officeholders.length > 0 ? (
 						<ul className={s.list()}>
 							{officeholders.map(person => (
-								<PersonRow key={person.key} person={person} decided={false} />
+								<PersonRow key={person.key} person={person} decided={false} list='officeholders' />
 							))}
 						</ul>
 					) : (

@@ -9,7 +9,14 @@ import {
 	type ReactNode,
 } from 'react';
 
-import { APP_LOG_IN_HREF, APP_SIGN_UP_HREF, isSignUpUrl, trackSignUpClicked } from '~/lib/analytics';
+import {
+	APP_LOG_IN_HREF,
+	APP_SIGN_UP_HREF,
+	isSignUpUrl,
+	trackSignUpClicked,
+	trackVoterGuideEvent,
+	type VoterGuideClickTracking,
+} from '~/lib/analytics';
 import { LinkTarget } from '~/types/ui';
 import { tv } from '../_lib/utils.ts';
 import { Anchor, type AnchorProps } from '../Anchor.tsx';
@@ -134,6 +141,12 @@ export type ComponentButtonProps = {
 	iconLeft?: ReactElement;
 	iconRight?: ReactElement;
 	onClick?(e: React.MouseEvent<HTMLElement, MouseEvent>): void;
+	/**
+	 * A voter guide event to report on click, as data rather than a handler so a
+	 * server-rendered block can ask for it. The button adds its own label and
+	 * destination to the properties.
+	 */
+	analytics?: VoterGuideClickTracking;
 } & (
 	| { buttonType: 'internal'; href: string }
 	| { buttonType: 'external'; href: string }
@@ -162,12 +175,18 @@ function defaultExternalLinkIcon() {
 export const ComponentButton = (props: ComponentButtonProps) => {
 	const isExternalHref = 'href' in props ? isExternalToEcosystem(props.href) : false;
 
+	const reportClick = (href: string | null) => {
+		if (!props.analytics) return;
+		trackVoterGuideEvent(props.analytics.event, { label: labelToString(props.label), href, ...props.analytics.properties });
+	};
+
 	const linkOnClick =
 		'href' in props
 			? (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
 					if (isSignUpUrl(props.href)) {
 						trackSignUpClicked({ href: props.href, label: labelToString(props.label), formId: props.formId ?? null });
 					}
+					reportClick(props.href);
 					props.onClick?.(e);
 				}
 			: undefined;
@@ -256,7 +275,10 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					className={props.className}
 					formId={props.formId}
 					href={APP_LOG_IN_HREF}
-					onClick={e => props.onClick?.(e)}
+					onClick={e => {
+						reportClick(APP_LOG_IN_HREF);
+						props.onClick?.(e);
+					}}
 					iconLeft={props.iconLeft}
 					iconRight={
 						props.iconRight ?? <IconResolver icon='arrow-up-right' className='min-w-4.5 min-h-4.5 w-4.5 h-4.5 max-w-4.5 max-h-4.5' />
@@ -276,6 +298,7 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					href={APP_SIGN_UP_HREF}
 					onClick={e => {
 						trackSignUpClicked({ href: APP_SIGN_UP_HREF, label: labelToString(props.label), formId: props.formId ?? null });
+						reportClick(APP_SIGN_UP_HREF);
 						props.onClick?.(e);
 					}}
 					iconLeft={props.iconLeft}
@@ -294,7 +317,10 @@ export const ComponentButton = (props: ComponentButtonProps) => {
 					parent='ComponentButton'
 					className={props.className}
 					formId={props.formId}
-					onClick={e => props.onClick?.(e)}
+					onClick={e => {
+						reportClick(null);
+						props.onClick?.(e);
+					}}
 					iconLeft={props.iconLeft}
 					iconRight={props.iconRight}
 					{...props.buttonProps}

@@ -17,6 +17,7 @@ import {
 	buildPersonProfileTokens,
 	buildPersonSectionOverrides,
 } from '~/components/people/personSectionOverrides';
+import { PersonProfileViewTracker } from '~/components/people/PersonProfileViewTracker';
 import { preloadElectionTemplate } from '~/lib/electionTemplates';
 import { renderElectionTemplatePage } from '~/lib/renderElectionTemplatePage';
 import { getPersonBySlug, getPersonMergeSurvivorChain } from '~/lib/electionsApi';
@@ -145,7 +146,7 @@ export default async function Page({ params }: { params: Promise<PageParams> }) 
 	// `personProfile` Sanity template (custom per-state → global → code default)
 	// and render it with this person's data injected via SectionOverrides. Editors
 	// can pin per-state (A–L) Custom Templates via field_profileState.
-	return renderElectionTemplatePage({
+	const page = await renderElectionTemplatePage({
 		context: {
 			templateType: 'personProfile',
 			personSlug: view.canonicalSlug,
@@ -155,6 +156,22 @@ export default async function Page({ params }: { params: Promise<PageParams> }) 
 		tokens: buildPersonProfileTokens(view),
 		schemas: [schema],
 	});
+
+	return (
+		<>
+			<PersonProfileViewTracker
+				personId={view.personId}
+				profileState={view.state}
+				persona={view.persona}
+				claimed={view.claimed}
+				pledged={view.pledged}
+				removed={view.removed}
+				unpublished={view.unpublished}
+				partyClass={view.partyClass}
+			/>
+			{page}
+		</>
+	);
 }
 
 export async function generateMetadata({

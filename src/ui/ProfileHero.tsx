@@ -335,7 +335,7 @@ export function ProfileHero(props: ProfileHeroProps) {
 								{attributionMode === 'pledged' && <Logo className={calloutIcon()} aria-hidden="true" />}
 								<p className={calloutText()}>
 									{renderCalloutSentence(attributionMode)}{' '}
-									<PledgeModal>
+									<PledgeModal source="profile_hero">
 										<button type="button" className={calloutLink()}>
 											{PLEDGE_CALLOUT_LINK_LABEL}
 											<IconResolver icon="arrow-up-right" className="min-w-4 min-h-4 w-4 h-4 max-w-4 max-h-4" />

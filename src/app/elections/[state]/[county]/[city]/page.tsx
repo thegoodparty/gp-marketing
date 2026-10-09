@@ -89,7 +89,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		const districtPlace = resolvedPlaceData!;
 		// The longest chain on the page, started once the page is known to render so
 		// the date and overlapping-office reads below run alongside it.
-		const districtFeaturedPeoplePromise = startFeaturedPeople({ placeSlug: fullSlug, locationLevel: 'district' });
+		const districtFeaturedPeopleInFlight = startFeaturedPeople({ placeSlug: fullSlug, locationLevel: 'district' });
 		const districtName = districtPlace.name;
 		const breadcrumbs = [
 			{ href: '/elections', label: 'Elections' },
@@ -122,7 +122,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 
 		return renderElectionsIndexPage({
 			placeSlug: fullSlug,
-			featuredPeoplePromise: districtFeaturedPeoplePromise,
+			featuredPeopleInFlight: districtFeaturedPeopleInFlight,
 			breadcrumbs,
 			locationLevel: 'district',
 			stateName,
@@ -173,7 +173,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 
 	// The longest chain on the page, started once the page is known to render so
 	// the date and overlapping-office reads below run alongside it.
-	const featuredPeoplePromise = startFeaturedPeople({ placeSlug: fullSlug, locationLevel: 'city' });
+	const featuredPeopleInFlight = startFeaturedPeople({ placeSlug: fullSlug, locationLevel: 'city' });
 	const cityName = displayPlaceName(cityPlace.name);
 
 	const breadcrumbs = [
@@ -235,7 +235,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 
 	return renderElectionsIndexPage({
 		placeSlug: fullSlug,
-		featuredPeoplePromise,
+		featuredPeopleInFlight,
 		breadcrumbs,
 		locationLevel: 'city',
 		stateName,

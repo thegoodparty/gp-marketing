@@ -6,6 +6,7 @@ import {
 } from '~/lib/electionsTemplateHelpers';
 import { loadPositionOfficeholders } from '~/lib/positionOfficeholders';
 import { resolveHowToRunGuide } from '~/lib/howToRunGuide';
+import { preloadElectionTemplate } from '~/lib/electionTemplates';
 import { getNearbyOffices } from '~/lib/nearbyOffices';
 import { renderElectionTemplatePage } from '~/lib/renderElectionTemplatePage';
 import { articleTitleBySlugQuery } from '~/sanity/groq';
@@ -17,6 +18,8 @@ export type PositionTemplateContext = PositionPageContext & {
 };
 
 export async function renderElectionsPositionPage(input: PositionTemplateContext) {
+	// The template needs nothing from election-api, so its Sanity reads run under the data chain.
+	preloadElectionTemplate('position');
 	const raceSlug = input.raceSlug ?? input.race?.slug;
 	// Every position route renders through here, so the content block's
 	// officeholder rows are loaded once, in one place, rather than in each route.

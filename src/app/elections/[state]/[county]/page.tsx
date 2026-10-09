@@ -75,7 +75,7 @@ export default async function Page({
 
 	// The longest chain on the page, started once the page is known to render so
 	// the date and overlapping-office reads below run alongside it.
-	const featuredPeoplePromise = startFeaturedPeople({ placeSlug: fullSlug, locationLevel: isDistrict ? 'district' : 'county' });
+	const featuredPeopleInFlight = startFeaturedPeople({ placeSlug: fullSlug, locationLevel: isDistrict ? 'district' : 'county' });
 
 	const placeName = isDistrict
 		? displayPlaceName(placeData?.name ?? county)
@@ -141,7 +141,7 @@ export default async function Page({
 
 	return renderElectionsIndexPage({
 		placeSlug: fullSlug,
-		featuredPeoplePromise,
+		featuredPeopleInFlight,
 		breadcrumbs,
 		locationLevel: isDistrict ? 'district' : 'county',
 		stateName,

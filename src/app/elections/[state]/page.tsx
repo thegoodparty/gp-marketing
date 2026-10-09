@@ -44,7 +44,7 @@ export default async function Page({
 	const currentYear = new Date().getFullYear();
 
 	// The longest chain on the page, started before the route's own reads so they overlap.
-	const featuredPeoplePromise = startFeaturedPeople({ placeSlug: state.toLowerCase(), locationLevel: 'state' });
+	const featuredPeopleInFlight = startFeaturedPeople({ placeSlug: state.toLowerCase(), locationLevel: 'state' });
 	const [allPlaces, placeData, featuredCities] = await Promise.all([
 		getPlacesByState({ state: stateCode }),
 		getPlaceBySlug({
@@ -124,7 +124,7 @@ export default async function Page({
 
 	return renderElectionsIndexPage({
 		placeSlug: state.toLowerCase(),
-		featuredPeoplePromise,
+		featuredPeopleInFlight,
 		breadcrumbs,
 		locationLevel: 'state',
 		stateName,

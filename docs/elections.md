@@ -64,8 +64,10 @@ that chain overlaps the route's own work instead of following it:
 
 - **Start the featured people first.** A location route calls `startFeaturedPeople`
   as soon as it knows the page will render (after its 404 and redirect decisions,
-  never before), and hands the promise to `renderElectionsIndexPage`. The helper also
-  preloads the page's Sanity template.
+  never before), and hands what it returns to `renderElectionsIndexPage`. The helper
+  also preloads the page's Sanity template. It returns a settled result, never a
+  rejecting promise, so the route can hold it across its own awaits; the renderer
+  throws any failure where it joins, which is where the fetch used to run.
 - **Own dates and overlapping offices run side by side.** `resolvePlaceRaceElectionDates`
   for the page's own races and `buildOverlappingOfficeItems` for the places above it do
   not depend on each other, so the routes `Promise.all` them.
@@ -82,10 +84,11 @@ that chain overlaps the route's own work instead of following it:
   route does this; location routes get it through `startFeaturedPeople`).
 - **A promise started early must not reject while nothing is listening.** A rejection
   that lands before the join is an unhandled rejection and takes the whole render down.
-  Every read in these chains folds failures into null or an empty list, which is what
-  makes them safe to leave in flight; inside a loader, `void promise.catch(() => undefined)`
-  right after creating one marks it handled as well, and the later await still sees the
-  failure. Keep both when you add one.
+  Across a route, hand out a settled result (`Promise.allSettled`) as `startFeaturedPeople`
+  does and rethrow at the join. Inside a loader, `void promise.catch(() => undefined)`
+  right after creating one marks it handled, and the later await still sees the failure.
+  Every read in these chains also folds failures into null or an empty list, but do not
+  rely on that alone.
 - **`<Suspense>` does not help a cold ISR render.** The first visitor receives the stored
   page after the whole render finishes, so streaming the carousel later would not move
   first byte. On these pages the featured-people fetch also feeds the hero's independent

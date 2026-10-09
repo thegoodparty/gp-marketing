@@ -18,7 +18,7 @@ import {
 	resolveDefaultElectionYear,
 	resolvePlaceRaceElectionDates,
 } from '~/lib/electionsHelpers';
-import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
+import { renderElectionsIndexPage, startFeaturedPeople } from '~/lib/renderElectionsIndexPage';
 import { US_STATE_CODES } from '~/lib/sitemap-entries';
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 
@@ -43,6 +43,8 @@ export default async function Page({
 	const stateName = getStateName(stateCode);
 	const currentYear = new Date().getFullYear();
 
+	// The longest chain on the page, started before the route's own reads so they overlap.
+	const featuredPeopleInFlight = startFeaturedPeople({ placeSlug: state.toLowerCase(), locationLevel: 'state' });
 	const [allPlaces, placeData, featuredCities] = await Promise.all([
 		getPlacesByState({ state: stateCode }),
 		getPlaceBySlug({
@@ -122,6 +124,7 @@ export default async function Page({
 
 	return renderElectionsIndexPage({
 		placeSlug: state.toLowerCase(),
+		featuredPeopleInFlight,
 		breadcrumbs,
 		locationLevel: 'state',
 		stateName,

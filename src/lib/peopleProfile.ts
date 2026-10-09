@@ -1346,7 +1346,7 @@ export const CARD_PERSON_RELATIONS = { includeOfficeHolders: true, includeCandid
 async function loadOtherCandidates(
 	positionId: string | null,
 	excludePersonId: string,
-	removedPersonIds: ReadonlySet<string> | null,
+	removedPersonIds: Promise<ReadonlySet<string> | null>,
 ): Promise<RelatedPersonCard[]> {
 	if (!positionId) return [];
 	const candidacies = await getCandidacies({ positionId });
@@ -1355,7 +1355,9 @@ async function loadOtherCandidates(
 		.filter((id): id is string => Boolean(id) && id!.toLowerCase() !== excludePersonId.toLowerCase());
 	const persons = await getPersonsByIds(ids, CARD_PERSON_RELATIONS);
 	const byId = new Map(persons.map((p) => [p.id.toLowerCase(), p]));
-	return withChosenPhotos(buildOtherCandidateCards(candidacies, byId, excludePersonId, removedPersonIds), removedPersonIds);
+	// Joined only here, where the cards are built, so the reads above never wait on it.
+	const removed = await removedPersonIds;
+	return withChosenPhotos(buildOtherCandidateCards(candidacies, byId, excludePersonId, removed), removed);
 }
 
 /**
@@ -1378,7 +1380,7 @@ async function withChosenPhotos(cards: RelatedPersonCard[], removedPersonIds: Re
 async function loadNearbyOfficials(
 	geoId: string | null,
 	excludePersonId: string,
-	removedPersonIds: ReadonlySet<string> | null,
+	removedPersonIds: Promise<ReadonlySet<string> | null>,
 ): Promise<RelatedPersonCard[]> {
 	if (!geoId) return [];
 	const officeholders = await getOfficeHoldersByGeoId(geoId);
@@ -1387,7 +1389,8 @@ async function loadNearbyOfficials(
 		.filter((id): id is string => Boolean(id) && id!.toLowerCase() !== excludePersonId.toLowerCase());
 	const persons = await getPersonsByIds(ids, CARD_PERSON_RELATIONS);
 	const byId = new Map(persons.map((p) => [p.id.toLowerCase(), p]));
-	return withChosenPhotos(buildNearbyOfficialCards(officeholders, byId, excludePersonId, removedPersonIds), removedPersonIds);
+	const removed = await removedPersonIds;
+	return withChosenPhotos(buildNearbyOfficialCards(officeholders, byId, excludePersonId, removed), removed);
 }
 
 /**
@@ -1592,6 +1595,10 @@ async function loadElectionsIndex(params: {
  * `view.state` drives which template + sections render.
  */
 export async function loadPersonProfile(personId: string): Promise<PersonProfileView | null> {
+	// The removal set gates every card photo below and depends on nothing, so it
+	// starts first and is joined inside each card loader. Safe to leave in flight:
+	// getRemovedPersonIds never rejects.
+	const removedPersonIdsPromise = getRemovedPersonIds();
 	const [overlayResult, person, voterDensity] = await Promise.all([
 		getPublicPersonProfileStatus(personId),
 		getPersonByPersonId(personId),
@@ -1610,6 +1617,14 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 	if (!overlay && !removed && !person) return null;
 
 	const office = pickCurrentOffice(person);
+	const geoId = office?.geoId ?? null;
+	// Nearby officials need only the office's geo id, so their chain (officeholders,
+	// persons, profile photos) starts here and runs under the candidacy and county
+	// lookups the rest of the page waits on. Every read in it folds its failures
+	// into an empty list, so it never rejects; the catch only marks it handled while
+	// it waits, and the join at the end still sees any failure.
+	const nearbyOfficialsPromise = loadNearbyOfficials(geoId, personId, removedPersonIdsPromise);
+	void nearbyOfficialsPromise.catch(() => undefined);
 	const candidacy = await loadPrimaryCandidacy(person, office !== null);
 
 	// One context for the whole page: the race the person is in, else the office
@@ -1619,7 +1634,9 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 	const positionLevel = candidacy?.Race?.positionLevel ?? office?.positionLevel ?? office?.Position?.level ?? null;
 	const positionId =
 		candidacy?.Race?.positionId ?? candidacy?.positionId ?? office?.positionId ?? null;
-	const geoId = office?.geoId ?? null;
+	// Other candidates need only the position id, so they start ahead of the county lookup.
+	const otherCandidatesPromise = loadOtherCandidates(positionId, personId, removedPersonIdsPromise);
+	void otherCandidatesPromise.catch(() => undefined);
 	const positionName =
 		candidacy?.positionName ?? office?.positionName ?? office?.officeTitle ?? null;
 	const electionDate = candidacy?.Race?.electionDate ?? null;
@@ -1661,16 +1678,12 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 		citySlugToCountySlug,
 		countySlugs,
 	});
-	// The removal set gates both card loaders, so it has to resolve first. The
-	// elections index needs nothing, so start it now and only join at the end —
-	// awaiting it up front would make the card loaders wait on the slower of the
-	// two. Safe to leave in flight: getRemovedPersonIds never rejects.
-	const electionsIndexPromise = loadElectionsIndex({ stateCode, tier, countySlug });
-	const removedPersonIds = await getRemovedPersonIds();
+	// The card loaders have been running since the ids they need were known; the
+	// elections index is the only read left to start.
 	const [otherCandidates, nearbyOfficials, electionsIndex] = await Promise.all([
-		loadOtherCandidates(positionId, personId, removedPersonIds),
-		loadNearbyOfficials(geoId, personId, removedPersonIds),
-		electionsIndexPromise,
+		otherCandidatesPromise,
+		nearbyOfficialsPromise,
+		loadElectionsIndex({ stateCode, tier, countySlug }),
 	]);
 
 	return composeView(personId, person, overlay, {

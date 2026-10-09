@@ -262,6 +262,15 @@ export async function getFeaturedPeople(
 		const level = tiers[index]?.level;
 		return index === 0 || !tierPlace || !level ? placeContext : { name: displayPlaceName(tierPlace.name), state: tierPlace.state, level };
 	});
+	// Current officials and the removal set depend only on the places, so they
+	// start now and are joined once the ballot is chosen, rather than waiting
+	// behind every tier's date refresh. Neither rejects (each read folds its
+	// failures into an empty answer); the catch only marks them handled while
+	// they wait, and the join below still sees any failure.
+	const officeholdersPromise = Promise.all(places.map(async tierPlace => (tierPlace?.geoId ? deps.getOfficeHoldersByGeoId(tierPlace.geoId) : [])));
+	const removedPersonIdsPromise = deps.getRemovedPersonIds();
+	void officeholdersPromise.catch(() => undefined);
+	void removedPersonIdsPromise.catch(() => undefined);
 	const tierRaces = await Promise.all(
 		tiers.map(async (tier, index) => {
 			const races = places[index]?.Races ?? [];
@@ -287,8 +296,8 @@ export async function getFeaturedPeople(
 		mapConcurrently(selectedRaces, CONCURRENT_RACE_REQUESTS, async ({ race, electionDate }) =>
 			(await deps.getCandidacies({ raceSlug: race.slug })).map(candidacy => ({ candidacy, race, electionDate })),
 		),
-		Promise.all(places.map(async tierPlace => (tierPlace?.geoId ? deps.getOfficeHoldersByGeoId(tierPlace.geoId) : []))),
-		deps.getRemovedPersonIds(),
+		officeholdersPromise,
+		removedPersonIdsPromise,
 	]);
 	// A race slug is shared across cycles, so the candidacies feed returns past
 	// cycles too. Only people on the upcoming ballot belong among the candidates

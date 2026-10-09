@@ -25,7 +25,7 @@ import {
 	resolveLocationDefaultYear,
 	resolvePlaceRaceElectionDates,
 } from '~/lib/electionsHelpers';
-import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
+import { renderElectionsIndexPage, startFeaturedPeople } from '~/lib/renderElectionsIndexPage';
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 
 export const revalidate = 3600;
@@ -87,6 +87,9 @@ export default async function Page({ params }: { params: Promise<{ state: string
 
 	if (isNestedDistrict) {
 		const districtPlace = resolvedPlaceData!;
+		// The longest chain on the page, started once the page is known to render so
+		// the date and overlapping-office reads below run alongside it.
+		const districtFeaturedPeopleInFlight = startFeaturedPeople({ placeSlug: fullSlug, locationLevel: 'district' });
 		const districtName = districtPlace.name;
 		const breadcrumbs = [
 			{ href: '/elections', label: 'Elections' },
@@ -97,17 +100,17 @@ export default async function Page({ params }: { params: Promise<{ state: string
 			const level = r.positionLevel?.toUpperCase();
 			return level === 'LOCAL' || level === 'COUNTY';
 		});
-		const districtResolvedDates = await resolvePlaceRaceElectionDates(districtRaces);
+		// The county and state races this district's voters also vote in. Their date
+		// refresh and the district's own are independent, so they run side by side.
+		const [districtResolvedDates, districtOverlapping] = await Promise.all([
+			resolvePlaceRaceElectionDates(districtRaces),
+			buildOverlappingOfficeItems({ stateSlug: state.toLowerCase(), countySlug }),
+		]);
 		const { offices: districtOffices, dataYears } = buildOfficeItemsFromPlaceRaces(districtRaces, districtResolvedDates, {
 			type: 'District',
 			level: 'local',
 			placeName: districtName,
 			buildHref: race => buildPlaceRacePositionHref([state, county, city], race.slug),
-		});
-		// The county and state races this district's voters also vote in.
-		const districtOverlapping = await buildOverlappingOfficeItems({
-			stateSlug: state.toLowerCase(),
-			countySlug,
 		});
 		const districtAllYears = [...new Set([...dataYears, ...districtOverlapping.dataYears])].sort((a, b) => a - b);
 		// Own level first so the opening list is populated, the union when the own
@@ -119,6 +122,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 
 		return renderElectionsIndexPage({
 			placeSlug: fullSlug,
+			featuredPeopleInFlight: districtFeaturedPeopleInFlight,
 			breadcrumbs,
 			locationLevel: 'district',
 			stateName,
@@ -167,6 +171,9 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		}
 	}
 
+	// The longest chain on the page, started once the page is known to render so
+	// the date and overlapping-office reads below run alongside it.
+	const featuredPeopleInFlight = startFeaturedPeople({ placeSlug: fullSlug, locationLevel: 'city' });
 	const cityName = displayPlaceName(cityPlace.name);
 
 	const breadcrumbs = [
@@ -204,19 +211,18 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		const level = r.positionLevel?.toUpperCase();
 		return level === 'LOCAL' || level === 'CITY';
 	});
-	const cityResolvedDates = await resolvePlaceRaceElectionDates(cityRaces);
+	// The county and state races this city's voters also vote in. The county place
+	// is already loaded here, but without its races, so this reads it again. That
+	// read and the city's own date refresh are independent, so they run side by side.
+	const [cityResolvedDates, overlapping] = await Promise.all([
+		resolvePlaceRaceElectionDates(cityRaces),
+		buildOverlappingOfficeItems({ stateSlug: state.toLowerCase(), countySlug }),
+	]);
 	const { offices: cityOffices, dataYears } = buildOfficeItemsFromPlaceRaces(cityRaces, cityResolvedDates, {
 		type: 'City',
 		level: 'local',
 		placeName: cityPlace.name,
 		buildHref: race => buildPlaceRacePositionHref([state, county, city], race.slug),
-	});
-
-	// The county and state races this city's voters also vote in. The county place
-	// is already loaded here, but without its races, so this reads it again.
-	const overlapping = await buildOverlappingOfficeItems({
-		stateSlug: state.toLowerCase(),
-		countySlug,
 	});
 
 	const allYears = [...new Set([...dataYears, ...overlapping.dataYears])].sort((a, b) => a - b);
@@ -229,6 +235,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 
 	return renderElectionsIndexPage({
 		placeSlug: fullSlug,
+		featuredPeopleInFlight,
 		breadcrumbs,
 		locationLevel: 'city',
 		stateName,

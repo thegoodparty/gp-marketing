@@ -247,3 +247,72 @@ describe('the shared button', () => {
 		]);
 	});
 });
+
+describe('the nearby offices block', () => {
+	/**
+	 * Not on the published position template as of 2026-10-09, so the preview
+	 * cannot show it firing; this is the only check the wiring gets.
+	 */
+	test('a row click reports the office under the nearby list', async () => {
+		const { NearbyOffices } = await import('./NearbyOffices.tsx');
+		await render(
+			React.createElement(NearbyOffices, {
+				offices: [
+					{
+						id: 'clerk',
+						type: 'County',
+						position: 'County Clerk',
+						nextElectionDate: '2026-11-03',
+						href: '/elections/tx/harris-county/position/county-clerk',
+					},
+				],
+			}),
+		);
+
+		await click(document.querySelector('a[href$="/county-clerk"]')!);
+
+		expect(ga4Events()).toEqual([
+			{
+				event: 'voter_guide_office_click',
+				page_path: '/elections/tx/harris-county',
+				list: 'nearby',
+				office_name: 'County Clerk',
+				office_level: null,
+				office_type: 'County',
+				election_date: '2026-11-03',
+				pledged_count: null,
+				href: '/elections/tx/harris-county/position/county-clerk',
+			},
+		]);
+	});
+});
+
+describe('the claim profile block', () => {
+	test('its button reports a claim click from the block, and Segment gets it too', async () => {
+		const segment: string[] = [];
+		(window as unknown as { analytics: unknown }).analytics = { track: (name: string) => segment.push(name) };
+		const { ClaimProfileBlock } = await import('./ClaimProfileBlock.tsx');
+		await render(
+			React.createElement(ClaimProfileBlock, {
+				layout: 'banner',
+				headline: 'Are you running?',
+				claimButton: { buttonType: 'signup', label: 'Claim your profile' },
+			}),
+		);
+
+		await click(document.querySelector('a')!);
+
+		expect(ga4Events()).toEqual([
+			{
+				event: 'voter_guide_claim_profile_click',
+				page_path: '/elections/tx/harris-county',
+				label: 'Claim your profile',
+				href: 'https://app.goodparty.org/sign-up',
+				source: 'claim_block',
+				layout: 'banner',
+			},
+		]);
+		expect(segment).toEqual(['Voter Guide - Claim Profile Clicked']);
+		expect(amplitudeEvents.map(e => e.name)).toEqual(['Sign Up Clicked', 'Voter Guide - Claim Profile Clicked']);
+	});
+});

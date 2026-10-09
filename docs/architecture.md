@@ -106,6 +106,8 @@ domain model, data sources, and what is and is not fixable in this repo:
 ## Integrations
 
 - **HubSpot** — marketing forms are embedded HubSpot forms (see `src/ui/Form/`).
+- **GA4** — reached only through the GTM container's data layer; the code never calls
+  GA4. The voter guide events, their names and the GTM steps are in `docs/analytics.md`.
 - **Amplitude** — product analytics plus A/B experiments. `src/middleware.ts`
   bootstraps an Amplitude device cookie on page routes so experiments can be resolved
   server-side. Experiment variants are also modeled as Sanity content

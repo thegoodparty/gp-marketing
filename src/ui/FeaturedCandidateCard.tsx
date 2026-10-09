@@ -1,3 +1,5 @@
+'use client';
+
 import { cn, tv } from './_lib/utils.ts';
 import { Avatar } from './Avatar.tsx';
 import { IconResolver } from './IconResolver.tsx';
@@ -5,6 +7,7 @@ import { ButtonLink } from './Inputs/Button.tsx';
 import { Text } from './Text.tsx';
 import { Logo } from '~/sanity/utils/Logo.tsx';
 import { getInitials } from '~/utils/getInitials';
+import { trackVoterGuideEvent } from '~/lib/analytics';
 
 const styles = tv({
 	slots: {
@@ -35,6 +38,8 @@ export type FeaturedCandidateCardProps = {
 	/** Draws the Heart & Star badge over the photo. Only ever true when the person's profile says so. */
 	isPledged?: boolean;
 	buttonLabel?: string;
+	/** The card's place in the carousel, counted from 0, for the click event. */
+	position?: number;
 };
 
 export function FeaturedCandidateCard(props: FeaturedCandidateCardProps) {
@@ -73,6 +78,16 @@ export function FeaturedCandidateCard(props: FeaturedCandidateCardProps) {
 				styleType='secondary'
 				styleSize='md'
 				className={button()}
+				onClick={() =>
+					trackVoterGuideEvent('featuredCandidateClick', {
+						name: props.name,
+						office: props.office ?? null,
+						location: props.location ?? null,
+						is_pledged: props.isPledged ?? false,
+						position: props.position ?? null,
+						href: props.href,
+					})
+				}
 				iconRight={<IconResolver icon='arrow-up-right' className='min-w-4 min-h-4 w-4 h-4 max-w-4 max-h-4' />}
 			>
 				{props.buttonLabel ?? 'View profile'}

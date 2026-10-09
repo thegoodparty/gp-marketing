@@ -46,7 +46,7 @@ export function PledgeSymbolCallout() {
 					{copy.slice(0, at)}
 					<span className={phrase()}>{ATTRIBUTION_PLEDGE_PHRASE}</span>
 					{copy.slice(at + ATTRIBUTION_PLEDGE_PHRASE.length)}{' '}
-					<PledgeModal>
+					<PledgeModal source='pledge_callout'>
 						<button type='button' className={link()}>
 							{PLEDGE_CALLOUT_LINK_LABEL}
 							<IconResolver icon='arrow-up-right' className='min-w-4 min-h-4 w-4 h-4 max-w-4 max-h-4' />

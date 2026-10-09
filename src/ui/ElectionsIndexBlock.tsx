@@ -2,6 +2,7 @@
 import { useState, useMemo } from 'react';
 
 import { DEFAULT_DISPLAY_COUNT } from '~/constants/display';
+import { trackVoterGuideEvent } from '~/lib/analytics';
 import { cn, tv } from './_lib/utils.ts';
 import { useMediaQuery } from './_lib/useMediaQuery.ts';
 import { resolveButtonStyleType } from './_lib/resolveButtonStyleType.ts';
@@ -121,6 +122,7 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 	const totalCount = filteredElections.length;
 
 	const handleShowMore = () => {
+		trackVoterGuideEvent('showMoreClick', { list: 'locations_index', hidden_count: filteredElections.length - displayCount });
 		setDisplayCount(prev => prev + initialDisplayCount);
 	};
 
@@ -167,7 +169,18 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 							<ul className={grid()}>
 								{displayedElections.map((election, index) => (
 									<li key={`${election.href}-${index}`}>
-										<Anchor href={election.href} className={locationLink()}>
+										<Anchor
+											href={election.href}
+											className={locationLink()}
+											onClick={() =>
+												trackVoterGuideEvent('locationIndexClick', {
+													place_name: election.name,
+													place_level: election.level,
+													href: election.href,
+													searched: searchQuery.trim().length > 0,
+												})
+											}
+										>
 											{election.name}
 										</Anchor>
 									</li>

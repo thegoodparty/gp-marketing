@@ -4,6 +4,7 @@ import { type ReactNode, useRef } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 
 import { cn, tv } from './_lib/utils.ts';
+import { useCarouselPageTracking } from './_lib/useCarouselPageTracking.ts';
 import { useRectTracker } from './_lib/useRectTracker';
 
 import { NextButton, PrevButton, useDotButton, usePrevNextButtons } from './Carousel.tsx';
@@ -106,6 +107,7 @@ export function FeaturedCandidatesBlock(props: FeaturedCandidatesBlockProps) {
 	const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start' });
 	const nav = usePrevNextButtons(emblaApi);
 	const pagination = useDotButton(emblaApi);
+	useCarouselPageTracking(emblaApi, 'featured_candidates');
 
 	const containerRef = useRef<HTMLDivElement>(null);
 	const rect = useRectTracker(containerRef);
@@ -139,7 +141,7 @@ export function FeaturedCandidatesBlock(props: FeaturedCandidatesBlockProps) {
 							<div className={calloutText()}>
 								{props.callout.body}
 								{props.callout.pledgeLinkLabel && (
-									<PledgeModal>
+									<PledgeModal source='featured_candidates'>
 										<button type='button' className={calloutLink()}>
 											{props.callout.pledgeLinkLabel}
 											<IconResolver icon='arrow-up-right' className='min-w-4 min-h-4 w-4 h-4 max-w-4 max-h-4' />
@@ -162,7 +164,7 @@ export function FeaturedCandidatesBlock(props: FeaturedCandidatesBlockProps) {
 								marginRight: index === props.people.length - 1 ? rect.computedStyle.paddingRight + rect.computedStyle.marginRight : 0,
 							}}
 						>
-							<FeaturedCandidateCard {...person} />
+							<FeaturedCandidateCard {...person} position={index} />
 						</div>
 					))}
 				</div>

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { displayPlaceName } from '~/lib/placeDisplayName';
 import { notFound, permanentRedirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
@@ -166,7 +167,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		}
 	}
 
-	const cityName = cityPlace.name;
+	const cityName = displayPlaceName(cityPlace.name);
 
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
@@ -207,7 +208,7 @@ export default async function Page({ params }: { params: Promise<{ state: string
 	const { offices: cityOffices, dataYears } = buildOfficeItemsFromPlaceRaces(cityRaces, cityResolvedDates, {
 		type: 'City',
 		level: 'local',
-		placeName: cityName,
+		placeName: cityPlace.name,
 		buildHref: race => buildPlaceRacePositionHref([state, county, city], race.slug),
 	});
 
@@ -295,7 +296,7 @@ export async function generateMetadata({
 			cityPlace = placeByShortSlug;
 		}
 	}
-	const cityName = cityPlace?.name ?? city;
+	const cityName = displayPlaceName(cityPlace?.name ?? city);
 	return {
 		title: `Elections in ${cityName}, ${countyDisplayName}, ${stateName} | ${SITE_NAME}`,
 		description: `Browse elections and local positions in ${cityName}, ${countyDisplayName}, ${stateName}.`,

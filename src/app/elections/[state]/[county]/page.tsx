@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { displayPlaceName } from '~/lib/placeDisplayName';
 import { notFound, redirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
@@ -73,14 +74,14 @@ export default async function Page({
 	}
 
 	const placeName = isDistrict
-		? (placeData?.name ?? county)
+		? displayPlaceName(placeData?.name ?? county)
 		: (normalizedCounty?.displayName ?? countyPlace!.name);
 	const cities = isDistrict
 		? []
 		: cityPlaces.map(c => {
 				const level: 'town' | 'city' = c.mtfcc === TOWN_MTFCC ? 'town' : 'city';
 				return {
-					name: c.name,
+					name: displayPlaceName(c.name),
 					href: `/elections/${fullSlug}/${c.slug?.split('/')?.pop() ?? c.name.toLowerCase().replace(/\s+/g, '-')}`,
 					level,
 				};
@@ -200,7 +201,7 @@ export async function generateMetadata({
 		? canonicalizeCountyEquivalentName(stateCode, countyPlace.name)
 		: null;
 	const placeName = isDistrict
-		? (placeData?.name ?? county)
+		? displayPlaceName(placeData?.name ?? county)
 		: (normalizedCounty?.displayName ?? county);
 	return {
 		title: `Elections in ${placeName}, ${stateName} | ${SITE_NAME}`,

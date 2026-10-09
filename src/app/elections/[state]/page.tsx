@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { displayPlaceName } from '~/lib/placeDisplayName';
 import { notFound } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
@@ -70,7 +71,7 @@ export default async function Page({
 							p.slug.split('/').pop() ??
 							p.name.toLowerCase().replace(/\s+/g, '-');
 						return {
-							name: p.name,
+							name: displayPlaceName(p.name),
 							href: `/elections/${countySlug}/${citySegment}`,
 							level: 'city' as const,
 						};

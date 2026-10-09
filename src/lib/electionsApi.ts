@@ -1,3 +1,4 @@
+import { displayPlaceName } from '~/lib/placeDisplayName';
 import type {
 	CandidacyItem,
 	DistrictNameItem,
@@ -882,7 +883,7 @@ export async function getFeaturedCities(params: {
 		const citySegment = place.slug.split('/').pop();
 		if (!countySlug || !citySegment) continue;
 		cards.push({
-			name: place.name,
+			name: displayPlaceName(place.name),
 			stateAbbreviation: state,
 			openElectionsCount,
 			href: `/elections/${countySlug}/${citySegment}`,

@@ -61,6 +61,7 @@ import { NearbyOfficesSection } from '~/PageSections/NearbyOfficesSection';
 import { IllustratedColumnsBlockSection } from '~/PageSections/IllustratedColumnsBlockSection';
 
 import { FeaturedCandidatesBlockSection } from '~/PageSections/FeaturedCandidatesBlockSection';
+import { FeaturedCandidatesRotationSection } from '~/PageSections/FeaturedCandidatesRotationSection';
 
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
 
@@ -801,6 +802,14 @@ export function PageSections(props: Props) {
 					const featuredOverride = props.sectionOverrides?.component_featuredCandidatesBlock;
 					if (featuredOverride?.hidden) {
 						return <Fragment key={section._key} />;
+					}
+					// No route supplied people: the page has no ballot, so the block shows the weekly rotation.
+					if (!featuredOverride) {
+						return (
+							<Boundary key={section._key} componentName='Featured Candidates Block'>
+								<FeaturedCandidatesRotationSection {...section} tokens={props.tokens} />
+							</Boundary>
+						);
 					}
 					return (
 						<Boundary key={section._key} componentName='Featured Candidates Block'>

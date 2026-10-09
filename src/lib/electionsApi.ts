@@ -556,10 +556,14 @@ export const PERSONS_BY_IDS_MAX = 1000;
  * ids per request, but 500 UUIDs make a URL past its header limit and the
  * whole request fails with 414 (every location page lost its featured people
  * for an hour, 2026-10-07), so the ids go in requests of 200. `OfficeHolders`
- * rides along only when asked for: the list endpoint leaves relations out by
- * default, so a caller that reads a person's current term off the row must say so.
+ * and `Candidacies` ride along only when asked for: the list endpoint leaves
+ * relations out by default, so a caller that reads a person's current term or
+ * their runs off the row must say so.
  */
-export async function getPersonsByIds(ids: string[], options: { includeOfficeHolders?: boolean } = {}): Promise<PersonItem[]> {
+export async function getPersonsByIds(
+	ids: string[],
+	options: { includeOfficeHolders?: boolean; includeCandidacies?: boolean } = {},
+): Promise<PersonItem[]> {
 	const unique = Array.from(new Set(ids.filter(Boolean))).slice(0, PERSONS_BY_IDS_MAX);
 	if (unique.length === 0) return [];
 	const batches: string[][] = [];
@@ -568,6 +572,7 @@ export async function getPersonsByIds(ids: string[], options: { includeOfficeHol
 		batches.map(async batch => {
 			const searchParams = new URLSearchParams({ ids: batch.join(',') });
 			if (options.includeOfficeHolders) searchParams.set('includeOfficeHolders', 'true');
+			if (options.includeCandidacies) searchParams.set('includeCandidacies', 'true');
 			const url = `${ELECTIONS_API_BASE_URL}/v1/persons?${searchParams}`;
 			const data = await fetchJson<PersonItem[]>(url, CACHE_OPTIONS);
 			return Array.isArray(data) ? data : [];

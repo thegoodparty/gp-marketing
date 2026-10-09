@@ -1602,3 +1602,23 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 		citySlugToCountySlug,
 	});
 }
+
+/**
+ * The pledge rule for a caller holding the person's whole civics record
+ * (`/v1/persons` asked for both `OfficeHolders` and `Candidacies`). The spine
+ * rule above demands at least one party string, because a card built from one
+ * row cannot know what it is missing. With the full record in hand, an empty
+ * party list is the data's whole answer, and the person's own profile shows the
+ * pledge in that case, so this does too: pledged, confirmed running, and no
+ * major party anywhere on the record.
+ */
+export function pledgedFromFullRecord(person: PersonItem | undefined, ...rowParties: Array<string | null | undefined>): boolean {
+	if (person?.isPledged !== true) return false;
+	if (!confirmedRunning(person.confirmedCandidate)) return false;
+	const evidence = [
+		...rowParties,
+		...(person.OfficeHolders ?? []).flatMap((o) => o.partyNames ?? []),
+		...(person.Candidacies ?? []).map((c) => c.party),
+	];
+	return !evidence.map(classifyParty).some((cls) => cls !== null && isMajorParty(cls));
+}

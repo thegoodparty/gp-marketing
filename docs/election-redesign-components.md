@@ -262,6 +262,11 @@ Four things from it that affect other components in the batch:
   is a real ballot relationship — a city voter also votes in their county's and state's races. The
   reverse is not, and a state's every municipal race would be hundreds of rows. Downward navigation
   stays with the counties-and-cities list (`component_electionsIndexBlock`).
+- **An empty place list hides the index block; it never falls back to the states.** The block lists
+  every state only when no page list is given at all (the /elections landing page). A county page
+  whose place has nothing below it, such as a Virginia independent city like Virginia Beach, hands over
+  an empty list, and the block renders nothing. The page also drops "cities" from its description.
+  Before 2026-10-09 those pages showed all 51 states under "Cities in Virginia Beach".
 - **The page level reaches the block as data, not as an editor's choice.** `locationLevel` was
   already in the index override context for the hero; the offices block now takes it too as
   `pageLevel`. One block serves all four location templates. Apply the same approach to the position

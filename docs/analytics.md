@@ -83,10 +83,12 @@ event name:
 
 Two things to know about the data layer:
 
-- GTM keeps the last value of every key across pushes. That is why the code pushes
-  `null` for anything it does not know: a tag reading `office_level` on a nearby
-  offices click sees null, not the level from an earlier offices list click. A tag
-  should only read keys its own event sets.
+- GTM keeps the last value of every key across pushes. That is why every event
+  writes every key in its row on every push, `null` when the code has nothing for
+  it: a Show more click from the index carries `page_level: null`, so a tag reading
+  it does not see the offices list's value from a click a minute earlier. A tag
+  should still only read the keys its own event lists above, because a key from a
+  different event is not reset.
 - Nothing in the data layer reaches GA4 without a tag. The push is visible in the
   browser (see below) even when the container ignores it, so "I can see it in the data
   layer" does not mean "it is in GA4".

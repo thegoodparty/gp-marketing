@@ -281,6 +281,7 @@ describe('the claim band hands the candidate to Win sign-up', () => {
 				source: 'claim_band',
 				label: 'Claim this profile',
 				href: 'https://app.goodparty.org/sign-up',
+				layout: null,
 			},
 		]);
 		expect(segmentEvents.map(e => e.name)).toEqual(['Voter Guide - Claim Profile Clicked']);

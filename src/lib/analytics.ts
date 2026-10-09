@@ -151,22 +151,80 @@ export function trackDataLayerEvent(event: string, properties?: Record<string, u
  * title-case twin in the style of the existing search events. `null` for the
  * data layer means the event is Amplitude-only, because GA4 already measures
  * that behaviour on its own.
+ *
+ * `keys` is every property the event can carry, and every push writes all of
+ * them. Two callers of one event know different things (the offices list's
+ * Show more has a page level, the index's has a hidden count), and GTM keeps
+ * the last value of a key a push leaves out, so a tag would otherwise read one
+ * caller's value on the other caller's event.
  */
 export const VOTER_GUIDE_EVENTS = {
-	officeClick: { dataLayer: 'voter_guide_office_click', amplitude: 'Voter Guide - Office Clicked' },
-	officesFilterChange: { dataLayer: 'voter_guide_offices_filter_change', amplitude: 'Voter Guide - Offices Filter Changed' },
-	heroButtonClick: { dataLayer: 'voter_guide_hero_button_click', amplitude: 'Voter Guide - Hero Button Clicked' },
-	featuredCandidateClick: { dataLayer: 'voter_guide_featured_candidate_click', amplitude: 'Voter Guide - Featured Candidate Clicked' },
-	carouselPage: { dataLayer: 'voter_guide_carousel_page', amplitude: 'Voter Guide - Carousel Paged' },
-	positionPersonClick: { dataLayer: 'voter_guide_position_person_click', amplitude: 'Voter Guide - Position Person Clicked' },
-	showMoreClick: { dataLayer: 'voter_guide_show_more_click', amplitude: 'Voter Guide - Show More Clicked' },
-	profileView: { dataLayer: 'voter_guide_profile_view', amplitude: 'Voter Guide - Profile Viewed' },
-	pledgeModalOpen: { dataLayer: 'voter_guide_pledge_modal_open', amplitude: 'Voter Guide - Pledge Modal Opened' },
-	claimProfileClick: { dataLayer: 'voter_guide_claim_profile_click', amplitude: 'Voter Guide - Claim Profile Clicked' },
-	locationIndexClick: { dataLayer: 'voter_guide_location_index_click', amplitude: 'Voter Guide - Location Index Clicked' },
-	featuredCityClick: { dataLayer: 'voter_guide_featured_city_click', amplitude: 'Voter Guide - Featured City Clicked' },
-	outboundClick: { dataLayer: null, amplitude: 'Voter Guide - Outbound Link Clicked' },
-} as const satisfies Record<string, { dataLayer: string | null; amplitude: string }>;
+	officeClick: {
+		dataLayer: 'voter_guide_office_click',
+		amplitude: 'Voter Guide - Office Clicked',
+		keys: ['list', 'office_name', 'office_level', 'office_type', 'election_date', 'pledged_count', 'href'],
+	},
+	officesFilterChange: {
+		dataLayer: 'voter_guide_offices_filter_change',
+		amplitude: 'Voter Guide - Offices Filter Changed',
+		keys: ['filter', 'value', 'page_level'],
+	},
+	heroButtonClick: {
+		dataLayer: 'voter_guide_hero_button_click',
+		amplitude: 'Voter Guide - Hero Button Clicked',
+		keys: ['label', 'href', 'location_level', 'state'],
+	},
+	featuredCandidateClick: {
+		dataLayer: 'voter_guide_featured_candidate_click',
+		amplitude: 'Voter Guide - Featured Candidate Clicked',
+		keys: ['name', 'office', 'location', 'is_pledged', 'position', 'href'],
+	},
+	carouselPage: {
+		dataLayer: 'voter_guide_carousel_page',
+		amplitude: 'Voter Guide - Carousel Paged',
+		keys: ['carousel', 'index', 'direction'],
+	},
+	positionPersonClick: {
+		dataLayer: 'voter_guide_position_person_click',
+		amplitude: 'Voter Guide - Position Person Clicked',
+		keys: ['list', 'name', 'href', 'party', 'is_pledged', 'is_winner', 'seat', 'decided'],
+	},
+	showMoreClick: {
+		dataLayer: 'voter_guide_show_more_click',
+		amplitude: 'Voter Guide - Show More Clicked',
+		keys: ['list', 'hidden_count', 'page_level'],
+	},
+	profileView: {
+		dataLayer: 'voter_guide_profile_view',
+		amplitude: 'Voter Guide - Profile Viewed',
+		keys: ['person_id', 'profile_state', 'persona', 'claimed', 'pledged', 'removed', 'unpublished', 'party_class'],
+	},
+	pledgeModalOpen: {
+		dataLayer: 'voter_guide_pledge_modal_open',
+		amplitude: 'Voter Guide - Pledge Modal Opened',
+		keys: ['source'],
+	},
+	claimProfileClick: {
+		dataLayer: 'voter_guide_claim_profile_click',
+		amplitude: 'Voter Guide - Claim Profile Clicked',
+		keys: ['source', 'label', 'href', 'layout'],
+	},
+	locationIndexClick: {
+		dataLayer: 'voter_guide_location_index_click',
+		amplitude: 'Voter Guide - Location Index Clicked',
+		keys: ['place_name', 'place_level', 'href', 'searched'],
+	},
+	featuredCityClick: {
+		dataLayer: 'voter_guide_featured_city_click',
+		amplitude: 'Voter Guide - Featured City Clicked',
+		keys: ['city_name', 'state', 'open_elections_count', 'href'],
+	},
+	outboundClick: {
+		dataLayer: null,
+		amplitude: 'Voter Guide - Outbound Link Clicked',
+		keys: ['href', 'host', 'link_text'],
+	},
+} as const satisfies Record<string, { dataLayer: string | null; amplitude: string; keys: readonly string[] }>;
 
 export type VoterGuideEventKey = keyof typeof VOTER_GUIDE_EVENTS;
 
@@ -191,16 +249,19 @@ const SEGMENT_FORWARDED: ReadonlySet<VoterGuideEventKey> = new Set<VoterGuideEve
  * Sends one voter guide event to every destination it belongs to: the GA4 data
  * layer first (GA4 is the one marketing reports on), then Amplitude, then
  * Segment for the few events in {@link SEGMENT_FORWARDED}. `page_path` is added
- * here so every event can be cut by the page it came from, and nulls stand in
- * for anything the caller does not know, so a tag reading the key sees "unknown"
- * rather than the previous event's value.
+ * here so every event can be cut by the page it came from, and every key the
+ * event declares is written, null when the caller had nothing for it, so a tag
+ * reading the key sees "unknown" rather than an earlier push's value.
  */
 export function trackVoterGuideEvent(key: VoterGuideEventKey, properties: VoterGuideEventProperties = {}): void {
 	if (typeof window === 'undefined') return;
 	const names = VOTER_GUIDE_EVENTS[key];
 	const payload: Record<string, unknown> = { page_path: window.location.pathname };
+	for (const name of names.keys) {
+		payload[name] = properties[name] ?? null;
+	}
 	for (const [name, value] of Object.entries(properties)) {
-		payload[name] = value ?? null;
+		if (!(name in payload)) payload[name] = value ?? null;
 	}
 
 	if (names.dataLayer) trackDataLayerEvent(names.dataLayer, payload);

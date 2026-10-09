@@ -81,21 +81,18 @@ describe('trackVoterGuideEvent', () => {
 	test('reaches the data layer under the GA4 name and Amplitude under the title-case name, with the page path', () => {
 		trackVoterGuideEvent('officeClick', { list: 'offices', office_name: 'Mayor', office_level: 'local' });
 
-		expect(stub.dataLayer).toEqual([
-			{
-				event: 'voter_guide_office_click',
-				page_path: '/elections/tx/harris-county',
-				list: 'offices',
-				office_name: 'Mayor',
-				office_level: 'local',
-			},
-		]);
-		expect(amplitudeCalls).toEqual([
-			{
-				name: 'Voter Guide - Office Clicked',
-				props: { page_path: '/elections/tx/harris-county', list: 'offices', office_name: 'Mayor', office_level: 'local' },
-			},
-		]);
+		const expected = {
+			page_path: '/elections/tx/harris-county',
+			list: 'offices',
+			office_name: 'Mayor',
+			office_level: 'local',
+			office_type: null,
+			election_date: null,
+			pledged_count: null,
+			href: null,
+		};
+		expect(stub.dataLayer).toEqual([{ event: 'voter_guide_office_click', ...expected }]);
+		expect(amplitudeCalls).toEqual([{ name: 'Voter Guide - Office Clicked', props: expected }]);
 	});
 
 	/**
@@ -107,6 +104,24 @@ describe('trackVoterGuideEvent', () => {
 		trackVoterGuideEvent('officeClick', { office_level: undefined, pledged_count: null });
 
 		expect(stub.dataLayer?.[0]).toMatchObject({ office_level: null, pledged_count: null });
+	});
+
+	/**
+	 * Two callers of one event name may know different things (the offices list
+	 * sends page_level, the index sends hidden_count), and GTM keeps the last
+	 * value of a key it was not sent. Every key an event declares is therefore
+	 * written on every push, null when the caller had nothing for it.
+	 */
+	test('writes null for every key the event declares that the caller did not send', () => {
+		trackVoterGuideEvent('showMoreClick', { list: 'locations_index', hidden_count: 3 });
+
+		expect(stub.dataLayer?.[0]).toEqual({
+			event: 'voter_guide_show_more_click',
+			page_path: '/elections/tx/harris-county',
+			list: 'locations_index',
+			hidden_count: 3,
+			page_level: null,
+		});
 	});
 
 	test('does not reach Segment unless the event is one marketing automates on', () => {
@@ -190,6 +205,17 @@ describe('the event names', () => {
 
 	test('every Amplitude name carries the prefix the existing search events use', () => {
 		for (const key of keys) expect(VOTER_GUIDE_EVENTS[key].amplitude).toStartWith('Voter Guide - ');
+	});
+
+	/**
+	 * The doc's Properties column is what the GTM variables are made from, so a
+	 * key the code writes but the doc does not name would never reach GA4.
+	 */
+	test('docs/analytics.md names every key every event declares', async () => {
+		const doc = await Bun.file(new URL('../../docs/analytics.md', import.meta.url)).text();
+		for (const key of keys) {
+			for (const property of VOTER_GUIDE_EVENTS[key].keys) expect(doc).toContain(`\`${property}\``);
+		}
 	});
 
 	/**

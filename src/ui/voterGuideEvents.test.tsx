@@ -183,7 +183,7 @@ describe('the offices list', () => {
 		await click(showMore);
 
 		expect(ga4Events()).toEqual([
-			{ event: 'voter_guide_show_more_click', page_path: '/elections/tx/harris-county', list: 'offices', page_level: 'local' },
+			{ event: 'voter_guide_show_more_click', page_path: '/elections/tx/harris-county', list: 'offices', hidden_count: null, page_level: 'local' },
 		]);
 	});
 });
@@ -216,7 +216,7 @@ describe('the counties and cities index', () => {
 				href: '/elections/tx/harris-county/houston',
 				searched: false,
 			},
-			{ event: 'voter_guide_show_more_click', page_path: '/elections/tx/harris-county', list: 'locations_index', hidden_count: 1 },
+			{ event: 'voter_guide_show_more_click', page_path: '/elections/tx/harris-county', list: 'locations_index', hidden_count: 1, page_level: null },
 		]);
 	});
 });

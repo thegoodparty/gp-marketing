@@ -9469,6 +9469,35 @@
           },
           "optional": true
         },
+        "featuredCandidatesBlockRotation": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "object",
+            "attributes": {
+              "list_alwaysFeature": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "array",
+                  "of": {
+                    "type": "string"
+                  }
+                },
+                "optional": true
+              },
+              "list_neverFeature": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "array",
+                  "of": {
+                    "type": "string"
+                  }
+                },
+                "optional": true
+              }
+            }
+          },
+          "optional": true
+        },
         "componentSettings": {
           "type": "objectAttribute",
           "value": {

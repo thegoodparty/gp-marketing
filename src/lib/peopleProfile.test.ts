@@ -1611,6 +1611,65 @@ describe('districtTag', () => {
 	});
 });
 
+describe('buildOtherCandidateCards reads every ballot line', () => {
+	const OTHER = '22222222-2222-2222-2222-222222222222';
+	const personsById = (person: PersonItem) => new Map([[person.id.toLowerCase(), person]]);
+
+	// Fusion voting lists one person on several lines, one feed row each. They
+	// fold into one card that labels like the profile (major party first) and
+	// cannot be marked pledged off the minor line alone.
+	test('one person on two lines is one card, labelled major party first and not pledged', () => {
+		const cards = buildOtherCandidateCards(
+			[
+				{ id: 'c1', personId: OTHER, firstName: 'Zohran', lastName: 'Mamdani', party: 'Working Families Party' },
+				{ id: 'c2', personId: OTHER, firstName: 'Zohran', lastName: 'Mamdani', party: 'Democratic' },
+			],
+			personsById(makePerson({ id: OTHER, fullName: 'Zohran Mamdani', isPledged: true })),
+			PID,
+			NO_REMOVALS,
+		);
+		expect(cards).toHaveLength(1);
+		expect(cards[0]).toMatchObject({ subtitle: 'Democratic, Working Families Party', majorParty: true, isPledged: false });
+	});
+
+	// The row says one thing and the person's own record another: the record
+	// wins, as it does on the person's own page.
+	test('a minor-line row is not pledged when the person\u2019s office carries a major line', () => {
+		const cards = buildOtherCandidateCards(
+			[{ id: 'c1', personId: OTHER, firstName: 'Zohran', lastName: 'Mamdani', party: 'Working Families Party' }],
+			personsById(
+				makePerson({
+					id: OTHER,
+					fullName: 'Zohran Mamdani',
+					isPledged: true,
+					OfficeHolders: [makeOffice({ isCurrent: true, partyNames: ['Working Families Party', 'Democratic'] })],
+				}),
+			),
+			PID,
+			NO_REMOVALS,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([false]);
+		expect(cards.map((c) => c.subtitle)).toEqual(['Working Families Party']);
+	});
+
+	test('a pledged person on a minor line with no major line anywhere keeps the mark', () => {
+		const cards = buildOtherCandidateCards(
+			[{ id: 'c1', personId: OTHER, firstName: 'Jim', lastName: 'Walden', party: 'Integrity' }],
+			personsById(
+				makePerson({
+					id: OTHER,
+					fullName: 'Jim Walden',
+					isPledged: true,
+					Candidacies: [{ id: 'c1', positionName: 'New York City Mayor', party: 'Integrity' }],
+				}),
+			),
+			PID,
+			NO_REMOVALS,
+		);
+		expect(cards.map((c) => c.isPledged)).toEqual([true]);
+	});
+});
+
 describe('buildNearbyOfficialCards', () => {
 	const OTHER = '22222222-2222-2222-2222-222222222222';
 	const personsById = (person: PersonItem) => new Map([[OTHER.toLowerCase(), person]]);

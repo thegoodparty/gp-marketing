@@ -1,4 +1,5 @@
 import { stegaClean } from 'next-sanity';
+import { displayPlaceName } from '~/lib/placeDisplayName';
 
 import type { Sections } from '~/PageSections';
 import type { ElectionItem } from '~/ui/ElectionsIndexBlock';
@@ -109,7 +110,7 @@ async function ElectionsIndexBlockSectionAsync(props: ElectionsIndexBlockSection
 		const cityPlaces = await getCityPlacesByCounty({ state: statePart.toUpperCase(), countySlug: slug });
 		elections = cityPlaces.length > 0
 			? cityPlaces.map(c => ({
-					name: c.name,
+					name: displayPlaceName(c.name),
 					href: `/elections/${slug}/${c.slug.split('/').pop() ?? c.name.toLowerCase().replace(/\s+/g, '-')}`,
 					level: 'city' as const,
 				}))
@@ -136,6 +137,12 @@ export function ElectionsIndexBlockSection(props: ElectionsIndexBlockSectionProp
 
 	const slug = (stateSlugOverride ?? '').trim().toLowerCase();
 	const hasOverride = !!electionsOverride && electionsOverride.length > 0;
+
+	// A location page hands over its own list. An empty one means the place has
+	// nothing below it (an independent city, say), not "show every state".
+	if (electionsOverride && !hasOverride) {
+		return null;
+	}
 
 	// Sync path: elections already provided (person profiles) or no slug to fetch
 	// (states fallback). Only the location-index branch needs an async fetch.

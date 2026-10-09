@@ -1,4 +1,5 @@
 import { convert } from 'html-to-text';
+import { displayPlaceName } from '~/lib/placeDisplayName';
 
 import { US_STATES } from '~/constants/usStates';
 import { isValidStateCode } from '~/constants/usStateCodes';
@@ -104,8 +105,8 @@ export function resolveLocalityName(
 	racePlace: PlaceWithFacts | undefined,
 	fallbackSlug: string,
 ): string {
-	if (countyPlace) return countyPlace.name;
-	if (racePlace?.name) return racePlace.name;
+	if (countyPlace) return displayPlaceName(countyPlace.name);
+	if (racePlace?.name) return displayPlaceName(racePlace.name);
 	const last = fallbackSlug.split('/').pop();
 	return last
 		? last.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())

@@ -1,3 +1,4 @@
+import { displayPlaceName } from '~/lib/placeDisplayName';
 import {
 	getCandidacies,
 	getElectionsPagePlace,
@@ -58,7 +59,8 @@ function locationLine(place: PlaceContext, ownCity: string | null | undefined): 
  * candidacy's place is the state, and "Indiana, IN" reads as a mistake (Emily, 2026-10-07).
  */
 export function placeWithState(placeName: string, state: string): string {
-	return isStateName(placeName, state) ? placeName : `${placeName}, ${state}`;
+	const shown = displayPlaceName(placeName);
+	return isStateName(placeName, state) ? shown : `${shown}, ${state}`;
 }
 
 function isStateName(placeName: string, state: string): boolean {
@@ -253,12 +255,12 @@ export async function getFeaturedPeople(
 	if (!place) return empty;
 
 	const today = params.today ?? new Date();
-	const placeContext: PlaceContext = { name: place.name, state: place.state, level: params.locationLevel };
+	const placeContext: PlaceContext = { name: displayPlaceName(place.name), state: place.state, level: params.locationLevel };
 	// Officials above the page are named with their own tier's place, so a county
 	// official on a city page reads "Harris County, TX", not the city.
 	const tierContexts: PlaceContext[] = places.map((tierPlace, index) => {
 		const level = tiers[index]?.level;
-		return index === 0 || !tierPlace || !level ? placeContext : { name: tierPlace.name, state: tierPlace.state, level };
+		return index === 0 || !tierPlace || !level ? placeContext : { name: displayPlaceName(tierPlace.name), state: tierPlace.state, level };
 	});
 	const tierRaces = await Promise.all(
 		tiers.map(async (tier, index) => {

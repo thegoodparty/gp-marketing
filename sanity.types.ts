@@ -1658,6 +1658,10 @@ export type Component_featuredCandidatesBlock = {
 		field_featuredPeople?: 'both' | 'candidates' | 'representatives';
 		field_blockColorCreamMidnight?: 'cream' | 'midnight';
 	};
+	featuredCandidatesBlockRotation?: {
+		list_alwaysFeature?: Array<string>;
+		list_neverFeature?: Array<string>;
+	};
 	componentSettings?: ComponentSettings;
 };
 
@@ -13581,6 +13585,10 @@ export type GoodpartyOrg_homeQueryResult = {
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
+					};
+					featuredCandidatesBlockRotation?: {
+						list_alwaysFeature?: Array<string>;
+						list_neverFeature?: Array<string>;
 					};
 					componentSettings: ComponentSettings | null;
 			  }
@@ -37480,6 +37488,10 @@ export type Experiment_variantsByExperimentIdQueryResult = Array<{
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
+					featuredCandidatesBlockRotation?: {
+						list_alwaysFeature?: Array<string>;
+						list_neverFeature?: Array<string>;
+					};
 					componentSettings: ComponentSettings | null;
 			  }
 			| {
@@ -61378,6 +61390,10 @@ export type ActiveVariantsByPageIdQueryResult = Array<{
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
+					};
+					featuredCandidatesBlockRotation?: {
+						list_alwaysFeature?: Array<string>;
+						list_neverFeature?: Array<string>;
 					};
 					componentSettings: ComponentSettings | null;
 			  }
@@ -85279,6 +85295,10 @@ export type GoodpartyOrg_allArticlesQueryResult = {
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
+					};
+					featuredCandidatesBlockRotation?: {
+						list_alwaysFeature?: Array<string>;
+						list_neverFeature?: Array<string>;
 					};
 					componentSettings: ComponentSettings | null;
 			  }
@@ -109218,6 +109238,10 @@ export type CategoriesQueryResult = {
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
+					};
+					featuredCandidatesBlockRotation?: {
+						list_alwaysFeature?: Array<string>;
+						list_neverFeature?: Array<string>;
 					};
 					componentSettings: ComponentSettings | null;
 			  }
@@ -133185,6 +133209,10 @@ export type TopicsQueryResult = {
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
+					};
+					featuredCandidatesBlockRotation?: {
+						list_alwaysFeature?: Array<string>;
+						list_neverFeature?: Array<string>;
 					};
 					componentSettings: ComponentSettings | null;
 			  }
@@ -159213,6 +159241,10 @@ export type GoodpartyOrg_contactQueryResult = {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
+					featuredCandidatesBlockRotation?: {
+						list_alwaysFeature?: Array<string>;
+						list_neverFeature?: Array<string>;
+					};
 					componentSettings: ComponentSettings | null;
 			  }
 			| {
@@ -183116,6 +183148,10 @@ export type GoodpartyOrg_landingPagesAndPolicyQueryResult =
 							featuredCandidatesBlockDesignSettings?: {
 								field_featuredPeople?: 'both' | 'candidates' | 'representatives';
 								field_blockColorCreamMidnight?: 'cream' | 'midnight';
+							};
+							featuredCandidatesBlockRotation?: {
+								list_alwaysFeature?: Array<string>;
+								list_neverFeature?: Array<string>;
 							};
 							componentSettings: ComponentSettings | null;
 					  }
@@ -207032,6 +207068,10 @@ export type GoodpartyOrg_electionsQueryResult = {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
+					featuredCandidatesBlockRotation?: {
+						list_alwaysFeature?: Array<string>;
+						list_neverFeature?: Array<string>;
+					};
 					componentSettings: ComponentSettings | null;
 			  }
 			| {
@@ -230934,6 +230974,10 @@ export type GoodpartyOrg_candidatesQueryResult = {
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
+					};
+					featuredCandidatesBlockRotation?: {
+						list_alwaysFeature?: Array<string>;
+						list_neverFeature?: Array<string>;
 					};
 					componentSettings: ComponentSettings | null;
 			  }
@@ -254838,6 +254882,10 @@ export type GoodpartyOrg_profileQueryResult = {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
+					featuredCandidatesBlockRotation?: {
+						list_alwaysFeature?: Array<string>;
+						list_neverFeature?: Array<string>;
+					};
 					componentSettings: ComponentSettings | null;
 			  }
 			| {
@@ -278740,6 +278788,10 @@ export type GoodpartyOrg_allComponentsQueryResult = {
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
+					};
+					featuredCandidatesBlockRotation?: {
+						list_alwaysFeature?: Array<string>;
+						list_neverFeature?: Array<string>;
 					};
 					componentSettings: ComponentSettings | null;
 			  }
@@ -308461,6 +308513,10 @@ export type GlobalElectionTemplateQueryResult = {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
 					};
+					featuredCandidatesBlockRotation?: {
+						list_alwaysFeature?: Array<string>;
+						list_neverFeature?: Array<string>;
+					};
 					componentSettings: ComponentSettings | null;
 			  }
 			| {
@@ -332391,6 +332447,10 @@ export type CustomElectionTemplateByIdQueryResult = {
 					featuredCandidatesBlockDesignSettings?: {
 						field_featuredPeople?: 'both' | 'candidates' | 'representatives';
 						field_blockColorCreamMidnight?: 'cream' | 'midnight';
+					};
+					featuredCandidatesBlockRotation?: {
+						list_alwaysFeature?: Array<string>;
+						list_neverFeature?: Array<string>;
 					};
 					componentSettings: ComponentSettings | null;
 			  }

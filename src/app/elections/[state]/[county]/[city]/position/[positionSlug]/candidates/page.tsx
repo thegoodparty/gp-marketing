@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { displayPlaceName } from '~/lib/placeDisplayName';
 import { notFound, permanentRedirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
@@ -94,7 +95,7 @@ export default async function Page({
 	if (!cityPlace) notFound();
 
 	const stateName = getStateName(stateCode);
-	const cityName = cityPlace.name;
+	const cityName = displayPlaceName(cityPlace.name);
 	const officeName = officeDisplayName(race, race.Place);
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
@@ -158,7 +159,7 @@ export async function generateMetadata({
 		cityPlaces.find(c => c.slug.toLowerCase() === `${state.toLowerCase()}/${city.toLowerCase()}`) ??
 		race?.Place ??
 		null;
-	const cityName = cityPlace?.name ?? city;
+	const cityName = displayPlaceName(cityPlace?.name ?? city);
 	// A joint office fills the city slot with an office name, and the place then resolves to the
 	// county, so naming it as both city and county would say the county twice.
 	const isRealCity = isRealPlaceSegment(cityPlace?.slug, city);

@@ -519,9 +519,13 @@ function buildCivicSections(view: PersonProfileView): SectionMap {
 	if (view.recentExperience.length > 0) {
 		sections.recentExperience = { heading: 'Recent Experience', content: <ExperienceContent experience={view.recentExperience} /> };
 	}
+	// Both headings name `positionName`, the office the loader built this
+	// context from, not `officeName`: for a past official whose last run was for
+	// another office the two differed, and "About New York Governor" sat over the
+	// Mayor's description (Cuomo, 2026-10-09).
 	if (view.positionDescription || view.termLabel || view.electionDate) {
 		sections.aboutPosition = {
-			heading: `About ${view.officeName ?? 'the Role'}`,
+			heading: `About ${view.positionName ?? 'the Role'}`,
 			content: <AboutPositionContent view={view} />,
 		};
 	}
@@ -539,7 +543,7 @@ function buildCivicSections(view: PersonProfileView): SectionMap {
 	const otherCandidates = toCandidateCards(rankRelatedPeople(view.otherCandidates));
 	if (otherCandidates.length > 0) {
 		sections.otherCandidates = {
-			heading: view.officeName ? `Other Candidates for ${view.officeName}` : 'Other Candidates',
+			heading: view.positionName ? `Other Candidates for ${view.positionName}` : 'Other Candidates',
 			content: <RelatedPeopleList cards={otherCandidates} callout={<PledgeSymbolCallout />} />,
 		};
 	}

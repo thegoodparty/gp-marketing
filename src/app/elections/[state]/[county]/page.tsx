@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { displayPlaceName } from '~/lib/placeDisplayName';
 import { notFound, redirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
@@ -73,19 +74,20 @@ export default async function Page({
 	}
 
 	const placeName = isDistrict
-		? (placeData?.name ?? county)
+		? displayPlaceName(placeData?.name ?? county)
 		: (normalizedCounty?.displayName ?? countyPlace!.name);
 	const cities = isDistrict
 		? []
 		: cityPlaces.map(c => {
 				const level: 'town' | 'city' = c.mtfcc === TOWN_MTFCC ? 'town' : 'city';
 				return {
-					name: c.name,
+					name: displayPlaceName(c.name),
 					href: `/elections/${fullSlug}/${c.slug?.split('/')?.pop() ?? c.name.toLowerCase().replace(/\s+/g, '-')}`,
 					level,
 				};
 			});
 	const hasTownEntries = cityPlaces.some(c => c.mtfcc === TOWN_MTFCC);
+	const hasCities = cities.length > 0;
 
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
@@ -152,17 +154,19 @@ export default async function Page({
 		featuredCities: isDistrict ? [] : featuredCities,
 		pageUrl,
 		pageTitle: `Elections in ${placeName}, ${stateName}`,
-		pageDescription: isDistrict
-			? `Browse elections and positions in ${placeName}, ${stateName}.`
-			: `Browse elections, positions, and cities in ${placeName}, ${stateName}.`,
-		electionsIndexHidden: isDistrict,
-		electionsIndexHeader: isDistrict
-			? undefined
-			: {
-					title: `${hasTownEntries ? 'Cities & Towns' : 'Cities'} in ${normalizedCounty?.displayName ?? countyPlace!.name}`,
-					copy: `Browse elections by city in ${normalizedCounty?.displayName ?? countyPlace!.name}, ${stateName}.`,
-					searchPlaceholder: 'Search by city',
-				},
+		pageDescription:
+			isDistrict || !hasCities
+				? `Browse elections and positions in ${placeName}, ${stateName}.`
+				: `Browse elections, positions, and cities in ${placeName}, ${stateName}.`,
+		electionsIndexHidden: isDistrict || !hasCities,
+		electionsIndexHeader:
+			isDistrict || !hasCities
+				? undefined
+				: {
+						title: `${hasTownEntries ? 'Cities & Towns' : 'Cities'} in ${normalizedCounty?.displayName ?? countyPlace!.name}`,
+						copy: `Browse elections by city in ${normalizedCounty?.displayName ?? countyPlace!.name}, ${stateName}.`,
+						searchPlaceholder: 'Search by city',
+					},
 		locationFacts:
 			factsCards.length > 0
 				? {
@@ -185,23 +189,26 @@ export async function generateMetadata({
 	if (!isValidStateCode(stateCode)) return {};
 	const stateName = getStateName(stateCode);
 	const fullSlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
-	const [counties, placeData] = await Promise.all([
+	const [counties, placeData, cityPlaces] = await Promise.all([
 		getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC }),
 		getElectionsPagePlace({ slug: fullSlug }),
+		getCountyChildPlaces({ state: stateCode, countySlug: fullSlug }),
 	]);
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === fullSlug);
 	const isDistrict = placeData != null && isDistrictMtfcc(placeData.mtfcc);
+	const hasCities = cityPlaces.length > 0;
 	const normalizedCounty = countyPlace
 		? canonicalizeCountyEquivalentName(stateCode, countyPlace.name)
 		: null;
 	const placeName = isDistrict
-		? (placeData?.name ?? county)
+		? displayPlaceName(placeData?.name ?? county)
 		: (normalizedCounty?.displayName ?? county);
 	return {
 		title: `Elections in ${placeName}, ${stateName} | ${SITE_NAME}`,
-		description: isDistrict
-			? `Browse elections and positions in ${placeName}, ${stateName}.`
-			: `Browse elections and cities in ${placeName}, ${stateName}.`,
+		description:
+			isDistrict || !hasCities
+				? `Browse elections and positions in ${placeName}, ${stateName}.`
+				: `Browse elections and cities in ${placeName}, ${stateName}.`,
 		alternates: { canonical: toAbsoluteUrl(`/elections/${fullSlug}`) },
 	};
 }

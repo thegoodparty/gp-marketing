@@ -137,6 +137,12 @@ export function ElectionsIndexBlockSection(props: ElectionsIndexBlockSectionProp
 	const slug = (stateSlugOverride ?? '').trim().toLowerCase();
 	const hasOverride = !!electionsOverride && electionsOverride.length > 0;
 
+	// A location page hands over its own list. An empty one means the place has
+	// nothing below it (an independent city, say), not "show every state".
+	if (electionsOverride && !hasOverride) {
+		return null;
+	}
+
 	// Sync path: elections already provided (person profiles) or no slug to fetch
 	// (states fallback). Only the location-index branch needs an async fetch.
 	if (hasOverride || !slug) {

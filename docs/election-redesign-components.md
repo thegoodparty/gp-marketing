@@ -927,6 +927,28 @@ file and the content block's clearance, and both wait for the `/people` batch (P
   `rankRelatedPeople` in `personSectionOverrides.tsx`; the cards carry `majorParty` from the same
   party rule the profile's own gating uses. It replaced the older "empowered first" sort, which the
   production builders could never trigger.
+- **One office per profile page** (Cuomo, 2026-10-09). The breadcrumb's position crumb, "About
+  [position]" with its term, next election and "Learn more" link, and "Other Candidates for
+  [position]" are all built from one context, chosen by `selectPrimaryCandidacy` in
+  `src/lib/peopleProfile.ts`, and that context is the office the hero names: the race the person
+  is in (soonest election first, also for someone serving and running, where the race leads);
+  else the office they hold or last held, linked through the term's own race slug; and only for
+  someone with no office at all, their most recent concluded run. Before this, only a *current*
+  office deferred, so Andrew Cuomo's page said "Former New York Governor" and "About New York
+  Governor" over the Mayor's description, the 2025 mayoral election date, a link to the mayoral
+  position page and the mayoral field as "Other Candidates for New York Governor". The two
+  headings now read `positionName`, the context's name, which the loader passes alongside
+  `positionId`; `officeName` stays the sidebar's and the placeholder prompts' office. A concluded
+  run for another office is a Recent Experience row and nothing more.
+- **A related-person card reads the same record its profile reads** (Mamdani on Cuomo's page,
+  2026-10-09). `pledgedFromSpine` needs the person's party evidence, but `/v1/persons?ids=` sends
+  scalars only unless asked, so a card built from a bare row saw one ballot line, "Working
+  Families Party", and marked a pledge the person's own page called impossible off the
+  Democratic line on his office. `loadOtherCandidates` and `loadNearbyOfficials` ask the batch
+  for `includeOfficeHolders=true&includeCandidacies=true`, and a person listed on several lines
+  of one race folds into one card that reads every line (`buildOtherCandidateCards`), labelled
+  major party first like the profile. The mark stays on a pledged person with no major line
+  anywhere on record (Jim Walden), because his own page says the same.
 **GoodParty.org Pledge block** (person profile pages first; location and position pages once editors
 place it) — extended, not rebuilt: `component_goodPartyOrgPledge`, the Studio block "GoodParty.org
 Pledge". The Voter Guide frames (2156-34297 desktop, 2188-38249 mobile) show a centred heading and intro

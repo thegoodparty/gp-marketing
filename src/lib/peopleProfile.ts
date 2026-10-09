@@ -214,6 +214,17 @@ export interface PersonProfileView {
 	secondaryRoleTitle: string | null;
 	/** Bare office name for the sidebar "About Office" row. */
 	officeName: string | null;
+	/**
+	 * The office the page's civic context describes: the breadcrumb's position
+	 * crumb, "About [position]", its "Learn more" link and "Other Candidates for
+	 * [position]" are all built from one race or office term, chosen by
+	 * {@link selectPrimaryCandidacy}, and this is that one's name. Equal to
+	 * {@link officeName} except for someone serving and running at once, whose
+	 * context is the race they are in while `officeName` stays the seat they
+	 * hold. Headings read this so they can never name an office the card's data
+	 * came from somewhere else (Cuomo, 2026-10-09).
+	 */
+	positionName: string | null;
 	/** Display label: {@link partyNames} joined with commas, major party first. */
 	party: string | null;
 	/**
@@ -757,10 +768,13 @@ function confirmedRunning(confirmedCandidate: string | null | undefined): boolea
  * whose card stays quiet. The one we cannot is a card asserting a pledge that
  * the profile it links to calls impossible.
  *
- * Residual, and unclosable from here: if the batch payload carries no nested
- * offices or candidacies and the row's own party disagrees with the office the
- * hero would read, the two can still differ. Closing it needs the current
- * office party on the person feed, not more logic here.
+ * The batch person payload carries no offices or candidacies unless asked for
+ * them, and a row built from a bare payload sees only its own party line. That
+ * is how a fusion candidate listed on a minor line (Mamdani, "Working Families
+ * Party") was marked pledged on another person's page while his own profile,
+ * reading his Democratic office line, called him ineligible. The loaders that
+ * build these cards therefore ask `/v1/persons?ids=` for both relations, so
+ * the evidence here is the person's whole record, not one ballot line.
  */
 export function pledgedFromSpine(person: PersonItem | undefined, ...rowParties: Array<string | null | undefined>): boolean {
 	if (person?.isPledged !== true) return false;
@@ -812,6 +826,12 @@ export function districtTag(subAreaName: string | null | undefined, subAreaValue
  * candidacy's own race row (`Race.subAreaName` / `subAreaValue`, asked for by
  * `getCandidacies`): a shared race slug names every district's race, so the
  * slug's race is the wrong place to read a seat from (Emily, 2026-10-06).
+ *
+ * One person can arrive on several rows, one per ballot line under fusion
+ * voting, each carrying a single `party`. The rows fold into one card that
+ * reads every line, the way the profile reads every line of an office term:
+ * the label leads with a major party, and a major line anywhere disqualifies
+ * the pledge mark.
  */
 export function buildOtherCandidateCards(
 	candidacies: CandidacyItem[],
@@ -819,14 +839,20 @@ export function buildOtherCandidateCards(
 	excludePersonId: string,
 	removedPersonIds: ReadonlySet<string> | null,
 ): RelatedPersonCard[] {
-	const cards: RelatedPersonCard[] = [];
-	const seen = new Set<string>();
+	const rowsByPerson = new Map<string, CandidacyItem[]>();
 	for (const c of candidacies) {
 		if (c.personId && c.personId.toLowerCase() === excludePersonId.toLowerCase()) continue;
+		const key = (c.personId ?? c.slug ?? nameOf(c.firstName, c.lastName, 'Candidate')).toLowerCase();
+		const rows = rowsByPerson.get(key);
+		if (rows) rows.push(c);
+		else rowsByPerson.set(key, [c]);
+	}
+	const cards: RelatedPersonCard[] = [];
+	for (const rows of rowsByPerson.values()) {
+		const c = rows[0];
+		if (!c) continue;
 		const name = nameOf(c.firstName, c.lastName, 'Candidate');
-		const dedupeKey = (c.personId ?? c.slug ?? name).toLowerCase();
-		if (seen.has(dedupeKey)) continue;
-		seen.add(dedupeKey);
+		const parties = orderPartyNames(rows.map((row) => row.party));
 		const href = c.personId
 			? `/people/${buildPersonSlug(name, c.personId)}`
 			: c.slug
@@ -835,11 +861,11 @@ export function buildOtherCandidateCards(
 		cards.push({
 			personId: c.personId ?? null,
 			name,
-			subtitle: c.party ?? null,
+			subtitle: parties.length > 0 ? parties.join(', ') : null,
 			href,
 			isEmpowered: false,
-			isPledged: pledgedFromSpine(c.personId ? personsById.get(c.personId.toLowerCase()) : undefined, c.party),
-			majorParty: isMajorParty(classifyParty(c.party)),
+			isPledged: pledgedFromSpine(c.personId ? personsById.get(c.personId.toLowerCase()) : undefined, ...parties),
+			majorParty: isMajorParty(classifyPartyFrom(...parties)),
 			tag: districtTag(c.Race?.subAreaName, c.Race?.subAreaValue),
 			avatarUrl: cardAvatarUrl(c.personId ?? null, c.image ?? null, removedPersonIds),
 		});
@@ -1015,6 +1041,8 @@ export interface ComposeExtras {
 	removed?: boolean;
 	unpublished?: boolean;
 	positionId?: string | null;
+	/** Name of the race or office the context fields below describe; see `PersonProfileView.positionName`. */
+	positionName?: string | null;
 	electionDate?: string | null;
 	positionDescription?: string | null;
 	positionHref?: string | null;
@@ -1115,7 +1143,7 @@ export function composeView(
 	// race than the one it describes.
 	const positionLink = extras.positionHref
 		? {
-				candidacySlug: selectPrimaryCandidacy(person, office?.isCurrent === true)?.slug ?? null,
+				candidacySlug: selectPrimaryCandidacy(person, office !== null)?.slug ?? null,
 				href: extras.positionHref,
 			}
 		: null;
@@ -1161,6 +1189,10 @@ export function composeView(
 		// position so section headings ("About …", "Other Candidates for …") still
 		// name the seat they're running for, matching the Figma candidate frames.
 		officeName: office?.positionName ?? office?.officeTitle ?? candidacyTarget,
+		// Without a loader there is no separate context (the dev fixtures and the
+		// state matrix compose straight from the spine), so the headings name the
+		// same office the sidebar does.
+		positionName: extras.positionName ?? office?.positionName ?? office?.officeTitle ?? candidacyTarget,
 		// Falls back to the class label so this never disagrees with `party`, which
 		// uses the same fallback when the spine names no party at all.
 		partyNames: partyNames.length > 0 ? partyNames : party ? [party] : [],
@@ -1214,26 +1246,34 @@ export function composeView(
 
 /**
  * Selects which of a person's candidacies drives the profile's office context
- * (breadcrumb position crumb, "Other Candidates", position href), by precedence:
+ * (breadcrumb position crumb, "About [position]", "Other Candidates", position
+ * href), by precedence:
  *   1. CURRENT candidate — the soonest UPCOMING election wins, even when the
  *      person also holds office ("both"): the office they're running for leads.
- *   2. Elected officeholder who is NOT currently running — defer to the elected
- *      office (return null) so the crumb reflects the seat they hold.
- *   3. Archived (no current run, no current office) — the most recent PAST run
- *      by election date wins.
+ *   2. Anyone who holds or has held office and is NOT currently running — defer
+ *      to that office (return null), because it is what the hero names: "City
+ *      Council" for a sitting member, "Former New York Governor" for a past one.
+ *      A concluded run for some other office must not take over the context
+ *      underneath that heading. Cuomo's page said "Former New York Governor"
+ *      and "About New York Governor" over the Mayor's description, the mayoral
+ *      election date, a link to the mayoral position page and the 2025 mayoral
+ *      field as "Other Candidates for New York Governor" (2026-10-09), because
+ *      only a CURRENT office used to defer.
+ *   3. Archived (no run ahead, no office at all) — the most recent PAST run
+ *      by election date wins, matching the "Candidate for …" hero.
  * Candidacies without a slug are skipped (the detail fetch keys off the slug).
  */
 function selectPrimaryCandidacy(
 	person: PersonItem | null,
-	hasCurrentOffice: boolean,
+	hasOffice: boolean,
 ): PersonCandidacySummary | null {
 	const { upcoming, past, undated } = candidaciesByRecency(
 		(person?.Candidacies ?? []).filter((c) => c.slug),
 	);
 	// (1) Current candidate: earliest upcoming election.
 	if (upcoming[0]) return upcoming[0];
-	// (2) Elected officeholder not currently running: defer to the office.
-	if (hasCurrentOffice) return null;
+	// (2) Holds or held office, not currently running: defer to the office.
+	if (hasOffice) return null;
 	// (3) Archived: most recent past run wins; undated rows fall back to first.
 	return past[0] ?? undated[0] ?? null;
 }
@@ -1241,12 +1281,21 @@ function selectPrimaryCandidacy(
 /** Resolves the primary candidacy detail (with race) used to enrich the page. */
 async function loadPrimaryCandidacy(
 	person: PersonItem | null,
-	hasCurrentOffice: boolean,
+	hasOffice: boolean,
 ): Promise<CandidacyItem | null> {
-	const slug = selectPrimaryCandidacy(person, hasCurrentOffice)?.slug;
+	const slug = selectPrimaryCandidacy(person, hasOffice)?.slug;
 	if (!slug) return null;
 	return getCandidateBySlug({ slug, includeStances: false, includeRace: true });
 }
+
+/**
+ * The relations a card's pledge rule needs on each batched person row. The
+ * list endpoint sends scalars only unless asked, and a row with no office
+ * terms and no runs has no party evidence beyond the one line it was built
+ * from, which is not what the person's own profile reads (see
+ * {@link pledgedFromSpine}).
+ */
+const CARD_PERSON_RELATIONS = { includeOfficeHolders: true, includeCandidacies: true } as const;
 
 /**
  * Fetches "Other Candidates for [Position]" cards for a resolved position.
@@ -1268,7 +1317,7 @@ async function loadOtherCandidates(
 	const ids = candidacies
 		.map((c) => c.personId)
 		.filter((id): id is string => Boolean(id) && id!.toLowerCase() !== excludePersonId.toLowerCase());
-	const persons = await getPersonsByIds(ids);
+	const persons = await getPersonsByIds(ids, CARD_PERSON_RELATIONS);
 	const byId = new Map(persons.map((p) => [p.id.toLowerCase(), p]));
 	return withChosenPhotos(buildOtherCandidateCards(candidacies, byId, excludePersonId, removedPersonIds), removedPersonIds);
 }
@@ -1300,7 +1349,7 @@ async function loadNearbyOfficials(
 	const ids = officeholders
 		.map((o) => o.personId)
 		.filter((id): id is string => Boolean(id) && id!.toLowerCase() !== excludePersonId.toLowerCase());
-	const persons = await getPersonsByIds(ids);
+	const persons = await getPersonsByIds(ids, CARD_PERSON_RELATIONS);
 	const byId = new Map(persons.map((p) => [p.id.toLowerCase(), p]));
 	return withChosenPhotos(buildNearbyOfficialCards(officeholders, byId, excludePersonId, removedPersonIds), removedPersonIds);
 }
@@ -1525,10 +1574,13 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 	if (!overlay && !removed && !person) return null;
 
 	const office = pickCurrentOffice(person);
-	const candidacy = await loadPrimaryCandidacy(person, office?.isCurrent === true);
+	const candidacy = await loadPrimaryCandidacy(person, office !== null);
 
-	const raceSlug = candidacy?.Race?.slug ?? null;
-	const positionLevel = candidacy?.Race?.positionLevel ?? office?.Position?.level ?? null;
+	// One context for the whole page: the race the person is in, else the office
+	// the hero names. Its slug is the office term's own race, flattened onto the
+	// term by election-api, the same slug the Recent Experience rows link.
+	const raceSlug = candidacy ? (candidacy.Race?.slug ?? null) : (office?.positionSlug ?? null);
+	const positionLevel = candidacy?.Race?.positionLevel ?? office?.positionLevel ?? office?.Position?.level ?? null;
 	const positionId =
 		candidacy?.Race?.positionId ?? candidacy?.positionId ?? office?.positionId ?? null;
 	const geoId = office?.geoId ?? null;
@@ -1548,10 +1600,9 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 	const cityCountyLookup = await loadCityCountyLookup(person, raceSlug);
 	const citySlugToCountySlug = cityCountyLookup?.citySlugToCountySlug ?? null;
 	const countySlugs = cityCountyLookup?.countySlugs ?? null;
-	// Canonical /elections position href for the person's OWN office ("Learn more").
-	// Only resolvable from a candidacy's race slug today, so this is populated for
-	// candidate/"both" personas; pure office-holders get null until election-api
-	// threads the office race slug (tracked follow-up).
+	// Canonical /elections position href for the context office ("Learn more" and
+	// the breadcrumb's position crumb). Null when neither the race nor the office
+	// term carries a slug the resolver can place.
 	const positionHref = positionHrefFor(raceSlug, positionLevel, citySlugToCountySlug);
 	// A code by contract — it builds `/elections/<code>` in the breadcrumb — but
 	// the mart sends `Minnesota` for rows it created from a gp-api account
@@ -1590,6 +1641,7 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 		removed,
 		unpublished,
 		positionId,
+		positionName,
 		electionDate,
 		positionDescription,
 		positionHref,

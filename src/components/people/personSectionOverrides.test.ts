@@ -620,6 +620,19 @@ describe('breadcrumb', () => {
 		]);
 	});
 
+	// The loader can hand the page a context office that is not the sidebar's
+	// `officeName`: a past official's last run, or the race someone in office is
+	// running in. The two civic headings follow the context, because that is
+	// where their body comes from (Cuomo, 2026-10-09).
+	test('the About and Other Candidates headings name the context office, not the held one', () => {
+		const view = getDevPersonProfileView('bill-fortner-61a42912');
+		const cards = buildPersonSectionOverrides({ ...view!, positionName: 'New York City Mayor' }).component_profileContentBlock?.contentCards ?? [];
+		const headings = cards.flatMap(card => (card.heading ? [card.heading] : []));
+		expect(headings).toContain('About New York City Mayor');
+		expect(headings).toContain('Other Candidates for New York City Mayor');
+		expect(headings.filter(h => h.includes(view!.officeName!))).toEqual([]);
+	});
+
 	test('every dev persona names one office in the trail, the hero, and the sections', () => {
 		for (const slug of ['allen-slagle-74eee01a', 'tracy-good-ecff49d3', 'susan-overman-ad914b82', 'bill-fortner-61a42912']) {
 			const view = getDevPersonProfileView(slug);

@@ -16,7 +16,16 @@
  * each slug lands on the intended Figma state; only the CONTENT VOLUME (issues,
  * experience, interlinks, density, bios) is enriched on top.
  */
-import { buildBreadcrumbTrail, composeView, type ExperienceItem, type PersonProfileView, type ProfileState, type RelatedPersonCard } from '~/lib/peopleProfile';
+import {
+	buildBreadcrumbTrail,
+	buildOtherCandidateCards,
+	composeView,
+	type ExperienceItem,
+	type PersonProfileView,
+	type ProfileState,
+	type RelatedPersonCard,
+} from '~/lib/peopleProfile';
+import type { PersonItem } from '~/types/people';
 import type { PersonPersona } from '~/lib/peopleProfile';
 import type { PublicPersonProfile, VoterDensity } from '~/types/people';
 import { buildElectionPositionHrefFromRaceSlug } from '~/lib/electionsHelpers';
@@ -58,6 +67,10 @@ const DEV_PEOPLE: Record<
 		/** Only A carries a date, so the other pledged fixtures show the row without its "Signed on" line. */
 		pledgedAt?: string;
 		confirmedCandidate?: string;
+		/** A concluded run for some other office, kept out of the page's context; see `cuomoShape`. */
+		pastRun?: { positionName: string; electionDate: string };
+		/** Replaces the synthetic Other Candidates cards with ones built from feed-shaped rows. */
+		otherCandidates?: RelatedPersonCard[];
 	}
 > = {
 	'allen-slagle-74eee01a': { state: 'A', first: 'Allen', last: 'Slagle', pledgedAt: '2026-01-01' },
@@ -103,7 +116,88 @@ const DEV_PEOPLE: Record<
 		isPledged: true,
 		confirmedCandidate: 'Partisan Candidate',
 	},
+	// The Cuomo shape (2026-10-09): a former council member whose last run was
+	// for mayor, lost. The hero says "Former", and everything under it is about
+	// the council seat; the mayoral run is a Recent Experience row only. The
+	// Other Candidates list carries the fusion case from the same report: a
+	// pledge flag on someone listed on a minor line whose own record carries a
+	// Democratic line gets no mark, and a pledged person on a minor line with
+	// nothing major anywhere keeps it.
+	'drew-former-fa5104e4': {
+		state: 'H',
+		first: 'Drew',
+		last: 'Former',
+		partyNames: ['Independent'],
+		pastRun: { positionName: 'Springfield Mayor', electionDate: '2025-11-04' },
+		otherCandidates: cuomoShapeOtherCandidates(),
+	},
 };
+
+function cuomoShapeOtherCandidates(): RelatedPersonCard[] {
+	const fusion = '568df699-0000-4000-8000-000000000000';
+	const minor = '9bde2363-0000-4000-8000-000000000000';
+	const rival = (id: string, fullName: string, over: Partial<PersonItem>): [string, PersonItem] => [
+		id,
+		{
+			id,
+			slug: fullName.toLowerCase().replace(/ /g, '-'),
+			firstName: fullName.split(' ')[0] ?? null,
+			middleName: null,
+			lastName: fullName.split(' ')[1] ?? null,
+			nickname: null,
+			suffix: null,
+			fullName,
+			bioText: null,
+			headshotUrl: null,
+			websiteUrl: null,
+			linkedinUrl: null,
+			facebookUrl: null,
+			twitterUrl: null,
+			instagramUrl: null,
+			state: 'WY',
+			isPledged: true,
+			...over,
+		},
+	];
+	const persons = new Map<string, PersonItem>([
+		rival(fusion, 'Zed Fusion', {
+			OfficeHolders: [
+				{
+					id: 'off-fusion',
+					positionName: DEV_POSITION_NAME,
+					normalizedPositionName: null,
+					officeTitle: 'City Council Member',
+					partyNames: ['Working Families', 'Democratic'],
+					startAt: '2024-01-01',
+					endAt: null,
+					termDateSpecificity: null,
+					isCurrent: true,
+					isAppointed: null,
+					numberOfSeats: null,
+					state: 'WY',
+					subAreaName: null,
+					subAreaValue: null,
+					websiteUrl: null,
+					officePhone: null,
+					officeEmail: null,
+					mailingCity: null,
+					mailingState: null,
+				},
+			],
+		}),
+		rival(minor, 'Jo Integrity', { Candidacies: [{ id: 'c-minor', positionName: DEV_POSITION_NAME, party: 'Integrity' }] }),
+	]);
+	return buildOtherCandidateCards(
+		[
+			{ id: 'row-1', personId: fusion, firstName: 'Zed', lastName: 'Fusion', party: 'Working Families', positionName: DEV_POSITION_NAME },
+			{ id: 'row-2', personId: minor, firstName: 'Jo', lastName: 'Integrity', party: 'Integrity', positionName: DEV_POSITION_NAME },
+			{ id: 'row-3', personId: 'aaaa0003-0000-4000-8000-000000000000', firstName: 'Pat', lastName: 'Major', party: 'Republican', positionName: DEV_POSITION_NAME },
+		],
+		persons,
+		'nobody',
+		new Set(),
+	);
+}
 
 /** Deterministic personId from the slug suffix so caching/keys stay stable. */
 function personIdFromSuffix(suffix: string): string {
@@ -297,7 +391,12 @@ export function getDevPersonProfileView(slug: string): PersonProfileView | null 
 		// would show a dev page whose hero names one race while the breadcrumb
 		// and position link point at another. Every dev persona is about the one
 		// DEV_RACE_SLUG race, so an incumbent here is running for re-election.
-		Candidacies: (fixture.person.Candidacies ?? []).map((c) => ({ ...c, positionName: DEV_POSITION_NAME })),
+		Candidacies: [
+			...(fixture.person.Candidacies ?? []).map((c) => ({ ...c, positionName: DEV_POSITION_NAME })),
+			...(entry.pastRun
+				? [{ id: 'cand-past', positionName: entry.pastRun.positionName, party: 'Independent', state: 'WY', Race: { electionDate: entry.pastRun.electionDate } }]
+				: []),
+		],
 		bioText: `${name} has served the community for over a decade. ${LOREM}`,
 		headshotUrl,
 		websiteUrl: 'https://example.org',
@@ -344,12 +443,14 @@ export function getDevPersonProfileView(slug: string): PersonProfileView | null 
 			positionLevel: 'CITY',
 			positionName: DEV_POSITION_NAME,
 		}),
-		recentExperience: richExperience(persona),
+		// A fixture with a past run shows the spine-built list, so the run appears
+		// as the experience row it is on the live page.
+		...(entry.pastRun ? {} : { recentExperience: richExperience(persona) }),
 		// Running personas get "Other candidates"; the Figma "past" mocks (G/H) are
 		// the tallest frames and also carry this section, so include it there too.
 		// Other candidates share the subject's race, so one district for all of
 		// them; nearby officials hold different seats, so one ward each.
-		otherCandidates: running || persona === 'past' ? relatedCards('other-candidate', 5, () => 'District 5') : [],
+		otherCandidates: entry.otherCandidates ?? (running || persona === 'past' ? relatedCards('other-candidate', 5, () => 'District 5') : []),
 		nearbyOfficials: relatedCards('nearby-official', 6, i => `Ward ${i + 1}`),
 		voterDensity: richVoterDensity(),
 		electionsIndex: richElectionsIndex(),

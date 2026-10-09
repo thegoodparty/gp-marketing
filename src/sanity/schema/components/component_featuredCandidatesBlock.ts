@@ -20,7 +20,7 @@ export const component_featuredCandidatesBlock = {
 	type: 'object',
 	icon: getIcon('Users'),
 	description:
-		'A carousel of up to eight pledged people on the page\'s ballot, read live from election data: candidates in its upcoming races, the people who currently hold its offices, or both. Only people who took the GoodParty.org Pledge are shown. Built for the Location templates; it renders nothing on pages that do not supply the data.',
+		'A carousel of up to eight pledged people on the page\'s ballot, read live from election data: candidates in its upcoming races, the people who currently hold its offices, or both. Only people who took the GoodParty.org Pledge are shown. Built for the Location templates. On a page with no election data of its own (the Elections landing page) it shows a weekly rotating pick of people with a published GoodParty.org profile instead; see the Weekly Rotation tab.',
 	fields: [
 		{
 			title: 'Heading',
@@ -115,6 +115,32 @@ export const component_featuredCandidatesBlock = {
 			],
 		},
 		{
+			title: 'Weekly Rotation',
+			name: 'featuredCandidatesBlockRotation',
+			type: 'object',
+			group: 'featuredCandidatesBlockRotation',
+			description:
+				'Only used on pages without their own election data, such as the Elections landing page. The carousel then shows eight people drawn each week from everyone with a published GoodParty.org profile: pledged candidates with an upcoming election and current officeholders, photo required. The pick changes every Monday on its own.',
+			options: { collapsed: false, columns: 1 },
+			fields: [
+				{
+					title: 'Always Feature',
+					name: 'list_alwaysFeature',
+					type: 'array',
+					of: [{ type: 'string' }],
+					description:
+						'Profile links (goodparty.org/people/...) or person ids. These people are in the carousel every week, as long as they qualify: pledged, with a photo, and running in an upcoming election or in office.',
+				},
+				{
+					title: 'Never Feature',
+					name: 'list_neverFeature',
+					type: 'array',
+					of: [{ type: 'string' }],
+					description: 'Profile links or person ids to keep out of the weekly pick.',
+				},
+			],
+		},
+		{
 			title: 'Settings',
 			name: 'componentSettings',
 			type: 'componentSettings',
@@ -158,6 +184,11 @@ export const component_featuredCandidatesBlock = {
 			title: 'Design Settings',
 			name: 'featuredCandidatesBlockDesignSettings',
 			icon: getIcon('ColorPalette'),
+		},
+		{
+			title: 'Weekly Rotation',
+			name: 'featuredCandidatesBlockRotation',
+			icon: getIcon('Users'),
 		},
 		{
 			title: 'Settings',

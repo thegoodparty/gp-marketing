@@ -737,6 +737,18 @@ people now follow the ballot that branch built. Decisions:
   put the first suggestion 0.5 to 0.75 s behind the first keystroke (timed live, 2026-10-08).
   Destination pages still take 1.7 to 2.4 s to first byte when uncached; that is page caching, not
   the search.
+- **Pages with no ballot show a weekly rotation** (Emily, 2026-10-09). The /elections landing page is a plain
+  landing page with no location, so its route hands the block nobody and the block rendered nothing. It now
+  shows eight people drawn each week from everyone with a published GoodParty.org profile (gp-api
+  `/published`), narrowed to pledged candidates with an upcoming election and current officeholders, photo
+  required; past candidates who hold no office are left out. The draw is seeded with the ISO week
+  (`weekKey`), weighted towards a product photo and an election within 120 days, so the set changes on
+  Monday with no scheduled job and no stored list, and the pool grows on its own as profiles are published.
+  Editors pin or exclude people on the block's Weekly Rotation tab (profile links or person ids; a
+  link matches by the eight-character id tail the /people slugs carry). `getWeeklyFeaturedPeople` in
+  `src/lib/featuredRotation.ts`; `FeaturedCandidatesRotationSection` renders it whenever no route
+  override is present, so location pages are untouched. The body copy on that page should say "across
+  the country" rather than "near you"; it is the editor's field.
 - **A candidate card says "Candidate for".** The card shows one office line with no role, so a
   council member running for mayor read as the mayor (Japjeet Uppal, Livingston, CA; Emily,
   2026-10-08). A candidate's line is now "Candidate for [office]"; an official's stays the plain

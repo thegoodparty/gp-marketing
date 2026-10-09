@@ -10,6 +10,7 @@ import {
 	deriveElectionsIndexTier,
 	extractPersonId,
 	isThinProfile,
+	personPartyNames,
 	resolveProfileState,
 	type PersonPersona,
 } from './peopleProfile';
@@ -1633,8 +1634,8 @@ describe('buildOtherCandidateCards reads every ballot line', () => {
 	});
 
 	// The row says one thing and the person's own record another: the record
-	// wins, as it does on the person's own page.
-	test('a minor-line row is not pledged when the person\u2019s office carries a major line', () => {
+	// wins, for the mark and for the label, as it does on the person's own page.
+	test('a minor-line row is labelled and gated off the person\u2019s office when it carries a major line', () => {
 		const cards = buildOtherCandidateCards(
 			[{ id: 'c1', personId: OTHER, firstName: 'Zohran', lastName: 'Mamdani', party: 'Working Families Party' }],
 			personsById(
@@ -1649,7 +1650,8 @@ describe('buildOtherCandidateCards reads every ballot line', () => {
 			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([false]);
-		expect(cards.map((c) => c.subtitle)).toEqual(['Working Families Party']);
+		expect(cards.map((c) => c.subtitle)).toEqual(['Democratic, Working Families Party']);
+		expect(cards.map((c) => c.majorParty)).toEqual([true]);
 	});
 
 	test('a pledged person on a minor line with no major line anywhere keeps the mark', () => {
@@ -1667,6 +1669,112 @@ describe('buildOtherCandidateCards reads every ballot line', () => {
 			NO_REMOVALS,
 		);
 		expect(cards.map((c) => c.isPledged)).toEqual([true]);
+	});
+});
+
+/**
+ * One party rule for the hero and every card that links to it. Bruce Blakeman's
+ * card on Andrew Cuomo's page said "Vote Affordable", the one ballot line on
+ * the candidacy row, while his own profile said "Republican, Conservative
+ * Party" off his office (Emily, 2026-10-09).
+ */
+describe('personPartyNames', () => {
+	test('the office the person holds leads, major party first', () => {
+		const person = makePerson({
+			OfficeHolders: [makeOffice({ isCurrent: true, partyNames: ['Conservative Party', 'Republican'] })],
+			Candidacies: [{ id: 'c1', positionName: 'Governor', party: 'Vote Affordable' }],
+		});
+		expect(personPartyNames(person)).toEqual(['Republican', 'Conservative Party']);
+	});
+
+	test('a last-held office still describes the person when no current one does', () => {
+		const person = makePerson({
+			OfficeHolders: [makeOffice({ isCurrent: false, startAt: '2019-01-01', partyNames: ['Democratic'] })],
+			Candidacies: [{ id: 'c1', positionName: 'Mayor', party: 'Fight and Deliver' }],
+		});
+		expect(personPartyNames(person)).toEqual(['Democratic']);
+	});
+
+	test('with no office, the current or latest run names the party', () => {
+		const person = makePerson({ Candidacies: [{ id: 'c1', positionName: 'Mayor', party: 'Integrity' }] });
+		expect(personPartyNames(person)).toEqual(['Integrity']);
+	});
+
+	test('an office with no party lines falls through to the run', () => {
+		const person = makePerson({
+			OfficeHolders: [makeOffice({ isCurrent: true, partyNames: [] })],
+			Candidacies: [{ id: 'c1', positionName: 'Mayor', party: 'Independent' }],
+		});
+		expect(personPartyNames(person)).toEqual(['Independent']);
+	});
+
+	test('nothing on record, nothing to say', () => {
+		expect(personPartyNames(makePerson())).toEqual([]);
+		expect(personPartyNames(null)).toEqual([]);
+		expect(personPartyNames(undefined)).toEqual([]);
+	});
+
+	test('the hero label is this rule, joined with commas', () => {
+		const person = makePerson({
+			OfficeHolders: [makeOffice({ isCurrent: true, partyNames: ['Conservative Party', 'Republican'] })],
+			Candidacies: [{ id: 'c1', positionName: 'Governor', party: 'Vote Affordable' }],
+		});
+		const view = composeView(PID, person, null);
+		expect(view.party).toBe(personPartyNames(person).join(', '));
+		expect(view.party).toBe('Republican, Conservative Party');
+	});
+});
+
+describe('a related candidate card is labelled the way its own profile is', () => {
+	const OTHER = '22222222-2222-2222-2222-222222222222';
+	const personsById = (person: PersonItem) => new Map([[person.id.toLowerCase(), person]]);
+	const blakemanRow = (): CandidacyItem => ({ id: 'c1', personId: OTHER, firstName: 'Bruce', lastName: 'Blakeman', party: 'Vote Affordable' });
+
+	test('the office on the record outranks the ballot line on the row', () => {
+		const cards = buildOtherCandidateCards(
+			[blakemanRow()],
+			personsById(
+				makePerson({
+					id: OTHER,
+					fullName: 'Bruce Blakeman',
+					OfficeHolders: [makeOffice({ isCurrent: true, partyNames: ['Republican', 'Conservative Party'] })],
+				}),
+			),
+			PID,
+			NO_REMOVALS,
+		);
+		expect(cards.map((c) => [c.subtitle, c.majorParty])).toEqual([['Republican, Conservative Party', true]]);
+	});
+
+	test('the record\u2019s run outranks the row too, so the card matches a candidate-only profile', () => {
+		const cards = buildOtherCandidateCards(
+			[{ id: 'c1', personId: OTHER, firstName: 'Kathy', lastName: 'Hochul', party: 'Working Families Party' }],
+			personsById(makePerson({ id: OTHER, fullName: 'Kathy Hochul', Candidacies: [{ id: 'c1', positionName: 'Governor', party: 'Democratic' }] })),
+			PID,
+			NO_REMOVALS,
+		);
+		expect(cards.map((c) => c.subtitle)).toEqual(['Democratic']);
+	});
+
+	test('a record that names no party leaves the row\u2019s line in place', () => {
+		const cards = buildOtherCandidateCards([blakemanRow()], personsById(makePerson({ id: OTHER, fullName: 'Bruce Blakeman' })), PID, NO_REMOVALS);
+		expect(cards.map((c) => c.subtitle)).toEqual(['Vote Affordable']);
+	});
+
+	test('no record at all, the row is all there is', () => {
+		const cards = buildOtherCandidateCards([blakemanRow()], new Map(), PID, NO_REMOVALS);
+		expect(cards.map((c) => c.subtitle)).toEqual(['Vote Affordable']);
+	});
+
+	// A major line on the row still gates even when the record leads with a minor one.
+	test('a major line on the row keeps disqualifying, whatever the record says', () => {
+		const cards = buildOtherCandidateCards(
+			[{ id: 'c1', personId: OTHER, firstName: 'Ada', lastName: 'Lee', party: 'Democratic' }],
+			personsById(makePerson({ id: OTHER, fullName: 'Ada Lee', isPledged: true, Candidacies: [{ id: 'c9', positionName: 'Council', party: 'Working Families' }] })),
+			PID,
+			NO_REMOVALS,
+		);
+		expect(cards.map((c) => [c.subtitle, c.majorParty, c.isPledged])).toEqual([['Working Families', true, false]]);
 	});
 });
 

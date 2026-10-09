@@ -1,7 +1,7 @@
 import { getCandidaciesOrNull, getPersonsByIds, getRemovedPersonIds } from '~/lib/electionsApi';
 import { isElectionDateBeforeToday, mapCandidacyToCard } from '~/lib/electionsHelpers';
-import { classifyParty, isMajorParty } from '~/lib/party';
-import { cardAvatarUrl, pledgedFromSpine } from '~/lib/peopleProfile';
+import { classifyPartyFrom, isMajorParty, orderPartyNames } from '~/lib/party';
+import { CARD_PERSON_RELATIONS, cardAvatarUrl, personPartyNames, pledgedFromSpine } from '~/lib/peopleProfile';
 import { resolveProductAvatars } from '~/lib/productAvatars';
 import type { CandidacyItem } from '~/types/elections';
 import type { PersonItem } from '~/types/people';
@@ -13,11 +13,17 @@ export function mapCandidacyToHeroCandidate(
 	person: PersonItem | undefined,
 ): ElectionsPositionHeroCandidate {
 	const card = mapCandidacyToCard(candidacy, index);
+	// The party is the person's, read the way their profile reads it, not the one
+	// ballot line this row was filed on: under fusion voting that line is often a
+	// minor party standing in for a major-party nominee (see `personPartyNames`).
+	// The row's line is the fallback when the record names no party.
+	const recordParties = personPartyNames(person);
+	const parties = recordParties.length > 0 ? recordParties : orderPartyNames([candidacy.party]);
 	return {
 		key: card._key,
 		name: card.name,
-		party: card.partyAffiliation,
-		partyClass: classifyParty(candidacy.party),
+		party: parties.length > 0 ? parties.join(', ') : card.partyAffiliation,
+		partyClass: classifyPartyFrom(...orderPartyNames([...parties, candidacy.party])),
 		isPledged: pledgedFromSpine(person, candidacy.party),
 		href: card.href,
 		avatar: card.avatar,
@@ -77,7 +83,7 @@ export async function heroCandidatesFromCandidacies(
 	let persons: PersonItem[] = [];
 	if (personIds.length > 0) {
 		try {
-			persons = await getPersonsByIds(personIds);
+			persons = await getPersonsByIds(personIds, CARD_PERSON_RELATIONS);
 		} catch {
 			persons = [];
 		}

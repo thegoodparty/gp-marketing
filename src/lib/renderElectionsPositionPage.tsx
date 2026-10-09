@@ -17,27 +17,25 @@ export type PositionTemplateContext = PositionPageContext & {
 };
 
 export async function renderElectionsPositionPage(input: PositionTemplateContext) {
+	const raceSlug = input.raceSlug ?? input.race?.slug;
 	// Every position route renders through here, so the content block's
 	// officeholder rows are loaded once, in one place, rather than in each route.
-	const ctx: PositionTemplateContext = {
-		...input,
-		officeholders:
-			input.officeholders ??
-			(await loadPositionOfficeholders({
+	// The three reads are independent of each other, so they run side by side.
+	const [officeholders, nearbyOffices, guideTitle] = await Promise.all([
+		input.officeholders ??
+			loadPositionOfficeholders({
 				positionId: input.race?.positionId,
 				placeSlug: input.placeSlug,
 				// Only election-api's own normalised name can match its officeholder rows;
 				// a race without one gets the single seat its position id answers for.
 				positionName: input.race?.normalizedPositionName,
-				raceSlug: input.raceSlug ?? input.race?.slug,
-			})),
-	};
-	const schemas = buildPositionPageSchemas(ctx);
-	const raceSlug = ctx.raceSlug ?? ctx.race?.slug;
-	const [nearbyOffices, guideTitle] = await Promise.all([
-		ctx.nearbyOffices ?? (ctx.placeSlug ? getNearbyOffices({ placeSlug: ctx.placeSlug, currentRaceSlug: raceSlug }) : []),
-		loadGuideTitle(ctx),
+				raceSlug,
+			}),
+		input.nearbyOffices ?? (input.placeSlug ? getNearbyOffices({ placeSlug: input.placeSlug, currentRaceSlug: raceSlug }) : []),
+		loadGuideTitle(input),
 	]);
+	const ctx: PositionTemplateContext = { ...input, officeholders };
+	const schemas = buildPositionPageSchemas(ctx);
 
 	return renderElectionTemplatePage({
 		context: {

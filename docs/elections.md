@@ -39,6 +39,64 @@ backoff, returns `null` on 404 or any non-500 error, and caches most responses w
 `{ next: { revalidate: 3600 } }` (one hour). Pages themselves also set
 `revalidate = 3600`.
 
+### What a cold render costs, and the rules that keep it parallel
+
+Every programmatic page is ISR: the first visitor in an hour pays for a full render
+(`x-vercel-cache: MISS`), everyone after them gets the stored page in about 150 ms
+(`HIT`, or `STALE` with a background refresh once the hour is up). Two things make cold
+renders more common than the hour suggests. There are about 20,000 city pages, so most
+arrivals from the location search land on one nobody has opened lately. And Vercel's
+page cache is per deployment: every production release starts with every programmatic
+page cold (only the 51 state pages are prebuilt). The Data Cache that holds the
+election-api reads does persist across deployments, which is why a cold page right
+after a release is still faster than a true cold one.
+
+A cold render is a fan-out of a few dozen to about a hundred election-api requests, so
+its time is set by the longest chain of dependent requests, not by the total. Measured
+2026-10-09 on production: cold city pages 1.6 to 3.2 s to first byte, cold county pages
+2.3 to 2.8 s, cold position pages 1.3 to 2.2 s, cold profiles 0.8 to 1.3 s. The
+longest chain on a location page is the featured-people block (`getFeaturedPeople`):
+places, then a date refresh per tier, then up to `FEATURED_RACE_BUDGET` candidacy
+reads six at a time, then persons, then the published-profile list, then product
+photos. On a county page the date refresh is the other big step, because a county
+lists tens of offices whose place-feed date has passed. The rules below exist so
+that chain overlaps the route's own work instead of following it:
+
+- **Start the featured people first.** A location route calls `startFeaturedPeople`
+  as soon as it knows the page will render (after its 404 and redirect decisions,
+  never before), and hands the promise to `renderElectionsIndexPage`. The helper also
+  preloads the page's Sanity template.
+- **Own dates and overlapping offices run side by side.** `resolvePlaceRaceElectionDates`
+  for the page's own races and `buildOverlappingOfficeItems` for the places above it do
+  not depend on each other, so the routes `Promise.all` them.
+- **A loader that needs only an id already in hand starts before the next await.** On a
+  profile, nearby officials need only the office's geo id (known once the person
+  loads) and other candidates only the position id (known once the candidacy loads),
+  so `loadPersonProfile` starts each the moment its input exists and joins them at
+  the end. The removal set starts first of all and is awaited inside the card loaders.
+- **Read a place through `getElectionsPagePlace`.** One column set means one cached
+  entry, so the state and county rows the overlapping-offices read needs are the same
+  entries the featured-people block reads, not a second request in a narrower shape.
+- **Preload the template on non-location programmatic routes.** `preloadElectionTemplate`
+  starts the two Sanity reads under the data chain instead of after it (the profile
+  route does this; location routes get it through `startFeaturedPeople`).
+- **A promise started early must not reject while nothing is listening.** A rejection
+  that lands before the join is an unhandled rejection and takes the whole render down.
+  Every read in these chains folds failures into null or an empty list, which is what
+  makes them safe to leave in flight; inside a loader, `void promise.catch(() => undefined)`
+  right after creating one marks it handled as well, and the later await still sees the
+  failure. Keep both when you add one.
+- **`<Suspense>` does not help a cold ISR render.** The first visitor receives the stored
+  page after the whole render finishes, so streaming the carousel later would not move
+  first byte. On these pages the featured-people fetch also feeds the hero's independent
+  count and the offices list's pledged counts and order, so it is on the critical path
+  by design.
+
+Raising the candidacy concurrency above six, trimming `FEATURED_RACE_BUDGET`, or a
+place-scoped candidacies endpoint on election-api would each shorten the chain
+further; the first two change what the page shows or how hard it hits election-api
+(the 2026-10-05 outage was election-api CPU), so they are decisions, not cleanups.
+
 **`/v1/races` is general-elections-only unless you say otherwise.** The endpoint coerces
 an absent `isPrimary` to `false` instead of leaving it unset, so an unfiltered slug lookup
 never sees a primary row. Offices that exist in the feed only as a primary (Minnesota's

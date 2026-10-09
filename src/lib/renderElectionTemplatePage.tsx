@@ -1,7 +1,7 @@
 import { ElectionsCmsTemplatePage } from '~/ui/ElectionsCmsTemplatePage';
 import type { SectionOverrides } from '~/PageSections';
 import type { TokenMap } from '~/lib/resolveTokens';
-import { resolveElectionTemplate, type ElectionTemplateContext } from '~/lib/electionTemplates';
+import { resolveElectionTemplate, type ElectionTemplateContext, type ResolvedElectionTemplate } from '~/lib/electionTemplates';
 
 type Props = {
 	context: ElectionTemplateContext;
@@ -9,10 +9,12 @@ type Props = {
 	tokens?: TokenMap;
 	schemas?: Array<unknown>;
 	enableLandingSearch?: boolean;
+	/** The template already resolved for `context`, when the caller ran that alongside its own data fetches. */
+	resolved?: ResolvedElectionTemplate;
 };
 
 export async function renderElectionTemplatePage(props: Props) {
-	const resolved = await resolveElectionTemplate(props.context, { tokens: props.tokens });
+	const resolved = props.resolved ?? (await resolveElectionTemplate(props.context, { tokens: props.tokens }));
 
 	return (
 		<ElectionsCmsTemplatePage

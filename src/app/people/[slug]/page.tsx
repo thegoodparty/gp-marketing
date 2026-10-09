@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound, permanentRedirect } from 'next/navigation';
+import { cache } from 'react';
 import {
 	buildBreadcrumbSchema,
 	buildPersonSchema,
@@ -16,6 +17,7 @@ import {
 	buildPersonProfileTokens,
 	buildPersonSectionOverrides,
 } from '~/components/people/personSectionOverrides';
+import { preloadElectionTemplate } from '~/lib/electionTemplates';
 import { renderElectionTemplatePage } from '~/lib/renderElectionTemplatePage';
 import { getPersonBySlug, getPersonMergeSurvivorChain } from '~/lib/electionsApi';
 import { getDevPersonProfileView, isDevPeopleFixturesEnabled } from '~/lib/devPeopleProfileFixtures';
@@ -65,7 +67,12 @@ async function loadProfileFollowingMerges(personId: string): Promise<PersonProfi
 	return null;
 }
 
-async function resolveView(slug: string): Promise<PersonProfileView | null> {
+/**
+ * One profile load per request: `generateMetadata` and the page both resolve the
+ * same slug, and React `cache` hands the second caller the first's promise
+ * instead of walking the whole chain of reads again.
+ */
+const resolveView = cache(async (slug: string): Promise<PersonProfileView | null> => {
 	// Dev-only Figma-parity aid: when PEOPLE_DEV_FIXTURES=true, serve the enriched
 	// (mock-volume) harness fixtures through the real render pipeline. No-op in
 	// prod (flag unset → reads the live election-api/gp-api data below).
@@ -86,10 +93,12 @@ async function resolveView(slug: string): Promise<PersonProfileView | null> {
 	const person = await getPersonBySlug(slug);
 	if (!person) return null;
 	return loadProfileFollowingMerges(person.id);
-}
+});
 
 export default async function Page({ params }: { params: Promise<PageParams> }) {
 	const { slug } = await params;
+	// The template needs nothing from the profile, so its Sanity reads run under the data chain.
+	preloadElectionTemplate('personProfile');
 	const view = await resolveView(slug);
 
 	if (!view) {

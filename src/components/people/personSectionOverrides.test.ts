@@ -593,11 +593,21 @@ describe('hero', () => {
 		expect(hero?.secondaryOffice).toMatch(/^Candidate for /);
 		expect(hero?.office).not.toMatch(/^Candidate for /);
 		expect(hero?.tags).toEqual(['Incumbent', 'Candidate']);
-		// Each line links to its own office's page: the held seat above, the
-		// race being run below.
-		expect(view!.currentOfficeHref).toContain('/elections/');
-		expect(hero?.officeHref).toBe(view!.currentOfficeHref ?? undefined);
-		expect(hero?.secondaryOfficeHref).toBe(view!.positionHref ?? undefined);
+		expect(hero?.officeHref).toContain('/elections/');
+		expect(hero?.secondaryOfficeHref).toContain('/elections/');
+	});
+
+	test('state C links each hero line to its own office, not both to the race', () => {
+		// The dev fixture's seat and race are the same office, so their hrefs
+		// coincide there; a school board member running for county attorney has
+		// two. Give the view two so a swap between the lines would be caught.
+		const fixture = getDevPersonProfileView('susan-overman-ad914b82')!;
+		const seatHref = '/elections/mn/olmsted-county/rochester/position/school-board';
+		const raceHref = '/elections/mn/olmsted-county/position/county-attorney';
+		const hero = buildPersonSectionOverrides({ ...fixture, currentOfficeHref: seatHref, positionHref: raceHref })
+			.component_profileHero;
+		expect(hero?.officeHref).toBe(seatHref);
+		expect(hero?.secondaryOfficeHref).toBe(raceHref);
 	});
 
 	test('a candidate-only hero has no second office line', () => {

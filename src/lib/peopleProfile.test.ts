@@ -374,7 +374,8 @@ describe('Recent Experience links every row it has a race slug for', () => {
 					id: 'c1',
 					positionName: 'Olmsted County Attorney',
 					state: 'MN',
-					Race: { electionDate: '2026-11-03', slug: race, positionLevel: 'COUNTY' },
+					// Clock-derived so the race stays upcoming and the persona stays 'both'.
+					Race: { electionDate: `${new Date().getUTCFullYear() + 1}-11-03`, slug: race, positionLevel: 'COUNTY' },
 				},
 			],
 		});

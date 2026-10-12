@@ -140,6 +140,9 @@ describe('a former officeholder keeps one office across the page', () => {
 		// The About card: the governor's term, no "Next election" borrowed from the mayoral race.
 		expect(view.termLabel).toBe('2019 – 2021');
 		expect(view.electionDate).toBeNull();
+		// ...but the disclaimer still dates the mayoral run: deferring the context
+		// to the office must not erase the year he last ran (Cobb, 2026-10-12).
+		expect(view.lastRanYear).toBe('2025');
 		expect(view.positionId).toBe('pos-gov');
 		expect(view.otherCandidates.map((c) => c.name)).toEqual(['Kathy Hochul']);
 		// The mayoral race was never asked about: not its detail, not its field.

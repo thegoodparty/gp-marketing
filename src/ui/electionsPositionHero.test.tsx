@@ -53,13 +53,55 @@ describe('ElectionsPositionHeroSection', () => {
 		expect(html).toContain('A nonpartisan guide to [office name] in [County or City].');
 	});
 
-	test('before the window opens it counts down to filing opening instead', () => {
+	test('before the window opens it is pre-filing: the how-to heading, its own intro, and a countdown to filing opening', () => {
 		const html = render(office, '2026-02-10');
 
+		expect(html).toContain('data-phase="preFiling"');
+		expect(html).toContain('How to Run for City Council Member in Austin, TX');
+		expect(html).toContain('Learn the requirements to run for office near you.');
+		expect(html).not.toContain('Find candidates and elected officials');
 		expect(html).toContain('Filing opens');
 		expect(html).toContain('June 1, 2026');
 		expect(html).toContain('Days until filing opens');
 		expect(html).not.toContain('Days to file');
+		expect(html).toContain('Days until election');
+		expect(html).not.toContain('data-testid="position-hero-ballot-card"');
+		expect(html).not.toContain('filed so far');
+	});
+
+	test('pre-filing with only a deadline on record shows the deadline and "Days to file", as the frame draws it', () => {
+		const html = render({ ...office, filingDateStartIso: null, filingDateEndIso: '2027-08-04', electionDateIso: '2027-11-02' }, '2026-10-12');
+
+		expect(html).toContain('data-phase="preFiling"');
+		expect(html).toContain('Filing deadline');
+		expect(html).toContain('August 4, 2027');
+		expect(html).toContain('Days to file');
+		expect(html).not.toContain('Days until filing opens');
+		expect(html).toContain('Days until election');
+		expect(html).not.toContain('data-testid="position-hero-ballot-card"');
+	});
+
+	test('between cycles, with the last election behind and no result, only the last election date stays and the ballot card hides', () => {
+		const html = render(
+			{ ...office, filingDateStartIso: '2020-01-01', filingDateEndIso: '2020-03-01', electionDateIso: '2020-11-03' },
+			'2026-10-12',
+		);
+
+		expect(html).toContain('data-phase="preFiling"');
+		expect(html).toContain('How to Run for City Council Member in Austin, TX');
+		expect(html).toContain('Last election');
+		expect(html).toContain('November 3, 2020');
+		expect(html).not.toContain('Election date');
+		expect(html).not.toContain('Filing deadline');
+		expect(html).not.toContain('Days');
+		expect(html).not.toContain('data-testid="position-hero-ballot-card"');
+	});
+
+	test('reads the phase the route resolved for the page rather than recomputing it', () => {
+		const html = render({ ...office, state: { phase: 'preFiling' } }, '2026-08-15');
+
+		expect(html).toContain('data-phase="preFiling"');
+		expect(html).toContain('How to Run for City Council Member in Austin, TX');
 	});
 
 	test('mid-election it drops the filing deadline and draws the timeline', () => {
@@ -122,34 +164,6 @@ describe('ElectionsPositionHeroSection', () => {
 		expect(html).toContain('+2 other winners');
 	});
 
-	test('more than six months before filing opens, the previous winner holds the decided state', () => {
-		const html = render(
-			{
-				...office,
-				winners: [],
-				priorWinners: [{ key: 'p1', name: 'Grace Hopper', party: 'Independent', term: '2023 to 2027' }],
-			},
-			'2025-11-20',
-		);
-
-		expect(html).toContain('data-phase="decided"');
-		expect(html).toContain('data-testid="position-hero-winner-card"');
-		expect(html).toContain('Grace Hopper');
-		expect(html).toContain('Independent · Current term 2023 to 2027');
-		expect(html).toContain('A nonpartisan guide to [office name] in [County or City].');
-	});
-
-	test('inside six months of filing opening, the previous winner gives way to the filing state', () => {
-		const html = render(
-			{ ...office, winners: [], priorWinners: [{ key: 'p1', name: 'Grace Hopper' }] },
-			'2026-02-10',
-		);
-
-		expect(html).toContain('data-phase="filing"');
-		expect(html).not.toContain('Grace Hopper');
-		expect(html).toContain('Days until filing opens');
-	});
-
 	test('open filing with no deadline on record still says filing has opened', () => {
 		const html = render({ ...office, filingDateEndIso: null }, '2026-08-15');
 
@@ -159,14 +173,6 @@ describe('ElectionsPositionHeroSection', () => {
 		expect(html).not.toContain('Filing deadline');
 		expect(html).not.toContain('Days to file');
 		expect(html).toContain('Days until election');
-	});
-
-	test('prior-cycle winners reach the winner card when this cycle has no winners at all', () => {
-		const html = render({ ...office, winners: undefined, priorWinners: [{ key: 'p1', name: 'Grace Hopper' }] }, '2025-11-20');
-
-		expect(html).toContain('data-phase="decided"');
-		expect(html).toContain('data-testid="position-hero-winner-card"');
-		expect(html).toContain('Grace Hopper');
 	});
 
 	test('hides the ballot card when we hold no candidate data, but shows a real zero', () => {
@@ -216,6 +222,10 @@ describe('ElectionsPositionHeroSection', () => {
 		);
 		expect(h1(render({ ...office, cityName: undefined, countyName: undefined, stateName: 'Texas' }, '2026-08-15'))).toBe(
 			'City Council Member in Texas',
+		);
+		expect(h1(render(office, '2026-02-10'))).toBe('How to Run for City Council Member in Austin, TX');
+		expect(h1(render({ ...office, cityName: undefined, countyName: undefined, stateName: 'Texas' }, '2026-02-10'))).toBe(
+			'How to Run for City Council Member in Texas',
 		);
 	});
 });

@@ -24,6 +24,13 @@ Studio (the CMS, served at `/studio/main`), do not open a PR:
   pricing plans; team members; quotes and testimonials.
 - Global content: the navigation menu, footer, social links, SEO settings, the 404
   page.
+- The promo banner under the main navigation: the Promo Banner section of the
+  Navigation document holds the on/off switch, the one-line message, an optional
+  button, the color, an optional live countdown to a date and time (with its own
+  short label), a start and end time, and two URL lists ("only show on" and
+  "hide on", matched as fragments of the page path, so "/elections/" covers
+  /elections and everything under it). Visitors can dismiss it; it comes back
+  when the message, button link or start time changes.
 - Redirects (managed as content; they take effect without a deploy).
 - A/B experiment variants.
 - Embeds via the Embedded Block, as long as the provider is one the block supports:

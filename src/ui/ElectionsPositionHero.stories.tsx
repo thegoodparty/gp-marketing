@@ -49,27 +49,57 @@ const meta: Meta<typeof ElectionsPositionHero> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const FilingOpen: Story = {
+/** Pre-filing with the opening date on record: "How to Run for" heading, countdown to the window opening, no ballot card (Figma 2360:19625, card dropped 2026-10-12). */
+export const PreFilingOpeningKnown: Story = {
 	args: {
 		...race,
-		state: { phase: 'filing', filingOpen: true },
-		candidates,
+		state: { phase: 'preFiling' },
+		intro: 'A nonpartisan guide to City Council Member in Austin. Learn the requirements to run for office near you.',
+		candidates: [],
+		now: new Date('2026-02-10T12:00:00'),
 	},
 };
 
-export const FilingNotYetOpen: Story = {
+/** Pre-filing with only a deadline on record, as the frame draws it: the deadline and "Days to file". */
+export const PreFilingDeadlineOnly: Story = {
 	args: {
 		...race,
-		state: { phase: 'filing', filingOpen: false },
-		candidates: [],
-		now: new Date('2026-02-10T12:00:00'),
+		filingDateStart: undefined,
+		filingDateEnd: '2027-08-04T00:00:00.000Z',
+		electionDate: '2027-11-02T00:00:00.000Z',
+		state: { phase: 'preFiling' },
+		intro: 'A nonpartisan guide to City Council Member in Austin. Learn the requirements to run for office near you.',
+		candidates,
+		now: new Date('2026-10-12T12:00:00'),
+	},
+};
+
+/** Pre-filing between cycles: the last election is behind with no result, so only its date stays. */
+export const PreFilingBetweenCycles: Story = {
+	args: {
+		...race,
+		filingDateStart: '2020-01-01T00:00:00.000Z',
+		filingDateEnd: '2020-03-01T00:00:00.000Z',
+		electionDate: '2020-11-03T00:00:00.000Z',
+		state: { phase: 'preFiling' },
+		intro: 'A nonpartisan guide to City Council Member in Austin. Learn the requirements to run for office near you.',
+		candidates,
+		now: new Date('2026-10-12T12:00:00'),
+	},
+};
+
+export const FilingOpen: Story = {
+	args: {
+		...race,
+		state: { phase: 'filing' },
+		candidates,
 	},
 };
 
 export const FilingNoCandidateData: Story = {
 	args: {
 		...race,
-		state: { phase: 'filing', filingOpen: true },
+		state: { phase: 'filing' },
 		candidates: undefined,
 	},
 };

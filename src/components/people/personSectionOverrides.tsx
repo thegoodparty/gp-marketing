@@ -480,26 +480,30 @@ function buildAuthoredPlaceholderSections(view: PersonProfileView): SectionMap {
 	return sections;
 }
 
-/** First 4-digit year in an ISO-ish date string (avoids TZ off-by-one). */
-function electionYear(electionDate: string | null): string | null {
-	return electionDate?.match(/\d{4}/)?.[0] ?? null;
-}
-
 /**
  * Past-election disclaimer shown at the top of the content well for persona
  * `past` (Figma states G 1958:113149 + H 1970:113742). It reuses the Figma "CTA
  * Section Module" treatment — a light-blue (blue-100) card with centered copy and
  * a dark "Start exploring" button — and carries the frames' verbatim copy.
+ *
+ * The "last ran" sentence needs a year to say anything, so it is dropped whole
+ * when no concluded run is dated, rather than trailing off (Emily, 2026-10-12).
  */
+export function pastElectionDisclaimerCopy(view: Pick<PersonProfileView, 'displayName' | 'lastRanYear'>): string {
+	const guide =
+		'Please see our updated voter guide for information about upcoming elections, candidates, and current elected officials.';
+	return view.lastRanYear
+		? `According to our records, ${view.displayName} last ran for office in ${view.lastRanYear}. ${guide}`
+		: guide;
+}
+
 function pastElectionDisclaimer(view: PersonProfileView): ProfileContentCardProps {
-	const year = electionYear(view.electionDate);
-	const ranClause = year ? `last ran for office in ${year}` : 'last ran for office';
 	return {
 		raw: true,
 		content: (
 			<div className='flex flex-col items-center gap-6 rounded-2xl bg-blue-100 px-6 py-10 text-center text-midnight-900 md:px-12'>
 				<Text styleType='body-1' className='mx-auto max-w-xl'>
-					{`According to our records, ${view.displayName} ${ranClause}. Please see our updated voter guide for information about upcoming elections, candidates, and current elected officials.`}
+					{pastElectionDisclaimerCopy(view)}
 				</Text>
 				<ButtonLink
 					parent='PersonProfilePastElectionDisclaimer'

@@ -2,7 +2,7 @@ import type { SVGProps } from 'react';
 import Link from 'next/link';
 import { normalizeStateCode } from '~/constants/usStateCodes';
 import type { PartyClass } from '~/lib/party';
-import { daysUntil, startOfLocalDay, toLocalDay, type PositionHeroState } from '~/lib/positionHeroState';
+import { daysUntil, positionHeroHeading, startOfLocalDay, toLocalDay, type PositionHeroState } from '~/lib/positionHeroState';
 import { Logo } from '~/sanity/utils/Logo.tsx';
 import { cn, tv } from './_lib/utils.ts';
 import { Avatar } from './Avatar.tsx';
@@ -16,6 +16,7 @@ const styles = tv({
 		layout: 'flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10',
 		intro: 'flex flex-col gap-2 lg:max-w-[33rem]',
 		cards: 'grid gap-4 md:grid-cols-2 lg:shrink-0 lg:grid-cols-[19.25rem_19.25rem]',
+		cardsSingle: 'md:grid-cols-1 lg:grid-cols-[19.25rem]',
 		card: 'flex min-h-[19.375rem] flex-col gap-4 rounded-lg border border-midnight-600 bg-midnight-800 p-6 text-white',
 		cardCompact: 'min-h-0 gap-6',
 		cardLabel: 'text-midnight-300',
@@ -195,11 +196,19 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 	const filingOpens = formatDay(props.filingDateStart);
 	const filingDeadline = formatDay(props.filingDateEnd);
 	const daysToElection = daysUntil(props.electionDate, now);
-	const daysToFile = daysUntil(state.phase === 'filing' && !state.filingOpen ? props.filingDateStart : props.filingDateEnd, now);
+	// Pre-filing counts down to the window opening when that date is known, and
+	// to the deadline otherwise (Figma 2360:19625 draws the deadline).
+	const daysUntilOpening = daysUntil(props.filingDateStart, now);
+	const countingToOpening = state.phase === 'preFiling' && daysUntilOpening !== null && daysUntilOpening > 0;
+	const daysToFile = countingToOpening ? daysUntilOpening : daysUntil(props.filingDateEnd, now);
+	// Between cycles the election on record is behind us and its filing dates are last time's.
+	const electionPassed = daysToElection !== null && daysToElection < 0;
 
 	const candidates = props.candidates;
 	const winners = props.winners ?? [];
-	const showBallotCard = candidates !== undefined && !(state.phase === 'midElection' && state.resultsPending);
+	// Before the window opens nobody can have filed, so the card would only ever
+	// say zero (Emily, 2026-10-12); after election day its rows would be stale.
+	const showBallotCard = candidates !== undefined && state.phase !== 'preFiling' && !(state.phase === 'midElection' && state.resultsPending);
 
 	const renderCountdown = (value: number | null, label: string) =>
 		value === null || value < 0 ? null : (
@@ -365,19 +374,27 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 			);
 		}
 
-		if (state.phase === 'filing') {
+		if (state.phase === 'filing' || state.phase === 'preFiling') {
+			// Between cycles the filing dates on record are last time's, so only the election row stays.
+			const filingRow = electionPassed
+				? null
+				: countingToOpening
+					? renderDate('Filing opens', filingOpens)
+					: (renderDate('Filing deadline', filingDeadline) ?? (state.phase === 'filing' ? renderDate('Filing opened', filingOpens) : null));
+			const fileCountdown = renderCountdown(daysToFile, countingToOpening ? 'Days until filing opens' : 'Days to file');
+			const electionCountdown = renderCountdown(daysToElection, 'Days until election');
 			return (
-				<div className={s.card()} data-testid='position-hero-dates-card'>
+				<div className={cn(s.card(), !fileCountdown && !electionCountdown && s.cardCompact())} data-testid='position-hero-dates-card'>
 					<dl className='flex flex-col gap-4'>
-						{state.filingOpen
-							? (renderDate('Filing deadline', filingDeadline) ?? renderDate('Filing opened', filingOpens))
-							: renderDate('Filing opens', filingOpens)}
-						{renderDate('Election date', electionDay)}
+						{filingRow}
+						{renderDate(electionPassed ? 'Last election' : 'Election date', electionDay)}
 					</dl>
-					<div className={cn(s.countdown(), 'mt-auto')}>
-						{renderCountdown(daysToFile, state.filingOpen ? 'Days to file' : 'Days until filing opens')}
-						{renderCountdown(daysToElection, 'Days until election')}
-					</div>
+					{(fileCountdown || electionCountdown) && (
+						<div className={cn(s.countdown(), 'mt-auto')}>
+							{fileCountdown}
+							{electionCountdown}
+						</div>
+					)}
 				</div>
 			);
 		}
@@ -448,11 +465,11 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 				<div className={s.layout()}>
 					<div className={s.intro()}>
 						<Text as='h1' styleType='heading-xl'>
-							{location ? `${props.officeName} in ${location}` : props.officeName}
+							{positionHeroHeading(state, props.officeName, location)}
 						</Text>
 						{props.intro && <Text styleType='body-1'>{props.intro}</Text>}
 					</div>
-					<div className={s.cards()}>
+					<div className={cn(s.cards(), !showBallotCard && s.cardsSingle())}>
 						{renderTimingCard()}
 						{renderBallotCard()}
 					</div>

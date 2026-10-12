@@ -111,7 +111,7 @@ describe('ElectionsPositionContentBlockSection', () => {
 	test('before the filing window opens, About and How to run lead and the "On this page" links follow', () => {
 		const html = render(override, '2026-01-15');
 
-		expect(html).toContain('data-phase="filing"');
+		expect(html).toContain('data-phase="preFiling"');
 		expect(html).toContain('data-layout="about-first"');
 		expect(at(html, 'position-about')).toBeGreaterThan(-1);
 		expect(at(html, 'position-about')).toBeLessThan(at(html, 'position-how-to-run'));
@@ -183,6 +183,21 @@ describe('ElectionsPositionContentBlockSection', () => {
 
 	test('after election day with no result it stays mid-election, like the hero', () => {
 		expect(render(override, '2026-11-10')).toContain('data-phase="midElection"');
+	});
+
+	test('three months after an election with no result it is pre-filing again, and About leads', () => {
+		const html = render(override, '2027-03-01');
+
+		expect(html).toContain('data-phase="preFiling"');
+		expect(html).toContain('data-layout="about-first"');
+		expect(html.indexOf('href="#position-about"')).toBeLessThan(html.indexOf('href="#position-candidates"'));
+	});
+
+	test('reads the phase the route resolved for the page rather than recomputing it', () => {
+		const html = render({ ...override, state: { phase: 'preFiling' } }, '2026-08-15');
+
+		expect(html).toContain('data-phase="preFiling"');
+		expect(html).toContain('data-layout="about-first"');
 	});
 
 	test('hides the candidates list, its nav link and the pledge explainer when the route holds no candidate data', () => {

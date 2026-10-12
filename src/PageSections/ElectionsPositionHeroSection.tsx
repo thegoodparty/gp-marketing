@@ -3,7 +3,7 @@ import { stegaClean } from 'next-sanity';
 import type { Sections } from '~/PageSections';
 import type { TokenMap } from '~/lib/resolveTokens';
 import { resolveSectionText } from '~/lib/resolveSectionText';
-import { resolvePositionHeroState } from '~/lib/positionHeroState';
+import { resolvePositionHeroState, type PositionHeroState } from '~/lib/positionHeroState';
 
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import {
@@ -11,7 +11,7 @@ import {
 	type ElectionsPositionHeroCandidate,
 	type ElectionsPositionHeroWinner,
 } from '~/ui/ElectionsPositionHero';
-import { HERO_INTRO_DEFAULT } from '~/sanity/schema/components/component_electionsPositionHero';
+import { HERO_INTRO_DEFAULT, HERO_INTRO_PRE_FILING_DEFAULT } from '~/sanity/schema/components/component_electionsPositionHero';
 
 /**
  * Everything the hero needs from the route. The position and candidates pages
@@ -19,8 +19,8 @@ import { HERO_INTRO_DEFAULT } from '~/sanity/schema/components/component_electio
  *
  * The seams that no route populates yet, because election-api has no results
  * data (candidacies carry no win/loss, and Race.numberOfSeats only just reached
- * the API): `winners`, `priorWinners`, `resultsHref`. The state resolver treats
- * their absence as "results pending" rather than inventing a winner.
+ * the API): `winners`, `resultsHref`. The state resolver treats their absence
+ * as "results pending" rather than inventing a winner.
  */
 export type OfficeData = {
 	officeName: string;
@@ -30,15 +30,19 @@ export type OfficeData = {
 	/** Pre-formatted dates kept for the page schema and older callers. */
 	electionDate: string;
 	filingDate: string;
-	/** ISO dates the hero derives its state and countdowns from. */
+	/** ISO dates the hero derives its countdowns from, and its state when the route resolved none. */
 	electionDateIso?: string | null;
 	filingDateStartIso?: string | null;
 	filingDateEndIso?: string | null;
+	/**
+	 * The phase the route resolved for the whole page, so the hero, the content
+	 * block and the page title all read one answer. Only a Studio preview with
+	 * no route data leaves it unset, and the hero then resolves it itself.
+	 */
+	state?: PositionHeroState;
 	/** `undefined` hides the ballot card; `[]` is a genuine zero. */
 	candidates?: ElectionsPositionHeroCandidate[];
 	winners?: ElectionsPositionHeroWinner[];
-	/** Winners of the previous cycle; holds the decided state until the next filing window nears. */
-	priorWinners?: ElectionsPositionHeroWinner[];
 	seatCount?: number | null;
 	candidatesHref?: string;
 	resultsHref?: string;
@@ -71,18 +75,22 @@ export function ElectionsPositionHeroSection(props: ElectionsPositionHeroSection
 		filingDate: 'TBD',
 	};
 
-	const state = resolvePositionHeroState({
-		filingDateStart: data.filingDateStartIso,
-		filingDateEnd: data.filingDateEndIso,
-		electionDate: data.electionDateIso,
-		winnerCount: data.winners?.length,
-		priorWinnerCount: data.priorWinners?.length,
-		now,
-	});
+	const state =
+		data.state ??
+		resolvePositionHeroState({
+			filingDateStart: data.filingDateStartIso,
+			filingDateEnd: data.filingDateEndIso,
+			electionDate: data.electionDateIso,
+			winnerCount: data.winners?.length,
+			now,
+		});
 
-	const winners = state.phase === 'decided' && (data.winners?.length ?? 0) === 0 ? data.priorWinners : data.winners;
-
-	const intro = resolveSectionText(stegaClean(section.field_intro) ?? HERO_INTRO_DEFAULT, tokens) ?? undefined;
+	// Pre-filing has its own sentence (Figma 2360:19625); every other phase shares one.
+	const introCopy =
+		state.phase === 'preFiling'
+			? (stegaClean(section.field_introPreFiling) ?? HERO_INTRO_PRE_FILING_DEFAULT)
+			: (stegaClean(section.field_intro) ?? HERO_INTRO_DEFAULT);
+	const intro = resolveSectionText(introCopy, tokens) ?? undefined;
 
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Elections Position Hero'>
@@ -98,7 +106,7 @@ export function ElectionsPositionHeroSection(props: ElectionsPositionHeroSection
 				filingDateStart={data.filingDateStartIso}
 				filingDateEnd={data.filingDateEndIso}
 				candidates={data.candidates}
-				winners={winners}
+				winners={data.winners}
 				seatCount={data.seatCount}
 				candidatesHref={data.candidatesHref}
 				resultsHref={data.resultsHref}

@@ -255,6 +255,16 @@ describe('buildPositionSectionOverrides hero', () => {
 		expect(overrides.component_electionsPositionHero?.winners).toBeUndefined();
 	});
 
+	test('resolves the phase once for the page and hands the same answer to the hero and the content block', () => {
+		const preFiling = buildPositionSectionOverrides({ ...positionOverrideCtx, race, now: new Date('2026-01-15T12:00:00') });
+		expect(preFiling.component_electionsPositionHero?.state).toEqual({ phase: 'preFiling' });
+		expect(preFiling.component_electionsPositionContentBlock?.state).toEqual({ phase: 'preFiling' });
+
+		const filing = buildPositionSectionOverrides({ ...positionOverrideCtx, race, now: new Date('2026-05-25T12:00:00') });
+		expect(filing.component_electionsPositionHero?.state).toEqual({ phase: 'filing' });
+		expect(filing.component_electionsPositionContentBlock?.state).toEqual({ phase: 'filing' });
+	});
+
 	test('uses the same hero data on the candidates page', () => {
 		const overrides = buildCandidatesSectionOverrides({ ...positionOverrideCtx, race, candidates: [], heroCandidates: [] });
 

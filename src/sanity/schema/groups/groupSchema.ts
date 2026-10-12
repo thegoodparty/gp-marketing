@@ -125,6 +125,7 @@ import { formOverview } from './formOverview.ts';
 import { blogBlockSummaryInfo } from './blogBlockSummaryInfo.ts';
 import { ErrorMessage } from './ErrorMessage.ts';
 import { loggedOutCtAs } from './loggedOutCtAs.ts';
+import { promoBanner } from './promoBanner.ts';
 import { socialChannels } from './socialChannels.ts';
 import { statsBlockDesignSettings } from './statsBlockDesignSettings.ts';
 import { primaryContactInformation } from './primaryContactInformation.ts';
@@ -278,6 +279,7 @@ export const groupSchema = [
 	blogBlockSummaryInfo,
 	ErrorMessage,
 	loggedOutCtAs,
+	promoBanner,
 	socialChannels,
 	statsBlockDesignSettings,
 	primaryContactInformation,

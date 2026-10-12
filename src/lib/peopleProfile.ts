@@ -241,6 +241,15 @@ export interface PersonProfileView {
 	currentOffice: PersonOfficeHolder | null;
 	termLabel: string | null;
 	electionDate: string | null;
+	/**
+	 * Year of the person's most recent concluded run, read straight off the
+	 * candidacy rows. Deliberately NOT derived from {@link electionDate}: that is
+	 * the context race's date, and the context defers to a held office for
+	 * anyone who has served and is not running now (see selectPrimaryCandidacy),
+	 * which left the past-election disclaimer saying "last ran for office" with
+	 * no year for every former official with a run on record (Emily, 2026-10-12).
+	 */
+	lastRanYear: string | null;
 	positionId: string | null;
 	positionDescription: string | null;
 	/** Canonical /elections position page href for the person's own office ("Learn more"). */
@@ -1253,6 +1262,7 @@ export function composeView(
 		currentOffice: office,
 		termLabel: formatTerm(office),
 		electionDate: extras.electionDate ?? null,
+		lastRanYear: formatYear(candidaciesByRecency(person?.Candidacies ?? []).past[0]?.Race?.electionDate ?? null),
 		positionId: extras.positionId ?? office?.positionId ?? null,
 		positionDescription: extras.positionDescription ?? null,
 		positionHref: extras.positionHref ?? null,

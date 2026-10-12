@@ -12,6 +12,7 @@ import {
 } from '~/lib/electionsHelpers';
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsPositionPage } from '~/lib/renderElectionsPositionPage';
+import { positionPageMetadata, resolvePositionHeroState } from '~/lib/positionHeroState';
 import { loadPositionHeroCandidates } from '~/lib/positionHeroCandidates';
 import { officeDisplayName } from '~/lib/officeDisplayName';
 
@@ -103,10 +104,15 @@ export async function generateMetadata({
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === countySlug);
 	const positionName = (race ? officeDisplayName(race, race.Place) : 'Position');
+	// The same resolver the page's hero and content block read, so the title cannot name a different phase.
+	const positionState = resolvePositionHeroState({
+		filingDateStart: race?.filingDateStart,
+		filingDateEnd: race?.filingDateEnd,
+		electionDate: race?.electionDate,
+	});
 	const countyDisplayName = resolveLocalityName(countyPlace, race?.Place, countySlug);
 	return {
-		title: `${positionName} in ${countyDisplayName}, ${stateName} | ${SITE_NAME}`,
-		description: `Election details and candidates for ${positionName} in ${countyDisplayName}, ${stateName}.`,
+		...positionPageMetadata(positionState, positionName, `${countyDisplayName}, ${stateName}`, SITE_NAME),
 		alternates: { canonical: toAbsoluteUrl(`/elections/${countySlug}/position/${positionSlug}`) },
 	};
 }

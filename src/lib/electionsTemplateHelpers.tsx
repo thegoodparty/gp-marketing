@@ -26,6 +26,7 @@ import {
 	buildWebPageSchema,
 } from '~/lib/schema';
 import { resolveHowToRunGuide } from '~/lib/howToRunGuide';
+import { resolvePositionHeroState, type PositionHeroState } from '~/lib/positionHeroState';
 import { toAbsoluteUrl } from '~/lib/url';
 import { POSITION_PAGE_FAQ } from '~/constants/positionPageStaticSections';
 
@@ -59,15 +60,32 @@ export type PositionPageContext = {
 	officeholders?: ElectionsPositionPerson[];
 	/** From `getNearbyOffices`; set by the position page renderer, absent on candidates pages. */
 	nearbyOffices?: OfficeItem[];
+	/** Injected by tests so the resolved phase is deterministic. */
+	now?: Date;
 };
 
 /**
- * The hero reads the same race the page does. Winners and the previous cycle's
- * winners are left unset because election-api records no results yet; the
- * resolver reads that as "results pending" after election day.
+ * The page's phase, resolved once from the race and handed to every block that
+ * varies with it. Winners are left unset because election-api records no
+ * results yet; the resolver reads that as "results pending" after election day
+ * and as pre-filing once that stretch is over.
  */
-export function buildPositionHeroOverride(ctx: PositionPageContext): NonNullable<SectionOverrides['component_electionsPositionHero']> {
+export function resolvePositionPageState(ctx: Pick<PositionPageContext, 'race' | 'now'>): PositionHeroState {
+	return resolvePositionHeroState({
+		filingDateStart: ctx.race?.filingDateStart,
+		filingDateEnd: ctx.race?.filingDateEnd,
+		electionDate: ctx.race?.electionDate,
+		now: ctx.now,
+	});
+}
+
+/** The hero reads the same race the page does and the one phase resolved for it. */
+export function buildPositionHeroOverride(
+	ctx: PositionPageContext,
+	state: PositionHeroState = resolvePositionPageState(ctx),
+): NonNullable<SectionOverrides['component_electionsPositionHero']> {
 	return {
+		state,
 		officeName: ctx.officeName,
 		stateName: ctx.stateName,
 		countyName: ctx.countyName,
@@ -168,12 +186,13 @@ export function buildPositionFilingAttributes(ctx: Pick<PositionPageContext, 'ra
 }
 
 /**
- * The content block reads the same race and the same candidate rows as the
- * hero, so the two derive one state. The "Explore more races" card links to the
- * page's own location, which is the crumb before the position in the trail.
+ * The content block reads the same race, the same candidate rows and the same
+ * resolved phase as the hero. The "Explore more races" card links to the page's
+ * own location, which is the crumb before the position in the trail.
  */
 export function buildPositionContentOverride(
 	ctx: PositionPageContext,
+	state: PositionHeroState = resolvePositionPageState(ctx),
 ): NonNullable<SectionOverrides['component_electionsPositionContentBlock']> {
 	const race = ctx.race;
 	const candidates = ctx.heroCandidates?.map(heroCandidateToPerson);
@@ -189,6 +208,7 @@ export function buildPositionContentOverride(
 			}
 		: undefined;
 	return {
+		state,
 		electionDateIso: race?.electionDate ?? null,
 		filingDateStartIso: race?.filingDateStart ?? null,
 		filingDateEndIso: race?.filingDateEnd ?? null,
@@ -246,6 +266,9 @@ export function buildProfileTokens(ctx: { candidateName: string; officeName: str
 
 export function buildPositionSectionOverrides(ctx: PositionPageContext): SectionOverrides {
 	const race = ctx.race;
+	// One resolution for the whole page: the hero, the content block and (in the
+	// routes' metadata) the title all read the same answer.
+	const state = resolvePositionPageState(ctx);
 	return {
 		component_breadcrumbBlock: { breadcrumbs: ctx.breadcrumbs },
 		// The hero's ballot card points down the page at the content block's
@@ -253,11 +276,11 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 		// redesign (Emily, 2026-09-24). With no rows the list hides, and so does
 		// the button: the card already says how many candidates there are.
 		component_electionsPositionHero: {
-			...buildPositionHeroOverride(ctx),
+			...buildPositionHeroOverride(ctx, state),
 			candidatesHref: ctx.heroCandidates && ctx.heroCandidates.length > 0 ? `#${POSITION_CONTENT_IDS.candidates}` : undefined,
 			resultsHref: ctx.heroCandidates && ctx.heroCandidates.length > 0 ? `#${POSITION_CONTENT_IDS.candidates}` : undefined,
 		},
-		component_electionsPositionContentBlock: buildPositionContentOverride(ctx),
+		component_electionsPositionContentBlock: buildPositionContentOverride(ctx, state),
 		component_faqBlock: {
 			items: race
 				? buildDynamicFAQItems(race, ctx.officeName, ctx.stateName)

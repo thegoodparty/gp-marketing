@@ -136,7 +136,7 @@ describe('resolvePositionHeroState', () => {
 
 describe('positionHeroHeading', () => {
 	test('pre-filing leads with the guide; every other phase names the race', () => {
-		expect(positionHeroHeading({ phase: 'preFiling' }, 'City Council', 'Bay City, MI')).toBe('How to run for City Council in Bay City, MI');
+		expect(positionHeroHeading({ phase: 'preFiling' }, 'City Council', 'Bay City, MI')).toBe('How to Run for City Council in Bay City, MI');
 		expect(positionHeroHeading({ phase: 'filing' }, 'City Council', 'Bay City, MI')).toBe('City Council in Bay City, MI');
 		expect(positionHeroHeading({ phase: 'midElection', resultsPending: false }, 'City Council', 'Bay City, MI')).toBe('City Council in Bay City, MI');
 		expect(positionHeroHeading({ phase: 'midElection', resultsPending: true }, 'City Council', 'Bay City, MI')).toBe('City Council in Bay City, MI');
@@ -144,7 +144,7 @@ describe('positionHeroHeading', () => {
 	});
 
 	test('with no place it is the office alone', () => {
-		expect(positionHeroHeading({ phase: 'preFiling' }, 'Governor', null)).toBe('How to run for Governor');
+		expect(positionHeroHeading({ phase: 'preFiling' }, 'Governor', null)).toBe('How to Run for Governor');
 		expect(positionHeroHeading({ phase: 'filing' }, 'Governor', undefined)).toBe('Governor');
 	});
 });
@@ -152,7 +152,7 @@ describe('positionHeroHeading', () => {
 describe('positionPageMetadata', () => {
 	test('pre-filing titles the page as a how-to and describes what it covers', () => {
 		expect(positionPageMetadata({ phase: 'preFiling' }, 'Mayor', 'Houston, Harris County, Texas', 'GoodParty.org')).toEqual({
-			title: 'How to run for Mayor in Houston, Harris County, Texas | GoodParty.org',
+			title: 'How to Run for Mayor in Houston, Harris County, Texas | GoodParty.org',
 			description: 'Learn how to run for Mayor in Houston, Harris County, Texas: filing dates, election date and who holds the office today.',
 		});
 	});

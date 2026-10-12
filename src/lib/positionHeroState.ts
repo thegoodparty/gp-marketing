@@ -129,20 +129,21 @@ export function resolvePositionHeroState(input: PositionHeroStateInput): Positio
 
 /**
  * The page's one H1, and the subject the title and description are built from.
- * Pre-filing leads with the guide ("How to run for City Council in Bay City, MI",
- * Figma 2360:19625); every other phase names the race ("City Council in Bay
- * City, MI"). The hero and the routes' metadata both read this, so the heading
+ * Pre-filing leads with the guide ("How to Run for City Council in Bay City, MI",
+ * capitalised as Figma 2360:19625 draws it, Emily 2026-10-12); every other phase
+ * names the race ("City Council in Bay City, MI"). The hero and the routes' metadata both read this, so the heading
  * can never say one phase while the cards show another.
  */
 export function positionHeroHeading(state: PositionHeroState, officeName: string, place?: string | null): string {
 	const subject = place ? `${officeName} in ${place}` : officeName;
-	return state.phase === 'preFiling' ? `How to run for ${subject}` : subject;
+	return state.phase === 'preFiling' ? `How to Run for ${subject}` : subject;
 }
 
 /**
  * The `<title>` and meta description for a position page. `placePhrase` is the
  * place as the route names it in metadata ("Houston, Harris County, Texas"),
- * which is longer than the H1's place and deliberately so.
+ * which is longer than the H1's place and deliberately so. The pre-filing title
+ * is capitalised like the heading (Emily, 2026-10-12).
  */
 export function positionPageMetadata(
 	state: PositionHeroState,
@@ -153,7 +154,7 @@ export function positionPageMetadata(
 	const subject = `${officeName} in ${placePhrase}`;
 	if (state.phase === 'preFiling') {
 		return {
-			title: `How to run for ${subject} | ${siteName}`,
+			title: `How to Run for ${subject} | ${siteName}`,
 			description: `Learn how to run for ${subject}: filing dates, election date and who holds the office today.`,
 		};
 	}

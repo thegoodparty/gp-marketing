@@ -49,7 +49,7 @@ const meta: Meta<typeof ElectionsPositionHero> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Pre-filing with the opening date on record: "How to run for" heading, countdown to the window opening (Figma 2360:19625). */
+/** Pre-filing with the opening date on record: "How to Run for" heading, countdown to the window opening, no ballot card (Figma 2360:19625, card dropped 2026-10-12). */
 export const PreFilingOpeningKnown: Story = {
 	args: {
 		...race,
@@ -74,7 +74,7 @@ export const PreFilingDeadlineOnly: Story = {
 	},
 };
 
-/** Pre-filing between cycles: the last election is behind with no result, so only its date stays and the ballot card hides. */
+/** Pre-filing between cycles: the last election is behind with no result, so only its date stays. */
 export const PreFilingBetweenCycles: Story = {
 	args: {
 		...race,

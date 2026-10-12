@@ -316,3 +316,66 @@ describe('the claim profile block', () => {
 		expect(amplitudeEvents.map(e => e.name)).toEqual(['Sign Up Clicked', 'Voter Guide - Claim Profile Clicked']);
 	});
 });
+
+describe('the outbound link tracker', () => {
+	// `usePathname` reads Next's pathname context, which the app router provides
+	// and a bare JSDOM mount does not, so the tracker is mounted inside one.
+	async function renderOnPage(pathname: string, ...links: React.ReactElement[]) {
+		const { OutboundLinkTracker } = await import('./OutboundLinkTracker.tsx');
+		const { PathnameContext } = await import('next/dist/shared/lib/hooks-client-context.shared-runtime');
+		await render(
+			React.createElement(
+				PathnameContext.Provider,
+				{ value: pathname },
+				React.createElement(OutboundLinkTracker),
+				...links,
+			),
+		);
+	}
+
+	const link = (href: string, text: string, id: string) =>
+		React.createElement('a', { href, id, key: id }, React.createElement('span', null, text));
+
+	test('a click that leaves the site reports its destination to Amplitude, and only Amplitude', async () => {
+		await renderOnPage('/people/jane-public-0a1b2c3d', link('https://www.janeforcouncil.com/donate', ' Campaign site ', 'campaign'));
+
+		// The span inside the anchor is what the visitor's click lands on.
+		await click(document.querySelector('#campaign span')!);
+
+		expect(amplitudeEvents).toEqual([
+			{
+				name: 'Voter Guide - Outbound Link Clicked',
+				props: {
+					page_path: '/elections/tx/harris-county',
+					href: 'https://www.janeforcouncil.com/donate',
+					host: 'www.janeforcouncil.com',
+					link_text: 'Campaign site',
+				},
+			},
+		]);
+		expect(ga4Events()).toEqual([]);
+	});
+
+	test('links that stay inside the GoodParty ecosystem, on the site, or in mail are not outbound', async () => {
+		await renderOnPage(
+			'/elections/tx/harris-county',
+			link('https://app.goodparty.org/sign-up', 'Claim', 'app'),
+			link('/elections/tx', 'Texas', 'internal'),
+			link('mailto:jane@example.org', 'Email', 'mail'),
+		);
+
+		await click(document.querySelector('#app')!);
+		await click(document.querySelector('#internal span')!);
+		await click(document.querySelector('#mail')!);
+
+		expect(amplitudeEvents).toEqual([]);
+	});
+
+	test('off the voter guide the same click is not recorded', async () => {
+		await renderOnPage('/blog/how-to-run', link('https://www.janeforcouncil.com/', 'Campaign site', 'campaign'));
+
+		await click(document.querySelector('#campaign')!);
+
+		expect(amplitudeEvents).toEqual([]);
+	});
+});

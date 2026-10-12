@@ -39,3 +39,8 @@ describe('PromoBanner', () => {
 		expect(html).toContain('{display:none}');
 	});
 });
+
+test('PromoBanner puts the pre-paint script before the banner so the hide rule exists before the banner can paint', () => {
+	const html = renderToString(<PromoBanner text='Order check' dismissKey='k4' />);
+	expect(html.indexOf('<script>')).toBeLessThan(html.indexOf('data-component="PromoBanner"'));
+});

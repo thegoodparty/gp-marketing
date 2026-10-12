@@ -95,35 +95,44 @@ export const PromoBanner = (props: PromoBannerProps) => {
 	};
 
 	return (
-		<div data-component='PromoBanner' data-promo-banner={dismissKey} className={styles({ color: props.color ?? 'bright-yellow' })}>
-			<Container
-				size='xl'
-				className='flex h-full items-center gap-3 md:gap-4 max-md:grid max-md:grid-cols-[auto_minmax(0,1fr)_auto] max-md:gap-x-3 max-md:gap-y-1.5'
-			>
-				{props.countdownTo && <PromoCountdown to={props.countdownTo} label={props.countdownLabel} />}
-				<Text
-					as='p'
-					styleType='body-2'
-					className={cn('min-w-0 flex-1 md:truncate max-md:line-clamp-2 max-md:row-start-1', props.countdownTo ? 'max-md:col-start-2' : 'max-md:col-span-2')}
-				>
-					{props.text}
-				</Text>
-				{props.button && (
-					<ComponentButton
-						{...props.button}
-						className={cn('shrink-0 max-md:row-start-2 max-md:justify-self-start', props.countdownTo ? 'max-md:col-start-2' : 'max-md:col-span-2')}
-						buttonProps={{ ...props.button.buttonProps, styleSize: 'sm' }} />
-				)}
-				<button
-					type='button'
-					aria-label='Dismiss this message'
-					onClick={dismiss}
-					className='max-md:col-start-3 max-md:row-start-1 flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full transition hover:bg-current/10 focus-visible:outline-2 focus-visible:outline-current'
-				>
-					<IconResolver icon='x' className='h-4 w-4 min-h-4 min-w-4' />
-				</button>
-			</Container>
+		<>
 			<script dangerouslySetInnerHTML={{ __html: promoBannerPrePaintScript({ dismissKey, startsAt, endsAt }) }} />
-		</div>
+			<div data-component='PromoBanner' data-promo-banner={dismissKey} className={styles({ color: props.color ?? 'bright-yellow' })}>
+				<Container
+					size='xl'
+					className='flex h-full items-center gap-3 md:gap-4 max-md:grid max-md:grid-cols-[auto_minmax(0,1fr)_auto] max-md:gap-x-3 max-md:gap-y-1.5'
+				>
+					{props.countdownTo && <PromoCountdown to={props.countdownTo} label={props.countdownLabel} />}
+					<Text
+						as='p'
+						styleType='body-2'
+						className={cn(
+							'min-w-0 flex-1 md:truncate max-md:line-clamp-2 max-md:row-start-1',
+							props.countdownTo ? 'max-md:col-start-2' : 'max-md:col-span-2',
+						)}
+					>
+						{props.text}
+					</Text>
+					{props.button && (
+						<ComponentButton
+							{...props.button}
+							className={cn(
+								'shrink-0 max-md:row-start-2 max-md:justify-self-start',
+								props.countdownTo ? 'max-md:col-start-2' : 'max-md:col-span-2',
+							)}
+							buttonProps={{ ...props.button.buttonProps, styleSize: 'sm' }}
+						/>
+					)}
+					<button
+						type='button'
+						aria-label='Dismiss this message'
+						onClick={dismiss}
+						className='max-md:col-start-3 max-md:row-start-1 flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full transition hover:bg-current/10 focus-visible:outline-2 focus-visible:outline-current'
+					>
+						<IconResolver icon='x' className='h-4 w-4 min-h-4 min-w-4' />
+					</button>
+				</Container>
+			</div>
+		</>
 	);
 };

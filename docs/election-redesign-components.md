@@ -655,6 +655,21 @@ Decisions that came out of it and affect other blocks in the batch:
   hero and the Elections Near You block). `placeForSubmit` in `src/lib/electionsNearYouSearch.ts` now
   takes the picked suggestion, else the first one on screen, else fetches them for the typed text
   before resolving, and only then falls back to free text.
+- **One click or one Enter is enough.** "The search needs a second click" (Emily and Farhad,
+  2026-10-12) was verified on production to be three things, none of them a failing click, and
+  `src/ui/ElectionsNearYouSearch.tsx` now covers all of them. Below `sm` the suggestion popover
+  opened on top of the stacked Search button, so the first tap picked a suggestion and the second
+  reached the button: the popover now carries an offset that clears the button there. React Aria
+  swallows Enter while the list is open, so "Boise" + Enter only closed the list: with nothing
+  highlighted, Enter now submits the form (a highlighted suggestion still gets picked). And after a
+  successful search the button went back to "Search" as soon as the resolve returned, while an
+  uncached elections page takes two to four seconds to send its first byte, so the page looked idle
+  and people clicked again, restarting the navigation: the button now stays in its loading state
+  until the next page replaces this one (a back-forward-cache restore resets it). A fourth quirk
+  went with it: the first batch of suggestions never opened the list when the name was typed fast
+  or pasted, because the library only opens on the keystroke render; the input now opens the list
+  when a batch lands while it is focused. There is no Google Places key on dev or Preview, so these
+  were verified with a throwaway local stub and must be rechecked on production after release.
 
 - **The search is one component now.** The city-or-county search that lived inside
   `ElectionsNearYouBlock` (Google Places suggestions, the resolve-place lookup, the analytics events,

@@ -1,3 +1,5 @@
+'use client';
+
 import { cn, tv } from './_lib/utils.ts';
 
 import { Anchor } from './Anchor.tsx';
@@ -7,6 +9,7 @@ import { ArrowRightIcon } from './icons/ArrowRightIcon.tsx';
 import type { OfficeItem } from './ListOfOfficesBlock.tsx';
 import { Logo } from '~/sanity/utils/Logo.tsx';
 import { formatElectionDateShortFromApi } from '~/lib/electionsHelpers';
+import { trackVoterGuideEvent } from '~/lib/analytics';
 
 /** Marketing's cap for the block (Emily, 2026-09-24). The data helper applies it too. */
 export const NEARBY_OFFICES_LIMIT = 8;
@@ -170,7 +173,22 @@ export const NearbyOffices = (props: NearbyOfficesProps) => {
 							);
 
 							return office.href ? (
-								<Anchor key={office.id} href={office.href} className={cn(row(), rowLink())}>
+								<Anchor
+									key={office.id}
+									href={office.href}
+									className={cn(row(), rowLink())}
+									onClick={() =>
+										trackVoterGuideEvent('officeClick', {
+											list: 'nearby',
+											office_name: office.position,
+											office_level: office.level ?? null,
+											office_type: office.type,
+											election_date: office.nextElectionDate,
+											pledged_count: office.pledgedCount ?? null,
+											href: office.href,
+										})
+									}
+								>
 									{content}
 								</Anchor>
 							) : (

@@ -5,6 +5,7 @@ import type { EmblaOptionsType } from 'embla-carousel';
 import useEmblaCarousel from 'embla-carousel-react';
 
 import { cn, tv } from './_lib/utils.ts';
+import { useCarouselPageTracking } from './_lib/useCarouselPageTracking.ts';
 import { useRectTracker } from './_lib/useRectTracker';
 
 import { Container } from './Container.tsx';
@@ -47,6 +48,7 @@ export function FeaturedCitiesBlock(props: FeaturedCitiesBlockProps) {
 	const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start', ...props.options });
 	const dots = useDotButton(emblaApi);
 	const nav = usePrevNextButtons(emblaApi);
+	useCarouselPageTracking(emblaApi, 'featured_cities');
 
 	const containerRef = useRef<HTMLDivElement>(null);
 	const rect = useRectTracker(containerRef);

@@ -201,7 +201,7 @@ export function ElectionsPositionContentBlockSection(props: ElectionsPositionCon
 						? {
 								title: text(rail?.field_exploreTitle, d.siderail.exploreTitle, tokens),
 								body: withPledgePhrase(text(rail?.field_exploreBody, d.siderail.exploreBody, tokens), phrase => (
-									<PledgeModal>
+									<PledgeModal source='position_content'>
 										<button type='button' className='font-medium text-info-500 underline underline-offset-2'>
 											{phrase}
 										</button>

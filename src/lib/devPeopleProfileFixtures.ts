@@ -337,13 +337,13 @@ function richOverlay(name: string, persona: PersonPersona): Partial<PublicPerson
 function richExperience(persona: PersonPersona): ExperienceItem[] {
 	const running = persona === 'candidate' || persona === 'both';
 	const rows: ExperienceItem[] = [
-		{ title: 'City Council, District 40', organization: '2022 – present', term: '2022 – present', status: 'Incumbent', href: '/elections/city-council-40' },
-		{ title: 'City Council, District 3', organization: '2018 – 2022', term: '2018 – 2022', status: 'Incumbent', href: '/elections/city-council-3' },
-		{ title: 'Candidate for Position, District 3', organization: '2014', term: '2014', status: 'Candidate', href: '/elections/position-3' },
-		{ title: 'School Board Trustee, At-Large', organization: '2010 – 2014', term: '2010 – 2014', status: null, href: '/elections/school-board' },
+		{ title: 'City Council, District 40', organization: 'City of Springfield', term: '2022 – present', status: 'Incumbent', href: '/elections/city-council-40' },
+		{ title: 'City Council, District 3', organization: 'City of Springfield', term: '2018 – 2022', status: 'Incumbent', href: '/elections/city-council-3' },
+		{ title: 'Candidate for Position, District 3', organization: 'City of Springfield', term: '2014', status: 'Candidate', href: '/elections/position-3' },
+		{ title: 'School Board Trustee, At-Large', organization: 'Springfield Unified School District', term: '2010 – 2014', status: null, href: '/elections/school-board' },
 	];
 	if (running) {
-		rows.unshift({ title: `Candidate for ${DEV_POSITION_NAME}`, organization: '2026 election', term: '2026 election', status: 'Candidate', href: devPositionHref() ?? null });
+		rows.unshift({ title: `Candidate for ${DEV_POSITION_NAME}`, organization: null, term: '2026 election', status: 'Candidate', href: devPositionHref() ?? null });
 	}
 	return rows;
 }
@@ -437,6 +437,10 @@ export function getDevPersonProfileView(slug: string): PersonProfileView | null 
 		// Address" rows for anyone currently in office (Figma officeholder frames).
 		OfficeHolders: (fixture.person.OfficeHolders ?? []).map((o) => ({
 			...o,
+			// The term's own race slug, as election-api flattens it onto a real term,
+			// so the hero's held-office line and its Recent Experience row link.
+			positionSlug: DEV_RACE_SLUG,
+			positionLevel: 'CITY',
 			...(entry.partyNames ? { partyNames: entry.partyNames } : {}),
 			officeEmail: 'office@townofexample.gov',
 			officePhone: '(307) 555-0100',

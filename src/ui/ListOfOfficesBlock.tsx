@@ -14,6 +14,7 @@ import { Button } from './Inputs/Button.tsx';
 import { Logo } from '~/sanity/utils/Logo.tsx';
 import { DEFAULT_YEAR_OFFSET } from '~/constants/display';
 import { formatElectionDateFromApi, getYearFromDateString, resolveDefaultElectionYear } from '~/lib/electionsHelpers';
+import { trackVoterGuideEvent } from '~/lib/analytics';
 
 /**
  * Text colour is set once on `base` and inherited, and never written as a
@@ -251,6 +252,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 		const year = parseInt(e.target.value, 10);
 		setSelectedYear(year);
 		setVisibleCount(pageSize);
+		trackVoterGuideEvent('officesFilterChange', { filter: 'year', value: year, page_level: pageLevel });
 		props.onYearChange?.(year);
 	};
 
@@ -265,6 +267,7 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 		const level = e.target.value as LevelSelection;
 		setSelectedLevel(level);
 		setVisibleCount(pageSize);
+		trackVoterGuideEvent('officesFilterChange', { filter: 'level', value: level, page_level: pageLevel });
 
 		const yearsAtLevel = [
 			...new Set(
@@ -398,7 +401,22 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 							return (
 								<div key={office.id} hidden={!visibleOffices.has(office)}>
 									{office.href ? (
-										<Anchor href={office.href} className={cn(row(), 'cursor-pointer')} onClick={() => props.onOfficeClick?.(office)}>
+										<Anchor
+											href={office.href}
+											className={cn(row(), 'cursor-pointer')}
+											onClick={() => {
+												trackVoterGuideEvent('officeClick', {
+													list: 'offices',
+													office_name: office.position,
+													office_level: office.level ?? pageLevel,
+													office_type: office.type,
+													election_date: office.nextElectionDate,
+													pledged_count: office.pledgedCount ?? null,
+													href: office.href,
+												});
+												props.onOfficeClick?.(office);
+											}}
+										>
 											{RowContent}
 										</Anchor>
 									) : (
@@ -414,7 +432,10 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 							<Button
 								parent='ListOfOfficesBlock'
 								styleType={secondaryButtonStyleType}
-								onClick={() => setVisibleCount(prev => prev + pageSize)}
+								onClick={() => {
+									trackVoterGuideEvent('showMoreClick', { list: 'offices', page_level: pageLevel });
+									setVisibleCount(prev => prev + pageSize);
+								}}
 							>
 								Show More
 							</Button>

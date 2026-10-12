@@ -83,6 +83,7 @@ export function ClaimProfileBlock(props: ClaimProfileBlockProps) {
 
 	const claimButtonProps = {
 		...props.claimButton,
+		analytics: { event: 'claimProfileClick' as const, properties: { source: 'claim_block', layout } },
 		className: cn(layout === 'banner' ? 'w-fit shrink-0' : 'w-fit p-8', props.claimButton.className),
 		buttonProps: {
 			...props.claimButton.buttonProps,

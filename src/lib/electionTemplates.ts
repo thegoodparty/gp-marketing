@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import type { Sections } from '~/PageSections';
 import { getCodeDefaultElectionTemplate } from '~/lib/electionTemplateDefaults';
 import { customElectionTemplateByIdQuery, customElectionTemplateTargetsQuery, globalElectionTemplateQuery } from '~/sanity/groq';
@@ -249,11 +250,11 @@ async function fetchGlobalTemplateByType(templateType: ElectionTemplateType | Le
 }
 
 async function fetchGlobalTemplate(templateType: ElectionTemplateType): Promise<Sections[] | null> {
-	const primary = await fetchGlobalTemplateByType(templateType);
+	const primary = await readGlobalTemplateByType(templateType);
 	if (primary) return primary;
 
 	if (isLocationTemplateType(templateType)) {
-		return fetchGlobalTemplateByType('location');
+		return readGlobalTemplateByType('location');
 	}
 	return null;
 }
@@ -286,6 +287,29 @@ async function fetchCustomTemplateSectionsById(id: string, templateType: Electio
 	}
 }
 
+/**
+ * The two reads memoized per request (React `cache`), so a route can start them
+ * with `preloadElectionTemplate` before its election-api work and the resolve
+ * below picks up the same promises. Outside the Next runtime `cache` is a plain
+ * call-through, so scripts and tests see one read per call as before.
+ */
+const readCustomTemplateTargets = cache(fetchCustomTemplateTargets);
+const readGlobalTemplateByType = cache(fetchGlobalTemplateByType);
+
+/**
+ * Starts the Sanity reads `resolveElectionTemplate` will make for this template
+ * type. Every programmatic page resolves its template after all of its data has
+ * loaded, which put two serial Sanity round trips at the end of every cold
+ * render; started here they finish while election-api is still answering. The
+ * global template is read even when a custom one wins, which is one cached CDN
+ * read more than before on that path, and the page it renders is the same. Both
+ * reads fold their own failures into an empty answer, so nothing here rejects.
+ */
+export function preloadElectionTemplate(templateType: ElectionTemplateType): void {
+	void readCustomTemplateTargets(templateType);
+	void readGlobalTemplateByType(templateType);
+}
+
 export async function resolveElectionTemplate(
 	ctx: ElectionTemplateContext,
 	options?: { tokens?: TokenMap },
@@ -297,7 +321,7 @@ export async function resolveElectionTemplate(
 	};
 
 	try {
-		const customTargets = await fetchCustomTemplateTargets(ctx.templateType);
+		const customTargets = await readCustomTemplateTargets(ctx.templateType);
 		const bestCustom = pickBestCustomTemplate(customTargets, ctx);
 		if (bestCustom) {
 			const customSections = await fetchCustomTemplateSectionsById(bestCustom._id, ctx.templateType);

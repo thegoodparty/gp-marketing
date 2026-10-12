@@ -8,6 +8,7 @@ import { Amplitude } from '~/ui/Amplitude';
 import { LogRocket } from '~/ui/LogRocket';
 import { AttributionProvider } from '~/ui/AttributionProvider';
 import { ScrollDepthTracker } from '~/ui/ScrollDepthTracker';
+import { OutboundLinkTracker } from '~/ui/OutboundLinkTracker';
 import { PageSchema } from '~/ui/PageSchema';
 import { getBaseUrl, SITE_NAME } from '~/lib/url';
 import { buildOrganizationSchema, buildSchemaGraph, buildWebSiteSchema, resolveSameAs } from '~/lib/schema';
@@ -95,6 +96,7 @@ export default async function RootLayout({ children }: Props) {
 				<Amplitude />
 				<LogRocket />
 				<ScrollDepthTracker />
+				<OutboundLinkTracker />
 				{(await draftMode()).isEnabled && <VisualEditing />}
 				<AttributionProvider>
 					<ComponentErrorBoundary componentName='Header'>

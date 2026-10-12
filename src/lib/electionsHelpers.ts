@@ -563,19 +563,14 @@ export async function buildOverlappingOfficeItems(params: {
 	/** The county's name when its races are supplied, for the office names. */
 	countyName?: string | null;
 }): Promise<{ offices: OfficeItem[]; dataYears: number[] }> {
-	const { getPlaceBySlug } = await import('~/lib/electionsApi');
-	const placeArgs = {
-		includeChildren: false,
-		includeRaces: true,
-		placeColumns: 'slug,name,mtfcc',
-		raceColumns: PLACE_RACE_COLUMNS,
-	};
+	// Read through the one shape every location block uses, so the state and
+	// county rows share their cached entry with the featured-people block instead
+	// of being asked of election-api a second time in a narrower column set.
+	const { getElectionsPagePlace } = await import('~/lib/electionsApi');
 
 	const [statePlace, countyPlace] = await Promise.all([
-		getPlaceBySlug({ slug: params.stateSlug, ...placeArgs }),
-		params.countyRaces || !params.countySlug
-			? Promise.resolve(null)
-			: getPlaceBySlug({ slug: params.countySlug, ...placeArgs }),
+		getElectionsPagePlace({ slug: params.stateSlug }),
+		params.countyRaces || !params.countySlug ? Promise.resolve(null) : getElectionsPagePlace({ slug: params.countySlug }),
 	]);
 
 	const stateRaces = (statePlace?.Races ?? []).filter(r => r.positionLevel?.toUpperCase() === 'STATE');

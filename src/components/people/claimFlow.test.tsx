@@ -273,7 +273,18 @@ describe('the claim band hands the candidate to Win sign-up', () => {
 		const signUp = trackedEvents.filter(e => e.name === 'Sign Up Clicked');
 		expect(signUp).toHaveLength(1);
 		expect(signUp[0]?.props).toMatchObject({ href: 'https://app.goodparty.org/sign-up', label: 'Claim profile' });
-		expect(dataLayer).toEqual([{ event: 'sign_up_click', formId: 'person-claim-owner' }]);
+		expect(dataLayer).toEqual([
+			{ event: 'sign_up_click', formId: 'person-claim-owner' },
+			{
+				event: 'voter_guide_claim_profile_click',
+				page_path: '/people/example-person',
+				source: 'claim_band',
+				label: 'Claim this profile',
+				href: 'https://app.goodparty.org/sign-up',
+				layout: null,
+			},
+		]);
+		expect(segmentEvents.map(e => e.name)).toEqual(['Voter Guide - Claim Profile Clicked']);
 	});
 
 	/**

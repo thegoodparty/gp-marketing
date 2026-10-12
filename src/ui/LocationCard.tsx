@@ -1,5 +1,8 @@
+'use client';
+
 import Link from 'next/link';
 
+import { trackVoterGuideEvent } from '~/lib/analytics';
 import { cn, tv } from './_lib/utils.ts';
 import { IconResolver } from './IconResolver.tsx';
 import { btnStyles } from './Inputs/Button.tsx';
@@ -32,7 +35,19 @@ export function LocationCard(props: LocationCardProps) {
 	const stateAbbr = props.stateAbbreviation?.toLowerCase() ?? '';
 
 	return (
-		<Link href={props.href} className={cn(base(), props.className)} data-component='LocationCard'>
+		<Link
+			href={props.href}
+			className={cn(base(), props.className)}
+			data-component='LocationCard'
+			onClick={() =>
+				trackVoterGuideEvent('featuredCityClick', {
+					city_name: props.cityName,
+					state: props.stateAbbreviation,
+					open_elections_count: props.openElectionsCount ?? null,
+					href: props.href,
+				})
+			}
+		>
 			<div className={content()}>
 				<div className={iconWrapper()}>
 					{stateAbbr && (

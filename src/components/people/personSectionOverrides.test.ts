@@ -14,7 +14,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { getDevPersonProfileView } from '~/lib/devPeopleProfileFixtures';
 import { buildBreadcrumbTrail } from '~/lib/peopleProfile';
 import { chunkCardGroups } from '~/ui/_lib/chunkCardGroups';
-import { buildPersonSectionOverrides } from './personSectionOverrides';
+import { buildPersonSectionOverrides, pastElectionDisclaimerCopy } from './personSectionOverrides';
 
 function contentCards(slug: string) {
 	const view = getDevPersonProfileView(slug);
@@ -800,5 +800,46 @@ describe('Recent Experience rows show the organization the owner typed', () => {
 		}).component_profileContentBlock?.contentCards?.find(c => c.heading === 'Recent Experience');
 		const markup = renderToStaticMarkup(card?.content as ReactElement);
 		expect(markup.match(/<span[^>]*text-body-2[^>]*>/g)?.length).toBe(1);
+	});
+});
+
+describe('the past-election disclaimer dates the last run from the record', () => {
+	const GUIDE = 'Please see our updated voter guide for information about upcoming elections, candidates, and current elected officials.';
+
+	/** The raw blue card at the top of a former official's content well. */
+	function disclaimerMarkup(slug: string): string {
+		const card = contentCards(slug).find(c => c.raw);
+		if (!card) throw new Error(`no disclaimer card for ${slug}`);
+		return renderToStaticMarkup(card.content as ReactElement);
+	}
+
+	test('a former official with a dated past run names its year, not the context race', () => {
+		// The context race defers to the held office for a former official, so
+		// `electionDate` is empty here; the year has to come from the run itself.
+		const view = getDevPersonProfileView('drew-former-fa5104e4');
+		if (!view) throw new Error('no dev fixture');
+		expect(view.persona).toBe('past');
+		expect(view.lastRanYear).toBe('2025');
+		expect(disclaimerMarkup('drew-former-fa5104e4')).toContain(
+			`According to our records, ${view.displayName} last ran for office in 2025. ${GUIDE}`,
+		);
+	});
+
+	test('a former official with no dated run drops the whole first sentence', () => {
+		const view = getDevPersonProfileView('bill-fortner-61a42912');
+		if (!view) throw new Error('no dev fixture');
+		expect(view.persona).toBe('past');
+		expect(view.lastRanYear).toBeNull();
+		const markup = disclaimerMarkup('bill-fortner-61a42912');
+		expect(markup).toContain(GUIDE);
+		expect(markup).not.toContain('According to our records');
+		expect(markup).not.toContain('last ran for office');
+	});
+
+	test('the copy never trails off without a year', () => {
+		expect(pastElectionDisclaimerCopy({ displayName: 'James "Bubba" T. Cobb', lastRanYear: null })).toBe(GUIDE);
+		expect(pastElectionDisclaimerCopy({ displayName: 'James "Bubba" T. Cobb', lastRanYear: '2026' })).toBe(
+			`According to our records, James "Bubba" T. Cobb last ran for office in 2026. ${GUIDE}`,
+		);
 	});
 });

@@ -306,6 +306,10 @@ export const navigationListGroq = `"navigationList":primaryNavigation.list_prima
 /*language=textmate*/
 export const goodpartyOrg_navigationQuery = defineQuery(`${groqFunctions}*[_type=="goodpartyOrg_navigation"][0]{${navigationListGroq}}`);
 /*language=textmate*/
+export const goodpartyOrg_promoBannerQuery = defineQuery(
+	`${groqFunctions}*[_type=="goodpartyOrg_navigation"][0]{"promoBanner":promoBanner{field_enabled,field_text,field_color,field_countdownTo,field_countdownLabel,field_startsAt,field_endsAt,list_includePaths,list_excludePaths,"button":button{${buttonGroq}}}}`,
+);
+/*language=textmate*/
 export const groupFooterNavigationGroupGroq = `_key,_type,"groupTitle":field_title,"list_footerNavigationGroup":list_footerNavigationGroup[]{_type=="externalLink"=>{${groupExternalLinkGroq}},_type=="internalLink"=>{${groupInternalLinkGroq}}}`;
 /*language=textmate*/
 export const goodpartyOrg_footerQuery = defineQuery(

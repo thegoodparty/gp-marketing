@@ -21,6 +21,7 @@ import { VWOScript } from 'vwo-smartcode-nextjs';
 import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
 import { PageHeader } from '~/components/PageHeader';
 import { PageFooter } from '~/components/PageFooter';
+import { PromoBannerSection } from '~/components/PromoBannerSection';
 import { Outfit, Open_Sans } from 'next/font/google';
 
 const primaryFont = Outfit({
@@ -106,6 +107,9 @@ export default async function RootLayout({ children }: Props) {
 						role='main'
 						className={`bg-goodparty-cream flex-1 basis-0 ${(await draftMode()).isEnabled ? 'pt-[calc(var(--header-height)+var(--preview-header-height))]' : 'pt-(--header-height)'}`}
 					>
+						<ComponentErrorBoundary componentName='PromoBanner'>
+							<PromoBannerSection />
+						</ComponentErrorBoundary>
 						{children}
 					</main>
 					<ComponentErrorBoundary componentName='Footer'>

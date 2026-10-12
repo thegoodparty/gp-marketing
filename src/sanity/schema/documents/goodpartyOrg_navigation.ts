@@ -13,6 +13,11 @@ export const goodpartyOrg_navigation = {
       name: 'primaryNavigation',
       type: 'primaryNavigation',
     },
+    {
+      title: 'Promo Banner',
+      name: 'promoBanner',
+      type: 'promoBanner',
+    },
   ],
   preview: {
     select: {

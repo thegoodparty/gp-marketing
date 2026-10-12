@@ -10466,6 +10466,129 @@
     }
   },
   {
+    "name": "promoBanner",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "promoBanner"
+          }
+        },
+        "field_enabled": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "boolean"
+          },
+          "optional": true
+        },
+        "field_text": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "button": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "button"
+          },
+          "optional": true
+        },
+        "field_color": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "BrightYellow"
+              },
+              {
+                "type": "string",
+                "value": "HaloGreen"
+              },
+              {
+                "type": "string",
+                "value": "Lavender"
+              },
+              {
+                "type": "string",
+                "value": "Waxflower"
+              },
+              {
+                "type": "string",
+                "value": "Blue"
+              },
+              {
+                "type": "string",
+                "value": "Red"
+              },
+              {
+                "type": "string",
+                "value": "Midnight"
+              }
+            ]
+          },
+          "optional": true
+        },
+        "field_countdownTo": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "field_countdownLabel": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "field_startsAt": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "field_endsAt": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "list_includePaths": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "array",
+            "of": {
+              "type": "string"
+            }
+          },
+          "optional": true
+        },
+        "list_excludePaths": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "array",
+            "of": {
+              "type": "string"
+            }
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
     "name": "loggedOutCtAs",
     "type": "type",
     "value": {
@@ -16279,6 +16402,14 @@
         "value": {
           "type": "inline",
           "name": "primaryNavigation"
+        },
+        "optional": true
+      },
+      "promoBanner": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "promoBanner"
         },
         "optional": true
       }

@@ -107,7 +107,7 @@ describe('composeView recent experience', () => {
 		});
 		const view = composeView(PID, person, null);
 		expect(view.recentExperience).toEqual([
-			{ title: 'Candidate for Mayor', organization: 'CA', term: null, status: 'Candidate', href: null },
+			{ title: 'Candidate for Mayor', organization: null, term: null, status: 'Candidate', href: null },
 		]);
 	});
 
@@ -129,8 +129,8 @@ describe('composeView recent experience', () => {
 		});
 		const view = composeView(PID, person, null);
 		expect(view.recentExperience).toEqual([
-			{ title: 'Candidate for Mayor', organization: 'CA', term: '2024', status: 'Candidate', href: null },
-			{ title: 'City Council', organization: 'CA', term: '2016 – 2020', status: null, href: null },
+			{ title: 'Candidate for Mayor', organization: null, term: '2024', status: 'Candidate', href: null },
+			{ title: 'City Council', organization: null, term: '2016 – 2020', status: null, href: null },
 		]);
 	});
 
@@ -155,7 +155,7 @@ describe('composeView recent experience', () => {
 		});
 		const view = composeView(PID, person, overlay, { removed: true });
 		expect(view.recentExperience).toEqual([
-			{ title: 'Candidate for Mayor', organization: 'CA', term: null, status: 'Candidate', href: null },
+			{ title: 'Candidate for Mayor', organization: null, term: null, status: 'Candidate', href: null },
 		]);
 	});
 });

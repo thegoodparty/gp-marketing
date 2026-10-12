@@ -9,6 +9,8 @@
  * If a frame changes, update the expectation here and cite the node id.
  */
 import { describe, expect, test } from 'bun:test';
+import type { ReactElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { getDevPersonProfileView } from '~/lib/devPeopleProfileFixtures';
 import { buildBreadcrumbTrail } from '~/lib/peopleProfile';
 import { chunkCardGroups } from '~/ui/_lib/chunkCardGroups';
@@ -756,5 +758,36 @@ describe('the pledge band across the twelve profile states', () => {
 	test('the take-the-pledge button has a destination', async () => {
 		const { APP_SIGN_UP_HREF } = await import('~/lib/analytics');
 		expect(APP_SIGN_UP_HREF).toMatch(/^https:\/\/app\.goodparty\.org\/sign-up$/);
+	});
+});
+
+describe('Recent Experience rows show the organization the owner typed', () => {
+	// The product app's editor has an Organization field per row. The field
+	// reached the view all along but the row never printed it, so "President"
+	// rows shipped without saying president of what.
+	test('an authored organization renders between the title and the term', () => {
+		const view = getDevPersonProfileView('allen-slagle-74eee01a');
+		if (!view) throw new Error('no dev fixture');
+		const card = buildPersonSectionOverrides({
+			...view,
+			recentExperience: [
+				{ title: 'President', organization: 'San Juan County Clerks Association', term: '2021-Present', status: null, href: null },
+			],
+		}).component_profileContentBlock?.contentCards?.find(c => c.heading === 'Recent Experience');
+		const markup = renderToStaticMarkup(card?.content as ReactElement);
+		expect(markup).toContain('President');
+		expect(markup.indexOf('San Juan County Clerks Association')).toBeGreaterThan(markup.indexOf('President'));
+		expect(markup.indexOf('2021-Present')).toBeGreaterThan(markup.indexOf('San Juan County Clerks Association'));
+	});
+
+	test('a row without an organization renders no empty line', () => {
+		const view = getDevPersonProfileView('allen-slagle-74eee01a');
+		if (!view) throw new Error('no dev fixture');
+		const card = buildPersonSectionOverrides({
+			...view,
+			recentExperience: [{ title: 'Chief Deputy Clerk', organization: null, term: '2024-Present', status: null, href: null }],
+		}).component_profileContentBlock?.contentCards?.find(c => c.heading === 'Recent Experience');
+		const markup = renderToStaticMarkup(card?.content as ReactElement);
+		expect(markup.match(/<span[^>]*text-body-2[^>]*>/g)?.length).toBe(1);
 	});
 });

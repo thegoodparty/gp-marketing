@@ -1175,7 +1175,8 @@ The five phases, one resolver (`resolvePositionHeroState`), and the three thresh
    next window: pre-filing covers that stretch and does not depend on a winner.
 
 No dates at all: mid-election with nothing to count down to and the plain heading, as before;
-the resolver never guesses. "Election date" still means the general.
+the resolver never guesses. The same fallback applies to an opening date with neither a deadline
+nor an election date, since "open until election day" has no end without one. "Election date" still means the general.
 
 The content block's order per phase: pre-filing is About, How to run, Candidates, Who's currently
 in office, Are you ready (Figma 2360:19703 / 2360:19297); every other phase is Candidates (or

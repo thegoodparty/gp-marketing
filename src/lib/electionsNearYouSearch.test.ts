@@ -7,6 +7,7 @@ import {
 	ELECTIONS_SEARCH_NETWORK_ERROR,
 	ELECTIONS_SEARCH_UNRESOLVED_ERROR,
 	placeForSubmit,
+	shouldSubmitOnEnter,
 	submitElectionsNearYouSearch,
 	submitElectionsNearYouSearchOnce,
 } from './electionsNearYouSearch';
@@ -218,5 +219,19 @@ describe('placeForSubmit', () => {
 			}),
 		).toBeUndefined();
 		expect(fetches).toBe(0);
+	});
+});
+
+describe('shouldSubmitOnEnter', () => {
+	test('an open list with nothing highlighted submits, so "Boise" + Enter searches on the first try', () => {
+		expect(shouldSubmitOnEnter({ isOpen: true, focusedKey: null })).toBe(true);
+	});
+
+	test('a highlighted suggestion keeps Enter as "pick this one"', () => {
+		expect(shouldSubmitOnEnter({ isOpen: true, focusedKey: 'boise-id' })).toBe(false);
+	});
+
+	test('a closed list leaves Enter to the browser, which submits the form itself', () => {
+		expect(shouldSubmitOnEnter({ isOpen: false, focusedKey: null })).toBe(false);
 	});
 });

@@ -1,8 +1,10 @@
 'use client';
 
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useId, useRef, useState } from 'react';
 import {
 	ComboBox as AreaComboBox,
+	type ComboBoxState,
+	ComboBoxStateContext,
 	Input as AreaInput,
 	Label as AreaLabel,
 	ListBox as AreaListBox,
@@ -13,11 +15,13 @@ import {
 import { cn, tv } from './_lib/utils.ts';
 import { Button } from './Inputs/Button.tsx';
 import { primaryButtonStyleType } from './_lib/designTypesStore.ts';
+import { useMediaQuery } from './_lib/useMediaQuery.ts';
 import { trackEvent } from '~/lib/analytics';
 import {
 	ELECTIONS_SEARCH_MIN_QUERY_LENGTH,
 	ELECTIONS_SEARCH_VIEWED_EVENT,
 	placeForSubmit,
+	shouldSubmitOnEnter,
 	submitElectionsNearYouSearchOnce,
 	type ElectionsNearYouSearchDeps,
 } from '~/lib/electionsNearYouSearch';
@@ -119,6 +123,17 @@ export type ElectionsNearYouSearchProps = {
 
 const MIN_QUERY_LENGTH = ELECTIONS_SEARCH_MIN_QUERY_LENGTH;
 
+// Below Tailwind's `sm` the form stacks and the button sits right under the
+// input, exactly where the suggestion popover opens, so on a phone the first
+// tap on "Search" picked whichever suggestion lay under it and only the second
+// tap reached the button (verified on production, 2026-10-12). There the
+// popover is pushed past the button: its own offset, the form's gap, the
+// `md` button height.
+const STACKED_LAYOUT_QUERY = '(min-width: 40rem)';
+const POPOVER_OFFSET = 8;
+const BUTTON_HEIGHT = 40;
+const STACKED_FORM_GAP = { inline: 16, fluid: 8 } as const;
+
 const RESOLVED_PLACE_MATCHED_LEVELS = new Set(['city', 'county', 'state']);
 
 // fetch's `.json()` types as `unknown` in this repo's DOM lib; narrow it at the
@@ -148,6 +163,61 @@ async function resolvePlaceOverHttp(params: { city?: string; county?: string; st
 	return data;
 }
 
+type SearchInputProps = {
+	className: string;
+	placeholder: string;
+	errorId: string | undefined;
+	hasSuggestions: boolean;
+	onFocus(): void;
+	onEnterWithoutHighlight(): void;
+};
+
+/**
+ * The combobox's text field, split out because the two behaviours it adds
+ * need the combobox state, which React Aria only hands to children.
+ */
+function SearchInput(props: SearchInputProps) {
+	const { hasSuggestions, errorId } = props;
+	// Typed explicitly: through this repo's module resolution the context's
+	// value reads back as `unknown`; this is the type React Aria puts in it.
+	const state = useContext<ComboBoxState<object> | null>(ComboBoxStateContext);
+	const hadSuggestionsRef = useRef(false);
+	const openPendingRef = useRef(false);
+
+	// React Aria opens the list only on the render where the text changed, and
+	// only if suggestions are already there. The first batch arrives after that
+	// render, so a quickly typed or pasted name showed nothing until the next
+	// keystroke. Open the list ourselves when a batch lands while the box is
+	// focused. `state.collection` cannot say when that is: it is frozen at the
+	// last list shown while the popover is closed, so this watches our own
+	// suggestions and keeps asking until the library has collected the items
+	// (its `open` is a no-op until then). A list the visitor closed stays
+	// closed: nothing new has arrived.
+	useEffect(() => {
+		if (!state) return;
+		if (hasSuggestions && !hadSuggestionsRef.current) openPendingRef.current = true;
+		hadSuggestionsRef.current = hasSuggestions;
+		if (!hasSuggestions || !state.isFocused || state.isOpen) openPendingRef.current = false;
+		else if (openPendingRef.current) state.open(null, 'input');
+	});
+
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key !== 'Enter' || !state) return;
+		if (shouldSubmitOnEnter({ isOpen: state.isOpen, focusedKey: state.selectionManager.focusedKey })) props.onEnterWithoutHighlight();
+	};
+
+	return (
+		<AreaInput
+			className={props.className}
+			placeholder={props.placeholder}
+			onFocus={() => props.onFocus()}
+			onKeyDown={handleKeyDown}
+			aria-invalid={errorId ? true : undefined}
+			aria-describedby={errorId}
+		/>
+	);
+}
+
 /**
  * The city-or-county search form shared by the Elections Near You block and the
  * Elections Search Hero: Google Places suggestions, the resolve-place lookup,
@@ -156,6 +226,7 @@ async function resolvePlaceOverHttp(params: { city?: string; county?: string; st
  */
 export function ElectionsNearYouSearch(props: ElectionsNearYouSearchProps) {
 	const errorId = `elections-near-you-error-${useId()}`;
+	const formRef = useRef<HTMLFormElement>(null);
 
 	const [inputValue, setInputValue] = useState('');
 	const [selectedPlace, setSelectedPlace] = useState<ParsedPlaceSuggestion | undefined>(undefined);
@@ -197,6 +268,17 @@ export function ElectionsNearYouSearch(props: ElectionsNearYouSearchProps) {
 		}
 		const timer = window.setTimeout(load, 1000);
 		return () => window.clearTimeout(timer);
+	}, []);
+
+	// A successful search leaves the button loading (see handleSubmit). When the
+	// visitor comes back with the browser's back button, Safari and Chrome can
+	// restore this page from the back-forward cache with that state intact.
+	useEffect(() => {
+		const restore = (event: PageTransitionEvent) => {
+			if (event.persisted) setIsSubmitting(false);
+		};
+		window.addEventListener('pageshow', restore);
+		return () => window.removeEventListener('pageshow', restore);
 	}, []);
 
 	const handleFocus = useCallback(() => {
@@ -247,7 +329,7 @@ export function ElectionsNearYouSearch(props: ElectionsNearYouSearchProps) {
 	const handleSubmit = useCallback(
 		(e: React.FormEvent) => {
 			e.preventDefault();
-			if (isSubmittingRef.current) return;
+			if (isSubmittingRef.current || isSubmitting) return;
 			setIsSubmitting(true);
 
 			const deps: ElectionsNearYouSearchDeps = {
@@ -271,22 +353,38 @@ export function ElectionsNearYouSearch(props: ElectionsNearYouSearchProps) {
 			void placeForSubmit({ rawInput: inputValue, selected: selectedPlace, suggestions, fetchSuggestions })
 				.then(async place => submitElectionsNearYouSearchOnce({ rawInput: inputValue, place }, deps, { isSubmitting: isSubmittingRef }))
 				.then(result => {
-					if (result && !result.ok) setError(result.error);
+					if (result === undefined) return;
+					// A successful search has already called navigate, and the next
+					// page replaces this one, so the button stays in its loading state
+					// until then. Resetting it here left the page looking idle for the
+					// seconds an uncached elections page takes to arrive, and a second
+					// click restarted the navigation (Emily and Farhad, 2026-10-12).
+					if (!result.ok) {
+						setError(result.error);
+						setIsSubmitting(false);
+					}
 				})
-				.finally(() => {
+				.catch(() => {
 					setIsSubmitting(false);
 				});
 		},
-		[inputValue, selectedPlace, suggestions],
+		[inputValue, isSubmitting, selectedPlace, suggestions],
 	);
+
+	const submitFromEnter = useCallback(() => {
+		formRef.current?.requestSubmit();
+	}, []);
+
+	const isStacked = !useMediaQuery(STACKED_LAYOUT_QUERY);
 
 	const layout = props.layout ?? 'inline';
 	const appearance = props.appearance ?? 'pill';
 	const { form, inputColumn, inputWrapper, inputIcon, input, button, error: errorClass, popover, listbox, listboxItem } = styles({ layout, appearance });
 	const Icon = appearance === 'field' ? SearchIcon : MapPinIcon;
+	const popoverOffset = isStacked ? POPOVER_OFFSET + STACKED_FORM_GAP[layout] + BUTTON_HEIGHT : POPOVER_OFFSET;
 
 	return (
-		<form onSubmit={handleSubmit} className={cn(form(), props.className)} noValidate data-component='ElectionsNearYouSearch'>
+		<form ref={formRef} onSubmit={handleSubmit} className={cn(form(), props.className)} noValidate data-component='ElectionsNearYouSearch'>
 			<div className={inputColumn()}>
 				<AreaComboBox
 					inputValue={inputValue}
@@ -299,15 +397,16 @@ export function ElectionsNearYouSearch(props: ElectionsNearYouSearchProps) {
 					<AreaLabel hidden>City or county</AreaLabel>
 					<div className={inputWrapper()}>
 						<Icon className={inputIcon()} />
-						<AreaInput
+						<SearchInput
 							className={input()}
 							placeholder='Enter your city or county'
+							errorId={error ? errorId : undefined}
+							hasSuggestions={suggestions.length > 0}
 							onFocus={handleFocus}
-							aria-invalid={error ? true : undefined}
-							aria-describedby={error ? errorId : undefined}
+							onEnterWithoutHighlight={submitFromEnter}
 						/>
 					</div>
-					<AreaPopover placement='bottom start' className={popover()} style={{ width: 'var(--trigger-width)' }}>
+					<AreaPopover placement='bottom start' offset={popoverOffset} className={popover()} style={{ width: 'var(--trigger-width)' }}>
 						<AreaListBox className={listbox()}>
 							{suggestions.map(suggestion => (
 								<AreaListBoxItem key={suggestion.id} id={suggestion.id} textValue={suggestion.description} className={listboxItem()}>

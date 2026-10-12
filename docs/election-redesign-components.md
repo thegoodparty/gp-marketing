@@ -380,14 +380,16 @@ block" below). Things that came out of it:
 
 - **The state is derived, never chosen.** `resolvePositionHeroState` in
   `src/lib/positionHeroState.ts` reads the filing window, the general election date and the
-  winners, and returns `filing`, `midElection` or `decided`. The rules, as marketing set them:
-  `filing` runs from six months before the filing window opens until the deadline (before the
-  window opens the copy switches to "Filing opens" and "Days until filing opens"); `midElection`
-  runs from the deadline until results are in; `decided` needs at least one winner, and splits on
-  one versus several. After election day with no result, the mid-election layout stays, the
-  countdown goes and the ballot card hides. More than six months before the next window, the
-  previous cycle's result holds the page in `decided`. Any other position block that varies with
-  the cycle should read this resolver rather than invent its own thresholds.
+  winners, and returns one of five phases. The rules, as marketing set them on 2026-10-12 (the
+  first cut of 2026-09-23 had three phases and no way to reach `decided`, see "Position page
+  phases, revised" below): `preFiling` from far out until the filing window opens; `filing` from
+  the opening date until the deadline; `midElection` from the deadline until election day;
+  `midElection` with `resultsPending` for three months after election day with no result; and
+  `decided`, which needs at least one winner and splits on one versus several. Any other position
+  block that varies with the cycle should read this resolver rather than invent its own
+  thresholds, and on a position page it should read the phase the route resolved
+  (`resolvePositionPageState` in `src/lib/electionsTemplateHelpers.tsx`, handed to each block's
+  override as `state`) rather than resolve again.
 - **"Election date" means the general.** `getRaceBySlug` already prefers the general race for a
   slug (election-api orders general → primary → runoff), so a page is mid-election after its
   primary and before the general without extra work here.
@@ -1125,15 +1127,69 @@ Decisions that came out of it:
   `/find-polling-place` and `/request-mail-in-ballot` (all live, checked 2026-10-06), replacing the
   vote.gov and vote.org links.
 - **Before the filing window opens the About card and the How to run steps lead.** The block reads
-  the hero's state, and `leadsWithAbout` is true only for `filing` with `filingOpen` false (the six
-  months before the window). The "On this page" links follow the rendered order. Every other phase,
-  including decided, leads with the people lists. `src/ui/electionsPositionContentBlock.test.tsx`
-  pins both orders.
+  the phase the route resolved for the page, and `leadsWithAbout` is true only for `preFiling`
+  (see "Position page phases, revised" below for when that is). The "On this page" links follow
+  the rendered order. Every other phase, including decided, leads with the people lists.
+  `src/ui/electionsPositionContentBlock.test.tsx` pins both orders.
 
-Noted and not acted on: the pre-filing desktop frame still lists the "On this page" links in the
-people-first order; the block follows the sections as rendered instead. The frames prefix the
-officeholder meta line with the office name ("City Council · Independent · …"); the line stays
-party and term only.
+Noted and not acted on: the pre-filing desktop frame (2360:19703, still so in the 2026-10-12
+working draft) lists the "On this page" links in the people-first order; the block follows the
+sections as rendered instead (Emily, 2026-10-12). The frames prefix the officeholder meta line
+with the office name ("City Council · Independent · …"); the line stays party and term only.
+
+**Position page phases, revised** (position pages) — settled with Emily on 2026-10-12 after a
+check of the live site. The first cut's `decided` was unreachable: both routes into it needed a
+winner count, and election-api records no results. So Houston's mayor and Louisiana's governor
+(filing opens in July and August 2027) read "filing" with "Days until filing opens" in the
+hundreds; Richwood, OH's village mayor (deadline August 4, 2027, no opening date) read "filing"
+with "296 days to file"; and Union County, OH's sheriff (last election November 3, 2020, no later
+race loaded) and Harris County's constable (November 5, 2024) read "results pending" for ever.
+
+The five phases, one resolver (`resolvePositionHeroState`), and the three thresholds:
+
+1. **Pre-filing** (`preFiling`, new, winner-independent). From far out until the filing window
+   opens. Entered when the opening date is known and today is before it; when there is no
+   opening date and today is more than `FALLBACK_PRE_FILING_MONTHS` (9) before the deadline; when
+   there are no filing dates and today is more than 9 months before the election; or when the
+   last election is more than `RESULTS_PENDING_MONTHS` (3) behind with no result on record and no
+   later race loaded. The H1 reads "How to run for [office] in [place]" (Figma 2360:19625 and
+   2360:19228), the title "How to run for [office] in [place], [state] | GoodParty.org", the
+   description "Learn how to run for … : filing dates, election date and who holds the office
+   today." The hero has its own intro sentence (`field_introPreFiling`, default "A nonpartisan
+   guide to [office name] in [County or City]. Learn the requirements to run for office near
+   you."). The dates card keeps the countdowns as the frame draws them: with the opening date
+   known and ahead, "Filing opens" and "Days until filing opens"; otherwise the deadline and
+   "Days to file"; between cycles (the last election behind), only "Last election" with its date,
+   and the ballot card hides because its rows would be last cycle's. The ballot card otherwise
+   follows the zero-versus-unknown rule.
+2. **Filing open** (`filing`). From the opening date until the deadline; with no opening date,
+   from 9 months before the deadline. Heading "[office] in [place]", the dates card as before
+   (deadline, "Days to file", election date, "Days until election"), the ballot card with the
+   candidates filed so far.
+3. **Mid-election** (`midElection`, `resultsPending` false). Deadline passed, election ahead. As
+   before.
+4. **Results pending** (`midElection`, `resultsPending` true). Election passed, no result, for 3
+   months. As before: no countdown, ballot card hidden. Then pre-filing.
+5. **Decided** (`decided`). Winners on record. Unchanged, and still unreachable until election-api
+   carries results. The previous cycle's winners no longer hold a page in `decided` before the
+   next window: pre-filing covers that stretch and does not depend on a winner.
+
+No dates at all: mid-election with nothing to count down to and the plain heading, as before;
+the resolver never guesses. "Election date" still means the general.
+
+The content block's order per phase: pre-filing is About, How to run, Candidates, Who's currently
+in office, Are you ready (Figma 2360:19703 / 2360:19297); every other phase is Candidates (or
+Results), Who's currently in office, Are you ready, About, How to run. The rail's "On this page"
+links follow whichever order rendered. Everything the pre-filing frame draws in the About card
+(the facts grid and the election-type checklist) and the How to run card (the three steps, the
+filing facts, the "Need help?" line) was already built; the frame's "Length of term" row has no
+election-api field and stays "Election frequency", and the judicial and retention rows stay
+hidden rather than shown unchecked, by the hide-versus-zero rule above.
+
+The heading, title and description come from one place, `positionHeroHeading` and
+`positionPageMetadata` in `src/lib/positionHeroState.ts`, which the hero and the four position
+routes' `generateMetadata` both call with the resolved phase, so the title can never name a
+different phase from the cards. `src/lib/positionHeroState.test.ts` pins the dated cases above.
 
 ## The shared election counts, as marketing defined them
 

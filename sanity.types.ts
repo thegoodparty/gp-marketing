@@ -1255,6 +1255,7 @@ export type Component_electionsPositionContentBlock = {
 export type Component_electionsPositionHero = {
 	_type: 'component_electionsPositionHero';
 	field_intro?: string;
+	field_introPreFiling?: string;
 	ctaAction?: CtaActionWithShared;
 	electionsPositionHeroDesignSettings?: ElectionsPositionHeroDesignSettings;
 	componentSettings?: ComponentSettings;
@@ -12285,6 +12286,7 @@ export type GoodpartyOrg_homeQueryResult = {
 					_key: string;
 					_type: 'component_electionsPositionHero';
 					field_intro?: string;
+					field_introPreFiling?: string;
 					ctaAction:
 						| {
 								_key: null;
@@ -36187,6 +36189,7 @@ export type Experiment_variantsByExperimentIdQueryResult = Array<{
 					_key: string;
 					_type: 'component_electionsPositionHero';
 					field_intro?: string;
+					field_introPreFiling?: string;
 					ctaAction:
 						| {
 								_key: null;
@@ -60090,6 +60093,7 @@ export type ActiveVariantsByPageIdQueryResult = Array<{
 					_key: string;
 					_type: 'component_electionsPositionHero';
 					field_intro?: string;
+					field_introPreFiling?: string;
 					ctaAction:
 						| {
 								_key: null;
@@ -83995,6 +83999,7 @@ export type GoodpartyOrg_allArticlesQueryResult = {
 					_key: string;
 					_type: 'component_electionsPositionHero';
 					field_intro?: string;
+					field_introPreFiling?: string;
 					ctaAction:
 						| {
 								_key: null;
@@ -107938,6 +107943,7 @@ export type CategoriesQueryResult = {
 					_key: string;
 					_type: 'component_electionsPositionHero';
 					field_intro?: string;
+					field_introPreFiling?: string;
 					ctaAction:
 						| {
 								_key: null;
@@ -131909,6 +131915,7 @@ export type TopicsQueryResult = {
 					_key: string;
 					_type: 'component_electionsPositionHero';
 					field_intro?: string;
+					field_introPreFiling?: string;
 					ctaAction:
 						| {
 								_key: null;
@@ -157940,6 +157947,7 @@ export type GoodpartyOrg_contactQueryResult = {
 					_key: string;
 					_type: 'component_electionsPositionHero';
 					field_intro?: string;
+					field_introPreFiling?: string;
 					ctaAction:
 						| {
 								_key: null;
@@ -181848,6 +181856,7 @@ export type GoodpartyOrg_landingPagesAndPolicyQueryResult =
 							_key: string;
 							_type: 'component_electionsPositionHero';
 							field_intro?: string;
+							field_introPreFiling?: string;
 							ctaAction:
 								| {
 										_key: null;
@@ -205767,6 +205776,7 @@ export type GoodpartyOrg_electionsQueryResult = {
 					_key: string;
 					_type: 'component_electionsPositionHero';
 					field_intro?: string;
+					field_introPreFiling?: string;
 					ctaAction:
 						| {
 								_key: null;
@@ -229674,6 +229684,7 @@ export type GoodpartyOrg_candidatesQueryResult = {
 					_key: string;
 					_type: 'component_electionsPositionHero';
 					field_intro?: string;
+					field_introPreFiling?: string;
 					ctaAction:
 						| {
 								_key: null;
@@ -253581,6 +253592,7 @@ export type GoodpartyOrg_profileQueryResult = {
 					_key: string;
 					_type: 'component_electionsPositionHero';
 					field_intro?: string;
+					field_introPreFiling?: string;
 					ctaAction:
 						| {
 								_key: null;
@@ -277488,6 +277500,7 @@ export type GoodpartyOrg_allComponentsQueryResult = {
 					_key: string;
 					_type: 'component_electionsPositionHero';
 					field_intro?: string;
+					field_introPreFiling?: string;
 					ctaAction:
 						| {
 								_key: null;
@@ -307497,6 +307510,7 @@ export type GlobalElectionTemplateQueryResult = {
 					_key: string;
 					_type: 'component_electionsPositionHero';
 					field_intro?: string;
+					field_introPreFiling?: string;
 					ctaAction:
 						| {
 								_key: null;
@@ -331432,6 +331446,7 @@ export type CustomElectionTemplateByIdQueryResult = {
 					_key: string;
 					_type: 'component_electionsPositionHero';
 					field_intro?: string;
+					field_introPreFiling?: string;
 					ctaAction:
 						| {
 								_key: null;

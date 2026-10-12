@@ -154,11 +154,12 @@ export const POSITION_CONTENT_IDS = {
 
 /**
  * Before the filing window opens there is nobody on the ballot yet, so the
- * page leads with what the office is and how to run for it (Emily, 2026-10-06;
- * Figma 2360:19703 and 2360:19298). Every other phase leads with the people.
+ * page leads with what the office is and how to run for it (Emily, 2026-10-06
+ * and 2026-10-12; Figma 2360:19703 and 2360:19297). Every other phase leads
+ * with the people.
  */
 export function leadsWithAbout(state: PositionHeroState): boolean {
-	return state.phase === 'filing' && !state.filingOpen;
+	return state.phase === 'preFiling';
 }
 
 function Attribute({ label, value }: ElectionsPositionAttribute) {

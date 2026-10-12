@@ -5,11 +5,14 @@ import {getIcon} from '../../utils/getIcon.tsx';
 export const HERO_INTRO_DEFAULT =
   'A nonpartisan guide to [office name] in [County or City]. Find candidates and elected officials who have turned down partisan and big-money influence.';
 
+export const HERO_INTRO_PRE_FILING_DEFAULT =
+  'A nonpartisan guide to [office name] in [County or City]. Learn the requirements to run for office near you.';
+
 export const component_electionsPositionHero = {
   title: 'Elections Position Hero',
   name: 'component_electionsPositionHero',
   description:
-    'Hero for Position Pages. Shows one of four states (filing, mid-election, decided, decided with several winners) chosen from the race dates and results, never by hand. Sanity controls the intro sentence and the design settings.',
+    'Hero for Position Pages. Shows one of five phases (pre-filing, filing open, mid-election, results pending, decided) chosen from the race dates and results, never by hand. Before filing opens the heading reads "How to run for [office] in [place]" and has its own intro sentence. Sanity controls the two intro sentences and the design settings.',
   type: 'object',
   icon: getIcon('Rocket'),
   fields: [
@@ -18,8 +21,17 @@ export const component_electionsPositionHero = {
       name: 'field_intro',
       type: 'string',
       description:
-        'The sentence under the heading, the same in every state of the race. Supports [office name], [County or City], [State] and [location] tokens.',
+        'The sentence under the heading from the day filing opens onward. Supports [office name], [County or City], [State] and [location] tokens.',
       initialValue: HERO_INTRO_DEFAULT,
+      group: 'content',
+    },
+    {
+      title: 'Intro before filing opens',
+      name: 'field_introPreFiling',
+      type: 'string',
+      description:
+        'The sentence under the "How to run for" heading while the page is pre-filing, before the filing window opens. Supports the same tokens.',
+      initialValue: HERO_INTRO_PRE_FILING_DEFAULT,
       group: 'content',
     },
     {

@@ -139,7 +139,7 @@ const voterItems: NonNullable<ElectionsPositionContentBlockProps['voterReadiness
 
 const base: ElectionsPositionContentBlockProps = {
 	backgroundColor: 'cream',
-	state: { phase: 'filing', filingOpen: true },
+	state: { phase: 'filing' },
 	officeName: 'City Council Member',
 	siderail: {
 		onThisPageTitle: 'On this page',
@@ -211,25 +211,35 @@ const meta: Meta<typeof ElectionsPositionContentBlock> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** State 1, filing open: candidates listed with the pledge explainer, four shown, the rest behind "See more". */
-export const Filing: Story = { args: base };
-
-/** State 1 before the window opens: nobody has filed, so About and How to run lead and the people lists follow. */
+/** Pre-filing (Figma 2360:19703): About and How to run lead, then the people lists, then voting; the rail follows that order. */
 export const PreFiling: Story = {
-	args: { ...base, state: { phase: 'filing', filingOpen: false }, candidates: [] },
+	args: { ...base, state: { phase: 'preFiling' } },
 };
 
-/** State 2: the filing deadline has passed. Same body as filing; only the hero changes. */
+/** Pre-filing before anyone has filed: the candidates list and its rail link go, the officeholders stay. */
+export const PreFilingNobodyFiled: Story = {
+	args: { ...base, state: { phase: 'preFiling' }, candidates: [] },
+};
+
+/** Filing open: candidates listed with the pledge explainer, four shown, the rest behind "See more". */
+export const Filing: Story = { args: base };
+
+/** Mid-election: the filing deadline has passed. Same body as filing; only the hero changes. */
 export const MidElection: Story = {
 	args: { ...base, state: { phase: 'midElection', resultsPending: false } },
 };
 
-/** State 3: the race is decided and a pledged candidate won. Results heading, ELECTED tag, "election is over" banner. */
+/** Results pending: election day has passed with no result. Same body as mid-election. */
+export const ResultsPending: Story = {
+	args: { ...base, state: { phase: 'midElection', resultsPending: true } },
+};
+
+/** Decided: the race is decided and a pledged candidate won. Results heading, ELECTED tag, "election is over" banner. */
 export const DecidedPledgedWinner: Story = {
 	args: { ...base, state: { phase: 'decided', multipleWinners: false } },
 };
 
-/** State 3 again, but nobody who won took the Pledge. */
+/** Decided again, but nobody who won took the Pledge. */
 export const DecidedNoPledgedWinner: Story = {
 	args: {
 		...base,
@@ -238,7 +248,7 @@ export const DecidedNoPledgedWinner: Story = {
 	},
 };
 
-/** State 4: several winners. The same body as state 3; the seat count only changes the hero. */
+/** Decided with several winners. The same body; the seat count only changes the hero. */
 export const DecidedMultipleWinners: Story = {
 	args: {
 		...DecidedPledgedWinner.args,

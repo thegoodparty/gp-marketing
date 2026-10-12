@@ -17,16 +17,21 @@ cycle. There is one component and one Sanity block; the state is read from
 the race dates and results by `resolvePositionHeroState` in `src/lib/positionHeroState.ts`,
 never chosen by an editor.
 
-## The four states
+## The five phases
 
-- **Filing** (`{ phase: 'filing', filingOpen }`): filing deadline, election date, and two countdowns
-  ("Days to file", "Days until election"). Before the window opens the first pair reads "Filing
-  opens" / "Days until filing opens". Runs from six months before the window opens to the deadline.
+- **Pre-filing** (`{ phase: 'preFiling' }`): the H1 becomes "How to run for [office] in [place]" and
+  the intro is its own sentence. The dates card keeps the countdowns: "Filing opens" / "Days until
+  filing opens" when the opening date is known and ahead, otherwise the deadline / "Days to file",
+  and only "Last election" between cycles (when the ballot card also hides). Runs from far out until
+  the window opens; with no opening date, until nine months before the deadline.
+- **Filing** (`{ phase: 'filing' }`): filing deadline, election date, and two countdowns
+  ("Days to file", "Days until election"). Runs from the opening date to the deadline.
 - **Mid-election** (`{ phase: 'midElection', resultsPending: false }`): election date, one countdown,
   and a timeline from filing opening to election day with today marked.
 - **Results pending** (`{ phase: 'midElection', resultsPending: true }`): election day has passed and
-  no result has reached us. The countdown goes, the timeline fills to election day, and the ballot
-  card is hidden rather than showing stale "filed so far" copy.
+  no result has reached us, for three months. The countdown goes, the timeline fills to election day,
+  and the ballot card is hidden rather than showing stale "filed so far" copy. After that the page
+  goes back to pre-filing.
 - **Decided** (`{ phase: 'decided', multipleWinners }`): winner card with photo, party, term and pledge
   line; the ballot card becomes "Final results" with a check by each winner. With several winners
   the card adds the other winners' avatars and the button reads "View all N winners".

@@ -15,10 +15,12 @@ and a column on the right holding: the candidates list and the officeholders lis
 sentence, the pledge explainer and, where the route built one, the seat filter in the heading row),
 the voter readiness card, the About card and the How to run steps.
 
-The block has one `state`, shared with the hero (`resolvePositionHeroState`), so the two can never
-disagree about where the race is in its cycle. Before the filing window opens the About card and the
-How to run steps lead and the people lists follow (`leadsWithAbout`); from the day filing opens the
-people lead. Filing and mid-election otherwise render the same body. Once decided, the list heading
+The block has one `state`, resolved once by the route and shared with the hero
+(`resolvePositionHeroState`), so the two can never disagree about where the race is in its cycle.
+In pre-filing (until the window opens, and again once the last election is three months behind
+with no result) the About card and the How to run steps lead and the people lists follow
+(`leadsWithAbout`); from the day filing opens the people lead. Filing, mid-election and results
+pending otherwise render the same body. Once decided, the list heading
 becomes the results heading, winners get an ELECTED tag and the "This election is over" banner
 appears above the steps.
 

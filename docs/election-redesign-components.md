@@ -1153,8 +1153,8 @@ The five phases, one resolver (`resolvePositionHeroState`), and the three thresh
    there are no filing dates and today is more than 9 months before the election; or when the
    last election is more than `RESULTS_PENDING_MONTHS` (3) behind with no result on record and no
    later race loaded. The H1 reads "How to Run for [office] in [place]", capitalised as the frame draws it (Figma
-   2360:19625 and 2360:19228; Emily, 2026-10-12), the title "How to run for [office] in [place],
-   [state] | GoodParty.org" in sentence case as specified, the
+   2360:19625 and 2360:19228; Emily, 2026-10-12), the title "How to Run for [office] in [place],
+   [state] | GoodParty.org" capitalised the same way, the
    description "Learn how to run for … : filing dates, election date and who holds the office
    today." The hero has its own intro sentence (`field_introPreFiling`, default "A nonpartisan
    guide to [office name] in [County or City]. Learn the requirements to run for office near

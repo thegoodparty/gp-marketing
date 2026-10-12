@@ -152,7 +152,7 @@ describe('positionHeroHeading', () => {
 describe('positionPageMetadata', () => {
 	test('pre-filing titles the page as a how-to and describes what it covers', () => {
 		expect(positionPageMetadata({ phase: 'preFiling' }, 'Mayor', 'Houston, Harris County, Texas', 'GoodParty.org')).toEqual({
-			title: 'How to run for Mayor in Houston, Harris County, Texas | GoodParty.org',
+			title: 'How to Run for Mayor in Houston, Harris County, Texas | GoodParty.org',
 			description: 'Learn how to run for Mayor in Houston, Harris County, Texas: filing dates, election date and who holds the office today.',
 		});
 	});

@@ -142,7 +142,8 @@ export function positionHeroHeading(state: PositionHeroState, officeName: string
 /**
  * The `<title>` and meta description for a position page. `placePhrase` is the
  * place as the route names it in metadata ("Houston, Harris County, Texas"),
- * which is longer than the H1's place and deliberately so.
+ * which is longer than the H1's place and deliberately so. The pre-filing title
+ * is capitalised like the heading (Emily, 2026-10-12).
  */
 export function positionPageMetadata(
 	state: PositionHeroState,
@@ -153,7 +154,7 @@ export function positionPageMetadata(
 	const subject = `${officeName} in ${placePhrase}`;
 	if (state.phase === 'preFiling') {
 		return {
-			title: `How to run for ${subject} | ${siteName}`,
+			title: `How to Run for ${subject} | ${siteName}`,
 			description: `Learn how to run for ${subject}: filing dates, election date and who holds the office today.`,
 		};
 	}

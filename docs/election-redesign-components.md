@@ -1152,16 +1152,18 @@ The five phases, one resolver (`resolvePositionHeroState`), and the three thresh
    opening date and today is more than `FALLBACK_PRE_FILING_MONTHS` (9) before the deadline; when
    there are no filing dates and today is more than 9 months before the election; or when the
    last election is more than `RESULTS_PENDING_MONTHS` (3) behind with no result on record and no
-   later race loaded. The H1 reads "How to run for [office] in [place]" (Figma 2360:19625 and
-   2360:19228), the title "How to run for [office] in [place], [state] | GoodParty.org", the
+   later race loaded. The H1 reads "How to Run for [office] in [place]", capitalised as the frame draws it (Figma
+   2360:19625 and 2360:19228; Emily, 2026-10-12), the title "How to run for [office] in [place],
+   [state] | GoodParty.org" in sentence case as specified, the
    description "Learn how to run for … : filing dates, election date and who holds the office
    today." The hero has its own intro sentence (`field_introPreFiling`, default "A nonpartisan
    guide to [office name] in [County or City]. Learn the requirements to run for office near
    you."). The dates card keeps the countdowns as the frame draws them: with the opening date
    known and ahead, "Filing opens" and "Days until filing opens"; otherwise the deadline and
-   "Days to file"; between cycles (the last election behind), only "Last election" with its date,
-   and the ballot card hides because its rows would be last cycle's. The ballot card otherwise
-   follows the zero-versus-unknown rule.
+   "Days to file"; between cycles (the last election behind), only "Last election" with its date.
+   The frame draws an "On the ballot" card here, but before the window opens it could only ever
+   say "0 candidates filed so far", so the hero hides it in every pre-filing case (Emily,
+   2026-10-12) and the dates card stands alone on the right.
 2. **Filing open** (`filing`). From the opening date until the deadline; with no opening date,
    from 9 months before the deadline. Heading "[office] in [place]", the dates card as before
    (deadline, "Days to file", election date, "Days until election"), the ballot card with the

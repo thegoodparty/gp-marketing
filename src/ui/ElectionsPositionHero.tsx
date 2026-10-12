@@ -16,6 +16,7 @@ const styles = tv({
 		layout: 'flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10',
 		intro: 'flex flex-col gap-2 lg:max-w-[33rem]',
 		cards: 'grid gap-4 md:grid-cols-2 lg:shrink-0 lg:grid-cols-[19.25rem_19.25rem]',
+		cardsSingle: 'md:grid-cols-1 lg:grid-cols-[19.25rem]',
 		card: 'flex min-h-[19.375rem] flex-col gap-4 rounded-lg border border-midnight-600 bg-midnight-800 p-6 text-white',
 		cardCompact: 'min-h-0 gap-6',
 		cardLabel: 'text-midnight-300',
@@ -200,14 +201,14 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 	const daysUntilOpening = daysUntil(props.filingDateStart, now);
 	const countingToOpening = state.phase === 'preFiling' && daysUntilOpening !== null && daysUntilOpening > 0;
 	const daysToFile = countingToOpening ? daysUntilOpening : daysUntil(props.filingDateEnd, now);
-	// A race whose election is behind it with no result is between cycles: its
-	// candidate rows are last time's, not "filed so far".
+	// Between cycles the election on record is behind us and its filing dates are last time's.
 	const electionPassed = daysToElection !== null && daysToElection < 0;
 
 	const candidates = props.candidates;
 	const winners = props.winners ?? [];
-	const showBallotCard =
-		candidates !== undefined && !(state.phase === 'midElection' && state.resultsPending) && !(state.phase === 'preFiling' && electionPassed);
+	// Before the window opens nobody can have filed, so the card would only ever
+	// say zero (Emily, 2026-10-12); after election day its rows would be stale.
+	const showBallotCard = candidates !== undefined && state.phase !== 'preFiling' && !(state.phase === 'midElection' && state.resultsPending);
 
 	const renderCountdown = (value: number | null, label: string) =>
 		value === null || value < 0 ? null : (
@@ -468,7 +469,7 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 						</Text>
 						{props.intro && <Text styleType='body-1'>{props.intro}</Text>}
 					</div>
-					<div className={s.cards()}>
+					<div className={cn(s.cards(), !showBallotCard && s.cardsSingle())}>
 						{renderTimingCard()}
 						{renderBallotCard()}
 					</div>

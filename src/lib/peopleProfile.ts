@@ -687,7 +687,9 @@ function buildRecentExperience(
 		sortKey: o.startAt ?? '',
 		item: {
 			title: o.officeTitle ?? o.positionName ?? 'Public office',
-			organization: [o.subAreaValue ?? o.subAreaName, o.state].filter(Boolean).join(', ') || null,
+			// Public records carry no employer; subAreaValue is a district label ("Ward 3"),
+			// not an organization, and the state alone under a title reads as noise.
+			organization: null,
 			term: formatTerm(o),
 			// Current terms read as "Incumbent"; past terms let the year range speak.
 			status: o.isCurrent === true ? 'Incumbent' : null,
@@ -711,7 +713,8 @@ function buildRecentExperience(
 				sortKey: electionDate ?? '',
 				item: {
 					title: `Candidate for ${c.positionName}`,
-					organization: c.state ?? null,
+					// The title already names the office; the state alone adds nothing.
+					organization: null,
 					term: formatYear(electionDate),
 					status: 'Candidate',
 					// "View Position" means the /elections position page the breadcrumb

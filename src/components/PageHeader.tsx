@@ -1,13 +1,12 @@
-import { sanityFetch } from '~/sanity/sanityClient';
-import { goodpartyOrg_navigationQuery } from '~/sanity/groq';
+import type { NavigationData } from '~/components/navigationData';
 import { Nav } from '~/ui/Nav';
 import { cn } from '~/ui/_lib/utils';
 import { transformButtons, type ButtonType } from '~/lib/buttonTransformer';
 import { Text } from '~/ui/Text';
 import { Anchor } from '~/ui/Anchor';
 
-export async function PageHeader(props: { className?: string; isDraftMode: boolean }) {
-	const navigation = await sanityFetch({ query: goodpartyOrg_navigationQuery, tags: ['goodpartyOrg_navigation'] });
+export function PageHeader(props: { className?: string; isDraftMode: boolean; navigation: NavigationData }) {
+	const { navigation } = props;
 
 	// console.log(navigation?.primaryCTA);
 	// console.log(navigation?.secondaryCTA);

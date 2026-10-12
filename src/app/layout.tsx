@@ -22,6 +22,7 @@ import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
 import { PageHeader } from '~/components/PageHeader';
 import { PageFooter } from '~/components/PageFooter';
 import { PromoBannerSection } from '~/components/PromoBannerSection';
+import { fetchNavigation } from '~/components/navigationData';
 import { Outfit, Open_Sans } from 'next/font/google';
 
 const primaryFont = Outfit({
@@ -78,7 +79,7 @@ async function getSiteSocialChannels(): Promise<Array<{ url?: string | null; nam
 
 export default async function RootLayout({ children }: Props) {
 	const baseUrl = getBaseUrl();
-	const socialChannels = await getSiteSocialChannels();
+	const [socialChannels, navigation] = await Promise.all([getSiteSocialChannels(), fetchNavigation()]);
 	const sameAs = resolveSameAs(socialChannels);
 	const siteSchema = buildSchemaGraph([buildOrganizationSchema({ baseUrl, sameAs }), buildWebSiteSchema({ baseUrl })]);
 	return (
@@ -101,14 +102,14 @@ export default async function RootLayout({ children }: Props) {
 				{(await draftMode()).isEnabled && <VisualEditing />}
 				<AttributionProvider>
 					<ComponentErrorBoundary componentName='Header'>
-						<PageHeader className='shrink-0' isDraftMode={(await draftMode()).isEnabled} />
+						<PageHeader className='shrink-0' isDraftMode={(await draftMode()).isEnabled} navigation={navigation} />
 					</ComponentErrorBoundary>
 					<main
 						role='main'
 						className={`bg-goodparty-cream flex-1 basis-0 ${(await draftMode()).isEnabled ? 'pt-[calc(var(--header-height)+var(--preview-header-height))]' : 'pt-(--header-height)'}`}
 					>
 						<ComponentErrorBoundary componentName='PromoBanner'>
-							<PromoBannerSection />
+							<PromoBannerSection navigation={navigation} />
 						</ComponentErrorBoundary>
 						{children}
 					</main>

@@ -2,8 +2,7 @@ import { stegaClean } from '@sanity/client/stega';
 
 import { type ButtonType, isButtonType, transformButtons } from '~/lib/buttonTransformer';
 import { promoBannerDismissKey } from '~/lib/promoBanner';
-import { goodpartyOrg_promoBannerQuery } from '~/sanity/groq';
-import { sanityFetch } from '~/sanity/sanityClient';
+import type { NavigationData } from '~/components/navigationData';
 import { PromoBanner, type PromoBannerColor } from '~/ui/PromoBanner';
 
 const colors: Record<string, PromoBannerColor> = {
@@ -24,9 +23,8 @@ const cleanDate = (value: string | null | undefined): string | null => {
 	return cleaned.length > 0 ? cleaned : null;
 };
 
-export async function PromoBannerSection() {
-	const navigation = await sanityFetch({ query: goodpartyOrg_promoBannerQuery, tags: ['goodpartyOrg_navigation'] });
-	const banner = navigation?.promoBanner;
+export function PromoBannerSection(props: { navigation: NavigationData }) {
+	const banner = props.navigation?.promoBanner;
 	if (!banner?.field_enabled) return null;
 
 	const text = banner.field_text ?? '';

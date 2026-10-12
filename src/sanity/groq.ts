@@ -304,10 +304,10 @@ export const groupNavigationGroupGroq = `_key,_type,"label":field_linkText,"list
 /*language=textmate*/
 export const navigationListGroq = `"navigationList":primaryNavigation.list_primaryNavigation[]{_type=="internalLink"=>{${groupInternalLinkGroq}},_type=="externalLink"=>{${groupExternalLinkGroq}},_type=="navigationGroup"=>{${groupNavigationGroupGroq}}},"primaryCTA":primaryNavigation.loggedOutCtAs.ref_navigationPrimaryCTA->{...ctaAction{${globalCtaPrimaryButtonGroq}}},"secondaryCTA":primaryNavigation.loggedOutCtAs.ref_navigationSecondaryCTA->{...ctaAction{${globalCtaPrimaryButtonGroq}}}`;
 /*language=textmate*/
-export const goodpartyOrg_navigationQuery = defineQuery(`${groqFunctions}*[_type=="goodpartyOrg_navigation"][0]{${navigationListGroq}}`);
+export const promoBannerGroq = `field_enabled,field_text,field_color,field_countdownTo,field_countdownLabel,field_startsAt,field_endsAt,list_includePaths,list_excludePaths,"button":button{${buttonGroq}}`;
 /*language=textmate*/
-export const goodpartyOrg_promoBannerQuery = defineQuery(
-	`${groqFunctions}*[_type=="goodpartyOrg_navigation"][0]{"promoBanner":promoBanner{field_enabled,field_text,field_color,field_countdownTo,field_countdownLabel,field_startsAt,field_endsAt,list_includePaths,list_excludePaths,"button":button{${buttonGroq}}}}`,
+export const goodpartyOrg_navigationQuery = defineQuery(
+	`${groqFunctions}*[_type=="goodpartyOrg_navigation"][0]{${navigationListGroq},"promoBanner":promoBanner{${promoBannerGroq}}}`,
 );
 /*language=textmate*/
 export const groupFooterNavigationGroupGroq = `_key,_type,"groupTitle":field_title,"list_footerNavigationGroup":list_footerNavigationGroup[]{_type=="externalLink"=>{${groupExternalLinkGroq}},_type=="internalLink"=>{${groupInternalLinkGroq}}}`;

@@ -1,3 +1,4 @@
+import type { Key } from 'react';
 import type { ResolvedPlace } from '~/lib/resolvePlace';
 import type { ParsedPlaceSuggestion, PlaceSuggestion } from '~/lib/googlePlaces';
 
@@ -138,4 +139,18 @@ export async function placeForSubmit(input: PlaceForSubmitInput): Promise<Parsed
 	if (trimmed.length < ELECTIONS_SEARCH_MIN_QUERY_LENGTH) return undefined;
 	const fetched = await input.fetchSuggestions(trimmed);
 	return fetched?.[0]?.parsed;
+}
+
+export type EnterKeyState = { isOpen: boolean; focusedKey: Key | null };
+
+/**
+ * Whether an Enter press in the search box should run the search itself.
+ * React Aria swallows Enter while the suggestion list is open so it can pick
+ * the highlighted suggestion; with nothing highlighted that left the first
+ * Enter closing the list and only the second one searching (verified on
+ * production, 2026-10-12). A highlighted suggestion keeps its meaning: Enter
+ * picks it. A closed list needs nothing from us: the browser submits the form.
+ */
+export function shouldSubmitOnEnter(state: EnterKeyState): boolean {
+	return state.isOpen && state.focusedKey == null;
 }

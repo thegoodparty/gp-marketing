@@ -348,6 +348,56 @@ describe('Recent Experience links every row it has a race slug for', () => {
 	});
 
 	/**
+	 * Serving and running at once, for two different offices (a school board
+	 * member running for county attorney, 2026-10-12): the hero's held-office
+	 * line needs the seat's own page, which is not the race the page's context
+	 * (`positionHref`) follows. The seat's link is the one its Recent Experience
+	 * row already carries.
+	 */
+	test('the held office links to its own seat, not to the race being run', () => {
+		const seat = 'mn/olmsted/rochester/school-board-position-3';
+		const race = 'mn/olmsted/olmsted-county-attorney';
+		const person = makePerson({
+			state: 'MN',
+			OfficeHolders: [
+				makeOffice({
+					officeTitle: 'Rochester School Board - Position 3',
+					state: 'MN',
+					startAt: '2023-01-01',
+					isCurrent: true,
+					positionSlug: seat,
+					positionLevel: 'CITY',
+				}),
+			],
+			Candidacies: [
+				{
+					id: 'c1',
+					positionName: 'Olmsted County Attorney',
+					state: 'MN',
+					Race: { electionDate: '2026-11-03', slug: race, positionLevel: 'COUNTY' },
+				},
+			],
+		});
+
+		const view = composeView(PID, person, null, { positionHref: expectedHref(race, 'COUNTY') });
+
+		expect(view.persona).toBe('both');
+		expect(view.currentOfficeHref).toContain('/elections/');
+		expect(view.currentOfficeHref).toBe(expectedHref(seat, 'CITY') ?? null);
+		expect(view.currentOfficeHref).not.toBe(view.positionHref);
+		const byTitle = new Map(view.recentExperience.map((r) => [r.title, r.href]));
+		expect(byTitle.get('Rochester School Board - Position 3')).toBe(expectedHref(seat, 'CITY'));
+	});
+
+	test('a held office with no race leaves the hero line unlinked', () => {
+		const person = makePerson({
+			OfficeHolders: [makeOffice({ officeTitle: 'Mayor', state: 'CA', startAt: '2022-01-01', isCurrent: true })],
+		});
+
+		expect(composeView(PID, person, null, {}).currentOfficeHref).toBeNull();
+	});
+
+	/**
 	 * The fallback when no county lookup is available (see the county-expansion
 	 * block below, which is what the loader actually does). A CITY slug carrying
 	 * no county segment resolves to a county-depth URL that 308s to the canonical

@@ -24,7 +24,7 @@ import {
 	resolveLocationDefaultYear,
 	resolvePlaceRaceElectionDates,
 } from '~/lib/electionsHelpers';
-import { renderElectionsIndexPage } from '~/lib/renderElectionsIndexPage';
+import { renderElectionsIndexPage, startFeaturedPeople } from '~/lib/renderElectionsIndexPage';
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 
 export const revalidate = 3600;
@@ -73,6 +73,10 @@ export default async function Page({
 		notFound();
 	}
 
+	// The longest chain on the page, started once the page is known to render so
+	// the date and overlapping-office reads below run alongside it.
+	const featuredPeopleInFlight = startFeaturedPeople({ placeSlug: fullSlug, locationLevel: isDistrict ? 'district' : 'county' });
+
 	const placeName = isDistrict
 		? displayPlaceName(placeData?.name ?? county)
 		: (normalizedCounty?.displayName ?? countyPlace!.name);
@@ -101,7 +105,14 @@ export default async function Page({
 		const level = r.positionLevel?.toUpperCase();
 		return level === 'COUNTY' || level === 'LOCAL';
 	});
-	const resolvedDates = await resolvePlaceRaceElectionDates(countyRaces);
+	// The state races this place's voters also vote in, for the Level dropdown.
+	// A district reached on this route has no county in its path (the slug is the
+	// district itself), so it offers Local and State but not County. Its date
+	// refresh and this place's own are independent, so they run side by side.
+	const [resolvedDates, overlapping] = await Promise.all([
+		resolvePlaceRaceElectionDates(countyRaces),
+		buildOverlappingOfficeItems({ stateSlug: state.toLowerCase() }),
+	]);
 	const officeType = isDistrict ? 'District' : 'County';
 	// A district page is a local ballot, so it opens on Local; a county page on County.
 	const ownLevel = isDistrict ? 'local' : 'county';
@@ -115,11 +126,6 @@ export default async function Page({
 			buildHref: race => buildPlaceRacePositionHref([state, county], race.slug),
 		},
 	);
-
-	// The state races this place's voters also vote in, for the Level dropdown.
-	// A district reached on this route has no county in its path (the slug is the
-	// district itself), so it offers Local and State but not County.
-	const overlapping = await buildOverlappingOfficeItems({ stateSlug: state.toLowerCase() });
 
 	const allYears = [...new Set([...dataYears, ...overlapping.dataYears])].sort((a, b) => a - b);
 	/**
@@ -135,6 +141,7 @@ export default async function Page({
 
 	return renderElectionsIndexPage({
 		placeSlug: fullSlug,
+		featuredPeopleInFlight,
 		breadcrumbs,
 		locationLevel: isDistrict ? 'district' : 'county',
 		stateName,

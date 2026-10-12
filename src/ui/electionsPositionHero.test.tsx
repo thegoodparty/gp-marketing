@@ -57,7 +57,7 @@ describe('ElectionsPositionHeroSection', () => {
 		const html = render(office, '2026-02-10');
 
 		expect(html).toContain('data-phase="preFiling"');
-		expect(html).toContain('How to run for City Council Member in Austin, TX');
+		expect(html).toContain('How to Run for City Council Member in Austin, TX');
 		expect(html).toContain('Learn the requirements to run for office near you.');
 		expect(html).not.toContain('Find candidates and elected officials');
 		expect(html).toContain('Filing opens');
@@ -65,7 +65,8 @@ describe('ElectionsPositionHeroSection', () => {
 		expect(html).toContain('Days until filing opens');
 		expect(html).not.toContain('Days to file');
 		expect(html).toContain('Days until election');
-		expect(html).toContain('data-testid="position-hero-ballot-card"');
+		expect(html).not.toContain('data-testid="position-hero-ballot-card"');
+		expect(html).not.toContain('filed so far');
 	});
 
 	test('pre-filing with only a deadline on record shows the deadline and "Days to file", as the frame draws it', () => {
@@ -77,6 +78,7 @@ describe('ElectionsPositionHeroSection', () => {
 		expect(html).toContain('Days to file');
 		expect(html).not.toContain('Days until filing opens');
 		expect(html).toContain('Days until election');
+		expect(html).not.toContain('data-testid="position-hero-ballot-card"');
 	});
 
 	test('between cycles, with the last election behind and no result, only the last election date stays and the ballot card hides', () => {
@@ -86,7 +88,7 @@ describe('ElectionsPositionHeroSection', () => {
 		);
 
 		expect(html).toContain('data-phase="preFiling"');
-		expect(html).toContain('How to run for City Council Member in Austin, TX');
+		expect(html).toContain('How to Run for City Council Member in Austin, TX');
 		expect(html).toContain('Last election');
 		expect(html).toContain('November 3, 2020');
 		expect(html).not.toContain('Election date');
@@ -99,7 +101,7 @@ describe('ElectionsPositionHeroSection', () => {
 		const html = render({ ...office, state: { phase: 'preFiling' } }, '2026-08-15');
 
 		expect(html).toContain('data-phase="preFiling"');
-		expect(html).toContain('How to run for City Council Member in Austin, TX');
+		expect(html).toContain('How to Run for City Council Member in Austin, TX');
 	});
 
 	test('mid-election it drops the filing deadline and draws the timeline', () => {
@@ -221,9 +223,9 @@ describe('ElectionsPositionHeroSection', () => {
 		expect(h1(render({ ...office, cityName: undefined, countyName: undefined, stateName: 'Texas' }, '2026-08-15'))).toBe(
 			'City Council Member in Texas',
 		);
-		expect(h1(render(office, '2026-02-10'))).toBe('How to run for City Council Member in Austin, TX');
+		expect(h1(render(office, '2026-02-10'))).toBe('How to Run for City Council Member in Austin, TX');
 		expect(h1(render({ ...office, cityName: undefined, countyName: undefined, stateName: 'Texas' }, '2026-02-10'))).toBe(
-			'How to run for City Council Member in Texas',
+			'How to Run for City Council Member in Texas',
 		);
 	});
 });

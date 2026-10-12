@@ -12,7 +12,7 @@ export const component_electionsPositionHero = {
   title: 'Elections Position Hero',
   name: 'component_electionsPositionHero',
   description:
-    'Hero for Position Pages. Shows one of five phases (pre-filing, filing open, mid-election, results pending, decided) chosen from the race dates and results, never by hand. Before filing opens the heading reads "How to run for [office] in [place]" and has its own intro sentence. Sanity controls the two intro sentences and the design settings.',
+    'Hero for Position Pages. Shows one of five phases (pre-filing, filing open, mid-election, results pending, decided) chosen from the race dates and results, never by hand. Before filing opens the heading reads "How to Run for [office] in [place]" and has its own intro sentence. Sanity controls the two intro sentences and the design settings.',
   type: 'object',
   icon: getIcon('Rocket'),
   fields: [
@@ -30,7 +30,7 @@ export const component_electionsPositionHero = {
       name: 'field_introPreFiling',
       type: 'string',
       description:
-        'The sentence under the "How to run for" heading while the page is pre-filing, before the filing window opens. Supports the same tokens.',
+        'The sentence under the "How to Run for" heading while the page is pre-filing, before the filing window opens. Supports the same tokens.',
       initialValue: HERO_INTRO_PRE_FILING_DEFAULT,
       group: 'content',
     },

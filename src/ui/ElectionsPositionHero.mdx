@@ -19,11 +19,12 @@ never chosen by an editor.
 
 ## The five phases
 
-- **Pre-filing** (`{ phase: 'preFiling' }`): the H1 becomes "How to run for [office] in [place]" and
+- **Pre-filing** (`{ phase: 'preFiling' }`): the H1 becomes "How to Run for [office] in [place]" and
   the intro is its own sentence. The dates card keeps the countdowns: "Filing opens" / "Days until
   filing opens" when the opening date is known and ahead, otherwise the deadline / "Days to file",
-  and only "Last election" between cycles (when the ballot card also hides). Runs from far out until
-  the window opens; with no opening date, until nine months before the deadline.
+  and only "Last election" between cycles. The ballot card is not drawn: nobody can have filed yet.
+  Runs from far out until the window opens; with no opening date, until nine months before the
+  deadline.
 - **Filing** (`{ phase: 'filing' }`): filing deadline, election date, and two countdowns
   ("Days to file", "Days until election"). Runs from the opening date to the deadline.
 - **Mid-election** (`{ phase: 'midElection', resultsPending: false }`): election date, one countdown,

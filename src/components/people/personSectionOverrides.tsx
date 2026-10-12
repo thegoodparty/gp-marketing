@@ -905,10 +905,10 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			office: view.roleTitle ?? '',
 			// The full positionName (incl. locality) links to the office/position page.
 			// When a second line is present (serving AND running, Figma C) the first
-			// line is the seat HELD, so the candidacy-derived href belongs on the
-			// second line; the held seat gets its own href once election-api threads
-			// the office's position slug through.
-			officeHref: (view.secondaryRoleTitle ? undefined : view.positionHref) ?? undefined,
+			// line is the seat HELD and links to that seat's own page, while the
+			// candidacy-derived href belongs on the second line: the two can be
+			// different offices (a school board member running for county attorney).
+			officeHref: (view.secondaryRoleTitle ? view.currentOfficeHref : view.positionHref) ?? undefined,
 			secondaryOffice: view.secondaryRoleTitle ?? undefined,
 			secondaryOfficeHref: (view.secondaryRoleTitle ? view.positionHref : undefined) ?? undefined,
 			profileImageUrl: view.avatarUrl ?? undefined,

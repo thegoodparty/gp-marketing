@@ -437,6 +437,10 @@ export function getDevPersonProfileView(slug: string): PersonProfileView | null 
 		// Address" rows for anyone currently in office (Figma officeholder frames).
 		OfficeHolders: (fixture.person.OfficeHolders ?? []).map((o) => ({
 			...o,
+			// The term's own race slug, as election-api flattens it onto a real term,
+			// so the hero's held-office line and its Recent Experience row link.
+			positionSlug: DEV_RACE_SLUG,
+			positionLevel: 'CITY',
 			...(entry.partyNames ? { partyNames: entry.partyNames } : {}),
 			officeEmail: 'office@townofexample.gov',
 			officePhone: '(307) 555-0100',

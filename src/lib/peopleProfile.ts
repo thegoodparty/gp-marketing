@@ -245,6 +245,14 @@ export interface PersonProfileView {
 	positionDescription: string | null;
 	/** Canonical /elections position page href for the person's own office ("Learn more"). */
 	positionHref: string | null;
+	/**
+	 * Position page for the seat {@link currentOffice} names, built from the
+	 * office term's own race slug the way its Recent Experience row is. Equal to
+	 * {@link positionHref} except for someone serving and running at once, whose
+	 * `positionHref` follows the race they are in: the hero's held-office line
+	 * links here, its candidacy line there (Emily, 2026-10-12).
+	 */
+	currentOfficeHref: string | null;
 	districtLabel: string | null;
 	stateLabel: string | null;
 	issues: PersonProfileIssueView[];
@@ -1248,6 +1256,11 @@ export function composeView(
 		positionId: extras.positionId ?? office?.positionId ?? null,
 		positionDescription: extras.positionDescription ?? null,
 		positionHref: extras.positionHref ?? null,
+		currentOfficeHref: positionHrefFor(
+			office?.positionSlug,
+			office?.positionLevel ?? office?.Position?.level,
+			extras.citySlugToCountySlug,
+		),
 		districtLabel,
 		stateLabel,
 		issues: removed

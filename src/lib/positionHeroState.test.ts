@@ -123,6 +123,13 @@ describe('resolvePositionHeroState', () => {
 		expect(resolvePositionHeroState({ ...noDeadline, now: at('2026-11-10') })).toEqual({ phase: 'midElection', resultsPending: true });
 	});
 
+	test('a filing start with no deadline and no election date does not stay in filing for ever', () => {
+		const startOnly = { filingDateStart: race.filingDateStart };
+		expect(resolvePositionHeroState({ ...startOnly, now: at('2026-05-01') })).toEqual({ phase: 'preFiling' });
+		expect(resolvePositionHeroState({ ...startOnly, now: at('2026-08-15') })).toEqual({ phase: 'midElection', resultsPending: false });
+		expect(resolvePositionHeroState({ ...startOnly, now: at('2029-08-15') })).toEqual({ phase: 'midElection', resultsPending: false });
+	});
+
 	test('no dates at all reads as mid-election with nothing to count down to', () => {
 		expect(resolvePositionHeroState({ now: at('2026-08-15') })).toEqual({ phase: 'midElection', resultsPending: false });
 	});

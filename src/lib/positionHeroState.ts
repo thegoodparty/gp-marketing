@@ -116,7 +116,9 @@ export function resolvePositionHeroState(input: PositionHeroStateInput): Positio
 
 	// With no deadline we cannot tell when filing closes, so a window that has
 	// opened stays open until election day rather than reading as mid-election.
-	if (!filingEnd && filingStart) {
+	// Without an election day either there is nothing for it to stay open until,
+	// so it falls through to mid-election rather than reading as filing for ever.
+	if (!filingEnd && filingStart && election) {
 		return { phase: 'filing' };
 	}
 

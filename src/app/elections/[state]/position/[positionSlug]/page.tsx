@@ -10,6 +10,7 @@ import {
 } from '~/lib/electionsHelpers';
 import { SITE_NAME, toAbsoluteUrl } from '~/lib/url';
 import { renderElectionsPositionPage } from '~/lib/renderElectionsPositionPage';
+import { positionPageMetadata, resolvePositionHeroState } from '~/lib/positionHeroState';
 import { loadPositionHeroCandidates } from '~/lib/positionHeroCandidates';
 import { officeDisplayName } from '~/lib/officeDisplayName';
 
@@ -81,9 +82,14 @@ export async function generateMetadata({
 	const raceSlug = buildRaceSlug(stateCode, positionSlug);
 	const race = await getRaceBySlug(raceSlug);
 	const positionName = (race ? officeDisplayName(race, race.Place) : 'Position');
+	// The same resolver the page's hero and content block read, so the title cannot name a different phase.
+	const positionState = resolvePositionHeroState({
+		filingDateStart: race?.filingDateStart,
+		filingDateEnd: race?.filingDateEnd,
+		electionDate: race?.electionDate,
+	});
 	return {
-		title: `${positionName} in ${stateName} | ${SITE_NAME}`,
-		description: `Election details and candidates for ${positionName} in ${stateName}.`,
+		...positionPageMetadata(positionState, positionName, stateName, SITE_NAME),
 		alternates: { canonical: toAbsoluteUrl(`/elections/${stateCode.toLowerCase()}/position/${positionSlug}`) },
 	};
 }

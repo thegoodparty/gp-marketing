@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { stegaClean } from 'next-sanity';
 
 import type { Sections } from '~/PageSections';
-import { resolvePositionHeroState } from '~/lib/positionHeroState';
+import { resolvePositionHeroState, type PositionHeroState } from '~/lib/positionHeroState';
 import type { TokenMap } from '~/lib/resolveTokens';
 import { resolveSectionText } from '~/lib/resolveSectionText';
 import { POSITION_CONTENT_DEFAULTS, POSITION_CONTENT_LINKS } from '~/sanity/schema/components/component_electionsPositionContentBlock';
@@ -25,21 +25,22 @@ import { PledgeModal } from '~/ui/PledgeModal';
  * Everything the block needs from the route. `buildPositionSectionOverrides`
  * fills this for the position pages.
  *
- * The state inputs are the hero's: the same ISO dates and winner lists go to
- * `resolvePositionHeroState` here, so the body can never sit in a different
- * phase from the header above it.
+ * `state` is the phase the route resolved once for the whole page and handed
+ * to the hero as well, so the body can never sit in a different phase from the
+ * header above it. The ISO dates are kept for the fallback resolution a Studio
+ * preview with no route data needs.
  *
  * Seams no route populates yet, for the same reason as the hero's: election-api
- * records no results, so `winners` and `priorWinners` stay empty and no live page
- * reaches the decided state. `seatFilter` waits on seat data reaching the
- * candidate rows (see `buildPositionContentOverride`).
+ * records no results, so `winners` stays empty and no live page reaches the
+ * decided state. `seatFilter` waits on seat data reaching the candidate rows
+ * (see `buildPositionContentOverride`).
  */
 export type ElectionsPositionContentBlockOverride = {
+	state?: PositionHeroState;
 	electionDateIso?: string | null;
 	filingDateStartIso?: string | null;
 	filingDateEndIso?: string | null;
 	winners?: ElectionsPositionPerson[];
-	priorWinners?: ElectionsPositionPerson[];
 	/** `undefined` means the route could not read the race's candidates; both that and `[]` hide the list. */
 	candidates?: ElectionsPositionPerson[];
 	/** Current holders of the position. `undefined` or `[]` hides the list. */
@@ -117,16 +118,16 @@ export function ElectionsPositionContentBlockSection(props: ElectionsPositionCon
 		? resolveBg(stegaClean(section.electionsPositionContentBlockDesignSettings.field_blockColorCreamMidnight))
 		: 'cream';
 
-	const state = resolvePositionHeroState({
-		filingDateStart: data.filingDateStartIso,
-		filingDateEnd: data.filingDateEndIso,
-		electionDate: data.electionDateIso,
-		winnerCount: data.winners?.length,
-		priorWinnerCount: data.priorWinners?.length,
-		now,
-	});
-	const winners = state.phase === 'decided' && (data.winners?.length ?? 0) === 0 ? data.priorWinners : data.winners;
-	const winnerKeys = new Set((winners ?? []).map(person => person.key));
+	const state =
+		data.state ??
+		resolvePositionHeroState({
+			filingDateStart: data.filingDateStartIso,
+			filingDateEnd: data.filingDateEndIso,
+			electionDate: data.electionDateIso,
+			winnerCount: data.winners?.length,
+			now,
+		});
+	const winnerKeys = new Set((data.winners ?? []).map(person => person.key));
 	const candidates = data.candidates?.map(person => ({ ...person, isWinner: person.isWinner ?? winnerKeys.has(person.key) }));
 
 	const officeName = tokens?.['[office name]'] ?? '';

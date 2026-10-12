@@ -2,7 +2,7 @@ import type { SVGProps } from 'react';
 import Link from 'next/link';
 import { normalizeStateCode } from '~/constants/usStateCodes';
 import type { PartyClass } from '~/lib/party';
-import { daysUntil, startOfLocalDay, toLocalDay, type PositionHeroState } from '~/lib/positionHeroState';
+import { daysUntil, positionHeroHeading, startOfLocalDay, toLocalDay, type PositionHeroState } from '~/lib/positionHeroState';
 import { Logo } from '~/sanity/utils/Logo.tsx';
 import { cn, tv } from './_lib/utils.ts';
 import { Avatar } from './Avatar.tsx';
@@ -195,11 +195,19 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 	const filingOpens = formatDay(props.filingDateStart);
 	const filingDeadline = formatDay(props.filingDateEnd);
 	const daysToElection = daysUntil(props.electionDate, now);
-	const daysToFile = daysUntil(state.phase === 'filing' && !state.filingOpen ? props.filingDateStart : props.filingDateEnd, now);
+	// Pre-filing counts down to the window opening when that date is known, and
+	// to the deadline otherwise (Figma 2360:19625 draws the deadline).
+	const daysUntilOpening = daysUntil(props.filingDateStart, now);
+	const countingToOpening = state.phase === 'preFiling' && daysUntilOpening !== null && daysUntilOpening > 0;
+	const daysToFile = countingToOpening ? daysUntilOpening : daysUntil(props.filingDateEnd, now);
+	// A race whose election is behind it with no result is between cycles: its
+	// candidate rows are last time's, not "filed so far".
+	const electionPassed = daysToElection !== null && daysToElection < 0;
 
 	const candidates = props.candidates;
 	const winners = props.winners ?? [];
-	const showBallotCard = candidates !== undefined && !(state.phase === 'midElection' && state.resultsPending);
+	const showBallotCard =
+		candidates !== undefined && !(state.phase === 'midElection' && state.resultsPending) && !(state.phase === 'preFiling' && electionPassed);
 
 	const renderCountdown = (value: number | null, label: string) =>
 		value === null || value < 0 ? null : (
@@ -365,19 +373,27 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 			);
 		}
 
-		if (state.phase === 'filing') {
+		if (state.phase === 'filing' || state.phase === 'preFiling') {
+			// Between cycles the filing dates on record are last time's, so only the election row stays.
+			const filingRow = electionPassed
+				? null
+				: countingToOpening
+					? renderDate('Filing opens', filingOpens)
+					: (renderDate('Filing deadline', filingDeadline) ?? (state.phase === 'filing' ? renderDate('Filing opened', filingOpens) : null));
+			const fileCountdown = renderCountdown(daysToFile, countingToOpening ? 'Days until filing opens' : 'Days to file');
+			const electionCountdown = renderCountdown(daysToElection, 'Days until election');
 			return (
-				<div className={s.card()} data-testid='position-hero-dates-card'>
+				<div className={cn(s.card(), !fileCountdown && !electionCountdown && s.cardCompact())} data-testid='position-hero-dates-card'>
 					<dl className='flex flex-col gap-4'>
-						{state.filingOpen
-							? (renderDate('Filing deadline', filingDeadline) ?? renderDate('Filing opened', filingOpens))
-							: renderDate('Filing opens', filingOpens)}
-						{renderDate('Election date', electionDay)}
+						{filingRow}
+						{renderDate(electionPassed ? 'Last election' : 'Election date', electionDay)}
 					</dl>
-					<div className={cn(s.countdown(), 'mt-auto')}>
-						{renderCountdown(daysToFile, state.filingOpen ? 'Days to file' : 'Days until filing opens')}
-						{renderCountdown(daysToElection, 'Days until election')}
-					</div>
+					{(fileCountdown || electionCountdown) && (
+						<div className={cn(s.countdown(), 'mt-auto')}>
+							{fileCountdown}
+							{electionCountdown}
+						</div>
+					)}
 				</div>
 			);
 		}
@@ -448,7 +464,7 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 				<div className={s.layout()}>
 					<div className={s.intro()}>
 						<Text as='h1' styleType='heading-xl'>
-							{location ? `${props.officeName} in ${location}` : props.officeName}
+							{positionHeroHeading(state, props.officeName, location)}
 						</Text>
 						{props.intro && <Text styleType='body-1'>{props.intro}</Text>}
 					</div>

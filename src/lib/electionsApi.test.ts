@@ -938,9 +938,9 @@ describe('gp-api person-profile reads carry the M2M token', () => {
 
 	function captureFetch(status: number, body: unknown): Array<{ url: string; init?: RequestInit }> {
 		const calls: Array<{ url: string; init?: RequestInit }> = [];
-		globalThis.fetch = ((input: RequestInfo | URL, init?: RequestInit) => {
+		globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
 			calls.push({ url: String(input), init });
-			return Promise.resolve(new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } }));
+			return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
 		}) as typeof fetch;
 		return calls;
 	}

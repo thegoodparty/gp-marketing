@@ -10,6 +10,8 @@ import {
 	getPersonMergeSurvivorId,
 	getPersonsByIds,
 	getCandidacies,
+	getPublicPersonProfileStatus,
+	getPublishedPersonProfileIds,
 	getRaceBySlug,
 	getRemovedPersonIds,
 	isStateIndexDistrictPlace,
@@ -927,6 +929,98 @@ describe('getRemovedPersonIds', () => {
 		}) as unknown as typeof fetch;
 
 		expect(await getRemovedPersonIds()).toBeNull();
+		errorSpy.mockRestore();
+	});
+});
+
+describe('gp-api person-profile reads carry the M2M token', () => {
+	const PERSON_ID = 'ab12cd34-0000-0000-0000-000000000001';
+
+	function captureFetch(status: number, body: unknown): Array<{ url: string; init?: RequestInit }> {
+		const calls: Array<{ url: string; init?: RequestInit }> = [];
+		globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+			calls.push({ url: String(input), init });
+			return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
+		}) as typeof fetch;
+		return calls;
+	}
+
+	const authorizationOf = (init?: RequestInit) => new Headers(init?.headers).get('authorization');
+
+	test('the render gate, the removal list, and the published list all send the bearer', async () => {
+		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
+		const calls = captureFetch(200, []);
+
+		await getPublicPersonProfileStatus(PERSON_ID);
+		await getRemovedPersonIds();
+		await getPublishedPersonProfileIds();
+
+		expect(calls.map(c => new URL(c.url).pathname)).toEqual([
+			'/v1/public-person-profiles',
+			'/v1/public-person-profiles/unlisted',
+			'/v1/public-person-profiles/published',
+		]);
+		for (const call of calls) expect(authorizationOf(call.init)).toBe('Bearer static-jwt');
+	});
+
+	test('the render gate keeps its per-person cache tag alongside the header', async () => {
+		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
+		const calls = captureFetch(404, {});
+
+		await getPublicPersonProfileStatus(PERSON_ID);
+
+		expect((calls[0]?.init as { next?: { tags?: string[] } }).next?.tags).toEqual([`person:${PERSON_ID}`]);
+	});
+
+	test('the removal list keeps its removals cache tag alongside the header', async () => {
+		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
+		const calls = captureFetch(200, []);
+
+		await getRemovedPersonIds();
+
+		expect((calls[0]?.init as { next?: { tags?: string[] } }).next?.tags).toEqual(['people-removals']);
+	});
+
+	for (const status of [401, 403]) {
+		test(`a ${status} from the render gate fails closed to removed, without retrying`, async () => {
+			process.env['ELECTION_API_M2M_TOKEN'] = 'expired-jwt';
+			const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
+			const calls = captureFetch(status, { message: 'Unauthorized' });
+
+			expect(await getPublicPersonProfileStatus(PERSON_ID)).toEqual({ status: 'removed' });
+			expect(calls).toHaveLength(1);
+			expect(errorSpy.mock.calls.some(call => String(call[0]).includes(`gp-api auth failure ${status}`))).toBe(true);
+			errorSpy.mockRestore();
+		});
+	}
+
+	test('a non-auth 4xx from the render gate still falls back to absent', async () => {
+		const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
+		captureFetch(400, {});
+
+		expect(await getPublicPersonProfileStatus(PERSON_ID)).toEqual({ status: 'absent' });
+		errorSpy.mockRestore();
+	});
+
+	test('a 401 on the removal list still fails closed to null', async () => {
+		const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
+		captureFetch(401, { message: 'Unauthorized' });
+
+		expect(await getRemovedPersonIds()).toBeNull();
+		errorSpy.mockRestore();
+	});
+
+	test('with no token, sends no Authorization header and warns once', async () => {
+		__resetElectionApiAuthForTests();
+		const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
+		const calls = captureFetch(200, []);
+
+		await getPublicPersonProfileStatus(PERSON_ID);
+		await getRemovedPersonIds();
+		await getPublishedPersonProfileIds();
+
+		for (const call of calls) expect(authorizationOf(call.init)).toBeNull();
+		expect(errorSpy.mock.calls.filter(call => String(call[0]).includes('ELECTION_API_M2M_TOKEN is not set'))).toHaveLength(1);
 		errorSpy.mockRestore();
 	});
 });

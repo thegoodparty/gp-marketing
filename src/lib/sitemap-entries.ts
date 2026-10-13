@@ -15,6 +15,7 @@ import { hasText } from '~/lib/peopleProfile';
 import { buildPersonSlugFromBase, personIdSuffix } from '~/lib/personSlug';
 import { FAQ_BASE_PATH, getFaqSitemapEntries } from '~/lib/faqSlugs';
 import { fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
+import { gpApiAuthHeaders } from '~/lib/electionApiAuth';
 import { allFaqsQuery } from '~/sanity/groq';
 
 /** 51 US state/DC codes (50 states + DC) */
@@ -569,7 +570,7 @@ export async function getCachedElectionRouteParams(): Promise<{
  */
 async function fetchGpApiJsonOrThrow<T>(path: string, tags?: readonly string[]): Promise<T[]> {
 	const url = `${GP_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
-	const res = await fetch(url, cacheInit(tags));
+	const res = await fetch(url, { ...cacheInit(tags), headers: gpApiAuthHeaders() });
 	if (!res.ok) throw new Error(`[sitemap] gp-api ${res.status} ${url}`);
 	const data: unknown = await res.json();
 	if (!Array.isArray(data)) throw new Error(`[sitemap] gp-api non-array body ${url}`);

@@ -392,6 +392,35 @@ describe('fetchPeopleSitemapEntries', () => {
 		]);
 	});
 
+	test('sends the M2M bearer on the gp-api published and unlisted reads, keeping the sitemap tag', async () => {
+		const originalToken = process.env['ELECTION_API_M2M_TOKEN'];
+		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
+		try {
+			mockUpstream({ persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }] });
+			const upstream = globalThis.fetch;
+			const gpApiCalls: { path: string; init?: RequestInit }[] = [];
+			globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+				const path = new URL(String(input)).pathname;
+				if (path.includes('/public-person-profiles/')) gpApiCalls.push({ path, init });
+				return upstream(input, init);
+			}) as typeof fetch;
+
+			await fetchPeopleSitemapEntries(base, shardOf(aliceId));
+
+			expect(gpApiCalls.map((c) => c.path).sort()).toEqual([
+				'/v1/public-person-profiles/published',
+				'/v1/public-person-profiles/unlisted',
+			]);
+			for (const call of gpApiCalls) {
+				expect(new Headers(call.init?.headers).get('authorization')).toBe('Bearer static-jwt');
+				expect((call.init as { next?: { tags?: string[] } }).next?.tags).toContain('people-sitemap');
+			}
+		} finally {
+			if (originalToken === undefined) delete process.env['ELECTION_API_M2M_TOKEN'];
+			else process.env['ELECTION_API_M2M_TOKEN'] = originalToken;
+		}
+	});
+
 	// Both of the following cover the same class of bug: an upstream that answers
 	// "nothing" on failure is indistinguishable from one that answers "no rows",
 	// and for these two inputs the wrong answer is silent and shipped.

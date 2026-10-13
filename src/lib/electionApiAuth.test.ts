@@ -4,6 +4,7 @@ import {
 	__resetElectionApiAuthForTests,
 	electionApiAuthHeaders,
 	getElectionApiToken,
+	gpApiAuthHeaders,
 } from './electionApiAuth';
 
 const ORIGINAL_TOKEN = process.env['ELECTION_API_M2M_TOKEN'];
@@ -60,6 +61,25 @@ describe('electionApiAuthHeaders', () => {
 		const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
 
 		expect(electionApiAuthHeaders()).toEqual({});
+
+		errorSpy.mockRestore();
+	});
+});
+
+describe('gpApiAuthHeaders', () => {
+	test('sends the same static token as a Bearer header', () => {
+		expect(gpApiAuthHeaders()).toEqual({ Authorization: 'Bearer static-jwt' });
+	});
+
+	test('returns an empty object and warns once when the token is unset', () => {
+		delete process.env['ELECTION_API_M2M_TOKEN'];
+		const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
+
+		expect(gpApiAuthHeaders()).toEqual({});
+		expect(gpApiAuthHeaders()).toEqual({});
+		expect(
+			errorSpy.mock.calls.filter((call) => String(call[0]).includes('ELECTION_API_M2M_TOKEN')),
+		).toHaveLength(1);
 
 		errorSpy.mockRestore();
 	});

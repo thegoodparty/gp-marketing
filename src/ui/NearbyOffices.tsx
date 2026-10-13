@@ -47,11 +47,10 @@ const styles = tv({
 		],
 		// Figma: 20px medium at every width; subtitle-1 is 20 on phones and subtitle-2 is 20 at 1440.
 		position: 'font-medium text-black col-span-2 md:col-span-1 md:col-start-2 md:row-start-1 md:truncate md:text-subtitle-2 md:font-medium',
-		// The badge leads the sentence on the phone card and trails the bare number
-		// on the desktop row, so the DOM order (number, badge) is reversed below md.
+		// Phone card: "2 [badge] candidates running". Desktop row: "2 [badge]", the words go screen-reader only.
 		count: [
-			'col-span-2 flex flex-row-reverse items-center justify-end gap-0.5 text-black',
-			'md:col-span-1 md:col-start-3 md:row-start-1 md:flex-row md:justify-start md:gap-2',
+			'col-span-2 flex items-center gap-1 text-black',
+			'md:col-span-1 md:col-start-3 md:row-start-1 md:gap-2',
 		],
 		countBadge: 'h-6 w-8 shrink-0',
 		date: 'text-black whitespace-nowrap md:col-start-4 md:row-start-1',
@@ -134,8 +133,8 @@ export const NearbyOffices = (props: NearbyOfficesProps) => {
 							<Text as='span' styleType='subtitle-2' className={columnHeaderCell()}>
 								Position
 							</Text>
-							<Text as='span' styleType='subtitle-2' className={columnHeaderCell()}>
-								# of independents running
+							<Text as='span' styleType='subtitle-2' className={cn(columnHeaderCell(), 'flex items-center gap-1')}>
+								# of <Logo className='h-[1.05rem] w-6 shrink-0' aria-hidden='true' /> candidates running
 							</Text>
 							<Text as='span' styleType='subtitle-2' className={columnHeaderCell()}>
 								Election date
@@ -151,11 +150,9 @@ export const NearbyOffices = (props: NearbyOfficesProps) => {
 									</Text>
 									{office.pledgedCount ? (
 										<Text as='span' styleType='body-2' className={count()}>
-											<span>
-												{office.pledgedCount}
-												<span className='md:sr-only'>{office.pledgedCount === 1 ? ' independent running' : ' independents running'}</span>
-											</span>
+											<span>{office.pledgedCount}</span>
 											<Logo className={countBadge()} aria-hidden='true' />
+											<span className='md:sr-only'>{office.pledgedCount === 1 ? ' candidate running' : ' candidates running'}</span>
 										</Text>
 									) : null}
 									<Text as='span' styleType='body-2' className={date()}>

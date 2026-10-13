@@ -119,20 +119,23 @@ describe('submitElectionsNearYouSearch', () => {
 	});
 
 	test('a thrown network failure fires Errored with network, without navigating', async () => {
-		const { deps, trackCalls, navigateCalls } = makeDeps(async () => {
+		const { deps, trackCalls, dataLayerCalls, navigateCalls } = makeDeps(async () => {
 			throw new Error('fetch failed');
 		});
 
 		const result = await submitElectionsNearYouSearch({ rawInput: 'Boston', place: { city: 'Boston', state: 'MA' } }, deps);
 
 		expect(result).toEqual({ ok: false, error: ELECTIONS_SEARCH_NETWORK_ERROR });
+		expect(dataLayerCalls).toEqual([
+			{ eventName: 'voter_guide_search_error', eventProperties: { input_type: 'city', failure_reason: 'network' } },
+		]);
 		expect(trackCalls).toEqual([{ eventName: ELECTIONS_SEARCH_ERRORED_EVENT, eventProperties: { inputType: 'city', failureReason: 'network' } }]);
 		expect(navigateCalls).toEqual([]);
 	});
 
 	test('an empty submit fires Errored with empty_input and makes no resolve call', async () => {
 		let resolveCallCount = 0;
-		const { deps, trackCalls, navigateCalls } = makeDeps(async () => {
+		const { deps, trackCalls, dataLayerCalls, navigateCalls } = makeDeps(async () => {
 			resolveCallCount += 1;
 			return { error: 'unresolved' };
 		});
@@ -140,6 +143,9 @@ describe('submitElectionsNearYouSearch', () => {
 		const result = await submitElectionsNearYouSearch({ rawInput: '   ' }, deps);
 
 		expect(result).toEqual({ ok: false, error: ELECTIONS_SEARCH_EMPTY_INPUT_ERROR });
+		expect(dataLayerCalls).toEqual([
+			{ eventName: 'voter_guide_search_error', eventProperties: { input_type: 'city', failure_reason: 'empty_input' } },
+		]);
 		expect(trackCalls).toEqual([{ eventName: ELECTIONS_SEARCH_ERRORED_EVENT, eventProperties: { inputType: 'city', failureReason: 'empty_input' } }]);
 		expect(navigateCalls).toEqual([]);
 		expect(resolveCallCount).toBe(0);

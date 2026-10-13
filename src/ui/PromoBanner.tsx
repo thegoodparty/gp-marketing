@@ -100,14 +100,15 @@ export const PromoBanner = (props: PromoBannerProps) => {
 			<div data-component='PromoBanner' data-promo-banner={dismissKey} className={styles({ color: props.color ?? 'bright-yellow' })}>
 				<Container
 					size='xl'
-					className='flex h-full items-center gap-3 md:gap-4 max-md:grid max-md:grid-cols-[auto_minmax(0,1fr)_auto] max-md:gap-x-3 max-md:gap-y-1.5'
+					className='flex h-full items-center gap-3 md:justify-center md:gap-4 max-md:grid max-md:grid-cols-[auto_minmax(0,1fr)_auto] max-md:gap-x-3 max-md:gap-y-1.5'
 				>
+					<span aria-hidden='true' className='hidden h-8 w-8 shrink-0 md:block' />
 					{props.countdownTo && <PromoCountdown to={props.countdownTo} label={props.countdownLabel} />}
 					<Text
 						as='p'
 						styleType='body-2'
 						className={cn(
-							'min-w-0 flex-1 md:truncate max-md:line-clamp-2 max-md:row-start-1',
+							'min-w-0 flex-1 md:flex-initial md:truncate md:text-center max-md:line-clamp-2 max-md:row-start-1',
 							props.countdownTo ? 'max-md:col-start-2' : 'max-md:col-span-2',
 						)}
 					>

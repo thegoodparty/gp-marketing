@@ -307,9 +307,10 @@ instead. That fix shipped separately, ahead of the redesign, as it was a live bu
 
 Revised after design feedback (Emily, 2026-10-05), in the same draft PR:
 
-- **A "# of independents running" column** sits between Position and Election date, showing the
-  row's pledged candidate count beside the Heart & Star badge; the phone card says "2 independents
-  running" under the position. The count is the number of candidates in the row's race who have
+- **A "# of [badge] candidates running" column** sits between Position and Election date, showing the
+  row's pledged candidate count beside the Heart & Star badge; the phone card shows "2 [badge] candidates
+  running" under the position. The header carries the badge inline in place of the
+  word "independents" (Emily, 2026-10-13); its accessible name is "GoodParty.org". The count is the number of candidates in the row's race who have
   taken the Pledge, by the same rule as every other badge (`pledgedFromSpine`), summed across the
   race's districts because a position row stands for the whole race. Only a count above zero is
   drawn: zero and unknown look the same, so a row never publishes "0 independents" off a pledge
@@ -469,11 +470,12 @@ Decisions that came out of it:
   it, so all three position routes get it without touching their `page.tsx`. The candidates
   template does not populate it, and the block hides itself wherever the override is empty.
 - **The empty state is "render nothing"**, pinned by `src/ui/nearbyOffices.test.tsx`.
-- **Each row shows its "# of independents running"** (design feedback round, Emily, 2026-10-06;
+- **Each row shows its "# of [badge] candidates running"** (design feedback round, Emily, 2026-10-06;
   frames [desktop](https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2156-30518),
   [mobile](https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2139-21952)):
-  the number beside the Heart & Star badge in a middle column on desktop, the badge and
-  "2 independents running" under the position on the phone card. It is the same figure the
+  the number beside the Heart & Star badge in a middle column on desktop, "2 [badge] candidates running"
+  under the position on the phone card. The column header shows the badge
+  inline, as in the offices list (Emily, 2026-10-13). It is the same figure the
   offices list draft (PR #304) shows for a row: the candidates in the row's race who have taken
   the Pledge by `pledgedFromSpine`, counted once per person. Position pages had no candidate
   fetch, so `withPledgedCounts` in `src/lib/nearbyOffices.ts` asks `/v1/candidacies?raceSlug=`

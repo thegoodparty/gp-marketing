@@ -73,11 +73,17 @@ describe('submitElectionsNearYouSearch', () => {
 	});
 
 	test('a picked county that resolves fires Completed with inputType county and resolvedCityCount 0', async () => {
-		const { deps, trackCalls, navigateCalls } = makeDeps(async () => ({ url: '/elections/ma/suffolk-county', matchedLevel: 'county' }));
+		const { deps, trackCalls, dataLayerCalls, navigateCalls } = makeDeps(async () => ({
+			url: '/elections/ma/suffolk-county',
+			matchedLevel: 'county',
+		}));
 
 		const result = await submitElectionsNearYouSearch({ rawInput: 'Suffolk County', place: { county: 'Suffolk County', state: 'MA' } }, deps);
 
 		expect(result).toEqual({ ok: true });
+		expect(dataLayerCalls).toEqual([
+			{ eventName: 'voter_guide_search_complete', eventProperties: { input_type: 'county', matched_level: 'county' } },
+		]);
 		expect(trackCalls).toEqual([
 			{
 				eventName: ELECTIONS_SEARCH_COMPLETED_EVENT,

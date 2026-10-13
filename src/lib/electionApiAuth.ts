@@ -1,5 +1,10 @@
 /**
- * Server-only Authorization header for election-api requests.
+ * Server-only Authorization header for election-api requests, and for gp-api's
+ * person-profile reads (`/v1/public-person-profiles`, `/unlisted`, `/published`).
+ *
+ * gp-api accepts any valid Clerk M2M JWT as a read-only credential for those
+ * three routes, so the same ELECTION_API_M2M_TOKEN is sent there too. The env
+ * var keeps its name because the rotation tooling writes it.
  *
  * gp-marketing runs on a large, churning fleet of short-lived Vercel isolates.
  * Minting a Clerk JWT M2M token per isolate — even pooled through the Next Data
@@ -25,7 +30,9 @@
  * If ELECTION_API_M2M_TOKEN is unset, requests go out unauthenticated. That is
  * intentional while election-api is in observe-only mode; once
  * ELECTION_API_AUTH_ENFORCED=true, the token must be present or election-api
- * returns 401. Rotate before the token's ~90-day expiry (runbook).
+ * returns 401. gp-api's person-profile reads 401 without it too, and the profile
+ * render gate treats that as a takedown (noindex), never as an unclaimed page.
+ * Rotate before the token's ~90-day expiry (runbook).
  */
 
 // Latched so a misconfigured deploy logs once per process, not once per request.
@@ -38,7 +45,7 @@ export function getElectionApiToken(): string | null {
 		if (!warnedMissingToken) {
 			warnedMissingToken = true;
 			console.error(
-				'[electionApiAuth] ELECTION_API_M2M_TOKEN is not set; election-api requests will be unauthenticated',
+				'[electionApiAuth] ELECTION_API_M2M_TOKEN is not set; election-api and gp-api person-profile requests will be unauthenticated',
 			);
 		}
 		return null;
@@ -48,6 +55,19 @@ export function getElectionApiToken(): string | null {
 
 /** Authorization header for an election-api request (empty if no token). */
 export function electionApiAuthHeaders(): Record<string, string> {
+	const token = getElectionApiToken();
+	return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+/**
+ * Authorization header for gp-api's person-profile reads (empty if no token).
+ *
+ * Sent as a plain header on a Next-cached fetch, unlike election-api's
+ * unstable_cache wrapper: the token is one static value shared by every isolate,
+ * so it adds the same component to every isolate's cache key, and Next 15 still
+ * caches a fetch carrying Authorization when it sets an explicit revalidate.
+ */
+export function gpApiAuthHeaders(): Record<string, string> {
 	const token = getElectionApiToken();
 	return token ? { Authorization: `Bearer ${token}` } : {};
 }

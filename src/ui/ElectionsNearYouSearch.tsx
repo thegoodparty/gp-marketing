@@ -21,6 +21,7 @@ import {
 	ELECTIONS_SEARCH_DATA_LAYER_EVENTS,
 	ELECTIONS_SEARCH_MIN_QUERY_LENGTH,
 	ELECTIONS_SEARCH_VIEWED_EVENT,
+	electionsSearchDataLayerContext,
 	placeForSubmit,
 	shouldSubmitOnEnter,
 	submitElectionsNearYouSearchOnce,
@@ -249,7 +250,7 @@ export function ElectionsNearYouSearch(props: ElectionsNearYouSearchProps) {
 		// no App Router context — the owning blocks' DOM tests render this via
 		// renderToStaticMarkup with no router mounted.
 		const pagePath = typeof window !== 'undefined' ? window.location.pathname : null;
-		trackDataLayerEvent(ELECTIONS_SEARCH_DATA_LAYER_EVENTS.viewed.event, { page_path: pagePath, placement });
+		trackDataLayerEvent(ELECTIONS_SEARCH_DATA_LAYER_EVENTS.viewed.event, electionsSearchDataLayerContext(placement, pagePath));
 		trackEvent(ELECTIONS_SEARCH_VIEWED_EVENT, { pagePath, placement });
 		// Fires once per mount, matching "once per page view per block instance".
 	}, [placement]);
@@ -338,7 +339,7 @@ export function ElectionsNearYouSearch(props: ElectionsNearYouSearchProps) {
 				resolvePlace: resolvePlaceOverHttp,
 				trackEvent,
 				trackDataLayerEvent: (event, properties) =>
-					trackDataLayerEvent(event, { page_path: window.location.pathname, placement, ...properties }),
+					trackDataLayerEvent(event, { ...electionsSearchDataLayerContext(placement, window.location.pathname), ...properties }),
 				// A full navigation, not the App Router's client-side `push`: the
 				// destination is a different, server-rendered elections page, and
 				// this keeps the form free of a router dependency the owning blocks

@@ -43,6 +43,11 @@ export const ELECTIONS_SEARCH_DATA_LAYER_EVENTS = {
 	errored: { event: 'voter_guide_search_error', keys: ['page_path', 'placement', 'input_type', 'failure_reason'] },
 } as const;
 
+/** What every search push carries besides its own keys: the page, and which search box it came from. */
+export function electionsSearchDataLayerContext(placement: string, pagePath: string | null) {
+	return { page_path: pagePath, placement };
+}
+
 export const ELECTIONS_SEARCH_EMPTY_INPUT_ERROR = 'Enter a city or county to search.';
 export const ELECTIONS_SEARCH_UNRESOLVED_ERROR = "We couldn't find that city or county. Try a nearby one.";
 export const ELECTIONS_SEARCH_NETWORK_ERROR = 'Something went wrong. Please try again.';

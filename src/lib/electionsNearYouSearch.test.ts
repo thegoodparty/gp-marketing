@@ -7,6 +7,7 @@ import {
 	ELECTIONS_SEARCH_ERRORED_EVENT,
 	ELECTIONS_SEARCH_NETWORK_ERROR,
 	ELECTIONS_SEARCH_UNRESOLVED_ERROR,
+	electionsSearchDataLayerContext,
 	placeForSubmit,
 	shouldSubmitOnEnter,
 	submitElectionsNearYouSearch,
@@ -146,11 +147,16 @@ describe('submitElectionsNearYouSearch', () => {
 });
 
 describe('the search data layer events', () => {
-	test('every key each event pushes is one the event declares', async () => {
-		const pushed: Record<string, Set<string>> = {};
+	/**
+	 * The component sends the view event as the shared context alone, and adds
+	 * the same context to the completed and errored pushes, so each event's
+	 * declared keys must be exactly the context plus what the submit logic pushes.
+	 */
+	test('every event pushes exactly the keys it declares', async () => {
+		const context = electionsSearchDataLayerContext('elections_search_hero', '/elections');
+		const pushed: Record<string, string[]> = {};
 		const record = (eventName: string, props: Record<string, unknown>) => {
-			pushed[eventName] ??= new Set();
-			for (const key of Object.keys(props)) pushed[eventName].add(key);
+			pushed[eventName] = Object.keys({ ...context, ...props }).sort();
 		};
 		const outcomes: (() => Promise<ResolvedPlace>)[] = [
 			async () => ({ url: '/elections/ma', matchedLevel: 'state' }),
@@ -160,9 +166,10 @@ describe('the search data layer events', () => {
 			const { deps } = makeDeps(outcome);
 			await submitElectionsNearYouSearch({ rawInput: 'Boston' }, { ...deps, trackDataLayerEvent: record });
 		}
-		const { completed, errored } = ELECTIONS_SEARCH_DATA_LAYER_EVENTS;
-		for (const key of pushed[completed.event] ?? []) expect(completed.keys as readonly string[]).toContain(key);
-		for (const key of pushed[errored.event] ?? []) expect(errored.keys as readonly string[]).toContain(key);
+		const { viewed, completed, errored } = ELECTIONS_SEARCH_DATA_LAYER_EVENTS;
+		expect(Object.keys(context).sort()).toEqual([...viewed.keys].sort());
+		expect(pushed[completed.event]).toEqual([...completed.keys].sort());
+		expect(pushed[errored.event]).toEqual([...errored.keys].sort());
 	});
 
 	/** Whoever configures the GTM container works from docs/analytics.md, so an event it does not name never reaches GA4. */

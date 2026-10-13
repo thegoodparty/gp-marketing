@@ -100,30 +100,32 @@ export const PromoBanner = (props: PromoBannerProps) => {
 			<div data-component='PromoBanner' data-promo-banner={dismissKey} className={styles({ color: props.color ?? 'bright-yellow' })}>
 				<Container
 					size='xl'
-					className='flex h-full items-center gap-3 md:justify-center md:gap-4 max-md:grid max-md:grid-cols-[auto_minmax(0,1fr)_auto] max-md:gap-x-3 max-md:gap-y-1.5'
+					className='grid h-full items-center max-md:grid-cols-[auto_minmax(0,1fr)_auto] max-md:gap-x-3 max-md:gap-y-1.5 md:grid-cols-[2rem_minmax(0,1fr)_2rem] md:gap-4'
 				>
 					<span aria-hidden='true' className='hidden h-8 w-8 shrink-0 md:block' />
-					{props.countdownTo && <PromoCountdown to={props.countdownTo} label={props.countdownLabel} />}
-					<Text
-						as='p'
-						styleType='body-2'
-						className={cn(
-							'min-w-0 flex-1 md:flex-initial md:truncate md:text-center max-md:line-clamp-2 max-md:row-start-1',
-							props.countdownTo ? 'max-md:col-start-2' : 'max-md:col-span-2',
-						)}
-					>
-						{props.text}
-					</Text>
-					{props.button && (
-						<ComponentButton
-							{...props.button}
+					<div className='max-md:contents md:flex md:min-w-0 md:items-center md:justify-center md:gap-4'>
+						{props.countdownTo && <PromoCountdown to={props.countdownTo} label={props.countdownLabel} />}
+						<Text
+							as='p'
+							styleType='body-2'
 							className={cn(
-								'shrink-0 max-md:row-start-2 max-md:justify-self-start',
+								'min-w-0 md:truncate max-md:line-clamp-2 max-md:row-start-1',
 								props.countdownTo ? 'max-md:col-start-2' : 'max-md:col-span-2',
 							)}
-							buttonProps={{ ...props.button.buttonProps, styleSize: 'sm' }}
-						/>
-					)}
+						>
+							{props.text}
+						</Text>
+						{props.button && (
+							<ComponentButton
+								{...props.button}
+								className={cn(
+									'shrink-0 max-md:row-start-2 max-md:justify-self-start',
+									props.countdownTo ? 'max-md:col-start-2' : 'max-md:col-span-2',
+								)}
+								buttonProps={{ ...props.button.buttonProps, styleSize: 'sm' }}
+							/>
+						)}
+					</div>
 					<button
 						type='button'
 						aria-label='Dismiss this message'

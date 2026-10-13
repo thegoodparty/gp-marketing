@@ -24,6 +24,7 @@ import {
 	stripCountySuffix,
 } from '~/lib/electionsHelpers';
 import { ElectionApiError, fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
+import { gpApiAuthHeaders } from '~/lib/electionApiAuth';
 
 const ELECTIONS_API_BASE_URL = process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
 
@@ -131,7 +132,8 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | nul
 		return null;
 	}
 
-	// gp-api and other hosts: no M2M token (election-api-scoped).
+	// gp-api and other hosts: no M2M token here. The gp-api person-profile reads
+	// that need one call fetch directly with gpApiAuthHeaders().
 	for (let attempt = 0; attempt <= FETCH_JSON_MAX_RETRIES; attempt++) {
 		try {
 			const res = await fetch(url, options);
@@ -416,6 +418,7 @@ export async function getRemovedPersonIds(): Promise<Set<string> | null> {
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles/unlisted`;
 	try {
 		const res = await fetch(url, {
+			headers: gpApiAuthHeaders(),
 			next: { revalidate: 300, tags: [PEOPLE_REMOVALS_CACHE_TAG] },
 		});
 		if (!res.ok) {
@@ -622,13 +625,18 @@ export type PublicPersonProfileResult =
  * (deleted). We map those to the render-gate outcomes above; any transient/5xx
  * failure falls back to `absent` so the spine page still renders instead of
  * 404-ing.
+ *
+ * A 401 or 403 is the exception: it means our M2M token is missing, expired, or
+ * rejected, so we cannot know whether this person asked to be taken down. That
+ * maps to `removed` (noindex, no photo, no claim CTAs) rather than `absent`,
+ * which would republish a takedown as an indexable unclaimed page.
  */
 export async function getPublicPersonProfileStatus(personId: string): Promise<PublicPersonProfileResult> {
 	const searchParams = new URLSearchParams({ personId });
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles?${searchParams}`;
 	for (let attempt = 0; attempt <= FETCH_JSON_MAX_RETRIES; attempt++) {
 		try {
-			const res = await fetch(url, personCacheOptions(personId));
+			const res = await fetch(url, { ...personCacheOptions(personId), headers: gpApiAuthHeaders() });
 			if (res.ok) {
 				const profile = (await res.json()) as PublicPersonProfile;
 				// Privacy takedown: gp-api answers 200 with { removed: true } and no
@@ -641,6 +649,12 @@ export async function getPublicPersonProfileStatus(personId: string): Promise<Pu
 			}
 			if (res.status === 410) return { status: 'gone' };
 			if (res.status === 404) return { status: 'absent' };
+			if (res.status === 401 || res.status === 403) {
+				console.error(
+					`[electionsApi] gp-api auth failure ${res.status} ${url}; ELECTION_API_M2M_TOKEN is missing, expired, or rejected. Rendering the page as removed (noindex) until auth is fixed.`,
+				);
+				return { status: 'removed' };
+			}
 			if (res.status < 500) {
 				console.error(`[electionsApi] ${res.status} ${url}`);
 				return { status: 'absent' };
@@ -665,7 +679,7 @@ export async function getPublicPersonProfileStatus(personId: string): Promise<Pu
 export async function getPublishedPersonProfileIds(): Promise<Set<string> | null> {
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles/published`;
 	try {
-		const res = await fetch(url, { next: { revalidate: 300 } });
+		const res = await fetch(url, { headers: gpApiAuthHeaders(), next: { revalidate: 300 } });
 		if (!res.ok) {
 			console.error(`[electionsApi] ${res.status} ${url}`);
 			return null;

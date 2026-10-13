@@ -183,7 +183,7 @@ describe('ListOfOfficesBlock level filter', () => {
 });
 
 /**
- * The "# of independents running" column counts the row's pledged candidates.
+ * The "# of [badge] candidates running" column counts the row's pledged candidates.
  * Only a count above zero is drawn: a zero and an unknown look the same, so a
  * row never claims "0 independents" off a pledge flag that may be unwritten.
  */
@@ -203,10 +203,11 @@ describe('ListOfOfficesBlock independents column', () => {
 	const BADGE = 'viewBox="35 42 137 116"';
 
 	test('labels the column and shows a count with the badge, singular when it is one', () => {
-		expect(html).toContain('# of independents running');
-		expect(rowOf('/p/rep')).toContain('2<span class="md:sr-only"> independents running</span>');
+		expect(html).toContain('candidates running');
+		expect(html).not.toContain('# of independents running');
+		expect(rowOf('/p/rep')).toMatch(/<span>2<\/span><svg[^]*?<\/svg><span class="md:sr-only"> candidates running<\/span>/);
 		expect(rowOf('/p/rep')).toContain(BADGE);
-		expect(rowOf('/p/senate')).toContain('1<span class="md:sr-only"> independent running</span>');
+		expect(rowOf('/p/senate')).toMatch(/<span>1<\/span><svg[^]*?<\/svg><span class="md:sr-only"> candidate running<\/span>/);
 	});
 
 	test('draws nothing for a zero or an unknown count', () => {

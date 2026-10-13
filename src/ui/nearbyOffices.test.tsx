@@ -63,7 +63,8 @@ describe('NearbyOffices', () => {
 		const html = renderToStaticMarkup(<NearbyOffices offices={[office(1, { href: undefined })]} />);
 
 		expect(html).not.toContain('<a ');
-		expect(html).not.toContain('<svg');
+		// The one SVG is the header's badge.
+		expect(html.match(/<svg/g)).toHaveLength(1);
 	});
 
 	/**
@@ -76,10 +77,11 @@ describe('NearbyOffices', () => {
 		const many = renderToStaticMarkup(<NearbyOffices offices={[office(1, { pledgedCount: 2 })]} />);
 		const one = renderToStaticMarkup(<NearbyOffices offices={[office(1, { pledgedCount: 1 })]} />);
 
-		expect(many).toContain('# of independents running');
-		expect(many).toContain('2<span class="md:sr-only"> independents running</span>');
-		expect(many.match(/<svg/g)).toHaveLength(3);
-		expect(one).toContain('1<span class="md:sr-only"> independent running</span>');
+		expect(many).toContain('candidates running');
+		expect(many).not.toContain('independents running');
+		expect(many).toMatch(/<span>2<\/span><svg[^]*?<\/svg><span class="md:sr-only"> candidates running<\/span>/);
+		expect(many.match(/<svg/g)).toHaveLength(4);
+		expect(one).toMatch(/<span>1<\/span><svg[^]*?<\/svg><span class="md:sr-only"> candidate running<\/span>/);
 	});
 
 	test('draws no count for a row with zero or no pledged candidates', () => {
@@ -88,7 +90,7 @@ describe('NearbyOffices', () => {
 
 		for (const html of [zero, unknown]) {
 			expect(html).not.toContain('md:sr-only');
-			expect(html.match(/<svg/g)).toHaveLength(2);
+			expect(html.match(/<svg/g)).toHaveLength(3);
 		}
 	});
 

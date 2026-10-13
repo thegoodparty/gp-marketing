@@ -65,11 +65,10 @@ const styles = tv({
 		// The tag is white on navy in both variants, so it sets its own colour.
 		tag: 'inline-block w-fit rounded-sm bg-blue-900 px-2 py-1 font-primary text-caption font-medium tracking-[0.0625rem] [color:white] uppercase',
 		positionCell: 'col-span-2 font-primary text-row-title md:col-span-1 md:col-start-2 md:row-start-1',
-		// The badge leads the sentence on the phone card and trails the bare number
-		// on the desktop row, so the DOM order (number, badge) is reversed below md.
+		// Phone card: "2 [badge] candidates running". Desktop row: "2 [badge]", the words go screen-reader only.
 		countCell: [
-			'col-span-2 flex flex-row-reverse items-center justify-end gap-0.5 font-secondary text-row-meta',
-			'md:col-span-1 md:col-start-3 md:row-start-1 md:flex-row md:justify-start md:gap-2',
+			'col-span-2 flex items-center gap-1 font-secondary text-row-meta',
+			'md:col-span-1 md:col-start-3 md:row-start-1 md:gap-2',
 		],
 		countIcon: 'h-[1.3rem] w-8 shrink-0',
 		dateCell: 'font-secondary text-row-meta md:col-start-4 md:row-start-1 md:text-right',
@@ -365,7 +364,9 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 							<div className={listHeader()}>
 								<div className={listHeaderCell()}>Type</div>
 								<div className={listHeaderCell()}>Position</div>
-								<div className={listHeaderCell()}># of independents running</div>
+								<div className={cn(listHeaderCell(), 'flex items-center gap-1')}>
+									# of <Logo className='h-[1.05rem] w-6 shrink-0' role='img' aria-label='GoodParty.org' /> candidates running
+								</div>
 								<div className={cn(listHeaderCell(), headerDateCell())}>Election date</div>
 								<div aria-hidden='true' />
 							</div>
@@ -380,11 +381,9 @@ export function ListOfOfficesBlock(props: ListOfOfficesBlockProps) {
 									<div className={positionCell()}>{office.position}</div>
 									{office.pledgedCount ? (
 										<div className={countCell()}>
-											<span>
-												{office.pledgedCount}
-												<span className='md:sr-only'>{office.pledgedCount === 1 ? ' independent running' : ' independents running'}</span>
-											</span>
+											<span>{office.pledgedCount}</span>
 											<Logo className={countIcon()} aria-hidden='true' />
+											<span className='md:sr-only'>{office.pledgedCount === 1 ? ' candidate running' : ' candidates running'}</span>
 										</div>
 									) : null}
 									<div className={dateCell()}>{formatElectionDateFromApi(office.nextElectionDate)}</div>

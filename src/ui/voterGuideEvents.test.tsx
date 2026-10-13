@@ -17,6 +17,7 @@ const DOM_GLOBALS = [
 	'NodeFilter',
 	'Element',
 	'HTMLElement',
+	'SVGElement',
 	'HTMLAnchorElement',
 	'HTMLSelectElement',
 	'DocumentFragment',
@@ -314,6 +315,31 @@ describe('the claim profile block', () => {
 		]);
 		expect(segment).toEqual(['Voter Guide - Claim Profile Clicked']);
 		expect(amplitudeEvents.map(e => e.name)).toEqual(['Sign Up Clicked', 'Voter Guide - Claim Profile Clicked']);
+	});
+});
+
+describe('the location search', () => {
+	test('reports that it was seen, and an empty search reports its error, both with the page and the search box', async () => {
+		const { ElectionsNearYouSearch } = await import('./ElectionsNearYouSearch.tsx');
+		await render(React.createElement(ElectionsNearYouSearch, { placement: 'elections_search_hero', parent: 'ElectionsSearchHero' }));
+
+		expect(ga4Events()).toEqual([
+			{ event: 'voter_guide_search_view', page_path: '/elections/tx/harris-county', placement: 'elections_search_hero' },
+		]);
+
+		await act(async () => {
+			document.querySelector('form')!.dispatchEvent(new dom.window.Event('submit', { bubbles: true, cancelable: true }));
+			await flush();
+			await flush();
+		});
+
+		expect(ga4Events()[1]).toEqual({
+			event: 'voter_guide_search_error',
+			page_path: '/elections/tx/harris-county',
+			placement: 'elections_search_hero',
+			input_type: 'city',
+			failure_reason: 'empty_input',
+		});
 	});
 });
 

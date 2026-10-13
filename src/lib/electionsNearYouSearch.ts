@@ -4,8 +4,8 @@ import type { ParsedPlaceSuggestion, PlaceSuggestion } from '~/lib/googlePlaces'
 
 /**
  * The block's submit logic as a plain function so it is testable without a
- * browser: `deps` stands in for the resolve-route fetch, Amplitude, and the
- * router, so a test can assert the exact event name/props and navigation
+ * browser: `deps` stands in for the resolve-route fetch, Amplitude, the GTM
+ * data layer, and the router, so a test can assert the exact event name/props and navigation
  * call for each resolve outcome without mocking the function under test.
  */
 
@@ -16,6 +16,7 @@ export type ElectionsSearchFailureReason = 'unresolved' | 'network' | 'empty_inp
 export type ElectionsNearYouSearchDeps = {
 	resolvePlace(params: { city?: string; county?: string; state?: string }): Promise<ResolvedPlace>;
 	trackEvent(eventName: string, eventProperties?: Record<string, unknown>): void;
+	trackDataLayerEvent(event: string, properties: Record<string, unknown>): void;
 	navigate(url: string): void;
 };
 
@@ -30,6 +31,23 @@ export const ELECTIONS_SEARCH_VIEWED_EVENT = 'Voter Guide - Election Search View
 export const ELECTIONS_SEARCH_COMPLETED_EVENT = 'Voter Guide - Election Search Completed';
 export const ELECTIONS_SEARCH_ERRORED_EVENT = 'Voter Guide - Election Search Errored';
 
+/**
+ * The same three events under the GA4 names a GTM Custom Event trigger matches
+ * (see docs/analytics.md). The Amplitude events above keep their camelCase
+ * properties so existing Amplitude charts still read them; the data layer gets
+ * snake_case keys like every other voter_guide_ event.
+ */
+export const ELECTIONS_SEARCH_DATA_LAYER_EVENTS = {
+	viewed: { event: 'voter_guide_search_view', keys: ['page_path', 'placement'] },
+	completed: { event: 'voter_guide_search_complete', keys: ['page_path', 'placement', 'input_type', 'matched_level'] },
+	errored: { event: 'voter_guide_search_error', keys: ['page_path', 'placement', 'input_type', 'failure_reason'] },
+} as const;
+
+/** What every search push carries besides its own keys: the page, and which search box it came from. */
+export function electionsSearchDataLayerContext(placement: string, pagePath: string | null) {
+	return { page_path: pagePath, placement };
+}
+
 export const ELECTIONS_SEARCH_EMPTY_INPUT_ERROR = 'Enter a city or county to search.';
 export const ELECTIONS_SEARCH_UNRESOLVED_ERROR = "We couldn't find that city or county. Try a nearby one.";
 export const ELECTIONS_SEARCH_NETWORK_ERROR = 'Something went wrong. Please try again.';
@@ -38,7 +56,12 @@ function inputTypeFor(place: ParsedPlaceSuggestion | undefined): ElectionsSearch
 	return place && 'county' in place ? 'county' : 'city';
 }
 
-function trackErrored(deps: Pick<ElectionsNearYouSearchDeps, 'trackEvent'>, inputType: ElectionsSearchInputType, failureReason: ElectionsSearchFailureReason) {
+function trackErrored(
+	deps: Pick<ElectionsNearYouSearchDeps, 'trackEvent' | 'trackDataLayerEvent'>,
+	inputType: ElectionsSearchInputType,
+	failureReason: ElectionsSearchFailureReason,
+) {
+	deps.trackDataLayerEvent(ELECTIONS_SEARCH_DATA_LAYER_EVENTS.errored.event, { input_type: inputType, failure_reason: failureReason });
 	deps.trackEvent(ELECTIONS_SEARCH_ERRORED_EVENT, { inputType, failureReason });
 }
 
@@ -77,6 +100,7 @@ export async function submitElectionsNearYouSearch(
 	// `navigate` triggers a full page navigation, and Amplitude's transport is
 	// fire-and-forget over the network, so ordering here (not a race with the
 	// unload) is what keeps the event from being lost to the redirect.
+	deps.trackDataLayerEvent(ELECTIONS_SEARCH_DATA_LAYER_EVENTS.completed.event, { input_type: inputType, matched_level: result.matchedLevel });
 	deps.trackEvent(ELECTIONS_SEARCH_COMPLETED_EVENT, {
 		inputType,
 		resolvedCityCount: result.matchedLevel === 'city' ? 1 : 0,

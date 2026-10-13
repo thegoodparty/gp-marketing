@@ -30,7 +30,13 @@ Everything lives in [src/lib/analytics.ts](../src/lib/analytics.ts).
   so a server-rendered block can ask for a click event without handing a function to a
   client component (which renders fine in SSR tests and throws on Vercel).
 
-The older helpers stay as they are: the search events, `Sign Up Clicked` (with its
+The location search (`ElectionsNearYouSearch`) predates these helpers. Its three
+Amplitude events keep their names and camelCase properties so existing Amplitude charts
+still work, and it now pushes the same three to the data layer under the
+`voter_guide_search_*` names below; [src/lib/electionsNearYouSearch.ts](../src/lib/electionsNearYouSearch.ts)
+holds both sets of names.
+
+The other older helpers stay as they are: `Sign Up Clicked` (with its
 `sign_up_click` data layer push keyed on `formId`), `Person Profile Notify Submitted`,
 the demo request and click-to-call events, and `Scroll Depth`.
 
@@ -54,6 +60,9 @@ data layer keys, which are also the Amplitude property names.
 | Clicked a claim-your-profile call to action | `voter_guide_claim_profile_click` | Voter Guide - Claim Profile Clicked (also sent to Segment) | The claim block on any template (`claim_block`) and the claim band on unclaimed profiles (`claim_band`) | `source`, `label`, `href`, `layout` (claim block only: card or banner) |
 | Clicked a place in the counties and cities index | `voter_guide_location_index_click` | Voter Guide - Location Index Clicked | The index on state and county pages | `place_name`, `place_level` (county, city, town, district), `href`, `searched` (true when the index was filtered first) |
 | Clicked a featured city card | `voter_guide_featured_city_click` | Voter Guide - Featured City Clicked | The featured cities carousel | `city_name`, `state`, `open_elections_count`, `href` |
+| Saw the location search box | `voter_guide_search_view` | Voter Guide - Election Search Viewed | The /elections hero (`placement: elections_search_hero`) and the Elections Near You block (`elections_near_you_block`), once per page load | `placement` |
+| Searched and was sent to a place | `voter_guide_search_complete` | Voter Guide - Election Search Completed | Either search box | `placement`, `input_type` (city or county, from the suggestion picked; city for typed text), `matched_level` (city, county, or state: the page the visitor was sent to) |
+| Searched and got an error | `voter_guide_search_error` | Voter Guide - Election Search Errored | Either search box | `placement`, `input_type`, `failure_reason` (empty_input, unresolved, network) |
 | Clicked a link that leaves the site | none (GA4 has its own `click`) | Voter Guide - Outbound Link Clicked | Any link to a host outside goodparty.org on an /elections or /people page | `href`, `host`, `link_text` |
 
 The claim band still sends `Sign Up Clicked` and the `sign_up_click` data layer push as
@@ -76,7 +85,7 @@ event name:
    Admin > Custom definitions > Create custom dimension, event scoped, with the parameter
    name. Do this for the keys you will filter or break down by: `office_level`,
    `location_level`, `profile_state`, `claimed`, `pledged`, `party_class`, `source`,
-   `list`, `carousel`, `filter`. GA4 keeps a limit of 50 event-scoped dimensions per
+   `list`, `carousel`, `filter`, `placement`, `matched_level`, `failure_reason`. GA4 keeps a limit of 50 event-scoped dimensions per
    property; the property had three when this was written.
 5. **Preview** the container on a voter guide page, click an office row, and confirm the
    event shows in Tag Assistant with its parameters, then publish the container.

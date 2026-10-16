@@ -12,7 +12,7 @@ import { describe, expect, test } from 'bun:test';
 import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { getDevPersonProfileView } from '~/lib/devPeopleProfileFixtures';
-import { buildBreadcrumbTrail } from '~/lib/peopleProfile';
+import { buildBreadcrumbTrail, composeView } from '~/lib/peopleProfile';
 import { chunkCardGroups } from '~/ui/_lib/chunkCardGroups';
 import { buildPersonSectionOverrides, pastElectionDisclaimerCopy } from './personSectionOverrides';
 
@@ -589,6 +589,36 @@ describe('card grouping sets the Figma heading levels', () => {
 });
 
 describe('hero', () => {
+	test('an incumbent flagged only on the candidacy shows the Incumbent tag and a filled office line', () => {
+		const view = composeView(
+			'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+			{
+				id: 'p1',
+				slug: 'jane-doe-aaaaaaaa',
+				firstName: 'Jane',
+				middleName: null,
+				lastName: 'Doe',
+				nickname: null,
+				suffix: null,
+				fullName: 'Jane Doe',
+				bioText: null,
+				headshotUrl: null,
+				websiteUrl: null,
+				linkedinUrl: null,
+				facebookUrl: null,
+				twitterUrl: null,
+				instagramUrl: null,
+				state: 'DC',
+				Candidacies: [{ id: 'c1', positionName: 'ANC 8C08', isIncumbent: true, Race: { electionDate: '2099-11-05' } }],
+			},
+			null,
+		);
+		const hero = buildPersonSectionOverrides(view).component_profileHero;
+		expect(hero?.tags).toEqual(['Incumbent', 'Candidate']);
+		expect(hero?.office).toBe('Candidate for ANC 8C08');
+		expect(hero?.secondaryOffice).toBeUndefined();
+	});
+
 	test('state C shows the seat held above the candidacy', () => {
 		const view = getDevPersonProfileView('susan-overman-ad914b82');
 		const hero = buildPersonSectionOverrides(view!).component_profileHero;

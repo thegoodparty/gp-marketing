@@ -378,12 +378,22 @@ function isRunningNow(person: PersonItem | null): boolean {
 	return upcoming.length > 0 || undated.length > 0;
 }
 
+/**
+ * Whether BallotReady flags a current run as an incumbent's. The officeholder
+ * feed lags the candidacy feed, so this can be true while no current term row
+ * exists yet.
+ */
+function isFlaggedIncumbent(person: PersonItem | null): boolean {
+	const { upcoming, undated } = candidaciesByRecency(person?.Candidacies ?? []);
+	return [...upcoming, ...undated].some((c) => c.isIncumbent === true);
+}
+
 export function resolvePersona(
 	person: PersonItem | null,
 	office: PersonOfficeHolder | null,
 ): PersonPersona {
 	const runningNow = isRunningNow(person);
-	const isCurrentlyInOffice = office?.isCurrent === true;
+	const isCurrentlyInOffice = office?.isCurrent === true || isFlaggedIncumbent(person);
 	const heldOfficeBefore = (person?.OfficeHolders?.length ?? 0) > 0;
 
 	if (runningNow && isCurrentlyInOffice) return 'both';
@@ -562,6 +572,13 @@ function resolveRoleTitle(
 			return target ? `Candidate for ${target}` : 'Candidate';
 		}
 		case 'both':
+			// An incumbent flagged only on the candidacy has no current term, so the
+			// held-seat title would be empty or a past term's; name the race instead.
+			if (office?.isCurrent !== true) {
+				const target = candidateOfficeName(person);
+				return target ? `Candidate for ${target}` : 'Candidate';
+			}
+			return officeTitle;
 		case 'officeholder':
 			return officeTitle;
 		case 'past':
@@ -1184,7 +1201,7 @@ export function composeView(
 	// `roleTitle` carries the seat held, this carries the candidacy beneath it.
 	const candidacyTarget = primaryCand?.positionName ?? null;
 	const secondaryRoleTitle =
-		persona === 'both' && candidacyTarget ? `Candidate for ${candidacyTarget}` : null;
+		persona === 'both' && office?.isCurrent === true && candidacyTarget ? `Candidate for ${candidacyTarget}` : null;
 	const party = rawParty ?? (partyClass ? PARTY_LABELS[partyClass] : null);
 	const districtLabel = office?.subAreaValue ?? office?.subAreaName ?? null;
 	// Mirror the loader's stateCode (which includes the candidacy fallback) so a

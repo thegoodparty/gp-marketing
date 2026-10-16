@@ -37,8 +37,7 @@ still work, and it now pushes the same three to the data layer under the
 holds both sets of names.
 
 The other older helpers stay as they are: `Sign Up Clicked` (with its
-`sign_up_click` data layer push keyed on `formId`), `Person Profile Notify Submitted`,
-the demo request and click-to-call events, and `Scroll Depth`.
+`sign_up_click` data layer push keyed on `formId`), the demo request and click-to-call events, and `Scroll Depth`.
 
 ## The voter guide events
 

@@ -1,11 +1,13 @@
 /**
- * The wire contract for `/api/people/claim-request`, shared by the two public
- * claim forms and the proxy route that forwards them to gp-api.
+ * The wire contract for `/api/people/claim-request`, and the proxy route that
+ * forwards it to gp-api. No form on the site posts to it today: the owner form
+ * became a sign-up link (2026-08-17) and the visitor notify prompt was removed
+ * (2026-10-16) because its requests piled up as HubSpot contacts nobody acted on.
  *
- * Both forms POST the same endpoint but mean opposite things:
+ * The two sources POSTed the same endpoint but mean opposite things:
  *
  * - `notify` — a VISITOR asking us to nudge someone else to complete their
- *   profile (the "Not [Name]?" form in ClaimProfileModal).
+ *   profile (the removed "ask [Name] to complete their profile" prompt).
  * - `owner` — the person THEMSELVES claiming their page (PersonClaimCTABand).
  *
  * gp-api counts only `notify` submissions into that person's HubSpot

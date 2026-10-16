@@ -5,23 +5,13 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
 /**
- * Guards the `<form id>` — and the absence of a `<form class>` — on both
- * person-profile claim forms.
+ * Guards that the claim band on a person profile collects nothing for HubSpot.
  *
- * These ids are an external contract with HubSpot, not decoration. The site-wide
- * tracking script collects submissions via the non-HubSpot forms tool, which
- * names each form after a CSS selector built from the form element's id AND its
- * class list, concatenated. An id does not replace the classes, it prefixes
- * them: `id` + `class='flex gap-4'` is filed as `#the-id .flex, .gap-4`, so
- * bumping `gap-4` to `gap-6` re-keys the form and HubSpot starts a fresh one,
- * orphaning whatever marketing workflow was attached to the old one. Nothing
- * throws when that happens, on the site or in HubSpot, so CI is the only place
- * it can be caught.
- *
- * These mount the form components directly rather than driving the dialog open,
- * because Radix's click delegation has proven unreliable under JSDOM here. The id
- * lives on the form element either way, so opening the dialog buys nothing and
- * only adds a way for the test to fail on something other than the id.
+ * Both person-profile forms are gone: the owner form became a sign-up link
+ * (2026-08-17) and the visitor notify form went with the "ask [Name] to complete
+ * their profile" card (2026-10-16), whose requests piled up in HubSpot as voter
+ * contacts nobody followed up on. Their HubSpot collected forms
+ * (`person-claim-owner`, `person-claim-notify`) receive nothing now.
  */
 
 const DOM_GLOBALS = [
@@ -86,30 +76,6 @@ async function render(element: React.ReactElement) {
 }
 
 const bandProps = { displayName: 'Example Person' };
-const notifyProps = { personId: 'person-1', displayName: 'Example Person' };
-
-/**
- * The empty class list is load-bearing, not tidiness — do not relax this to make
- * a styling change easier.
- *
- * HubSpot appends the form element's classes to the id when it names a collected
- * form, so a bare id yields the selector `#person-claim-owner` while a single
- * Tailwind utility yields `#person-claim-owner .flex`. Every subsequent utility
- * churn (a designer widening a gap, dropping `max-w-md`, a Figma-parity pass)
- * then hands HubSpot a name it has never seen and it opens a new form, breaking
- * submission history and the workflows keyed on the old one. Silently: no error
- * surfaces anywhere, the numbers just go flat.
- *
- * Styling belongs on the wrapper `<div>` inside each form, which HubSpot never
- * looks at. If a class genuinely must live on the form element, it has to be a
- * stable semantic name that styling passes will not touch — update this helper
- * deliberately rather than deleting the assertion.
- */
-function expectNoStylingClasses(form: Element | null) {
-	if (!form) throw new Error('expected the claim form to be in the document');
-	expect(form.getAttribute('class')).toBeNull();
-	expect(form.classList.length).toBe(0);
-}
 
 describe('claim form HubSpot ids', () => {
 	/**
@@ -127,65 +93,5 @@ describe('claim form HubSpot ids', () => {
 		await render(React.createElement(PersonClaimCTABand, bandProps));
 
 		expect(document.querySelector('form')).toBeNull();
-	});
-
-	test('the claim dialog notify form renders form#person-claim-notify', async () => {
-		const { NotifyForm } = await import('./ClaimProfileModal');
-
-		await render(React.createElement(NotifyForm, notifyProps));
-
-		const form = document.querySelector('form#person-claim-notify');
-		expect(form).not.toBeNull();
-		expect(form?.querySelector('input[name="firstname"]')).not.toBeNull();
-		expect(form?.querySelector('input[name="email"]')).not.toBeNull();
-	});
-
-	test('the notify form carries no classes, so HubSpot sees #person-claim-notify alone', async () => {
-		const { NotifyForm } = await import('./ClaimProfileModal');
-
-		await render(React.createElement(NotifyForm, notifyProps));
-
-		expectNoStylingClasses(document.querySelector('form#person-claim-notify'));
-	});
-
-	test('the notify form is the only one left on an unclaimed profile', async () => {
-		const [{ PersonClaimCTABand }, { NotifyForm }] = await Promise.all([
-			import('./PersonClaimCTABand'),
-			import('./ClaimProfileModal'),
-		]);
-
-		// Both surfaces are reachable on an unclaimed candidate profile. The notify
-		// form is fed by OTHER people asking this person to complete their profile
-		// and feeds `candidate_profile_requests`, so it survives the owner form's
-		// removal untouched — different intent, different audience, different table.
-		await render(
-			React.createElement(
-				React.Fragment,
-				null,
-				React.createElement(PersonClaimCTABand, bandProps),
-				React.createElement(NotifyForm, notifyProps),
-			),
-		);
-
-		expect([...document.querySelectorAll('form')].map(f => f.id)).toEqual(['person-claim-notify']);
-	});
-});
-
-describe('claim form marketing consent', () => {
-	/**
-	 * The Figma dialog (1901:51851) draws this box ticked, so the unchecked default
-	 * looks like a parity bug to anyone re-reading the frame and is a one-word revert
-	 * away. It is deliberate: a pre-ticked box opts the sender in unless they notice
-	 * and clear it, which is not consent under GDPR. Nothing else fails if it flips.
-	 */
-	test('the notify form does not pre-check the marketing opt-in', async () => {
-		const { NotifyForm } = await import('./ClaimProfileModal');
-
-		await render(React.createElement(NotifyForm, notifyProps));
-
-		const consent = document.querySelector<HTMLInputElement>('input[name="marketingConsent"]');
-		expect(consent).not.toBeNull();
-		expect(consent?.type).toBe('checkbox');
-		expect(consent?.checked).toBe(false);
 	});
 });

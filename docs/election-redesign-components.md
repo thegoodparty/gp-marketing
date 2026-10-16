@@ -847,8 +847,7 @@ people now follow the ballot that branch built. Decisions:
   text, a Show Pledge Link toggle and its label. Nothing is placed anywhere yet, so the defaults
   could change to the frame's copy with no page affected.
 - **The link opens a pop-up, not a page.** `PledgeModal` in `src/ui/PledgeModal.tsx` is a plain
-  component any block can wrap a trigger in (Radix dialog, the same plumbing as the profile's
-  notify form); it is deliberately not a Studio block. Its copy (title, intro, the three pillars)
+  component any block can wrap a trigger in (a Radix dialog); it is deliberately not a Studio block. Its copy (title, intro, the three pillars)
   lives in code; its "Learn more" button goes to `/about`, there being no pledge page. Figma
   2156:29105 and 2156:29080. Move the copy into a settings document if marketing needs to edit it.
 

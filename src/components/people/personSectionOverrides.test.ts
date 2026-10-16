@@ -12,7 +12,7 @@ import { describe, expect, test } from 'bun:test';
 import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { getDevPersonProfileView } from '~/lib/devPeopleProfileFixtures';
-import { buildBreadcrumbTrail, composeView } from '~/lib/peopleProfile';
+import { composeView } from '~/lib/peopleProfile';
 import { chunkCardGroups } from '~/ui/_lib/chunkCardGroups';
 import { buildPersonSectionOverrides, pastElectionDisclaimerCopy } from './personSectionOverrides';
 
@@ -128,8 +128,15 @@ describe('unclaimed pages prompt for every section the claimed page would show',
 	});
 });
 
-describe('the claim prompt and the claim form ship together', () => {
-	/** Every Figma state A–L, so no state can render one half of the pair. */
+/**
+ * Marketing removed the visitor-facing "ask [Name] to complete their profile"
+ * card (2026-10-16): each request created a HubSpot voter contact, and the team
+ * could not follow through on contacting the candidate or official. Nothing
+ * else on the page sends that request, so this guards against the card coming
+ * back on any state while the person's own claim band stays.
+ */
+describe('no page asks visitors to request a profile', () => {
+	/** Every Figma state A–L. */
 	const ALL_STATES = [
 		'allen-slagle-74eee01a',
 		'tracy-good-ecff49d3',
@@ -146,105 +153,18 @@ describe('the claim prompt and the claim form ship together', () => {
 	];
 
 	/**
-	 * The prompt is the only content card handed a person and a place, so it is
-	 * identified by its props rather than by importing the component — this suite
-	 * runs without a DOM and the component pulls in Radix.
+	 * The prompt was the only content card handed a `personId` (and a
+	 * `locationLabel`), so that is what this looks for. This suite runs without a
+	 * DOM, so it reads props rather than rendering.
 	 */
-	function claimPrompts(slug: string): { locationLabel?: unknown }[] {
-		return contentCards(slug).flatMap(card => {
-			const props = (card.content as { props?: Record<string, unknown> } | undefined)?.props;
-			return props && 'personId' in props && 'locationLabel' in props ? [props] : [];
-		});
-	}
-
-	function rendersClaimBand(slug: string): boolean {
-		const view = getDevPersonProfileView(slug);
-		if (!view) throw new Error(`no dev fixture for ${slug}`);
-		const cta = buildPersonSectionOverrides(view).component_ctaBannerBlock as { render?: unknown } | undefined;
-		return cta?.render !== undefined;
-	}
-
-	/**
-	 * The prompt asks a visitor to nudge the person; the band is where that
-	 * person actually claims. Both hang off the same `showClaim` gate today, and
-	 * a page carrying one without the other is incoherent either way — a nudge
-	 * leading nowhere, or a claim form on a page that never mentions claiming.
-	 */
-	test('no state renders the claim prompt without the claim band below it', () => {
+	test('no state renders the request prompt in the content well', () => {
 		for (const slug of ALL_STATES) {
-			expect([slug, claimPrompts(slug).length > 0]).toEqual([slug, rendersClaimBand(slug)]);
+			const prompts = contentCards(slug).filter(card => {
+				const props = (card.content as { props?: Record<string, unknown> } | undefined)?.props;
+				return Boolean(props && 'personId' in props);
+			});
+			expect([slug, prompts.length]).toEqual([slug, 0]);
 		}
-	});
-
-	/**
-	 * The frames put exactly ONE card at the top of the content well and it is
-	 * visitor-facing (D 1958:108619, F 1928:100987). An owner-facing "are you
-	 * [Name]?" prompt was added alongside it once and had to be taken back out;
-	 * this is what stops a second one reappearing.
-	 *
-	 * State E is absent on purpose: an unclaimed officeholder is no longer asked
-	 * to claim anything (see the office-only gating below), so it has no prompt
-	 * to count.
-	 */
-	test('the unclaimed states lead with exactly one claim prompt', () => {
-		for (const slug of ['kim-byrd-b77f912d', 'tim-ficken-0a951485']) {
-			expect([slug, claimPrompts(slug).length]).toEqual([slug, 1]);
-		}
-	});
-
-	// A claimed profile has nothing to claim, and a removed one asked us to stop.
-	test('claimed and removed states show no prompt', () => {
-		for (const slug of ['allen-slagle-74eee01a', 'x-27255f40', 'x-3412f69c']) {
-			expect([slug, claimPrompts(slug).length]).toEqual([slug, 0]);
-		}
-	});
-
-	function promptLocation(cards: ReturnType<typeof contentCards>): unknown {
-		return cards
-			.map(card => (card.content as { props?: Record<string, unknown> } | undefined)?.props)
-			.find(props => props && 'personId' in props && 'locationLabel' in props)?.['locationLabel'];
-	}
-
-	/**
-	 * The prompt for someone in office opens "[Location] deserves greater
-	 * transparency" (Figma E 1928:99467, F 1928:100987). Nothing on the view is
-	 * that place — `districtLabel` is a ward, `stateLabel` a two-letter code — so
-	 * it is read back off the breadcrumb, and picking the wrong crumb would name
-	 * the state, or the office, where the frame names the town.
-	 */
-	test('the prompt is handed the most specific place in the breadcrumb', () => {
-		for (const slug of ['kim-byrd-b77f912d', 'tim-ficken-0a951485']) {
-			expect([slug, promptLocation(contentCards(slug))]).toEqual([slug, 'Springfield']);
-		}
-	});
-
-	/**
-	 * The dev fixtures hand every persona a city race, but in production a
-	 * candidacy can arrive without a slug, leaving no race for the trail to hang
-	 * off, and it degrades to `Elections > State > Name`. The card then names the
-	 * state. That is the accepted degradation (see `profileLocationLabel`) — what
-	 * must not happen is the state crumb being skipped for the office, or dropped
-	 * for the generic subject, so this pins the degraded shape rather than
-	 * assuming the fixtures represent it.
-	 *
-	 * Driven from state F rather than E: the office-only persona no longer renders
-	 * a prompt for the label to reach.
-	 */
-	test('a profile with no race falls back to the state, not the office', () => {
-		const view = getDevPersonProfileView('tim-ficken-0a951485');
-		if (!view) throw new Error('no dev fixture for tim-ficken-0a951485');
-		const stateOnly = {
-			...view,
-			breadcrumb: buildBreadcrumbTrail({
-				displayName: view.displayName,
-				stateCode: 'WY',
-				raceSlug: null,
-				positionLevel: null,
-				positionName: null,
-			}),
-		};
-		const cards = buildPersonSectionOverrides(stateOnly).component_profileContentBlock?.contentCards ?? [];
-		expect(promptLocation(cards)).toBe('Wyoming');
 	});
 });
 
@@ -259,28 +179,16 @@ describe('the claim prompt and the claim form ship together', () => {
  * would silently take state F's CTAs with it.
  */
 describe('claim CTAs are gone from the office-only pages and nowhere else', () => {
-	function claimSurfaces(slug: string): { prompts: number; band: boolean } {
+	function claimBand(slug: string): boolean {
 		const view = getDevPersonProfileView(slug);
 		if (!view) throw new Error(`no dev fixture for ${slug}`);
-		const overrides = buildPersonSectionOverrides(view);
-		const cta = overrides.component_ctaBannerBlock as { render?: unknown } | undefined;
-		return {
-			// Identified the same way `claimPrompts` does it above: the prompt is the
-			// only card handed both a `personId` and a `locationLabel`. This used to
-			// key on a `variant` prop, which went with the owner card — and a filter
-			// on a prop that no longer exists counts zero on every page, which reads
-			// as "the CTAs are gone" no matter what actually rendered.
-			prompts: (overrides.component_profileContentBlock?.contentCards ?? []).filter(card => {
-				const props = (card.content as { props?: Record<string, unknown> } | undefined)?.props;
-				return Boolean(props && 'personId' in props && 'locationLabel' in props);
-			}).length,
-			band: cta?.render !== undefined,
-		};
+		const cta = buildPersonSectionOverrides(view).component_ctaBannerBlock as { render?: unknown } | undefined;
+		return cta?.render !== undefined;
 	}
 
 	test('state E — an unclaimed officeholder is asked for nothing', () => {
 		expect(getDevPersonProfileView('rob-zotti-d8c578fb')?.persona).toBe('officeholder');
-		expect(claimSurfaces('rob-zotti-d8c578fb')).toEqual({ prompts: 0, band: false });
+		expect(claimBand('rob-zotti-d8c578fb')).toBe(false);
 	});
 
 	test('state E falls through to no CTA band at all, not the claimed sign-up one', () => {
@@ -292,8 +200,8 @@ describe('claim CTAs are gone from the office-only pages and nowhere else', () =
 	test('states D and F — running, so still asked to claim', () => {
 		expect(getDevPersonProfileView('kim-byrd-b77f912d')?.persona).toBe('candidate');
 		expect(getDevPersonProfileView('tim-ficken-0a951485')?.persona).toBe('both');
-		expect(claimSurfaces('kim-byrd-b77f912d')).toEqual({ prompts: 1, band: true });
-		expect(claimSurfaces('tim-ficken-0a951485')).toEqual({ prompts: 1, band: true });
+		expect(claimBand('kim-byrd-b77f912d')).toBe(true);
+		expect(claimBand('tim-ficken-0a951485')).toBe(true);
 	});
 
 	test('state E keeps its civics spine — this removed the ask, not the page', () => {
@@ -468,8 +376,8 @@ describe('the removal states publish the civics spine and nothing else', () => {
 	});
 
 	test('the removal frames carry no card without a heading', () => {
-		// The claim prompts are the only chrome-less `raw` cards in the well, and
-		// `claimPrompts` above already pins that they are gone. This catches
+		// The removed request prompt was a chrome-less `raw` card in the well. This
+		// catches
 		// a future raw card (a banner, a notice) being added to every unclaimed
 		// page and silently landing on a page we are meant to have stripped.
 		for (const [state, slug] of REMOVAL_SLUGS) {

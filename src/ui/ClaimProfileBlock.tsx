@@ -7,7 +7,7 @@ import { CandidatesCard, type CandidatesCardProps } from './CandidatesCard.tsx';
 
 const styles = tv({
 	slots: {
-		base: 'p-12 border border-bright-yellow-600 rounded-3xl',
+		base: 'p-6 md:p-12 border border-bright-yellow-600 rounded-3xl',
 		content: 'flex flex-col lg:flex-row gap-8 items-center',
 		textSection: 'flex-1 flex flex-col gap-6',
 		cardSection: 'flex-1 w-full lg:w-auto',

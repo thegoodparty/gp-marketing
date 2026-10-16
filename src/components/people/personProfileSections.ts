@@ -37,7 +37,7 @@ const contentSkeleton = byType('component_profileContentBlock');
 const pledgeSkeleton = byType('component_goodPartyOrgPledge');
 
 // Order mirrors the Figma person-profile states:
-//   breadcrumb → hero → claim (unclaimed only) → content well → sign-up CTA →
+//   breadcrumb → hero → content well → claim (unclaimed only) → sign-up CTA →
 //   GoodParty pledge (claimed candidate/both) → elections index.
 // The Figma content well is a two-column layout (left contact/office sidebar +
 // right card stack). The right stack — authored cards, Recent Experience, the
@@ -49,8 +49,8 @@ const pledgeSkeleton = byType('component_goodPartyOrgPledge');
 export const PERSON_PROFILE_SECTIONS = [
 	{ ...breadcrumbSkeleton, _key: PERSON_SECTION_KEYS.breadcrumb },
 	{ ...heroSkeleton, _key: PERSON_SECTION_KEYS.hero },
-	{ ...claimSkeleton, _key: PERSON_SECTION_KEYS.claim },
 	{ ...contentSkeleton, _key: PERSON_SECTION_KEYS.content },
+	{ ...claimSkeleton, _key: PERSON_SECTION_KEYS.claim },
 	{
 		_key: PERSON_SECTION_KEYS.cta,
 		_type: 'component_ctaBannerBlock',

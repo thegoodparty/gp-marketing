@@ -16,7 +16,7 @@ import { Text } from '~/ui/Text';
 import { ButtonLink } from '~/ui/Inputs/Button';
 import type { CardAttributionMode } from '~/ui/CandidatesCard';
 import { VoterDensityMapCard } from './VoterDensityMapCard';
-import { PersonClaimCTABand } from './PersonClaimCTABand';
+import { PERSON_CLAIM_FORM_ID } from './claimFormId';
 import { PledgeSymbolCallout } from './PledgeSymbolCallout';
 import { RelatedPeopleList } from './RelatedPeopleList';
 
@@ -803,9 +803,9 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 
 	// The person-profile CTA band sits below the content well (Figma order):
 	//  - claimed (A/B/C/G)   → generic centered "Join the movement" sign-up CTA
-	//  - unclaimed empowered candidates (D/F) → full-width claim CTA band
-	//    ("Are you …? Complete your profile now." + a button into Win sign-up)
-	//  - officeholder-only (E), past (H), major-party (I/J), removed (K/L) → none
+	//  - everyone else → none. The person's own claim prompt for unclaimed
+	//    empowered candidates (D/F) is the template's Claim Profile Block, so
+	//    marketing edits its copy in Studio (see `component_claimProfileBlock`).
 	const ctaOverride: SectionOverrides['component_ctaBannerBlock'] = view.claimed
 		? {
 				align: 'center',
@@ -827,15 +827,13 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 				// side, centered on the page. Mirroring the column pushed it right of
 				// center, which is the misalignment marketing reported.
 			}
-		: showClaim
-			? { render: <PersonClaimCTABand displayName={view.displayName} /> }
-			: { hidden: true };
+		: { hidden: true };
 
 	// The Figma content well led unclaimed empowered pages (D/F) with a
 	// visitor-facing "ask them to complete their profile" card. Marketing removed
 	// it (2026-10-16): each request created a HubSpot voter contact, and the team
 	// could not follow through on contacting the candidate or official. The
-	// person's own way in, the claim band below the well, is unchanged.
+	// person's own way in is the Claim Profile Block below the well.
 	// The column is authored cards (empowerment-gated) then the civics-spine cards
 	// (Recent Experience → Other candidates → Nearby officials → About position →
 	// District map) that render on every state.
@@ -843,7 +841,7 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	// empowered pages (Figma D/E/F/H) show muted placeholder prompt cards in the
 	// same slot; major-party (I/J) and removed (K/L) pages show neither.
 	// Unpublished pages are excluded as well — every placeholder ends in "once
-	// they claim their profile", which would point at a claim band the page
+	// they claim their profile", which would point at a claim block the page
 	// does not show.
 	const authoredSections = view.claimed
 		? buildAuthoredSections(view)
@@ -887,15 +885,16 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			showBrandMark: view.claimed,
 		},
 		component_claimProfileBlock: {
-			// The standalone full-width claim banner is always suppressed. The
-			// person's claim path is the CTA band below the content well.
-			//
-			// It also cannot go here: the hero portrait deliberately overflows 48px
-			// (md) / 68px (lg) below the hero box, and the next section is expected
-			// to offset for it the way ProfileContentBlock's sidebar does. A
-			// full-width banner in this slot renders its headline underneath the
-			// photo.
-			claimed: true,
+			// The Studio block is the person's own way in, so it shows exactly where
+			// `showClaim` allows. It belongs BELOW the content well, as the Person
+			// Profile global template places it: the hero portrait deliberately
+			// overflows 48px (md) / 68px (lg) below the hero box, so a block directly
+			// under the hero renders its headline underneath the photo.
+			claimed: !showClaim,
+			hideExampleCard: true,
+			// GTM resolves the claim sign-up conversion through this id (see
+			// `PERSON_CLAIM_FORM_ID`).
+			formId: PERSON_CLAIM_FORM_ID,
 		},
 		component_profileContentBlock: {
 			contentCards,

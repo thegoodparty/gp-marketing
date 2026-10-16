@@ -232,6 +232,25 @@ fixing one query moved two tiers. `fetchStateElectionRouteParams` reads the same
 the same reason: if the two functions disagree, the sitemap advertises URLs that were
 never prerendered. Use the constants, not the literals, and keep the two in step.
 
+The position tier reads `/v1/races`, and **that endpoint is paged**. Since 2026-07-21 it
+returns at most 1,000 distinct race slugs per call unless told otherwise (`pageSize` up to
+5,000, `page` is 1-based), and the cap is silent: an unpaged `?state=PA` just stops at
+the 1,000th slug alphabetically. Until October 2026 this band made one unpaged call per
+state, so 15 state shards sat at exactly 1,000 position URLs and about 20 more just under
+it, with every office past the cut rendering fine but never listed or prerendered.
+`fetchAllStateRaces` now walks the pages at 5,000 a time for both functions. Two details
+matter if you touch it:
+
+- **The page size counts slugs, not rows.** With only `slug,positionLevel` projected the
+  API skips its own dedupe, so a page can return more rows than `pageSize`. The walk
+  stops on the first page with fewer distinct slugs than the page size.
+- **A failed page never truncates.** A partial list looks exactly like a complete one,
+  which is how the cap went unnoticed. In the sitemap the error propagates and the shard
+  fails, so a crawler retries. In the route params it is logged and the state prerenders
+  no position pages, so one upstream blip cannot fail a build; those pages still render
+  on demand. A 404 on page 1 is how the API says a state has no races, and is treated
+  as empty.
+
 Three things not to "fix" while in here:
 
 - **Town slugs carry their suffix** (`brattleboro-town`); the bare form 404s, so never

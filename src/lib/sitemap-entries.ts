@@ -437,9 +437,14 @@ export async function fetchStateElectionRouteParams(stateCode: string): Promise<
 			mtfcc: TOWN_MTFCC,
 			placeColumns: 'slug,countyName',
 		}),
-		fetchElectionJson<{ slug?: string; positionLevel?: string }>('v1/races', {
-			state: code,
-			raceColumns: 'slug,positionLevel',
+		// A build should not fail on one upstream blip, so this side degrades to no
+		// prerendered position pages for the state; they still render on demand.
+		fetchAllStateRaces(code).catch((err: unknown) => {
+			console.error(
+				`[sitemap] race walk failed for ${code}; prerendering none of its position pages`,
+				err instanceof Error ? err.message : String(err),
+			);
+			return [];
 		}),
 	]);
 
@@ -590,6 +595,56 @@ async function fetchElectionJsonOrThrow<T>(
 		throw new Error(`[sitemap] Election API non-array body ${url}`);
 	}
 	return result.json as T[];
+}
+
+/**
+ * Page size for the per-state race walk: election-api's MAX_RACE_PAGE_SIZE.
+ *
+ * Since 2026-07-21 `/v1/races` returns at most 1,000 distinct slugs per call
+ * unless asked otherwise, and the cap is silent: an unpaged `?state=PA` simply
+ * stops at the 1,000th slug in alphabetical order. That left 15 state shards at
+ * exactly 1,000 position URLs, with every office past the cut rendering fine but
+ * never advertised or prerendered.
+ */
+export const RACE_PAGE_SIZE = 5000;
+
+/** A runaway guard: 200,000 races per state, far past any real state. */
+const MAX_RACE_PAGES = 40;
+
+/**
+ * Every race in a state, walking `/v1/races` page by page (`page` is 1-based).
+ *
+ * The page size counts distinct slugs, not rows: with only `slug,positionLevel`
+ * projected the API skips its dedupe, so one page can carry more rows than
+ * slugs. The walk therefore stops on the first page with fewer than
+ * RACE_PAGE_SIZE distinct slugs, not fewer rows.
+ *
+ * A failed page throws instead of returning what it has. A partial walk looks
+ * exactly like a complete one, which is how the cap went unnoticed for three
+ * months. The one quiet case is a 404 on page 1, which is how the API says the
+ * state has no races at all.
+ */
+async function fetchAllStateRaces(code: string): Promise<RaceEntry[]> {
+	const races: RaceEntry[] = [];
+	for (let page = 1; page <= MAX_RACE_PAGES; page++) {
+		const search = new URLSearchParams({
+			state: code,
+			raceColumns: 'slug,positionLevel',
+			page: String(page),
+			pageSize: String(RACE_PAGE_SIZE),
+		}).toString();
+		const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/v1/races?${search}`;
+		const result = await fetchElectionApiJsonCached(url);
+		if (!result.ok) {
+			if (page === 1 && result.status === 404) return races;
+			throw new Error(`[sitemap] Election API ${result.status} ${url}`);
+		}
+		if (!Array.isArray(result.json)) throw new Error(`[sitemap] Election API non-array body ${url}`);
+		const rows = result.json as RaceEntry[];
+		races.push(...rows);
+		if (new Set(rows.map((r) => r.slug)).size < RACE_PAGE_SIZE) return races;
+	}
+	throw new Error(`[sitemap] ${code} races exceeded ${MAX_RACE_PAGES} pages of ${RACE_PAGE_SIZE}`);
 }
 
 async function fetchElectionJson<T>(
@@ -757,10 +812,7 @@ export async function fetchStateElectionSitemapEntries(
 			mtfcc: TOWN_MTFCC,
 			placeColumns: 'slug,countyName',
 		}),
-		fetchElectionJson<{ slug?: string; positionLevel?: string }>('v1/races', {
-			state: code,
-			raceColumns: 'slug,positionLevel',
-		}),
+		fetchAllStateRaces(code),
 	]);
 
 	// Towns (TOWN_MTFCC) are a separate code from cities (CITY_MTFCC), and where the

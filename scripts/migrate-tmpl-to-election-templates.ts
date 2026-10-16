@@ -33,7 +33,6 @@ const forceSeed = process.argv.includes('--force-seed');
 const LEGACY_GLOBAL_MAP: Record<string, (typeof globalElectionTemplateSeedDocuments)[number]['_id']> = {
 	tmpl_candidateProfile: 'globalTemplate_candidateProfile',
 	tmpl_electionsPosition: 'globalTemplate_position',
-	tmpl_electionsCandidates: 'globalTemplate_positionCandidates',
 	tmpl_electionsStateIndex: 'globalTemplate_locationState',
 	tmpl_electionsCountyIndex: 'globalTemplate_locationCounty',
 	tmpl_electionsCityIndex: 'globalTemplate_locationCity',

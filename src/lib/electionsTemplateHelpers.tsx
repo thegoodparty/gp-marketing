@@ -1,7 +1,6 @@
 import type { SectionOverrides } from '~/PageSections';
 import type { TokenMap } from '~/lib/resolveTokens';
 import type { FeaturedCityCard, RaceDetail } from '~/types/elections';
-import type { CandidateCard } from '~/ui/CandidatesBlock';
 import type { BreadcrumbItem } from '~/ui/BreadcrumbBlock';
 import type { OfficeItem } from '~/ui/ListOfOfficesBlock';
 import { type FeaturedPeople, summarizeIndependents } from '~/lib/featuredPeople';
@@ -38,14 +37,12 @@ export type PositionPageContext = {
 	electionDate: string;
 	filingDate: string;
 	breadcrumbs: BreadcrumbItem[];
-	// Required by the position template overrides; candidates pages legitimately omit it.
-	candidatesHref?: string;
 	positionHref?: string;
 	locationHref?: string;
 	race?: RaceDetail | null;
 	/** The how-to-run article's title for the guide card, resolved by the renderer; see the override's doc. */
 	guideTitle?: string | null;
-	// Used only by the position-page schema builders; optional for candidates pages.
+	// Used only by the position-page schema builders.
 	pageUrl?: string;
 	/**
 	 * The hero's ballot rows. `undefined` means the route could not read the
@@ -58,7 +55,7 @@ export type PositionPageContext = {
 	 * list hides. `renderElectionsPositionPage` loads it when a route does not.
 	 */
 	officeholders?: ElectionsPositionPerson[];
-	/** From `getNearbyOffices`; set by the position page renderer, absent on candidates pages. */
+	/** From `getNearbyOffices`; set by the position page renderer. */
 	nearbyOffices?: OfficeItem[];
 	/** Injected by tests so the resolved phase is deterministic. */
 	now?: Date;
@@ -97,7 +94,6 @@ export function buildPositionHeroOverride(
 		filingDateEndIso: ctx.race?.filingDateEnd ?? null,
 		candidates: ctx.heroCandidates,
 		seatCount: ctx.race?.numberOfSeats ?? null,
-		candidatesHref: ctx.candidatesHref,
 	};
 }
 
@@ -245,18 +241,6 @@ export function buildPositionTokens(ctx: Pick<PositionPageContext, 'officeName' 
 	};
 }
 
-export function buildCandidatesTokens(ctx: Pick<PositionPageContext, 'officeName' | 'stateName' | 'countyName' | 'cityName'>): TokenMap {
-	const locationName = ctx.cityName ?? ctx.countyName ?? ctx.stateName;
-	return {
-		'[office]': ctx.officeName,
-		'[office name]': ctx.officeName,
-		'[Position Name]': ctx.officeName,
-		'[State]': ctx.stateName,
-		'[County or City]': locationName,
-		'[location]': heroLocation(ctx),
-	};
-}
-
 export function buildProfileTokens(ctx: { candidateName: string; officeName: string }): TokenMap {
 	return {
 		'[candidate name]': ctx.candidateName,
@@ -272,12 +256,11 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 	return {
 		component_breadcrumbBlock: { breadcrumbs: ctx.breadcrumbs },
 		// The hero's ballot card points down the page at the content block's
-		// candidate rows, never at the /candidates page, which goes away with the
-		// redesign (Emily, 2026-09-24). With no rows the list hides, and so does
-		// the button: the card already says how many candidates there are.
+		// candidate rows; the /candidates listing pages are retired (Emily,
+		// 2026-09-24). With no rows the list hides, and so does the button: the
+		// card already says how many candidates there are.
 		component_electionsPositionHero: {
 			...buildPositionHeroOverride(ctx, state),
-			candidatesHref: ctx.heroCandidates && ctx.heroCandidates.length > 0 ? `#${POSITION_CONTENT_IDS.candidates}` : undefined,
 			resultsHref: ctx.heroCandidates && ctx.heroCandidates.length > 0 ? `#${POSITION_CONTENT_IDS.candidates}` : undefined,
 		},
 		component_electionsPositionContentBlock: buildPositionContentOverride(ctx, state),
@@ -285,9 +268,6 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 			items: race
 				? buildDynamicFAQItems(race, ctx.officeName, ctx.stateName)
 				: POSITION_PAGE_FAQ.items.map(item => ({ title: item.title, copy: item.copy })),
-		},
-		component_ctaBlock: {
-			primaryButtonHref: ctx.candidatesHref,
 		},
 		component_electionPositionResourcesBlock: {
 			guideHref: resolveHowToRunGuide({ officeName: ctx.officeName, race }).href,
@@ -301,24 +281,6 @@ export function buildPositionSectionOverrides(ctx: PositionPageContext): Section
 			offices: ctx.nearbyOffices ?? [],
 			hidden: !ctx.nearbyOffices || ctx.nearbyOffices.length === 0,
 		},
-	};
-}
-
-export function buildCandidatesSectionOverrides(ctx: PositionPageContext & { candidates: CandidateCard[] }): SectionOverrides {
-	return {
-		component_breadcrumbBlock: { breadcrumbs: ctx.breadcrumbs },
-		component_electionsPositionHero: buildPositionHeroOverride(ctx),
-		component_candidatesBlock: {
-			candidates: ctx.candidates,
-			header: {
-				title: `Candidates for ${ctx.officeName}`,
-				copy: `Candidates running for ${ctx.officeName} in ${[ctx.cityName, ctx.countyName, ctx.stateName].filter(Boolean).join(', ')}.`,
-			},
-		},
-		component_ctaImageBlock: {
-			primaryButtonHref: ctx.locationHref,
-		},
-		component_testimonialBlockWithLink: { stateName: ctx.stateName },
 	};
 }
 
@@ -342,24 +304,6 @@ export function buildPositionPageSchemas(ctx: PositionPageContext) {
 		: POSITION_PAGE_FAQ.items.map(item => ({ title: item.title, copy: item.copy }));
 	const faqSchema = buildFAQSchema(faqItems);
 	return { positionPageSchema, breadcrumbSchema, faqSchema };
-}
-
-export function buildCandidatesPageSchema(ctx: PositionPageContext) {
-	const locationParts = [ctx.cityName, ctx.countyName, ctx.stateName].filter(Boolean);
-	const locationName = locationParts.join(', ');
-	const lastCrumbHref = ctx.breadcrumbs[ctx.breadcrumbs.length - 1]?.href;
-	const candidatesPageUrl = lastCrumbHref ? toAbsoluteUrl(lastCrumbHref) : undefined;
-	return buildSchemaGraph([
-		candidatesPageUrl
-			? buildWebPageSchema({
-					url: candidatesPageUrl,
-					name: `Candidates for ${ctx.officeName} in ${locationName}`,
-					description: `Candidates running for ${ctx.officeName} in ${locationName}.`,
-					pageType: 'CollectionPage',
-				})
-			: null,
-		buildBreadcrumbSchema(ctx.breadcrumbs, toAbsoluteUrl),
-	]);
 }
 
 export type ElectionsIndexPageContext = {

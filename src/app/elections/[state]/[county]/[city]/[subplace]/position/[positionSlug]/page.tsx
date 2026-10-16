@@ -80,8 +80,6 @@ export default async function Page({
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 
-	const candidatesHref = `/elections/${pathBeforePosition}/position/${positionSlug}/candidates`;
-
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
 		{ href: `/elections/${state.toLowerCase()}`, label: stateName },
@@ -103,7 +101,6 @@ export default async function Page({
 		electionDate,
 		filingDate,
 		breadcrumbs,
-		candidatesHref,
 		race,
 		heroCandidates,
 		pageUrl,

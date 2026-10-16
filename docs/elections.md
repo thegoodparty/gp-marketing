@@ -177,9 +177,10 @@ The hierarchy is state, county, city, then subplace. The route tree under
 2026; Emily, 2026-10-06). The position page carries the candidate list itself, so each listing URL
 is a permanent redirect to its position page (`src/lib/candidates-redirects.ts`, wired into
 `next.config.ts`). They were never in the sitemap, and nothing on the redesigned pages links to
-them. The route files behind them, and the `candidatesHref` the position routes still compute for
-the old hero, come out in a follow-up once the position page batch has merged, because that batch
-edits the same files.
+them. Their route files, the `candidatesHref` the position routes used to compute, and the
+Position Candidates template type are all removed, so the redirects are the only thing answering
+those URLs. Keep them. The hero's "View all candidates" button links to `#position-candidates` on
+the same page.
 
 Race slugs look like `state/[county]/[city]/[subplace]/positionSlug`. City and town
 races often carry 3-part slugs that must be expanded to 4-level URLs by resolving the
@@ -230,6 +231,25 @@ so `buildRaceEntries` dropped their position pages via `skipUnmappedCity` — wh
 fixing one query moved two tiers. `fetchStateElectionRouteParams` reads the same pair for
 the same reason: if the two functions disagree, the sitemap advertises URLs that were
 never prerendered. Use the constants, not the literals, and keep the two in step.
+
+The position tier reads `/v1/races`, and **that endpoint is paged**. Since 2026-07-21 it
+returns at most 1,000 distinct race slugs per call unless told otherwise (`pageSize` up to
+5,000, `page` is 1-based), and the cap is silent: an unpaged `?state=PA` just stops at
+the 1,000th slug alphabetically. Until October 2026 this band made one unpaged call per
+state, so 15 state shards sat at exactly 1,000 position URLs and about 20 more just under
+it, with every office past the cut rendering fine but never listed or prerendered.
+`fetchAllStateRaces` now walks the pages at 5,000 a time for both functions. Two details
+matter if you touch it:
+
+- **The page size counts slugs, not rows.** With only `slug,positionLevel` projected the
+  API skips its own dedupe, so a page can return more rows than `pageSize`. The walk
+  stops on the first page with fewer distinct slugs than the page size.
+- **A failed page never truncates.** A partial list looks exactly like a complete one,
+  which is how the cap went unnoticed. In the sitemap the error propagates and the shard
+  fails, so a crawler retries. In the route params it is logged and the state prerenders
+  no position pages, so one upstream blip cannot fail a build; those pages still render
+  on demand. A 404 on page 1 is how the API says a state has no races, and is treated
+  as empty.
 
 Three things not to "fix" while in here:
 
@@ -314,10 +334,6 @@ contain. It is membership rather than a tail match because the resolved place ca
 the segment being checked, which is the real-subplace case the neighbouring `isRealSubplace`
 check covers.
 
-The matching `/candidates` pages still build the broken crumb, and a broken `locationHref`
-with it. That is deliberate: those pages are being removed, so they were left alone rather
-than fixed twice.
-
 Because the route tree stops at four place levels, an office combining four or more
 roles cannot be addressed at all. `buildPlaceRacePositionHref` returns `undefined`
 there and `ListOfOfficesBlock` lists the office without a link rather than linking to
@@ -330,8 +346,10 @@ Editor-facing how-to (Studio steps, preview targets, clone workflow):
 `docs/election-templates-manual.md`.
 
 `ElectionTemplateType` is one of `locationState`, `locationCounty`, `locationCity`,
-`locationDistrict`, `position`, `positionCandidates`, or `candidateProfile` (plus a
-deprecated legacy `location`). `resolveElectionTemplate` in `electionTemplates.ts`
+`locationDistrict`, `position`, `candidateProfile`, or `personProfile` (plus a
+deprecated legacy `location`). The old `positionCandidates` type was retired with the
+`/candidates` listing pages; its `globalTemplate_positionCandidates` document still sits
+in the dataset but nothing reads it and Studio no longer lists it. `resolveElectionTemplate` in `electionTemplates.ts`
 picks the page's blocks in three tiers, most specific first:
 
 1. Custom. `goodpartyOrg_customTemplate` docs matched by `list_targets`
@@ -357,7 +375,7 @@ tokens)` does plain string replacement. Any known token that is not supplied for
 page is stripped to empty, so a raw `[token]` never renders (it warns outside
 production). Token maps are built by the `build*Tokens` helpers in
 `electionsTemplateHelpers.tsx` (for example `buildProfileTokens`,
-`buildPositionTokens`, `buildCandidatesTokens`). Callers must `stegaClean` strings
+`buildPositionTokens`). Callers must `stegaClean` strings
 before passing them in.
 
 ## The GROQ schema vs projection gotcha

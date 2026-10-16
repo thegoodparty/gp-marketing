@@ -37,10 +37,10 @@ export const electionTemplatePreviewTarget = {
 			name: 'field_positionSlug',
 			title: 'Position Slug (optional)',
 			type: 'string',
-			description: 'URL position segment for Position or Position Candidates preview, e.g. `governor`.',
+			description: 'URL position segment for Position preview, e.g. `governor`.',
 			hidden: ({ document }: { document?: PreviewDoc }) => {
 				const templateType = document?.field_electionTemplateType;
-				return templateType !== 'position' && templateType !== 'positionCandidates';
+				return templateType !== 'position';
 			},
 		},
 	],

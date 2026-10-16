@@ -1,7 +1,6 @@
 import type { Sections } from '~/PageSections';
 import { PROFILE_PAGE_SECTIONS } from '~/app/candidate/[...slug]/profilePageSections';
 import {
-	tmplElectionsCandidatesSections,
 	tmplElectionsCityIndexSections,
 	tmplElectionsCountyIndexSections,
 	tmplElectionsDistrictIndexSections,
@@ -35,8 +34,6 @@ export function getCodeDefaultElectionTemplate(templateType: ElectionTemplateTyp
 			return stripUnresolvableSeedBlocks(tmplPersonProfileSections as unknown as Sections[]);
 		case 'position':
 			return stripUnresolvableSeedBlocks(tmplElectionsPositionSections as unknown as Sections[]);
-		case 'positionCandidates':
-			return stripUnresolvableSeedBlocks(tmplElectionsCandidatesSections as unknown as Sections[]);
 		case 'locationState':
 			return stripUnresolvableSeedBlocks(tmplElectionsStateIndexSections as unknown as Sections[]);
 		case 'locationCounty':

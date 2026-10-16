@@ -12,7 +12,7 @@ import { getInitials } from '~/utils/getInitials';
 const styles = tv({
 	slots: {
 		base: [
-			'flex flex-col gap-2 p-6 bg-white rounded-xl border transition-shadow duration-normal hover:shadow-md',
+			'relative flex flex-col gap-2 p-6 bg-white rounded-xl border transition-shadow duration-normal hover:shadow-md',
 			'max-md:min-w-[260px]',
 			'md:flex-row md:flex-wrap md:items-center md:gap-6',
 		],
@@ -30,7 +30,10 @@ const styles = tv({
 		name: 'whitespace-nowrap md:whitespace-normal',
 		attributionLine: 'text-neutral-500 min-w-0',
 		footerWrapper: 'flex flex-col w-full gap-2 md:w-full md:flex-row md:flex-wrap md:items-center md:justify-between md:gap-4',
-		link: 'flex items-center gap-2 text-nowrap shrink-0',
+		// The pseudo-element stretches the profile link over the whole card, so a click
+		// on the name or photo lands (LogRocket showed dead clicks there). One link keeps
+		// a single tab stop and screen-reader entry instead of nesting the card in an <a>.
+		link: 'flex items-center gap-2 text-nowrap shrink-0 after:absolute after:inset-0 after:rounded-xl after:content-[""]',
 		badge: 'absolute -bottom-0.5 -right-0.5 w-[50px] h-[35px] flex items-center justify-center',
 	},
 });

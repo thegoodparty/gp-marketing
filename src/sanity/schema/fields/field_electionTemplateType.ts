@@ -4,7 +4,6 @@ export const ELECTION_TEMPLATE_TYPES = [
 	{ title: 'Location - City', value: 'locationCity' },
 	{ title: 'Location - District', value: 'locationDistrict' },
 	{ title: 'Position page', value: 'position' },
-	{ title: 'Position candidates list', value: 'positionCandidates' },
 	{ title: 'Candidate profile', value: 'candidateProfile' },
 	{ title: 'Person profile (/people/<slug>)', value: 'personProfile' },
 ] as const;

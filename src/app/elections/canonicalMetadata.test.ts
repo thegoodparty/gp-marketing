@@ -24,7 +24,7 @@ function metadataBody(source: string): string {
 describe('/elections canonical metadata', () => {
 	it('finds every elections route variant', async () => {
 		const files = await electionPageFiles();
-		expect(files.length).toBeGreaterThanOrEqual(12);
+		expect(files.length).toBeGreaterThanOrEqual(8);
 	});
 
 	it('emits a canonical from every generateMetadata return', async () => {
@@ -97,7 +97,7 @@ describe('/elections page titles', () => {
 	 */
 	it('never names the same place twice in a city-level title', async () => {
 		const cityRoutes = (await electionPageFiles()).filter(f => f.includes('[city]') && !f.endsWith('[city]/page.tsx'));
-		expect(cityRoutes.length).toBeGreaterThanOrEqual(4);
+		expect(cityRoutes.length).toBeGreaterThanOrEqual(2);
 		for (const file of cityRoutes) {
 			const body = metadataBody(await Bun.file(file).text());
 			// joinPlaceNames owns the dedupe and is unit-tested in electionsHelpers.test.ts; what a
@@ -118,7 +118,7 @@ describe('/elections page titles', () => {
 		// leaves `cityPlace` null and the page 404s before a title is served. `placePhrase` there
 		// would be a no-op, since isRealPlaceSegment returns true for an undefined place slug.
 		const cityRoutes = (await electionPageFiles()).filter(f => f.includes('[city]') && !f.endsWith('[city]/page.tsx'));
-		expect(cityRoutes.length).toBeGreaterThanOrEqual(4);
+		expect(cityRoutes.length).toBeGreaterThanOrEqual(2);
 		for (const file of cityRoutes) {
 			const body = metadataBody(await Bun.file(file).text());
 			expect(body, `${file} must derive its title place from placePhrase`).toMatch(/const placePhrase =/);

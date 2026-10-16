@@ -14,8 +14,8 @@ import {
 import { HERO_INTRO_DEFAULT, HERO_INTRO_PRE_FILING_DEFAULT } from '~/sanity/schema/components/component_electionsPositionHero';
 
 /**
- * Everything the hero needs from the route. The position and candidates pages
- * fill this in `buildPositionSectionOverrides` / `buildCandidatesSectionOverrides`.
+ * Everything the hero needs from the route. The position page fills this in
+ * `buildPositionSectionOverrides`.
  *
  * The seams that no route populates yet, because election-api has no results
  * data (candidacies carry no win/loss, and Race.numberOfSeats only just reached
@@ -44,7 +44,6 @@ export type OfficeData = {
 	candidates?: ElectionsPositionHeroCandidate[];
 	winners?: ElectionsPositionHeroWinner[];
 	seatCount?: number | null;
-	candidatesHref?: string;
 	resultsHref?: string;
 	/** Retained so older callers still typecheck; the redesigned hero draws no standalone button. */
 	ctaHref?: string;
@@ -108,7 +107,6 @@ export function ElectionsPositionHeroSection(props: ElectionsPositionHeroSection
 				candidates={data.candidates}
 				winners={data.winners}
 				seatCount={data.seatCount}
-				candidatesHref={data.candidatesHref}
 				resultsHref={data.resultsHref}
 				now={now}
 			/>

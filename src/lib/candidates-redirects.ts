@@ -5,8 +5,8 @@
  * listing URL redirects permanently to its position page, one rule per URL
  * depth. They were never in the sitemap, and nothing on the redesigned pages
  * links to them, so the redirect is for people and crawlers arriving on old
- * links. The route files behind them are removed in a follow-up once the
- * position page batch has merged, because that batch edits the same files.
+ * links. Their route files and the Position Candidates template are gone, so
+ * these rules are the only thing left answering those URLs: keep them.
  */
 const POSITION_PAGE_DEPTHS = [
 	'/elections/:state/position/:positionSlug',

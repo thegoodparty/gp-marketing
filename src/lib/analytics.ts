@@ -37,58 +37,6 @@ export function trackClickToCallPhoneSubmitted(props: { page_path: string | null
 }
 
 /**
- * A completed notify submission on an unclaimed /people profile: a visitor has
- * asked us to nudge `personId` to finish their profile, and gp-api has accepted
- * the lead. Call it on success, never on click — the point of the number is
- * completed asks.
- *
- * It goes to Segment as well as Amplitude because the CRM-side count marketing
- * would otherwise automate on, the HubSpot contact property
- * `candidate_profile_requests`, is only a lower bound. gp-api writes it solely
- * when the SUBJECT resolves to exactly one HubSpot contact in the civics person
- * mart (`mart_civics.people.hs_contact_id`, which the mart nulls for a person
- * whose identity cluster carries zero or several contacts), and it deliberately
- * mints nothing for a person the CRM has never seen — see
- * `CrmPersonProfilesService.syncClaimRequestCount` in gp-api. Notify exists for
- * the people we hold the least data on, so the population that write skips is
- * the population the number is meant to describe, and it skips them without an
- * error anywhere: the call is detached from the request and swallows its own
- * failures. Segment sees every completed submission whatever the CRM knows.
- *
- * `page_path` is passed explicitly, as in {@link trackSignUpClicked}. Nothing in
- * this module attaches it, and Segment's snippet puts the path in event
- * *context* rather than in properties, so a property-keyed audience would not
- * find it otherwise.
- *
- * `personId` is the join key to the subject's HubSpot record: it is the same
- * value as `mart_civics.people.gp_person_id`, whose `hs_contact_id` column is
- * the contact gp-api writes `candidate_profile_requests` to. The contact id is
- * deliberately NOT resolved here — that lookup is a warehouse query gp-api runs
- * off the request path, and it yields null for most of the spine, so putting it
- * on the event would both slow a public form submit and read as "no contact"
- * far more often than it read as a real id.
- *
- * `claimRequestId` is gp-api's stored-lead id, echoed back through the proxy so
- * a Segment event can be tied to the exact row that produced it. Null when the
- * lead was accepted but the id could not be read back; the event still fires,
- * because a completed ask is the thing being counted.
- */
-export function trackPersonProfileNotifySubmitted(props: {
-	personId: string;
-	claimRequestId?: string | null;
-}): void {
-	const pagePath = typeof window !== 'undefined' ? window.location.pathname : null;
-	const properties = {
-		personId: props.personId,
-		claimRequestId: props.claimRequestId ?? null,
-		page_path: pagePath ?? null,
-	};
-
-	trackEvent('Person Profile Notify Submitted', properties);
-	trackSegmentEvent('Person Profile Notify Submitted', properties);
-}
-
-/**
  * True when the path ends with `/sign-up` (any origin, any prefix).
  * Intentionally broad so every sign-up surface is tracked, including future
  * paths like `/partner/sign-up`. Tighten if only specific origins should match.

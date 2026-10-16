@@ -808,6 +808,66 @@ describe('composeView persona resolution', () => {
 		expect(view.persona).toBe('both');
 	});
 
+	// The officeholder feed lags the candidacy feed, so an incumbent's term row
+	// can be missing while BallotReady already flags the run as an incumbent's.
+	test('both: candidacy flagged incumbent with no officeholder row', () => {
+		const view = composeView(
+			PID,
+			makePerson({
+				fullName: 'Jane Doe',
+				Candidacies: [
+					{ id: 'c1', positionName: 'ANC 8C08', isIncumbent: true, Race: { electionDate: '2099-11-05' } },
+				],
+			}),
+			null,
+		);
+		expect(view.persona).toBe('both');
+		expect(view.roleTitle).toBe('Candidate for ANC 8C08');
+		expect(view.secondaryRoleTitle).toBeNull();
+		expect(view.termLabel).toBeNull();
+	});
+
+	test('candidate: no incumbent flag and no officeholder row is unchanged', () => {
+		for (const isIncumbent of [false, null, undefined]) {
+			const view = composeView(
+				PID,
+				makePerson({
+					fullName: 'Jane Doe',
+					Candidacies: [{ id: 'c1', positionName: 'ANC 8C08', isIncumbent, Race: { electionDate: '2099-11-05' } }],
+				}),
+				null,
+			);
+			expect(view.persona).toBe('candidate');
+		}
+	});
+
+	test('an incumbent flag on a race that already happened does not make someone incumbent', () => {
+		const view = composeView(
+			PID,
+			makePerson({
+				fullName: 'Jane Doe',
+				Candidacies: [{ id: 'c1', positionName: 'ANC 8C08', isIncumbent: true, Race: { electionDate: '2020-11-05' } }],
+			}),
+			null,
+		);
+		expect(view.persona).toBe('candidate');
+	});
+
+	test('both: an existing current officeholder row still names the seat held', () => {
+		const view = composeView(
+			PID,
+			makePerson({
+				fullName: 'Jane Doe',
+				Candidacies: [{ id: 'c1', positionName: 'Mayor', isIncumbent: true, Race: { electionDate: '2099-11-05' } }],
+				OfficeHolders: [makeOffice({ isCurrent: true, officeTitle: 'City Council' })],
+			}),
+			null,
+		);
+		expect(view.persona).toBe('both');
+		expect(view.roleTitle).toBe('City Council');
+		expect(view.secondaryRoleTitle).toBe('Candidate for Mayor');
+	});
+
 	// Regression: election-api keeps a candidacy row forever, so counting rows
 	// rather than dating them kept every officeholder who had ever run reading
 	// as a current candidate. Shape below is Monique Bryant's live spine — a

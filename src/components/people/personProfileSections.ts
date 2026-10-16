@@ -50,8 +50,9 @@ export const PERSON_PROFILE_SECTIONS = [
 	{ ...breadcrumbSkeleton, _key: PERSON_SECTION_KEYS.breadcrumb },
 	{ ...heroSkeleton, _key: PERSON_SECTION_KEYS.hero },
 	{ ...contentSkeleton, _key: PERSON_SECTION_KEYS.content },
-	// Mirrors the Person Profile global template, in the projected shape the
-	// page query returns (`action`/`text`), since this default never runs GROQ.
+	// Mirrors the Person Profile global template. Schema field names, because
+	// this list is also the seed scripts/migrate-tmpl-to-election-templates.ts
+	// writes to Sanity.
 	{
 		...claimSkeleton,
 		_key: PERSON_SECTION_KEYS.claim,
@@ -60,7 +61,7 @@ export const PERSON_PROFILE_SECTIONS = [
 			field_body:
 				'Your community deserves accountable leadership. Claim your profile and share your top priorities with residents. Create a free GoodParty.org account to get started.',
 		},
-		ctaAction: { _type: 'ctaActionWithShared', action: 'SignUp', text: 'Claim this profile' },
+		ctaAction: { _type: 'ctaActionWithShared', field_ctaActionWithShared: 'SignUp', field_buttonText: 'Claim this profile' },
 	},
 	{
 		_key: PERSON_SECTION_KEYS.cta,

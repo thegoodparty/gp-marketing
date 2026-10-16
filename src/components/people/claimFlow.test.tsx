@@ -226,7 +226,7 @@ describe('the claim block hands the candidate to Win sign-up', () => {
 	});
 
 	// The code default runs when Studio has no Person Profile template, without
-	// the page query, so its button has to be in the projected shape already.
+	// the page query, so its button arrives in schema field names, not projected.
 	test('the code-default template also sends the candidate to sign-up', async () => {
 		const { PERSON_PROFILE_SECTIONS, PERSON_SECTION_KEYS } = await import('./personProfileSections');
 		const codeDefault = PERSON_PROFILE_SECTIONS.find(section => section._key === PERSON_SECTION_KEYS.claim);

@@ -1,5 +1,5 @@
 import type { SectionOverrides, Sections } from '~/PageSections';
-import { isButtonType, transformButton } from '~/lib/buttonTransformer';
+import { normalizeRawCtaToButton, type RawCtaInput, transformButton } from '~/lib/buttonTransformer';
 import type { TokenMap } from '~/lib/resolveTokens';
 import { resolveSectionText } from '~/lib/resolveSectionText';
 import { ClaimProfileBlock } from '~/ui/ClaimProfileBlock';
@@ -42,7 +42,10 @@ export function ClaimProfileBlockSection({ claimProfileOverride, tokens, ...sect
 	const backgroundColor = resolveClaimProfileBlockBackgroundColor(bgValue);
 
 	const ctaButton = section.ctaAction;
-	const transformedButton = ctaButton && isButtonType(ctaButton) ? transformButton(ctaButton) : undefined;
+	// Normalized so a section that skipped the page query (the code-default
+	// template, written with schema field names) reads the same as a projected one.
+	const normalizedButton = ctaButton ? normalizeRawCtaToButton(ctaButton as RawCtaInput, section._key) : undefined;
+	const transformedButton = normalizedButton ? transformButton(normalizedButton) : undefined;
 	const claimButton =
 		transformedButton && claimProfileOverride?.formId ? { ...transformedButton, formId: claimProfileOverride.formId } : transformedButton;
 	const exampleCard = section.claimProfileBlockContent?.exampleCard;
@@ -60,11 +63,15 @@ export function ClaimProfileBlockSection({ claimProfileOverride, tokens, ...sect
 				// A person profile's claim always means sign-up, so its fallback keeps the
 				// destination and the conversion id when the Studio button is unusable.
 				(claimProfileOverride?.formId
-					? { buttonType: 'signup', label: ctaButton?.text || 'Claim this profile', formId: claimProfileOverride.formId }
+					? {
+							buttonType: 'signup',
+							label: normalizedButton?.text || ctaButton?.text || 'Claim this profile',
+							formId: claimProfileOverride.formId,
+						}
 					: {
 							buttonType: 'internal',
 							href: '/',
-							label: ctaButton?.text || 'View Claims',
+							label: normalizedButton?.text || ctaButton?.text || 'View Claims',
 						})
 			}
 			// Maps CMS exampleCard → CandidatesCardProps (no secondaryText on card UI)

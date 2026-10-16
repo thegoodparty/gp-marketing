@@ -827,6 +827,26 @@ describe('composeView persona resolution', () => {
 		expect(view.termLabel).toBeNull();
 	});
 
+	test('both: a flagged incumbent with only a past term does not show that term', () => {
+		const view = composeView(
+			PID,
+			makePerson({
+				fullName: 'Jane Doe',
+				Candidacies: [
+					{ id: 'c1', positionName: 'ANC 8C08', isIncumbent: true, Race: { electionDate: '2099-11-05' } },
+				],
+				OfficeHolders: [
+					makeOffice({ isCurrent: false, startAt: '2014-01-01', endAt: '2018-01-01', subAreaValue: 'Ward 3' }),
+				],
+			}),
+			null,
+		);
+		expect(view.persona).toBe('both');
+		expect(view.roleTitle).toBe('Candidate for ANC 8C08');
+		expect(view.termLabel).toBeNull();
+		expect(view.districtLabel).toBeNull();
+	});
+
 	test('candidate: no incumbent flag and no officeholder row is unchanged', () => {
 		for (const isIncumbent of [false, null, undefined]) {
 			const view = composeView(

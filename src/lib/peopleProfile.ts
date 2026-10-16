@@ -1203,7 +1203,10 @@ export function composeView(
 	const secondaryRoleTitle =
 		persona === 'both' && office?.isCurrent === true && candidacyTarget ? `Candidate for ${candidacyTarget}` : null;
 	const party = rawParty ?? (partyClass ? PARTY_LABELS[partyClass] : null);
-	const districtLabel = office?.subAreaValue ?? office?.subAreaName ?? null;
+	// A flagged incumbent with no current term would otherwise borrow the
+	// district and dates of a past term that `pickCurrentOffice` fell back to.
+	const termOffice = persona === 'both' && office?.isCurrent !== true ? null : office;
+	const districtLabel = termOffice?.subAreaValue ?? termOffice?.subAreaName ?? null;
 	// Mirror the loader's stateCode (which includes the candidacy fallback) so a
 	// candidate-only person's sidebar label matches their breadcrumb. Normalized
 	// for the same reason the loader normalizes: this is a code by contract (it
@@ -1277,7 +1280,7 @@ export function composeView(
 		whyRunning: removed ? null : (overlay?.whyRunning ?? null),
 		accomplishments: removed ? [] : (overlay?.accomplishments ?? []),
 		currentOffice: office,
-		termLabel: formatTerm(office),
+		termLabel: formatTerm(termOffice),
 		electionDate: extras.electionDate ?? null,
 		lastRanYear: formatYear(candidaciesByRecency(person?.Candidacies ?? []).past[0]?.Race?.electionDate ?? null),
 		positionId: extras.positionId ?? office?.positionId ?? null,

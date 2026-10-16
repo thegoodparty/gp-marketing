@@ -202,13 +202,13 @@ describe('extractTitleAndDescription', () => {
 describe('buildPageUrls', () => {
 	const baseUrl = 'https://goodparty.org';
 
-	test('builds position and candidates URLs from race slugs', () => {
+	test('builds position URLs from race slugs, never the retired /candidates listing', () => {
 		const racesByState = new Map<string, Array<{ slug?: string }>>([
 			['AZ', [{ slug: 'az/maricopa-county/governor' }]],
 		]);
 		const urls = buildPageUrls(baseUrl, racesByState, 10);
 		expect(urls).toContain(`${baseUrl}/elections/az/maricopa-county/position/governor`);
-		expect(urls).toContain(`${baseUrl}/elections/az/maricopa-county/position/governor/candidates`);
+		expect(urls).toEqual([`${baseUrl}/elections/az/maricopa-county/position/governor`]);
 	});
 
 	test('respects samplePerState limit', () => {
@@ -219,8 +219,8 @@ describe('buildPageUrls', () => {
 				{ slug: 'az/maricopa-county/race3' },
 			]],
 		]);
-		const urls = buildPageUrls(baseUrl, racesByState, 4);
-		expect(urls.length).toBe(4);
+		const urls = buildPageUrls(baseUrl, racesByState, 2);
+		expect(urls.length).toBe(2);
 	});
 
 	test('deduplicates paths', () => {
@@ -231,7 +231,7 @@ describe('buildPageUrls', () => {
 			]],
 		]);
 		const urls = buildPageUrls(baseUrl, racesByState, 10);
-		expect(urls.filter(u => u.includes('/governor'))).toHaveLength(2);
+		expect(urls.filter(u => u.includes('/governor'))).toHaveLength(1);
 	});
 
 	test('skips races without slug', () => {
@@ -239,7 +239,7 @@ describe('buildPageUrls', () => {
 			['AZ', [{ slug: undefined }, { slug: 'az/maricopa-county/governor' }]],
 		]);
 		const urls = buildPageUrls(baseUrl, racesByState, 10);
-		expect(urls).toHaveLength(2);
+		expect(urls).toHaveLength(1);
 	});
 
 	test('handles multiple states', () => {

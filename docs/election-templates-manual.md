@@ -28,7 +28,6 @@ Page families (one Global Template each):
 - Location - City (example: `/elections/wi/adams-county/adams`)
 - Location - District (example: `/elections/mn/minneapolis-public-school-district`)
 - Position page (example: `/elections/ny/position/governor`)
-- Position Candidates list (example: `/elections/ny/position/governor/candidates`)
 - Candidate Profile (example: `/candidate/janet-mills/us-senate-maine`)
 
 ```mermaid
@@ -83,7 +82,6 @@ Preview Target tells Studio which real URL to open in the iframe.
 | Location - City | Place | `wi/adams-county/adams` | (hidden) |
 | Location - District | Place | `mn/minneapolis-public-school-district` | (hidden) |
 | Position | Place | `ny` | `governor` |
-| Position Candidates | Place | `ny` | `governor` |
 | Candidate Profile | **Candidate** | `janet-mills/us-senate-maine` | (hidden) |
 
 Rules:
@@ -91,7 +89,7 @@ Rules:
 - Do not add leading or trailing `/`.
 - For **Candidate Profile**, choose **Candidate**, not Place. Paste the candidate
   slug from a live profile URL after `/candidate/`.
-- **Position Slug** only appears for Position and Position Candidates templates.
+- **Position Slug** only appears for Position templates.
   It is the last URL segment (for example `governor`), not the full race slug.
 - If **Candidate** is missing from the list, hard-refresh Studio or confirm you
   are on `https://goodparty-marketing.sanity.studio/studio/main`.
@@ -132,7 +130,7 @@ Custom **Targets** decide which live pages use this template.
 | Template Type | Use this Target Type | Slug examples |
 | ------------- | -------------------- | ------------- |
 | Location - State / County / City / District | **Place** only | `ny`, `wi/adams-county`, `wi/adams-county/adams`, `mn/minneapolis-public-school-district` |
-| Position or Position Candidates | **Place** or **Position** | Place: `ny`. Position: full race slug such as `ny/governor` (not only `governor`) |
+| Position | **Place** or **Position** | Place: `ny`. Position: full race slug such as `ny/governor` (not only `governor`) |
 | Candidate Profile | **Candidate** only | `janet-mills/us-senate-maine` |
 
 Place targets match by prefix. A Place target of `ny` can match New York state

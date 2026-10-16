@@ -1,8 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
 import {
-	buildCandidatesSectionOverrides,
-	buildCandidatesTokens,
 	buildPositionSeatFilter,
 	buildElectionsIndexSectionOverrides,
 	buildPositionSectionOverrides,
@@ -221,7 +219,6 @@ describe('buildPositionSectionOverrides hero', () => {
 		const overrides = buildPositionSectionOverrides({
 			...positionOverrideCtx,
 			race,
-			candidatesHref: '/elections/mn/morrison-county/position/county-attorney/candidates',
 			heroCandidates: [{ name: 'Ada Lovelace', party: 'Independent', partyClass: 'independent' }],
 		});
 
@@ -233,18 +230,15 @@ describe('buildPositionSectionOverrides hero', () => {
 			filingDateStartIso: '2026-05-19T00:00:00.000Z',
 			filingDateEndIso: '2026-06-02T00:00:00.000Z',
 			seatCount: 2,
-			candidatesHref: '#position-candidates',
 			resultsHref: '#position-candidates',
 		});
 		expect(overrides.component_electionsPositionHero?.candidates).toHaveLength(1);
 	});
 
-	test('never links the hero to the /candidates page: with no rows on the page the button has nowhere to go', () => {
-		const href = '/elections/mn/morrison-county/position/county-attorney/candidates';
-		const withEmptyRows = buildPositionSectionOverrides({ ...positionOverrideCtx, race, candidatesHref: href, heroCandidates: [] });
-		const withNoData = buildPositionSectionOverrides({ ...positionOverrideCtx, race, candidatesHref: href });
-		expect(withEmptyRows.component_electionsPositionHero?.candidatesHref).toBeUndefined();
-		expect(withNoData.component_electionsPositionHero?.candidatesHref).toBeUndefined();
+	test('with no rows on the page the results button has nowhere to go', () => {
+		const withEmptyRows = buildPositionSectionOverrides({ ...positionOverrideCtx, race, heroCandidates: [] });
+		const withNoData = buildPositionSectionOverrides({ ...positionOverrideCtx, race });
+		expect(withEmptyRows.component_electionsPositionHero?.resultsHref).toBeUndefined();
 		expect(withNoData.component_electionsPositionHero?.resultsHref).toBeUndefined();
 	});
 
@@ -263,13 +257,6 @@ describe('buildPositionSectionOverrides hero', () => {
 		const filing = buildPositionSectionOverrides({ ...positionOverrideCtx, race, now: new Date('2026-05-25T12:00:00') });
 		expect(filing.component_electionsPositionHero?.state).toEqual({ phase: 'filing' });
 		expect(filing.component_electionsPositionContentBlock?.state).toEqual({ phase: 'filing' });
-	});
-
-	test('uses the same hero data on the candidates page', () => {
-		const overrides = buildCandidatesSectionOverrides({ ...positionOverrideCtx, race, candidates: [], heroCandidates: [] });
-
-		expect(overrides.component_electionsPositionHero?.electionDateIso).toBe('2026-11-03T00:00:00.000Z');
-		expect(overrides.component_electionsPositionHero?.candidates).toEqual([]);
 	});
 });
 
@@ -291,30 +278,10 @@ describe('buildPositionTokens', () => {
 	});
 });
 
-describe('buildCandidatesTokens', () => {
-	test('resolves both [office name] and [office]', () => {
-		const tokens = buildCandidatesTokens(tokenCtx);
-		expect(resolveTokens('Not running for [office]?', tokens)).toBe('Not running for Mayor?');
-		expect(resolveTokens('See candidates for [office name]', tokens)).toBe('See candidates for Mayor');
-	});
-
-	test('resolves [location], [State], and [County or City]', () => {
-		const tokens = buildCandidatesTokens(tokenCtx);
-		expect(resolveTokens('Candidates in [location]', tokens)).toBe('Candidates in Brooklyn, NY');
-		expect(resolveTokens('Candidates in [State]', tokens)).toBe('Candidates in New York');
-		expect(resolveTokens('Candidates in [County or City]', tokens)).toBe('Candidates in Brooklyn');
-	});
-
-	test('does not supply [candidate name]', () => {
-		const tokens = buildCandidatesTokens(tokenCtx);
-		expect(resolveTokens('Meet [candidate name]', tokens)).toBe('Meet ');
-	});
-});
-
 /**
  * The testimonial block's state filter reads `stateName` off the override. Every
  * template helper has to pass it, or the toggle silently does nothing on that
- * template (the candidates helper did not, which the review caught).
+ * template.
  */
 describe('every template helper hands the testimonial block the page state', () => {
 	const base = {
@@ -329,12 +296,6 @@ describe('every template helper hands the testimonial block the page state', () 
 
 	test('position page', () => {
 		expect(buildPositionSectionOverrides(base as never).component_testimonialBlockWithLink).toEqual({ stateName: 'Tennessee' });
-	});
-
-	test('candidates page', () => {
-		expect(buildCandidatesSectionOverrides({ ...base, candidates: [] } as never).component_testimonialBlockWithLink).toEqual({
-			stateName: 'Tennessee',
-		});
 	});
 
 	test('location index page', () => {

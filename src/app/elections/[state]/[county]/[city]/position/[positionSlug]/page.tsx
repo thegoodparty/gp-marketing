@@ -80,7 +80,6 @@ export default async function Page({
 	const officeName = officeDisplayName(race, race.Place);
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
-	const candidatesHref = `/elections/${fullSlug}/position/${positionSlug}/candidates`;
 	const pageUrl = toAbsoluteUrl(`/elections/${fullSlug}/position/${positionSlug}`);
 
 	if (isNestedDistrict) {
@@ -101,7 +100,6 @@ export default async function Page({
 			electionDate,
 			filingDate,
 			breadcrumbs,
-			candidatesHref,
 			race,
 			heroCandidates,
 			pageUrl,
@@ -137,7 +135,6 @@ export default async function Page({
 		electionDate,
 		filingDate,
 		breadcrumbs,
-		candidatesHref,
 		race,
 		heroCandidates,
 		pageUrl,

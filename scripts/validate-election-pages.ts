@@ -135,8 +135,7 @@ export function buildPageUrls(
 			if (seen.has(path)) continue;
 			seen.add(path);
 			urls.push(`${baseUrl}${path}`);
-			urls.push(`${baseUrl}${path}/candidates`);
-			count += 2;
+			count += 1;
 		}
 	}
 	return urls;

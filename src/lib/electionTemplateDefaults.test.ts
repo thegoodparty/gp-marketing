@@ -8,7 +8,6 @@ const TEMPLATE_TYPES: ElectionTemplateType[] = [
 	'locationCity',
 	'locationDistrict',
 	'position',
-	'positionCandidates',
 	'candidateProfile',
 	'personProfile',
 ];

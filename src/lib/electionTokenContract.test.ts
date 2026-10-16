@@ -2,7 +2,6 @@ import { describe, expect, test } from 'bun:test';
 
 import { buildElectionsIndexTokens } from '~/lib/electionsIndexTemplates';
 import {
-	buildCandidatesTokens,
 	buildPositionTokens,
 	buildProfileTokens,
 } from '~/lib/electionsTemplateHelpers';
@@ -67,13 +66,6 @@ describe('election token contract', () => {
 		expectTokensInclude(
 			['[office name]', '[office]', '[State]', '[County or City]', '[location]'],
 			buildPositionTokens(tokenCtx),
-		);
-	});
-
-	test('candidates builder supplies documented tokens', () => {
-		expectTokensInclude(
-			['[office name]', '[office]', '[State]', '[County or City]', '[location]'],
-			buildCandidatesTokens(tokenCtx),
 		);
 	});
 

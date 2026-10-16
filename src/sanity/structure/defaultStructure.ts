@@ -78,7 +78,6 @@ export function defaultStructure(S: StructureBuilder) {
                   globalTemplateItem('globalTemplate_locationCity', 'Location - City'),
                   globalTemplateItem('globalTemplate_locationDistrict', 'Location - District'),
                   globalTemplateItem('globalTemplate_position', 'Position'),
-                  globalTemplateItem('globalTemplate_positionCandidates', 'Position Candidates'),
                   globalTemplateItem('globalTemplate_candidateProfile', 'Candidate Profile'),
                   globalTemplateItem('globalTemplate_personProfile', 'Person Profile'),
                 ],

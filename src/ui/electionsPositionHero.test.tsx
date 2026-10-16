@@ -30,7 +30,6 @@ const office: OfficeData = {
 	electionDateIso: '2026-11-03T00:00:00.000Z',
 	filingDateStartIso: '2026-06-01T00:00:00.000Z',
 	filingDateEndIso: '2026-10-02T00:00:00.000Z',
-	candidatesHref: '/elections/tx/austin/position/city-council-member/candidates',
 	candidates,
 };
 
@@ -50,6 +49,7 @@ describe('ElectionsPositionHeroSection', () => {
 		expect(html).toContain('<strong>2</strong> candidates filed so far');
 		expect(html).toContain('Tom Nguyen');
 		expect(html).toContain('View all candidates');
+		expect(html).toContain('href="#position-candidates"');
 		expect(html).toContain('A nonpartisan guide to [office name] in [County or City].');
 	});
 

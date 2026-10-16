@@ -27,8 +27,6 @@ export function buildElectionTemplatePreviewPath(
 			return `/elections/${slug}`;
 		case 'position':
 			return positionSlug ? `/elections/${slug}/position/${positionSlug}` : `/elections/${slug}`;
-		case 'positionCandidates':
-			return positionSlug ? `/elections/${slug}/position/${positionSlug}/candidates` : `/elections/${slug}`;
 		case 'candidateProfile':
 			return `/candidate/${slug}`;
 		case 'personProfile':

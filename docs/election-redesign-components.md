@@ -406,7 +406,8 @@ block" below). Things that came out of it:
   `number_of_seats`), which the API already returns and `RaceDetail` now types. Ask the election
   data team for per-candidacy results and current terms before expecting states 3 and 4 live.
 - **The hero's own button is gone.** The frames hide the left-hand CTA; the links live in the
-  cards and come from the route (`candidatesHref`, later `resultsHref`). The Sanity `ctaAction`
+  cards: the ballot card links to `#position-candidates` when it has rows, and later the route's
+  `resultsHref`. The Sanity `ctaAction`
   field is kept but hidden and marked deprecated so the live template documents that still carry a
   value raise no "unknown field" warning in Studio. The intro sentence is editable
   (`field_intro`) and accepts the office and location tokens.
@@ -1462,9 +1463,9 @@ this table; it is here to orient, and to show the shape of the answer.
 | List of offices | develop + draft PR #304 (stacked on #300 since 2026-10-05) | all five Location globals (drafts view adds the `template-elections-subset` landing page) | into #304, stays draft |
 | Location facts | develop | State / County / City / District globals | draft and batch |
 | Elections index | develop | Location globals, Person Profile global | draft and batch |
-| Position hero | develop + draft PR #320 | Position and Position Candidates globals | into #320, stays draft |
+| Position hero | develop + draft PR #320 | Position global | into #320, stays draft |
 | Position content block | develop + draft PR #327 (stacked on #320) | Position global, plus the landing page `template-elections-position-subset` | into #327, stays draft |
-| Candidates block | develop | Position Candidates global, every `/people` profile | draft and batch |
+| Candidates block | develop | every `/people` profile | draft and batch |
 | Breadcrumb block | develop + draft PR #377 (phone collapse) | every election global, two position landing pages | into #377, stays draft |
 | Profile hero | develop + draft PR #374 | Person Profile global, Candidate Profile global | into #374, stays draft |
 | Profile content block | develop + draft PR #375 (stacked on #374) | Person Profile global, Candidate Profile global | into #375, stays draft |

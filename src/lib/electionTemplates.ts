@@ -12,7 +12,6 @@ export type LocationTemplateType = 'locationState' | 'locationCounty' | 'locatio
 export type ElectionTemplateType =
 	| LocationTemplateType
 	| 'position'
-	| 'positionCandidates'
 	| 'candidateProfile'
 	| 'personProfile';
 

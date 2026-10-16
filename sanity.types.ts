@@ -2820,7 +2820,6 @@ export type GoodpartyOrg_customTemplate = {
 		| 'locationCity'
 		| 'locationDistrict'
 		| 'position'
-		| 'positionCandidates'
 		| 'candidateProfile'
 		| 'personProfile';
 	field_profileState?: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L';
@@ -2855,7 +2854,6 @@ export type GoodpartyOrg_globalTemplate = {
 		| 'locationCity'
 		| 'locationDistrict'
 		| 'position'
-		| 'positionCandidates'
 		| 'candidateProfile'
 		| 'personProfile';
 	field_instructions?: string;
@@ -299352,7 +299350,6 @@ export type GlobalElectionTemplateQueryResult = {
 		| 'locationState'
 		| 'personProfile'
 		| 'position'
-		| 'positionCandidates'
 		| null;
 	previewTarget: ElectionTemplatePreviewTarget | null;
 	pageSections: {
@@ -323264,7 +323261,6 @@ export type CustomElectionTemplateTargetsQueryResult = Array<{
 		| 'locationState'
 		| 'personProfile'
 		| 'position'
-		| 'positionCandidates'
 		| null;
 	field_profileState: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | null;
 	field_enabled: boolean | null;
@@ -323289,7 +323285,6 @@ export type CustomElectionTemplateByIdQueryResult = {
 		| 'locationState'
 		| 'personProfile'
 		| 'position'
-		| 'positionCandidates'
 		| null;
 	pageSections: {
 		_type: 'pageSections';

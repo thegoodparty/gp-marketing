@@ -52,6 +52,8 @@ export interface PersonCandidacySummary {
 	party?: string | null;
 	state?: string | null;
 	raceId?: string | null;
+	/** BallotReady's incumbent flag for this run. Null or absent when the feed does not say. */
+	isIncumbent?: boolean | null;
 	/** Resolved through the candidacy's Race; may be absent unless requested with includeRace. */
 	positionId?: string | null;
 	/**

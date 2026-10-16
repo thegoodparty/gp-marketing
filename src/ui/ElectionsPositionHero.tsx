@@ -24,7 +24,9 @@ const styles = tv({
 		countdown: 'flex flex-wrap gap-4',
 		countdownBox: 'flex h-[3.875rem] w-[4.1875rem] items-center justify-center rounded-md border border-midnight-600 bg-midnight-900',
 		rows: 'flex flex-col gap-3',
-		row: 'flex items-center gap-1.5',
+		// relative so a row's name link can stretch over the whole row: LogRocket showed
+		// clicks on the dot and party missing the name, which was all that linked.
+		row: 'relative flex items-center gap-1.5',
 		rowMark: 'flex w-[1.625rem] shrink-0 items-center justify-center',
 		dot: 'size-2 rounded-full',
 		party: 'ml-auto shrink-0 text-midnight-300',
@@ -309,7 +311,7 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 			const metaLine = [winner.party, winner.term ? `Current term ${winner.term}` : null].filter(Boolean).join(' · ');
 			const large = !state.multipleWinners;
 			return (
-				<div className={s.card()} data-testid='position-hero-winner-card'>
+				<div className={cn(s.card(), 'relative')} data-testid='position-hero-winner-card'>
 					<Text as='h2' styleType='overline' className={s.cardLabel()}>
 						Race winner
 					</Text>
@@ -335,7 +337,7 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 					<div className='flex flex-col gap-0.5'>
 						<Text as='h3' styleType='subtitle-1'>
 							{winner.href ? (
-								<Link href={winner.href} className='hover:underline'>
+								<Link href={winner.href} className='hover:underline after:absolute after:inset-0 after:rounded-lg after:content-[""]'>
 									{winner.name}
 								</Link>
 							) : (
@@ -351,7 +353,7 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 						)}
 					</div>
 					{others.length > 0 && (
-						<div className='mt-auto flex items-center gap-2'>
+						<div className='relative z-10 mt-auto flex items-center gap-2'>
 							<div className='flex'>
 								{others.slice(0, 3).map((other, index) => (
 									<span key={other.key ?? other.name} className={cn('rounded-full ring-1 ring-white', index > 0 && '-ml-1')}>
@@ -437,7 +439,7 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 								</span>
 								<Text as='span' styleType='text-sm' className='flex min-w-0 items-center gap-1.5'>
 									{candidate.href ? (
-										<Link href={candidate.href} className='truncate hover:underline'>
+										<Link href={candidate.href} className='truncate hover:underline after:absolute after:inset-0 after:content-[""]'>
 											{candidate.name}
 										</Link>
 									) : (

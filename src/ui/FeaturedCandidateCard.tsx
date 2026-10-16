@@ -12,7 +12,7 @@ import { trackVoterGuideEvent } from '~/lib/analytics';
 const styles = tv({
 	slots: {
 		// Figma: 308 wide, 24 padding, 32 radius, 24 between photo, text and button.
-		base: 'flex w-[19.25rem] shrink-0 flex-col items-center gap-6 rounded-[2rem] bg-white p-6 text-center',
+		base: 'relative flex w-[19.25rem] shrink-0 flex-col items-center gap-6 rounded-[2rem] bg-white p-6 text-center',
 		avatarWrapper: 'relative size-[12.5rem] shrink-0',
 		avatar: 'size-[12.5rem]',
 		initials: 'flex size-[12.5rem] items-center justify-center rounded-full bg-gray-200 font-primary text-heading-md font-semibold text-gray-700',
@@ -22,7 +22,8 @@ const styles = tv({
 		name: 'text-black',
 		office: 'font-normal text-black',
 		location: 'font-primary font-normal text-gray-500',
-		button: 'w-full',
+		// The button's link stretches over the card so a click on the photo or name lands too.
+		button: 'w-full after:absolute after:inset-0 after:rounded-[2rem] after:content-[""]',
 	},
 });
 

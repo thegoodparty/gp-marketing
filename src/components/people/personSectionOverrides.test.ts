@@ -133,7 +133,7 @@ describe('unclaimed pages prompt for every section the claimed page would show',
  * card (2026-10-16): each request created a HubSpot voter contact, and the team
  * could not follow through on contacting the candidate or official. Nothing
  * else on the page sends that request, so this guards against the card coming
- * back on any state while the person's own claim band stays.
+ * back on any state while the person's own claim block stays.
  */
 describe('no page asks visitors to request a profile', () => {
 	/** Every Figma state A–L. */
@@ -179,16 +179,15 @@ describe('no page asks visitors to request a profile', () => {
  * would silently take state F's CTAs with it.
  */
 describe('claim CTAs are gone from the office-only pages and nowhere else', () => {
-	function claimBand(slug: string): boolean {
+	function claimBlock(slug: string): boolean {
 		const view = getDevPersonProfileView(slug);
 		if (!view) throw new Error(`no dev fixture for ${slug}`);
-		const cta = buildPersonSectionOverrides(view).component_ctaBannerBlock as { render?: unknown } | undefined;
-		return cta?.render !== undefined;
+		return buildPersonSectionOverrides(view).component_claimProfileBlock?.claimed === false;
 	}
 
 	test('state E — an unclaimed officeholder is asked for nothing', () => {
 		expect(getDevPersonProfileView('rob-zotti-d8c578fb')?.persona).toBe('officeholder');
-		expect(claimBand('rob-zotti-d8c578fb')).toBe(false);
+		expect(claimBlock('rob-zotti-d8c578fb')).toBe(false);
 	});
 
 	test('state E falls through to no CTA band at all, not the claimed sign-up one', () => {
@@ -200,8 +199,27 @@ describe('claim CTAs are gone from the office-only pages and nowhere else', () =
 	test('states D and F — running, so still asked to claim', () => {
 		expect(getDevPersonProfileView('kim-byrd-b77f912d')?.persona).toBe('candidate');
 		expect(getDevPersonProfileView('tim-ficken-0a951485')?.persona).toBe('both');
-		expect(claimBand('kim-byrd-b77f912d')).toBe(true);
-		expect(claimBand('tim-ficken-0a951485')).toBe(true);
+		expect(claimBlock('kim-byrd-b77f912d')).toBe(true);
+		expect(claimBlock('tim-ficken-0a951485')).toBe(true);
+	});
+
+	// Claimed (A/B/C/G) has nothing to claim, past (H) is not running, major-party
+	// (I/J) is not empowered, and removed (K/L) asked us to stop.
+	test('every other state hides the claim block', () => {
+		const others = [
+			'allen-slagle-74eee01a',
+			'tracy-good-ecff49d3',
+			'susan-overman-ad914b82',
+			'bill-fortner-61a42912',
+			'gregory-schreurs-136cadf0',
+			'jeb-hanson-3753676b',
+			'deb-craft-f88e7434',
+			'x-27255f40',
+			'x-3412f69c',
+		];
+		for (const slug of others) {
+			expect([slug, claimBlock(slug)]).toEqual([slug, false]);
+		}
 	});
 
 	test('state E keeps its civics spine — this removed the ask, not the page', () => {

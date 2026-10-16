@@ -38,9 +38,8 @@ function cardShapes(view: PersonProfileView): string[] {
 	);
 }
 
-function rendersClaimBand(view: PersonProfileView): boolean {
-	const cta = buildPersonSectionOverrides(view).component_ctaBannerBlock as { render?: unknown } | undefined;
-	return cta?.render !== undefined;
+function rendersClaimBlock(view: PersonProfileView): boolean {
+	return buildPersonSectionOverrides(view).component_claimProfileBlock?.claimed === false;
 }
 
 describe('an unpublished profile suppresses every claim affordance', () => {
@@ -48,18 +47,18 @@ describe('an unpublished profile suppresses every claim affordance', () => {
 		describe(fixture.description, () => {
 			const view = viewForFixture(fixture);
 
-			test('renders no claim band', () => {
-				expect(rendersClaimBand(view)).toBe(false);
+			test('renders no claim block', () => {
+				expect(rendersClaimBlock(view)).toBe(false);
 			});
 
 			// Proves the assertion above is doing work: the same person, merely
-			// unclaimed rather than unpublished, gets the band, unless the spine was
+			// unclaimed rather than unpublished, gets the block, unless the spine was
 			// never empowered or is not running (a major-party, office-only or past
 			// page has no claim surfaces in either state).
 			test('the equivalent unclaimed profile gets one whenever it is empowered and running', () => {
 				const absent = absentView(fixture);
 				const running = absent.persona === 'candidate' || absent.persona === 'both';
-				expect(rendersClaimBand(absent)).toBe(absent.empowered && running);
+				expect(rendersClaimBlock(absent)).toBe(absent.empowered && running);
 			});
 
 			test('hides the CTA band instead of offering the claim form', () => {

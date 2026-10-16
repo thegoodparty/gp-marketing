@@ -5,14 +5,17 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
 /**
- * Covers the claim band on an unclaimed person profile, the person's own ask.
+ * Covers the claim prompt on an unclaimed person profile, the person's own ask:
+ * the Person Profile template's Claim Profile Block, rendered with the overrides
+ * the profile hands it.
  *
- * The band used to collect a name and email and branch on the person's product
- * (Win into sign-up, Serve into "a human will be in touch"). Both halves of that
- * are gone: the band is candidate-only now, so there is no Serve branch, and it
- * sends people to sign-up instead of taking their address. The visitor-facing
- * "ask [Name] to complete their profile" card that sat above it was removed
- * (2026-10-16), so nothing on the page posts to the claim-request endpoint.
+ * It used to be a hard-coded band that collected a name and email and branched
+ * on the person's product (Win into sign-up, Serve into "a human will be in
+ * touch"). Both halves of that are gone: the prompt is candidate-only, so there
+ * is no Serve branch, and it sends people to sign-up instead of taking their
+ * address. The visitor-facing "ask [Name] to complete their profile" card was
+ * removed (2026-10-16), so nothing on the page posts to the claim-request
+ * endpoint.
  *
  * Nothing here mocks `~/lib/analytics`: a partial module mock of it drops the
  * exports other importers rely on. The analytics assertions read the
@@ -122,45 +125,87 @@ async function click(element: Element) {
 	});
 }
 
-const displayName = 'Example Person';
+/**
+ * The Person Profile global template's block (2026-10-16), in the shape the page
+ * query projects it to: `ctaAction` arrives as `action`/`text`.
+ */
+const templateSection = {
+	_key: 'person-claim',
+	_type: 'component_claimProfileBlock',
+	claimProfileBlockContent: {
+		exampleCard: { field_showBadge: true },
+		field_headline: 'Are you [candidate name]? Complete your profile now.',
+		field_body:
+			'Your community deserves accountable leadership. Claim your profile and share your top priorities with residents. Create a free GoodParty.org account to get started.',
+	},
+	claimProfileBlockDesignSettings: { field_blockColorCreamMidnight: 'cream' },
+	ctaAction: { _type: 'ctaActionWithShared', action: 'SignUp', text: 'Claim this profile' },
+};
 
-describe('the claim band hands the candidate to Win sign-up', () => {
-	async function renderBand() {
-		const { PersonClaimCTABand } = await import('./PersonClaimCTABand');
-		await render(React.createElement(PersonClaimCTABand, { displayName }));
-		return document.getElementById('person-claim-signup')!;
+describe('the claim block hands the candidate to Win sign-up', () => {
+	async function renderBlock() {
+		const [{ ClaimProfileBlockSection }, { buildPersonSectionOverrides }, { getDevPersonProfileView }] = await Promise.all([
+			import('~/PageSections/ClaimProfileBlockSection'),
+			import('./personSectionOverrides'),
+			import('~/lib/devPeopleProfileFixtures'),
+		]);
+		const view = getDevPersonProfileView('kim-byrd-b77f912d');
+		if (!view) throw new Error('no dev fixture for kim-byrd-b77f912d');
+		await render(
+			React.createElement(ClaimProfileBlockSection, {
+				...(templateSection as unknown as React.ComponentProps<typeof ClaimProfileBlockSection>),
+				claimProfileOverride: buildPersonSectionOverrides(view).component_claimProfileBlock,
+				tokens: { '[candidate name]': view.displayName },
+			}),
+		);
+		return document.querySelector('[data-component="ClaimProfileBlock"] a')!;
 	}
 
 	test('the call to action is a link to sign-up, not a form', async () => {
-		const cta = await renderBand();
+		const cta = await renderBlock();
 
 		expect(cta.tagName).toBe('A');
 		expect(cta.getAttribute('href')).toBe('https://app.goodparty.org/sign-up');
 		expect(document.querySelector('form')).toBeNull();
 	});
 
+	test('the template copy names the person', async () => {
+		await renderBlock();
+
+		expect(document.querySelector('h2')?.textContent).toBe('Are you Kim Byrd? Complete your profile now.');
+	});
+
+	// The sample candidate card is for landing pages; the profile already shows
+	// the person's name and photo above it (Emily, 2026-10-16).
+	test('the block shows no sample candidate card', async () => {
+		await renderBlock();
+
+		expect(document.querySelector('[data-component="ClaimProfileBlock"]')?.textContent).not.toContain('View profile');
+	});
+
 	/**
 	 * The GTM Data Layer Variable behind the sign-up conversion is keyed on this
-	 * id. It used to arrive from the band's HubSpot form; the form is gone but the
-	 * key has to survive it, or the conversion stops resolving for this surface.
+	 * id. It arrived from the hard-coded band, and before that its HubSpot form;
+	 * the key has to survive both, or the conversion stops resolving for this
+	 * surface.
 	 */
 	test('clicking it reports a sign-up under the surface’s existing form id', async () => {
-		const cta = await renderBand();
+		const cta = await renderBlock();
 
 		await click(cta);
 
 		const signUp = trackedEvents.filter(e => e.name === 'Sign Up Clicked');
 		expect(signUp).toHaveLength(1);
-		expect(signUp[0]?.props).toMatchObject({ href: 'https://app.goodparty.org/sign-up', label: 'Claim profile' });
+		expect(signUp[0]?.props).toMatchObject({ href: 'https://app.goodparty.org/sign-up', label: 'Claim this profile' });
 		expect(dataLayer).toEqual([
 			{ event: 'sign_up_click', formId: 'person-claim-owner' },
 			{
 				event: 'voter_guide_claim_profile_click',
 				page_path: '/people/example-person',
-				source: 'claim_band',
+				source: 'claim_block',
 				label: 'Claim this profile',
 				href: 'https://app.goodparty.org/sign-up',
-				layout: null,
+				layout: 'card',
 			},
 		]);
 		expect(segmentEvents.map(e => e.name)).toEqual(['Voter Guide - Claim Profile Clicked']);
@@ -172,8 +217,8 @@ describe('the claim band hands the candidate to Win sign-up', () => {
 	 * "restore the lead capture" change would quietly reintroduce a second,
 	 * conflicting owner path and a HubSpot form nobody is watching.
 	 */
-	test('nothing is posted to the claim-request endpoint from the band', async () => {
-		const cta = await renderBand();
+	test('nothing is posted to the claim-request endpoint from the block', async () => {
+		const cta = await renderBlock();
 
 		await click(cta);
 

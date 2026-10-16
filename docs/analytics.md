@@ -56,7 +56,7 @@ data layer keys, which are also the Amplitude property names.
 | Clicked Show more | `voter_guide_show_more_click` | Voter Guide - Show More Clicked | Position candidates (`position_candidates`), the offices list (`offices`), the counties and cities index (`locations_index`) | `list`, `hidden_count` (not on the offices list), `page_level` (offices list only) |
 | Viewed a profile | `voter_guide_profile_view` | Voter Guide - Profile Viewed | Every /people page, once per load | `person_id`, `profile_state` (the Figma letter A to L), `persona` (candidate, officeholder, both, past), `claimed`, `pledged`, `removed`, `unpublished`, `party_class` (republican, democrat, independent, other, or null) |
 | Opened the pledge pop-up | `voter_guide_pledge_modal_open` | Voter Guide - Pledge Modal Opened | All five openers | `source`: profile_hero, pledge_callout, position_people_lists, position_content, featured_candidates |
-| Clicked a claim-your-profile call to action | `voter_guide_claim_profile_click` | Voter Guide - Claim Profile Clicked (also sent to Segment) | The claim block on any template (`claim_block`) and the claim band on unclaimed profiles (`claim_band`) | `source`, `label`, `href`, `layout` (claim block only: card or banner) |
+| Clicked a claim-your-profile call to action | `voter_guide_claim_profile_click` | Voter Guide - Claim Profile Clicked (also sent to Segment) | The Claim Profile Block on any template, including unclaimed candidate profiles (`claim_block`). `claim_band` came from the hard-coded profile band it replaced (Oct 2026) | `source`, `label`, `href`, `layout` (card or banner) |
 | Clicked a place in the counties and cities index | `voter_guide_location_index_click` | Voter Guide - Location Index Clicked | The index on state and county pages | `place_name`, `place_level` (county, city, town, district), `href`, `searched` (true when the index was filtered first) |
 | Clicked a featured city card | `voter_guide_featured_city_click` | Voter Guide - Featured City Clicked | The featured cities carousel | `city_name`, `state`, `open_elections_count`, `href` |
 | Saw the location search box | `voter_guide_search_view` | Voter Guide - Election Search Viewed | The /elections hero (`placement: elections_search_hero`) and the Elections Near You block (`elections_near_you_block`), once per page load | `placement` |
@@ -64,8 +64,9 @@ data layer keys, which are also the Amplitude property names.
 | Searched and got an error | `voter_guide_search_error` | Voter Guide - Election Search Errored | Either search box | `placement`, `input_type`, `failure_reason` (empty_input, unresolved, network) |
 | Clicked a link that leaves the site | none (GA4 has its own `click`) | Voter Guide - Outbound Link Clicked | Any link to a host outside goodparty.org on an /elections or /people page | `href`, `host`, `link_text` |
 
-The claim band still sends `Sign Up Clicked` and the `sign_up_click` data layer push as
-before; the claim event is in addition to them.
+On profiles the claim block's sign-up button still sends `Sign Up Clicked` and the
+`sign_up_click` data layer push with form id `person-claim-owner`, as the band did; the
+claim event is in addition to them.
 
 ## Setting up GA4 (whoever owns the GTM container)
 

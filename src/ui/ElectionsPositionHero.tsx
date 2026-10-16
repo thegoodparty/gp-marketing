@@ -7,6 +7,7 @@ import { Logo } from '~/sanity/utils/Logo.tsx';
 import { cn, tv } from './_lib/utils.ts';
 import { Avatar } from './Avatar.tsx';
 import { Container } from './Container.tsx';
+import { POSITION_CONTENT_IDS } from './ElectionsPositionContentBlock.tsx';
 import { ComponentButton } from './Inputs/Button.tsx';
 import { Text } from './Text.tsx';
 
@@ -97,7 +98,6 @@ export type ElectionsPositionHeroProps = {
 	winners?: ElectionsPositionHeroWinner[];
 	/** Seats up in this race, from BallotReady. Labels the multi-winner button. */
 	seatCount?: number | null;
-	candidatesHref?: string;
 	resultsHref?: string;
 	/** Injected by stories and tests so the countdowns are deterministic. */
 	now?: Date;
@@ -412,6 +412,8 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 		if (!showBallotCard || candidates === undefined) return null;
 		const decided = state.phase === 'decided';
 		const count = candidates.length;
+		// The rows live further down the page in the content block, which hides its list when there are none.
+		const candidatesAnchor = count > 0 ? `#${POSITION_CONTENT_IDS.candidates}` : undefined;
 		const winnerCount = winners.length;
 		const buttonLabel = decided
 			? state.multipleWinners
@@ -451,7 +453,7 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 					</ul>
 				)}
 				<CardButton
-					href={decided ? (props.resultsHref ?? props.candidatesHref) : props.candidatesHref}
+					href={decided ? (props.resultsHref ?? candidatesAnchor) : candidatesAnchor}
 					label={buttonLabel}
 					className={s.button()}
 				/>

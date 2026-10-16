@@ -10,7 +10,6 @@ const race = {
 	filingDateStart: '2026-06-01T00:00:00.000Z',
 	filingDateEnd: '2026-10-02T00:00:00.000Z',
 	electionDate: '2026-11-03T00:00:00.000Z',
-	candidatesHref: '/elections/tx/travis-county/austin/position/city-council-member/candidates',
 	intro: 'A nonpartisan guide to City Council Member in Austin. Find candidates and elected officials who have turned down partisan and big-money influence.',
 	now: NOW,
 };

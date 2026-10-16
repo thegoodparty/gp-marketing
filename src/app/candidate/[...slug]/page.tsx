@@ -32,7 +32,7 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
 function buildSectionOverrides(
 	candidate: CandidacyItem,
 	claimed: FindByRaceIdResponse | null,
-	electionHrefs: { positionHref?: string; candidatesHref?: string },
+	electionHrefs: { positionHref?: string },
 ): SectionOverrides {
 	const candidateName = [candidate.firstName, candidate.lastName].filter(Boolean).join(' ') || 'Candidate';
 	const office = candidate.positionName ?? 'Office';

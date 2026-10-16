@@ -17,7 +17,6 @@ const contactInternalLink = {
 	href: { _ref: '1876f6cd-0d57-4e50-911b-2dee7b7fceed', _type: 'reference' as const },
 };
 
-import { CANDIDATES_PAGE_CTA_BANNER, CANDIDATES_PAGE_CTA_IMAGE } from '~/constants/candidatesPageStaticSections';
 
 export const tmplCandidateProfileSections = PROFILE_PAGE_SECTIONS;
 
@@ -245,93 +244,6 @@ export const tmplElectionsPositionSections = [
 			},
 		},
 	},
-];
-
-export const tmplElectionsCandidatesSections = [
-	{
-		_key: 'cand-breadcrumb',
-		_type: 'component_breadcrumbBlock',
-		breadcrumbBlockDesignSettings: { field_blockColorCreamMidnight: 'MidnightDark' },
-	},
-	{
-		_key: 'cand-hero',
-		_type: 'component_electionsPositionHero',
-		electionsPositionHeroDesignSettings: { field_blockColorCreamMidnight: 'MidnightDark' },
-		ctaAction: {
-			_type: 'ctaActionWithShared',
-			field_buttonText: 'Back to position',
-			text: 'Back to position',
-			field_ctaActionWithShared: 'Internal',
-		},
-	},
-	{
-		_key: 'cand-list',
-		_type: 'component_candidatesBlock',
-		candidatesBlockDesignSettings: { field_blockColorCreamMidnight: 'Cream' },
-		candidatesBlockFilterSettings: { field_enableFilters: true },
-	},
-	{
-		_key: 'cand-cta-banner',
-		_type: 'component_ctaBannerBlock',
-		field_ctaType: 'Manual',
-		smallCtaMessaging: {
-			field_title: CANDIDATES_PAGE_CTA_BANNER.title,
-			block_summaryText: [
-				{
-					_key: 'cand-cta-banner-copy',
-					_type: 'block',
-					children: [{ _key: 'cand-cta-banner-span', _type: 'span', marks: [], text: CANDIDATES_PAGE_CTA_BANNER.copy }],
-					markDefs: [],
-					style: 'normal',
-				},
-			],
-		},
-		ctaAction: {
-			_type: 'ctaAction',
-			field_buttonText: CANDIDATES_PAGE_CTA_BANNER.button.label,
-			field_ctaAction: 'External',
-			field_externalLink: CANDIDATES_PAGE_CTA_BANNER.button.href,
-		},
-		ctaBannerBlockDesignSettings: {
-			field_blockColorCreamMidnight: 'Cream',
-			field_componentColor6ColorsInverse: 'BrightYellow',
-		},
-	},
-	{
-		_key: 'cand-cta-image',
-		_type: 'component_ctaImageBlock',
-		field_ctaType: 'Manual',
-		ctaMessaging: {
-			field_title: CANDIDATES_PAGE_CTA_IMAGE.title,
-			block_summaryText: [
-				{
-					_key: 'cand-cta-image-copy',
-					_type: 'block',
-					children: [{ _key: 'cand-cta-image-span', _type: 'span', marks: [], text: CANDIDATES_PAGE_CTA_IMAGE.copy }],
-					markDefs: [],
-					style: 'normal',
-				},
-			],
-		},
-		ctaAction: {
-			_type: 'ctaAction',
-			field_buttonText: CANDIDATES_PAGE_CTA_IMAGE.primaryButton.label,
-			field_ctaAction: 'Internal',
-			field_internalLink: contactInternalLink,
-		},
-		ctaAssets: {
-			img_featuredImage: {
-				_type: 'img_image',
-				asset: { _ref: CANDIDATES_PAGE_CTA_IMAGE.imageAssetRef, _type: 'reference' },
-			},
-			showFullImage: CANDIDATES_PAGE_CTA_IMAGE.showFullImage,
-		},
-		ctaImageBlockDesignSettings: {
-			field_blockColorCreamMidnight: 'Cream',
-			field_componentColor6ColorsInverse: 'Blue',
-		},
-	},
-	...tmplElectionsPositionSections.filter(section => section._key === 'pos-two-up'),
 ];
 
 const electionsIndexMarketingSections = [
@@ -575,11 +487,6 @@ const GLOBAL_TEMPLATE_PREVIEW_TARGETS = {
 		field_electionTargetSlug: 'ny',
 		field_positionSlug: 'governor',
 	},
-	positionCandidates: {
-		field_electionTargetType: 'place',
-		field_electionTargetSlug: 'ny',
-		field_positionSlug: 'governor',
-	},
 	candidateProfile: {
 		field_electionTargetType: 'candidate',
 		field_electionTargetSlug: 'janet-mills/us-senate-maine',
@@ -609,14 +516,6 @@ export const globalElectionTemplateSeedDocuments = [
 		field_electionTemplateType: 'position',
 		previewTarget: GLOBAL_TEMPLATE_PREVIEW_TARGETS.position,
 		pageSections: { list_pageSections: tmplElectionsPositionSections },
-	},
-	{
-		_id: 'globalTemplate_positionCandidates',
-		_type: 'goodpartyOrg_globalTemplate',
-		field_title: 'Position Candidates',
-		field_electionTemplateType: 'positionCandidates',
-		previewTarget: GLOBAL_TEMPLATE_PREVIEW_TARGETS.positionCandidates,
-		pageSections: { list_pageSections: tmplElectionsCandidatesSections },
 	},
 	{
 		_id: 'globalTemplate_locationState',
@@ -716,11 +615,6 @@ export const electionsTemplateSeedDocuments = [
 		_id: 'tmpl_electionsPosition',
 		_type: 'tmpl_electionsPosition',
 		pageSections: { list_pageSections: tmplElectionsPositionSections },
-	},
-	{
-		_id: 'tmpl_electionsCandidates',
-		_type: 'tmpl_electionsCandidates',
-		pageSections: { list_pageSections: tmplElectionsCandidatesSections },
 	},
 	{
 		_id: 'tmpl_electionsStateIndex',

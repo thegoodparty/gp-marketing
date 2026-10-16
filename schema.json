@@ -15825,10 +15825,6 @@
             },
             {
               "type": "string",
-              "value": "positionCandidates"
-            },
-            {
-              "type": "string",
               "value": "candidateProfile"
             },
             {
@@ -16053,10 +16049,6 @@
             {
               "type": "string",
               "value": "position"
-            },
-            {
-              "type": "string",
-              "value": "positionCandidates"
             },
             {
               "type": "string",

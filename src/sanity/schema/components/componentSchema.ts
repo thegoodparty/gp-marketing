@@ -58,7 +58,10 @@ import { component_illustratedColumnsBlock } from './component_illustratedColumn
 
 import { component_featuredCandidatesBlock } from './component_featuredCandidatesBlock.ts';
 
+import { component_voterFilterBlock } from './component_voterFilterBlock.ts';
+
 export const componentSchema = [
+	component_voterFilterBlock,
 	component_featuredCandidatesBlock,
 	component_illustratedColumnsBlock,
 	component_electionPositionResourcesBlock,

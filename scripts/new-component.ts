@@ -198,7 +198,7 @@ edit(
 // --- Edit: list_pageSections.ts (top-level page-sections array + insert-menu group)
 editRe(
 	'src/sanity/schema/lists/list_pageSections.ts',
-	/type: 'array',\s*\n\s*of: \[\n/,
+	/type: 'array',\s*\r?\n\s*of: \[\r?\n/,
 	match => `${match}\t\t{ title: '${title}', type: '${componentType}' },\n`,
 );
 {

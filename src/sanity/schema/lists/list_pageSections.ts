@@ -205,6 +205,7 @@ export const list_pageSections = {
 					name: 'grid',
 					title: 'Grid',
 					of: [
+						'component_voterFilterBlock',
 						'component_illustratedColumnsBlock',
 						'component_nearbyOffices',
 						'component_comparisonBlock',
@@ -254,6 +255,7 @@ export const list_pageSections = {
 	},
 	type: 'array',
 	of: [
+		{ title: 'Voter Filter Block', type: 'component_voterFilterBlock' },
 		{ title: 'Featured Candidates Block', type: 'component_featuredCandidatesBlock' },
 		{ title: 'Illustrated Columns Block', type: 'component_illustratedColumnsBlock' },
 		{ title: 'Election Position Resources Block', type: 'component_electionPositionResourcesBlock' },

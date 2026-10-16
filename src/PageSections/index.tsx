@@ -63,6 +63,8 @@ import { IllustratedColumnsBlockSection } from '~/PageSections/IllustratedColumn
 import { FeaturedCandidatesBlockSection } from '~/PageSections/FeaturedCandidatesBlockSection';
 import { FeaturedCandidatesRotationSection } from '~/PageSections/FeaturedCandidatesRotationSection';
 
+import { VoterFilterBlockSection } from '~/PageSections/VoterFilterBlockSection';
+
 export type Sections = NonNullable<NonNullable<NonNullable<GoodpartyOrg_homeQueryResult>['pageSections']>['list_pageSections']>[number];
 
 export type { TokenMap };
@@ -817,6 +819,12 @@ export function PageSections(props: Props) {
 						</Boundary>
 					);
 				}
+				case 'component_voterFilterBlock':
+					return (
+						<Boundary key={section._key} componentName='Voter Filter Block'>
+							<VoterFilterBlockSection {...section} />
+						</Boundary>
+					);
 				default:
 						console.warn('unknown section._type', section['_type']);
 						return <Fragment key={`unknown section._type' ${i}`} />;

@@ -16,7 +16,6 @@ import { Text } from '~/ui/Text';
 import { ButtonLink } from '~/ui/Inputs/Button';
 import type { CardAttributionMode } from '~/ui/CandidatesCard';
 import { VoterDensityMapCard } from './VoterDensityMapCard';
-import { ClaimProfileModal } from './ClaimProfileModal';
 import { PersonClaimCTABand } from './PersonClaimCTABand';
 import { PledgeSymbolCallout } from './PledgeSymbolCallout';
 import { RelatedPeopleList } from './RelatedPeopleList';
@@ -707,33 +706,6 @@ function buildDistrictMap(view: PersonProfileView): ReactNode | undefined {
 }
 
 /**
- * The most specific place this profile sits in — city, else county, else state.
- *
- * Figma's voter-facing claim card for someone in office opens "[Location]
- * deserves greater transparency" (E 1928:99467, F 1928:100987). The view carries
- * no locality field (`districtLabel` is a ward/seat, `stateLabel` a two-letter
- * code), so this reads the place crumbs off the breadcrumb, which is built from
- * the canonical elections path `/elections/<state>/<county?>/<city?>/position/…`
- * and is already humanised. The position crumb and the trailing name crumb are
- * not places, hence the href filter. Null when the profile resolved to no place
- * at all (no race and no state).
- *
- * Someone who only holds office has no candidacy, so today they have no race
- * slug and their trail stops at the state — the same gap that leaves
- * `positionHref` null for them (see `composePersonProfileView`). They therefore
- * get "Wyoming deserves greater transparency" where the frame shows the town.
- * That is deliberately preferred to a vaguer stand-in: it is still the place
- * they serve, it is the same place the rest of their page links to, and it
- * sharpens on its own once election-api threads the office's race slug through.
- */
-function profileLocationLabel(view: PersonProfileView): string | null {
-	const places = view.breadcrumb.filter(
-		crumb => crumb.href?.startsWith('/elections/') && !crumb.href.includes('/position/'),
-	);
-	return places.at(-1)?.label ?? null;
-}
-
-/**
  * Which pledge statement the hero makes about this person.
  *
  * Marketing specified these three lines keyed off CLAIM status ("has taken" for
@@ -784,9 +756,8 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	// disclaimer, NOT the claim CTA — so exclude persona 'past' from the claim gate.
 	//
 	// `unpublished` is excluded too: the profile is already claimed, it just isn't
-	// live, so "Are you …? Claim your profile" addresses someone who owns it and
-	// the voter-facing prompt asks the reader to nudge a person who already
-	// decided. This is the only difference from the equivalent `absent` page.
+	// live, so "Are you …? Claim your profile" addresses someone who owns it.
+	// This is the only difference from the equivalent `absent` page.
 	//
 	// 'officeholder' is excluded too (marketing, 2026-08-17): someone who only
 	// holds office has no self-serve product to be sent to, so their claim
@@ -860,32 +831,20 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			? { render: <PersonClaimCTABand displayName={view.displayName} /> }
 			: { hidden: true };
 
-	// The Figma content well is one column of cards. For unclaimed empowered pages
-	// exactly ONE card leads the column (frames D 1958:108619 / E 1928:99467): the
-	// visitor-facing "ask them to complete their profile" prompt, whose button
-	// opens the notify dialog. The frames put no owner-facing claim prompt up
-	// here — the person's own way in is the claim band below the well — so do not
-	// add a second card.
-	// Below it: authored cards (empowerment-gated) then the civics-spine cards
+	// The Figma content well led unclaimed empowered pages (D/F) with a
+	// visitor-facing "ask them to complete their profile" card. Marketing removed
+	// it (2026-10-16): each request created a HubSpot voter contact, and the team
+	// could not follow through on contacting the candidate or official. The
+	// person's own way in, the claim band below the well, is unchanged.
+	// The column is authored cards (empowerment-gated) then the civics-spine cards
 	// (Recent Experience → Other candidates → Nearby officials → About position →
 	// District map) that render on every state.
-	const claimCard = (): ProfileContentCardProps => ({
-		raw: true,
-		content: (
-			<ClaimProfileModal
-				personId={view.personId}
-				displayName={view.displayName}
-				persona={view.persona}
-				locationLabel={profileLocationLabel(view)}
-			/>
-		),
-	});
 	// Authored slot: claimed pages show real owner content; unclaimed but
 	// empowered pages (Figma D/E/F/H) show muted placeholder prompt cards in the
 	// same slot; major-party (I/J) and removed (K/L) pages show neither.
 	// Unpublished pages are excluded as well — every placeholder ends in "once
-	// they claim their profile", so leaving them in would restate the claim
-	// prompt the block above just suppressed.
+	// they claim their profile", which would point at a claim band the page
+	// does not show.
 	const authoredSections = view.claimed
 		? buildAuthoredSections(view)
 		: view.empowered && !view.unpublished
@@ -893,7 +852,6 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			: {};
 	const contentCards: ProfileContentCardProps[] = [
 		...(view.persona === 'past' ? [pastElectionDisclaimer(view)] : []),
-		...(showClaim ? [claimCard()] : []),
 		...orderedSectionCards(view, { ...authoredSections, ...buildCivicSections(view) }),
 	];
 	const sidebar = buildSidebar(view);
@@ -929,9 +887,8 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			showBrandMark: view.claimed,
 		},
 		component_claimProfileBlock: {
-			// The standalone full-width claim banner is always suppressed now: the
-			// claim prompt renders in-column as light-blue cards inside the content
-			// well (see `claimCard` above), matching the Figma layout.
+			// The standalone full-width claim banner is always suppressed. The
+			// person's claim path is the CTA band below the content well.
 			//
 			// It also cannot go here: the hero portrait deliberately overflows 48px
 			// (md) / 68px (lg) below the hero box, and the next section is expected

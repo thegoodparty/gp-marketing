@@ -344,6 +344,8 @@ export type SectionOverrides = {
 		candidateName?: string;
 		partyAffiliation?: string;
 		layout?: 'card' | 'banner';
+		hideExampleCard?: boolean;
+		formId?: string;
 	};
 };
 

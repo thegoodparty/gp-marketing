@@ -8,7 +8,7 @@
  *
  * - `notify` — a VISITOR asking us to nudge someone else to complete their
  *   profile (the removed "ask [Name] to complete their profile" prompt).
- * - `owner` — the person THEMSELVES claiming their page (PersonClaimCTABand).
+ * - `owner` — the person THEMSELVES claiming their page (the owner form, retired).
  *
  * gp-api counts only `notify` submissions into that person's HubSpot
  * `candidate_profile_requests`, so conflating the two would credit someone's own

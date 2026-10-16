@@ -50,7 +50,18 @@ export const PERSON_PROFILE_SECTIONS = [
 	{ ...breadcrumbSkeleton, _key: PERSON_SECTION_KEYS.breadcrumb },
 	{ ...heroSkeleton, _key: PERSON_SECTION_KEYS.hero },
 	{ ...contentSkeleton, _key: PERSON_SECTION_KEYS.content },
-	{ ...claimSkeleton, _key: PERSON_SECTION_KEYS.claim },
+	// Mirrors the Person Profile global template, in the projected shape the
+	// page query returns (`action`/`text`), since this default never runs GROQ.
+	{
+		...claimSkeleton,
+		_key: PERSON_SECTION_KEYS.claim,
+		claimProfileBlockContent: {
+			field_headline: 'Are you [candidate name]? Complete your profile now.',
+			field_body:
+				'Your community deserves accountable leadership. Claim your profile and share your top priorities with residents. Create a free GoodParty.org account to get started.',
+		},
+		ctaAction: { _type: 'ctaActionWithShared', action: 'SignUp', text: 'Claim this profile' },
+	},
 	{
 		_key: PERSON_SECTION_KEYS.cta,
 		_type: 'component_ctaBannerBlock',

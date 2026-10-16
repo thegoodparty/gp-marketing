@@ -56,11 +56,16 @@ export function ClaimProfileBlockSection({ claimProfileOverride, tokens, ...sect
 			headline={headline}
 			body={body}
 			claimButton={
-				claimButton ?? {
-					buttonType: 'internal',
-					href: '/',
-					label: ctaButton?.text || 'View Claims',
-				}
+				claimButton ??
+				// A person profile's claim always means sign-up, so its fallback keeps the
+				// destination and the conversion id when the Studio button is unusable.
+				(claimProfileOverride?.formId
+					? { buttonType: 'signup', label: ctaButton?.text || 'Claim this profile', formId: claimProfileOverride.formId }
+					: {
+							buttonType: 'internal',
+							href: '/',
+							label: ctaButton?.text || 'View Claims',
+						})
 			}
 			// Maps CMS exampleCard → CandidatesCardProps (no secondaryText on card UI)
 			exampleCard={

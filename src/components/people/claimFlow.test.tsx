@@ -143,7 +143,7 @@ const templateSection = {
 };
 
 describe('the claim block hands the candidate to Win sign-up', () => {
-	async function renderBlock() {
+	async function renderBlock(section: object = templateSection) {
 		const [{ ClaimProfileBlockSection }, { buildPersonSectionOverrides }, { getDevPersonProfileView }] = await Promise.all([
 			import('~/PageSections/ClaimProfileBlockSection'),
 			import('./personSectionOverrides'),
@@ -153,7 +153,7 @@ describe('the claim block hands the candidate to Win sign-up', () => {
 		if (!view) throw new Error('no dev fixture for kim-byrd-b77f912d');
 		await render(
 			React.createElement(ClaimProfileBlockSection, {
-				...(templateSection as unknown as React.ComponentProps<typeof ClaimProfileBlockSection>),
+				...(section as unknown as React.ComponentProps<typeof ClaimProfileBlockSection>),
 				claimProfileOverride: buildPersonSectionOverrides(view).component_claimProfileBlock,
 				tokens: { '[candidate name]': view.displayName },
 			}),
@@ -223,5 +223,28 @@ describe('the claim block hands the candidate to Win sign-up', () => {
 		await click(cta);
 
 		expect(fetchCalls).toEqual([]);
+	});
+
+	// The code default runs when Studio has no Person Profile template, without
+	// the page query, so its button has to be in the projected shape already.
+	test('the code-default template also sends the candidate to sign-up', async () => {
+		const { PERSON_PROFILE_SECTIONS, PERSON_SECTION_KEYS } = await import('./personProfileSections');
+		const codeDefault = PERSON_PROFILE_SECTIONS.find(section => section._key === PERSON_SECTION_KEYS.claim);
+		if (!codeDefault) throw new Error('no claim section in the code default');
+		const cta = await renderBlock(codeDefault);
+
+		expect(cta.getAttribute('href')).toBe('https://app.goodparty.org/sign-up');
+		expect(document.querySelector('h2')?.textContent).toBe('Are you Kim Byrd? Complete your profile now.');
+	});
+
+	test('an unusable Studio button still falls back to sign-up under the form id', async () => {
+		const cta = await renderBlock({
+			...templateSection,
+			ctaAction: { _type: 'ctaActionWithShared', action: null, text: 'Claim this profile' },
+		});
+
+		expect(cta.getAttribute('href')).toBe('https://app.goodparty.org/sign-up');
+		await click(cta);
+		expect(dataLayer[0]).toEqual({ event: 'sign_up_click', formId: 'person-claim-owner' });
 	});
 });

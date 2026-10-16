@@ -17,6 +17,7 @@ import {
 	PEOPLE_SITEMAP_BAND_START,
 	PEOPLE_SITEMAP_SHARD_COUNT,
 	PEOPLE_SITEMAP_SHARDS,
+	RACE_PAGE_SIZE,
 	stripCountySuffix,
 	US_STATE_CODES,
 	type CountyPlace,
@@ -1568,5 +1569,155 @@ describe('fetchStateElectionRouteParams', () => {
 				positionSlug: 'town-moderator',
 			},
 		]);
+	});
+});
+
+describe('per-state race paging', () => {
+	const originalFetch = globalThis.fetch;
+	const originalConsoleError = console.error;
+	const base = 'https://goodparty.org';
+
+	type MockRace = { slug: string; positionLevel: string };
+
+	const stateRaces = (count: number): MockRace[] =>
+		Array.from({ length: count }, (_, i) => ({
+			slug: `pa/office-${String(i).padStart(6, '0')}`,
+			positionLevel: 'STATE',
+		}));
+
+	/**
+	 * Serves `/v1/races` the way election-api pages it: `pageSize` distinct slugs
+	 * per page in slug order, an empty array past the end, and a 404 for a first
+	 * page that matches nothing. `failPage` answers that page with a 500.
+	 */
+	function mockRaces(races: MockRace[], opts: { failPage?: number } = {}): URLSearchParams[] {
+		const raceQueries: URLSearchParams[] = [];
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = new URL(String(input));
+			const json = (body: unknown, status = 200) =>
+				new Response(JSON.stringify(body), {
+					status,
+					headers: { 'content-type': 'application/json' },
+				});
+			if (!url.pathname.endsWith('/v1/races')) return json([]);
+			raceQueries.push(url.searchParams);
+			const page = Number(url.searchParams.get('page') ?? '1');
+			const pageSize = Number(url.searchParams.get('pageSize') ?? '1000');
+			if (page === opts.failPage) return json({ message: 'boom' }, 500);
+			const slice = races.slice((page - 1) * pageSize, page * pageSize);
+			if (slice.length === 0 && page === 1) return json({ message: 'No races found' }, 404);
+			return json(slice);
+		}) as typeof fetch;
+		return raceQueries;
+	}
+
+	const positionUrls = (entries: { url: string }[]) => entries.filter((e) => e.url.includes('/position/'));
+
+	afterEach(() => {
+		globalThis.fetch = originalFetch;
+		console.error = originalConsoleError;
+	});
+
+	afterAll(() => {
+		globalThis.fetch = originalFetch;
+		console.error = originalConsoleError;
+	});
+
+	// The bug this guards: an unpaged call stopped at election-api's silent
+	// 1,000-slug default, so big states listed exactly 1,000 offices.
+	test('walks every page, so a state past one page lists all its offices', async () => {
+		const races = stateRaces(RACE_PAGE_SIZE * 2 + 7);
+		const queries = mockRaces(races);
+
+		const entries = await fetchStateElectionSitemapEntries('PA', base);
+
+		expect(positionUrls(entries)).toHaveLength(races.length);
+		expect(queries.map((q) => q.get('page'))).toEqual(['1', '2', '3']);
+		expect(queries.every((q) => q.get('pageSize') === String(RACE_PAGE_SIZE))).toBe(true);
+	});
+
+	test('a state that fits on one page makes one call', async () => {
+		const queries = mockRaces(stateRaces(1500));
+
+		const entries = await fetchStateElectionSitemapEntries('PA', base);
+
+		expect(positionUrls(entries)).toHaveLength(1500);
+		expect(queries).toHaveLength(1);
+	});
+
+	// An exactly-full last page can only be told apart from a full middle page by
+	// asking for the next one, which comes back empty rather than 404.
+	test('an exactly full last page ends on the empty page after it', async () => {
+		const queries = mockRaces(stateRaces(RACE_PAGE_SIZE));
+
+		const entries = await fetchStateElectionSitemapEntries('PA', base);
+
+		expect(positionUrls(entries)).toHaveLength(RACE_PAGE_SIZE);
+		expect(queries.map((q) => q.get('page'))).toEqual(['1', '2']);
+	});
+
+	// The page size counts distinct slugs. Without positionNames projected the API
+	// returns every row for the page's slugs, so a last page can hold more rows
+	// than pageSize and must still end the walk.
+	test('stops on distinct slugs, not rows', async () => {
+		const distinct = stateRaces(RACE_PAGE_SIZE - 1);
+		const rows = [...distinct, { ...distinct[0]! }];
+		const queries: string[] = [];
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = new URL(String(input));
+			if (url.pathname.endsWith('/v1/races')) queries.push(url.searchParams.get('page') ?? '');
+			const body = url.pathname.endsWith('/v1/races') ? rows : [];
+			return new Response(JSON.stringify(body), { status: 200 });
+		}) as typeof fetch;
+
+		await fetchStateElectionSitemapEntries('PA', base);
+
+		expect(rows).toHaveLength(RACE_PAGE_SIZE);
+		expect(queries).toEqual(['1']);
+	});
+
+	test('a state with no races at all (a 404 on page one) is just empty', async () => {
+		mockRaces([]);
+
+		const entries = await fetchStateElectionSitemapEntries('PA', base);
+
+		expect(positionUrls(entries)).toEqual([]);
+	});
+
+	// A partial walk looks exactly like a complete one, so the sitemap shard fails
+	// instead: the crawler retries rather than reading a short list as the truth.
+	test('a failed later page fails the sitemap shard rather than truncating it', async () => {
+		mockRaces(stateRaces(RACE_PAGE_SIZE + 5), { failPage: 2 });
+
+		await expect(fetchStateElectionSitemapEntries('PA', base)).rejects.toThrow('election-api 500');
+	});
+
+	// The build must not fail on an upstream blip, but it must not prerender a
+	// silently short list either: it logs and prerenders none of the state's
+	// position pages, which still render on demand.
+	test('route params log a failed walk and prerender no positions for the state', async () => {
+		mockRaces(stateRaces(RACE_PAGE_SIZE + 5), { failPage: 2 });
+		const logged: unknown[][] = [];
+		console.error = (...args: unknown[]) => {
+			logged.push(args);
+		};
+
+		const { statePositionParams } = await fetchStateElectionRouteParams('PA');
+
+		expect(statePositionParams).toEqual([]);
+		expect(logged.some((args) => String(args[0]).includes('race walk failed for PA'))).toBe(true);
+	});
+
+	test('route params walk the same pages as the sitemap, so the two stay in step', async () => {
+		const races = stateRaces(RACE_PAGE_SIZE + 3);
+
+		mockRaces(races);
+		const { statePositionParams } = await fetchStateElectionRouteParams('PA');
+		mockRaces(races);
+		const entries = await fetchStateElectionSitemapEntries('PA', base);
+
+		const fromParams = statePositionParams.map((p) => `${base}/elections/${p.state}/position/${p.positionSlug}`).sort();
+		expect(fromParams).toEqual(positionUrls(entries).map((e) => e.url).sort());
+		expect(fromParams).toHaveLength(races.length);
 	});
 });

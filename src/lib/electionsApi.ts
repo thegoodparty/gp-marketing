@@ -157,6 +157,35 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | nul
 	return null;
 }
 
+/**
+ * gp-api's largest page for its list reads (/places, /persons, /candidacies,
+ * /officeholders). election-api answered these whole; gp-api caps every page
+ * at 1,000 rows unless asked, and the cap is silent, so any read that can run
+ * long has to walk pages.
+ */
+export const ELECTION_PAGE_SIZE = 5000;
+
+/** A runaway guard: 200,000 rows for one read, far past any real answer. */
+const MAX_ELECTION_PAGES = 40;
+
+/**
+ * Every page of one list read, or null when the first page gives no usable
+ * answer. A miss after page 1 ends the walk: /places answers 404, not [], once
+ * it runs out of rows, and fetchJson reports that 404 as null.
+ */
+async function fetchAllElectionPages<T>(path: string, searchParams: URLSearchParams, options?: RequestInit): Promise<T[] | null> {
+	const rows: T[] = [];
+	for (let page = 1; page <= MAX_ELECTION_PAGES; page++) {
+		searchParams.set('page', String(page));
+		searchParams.set('pageSize', String(ELECTION_PAGE_SIZE));
+		const data = await fetchJson<T[]>(`${ELECTIONS_BASE_URL}/${path}?${searchParams}`, options);
+		if (!Array.isArray(data)) return page === 1 ? null : rows;
+		rows.push(...data);
+		if (data.length < ELECTION_PAGE_SIZE) return rows;
+	}
+	return rows;
+}
+
 export async function getDistrictTypes(params: {
 	state: string;
 	electionYear: number;
@@ -314,9 +343,9 @@ export async function getCandidaciesOrNull(params: {
 	// subAreaValue). A shared race slug names every district's race, so the
 	// slug's race is the wrong place to read a seat from (Emily, 2026-10-06).
 	searchParams.set('includeRace', 'true');
-	const url = `${ELECTIONS_BASE_URL}/candidacies?${searchParams}`;
-	const data = await fetchJson<CandidacyItem[]>(url);
-	return Array.isArray(data) ? data : null;
+	// A shared race slug names every district's race across every cycle, which
+	// can run past gp-api's page.
+	return fetchAllElectionPages<CandidacyItem>('candidacies', searchParams);
 }
 
 export async function getCandidateBySlug(params: {
@@ -490,9 +519,7 @@ export async function getPersonMergeSurvivorChain(retiredId: string): Promise<st
 /** Office terms held by a person (election-api). */
 export async function getOfficeHoldersByPerson(personId: string): Promise<PersonOfficeHolder[]> {
 	const searchParams = new URLSearchParams({ personId, includePosition: 'true' });
-	const url = `${ELECTIONS_BASE_URL}/officeholders?${searchParams}`;
-	const data = await fetchJson<PersonOfficeHolder[]>(url, personCacheOptions(personId));
-	return Array.isArray(data) ? data : [];
+	return (await fetchAllElectionPages<PersonOfficeHolder>('officeholders', searchParams, personCacheOptions(personId))) ?? [];
 }
 
 /**
@@ -502,9 +529,7 @@ export async function getOfficeHoldersByPerson(personId: string): Promise<Person
  */
 export async function getOfficeHoldersByGeoId(geoId: string): Promise<PersonOfficeHolder[]> {
 	const searchParams = new URLSearchParams({ geoId, includePosition: 'true' });
-	const url = `${ELECTIONS_BASE_URL}/officeholders?${searchParams}`;
-	const data = await fetchJson<PersonOfficeHolder[]>(url, CACHE_OPTIONS);
-	return Array.isArray(data) ? data : [];
+	return (await fetchAllElectionPages<PersonOfficeHolder>('officeholders', searchParams, CACHE_OPTIONS)) ?? [];
 }
 
 /**
@@ -516,9 +541,7 @@ export async function getOfficeHoldersByGeoId(geoId: string): Promise<PersonOffi
  */
 export async function getOfficeHoldersByPositionIdOrNull(positionId: string): Promise<PersonOfficeHolder[] | null> {
 	const searchParams = new URLSearchParams({ positionId, includePosition: 'true' });
-	const url = `${ELECTIONS_BASE_URL}/officeholders?${searchParams}`;
-	const data = await fetchJson<PersonOfficeHolder[]>(url, CACHE_OPTIONS);
-	return Array.isArray(data) ? data : null;
+	return fetchAllElectionPages<PersonOfficeHolder>('officeholders', searchParams, CACHE_OPTIONS);
 }
 
 /** Ids per `/v1/persons?ids=` request. 500 made an 18.5 KB URL that election-api answers with 414. */
@@ -670,15 +693,6 @@ export async function getMostElections(count = 3): Promise<FeaturedCity[]> {
 	return Array.isArray(data) ? data : [];
 }
 
-/**
- * gp-api's largest page for /places. A state-wide read used to come back whole;
- * gp-api caps every page at 1,000 rows unless asked, and the cap is silent.
- */
-export const PLACE_PAGE_SIZE = 5000;
-
-/** A runaway guard: 200,000 places per state, far past any real state. */
-const MAX_PLACE_PAGES = 40;
-
 export async function getPlacesByState(params: {
 	state: string;
 	mtfcc?: string;
@@ -693,18 +707,7 @@ export async function getPlacesByState(params: {
 	if (params.includeRaces) searchParams.set('includeRaces', 'true');
 	if (params.placeColumns) searchParams.set('placeColumns', params.placeColumns);
 	if (params.raceColumns) searchParams.set('raceColumns', params.raceColumns);
-	const places: PlaceItem[] = [];
-	for (let page = 1; page <= MAX_PLACE_PAGES; page++) {
-		searchParams.set('page', String(page));
-		searchParams.set('pageSize', String(PLACE_PAGE_SIZE));
-		const url = `${ELECTIONS_BASE_URL}/places?${searchParams}`;
-		const data = await fetchJson<PlaceItem[]>(url, CACHE_OPTIONS);
-		// /places answers 404, not [], past its last page.
-		if (!Array.isArray(data)) return places;
-		places.push(...data);
-		if (data.length < PLACE_PAGE_SIZE) return places;
-	}
-	return places;
+	return (await fetchAllElectionPages<PlaceItem>('places', searchParams, CACHE_OPTIONS)) ?? [];
 }
 
 /** Normalize place name for comparison (strip punctuation, lowercase). */

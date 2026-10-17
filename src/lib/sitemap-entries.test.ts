@@ -169,6 +169,7 @@ describe('fetchPeopleSitemapEntries', () => {
 		unlisted?: { personId: string }[];
 		unlistedStatus?: number;
 		failPersonsForState?: string;
+		failPersonsStatus?: number;
 	}): string[] {
 		const urls: string[] = [];
 		globalThis.fetch = (async (input: RequestInfo | URL) => {
@@ -193,7 +194,7 @@ describe('fetchPeopleSitemapEntries', () => {
 					opts.failPersonsForState &&
 					url.searchParams.get('state') === opts.failPersonsForState
 				) {
-					return new Response('boom', { status: 503 });
+					return new Response('boom', { status: opts.failPersonsStatus ?? 503 });
 				}
 				const ids = url.searchParams.get('ids');
 				const matches = ids
@@ -430,6 +431,19 @@ describe('fetchPeopleSitemapEntries', () => {
 		mockUpstream({
 			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
 			failPersonsForState: 'CA',
+		});
+
+		await expect(fetchPeopleSitemapEntries(base, shardOf(aliceId))).rejects.toThrow();
+	});
+
+	// The person, candidacy and office-term reads answer [] when they run out, so a
+	// 404 is a fault: gp-api without the election routes yet, for one. Ending the
+	// walk on it would publish whatever states answered before it as complete.
+	test('a 404 on a state sweep rejects rather than reading as an empty state', async () => {
+		mockUpstream({
+			persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }],
+			failPersonsForState: 'CA',
+			failPersonsStatus: 404,
 		});
 
 		await expect(fetchPeopleSitemapEntries(base, shardOf(aliceId))).rejects.toThrow();

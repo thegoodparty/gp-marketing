@@ -8,7 +8,7 @@ import {
 	getCountySlugsByState,
 	getDistrictNames,
 	getPlacesByState,
-	PLACE_PAGE_SIZE,
+	ELECTION_PAGE_SIZE,
 	getPersonMergeSurvivorChain,
 	getPersonMergeSurvivorId,
 	getPersonsByIds,
@@ -950,7 +950,7 @@ describe('election reads go to gp-api', () => {
 		new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
 
 	test('places for a state walk every page instead of stopping at gp-api\u2019s 1,000-row default', async () => {
-		const full = Array.from({ length: PLACE_PAGE_SIZE }, (_, i) => ({ slug: `tx/place-${i}`, name: `Place ${i}` }));
+		const full = Array.from({ length: ELECTION_PAGE_SIZE }, (_, i) => ({ slug: `tx/place-${i}`, name: `Place ${i}` }));
 		const urls = captureUrls(url => {
 			const page = url.searchParams.get('page');
 			if (page === '1') return json(full);
@@ -960,18 +960,31 @@ describe('election reads go to gp-api', () => {
 
 		const places = await getPlacesByState({ state: 'tx' });
 
-		expect(places).toHaveLength(PLACE_PAGE_SIZE + 1);
+		expect(places).toHaveLength(ELECTION_PAGE_SIZE + 1);
 		expect(urls.map(u => [u.pathname, u.searchParams.get('page'), u.searchParams.get('pageSize')])).toEqual([
-			['/v1/elections/places', '1', String(PLACE_PAGE_SIZE)],
-			['/v1/elections/places', '2', String(PLACE_PAGE_SIZE)],
+			['/v1/elections/places', '1', String(ELECTION_PAGE_SIZE)],
+			['/v1/elections/places', '2', String(ELECTION_PAGE_SIZE)],
+		]);
+	});
+
+	test('candidacies for a shared race slug walk past one page', async () => {
+		const full = Array.from({ length: ELECTION_PAGE_SIZE }, (_, i) => ({ id: `c-${i}`, slug: `cand-${i}` }));
+		const urls = captureUrls(url => (url.searchParams.get('page') === '1' ? json(full) : json([{ id: 'c-last', slug: 'cand-last' }])));
+
+		const candidacies = await getCandidacies({ raceSlug: 'tx/state-house' });
+
+		expect(candidacies).toHaveLength(ELECTION_PAGE_SIZE + 1);
+		expect(urls.map(u => [u.pathname, u.searchParams.get('page')])).toEqual([
+			['/v1/elections/candidacies', '1'],
+			['/v1/elections/candidacies', '2'],
 		]);
 	});
 
 	test('a full last page ends on the 404 /places sends past its last row', async () => {
-		const full = Array.from({ length: PLACE_PAGE_SIZE }, (_, i) => ({ slug: `tx/place-${i}`, name: `Place ${i}` }));
+		const full = Array.from({ length: ELECTION_PAGE_SIZE }, (_, i) => ({ slug: `tx/place-${i}`, name: `Place ${i}` }));
 		captureUrls(url => (url.searchParams.get('page') === '1' ? json(full) : json({}, 404)));
 
-		expect(await getPlacesByState({ state: 'tx' })).toHaveLength(PLACE_PAGE_SIZE);
+		expect(await getPlacesByState({ state: 'tx' })).toHaveLength(ELECTION_PAGE_SIZE);
 	});
 
 	test('district names keep election-api\u2019s default and include districts without turnout', async () => {

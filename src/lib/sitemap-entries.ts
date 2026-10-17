@@ -664,13 +664,16 @@ const MAX_ELECTION_PAGES = 40;
 
 /**
  * Strict page walk for the /people band: any failed page throws, because a
- * partial sweep looks exactly like a complete one. A 404 ends the walk, since
- * /places answers 404 rather than [] once it runs out of rows.
+ * partial sweep looks exactly like a complete one. That includes a 404: the
+ * person, candidacy and office-term reads answer [] when they run out, so a
+ * 404 from them is a fault. Only /places answers 404 past its last row, and
+ * only its caller passes `notFoundEndsWalk`.
  */
 async function fetchElectionPagesOrThrow<T>(
 	path: string,
 	params: Record<string, string>,
 	tags?: readonly string[],
+	notFoundEndsWalk = false,
 ): Promise<T[]> {
 	const rows: T[] = [];
 	for (let page = 1; page <= MAX_ELECTION_PAGES; page++) {
@@ -678,7 +681,7 @@ async function fetchElectionPagesOrThrow<T>(
 		const url = `${ELECTIONS_BASE}/${path.replace(/^\//, '')}?${search}`;
 		const result = await fetchElectionApiJsonCached(url, tags);
 		if (!result.ok) {
-			if (result.status === 404) return rows;
+			if (result.status === 404 && notFoundEndsWalk) return rows;
 			throw new Error(`[sitemap] Election API ${result.status} ${url}`);
 		}
 		if (!Array.isArray(result.json)) throw new Error(`[sitemap] Election API non-array body ${url}`);
@@ -689,10 +692,10 @@ async function fetchElectionPagesOrThrow<T>(
 	throw new Error(`[sitemap] ${path} ${JSON.stringify(params)} exceeded ${MAX_ELECTION_PAGES} pages of ${ELECTION_PAGE_SIZE}`);
 }
 
-/** Soft page walk for the election bands: like fetchElectionJson, a failure logs and degrades to []. */
+/** Soft /places walk for the election bands: like fetchElectionJson, a failure logs and degrades to []. */
 async function fetchElectionPages<T>(path: string, params: Record<string, string>): Promise<T[]> {
 	try {
-		return await fetchElectionPagesOrThrow<T>(path, params);
+		return await fetchElectionPagesOrThrow<T>(path, params, undefined, true);
 	} catch (err) {
 		console.error('[sitemap] Election API page walk failed', path, err instanceof Error ? err.message : String(err));
 		return [];

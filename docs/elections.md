@@ -22,17 +22,22 @@ because the data and a template exist.
 
 ## Data sources and fetching
 
-Two backends feed these pages. Both are read through `src/lib/electionsApi.ts`.
+gp-api feeds these pages, read through `src/lib/electionsApi.ts` (and
+`src/lib/sitemap-entries.ts` for the sitemaps). The base is `GP_API_BASE_URL`; where
+that is unset it falls back to `NEXT_PUBLIC_API_BASE`, then to the legacy
+`ELECTIONS_API_BASE_URL` with `election-api` swapped for `gp-api`.
 
-- election-api (`ELECTIONS_API_BASE_URL`, default
-  `https://election-api.goodparty.org`) is the base data source: races, positions,
-  places, candidacies, and districts. Endpoints used include
-  `/v1/elections/races-by-year`, `/v1/districts/types`, `/v1/districts/names`,
-  `/v1/positions/:id`, `/v1/races`, `/v1/candidacies`, `/v1/places`, and
-  `/v1/places/most-elections`.
-- gp-api (`GP_API_BASE_URL`, derived by replacing `election-api` with `gp-api` in the
-  base URL) is queried at `/v1/public-campaigns` through `findCampaignByRace` to find
-  a claimed campaign for a candidate.
+- Election data (races, positions, places, persons, candidacies, office terms,
+  districts and person merges) lives under `/v1/elections/*`: `/races`,
+  `/candidacies`, `/officeholders`, `/persons` (and `/persons/:id`,
+  `/persons/by-slug/:slug`), `/person-merges/:retiredId`, `/places`,
+  `/places/most-elections`, `/districts/types` and `/districts/names`. These carry
+  the `ELECTION_API_M2M_TOKEN` bearer; gp-api answers 403 without it.
+- `/places`, `/persons`, `/candidacies` and `/officeholders` return 1,000 rows per
+  page unless asked (`page`, `pageSize`, max 5,000), and the cap is silent. Any
+  state-wide read has to walk pages. `/places` answers 404 past its last page.
+- `/v1/public-campaigns` (through `findCampaignByRace`) finds a claimed campaign for
+  a candidate, and `/v1/public-person-profiles` serves the profile overlay.
 
 All reads go through `fetchJson`, which retries twice with a 500ms times attempt
 backoff, returns `null` on 404 or any non-500 error, and caches most responses with

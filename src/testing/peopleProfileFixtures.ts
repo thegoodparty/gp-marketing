@@ -460,7 +460,7 @@ export function buildPeopleFetchMock(
 		}
 
 		// election-api: person spine by id (no query string).
-		if (/\/v1\/persons\/[^/?]+$/.test(url) && !url.includes('/by-slug/')) {
+		if (/\/v1\/elections\/persons\/[^/?]+$/.test(url) && !url.includes('/by-slug/')) {
 			return jsonResponse(fixture.person) as unknown as Response;
 		}
 

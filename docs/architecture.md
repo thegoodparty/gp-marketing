@@ -93,13 +93,13 @@ Some pages are generated from data, not hand-authored in Sanity.
 
 - Elections pages under `src/app/elections/**` — a state / county / city / subplace
   hierarchy plus per-office (position) and candidate-list pages, built from
-  election-api data. Slugs, county-equivalent naming, MTFCC place classification, and
+  gp-api's election data (`/v1/elections/*`). Slugs, county-equivalent naming, MTFCC place classification, and
   template resolution all live in `src/lib/`.
-- Candidate pages at `src/app/candidate/[...slug]/page.tsx` — stitch an election-api
-  candidacy record together with the claimed campaign from gp-api.
+- Candidate pages at `src/app/candidate/[...slug]/page.tsx` — stitch a candidacy
+  record together with the claimed campaign, both from gp-api.
 
 These are the most complex and bug-prone surface. A wrong candidate page is usually
-an upstream data problem in gp-api or election-api, not a bug you can fix here. Full
+an upstream data problem in gp-api or the election data, not a bug you can fix here. Full
 domain model, data sources, and what is and is not fixable in this repo:
 `docs/elections.md`.
 

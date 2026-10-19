@@ -119,14 +119,14 @@ function stubFetch(): void {
 		// gp-api: no overlay and no density — this is an unclaimed programmatic page.
 		if (url.includes('/public-person-profiles')) return jsonResponse({}, 404);
 
-		if (/\/v1\/persons\/[^/?]+$/.test(url)) return jsonResponse(PERSON);
-		if (url.includes('/v1/candidacies?') && url.includes('slug=')) {
+		if (/\/v1\/elections\/persons\/[^/?]+$/.test(url)) return jsonResponse(PERSON);
+		if (url.includes('/v1/elections/candidacies?') && url.includes('slug=')) {
 			return jsonResponse(CANDIDACY_DETAIL);
 		}
-		if (url.includes('/v1/places?') && url.includes('mtfcc=G4020')) {
+		if (url.includes('/v1/elections/places?') && url.includes('mtfcc=G4020')) {
 			return jsonResponse(NC_COUNTIES);
 		}
-		if (url.includes('/v1/places?') && url.includes('mtfcc=G4110')) {
+		if (url.includes('/v1/elections/places?') && url.includes('mtfcc=G4110')) {
 			return jsonResponse(NC_CITIES);
 		}
 

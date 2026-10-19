@@ -539,7 +539,7 @@ describe('resolvePlaceRaceElectionDates', () => {
 	test('fetches the upcoming race when the place date is a past primary', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/elections/races?') && url.includes('raceSlug=ca%2Flieutenant-governor') && url.includes('electionDateStart='),
+				match: url => url.includes('/v1/races?') && url.includes('raceSlug=ca%2Flieutenant-governor') && url.includes('electionDateStart='),
 				body: [
 					{
 						id: 1,
@@ -562,7 +562,7 @@ describe('resolvePlaceRaceElectionDates', () => {
 	test('a past general is refreshed too, to the slug\'s upcoming race', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/elections/races?') && url.includes('raceSlug=ca%2Flos-angeles%2Fcity-executive-mayor') && url.includes('electionDateStart='),
+				match: url => url.includes('/v1/races?') && url.includes('raceSlug=ca%2Flos-angeles%2Fcity-executive-mayor') && url.includes('electionDateStart='),
 				body: [{ id: 9, slug: 'ca/los-angeles/city-executive-mayor', name: 'Mayor', state: 'CA', electionDate: '2026-11-03T00:00:00.000Z', isPrimary: false }],
 			},
 		]);
@@ -604,7 +604,7 @@ describe('resolvePlaceRaceElectionDates', () => {
 	test('falls back to place date when races API returns nothing', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/elections/races?'),
+				match: url => url.includes('/v1/races?'),
 				body: [],
 			},
 		]);
@@ -1241,7 +1241,7 @@ describe('redirectCityRaceToFourLevelUrl', () => {
 	test('redirects to verified canonical county, not the URL county segment', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/elections/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
+				match: url => url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
 				body: [
 					{ slug: 'ok/caddo-county', name: 'Caddo County', mtfcc: 'G4020', state: 'OK' },
 					{ slug: 'ok/comanche-county', name: 'Comanche County', mtfcc: 'G4020', state: 'OK' },
@@ -1266,7 +1266,7 @@ describe('redirectCityRaceToFourLevelUrl', () => {
 	test('does not redirect when county lookup fails', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/elections/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
+				match: url => url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
 				body: [{ slug: 'ok/comanche-county', name: 'Comanche County', mtfcc: 'G4020', state: 'OK' }],
 			},
 		]);
@@ -1298,7 +1298,7 @@ describe('redirectCityPlaceToFourLevelUrl', () => {
 	test('redirects city on two-segment URL to canonical county with city segment', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/elections/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
+				match: url => url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
 				body: [
 					{ slug: 'ok/caddo-county', name: 'Caddo County', mtfcc: 'G4020', state: 'OK' },
 					{ slug: 'ok/comanche-county', name: 'Comanche County', mtfcc: 'G4020', state: 'OK' },
@@ -1318,7 +1318,7 @@ describe('redirectCityPlaceToFourLevelUrl', () => {
 	test('does not redirect when county lookup fails', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/elections/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
+				match: url => url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
 				body: [{ slug: 'ok/comanche-county', name: 'Comanche County', mtfcc: 'G4020', state: 'OK' }],
 			},
 		]);
@@ -1344,7 +1344,7 @@ describe('redirectCityPlaceToFourLevelUrl', () => {
 	test('does not redirect when canonical county slug equals current full slug', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/elections/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
+				match: url => url.includes('/v1/places?') && url.includes('state=OK') && url.includes('mtfcc=G4020'),
 				body: [{ slug: 'ok/binger', name: 'Binger', mtfcc: 'G4020', state: 'OK' }],
 			},
 		]);

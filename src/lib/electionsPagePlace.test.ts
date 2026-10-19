@@ -28,7 +28,7 @@ beforeEach(() => {
 	globalThis.fetch = (async (input: RequestInfo | URL) => {
 		const url = String(input);
 		requested.push(url);
-		const body = url.includes('/v1/places') ? [PLACE] : [];
+		const body = url.includes('/v1/elections/places') ? [PLACE] : [];
 		return await Promise.resolve(
 			new Response(JSON.stringify(body), {
 				status: 200,
@@ -50,7 +50,7 @@ afterEach(() => {
 
 function placeUrlsFor(slug: string): string[] {
 	const encoded = encodeURIComponent(slug);
-	return [...new Set(requested.filter(u => u.includes('/v1/places?') && u.includes(`slug=${encoded}`)))];
+	return [...new Set(requested.filter(u => u.includes('/v1/elections/places?') && u.includes(`slug=${encoded}`)))];
 }
 
 describe('one place read per /elections page render', () => {

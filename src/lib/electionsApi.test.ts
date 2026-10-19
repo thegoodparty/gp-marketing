@@ -6,6 +6,9 @@ import {
 	getCountyChildPlaces,
 	getFeaturedCities,
 	getCountySlugsByState,
+	getDistrictNames,
+	getPlacesByState,
+	ELECTION_PAGE_SIZE,
 	getPersonMergeSurvivorChain,
 	getPersonMergeSurvivorId,
 	getPersonsByIds,
@@ -70,7 +73,7 @@ describe('getCountyChildPlaces', () => {
 	test('returns hierarchy children for NV Mineral County (G4040 town-style child)', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('slug=nv%2Fmineral-county'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=nv%2Fmineral-county'),
 				body: [
 					{
 						slug: 'nv/mineral-county',
@@ -105,7 +108,7 @@ describe('getCountyChildPlaces', () => {
 	test('merges hierarchy and fallback cities for NV Lyon County and dedupes duplicate slugs', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('slug=nv%2Flyon-county'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=nv%2Flyon-county'),
 				body: [
 					{
 						slug: 'nv/lyon-county',
@@ -132,7 +135,7 @@ describe('getCountyChildPlaces', () => {
 			},
 			{
 				match: url =>
-					url.includes('/v1/places?') &&
+					url.includes('/v1/elections/places?') &&
 					url.includes('state=NV') &&
 					url.includes('mtfcc=G4110'),
 				body: [
@@ -165,7 +168,7 @@ describe('getCountyChildPlaces', () => {
 	test('returns hierarchy town children for CT Hartford County even with regional countyName values', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('slug=ct%2Fhartford-county'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=ct%2Fhartford-county'),
 				body: [
 					{
 						slug: 'ct/hartford-county',
@@ -199,7 +202,7 @@ describe('getCountyChildPlaces', () => {
 	test('falls back to countyName city matching when hierarchy children are empty', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('slug=wv%2Fbraxton-county'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=wv%2Fbraxton-county'),
 				body: [
 					{
 						slug: 'wv/braxton-county',
@@ -211,7 +214,7 @@ describe('getCountyChildPlaces', () => {
 			},
 			{
 				match: url =>
-					url.includes('/v1/places?') &&
+					url.includes('/v1/elections/places?') &&
 					url.includes('state=WV') &&
 					url.includes('mtfcc=G4110'),
 				body: [
@@ -240,7 +243,7 @@ describe('getCountyChildPlaces', () => {
 	test('merges G4040 towns for Maine Androscoggin when hierarchy children are sparse (production-shaped)', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('slug=me%2Fandroscoggin-county'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=me%2Fandroscoggin-county'),
 				body: [
 					{
 						slug: 'me/androscoggin-county',
@@ -267,7 +270,7 @@ describe('getCountyChildPlaces', () => {
 			},
 			{
 				match: url =>
-					url.includes('/v1/places?') &&
+					url.includes('/v1/elections/places?') &&
 					url.includes('state=ME') &&
 					url.includes('mtfcc=G4110'),
 				body: [
@@ -282,7 +285,7 @@ describe('getCountyChildPlaces', () => {
 			},
 			{
 				match: url =>
-					url.includes('/v1/places?') &&
+					url.includes('/v1/elections/places?') &&
 					url.includes('state=ME') &&
 					url.includes('mtfcc=G4040'),
 				body: [
@@ -316,7 +319,7 @@ describe('resolveCountySlugForPlace', () => {
 		withFetchMock([
 			{
 				match: url =>
-					url.includes('/v1/places?') && url.includes('state=MI') && url.includes('mtfcc=G4020'),
+					url.includes('/v1/elections/places?') && url.includes('state=MI') && url.includes('mtfcc=G4020'),
 				body: [
 					{ slug: 'mi/wayne-county', name: 'Wayne County', mtfcc: 'G4020', state: 'MI' },
 					{ slug: 'mi/oakland-county', name: 'Oakland County', mtfcc: 'G4020', state: 'MI' },
@@ -332,7 +335,7 @@ describe('getCitySlugToCountySlugMap', () => {
 	const NC_PLACES: FetchMockResponse[] = [
 		{
 			match: url =>
-				url.includes('/v1/places?') && url.includes('state=NC') && url.includes('mtfcc=G4020'),
+				url.includes('/v1/elections/places?') && url.includes('state=NC') && url.includes('mtfcc=G4020'),
 			body: [
 				{ slug: 'nc/guilford-county', name: 'Guilford County', mtfcc: 'G4020', state: 'NC' },
 				{ slug: 'nc/wake-county', name: 'Wake County', mtfcc: 'G4020', state: 'NC' },
@@ -340,7 +343,7 @@ describe('getCitySlugToCountySlugMap', () => {
 		},
 		{
 			match: url =>
-				url.includes('/v1/places?') && url.includes('state=NC') && url.includes('mtfcc=G4110'),
+				url.includes('/v1/elections/places?') && url.includes('state=NC') && url.includes('mtfcc=G4110'),
 			body: [
 				{ slug: 'nc/greensboro', name: 'Greensboro', mtfcc: 'G4110', state: 'NC', countyName: 'Guilford' },
 				{ slug: 'nc/nowhere', name: 'Nowhere', mtfcc: 'G4110', state: 'NC', countyName: 'Not A County' },
@@ -348,7 +351,7 @@ describe('getCitySlugToCountySlugMap', () => {
 		},
 		{
 			match: url =>
-				url.includes('/v1/places?') && url.includes('state=NC') && url.includes('mtfcc=G4040'),
+				url.includes('/v1/elections/places?') && url.includes('state=NC') && url.includes('mtfcc=G4040'),
 			// The feed sends the county name both bare and suffixed.
 			body: [{ slug: 'nc/cary', name: 'Cary', mtfcc: 'G4040', state: 'NC', countyName: 'Wake County' }],
 		},
@@ -377,12 +380,12 @@ describe('getCitySlugToCountySlugMap', () => {
 		withFetchMock([
 			{
 				match: url =>
-					url.includes('/v1/places?') && url.includes('state=LA') && url.includes('mtfcc=G4020'),
+					url.includes('/v1/elections/places?') && url.includes('state=LA') && url.includes('mtfcc=G4020'),
 				body: [{ slug: 'la/jefferson-parish', name: 'Jefferson Parish', mtfcc: 'G4020', state: 'LA' }],
 			},
 			{
 				match: url =>
-					url.includes('/v1/places?') && url.includes('state=LA') && url.includes('mtfcc=G4110'),
+					url.includes('/v1/elections/places?') && url.includes('state=LA') && url.includes('mtfcc=G4110'),
 				body: [{ slug: 'la/kenner', name: 'Kenner', mtfcc: 'G4110', state: 'LA', countyName: 'Jefferson' }],
 			},
 		]);
@@ -402,11 +405,11 @@ describe('getCitySlugToCountySlugMap', () => {
 describe('getCitySlugToCountySlugMap with walkCountiesWhenEmpty', () => {
 	const CT_EMPTY_SWEEP: FetchMockResponse[] = [
 		{
-			match: url => url.includes('/v1/places?') && url.includes('state=CT') && url.includes('mtfcc=G4020'),
+			match: url => url.includes('/v1/elections/places?') && url.includes('state=CT') && url.includes('mtfcc=G4020'),
 			body: [{ slug: 'ct/fairfield-county', name: 'Fairfield County', mtfcc: 'G4020', state: 'CT' }],
 		},
 		{
-			match: url => url.includes('/v1/places?') && url.includes('slug=ct%2Ffairfield-county'),
+			match: url => url.includes('/v1/elections/places?') && url.includes('slug=ct%2Ffairfield-county'),
 			body: [
 				{
 					slug: 'ct/fairfield-county',
@@ -443,15 +446,15 @@ describe('getCitySlugToCountySlugMap with walkCountiesWhenEmpty', () => {
 	test('does not walk when the sweep mapped something', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('state=NC') && url.includes('mtfcc=G4020'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('state=NC') && url.includes('mtfcc=G4020'),
 				body: [{ slug: 'nc/guilford-county', name: 'Guilford County', mtfcc: 'G4020', state: 'NC' }],
 			},
 			{
-				match: url => url.includes('/v1/places?') && url.includes('state=NC') && url.includes('mtfcc=G4110'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('state=NC') && url.includes('mtfcc=G4110'),
 				body: [{ slug: 'nc/greensboro', name: 'Greensboro', mtfcc: 'G4110', state: 'NC', countyName: 'Guilford' }],
 			},
 			{
-				match: url => url.includes('/v1/places?') && url.includes('includeChildren=true'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('includeChildren=true'),
 				body: [{ slug: 'nc/guilford-county', children: [{ slug: 'nc/should-not-appear', mtfcc: 'G4110' }] }],
 			},
 		]);
@@ -466,7 +469,7 @@ describe('getCountySlugsByState', () => {
 	test('collects the state county-equivalent slugs', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('state=VA') && url.includes('mtfcc=G4020'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('state=VA') && url.includes('mtfcc=G4020'),
 				body: [
 					{ slug: 'va/accomack-county', name: 'Accomack County', mtfcc: 'G4020', state: 'VA' },
 					// An independent city is a county-equivalent, and its slug says "city".
@@ -486,11 +489,11 @@ describe('resolveCountySlugForCitySlug', () => {
 	test('asks the city for its county, then the county for its slug', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('slug=id%2Fcoeur-dalene'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=id%2Fcoeur-dalene'),
 				body: [{ slug: 'id/coeur-dalene', name: "Coeur d'Alene", mtfcc: 'G4110', countyName: 'Kootenai' }],
 			},
 			{
-				match: url => url.includes('/v1/places?') && url.includes('state=ID') && url.includes('mtfcc=G4020'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('state=ID') && url.includes('mtfcc=G4020'),
 				body: [{ slug: 'id/kootenai-county', name: 'Kootenai County', mtfcc: 'G4020', state: 'ID' }],
 			},
 		]);
@@ -501,7 +504,7 @@ describe('resolveCountySlugForCitySlug', () => {
 	test('resolves to nothing when the place carries no county', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('slug=va%2Fsuffolk'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=va%2Fsuffolk'),
 				body: [{ slug: 'va/suffolk', name: 'Suffolk', mtfcc: 'G4110' }],
 			},
 		]);
@@ -514,7 +517,7 @@ describe('resolveRaceElectionHrefs', () => {
 	test('returns generic path for LOCAL school district without county expansion', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/races?') && url.includes('ok%2Ftecumseh-public-schools'),
+				match: url => url.includes('/v1/elections/races?') && url.includes('ok%2Ftecumseh-public-schools'),
 				body: [
 					{
 						slug: 'ok/tecumseh-public-schools/local-school-board',
@@ -543,7 +546,7 @@ describe('resolveRaceElectionHrefs', () => {
 	test('expands CITY race to canonical 4-level candidates URL', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/races?') && url.includes('mi%2Fnorthville'),
+				match: url => url.includes('/v1/elections/races?') && url.includes('mi%2Fnorthville'),
 				body: [
 					{
 						slug: 'mi/northville/city-legislature',
@@ -559,7 +562,7 @@ describe('resolveRaceElectionHrefs', () => {
 			},
 			{
 				match: url =>
-					url.includes('/v1/places?') && url.includes('state=MI') && url.includes('mtfcc=G4020'),
+					url.includes('/v1/elections/places?') && url.includes('state=MI') && url.includes('mtfcc=G4020'),
 				body: [{ slug: 'mi/wayne-county', name: 'Wayne County', mtfcc: 'G4020', state: 'MI' }],
 			},
 		]);
@@ -574,7 +577,7 @@ describe('resolveRaceElectionHrefs', () => {
 	test('expands CITY race when positionLevel is empty string and falls back to race fetch', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/races?') && url.includes('mi%2Fnorthville'),
+				match: url => url.includes('/v1/elections/races?') && url.includes('mi%2Fnorthville'),
 				body: [
 					{
 						slug: 'mi/northville/city-legislature',
@@ -590,7 +593,7 @@ describe('resolveRaceElectionHrefs', () => {
 			},
 			{
 				match: url =>
-					url.includes('/v1/places?') && url.includes('state=MI') && url.includes('mtfcc=G4020'),
+					url.includes('/v1/elections/places?') && url.includes('state=MI') && url.includes('mtfcc=G4020'),
 				body: [{ slug: 'mi/wayne-county', name: 'Wayne County', mtfcc: 'G4020', state: 'MI' }],
 			},
 		]);
@@ -666,7 +669,7 @@ describe('isStateIndexDistrictPlace', () => {
 });
 
 /**
- * `/v1/races` coerces an absent `isPrimary` to `false`, so the unfiltered lookup is really a
+ * `/v1/elections/races` coerces an absent `isPrimary` to `false`, so the unfiltered lookup is really a
  * general-elections-only lookup. Offices that exist in the feed only as a primary row came back
  * empty and their position page 404'd, while the county index page and the "View Position" link
  * on every officeholder's /people profile kept listing them (25 of the 26 dead
@@ -933,6 +936,67 @@ describe('getRemovedPersonIds', () => {
 	});
 });
 
+describe('election reads go to gp-api', () => {
+	function captureUrls(respond: (url: URL) => Response): URL[] {
+		const urls: URL[] = [];
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = new URL(String(input));
+			urls.push(url);
+			return respond(url);
+		}) as typeof fetch;
+		return urls;
+	}
+	const json = (body: unknown, status = 200) =>
+		new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
+
+	test('places for a state walk every page instead of stopping at gp-api\u2019s 1,000-row default', async () => {
+		const full = Array.from({ length: ELECTION_PAGE_SIZE }, (_, i) => ({ slug: `tx/place-${i}`, name: `Place ${i}` }));
+		const urls = captureUrls(url => {
+			const page = url.searchParams.get('page');
+			if (page === '1') return json(full);
+			if (page === '2') return json([{ slug: 'tx/last', name: 'Last' }]);
+			return json({}, 404);
+		});
+
+		const places = await getPlacesByState({ state: 'tx' });
+
+		expect(places).toHaveLength(ELECTION_PAGE_SIZE + 1);
+		expect(urls.map(u => [u.pathname, u.searchParams.get('page'), u.searchParams.get('pageSize')])).toEqual([
+			['/v1/elections/places', '1', String(ELECTION_PAGE_SIZE)],
+			['/v1/elections/places', '2', String(ELECTION_PAGE_SIZE)],
+		]);
+	});
+
+	test('candidacies for a shared race slug walk past one page', async () => {
+		const full = Array.from({ length: ELECTION_PAGE_SIZE }, (_, i) => ({ id: `c-${i}`, slug: `cand-${i}` }));
+		const urls = captureUrls(url => (url.searchParams.get('page') === '1' ? json(full) : json([{ id: 'c-last', slug: 'cand-last' }])));
+
+		const candidacies = await getCandidacies({ raceSlug: 'tx/state-house' });
+
+		expect(candidacies).toHaveLength(ELECTION_PAGE_SIZE + 1);
+		expect(urls.map(u => [u.pathname, u.searchParams.get('page')])).toEqual([
+			['/v1/elections/candidacies', '1'],
+			['/v1/elections/candidacies', '2'],
+		]);
+	});
+
+	test('a full last page ends on the 404 /places sends past its last row', async () => {
+		const full = Array.from({ length: ELECTION_PAGE_SIZE }, (_, i) => ({ slug: `tx/place-${i}`, name: `Place ${i}` }));
+		captureUrls(url => (url.searchParams.get('page') === '1' ? json(full) : json({}, 404)));
+
+		expect(await getPlacesByState({ state: 'tx' })).toHaveLength(ELECTION_PAGE_SIZE);
+	});
+
+	test('district names keep election-api\u2019s default and include districts without turnout', async () => {
+		const urls = captureUrls(() => json([]));
+
+		await getDistrictNames({ L2DistrictType: 'City_Council_Commissioner_District', state: 'tx', electionYear: 2026 });
+
+		expect(urls[0]?.pathname).toBe('/v1/elections/districts/names');
+		expect(urls[0]?.searchParams.get('excludeInvalid')).toBe('false');
+	});
+});
+
 describe('gp-api person-profile reads carry the M2M token', () => {
 	const PERSON_ID = 'ab12cd34-0000-0000-0000-000000000001';
 
@@ -1028,7 +1092,7 @@ describe('gp-api person-profile reads carry the M2M token', () => {
 describe('getPersonMergeSurvivorId', () => {
 	const RETIRED = '11111111-1111-1111-1111-111111111111';
 	const SURVIVOR = '22222222-2222-2222-2222-222222222222';
-	const isMergeLookup = (url: string) => url.includes(`/v1/person-merges/${RETIRED}`);
+	const isMergeLookup = (url: string) => url.includes(`/v1/elections/person-merges/${RETIRED}`);
 
 	test('returns the survivor for a purged duplicate', async () => {
 		withFetchMock([
@@ -1057,7 +1121,7 @@ describe('getPersonMergeSurvivorChain', () => {
 	const R = '11111111-1111-1111-1111-111111111111';
 	const S = '22222222-2222-2222-2222-222222222222';
 	const T = '33333333-3333-3333-3333-333333333333';
-	const mergeFor = (id: string) => (url: string) => url.includes(`/v1/person-merges/${id}`);
+	const mergeFor = (id: string) => (url: string) => url.includes(`/v1/elections/person-merges/${id}`);
 
 	test('returns nothing for an id that was never retired', async () => {
 		withFetchMock([{ match: mergeFor(R), body: null, status: 404 }]);
@@ -1136,7 +1200,7 @@ describe('getFeaturedCities', () => {
 	test('ranks the cities of a county and links them under that county', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('slug=tn%2Fdavidson-county'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=tn%2Fdavidson-county'),
 				body: [
 					{
 						slug: 'tn/davidson-county',
@@ -1149,7 +1213,7 @@ describe('getFeaturedCities', () => {
 			{
 				// The same two cities in the state list, at the shorter slug the API uses
 				// there: they must merge into one card each, not duplicate.
-				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4110'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('mtfcc=G4110'),
 				body: [city('tn/nashville', 'Nashville', 4), city('tn/belle-meade', 'Belle Meade', 1)],
 			},
 		]);
@@ -1164,7 +1228,7 @@ describe('getFeaturedCities', () => {
 	test('leaves the page’s own city out of its neighbours', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('slug=tn%2Fdavidson-county'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=tn%2Fdavidson-county'),
 				body: [
 					{
 						slug: 'tn/davidson-county',
@@ -1187,15 +1251,15 @@ describe('getFeaturedCities', () => {
 	test('sweeps the state on a state page and resolves each city’s county for the link', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('state=TN') && url.includes('mtfcc=G4110'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('state=TN') && url.includes('mtfcc=G4110'),
 				body: [city('tn/nashville', 'Nashville', 4)],
 			},
 			{
-				match: url => url.includes('/v1/places?') && url.includes('state=TN') && url.includes('mtfcc=G4040'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('state=TN') && url.includes('mtfcc=G4040'),
 				body: [city('tn/smallville', 'Smallville', 2, 'G4040')],
 			},
 			{
-				match: url => url.includes('/v1/places?') && url.includes('state=TN') && url.includes('mtfcc=G4020'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('state=TN') && url.includes('mtfcc=G4020'),
 				body: [{ slug: 'tn/davidson-county', name: 'Davidson County', mtfcc: 'G4020', state: 'TN' }],
 			},
 		]);
@@ -1216,7 +1280,7 @@ describe('getFeaturedCities', () => {
 	test('merges cities the county hierarchy omits, and keeps other counties out', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('slug=tn%2Fdavidson-county'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=tn%2Fdavidson-county'),
 				body: [
 					{
 						slug: 'tn/davidson-county',
@@ -1227,7 +1291,7 @@ describe('getFeaturedCities', () => {
 				],
 			},
 			{
-				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4110'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('mtfcc=G4110'),
 				body: [
 					city('tn/nashville', 'Nashville', 6),
 					{ ...city('tn/franklin', 'Franklin', 9), countyName: 'Williamson' },
@@ -1250,11 +1314,11 @@ describe('getFeaturedCities', () => {
 	test('falls back to the state sweep for a childless county, narrowed by county name', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('slug=tn%2Fdekalb-county'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=tn%2Fdekalb-county'),
 				body: [{ slug: 'tn/dekalb-county', name: 'DeKalb County', mtfcc: 'G4020', state: 'TN', children: [] }],
 			},
 			{
-				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4110'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('mtfcc=G4110'),
 				body: [
 					{ ...city('tn/smithville', 'Smithville', 5), countyName: 'DeKalb' },
 					{ ...city('tn/alexandria', 'Alexandria', 2), countyName: 'DeKalb' },
@@ -1264,14 +1328,14 @@ describe('getFeaturedCities', () => {
 			{
 				// Towns sweep separately from cities and are just as much a featured
 				// city — in New England they are the primary local unit.
-				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4040'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('mtfcc=G4040'),
 				body: [
 					{ ...city('tn/dekalb-county/dowelltown', 'Dowelltown', 3, 'G4040'), countyName: 'DeKalb' },
 					{ ...city('tn/bedford-county/shelbyville', 'Shelbyville', 7, 'G4040'), countyName: 'Bedford' },
 				],
 			},
 			{
-				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4020'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('mtfcc=G4020'),
 				body: [{ slug: 'tn/dekalb-county', name: 'DeKalb County', mtfcc: 'G4020', state: 'TN' }],
 			},
 		]);
@@ -1289,12 +1353,12 @@ describe('getFeaturedCities', () => {
 		let sweeps = 0;
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('slug=tn%2Fsome-school-district'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=tn%2Fsome-school-district'),
 				body: [{ slug: 'tn/some-school-district', name: 'Some School District', mtfcc: 'G5420', state: 'TN', children: [] }],
 			},
 			{
 				match: url => {
-					const isSweep = url.includes('/v1/places?') && url.includes('mtfcc=G4110');
+					const isSweep = url.includes('/v1/elections/places?') && url.includes('mtfcc=G4110');
 					if (isSweep) sweeps += 1;
 					return isSweep;
 				},
@@ -1314,14 +1378,14 @@ describe('getFeaturedCities', () => {
 	test('skips a city whose county cannot be resolved, and promotes the next one', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4110'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('mtfcc=G4110'),
 				body: [
 					{ ...city('tn/mystery-city', 'Mystery City', 20), countyName: undefined },
 					city('tn/nashville', 'Nashville', 4),
 				],
 			},
 			{
-				match: url => url.includes('/v1/places?') && url.includes('mtfcc=G4020'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('mtfcc=G4020'),
 				body: [{ slug: 'tn/davidson-county', name: 'Davidson County', mtfcc: 'G4020', state: 'TN' }],
 			},
 		]);
@@ -1335,7 +1399,7 @@ describe('getFeaturedCities', () => {
 	test('returns nothing when the place has no cities with elections', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('slug=tn%2Fempty-county'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=tn%2Fempty-county'),
 				body: [
 					{
 						slug: 'tn/empty-county',

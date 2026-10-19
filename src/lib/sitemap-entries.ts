@@ -116,6 +116,10 @@ const GP_API_BASE =
 	process.env['NEXT_PUBLIC_API_BASE'] ??
 	ELECTION_API_BASE.replace('election-api', 'gp-api');
 
+// Election data is served by gp-api now; ELECTION_API_BASE above only survives
+// to derive the gp-api host where GP_API_BASE_URL is not set yet.
+const ELECTIONS_BASE = `${GP_API_BASE.replace(/\/$/, '')}/v1/elections`;
+
 const CACHE_1H: RequestInit = { next: { revalidate: 3600 } };
 
 /** Next.js data-cache tag for the /people sitemap upstream fetches. Bust via revalidateTag. */
@@ -214,7 +218,7 @@ async function fetchMunicipalitiesByCountyWalk(places: CountyPlace[]): Promise<C
 			// necessary.
 			const rows = await fetchElectionJson<{
 				children?: Array<{ slug?: string; mtfcc?: string }>;
-			}>('v1/places', {
+			}>('places', {
 				slug: county.slug ?? '',
 				includeChildren: 'true',
 				includeRaces: 'false',
@@ -423,16 +427,16 @@ export async function fetchStateElectionRouteParams(stateCode: string): Promise<
 	const code = stateCode.toUpperCase();
 
 	const [places, cityPlaces, townPlaces, races] = await Promise.all([
-		fetchElectionJson<{ slug?: string; mtfcc?: string; name?: string }>('v1/places', {
+		fetchElectionPages<{ slug?: string; mtfcc?: string; name?: string }>('places', {
 			state: code,
 			placeColumns: 'slug,mtfcc,name',
 		}),
-		fetchElectionJson<{ slug?: string; countyName?: string }>('v1/places', {
+		fetchElectionPages<{ slug?: string; countyName?: string }>('places', {
 			state: code,
 			mtfcc: CITY_MTFCC,
 			placeColumns: 'slug,countyName',
 		}),
-		fetchElectionJson<{ slug?: string; countyName?: string }>('v1/places', {
+		fetchElectionPages<{ slug?: string; countyName?: string }>('places', {
 			state: code,
 			mtfcc: TOWN_MTFCC,
 			placeColumns: 'slug,countyName',
@@ -588,7 +592,7 @@ async function fetchElectionJsonOrThrow<T>(
 	tags?: readonly string[],
 ): Promise<T[]> {
 	const search = new URLSearchParams(params).toString();
-	const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}?${search}`;
+	const url = `${ELECTIONS_BASE}/${path.replace(/^\//, '')}?${search}`;
 	const result = await fetchElectionApiJsonCached(url, tags);
 	if (!result.ok) throw new Error(`[sitemap] Election API ${result.status} ${url}`);
 	if (!Array.isArray(result.json)) {
@@ -633,7 +637,7 @@ async function fetchAllStateRaces(code: string): Promise<RaceEntry[]> {
 			page: String(page),
 			pageSize: String(RACE_PAGE_SIZE),
 		}).toString();
-		const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/v1/races?${search}`;
+		const url = `${ELECTIONS_BASE}/races?${search}`;
 		const result = await fetchElectionApiJsonCached(url);
 		if (!result.ok) {
 			if (page === 1 && result.status === 404) return races;
@@ -647,13 +651,64 @@ async function fetchAllStateRaces(code: string): Promise<RaceEntry[]> {
 	throw new Error(`[sitemap] ${code} races exceeded ${MAX_RACE_PAGES} pages of ${RACE_PAGE_SIZE}`);
 }
 
+/**
+ * gp-api's largest page for the state-wide reads below (places, persons,
+ * candidacies, officeholders). election-api answered these whole; gp-api caps
+ * each page at 1,000 rows unless asked, and the cap is silent, so a state
+ * sweep has to walk pages the same way the race walk does.
+ */
+export const ELECTION_PAGE_SIZE = 5000;
+
+/** A runaway guard: 200,000 rows per state sweep, far past any real state. */
+const MAX_ELECTION_PAGES = 40;
+
+/**
+ * Strict page walk for the /people band: any failed page throws, because a
+ * partial sweep looks exactly like a complete one. That includes a 404: the
+ * person, candidacy and office-term reads answer [] when they run out, so a
+ * 404 from them is a fault. Only /places answers 404 past its last row, and
+ * only its caller passes `notFoundEndsWalk`.
+ */
+async function fetchElectionPagesOrThrow<T>(
+	path: string,
+	params: Record<string, string>,
+	tags?: readonly string[],
+	notFoundEndsWalk = false,
+): Promise<T[]> {
+	const rows: T[] = [];
+	for (let page = 1; page <= MAX_ELECTION_PAGES; page++) {
+		const search = new URLSearchParams({ ...params, page: String(page), pageSize: String(ELECTION_PAGE_SIZE) }).toString();
+		const url = `${ELECTIONS_BASE}/${path.replace(/^\//, '')}?${search}`;
+		const result = await fetchElectionApiJsonCached(url, tags);
+		if (!result.ok) {
+			if (result.status === 404 && notFoundEndsWalk) return rows;
+			throw new Error(`[sitemap] Election API ${result.status} ${url}`);
+		}
+		if (!Array.isArray(result.json)) throw new Error(`[sitemap] Election API non-array body ${url}`);
+		const pageRows = result.json as T[];
+		rows.push(...pageRows);
+		if (pageRows.length < ELECTION_PAGE_SIZE) return rows;
+	}
+	throw new Error(`[sitemap] ${path} ${JSON.stringify(params)} exceeded ${MAX_ELECTION_PAGES} pages of ${ELECTION_PAGE_SIZE}`);
+}
+
+/** Soft /places walk for the election bands: like fetchElectionJson, a failure logs and degrades to []. */
+async function fetchElectionPages<T>(path: string, params: Record<string, string>): Promise<T[]> {
+	try {
+		return await fetchElectionPagesOrThrow<T>(path, params, undefined, true);
+	} catch (err) {
+		console.error('[sitemap] Election API page walk failed', path, err instanceof Error ? err.message : String(err));
+		return [];
+	}
+}
+
 async function fetchElectionJson<T>(
 	path: string,
 	params: Record<string, string>,
 	tags?: readonly string[],
 ): Promise<T[]> {
 	const search = new URLSearchParams(params).toString();
-	const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}?${search}`;
+	const url = `${ELECTIONS_BASE}/${path.replace(/^\//, '')}?${search}`;
 	try {
 		const result = await fetchElectionApiJsonCached(url, tags);
 		if (!result.ok) {
@@ -798,16 +853,16 @@ export async function fetchStateElectionSitemapEntries(
 	const code = stateCode.toUpperCase();
 
 	const [places, cityPlaces, townPlaces, races] = await Promise.all([
-		fetchElectionJson<{ slug?: string; mtfcc?: string; name?: string }>('v1/places', {
+		fetchElectionPages<{ slug?: string; mtfcc?: string; name?: string }>('places', {
 			state: code,
 			placeColumns: 'slug,mtfcc,name',
 		}),
-		fetchElectionJson<{ slug?: string; countyName?: string }>('v1/places', {
+		fetchElectionPages<{ slug?: string; countyName?: string }>('places', {
 			state: code,
 			mtfcc: CITY_MTFCC,
 			placeColumns: 'slug,countyName',
 		}),
-		fetchElectionJson<{ slug?: string; countyName?: string }>('v1/places', {
+		fetchElectionPages<{ slug?: string; countyName?: string }>('places', {
 			state: code,
 			mtfcc: TOWN_MTFCC,
 			placeColumns: 'slug,countyName',
@@ -958,8 +1013,8 @@ async function fetchAllPersons(
 	const byId = new Map<string, PeopleSitemapPerson>();
 
 	const sweeps = await mapWithConcurrency(states, ENUMERATION_CONCURRENCY, async (state) =>
-		fetchElectionJsonOrThrow<PeopleSitemapPerson>(
-			'v1/persons',
+		fetchElectionPagesOrThrow<PeopleSitemapPerson>(
+			'persons',
 			{ state, columns: 'id,slug' },
 			tags,
 		),
@@ -984,15 +1039,15 @@ async function fetchAllPersons(
 	// `placeColumns`/`raceColumns` used elsewhere in this file would 400.
 	const linkedFeeds: { path: string; state: string; columns: string }[] = states.flatMap(
 		(state) => [
-			{ path: 'v1/candidacies', state, columns: 'personId,positionName' },
-			{ path: 'v1/officeholders', state, columns: 'personId,positionName,officeTitle' },
+			{ path: 'candidacies', state, columns: 'personId,positionName' },
+			{ path: 'officeholders', state, columns: 'personId,positionName,officeTitle' },
 		],
 	);
 	const linked = await mapWithConcurrency(
 		linkedFeeds,
 		ENUMERATION_CONCURRENCY,
 		async ({ path, state, columns }) =>
-			fetchElectionJsonOrThrow<LinkedFeedRow>(path, { state, columns }, tags),
+			fetchElectionPagesOrThrow<LinkedFeedRow>(path, { state, columns }, tags),
 	);
 	const unseen = new Set<string>();
 	const personIdsWithOffice = new Set<string>();
@@ -1029,7 +1084,7 @@ async function fetchAllPersons(
 		ENUMERATION_CONCURRENCY,
 		async (ids) =>
 			fetchElectionJsonOrThrow<PeopleSitemapPerson>(
-				'v1/persons',
+				'persons',
 				{ ids: ids.join(','), columns: 'id,slug' },
 				tags,
 			),

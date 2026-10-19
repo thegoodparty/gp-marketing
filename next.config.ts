@@ -78,8 +78,6 @@ const nextConfig = {
 
 		remotePatterns: [
 			{ hostname: 'cdn.sanity.io' },
-			{ hostname: 'election-api.goodparty.org' },
-			{ hostname: 'election-api-dev.goodparty.org' },
 			{ hostname: 'img.clerk.com' },
 		],
 	},

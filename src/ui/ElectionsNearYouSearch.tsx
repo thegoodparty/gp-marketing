@@ -16,7 +16,7 @@ import { cn, tv } from './_lib/utils.ts';
 import { Button } from './Inputs/Button.tsx';
 import { primaryButtonStyleType } from './_lib/designTypesStore.ts';
 import { useMediaQuery } from './_lib/useMediaQuery.ts';
-import { trackDataLayerEvent, trackEvent } from '~/lib/analytics';
+import { trackDataLayerEvent, trackEvent, trackMetaVoterGuideSearchComplete } from '~/lib/analytics';
 import {
 	ELECTIONS_SEARCH_DATA_LAYER_EVENTS,
 	ELECTIONS_SEARCH_MIN_QUERY_LENGTH,
@@ -338,8 +338,13 @@ export function ElectionsNearYouSearch(props: ElectionsNearYouSearchProps) {
 			const deps: ElectionsNearYouSearchDeps = {
 				resolvePlace: resolvePlaceOverHttp,
 				trackEvent,
-				trackDataLayerEvent: (event, properties) =>
-					trackDataLayerEvent(event, { ...electionsSearchDataLayerContext(placement, window.location.pathname), ...properties }),
+				trackDataLayerEvent: (event, properties) => {
+					const context = electionsSearchDataLayerContext(placement, window.location.pathname);
+					trackDataLayerEvent(event, { ...context, ...properties });
+					if (event === ELECTIONS_SEARCH_DATA_LAYER_EVENTS.completed.event) {
+						trackMetaVoterGuideSearchComplete({ page_path: context.page_path, ...properties });
+					}
+				},
 				// A full navigation, not the App Router's client-side `push`: the
 				// destination is a different, server-rendered elections page, and
 				// this keeps the form free of a router dependency the owning blocks

@@ -2,7 +2,12 @@
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
 import {
 	trackDataLayerEvent,
+	trackMetaCustomEvent,
+	trackMetaVoterGuideSearchComplete,
 	trackVoterGuideEvent,
+	VOTER_GUIDE_META_ENGAGED_EVENT,
+	VOTER_GUIDE_META_EVENTS,
+	VOTER_GUIDE_META_SEARCH_EVENT,
 	trackVoterGuideProfileViewed,
 	VOTER_GUIDE_EVENTS,
 	type VoterGuideEventKey,
@@ -19,9 +24,10 @@ type Call = { name: string; props?: Record<string, unknown> };
 
 type StubWindow = {
 	dataLayer?: Record<string, unknown>[];
+	fbq?: (method: string, name: string, props?: Record<string, unknown>) => void;
 	amplitude?: { track(name: string, props?: Record<string, unknown>): void };
 	analytics?: { track(name: string, props?: Record<string, unknown>): void };
-	location: { pathname: string };
+	location: { pathname: string; hostname: string };
 	addEventListener(type: string, listener: () => void, options?: unknown): void;
 	removeEventListener(type: string, listener: () => void): void;
 };
@@ -31,15 +37,18 @@ const originalWindow = testGlobal.window;
 
 let amplitudeCalls: Call[];
 let segmentCalls: Call[];
+let metaCalls: { method: string; name: string; props?: Record<string, unknown> }[];
 let listeners: Map<string, (() => void)[]>;
 let stub: StubWindow;
 
 function installWindow(opts: { amplitude: boolean }) {
 	amplitudeCalls = [];
 	segmentCalls = [];
+	metaCalls = [];
 	listeners = new Map();
 	stub = {
-		location: { pathname: '/elections/tx/harris-county' },
+		location: { pathname: '/elections/tx/harris-county', hostname: 'goodparty.org' },
+		fbq: (method, name, props) => metaCalls.push({ method, name, props }),
 		analytics: { track: (name, props) => segmentCalls.push({ name, props }) },
 		addEventListener: (type, listener) => listeners.set(type, [...(listeners.get(type) ?? []), listener]),
 		removeEventListener: (type, listener) =>
@@ -229,6 +238,57 @@ describe('the event names', () => {
 			const { dataLayer, amplitude } = VOTER_GUIDE_EVENTS[key];
 			if (dataLayer) expect(doc).toContain(`\`${dataLayer}\``);
 			expect(doc).toContain(amplitude);
+		}
+	});
+});
+
+describe('the Meta pixel events', () => {
+	test('an office click reaches the pixel under its Meta name and as the engaged umbrella, with only the step keys', () => {
+		trackVoterGuideEvent('officeClick', { list: 'offices', office_name: 'Mayor', office_level: 'local', href: '/x' });
+		expect(metaCalls).toEqual([
+			{ method: 'trackCustom', name: 'VoterGuideOfficeClick', props: { page_path: '/elections/tx/harris-county', list: 'offices', office_level: 'local' } },
+			{
+				method: 'trackCustom',
+				name: VOTER_GUIDE_META_ENGAGED_EVENT,
+				props: { page_path: '/elections/tx/harris-county', list: 'offices', office_level: 'local', step: 'VoterGuideOfficeClick' },
+			},
+		]);
+	});
+
+	test('both candidate click sources map to the profile click event', () => {
+		trackVoterGuideEvent('positionPersonClick', { list: 'candidates', name: 'Jane', is_pledged: true });
+		trackVoterGuideEvent('featuredCandidateClick', { name: 'Jane', is_pledged: false });
+		expect(metaCalls.filter(c => c.name === 'VoterGuideProfileClick').map(c => c.props)).toEqual([
+			{ page_path: '/elections/tx/harris-county', list: 'candidates', is_pledged: true },
+			{ page_path: '/elections/tx/harris-county', is_pledged: false },
+		]);
+		expect(metaCalls.some(c => c.props && 'name' in c.props)).toBe(false);
+	});
+
+	test('a completed search reaches the pixel as the search event and the umbrella', () => {
+		trackMetaVoterGuideSearchComplete({ page_path: '/elections', input_type: 'autocomplete', matched_level: 'city' });
+		expect(metaCalls.map(c => c.name)).toEqual([VOTER_GUIDE_META_SEARCH_EVENT, VOTER_GUIDE_META_ENGAGED_EVENT]);
+		expect(metaCalls[0]?.props).toEqual({ page_path: '/elections', input_type: 'autocomplete', matched_level: 'city' });
+	});
+
+	test('clicks that are not bid signals do not reach the pixel', () => {
+		trackVoterGuideEvent('heroButtonClick', { label: 'See elections' });
+		trackVoterGuideEvent('pledgeModalOpen', { source: 'profile_hero' });
+		expect(metaCalls).toEqual([]);
+	});
+
+	test('nothing is sent from dev or preview hosts, and a missing pixel is tolerated', () => {
+		stub.location.hostname = 'dev.goodparty.org';
+		trackVoterGuideEvent('officeClick', { list: 'offices' });
+		expect(metaCalls).toEqual([]);
+		stub.location.hostname = 'goodparty.org';
+		delete stub.fbq;
+		expect(() => trackMetaCustomEvent('VoterGuideOfficeClick', {})).not.toThrow();
+	});
+
+	test('every Meta mapping points at a real voter guide event', () => {
+		for (const key of Object.keys(VOTER_GUIDE_META_EVENTS)) {
+			expect(key in VOTER_GUIDE_EVENTS).toBe(true);
 		}
 	});
 });

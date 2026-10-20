@@ -68,6 +68,19 @@ On profiles the claim block's sign-up button still sends `Sign Up Clicked` and t
 `sign_up_click` data layer push with form id `person-claim-owner`, as the band did; the
 claim event is in addition to them.
 
+## The Meta pixel events (paid media bids on these)
+
+The pixel in `~/ui/FacebookPixel` sends a PageView everywhere it loads. Three voter guide steps also reach it as custom events, from `trackMetaCustomEvent` in `~/lib/analytics`, on the production host only (`goodparty.org` and `www.goodparty.org`; dev and Vercel previews load the pixel too, and staff clicks must not train the bidding). Each step is sent twice: under its own name, and as `VoterGuideEngaged` with `step` set to that name, so an ad set can optimise on the umbrella while the three steps report separately. Only keys that describe the step go to Meta; no person or office names.
+
+| Step | Meta event | GA4 twin | Meta custom conversion |
+|---|---|---|---|
+| Elections near you search returned results | `VoterGuideSearchComplete` | `voter_guide_search_complete` | VG Search Complete |
+| Office row click to a position page | `VoterGuideOfficeClick` | `voter_guide_office_click` | VG Office Click |
+| Candidate or officeholder click to a profile (position lists and featured cards) | `VoterGuideProfileClick` | `voter_guide_position_person_click`, `voter_guide_featured_candidate_click` | VG Profile Click |
+| Any of the three | `VoterGuideEngaged` | | VG Engaged |
+
+The custom conversions live on the pixel in Events Manager (ad account 191049802830153) and are what the ad sets' performance goal points at. Adding a step means a mapping in `VOTER_GUIDE_META_EVENTS` (or a call like the search one), a test in `analytics.test.ts`, and a custom conversion whose rule matches the new event name.
+
 ## Setting up GA4 (whoever owns the GTM container)
 
 Nothing reaches GA4 until the container forwards it. For each row above with a GA4

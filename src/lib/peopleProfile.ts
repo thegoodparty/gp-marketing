@@ -16,6 +16,7 @@ import {
 	resolveCountySlugForCitySlug,
 } from '~/lib/electionsApi';
 import { resolveProductAvatars } from '~/lib/productAvatars';
+import { currentCycleCandidacies } from '~/lib/positionHeroCandidates';
 import { US_STATES_TUPLES } from '~/constants/usStates';
 import { normalizeStateCode } from '~/constants/usStateCodes';
 import {
@@ -1388,14 +1389,20 @@ export const CARD_PERSON_RELATIONS = { includeOfficeHolders: true, includeCandid
  * `Person.isPledged` the hero reads, so a card cannot contradict the profile it
  * links to. `getPersonsByIds` dedupes, caps at 500 and is cached, and returns
  * without a request when the position has no linked people.
+ *
+ * A position id names every cycle of the office, so the rows are cut to the
+ * position page's own rule (`currentCycleCandidacies`): Fairfax City's 2026
+ * mayoral profiles listed the sitting mayor, whose only run was in 2024, as a
+ * rival the position page did not show (Emily, 2026-10-20).
  */
 async function loadOtherCandidates(
 	positionId: string | null,
+	raceElectionDate: string | null,
 	excludePersonId: string,
 	removedPersonIds: Promise<ReadonlySet<string> | null>,
 ): Promise<RelatedPersonCard[]> {
 	if (!positionId) return [];
-	const candidacies = await getCandidacies({ positionId });
+	const candidacies = currentCycleCandidacies(await getCandidacies({ positionId }), { raceElectionDate });
 	const ids = candidacies
 		.map((c) => c.personId)
 		.filter((id): id is string => Boolean(id) && id!.toLowerCase() !== excludePersonId.toLowerCase());
@@ -1681,7 +1688,7 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 	const positionId =
 		candidacy?.Race?.positionId ?? candidacy?.positionId ?? office?.positionId ?? null;
 	// Other candidates need only the position id, so they start ahead of the county lookup.
-	const otherCandidatesPromise = loadOtherCandidates(positionId, personId, removedPersonIdsPromise);
+	const otherCandidatesPromise = loadOtherCandidates(positionId, candidacy?.Race?.electionDate ?? null, personId, removedPersonIdsPromise);
 	void otherCandidatesPromise.catch(() => undefined);
 	const positionName =
 		candidacy?.positionName ?? office?.positionName ?? office?.officeTitle ?? null;

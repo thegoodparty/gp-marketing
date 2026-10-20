@@ -386,62 +386,25 @@ function PlaceholderPrompt({ children }: { children: ReactNode }): ReactNode {
 	);
 }
 
-/**
- * Copy for the "Why …" placeholder prompt, phrased as a genuine, name + office
- * question so the section stays indexable and useful rather than an empty state.
- */
+/** Copy for the placeholder prompts (marketing, 2026-10-20). */
 function whyPrompt(view: PersonProfileView): string {
-	const { displayName, persona } = view;
-	const office = view.officeName ?? 'their office';
-	switch (persona) {
-		case 'candidate':
-		case 'both':
-			return `What would ${displayName} prioritize in office? Their platform and reasons for running will appear here once they claim their profile.`;
-		case 'officeholder':
-			return `How does ${displayName} approach serving ${office}? Their motivations and priorities in office will appear here once they claim their profile.`;
-		case 'past':
-			return `Why did ${displayName} serve ${office}? Their story and reasons for serving will appear here once they claim their profile.`;
-	}
+	return `${view.displayName} has not filled out this section yet.`;
 }
 
-/** Copy for the "Campaign Issues / Priorities" placeholder prompt. */
 function issuesPrompt(view: PersonProfileView): string {
-	const { displayName, persona } = view;
-	const office = view.officeName;
-	switch (persona) {
-		case 'candidate':
-		case 'both':
-			return `Which issues would ${displayName} champion${office ? ` as ${office}` : ''}? Their campaign priorities will appear here once they claim their profile.`;
-		case 'officeholder':
-			return `What are ${displayName}'s top priorities${office ? ` for ${office}` : ''}? Their agenda in office will appear here once they claim their profile.`;
-		// A past official's frame carries this section AND the in-office one, so
-		// this has to ask about the campaign; `inOfficePrompt` covers the record.
-		case 'past':
-			return `What did ${displayName} campaign on${office ? ` for ${office}` : ''}? Their platform and issues will appear here once they claim their profile.`;
-	}
+	return `${view.displayName} has not shared their top campaign issues yet.`;
 }
 
-/** Copy for the "Top Priorities While in Office" placeholder prompt. */
 function inOfficePrompt(view: PersonProfileView): string {
-	const office = view.officeName ? ` in ${view.officeName}` : ' in office';
-	if (view.persona === 'past') {
-		return `Which priorities did ${view.displayName} focus on${office}? Their record will appear here once they claim their profile.`;
-	}
-	return `What is ${view.displayName} focused on${office}? Their priorities will appear here once they claim their profile.`;
+	return `${view.displayName} has not shared their top priorities yet.`;
 }
 
-/** Copy for the "Accomplishments During This Term" placeholder prompt. */
 function accomplishmentsPrompt(view: PersonProfileView): string {
-	const office = view.officeName ? ` in ${view.officeName}` : ' in office';
-	const verb = view.persona === 'past' ? 'did' : 'has';
-	const achieved = view.persona === 'past' ? 'achieve' : 'achieved';
-	return `What ${verb} ${view.displayName} ${achieved}${office}? Their accomplishments will appear here once they claim their profile.`;
+	return `${view.displayName} has not listed any accomplishments yet.`;
 }
 
-/** Copy for the "About Me" placeholder prompt. */
 function aboutPrompt(view: PersonProfileView): string {
-	const office = view.officeName ? ` for ${view.officeName}` : '';
-	return `Get to know ${view.displayName}. Their background, experience, and story${office} will appear here once they claim their profile.`;
+	return `${view.displayName} has not filled out this section yet.`;
 }
 
 /** The sections a profile owner writes; the rest come from the civic spine. */
@@ -459,8 +422,8 @@ const AUTHORED_SECTIONS = new Set<SectionKey>([
  * H 1970:113629). The frames show a prompt for every authored section the
  * claimed page would have, so this seeds from the persona's `SECTION_ORDER`
  * rather than its own list — an unclaimed page must never advertise a
- * different set of sections than its claimed counterpart. Copy is muted
- * name + office prompt text, since there is no owner-authored content yet.
+ * different set of sections than its claimed counterpart. Copy is a muted
+ * "has not … yet" line, since there is no owner-authored content yet.
  */
 function buildAuthoredPlaceholderSections(view: PersonProfileView): SectionMap {
 	const prompt = (text: string) => <PlaceholderPrompt>{text}</PlaceholderPrompt>;
@@ -765,9 +728,14 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	// is the officeholder persona ONLY — 'both' (serving AND running) keeps the
 	// candidate treatment, because they have a live candidacy and Win to claim
 	// into. State E therefore loses its claim surfaces entirely; D/F keep theirs.
+	//
+	// A pledged person is excluded too (Emily, 2026-10-20): they took the pledge
+	// through the product, so they already have the account the block asks them
+	// to create, and the hero above it says they pledged.
 	const showClaim =
 		view.empowered &&
 		!view.claimed &&
+		!view.pledged &&
 		!view.unpublished &&
 		view.persona !== 'past' &&
 		view.persona !== 'officeholder';
@@ -840,9 +808,9 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	// Authored slot: claimed pages show real owner content; unclaimed but
 	// empowered pages (Figma D/E/F/H) show muted placeholder prompt cards in the
 	// same slot; major-party (I/J) and removed (K/L) pages show neither.
-	// Unpublished pages are excluded as well — every placeholder ends in "once
-	// they claim their profile", which would point at a claim block the page
-	// does not show.
+	// Unpublished pages are excluded as well — the owner may have written these
+	// sections and only not published them, so "has not filled out this section
+	// yet" would be false.
 	const authoredSections = view.claimed
 		? buildAuthoredSections(view)
 		: view.empowered && !view.unpublished

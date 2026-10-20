@@ -5,6 +5,7 @@ import {
 	getCityPlacesByCounty,
 	getCitySlugToCountySlugMap,
 	getCountySlugsByState,
+	getIndependentCitiesByState,
 	getOfficeHoldersByGeoId,
 	getPersonByPersonId,
 	getPersonsByIds,
@@ -15,6 +16,7 @@ import {
 	looksLikeDistrictSlug,
 	resolveCountySlugForCitySlug,
 } from '~/lib/electionsApi';
+import { plainIndependentCityOfficeName } from '~/lib/placeDisplayName';
 import { resolveProductAvatars } from '~/lib/productAvatars';
 import { currentCycleCandidacies } from '~/lib/positionHeroCandidates';
 import { US_STATES_TUPLES } from '~/constants/usStates';
@@ -1066,8 +1068,9 @@ export function buildBreadcrumbTrail(params: {
 	positionName: string | null;
 	citySlugToCountySlug?: Map<string, string> | null;
 	countySlugs?: Set<string> | null;
+	independentCities?: Map<string, string> | null;
 }): ProfileBreadcrumb[] {
-	const { displayName, stateCode, raceSlug, positionLevel, positionName, citySlugToCountySlug, countySlugs } =
+	const { displayName, stateCode, raceSlug, positionLevel, positionName, citySlugToCountySlug, countySlugs, independentCities } =
 		params;
 	const trail: ProfileBreadcrumb[] = [{ href: '/elections', label: 'Elections' }];
 
@@ -1094,7 +1097,9 @@ export function buildBreadcrumbTrail(params: {
 		for (const [i, segment] of locationSegments.entries()) {
 			if (i > 0 && !isRealPlaceSlot({ slot: i, state, segment, citySlugToCountySlug, countySlugs })) break;
 			cumulative += `/${segment}`;
-			const label = i === 0 ? getStateName(segment) : humanizeSlugSegment(segment);
+			// The slug cannot say "Fairfax city" from "Carson City"; the county list can.
+			const label =
+				i === 0 ? getStateName(segment) : ((i === 1 ? independentCities?.get(`${state}/${segment}`) : undefined) ?? humanizeSlugSegment(segment));
 			trail.push({ href: cumulative, label });
 		}
 		if (positionName) {
@@ -1446,6 +1451,20 @@ async function loadNearbyOfficials(
 	return withChosenPhotos(buildNearbyOfficialCards(officeholders, byId, excludePersonId, removed), removed);
 }
 
+/** The person's office and candidacy names with independent cities' mayors renamed; see `plainIndependentCityOfficeName`. */
+function withPlainIndependentCityOffices(person: PersonItem | null, bases: ReadonlySet<string>): PersonItem | null {
+	if (!person || bases.size === 0) return person;
+	return {
+		...person,
+		OfficeHolders: person.OfficeHolders?.map((o) => ({
+			...o,
+			positionName: plainIndependentCityOfficeName(o.positionName, bases),
+			officeTitle: plainIndependentCityOfficeName(o.officeTitle, bases),
+		})),
+		Candidacies: person.Candidacies?.map((c) => ({ ...c, positionName: plainIndependentCityOfficeName(c.positionName, bases) })),
+	};
+}
+
 /**
  * What one profile needs to know about its state's geography to link `/elections`:
  * the city → county expansion, and the county slugs that say which URL segments
@@ -1454,6 +1473,8 @@ async function loadNearbyOfficials(
 export type CityCountyLookup = {
 	citySlugToCountySlug: Map<string, string>;
 	countySlugs: Set<string>;
+	/** County slug → plain name for the independent cities ("va/fairfax-city" → "Fairfax"). */
+	independentCities: Map<string, string>;
 };
 
 /** Every race slug this profile can link, in one list. */
@@ -1510,11 +1531,13 @@ async function loadCityCountyLookup(
 	const states = [
 		...new Set(slugs.map((slug) => slug.split('/')[0]).filter((s): s is string => Boolean(s))),
 	];
-	const [maps, countySlugSets] = await Promise.all([
+	const [maps, countySlugSets, independentCityMaps] = await Promise.all([
 		Promise.all(states.map(async (state) => getCitySlugToCountySlugMap(state, { walkCountiesWhenEmpty: true }))),
 		Promise.all(states.map(async (state) => getCountySlugsByState(state))),
+		Promise.all(states.map(async (state) => getIndependentCitiesByState(state))),
 	]);
 	const countySlugs = new Set(countySlugSets.flatMap((set) => [...set]));
+	const independentCities = new Map(independentCityMaps.flatMap((map) => [...map]));
 	// Keys carry their state, so merging states cannot collide.
 	const citySlugToCountySlug = new Map(maps.flatMap((map) => [...map]));
 
@@ -1528,7 +1551,7 @@ async function loadCityCountyLookup(
 		if (countySlug) citySlugToCountySlug.set(prefix, countySlug);
 	}
 
-	return { citySlugToCountySlug, countySlugs };
+	return { citySlugToCountySlug, countySlugs, independentCities };
 }
 
 /**
@@ -1706,6 +1729,13 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 	const cityCountyLookup = await loadCityCountyLookup(person, raceSlug);
 	const citySlugToCountySlug = cityCountyLookup?.citySlugToCountySlug ?? null;
 	const countySlugs = cityCountyLookup?.countySlugs ?? null;
+	const independentCities = cityCountyLookup?.independentCities ?? null;
+	// Office names as their position pages head them: "Fairfax City Mayor" is
+	// "Fairfax Mayor" (see `plainIndependentCityOfficeName`). Renamed once, here,
+	// so every line the page builds from them agrees.
+	const independentCityNames = new Set(independentCities?.values() ?? []);
+	const shownPerson = withPlainIndependentCityOffices(person, independentCityNames);
+	const shownPositionName = plainIndependentCityOfficeName(positionName, independentCityNames);
 	// Canonical /elections position href for the context office ("Learn more" and
 	// the breadcrumb's position crumb). Null when neither the race nor the office
 	// term carries a slug the resolver can place.
@@ -1727,9 +1757,10 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 		stateCode,
 		raceSlug,
 		positionLevel,
-		positionName,
+		positionName: shownPositionName,
 		citySlugToCountySlug,
 		countySlugs,
+		independentCities,
 	});
 	// The card loaders have been running since the ids they need were known; the
 	// elections index is the only read left to start.
@@ -1739,16 +1770,19 @@ export async function loadPersonProfile(personId: string): Promise<PersonProfile
 		loadElectionsIndex({ stateCode, tier, countySlug }),
 	]);
 
-	return composeView(personId, person, overlay, {
+	return composeView(personId, shownPerson, overlay, {
 		removed,
 		unpublished,
 		positionId,
-		positionName,
+		positionName: shownPositionName,
 		electionDate,
 		positionDescription,
 		positionHref,
 		otherCandidates,
-		nearbyOfficials,
+		nearbyOfficials: nearbyOfficials.map((card) => ({
+			...card,
+			subtitle: plainIndependentCityOfficeName(card.subtitle, independentCityNames),
+		})),
 		breadcrumb,
 		electionsIndex,
 		voterDensity,

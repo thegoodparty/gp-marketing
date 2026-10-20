@@ -85,7 +85,7 @@ describe('mapOfficeholderToPerson', () => {
 
 /**
  * Los Angeles' city council page listed one council member (Emily, 2026-10-07):
- * the race carries one district's position id and `/v1/elections/officeholders?positionId=`
+ * the race carries one district's position id and `/v1/officeholders?positionId=`
  * answers for that seat alone. The place's officeholders, filtered to the same
  * office, supply the other seats.
  */

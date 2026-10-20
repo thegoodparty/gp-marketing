@@ -33,29 +33,23 @@ function mockUpstream(opts: { persons: MockPerson[]; candidacies?: Record<string
 		const url = new URL(raw);
 		const json = (body: unknown) =>
 			new Response(JSON.stringify(body), { status: 200, headers: { 'content-type': 'application/json' } });
-		// gp-api pages its state sweeps: 1,000 rows unless pageSize asks for more.
-		const paged = <T,>(rows: T[]) => {
-			const page = Number(url.searchParams.get('page') ?? '1');
-			const pageSize = Number(url.searchParams.get('pageSize') ?? '1000');
-			return rows.slice((page - 1) * pageSize, page * pageSize);
-		};
 
 		if (url.pathname.endsWith('/public-person-profiles/published')) return json([]);
 		if (url.pathname.endsWith('/public-person-profiles/unlisted')) return json([]);
-		if (url.pathname.endsWith('/v1/elections/persons')) {
+		if (url.pathname.endsWith('/v1/persons')) {
 			const ids = url.searchParams.get('ids');
 			if (ids) {
 				const want = new Set(ids.split(','));
 				return json(opts.persons.filter((p) => want.has(p.id)).map(({ id, slug }) => ({ id, slug })));
 			}
 			const state = url.searchParams.get('state');
-			return json(paged(opts.persons.filter((p) => p.state === state).map(({ id, slug }) => ({ id, slug }))));
+			return json(opts.persons.filter((p) => p.state === state).map(({ id, slug }) => ({ id, slug })));
 		}
-		if (url.pathname.endsWith('/v1/elections/candidacies')) {
+		if (url.pathname.endsWith('/v1/candidacies')) {
 			const state = url.searchParams.get('state') ?? '';
-			return json(paged((opts.candidacies?.[state] ?? []).map((personId) => ({ personId, positionName: 'Mayor', officeTitle: null }))));
+			return json((opts.candidacies?.[state] ?? []).map((personId) => ({ personId, positionName: 'Mayor', officeTitle: null })));
 		}
-		if (url.pathname.endsWith('/v1/elections/officeholders')) return json([]);
+		if (url.pathname.endsWith('/v1/officeholders')) return json([]);
 		return json([]);
 	}) as typeof fetch;
 	return urls;
@@ -180,7 +174,7 @@ describe('runPeopleShardsOut', () => {
 
 		await fetchPeopleShards([...PEOPLE_SITEMAP_SHARDS], (shard) => fetchPeopleSitemapEntries(base, shard));
 
-		const stateSweepCalls = urls.filter((u) => u.includes('/v1/elections/persons') && u.includes('state=') && !u.includes('ids='));
+		const stateSweepCalls = urls.filter((u) => u.includes('/v1/persons') && u.includes('state=') && !u.includes('ids='));
 		expect(stateSweepCalls.length).toBe(US_STATE_CODES.length);
 	});
 });

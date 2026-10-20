@@ -20,7 +20,8 @@ const DEFAULT_SAMPLE_PER_STATE = 20;
 const DEFAULT_TIMEOUT_MS = 15_000;
 const STATE_FACTS_MARKER = /data-section=["']Location Facts Block["']/i;
 
-const ELECTIONS_BASE = `${(process.env['GP_API_BASE_URL'] ?? 'https://gp-api.goodparty.org').replace(/\/$/, '')}/v1/elections`;
+const ELECTION_API_BASE =
+	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
 
 const BAD_PATTERNS = [
 	/\b[a-z][a-z-]*\s+County\b/, // lowercase word + " County" = broken fallback (e.g. "buckeye County"), not "Yuma County"
@@ -97,7 +98,7 @@ function parseArgs(): {
 
 async function fetchElectionJson<T>(path: string, params: Record<string, string>): Promise<T[]> {
 	const search = new URLSearchParams(params).toString();
-	const url = `${ELECTIONS_BASE}/${path.replace(/^\//, '')}?${search}`;
+	const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}?${search}`;
 	try {
 		const authHeaders = electionApiAuthHeaders();
 		const res = await fetch(url, { headers: authHeaders });
@@ -306,7 +307,7 @@ async function main(): Promise<void> {
 	if (mode === 'positions') {
 		const racesByState = new Map<string, Array<{ slug?: string }>>();
 		for (const state of states) {
-			const races = await fetchElectionJson<{ slug?: string }>('races', {
+			const races = await fetchElectionJson<{ slug?: string }>('v1/races', {
 				state,
 				raceColumns: 'slug',
 			});

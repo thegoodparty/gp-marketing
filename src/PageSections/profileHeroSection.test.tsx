@@ -27,9 +27,13 @@ function render(props: Partial<Props>): string {
 	return renderToStaticMarkup(<ProfileHeroSection {...(SECTION as unknown as Props)} tokens={TOKENS} {...props} />);
 }
 
-function intro(html: string): string | null {
-	const match = /<p[^>]*>(Learn about[^<]*)<\/p>/.exec(html);
+function introHtml(html: string): string | null {
+	const match = /<p[^>]*>(Learn about.*?)<\/p>/.exec(html);
 	return match ? match[1]! : null;
+}
+
+function intro(html: string): string | null {
+	return introHtml(html)?.replace(/<[^>]+>/g, '') ?? null;
 }
 
 describe('the hero intro paragraph', () => {
@@ -82,6 +86,25 @@ describe('the hero intro paragraph', () => {
 		});
 
 		expect(intro(html)).toContain('DeVelle Jackson’s candidacy');
+	});
+
+	test('"GoodParty.org" links to the about page, for candidates and elected officials alike', () => {
+		for (const subject of ['candidate', 'elected official'] as const) {
+			const html = render({
+				profileHeroOverride: { candidateName: 'DeVelle Jackson', office: 'Office', attribution: 'notPledged', subject },
+			});
+
+			expect(introHtml(html)).toMatch(/<a [^>]*href="\/about"[^>]*>GoodParty\.org<\/a>/);
+		}
+	});
+
+	test('Studio wording without "GoodParty.org" renders as plain text', () => {
+		const html = render({
+			...({ profileHeroContent: { field_introCandidates: 'Learn about [candidate name].' } } as unknown as Partial<Props>),
+			profileHeroOverride: { candidateName: 'DeVelle Jackson', office: 'Office', attribution: 'pledged', subject: 'candidate' },
+		});
+
+		expect(introHtml(html)).toBe('Learn about DeVelle Jackson.');
 	});
 
 	test('a page that names no subject (the legacy /candidate route) renders no intro and no callout', () => {

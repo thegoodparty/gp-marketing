@@ -203,6 +203,14 @@ describe('claim CTAs are gone from the office-only pages and nowhere else', () =
 		expect(claimBlock('tim-ficken-0a951485')).toBe(true);
 	});
 
+	// Tom Peterson, Fairfax City (2026-10-20): "Has taken the GoodParty.org Pledge"
+	// above a block asking him to create the account he pledged through.
+	test('a pledged candidate with no published profile is not asked to claim', () => {
+		const view = getDevPersonProfileView('kim-byrd-b77f912d');
+		if (!view) throw new Error('no dev fixture for kim-byrd-b77f912d');
+		expect(buildPersonSectionOverrides({ ...view, pledged: true }).component_claimProfileBlock?.claimed).toBe(true);
+	});
+
 	// Claimed (A/B/C/G) has nothing to claim, past (H) is not running, major-party
 	// (I/J) is not empowered, and removed (K/L) asked us to stop.
 	test('every other state hides the claim block', () => {

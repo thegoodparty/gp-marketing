@@ -765,9 +765,14 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	// is the officeholder persona ONLY — 'both' (serving AND running) keeps the
 	// candidate treatment, because they have a live candidacy and Win to claim
 	// into. State E therefore loses its claim surfaces entirely; D/F keep theirs.
+	//
+	// A pledged person is excluded too (Emily, 2026-10-20): they took the pledge
+	// through the product, so they already have the account the block asks them
+	// to create, and the hero above it says they pledged.
 	const showClaim =
 		view.empowered &&
 		!view.claimed &&
+		!view.pledged &&
 		!view.unpublished &&
 		view.persona !== 'past' &&
 		view.persona !== 'officeholder';

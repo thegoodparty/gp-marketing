@@ -176,6 +176,36 @@ describe('a former officeholder keeps one office across the page', () => {
 		expect(view?.electionDate).toBe(UPCOMING);
 		expect(view?.otherCandidates.map((c) => c.name)).toEqual(['Zohran Mamdani']);
 	});
+
+	// Fairfax City Mayor, 2026-10-20: the sitting mayor's 2024 run listed her as a 2026 rival.
+	test('a rival from an earlier cycle of the office is not listed as running against them', async () => {
+		const person: PersonItem = {
+			...fixtureForState('H').person,
+			fullName: 'Kirsten Sides Lockhart',
+			state: 'NY',
+			OfficeHolders: [],
+			Candidacies: [mayoralRun(UPCOMING)],
+		};
+		stubFetch({
+			person,
+			candidaciesByPosition: {
+				'pos-mayor': [
+					mayoralRival({ personId: MAMDANI, firstName: 'Thomas', lastName: 'Peterson', party: 'Nonpartisan' }),
+					mayoralRival({
+						personId: WALDEN,
+						firstName: 'Catherine',
+						lastName: 'Read',
+						party: 'Nonpartisan',
+						Race: { brHashId: 'br-mayor-2024', slug: MAYOR_SLUG, positionId: 'pos-mayor', positionLevel: 'CITY', electionDate: '2024-11-05' },
+					}),
+				],
+			},
+			persons: () => [],
+		});
+
+		const view = await loadPersonProfile(PERSON_ID);
+		expect(view?.otherCandidates.map((c) => c.name)).toEqual(['Thomas Peterson']);
+	});
 });
 
 describe('a related-person card reads the whole record its profile reads', () => {

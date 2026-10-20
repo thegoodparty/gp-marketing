@@ -176,6 +176,36 @@ describe('a former officeholder keeps one office across the page', () => {
 		expect(view?.electionDate).toBe(UPCOMING);
 		expect(view?.otherCandidates.map((c) => c.name)).toEqual(['Zohran Mamdani']);
 	});
+
+	// Fairfax City Mayor, 2026-10-20: the sitting mayor's 2024 run listed her as a 2026 rival.
+	test('a rival from an earlier cycle of the office is not listed as running against them', async () => {
+		const person: PersonItem = {
+			...fixtureForState('H').person,
+			fullName: 'Kirsten Sides Lockhart',
+			state: 'NY',
+			OfficeHolders: [],
+			Candidacies: [mayoralRun(UPCOMING)],
+		};
+		stubFetch({
+			person,
+			candidaciesByPosition: {
+				'pos-mayor': [
+					mayoralRival({ personId: MAMDANI, firstName: 'Thomas', lastName: 'Peterson', party: 'Nonpartisan' }),
+					mayoralRival({
+						personId: WALDEN,
+						firstName: 'Catherine',
+						lastName: 'Read',
+						party: 'Nonpartisan',
+						Race: { brHashId: 'br-mayor-2024', slug: MAYOR_SLUG, positionId: 'pos-mayor', positionLevel: 'CITY', electionDate: '2024-11-05' },
+					}),
+				],
+			},
+			persons: () => [],
+		});
+
+		const view = await loadPersonProfile(PERSON_ID);
+		expect(view?.otherCandidates.map((c) => c.name)).toEqual(['Thomas Peterson']);
+	});
 });
 
 describe('a related-person card reads the whole record its profile reads', () => {
@@ -245,5 +275,51 @@ describe('a related-person card reads the whole record its profile reads', () =>
 		expect(byName.get('Bruce Blakeman')?.subtitle).toBe('Republican, Conservative Party');
 		expect(byName.get('Bruce Blakeman')?.majorParty).toBe(true);
 		expect(byName.get('Curtis Sliwa')?.subtitle).toBe('Independence');
+	});
+});
+
+describe('an independent city is named the way its position page names it', () => {
+	// Fairfax, VA (Emily, 2026-10-20): the profile read "Fairfax City Mayor" and a
+	// "Fairfax City" crumb where the position page reads "Mayor in Fairfax".
+	test('the mayor is "Fairfax Mayor" and the county crumb is "Fairfax"', async () => {
+		const mayorSlug = 'va/fairfax-city/county-executive-head';
+		const person: PersonItem = {
+			...fixtureForState('H').person,
+			fullName: 'Catherine S. Read',
+			state: 'VA',
+			OfficeHolders: [
+				{
+					...governorTerm(),
+					positionId: 'pos-fairfax-mayor',
+					positionName: 'Fairfax City Mayor',
+					officeTitle: 'Fairfax City Mayor',
+					state: 'VA',
+					startAt: '2025-01-01',
+					endAt: null,
+					isCurrent: true,
+					positionSlug: mayorSlug,
+					positionLevel: 'CITY',
+				},
+			],
+			Candidacies: [],
+		};
+		const base = buildPeopleFetchMock({ ...fixtureForState('H'), person });
+		const json = (data: unknown) => ({ ok: true, status: 200, json: async () => data }) as unknown as Response;
+		globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+			const url = new URL(String(input));
+			if (url.pathname.endsWith('/v1/places') && url.searchParams.get('state')?.toUpperCase() === 'VA' && url.searchParams.has('mtfcc')) {
+				return json([
+					{ id: 'p-fx-city', slug: 'va/fairfax-city', name: 'Fairfax city', state: 'VA', mtfcc: url.searchParams.get('mtfcc') },
+					{ id: 'p-fx-county', slug: 'va/fairfax-county', name: 'Fairfax County', state: 'VA', mtfcc: url.searchParams.get('mtfcc') },
+				]);
+			}
+			return base(input, init);
+		}) as unknown as typeof fetch;
+
+		const view = await loadPersonProfile(PERSON_ID);
+		expect(view?.roleTitle).toBe('Fairfax Mayor');
+		expect(view?.positionName).toBe('Fairfax Mayor');
+		expect(view?.recentExperience[0]?.title).toBe('Fairfax Mayor');
+		expect(view?.breadcrumb.map((c) => c.label)).toEqual(['Elections', 'Virginia', 'Fairfax', 'Fairfax Mayor', 'Catherine S. Read']);
 	});
 });

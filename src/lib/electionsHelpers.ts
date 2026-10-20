@@ -1,5 +1,5 @@
 import { convert } from 'html-to-text';
-import { displayPlaceName } from '~/lib/placeDisplayName';
+import { displayPlaceName, independentCityBaseName } from '~/lib/placeDisplayName';
 
 import { US_STATES } from '~/constants/usStates';
 import { isValidStateCode } from '~/constants/usStateCodes';
@@ -87,9 +87,12 @@ export function canonicalizeCountyEquivalentName(
 	// style is "Fairfax city", which read "Fairfax city County, Virginia" on its
 	// page, and Emily wants "Fairfax, Virginia" (2026-10-07). The base name stays
 	// whole so the county matching built on it keeps telling "Fairfax city" and
-	// "Fairfax County" apart.
-	if (/\scity$/i.test(normalizedName) && !COUNTY_EQUIV_TAIL_RE.test(normalizedName)) {
-		return { displayName: normalizedName.replace(/\scity$/i, ''), baseName: normalizedName, suffixLabel: 'City' };
+	// "Fairfax County" apart. A capital "City" is the place's own name: Carson
+	// City read "Carson, Nevada" (2026-10-20).
+	const independentCity = independentCityBaseName(normalizedName);
+	if (independentCity) return { displayName: independentCity, baseName: normalizedName, suffixLabel: 'City' };
+	if (/\sCity$/.test(normalizedName) && !COUNTY_EQUIV_TAIL_RE.test(normalizedName)) {
+		return { displayName: normalizedName, baseName: normalizedName, suffixLabel: 'City' };
 	}
 	const tailMatch = COUNTY_EQUIV_TAIL_RE.exec(normalizedName);
 	const existingSuffix = tailMatch ? toCanonicalSuffix(tailMatch[1] ?? '') : null;

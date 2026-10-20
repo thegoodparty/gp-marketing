@@ -203,6 +203,14 @@ describe('claim CTAs are gone from the office-only pages and nowhere else', () =
 		expect(claimBlock('tim-ficken-0a951485')).toBe(true);
 	});
 
+	// Tom Peterson, Fairfax City (2026-10-20): "Has taken the GoodParty.org Pledge"
+	// above a block asking him to create the account he pledged through.
+	test('a pledged candidate with no published profile is not asked to claim', () => {
+		const view = getDevPersonProfileView('kim-byrd-b77f912d');
+		if (!view) throw new Error('no dev fixture for kim-byrd-b77f912d');
+		expect(buildPersonSectionOverrides({ ...view, pledged: true }).component_claimProfileBlock?.claimed).toBe(true);
+	});
+
 	// Claimed (A/B/C/G) has nothing to claim, past (H) is not running, major-party
 	// (I/J) is not empowered, and removed (K/L) asked us to stop.
 	test('every other state hides the claim block', () => {
@@ -797,5 +805,24 @@ describe('the past-election disclaimer dates the last run from the record', () =
 		expect(pastElectionDisclaimerCopy({ displayName: 'James "Bubba" T. Cobb', lastRanYear: '2026' })).toBe(
 			`According to our records, James "Bubba" T. Cobb last ran for office in 2026. ${GUIDE}`,
 		);
+	});
+});
+
+describe('unclaimed placeholder cards', () => {
+	// Marketing's copy (Emily, 2026-10-20): a plain "has not … yet" line per section.
+	test('state F says what each section is still missing', () => {
+		const view = getDevPersonProfileView('tim-ficken-0a951485');
+		if (!view) throw new Error('no dev fixture for tim-ficken-0a951485');
+		const name = view.displayName;
+		const copy = Object.fromEntries(
+			contentCards('tim-ficken-0a951485').flatMap(card =>
+				card.heading ? [[card.heading, renderToStaticMarkup(card.content as ReactElement).replace(/<[^>]*>/g, '')]] : [],
+			),
+		);
+		expect(copy['Why I’m Running for Office']).toBe(`${name} has not filled out this section yet.`);
+		expect(copy['Campaign Issues']).toBe(`${name} has not shared their top campaign issues yet.`);
+		expect(copy['Top Priorities While in Office']).toBe(`${name} has not shared their top priorities yet.`);
+		expect(copy['Accomplishments During This Term']).toBe(`${name} has not listed any accomplishments yet.`);
+		expect(copy['About Me']).toBe(`${name} has not filled out this section yet.`);
 	});
 });

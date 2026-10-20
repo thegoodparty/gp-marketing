@@ -65,7 +65,7 @@ describe('an unpublished profile suppresses every claim affordance', () => {
 				expect(buildPersonSectionOverrides(view).component_ctaBannerBlock).toEqual({ hidden: true });
 			});
 
-			test('drops the "once they claim their profile" placeholder cards', () => {
+			test('drops the "has not … yet" placeholder cards', () => {
 				const text = cardShapes(view).join(' ');
 				expect(text).not.toContain('Why');
 				expect(text).not.toContain('About');

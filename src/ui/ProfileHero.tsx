@@ -75,6 +75,9 @@ const styles = tv({
 		// 16 → 17 → 18 (from 1280), which lands on both frame sizes without a fixed
 		// override; the line-height is the token's. Color via variant.
 		intro: '',
+		// "GoodParty.org" in the intro links to /about, styled like the callout's
+		// "Read the full pledge" so the hero's two inline links read as one family.
+		introLink: 'font-semibold underline underline-offset-4 hover:no-underline',
 		// The pledge callout: an 8px-radius box with a hairline border and a faint
 		// fill over the band (Figma: midnight/200 line, midnight/50 at 10%). On the
 		// phone the mark sits above the sentence; from md they share a row with the
@@ -192,6 +195,24 @@ const PLEDGE_CALLOUT_MODES: ReadonlySet<AttributionMode> = new Set<AttributionMo
 
 const isPledgeCalloutMode = (mode: AttributionMode): mode is PledgeCalloutMode => PLEDGE_CALLOUT_MODES.has(mode);
 
+// The intro is a plain Studio text field, so the link is added here: the first
+// "GoodParty.org" in whatever wording marketing saved points at the about page.
+const INTRO_LINK_TEXT = 'GoodParty.org';
+
+const renderIntro = (text: string, className: string) => {
+	const at = text.indexOf(INTRO_LINK_TEXT);
+	if (at === -1) return text;
+	return (
+		<>
+			{text.slice(0, at)}
+			<Anchor href="/about" className={className}>
+				{INTRO_LINK_TEXT}
+			</Anchor>
+			{text.slice(at + INTRO_LINK_TEXT.length)}
+		</>
+	);
+};
+
 export function ProfileHero(props: ProfileHeroProps) {
 	const backgroundColor = props.backgroundColor ?? 'midnight';
 	const resolvedBackgroundColor = backgroundColor === 'white' ? 'cream' : backgroundColor;
@@ -214,6 +235,7 @@ export function ProfileHero(props: ProfileHeroProps) {
 		office,
 		officeLink,
 		intro,
+		introLink,
 		callout,
 		calloutIcon,
 		calloutText,
@@ -327,7 +349,7 @@ export function ProfileHero(props: ProfileHeroProps) {
 						</div>
 						{props.intro && (
 							<Text as="p" styleType="body-2" className={intro()}>
-								{props.intro}
+								{renderIntro(props.intro, introLink())}
 							</Text>
 						)}
 						{isPledgeCalloutMode(attributionMode) && (

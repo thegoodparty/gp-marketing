@@ -337,7 +337,9 @@ describe('canonicalizeCountyEquivalentName', () => {
 			baseName: 'Fairfax city',
 			suffixLabel: 'City',
 		});
-		expect(canonicalizeCountyEquivalentName('MD', 'Baltimore City').displayName).toBe('Baltimore');
+		expect(canonicalizeCountyEquivalentName('MD', 'Baltimore city').displayName).toBe('Baltimore');
+		// A capital City is the name itself: Carson City read "Carson, Nevada" (2026-10-20).
+		expect(canonicalizeCountyEquivalentName('NV', 'Carson City').displayName).toBe('Carson City');
 		expect(canonicalizeCountyEquivalentName('CO', 'Denver City and County').displayName).toBe('Denver City and County');
 	});
 

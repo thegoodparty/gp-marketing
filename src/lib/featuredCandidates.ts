@@ -1,4 +1,4 @@
-import { displayPlaceName } from '~/lib/placeDisplayName';
+import { displayPlaceName, independentCityBaseName, plainIndependentCityOfficeName } from '~/lib/placeDisplayName';
 import {
 	getCandidacies,
 	getElectionsPagePlace,
@@ -364,11 +364,14 @@ export async function getFeaturedPeople(
 	// systems, so a photo the list suppressed is never put back by the profile,
 	// and an unreadable list (null) keeps every photo off, as cardAvatarUrl does.
 	const avatars = await deps.resolveProductAvatars([...candidates, ...representatives].map(card => card.personId));
+	// "Fairfax City Mayor" reads "Fairfax Mayor", as its position page heads it.
+	const independentCities = new Set(places.map(tierPlace => independentCityBaseName(tierPlace?.name)).filter((name): name is string => Boolean(name)));
 	const withChosenPhoto = (card: FeaturedPersonCard): FeaturedPersonCard => {
+		const shown = { ...card, office: plainIndependentCityOfficeName(card.office, independentCities) };
 		const id = card.personId?.toLowerCase();
-		if (!id || !removedPersonIds || removedPersonIds.has(id)) return card;
+		if (!id || !removedPersonIds || removedPersonIds.has(id)) return shown;
 		const chosen = avatars.get(id);
-		return chosen ? { ...card, avatarUrl: chosen } : card;
+		return chosen ? { ...shown, avatarUrl: chosen } : shown;
 	};
 	return {
 		candidates: candidates.map(withChosenPhoto),

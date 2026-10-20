@@ -1,4 +1,4 @@
-import { displayPlaceName } from '~/lib/placeDisplayName';
+import { displayPlaceName, independentCityBaseName } from '~/lib/placeDisplayName';
 import type {
 	CandidacyItem,
 	DistrictNameItem,
@@ -1057,6 +1057,17 @@ async function walkCountiesForCitySlugMap(counties: PlaceItem[]): Promise<Map<st
 export async function getCountySlugsByState(state: string): Promise<Set<string>> {
 	const counties = await getPlacesByState({ state, mtfcc: COUNTY_MTFCC });
 	return new Set(counties.map(county => county.slug).filter((slug): slug is string => Boolean(slug)));
+}
+
+/** County slug → plain name for the state's independent cities ("va/fairfax-city" → "Fairfax"). */
+export async function getIndependentCitiesByState(state: string): Promise<Map<string, string>> {
+	const counties = await getPlacesByState({ state, mtfcc: COUNTY_MTFCC });
+	return new Map(
+		counties.flatMap(county => {
+			const base = independentCityBaseName(county.name);
+			return county.slug && base ? [[county.slug, base] as const] : [];
+		}),
+	);
 }
 
 /**

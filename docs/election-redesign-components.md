@@ -272,6 +272,14 @@ Four things from it that affect other components in the batch:
   exceptions list. The raw name stays on the data: slugs, the office-name trim in `officeDisplayName`
   and the dedupe rules compare raw names, so the display form is applied where names are composed into
   headings, titles, breadcrumbs, cards, lists and the "City, ST" line, not in the fetchers.
+- **County-level independent cities are shown by their plain name** (Emily, 2026-10-20). The Census
+  writes them with a lowercase descriptor ("Fairfax city", "St. Louis city"), so `displayPlaceName`
+  shows "Fairfax". A capital "City" is part of the name and stays: Carson City, Farmer City, Jersey
+  City. Office names follow the position page heading, which drops the extra word only for the mayor
+  ("Mayor in Fairfax"): `plainIndependentCityOfficeName` turns BallotReady's "Fairfax City Mayor" into
+  "Fairfax Mayor" on profiles and location-page cards and leaves "Fairfax City Council" alone. Profile
+  breadcrumbs are built from URL slugs, which cannot tell "fairfax-city" from "carson-city", so the
+  profile reads the state's county list (`getIndependentCitiesByState`) for those names.
 - **An empty place list hides the index block; it never falls back to the states.** The block lists
   every state only when no page list is given at all (the /elections landing page). A county page
   whose place has nothing below it, such as a Virginia independent city like Virginia Beach, hands over
@@ -853,6 +861,26 @@ people now follow the ballot that branch built. Decisions:
 
 Noted and not acted on: the frame's heading is `gray-900` where the site's headings are black; the
 mobile frame bolds the callout title where the desktop frame uses semibold (semibold on both).
+
+**Revised to a grid (Emily, 2026-10-20; Figma 2503-37070 desktop, 2503-37294 mobile, 2589-92422 a
+short second row).** The carousel is gone. Desktop shows every featured person at once, four across
+with 16px between columns and 24px between rows; with five to seven people the second row keeps the
+column width and starts at the left, which a fixed-column grid does on its own. Tablets, which have no
+frame, get two columns from 768px and three from 1024px. The phone stacks three full-width cards and a
+white "See more candidates and officials" button reveals the rest; the hidden cards stay in the markup,
+so their profile links are still crawlable. Card text is fixed at Outfit 24/32 for the name and office
+and 20/28 grey for the place, at every width, and the View profile buttons in a row line up at the
+bottom. Decisions:
+
+- **Cards are 288px at 1440, not the frame's 308.** The frame lays four cards on a 1280px content
+  area; the site's xl container gives 1200, and every other block on the page lines up with it.
+- **Analytics.** With no carousel, the block no longer sends `voter_guide_carousel_page`; the phone's
+  See more sends `voter_guide_show_more_click` with `list: featured_candidates`.
+- Who is featured, the cap of eight, the pledge badge, the callout and the card click event are
+  unchanged.
+
+Noted and not acted on (2026-10-20): the frames still draw the heading in `gray-900` and the phone's
+callout title in bold; both stay as settled above.
 
 **Request to the election data team** (the one query that finishes this block): a persons read
 filtered by **place including its descendants** and by **pledge**, with the person's current
@@ -1474,7 +1502,7 @@ this table; it is here to orient, and to show the shape of the answer.
 | Elections near you | develop | `/all` plus three landing pages (see the note above) | ready to merge, list the pages |
 | Election position resources | develop | nowhere published; a **draft** of the Position Page global adds it | ready to merge, tell the editor holding that draft |
 | Nearby offices | develop | nowhere | ready to merge |
-| Featured candidates | develop + draft PR #300's branch (the 2026-10-06 revision is stacked on it) | nowhere | into the #300 branch, ships with the location batch |
+| Featured candidates | develop; the 2026-10-20 grid is PR #489 | all four Location globals (state, county, city, district) and the `/elections` landing page, published and in drafts (checked 2026-10-20) | #489, ships on its own (Emily, 2026-10-20) |
 | Illustrated columns | develop | nowhere | ready to merge |
 | Testimonial block with link | develop | nowhere | ready to merge |
 | Location editorial | develop | nowhere (hidden on location pages by design) | ready to merge |

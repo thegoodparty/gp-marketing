@@ -177,6 +177,39 @@ describe('FeaturedCandidatesBlockSection', () => {
 
 		expect(html).toContain('bg-midnight-900');
 	});
+
+	/**
+	 * Figma 2503-37070 and 2589-92422: four across on desktop, and a short second
+	 * row keeps the column width and starts at the left. A fixed-column grid does
+	 * that on its own; a flex row with centring or growing cards would not.
+	 */
+	test('lays the cards out in a grid of four equal columns on desktop', () => {
+		const people = Array.from({ length: 6 }, (_, i) => person(i + 1));
+		const html = renderToStaticMarkup(<FeaturedCandidatesBlockSection {...section} featuredOverride={{ candidates: people, representatives: [] }} />);
+		const list = /<ul class="([^"]*)"/.exec(html)?.[1] ?? '';
+
+		expect(list.split(' ')).toEqual(expect.arrayContaining(['grid', 'xl:grid-cols-4']));
+		expect(list).not.toMatch(/justify-(center|between|evenly|around)|place-content-center/);
+		expect(html.match(/<li /g)).toHaveLength(6);
+	});
+
+	/** Figma 2503-37294: the phone stacks three cards and a "See more" button reveals the rest. */
+	test('hides all but three cards on a phone behind a See more button', () => {
+		const people = Array.from({ length: 5 }, (_, i) => person(i + 1));
+		const html = renderToStaticMarkup(<FeaturedCandidatesBlockSection {...section} featuredOverride={{ candidates: people, representatives: [] }} />);
+		const items = [...html.matchAll(/<li class="([^"]*)"/g)].map(match => (match[1] ?? '').split(' ').includes('max-md:hidden'));
+
+		expect(items).toEqual([false, false, false, true, true]);
+		expect(html).toContain('See more candidates and officials');
+	});
+
+	test('has no See more button when three or fewer people fit', () => {
+		const people = Array.from({ length: 3 }, (_, i) => person(i + 1));
+		const html = renderToStaticMarkup(<FeaturedCandidatesBlockSection {...section} featuredOverride={{ candidates: people, representatives: [] }} />);
+
+		expect(html).not.toContain('max-md:hidden');
+		expect(html).not.toContain('See more candidates and officials');
+	});
 });
 
 describe('resolveFeaturedBodyCopy', () => {

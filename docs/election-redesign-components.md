@@ -272,6 +272,14 @@ Four things from it that affect other components in the batch:
   exceptions list. The raw name stays on the data: slugs, the office-name trim in `officeDisplayName`
   and the dedupe rules compare raw names, so the display form is applied where names are composed into
   headings, titles, breadcrumbs, cards, lists and the "City, ST" line, not in the fetchers.
+- **County-level independent cities are shown by their plain name** (Emily, 2026-10-20). The Census
+  writes them with a lowercase descriptor ("Fairfax city", "St. Louis city"), so `displayPlaceName`
+  shows "Fairfax". A capital "City" is part of the name and stays: Carson City, Farmer City, Jersey
+  City. Office names follow the position page heading, which drops the extra word only for the mayor
+  ("Mayor in Fairfax"): `plainIndependentCityOfficeName` turns BallotReady's "Fairfax City Mayor" into
+  "Fairfax Mayor" on profiles and location-page cards and leaves "Fairfax City Council" alone. Profile
+  breadcrumbs are built from URL slugs, which cannot tell "fairfax-city" from "carson-city", so the
+  profile reads the state's county list (`getIndependentCitiesByState`) for those names.
 - **An empty place list hides the index block; it never falls back to the states.** The block lists
   every state only when no page list is given at all (the /elections landing page). A county page
   whose place has nothing below it, such as a Virginia independent city like Virginia Beach, hands over

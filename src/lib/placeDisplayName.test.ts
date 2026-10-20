@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
-import { displayPlaceName } from './placeDisplayName';
+import { displayPlaceName, independentCityBaseName, plainIndependentCityOfficeName } from './placeDisplayName';
 
 describe('displayPlaceName', () => {
 	test('says a town the way people do', () => {
@@ -14,7 +14,6 @@ describe('displayPlaceName', () => {
 		expect(displayPlaceName('Bloomfield charter township')).toBe('Bloomfield Charter Township');
 		expect(displayPlaceName('Colonie village')).toBe('Colonie Village');
 		expect(displayPlaceName('Carlisle borough')).toBe('Carlisle Borough');
-		expect(displayPlaceName('Albany city')).toBe('Albany City');
 		expect(displayPlaceName('Monson plantation')).toBe('Monson Plantation');
 		expect(displayPlaceName('Dorado zona urbana')).toBe('Dorado Zona Urbana');
 	});
@@ -22,6 +21,8 @@ describe('displayPlaceName', () => {
 	test('leaves names that are already right alone, including lowercase words inside them', () => {
 		for (const name of [
 			'Jersey City',
+			'Carson City',
+			'Farmer City',
 			'Kansas City',
 			"Coeur d'Alene",
 			'Fond du Lac',
@@ -58,5 +59,27 @@ describe('displayPlaceName', () => {
 		expect(displayPlaceName('')).toBe('');
 		expect(displayPlaceName(null)).toBeUndefined();
 		expect(displayPlaceName(undefined)).toBeUndefined();
+	});
+});
+
+describe('independent cities', () => {
+	// A lowercase "city" is the Census descriptor on a county-level independent
+	// city; a capital one is part of the name (Emily, 2026-10-20).
+	test('are shown by their plain name', () => {
+		expect(displayPlaceName('Fairfax city')).toBe('Fairfax');
+		expect(displayPlaceName('St. Louis city')).toBe('St. Louis');
+		expect(independentCityBaseName('Fairfax city')).toBe('Fairfax');
+		expect(independentCityBaseName('Carson City')).toBeNull();
+		expect(independentCityBaseName('Farmer City')).toBeNull();
+		expect(independentCityBaseName(null)).toBeNull();
+	});
+
+	test("only the mayor drops the place's extra City, as the position page heads it", () => {
+		const bases = new Set(['Fairfax']);
+		expect(plainIndependentCityOfficeName('Fairfax City Mayor', bases)).toBe('Fairfax Mayor');
+		expect(plainIndependentCityOfficeName('Fairfax City Council', bases)).toBe('Fairfax City Council');
+		expect(plainIndependentCityOfficeName('Farmer City Mayor', bases)).toBe('Farmer City Mayor');
+		expect(plainIndependentCityOfficeName('Carson City Mayor', bases)).toBe('Carson City Mayor');
+		expect(plainIndependentCityOfficeName(null, bases)).toBeNull();
 	});
 });

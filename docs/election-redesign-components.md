@@ -1494,7 +1494,7 @@ this table; it is here to orient, and to show the shape of the answer.
 | Elections near you | develop | `/all` plus three landing pages (see the note above) | ready to merge, list the pages |
 | Election position resources | develop | nowhere published; a **draft** of the Position Page global adds it | ready to merge, tell the editor holding that draft |
 | Nearby offices | develop | nowhere | ready to merge |
-| Featured candidates | develop; the 2026-10-20 grid is PR #489 | all four Location globals (state, county, city, district) and the `/elections` landing page, published and in drafts (checked 2026-10-20) | #489, draft and batch |
+| Featured candidates | develop; the 2026-10-20 grid is PR #489 | all four Location globals (state, county, city, district) and the `/elections` landing page, published and in drafts (checked 2026-10-20) | #489, ships on its own (Emily, 2026-10-20) |
 | Illustrated columns | develop | nowhere | ready to merge |
 | Testimonial block with link | develop | nowhere | ready to merge |
 | Location editorial | develop | nowhere (hidden on location pages by design) | ready to merge |

@@ -854,6 +854,26 @@ people now follow the ballot that branch built. Decisions:
 Noted and not acted on: the frame's heading is `gray-900` where the site's headings are black; the
 mobile frame bolds the callout title where the desktop frame uses semibold (semibold on both).
 
+**Revised to a grid (Emily, 2026-10-20; Figma 2503-37070 desktop, 2503-37294 mobile, 2589-92422 a
+short second row).** The carousel is gone. Desktop shows every featured person at once, four across
+with 16px between columns and 24px between rows; with five to seven people the second row keeps the
+column width and starts at the left, which a fixed-column grid does on its own. Tablets, which have no
+frame, get two columns from 768px and three from 1024px. The phone stacks three full-width cards and a
+white "See more candidates and officials" button reveals the rest; the hidden cards stay in the markup,
+so their profile links are still crawlable. Card text is fixed at Outfit 24/32 for the name and office
+and 20/28 grey for the place, at every width, and the View profile buttons in a row line up at the
+bottom. Decisions:
+
+- **Cards are 288px at 1440, not the frame's 308.** The frame lays four cards on a 1280px content
+  area; the site's xl container gives 1200, and every other block on the page lines up with it.
+- **Analytics.** With no carousel, the block no longer sends `voter_guide_carousel_page`; the phone's
+  See more sends `voter_guide_show_more_click` with `list: featured_candidates`.
+- Who is featured, the cap of eight, the pledge badge, the callout and the card click event are
+  unchanged.
+
+Noted and not acted on (2026-10-20): the frames still draw the heading in `gray-900` and the phone's
+callout title in bold; both stay as settled above.
+
 **Request to the election data team** (the one query that finishes this block): a persons read
 filtered by **place including its descendants** and by **pledge**, with the person's current
 candidacy or office for the card, e.g. `/v1/persons?placeSlug=tx/harris-county&includeDescendants=true&isPledged=true&includeCandidacies=true&includeOfficeHolders=true`.
@@ -1474,7 +1494,7 @@ this table; it is here to orient, and to show the shape of the answer.
 | Elections near you | develop | `/all` plus three landing pages (see the note above) | ready to merge, list the pages |
 | Election position resources | develop | nowhere published; a **draft** of the Position Page global adds it | ready to merge, tell the editor holding that draft |
 | Nearby offices | develop | nowhere | ready to merge |
-| Featured candidates | develop + draft PR #300's branch (the 2026-10-06 revision is stacked on it) | nowhere | into the #300 branch, ships with the location batch |
+| Featured candidates | develop; the 2026-10-20 grid is PR #489 | all four Location globals (state, county, city, district) and the `/elections` landing page, published and in drafts (checked 2026-10-20) | #489, draft and batch |
 | Illustrated columns | develop | nowhere | ready to merge |
 | Testimonial block with link | develop | nowhere | ready to merge |
 | Location editorial | develop | nowhere (hidden on location pages by design) | ready to merge |

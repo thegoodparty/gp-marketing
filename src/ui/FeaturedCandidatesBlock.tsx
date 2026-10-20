@@ -32,8 +32,8 @@ const styles = tv({
 		calloutIconCell: 'flex shrink-0 items-start md:w-[7.3125rem] md:items-center md:justify-center md:border-r md:border-midnight-200',
 		calloutIcon: 'h-12 w-14 shrink-0 md:h-[3.6875rem] md:w-[4.5rem]',
 		calloutBody: 'flex min-w-0 flex-col gap-1 md:px-8 md:py-[1.1875rem]',
-		// Figma: Outfit 20/28 on both frames, which no ramping token gives; bold on the phone, semibold on desktop.
-		calloutTitle: 'font-primary text-[1.25rem]/[1.75rem] font-bold text-black md:font-semibold',
+		// Figma: Outfit 20/28 on both frames, which no ramping token gives.
+		calloutTitle: 'font-primary text-[1.25rem]/[1.75rem] font-semibold text-black',
 		calloutText: 'font-secondary text-[1rem]/[1.5rem] text-black [&_a]:text-info-500 [&_a]:underline md:[&_p]:inline',
 		calloutLink:
 			'flex w-fit items-center gap-1 font-secondary text-[1rem]/[1.5rem] font-semibold text-info-500 underline max-md:mt-1 md:ml-1 md:inline-flex',

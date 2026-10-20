@@ -24,7 +24,7 @@ type Call = { name: string; props?: Record<string, unknown> };
 
 type StubWindow = {
 	dataLayer?: Record<string, unknown>[];
-	fbq?: (method: string, name: string, props?: Record<string, unknown>) => void;
+	fbq?(method: string, name: string, props?: Record<string, unknown>): void;
 	amplitude?: { track(name: string, props?: Record<string, unknown>): void };
 	analytics?: { track(name: string, props?: Record<string, unknown>): void };
 	location: { pathname: string; hostname: string };

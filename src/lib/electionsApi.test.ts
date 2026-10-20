@@ -2,8 +2,11 @@ import { afterEach, beforeEach, describe, expect, spyOn, test } from 'bun:test';
 import type { PlaceItem } from '~/types/elections';
 import { __resetElectionApiAuthForTests } from './electionApiAuth';
 import {
+	ELECTION_PAGE_SIZE,
 	getCitySlugToCountySlugMap,
 	getCountyChildPlaces,
+	getDistrictNames,
+	getPlacesByState,
 	getFeaturedCities,
 	getCountySlugsByState,
 	getPersonMergeSurvivorChain,
@@ -1348,5 +1351,92 @@ describe('getFeaturedCities', () => {
 		]);
 
 		expect(await getFeaturedCities({ stateCode: 'TN', countySlug: 'tn/empty-county' })).toEqual([]);
+	});
+});
+
+describe('ELECTIONS_GP_API_PERCENT picks the backend for election reads', () => {
+	const ORIGINAL_PERCENT = process.env['ELECTIONS_GP_API_PERCENT'];
+
+	function recordFetches(bodyFor: (url: string) => unknown): string[] {
+		const urls: string[] = [];
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			const url = String(input);
+			urls.push(url);
+			return new Response(JSON.stringify(bodyFor(url)), {
+				status: 200,
+				headers: { 'content-type': 'application/json' },
+			});
+		}) as typeof fetch;
+		return urls;
+	}
+
+	afterEach(() => {
+		if (ORIGINAL_PERCENT === undefined) {
+			delete process.env['ELECTIONS_GP_API_PERCENT'];
+		} else {
+			process.env['ELECTIONS_GP_API_PERCENT'] = ORIGINAL_PERCENT;
+		}
+	});
+
+	test('unset sends every read to election-api in one request', async () => {
+		delete process.env['ELECTIONS_GP_API_PERCENT'];
+		const urls = recordFetches(() => [{ slug: 'wy/laramie-county' }]);
+
+		const places = await getPlacesByState({ state: 'wy' });
+
+		expect(places).toHaveLength(1);
+		expect(urls).toHaveLength(1);
+		expect(urls[0]).toContain('/v1/places?');
+		expect(urls[0]).not.toContain('/v1/elections/');
+		expect(urls[0]).not.toContain('pageSize=');
+	});
+
+	test('100 sends list reads to gp-api and walks its pages', async () => {
+		process.env['ELECTIONS_GP_API_PERCENT'] = '100';
+		const urls = recordFetches(url => {
+			const page = Number(new URL(url).searchParams.get('page'));
+			const size = page === 1 ? ELECTION_PAGE_SIZE : 3;
+			return Array.from({ length: size }, (_, i) => ({ slug: `wy/place-${page}-${i}` }));
+		});
+
+		const places = await getPlacesByState({ state: 'wy' });
+
+		expect(places).toHaveLength(ELECTION_PAGE_SIZE + 3);
+		expect(urls).toHaveLength(2);
+		for (const url of urls) {
+			expect(url).toContain('/v1/elections/places?');
+			expect(url).toContain(`pageSize=${ELECTION_PAGE_SIZE}`);
+		}
+	});
+
+	test('100 sends single reads to gp-api', async () => {
+		process.env['ELECTIONS_GP_API_PERCENT'] = '100';
+		const urls = recordFetches(() => ({ survivingId: 'survivor-1' }));
+
+		await expect(getPersonMergeSurvivorId('retired-1')).resolves.toBe('survivor-1');
+
+		expect(urls).toHaveLength(1);
+		expect(urls[0]).toContain('/v1/elections/person-merges/retired-1');
+	});
+
+	test('a value that is not a number keeps every read on election-api', async () => {
+		process.env['ELECTIONS_GP_API_PERCENT'] = 'all';
+		const urls = recordFetches(() => ({ survivingId: 'survivor-1' }));
+
+		await getPersonMergeSurvivorId('retired-1');
+
+		expect(urls[0]).toContain('/v1/person-merges/retired-1');
+		expect(urls[0]).not.toContain('/v1/elections/');
+	});
+
+	test('district names ask both backends for excludeInvalid=false', async () => {
+		for (const percent of ['0', '100']) {
+			process.env['ELECTIONS_GP_API_PERCENT'] = percent;
+			const urls = recordFetches(() => []);
+
+			await getDistrictNames({ L2DistrictType: 'City', state: 'wy', electionYear: 2026 });
+
+			expect(urls[0]).toContain('excludeInvalid=false');
+		}
 	});
 });

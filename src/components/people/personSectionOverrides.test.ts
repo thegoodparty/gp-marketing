@@ -807,3 +807,22 @@ describe('the past-election disclaimer dates the last run from the record', () =
 		);
 	});
 });
+
+describe('unclaimed placeholder cards', () => {
+	// Marketing's copy (Emily, 2026-10-20): a plain "has not … yet" line per section.
+	test('state F says what each section is still missing', () => {
+		const view = getDevPersonProfileView('tim-ficken-0a951485');
+		if (!view) throw new Error('no dev fixture for tim-ficken-0a951485');
+		const name = view.displayName;
+		const copy = Object.fromEntries(
+			contentCards('tim-ficken-0a951485').flatMap(card =>
+				card.heading ? [[card.heading, renderToStaticMarkup(card.content as ReactElement).replace(/<[^>]*>/g, '')]] : [],
+			),
+		);
+		expect(copy['Why I’m Running for Office']).toBe(`${name} has not filled out this section yet.`);
+		expect(copy['Campaign Issues']).toBe(`${name} has not shared their top campaign issues yet.`);
+		expect(copy['Top Priorities While in Office']).toBe(`${name} has not shared their top priorities yet.`);
+		expect(copy['Accomplishments During This Term']).toBe(`${name} has not listed any accomplishments yet.`);
+		expect(copy['About Me']).toBe(`${name} has not filled out this section yet.`);
+	});
+});

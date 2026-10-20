@@ -307,7 +307,7 @@ describe('an independent city is named the way its position page names it', () =
 		const json = (data: unknown) => ({ ok: true, status: 200, json: async () => data }) as unknown as Response;
 		globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
 			const url = new URL(String(input));
-			if (url.pathname.endsWith('/v1/elections/places') && url.searchParams.get('state')?.toUpperCase() === 'VA' && url.searchParams.has('mtfcc')) {
+			if (url.pathname.endsWith('/v1/places') && url.searchParams.get('state')?.toUpperCase() === 'VA' && url.searchParams.has('mtfcc')) {
 				return json([
 					{ id: 'p-fx-city', slug: 'va/fairfax-city', name: 'Fairfax city', state: 'VA', mtfcc: url.searchParams.get('mtfcc') },
 					{ id: 'p-fx-county', slug: 'va/fairfax-county', name: 'Fairfax County', state: 'VA', mtfcc: url.searchParams.get('mtfcc') },

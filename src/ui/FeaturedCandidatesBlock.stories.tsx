@@ -29,7 +29,7 @@ const callout = {
 	pledgeLinkLabel: 'Read the full pledge',
 };
 
-const people = Array.from({ length: 6 }, (_, i) => ({
+const people = Array.from({ length: 8 }, (_, i) => ({
 	key: `person-${i}`,
 	name: '[Candidate Name]',
 	office: '[Office held]',
@@ -54,6 +54,24 @@ export const WithCount: Story = {
 		bodyCopy: 'There are 5 candidates and elected officials who have taken the GoodParty.org Pledge in Bay County. Read why they’re running and serving, in their own words.',
 		callout,
 		people,
+	},
+};
+
+export const SixPeople: Story = {
+	args: {
+		heading,
+		bodyCopy,
+		callout,
+		people: people.slice(0, 6),
+	},
+};
+
+export const ThreePeople: Story = {
+	args: {
+		heading,
+		bodyCopy,
+		callout,
+		people: people.slice(0, 3),
 	},
 };
 

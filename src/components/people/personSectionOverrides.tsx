@@ -764,9 +764,14 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	// Not on a removed profile (Emily, 2026-10-06): the hero still states their
 	// pledge fact, but the page must not invite someone who asked us to stop
 	// publishing them to sign up with us.
+	//
+	// The click is reported from the profile page (`takePledgeClick`), because
+	// sign-up completes on app.goodparty.org and the completion event lands
+	// there: this is the only event that credits the profile the visitor came
+	// from, the same way the claim block's click does.
 	const pledgeButton: NonNullable<SectionOverrides['component_goodPartyOrgPledge']>['button'] =
 		attribution === 'notPledged' && !view.removed
-			? { buttonType: 'signup', label: 'Take the pledge' }
+			? { buttonType: 'signup', label: 'Take the pledge', analytics: { event: 'takePledgeClick', properties: { source: 'pledge_block' } } }
 			: { buttonType: 'internal', href: '/about', label: 'Learn more' };
 
 	// The person-profile CTA band sits below the content well (Figma order):

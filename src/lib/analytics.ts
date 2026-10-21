@@ -87,6 +87,48 @@ export function trackSignUpClicked(props: { href: string; label?: string | null;
  * readable when the next event fires. Each event therefore carries its whole
  * property set every time, and a tag only reads the keys its own event sets.
  */
+/**
+ * The Meta pixel custom events paid media bids on. Only the production host
+ * sends them: the pixel snippet also loads on dev.goodparty.org and Vercel
+ * previews, and a bid signal polluted by staff clicks optimises toward staff.
+ */
+export const META_EVENT_HOSTS = new Set(['goodparty.org', 'www.goodparty.org']);
+
+export function trackMetaCustomEvent(eventName: string, parameters?: Record<string, unknown>): void {
+	if (typeof window === 'undefined') return;
+	if (!META_EVENT_HOSTS.has(window.location.hostname)) return;
+	window.fbq?.('trackCustom', eventName, parameters);
+}
+
+/**
+ * Which voter guide clicks reach Meta, and under what name. Each is also sent as
+ * `VoterGuideEngaged` (with `step` naming the click) so an ad set can optimise on
+ * one event with enough volume while the three steps report separately. Only
+ * keys that describe the step go along; no person or office names.
+ */
+export const VOTER_GUIDE_META_EVENTS = {
+	officeClick: { name: 'VoterGuideOfficeClick', keys: ['list', 'office_level'] },
+	positionPersonClick: { name: 'VoterGuideProfileClick', keys: ['list', 'is_pledged'] },
+	featuredCandidateClick: { name: 'VoterGuideProfileClick', keys: ['is_pledged'] },
+} as const satisfies Partial<Record<string, { name: string; keys: readonly string[] }>>;
+
+export const VOTER_GUIDE_META_ENGAGED_EVENT = 'VoterGuideEngaged';
+export const VOTER_GUIDE_META_SEARCH_EVENT = 'VoterGuideSearchComplete';
+
+function trackMetaVoterGuideStep(name: string, payload: Record<string, unknown>): void {
+	trackMetaCustomEvent(name, payload);
+	trackMetaCustomEvent(VOTER_GUIDE_META_ENGAGED_EVENT, { ...payload, step: name });
+}
+
+/** A completed Elections near you search, from the search form's data layer wrapper. */
+export function trackMetaVoterGuideSearchComplete(props: { page_path: string | null; input_type?: unknown; matched_level?: unknown }): void {
+	trackMetaVoterGuideStep(VOTER_GUIDE_META_SEARCH_EVENT, {
+		page_path: props.page_path,
+		input_type: props.input_type ?? null,
+		matched_level: props.matched_level ?? null,
+	});
+}
+
 export function trackDataLayerEvent(event: string, properties?: Record<string, unknown>): void {
 	if (typeof window === 'undefined') return;
 	window.dataLayer = window.dataLayer || [];
@@ -157,6 +199,11 @@ export const VOTER_GUIDE_EVENTS = {
 		amplitude: 'Voter Guide - Claim Profile Clicked',
 		keys: ['source', 'label', 'href', 'layout'],
 	},
+	takePledgeClick: {
+		dataLayer: 'voter_guide_take_pledge_click',
+		amplitude: 'Voter Guide - Take Pledge Clicked',
+		keys: ['source', 'label', 'href'],
+	},
 	locationIndexClick: {
 		dataLayer: 'voter_guide_location_index_click',
 		amplitude: 'Voter Guide - Location Index Clicked',
@@ -215,6 +262,13 @@ export function trackVoterGuideEvent(key: VoterGuideEventKey, properties: VoterG
 	if (names.dataLayer) trackDataLayerEvent(names.dataLayer, payload);
 	trackEvent(names.amplitude, payload);
 	if (SEGMENT_FORWARDED.has(key)) trackSegmentEvent(names.amplitude, payload);
+
+	const meta = (VOTER_GUIDE_META_EVENTS as Partial<Record<VoterGuideEventKey, { name: string; keys: readonly string[] }>>)[key];
+	if (meta) {
+		const metaPayload: Record<string, unknown> = { page_path: payload['page_path'] };
+		for (const name of meta.keys) metaPayload[name] = payload[name] ?? null;
+		trackMetaVoterGuideStep(meta.name, metaPayload);
+	}
 }
 
 const noop = () => undefined;

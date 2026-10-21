@@ -170,7 +170,10 @@ const BRAND_CSS = `
 		color: var(--gp-form-text, hsl(220 58% 10%)) !important;
 	}
 	.hs-form .hs-error-msg, .hs-form .hs-error-msgs label { color: var(--gp-form-error, #b80a27) !important; font-weight: 400 !important; }
+	.hs-form .hs-submit .actions { text-align: var(--gp-form-submit-align, left) !important; }
 `;
+
+export type SubmitAlign = 'left' | 'center' | 'right';
 
 /* The form is dropped into sections with different backgrounds (cream, dark hero,
    etc.), so pick a readable colour for the on-section text — labels and the legal
@@ -206,7 +209,7 @@ function isDarkColor(color: string): boolean {
 	return (0.299 * effectiveR + 0.587 * effectiveG + 0.114 * effectiveB) / 255 < 0.5;
 }
 
-function applyBrandStyles(target: HTMLElement) {
+function applyBrandStyles(target: HTMLElement, submitAlign: SubmitAlign = 'left') {
 	const iframe = target.querySelector('iframe');
 	if (!(iframe instanceof HTMLIFrameElement)) return;
 
@@ -228,6 +231,7 @@ function applyBrandStyles(target: HTMLElement) {
 
 	const background = effectiveBackgroundColor(target);
 	doc.documentElement.style.setProperty('--gp-form-text', background && isDarkColor(background) ? ON_SECTION_LIGHT_TEXT : ON_SECTION_DARK_TEXT);
+	doc.documentElement.style.setProperty('--gp-form-submit-align', submitAlign);
 
 	let style = doc.getElementById(BRAND_STYLE_ID);
 	if (!(style instanceof HTMLStyleElement)) {
@@ -242,11 +246,14 @@ export function HubSpotEmbedForm({
 	formId,
 	redirectTo,
 	submitLabel,
+	submitAlign = 'left',
 	onFormSubmit = handleHubSpotFormSubmission,
 }: {
 	formId: string;
 	redirectTo?: string;
 	submitLabel?: string;
+	/** Where the submit button sits under the fields. Centered blocks pass 'center' so the button lines up with their heading. */
+	submitAlign?: SubmitAlign;
 	onFormSubmit?: typeof handleHubSpotFormSubmission;
 }) {
 	const reactId = useId();
@@ -278,7 +285,7 @@ export function HubSpotEmbedForm({
 					onFormReady: () => {
 						if (cancelled || !mountedRef.current) return;
 						applyEmbedWidth(target);
-						applyBrandStyles(target);
+						applyBrandStyles(target, submitAlign);
 						applySubmitLabel(target, submitLabel);
 					},
 					onFormSubmitted: () => {
@@ -302,7 +309,7 @@ export function HubSpotEmbedForm({
 			mountedRef.current = false;
 			target.innerHTML = '';
 		};
-	}, [formId, redirectTo, submitLabel, targetId, onFormSubmit]);
+	}, [formId, redirectTo, submitLabel, submitAlign, targetId, onFormSubmit]);
 
 	return (
 		<div data-component='HubSpotEmbedForm' className='gp-hubspot-form flex w-full flex-col gap-4'>

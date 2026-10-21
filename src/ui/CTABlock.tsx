@@ -16,7 +16,7 @@ const styles = tv({
 	slots: {
 		base: '',
 		content: 'relative p-6 z-2 flex flex-col gap-6 items-center text-center md:p-12',
-		card: 'absolute inset-0 overflow-hidden rounded-2xl transition-transform duration-normal ease-smooth z-0 pointer-events-none group-hover:scale-[1.025]',
+		card: 'absolute inset-0 overflow-hidden rounded-2xl transition-transform duration-normal ease-smooth z-0 pointer-events-none',
 		overline: 'text-neutral-500',
 	},
 	variants: {
@@ -65,6 +65,12 @@ const styles = tv({
 			page: 'py-(--container-padding)',
 			blog: {},
 		},
+		hoverScale: {
+			true: {
+				card: 'group-hover:scale-[1.025]',
+			},
+			false: {},
+		},
 	},
 });
 
@@ -82,6 +88,8 @@ export type CTABlockProps = {
 	form?: FormProps;
 	layout?: 'blog' | 'page';
 	showLogo?: boolean;
+	/** Scale the background card on hover. Off for blocks that hold a form, where the card should stay put while the visitor types. */
+	hoverScale?: boolean;
 };
 
 export function CTABlock(props: CTABlockProps) {
@@ -89,8 +97,9 @@ export function CTABlock(props: CTABlockProps) {
 	const color = props.color ?? 'red';
 	const size = props.size ?? 'normal';
 	const layout = props.layout ?? 'page';
+	const hoverScale = props.hoverScale ?? true;
 
-	const { base, content, card, overline } = styles({ backgroundColor, color, size, layout });
+	const { base, content, card, overline } = styles({ backgroundColor, color, size, layout, hoverScale });
 
 	return (
 		<article className={cn(base(), props.className)} data-component='CTABlock'>
@@ -138,7 +147,14 @@ export function CTABlock(props: CTABlockProps) {
 							</Text>
 						)}
 						{props.form?.provider === 'Hubspot' && props.form.formId && (
-							<HubSpotEmbedForm formId={props.form.formId} redirectTo={props.form.redirectTo} submitLabel={props.form.submitLabel} />
+							<div className='w-full max-w-xl'>
+								<HubSpotEmbedForm
+									formId={props.form.formId}
+									redirectTo={props.form.redirectTo}
+									submitLabel={props.form.submitLabel}
+									submitAlign='center'
+								/>
+							</div>
 						)}
 					</div>
 					<div className={card()}>

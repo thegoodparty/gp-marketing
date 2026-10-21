@@ -17,6 +17,7 @@ export function HeroWithSubscribeBlockSection(section: Extract<Sections, { _type
 				title={section.summaryInfoNoButtons?.field_title ?? ''}
 				copy={<RichData value={section.summaryInfoNoButtons?.block_summaryText} />}
 				image={section.heroImage?.img_image}
+				priority={!!section.heroImage?.img_image && !section.heroImage?.field_displayEmbed}
 				showFullImage={section.heroImage?.showFullImage}
 				embedCode={section.heroImage?.field_displayEmbed ? section.heroImage?.field_embedCode : undefined}
 				layout={resolveHeroLayout({

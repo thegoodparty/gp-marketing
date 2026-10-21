@@ -34,6 +34,16 @@ Two backends feed these pages. Both are read through `src/lib/electionsApi.ts`.
   base URL) is queried at `/v1/public-campaigns` through `findCampaignByRace` to find
   a claimed campaign for a candidate.
 
+Election data is moving from election-api to gp-api, which serves the same reads
+from the same database under `/v1/elections/*`. `ELECTIONS_GP_API_PERCENT` (0 to
+100, default 0) sets the share of election reads that go to gp-api; each read
+picks its backend at random, and all pages of one list read go to the same one.
+gp-api caps list pages at 1,000 rows, so on gp-api `fetchElectionList` walks
+`/places`, `/candidacies` and `/officeholders` in pages of 5,000. Change the
+value in Vercel and redeploy to move the share. Sitemap generation
+(`src/lib/sitemap-entries.ts`) and `/api/people/claim-request` still read
+election-api directly.
+
 All reads go through `fetchJson`, which retries twice with a 500ms times attempt
 backoff, returns `null` on 404 or any non-500 error, and caches most responses with
 `{ next: { revalidate: 3600 } }` (one hour). Pages themselves also set

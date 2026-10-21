@@ -666,7 +666,11 @@ describe('the claimed CTA band button goes somewhere', () => {
  */
 describe('the pledge band across the twelve profile states', () => {
 	const LEARN_MORE = { buttonType: 'internal', href: '/about', label: 'Learn more' } as const;
-	const TAKE_THE_PLEDGE = { buttonType: 'signup', label: 'Take the pledge' } as const;
+	const TAKE_THE_PLEDGE = {
+		buttonType: 'signup',
+		label: 'Take the pledge',
+		analytics: { event: 'takePledgeClick', properties: { source: 'pledge_block' } },
+	} as const;
 
 	/** slug → [expected hero attribution, expected band button] */
 	const STATES = {

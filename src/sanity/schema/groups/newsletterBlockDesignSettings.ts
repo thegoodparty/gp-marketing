@@ -13,6 +13,12 @@ export const newsletterBlockDesignSettings = {
   icon: getIcon('ColorPalette'),
   fields: [
     {
+      title: 'Size',
+      name: 'field_ctaSizeNormalCondensed',
+      type: 'field_ctaSizeNormalCondensed',
+      description: 'Condensed removes the tall minimum height and the background artwork, for a compact subscribe band.',
+    },
+    {
       title: 'Color',
       name: 'field_componentColor6Colors',
       type: 'field_componentColor6Colors',

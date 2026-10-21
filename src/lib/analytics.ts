@@ -199,6 +199,11 @@ export const VOTER_GUIDE_EVENTS = {
 		amplitude: 'Voter Guide - Claim Profile Clicked',
 		keys: ['source', 'label', 'href', 'layout'],
 	},
+	takePledgeClick: {
+		dataLayer: 'voter_guide_take_pledge_click',
+		amplitude: 'Voter Guide - Take Pledge Clicked',
+		keys: ['source', 'label', 'href'],
+	},
 	locationIndexClick: {
 		dataLayer: 'voter_guide_location_index_click',
 		amplitude: 'Voter Guide - Location Index Clicked',

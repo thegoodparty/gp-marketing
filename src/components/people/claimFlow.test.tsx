@@ -205,7 +205,8 @@ describe('the claim block hands the candidate to Win sign-up', () => {
 				source: 'claim_block',
 				label: 'Claim this profile',
 				href: 'https://app.goodparty.org/sign-up',
-				layout: 'card',
+				// The profile's claim card is the inset one at the top of the content column.
+				layout: 'inset',
 			},
 		]);
 		expect(segmentEvents.map(e => e.name)).toEqual(['Voter Guide - Claim Profile Clicked']);

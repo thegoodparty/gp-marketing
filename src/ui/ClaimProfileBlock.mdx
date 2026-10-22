@@ -81,6 +81,18 @@ The component uses a responsive two-column layout:
 - Both columns are equal width (`flex-1`) on desktop
 - Card section has `w-full lg:w-auto` to allow natural card sizing
 
+### Inset layout (person profiles)
+
+`layout='inset'` is the claim card on unclaimed `/people` profiles. It renders as the first card of the
+Profile Content Block's card column rather than as its own full-width section, wherever the template lists
+the block (Voter Guide round, Figma 2626:120137 desktop / 2626:128927 phone):
+
+- Centred `section-heading` headline (32/44 at every width), `body-1` copy, and a large midnight button
+- White-to-blue-to-pink glow: a top-down ramp on the phone, a radial glow from the top edge from `md`
+- 24px radius with a gray-200 border; 24px padding on the phone, 40px/48px from `md`
+- The button is full width on the phone and sized to its label from `md`
+- No example card, and `backgroundColor` does not apply
+
 ## Text Section
 
 The text section contains:

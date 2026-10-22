@@ -91,6 +91,8 @@ type ProfileContentBlockSectionProps = Extract<Sections, { _type: 'component_pro
 	cardLayout?: 'joined' | 'separated';
 	/** Optional district voter-density map rendered below the content. */
 	districtMap?: ReactNode;
+	/** Rendered first in the card column (the person profile's claim card). */
+	lead?: ReactNode;
 };
 
 export function ProfileContentBlockSection({
@@ -100,6 +102,7 @@ export function ProfileContentBlockSection({
 	sidebarOverride,
 	cardLayout,
 	districtMap,
+	lead,
 	...section
 }: ProfileContentBlockSectionProps) {
 	const backgroundColor = section.profileContentBlockDesignSettings?.field_blockColorCreamMidnight
@@ -111,7 +114,7 @@ export function ProfileContentBlockSection({
 
 	// Nothing authored and no sidebar/map (e.g. removal states) — render nothing
 	// rather than an empty shell.
-	if (contentCards.length === 0 && !sidebar && !districtMap) {
+	if (contentCards.length === 0 && !sidebar && !districtMap && !lead) {
 		return null;
 	}
 
@@ -122,6 +125,7 @@ export function ProfileContentBlockSection({
 				sidebar={sidebar}
 				contentCards={contentCards}
 				cardLayout={cardLayout}
+				lead={lead}
 			/>
 			{districtMap}
 		</section>

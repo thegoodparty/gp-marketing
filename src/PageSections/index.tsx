@@ -343,7 +343,12 @@ export type SectionOverrides = {
 		claimed?: boolean;
 		candidateName?: string;
 		partyAffiliation?: string;
-		layout?: 'card' | 'banner';
+		/**
+		 * `inset` (person profiles) moves the block into the profile content block's
+		 * card column, wherever the template lists it. With no profile content block
+		 * on the page, or a hidden one, it renders where the template puts it.
+		 */
+		layout?: 'card' | 'banner' | 'inset';
 		hideExampleCard?: boolean;
 		formId?: string;
 	};
@@ -369,12 +374,23 @@ function PassthroughBoundary({ children }: PropsWithChildren & { componentName?:
 	return <>{children}</>;
 }
 
+type ClaimProfileSection = Extract<Sections, { _type: 'component_claimProfileBlock' }>;
+
+/** The claim block the profile content block renders as its first card, if any (see `layout: 'inset'`). */
+export function findInsetClaimSection(pageSections: Sections[], overrides?: SectionOverrides): ClaimProfileSection | undefined {
+	const claim = overrides?.component_claimProfileBlock;
+	if (claim?.layout !== 'inset' || claim.claimed || overrides?.component_profileContentBlock?.hidden) return undefined;
+	if (!pageSections.some(s => s._type === 'component_profileContentBlock')) return undefined;
+	return pageSections.find((s): s is ClaimProfileSection => s._type === 'component_claimProfileBlock');
+}
+
 export function PageSections(props: Props) {
 	if (!props.pageSections) {
 		return null;
 	}
 
 	const Boundary = props.disableErrorBoundary ? PassthroughBoundary : ComponentErrorBoundary;
+	const insetClaimSection = findInsetClaimSection(props.pageSections, props.sectionOverrides);
 
 	return (
 		<>
@@ -434,7 +450,7 @@ export function PageSections(props: Props) {
 							</Boundary>
 						);
 					case 'component_claimProfileBlock':
-						if (props.sectionOverrides?.component_claimProfileBlock?.claimed) {
+						if (props.sectionOverrides?.component_claimProfileBlock?.claimed || insetClaimSection === section) {
 							return <Fragment key={section._key} />;
 						}
 						return (
@@ -709,6 +725,16 @@ export function PageSections(props: Props) {
 									sidebarOverride={pcbOverride?.sidebar}
 									cardLayout={pcbOverride?.cardLayout}
 									districtMap={pcbOverride?.districtMap}
+									lead={
+										insetClaimSection ? (
+											<ClaimProfileBlockSection
+												{...insetClaimSection}
+												tokens={props.tokens}
+												claimProfileOverride={props.sectionOverrides?.component_claimProfileBlock}
+												embedded
+											/>
+										) : undefined
+									}
 								/>
 							</Boundary>
 						);

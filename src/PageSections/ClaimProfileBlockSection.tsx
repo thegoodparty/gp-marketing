@@ -9,6 +9,8 @@ import { stegaClean } from 'next-sanity';
 type Props = Extract<Sections, { _type: 'component_claimProfileBlock' }> & {
 	claimProfileOverride?: SectionOverrides['component_claimProfileBlock'];
 	tokens?: TokenMap;
+	/** Rendered inside the profile content column, which supplies the gutter and spacing. */
+	embedded?: boolean;
 };
 
 export function resolveExampleCardPartyAffiliation(
@@ -37,7 +39,7 @@ export function resolveClaimProfileBlockText(
 	};
 }
 
-export function ClaimProfileBlockSection({ claimProfileOverride, tokens, ...section }: Props) {
+export function ClaimProfileBlockSection({ claimProfileOverride, tokens, embedded, ...section }: Props) {
 	const bgValue = stegaClean(section.claimProfileBlockDesignSettings?.field_blockColorCreamMidnight);
 	const backgroundColor = resolveClaimProfileBlockBackgroundColor(bgValue);
 
@@ -76,7 +78,7 @@ export function ClaimProfileBlockSection({ claimProfileOverride, tokens, ...sect
 			}
 			// Maps CMS exampleCard → CandidatesCardProps (no secondaryText on card UI)
 			exampleCard={
-				layout === 'banner' || claimProfileOverride?.hideExampleCard
+				layout !== 'card' || claimProfileOverride?.hideExampleCard
 					? undefined
 					: {
 							name: claimProfileOverride?.candidateName ?? exampleCard?.field_name ?? 'Firstname Lastname',
@@ -89,10 +91,11 @@ export function ClaimProfileBlockSection({ claimProfileOverride, tokens, ...sect
 	);
 
 	// The card has its own border and rounded corners, so it needs the page gutter
-	// around it; the banner is edge to edge by design.
+	// around it; the banner is edge to edge by design. The inset card only needs it
+	// when it could not be placed in the profile content column.
 	return (
 		<section id={stegaClean(section.componentSettings?.field_anchorId)} data-section='Claim Profile Block'>
-			{layout === 'card' ? (
+			{layout === 'card' || (layout === 'inset' && !embedded) ? (
 				<Container size='xl' className='py-(--container-padding)'>
 					{block}
 				</Container>

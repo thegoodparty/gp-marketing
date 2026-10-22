@@ -1032,6 +1032,28 @@ file and the content block's clearance, and both wait for the `/people` batch (P
   A card falls back to its row's line only when the record names no party, or no record came
   back for it. The pledge mark and `majorParty` are unchanged in direction: a major line on the
   row or on the record still disqualifies, so nothing marked major before is unmarked now.
+- **The claim card moved into the content column and was restyled** (Tony, 2026-10-22; frames
+  2626:119116 desktop / 2626:119625 phone, the card itself 2626:120137 / 2626:128927). The Person
+  Profile global lists the Claim Profile Block after the content block, and it used to render
+  there, full width under the well. It now renders as the first card of the content block's card
+  column: above Why I'm Running on desktop, straight under the contact sidebar on the phone. The
+  person override sets `layout: 'inset'` on the claim block; `PageSections` then hands that Studio
+  section to the content block as its `lead` (`findInsetClaimSection`) and renders nothing where
+  the template lists it. Copy and button stay Studio-editable on the claim block. If a page has no
+  content block, or a hidden one, the card renders where the template lists it instead of
+  vanishing. Who sees it is unchanged (`showClaim`: unclaimed, unpledged, empowered candidates).
+  The look is the frames': centred `section-heading` (32/44 at every width) and `body-1`, a large
+  midnight button with the up-right arrow (full width on the phone), a 24px-radius card with a
+  gray-200 border and a white-to-blue-100-to-red-100 glow (top-down on the phone, radial from the
+  top edge from `md`). The `/candidate` route's banner and the card layout are untouched. The
+  claim click's analytics `layout` now reads `inset` on profiles. Shipped on its own, not held for
+  a batch: the `/people` batch had already released (Tony, 2026-10-22).
+
+  Noted and not acted on (2026-10-22): the frames still draw the "[Name] has not completed their
+  profile. Ask them to fill it out now. / Send request" card, which was removed on purpose on
+  2026-10-16 (#476, see above); the phone frame's claim card carries hidden Overline and Caption
+  layers, left out (Tony, 2026-10-22); and the phone's Recent Experience labels ("Elected" / "Ran",
+  above the title) differ from the desktop's, which was not part of this request.
 **GoodParty.org Pledge block** (person profile pages first; location and position pages once editors
 place it) — extended, not rebuilt: `component_goodPartyOrgPledge`, the Studio block "GoodParty.org
 Pledge". The Voter Guide frames (2156-34297 desktop, 2188-38249 mobile) show a centred heading and intro
@@ -1494,8 +1516,8 @@ this table; it is here to orient, and to show the shape of the answer.
 | Position content block | develop + draft PR #327 (stacked on #320) | Position global, plus the landing page `template-elections-position-subset` | into #327, stays draft |
 | Candidates block | develop | every `/people` profile | draft and batch |
 | Breadcrumb block | develop + draft PR #377 (phone collapse) | every election global, two position landing pages | into #377, stays draft |
-| Profile hero | develop + draft PR #374 | Person Profile global, Candidate Profile global | into #374, stays draft |
-| Profile content block | develop + draft PR #375 (stacked on #374) | Person Profile global, Candidate Profile global | into #375, stays draft |
+| Profile content block | develop (#374 and #375 merged) | Person Profile global (every `/people` profile), the retired Candidate Profile global, twelve disabled per-state scaffolds; drafts add the landing page `template-elections-position-candidates-subset-candidate-name` (checked 2026-10-22) | on its own; the `/people` batch has released (Tony, 2026-10-22) |
+| Claim profile block | develop | same templates as the profile content block; on `/people` it renders inside the content block (checked 2026-10-22) | on its own, with the content block |
 | Profile hero | develop | Person Profile global (every `/people` profile), the retired Candidate Profile global, twelve disabled per-state scaffolds; a landing page **draft** also carries it | draft and batch with the `/people` pages (PR for the 2026-10-06 revision) |
 | Elections search hero | develop + draft PR #351 | the `/elections` landing page | into #351 |
 | Featured cities | develop + draft PR #307 | the `/elections` landing page | into #307 |

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { chunkCardGroups } from './_lib/chunkCardGroups.ts';
 import { cn, tv } from './_lib/utils.ts';
 import { Container } from './Container.tsx';
@@ -71,13 +72,19 @@ export type ProfileContentBlockProps = {
 	 * separated by cream gaps; `raw` cards render standalone without card chrome.
 	 */
 	cardLayout?: 'joined' | 'separated';
+	/**
+	 * Rendered first in the card column, above the cards, without card chrome of
+	 * its own. Person profiles put the claim card here (2626:120137): first in the
+	 * column on desktop, straight under the sidebar on the phone.
+	 */
+	lead?: ReactNode;
 };
 
 export function ProfileContentBlock(props: ProfileContentBlockProps) {
 	const backgroundColor = props.backgroundColor ?? 'cream';
 	const { base, well, grid, sidebar, sidebarStandalone, content, separatedColumn, separatedCard, columnWithoutSidebar, title: titleSlot } =
 		styles({ backgroundColor });
-	const hasContentCards = props.contentCards.length > 0;
+	const hasContentCards = props.contentCards.length > 0 || !!props.lead;
 	const separated = props.cardLayout === 'separated';
 	// Without an <aside> the cards become the grid's first child, so they inherit
 	// the slot the hero portrait overflows into. See the slot's comment.
@@ -95,6 +102,7 @@ export function ProfileContentBlock(props: ProfileContentBlockProps) {
 					{hasContentCards &&
 						(separated ? (
 							<div className={cn(separatedColumn(), contentColumn)}>
+								{props.lead}
 								{chunkCardGroups(props.contentCards).map((group, gi) =>
 									group[0]?.raw ? (
 										group.map((card, ci) => <ProfileContentCard key={`${gi}-${ci}`} {...card} />)
@@ -114,6 +122,7 @@ export function ProfileContentBlock(props: ProfileContentBlockProps) {
 							</div>
 						) : (
 							<div className={cn(content(), contentColumn)}>
+								{props.lead}
 								{props.title && (
 									<Text as='h2' styleType='heading-sm' className={titleSlot()}>
 										{props.title}

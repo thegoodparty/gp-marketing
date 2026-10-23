@@ -152,6 +152,7 @@ export function CTABlock(props: CTABlockProps) {
 									formId={props.form.formId}
 									redirectTo={props.form.redirectTo}
 									submitLabel={props.form.submitLabel}
+									experiment={props.form.experiment}
 									submitAlign='center'
 								/>
 							</div>

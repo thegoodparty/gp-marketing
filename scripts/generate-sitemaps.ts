@@ -310,7 +310,7 @@ async function main(): Promise<void> {
 		environment: {
 			appBase: base,
 			sanityProjectId: process.env['NEXT_PUBLIC_SANITY_PROJECT_ID'] ?? '3rbseux7',
-			electionApiBase: process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org',
+			gpApiBase: process.env['GP_API_BASE_URL'] ?? 'https://gp-api.goodparty.org',
 		},
 		stats: {
 			totalUrls: allGeneratedUrls.length,

@@ -156,12 +156,12 @@ async function main(): Promise<void> {
 	// token is actually authenticated. A 401/403 is an unambiguous bad-token
 	// signal in any mode and MUST abort before we roll the token out — that is
 	// exactly how a broken token surfaces once ELECTION_API_AUTH_ENFORCED is on.
-	// In observe-only mode election-api still answers 2xx, so this can't fully
-	// validate today; genuine transport/5xx blips stay non-fatal.
-	const electionApiBase = process.env['ELECTION_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
+	// gp-api's election reads require the token, so a bad one answers 401/403;
+	// genuine transport/5xx blips stay non-fatal.
+	const gpApiBase = process.env['GP_API_BASE_URL'] ?? 'https://gp-api.goodparty.org';
 	let probeRes: Response | undefined;
 	try {
-		probeRes = await fetch(`${electionApiBase}/v1/candidacies?slug=__token-rotation-probe__`, {
+		probeRes = await fetch(`${gpApiBase}/v1/elections/candidacies?slug=__token-rotation-probe__`, {
 			headers: { Authorization: `Bearer ${newToken}` },
 		});
 	} catch (err) {
@@ -169,10 +169,10 @@ async function main(): Promise<void> {
 		console.warn(`  auth probe inconclusive — transport error (non-fatal): ${redact(probeErrMsg)}`);
 	}
 	if (probeRes && (probeRes.status === 401 || probeRes.status === 403)) {
-		throw new Error(`election-api rejected the freshly minted token (HTTP ${probeRes.status}); aborting before rollout`);
+		throw new Error(`gp-api rejected the freshly minted token (HTTP ${probeRes.status}); aborting before rollout`);
 	}
 	if (probeRes) {
-		console.log(`  election-api auth probe → ${probeRes.status}`);
+		console.log(`  gp-api auth probe → ${probeRes.status}`);
 	}
 
 	if (dryRun) {

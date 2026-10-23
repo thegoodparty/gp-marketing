@@ -93,7 +93,7 @@ function stubFetch(routes: Routes): string[] {
 		const raw = String(input);
 		urls.push(raw);
 		const url = new URL(raw);
-		if (url.pathname.endsWith('/v1/candidacies')) {
+		if (url.pathname.endsWith('/v1/elections/candidacies')) {
 			const slug = url.searchParams.get('slug');
 			if (slug) {
 				const own = (routes.person.Candidacies ?? []).find((c) => c.slug === slug);
@@ -101,7 +101,7 @@ function stubFetch(routes: Routes): string[] {
 			}
 			return json(routes.candidaciesByPosition[url.searchParams.get('positionId') ?? ''] ?? []);
 		}
-		if (url.pathname.endsWith('/v1/persons') && url.searchParams.has('ids')) return json(routes.persons(url));
+		if (url.pathname.endsWith('/v1/elections/persons') && url.searchParams.has('ids')) return json(routes.persons(url));
 		return base(input, init);
 	}) as unknown as typeof fetch;
 	return urls;
@@ -146,7 +146,7 @@ describe('a former officeholder keeps one office across the page', () => {
 		expect(view.positionId).toBe('pos-gov');
 		expect(view.otherCandidates.map((c) => c.name)).toEqual(['Kathy Hochul']);
 		// The mayoral race was never asked about: not its detail, not its field.
-		expect(urls.some((u) => u.includes('/v1/candidacies?slug='))).toBe(false);
+		expect(urls.some((u) => u.includes('/v1/elections/candidacies?slug='))).toBe(false);
 		expect(urls.some((u) => u.includes('positionId=pos-mayor'))).toBe(false);
 		// The past run still appears in Recent Experience, as experience.
 		expect(view.recentExperience.map((e) => e.title)).toEqual(['Candidate for New York City Mayor', 'New York Governor']);
@@ -226,7 +226,7 @@ describe('a related-person card reads the whole record its profile reads', () =>
 					mayoralRival({ personId: BLAKEMAN, firstName: 'Bruce', lastName: 'Blakeman', party: 'Vote Affordable' }),
 				],
 			},
-			// What `/v1/persons?ids=` sends: scalars always, relations only when asked for.
+			// What `/v1/elections/persons?ids=` sends: scalars always, relations only when asked for.
 			persons: (url) => {
 				const withOffices = url.searchParams.get('includeOfficeHolders') === 'true';
 				const withRuns = url.searchParams.get('includeCandidacies') === 'true';
@@ -263,7 +263,7 @@ describe('a related-person card reads the whole record its profile reads', () =>
 		expect(view).not.toBeNull();
 		if (!view) return;
 
-		const personsUrl = urls.find((u) => u.includes('/v1/persons?'));
+		const personsUrl = urls.find((u) => u.includes('/v1/elections/persons?'));
 		expect(personsUrl).toContain('includeOfficeHolders=true');
 		expect(personsUrl).toContain('includeCandidacies=true');
 
@@ -307,7 +307,7 @@ describe('an independent city is named the way its position page names it', () =
 		const json = (data: unknown) => ({ ok: true, status: 200, json: async () => data }) as unknown as Response;
 		globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
 			const url = new URL(String(input));
-			if (url.pathname.endsWith('/v1/places') && url.searchParams.get('state')?.toUpperCase() === 'VA' && url.searchParams.has('mtfcc')) {
+			if (url.pathname.endsWith('/v1/elections/places') && url.searchParams.get('state')?.toUpperCase() === 'VA' && url.searchParams.has('mtfcc')) {
 				return json([
 					{ id: 'p-fx-city', slug: 'va/fairfax-city', name: 'Fairfax city', state: 'VA', mtfcc: url.searchParams.get('mtfcc') },
 					{ id: 'p-fx-county', slug: 'va/fairfax-county', name: 'Fairfax County', state: 'VA', mtfcc: url.searchParams.get('mtfcc') },

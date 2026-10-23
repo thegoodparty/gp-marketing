@@ -234,15 +234,15 @@ describe('resolvePlace', () => {
 	test('a normally-mapped state resolves the city without walking any county', async () => {
 		const urls = withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('state=NC') && url.includes('mtfcc=G4020'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('state=NC') && url.includes('mtfcc=G4020'),
 				body: [{ slug: 'nc/guilford-county', name: 'Guilford County', mtfcc: 'G4020', state: 'NC' }],
 			},
 			{
-				match: url => url.includes('/v1/places?') && url.includes('state=NC') && url.includes('mtfcc=G4110'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('state=NC') && url.includes('mtfcc=G4110'),
 				body: [{ slug: 'nc/greensboro', name: 'Greensboro', mtfcc: 'G4110', state: 'NC', countyName: 'Guilford' }],
 			},
 			{
-				match: url => url.includes('/v1/places?') && url.includes('state=NC') && url.includes('mtfcc=G4040'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('state=NC') && url.includes('mtfcc=G4040'),
 				body: [],
 			},
 		]);
@@ -261,20 +261,20 @@ describe('resolvePlace', () => {
 	test('walks the counties when the sweep is non-empty but maps to no county', async () => {
 		const urls = withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('state=CT') && url.includes('mtfcc=G4020'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('state=CT') && url.includes('mtfcc=G4020'),
 				body: [{ slug: 'ct/hartford-county', name: 'Hartford County', mtfcc: 'G4020', state: 'CT' }],
 			},
 			{
-				match: url => url.includes('/v1/places?') && url.includes('state=CT') && url.includes('mtfcc=G4110'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('state=CT') && url.includes('mtfcc=G4110'),
 				// A row the state sweep returns but that maps to no real county place.
 				body: [{ slug: 'ct/somewhere', name: 'Somewhere', mtfcc: 'G4110', state: 'CT', countyName: 'Capitol Planning Region' }],
 			},
 			{
-				match: url => url.includes('/v1/places?') && url.includes('state=CT') && url.includes('mtfcc=G4040'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('state=CT') && url.includes('mtfcc=G4040'),
 				body: [],
 			},
 			{
-				match: url => url.includes('/v1/places?') && url.includes('slug=ct%2Fhartford-county') && url.includes('includeChildren=true'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=ct%2Fhartford-county') && url.includes('includeChildren=true'),
 				body: [
 					{
 						slug: 'ct/hartford-county',
@@ -296,16 +296,16 @@ describe('resolvePlace', () => {
 	test('walks the counties when the sweep is completely empty', async () => {
 		withFetchMock([
 			{
-				match: url => url.includes('/v1/places?') && url.includes('state=CT') && url.includes('mtfcc=G4020'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('state=CT') && url.includes('mtfcc=G4020'),
 				body: [{ slug: 'ct/fairfield-county', name: 'Fairfield County', mtfcc: 'G4020', state: 'CT' }],
 			},
 			{
 				match: url =>
-					url.includes('/v1/places?') && url.includes('state=CT') && (url.includes('mtfcc=G4110') || url.includes('mtfcc=G4040')),
+					url.includes('/v1/elections/places?') && url.includes('state=CT') && (url.includes('mtfcc=G4110') || url.includes('mtfcc=G4040')),
 				body: [],
 			},
 			{
-				match: url => url.includes('/v1/places?') && url.includes('slug=ct%2Ffairfield-county') && url.includes('includeChildren=true'),
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=ct%2Ffairfield-county') && url.includes('includeChildren=true'),
 				body: [
 					{
 						slug: 'ct/fairfield-county',

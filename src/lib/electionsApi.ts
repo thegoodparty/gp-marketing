@@ -26,24 +26,9 @@ import {
 import { ElectionApiError, fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
 import { gpApiAuthHeaders } from '~/lib/electionApiAuth';
 
-const ELECTIONS_API_BASE_URL = process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
-
-const GP_API_BASE_URL =
-	process.env['GP_API_BASE_URL'] ?? process.env['NEXT_PUBLIC_API_BASE'] ?? ELECTIONS_API_BASE_URL.replace('election-api', 'gp-api');
+const GP_API_BASE_URL = process.env['GP_API_BASE_URL'] ?? process.env['NEXT_PUBLIC_API_BASE'] ?? 'https://gp-api.goodparty.org';
 
 const GP_API_ELECTIONS_BASE_URL = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/elections`;
-
-/**
- * Picks the backend for one election read during the staged move from
- * election-api to gp-api. ELECTIONS_GP_API_PERCENT (0-100, default 0) is the
- * share of reads sent to gp-api; it is read per call so each Vercel redeploy
- * with a new value takes effect without a code change. Both backends read the
- * same database, so a page renders the same either way.
- */
-function electionsBaseUrl(): string {
-	const percent = Number(process.env['ELECTIONS_GP_API_PERCENT'] ?? '0');
-	return Number.isFinite(percent) && Math.random() * 100 < percent ? GP_API_ELECTIONS_BASE_URL : `${ELECTIONS_API_BASE_URL}/v1`;
-}
 
 const CACHE_OPTIONS = { next: { revalidate: 3600 } } satisfies RequestInit;
 
@@ -120,7 +105,7 @@ async function sleep(ms: number): Promise<void> {
 async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | null> {
 	// Election data: auth + URL-keyed unstable_cache (Authorization must not be in the
 	// Next fetch cache key or the shared 1h cache stops hitting across isolates).
-	if (url.startsWith(ELECTIONS_API_BASE_URL) || url.startsWith(GP_API_ELECTIONS_BASE_URL)) {
+	if (url.startsWith(GP_API_ELECTIONS_BASE_URL)) {
 		// Forward on-demand revalidation tags (e.g. person:<id>) so cache busts
 		// via /api/revalidate-person actually invalidate these cached responses.
 		const tags = (options as { next?: { tags?: readonly string[] } } | undefined)?.next?.tags;
@@ -180,22 +165,16 @@ export const ELECTION_PAGE_SIZE = 5000;
 const MAX_ELECTION_PAGES = 40;
 
 /**
- * Every row of one list read, or null when there is no usable answer. The
- * backend is picked once, so all pages of a read come from the same one. On
- * gp-api a miss after page 1 ends the walk: /places answers 404, not [], once
- * it runs out of rows, and fetchJson reports that 404 as null.
+ * Every row of one list read, or null when there is no usable answer. gp-api
+ * pages every list, and a miss after page 1 ends the walk: /places answers 404,
+ * not [], once it runs out of rows, and fetchJson reports that 404 as null.
  */
 async function fetchElectionList<T>(path: string, searchParams: URLSearchParams, options?: RequestInit): Promise<T[] | null> {
-	const baseUrl = electionsBaseUrl();
-	if (baseUrl !== GP_API_ELECTIONS_BASE_URL) {
-		const data = await fetchJson<T[]>(`${baseUrl}/${path}?${searchParams}`, options);
-		return Array.isArray(data) ? data : null;
-	}
 	const rows: T[] = [];
 	for (let page = 1; page <= MAX_ELECTION_PAGES; page++) {
 		searchParams.set('page', String(page));
 		searchParams.set('pageSize', String(ELECTION_PAGE_SIZE));
-		const data = await fetchJson<T[]>(`${baseUrl}/${path}?${searchParams}`, options);
+		const data = await fetchJson<T[]>(`${GP_API_ELECTIONS_BASE_URL}/${path}?${searchParams}`, options);
 		if (!Array.isArray(data)) return page === 1 ? null : rows;
 		rows.push(...data);
 		if (data.length < ELECTION_PAGE_SIZE) return rows;
@@ -211,7 +190,7 @@ export async function getRacesByYear(params: {
 	const searchParams = new URLSearchParams({ zipcode: params.zipcode });
 	if (params.level) searchParams.set('level', params.level);
 	if (params.electionDate) searchParams.set('electionDate', params.electionDate);
-	const url = `${ELECTIONS_API_BASE_URL}/v1/elections/races-by-year?${searchParams}`;
+	const url = `${GP_API_ELECTIONS_BASE_URL}/races-by-year?${searchParams}`;
 	const data = await fetchJson<RaceNode[]>(url);
 	return data ?? [];
 }
@@ -226,7 +205,7 @@ export async function getDistrictTypes(params: {
 		electionYear: params.electionYear.toString(),
 		excludeInvalid: (params.excludeInvalid ?? true).toString(),
 	});
-	const url = `${electionsBaseUrl()}/districts/types?${searchParams}`;
+	const url = `${GP_API_ELECTIONS_BASE_URL}/districts/types?${searchParams}`;
 	const data = await fetchJson<DistrictTypeItem[]>(url, CACHE_OPTIONS);
 	return data ?? [];
 }
@@ -245,13 +224,13 @@ export async function getDistrictNames(params: {
 	// election-api defaults this to false and gp-api to true; every caller here
 	// was written against false, so send it to both.
 	searchParams.set('excludeInvalid', (params.excludeInvalid ?? false).toString());
-	const url = `${electionsBaseUrl()}/districts/names?${searchParams}`;
+	const url = `${GP_API_ELECTIONS_BASE_URL}/districts/names?${searchParams}`;
 	const data = await fetchJson<DistrictNameItem[]>(url, CACHE_OPTIONS);
 	return data ?? [];
 }
 
 export async function getPositionById(id: string): Promise<PositionDetail | null> {
-	const url = `${ELECTIONS_API_BASE_URL}/v1/positions/${encodeURIComponent(id)}`;
+	const url = `${GP_API_ELECTIONS_BASE_URL}/positions/${encodeURIComponent(id)}`;
 	return fetchJson<PositionDetail>(url, CACHE_OPTIONS);
 }
 
@@ -271,7 +250,7 @@ async function fetchRaceBySlug(
 	if (electionDateStart) {
 		searchParams.set('electionDateStart', electionDateStart);
 	}
-	const url = `${electionsBaseUrl()}/races?${searchParams}`;
+	const url = `${GP_API_ELECTIONS_BASE_URL}/races?${searchParams}`;
 	const data = await fetchJson<RaceDetail[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) && data.length > 0 ? (data[0] ?? null) : null;
 }
@@ -393,7 +372,7 @@ export async function getCandidateBySlug(params: {
 		includeStances: (params.includeStances ?? true).toString(),
 		includeRace: (params.includeRace ?? true).toString(),
 	});
-	const url = `${electionsBaseUrl()}/candidacies?${searchParams}`;
+	const url = `${GP_API_ELECTIONS_BASE_URL}/candidacies?${searchParams}`;
 	const data = await fetchJson<CandidacyItem[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) && data.length > 0 ? (data[0] ?? null) : null;
 }
@@ -406,9 +385,8 @@ export async function fetchCandidacySlugs(stateCode: string): Promise<string[]> 
 		state: stateCode.toUpperCase(),
 		columns: 'slug',
 	});
-	const url = `${ELECTIONS_API_BASE_URL}/v1/candidacies?${searchParams}`;
-	const data = await fetchJson<Array<{ slug?: string }>>(url, CACHE_OPTIONS);
-	if (!Array.isArray(data)) return [];
+	const data = await fetchElectionList<{ slug?: string }>('candidacies', searchParams, CACHE_OPTIONS);
+	if (!data) return [];
 	return data.map(c => c.slug).filter((s): s is string => typeof s === 'string' && s.length > 0);
 }
 
@@ -493,7 +471,7 @@ export async function getRemovedPersonIds(): Promise<Set<string> | null> {
  * (e.g. a brand-new user the data team hasn't reconciled).
  */
 export async function getPersonByPersonId(personId: string): Promise<PersonItem | null> {
-	const url = `${electionsBaseUrl()}/persons/${encodeURIComponent(personId)}`;
+	const url = `${GP_API_ELECTIONS_BASE_URL}/persons/${encodeURIComponent(personId)}`;
 	return fetchJson<PersonItem>(url, personCacheOptions(personId));
 }
 
@@ -505,7 +483,7 @@ export async function getPersonByPersonId(personId: string): Promise<PersonItem 
  * `person:<uuid>` tag still applies).
  */
 export async function getPersonBySlug(slug: string): Promise<PersonItem | null> {
-	const url = `${electionsBaseUrl()}/persons/by-slug/${encodeURIComponent(slug)}`;
+	const url = `${GP_API_ELECTIONS_BASE_URL}/persons/by-slug/${encodeURIComponent(slug)}`;
 	return fetchJson<PersonItem>(url, CACHE_OPTIONS);
 }
 
@@ -523,7 +501,7 @@ export async function getPersonBySlug(slug: string): Promise<PersonItem | null> 
  * merge event reaches this lookup too.
  */
 export async function getPersonMergeSurvivorId(retiredId: string): Promise<string | null> {
-	const url = `${electionsBaseUrl()}/person-merges/${encodeURIComponent(retiredId)}`;
+	const url = `${GP_API_ELECTIONS_BASE_URL}/person-merges/${encodeURIComponent(retiredId)}`;
 	const merge = await fetchJson<{ survivingId?: string }>(url, personCacheOptions(retiredId));
 	return merge?.survivingId ?? null;
 }
@@ -620,7 +598,7 @@ export async function getPersonsByIds(
 			const searchParams = new URLSearchParams({ ids: batch.join(',') });
 			if (options.includeOfficeHolders) searchParams.set('includeOfficeHolders', 'true');
 			if (options.includeCandidacies) searchParams.set('includeCandidacies', 'true');
-			const url = `${electionsBaseUrl()}/persons?${searchParams}`;
+			const url = `${GP_API_ELECTIONS_BASE_URL}/persons?${searchParams}`;
 			const data = await fetchJson<PersonItem[]>(url, CACHE_OPTIONS);
 			return Array.isArray(data) ? data : [];
 		}),
@@ -737,7 +715,7 @@ export async function getPublishedPersonProfileIds(): Promise<Set<string> | null
 }
 
 export async function getMostElections(count = 3): Promise<FeaturedCity[]> {
-	const url = `${electionsBaseUrl()}/places/most-elections?count=${count}`;
+	const url = `${GP_API_ELECTIONS_BASE_URL}/places/most-elections?count=${count}`;
 	const data = await fetchJson<FeaturedCity[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) ? data : [];
 }
@@ -965,7 +943,7 @@ export async function getPlaceBySlug(params: {
 	if (params.includeChildRaces) searchParams.set('includeChildRaces', 'true');
 	if (params.placeColumns) searchParams.set('placeColumns', params.placeColumns);
 	if (params.raceColumns) searchParams.set('raceColumns', params.raceColumns);
-	const url = `${electionsBaseUrl()}/places?${searchParams}`;
+	const url = `${GP_API_ELECTIONS_BASE_URL}/places?${searchParams}`;
 	const data = await fetchJson<PlaceWithFacts[]>(url, CACHE_OPTIONS);
 	return Array.isArray(data) && data.length > 0 ? (data[0] ?? null) : null;
 }

@@ -9,6 +9,7 @@ export function handleHubSpotFormSubmission({
 	formId,
 	redirectTo,
 	pagePath,
+	experiment,
 	randomUuid = () => crypto.randomUUID(),
 	assign = url => window.location.assign(url),
 	track = trackEvent,
@@ -16,6 +17,8 @@ export function handleHubSpotFormSubmission({
 	formId: string;
 	redirectTo?: string;
 	pagePath: string;
+	/** A/B test arm the form sat in, recorded on the event as flag_key and variant. */
+	experiment?: { flagKey: string; variant: string };
 	randomUuid?: RandomUuidFn;
 	assign?: AssignFn;
 	track?: TrackFn;
@@ -23,6 +26,7 @@ export function handleHubSpotFormSubmission({
 	track('Newsletter Form Submitted', {
 		formId,
 		page_path: pagePath,
+		...(experiment ? { flag_key: experiment.flagKey, variant: experiment.variant } : {}),
 	});
 
 	if (redirectTo && isSafeRelativeRedirect(redirectTo)) {

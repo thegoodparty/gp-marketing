@@ -22,27 +22,16 @@ because the data and a template exist.
 
 ## Data sources and fetching
 
-Two backends feed these pages. Both are read through `src/lib/electionsApi.ts`.
+gp-api (`GP_API_BASE_URL`, default `https://gp-api.goodparty.org`) feeds these
+pages, read through `src/lib/electionsApi.ts`. Election data (races, positions,
+places, candidacies, officeholders, persons and districts) comes from
+`/v1/elections/*`; claimed campaigns come from `/v1/public-campaigns` through
+`findCampaignByRace`, and person profiles from `/v1/public-person-profiles`.
 
-- election-api (`ELECTIONS_API_BASE_URL`, default
-  `https://election-api.goodparty.org`) is the base data source: races, positions,
-  places, candidacies, and districts. Endpoints used include
-  `/v1/elections/races-by-year`, `/v1/districts/types`, `/v1/districts/names`,
-  `/v1/positions/:id`, `/v1/races`, `/v1/candidacies`, `/v1/places`, and
-  `/v1/places/most-elections`.
-- gp-api (`GP_API_BASE_URL`, derived by replacing `election-api` with `gp-api` in the
-  base URL) is queried at `/v1/public-campaigns` through `findCampaignByRace` to find
-  a claimed campaign for a candidate.
-
-Election data is moving from election-api to gp-api, which serves the same reads
-from the same database under `/v1/elections/*`. `ELECTIONS_GP_API_PERCENT` (0 to
-100, default 0) sets the share of election reads that go to gp-api; each read
-picks its backend at random, and all pages of one list read go to the same one.
-gp-api caps list pages at 1,000 rows, so on gp-api `fetchElectionList` walks
-`/places`, `/candidacies` and `/officeholders` in pages of 5,000. Change the
-value in Vercel and redeploy to move the share. Sitemap generation
-(`src/lib/sitemap-entries.ts`) and `/api/people/claim-request` still read
-election-api directly.
+gp-api pages every election list and answers only the first 1,000 rows of an
+unpaged read, without saying so. `fetchElectionList` in `electionsApi.ts` and
+`fetchElectionPages` in `src/lib/sitemap-entries.ts` walk lists in pages of 5,000.
+Any new list read must go through one of them.
 
 All reads go through `fetchJson`, which retries twice with a 500ms times attempt
 backoff, returns `null` on 404 or any non-500 error, and caches most responses with

@@ -69,6 +69,12 @@ On profiles the claim block's sign-up button still sends `Sign Up Clicked` and t
 `sign_up_click` data layer push with form id `person-claim-owner`, as the band did; the
 claim event is in addition to them.
 
+The claim button's link is `https://app.goodparty.org/sign-up?signup_source=profile_claim`,
+so the `href` on `Sign Up Clicked` and on the claim event carries that parameter (the
+attribution parameters are still added on top). The app reads it to show the claim
+variation of its sign-up page while the `signup-profile-claim-variation` flag is on. The
+pledge band's "Take the pledge" button and every other sign-up link stay plain.
+
 ## The Meta pixel events (paid media bids on these)
 
 The pixel in `~/ui/FacebookPixel` sends a PageView everywhere it loads. Three voter guide steps also reach it as custom events, from `trackMetaCustomEvent` in `~/lib/analytics`, on the production host only (`goodparty.org` and `www.goodparty.org`; dev and Vercel previews load the pixel too, and staff clicks must not train the bidding). Each step is sent twice: under its own name, and as `VoterGuideEngaged` with `step` set to that name, so an ad set can optimise on the umbrella while the three steps report separately. Only keys that describe the step go to Meta; no person or office names.

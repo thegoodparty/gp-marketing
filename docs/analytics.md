@@ -41,7 +41,9 @@ The other older helpers stay as they are: `Sign Up Clicked` (with its
 
 ## The voter guide events
 
-Every event carries `page_path` (the page it fired on). The GA4 name is what the GTM
+Every event carries `page_path` (the page it fired on) and, while the pledge copy test
+runs, `pledge_copy_variant` (see below; the three search events, which predate the
+helpers, do not). The GA4 name is what the GTM
 trigger matches; the Amplitude name is the same event in Amplitude. Properties are the
 data layer keys, which are also the Amplitude property names.
 
@@ -56,6 +58,7 @@ data layer keys, which are also the Amplitude property names.
 | Clicked Show more | `voter_guide_show_more_click` | Voter Guide - Show More Clicked | Position candidates (`position_candidates`), the offices list (`offices`), the counties and cities index (`locations_index`), featured candidates on phones (`featured_candidates`) | `list`, `hidden_count` (not on the offices list), `page_level` (offices list only) |
 | Viewed a profile | `voter_guide_profile_view` | Voter Guide - Profile Viewed | Every /people page, once per load | `person_id`, `profile_state` (the Figma letter A to L), `persona` (candidate, officeholder, both, past), `claimed`, `pledged`, `removed`, `unpublished`, `party_class` (republican, democrat, independent, other, or null) |
 | Opened the pledge pop-up | `voter_guide_pledge_modal_open` | Voter Guide - Pledge Modal Opened | All five openers | `source`: profile_hero, pledge_callout, position_people_lists, position_content, featured_candidates |
+| Clicked a button in the pledge pop-up | `voter_guide_pledge_modal_cta_click` | Voter Guide - Pledge Modal CTA Clicked | The pop-up's "Learn more" button, or the pledge copy test's buttons (below) | `source` (the opener, as above), `label`, `href`, `cta` (primary or secondary) |
 | Clicked a claim-your-profile call to action | `voter_guide_claim_profile_click` | Voter Guide - Claim Profile Clicked (also sent to Segment) | The Claim Profile Block on any template, including unclaimed candidate profiles (`claim_block`). `claim_band` came from the hard-coded profile band it replaced (Oct 2026) | `source`, `label`, `href`, `layout` (card or banner) |
 | Clicked a place in the counties and cities index | `voter_guide_location_index_click` | Voter Guide - Location Index Clicked | The index on state and county pages | `place_name`, `place_level` (county, city, town, district), `href`, `searched` (true when the index was filtered first) |
 | Clicked a featured city card | `voter_guide_featured_city_click` | Voter Guide - Featured City Clicked | The featured cities carousel | `city_name`, `state`, `open_elections_count`, `href` |
@@ -67,6 +70,46 @@ data layer keys, which are also the Amplitude property names.
 On profiles the claim block's sign-up button still sends `Sign Up Clicked` and the
 `sign_up_click` data layer push with form id `person-claim-owner`, as the band did; the
 claim event is in addition to them.
+
+## The pledge copy test
+
+From October 2026 the voter guide runs a three-way test of the pledge copy (Jack's
+"Pledge callout copy test variants" doc). The arms are `control` (today's copy), `b3`
+("a real choice") and `alt` ("one thing to check before you vote"). Each arm changes three
+things together:
+
+- the "What this symbol means" callout in the featured candidates block on location pages
+- the pledge sentence and link in a pledged person's profile hero (the not-pledged and
+  partisan sentences are not tested)
+- the call to action at the bottom of the pledge pop-up, on every page that opens it
+
+[src/experiments/pledgeCopyTest.ts](../src/experiments/pledgeCopyTest.ts) holds the copy,
+the on/off switch and the arm picker. The pages are cached, so the server cannot choose an
+arm per visitor. Every arm is in the HTML instead, and a script in the page head picks
+the visitor's arm from their Amplitude device id before first paint and hides the others.
+The same device always gets the same arm, about a third each. A visitor with no Amplitude
+cookie sees control and is left out: their events carry no `pledge_copy_variant`.
+
+What it sends:
+
+- `pledge_copy_variant` (control, b3 or alt) on every voter guide event in the table above
+  except the three search events.
+- An exposure, once per page, when the page shows a tested callout or the pop-up opens:
+  Amplitude's `$exposure` and `Experiment Viewed` (both with `flag_key:
+  voter-guide-pledge-copy` and `variant`, as the page experiments send), and a data layer
+  push, `voter_guide_pledge_copy_exposure`, with `flag_key`, `variant` and `page_path`.
+  `$exposure` sets the `[Experiment] voter-guide-pledge-copy` user property in Amplitude.
+
+The two questions it answers:
+
+- **Callout copy:** of the visitors exposed in each arm, how many opened the pop-up
+  (`Voter Guide - Pledge Modal Opened` by `pledge_copy_variant`, over exposures).
+- **Pop-up call to action:** of the visitors who opened the pop-up in each arm, how many
+  clicked its button (`Voter Guide - Pledge Modal CTA Clicked` over opens).
+
+Ending it: set `PLEDGE_COPY_TEST_ENABLED` to false, which puts everyone back on control
+and stops the property and the exposures. To ship a winner, write its copy into the
+control strings and delete the test.
 
 ## Setting up GA4 (whoever owns the GTM container)
 
@@ -85,7 +128,8 @@ event name:
    Admin > Custom definitions > Create custom dimension, event scoped, with the parameter
    name. Do this for the keys you will filter or break down by: `office_level`,
    `location_level`, `profile_state`, `claimed`, `pledged`, `party_class`, `source`,
-   `list`, `carousel`, `filter`, `placement`, `matched_level`, `failure_reason`. GA4 keeps a limit of 50 event-scoped dimensions per
+   `list`, `carousel`, `filter`, `placement`, `matched_level`, `failure_reason`,
+   `cta`, `pledge_copy_variant`. GA4 keeps a limit of 50 event-scoped dimensions per
    property; the property had three when this was written.
 5. **Preview** the container on a voter guide page, click an office row, and confirm the
    event shows in Tag Assistant with its parameters, then publish the container.

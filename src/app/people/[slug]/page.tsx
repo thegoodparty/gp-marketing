@@ -16,6 +16,7 @@ import {
 import {
 	buildPersonProfileTokens,
 	buildPersonSectionOverrides,
+	personPledgeLocation,
 } from '~/components/people/personSectionOverrides';
 import { PersonProfileViewTracker } from '~/components/people/PersonProfileViewTracker';
 import { preloadElectionTemplate } from '~/lib/electionTemplates';
@@ -155,6 +156,7 @@ export default async function Page({ params }: { params: Promise<PageParams> }) 
 		sectionOverrides: buildPersonSectionOverrides(view),
 		tokens: buildPersonProfileTokens(view),
 		schemas: [schema],
+		pledgeLocation: personPledgeLocation(view),
 	});
 
 	return (

@@ -2,12 +2,8 @@ import { type NextRequest, NextResponse } from 'next/server';
 
 import { isClaimRequestSource } from '~/lib/claimRequest';
 
-const ELECTION_API_BASE = process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
-
 const GP_API_BASE =
-	process.env['GP_API_BASE_URL'] ??
-	process.env['NEXT_PUBLIC_API_BASE'] ??
-	ELECTION_API_BASE.replace('election-api', 'gp-api');
+	process.env['GP_API_BASE_URL'] ?? process.env['NEXT_PUBLIC_API_BASE'] ?? 'https://gp-api.goodparty.org';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PERSON_ID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;

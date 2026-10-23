@@ -226,6 +226,23 @@ export const activeVariantsByPageIdQuery = defineQuery(`${groqFunctions}
 `);
 
 /*language=textmate*/
+export const activeVariantsByExperimentIdQuery = defineQuery(`${groqFunctions}
+  *[
+    _type == "experiment_variant" &&
+    field_experimentId == $experimentId &&
+    field_status == "running"
+  ] | order(field_priority asc, _id asc) {
+    _id,
+    field_experimentId,
+    field_variantName,
+    pageSections{
+      ...,
+      list_pageSections[]{${sectionsGroq}}
+    }
+  }
+`);
+
+/*language=textmate*/
 export const goodpartyOrg_allArticlesQuery = defineQuery(
 	`${groqFunctions}*[_type=="goodpartyOrg_allArticles"][0]{...,pageSections{...,list_pageSections[]{${sectionsGroq}}},"categories":${allCategoriesLinksGroq},${allArticlesHrefGroq}}`,
 );

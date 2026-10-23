@@ -525,7 +525,13 @@ export async function getCachedElectionRouteParams(): Promise<{
 }> {
 	if (!cachedElectionRouteParams) {
 		cachedElectionRouteParams = (async () => {
-			const results = await Promise.all(US_STATE_CODES.map(async (c) => fetchStateElectionRouteParams(c)));
+			// Every build worker runs this walk, and each state fans out into several
+			// paged reads. All 51 states at once put about 150 slow race reads on
+			// gp-api in one second (2026-10-23 15:14Z) and timed out its pools, so
+			// walk a few states at a time.
+			const results = await mapWithConcurrency([...US_STATE_CODES], ROUTE_PARAMS_CONCURRENCY, async (c) =>
+				fetchStateElectionRouteParams(c),
+			);
 			return {
 				countyParams: dedupeByKey(results.flatMap((r) => r.countyParams), (x) => `${x.state}|${x.county}`),
 				cityParams: dedupeByKey(
@@ -905,6 +911,9 @@ const PERSON_ID_BATCH = 150;
  * live page renders.
  */
 const ENUMERATION_CONCURRENCY = 8;
+
+/** States walked at once for the build's election route params. */
+const ROUTE_PARAMS_CONCURRENCY = 4;
 
 /** Projected row from the candidacy / officeholder sweeps in fetchAllPersons. */
 type LinkedFeedRow = {

@@ -59,7 +59,8 @@ data layer keys, which are also the Amplitude property names.
 | Viewed a profile | `voter_guide_profile_view` | Voter Guide - Profile Viewed | Every /people page, once per load | `person_id`, `profile_state` (the Figma letter A to L), `persona` (candidate, officeholder, both, past), `claimed`, `pledged`, `removed`, `unpublished`, `party_class` (republican, democrat, independent, other, or null) |
 | Opened the pledge pop-up | `voter_guide_pledge_modal_open` | Voter Guide - Pledge Modal Opened | All five openers | `source`: profile_hero, pledge_callout, position_people_lists, position_content, featured_candidates |
 | Clicked a button in the pledge pop-up | `voter_guide_pledge_modal_cta_click` | Voter Guide - Pledge Modal CTA Clicked | The pop-up's "Learn more" button, or the pledge copy test's buttons (below) | `source` (the opener, as above), `label`, `href`, `cta` (primary or secondary) |
-| Clicked a claim-your-profile call to action | `voter_guide_claim_profile_click` | Voter Guide - Claim Profile Clicked (also sent to Segment) | The Claim Profile Block on any template, including unclaimed candidate profiles (`claim_block`). `claim_band` came from the hard-coded profile band it replaced (Oct 2026) | `source`, `label`, `href`, `layout` (card or banner) |
+| Clicked a claim-your-profile call to action | `voter_guide_claim_profile_click` | Voter Guide - Claim Profile Clicked (also sent to Segment) | The Claim Profile Block on any template, including unclaimed candidate profiles (`claim_block`). `claim_band` came from the hard-coded profile band it replaced (Oct 2026) | `source`, `label`, `href`, `layout` (card, banner, or inset: `inset` is the claim card on `/people` profiles from 2026-10-22; it read `card` there before) |
+| Clicked "Take the pledge" | `voter_guide_take_pledge_click` | Voter Guide - Take Pledge Clicked | The GoodParty.org Pledge band on a person profile whose hero says they have not taken it (`source: pledge_block`). The button goes to app sign-up, so the completion lands on the app; this click is what credits the profile page | `source`, `label`, `href` |
 | Clicked a place in the counties and cities index | `voter_guide_location_index_click` | Voter Guide - Location Index Clicked | The index on state and county pages | `place_name`, `place_level` (county, city, town, district), `href`, `searched` (true when the index was filtered first) |
 | Clicked a featured city card | `voter_guide_featured_city_click` | Voter Guide - Featured City Clicked | The featured cities carousel | `city_name`, `state`, `open_elections_count`, `href` |
 | Saw the location search box | `voter_guide_search_view` | Voter Guide - Election Search Viewed | The /elections hero (`placement: elections_search_hero`) and the Elections Near You block (`elections_near_you_block`), once per page load | `placement` |
@@ -110,6 +111,19 @@ The two questions it answers:
 Ending it: set `PLEDGE_COPY_TEST_ENABLED` to false, which puts everyone back on control
 and stops the property and the exposures. To ship a winner, write its copy into the
 control strings and delete the test.
+
+## The Meta pixel events (paid media bids on these)
+
+The pixel in `~/ui/FacebookPixel` sends a PageView everywhere it loads. Three voter guide steps also reach it as custom events, from `trackMetaCustomEvent` in `~/lib/analytics`, on the production host only (`goodparty.org` and `www.goodparty.org`; dev and Vercel previews load the pixel too, and staff clicks must not train the bidding). Each step is sent twice: under its own name, and as `VoterGuideEngaged` with `step` set to that name, so an ad set can optimise on the umbrella while the three steps report separately. Only keys that describe the step go to Meta; no person or office names.
+
+| Step | Meta event | GA4 twin | Meta custom conversion |
+|---|---|---|---|
+| Elections near you search returned results | `VoterGuideSearchComplete` | `voter_guide_search_complete` | VG Search Complete |
+| Office row click to a position page | `VoterGuideOfficeClick` | `voter_guide_office_click` | VG Office Click |
+| Candidate or officeholder click to a profile (position lists and featured cards) | `VoterGuideProfileClick` | `voter_guide_position_person_click`, `voter_guide_featured_candidate_click` | VG Profile Click |
+| Any of the three | `VoterGuideEngaged` | | VG Engaged |
+
+The custom conversions live on the pixel in Events Manager (ad account 191049802830153) and are what the ad sets' performance goal points at. Adding a step means a mapping in `VOTER_GUIDE_META_EVENTS` (or a call like the search one), a test in `analytics.test.ts`, and a custom conversion whose rule matches the new event name.
 
 ## Setting up GA4 (whoever owns the GTM container)
 

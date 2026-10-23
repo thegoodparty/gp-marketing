@@ -188,7 +188,7 @@ describe('fetchPeopleSitemapEntries', () => {
 				if (opts.unlistedStatus) return new Response('nope', { status: opts.unlistedStatus });
 				return json(opts.unlisted ?? []);
 			}
-			if (url.pathname.endsWith('/v1/persons')) {
+			if (url.pathname.endsWith('/v1/elections/persons')) {
 				if (
 					opts.failPersonsForState &&
 					url.searchParams.get('state') === opts.failPersonsForState
@@ -204,11 +204,11 @@ describe('fetchPeopleSitemapEntries', () => {
 					: opts.persons.filter((p) => p.state === url.searchParams.get('state'));
 				return json(matches.map(({ id, slug }) => ({ id, slug })));
 			}
-			if (url.pathname.endsWith('/v1/candidacies')) {
+			if (url.pathname.endsWith('/v1/elections/candidacies')) {
 				const state = url.searchParams.get('state') ?? '';
 				return json((opts.candidacies?.[state] ?? []).map(linkRow));
 			}
-			if (url.pathname.endsWith('/v1/officeholders')) {
+			if (url.pathname.endsWith('/v1/elections/officeholders')) {
 				const state = url.searchParams.get('state') ?? '';
 				return json((opts.officeholders?.[state] ?? []).map(linkRow));
 			}
@@ -371,7 +371,7 @@ describe('fetchPeopleSitemapEntries', () => {
 		]);
 
 		expect(urls.filter((u) => u.includes('public-person-profiles/published'))).toHaveLength(1);
-		expect(urls.filter((u) => u.includes('state=WY') && u.includes('/v1/persons'))).toHaveLength(
+		expect(urls.filter((u) => u.includes('state=WY') && u.includes('/v1/elections/persons'))).toHaveLength(
 			1,
 		);
 	});
@@ -543,11 +543,11 @@ describe('fetchPeopleSitemapEntries', () => {
 					.map((u) => new URL(u).searchParams.get('columns') ?? ''),
 			);
 
-		expect(columnsFor('/v1/candidacies')).toEqual(new Set(['personId,positionName']));
-		expect(columnsFor('/v1/officeholders')).toEqual(
+		expect(columnsFor('/v1/elections/candidacies')).toEqual(new Set(['personId,positionName']));
+		expect(columnsFor('/v1/elections/officeholders')).toEqual(
 			new Set(['personId,positionName,officeTitle']),
 		);
-		expect(columnsFor('/v1/persons')).toEqual(new Set(['id,slug']));
+		expect(columnsFor('/v1/elections/persons')).toEqual(new Set(['id,slug']));
 	});
 
 	// The one case where the sitemap must not apply the office test: an owner who
@@ -1157,7 +1157,7 @@ describe('fetchStateElectionSitemapEntries', () => {
 		cities?: MockCity[];
 		towns?: MockCity[];
 		races?: MockRace[];
-		/** county slug → its `children`, as /v1/places?slug=…&includeChildren=true returns them. */
+		/** county slug → its `children`, as /v1/elections/places?slug=…&includeChildren=true returns them. */
 		countyChildren?: Record<string, Array<{ slug: string; mtfcc: string }>>;
 	}): string[] {
 		const urls: string[] = [];
@@ -1170,11 +1170,11 @@ describe('fetchStateElectionSitemapEntries', () => {
 					headers: { 'content-type': 'application/json' },
 				});
 
-			if (url.pathname.endsWith('/v1/races')) return json(opts.races ?? []);
-			// The county walk is the /v1/places call keyed on one slug, not on state.
+			if (url.pathname.endsWith('/v1/elections/races')) return json(opts.races ?? []);
+			// The county walk is the /v1/elections/places call keyed on one slug, not on state.
 			const slug = url.searchParams.get('slug');
 			if (slug) return json([{ children: opts.countyChildren?.[slug] ?? [] }]);
-			// The municipal sweeps are the /v1/places calls that filter on mtfcc.
+			// The municipal sweeps are the /v1/elections/places calls that filter on mtfcc.
 			if (url.searchParams.get('mtfcc') === 'G4110') return json(opts.cities ?? []);
 			if (url.searchParams.get('mtfcc') === 'G4040') return json(opts.towns ?? []);
 			return json(opts.places ?? []);
@@ -1456,7 +1456,7 @@ describe('fetchStateElectionRouteParams', () => {
 					headers: { 'content-type': 'application/json' },
 				});
 
-			if (url.pathname.endsWith('/v1/races')) return json(opts.races ?? []);
+			if (url.pathname.endsWith('/v1/elections/races')) return json(opts.races ?? []);
 			const slug = url.searchParams.get('slug');
 			if (slug) return json([{ children: opts.countyChildren?.[slug] ?? [] }]);
 			if (url.searchParams.get('mtfcc') === 'G4110') return json(opts.cities ?? []);
@@ -1586,7 +1586,7 @@ describe('per-state race paging', () => {
 		}));
 
 	/**
-	 * Serves `/v1/races` the way election-api pages it: `pageSize` distinct slugs
+	 * Serves `/v1/elections/races` the way election-api pages it: `pageSize` distinct slugs
 	 * per page in slug order, an empty array past the end, and a 404 for a first
 	 * page that matches nothing. `failPage` answers that page with a 500.
 	 */
@@ -1599,7 +1599,7 @@ describe('per-state race paging', () => {
 					status,
 					headers: { 'content-type': 'application/json' },
 				});
-			if (!url.pathname.endsWith('/v1/races')) return json([]);
+			if (!url.pathname.endsWith('/v1/elections/races')) return json([]);
 			raceQueries.push(url.searchParams);
 			const page = Number(url.searchParams.get('page') ?? '1');
 			const pageSize = Number(url.searchParams.get('pageSize') ?? '1000');
@@ -1665,8 +1665,8 @@ describe('per-state race paging', () => {
 		const queries: string[] = [];
 		globalThis.fetch = (async (input: RequestInfo | URL) => {
 			const url = new URL(String(input));
-			if (url.pathname.endsWith('/v1/races')) queries.push(url.searchParams.get('page') ?? '');
-			const body = url.pathname.endsWith('/v1/races') ? rows : [];
+			if (url.pathname.endsWith('/v1/elections/races')) queries.push(url.searchParams.get('page') ?? '');
+			const body = url.pathname.endsWith('/v1/elections/races') ? rows : [];
 			return new Response(JSON.stringify(body), { status: 200 });
 		}) as typeof fetch;
 

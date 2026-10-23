@@ -39,6 +39,8 @@ const pledgeSkeleton = byType('component_goodPartyOrgPledge');
 // Order mirrors the Figma person-profile states:
 //   breadcrumb → hero → content well → claim (unclaimed only) → sign-up CTA →
 //   GoodParty pledge (claimed candidate/both) → elections index.
+// The claim block is listed after the well but renders as the well's first card
+// (see `component_claimProfileBlock` in buildPersonSectionOverrides).
 // The Figma content well is a two-column layout (left contact/office sidebar +
 // right card stack). The right stack — authored cards, Recent Experience, the
 // in-column "Other candidates" list, the About-position card, and the District

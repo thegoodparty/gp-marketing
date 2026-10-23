@@ -90,3 +90,31 @@ export const BannerLayout: Story = {
 		},
 	},
 };
+
+// The person profile's claim card, first in the profile content column.
+export const InsetLayout: Story = {
+	args: {
+		layout: 'inset',
+		headline: 'Are you Jordan Avery? Complete your profile now.',
+		body: 'Your community deserves accountable leadership. Claim your profile and share your top priorities with residents. Create a free GoodParty.org account to get started.',
+		claimButton: {
+			buttonType: 'signup',
+			label: 'Claim this profile',
+		},
+	},
+	decorators: [
+		Story => (
+			<div className='bg-goodparty-cream p-4 md:p-10'>
+				<div className='mx-auto max-w-[740px]'>
+					<Story />
+				</div>
+			</div>
+		),
+	],
+	parameters: {
+		design: {
+			type: 'figma',
+			url: 'https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2626-120137',
+		},
+	},
+};

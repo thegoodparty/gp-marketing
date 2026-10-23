@@ -764,9 +764,14 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	// Not on a removed profile (Emily, 2026-10-06): the hero still states their
 	// pledge fact, but the page must not invite someone who asked us to stop
 	// publishing them to sign up with us.
+	//
+	// The click is reported from the profile page (`takePledgeClick`), because
+	// sign-up completes on app.goodparty.org and the completion event lands
+	// there: this is the only event that credits the profile the visitor came
+	// from, the same way the claim block's click does.
 	const pledgeButton: NonNullable<SectionOverrides['component_goodPartyOrgPledge']>['button'] =
 		attribution === 'notPledged' && !view.removed
-			? { buttonType: 'signup', label: 'Take the pledge' }
+			? { buttonType: 'signup', label: 'Take the pledge', analytics: { event: 'takePledgeClick', properties: { source: 'pledge_block' } } }
 			: { buttonType: 'internal', href: '/about', label: 'Learn more' };
 
 	// The person-profile CTA band sits below the content well (Figma order):
@@ -801,7 +806,7 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 	// visitor-facing "ask them to complete their profile" card. Marketing removed
 	// it (2026-10-16): each request created a HubSpot voter contact, and the team
 	// could not follow through on contacting the candidate or official. The
-	// person's own way in is the Claim Profile Block below the well.
+	// person's own way in is the Claim Profile Block, at the top of the column.
 	// The column is authored cards (empowerment-gated) then the civics-spine cards
 	// (Recent Experience → Other candidates → Nearby officials → About position →
 	// District map) that render on every state.
@@ -854,11 +859,15 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 		},
 		component_claimProfileBlock: {
 			// The Studio block is the person's own way in, so it shows exactly where
-			// `showClaim` allows. It belongs BELOW the content well, as the Person
-			// Profile global template places it: the hero portrait deliberately
-			// overflows 48px (md) / 68px (lg) below the hero box, so a block directly
-			// under the hero renders its headline underneath the photo.
+			// `showClaim` allows. It renders as the first card of the content block's
+			// card column, wherever the template lists it (Voter Guide round,
+			// 2626:120137 / 2626:128927, 2026-10-22): above Why I'm Running on
+			// desktop, straight under the contact sidebar on the phone. Not as its own
+			// section under the hero: the portrait deliberately overflows 48px (md) /
+			// 68px (lg) below the hero box, so a full-width block there renders its
+			// headline underneath the photo.
 			claimed: !showClaim,
+			layout: 'inset',
 			hideExampleCard: true,
 			// GTM resolves the claim sign-up conversion through this id (see
 			// `PERSON_CLAIM_FORM_ID`).

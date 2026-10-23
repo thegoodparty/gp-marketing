@@ -14160,6 +14160,14 @@
             "value": "newsletterBlockDesignSettings"
           }
         },
+        "field_ctaSizeNormalCondensed": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "field_ctaSizeNormalCondensed"
+          },
+          "optional": true
+        },
         "field_componentColor6Colors": {
           "type": "objectAttribute",
           "value": {

@@ -2488,6 +2488,7 @@ export type CarouselBlockDesignSettings = {
 
 export type NewsletterBlockDesignSettings = {
 	_type: 'newsletterBlockDesignSettings';
+	field_ctaSizeNormalCondensed?: Field_ctaSizeNormalCondensed;
 	field_componentColor6Colors?: Field_componentColor6Colors;
 };
 

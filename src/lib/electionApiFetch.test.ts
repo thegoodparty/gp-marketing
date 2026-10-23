@@ -8,7 +8,7 @@ import { lastCacheCall, resetNextCacheMock, unstable_cache } from '~/testing/nex
 // Imported after the module mock so the dynamic import('next/cache') resolves to it.
 const { fetchElectionApiJsonCached } = await import('./electionApiFetch');
 
-const ELECTION_URL = 'https://election-api.goodparty.org/v1/positions/1';
+const ELECTION_URL = 'https://election-api.goodparty.org/v1/elections/positions/1';
 const OK_BODY = { hello: 'world' };
 
 const originalFetch = globalThis.fetch;

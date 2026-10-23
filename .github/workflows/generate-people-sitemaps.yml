@@ -43,9 +43,8 @@ env:
   # emitter's local-host refusal gate (runPeopleShardsOut) meaningful.
   NEXT_PUBLIC_SITE_URL: https://goodparty.org
   # Job level, not step level: a step's own `env` block is not visible to that
-  # step's `if` condition (see the identical note in gpbot-pr-triage.yml), so
-  # the Slack guard below would always evaluate true and the step would fail
-  # on an unset channel instead of skipping.
+  # step's `if` condition, so the Slack guard below would always evaluate true
+  # and the step would fail on an unset channel instead of skipping.
   SLACK_TOKEN: ${{ secrets.GPBOT_SLACK_BOT_TOKEN }}
   CHANNEL: ${{ vars.BOT_DEV_CHANNEL_ID }}
   # Job level so both `if:` conditions and `run:` steps can read it as a real
@@ -138,9 +137,9 @@ jobs:
 
       # chat.postMessage answers 200 even when it refuses the message, so -f
       # proves nothing; the -e check at the end catches a revoked token or a
-      # channel gp_ai_bot was never invited to, same trap gpbot-pr-triage.yml
-      # documents. Runs regardless of which prior step failed -- `if: failure()`
-      # overrides the default "only run after success" behavior.
+      # channel gp_ai_bot was never invited to. Runs regardless of which prior
+      # step failed -- `if: failure()` overrides the default "only run after
+      # success" behavior.
       - name: Alert #bot-dev on failure
         if: failure() && env.SLACK_TOKEN != '' && env.CHANNEL != ''
         env:

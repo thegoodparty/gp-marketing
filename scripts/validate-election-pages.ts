@@ -20,8 +20,9 @@ const DEFAULT_SAMPLE_PER_STATE = 20;
 const DEFAULT_TIMEOUT_MS = 15_000;
 const STATE_FACTS_MARKER = /data-section=["']Location Facts Block["']/i;
 
-const ELECTION_API_BASE =
-	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
+const GP_API_ELECTIONS_BASE = `${(
+	process.env['GP_API_BASE_URL'] ?? 'https://gp-api.goodparty.org'
+).replace(/\/$/, '')}/v1/elections`;
 
 const BAD_PATTERNS = [
 	/\b[a-z][a-z-]*\s+County\b/, // lowercase word + " County" = broken fallback (e.g. "buckeye County"), not "Yuma County"
@@ -98,7 +99,7 @@ function parseArgs(): {
 
 async function fetchElectionJson<T>(path: string, params: Record<string, string>): Promise<T[]> {
 	const search = new URLSearchParams(params).toString();
-	const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}?${search}`;
+	const url = `${GP_API_ELECTIONS_BASE}/${path.replace(/^\/?v1\//, '')}?${search}`;
 	try {
 		const authHeaders = electionApiAuthHeaders();
 		const res = await fetch(url, { headers: authHeaders });

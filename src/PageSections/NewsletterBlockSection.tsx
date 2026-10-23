@@ -2,6 +2,7 @@ import type { Sections } from '~/PageSections';
 
 import { resolveComponentColor } from '~/ui/_lib/resolveComponentColor';
 import { resolveForm } from '~/ui/_lib/resolveForm';
+import { resolveCTASize } from '~/ui/_lib/resolveCTASize';
 
 import { CTABlock } from '~/ui/CTABlock';
 import { RichData } from '~/ui/RichData';
@@ -19,6 +20,8 @@ export function NewsletterBlockSection(section: Extract<Sections, { _type: 'comp
 				caption={section.newsletterBlockMessaging?.field_caption}
 				color={resolveComponentColor(stegaClean(section.newsletterBlockDesignSettings?.field_componentColor6Colors))}
 				form={resolveForm(stegaClean(section.newsletterBlockForm?.ref_formUsed ?? undefined))}
+				size={resolveCTASize(stegaClean(section.newsletterBlockDesignSettings?.field_ctaSizeNormalCondensed))}
+				hoverScale={false}
 			/>
 		</section>
 	);

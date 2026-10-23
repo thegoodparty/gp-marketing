@@ -6,6 +6,8 @@ export type FormProps = {
 	formId?: string;
 	redirectTo?: string;
 	submitLabel?: string;
+	/** Set when the block sits inside an A/B test so the submit event carries the arm. */
+	experiment?: { flagKey: string; variant: string };
 };
 
 export function resolveForm(form?: Forms) {

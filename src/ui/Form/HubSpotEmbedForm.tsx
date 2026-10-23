@@ -247,6 +247,7 @@ export function HubSpotEmbedForm({
 	redirectTo,
 	submitLabel,
 	submitAlign = 'left',
+	experiment,
 	onFormSubmit = handleHubSpotFormSubmission,
 }: {
 	formId: string;
@@ -254,12 +255,16 @@ export function HubSpotEmbedForm({
 	submitLabel?: string;
 	/** Where the submit button sits under the fields. Centered blocks pass 'center' so the button lines up with their heading. */
 	submitAlign?: SubmitAlign;
+	/** A/B test arm the form sits in; forwarded onto the submit event. */
+	experiment?: { flagKey: string; variant: string };
 	onFormSubmit?: typeof handleHubSpotFormSubmission;
 }) {
 	const reactId = useId();
 	const targetId = `hs-form-${reactId.replace(/:/g, '')}`;
 	const mountedRef = useRef(true);
 	const [loadError, setLoadError] = useState(false);
+	const experimentFlagKey = experiment?.flagKey;
+	const experimentVariant = experiment?.variant;
 
 	useEffect(() => {
 		mountedRef.current = true;
@@ -293,6 +298,8 @@ export function HubSpotEmbedForm({
 							formId,
 							redirectTo,
 							pagePath: window.location.pathname,
+							experiment:
+								experimentFlagKey && experimentVariant ? { flagKey: experimentFlagKey, variant: experimentVariant } : undefined,
 						});
 					},
 				});
@@ -309,7 +316,7 @@ export function HubSpotEmbedForm({
 			mountedRef.current = false;
 			target.innerHTML = '';
 		};
-	}, [formId, redirectTo, submitLabel, submitAlign, targetId, onFormSubmit]);
+	}, [formId, redirectTo, submitLabel, submitAlign, targetId, onFormSubmit, experimentFlagKey, experimentVariant]);
 
 	return (
 		<div data-component='HubSpotEmbedForm' className='gp-hubspot-form flex w-full flex-col gap-4'>

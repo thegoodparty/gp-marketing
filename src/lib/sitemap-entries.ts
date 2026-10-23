@@ -106,15 +106,12 @@ export function getSitemapIds(): { id: number }[] {
 	return ids;
 }
 
-// Server-only base: M2M auth headers are attached to requests against this URL,
-// so it must never be sourced from a client-visible (NEXT_PUBLIC_*) env var.
-const ELECTION_API_BASE =
-	process.env['ELECTIONS_API_BASE_URL'] ?? 'https://election-api.goodparty.org';
-
 const GP_API_BASE =
 	process.env['GP_API_BASE_URL'] ??
 	process.env['NEXT_PUBLIC_API_BASE'] ??
-	ELECTION_API_BASE.replace('election-api', 'gp-api');
+	'https://gp-api.goodparty.org';
+
+const GP_API_ELECTIONS_BASE = `${GP_API_BASE.replace(/\/$/, '')}/v1/elections`;
 
 const CACHE_1H: RequestInit = { next: { revalidate: 3600 } };
 
@@ -582,42 +579,66 @@ async function fetchGpApiJsonOrThrow<T>(path: string, tags?: readonly string[]):
 	return data as T[];
 }
 
+/**
+ * Page size for every election list walk: gp-api's largest page.
+ *
+ * gp-api pages every election list and answers only the first 1,000 rows when
+ * not asked for a page. The cap is silent: an unpaged `?state=PA` simply stops,
+ * which is how 15 state shards once sat at exactly 1,000 position URLs, with
+ * every office past the cut rendering fine but never advertised or
+ * prerendered.
+ */
+export const RACE_PAGE_SIZE = 5000;
+
+/** A runaway guard: 200,000 rows per read, far past any real state. */
+const MAX_RACE_PAGES = 40;
+
+/**
+ * Every row of one gp-api election list, walked page by page (`page` is
+ * 1-based), or the status of the first page that failed.
+ *
+ * A 404 is how gp-api says there is nothing (more) to read: on page 1 the read
+ * has no rows, and after page 1 the walk is done.
+ */
+async function fetchElectionPages<T>(
+	path: string,
+	params: Record<string, string>,
+	tags?: readonly string[],
+): Promise<{ ok: true; rows: T[] } | { ok: false; error: string }> {
+	const rows: T[] = [];
+	for (let page = 1; page <= MAX_RACE_PAGES; page++) {
+		const search = new URLSearchParams({
+			...params,
+			page: String(page),
+			pageSize: String(RACE_PAGE_SIZE),
+		}).toString();
+		const url = `${GP_API_ELECTIONS_BASE}/${path.replace(/^\/?v1\//, '')}?${search}`;
+		const result = await fetchElectionApiJsonCached(url, tags);
+		if (!result.ok) {
+			if (result.status === 404) return { ok: true, rows };
+			return { ok: false, error: `[sitemap] Election API ${result.status} ${url}` };
+		}
+		if (!Array.isArray(result.json)) return { ok: false, error: `[sitemap] Election API non-array body ${url}` };
+		const pageRows = result.json as T[];
+		rows.push(...pageRows);
+		if (pageRows.length < RACE_PAGE_SIZE) return { ok: true, rows };
+	}
+	return { ok: false, error: `[sitemap] ${path} exceeded ${MAX_RACE_PAGES} pages of ${RACE_PAGE_SIZE}` };
+}
+
 async function fetchElectionJsonOrThrow<T>(
 	path: string,
 	params: Record<string, string>,
 	tags?: readonly string[],
 ): Promise<T[]> {
-	const search = new URLSearchParams(params).toString();
-	const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}?${search}`;
-	const result = await fetchElectionApiJsonCached(url, tags);
-	if (!result.ok) throw new Error(`[sitemap] Election API ${result.status} ${url}`);
-	if (!Array.isArray(result.json)) {
-		throw new Error(`[sitemap] Election API non-array body ${url}`);
-	}
-	return result.json as T[];
+	const result = await fetchElectionPages<T>(path, params, tags);
+	if (!result.ok) throw new Error(result.error);
+	return result.rows;
 }
 
 /**
- * Page size for the per-state race walk: election-api's MAX_RACE_PAGE_SIZE.
- *
- * Since 2026-07-21 `/v1/races` returns at most 1,000 distinct slugs per call
- * unless asked otherwise, and the cap is silent: an unpaged `?state=PA` simply
- * stops at the 1,000th slug in alphabetical order. That left 15 state shards at
- * exactly 1,000 position URLs, with every office past the cut rendering fine but
- * never advertised or prerendered.
- */
-export const RACE_PAGE_SIZE = 5000;
-
-/** A runaway guard: 200,000 races per state, far past any real state. */
-const MAX_RACE_PAGES = 40;
-
-/**
- * Every race in a state, walking `/v1/races` page by page (`page` is 1-based).
- *
- * The page size counts distinct slugs, not rows: with only `slug,positionLevel`
- * projected the API skips its dedupe, so one page can carry more rows than
- * slugs. The walk therefore stops on the first page with fewer than
- * RACE_PAGE_SIZE distinct slugs, not fewer rows.
+ * Every race in a state. The page size counts distinct slugs, not rows, so the
+ * walk stops on the first page with fewer than RACE_PAGE_SIZE distinct slugs.
  *
  * A failed page throws instead of returning what it has. A partial walk looks
  * exactly like a complete one, which is how the cap went unnoticed for three
@@ -633,7 +654,7 @@ async function fetchAllStateRaces(code: string): Promise<RaceEntry[]> {
 			page: String(page),
 			pageSize: String(RACE_PAGE_SIZE),
 		}).toString();
-		const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/v1/races?${search}`;
+		const url = `${GP_API_ELECTIONS_BASE}/races?${search}`;
 		const result = await fetchElectionApiJsonCached(url);
 		if (!result.ok) {
 			if (page === 1 && result.status === 404) return races;
@@ -652,23 +673,15 @@ async function fetchElectionJson<T>(
 	params: Record<string, string>,
 	tags?: readonly string[],
 ): Promise<T[]> {
-	const search = new URLSearchParams(params).toString();
-	const url = `${ELECTION_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}?${search}`;
 	try {
-		const result = await fetchElectionApiJsonCached(url, tags);
+		const result = await fetchElectionPages<T>(path, params, tags);
 		if (!result.ok) {
-			console.error(`[sitemap] Election API ${result.status} ${url}`);
+			console.error(result.error);
 			return [];
 		}
-		const data = result.json;
-		if (Array.isArray(data)) return data as T[];
-		if (data && typeof data === 'object' && 'data' in data) {
-			const inner = (data as { data: unknown }).data;
-			if (Array.isArray(inner)) return inner as T[];
-		}
-		return [];
+		return result.rows;
 	} catch (err) {
-		console.error('[sitemap] Election API fetch failed', url, err instanceof Error ? err.message : String(err));
+		console.error('[sitemap] Election API fetch failed', path, err instanceof Error ? err.message : String(err));
 		return [];
 	}
 }

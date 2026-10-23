@@ -85,10 +85,10 @@ function stubFetch(scenario: Scenario): void {
 	globalThis.fetch = (async (input: RequestInfo | URL): Promise<Response> => {
 		const url = String(input);
 		if (url.includes('/public-person-profiles')) return jsonResponse({}, 404);
-		if (/\/v1\/persons\/[^/?]+$/.test(url)) return jsonResponse(person);
-		if (url.includes('/v1/candidacies?') && url.includes('slug=')) return jsonResponse(candidacyDetail);
+		if (/\/v1\/elections\/persons\/[^/?]+$/.test(url)) return jsonResponse(person);
+		if (url.includes('/v1/elections/candidacies?') && url.includes('slug=')) return jsonResponse(candidacyDetail);
 
-		if (url.includes('/v1/places?')) {
+		if (url.includes('/v1/elections/places?')) {
 			const params = new URL(url).searchParams;
 			const slug = params.get('slug');
 			if (slug) {

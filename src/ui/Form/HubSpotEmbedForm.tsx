@@ -10,13 +10,34 @@ import { waitForHubSpotForms } from './waitForHubSpotForms';
 
 import './hubspot-embed.css';
 
+const SUBMIT_SELECTOR = '.hs-button, input[type="submit"], button[type="submit"]';
+
+/* HubSpot renders the form inside a same-origin iframe, so the submit button is
+   not reachable from the host document. Look in the target first (inline embeds)
+   and then inside the iframe's document. */
+function findSubmitElement(target: HTMLElement): Element | null {
+	const inline = target.querySelector(SUBMIT_SELECTOR);
+	if (inline) return inline;
+
+	const iframe = target.querySelector('iframe');
+	if (!(iframe instanceof HTMLIFrameElement)) return null;
+	try {
+		return iframe.contentDocument?.querySelector(SUBMIT_SELECTOR) ?? null;
+	} catch {
+		return null;
+	}
+}
+
 function applySubmitLabel(target: HTMLElement, submitLabel?: string) {
 	if (!submitLabel) return;
 
-	const submit = target.querySelector('.hs-button, input[type="submit"], button[type="submit"]');
-	if (submit instanceof HTMLInputElement) {
-		submit.value = submitLabel;
-	} else if (submit instanceof HTMLButtonElement) {
+	const submit = findSubmitElement(target);
+	if (!submit) return;
+	/* An element inside the iframe belongs to that window's realm, so instanceof
+	   against this window's HTMLInputElement is false. Branch on the tag instead. */
+	if (submit.tagName === 'INPUT') {
+		(submit as HTMLInputElement).value = submitLabel;
+	} else if (submit.tagName === 'BUTTON') {
 		submit.textContent = submitLabel;
 	}
 }

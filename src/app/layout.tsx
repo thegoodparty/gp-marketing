@@ -23,22 +23,28 @@ import { PageHeader } from '~/components/PageHeader';
 import { PageFooter } from '~/components/PageFooter';
 import { PromoBannerSection } from '~/components/PromoBannerSection';
 import { fetchNavigation } from '~/components/navigationData';
-import { Outfit, Open_Sans } from 'next/font/google';
+import localFont from 'next/font/local';
 
-const primaryFont = Outfit({
+// Self-hosted (latin + latin-ext, weights 400-600) rather than next/font/google:
+// Google sometimes serves extension-less /l/font URLs that Turbopack cannot
+// resolve ("next/font/google queries have exactly one entry"), which failed
+// builds on 2026-10-22 and 2026-10-23. Licenses sit next to the files.
+const primaryFont = localFont({
+	src: './fonts/outfit-latin-latin-ext.woff2',
+	weight: '400 600',
 	display: 'swap',
 	preload: true,
-	subsets: ['latin'],
 	variable: '--font-primary',
-	weight: ['400', '600'],
+	fallback: ['system-ui', 'sans-serif'],
 });
 
-const secondaryFont = Open_Sans({
+const secondaryFont = localFont({
+	src: './fonts/open-sans-latin-latin-ext.woff2',
+	weight: '400 600',
 	display: 'swap',
 	preload: true,
-	subsets: ['latin'],
 	variable: '--font-secondary',
-	weight: ['400', '600'],
+	fallback: ['system-ui', 'sans-serif'],
 });
 type Props = {
 	children: ReactNode;

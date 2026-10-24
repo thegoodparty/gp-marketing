@@ -99,8 +99,12 @@ function injectHostFonts(doc: Document) {
 	/* Font faces load lazily, which can leave the form showing a fallback on first
 	   paint. Kick off the two families the brand styles use so they are ready. */
 	if (doc.fonts) {
-		for (const family of ['Outfit', 'Open Sans']) {
-			void doc.fonts.load(`600 16px "${family}"`).catch(() => null);
+		// Read the family names off the brand variables rather than hard-coding
+		// them: next/font names the self-hosted faces after its own variables.
+		const rootStyle = getComputedStyle(document.documentElement);
+		for (const variable of ['--font-primary', '--font-secondary']) {
+			const family = rootStyle.getPropertyValue(variable).split(',')[0]?.trim().replace(/^["']|["']$/g, '');
+			if (family) void doc.fonts.load(`600 16px "${family}"`).catch(() => null);
 		}
 	}
 }

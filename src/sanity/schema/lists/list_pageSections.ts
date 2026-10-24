@@ -139,6 +139,7 @@ export const list_pageSections = {
 					name: 'text',
 					title: 'Text',
 					of: [
+						'component_eventAgendaBlock',
 						'component_locationEditorialBlock',
 						'component_bannerBlock',
 						'component_calculatorTextBlock',
@@ -254,6 +255,7 @@ export const list_pageSections = {
 	},
 	type: 'array',
 	of: [
+		{ title: 'Event Agenda Block', type: 'component_eventAgendaBlock' },
 		{ title: 'Featured Candidates Block', type: 'component_featuredCandidatesBlock' },
 		{ title: 'Illustrated Columns Block', type: 'component_illustratedColumnsBlock' },
 		{ title: 'Election Position Resources Block', type: 'component_electionPositionResourcesBlock' },

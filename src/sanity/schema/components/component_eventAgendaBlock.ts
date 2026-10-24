@@ -24,8 +24,11 @@ export const component_eventAgendaBlock = {
 		},
 		{
 			title: 'Agenda items',
-			name: 'agendaItems',
-			type: 'iconContentBlockItems',
+			name: 'list_agendaItems',
+			description: 'One item per part of the session: an icon, a heading, a line of body text and an optional link. Max 12.',
+			type: 'array',
+			of: [{ title: 'Agenda item', type: 'iconBlockItem' }],
+			validation: (Rule: any) => Rule.max(12),
 			group: 'agenda',
 		},
 		{

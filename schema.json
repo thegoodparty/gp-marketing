@@ -9559,11 +9559,25 @@
           },
           "optional": true
         },
-        "agendaItems": {
+        "list_agendaItems": {
           "type": "objectAttribute",
           "value": {
-            "type": "inline",
-            "name": "iconContentBlockItems"
+            "type": "array",
+            "of": {
+              "type": "object",
+              "attributes": {
+                "_key": {
+                  "type": "objectAttribute",
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              },
+              "rest": {
+                "type": "inline",
+                "name": "iconBlockItem"
+              }
+            }
           },
           "optional": true
         },

@@ -27,11 +27,14 @@ export function EventAgendaBlockSection(section: Extract<Sections, { _type: 'com
 				}}
 				agendaTitle={section.field_agendaTitle}
 				color={resolveIconColor(stegaClean(section.field_iconColor6ColorsWhiteMixed))}
-				items={section.agendaItems?.list_iconContentItems?.map(item => ({
+				items={section.list_agendaItems?.map(item => ({
 					_key: item._key,
 					icon: item.field_icon,
 					title: item.field_title,
-					copy: <RichData value={item.block_summaryText} />,
+					copy: item.block_summaryText?.length ? <RichData value={item.block_summaryText} /> : undefined,
+					button: item.ctaActionWithShared?.action
+						? transformButtons([{ ...item.ctaActionWithShared, _key: `${item._key ?? ''}-agenda-cta` }])?.[0]
+						: undefined,
 				}))}
 			/>
 		</section>

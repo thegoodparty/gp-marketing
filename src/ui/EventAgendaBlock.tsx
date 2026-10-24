@@ -7,7 +7,11 @@ import { isValidRichText } from './_lib/isValidRichText.ts';
 import { Container } from './Container.tsx';
 import { HeaderBlock, type HeaderBlockProps } from './HeaderBlock.tsx';
 import { IconResolver } from './IconResolver.tsx';
+import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { Text } from './Text.tsx';
+
+// IconResolver's md size pins a 24px minimum, which would make the 40px link row taller than its text.
+const ARROW_ICON_CLASS = 'min-w-4 min-h-4 w-4 h-4 max-w-4 max-h-4';
 
 const styles = tv({
 	slots: {
@@ -19,6 +23,7 @@ const styles = tv({
 		marker: 'flex size-12 shrink-0 items-center justify-center rounded-full text-midnight-900',
 		body: 'flex flex-col gap-1',
 		description: 'text-neutral-600',
+		link: 'mt-2 w-fit text-info-500 hover:text-info-600 hover:opacity-100 focus:ring-info-500/30 h-10! py-2.5',
 	},
 	variants: {
 		backgroundColor: {
@@ -45,6 +50,7 @@ export type EventAgendaItemProps = {
 	icon?: string;
 	title?: string;
 	copy?: ReactNode;
+	button?: ComponentButtonProps;
 };
 
 export type EventAgendaBlockProps = {
@@ -61,8 +67,8 @@ export function EventAgendaBlock(props: EventAgendaBlockProps) {
 	const color = props.color ?? 'mixed';
 	const s = styles({ backgroundColor });
 
-	const items = (props.items ?? []).filter(item => Boolean(item.title) || isValidRichText(item.copy));
-	const hasCard = items.length > 0 || Boolean(props.agendaTitle);
+	const items = (props.items ?? []).filter(item => Boolean(item.title) || item.copy != null || Boolean(item.button));
+	const hasCard = items.length > 0;
 
 	return (
 		<article className={cn(s.base(), props.className)} data-component='EventAgendaBlock'>
@@ -101,6 +107,14 @@ export function EventAgendaBlock(props: EventAgendaBlockProps) {
 														<Text as='div' styleType='body-2' className={s.description()}>
 															{item.copy}
 														</Text>
+													)}
+													{item.button && (
+														<ComponentButton
+															{...item.button}
+															className={cn(s.link(), item.button.className)}
+															buttonProps={{ ...(item.button.buttonProps ?? {}), styleType: 'min-ghost', styleSize: 'md' }}
+															iconRight={<IconResolver icon='arrow-up-right' className={ARROW_ICON_CLASS} />}
+														/>
 													)}
 												</div>
 											</li>

@@ -157,6 +157,36 @@ describe('HubSpotEmbedForm', () => {
 		expect(button.textContent).toBe('Subscribe now');
 	});
 
+	test('applySubmitLabel reaches the submit button inside the HubSpot form iframe', async () => {
+		const { HubSpotEmbedForm } = await import('./HubSpotEmbedForm');
+
+		await act(async () => {
+			root = createRoot(document.getElementById('root')!);
+			root.render(React.createElement(HubSpotEmbedForm, { formId: 'form-123', submitLabel: 'Get the newsletter' }));
+			await new Promise<void>(resolve => {
+				window.setTimeout(resolve, 0);
+			});
+		});
+
+		expect(createOptions?.onFormReady).toBeDefined();
+
+		const target = document.querySelector('.gp-hubspot-form-target')!;
+		const iframe = document.createElement('iframe');
+		target.appendChild(iframe);
+		const doc = iframe.contentDocument!;
+		const input = doc.createElement('input');
+		input.type = 'submit';
+		input.value = 'Join the movement';
+		input.className = 'hs-button';
+		doc.body.appendChild(input);
+
+		await act(async () => {
+			createOptions?.onFormReady?.();
+		});
+
+		expect(input.value).toBe('Get the newsletter');
+	});
+
 	test('applyBrandStyles injects the brand stylesheet into the form iframe on form ready', async () => {
 		const { HubSpotEmbedForm } = await import('./HubSpotEmbedForm');
 

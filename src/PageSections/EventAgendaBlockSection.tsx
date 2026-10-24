@@ -20,7 +20,7 @@ export function EventAgendaBlockSection(section: Extract<Sections, { _type: 'com
 				header={{
 					label: section.summaryInfo?.field_label,
 					title: section.summaryInfo?.field_title,
-					copy: <RichData value={section.summaryInfo?.block_summaryText} />,
+					copy: section.summaryInfo?.block_summaryText?.length ? <RichData value={section.summaryInfo.block_summaryText} /> : undefined,
 					buttons: transformButtons(section.summaryInfo?.list_buttons),
 					caption: section.summaryInfo?.field_caption,
 					textSize: resolveTextSize(section.summaryInfo?.field_textSize),

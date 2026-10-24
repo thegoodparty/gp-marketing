@@ -69,12 +69,19 @@ export function EventAgendaBlock(props: EventAgendaBlockProps) {
 
 	const items = (props.items ?? []).filter(item => Boolean(item.title) || item.copy != null || Boolean(item.button));
 	const hasCard = items.length > 0;
+	const header = props.header;
+	const hasHeader = Boolean(
+		header && (header.title || header.label || header.caption || header.copy != null || (header.buttons && header.buttons.length > 0)),
+	);
+	if (!hasHeader && !hasCard) {
+		return null;
+	}
 
 	return (
 		<article className={cn(s.base(), props.className)} data-component='EventAgendaBlock'>
 			<Container size='xl'>
-				<div className={cn(s.wrapper(), !hasCard && 'lg:grid-cols-1')}>
-					{props.header && <HeaderBlock {...props.header} backgroundColor={backgroundColor} layout='left' />}
+				<div className={cn(s.wrapper(), (!hasCard || !hasHeader) && 'lg:grid-cols-1')}>
+					{hasHeader && <HeaderBlock {...header} backgroundColor={backgroundColor} layout='left' />}
 					{hasCard && (
 						<div className={s.card()}>
 							{props.agendaTitle && (
@@ -88,7 +95,7 @@ export function EventAgendaBlock(props: EventAgendaBlockProps) {
 										const markerColor = color === 'mixed' ? (mixedCycle[index % mixedCycle.length] ?? 'blue') : color;
 										return (
 											<li key={item._key ?? index} className={s.item()} data-component='EventAgendaItem'>
-												<div className={cn(s.marker(), markerColors[markerColor])} aria-hidden={!item.icon}>
+												<div className={cn(s.marker(), markerColors[markerColor])} aria-hidden>
 													{item.icon ? (
 														<IconResolver icon={item.icon} />
 													) : (

@@ -304,6 +304,70 @@
 		"verified": "read in statute"
 	},
 	{
+		"claim": "A petition candidate for partisan office states a party or political principle of no more than three words",
+		"citation": "Minn. Stat. § 204B.07, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204B.07",
+		"quote": "the candidate's political party or political principle expressed in not more than three words",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A petition candidate may not use any part of a major party's name, but may use the word independent",
+		"citation": "Minn. Stat. § 204B.07, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204B.07",
+		"quote": "No part of the name of a major political party may be used to designate the political party or principle of a candidate who files for a partisan office by nominating petition",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A petition candidate for partisan office may be designated independent",
+		"citation": "Minn. Stat. § 204B.07, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204B.07",
+		"quote": "may be used to designate the party or principle",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A petition candidate for partisan office may not call themselves nonpartisan",
+		"citation": "Minn. Stat. § 204B.07, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204B.07",
+		"quote": "shall use the term \"nonpartisan\" as a statement of political principle",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each petition signer swears they do not intend to vote in the primary for that office",
+		"citation": "Minn. Stat. § 204B.07, subd. 4",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204B.07",
+		"quote": "that I do not intend to vote at the primary election for the office for which this nominating petition is made",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Someone who runs in the primary cannot also be nominated by petition for the same office",
+		"citation": "Minn. Stat. § 204B.04, subd. 2",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204B.04",
+		"quote": "No individual who seeks nomination for any partisan or nonpartisan office at a primary shall be nominated for the same office by nominating petition.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nominating petitions for state and federal offices are filed in the same window as primary candidates' affidavits",
+		"citation": "Minn. Stat. § 204B.09, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204B.09",
+		"quote": "affidavits of candidacy and nominating petitions for county, state, and federal offices filled at the state general election shall be filed",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "On the November ballot a petition candidate's party or principle is printed after their name",
+		"citation": "Minn. Stat. § 204D.13, subd. 3",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204D.13",
+		"quote": "the political party or political principle of a candidate as stated on the petition shall be placed after the name of a candidate nominated by petition",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
 		"claim": "Only voters eligible to vote for the candidate may sign a nominating petition",
 		"citation": "Minn. Stat. § 204B.08, subd. 2",
 		"url": "https://www.revisor.mn.gov/statutes/cite/204B.08",

@@ -137,9 +137,40 @@ counting method for a named home rule charter city.
 Local candidates file an affidavit of candidacy and pay a filing fee, or file a
 petition in place of the fee. Only voters eligible to vote for the candidate may
 sign, and nobody may sign for more candidates for one office than there are
-seats. Nominating petitions in the party sense exist only for partisan offices.
+seats.
 
-*Minn. Stat. §§ 205.13, 204B.11, subd. 2, 204B.08, subd. 2, 204B.03 · statutory · read in statute*
+*Minn. Stat. §§ 205.13, 204B.11, subd. 2, 204B.08, subd. 2 · statutory · read in statute*
+
+### Running as an independent for a partisan office
+
+This applies only to the partisan offices: federal, statewide and state
+legislative. Location pages rarely carry them, but use this wherever copy
+mentions a state house or senate race.
+
+A candidate who is not seeking a major party's nomination skips the August
+primary and gets on the November ballot by **nominating petition**, filed in the
+same window as primary candidates' affidavits. Someone who runs in the primary
+cannot then petition for the same office.
+
+*Minn. Stat. §§ 204B.03, 204B.04, subd. 2, 204B.09, subd. 1 · statutory · read in statute*
+
+The petition names the candidate's party or political principle in three words
+or fewer, and that label is printed after the candidate's name in November. It
+may not use any part of a major party's name or the word "nonpartisan", but the
+word "independent" is allowed.
+
+*Minn. Stat. §§ 204B.07, subd. 1, 204D.13, subd. 3 · statutory · read in statute*
+
+Who may sign: only voters eligible to vote for that candidate, and each voter
+may sign petitions for only as many candidates for one office as there are
+seats. Each signer also swears that they do not intend to vote in the primary
+for that office.
+
+*Minn. Stat. §§ 204B.08, subd. 2, 204B.07, subd. 4 · statutory · read in statute*
+
+**Watch out:** that oath is the Minnesota equivalent of "primary voters may not
+sign". Phrase it as the oath, since it is a promise about the coming primary,
+not a check against a past vote.
 
 ## County government
 

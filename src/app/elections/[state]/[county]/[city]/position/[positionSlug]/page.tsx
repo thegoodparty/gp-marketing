@@ -4,6 +4,7 @@ import { notFound, permanentRedirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	getCityPlacesByCounty,
+	getCountyChildPlaces,
 	getPlacesByState,
 	getRaceBySlug,
 	isCityOrTownMtfcc,
@@ -48,6 +49,16 @@ export default async function Page({
 	// (state/city/position). Try 3-part first for the common case, then fall back.
 	let race = await getRaceBySlug(buildRaceSlug(state, positionSlug, city));
 	if (!race) race = await getRaceBySlug(buildRaceSlug(state, positionSlug, county, city));
+	if (!race) {
+		// A slash in the place name ("Rainy Creek/Cheyenne Township") gives its slug an extra
+		// segment, so the place's own slug is the only way to its races.
+		const childPlaces = await getCountyChildPlaces({
+			state: stateCode,
+			countySlug: `${state.toLowerCase()}/${county.toLowerCase()}`,
+		});
+		const place = childPlaces.find(p => p.slug?.toLowerCase().split('/').pop() === city.toLowerCase());
+		if (place?.slug) race = await getRaceBySlug(`${place.slug.toLowerCase()}/${positionSlug}`);
+	}
 	if (!race) notFound();
 
 	const raceSlug = race.slug;

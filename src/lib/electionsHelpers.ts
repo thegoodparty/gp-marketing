@@ -1237,6 +1237,14 @@ export function resolveElectionPositionFromRaceSlug(
 	// Louisiana), and the place name then lands in the state slot.
 	if (!isValidStateCode(parts[0])) return undefined;
 
+	// A slash in a place name ("Rainy Creek/Cheyenne Township") gives its slug an extra segment,
+	// which would otherwise read as a city plus a subplace. The place's page lives under its last
+	// segment, which is how the sitemap's city loop builds it, so its races must point there too.
+	if (parts.length > 3) {
+		const placeCountySlug = options?.citySlugToCountySlug?.get(parts.join('/'));
+		if (placeCountySlug) return routeFromCountySlug(placeCountySlug, parts.at(-1)!, positionSlug);
+	}
+
 	const level = (race.positionLevel ?? '').toUpperCase();
 	const skipUnmapped = options?.skipUnmappedCity ?? false;
 

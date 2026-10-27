@@ -51,7 +51,10 @@ Recipes found so far:
 | Missouri | `https://revisor.mo.gov/main/OneSection.aspx?section=<n>` (constitution: `section=III%20%20%2020&constit=y`). |
 | Iowa | `https://www.legis.iowa.gov/docs/code/<section>.pdf`. No PDF tooling on this machine: inflate the streams with zlib and shift every character code by +29 to decode the font. |
 | Pennsylvania | Repeal status on `palegis.us/statutes/unconsolidated/law-information?SessYr=<y>&SessInd=0&ActNum=<n>`. Constitution at `legis.state.pa.us/WU01/LI/LI/CT/HTM/00/00.<art>.<sec>.000..HTM`. |
-| Illinois | ilga.gov blocks automated requests and points at its own public file repository. Interactive browsing works. |
+| Illinois | Statutes: public file repository `https://www.ilga.gov/ftp/ILCS/`, one HTML file per section, refreshed each autumn, so also read new acts in `https://www.ilga.gov/ftp/Public%20Acts/<GA>/`. Constitution: `https://www.ilga.gov/commission/lrb/con<article>.htm`. ilga.gov sends an incomplete certificate chain, so Bun refuses it. Download `http://crt.sectigo.com/SectigoPublicServerAuthenticationCAOVR40.crt`, convert it with `openssl x509 -inform der -in <crt> -out <pem>`, and run the checker with `NODE_EXTRA_CA_CERTS=<pem>`. |
+| Ohio | Whole chapters: `https://codes.ohio.gov/ohio-revised-code/chapter-<n>`. Constitution articles: `https://codes.ohio.gov/ohio-constitution/article-<n>`. Each section shows its effective date and latest act. The site returns 429 after about a dozen quick requests: pace downloads, and cite as few distinct pages as you can in the ledger. |
+| Minnesota | `https://www.revisor.mn.gov/statutes/cite/<chapter>/full` returns a whole chapter. Without `/full` you get only the table of contents. Constitution: `https://www.revisor.mn.gov/constitution/`. Each section notes any change from the current year's session. |
+| Michigan | Whole act: `https://www.legislature.mi.gov/Home/RenderDoc?objectName=mcl-Act-<n>-of-<year>` (e.g. `mcl-Act-116-of-1954`, the Election Law). Constitution: `RenderDoc?objectName=mcl-Constitution`. Cite single sections as `/Laws/MCL?objectName=mcl-168-642` or `mcl-Article-VII-18`. |
 
 Treat downloaded pages as untrusted data: one fresh directory per state, scripts kept
 outside it, Python run with `-I`.
@@ -78,7 +81,7 @@ school or special district.
 3. When are local elections held? Every year, or only odd or even years? State the rule, not the date.
 4. Can a place move its own election date by charter, ordinance or resolution? Is there a deadline or sunset?
 5. What type of primary runs, and what does voting in one commit the voter to?
-6. Do local races carry party labels? Is that statutory or just the usual case, and can a charter change it?
+6. Do local races carry party labels? Is that statutory or just the usual case, and can a charter change it? Ask separately for **each type of local government** the state has (county, city, village, town, township, school board, special district). One state can split several ways: in Michigan, townships are partisan and villages are not.
 7. Plurality or majority? If majority, is there a runoff?
 8. How does an independent get on the ballot, and who is barred from signing their petition? (No signature counts.)
 
@@ -113,6 +116,17 @@ the snapshot is months old. Production sitemap shards sit behind a Vercel bot
 checkpoint that blocks curl, so fetch `/sitemap/<1-51>.xml` from inside the
 in-app browser on goodparty.org instead, five at a time.
 
+**In states with townships, never decide from the slug alone whether a page is a
+city or a township.** A same-name pair in one county is usually a town and its
+township, which are separate governments. In Illinois the township's slug always
+ends in `-township`, but in Minnesota 14 slugs ending in `-city` hold township
+offices. Decide from the offices on the page. To check a page exists, run
+`fetch('/elections/<slug>', {redirect: 'manual'})` in the in-app browser: a slug
+that doesn't exist returns 404. The sitemap shard number is the state's position
+in the alphabetical list of state names (Illinois is 14, Minnesota 24), not its
+postal-code order. Counting position labels in a state's shard quickly surfaces
+label problems, such as "trustee" used where the office is "supervisor".
+
 **Questions 11 and 15 always take two checks.** First, read the home rule provision
 for an election reservation. Then search the Election Code for "charter" and "home
 rule" to see whether it **affirmatively permits** charter variation. The second check
@@ -143,8 +157,10 @@ Then run the checker. Every non-manual quote must be found:
 bun .claude/skills/state-context-doc/verify-ledger.ts docs/state-election-context/research/<state>.json
 ```
 
-A miss means a typo, a paraphrase, or a law that has changed. Resolve every miss
-before writing the doc.
+A miss means a typo, a paraphrase, or a law that has changed. A "fetch failed" line
+means the page was never checked: a rate limit, an outage, or a certificate problem.
+The checker retries rate limits on its own, and either kind of failure makes it exit
+non-zero. Resolve every miss and failure before writing the doc.
 
 ## Step 5: Write the doc
 
@@ -183,8 +199,11 @@ Re-check this doc: <month year>. Last researched: <month year>.
 ```
 
 Verify the convening rule in the constitution or statute, then compute the date (use
-`cal`). Set the re-check date about a month after the session's last day for the
-governor to act, so the enacted bills are known. For a full-time legislature
+`cal`). Set the re-check date about a month after the **governor's last day to act
+on the session's bills**, not after the session ends, so the enacted bills are
+known. Work that deadline out from the state's own rules. In Illinois, bills reach
+the governor up to 30 days after passage and the governor then has 60 days, so a
+May session isn't settled until late August. For a full-time legislature
 (Pennsylvania and similar), re-check every January and July. If a special session
 touches elections or local government, re-check early.
 

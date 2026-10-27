@@ -13,17 +13,17 @@ states cover the most pages, so they come first.
 
 | # | State | Location pages | Status |
 | --- | --- | ---: | --- |
-| 1 | Illinois | 3,627 | in progress |
+| 1 | Illinois | 3,627 | drafted, awaiting review |
 | 2 | Pennsylvania | 3,102 | done |
-| 3 | Ohio | 2,922 | in progress |
-| 4 | Minnesota | 2,511 | in progress |
+| 3 | Ohio | 2,922 | drafted, awaiting review |
+| 4 | Minnesota | 2,511 | drafted, awaiting review |
 | 5 | Iowa | 2,495 | done |
-| 6 | Michigan | 2,367 | in progress |
-| 7 | Kansas | 2,334 | to do |
+| 6 | Michigan | 2,367 | drafted, awaiting review |
+| 7 | Kansas | 2,334 | in progress |
 | 8 | Texas | 2,300 | done, reviewed 27 October 2026 |
-| 9 | New York | 2,124 | to do |
-| 10 | Wisconsin | 2,041 | to do |
-| 11 | Indiana | 1,856 | to do |
+| 9 | New York | 2,124 | in progress |
+| 10 | Wisconsin | 2,041 | in progress |
+| 11 | Indiana | 1,856 | in progress |
 | 12 | Missouri | 1,651 | done |
 
 Every state in the top 12 has more than 1,600 location pages. The other 39 add

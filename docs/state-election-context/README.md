@@ -62,8 +62,11 @@ Three parts, in order:
 **How it was verified:**
 
 - `read in statute`: the statutory text itself was read.
+- `read in county charter`: the text of a county's own charter was read.
 - `Secretary of State publication` / `state agency publication`: an official
   state publication, not the statute.
+- `local government publication`: an official page or document from the city,
+  county or district itself.
 
 ## Rules that apply to every state
 

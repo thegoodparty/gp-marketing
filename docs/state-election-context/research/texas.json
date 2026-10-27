@@ -1,0 +1,50 @@
+[
+	{
+		"claim": "Elections are held on uniform dates: the first Saturday in May or the first Tuesday after the first Monday in November",
+		"citation": "Tex. Elec. Code § 41.001",
+		"url": "https://tcss.legis.texas.gov/resources/EL/htm/EL.41.htm",
+		"quote": "the first Saturday in May in an odd-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County and state officers are elected in November of even-numbered years",
+		"citation": "Tex. Elec. Code § 41.002",
+		"url": "https://tcss.legis.texas.gov/resources/EL/htm/EL.41.htm",
+		"quote": "The general election for state and county officers shall be held on the first Tuesday after the first Monday in November in even-numbered years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general primary is the first Tuesday in March of even-numbered years, with a runoff on the fourth Tuesday in May",
+		"citation": "Tex. Elec. Code § 41.007",
+		"url": "https://tcss.legis.texas.gov/resources/EL/htm/EL.41.htm",
+		"quote": "The runoff primary election date is the fourth Tuesday in May following the general primary election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voting in a party's primary affiliates the voter with that party",
+		"citation": "Tex. Elec. Code § 162.003",
+		"url": "https://tcss.legis.texas.gov/resources/EL/htm/EL.162.htm",
+		"quote": "A person becomes affiliated with a political party when the person:",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City candidates appear on the ballot as independents unless a home-rule charter authorizes partisan nominations",
+		"citation": "Tex. Elec. Code §§ 143.002, 143.003",
+		"url": "https://tcss.legis.texas.gov/resources/EL/htm/EL.143.htm",
+		"quote": "A city charter may authorize nominations of partisan candidates by political organizations for an office of a home-rule city.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School and other district candidates appear on the ballot only as independents",
+		"citation": "Tex. Elec. Code § 144.002",
+		"url": "https://tcss.legis.texas.gov/resources/EL/htm/EL.144.htm",
+		"quote": "A candidate's name may appear on the ballot only as an independent.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

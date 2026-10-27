@@ -101,6 +101,8 @@ Read the nearest relevant doc rather than loading everything.
 | Changing an existing page-builder block     | the `update-component` skill        |
 | Building a block for the election redesign  | `docs/election-redesign-components.md` |
 | Anything about election or candidate pages  | `docs/elections.md`                 |
+| Writing copy about a specific state's elections | `docs/state-election-context/` |
+| Creating or re-checking a state context doc | the `state-context-doc` skill       |
 | Finding the live URL for any page           | the `sitemap-lookup` skill          |
 | The demo request form and its qualifier API | `docs/demo-request-block.md`        |
 | Content written into Sanity over the API    | `docs/sanity-api-writes.md`         |

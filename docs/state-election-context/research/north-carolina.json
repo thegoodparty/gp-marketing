@@ -1,0 +1,733 @@
+[
+	{
+		"claim": "The General Assembly meets in regular session every two years, in odd-numbered years, on the day set by law",
+		"citation": "N.C. Const. art. II, § 11(1)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Constitution/NCConstitution.html",
+		"quote": "The General Assembly shall meet in regular session in 1973 and every two years thereafter on the day prescribed by law.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The session opens at noon on the second Wednesday in January after the election, for organization only",
+		"citation": "N.C. Gen. Stat. § 120-11.1",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_120.html",
+		"quote": "beginning at 12:00 noon on the second Wednesday in January next after their election, and on that day they shall meet solely to elect officers, adopt rules, and otherwise organize the session",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "After the organizational day the session reconvenes on the third Wednesday after the second Monday in January",
+		"citation": "N.C. Gen. Stat. § 120-11.1",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_120.html",
+		"quote": "they stand adjourned until 12:00 noon on the third Wednesday after the second Monday in January next after their election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The governor has 10 days to act on a bill presented during the session",
+		"citation": "N.C. Const. art. II, § 22(7)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Constitution/NCConstitution.html",
+		"quote": "If any bill shall not be returned by the Governor within 10 days after it shall have been presented to him, the same shall be a law in like manner as if he had signed it",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "After a sine die adjournment or one longer than 30 days, the governor has 30 days to return a bill with a veto",
+		"citation": "N.C. Const. art. II, § 22(7)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Constitution/NCConstitution.html",
+		"quote": "it shall become a law unless, within 30 days after such adjournment, it is returned by the Governor with objections and veto message",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Bills that apply in fewer than 15 counties (local bills) are not presented to the governor",
+		"citation": "N.C. Const. art. II, § 22(6)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Constitution/NCConstitution.html",
+		"quote": "Every bill that applies in fewer than 15 counties shall be read three times in each house before it becomes law and shall be signed by the presiding officers of both houses.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Acts take effect 60 days after the session adjourns unless the act says otherwise",
+		"citation": "N.C. Gen. Stat. § 120-20",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_120.html",
+		"quote": "Acts of the General Assembly shall be in force only from and after 60 days after the adjournment of the session in which they shall have passed, unless the commencement of the operation thereof be expressly otherwise directed.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The party primary for offices elected in November of even years is held in March",
+		"citation": "N.C. Gen. Stat. § 163-1(b)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "On Tuesday next after the first Monday in March preceding each general election to be held in November for the officers referred to in subsection (a) of this section, there shall be held in all election precincts within the territory for which the officers are to be elected a primary election for the purpose of nominating candidates for each political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Legislative seats are elected every two years from 1968, so the regular election falls in even years",
+		"citation": "N.C. Gen. Stat. § 163-1(a)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "Representatives 1968 and every two years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County commissioners are elected at the regular election for General Assembly members, with a default term of two years",
+		"citation": "N.C. Gen. Stat. § 163-1(a)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "County County At the regular election Two years, from the",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any approved change to a county board takes effect through the next primary and general election for county offices",
+		"citation": "N.C. Gen. Stat. § 153A-62",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_153A.html",
+		"quote": "shall be the basis for nominating and electing the members of the board of commissioners at the first succeeding primary and general election for county offices",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a sheriff for four years at the same time as the General Assembly",
+		"citation": "N.C. Const. art. VII, § 2",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Constitution/NCConstitution.html",
+		"quote": "In each county a Sheriff shall be elected by the qualified voters thereof at the same time and places as members of the General Assembly are elected and shall hold his office for a period of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a clerk of superior court for four years",
+		"citation": "N.C. Const. art. IV, § 9(3)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Constitution/NCConstitution.html",
+		"quote": "A Clerk of the Superior Court for each county shall be elected for a term of four years by the qualified voters thereof",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a register of deeds at the General Assembly election",
+		"citation": "N.C. Gen. Stat. § 161-1",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_161.html",
+		"quote": "In each county there shall be elected biennially by the qualified voters thereof, as provided for the election of members of the General Assembly, a register of deeds.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general law provides for an elected coroner in each county",
+		"citation": "N.C. Gen. Stat. § 152-1",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_152.html",
+		"quote": "In each county a coroner shall be elected by the qualified voters thereof in the same manner and at the same time as the election of members of the General Assembly",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Soil and water conservation district supervisors: three elected per county, at the county election, nonpartisan, no primary",
+		"citation": "N.C. Gen. Stat. § 139-6",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_139.html",
+		"quote": "The election shall be nonpartisan and no primary election shall be held.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Soil and water supervisors are elected at the regular election for county officers",
+		"citation": "N.C. Gen. Stat. § 139-6",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_139.html",
+		"quote": "All elections for members of the district board of supervisors shall be held at the same time as the regular election for county officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only voters registered with a party may vote in that party's primary",
+		"citation": "N.C. Gen. Stat. § 163-59",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "Has declared and has had recorded on the registration book or record the fact that the voter affiliates with the political party in whose primary the voter proposes to vote or participate.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Unaffiliated voters choose one party's primary",
+		"citation": "N.C. Gen. Stat. § 163-119",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "Unaffiliated voters shall be allowed to vote in one primary of the voter's choosing",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No voter may vote in more than one party's primary",
+		"citation": "N.C. Gen. Stat. § 163-166.7(b)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "No voter in a primary shall be permitted to vote in more than one party's primary.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party candidate pledges not to run as a write-in after losing the primary",
+		"citation": "N.C. Gen. Stat. § 163-106(a)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "I pledge that if I am defeated in the primary, I will not run for the same office as a write-in candidate in the next general election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A primary is won with more than 30 percent of the vote (a substantial plurality)",
+		"citation": "N.C. Gen. Stat. § 163-111(a)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "the substantial plurality shall be ascertained by multiplying the total vote cast for all aspirants by thirty percent (30%)",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Below 30 percent, the leader is nominated unless the runner-up requests a second primary",
+		"citation": "N.C. Gen. Stat. § 163-111(b)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "the aspirant receiving the highest number of votes shall be declared nominated by the appropriate board of elections unless the aspirant receiving the second highest number of votes shall request a second primary",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Runner-ups for county office request the second primary from the county board of elections",
+		"citation": "N.C. Gen. Stat. § 163-111(c)(2)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "Members of the State House of Representatives in single-county representative districts, and All county officers.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The second primary is held 10 weeks after the first",
+		"citation": "N.C. Gen. Stat. § 163-111(e)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "shall order that it be held 10 weeks after the first primary",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "There is never a third primary",
+		"citation": "N.C. Gen. Stat. § 163-111(f)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "In no case shall there be a third primary.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is won by plurality",
+		"citation": "N.C. Gen. Stat. § 163-182.15",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "individuals having the highest number of votes for each office shall be declared elected to the office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An unaffiliated candidate for county office files petitions with the county board of elections, signed by qualified voters of the county",
+		"citation": "N.C. Gen. Stat. § 163-122(a)(3)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "If the office is a county office or a single county legislative district, file written petitions with the chair or director of the county board of elections supporting the voter's candidacy for a specified county office.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate who was on the primary ballot cannot run as unaffiliated for the same office that year",
+		"citation": "N.C. Gen. Stat. § 163-122(b)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "shall not be eligible to have that individual's name placed on the general election ballot as an unaffiliated candidate for the same office in that year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In partisan cities, unaffiliated candidates also qualify by petition, and primary candidates are barred",
+		"citation": "N.C. Gen. Stat. § 163-296",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "A person whose name appeared on the ballot in a primary election is not eligible to have his name placed on the regular municipal election ballot as an unaffiliated candidate for the same office in that year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In nonpartisan cities, candidates file a notice of candidacy and must be registered in the municipality",
+		"citation": "N.C. Gen. Stat. § 163-294.2(b)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "Only persons who are registered to vote in the municipality shall be permitted to file notice of candidacy for election to municipal office.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal and special district elections are held every two or four years, counted from 1973, as the charter provides",
+		"citation": "N.C. Gen. Stat. § 163-279(a)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "shall be held in 1973 and every two or four years thereafter as provided by municipal charter on the following days",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan plurality elections are held on the Tuesday after the first Monday in November",
+		"citation": "N.C. Gen. Stat. § 163-279(a)(1)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "If the election is nonpartisan and decided by simple plurality, the election shall be held on Tuesday after the first Monday in November.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Partisan municipal primaries are held the second Tuesday after Labor Day",
+		"citation": "N.C. Gen. Stat. § 163-279(a)(2)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "the first primary shall be held on the second Tuesday after Labor Day, and the second primary, if required, shall be held on the fourth Tuesday before the election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan primaries are held four Tuesdays before the November election",
+		"citation": "N.C. Gen. Stat. § 163-279(a)(3)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "the nonpartisan primary shall be held on the fourth Tuesday before the election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under election-and-runoff, the first election is four Tuesdays before November and the runoff is in November",
+		"citation": "N.C. Gen. Stat. § 163-279(a)(4)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "the runoff election, if required, shall be held on Tuesday after the first Monday in November",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every city, town, village and special district uses one of four methods",
+		"citation": "N.C. Gen. Stat. § 163-290(a)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "Each city, town, village, and special district in this State shall operate under one of the following alternative methods of nominating candidates for and determining the results of its elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city can change its method by act of the General Assembly or charter amendment",
+		"citation": "N.C. Gen. Stat. § 163-290(b)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "may change its method of election from one to another of the methods set out in subsection (a) by act of the General Assembly or in the manner provided by law for amendment of its charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Partisan city elections follow the rules for county nominations, including second primaries",
+		"citation": "N.C. Gen. Stat. § 163-291",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "shall be governed by the provisions of this Chapter applicable to the nomination of county officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Plurality method: most votes wins",
+		"citation": "N.C. Gen. Stat. § 163-292",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "When more than one person is seeking election to a single office, the candidate who receives the highest number of votes shall be declared elected.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Election-and-runoff method needs a majority; runner-up may request a runoff",
+		"citation": "N.C. Gen. Stat. § 163-293(a)-(b)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "nonpartisan municipal elections in cities using the election and runoff election method shall be determined by a majority of the votes cast",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A runoff happens only if the second-place candidate requests it",
+		"citation": "N.C. Gen. Stat. § 163-293(b)(1)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "the candidate receiving the highest number of votes shall be declared elected unless the candidate receiving the second highest number of votes requests a runoff election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan primary narrows the field to two per seat",
+		"citation": "N.C. Gen. Stat. § 163-294(a)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "there shall be a primary to narrow the field of candidates to two candidates for each position to be filled",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Post-census redistricting can push a city election into the following even year",
+		"citation": "N.C. Gen. Stat. § 160A-23.1(a), (d)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_160A.html",
+		"quote": "it may adopt a resolution delaying the election so that it will be held on the timetable provided by subsection (d) of this section",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City, town and village are legally the same thing",
+		"citation": "N.C. Gen. Stat. § 160A-1(2)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_160A.html",
+		"quote": "\"City\" is interchangeable with the terms \"town\" and \"village,\"",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Council, board of aldermen and board of commissioners are the same body under different names",
+		"citation": "N.C. Gen. Stat. § 160A-1(3)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_160A.html",
+		"quote": "\"Council\" is interchangeable with the terms \"board of aldermen\" and \"board of commissioners,\"",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter is the body of local acts for one city",
+		"citation": "N.C. Gen. Stat. § 160A-1(1)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_160A.html",
+		"quote": "\"Charter\" means the entire body of local acts currently in force applicable to a particular city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Default structure: mayor and three council members at large for two-year terms",
+		"citation": "N.C. Gen. Stat. § 160A-66",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_160A.html",
+		"quote": "Unless otherwise provided by its charter, each city shall be governed by a mayor and a council of three members, who shall be elected from the city at large for terms of two years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city may style itself a city, town or village",
+		"citation": "N.C. Gen. Stat. § 160A-101(2)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_160A.html",
+		"quote": "The city may be styled a city, town, or village.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Council terms are two or four years",
+		"citation": "N.C. Gen. Stat. § 160A-101(4)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_160A.html",
+		"quote": "Members of the council shall serve terms of office of either two or four years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Council size is 3 to 12",
+		"citation": "N.C. Gen. Stat. § 160A-101(5)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_160A.html",
+		"quote": "The council shall consist of any number of members not less than three nor more than 12.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "At most half the council can be at large when districts are used",
+		"citation": "N.C. Gen. Stat. § 160A-101(6)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_160A.html",
+		"quote": "No more than one half of the council may be apportioned to the city at large.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The charter options include all four election methods",
+		"citation": "N.C. Gen. Stat. § 160A-101(7)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_160A.html",
+		"quote": "Partisan. - Municipal primaries and elections shall be conducted on a partisan basis as provided in G.S. 163-291.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The mayor is elected for two to four years, or chosen by the council",
+		"citation": "N.C. Gen. Stat. § 160A-101(8)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_160A.html",
+		"quote": "The mayor shall be elected by all the qualified voters of the city for a term of not less than two years nor more than four years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The council may choose the mayor from its own members",
+		"citation": "N.C. Gen. Stat. § 160A-101(8)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_160A.html",
+		"quote": "The mayor shall be selected by the council from among its membership to serve at its pleasure.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The council can adopt these options by ordinance",
+		"citation": "N.C. Gen. Stat. § 160A-102",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_160A.html",
+		"quote": "the council may amend the city charter by ordinance to implement any of the optional forms set out in G.S. 160A-101",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters can start a charter amendment by initiative petition",
+		"citation": "N.C. Gen. Stat. § 160A-104",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_160A.html",
+		"quote": "The people may initiate a referendum on proposed charter amendments.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A local act applies to named cities or counties",
+		"citation": "N.C. Gen. Stat. § 160A-1(5)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_160A.html",
+		"quote": "\"Local act\" means an act of the General Assembly applying to one or more specific cities by name, or to all cities within one or more specifically named counties.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The General Assembly organizes and empowers counties and cities; there is no constitutional home rule",
+		"citation": "N.C. Const. art. VII, § 1",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Constitution/NCConstitution.html",
+		"quote": "The General Assembly shall provide for the organization and government and the fixing of boundaries of counties, cities and towns, and other governmental subdivisions",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "North Carolina has 100 counties",
+		"citation": "N.C. Gen. Stat. § 153A-10",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_153A.html",
+		"quote": "North Carolina has 100 counties.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county is governed by a board of commissioners whose structure stays as it was unless changed by law",
+		"citation": "N.C. Gen. Stat. § 153A-34",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_153A.html",
+		"quote": "Each county is governed by a board of commissioners. The structure and manner of election of the board of commissioners in each county shall remain as it is on February 1, 1974, until changed in accordance with law.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county board has at least three members",
+		"citation": "N.C. Gen. Stat. § 153A-58(1)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_153A.html",
+		"quote": "The board may consist of any number of members not less than three",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commissioner terms can be two-year, four-year or overlapping four-year",
+		"citation": "N.C. Gen. Stat. § 153A-58(2)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_153A.html",
+		"quote": "Members shall be elected for overlapping four-year terms of office.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commissioners may be elected at large or from districts, with at most half at large",
+		"citation": "N.C. Gen. Stat. § 153A-58(3)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_153A.html",
+		"quote": "No more than half the board may be apportioned to the county at large.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The chair is usually chosen by the board, but can be a separately elected office",
+		"citation": "N.C. Gen. Stat. § 153A-58(4)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_153A.html",
+		"quote": "The chairmanship shall be a separate office. The qualified voters of the entire county nominate candidates for and elect the chairman for a two-or four-year term.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County structure changes require a referendum",
+		"citation": "N.C. Gen. Stat. § 153A-60(4)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_153A.html",
+		"quote": "Call a special referendum on the question of adoption of the alterations.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City-county consolidation needs an act of the General Assembly",
+		"citation": "N.C. Gen. Stat. § 153A-405(d)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_153A.html",
+		"quote": "no governmental consolidation may become effective until enacted into law by the General Assembly",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county with no municipality holds city powers (unified government)",
+		"citation": "N.C. Gen. Stat. § 153A-471(a)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_153A.html",
+		"quote": "are vested with any county that has either: (1) No portion of an incorporated municipality located within its boundaries",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Townships are boundaries a county draws by resolution",
+		"citation": "N.C. Gen. Stat. § 153A-19(a)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_153A.html",
+		"quote": "A county may by resolution establish and abolish townships, change their boundaries, and prescribe their names",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties report township boundaries to the Census Bureau",
+		"citation": "N.C. Gen. Stat. § 153A-19(c)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_153A.html",
+		"quote": "shall report township boundaries and changes in those boundaries to the United States Bureau of the Census in the Boundary and Annexations Survey",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Default county school board: five members elected at large for four years, unless local legislation changes it",
+		"citation": "N.C. Gen. Stat. § 115C-35(a)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_115C.html",
+		"quote": "The county board of education in each county shall consist of five members elected by the voters of the county at large for terms of four years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Local legislation can change school board terms",
+		"citation": "N.C. Gen. Stat. § 115C-35(a)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_115C.html",
+		"quote": "unless modified by local legislation",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Default: county school boards are elected nonpartisan at the time of the primary, every two years",
+		"citation": "N.C. Gen. Stat. § 115C-37(a)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_115C.html",
+		"quote": "The county boards of education shall be elected on a nonpartisan basis at the time of the primary election in 1970 and biennially thereafter.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under the default, no party appears next to school board candidates",
+		"citation": "N.C. Gen. Stat. § 115C-37(a)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_115C.html",
+		"quote": "The names of the candidates shall be printed on the ballots without reference to any party affiliation",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City school boards are appointed or elected as their own laws provide",
+		"citation": "N.C. Gen. Stat. § 115C-37(c)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_115C.html",
+		"quote": "The board of education for any city administrative unit shall be appointed or elected as now provided by law.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Many county school boards are elected on a partisan basis by local act; a vacancy statute lists more than 40 counties",
+		"citation": "N.C. Gen. Stat. § 115C-37.1(a), (d)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_115C.html",
+		"quote": "All vacancies in the membership of county boards of education which are elected by public or local act on a partisan basis",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The partisan school board list keeps growing (Pitt added from December 2026, Currituck and Moore from December 2028)",
+		"citation": "N.C. Gen. Stat. § 115C-37.1(d)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_115C.html",
+		"quote": "(d) (Effective December 4, 2028) This section shall apply only to the Asheboro City Board of Education",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The State Auditor appoints the five-member State Board of Elections",
+		"citation": "N.C. Gen. Stat. § 163-19(b)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "The State Auditor shall appoint the members of the State Board and likewise shall appoint their successors at the expiration of each four-year term.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No more than three State Board members may share a party",
+		"citation": "N.C. Gen. Stat. § 163-19(b)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "Not more than three members of the State Board shall be members of the same political party.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county board of elections has five members: four from the State Board, a chair from the State Auditor",
+		"citation": "N.C. Gen. Stat. § 163-30(a)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "One member of each county board shall be appointed by the State Auditor to be the chair of the county board",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Mailed absentee ballots must arrive by 7:30 p.m. on election day",
+		"citation": "N.C. Gen. Stat. § 163-231(b)(1)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "received by the county board not later than 7:30 P.M. on the day of the statewide primary or general election or county bond election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In-person voters show photo ID",
+		"citation": "N.C. Gen. Stat. § 163-166.16(a)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "the registered voter shall produce any of the following forms of identification that contain a photograph of the registered voter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A constitutional amendment on photo ID is on the 3 November 2026 ballot",
+		"citation": "N.C. Const. art. VI, § 2(4) note",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Constitution/NCConstitution.html",
+		"quote": "The amendments by S.L. 2024-58 are contingent upon the results of the November 3, 2026, referendum",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board terms are staggered so about half expire every two years",
+		"citation": "N.C. Gen. Stat. § 115C-37(a)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_115C.html",
+		"quote": "The terms of office of the members shall be staggered so as nearly equal to one half as possible shall expire every two years.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter ordinance needs a referendum only if the council calls one or a referendum petition is filed",
+		"citation": "N.C. Gen. Stat. § 160A-102",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_160A.html",
+		"quote": "but shall not be required to unless a referendum petition is received pursuant to G.S. 160A-103",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The two largest parties submit the nominee lists for the State Board",
+		"citation": "N.C. Gen. Stat. § 163-19(b)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "The State Auditor shall appoint the members from a list of nominees submitted to the State Auditor by the State party chair of each of the two political parties having the highest number of registered affiliates",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Four county board members are appointed by the State Board, two from each of the two largest parties",
+		"citation": "N.C. Gen. Stat. § 163-30(a)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_163.html",
+		"quote": "two members each shall belong to the two political parties having the highest number of registered affiliates",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County school boards run under the primary election rules of Chapter 163 unless the law says otherwise",
+		"citation": "N.C. Gen. Stat. § 115C-37(a)",
+		"url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_115C.html",
+		"quote": "the election shall be conducted according to the provisions of Chapter 163 of the General Statutes then governing primary elections",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Asheville moved to district elections in even-numbered years by a 2018 act",
+		"citation": "S.L. 2018-123 (Asheville charter, § 6)",
+		"url": "https://www.ncleg.gov/Files/BillDrafting/CityCharters/Charter%20of%20the%20City%20of%20Asheville.pdf",
+		"quote": "Also provided that elections shall be held in even-numbered years, beginning in 2020.",
+		"certainty": "varies by place",
+		"verified": "General Assembly charter amendment table",
+		"manual": true
+	},
+	{
+		"claim": "High Point moved to even years in 2006 and back to odd years from 2017",
+		"citation": "S.L. 2006-171, 2013-261 (High Point charter, § 3.1)",
+		"url": "https://www.ncleg.gov/Files/BillDrafting/CityCharters/Charter%20of%20the%20City%20of%20High%20Point.pdf",
+		"quote": "beginning with the 2017 election, City elections shall be held in odd",
+		"certainty": "varies by place",
+		"verified": "General Assembly charter amendment table",
+		"manual": true
+	},
+	{
+		"claim": "Raleigh adopted four-year staggered terms from 2026 and the nonpartisan primary method by ordinance in 2024",
+		"citation": "Raleigh Ord. No. 627 (2024) (Raleigh charter, § 9)",
+		"url": "https://www.ncleg.gov/Files/BillDrafting/CityCharters/Charter%20of%20the%20City%20of%20Raleigh.pdf",
+		"quote": "to stagger the terms of the city council",
+		"certainty": "varies by place",
+		"verified": "General Assembly charter amendment table",
+		"manual": true
+	}
+]

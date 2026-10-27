@@ -46,5 +46,381 @@
 		"quote": "A candidate's name may appear on the ballot only as an independent.",
 		"certainty": "statutory",
 		"verified": "read in statute"
+	},
+	{
+		"claim": "Elections may also fall on the first Saturday in May of an even-numbered year, for any political subdivision other than a county",
+		"citation": "Tex. Elec. Code § 41.001(a)(2)",
+		"url": "https://tcss.legis.texas.gov/resources/EL/htm/EL.41.htm",
+		"quote": "the first Saturday in May in an even-numbered year, for an election held by a political subdivision other than a county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An election held on a date the uniform-date rules do not allow is void",
+		"citation": "Tex. Elec. Code § 41.008",
+		"url": "https://tcss.legis.texas.gov/resources/EL/htm/EL.41.htm",
+		"quote": "An election held on a date not permitted by this subchapter is void.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The deadline for most political subdivisions to move their election to the November odd-year date was 31 December 2025",
+		"citation": "Tex. Elec. Code § 41.0052(a)",
+		"url": "https://tcss.legis.texas.gov/resources/EL/htm/EL.41.htm",
+		"quote": "may, not later than December 31, 2025, change the date on which it holds its general election for officers to the November uniform election date in odd-numbered years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home-rule city can make the date change by resolution, overriding its charter",
+		"citation": "Tex. Elec. Code § 41.0052(c)",
+		"url": "https://tcss.legis.texas.gov/resources/EL/htm/EL.41.htm",
+		"quote": "The change contained in the resolution supersedes a city charter provision that requires a different general election date",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party affiliation from voting in a primary lasts until the end of the voting year",
+		"citation": "Tex. Elec. Code § 162.010",
+		"url": "https://tcss.legis.texas.gov/resources/EL/htm/EL.162.htm",
+		"quote": "a party affiliation expires at the end of the voting year in which the person became affiliated",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A primary voter cannot vote in another party's primary or runoff in the same voting year",
+		"citation": "Tex. Elec. Code § 162.013",
+		"url": "https://tcss.legis.texas.gov/resources/EL/htm/EL.162.htm",
+		"quote": "A vote in a primary election is void if the voter previously voted in a primary election of another party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Someone who voted in a primary cannot run as an independent for an office that party nominated a candidate for",
+		"citation": "Tex. Elec. Code § 162.015(a)",
+		"url": "https://tcss.legis.texas.gov/resources/EL/htm/EL.162.htm",
+		"quote": "an independent candidate for an office for which a candidate was nominated in the primary",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Independent candidates for county and state office need a declaration of intent and a petition",
+		"citation": "Tex. Elec. Code §§ 142.002, 142.004",
+		"url": "https://tcss.legis.texas.gov/resources/EL/htm/EL.142.htm",
+		"quote": "a candidate must make a declaration of intent to run as an independent candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A petition signature is invalid if the signer voted in the primary of a party that nominated someone for that office",
+		"citation": "Tex. Elec. Code § 142.009",
+		"url": "https://tcss.legis.texas.gov/resources/EL/htm/EL.142.htm",
+		"quote": "voted in the general or runoff primary election of a political party that made a nomination, at either primary, for the office sought by the candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Major parties must nominate county and state candidates by primary",
+		"citation": "Tex. Elec. Code § 172.001",
+		"url": "https://tcss.legis.texas.gov/resources/EL/htm/EL.172.htm",
+		"quote": "must be nominated by primary election, held as provided by this code",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Plurality is the default rule for winning office",
+		"citation": "Tex. Elec. Code § 2.001",
+		"url": "https://tcss.legis.texas.gov/resources/EL/htm/EL.2.htm",
+		"quote": "to be elected to a public office, a candidate must receive more votes than any other candidate for the office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Where a majority is required and nobody gets one, a runoff follows",
+		"citation": "Tex. Elec. Code § 2.021",
+		"url": "https://tcss.legis.texas.gov/resources/EL/htm/EL.2.htm",
+		"quote": "If no candidate for a particular office receives the vote necessary to be elected in an election requiring a majority vote, a runoff election for that office is required.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city with terms longer than two years must elect its whole governing body by majority vote",
+		"citation": "Tex. Const. art. XI, § 11(b)",
+		"url": "https://tcss.legis.texas.gov/resources/CN/htm/CN.11.htm",
+		"quote": "must elect all of the members of its governing body by majority vote of the qualified voters in such municipality",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any city, home rule or general law, may lengthen terms to at most four years",
+		"citation": "Tex. Const. art. XI, § 11(a)",
+		"url": "https://tcss.legis.texas.gov/resources/CN/htm/CN.11.htm",
+		"quote": "for a longer term of office than two (2) years for its officers, either elective or appointive, or both, but not to exceed four (4) years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities over 5,000 people may adopt a home rule charter",
+		"citation": "Tex. Const. art. XI, § 5(a)",
+		"url": "https://tcss.legis.texas.gov/resources/CN/htm/CN.11.htm",
+		"quote": "Cities having more than five thousand (5000) inhabitants may, by a majority vote of the qualified voters of said city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule city keeps its charter if its population later falls to 5,000 or fewer",
+		"citation": "Tex. Const. art. XI, § 5(a)",
+		"url": "https://tcss.legis.texas.gov/resources/CN/htm/CN.11.htm",
+		"quote": "If the number of inhabitants of cities that have adopted or amended their charters under this section is reduced to five thousand (5000) or fewer",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No charter may conflict with the constitution or general state law",
+		"citation": "Tex. Const. art. XI, § 5(a)",
+		"url": "https://tcss.legis.texas.gov/resources/CN/htm/CN.11.htm",
+		"quote": "no charter or any ordinance passed under said charter shall contain any provision inconsistent with the Constitution of the State, or of the general laws enacted by the Legislature of this State",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule city may adopt any form of government",
+		"citation": "Tex. Loc. Gov't Code § 26.021",
+		"url": "https://tcss.legis.texas.gov/resources/LG/htm/LG.26.htm",
+		"quote": "The municipality may adopt and operate under any form of government, including the aldermanic or commission form.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule charter may set some candidate application requirements, but not filing deadlines",
+		"citation": "Tex. Elec. Code § 143.005(a)",
+		"url": "https://tcss.legis.texas.gov/resources/EL/htm/EL.143.htm",
+		"quote": "This section does not authorize a city charter requirement in connection with the timely filing of an application",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Texas municipalities are Type A, B or C general-law, home rule, or special-law",
+		"citation": "Tex. Loc. Gov't Code §§ 5.001-5.005",
+		"url": "https://tcss.legis.texas.gov/resources/LG/htm/LG.5.htm",
+		"quote": "A municipality is a Type C general-law municipality if it",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A Type A town may rename itself a city by ordinance, with no change in powers",
+		"citation": "Tex. Loc. Gov't Code § 5.902",
+		"url": "https://tcss.legis.texas.gov/resources/LG/htm/LG.5.htm",
+		"quote": "A change in designation does not affect the municipality's corporate existence or powers.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Type A: mayor and five aldermen at large, or a mayor and two aldermen per ward",
+		"citation": "Tex. Loc. Gov't Code § 22.031",
+		"url": "https://tcss.legis.texas.gov/resources/LG/htm/LG.22.htm",
+		"quote": "the governing body consists of a mayor and five aldermen who are elected by the qualified voters of the municipality",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Type A: two-year terms by default",
+		"citation": "Tex. Loc. Gov't Code § 22.035",
+		"url": "https://tcss.legis.texas.gov/resources/LG/htm/LG.22.htm",
+		"quote": "The mayor and aldermen of the municipality are elected for a term of two years unless a longer term is established",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Type A: plurality wins",
+		"citation": "Tex. Loc. Gov't Code § 22.004",
+		"url": "https://tcss.legis.texas.gov/resources/LG/htm/LG.22.htm",
+		"quote": "To be elected to an office of the municipality, a person must receive more votes than any other person for the office.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Type B: mayor, five aldermen and a marshal are elected",
+		"citation": "Tex. Loc. Gov't Code § 23.021",
+		"url": "https://tcss.legis.texas.gov/resources/LG/htm/LG.23.htm",
+		"quote": "the county judge of the county in which the municipality is located shall order an election for a mayor, five aldermen, and a marshal",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Type B: one-year terms by default, or two-year staggered terms by ordinance",
+		"citation": "Tex. Loc. Gov't Code § 23.026",
+		"url": "https://tcss.legis.texas.gov/resources/LG/htm/LG.23.htm",
+		"quote": "are elected for a term of one year unless a longer term is established",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Type B under 5,000 people may abolish the elected marshal",
+		"citation": "Tex. Loc. Gov't Code § 23.029",
+		"url": "https://tcss.legis.texas.gov/resources/LG/htm/LG.23.htm",
+		"quote": "The governing body of a municipality with a population of less than 5,000 by ordinance may abolish the office of marshal",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Type C: a mayor and two commissioners, commission form",
+		"citation": "Tex. Loc. Gov't Code § 24.021",
+		"url": "https://tcss.legis.texas.gov/resources/LG/htm/LG.24.htm",
+		"quote": "a mayor and two commissioners must be elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Type C: two-year terms by default",
+		"citation": "Tex. Loc. Gov't Code § 24.023",
+		"url": "https://tcss.legis.texas.gov/resources/LG/htm/LG.24.htm",
+		"quote": "The mayor and commissioners of the municipality serve for a term of two years unless a longer term is established",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Type A requires 600 or more people at incorporation",
+		"citation": "Tex. Loc. Gov't Code § 6.001",
+		"url": "https://tcss.legis.texas.gov/resources/LG/htm/LG.6.htm",
+		"quote": "contains 600 or more inhabitants",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Type B requires 201 to 9,999 people at incorporation",
+		"citation": "Tex. Loc. Gov't Code § 7.001",
+		"url": "https://tcss.legis.texas.gov/resources/LG/htm/LG.7.htm",
+		"quote": "contains 201 to 9,999 inhabitants",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every county has a commissioners court: four commissioners from precincts plus the county judge presiding",
+		"citation": "Tex. Const. art. V, § 18(b)",
+		"url": "https://tcss.legis.texas.gov/resources/CN/htm/CN.5.htm",
+		"quote": "The County Commissioners so chosen, with the County Judge as presiding officer, shall compose the County Commissioners Court",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County commissioners serve four-year terms",
+		"citation": "Tex. Const. art. V, § 18(b)",
+		"url": "https://tcss.legis.texas.gov/resources/CN/htm/CN.5.htm",
+		"quote": "one County Commissioner, who shall hold his office for four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county judge is elected countywide for four years",
+		"citation": "Tex. Const. art. V, § 15",
+		"url": "https://tcss.legis.texas.gov/resources/CN/htm/CN.5.htm",
+		"quote": "there shall be elected in each county, by the qualified voters, a County Judge",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties elect justices of the peace and constables by precinct for four years",
+		"citation": "Tex. Const. art. V, § 18(a)",
+		"url": "https://tcss.legis.texas.gov/resources/CN/htm/CN.5.htm",
+		"quote": "in each such precinct there shall be elected one Justice of the Peace and one Constable, each of whom shall hold his office for four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a sheriff for four years",
+		"citation": "Tex. Const. art. V, § 23",
+		"url": "https://tcss.legis.texas.gov/resources/CN/htm/CN.5.htm",
+		"quote": "There shall be elected by the qualified voters of each county a Sheriff, who shall hold his office for the term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The constitutional county home rule section was repealed in 1969",
+		"citation": "Tex. Const. art. IX, § 3",
+		"url": "https://tcss.legis.texas.gov/resources/CN/htm/CN.9.htm",
+		"quote": "Sec. 3. (Repealed Aug. 5, 1969.)",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School trustees serve three- or four-year staggered terms",
+		"citation": "Tex. Educ. Code § 11.059(a)",
+		"url": "https://tcss.legis.texas.gov/resources/ED/htm/ED.11.htm",
+		"quote": "A trustee of an independent school district serves a term of three or four years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School trustee elections must coincide with a city election in the district, the November general election, or certain other local elections",
+		"citation": "Tex. Educ. Code § 11.0581(a)",
+		"url": "https://tcss.legis.texas.gov/resources/ED/htm/ED.11.htm",
+		"quote": "An election for trustees of an independent school district shall be held on the same date as:",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A school board may elect some or all trustees from single-member districts",
+		"citation": "Tex. Educ. Code § 11.052(a)",
+		"url": "https://tcss.legis.texas.gov/resources/ED/htm/ED.11.htm",
+		"quote": "may order that trustees of the district are to be elected from single-member trustee districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School trustees win by plurality unless the board requires a majority by resolution",
+		"citation": "Tex. Educ. Code § 11.057(c)",
+		"url": "https://tcss.legis.texas.gov/resources/ED/htm/ED.11.htm",
+		"quote": "that a candidate must receive a majority of the votes cast for a position or in a trustee district, as applicable, to be elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Legislature convenes the second Tuesday in January of odd-numbered years",
+		"citation": "Tex. Gov't Code § 301.001",
+		"url": "https://tcss.legis.texas.gov/resources/GV/htm/GV.301.htm",
+		"quote": "The legislature shall convene at the seat of government in regular session at 12 noon on the second Tuesday in January of each odd-numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Regular sessions last at most 140 days",
+		"citation": "Tex. Const. art. III, § 24(b)",
+		"url": "https://tcss.legis.texas.gov/resources/CN/htm/CN.3.htm",
+		"quote": "No Regular Session shall be of longer duration than one hundred and forty (140) days.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Laws take effect 90 days after adjournment unless two-thirds vote otherwise",
+		"citation": "Tex. Const. art. III, § 39",
+		"url": "https://tcss.legis.texas.gov/resources/CN/htm/CN.3.htm",
+		"quote": "until ninety days after the adjournment of the session at which it was enacted",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The governor can convene the Legislature at other times",
+		"citation": "Tex. Const. art. III, § 5(a)",
+		"url": "https://tcss.legis.texas.gov/resources/CN/htm/CN.3.htm",
+		"quote": "and at other times when convened by the Governor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county has a county court, and the county judge presides over it",
+		"citation": "Tex. Const. art. V, § 15",
+		"url": "https://tcss.legis.texas.gov/resources/CN/htm/CN.5.htm",
+		"quote": "There shall be established in each county in this State a County Court",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The commissioners court exercises powers over all county business",
+		"citation": "Tex. Const. art. V, § 18(b)",
+		"url": "https://tcss.legis.texas.gov/resources/CN/htm/CN.5.htm",
+		"quote": "shall exercise such powers and jurisdiction over all county business",
+		"certainty": "statutory",
+		"verified": "read in statute"
 	}
 ]

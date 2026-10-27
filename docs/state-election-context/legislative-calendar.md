@@ -13,14 +13,14 @@ states cover the most pages, so they come first.
 
 | # | State | Location pages | Status |
 | --- | --- | ---: | --- |
-| 1 | Illinois | 3,627 | to do |
+| 1 | Illinois | 3,627 | in progress |
 | 2 | Pennsylvania | 3,102 | done |
-| 3 | Ohio | 2,922 | to do |
-| 4 | Minnesota | 2,511 | to do |
+| 3 | Ohio | 2,922 | in progress |
+| 4 | Minnesota | 2,511 | in progress |
 | 5 | Iowa | 2,495 | done |
-| 6 | Michigan | 2,367 | to do |
+| 6 | Michigan | 2,367 | in progress |
 | 7 | Kansas | 2,334 | to do |
-| 8 | Texas | 2,300 | in progress |
+| 8 | Texas | 2,300 | drafted, awaiting review |
 | 9 | New York | 2,124 | to do |
 | 10 | Wisconsin | 2,041 | to do |
 | 11 | Indiana | 1,856 | to do |

@@ -183,6 +183,51 @@ describe('resolvePlaceUrl: county match', () => {
 		});
 	});
 
+	test('a consolidated city with no page of its own goes to its county', () => {
+		// Emily, 2026-10-27: picking "Indianapolis, IN" landed on /elections/in.
+		const data: ResolvePlaceData = {
+			cityAndTownPlaces: [{ name: 'Lawrence', slug: 'in/lawrence', countyName: 'Marion' }],
+			countyPlaces: [
+				{ name: 'Marion County', slug: 'in/marion-county' },
+				{ name: 'Hamilton County', slug: 'in/hamilton-county' },
+			],
+			citySlugToCountySlug: new Map([['in/lawrence', 'in/marion-county']]),
+		};
+		expect(resolvePlaceUrl({ city: 'Indianapolis', state: 'IN' }, data)).toEqual({
+			url: '/elections/in/marion-county',
+			matchedLevel: 'county',
+		});
+		expect(resolvePlaceUrl({ city: 'Lawrence', state: 'IN' }, data)).toEqual({
+			url: '/elections/in/marion-county/lawrence',
+			matchedLevel: 'city',
+		});
+	});
+
+	test('a consolidated city reaches its own county, not a different county named after it', () => {
+		const data: ResolvePlaceData = {
+			cityAndTownPlaces: [],
+			countyPlaces: [
+				{ name: 'Macon County', slug: 'ga/macon-county' },
+				{ name: 'Bibb County', slug: 'ga/bibb-county' },
+			],
+			citySlugToCountySlug: new Map(),
+		};
+		expect(resolvePlaceUrl({ city: 'Macon', state: 'GA' }, data)).toEqual({ url: '/elections/ga/bibb-county', matchedLevel: 'county' });
+		expect(resolvePlaceUrl({ county: 'Macon County', state: 'GA' }, data)).toEqual({
+			url: '/elections/ga/macon-county',
+			matchedLevel: 'county',
+		});
+	});
+
+	test('a consolidated city name only maps within its own state', () => {
+		const data: ResolvePlaceData = {
+			cityAndTownPlaces: [],
+			countyPlaces: [{ name: 'Fayette County', slug: 'oh/fayette-county' }],
+			citySlugToCountySlug: new Map(),
+		};
+		expect(resolvePlaceUrl({ city: 'Lexington', state: 'OH' }, data)).toEqual({ url: '/elections/oh', matchedLevel: 'state' });
+	});
+
 	test('falls back to the city text as a county query when no county param is given', () => {
 		const data: ResolvePlaceData = { ...guilfordCounty, cityAndTownPlaces: [] };
 		expect(resolvePlaceUrl({ city: 'Guilford County', state: 'NC' }, data)).toEqual({

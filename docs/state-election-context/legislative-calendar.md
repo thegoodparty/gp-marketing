@@ -21,13 +21,16 @@ states cover the most pages, so they come first.
 | 6 | Michigan | 2,367 | drafted, awaiting review |
 | 7 | Kansas | 2,334 | in progress |
 | 8 | Texas | 2,300 | done, reviewed 27 October 2026 |
-| 9 | New York | 2,124 | in progress |
-| 10 | Wisconsin | 2,041 | in progress |
-| 11 | Indiana | 1,856 | in progress |
+| 9 | New York | 2,124 | drafted, awaiting review |
+| 10 | Wisconsin | 2,041 | drafted, awaiting review |
+| 11 | Indiana | 1,856 | drafted, awaiting review |
 | 12 | Missouri | 1,651 | done |
+| 13 | California | 1,461 | in progress |
+| 14 | Arkansas | 1,218 | in progress |
+| 15 | South Dakota | 1,199 | in progress |
+| 16 | New Jersey | 1,158 | next |
 
-Every state in the top 12 has more than 1,600 location pages. The other 39 add
-up to about 21,000 of the 48,036 total. Their order is in the CSV.
+The rest follow the order in the CSV.
 
 The September plan put Texas first. That plan was based on an earlier count, made
 before school district pages joined the sitemap. Those pages add 12,273 location

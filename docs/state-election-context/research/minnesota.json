@@ -1,0 +1,674 @@
+[
+	{
+		"claim": "The legislature convenes in regular session on the first Tuesday after the second Monday in January of each odd-numbered year",
+		"citation": "Minn. Stat. § 3.011",
+		"url": "https://www.revisor.mn.gov/statutes/cite/3.011",
+		"quote": "The legislature shall meet at the seat of government on the first Tuesday after the second Monday in January of each odd-numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The regular session may not run past the first Monday after the third Saturday in May",
+		"citation": "Minn. Const. art. IV, § 12",
+		"url": "https://www.revisor.mn.gov/constitution/",
+		"quote": "after the first Monday following the third Saturday in May of any year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The regular session meets each biennium at times prescribed by law, for at most 120 legislative days",
+		"citation": "Minn. Const. art. IV, § 12",
+		"url": "https://www.revisor.mn.gov/constitution/",
+		"quote": "in regular session in each biennium at the times prescribed by law for not exceeding a total of 120 legislative days",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Most new laws take effect on 1 August after final enactment unless the act says otherwise",
+		"citation": "Minn. Stat. § 645.02",
+		"url": "https://www.revisor.mn.gov/statutes/cite/645.02",
+		"quote": "takes effect on August 1 next following its final enactment, unless a different date is specified in the act",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City general elections are held on the first Tuesday after the first Monday in November of even-numbered years by default",
+		"citation": "Minn. Stat. § 205.07, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/205.07",
+		"quote": "The municipal general election in each city shall be held on the first Tuesday after the first Monday in November in every even-numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city may move its election to odd-numbered years by ordinance, but not hold elections in both",
+		"citation": "Minn. Stat. § 205.07, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/205.07",
+		"quote": "A city may hold elections in either the even-numbered year or the odd-numbered year, but not both.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The ordinance moving the election year must pass at least 180 days before filing opens",
+		"citation": "Minn. Stat. § 205.07, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/205.07",
+		"quote": "by ordinance passed at a regular meeting held at least 180 calendar days before the first day to file for candidacy in the next municipal election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters can force a referendum on an ordinance changing the city election year",
+		"citation": "Minn. Stat. § 205.07, subd. 3",
+		"url": "https://www.revisor.mn.gov/statutes/cite/205.07",
+		"quote": "a petition requesting a referendum on the ordinance may be filed with the city clerk",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Chapter 205's election rules apply to both statutory and home rule charter cities, apart from listed sections a charter may replace",
+		"citation": "Minn. Stat. § 205.02, subd. 2",
+		"url": "https://www.revisor.mn.gov/statutes/cite/205.02",
+		"quote": "In all statutory and home rule charter cities, the primary, general and special elections held for choosing city officials and deciding public questions relating to the city shall be held as provided in this chapter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule charter controls nominations, primaries and elections for city offices even where it conflicts with general law",
+		"citation": "Minn. Stat. § 410.21",
+		"url": "https://www.revisor.mn.gov/statutes/cite/410.21",
+		"quote": "shall control as to nominations, primary elections, and elections for municipal offices, notwithstanding that such charter provisions may be inconsistent with any general law relating thereto",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city primary is optional, held on the second Tuesday in August when the city has chosen to nominate by primary",
+		"citation": "Minn. Stat. § 205.065, subds. 1, 2",
+		"url": "https://www.revisor.mn.gov/statutes/cite/205.065",
+		"quote": "elect to choose nominees for municipal offices by a primary as provided in this section",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The city primary date is the second Tuesday in August of a city election year",
+		"citation": "Minn. Stat. § 205.065, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/205.065",
+		"quote": "may be held in any city on the second Tuesday in August of any year in which a municipal general election is to be held",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City primary candidates appear without party labels",
+		"citation": "Minn. Stat. § 205.065, subd. 4",
+		"url": "https://www.revisor.mn.gov/statutes/cite/205.065",
+		"quote": "The clerk shall place upon the primary ballot without partisan designation the names of individuals whose candidacies have been filed",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The top two per seat advance from a city primary and appear on the general ballot without party labels",
+		"citation": "Minn. Stat. § 205.065, subd. 5",
+		"url": "https://www.revisor.mn.gov/statutes/cite/205.065",
+		"quote": "place them on the municipal general election ballot without partisan designation",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "If no more than twice as many candidates file as there are seats, no city primary is held for that office",
+		"citation": "Minn. Stat. § 205.065, subd. 4",
+		"url": "https://www.revisor.mn.gov/statutes/cite/205.065",
+		"quote": "their names shall not be placed upon the primary ballot and shall be placed on the municipal general election ballot as the nominees for that office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Judicial, county, municipal, school district and special district offices are nonpartisan offices",
+		"citation": "Minn. Stat. § 200.02, subd. 28",
+		"url": "https://www.revisor.mn.gov/statutes/cite/200.02",
+		"quote": "means all judicial, county, municipal, school district, and special district offices",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Partisan offices are federal, constitutional and legislative offices only",
+		"citation": "Minn. Stat. § 200.02, subd. 27",
+		"url": "https://www.revisor.mn.gov/statutes/cite/200.02",
+		"quote": "means federal offices, presidential electors, constitutional offices, and legislative offices",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In election law a municipality is a city or a town (township)",
+		"citation": "Minn. Stat. § 200.02, subd. 9",
+		"url": "https://www.revisor.mn.gov/statutes/cite/200.02",
+		"quote": "means any city or town",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Town general elections are held on the second Tuesday in March unless the town has moved them",
+		"citation": "Minn. Stat. § 205.075, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/205.075",
+		"quote": "The general election in a town must be held on the second Tuesday in March",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town may move its election to November of an even or odd year",
+		"citation": "Minn. Stat. § 205.075, subd. 2",
+		"url": "https://www.revisor.mn.gov/statutes/cite/205.075",
+		"quote": "designate the first Tuesday after the first Monday in November of either the even-numbered or the odd-numbered year as the date of the town general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Moving a town election to November needs a vote of the town's electors",
+		"citation": "Minn. Stat. § 205.075, subd. 2",
+		"url": "https://www.revisor.mn.gov/statutes/cite/205.075",
+		"quote": "is effective upon an affirmative vote of the electors at the next town general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School district general elections are held in November of either odd or even years",
+		"citation": "Minn. Stat. § 205A.04, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/205A.04",
+		"quote": "The general election in each school district must be held on the first Tuesday after the first Monday in November of either the odd-numbered or the even-numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A school board may change its election year by resolution",
+		"citation": "Minn. Stat. § 205A.04, subd. 3",
+		"url": "https://www.revisor.mn.gov/statutes/cite/205A.04",
+		"quote": "The school board may, by resolution, change the year in which the school district general election will be held.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A school board primary is held only if the board has chosen to nominate by primary",
+		"citation": "Minn. Stat. § 205A.03, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/205A.03",
+		"quote": "decide to choose nominees for school board by a primary as provided in this section",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board candidates appear without party labels",
+		"citation": "Minn. Stat. § 205A.03, subd. 4",
+		"url": "https://www.revisor.mn.gov/statutes/cite/205A.03",
+		"quote": "place them on the school district general election ballot without partisan designation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An independent school district board has six elected members on four-year terms",
+		"citation": "Minn. Stat. § 123B.09, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/123B.09",
+		"quote": "The membership of the board shall consist of six elected directors",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board members serve four-year terms",
+		"citation": "Minn. Stat. § 123B.09, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/123B.09",
+		"quote": "The term of office of a member shall be four years commencing on the first Monday in January",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters may enlarge a school board to seven members",
+		"citation": "Minn. Stat. § 123B.09, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/123B.09",
+		"quote": "the question whether the board shall consist of seven members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The state primary is held on the second Tuesday in August of even-numbered years and nominates nonpartisan offices on the state general ballot",
+		"citation": "Minn. Stat. § 204D.03, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204D.03",
+		"quote": "The state primary shall be held on the second Tuesday in August in each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The state general election, which carries county offices, is in November of even-numbered years",
+		"citation": "Minn. Stat. § 204D.03, subd. 2",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204D.03",
+		"quote": "The state general election shall be held on the first Tuesday after the first Monday in November in each even-numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan offices are dropped from the primary when no more than twice as many candidates file as there are seats",
+		"citation": "Minn. Stat. § 204D.07, subd. 3",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204D.07",
+		"quote": "their names and the name of the office shall be omitted from the state and county nonpartisan primary ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The top two in a county or other nonpartisan primary advance to November",
+		"citation": "Minn. Stat. § 204D.10, subd. 3",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204D.10",
+		"quote": "receiving the highest and the next highest number of votes shall be the nominees for that office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "At the state partisan primary a voter may vote in only one party's column",
+		"citation": "Minn. Stat. § 204D.08, subd. 4",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204D.08",
+		"quote": "permits you to vote for the candidates of only one political party in a state partisan primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A partisan primary ballot marked for more than one party is not counted on the partisan section",
+		"citation": "Minn. Stat. § 204C.13, subd. 3",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204C.13",
+		"quote": "the ballot is totally defective and no vote on the partisan section of the ballot shall be counted",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Election judges may not record which party a voter belongs to or voted for",
+		"citation": "Minn. Stat. § 204C.18, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204C.18",
+		"quote": "showing the political party to which a voter belongs or for which political party the voter voted",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The presidential nomination primary is the exception: the party ballot a voter requests is recorded",
+		"citation": "Minn. Stat. § 207A.12",
+		"url": "https://www.revisor.mn.gov/statutes/cite/207A.12",
+		"quote": "the election judge must record in the polling place roster the name of the political party whose ballot the voter requested",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nobody can be nominated by petition for a nonpartisan office",
+		"citation": "Minn. Stat. § 204B.04, subd. 3",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204B.04",
+		"quote": "No individual shall be nominated by nominating petition for any nonpartisan office.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nominating petitions are the route for partisan-office candidates who are not seeking a major party nomination",
+		"citation": "Minn. Stat. § 204B.03",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204B.03",
+		"quote": "Candidates for any partisan office who do not seek the nomination of a major political party shall be nominated by nominating petition",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only voters eligible to vote for the candidate may sign a nominating petition",
+		"citation": "Minn. Stat. § 204B.08, subd. 2",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204B.08",
+		"quote": "A nominating petition may be signed only by individuals who are eligible to vote for the candidate who is nominated.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter may not sign petitions for more candidates for one office than there are seats",
+		"citation": "Minn. Stat. § 204B.08, subd. 2",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204B.08",
+		"quote": "No individual may sign more than one nominating petition for candidates for the same office unless more than one candidate is to be elected to that office.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate may file a petition instead of paying the filing fee",
+		"citation": "Minn. Stat. § 204B.11, subd. 2",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204B.11",
+		"quote": "At the time of filing an affidavit of candidacy, a candidate may present a petition in place of the filing fee.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City candidates file an affidavit of candidacy with the municipal clerk",
+		"citation": "Minn. Stat. § 205.13, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/205.13",
+		"quote": "shall file an affidavit of candidacy with the municipal clerk",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County offices are won by plurality: the candidate with the most votes is declared elected",
+		"citation": "Minn. Stat. § 204C.33, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204C.33",
+		"quote": "declare the candidate duly elected who received the highest number of votes for each county and state office voted for only within the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Hospital district boards declare the highest vote-getter elected",
+		"citation": "Minn. Stat. § 447.32, subd. 4",
+		"url": "https://www.revisor.mn.gov/statutes/cite/447.32",
+		"quote": "declare the candidate duly elected who received the highest number of votes for each hospital district office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county has a five-member board of commissioners on four-year terms by default",
+		"citation": "Minn. Stat. § 375.01",
+		"url": "https://www.revisor.mn.gov/statutes/cite/375.01",
+		"quote": "Each county shall have a board of five commissioners who shall be known as the county board and whose terms of office shall be four years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Anoka, Hennepin, Ramsey and St. Louis counties have seven-member boards",
+		"citation": "Minn. Stat. § 375.01",
+		"url": "https://www.revisor.mn.gov/statutes/cite/375.01",
+		"quote": "In Anoka, Hennepin, Ramsey, and St. Louis Counties the board shall have seven members.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any county may change its board to three, five, seven or nine members",
+		"citation": "Minn. Stat. § 375A.09, subd. 2",
+		"url": "https://www.revisor.mn.gov/statutes/cite/375A.09",
+		"quote": "Any county may provide that the board of county commissioners shall consist of three, five, seven or nine members.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties with 100,000 or more people may move to a seven-member board by resolution",
+		"citation": "Minn. Stat. § 375.056",
+		"url": "https://www.revisor.mn.gov/statutes/cite/375.056",
+		"quote": "Any county with a population of 100,000 or more according to the last federal decennial census may by resolution of its county board provide for a seven-member board of county commissioners.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commissioners are elected one per district and must live in the district",
+		"citation": "Minn. Stat. § 375.025, subd. 4",
+		"url": "https://www.revisor.mn.gov/statutes/cite/375.025",
+		"quote": "One commissioner shall be elected in each district who, at the time of the election, is a resident of the district.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties elect an auditor, treasurer, sheriff, recorder and county attorney to four-year terms unless an office has been combined or made appointive",
+		"citation": "Minn. Stat. § 382.01",
+		"url": "https://www.revisor.mn.gov/statutes/cite/382.01",
+		"quote": "a county auditor, a county treasurer, sheriff, county recorder, county attorney, and coroner",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Elected county offices can be consolidated or made appointive",
+		"citation": "Minn. Stat. § 382.01",
+		"url": "https://www.revisor.mn.gov/statutes/cite/382.01",
+		"quote": "unless an office is consolidated with another county office or made appointive under chapter 375A or other general or special law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county board may make the auditor, treasurer or recorder appointive",
+		"citation": "Minn. Stat. § 375A.1205, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/375A.1205",
+		"quote": "A county board may appoint the county auditor, county treasurer, or county recorder",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The optional forms chapter does not apply to Hennepin County",
+		"citation": "Minn. Stat. § 375A.001",
+		"url": "https://www.revisor.mn.gov/statutes/cite/375A.001",
+		"quote": "This chapter does not apply to Hennepin County.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The staggered-term rule for new or enlarged county boards does not apply to Ramsey County",
+		"citation": "Minn. Stat. § 375.03, subd. 2",
+		"url": "https://www.revisor.mn.gov/statutes/cite/375.03",
+		"quote": "This section does not apply to Ramsey County.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A local government may adopt a home rule charter only when authorized by law",
+		"citation": "Minn. Const. art. XII, § 4",
+		"url": "https://www.revisor.mn.gov/constitution/",
+		"quote": "Any local government unit when authorized by law may adopt a home rule charter for its government.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Ramsey County has a special law authorizing a county charter commission",
+		"citation": "Minn. Stat. § 383A.551",
+		"url": "https://www.revisor.mn.gov/statutes/cite/383A.551",
+		"quote": "the Ramsey County legislative delegation means all elected members of the state house of representatives and state senate whose legislative district includes a portion of Ramsey County",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Ramsey County's charter may provide for new elective or appointive officers",
+		"citation": "Minn. Stat. § 383A.554",
+		"url": "https://www.revisor.mn.gov/statutes/cite/383A.554",
+		"quote": "It shall provide for present functions to be assumed by new elective or appointive officers as shall be provided for in the charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County boards may create election precincts for unorganized territory",
+		"citation": "Minn. Stat. § 204B.15",
+		"url": "https://www.revisor.mn.gov/statutes/cite/204B.15",
+		"quote": "A county board may establish new election precincts to serve the residents of unorganized territories.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Towns elect three supervisors to three-year terms by default",
+		"citation": "Minn. Stat. § 367.03, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/367.03",
+		"quote": "Each supervisor shall be elected for a term of three years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Towns elect three supervisors at the town general election",
+		"citation": "Minn. Stat. § 367.03, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/367.03",
+		"quote": "three supervisors shall be elected in each town at the town general election",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Towns that vote in November elect their officers to four-year terms",
+		"citation": "Minn. Stat. § 367.03, subd. 4",
+		"url": "https://www.revisor.mn.gov/statutes/cite/367.03",
+		"quote": "supervisors and other town officers in towns that hold the town general election in November shall be elected for terms of four years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A November town may move supervisors to six-year terms",
+		"citation": "Minn. Stat. § 367.03, subd. 4a",
+		"url": "https://www.revisor.mn.gov/statutes/cite/367.03",
+		"quote": "may adopt a resolution establishing six-year terms for supervisors",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Towns elect a clerk and a treasurer on two-year terms unless the offices have been made appointive or combined",
+		"citation": "Minn. Stat. § 367.03, subd. 5",
+		"url": "https://www.revisor.mn.gov/statutes/cite/367.03",
+		"quote": "The clerk and treasurer each shall serve for two years and until their successors are elected and qualified.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town may adopt a five-member board",
+		"citation": "Minn. Stat. § 367.30, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/367.30",
+		"quote": "A town may provide for a five-member board of supervisors",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town may make its clerk and treasurer appointed by the town board",
+		"citation": "Minn. Stat. § 367.30, subd. 2",
+		"url": "https://www.revisor.mn.gov/statutes/cite/367.30",
+		"quote": "A town may provide for the appointment by the town board of its clerk or treasurer, or both",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every city without a home rule charter is a statutory city, including every former village",
+		"citation": "Minn. Stat. § 412.016, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/412.016",
+		"quote": "the term includes every city which was a village on January 1, 1974",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The term village is no longer applied to statutory cities",
+		"citation": "Minn. Stat. § 412.016, subd. 2",
+		"url": "https://www.revisor.mn.gov/statutes/cite/412.016",
+		"quote": "shall not be applied to any municipal corporation operating under the authority of this chapter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Villages, boroughs and non-charter cities were brought under one statutory city code in 1973-74",
+		"citation": "Minn. Stat. § 412.015, subd. 2",
+		"url": "https://www.revisor.mn.gov/statutes/cite/412.015",
+		"quote": "bringing the basic laws relating to all villages, boroughs and cities without home rule charters under a single code of statutes",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A statutory city is one that has not adopted a home rule charter",
+		"citation": "Minn. Stat. § 410.015",
+		"url": "https://www.revisor.mn.gov/statutes/cite/410.015",
+		"quote": "means any city which has not adopted a home rule charter pursuant to the constitution and laws",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any city may frame a home rule charter, with no population threshold",
+		"citation": "Minn. Stat. § 410.04",
+		"url": "https://www.revisor.mn.gov/statutes/cite/410.04",
+		"quote": "Any city in the state may frame a city charter for its own government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule charter must provide for a mayor and an elected council",
+		"citation": "Minn. Stat. § 410.07",
+		"url": "https://www.revisor.mn.gov/statutes/cite/410.07",
+		"quote": "provide for a mayor, and for a council to be elected by the people",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter chooses the form of government and whether officers are elected at large or otherwise",
+		"citation": "Minn. Stat. § 410.16",
+		"url": "https://www.revisor.mn.gov/statutes/cite/410.16",
+		"quote": "may provide that all elective city officers, including mayor and members of the council, shall be elected at large or otherwise",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City classes are by population and exist for legislative purposes",
+		"citation": "Minn. Stat. § 410.01",
+		"url": "https://www.revisor.mn.gov/statutes/cite/410.01",
+		"quote": "Cities are hereby divided, for legislative purposes, into classes as follows",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A first class city keeps its class unless its population falls 25 percent",
+		"citation": "Minn. Stat. § 410.01",
+		"url": "https://www.revisor.mn.gov/statutes/cite/410.01",
+		"quote": "it shall not be reclassified unless its population decreases by 25 percent from the census figures which last qualified the city for inclusion in the class",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under the standard plan, voters elect the mayor, council members, the clerk and the treasurer if there is one",
+		"citation": "Minn. Stat. § 412.541, subd. 4",
+		"url": "https://www.revisor.mn.gov/statutes/cite/412.541",
+		"quote": "the voters elect the treasurer, if there is one, and a council consisting of a mayor, three or five council members, and the clerk or clerk-treasurer",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Optional Plan A makes the clerk and treasurer appointed",
+		"citation": "Minn. Stat. § 412.541, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/412.541",
+		"quote": "Any statutory city may provide for the appointment of its clerk and treasurer",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Optional Plan B is the council-manager plan, open to statutory cities over 1,000 people",
+		"citation": "Minn. Stat. § 412.541, subd. 2",
+		"url": "https://www.revisor.mn.gov/statutes/cite/412.541",
+		"quote": "Any statutory city of more than 1,000 population may provide for the council-manager plan of government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A Plan B council is a mayor and four or six council members",
+		"citation": "Minn. Stat. § 412.631",
+		"url": "https://www.revisor.mn.gov/statutes/cite/412.631",
+		"quote": "be composed of a mayor and four or six council members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A statutory city council may set a two- or four-year mayoral term by ordinance",
+		"citation": "Minn. Stat. § 412.022, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/412.022",
+		"quote": "The council may, by ordinance, establish a four-year term or reestablish a two-year term for the office of mayor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters may enlarge or shrink a statutory city council to seven or five",
+		"citation": "Minn. Stat. § 412.02, subd. 6",
+		"url": "https://www.revisor.mn.gov/statutes/cite/412.02",
+		"quote": "the question of whether the city council should be increased or reduced to seven or five members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A statutory city may elect its council by ward",
+		"citation": "Minn. Stat. § 412.02, subd. 7",
+		"url": "https://www.revisor.mn.gov/statutes/cite/412.02",
+		"quote": "A city may adopt an ordinance to elect its city council members by ward",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Soil and water conservation district supervisors are elected at the state general election with no primary",
+		"citation": "Minn. Stat. § 103C.305, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/103C.305",
+		"quote": "Elections must be held at the state general election specified in section 204D.03, subdivision 2 . A primary may not be held.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Soil and water supervisors are nominated by supervisor district but elected at large",
+		"citation": "Minn. Stat. § 103C.311, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/103C.311",
+		"quote": "one or more supervisors shall be nominated from each supervisor district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A hospital district board has one member from each city and town in the district plus one at large",
+		"citation": "Minn. Stat. § 447.32, subd. 1",
+		"url": "https://www.revisor.mn.gov/statutes/cite/447.32",
+		"quote": "composed of one member elected from each city and town in the district and one member elected at large",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

@@ -33,6 +33,7 @@ the session adjourns unless two-thirds of each house votes an emergency clause
 (Okla. Const. art. V, § 58).
 
 Re-check this doc: July 2027. Last researched: October 2026.
+Reviewed by Emily: 27 October 2026.
 
 ## How elections work in Oklahoma
 

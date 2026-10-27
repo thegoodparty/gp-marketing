@@ -40,13 +40,31 @@ const fetchPage = async (url: string): Promise<{ text: string } | { error: strin
 	return { error: lastError };
 };
 
-const ledgerPath = process.argv[2];
+const browserMode = process.argv.includes('--browser');
+const ledgerPath = process.argv.slice(2).find(a => !a.startsWith('--'));
 if (!ledgerPath) {
-	console.error('Usage: bun verify-ledger.ts <path to research/<state>.json>');
+	console.error('Usage: bun verify-ledger.ts [--browser] <path to research/<state>.json>');
 	process.exit(2);
 }
 
 const entries = (await Bun.file(ledgerPath).json()) as Entry[];
+
+// For law sites that only serve text to a real browser: print one snippet per origin to run in the in-app browser on that origin.
+if (browserMode) {
+	const byOrigin = new Map<string, Entry[]>();
+	for (const e of entries) {
+		const origin = new URL(e.url).origin;
+		byOrigin.set(origin, [...(byOrigin.get(origin) ?? []), e]);
+	}
+	for (const [origin, list] of byOrigin) {
+		const items = list.map(e => ({ citation: e.citation, url: e.url, quote: e.quote }));
+		console.log(`// Run on ${origin} (${items.length} claims)`);
+		console.log(
+			`(async () => { const normalize = ${normalize.toString()}; const items = ${JSON.stringify(items)}; const pages = {}; const out = { found: 0, missing: [], failed: [] }; for (const i of items) { if (!(i.url in pages)) { try { const r = await fetch(i.url); pages[i.url] = r.ok ? normalize(await r.text()) : null; } catch { pages[i.url] = null; } await new Promise(r => setTimeout(r, 300)); } const p = pages[i.url]; if (p === null) out.failed.push(i.citation + ' ' + i.url); else if (p.includes(normalize(i.quote))) out.found++; else out.missing.push(i.citation + ': ' + i.quote); } return out; })()`,
+		);
+	}
+	process.exit(0);
+}
 const pages = new Map<string, string>();
 const fetchErrors = new Map<string, string>();
 const misses: Entry[] = [];

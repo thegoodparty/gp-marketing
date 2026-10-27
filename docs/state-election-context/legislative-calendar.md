@@ -13,7 +13,7 @@ states cover the most pages, so they come first.
 
 | # | State | Location pages | Status |
 | --- | --- | ---: | --- |
-| 1 | Illinois | 3,627 | drafted, awaiting review |
+| 1 | Illinois | 3,627 | done, reviewed 27 October 2026 |
 | 2 | Pennsylvania | 3,102 | done |
 | 3 | Ohio | 2,922 | done, reviewed 27 October 2026 |
 | 4 | Minnesota | 2,511 | drafted, awaiting review |
@@ -62,7 +62,7 @@ If a legislature meets year-round, re-check in January and July.
 | Georgia | January | late March–April | May 2027 | no |
 | Hawaii | January | May | June 2027 | no |
 | Idaho | January | March–April | May 2027 | no |
-| Illinois | year-round, spring session to 31 May | — | June 2027 and January | no |
+| Illinois | 13 January 2027, year-round, spring session to 31 May | — | January 2027, then October 2027 | verified |
 | Indiana | odd-year long session, January | April | May 2027 | no |
 | Iowa | 11 January 2027 | spring | June 2027 | verified |
 | Kansas | January | April–May | June 2027 | no |
@@ -111,12 +111,12 @@ Grouped by month. Within a month, do the states with the most pages first.
 - **April**: Kentucky, New Mexico, South Dakota, Utah, Wyoming.
 - **May**: Indiana, Arkansas, Georgia, Tennessee, Idaho, Maryland, Mississippi,
   Virginia, Washington, West Virginia.
-- **June**: Illinois (spring session), Minnesota, Iowa, Kansas, Oklahoma, Alaska, Colorado, Florida, Hawaii, Montana, North Dakota,
+- **June**: Minnesota, Iowa, Kansas, Oklahoma, Alaska, Colorado, Florida, Hawaii, Montana, North Dakota,
   South Carolina, Vermont.
 - **July**: Pennsylvania, Ohio, Michigan, Texas, New York, Wisconsin, Missouri,
   Nebraska, Louisiana, Oregon, Alabama, Arizona, Connecticut, Delaware, Maine,
   Nevada, New Hampshire, New Jersey, Rhode Island, Massachusetts, DC.
-- **October**: North Carolina.
+- **October**: Illinois (spring session bills are signed or vetoed by late August), North Carolina.
 - **November**: California.
 
 Special sessions are common, and in 2026 several dealt with redistricting.

@@ -29,7 +29,8 @@ the Governor within 30 days of passage and the Governor has 60 days to act (Ill.
 Const. art. IV, § 9), so spring bills are settled by about the end of August.
 
 Re-check this doc: January 2027 (for anything from the autumn 2026 veto
-session), then October 2027. Last researched: October 2026.
+session), then October 2027. Last researched: October 2026. Reviewed by Emily:
+27 October 2026.
 
 ## How elections work in Illinois
 

@@ -24,7 +24,7 @@ session the following year, Ohio Const. art. II, § 8). A law usually takes
 effect ninety days after the governor files it with the secretary of state
 (Ohio Const. art. II, § 1c).
 
-Re-check this doc: January and July each year. Last researched: October 2026.
+Re-check this doc: January and July each year. Last researched: October 2026. Reviewed by Emily: 27 October 2026.
 
 *Ohio Const. art. II, §§ 1c, 8 · statutory · read in statute*
 

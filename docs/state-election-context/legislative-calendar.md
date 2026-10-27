@@ -15,7 +15,7 @@ states cover the most pages, so they come first.
 | --- | --- | ---: | --- |
 | 1 | Illinois | 3,627 | drafted, awaiting review |
 | 2 | Pennsylvania | 3,102 | done |
-| 3 | Ohio | 2,922 | drafted, awaiting review |
+| 3 | Ohio | 2,922 | done, reviewed 27 October 2026 |
 | 4 | Minnesota | 2,511 | drafted, awaiting review |
 | 5 | Iowa | 2,495 | done |
 | 6 | Michigan | 2,367 | drafted, awaiting review |
@@ -84,7 +84,7 @@ If a legislature meets year-round, re-check in January and July.
 | New York | year-round, most bills by June | — | July 2027 and January | no |
 | North Carolina | odd-year long session, January | late summer or later | October 2027 | no |
 | North Dakota | odd years only, January | April–May | June 2027 | no |
-| Ohio | year-round | — | January and July | no |
+| Ohio | 4 January 2027, year-round | — | January and July | verified |
 | Oklahoma | February | May | June 2027 | no |
 | Oregon | odd-year long session, January | June | July 2027 | no |
 | Pennsylvania | 5 January 2027, year-round | — | January and July | verified |

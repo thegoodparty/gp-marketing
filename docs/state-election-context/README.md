@@ -10,9 +10,10 @@ same ground on every one of the ~48,000 location pages.
 | Iowa | [iowa.md](./iowa.md) |
 | Missouri | [missouri.md](./missouri.md) |
 | Pennsylvania | [pennsylvania.md](./pennsylvania.md) |
+| Ohio | [ohio.md](./ohio.md) |
 | Texas | [texas.md](./texas.md) |
 
-46 states and DC still to do. Each doc is a draft until Emily has reviewed it.
+45 states and DC still to do. Each doc is a draft until Emily has reviewed it.
 
 ## What these are, and what they are not
 

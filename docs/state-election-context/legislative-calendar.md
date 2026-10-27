@@ -22,7 +22,7 @@ states cover the most pages, so they come first.
 | 7 | Kansas | 2,334 | drafted, awaiting review |
 | 8 | Texas | 2,300 | done, reviewed 27 October 2026 |
 | 9 | New York | 2,124 | drafted, awaiting review |
-| 10 | Wisconsin | 2,041 | approved, not yet merged |
+| 10 | Wisconsin | 2,041 | done, reviewed 27 October 2026 |
 | 11 | Indiana | 1,856 | done, reviewed 27 October 2026 |
 | 12 | Missouri | 1,651 | done |
 | 13 | California | 1,461 | drafted, awaiting review |
@@ -109,7 +109,7 @@ If a legislature meets year-round, re-check in January and July.
 | Virginia | January | February–March | May 2027 | no |
 | Washington | odd-year 105-day session, January | April | May 2027 | no |
 | West Virginia | February in odd years | April | May 2027 | no |
-| Wisconsin | year-round | — | January and July | no |
+| Wisconsin | organizes 4 January 2027, year-round | — | January and July | verified |
 | Wyoming | odd-year general session, January | March | April 2027 | no |
 
 ## Re-check plan for 2027

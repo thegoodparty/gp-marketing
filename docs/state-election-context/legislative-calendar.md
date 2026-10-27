@@ -28,10 +28,11 @@ states cover the most pages, so they come first.
 | 13 | California | 1,461 | drafted, awaiting review |
 | 14 | Arkansas | 1,218 | in progress |
 | 15 | South Dakota | 1,199 | drafted, awaiting review |
-| 16 | New Jersey | 1,158 | in progress |
+| 16 | New Jersey | 1,158 | drafted, awaiting review |
 | 17 | Nebraska | 1,089 | in progress |
 | 18 | Oklahoma | 869 | in progress |
-| 19 | North Carolina | 787 | next |
+| 19 | North Carolina | 787 | in progress |
+| 20 | Georgia | 758 | next |
 
 The rest follow the order in the CSV.
 

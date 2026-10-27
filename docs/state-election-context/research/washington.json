@@ -1,0 +1,690 @@
+[
+	{
+		"claim": "Regular sessions convene every year on the second Monday of January",
+		"citation": "RCW 44.04.010",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=44.04.010",
+		"quote": "Regular sessions of the legislature shall be held annually, commencing on the second Monday of January.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Odd-year regular sessions run at most 105 consecutive days",
+		"citation": "Wash. Const. art. II, § 12",
+		"url": "https://leg.wa.gov/state-laws-and-rules/washington-state-constitution/?section=13c8f0de-58d7-4cee-b367-4478b3be34fb",
+		"quote": "During each odd-numbered year, the regular session shall not be more than one hundred five consecutive days.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Even-year regular sessions run at most 60 consecutive days",
+		"citation": "Wash. Const. art. II, § 12",
+		"url": "https://leg.wa.gov/state-laws-and-rules/washington-state-constitution/?section=13c8f0de-58d7-4cee-b367-4478b3be34fb",
+		"quote": "During each even-numbered year, the regular session shall not be more than sixty consecutive days.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Bills presented after adjournment become law unless the governor vetoes within 20 days, Sundays excepted",
+		"citation": "Wash. Const. art. III, § 12",
+		"url": "https://leg.wa.gov/state-laws-and-rules/washington-state-constitution/?section=62da7e39-e41a-4405-be4e-ed6f593ca55f",
+		"quote": "it shall become a law unless the governor, within twenty days next after the adjournment, Sundays excepted, shall file such bill with his objections thereto",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Bills presented during session become law if not returned within five days, Sundays excepted",
+		"citation": "Wash. Const. art. III, § 12",
+		"url": "https://leg.wa.gov/state-laws-and-rules/washington-state-constitution/?section=62da7e39-e41a-4405-be4e-ed6f593ca55f",
+		"quote": "If any bill shall not be returned by the governor within five days, Sundays excepted, after it shall be presented to him, it shall become a law without his signature",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Laws subject to referendum take effect 90 days after the session adjourns",
+		"citation": "Wash. Const. art. II, § 1(c)",
+		"url": "https://leg.wa.gov/state-laws-and-rules/washington-state-constitution/?section=13c8f0de-58d7-4cee-b367-4478b3be34fb",
+		"quote": "No act, law, or bill subject to referendum shall take effect until ninety days after the adjournment of the session at which it was enacted.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Primaries for November general elections are held on the first Tuesday of August",
+		"citation": "RCW 29A.04.311",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.04.311",
+		"quote": "must be held on the first Tuesday of the preceding August",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A statewide general election is held every year on the first Tuesday after the first Monday of November",
+		"citation": "RCW 29A.04.321",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.04.321",
+		"quote": "A statewide general election shall be held on the first Tuesday after the first Monday of November of each year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The odd-year statewide general election is limited mainly to city, town and district elections",
+		"citation": "RCW 29A.04.321",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.04.321",
+		"quote": "the statewide general election held in odd-numbered years shall be limited to (a) city, town, and district general elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter county may hold its county elections in the odd-year general election",
+		"citation": "RCW 29A.04.321",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.04.321",
+		"quote": "the election of county officers in any county governed by a charter containing provisions calling for general county elections at this time",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City, town and district general elections are held in November of odd-numbered years",
+		"citation": "RCW 29A.04.330",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.04.330",
+		"quote": "All city, town, and district general elections shall be held throughout the state of Washington on the first Tuesday following the first Monday in November in the odd-numbered years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Public utility districts, conservation districts and property-owner districts are outside the odd-year rule",
+		"citation": "RCW 29A.04.330",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.04.330",
+		"quote": "Public utility districts, conservation districts, or district elections at which the ownership of property within those districts is a prerequisite to voting",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The odd-year dates are mandatory and override other statutes",
+		"citation": "RCW 29A.04.330",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.04.330",
+		"quote": "the purpose of this section being to establish mandatory dates for holding elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County officers are elected every four years at the November election in a year counted from 1922, so in even years",
+		"citation": "RCW 36.16.010",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=36.16.010",
+		"quote": "and every four years thereafter on the Tuesday next following the first Monday in November",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County officers serve four-year terms",
+		"citation": "RCW 36.16.020",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=36.16.020",
+		"quote": "The term of office of all county and precinct officers shall be four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County commissioners serve four-year staggered terms, with one or two elected in each even-numbered year",
+		"citation": "RCW 36.32.030",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=36.32.030",
+		"quote": "either one or two commissioners are elected at a general election held in each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County offices are partisan except judicial offices and offices a county charter makes otherwise",
+		"citation": "RCW 29A.04.110",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.04.110",
+		"quote": "All county offices except (a) judicial offices and (b) those offices for which a county home rule charter provides otherwise.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State offices, including the legislature, are partisan except judges and the superintendent of public instruction",
+		"citation": "RCW 29A.04.110",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.04.110",
+		"quote": "All state offices, including legislative, except (a) judicial offices and (b) the office of superintendent of public instruction",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A partisan office is one where the candidate may show a party preference on the ballot",
+		"citation": "RCW 29A.04.110",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.04.110",
+		"quote": "means a public office for which a candidate may indicate a political party preference on his or her declaration of candidacy",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "All city, town and special purpose district offices are nonpartisan",
+		"citation": "RCW 29A.52.231",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.52.231",
+		"quote": "All city, town, and special purpose district elective offices shall be nonpartisan and the candidates therefor shall be nominated and elected as such.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City and town primaries are nonpartisan",
+		"citation": "RCW 29A.52.210",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.52.210",
+		"quote": "All city and town primaries shall be nonpartisan.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Partisan offices use a top-two primary",
+		"citation": "RCW 29A.52.112",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.52.112",
+		"quote": "the top two candidates will be certified as qualified to appear on the general election ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate may state a party preference, or none",
+		"citation": "RCW 29A.52.112",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.52.112",
+		"quote": "A candidate may choose to express no party preference.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party preference on the ballot is information only and limits nobody",
+		"citation": "RCW 29A.52.112",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.52.112",
+		"quote": "Any party preferences are shown for the information of voters only and may in no way limit the options available to voters.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The ballot prints the preference as \"Prefers ... Party\" or \"States No Party Preference\"",
+		"citation": "WAC 434-230-045",
+		"url": "https://app.leg.wa.gov/WAC/default.aspx?cite=434-230-045",
+		"quote": "John Smith (Prefers ABC Party)",
+		"certainty": "statutory",
+		"verified": "Secretary of State publication"
+	},
+	{
+		"claim": "A candidate who states no preference is shown as \"States No Party Preference\"",
+		"citation": "WAC 434-230-045",
+		"url": "https://app.leg.wa.gov/WAC/default.aspx?cite=434-230-045",
+		"quote": "(States No Party Preference)",
+		"certainty": "statutory",
+		"verified": "Secretary of State publication"
+	},
+	{
+		"claim": "Voters never register by party",
+		"citation": "RCW 29A.08.166",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.08.166",
+		"quote": "Under no circumstances may an individual be required to affiliate with, join, adhere to, express faith in, or declare a preference for, a political party or organization upon registering to vote.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No primary for a nonpartisan position with two or fewer candidates",
+		"citation": "RCW 29A.52.220",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.52.220",
+		"quote": "there are no more than two candidates filed for the position",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Park and recreation district and cemetery district commissioners have no primary",
+		"citation": "RCW 29A.52.220",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.52.220",
+		"quote": "No primary may be held for the office of commissioner of a park and recreation district or for the office of cemetery district commissioner.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only the top two from the primary appear in November, and only with at least 1 percent of the primary vote",
+		"citation": "RCW 29A.36.170",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.36.170",
+		"quote": "unless he or she receives at least one percent of the total votes cast for that office at the preceding primary",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The commissioner with the most votes is elected",
+		"citation": "RCW 36.32.050",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=36.32.050",
+		"quote": "the person receiving the highest number of votes for the office of commissioner for the district in which he or she resides shall be declared duly elected from that district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every candidate files a declaration of candidacy, with a party preference line only for partisan offices",
+		"citation": "RCW 29A.24.031",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.24.031",
+		"quote": "A place for the candidate to state a party preference, if the office is a partisan office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate who cannot pay the filing fee may file a filing fee petition instead",
+		"citation": "RCW 29A.24.091",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.24.091",
+		"quote": "shall submit with the candidate's declaration of candidacy a filing fee petition",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only voters registered within the office's jurisdiction may sign a filing fee petition",
+		"citation": "RCW 29A.24.091",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.24.091",
+		"quote": "The signatures shall be of voters registered to vote within the jurisdiction of the office for which the candidate is filing.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every active registered voter is mailed a ballot for every election",
+		"citation": "RCW 29A.40.010",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.40.010",
+		"quote": "shall automatically be issued a mail ballot for each general election, special election, or primary",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "There are 39 counties, one boundary section each from Adams (36.04.010) to Yakima (36.04.390)",
+		"citation": "RCW 36.04.390",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=36.04&full=true",
+		"quote": "Yakima county shall consist of the territory bounded as follows",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county has a board of three commissioners by default",
+		"citation": "RCW 36.32.010",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=36.32.010",
+		"quote": "each board of county commissioners shall consist of three qualified electors",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commissioners are nominated by district",
+		"citation": "RCW 36.32.040",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=36.32.040",
+		"quote": "the qualified electors of each county commissioner district, and they only, shall nominate from among their own number",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Noncharter counties of 400,000 or more elect commissioners by district",
+		"citation": "RCW 36.32.050",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=36.32.050",
+		"quote": "in any noncharter county with a population of four hundred thousand or more, county commissioners must be nominated and elected by the qualified electors of the commissioner district in which he or she resides",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Some noncharter counties may move to five commissioners by vote",
+		"citation": "RCW 36.32.055",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=36.32.055",
+		"quote": "authorizing the board of commissioners to be increased to five members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Five-member boards are nominated by district and elected countywide",
+		"citation": "RCW 36.32.0556",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=36.32.0556",
+		"quote": "Each shall be elected by the voters of the entire county.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Default elected county officers",
+		"citation": "RCW 36.16.030",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=36.16.030",
+		"quote": "a county assessor, a county auditor, a county clerk, a county coroner, three county commissioners, a county prosecuting attorney, a county sheriff, and a county treasurer",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties under 40,000 may appoint rather than elect a coroner",
+		"citation": "RCW 36.16.030",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=36.16.030",
+		"quote": "in each county with a population of less than forty thousand the county legislative authority may determine that no coroner shall be elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any county may adopt a home rule charter, subject to the constitution and state law",
+		"citation": "Wash. Const. art. XI, § 4",
+		"url": "https://leg.wa.gov/state-laws-and-rules/washington-state-constitution/?section=b5d3ff0e-7914-47c9-87b5-6f237d7be982",
+		"quote": "Any county may frame a \"Home Rule\" charter for its own government subject to the Constitution and laws of this state",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county charter cannot change the election of the prosecuting attorney or superior court judges",
+		"citation": "Wash. Const. art. XI, § 4",
+		"url": "https://leg.wa.gov/state-laws-and-rules/washington-state-constitution/?section=b5d3ff0e-7914-47c9-87b5-6f237d7be982",
+		"quote": "shall not affect the election of the prosecuting attorney, the county superintendent of schools, the judges of the superior court, and the justices of the peace",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The constitution permits combined city-county governments",
+		"citation": "RCW 36.65.010",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=36.65.010",
+		"quote": "which authorizes the formation of combined city and county municipal corporations",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township government law is no longer in the code: Title 45, Townships, survives only as a dispositions table",
+		"citation": "Title 45 RCW (dispositions)",
+		"url": "https://app.leg.wa.gov/RCW/dispo.aspx?cite=45",
+		"quote": "COUNTY-WIDE DISORGANIZATION OF TOWNSHIPS",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "King County executive, assessor, council and prosecuting attorney elections follow the law for nonpartisan county officers",
+		"citation": "King County Charter § 610",
+		"url": "https://aqua.kingcounty.gov/council/clerk/code/03_Charter.htm",
+		"quote": "shall be conducted in accordance with general law governing the election of nonpartisan county officers",
+		"certainty": "statutory",
+		"verified": "read in county charter"
+	},
+	{
+		"claim": "King County executive and assessor are nonpartisan",
+		"citation": "King County Charter § 640",
+		"url": "https://aqua.kingcounty.gov/council/clerk/code/03_Charter.htm",
+		"quote": "The county executive and county assessor shall be elected as nonpartisan offices by the voters of the county",
+		"certainty": "statutory",
+		"verified": "read in county charter"
+	},
+	{
+		"claim": "King County director of elections is an elected nonpartisan office",
+		"citation": "King County Charter § 647",
+		"url": "https://aqua.kingcounty.gov/council/clerk/code/03_Charter.htm",
+		"quote": "The county director of elections shall be elected as a nonpartisan office by the voters of the county",
+		"certainty": "statutory",
+		"verified": "read in county charter"
+	},
+	{
+		"claim": "King County prosecuting attorney is nonpartisan",
+		"citation": "King County Charter § 649",
+		"url": "https://aqua.kingcounty.gov/council/clerk/code/03_Charter.htm",
+		"quote": "The county prosecuting attorney shall be elected as a nonpartisan office by the voters of the county",
+		"certainty": "statutory",
+		"verified": "read in county charter"
+	},
+	{
+		"claim": "King County has nine council districts",
+		"citation": "King County Charter § 650.10",
+		"url": "https://aqua.kingcounty.gov/council/clerk/code/03_Charter.htm",
+		"quote": "The county shall be divided into nine districts numbered one through nine",
+		"certainty": "statutory",
+		"verified": "read in county charter"
+	},
+	{
+		"claim": "King County moved its county elections to even-numbered years from 2026",
+		"citation": "King County Charter §§ 647, 650.20",
+		"url": "https://aqua.kingcounty.gov/council/clerk/code/03_Charter.htm",
+		"quote": "in even-numbered years commencing in 2026 and every four years thereafter",
+		"certainty": "statutory",
+		"verified": "read in county charter"
+	},
+	{
+		"claim": "First-class city: 10,000 or more at organization, with a charter",
+		"citation": "RCW 35.01.010",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35.01.010",
+		"quote": "A first-class city is a city with a population of ten thousand or more at the time of its organization or reorganization that has a charter adopted under Article XI, section 10, of the state Constitution.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Second-class city: 1,500 or more at organization, no charter, not a code city",
+		"citation": "RCW 35.01.020",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35.01.020",
+		"quote": "A second-class city is a city with a population of fifteen hundred or more at the time of its organization or reorganization",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Town: under 1,500 at organization, not a code city",
+		"citation": "RCW 35.01.040",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35.01.040",
+		"quote": "A town has a population of less than fifteen hundred at the time of its organization and does not operate under Title 35A RCW.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A noncharter code city can be any size",
+		"citation": "RCW 35A.01.020",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35A.01.020",
+		"quote": "A noncharter code city is one, regardless of population,",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter code city needs 10,000 inhabitants at organization",
+		"citation": "RCW 35A.01.030",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35A.01.030",
+		"quote": "A charter code city is one having at least ten thousand inhabitants at the time of its organization or reorganization",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any city or town may become a noncharter code city",
+		"citation": "RCW 35A.02.010",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35A.02.010",
+		"quote": "Any incorporated city or town may become a noncharter code city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town that reaches 1,500 may, but need not, advance to second class",
+		"citation": "RCW 35.06.010",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35.06.010",
+		"quote": "A town which has at least fifteen hundred inhabitants may reorganize and advance its classification to become a second-class city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city of 10,000 or more may frame a charter, subject to state law",
+		"citation": "Wash. Const. art. XI, § 10",
+		"url": "https://leg.wa.gov/state-laws-and-rules/washington-state-constitution/?section=b5d3ff0e-7914-47c9-87b5-6f237d7be982",
+		"quote": "Any city containing a population of ten thousand inhabitants, or more, shall be permitted to frame a charter for its own government, consistent with and subject to the Constitution and laws of this state",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City charters are controlled by general laws",
+		"citation": "Wash. Const. art. XI, § 10",
+		"url": "https://leg.wa.gov/state-laws-and-rules/washington-state-constitution/?section=b5d3ff0e-7914-47c9-87b5-6f237d7be982",
+		"quote": "all charters thereof framed or adopted by authority of this Constitution shall be subject to and controlled by general laws",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Code city elections follow general election law",
+		"citation": "RCW 35A.29.151",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35A.29.151",
+		"quote": "Elections for code cities shall comply with general election law.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Mayor-council code cities elect a mayor and council",
+		"citation": "RCW 35A.12.010",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35A.12.010",
+		"quote": "shall be vested in an elected mayor and an elected council",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Code city council: five members under 2,500 people, seven at 2,500 or more",
+		"citation": "RCW 35A.12.010",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35A.12.010",
+		"quote": "The council of a noncharter code city having less than twenty-five hundred inhabitants shall consist of five members; when there are twenty-five hundred or more inhabitants, the council shall consist of seven members.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Code city mayor and council serve four-year terms",
+		"citation": "RCW 35A.12.040",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35A.12.040",
+		"quote": "The mayor and the councilmembers shall be elected for four-year terms of office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Code city councils are at large unless a charter or ordinance creates wards",
+		"citation": "RCW 35A.12.040",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35A.12.040",
+		"quote": "unless provision is made by charter or ordinance for election by wards",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In council-manager code cities only the council is elected",
+		"citation": "RCW 35A.13.010",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35A.13.010",
+		"quote": "The councilmembers shall be the only elective officers of a code city electing to adopt the council-manager plan of government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In council-manager code cities the council chair carries the title mayor",
+		"citation": "RCW 35A.13.030",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35A.13.030",
+		"quote": "The chair of the council shall have the title of mayor and shall preside at meetings of the council.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Second-class cities elect a mayor, seven councilmembers, attorney, clerk and treasurer",
+		"citation": "RCW 35.23.021",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35.23.021",
+		"quote": "a city council of seven members, a city attorney, a clerk, a treasurer, all elective",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A second-class city may make its clerk, attorney and treasurer appointed",
+		"citation": "RCW 35.23.021",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35.23.021",
+		"quote": "the council may enact an ordinance providing for the appointment of the city clerk, city attorney, and treasurer by the mayor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Second-class cities vote in odd years",
+		"citation": "RCW 35.23.051",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35.23.051",
+		"quote": "General municipal elections in second-class cities shall be held biennially in the odd-numbered years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Second-class council position seven has a two-year term",
+		"citation": "RCW 35.23.051",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35.23.051",
+		"quote": "council position seven has a two-year term of office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Towns elect a mayor, five councilmembers and a treasurer",
+		"citation": "RCW 35.27.070",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35.27.070",
+		"quote": "The government of a town shall be vested in a mayor and a council consisting of five members and a treasurer, all elective",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Town councilmembers serve four-year terms",
+		"citation": "RCW 35.27.090",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=35.27.090",
+		"quote": "Councilmembers shall be elected for four year terms",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School boards have five directors",
+		"citation": "RCW 28A.343.300",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=28A.343.300",
+		"quote": "the board of directors of every school district of the first class or school district of the second class shall consist of five members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A district containing a city of 400,000 or more has seven directors",
+		"citation": "RCW 28A.343.300",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=28A.343.300",
+		"quote": "which shall have a board of directors of seven members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School directors serve four-year terms by default",
+		"citation": "RCW 28A.343.300",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=28A.343.300",
+		"quote": "shall hold office for a term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School director races appear on the nonpartisan ballot",
+		"citation": "RCW 28A.343.330",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=28A.343.330",
+		"quote": "shall appear separately on the nonpartisan ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Some large first-class school districts may elect directors to six-year terms",
+		"citation": "RCW 29A.04.340",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=29A.04.340",
+		"quote": "the directors to be elected may be elected for terms of six years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Fire commissioners serve six-year terms",
+		"citation": "RCW 52.14.060",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=52.14.060",
+		"quote": "The term of office of each subsequent commissioner shall be six years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Port commissioners serve four- or six-year terms",
+		"citation": "RCW 53.12.172",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=53.12.172",
+		"quote": "In every port district the term of office of each port commissioner shall be four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Hospital district commissioners serve six-year terms",
+		"citation": "RCW 70.44.040",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=70.44.040",
+		"quote": "The term of office of each successor shall be six years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Water-sewer district commissioners serve six-year terms",
+		"citation": "RCW 57.12.030",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=57.12.030",
+		"quote": "the term of office of each district commissioner shall be six years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Park and recreation districts have five commissioners elected in odd years without a primary",
+		"citation": "RCW 36.69.090",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=36.69.090",
+		"quote": "Elections for park and recreation district commissioners shall be held biennially in conjunction with the general election in each odd-numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "PUD commissions have three or five members by district",
+		"citation": "RCW 54.12.010",
+		"url": "https://app.leg.wa.gov/RCW/default.aspx?cite=54.12.010",
+		"quote": "The powers of the public utility district shall be exercised through a commission consisting of three members in three commissioner districts, and five members in five commissioner districts.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

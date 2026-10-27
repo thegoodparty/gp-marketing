@@ -31,7 +31,7 @@ states cover the most pages, so they come first.
 | 16 | New Jersey | 1,158 | drafted, awaiting review |
 | 17 | Nebraska | 1,089 | drafted, awaiting review |
 | 18 | Oklahoma | 869 | drafted, awaiting review |
-| 19 | North Carolina | 787 | drafted, awaiting review |
+| 19 | North Carolina | 787 | done, reviewed 27 October 2026 |
 | 20 | Georgia | 758 | in progress |
 | 21 | Kentucky | 705 | in progress |
 | 22 | Washington | 618 | in progress |
@@ -93,7 +93,7 @@ If a legislature meets year-round, re-check in January and July.
 | New Jersey | year-round | — | January and July | no |
 | New Mexico | odd-year 60-day session, January | March | April 2027 | no |
 | New York | year-round, most bills by June | — | July 2027 and January | no |
-| North Carolina | odd-year long session, January | late summer or later | October 2027 | no |
+| North Carolina | organizes 13 January 2027, reconvenes 27 January 2027 | no fixed end | October 2027 | verified |
 | North Dakota | odd years only, January | April–May | June 2027 | no |
 | Ohio | 4 January 2027, year-round | — | January and July | verified |
 | Oklahoma | February | May | June 2027 | no |

@@ -37,7 +37,7 @@ says otherwise (Wis. Stat. § 991.11).
 
 Re-check this doc: January 2027, then every January and July while the
 Legislature is in session. Last researched: October 2026 (statutes current
-through 2025 Wis. Act 247).
+through 2025 Wis. Act 247). Reviewed by Emily: 27 October 2026.
 
 ## How elections work in Wisconsin
 

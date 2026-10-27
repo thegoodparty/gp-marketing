@@ -42,7 +42,7 @@ the effective-date section of any new election or local-government law.
 
 Re-check this doc: January 2027 and July 2027 (full-time Legislature), then
 February 2028, after the two-year Legislature ends and its last bills are
-signed. Last researched: October 2026.
+signed. Last researched: October 2026. Reviewed by Emily: 27 October 2026.
 
 ## How elections work in New Jersey
 

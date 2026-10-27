@@ -29,6 +29,7 @@ two-thirds of each house votes to give them immediate effect (Mich. Const.
 art. IV, § 27).
 
 Re-check this doc: January and July each year. Last researched: October 2026.
+Reviewed by Emily: 27 October 2026.
 
 ## How elections work in Michigan
 

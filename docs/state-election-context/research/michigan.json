@@ -1,0 +1,586 @@
+[
+	{
+		"claim": "The Legislature convenes at noon on the second Wednesday in January each year; a regular session ends on a day set by concurrent resolution",
+		"citation": "Mich. Const. art. IV, § 13",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-Article-IV-13",
+		"quote": "The legislature shall meet at the seat of government on the second Wednesday in January of each year at twelve o'clock noon.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A new law takes effect 90 days after the session ends unless two-thirds of each house give it immediate effect",
+		"citation": "Mich. Const. art. IV, § 27",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-Article-IV-27",
+		"quote": "No act shall take effect until the expiration of 90 days from the end of the session at which it was passed",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every election is held on a regular election date: the first Tuesday after the first Monday in May, August or November (plus the presidential primary date)",
+		"citation": "MCL 168.641(1)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-641",
+		"quote": "The August regular election date, which is the first Tuesday after the first Monday in August.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The primary for offices elected at the general election is held on the August regular election date",
+		"citation": "MCL 168.641(2)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-641",
+		"quote": "the primary election shall be held on the August regular election date",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general November election is the November regular election date in an even-numbered year",
+		"citation": "MCL 168.2(m)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-2",
+		"quote": "\"General election\" or \"general November election\" means the election held on the November regular election date in an even numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The odd year general election is the November regular election date in an odd-numbered year, and the odd year primary is the August date in an odd year",
+		"citation": "MCL 168.3(e), (f)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-3",
+		"quote": "\"Odd year general election\" means the election held on the November regular election date in an odd numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities elect city officers at the odd year general election by default, but a city already on an annual or even-year November schedule keeps it",
+		"citation": "MCL 168.642(1)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-642",
+		"quote": "A city that holds its regular election for a city office annually or in the even year on the November regular election date shall continue holding elections on that schedule.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Odd-year city elections are the default rule",
+		"citation": "MCL 168.642(1)(a)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-642",
+		"quote": "A city shall hold its regular election for a city office at the odd year general election.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city on the May date holds no regular primary",
+		"citation": "MCL 168.642(2)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-642",
+		"quote": "If a city's regular election is held on the May regular election date, the city shall not hold a regular primary election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city council may move its regular election between the permitted schedules by resolution, including from odd years to even years",
+		"citation": "MCL 168.642a(4)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-642a",
+		"quote": "may change its regular election schedule to the even year general election and the even year primary election by adopting a resolution in compliance with section 642",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Villages elect at the general (even-year November) election, run by the township clerk, with no primary",
+		"citation": "MCL 168.642(5)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-642",
+		"quote": "A village shall hold its regular election for a village office at the general election and the appropriate township clerk shall conduct the election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Villages hold no regular primary",
+		"citation": "MCL 168.642(5)(b)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-642",
+		"quote": "A village shall not hold a regular primary election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board members are elected at the general November election",
+		"citation": "MCL 168.642c",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-642c",
+		"quote": "A school district shall hold its regular election for the office of school board member at the general November election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "At least one school board member is elected at each regular school election; school district includes community college districts",
+		"citation": "MCL 168.302",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-302",
+		"quote": "At least 1 school board member for a school district must be elected at each of the school district's regular elections held as provided in section 642c.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board candidates file nonpartisan nominating petitions",
+		"citation": "MCL 168.303(2)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-303",
+		"quote": "except that the petition must be nonpartisan",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board members serve 4- or 6-year terms set by the district's bylaws",
+		"citation": "MCL 380.11a(8)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-380-11a",
+		"quote": "Members of the board of a general powers school district shall be elected by the school electors for terms of 4 or 6 years, as provided by the school district's bylaws.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The candidates with the most votes, up to the number of seats, win school board races (plurality)",
+		"citation": "MCL 168.307(1)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-307",
+		"quote": "That number of candidates equal to the number of individuals to be elected who receive the greatest number of votes cast at the election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County clerk, treasurer, register of deeds, prosecutor, sheriff, drain commissioner and surveyor are elected every fourth year from the 2000 general election (presidential years), unless abolished or combined",
+		"citation": "MCL 168.200(1)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-200",
+		"quote": "shall be elected at the 2000 general November election and every fourth year after that",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The constitution requires a four-year sheriff, clerk, treasurer, register of deeds and prosecuting attorney in every organized county",
+		"citation": "Mich. Const. art. VII, § 4",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-Article-VII-4",
+		"quote": "There shall be elected for four-year terms in each organized county a sheriff, a county clerk, a county treasurer, a register of deeds and a prosecuting attorney",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County offices are nominated at a party primary held in August before the general November election",
+		"citation": "MCL 168.192",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-192",
+		"quote": "A general primary election of all political parties shall be held in every county of this state on the Tuesday succeeding the first Monday in August",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The candidate with the most votes wins a county office (plurality, no runoff)",
+		"citation": "MCL 168.201",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-201",
+		"quote": "received the greatest number of votes and shall declare such candidates to be duly elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County commissioners are elected in partisan elections",
+		"citation": "MCL 46.411",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-46-411",
+		"quote": "Nominations and elections for commissioners must be by partisan elections.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County commissioners elected at or after the 2024 general election serve four-year terms (previously two, with state representatives)",
+		"citation": "MCL 46.410(2)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-46-410",
+		"quote": "The term of office of each commissioner elected at or after the 2024 general November election is 4 years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county is apportioned into 5 to 21 single-member commissioner districts",
+		"citation": "MCL 46.401(1)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-46-401",
+		"quote": "apportion the county into not less than 5 nor more than 21 county commissioner districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Smaller counties have a lower cap on commissioners (not more than 7 under 5,001 people, up to 21 over 50,000)",
+		"citation": "MCL 46.402",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-46-402",
+		"quote": "Number of county commissioners based on county population",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commissioner districts are single-member districts",
+		"citation": "MCL 46.404(a)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-46-404",
+		"quote": "All districts shall be single-member districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Older laws and the constitution say 'board of supervisors'; that now means the county board of commissioners",
+		"citation": "MCL 46.416",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-46-416",
+		"quote": "shall be deemed to mean county commissioners and county boards of commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any county may adopt a charter under general law",
+		"citation": "Mich. Const. art. VII, § 2",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-Article-VII-2",
+		"quote": "Any county may frame, adopt, amend or repeal a county charter in a manner and with powers and limitations to be provided by general law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county charter must provide for partisan election of the board of commissioners from single-member districts",
+		"citation": "MCL 45.514(1)(b)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-45-514",
+		"quote": "The charter must also provide for the partisan election of members of the legislative body from single-member districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county charter must keep the sheriff, prosecutor, clerk, treasurer and register of deeds elected on a partisan basis",
+		"citation": "MCL 45.514(1)(c)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-45-514",
+		"quote": "The partisan election of a sheriff, a prosecuting attorney, a county clerk, a county treasurer, and a register of deeds",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter county under 1.5 million people elects a county executive at large on a partisan basis",
+		"citation": "MCL 45.514(1)(a)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-45-514",
+		"quote": "for a salaried county executive, who is elected at large on a partisan basis",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The optional unified form comes with either an appointed county manager or an elected county executive",
+		"citation": "MCL 45.552",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-45-552",
+		"quote": "An elected county executive, who shall comply with the qualifications and exercise the responsibilities detailed in sections 8, 9, 10, and 11.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under the optional unified form, a county executive is elected on a partisan basis for four years",
+		"citation": "MCL 45.559(1)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-45-559",
+		"quote": "shall be elected on a partisan basis for a term of 4 years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Detroit (the only city over 600,000) sits in a county organized under the 1966 charter county act, i.e. Wayne County is a charter county",
+		"citation": "MCL 117.36a(8)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-117-36a",
+		"quote": "If a city with a population of more than 600,000 that is located in a county organized under 1966 PA 293",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every organized township elects a supervisor, clerk, treasurer and up to four trustees",
+		"citation": "Mich. Const. art. VII, § 18",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-Article-VII-18",
+		"quote": "a supervisor, a clerk, a treasurer, and not to exceed four trustees",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township officers are elected at the even-year general November election, on the cycle that began in 1980 (presidential years)",
+		"citation": "MCL 168.358(1)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-358",
+		"quote": "At the 1980 general November election, there shall be elected by ballot all of the following township officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township officers serve four-year terms",
+		"citation": "MCL 168.362(1)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-362",
+		"quote": "the term of office of all township officers listed in section 358 is 4 years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A general law township has two trustees, or four if it reaches 5,000 people (or 3,000 voters) and its voters approve",
+		"citation": "MCL 168.358(4)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-358",
+		"quote": "In other townships there shall be 2 trustees.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township candidates are nominated at a party primary in August",
+		"citation": "MCL 168.345",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-345",
+		"quote": "the qualified and registered electors of each political party may vote for party candidates for township offices",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township candidates appear under a party heading on the primary ballot",
+		"citation": "MCL 168.349(1)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-349",
+		"quote": "To obtain the printing of the name of an individual as a candidate for nomination by a political party for a township office under the particular party heading",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A township of 2,000 or more people may incorporate as a charter township",
+		"citation": "MCL 42.1(2)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-42-1",
+		"quote": "A township, having a population of 2,000 or more inhabitants according to the most recent regular or special federal or state census of the inhabitants of the township may incorporate as a charter township.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter township has a seven-member board (supervisor, clerk, treasurer, four trustees) elected under the Michigan election law",
+		"citation": "MCL 42.5(1)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-42-5",
+		"quote": "a township board of 7 members composed of the supervisor, the township clerk, the township treasurer, and 4 trustees",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a charter township the supervisor presides and is the board's executive officer, with an equal vote",
+		"citation": "MCL 42.5(2)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-42-5",
+		"quote": "the supervisor shall be the presiding and executive officer of the board and shall have an equal voice and vote in the proceedings of the board",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The voter marks one party's ticket only in a primary; a ballot with more than one party's ticket marked is void",
+		"citation": "MCL 168.576(2)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-576",
+		"quote": "A ballot on which more than 1 party ticket has been voted is void.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A primary voter chooses the party primary they want on the day",
+		"citation": "MCL 168.795(1)(e)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-795",
+		"quote": "Permit an elector in a primary election to vote for the candidates in the party primary of the elector's choice.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only the presidential primary requires a written party choice, which becomes a public record",
+		"citation": "MCL 168.615c(1), (3)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-615c",
+		"quote": "In order to vote at a presidential primary election, an elector shall indicate in writing",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate without party affiliation files a qualifying petition, available for partisan offices",
+		"citation": "MCL 168.590(1), (2)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-590",
+		"quote": "A person may file a qualifying petition for a partisan office or office of justice of the supreme court.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An independent cannot pay a filing fee instead of petitioning",
+		"citation": "MCL 168.590(2)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-590",
+		"quote": "A filing fee shall not be tendered instead of a qualifying petition.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A person who files a qualifying petition cannot also seek a party nomination for that election or any election that calendar year",
+		"citation": "MCL 168.590g(1)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-590g",
+		"quote": "shall not file a partisan nominating petition or filing fee, and shall not be nominated as a candidate by write-in vote or by a political party convention, caucus, or committee",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Signers must be registered voters of the district, and may not sign more petitions for the same office than there are seats",
+		"citation": "MCL 168.590h(3)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-590h",
+		"quote": "An individual shall not knowingly sign more petitions for the same office than there are persons to be elected to the office.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A qualifying petition may not refer to a political party",
+		"citation": "MCL 168.590h(2)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-590h",
+		"quote": "A qualifying petition for a candidate without party affiliation must not contain a reference to a political party.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Qualifying petition signers must be registered electors of the district",
+		"citation": "MCL 168.590b(1)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-590b",
+		"quote": "shall be signed by a number of qualified and registered electors of the district that is represented by the office being sought",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "If no more than twice as many candidates file as there are seats, the nonpartisan odd-year primary is skipped, unless a city charter says otherwise",
+		"citation": "MCL 168.644f(3)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-644f",
+		"quote": "not more than twice the number of candidates as there are persons to be elected to that office have filed, the primary for that office must not be held",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city charter may elect a candidate outright at the primary on more than 50% of the vote",
+		"citation": "MCL 168.644e",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-644e",
+		"quote": "If a charter provides for the election at the primary of a candidate who receives more than 50% of the votes cast for that office",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City officers' nomination, election and terms follow the city charter, subject to the Election Law's timing sections",
+		"citation": "MCL 168.321(1)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-321",
+		"quote": "the qualifications, nomination, election, appointment, term of office, and removal from office of a city officer must be in accordance with the charter provisions governing the city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city may lie in more than one county",
+		"citation": "MCL 168.321(3)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-321",
+		"quote": "the county in which the largest portion of the population of the city resides",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule city charter chooses partisan, nonpartisan or preferential ballots, and may have the council pick the mayor",
+		"citation": "MCL 117.3(a)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-117-3",
+		"quote": "Elections may be by a partisan, nonpartisan, or preferential ballot, or by any other legal method of voting.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule city charter may provide for the council to select the mayor",
+		"citation": "MCL 117.3(a)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-117-3",
+		"quote": "The city charter may provide for the selection of the mayor by the legislative body.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule city charter elects a mayor and a legislative body; clerk, treasurer and assessor may be elected or appointed",
+		"citation": "MCL 117.3(a)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-117-3",
+		"quote": "for the election or appointment of a clerk, a treasurer, an assessor or board of assessors",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule city charter chooses partisan or nonpartisan primary, petition or convention for nominations",
+		"citation": "MCL 117.3(b)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-117-3",
+		"quote": "The nomination of elective officers by partisan or nonpartisan primary, by petition, or by convention.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City elections remain subject to the state's regular election dates notwithstanding any charter",
+		"citation": "MCL 117.26(2)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-117-26",
+		"quote": "Notwithstanding another provision of this act or a charter provision, an election under this act is subject to section 641 of the Michigan election law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No city charter may conflict with general state law",
+		"citation": "MCL 117.36",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-117-36",
+		"quote": "No provision of any city charter shall conflict with or contravene the provisions of any general law of the state.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities are created or enlarged only by a petition-started incorporation process, not automatically by population",
+		"citation": "MCL 117.6",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-117-6",
+		"quote": "by proceedings originating by petition therefor signed by qualified electors who are freeholders",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities once incorporated under the fourth class city act have been home rule cities since 1980",
+		"citation": "MCL 81.1c",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-81-1c",
+		"quote": "Effective January 1, 1980, a city incorporated under this act shall be deemed a home rule city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters of each city and village may frame, adopt and amend a charter under general law",
+		"citation": "Mich. Const. art. VII, § 22",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-Article-VII-22",
+		"quote": "Under general laws the electors of each city and village shall have the power and authority to frame, adopt and amend its charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "General law village elections are nonpartisan regardless of charter or ordinance",
+		"citation": "MCL 63.3",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-63-3",
+		"quote": "Notwithstanding a charter provision or ordinance to the contrary, village elections shall be nonpartisan.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Home rule village elections are nonpartisan regardless of charter; a home rule village elects a president, clerk and legislative body",
+		"citation": "MCL 78.23(a)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-78-23",
+		"quote": "Notwithstanding a charter provision to the contrary, a village election shall be nonpartisan.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A general law village elects a president, six trustees, a clerk and a treasurer by default",
+		"citation": "MCL 62.1(1)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-62-1",
+		"quote": "the following officers shall be elected: a president, 6 trustees, 1 clerk, and 1 treasurer",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A general law village council may by two-thirds vote cut trustees to four, change term lengths, or make the clerk or treasurer appointed",
+		"citation": "MCL 62.1(2), (3)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-62-1",
+		"quote": "may provide by ordinance for the reduction in the number of trustees to 4",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Village residents vote as electors of the township the village sits in; villages stay part of their township",
+		"citation": "MCL 63.4",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-63-4",
+		"quote": "An individual who is a registered elector of the township in which the village is located and who is a resident of the village may vote at any election in the village.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "If a village charter does not set its election method, the village follows the township rules",
+		"citation": "MCL 168.382",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-382",
+		"quote": "the village shall nominate and elect its officers in accordance with the provisions governing the selection of township officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A large city (1970 population over 150,000) may lengthen terms to four years by ordinance, subject to a referendum petition",
+		"citation": "MCL 117.3(a)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-117-3",
+		"quote": "may provide by ordinance for a term of office of up to 4 years for mayor and other elected city officials",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An officer elected at the odd year general election for an odd number of years serves one year longer than the charter says",
+		"citation": "MCL 168.644g(2)",
+		"url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-168-644g",
+		"quote": "shall, after September 1, 2004, be elected for a term of 1 year longer than provided by law or charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

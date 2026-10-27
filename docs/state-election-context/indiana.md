@@ -32,7 +32,7 @@ the eighth day (Ind. Const. art. 5, § 14). A one-day technical session on 15 Ju
 override vetoes. New laws usually take effect on 1 July (Ind. Code § 1-1-3-3).
 Special sessions last at most 30 session days (§ 2-2.1-1-4).
 
-Re-check this doc: July 2027. Last researched: October 2026.
+Re-check this doc: July 2027. Last researched: October 2026. Reviewed by Emily: 27 October 2026.
 
 ## How elections work in Indiana
 

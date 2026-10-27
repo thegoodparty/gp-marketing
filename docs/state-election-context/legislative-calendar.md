@@ -16,14 +16,14 @@ states cover the most pages, so they come first.
 | 1 | Illinois | 3,627 | done, reviewed 27 October 2026 |
 | 2 | Pennsylvania | 3,102 | done |
 | 3 | Ohio | 2,922 | done, reviewed 27 October 2026 |
-| 4 | Minnesota | 2,511 | approved, not yet merged |
+| 4 | Minnesota | 2,511 | done, reviewed 27 October 2026 |
 | 5 | Iowa | 2,495 | done |
 | 6 | Michigan | 2,367 | done, reviewed 27 October 2026 |
 | 7 | Kansas | 2,334 | drafted, awaiting review |
 | 8 | Texas | 2,300 | done, reviewed 27 October 2026 |
 | 9 | New York | 2,124 | drafted, awaiting review |
 | 10 | Wisconsin | 2,041 | drafted, awaiting review |
-| 11 | Indiana | 1,856 | approved, not yet merged |
+| 11 | Indiana | 1,856 | done, reviewed 27 October 2026 |
 | 12 | Missouri | 1,651 | done |
 | 13 | California | 1,461 | drafted, awaiting review |
 | 14 | Arkansas | 1,218 | in progress |
@@ -69,7 +69,7 @@ If a legislature meets year-round, re-check in January and July.
 | Hawaii | January | May | June 2027 | no |
 | Idaho | January | March–April | May 2027 | no |
 | Illinois | 13 January 2027, year-round, spring session to 31 May | — | January 2027, then October 2027 | verified |
-| Indiana | odd-year long session, January | April | May 2027 | no |
+| Indiana | organizes 17 November 2026, reconvenes by 25 January 2027 | by 29 April | July 2027 | verified |
 | Iowa | 11 January 2027 | spring | June 2027 | verified |
 | Kansas | January | April–May | June 2027 | no |
 | Kentucky | odd-year short session, January | March | April 2027 | no |
@@ -78,7 +78,7 @@ If a legislature meets year-round, re-check in January and July.
 | Maryland | January | April | May 2027 | no |
 | Massachusetts | year-round | — | January and July | no |
 | Michigan | 13 January 2027, year-round | — | January and July | verified |
-| Minnesota | odd-year long session, January | May | June 2027 | no |
+| Minnesota | 12 January 2027 | by 17 May | July 2027 | verified |
 | Mississippi | January | April | May 2027 | no |
 | Missouri | 6 January 2027 | 30 May | July 2027 | verified |
 | Montana | odd years only, January | April–May | June 2027 | no |
@@ -115,11 +115,11 @@ Grouped by month. Within a month, do the states with the most pages first.
   Michigan, New York, Wisconsin, New Jersey, Massachusetts and DC), to catch
   anything passed in late 2026.
 - **April**: Kentucky, New Mexico, South Dakota, Utah, Wyoming.
-- **May**: Indiana, Arkansas, Georgia, Tennessee, Idaho, Maryland, Mississippi,
+- **May**: Arkansas, Georgia, Tennessee, Idaho, Maryland, Mississippi,
   Virginia, Washington, West Virginia.
-- **June**: Minnesota, Iowa, Kansas, Oklahoma, Alaska, Colorado, Florida, Hawaii, Montana, North Dakota,
+- **June**: Iowa, Kansas, Oklahoma, Alaska, Colorado, Florida, Hawaii, Montana, North Dakota,
   South Carolina, Vermont.
-- **July**: Pennsylvania, Ohio, Michigan, Texas, New York, Wisconsin, Missouri,
+- **July**: Pennsylvania, Ohio, Michigan, Minnesota, Indiana, Texas, New York, Wisconsin, Missouri,
   Nebraska, Louisiana, Oregon, Alabama, Arizona, Connecticut, Delaware, Maine,
   Nevada, New Hampshire, New Jersey, Rhode Island, Massachusetts, DC.
 - **October**: Illinois (spring session bills are signed or vetoed by late August), North Carolina.

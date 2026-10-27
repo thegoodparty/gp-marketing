@@ -24,7 +24,8 @@ two-year session at 120 legislative days and leaves the even-year start to
 statute, so check the 2028 date before then. New laws usually
 take effect on 1 August after final enactment (Minn. Stat. § 645.02).
 
-Re-check this doc: July 2027. Last researched: October 2026.
+Re-check this doc: July 2027. Last researched: October 2026. Reviewed by Emily:
+27 October 2026.
 
 ## How elections work in Minnesota
 

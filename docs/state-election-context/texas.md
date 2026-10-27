@@ -25,7 +25,7 @@ art. III, § 24(b)). New laws usually take effect 90 days after adjournment unle
 two-thirds of each house vote otherwise (Tex. Const. art. III, § 39). The governor
 can also convene the Legislature in special session (Tex. Const. art. III, § 5).
 
-Re-check this doc: July 2027. Last researched: October 2026.
+Re-check this doc: July 2027. Last researched: October 2026. Reviewed by Emily: 27 October 2026.
 
 ## How elections work in Texas
 

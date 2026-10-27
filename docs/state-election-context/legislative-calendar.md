@@ -20,7 +20,7 @@ states cover the most pages, so they come first.
 | 5 | Iowa | 2,495 | done |
 | 6 | Michigan | 2,367 | in progress |
 | 7 | Kansas | 2,334 | to do |
-| 8 | Texas | 2,300 | drafted, awaiting review |
+| 8 | Texas | 2,300 | done, reviewed 27 October 2026 |
 | 9 | New York | 2,124 | to do |
 | 10 | Wisconsin | 2,041 | to do |
 | 11 | Indiana | 1,856 | to do |

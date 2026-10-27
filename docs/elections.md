@@ -28,6 +28,14 @@ places, candidacies, officeholders, persons and districts) comes from
 `/v1/elections/*`; claimed campaigns come from `/v1/public-campaigns` through
 `findCampaignByRace`, and person profiles from `/v1/public-person-profiles`.
 
+The election endpoints used to be a separate service called election-api, and older
+notes, tickets and handoff docs still use that name. They now live inside gp-api, in
+`packages/gp-api/src/electionDb/` in the `thegoodparty/omni` repo, and read their own
+election database. There are no public API docs and this checkout has no token, so to
+learn what an endpoint accepts, read its `*.schema.ts` (the Zod query rules) and
+`*.service.ts` (the query) there, for example
+`gh api repos/thegoodparty/omni/contents/packages/gp-api/src/electionDb/places/places.schema.ts --jq .content | base64 -d`.
+
 gp-api pages every election list and answers only the first 1,000 rows of an
 unpaged read, without saying so. `fetchElectionList` in `electionsApi.ts` and
 `fetchElectionPages` in `src/lib/sitemap-entries.ts` walk lists in pages of 5,000.
@@ -47,10 +55,10 @@ renders more common than the hour suggests. There are about 20,000 city pages, s
 arrivals from the location search land on one nobody has opened lately. And Vercel's
 page cache is per deployment: every production release starts with every programmatic
 page cold (only the 51 state pages are prebuilt). The Data Cache that holds the
-election-api reads does persist across deployments, which is why a cold page right
+election endpoint reads does persist across deployments, which is why a cold page right
 after a release is still faster than a true cold one.
 
-A cold render is a fan-out of a few dozen to about a hundred election-api requests, so
+A cold render is a fan-out of a few dozen to about a hundred election endpoint requests, so
 its time is set by the longest chain of dependent requests, not by the total. Measured
 2026-10-09 on production: cold city pages 1.6 to 3.2 s to first byte, cold county pages
 2.3 to 2.8 s, cold position pages 1.3 to 2.2 s, cold profiles 0.8 to 1.3 s. The
@@ -95,9 +103,10 @@ that chain overlaps the route's own work instead of following it:
   by design.
 
 Raising the candidacy concurrency above six, trimming `FEATURED_RACE_BUDGET`, or a
-place-scoped candidacies endpoint on election-api would each shorten the chain
-further; the first two change what the page shows or how hard it hits election-api
-(the 2026-10-05 outage was election-api CPU), so they are decisions, not cleanups.
+place-scoped candidacies endpoint in gp-api would each shorten the chain
+further; the first two change what the page shows or how hard it hits the election
+endpoints (the 2026-10-05 outage was CPU on what was then election-api), so they are
+decisions, not cleanups.
 
 **`/v1/races` is general-elections-only unless you say otherwise.** The endpoint coerces
 an absent `isPrimary` to `false` instead of leaving it unset, so an unfiltered slug lookup
@@ -109,8 +118,9 @@ position-page URLs in the 2026-09-18 crawl. `getRaceBySlug` therefore retries on
 `isPrimary: true` when the first lookup finds nothing, which costs a second request only on
 the path that would otherwise render a 404. A caller that passes `isPrimary` itself is never
 second-guessed. The fix
-belongs upstream in `election-api`'s `raceFilterSchema`, where the `z.preprocess` around
-`isPrimary`/`isRunoff` turns `undefined` into `false`; until that lands, keep the retry.
+belongs upstream in gp-api's `raceFilterSchema` (`packages/gp-api/src/electionDb/races/races.schema.ts`
+in omni), where the `z.preprocess` around `isPrimary`/`isRunoff` turns `undefined` into
+`false` (still true on 2026-10-27); until that lands, keep the retry.
 
 A slug can also name many race rows. Every California Assembly district is
 `ca/state-representative`, in every election year, and `/v1/races` folds the rows into one
@@ -128,7 +138,7 @@ intentional (Emily, 2026-10-06); this only makes that page describe the current 
 
 ### MTFCC codes
 
-MTFCC codes are US Census geographic-entity codes. election-api tags every place with
+MTFCC codes are US Census geographic-entity codes. The election data tags every place with
 one, and the code decides how the place is treated. The constants live in
 `electionsApi.ts`:
 
@@ -428,8 +438,8 @@ things then happen on this site, and they are separate:
    the photo, bio and every authored field while keeping a crawlable name.
 2. **Everybody else's page.** A person's photo also travels on their candidacy
    and officeholder records, which is what the "Other Candidates" and "Nearby
-   Officials" cards on *other* profiles read. Those come from election-api,
-   which knows nothing about removals, so the cards are filtered here instead:
+   Officials" cards on *other* profiles read. Those come from gp-api's election
+   endpoints, which know nothing about removals, so the cards are filtered here instead:
    `getRemovedPersonIds` reads gp-api's `/v1/public-person-profiles/unlisted`
    feed and `buildOtherCandidateCards` / `buildNearbyOfficialCards` drop the
    photo for anyone in it.
@@ -558,15 +568,15 @@ band to a different county's towns.
 
 Candidate claimed-vs-unclaimed state and any "my profile is wrong" bug is a data
 lineage problem, not a marketing-site code bug. `src/app/candidate/[...slug]/page.tsx`
-calls `buildSectionOverrides`, which stitches together the election-api candidacy
-record, the claimed campaign from gp-api (`findCampaignByRace` ->
+calls `buildSectionOverrides`, which stitches together the candidacy record from
+gp-api's election endpoints, the claimed campaign from gp-api (`findCampaignByRace` ->
 `/v1/public-campaigns`), claimed website content
 (`claimed.website.content.about.bio` and `.issues`), stances, and custom issues. The
 `isClaimed` flag and most of the fallbacks flip based on whether that gp-api lookup
 succeeds. When a candidate page shows the wrong claim state, wrong bio, wrong issues,
 or missing photo, the cause is almost always upstream: the product account, the
-HubSpot company record, or the Candidacy record across gp-api, election-api, and
-HubSpot are not linked or not in sync. Nothing in this repo can correct that.
+HubSpot company record, or the Candidacy record across gp-api's account and
+election data and HubSpot are not linked or not in sync. Nothing in this repo can correct that.
 
 If the agent concludes a bug is in this category, it should not attempt a code fix. It
 should explain in plain language what is happening (for example, "the candidate has

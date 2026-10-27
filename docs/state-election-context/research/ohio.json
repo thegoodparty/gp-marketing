@@ -1,0 +1,462 @@
+[
+	{
+		"claim": "The General Assembly convenes in first regular session on the first Monday of January of the odd-numbered year, and in second regular session on the same date the next year",
+		"citation": "Ohio Const. art. II, § 8",
+		"url": "https://codes.ohio.gov/ohio-constitution/article-2",
+		"quote": "Each general assembly shall convene in first regular session on the first Monday of January in the odd-numbered year, or on the succeeding day if the first Monday of January is a legal holiday",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A law takes effect ninety days after the governor files it with the secretary of state, unless an exception applies",
+		"citation": "Ohio Const. art. II, § 1c",
+		"url": "https://codes.ohio.gov/ohio-constitution/article-2",
+		"quote": "No law passed by the general assembly shall go into effect until ninety days after it shall have been filed by the governor in the office of the secretary of state",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County officers are elected in November of even-numbered years and all other elective officers in November of odd-numbered years",
+		"citation": "Ohio Const. art. XVII, § 1",
+		"url": "https://codes.ohio.gov/ohio-constitution/article-17",
+		"quote": "Elections for state and county officers shall be held on the first Tuesday after the first Monday in November in even numbered years; and all elections for all other elective officers shall be held on the first Tuesday after the first Monday in November in the odd numbered years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County officers are elected in even-numbered years",
+		"citation": "R.C. 3501.02(C)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3501",
+		"quote": "of elective state and county officers, in the even-numbered years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal and township officers and school board members are elected in odd-numbered years",
+		"citation": "R.C. 3501.02(D)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3501",
+		"quote": "For municipal and township officers, members of boards of education, judges and clerks of municipal courts, in the odd-numbered years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The regular municipal election is the first Tuesday after the first Monday in November of each odd-numbered year",
+		"citation": "R.C. 3501.01(B)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3501",
+		"quote": "\"Regular municipal election\" means the election held on the first Tuesday after the first Monday in November in each odd-numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The primary is the first Tuesday after the first Monday in May, except in presidential primary years",
+		"citation": "R.C. 3501.01(E)(1)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3501",
+		"quote": "Primary elections shall be held on the first Tuesday after the first Monday in May of each year except in years in which a presidential primary election is held.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In presidential primary years all primaries move to the third Tuesday after the first Monday in March, unless a charter provides otherwise",
+		"citation": "R.C. 3501.01(E)(2)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3501",
+		"quote": "all primary elections shall be held on the third Tuesday after the first Monday in March except as otherwise authorized by a municipal or county charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipal or county charter may set its own primary day; special elections are otherwise limited to set days",
+		"citation": "R.C. 3501.01(D)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3501",
+		"quote": "or on the day authorized by a particular municipal or county charter for the holding of a primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special elections on local questions are held on general election day unless a law or charter provides otherwise",
+		"citation": "R.C. 3501.02",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3501",
+		"quote": "No special election shall be held on a day other than the day of a general election, unless a law or charter provides otherwise",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "At a primary, a voter can be challenged on party affiliation, judged from the party primaries voted in the current and previous two calendar years",
+		"citation": "R.C. 3513.19(A)(3)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3513",
+		"quote": "Such party affiliation shall be determined by examining the elector's voting record for the current year and the immediately preceding two calendar years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A challenged primary voter may still vote by stating under penalty of election falsification that they wish to affiliate with that party",
+		"citation": "R.C. 3513.19(B)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3513",
+		"quote": "that the person desires to be affiliated with and supports the principles of the political party whose primary ballot the person desires to vote",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Primaries nominate candidates of political parties for the offices voted on at the next general election",
+		"citation": "R.C. 3513.01(A)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3513",
+		"quote": "for the purpose of nominating persons as candidates of political parties for election to offices to be voted for at the succeeding general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County offices are among those with party nominations at the primary",
+		"citation": "R.C. 3513.04",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3513",
+		"quote": "Candidates for party nominations to state, district, county, and municipal offices or positions, for which party nominations are provided by law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Townships and municipalities under 2,000 hold no party primaries for their offices unless a majority of electors petition for them",
+		"citation": "R.C. 3513.01(C)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3513",
+		"quote": "Primary elections shall not be held for the nomination of candidates for election as officers of any township, or any municipal corporation having a population of less than two thousand",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In municipalities of 2,000 or more, offices are nominated the same way the place nominated them in 1989 unless voters have since changed it",
+		"citation": "R.C. 3513.01(B)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3513",
+		"quote": "shall be the same as the manner in which candidates were nominated for election as officers in the municipal corporation in 1989",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters in a nonpartisan municipality of 2,000 or more can switch to party primaries by referendum",
+		"citation": "R.C. 3513.01(D)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3513",
+		"quote": "the question of changing to the primary-election method of nominating persons as candidates for election as officers of the municipal corporation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters in a partisan township or municipality can switch to nonpartisan nomination and election by referendum",
+		"citation": "R.C. 3513.01(E)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3513",
+		"quote": "be nominated as candidates by nominating petition and be elected only in a nonpartisan election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township officers are nominated only by nominating petition unless a majority of electors petition for a primary",
+		"citation": "R.C. 3513.253",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3513",
+		"quote": "Nominations of candidates for election as officers of a township shall be made only by nominating petitions, unless a majority of the electors of such township have petitioned for a primary election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The nonpartisan ballot carries school board races, municipal and township offices in places without party primaries, and charter-municipality offices on separate ballots",
+		"citation": "R.C. 3505.04",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3505",
+		"quote": "municipal or township offices for municipal corporations and townships in which primary elections are not held for nomination of candidates by political parties, and municipal offices of municipal corporations having charters which provide for separate ballots",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board candidates appear on the nonpartisan ballot",
+		"citation": "R.C. 3513.254(A)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3513",
+		"quote": "The name of each candidate for member of a city, local, or exempted village board of education shall appear on the nonpartisan ballot.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Educational service center governing board candidates appear on the nonpartisan ballot",
+		"citation": "R.C. 3513.255",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3513",
+		"quote": "The name of each candidate for election as a member of a governing board of an educational service center shall appear on the nonpartisan ballot.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The candidate with the most votes wins; ties are resolved by lot",
+		"citation": "R.C. 3505.33",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3505",
+		"quote": "If more than the number of candidates to be elected to an office received the largest and an equal number of votes, such tie shall be resolved by lot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Ranked choice and instant runoff voting are prohibited except as permitted under the county and municipal home rule articles",
+		"citation": "R.C. 3505.011",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3505",
+		"quote": "Except as otherwise permitted under Article X or Article XVIII, Ohio Constitution, no election shall be conducted in this state using ranked choice voting or instant runoff voting.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An independent candidate is one who claims not to be affiliated with a political party and files a statement of candidacy and nominating petition",
+		"citation": "R.C. 3501.01(I)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3501",
+		"quote": "\"Independent candidate\" means any candidate who claims not to be affiliated with a political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Independent candidates for offices with primaries file a statement of candidacy and nominating petition by the day before the primary",
+		"citation": "R.C. 3513.257",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3513",
+		"quote": "shall file no later than four p.m. of the day before the day of the primary election immediately preceding the general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only electors qualified to vote on the candidacy may sign a petition",
+		"citation": "R.C. 3501.38(A)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3501",
+		"quote": "Only electors qualified to vote on the candidacy or issue which is the subject of the petition shall sign a petition.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A person who sought a party nomination at the primary cannot run as an independent at the following general election, except for school board and township trustee and similar offices",
+		"citation": "R.C. 3513.04",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3513",
+		"quote": "at the following general election for any office other than the office of member of the state board of education",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county board of commissioners has three members",
+		"citation": "R.C. 305.01",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-305",
+		"quote": "The board of county commissioners shall consist of three persons",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commissioners are elected on a staggered four-year cycle, one in one even year and two in the next",
+		"citation": "R.C. 305.01",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-305",
+		"quote": "In November, 1974, and quadrennially thereafter, one county commissioner shall be elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The legislature may provide alternative forms of county government, which take effect only on voter approval",
+		"citation": "Ohio Const. art. X, § 1",
+		"url": "https://codes.ohio.gov/ohio-constitution/article-10",
+		"quote": "may provide by general law alternative forms of county government. No alternative form shall become operative in any county until submitted to the electors thereof",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county may adopt a charter, and the charter decides which officers are elected and how; elections are not reserved to state law at the county tier",
+		"citation": "Ohio Const. art. X, § 3",
+		"url": "https://codes.ohio.gov/ohio-constitution/article-10",
+		"quote": "Every such charter shall provide the form of government of the county and shall determine which of its officers shall be elected and the manner of their election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Summit County has a charter with an elected county executive",
+		"citation": "Summit County Charter § 2.01",
+		"url": "https://co.summitoh.net/files-generic/13031/file/summitcountycharter.pdf",
+		"quote": "The County Executive shall be the chief executive officer of the County.",
+		"certainty": "varies by place",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Summit County Council has eleven members nominated and elected as county officers are under general law",
+		"citation": "Summit County Charter § 3.01.1",
+		"url": "https://co.summitoh.net/files-generic/13031/file/summitcountycharter.pdf",
+		"quote": "It shall consist of eleven (11) members who shall be nominated and elected as provided in this Charter and in the manner provided by general law for County officers.",
+		"certainty": "varies by place",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Cuyahoga County has a charter with an elected county executive, nominated and elected as general law provides for county officers",
+		"citation": "Cuyahoga County Charter § 2.01",
+		"url": "https://cuyahogacms.blob.core.windows.net/home/docs/default-source/council/legislation/county-charter/countycharter.pdf",
+		"quote": "shall be nominated and elected in the manner provided for county officers by general law and this Charter",
+		"certainty": "varies by place",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Cuyahoga County Council has eleven members elected by district for four-year terms",
+		"citation": "Cuyahoga County Charter §§ 3.01, 3.02",
+		"url": "https://cuyahogacms.blob.core.windows.net/home/docs/default-source/council/legislation/county-charter/countycharter.pdf",
+		"quote": "Beginning with the 2012 general election, the term for each member of Council shall be four years.",
+		"certainty": "varies by place",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "The legislature provides by general law for the election of township officers",
+		"citation": "Ohio Const. art. X, § 2",
+		"url": "https://codes.ohio.gov/ohio-constitution/article-10",
+		"quote": "The General Assembly shall provide by general law for the election of such township officers as may be necessary.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every township has a board of three trustees on staggered four-year terms",
+		"citation": "R.C. 505.01",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-505",
+		"quote": "In each township there shall be a board of township trustees consisting of three members.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal corporations are cities (5,000 or more) or villages (all others)",
+		"citation": "Ohio Const. art. XVIII, § 1",
+		"url": "https://codes.ohio.gov/ohio-constitution/article-18",
+		"quote": "Municipal corporations are hereby classified into cities and villages. All such corporations having a population of five thousand or over shall be cities; all others shall be villages.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Statutory city council has at least seven members, four by ward and three at large, growing with population to at most seventeen",
+		"citation": "R.C. 731.01(A)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-731",
+		"quote": "composed of not fewer than seven members, four of whom shall be elected by wards and three of whom shall be elected by electors of the city at large",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city can set council size between five and seventeen by referendum",
+		"citation": "R.C. 731.01(B)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-731",
+		"quote": "composed of not fewer than five nor more than seventeen members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Statutory city council members serve two-year terms",
+		"citation": "R.C. 731.03(A)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-731",
+		"quote": "Members shall serve for a term of two years commencing on the first day of January next after their election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city can change council terms from two to four years by referendum",
+		"citation": "R.C. 731.03(B)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-731",
+		"quote": "the question of whether the terms of office of the members of the legislative authority should be changed from two to four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A village council has six members elected at large for four-year terms",
+		"citation": "R.C. 731.09(A)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-731",
+		"quote": "composed of six members, who shall be elected by the electors of the village at large, for terms of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A statutory city elects a mayor for four years",
+		"citation": "R.C. 733.02",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-733",
+		"quote": "The mayor of a city shall be elected for a term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A village elects a mayor for four years who presides over council",
+		"citation": "R.C. 733.24",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-733",
+		"quote": "The mayor of a village shall be elected for a term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A statutory city elects a president of council for two years",
+		"citation": "R.C. 733.09(A)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-733",
+		"quote": "the president of the legislative authority of a city shall be elected for a term of two years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A statutory city elects an auditor for four years",
+		"citation": "R.C. 733.10",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-733",
+		"quote": "The auditor of a city shall be elected for a term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A statutory municipality elects a treasurer for four years",
+		"citation": "R.C. 733.42",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-733",
+		"quote": "The treasurer of a municipal corporation shall be elected for a term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A statutory city elects a director of law for four years",
+		"citation": "R.C. 733.49",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-733",
+		"quote": "The city director of law shall be elected for a term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any municipality, city or village, may adopt a charter",
+		"citation": "Ohio Const. art. XVIII, § 7",
+		"url": "https://codes.ohio.gov/ohio-constitution/article-18",
+		"quote": "Any municipality may frame and adopt or amend a charter for its government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities have all powers of local self-government, subject only to the voter-qualification rule of Article V, § 1",
+		"citation": "Ohio Const. art. XVIII, § 3",
+		"url": "https://codes.ohio.gov/ohio-constitution/article-18",
+		"quote": "Subject to the requirements of Section 1 of Article V of this constitution, municipalities shall have authority to exercise all powers of local self-government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Cleveland Metropolitan School District board is appointed by the mayor of Cleveland",
+		"citation": "R.C. 3311.71; City of Cleveland, CMSD Board of Education Appointment Information",
+		"url": "https://www.clevelandohio.gov/CMSDAppointmentInfo",
+		"quote": "Under Ohio law, nine members of the Board of Education of the Cleveland Metropolitan School District are appointed by the Mayor of the City of Cleveland.",
+		"certainty": "varies by place",
+		"verified": "local government publication"
+	},
+	{
+		"claim": "Each county elects a prosecuting attorney, auditor, treasurer, clerk of the court of common pleas, sheriff, recorder, engineer and coroner alongside the commissioners",
+		"citation": "R.C. 305.02(A)",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-305",
+		"quote": "If a vacancy in the office of county commissioner, prosecuting attorney, county auditor, county treasurer, clerk of the court of common pleas, sheriff, county recorder, county engineer, or coroner occurs",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each township elects a fiscal officer alongside its trustees, nominated by petition",
+		"citation": "R.C. 3513.253",
+		"url": "https://codes.ohio.gov/ohio-revised-code/chapter-3513",
+		"quote": "The nominating petitions of nonpartisan candidates for township trustee and township fiscal officer",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The transition between city and village is regulated by law (the census-driven rule), so a place does not keep its class as it grows or shrinks",
+		"citation": "Ohio Const. art. XVIII, § 1",
+		"url": "https://codes.ohio.gov/ohio-constitution/article-18",
+		"quote": "The method of transition from one class to the other shall be regulated by law.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Additional (optional) forms of municipal government apply only where a municipality's voters adopt them",
+		"citation": "Ohio Const. art. XVIII, § 2",
+		"url": "https://codes.ohio.gov/ohio-constitution/article-18",
+		"quote": "no such additional law shall become operative in any municipality until it shall have been submitted to the electors thereof",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

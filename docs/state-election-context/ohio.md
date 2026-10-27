@@ -44,7 +44,8 @@ elected in November of **odd-numbered** years, at the regular municipal election
 *Ohio Const. art. XVII, § 1; R.C. 3501.01(B), 3501.02(C), (D) · statutory · read in statute*
 
 So a county page and a city page in the same county are almost never about the
-same election year. Never put county offices and city offices on one ballot.
+same election year. Avoid putting county offices and city offices on one ballot,
+but let our own election data decide: if race data shows them together, follow it.
 
 The primary is the first Tuesday after the first Monday in **May**. In a
 presidential primary year it moves to the third Tuesday after the first Monday
@@ -317,9 +318,9 @@ These are the ways Ohio copy goes visibly wrong.
 1. **Never say Ohio local elections are nonpartisan, or that they are
    partisan.** County races are partisan, township and school board races are
    nonpartisan, and city and village races vary by place.
-2. **Never put county and city offices in the same election year.** Counties
+2. **Avoid putting county and city offices in the same election year.** Counties
    vote in even years, cities, villages, townships and school boards in odd
-   years.
+   years. Our own election data still comes first.
 3. **Never infer a county from a place name.** 26 Ohio municipal pages are named
    after a county they are not in, for example Hamilton (Butler County),
    Franklin (Warren County), Warren (Trumbull County) and Lucas (Richland

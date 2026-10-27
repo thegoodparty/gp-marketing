@@ -1135,6 +1135,26 @@ describe('buildElectionPositionHrefFromRaceSlug', () => {
 			),
 		).toBeUndefined();
 	});
+
+	test('expands COUNTY-level race keyed to a city through its county', () => {
+		const arMap = new Map([['ar/atkins', 'ar/pope-county']]);
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{ slug: 'ar/atkins/county-constable', positionLevel: 'COUNTY' },
+				{ citySlugToCountySlug: arMap, skipUnmappedCity: true },
+			),
+		).toBe('/elections/ar/pope-county/atkins/position/county-constable');
+	});
+
+	test('keeps COUNTY-level race on a county slug at the county path', () => {
+		const arMap = new Map([['ar/atkins', 'ar/pope-county']]);
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{ slug: 'ar/pope-county/county-constable', positionLevel: 'COUNTY' },
+				{ citySlugToCountySlug: arMap, skipUnmappedCity: true },
+			),
+		).toBe('/elections/ar/pope-county/position/county-constable');
+	});
 });
 
 

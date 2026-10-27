@@ -37,7 +37,7 @@ date (N.C. Gen. Stat. § 120-20), and most acts do set one.
 
 Re-check this doc: October 2027, or a month after the 2027 session adjourns if
 that is later. Also re-check the photo ID line after the 3 November 2026 vote on a
-constitutional amendment. Last researched: October 2026.
+constitutional amendment. Last researched: October 2026. Reviewed by Emily: 27 October 2026.
 
 ## How elections work in North Carolina
 

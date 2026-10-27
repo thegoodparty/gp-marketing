@@ -353,6 +353,8 @@ export type SectionOverrides = {
 		layout?: 'card' | 'banner' | 'inset';
 		hideExampleCard?: boolean;
 		formId?: string;
+		/** Added to a sign-up button's link as `signup_source` (see `PERSON_CLAIM_SIGNUP_SOURCE`). */
+		signupSource?: string;
 	};
 };
 

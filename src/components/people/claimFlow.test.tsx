@@ -142,6 +142,13 @@ const templateSection = {
 	ctaAction: { _type: 'ctaActionWithShared', action: 'SignUp', text: 'Claim this profile' },
 };
 
+/**
+ * The claim link says where it came from, so the app can show the claim
+ * variation of its sign-up page to these visitors only (see
+ * `PERSON_CLAIM_SIGNUP_SOURCE`).
+ */
+const CLAIM_SIGNUP_HREF = 'https://app.goodparty.org/sign-up?signup_source=profile_claim';
+
 describe('the claim block hands the candidate to Win sign-up', () => {
 	async function renderBlock(section: object = templateSection) {
 		const [{ ClaimProfileBlockSection }, { buildPersonSectionOverrides }, { getDevPersonProfileView }] = await Promise.all([
@@ -165,7 +172,7 @@ describe('the claim block hands the candidate to Win sign-up', () => {
 		const cta = await renderBlock();
 
 		expect(cta.tagName).toBe('A');
-		expect(cta.getAttribute('href')).toBe('https://app.goodparty.org/sign-up');
+		expect(cta.getAttribute('href')).toBe(CLAIM_SIGNUP_HREF);
 		expect(document.querySelector('form')).toBeNull();
 	});
 
@@ -196,7 +203,7 @@ describe('the claim block hands the candidate to Win sign-up', () => {
 
 		const signUp = trackedEvents.filter(e => e.name === 'Sign Up Clicked');
 		expect(signUp).toHaveLength(1);
-		expect(signUp[0]?.props).toMatchObject({ href: 'https://app.goodparty.org/sign-up', label: 'Claim this profile' });
+		expect(signUp[0]?.props).toMatchObject({ href: CLAIM_SIGNUP_HREF, label: 'Claim this profile' });
 		expect(dataLayer).toEqual([
 			{ event: 'sign_up_click', formId: 'person-claim-owner' },
 			{
@@ -204,7 +211,7 @@ describe('the claim block hands the candidate to Win sign-up', () => {
 				page_path: '/people/example-person',
 				source: 'claim_block',
 				label: 'Claim this profile',
-				href: 'https://app.goodparty.org/sign-up',
+				href: CLAIM_SIGNUP_HREF,
 				// The profile's claim card is the inset one at the top of the content column.
 				layout: 'inset',
 			},
@@ -234,10 +241,12 @@ describe('the claim block hands the candidate to Win sign-up', () => {
 		if (!codeDefault) throw new Error('no claim section in the code default');
 		const cta = await renderBlock(codeDefault);
 
-		expect(cta.getAttribute('href')).toBe('https://app.goodparty.org/sign-up');
+		expect(cta.getAttribute('href')).toBe(CLAIM_SIGNUP_HREF);
 		expect(document.querySelector('h2')?.textContent).toBe('Are you Kim Byrd? Complete your profile now.');
 	});
 
+	// The fallback is the plain sign-up button, which carries no source, so these
+	// visitors see the original sign-up page. That is the safe side to fail on.
 	test('an unusable Studio button still falls back to sign-up under the form id', async () => {
 		const cta = await renderBlock({
 			...templateSection,
@@ -247,5 +256,21 @@ describe('the claim block hands the candidate to Win sign-up', () => {
 		expect(cta.getAttribute('href')).toBe('https://app.goodparty.org/sign-up');
 		await click(cta);
 		expect(dataLayer[0]).toEqual({ event: 'sign_up_click', formId: 'person-claim-owner' });
+	});
+
+	// The pledge band's sign-up is the voter's way in, not the candidate's, so the
+	// app must keep showing it the original sign-up page.
+	test('the pledge band’s sign-up does not carry the claim source', async () => {
+		const [{ buildPersonSectionOverrides }, { getDevPersonProfileView }] = await Promise.all([
+			import('./personSectionOverrides'),
+			import('~/lib/devPeopleProfileFixtures'),
+		]);
+		const view = getDevPersonProfileView('kim-byrd-b77f912d');
+		if (!view) throw new Error('no dev fixture for kim-byrd-b77f912d');
+		const overrides = buildPersonSectionOverrides(view);
+
+		expect(overrides.component_claimProfileBlock?.signupSource).toBe('profile_claim');
+		expect(JSON.stringify(overrides.component_goodPartyOrgPledge)).not.toContain('signup_source');
+		expect(JSON.stringify(overrides.component_goodPartyOrgPledge)).not.toContain('profile_claim');
 	});
 });

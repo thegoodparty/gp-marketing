@@ -25,7 +25,7 @@ states cover the most pages, so they come first.
 | 10 | Wisconsin | 2,041 | done, reviewed 27 October 2026 |
 | 11 | Indiana | 1,856 | done, reviewed 27 October 2026 |
 | 12 | Missouri | 1,651 | done |
-| 13 | California | 1,461 | approved, not yet merged |
+| 13 | California | 1,461 | done, reviewed 28 October 2026 |
 | 14 | Arkansas | 1,218 | drafted, awaiting review |
 | 15 | South Dakota | 1,199 | drafted, awaiting review |
 | 16 | New Jersey | 1,158 | done, reviewed 27 October 2026 |
@@ -70,7 +70,7 @@ If a legislature meets year-round, re-check in January and July.
 | Alaska | January | May | June 2027 | no |
 | Arizona | January | May–June | July 2027 | no |
 | Arkansas | odd-year regular session, January | April | May 2027 | no |
-| California | year-round (bills signed by October) | — | November 2027 | no |
+| California | 7 December 2026, year-round two-year session | 30 November 2028 | November each year | verified |
 | Colorado | January | May | June 2027 | no |
 | Connecticut | odd-year long session, January | June | July 2027 | no |
 | Delaware | January | 30 June | July 2027 | no |

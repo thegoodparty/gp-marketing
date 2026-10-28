@@ -7,6 +7,7 @@ same ground on every one of the ~48,000 location pages.
 
 | State | File |
 | --- | --- |
+| California | [california.md](./california.md) |
 | Illinois | [illinois.md](./illinois.md) |
 | Indiana | [indiana.md](./indiana.md) |
 | Iowa | [iowa.md](./iowa.md) |
@@ -22,7 +23,7 @@ same ground on every one of the ~48,000 location pages.
 | Texas | [texas.md](./texas.md) |
 | Wisconsin | [wisconsin.md](./wisconsin.md) |
 
-36 states and DC still to do. Each doc is a draft until Emily has reviewed it.
+35 states and DC still to do. Each doc is a draft until Emily has reviewed it.
 
 ## What these are, and what they are not
 

@@ -4,6 +4,7 @@ import { notFound, permanentRedirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	getCityPlacesByCounty,
+	getCountyChildPlaces,
 	getPlacesByState,
 	getRaceBySlug,
 	isCityOrTownMtfcc,
@@ -28,6 +29,24 @@ import { officeDisplayName } from '~/lib/officeDisplayName';
 
 export const revalidate = 3600;
 
+/**
+ * Some races have 4-part slugs (state/county/city/position) instead of 3-part
+ * (state/city/position). Try 3-part first for the common case, then fall back.
+ */
+async function findCityRace(stateCode: string, state: string, county: string, city: string, positionSlug: string) {
+	let race = await getRaceBySlug(buildRaceSlug(state, positionSlug, city));
+	if (!race) race = await getRaceBySlug(buildRaceSlug(state, positionSlug, county, city));
+	if (race) return race;
+	// A slash in the place name ("Rainy Creek/Cheyenne Township") gives its slug an extra
+	// segment, so the place's own slug is the only way to its races.
+	const childPlaces = await getCountyChildPlaces({
+		state: stateCode,
+		countySlug: `${state.toLowerCase()}/${county.toLowerCase()}`,
+	});
+	const place = childPlaces.find(p => p.slug?.toLowerCase().split('/').pop() === city.toLowerCase());
+	return place?.slug ? getRaceBySlug(`${place.slug.toLowerCase()}/${positionSlug}`) : null;
+}
+
 export async function generateStaticParams() {
 	return [];
 }
@@ -44,10 +63,7 @@ export default async function Page({
 		notFound();
 	}
 
-	// Some races have 4-part slugs (state/county/city/position) instead of 3-part
-	// (state/city/position). Try 3-part first for the common case, then fall back.
-	let race = await getRaceBySlug(buildRaceSlug(state, positionSlug, city));
-	if (!race) race = await getRaceBySlug(buildRaceSlug(state, positionSlug, county, city));
+	const race = await findCityRace(stateCode, state, county, city, positionSlug);
 	if (!race) notFound();
 
 	const raceSlug = race.slug;
@@ -155,8 +171,7 @@ export async function generateMetadata({
 	const stateCode = state.toUpperCase();
 	if (!isValidStateCode(stateCode)) return {};
 	const stateName = getStateName(stateCode);
-	let race = await getRaceBySlug(buildRaceSlug(state, positionSlug, city));
-	if (!race) race = await getRaceBySlug(buildRaceSlug(state, positionSlug, county, city));
+	const race = await findCityRace(stateCode, state, county, city, positionSlug);
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
 	const fullSlug = `${countySlug}/${city.toLowerCase()}`;
 	const counties = await getPlacesByState({ state: stateCode, mtfcc: COUNTY_MTFCC });

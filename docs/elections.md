@@ -564,6 +564,16 @@ Slot-aware matters as much as the check itself: a place name containing a slash
 real city, so in the county slot it resolved — and sent the "Explore Elections"
 band to a different county's towns.
 
+The same slash can give a city or township's own slug an extra segment.
+"Rainy Creek/Cheyenne Township" is `sd/pennington-county/rainy-creek/cheyenne-township`,
+the only such place in all 51 shards (October 2026). Its page lives under its last
+segment (`/elections/sd/pennington-county/cheyenne-township`), so four things look
+it up by the place's own slug: the city page reads its races through it when the URL
+slugs miss, the city position route tries `<place slug>/<position>` last,
+`resolveElectionPositionFromRaceSlug` sends a race whose prefix is a known city slug
+to the city route rather than the subplace one, and the subplace route 308s the old
+split URL to the city-level one.
+
 ### Not fixable here, escalate
 
 Candidate claimed-vs-unclaimed state and any "my profile is wrong" bug is a data

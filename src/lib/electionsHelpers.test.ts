@@ -38,6 +38,7 @@ import {
 	resolveClaimedCustomIssueText,
 	resolveClaimedTextField,
 	resolveDefaultElectionYear,
+	resolveElectionPositionFromRaceSlug,
 	resolveLocationDefaultYear,
 	resolveLocalityName,
 	resolvePlaceRaceElectionDates,
@@ -1154,6 +1155,16 @@ describe('buildElectionPositionHrefFromRaceSlug', () => {
 				{ citySlugToCountySlug: arMap, skipUnmappedCity: true },
 			),
 		).toBe('/elections/ar/pope-county/position/county-constable');
+	});
+
+	test('expands COUNTY-level race keyed to a city in race-param mode too', () => {
+		const arMap = new Map([['ar/pea-ridge', 'ar/benton-county']]);
+		expect(
+			resolveElectionPositionFromRaceSlug(
+				{ slug: 'ar/pea-ridge/county-constable', positionLevel: 'COUNTY' },
+				{ citySlugToCountySlug: arMap, skipUnmappedCity: true },
+			)?.route,
+		).toEqual({ level: 'city', state: 'ar', county: 'benton-county', city: 'pea-ridge', positionSlug: 'county-constable' });
 	});
 });
 

@@ -1285,6 +1285,13 @@ export function resolveElectionPositionFromRaceSlug(
 		}
 	}
 
+	// A county-level office can still be keyed to a city (Arkansas constables: `ar/atkins/county-constable`).
+	// The generic path below would put the city in the county slot, a URL that only works by redirect.
+	if (parts.length === 2) {
+		const countySlug = options?.citySlugToCountySlug?.get(parts.join('/'));
+		if (countySlug) return routeFromCountySlug(countySlug, parts[1]!, positionSlug);
+	}
+
 	const prefix = parts.join('/');
 	const segs = prefix.split('/').filter(Boolean);
 

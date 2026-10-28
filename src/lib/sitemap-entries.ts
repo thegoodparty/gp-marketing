@@ -288,6 +288,8 @@ export function buildCountyLookups(
  * CITY/LOCAL 4-part slugs: the county is already embedded; fall through to the generic
  * branch which emits the URL directly from the prefix.
  * CITY 3-part slugs with no county mapping are skipped (would produce a wrong URL).
+ * Any other level on a 3-part slug whose middle segment is a mapped city (Arkansas
+ * constables, COUNTY-level) also goes through the county, not into the county slot.
  */
 export function buildRaceEntries(
 	races: RaceEntry[],

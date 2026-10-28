@@ -38,6 +38,7 @@ import {
 	resolveClaimedCustomIssueText,
 	resolveClaimedTextField,
 	resolveDefaultElectionYear,
+	resolveElectionPositionFromRaceSlug,
 	resolveLocationDefaultYear,
 	resolveLocalityName,
 	resolvePlaceRaceElectionDates,
@@ -1162,6 +1163,36 @@ describe('buildElectionPositionHrefFromRaceSlug', () => {
 				{ skipUnmappedCity: true },
 			),
 		).toBeUndefined();
+	});
+
+	test('expands COUNTY-level race keyed to a city through its county', () => {
+		const arMap = new Map([['ar/atkins', 'ar/pope-county']]);
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{ slug: 'ar/atkins/county-constable', positionLevel: 'COUNTY' },
+				{ citySlugToCountySlug: arMap, skipUnmappedCity: true },
+			),
+		).toBe('/elections/ar/pope-county/atkins/position/county-constable');
+	});
+
+	test('keeps COUNTY-level race on a county slug at the county path', () => {
+		const arMap = new Map([['ar/atkins', 'ar/pope-county']]);
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{ slug: 'ar/pope-county/county-constable', positionLevel: 'COUNTY' },
+				{ citySlugToCountySlug: arMap, skipUnmappedCity: true },
+			),
+		).toBe('/elections/ar/pope-county/position/county-constable');
+	});
+
+	test('expands COUNTY-level race keyed to a city in race-param mode too', () => {
+		const arMap = new Map([['ar/pea-ridge', 'ar/benton-county']]);
+		expect(
+			resolveElectionPositionFromRaceSlug(
+				{ slug: 'ar/pea-ridge/county-constable', positionLevel: 'COUNTY' },
+				{ citySlugToCountySlug: arMap, skipUnmappedCity: true },
+			)?.route,
+		).toEqual({ level: 'city', state: 'ar', county: 'benton-county', city: 'pea-ridge', positionSlug: 'county-constable' });
 	});
 });
 

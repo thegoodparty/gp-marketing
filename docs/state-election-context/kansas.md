@@ -34,7 +34,7 @@ New laws usually take effect when the session laws are published, which is
 1 July when the volume is ready by then, unless the act sets another date
 (K.S.A. 45-310, 45-311).
 
-Re-check this doc: June 2027. Last researched: October 2026.
+Re-check this doc: June 2027. Last researched: October 2026. Reviewed by Emily: 28 October 2026.
 
 ## How elections work in Kansas
 

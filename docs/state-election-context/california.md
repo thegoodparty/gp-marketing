@@ -476,8 +476,8 @@ October 2026):
 - **The combined statewide office**
   `ca/state-insurance-commissioner/position/fire-safety-commissioner-joint`
   named the state twice and linked a breadcrumb to a page that does not exist.
-  That was our code, and it is fixed in PR #518 along with five similar pages
-  in other states.
+  That was our code. PR #518 fixes it, along with five similar pages in other
+  states, once it merges and is released.
 - **Duplicate school district names.** 11 district slugs carry an ID suffix to
   tell same-name districts apart, for example
   `ca/jefferson-elementary-school-district-0618870`, plus one odd slug,

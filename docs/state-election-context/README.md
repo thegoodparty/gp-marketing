@@ -21,9 +21,10 @@ same ground on every one of the ~48,000 location pages.
 | Oklahoma | [oklahoma.md](./oklahoma.md) |
 | Pennsylvania | [pennsylvania.md](./pennsylvania.md) |
 | Texas | [texas.md](./texas.md) |
+| Washington | [washington.md](./washington.md) |
 | Wisconsin | [wisconsin.md](./wisconsin.md) |
 
-35 states and DC still to do. Each doc is a draft until Emily has reviewed it.
+34 states and DC still to do. Each doc is a draft until Emily has reviewed it.
 
 ## What these are, and what they are not
 

@@ -100,7 +100,7 @@ If a legislature meets year-round, re-check in January and July.
 | North Carolina | organizes 13 January 2027, reconvenes 27 January 2027 | no fixed end | October 2027 | verified |
 | North Dakota | odd years only, January | April–May | June 2027 | no |
 | Ohio | 4 January 2027, year-round | — | January and July | verified |
-| Oklahoma | organizes 5 January 2027, convenes 1 February 2027 | by 28 May | June 2027 | verified |
+| Oklahoma | organizes 5 January 2027, convenes 1 February 2027 | by 28 May | July 2027 | verified |
 | Oregon | odd-year long session, January | June | July 2027 | no |
 | Pennsylvania | 5 January 2027, year-round | — | January and July | verified |
 | Rhode Island | January | June | July 2027 | no |
@@ -126,9 +126,9 @@ Grouped by month. Within a month, do the states with the most pages first.
 - **April**: Kentucky, New Mexico, South Dakota, Utah, Wyoming.
 - **May**: Arkansas, Georgia, Tennessee, Idaho, Maryland, Mississippi,
   Virginia, Washington, West Virginia.
-- **June**: Iowa, Kansas, Oklahoma, Alaska, Colorado, Florida, Hawaii, Montana, North Dakota,
+- **June**: Iowa, Kansas, Alaska, Colorado, Florida, Hawaii, Montana, North Dakota,
   South Carolina, Vermont.
-- **July**: Pennsylvania, Ohio, Michigan, Minnesota, Indiana, Texas, New York, Wisconsin, Missouri,
+- **July**: Pennsylvania, Ohio, Michigan, Minnesota, Indiana, Oklahoma, Texas, New York, Wisconsin, Missouri,
   Nebraska, Louisiana, Oregon, Alabama, Arizona, Connecticut, Delaware, Maine,
   Nevada, New Hampshire, New Jersey, Rhode Island, Massachusetts, DC.
 - **October**: Illinois (spring session bills are signed or vetoed by late August), North Carolina.

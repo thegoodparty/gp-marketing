@@ -25,7 +25,7 @@ states cover the most pages, so they come first.
 | 10 | Wisconsin | 2,041 | done, reviewed 27 October 2026 |
 | 11 | Indiana | 1,856 | done, reviewed 27 October 2026 |
 | 12 | Missouri | 1,651 | done |
-| 13 | California | 1,461 | drafted, awaiting review |
+| 13 | California | 1,461 | approved, not yet merged |
 | 14 | Arkansas | 1,218 | drafted, awaiting review |
 | 15 | South Dakota | 1,199 | drafted, awaiting review |
 | 16 | New Jersey | 1,158 | done, reviewed 27 October 2026 |
@@ -38,9 +38,11 @@ states cover the most pages, so they come first.
 | 23 | North Dakota | 606 | drafted, awaiting review |
 | 24 | Massachusetts | 597 | in progress |
 | 25 | Tennessee | 553 | in progress |
-| 26 | Florida | 533 | in progress |
-| 27 | Oregon | 481 | in progress |
-| 28 | Mississippi | 449 | next |
+| 26 | Florida | 533 | drafted, awaiting review |
+| 27 | Oregon | 481 | drafted, awaiting review |
+| 28 | Mississippi | 449 | in progress |
+| 29 | Louisiana | 436 | in progress |
+| 30 | Virginia | 428 | next |
 
 The rest follow the order in the CSV.
 

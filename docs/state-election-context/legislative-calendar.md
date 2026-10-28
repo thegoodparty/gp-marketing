@@ -46,7 +46,24 @@ states cover the most pages, so they come first.
 | 31 | Montana | 401 | in progress |
 | 32 | Alabama | 385 | in progress |
 | 33 | Colorado | 365 | in progress |
-| 34 | South Carolina | 363 | next |
+| 34 | South Carolina | 363 | queued after Virginia |
+| 35 | Idaho | 362 | queued after Montana |
+| 36 | Maine | 329 | queued after Alabama |
+| 37 | Arizona | 321 | queued after Colorado |
+| 38 | Connecticut | 312 | queued after Virginia |
+| 39 | Utah | 303 | queued after Montana |
+| 40 | Vermont | 298 | queued after Alabama |
+| 41 | New Hampshire | 284 | queued after Colorado |
+| 42 | New Mexico | 230 | queued after Virginia |
+| 43 | West Virginia | 186 | queued after Montana |
+| 44 | Maryland | 158 | queued after Alabama |
+| 45 | Wyoming | 155 | queued after Virginia |
+| 46 | Alaska | 84 | queued after Montana |
+| 47 | Delaware | 76 | queued after Alabama |
+| 48 | Rhode Island | 74 | queued after Colorado |
+| 49 | Nevada | 67 | queued after Virginia |
+| 50 | Hawaii | 5 | queued after Montana |
+| 51 | District of Columbia | 3 | queued after Alabama |
 
 The rest follow the order in the CSV.
 

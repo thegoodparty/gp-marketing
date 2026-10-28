@@ -358,6 +358,14 @@ distinct from the city. It has no separate county board of education.
 The city and county's offices come from its charter, which this doc did not
 read. Let race data supply offices, seat counts and the voting method.
 
+In our data the city page, `ca/san-francisco-county/san-francisco`, lists the
+city attorney plus the county's offices (board of supervisors, sheriff,
+district attorney, assessor-recorder, treasurer-tax collector), and site search
+for "San Francisco" lands there. Election-api has no mayor's race for San
+Francisco, so do not mention the mayor's office unless race data shows it.
+
+*Our page data and goodparty.org search, checked 28 October 2026*
+
 ### Los Angeles, San Diego, San Jose and other large cities
 
 `ca/los-angeles-county/los-angeles`, `ca/san-diego-county/san-diego`,
@@ -384,15 +392,18 @@ from this doc; let race data supply them.
 ### Pages that are not cities
 
 27 of our 506 California municipal-tier pages have no city council position.
-One is San Francisco (its offices sit on the county page). The other 26 are
-unincorporated communities or special district areas, such as
-`ca/marin-county/bolinas`, `ca/san-diego-county/fallbrook`,
-`ca/contra-costa-county/central-contra-costa` and
-`ca/riverside-county/coachella-valley`, whose only offices are special district
-boards. Never call these places cities or towns, and never describe a city
-government for them. Describe the district offices race data shows.
+One is San Francisco (its city page lists the county's offices, see above). The
+other 26 are Census county divisions: areas the Census Bureau draws for
+counting, with no government of their own. Election-api matched special
+district races to them by name, so pages such as `ca/marin-county/bolinas`,
+`ca/san-diego-county/fallbrook`, `ca/contra-costa-county/central-contra-costa`
+and `ca/riverside-county/coachella-valley` list only special district boards
+(the Central Contra Costa Sanitary District on that page, for example). The
+pages never call themselves cities, and the races on them are real. Never call
+these places cities or towns, never describe a city government for them, and
+describe only the district offices race data shows.
 
-*Our page data (sitemap shard 5, checked 27 October 2026)*
+*Our page data (sitemap shard 5, checked 27 October 2026); Census TIGERweb county subdivisions, all 26 named "<name> CCD" with no functioning government (checked 28 October 2026)*
 
 ## Writing rules
 
@@ -446,19 +457,27 @@ These are the ways California copy goes visibly wrong.
 These are problems in our own page data, noted so the data team can fix them.
 Do not write copy around them.
 
-- **Special districts filed as places.** About 26 municipal-tier pages are
-  special district areas or unincorporated communities, not cities (list in
-  "Pages that are not cities").
-- **San Francisco.** The `ca/san-francisco-county/san-francisco` page carries
-  only the city attorney; the board of supervisors is filed on the county page
-  as a county legislature, and no mayor position appears in the sitemap.
-- **Combined county offices in the place slot.** 159 California position URLs
-  put a county office in the place slot, such as
-  `ca/el-dorado-county/county-sheriff/coroner` and
-  `ca/san-francisco-county/county-tax-collector/position/treasurer-joint`.
-  These are combined county offices, not places.
-- **A state office in the place slot:**
-  `ca/state-insurance-commissioner/position/fire-safety-commissioner-joint`.
+- **Special districts matched to Census county divisions.** 26 municipal-tier
+  pages are Census county divisions that election-api attached special district
+  races to (list in "Pages that are not cities"). Our code cannot fix this
+  without hiding real races; the fix is giving these special districts their
+  own places in election-api.
+- **No San Francisco mayor's race.** Election-api carries no mayor's race for
+  San Francisco. The rest of its offices show on the city page.
+
+Two things that looked like data issues turned out not to be (checked 28
+October 2026):
+
+- **Combined county offices in the web address.** 159 California position
+  pages carry a county office where a place name would sit, such as
+  `ca/el-dorado-county/county-sheriff/coroner/position/public-administrator-joint`.
+  That is how election-api names combined offices. The pages' titles and
+  breadcrumbs are correct, so nothing needs fixing.
+- **The combined statewide office**
+  `ca/state-insurance-commissioner/position/fire-safety-commissioner-joint`
+  named the state twice and linked a breadcrumb to a page that does not exist.
+  That was our code, and it is fixed in PR #518 along with five similar pages
+  in other states.
 - **Duplicate school district names.** 11 district slugs carry an ID suffix to
   tell same-name districts apart, for example
   `ca/jefferson-elementary-school-district-0618870`, plus one odd slug,

@@ -58,7 +58,10 @@ import { component_illustratedColumnsBlock } from './component_illustratedColumn
 
 import { component_featuredCandidatesBlock } from './component_featuredCandidatesBlock.ts';
 
+import { component_eventAgendaBlock } from './component_eventAgendaBlock.ts';
+
 export const componentSchema = [
+	component_eventAgendaBlock,
 	component_featuredCandidatesBlock,
 	component_illustratedColumnsBlock,
 	component_electionPositionResourcesBlock,

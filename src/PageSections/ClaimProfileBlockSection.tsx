@@ -1,9 +1,11 @@
 import type { SectionOverrides, Sections } from '~/PageSections';
 import { normalizeRawCtaToButton, type RawCtaInput, transformButton } from '~/lib/buttonTransformer';
+import { isSignUpUrl } from '~/lib/analytics';
 import type { TokenMap } from '~/lib/resolveTokens';
 import { resolveSectionText } from '~/lib/resolveSectionText';
 import { ClaimProfileBlock } from '~/ui/ClaimProfileBlock';
 import { Container } from '~/ui/Container';
+import type { ComponentButtonProps } from '~/ui/Inputs/Button';
 import { stegaClean } from 'next-sanity';
 
 type Props = Extract<Sections, { _type: 'component_claimProfileBlock' }> & {
@@ -39,6 +41,27 @@ export function resolveClaimProfileBlockText(
 	};
 }
 
+/**
+ * Tags a sign-up link with where the click came from. Only a link that already
+ * goes to sign-up is tagged, so an editor who points the Studio button somewhere
+ * else does not get a stray parameter; any parameter already on the link is kept,
+ * and the attribution parameters are still added on top when the link renders.
+ */
+export function withSignupSource(
+	button: ComponentButtonProps | undefined,
+	source: string | undefined,
+): ComponentButtonProps | undefined {
+	if (!button || !source || !('href' in button) || !isSignUpUrl(button.href)) return button;
+	let url: URL;
+	try {
+		url = new URL(button.href);
+	} catch {
+		return button;
+	}
+	url.searchParams.set('signup_source', source);
+	return { ...button, href: url.toString() };
+}
+
 export function ClaimProfileBlockSection({ claimProfileOverride, tokens, embedded, ...section }: Props) {
 	const bgValue = stegaClean(section.claimProfileBlockDesignSettings?.field_blockColorCreamMidnight);
 	const backgroundColor = resolveClaimProfileBlockBackgroundColor(bgValue);
@@ -48,8 +71,9 @@ export function ClaimProfileBlockSection({ claimProfileOverride, tokens, embedde
 	// template, written with schema field names) reads the same as a projected one.
 	const normalizedButton = ctaButton ? normalizeRawCtaToButton(ctaButton as RawCtaInput, section._key) : undefined;
 	const transformedButton = normalizedButton ? transformButton(normalizedButton) : undefined;
-	const claimButton =
+	const formButton =
 		transformedButton && claimProfileOverride?.formId ? { ...transformedButton, formId: claimProfileOverride.formId } : transformedButton;
+	const claimButton = withSignupSource(formButton, claimProfileOverride?.signupSource);
 	const exampleCard = section.claimProfileBlockContent?.exampleCard;
 	const { headline, body } = resolveClaimProfileBlockText(section.claimProfileBlockContent, tokens);
 	const layout = claimProfileOverride?.layout ?? 'card';

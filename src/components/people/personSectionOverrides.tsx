@@ -16,7 +16,7 @@ import { Text } from '~/ui/Text';
 import { ButtonLink } from '~/ui/Inputs/Button';
 import type { CardAttributionMode } from '~/ui/CandidatesCard';
 import { VoterDensityMapCard } from './VoterDensityMapCard';
-import { PERSON_CLAIM_FORM_ID } from './claimFormId';
+import { PERSON_CLAIM_FORM_ID, PERSON_CLAIM_SIGNUP_SOURCE } from './claimFormId';
 import { PledgeSymbolCallout } from './PledgeSymbolCallout';
 import { RelatedPeopleList } from './RelatedPeopleList';
 
@@ -872,6 +872,7 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			// GTM resolves the claim sign-up conversion through this id (see
 			// `PERSON_CLAIM_FORM_ID`).
 			formId: PERSON_CLAIM_FORM_ID,
+			signupSource: PERSON_CLAIM_SIGNUP_SOURCE,
 		},
 		component_profileContentBlock: {
 			contentCards,

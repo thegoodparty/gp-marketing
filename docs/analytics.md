@@ -72,6 +72,12 @@ On profiles the claim block's sign-up button still sends `Sign Up Clicked` and t
 `sign_up_click` data layer push with form id `person-claim-owner`, as the band did; the
 claim event is in addition to them.
 
+The claim button's link is `https://app.goodparty.org/sign-up?signup_source=profile_claim`,
+so the `href` on `Sign Up Clicked` and on the claim event carries that parameter (the
+attribution parameters are still added on top). The app reads it to show the claim
+variation of its sign-up page while the `signup-profile-claim-variation` flag is on. The
+pledge band's "Take the pledge" button and every other sign-up link stay plain.
+
 ## The pledge copy test
 
 From October 2026 the voter guide runs a three-way test of the pledge copy (Jack's

@@ -27,6 +27,23 @@ describe('handleHubSpotFormSubmission', () => {
 		expect(assign).toHaveBeenCalledWith('/thanks?submissionGuid=uuid-123');
 	});
 
+	test('records the experiment arm on the event when the form sat in a test', () => {
+		handleHubSpotFormSubmission({
+			formId: 'form-123',
+			pagePath: '/blog/article/some-article',
+			experiment: { flagKey: 'blog-voter-newsletter-cta-202610', variant: 'proof' },
+			assign: mock((_url: string) => {}),
+			track: trackMock,
+		});
+
+		expect(trackMock).toHaveBeenCalledWith('Newsletter Form Submitted', {
+			formId: 'form-123',
+			page_path: '/blog/article/some-article',
+			flag_key: 'blog-voter-newsletter-cta-202610',
+			variant: 'proof',
+		});
+	});
+
 	test('does not redirect when redirectTo is unsafe', () => {
 		const assign = mock((_url: string) => {});
 		handleHubSpotFormSubmission({

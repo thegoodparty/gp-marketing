@@ -10,6 +10,8 @@ import { ButtonSectionGroup } from '~/RichTextContentSections/ButtonSectionGroup
 import { FAQsSectionGroup } from '~/RichTextContentSections/FAQsSectionGroup';
 import { block, marks, list, listItem } from '~/ui/RichData';
 import { CalloutSectionGroup } from '~/RichTextContentSections/CalloutSectionGroup';
+import { NewsletterSectionGroup } from '~/RichTextContentSections/NewsletterSectionGroup';
+import type { NewsletterArticleSection } from '~/experiments/blogNewsletter';
 import { VideoSectionGroup } from '~/RichTextContentSections/VideoSectionGroup';
 import { Typography } from '~/ui/Typography';
 import { TypographyStackSpacing } from '~/types/ui';
@@ -17,10 +19,10 @@ import { TypographyStackSpacing } from '~/types/ui';
 export type ArticleSections = NonNullable<
 	NonNullable<NonNullable<NonNullable<ArticleQueryResult>['contentSections']>['block_editorialContentSections']>[number]
 >;
-type RichTextSection = ArticleSections | Block_policyText[number];
+type RichTextSection = ArticleSections | NewsletterArticleSection | Block_policyText[number];
 
 interface Props {
-	contentSections?: ArticleSections[] | Block_policyText | null;
+	contentSections?: (ArticleSections | NewsletterArticleSection)[] | Block_policyText | null;
 	stackSpacing?: TypographyStackSpacing;
 }
 
@@ -39,6 +41,13 @@ export function RichTextContentSections(props: Props) {
 				value={contentSections}
 				components={{
 					types: {
+						newsletterSection({ value: section }) {
+							return (
+								<ComponentErrorBoundary key={`newsletter-section-${section._key}`} componentName='NewsletterSectionGroup'>
+									<NewsletterSectionGroup {...section} />
+								</ComponentErrorBoundary>
+							);
+						},
 						imageCta({ value: section }) {
 							return (
 								<ComponentErrorBoundary key={`image-cta-${section._key}`} componentName='ImageCTAGroup'>

@@ -29,7 +29,7 @@ effect on 1 January after a 90-day period from enactment (Cal. Const. art. IV,
 § 8(c)).
 
 Re-check this doc: November each year, once the autumn signing window has
-closed. Last researched: October 2026.
+closed. Last researched: October 2026. Reviewed by Emily: 28 October 2026.
 
 *Cal. Const. art. IV, §§ 3(a), 8(c), 10(b) · statutory · read in statute*
 

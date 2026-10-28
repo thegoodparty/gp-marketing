@@ -1,0 +1,634 @@
+[
+	{
+		"claim": "The Legislature convenes in regular session every year on the second Monday in January",
+		"citation": "Kan. Const. art. 2, § 8",
+		"url": "https://www.ksrevisor.gov/kanconst/093_002_0008.html",
+		"quote": "The legislature shall meet in regular session annually commencing on the second Monday in January",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Even-year sessions are limited to 90 calendar days unless extended by two-thirds of each house; odd-year sessions have no limit",
+		"citation": "Kan. Const. art. 2, § 8",
+		"url": "https://www.ksrevisor.gov/kanconst/093_002_0008.html",
+		"quote": "The duration of regular sessions held in even-numbered years shall not exceed ninety calendar days",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Bills are presented to the governor within ten days after passage",
+		"citation": "Kan. Const. art. 2, § 14(a)",
+		"url": "https://www.ksrevisor.gov/kanconst/093_002_0014.html",
+		"quote": "Within ten days after passage, every bill shall be signed by the presiding officers and presented to the governor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A bill not returned within ten calendar days after presentment becomes law without signature",
+		"citation": "Kan. Const. art. 2, § 14(a)",
+		"url": "https://www.ksrevisor.gov/kanconst/093_002_0014.html",
+		"quote": "If any bill shall not be returned within ten calendar days (excluding the day presented) after it shall have been presented to the governor, it shall become a law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The governor may call a special session",
+		"citation": "Kan. Const. art. 1, § 5",
+		"url": "https://www.ksrevisor.gov/kanconst/093_001_0005.html",
+		"quote": "The governor may, on extraordinary occasions, call the legislature into special session by proclamation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Acts take effect on publication of the session laws unless the act says otherwise",
+		"citation": "K.S.A. 45-310(a)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch45/045_003_0010.html",
+		"quote": "Such acts shall take effect and be in force from and after such publication, unless otherwise specifically provided in such act.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The session laws publication date is July 1 when the volume is ready by then",
+		"citation": "K.S.A. 45-311",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch45/045_003_0011.html",
+		"quote": "shall be July 1 if a limited number of the volume are in the office of the secretary of state on or before July 1",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal primaries are the first Tuesday in August and general elections the Tuesday after the first Monday in November of odd-numbered years",
+		"citation": "K.S.A. 25-21a01(a)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_021a_0001.html",
+		"quote": "shall be held on the Tuesday succeeding the first Monday in November of 2017 of odd-numbered years and on such date thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "\"Municipality\" for election timing includes cities and consolidated city-counties",
+		"citation": "K.S.A. 25-21a01(g)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_021a_0001.html",
+		"quote": "Any city, consolidated city-county created under",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "\"Municipality\" also includes school districts, community colleges and drainage, extension, irrigation, improvement, water and hospital districts",
+		"citation": "K.S.A. 25-21a01(g)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_021a_0001.html",
+		"quote": "community college, drainage district, extension district created under",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special districts that elect their board at a district meeting are excluded",
+		"citation": "K.S.A. 25-21a01(g)(2)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_021a_0001.html",
+		"quote": "The term does not include any special district where the election of members of the governing body is conducted at a meeting of the special district.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities and hospital districts may also hold elections in even-numbered years to stagger terms or use three-year terms",
+		"citation": "K.S.A. 25-21a01(h)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_021a_0001.html",
+		"quote": "Cities and hospital districts may provide for elections of elected officials in even-numbered years in order to provide for staggered terms of office or for three-year terms of office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each municipality sets its terms of office by ordinance or resolution to fit the schedule",
+		"citation": "K.S.A. 25-21a01(c)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_021a_0001.html",
+		"quote": "The governing body of the municipality shall establish by ordinance or resolution terms of office of elected officials to comply with this act.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipal candidate may file a declaration of intent with the county election officer with a fee",
+		"citation": "K.S.A. 25-21a01(f)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_021a_0001.html",
+		"quote": "may become a candidate for municipal office by filing a declaration of intent to become a candidate with the county election officer",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Old city ordinances on election timing did not survive the 2015 move to November",
+		"citation": "K.S.A. 12-184a(b)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch12/012_001_0084a.html",
+		"quote": "except those provisions relating to the timing of city primary and general elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City general elections are held on the Tuesday after the first Monday in November, if needed, in both odd and even years",
+		"citation": "K.S.A. 25-2107(a)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_021_0007.html",
+		"quote": "The general election of city officers shall be held on the Tuesday following the first Monday in November of each odd-numbered and even-numbered years, if needed.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city primary is held only where a district has more than three candidates",
+		"citation": "K.S.A. 25-2108a(b)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_021_0008a.html",
+		"quote": "if there are more than three qualified candidates for any member district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An at-large city primary is held only where candidates exceed three times the seats",
+		"citation": "K.S.A. 25-2108a(c)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_021_0008a.html",
+		"quote": "if there are more than three times the number of candidates as there are members to be elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board general elections are in November of odd-numbered years with an August primary",
+		"citation": "K.S.A. 25-2010",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_020_0010.html",
+		"quote": "Board member general elections shall be held on the Tuesday following the first Monday in November of odd-numbered years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A school board primary is held only where a member position has more than three candidates",
+		"citation": "K.S.A. 25-2021(a)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_020_0021.html",
+		"quote": "if there are more than three qualified candidates for any member position in any member district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A unified school district board has seven members serving four-year terms, unless a specific law provides otherwise",
+		"citation": "K.S.A. 72-1072",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch72/072_010_0072.html",
+		"quote": "a board of education composed of seven (7) members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County and state partisan primaries are the first Tuesday of August in even-numbered years",
+		"citation": "K.S.A. 25-203",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_002_0003.html",
+		"quote": "The primary national, state, county and township election shall be held on the first Tuesday of August in even-numbered years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is the Tuesday after the first Monday in November",
+		"citation": "K.S.A. 25-2102(a)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_021_0002.html",
+		"quote": "means the elections held on the Tuesday succeeding the first Monday in November of both odd-numbered and even-numbered years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township elections are held in November of even-numbered years in every township except city townships",
+		"citation": "K.S.A. 25-1601",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_016_0001.html",
+		"quote": "a township election shall be held in each township in the state, except in city townships",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township trustee and treasurer are elected together for four-year terms",
+		"citation": "K.S.A. 25-1601",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_016_0001.html",
+		"quote": "there shall be elected for a term of four years, a township trustee and a treasurer",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The township clerk is elected for four years on the alternate cycle",
+		"citation": "K.S.A. 25-1601",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_016_0001.html",
+		"quote": "each fourth year thereafter, there shall be elected for a term of four years, a township clerk",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County and township candidates are nominated by party primary or by independent petition",
+		"citation": "K.S.A. 25-202(a)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_002_0002.html",
+		"quote": "all candidates for national, state, county and township offices shall be nominated by",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Parties whose governor candidate polled under 5% nominate by convention instead of primary",
+		"citation": "K.S.A. 25-202(b)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_002_0002.html",
+		"quote": "did not poll at least 5% of the total vote cast for all candidates for governor in the preceding general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate cannot run in a party primary and then as an independent for county or township office in the same cycle",
+		"citation": "K.S.A. 25-202(c)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_002_0002.html",
+		"quote": "shall file for office as a partisan candidate in a primary election and also file for office as an independent candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Affiliated voters vote in their party primary; each party decides by January 15 whether unaffiliated voters may vote in its primary",
+		"citation": "K.S.A. 25-3301(a)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_033_0001.html",
+		"quote": "whether voters who are unaffiliated with such political party may vote in such party's primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An unaffiliated voter can declare a party at the polls and receive that party ballot, which records the affiliation",
+		"citation": "K.S.A. 25-3301(c)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_033_0001.html",
+		"quote": "Such a statement of party affiliation shall constitute a declaration of party affiliation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party affiliation cannot be changed between the candidate filing deadline and certification of primary results",
+		"citation": "K.S.A. 25-3304(b)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_033_0004.html",
+		"quote": "Such declaration cannot be filed during the time from the candidate filing deadline",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City elections are partisan or nonpartisan as the city governing body decides",
+		"citation": "K.S.A. 25-2113",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_021_0013.html",
+		"quote": "City elections shall be nonpartisan or partisan as determined by the governing body",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board elections are always nonpartisan",
+		"citation": "K.S.A. 25-2009(a)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_020_0009.html",
+		"quote": "School elections shall be nonpartisan and laws applicable only to partisan elections shall not apply in such elections.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The candidate with the most votes wins unless a law expressly says otherwise",
+		"citation": "K.S.A. 25-702(a)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_007_0002.html",
+		"quote": "the person having the highest number of votes for any office shall be deemed to have been elected to that office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The independent-nomination statute does not apply to city and school elections",
+		"citation": "K.S.A. 25-303(a)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_003_0003.html",
+		"quote": "This section shall not apply to city and school elections, nor to election of other officers provided by law to be elected in odd-numbered years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter who holds a party affiliation cannot accept an independent nomination",
+		"citation": "K.S.A. 25-303(b)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_003_0003.html",
+		"quote": "shall be eligible to accept an independent nomination for any office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township offices also have an independent petition route",
+		"citation": "K.S.A. 25-303(e)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_003_0003.html",
+		"quote": "Independent nominations of candidates for offices to be filled by the voters of a township",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Independent petition signers must live in the same county and election district as the office",
+		"citation": "K.S.A. 25-303(f)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_003_0003.html",
+		"quote": "All signers of each separate nomination petition shall reside in the same county and election district of the office sought.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter may not sign independent petitions for more than one candidate for the same office",
+		"citation": "K.S.A. 25-303(h)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_003_0003.html",
+		"quote": "No person shall join in nominating more than one person for the same office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each city sets by ordinance how many signatures a city nomination petition needs",
+		"citation": "K.S.A. 25-2110(b)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_021_0010.html",
+		"quote": "shall be established by the city governing body by passage of an ordinance",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City elections are run by the county election officer of the county holding most of the city population",
+		"citation": "K.S.A. 25-2110(e)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch25/025_021_0010.html",
+		"quote": "or of the county in which the greater population of the city is located if the city extends into more than one county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A board of county commissioners has three, five or seven members",
+		"citation": "K.S.A. 19-202(a)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch19/019_002_0002.html",
+		"quote": "The board of county commissioners of each county shall consist of three, five or seven qualified electors.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each commissioner lives in and represents a district",
+		"citation": "K.S.A. 19-202(b)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch19/019_002_0002.html",
+		"quote": "one county commissioner shall reside in and represent each commissioner district within the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commissioners serve staggered four-year terms",
+		"citation": "K.S.A. 19-202(c)-(d)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch19/019_002_0002.html",
+		"quote": "all county commissioners shall hold office for a term of four years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Changing the number of commissioner districts needs voter approval",
+		"citation": "K.S.A. 19-204(c)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch19/019_002_0004.html",
+		"quote": "shall take effect until it has been approved by a majority of the qualified electors of the county voting thereon",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Sherman County may elect its commissioners at large",
+		"citation": "K.S.A. 19-204b",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch19/019_002_0004b.html",
+		"quote": "Each county commissioner shall run at large.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a county clerk for four years",
+		"citation": "K.S.A. 19-301",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch19/019_003_0001.html",
+		"quote": "a county clerk shall be elected in each county, for a term of four (4) years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a county treasurer for four years",
+		"citation": "K.S.A. 19-501",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch19/019_005_0001.html",
+		"quote": "a county treasurer shall be elected in each county for a term of four (4) years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a register of deeds for four years",
+		"citation": "K.S.A. 19-1201",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch19/019_012_0001.html",
+		"quote": "a register of deeds shall be elected in each county for a term of four (4) years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a county attorney for four years, except as otherwise provided by law",
+		"citation": "K.S.A. 19-701",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch19/019_007_0001.html",
+		"quote": "a county attorney shall be elected in each county who shall hold office for a term of four (4) years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a sheriff for four years except counties under a consolidated law enforcement act",
+		"citation": "K.S.A. 19-801a",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch19/019_008_0001a.html",
+		"quote": "Except in those counties operating under the provisions of any consolidated law enforcement act",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The constitution requires an elected sheriff except in a county that abolished the office before January 11, 2022",
+		"citation": "Kan. Const. art. 9, § 2(a)-(b)",
+		"url": "https://www.ksrevisor.gov/kanconst/093_009_0002.html",
+		"quote": "shall not apply to a county that abolished the office of sheriff prior to January 11, 2022",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County home rule is exercised by commission resolution, and counties remain subject to all state election law",
+		"citation": "K.S.A. 19-101a(a)(6)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch19/019_001_0001a.html",
+		"quote": "Counties shall be subject to all acts of the legislature concerning elections, election commissioners and officers and their duties as such officers and the election of county officers.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only counties designated urban areas may adopt a charter; Johnson and Sedgwick are so designated",
+		"citation": "K.S.A. 19-2654",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch19/019_026_0054.html",
+		"quote": "The area comprising Sedgwick county is hereby designated as an urban area",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Johnson County is designated an urban area",
+		"citation": "K.S.A. 19-2654(a)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch19/019_026_0054.html",
+		"quote": "The area comprising Johnson county is hereby designated as an urban area",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county charter may set the number, terms and method of election of commissioners",
+		"citation": "K.S.A. 19-2680(a)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch19/019_026_0080.html",
+		"quote": "fix the number, term, and compensation of the commissioners and their method of election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county charter may make elected county offices appointive or eliminate them",
+		"citation": "K.S.A. 19-2680(e)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch19/019_026_0080.html",
+		"quote": "authorize the appointment of or elimination of elective officials and offices within the charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State law provided for consolidating Kansas City, Kansas, and Wyandotte County",
+		"citation": "K.S.A. 12-340",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch12/012_003_0040.html",
+		"quote": "Consolidation of Kansas City, Kansas, and Wyandotte county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Unified Government of Wyandotte County/Kansas City exists and is headed by a chief executive/mayor",
+		"citation": "K.S.A. 12-345 (Attorney General opinion annotation)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch12/012_003_0045.html",
+		"quote": "Chief executive/mayor of unified government of Wyandotte County",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The consolidation plan decides whether the governing body is elected on a partisan or nonpartisan basis",
+		"citation": "K.S.A. 12-344(c)(2)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch12/012_003_0044.html",
+		"quote": "determine whether elections of the governing body of the consolidated city-county shall be partisan or nonpartisan elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Bonner Springs, Edwardsville and Lake Quivira stay separate cities inside Wyandotte County",
+		"citation": "K.S.A. 12-345(h)(2)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch12/012_003_0045.html",
+		"quote": "except the territory of the cities of Bonner Springs, Edwardsville, Lake Quivira and the unincorporated area of the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State law also allows unification of governments in Greeley County",
+		"citation": "K.S.A. 12-360",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch12/012_003_0060.html",
+		"quote": "Unification of governmental units in Greeley county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A Greeley County unification plan decides partisan or nonpartisan elections",
+		"citation": "K.S.A. 12-363(c)(2)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch12/012_003_0063.html",
+		"quote": "determine whether elections of the governing body of the unified city-county shall be partisan or nonpartisan elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The legislature may set up to four classes of cities",
+		"citation": "Kan. Const. art. 12, § 5(b)",
+		"url": "https://www.ksrevisor.gov/kanconst/093_012_0005.html",
+		"quote": "the legislature may establish not to exceed four classes of cities",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities have constitutional home rule over local affairs and government",
+		"citation": "Kan. Const. art. 12, § 5(b)",
+		"url": "https://www.ksrevisor.gov/kanconst/093_012_0005.html",
+		"quote": "Cities are hereby empowered to determine their local affairs and government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter ordinance cannot exempt a city from laws that apply uniformly to all cities",
+		"citation": "Kan. Const. art. 12, § 5(c)(1)",
+		"url": "https://www.ksrevisor.gov/kanconst/093_012_0005.html",
+		"quote": "other than enactments of statewide concern applicable uniformly to all cities, other enactments applicable uniformly to all cities",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city over 15,000 becomes first class by governor proclamation after certifying its population",
+		"citation": "K.S.A. 13-101",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch13/013_001_0001.html",
+		"quote": "who shall thereupon by public proclamation declare such city to be a city of the first class",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city between 15,000 and 25,000 may choose to stay second class",
+		"citation": "K.S.A. 13-101",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch13/013_001_0001.html",
+		"quote": "would be more advantageous for such city to continue to operate as a city of the second class",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Second class covers cities over 2,000 and under 15,000",
+		"citation": "K.S.A. 14-101(a)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch14/014_001_0001.html",
+		"quote": "all cities hereafter attaining a population of more than 2,000 and less than 15,000",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city between 2,000 and 5,000 may choose to stay third class",
+		"citation": "K.S.A. 14-101(a)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch14/014_001_0001.html",
+		"quote": "would be more advantageous for such city to continue to operate as a city of the third class",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "When a city becomes second class, its land leaves the township",
+		"citation": "K.S.A. 14-101(d)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch14/014_001_0001.html",
+		"quote": "land within the corporate limits of such city is no longer located within the territory of any township",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Third class covers places of not more than 2,000, plus county seats of any size that were unincorporated towns",
+		"citation": "K.S.A. 15-101",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch15/015_001_0001.html",
+		"quote": "containing not more than two thousand inhabitants",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A second-class city reduced to 1,000 or fewer people returns to third class only by a vote of its residents",
+		"citation": "K.S.A. 14-901",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch14/014_009_0001.html",
+		"quote": "has been reduced in population to one thousand or less",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A third-class city elects a mayor and five council members for two-year terms by default",
+		"citation": "K.S.A. 15-201",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch15/015_002_0001.html",
+		"quote": "Every two years an election shall be held for a mayor, and five council members.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A second-class city elects a mayor, council members and a city treasurer for two-year terms by default",
+		"citation": "K.S.A. 14-201",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch14/014_002_0001.html",
+		"quote": "a mayor, council members and city treasurer",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The second-class city statute still names an April election date that the 2015 municipal timing law superseded",
+		"citation": "K.S.A. 14-201",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch14/014_002_0001.html",
+		"quote": "there shall be elected on the first Tuesday in April of each odd-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city adopts or abandons a form of government by a vote of its residents",
+		"citation": "K.S.A. 12-184(b)",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch12/012_001_0084.html",
+		"quote": "the question of the adoption or abandonment of the form of city government shall be submitted to the qualified electors of the city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The modified mayor-council form has a mayor, three council members at large and four by district",
+		"citation": "K.S.A. 12-10a02",
+		"url": "https://www.ksrevisor.gov/statutes/chapters/ch12/012_010a_0002.html",
+		"quote": "The governing body shall consist of a mayor and three (3) members of the council elected at large and four (4) members of the council",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	}
+]

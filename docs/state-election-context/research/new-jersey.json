@@ -1,0 +1,922 @@
+[
+	{
+		"claim": "Each two-year Legislature begins at noon on the second Tuesday in January of each even-numbered year",
+		"citation": "N.J. Const. art. IV, § 1, ¶ 3",
+		"url": "https://www.njleg.state.nj.us/constitution",
+		"quote": "Each Legislature shall be constituted for a term of 2 years beginning at noon on the second Tuesday in January in each even numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each legislative year begins on the second Tuesday in January",
+		"citation": "N.J. Const. art. IV, § 1, ¶ 3",
+		"url": "https://www.njleg.state.nj.us/constitution",
+		"quote": "The legislative year shall commence at noon on the second Tuesday in January of each year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Bills left at the end of the first annual session carry over into the second",
+		"citation": "N.J. Const. art. IV, § 1, ¶ 3",
+		"url": "https://www.njleg.state.nj.us/constitution",
+		"quote": "All business before either House or any of the committees thereof at the end of the first annual session may be resumed in the second annual session.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Governor has until noon of the 45th day after presentation to act on a bill",
+		"citation": "N.J. Const. art. V, § 1, ¶ 14(c)",
+		"url": "https://www.njleg.state.nj.us/constitution",
+		"quote": "shall be from the date of presentation until noon of the forty-fifth day next following",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A bill passed in the last 10 days of a two-year Legislature becomes law only if the Governor signs it by noon of the seventh day after the Legislature expires",
+		"citation": "N.J. Const. art. V, § 1, ¶ 14(c)(3)",
+		"url": "https://www.njleg.state.nj.us/constitution",
+		"quote": "shall become law only if the Governor signs it prior to noon of the seventh day following such expiration",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is the Tuesday after the first Monday in November every year",
+		"citation": "N.J.S.A. 19:2-3",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/20398",
+		"quote": "The general election shall be held on the Tuesday next after the first Monday in November in each year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The primary for the general election is the Tuesday after the first Monday in June, for all parties",
+		"citation": "N.J.S.A. 19:23-40",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/20770",
+		"quote": "The primary election for the general election shall be held for all political parties upon the Tuesday next after the first Monday in June",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every office filled at the November general election is nominated either by party primary or by direct petition",
+		"citation": "N.J.S.A. 19:13-1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/20559",
+		"quote": "shall be nominated directly by petition as hereinafter provided, or at the primary for the general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voting in a party's primary makes the voter a member of that party until they file a change",
+		"citation": "N.J.S.A. 19:23-45",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/20773",
+		"quote": "shall be deemed to be a member of that party until the voter signs and files",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party member can vote in another party's primary only after switching at least 55 days before; new voters and voters who have never voted in a primary are exempt",
+		"citation": "N.J.S.A. 19:23-45",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/20773",
+		"quote": "or a voter who has not previously voted in a primary election, may vote in a primary election of a political party unless the voter was deemed to be a member of that party on the 55th day next preceding such primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter may declare themselves unaffiliated with any party",
+		"citation": "N.J.S.A. 19:23-45",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/20773",
+		"quote": "or declare that the voter is unaffiliated with any party regardless of any previously declared party affiliation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "At the polls each primary voter names the party primary they want to vote in",
+		"citation": "N.J.S.A. 19:23-46",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/20777",
+		"quote": "Each voter offering to vote shall announce his name and the party primary in which he wishes to vote.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Whoever gets the most votes wins (plurality)",
+		"citation": "N.J.S.A. 19:3-4",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/20403",
+		"quote": "for whom the greatest number of votes shall have been given therein for such office or offices, shall be deemed and taken to be elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Petitions for county and local offices on the November ballot go to the county clerk",
+		"citation": "N.J.S.A. 19:13-3",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/20561",
+		"quote": "shall be addressed to the clerks of the respective counties wherein the officers nominated are to be voted for",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A petition candidate may carry a designation of up to three words that cannot use the name of a party that holds primaries",
+		"citation": "N.J.S.A. 19:13-4",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/20562",
+		"quote": "The petition shall also state in not more than three words the designation of the party or principles which the candidates therein named represent",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Petition signers certify they have not signed another nominating petition, for the primary or the general election, for that office",
+		"citation": "N.J.S.A. 19:13-4",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/20562",
+		"quote": "that they have not signed any other petition of nomination for the primary or for the general election for such office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A petition may not nominate someone who has accepted a primary nomination for the same office",
+		"citation": "N.J.S.A. 19:13-4",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/20562",
+		"quote": "No such petition shall undertake to nominate any candidate who has accepted the nomination for the primary for such position.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter may sign one petition per office",
+		"citation": "N.J.S.A. 19:13-6",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/20564",
+		"quote": "Such voter may sign one petition for each officer and no more",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A primary candidate for a municipal office cannot be another party's candidate for that office in the following November",
+		"citation": "N.J.S.A. 19:13-14.1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/20574",
+		"quote": "shall not be eligible to serve as the candidate of any other political party for that office in that municipality at the general election following that primary",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Borough: mayor elected at large for four years",
+		"citation": "N.J.S.A. 40A:60-2",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39530",
+		"quote": "The mayor shall be elected by the voters of the municipality at large and serve for a term of four years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Borough: six council members elected at large for three-year terms, two each year",
+		"citation": "N.J.S.A. 40A:60-2",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39530",
+		"quote": "The council shall consist of six members, elected at large, and shall serve for a term of three years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Borough elections are held every year at the November general election",
+		"citation": "N.J.S.A. 40A:60-2",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39530",
+		"quote": "There shall be held annually, at the time provided by law for holding general elections, an election for borough officers.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City: seven council members, six from two wards for staggered three-year terms and one at large for four years",
+		"citation": "N.J.S.A. 40A:61-2",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39539",
+		"quote": "six shall be elected from two wards for staggered three year terms and one shall be elected at large for a four year term",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities that had a different mayor term or council structure before the 1987 law keep it until voters adopt the new one",
+		"citation": "N.J.S.A. 40A:61-2",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39539",
+		"quote": "any city which elected its mayor for a two or three year term prior to the effective date of this act shall continue to elect its mayor for that term",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City elections are held every year at the November general election",
+		"citation": "N.J.S.A. 40A:61-2",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39539",
+		"quote": "There shall be held annually, at the time provided by law for holding general elections an election for city officers.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Town: mayor elected at large for four years and called the councilman-at-large",
+		"citation": "N.J.S.A. 40A:62-2",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39547",
+		"quote": "The mayor shall be elected by the voters of the municipality at large and shall be known as the councilman-at-large.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Town: eight council members, two from each of four wards, four-year terms",
+		"citation": "N.J.S.A. 40A:62-2",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39547",
+		"quote": "The council shall consist of eight members, two elected from each of four wards.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Town elections are held with the November general election",
+		"citation": "N.J.S.A. 40A:62-2",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39547",
+		"quote": "The annual election for town officers shall be held at the same time and places as the general election.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township: a township committee of three or five members elected at large for three-year terms",
+		"citation": "N.J.S.A. 40A:63-2",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39557",
+		"quote": "The township committee shall consist of three or five members elected at large and who shall hold office for a term of three years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township committee elections are held with the November general election",
+		"citation": "N.J.S.A. 40A:63-2",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39557",
+		"quote": "The annual township election for members of the township committee shall be held at the same time and places as for the general election.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A plurality elects a township officer",
+		"citation": "N.J.S.A. 40A:63-2",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39557",
+		"quote": "A plurality of votes shall be sufficient to elect any township officer.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The township committee chooses one of its members as chair, who is known as the mayor",
+		"citation": "N.J.S.A. 40A:63-3",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39558",
+		"quote": "the committee shall have the power and authority to elect one of their number as chairman of the committee, who shall preside at all meetings of the township committee and who shall be known as the mayor of the township",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Village: a five-member board of trustees elected at large for three-year terms",
+		"citation": "N.J.S.A. 40A:63-8",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39564",
+		"quote": "The village board of trustees shall consist of five members who shall be elected at large and serve for a term of three years.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A village runs under the township law, reading township committee as board of trustees and mayor as president of the board",
+		"citation": "N.J.S.A. 40A:63-8",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39564",
+		"quote": "shall operate and transact all of its business according to the laws pertaining to the township form of government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The five kinds of municipality are city, borough, town, township and village",
+		"citation": "N.J.S.A. 40:55D-5",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/36348",
+		"quote": "means any city, borough, town, township or village.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan municipal elections are held on the second Tuesday in May",
+		"citation": "N.J.S.A. 40:45-7",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35839",
+		"quote": "regular municipal elections shall be held in each municipality governed by this act on the second Tuesday in May",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Secretary of State may move a May municipal election that falls on a religious observance",
+		"citation": "N.J.S.A. 40:45-7",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35839",
+		"quote": "the Secretary of State may change in any year the date provided for a regular municipal election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Uniform Nonpartisan Elections Law covers Faulkner Act charters, the commission form and other May-election forms, and governs only the time, manner and method of election",
+		"citation": "N.J.S.A. 40:45-6",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35838",
+		"quote": "This act shall govern these municipalities only with respect to the time, manner and method of election of municipal officers.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The commission form is one of the forms that holds nonpartisan May elections",
+		"citation": "N.J.S.A. 40:45-6",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35838",
+		"quote": "commission form of government law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan candidates may print a slogan of up to six words that cannot show party affiliation",
+		"citation": "N.J.S.A. 40:45-10",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35844",
+		"quote": "The designation shall not indicate political party affiliation.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A May-election municipality may move its nonpartisan election to the November general election by ordinance",
+		"citation": "N.J.S.A. 40:45-7.1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35840",
+		"quote": "may, by ordinance, choose to hold regular municipal elections on the day of the general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Once moved to November, a municipality cannot move back to May for at least 10 years",
+		"citation": "N.J.S.A. 40:45-7.1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35840",
+		"quote": "at least 10 years have passed since the adoption of the ordinance changing the date of the municipal election to the day of the general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan municipal elections are decided by plurality by default",
+		"citation": "N.J.S.A. 40:45-17",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35852",
+		"quote": "the candidates receiving the greatest number of votes cast shall be elected to the respective offices",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A nonpartisan municipality can adopt or abandon runoff elections by referendum",
+		"citation": "N.J.S.A. 40:45-21",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35856",
+		"quote": "may, by referendum, adopt the provisions of those sections",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Where runoffs apply, the runoff is held on the fourth Tuesday after a May election, or in December after a November one",
+		"citation": "N.J.S.A. 40:45-19",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35854",
+		"quote": "shall be held on the fourth Tuesday next following that municipal election",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan municipal candidates file petitions with the municipal clerk",
+		"citation": "N.J.S.A. 40:45-8",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35842",
+		"quote": "the names of candidates for all elective offices shall be filed with the municipal clerk",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter may not sign more nonpartisan nominating petitions than there are seats to fill",
+		"citation": "N.J.S.A. 40:45-8",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35842",
+		"quote": "I further certify that I have not signed more petitions or certificates of nomination than there are places to be filled for the above office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities that move their nonpartisan election to November stay under the nonpartisan elections law",
+		"citation": "N.J.S.A. 40:45-6",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35838",
+		"quote": "or having chosen to hold such elections on the day of the general election in November",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Faulkner Act municipalities hold May nonpartisan elections unless their charter puts elections at the November general election",
+		"citation": "N.J.S.A. 40:69A-150",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37677",
+		"quote": "where the election of such officers is not provided to be at the general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Faulkner Act voters can amend the charter to switch between May municipal elections and November general elections",
+		"citation": "N.J.S.A. 40:69A-25.1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37577",
+		"quote": "the holding of general elections in November",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Faulkner Act mayor-council plan",
+		"citation": "N.J.S.A. 40:69A-31",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37587",
+		"quote": "mayor-council plan",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Mayor-council plan: mayor directly elected for four years",
+		"citation": "N.J.S.A. 40:69A-33",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37589",
+		"quote": "The mayor shall be elected by the voters of the municipality, and shall serve for a term of 4 years.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Mayor-council plan: council of five unless the charter says otherwise, four-year terms",
+		"citation": "N.J.S.A. 40:69A-34",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37590",
+		"quote": "The council shall consist of five members, unless otherwise provided in the municipal charter, who shall serve for a term of 4 years.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Faulkner Act council-manager plan",
+		"citation": "N.J.S.A. 40:69A-81",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37621",
+		"quote": "council-manager plan",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Council-manager plan: the charter decides whether the council or the voters choose the mayor",
+		"citation": "N.J.S.A. 40:69A-86",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37627",
+		"quote": "That the mayor shall be elected by the members of the council",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The small municipality plan is open only to places under 12,000 people",
+		"citation": "N.J.S.A. 40:69A-115",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37641",
+		"quote": "It may be adopted by any municipality having a population of less than 12,000 inhabitants",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Small municipality plan: council elected at large for three-year terms",
+		"citation": "N.J.S.A. 40:69A-117",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37643",
+		"quote": "Members of the council shall be elected at large by the voters of the municipality and shall serve for a term of three years.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Faulkner Act mayor-council-administrator plan",
+		"citation": "N.J.S.A. 40:69A-149.1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37660",
+		"quote": "mayor-council-administrator plan",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality changes its form of government by a majority vote of its voters",
+		"citation": "N.J.S.A. 40:69A-22",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37573",
+		"quote": "vote in favor of adopting a change in their form of government pursuant to this act",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "After adopting a Faulkner Act form, voters cannot vote on another form for 10 years",
+		"citation": "N.J.S.A. 40:69A-23",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37574",
+		"quote": "may not vote on the question of adopting another form of government until 10 years thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Faulkner Act is meant to give the greatest local self-government the Constitution allows",
+		"citation": "N.J.S.A. 40:69A-30",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37586",
+		"quote": "is intended to confer the greatest power of local self-government consistent with the Constitution of this State",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commission form: three commissioners under 12,000 people, five at 12,000 or more",
+		"citation": "N.J.S.A. 40:72-1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37740",
+		"quote": "The commission shall consist of three members in municipalities having less than twelve thousand inhabitants",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commission form: the commissioners choose one of their number to preside, called mayor",
+		"citation": "N.J.S.A. 40:72-10",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37752",
+		"quote": "the commissioners shall choose one of their number to preside at all meetings of the board",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Laws on counties and municipalities are construed liberally in their favor",
+		"citation": "N.J. Const. art. IV, § 7, ¶ 11",
+		"url": "https://www.njleg.state.nj.us/constitution",
+		"quote": "shall be liberally construed in their favor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Legislature may pass a special law for one municipality or county on its petition, which takes effect only if locally adopted",
+		"citation": "N.J. Const. art. IV, § 7, ¶ 10",
+		"url": "https://www.njleg.state.nj.us/constitution",
+		"quote": "the Legislature may pass private, special or local laws regulating the internal affairs of the municipality or county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities are put in population classes for legislative purposes",
+		"citation": "N.J.S.A. 40A:6-4",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/38318",
+		"quote": "For legislative purposes, cities shall be classified as follows based upon population",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city that moves to another population class is governed by that class's laws",
+		"citation": "N.J.S.A. 40A:6-7",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/38321",
+		"quote": "When any city becomes, by reason of its population, a member of another class",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties are put in population classes for legislative purposes",
+		"citation": "N.J.S.A. 40A:6-1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/38315",
+		"quote": "For legislative purposes, counties are classified as follows based upon their population",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every county is governed by an elected board of county commissioners",
+		"citation": "N.J.S.A. 40:20-1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/34778",
+		"quote": "the executive and legislative powers of the county shall be vested in that board of county commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Since P.L.2020, c.67, freeholders are called county commissioners",
+		"citation": "N.J.S.A. 40:41A-1(b)",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35591",
+		"quote": "shall be replaced by the term \"board of county commissioners\"",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County voters may set the board at three, five, seven or nine members",
+		"citation": "N.J.S.A. 40:20-20",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/34800",
+		"quote": "increase or decrease the number of members of the board of chosen freeholders to three, five, seven or nine",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County commissioner terms are three years unless voters switch to four-year staggered terms",
+		"citation": "N.J.S.A. 40:20-20.4",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/34802",
+		"quote": "to change the term of office for the members of the board of chosen freeholders from three to four years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County clerks, surrogates and sheriffs are elected countywide at general elections; clerks and surrogates for five years, sheriffs for three",
+		"citation": "N.J. Const. art. VII, § 2, ¶ 2",
+		"url": "https://www.njleg.state.nj.us/constitution",
+		"quote": "County clerks, surrogates and sheriffs shall be elected by the people of their respective counties at general elections. The term of office of county clerks and surrogates shall be five years, and of sheriffs three years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County offices on the November ballot include county executive, sheriff, clerk, surrogate, register of deeds and the county board",
+		"citation": "N.J.S.A. 19:14-10",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/20596",
+		"quote": "sheriff; county clerk; surrogate; register of deeds and mortgages",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties can adopt an optional charter by voter-approved charter study",
+		"citation": "N.J.S.A. 40:41A-1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35591",
+		"quote": "Shall a charter study commission be created to study the present governmental structure of",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "One charter option is the county executive plan",
+		"citation": "N.J.S.A. 40:41A-31",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35621",
+		"quote": "county executive plan",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county executive is elected countywide for four years",
+		"citation": "N.J.S.A. 40:41A-33",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35623",
+		"quote": "He shall be elected from the county at large for a term of 4 years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Charter counties remain bound by general laws on elections",
+		"citation": "N.J.S.A. 40:41A-26",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35616",
+		"quote": "the administration of the judicial system, education, elections, health",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Type II school districts hold their annual school election on the third Tuesday in April",
+		"citation": "N.J.S.A. 19:60-1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/21348",
+		"quote": "an annual school election shall be held in a Type II district on the third Tuesday in April",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Districts that moved their election to November vote with the general election",
+		"citation": "N.J.S.A. 19:60-1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/21348",
+		"quote": "An annual school election shall be held simultaneously with the general election on the first Tuesday after the first Monday in November",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School election ballots carry no party designation",
+		"citation": "N.J.S.A. 19:60-1(b)",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/21348",
+		"quote": "No party designation shall appear on any ballot to be used in a school election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The school board or the municipal governing body can move the school election to November by resolution, without a vote",
+		"citation": "N.J.S.A. 19:60-1.1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/21349",
+		"quote": "may be moved to the first Tuesday after the first Monday in November without voter approval, upon the adoption of a resolution by the board of education",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A district can move back to April only after at least four November school elections",
+		"citation": "N.J.S.A. 19:60-1.1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/21349",
+		"quote": "No resolution may be adopted and no petition may be filed pursuant to this subsection until at least four annual school elections have been held in November.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Elected school boards have nine members (or three, five or seven) serving three-year terms",
+		"citation": "N.J.S.A. 18A:12-11",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/15935/16783",
+		"quote": "who shall be elected at annual school elections in the district for terms of three years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School districts are classified as Type I or Type II",
+		"citation": "N.J.S.A. 18A:9-1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/15935/16725",
+		"quote": "School districts shall be classified as type I and type II school districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City school districts are Type I by default",
+		"citation": "N.J.S.A. 18A:9-2",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/15935/16726",
+		"quote": "Every local school district hereafter established in a city",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Regional school districts are Type II",
+		"citation": "N.J.S.A. 18A:9-3",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/15935/16727",
+		"quote": "Every regional school district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a Type I district the mayor appoints board members to five-year terms",
+		"citation": "N.J.S.A. 18A:12-17",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/15935/16791",
+		"quote": "appoint one member of the board to serve for a term of 5 years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A Type I district can switch to an elected board by referendum",
+		"citation": "N.J.S.A. 18A:12-18",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/15935/16792",
+		"quote": "shall thereafter be elected by the voters of the district at annual school elections",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Fire districts elect annually, on the third Saturday in February or at the November general election",
+		"citation": "N.J.S.A. 40A:14-72",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39147",
+		"quote": "An election shall be held annually either on the third Saturday in February or at the time of the general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A fire district that moves its election to November cannot move it back",
+		"citation": "N.J.S.A. 40A:14-72.1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39148",
+		"quote": "the date of the annual fire election shall be held at that time and shall not be changed",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A board of fire commissioners has five members",
+		"citation": "N.J.S.A. 40A:14-70",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39143",
+		"quote": "to consist of five persons, residents therein",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Fire commissioners serve three-year terms",
+		"citation": "N.J.S.A. 40A:14-70",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39143",
+		"quote": "of the third year following the year in which they were elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Fire commissioner candidates for a November election use the direct petition process",
+		"citation": "N.J.S.A. 40A:14-71(b)",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39146",
+		"quote": "shall be nominated by petition for direct nomination pursuant to the procedures set forth in R.S.19:13-1 et seq.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Where runoffs are adopted, a candidate needs the most votes and a majority",
+		"citation": "N.J.S.A. 40:45-18",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35853",
+		"quote": "the candidates receiving the greatest number and a majority of votes cast shall be elected to the respective offices",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "After a November nonpartisan election, the runoff is in December",
+		"citation": "N.J.S.A. 40:45-19",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35854",
+		"quote": "the run-off election shall be held at a special election on the subsequent Tuesday next after the first Monday in December",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township voters can set the committee at three or five members",
+		"citation": "N.J.S.A. 40A:63-3",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39558",
+		"quote": "The legal voters of any township may elect to increase or decrease the membership of the township committee of the township either to three or five members.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Commissioner of Education can move an April school election that falls on a religious observance",
+		"citation": "N.J.S.A. 19:60-1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/21348",
+		"quote": "the Commissioner of Education shall make any adjustments to the school budget and election calendar",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The annual school election can also carry a vote on extra school funding",
+		"citation": "N.J.S.A. 19:60-1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/21348",
+		"quote": "for the purpose of submitting a proposal to the voters for the approval of additional funds",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board candidates may print a designation of up to three words that cannot use a party name",
+		"citation": "N.J.S.A. 19:60-1(b)",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/21348",
+		"quote": "the ballot for a school election may include a designation in not more than three words that conveys the principles which the candidate or candidates therein named represent",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan candidates for the same office can be grouped under one shared slogan",
+		"citation": "N.J.S.A. 40:45-10",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/35844",
+		"quote": "If several candidates for the same office shall petition that their names be grouped together",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Faulkner Act voters can choose at-large or ward council elections",
+		"citation": "N.J.S.A. 40:69A-25.1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37577",
+		"quote": "the election of all council members at large",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Faulkner Act voters can choose staggered or concurrent terms",
+		"citation": "N.J.S.A. 40:69A-25.1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37577",
+		"quote": "the election of council members for staggered terms",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Faulkner Act voters can choose whether the council or the voters elect the mayor",
+		"citation": "N.J.S.A. 40:69A-25.1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37577",
+		"quote": "the election of the mayor directly by the voters of the municipality",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Faulkner Act voters can set council size at three, five, seven or nine",
+		"citation": "N.J.S.A. 40:69A-25.1",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37577",
+		"quote": "a municipal council to consist of nine members",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Council-manager plan: elected council and appointed manager",
+		"citation": "N.J.S.A. 40:69A-82",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37622",
+		"quote": "shall be governed by an elected council and by an appointed municipal manager",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Mayor-council-administrator plan: elected mayor and council and appointed administrator",
+		"citation": "N.J.S.A. 40:69A-149.2",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37661",
+		"quote": "shall be governed by an elected mayor and council, and an appointed municipal administrator",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Mayor-council-administrator plan: mayor and council elected at the November general election",
+		"citation": "N.J.S.A. 40:69A-149.3",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/34392/37662",
+		"quote": "The mayor and council shall be elected at the general election to be held on the first Tuesday after the first Monday in November.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Borough council terms are staggered so two seats are elected each year",
+		"citation": "N.J.S.A. 40A:60-2",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39530",
+		"quote": "so that the terms of two councilmen shall expire at the end of each year",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City: mayor elected at large for four years",
+		"citation": "N.J.S.A. 40A:61-2",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39539",
+		"quote": "The mayor shall be elected by the voters of the city at large and serve for a term of four years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Town: mayor serves four years",
+		"citation": "N.J.S.A. 40A:62-2",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39547",
+		"quote": "The mayor shall serve for a term of four years.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Town: council members serve four years",
+		"citation": "N.J.S.A. 40A:62-2",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39547",
+		"quote": "The members of council shall serve for a term of four years.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Fire district candidates for a February election are nominated by petition",
+		"citation": "N.J.S.A. 40A:14-71(a)",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/37945/39146",
+		"quote": "candidates for membership on the board shall be nominated by verified petitions",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Naming a party on a voter registration form makes the voter a member of that party",
+		"citation": "N.J.S.A. 19:23-45",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/20773",
+		"quote": "who indicates on a voter registration form the voter's choice of political party affiliation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party primaries are decided by plurality",
+		"citation": "N.J.S.A. 19:13-14",
+		"url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/20392/20573",
+		"quote": "the person having in the aggregate the highest number of votes shall be the candidate of his respective party for the office to be filled",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

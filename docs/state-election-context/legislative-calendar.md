@@ -35,8 +35,12 @@ states cover the most pages, so they come first.
 | 20 | Georgia | 758 | drafted, awaiting review |
 | 21 | Kentucky | 705 | drafted, awaiting review |
 | 22 | Washington | 618 | drafted, awaiting review |
-| 23 | North Dakota | 606 | in progress |
-| 24 | Massachusetts | 597 | next |
+| 23 | North Dakota | 606 | drafted, awaiting review |
+| 24 | Massachusetts | 597 | in progress |
+| 25 | Tennessee | 553 | in progress |
+| 26 | Florida | 533 | in progress |
+| 27 | Oregon | 481 | in progress |
+| 28 | Mississippi | 449 | next |
 
 The rest follow the order in the CSV.
 

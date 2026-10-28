@@ -28,13 +28,13 @@ states cover the most pages, so they come first.
 | 13 | California | 1,461 | drafted, awaiting review |
 | 14 | Arkansas | 1,218 | drafted, awaiting review |
 | 15 | South Dakota | 1,199 | drafted, awaiting review |
-| 16 | New Jersey | 1,158 | drafted, awaiting review |
+| 16 | New Jersey | 1,158 | approved, not yet merged |
 | 17 | Nebraska | 1,089 | drafted, awaiting review |
-| 18 | Oklahoma | 869 | drafted, awaiting review |
+| 18 | Oklahoma | 869 | approved, not yet merged |
 | 19 | North Carolina | 787 | done, reviewed 27 October 2026 |
-| 20 | Georgia | 758 | in progress |
-| 21 | Kentucky | 705 | in progress |
-| 22 | Washington | 618 | in progress |
+| 20 | Georgia | 758 | drafted, awaiting review |
+| 21 | Kentucky | 705 | drafted, awaiting review |
+| 22 | Washington | 618 | drafted, awaiting review |
 | 23 | North Dakota | 606 | in progress |
 | 24 | Massachusetts | 597 | next |
 

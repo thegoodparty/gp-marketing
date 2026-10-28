@@ -28,9 +28,9 @@ states cover the most pages, so they come first.
 | 13 | California | 1,461 | drafted, awaiting review |
 | 14 | Arkansas | 1,218 | drafted, awaiting review |
 | 15 | South Dakota | 1,199 | drafted, awaiting review |
-| 16 | New Jersey | 1,158 | approved, not yet merged |
+| 16 | New Jersey | 1,158 | done, reviewed 27 October 2026 |
 | 17 | Nebraska | 1,089 | drafted, awaiting review |
-| 18 | Oklahoma | 869 | approved, not yet merged |
+| 18 | Oklahoma | 869 | done, reviewed 27 October 2026 |
 | 19 | North Carolina | 787 | done, reviewed 27 October 2026 |
 | 20 | Georgia | 758 | drafted, awaiting review |
 | 21 | Kentucky | 705 | drafted, awaiting review |
@@ -94,13 +94,13 @@ If a legislature meets year-round, re-check in January and July.
 | Nebraska | odd-year long session, January | June | July 2027 | no |
 | Nevada | odd years only, February | June | July 2027 | no |
 | New Hampshire | January | June | July 2027 | no |
-| New Jersey | year-round | — | January and July | no |
+| New Jersey | year-round; second year begins 12 January 2027, next Legislature 11 January 2028 | — | January and July 2027, then February 2028 | verified |
 | New Mexico | odd-year 60-day session, January | March | April 2027 | no |
 | New York | year-round, most bills by June | — | July 2027 and January | no |
 | North Carolina | organizes 13 January 2027, reconvenes 27 January 2027 | no fixed end | October 2027 | verified |
 | North Dakota | odd years only, January | April–May | June 2027 | no |
 | Ohio | 4 January 2027, year-round | — | January and July | verified |
-| Oklahoma | February | May | June 2027 | no |
+| Oklahoma | organizes 5 January 2027, convenes 1 February 2027 | by 28 May | June 2027 | verified |
 | Oregon | odd-year long session, January | June | July 2027 | no |
 | Pennsylvania | 5 January 2027, year-round | — | January and July | verified |
 | Rhode Island | January | June | July 2027 | no |

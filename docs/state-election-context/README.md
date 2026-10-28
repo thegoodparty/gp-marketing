@@ -13,13 +13,15 @@ same ground on every one of the ~48,000 location pages.
 | Michigan | [michigan.md](./michigan.md) |
 | Minnesota | [minnesota.md](./minnesota.md) |
 | Missouri | [missouri.md](./missouri.md) |
+| New Jersey | [new-jersey.md](./new-jersey.md) |
 | North Carolina | [north-carolina.md](./north-carolina.md) |
 | Ohio | [ohio.md](./ohio.md) |
+| Oklahoma | [oklahoma.md](./oklahoma.md) |
 | Pennsylvania | [pennsylvania.md](./pennsylvania.md) |
 | Texas | [texas.md](./texas.md) |
 | Wisconsin | [wisconsin.md](./wisconsin.md) |
 
-39 states and DC still to do. Each doc is a draft until Emily has reviewed it.
+37 states and DC still to do. Each doc is a draft until Emily has reviewed it.
 
 ## What these are, and what they are not
 

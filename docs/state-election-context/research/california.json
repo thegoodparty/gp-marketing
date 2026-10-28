@@ -1,0 +1,682 @@
+[
+ {
+  "claim": "The Legislature convenes in regular session on the first Monday in December of each even-numbered year and adjourns at midnight on November 30 two years later",
+  "citation": "Cal. Const. art. IV, § 3(a)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%203.&article=IV",
+  "quote": "The Legislature shall convene in regular session at noon on the first Monday in December of each even-numbered year",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "In the first year of the session, the governor has 30 days after the joint recess to act on bills in their possession",
+  "citation": "Cal. Const. art. IV, § 10(b)(1)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%2010.&article=IV",
+  "quote": "that is not returned within 30 days after that date becomes a statute",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "In the second year, bills passed before September 1 and held by the governor become law unless returned by September 30",
+  "citation": "Cal. Const. art. IV, § 10(b)(2)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%2010.&article=IV",
+  "quote": "that is not returned on or before September 30 of that year becomes a statute",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "A regular-session statute takes effect on January 1 after a 90-day period from enactment",
+  "citation": "Cal. Const. art. IV, § 8(c)(1)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%208.&article=IV",
+  "quote": "a statute enacted at a regular session shall go into effect on January 1 next following a 90-day period from the date of enactment of the statute",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "All judicial, school, county and city offices are nonpartisan",
+  "citation": "Cal. Const. art. II, § 6(a)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%206.&article=II",
+  "quote": "All judicial, school, county, and city offices, including the Superintendent of Public Instruction, shall be nonpartisan.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Parties may not nominate for nonpartisan office and the candidate's party preference is not on the ballot",
+  "citation": "Cal. Const. art. II, § 6(b)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%206.&article=II",
+  "quote": "the candidate's party preference shall not be included on the ballot for the nonpartisan office",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "The Elections Code defines judicial, school, county and municipal offices as nonpartisan",
+  "citation": "Cal. Elec. Code § 334",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=334.",
+  "quote": "Judicial, school, county, and municipal offices, including the Superintendent of Public Instruction, are nonpartisan offices.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Congressional and state offices use a voter-nominated (top-two) primary open to all voters",
+  "citation": "Cal. Const. art. II, § 5(a)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%205.&article=II",
+  "quote": "The candidates who are the top two vote-getters at a voter-nominated primary election for a congressional or state elective office shall, regardless of party preference, compete in the ensuing general election.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Any voter may vote for any candidate at a top-two primary regardless of party preference",
+  "citation": "Cal. Elec. Code § 8002.5(c)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=8002.5.",
+  "quote": "any qualified voter may vote for any candidate for a voter-nominated office",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Top-two candidates show \"Party Preference: None\" if they declined to disclose a party",
+  "citation": "Cal. Elec. Code § 8002.5(a)(2)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=8002.5.",
+  "quote": "Party Preference: None",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Voter-nominated offices list (Governor through Assembly)",
+  "citation": "Cal. Elec. Code § 359.5",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=359.5.",
+  "quote": "serves to winnow the candidates for the general election to the candidates receiving the highest or second highest number of votes cast at the primary election",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Presidential and party committee primaries remain partisan",
+  "citation": "Cal. Const. art. II, § 5(c)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%205.&article=II",
+  "quote": "The Legislature shall provide for partisan elections for presidential candidates, and political party and party central committees",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "A voter with no party preference gets a nonpartisan ballot at a partisan primary unless they ask for a party ballot the party allows",
+  "citation": "Cal. Elec. Code § 13102(b)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=13102.",
+  "quote": "each voter not registered disclosing a preference for any one of the political parties participating in the election shall be furnished only a nonpartisan ballot, unless the voter requests a ballot of a political party",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Voters may decline to disclose a party preference when registering",
+  "citation": "Cal. Elec. Code § 2151(b)(1)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=2151.",
+  "quote": "an elector may decline to disclose a political party preference",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "American Independent Party is a political party in California (a party, not a lack of one)",
+  "citation": "Secretary of State, Qualified Political Parties",
+  "url": "https://www.sos.ca.gov/elections/political-parties/qualified-political-parties",
+  "quote": "American Independent Party",
+  "certainty": "usual case",
+  "verified": "Secretary of State publication"
+ },
+ {
+  "claim": "Established election dates",
+  "citation": "Cal. Elec. Code § 1000",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=1000.",
+  "quote": "The first Tuesday after the first Monday in November of each year.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "All state, county, municipal, district and school district elections must be on an established election date",
+  "citation": "Cal. Elec. Code § 1002",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=1002.",
+  "quote": "all state, county, municipal, district, and school district elections shall be held on an established election date",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Election date rules do not bind charter cities and charter counties whose charters differ, or recall/initiative elections",
+  "citation": "Cal. Elec. Code § 1003(b), (e)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=1003.",
+  "quote": "Elections held in chartered cities or chartered counties in which the charter provisions are inconsistent with this chapter.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Statewide general election is the first Tuesday after the first Monday in November of even years",
+  "citation": "Cal. Elec. Code § 1200",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=1200.",
+  "quote": "The statewide general election shall be held on the first Tuesday after the first Monday in November of each even-numbered year.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Statewide primary: June in gubernatorial years, March in presidential years",
+  "citation": "Cal. Elec. Code § 1201",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=1201.",
+  "quote": "The statewide direct primary shall be held on the first Tuesday after the first Monday in June of each even-numbered year that is not evenly divisible by four and on the first Tuesday after the first Monday in March in each even-numbered year that is evenly divisible by four.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "District attorney and sheriff are elected at the presidential primary",
+  "citation": "Cal. Elec. Code § 1300(a)(1)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=1300.",
+  "quote": "An election to select a district attorney and sheriff shall be held with the presidential primary.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Other county officers are elected at the gubernatorial primary, with a November runoff if no one wins outright",
+  "citation": "Cal. Elec. Code § 1300(b)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=1300.",
+  "quote": "an election to select county officers other than district attorney and sheriff shall be held with the statewide primary at which candidates for Governor are nominated",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "A board of supervisors may move other county offices (except county superintendent) to the presidential primary",
+  "citation": "Cal. Elec. Code § 1300(b)(2)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=1300.",
+  "quote": "a county board of supervisors may adopt an ordinance to hold an election to select any county officer other than a county superintendent of schools with the presidential primary",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "A general municipal election is on an established election date; a city council may move it by ordinance with the supervisors' approval",
+  "citation": "Cal. Elec. Code § 1301",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=1301.",
+  "quote": "a city council may enact an ordinance, pursuant to Division 10 (commencing with Section 10000), requiring its general municipal election to be held on the day of the statewide direct primary election, the day of the statewide general election",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "The ordinance takes effect on approval by the board of supervisors",
+  "citation": "Cal. Elec. Code § 1301(b)(1)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=1301.",
+  "quote": "An ordinance adopted pursuant to this subdivision shall become operative upon approval by the county board of supervisors.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Moving a city election date cannot lengthen or shorten a term by more than 12 months",
+  "citation": "Cal. Elec. Code § 10403.5(b)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=10403.5.",
+  "quote": "no term of office shall be increased or decreased by more than 12 months",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "School, community college and county board of education elections default to November of odd years, and may move to a statewide or municipal election date by resolution",
+  "citation": "Cal. Elec. Code § 1302",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=1302.",
+  "quote": "shall be held on the first Tuesday after the first Monday in November of each odd-numbered year",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "The school board resolution becomes operative on supervisors' approval",
+  "citation": "Cal. Elec. Code § 1302(b)(1)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=1302.",
+  "quote": "The resolution shall become operative upon approval by the board of supervisors pursuant to Section 10404.5 or 10405.7, as applicable.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Special district elections default to November of odd years; a district may move to the statewide general election",
+  "citation": "Cal. Elec. Code § 1303",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=1303.",
+  "quote": "a governing body of a special district may require, by resolution, that its elections of governing body members be held on the same day as the statewide general election",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Special district default date",
+  "citation": "Cal. Elec. Code § 1303(a)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=1303.",
+  "quote": "on the first Tuesday following the first Monday in November of each odd-numbered year",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "A political subdivision may not hold an off-cycle election if that has caused a significant turnout drop",
+  "citation": "Cal. Elec. Code § 14052(a)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=14052.",
+  "quote": "a political subdivision shall not hold an election other than on a statewide election date if holding an election on a nonconcurrent date has previously resulted in a significant decrease in voter turnout",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Significant decrease means at least 25 percent below the average of the previous four statewide general elections",
+  "citation": "Cal. Elec. Code § 14051(b)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=14051.",
+  "quote": "at least 25 percent less than the average voter turnout within that political subdivision for the previous four statewide general elections",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Political subdivision includes cities, school districts, community college districts and other districts",
+  "citation": "Cal. Elec. Code § 14051(a)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=14051.",
+  "quote": "including, but not limited to, a city, a school district, a community college district, or other district organized pursuant to state law",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "The turnout rule has applied since 1 January 2018",
+  "citation": "Cal. Elec. Code § 14057",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=14057.",
+  "quote": "This chapter shall become operative on January 1, 2018.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "A nonpartisan candidate with a majority at the primary is elected outright",
+  "citation": "Cal. Elec. Code § 8140",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=8140.",
+  "quote": "Any candidate for a nonpartisan office who at a primary election receives votes on a majority of all the ballots cast for candidates for that office shall be elected to that office.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Otherwise the top vote-getters, twice the number of seats, go to the general election",
+  "citation": "Cal. Elec. Code § 8141",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=8141.",
+  "quote": "equal in number to twice the number remaining to be elected to that office",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Plurality wins unless a charter, city law or the county primary runoff rule says otherwise",
+  "citation": "Cal. Elec. Code § 15452",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=15452.",
+  "quote": "The person who receives a plurality of the votes cast for any office is elected or nominated to that office in any election, except: (a) An election for which different provision is made by any city or county charter.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Nomination papers: signers must be voters in the jurisdiction",
+  "citation": "Cal. Elec. Code § 8068",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=8068.",
+  "quote": "Signers shall be voters in the district or political subdivision in which the candidate is to be voted on.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "A signer may not sign for more candidates than there are seats",
+  "citation": "Cal. Elec. Code § 8041(a)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=8041.",
+  "quote": "I have not signed more nomination papers than there are places to be filled in the above-named office",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "City candidates are nominated by voters signing a nomination paper; no voter may sign more than one for the same office",
+  "citation": "Cal. Elec. Code § 10220",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=10220.",
+  "quote": "No voter may sign more than one nomination paper for the same office",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Candidate must file a declaration of candidacy and nomination papers",
+  "citation": "Cal. Elec. Code § 8020(a)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=8020.",
+  "quote": "Nomination papers signed by signers pursuant to Section 8041.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Independent nomination after the primary is open to nonpartisan offices only when no one was nominated or elected at the primary",
+  "citation": "Cal. Elec. Code § 8300",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=8300.",
+  "quote": "A candidate for nonpartisan office or for voter-nominated office may be nominated subsequent to, or by other means than, a primary election pursuant to this chapter only if a candidate was not nominated or elected at the primary election for that office.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Uniform District Election Law governs special district elections",
+  "citation": "Cal. Elec. Code § 10500",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=10500.",
+  "quote": "This part may be cited as the Uniform District Election Law.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Some special districts are landowner-voting districts",
+  "citation": "Cal. Elec. Code § 10500(b)(8)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=ELEC&sectionNum=10500.",
+  "quote": "“Landowner voting district” means a district whose principal act requires an elector to be an owner of land located within the district.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "State divided into counties",
+  "citation": "Cal. Const. art. XI, § 1(a)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%201.&article=XI",
+  "quote": "The State is divided into counties which are legal subdivisions of the State.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Every county has an elected sheriff, district attorney, assessor and governing body",
+  "citation": "Cal. Const. art. XI, § 1(b)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%201.&article=XI",
+  "quote": "an elected county sheriff, an elected district attorney, an elected assessor, and an elected governing body in each county",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "A general law county has a five-member board of supervisors on staggered four-year terms",
+  "citation": "Cal. Gov. Code § 25000(a)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=25000.",
+  "quote": "Each county shall have a board of supervisors consisting of five members.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Supervisor terms are four years",
+  "citation": "Cal. Gov. Code § 25000(a)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=25000.",
+  "quote": "Thereafter the term of office of each member shall be four years.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Supervisors are elected by district",
+  "citation": "Cal. Gov. Code § 25040",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=25040.",
+  "quote": "Each member of the board of supervisors shall be elected by the district which he represents, and not at large",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Elected county officers by default",
+  "citation": "Cal. Gov. Code § 24009(a)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=24009.",
+  "quote": "the county officers to be elected by the people are the treasurer, county clerk, auditor, sheriff, tax collector, district attorney, recorder, assessor, public administrator, and coroner",
+  "certainty": "usual case",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "County voters may make an elective office appointive, except sheriff, DA and assessor",
+  "citation": "Cal. Gov. Code § 24009(b)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=24009.",
+  "quote": "any county office that is required to be elective may become an appointive office pursuant to this subdivision",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Supervisors may consolidate county offices (e.g. clerk-recorder, treasurer-tax collector, sheriff-coroner)",
+  "citation": "Cal. Gov. Code § 24300",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=24300.",
+  "quote": "By ordinance the board of supervisors may consolidate the duties of certain of the county offices in one or more of these combinations",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Combination list includes sheriff and coroner, treasurer and tax collector, clerk and recorder",
+  "citation": "Cal. Gov. Code § 24300",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=24300.",
+  "quote": "(n) Sheriff and coroner.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Any county or city may adopt a charter by majority vote",
+  "citation": "Cal. Const. art. XI, § 3(a)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%203.&article=XI",
+  "quote": "For its own government, a county or city may adopt a charter by majority vote of its electors voting on the question.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "County charters must provide a governing body of 5 or more and an elected sheriff, DA and assessor",
+  "citation": "Cal. Const. art. XI, § 4(a), (c)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%204.&article=XI",
+  "quote": "A governing body of 5 or more members, elected (1) by district or, (2) at large, or (3) at large, with a requirement that they reside in a district.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "County charters set terms of the governing body and the election or appointment of other officers",
+  "citation": "Cal. Const. art. XI, § 4(c)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%204.&article=XI",
+  "quote": "An elected sheriff, an elected district attorney, an elected assessor, other officers, their election or appointment, compensation, terms and removal.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "City charters may provide for the conduct of city elections and the times and terms of municipal officers",
+  "citation": "Cal. Const. art. XI, § 5(b)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%205.&article=XI",
+  "quote": "(3) conduct of city elections",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Charter city plenary authority over manner, method, times and terms of elected officers",
+  "citation": "Cal. Const. art. XI, § 5(b)(4)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%205.&article=XI",
+  "quote": "the manner in which, the method by which, the times at which, and the terms for which the several municipal officers and employees whose compensation is paid by the city shall be elected or appointed",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "A county and its cities may consolidate as a charter city and county",
+  "citation": "Cal. Const. art. XI, § 6",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%206.&article=XI",
+  "quote": "A county and all cities within it may consolidate as a charter city and county as provided by statute.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "A charter city and county is both; city powers prevail",
+  "citation": "Cal. Const. art. XI, § 6(b)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%206.&article=XI",
+  "quote": "A charter city and county is a charter city and a charter county. Its charter city powers supersede conflicting charter county powers.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Cities are either chartered cities or general law cities",
+  "citation": "Cal. Gov. Code §§ 34101, 34102",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=34102.",
+  "quote": "Cities organized under the general law shall be “general law cities.”",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Chartered cities defined",
+  "citation": "Cal. Gov. Code § 34101",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=34101.",
+  "quote": "Cities organized under a charter shall be “chartered cities.”",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Any city or city and county may enact a charter",
+  "citation": "Cal. Gov. Code § 34450",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=34450.",
+  "quote": "Any city or city and county may enact, amend, or repeal a charter for its own government",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "\"Town\" is only a name: a council can swap \"city\" and \"town\" in the corporate name",
+  "citation": "Cal. Gov. Code § 34502",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=34502.",
+  "quote": "eliminate the word “city” from the corporate name and substitute the word “town”",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "A general law city has a council of at least five, a city clerk and a city treasurer",
+  "citation": "Cal. Gov. Code § 36501",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=36501.",
+  "quote": "A city council of at least five members. (b) A city clerk. (c) A city treasurer.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Voters may make the clerk and treasurer appointive",
+  "citation": "Cal. Gov. Code § 36508",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=36508.",
+  "quote": "the city council may submit to the electors the question whether the elective officers, or any of them except council members, shall be appointed by the city council",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "By default the council chooses one of its members as mayor",
+  "citation": "Cal. Gov. Code § 36801",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=36801.",
+  "quote": "choose one of its number as mayor, and one of its number as mayor pro tempore",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Voters may choose to elect a mayor directly, for a two- or four-year term",
+  "citation": "Cal. Gov. Code § 34900",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=34900.",
+  "quote": "whether electors shall thereafter elect a mayor and four city council members, and whether the mayor shall serve a two-year or four-year term",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "An elected mayor is a member of the council",
+  "citation": "Cal. Gov. Code § 34903",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=34903.",
+  "quote": "The mayor is a member of the city council and has all of the powers and duties of a member of the city council.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "By-district councils may have five, seven or nine districts",
+  "citation": "Cal. Gov. Code § 34871",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=34871.",
+  "quote": "By districts in five, seven, or nine districts.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "District council terms are four years unless otherwise provided",
+  "citation": "Cal. Gov. Code § 34879",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=34879.",
+  "quote": "shall be four years, unless otherwise expressly provided",
+  "certainty": "usual case",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "A council may switch to district elections by ordinance without a vote, citing the Voting Rights Act",
+  "citation": "Cal. Gov. Code § 34886",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=34886.",
+  "quote": "without being required to submit the ordinance to the voters for approval",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Councils or voters may set term limits for council members and elected mayors",
+  "citation": "Cal. Gov. Code § 36502(b)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=36502.",
+  "quote": "a proposal to limit or repeal a limit on the number of terms a member of the city council may serve on the city council",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Default school board: five members elected at large to staggered four-year terms",
+  "citation": "Cal. Educ. Code § 35012(a)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EDC&sectionNum=35012.",
+  "quote": "the governing board of a school district shall consist of five regular members elected at large by the qualified voters of the school district",
+  "certainty": "usual case",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Unified districts may have seven members",
+  "citation": "Cal. Educ. Code § 35012(b)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EDC&sectionNum=35012.",
+  "quote": "A unified school district may have a governing board of seven regular members",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Small districts may cut boards to three; county committee may move between five and seven",
+  "citation": "Cal. Educ. Code § 5019(a)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EDC&sectionNum=5019.",
+  "quote": "may decrease from five to three the number of members of the governing board",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "School board term is four years",
+  "citation": "Cal. Educ. Code § 5017",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EDC&sectionNum=5017.",
+  "quote": "shall hold office for a term of four years",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Community college boards of five or seven, four-year terms",
+  "citation": "Cal. Educ. Code § 72023",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EDC&sectionNum=72023.",
+  "quote": "there shall be a governing board of either five or seven members elected at large from the district to serve a term of four years",
+  "certainty": "usual case",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Every county except a city and county has an elected county board of education of five or seven members by trustee area; charter counties may differ",
+  "citation": "Cal. Educ. Code § 1000(a)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EDC&sectionNum=1000.",
+  "quote": "Except in a city and county, there shall be a county board of education",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "In charter counties, the charter or supervisors decide how the county board of education is chosen",
+  "citation": "Cal. Educ. Code § 1000(a)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EDC&sectionNum=1000.",
+  "quote": "In chartered counties, the manner of selection of the county board of education shall be prescribed in the county charter, or by the county board of supervisors.",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "County superintendent of schools may be elected or appointed, as county voters decide",
+  "citation": "Cal. Const. art. IX, § 3",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%203.&article=IX",
+  "quote": "may be elected by the qualified electors thereof at each gubernatorial election or may be appointed by the county board of education",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "City charters may set how boards of education are elected or appointed",
+  "citation": "Cal. Const. art. IX, § 16(a)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%2016.&article=IX",
+  "quote": "the manner in which, the times at which, and the terms for which the members of boards of education shall be elected or appointed",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "School and community college districts may elect by trustee area instead of at large",
+  "citation": "Cal. Educ. Code § 5030",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EDC&sectionNum=5030.",
+  "quote": "That one or more members residing in each trustee area be elected by the registered voters of that particular trustee area.",
+  "certainty": "varies by place",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "The 2026 amendments to the California Voting Rights Act (SB 1164, Stats. 2026, ch. 338) change how district remedies are ordered and do not amend the sections cited here",
+  "citation": "Stats. 2026, ch. 338 (SB 1164)",
+  "url": "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260SB1164",
+  "quote": "An act to amend Sections 10010, 14026, 14027, 14028, 14029, 14030, and 21130 of",
+  "certainty": "statutory",
+  "verified": "read in statute"
+ },
+ {
+  "claim": "Cities are the general-purpose local government below counties; the Legislature provides for city formation and powers",
+  "citation": "Cal. Const. art. XI, § 2(a)",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SEC.%202.&article=XI",
+  "quote": "The Legislature shall prescribe uniform procedure for city formation and provide for city powers.",
+  "certainty": "usual case",
+  "verified": "read in statute"
+ }
+]

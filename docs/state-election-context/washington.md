@@ -31,7 +31,8 @@ a full-length 2027 session is settled by 18 May 2027 (Wash. Const. art. III,
 § 12). New laws usually take effect 90 days after the session adjourns, unless
 the bill says otherwise (Wash. Const. art. II, § 1(c)).
 
-Re-check this doc: June 2027. Last researched: October 2026.
+Re-check this doc: June 2027. Last researched: October 2026. Reviewed by Emily:
+28 October 2026.
 
 ## How elections work in Washington
 
@@ -471,10 +472,13 @@ Logged for the data team. Never write copy around them.
 - **Joint offices in the place slot.** Pierce County's assessor-treasurer is at
   `wa/pierce-county/county-assessor/position/treasurer-joint`, and Starbuck's
   clerk-treasurer at `wa/columbia-county/starbuck/city-clerk/position/treasurer-joint`.
-  The office name has landed in the URL where a place name belongs.
+  The office name has landed in the URL where a place name belongs. Being
+  investigated separately (code fix with redirects, or a data-team request).
 - **Port commission labeled as an airport board.** Seattle's page carries an
-  `airport-district-board` position. Worth checking whether this is the port
-  commission under another label.
+  `airport-district-board` position. It is the Port of Seattle commission: the
+  page heading reads "Port of Seattle Board", but the URL and the "About this
+  position" text describe an airport district. Call it the port commission in
+  copy, never an airport board.
 
 ## Sources
 

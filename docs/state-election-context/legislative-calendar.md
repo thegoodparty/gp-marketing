@@ -19,7 +19,7 @@ states cover the most pages, so they come first.
 | 4 | Minnesota | 2,511 | done, reviewed 27 October 2026 |
 | 5 | Iowa | 2,495 | done |
 | 6 | Michigan | 2,367 | done, reviewed 27 October 2026 |
-| 7 | Kansas | 2,334 | drafted, awaiting review |
+| 7 | Kansas | 2,334 | done, reviewed 28 October 2026 |
 | 8 | Texas | 2,300 | done, reviewed 27 October 2026 |
 | 9 | New York | 2,124 | drafted, awaiting review |
 | 10 | Wisconsin | 2,041 | done, reviewed 27 October 2026 |
@@ -80,7 +80,7 @@ If a legislature meets year-round, re-check in January and July.
 | Illinois | 13 January 2027, year-round, spring session to 31 May | — | January 2027, then October 2027 | verified |
 | Indiana | organizes 17 November 2026, reconvenes by 25 January 2027 | by 29 April | July 2027 | verified |
 | Iowa | 11 January 2027 | spring | June 2027 | verified |
-| Kansas | January | April–May | June 2027 | no |
+| Kansas | 11 January 2027 | April–May | June 2027 | verified |
 | Kentucky | odd-year short session, January | March | April 2027 | no |
 | Louisiana | odd years start in April | June | July 2027 | no |
 | Maine | odd-year long session, January | June | July 2027 | no |

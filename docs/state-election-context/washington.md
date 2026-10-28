@@ -464,7 +464,10 @@ These are the ways Washington copy goes visibly wrong.
 Logged for the data team. Never write copy around them.
 
 - **"District attorney" label.** Every county page files the prosecuting attorney
-  under `district-attorney`. Washington has no district attorney.
+  under `district-attorney`. Washington has no district attorney. The page heading
+  already reads "County Prosecuting Attorney"; the label survives in the URL and
+  in the "About this position" text ("The District Attorney is the chief legal
+  representative of the district"), both of which come from election-api.
 - **Joint offices in the place slot.** Pierce County's assessor-treasurer is at
   `wa/pierce-county/county-assessor/position/treasurer-joint`, and Starbuck's
   clerk-treasurer at `wa/columbia-county/starbuck/city-clerk/position/treasurer-joint`.

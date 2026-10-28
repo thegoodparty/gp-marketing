@@ -34,15 +34,19 @@ states cover the most pages, so they come first.
 | 19 | North Carolina | 787 | done, reviewed 27 October 2026 |
 | 20 | Georgia | 758 | drafted, awaiting review |
 | 21 | Kentucky | 705 | drafted, awaiting review |
-| 22 | Washington | 618 | drafted, awaiting review |
+| 22 | Washington | 618 | approved, not yet merged |
 | 23 | North Dakota | 606 | drafted, awaiting review |
-| 24 | Massachusetts | 597 | in progress |
-| 25 | Tennessee | 553 | in progress |
+| 24 | Massachusetts | 597 | drafted, awaiting review |
+| 25 | Tennessee | 553 | drafted, quote check waiting on robot check |
 | 26 | Florida | 533 | drafted, awaiting review |
 | 27 | Oregon | 481 | drafted, awaiting review |
-| 28 | Mississippi | 449 | in progress |
-| 29 | Louisiana | 436 | in progress |
-| 30 | Virginia | 428 | next |
+| 28 | Mississippi | 449 | drafted, awaiting review |
+| 29 | Louisiana | 436 | drafted, awaiting review |
+| 30 | Virginia | 428 | in progress |
+| 31 | Montana | 401 | in progress |
+| 32 | Alabama | 385 | in progress |
+| 33 | Colorado | 365 | in progress |
+| 34 | South Carolina | 363 | next |
 
 The rest follow the order in the CSV.
 

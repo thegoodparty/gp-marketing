@@ -6,6 +6,8 @@ name: Rotate election-api M2M token
 # routine deploys to pick up the new one (zero-downtime). The same token is also
 # written to the omni candidate-sites Vercel project as GP_API_M2M_TOKEN. See
 # scripts/rotate-election-api-token.ts for the full rationale.
+# Once GP_API_AUTH_MODE=oidc-preferred is live, gp-marketing authenticates with
+# its Vercel OIDC token and this token is only its fallback.
 
 on:
   schedule:

@@ -164,3 +164,44 @@ describe('GP_API_AUTH_MODE', () => {
 		});
 	});
 });
+
+describe('GP_API_SERVICE_TOKEN', () => {
+	test('is sent in place of the clerk token on every gp-api read', async () => {
+		process.env['GP_API_SERVICE_TOKEN'] = 'github-oidc-jwt';
+
+		expect(await gpApiAuthHeaders()).toEqual({ Authorization: 'Bearer github-oidc-jwt' });
+		expect(await electionApiAuthHeaders()).toEqual({ Authorization: 'Bearer github-oidc-jwt' });
+	});
+
+	test('wins over oidc-preferred even with a Vercel OIDC token in reach', async () => {
+		process.env['GP_API_SERVICE_TOKEN'] = 'github-oidc-jwt';
+		process.env['GP_API_AUTH_MODE'] = 'oidc-preferred';
+		setVercelRequestOidcToken(fakeVercelOidcToken('request'));
+
+		expect(await gpApiAuthHeaders()).toEqual({ Authorization: 'Bearer github-oidc-jwt' });
+	});
+
+	test('needs no clerk token and does not warn about the missing one', async () => {
+		process.env['GP_API_SERVICE_TOKEN'] = 'github-oidc-jwt';
+		delete process.env['ELECTION_API_M2M_TOKEN'];
+		const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
+
+		expect(await gpApiAuthHeaders()).toEqual({ Authorization: 'Bearer github-oidc-jwt' });
+		expect(errorSpy).not.toHaveBeenCalled();
+
+		errorSpy.mockRestore();
+	});
+
+	test('re-reads process.env on every call', async () => {
+		process.env['GP_API_SERVICE_TOKEN'] = 'first';
+		expect(await gpApiAuthHeaders()).toEqual({ Authorization: 'Bearer first' });
+		process.env['GP_API_SERVICE_TOKEN'] = 'second';
+		expect(await gpApiAuthHeaders()).toEqual({ Authorization: 'Bearer second' });
+	});
+
+	test('an empty value falls through to the clerk token', async () => {
+		process.env['GP_API_SERVICE_TOKEN'] = '';
+
+		expect(await gpApiAuthHeaders()).toEqual({ Authorization: 'Bearer static-jwt' });
+	});
+});

@@ -3,7 +3,13 @@
  * `/v1/elections`, the person-profile reads (`/v1/public-person-profiles`,
  * `/unlisted`, `/published`, `/voter-density`) and `/v1/public-campaigns`.
  *
- * Two credentials, picked by the non-secret GP_API_AUTH_MODE env var:
+ * GP_API_SERVICE_TOKEN, when set, is sent as-is and wins over everything below.
+ * The generate-people-sitemaps workflow sets it to the GitHub Actions OIDC token
+ * it fetches (audience `gp-api`) right before the generate step; gp-api verifies
+ * it against GitHub's issuer and allowlists that workflow. It is never set in a
+ * Vercel deployment, so Vercel keeps the behavior below.
+ *
+ * Otherwise, two credentials, picked by the non-secret GP_API_AUTH_MODE env var:
  *
  *  - `clerk` (the default, and any unset or unknown value): the static Clerk
  *    JWT in ELECTION_API_M2M_TOKEN, described below.
@@ -97,6 +103,8 @@ export function getElectionApiToken(): string | null {
  * Not cached: the OIDC token is short-lived and @vercel/oidc refreshes it.
  */
 export async function gpApiAuthHeaders(): Promise<Record<string, string>> {
+	const serviceToken = process.env['GP_API_SERVICE_TOKEN'];
+	if (serviceToken) return { Authorization: `Bearer ${serviceToken}` };
 	if (getGpApiAuthMode() === 'oidc-preferred') {
 		try {
 			const oidcToken = await getVercelOidcToken();

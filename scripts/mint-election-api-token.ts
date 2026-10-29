@@ -1,10 +1,12 @@
 #!/usr/bin/env bun
 /**
  * Mints a short-lived election-api M2M token for a single CI run — no Vercel
- * write, no long-lived credential. Used by
+ * write, no long-lived credential. Was used by
  * .github/workflows/generate-people-sitemaps.yml to authenticate the sitemap
  * generator's election-api calls without touching the static
  * ELECTION_API_M2M_TOKEN that scripts/rotate-election-api-token.ts manages.
+ * That workflow now sends its GitHub Actions OIDC token instead; this script
+ * stays until Clerk service auth is removed.
  *
  * The minted token is never printed. It is masked via the `::add-mask::`
  * workflow command (GitHub Actions only auto-masks declared `secrets:`

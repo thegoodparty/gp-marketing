@@ -6,7 +6,7 @@
 
 const REQUEST_CONTEXT = Symbol.for('@vercel/request-context');
 
-const OIDC_ENV_KEYS = ['GP_API_AUTH_MODE', 'VERCEL_OIDC_TOKEN', 'VERCEL_OIDC_TOKEN_FILE'] as const;
+const OIDC_ENV_KEYS = ['GP_API_AUTH_MODE', 'GP_API_SERVICE_TOKEN', 'VERCEL_OIDC_TOKEN', 'VERCEL_OIDC_TOKEN_FILE'] as const;
 
 const base64Url = (value: object): string => Buffer.from(JSON.stringify(value)).toString('base64url');
 

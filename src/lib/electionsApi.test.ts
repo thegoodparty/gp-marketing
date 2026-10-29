@@ -991,7 +991,7 @@ describe('gp-api person-profile reads carry the M2M token', () => {
 
 		await getPublicPersonProfileStatus(PERSON_ID);
 
-		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url]);
+		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url, '3600', `person:${PERSON_ID}`]);
 		expect(lastCacheCall.options).toEqual({ revalidate: 3600, tags: [`person:${PERSON_ID}`] });
 		expect(calls[0]?.init?.cache).toBe('no-store');
 		expect((calls[0]?.init as { next?: unknown }).next).toBeUndefined();
@@ -1004,7 +1004,7 @@ describe('gp-api person-profile reads carry the M2M token', () => {
 
 		await getRemovedPersonIds();
 
-		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url]);
+		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url, '300', 'people-removals']);
 		expect(lastCacheCall.options).toEqual({ revalidate: 300, tags: ['people-removals'] });
 	});
 
@@ -1015,7 +1015,7 @@ describe('gp-api person-profile reads carry the M2M token', () => {
 
 		await getPublishedPersonProfileIds();
 
-		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url]);
+		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url, '300']);
 		expect(lastCacheCall.options).toEqual({ revalidate: 300 });
 	});
 
@@ -1110,7 +1110,7 @@ describe('gp-api voter-density and public-campaigns reads carry the M2M token', 
 
 		expect(await getVoterDensityForDistrict(PERSON_ID)).toBeNull();
 		expect(calls).toHaveLength(1);
-		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url]);
+		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url, '3600', `person:${PERSON_ID}`]);
 		expect(lastCacheCall.options).toEqual({ revalidate: 3600, tags: [`person:${PERSON_ID}`] });
 	});
 

@@ -204,9 +204,19 @@ describe('fetchGpApiJsonCached', () => {
 		const result = await fetchGpApiJsonCached(GP_API_URL, { revalidate: 300, tags: ['people-removals'] });
 
 		expect(unstable_cache).toHaveBeenCalledTimes(1);
-		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', GP_API_URL]);
+		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', GP_API_URL, '300', 'people-removals']);
 		expect(lastCacheCall.options).toEqual({ revalidate: 300, tags: ['people-removals'] });
 		expect(result).toEqual(OK_BODY);
+	});
+
+	test('two readers of one URL with different windows and tags get separate entries', async () => {
+		process.env['NEXT_RUNTIME'] = 'nodejs';
+		memoizeNextTwoCacheCalls();
+
+		await fetchGpApiJsonCached(GP_API_URL, { revalidate: 300, tags: ['people-removals'] });
+		await fetchGpApiJsonCached(GP_API_URL, { revalidate: 3600, tags: ['people-sitemap'] });
+
+		expect(fetchCalls).toBe(2);
 	});
 
 	test('without tags, omits the tags cache option', async () => {

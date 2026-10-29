@@ -75,6 +75,11 @@ export async function fetchElectionApiJsonCached(
  * Only a 200 is cached, as the Next fetch cache did for these reads before.
  * Every other status throws ElectionApiError, so the caller maps it and the
  * next read asks gp-api again.
+ *
+ * The revalidate window and tags are part of the key because one URL has
+ * several readers: the removals feed is read by the profile pages (5 minutes,
+ * `people-removals`) and by the sitemap (1 hour, `people-sitemap`). With a
+ * shared entry, whichever wrote first would set the tags it is stored under.
  */
 export const fetchGpApiJsonCached = async (url: string, cache: { revalidate: number; tags?: readonly string[] }): Promise<unknown> => {
 	const authHeaders = await gpApiAuthHeaders();
@@ -87,7 +92,7 @@ export const fetchGpApiJsonCached = async (url: string, cache: { revalidate: num
 	if (!process.env['NEXT_RUNTIME']) return run();
 
 	const { unstable_cache } = await import('next/cache');
-	return await unstable_cache(run, ['gp-api-json', url], {
+	return await unstable_cache(run, ['gp-api-json', url, String(cache.revalidate), ...(cache.tags ?? [])], {
 		revalidate: cache.revalidate,
 		...(cache.tags && cache.tags.length > 0 ? { tags: [...cache.tags] } : {}),
 	})();

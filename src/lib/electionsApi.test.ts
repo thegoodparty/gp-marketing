@@ -3,6 +3,7 @@ import type { PlaceItem } from '~/types/elections';
 import { __resetElectionApiAuthForTests } from './electionApiAuth';
 import {
 	ELECTION_PAGE_SIZE,
+	findCampaignByRace,
 	getCitySlugToCountySlugMap,
 	getCountyChildPlaces,
 	getDistrictNames,
@@ -17,6 +18,7 @@ import {
 	getPublishedPersonProfileIds,
 	getRaceBySlug,
 	getRemovedPersonIds,
+	getVoterDensityForDistrict,
 	isStateIndexDistrictPlace,
 	resolveCountySlugForCitySlug,
 	resolveCountySlugForPlace,
@@ -1025,6 +1027,68 @@ describe('gp-api person-profile reads carry the M2M token', () => {
 		for (const call of calls) expect(authorizationOf(call.init)).toBeNull();
 		expect(errorSpy.mock.calls.filter(call => String(call[0]).includes('ELECTION_API_M2M_TOKEN is not set'))).toHaveLength(1);
 		errorSpy.mockRestore();
+	});
+});
+
+describe('gp-api voter-density and public-campaigns reads carry the M2M token', () => {
+	const PERSON_ID = 'ab12cd34-0000-0000-0000-000000000002';
+	const CAMPAIGN_PARAMS = { raceId: 'race-1', firstName: 'Ada', lastName: 'Lovelace' };
+
+	function captureFetch(status: number, body: unknown): Array<{ url: string; init?: RequestInit }> {
+		const calls: Array<{ url: string; init?: RequestInit }> = [];
+		globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+			calls.push({ url: String(input), init });
+			return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
+		}) as typeof fetch;
+		return calls;
+	}
+
+	const authorizationOf = (init?: RequestInit) => new Headers(init?.headers).get('authorization');
+
+	test('voter-density and public-campaigns both send the bearer', async () => {
+		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
+		const calls = captureFetch(200, {});
+
+		await getVoterDensityForDistrict(PERSON_ID);
+		await findCampaignByRace(CAMPAIGN_PARAMS);
+
+		expect(calls.map(c => new URL(c.url).pathname)).toEqual(['/v1/public-person-profiles/voter-density', '/v1/public-campaigns']);
+		for (const call of calls) expect(authorizationOf(call.init)).toBe('Bearer static-jwt');
+	});
+
+	test('voter-density keeps its per-person cache tag and revalidate alongside the header', async () => {
+		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
+		const calls = captureFetch(404, {});
+
+		expect(await getVoterDensityForDistrict(PERSON_ID)).toBeNull();
+		expect((calls[0]?.init as { next?: { revalidate?: number; tags?: string[] } }).next).toEqual({
+			revalidate: 3600,
+			tags: [`person:${PERSON_ID}`],
+		});
+	});
+
+	for (const status of [401, 403]) {
+		test(`a ${status} from voter-density or public-campaigns logs an auth failure and resolves to null, without retrying`, async () => {
+			process.env['ELECTION_API_M2M_TOKEN'] = 'expired-jwt';
+			const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
+			const calls = captureFetch(status, { message: 'Unauthorized' });
+
+			expect(await getVoterDensityForDistrict(PERSON_ID)).toBeNull();
+			expect(await findCampaignByRace(CAMPAIGN_PARAMS)).toBeNull();
+			expect(calls).toHaveLength(2);
+			expect(errorSpy.mock.calls.filter(call => String(call[0]).includes(`gp-api auth failure ${status}`))).toHaveLength(2);
+			errorSpy.mockRestore();
+		});
+	}
+
+	test('with no token, sends no Authorization header', async () => {
+		const calls = captureFetch(200, {});
+
+		await getVoterDensityForDistrict(PERSON_ID);
+		await findCampaignByRace(CAMPAIGN_PARAMS);
+
+		expect(calls).toHaveLength(2);
+		for (const call of calls) expect(authorizationOf(call.init)).toBeNull();
 	});
 });
 

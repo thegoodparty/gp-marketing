@@ -3,7 +3,8 @@ name: Rotate election-api M2M token
 # gp-marketing talks to election-api with a static, long-lived Clerk JWT
 # (ELECTION_API_M2M_TOKEN). JWTs can't be revoked, so we bound them to ~90 days
 # and rotate on a ~60-day cadence — the old token stays valid long enough for
-# routine deploys to pick up the new one (zero-downtime). See
+# routine deploys to pick up the new one (zero-downtime). The same token is also
+# written to the omni candidate-sites Vercel project as GP_API_M2M_TOKEN. See
 # scripts/rotate-election-api-token.ts for the full rationale.
 
 on:
@@ -51,6 +52,9 @@ jobs:
           # Non-secret project/team identifiers for good-party/gp-marketing.
           VERCEL_PROJECT_ID: prj_xUbQGrErwISW8pqTZtKzk9wN5gFc
           VERCEL_TEAM_ID: team_e4HAh1NYJW4yYc38qx66yTtG
+          # Non-secret project id for good-party/candidate-sites (omni); the token
+          # is written there as GP_API_M2M_TOKEN.
+          CANDIDATE_SITES_VERCEL_PROJECT_ID: prj_PFN2Upwy18Fg5jjF0BTD3vcEq5eO
           # Optional — if set, forces an immediate production redeploy.
           VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
           DRY_RUN: ${{ github.event.inputs.dry_run }}

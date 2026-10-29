@@ -1,10 +1,13 @@
 /**
  * Server-only Authorization header for election-api requests, and for gp-api's
- * person-profile reads (`/v1/public-person-profiles`, `/unlisted`, `/published`).
+ * gated public reads: the person-profile reads (`/v1/public-person-profiles`,
+ * `/unlisted`, `/published`, `/voter-density`) and `/v1/public-campaigns`.
  *
  * gp-api accepts any valid Clerk M2M JWT as a read-only credential for those
- * three routes, so the same ELECTION_API_M2M_TOKEN is sent there too. The env
- * var keeps its name because the rotation tooling writes it.
+ * routes, so the same ELECTION_API_M2M_TOKEN is sent there too. The env var
+ * keeps its name because the rotation tooling writes it. The rotation also
+ * writes the same token to the omni candidate-sites Vercel project as
+ * GP_API_M2M_TOKEN, since candidate-sites reads the same gated gp-api routes.
  *
  * gp-marketing runs on a large, churning fleet of short-lived Vercel isolates.
  * Minting a Clerk JWT M2M token per isolate — even pooled through the Next Data
@@ -30,8 +33,9 @@
  * If ELECTION_API_M2M_TOKEN is unset, requests go out unauthenticated. That is
  * intentional while election-api is in observe-only mode; once
  * ELECTION_API_AUTH_ENFORCED=true, the token must be present or election-api
- * returns 401. gp-api's person-profile reads 401 without it too, and the profile
- * render gate treats that as a takedown (noindex), never as an unclaimed page.
+ * returns 401. gp-api's gated reads 401 without it too. The profile render gate
+ * treats that as a takedown (noindex), never as an unclaimed page; voter-density
+ * and public-campaigns treat it as no data.
  * Rotate before the token's ~90-day expiry (runbook).
  */
 

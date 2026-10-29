@@ -1,6 +1,7 @@
 #!/usr/bin/env bun
 /**
- * Rotates the gp-marketing → election-api M2M bearer (ELECTION_API_M2M_TOKEN).
+ * Rotates the gp-marketing → election-api M2M bearer (ELECTION_API_M2M_TOKEN),
+ * and the same token for the omni candidate-sites project (GP_API_M2M_TOKEN).
  *
  * Why this exists: gp-marketing authenticates to election-api with a single
  * long-lived Clerk JWT injected as ELECTION_API_M2M_TOKEN, instead of minting a
@@ -15,20 +16,31 @@
  * is on — election-api starts returning 401 to gp-marketing. This script mints a
  * fresh JWT and writes it into every Vercel environment's ELECTION_API_M2M_TOKEN.
  *
+ * gp-api gates some public reads (the person-profile reads incl. voter-density,
+ * and /v1/public-campaigns) behind the same kind of read token. gp-marketing
+ * sends ELECTION_API_M2M_TOKEN there; the omni candidate-sites Vercel project
+ * reads the same routes and gets the SAME minted token as GP_API_M2M_TOKEN, so
+ * one rotation keeps both consumers current. If CANDIDATE_SITES_VERCEL_PROJECT_ID
+ * is unset, that write is skipped. Both projects are listed and validated before
+ * either is written, so a bad entry in one does not leave a half-done rotation.
+ *
  * Zero-downtime: we rotate on a ~60-day cadence while minting ~90-day tokens, so
  * the previous token stays valid for ~30 more days — long enough for routine
  * deployments to bake in the new value (Vercel env changes only apply to new
  * deployments). No forced redeploy is required; one is triggered only if
- * VERCEL_DEPLOY_HOOK_URL is provided.
+ * VERCEL_DEPLOY_HOOK_URL is provided (gp-marketing only; candidate-sites picks
+ * the token up on its next deployment).
  *
  * Run by .github/workflows/rotate-election-api-token.yml (scheduled + manual).
  *
  * Required env:
  *   CLERK_MACHINE_SECRET_KEY  ak_… secret for the gp-marketing (production) machine
- *   VERCEL_TOKEN              Vercel API token with write access to the project
- *   VERCEL_PROJECT_ID         prj_… (not secret)
- *   VERCEL_TEAM_ID            team_… (not secret)
+ *   VERCEL_TOKEN              Vercel API token with write access to the project(s)
+ *   VERCEL_PROJECT_ID         prj_… gp-marketing (not secret)
+ *   VERCEL_TEAM_ID            team_… (not secret; both projects live in this team)
  * Optional env:
+ *   CANDIDATE_SITES_VERCEL_PROJECT_ID  prj_… omni candidate-sites (not secret);
+ *                             if set, the token is also written there as GP_API_M2M_TOKEN
  *   CLERK_SECRET_KEY          sk_… (not used for minting; only set if convenient)
  *   TOKEN_TTL_DAYS            token lifetime in days (default 90)
  *   ELECTION_API_BASE_URL     base for the post-mint liveness check (default prod)
@@ -40,7 +52,8 @@
 
 import { createRedactor, jwtExpMs, mask, mintJwt } from './lib/election-api-token-mint';
 
-const TOKEN_ENV_KEY = 'ELECTION_API_M2M_TOKEN';
+const GP_MARKETING_TOKEN_ENV_KEY = 'ELECTION_API_M2M_TOKEN';
+const CANDIDATE_SITES_TOKEN_ENV_KEY = 'GP_API_M2M_TOKEN';
 const VERCEL_API = 'https://api.vercel.com';
 
 /** Vercel environments that hold the token, and the type each entry must use. */
@@ -90,10 +103,16 @@ async function vercelFetch<T>(path: string, token: string, teamId: string, init?
 	return (await res.json()) as T;
 }
 
-async function listTokenEnvVars(projectId: string, token: string, teamId: string): Promise<VercelEnvVar[]> {
+/** One Vercel project that holds the rotated token, and the env key it reads it from. */
+export interface TokenTarget {
+	projectId: string;
+	envKey: string;
+}
+
+async function listTokenEnvVars(projectId: string, envKey: string, token: string, teamId: string): Promise<VercelEnvVar[]> {
 	// The project env list is returned in a single page today, but page through
 	// defensively: a project with more variables than the endpoint's page size
-	// would otherwise silently drop an ELECTION_API_M2M_TOKEN entry, leaving it on
+	// would otherwise silently drop a token entry, leaving it on
 	// the stale token while the rest rotate. `pagination.next` is a timestamp
 	// cursor consumed via `until`.
 	const matches: VercelEnvVar[] = [];
@@ -106,7 +125,7 @@ async function listTokenEnvVars(projectId: string, token: string, teamId: string
 			pagination?: { next: number | null };
 		}>(`/v9/projects/${projectId}/env?${query.toString()}`, token, teamId);
 		for (const env of data.envs) {
-			if (env.key !== TOKEN_ENV_KEY) continue;
+			if (env.key !== envKey) continue;
 			matches.push({
 				id: env.id,
 				key: env.key,
@@ -122,6 +141,70 @@ async function listTokenEnvVars(projectId: string, token: string, teamId: string
 		until = String(next);
 	}
 	return matches;
+}
+
+/**
+ * Writes the token into every Vercel environment of each target project. Every
+ * project is listed and validated before any of them is written.
+ */
+export async function writeTokenToVercel(targets: TokenTarget[], newToken: string, vercelToken: string, teamId: string): Promise<void> {
+	const existingByTarget: Array<{ target: TokenTarget; existing: VercelEnvVar[] }> = [];
+	for (const target of targets) {
+		const existing = await listTokenEnvVars(target.projectId, target.envKey, vercelToken, teamId);
+		console.log(`Found ${existing.length} existing ${target.envKey} entrie(s) in Vercel project ${target.projectId}.`);
+
+		// Refuse to proceed on a manually-created entry that spans targets needing
+		// different types (e.g. one record covering both production and development).
+		// We deliberately do NOT auto-split it: that would require DELETE-then-POST on a
+		// live production credential, and a failure between the two calls would leave
+		// production with no token. Fail loudly before any write so an operator can
+		// split it by hand. Our provisioning creates one single-typed entry per
+		// environment, so this never triggers in practice.
+		for (const env of existing) {
+			const requiredTypes = new Set(env.target.map(t => TARGET_TYPES[t]).filter(Boolean));
+			if (requiredTypes.size > 1) {
+				throw new Error(
+					`Env entry ${env.id} in ${target.projectId} spans targets needing different types (${[...requiredTypes].join(', ')}); ` +
+						`split it into one entry per target in Vercel and re-run — refusing to delete a live credential to fix this automatically`,
+				);
+			}
+		}
+		existingByTarget.push({ target, existing });
+	}
+
+	for (const { target, existing } of existingByTarget) {
+		const { projectId, envKey } = target;
+		// Update every existing entry that holds this key (one entry may cover several
+		// environments), then create entries for any target that isn't covered yet.
+		for (const env of existing) {
+			// Also correct the variable type if it drifted (e.g. a production entry
+			// created manually as `encrypted` instead of `sensitive`, which would expose
+			// the bearer to anyone with project read access). Only set it when every
+			// target on the entry maps to one expected type, to avoid guessing on a
+			// mixed-target entry.
+			const expectedTypes = [...new Set(env.target.map(t => TARGET_TYPES[t]).filter(Boolean))];
+			const patchBody: Record<string, unknown> = { value: newToken };
+			if (expectedTypes.length === 1) patchBody['type'] = expectedTypes[0];
+			await vercelFetch(`/v9/projects/${projectId}/env/${env.id}`, vercelToken, teamId, {
+				method: 'PATCH',
+				body: JSON.stringify(patchBody),
+			});
+			console.log(`  ${projectId}: updated ${envKey} entry ${env.id} (targets: ${env.target.join(', ')})`);
+		}
+
+		// Exclude branch-scoped preview entries: they carry target ['preview'] but do
+		// not cover the canonical preview slot, so counting them would wrongly skip
+		// creating the canonical preview entry and leave preview on the stale token.
+		const covered = new Set(existing.filter(env => !env.gitBranch).flatMap(env => env.target));
+		for (const [environment, type] of Object.entries(TARGET_TYPES)) {
+			if (covered.has(environment)) continue;
+			await vercelFetch(`/v10/projects/${projectId}/env`, vercelToken, teamId, {
+				method: 'POST',
+				body: JSON.stringify({ key: envKey, value: newToken, type, target: [environment] }),
+			});
+			console.log(`  ${projectId}: created ${type} ${envKey} entry for missing target: ${environment}`);
+		}
+	}
 }
 
 async function main(): Promise<void> {
@@ -187,56 +270,15 @@ async function main(): Promise<void> {
 	const projectId = requireEnv('VERCEL_PROJECT_ID');
 	const teamId = requireEnv('VERCEL_TEAM_ID');
 
-	const existing = await listTokenEnvVars(projectId, vercelToken, teamId);
-	console.log(`Found ${existing.length} existing ${TOKEN_ENV_KEY} entrie(s) in Vercel.`);
-
-	// Refuse to proceed on a manually-created entry that spans targets needing
-	// different types (e.g. one record covering both production and development).
-	// We deliberately do NOT auto-split it: that would require DELETE-then-POST on a
-	// live production credential, and a failure between the two calls would leave
-	// production with no token. Fail loudly before any write so an operator can
-	// split it by hand. Our provisioning creates one single-typed entry per
-	// environment, so this never triggers in practice.
-	for (const env of existing) {
-		const requiredTypes = new Set(env.target.map(t => TARGET_TYPES[t]).filter(Boolean));
-		if (requiredTypes.size > 1) {
-			throw new Error(
-				`Env entry ${env.id} spans targets needing different types (${[...requiredTypes].join(', ')}); ` +
-					`split it into one entry per target in Vercel and re-run — refusing to delete a live credential to fix this automatically`,
-			);
-		}
+	const targets: TokenTarget[] = [{ projectId, envKey: GP_MARKETING_TOKEN_ENV_KEY }];
+	const candidateSitesProjectId = process.env['CANDIDATE_SITES_VERCEL_PROJECT_ID'];
+	if (candidateSitesProjectId) {
+		targets.push({ projectId: candidateSitesProjectId, envKey: CANDIDATE_SITES_TOKEN_ENV_KEY });
+	} else {
+		console.log(`CANDIDATE_SITES_VERCEL_PROJECT_ID not set; skipping the candidate-sites ${CANDIDATE_SITES_TOKEN_ENV_KEY} update.`);
 	}
 
-	// Update every existing entry that holds this key (one entry may cover several
-	// environments), then create entries for any target that isn't covered yet.
-	for (const env of existing) {
-		// Also correct the variable type if it drifted (e.g. a production entry
-		// created manually as `encrypted` instead of `sensitive`, which would expose
-		// the bearer to anyone with project read access). Only set it when every
-		// target on the entry maps to one expected type, to avoid guessing on a
-		// mixed-target entry.
-		const expectedTypes = [...new Set(env.target.map(t => TARGET_TYPES[t]).filter(Boolean))];
-		const patchBody: Record<string, unknown> = { value: newToken };
-		if (expectedTypes.length === 1) patchBody['type'] = expectedTypes[0];
-		await vercelFetch(`/v9/projects/${projectId}/env/${env.id}`, vercelToken, teamId, {
-			method: 'PATCH',
-			body: JSON.stringify(patchBody),
-		});
-		console.log(`  updated entry ${env.id} (targets: ${env.target.join(', ')})`);
-	}
-
-	// Exclude branch-scoped preview entries: they carry target ['preview'] but do
-	// not cover the canonical preview slot, so counting them would wrongly skip
-	// creating the canonical preview entry and leave preview on the stale token.
-	const covered = new Set(existing.filter(env => !env.gitBranch).flatMap(env => env.target));
-	for (const [target, type] of Object.entries(TARGET_TYPES)) {
-		if (covered.has(target)) continue;
-		await vercelFetch(`/v10/projects/${projectId}/env`, vercelToken, teamId, {
-			method: 'POST',
-			body: JSON.stringify({ key: TOKEN_ENV_KEY, value: newToken, type, target: [target] }),
-		});
-		console.log(`  created ${type} entry for missing target: ${target}`);
-	}
+	await writeTokenToVercel(targets, newToken, vercelToken, teamId);
 
 	const deployHook = process.env['VERCEL_DEPLOY_HOOK_URL'];
 	if (deployHook) {
@@ -257,11 +299,13 @@ async function main(): Promise<void> {
 	console.log('Rotation complete.');
 }
 
-main().catch(err => {
-	// Normalise before redacting: a non-Error throw would make `.message`
-	// undefined and redact() throw, swallowing the failure diagnosis.
-	// redact: a Vercel validation error can embed the submitted token value.
-	const message = err instanceof Error ? err.message : String(err);
-	console.error(`Rotation failed: ${redact(message)}`);
-	process.exit(1);
-});
+if (import.meta.main) {
+	main().catch(err => {
+		// Normalise before redacting: a non-Error throw would make `.message`
+		// undefined and redact() throw, swallowing the failure diagnosis.
+		// redact: a Vercel validation error can embed the submitted token value.
+		const message = err instanceof Error ? err.message : String(err);
+		console.error(`Rotation failed: ${redact(message)}`);
+		process.exit(1);
+	});
+}

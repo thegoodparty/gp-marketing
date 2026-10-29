@@ -23,9 +23,9 @@ export type AttributionMode =
 
 export const ATTRIBUTION_COPY: Record<Exclude<AttributionMode, 'none'>, string> = {
 	empowered: 'Empowered by GoodParty.org',
-	pledged: 'Has taken the GoodParty.org Pledge',
-	notPledged: 'Has not taken the GoodParty.org Pledge',
-	pledgeIneligible: 'Ineligible for the GoodParty.org Pledge due to partisan affiliation',
+	pledged: 'Has taken the People First Pledge',
+	notPledged: 'Has not taken the People First Pledge',
+	pledgeIneligible: 'Ineligible for the People First Pledge due to partisan affiliation',
 };
 
 /**
@@ -37,7 +37,14 @@ export const ATTRIBUTION_COPY: Record<Exclude<AttributionMode, 'none'>, string> 
  * Stays title case while the sentences around it are sentence case — it is the
  * pledge's name, not prose.
  */
-export const ATTRIBUTION_PLEDGE_PHRASE = 'GoodParty.org Pledge';
+export const ATTRIBUTION_PLEDGE_PHRASE = 'People First Pledge';
+
+/**
+ * The pledge's name before it became the People First Pledge (Oct 2026). Studio
+ * text written before the rename still says it, and the blocks that find the
+ * name in an editor's copy look for both until that copy is updated.
+ */
+export const LEGACY_PLEDGE_PHRASE = 'GoodParty.org Pledge';
 
 /**
  * The pledge callout that replaced the one-line status in the Profile Hero

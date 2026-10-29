@@ -1085,6 +1085,17 @@ describe('buildRaceRouteParams', () => {
 		]);
 	});
 
+	test('a place whose name has a slash maps to cityPositionParams under its last segment', () => {
+		const { cityPositionParams, subplacePositionParams } = buildRaceRouteParams(
+			[{ slug: 'sd/pennington-county/rainy-creek/cheyenne-township/township-clerk', positionLevel: 'LOCAL' }],
+			new Map([['sd/pennington-county/rainy-creek/cheyenne-township', 'sd/pennington-county']]),
+		);
+		expect(cityPositionParams).toEqual([
+			{ state: 'sd', county: 'pennington-county', city: 'cheyenne-township', positionSlug: 'township-clerk' },
+		]);
+		expect(subplacePositionParams).toEqual([]);
+	});
+
 	test('4-part CITY slug maps to cityPositionParams via generic branch', () => {
 		const { cityPositionParams } = params([
 			{ slug: 'wi/adams-county/adams-town/city-clerk', positionLevel: 'CITY' },

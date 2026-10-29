@@ -742,7 +742,9 @@ Decisions that came out of it (Emily, 2026-09-29):
   fetches it with `getFeaturedPeople`, so every location route feeds the block without touching its
   `page.tsx`. Absent, the override is `{ hidden: true }`.
 - **Where the people come from.** Candidates: the place's own upcoming races (same level filter as
-  its offices list), each asked through `/v1/candidacies?raceSlug=`, soonest election first, within
+  its offices list, `raceBelongsToTier`; a city or township page keeps `CITY`, `LOCAL` and
+  `TOWNSHIP`, since township offices carry their own level and every township page once listed
+  none of them), each asked through `/v1/candidacies?raceSlug=`, soonest election first, within
   a budget of sixteen races (`FEATURED_RACE_BUDGET`), six requests at a time. Representatives:
   `/v1/officeholders?geoId=` with the place's own `geoId` (now on `PlaceItem`; ask for it with
   `placeColumns`), current terms only. Both lists then read the person rows in one batch for the
@@ -1054,6 +1056,15 @@ file and the content block's clearance, and both wait for the `/people` batch (P
   2026-10-16 (#476, see above); the phone frame's claim card carries hidden Overline and Caption
   layers, left out (Tony, 2026-10-22); and the phone's Recent Experience labels ("Elected" / "Ran",
   above the title) differ from the desktop's, which was not part of this request.
+**The pledge's name (October 2026).** The GoodParty.org Pledge became the People First Pledge, with
+three pillars: Independent, People-Powered and Anti-Corruption. People First is the umbrella name, not
+a pillar. All built-in copy uses the new names. Studio text is edited separately, and editor copy
+written before the rename may still say "GoodParty.org Pledge". The one block that finds the name in
+an editor's text, the position content block (bold in the pledge explainer, pop-up link in the explore
+card), looks for either name (`LEGACY_PLEDGE_PHRASE` in `src/ui/_lib/attributionCopy.ts`). The
+quotes and lists below record the wording as it was when each piece shipped. The Studio block keeps
+its internal name, "GoodParty.org Pledge".
+
 **GoodParty.org Pledge block** (person profile pages first; location and position pages once editors
 place it) — extended, not rebuilt: `component_goodPartyOrgPledge`, the Studio block "GoodParty.org
 Pledge". The Voter Guide frames (2156-34297 desktop, 2188-38249 mobile) show a centred heading and intro
@@ -1075,7 +1086,8 @@ Decisions that came out of it (Emily, 2026-10-06):
   band supplies one button per state through it ("Take the pledge" or "Learn more"). The retired
   Candidate Profile global still carries card buttons, which Studio now shows as an unknown field.
 - **Studio pre-fills the block.** `src/lib/goodPartyOrgPledgeDefaults.ts` holds the heading, the intro,
-  the three cards (Independent / People First / Anti-Corruption), midnight, mixed icon colours and three
+  the three cards (Independent / People-Powered / Anti-Corruption; the middle one was People First
+  before the October 2026 rename below), midnight, mixed icon colours and three
   columns; the schema's `initialValue` and the person-profile code seed both read it so they cannot
   drift. The frame cuts the Anti-Corruption sentence off mid-way, so the full sentence that was already
   live is used. The frame also underlines "GoodParty.org" as a link to the homepage; that was left out
@@ -1168,7 +1180,7 @@ Decisions that came out of it:
 - **The rail is desktop-only and has two cards.** The share card and its button component are gone,
   with their Studio fields; the "On this page" links and the "Explore more races" card remain, and the
   whole rail is hidden below the `lg` breakpoint because the phone frame carries none of it. The
-  "GoodParty.org Pledge" in the explore card's body opens the pledge pop-up.
+  "People First Pledge" (or the old "GoodParty.org Pledge") in the explore card's body opens the pledge pop-up.
 - **The branded CTA ("Tired of choosing between red and blue?") is gone**, with its nine fields and
   the four-way copy switch. No editor had filled any of them, so nothing is orphaned in Studio.
 - **The pledge explainer is drawn inside each people list**, under the intro sentence, in the shape

@@ -57,11 +57,11 @@ const styles = tv({
 });
 
 export type FeaturedCandidatesCalloutProps = {
-	/** Defaults to "What this symbol means". */
-	title?: string;
+	/** Defaults to "What this symbol means". A node so the pledge copy test can render its arms here. */
+	title?: ReactNode;
 	body: ReactNode;
 	/** The link at the end of the copy that opens the pledge pop-up. Nothing here means no link. */
-	pledgeLinkLabel?: string;
+	pledgeLinkLabel?: ReactNode;
 };
 
 export type FeaturedCandidatesBlockProps = {
@@ -96,7 +96,7 @@ export function FeaturedCandidatesBlock(props: FeaturedCandidatesBlockProps) {
 				<div className={s.header()}>
 					<div className={s.intro()}>
 						<Text as='h2' styleType='heading-lg' className={s.heading()}>
-							{props.heading || 'Candidates and officials who took the GoodParty.org Pledge'}
+							{props.heading || 'Candidates and officials who took the People First Pledge'}
 						</Text>
 						{props.bodyCopy && (
 							<Text as='p' styleType='body-large' className={s.bodyCopy()}>

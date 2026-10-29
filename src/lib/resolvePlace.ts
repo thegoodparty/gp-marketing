@@ -27,6 +27,37 @@ export type ResolvePlaceData = {
 	citySlugToCountySlug: Map<string, string>;
 };
 
+// Consolidated city-counties whose city has no page of its own and whose name
+// differs from its county's: the city's offices sit on the county page, and a
+// Google pick like "Indianapolis, IN" carries no county, so without this it
+// fell through to the state page (Emily, 2026-10-27). Macon also matched the
+// wrong county ("Macon County" is a different county from Macon-Bibb). Checked
+// against goodparty.org's resolve-place route on 2026-10-27; same-named
+// city-counties (Denver, Juneau, Philadelphia) and consolidated cities that
+// have their own page (Jacksonville, Columbus GA) already resolve and are left out.
+const CONSOLIDATED_CITY_COUNTIES: Record<string, Record<string, string>> = {
+	GA: {
+		Athens: 'Clarke County',
+		Augusta: 'Richmond County',
+		Cusseta: 'Chattahoochee County',
+		Georgetown: 'Quitman County',
+		Macon: 'Bibb County',
+		Preston: 'Webster County',
+		Statenville: 'Echols County',
+	},
+	IN: { Indianapolis: 'Marion County' },
+	KS: { Tribune: 'Greeley County' },
+	KY: { Lexington: 'Fayette County', Louisville: 'Jefferson County' },
+	MT: { Anaconda: 'Deer Lodge County', Butte: 'Silver Bow County' },
+	TN: { Hartsville: 'Trousdale County', Lynchburg: 'Moore County', Nashville: 'Davidson County' },
+};
+
+function consolidatedCountyFor(state: string, city: string): string | undefined {
+	const target = normalizeName(stripCityTypeSuffix(city));
+	const match = Object.entries(CONSOLIDATED_CITY_COUNTIES[state] ?? {}).find(([name]) => normalizeName(name) === target);
+	return match?.[1];
+}
+
 function slugTail(slug: string): string | undefined {
 	return slug.split('/').filter(Boolean).pop();
 }
@@ -62,7 +93,8 @@ export function resolvePlaceUrl(input: ResolvePlaceInput, data: ResolvePlaceData
 	// Some callers only have one free-text field for the chosen place; when there
 	// is no distinct `county`, try the city text against county names too (a
 	// visitor picking "Guilford County, NC" from a single autocomplete field).
-	const countyQuery = input.county?.trim() || cityQuery;
+	const consolidatedCounty = state && cityQuery && !input.county ? consolidatedCountyFor(state, cityQuery) : undefined;
+	const countyQuery = input.county?.trim() || consolidatedCounty || cityQuery;
 	if (state && countyQuery) {
 		const target = normalizeName(canonicalizeCountyEquivalentName(state, countyQuery).baseName);
 		// An independent city sits at the county level beside a county of the same

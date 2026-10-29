@@ -1,6 +1,8 @@
 import { stegaClean } from 'next-sanity';
 
 import { INDEPENDENTS_ANCHOR } from '~/constants/electionAnchors';
+import { PledgeCopyArms } from '~/experiments/PledgeCopyArms';
+import { PLEDGE_LOCATION_CALLOUT_COPY } from '~/experiments/pledgeCopyTest';
 import { type FeaturedPeopleMode, selectFeaturedPeople } from '~/lib/featuredPeople';
 import { resolveRichTextTokens, resolveSectionText } from '~/lib/resolveSectionText';
 import type { TokenMap } from '~/lib/resolveTokens';
@@ -49,10 +51,10 @@ export function resolveFeaturedBodyCopy(value: string | null | undefined, count:
 		.trim();
 }
 
-/** The frame bolds "GoodParty.org Pledge" inside the default copy; an editor's own rich text carries its own marks. */
-function defaultCalloutBody() {
-	const phrase = 'GoodParty.org Pledge';
-	const [before, after] = FEATURED_CANDIDATES_DEFAULT_CALLOUT.split(phrase);
+/** The frame bolds "People First Pledge" inside the default copy and the test's rewrites; an editor's own rich text carries its own marks. */
+function boldPledgePhrase(copy: string) {
+	const phrase = 'People First Pledge';
+	const [before, after] = copy.split(phrase);
 	return (
 		<p>
 			{before}
@@ -84,14 +86,36 @@ export function FeaturedCandidatesBlockSection(props: Props) {
 	const showCallout = calloutSettings?.field_showCallout !== false;
 	const calloutText = calloutSettings?.block_calloutText;
 	const showPledgeLink = calloutSettings?.field_showPledgeLink !== false;
+	const controlTitle = resolveSectionText(calloutSettings?.field_calloutTitle, tokens) || FEATURED_CANDIDATES_DEFAULT_CALLOUT_TITLE;
+	const controlBody = calloutText && calloutText.length > 0 ? <RichData value={resolveRichTextTokens(calloutText, tokens)} /> : boldPledgePhrase(FEATURED_CANDIDATES_DEFAULT_CALLOUT);
+	const controlLinkLabel = resolveSectionText(calloutSettings?.field_pledgeLinkLabel, tokens) || FEATURED_CANDIDATES_DEFAULT_PLEDGE_LINK;
+	// The pledge copy test's rewrites replace the editor's callout text, Studio
+	// edits included (Emily, 2026-10-20); the show/hide switches still apply.
 	const callout = !showCallout
 		? undefined
 		: {
-				title: resolveSectionText(calloutSettings?.field_calloutTitle, tokens) || FEATURED_CANDIDATES_DEFAULT_CALLOUT_TITLE,
-				body: calloutText && calloutText.length > 0 ? <RichData value={resolveRichTextTokens(calloutText, tokens)} /> : defaultCalloutBody(),
-				pledgeLinkLabel: showPledgeLink
-					? resolveSectionText(calloutSettings?.field_pledgeLinkLabel, tokens) || FEATURED_CANDIDATES_DEFAULT_PLEDGE_LINK
-					: undefined,
+				title: (
+					<PledgeCopyArms
+						control={controlTitle}
+						b3={PLEDGE_LOCATION_CALLOUT_COPY.b3.title}
+						alt={PLEDGE_LOCATION_CALLOUT_COPY.alt.title}
+					/>
+				),
+				body: (
+					<PledgeCopyArms
+						as='div'
+						control={controlBody}
+						b3={boldPledgePhrase(PLEDGE_LOCATION_CALLOUT_COPY.b3.body)}
+						alt={boldPledgePhrase(PLEDGE_LOCATION_CALLOUT_COPY.alt.body)}
+					/>
+				),
+				pledgeLinkLabel: showPledgeLink ? (
+					<PledgeCopyArms
+						control={controlLinkLabel}
+						b3={PLEDGE_LOCATION_CALLOUT_COPY.b3.linkLabel}
+						alt={PLEDGE_LOCATION_CALLOUT_COPY.alt.linkLabel}
+					/>
+				) : undefined,
 			};
 
 	return (

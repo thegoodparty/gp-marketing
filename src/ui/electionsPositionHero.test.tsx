@@ -138,7 +138,7 @@ describe('ElectionsPositionHeroSection', () => {
 		expect(html).toContain('data-phase="decided"');
 		expect(html).toContain('Race winner');
 		expect(html).toContain('Independent · Current term 2027 to 2031');
-		expect(html).toContain('Has taken the GoodParty.org Pledge');
+		expect(html).toContain('Has taken the People First Pledge');
 		expect(html).toContain('Final results');
 		expect(html).toContain('candidates ran');
 		expect(html).toContain('aria-label="Winner"');
@@ -187,7 +187,7 @@ describe('ElectionsPositionHeroSection', () => {
 	test('pledged candidates get the mark, everyone else a party dot', () => {
 		const html = render(office, '2026-08-15');
 
-		expect(html).toContain('aria-label="Took the GoodParty.org Pledge"');
+		expect(html).toContain('aria-label="Took the People First Pledge"');
 		expect(html).toContain('bg-goodparty-blue');
 	});
 

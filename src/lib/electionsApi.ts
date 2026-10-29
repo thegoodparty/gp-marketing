@@ -23,7 +23,7 @@ import {
 	PLACE_RACE_COLUMNS,
 	stripCountySuffix,
 } from '~/lib/electionsHelpers';
-import { ElectionApiError, fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
+import { ElectionApiError, fetchElectionApiJsonCached, fetchGpApiJsonCached } from '~/lib/electionApiFetch';
 import { gpApiAuthHeaders } from '~/lib/electionApiAuth';
 
 const GP_API_BASE_URL = process.env['GP_API_BASE_URL'] ?? process.env['NEXT_PUBLIC_API_BASE'] ?? 'https://gp-api.goodparty.org';
@@ -131,13 +131,19 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | nul
 		return null;
 	}
 
-	// gp-api and other hosts: no M2M token here. The gp-api person-profile reads
-	// that need one call fetch directly with gpApiAuthHeaders().
+	// gp-api and other hosts: no token is added here. The one authenticated read
+	// that comes this way, public-campaigns, passes gpApiAuthHeaders() and no
+	// revalidate, so Next does not cache it at runtime and a per-request OIDC
+	// token costs no cache hits. Cached gp-api reads use fetchGpApiJsonCached.
 	for (let attempt = 0; attempt <= FETCH_JSON_MAX_RETRIES; attempt++) {
 		try {
 			const res = await fetch(url, options);
 			if (res.status === 404) return null;
 			if (res.ok) return (await res.json()) as T;
+			if (res.status === 401 || res.status === 403) {
+				console.error(`[electionsApi] gp-api auth failure ${res.status} ${url}; our token (Vercel OIDC or ELECTION_API_M2M_TOKEN) is missing, expired, or rejected.`);
+				return null;
+			}
 			if (res.status < 500) {
 				console.error(`[electionsApi] ${res.status} ${url}`);
 				return null;
@@ -407,7 +413,7 @@ export async function findCampaignByRace(params: {
 		lastName,
 	});
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-campaigns?${searchParams}`;
-	return fetchJson<FindByRaceIdResponse>(url);
+	return fetchJson<FindByRaceIdResponse>(url, { headers: await gpApiAuthHeaders() });
 }
 
 /**
@@ -444,15 +450,7 @@ export const PEOPLE_REMOVALS_CACHE_TAG = 'people-removals';
 export async function getRemovedPersonIds(): Promise<Set<string> | null> {
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles/unlisted`;
 	try {
-		const res = await fetch(url, {
-			headers: gpApiAuthHeaders(),
-			next: { revalidate: 300, tags: [PEOPLE_REMOVALS_CACHE_TAG] },
-		});
-		if (!res.ok) {
-			console.error(`[electionsApi] ${res.status} ${url}`);
-			return null;
-		}
-		const rows = (await res.json()) as Array<{ personId?: string }>;
+		const rows = (await fetchGpApiJsonCached(url, { revalidate: 300, tags: [PEOPLE_REMOVALS_CACHE_TAG] })) as Array<{ personId?: string }>;
 		if (!Array.isArray(rows)) return null;
 		const ids = new Set<string>();
 		for (const row of rows) {
@@ -460,6 +458,10 @@ export async function getRemovedPersonIds(): Promise<Set<string> | null> {
 		}
 		return ids;
 	} catch (err) {
+		if (err instanceof ElectionApiError) {
+			console.error(`[electionsApi] ${err.status} ${url}`);
+			return null;
+		}
 		console.error('[electionsApi] removed-person feed unreachable', err);
 		return null;
 	}
@@ -612,12 +614,36 @@ export async function getPersonsByIds(
  * non-live result (404 when the person maps to no district, or a transient
  * failure) resolves to null so the profile simply renders no map. The endpoint
  * lives on the heatmap track and may not exist in every environment yet; the
- * null-on-miss contract keeps the profile fully functional regardless.
+ * null-on-miss contract keeps the profile fully functional regardless. gp-api
+ * requires the M2M token here; a 401/403 is logged as an auth failure and also
+ * resolves to null.
  */
 export async function getVoterDensityForDistrict(personId: string): Promise<VoterDensity | null> {
 	const searchParams = new URLSearchParams({ personId });
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles/voter-density?${searchParams}`;
-	return fetchJson<VoterDensity>(url, personCacheOptions(personId));
+	for (let attempt = 0; attempt <= FETCH_JSON_MAX_RETRIES; attempt++) {
+		try {
+			return (await fetchGpApiJsonCached(url, { revalidate: 3600, tags: [personCacheTag(personId)] })) as VoterDensity;
+		} catch (err) {
+			if (!(err instanceof ElectionApiError)) {
+				console.error(`[electionsApi] attempt ${attempt + 1}`, err);
+			} else if (err.status === 404) {
+				return null;
+			} else if (err.status === 401 || err.status === 403) {
+				console.error(`[electionsApi] gp-api auth failure ${err.status} ${url}; our token (Vercel OIDC or ELECTION_API_M2M_TOKEN) is missing, expired, or rejected.`);
+				return null;
+			} else if (err.status < 500) {
+				console.error(`[electionsApi] ${err.status} ${url}`);
+				return null;
+			} else {
+				console.error(`[electionsApi] ${err.status} ${url} (attempt ${attempt + 1})`);
+			}
+		}
+		if (attempt < FETCH_JSON_MAX_RETRIES) {
+			await sleep(retryDelayMs(attempt));
+		}
+	}
+	return null;
 }
 
 /**
@@ -657,32 +683,32 @@ export async function getPublicPersonProfileStatus(personId: string): Promise<Pu
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles?${searchParams}`;
 	for (let attempt = 0; attempt <= FETCH_JSON_MAX_RETRIES; attempt++) {
 		try {
-			const res = await fetch(url, { ...personCacheOptions(personId), headers: gpApiAuthHeaders() });
-			if (res.ok) {
-				const profile = (await res.json()) as PublicPersonProfile;
-				// Privacy takedown: gp-api answers 200 with { removed: true } and no
-				// authored content. Render the minimal "removal requested" states.
-				if (profile.removed === true) return { status: 'removed' };
-				// Checked after `removed` because a takedown outranks the owner's own
-				// publish state, and gp-api only ever sends one of the two markers.
-				if (profile.unpublished === true) return { status: 'unpublished' };
-				return { status: 'live', profile };
-			}
-			if (res.status === 410) return { status: 'gone' };
-			if (res.status === 404) return { status: 'absent' };
-			if (res.status === 401 || res.status === 403) {
+			const profile = (await fetchGpApiJsonCached(url, { revalidate: 3600, tags: [personCacheTag(personId)] })) as PublicPersonProfile;
+			// Privacy takedown: gp-api answers 200 with { removed: true } and no
+			// authored content. Render the minimal "removal requested" states.
+			if (profile.removed === true) return { status: 'removed' };
+			// Checked after `removed` because a takedown outranks the owner's own
+			// publish state, and gp-api only ever sends one of the two markers.
+			if (profile.unpublished === true) return { status: 'unpublished' };
+			return { status: 'live', profile };
+		} catch (err) {
+			if (!(err instanceof ElectionApiError)) {
+				console.error(`[electionsApi] overlay attempt ${attempt + 1}`, err);
+			} else if (err.status === 410) {
+				return { status: 'gone' };
+			} else if (err.status === 404) {
+				return { status: 'absent' };
+			} else if (err.status === 401 || err.status === 403) {
 				console.error(
-					`[electionsApi] gp-api auth failure ${res.status} ${url}; ELECTION_API_M2M_TOKEN is missing, expired, or rejected. Rendering the page as removed (noindex) until auth is fixed.`,
+					`[electionsApi] gp-api auth failure ${err.status} ${url}; our token (Vercel OIDC or ELECTION_API_M2M_TOKEN) is missing, expired, or rejected. Rendering the page as removed (noindex) until auth is fixed.`,
 				);
 				return { status: 'removed' };
-			}
-			if (res.status < 500) {
-				console.error(`[electionsApi] ${res.status} ${url}`);
+			} else if (err.status < 500) {
+				console.error(`[electionsApi] ${err.status} ${url}`);
 				return { status: 'absent' };
+			} else {
+				console.error(`[electionsApi] ${err.status} ${url} (attempt ${attempt + 1})`);
 			}
-			console.error(`[electionsApi] ${res.status} ${url} (attempt ${attempt + 1})`);
-		} catch (err) {
-			console.error(`[electionsApi] overlay attempt ${attempt + 1}`, err);
 		}
 		if (attempt < FETCH_JSON_MAX_RETRIES) {
 			await sleep(retryDelayMs(attempt));
@@ -700,15 +726,14 @@ export async function getPublicPersonProfileStatus(personId: string): Promise<Pu
 export async function getPublishedPersonProfileIds(): Promise<Set<string> | null> {
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles/published`;
 	try {
-		const res = await fetch(url, { headers: gpApiAuthHeaders(), next: { revalidate: 300 } });
-		if (!res.ok) {
-			console.error(`[electionsApi] ${res.status} ${url}`);
-			return null;
-		}
-		const rows = (await res.json()) as Array<{ personId?: string }>;
+		const rows = (await fetchGpApiJsonCached(url, { revalidate: 300 })) as Array<{ personId?: string }>;
 		if (!Array.isArray(rows)) return null;
 		return new Set(rows.flatMap(row => (row.personId ? [row.personId.toLowerCase()] : [])));
 	} catch (err) {
+		if (err instanceof ElectionApiError) {
+			console.error(`[electionsApi] ${err.status} ${url}`);
+			return null;
+		}
 		console.error(`[electionsApi] ${url}`, err);
 		return null;
 	}

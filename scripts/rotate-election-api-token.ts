@@ -21,6 +21,11 @@
  * deployments). No forced redeploy is required; one is triggered only if
  * VERCEL_DEPLOY_HOOK_URL is provided.
  *
+ * Superseded for gp-marketing once GP_API_AUTH_MODE=oidc-preferred is set in
+ * its Vercel environments: gp-marketing then sends its Vercel OIDC token, which
+ * Vercel issues per deployment, and ELECTION_API_M2M_TOKEN is only the fallback
+ * for contexts without one (see src/lib/electionApiAuth.ts).
+ *
  * Run by .github/workflows/rotate-election-api-token.yml (scheduled + manual).
  *
  * Required env:

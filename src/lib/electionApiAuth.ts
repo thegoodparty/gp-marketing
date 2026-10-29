@@ -1,10 +1,29 @@
 /**
- * Server-only Authorization header for election-api requests, and for gp-api's
- * person-profile reads (`/v1/public-person-profiles`, `/unlisted`, `/published`).
+ * Server-only Authorization header for gp-api reads: the election routes under
+ * `/v1/elections`, the person-profile reads (`/v1/public-person-profiles`,
+ * `/unlisted`, `/published`, `/voter-density`) and `/v1/public-campaigns`.
+ *
+ * Two credentials, picked by the non-secret GP_API_AUTH_MODE env var:
+ *
+ *  - `clerk` (the default, and any unset or unknown value): the static Clerk
+ *    JWT in ELECTION_API_M2M_TOKEN, described below.
+ *  - `oidc-preferred`: this deployment's Vercel OIDC token (`getVercelOidcToken`
+ *    from `@vercel/oidc`, default audience). Vercel signs a fresh one for every
+ *    deployment, so there is no secret to store and nothing to rotate. In a
+ *    function it comes from the request's `x-vercel-oidc-token` header; at build
+ *    time from VERCEL_OIDC_TOKEN. When no token can be had (a CLI script, a
+ *    GitHub Action, an expired build token) we fall back to the Clerk token.
+ *
+ * The default stays `clerk` because a gp-api that does not yet accept OIDC
+ * treats the token as anonymous and 401s the gated reads. The order is: gp-api
+ * accepts OIDC in prod, then GP_API_AUTH_MODE=oidc-preferred is set in Vercel.
+ * The OIDC token changes on every request, so no fetch may carry it into a Next
+ * fetch cache key: every authenticated read goes through the URL-keyed
+ * unstable_cache wrappers in electionApiFetch.ts.
  *
  * gp-api accepts any valid Clerk M2M JWT as a read-only credential for those
- * three routes, so the same ELECTION_API_M2M_TOKEN is sent there too. The env
- * var keeps its name because the rotation tooling writes it.
+ * routes, so the same ELECTION_API_M2M_TOKEN is sent there too. The env var
+ * keeps its name because the rotation tooling writes it.
  *
  * gp-marketing runs on a large, churning fleet of short-lived Vercel isolates.
  * Minting a Clerk JWT M2M token per isolate — even pooled through the Next Data
@@ -27,16 +46,35 @@
  * via sitemap-entries.ts — keep working; the `server-only` default export throws
  * outside a bundler.)
  *
- * If ELECTION_API_M2M_TOKEN is unset, requests go out unauthenticated. That is
+ * If neither credential is available, requests go out unauthenticated. That is
  * intentional while election-api is in observe-only mode; once
  * ELECTION_API_AUTH_ENFORCED=true, the token must be present or election-api
- * returns 401. gp-api's person-profile reads 401 without it too, and the profile
- * render gate treats that as a takedown (noindex), never as an unclaimed page.
- * Rotate before the token's ~90-day expiry (runbook).
+ * returns 401. gp-api's gated reads 401 without it too. The profile render gate
+ * treats that as a takedown (noindex), never as an unclaimed page; voter-density
+ * and public-campaigns treat it as no data.
+ * Rotate the Clerk token before its ~90-day expiry (runbook) until
+ * GP_API_AUTH_MODE=oidc-preferred is live in every environment.
  */
+
+import { getVercelOidcToken } from '@vercel/oidc';
 
 // Latched so a misconfigured deploy logs once per process, not once per request.
 let warnedMissingToken = false;
+let warnedOidcUnavailable = false;
+let warnedUnknownAuthMode = false;
+
+export type GpApiAuthMode = 'clerk' | 'oidc-preferred';
+
+/** GP_API_AUTH_MODE, read per call. Anything but `oidc-preferred` is `clerk`. */
+export const getGpApiAuthMode = (): GpApiAuthMode => {
+	const mode = process.env['GP_API_AUTH_MODE'];
+	if (mode === 'oidc-preferred') return 'oidc-preferred';
+	if (mode && mode !== 'clerk' && !warnedUnknownAuthMode) {
+		warnedUnknownAuthMode = true;
+		console.error(`[electionApiAuth] Unknown GP_API_AUTH_MODE "${mode}"; using the clerk token`);
+	}
+	return 'clerk';
+};
 
 /** The static election-api M2M bearer, or null if unconfigured (warns once). */
 export function getElectionApiToken(): string | null {
@@ -53,26 +91,35 @@ export function getElectionApiToken(): string | null {
 	return token;
 }
 
-/** Authorization header for an election-api request (empty if no token). */
-export function electionApiAuthHeaders(): Record<string, string> {
-	const token = getElectionApiToken();
-	return token ? { Authorization: `Bearer ${token}` } : {};
-}
-
 /**
- * Authorization header for gp-api's person-profile reads (empty if no token).
- *
- * Sent as a plain header on a Next-cached fetch, unlike election-api's
- * unstable_cache wrapper: the token is one static value shared by every isolate,
- * so it adds the same component to every isolate's cache key, and Next 15 still
- * caches a fetch carrying Authorization when it sets an explicit revalidate.
+ * Authorization header for a gp-api read (empty if no credential). Never
+ * throws: a failure to get the OIDC token falls back to the Clerk token.
+ * Not cached: the OIDC token is short-lived and @vercel/oidc refreshes it.
  */
-export function gpApiAuthHeaders(): Record<string, string> {
+export async function gpApiAuthHeaders(): Promise<Record<string, string>> {
+	if (getGpApiAuthMode() === 'oidc-preferred') {
+		try {
+			const oidcToken = await getVercelOidcToken();
+			if (oidcToken) return { Authorization: `Bearer ${oidcToken}` };
+		} catch (err) {
+			if (!warnedOidcUnavailable) {
+				warnedOidcUnavailable = true;
+				console.error('[electionApiAuth] No Vercel OIDC token available; falling back to ELECTION_API_M2M_TOKEN', err);
+			}
+		}
+	}
 	const token = getElectionApiToken();
 	return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
-/** Test-only: reset the warn-once latch (optionally pre-latched to stay quiet). */
+/** Authorization header for a gp-api `/v1/elections` read; same credential as gpApiAuthHeaders. */
+export async function electionApiAuthHeaders(): Promise<Record<string, string>> {
+	return gpApiAuthHeaders();
+}
+
+/** Test-only: reset the warn-once latches (optionally pre-latched to stay quiet). */
 export function __resetElectionApiAuthForTests(seed?: { warnedMissingToken?: boolean }): void {
 	warnedMissingToken = seed?.warnedMissingToken ?? false;
+	warnedOidcUnavailable = false;
+	warnedUnknownAuthMode = false;
 }

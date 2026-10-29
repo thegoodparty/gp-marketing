@@ -96,7 +96,7 @@ export function FeaturedCandidatesBlock(props: FeaturedCandidatesBlockProps) {
 				<div className={s.header()}>
 					<div className={s.intro()}>
 						<Text as='h2' styleType='heading-lg' className={s.heading()}>
-							{props.heading || 'Candidates and officials who took the GoodParty.org Pledge'}
+							{props.heading || 'Candidates and officials who took the People First Pledge'}
 						</Text>
 						{props.bodyCopy && (
 							<Text as='p' styleType='body-large' className={s.bodyCopy()}>

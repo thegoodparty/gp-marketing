@@ -18,7 +18,7 @@ import { PLEDGE_MODAL_CTA_COPY, type PledgeCopyVariant, currentPledgeCopyVariant
  * settings document if marketing needs to edit it without a release.
  */
 export const PLEDGE_MODAL_COPY = {
-	title: 'The GoodParty.org Pledge',
+	title: 'The People First Pledge',
 	intro:
 		'GoodParty.org only works with candidates and elected officials who agree to serve people first, independent of both major parties and big-money interests. Their stances on individual issues vary. They are eligible to take the pledge if they agree to be:',
 	pillars: [
@@ -31,7 +31,7 @@ export const PLEDGE_MODAL_COPY = {
 		{
 			icon: 'users-round',
 			iconBg: 'bg-bright-yellow-200',
-			title: 'People First',
+			title: 'People-Powered',
 			body: 'They raise most of their funding from individuals, not from political action committees (PACs), lobbyists, unions, or corporations. Once elected, they focus on their constituents’ problems, not on themselves or special interests.',
 		},
 		{
@@ -81,7 +81,7 @@ export type PledgeModalProps = {
 };
 
 /**
- * The "what is the GoodParty.org Pledge" pop-up, for any block that wants to
+ * The "what is the People First Pledge" pop-up, for any block that wants to
  * explain the Heart & Star badge. Wrap the trigger; the pop-up manages itself.
  * Figma: 2156:29105 (desktop) and 2156:29080 (phone).
  */

@@ -135,7 +135,7 @@ describe('the person-profile pledge band', () => {
 		expect(preset).toBe(goodPartyOrgPledgeInitialValue);
 		expect(preset.goodPartyOrgPledgeItems.list_pledgeCards.map(card => card.field_title)).toEqual([
 			'Independent',
-			'People First',
+			'People-Powered',
 			'Anti-Corruption',
 		]);
 		expect(preset.goodPartyOrgPledgeDesignSettings.field_columnLayout12Columns).toBe('3Col');
@@ -146,7 +146,7 @@ describe('the person-profile pledge band', () => {
 		const band = await renderSeededPledge();
 		const titles = [...band.querySelectorAll('h3')].map(h => h.textContent);
 
-		expect(titles).toEqual(['Independent', 'People First', 'Anti-Corruption']);
+		expect(titles).toEqual(['Independent', 'People-Powered', 'Anti-Corruption']);
 	});
 
 	test('carries the intro line that frames the pledge', async () => {

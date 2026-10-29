@@ -8,13 +8,13 @@ import { PLEDGE_CALLOUT_LINK_LABEL, pledgeCalloutCopy } from '~/ui/_lib/attribut
 /**
  * Pins the hero's pledge callout word for word (Voter Guide frames; Emily,
  * 2026-10-06, replacing the one-line status approved 2026-08-17):
- *   pledged          → "This candidate took the GoodParty.org Pledge, promising to
+ *   pledged          → "This candidate took the People First Pledge, promising to
  *                       serve people first, independent of both major parties and
  *                       big-money interests."
- *   notPledged       → "This candidate has not yet taken the GoodParty.org Pledge to
+ *   notPledged       → "This candidate has not yet taken the People First Pledge to
  *                       serve people first, independent of both major parties and
  *                       big-money interests."
- *   pledgeIneligible → "This candidate is ineligible for the GoodParty.org Pledge due
+ *   pledgeIneligible → "This candidate is ineligible for the People First Pledge due
  *                       to partisan affiliation."
  * with "candidate" swapped for "elected official" on an officeholder's page, and
  * "Read the full pledge" opening the pledge pop-up after each sentence.
@@ -191,7 +191,7 @@ describe('the hero pledge callout says exactly what marketing approved', () => {
 		await renderHero({ attribution: 'pledged', showBrandMark: true });
 
 		expect(calloutSentence()).toBe(
-			'This candidate took the GoodParty.org Pledge, promising to serve people first, independent of both major parties and big-money interests.',
+			'This candidate took the People First Pledge, promising to serve people first, independent of both major parties and big-money interests.',
 		);
 	});
 
@@ -199,36 +199,36 @@ describe('the hero pledge callout says exactly what marketing approved', () => {
 		await renderHero({ attribution: 'notPledged', showBrandMark: false });
 
 		expect(calloutSentence()).toBe(
-			'This candidate has not yet taken the GoodParty.org Pledge to serve people first, independent of both major parties and big-money interests.',
+			'This candidate has not yet taken the People First Pledge to serve people first, independent of both major parties and big-money interests.',
 		);
 	});
 
 	test('a major-party candidate, who cannot', async () => {
 		await renderHero({ attribution: 'pledgeIneligible', showBrandMark: false });
 
-		expect(calloutSentence()).toBe('This candidate is ineligible for the GoodParty.org Pledge due to partisan affiliation.');
+		expect(calloutSentence()).toBe('This candidate is ineligible for the People First Pledge due to partisan affiliation.');
 	});
 
 	test('an elected official gets the same sentences about an elected official', async () => {
 		await renderHero({ attribution: 'pledged', pledgeSubject: 'elected official' });
 		expect(calloutSentence()).toBe(
-			'This elected official took the GoodParty.org Pledge, promising to serve people first, independent of both major parties and big-money interests.',
+			'This elected official took the People First Pledge, promising to serve people first, independent of both major parties and big-money interests.',
 		);
 
 		await renderHero({ attribution: 'notPledged', pledgeSubject: 'elected official' });
 		expect(calloutSentence()).toBe(
-			'This elected official has not yet taken the GoodParty.org Pledge to serve people first, independent of both major parties and big-money interests.',
+			'This elected official has not yet taken the People First Pledge to serve people first, independent of both major parties and big-money interests.',
 		);
 
 		await renderHero({ attribution: 'pledgeIneligible', pledgeSubject: 'elected official' });
-		expect(calloutSentence()).toBe('This elected official is ineligible for the GoodParty.org Pledge due to partisan affiliation.');
+		expect(calloutSentence()).toBe('This elected official is ineligible for the People First Pledge due to partisan affiliation.');
 	});
 
 	test('the sentence on screen is the shared copy, split around the bold pledge name without losing a word', async () => {
 		for (const mode of ['pledged', 'notPledged', 'pledgeIneligible'] as const) {
 			await renderHero({ attribution: mode });
 			expect(calloutSentence()).toBe(pledgeCalloutCopy(mode, 'candidate'));
-			expect(callout()?.querySelector('.font-semibold')?.textContent).toBe('GoodParty.org Pledge');
+			expect(callout()?.querySelector('.font-semibold')?.textContent).toBe('People First Pledge');
 		}
 	});
 

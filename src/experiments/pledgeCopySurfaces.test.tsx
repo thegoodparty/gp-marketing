@@ -42,7 +42,7 @@ describe('the pledged profile hero', () => {
 	test('carries all three arms of the sentence, with control visible and the rewrites hidden', () => {
 		const html = render('pledged');
 		expect(arm(html, 'control')).toBe(
-			'This candidate took the GoodParty.org Pledge, promising to serve people first, independent of both major parties and big-money interests.',
+			'This candidate took the People First Pledge, promising to serve people first, independent of both major parties and big-money interests.',
 		);
 		expect(arm(html, 'b3')).toBe(
 			"Dana Ruiz is running without either major party's endorsement. They signed the People First Pledge to serve people first, independent of both major parties and big-money donors.",
@@ -96,7 +96,7 @@ describe('the location page callout', () => {
 		expect(arm(html, 'b3')).toBe(PLEDGE_LOCATION_CALLOUT_COPY.b3.title);
 		expect(arm(html, 'alt')).toBe(PLEDGE_LOCATION_CALLOUT_COPY.alt.title);
 		expect(html).toContain('See the pledge they signed');
-		expect(html.match(/<strong>People First Pledge<\/strong>/g)).toHaveLength(2);
+		expect(html.match(/<strong>People First Pledge<\/strong>/g)).toHaveLength(3);
 	});
 
 	test('still hides with the Show Callout switch', () => {

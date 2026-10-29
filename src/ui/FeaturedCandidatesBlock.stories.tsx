@@ -14,15 +14,15 @@ const meta: Meta<typeof FeaturedCandidatesBlock> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const heading = 'Candidates and officials who took the GoodParty.org Pledge';
+const heading = 'Candidates and officials who took the People First Pledge';
 
-const bodyCopy = 'Candidates and elected officials near you who have taken the GoodParty.org Pledge. Read why they’re running and serving, in their own words.';
+const bodyCopy = 'Candidates and elected officials near you who have taken the People First Pledge. Read why they’re running and serving, in their own words.';
 
 const callout = {
 	title: 'What this symbol means',
 	body: (
 		<p>
-			Candidates and elected officials with this symbol took the <strong>GoodParty.org Pledge</strong>, promising to serve people first,
+			Candidates and elected officials with this symbol took the <strong>People First Pledge</strong>, promising to serve people first,
 			independent of both major parties and big-money interests.
 		</p>
 	),
@@ -51,7 +51,7 @@ export const Default: Story = {
 export const WithCount: Story = {
 	args: {
 		heading,
-		bodyCopy: 'There are 5 candidates and elected officials who have taken the GoodParty.org Pledge in Bay County. Read why they’re running and serving, in their own words.',
+		bodyCopy: 'There are 5 candidates and elected officials who have taken the People First Pledge in Bay County. Read why they’re running and serving, in their own words.',
 		callout,
 		people,
 	},

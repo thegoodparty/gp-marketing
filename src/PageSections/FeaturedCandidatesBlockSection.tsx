@@ -51,13 +51,9 @@ export function resolveFeaturedBodyCopy(value: string | null | undefined, count:
 		.trim();
 }
 
-/**
- * The frame bolds the pledge's name inside the default copy; an editor's own rich
- * text carries its own marks. The test's rewrites use the new name, the People
- * First Pledge, while the default copy may still use the old one.
- */
+/** The frame bolds "People First Pledge" inside the default copy and the test's rewrites; an editor's own rich text carries its own marks. */
 function boldPledgePhrase(copy: string) {
-	const phrase = copy.includes('People First Pledge') ? 'People First Pledge' : 'GoodParty.org Pledge';
+	const phrase = 'People First Pledge';
 	const [before, after] = copy.split(phrase);
 	return (
 		<p>

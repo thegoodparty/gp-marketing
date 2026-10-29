@@ -54,7 +54,7 @@ export type ElectionsPositionHeroCandidate = {
 	name: string;
 	party: string;
 	partyClass: PartyClass | null;
-	/** Took the GoodParty.org Pledge, by the same rule the candidate cards use. */
+	/** Took the People First Pledge, by the same rule the candidate cards use. */
 	isPledged?: boolean;
 	href?: string;
 	isWinner?: boolean;
@@ -159,7 +159,7 @@ function CheckIcon(props: SVGProps<SVGSVGElement>) {
 
 function PartyMark({ candidate, className }: { candidate: ElectionsPositionHeroCandidate; className: string }) {
 	if (candidate.isPledged) {
-		return <Logo width={27} height={20} aria-label='Took the GoodParty.org Pledge' role='img' />;
+		return <Logo width={27} height={20} aria-label='Took the People First Pledge' role='img' />;
 	}
 	const color =
 		candidate.partyClass === 'democrat'
@@ -329,7 +329,7 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 							</div>
 						)}
 						{winner.isPledged && (
-							<span className='absolute -bottom-1 -right-2' aria-label='Took the GoodParty.org Pledge' role='img'>
+							<span className='absolute -bottom-1 -right-2' aria-label='Took the People First Pledge' role='img'>
 								<Logo width={large ? 43 : 32} height={large ? 32 : 24} />
 							</span>
 						)}
@@ -348,7 +348,7 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 						{winner.seatLabel && <Text styleType='text-sm'>{winner.seatLabel}</Text>}
 						{winner.isPledged && (
 							<Text styleType='text-sm' className='text-neutral-400'>
-								Has taken the GoodParty.org Pledge
+								Has taken the People First Pledge
 							</Text>
 						)}
 					</div>

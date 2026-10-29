@@ -59,7 +59,7 @@ const pledgeExplainer: ElectionsPositionContentBlockProps['pledgeExplainer'] = {
 	title: 'What this symbol means',
 	body: (
 		<p>
-			Candidates and elected officials with this symbol took the <strong>GoodParty.org Pledge</strong>, promising to serve people first,
+			Candidates and elected officials with this symbol took the <strong>People First Pledge</strong>, promising to serve people first,
 			independent of both major parties and big-money interests.
 		</p>
 	),
@@ -149,7 +149,7 @@ const base: ElectionsPositionContentBlockProps = {
 				<p>
 					Browse every upcoming election in Harris County and find independent candidates who&apos;ve taken the{' '}
 					<a href='#' className='font-medium text-info-500 underline underline-offset-2'>
-						GoodParty.org Pledge
+						People First Pledge
 					</a>
 					.
 				</p>

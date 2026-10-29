@@ -164,6 +164,12 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		notFound();
 	}
 
+	// A slash in the place name ("Rainy Creek/Cheyenne Township") puts an extra segment in its
+	// slug, so neither slug built from the URL finds it and the page listed none of its races.
+	if (!resolvedPlaceData && cityPlace.slug) {
+		resolvedPlaceData = await getElectionsPagePlace({ slug: cityPlace.slug });
+	}
+
 	if (cityPlace.countyName) {
 		const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, cityPlace.countyName);
 		if (canonicalCountySlug && canonicalCountySlug.toLowerCase() !== countySlug) {

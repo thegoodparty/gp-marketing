@@ -288,6 +288,8 @@ export function buildCountyLookups(
  * CITY/LOCAL 4-part slugs: the county is already embedded; fall through to the generic
  * branch which emits the URL directly from the prefix.
  * CITY 3-part slugs with no county mapping are skipped (would produce a wrong URL).
+ * Any other level on a 3-part slug whose middle segment is a mapped city (Arkansas
+ * constables, COUNTY-level) also goes through the county, not into the county slot.
  */
 export function buildRaceEntries(
 	races: RaceEntry[],
@@ -643,35 +645,16 @@ async function fetchElectionJsonOrThrow<T>(
 }
 
 /**
- * Every race in a state. The page size counts distinct slugs, not rows, so the
- * walk stops on the first page with fewer than RACE_PAGE_SIZE distinct slugs.
+ * Every race in a state. A failed page throws instead of returning what it has:
+ * a partial walk looks exactly like a complete one, which is how the cap went
+ * unnoticed for three months. A state with no races at all is an empty list.
  *
- * A failed page throws instead of returning what it has. A partial walk looks
- * exactly like a complete one, which is how the cap went unnoticed for three
- * months. The one quiet case is a 404 on page 1, which is how the API says the
- * state has no races at all.
+ * gp-api pages /races by distinct slug and can return more rows than slugs, so
+ * a last page may still be a full page of rows. Stopping on row count then
+ * costs one extra, empty page, and never stops the walk early.
  */
 async function fetchAllStateRaces(code: string): Promise<RaceEntry[]> {
-	const races: RaceEntry[] = [];
-	for (let page = 1; page <= MAX_RACE_PAGES; page++) {
-		const search = new URLSearchParams({
-			state: code,
-			raceColumns: 'slug,positionLevel',
-			page: String(page),
-			pageSize: String(RACE_PAGE_SIZE),
-		}).toString();
-		const url = `${GP_API_ELECTIONS_BASE}/races?${search}`;
-		const result = await fetchElectionApiJsonCached(url);
-		if (!result.ok) {
-			if (page === 1 && result.status === 404) return races;
-			throw new Error(`[sitemap] Election API ${result.status} ${url}`);
-		}
-		if (!Array.isArray(result.json)) throw new Error(`[sitemap] Election API non-array body ${url}`);
-		const rows = result.json as RaceEntry[];
-		races.push(...rows);
-		if (new Set(rows.map((r) => r.slug)).size < RACE_PAGE_SIZE) return races;
-	}
-	throw new Error(`[sitemap] ${code} races exceeded ${MAX_RACE_PAGES} pages of ${RACE_PAGE_SIZE}`);
+	return fetchElectionJsonOrThrow<RaceEntry>('v1/races', { state: code, raceColumns: 'slug,positionLevel' });
 }
 
 async function fetchElectionJson<T>(

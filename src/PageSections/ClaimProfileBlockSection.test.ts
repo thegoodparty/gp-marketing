@@ -3,6 +3,7 @@ import {
 	resolveClaimProfileBlockBackgroundColor,
 	resolveClaimProfileBlockText,
 	resolveExampleCardPartyAffiliation,
+	withSignupSource,
 } from './ClaimProfileBlockSection';
 
 describe('resolveClaimProfileBlockText', () => {
@@ -81,5 +82,33 @@ describe('resolveExampleCardPartyAffiliation', () => {
 	test('returns empty string when all values are absent', () => {
 		expect(resolveExampleCardPartyAffiliation(undefined, undefined)).toBe('');
 		expect(resolveExampleCardPartyAffiliation(undefined, {})).toBe('');
+	});
+});
+
+describe('withSignupSource', () => {
+	const signUp = { buttonType: 'external' as const, href: 'https://app.goodparty.org/sign-up', label: 'Claim this profile' };
+
+	test('tags a sign-up link with its source', () => {
+		expect(withSignupSource(signUp, 'profile_claim')).toEqual({
+			...signUp,
+			href: 'https://app.goodparty.org/sign-up?signup_source=profile_claim',
+		});
+	});
+
+	test('keeps parameters already on the link', () => {
+		const tagged = withSignupSource({ ...signUp, href: 'https://app.goodparty.org/sign-up?utm_source=meta' }, 'profile_claim');
+		expect(tagged && 'href' in tagged ? tagged.href : null).toBe(
+			'https://app.goodparty.org/sign-up?utm_source=meta&signup_source=profile_claim',
+		);
+	});
+
+	test('leaves a link that does not go to sign-up alone', () => {
+		const about = { buttonType: 'internal' as const, href: '/about', label: 'Learn more' };
+		expect(withSignupSource(about, 'profile_claim')).toBe(about);
+	});
+
+	test('leaves the button alone with no source, or no button', () => {
+		expect(withSignupSource(signUp, undefined)).toBe(signUp);
+		expect(withSignupSource(undefined, 'profile_claim')).toBeUndefined();
 	});
 });

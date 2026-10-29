@@ -18,7 +18,6 @@ import { resolveEditorialContentTags } from '~/ui/_lib/resolveEditorialContentTa
 import { EditorialLayout } from '~/components/EditorialLayout';
 import { resolveArticleNavigation } from '~/lib/resolveArticleNavigation';
 import { Author } from '~/ui/Author';
-import { client } from '~/lib/client';
 import { format, parseISO } from 'date-fns';
 import { stegaClean } from 'next-sanity';
 import { PageSchema } from '~/ui/PageSchema';
@@ -35,13 +34,16 @@ import { BlogBlock } from '~/ui/BlogBlock';
 import type { BlogCardProps } from '~/ui/BlogCard';
 import { resolveBlogCard } from '~/ui/_lib/resolveBlogCard';
 import { resolveStickySidebarCta } from '~/ui/_lib/resolveStickySidebarCta';
+import { ExperimentExposureTracker } from '~/experiments/ExperimentExposureTracker';
+import { isVoterFacingCategory, swapInlineCtasForNewsletter } from '~/experiments/blogNewsletter';
+import { resolveBlogNewsletterExperiment } from '~/experiments/resolveBlogNewsletterExperiment';
 
-export async function generateStaticParams() {
-	const entries = await client.fetch<Array<string>>('*[_type == "article"].editorialOverview.field_slug');
-	return entries.filter(Boolean).map((slug) => ({
-		slug,
-	}));
-}
+// SSR per request so the voter-facing newsletter block can read the visitor's AMP_* cookie
+// and resolve the copy arm on the server (same pattern as `src/app/[slug]/page.tsx`).
+// `generateStaticParams` was removed with this: it is a build-time API that the Next.js
+// docs only sanction alongside `force-static`. Unknown slugs hit `notFound()` below and
+// the sitemap enumerates articles from Sanity in `src/lib/sitemap-entries.ts`.
+export const dynamic = 'force-dynamic';
 
 export default async function Page(props: any) {
 	const slug = (await props.params)['slug'];
@@ -131,9 +133,22 @@ export default async function Page(props: any) {
 
 	const stickySidebarCta = resolveStickySidebarCta(page.stickySidebarCta);
 
+	// Voter-facing categories swap their inline candidate CTAs for the newsletter block,
+	// whose copy is split by the blog newsletter flag. Everything else renders as authored.
+	const categorySlug = page.editorialContentTags?.category?.tagOverview?.field_slug;
+	const newsletter = isVoterFacingCategory(categorySlug ? stegaClean(categorySlug) : undefined)
+		? await resolveBlogNewsletterExperiment()
+		: null;
+	const bodySections = newsletter
+		? swapInlineCtasForNewsletter(page.contentSections?.block_editorialContentSections, newsletter.block, newsletter.exposure)
+		: page.contentSections?.block_editorialContentSections;
+
 	return (
 		<>
 			<PageSchema schema={articleGraph ?? undefined} />
+			{newsletter?.exposure && (
+				<ExperimentExposureTracker flagKey={newsletter.exposure.flagKey} variant={newsletter.exposure.variant} />
+			)}
 			<BlogArticleHero
 				title={page.editorialOverview?.field_editorialTitle}
 				tagline={{ label: page.editorialContentTags?.category?.tagOverview?.field_name, href: page.editorialContentTags?.category?.href }}
@@ -176,7 +191,7 @@ export default async function Page(props: any) {
 			>
 				<RichTextContentSections
 					stackSpacing={TypographyStackSpacing.EDITORIAL}
-					contentSections={page.contentSections?.block_editorialContentSections}
+					contentSections={bodySections}
 				/>
 				<div className='flex flex-col gap-12 pt-12'>
 					<BlogArticleTags tags={resolveEditorialContentTags(page.editorialContentTags)} />

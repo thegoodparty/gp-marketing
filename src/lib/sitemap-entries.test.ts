@@ -1085,6 +1085,17 @@ describe('buildRaceRouteParams', () => {
 		]);
 	});
 
+	test('a place whose name has a slash maps to cityPositionParams under its last segment', () => {
+		const { cityPositionParams, subplacePositionParams } = buildRaceRouteParams(
+			[{ slug: 'sd/pennington-county/rainy-creek/cheyenne-township/township-clerk', positionLevel: 'LOCAL' }],
+			new Map([['sd/pennington-county/rainy-creek/cheyenne-township', 'sd/pennington-county']]),
+		);
+		expect(cityPositionParams).toEqual([
+			{ state: 'sd', county: 'pennington-county', city: 'cheyenne-township', positionSlug: 'township-clerk' },
+		]);
+		expect(subplacePositionParams).toEqual([]);
+	});
+
 	test('4-part CITY slug maps to cityPositionParams via generic branch', () => {
 		const { cityPositionParams } = params([
 			{ slug: 'wi/adams-county/adams-town/city-clerk', positionLevel: 'CITY' },
@@ -1657,23 +1668,26 @@ describe('per-state race paging', () => {
 	});
 
 	// The page size counts distinct slugs. Without positionNames projected the API
-	// returns every row for the page's slugs, so a last page can hold more rows
-	// than pageSize and must still end the walk.
-	test('stops on distinct slugs, not rows', async () => {
+	// returns every row for the page's slugs, so a last page can hold a full
+	// page of rows. The walk asks for one more page, gets nothing, and stops,
+	// with every race from the first page kept.
+	test('a last page with more rows than slugs ends the walk one empty page later', async () => {
 		const distinct = stateRaces(RACE_PAGE_SIZE - 1);
 		const rows = [...distinct, { ...distinct[0]! }];
 		const queries: string[] = [];
 		globalThis.fetch = (async (input: RequestInfo | URL) => {
 			const url = new URL(String(input));
-			if (url.pathname.endsWith('/v1/elections/races')) queries.push(url.searchParams.get('page') ?? '');
-			const body = url.pathname.endsWith('/v1/elections/races') ? rows : [];
+			const isRaces = url.pathname.endsWith('/v1/elections/races');
+			if (isRaces) queries.push(url.searchParams.get('page') ?? '');
+			const body = isRaces && url.searchParams.get('page') === '1' ? rows : [];
 			return new Response(JSON.stringify(body), { status: 200 });
 		}) as typeof fetch;
 
-		await fetchStateElectionSitemapEntries('PA', base);
+		const entries = await fetchStateElectionSitemapEntries('PA', base);
 
 		expect(rows).toHaveLength(RACE_PAGE_SIZE);
-		expect(queries).toEqual(['1']);
+		expect(queries).toEqual(['1', '2']);
+		expect(positionUrls(entries)).toHaveLength(RACE_PAGE_SIZE - 1);
 	});
 
 	test('a state with no races at all (a 404 on page one) is just empty', async () => {

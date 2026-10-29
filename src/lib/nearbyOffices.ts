@@ -59,7 +59,7 @@ export function raceBelongsToTier(race: PlaceRace, level: NearbyOfficesTier['lev
 	const raceLevel = race.positionLevel?.toUpperCase();
 	if (level === 'state') return raceLevel === 'STATE';
 	if (level === 'county') return raceLevel === 'COUNTY' || raceLevel === 'LOCAL';
-	return raceLevel === 'CITY' || raceLevel === 'LOCAL';
+	return raceLevel === 'CITY' || raceLevel === 'LOCAL' || raceLevel === 'TOWNSHIP';
 }
 
 const LEVEL_LABELS: Record<string, string> = {
@@ -68,6 +68,7 @@ const LEVEL_LABELS: Record<string, string> = {
 	COUNTY: 'County',
 	CITY: 'Local',
 	LOCAL: 'Local',
+	TOWNSHIP: 'Local',
 };
 
 const TIER_LABELS: Record<NearbyOfficesTier['level'], string> = { state: 'State', county: 'County', city: 'Local' };

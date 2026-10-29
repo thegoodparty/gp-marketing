@@ -1,5 +1,6 @@
 /// <reference types="bun-types" />
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
+import { PLEDGE_COPY_WINDOW_KEY } from '~/experiments/pledgeCopyTest';
 import {
 	trackDataLayerEvent,
 	trackMetaCustomEvent,
@@ -105,6 +106,24 @@ describe('trackVoterGuideEvent', () => {
 	});
 
 	/**
+	 * Every voter guide event carries the visitor's pledge copy test arm while
+	 * the test runs, so any of them can be cut by arm. The head script leaves
+	 * the arm on `window`.
+	 */
+	test('carries the pledge copy test arm the head script picked', () => {
+		const g = globalThis as { document?: unknown };
+		g.document = { cookie: '' };
+		(stub as unknown as Record<string, unknown>)[PLEDGE_COPY_WINDOW_KEY] = 'b3';
+		try {
+			trackVoterGuideEvent('pledgeModalOpen', { source: 'profile_hero' });
+		} finally {
+			delete g.document;
+		}
+
+		expect(stub.dataLayer?.[0]).toMatchObject({ event: 'voter_guide_pledge_modal_open', pledge_copy_variant: 'b3', source: 'profile_hero' });
+	});
+
+	/**
 	 * GTM's data layer keeps the last value of every key across pushes. A key
 	 * the caller does not know must therefore be pushed as null, or a tag that
 	 * reads it would see the previous event's value.
@@ -176,7 +195,7 @@ describe('trackVoterGuideProfileViewed', () => {
 				removed: false,
 				unpublished: false,
 				party_class: null,
-			},
+				},
 		]);
 		expect(amplitudeCalls.map(c => c.name)).toEqual(['Voter Guide - Profile Viewed']);
 	});

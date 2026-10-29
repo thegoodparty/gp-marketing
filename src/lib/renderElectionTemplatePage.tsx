@@ -11,6 +11,8 @@ type Props = {
 	enableLandingSearch?: boolean;
 	/** The template already resolved for `context`, when the caller ran that alongside its own data fetches. */
 	resolved?: ResolvedElectionTemplate;
+	/** See `ElectionsCmsTemplatePage`. */
+	pledgeLocation?: string | null;
 };
 
 export async function renderElectionTemplatePage(props: Props) {
@@ -23,6 +25,7 @@ export async function renderElectionTemplatePage(props: Props) {
 			tokens={resolved.tokens ?? props.tokens}
 			schemas={props.schemas}
 			enableLandingSearch={props.enableLandingSearch}
+			pledgeLocation={props.pledgeLocation}
 		/>
 	);
 }

@@ -119,12 +119,25 @@ function callout(): Element | null {
 }
 
 /** The callout's sentence, without the pop-up link that follows it. */
+/**
+ * What a visitor sees by default. The pledged sentence also carries the pledge
+ * copy test's hidden rewrites (see `~/experiments/PledgeCopyArms`); only the
+ * control arm shows until the head script picks another, so the hidden ones are
+ * left out here.
+ */
+function visibleNodes(parent: Node): Node[] {
+	return [...parent.childNodes].flatMap(node => {
+		if (!(node instanceof HTMLElement) || !node.hasAttribute('data-pledge-copy')) return [node];
+		return node.getAttribute('data-pledge-copy') === 'control' ? [...node.childNodes] : [];
+	});
+}
+
 function calloutSentence(): string {
 	const box = callout();
 	if (!box) throw new Error('expected the pledge callout to render');
 	const paragraph = box.querySelector('p');
 	if (!paragraph) throw new Error('expected the callout sentence');
-	return [...paragraph.childNodes]
+	return visibleNodes(paragraph)
 		.filter(node => !(node instanceof HTMLButtonElement))
 		.map(node => node.textContent ?? '')
 		.join('')
@@ -139,7 +152,7 @@ function calloutButton(): HTMLButtonElement {
 
 /** The trigger's own words, without the arrow icon's accessible title. */
 function calloutButtonLabel(): string {
-	return [...calloutButton().childNodes]
+	return visibleNodes(calloutButton())
 		.filter(node => node.nodeType === Node.TEXT_NODE)
 		.map(node => node.textContent ?? '')
 		.join('')

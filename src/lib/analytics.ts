@@ -1,3 +1,5 @@
+import { PLEDGE_COPY_TEST_ENABLED, currentPledgeCopyVariant } from '~/experiments/pledgeCopyTest';
+
 /** Canonical app sign-up URL (matches `buttonTransformer` SignUp action). */
 export const APP_SIGN_UP_HREF = 'https://app.goodparty.org/sign-up';
 
@@ -194,6 +196,11 @@ export const VOTER_GUIDE_EVENTS = {
 		amplitude: 'Voter Guide - Pledge Modal Opened',
 		keys: ['source'],
 	},
+	pledgeModalCtaClick: {
+		dataLayer: 'voter_guide_pledge_modal_cta_click',
+		amplitude: 'Voter Guide - Pledge Modal CTA Clicked',
+		keys: ['source', 'label', 'href', 'cta'],
+	},
 	claimProfileClick: {
 		dataLayer: 'voter_guide_claim_profile_click',
 		amplitude: 'Voter Guide - Claim Profile Clicked',
@@ -251,7 +258,7 @@ const SEGMENT_FORWARDED: ReadonlySet<VoterGuideEventKey> = new Set<VoterGuideEve
 export function trackVoterGuideEvent(key: VoterGuideEventKey, properties: VoterGuideEventProperties = {}): void {
 	if (typeof window === 'undefined') return;
 	const names = VOTER_GUIDE_EVENTS[key];
-	const payload: Record<string, unknown> = { page_path: window.location.pathname };
+	const payload: Record<string, unknown> = { page_path: window.location.pathname, ...pledgeCopyProperty() };
 	for (const name of names.keys) {
 		payload[name] = properties[name] ?? null;
 	}
@@ -269,6 +276,18 @@ export function trackVoterGuideEvent(key: VoterGuideEventKey, properties: VoterG
 		for (const name of meta.keys) metaPayload[name] = payload[name] ?? null;
 		trackMetaVoterGuideStep(meta.name, metaPayload);
 	}
+}
+
+/**
+ * The visitor's pledge copy test arm, on every voter guide event while the test
+ * runs, so any of them can be cut by arm. Left off for a visitor outside the
+ * test. Leaving a key off is safe here despite GTM keeping old values (see
+ * {@link trackVoterGuideEvent}): a visitor's arm never changes, so there is no
+ * earlier value for a push to contradict.
+ */
+function pledgeCopyProperty(): Record<string, string> {
+	const variant = PLEDGE_COPY_TEST_ENABLED ? currentPledgeCopyVariant() : null;
+	return variant ? { pledge_copy_variant: variant } : {};
 }
 
 const noop = () => undefined;
@@ -320,6 +339,7 @@ export function trackVoterGuideProfileViewed(props: {
 		removed: props.removed,
 		unpublished: props.unpublished,
 		party_class: props.partyClass ?? null,
+		...pledgeCopyProperty(),
 	};
 	trackDataLayerEvent(VOTER_GUIDE_EVENTS.profileView.dataLayer, payload);
 	return whenAmplitudeReady(() => trackEvent(VOTER_GUIDE_EVENTS.profileView.amplitude, payload));

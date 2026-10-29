@@ -1,4 +1,4 @@
-import { electionApiAuthHeaders } from '~/lib/electionApiAuth';
+import { electionApiAuthHeaders, gpApiAuthHeaders } from '~/lib/electionApiAuth';
 
 const ELECTION_API_CACHE_SECONDS = 3600;
 
@@ -26,10 +26,11 @@ export class ElectionApiError extends Error {
  * Authenticated election-api GET, keyed only on the URL so the shared 1h Data
  * Cache hits across isolates.
  *
- * The M2M Authorization header is acquired OUTSIDE this URL cache: it is a static
- * env-injected token (see electionApiAuth), so reading it is free, and keeping it
- * out of the wrapped function means the bearer never enters the URL cache key
- * (fetch also uses cache:'no-store').
+ * The Authorization header is acquired OUTSIDE this URL cache (see
+ * electionApiAuth): either the static Clerk token or the per-request Vercel OIDC
+ * token. Keeping it out of the wrapped function means the bearer never enters the
+ * URL cache key (fetch also uses cache:'no-store'), so a token that changes on
+ * every request still shares one cache entry per URL.
  *
  * unstable_cache only works inside the Next server runtime. In CLI scripts (bun/tsx)
  * and unit tests the module still imports, but invoking unstable_cache outside the
@@ -41,7 +42,7 @@ export async function fetchElectionApiJsonCached(
 	url: string,
 	tags?: readonly string[],
 ): Promise<ElectionApiJsonResult> {
-	const authHeaders = electionApiAuthHeaders();
+	const authHeaders = await electionApiAuthHeaders();
 	const run = async (): Promise<ElectionApiJsonResult> => {
 		const res = await fetch(url, { headers: authHeaders, cache: 'no-store' });
 		if (res.status === 404) return { status: 404, ok: false, json: null };
@@ -63,3 +64,36 @@ export async function fetchElectionApiJsonCached(
 		...(tags && tags.length > 0 ? { tags: [...tags] } : {}),
 	})();
 }
+
+/**
+ * Authenticated gp-api GET for the reads outside `/v1/elections` (the
+ * person-profile reads and voter-density), keyed only on the URL and tags for
+ * the same reason as fetchElectionApiJsonCached: the Vercel OIDC token changes
+ * on every request, so a fetch carrying it in the Next fetch cache key would
+ * never hit.
+ *
+ * Only a 200 is cached, as the Next fetch cache did for these reads before.
+ * Every other status throws ElectionApiError, so the caller maps it and the
+ * next read asks gp-api again.
+ *
+ * The revalidate window and tags are part of the key because one URL has
+ * several readers: the removals feed is read by the profile pages (5 minutes,
+ * `people-removals`) and by the sitemap (1 hour, `people-sitemap`). With a
+ * shared entry, whichever wrote first would set the tags it is stored under.
+ */
+export const fetchGpApiJsonCached = async (url: string, cache: { revalidate: number; tags?: readonly string[] }): Promise<unknown> => {
+	const authHeaders = await gpApiAuthHeaders();
+	const run = async (): Promise<unknown> => {
+		const res = await fetch(url, { headers: authHeaders, cache: 'no-store' });
+		if (res.status !== 200) throw new ElectionApiError(res.status, url);
+		return res.json();
+	};
+
+	if (!process.env['NEXT_RUNTIME']) return run();
+
+	const { unstable_cache } = await import('next/cache');
+	return await unstable_cache(run, ['gp-api-json', url, String(cache.revalidate), ...(cache.tags ?? [])], {
+		revalidate: cache.revalidate,
+		...(cache.tags && cache.tags.length > 0 ? { tags: [...cache.tags] } : {}),
+	})();
+};

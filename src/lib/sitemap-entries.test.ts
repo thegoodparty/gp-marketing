@@ -24,6 +24,7 @@ import {
 	type CityPlace,
 	type RaceEntry,
 } from './sitemap-entries';
+import { resetNextCacheMock, unstable_cache } from '~/testing/nextCacheMock';
 
 describe('people sitemap shards', () => {
 	const uuid = (hex8: string) => `${hex8}-1111-2222-3333-444444444444`;
@@ -393,7 +394,7 @@ describe('fetchPeopleSitemapEntries', () => {
 		]);
 	});
 
-	test('sends the M2M bearer on the gp-api published and unlisted reads, keeping the sitemap tag', async () => {
+	test('sends the M2M bearer on the gp-api published and unlisted reads, without the fetch cache', async () => {
 		const originalToken = process.env['ELECTION_API_M2M_TOKEN'];
 		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
 		try {
@@ -414,11 +415,32 @@ describe('fetchPeopleSitemapEntries', () => {
 			]);
 			for (const call of gpApiCalls) {
 				expect(new Headers(call.init?.headers).get('authorization')).toBe('Bearer static-jwt');
-				expect((call.init as { next?: { tags?: string[] } }).next?.tags).toContain('people-sitemap');
+				expect(call.init?.cache).toBe('no-store');
 			}
 		} finally {
 			if (originalToken === undefined) delete process.env['ELECTION_API_M2M_TOKEN'];
 			else process.env['ELECTION_API_M2M_TOKEN'] = originalToken;
+		}
+	});
+
+	test('caches the gp-api published and unlisted reads by URL under the sitemap tag', async () => {
+		const originalRuntime = process.env['NEXT_RUNTIME'];
+		process.env['NEXT_RUNTIME'] = 'nodejs';
+		resetNextCacheMock();
+		try {
+			mockUpstream({ persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }] });
+
+			await fetchPeopleSitemapEntries(base, shardOf(aliceId));
+
+			const gpApiCacheCalls = unstable_cache.mock.calls.filter(([, keyParts]) => (keyParts as string[])[0] === 'gp-api-json');
+			expect(gpApiCacheCalls.map(([, keyParts]) => new URL((keyParts as string[])[1]!).pathname).sort()).toEqual([
+				'/v1/public-person-profiles/published',
+				'/v1/public-person-profiles/unlisted',
+			]);
+			for (const [, , options] of gpApiCacheCalls) expect(options).toEqual({ revalidate: 3600, tags: ['people-sitemap'] });
+		} finally {
+			if (originalRuntime === undefined) delete process.env['NEXT_RUNTIME'];
+			else process.env['NEXT_RUNTIME'] = originalRuntime;
 		}
 	});
 

@@ -14,8 +14,7 @@ import {
 import { hasText } from '~/lib/peopleProfile';
 import { buildPersonSlugFromBase, personIdSuffix } from '~/lib/personSlug';
 import { FAQ_BASE_PATH, getFaqSitemapEntries } from '~/lib/faqSlugs';
-import { fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
-import { gpApiAuthHeaders } from '~/lib/electionApiAuth';
+import { ElectionApiError, fetchElectionApiJsonCached, fetchGpApiJsonCached } from '~/lib/electionApiFetch';
 import { allFaqsQuery } from '~/sanity/groq';
 
 /** 51 US state/DC codes (50 states + DC) */
@@ -113,17 +112,8 @@ const GP_API_BASE =
 
 const GP_API_ELECTIONS_BASE = `${GP_API_BASE.replace(/\/$/, '')}/v1/elections`;
 
-const CACHE_1H: RequestInit = { next: { revalidate: 3600 } };
-
 /** Next.js data-cache tag for the /people sitemap upstream fetches. Bust via revalidateTag. */
 export const PEOPLE_SITEMAP_CACHE_TAG = 'people-sitemap';
-
-function cacheInit(tags?: readonly string[]): RequestInit {
-	if (tags && tags.length > 0) {
-		return { next: { revalidate: 3600, tags: [...tags] } };
-	}
-	return CACHE_1H;
-}
 
 export type CountyPlace = { slug?: string; name?: string; mtfcc?: string };
 export type CityPlace = { slug?: string; countyName?: string };
@@ -580,9 +570,13 @@ export async function getCachedElectionRouteParams(): Promise<{
  */
 async function fetchGpApiJsonOrThrow<T>(path: string, tags?: readonly string[]): Promise<T[]> {
 	const url = `${GP_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
-	const res = await fetch(url, { ...cacheInit(tags), headers: gpApiAuthHeaders() });
-	if (!res.ok) throw new Error(`[sitemap] gp-api ${res.status} ${url}`);
-	const data: unknown = await res.json();
+	let data: unknown;
+	try {
+		data = await fetchGpApiJsonCached(url, { revalidate: 3600, ...(tags ? { tags } : {}) });
+	} catch (err) {
+		if (err instanceof ElectionApiError) throw new Error(`[sitemap] gp-api ${err.status} ${url}`);
+		throw err;
+	}
 	if (!Array.isArray(data)) throw new Error(`[sitemap] gp-api non-array body ${url}`);
 	return data as T[];
 }

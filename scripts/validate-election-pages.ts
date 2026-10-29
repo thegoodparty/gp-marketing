@@ -101,7 +101,7 @@ async function fetchElectionJson<T>(path: string, params: Record<string, string>
 	const search = new URLSearchParams(params).toString();
 	const url = `${GP_API_ELECTIONS_BASE}/${path.replace(/^\/?v1\//, '')}?${search}`;
 	try {
-		const authHeaders = electionApiAuthHeaders();
+		const authHeaders = await electionApiAuthHeaders();
 		const res = await fetch(url, { headers: authHeaders });
 		if (!res.ok) return [];
 		const data: unknown = await res.json();

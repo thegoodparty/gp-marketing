@@ -361,8 +361,8 @@ export function ProfileHero(props: ProfileHeroProps) {
 									{attributionMode === 'pledged' ? (
 										<PledgeCopyArms
 											control={renderCalloutSentence(pledgeCalloutCopy(attributionMode, props.pledgeSubject ?? 'candidate'))}
-											b3={renderCalloutSentence(PLEDGE_PROFILE_CALLOUT_COPY.b3.sentence(props.candidateName))}
-											alt={renderCalloutSentence(PLEDGE_PROFILE_CALLOUT_COPY.alt.sentence(props.candidateName))}
+											b3={renderCalloutSentence(PLEDGE_PROFILE_CALLOUT_COPY.b3.sentence(props.candidateName, props.pledgeSubject ?? 'candidate'))}
+											alt={renderCalloutSentence(PLEDGE_PROFILE_CALLOUT_COPY.alt.sentence(props.candidateName, props.pledgeSubject ?? 'candidate'))}
 										/>
 									) : (
 										renderCalloutSentence(pledgeCalloutCopy(attributionMode, props.pledgeSubject ?? 'candidate'))

@@ -53,6 +53,13 @@ describe('the pledged profile hero', () => {
 		expect(armClass(html, 'alt')).toBe('hidden');
 	});
 
+	test('says an elected official is serving, not running, in b3', () => {
+		const html = renderToStaticMarkup(
+			<ProfileHero candidateName='Dana Ruiz' office='Mayor' attribution='pledged' pledgeSubject='elected official' />,
+		);
+		expect(arm(html, 'b3')).toStartWith("Dana Ruiz is serving without either major party's endorsement.");
+	});
+
 	test('rewrites the link label with the sentence', () => {
 		const html = render('pledged');
 		expect(html).toContain('See the pledge they signed');

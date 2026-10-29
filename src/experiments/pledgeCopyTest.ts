@@ -1,3 +1,5 @@
+import type { PledgeSubject } from '~/ui/_lib/attributionCopy';
+
 /**
  * The voter guide pledge copy test (Jack's "Pledge callout copy test variants"
  * doc; Voter Guide Data meeting, 2026-10-19). Three arms: today's copy and two
@@ -128,10 +130,10 @@ export const PLEDGE_LOCATION_CALLOUT_COPY: Record<PledgeCopyTreatment, { title: 
 };
 
 /** The pledged profile's hero callout, per rewrite. Only the pledged sentence is tested; the other two stay as they are. */
-export const PLEDGE_PROFILE_CALLOUT_COPY: Record<PledgeCopyTreatment, { sentence(name: string): string; linkLabel: string }> = {
+export const PLEDGE_PROFILE_CALLOUT_COPY: Record<PledgeCopyTreatment, { sentence(name: string, subject: PledgeSubject): string; linkLabel: string }> = {
 	b3: {
-		sentence: name =>
-			`${name} is running without either major party's endorsement. They signed the GoodParty.org Pledge to serve people first, independent of both major parties and big-money donors.`,
+		sentence: (name, subject) =>
+			`${name} ${subject === 'elected official' ? 'is serving' : 'is running'} without either major party's endorsement. They signed the GoodParty.org Pledge to serve people first, independent of both major parties and big-money donors.`,
 		linkLabel: 'See the pledge they signed',
 	},
 	alt: {

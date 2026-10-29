@@ -57,11 +57,11 @@ const styles = tv({
 });
 
 export type FeaturedCandidatesCalloutProps = {
-	/** Defaults to "What this symbol means". */
-	title?: string;
+	/** Defaults to "What this symbol means". A node so the pledge copy test can render its arms here. */
+	title?: ReactNode;
 	body: ReactNode;
 	/** The link at the end of the copy that opens the pledge pop-up. Nothing here means no link. */
-	pledgeLinkLabel?: string;
+	pledgeLinkLabel?: ReactNode;
 };
 
 export type FeaturedCandidatesBlockProps = {

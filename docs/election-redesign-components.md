@@ -742,7 +742,9 @@ Decisions that came out of it (Emily, 2026-09-29):
   fetches it with `getFeaturedPeople`, so every location route feeds the block without touching its
   `page.tsx`. Absent, the override is `{ hidden: true }`.
 - **Where the people come from.** Candidates: the place's own upcoming races (same level filter as
-  its offices list), each asked through `/v1/candidacies?raceSlug=`, soonest election first, within
+  its offices list, `raceBelongsToTier`; a city or township page keeps `CITY`, `LOCAL` and
+  `TOWNSHIP`, since township offices carry their own level and every township page once listed
+  none of them), each asked through `/v1/candidacies?raceSlug=`, soonest election first, within
   a budget of sixteen races (`FEATURED_RACE_BUDGET`), six requests at a time. Representatives:
   `/v1/officeholders?geoId=` with the place's own `geoId` (now on `PlaceItem`; ask for it with
   `placeColumns`), current terms only. Both lists then read the person rows in one batch for the

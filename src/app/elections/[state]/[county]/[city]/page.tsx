@@ -215,7 +215,8 @@ export default async function Page({ params }: { params: Promise<{ state: string
 
 	const cityRaces = (resolvedPlaceData?.Races ?? []).filter(r => {
 		const level = r.positionLevel?.toUpperCase();
-		return level === 'LOCAL' || level === 'CITY';
+		// Township offices carry their own level, and every township page listed none of them.
+		return level === 'LOCAL' || level === 'CITY' || level === 'TOWNSHIP';
 	});
 	// The county and state races this city's voters also vote in. The county place
 	// is already loaded here, but without its races, so this reads it again. That

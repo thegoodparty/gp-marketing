@@ -18,6 +18,8 @@ import {
 	type PledgeSubject,
 } from './_lib/attributionCopy.ts';
 import { Logo } from '~/sanity/utils/Logo.tsx';
+import { PledgeCopyArms } from '~/experiments/PledgeCopyArms';
+import { PLEDGE_PROFILE_CALLOUT_COPY } from '~/experiments/pledgeCopyTest';
 
 const styles = tv({
 	slots: {
@@ -261,8 +263,7 @@ export function ProfileHero(props: ProfileHeroProps) {
 	// Only the pledge's name is set in bold, not the sentence around it: the
 	// sentence states something about this person, and the bold marks the thing
 	// being referred to.
-	const renderCalloutSentence = (mode: PledgeCalloutMode) => {
-		const copy = pledgeCalloutCopy(mode, props.pledgeSubject ?? 'candidate');
+	const renderCalloutSentence = (copy: string) => {
 		const at = copy.indexOf(ATTRIBUTION_PLEDGE_PHRASE);
 		if (at < 0) return copy;
 
@@ -356,10 +357,27 @@ export function ProfileHero(props: ProfileHeroProps) {
 							<div className={callout()} data-component="ProfileHeroPledgeCallout">
 								{attributionMode === 'pledged' && <Logo className={calloutIcon()} aria-hidden="true" />}
 								<p className={calloutText()}>
-									{renderCalloutSentence(attributionMode)}{' '}
+									{/* The pledge copy test only rewrites the pledged sentence (see `PLEDGE_PROFILE_CALLOUT_COPY`). */}
+									{attributionMode === 'pledged' ? (
+										<PledgeCopyArms
+											control={renderCalloutSentence(pledgeCalloutCopy(attributionMode, props.pledgeSubject ?? 'candidate'))}
+											b3={renderCalloutSentence(PLEDGE_PROFILE_CALLOUT_COPY.b3.sentence(props.candidateName, props.pledgeSubject ?? 'candidate'))}
+											alt={renderCalloutSentence(PLEDGE_PROFILE_CALLOUT_COPY.alt.sentence(props.candidateName, props.pledgeSubject ?? 'candidate'))}
+										/>
+									) : (
+										renderCalloutSentence(pledgeCalloutCopy(attributionMode, props.pledgeSubject ?? 'candidate'))
+									)}{' '}
 									<PledgeModal source="profile_hero">
 										<button type="button" className={calloutLink()}>
-											{PLEDGE_CALLOUT_LINK_LABEL}
+											{attributionMode === 'pledged' ? (
+												<PledgeCopyArms
+													control={PLEDGE_CALLOUT_LINK_LABEL}
+													b3={PLEDGE_PROFILE_CALLOUT_COPY.b3.linkLabel}
+													alt={PLEDGE_PROFILE_CALLOUT_COPY.alt.linkLabel}
+												/>
+											) : (
+												PLEDGE_CALLOUT_LINK_LABEL
+											)}
 											<IconResolver icon="arrow-up-right" className="min-w-4 min-h-4 w-4 h-4 max-w-4 max-h-4" />
 										</button>
 									</PledgeModal>

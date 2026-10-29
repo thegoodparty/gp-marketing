@@ -9,6 +9,8 @@ import { Button, ButtonLink } from './Inputs/Button.tsx';
 import { Text } from './Text.tsx';
 import { Logo } from '~/sanity/utils/Logo.tsx';
 import { trackVoterGuideEvent } from '~/lib/analytics';
+import { exposePledgeCopy, usePledgeLocation } from '~/experiments/PledgeCopyProvider';
+import { PLEDGE_MODAL_CTA_COPY, type PledgeCopyVariant, currentPledgeCopyVariant } from '~/experiments/pledgeCopyTest';
 
 /**
  * The pledge explainer's copy lives here rather than in Studio: the pop-up is
@@ -60,6 +62,10 @@ const styles = tv({
 		pillarTitle: 'text-black',
 		pillarBody: 'font-secondary text-[0.875rem]/[1.25rem] text-black md:text-[1rem]/[1.5rem]',
 		footer: 'flex justify-center',
+		// The pledge copy test's call to action: a prompt over the buttons, centred like the header.
+		cta: 'flex flex-col items-center gap-4 text-center',
+		ctaPrompt: 'text-black',
+		ctaButtons: 'flex w-full flex-col items-center justify-center gap-3 md:w-auto md:flex-row md:gap-4',
 		close: 'absolute right-4 top-4 md:right-6 md:top-6',
 	},
 });
@@ -70,6 +76,8 @@ export type PledgeModalProps = {
 	className?: string;
 	/** Which opener this is, for the opened event: the pop-up has five, on three page types. */
 	source?: string;
+	/** The pledge copy test arm to show. Defaults to the visitor's own; stories and tests pass one. */
+	copyVariant?: PledgeCopyVariant | null;
 };
 
 /**
@@ -78,13 +86,31 @@ export type PledgeModalProps = {
  * Figma: 2156:29105 (desktop) and 2156:29080 (phone).
  */
 export function PledgeModal(props: PledgeModalProps) {
-	const { overlay, content, header, logo, title, intro, pillars, pillar, pillarHeading, pillarIcon, pillarTitle, pillarBody, footer, close } =
-		styles();
+	const {
+		overlay,
+		content,
+		header,
+		logo,
+		title,
+		intro,
+		pillars,
+		pillar,
+		pillarHeading,
+		pillarIcon,
+		pillarTitle,
+		pillarBody,
+		close,
+	} = styles();
+	const location = usePledgeLocation();
+	// Only the pop-up's content reads the arm, and that renders once the pop-up is open, in the browser, so it cannot mismatch the server HTML.
+	const variant = props.copyVariant === undefined ? currentPledgeCopyVariant() : props.copyVariant;
 
 	return (
 		<Dialog.Root
 			onOpenChange={open => {
-				if (open) trackVoterGuideEvent('pledgeModalOpen', { source: props.source ?? null });
+				if (!open) return;
+				exposePledgeCopy();
+				trackVoterGuideEvent('pledgeModalOpen', { source: props.source ?? null });
 			}}
 		>
 			<Dialog.Trigger asChild>{props.children}</Dialog.Trigger>
@@ -118,18 +144,7 @@ export function PledgeModal(props: PledgeModalProps) {
 							</li>
 						))}
 					</ul>
-					<div className={footer()}>
-						<ButtonLink
-							parent='PledgeModal'
-							href={PLEDGE_MODAL_COPY.learnMore.href}
-							styleType='primary'
-							styleSize='md'
-							className='max-md:w-full'
-							iconRight={<IconResolver icon='arrow-up-right' className='min-w-4 min-h-4 w-4 h-4 max-w-4 max-h-4' />}
-						>
-							{PLEDGE_MODAL_COPY.learnMore.label}
-						</ButtonLink>
-					</div>
+					<PledgeModalCallToAction variant={variant} location={location} source={props.source} />
 					<Dialog.Close asChild>
 						<Button
 							parent='PledgeModal'
@@ -143,5 +158,68 @@ export function PledgeModal(props: PledgeModalProps) {
 				</Dialog.Content>
 			</Dialog.Portal>
 		</Dialog.Root>
+	);
+}
+
+/**
+ * The bottom of the pop-up: today's "Learn more" button, or for a visitor in a
+ * rewrite of the pledge copy test, a prompt over that arm's buttons.
+ */
+export function PledgeModalCallToAction(props: { variant: PledgeCopyVariant | null; location: string | null; source?: string }) {
+	const { footer, cta, ctaPrompt, ctaButtons } = styles();
+	const ctaCopy = props.variant && props.variant !== 'control' ? PLEDGE_MODAL_CTA_COPY[props.variant] : null;
+	const trackCta = (label: string, href: string, position: 'primary' | 'secondary') =>
+		trackVoterGuideEvent('pledgeModalCtaClick', { source: props.source ?? null, label, href, cta: position });
+
+	if (!ctaCopy) {
+		return (
+			<div className={footer()}>
+				<ButtonLink
+					parent='PledgeModal'
+					href={PLEDGE_MODAL_COPY.learnMore.href}
+					styleType='primary'
+					styleSize='md'
+					className='max-md:w-full'
+					onClick={() => trackCta(PLEDGE_MODAL_COPY.learnMore.label, PLEDGE_MODAL_COPY.learnMore.href, 'primary')}
+					iconRight={<IconResolver icon='arrow-up-right' className='min-w-4 min-h-4 w-4 h-4 max-w-4 max-h-4' />}
+				>
+					{PLEDGE_MODAL_COPY.learnMore.label}
+				</ButtonLink>
+			</div>
+		);
+	}
+
+	const { primary, secondary } = ctaCopy;
+	return (
+		<div className={cta()} data-pledge-modal-cta={props.variant}>
+			<Text as='h3' styleType='heading-sm' className={ctaPrompt()}>
+				{ctaCopy.prompt(props.location)}
+			</Text>
+			<div className={ctaButtons()}>
+				<ButtonLink
+					parent='PledgeModal'
+					href={primary.href}
+					styleType='primary'
+					styleSize='md'
+					className='max-md:w-full'
+					onClick={() => trackCta(primary.label, primary.href, 'primary')}
+					iconRight={<IconResolver icon='arrow-up-right' className='min-w-4 min-h-4 w-4 h-4 max-w-4 max-h-4' />}
+				>
+					{primary.label}
+				</ButtonLink>
+				{secondary && (
+					<ButtonLink
+						parent='PledgeModal'
+						href={secondary.href}
+						styleType='outline'
+						styleSize='md'
+						className='max-md:w-full'
+						onClick={() => trackCta(secondary.label, secondary.href, 'secondary')}
+					>
+						{secondary.label}
+					</ButtonLink>
+				)}
+			</div>
+		</div>
 	);
 }

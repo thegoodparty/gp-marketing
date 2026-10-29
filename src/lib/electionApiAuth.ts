@@ -23,9 +23,7 @@
  *
  * gp-api accepts any valid Clerk M2M JWT as a read-only credential for those
  * routes, so the same ELECTION_API_M2M_TOKEN is sent there too. The env var
- * keeps its name because the rotation tooling writes it. The rotation also
- * writes the same token to the omni candidate-sites Vercel project as
- * GP_API_M2M_TOKEN, since candidate-sites reads the same gated gp-api routes.
+ * keeps its name because the rotation tooling writes it.
  *
  * gp-marketing runs on a large, churning fleet of short-lived Vercel isolates.
  * Minting a Clerk JWT M2M token per isolate — even pooled through the Next Data

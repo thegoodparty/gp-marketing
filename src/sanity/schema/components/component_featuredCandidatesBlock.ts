@@ -2,15 +2,15 @@ import { resolveValue } from '../../utils/resolveValue.ts';
 import { handleReplacements } from '../../utils/handleReplacements.ts';
 import { getIcon } from '../../utils/getIcon.tsx';
 
-export const FEATURED_CANDIDATES_DEFAULT_HEADING = 'Candidates and officials who took the GoodParty.org Pledge';
+export const FEATURED_CANDIDATES_DEFAULT_HEADING = 'Candidates and officials who took the People First Pledge';
 
 export const FEATURED_CANDIDATES_DEFAULT_BODY =
-	'Candidates and elected officials near you who have taken the GoodParty.org Pledge. Read why they\'re running and serving, in their own words.';
+	'Candidates and elected officials near you who have taken the People First Pledge. Read why they\'re running and serving, in their own words.';
 
 export const FEATURED_CANDIDATES_DEFAULT_CALLOUT_TITLE = 'What this symbol means';
 
 export const FEATURED_CANDIDATES_DEFAULT_CALLOUT =
-	'Candidates and elected officials with this symbol took the GoodParty.org Pledge, promising to serve people first, independent of both major parties and big-money interests.';
+	'Candidates and elected officials with this symbol took the People First Pledge, promising to serve people first, independent of both major parties and big-money interests.';
 
 export const FEATURED_CANDIDATES_DEFAULT_PLEDGE_LINK = 'Read the full pledge';
 
@@ -20,7 +20,7 @@ export const component_featuredCandidatesBlock = {
 	type: 'object',
 	icon: getIcon('Users'),
 	description:
-		'A carousel of up to eight pledged people on the page\'s ballot, read live from election data: candidates in its upcoming races, the people who currently hold its offices, or both. Only people who took the GoodParty.org Pledge are shown. Built for the Location templates. On a page with no election data of its own (the Elections landing page) it shows a weekly rotating pick of people with a published GoodParty.org profile instead; see the Weekly Rotation tab.',
+		'A carousel of up to eight pledged people on the page\'s ballot, read live from election data: candidates in its upcoming races, the people who currently hold its offices, or both. Only people who took the People First Pledge are shown. Built for the Location templates. On a page with no election data of its own (the Elections landing page) it shows a weekly rotating pick of people with a published GoodParty.org profile instead; see the Weekly Rotation tab.',
 	fields: [
 		{
 			title: 'Heading',
@@ -61,7 +61,7 @@ export const component_featuredCandidatesBlock = {
 					title: 'Callout Text',
 					name: 'block_calloutText',
 					type: 'block_summaryText',
-					description: `Defaults to: "${FEATURED_CANDIDATES_DEFAULT_CALLOUT}" with "GoodParty.org Pledge" in bold.`,
+					description: `Defaults to: "${FEATURED_CANDIDATES_DEFAULT_CALLOUT}" with "People First Pledge" in bold.`,
 				},
 				{
 					title: 'Show Pledge Link',

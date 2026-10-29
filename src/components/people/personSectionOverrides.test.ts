@@ -203,7 +203,7 @@ describe('claim CTAs are gone from the office-only pages and nowhere else', () =
 		expect(claimBlock('tim-ficken-0a951485')).toBe(true);
 	});
 
-	// Tom Peterson, Fairfax City (2026-10-20): "Has taken the GoodParty.org Pledge"
+	// Tom Peterson, Fairfax City (2026-10-20): "Has taken the People First Pledge"
 	// above a block asking him to create the account he pledged through.
 	test('a pledged candidate with no published profile is not asked to claim', () => {
 		const view = getDevPersonProfileView('kim-byrd-b77f912d');
@@ -244,7 +244,7 @@ describe('claim CTAs are gone from the office-only pages and nowhere else', () =
  * facts (see `pledgeAttribution`). State B is the case that proves it: a claimed
  * officeholder is `pledged: false` in the shared matrix, because `isPledged`
  * only ever rolls up from candidacies, so the literal spec would have published
- * "took the GoodParty.org Pledge" about them.
+ * "took the People First Pledge" about them.
  *
  * The removal states (K/L) read the same flags as everyone else (Emily,
  * 2026-10-06): K is a Republican, so ineligible; L's spine flag stands.

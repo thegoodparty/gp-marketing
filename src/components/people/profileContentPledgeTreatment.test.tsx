@@ -20,7 +20,7 @@ import { authoredDisclaimerCopy, buildPersonSectionOverrides } from './personSec
  * district map and the claim dialog stay out of the picture.
  */
 
-const PLEDGE_ROW = 'Took the GoodParty.org Pledge';
+const PLEDGE_ROW = 'Took the People First Pledge';
 
 function view(slug: string, over: Partial<PersonProfileView> = {}): PersonProfileView {
 	const base = getDevPersonProfileView(slug);
@@ -171,7 +171,7 @@ describe('the Other Candidates list explains the mark', () => {
 		const html = cardHtml(cardWithHeading(cards, 'Other Candidates'));
 		expect(html).toContain(PLEDGE_SYMBOL_CALLOUT.heading);
 		expect(html).toContain(
-			'Candidates and elected officials with this symbol took the <span class="font-bold">GoodParty.org Pledge</span>, promising to serve people first, independent of both major parties and big-money interests.',
+			'Candidates and elected officials with this symbol took the <span class="font-bold">People First Pledge</span>, promising to serve people first, independent of both major parties and big-money interests.',
 		);
 		expect(html).toContain('Read the full pledge');
 		// Before the first card, not after.

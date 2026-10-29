@@ -70,7 +70,7 @@ export type ElectionsPositionPerson = {
 	avatar?: string;
 	/** As the ballot or the office spine names it, e.g. "Independent" or "Democratic". */
 	party?: string;
-	/** Took the GoodParty.org Pledge, by the same rule the candidate cards use. */
+	/** Took the People First Pledge, by the same rule the candidate cards use. */
 	isPledged?: boolean;
 	/** Won this race. Only meaningful once the race is decided. */
 	isWinner?: boolean;
@@ -143,7 +143,7 @@ function PersonRow({ person, decided, list }: { person: ElectionsPositionPerson;
 						</span>
 					)}
 					{person.isPledged && (
-						<span className={s.mark()} role='img' aria-label='Took the GoodParty.org Pledge'>
+						<span className={s.mark()} role='img' aria-label='Took the People First Pledge'>
 							<Logo width={28} height={21} />
 						</span>
 					)}

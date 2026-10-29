@@ -49,9 +49,9 @@ export function resolveFeaturedBodyCopy(value: string | null | undefined, count:
 		.trim();
 }
 
-/** The frame bolds "GoodParty.org Pledge" inside the default copy; an editor's own rich text carries its own marks. */
+/** The frame bolds "People First Pledge" inside the default copy; an editor's own rich text carries its own marks. */
 function defaultCalloutBody() {
-	const phrase = 'GoodParty.org Pledge';
+	const phrase = 'People First Pledge';
 	const [before, after] = FEATURED_CANDIDATES_DEFAULT_CALLOUT.split(phrase);
 	return (
 		<p>

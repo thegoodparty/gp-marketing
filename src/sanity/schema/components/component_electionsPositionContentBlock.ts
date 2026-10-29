@@ -33,12 +33,12 @@ export const POSITION_CONTENT_DEFAULTS = {
 		onThisPageTitle: 'On this page',
 		exploreTitle: 'Explore more races in [County or City]',
 		exploreBody:
-			"Browse every upcoming election in [County or City] and find independent candidates who've taken the GoodParty.org Pledge.",
+			"Browse every upcoming election in [County or City] and find independent candidates who've taken the People First Pledge.",
 		exploreButtonLabel: 'See all [County or City] races',
 	},
 	pledgeExplainer: {
 		title: 'What this symbol means',
-		body: 'Candidates and elected officials with this symbol took the GoodParty.org Pledge, promising to serve people first, independent of both major parties and big-money interests.',
+		body: 'Candidates and elected officials with this symbol took the People First Pledge, promising to serve people first, independent of both major parties and big-money interests.',
 		linkLabel: 'Read the full pledge',
 	},
 	peopleLists: {
@@ -137,7 +137,7 @@ export const component_electionsPositionContentBlock = {
 					'field_exploreBody',
 					'Explore card body',
 					POSITION_CONTENT_DEFAULTS.siderail.exploreBody,
-					`The words "GoodParty.org Pledge" open the pledge pop-up automatically. ${TOKEN_NOTE}`,
+					`The words "People First Pledge" (or the old name, "GoodParty.org Pledge") open the pledge pop-up automatically. ${TOKEN_NOTE}`,
 				),
 				stringField(
 					'field_exploreButtonLabel',
@@ -160,7 +160,7 @@ export const component_electionsPositionContentBlock = {
 					'field_body',
 					'Body',
 					POSITION_CONTENT_DEFAULTS.pledgeExplainer.body,
-					'The words "GoodParty.org Pledge" are shown in bold automatically.',
+					'The words "People First Pledge" (or the old name, "GoodParty.org Pledge") are shown in bold automatically.',
 				),
 				{
 					title: 'Show pledge link',

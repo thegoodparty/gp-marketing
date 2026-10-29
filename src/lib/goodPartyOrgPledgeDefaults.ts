@@ -24,7 +24,7 @@ const pledgeCard = (key: string, icon: string, title: string, copy: string) => (
 	block_summaryText: richText(`${key}-copy`, copy),
 });
 
-export const GOODPARTY_PLEDGE_TITLE = 'The GoodParty.org Pledge';
+export const GOODPARTY_PLEDGE_TITLE = 'The People First Pledge';
 
 export const GOODPARTY_PLEDGE_INTRO =
 	'GoodParty.org only works with candidates and elected officials who are independent of both major parties and the influence of big money. Their positions on individual issues may vary, but they are eligible to take the pledge if they commit to being:';
@@ -39,7 +39,7 @@ export const GOODPARTY_PLEDGE_CARDS = [
 	pledgeCard(
 		'pledge-people-first',
 		'users',
-		'People First',
+		'People-Powered',
 		'Candidates get a majority of their funding from individuals, not from political action committees (PACs), lobbies, unions, or corporations. Once elected, they pledge to focus on solving the problems facing their constituents, not serving themselves or special interests.',
 	),
 	pledgeCard(

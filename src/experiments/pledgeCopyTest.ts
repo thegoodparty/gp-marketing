@@ -119,12 +119,12 @@ export function currentPledgeCopyVariant(): PledgeCopyVariant | null {
 export const PLEDGE_LOCATION_CALLOUT_COPY: Record<PledgeCopyTreatment, { title: string; body: string; linkLabel: string }> = {
 	b3: {
 		title: 'Tired of choosing between two broken parties?',
-		body: "Candidates with this symbol run without either major party's endorsement. They signed the GoodParty.org Pledge to serve people first, independent of both major parties and big-money donors.",
+		body: "Candidates with this symbol run without either major party's endorsement. They signed the People First Pledge to serve people first, independent of both major parties and big-money donors.",
 		linkLabel: 'See the pledge they signed',
 	},
 	alt: {
 		title: 'One thing to check before you vote',
-		body: "You can't research every candidate. This symbol tells you something concrete: they signed the GoodParty.org Pledge to run without major-party endorsements, raise most of their money from individuals, and stay accountable to you.",
+		body: "You can't research every candidate. This symbol tells you something concrete: they signed the People First Pledge to run without major-party endorsements, raise most of their money from individuals, and stay accountable to you.",
 		linkLabel: "Here's what they pledged",
 	},
 };
@@ -133,12 +133,12 @@ export const PLEDGE_LOCATION_CALLOUT_COPY: Record<PledgeCopyTreatment, { title: 
 export const PLEDGE_PROFILE_CALLOUT_COPY: Record<PledgeCopyTreatment, { sentence(name: string, subject: PledgeSubject): string; linkLabel: string }> = {
 	b3: {
 		sentence: (name, subject) =>
-			`${name} ${subject === 'elected official' ? 'is serving' : 'is running'} without either major party's endorsement. They signed the GoodParty.org Pledge to serve people first, independent of both major parties and big-money donors.`,
+			`${name} ${subject === 'elected official' ? 'is serving' : 'is running'} without either major party's endorsement. They signed the People First Pledge to serve people first, independent of both major parties and big-money donors.`,
 		linkLabel: 'See the pledge they signed',
 	},
 	alt: {
 		sentence: name =>
-			`If you check one thing about ${name}, check this. They signed the GoodParty.org Pledge to run without major-party endorsements, raise most of their money from individuals, and answer to you.`,
+			`If you check one thing about ${name}, check this. They signed the People First Pledge to run without major-party endorsements, raise most of their money from individuals, and answer to you.`,
 		linkLabel: "Here's what they pledged",
 	},
 };
@@ -153,7 +153,7 @@ export const PLEDGE_MODAL_CTA_COPY: Record<PledgeCopyTreatment, { prompt(locatio
 		secondary: { label: 'Learn more about GoodParty.org', href: '/about' },
 	},
 	alt: {
-		prompt: () => 'What the GoodParty.org Pledge means for you',
+		prompt: () => 'What the People First Pledge means for you',
 		primary: { label: 'Join the independent movement', href: '/about' },
 	},
 };

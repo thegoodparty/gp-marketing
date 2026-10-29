@@ -45,7 +45,7 @@ describe('the pledged profile hero', () => {
 			'This candidate took the GoodParty.org Pledge, promising to serve people first, independent of both major parties and big-money interests.',
 		);
 		expect(arm(html, 'b3')).toBe(
-			"Dana Ruiz is running without either major party's endorsement. They signed the GoodParty.org Pledge to serve people first, independent of both major parties and big-money donors.",
+			"Dana Ruiz is running without either major party's endorsement. They signed the People First Pledge to serve people first, independent of both major parties and big-money donors.",
 		);
 		expect(arm(html, 'alt')).toStartWith('If you check one thing about Dana Ruiz, check this.');
 		expect(armClass(html, 'control')).toBe('contents');
@@ -96,6 +96,7 @@ describe('the location page callout', () => {
 		expect(arm(html, 'b3')).toBe(PLEDGE_LOCATION_CALLOUT_COPY.b3.title);
 		expect(arm(html, 'alt')).toBe(PLEDGE_LOCATION_CALLOUT_COPY.alt.title);
 		expect(html).toContain('See the pledge they signed');
+		expect(html.match(/<strong>People First Pledge<\/strong>/g)).toHaveLength(2);
 	});
 
 	test('still hides with the Show Callout switch', () => {
@@ -129,7 +130,7 @@ describe('the pop-up call to action', () => {
 
 	test('alt has one button', () => {
 		const html = renderToStaticMarkup(<PledgeModalCallToAction variant='alt' location={null} />);
-		expect(html).toContain('What the GoodParty.org Pledge means for you');
+		expect(html).toContain('What the People First Pledge means for you');
 		expect(html).toContain('Join the independent movement');
 		expect(html.match(/href="\/about"/g)).toHaveLength(1);
 	});

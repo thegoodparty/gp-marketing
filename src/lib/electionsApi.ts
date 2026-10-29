@@ -131,13 +131,17 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | nul
 		return null;
 	}
 
-	// gp-api and other hosts: no M2M token here. The gp-api person-profile reads
-	// that need one call fetch directly with gpApiAuthHeaders().
+	// gp-api and other hosts: no M2M token is added here. gp-api reads that need
+	// one pass gpApiAuthHeaders() in options (or call fetch directly).
 	for (let attempt = 0; attempt <= FETCH_JSON_MAX_RETRIES; attempt++) {
 		try {
 			const res = await fetch(url, options);
 			if (res.status === 404) return null;
 			if (res.ok) return (await res.json()) as T;
+			if (res.status === 401 || res.status === 403) {
+				console.error(`[electionsApi] gp-api auth failure ${res.status} ${url}; ELECTION_API_M2M_TOKEN is missing, expired, or rejected.`);
+				return null;
+			}
 			if (res.status < 500) {
 				console.error(`[electionsApi] ${res.status} ${url}`);
 				return null;
@@ -407,7 +411,7 @@ export async function findCampaignByRace(params: {
 		lastName,
 	});
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-campaigns?${searchParams}`;
-	return fetchJson<FindByRaceIdResponse>(url);
+	return fetchJson<FindByRaceIdResponse>(url, { headers: gpApiAuthHeaders() });
 }
 
 /**
@@ -612,12 +616,14 @@ export async function getPersonsByIds(
  * non-live result (404 when the person maps to no district, or a transient
  * failure) resolves to null so the profile simply renders no map. The endpoint
  * lives on the heatmap track and may not exist in every environment yet; the
- * null-on-miss contract keeps the profile fully functional regardless.
+ * null-on-miss contract keeps the profile fully functional regardless. gp-api
+ * requires the M2M token here; a 401/403 is logged as an auth failure and also
+ * resolves to null.
  */
 export async function getVoterDensityForDistrict(personId: string): Promise<VoterDensity | null> {
 	const searchParams = new URLSearchParams({ personId });
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles/voter-density?${searchParams}`;
-	return fetchJson<VoterDensity>(url, personCacheOptions(personId));
+	return fetchJson<VoterDensity>(url, { ...personCacheOptions(personId), headers: gpApiAuthHeaders() });
 }
 
 /**

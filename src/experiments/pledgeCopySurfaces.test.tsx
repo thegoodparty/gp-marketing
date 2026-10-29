@@ -45,7 +45,7 @@ describe('the pledged profile hero', () => {
 			'This candidate took the GoodParty.org Pledge, promising to serve people first, independent of both major parties and big-money interests.',
 		);
 		expect(arm(html, 'b3')).toBe(
-			"Dana Ruiz runs without either major party's endorsement. They signed the GoodParty.org Pledge to serve people first, independent of both major parties and big-money donors.",
+			"Dana Ruiz is running without either major party's endorsement. They signed the GoodParty.org Pledge to serve people first, independent of both major parties and big-money donors.",
 		);
 		expect(arm(html, 'alt')).toStartWith('If you check one thing about Dana Ruiz, check this.');
 		expect(armClass(html, 'control')).toBe('contents');

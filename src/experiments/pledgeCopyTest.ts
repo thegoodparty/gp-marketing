@@ -131,7 +131,7 @@ export const PLEDGE_LOCATION_CALLOUT_COPY: Record<PledgeCopyTreatment, { title: 
 export const PLEDGE_PROFILE_CALLOUT_COPY: Record<PledgeCopyTreatment, { sentence(name: string): string; linkLabel: string }> = {
 	b3: {
 		sentence: name =>
-			`${name} runs without either major party's endorsement. They signed the GoodParty.org Pledge to serve people first, independent of both major parties and big-money donors.`,
+			`${name} is running without either major party's endorsement. They signed the GoodParty.org Pledge to serve people first, independent of both major parties and big-money donors.`,
 		linkLabel: 'See the pledge they signed',
 	},
 	alt: {

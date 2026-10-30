@@ -265,10 +265,9 @@ describe('resolvePlace', () => {
 	const originalFetch = globalThis.fetch;
 
 	beforeEach(() => {
-		// Fail-soft path: unset the static token so election-api reads go out
-		// unauthenticated (these tests don't assert on auth headers).
-		delete process.env['ELECTION_API_M2M_TOKEN'];
-		__resetElectionApiAuthForTests({ warnedMissingToken: true });
+		// Fail-soft path: no credential, so gp-api reads go out unauthenticated
+		// (these tests don't assert on auth headers).
+		__resetElectionApiAuthForTests({ warnedNoToken: true });
 	});
 
 	afterEach(() => {

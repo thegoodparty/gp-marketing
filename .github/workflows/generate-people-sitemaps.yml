@@ -15,6 +15,17 @@ name: Generate and publish people sitemaps
 # can refresh one file within minutes instead of waiting for the whole band.
 # It shares the hourly cron's concurrency group so a dispatched takedown
 # queues behind an in-flight run instead of racing it.
+#
+# gp-api reads authenticate with this run's GitHub Actions OIDC token
+# (audience `gp-api`, no stored secret), which gp-api accepts only from this
+# workflow: prod allowlists it at refs/heads/develop, dev at any ref. The
+# token is fetched in the step right before generation and handed to that
+# step alone as GP_API_SERVICE_TOKEN (src/lib/electionApiAuth.ts).
+#
+# workflow_dispatch with `dev_dry_run` reads from dev gp-api instead, never
+# configures AWS or publishes, sends no Slack alert, and uploads the shards
+# as a workflow artifact. It has its own concurrency group so it can never
+# displace a pending scheduled run.
 
 on:
   schedule:
@@ -25,18 +36,21 @@ on:
         description: 'Single shard (0-63) to regenerate; empty regenerates all 64'
         type: string
         default: ''
+      dev_dry_run:
+        description: 'Read from dev gp-api and upload the shards as an artifact; nothing is published to S3'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
   id-token: write
 
 concurrency:
-  group: generate-people-sitemaps
+  group: ${{ inputs.dev_dry_run && 'generate-people-sitemaps-dev-dry-run' || 'generate-people-sitemaps' }}
   cancel-in-progress: false
 
 env:
-  ELECTIONS_API_BASE_URL: https://election-api.goodparty.org
-  GP_API_BASE_URL: https://gp-api.goodparty.org
+  GP_API_BASE_URL: ${{ inputs.dev_dry_run && 'https://gp-api-dev.goodparty.org' || 'https://gp-api.goodparty.org' }}
   # getBaseUrl() (src/lib/siteBaseUrl.ts) writes this into every emitted <loc>.
   # It already falls back to the production host with nothing set, but this
   # keeps that fallback explicit rather than implicit, and keeps the shard
@@ -51,6 +65,9 @@ env:
   # shell variable ($SHARD) instead of interpolating `${{ inputs.shard }}`
   # directly into script text.
   SHARD: ${{ inputs.shard }}
+  # `inputs.dev_dry_run` is null on the hourly cron, which the `== true`
+  # comparison turns into 'false'.
+  DEV_DRY_RUN: ${{ inputs.dev_dry_run == true }}
 
 jobs:
   generate-and-publish:
@@ -78,20 +95,30 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      # Per-run token, minted fresh and never written anywhere but this job's
-      # own masked env -- not the long-lived ELECTION_API_M2M_TOKEN that
-      # rotate-election-api-token.yml manages in Vercel. No Vercel write, no
-      # Vercel env needed here.
-      - name: Mint election-api token
-        id: mint-token
-        env:
-          CLERK_MACHINE_SECRET_KEY: ${{ secrets.CLERK_GP_MARKETING_MACHINE_SECRET }}
-        run: bun run scripts/mint-election-api-token.ts
+      # GitHub signs this per request; it is masked before it can reach the
+      # log and passed only to the generate step's env. GitHub does not
+      # document the lifetime: its docs' example claims show 5 minutes, real
+      # tokens have shown far longer. Fetching it here, immediately before the
+      # ~1 minute walk, keeps it inside even the 5-minute case. If a walk ever
+      # outlasts it, gp-api 401s, every gp-api read in the walk throws, and the
+      # run fails before anything is published.
+      - name: Fetch gp-api OIDC token
+        id: gp-api-token
+        run: |
+          set -euo pipefail
+          token=$(curl -sSf -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=gp-api" | jq -r '.value')
+          if [ -z "$token" ] || [ "$token" = "null" ]; then
+            echo "::error::GitHub returned no OIDC token for audience gp-api"
+            exit 1
+          fi
+          echo "::add-mask::$token"
+          echo "token=$token" >> "$GITHUB_OUTPUT"
 
       - name: Generate people shards
         id: generate-shards
         env:
-          ELECTION_API_M2M_TOKEN: ${{ steps.mint-token.outputs.token }}
+          GP_API_SERVICE_TOKEN: ${{ steps.gp-api-token.outputs.token }}
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/people-shards"
@@ -101,13 +128,43 @@ jobs:
             bun run scripts/generate-sitemaps.ts --people-shards-out "$RUNNER_TEMP/people-shards"
           fi
 
+      - name: Summarize dry-run shards
+        if: env.DEV_DRY_RUN == 'true'
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/people-shards"
+          shard_count=$(find "$dir" -name '*.xml' | wc -l | tr -d ' ')
+          total_urls=0
+          {
+            echo "### Dev dry run: people shards from $GP_API_BASE_URL"
+            echo
+            echo "| Shard | URLs |"
+            echo "| --- | --- |"
+            for f in $(find "$dir" -name '*.xml' | sort -V); do
+              urls=$( (grep -o '<loc>' "$f" || true) | wc -l | tr -d ' ')
+              total_urls=$((total_urls + urls))
+              echo "| $(basename "$f" .xml) | $urls |"
+            done
+            echo
+            echo "**$shard_count shard file(s), $total_urls URLs total.** Nothing was published to S3."
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload dry-run shards
+        if: env.DEV_DRY_RUN == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: people-shards-dev-dry-run-${{ github.run_id }}
+          path: ${{ runner.temp }}/people-shards
+          if-no-files-found: error
+          retention-days: 7
+
       # Everything above this line can fail without an AWS credential ever
-      # existing in the job. SITEMAPS_PUBLISHER_ROLE_ARN (task 01) may not be
+      # existing in the job. A dev dry run stops here. SITEMAPS_PUBLISHER_ROLE_ARN (task 01) may not be
       # set yet on a fresh merge -- skip publishing rather than fail loudly on
       # a known, temporary gap; the "Note" step below makes that visible.
       - name: Configure AWS credentials
         id: configure-aws
-        if: vars.SITEMAPS_PUBLISHER_ROLE_ARN != ''
+        if: env.DEV_DRY_RUN != 'true' && vars.SITEMAPS_PUBLISHER_ROLE_ARN != ''
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ vars.SITEMAPS_PUBLISHER_ROLE_ARN }}
@@ -115,7 +172,7 @@ jobs:
 
       - name: Publish all shards
         id: publish-full
-        if: vars.SITEMAPS_PUBLISHER_ROLE_ARN != '' && env.SHARD == ''
+        if: env.DEV_DRY_RUN != 'true' && vars.SITEMAPS_PUBLISHER_ROLE_ARN != '' && env.SHARD == ''
         run: |
           aws s3 sync "$RUNNER_TEMP/people-shards" s3://gp-marketing-sitemaps/sitemap/people/ \
             --content-type application/xml \
@@ -124,7 +181,7 @@ jobs:
 
       - name: Publish single shard
         id: publish-shard
-        if: vars.SITEMAPS_PUBLISHER_ROLE_ARN != '' && env.SHARD != ''
+        if: env.DEV_DRY_RUN != 'true' && vars.SITEMAPS_PUBLISHER_ROLE_ARN != '' && env.SHARD != ''
         run: |
           aws s3 cp "$RUNNER_TEMP/people-shards/$SHARD.xml" \
             "s3://gp-marketing-sitemaps/sitemap/people/$SHARD.xml" \
@@ -132,21 +189,21 @@ jobs:
             --cache-control "public, max-age=300"
 
       - name: Note publisher role not configured yet
-        if: vars.SITEMAPS_PUBLISHER_ROLE_ARN == ''
+        if: env.DEV_DRY_RUN != 'true' && vars.SITEMAPS_PUBLISHER_ROLE_ARN == ''
         run: echo "::notice::SITEMAPS_PUBLISHER_ROLE_ARN is not set (task 01 pending) -- shards were generated and gate-validated but not published"
 
       # chat.postMessage answers 200 even when it refuses the message, so -f
       # proves nothing; the -e check at the end catches a revoked token or a
       # channel gp_ai_bot was never invited to. Runs regardless of which prior
       # step failed -- `if: failure()` overrides the default "only run after
-      # success" behavior.
+      # success" behavior. A dev dry run never alerts.
       - name: Alert #bot-dev on failure
-        if: failure() && env.SLACK_TOKEN != '' && env.CHANNEL != ''
+        if: failure() && env.DEV_DRY_RUN != 'true' && env.SLACK_TOKEN != '' && env.CHANNEL != ''
         env:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           FAILING_STEP: >-
             ${{
-              steps.mint-token.outcome == 'failure' && 'Mint election-api token'
+              steps.gp-api-token.outcome == 'failure' && 'Fetch gp-api OIDC token'
               || steps.generate-shards.outcome == 'failure' && 'Generate people shards'
               || steps.configure-aws.outcome == 'failure' && 'Configure AWS credentials'
               || steps.publish-full.outcome == 'failure' && 'Publish all shards'

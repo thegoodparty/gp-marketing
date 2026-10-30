@@ -12,7 +12,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { US_STATE_CODES } from '../src/lib/sitemap-entries';
 import { getStateName } from '../src/lib/electionsHelpers';
-import { electionApiAuthHeaders } from '../src/lib/electionApiAuth';
+import { gpApiAuthHeaders } from '../src/lib/electionApiAuth';
 
 const DEFAULT_BASE_URL = 'https://goodparty.org';
 const DEFAULT_CONCURRENCY = 10;
@@ -101,7 +101,7 @@ async function fetchElectionJson<T>(path: string, params: Record<string, string>
 	const search = new URLSearchParams(params).toString();
 	const url = `${GP_API_ELECTIONS_BASE}/${path.replace(/^\/?v1\//, '')}?${search}`;
 	try {
-		const authHeaders = await electionApiAuthHeaders();
+		const authHeaders = await gpApiAuthHeaders();
 		const res = await fetch(url, { headers: authHeaders });
 		if (!res.ok) return [];
 		const data: unknown = await res.json();

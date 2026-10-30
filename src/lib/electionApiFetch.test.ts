@@ -14,7 +14,6 @@ const GP_API_URL = 'https://gp-api.goodparty.org/v1/public-person-profiles/unlis
 const OK_BODY = { hello: 'world' };
 
 const originalFetch = globalThis.fetch;
-const ORIGINAL_M2M_TOKEN = process.env['ELECTION_API_M2M_TOKEN'];
 const ORIGINAL_RUNTIME = process.env['NEXT_RUNTIME'];
 
 let fetchCalls: number;
@@ -39,11 +38,10 @@ beforeEach(() => {
 	resetNextCacheMock();
 	restoreVercelOidcEnv = saveVercelOidcEnv();
 	fetchCalls = 0;
-	// Authenticated by default — this is the representative production path: the
-	// static token is present, so run() attaches the bearer. Tests that assert cache
-	// behavior are header-agnostic; the forwarding itself is asserted explicitly in
-	// the "forwards the static M2M token" test below.
-	process.env['ELECTION_API_M2M_TOKEN'] = 'test-m2m-token';
+	// Authenticated by default: a service token is present, so run() attaches the
+	// bearer. Tests that assert cache behavior are header-agnostic; the forwarding
+	// itself is asserted explicitly in the "forwards the service token" test below.
+	process.env['GP_API_SERVICE_TOKEN'] = 'test-service-token';
 	__resetElectionApiAuthForTests();
 	globalThis.fetch = (async () => {
 		fetchCalls += 1;
@@ -55,11 +53,6 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-	if (ORIGINAL_M2M_TOKEN === undefined) {
-		delete process.env['ELECTION_API_M2M_TOKEN'];
-	} else {
-		process.env['ELECTION_API_M2M_TOKEN'] = ORIGINAL_M2M_TOKEN;
-	}
 	if (ORIGINAL_RUNTIME === undefined) {
 		delete process.env['NEXT_RUNTIME'];
 	} else {
@@ -129,12 +122,12 @@ describe('fetchElectionApiJsonCached', () => {
 		await expect(promise).rejects.toMatchObject({ name: 'ElectionApiError', status });
 	});
 
-	test('forwards the static M2M token to fetch as a Bearer Authorization header', async () => {
+	test('forwards the service token to fetch as a Bearer Authorization header', async () => {
 		// The whole point of this module: prove the token flows into the request.
 		// Without this, deleting the `headers` argument in electionApiFetch would
 		// leave every other test green (they all run the no-token fail-soft path).
 		delete process.env['NEXT_RUNTIME']; // direct fetch path, no cache wrapper
-		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt-abc';
+		process.env['GP_API_SERVICE_TOKEN'] = 'service-token-abc';
 		__resetElectionApiAuthForTests();
 
 		let capturedHeaders: HeadersInit | undefined;
@@ -150,7 +143,7 @@ describe('fetchElectionApiJsonCached', () => {
 		await fetchElectionApiJsonCached(ELECTION_URL);
 
 		expect(fetchCalls).toBe(1);
-		expect(capturedHeaders).toEqual({ Authorization: 'Bearer static-jwt-abc' });
+		expect(capturedHeaders).toEqual({ Authorization: 'Bearer service-token-abc' });
 	});
 });
 
@@ -160,7 +153,7 @@ describe('a per-request OIDC token stays out of the cache key', () => {
 	beforeEach(() => {
 		capturedAuthorizations.length = 0;
 		process.env['NEXT_RUNTIME'] = 'nodejs';
-		process.env['GP_API_AUTH_MODE'] = 'oidc-preferred';
+		delete process.env['GP_API_SERVICE_TOKEN'];
 		globalThis.fetch = (async (_url: RequestInfo | URL, init?: RequestInit) => {
 			fetchCalls += 1;
 			capturedAuthorizations.push(new Headers(init?.headers).get('authorization') ?? '');
@@ -237,7 +230,7 @@ describe('fetchGpApiJsonCached', () => {
 
 		expect(await fetchGpApiJsonCached(GP_API_URL, { revalidate: 3600 })).toEqual(OK_BODY);
 		expect(unstable_cache).not.toHaveBeenCalled();
-		expect(capturedInit).toEqual({ headers: { Authorization: 'Bearer test-m2m-token' }, cache: 'no-store' });
+		expect(capturedInit).toEqual({ headers: { Authorization: 'Bearer test-service-token' }, cache: 'no-store' });
 	});
 
 	// Only a 200 is cached, as the Next fetch cache did for these reads: a 404 or

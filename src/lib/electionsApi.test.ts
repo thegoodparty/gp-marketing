@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, spyOn, test } from 'bun:test';
 import type { PlaceItem } from '~/types/elections';
 import { __resetElectionApiAuthForTests } from './electionApiAuth';
 import { lastCacheCall, resetNextCacheMock } from '~/testing/nextCacheMock';
-import { fakeVercelOidcToken, saveVercelOidcEnv, setVercelRequestOidcToken } from '~/testing/vercelOidc';
+import { blockVercelOidcToken, fakeVercelOidcToken, saveVercelOidcEnv, setVercelRequestOidcToken } from '~/testing/vercelOidc';
 import {
 	ELECTION_PAGE_SIZE,
 	findCampaignByRace,
@@ -35,7 +35,6 @@ type FetchMockResponse = {
 };
 
 const originalFetch = globalThis.fetch;
-const ORIGINAL_M2M_TOKEN = process.env['ELECTION_API_M2M_TOKEN'];
 const ORIGINAL_RUNTIME = process.env['NEXT_RUNTIME'];
 
 let restoreVercelOidcEnv: () => void;
@@ -59,22 +58,17 @@ function slugs(items: PlaceItem[]): string[] {
 }
 
 beforeEach(() => {
-	// Fail-soft path: unset the static token so election-api reads go out
-	// unauthenticated (these tests don't assert on auth headers).
-	delete process.env['ELECTION_API_M2M_TOKEN'];
-	// Skip the warn-once log — these tests intentionally exercise the fail-soft path.
-	__resetElectionApiAuthForTests({ warnedMissingToken: true });
-	globalThis.fetch = originalFetch;
+	// Fail-soft path: no credential, so gp-api reads go out unauthenticated
+	// (these tests don't assert on auth headers).
 	restoreVercelOidcEnv = saveVercelOidcEnv();
+	blockVercelOidcToken();
+	// Skip the warn-once log — these tests intentionally exercise the fail-soft path.
+	__resetElectionApiAuthForTests({ warnedNoToken: true });
+	globalThis.fetch = originalFetch;
 	resetNextCacheMock();
 });
 
 afterEach(() => {
-	if (ORIGINAL_M2M_TOKEN === undefined) {
-		delete process.env['ELECTION_API_M2M_TOKEN'];
-	} else {
-		process.env['ELECTION_API_M2M_TOKEN'] = ORIGINAL_M2M_TOKEN;
-	}
 	if (ORIGINAL_RUNTIME === undefined) {
 		delete process.env['NEXT_RUNTIME'];
 	} else {
@@ -952,7 +946,7 @@ describe('getRemovedPersonIds', () => {
 	});
 });
 
-describe('gp-api person-profile reads carry the M2M token', () => {
+describe('gp-api person-profile reads carry the service credential', () => {
 	const PERSON_ID = 'ab12cd34-0000-0000-0000-000000000001';
 
 	function captureFetch(status: number, body: unknown): Array<{ url: string; init?: RequestInit }> {
@@ -967,7 +961,7 @@ describe('gp-api person-profile reads carry the M2M token', () => {
 	const authorizationOf = (init?: RequestInit) => new Headers(init?.headers).get('authorization');
 
 	test('the render gate, the removal list, and the published list all send the bearer', async () => {
-		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
+		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
 		const calls = captureFetch(200, []);
 
 		await getPublicPersonProfileStatus(PERSON_ID);
@@ -979,13 +973,13 @@ describe('gp-api person-profile reads carry the M2M token', () => {
 			'/v1/public-person-profiles/unlisted',
 			'/v1/public-person-profiles/published',
 		]);
-		for (const call of calls) expect(authorizationOf(call.init)).toBe('Bearer static-jwt');
+		for (const call of calls) expect(authorizationOf(call.init)).toBe('Bearer service-token');
 	});
 
 	// The cache lives in a URL-keyed unstable_cache, not the fetch, so the header
 	// never enters the key; the fetch itself is no-store.
 	test('the render gate caches by URL with its per-person tag, and the fetch stays out of the Next fetch cache', async () => {
-		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
+		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
 		process.env['NEXT_RUNTIME'] = 'nodejs';
 		const calls = captureFetch(200, {});
 
@@ -998,7 +992,7 @@ describe('gp-api person-profile reads carry the M2M token', () => {
 	});
 
 	test('the removal list caches by URL with its removals tag and 5-minute revalidate', async () => {
-		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
+		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
 		process.env['NEXT_RUNTIME'] = 'nodejs';
 		const calls = captureFetch(200, []);
 
@@ -1009,7 +1003,7 @@ describe('gp-api person-profile reads carry the M2M token', () => {
 	});
 
 	test('the published list caches by URL with a 5-minute revalidate', async () => {
-		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
+		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
 		process.env['NEXT_RUNTIME'] = 'nodejs';
 		const calls = captureFetch(200, []);
 
@@ -1035,7 +1029,7 @@ describe('gp-api person-profile reads carry the M2M token', () => {
 
 	for (const status of [401, 403]) {
 		test(`a ${status} from the render gate fails closed to removed, without retrying`, async () => {
-			process.env['ELECTION_API_M2M_TOKEN'] = 'expired-jwt';
+			process.env['GP_API_SERVICE_TOKEN'] = 'expired-token';
 			const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
 			const calls = captureFetch(status, { message: 'Unauthorized' });
 
@@ -1072,12 +1066,12 @@ describe('gp-api person-profile reads carry the M2M token', () => {
 		await getPublishedPersonProfileIds();
 
 		for (const call of calls) expect(authorizationOf(call.init)).toBeNull();
-		expect(errorSpy.mock.calls.filter(call => String(call[0]).includes('ELECTION_API_M2M_TOKEN is not set'))).toHaveLength(1);
+		expect(errorSpy.mock.calls.filter(call => String(call[0]).includes('No GP_API_SERVICE_TOKEN or Vercel OIDC token'))).toHaveLength(1);
 		errorSpy.mockRestore();
 	});
 });
 
-describe('gp-api voter-density and public-campaigns reads carry the M2M token', () => {
+describe('gp-api voter-density and public-campaigns reads carry the service credential', () => {
 	const PERSON_ID = 'ab12cd34-0000-0000-0000-000000000002';
 	const CAMPAIGN_PARAMS = { raceId: 'race-1', firstName: 'Ada', lastName: 'Lovelace' };
 
@@ -1093,18 +1087,18 @@ describe('gp-api voter-density and public-campaigns reads carry the M2M token', 
 	const authorizationOf = (init?: RequestInit) => new Headers(init?.headers).get('authorization');
 
 	test('voter-density and public-campaigns both send the bearer', async () => {
-		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
+		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
 		const calls = captureFetch(200, {});
 
 		await getVoterDensityForDistrict(PERSON_ID);
 		await findCampaignByRace(CAMPAIGN_PARAMS);
 
 		expect(calls.map(c => new URL(c.url).pathname)).toEqual(['/v1/public-person-profiles/voter-density', '/v1/public-campaigns']);
-		for (const call of calls) expect(authorizationOf(call.init)).toBe('Bearer static-jwt');
+		for (const call of calls) expect(authorizationOf(call.init)).toBe('Bearer service-token');
 	});
 
 	test('voter-density caches by URL with its per-person tag and 1-hour revalidate', async () => {
-		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
+		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
 		process.env['NEXT_RUNTIME'] = 'nodejs';
 		const calls = captureFetch(404, {});
 
@@ -1115,7 +1109,7 @@ describe('gp-api voter-density and public-campaigns reads carry the M2M token', 
 	});
 
 	test('public-campaigns sets no revalidate, so Next does not cache it at runtime', async () => {
-		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
+		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
 		const calls = captureFetch(200, {});
 
 		await findCampaignByRace(CAMPAIGN_PARAMS);
@@ -1134,7 +1128,7 @@ describe('gp-api voter-density and public-campaigns reads carry the M2M token', 
 
 	for (const status of [401, 403]) {
 		test(`a ${status} from voter-density or public-campaigns logs an auth failure and resolves to null, without retrying`, async () => {
-			process.env['ELECTION_API_M2M_TOKEN'] = 'expired-jwt';
+			process.env['GP_API_SERVICE_TOKEN'] = 'expired-token';
 			const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
 			const calls = captureFetch(status, { message: 'Unauthorized' });
 
@@ -1532,12 +1526,10 @@ describe('election reads go to gp-api', () => {
 	});
 });
 
-describe('GP_API_AUTH_MODE=oidc-preferred', () => {
+describe('Vercel OIDC token', () => {
 	const PERSON_ID = 'ab12cd34-0000-0000-0000-000000000003';
 
-	test('every gp-api read sends the request OIDC token instead of the clerk token', async () => {
-		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
-		process.env['GP_API_AUTH_MODE'] = 'oidc-preferred';
+	test('every gp-api read sends the request OIDC token', async () => {
 		const oidcToken = fakeVercelOidcToken('request');
 		setVercelRequestOidcToken(oidcToken);
 		const calls: Array<{ url: string; init?: RequestInit }> = [];

@@ -46,11 +46,11 @@ permissions:
   id-token: write
 
 concurrency:
-  group: ${{ inputs.dev_dry_run && 'generate-people-sitemaps-dev-dry-run' || 'generate-people-sitemaps' }}
+  group: ${{ inputs.dev_dry_run == true && 'generate-people-sitemaps-dev-dry-run' || 'generate-people-sitemaps' }}
   cancel-in-progress: false
 
 env:
-  GP_API_BASE_URL: ${{ inputs.dev_dry_run && 'https://gp-api-dev.goodparty.org' || 'https://gp-api.goodparty.org' }}
+  GP_API_BASE_URL: ${{ inputs.dev_dry_run == true && 'https://gp-api-dev.goodparty.org' || 'https://gp-api.goodparty.org' }}
   # getBaseUrl() (src/lib/siteBaseUrl.ts) writes this into every emitted <loc>.
   # It already falls back to the production host with nothing set, but this
   # keeps that fallback explicit rather than implicit, and keeps the shard

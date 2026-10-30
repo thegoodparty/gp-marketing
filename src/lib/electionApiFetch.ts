@@ -1,4 +1,4 @@
-import { electionApiAuthHeaders, gpApiAuthHeaders } from '~/lib/electionApiAuth';
+import { gpApiAuthHeaders } from '~/lib/electionApiAuth';
 
 const ELECTION_API_CACHE_SECONDS = 3600;
 
@@ -27,8 +27,8 @@ export class ElectionApiError extends Error {
  * Cache hits across isolates.
  *
  * The Authorization header is acquired OUTSIDE this URL cache (see
- * electionApiAuth): either the static Clerk token or the per-request Vercel OIDC
- * token. Keeping it out of the wrapped function means the bearer never enters the
+ * electionApiAuth): GP_API_SERVICE_TOKEN or the per-request Vercel OIDC token.
+ * Keeping it out of the wrapped function means the bearer never enters the
  * URL cache key (fetch also uses cache:'no-store'), so a token that changes on
  * every request still shares one cache entry per URL.
  *
@@ -42,7 +42,7 @@ export async function fetchElectionApiJsonCached(
 	url: string,
 	tags?: readonly string[],
 ): Promise<ElectionApiJsonResult> {
-	const authHeaders = await electionApiAuthHeaders();
+	const authHeaders = await gpApiAuthHeaders();
 	const run = async (): Promise<ElectionApiJsonResult> => {
 		const res = await fetch(url, { headers: authHeaders, cache: 'no-store' });
 		if (res.status === 404) return { status: 404, ok: false, json: null };

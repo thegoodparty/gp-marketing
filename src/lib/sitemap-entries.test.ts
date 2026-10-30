@@ -394,9 +394,9 @@ describe('fetchPeopleSitemapEntries', () => {
 		]);
 	});
 
-	test('sends the M2M bearer on the gp-api published and unlisted reads, without the fetch cache', async () => {
-		const originalToken = process.env['ELECTION_API_M2M_TOKEN'];
-		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
+	test('sends the service token on the gp-api published and unlisted reads, without the fetch cache', async () => {
+		const originalToken = process.env['GP_API_SERVICE_TOKEN'];
+		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
 		try {
 			mockUpstream({ persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }] });
 			const upstream = globalThis.fetch;
@@ -414,12 +414,12 @@ describe('fetchPeopleSitemapEntries', () => {
 				'/v1/public-person-profiles/unlisted',
 			]);
 			for (const call of gpApiCalls) {
-				expect(new Headers(call.init?.headers).get('authorization')).toBe('Bearer static-jwt');
+				expect(new Headers(call.init?.headers).get('authorization')).toBe('Bearer service-token');
 				expect(call.init?.cache).toBe('no-store');
 			}
 		} finally {
-			if (originalToken === undefined) delete process.env['ELECTION_API_M2M_TOKEN'];
-			else process.env['ELECTION_API_M2M_TOKEN'] = originalToken;
+			if (originalToken === undefined) delete process.env['GP_API_SERVICE_TOKEN'];
+			else process.env['GP_API_SERVICE_TOKEN'] = originalToken;
 		}
 	});
 

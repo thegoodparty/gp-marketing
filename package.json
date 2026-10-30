@@ -39,7 +39,6 @@
     "test:integration:sitemap:batches": "bash scripts/test-sitemap-batches.sh",
     "test:unit": "bun run test:logic",
     "validate:elections": "bun run scripts/validate-election-pages.ts",
-    "rotate:election-token": "bun run scripts/rotate-election-api-token.ts",
     "lint:sitemap": "next lint --file src/app/api/sitemap-index/route.ts --file src/app/sitemap.ts --file src/lib/sitemap-entries.ts"
   },
   "dependencies": {
@@ -143,7 +142,6 @@
     "vwo-smartcode-nextjs": "^1.4.2"
   },
   "devDependencies": {
-    "@clerk/backend": "^3.16.4",
     "@eslint/eslintrc": "^3.3.1",
     "@next/bundle-analyzer": "^15.5.4",
     "@playwright/test": "^1.49.0",

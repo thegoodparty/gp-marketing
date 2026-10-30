@@ -25,7 +25,6 @@ const CANONICAL = '/elections/nc/guilford-county/greensboro/position/mayor';
 const REDIRECTING = '/elections/nc/greensboro';
 
 const originalFetch = globalThis.fetch;
-const ORIGINAL_M2M_TOKEN = process.env['ELECTION_API_M2M_TOKEN'];
 
 const ELECTION_DATE = `${new Date().getUTCFullYear() + 1}-11-03`;
 
@@ -136,17 +135,11 @@ function stubFetch(): void {
 }
 
 beforeEach(() => {
-	delete process.env['ELECTION_API_M2M_TOKEN'];
-	__resetElectionApiAuthForTests({ warnedMissingToken: true });
+	__resetElectionApiAuthForTests({ warnedNoToken: true });
 	stubFetch();
 });
 
 afterEach(() => {
-	if (ORIGINAL_M2M_TOKEN === undefined) {
-		delete process.env['ELECTION_API_M2M_TOKEN'];
-	} else {
-		process.env['ELECTION_API_M2M_TOKEN'] = ORIGINAL_M2M_TOKEN;
-	}
 	__resetElectionApiAuthForTests();
 	globalThis.fetch = originalFetch;
 });

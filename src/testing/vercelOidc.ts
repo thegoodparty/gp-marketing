@@ -6,7 +6,7 @@
 
 const REQUEST_CONTEXT = Symbol.for('@vercel/request-context');
 
-const OIDC_ENV_KEYS = ['GP_API_AUTH_MODE', 'GP_API_SERVICE_TOKEN', 'VERCEL_OIDC_TOKEN', 'VERCEL_OIDC_TOKEN_FILE'] as const;
+const OIDC_ENV_KEYS = ['GP_API_SERVICE_TOKEN', 'VERCEL_OIDC_TOKEN', 'VERCEL_OIDC_TOKEN_FILE'] as const;
 
 const base64Url = (value: object): string => Buffer.from(JSON.stringify(value)).toString('base64url');
 
@@ -17,6 +17,11 @@ export const fakeVercelOidcToken = (sub: string): string =>
 /** Sets the per-request `x-vercel-oidc-token` header the way a Vercel function sees it. */
 export const setVercelRequestOidcToken = (token: string): void => {
 	(globalThis as Record<symbol, unknown>)[REQUEST_CONTEXT] = { get: () => ({ headers: { 'x-vercel-oidc-token': token } }) };
+};
+
+/** Makes @vercel/oidc fail fast, before it tries a `vc link` refresh, so the read goes out with no credential. */
+export const blockVercelOidcToken = (): void => {
+	process.env['VERCEL_OIDC_TOKEN_FILE'] = '/nonexistent/vercel-oidc-token';
 };
 
 /** Snapshots the OIDC env and request context; the returned function restores both. */

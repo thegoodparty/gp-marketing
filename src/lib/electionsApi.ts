@@ -141,7 +141,7 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | nul
 			if (res.status === 404) return null;
 			if (res.ok) return (await res.json()) as T;
 			if (res.status === 401 || res.status === 403) {
-				console.error(`[electionsApi] gp-api auth failure ${res.status} ${url}; our token (Vercel OIDC or ELECTION_API_M2M_TOKEN) is missing, expired, or rejected.`);
+				console.error(`[electionsApi] gp-api auth failure ${res.status} ${url}; our token (GP_API_SERVICE_TOKEN or Vercel OIDC) is missing, expired, or rejected.`);
 				return null;
 			}
 			if (res.status < 500) {
@@ -615,7 +615,7 @@ export async function getPersonsByIds(
  * failure) resolves to null so the profile simply renders no map. The endpoint
  * lives on the heatmap track and may not exist in every environment yet; the
  * null-on-miss contract keeps the profile fully functional regardless. gp-api
- * requires the M2M token here; a 401/403 is logged as an auth failure and also
+ * requires a service token here; a 401/403 is logged as an auth failure and also
  * resolves to null.
  */
 export async function getVoterDensityForDistrict(personId: string): Promise<VoterDensity | null> {
@@ -630,7 +630,7 @@ export async function getVoterDensityForDistrict(personId: string): Promise<Vote
 			} else if (err.status === 404) {
 				return null;
 			} else if (err.status === 401 || err.status === 403) {
-				console.error(`[electionsApi] gp-api auth failure ${err.status} ${url}; our token (Vercel OIDC or ELECTION_API_M2M_TOKEN) is missing, expired, or rejected.`);
+				console.error(`[electionsApi] gp-api auth failure ${err.status} ${url}; our token (GP_API_SERVICE_TOKEN or Vercel OIDC) is missing, expired, or rejected.`);
 				return null;
 			} else if (err.status < 500) {
 				console.error(`[electionsApi] ${err.status} ${url}`);
@@ -673,7 +673,7 @@ export type PublicPersonProfileResult =
  * failure falls back to `absent` so the spine page still renders instead of
  * 404-ing.
  *
- * A 401 or 403 is the exception: it means our M2M token is missing, expired, or
+ * A 401 or 403 is the exception: it means our service token is missing, expired, or
  * rejected, so we cannot know whether this person asked to be taken down. That
  * maps to `removed` (noindex, no photo, no claim CTAs) rather than `absent`,
  * which would republish a takedown as an indexable unclaimed page.
@@ -700,7 +700,7 @@ export async function getPublicPersonProfileStatus(personId: string): Promise<Pu
 				return { status: 'absent' };
 			} else if (err.status === 401 || err.status === 403) {
 				console.error(
-					`[electionsApi] gp-api auth failure ${err.status} ${url}; our token (Vercel OIDC or ELECTION_API_M2M_TOKEN) is missing, expired, or rejected. Rendering the page as removed (noindex) until auth is fixed.`,
+					`[electionsApi] gp-api auth failure ${err.status} ${url}; our token (GP_API_SERVICE_TOKEN or Vercel OIDC) is missing, expired, or rejected. Rendering the page as removed (noindex) until auth is fixed.`,
 				);
 				return { status: 'removed' };
 			} else if (err.status < 500) {

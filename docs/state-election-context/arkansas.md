@@ -471,13 +471,12 @@ For the data team, not for copy:
    county court, which is the county judge's court. District judges are state
    judges elected nonpartisan in March. The county judge is a separate partisan
    office (`county-executive-head`).
-3. **Sitemap lists seven constable URLs without the county.** Sitemap shard 4
-   lists `ar/atkins`, `ar/hector`, `ar/london`, `ar/pea-ridge`,
-   `ar/pocahontas`, `ar/pottsville` and `ar/russellville` followed by
-   `/position/county-constable`. Each one redirects to the correct page with
-   the county in the address (for example
-   `ar/pope-county/atkins/position/county-constable`), so readers see the right
-   page. The sitemap should list the final address instead of the redirect.
+3. **Fixed: sitemap listed seven constable URLs without the county.** The
+   Atkins, Hector, London, Pea Ridge, Pocahontas, Pottsville and Russellville
+   constable pages were listed without their county and only worked through a
+   redirect. PR #517 fixed this, and as of 2 November 2026 the live sitemap lists
+   each with its county (for example
+   `ar/pope-county/atkins/position/county-constable`).
 
 ## Writing rules
 

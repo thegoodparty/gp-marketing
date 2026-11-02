@@ -37,7 +37,7 @@ window after final adjournment before it takes effect (Ark. Const. art. 5,
 Re-check this doc: June 2027, about a month after the governor's 20 days
 following final adjournment of the 2027 session. Check again after the 2028
 fiscal session only if it took up non-appropriation bills. Last researched:
-October 2026.
+October 2026. Reviewed by Emily: 2 November 2026.
 
 *Ark. Const. art. 5, §§ 1, 5, 17; art. 6, § 15 · statutory · read in statute*
 

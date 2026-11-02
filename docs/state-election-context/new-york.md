@@ -31,7 +31,7 @@ takes effect on the twentieth day after it becomes law unless it sets its own da
 (N.Y. Legis. Law § 43).
 
 Re-check this doc: July 2027, then January 2028 to catch bills signed late in
-2027. Last researched: October 2026.
+2027. Last researched: October 2026. Reviewed by Emily: 2 November 2026.
 
 ## How elections work in New York
 

@@ -21,7 +21,7 @@ states cover the most pages, so they come first.
 | 6 | Michigan | 2,367 | done, reviewed 27 October 2026 |
 | 7 | Kansas | 2,334 | done, reviewed 28 October 2026 |
 | 8 | Texas | 2,300 | done, reviewed 27 October 2026 |
-| 9 | New York | 2,124 | drafted, awaiting review |
+| 9 | New York | 2,124 | done, reviewed 2 November 2026 |
 | 10 | Wisconsin | 2,041 | done, reviewed 27 October 2026 |
 | 11 | Indiana | 1,856 | done, reviewed 27 October 2026 |
 | 12 | Missouri | 1,651 | done |
@@ -119,7 +119,7 @@ If a legislature meets year-round, re-check in January and July.
 | New Hampshire | January | June | July 2027 | no |
 | New Jersey | year-round; second year begins 12 January 2027, next Legislature 11 January 2028 | — | January and July 2027, then February 2028 | verified |
 | New Mexico | odd-year 60-day session, January | March | April 2027 | no |
-| New York | year-round, most bills by June | — | July 2027 and January | no |
+| New York | 6 January 2027, year-round | — | July 2027 and January 2028 | verified |
 | North Carolina | organizes 13 January 2027, reconvenes 27 January 2027 | no fixed end | October 2027 | verified |
 | North Dakota | odd years only, January | April–May | June 2027 | no |
 | Ohio | 4 January 2027, year-round | — | January and July | verified |

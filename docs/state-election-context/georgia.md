@@ -350,7 +350,12 @@ These are the ways Georgia copy goes visibly wrong.
 Logged for the data team. Never write copy around them.
 
 - **Augusta has no city page.** Its mayor and commission sit on
-  `ga/richmond-county`, labelled county executive and county board.
+  `ga/richmond-county`, labelled county executive and county board, because the
+  election data files them as Richmond County offices. The location search
+  already sends a search for Augusta to `ga/richmond-county` (and Macon to
+  `ga/bibb-county`), checked 2 November 2026, so readers land on the right page.
+  Columbus is filed as a city, so the four consolidated governments are labelled
+  inconsistently.
 - **Macon's page holds only a water board.** `ga/bibb-county/macon-bibb-county`
   carries one water district position; the mayor and commission are on
   `ga/bibb-county`.

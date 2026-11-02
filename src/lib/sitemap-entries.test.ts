@@ -8,6 +8,7 @@ import {
 	fetchPeopleSitemapEntries,
 	fetchStateElectionRouteParams,
 	fetchStateElectionSitemapEntries,
+	findMergedCityTwinSlugs,
 	getSitemapIds,
 	MAX_URLS_PER_SITEMAP,
 	normalizeName,
@@ -904,6 +905,28 @@ describe('buildCountyLookups', () => {
 	});
 });
 
+describe('findMergedCityTwinSlugs', () => {
+	const city: CityPlace = { slug: 'mn/elba', countyName: 'Winona', name: 'Elba', mtfcc: 'G4110' };
+	const twin: CityPlace = { slug: 'mn/elba-city', countyName: 'Winona', name: 'Elba city', mtfcc: 'G4040' };
+
+	test('merges a twin that holds only city or district offices', () => {
+		const races: RaceEntry[] = [{ slug: 'mn/elba-city/healthcare-district-board-hospital-district-board', positionLevel: 'LOCAL' }];
+		expect([...findMergedCityTwinSlugs([city, twin], races)]).toEqual(['mn/elba-city']);
+	});
+
+	// Elba Township's offices sit on the Elba city twin upstream. They belong to a
+	// different government, so the twin keeps its page rather than joining the city.
+	test('keeps a twin that holds a township office', () => {
+		const races: RaceEntry[] = [{ slug: 'mn/elba-city/township-clerk', positionLevel: 'LOCAL' }];
+		expect(findMergedCityTwinSlugs([city, twin], races).size).toBe(0);
+	});
+
+	test('ignores township offices of other places', () => {
+		const races: RaceEntry[] = [{ slug: 'mn/elba-city-north/township-clerk', positionLevel: 'TOWNSHIP' }];
+		expect([...findMergedCityTwinSlugs([city, twin], races)]).toEqual(['mn/elba-city']);
+	});
+});
+
 describe('buildRaceEntries', () => {
 	const BASE = 'https://goodparty.org';
 
@@ -1175,7 +1198,7 @@ describe('fetchStateElectionSitemapEntries', () => {
 	const base = 'https://goodparty.org';
 
 	type MockPlace = { slug: string; mtfcc: string; name: string };
-	type MockCity = { slug: string; countyName: string };
+	type MockCity = { slug: string; countyName: string; name?: string; mtfcc?: string };
 	type MockRace = { slug: string; positionLevel: string };
 
 	/**
@@ -1242,6 +1265,23 @@ describe('fetchStateElectionSitemapEntries', () => {
 		const entries = await fetchStateElectionSitemapEntries('dc', base);
 
 		expect(entries[0]?.url).toBe(`${base}/elections/dc`);
+	});
+
+	// Beatrice, NE was listed twice: the city and its Census filler twin "Beatrice city",
+	// which held only the airport authority board and now redirects to the city.
+	test('drops a Census city twin page but keeps its position pages', async () => {
+		mockUpstream({
+			places: [{ slug: 'ne/gage-county', mtfcc: 'G4020', name: 'Gage County' }],
+			cities: [{ slug: 'ne/beatrice', countyName: 'Gage', name: 'Beatrice', mtfcc: 'G4110' }],
+			towns: [{ slug: 'ne/beatrice-city', countyName: 'Gage', name: 'Beatrice city', mtfcc: 'G4040' }],
+			races: [{ slug: 'ne/beatrice-city/airport-district-board', positionLevel: 'LOCAL' }],
+		});
+
+		const urls = (await fetchStateElectionSitemapEntries('NE', base)).map(e => e.url);
+
+		expect(urls).toContain(`${base}/elections/ne/gage-county/beatrice`);
+		expect(urls).not.toContain(`${base}/elections/ne/gage-county/beatrice-city`);
+		expect(urls).toContain(`${base}/elections/ne/gage-county/beatrice-city/position/airport-district-board`);
 	});
 
 	test('gives the state a priority at least as high as its counties and cities', async () => {

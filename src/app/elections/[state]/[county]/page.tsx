@@ -6,6 +6,7 @@ import {
 	getCountyChildPlaces,
 	getFeaturedCities,
 	getElectionsPagePlace,
+	getMergedCityTwins,
 	getPlacesByState,
 	isDistrictMtfcc,
 	TOWN_MTFCC,
@@ -61,9 +62,13 @@ export default async function Page({
 		? canonicalizeCountyEquivalentName(stateCode, countyPlace.name)
 		: null;
 
-	const cityPlaces = isDistrict
+	const countyChildPlaces = isDistrict
 		? []
 		: await getCountyChildPlaces({ state: stateCode, countySlug: fullSlug });
+	// A Census filler twin ("Beatrice city") redirects to its city, so it is not listed
+	// as a second city of the same name. See `pairCensusCityTwins`.
+	const mergedTwinSlugs = new Set((await getMergedCityTwins(countyChildPlaces)).map(pair => pair.twin.slug.toLowerCase()));
+	const cityPlaces = countyChildPlaces.filter(c => !mergedTwinSlugs.has(c.slug?.toLowerCase() ?? ''));
 
 	if (!countyPlace && !isDistrict) {
 		await redirectCityPlaceToFourLevelUrl(placeData, stateCode, fullSlug);

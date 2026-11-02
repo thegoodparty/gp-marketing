@@ -22,7 +22,9 @@ import {
 	getRaceBySlug,
 	getRemovedPersonIds,
 	getVoterDensityForDistrict,
+	hasTownshipRace,
 	isStateIndexDistrictPlace,
+	pairCensusCityTwins,
 	resolveCountySlugForCitySlug,
 	resolveCountySlugForPlace,
 	resolveRaceElectionHrefs,
@@ -1554,5 +1556,50 @@ describe('Vercel OIDC token', () => {
 			'/v1/public-campaigns',
 		]);
 		for (const call of calls) expect(new Headers(call.init?.headers).get('authorization')).toBe(`Bearer ${oidcToken}`);
+	});
+});
+
+describe('pairCensusCityTwins', () => {
+	const place = (slug: string, name: string, mtfcc: string, countyName = 'Gage') => ({ slug, name, mtfcc, countyName });
+
+	test('pairs "X city" county subdivision with the city it duplicates', () => {
+		const city = place('ne/beatrice', 'Beatrice', 'G4110');
+		const twin = place('ne/beatrice-city', 'Beatrice city', 'G4040');
+		expect(pairCensusCityTwins([city, twin])).toEqual([{ twin, city }]);
+	});
+
+	test('handles a city whose own name ends in City', () => {
+		const city = place('mi/imlay-city', 'Imlay City', 'G4110', 'Lapeer');
+		const twin = place('mi/imlay-city-city', 'Imlay City city', 'G4040', 'Lapeer');
+		expect(pairCensusCityTwins([city, twin])).toEqual([{ twin, city }]);
+	});
+
+	// New York and Wisconsin towns are governments of their own, not filler twins.
+	test('never pairs a town or township with the city of the same name', () => {
+		const city = place('ny/ithaca', 'Ithaca', 'G4110', 'Tompkins');
+		expect(pairCensusCityTwins([city, place('ny/ithaca-town', 'Ithaca town', 'G4040', 'Tompkins')])).toEqual([]);
+	});
+
+	test('needs the lowercase descriptor, the -city slug, a G4040 twin and the same county', () => {
+		const city = place('ne/beatrice', 'Beatrice', 'G4110');
+		expect(pairCensusCityTwins([city, place('ne/beatrice-city', 'Beatrice City', 'G4040')])).toEqual([]);
+		expect(pairCensusCityTwins([city, place('ne/beatrice-city', 'Beatrice city', 'G4110')])).toEqual([]);
+		expect(pairCensusCityTwins([city, place('ne/beatrice-city', 'Beatrice city', 'G4040', 'Lancaster')])).toEqual([]);
+		expect(pairCensusCityTwins([city, place('ne/beatricecity', 'Beatrice city', 'G4040')])).toEqual([]);
+	});
+
+	// Jersey City is a city with no twin: there is no plain "Jersey" city to fold it into.
+	test('leaves a -city slug with no plain city alone', () => {
+		expect(pairCensusCityTwins([place('nj/jersey-city', 'Jersey City', 'G4110', 'Hudson')])).toEqual([]);
+		expect(pairCensusCityTwins([place('ne/oneill-city', "O'Neill city", 'G4040', 'Holt')])).toEqual([]);
+	});
+});
+
+describe('hasTownshipRace', () => {
+	test('spots a township office by level or by position slug', () => {
+		expect(hasTownshipRace([{ slug: 'mn/elba-city/township-clerk', positionLevel: 'LOCAL' }])).toBe(true);
+		expect(hasTownshipRace([{ slug: 'wi/brookfield-city/supervisor', positionLevel: 'TOWNSHIP' }])).toBe(true);
+		expect(hasTownshipRace([{ slug: 'ne/beatrice-city/airport-district-board', positionLevel: 'LOCAL' }])).toBe(false);
+		expect(hasTownshipRace([])).toBe(false);
 	});
 });

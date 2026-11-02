@@ -27,7 +27,8 @@ governor has 15 days, Saturdays and Sundays excepted, to act on each bill
 (N.D. Const. art. V, § 9). New laws usually take effect on 1 August after filing
 with the secretary of state (N.D. Const. art. IV, § 13).
 
-Re-check this doc: June 2027. Last researched: October 2026. The Century Code
+Re-check this doc: June 2027. Last researched: October 2026. Reviewed by Emily:
+2 November 2026. The Century Code
 PDFs may not show the 2027 acts by then, so read the 2027 session laws for
 titles 4.1, 11, 15.1, 16.1, 40, 58 and 61.
 

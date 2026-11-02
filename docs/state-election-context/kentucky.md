@@ -33,7 +33,8 @@ ninety days after the session adjourns, unless passed as emergency legislation
 convenes the first Tuesday after the first Monday in January and is capped at
 sixty legislative days and 15 April (Ky. Const. §§ 36, 42).
 
-Re-check this doc: May 2027. Last researched: October 2026.
+Re-check this doc: May 2027. Last researched: October 2026. Reviewed by Emily:
+2 November 2026.
 
 ## How elections work in Kentucky
 

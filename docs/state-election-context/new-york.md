@@ -105,15 +105,39 @@ nominations for offices filled at the general election are made at the primary.
 
 *N.Y. Elec. Law §§ 5-210, 6-110 · statutory · read in statute*
 
-**One candidate, several party lines.** New York lets more than one party
-nominate the same candidate. That candidate's name then appears on each party's
-line on the ballot.
+### Fusion voting
+
+New York allows **fusion voting**, also called cross-endorsement: more than one
+party can nominate the same candidate. That candidate's name then appears on each
+party's line on the ballot. A candidate who is also nominated by an independent
+body appears on that body's line too.
 
 *N.Y. Elec. Law § 7-104 · statutory · read in statute*
 
+A party can nominate someone who is not one of its enrolled members only if the
+party's committee authorizes it. The candidate must then file a signed acceptance
+of each nomination other than their own party's, or that nomination is void.
+
+*N.Y. Elec. Law §§ 6-120, 6-146(1) · statutory · read in statute*
+
+A voter marks one line. If a voter marks the same candidate on two or more lines,
+only one vote counts. Official results show a fused candidate's votes on each
+line separately, as well as the candidate's total.
+
+*N.Y. Elec. Law §§ 9-112(4), 9-210 · statutory · read in statute*
+
+**Why the separate counts matter.** A political organization keeps its status as
+a party, and its automatic place on the ballot, only if its candidate for governor
+or president wins a minimum share of the vote. Only the votes cast on that party's
+own line count toward it. So the line a voter chooses can matter even when it does
+not change who wins.
+
+*N.Y. Elec. Law § 1-104(3) · statutory · read in statute*
+
 **Watch out:** do not call New York primaries open, and do not describe a
 candidate as belonging to a single party because one party nominated them. A
-candidate may hold several lines.
+candidate may hold several lines. If copy mentions a candidate's party, take every
+line from race data rather than picking one.
 
 ### Partisanship
 
@@ -377,7 +401,7 @@ These are the ways New York copy goes visibly wrong.
    position labels. A `-town` slug is a town. A plain slug can be either.
 8. Do not merge a town with the village or city of the same name.
 9. Do not call New York primaries open, and do not tie a candidate to one party
-   when they may hold several party lines.
+   when fusion voting may give them several party lines.
 10. Do not assume a run-off. Plurality wins, except New York City's ranked choice
     primaries.
 11. Avoid anything that changes within a year: who has filed, whether a race is

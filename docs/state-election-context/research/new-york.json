@@ -738,5 +738,75 @@
 		"verified": "read in statute",
 		"manual": true,
 		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A candidate nominated by more than one party appears on each party's line",
+		"citation": "N.Y. Elec. Law § 7-104",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/7-104",
+		"quote": "When the same person has been nominated for an office to be filled at the election by more than one party",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-11-02 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A candidate also nominated by an independent body appears on that body's line too",
+		"citation": "N.Y. Elec. Law § 7-104",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/7-104",
+		"quote": "If such candidate has also been nominated by one or more independent bodies",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-11-02 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A party committee must authorize nominating a non-member",
+		"citation": "N.Y. Elec. Law § 6-120",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/6-120",
+		"quote": "authorize the designation or nomination of a person as candidate for any office who is not enrolled as a member of such party",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-11-02 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A candidate nominated by more than one party must file an acceptance of each nomination",
+		"citation": "N.Y. Elec. Law § 6-146(1)",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/6-146",
+		"quote": "accept the designation or nomination as a candidate of each such party or independent body other than that of the party of which he is an enrolled member, otherwise such designation or nomination shall be null and void",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-11-02 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A voter who marks the same candidate on two or more lines has only one vote counted",
+		"citation": "N.Y. Elec. Law § 9-112(4)",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/9-112",
+		"quote": "only the first vote shall be counted for such candidate",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-11-02 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Results show a fused candidate's votes on each line separately",
+		"citation": "N.Y. Elec. Law § 9-210",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/9-210",
+		"quote": "the number, separately stated, of votes cast for him as the candidate of each party or independent body by which he was nominated",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-11-02 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Party status depends on the vote for the party's own candidate for governor or president",
+		"citation": "N.Y. Elec. Law § 1-104(3)",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/1-104",
+		"quote": "at the last preceding election for governor received, at least two percent of the total votes cast for its candidate for governor",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-11-02 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
 	}
 ]

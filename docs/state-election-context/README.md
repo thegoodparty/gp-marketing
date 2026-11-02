@@ -48,7 +48,7 @@ same ground on every one of the ~48,000 location pages.
 | Pennsylvania | [pennsylvania.md](./pennsylvania.md) | written before the review rule, not yet reviewed |
 | Rhode Island | [rhode-island.md](./rhode-island.md) | draft, awaiting review |
 | South Carolina | [south-carolina.md](./south-carolina.md) | draft, awaiting review |
-| South Dakota | [south-dakota.md](./south-dakota.md) | draft, awaiting review |
+| South Dakota | [south-dakota.md](./south-dakota.md) | reviewed 2 November 2026 |
 | Tennessee | [tennessee.md](./tennessee.md) | draft, awaiting review |
 | Texas | [texas.md](./texas.md) | reviewed 27 October 2026 |
 | Utah | [utah.md](./utah.md) | draft, awaiting review |
@@ -59,7 +59,7 @@ same ground on every one of the ~48,000 location pages.
 | Wisconsin | [wisconsin.md](./wisconsin.md) | reviewed 27 October 2026 |
 | Wyoming | [wyoming.md](./wyoming.md) | draft, awaiting review |
 
-All 50 states and DC are drafted. 16 are reviewed. Each doc is a draft until Emily has reviewed it, and only a doc marked "Reviewed by Emily" should feed the generator.
+All 50 states and DC are drafted. 17 are reviewed. Each doc is a draft until Emily has reviewed it, and only a doc marked "Reviewed by Emily" should feed the generator.
 
 ## What these are, and what they are not
 

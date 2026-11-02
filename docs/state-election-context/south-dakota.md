@@ -30,6 +30,7 @@ of March. A law passed at a regular session usually takes effect on 1 July
 passed as an emergency (S.D. Const. art. III, § 22).
 
 Re-check this doc: late April 2027. Last researched: October 2026.
+Reviewed by Emily: 2 November 2026.
 
 *S.D. Const. art. III, §§ 6, 7, 22, art. IV, § 4; SDCL 2-14-16 · statutory · read in statute*
 

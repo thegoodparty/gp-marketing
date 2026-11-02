@@ -34,7 +34,8 @@ laws are settled about a week after it ends. New laws take effect three calendar
 months after adjournment, unless two-thirds of the members pass an emergency
 clause (Neb. Const. art. III, § 27).
 
-Re-check this doc: July 2027. Last researched: October 2026.
+Re-check this doc: July 2027. Last researched: October 2026. Reviewed by Emily:
+2 November 2026.
 
 ## How elections work in Nebraska
 

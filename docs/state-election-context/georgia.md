@@ -32,7 +32,7 @@ create cities and decide most local election rules, take effect as soon as the g
 Re-check this doc: June 2027, once the governor's 40-day window after sine die has
 closed. Also re-check in **November 2026**, after the vote on the constitutional
 amendment for nonpartisan probate judges (see Partisanship). Last researched:
-October 2026.
+October 2026. Reviewed by Emily: 2 November 2026.
 
 ## How elections work in Georgia
 

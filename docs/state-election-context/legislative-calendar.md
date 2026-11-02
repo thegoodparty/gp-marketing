@@ -32,7 +32,7 @@ states cover the most pages, so they come first.
 | 17 | Nebraska | 1,089 | done, reviewed 2 November 2026 |
 | 18 | Oklahoma | 869 | done, reviewed 27 October 2026 |
 | 19 | North Carolina | 787 | done, reviewed 27 October 2026 |
-| 20 | Georgia | 758 | drafted, awaiting review |
+| 20 | Georgia | 758 | done, reviewed 2 November 2026 |
 | 21 | Kentucky | 705 | drafted, awaiting review |
 | 22 | Washington | 618 | done, reviewed 28 October 2026 |
 | 23 | North Dakota | 606 | drafted, awaiting review |
@@ -97,7 +97,7 @@ If a legislature meets year-round, re-check in January and July.
 | Delaware | January | 30 June | July 2027 | no |
 | District of Columbia | Council meets year-round | — | January and July | no |
 | Florida | odd years start in March | May | June 2027 | no |
-| Georgia | January | late March–April | May 2027 | no |
+| Georgia | 11 January 2027, at most 40 legislative days | late March–April | June 2027 (and November 2026, after the probate judge amendment vote) | verified |
 | Hawaii | January | May | June 2027 | no |
 | Idaho | January | March–April | May 2027 | no |
 | Illinois | 13 January 2027, year-round, spring session to 31 May | — | January 2027, then October 2027 | verified |
@@ -147,9 +147,9 @@ Grouped by month. Within a month, do the states with the most pages first.
   Michigan, New York, Wisconsin, New Jersey, Massachusetts and DC), to catch
   anything passed in late 2026.
 - **April**: Kentucky, New Mexico, South Dakota, Utah, Wyoming.
-- **May**: Georgia, Tennessee, Idaho, Maryland, Mississippi,
+- **May**: Tennessee, Idaho, Maryland, Mississippi,
   West Virginia.
-- **June**: Iowa, Kansas, Washington, Arkansas, Alaska, Colorado, Florida, Hawaii, Montana, North Dakota,
+- **June**: Iowa, Kansas, Washington, Arkansas, Georgia, Alaska, Colorado, Florida, Hawaii, Montana, North Dakota,
   South Carolina, Vermont.
 - **July**: Pennsylvania, Ohio, Michigan, Minnesota, Indiana, Oklahoma, Texas, New York, Wisconsin, Missouri, Virginia,
   Nebraska, Louisiana, Oregon, Alabama, Arizona, Connecticut, Delaware, Maine,

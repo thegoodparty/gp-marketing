@@ -36,7 +36,7 @@ I; M.G.L. c. 4, § 1).
 
 Re-check this doc: January 2027, then every January and July while the General
 Court is in session. Last researched: October 2026 (General Laws as served by
-malegislature.gov on 28 October 2026).
+malegislature.gov on 28 October 2026). Reviewed by Emily: 2 November 2026.
 
 ## How elections work in Massachusetts
 

@@ -36,7 +36,7 @@ states cover the most pages, so they come first.
 | 21 | Kentucky | 705 | done, reviewed 2 November 2026 |
 | 22 | Washington | 618 | done, reviewed 28 October 2026 |
 | 23 | North Dakota | 606 | done, reviewed 2 November 2026 |
-| 24 | Massachusetts | 597 | drafted, awaiting review |
+| 24 | Massachusetts | 597 | done, reviewed 2 November 2026 |
 | 25 | Tennessee | 553 | drafted, awaiting review |
 | 26 | Florida | 533 | drafted, awaiting review |
 | 27 | Oregon | 481 | drafted, awaiting review |
@@ -108,7 +108,7 @@ If a legislature meets year-round, re-check in January and July.
 | Louisiana | odd years start in April | June | July 2027 | no |
 | Maine | odd-year long session, January | June | July 2027 | no |
 | Maryland | January | April | May 2027 | no |
-| Massachusetts | year-round | — | January and July | no |
+| Massachusetts | 6 January 2027, year-round | — | January and July | verified |
 | Michigan | 13 January 2027, year-round | — | January and July | verified |
 | Minnesota | 12 January 2027 | by 17 May | July 2027 | verified |
 | Mississippi | January | April | May 2027 | no |

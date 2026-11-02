@@ -5,27 +5,61 @@ that holds across that whole state. These exist to give the location page
 editorial generator a **starting point**, so it does not have to research the
 same ground on every one of the ~48,000 location pages.
 
-| State | File |
-| --- | --- |
-| California | [california.md](./california.md) |
-| Illinois | [illinois.md](./illinois.md) |
-| Indiana | [indiana.md](./indiana.md) |
-| Iowa | [iowa.md](./iowa.md) |
-| Kansas | [kansas.md](./kansas.md) |
-| Michigan | [michigan.md](./michigan.md) |
-| Minnesota | [minnesota.md](./minnesota.md) |
-| Missouri | [missouri.md](./missouri.md) |
-| New Jersey | [new-jersey.md](./new-jersey.md) |
-| North Carolina | [north-carolina.md](./north-carolina.md) |
-| Ohio | [ohio.md](./ohio.md) |
-| Oklahoma | [oklahoma.md](./oklahoma.md) |
-| Pennsylvania | [pennsylvania.md](./pennsylvania.md) |
-| Texas | [texas.md](./texas.md) |
-| Virginia | [virginia.md](./virginia.md) |
-| Washington | [washington.md](./washington.md) |
-| Wisconsin | [wisconsin.md](./wisconsin.md) |
+| State | File | Status |
+| --- | --- | --- |
+| Alabama | [alabama.md](./alabama.md) | draft, awaiting review |
+| Alaska | [alaska.md](./alaska.md) | draft, awaiting review |
+| Arizona | [arizona.md](./arizona.md) | draft, awaiting review |
+| Arkansas | [arkansas.md](./arkansas.md) | draft, awaiting review |
+| California | [california.md](./california.md) | reviewed 28 October 2026 |
+| Colorado | [colorado.md](./colorado.md) | draft, awaiting review |
+| Connecticut | [connecticut.md](./connecticut.md) | draft, awaiting review |
+| Delaware | [delaware.md](./delaware.md) | draft, awaiting review |
+| District of Columbia | [district-of-columbia.md](./district-of-columbia.md) | draft, awaiting review |
+| Florida | [florida.md](./florida.md) | draft, awaiting review |
+| Georgia | [georgia.md](./georgia.md) | draft, awaiting review |
+| Hawaii | [hawaii.md](./hawaii.md) | draft, awaiting review |
+| Idaho | [idaho.md](./idaho.md) | draft, awaiting review |
+| Illinois | [illinois.md](./illinois.md) | reviewed 27 October 2026 |
+| Indiana | [indiana.md](./indiana.md) | reviewed 27 October 2026 |
+| Iowa | [iowa.md](./iowa.md) | written before the review rule, not yet reviewed |
+| Kansas | [kansas.md](./kansas.md) | reviewed 28 October 2026 |
+| Kentucky | [kentucky.md](./kentucky.md) | draft, awaiting review |
+| Louisiana | [louisiana.md](./louisiana.md) | draft, awaiting review |
+| Maine | [maine.md](./maine.md) | draft, awaiting review |
+| Maryland | [maryland.md](./maryland.md) | draft, awaiting review |
+| Massachusetts | [massachusetts.md](./massachusetts.md) | draft, awaiting review |
+| Michigan | [michigan.md](./michigan.md) | reviewed 27 October 2026 |
+| Minnesota | [minnesota.md](./minnesota.md) | reviewed 27 October 2026 |
+| Mississippi | [mississippi.md](./mississippi.md) | draft, awaiting review |
+| Missouri | [missouri.md](./missouri.md) | written before the review rule, not yet reviewed |
+| Montana | [montana.md](./montana.md) | draft, awaiting review |
+| Nebraska | [nebraska.md](./nebraska.md) | draft, awaiting review |
+| Nevada | [nevada.md](./nevada.md) | draft, awaiting review |
+| New Hampshire | [new-hampshire.md](./new-hampshire.md) | draft, awaiting review |
+| New Jersey | [new-jersey.md](./new-jersey.md) | reviewed 27 October 2026 |
+| New Mexico | [new-mexico.md](./new-mexico.md) | draft, awaiting review |
+| New York | [new-york.md](./new-york.md) | draft, awaiting review |
+| North Carolina | [north-carolina.md](./north-carolina.md) | reviewed 27 October 2026 |
+| North Dakota | [north-dakota.md](./north-dakota.md) | draft, awaiting review |
+| Ohio | [ohio.md](./ohio.md) | reviewed 27 October 2026 |
+| Oklahoma | [oklahoma.md](./oklahoma.md) | reviewed 27 October 2026 |
+| Oregon | [oregon.md](./oregon.md) | draft, awaiting review |
+| Pennsylvania | [pennsylvania.md](./pennsylvania.md) | written before the review rule, not yet reviewed |
+| Rhode Island | [rhode-island.md](./rhode-island.md) | draft, awaiting review |
+| South Carolina | [south-carolina.md](./south-carolina.md) | draft, awaiting review |
+| South Dakota | [south-dakota.md](./south-dakota.md) | draft, awaiting review |
+| Tennessee | [tennessee.md](./tennessee.md) | draft, awaiting review |
+| Texas | [texas.md](./texas.md) | reviewed 27 October 2026 |
+| Utah | [utah.md](./utah.md) | draft, awaiting review |
+| Vermont | [vermont.md](./vermont.md) | draft, awaiting review |
+| Virginia | [virginia.md](./virginia.md) | reviewed 2 November 2026 |
+| Washington | [washington.md](./washington.md) | reviewed 28 October 2026 |
+| West Virginia | [west-virginia.md](./west-virginia.md) | draft, awaiting review |
+| Wisconsin | [wisconsin.md](./wisconsin.md) | reviewed 27 October 2026 |
+| Wyoming | [wyoming.md](./wyoming.md) | draft, awaiting review |
 
-33 states and DC still to do. Each doc is a draft until Emily has reviewed it.
+All 50 states and DC are drafted. 14 are reviewed. Each doc is a draft until Emily has reviewed it, and only a doc marked "Reviewed by Emily" should feed the generator.
 
 ## What these are, and what they are not
 

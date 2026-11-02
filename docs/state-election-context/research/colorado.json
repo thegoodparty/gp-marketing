@@ -1,0 +1,746 @@
+[
+	{
+		"claim": "The General Assembly meets in regular session every year, convening no later than the second Wednesday of January",
+		"citation": "Colo. Const. art. V, § 7",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "shall meet in regular session at 10 a.m. no later than the second Wednesday of January of each year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Regular sessions are limited to 120 calendar days",
+		"citation": "Colo. Const. art. V, § 7",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "Regular sessions of the general assembly shall not exceed one hundred twenty calendar days",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A bill not returned within ten days of presentment becomes law without signature",
+		"citation": "Colo. Const. art. IV, § 11",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "If any bill shall not be returned by the governor within ten days after it shall have been presented to him, the same shall be a law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "After the session adjourns, the governor has thirty days to file a veto, or the bill becomes law",
+		"citation": "Colo. Const. art. IV, § 11",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "office of the secretary of state, within thirty days after such adjournment, or else become a law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An act takes effect on the date it states, or on passage if none is stated",
+		"citation": "Colo. Const. art. V, § 19",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "An act of the general assembly shall take effect on the date stated in the act, or, if no date is stated in the act, then on its passage",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Referendum petitions against an act may be filed up to ninety days after the session ends",
+		"citation": "Colo. Const. art. V, § 1(3)",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "secretary of state not more than ninety days after the final adjournment of the session of the general assembly that passed the bill",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Election Code governs general, primary, school district and special district elections, and municipal elections held as part of a coordinated election except where a charter conflicts",
+		"citation": "C.R.S. 1-1-102(1)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "This code applies to any municipal election conducted as part of a coordinated election except to the extent that this code conflicts with a specific charter provision",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is the Tuesday after the first Monday of November in even-numbered years",
+		"citation": "C.R.S. 1-1-104(17)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "means the election held on the Tuesday succeeding the first Monday of November in each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The primary is held on the last Tuesday in June of even-numbered years",
+		"citation": "C.R.S. 1-4-101(1)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "a primary election shall be held on the last Tuesday in June of even-numbered years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County commissioners are elected at the general election for four-year terms, staggered",
+		"citation": "Colo. Const. art. XIV, § 6",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "and all of such commissioners shall be elected for the term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County clerk, sheriff, coroner, treasurer, surveyor and assessor are elected for four-year terms at the same time as the legislature",
+		"citation": "Colo. Const. art. XIV, § 8",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "one county clerk, who shall be ex officio recorder of deeds and clerk of the board of county commissioners; one sheriff; one coroner; one treasurer who shall be collector of taxes; one county surveyor; one county assessor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County officer terms are four years",
+		"citation": "Colo. Const. art. XIV, § 8",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "The term of office of all such officials shall be four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county attorney is appointed by the board, not elected",
+		"citation": "C.R.S. 30-11-118",
+		"url": "https://olls.info/crs/crs2026-title-30.htm",
+		"quote": "when the interests of the county require it, may employ an attorney",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Regular school board elections are held on the first Tuesday in November of odd-numbered years",
+		"citation": "C.R.S. 22-31-104(1)",
+		"url": "https://olls.info/crs/crs2026-title-22.htm",
+		"quote": "the regular biennial school election in each school district shall be held the first Tuesday in November of each odd-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School boards have five, six or seven directors, elected at the odd-year election for four-year terms",
+		"citation": "C.R.S. 22-31-105(1)(a)",
+		"url": "https://olls.info/crs/crs2026-title-22.htm",
+		"quote": "five, six, or seven school directors shall be elected, the number having been established as required by law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Directors serve four-year terms, though districts that had six-year terms in 1999 may keep them",
+		"citation": "C.R.S. 22-31-105(1)(a)",
+		"url": "https://olls.info/crs/crs2026-title-22.htm",
+		"quote": "each for a term of four years and until a successor has been elected and qualified",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "All school directors are voted on by the whole district, even under a director district plan, except in Denver and a few listed cases",
+		"citation": "C.R.S. 22-31-105(2)",
+		"url": "https://olls.info/crs/crs2026-title-22.htm",
+		"quote": "all school directors shall be voted on at large by the eligible electors of the entire school district, regardless of the school district",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Denver Public Schools has a seven-member board: five from director districts and two at large",
+		"citation": "C.R.S. 22-31-105(1)(b)",
+		"url": "https://olls.info/crs/crs2026-title-22.htm",
+		"quote": "a seven-member board of education with one eligible elector elected from each of five director districts and two eligible electors elected from the district at large",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Regular special district elections are held on the Tuesday after the first Monday of May in odd-numbered years",
+		"citation": "C.R.S. 1-13.5-111(1)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "regular special district elections must be held on the Tuesday succeeding the first Monday of May in every odd-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special district directors serve four-year terms on boards of five or seven",
+		"citation": "C.R.S. 32-1-305.5(2), (3)(a)",
+		"url": "https://olls.info/crs/crs2026-title-32.htm",
+		"quote": "the basic term of office for directors, after the original terms provided in subsection (2) of this section, is four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special district boards have five or seven members",
+		"citation": "C.R.S. 32-1-305.5(2)",
+		"url": "https://olls.info/crs/crs2026-title-32.htm",
+		"quote": "In the case of a seven-member board",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Statutory towns hold regular elections on the first Tuesday of April in even years; statutory cities on the first Tuesday of November in odd years",
+		"citation": "C.R.S. 31-1-101(10)",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "the election held in towns on the first Tuesday of April in each even-numbered year; the election held in cities on the first Tuesday of November in each odd-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality may keep a different regular election date its voters chose",
+		"citation": "C.R.S. 31-1-101(10)(b)",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "the date on which the regular election of officers takes place as determined by the registered electors of the municipality",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters may move a municipality's regular election to November of odd or even years",
+		"citation": "C.R.S. 31-10-109(1)(a)",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "the question of whether the regular election date of such municipality shall be changed to either the Tuesday succeeding the first Monday of November in each odd-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Elections held the same November day by overlapping governments are coordinated and run by the county clerk and recorder by mail ballot",
+		"citation": "C.R.S. 1-7-116(1)(a)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "the county clerk and recorder is the coordinated election official",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Running in a coordinated election alongside partisan races does not make a nonpartisan election partisan",
+		"citation": "C.R.S. 1-1-104(23.6)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "as a part of a coordinated election does not cause an otherwise nonpartisan election of another political subdivision to become a partisan election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An uncontested nonpartisan election may be canceled and the candidates declared elected",
+		"citation": "C.R.S. 1-5-208(1.5)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "there are not more candidates than offices to be filled at the election, including candidates filing affidavits of intent, the designated election official, if instructed by resolution of the governing body, shall cancel the election and declare the candidates elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A special district election may likewise be canceled when uncontested",
+		"citation": "C.R.S. 1-13.5-513(1)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "the designated election official, if instructed by resolution of the governing body, shall cancel the election and declare the candidates elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A primary may be canceled when no party has more than one candidate for any office",
+		"citation": "C.R.S. 1-4-104.5(1)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "the designated election official may cancel the primary election and declare each candidate the party nominee for that office at the general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only major parties nominate by primary",
+		"citation": "C.R.S. 1-4-101(1)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "only a major political party, as defined in section 1-1-104 (22), is entitled to nominate candidates in a primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County officers of major parties are nominated by primary",
+		"citation": "C.R.S. 1-4-101(3)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "all elective state, district, and county officers, and members of the general assembly shall be made by primary elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Unaffiliated voters may vote in one major party primary without joining it",
+		"citation": "C.R.S. 1-7-201(2.3)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "is entitled to vote in the primary election of a major political party without affiliating with that political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Unaffiliated voters are mailed every major party ballot and may return only one; returning more than one voids them all",
+		"citation": "C.R.S. 1-4-101(2)(b)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "If an elector casts and returns to the clerk the ballot of more than one major political party, all such ballots returned will be rejected and will not be counted",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party may switch to nominating by assembly or convention if three-fourths of its state central committee votes to",
+		"citation": "C.R.S. 1-4-702(1)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "if at least three-fourths of the total membership of the party's state central committee votes to use the assembly or convention nomination process",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Primary nominees are chosen by plurality",
+		"citation": "C.R.S. 1-4-104",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "receive a plurality of the votes cast shall be the respective party nominees for the respective offices",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A partisan election is one in which candidates appear with their affiliation",
+		"citation": "C.R.S. 1-1-104(23.6)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "means an election in which the names of the candidates are printed on the ballot along with their affiliation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Elected nonpartisan local officials are nominated by petition",
+		"citation": "C.R.S. 1-4-503",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "for all elected nonpartisan local government officials must be by petition for nomination as provided in part 8 of this article",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan ballots carry no party designation",
+		"citation": "C.R.S. 1-5-406",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "The names shall be printed on the ballot without political party designation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School director candidates are nominated by petition under the nonpartisan petition rules",
+		"citation": "C.R.S. 22-31-107(2)",
+		"url": "https://olls.info/crs/crs2026-title-22.htm",
+		"quote": "together with a nomination petition according to the provisions of section 1-4-803",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special district candidates self-nominate",
+		"citation": "C.R.S. 1-13.5-303(1)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "shall file a self-nomination and acceptance form or letter signed by the candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Statutory city and town candidates are nominated by petition without regard to party",
+		"citation": "C.R.S. 31-10-302(1)",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "Candidates for municipal offices shall be nominated, without regard to affiliation, by petition on forms supplied by the clerk",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Statutory municipal ballots carry no party designation",
+		"citation": "C.R.S. 31-10-902(2)",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "printed upon the ballot without political party designation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule charter controls all matters of municipal elections, including making them nonpartisan",
+		"citation": "Colo. Const. art. XX, § 6(d)",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "tending to make such elections or electoral votes non-partisan in character",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan ties for the most votes are settled by lot",
+		"citation": "C.R.S. 1-11-102",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "If any two or more candidates tie for the highest number of votes for the same office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Statutory municipal winners are those with the greatest number of votes",
+		"citation": "C.R.S. 31-10-1205(1)",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "determine which persons have been by the greatest number of votes duly elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Local governments may use instant runoff voting for single-seat races",
+		"citation": "C.R.S. 1-7-1003(3)(a)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "the ranked voting method shall be known as instant runoff voting",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Statutory cities and towns and home rule municipalities may refer an instant runoff election into the coordinated election",
+		"citation": "C.R.S. 1-7-116(1)(d)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "a statutory city or town or home rule municipality may refer a municipal election using instant runoff voting to be conducted as part of a coordinated election",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Candidates for partisan office who do not want a major party label are nominated by petition",
+		"citation": "C.R.S. 1-4-802(1)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "Candidates for partisan public offices to be filled at a general election who do not wish to affiliate with a major political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A petition-nominated unaffiliated candidate must have been unaffiliated or minor-party by the first business day of January of the election year",
+		"citation": "C.R.S. 1-4-802(1)(g)(II)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "registered as affiliated with a minor political party or as unaffiliated, as shown in the statewide voter registration system, no later than the first business day of the January immediately preceding the general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An unaffiliated candidate may not use a party name to identify themselves",
+		"citation": "C.R.S. 1-4-802(1)(a)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "No name of any political party shall be used, in whole or in part, to identify an unaffiliated candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County office petitions must be signed by voters of that county",
+		"citation": "C.R.S. 1-4-802(1)(c)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "must be signed by eligible electors residing within the district or political subdivision in which the officer is to be elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any eligible voter may sign an unaffiliated candidate petition, but not petitions for two candidates for the same office",
+		"citation": "C.R.S. 1-4-904(2)(b)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "may be signed by any eligible elector who has not signed any other petition for any other candidate for the same office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipal voter may not sign more than one nomination petition per office",
+		"citation": "C.R.S. 31-10-302(5)",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "No registered elector shall sign more than one nomination petition for each separate office to be filled",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties under 70,000 people elect three commissioners; larger counties may have five",
+		"citation": "Colo. Const. art. XIV, § 6",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "when the population of any county shall equal or exceed seventy thousand, the board of county commissioners may consist of five members",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county is divided into three commissioner districts; each commissioner is elected from a district by the voters of the whole county",
+		"citation": "C.R.S. 30-10-306(1)",
+		"url": "https://olls.info/crs/crs2026-title-30.htm",
+		"quote": "One county commissioner must be elected from each of such districts by the voters of the whole county",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county of 70,000 or more may go to five commissioners by referred or initiated vote",
+		"citation": "C.R.S. 30-10-306.5(1)",
+		"url": "https://olls.info/crs/crs2026-title-30.htm",
+		"quote": "the membership of the board of county commissioners may be increased from three to five members pursuant to this section",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Five-member counties may elect some commissioners only by district voters",
+		"citation": "C.R.S. 30-10-306.7(2)(a)",
+		"url": "https://olls.info/crs/crs2026-title-30.htm",
+		"quote": "elected by the voters of the whole county or elected only by voters resident in the district from which the member runs for election",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County includes a city and county for Election Code purposes",
+		"citation": "C.R.S. 1-1-104(7)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "includes a city and county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters of any county may adopt a home rule charter setting its organization and structure",
+		"citation": "Colo. Const. art. XIV, § 16(1)",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "the registered electors of each county of the state are hereby vested with the power to adopt a home rule charter establishing the organization and structure of county government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The constitutional rules on commissioners and county officers apply to a home rule county only as its charter provides",
+		"citation": "Colo. Const. art. XIV, § 16(5)",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "shall apply to counties adopting a home rule charter only to such extent as may be provided in said charter",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule county charter decides which officers are elected or appointed and their terms",
+		"citation": "C.R.S. 30-11-513",
+		"url": "https://olls.info/crs/crs2026-title-30.htm",
+		"quote": "Officers of a home rule county shall be appointed or elected as provided for in the charter",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule county must still provide all mandatory county functions",
+		"citation": "Colo. Const. art. XIV, § 16(3)",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "A home rule county shall provide all mandatory county functions, services, and facilities",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The legislature classifies cities and towns, with no more than four classes",
+		"citation": "Colo. Const. art. XIV, § 13",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "The number of such classes shall not exceed four",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities are pre-1877 charter places, home rule places, and statutory cities and towns",
+		"citation": "C.R.S. 31-1-201(1)",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "Cities or towns organized pursuant to the provisions of article XX of the state constitution",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A statutory city has over 2,000 people, or was a city in 1980 and stayed one, regardless of population",
+		"citation": "C.R.S. 31-1-101(2)",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "means a municipal corporation having a population of more than two thousand",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A statutory town has 2,000 or fewer, or was a town in 1980 and stayed one, regardless of population",
+		"citation": "C.R.S. 31-1-101(13)",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "means a municipal corporation having a population of two thousand or less",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality organized as a town or city in 1980 keeps that organization regardless of population unless it reorganizes",
+		"citation": "C.R.S. 31-1-101(2), (13)",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "organized as a town on December 31, 1980, and choosing not to reorganize as a city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town entitled to become a city reorganizes only by electing city officers at a later regular election",
+		"citation": "C.R.S. 31-1-204(2)",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "to organize according to the new classification available to it by the election of officers properly belonging thereto",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A statutory town is governed by a board of trustees of a mayor and six trustees",
+		"citation": "C.R.S. 31-4-301(1)",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "consisting of one mayor and six trustees",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Town mayor and trustees serve two-year terms by default",
+		"citation": "C.R.S. 31-4-301(2)",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "there shall be elected a mayor for a term of two years and six trustees for terms of two years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town board may adopt four-year overlapping terms by ordinance",
+		"citation": "C.R.S. 31-4-301(5)",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "The board of trustees may provide by ordinance for four-year overlapping terms of office",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town may reduce its trustees from six to four by vote",
+		"citation": "C.R.S. 31-4-301.5(1)",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "may be reduced in number from six to four or again increased from four to six",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A statutory city elects a mayor, clerk and treasurer at large and two council members per ward, for two-year terms",
+		"citation": "C.R.S. 31-4-105",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "shall elect, at the regular election, a mayor, a clerk, and a city treasurer from the city at large",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each ward of a statutory city elects two council members",
+		"citation": "C.R.S. 31-4-105",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "the registered electors of each ward of the city shall elect two members of the city council",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city council may adopt four-year overlapping terms by ordinance",
+		"citation": "C.R.S. 31-4-107(3)",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "The city council may provide by ordinance for four-year overlapping terms of office for council members",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters may make the city clerk and treasurer appointive",
+		"citation": "C.R.S. 31-4-107(4)(a)",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "that the position of city clerk or city treasurer, or both such positions, be made appointive rather than elective",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A statutory city may reorganize into council-manager form",
+		"citation": "C.R.S. 31-4-201",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "may reorganize into a city council-city manager form of municipal government",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city or town of 2,000 or more may adopt a home rule charter",
+		"citation": "Colo. Const. art. XX, § 6",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "having a population of two thousand inhabitants as determined by the last preceding census",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule charter supersedes conflicting state law on local and municipal matters",
+		"citation": "Colo. Const. art. XX, § 6",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "shall supersede within the territorial limits and other jurisdiction of said city or town any law of the state in conflict therewith",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Home rule charters control the creation and terms of municipal officers",
+		"citation": "Colo. Const. art. XX, § 6(a)",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "The creation and terms of municipal officers, agencies and employments",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Home rule charters control the date of municipal elections and nominations",
+		"citation": "Colo. Const. art. XX, § 6(d)",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "All matters pertaining to municipal elections in such city or town",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any municipality may opt into the Election Code instead of the Municipal Election Code",
+		"citation": "C.R.S. 1-1-102(1)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "Any municipality may provide by ordinance or resolution that it will utilize the requirements and procedures of this code in lieu of",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Denver is a consolidated city and county",
+		"citation": "Colo. Const. art. XX, § 1",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "are hereby consolidated and are hereby declared to be a single body politic and corporate, by the name of the",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Denver's charter sets which officers are elected and their terms",
+		"citation": "Colo. Const. art. XX, § 2",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "The officers of the city and county of Denver shall be such as by appointment or election may be provided for by the charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Denver Public Schools elections are run by the Denver election commission",
+		"citation": "C.R.S. 22-31-131(1)",
+		"url": "https://olls.info/crs/crs2026-title-22.htm",
+		"quote": "shall be conducted and supervised by the election commission of the city and county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Broomfield became a city and county in 2001, detached from Adams, Boulder, Jefferson and Weld counties",
+		"citation": "Colo. Const. art. XX, § 10",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "shall be detached from the counties of Adams, Boulder, Jefferson, and Weld and shall be consolidated into a single county and municipal corporation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Broomfield's officers are set by its charter and ordinances",
+		"citation": "Colo. Const. art. XX, § 11",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "The officers of the city and county of Broomfield shall be as provided for by its charter or ordinances",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special districts include fire protection, metropolitan and water districts",
+		"citation": "C.R.S. 32-1-103",
+		"url": "https://olls.info/crs/crs2026-title-32.htm",
+		"quote": "means a special district which provides protection against fire by any available means",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A metropolitan district provides two or more services",
+		"citation": "C.R.S. 32-1-103",
+		"url": "https://olls.info/crs/crs2026-title-32.htm",
+		"quote": "means a special district that provides for the inhabitants thereof any two or more of the following services",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party member votes only their own party's primary ballot",
+		"citation": "C.R.S. 1-7-201(2)",
+		"url": "https://olls.info/crs/crs2026-title-01.htm",
+		"quote": "present the elector with the party ballot of the political party affiliation last recorded",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State statutes keep applying to home rule places except where the charter or its ordinances supersede them",
+		"citation": "Colo. Const. art. XX, § 6",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "shall continue to apply to such cities and towns, except insofar as superseded by the charters of such cities and towns",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Home rule charters control nomination and election systems",
+		"citation": "Colo. Const. art. XX, § 6(d)",
+		"url": "https://olls.info/crs/crs2026-title-00.htm",
+		"quote": "nomination and election systems",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Statutory municipalities are divided into cities and towns",
+		"citation": "C.R.S. 31-1-203(1)",
+		"url": "https://olls.info/crs/crs2026-title-31.htm",
+		"quote": "which have not chosen to adopt a home rule charter under the provisions of article XX of the state constitution, are divided into cities and towns",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

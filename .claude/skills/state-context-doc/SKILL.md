@@ -60,6 +60,14 @@ Recipes found so far:
 | New York | `https://www.nysenate.gov/legislation/laws/<LAW>/<section>` (e.g. `ELN/8-100`, `TWN/80`). Constitution: `CNS/A<article>S<section>`. An article page such as `ELN/A15` lists its sections. **Browser only** (HTTP 403 to scripts). Each section page shows its last revision date. |
 | Wisconsin | Whole chapters as PDFs: `https://docs.legis.wisconsin.gov/statutes/statutes/<chapter>.pdf`, constitution `https://docs.legis.wisconsin.gov/constitution/wi.pdf`. They decode with zlib plus a +31 shift on each character code. Cite sections as `https://docs.legis.wisconsin.gov/document/statutes/<section>?view=section`. The fixed county list is in § 2.01. |
 
+**Incomplete certificate chains** also affect Connecticut (cga.ct.gov), Mississippi
+(billstatus.ls.state.ms.us) and Alaska (ltgov.alaska.gov), as well as Illinois. The
+general fix: read the issuer URL with
+`openssl s_client -connect <host>:443 -servername <host> | openssl x509 -noout -ext authorityInfoAccess`,
+download that certificate, convert it to PEM, append it to one file, and run the
+checker with `NODE_EXTRA_CA_CERTS=<file>`. akleg.gov returns 403 after one full
+Alaska run, so wait before re-running it.
+
 **Browser-only law sites.** Don't mark every entry `manual`: a ledger that is all
 manual "passes" without testing anything. Run
 `bun .claude/skills/state-context-doc/verify-ledger.ts --browser <ledger>` instead.

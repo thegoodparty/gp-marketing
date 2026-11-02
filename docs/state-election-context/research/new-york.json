@@ -1,0 +1,742 @@
+[
+	{
+		"claim": "The Legislature assembles every year on the first Wednesday after the first Monday in January",
+		"citation": "N.Y. Const. art. XIII, § 4",
+		"url": "https://www.nysenate.gov/legislation/laws/CNS/A13S4",
+		"quote": "the legislature shall, every year, assemble on the first Wednesday after the first Monday in January",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A bill not returned by the governor within ten days, Sundays excepted, becomes law unless the Legislature has adjourned",
+		"citation": "N.Y. Const. art. IV, § 7",
+		"url": "https://www.nysenate.gov/legislation/laws/CNS/A4S7",
+		"quote": "If any bill shall not be returned by the governor within ten days (Sundays excepted) after it shall have been presented to him or her, the same shall be a law",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "After final adjournment, a bill becomes law only if the governor approves it within thirty days",
+		"citation": "N.Y. Const. art. IV, § 7",
+		"url": "https://www.nysenate.gov/legislation/laws/CNS/A4S7",
+		"quote": "No bill shall become a law after the final adjournment of the legislature, unless approved by the governor within thirty days after such adjournment.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A law takes effect on the twentieth day after it becomes law unless it says otherwise",
+		"citation": "N.Y. Legis. Law § 43",
+		"url": "https://www.nysenate.gov/legislation/laws/LEG/43",
+		"quote": "Every law, unless a different time shall be prescribed therein, shall take effect on the twentieth day after it shall have become a law.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "The general election is held every year on the Tuesday after the first Monday in November",
+		"citation": "N.Y. Elec. Law § 8-100(1)(c)",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/8-100",
+		"quote": "The general election shall be held annually on the Tuesday next succeeding the first Monday in November.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "The primary is held on the fourth Tuesday in June",
+		"citation": "N.Y. Elec. Law § 8-100(1)(a)",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/8-100",
+		"quote": "A primary election shall be held on the fourth Tuesday in June before every general election unless otherwise changed by an act of the legislature.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "City officers, and county officers in a county wholly inside a city, are elected in November of odd-numbered years",
+		"citation": "N.Y. Const. art. XIII, § 8",
+		"url": "https://www.nysenate.gov/legislation/laws/CNS/A13S8",
+		"quote": "All elections of city officers, including supervisors, elected in any city or part of a city, and of county officers elected in any county wholly included in a city, except to fill vacancies, shall be held on the Tuesday succeeding the first Monday in November in an odd-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "The odd-year rule for city officers does not apply to judges",
+		"citation": "N.Y. Const. art. XIII, § 8",
+		"url": "https://www.nysenate.gov/legislation/laws/CNS/A13S8",
+		"quote": "This section shall not apply to elections of any judicial officer.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Town officers are elected in November of even-numbered years, overriding any local law or charter",
+		"citation": "N.Y. Town Law § 80",
+		"url": "https://www.nysenate.gov/legislation/laws/TWN/80",
+		"quote": "Notwithstanding any provision of any general, special or local law, charter, code, ordinance, resolution, rule or regulation to the contrary, a biennial town election",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "The even-year town election date",
+		"citation": "N.Y. Town Law § 80",
+		"url": "https://www.nysenate.gov/legislation/laws/TWN/80",
+		"quote": "shall be held on the Tuesday next succeeding the first Monday in November of every even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Town justices and town offices that had three-year terms before 2025 are outside the even-year rule",
+		"citation": "N.Y. Town Law § 80",
+		"url": "https://www.nysenate.gov/legislation/laws/TWN/80",
+		"quote": "other than town justices or any town office with a three-year term prior to January first, two thousand twenty-five",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A town coterminous with a village that voted in odd years keeps odd-year elections",
+		"citation": "N.Y. Town Law § 80",
+		"url": "https://www.nysenate.gov/legislation/laws/TWN/80",
+		"quote": "Any town completely coterminous with a village shall continue to elect its officers, including town justices, in odd-numbered years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "County elected officials are elected in November of even-numbered years, overriding any charter",
+		"citation": "N.Y. County Law § 400(8)",
+		"url": "https://www.nysenate.gov/legislation/laws/CNT/400",
+		"quote": "all elections for any position of a county elected official shall occur on the Tuesday next succeeding the first Monday in November and shall occur in an even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Sheriff, county clerk, district attorney, county judges and offices with three-year terms before 2025 are outside the even-year county rule",
+		"citation": "N.Y. County Law § 400(8)",
+		"url": "https://www.nysenate.gov/legislation/laws/CNT/400",
+		"quote": "this subdivision shall not apply to an election for the office of sheriff, county clerk, district attorney, family court judge, county court judge, surrogate court judge, or any offices with a three-year term prior to January first, two thousand twenty-five",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A county charter may not override the even-year requirement (outside New York City)",
+		"citation": "N.Y. Mun. Home Rule Law § 34(3)(h)",
+		"url": "https://www.nysenate.gov/legislation/laws/MHR/34",
+		"quote": "to hold elections in even-numbered years for any position of a county elected official",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A local law may not override the general election date",
+		"citation": "N.Y. Mun. Home Rule Law § 11(1)(f)",
+		"url": "https://www.nysenate.gov/legislation/laws/MHR/11",
+		"quote": "Applies to or affects any provision of paragraph (c) of subdivision one of section 8-100 of the election law",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Village elections default to the third Tuesday in March, but a village may elect on another date",
+		"citation": "N.Y. Elec. Law § 15-104(1)(a)",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/15-104",
+		"quote": "The general village election shall be held on the third Tuesday in March except in any village which presently elects, or hereafter adopts a proposition to elect, its officers on a date other than the third Tuesday in March.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A village whose elections are run by the county board of elections may move them to general election day",
+		"citation": "N.Y. Elec. Law § 15-104(1)(c)",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/15-104",
+		"quote": "may also adopt a resolution providing that village elections shall occur on the day of the general election",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A change of village election date takes effect only for an election more than 120 days later",
+		"citation": "N.Y. Elec. Law § 15-104(2)",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/15-104",
+		"quote": "A proposition changing the date of the general village election shall not become effective until the next election regularly scheduled to be held more than one hundred twenty days following its adoption.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "School district annual meetings and elections are held on the third Tuesday of May",
+		"citation": "N.Y. Educ. Law § 2002(1)",
+		"url": "https://www.nysenate.gov/legislation/laws/EDN/2002",
+		"quote": "The annual meeting and election of each school district shall be held on the third Tuesday of May in each year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "To vote in a party's primary a voter must be enrolled in that party",
+		"citation": "N.Y. Elec. Law § 5-210",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/5-210",
+		"quote": "in order to vote in a primary election of a political party, a voter must enroll in that political party, unless state party rules allow otherwise",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Party nominations for offices filled at the general election are made at the primary",
+		"citation": "N.Y. Elec. Law § 6-110",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/6-110",
+		"quote": "All other party nominations of candidates for offices to be filled at a general election, except as provided for herein, shall be made at the primary election.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A candidate nominated by more than one party appears on each party's line",
+		"citation": "N.Y. Elec. Law § 7-104",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/7-104",
+		"quote": "When the same person has been nominated for an office to be filled at the election by more than one party",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Village party nominations are made at a caucus, or at a primary if county party rules say so",
+		"citation": "N.Y. Elec. Law § 15-108(2)",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/15-108",
+		"quote": "Party nominations of candidates for village offices in any county shall be made at a party caucus or, if the rules of the county committee",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Village independent nominations are made by petition",
+		"citation": "N.Y. Elec. Law § 15-108(4)",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/15-108",
+		"quote": "Independent nominations for elective village offices shall be made by a petition",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Only enrolled party members who live in the village may take part in a village caucus or primary",
+		"citation": "N.Y. Elec. Law § 15-108",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/15-108",
+		"quote": "No person shall participate in such primary or caucus who is not a resident of the village and an enrolled voter of the party conducting the primary or caucus.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "School board candidates are nominated by petition",
+		"citation": "N.Y. Educ. Law § 2018(a)",
+		"url": "https://www.nysenate.gov/legislation/laws/EDN/2018",
+		"quote": "candidates for the office of member of the board of education shall be nominated by petition",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "City school district boards are elected at annual school elections",
+		"citation": "N.Y. Educ. Law § 2502(2)",
+		"url": "https://www.nysenate.gov/legislation/laws/EDN/2502",
+		"quote": "Members of such board shall be elected by the qualified voters at large of the school district at annual school elections",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "New York City's school board members are appointed",
+		"citation": "N.Y. Educ. Law § 2590-b",
+		"url": "https://www.nysenate.gov/legislation/laws/EDN/2590-B",
+		"quote": "one member to be appointed by each borough president of the city of New York",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "County, city, town and village offices go to the candidate with the most votes",
+		"citation": "N.Y. Elec. Law § 9-212",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/9-212",
+		"quote": "each person elected by the greatest number of votes to each city, town or village office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "In a village election the candidate with more votes than any other wins",
+		"citation": "N.Y. Elec. Law § 15-104(1)(d)",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/15-104",
+		"quote": "to be elected in a village election, a candidate must receive more votes than any other candidate for the office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "State law still provides for a New York City citywide run-off primary",
+		"citation": "N.Y. Elec. Law § 6-162",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/6-162",
+		"quote": "the board of elections of such city shall conduct a run-off primary election between the two candidates receiving the greatest number of votes",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "New York City's ranked choice offices are mayor, public advocate, comptroller, borough president and council member",
+		"citation": "N.Y.C. Charter § 1057-g(a)",
+		"url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCcharter/0-0-0-3079",
+		"quote": "The term \"ranked choice office\" means the offices of mayor, public advocate, comptroller, borough president, and council member.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403) and loads its text by script. Quote matched 2026-10-27 in the in-app browser against the rendered page text."
+	},
+	{
+		"claim": "Ranked choice voting applies to primaries for those offices and to elections where every candidate was nominated by independent petition",
+		"citation": "N.Y.C. Charter § 1057-g(a)",
+		"url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCcharter/0-0-0-3079",
+		"quote": "means any primary election for a ranked choice office, and any election for a ranked choice office in which all candidates are nominated by independent nominating petition",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403) and loads its text by script. Quote matched 2026-10-27 in the in-app browser against the rendered page text."
+	},
+	{
+		"claim": "No run-off is held for a New York City ranked choice office",
+		"citation": "N.Y.C. Charter § 1057-g(b)",
+		"url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCcharter/0-0-0-3079",
+		"quote": "No run-off election shall be held for any ranked choice office.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403) and loads its text by script. Quote matched 2026-10-27 in the in-app browser against the rendered page text."
+	},
+	{
+		"claim": "Independent candidates are nominated by a petition of registered voters",
+		"citation": "N.Y. Elec. Law § 6-138(1)",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/6-138",
+		"quote": "Independent nominations for public office shall be made by a petition containing the signatures of registered voters of the political unit for which a nomination is made",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A signature does not count if the signer also signed another petition for the same office",
+		"citation": "N.Y. Elec. Law § 6-138(1)",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/6-138",
+		"quote": "shall not be counted if the name of a person who has signed such a petition appears upon another valid and effective petition designating or nominating the same or a different person for the same office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "The county legislative body may be called a board of supervisors, a county legislature or something else",
+		"citation": "N.Y. County Law § 214(1)",
+		"url": "https://www.nysenate.gov/legislation/laws/CNT/214",
+		"quote": "whether such body be denominated board of supervisors, county legislature or otherwise",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "The default board of supervisors is made up of the supervisors of the county's cities and towns",
+		"citation": "N.Y. County Law § 150",
+		"url": "https://www.nysenate.gov/legislation/laws/CNT/150",
+		"quote": "The supervisors of the several cities and towns in each county, when lawfully convened, shall constitute the board of supervisors of the county.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Every county elects a sheriff, county clerk, district attorney and county treasurer",
+		"citation": "N.Y. County Law § 400(1)",
+		"url": "https://www.nysenate.gov/legislation/laws/CNT/400",
+		"quote": "There shall be elected a sheriff, county clerk, district attorney and county treasurer.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Sheriff, county clerk, county treasurer and coroner serve four-year terms",
+		"citation": "N.Y. County Law § 400(1)",
+		"url": "https://www.nysenate.gov/legislation/laws/CNT/400",
+		"quote": "the terms of office of sheriff, county clerk, county treasurer and coroner shall be four years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "District attorneys outside New York City serve four-year terms",
+		"citation": "N.Y. County Law § 400(1-a)",
+		"url": "https://www.nysenate.gov/legislation/laws/CNT/400",
+		"quote": "The term of office of the district attorney of each county outside of New York city shall be for four years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A county may abolish the elected coroner and create a medical examiner",
+		"citation": "N.Y. County Law § 400(2)",
+		"url": "https://www.nysenate.gov/legislation/laws/CNT/400",
+		"quote": "the board of supervisors shall have power by local law to abolish the office of coroner and create the office of medical examiner",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Counties outside New York City may adopt their own charter (alternative form of government)",
+		"citation": "N.Y. Const. art. IX, § 1(h)(1)",
+		"url": "https://www.nysenate.gov/legislation/laws/CNS/A9S1",
+		"quote": "Counties, other than those wholly included within a city, shall be empowered by general law",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Counties may prepare and adopt alternative forms of their own",
+		"citation": "N.Y. Const. art. IX, § 1(h)(1)",
+		"url": "https://www.nysenate.gov/legislation/laws/CNS/A9S1",
+		"quote": "to adopt, amend or repeal alternative forms of county government provided by the legislature or to prepare, adopt, amend or repeal alternative forms of their own",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A county charter may not supersede the Election Law",
+		"citation": "N.Y. Mun. Home Rule Law § 34(3)(g)",
+		"url": "https://www.nysenate.gov/legislation/laws/MHR/34",
+		"quote": "a county charter or charter law shall not supersede any general or special law enacted by the legislature",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "The Election Law is on the list of laws a county charter cannot supersede",
+		"citation": "N.Y. Mun. Home Rule Law § 34(3)(g)",
+		"url": "https://www.nysenate.gov/legislation/laws/MHR/34",
+		"quote": "environmental conservation law, election law, executive law",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Every local government except a county wholly inside a city has an elected legislative body",
+		"citation": "N.Y. Const. art. IX, § 1(a)",
+		"url": "https://www.nysenate.gov/legislation/laws/CNS/A9S1",
+		"quote": "Every local government, except a county wholly included within a city, shall have a legislative body elective by the people thereof.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "County powers within New York City are vested in the city",
+		"citation": "N.Y. Const. art. IX, § 2(e)",
+		"url": "https://www.nysenate.gov/legislation/laws/CNS/A9S2",
+		"quote": "insofar as applicable to any county within the city of New York shall be vested in such city",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Each county in New York City has an appointed, not elected, county clerk",
+		"citation": "N.Y. Const. art. XIII, § 13(a)",
+		"url": "https://www.nysenate.gov/legislation/laws/CNS/A13S13",
+		"quote": "The clerk of each county in the city of New York shall be appointed",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Every county, including those in New York City, elects a district attorney",
+		"citation": "N.Y. Const. art. XIII, § 13(a)",
+		"url": "https://www.nysenate.gov/legislation/laws/CNS/A13S13",
+		"quote": "In each county a district attorney shall be chosen by the electors",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "New York City contains five counties",
+		"citation": "N.Y. Elec. Law § 3-200(1)",
+		"url": "https://www.nysenate.gov/legislation/laws/ELN/3-200",
+		"quote": "in the city of New York for the five counties thereof",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A town is a municipal corporation",
+		"citation": "N.Y. Town Law § 2",
+		"url": "https://www.nysenate.gov/legislation/laws/TWN/2",
+		"quote": "A town is a municipal corporation comprising the inhabitants within its boundaries",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Towns are first or second class by population, with exceptions written into the law",
+		"citation": "N.Y. Town Law § 10",
+		"url": "https://www.nysenate.gov/legislation/laws/TWN/10",
+		"quote": "Towns are divided into classes according to population",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "First class towns generally have 10,000 or more people; Westchester towns are all first class",
+		"citation": "N.Y. Town Law § 10",
+		"url": "https://www.nysenate.gov/legislation/laws/TWN/10",
+		"quote": "Every town in the county of Westchester shall be a town of the first class.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "All Suffolk and Broome towns are second class regardless of size",
+		"citation": "N.Y. Town Law § 10",
+		"url": "https://www.nysenate.gov/legislation/laws/TWN/10",
+		"quote": "Every town in the counties of Suffolk and Broome and the town of Potsdam in the county of St. Lawrence.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A second class town that reaches 10,000 people at the census becomes first class",
+		"citation": "N.Y. Town Law § 11(1)",
+		"url": "https://www.nysenate.gov/legislation/laws/TWN/11",
+		"quote": "the classification of such town shall be changed to that of a town of the first class",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A first class town has a supervisor and four town council members by default, changeable to six or two",
+		"citation": "N.Y. Town Law § 20(1)(a)",
+		"url": "https://www.nysenate.gov/legislation/laws/TWN/20",
+		"quote": "Every town of the first class shall have a supervisor, four town council members, unless the number of council members shall have been increased to six or decreased to two",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "First class town elected offices",
+		"citation": "N.Y. Town Law § 20(1)(a)",
+		"url": "https://www.nysenate.gov/legislation/laws/TWN/20",
+		"quote": "town clerk, town justices, town superintendent of highways and receiver of taxes and assessments in every such town shall be elective",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Second class town default officers",
+		"citation": "N.Y. Town Law § 20(1)(b)",
+		"url": "https://www.nysenate.gov/legislation/laws/TWN/20",
+		"quote": "every town of the second class shall have a supervisor, two justices of the peace, two town council members",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "The town board is the supervisor and the town council members",
+		"citation": "N.Y. Town Law § 60(1)",
+		"url": "https://www.nysenate.gov/legislation/laws/TWN/60",
+		"quote": "In every town the supervisor and the town council members shall constitute the town board",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Most town elective offices, including supervisor, have two-year terms by default",
+		"citation": "N.Y. Town Law § 24",
+		"url": "https://www.nysenate.gov/legislation/laws/TWN/24",
+		"quote": "All elective officers other than town council members, town justices, receivers of taxes and assessors shall hold their respective offices for two years.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Town council members serve four-year staggered terms",
+		"citation": "N.Y. Town Law § 24",
+		"url": "https://www.nysenate.gov/legislation/laws/TWN/24",
+		"quote": "thereafter at each biennial town election there shall be elected two town council members for terms of four years each",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Town justices serve four-year terms",
+		"citation": "N.Y. Town Law § 24",
+		"url": "https://www.nysenate.gov/legislation/laws/TWN/24",
+		"quote": "The terms of office of the town justices and elective receivers of taxes and assessments shall be four years.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A village lies in one or more towns",
+		"citation": "N.Y. Village Law § 2-250",
+		"url": "https://www.nysenate.gov/legislation/laws/VIL/2-250",
+		"quote": "any town in which the village, or a part thereof, is located",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A village cannot include part of a city or another village",
+		"citation": "N.Y. Village Law § 2-200(1)",
+		"url": "https://www.nysenate.gov/legislation/laws/VIL/2-200",
+		"quote": "provided such territory does not include a part of a city or village",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Every village has a mayor and four trustees by default",
+		"citation": "N.Y. Village Law § 3-301(1)",
+		"url": "https://www.nysenate.gov/legislation/laws/VIL/3-301",
+		"quote": "Every village shall have the following officers: a. a mayor; b. four trustees",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A village may change its number of trustees, subject to permissive referendum",
+		"citation": "N.Y. Village Law § 3-304",
+		"url": "https://www.nysenate.gov/legislation/laws/VIL/3-304",
+		"quote": "The board of trustees by resolution or local law, subject to permissive referendum, may change the number of trustees.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Village mayor and trustees serve two-year terms by default",
+		"citation": "N.Y. Village Law § 3-302(3)",
+		"url": "https://www.nysenate.gov/legislation/laws/VIL/3-302",
+		"quote": "the term of office of mayor, each trustee, treasurer and clerk shall be two official years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Counties, cities, towns and villages may set the terms and mode of selection of their officers by local law",
+		"citation": "N.Y. Mun. Home Rule Law § 10(1)(ii)(a)(1)",
+		"url": "https://www.nysenate.gov/legislation/laws/MHR/10",
+		"quote": "The powers, duties, qualifications, number, mode of selection and removal, terms of office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "Local laws must not be inconsistent with the constitution or general law",
+		"citation": "N.Y. Mun. Home Rule Law § 10(1)",
+		"url": "https://www.nysenate.gov/legislation/laws/MHR/10",
+		"quote": "shall have power to adopt and amend local laws not inconsistent with the provisions of the constitution or not inconsistent with any general law",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A local law changing how an officer is nominated or elected, or a term, needs voter approval",
+		"citation": "N.Y. Mun. Home Rule Law § 23(2)(e)",
+		"url": "https://www.nysenate.gov/legislation/laws/MHR/23",
+		"quote": "Abolishes an elective office, or changes the method of nominating, electing or removing an elective officer, or changes the term of an elective office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A local law changing the size of a city, town or village legislative body needs voter approval",
+		"citation": "N.Y. Mun. Home Rule Law § 23(2)(b)",
+		"url": "https://www.nysenate.gov/legislation/laws/MHR/23",
+		"quote": "In the case of a city, town or village, changes the membership or composition of the legislative body",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	},
+	{
+		"claim": "A new city charter needs voter approval",
+		"citation": "N.Y. Mun. Home Rule Law § 23(2)(a)",
+		"url": "https://www.nysenate.gov/legislation/laws/MHR/23",
+		"quote": "In the case of a city, provides a new charter for such city.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "Site refuses scripted requests (HTTP 403). Quote matched 2026-10-27 in the in-app browser against the page HTML, using verify-ledger.ts normalization."
+	}
+]

@@ -1,0 +1,458 @@
+[
+	{
+		"claim": "The General Court assembles every year on the first Wednesday after the first Tuesday in January",
+		"citation": "N.H. Const. pt. II, art. 3",
+		"url": "https://www.nh.gov/glance/state-constitution/general-court",
+		"quote": "shall assemble annually on the first Wednesday following the first Tuesday in January",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A bill not returned within five days (Sundays excepted) becomes law",
+		"citation": "N.H. Const. pt. II, art. 44",
+		"url": "https://www.nh.gov/glance/state-constitution/executive-power-governor",
+		"quote": "five days (Sundays excepted) after it shall have been presented to him, the same shall be a law in like manner as if he had signed it",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "If adjournment prevents the return of a bill, it does not become law",
+		"citation": "N.H. Const. pt. II, art. 44",
+		"url": "https://www.nh.gov/glance/state-constitution/executive-power-governor",
+		"quote": "unless the legislature, by their adjournment, prevent its return, in which case it shall not be a law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Laws take effect 60 days after passage unless the act sets another date",
+		"citation": "RSA 14:9-a, I",
+		"url": "https://gc.nh.gov/rsa/html/I/14/14-mrg.htm",
+		"quote": "each law passed by the general court shall take effect 60 calendar days following passage",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The state general election is the Tuesday after the first Monday in November of even-numbered years",
+		"citation": "RSA 653:7",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/653/653-mrg.htm",
+		"quote": "The state general election shall be held on the first Tuesday following the first Monday in November of every even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The state primary is the second Tuesday in September of even-numbered years",
+		"citation": "RSA 653:8",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/653/653-mrg.htm",
+		"quote": "The state primary election shall be held on the second Tuesday in September of every even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A state general election chooses federal, state and county officers",
+		"citation": "RSA 652:4",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/652/652-mrg.htm",
+		"quote": "shall mean an election to choose a federal, state, or county officer",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Sheriff, county attorney, treasurer, register of deeds and register of probate are elected at each state general election for 2-year terms, 4 years in Rockingham and Coos",
+		"citation": "RSA 653:1, V",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/653/653-mrg.htm",
+		"quote": "One sheriff, one county attorney, one county treasurer, one register of deeds, and one register of probate by the voters in each county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County officers have 2-year terms except as provided",
+		"citation": "RSA 653:1",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/653/653-mrg.htm",
+		"quote": "At every state general election, the following officers shall be elected for 2-year terms except as otherwise provided",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Rockingham and Coos county officers serve 4-year terms",
+		"citation": "RSA 653:1, V",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/653/653-mrg.htm",
+		"quote": "any such officer in Coos county shall be chosen in the county by the voters for a 4-year term",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county commissioner is elected from a commissioner district, by district voters or the whole county depending on the county",
+		"citation": "RSA 653:1, VI",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/653/653-mrg.htm",
+		"quote": "one county commissioner by those voters in each county commissioner district in the county",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Carroll and Sullivan elect commissioners countywide",
+		"citation": "RSA 653:1, VI(b), (e)",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/653/653-mrg.htm",
+		"quote": "Sullivan county-one county commissioner from each county commissioner district by all the voters of the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In most counties commissioner terms alternate between 4 and 2 years",
+		"citation": "RSA 653:1, VI",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/653/653-mrg.htm",
+		"quote": "one shall serve a 4-year term and one shall serve a 2-year term",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Towns elect officers every year on the second Tuesday in March, unless they have adopted the May date or another date",
+		"citation": "RSA 669:1, I",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/669/669-mrg.htm",
+		"quote": "All towns shall hold an election annually for the election of town officers on the second Tuesday in March",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Charter towns may choose March, May or November of odd years",
+		"citation": "RSA 669:1, II",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/669/669-mrg.htm",
+		"quote": "the first Tuesday after the first Monday in November in odd-numbered years as the date for the election of town officers",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Town elections are never held with the state general election",
+		"citation": "RSA 669:1, III",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/669/669-mrg.htm",
+		"quote": "No town election shall be held in conjunction with the biennial election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An SB 2 town chooses March, April or May for its election and second session",
+		"citation": "RSA 40:14, X",
+		"url": "https://gc.nh.gov/rsa/html/III/40/40-mrg.htm",
+		"quote": "whether the date for local elections and the second session shall be the second Tuesday in March, the second Tuesday in April, or the second Tuesday in May",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An SB 2 town votes on all questions by official ballot after a deliberative session",
+		"citation": "RSA 40:13, I-II",
+		"url": "https://gc.nh.gov/rsa/html/III/40/40-mrg.htm",
+		"quote": "shall utilize the official ballot for voting on all issues before the voters",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Adopting SB 2 takes a three-fifths majority",
+		"citation": "RSA 40:14, I",
+		"url": "https://gc.nh.gov/rsa/html/III/40/40-mrg.htm",
+		"quote": "A 3/5 majority of those voting on the question shall be required to adopt this subdivision",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City elections are never held with the state general election; the date is fixed by law or ordinance",
+		"citation": "RSA 44:11, I",
+		"url": "https://gc.nh.gov/rsa/html/III/44/44-mrg.htm",
+		"quote": "shall be held on such day as may be fixed by law or by ordinance of the city council but in no event shall it be held in conjunction with a biennial election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city charter sets the city election date within what RSA 44:11 permits",
+		"citation": "RSA 49-C:4",
+		"url": "https://gc.nh.gov/rsa/html/III/49-C/49-C-mrg.htm",
+		"quote": "on a date permitted for city elections in RSA 44:11 and specified in the charter",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School district officers are elected at town meeting or the district annual meeting",
+		"citation": "RSA 671:2",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/671/671-mrg.htm",
+		"quote": "School district officers shall be elected either at the town meeting as provided in RSA 671:22-26 or at an annual meeting of the district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School district elections are never held with the state general election, except Concord and Laconia",
+		"citation": "RSA 671:2",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/671/671-mrg.htm",
+		"quote": "no election for school district officers shall be held in conjunction with the biennial election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The school district annual meeting is held between March 1 and March 25 unless the district uses SB 2",
+		"citation": "RSA 197:1",
+		"url": "https://gc.nh.gov/rsa/html/XV/197/197-mrg.htm",
+		"quote": "shall be held annually between March 1 and March 25, inclusive, or in accordance with RSA 40:13",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A regular school board has 3, 5, 7 or 9 members serving 3-year terms; 3 by default",
+		"citation": "RSA 671:4",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/671/671-mrg.htm",
+		"quote": "may have a school board of 3, 5, 7, or 9 members, as it shall determine by vote at any annual meeting. They shall serve for a term of 3 years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An undeclared voter may join a party at the primary and vote its ballot",
+		"citation": "RSA 654:34, II(b)",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/654/654-mrg.htm",
+		"quote": "A voter may also register as a member of a party at any primary by requesting to be registered as a member and voting the ballot of the party of the voter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "After voting, a formerly undeclared voter may return to undeclared status",
+		"citation": "RSA 654:34, II(b)",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/654/654-mrg.htm",
+		"quote": "A voter may also register once again as an undeclared voter after voting in a primary as a registered member of a party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A registered party member who changes registration at the primary may not vote any party ballot there",
+		"citation": "RSA 654:34, I(b)",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/654/654-mrg.htm",
+		"quote": "but he shall not be permitted in such case to vote the ballot of any party at such primary",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Registered voters may not change party in the months before the primary",
+		"citation": "RSA 654:34, IV",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/654/654-mrg.htm",
+		"quote": "shall affiliate with a party or disaffiliate from a party between the first Wednesday in June and the day before the state primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town may adopt the partisan official ballot system for town officers",
+		"citation": "RSA 669:12",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/669/669-mrg.htm",
+		"quote": "Any town may vote to adopt the partisan official ballot system for election of town officers",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town may adopt the nonpartisan official ballot system for town officers",
+		"citation": "RSA 669:13",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/669/669-mrg.htm",
+		"quote": "A town may vote to adopt the non-partisan official ballot system for election of town officers",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town with no official ballot system elects officers by unofficial ballot at the town meeting, by majority vote",
+		"citation": "RSA 669:11",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/669/669-mrg.htm",
+		"quote": "A majority vote shall be required to elect using unofficial ballots",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Plurality elects under the partisan and nonpartisan ballot systems",
+		"citation": "RSA 669:12, 669:13",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/669/669-mrg.htm",
+		"quote": "A plurality shall elect in towns using the non-partisan ballot system",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan town candidates file a declaration of candidacy with the town clerk",
+		"citation": "RSA 669:19",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/669/669-mrg.htm",
+		"quote": "all candidates shall file a declaration of candidacy with the town clerk during the filing period for town candidates",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every school district uses the nonpartisan ballot system unless a special statute applies",
+		"citation": "RSA 671:30",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/671/671-mrg.htm",
+		"quote": "shall use the non-partisan ballot system for the election of district officers",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city charter may provide for party-ballot (Australian) elections or nonpartisan elections",
+		"citation": "RSA 49-C:6",
+		"url": "https://gc.nh.gov/rsa/html/III/49-C/49-C-mrg.htm",
+		"quote": "Under charters providing for non-partisan elections, the ballot shall contain the names in alphabetical order",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan city ballots carry no party designation",
+		"citation": "RSA 49-C:6",
+		"url": "https://gc.nh.gov/rsa/html/III/49-C/49-C-mrg.htm",
+		"quote": "without party designation, of all who file with the city clerk as candidates for elective office",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State and county winners are those with the highest number of votes",
+		"citation": "RSA 659:81",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/659/659-mrg.htm",
+		"quote": "those persons who received the highest number of votes cast for said office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate may reach the general election ballot by nomination papers instead of a party primary",
+		"citation": "RSA 655:40",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/655/655-mrg.htm",
+		"quote": "As an alternative to nomination by party primary, a candidate may have his or her name placed on the ballot for the state general election by submitting the requisite number of nomination papers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No voter may sign more than one nomination paper per office",
+		"citation": "RSA 655:40",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/655/655-mrg.htm",
+		"quote": "No voter shall sign more than one nomination paper for each office to be voted for",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nomination papers may be signed only by voters registered for the state general election",
+		"citation": "RSA 655:40",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/655/655-mrg.htm",
+		"quote": "Nomination papers shall be signed by such persons only as are registered to vote at the state general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate who filed in the primary cannot then run by nomination papers",
+		"citation": "RSA 655:43, IV",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/655/655-mrg.htm",
+		"quote": "No person who filed as a candidate in the state primary election shall be eligible to have his or her name placed on the ballot for the state general election by submitting nomination papers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "New Hampshire has 10 counties",
+		"citation": "RSA 22:1",
+		"url": "https://gc.nh.gov/rsa/html/II/22/22-mrg.htm",
+		"quote": "The state is divided into 10 counties",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county convention is made up of the county state representatives",
+		"citation": "RSA 24:1",
+		"url": "https://gc.nh.gov/rsa/html/II/24/24-mrg.htm",
+		"quote": "The county convention consists of the state representatives of the representative districts of the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every town elects a selectman each year for a 3-year term",
+		"citation": "RSA 41:8",
+		"url": "https://gc.nh.gov/rsa/html/III/41/41-mrg.htm",
+		"quote": "shall choose, by ballot, one selectman to hold office for 3 years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters may enlarge the board of selectmen to 5",
+		"citation": "RSA 41:8-b",
+		"url": "https://gc.nh.gov/rsa/html/III/41/41-mrg.htm",
+		"quote": "Are you in favor of increasing the board of selectmen to 5 members?",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Towns elect selectmen, moderator, supervisors of the checklist, town clerk, treasurer and highway agents by ballot",
+		"citation": "RSA 669:15",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/669/669-mrg.htm",
+		"quote": "The town officers specified in this section shall be elected at a town election by the voters of the town",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Town clerk is one of the required elected offices",
+		"citation": "RSA 669:15, IV",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/669/669-mrg.htm",
+		"quote": "Town clerk (RSA 41:16 through 16-b)",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Optional elected offices include trustees of trust funds, library trustees and others",
+		"citation": "RSA 669:16",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/669/669-mrg.htm",
+		"quote": "Trustees of trust fund (RSA 31:19-23)",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any town or city may adopt a charter under the home rule powers of Part I, article 39",
+		"citation": "RSA 49-B:2, I",
+		"url": "https://gc.nh.gov/rsa/html/III/49-B/49-B-mrg.htm",
+		"quote": "Any incorporated town or city, regardless of population, shall be entitled to exercise the home rule powers recognized by article 39, part first, of the New Hampshire constitution",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter town is prepared under RSA 49-D and a charter city under RSA 49-C",
+		"citation": "RSA 49-B:2, II-III",
+		"url": "https://gc.nh.gov/rsa/html/III/49-B/49-B-mrg.htm",
+		"quote": "If the proposed charter denominates the municipality as a city, the charter shall be prepared pursuant to RSA 49-C",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The governing body, mode of election and terms cannot be changed by ordinance",
+		"citation": "RSA 49-B:8",
+		"url": "https://gc.nh.gov/rsa/html/III/49-B/49-B-mrg.htm",
+		"quote": "No change in the composition, mode of election or terms of office of the legislative body, the mayor or the manager of any municipality may be accomplished by bylaw or ordinance",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city charter sets terms and ward or at-large representation",
+		"citation": "RSA 49-C:8",
+		"url": "https://gc.nh.gov/rsa/html/III/49-C/49-C-mrg.htm",
+		"quote": "Terms of elected officials, the date of commencement, and termination of office and ward and at-large representation shall be set forth in the charter",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter city has a mayor and aldermen or a council-manager plan",
+		"citation": "RSA 49-C:8",
+		"url": "https://gc.nh.gov/rsa/html/III/49-C/49-C-mrg.htm",
+		"quote": "under the council-manager plan shall be a city council, all of whom shall be elected",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Village districts may be formed within towns for purposes such as fire protection",
+		"citation": "RSA 52:1",
+		"url": "https://gc.nh.gov/rsa/html/III/52/52-mrg.htm",
+		"quote": "The extinguishment of fires",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A village district chooses its officers at its meetings",
+		"citation": "RSA 52:3, I",
+		"url": "https://gc.nh.gov/rsa/html/III/52/52-mrg.htm",
+		"quote": "choose necessary officers therefor to hold office until the first annual meeting of the district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Concord union school district and Laconia board of education are the exceptions to the no-November rule",
+		"citation": "RSA 671:2",
+		"url": "https://gc.nh.gov/rsa/html/LXIII/671/671-mrg.htm",
+		"quote": "shall not apply to the election of the board of education members of the Concord union school district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

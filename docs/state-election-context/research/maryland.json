@@ -1,0 +1,354 @@
+[
+	{
+		"claim": "The General Assembly meets every year on the second Wednesday of January",
+		"citation": "Md. Const. art. III, § 14",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c3&section=14&enactments=false",
+		"quote": "The General Assembly shall meet on the second Wednesday of January",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The session lasts up to 90 consecutive days, extendable by 30 days by three-fifths vote",
+		"citation": "Md. Const. art. III, § 15(1)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c3&section=15&enactments=false",
+		"quote": "for a period not longer than ninety days in each year. The ninety days shall be consecutive unless otherwise provided by law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A special session called by the governor is limited to 30 days",
+		"citation": "Md. Const. art. III, § 15(1)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c3&section=15&enactments=false",
+		"quote": "When the General Assembly is convened by Proclamation of the Governor, the session shall not continue longer than thirty days",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "During the session the governor has six days, Sundays excepted, to act",
+		"citation": "Md. Const. art. II, § 17(b)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c2&section=17&enactments=false",
+		"quote": "is not returned by the Governor with objections within six days (Sundays excepted), the Bill shall be a law in like manner as if the Governor signed it",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Bills presented in the last six days or after adjournment become law unless vetoed within 30 days of presentment",
+		"citation": "Md. Const. art. II, § 17(c)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c2&section=17&enactments=false",
+		"quote": "unless it is vetoed by the Governor within 30 days after its presentment",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Non-emergency laws take effect no earlier than 1 June after the session",
+		"citation": "Md. Const. art. XVI, § 2",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c16&section=2&enactments=false",
+		"quote": "No law enacted by the General Assembly shall take effect until the first day of June next after the session at which it may be passed",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State and county officers are elected in November every four years, counting from 1926 (the governor’s cycle)",
+		"citation": "Md. Const. art. XVII, § 2",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c17&section=2&enactments=false",
+		"quote": "elections by qualified voters for State and county officers shall be held on the Tuesday next after the first Monday of November",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Elected state and county officers serve four-year terms, except certain judges",
+		"citation": "Md. Const. art. XVII, § 3",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c17&section=3&enactments=false",
+		"quote": "shall hold office for terms of four years, and until their successors shall qualify",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The quadrennial rule does not apply to elected school boards or Cecil County’s commissioners",
+		"citation": "Md. Const. art. XVII, § 7",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c17&section=7&enactments=false",
+		"quote": "members of any elective local board of education; or (2) the Board of County Commissioners for Cecil County",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A tie for the most votes means a new election ordered by the governor; the top vote-getter wins",
+		"citation": "Md. Const. art. XVII, § 8",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c17&section=8&enactments=false",
+		"quote": "any two or more candidates shall have the highest and an equal number of votes, a new election shall be ordered by the Governor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The state canvassers declare elected the candidates with the greatest number of votes",
+		"citation": "Md. Code, Elec. Law § 11-503(a)(2)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gel&section=11-503&enactments=false",
+		"quote": "by the greatest number of votes, have been elected to each office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The gubernatorial-year primary is the fourth Tuesday in June; the presidential-year primary is the fourth Tuesday in April",
+		"citation": "Md. Code, Elec. Law § 8-201(a)(2)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gel&section=8-201&enactments=false",
+		"quote": "in the year in which the Governor is elected, on the fourth Tuesday in June",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Presidential-year primary date",
+		"citation": "Md. Code, Elec. Law § 8-201(a)(2)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gel&section=8-201&enactments=false",
+		"quote": "in the year in which the President of the United States is elected, on the fourth Tuesday in April",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Baltimore City has its municipal primary in presidential years",
+		"citation": "Md. Code, Elec. Law § 8-201(b)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gel&section=8-201&enactments=false",
+		"quote": "In Baltimore City, there shall be a primary election for municipal offices on the fourth Tuesday in April in the year in which the President of the United States is elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Principal parties must nominate by primary",
+		"citation": "Md. Code, Elec. Law § 8-202(a)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gel&section=8-202&enactments=false",
+		"quote": "shall use the primary election to: (i) nominate its candidates for public office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party may choose to open its primary to unaffiliated voters by notifying the State Board in advance",
+		"citation": "Md. Code, Elec. Law § 8-202(c)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gel&section=8-202&enactments=false",
+		"quote": "If a political party chooses to permit voters not affiliated with the party to vote in the party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board members are elected on a nonpartisan basis, and every registered voter may vote in the school board primary",
+		"citation": "Md. Code, Elec. Law § 8-802(a)(1)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gel&section=8-802&enactments=false",
+		"quote": "Members of boards of education shall be elected on a nonpartisan basis",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any registered voter may vote in school board primary contests",
+		"citation": "Md. Code, Elec. Law § 8-802(a)(1)(ii)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gel&section=8-802&enactments=false",
+		"quote": "any registered voter of the county, regardless of party affiliation or lack of party affiliation, is eligible to vote in those contests for nomination",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The school board primary advances twice as many candidates as seats",
+		"citation": "Md. Code, Elec. Law § 8-804(c)(1)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gel&section=8-804&enactments=false",
+		"quote": "The candidates, equal in number to twice the number of offices to be filled, who receive the largest number of votes in the primary election shall be the nominated candidates",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Twenty counties elect their whole school board",
+		"citation": "Md. Code, Educ. § 3-114(a)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=ged&section=3-114&enactments=false",
+		"quote": "In the following counties, the members of the county board shall be elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Baltimore City, Baltimore County, Caroline and Harford boards are part elected and part appointed",
+		"citation": "Md. Code, Educ. § 3-114(c)-(e)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=ged&section=3-114&enactments=false",
+		"quote": "In Harford County, in accordance with Subtitle 6A of this title, the members of the county board shall be a combination of members who are elected and appointed",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Baltimore City school board combination",
+		"citation": "Md. Code, Educ. § 3-114(b)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=ged&section=3-114&enactments=false",
+		"quote": "the members of the Baltimore City Board of School Commissioners shall be a combination of members who are elected and appointed",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate not affiliated with any party may be nominated by petition (not for nonpartisan school boards)",
+		"citation": "Md. Code, Elec. Law § 5-703(a)-(b)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gel&section=5-703&enactments=false",
+		"quote": "A candidate for a public office may be nominated by petition under this subtitle if the candidate is not affiliated with any political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The petition route does not apply to nonpartisan school boards",
+		"citation": "Md. Code, Elec. Law § 5-703(a)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gel&section=5-703&enactments=false",
+		"quote": "Except for a candidate for a nonpartisan county board of education",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State election law does not cover municipal elections other than Baltimore City",
+		"citation": "Md. Code, Elec. Law § 1-101",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gel&section=1-101&enactments=false",
+		"quote": "does not include, unless otherwise specifically provided in this article, a municipal election other than in Baltimore City",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties are charter, code or commission counties",
+		"citation": "Md. Code, Local Gov’t § 1-101(b)-(d)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=glg&section=1-101&enactments=false",
+		"quote": "means a county that has not adopted charter or code home rule",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter county has adopted charter home rule under Article XI-A",
+		"citation": "Md. Code, Local Gov’t § 1-101(b)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=glg&section=1-101&enactments=false",
+		"quote": "means a county that has adopted charter home rule under Article",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Governing body: county council (and executive if any) in charter counties; county commissioners in code and commission counties",
+		"citation": "Md. Code, Local Gov’t § 1-101(f)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=glg&section=1-101&enactments=false",
+		"quote": "for a code county, the county commissioners; (4) for a commission county, the county commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every charter provides an elected county council; an elected county executive is optional",
+		"citation": "Md. Const. art. XI-A, § 3",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c11a&section=3&enactments=false",
+		"quote": "Every charter so formed shall provide for an elective legislative body in which shall be vested the law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Charter council name and optional executive",
+		"citation": "Md. Const. art. XI-A, § 3",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c11a&section=3&enactments=false",
+		"quote": "in any county shall be known as the County Council of the County",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county council cannot legislate for municipalities on matters their charters cover",
+		"citation": "Md. Const. art. XI-A, § 3",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c11a&section=3&enactments=false",
+		"quote": "nothing herein contained shall be construed to authorize or empower the County Council of any County in this State to enact laws or regulations for any incorporated town, village, or municipality",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commission counties elect commissioners by district, at large or both, as the General Assembly provides",
+		"citation": "Md. Const. art. VII, § 1",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c7&section=1&enactments=false",
+		"quote": "may be elected by the voters of commissioner districts established therein, or by the voters of the entire county, or by a combination of these methods of election, as provided by the General Assembly by law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A code county can enact its own public local laws",
+		"citation": "Md. Const. art. XI-F, § 3",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c11f&section=3&enactments=false",
+		"quote": "a code county may enact, amend, or repeal a public local law of that county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter board is elected after a petition or demand, to draft a county charter",
+		"citation": "Md. Const. art. XI-A, § 1",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c11a&section=1&enactments=false",
+		"quote": "for the election of a charter board of eleven registered voters of said City or five registered voters in any such Counties",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county and Baltimore City elects a sheriff for four years",
+		"citation": "Md. Const. art. IV, § 44",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c4&section=44&enactments=false",
+		"quote": "There shall be elected in each county and in Baltimore City one person",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county and Baltimore City elects a state’s attorney for four years",
+		"citation": "Md. Const. art. V, § 7",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c5&section=7&enactments=false",
+		"quote": "who shall be elected by the voters thereof, respectively, and shall hold his office for four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county and Baltimore City elects a circuit court clerk by plurality for four years",
+		"citation": "Md. Const. art. IV, § 25",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c4&section=25&enactments=false",
+		"quote": "There shall be a Clerk of the Circuit Court for each County and Baltimore City, who shall be elected by a plurality of the qualified voters",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county and Baltimore City elects a register of wills for four years",
+		"citation": "Md. Const. art. IV, § 41",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c4&section=41&enactments=false",
+		"quote": "There shall be a Register of Wills in each county of the State, and the City of Baltimore, to be elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every county except Howard, Montgomery and Harford elects three orphans’ court judges",
+		"citation": "Md. Const. art. IV, § 40(a)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c4&section=40&enactments=false",
+		"quote": "The qualified voters of the several Counties, except Howard County, Montgomery County, and Harford County, shall elect three Judges of the Orphans",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The General Assembly may not pass local laws for municipalities; it acts on them only by general law",
+		"citation": "Md. Const. art. XI-E, § 1",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c11e&section=1&enactments=false",
+		"quote": "the General Assembly shall not pass any law relating to the incorporation, organization, government, or affairs of those municipal corporations",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities may adopt and amend their own charters",
+		"citation": "Md. Const. art. XI-E, § 3",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c11e&section=3&enactments=false",
+		"quote": "to adopt a new charter, and to amend or repeal any charter adopted under the provisions of this Article",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter change may be proposed by the legislative body or by petition of 5% of voters",
+		"citation": "Md. Const. art. XI-E, § 4",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=c11e&section=4&enactments=false",
+		"quote": "shall be proposed either by a resolution of the legislative body of any such municipal corporation or by a petition",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "There is one class of municipality in Maryland",
+		"citation": "Md. Code, Local Gov’t § 4-102",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=glg&section=4-102&enactments=false",
+		"quote": "There is one class of municipalities in the State, and every municipality is a member of that class",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal voters are those authorized by the municipal charter",
+		"citation": "Md. Code, Local Gov’t § 4-101(c)",
+		"url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=glg&section=4-101&enactments=false",
+		"quote": "means an individual authorized under a municipal charter to vote in elections in the municipality",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

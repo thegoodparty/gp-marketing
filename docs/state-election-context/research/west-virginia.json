@@ -1,0 +1,490 @@
+[
+	{
+		"claim": "Regular sessions begin the second Wednesday of January each year",
+		"citation": "W. Va. Const. art. VI, § 18",
+		"url": "https://www.wvlegislature.gov/WVCODE/WV_CON.cfm",
+		"quote": "Regular sessions of the Legislature shall commence on the second Wednesday of January of each year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In 1973 and every fourth year after, the Legislature organizes in January and recesses to the second Wednesday of February",
+		"citation": "W. Va. Const. art. VI, § 18",
+		"url": "https://www.wvlegislature.gov/WVCODE/WV_CON.cfm",
+		"quote": "When all of these matters have been completed in the year one thousand nine hundred seventy-three and every fourth year thereafter, the Legislature shall adjourn until the second Wednesday of February following.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Sessions are limited to sixty calendar days unless extended by two-thirds",
+		"citation": "W. Va. Const. art. VI, § 22",
+		"url": "https://www.wvlegislature.gov/WVCODE/WV_CON.cfm",
+		"quote": "the regular session held in all other years shall not exceed sixty calendar days computed from and including the second Wednesday of January",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The governor must convene the Legislature on written application of three fifths of each house",
+		"citation": "W. Va. Const. art. VI, § 19",
+		"url": "https://www.wvlegislature.gov/WVCODE/WV_CON.cfm",
+		"quote": "It shall be his duty to convene it, on application in writing, of three fifths of the members elected to each house.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A bill not returned within five days (Sundays excepted) becomes law",
+		"citation": "W. Va. Const. art. VII, § 14",
+		"url": "https://www.wvlegislature.gov/WVCODE/WV_CON.cfm",
+		"quote": "Any bill which shall not be returned by the governor within five days, Sundays excepted, after it shall have been presented to him shall be a law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "After adjournment sine die the governor has fifteen days (Sundays excepted) to file objections",
+		"citation": "W. Va. Const. art. VII, § 14",
+		"url": "https://www.wvlegislature.gov/WVCODE/WV_CON.cfm",
+		"quote": "within fifteen days, Sundays excepted, after such adjournment, or become a law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Acts take effect ninety days after passage unless two-thirds of each house direct otherwise",
+		"citation": "W. Va. Const. art. VI, § 30",
+		"url": "https://www.wvlegislature.gov/WVCODE/WV_CON.cfm",
+		"quote": "shall take effect until the expiration of ninety days after its passage",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "General elections are on the Tuesday after the first Monday in November of each even year",
+		"citation": "W. Va. Code § 3-1-31(a)",
+		"url": "https://code.wvlegislature.gov/3-1-31/",
+		"quote": "General elections shall be held in the several election precincts of the state on the Tuesday next after the first Monday in November of each even year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "All municipal elections must be held with a statewide primary or general election",
+		"citation": "W. Va. Code § 3-1-31(a)",
+		"url": "https://code.wvlegislature.gov/3-1-31/",
+		"quote": "all local municipal elections shall be held concurrently with a regularly scheduled statewide primary or general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities negotiate an agreement with the county commission to move their elections",
+		"citation": "W. Va. Code § 3-1-31(a)",
+		"url": "https://code.wvlegislature.gov/3-1-31/",
+		"quote": "a municipality shall negotiate an agreement with the county commission to establish the election date",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Regular municipal elections follow the § 3-1-31 timing",
+		"citation": "W. Va. Code § 8-5-5(a)",
+		"url": "https://code.wvlegislature.gov/8-5-5/",
+		"quote": "the regular election of officers shall be held on the same day and in the same manner as prescribed by §3-1-31 of this code",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Charters with conflicting election days must conform by 1 July 2032",
+		"citation": "W. Va. Code § 8-5-5(b)",
+		"url": "https://code.wvlegislature.gov/8-5-5/",
+		"quote": "shall amend said charter or otherwise revise its governing election provisions to make the requirements set forth in §3-1-31 of this code effective by July 1, 2032",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities may stagger or change officer terms by ordinance",
+		"citation": "W. Va. Code § 8-5-5(e)",
+		"url": "https://code.wvlegislature.gov/8-5-5/",
+		"quote": "Municipalities may stagger and/or change the terms of elected municipal officers.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Primary elections are on the second Tuesday in May of even years",
+		"citation": "W. Va. Code § 3-5-1",
+		"url": "https://code.wvlegislature.gov/3-5-1/",
+		"quote": "on the second Tuesday in May 1986 and in each second year thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County board of education members are elected at the primary, on a nonpartisan ballot",
+		"citation": "W. Va. Code § 3-5-6(a)",
+		"url": "https://code.wvlegislature.gov/3-5-6/",
+		"quote": "An election for the purpose of electing members of the county board of education shall be held on the same date as the primary elections, as provided by law, but upon a nonpartisan ballot printed for the purpose.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No more than two school board members may come from the same magisterial district",
+		"citation": "W. Va. Code § 3-5-6(b)",
+		"url": "https://code.wvlegislature.gov/3-5-6/",
+		"quote": "No more than two members may be elected or serve from the same magisterial district.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board full terms are four years",
+		"citation": "W. Va. Code § 3-5-6(b)",
+		"url": "https://code.wvlegislature.gov/3-5-6/",
+		"quote": "declared elected for full terms of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county board of education has five members elected without party",
+		"citation": "W. Va. Code § 18-5-1",
+		"url": "https://code.wvlegislature.gov/18-5-1/",
+		"quote": "which shall be composed of five members, nominated and elected by the voters of the respective county without reference to political party affiliation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Magistrates and circuit judges are elected at the primary on a nonpartisan ballot",
+		"citation": "W. Va. Code § 3-1-17(a)",
+		"url": "https://code.wvlegislature.gov/3-1-17/",
+		"quote": "an election for the purpose of electing magistrates, shall be upon a nonpartisan ballot printed for the purpose",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Magistrates are elected by division at the primary on a nonpartisan ballot",
+		"citation": "W. Va. Code § 3-5-6d(a)",
+		"url": "https://code.wvlegislature.gov/3-5-6d/",
+		"quote": "An election for the purpose of electing a magistrate or magistrates by division shall be held on the same date as the primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Sheriff, prosecuting attorney, surveyor and assessor are elected every four years at the general election",
+		"citation": "W. Va. Code § 3-1-17(b)",
+		"url": "https://code.wvlegislature.gov/3-1-17/",
+		"quote": "a sheriff, prosecuting attorney, surveyor of lands, and the number of assessors prescribed by law for the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county commissioner is elected at every even-year general election",
+		"citation": "W. Va. Code § 3-1-17(b)",
+		"url": "https://code.wvlegislature.gov/3-1-17/",
+		"quote": "every second year thereafter, a commissioner of the county commission for each county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County clerk and circuit clerk are elected every six years",
+		"citation": "W. Va. Code § 3-1-17(b)",
+		"url": "https://code.wvlegislature.gov/3-1-17/",
+		"quote": "every sixth year thereafter, a clerk of the county commission and a clerk of the circuit court for each county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party candidates for county offices are nominated at the primary",
+		"citation": "W. Va. Code § 3-5-4(a)",
+		"url": "https://code.wvlegislature.gov/3-5-4/",
+		"quote": "and of each county in the state shall be nominated by the voters of the different political parties",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A plurality is enough for nomination in a primary",
+		"citation": "W. Va. Code § 3-5-4(b)",
+		"url": "https://code.wvlegislature.gov/3-5-4/",
+		"quote": "In primary elections a plurality of the votes cast shall be sufficient for the nomination of candidates for office.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A primary voter receives their party's ballot plus nonpartisan ballots",
+		"citation": "W. Va. Code § 3-1-35",
+		"url": "https://code.wvlegislature.gov/3-1-35/",
+		"quote": "In primary elections the ballot of the voter's political party at that election in that precinct shall be furnished to the voter together with separate ballots, if any, on any nonpartisan candidates",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under the statute, a voter registered independent receives only nonpartisan ballots and questions in a primary",
+		"citation": "W. Va. Code § 3-1-35",
+		"url": "https://code.wvlegislature.gov/3-1-35/",
+		"quote": "he shall not, in a primary election, be given or entitled to vote any party ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A losing primary candidate may not become another party's candidate for the same office",
+		"citation": "W. Va. Code § 3-5-4(d)",
+		"url": "https://code.wvlegislature.gov/3-5-4/",
+		"quote": "may not, after failing to win the nomination of that political party at a primary election, become a candidate of any other recognized political party for the same political office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality may let municipal parties that are not state parties take part in its primary",
+		"citation": "W. Va. Code § 3-1-8",
+		"url": "https://code.wvlegislature.gov/3-1-8/",
+		"quote": "may participate in the primary elections of any such municipality",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Groups with no party organization nominate by certificate, for candidates not already in the primary",
+		"citation": "W. Va. Code § 3-5-23(a)",
+		"url": "https://code.wvlegislature.gov/3-5-23/",
+		"quote": "Groups of citizens having no party organization may nominate candidates who are not already candidates in the primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Certificate signers must be registered voters residing in the political division of the office",
+		"citation": "W. Va. Code § 3-5-23(c)",
+		"url": "https://code.wvlegislature.gov/3-5-23/",
+		"quote": "who must be residents within the county, district, or other political division represented by the office sought",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The certificate filing rules do not apply to nonpartisan elections",
+		"citation": "W. Va. Code § 3-5-24(e)",
+		"url": "https://code.wvlegislature.gov/3-5-24/",
+		"quote": "This section is inapplicable to nonpartisan elections.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county has a county commission of three commissioners, unless reformed",
+		"citation": "W. Va. Const. art. IX, § 9",
+		"url": "https://www.wvlegislature.gov/WVCODE/WV_CON.cfm",
+		"quote": "there shall be in each county of the state a county commission, composed of three commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commissioners are elected countywide for six-year staggered terms, one every two years, no two from the same magisterial district",
+		"citation": "W. Va. Const. art. IX, § 10",
+		"url": "https://www.wvlegislature.gov/WVCODE/WV_CON.cfm",
+		"quote": "so that one shall be elected every two years; but no two of said commissioners shall be elected from the same magisterial district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commissioners are elected by the voters of the county for six years",
+		"citation": "W. Va. Const. art. IX, § 10",
+		"url": "https://www.wvlegislature.gov/WVCODE/WV_CON.cfm",
+		"quote": "The commissioners shall be elected by the voters of the county, and hold their office for a term of six years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties elect a surveyor, prosecuting attorney, sheriff and one or two assessors for four years",
+		"citation": "W. Va. Const. art. IX, § 1",
+		"url": "https://www.wvlegislature.gov/WVCODE/WV_CON.cfm",
+		"quote": "The voters of each county shall elect a surveyor of lands, a prosecuting attorney, a sheriff, and one and not more than two assessors, who shall hold their respective offices for the term of four years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A sheriff may not serve more than two consecutive terms",
+		"citation": "W. Va. Const. art. IX, § 3",
+		"url": "https://www.wvlegislature.gov/WVCODE/WV_CON.cfm",
+		"quote": "shall be ineligible for the office of sheriff during any part of the term immediately following the second of the two consecutive terms",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a clerk of the county commission for six years",
+		"citation": "W. Va. Const. art. IX, § 12",
+		"url": "https://www.wvlegislature.gov/WVCODE/WV_CON.cfm",
+		"quote": "The voters of each county shall elect a clerk of the county commission, whose term of office shall be six years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Legislature may reform a county commission on a county's application and voter approval",
+		"citation": "W. Va. Const. art. IX, § 13",
+		"url": "https://www.wvlegislature.gov/WVCODE/WV_CON.cfm",
+		"quote": "with the assent of a majority of the voters of such county voting at an election, create another tribunal",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county council created since 2008 as an alternative has four or more members",
+		"citation": "W. Va. Code § 7-1-1(c)",
+		"url": "https://code.wvlegislature.gov/7-1-1/",
+		"quote": "shall consist of four or more members, a majority of whom shall constitute a quorum for the transaction of business",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county commission has three commissioners",
+		"citation": "W. Va. Code § 7-1-1(b)",
+		"url": "https://code.wvlegislature.gov/7-1-1/",
+		"quote": "A county commission shall consist of three commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A commission candidate must live in the magisterial district they seek by the filing deadline",
+		"citation": "W. Va. Code § 7-1-1b(b)",
+		"url": "https://code.wvlegislature.gov/7-1-1b/",
+		"quote": "A candidate for the office of county commissioner shall be a resident from the magisterial district for which he or she is seeking election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities are in four classes by population",
+		"citation": "W. Va. Code § 8-1-3",
+		"url": "https://code.wvlegislature.gov/8-1-3/",
+		"quote": "all municipal corporations are hereby classified by population into four classes",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Class I is over 50,000",
+		"citation": "W. Va. Code § 8-1-3",
+		"url": "https://code.wvlegislature.gov/8-1-3/",
+		"quote": "Every municipal corporation with a population in excess of fifty thousand shall be a Class I city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Class II is over 10,000 to 50,000",
+		"citation": "W. Va. Code § 8-1-3",
+		"url": "https://code.wvlegislature.gov/8-1-3/",
+		"quote": "Every municipal corporation with a population in excess of ten thousand but not in excess of fifty thousand shall be a Class II city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Class III is over 2,000 to 10,000",
+		"citation": "W. Va. Code § 8-1-3",
+		"url": "https://code.wvlegislature.gov/8-1-3/",
+		"quote": "Every municipal corporation with a population in excess of two thousand but not in excess of ten thousand shall be a Class III city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Class IV, 2,000 or fewer, is a town or village",
+		"citation": "W. Va. Code § 8-1-3",
+		"url": "https://code.wvlegislature.gov/8-1-3/",
+		"quote": "Every municipal corporation with a population of two thousand or less shall be a Class IV town or village.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Class changes automatically with the census",
+		"citation": "W. Va. Code § 8-1-3",
+		"url": "https://code.wvlegislature.gov/8-1-3/",
+		"quote": "Transition from one to another class shall occur automatically when the requisite population qualification has been met",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities over 2,000 may frame and adopt their own charters",
+		"citation": "W. Va. Const. art. VI, § 39a",
+		"url": "https://www.wvlegislature.gov/WVCODE/WV_CON.cfm",
+		"quote": "the electors of each municipal corporation, wherein the population exceeds two thousand, shall have power and authority to frame, adopt and amend the charter of such corporation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Charters and ordinances are void if they conflict with general law",
+		"citation": "W. Va. Const. art. VI, § 39a",
+		"url": "https://www.wvlegislature.gov/WVCODE/WV_CON.cfm",
+		"quote": "shall be invalid and void if inconsistent or in conflict with this constitution or the general laws of the state",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city charter must provide how candidates file and are nominated and how primaries and regular elections run",
+		"citation": "W. Va. Code § 8-5-6",
+		"url": "https://code.wvlegislature.gov/8-5-6/",
+		"quote": "shall provide a method and time for the filing of certificates of candidacy, nominating candidates, conducting primary and regular municipal elections",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "General election law applies to municipal elections except as a charter provides",
+		"citation": "W. Va. Code § 8-5-6",
+		"url": "https://code.wvlegislature.gov/8-5-6/",
+		"quote": "Except as otherwise provided in the charter of any municipality, the provisions of general law",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Unless the charter says otherwise, a municipality elects a mayor, recorder and council",
+		"citation": "W. Va. Code § 8-5-7(a)",
+		"url": "https://code.wvlegislature.gov/8-5-7/",
+		"quote": "Unless otherwise provided in the charter of a municipality, there shall be elected a mayor, a recorder and council members, who together shall form the governing body of the municipality.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Without wards there are at least five council members",
+		"citation": "W. Va. Code § 8-5-7(b)",
+		"url": "https://code.wvlegislature.gov/8-5-7/",
+		"quote": "When a municipality has not been divided into wards or election districts, there shall be at least five council members",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Towns and villages may move to four-year terms by vote",
+		"citation": "W. Va. Code § 8-5-5(d)",
+		"url": "https://code.wvlegislature.gov/8-5-5/",
+		"quote": "Officers of a town or village may be elected for a four-year term upon approval by a majority of the legal votes cast at a regular municipal election of a proposition calling for four-year terms.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Municipal Home Rule Program is permanent",
+		"citation": "W. Va. Code § 8-1-5a(b)",
+		"url": "https://code.wvlegislature.gov/8-1-5a/",
+		"quote": "The Municipal Home Rule Pilot Program is established as a permanent program and shall be identified as the Municipal Home Rule Program.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State election offense and administration articles apply to every municipal election, even under home rule charters",
+		"citation": "W. Va. Code § 3-1-2a(a)",
+		"url": "https://code.wvlegislature.gov/3-1-2a/",
+		"quote": "Notwithstanding other provisions of this code or of any special legislative or home rule city charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Magistrate divisions certify the candidate with the most votes",
+		"citation": "W. Va. Code § 3-5-6d(b)",
+		"url": "https://code.wvlegislature.gov/3-5-6d/",
+		"quote": "the board of canvassers shall declare and certify the election of the eligible candidate receiving the highest numbers of votes cast within a numbered division",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Circuit judge races with no candidate over 30 percent go to a November runoff",
+		"citation": "W. Va. Code § 3-1-17(d)",
+		"url": "https://code.wvlegislature.gov/3-1-17/",
+		"quote": "there shall be a runoff election at the subsequent general election between the two candidates who received the highest and next-highest number of votes cast in that division",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board elections certify the top vote-getters for full terms",
+		"citation": "W. Va. Code § 3-5-6(c)",
+		"url": "https://code.wvlegislature.gov/3-5-6/",
+		"quote": "Declare and certify the election of the required number of eligible candidates receiving the highest numbers of votes to fill any full terms",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Section 3-1-31 lists 2025 SB 50 in its bill history",
+		"citation": "W. Va. Code § 3-1-31 (bill history)",
+		"url": "https://code.wvlegislature.gov/3-1-31/",
+		"quote": "2025 Regular Session SB50",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

@@ -1,0 +1,914 @@
+[
+	{
+		"claim": "The General Assembly meets in regular session on the second Monday in January of each odd-numbered year",
+		"citation": "Ark. Const. art. 5, § 5(b)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WW2-5J30-R03N-M14J-00008-00&pdcontentcomponentid=234170",
+		"quote": "The General Assembly shall meet in regular session on the second Monday in January of each odd-numbered year to consider any bill or resolution.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A fiscal session limited to appropriation bills meets on the second Monday in February of each even-numbered year",
+		"citation": "Ark. Const. art. 5, § 5(c)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WW2-5J30-R03N-M14J-00008-00&pdcontentcomponentid=234170",
+		"quote": "the General Assembly shall meet in fiscal session on the second Monday in February of each even-numbered year to consider only appropriation bills",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A regular session lasts sixty days unless extended by two-thirds of each house",
+		"citation": "Ark. Const. art. 5, § 17(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WW2-5J30-R03P-2150-00008-00&pdcontentcomponentid=234170",
+		"quote": "A regular biennial session shall not exceed sixty (60) calendar days in duration",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "During the session the governor has five days, Sundays excepted, to act on a bill",
+		"citation": "Ark. Const. art. 6, § 15",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WW2-5J30-R03K-D167-00008-00&pdcontentcomponentid=234170",
+		"quote": "If any bill shall not be returned by the Governor within five days, Sundays excepted, after it shall have been presented to him, the same shall be a law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "For bills whose return is prevented by adjournment, the governor has twenty days after adjournment to veto",
+		"citation": "Ark. Const. art. 6, § 15",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WW2-5J30-R03K-D167-00008-00&pdcontentcomponentid=234170",
+		"quote": "within twenty days after such adjournment",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A referendum petition against an act may be filed up to ninety days after the final adjournment of the session, so acts without an emergency clause usually wait out that period",
+		"citation": "Ark. Const. art. 5, § 1 (Amendment 7)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WW2-5J30-R03N-014D-00008-00&pdcontentcomponentid=234170",
+		"quote": "not later than ninety days after the final adjournment of the session at which such Act was passed",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters of each municipality and county hold initiative and referendum powers over local legislation",
+		"citation": "Ark. Const. art. 5, § 1 (Amendment 7)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WW2-5J30-R03N-014D-00008-00&pdcontentcomponentid=234170",
+		"quote": "The initiative and referendum powers of the people are hereby further reserved to the legal voters of each municipality and county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is held on the Tuesday after the first Monday in November of every even-numbered year",
+		"citation": "A.C.A. § 7-5-102",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-CPJ0-R03K-X2D1-00008-00&pdcontentcomponentid=234170",
+		"quote": "On the Tuesday next after the first Monday in November in every even-numbered year, there shall be held an election in each precinct and ward in this state",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County officers are elected at each regular gubernatorial election for four-year terms",
+		"citation": "A.C.A. § 14-14-1302(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-NBH0-R03N-254X-00008-00&pdcontentcomponentid=234170",
+		"quote": "at the time of each regular gubernatorial election, shall elect until otherwise provided by law all county officers for the term of four (4) years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Quorum court district and township officers are elected for two-year terms when members of the General Assembly are elected",
+		"citation": "A.C.A. § 14-14-1302(b)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-NBH0-R03N-254X-00008-00&pdcontentcomponentid=234170",
+		"quote": "shall elect each district and township officer for the term of two (2) years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal officials are elected at the November general election",
+		"citation": "A.C.A. § 14-42-201(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D0Y7-00008-00&pdcontentcomponentid=234170",
+		"quote": "The general election for the election of municipal officials in all cities and incorporated towns shall be held on the Tuesday following the first Monday in November.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Odd-year municipal elections in mayor-council cities of 50,000 or more are abolished",
+		"citation": "A.C.A. § 14-43-303(c)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A5W42-YK70-R03K-K0ND-00008-00&pdcontentcomponentid=234170",
+		"quote": "All odd-year elections for municipal officials in the cities of the first class that have a population of fifty thousand (50,000) or more persons",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Mayor-council cities of 50,000 or more elect a mayor, city clerk and ward council members in the 1960 cycle (presidential years), four-year terms",
+		"citation": "A.C.A. § 14-43-303(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A5W42-YK70-R03K-K0ND-00008-00&pdcontentcomponentid=234170",
+		"quote": "In the general election in the year 1960, and every four (4) years thereafter, cities of the first class that have a population of fifty thousand (50,000) persons or more",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Mayors of first-class mayor-council cities under 50,000 are elected for four years in the 1970 cycle",
+		"citation": "A.C.A. § 14-43-305(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D10R-00008-00&pdcontentcomponentid=234170",
+		"quote": "on the Tuesday following the first Monday in November of 1970 and every four (4) years thereafter, shall elect a mayor for four (4) years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Mayors of second-class cities are elected for four years in the 1966 cycle",
+		"citation": "A.C.A. § 14-44-105",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D12H-00008-00&pdcontentcomponentid=234170",
+		"quote": "The qualified voters of cities of the second class shall elect a mayor for a term of four (4) years on the Tuesday following the first Monday in November 1966 and every four (4) years thereafter.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Mayors of incorporated towns are elected for four years in the 1966 cycle",
+		"citation": "A.C.A. § 14-45-104",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D134-00008-00&pdcontentcomponentid=234170",
+		"quote": "The qualified electors in incorporated towns shall elect a mayor for a term of four (4) years on the Tuesday following the first Monday in November 1966 and every four (4) years thereafter.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board members are elected at the preferential primary election",
+		"citation": "A.C.A. § 6-14-111(a)(2)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FMS-WXX0-R03M-K091-00008-00&pdcontentcomponentid=234170",
+		"quote": "A district school board member shall be elected at the preferential primary election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The annual school election is held on the preferential primary date in even years, and in March in odd years",
+		"citation": "A.C.A. § 6-14-102(a)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FN2-6560-R03M-P20H-00008-00&pdcontentcomponentid=234170",
+		"quote": "In even-numbered years, on the date of the preferential primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Parties nominate through a preferential primary and, if required, a general primary (runoff)",
+		"citation": "A.C.A. § 7-7-202(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-CPJ0-R03K-X2KK-00008-00&pdcontentcomponentid=234170",
+		"quote": "there shall be held a preferential primary election and a general primary election, if required",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The preferential primary is the first Tuesday after the first Monday in March",
+		"citation": "A.C.A. § 7-7-203(b)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FMT-4DG0-R03N-V4CW-00008-00&pdcontentcomponentid=234170",
+		"quote": "The preferential primary election shall be held on the first Tuesday after the first Monday in March.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general primary (runoff) is four weeks after the preferential primary",
+		"citation": "A.C.A. § 7-7-203(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FMT-4DG0-R03N-V4CW-00008-00&pdcontentcomponentid=234170",
+		"quote": "The general primary election shall be held on the Tuesday four (4) weeks following the preferential primary election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party nominee needs a majority of the primary vote, or no opponent",
+		"citation": "A.C.A. § 7-7-102(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-CPJ0-R03K-X2KD-00008-00&pdcontentcomponentid=234170",
+		"quote": "shall be certified as having received a majority of the votes cast for the office, or as an unopposed candidate, at a primary election held by the political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The voter names the party primary at the polls and the choice is marked on the precinct list",
+		"citation": "A.C.A. § 7-7-308(b)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-CPJ0-R03K-X2M0-00008-00&pdcontentcomponentid=234170",
+		"quote": "the party primary or other election in which the voter chooses to vote",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter in one party's preferential primary may not vote in another party's general primary",
+		"citation": "A.C.A. § 7-1-103(a)(18)(B)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A5VTB-N4X0-R03M-C250-00008-00&pdcontentcomponentid=234170",
+		"quote": "No person shall cast a ballot or vote in the preferential primary of one (1) political party and then cast a ballot or vote in the general primary of another political party in this state",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Judges, prosecuting attorneys and school board members are nonpartisan offices",
+		"citation": "A.C.A. § 7-10-102(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FNW-DR40-R03K-W1BG-00008-00&pdcontentcomponentid=234170",
+		"quote": "The offices of Justice of the Supreme Court, Judge of the Court of Appeals, circuit judge, district judge, prosecuting attorney, and member of a school district board of directors are nonpartisan offices.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan general elections are held on the preferential primary date",
+		"citation": "A.C.A. § 7-10-102(b)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FNW-DR40-R03K-W1BG-00008-00&pdcontentcomponentid=234170",
+		"quote": "The general elections for nonpartisan offices shall be held on the same date and at the same times and places as provided by law for preferential primary elections.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter does not have to take a party ballot to vote in nonpartisan races",
+		"citation": "A.C.A. § 7-10-102(b)(3)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FNW-DR40-R03K-W1BG-00008-00&pdcontentcomponentid=234170",
+		"quote": "A voter shall not be required to vote in a political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan races need a majority, with a runoff at the November general election",
+		"citation": "A.C.A. § 7-10-102(c)(2)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FNW-DR40-R03K-W1BG-00008-00&pdcontentcomponentid=234170",
+		"quote": "shall be certified to a runoff election, which shall be held on the same date and at the same times and places as the November general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Circuit and district judges are elected on a nonpartisan basis by majority vote",
+		"citation": "Ark. Const. amend. 80, § 17",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4MP0-04P0-R03N-03X0-00008-00&pdcontentcomponentid=234170",
+		"quote": "Circuit Judges and District Judges shall be elected on a nonpartisan basis by a majority of qualified electors voting for such office within the circuit or district which they serve.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Supreme Court justices and Court of Appeals judges are elected on a nonpartisan basis by majority vote",
+		"citation": "Ark. Const. amend. 80, § 18",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4MP0-04P0-R03N-03X1-00008-00&pdcontentcomponentid=234170",
+		"quote": "Supreme Court Justices and Court of Appeals Judges shall be elected on a nonpartisan basis by a majority of qualified electors voting for such office.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party nominees for county and township offices are chosen in party primaries",
+		"citation": "A.C.A. § 7-7-102(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-CPJ0-R03K-X2KD-00008-00&pdcontentcomponentid=234170",
+		"quote": "nominees of any political party for United States Senate, United States House of Representatives, or state, district, county, township, or applicable municipal office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A mayor-council city or town council may ask the county parties to hold party primaries for municipal offices",
+		"citation": "A.C.A. § 14-42-206(a)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FGJ-CTG0-R03K-V0YB-00008-00&pdcontentcomponentid=234170",
+		"quote": "may request the county party committees of recognized political parties under the laws of the state to conduct party primaries for municipal offices",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Otherwise candidates in mayor-council cities and towns qualify by petition as independents",
+		"citation": "A.C.A. § 14-42-206(b)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FGJ-CTG0-R03K-V0YB-00008-00&pdcontentcomponentid=234170",
+		"quote": "Any person desiring to become an independent candidate for municipal office in cities and towns with the mayor-council form of government shall file his or her petition",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate defeated in a party primary cannot file as an independent for that office",
+		"citation": "A.C.A. § 14-42-206(b)(7)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FGJ-CTG0-R03K-V0YB-00008-00&pdcontentcomponentid=234170",
+		"quote": "A person who has been defeated in a party primary shall not file as an independent candidate in the general election for the office for which he or she was defeated in the party primary.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Petitions for ward council candidates may be signed only by voters of the ward",
+		"citation": "A.C.A. § 14-42-206(b)(2)(B)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FGJ-CTG0-R03K-V0YB-00008-00&pdcontentcomponentid=234170",
+		"quote": "the nominating petitions shall be signed only by qualified electors of the ward",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City manager elections are nonpartisan with no party designation on the ballot",
+		"citation": "A.C.A. § 14-47-109(d)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D13V-00008-00&pdcontentcomponentid=234170",
+		"quote": "All regular and special elections of directors shall be nonpartisan, the ballots to show no party designation.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City administrator elections are nonpartisan with no party designation on the ballot",
+		"citation": "A.C.A. § 14-48-110(d)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D159-00008-00&pdcontentcomponentid=234170",
+		"quote": "All primary, general, and special elections of the mayor and directors shall be nonpartisan, and the ballots shall show no party designation.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County and municipal offices, including justice of the peace, go to a runoff four weeks after the general election when no candidate has a majority",
+		"citation": "A.C.A. § 7-5-106(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6G10-KBB0-R03M-72WW-00008-00&pdcontentcomponentid=234170",
+		"quote": "there shall be a runoff general election held in that county or municipality four (4) weeks following the date of the general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The runoff rule does not cover city manager cities",
+		"citation": "A.C.A. § 7-5-106(f)(2)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6G10-KBB0-R03M-72WW-00008-00&pdcontentcomponentid=234170",
+		"quote": "does not include offices of cities having a city manager form of government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city manager city that elects its mayor directly may set a winning threshold below fifty percent",
+		"citation": "A.C.A. § 14-61-111(b)(2)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A5VWX-D5K0-R03J-V27V-00008-00&pdcontentcomponentid=234170",
+		"quote": "may also vote to require that a successful candidate for mayor receive a minimum percentage, less than fifty percent (50%), of the total votes cast for the position of mayor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board runoffs are held at the November general election",
+		"citation": "A.C.A. § 6-14-121(a)(3)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FNW-C7C0-R03N-0177-00008-00&pdcontentcomponentid=234170",
+		"quote": "The runoff election shall be held at the same time as the general election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Ranked choice voting is banned for local, state and federal offices",
+		"citation": "A.C.A. § 7-1-116(b)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FYS-BM00-R03M-016G-00008-00&pdcontentcomponentid=234170",
+		"quote": "Ranked choice voting shall not be used to determine the election or nomination of a candidate to any local, state, or federal elective office in this state.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Independents for county, township and district offices file during the party filing period and qualify by petition",
+		"citation": "A.C.A. § 7-7-103(a)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A5VMF-6510-R03K-S4YN-00008-00&pdcontentcomponentid=234170",
+		"quote": "as an independent candidate without political party affiliation for any United States office other than President of the United States or Vice President of the United States or state, county, township, or district office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each petition signer must be a registered voter",
+		"citation": "A.C.A. § 7-7-103(b)(2)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A5VMF-6510-R03K-S4YN-00008-00&pdcontentcomponentid=234170",
+		"quote": "Each elector signing the petition shall be a registered voter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A person who files for a party nomination cannot be an independent for the same office at that election",
+		"citation": "A.C.A. § 7-7-204(a)(2)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A680C-5RY0-R03K-04T1-00008-00&pdcontentcomponentid=234170",
+		"quote": "Be an independent candidate for the same office at the general or special election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county judge is elected countywide for four years",
+		"citation": "Ark. Const. art. 7, § 29",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WW2-5J40-R03M-S16W-00008-00&pdcontentcomponentid=234170",
+		"quote": "The judge of the county court shall be elected by the qualified electors of the county for the term of four (4) years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county judge presides over the quorum court without a vote but with a veto",
+		"citation": "Ark. Const. amend. 55, § 3",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4MP0-04P0-R03N-03TB-00008-00&pdcontentcomponentid=234170",
+		"quote": "shall preside over the Quorum Court without a vote but with the power of veto",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The quorum court has nine to fifteen justices of the peace",
+		"citation": "Ark. Const. amend. 55, § 2(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4MP0-04P0-R03N-03T9-00008-00&pdcontentcomponentid=234170",
+		"quote": "Quorum Court shall be comprised of fewer than nine (9) justices of the peace, nor comprised of more than fifteen (15) justices of the peace.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Justices of the peace are elected from single-member districts redrawn after each census",
+		"citation": "Ark. Const. amend. 55, § 2(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4MP0-04P0-R03N-03T9-00008-00&pdcontentcomponentid=234170",
+		"quote": "divide the county into convenient and single member districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The quorum court may create, consolidate or abandon elective county offices with voter approval",
+		"citation": "Ark. Const. amend. 55, § 2(b)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4MP0-04P0-R03N-03T9-00008-00&pdcontentcomponentid=234170",
+		"quote": "The Quorum Court may create, consolidate, separate, revise, or abandon any elective county office or offices except during the term thereof",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county acts through its quorum court and may exercise local legislative authority not denied by law",
+		"citation": "Ark. Const. amend. 55, § 1(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4MP0-04P0-R03N-03T8-00008-00&pdcontentcomponentid=234170",
+		"quote": "A county acting through its Quorum Court may exercise local legislative authority not denied by the Constitution or by law.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "All county legislative power is vested in the quorum court",
+		"citation": "A.C.A. § 14-14-502(b)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WKD-4T60-R03N-70C0-00008-00&pdcontentcomponentid=234170",
+		"quote": "All legislative powers of the county governments are vested in the quorum court.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Justices of the peace serve two-year terms",
+		"citation": "Ark. Const. art. 7, § 38",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WW2-5J40-R03M-N176-00008-00&pdcontentcomponentid=234170",
+		"quote": "shall elect the Justices of the Peace for the term of two years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a sheriff, assessor, coroner, treasurer and surveyor for four-year terms",
+		"citation": "Ark. Const. art. 7, § 46",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WW2-5J40-R03M-917G-00008-00&pdcontentcomponentid=234170",
+		"quote": "The qualified electors of each county shall elect one (1) sheriff, who shall be ex officio collector of taxes, unless otherwise provided by law; one (1) assessor, one (1) coroner, one (1) treasurer",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Where a separate tax collector has been created by law, voters elect the collector",
+		"citation": "Ark. Const. art. 7, § 46",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WW2-5J40-R03M-917G-00008-00&pdcontentcomponentid=234170",
+		"quote": "If a separate collector of taxes has been created by law for a county, the qualified electors of that county shall elect one (1) collector of taxes for a term of four (4) years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Circuit clerks serve four years; counties over 15,000 people also elect a county clerk",
+		"citation": "Ark. Const. art. 7, § 19",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WW2-5J30-R03J-X16K-00008-00&pdcontentcomponentid=234170",
+		"quote": "in any county having a population exceeding fifteen thousand (15,000) inhabitants, as shown by the last federal census, there shall be elected a county clerk",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Constables are elected by township for two-year terms",
+		"citation": "Ark. Const. art. 7, § 47",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WW2-5J40-R03N-T17H-00008-00&pdcontentcomponentid=234170",
+		"quote": "The qualified electors of each township shall elect the Constable for the term of two years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Constables are township offices",
+		"citation": "A.C.A. § 14-14-604(3)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-MSP0-R03N-D4T1-00008-00&pdcontentcomponentid=234170",
+		"quote": "Constables who are deemed township offices",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county court divides the county into townships and may alter township lines",
+		"citation": "A.C.A. § 14-14-401(b)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-MSP0-R03N-D4SM-00008-00&pdcontentcomponentid=234170",
+		"quote": "The county court of each county in this state shall have the authority to divide the county into convenient townships",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Sebastian County may have two districts and two county seats",
+		"citation": "Ark. Const. art. 13, § 5",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WW2-5J50-R03M-1194-00008-00&pdcontentcomponentid=234170",
+		"quote": "Sebastian County may have two districts and two county seats",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities and towns are organized under general laws, and cities may be classified",
+		"citation": "Ark. Const. art. 12, § 3",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WW2-5J40-R03N-R18M-00008-00&pdcontentcomponentid=234170",
+		"quote": "The General Assembly shall provide, by general laws, for the organization of cities (which may be classified) and incorporated towns",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The General Assembly may not pass local or special acts",
+		"citation": "Ark. Const. amend. 14",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4MP0-04P0-R03N-03KR-00008-00&pdcontentcomponentid=234170",
+		"quote": "The General Assembly shall not pass any local or special act.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities are cities of the first class, cities of the second class and incorporated towns",
+		"citation": "A.C.A. § 14-37-102",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-NJR0-R03N-70J2-00008-00&pdcontentcomponentid=234170",
+		"quote": "municipal corporations are divided into the following classes",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities over 2,500 inhabitants are cities of the first class",
+		"citation": "A.C.A. § 14-37-103(a)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-NJR0-R03N-70J3-00008-00&pdcontentcomponentid=234170",
+		"quote": "All municipal corporations having over two thousand five hundred (2,500) inhabitants shall be deemed cities of the first class.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities of 500 to 2,499 inhabitants are cities of the second class",
+		"citation": "A.C.A. § 14-37-103(a)(2)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-NJR0-R03N-70J3-00008-00&pdcontentcomponentid=234170",
+		"quote": "All cities having five hundred (500) inhabitants or more and fewer than two thousand five hundred (2,500) inhabitants shall be deemed cities of the second class.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city of 1,500 or more may become first class by ordinance",
+		"citation": "A.C.A. § 14-37-103(b)(2)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-NJR0-R03N-70J3-00008-00&pdcontentcomponentid=234170",
+		"quote": "Any city having a population of one thousand five hundred (1,500) or more may become a city of the first class upon the enactment of an ordinance therefor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town under 500 that voted to become a second-class city stays one",
+		"citation": "A.C.A. § 14-37-103(b)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-NJR0-R03N-70J3-00008-00&pdcontentcomponentid=234170",
+		"quote": "who have voted to be a city of the second class under",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city found at a census to have 2,500 inhabitants becomes first class",
+		"citation": "A.C.A. § 14-37-104(b)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-NJR0-R03N-70J4-00008-00&pdcontentcomponentid=234170",
+		"quote": "shall be found to have a population of two thousand five hundred (2,500) inhabitants shall thereafter be deemed cities of the first class",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city that falls below its class threshold moves down only if its council asks",
+		"citation": "A.C.A. § 14-37-111(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-NJR0-R03N-70JC-00008-00&pdcontentcomponentid=234170",
+		"quote": "the city may be reduced to a city of the second class or to an incorporated town, respectively, upon the adoption of a resolution by the council",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "First-class mayor-council cities under 50,000 elect two council members per ward for two-year terms, with a voter-approved four-year option",
+		"citation": "A.C.A. § 14-43-312(a)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D110-00008-00&pdcontentcomponentid=234170",
+		"quote": "shall elect two (2) council members from each ward for a term of two (2) years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "First-class city council members live in their ward but run citywide unless an ordinance provides ward elections",
+		"citation": "A.C.A. § 14-43-307(a)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FCH-29G0-R03J-W2F1-00008-00&pdcontentcomponentid=234170",
+		"quote": "Candidates for the office of council member in cities of the first class shall reside in the ward from which they seek to be elected and shall run at large.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "First-class mayor-council cities under 50,000 elect a city attorney for four years unless an ordinance makes the office appointed",
+		"citation": "A.C.A. § 14-43-315(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A67S6-8J30-R03N-J4RH-00008-00&pdcontentcomponentid=234170",
+		"quote": "If not established by ordinance that the office of the city attorney will be appointed",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "First-class mayor-council cities under 50,000 elect a city clerk and treasurer, or a clerk-treasurer, for four years in the 1962 cycle",
+		"citation": "A.C.A. § 14-43-316(a)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D114-00008-00&pdcontentcomponentid=234170",
+		"quote": "One (1) city clerk and, unless appointed pursuant to",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Second-class cities elect two council members per ward every two years, with a voter-approved four-year option",
+		"citation": "A.C.A. § 14-44-103(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FCH-3GY0-R03N-72F4-00008-00&pdcontentcomponentid=234170",
+		"quote": "the qualified voters in cities of the second class shall elect for each of the wards of these cities two (2) council members",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Second-class cities elect a recorder, treasurer or recorder-treasurer for four years in the 1972 cycle",
+		"citation": "A.C.A. § 14-44-115(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A5VP9-RP50-R03M-34MR-00008-00&pdcontentcomponentid=234170",
+		"quote": "the qualified voters of cities of the second class shall elect a recorder, a treasurer, or a recorder-treasurer, as the case may be, for a term of four (4) years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Incorporated towns elect five council members every two years, with a voter-approved four-year option",
+		"citation": "A.C.A. § 14-45-102(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D132-00008-00&pdcontentcomponentid=234170",
+		"quote": "the qualified voters of incorporated towns shall elect five (5) council members",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town council may refer four-year council terms to the voters",
+		"citation": "A.C.A. § 14-45-102(a)(2)(A)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D132-00008-00&pdcontentcomponentid=234170",
+		"quote": "may refer to the voters an ordinance on the question of electing the five (5) council members to four-year terms",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Incorporated towns elect a recorder-treasurer for four years in the 1982 cycle unless appointed by ordinance",
+		"citation": "A.C.A. § 14-45-108(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A5VP9-RW30-R03J-V4MS-00008-00&pdcontentcomponentid=234170",
+		"quote": "The qualified voters of incorporated towns shall elect one (1) recorder-treasurer on the Tuesday following the first Monday in November 1982 and every four (4) years thereafter.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city of 2,500 or more may adopt the city manager form",
+		"citation": "A.C.A. § 14-47-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D13J-00008-00&pdcontentcomponentid=234170",
+		"quote": "having a population of two thousand five hundred (2,500) or more, according to the latest federal census, may become organized under the provisions of this chapter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city manager city is governed by a board of directors",
+		"citation": "A.C.A. § 14-47-109(a)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D13V-00008-00&pdcontentcomponentid=234170",
+		"quote": "shall be known and designated as the board of directors of that city",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City manager cities choose how directors are elected (at large, wards, districts or a mix)",
+		"citation": "A.C.A. § 14-61-107",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A5W30-TSK0-R03M-G3J9-00008-00&pdcontentcomponentid=234170",
+		"quote": "may choose one (1) of the options included within this chapter as the method by which to select a board of directors",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a city manager city the board picks the mayor unless voters choose direct election",
+		"citation": "A.C.A. § 14-61-111(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A5VWX-D5K0-R03J-V27V-00008-00&pdcontentcomponentid=234170",
+		"quote": "Unless a majority of the qualified electors of the city voting on the issue choose otherwise, the mayor will be selected by a majority vote of the board of directors from among its members.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality of 2,500 or more, or any first-class city, may adopt the city administrator form",
+		"citation": "A.C.A. § 14-48-101(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D150-00008-00&pdcontentcomponentid=234170",
+		"quote": "may call and hold an election on the question of becoming organized under, and governed by, the city administrator form of government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City administrator mayors and directors are elected at the even-year general election",
+		"citation": "A.C.A. § 14-48-110(c)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D159-00008-00&pdcontentcomponentid=234170",
+		"quote": "the mayor and directors shall be elected at the general elections held biennially for the election of state and county offices",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities have full legislative power over municipal affairs and Dillon's Rule does not apply",
+		"citation": "A.C.A. § 14-43-602",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D121-00008-00&pdcontentcomponentid=234170",
+		"quote": "is inapplicable to the municipal affairs of municipalities",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal affairs exclude a list of state affairs; elections are not on the list",
+		"citation": "A.C.A. § 14-43-601(a)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6G0C-H6F0-R03N-V102-00008-00&pdcontentcomponentid=234170",
+		"quote": "means all matters and affairs of government germane to, affecting, or concerning the municipality or its government except the following",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city of the first or second class may create a commission to frame a charter",
+		"citation": "A.C.A. § 14-42-302(a)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D0YG-00008-00&pdcontentcomponentid=234170",
+		"quote": "The governing body of any city of the first or second class, upon passage of a municipal ordinance, may create a commission to frame a charter for the city.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An approved charter supersedes conflicting laws on the organization and government of the city",
+		"citation": "A.C.A. § 14-42-305",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D0YK-00008-00&pdcontentcomponentid=234170",
+		"quote": "shall supersede all laws affecting the organization and government of the municipality which are in conflict therewith",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board members serve four- or six-year staggered terms",
+		"citation": "A.C.A. § 6-13-608(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FN2-2150-R03M-61NC-00008-00&pdcontentcomponentid=234170",
+		"quote": "shall be elected to a term of office of four (4) years or six (6) years in length",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School boards have five or seven members (nine allowed at 20,000 or more students)",
+		"citation": "A.C.A. § 6-13-634(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FN2-2K80-R03J-T1XN-00008-00&pdcontentcomponentid=234170",
+		"quote": "A school district shall have a board of directors with five (5) members or seven (7) members.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A non-appropriation bill may be taken up in a fiscal session only with two-thirds of each house",
+		"citation": "Ark. Const. art. 5, § 5(c)(2)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WW2-5J30-R03N-M14J-00008-00&pdcontentcomponentid=234170",
+		"quote": "A bill other than an appropriation bill may be considered in a fiscal session if two-thirds",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county judge operates the county road system and hires county employees",
+		"citation": "Ark. Const. amend. 55, § 3",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4MP0-04P0-R03N-03TB-00008-00&pdcontentcomponentid=234170",
+		"quote": "operate the system of county roads",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Creating or abolishing an elective county office needs voter approval at a general election",
+		"citation": "Ark. Const. amend. 55, § 2(b)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4MP0-04P0-R03N-03T9-00008-00&pdcontentcomponentid=234170",
+		"quote": "provided, however, that a majority of those voting on the question at a general election have approved said action",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Circuit clerks are elected countywide for four years",
+		"citation": "Ark. Const. art. 7, § 19",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WW2-5J30-R03J-X16K-00008-00&pdcontentcomponentid=234170",
+		"quote": "The clerks of the circuit courts shall be elected by the qualified electors of the several counties for the term of four (4) years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Justices of the peace are district offices",
+		"citation": "A.C.A. § 14-14-604(2)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-MSP0-R03N-D4T1-00008-00&pdcontentcomponentid=234170",
+		"quote": "Justices of the peace who are deemed district offices",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county runoff rule includes justices of the peace",
+		"citation": "A.C.A. § 7-5-106(a)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6G10-KBB0-R03M-72WW-00008-00&pdcontentcomponentid=234170",
+		"quote": "including the office of justice of the peace",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Independents file during the party filing period",
+		"citation": "A.C.A. § 7-7-103(a)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A5VMF-6510-R03K-S4YN-00008-00&pdcontentcomponentid=234170",
+		"quote": "shall file, during the party filing period for the year in which the election is to be held",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal independent petitions are filed with the county clerk",
+		"citation": "A.C.A. § 14-42-206(b)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FGJ-CTG0-R03K-V0YB-00008-00&pdcontentcomponentid=234170",
+		"quote": "ninety (90) days before the general election with the county clerk",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan candidates also appear on a separate nonpartisan ballot",
+		"citation": "A.C.A. § 7-10-102(b)(2)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FNW-DR40-R03K-W1BG-00008-00&pdcontentcomponentid=234170",
+		"quote": "Separate ballots containing the names of nonpartisan candidates shall be",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The nonpartisan-office section was last amended by Act 503 of 2025",
+		"citation": "A.C.A. § 7-10-102 (history)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FNW-DR40-R03K-W1BG-00008-00&pdcontentcomponentid=234170",
+		"quote": "2025, No. 503",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In odd years the annual school election is the first Tuesday after the first Monday in March",
+		"citation": "A.C.A. § 6-14-102(a)(1)(A)(ii)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FN2-6560-R03M-P20H-00008-00&pdcontentcomponentid=234170",
+		"quote": "in odd-numbered years, on the first Tuesday after the first Monday in March",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The annual school election concerns only issues authorized by the constitution or statute",
+		"citation": "A.C.A. § 6-14-102(a)(2)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FN2-6560-R03M-P20H-00008-00&pdcontentcomponentid=234170",
+		"quote": "The annual school election shall only concern issues authorized to be on the ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Districts with 20,000 or more students may have nine board members",
+		"citation": "A.C.A. § 6-13-634(a)(2)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FN2-2K80-R03J-T1XN-00008-00&pdcontentcomponentid=234170",
+		"quote": "A school district may have a board of directors with nine (9) members if the school district has an average daily membership of twenty thousand (20,000) or more.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters can choose zone, at-large or mixed election of school board members",
+		"citation": "A.C.A. § 6-13-615(a)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-7NS0-R03P-12JH-00008-00&pdcontentcomponentid=234170",
+		"quote": "may, by petition, have placed on the ballot of any annual school election the issue to determine whether to elect the school district board of directors",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City manager directors win with the most votes and at least forty percent, unless changed by ordinance",
+		"citation": "A.C.A. § 14-61-112(c)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A5W30-X3X0-R03K-13JG-00008-00&pdcontentcomponentid=234170",
+		"quote": "who receives at least forty percent (40%) of the votes cast, shall be deemed elected",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city administrator city has a seven-member board of directors",
+		"citation": "A.C.A. § 14-48-110(a)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D159-00008-00&pdcontentcomponentid=234170",
+		"quote": "The seven (7) directors elected by a city reorganized under this chapter shall be known and designated as the board of directors of the city.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The city administrator mayor is elected citywide",
+		"citation": "A.C.A. § 14-48-110(d)(2)(A)(ii)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D159-00008-00&pdcontentcomponentid=234170",
+		"quote": "The persons elected to fill the position of mayor and director positions five, six, and seven",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Mayor-council cities of 50,000 or more elect the city attorney, treasurer and other ward seats two years after the mayor",
+		"citation": "A.C.A. § 14-43-303(a)(2)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A5W42-YK70-R03K-K0ND-00008-00&pdcontentcomponentid=234170",
+		"quote": "At the general election in the year 1962 and every four (4) years thereafter, the city shall elect",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Council terms in those cities are staggered so one member per ward is elected every two years",
+		"citation": "A.C.A. § 14-43-303(d)(2)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A5W42-YK70-R03K-K0ND-00008-00&pdcontentcomponentid=234170",
+		"quote": "one (1) council member will be elected from each ward every two (2) years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters may approve four-year council terms in a first-class city",
+		"citation": "A.C.A. § 14-43-312(a)(2)(A)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVD-PJN0-R03M-D110-00008-00&pdcontentcomponentid=234170",
+		"quote": "may elect two (2) council members from each ward to four-year terms",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A second-class city may refer four-year council terms to voters",
+		"citation": "A.C.A. § 14-44-103(a)(4)(A)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FCH-3GY0-R03N-72F4-00008-00&pdcontentcomponentid=234170",
+		"quote": "may refer to voters an ordinance on the question of electing the two (2) council members for each ward to four-year terms",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A first-class city may provide by ordinance for ward-only council elections",
+		"citation": "A.C.A. § 14-43-307(b)(1)(A)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FCH-29G0-R03J-W2F1-00008-00&pdcontentcomponentid=234170",
+		"quote": "may provide by ordinance that all council members be elected by ward",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A second-class city council may make the treasurer appointed",
+		"citation": "A.C.A. § 14-44-115(b)(1)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A5VP9-RP50-R03M-34MR-00008-00&pdcontentcomponentid=234170",
+		"quote": "The city council may provide by ordinance for the appointment of the city treasurer.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town council may make the recorder-treasurer appointed",
+		"citation": "A.C.A. § 14-45-108(b)(1)(A)",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA2ZjZiM2VhNS0wNTVlLTQ3NzUtYjQzYy0yYWZmODJiODRmMDYKAFBvZENhdGFsb2fXiYCnsel0plIgqpYkw9PK&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A5VP9-RW30-R03J-V4MS-00008-00&pdcontentcomponentid=234170",
+		"quote": "The town council may provide by ordinance for the appointment of the town recorder-treasurer.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

@@ -1,0 +1,418 @@
+[
+	{
+		"claim": "The Legislature convenes every year; the constitutional date may be changed by law",
+		"citation": "Alaska Const. art. II, § 8",
+		"url": "https://ltgov.alaska.gov/information/alaskas-constitution/",
+		"quote": "The legislature shall convene in regular session each year on the fourth Monday in January, but the month and day may be changed by law.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A regular session may last no more than 120 days, extendable once by 10 days",
+		"citation": "Alaska Const. art. II, § 8",
+		"url": "https://ltgov.alaska.gov/information/alaskas-constitution/",
+		"quote": "The legislature shall adjourn from regular session no later than one hundred twenty consecutive calendar days from the date it convenes",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "By statute the Legislature convenes on the third Tuesday in January",
+		"citation": "AS 24.05.090",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=24.05&secEnd=24.05",
+		"quote": "The legislature shall convene at the capital each year on the third Tuesday in January at 1:00 p.m.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "By statute a regular session must adjourn within 90 days",
+		"citation": "AS 24.05.150(b)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=24.05&secEnd=24.05",
+		"quote": "The legislature shall adjourn from a regular session within 90 consecutive calendar days",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "During session a bill becomes law if not acted on within 15 days, Sundays excepted",
+		"citation": "Alaska Const. art. II, § 17",
+		"url": "https://ltgov.alaska.gov/information/alaskas-constitution/",
+		"quote": "while the legislature is in session, the governor neither signs nor vetoes it within fifteen days, Sundays excepted, after its delivery to him",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Out of session the governor has 20 days, Sundays excepted, after delivery",
+		"citation": "Alaska Const. art. II, § 17",
+		"url": "https://ltgov.alaska.gov/information/alaskas-constitution/",
+		"quote": "If the legislature is not in session and the governor neither signs nor vetoes a bill within twenty days, Sundays excepted, after its delivery to him, the bill becomes law.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Laws take effect ninety days after enactment unless two-thirds of each house set another date",
+		"citation": "Alaska Const. art. II, § 18",
+		"url": "https://ltgov.alaska.gov/information/alaskas-constitution/",
+		"quote": "Laws passed by the legislature become effective ninety days after enactment.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Acts become effective 90 days after becoming law unless two-thirds provide otherwise",
+		"citation": "AS 01.10.070(a)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=01.10&secEnd=01.10",
+		"quote": "Acts become effective 90 days after becoming law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "All local government powers are vested in boroughs and cities",
+		"citation": "Alaska Const. art. X, § 2",
+		"url": "https://ltgov.alaska.gov/information/alaskas-constitution/",
+		"quote": "All local government powers shall be vested in boroughs and cities.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The entire state is divided into boroughs, organized or unorganized",
+		"citation": "Alaska Const. art. X, § 3",
+		"url": "https://ltgov.alaska.gov/information/alaskas-constitution/",
+		"quote": "The entire State shall be divided into boroughs, organized or unorganized.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Areas outside organized boroughs form a single unorganized borough",
+		"citation": "AS 29.03.010",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.03&secEnd=29.03",
+		"quote": "Areas of the state that are not within the boundaries of an organized borough constitute a single unorganized borough.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Legislature provides services in the unorganized borough",
+		"citation": "Alaska Const. art. X, § 6",
+		"url": "https://ltgov.alaska.gov/information/alaskas-constitution/",
+		"quote": "The legislature shall provide for the performance of services it deems necessary or advisable in unorganized boroughs",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An organized borough's governing body is the assembly",
+		"citation": "Alaska Const. art. X, § 4",
+		"url": "https://ltgov.alaska.gov/information/alaskas-constitution/",
+		"quote": "The governing body of the organized borough shall be the assembly",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities are part of the borough in which they are located",
+		"citation": "Alaska Const. art. X, § 7",
+		"url": "https://ltgov.alaska.gov/information/alaskas-constitution/",
+		"quote": "shall be a part of the borough in which they are located",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city's governing body is the council",
+		"citation": "Alaska Const. art. X, § 8",
+		"url": "https://ltgov.alaska.gov/information/alaskas-constitution/",
+		"quote": "The governing body of a city shall be the council.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters of a first class borough or city may adopt a home rule charter",
+		"citation": "Alaska Const. art. X, § 9",
+		"url": "https://ltgov.alaska.gov/information/alaskas-constitution/",
+		"quote": "The qualified voters of any borough of the first class or city of the first class may adopt, amend, or repeal a home rule charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule borough or city may exercise all legislative powers not prohibited by law or charter",
+		"citation": "Alaska Const. art. X, § 11",
+		"url": "https://ltgov.alaska.gov/information/alaskas-constitution/",
+		"quote": "A home rule borough or city may exercise all legislative powers not prohibited by law or by charter.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule municipality is a chartered city or borough or a unified municipality",
+		"citation": "AS 29.04.010",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.04&secEnd=29.04",
+		"quote": "It is a city or a borough that has adopted a home rule charter, or it is a unified municipality.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "General law municipalities are first, second and third class boroughs and first and second class cities",
+		"citation": "AS 29.04.030",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.04&secEnd=29.04",
+		"quote": "General law municipalities are of five classes: (1) first class boroughs; (2) second class boroughs; (3) third class boroughs; (4) first class cities; (5) second class cities.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No area may newly incorporate as a third class borough",
+		"citation": "AS 29.05.031(b)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.05&secEnd=29.05",
+		"quote": "An area may not incorporate as a third class borough.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A first class or home rule city needs at least 400 permanent residents to incorporate",
+		"citation": "AS 29.05.011(a)(1)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.05&secEnd=29.05",
+		"quote": "the community has 400 or more permanent residents",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A community meeting all other standards may incorporate as a second class city",
+		"citation": "AS 29.05.011(b)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.05&secEnd=29.05",
+		"quote": "may incorporate as a second class city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities may be reclassified between first and second class by petition and vote",
+		"citation": "AS 29.04.040(a)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.04&secEnd=29.04",
+		"quote": "A second class city may be reclassified as a first class city.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A general law borough or first class city may adopt a charter",
+		"citation": "AS 29.10.010(a)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.10&secEnd=29.10",
+		"quote": "A general law borough or first class city may adopt a charter for its own government.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only listed provisions of Title 29 bind home rule municipalities",
+		"citation": "AS 29.10.200",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.10&secEnd=29.10",
+		"quote": "Only the following provisions of this title apply to home rule municipalities as prohibitions on acting otherwise than as provided.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Borough legislative power is in the assembly; city legislative power in the council",
+		"citation": "AS 29.20.050(a)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.20&secEnd=29.20",
+		"quote": "The legislative power of a borough is vested in the assembly. The legislative power of a city is vested in the council.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Assembly composition is set by the incorporation petition, charter or ordinance",
+		"citation": "AS 29.20.060(b)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.20&secEnd=29.20",
+		"quote": "prescribed by charter or ordinance",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A first class city council has six members and a second class city council seven, at large unless changed by ordinance",
+		"citation": "AS 29.20.130",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.20&secEnd=29.20",
+		"quote": "Each first class city has a council of six members elected by the voters at large. Each second class city has a council of seven members elected by the voters at large.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Governing body members serve three-year terms unless a charter or ordinance sets up to four",
+		"citation": "AS 29.20.150(a)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.20&secEnd=29.20",
+		"quote": "A member of the governing body is elected for a three-year term and until a successor qualifies, unless a different term not exceeding four years is prescribed by home rule charter or ordinance.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The mayor of a borough or first class city is elected at large for three years unless an ordinance sets up to four",
+		"citation": "AS 29.20.230(a)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.20&secEnd=29.20",
+		"quote": "The mayor of a borough or first class city is elected at large. The mayor of a borough or first class city serves a term of three years, unless by ordinance a different term not to exceed four years is provided.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A second class city's mayor is chosen by and from the council",
+		"citation": "AS 29.20.230(b)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.20&secEnd=29.20",
+		"quote": "The mayor of a second class city is elected by and from the council",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A second class city may have voters elect the mayor from the council",
+		"citation": "AS 29.20.230(d)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.20&secEnd=29.20",
+		"quote": "a second class city may by ordinance provide that the mayor is elected, from the council, by the voters rather than by the council",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Without a manager plan the mayor is chief administrator",
+		"citation": "AS 29.20.250(a)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.20&secEnd=29.20",
+		"quote": "If a municipality has not adopted a manager plan of government, the mayor is the chief administrator",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The regular municipal election is the first Tuesday of October each year unless an ordinance sets another date or interval",
+		"citation": "AS 29.26.040",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.26&secEnd=29.26",
+		"quote": "The date of a regular election is the first Tuesday of October annually, unless a different date or interval of years is provided by ordinance.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each municipality sets its own election rules",
+		"citation": "AS 29.26.010(a)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.26&secEnd=29.26",
+		"quote": "The governing body shall prescribe the rules for conducting an election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal candidates are nominated by declaration or petition set by ordinance",
+		"citation": "AS 29.26.020(a)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.26&secEnd=29.26",
+		"quote": "the governing body shall provide by ordinance for nominations of elected officials by providing for declaration of candidacy or for petition requiring the signatures of not more than 10 voters, or for both",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Unless an ordinance says otherwise, a runoff is held if no candidate gets over 40 percent",
+		"citation": "AS 29.26.060(a)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.26&secEnd=29.26",
+		"quote": "Unless otherwise provided by ordinance, a runoff election shall be held if no candidate receives over 40 percent of the votes cast for the office of (1) mayor; or (2) member of the governing body or school board if candidates run for a designated seat.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The runoff is between the top two and within three weeks after certification",
+		"citation": "AS 29.26.060(c)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.26&secEnd=29.26",
+		"quote": "The runoff election shall be between the two candidates receiving the greatest number of votes for the seat.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal voters must be state-qualified, registered and 30-day residents",
+		"citation": "AS 29.26.050(a)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.26&secEnd=29.26",
+		"quote": "has been a resident of the municipality for 30 days immediately preceding the election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The state general election is in November of even-numbered years",
+		"citation": "AS 15.15.020",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=15.15&secEnd=15.15",
+		"quote": "The general election is held on the Tuesday after the first Monday in November in every even numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The state primary is the third Tuesday in August of even-numbered years",
+		"citation": "AS 15.25.020",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=15.25&secEnd=15.25",
+		"quote": "The primary election is held on the third Tuesday in August of every even-numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The state primary is a top-four nonpartisan open primary for state executive and legislative offices",
+		"citation": "AS 15.15.025",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=15.15&secEnd=15.15",
+		"quote": "may cast a vote for any candidate for each elective state executive and state and national legislative office, without limitations based on the political party or political group affiliation of either the voter or the candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The state primary only narrows the field to four; it does not choose party nominees",
+		"citation": "AS 15.25.010",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=15.25&secEnd=15.25",
+		"quote": "The primary election does not serve to determine the nominee of a political party or political group but serves only to narrow the number of candidates whose names will appear on the ballot at the general election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State general elections use ranked-choice voting",
+		"citation": "AS 15.15.350(c)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=15.15&secEnd=15.15",
+		"quote": "All general elections shall be conducted by ranked-choice voting.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each organized borough is a borough school district; home rule and first class cities in the unorganized borough are city districts; the rest are REAAs",
+		"citation": "AS 14.12.010",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=14.12&secEnd=14.12",
+		"quote": "each home rule and first class city in the unorganized borough is a city school district; (2) each organized borough is a borough school district; (3) the area outside organized boroughs and outside home rule and first class cities is divided into regional educational attendance areas",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Districts of 5,000 students or fewer have five-member boards (seven by ordinance)",
+		"citation": "AS 14.12.030(a)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=14.12&secEnd=14.12",
+		"quote": "has a school board of five members",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Larger districts have boards of seven, nine or eleven",
+		"citation": "AS 14.12.030(b)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=14.12&secEnd=14.12",
+		"quote": "has a school board of seven, nine, or eleven members, as established by ordinance",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal school board members are elected at the regular election for three-year terms, at large unless voters approve otherwise",
+		"citation": "AS 29.20.300(a)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.20&secEnd=29.20",
+		"quote": "members of a school board are elected at the regular election for three-year terms and until their successors take office. Members are elected at large unless a different method of election has been approved by the voters in a regular election.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a third class borough the assembly is the school board",
+		"citation": "AS 29.20.300(b)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=29.20&secEnd=29.20",
+		"quote": "The assembly is the school board for a third class borough.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A regional educational attendance area is run by an elected regional school board of 5 to 11 members",
+		"citation": "AS 14.08.041",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=14.08&secEnd=14.08",
+		"quote": "shall elect a regional school board of not less than five nor more than eleven members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Regional school board elections are held annually on the first Tuesday in October, supervised by the state",
+		"citation": "AS 14.08.071(b)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=14.08&secEnd=14.08",
+		"quote": "elections shall be held annually on the first Tuesday in October. Elections shall be supervised by the director of elections in the office of the lieutenant governor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A regional school board may opt out of runoff requirements",
+		"citation": "AS 14.08.071(b)",
+		"url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=14.08&secEnd=14.08",
+		"quote": "if a school board by resolution so requests",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	}
+]

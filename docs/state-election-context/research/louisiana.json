@@ -1,0 +1,834 @@
+[
+	{
+		"claim": "The Legislature meets every year in regular session",
+		"citation": "La. Const. art. III, § 2(A)(1)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206416",
+		"quote": "The legislature shall meet annually in regular session for a limited number of legislative days",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Odd-year regular sessions convene at noon on the second Monday in April",
+		"citation": "La. Const. art. III, § 2(A)(4)(a)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206416",
+		"quote": "All regular sessions convening in odd-numbered years shall convene at noon on the second Monday in April",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Odd-year sessions last no more than 45 legislative days and end by the 60th calendar day",
+		"citation": "La. Const. art. III, § 2(A)(4)(a)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206416",
+		"quote": "shall continue beyond six o'clock in the evening of the sixtieth calendar day after convening",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Odd-year sessions are limited to fiscal matters, plus up to five prefiled non-fiscal bills per member and advertised local or special laws",
+		"citation": "La. Const. art. III, § 2(A)(4)(b)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206416",
+		"quote": "provided that the member shall not prefile more than five such matters pursuant to this Subsubparagraph",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Even-year regular sessions are general and convene at noon on the second Monday in March",
+		"citation": "La. Const. art. III, § 2(A)(3)(a)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206416",
+		"quote": "All regular sessions convening in even-numbered years shall be general in nature and shall convene at noon on the second Monday in March",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The governor may call an extraordinary session",
+		"citation": "La. Const. art. III, § 2(B)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206416",
+		"quote": "The legislature may be convened at other times by the governor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A bill becomes law if the governor does not act within ten days of delivery during the session, or twenty days if the tenth day falls after adjournment",
+		"citation": "La. Const. art. III, § 18(A)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206414",
+		"quote": "or within twenty days after delivery if the tenth day after delivery occurs after the legislative session in which the bill passed is adjourned",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Laws from a regular session take effect on 1 August unless the bill sets another date",
+		"citation": "La. Const. art. III, § 19",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206415",
+		"quote": "All laws enacted during a regular session of the legislature shall take effect on August first of the calendar year in which the regular session is held",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A bill may set an earlier or later effective date",
+		"citation": "La. Const. art. III, § 19",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206415",
+		"quote": "However, any bill may specify an earlier or later effective date",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Political subdivisions may not adopt their own laws on elections unless the Election Code specifically authorizes it",
+		"citation": "La. R.S. 18:1(B)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81241",
+		"quote": "political subdivisions shall be prohibited from adopting any law, resolution, or ordinance relative to elections and the conduct thereof",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In the primary for every office except a party primary office, all voters vote regardless of party and all candidates run regardless of party",
+		"citation": "La. R.S. 18:401(B)(1)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81543",
+		"quote": "Except for the election of persons to a party primary office in a party primary election, all qualified voters of this state may vote on candidates for public office in primary elections without regard to the voter's party affiliation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "General elections are open to all voters and candidates regardless of party",
+		"citation": "La. R.S. 18:401(C)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81543",
+		"quote": "All qualified voters of this state may vote on candidates for public office in general elections without regard to the voter's party affiliation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party primary offices are U.S. Senate and House, the state Supreme Court, BESE and the Public Service Commission",
+		"citation": "La. R.S. 18:2(9)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81529",
+		"quote": "\"Party primary office\" means an office of senator or representative in the United States Congress, justice of the supreme court, the State Board of Elementary and Secondary Education, and the Public Service Commission",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party primaries are held on the spring election dates",
+		"citation": "La. R.S. 18:410.10",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=1341881",
+		"quote": "Party primary elections shall be held in an election year on the spring election dates established in R.S. 18:402",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a party primary a voter may vote only for candidates of the voter's own party",
+		"citation": "La. R.S. 18:410.3(A)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=1341857",
+		"quote": "each voter voting in such election may vote only for a candidate who is affiliated with the same party as the voter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Unaffiliated voters may choose one major party's primary ballot, and cannot switch party for the second party primary",
+		"citation": "La. R.S. 18:410.3(B)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=1341857",
+		"quote": "Voters not affiliated with a political party may vote in a major party primary if a party primary ballot is selected by the voter prior to casting his ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only candidates affiliated with a major party take part in that party's primary",
+		"citation": "La. R.S. 18:410.2",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=1341825",
+		"quote": "Only candidates affiliated with a major political party may participate in the party primary election of the political party of the candidate's party affiliation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party primary needs a majority; otherwise the top two of each party go to a second party primary",
+		"citation": "La. R.S. 18:410.7(A), (B)(1)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=1341864",
+		"quote": "the two candidates from each political party who received the greatest number of votes in the first party primary shall be voted on in the second party primary",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Candidates for party primary offices not affiliated with a major party go straight to the general election by petition",
+		"citation": "La. R.S. 18:410.8(A)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=1341866",
+		"quote": "who is not registered as being affiliated with a major political party shall file his notice of candidacy, which shall be accompanied by a nominating petition",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only voters not affiliated with a major party may sign such a petition",
+		"citation": "La. R.S. 18:410.8(B)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=1341866",
+		"quote": "and who are not affiliated with a major political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In gubernatorial election years, the spring primary for municipal and ward officers is the third Saturday in April",
+		"citation": "La. R.S. 18:402(B)(1)(a)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81545",
+		"quote": "There shall be a spring primary election held on the third Saturday in April for municipal and ward officers elected in the spring of a gubernatorial election year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The spring general election is the sixth Saturday after the spring primary",
+		"citation": "La. R.S. 18:402(B)(1)(b)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81545",
+		"quote": "There shall be a spring election held on the sixth Saturday after the third Saturday in April which shall be a general election for municipal and ward officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The fall gubernatorial primary is the third to last Saturday in October, for the governor and officers elected with the governor",
+		"citation": "La. R.S. 18:402(B)(2)(a)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81545",
+		"quote": "There shall be a fall primary election held on the third to last Saturday in October of a gubernatorial election year for governor and officers elected at the same time as the governor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The fall gubernatorial general election is six Saturdays later",
+		"citation": "La. R.S. 18:402(B)(2)(b)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81545",
+		"quote": "There shall be a fall general election held on the sixth Saturday after the third to last Saturday in October of a gubernatorial election year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In presidential years the spring municipal primary is the last Saturday in March",
+		"citation": "La. R.S. 18:402(C)(1)(c)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81545",
+		"quote": "there shall be a spring primary election held on the last Saturday in March for municipal and ward officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In congressional years the fall primary is the November federal election day",
+		"citation": "La. R.S. 18:402(C)(2)(a)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81545",
+		"quote": "There shall be a fall primary election held on the first Tuesday after the first Monday in November for officers elected at the same time as members of congress in that year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In congressional years the fall general election is the sixth Saturday after the November primary",
+		"citation": "La. R.S. 18:402(C)(2)(b)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81545",
+		"quote": "There shall be a fall general election held on the sixth Saturday after the first Tuesday after the first Monday in November of a congressional election year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Odd years without a governor's race also have spring municipal and ward elections",
+		"citation": "La. R.S. 18:402(D)(1)(a)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81545",
+		"quote": "There shall be a spring primary election held on the third Saturday in April for municipal and ward officers elected in the spring of a nongubernatorial election year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In odd years without a governor's race, a parish containing a municipality of 300,000 or more holds a fall primary for parochial and municipal officers on the second Saturday in October",
+		"citation": "La. R.S. 18:402(D)(2)(a)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81545",
+		"quote": "There shall be a fall primary election held on the second Saturday in October for parochial and municipal officers in a parish containing a municipality with a population of three hundred thousand or more",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate with a majority in the primary is elected",
+		"citation": "La. R.S. 18:511(A)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81616",
+		"quote": "A candidate who receives a majority of the votes cast for an office in a primary election is elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Unopposed candidates are declared elected and do not appear on the ballot",
+		"citation": "La. R.S. 18:511(B)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81616",
+		"quote": "the candidates for that office, or those remaining after the withdrawal of one or more candidates, are declared elected by the people",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Otherwise the top two (twice the number of seats) advance to the general election, whatever their party",
+		"citation": "La. R.S. 18:481, 18:482",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81606",
+		"quote": "the candidates who qualify for each office remaining to be filled in the general election are those who received the two highest numbers of votes",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election field is twice the number of seats left to fill",
+		"citation": "La. R.S. 18:482",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81607",
+		"quote": "the number of candidates for an office who may qualify for the general election is twice the number of persons remaining to be elected to the office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every candidate's party, or \"other\" or \"no party\", is printed next to their name on primary and general ballots",
+		"citation": "La. R.S. 18:551(D)(1)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81637",
+		"quote": "shall be listed on the primary or general election ballot on the same line and immediately after or below the candidate's name",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate with no party affiliation is shown as \"no party\"",
+		"citation": "La. R.S. 18:551(D)(1)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81637",
+		"quote": "If a candidate is not affiliated with any political party, the words \"no party\" or an abbreviation thereof shall be placed after his name",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The ballot order lists local offices including police juror, school board member and justice of the peace, and municipal offices including mayor, chief of police and alderman",
+		"citation": "La. R.S. 18:551(B)(2)(d), (e)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81637",
+		"quote": "Municipal offices--mayor, chief of police or marshal, alderman or member of a city council",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate lists their registered party, \"other\" or \"no party\" on the notice of candidacy",
+		"citation": "La. R.S. 18:463(A)(1)(a)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81594",
+		"quote": "or \"no party\" or an abbreviation thereof if he is registered with no political party affiliation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No party may be recognized under the name \"Independent\"",
+		"citation": "La. R.S. 18:441(B)(4)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81575",
+		"quote": "no political party shall be recognized in this state which declares its name solely to be \"Independent\" or the \"Independent Party\"",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate qualifies by filing a notice of candidacy with either a nominating petition or the qualifying fee",
+		"citation": "La. R.S. 18:461(A)(1)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81592",
+		"quote": "shall qualify as a candidate by timely filing notice of his candidacy, which shall be accompanied either by a nominating petition or by the qualifying fee",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Petition signers must be registered to vote on the office the candidate seeks, and may not withdraw a signature",
+		"citation": "La. R.S. 18:465(B)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81596",
+		"quote": "Once a voter has signed a nominating petition, he may not withdraw the nomination",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Petition signers must be registered to vote on the office",
+		"citation": "La. R.S. 18:465(B)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81596",
+		"quote": "registered to vote on the office he seeks who sign a nominating petition for him",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A person under an order of imprisonment for a felony conviction cannot qualify",
+		"citation": "La. R.S. 18:461(A)(3)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81592",
+		"quote": "shall qualify to become a candidate if he is under an order of imprisonment for conviction of a felony",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Parish school board members are elected at the congressional elections for four-year concurrent terms beginning 1 January",
+		"citation": "La. R.S. 17:52(A)(1)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81132",
+		"quote": "members of parish school boards shall be elected at the congressional elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board terms are four-year concurrent terms beginning January 1",
+		"citation": "La. R.S. 17:52(A)(1)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81132",
+		"quote": "Members elected in 1986 and thereafter shall serve four-year concurrent terms beginning January 1 following their election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A school board could move its elections to the fall gubernatorial election by a plan filed by 1 July 2026, starting in 2031",
+		"citation": "La. R.S. 17:52(A)(2)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81132",
+		"quote": "The first election under the plan shall be held at the 2031 fall gubernatorial election",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The legislature creates parish school boards and provides for the election of their members",
+		"citation": "La. Const. art. VIII, § 9(A)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206581",
+		"quote": "The legislature shall create parish school boards and provide for the election of their members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Existing parish and city school systems are recognized",
+		"citation": "La. Const. art. VIII, § 10(A)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206566",
+		"quote": "Parish and city school board systems in existence on the effective date of this constitution are recognized",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Monroe City and Ouachita Parish school boards have separate electorates",
+		"citation": "La. Const. art. VIII, § 10(B)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206566",
+		"quote": "Only persons residing within the jurisdiction of the Monroe City School Board shall be eligible to vote for or be members of the Monroe City School Board",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter cannot change a school board inconsistently with the constitution or law",
+		"citation": "La. Const. art. VI, § 5(G)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206520",
+		"quote": "No home rule charter or plan of government shall contain any provision affecting a school board",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "East Baton Rouge Parish School Board has its own membership law",
+		"citation": "La. R.S. 17:58",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81156",
+		"quote": "East Baton Rouge Parish School Board shall continue to consist of twelve members elected at the congressional elections",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Justices of the peace are elected at the congressional election for six-year terms",
+		"citation": "La. R.S. 13:2582(B)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=77366",
+		"quote": "Justices of the peace shall be elected at the congressional election for terms of six years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Constables are elected at the congressional election for six-year terms, one for each justice of the peace court",
+		"citation": "La. R.S. 13:2583(A), (B)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=77367",
+		"quote": "A constable shall be elected at the congressional election for terms of six years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City court marshals or constables are elected at the congressional election for six-year terms, except Baton Rouge's city constable",
+		"citation": "La. R.S. 13:1879(A)(1), (B)(1)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=77006",
+		"quote": "each marshal or constable shall be elected at the congressional election",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Baton Rouge's city constable is elected under the city charter and the parish plan of government",
+		"citation": "La. R.S. 13:1879(B)(1)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=77006",
+		"quote": "The city constable of the city of Baton Rouge shall be elected in accordance with and pursuant to the applicable provisions of the charter of the city of Baton Rouge",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Mayors' courts and justice of the peace courts are continued by the constitution",
+		"citation": "La. Const. art. V, § 20",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206458",
+		"quote": "Mayors' courts and justice of the peace courts existing on the effective date of this constitution are continued",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Parishes and their boundaries are recognized by the constitution",
+		"citation": "La. Const. art. VI, § 1(A)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206480",
+		"quote": "Parishes and their boundaries as established on the effective date of this constitution are recognized and ratified",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A police jury sets its own size by ordinance, between 5 and 15 members (3 in parishes of 10,000 or fewer)",
+		"citation": "La. R.S. 33:1221(A)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=88684",
+		"quote": "no police jury shall have less than five members nor more than fifteen members",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Small parishes may have as few as three police jurors",
+		"citation": "La. R.S. 33:1221(A)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=88684",
+		"quote": "parishes with a population of ten thousand persons or less may establish the size of the body at not less than three members",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Police jurors are elected at the state general election for four-year terms",
+		"citation": "La. R.S. 33:1221(A)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=88684",
+		"quote": "Police jurors shall be elected at the state general election and shall serve for terms of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Police jurors take office on the second Monday in January after their election and elect a president from among themselves",
+		"citation": "La. R.S. 33:1226(A)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=88690",
+		"quote": "the police jury shall elect a president from their own number",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A police jury may divide the parish into up to twelve police jury wards",
+		"citation": "La. R.S. 33:1224",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=88688",
+		"quote": "may redistrict their parish into not more than twelve police jury wards",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each parish elects a sheriff for four years, except Orleans Parish where this section does not apply",
+		"citation": "La. Const. art. V, § 27",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206465",
+		"quote": "In each parish a sheriff shall be elected for a term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The constitutional sheriff section does not apply to Orleans Parish",
+		"citation": "La. Const. art. V, § 27",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206465",
+		"quote": "This Section shall not apply to Orleans Parish",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each parish elects a clerk of the district court for four years",
+		"citation": "La. Const. art. V, § 28(A)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206466",
+		"quote": "In each parish a clerk of the district court shall be elected for a term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each parish elects a coroner for four years",
+		"citation": "La. Const. art. V, § 29",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206467",
+		"quote": "In each parish a coroner shall be elected for a term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each parish elects a tax assessor for four years",
+		"citation": "La. Const. art. VII, § 24(A)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206554",
+		"quote": "A tax assessor shall be elected by the electors of each parish. His term of office shall be four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Orleans Parish's assessor is elected with New Orleans's municipal officers",
+		"citation": "La. Const. art. VII, § 24(B)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206554",
+		"quote": "The assessor shall be elected at the same time as the municipal officers of New Orleans",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter cannot change the offices of district attorney, sheriff, assessor, clerk of court or coroner inconsistently with the constitution or law",
+		"citation": "La. Const. art. VI, § 5(G)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206520",
+		"quote": "or the offices of district attorney, sheriff, assessor, clerk of a district court, or coroner, which is inconsistent with this constitution or law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any parish or municipality may adopt a home rule charter; there is no population threshold",
+		"citation": "La. Const. art. VI, §§ 5(A), 44(1)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206520",
+		"quote": "any local governmental subdivision may draft, adopt, or amend a home rule charter in accordance with this Section",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "\"Local governmental subdivision\" means a parish or municipality",
+		"citation": "La. Const. art. VI, § 44(1)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206519",
+		"quote": "\"Local governmental subdivision\" means any parish or municipality",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality means an incorporated city, town or village",
+		"citation": "La. Const. art. VI, § 44(3)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206519",
+		"quote": "\"Municipality\" means an incorporated city, town, or village",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter is adopted by majority vote of the electors",
+		"citation": "La. Const. art. VI, § 5(C)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206520",
+		"quote": "A home rule charter shall be adopted, amended, or repealed when approved by a majority of the electors voting thereon",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter sets the structure and organization of the local government",
+		"citation": "La. Const. art. VI, § 5(E)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206520",
+		"quote": "A home rule charter adopted under this Section shall provide the structure and organization, powers, and functions of the government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Two or more subdivisions in one parish may adopt a joint charter",
+		"citation": "La. Const. art. VI, § 5(D)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206520",
+		"quote": "Two or more local governmental subdivisions within the boundaries of one parish may adopt a home rule charter under this Section",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Charters and plans of government existing in 1974 remain in effect",
+		"citation": "La. Const. art. VI, § 4",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206514",
+		"quote": "Every home rule charter or plan of government existing or adopted when this constitution is adopted shall remain in effect",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The legislature may not change the structure of a home rule charter government",
+		"citation": "La. Const. art. VI, § 6",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206521",
+		"quote": "The legislature shall enact no law the effect of which changes or affects the structure and organization",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The legislature may classify parishes and municipalities by population",
+		"citation": "La. Const. art. VI, § 3",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206502",
+		"quote": "The legislature may classify parishes or municipalities according to population or on any other reasonable basis",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal incorporation and government are set by general law; local laws cannot create a municipality or amend a municipal charter, except pre-1974 special legislative charters",
+		"citation": "La. Const. art. VI, § 2",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=206491",
+		"quote": "No local or special law shall create a municipal corporation or amend, modify, or repeal a municipal charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities are cities (5,000 or more), towns (1,001 to 4,999) and villages (1,000 or fewer)",
+		"citation": "La. R.S. 33:341",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=90178",
+		"quote": "Those having five thousand inhabitants or more are cities; those having less than five thousand but more than one thousand inhabitants are towns; and those having one thousand or fewer inhabitants are villages",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A change of class needs a resolution and a governor's proclamation; a census alone does not change it",
+		"citation": "La. R.S. 33:342(A)(1), (B)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=90179",
+		"quote": "If the governor finds that the municipality is wrongly classified, he shall issue a proclamation correctly classifying the municipality",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A village that grows by fewer than 200 people into town size may choose to stay a village",
+		"citation": "La. R.S. 33:342(A)(2)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=90179",
+		"quote": "the governing authority of a municipality may elect not to change the classification of the municipality",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Lawrason Act municipalities may call their board a village, town or city council and its members council members",
+		"citation": "La. R.S. 33:343(A)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=90189",
+		"quote": "elect to be known and referred to as a village, town, or city council",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Lawrason Act (mayor and board of aldermen) governs every municipality without a special legislative charter or home rule charter",
+		"citation": "La. R.S. 33:321",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=90123",
+		"quote": "All municipalities shall be governed by the provisions of this Part except those municipalities governed by a special legislative charter or a home rule charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A special legislative charter governs where it speaks; the Lawrason Act fills gaps",
+		"citation": "La. R.S. 33:481",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=91212",
+		"quote": "if the provisions of the special legislative charter are silent on a particular matter, then the provisions of Part I of Chapter 2",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Lawrason municipal officers are a mayor, aldermen, a chief of police, a tax collector and a clerk",
+		"citation": "La. R.S. 33:381(A)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=90347",
+		"quote": "The officers of every municipality shall be a mayor, aldermen, a chief of police, a tax collector, and a clerk",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The mayor and chief of police are elected at large",
+		"citation": "La. R.S. 33:381(B)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=90347",
+		"quote": "The mayor and chief of police in all municipalities shall be elected at large",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Some municipalities appoint their chief of police, under pre-1970 practice or special laws",
+		"citation": "La. R.S. 33:381(B), (C)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=90347",
+		"quote": "Municipalities where the chief of police is appointed rather than elected as of",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In some municipalities the elected chief of police is called the marshal",
+		"citation": "La. R.S. 33:381.1",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=90348",
+		"quote": "The marshal who is the chief of police in such municipalities shall be elected at large",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In municipalities of 5,000 or less, voters may choose to have an appointed or elected marshal",
+		"citation": "La. R.S. 33:381.2(A)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=208476",
+		"quote": "authorize the mayor to thereafter appoint a marshal who is the chief of police with the approval of the governing authority or provide for the election of a marshal",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities have 5 to 9 aldermen, towns 5 and villages 3",
+		"citation": "La. R.S. 33:382(A)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=90367",
+		"quote": "The number of aldermen in a city shall be not less than five nor more than nine; the number of aldermen in a town shall be five; and the number of aldermen in a village shall be three",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Village aldermen are elected at large",
+		"citation": "La. R.S. 33:382(B)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=90367",
+		"quote": "Aldermen in villages shall be elected at large",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Lawrason municipal officers serve four-year terms",
+		"citation": "La. R.S. 33:383(A)(1)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=90382",
+		"quote": "municipal elections shall be held every four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Lawrason officers take office on 1 July and serve four years",
+		"citation": "La. R.S. 33:383(A)(1)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=90382",
+		"quote": "The officers elected shall take office on the first day of July following their election and shall hold their office for four years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality may, by irrevocable plan, move its elections to the congressional elections",
+		"citation": "La. R.S. 33:383(A)(2)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=90382",
+		"quote": "Any municipality by ordinance of the governing authority may adopt a plan for holding municipal elections at the congressional elections",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Such a plan cannot be revoked",
+		"citation": "La. R.S. 33:383(A)(2)(b)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=90382",
+		"quote": "No such plan shall be revocable by the governing authority",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality may file a plan by 12 January 2027 to move to the fall gubernatorial election, first used in 2031",
+		"citation": "La. R.S. 33:383(A)(3)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=90382",
+		"quote": "Any plan adopted pursuant to this Paragraph shall be filed with the secretary of state no later than January 12, 2027",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The first fall gubernatorial municipal election under such a plan is 2031",
+		"citation": "La. R.S. 33:383(A)(3)(c)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=90382",
+		"quote": "The first election under the plan shall be held at the 2031 gubernatorial election",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Charter commissions may be appointed or elected for any parish or municipality",
+		"citation": "La. R.S. 33:1395(A)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=89097",
+		"quote": "Any parish or municipality may draft, adopt, or amend a home rule charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Officers of a newly incorporated municipality are appointed by the governor until the next municipal election",
+		"citation": "La. R.S. 33:6",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=91316",
+		"quote": "The governor shall appoint all the officers of a newly incorporated municipality",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "For Orleans Parish, the parish governing authority is the city council",
+		"citation": "La. R.S. 18:2(7)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81529",
+		"quote": "\"Parish governing authority\" or \"governing authority of the parish\" with respect to Orleans Parish means the city council",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Lafayette's unified city-parish plan remains in effect as a local and special act",
+		"citation": "La. R.S. 33:1391 (note)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=89095",
+		"quote": "dealing with the charter commission and the plan for unification of the parish and city of Lafayette",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Terrebonne Parish's plan of government remains in effect as a local and special act",
+		"citation": "La. R.S. 33:1392 (note)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=89096",
+		"quote": "dealing with the charter commission and plan of government for Terrebonne Parish",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Baton Rouge and East Baton Rouge Parish share a plan of government",
+		"citation": "La. R.S. 13:1879(B)(1)",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=77006",
+		"quote": "the applicable provisions of the plan of government for the parish of East Baton Rouge and the city of Baton Rouge",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Where a municipality has over half of a parish's people, it gets proportionate representation on the parish school board",
+		"citation": "La. R.S. 17:57",
+		"url": "https://legis.la.gov/legis/Law.aspx?d=81155",
+		"quote": "the municipality shall have representation on the parish school board proportionate to its population",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

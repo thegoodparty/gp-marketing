@@ -1,0 +1,570 @@
+[
+	{
+		"claim": "Regular sessions start on the second Monday of January every year unless law sets another day",
+		"citation": "Idaho Const. art. III, § 8(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idconst/ArtIII/Sect8/",
+		"quote": "commencing on the second Monday of January of each year, unless a different day shall have been appointed by law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The governor may call extraordinary sessions",
+		"citation": "Idaho Const. art. III, § 8(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idconst/ArtIII/Sect8/",
+		"quote": "in extraordinary sessions when convened by the governor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Legislative leaders must call a special session on petition of 60% of each house",
+		"citation": "Idaho Const. art. III, § 8(2)",
+		"url": "https://legislature.idaho.gov/statutesrules/idconst/ArtIII/Sect8/",
+		"quote": "a joint written petition of at least sixty percent of the membership of each house",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A bill not returned within five days (Sundays excepted) during session becomes law",
+		"citation": "Idaho Const. art. IV, § 10",
+		"url": "https://legislature.idaho.gov/statutesrules/idconst/ArtIV/Sect10/",
+		"quote": "Any bill which shall not be returned by the governor to the legislature within five days (Sundays excepted) after it shall have been presented to him, shall become a law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "After adjournment the governor has ten days (Sundays excepted) to file a veto or the bill becomes law",
+		"citation": "Idaho Const. art. IV, § 10",
+		"url": "https://legislature.idaho.gov/statutesrules/idconst/ArtIV/Sect10/",
+		"quote": "within ten days after such adjournment (Sundays excepted) or become a law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Acts take effect July 1 or sixty days after the session ends, whichever is later, unless an emergency is declared",
+		"citation": "Idaho Code § 67-510",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title67/T67CH5/SECT67-510/",
+		"quote": "No act shall take effect until July 1 of the year of the regular session or sixty (60) days from the end of the session at which the same shall have been passed, whichever date occurs last",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The constitution bars acts taking effect before sixty days after session end, except emergencies",
+		"citation": "Idaho Const. art. III, § 22",
+		"url": "https://legislature.idaho.gov/statutesrules/idconst/ArtIII/Sect22/",
+		"quote": "No act shall take effect until sixty days from the end of the session at which the same shall have been passed, except in case of emergency",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "General elections for state and county offices are in November of even-numbered years",
+		"citation": "Idaho Code § 34-101",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH1/SECT34-101/",
+		"quote": "held on the first Tuesday succeeding the first Monday of November in each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County officers are chosen at the even-year general election",
+		"citation": "Idaho Code § 34-101",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH1/SECT34-101/",
+		"quote": "there shall be chosen all congressional, state and county officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The partisan primary is the third Tuesday of May in even-numbered years",
+		"citation": "Idaho Code § 34-102",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH1/SECT34-102/",
+		"quote": "Primary elections shall be held on the third Tuesday of May in each even-numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No more than two election dates a year in any county: the third Tuesday in May and the November Tuesday",
+		"citation": "Idaho Code § 34-106",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH1/SECT34-106/",
+		"quote": "there shall be no more than two (2) elections conducted in any county in any calendar year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The two permitted dates are the third Tuesday in May and the Tuesday after the first Monday in November",
+		"citation": "Idaho Code § 34-106(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH1/SECT34-106/",
+		"quote": "The third Tuesday in May of each year; and (b) The Tuesday following the first Monday in November of each year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A district that voted on another date before 2011 moved to the nearest permitted date",
+		"citation": "Idaho Code § 34-106(4)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH1/SECT34-106/",
+		"quote": "shall establish as the election date for that political subdivision the date authorized in subsection (1) of this section that falls nearest the date on which elections were previously conducted",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Water districts are exempt from the two-date limit",
+		"citation": "Idaho Code § 34-106(6)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH1/SECT34-106/",
+		"quote": "Water districts governed by chapter 6, title 42",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City initiative and referendum elections are in November of odd-numbered years",
+		"citation": "Idaho Code § 34-106(8)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH1/SECT34-106/",
+		"quote": "A city initiative or referendum election shall be held on the Tuesday following the first Monday in November of odd-numbered years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City general elections are in November of odd-numbered years and choose mayors and council members",
+		"citation": "Idaho Code § 50-402(a)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title50/T50CH4/SECT50-402/",
+		"quote": "the election held on the first Tuesday succeeding the first Monday in November in each odd-numbered year at which there shall be chosen all mayors and councilmen",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each city holds its general election in November of odd-numbered years",
+		"citation": "Idaho Code § 50-405(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title50/T50CH4/SECT50-405/",
+		"quote": "on the Tuesday following the first Monday of November in each odd-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In cities under 100,000, an uncontested mayor or council race is not held and the candidate is declared elected",
+		"citation": "Idaho Code § 50-405(2)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title50/T50CH4/SECT50-405/",
+		"quote": "No city with a population of less than one hundred thousand (100,000) shall hold a city election for an office if",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School trustees are elected in November of odd-numbered years",
+		"citation": "Idaho Code § 33-503(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title33/T33CH5/SECT33-503/",
+		"quote": "The election of school district trustees including those in charter districts shall be on the Tuesday following the first Monday in November in odd-numbered years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each trustee zone elects the candidate with the most votes in the zone",
+		"citation": "Idaho Code § 33-503(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title33/T33CH5/SECT33-503/",
+		"quote": "In each trustee zone, the person receiving the greatest number of votes cast within his zone shall be declared",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Trustees serve four-year terms",
+		"citation": "Idaho Code § 33-501(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title33/T33CH5/SECT33-501/",
+		"quote": "a school district trustee shall be elected for a term of four (4) years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Elementary school district boards have three trustees and other districts five, with exceptions after boundary changes",
+		"citation": "Idaho Code § 33-501(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title33/T33CH5/SECT33-501/",
+		"quote": "The board of trustees of each elementary school district shall consist of three (3) members, and the board of trustees of each other school district shall consist of five (5) members.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Trustees must live in the trustee zone they represent",
+		"citation": "Idaho Code § 33-501(2)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title33/T33CH5/SECT33-501/",
+		"quote": "a resident of the trustee zone from which nominated or appointed",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Trustee candidates file declarations signed by five zone electors",
+		"citation": "Idaho Code § 33-502",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title33/T33CH5/SECT33-502/",
+		"quote": "bear the signature of not less than five (5) school district electors resident of the trustee zone",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county clerk runs elections for every political subdivision, including special districts",
+		"citation": "Idaho Code § 34-1401(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH14/SECT34-1401/",
+		"quote": "the county clerk shall administer all elections on behalf of any political subdivision",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "All school district and highway district elections follow the uniform district election law",
+		"citation": "Idaho Code § 34-1401(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH14/SECT34-1401/",
+		"quote": "All school district and highway district elections shall be conducted pursuant to the provisions of this chapter 14, title 34",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Irrigation districts and several water-related districts are exempt from the uniform district election law",
+		"citation": "Idaho Code § 34-1401(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH14/SECT34-1401/",
+		"quote": "irrigation districts governed by title 43 , Idaho Code, are exempt from the provisions of this chapter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "District candidates are nominated by petitions, not party",
+		"citation": "Idaho Code § 34-1404(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH14/SECT34-1404/",
+		"quote": "Candidates for election in any political subdivision shall be nominated by nominating petitions",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Highway district commissioners are elected on a nonpartisan ballot",
+		"citation": "Idaho Code § 34-905A",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH9/SECT34-905A/",
+		"quote": "There shall be a single nonpartisan ballot for the election of highway district commissioners in each highway district.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Highway district commissioner: the candidate with the most votes wins",
+		"citation": "Idaho Code § 34-905A",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH9/SECT34-905A/",
+		"quote": "The candidate with the most votes shall be declared the successful candidate.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Single countywide highway district candidates file with the county clerk like party candidates",
+		"citation": "Idaho Code § 34-704(3)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH7/SECT34-704/",
+		"quote": "single countywide highway district office pursuant to section 40-1404A",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Primary ballots are separate for each party",
+		"citation": "Idaho Code § 34-904(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH9/SECT34-904/",
+		"quote": "There shall be a separate primary election ballot for each political party upon which its ticket shall be printed",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter affiliated with a party may vote only in that party's primary",
+		"citation": "Idaho Code § 34-904A(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH9/SECT34-904A/",
+		"quote": "an elector who has designated a party affiliation shall be allowed to vote only in the primary election of the political party for which such an elector is so registered",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party may open its primary to unaffiliated voters or another party's members by notice the previous November",
+		"citation": "Idaho Code § 34-904A(2)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH9/SECT34-904A/",
+		"quote": "no later than the last Tuesday in the November prior to a primary election, notify the secretary of state in writing that the political party elects to allow",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An unaffiliated voter choosing a party's primary declares it at the polls and the choice is recorded in voting history",
+		"citation": "Idaho Code § 34-904A(3)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH9/SECT34-904A/",
+		"quote": "The county clerk shall record such choice as part of the elector",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party candidates must be affiliated with the party when they file",
+		"citation": "Idaho Code § 34-704(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH7/SECT34-704/",
+		"quote": "All political party candidates shall declare their party affiliation in their declaration of candidacy and shall be affiliated with a party at the time of filing.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County office candidates file party declarations with the county clerk before the primary",
+		"citation": "Idaho Code § 34-704(3)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH7/SECT34-704/",
+		"quote": "Each political party candidate for county office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party candidate who loses the primary may not run in the general under another party or as an independent",
+		"citation": "Idaho Code § 34-704(4)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH7/SECT34-704/",
+		"quote": "shall not be allowed to appear on the general election ballot under any other political party name or as an independent candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The primary winner for a county office is the candidate with the most votes",
+		"citation": "Idaho Code § 34-1208",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH12/SECT34-1208/",
+		"quote": "the political party candidates of each party who receive the highest number of votes for their particular county office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County candidates with the most votes in November are elected",
+		"citation": "Idaho Code § 34-1209",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH12/SECT34-1209/",
+		"quote": "the county candidates who received the highest number of votes for that particular office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City candidates are nominated by declaration with no mention of party",
+		"citation": "Idaho Code § 50-406",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title50/T50CH4/SECT50-406/",
+		"quote": "There shall be no mention relating to party or principal of the nominee.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City races are won by the most votes; multi-seat races by the top vote-getters",
+		"citation": "Idaho Code § 50-412",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title50/T50CH4/SECT50-412/",
+		"quote": "the candidate with the highest number of votes shall be declared elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Independents may not run in the primary",
+		"citation": "Idaho Code § 34-708(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH7/SECT34-708/",
+		"quote": "No person may offer himself as an independent candidate at the primary election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An independent for county office files a declaration with a petition and declares no party affiliation",
+		"citation": "Idaho Code § 34-708(2)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH7/SECT34-708/",
+		"quote": "must declare that he has no political party affiliation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Idaho's counties are those of the territory as recognized at statehood",
+		"citation": "Idaho Const. art. XVIII, § 1",
+		"url": "https://legislature.idaho.gov/statutesrules/idconst/ArtXVIII/Sect1/",
+		"quote": "The several counties of the territory of Idaho, as they now exist, are hereby recognized as legal subdivisions of this state.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County government must be uniform throughout the state",
+		"citation": "Idaho Const. art. XVIII, § 5",
+		"url": "https://legislature.idaho.gov/statutesrules/idconst/ArtXVIII/Sect5/",
+		"quote": "a system of county governments which shall be uniform throughout the state",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every county commission has three members",
+		"citation": "Idaho Const. art. XVIII, § 10",
+		"url": "https://legislature.idaho.gov/statutesrules/idconst/ArtXVIII/Sect10/",
+		"quote": "The board of county commissioners shall consist of three members.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county must have a three-member board of commissioners",
+		"citation": "Idaho Code § 31-701",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title31/T31CH7/SECT31-701/",
+		"quote": "Each county must have a board of county commissioners consisting of three (3) members.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "At each biennial election one commissioner is elected for two years and one for four years, rotating by district",
+		"citation": "Idaho Code § 31-703",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title31/T31CH7/SECT31-703/",
+		"quote": "at each biennial election thereafter, one member shall be elected for a term of two (2) years and one for a term of four (4) years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties have three commissioner districts",
+		"citation": "Idaho Code § 31-704",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title31/T31CH7/SECT31-704/",
+		"quote": "must district their county into three (3) districts, as nearly equal in population as may be",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A commissioner must have lived in the district they represent for 90 days before the primary",
+		"citation": "Idaho Code § 34-617(2)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH6/SECT34-617/",
+		"quote": "in the district which he represents for a period of ninety (90) days next preceding the primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties elect a sheriff, assessor, coroner and treasurer every four years",
+		"citation": "Idaho Const. art. XVIII, § 6",
+		"url": "https://legislature.idaho.gov/statutesrules/idconst/ArtXVIII/Sect6/",
+		"quote": "for the election of a sheriff, a county assessor, a county coroner and a county treasurer, who is ex-officio public administrator, every four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The clerk of the district court is ex officio auditor and recorder",
+		"citation": "Idaho Const. art. XVIII, § 6",
+		"url": "https://legislature.idaho.gov/statutesrules/idconst/ArtXVIII/Sect6/",
+		"quote": "The clerk of the district court shall be ex-officio auditor and recorder.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No other county offices may be established",
+		"citation": "Idaho Const. art. XVIII, § 6",
+		"url": "https://legislature.idaho.gov/statutesrules/idconst/ArtXVIII/Sect6/",
+		"quote": "No other county offices shall be established",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The statutory list of county officers",
+		"citation": "Idaho Code § 31-2001",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title31/T31CH20/SECT31-2001/",
+		"quote": "The officers of a county are: 1. A sheriff. 2. A clerk of the district court, who shall be ex officio auditor and recorder, and ex officio clerk of the board of county commissioners. 3. An assessor. 4. A prosecuting attorney.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A prosecuting attorney is elected every four years in every county",
+		"citation": "Idaho Code § 34-623(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH6/SECT34-623/",
+		"quote": "every four (4) years thereafter, a prosecuting attorney shall be elected in every county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A clerk of the district court is elected every four years in every county",
+		"citation": "Idaho Code § 34-619(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH6/SECT34-619/",
+		"quote": "every four (4) years thereafter, a clerk of the district court shall be elected in every county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties and cities may make local police, sanitary and other regulations not in conflict with general law",
+		"citation": "Idaho Const. art. XII, § 2",
+		"url": "https://legislature.idaho.gov/statutesrules/idconst/ArtXII/Sect2/",
+		"quote": "may make and enforce, within its limits, all such local police, sanitary and other regulations as are not in conflict with its charter or with the general laws",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities are organized and classified by general law",
+		"citation": "Idaho Const. art. XII, § 1",
+		"url": "https://legislature.idaho.gov/statutesrules/idconst/ArtXII/Sect1/",
+		"quote": "The legislature shall provide by general laws for the incorporation, organization and classification of the cities and towns",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An area with at least 125 qualified electors may petition to incorporate as a city",
+		"citation": "Idaho Code § 50-101",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title50/T50CH1/SECT50-101/",
+		"quote": "containing not less than 125 qualified electors",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City council has four or six members, half elected at each general city election (except council-manager cities)",
+		"citation": "Idaho Code § 50-701",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title50/T50CH7/SECT50-701/",
+		"quote": "a council consisting of either four (4) or six (6) members, one half (1/2) of whom shall be elected at each general city election",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Council members serve four-year terms",
+		"citation": "Idaho Code § 50-702",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title50/T50CH7/SECT50-702/",
+		"quote": "shall hold office for a term of four (4) years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The mayor serves a four-year term",
+		"citation": "Idaho Code § 50-601",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title50/T50CH6/SECT50-601/",
+		"quote": "The term of office of mayor shall be for a period of four (4) years except as otherwise specifically provided.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Outside council-manager cities, the mayor is the chief administrative official and votes only to break ties",
+		"citation": "Idaho Code § 50-602",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title50/T50CH6/SECT50-602/",
+		"quote": "have a vote only when the council is equally divided",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any city may adopt the council-manager plan by vote",
+		"citation": "Idaho Code § 50-801",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title50/T50CH8/SECT50-801/",
+		"quote": "may adopt the council-manager plan of government by proceedings as herein provided",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city may change between four and six council members by election",
+		"citation": "Idaho Code § 50-703(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title50/T50CH7/SECT50-703/",
+		"quote": "Any city may change to the greater or lesser number of councilmen after an election",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city may number its council seats by ordinance",
+		"citation": "Idaho Code § 50-707",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title50/T50CH7/SECT50-707/",
+		"quote": "Any city, by ordinance, may assign a number to each council seat.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities under 100,000 may elect council by district; cities over 100,000 must",
+		"citation": "Idaho Code § 50-707A(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title50/T50CH7/SECT50-707A/",
+		"quote": "Any city having more than one hundred thousand (100,000) inhabitants based upon the most recent federal decennial census shall establish districts and shall elect councilmen by districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Smaller cities may choose district elections by ordinance",
+		"citation": "Idaho Code § 50-707A(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title50/T50CH7/SECT50-707A/",
+		"quote": "may, by ordinance, provide for districts and the election of councilmen by districts",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City elections in a city spanning counties are run jointly by the county clerks",
+		"citation": "Idaho Code § 50-403(2)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title50/T50CH4/SECT50-403/",
+		"quote": "Elections in a city located in more than one (1) county shall be conducted jointly by the clerks of the respective counties",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Joint school districts crossing county lines have elections run jointly by the county clerks, coordinated by the home county",
+		"citation": "Idaho Code § 34-1401(1)",
+		"url": "https://legislature.idaho.gov/statutesrules/idstat/Title34/T34CH14/SECT34-1401/",
+		"quote": "Elections in a joint school district or other political subdivisions that extend beyond the boundaries of a single county shall be conducted jointly by the clerks of the respective counties",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

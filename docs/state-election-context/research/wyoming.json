@@ -1,0 +1,317 @@
+[
+	{
+		"claim": "The legislature meets at noon on the second Tuesday of January in odd years for a general and budget session",
+		"citation": "Wyo. Const. art. 3, § 7(a)",
+		"url": "https://wyoleg.gov/statutes/compress/title97.pdf",
+		"quote": "on the second Tuesday of January of the odd-numbered years for general and budget session",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "It may meet in even years for a budget session",
+		"citation": "Wyo. Const. art. 3, § 7(a)",
+		"url": "https://wyoleg.gov/statutes/compress/title97.pdf",
+		"quote": "may meet on the second Tuesday of January of the even-numbered years for budget session",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "No more than 40 legislative working days in a calendar year, except special sessions",
+		"citation": "Wyo. Const. art. 3, § 6",
+		"url": "https://wyoleg.gov/statutes/compress/title97.pdf",
+		"quote": "The legislature shall meet for no more than forty (40) legislative working days excluding Sundays in any (1) calendar year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A bill not returned within three days, Sundays excepted, becomes law",
+		"citation": "Wyo. Const. art. 4, § 8",
+		"url": "https://wyoleg.gov/statutes/compress/title97.pdf",
+		"quote": "If any bill is not returned by the governor within three days (Sundays excepted) after its presentation to him",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "After adjournment the governor has fifteen days to file objections",
+		"citation": "Wyo. Const. art. 4, § 8",
+		"url": "https://wyoleg.gov/statutes/compress/title97.pdf",
+		"quote": "within fifteen days after such adjournment",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "General elections are in November of even years",
+		"citation": "Wyo. Stat. § 22-2-104(a)",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "on the Tuesday next following the first Monday in November of each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The primary is the first Tuesday after the third Monday in August, for partisan and nonpartisan offices",
+		"citation": "Wyo. Stat. § 22-2-104(b)",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "on the first Tuesday after the third Monday in August in general election years for the nomination of candidates for partisan and nonpartisan offices",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "School and community college trustees are elected in November of general election years",
+		"citation": "Wyo. Stat. § 22-2-104(e)",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "The election of members of the board of trustees of each school district and community college district shall be held for each district on the first Tuesday after the first Monday in November in general election years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Trustees serve four-year terms beginning in December; no more than a simple majority elected at once",
+		"citation": "Wyo. Stat. § 22-22-102",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "Terms of office shall run for four (4) years beginning at 12:00 noon on the first day in December following the election",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Trustees are nominated by filing an application, not in the primary",
+		"citation": "Wyo. Stat. § 22-22-202(a)",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "may be nominated for the office of school district trustee or member of a community college board by filing an applicatio",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Nominations by primary, petition or convention apply to all general election offices except school, college and special district offices",
+		"citation": "Wyo. Stat. § 22-5-101",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "except school and community college district offices and special district offices",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "County clerks, treasurers, assessors, coroners, county and prosecuting attorneys, district attorneys, sheriffs and clerks of district court serve four-year terms on the 1974 cycle",
+		"citation": "Wyo. Stat. § 22-2-105(a)(ii)",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "county clerks, county treasurers, county assessors, county coroners, county and prosecuting attorneys, district attorneys, sheriffs, clerks of the district court",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "County commissioners are elected at every general election",
+		"citation": "Wyo. Stat. § 22-2-105(a)(ii)",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "At every general election there shall be elected the necessary member or members of the Wyoming senate and county commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A board of county commissioners has three members, serving staggered four-year terms",
+		"citation": "Wyo. Stat. § 18-3-501(a)",
+		"url": "https://wyoleg.gov/statutes/compress/title18.pdf",
+		"quote": "Each board of county commissioners shall consist of three (3) qualified electors",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Voters may increase the board to five",
+		"citation": "Wyo. Stat. § 18-3-501(b)",
+		"url": "https://wyoleg.gov/statutes/compress/title18.pdf",
+		"quote": "any county may increase the membership of its board of county commissioners from three (3) to five (5) members",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A primary voter requesting a party ballot declares that affiliation; a voter may vote only the nonpartisan ballot",
+		"citation": "Wyo. Stat. § 22-5-212",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "An elector may vote only the nonpartisan ballot and if so, is not required to declare his party affiliation",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Requesting a party ballot is a declaration of party affiliation",
+		"citation": "Wyo. Stat. § 22-5-212",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "Requesting a partisan primary election ballot constitutes a declaration of party affiliation",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Party changes for the primary must be filed before the candidate filing period opens",
+		"citation": "Wyo. Stat. § 22-5-214(a)",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "filing it with the county clerk before the first day on which an application for nomination may be filed",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Party nominees are the candidates with the most primary votes",
+		"citation": "Wyo. Stat. § 22-5-215",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "who receive the largest number of votes shall be nominated",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A losing primary candidate may not run by petition for the same office",
+		"citation": "Wyo. Stat. § 22-5-302",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "may not seek nomination by petition for the same office at the next general election",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Independent petitions for county office are signed by registered electors of the county eligible to vote for the candidate",
+		"citation": "Wyo. Stat. § 22-5-304(b)",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "a petition shall be signed by registered electors, resident in the county and eligible to vote for the petitioner",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Nonpartisan ballots carry no party designations",
+		"citation": "Wyo. Stat. § 22-6-123",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "They shall contain no political party designations",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "All municipal offices are nonpartisan",
+		"citation": "Wyo. Stat. § 22-23-102",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "All municipal offices are nonpartisan",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Municipal primaries and general elections are held with the statewide ones",
+		"citation": "Wyo. Stat. § 22-23-201(a)",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "municipal primary and general elections are held at the same time, in the same manner, at the same polling places",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A municipality may instead hold its own elections in May every two years by charter ordinance",
+		"citation": "Wyo. Stat. § 22-23-202(a)",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "which shall be held on the Tuesday next following the first Monday in the month of May every two (2) years",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "All municipal candidates are nominated at the municipal primary",
+		"citation": "Wyo. Stat. § 22-23-301",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "All candidates for municipal office shall be nominated at the municipal primary election",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Twice as many candidates as seats advance from the municipal primary",
+		"citation": "Wyo. Stat. § 22-23-307(a)",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "The candidates equal to twice the number to be elected to each office who receive the highest number of votes are nominated",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Special district director elections are in March, May or November, as each district decides",
+		"citation": "Wyo. Stat. § 22-29-112(a)",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "shall be held on the first Tuesday after the third Monday in March or on the Tuesday next following the first Monday in May or November, as determined by the district",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "In special district elections the most votes wins",
+		"citation": "Wyo. Stat. § 22-29-113(b)(ii)",
+		"url": "https://wyoleg.gov/statutes/compress/title22.pdf",
+		"quote": "The person or persons receiving the largest number of votes is elected to office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A first class city has 4,000 or more people and has been proclaimed one",
+		"citation": "Wyo. Stat. § 15-1-101(a)(iv)",
+		"url": "https://wyoleg.gov/statutes/compress/title15.pdf",
+		"quote": "having a population of four thousand (4,000) or more which has been declared a first class city",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The mayor may be elected by voters or by the governing body",
+		"citation": "Wyo. Stat. § 15-1-101(a)(viii)",
+		"url": "https://wyoleg.gov/statutes/compress/title15.pdf",
+		"quote": "means the person elected, either by popular vote or by vote of the governing body",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Cities and towns determine their local affairs by ordinance, subject to uniform statutes; no more than four classes",
+		"citation": "Wyo. Const. art. 13, § 1(b)",
+		"url": "https://wyoleg.gov/statutes/compress/title97.pdf",
+		"quote": "All cities and towns are hereby empowered to determine their local affairs and government as established by ordinance passed by the governing body",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "No more than four classes of cities and towns",
+		"citation": "Wyo. Const. art. 13, § 1(b)",
+		"url": "https://wyoleg.gov/statutes/compress/title97.pdf",
+		"quote": "The legislature may not establish more than four (4) classes of cities and towns",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A city or town may exempt itself from non-uniform statutes by charter ordinance",
+		"citation": "Wyo. Const. art. 13, § 1(b)",
+		"url": "https://wyoleg.gov/statutes/compress/title97.pdf",
+		"quote": "except as it may exempt itself by charter ordinance as hereinafter provided",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The constitution lets counties adopt township government by vote",
+		"citation": "Wyo. Const. art. 12, § 4",
+		"url": "https://wyoleg.gov/statutes/compress/title97.pdf",
+		"quote": "which may be adopted by any county whenever a majority of the citizens thereof voting at a general election shall so determine",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	}
+]

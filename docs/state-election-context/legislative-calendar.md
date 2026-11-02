@@ -37,33 +37,33 @@ states cover the most pages, so they come first.
 | 22 | Washington | 618 | done, reviewed 28 October 2026 |
 | 23 | North Dakota | 606 | drafted, awaiting review |
 | 24 | Massachusetts | 597 | drafted, awaiting review |
-| 25 | Tennessee | 553 | drafted, quote check waiting on robot check |
+| 25 | Tennessee | 553 | drafted, awaiting review |
 | 26 | Florida | 533 | drafted, awaiting review |
 | 27 | Oregon | 481 | drafted, awaiting review |
 | 28 | Mississippi | 449 | drafted, awaiting review |
 | 29 | Louisiana | 436 | drafted, awaiting review |
 | 30 | Virginia | 428 | done, reviewed 2 November 2026 |
-| 31 | Montana | 401 | in progress |
-| 32 | Alabama | 385 | in progress |
-| 33 | Colorado | 365 | in progress |
-| 34 | South Carolina | 363 | queued after Virginia |
-| 35 | Idaho | 362 | queued after Montana |
-| 36 | Maine | 329 | queued after Alabama |
-| 37 | Arizona | 321 | queued after Colorado |
-| 38 | Connecticut | 312 | queued after Virginia |
-| 39 | Utah | 303 | queued after Montana |
-| 40 | Vermont | 298 | queued after Alabama |
-| 41 | New Hampshire | 284 | queued after Colorado |
-| 42 | New Mexico | 230 | queued after Virginia |
-| 43 | West Virginia | 186 | queued after Montana |
-| 44 | Maryland | 158 | queued after Alabama |
-| 45 | Wyoming | 155 | queued after Virginia |
-| 46 | Alaska | 84 | queued after Montana |
-| 47 | Delaware | 76 | queued after Alabama |
-| 48 | Rhode Island | 74 | queued after Colorado |
-| 49 | Nevada | 67 | queued after Virginia |
-| 50 | Hawaii | 5 | queued after Montana |
-| 51 | District of Columbia | 3 | queued after Alabama |
+| 31 | Montana | 401 | drafted, awaiting review |
+| 32 | Alabama | 385 | drafted, awaiting review |
+| 33 | Colorado | 365 | drafted, awaiting review |
+| 34 | South Carolina | 363 | drafted, awaiting review |
+| 35 | Idaho | 362 | drafted, awaiting review |
+| 36 | Maine | 329 | drafted, awaiting review |
+| 37 | Arizona | 321 | drafted, awaiting review |
+| 38 | Connecticut | 312 | drafted, awaiting review |
+| 39 | Utah | 303 | drafted, awaiting review |
+| 40 | Vermont | 298 | drafted, awaiting review |
+| 41 | New Hampshire | 284 | drafted, awaiting review |
+| 42 | New Mexico | 230 | drafted, awaiting review |
+| 43 | West Virginia | 186 | drafted, awaiting review |
+| 44 | Maryland | 158 | drafted, awaiting review |
+| 45 | Wyoming | 155 | drafted, awaiting review |
+| 46 | Alaska | 84 | drafted, awaiting review |
+| 47 | Delaware | 76 | drafted, awaiting review |
+| 48 | Rhode Island | 74 | drafted, awaiting review |
+| 49 | Nevada | 67 | drafted, awaiting review |
+| 50 | Hawaii | 5 | drafted, awaiting review |
+| 51 | District of Columbia | 3 | drafted, awaiting review |
 
 The rest follow the order in the CSV.
 

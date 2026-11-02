@@ -1,0 +1,1212 @@
+[
+	{
+		"claim": "The General Assembly convenes in odd-numbered years on the first Tuesday after the first Monday in January",
+		"citation": "Ky. Const. § 36",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=40",
+		"quote": "shall convene for the first part of the session on the first Tuesday after the first Monday in January in odd-numbered years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "In odd-numbered years the session resumes for its second part on the first Tuesday in February",
+		"citation": "Ky. Const. § 36",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=40",
+		"quote": "The General Assembly shall convene for the second part of the session on the first Tuesday in February of that year.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The odd-year session lasts at most 30 legislative days",
+		"citation": "Ky. Const. § 36",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=40",
+		"quote": "for a period not to exceed a total of thirty (30) legislative days",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Even-year sessions convene on the first Tuesday after the first Monday in January",
+		"citation": "Ky. Const. § 36",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=40",
+		"quote": "until the first Tuesday after the first Monday in January of the following even-numbered years, at which time the General Assembly shall convene in regular session",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "An odd-year session may not run past March 30",
+		"citation": "Ky. Const. § 42",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=46",
+		"quote": "nor shall a session occurring in odd-numbered years extend beyond March 30",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "An even-year session is capped at sixty legislative days and April 15",
+		"citation": "Ky. Const. § 42",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=46",
+		"quote": "continue beyond sixty legislative days, nor shall it extend beyond April 15",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The governor has ten days, Sundays excepted, to act on a bill; after adjournment, a bill becomes law unless vetoed within ten days of adjournment",
+		"citation": "Ky. Const. § 88",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=96",
+		"quote": "If any bill shall not be returned by the Governor within ten days (Sundays excepted) after it shall have been presented to him, it shall be a law in like manner as if he had signed it, unless the General Assembly, by their adjournment, prevent its return, in which case it shall be a law, unless disapproved by him within ten days after the adjournment",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Acts take effect ninety days after the session adjourns, unless passed as emergency legislation or a general appropriation bill",
+		"citation": "Ky. Const. § 55",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=59",
+		"quote": "No act, except general appropriation bills, shall become a law until ninety days after the adjournment of the session at which it was passed, except in cases of emergency",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "All regular elections of state, county, city and district officers are held on the first Tuesday after the first Monday in November",
+		"citation": "Ky. Const. § 148",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=169",
+		"quote": "All regular elections of State, county, city, town, urban-county, or district officers shall be held on the first Tuesday after the first Monday in November.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "No more than one election a year may be held in the state or in any local unit, except as the Constitution provides",
+		"citation": "Ky. Const. § 148",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=169",
+		"quote": "Not more than one election each year shall be held in this State or in any city, town, district, urban-county or county thereof, except as otherwise provided in this Constitution.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The primary is held on the first Tuesday after the third Monday in May",
+		"citation": "KRS 118.025(3)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=51687",
+		"quote": "shall be held on the first Tuesday after the third Monday in May of each year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The election of all officers of all governmental units is held on the first Tuesday after the first Monday in November",
+		"citation": "KRS 118.025(4)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=51687",
+		"quote": "The election of all officers of all governmental units shall be held on the first Tuesday after the first Monday in November.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "County officers, justices of the peace and constables are elected in 1998 and every four years after, for four-year terms",
+		"citation": "Ky. Const. § 99",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=108",
+		"quote": "At the regular election in nineteen hundred and ninety-eight and every four years thereafter, there shall be elected in each county a Judge of the County Court, a County Court Clerk, a County Attorney, Sheriff, Jailer, Coroner, Surveyor and Assessor, and in each Justice's District one Justice of the Peace and one Constable",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "County officers serve four years",
+		"citation": "Ky. Const. § 99",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=108",
+		"quote": "who shall hold their offices four years until the election and qualification of their successors",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The property valuation administrator is elected in the county election year for four years",
+		"citation": "KRS 132.370(2)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=28264",
+		"quote": "Property valuation administrators shall be elected in the year in which county elections are held",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Each county has a property valuation administrator in place of a county assessor",
+		"citation": "KRS 132.370(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=28264",
+		"quote": "There shall be a property valuation administrator in each county in lieu of a county assessor.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The circuit court clerk (each county) and Commonwealth's attorney (each circuit) are elected in 2000 and every six years after, for six-year terms",
+		"citation": "Ky. Const. § 97",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=106",
+		"quote": "In the year two thousand, and every six years thereafter, there shall be an election in each county for a Circuit Court Clerk, and for a Commonwealth's Attorney, in each circuit court district",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "City and urban-county officers are elected at the November general election in even-numbered years",
+		"citation": "Ky. Const. § 167",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=193",
+		"quote": "shall be elected at the general elections in November in even-numbered years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "City election dates follow KRS 118.025",
+		"citation": "KRS 83A.043(2)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=25166",
+		"quote": "Dates on which primary and regular elections are to be held shall be governed by the provisions of KRS 118.025, except as provided in this chapter.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Mayors serve four years",
+		"citation": "KRS 83A.040(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=58058",
+		"quote": "His or her term of office shall begin on the first day of January following his or her election and shall be for four (4) years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "City legislative body members serve two years",
+		"citation": "KRS 83A.040(4)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=58058",
+		"quote": "shall be for two (2) years, except as provided by KRS 83A.050",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The Constitution sets mayors' terms at four years and legislative board terms at two years",
+		"citation": "Ky. Const. § 160",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=186",
+		"quote": "The terms of office of Mayors or Chief Executives and Police Judges shall be four years, and until their successors shall be qualified, and of members of legislative boards, two years.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "School board elections are held in even-numbered years, for four-year terms, normally at the November regular election",
+		"citation": "KRS 160.200(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=56916",
+		"quote": "All elections for members of boards of education shall be in even numbered years, for a term of four (4) years. Except as provided in subsection (3) of this section, the elections shall be held at the regular November election.",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Some independent school districts may hold their board election on the first Saturday in May",
+		"citation": "KRS 160.200(3)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=56916",
+		"quote": "hold its election of board members at its public school building on the first Saturday in May",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Soil and water conservation district supervisors are elected for four-year terms, nominated by petition",
+		"citation": "KRS 262.240(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=54498",
+		"quote": "Supervisors shall be elected for four (4) years as their terms expire. Nominating petitions for supervisors shall be filed with the county clerk",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Soil and water supervisor candidates appear on the regular election ballot when nominated by petition",
+		"citation": "KRS 118.305(1)(j)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=51691",
+		"quote": "Candidates for soil and water district supervisors who have been nominated by petition as provided in KRS 262.210",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Fire protection district trustees are elected by firefighters and property owners at the fire house on the fourth Saturday of June",
+		"citation": "KRS 75.031(2)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=56837",
+		"quote": "shall be filled by an election to be held once each year on the fourth Saturday of June between the hours of 11:00 a.m. and 2:00 p.m. The polls shall be located at the principal fire house in the district.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Fire protection district boards have four elected and three appointed trustees",
+		"citation": "KRS 75.031(1)(a)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=56837",
+		"quote": "four (4) to be elected by the members of the district as hereinafter set out and three (3) to be appointed by the county judge/executive or the mayor in a consolidated local government",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Only voters registered with a party by December 31 before the primary may vote in that party's primary",
+		"citation": "KRS 116.055(1)(b)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=48900",
+		"quote": "Shall have been a registered member of the party in whose primary he or she seeks to vote on December 31 immediately preceding the primary",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A voter may vote only for the candidates of their own registered party",
+		"citation": "KRS 116.055(4)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=48900",
+		"quote": "No person shall be allowed to vote for any party candidates or slates of candidates other than that of the party of which he or she is a registered member.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Any registered voter, including independents, may vote in the nonpartisan races on a primary ballot",
+		"citation": "KRS 116.055(5)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=48900",
+		"quote": "shall be qualified to vote in a primary for candidates listed in all nonpartisan races",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Political parties must nominate all their candidates by primary",
+		"citation": "KRS 118.105(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=53821",
+		"quote": "every political party shall nominate all of its candidates for elective offices to be voted for at any regular election at a primary held as provided in this chapter",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The party-primary rule does not apply to school board, nonpartisan races or presidential electors",
+		"citation": "KRS 118.105(6)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=53821",
+		"quote": "This section does not apply to candidates for members of boards of education, or presidential electors, nor to candidates participating in nonpartisan elections.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A political party is an organization whose presidential candidate won at least ten percent of the vote",
+		"citation": "KRS 118.015(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=56999",
+		"quote": "whose candidate received at least ten percent (10%) of the total vote cast at the last preceding election at which presidential electors were voted for",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "City elections follow the general (partisan) election laws unless the city adopts nonpartisan elections by ordinance",
+		"citation": "KRS 83A.050(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=43601",
+		"quote": "Election of city officers shall be governed by general election laws as provided in KRS Chapters 116 through 121 unless the city legislative body prescribes by ordinance that election of city officers shall be under nonpartisan city election laws",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A city may not change how its officers are elected more often than every five years",
+		"citation": "KRS 83A.050(2)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=43601",
+		"quote": "no change shall be made earlier than five (5) years from the last change",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Partisan city elections follow the same rules regardless of form of government or class",
+		"citation": "KRS 83A.045(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=53991",
+		"quote": "partisan elections of city officers shall be governed by the following provisions, regardless of the form of government or classification of the city",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Nonpartisan city primaries show no party designation",
+		"citation": "KRS 83A.170(10)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57011",
+		"quote": "No party designation or emblem of any kind nor any sign indicating any applicant's political belief or party affiliation shall be used.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A nonpartisan city primary nominates the top two candidates per office (twice the seats for at-large councils)",
+		"citation": "KRS 83A.170(13)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57011",
+		"quote": "The two (2) applicants receiving the highest number of votes for nomination for each city office shall be nominated",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "If there are no more than two candidates per office, the nonpartisan city primary is skipped for that office",
+		"citation": "KRS 83A.170(6)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57011",
+		"quote": "the applicants for nomination shall thereby be nominated and no drawing for ballot position nor primary election shall be held for that office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Home rule class cities may drop the nonpartisan primary by ordinance",
+		"citation": "KRS 83A.045(2)(b)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=53991",
+		"quote": "A city may forgo conducting a nonpartisan primary for the nomination of candidates to city office, regardless of the number of candidates running for each office",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Without a primary, the top vote-getters equal to the number of seats are elected",
+		"citation": "KRS 83A.045(2)(b)4",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=53991",
+		"quote": "the number of candidates equal to the number of city offices to be filled who receive the highest number of votes cast in the regular election for each city office shall be elected",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "School board candidates appear without any party emblem, under the words School Candidates",
+		"citation": "KRS 160.230",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=3694",
+		"quote": "no party emblem or distinguishing mark shall be used, save the words \"School Candidates.\"",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "School board candidates are nominated by petition, not primary",
+		"citation": "KRS 160.220",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=3693",
+		"quote": "who have filed a petition as provided in KRS 118.315",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Judicial candidates run on a nonpartisan judicial ballot",
+		"citation": "KRS 118A.060(8)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57005",
+		"quote": "No party designation or emblem of any kind, nor any sign indicating any candidate's political belief or party affiliation, shall be used on the ballots.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The candidate with the most votes in a primary is the nominee",
+		"citation": "KRS 118.245(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=50330",
+		"quote": "The candidate for office receiving the highest number of votes in a primary for the office for which he or she is a candidate shall be the nominee of his or her party for that office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A tie for the highest vote in a general election is decided by lot",
+		"citation": "KRS 118.425(2)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=56461",
+		"quote": "If the board finds that two (2) or more candidates have received the highest and equal number of votes for the same office, the board shall determine by lot which of the candidates is elected.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "In a nonpartisan city regular election the candidate with more votes wins",
+		"citation": "KRS 83A.170(15)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57011",
+		"quote": "The nominee or candidate receiving the greater number of votes cast for each city office shall be elected.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "County school board members are elected by division; independent district members at large, by plurality",
+		"citation": "KRS 160.260",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=3697",
+		"quote": "The legally eligible candidate receiving the highest number of votes cast in his division shall be declared elected.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Any candidate may be nominated for the regular election by petition of qualified voters",
+		"citation": "KRS 118.315(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57003",
+		"quote": "A candidate for any office to be voted for at any regular election may be nominated by a petition of electors qualified to vote for him or her",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A person registered with a party on January 1 before the election may not run as an independent",
+		"citation": "KRS 118.315(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57003",
+		"quote": "whose registration status was as a registered member of a political party on January 1 immediately preceding the regular election for which the person seeks to be a candidate",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The party-registration bar on independents does not apply to home rule city mayor and council, soil and water, school board or nonpartisan races",
+		"citation": "KRS 118.315(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57003",
+		"quote": "This restriction shall not apply to candidates to those offices specified in KRS 118.105(6), for supervisor of a soil and water conservation district, for candidates for mayor or legislative body in cities of the home rule class, or to candidates participating in nonpartisan elections.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A voter may sign more than one nomination petition",
+		"citation": "KRS 118.315(2)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57003",
+		"quote": "A petitioner for the nomination of a candidate may be counted for every petition to which his or her signature is affixed.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Petition signers are registered voters from the candidate's district or jurisdiction",
+		"citation": "KRS 118.315(2)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57003",
+		"quote": "signed by the candidate and by registered voters from the district or jurisdiction from which the candidate seeks nomination",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A candidate defeated in a primary cannot appear on the regular election ballot for the same office",
+		"citation": "KRS 118.345(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=54650",
+		"quote": "No candidate who has been defeated or disqualified for the nomination for any office in a primary shall have his or her name placed on ballots in the succeeding regular election as a candidate for the same office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Independent city candidates do not take part in a primary",
+		"citation": "KRS 83A.045(1)(b)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=53991",
+		"quote": "An independent candidate for nomination to city office shall not participate in a primary",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Each county has a fiscal court of either the judge and the justices of the peace, or the judge and three commissioners",
+		"citation": "Ky. Const. § 144",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=164",
+		"quote": "Counties shall have a Fiscal Court, which may consist of the Judge of the County Court and the Justices of the Peace, in which Court the Judge of the County Court shall preside, if present; or a county may have three Commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The fiscal court is the county judge/executive plus either the justices of the peace or three commissioners",
+		"citation": "KRS 67.040(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=23675",
+		"quote": "The fiscal court of each county shall consist of the county judge/executive and the justices of the peace of the county; or of the county judge/executive and three (3) county commissioners elected under KRS 67.050 and 67.060.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Each county has three to eight justices' districts, each electing one justice of the peace",
+		"citation": "Ky. Const. § 142",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=161",
+		"quote": "no county shall have less than three nor more than eight districts, in each of which districts one Justice of the Peace shall be elected as provided in Section 99",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A county chooses a commissioner fiscal court by referendum, and can vote to return",
+		"citation": "KRS 67.050(1), (3)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=23678",
+		"quote": "Are you for or against having a fiscal court composed of three (3) commissioners and the county judge/executive?",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "In commissioner counties, three commissioners are elected countywide, one from each district, every four years",
+		"citation": "KRS 67.060(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=43617",
+		"quote": "there shall be elected by the voters of the entire county three (3) commissioners, one (1) from each district who, with the county judge/executive, shall constitute the fiscal court",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Party primaries for county commissioner are voted by district",
+		"citation": "KRS 67.060(3)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=43617",
+		"quote": "be voted upon exclusively by the eligible voters of the district in which the person resides and seeks to represent",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "In commissioner counties, justice of the peace districts match the three commissioner districts",
+		"citation": "KRS 67.045(3)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=23677",
+		"quote": "the justice of the peace districts shall be coextensive with the three (3) county commissioner districts",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The county judge/executive is the county's chief executive",
+		"citation": "KRS 67.705(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=23769",
+		"quote": "Each county shall have a chief executive officer known as the county judge/executive.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The county judge/executive presides over the fiscal court",
+		"citation": "KRS 67.040(2)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=23675",
+		"quote": "The county judge/executive shall preside, if present.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Fiscal court members are referred to as justices of the peace, magistrates or commissioners",
+		"citation": "KRS 67.705(3)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=23769",
+		"quote": "justice of the peace, magistrate, or commissioners who serve on the fiscal court",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A county may merge with its cities into a charter county government by referendum, except Jefferson, urban-county and unified counties",
+		"citation": "KRS 67.825",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=41116",
+		"quote": "may vote to merge all units of city and county government into a charter county form of government",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A charter county's officials are those designated in its plan, elected at the county election",
+		"citation": "KRS 67.840",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=23806",
+		"quote": "officials designated in the comprehensive plan shall be elected at the next regularly scheduled election at which county officers shall be elected",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Constables have countywide jurisdiction",
+		"citation": "Ky. Const. § 101",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=110",
+		"quote": "their jurisdictions shall be coextensive with the counties in which they reside",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Since 2015, cities fall into two classes by form of government: first class (mayor-alderman) and home rule class",
+		"citation": "KRS 81.005(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=48681",
+		"quote": "Cities shall be organized into two (2) classes based on the form of their respective government.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "First class cities are those under the mayor-alderman plan of KRS Chapter 83",
+		"citation": "KRS 81.005(1)(a)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=48681",
+		"quote": "First class, which shall include cities organized and operating under the mayor-alderman plan of government in accordance with KRS Chapter 83",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Home rule class covers the city manager, mayor-council and commission plans",
+		"citation": "KRS 81.005(1)(b)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=48681",
+		"quote": "Home rule class, which shall include any city government organized and operating under the following forms of government: 1. City manager plan of government in accordance with KRS 83A.150; 2. Mayor-council plan of government in accordance with KRS 83A.130; or 3. Commission plan of government in accordance with KRS 83A.140.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A city changes class only by changing its form of government",
+		"citation": "KRS 81.005(4)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=48681",
+		"quote": "A city shall be deemed to be reclassified to the class designated under subsection (2) of this section upon the effective date of a change in the form of government pursuant to KRS 83A.160.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A city keeps population-based powers it has used even if its population later changes",
+		"citation": "KRS 83A.022",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=52760",
+		"quote": "the city shall not thereafter lose the ability to exercise the powers and duties provided in those sections because of an increase or decrease in population",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Mayor-council cities have a mayor and a council of six to twelve members set by ordinance",
+		"citation": "KRS 83A.030(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=53989",
+		"quote": "shall have a mayor and each shall have a legislative body composed of not less than six (6) nor more than twelve (12) members as prescribed by ordinance",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Commission and city manager cities have a mayor and four commissioners",
+		"citation": "KRS 83A.030(2)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=53989",
+		"quote": "Each city organized and governed under the commission plan or city manager plan shall have a legislative body composed of a mayor and four (4) commissioners.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "In a mayor-council city the elected body is called the city council",
+		"citation": "KRS 83A.130(2)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=25182",
+		"quote": "an elected legislative body which shall be called the city council",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "In a commission city the mayor and commissioners together form the city commission",
+		"citation": "KRS 83A.140(2)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=25183",
+		"quote": "elected legislative body members who shall be called city commissioners and which together shall be known as the city commission",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "In a city manager city the mayor and commissioners form the board of commissioners, which appoints a manager",
+		"citation": "KRS 83A.150(2)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=52572",
+		"quote": "elected legislative body members who shall be called city commissioners and which together shall be known as the board of commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Every city elects a mayor at a regular election",
+		"citation": "KRS 83A.040(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=58058",
+		"quote": "A mayor shall be elected by the voters of each city at a regular election.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Council members are elected at large unless the city creates wards",
+		"citation": "KRS 83A.040(4)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=58058",
+		"quote": "Each legislative body member shall be elected at large by the voters of each city at a regular election.",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A city may create wards, or a hybrid of ward and at-large seats, by ordinance",
+		"citation": "KRS 83A.100(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=53992",
+		"quote": "The city may establish a hybrid ward system for the conduct of its legislative body elections.",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "In ward cities, members run from a ward but are elected by the whole city",
+		"citation": "KRS 83A.100(4)(a)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=53992",
+		"quote": "Members shall be elected in the regular November election at large, but each candidate shall reside in the ward he or she seeks to represent",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A city changes its form of government only by popular vote, and no more than every five years",
+		"citation": "KRS 83A.160(1), (5)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=43593",
+		"quote": "Any city may become organized and governed under the mayor-council plan, the commission plan or the city manager plan only by popular vote",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Home rule: a city may exercise any public-purpose power not in conflict with the Constitution or a statute",
+		"citation": "KRS 82.082(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=48682",
+		"quote": "that is in furtherance of a public purpose of the city and not in conflict with a constitutional provision or statute",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A power conflicts with a statute where a comprehensive scheme of legislation covers the subject",
+		"citation": "KRS 82.082(2)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=48682",
+		"quote": "there is a comprehensive scheme of legislation on the same general subject embodied in the Kentucky Revised Statutes",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "City elections are governed by KRS Chapters 116 to 121 except as Chapter 83A provides",
+		"citation": "KRS 83A.043(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=25166",
+		"quote": "Election of city officers shall be governed by the provisions of KRS Chapters 116 to 121, except as provided in this chapter.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The Constitution lets the General Assembly classify cities on any reasonable basis",
+		"citation": "Ky. Const. § 156A",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=177",
+		"quote": "The General Assembly shall create such classifications of cities as it deems necessary based on population, tax base, form of government, geography, or any other reasonable basis",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "New cities need at least 300 residents",
+		"citation": "KRS 81.060(1)(a)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=43590",
+		"quote": "At least three hundred (300) persons reside in the territory sought to be incorporated",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Mayoral term limits for former second class cities apply only to cities on a registry kept since 2014",
+		"citation": "KRS 83A.024",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=43596",
+		"quote": "The mayoral term limits expressed in Kentucky Constitution Section 160 relating to cities of the second class shall apply only to the cities on the registry created pursuant to this section.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Old city classes (first to fifth) still define which school districts count as independent",
+		"citation": "KRS 160.020(2)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=43808",
+		"quote": "\"designated city\" means a city classified as a city of the first, second, third, fourth, or fifth class as of January 1, 2014, under the city classification system in effect prior to January 1, 2015",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A city spanning counties files candidates with the clerk of the county where the candidate lives",
+		"citation": "KRS 83A.047",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=25168",
+		"quote": "all nomination papers shall be filed with the county clerk of the county in which the candidate resides",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "County school districts elect five members by division; independent districts elect at large",
+		"citation": "KRS 160.210(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=56918",
+		"quote": "In independent school districts, the members of the school board shall be elected from the district at large. In county school districts, members shall be elected from divisions.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Each county school district has five divisions",
+		"citation": "KRS 160.210(2)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=56918",
+		"quote": "shall divide its district into five (5) divisions containing integral voting precincts",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Independent school districts serve designated cities or graded districts with 200 or more children",
+		"citation": "KRS 160.020(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=43808",
+		"quote": "All school districts embracing designated cities together with the territory within their limits",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Louisville and Jefferson County merged; the consolidated government replaces both the first class city and the county",
+		"citation": "KRS 67C.101(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=24002",
+		"quote": "This single government replaces and supersedes the governments of the pre-existing city of the first class and its county.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A consolidated local government is neither a city nor a county government but its own classification",
+		"citation": "KRS 67C.101(2)(d)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=24002",
+		"quote": "A consolidated local government is neither a city government nor a county government",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The consolidated government's territory is the whole county",
+		"citation": "KRS 67C.101(5)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=24002",
+		"quote": "A consolidated local government shall have power and jurisdiction throughout the total area embraced by the official jurisdictional boundaries of the county.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The Metro mayor is elected in nonpartisan elections for four years",
+		"citation": "KRS 67C.105(2)(a)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=55789",
+		"quote": "The mayor shall be nominated and elected in nonpartisan elections for a term of four (4) years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The Metro mayor is limited to two consecutive terms",
+		"citation": "KRS 67C.105(2)(c)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=55789",
+		"quote": "the mayor may serve for no more than two (2) consecutive terms",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The Metro council has 26 districts, one member each",
+		"citation": "KRS 67C.103(1)-(2)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57991",
+		"quote": "There shall be twenty-six (26) council districts.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Metro council members serve four years and are elected by district in nonpartisan elections",
+		"citation": "KRS 67C.103(5)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57991",
+		"quote": "shall be nominated and elected from the district in which they reside in nonpartisan elections",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Metro council members serve four-year terms",
+		"citation": "KRS 67C.103(4)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57991",
+		"quote": "The consolidated local government council members shall serve for a term of four (4) years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Other cities inside Jefferson County stay incorporated",
+		"citation": "KRS 67C.111(1)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57995",
+		"quote": "shall remain incorporated unless dissolved in accordance with KRS 81.094",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The constitutional county offices continue under the consolidated government, with elections unchanged",
+		"citation": "KRS 67C.121(1)-(2)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=24012",
+		"quote": "All offices provided for in Sections 99 and 144 of the Constitution of Kentucky shall remain in existence upon the consolidation of a city of the first class with its county.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "In a consolidated county the county judge/executive and magistrates or commissioners have duties set by Metro ordinance",
+		"citation": "KRS 67.705(4)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=23769",
+		"quote": "In a county containing a consolidated local government, the county judge/executive and magistrates or commissioners may have those duties as determined by ordinance of the consolidated local government",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Any county without a first class city may merge city and county into an urban-county government",
+		"citation": "KRS 67A.010",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=23838",
+		"quote": "the voters in any county except a county containing a city of the first class may merge all units of city and county government into an urban-county form of government",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "An urban-county government's officers are set by its comprehensive plan",
+		"citation": "KRS 67A.020",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=23839",
+		"quote": "The plan shall include a description of the form, structure, functions, powers and officers and their duties of the proposed urban-county government",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The urban-county government assumes all city and county government in the county",
+		"citation": "KRS 67A.030",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=23843",
+		"quote": "All the debts, property, franchises and rights of the existing county government and of any municipality within the county shall be assumed by the urban-county government.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Counties may also unite with one or more cities into a unified local government",
+		"citation": "KRS 67.900",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=23815",
+		"quote": "may vote to unite the county government with one (1) or more cities within the county to form",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The 2014 classification took effect for existing cities on 1 January 2015",
+		"citation": "KRS 81.005(2)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=48681",
+		"quote": "Cities incorporated before January 1, 2015, shall be classified in accordance with the classes set out in subsection (1) of this section on January 1, 2015.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "The Louisville Metro nonpartisan rule came from 2024 Ky. Acts ch. 181, effective 1 January 2025",
+		"citation": "KRS 67C.105 (history)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=55789",
+		"quote": "Amended 2024 Ky. Acts ch. 181, sec. 5, effective January 1, 2025.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Metro Council nonpartisan rule came from the same 2024 act",
+		"citation": "KRS 67C.103 (history)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57991",
+		"quote": "Amended 2024 Ky. Acts ch. 181, sec. 4, effective January 1, 2025.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A city that changes its plan may not change again for five years",
+		"citation": "KRS 83A.160(5)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=43593",
+		"quote": "shall again change the plan sooner than five (5) years from the effective date of the last change",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "A commissioner county may vote to return to a magistrate fiscal court",
+		"citation": "KRS 67.050(3)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=23678",
+		"quote": "Any county that has voted in favor of having county commissioners may return to its prior form of government",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "For a city spanning counties, each county clerk certifies vote totals to the other",
+		"citation": "KRS 83A.047",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=25168",
+		"quote": "each county clerk shall certify the vote totals for that candidate to the clerk of the other county into which the boundaries of the city extend",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "May school board elections are allowed for independent districts of former fifth class cities",
+		"citation": "KRS 160.200(4)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=56916",
+		"quote": "\"designated city\" means a city classified as a city of the fifth class as of January 1, 2014",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Counties are laid off into justices' districts",
+		"citation": "Ky. Const. § 142",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=161",
+		"quote": "shall be laid off into districts in such manner as the General Assembly may direct",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Louisville Metro's 2026 council amendments",
+		"citation": "KRS 67C.103 (history)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57991",
+		"quote": "Amended 2026 Ky. Acts ch. 165, sec. 2, effective July 15, 2026.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "2026 Ky. Acts ch. 175 amended the nonpartisan city primary law",
+		"citation": "KRS 83A.170 (history)",
+		"url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57011",
+		"quote": "Amended 2026 Ky. Acts ch. 175, sec. 24, effective April 14, 2026.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	},
+	{
+		"claim": "Statewide constitutional officers are elected in 1895 and every four years after (odd-numbered years)",
+		"citation": "Ky. Const. § 95",
+		"url": "https://apps.legislature.ky.gov/Law/Constitution/Constitution/ViewConstitution?rsn=103",
+		"quote": "shall be held on the first Tuesday after the first Monday in November, eighteen hundred and ninety-five, and the same day every four years thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "PDF text matched by script and by macOS PDFKit, 27 October 2026"
+	}
+]

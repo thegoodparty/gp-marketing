@@ -1,0 +1,1100 @@
+[
+	{
+		"claim": "The Legislative Assembly holds an organizational session in December after the election, then recesses until the first Tuesday after the third day in January or another date set by law, no later than 11 January",
+		"citation": "N.D. Const. art. IV, § 7",
+		"url": "https://ndlegis.gov/constit/a04.pdf",
+		"quote": "shall thereafter recess until twelve noon on the first Tuesday after the third day in January or at such other time as may be prescribed by law but not later than the eleventh day of January",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "No regular session may exceed eighty natural days during the biennium",
+		"citation": "N.D. Const. art. IV, § 7",
+		"url": "https://ndlegis.gov/constit/a04.pdf",
+		"quote": "No regular session of the legislative assembly may exceed eighty natural days during the biennium.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "By statute the assembly reconvenes at noon on the first Tuesday after the third day in January of the year after the organizational session, or on a date the legislative management picks between 2 and 11 January",
+		"citation": "N.D.C.C. § 54-03-02",
+		"url": "https://ndlegis.gov/cencode/t54c03.pdf#nameddest=54-03-02",
+		"quote": "The legislative assembly shall reconvene at twelve noon on the first Tuesday after the third day in January of the year following the organizational session",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The legislative management may instead pick a reconvening date no earlier than 2 January and no later than 11 January",
+		"citation": "N.D.C.C. § 54-03-02",
+		"url": "https://ndlegis.gov/cencode/t54c03.pdf#nameddest=54-03-02",
+		"quote": "not earlier than January second nor later than January eleventh of the year following the organizational session",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Most laws take effect on 1 August after filing with the secretary of state unless the act says otherwise or is an emergency measure",
+		"citation": "N.D. Const. art. IV, § 13",
+		"url": "https://ndlegis.gov/constit/a04.pdf",
+		"quote": "takes effect on August first after its filing with the secretary of state",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "During the session a bill becomes law if the governor neither signs nor vetoes it within three legislative days",
+		"citation": "N.D. Const. art. V, § 9",
+		"url": "https://ndlegis.gov/constit/a05.pdf",
+		"quote": "a bill becomes law if the governor neither signs nor vetoes it within three legislative days after its delivery to the governor",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "After the session the governor has fifteen days, Saturdays and Sundays excepted, to act on a bill",
+		"citation": "N.D. Const. art. V, § 9",
+		"url": "https://ndlegis.gov/constit/a05.pdf",
+		"quote": "vetoes it within fifteen days, Saturdays and Sundays excepted, after its delivery to the governor",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The general election is the first Tuesday after the first Monday in November of even-numbered years",
+		"citation": "N.D.C.C. § 16.1-13-01",
+		"url": "https://ndlegis.gov/cencode/t16-1c13.pdf#nameddest=16.1-13-01",
+		"quote": "on the first Tuesday after the first Monday in November of each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The primary is the second Tuesday in June of every general election year and nominates county officers and county commissioners among others",
+		"citation": "N.D.C.C. § 16.1-11-01",
+		"url": "https://ndlegis.gov/cencode/t16-1c11.pdf#nameddest=16.1-11-01",
+		"quote": "On the second Tuesday in June of every general election year, a primary election must be held",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The June primary nominates county officers and county commissioners",
+		"citation": "N.D.C.C. § 16.1-11-01",
+		"url": "https://ndlegis.gov/cencode/t16-1c11.pdf#nameddest=16.1-11-01",
+		"quote": "judges of the supreme court and district court, county officers, and county commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "All elective county officers are elected at the general election before their terms expire",
+		"citation": "N.D.C.C. § 16.1-13-02",
+		"url": "https://ndlegis.gov/cencode/t16-1c13.pdf#nameddest=16.1-13-02",
+		"quote": "All elective state, district, and county officers, and the United States senators, and the members of the United States house of representatives, must be elected at the general election",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "No reference to party may be made in the petition of a candidate for an elective county office or for supreme or district court judge",
+		"citation": "N.D.C.C. § 16.1-11-08",
+		"url": "https://ndlegis.gov/cencode/t16-1c11.pdf#nameddest=16.1-11-08",
+		"quote": "No reference may be made to a party ballot or to the party affiliation of a candidate in a petition and affidavit filed by or on behalf of a candidate for nomination in the primary election to an elective county office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Candidates for those offices appear on a separate no-party primary ballot without party designation",
+		"citation": "N.D.C.C. § 16.1-11-24",
+		"url": "https://ndlegis.gov/cencode/t16-1c11.pdf#nameddest=16.1-11-24",
+		"quote": "must be placed on the ballot without party designation",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The no-party primary advances the top vote-getters up to twice the number of seats, and partisan nominations may not be made for those offices",
+		"citation": "N.D.C.C. § 16.1-11-37",
+		"url": "https://ndlegis.gov/cencode/t16-1c11.pdf#nameddest=16.1-11-37",
+		"quote": "who total twice the number of available positions for the office if that many individuals are candidates for nomination",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Partisan nominations may not be made for county, judicial and the other no-party offices",
+		"citation": "N.D.C.C. § 16.1-11-37",
+		"url": "https://ndlegis.gov/cencode/t16-1c11.pdf#nameddest=16.1-11-37",
+		"quote": "Partisan nominations may not be made for any of the offices mentioned in section 16.1-11-08.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The general election carries a separate no-party ballot for candidates nominated on the no-party primary ballot",
+		"citation": "N.D.C.C. § 16.1-06-08",
+		"url": "https://ndlegis.gov/cencode/t16-1c06.pdf#nameddest=16.1-06-08",
+		"quote": "There must be a separate no-party ballot at the general election upon which must be placed the names of all candidates who have been nominated on the no-party primary ballot",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The primary uses one consolidated ballot with a section for each party; voting in more than one party's section rejects the party ballot but no-party and measure votes still count",
+		"citation": "N.D.C.C. § 16.1-11-22",
+		"url": "https://ndlegis.gov/cencode/t16-1c11.pdf#nameddest=16.1-11-22",
+		"quote": "If you vote in more than one political party's section, your Political Party Ballot will be rejected; however, all votes on the No Party and Measure Ballots will still be counted.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The primary ballot is one consolidated ballot with sections for all parties",
+		"citation": "N.D.C.C. § 16.1-11-22",
+		"url": "https://ndlegis.gov/cencode/t16-1c11.pdf#nameddest=16.1-11-22",
+		"quote": "At the primary election there may be only one ballot containing the separate sections for all parties or principles.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "To be nominated in the primary a candidate needs at least as many votes as the petition signatures required for that office",
+		"citation": "N.D.C.C. § 16.1-11-36",
+		"url": "https://ndlegis.gov/cencode/t16-1c11.pdf#nameddest=16.1-11-36",
+		"quote": "receives a number of votes at least equal to the number of signatures required on a petition",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Unless the law says otherwise, the candidate with the most votes is elected",
+		"citation": "N.D.C.C. § 16.1-01-06",
+		"url": "https://ndlegis.gov/cencode/t16-1c01.pdf#nameddest=16.1-01-06",
+		"quote": "the individual receiving the highest number of votes for any office is deemed elected to that office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Approval voting and ranked-choice voting may not be used to elect or nominate anyone to local, state or federal office",
+		"citation": "N.D.C.C. § 16.1-01-06.1",
+		"url": "https://ndlegis.gov/cencode/t16-1c01.pdf#nameddest=16.1-01-06.1",
+		"quote": "Approval voting or ranked-choice voting may not be used in an election held within this state to elect or nominate a candidate to any local, state, or federal elective office.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A local ordinance that conflicts with the ban is void, including one adopted under a home rule charter",
+		"citation": "N.D.C.C. § 16.1-01-06.1",
+		"url": "https://ndlegis.gov/cencode/t16-1c01.pdf#nameddest=16.1-01-06.1",
+		"quote": "including an ordinance enacted or adopted under a home rule charter, which conflicts with this section is void",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "There is no voter registration: the voter-list procedure may not be used to require registration",
+		"citation": "N.D.C.C. § 16.1-01-05.1",
+		"url": "https://ndlegis.gov/cencode/t16-1c01.pdf#nameddest=16.1-01-05.1",
+		"quote": "The procedure provided for in this section may not be used to require the registration of electors.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A voter must be a resident who has lived in the precinct at least thirty days before the election",
+		"citation": "N.D.C.C. § 16.1-01-04",
+		"url": "https://ndlegis.gov/cencode/t16-1c01.pdf#nameddest=16.1-01-04",
+		"quote": "A resident of this state who has resided in the precinct at least thirty days immediately preceding any election.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A voter must meet the identification requirements of section 16.1-01-04.1",
+		"citation": "N.D.C.C. § 16.1-01-04",
+		"url": "https://ndlegis.gov/cencode/t16-1c01.pdf#nameddest=16.1-01-04",
+		"quote": "An elector seeking to vote in an election must meet the identification requirements specified in section 16.1-01-04.1.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The secretary of state keeps a central voter file linked with county auditors",
+		"citation": "N.D.C.C. § 16.1-02-01",
+		"url": "https://ndlegis.gov/cencode/t16-1c02.pdf#nameddest=16.1-02-01",
+		"quote": "A permanent, centralized electronic database of voters, to be known as the central voter file",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Independent candidates get on the general election ballot by certificate of nomination by petition, for any office except one on the no-party ballot, and appear as independent nominations",
+		"citation": "N.D.C.C. § 16.1-12-02",
+		"url": "https://ndlegis.gov/cencode/t16-1c12.pdf#nameddest=16.1-12-02",
+		"quote": "except for an office appearing on the no-party ballot, may be made as provided by this section",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Names nominated by petition appear on the ballot as independent nominations, except presidential candidates",
+		"citation": "N.D.C.C. § 16.1-12-02",
+		"url": "https://ndlegis.gov/cencode/t16-1c12.pdf#nameddest=16.1-12-02",
+		"quote": "names of nominees so nominated must appear on the ballot as independent nominations",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Only qualified electors of the state, district, county or subdivision may sign a nominating petition",
+		"citation": "N.D.C.C. § 16.1-11-16",
+		"url": "https://ndlegis.gov/cencode/t16-1c11.pdf#nameddest=16.1-11-16",
+		"quote": "Only qualified electors of the state, district, county, or other political subdivision, as the case may be, may sign nominating petitions.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A voter may sign independent nominating petitions for more than one candidate for the same office",
+		"citation": "N.D.C.C. § 16.1-12-03",
+		"url": "https://ndlegis.gov/cencode/t16-1c12.pdf#nameddest=16.1-12-03",
+		"quote": "except an individual may sign a certificate of nomination by petition for more than one individual for each office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A candidate defeated in the primary may not appear on the general election ballot for the same office",
+		"citation": "N.D.C.C. § 16.1-13-06",
+		"url": "https://ndlegis.gov/cencode/t16-1c13.pdf#nameddest=16.1-13-06",
+		"quote": "who was defeated for the nomination may not have that individual's name printed upon the official ballot at the ensuing general election for the same office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "City elections are held on the second Tuesday in June of each even-numbered year",
+		"citation": "N.D.C.C. § 40-21-02",
+		"url": "https://ndlegis.gov/cencode/t40c21.pdf#nameddest=40-21-02",
+		"quote": "Biennial municipal elections must be held on the second Tuesday in June in each even-numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A city must agree with its county or counties on a single canvassing board, shared election staff and costs",
+		"citation": "N.D.C.C. § 40-21-02",
+		"url": "https://ndlegis.gov/cencode/t40c21.pdf#nameddest=40-21-02",
+		"quote": "The governing body of a city shall enter into an agreement with the governing body of the county or counties in which the city lies",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "No party reference may appear in the nominating petition of a candidate for city office",
+		"citation": "N.D.C.C. § 40-21-06",
+		"url": "https://ndlegis.gov/cencode/t40c21.pdf#nameddest=40-21-06",
+		"quote": "No reference may be made to a party ballot nor to the party affiliation of a candidate in a petition to be filed by or in behalf of a candidate for nomination to a public office in any incorporated city in this state.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "City candidates are nominated by petition filed with the city auditor; signers must live in the ward if elected by ward, or the city if at large",
+		"citation": "N.D.C.C. § 40-21-07",
+		"url": "https://ndlegis.gov/cencode/t40c21.pdf#nameddest=40-21-07",
+		"quote": "Qualified electors who sign a petition must reside within the ward or precinct in and for which that officer is to be elected, if the election is by wards, or within the corporate limits of the city, if the officer is elected at large.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A city candidate may run for only one city office at an election",
+		"citation": "N.D.C.C. § 40-21-07",
+		"url": "https://ndlegis.gov/cencode/t40c21.pdf#nameddest=40-21-07",
+		"quote": "A candidate may run for only one office in a city at any given election.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The city auditor places only the names of the persons nominated on the ballot",
+		"citation": "N.D.C.C. § 40-21-08",
+		"url": "https://ndlegis.gov/cencode/t40c21.pdf#nameddest=40-21-08",
+		"quote": "The auditor of the city shall place only the names of the persons nominated upon the ballot.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "City elections otherwise follow the rules for electing county officers",
+		"citation": "N.D.C.C. § 40-21-13",
+		"url": "https://ndlegis.gov/cencode/t40c21.pdf#nameddest=40-21-13",
+		"quote": "by the laws of this state applicable to elections and contests in the case of county officers",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Municipalities are cities: the term includes all cities and no other political subdivision",
+		"citation": "N.D.C.C. § 40-01-01",
+		"url": "https://ndlegis.gov/cencode/t40c01.pdf#nameddest=40-01-01",
+		"quote": "\"Municipal corporation\" or \"municipality\" includes all cities organized under the laws of this state, but shall not include any other political subdivision.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Council cities are governed by a city council of the mayor and council members",
+		"citation": "N.D.C.C. § 40-08-01",
+		"url": "https://ndlegis.gov/cencode/t40c08.pdf#nameddest=40-08-01",
+		"quote": "The governing body of a city operating under the council form of government is the city council, which is composed of the mayor and council members.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A council city has at least three council members, a number that can change by vote",
+		"citation": "N.D.C.C. § 40-08-03",
+		"url": "https://ndlegis.gov/cencode/t40c08.pdf#nameddest=40-08-03",
+		"quote": "The number of council members is not less than three.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "In council cities of 600 or fewer the council is elected at large; otherwise by ward unless a city of 5,000 or fewer opts for at large",
+		"citation": "N.D.C.C. §§ 40-08-04, 40-08-04.2",
+		"url": "https://ndlegis.gov/cencode/t40c08.pdf#nameddest=40-08-04",
+		"quote": "In cities containing six hundred inhabitants or less, the council members must be elected at large.",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A council city of up to 5,000 people may elect all council members at large by ordinance",
+		"citation": "N.D.C.C. § 40-08-04.2",
+		"url": "https://ndlegis.gov/cencode/t40c08.pdf#nameddest=40-08-04.2",
+		"quote": "the governing body of a city having a population not exceeding five thousand and which is operating under the council form of government may provide by ordinance for the election of all council members at large",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Council members serve four-year terms, staggered so about half are elected at each election",
+		"citation": "N.D.C.C. § 40-08-06",
+		"url": "https://ndlegis.gov/cencode/t40c08.pdf#nameddest=40-08-06",
+		"quote": "Council members shall hold office for four years and until their successors are elected and qualified.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Council terms are arranged so about half the council is elected at each election",
+		"citation": "N.D.C.C. § 40-08-06",
+		"url": "https://ndlegis.gov/cencode/t40c08.pdf#nameddest=40-08-06",
+		"quote": "one-half of the council members in any city, as nearly as practicable, are elected in any one election",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The mayor of a council city serves four years",
+		"citation": "N.D.C.C. § 40-08-14",
+		"url": "https://ndlegis.gov/cencode/t40c08.pdf#nameddest=40-08-14",
+		"quote": "The mayor shall be a qualified elector within the city and shall hold office for four years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A council city must elect a mayor and its council members, and may choose to have an elected municipal judge",
+		"citation": "N.D.C.C. § 40-14-01",
+		"url": "https://ndlegis.gov/cencode/t40c14.pdf#nameddest=40-14-01",
+		"quote": "Each city operating under the council form of government may choose to have a municipal judge who is elected.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "In council cities the city auditor is appointed by the mayor with council approval, not elected",
+		"citation": "N.D.C.C. § 40-14-04",
+		"url": "https://ndlegis.gov/cencode/t40c14.pdf#nameddest=40-14-04",
+		"quote": "The mayor, with the approval of the city council, shall appoint the following officers:",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Commission cities are governed by a board of city commissioners: a president and at least three commissioners",
+		"citation": "N.D.C.C. § 40-09-01",
+		"url": "https://ndlegis.gov/cencode/t40c09.pdf#nameddest=40-09-01",
+		"quote": "is the board of city commissioners which is composed of the president of the board of city commissioners and not less than three city commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Commission members are elected at large, not by ward",
+		"citation": "N.D.C.C. § 40-09-03",
+		"url": "https://ndlegis.gov/cencode/t40c09.pdf#nameddest=40-09-03",
+		"quote": "The members of the board of city commissioners must be elected at large and not by wards.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Commissioners and the president serve four-year terms starting 1 July, about half elected every two years",
+		"citation": "N.D.C.C. § 40-09-04",
+		"url": "https://ndlegis.gov/cencode/t40c09.pdf#nameddest=40-09-04",
+		"quote": "Each commissioner and the president of the board of city commissioners shall hold office for four years commencing on the first day of July of the year in which the officer was elected",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Under the modern council form the council has at least four members, one the mayor, elected at large or by wards to four-year terms",
+		"citation": "N.D.C.C. § 40-04.1-01",
+		"url": "https://ndlegis.gov/cencode/t40c04-1.pdf#nameddest=40-04.1-01",
+		"quote": "which is composed of not less than four members, one of whom is the mayor, all elected at large or by wards",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Modern council terms are four years starting 1 July",
+		"citation": "N.D.C.C. § 40-04.1-01",
+		"url": "https://ndlegis.gov/cencode/t40c04-1.pdf#nameddest=40-04.1-01",
+		"quote": "The terms of members of the council is four years, commencing on the first of July of the year in which the member was elected",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A city may adopt a city manager plan",
+		"citation": "N.D.C.C. ch. 40-10",
+		"url": "https://ndlegis.gov/cencode/t40c10.pdf",
+		"quote": "CITY MANAGER PLAN",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The size of a city governing body can be changed by a vote of the city's electors, started by the governing body or a petition",
+		"citation": "N.D.C.C. § 40-06-09",
+		"url": "https://ndlegis.gov/cencode/t40c06.pdf#nameddest=40-06-09",
+		"quote": "shall submit the question of increasing or decreasing the number of members of the city governing body to the electors of the city",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A city that sets up a municipal court must provide by ordinance for electing at least one judge",
+		"citation": "N.D.C.C. § 40-18.1-01",
+		"url": "https://ndlegis.gov/cencode/t40c18-1.pdf#nameddest=40-18.1-01",
+		"quote": "The governing body shall, by ordinance, provide for the election of at least one full-time or part-time judge.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A municipal judge is elected to a four-year term",
+		"citation": "N.D.C.C. § 40-18.1-05",
+		"url": "https://ndlegis.gov/cencode/t40c18-1.pdf#nameddest=40-18.1-05",
+		"quote": "A municipal judge must be elected to serve a term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Any city may adopt a home rule charter; there is no population threshold",
+		"citation": "N.D.C.C. § 40-05.1-01",
+		"url": "https://ndlegis.gov/cencode/t40c05-1.pdf#nameddest=40-05.1-01",
+		"quote": "Any city may frame, adopt, amend, or repeal home rule charters as provided in this chapter.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A city home rule charter supersedes state law except in matters pertaining to city elections",
+		"citation": "N.D.C.C. § 40-05.1-05",
+		"url": "https://ndlegis.gov/cencode/t40c05-1.pdf#nameddest=40-05.1-05",
+		"quote": "except for matters pertaining to city elections, supersede within the territorial limits and other jurisdiction of the city any law of the state in conflict with the charter",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A home rule city ordinance on city elections that conflicts with state law is void, with one exception in section 40-05.1-06(9)",
+		"citation": "N.D.C.C. § 40-05.1-05",
+		"url": "https://ndlegis.gov/cencode/t40c05-1.pdf#nameddest=40-05.1-05",
+		"quote": "any ordinance enacted or adopted by a city pertaining to city elections under a home rule charter in conflict with state law is void",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The one election exception: a home rule city may set the signature thresholds for city candidates' nominating petitions",
+		"citation": "N.D.C.C. § 40-05.1-06(9)",
+		"url": "https://ndlegis.gov/cencode/t40c05-1.pdf#nameddest=40-05.1-06",
+		"quote": "Notwithstanding section 40-21-07, to provide for all matters pertaining to signature thresholds for nominating petitions for candidates for city offices",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A home rule charter may set the city's form and structure of government, including its governing body and executive officer",
+		"citation": "N.D.C.C. § 40-05.1-06",
+		"url": "https://ndlegis.gov/cencode/t40c05-1.pdf#nameddest=40-05.1-06",
+		"quote": "To provide for change, selection, or creation of its form and structure of government, including its governing body, executive officer, and city officers.",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Home rule for counties and cities exists only as the legislature provides and only after voter approval",
+		"citation": "N.D. Const. art. VII, § 6",
+		"url": "https://ndlegis.gov/constit/a07.pdf",
+		"quote": "The legislative assembly shall provide by law for the establishment and exercise of home rule in counties and cities.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A city park district is governed by an elected board of five or three park commissioners with four-year terms starting 1 July",
+		"citation": "N.D.C.C. § 40-49-05",
+		"url": "https://ndlegis.gov/cencode/t40c49.pdf#nameddest=40-49-05",
+		"quote": "by a board of park commissioners consisting of five or three members",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Park commissioners serve four-year terms",
+		"citation": "N.D.C.C. § 40-49-05",
+		"url": "https://ndlegis.gov/cencode/t40c49.pdf#nameddest=40-49-05",
+		"quote": "each commissioner shall hold office for a term of four years and until a successor is elected and qualified",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Park commissioners are elected at the regular city elections",
+		"citation": "N.D.C.C. § 40-49-07",
+		"url": "https://ndlegis.gov/cencode/t40c49.pdf#nameddest=40-49-07",
+		"quote": "After the first board is elected, the members of the board must be elected at the regular city elections.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A park district is known as the park district of the city",
+		"citation": "N.D.C.C. § 40-49-04",
+		"url": "https://ndlegis.gov/cencode/t40c49.pdf#nameddest=40-49-04",
+		"quote": "A park district shall be known as \"park district of the city of ___________\".",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "North Dakota's counties are those whose names and boundaries are fixed in sections 11-01-02 through 11-01-54 (53 counties)",
+		"citation": "N.D.C.C. § 11-01-01",
+		"url": "https://ndlegis.gov/cencode/t11c01.pdf#nameddest=11-01-01",
+		"quote": "Sections 11-01-02 through 11-01-54 shall be deemed to show the names and boundaries of the several counties of this state",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Each organized county has a board of county commissioners of three to five members",
+		"citation": "N.D.C.C. § 11-11-01",
+		"url": "https://ndlegis.gov/cencode/t11c11.pdf#nameddest=11-11-01",
+		"quote": "Each organized county shall have a board of county commissioners which shall consist of not less than three nor more than five members.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Each commissioner is chosen by the voters of the district where the commissioner lives, unless the county elects at large",
+		"citation": "N.D.C.C. § 11-11-02",
+		"url": "https://ndlegis.gov/cencode/t11c11.pdf#nameddest=11-11-02",
+		"quote": "Each county commissioner shall be chosen by the qualified electors of the district of which the commissioner is a resident",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Voters may switch the county to at-large commissioner elections by a sixty percent vote",
+		"citation": "N.D.C.C. § 11-07-06",
+		"url": "https://ndlegis.gov/cencode/t11c07.pdf#nameddest=11-07-06",
+		"quote": "If approved by sixty percent of the qualified electors voting at such election, all county commissioner districts in the county must be immediately dissolved",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "County commissioners serve four-year terms",
+		"citation": "N.D.C.C. § 11-11-03",
+		"url": "https://ndlegis.gov/cencode/t11c11.pdf#nameddest=11-11-03",
+		"quote": "A county commissioner shall hold office for the term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Any elective county office has a four-year term, and the sheriff must be elected",
+		"citation": "N.D. Const. art. VII, § 8",
+		"url": "https://ndlegis.gov/constit/a07.pdf",
+		"quote": "Any elective office provided for by the counties shall be for a term of four years.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The office of sheriff must be elected",
+		"citation": "N.D. Const. art. VII, § 8",
+		"url": "https://ndlegis.gov/constit/a07.pdf",
+		"quote": "The office of sheriff shall be elected.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Until a county adopts an optional form, a board of county commissioners governs it",
+		"citation": "N.D. Const. art. VII, § 7",
+		"url": "https://ndlegis.gov/constit/a07.pdf",
+		"quote": "Until one of the optional forms of county government is adopted by any county, the fiscal and administrative affairs of the county shall be governed by a board of county commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "By default a county has an auditor, recorder, treasurer and the board of commissioners, plus an elected state's attorney and sheriff, unless it has combined or redesignated offices",
+		"citation": "N.D.C.C. § 11-10-02",
+		"url": "https://ndlegis.gov/cencode/t11c10.pdf#nameddest=11-10-02",
+		"quote": "each county must have an elected state's attorney and an elected sheriff",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Recorder, auditor, treasurer, sheriff and state's attorney are elected on a four-year cycle",
+		"citation": "N.D.C.C. § 11-10-02",
+		"url": "https://ndlegis.gov/cencode/t11c10.pdf#nameddest=11-10-02",
+		"quote": "except the recorder, county auditor, treasurer, sheriff, and state's attorney, who must be chosen in 1966 and every four years thereafter",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "In counties of 6,000 or fewer people, the recorder is also ex officio clerk of the district court",
+		"citation": "N.D.C.C. § 11-10-02",
+		"url": "https://ndlegis.gov/cencode/t11c10.pdf#nameddest=11-10-02",
+		"quote": "In counties having a population of six thousand or less, the recorder also serves as ex officio clerk of the district court.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Voters may make the state's attorney appointive",
+		"citation": "N.D.C.C. § 11-10-02.3",
+		"url": "https://ndlegis.gov/cencode/t11c10.pdf#nameddest=11-10-02.3",
+		"quote": "the county auditor shall place the question of appointing the state's attorney on the ballot",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A county may combine, separate or make appointive its elective offices without home rule; the sheriff is excluded",
+		"citation": "N.D.C.C. § 11-10.2-01",
+		"url": "https://ndlegis.gov/cencode/t11c10-2.pdf#nameddest=11-10.2-01",
+		"quote": "Redesignate an elective county office as an appointive office or an appointive office as an elective office.",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The sheriff is excluded from the office combination chapter",
+		"citation": "N.D.C.C. § 11-10.2-01",
+		"url": "https://ndlegis.gov/cencode/t11c10-2.pdf#nameddest=11-10.2-01",
+		"quote": "The office of sheriff is excluded from the application of this chapter.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Counties may share a combined elective office with other counties",
+		"citation": "N.D.C.C. § 11-10.3-01",
+		"url": "https://ndlegis.gov/cencode/t11c10-3.pdf#nameddest=11-10.3-01",
+		"quote": "A county may combine any county elective office with one or more elective offices of one or more other counties",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The county coroner is appointed by the board of county commissioners",
+		"citation": "N.D.C.C. § 11-19.1-03",
+		"url": "https://ndlegis.gov/cencode/t11c19-1.pdf#nameddest=11-19.1-03",
+		"quote": "The board of county commissioners shall appoint a coroner for a term of five years.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Counties may adopt a county manager form, with the manager appointed or elected",
+		"citation": "N.D.C.C. § 11-09-01",
+		"url": "https://ndlegis.gov/cencode/t11c09.pdf#nameddest=11-09-01",
+		"quote": "Any county in this state is authorized to adopt one of the following county manager forms of government:",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Counties may adopt the consolidated office form of county government",
+		"citation": "N.D.C.C. § 11-08-01",
+		"url": "https://ndlegis.gov/cencode/t11c08.pdf#nameddest=11-08-01",
+		"quote": "Any county in this state may adopt the county consolidated office form of government",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A county home rule charter supersedes conflicting state law except in matters pertaining to county elections",
+		"citation": "N.D.C.C. § 11-09.1-04",
+		"url": "https://ndlegis.gov/cencode/t11c09-1.pdf#nameddest=11-09.1-04",
+		"quote": "except for matters pertaining to county elections, must be liberally construed to supersede",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A home rule county ordinance on county elections that conflicts with state law is void",
+		"citation": "N.D.C.C. § 11-09.1-04",
+		"url": "https://ndlegis.gov/cencode/t11c09-1.pdf#nameddest=11-09.1-04",
+		"quote": "Any ordinance enacted or adopted by a county pertaining to county elections under a home rule charter in conflict with state law is void.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A county charter may not change the structure of township government without the township board's consent",
+		"citation": "N.D.C.C. § 11-09.1-04",
+		"url": "https://ndlegis.gov/cencode/t11c09-1.pdf#nameddest=11-09.1-04",
+		"quote": "or to change the structure of township government in any organized civil township, without the consent of the board of supervisors of the township",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Under a county charter, an elected office may be eliminated or combined only with voter approval or the combination procedures; sheriff and state's attorney cannot be made appointive this way",
+		"citation": "N.D.C.C. § 11-09.1-05(6)",
+		"url": "https://ndlegis.gov/cencode/t11c09-1.pdf#nameddest=11-09.1-05",
+		"quote": "This subsection does not authorize a county to redesignate the elected offices of sheriff and state's attorney as appointed",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Township law does not apply inside incorporated cities",
+		"citation": "N.D.C.C. § 58-01-02",
+		"url": "https://ndlegis.gov/cencode/t58c01.pdf#nameddest=58-01-02",
+		"quote": "Nothing contained in this title applies in any way to any portion of the state which is embraced within the limits of any incorporated city.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A civil township is organized only after a petition and a vote of the electors of the congressional township",
+		"citation": "N.D.C.C. § 58-02-01",
+		"url": "https://ndlegis.gov/cencode/t58c02.pdf#nameddest=58-02-01",
+		"quote": "If a majority of the votes cast approve of organization, the township must then be organized",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Township voters can dissolve the township at the annual meeting",
+		"citation": "N.D.C.C. § 58-02-28",
+		"url": "https://ndlegis.gov/cencode/t58c02.pdf#nameddest=58-02-28",
+		"quote": "If a majority of votes cast at the township meeting are in favor of dissolution, the township ceases to be a corporation on the next succeeding January first.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Township electors hold an annual township meeting in March",
+		"citation": "N.D.C.C. § 58-04-01",
+		"url": "https://ndlegis.gov/cencode/t58c04.pdf#nameddest=58-04-01",
+		"quote": "The electors of each township annually shall assemble and hold a township meeting in the month of March",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Supervisors, treasurer and clerk are elected by ballot at the meeting",
+		"citation": "N.D.C.C. § 58-04-10",
+		"url": "https://ndlegis.gov/cencode/t58c04.pdf#nameddest=58-04-10",
+		"quote": "The supervisors, treasurer, and clerk in each township must be elected by ballot.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The township ballot carries the names of the persons voted for and their offices, with no party",
+		"citation": "N.D.C.C. § 58-04-11",
+		"url": "https://ndlegis.gov/cencode/t58c04.pdf#nameddest=58-04-11",
+		"quote": "the names of the persons voted for and the offices to which such persons are intended to be chosen",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "At a township election the person with the most votes is declared elected",
+		"citation": "N.D.C.C. § 58-04-14",
+		"url": "https://ndlegis.gov/cencode/t58c04.pdf#nameddest=58-04-14",
+		"quote": "The person having the greatest number of votes for an office must be declared elected.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Only people qualified to vote at general elections may vote at township meetings",
+		"citation": "N.D.C.C. § 58-04-08",
+		"url": "https://ndlegis.gov/cencode/t58c04.pdf#nameddest=58-04-08",
+		"quote": "A person may not vote at any township meeting unless that person is qualified to vote at general elections therein.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Township electors may expand the board of supervisors from three to five",
+		"citation": "N.D.C.C. § 58-04-02.1",
+		"url": "https://ndlegis.gov/cencode/t58c04.pdf#nameddest=58-04-02.1",
+		"quote": "the electors of the township may approve expansion of the board of township supervisors from three to five members",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Township officers are three or five supervisors, a clerk, an assessor and a treasurer",
+		"citation": "N.D.C.C. § 58-05-02",
+		"url": "https://ndlegis.gov/cencode/t58c05.pdf#nameddest=58-05-02",
+		"quote": "The elected officers of a civil township must be:",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "On a three-member board one supervisor is elected each year for a three-year term",
+		"citation": "N.D.C.C. § 58-05-02",
+		"url": "https://ndlegis.gov/cencode/t58c05.pdf#nameddest=58-05-02",
+		"quote": "In townships with three-member boards of township supervisors, one supervisor must be elected at each annual township meeting and shall hold office for a term of three years.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Other township officers serve two-year terms",
+		"citation": "N.D.C.C. § 58-05-02",
+		"url": "https://ndlegis.gov/cencode/t58c05.pdf#nameddest=58-05-02",
+		"quote": "The other elective officers must be elected every two years and shall hold their respective offices for a term of two years.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Township electors may merge the clerk and treasurer into one office",
+		"citation": "N.D.C.C. § 58-05-02",
+		"url": "https://ndlegis.gov/cencode/t58c05.pdf#nameddest=58-05-02",
+		"quote": "The same person may hold the offices of township clerk and treasurer if a majority of the electors present vote in favor of the merging of such offices",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "If no township meeting is noticed, the county commission appoints the township officers",
+		"citation": "N.D.C.C. § 58-04-20",
+		"url": "https://ndlegis.gov/cencode/t58c04.pdf#nameddest=58-04-20",
+		"quote": "the board of county commissioners of the county in which the township is located shall appoint the necessary township officers",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A school board has five, seven or nine members",
+		"citation": "N.D.C.C. § 15.1-09-01",
+		"url": "https://ndlegis.gov/cencode/t15-1c09.pdf#nameddest=15.1-09-01",
+		"quote": "The board of a school district must be composed of five, seven, or nine members.",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "School board members serve three-year terms",
+		"citation": "N.D.C.C. § 15.1-09-02",
+		"url": "https://ndlegis.gov/cencode/t15-1c09.pdf#nameddest=15.1-09-02",
+		"quote": "The term of each elected member of a school board is three years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Each school board holds an annual election between 1 April and 30 June",
+		"citation": "N.D.C.C. § 15.1-09-22",
+		"url": "https://ndlegis.gov/cencode/t15-1c09.pdf#nameddest=15.1-09-22",
+		"quote": "The board of a school district shall hold an election each year between April first and June thirtieth",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A school board may hold its election with a city's regular election",
+		"citation": "N.D.C.C. § 15.1-09-22",
+		"url": "https://ndlegis.gov/cencode/t15-1c09.pdf#nameddest=15.1-09-22",
+		"quote": "the annual election may be held in conjunction with the regular election of a city",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The school election ballot must be nonpartisan in form",
+		"citation": "N.D.C.C. § 15.1-09-11",
+		"url": "https://ndlegis.gov/cencode/t15-1c09.pdf#nameddest=15.1-09-11",
+		"quote": "The ballot must be nonpartisan in form",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "School candidates file a document with their name and position sought",
+		"citation": "N.D.C.C. § 15.1-09-08",
+		"url": "https://ndlegis.gov/cencode/t15-1c09.pdf#nameddest=15.1-09-08",
+		"quote": "shall prepare and sign a document stating the individual's name and the position for which that individual is a candidate",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The school candidate with the most votes is elected",
+		"citation": "N.D.C.C. § 15.1-09-15",
+		"url": "https://ndlegis.gov/cencode/t15-1c09.pdf#nameddest=15.1-09-15",
+		"quote": "The individual receiving the highest number of votes for an office must be declared elected.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Soil conservation district supervisors are elected at the general election",
+		"citation": "N.D.C.C. § 4.1-20-17",
+		"url": "https://ndlegis.gov/cencode/t04-1c20.pdf#nameddest=4.1-20-17",
+		"quote": "The regular election of soil conservation districts must be held at the same time, and at the same place, as the general election is held.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Soil conservation candidates go on the no-party ballot",
+		"citation": "N.D.C.C. § 4.1-20-16",
+		"url": "https://ndlegis.gov/cencode/t04-1c20.pdf#nameddest=4.1-20-16",
+		"quote": "the name of the candidate so nominated on the no-party ballot at the ensuing general election",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Soil conservation district supervisors serve six-year terms",
+		"citation": "N.D.C.C. § 4.1-20-18",
+		"url": "https://ndlegis.gov/cencode/t04-1c20.pdf#nameddest=4.1-20-18",
+		"quote": "one district supervisor must be elected for a term of six years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Southwest Water Authority directors are elected, one per member county plus two in Dickinson and one in Mandan",
+		"citation": "N.D.C.C. § 61-24.5-04",
+		"url": "https://ndlegis.gov/cencode/t61c24-5.pdf#nameddest=61-24.5-04",
+		"quote": "One director must be elected from each county within the authority, two directors must be elected in the city of Dickinson, and one director must be elected in the city of Mandan.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Southwest Water Authority candidates appear on the no-party primary ballot and the highest vote wins",
+		"citation": "N.D.C.C. § 61-24.5-06",
+		"url": "https://ndlegis.gov/cencode/t61c24-5.pdf#nameddest=61-24.5-06",
+		"quote": "aspirant on the no-party primary election ballot as a candidate for the office of director. The candidate receiving the highest number of votes is elected.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The Southwest Water Authority covers Dunn, Stark, Golden Valley, Billings, Slope, Bowman, Adams, Grant, Hettinger, Morton and Mercer counties, and adjoining counties may join",
+		"citation": "N.D.C.C. § 61-24.5-03",
+		"url": "https://ndlegis.gov/cencode/t61c24-5.pdf#nameddest=61-24.5-03",
+		"quote": "the boundaries of Dunn, Stark, Golden Valley, Billings, Slope, Bowman, Adams, Grant, Hettinger, Morton, and Mercer Counties",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "An adjoining county may join the Southwest Water Authority with the board's approval",
+		"citation": "N.D.C.C. § 61-24.5-03",
+		"url": "https://ndlegis.gov/cencode/t61c24-5.pdf#nameddest=61-24.5-03",
+		"quote": "Any county adjoining the authority as herein created, or as hereafter composed, may join such authority",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The party sections of the primary ballot carry congressional, legislative and state offices",
+		"citation": "N.D.C.C. § 16.1-11-26",
+		"url": "https://ndlegis.gov/cencode/t16-1c11.pdf#nameddest=16.1-11-26",
+		"quote": "The primary election ballot for party nominations shall contain the following offices in the following order under each party column:",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A certificate of nomination may be a certificate by petition for independent nominations",
+		"citation": "N.D.C.C. § 16.1-12-01",
+		"url": "https://ndlegis.gov/cencode/t16-1c12.pdf#nameddest=16.1-12-01",
+		"quote": "The certificate of nomination by petition for independent nominations provided for by this chapter",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "County candidates file a petition with the county auditor",
+		"citation": "N.D.C.C. § 16.1-11-11",
+		"url": "https://ndlegis.gov/cencode/t16-1c11.pdf#nameddest=16.1-11-11",
+		"quote": "Every candidate for a county office shall present a petition to the county auditor",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Southwest Water Authority directors for Dickinson and Mandan file with the city auditor",
+		"citation": "N.D.C.C. § 61-24.5-07",
+		"url": "https://ndlegis.gov/cencode/t61c24-5.pdf#nameddest=61-24.5-07",
+		"quote": "aspires to the office of director of the southwest water authority shall, before four p.m. on the",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The executive officer is the mayor in council cities and the president of the board of city commissioners in commission cities",
+		"citation": "N.D.C.C. § 40-01-01",
+		"url": "https://ndlegis.gov/cencode/t40c01.pdf#nameddest=40-01-01",
+		"quote": "\"Executive officer\" means the mayor in council cities or the president of the board of city commissioners in commission cities.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	}
+]

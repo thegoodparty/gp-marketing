@@ -1,0 +1,426 @@
+[
+	{
+		"claim": "The Legislature convenes its first regular session on the first Wednesday of December after the general election",
+		"citation": "Me. Const. art. IV, pt. 3, § 1",
+		"url": "https://legislature.maine.gov/ros/LawsOfMaine/App/views/constitution.html",
+		"quote": "convene on the first Wednesday of December following the general election in what shall be designated the first regular session of the Legislature",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The second regular session convenes the first Wednesday after the first Tuesday of January of the even-numbered year and is limited in scope",
+		"citation": "Me. Const. art. IV, pt. 3, § 1",
+		"url": "https://legislature.maine.gov/ros/LawsOfMaine/App/views/constitution.html",
+		"quote": "shall further convene on the first Wednesday after the first Tuesday of January in the subsequent even-numbered year in what shall be designated the second regular session of the Legislature",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The second session is limited to budget, emergency, governor-called, carried-over study and initiated legislation",
+		"citation": "Me. Const. art. IV, pt. 3, § 1",
+		"url": "https://legislature.maine.gov/ros/LawsOfMaine/App/views/constitution.html",
+		"quote": "the business of the second regular session of the Legislature shall be limited to budgetary matters",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Legislature may also convene on call of the presiding officers with majority-party consent",
+		"citation": "Me. Const. art. IV, pt. 3, § 1",
+		"url": "https://legislature.maine.gov/ros/LawsOfMaine/App/views/constitution.html",
+		"quote": "The Legislature may convene at such other times on the call of the President of the Senate and Speaker of the House",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The first regular session must adjourn by the third Wednesday in June; the second by the third Wednesday in April; limited extensions allowed",
+		"citation": "3 M.R.S. § 2",
+		"url": "https://legislature.maine.gov/statutes/3/title3sec2.html",
+		"quote": "The first regular session of the Legislature, after its convening, may not adjourn later than the 3rd Wednesday in June and the 2nd regular session of the Legislature may not adjourn later than the 3rd Wednesday in April",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The governor has 10 days, Sundays excepted, to act; a bill held when adjournment prevents return becomes law unless returned within 3 days after the next meeting of the same Legislature",
+		"citation": "Me. Const. art. IV, pt. 3, § 2",
+		"url": "https://legislature.maine.gov/ros/LawsOfMaine/App/views/constitution.html",
+		"quote": "unless returned within 3 days after the next meeting of the same Legislature which enacted the bill or resolution",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Governor 10-day rule",
+		"citation": "Me. Const. art. IV, pt. 3, § 2",
+		"url": "https://legislature.maine.gov/ros/LawsOfMaine/App/views/constitution.html",
+		"quote": "If the bill or resolution shall not be returned by the Governor within 10 days (Sundays excepted) after it shall have been presented to the Governor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Non-emergency acts take effect 90 days after the session recesses",
+		"citation": "Me. Const. art. IV, pt. 3, § 16",
+		"url": "https://legislature.maine.gov/ros/LawsOfMaine/App/views/constitution.html",
+		"quote": "shall take effect until 90 days after the recess of the session of the Legislature in which it was passed",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An emergency act may not infringe municipal home rule",
+		"citation": "Me. Const. art. IV, pt. 3, § 16",
+		"url": "https://legislature.maine.gov/ros/LawsOfMaine/App/views/constitution.html",
+		"quote": "an infringement of the right of home rule for municipalities",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The state primary is the second Tuesday of June of each general election year",
+		"citation": "21-A M.R.S. § 339",
+		"url": "https://legislature.maine.gov/statutes/21-A/title21-Asec339.html",
+		"quote": "The primary election shall be held on the 2nd Tuesday of June of each general election year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An unenrolled voter may vote in one party primary without enrolling",
+		"citation": "21-A M.R.S. § 341",
+		"url": "https://legislature.maine.gov/statutes/21-A/title21-Asec341.html",
+		"quote": "A registered voter not enrolled in a political party may participate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An unenrolled voter may vote in only one party primary",
+		"citation": "21-A M.R.S. § 341",
+		"url": "https://legislature.maine.gov/statutes/21-A/title21-Asec341.html",
+		"quote": "An unenrolled voter may vote in only one party's primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Ranked-choice voting applies only to primaries for U.S. Senate, U.S. House, governor and the Legislature, federal general elections, and presidential elections",
+		"citation": "21-A M.R.S. § 1(27-C)",
+		"url": "https://legislature.maine.gov/statutes/21-A/title21-Asec1.html",
+		"quote": "Primary elections for the offices of United States Senator, United States Representative to Congress, Governor, State Senator and State Representative",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Other primaries, including county office, are decided by plurality",
+		"citation": "21-A M.R.S. § 723(1)",
+		"url": "https://legislature.maine.gov/statutes/21-A/title21-Asec723.html",
+		"quote": "In a primary election, the person who receives a plurality of the votes cast for nomination to any office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "General and other elections not using ranked-choice voting are decided by plurality",
+		"citation": "21-A M.R.S. § 723(2)",
+		"url": "https://legislature.maine.gov/statutes/21-A/title21-Asec723.html",
+		"quote": "In any other election except for those determined by ranked-choice voting, the person who receives a plurality of the votes cast for election to any office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County commissioners are elected in November of even-numbered years",
+		"citation": "30-A M.R.S. § 61(2)",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec61.html",
+		"quote": "County commissioners shall be elected on the Tuesday following the first Monday of November in each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The default board is a chair and two others, each elected from a commissioner district by its voters",
+		"citation": "30-A M.R.S. § 61",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec61.html",
+		"quote": "There shall be a board of commissioners for each county consisting of a chairman and 2 other persons",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commissioners must live in and are elected by their district",
+		"citation": "30-A M.R.S. § 61(1)",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec61.html",
+		"quote": "Members of each board of commissioners must be residents of the commissioner district which they represent and shall be elected by the voters of that district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The commissioners pick their own chair each year",
+		"citation": "30-A M.R.S. § 61(3)",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec61.html",
+		"quote": "The commissioners shall select their chairman annually",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "York County has five commissioners",
+		"citation": "30-A M.R.S. § 61-A",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec61-A.html",
+		"quote": "there shall be a Board of Commissioners for York County consisting of a chair and 4 other citizens",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commissioner terms are four years",
+		"citation": "30-A M.R.S. § 62(1)",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec62.html",
+		"quote": "The term of office for a county commissioner is 4 years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A vacancy in a primary-nominated commissioner seat is filled by appointee of the same party, showing county races are partisan",
+		"citation": "30-A M.R.S. § 63",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec63.html",
+		"quote": "the commissioner appointed by the Governor must be enrolled in the same political party as the commissioner whose term is vacant",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a treasurer for four years, unless voters switched to an appointed treasurer",
+		"citation": "30-A M.R.S. §§ 151, 156",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec151.html",
+		"quote": "the voters of each county shall elect a county treasurer",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county may replace its elected treasurer with an appointed one, with voter approval",
+		"citation": "30-A M.R.S. § 156",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec156.html",
+		"quote": "the county commissioners may decide to abolish the position of elected county treasurer and replace it with an appointed county treasurer",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "District attorneys are elected every four years by prosecutorial district, not by county",
+		"citation": "30-A M.R.S. § 251(1)",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec251.html",
+		"quote": "The district attorneys shall be elected on the Tuesday following the first Monday of November in every 4th year, by the voters of the respective prosecutorial districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Sheriffs are elected by county by plurality for four years",
+		"citation": "Me. Const. art. IX, § 10",
+		"url": "https://legislature.maine.gov/ros/LawsOfMaine/App/views/constitution.html",
+		"quote": "Sheriffs shall be elected by the people of their respective counties, by a plurality of the votes given in",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Judges and registers of probate are elected by county by plurality for four years",
+		"citation": "Me. Const. art. VI, § 6",
+		"url": "https://legislature.maine.gov/ros/LawsOfMaine/App/views/constitution.html",
+		"quote": "Judges and registers of probate shall be elected by the people of their respective counties, by a plurality of the votes given in",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County office candidates must live and vote in the division they seek",
+		"citation": "21-A M.R.S. § 352",
+		"url": "https://legislature.maine.gov/statutes/21-A/title21-Asec352.html",
+		"quote": "A candidate for the office of presidential elector or any county office must be a resident of and a voter in the electoral division",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party-enrolled person who wants to run by petition must first withdraw enrollment by a deadline",
+		"citation": "21-A M.R.S. § 353",
+		"url": "https://legislature.maine.gov/statutes/21-A/title21-Asec353.html",
+		"quote": "If enrolled, the person must also withdraw enrollment in a party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A petition candidate may list a political designation of up to three words, not a qualified party name",
+		"citation": "21-A M.R.S. § 354(1)",
+		"url": "https://legislature.maine.gov/statutes/21-A/title21-Asec354.html",
+		"quote": "This designation may not exceed 3 words in length",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties may adopt charters setting their own structure",
+		"citation": "30-A M.R.S. § 1301",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec1301.html",
+		"quote": "The purpose of this chapter is to provide a method for each county, by vote of its voters, to determine the structure of county government in that county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county charter may provide for election of a county legislative body and how officers are selected",
+		"citation": "30-A M.R.S. § 1351(1)",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec1351.html",
+		"quote": "The election of a county legislative body and the method of selecting officers, officials and employees",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter can displace the general laws on commissioners, treasurers and registers of deeds",
+		"citation": "30-A M.R.S. § 1352(2)",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec1352.html",
+		"quote": "if the new charter abolishes any of these offices or positions",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipality includes cities, towns and plantations",
+		"citation": "1 M.R.S. § 72(13)",
+		"url": "https://legislature.maine.gov/statutes/1/title1sec72.html",
+		"quote": "\"Municipality\" includes cities, towns and plantations",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities may amend their charters on local and municipal matters not prohibited by constitution or general law",
+		"citation": "Me. Const. art. VIII, pt. 2, § 1",
+		"url": "https://legislature.maine.gov/ros/LawsOfMaine/App/views/constitution.html",
+		"quote": "The inhabitants of any municipality shall have the power to alter and amend their charters on all matters, not prohibited by Constitution or general law, which are local and municipal in character",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Chapter 111 implements constitutional home rule",
+		"citation": "30-A M.R.S. § 2101",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec2101.html",
+		"quote": "The purpose of this chapter is to implement the home rule powers granted to municipalities by the Constitution of Maine",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters can force a charter commission by petition",
+		"citation": "30-A M.R.S. § 2102(2)",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec2102.html",
+		"quote": "the municipal officers, by order, shall provide for the establishment of a charter commission",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Unless a charter or Title 30-A says otherwise, Title 21-A governs municipal voting",
+		"citation": "30-A M.R.S. § 2501",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec2501.html",
+		"quote": "Except as otherwise provided by this Title or by charter, the method of voting and the conduct of a municipal election are governed by Title",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each town holds an annual meeting that elects a moderator, select board and school committee by ballot",
+		"citation": "30-A M.R.S. § 2525(1)",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec2525.html",
+		"quote": "Each town shall hold an annual meeting at which the following town officials shall be elected by ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town may designate other officials to be elected by ballot",
+		"citation": "30-A M.R.S. § 2525(2)",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec2525.html",
+		"quote": "may designate other town officials to be elected by ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Town officials: plurality in towns over 4,000; majority in towns of 4,000 or fewer, unless the charter differs",
+		"citation": "30-A M.R.S. § 2526(1)",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec2526.html",
+		"quote": "In a town with a population greater than 4,000, according to the last Federal Decennial Census, election shall be by plurality",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Small towns default to majority",
+		"citation": "30-A M.R.S. § 2526(1)",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec2526.html",
+		"quote": "in a town with a population of 4,000 or under, election shall be by majority",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town decides whether its select board has 3, 5 or 7 members and their terms",
+		"citation": "30-A M.R.S. § 2526(4)",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec2526.html",
+		"quote": "whether 3, 5 or 7 will be elected to each board and their terms of office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under secret ballot rules, election is by plurality, with a runoff only to break a tie",
+		"citation": "30-A M.R.S. § 2528(10)",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec2528.html",
+		"quote": "Election must be by plurality vote.  In the case of a tie vote, the municipal clerk shall automatically initiate a recount",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nomination of town officials by political caucus applies only where a town separately accepts it",
+		"citation": "30-A M.R.S. § 2528(1)(A)",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec2528.html",
+		"quote": "The provisions of this section relating to the nomination of town officials by political caucus apply only when a town separately accepts those provisions",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City candidates nominated by petition may use a political designation only if the city charter permits",
+		"citation": "30-A M.R.S. § 2553",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec2553.html",
+		"quote": "A person seeking nomination under this section may use a political designation only if permitted by the city charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City elections are by plurality unless the charter says otherwise",
+		"citation": "30-A M.R.S. § 2555",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec2555.html",
+		"quote": "In a city election, unless otherwise provided by municipal charter, the person who receives a plurality of the votes cast for election to any office is elected to that office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An unincorporated township of 200 or more may organize as a plantation, electing assessors, clerk and others",
+		"citation": "30-A M.R.S. § 7001",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec7001.html",
+		"quote": "to choose a moderator, clerk, 3 assessors, treasurer, collector of taxes, constable, school committee and other necessary plantation officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A plantation is one township",
+		"citation": "30-A M.R.S. § 7002",
+		"url": "https://legislature.maine.gov/statutes/30-A/title30-Asec7002.html",
+		"quote": "Organized plantations may not be composed of more than one township",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality not in a district elects a school committee at its annual meeting",
+		"citation": "20-A M.R.S. § 2302",
+		"url": "https://legislature.maine.gov/statutes/20-A/title20-Asec2302.html",
+		"quote": "shall elect at its annual meeting a school committee of 3",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School administrative district directors are nominated as municipal officials",
+		"citation": "20-A M.R.S. § 1253",
+		"url": "https://legislature.maine.gov/statutes/20-A/title20-Asec1253.html",
+		"quote": "school directors shall be considered municipal officials and shall be nominated in accordance with Title",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "SAD boards have at least five directors including one from each member municipality",
+		"citation": "20-A M.R.S. § 1251(1)",
+		"url": "https://legislature.maine.gov/statutes/20-A/title20-Asec1251.html",
+		"quote": "It shall include at least one director from each municipality or subdistrict",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "SAD director terms are three years with annual elections or four years with biennial elections",
+		"citation": "20-A M.R.S. § 1251(2)",
+		"url": "https://legislature.maine.gov/statutes/20-A/title20-Asec1251.html",
+		"quote": "In municipalities with annual elections, directors shall serve a 3-year term.  In municipalities with biennial elections, directors shall serve a 4-year term",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

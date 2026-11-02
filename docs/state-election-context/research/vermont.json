@@ -1,0 +1,282 @@
+[
+	{
+		"claim": "The General Assembly meets every two years on the first Wednesday after the first Monday of January",
+		"citation": "Vt. Const. ch. II, § 7",
+		"url": "https://legislature.vermont.gov/statutes/constitution-of-the-state-of-vermont/",
+		"quote": "The General Assembly shall meet biennially on the first Wednesday next after the first Monday of January",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The governor has five days, Sundays excepted, to act; a bill becomes law without signature unless adjournment within three days of presentation prevents its return",
+		"citation": "Vt. Const. ch. II, § 11",
+		"url": "https://legislature.vermont.gov/statutes/constitution-of-the-state-of-vermont/",
+		"quote": "within five days (Sundays excepted) after it shall have been presented to the Governor, the same shall become a law in like manner as if the Governor had signed it",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Pocket veto rule",
+		"citation": "Vt. Const. ch. II, § 11",
+		"url": "https://legislature.vermont.gov/statutes/constitution-of-the-state-of-vermont/",
+		"quote": "unless the two Houses by their adjournment, within three days after the presentation of such bill shall prevent its return; in which case it shall not become a law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Assistant judges, sheriffs, high bailiffs, state’s attorneys, probate judges and justices of the peace are elected at the November general election",
+		"citation": "Vt. Const. ch. II, § 43",
+		"url": "https://legislature.vermont.gov/statutes/constitution-of-the-state-of-vermont/",
+		"quote": "Assistant Judges of the County Court, Sheriffs, High Bailiffs, State’s Attorneys, Judges of Probate and Justices of the Peace, shall be elected biennially on the first Tuesday next after the first Monday of November",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Assistant judges are elected by district for four-year terms",
+		"citation": "Vt. Const. ch. II, § 50",
+		"url": "https://legislature.vermont.gov/statutes/constitution-of-the-state-of-vermont/",
+		"quote": "The Assistant Judges shall be elected by the voters of their respective districts as established by law. Their judicial functions shall be established by law. Their term of office shall be four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Sheriffs serve four-year terms",
+		"citation": "Vt. Const. ch. II, § 50",
+		"url": "https://legislature.vermont.gov/statutes/constitution-of-the-state-of-vermont/",
+		"quote": "Sheriffs shall be elected by the voters of their respective districts as established by law. Their term of office shall be four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State’s attorneys serve four-year terms",
+		"citation": "Vt. Const. ch. II, § 50",
+		"url": "https://legislature.vermont.gov/statutes/constitution-of-the-state-of-vermont/",
+		"quote": "State’s Attorneys shall be elected by the voters of their respective districts as established by law. Their term of office shall be four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Probate judges serve four-year terms",
+		"citation": "Vt. Const. ch. II, § 51",
+		"url": "https://legislature.vermont.gov/statutes/constitution-of-the-state-of-vermont/",
+		"quote": "Judges of Probate shall be elected by the voters of their respective districts as established by law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Probate judge term",
+		"citation": "Vt. Const. ch. II, § 51",
+		"url": "https://legislature.vermont.gov/statutes/constitution-of-the-state-of-vermont/",
+		"quote": "The General Assembly may establish by law qualifications for the election to and holding of such office. Their term of office shall be four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Justices of the peace are elected by town, with the number set by population",
+		"citation": "Vt. Const. ch. II, § 52",
+		"url": "https://legislature.vermont.gov/statutes/constitution-of-the-state-of-vermont/",
+		"quote": "Justices of the Peace shall be elected by the voters of their respective towns",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party members in each town nominate justice of the peace candidates by caucus",
+		"citation": "17 V.S.A. § 2413(a)(1)",
+		"url": "https://legislature.vermont.gov/statutes/section/17/049/02413",
+		"quote": "may meet in caucus and nominate candidates for justice of the peace",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The primary is the second Tuesday in August in even-numbered years for major-party nominations, except justices of the peace and presidential offices",
+		"citation": "17 V.S.A. § 2351",
+		"url": "https://legislature.vermont.gov/statutes/section/17/049/02351",
+		"quote": "A primary election shall be held on the second Tuesday in August in each even-numbered year for the nomination of candidates of major political parties",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A primary voter votes one party’s ballot and is not asked to state a party",
+		"citation": "17 V.S.A. § 2363(a)",
+		"url": "https://legislature.vermont.gov/statutes/section/17/049/02363",
+		"quote": "A voter shall vote for the candidates of one party only. A person voting at the primary shall not be required to indicate his or her party choice to any election official",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A plurality of a party’s primary vote wins the nomination",
+		"citation": "17 V.S.A. § 2369(a)",
+		"url": "https://legislature.vermont.gov/statutes/section/17/049/02369",
+		"quote": "A person who receives a plurality of all the votes cast by a party in a primary shall be a candidate of that party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In the general election the candidate with the most votes is declared elected",
+		"citation": "17 V.S.A. § 2592(h)(1)",
+		"url": "https://legislature.vermont.gov/statutes/section/17/051/02592",
+		"quote": "The canvassing committee shall declare the person receiving the largest number of votes for each office to be elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An independent candidate files a statement of nomination signed by voters qualified to vote for the office",
+		"citation": "17 V.S.A. § 2402(b)(1)",
+		"url": "https://legislature.vermont.gov/statutes/section/17/049/02402",
+		"quote": "To constitute a valid nomination, a statement shall contain signatures of voters qualified to vote in an election for the office in question",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An independent may add up to three words of identification after their name",
+		"citation": "17 V.S.A. § 2402(a)(3)",
+		"url": "https://legislature.vermont.gov/statutes/section/17/049/02402",
+		"quote": "a name, or other identification (in not more than three words) to be printed on the ballot following the candidate’s name",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each town holds its annual meeting on the first Tuesday of March to elect officers",
+		"citation": "17 V.S.A. § 2640(a)",
+		"url": "https://legislature.vermont.gov/statutes/section/17/055/02640",
+		"quote": "A meeting of the legal voters of each town shall be held annually on the first Tuesday of March for the election of officers and the transaction of other business",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The annual meeting elects the town officers, including the moderator, clerk, treasurer and selectboard members",
+		"citation": "17 V.S.A. § 2646",
+		"url": "https://legislature.vermont.gov/statutes/section/17/055/02646",
+		"quote": "At the annual meeting, a town shall choose from among its registered voters the following town officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A selectboard member is elected for three years by ballot each year (by default)",
+		"citation": "17 V.S.A. § 2646(4)",
+		"url": "https://legislature.vermont.gov/statutes/section/17/055/02646",
+		"quote": "One selectboard member for a term of three years who shall be elected by ballot",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town may vote to make the clerk and treasurer appointed or give them three-year terms",
+		"citation": "17 V.S.A. § 2646(2)",
+		"url": "https://legislature.vermont.gov/statutes/section/17/055/02646",
+		"quote": "unless a town votes that the clerk shall be elected for a term of three years",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Australian ballot applies to a town’s meeting only if the town votes to use it",
+		"citation": "17 V.S.A. § 2680(a)",
+		"url": "https://legislature.vermont.gov/statutes/section/17/055/02680",
+		"quote": "the provisions of the Australian ballot system shall not apply to the annual or special meeting of a municipality unless that municipality, at its annual meeting or at a special meeting called for that purpose, votes to have them apply",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under Australian ballot, municipal officers are nominated by petition, with any party endorsements filed alongside",
+		"citation": "17 V.S.A. § 2681(a)(1)(A)",
+		"url": "https://legislature.vermont.gov/statutes/section/17/055/02681",
+		"quote": "Nominations of the municipal officers shall be by petition. The petition shall be filed with the municipal clerk, together with the endorsement, if any, of any party or parties",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In those municipal elections the person with the most votes wins",
+		"citation": "17 V.S.A. § 2682(c)",
+		"url": "https://legislature.vermont.gov/statutes/section/17/055/02682",
+		"quote": "the person receiving the greatest number of votes for an office shall be declared elected to that office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality may propose a charter, or charter change, to the General Assembly after a local vote",
+		"citation": "17 V.S.A. § 2645(a)",
+		"url": "https://legislature.vermont.gov/statutes/section/17/055/02645",
+		"quote": "A municipality may propose to the General Assembly to adopt, repeal, or amend its charter by majority vote of the legal voters",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipality includes cities, towns, town school districts, incorporated school or fire districts and incorporated villages",
+		"citation": "1 V.S.A. § 126",
+		"url": "https://legislature.vermont.gov/statutes/section/01/003/00126",
+		"quote": "“Municipality” shall include a city, town, town school district, incorporated school or fire district, or incorporated village",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A local election means one for town or village officers in places over 4,000 people",
+		"citation": "1 V.S.A. § 117",
+		"url": "https://legislature.vermont.gov/statutes/section/01/003/00117",
+		"quote": "“Local election” shall mean any election of town or village officers in towns or villages having more than 4,000 inhabitants",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Vermont has 14 counties",
+		"citation": "24 V.S.A. § 1",
+		"url": "https://legislature.vermont.gov/statutes/section/24/001/00001",
+		"quote": "The State is divided into the counties of Addison, Bennington, Caledonia, Chittenden, Essex, Franklin, Grand Isle, Lamoille, Orange, Orleans, Rutland, Washington, Windham, and Windsor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The assistant judges prepare the county budget each year",
+		"citation": "24 V.S.A. § 133(a)",
+		"url": "https://legislature.vermont.gov/statutes/section/24/005/00133",
+		"quote": "Annually, the assistant judges shall prepare a proposed budget of the county for the ensuing year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A village may be set up within a town on petition of its voters",
+		"citation": "24 V.S.A. § 1301",
+		"url": "https://legislature.vermont.gov/statutes/section/24/039/01301",
+		"quote": "residing in a village containing 30 or more houses, the selectboard shall establish the bounds of such village",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Unorganized towns and gores are administered through state-appointed appraisers and supervisors",
+		"citation": "24 V.S.A. § 1401",
+		"url": "https://legislature.vermont.gov/statutes/section/24/043/01401",
+		"quote": "a board of three appraisers for the unorganized towns and gores in each county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The annual town meeting is the town school district meeting, which may move to a date between February 1 and June 15",
+		"citation": "16 V.S.A. § 422(a)",
+		"url": "https://legislature.vermont.gov/statutes/section/16/009/00422",
+		"quote": "The annual town meeting shall be the annual town school district meeting",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School meeting date window",
+		"citation": "16 V.S.A. § 422(a)",
+		"url": "https://legislature.vermont.gov/statutes/section/16/009/00422",
+		"quote": "so long as the meeting is held after February 1 and before June 15",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town school district has a three-director board elected one a year for three years, unless it is part of a unified union district",
+		"citation": "16 V.S.A. § 423(a)",
+		"url": "https://legislature.vermont.gov/statutes/section/16/009/00423",
+		"quote": "Each town school district shall have a school board consisting of three directors, one of whom shall be elected by ballot at each annual meeting of the town school district for a term of three years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Act 73 of 2025 transforms education governance",
+		"citation": "Act 73 (2025), H.454 status page",
+		"url": "https://legislature.vermont.gov/bill/status/2026/H.454",
+		"quote": "An act relating to transforming Vermont’s education governance, quality, and finance systems",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

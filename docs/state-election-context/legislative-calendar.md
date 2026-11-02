@@ -42,7 +42,7 @@ states cover the most pages, so they come first.
 | 27 | Oregon | 481 | drafted, awaiting review |
 | 28 | Mississippi | 449 | drafted, awaiting review |
 | 29 | Louisiana | 436 | drafted, awaiting review |
-| 30 | Virginia | 428 | in progress |
+| 30 | Virginia | 428 | done, reviewed 2 November 2026 |
 | 31 | Montana | 401 | in progress |
 | 32 | Alabama | 385 | in progress |
 | 33 | Colorado | 365 | in progress |
@@ -133,7 +133,7 @@ If a legislature meets year-round, re-check in January and July.
 | Texas | 12 January 2027, at most 140 days | late May–early June | July 2027 | verified |
 | Utah | January | March | April 2027 | no |
 | Vermont | January | May | June 2027 | no |
-| Virginia | January | February–March | May 2027 | no |
+| Virginia | 13 January 2027, 30-day odd-year session; reconvened veto session the sixth Wednesday after adjournment | February–March | July 2027 | verified |
 | Washington | 11 January 2027, at most 105 days | by 25 April | June 2027 | verified |
 | West Virginia | February in odd years | April | May 2027 | no |
 | Wisconsin | organizes 4 January 2027, year-round | — | January and July | verified |
@@ -148,10 +148,10 @@ Grouped by month. Within a month, do the states with the most pages first.
   anything passed in late 2026.
 - **April**: Kentucky, New Mexico, South Dakota, Utah, Wyoming.
 - **May**: Arkansas, Georgia, Tennessee, Idaho, Maryland, Mississippi,
-  Virginia, West Virginia.
+  West Virginia.
 - **June**: Iowa, Kansas, Washington, Alaska, Colorado, Florida, Hawaii, Montana, North Dakota,
   South Carolina, Vermont.
-- **July**: Pennsylvania, Ohio, Michigan, Minnesota, Indiana, Oklahoma, Texas, New York, Wisconsin, Missouri,
+- **July**: Pennsylvania, Ohio, Michigan, Minnesota, Indiana, Oklahoma, Texas, New York, Wisconsin, Missouri, Virginia,
   Nebraska, Louisiana, Oregon, Alabama, Arizona, Connecticut, Delaware, Maine,
   Nevada, New Hampshire, New Jersey, Rhode Island, Massachusetts, DC.
 - **October**: Illinois (spring session bills are signed or vetoed by late August), North Carolina.

@@ -78,7 +78,9 @@ const styles = tv({
 		content: [
 			'fixed inset-x-0 top-1/2 z-50 mx-auto flex max-h-[calc(100dvh-3rem)] w-[calc(100%-3rem)] max-w-[66.5rem] -translate-y-1/2 flex-col overflow-y-auto',
 			'rounded-lg border border-neutral-300 bg-white text-black shadow-lg focus:outline-none',
-			'lg:grid lg:min-h-[46.75rem] lg:grid-cols-[26rem_1fr] lg:border-0',
+			// Capped by the viewport: a plain min-height would beat the max-height on a
+			// short laptop screen and push the close button off it.
+			'lg:grid lg:min-h-[min(46.75rem,calc(100dvh-3rem))] lg:grid-cols-[26rem_1fr] lg:border-0',
 		],
 		candidatePanel: [
 			'flex flex-col justify-center gap-4 px-4 py-8 md:px-10 lg:order-first lg:py-12 lg:pl-11 lg:pr-8',
@@ -225,9 +227,11 @@ function RecaptchaCheckbox({ siteKey, onToken }: { siteKey: string; onToken: Dis
 				if (cancelled || !container.current || !window.grecaptcha) return;
 				window.grecaptcha.render(container.current, {
 					sitekey: siteKey,
-					callback: token => onToken(token),
-					'expired-callback': () => onToken(null),
-					'error-callback': () => onToken(null),
+					// A replaced widget stays alive in Google's script, so its callbacks
+					// must not touch the token its replacement issued.
+					callback: token => !cancelled && onToken(token),
+					'expired-callback': () => !cancelled && onToken(null),
+					'error-callback': () => !cancelled && onToken(null),
 				});
 			})
 			.catch(() => {

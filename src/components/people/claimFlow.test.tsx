@@ -434,13 +434,11 @@ describe('a voter asks the candidate to complete their profile', () => {
 	 * for it. One test on purpose: the script load is cached for the process.
 	 */
 	test('with reCAPTCHA on, nothing is sent until the box is ticked', async () => {
-		let tick: ((token: string) => void) | undefined;
+		type WidgetParams = { callback(this: void, token: string): void; 'expired-callback'(this: void): void };
+		const widgets: WidgetParams[] = [];
 		(window as unknown as { grecaptcha: unknown }).grecaptcha = {
 			ready: (callback: () => void) => callback(),
-			render: (_el: HTMLElement, params: { callback(token: string): void }) => {
-				tick = params.callback;
-				return 0;
-			},
+			render: (_el: HTMLElement, params: WidgetParams) => widgets.push(params) - 1,
 		};
 		const { ProfileRequestForm } = await import('~/ui/ProfileRequestModal');
 		await render(React.createElement(ProfileRequestForm, { personId, candidateName: 'Kim Byrd', recaptchaSiteKey: 'site-key' }));
@@ -458,18 +456,35 @@ describe('a voter asks the candidate to complete their profile', () => {
 			await flush();
 		});
 		await act(async () => {
-			tick?.('tok');
+			widgets[0]?.callback('tok');
 			await flush();
 		});
 		expect(button.disabled).toBe(false);
 
+		// A failed send spends the token, so the box is replaced and must be ticked again.
+		fetchOk = false;
+		await submit(form, {});
+		expect(button.disabled).toBe(true);
+		expect(widgets).toHaveLength(2);
+
+		await act(async () => {
+			widgets[1]?.callback('tok-2');
+			await flush();
+		});
+		// The replaced box's expiry must not wipe the new tick.
+		await act(async () => {
+			widgets[0]?.['expired-callback']();
+			await flush();
+		});
+		expect(button.disabled).toBe(false);
+
+		fetchOk = true;
 		await submit(form, {});
 
-		expect(fetchCalls).toEqual([
-			{
-				url: '/api/people/claim-request',
-				body: { personId, firstname: '', email: 'ada@example.com', source: 'notify', recaptchaToken: 'tok' },
-			},
-		]);
+		expect(fetchCalls.map(call => call.body['recaptchaToken'])).toEqual(['tok', 'tok-2']);
+		expect(fetchCalls[1]).toEqual({
+			url: '/api/people/claim-request',
+			body: { personId, firstname: '', email: 'ada@example.com', source: 'notify', recaptchaToken: 'tok-2' },
+		});
 	});
 });

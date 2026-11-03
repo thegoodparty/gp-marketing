@@ -277,6 +277,22 @@
 		"url": "https://legislature.vermont.gov/bill/status/2026/H.454",
 		"quote": "An act relating to transforming Vermont’s education governance, quality, and finance systems",
 		"certainty": "statutory",
-		"verified": "read in statute"
+		"verified": "state agency publication"
+	},
+	{
+		"claim": "Burlington's charter elects its mayor, councilors, school commissioners and ward election officers by ranked choice voting, with no separate runoff",
+		"citation": "24 V.S.A. App. ch. 3 (Burlington City Charter) § 5",
+		"url": "https://legislature.vermont.gov/statutes/fullchapter/24APPENDIX/003",
+		"quote": "All elections of the Mayor, City Councilors, school commissioners, and ward election officers shall be by ballot, using a system of ranked choice voting without a separate runoff election",
+		"certainty": "statutory",
+		"verified": "read in city charter"
+	},
+	{
+		"claim": "If no candidate has a majority of first preferences, an instant runoff tabulation is performed",
+		"citation": "24 V.S.A. App. ch. 3 (Burlington City Charter) § 5",
+		"url": "https://legislature.vermont.gov/statutes/fullchapter/24APPENDIX/003",
+		"quote": "If no candidate receives a majority of first preferences, an instant runoff tabulation shall be performed by the presiding election officer",
+		"certainty": "statutory",
+		"verified": "read in city charter"
 	}
 ]

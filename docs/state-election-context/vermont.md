@@ -66,7 +66,7 @@ governance. School district boundaries and boards may change. Avoid describing
 how a Vermont school board is organized beyond what race data shows, and
 re-check this section after the 2027 session.
 
-*Act 73 (2025) · varies by place · read in statute*
+*Act 73 (2025), title only · varies by place · state agency publication*
 
 ### Primary type
 
@@ -100,11 +100,19 @@ Vermont town race partisan or nonpartisan unless race data says which.
 
 ### Winning an election
 
-**Plurality** throughout: the top vote-getter wins the party primary, the
-November general election and Australian-ballot town elections. No runoff was
-found in the law.
+**Plurality** is the state rule: the top vote-getter wins the party primary,
+the November general election and Australian-ballot town elections. No runoff
+was found in the state law.
 
 *17 V.S.A. §§ 2369(a), 2592(h)(1), 2682(c) · statutory · read in statute*
+
+**A city charter can set its own method.** Burlington's charter elects its
+mayor, city councilors, school commissioners and ward election officers by
+ranked-choice voting, with an instant runoff instead of a separate runoff
+election. Avoid saying a Vermont city race is won by plurality, or by ranked
+choice, unless race data or the city's charter shows which.
+
+*24 V.S.A. App. ch. 3 (Burlington City Charter) § 5 · varies by place · read in city charter*
 
 ### Running as an independent
 
@@ -193,8 +201,12 @@ governments and elections. Never merge them in copy.
 
 `vt/chittenden-county/burlington`
 
-Governed by its charter, with a mayor and council. Take
-its election rules from race data.
+Governed by its charter, with a mayor and council. The charter elects the
+mayor, councilors, school commissioners and ward election officers by
+ranked-choice voting, with an instant runoff when no one has a majority of first
+choices. Take everything else from race data.
+
+*24 V.S.A. App. ch. 3 (Burlington City Charter) § 5 · statutory · read in city charter*
 
 ### Lamoille and Orleans counties
 
@@ -217,7 +229,8 @@ These are the ways Vermont copy goes visibly wrong.
    judges, not a governing board. Say state's attorney, not district attorney.
 5. Do not call town races partisan or nonpartisan unless race data says which.
    County races and justices of the peace are partisan.
-6. Do not mention runoffs. Plurality wins.
+6. Do not mention runoffs. Plurality wins, except where a city charter says
+   otherwise: Burlington uses ranked-choice voting for its city offices.
 7. Say selectboard, not city council, on a town page.
 8. Avoid describing school board structure beyond race data while Act 73
    changes are under way.
@@ -240,6 +253,13 @@ These are the ways Vermont copy goes visibly wrong.
   chapter (mainly Acts 70 and 91 of 2025 on election procedure). None change the
   claims here. Act 73 of 2025 on education governance is flagged above; its
   text was not read for this doc.
+- **City charters:** Vermont's city charters are enacted as law and published as
+  Title 24 Appendix, one chapter per municipality, at
+  `https://legislature.vermont.gov/statutes/fullchapter/24APPENDIX/<chapter>`
+  (Burlington is `003`, Winooski `019`). Burlington's ranked-choice rule is in
+  § 5, confirmed by the city's own ranked-choice page
+  (`https://www.burlingtonvt.gov/191/Ranked-Choice-Voting`). Winooski's charter
+  has no ranked-choice provision.
 - **Page data:** goodparty.org sitemap shard 46, 28 October 2026, read in the
   in-app browser.
 

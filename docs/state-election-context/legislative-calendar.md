@@ -40,7 +40,7 @@ states cover the most pages, so they come first.
 | 25 | Tennessee | 553 | done, reviewed 3 November 2026 |
 | 26 | Florida | 533 | done, reviewed 3 November 2026 |
 | 27 | Oregon | 481 | done, reviewed 3 November 2026 |
-| 28 | Mississippi | 449 | drafted, awaiting review |
+| 28 | Mississippi | 449 | done, reviewed 3 November 2026 |
 | 29 | Louisiana | 436 | drafted, awaiting review |
 | 30 | Virginia | 428 | done, reviewed 2 November 2026 |
 | 31 | Montana | 401 | drafted, awaiting review |
@@ -111,7 +111,7 @@ If a legislature meets year-round, re-check in January and July.
 | Massachusetts | 6 January 2027, year-round | — | January and July | verified |
 | Michigan | 13 January 2027, year-round | — | January and July | verified |
 | Minnesota | 12 January 2027 | by 17 May | July 2027 | verified |
-| Mississippi | January | April | May 2027 | no |
+| Mississippi | 5 January 2027, 90 days | early April | June 2027 | verified |
 | Missouri | 6 January 2027 | 30 May | July 2027 | verified |
 | Montana | odd years only, January | April–May | June 2027 | no |
 | Nebraska | 6 January 2027, 90 legislative days | late May–early June | July 2027 | verified |
@@ -147,10 +147,10 @@ Grouped by month. Within a month, do the states with the most pages first.
   Michigan, New York, Wisconsin, New Jersey, Massachusetts and DC), to catch
   anything passed in late 2026.
 - **April**: New Mexico, South Dakota, Utah, Wyoming.
-- **May**: Kentucky, Idaho, Maryland, Mississippi,
+- **May**: Kentucky, Idaho, Maryland,
   West Virginia.
 - **June**: Iowa, Kansas, Washington, Arkansas, Georgia, Alaska, Colorado, Hawaii, Montana, North Dakota,
-  South Carolina, Vermont.
+  South Carolina, Vermont, Mississippi.
 - **July**: Pennsylvania, Ohio, Michigan, Minnesota, Indiana, Oklahoma, Texas, New York, Wisconsin, Missouri, Virginia,
   Nebraska, Louisiana, Alabama, Arizona, Connecticut, Delaware, Maine,
   Nevada, New Hampshire, New Jersey, Rhode Island, Massachusetts, Tennessee, DC.

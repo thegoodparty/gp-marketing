@@ -42,6 +42,7 @@ clause. The 2025 county runoff law, for example, took effect for elections from
 (usual case).
 
 Re-check this doc: June 2027. Last researched: October 2026.
+Reviewed by Emily: 3 November 2026.
 
 ## How elections work in Mississippi
 
@@ -479,7 +480,7 @@ For the data team, not for copy.
   bill's HTML is the same path as its PDF link with `/html/` and `.htm`
   (e.g. `documents/2025/html/HB/0200-0299/HB0291SG.htm`). Deleted words are
   inside `<s>` tags with `display:none`, so quotes are taken from unchanged
-  text. All enacted bills from 2008 to 2026 were downloaded and indexed by the
+  text. All enacted bills from 2011 to 2026 were downloaded and indexed by the
   sections they amend; each claim cites the latest act that printed the
   section. The site sends an incomplete certificate chain: download
   `http://secure.globalsign.com/cacert/gsrsaovsslca2018.crt`, convert it with

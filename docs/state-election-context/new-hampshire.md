@@ -32,6 +32,7 @@ New laws take effect 60 days after passage unless the act sets another date
 (RSA 14:9-a, I).
 
 Re-check this doc: August 2027. Last researched: October 2026.
+Reviewed by Emily: 3 November 2026.
 
 ## How elections work in New Hampshire
 

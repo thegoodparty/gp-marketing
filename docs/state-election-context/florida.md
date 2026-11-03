@@ -41,7 +41,7 @@ Re-check this doc: August 2027, once the 2027 session's bills have all been acte
 on. Also re-check early if a special session touches elections or local government;
 the governor can call one at any time by proclamation (art. III, § 3(c)). Last
 researched: October 2026, against the 2026 Florida Statutes, which already include
-the 2026 session's laws.
+the 2026 session's laws. Reviewed by Emily: 3 November 2026.
 
 ## How elections work in Florida
 

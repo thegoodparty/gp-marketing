@@ -28,7 +28,7 @@ last day for vetoes (art. IV, § 15; amend. art. III). Public acts take effect o
 § 2-32).
 
 Re-check this doc: August 2027, after the veto session, and again after the
-2027 acts are compiled. Last researched: October 2026.
+2027 acts are compiled. Last researched: October 2026. Reviewed by Emily: 3 November 2026.
 
 ## How elections work in Connecticut
 
@@ -209,8 +209,10 @@ them.
    May.
 5. Say **first selectman** for the leader of a selectman town, not mayor.
 6. Do not write that a primary will happen; most endorsements are unchallenged.
-7. Say "town" for the municipality on a town page, even where its name is a city,
-   unless race data shows city offices.
+7. **Never call a city a town.** On a `-town` page, say "town" only when the
+   page is not one of Connecticut's cities. Bridgeport, Hartford, New Haven,
+   Stamford, Waterbury and the other places with a mayor are cities. When unsure,
+   use the place's name alone.
 8. Avoid anything that changes within a year: who has filed, whether a race is
    contested, filing deadlines, current ballot measures.
 

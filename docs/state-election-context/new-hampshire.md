@@ -179,6 +179,11 @@ elect optional offices such as trustees of trust funds and library trustees.
 
 *RSA 41:8, 41:8-b, 669:15, 669:16 · usual case · read in statute*
 
+**Watch out:** most of our town pages carry no select board race even though
+every town has one. Never say a town has no selectmen, or that none are up for
+election, because the page lacks the race. Describe the board in general terms
+or leave it out.
+
 Charter towns are organized under RSA 49-D and may have a different governing
 body, such as a town council. Take a charter town's offices from race data.
 
@@ -260,14 +265,19 @@ These are the ways New Hampshire copy goes visibly wrong.
 
 Do not write copy around these. They are for the data team to fix.
 
-- **Most town pages have no selectmen race.** Board of selectmen positions are
-  missing for nearly every town. Only charter towns with a council show a
-  governing body. - **Town offices are labeled as city offices** (for example
-  "City Library Board" and the `city-legislature` slug for town councils on
-  `-town` pages). - **Franklin has no page.**
-  `/elections/nh/merrimack-county/franklin` returns 404, though Franklin is a
-  city. - Our data has 112 municipal pages, far fewer than New Hampshire's towns
-  and cities.
+- **Most towns' own offices are missing.** Of our 100 town pages (checked
+  3 November 2026), 75 hold only school district races, 19 carry a select board
+  and 6 a town council. The select board, where present, is filed under the
+  election board slug (`city-election-board-election-commission`, shown as
+  "Town Select Board"), so it never appears as a selectmen position. Goffstown's
+  shows as "City Election Board". The towns exist in the data mainly because
+  school races are attached to them.
+- **About half of New Hampshire's 234 towns and cities have no page at all**,
+  including the city of Franklin and towns such as Bow and Lyme. Our data has
+  112 municipal pages. These places have no races upstream, so no page is made.
+  Search for Franklin falls back to the state page. Not fixable in our code.
+- **Town offices are labeled as city offices** (for example "City Library
+  Board", and the `city-legislature` slug for town councils on `-town` pages).
 
 ## Sources
 

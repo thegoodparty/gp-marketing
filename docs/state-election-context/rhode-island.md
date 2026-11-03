@@ -30,6 +30,7 @@ A law that sets no date takes effect on 1 July if enacted by then, and on
 passage if enacted later (R.I. Gen. Laws 43-3-25(a)).
 
 Re-check this doc: August 2027. Last researched: October 2026.
+Reviewed by Emily: 3 November 2026.
 
 ## How elections work in Rhode Island
 
@@ -174,24 +175,27 @@ State law refers to partisan local elections here.
 These are the ways Rhode Island copy goes visibly wrong.
 
 1. **Never describe county government.** There is none to describe. The county
-   on a page is only where the place is. 2. **Never decide from the slug alone
-   whether a page is a town or a city.** Our town slugs end in `-town`
-   (`westerly-town`), city slugs do not (`providence`). Town pages label town
-   offices as "City" offices. 3. **Do not call local races partisan or
-   nonpartisan without race data.** Partisan is the default, but several cities
-   are not. 4. Do not call Rhode Island primaries open or closed. Unaffiliated
-   voters choose one party's primary and stay unaffiliated. 5. Do not call any
-   Rhode Island place a township, village or borough. 6. Our data has no place
-   names that match a Rhode Island county name in a different county, but still
-   take the county from the page data. 7. Never name an officeholder or a
-   candidate. 8. Avoid anything that changes within a year: who has filed,
-   whether a race is contested, filing deadlines, current ballot measures.
+   on a page is only where the place is.
+2. **Never decide from the slug alone whether a page is a town or a city.** Our
+   town slugs end in `-town` (`westerly-town`), city slugs do not
+   (`providence`). Town pages label town offices as "City" offices.
+3. **Do not call local races partisan or nonpartisan without race data.**
+   Partisan is the default, but several cities are not.
+4. Do not call Rhode Island primaries open or closed. Unaffiliated voters choose
+   one party's primary and stay unaffiliated.
+5. Do not call any Rhode Island place a township, village or borough.
+6. Our data has no place names that match a Rhode Island county name in a
+   different county, but still take the county from the page data.
+7. Never name an officeholder or a candidate.
+8. Avoid anything that changes within a year: who has filed, whether a race is
+   contested, filing deadlines, current ballot measures.
 
 ### What search results commonly get wrong
 
-- That Rhode Island has county government. It does not. - That unaffiliated
-  voters become party members by voting in a primary. Since 2024 they stay
-  unaffiliated. - That local races are nonpartisan. Partisan is the default.
+- That Rhode Island has county government. It does not.
+- That unaffiliated voters become party members by voting in a primary. Since
+  2024 they stay unaffiliated.
+- That local races are nonpartisan. Partisan is the default.
 
 ## Data issues for the data team
 

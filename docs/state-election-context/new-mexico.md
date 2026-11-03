@@ -29,6 +29,7 @@ signed by then does not become law (art. IV, § 22). Laws take effect 90 days af
 adjournment, except appropriations and emergency acts (art. IV, § 23).
 
 Re-check this doc: May 2027. Last researched: October 2026.
+Reviewed by Emily: 3 November 2026.
 
 ## How elections work in New Mexico
 

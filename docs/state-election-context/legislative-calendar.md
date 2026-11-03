@@ -54,7 +54,7 @@ states cover the most pages, so they come first.
 | 39 | Utah | 303 | done, reviewed 3 November 2026 |
 | 40 | Vermont | 298 | done, reviewed 3 November 2026 |
 | 41 | New Hampshire | 284 | done, reviewed 3 November 2026 |
-| 42 | New Mexico | 230 | drafted, awaiting review |
+| 42 | New Mexico | 230 | done, reviewed 3 November 2026 |
 | 43 | West Virginia | 186 | drafted, awaiting review |
 | 44 | Maryland | 158 | drafted, awaiting review |
 | 45 | Wyoming | 155 | drafted, awaiting review |
@@ -118,7 +118,7 @@ If a legislature meets year-round, re-check in January and July.
 | Nevada | odd years only, February | June | July 2027 | no |
 | New Hampshire | 6 January 2027, no fixed length | June | August 2027 | verified |
 | New Jersey | year-round; second year begins 12 January 2027, next Legislature 11 January 2028 | — | January and July 2027, then February 2028 | verified |
-| New Mexico | odd-year 60-day session, January | March | April 2027 | no |
+| New Mexico | 19 January 2027, 60 days | by 20 March | May 2027 | verified |
 | New York | 6 January 2027, year-round | — | July 2027 and January 2028 | verified |
 | North Carolina | organizes 13 January 2027, reconvenes 27 January 2027 | no fixed end | October 2027 | verified |
 | North Dakota | 5 January 2027, odd years only, at most 80 days | April–May | June 2027 | verified |
@@ -146,8 +146,8 @@ Grouped by month. Within a month, do the states with the most pages first.
 - **January 2027**: the year-round legislatures (Pennsylvania, Illinois, Ohio,
   Michigan, New York, Wisconsin, New Jersey, Massachusetts and DC), to catch
   anything passed in late 2026.
-- **April**: New Mexico, South Dakota, Utah, Wyoming.
-- **May**: Kentucky, Idaho, Maryland,
+- **April**: South Dakota, Utah, Wyoming.
+- **May**: Kentucky, Idaho, Maryland, New Mexico,
   West Virginia.
 - **June**: Iowa, Kansas, Washington, Arkansas, Georgia, Alaska, Hawaii, Montana, North Dakota,
   Mississippi, Alabama.

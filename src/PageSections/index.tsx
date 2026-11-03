@@ -355,6 +355,8 @@ export type SectionOverrides = {
 		formId?: string;
 		/** Added to a sign-up button's link as `signup_source` (see `PERSON_CLAIM_SIGNUP_SOURCE`). */
 		signupSource?: string;
+		/** `inset` only: the button opens the claim pop-up (see `ProfileRequestModal`) instead of going to sign-up. */
+		requestModal?: { personId: string; candidateName: string; locationLabel: string | null };
 	};
 };
 

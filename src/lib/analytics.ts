@@ -39,6 +39,31 @@ export function trackClickToCallPhoneSubmitted(props: { page_path: string | null
 }
 
 /**
+ * A completed request from the unclaimed profile's pop-up: a visitor has asked
+ * us to nudge `personId` to finish their profile, and gp-api has accepted the
+ * lead. Call it on success, never on click: the number is completed asks.
+ *
+ * It goes to Segment as well as Amplitude because the HubSpot count gp-api
+ * writes, `candidate_profile_requests`, is only a lower bound: gp-api writes it
+ * only when the subject resolves to exactly one HubSpot contact. Segment sees
+ * every completed submission whatever the CRM knows.
+ *
+ * `claimRequestId` is gp-api's stored-lead id, null when the lead was accepted
+ * but the id could not be read back.
+ */
+export function trackPersonProfileNotifySubmitted(props: { personId: string; claimRequestId?: string | null }): void {
+	const pagePath = typeof window !== 'undefined' ? window.location.pathname : null;
+	const properties = {
+		personId: props.personId,
+		claimRequestId: props.claimRequestId ?? null,
+		page_path: pagePath ?? null,
+	};
+
+	trackEvent('Person Profile Notify Submitted', properties);
+	trackSegmentEvent('Person Profile Notify Submitted', properties);
+}
+
+/**
  * True when the path ends with `/sign-up` (any origin, any prefix).
  * Intentionally broad so every sign-up surface is tracked, including future
  * paths like `/partner/sign-up`. Tighten if only specific origins should match.
@@ -200,6 +225,11 @@ export const VOTER_GUIDE_EVENTS = {
 		dataLayer: 'voter_guide_pledge_modal_cta_click',
 		amplitude: 'Voter Guide - Pledge Modal CTA Clicked',
 		keys: ['source', 'label', 'href', 'cta'],
+	},
+	claimModalOpen: {
+		dataLayer: 'voter_guide_claim_modal_open',
+		amplitude: 'Voter Guide - Claim Modal Opened',
+		keys: ['source'],
 	},
 	claimProfileClick: {
 		dataLayer: 'voter_guide_claim_profile_click',

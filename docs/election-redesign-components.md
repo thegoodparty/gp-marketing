@@ -1056,6 +1056,24 @@ file and the content block's clearance, and both wait for the `/people` batch (P
   2026-10-16 (#476, see above); the phone frame's claim card carries hidden Overline and Caption
   layers, left out (Tony, 2026-10-22); and the phone's Recent Experience labels ("Elected" / "Ran",
   above the title) differ from the desktop's, which was not part of this request.
+- **The claim card opens a claim pop-up** (Emily, 2026-11-03; card 2677:13892 desktop / 2686:20489
+  phone, pop-up 2684:9074 / 2686:19897). The card is now left-aligned with no border, 48px padding
+  (16 by 24 on the phone), a 32/44 heading, 16/24 body and a white-to-red-100-to-blue-200 glow from
+  the top edge. Its button no longer goes to sign-up: it opens `ProfileRequestModal`
+  (`src/ui/ProfileRequestModal.tsx`). The candidate half ("Are you [Name]?") carries the Studio
+  button's sign-up link, form id and claim analytics, relabelled "Claim your profile". The voter half
+  ("Are you a [Location] voter?", the place from `personPledgeLocation`) brings back the visitor ask
+  removed in #476: First Name, Last Name, Email (required), City, posted to
+  `/api/people/claim-request` as `notify` and collected by HubSpot as `#person-claim-notify`, the
+  removed form's id, so its submissions land in the same place. The pop-up's copy is in code; the
+  card's heading, body and button label stay in Studio. Side by side from `lg`, stacked (voter
+  first) below it. The frames' reCAPTCHA box is Google's v2 checkbox, on when
+  `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` and `RECAPTCHA_SECRET_KEY` are both set in Vercel (set both or
+  neither). The button stays disabled until the box is ticked, and `/api/people/claim-request`
+  checks the token with Google before calling gp-api. The checkbox and button sit outside the
+  `<form>` so Google's hidden field is not collected by HubSpot. It guards gp-api only: HubSpot
+  collects the form in the browser, so a bot that skips the box can still reach HubSpot. Google
+  draws the box at a fixed 304px, narrower than the frame's.
 **The pledge's name (October 2026).** The GoodParty.org Pledge became the People First Pledge, with
 three pillars: Independent, People-Powered and Anti-Corruption. People First is the umbrella name, not
 a pillar. All built-in copy uses the new names. Studio text is edited separately, and editor copy

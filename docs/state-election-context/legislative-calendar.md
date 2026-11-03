@@ -57,7 +57,7 @@ states cover the most pages, so they come first.
 | 42 | New Mexico | 230 | done, reviewed 3 November 2026 |
 | 43 | West Virginia | 186 | done, reviewed 3 November 2026 |
 | 44 | Maryland | 158 | done, reviewed 3 November 2026 |
-| 45 | Wyoming | 155 | drafted, awaiting review |
+| 45 | Wyoming | 155 | done, reviewed 3 November 2026 |
 | 46 | Alaska | 84 | drafted, awaiting review |
 | 47 | Delaware | 76 | drafted, awaiting review |
 | 48 | Rhode Island | 74 | drafted, awaiting review |
@@ -137,7 +137,7 @@ If a legislature meets year-round, re-check in January and July.
 | Washington | 11 January 2027, at most 105 days | by 25 April | June 2027 | verified |
 | West Virginia | 13 January 2027, 60 days | mid-March | May 2027 | verified |
 | Wisconsin | organizes 4 January 2027, year-round | — | January and July | verified |
-| Wyoming | odd-year general session, January | March | April 2027 | no |
+| Wyoming | 12 January 2027, at most 40 working days a year | March | April 2027 | verified |
 
 ## Re-check plan for 2027
 

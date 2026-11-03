@@ -27,6 +27,7 @@ more than 40 legislative working days in a calendar year outside special session
 after adjournment, 15 days to file objections (art. 4, § 8).
 
 Re-check this doc: April 2027. Last researched: October 2026.
+Reviewed by Emily: 3 November 2026.
 
 ## How elections work in Wyoming
 

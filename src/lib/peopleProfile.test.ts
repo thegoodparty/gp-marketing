@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'bun:test';
+import { afterEach, describe, expect, setSystemTime, test } from 'bun:test';
 import type { CandidacyItem } from '~/types/elections';
 import type { PersonItem, PersonOfficeHolder, PublicPersonProfile } from '~/types/people';
 import {
@@ -770,6 +770,35 @@ describe('buildPersonSlugFromBase', () => {
 
 	test('still appends when the base merely contains the suffix mid-string', () => {
 		expect(buildPersonSlugFromBase(`${ID8}-jane`, PID)).toBe(`${ID8}-jane-${ID8}`);
+	});
+});
+
+describe('a race on the ballot today is still being run', () => {
+	const runningToday = makePerson({
+		fullName: 'Jane Doe',
+		OfficeHolders: [makeOffice({ isCurrent: true, officeTitle: 'State Senate' })],
+		Candidacies: [{ id: 'c1', positionName: 'Governor', party: 'Independent', Race: { electionDate: '2026-11-03' } }],
+	});
+
+	afterEach(() => setSystemTime());
+
+	// The reported bug: from 7pm Eastern on Nov 2 these profiles read as already run.
+	for (const [label, iso] of [
+		['7pm Eastern the evening before', '2026-11-03T00:00:00Z'],
+		['polls closing in Hawaii and Alaska', '2026-11-04T06:00:00Z'],
+		['a minute before midnight Pacific', '2026-11-04T07:59:00Z'],
+	] as const) {
+		test(`${label}`, () => {
+			setSystemTime(new Date(iso));
+			const view = composeView(PID, runningToday, null);
+			expect(view.persona).toBe('both');
+			expect(view.secondaryRoleTitle).toBe('Candidate for Governor');
+		});
+	}
+
+	test('the race is past once the Pacific day is over', () => {
+		setSystemTime(new Date('2026-11-04T08:00:00Z'));
+		expect(composeView(PID, runningToday, null).persona).toBe('officeholder');
 	});
 });
 

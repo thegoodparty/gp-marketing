@@ -349,6 +349,19 @@ there and `ListOfOfficesBlock` lists the office without a link rather than linki
 a page that cannot exist. Giving those offices a real page needs a different URL
 shape, which is a separate piece of work.
 
+### When election day ends
+
+Election dates arrive as calendar days (`2026-11-03`), and every "has this race
+happened yet" check compares them to today's date **in Pacific time**, through
+`startOfElectionDay` in `src/lib/electionDay.ts`. A race stays upcoming until
+midnight Pacific, after every state's polls have closed. Never compare an election
+date with `Date.parse` or `Date.now()`: a date-only string parses as midnight UTC,
+which ended election day at 7pm Eastern the evening before and turned every
+candidate on that day's ballot into a past candidate. The servers also run on UTC,
+so "today in local time" on Vercel ends election day at 7pm Eastern while polls are
+still open. The one exception is the election-api "upcoming" query filter, which
+reaches a day back on purpose (`upcomingSinceDateOnly`).
+
 ### Templates: global vs custom, and three-tier resolution
 
 Editor-facing how-to (Studio steps, preview targets, clone workflow):

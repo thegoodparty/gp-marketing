@@ -2,7 +2,8 @@ import type { SVGProps } from 'react';
 import Link from 'next/link';
 import { normalizeStateCode } from '~/constants/usStateCodes';
 import type { PartyClass } from '~/lib/party';
-import { daysUntil, positionHeroHeading, startOfLocalDay, toLocalDay, type PositionHeroState } from '~/lib/positionHeroState';
+import { startOfElectionDay } from '~/lib/electionDay';
+import { daysUntil, positionHeroHeading, toLocalDay, type PositionHeroState } from '~/lib/positionHeroState';
 import { Logo } from '~/sanity/utils/Logo.tsx';
 import { cn, tv } from './_lib/utils.ts';
 import { Avatar } from './Avatar.tsx';
@@ -249,7 +250,7 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 		const ordered = legs.every((day, i) => i === 0 || day > (legs[i - 1] ?? new Date(0)));
 		if (!end || legs.length < 2 || !ordered) return null;
 		const pending = state.phase === 'midElection' && state.resultsPending;
-		const today = startOfLocalDay(now).getTime();
+		const today = startOfElectionDay(now).getTime();
 		const anchorAt = (index: number) => index / (legs.length - 1);
 		const progress = (() => {
 			if (pending || today >= end.getTime()) return 1;

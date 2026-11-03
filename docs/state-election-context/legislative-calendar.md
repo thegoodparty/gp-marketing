@@ -52,7 +52,7 @@ states cover the most pages, so they come first.
 | 37 | Arizona | 321 | done, reviewed 3 November 2026 |
 | 38 | Connecticut | 312 | done, reviewed 3 November 2026 |
 | 39 | Utah | 303 | done, reviewed 3 November 2026 |
-| 40 | Vermont | 298 | drafted, awaiting review |
+| 40 | Vermont | 298 | done, reviewed 3 November 2026 |
 | 41 | New Hampshire | 284 | drafted, awaiting review |
 | 42 | New Mexico | 230 | drafted, awaiting review |
 | 43 | West Virginia | 186 | drafted, awaiting review |
@@ -132,7 +132,7 @@ If a legislature meets year-round, re-check in January and July.
 | Tennessee | 12 January 2027 | April | July 2027 | verified |
 | Texas | 12 January 2027, at most 140 days | late May–early June | July 2027 | verified |
 | Utah | 19 January 2027, at most 45 days | early March | April 2027 | verified |
-| Vermont | January | May | June 2027 | no |
+| Vermont | 6 January 2027, no fixed end | May | July 2027 | verified |
 | Virginia | 13 January 2027, 30-day odd-year session; reconvened veto session the sixth Wednesday after adjournment | February–March | July 2027 | verified |
 | Washington | 11 January 2027, at most 105 days | by 25 April | June 2027 | verified |
 | West Virginia | February in odd years | April | May 2027 | no |
@@ -150,9 +150,9 @@ Grouped by month. Within a month, do the states with the most pages first.
 - **May**: Kentucky, Idaho, Maryland,
   West Virginia.
 - **June**: Iowa, Kansas, Washington, Arkansas, Georgia, Alaska, Hawaii, Montana, North Dakota,
-  Vermont, Mississippi, Alabama.
+  Mississippi, Alabama.
 - **July**: Pennsylvania, Ohio, Michigan, Minnesota, Indiana, Oklahoma, Texas, New York, Wisconsin, Missouri, Virginia,
-  Nebraska, Colorado, South Carolina, Delaware, Maine,
+  Nebraska, Colorado, South Carolina, Vermont, Delaware, Maine,
   Nevada, New Hampshire, New Jersey, Rhode Island, Massachusetts, Tennessee, DC.
 - **August**: Florida (bills reach the governor in batches after the session ends), Louisiana, Arizona, Connecticut.
 - **September**: Oregon (the governor has until early August to act on bills; re-check again in May 2028 after the short session).

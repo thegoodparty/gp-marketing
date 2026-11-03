@@ -32,6 +32,7 @@ adjourns within three days of presenting it, in which case it does not
 adjournment. Each act usually sets its own effective date (`usual case`).
 
 Re-check this doc: July 2027. Last researched: October 2026.
+Reviewed by Emily: 3 November 2026.
 
 ## How elections work in Vermont
 

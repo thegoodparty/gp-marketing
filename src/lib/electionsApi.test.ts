@@ -22,7 +22,9 @@ import {
 	getRaceBySlug,
 	getRemovedPersonIds,
 	getVoterDensityForDistrict,
+	getCountyElectionDistricts,
 	hasTownshipRace,
+	isCountyElectionDistrictPlace,
 	isStateIndexDistrictPlace,
 	pairCensusCityTwins,
 	resolveCountySlugForCitySlug,
@@ -1289,6 +1291,27 @@ describe('getFeaturedCities', () => {
 		]);
 	});
 
+	// Alcorn County, MS featured "District 5, MS" as a city: a supervisors district holding a
+	// school board seat.
+	test('never features a numbered county election district', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=tn%2Fdavidson-county'),
+				body: [
+					{
+						slug: 'tn/davidson-county',
+						name: 'Davidson County',
+						mtfcc: 'G4020',
+						children: [city('tn/davidson-county/district-5', 'District 5', 6, 'G4040'), city('tn/davidson-county/nashville', 'Nashville', 4)],
+					},
+				],
+			},
+		]);
+
+		const result = await getFeaturedCities({ stateCode: 'TN', countySlug: 'tn/davidson-county' });
+		expect(result.map(card => card.name)).toEqual(['Nashville']);
+	});
+
 	test('leaves the page’s own city out of its neighbours', async () => {
 		withFetchMock([
 			{
@@ -1613,5 +1636,42 @@ describe('hasTownshipRace', () => {
 		expect(hasTownshipRace([{ slug: 'wi/brookfield-city/supervisor', positionLevel: 'TOWNSHIP' }])).toBe(true);
 		expect(hasTownshipRace([{ slug: 'ne/beatrice-city/airport-district-board', positionLevel: 'LOCAL' }])).toBe(false);
 		expect(hasTownshipRace([])).toBe(false);
+	});
+});
+
+describe('isCountyElectionDistrictPlace', () => {
+	test('spots a numbered district filed as a town', () => {
+		expect(isCountyElectionDistrictPlace({ slug: 'ms/alcorn-county/district-1', name: 'District 1' })).toBe(true);
+		expect(isCountyElectionDistrictPlace({ slug: 'tn/bradley-county/district-12', name: 'District 12' })).toBe(true);
+	});
+
+	test('leaves real places with district in the name alone', () => {
+		expect(isCountyElectionDistrictPlace({ slug: 'ms/alcorn-county/kossuth', name: 'Kossuth' })).toBe(false);
+		expect(isCountyElectionDistrictPlace({ slug: 'pa/district-township', name: 'District township' })).toBe(false);
+		expect(isCountyElectionDistrictPlace({ slug: 'ca/district-1-water', name: 'District 1 Water' })).toBe(false);
+		expect(isCountyElectionDistrictPlace({ slug: 'ms/alcorn-county/district-1', name: 'Corinth' })).toBe(false);
+	});
+});
+
+describe('getCountyElectionDistricts', () => {
+	test('reads only the numbered districts, each with its races', async () => {
+		const requested: string[] = [];
+		withFetchMock([
+			{
+				match: url => {
+					if (url.includes('/v1/elections/places?')) requested.push(new URL(url).searchParams.get('slug') ?? '');
+					return url.includes('slug=ms%2Falcorn-county%2Fdistrict-1');
+				},
+				body: [{ slug: 'ms/alcorn-county/district-1', name: 'District 1', Races: [{ slug: 'ms/alcorn-county/district-1/local-school-board' }] }],
+			},
+		]);
+
+		const result = await getCountyElectionDistricts([
+			{ slug: 'ms/alcorn-county/district-1', name: 'District 1', mtfcc: 'G4040' },
+			{ slug: 'ms/alcorn-county/kossuth', name: 'Kossuth', mtfcc: 'G4110' },
+		] as never);
+
+		expect(requested).toEqual(['ms/alcorn-county/district-1']);
+		expect(result.map(r => r.districtData.Races?.map(race => race.slug))).toEqual([['ms/alcorn-county/district-1/local-school-board']]);
 	});
 });

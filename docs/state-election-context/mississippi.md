@@ -450,9 +450,13 @@ For the data team, not for copy.
   `ms/sharkey-county/county-chancery/position/circuit-court-clerk-joint`.
 - Election commissioners use the slug `county-board-of-elections-supervisors`.
   They are elected election commissioners, not supervisors.
-- City races on some pages show a past election as the next one (Jackson and
-  Brandon list a mayor race dated 2021). The next regular municipal election is
-  in 2029.
+- The June 2025 municipal election is missing for most cities. On 157 of the 218
+  city pages checked on 3 November 2026, the newest mayor race is June 2021, so
+  the mayor page says "Last election June 8, 2021" and shows the 2021 filing
+  period beside a mayor whose term runs 2025 to 2029 (Jackson, Brandon). Council
+  races have the same gap on 137 pages. Visitors see it through the Year filter
+  and on position pages; the default location view lists only upcoming races.
+  The next regular municipal election is in 2029.
 - Three municipal pages carry local school board races
   (`ms/pontotoc-county/algoma`, `ms/perry-county/beaumont`,
   `ms/lee-county/baldwyn`). Probably a school district named after the town;

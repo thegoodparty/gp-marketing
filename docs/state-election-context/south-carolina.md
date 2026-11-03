@@ -29,7 +29,7 @@ becomes law unless returned within two days after the houses next meet (art. IV,
 § 21).
 
 Re-check this doc: July 2027, after the June return of the houses. Last
-researched: October 2026.
+researched: October 2026. Reviewed by Emily: 3 November 2026.
 
 ## How elections work in South Carolina
 

@@ -46,7 +46,7 @@ states cover the most pages, so they come first.
 | 31 | Montana | 401 | done, reviewed 3 November 2026 |
 | 32 | Alabama | 385 | done, reviewed 3 November 2026 |
 | 33 | Colorado | 365 | done, reviewed 3 November 2026 |
-| 34 | South Carolina | 363 | drafted, awaiting review |
+| 34 | South Carolina | 363 | done, reviewed 3 November 2026 |
 | 35 | Idaho | 362 | drafted, awaiting review |
 | 36 | Maine | 329 | drafted, awaiting review |
 | 37 | Arizona | 321 | drafted, awaiting review |
@@ -127,7 +127,7 @@ If a legislature meets year-round, re-check in January and July.
 | Oregon | 19 January 2027, at most 160 days; short session 1 February 2028 | by 27 June | September 2027 and May 2028 | verified |
 | Pennsylvania | 5 January 2027, year-round | — | January and July | verified |
 | Rhode Island | January | June | July 2027 | no |
-| South Carolina | January | May | June 2027 | no |
+| South Carolina | 12 January 2027 | 13 May, budget return until end of June | July 2027 | verified |
 | South Dakota | 12 January 2027, at most 40 legislative days | March | late April 2027 | verified |
 | Tennessee | 12 January 2027 | April | July 2027 | verified |
 | Texas | 12 January 2027, at most 140 days | late May–early June | July 2027 | verified |
@@ -150,9 +150,9 @@ Grouped by month. Within a month, do the states with the most pages first.
 - **May**: Kentucky, Idaho, Maryland,
   West Virginia.
 - **June**: Iowa, Kansas, Washington, Arkansas, Georgia, Alaska, Hawaii, Montana, North Dakota,
-  South Carolina, Vermont, Mississippi, Alabama.
+  Vermont, Mississippi, Alabama.
 - **July**: Pennsylvania, Ohio, Michigan, Minnesota, Indiana, Oklahoma, Texas, New York, Wisconsin, Missouri, Virginia,
-  Nebraska, Colorado, Arizona, Connecticut, Delaware, Maine,
+  Nebraska, Colorado, South Carolina, Arizona, Connecticut, Delaware, Maine,
   Nevada, New Hampshire, New Jersey, Rhode Island, Massachusetts, Tennessee, DC.
 - **August**: Florida (bills reach the governor in batches after the session ends), Louisiana.
 - **September**: Oregon (the governor has until early August to act on bills; re-check again in May 2028 after the short session).

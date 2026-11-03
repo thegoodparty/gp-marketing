@@ -35,6 +35,7 @@ New laws take effect on the date the act states, or on passage if it states none
 up to ninety days after the session ends (Colo. Const. art. V, § 1(3)).
 
 Re-check this doc: July 2027. Last researched: October 2026.
+Reviewed by Emily: 3 November 2026.
 
 ## How elections work in Colorado
 
@@ -365,7 +366,7 @@ lies wholly within the county on its page.
 
 These are the ways Colorado copy goes visibly wrong.
 
-1. **Never infer a county from a place name.** Of the 9 Colorado place pages
+1. **Never infer a county from a place name.** Of our Colorado place pages
    that share a name with a Colorado county, one sits in a different county:
    the city of Las Animas is in Bent County, not Las Animas County. The full
    list is in

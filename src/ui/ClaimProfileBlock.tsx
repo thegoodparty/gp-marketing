@@ -5,6 +5,7 @@ import { Text } from './Text.tsx';
 import { ComponentButton, type ComponentButtonProps } from './Inputs/Button.tsx';
 import { CandidatesCard, type CandidatesCardProps } from './CandidatesCard.tsx';
 import { IconResolver } from './IconResolver.tsx';
+import { ProfileRequestModal, type ProfileRequestModalProps } from './ProfileRequestModal.tsx';
 
 const styles = tv({
 	slots: {
@@ -16,15 +17,15 @@ const styles = tv({
 		bannerContent: 'flex w-full flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-6',
 		bannerTextSection: 'min-w-0 flex-1 flex flex-col gap-2 md:gap-3',
 		// The person profile's claim card, first in the profile content column
-		// (Voter Guide round, 2626:120137 desktop / 2626:128927 phone). The frames
-		// draw the glow as a top-down ramp on the phone and a radial one from the
-		// top edge on desktop.
+		// (2677:13892 desktop / 2686:20489 phone, Nov 2026). Both frames draw a
+		// radial glow from the top edge, wider than it is tall on desktop.
 		insetBase: [
-			'flex flex-col gap-6 rounded-3xl border border-gray-200 p-6 text-center text-black md:px-10 md:py-12',
-			'bg-[linear-gradient(180deg,var(--color-white)_25%,var(--color-blue-100)_55%,var(--color-red-100)_100%)]',
-			'md:bg-[radial-gradient(ellipse_100%_100%_at_50%_0%,var(--color-white)_25%,var(--color-blue-100)_65%,var(--color-red-100)_100%)]',
+			'flex flex-col gap-4 rounded-3xl px-4 py-6 text-left text-black md:p-12',
+			'bg-[radial-gradient(ellipse_120%_111%_at_50%_-11%,var(--color-white)_0%,var(--color-red-100)_50%,var(--color-blue-200)_100%)]',
+			'md:bg-[radial-gradient(ellipse_139%_115%_at_50%_0%,var(--color-white)_0%,var(--color-red-100)_50%,var(--color-blue-200)_100%)]',
 		],
-		insetTextSection: 'flex flex-col gap-3 md:gap-4',
+		insetTextSection: 'flex flex-col gap-4',
+		insetBody: 'font-secondary text-[1rem]/[1.5rem]',
 	},
 	variants: {
 		layout: {
@@ -87,12 +88,21 @@ export type ClaimProfileBlockProps = {
 	body?: ReactNode;
 	claimButton: ComponentButtonProps;
 	exampleCard?: CandidatesCardProps;
+	/**
+	 * `inset` only: the button opens a pop-up with the claim button for the
+	 * candidate and a request form for voters, instead of going to sign-up.
+	 */
+	requestModal?: Omit<ProfileRequestModalProps, 'triggerLabel' | 'claimButton'>;
 };
+
+function labelText(label: ReactNode): string | undefined {
+	return typeof label === 'string' && label.trim() !== '' ? label : undefined;
+}
 
 export function ClaimProfileBlock(props: ClaimProfileBlockProps) {
 	const layout = props.layout ?? 'card';
 	const backgroundColor = props.backgroundColor ?? 'cream';
-	const { base, content, textSection, cardSection, bannerBase, bannerContent, bannerTextSection, insetBase, insetTextSection } = styles({
+	const { base, content, textSection, cardSection, bannerBase, bannerContent, bannerTextSection, insetBase, insetTextSection, insetBody } = styles({
 		backgroundColor,
 		layout,
 	});
@@ -117,16 +127,24 @@ export function ClaimProfileBlock(props: ClaimProfileBlockProps) {
 							{props.headline}
 						</Text>
 					)}
-					{props.body && <Text styleType='body-1'>{props.body}</Text>}
+					{props.body && <p className={insetBody()}>{props.body}</p>}
 				</div>
-				<ComponentButton
-					{...claimButtonProps}
-					className={cn('w-full md:w-fit md:self-center', props.claimButton.className)}
-					// Studio's Sign Up action arrives as a plain link to the app, which
-					// carries no icon; the frames draw the arrow on this button.
-					iconRight={props.claimButton.iconRight ?? <IconResolver icon='arrow-up-right' className='size-4 min-w-4' />}
-					buttonProps={{ ...claimButtonProps.buttonProps, styleType: 'secondary', styleSize: 'lg' }}
-				/>
+				{props.requestModal ? (
+					<ProfileRequestModal
+						{...props.requestModal}
+						triggerLabel={labelText(props.claimButton.label) ?? 'Get started'}
+						claimButton={claimButtonProps}
+					/>
+				) : (
+					<ComponentButton
+						{...claimButtonProps}
+						className={cn('w-full md:w-fit', props.claimButton.className)}
+						// Studio's Sign Up action arrives as a plain link to the app, which
+						// carries no icon; the frames draw the arrow on this button.
+						iconRight={props.claimButton.iconRight ?? <IconResolver icon='arrow-up-right' className='size-4 min-w-4' />}
+						buttonProps={{ ...claimButtonProps.buttonProps, styleType: 'secondary', styleSize: 'lg' }}
+					/>
+				)}
 			</article>
 		);
 	}

@@ -70,7 +70,7 @@ describe('the claim card leads the profile content column', () => {
 		expect(section.closest('[data-component="ProfileContentBlock"]')).not.toBeNull();
 		expect(column.firstElementChild).toBe(section);
 		expect(column.previousElementSibling?.tagName).toBe('ASIDE');
-		expect(claim.querySelector('h2')?.textContent).toBe('Are you Kim Byrd? Complete your profile now.');
+		expect(claim.querySelector('h2')?.textContent).toBe('This profile is incomplete.');
 	});
 
 	test('nothing is left behind where the template lists the claim block', async () => {

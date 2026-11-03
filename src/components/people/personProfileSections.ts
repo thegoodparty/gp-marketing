@@ -59,11 +59,11 @@ export const PERSON_PROFILE_SECTIONS = [
 		...claimSkeleton,
 		_key: PERSON_SECTION_KEYS.claim,
 		claimProfileBlockContent: {
-			field_headline: 'Are you [candidate name]? Complete your profile now.',
+			field_headline: 'This profile is incomplete.',
 			field_body:
-				'Your community deserves accountable leadership. Claim your profile and share your top priorities with residents. Create a free GoodParty.org account to get started.',
+				'Are you [candidate name]? Claim your profile and share your top priorities with voters. Not [candidate name]? Ask this candidate to complete their profile today.',
 		},
-		ctaAction: { _type: 'ctaActionWithShared', field_ctaActionWithShared: 'SignUp', field_buttonText: 'Claim this profile' },
+		ctaAction: { _type: 'ctaActionWithShared', field_ctaActionWithShared: 'SignUp', field_buttonText: 'Get started' },
 	},
 	{
 		_key: PERSON_SECTION_KEYS.cta,

@@ -95,11 +95,16 @@ export const BannerLayout: Story = {
 export const InsetLayout: Story = {
 	args: {
 		layout: 'inset',
-		headline: 'Are you Jordan Avery? Complete your profile now.',
-		body: 'Your community deserves accountable leadership. Claim your profile and share your top priorities with residents. Create a free GoodParty.org account to get started.',
+		headline: 'This profile is incomplete.',
+		body: 'Are you Jordan Avery? Claim your profile and share your top priorities with voters. Not Jordan Avery? Ask this candidate to complete their profile today.',
 		claimButton: {
 			buttonType: 'signup',
-			label: 'Claim this profile',
+			label: 'Get started',
+		},
+		requestModal: {
+			personId: '11111111-1111-4111-8111-111111111111',
+			candidateName: 'Jordan Avery',
+			locationLabel: 'Austin',
 		},
 	},
 	decorators: [
@@ -114,7 +119,7 @@ export const InsetLayout: Story = {
 	parameters: {
 		design: {
 			type: 'figma',
-			url: 'https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2626-120137',
+			url: 'https://www.figma.com/design/uiXjaG81QXkT0Swu0OiM5V/Elections---Voter-Guide?node-id=2677-13892',
 		},
 	},
 };

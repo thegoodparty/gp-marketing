@@ -37,7 +37,8 @@ still work, and it now pushes the same three to the data layer under the
 holds both sets of names.
 
 The other older helpers stay as they are: `Sign Up Clicked` (with its
-`sign_up_click` data layer push keyed on `formId`), the demo request and click-to-call events, and `Scroll Depth`.
+`sign_up_click` data layer push keyed on `formId`), `Person Profile Notify Submitted`,
+the demo request and click-to-call events, and `Scroll Depth`.
 
 ## The voter guide events
 
@@ -59,6 +60,7 @@ data layer keys, which are also the Amplitude property names.
 | Viewed a profile | `voter_guide_profile_view` | Voter Guide - Profile Viewed | Every /people page, once per load | `person_id`, `profile_state` (the Figma letter A to L), `persona` (candidate, officeholder, both, past), `claimed`, `pledged`, `removed`, `unpublished`, `party_class` (republican, democrat, independent, other, or null) |
 | Opened the pledge pop-up | `voter_guide_pledge_modal_open` | Voter Guide - Pledge Modal Opened | All five openers | `source`: profile_hero, pledge_callout, position_people_lists, position_content, featured_candidates |
 | Clicked a button in the pledge pop-up | `voter_guide_pledge_modal_cta_click` | Voter Guide - Pledge Modal CTA Clicked | The pop-up's "Learn more" button, or the pledge copy test's buttons (below) | `source` (the opener, as above), `label`, `href`, `cta` (primary or secondary) |
+| Opened the claim pop-up | `voter_guide_claim_modal_open` | Voter Guide - Claim Modal Opened | The claim card on unclaimed `/people` profiles, whose button opens a pop-up with a candidate half and a voter half (Nov 2026) | `source` (claim_block) |
 | Clicked a claim-your-profile call to action | `voter_guide_claim_profile_click` | Voter Guide - Claim Profile Clicked (also sent to Segment) | The Claim Profile Block on any template, including unclaimed candidate profiles (`claim_block`). `claim_band` came from the hard-coded profile band it replaced (Oct 2026) | `source`, `label`, `href`, `layout` (card, banner, or inset: `inset` is the claim card on `/people` profiles from 2026-10-22; it read `card` there before) |
 | Clicked "Take the pledge" | `voter_guide_take_pledge_click` | Voter Guide - Take Pledge Clicked | The People First Pledge band on a person profile whose hero says they have not taken it (`source: pledge_block`). The button goes to app sign-up, so the completion lands on the app; this click is what credits the profile page | `source`, `label`, `href` |
 | Clicked a place in the counties and cities index | `voter_guide_location_index_click` | Voter Guide - Location Index Clicked | The index on state and county pages | `place_name`, `place_level` (county, city, town, district), `href`, `searched` (true when the index was filtered first) |
@@ -67,6 +69,12 @@ data layer keys, which are also the Amplitude property names.
 | Searched and was sent to a place | `voter_guide_search_complete` | Voter Guide - Election Search Completed | Either search box | `placement`, `input_type` (city or county, from the suggestion picked; city for typed text), `matched_level` (city, county, or state: the page the visitor was sent to) |
 | Searched and got an error | `voter_guide_search_error` | Voter Guide - Election Search Errored | Either search box | `placement`, `input_type`, `failure_reason` (empty_input, unresolved, network) |
 | Clicked a link that leaves the site | none (GA4 has its own `click`) | Voter Guide - Outbound Link Clicked | Any link to a host outside goodparty.org on an /elections or /people page | `href`, `host`, `link_text` |
+
+On profiles the claim card's button opens the claim pop-up. Its "Claim your profile" button
+is the Studio block's sign-up button, so the claim event below comes from there, still with
+`source: claim_block` and `layout: inset`. The pop-up's voter half posts to
+`/api/people/claim-request` (source `notify`) and sends `Person Profile Notify Submitted` to
+Amplitude and Segment on success; HubSpot collects the same form as `#person-claim-notify`.
 
 On profiles the claim block's sign-up button still sends `Sign Up Clicked` and the
 `sign_up_click` data layer push with form id `person-claim-owner`, as the band did; the

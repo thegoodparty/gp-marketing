@@ -20,6 +20,10 @@ const EMAIL = 'visitor@example.com';
 const { POST } = await import('./route');
 
 let calls: Array<{ url: string; body: Record<string, unknown> }>;
+/** Requests to Google's siteverify, which are form-encoded rather than JSON. */
+let verifyCalls: URLSearchParams[];
+/** Google's siteverify answer; `null` stands for Google being unreachable. */
+let verifyBody: Record<string, unknown> | null;
 let originalFetch: typeof globalThis.fetch;
 /** gp-api's response body; `null` stands for a 2xx that cannot be parsed. */
 let upstreamBody: Record<string, unknown> | null;
@@ -28,9 +32,17 @@ const CLAIM_REQUEST_ID = 'clr_01HZY8QK5M';
 
 beforeEach(() => {
 	calls = [];
+	verifyCalls = [];
+	verifyBody = { success: true };
 	upstreamBody = { id: CLAIM_REQUEST_ID, personId: PERSON_ID, createdAt: '2026-08-24T00:00:00.000Z' };
 	originalFetch = globalThis.fetch;
 	globalThis.fetch = (async (url: string, init?: { body?: string }) => {
+		if (String(url).startsWith('https://www.google.com/recaptcha/')) {
+			verifyCalls.push(new URLSearchParams(init?.body ?? ''));
+			if (verifyBody === null) throw new Error('network down');
+			const answer = verifyBody;
+			return { ok: true, status: 200, json: async () => answer } as Response;
+		}
 		calls.push({ url: String(url), body: JSON.parse(init?.body ?? '{}') as Record<string, unknown> });
 		return {
 			ok: true,
@@ -45,6 +57,7 @@ beforeEach(() => {
 
 afterEach(() => {
 	globalThis.fetch = originalFetch;
+	delete process.env['RECAPTCHA_SECRET_KEY'];
 });
 
 async function post(body: unknown): Promise<Response> {
@@ -146,6 +159,63 @@ describe('POST /api/people/claim-request', () => {
 
 	test('rejects a bad email before calling gp-api', async () => {
 		const res = await post({ personId: PERSON_ID, email: 'not-an-email', source: 'notify' });
+
+		expect(res.status).toBe(400);
+		expect(calls).toHaveLength(0);
+	});
+});
+
+/**
+ * The voter form's "I'm not a robot" box. Off until the secret is set in
+ * Vercel, so previews and local dev keep working without Google keys.
+ */
+describe('the reCAPTCHA check', () => {
+	const SECRET = 'test-secret';
+
+	test('is skipped while no secret is configured', async () => {
+		const res = await post({ personId: PERSON_ID, email: EMAIL, source: 'notify' });
+
+		expect(res.status).toBe(200);
+		expect(verifyCalls).toHaveLength(0);
+	});
+
+	test('asks Google about the token and forwards the request when it passes', async () => {
+		process.env['RECAPTCHA_SECRET_KEY'] = SECRET;
+
+		const res = await post({ personId: PERSON_ID, email: EMAIL, source: 'notify', recaptchaToken: 'tok' });
+
+		expect(res.status).toBe(200);
+		expect(verifyCalls.map(p => [p.get('secret'), p.get('response')])).toEqual([[SECRET, 'tok']]);
+		expect(calls).toHaveLength(1);
+		// The token is ours to check, not gp-api's.
+		expect(calls[0]?.body).not.toHaveProperty('recaptchaToken');
+	});
+
+	test('rejects a request with no token without asking Google or calling gp-api', async () => {
+		process.env['RECAPTCHA_SECRET_KEY'] = SECRET;
+
+		const res = await post({ personId: PERSON_ID, email: EMAIL, source: 'notify' });
+
+		expect(res.status).toBe(400);
+		expect(verifyCalls).toHaveLength(0);
+		expect(calls).toHaveLength(0);
+	});
+
+	test('rejects a token Google does not accept', async () => {
+		process.env['RECAPTCHA_SECRET_KEY'] = SECRET;
+		verifyBody = { success: false, 'error-codes': ['timeout-or-duplicate'] };
+
+		const res = await post({ personId: PERSON_ID, email: EMAIL, source: 'notify', recaptchaToken: 'used' });
+
+		expect(res.status).toBe(400);
+		expect(calls).toHaveLength(0);
+	});
+
+	test('fails closed when Google cannot be reached', async () => {
+		process.env['RECAPTCHA_SECRET_KEY'] = SECRET;
+		verifyBody = null;
+
+		const res = await post({ personId: PERSON_ID, email: EMAIL, source: 'notify', recaptchaToken: 'tok' });
 
 		expect(res.status).toBe(400);
 		expect(calls).toHaveLength(0);

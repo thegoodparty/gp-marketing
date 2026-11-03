@@ -5,17 +5,12 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
 /**
- * Covers the claim prompt on an unclaimed person profile, the person's own ask:
- * the Person Profile template's Claim Profile Block, rendered with the overrides
- * the profile hands it.
- *
- * It used to be a hard-coded band that collected a name and email and branched
- * on the person's product (Win into sign-up, Serve into "a human will be in
- * touch"). Both halves of that are gone: the prompt is candidate-only, so there
- * is no Serve branch, and it sends people to sign-up instead of taking their
- * address. The visitor-facing "ask [Name] to complete their profile" card was
- * removed (2026-10-16), so nothing on the page posts to the claim-request
- * endpoint.
+ * Covers the claim card on an unclaimed person profile: the Person Profile
+ * template's Claim Profile Block, rendered with the overrides the profile hands
+ * it. Its button opens a pop-up (Figma 2684:9074, Nov 2026) with two halves: the
+ * candidate's sign-up button, and a form for a voter to ask the candidate to
+ * complete the page, which posts to the claim-request endpoint as `notify` and
+ * is collected by HubSpot as `#person-claim-notify`.
  *
  * Nothing here mocks `~/lib/analytics`: a partial module mock of it drops the
  * exports other importers rely on. The analytics assertions read the
@@ -47,6 +42,11 @@ let trackedEvents: { name: string; props?: Record<string, unknown> }[];
 let segmentEvents: { name: string; props?: Record<string, unknown> }[];
 let dataLayer: Record<string, unknown>[];
 let fetchCalls: { url: string; body: Record<string, unknown> }[];
+let fetchOk: boolean;
+let fetchBody: Record<string, unknown> | null;
+
+/** gp-api's stored-lead id, echoed back through the proxy. */
+const CLAIM_REQUEST_ID = 'clr_01HZY8QK5M';
 
 beforeEach(() => {
 	dom = new JSDOM('<!DOCTYPE html><html><body><div id="root"></div></body></html>', {
@@ -68,6 +68,18 @@ beforeEach(() => {
 	segmentEvents = [];
 	dataLayer = [];
 	fetchCalls = [];
+	fetchOk = true;
+	fetchBody = { ok: true, claimRequestId: CLAIM_REQUEST_ID };
+
+	// React DOM decides once per process, when it is first imported, whether the
+	// browser fires `input` events, by looking for a `window` global. Every DOM
+	// test imports react-dom before its JSDOM exists, so it falls back to its
+	// Internet Explorer path (`attachEvent` / `detachEvent` and `keyup`), which
+	// JSDOM lacks, and focusing an input throws inside React; the dialog focuses
+	// one on open. These no-ops let that path run.
+	const shim = window.HTMLElement.prototype as unknown as Record<string, unknown>;
+	shim['attachEvent'] = () => {};
+	shim['detachEvent'] = () => {};
 
 	(window as unknown as { amplitude: unknown }).amplitude = {
 		track: (name: string, props?: Record<string, unknown>) => trackedEvents.push({ name, props }),
@@ -79,7 +91,15 @@ beforeEach(() => {
 
 	globalThis.fetch = (async (url: string, init?: { body?: string }) => {
 		fetchCalls.push({ url: String(url), body: JSON.parse(init?.body ?? '{}') as Record<string, unknown> });
-		return { ok: true, json: async () => ({}) } as Response;
+		// `fetchBody === null` stands for a 2xx whose body cannot be read, which
+		// must still report the submission.
+		return {
+			ok: fetchOk,
+			json: async () => {
+				if (fetchBody === null) throw new Error('unreadable body');
+				return fetchBody;
+			},
+		} as Response;
 	}) as unknown as typeof fetch;
 
 	// `window.location` is unforgeable in JSDOM — it cannot be reassigned or
@@ -126,6 +146,27 @@ async function click(element: Element) {
 }
 
 /**
+ * Types into a react-hook-form field. The value goes through the prototype
+ * setter so React's value tracker notices the change; `input` and `keyup` cover
+ * whichever event path React took (see the shims in `beforeEach`).
+ */
+function setInputValue(input: HTMLInputElement, value: string) {
+	const setter = Object.getOwnPropertyDescriptor(dom.window.HTMLInputElement.prototype, 'value')!.set!;
+	input.focus();
+	setter.call(input, value);
+	input.dispatchEvent(new dom.window.Event('input', { bubbles: true }));
+	input.dispatchEvent(new dom.window.KeyboardEvent('keyup', { bubbles: true }));
+	input.dispatchEvent(new dom.window.Event('change', { bubbles: true }));
+}
+
+async function kimByrd() {
+	const { getDevPersonProfileView } = await import('~/lib/devPeopleProfileFixtures');
+	const view = getDevPersonProfileView('kim-byrd-b77f912d');
+	if (!view) throw new Error('no dev fixture for kim-byrd-b77f912d');
+	return view;
+}
+
+/**
  * The Person Profile global template's block (2026-10-16), in the shape the page
  * query projects it to: `ctaAction` arrives as `action`/`text`.
  */
@@ -149,31 +190,60 @@ const templateSection = {
  */
 const CLAIM_SIGNUP_HREF = 'https://app.goodparty.org/sign-up?signup_source=profile_claim';
 
-describe('the claim block hands the candidate to Win sign-up', () => {
-	async function renderBlock(section: object = templateSection) {
-		const [{ ClaimProfileBlockSection }, { buildPersonSectionOverrides }, { getDevPersonProfileView }] = await Promise.all([
-			import('~/PageSections/ClaimProfileBlockSection'),
-			import('./personSectionOverrides'),
-			import('~/lib/devPeopleProfileFixtures'),
-		]);
-		const view = getDevPersonProfileView('kim-byrd-b77f912d');
-		if (!view) throw new Error('no dev fixture for kim-byrd-b77f912d');
-		await render(
-			React.createElement(ClaimProfileBlockSection, {
-				...(section as unknown as React.ComponentProps<typeof ClaimProfileBlockSection>),
-				claimProfileOverride: buildPersonSectionOverrides(view).component_claimProfileBlock,
-				tokens: { '[candidate name]': view.displayName },
-			}),
-		);
-		return document.querySelector('[data-component="ClaimProfileBlock"] a')!;
-	}
+async function renderBlock(section: object = templateSection) {
+	const [{ ClaimProfileBlockSection }, { buildPersonSectionOverrides }, view] = await Promise.all([
+		import('~/PageSections/ClaimProfileBlockSection'),
+		import('./personSectionOverrides'),
+		kimByrd(),
+	]);
+	await render(
+		React.createElement(ClaimProfileBlockSection, {
+			...(section as unknown as React.ComponentProps<typeof ClaimProfileBlockSection>),
+			claimProfileOverride: buildPersonSectionOverrides(view).component_claimProfileBlock,
+			tokens: { '[candidate name]': view.displayName },
+		}),
+	);
+	return document.querySelector('[data-component="ClaimProfileBlock"] button')!;
+}
 
-	test('the call to action is a link to sign-up, not a form', async () => {
-		const cta = await renderBlock();
+/** Opens the pop-up from the card and returns the candidate half's sign-up link. */
+async function openAndFindClaimLink(section?: object) {
+	await click(await renderBlock(section));
+	return document.querySelector('[role="dialog"] a')!;
+}
 
-		expect(cta.tagName).toBe('A');
+describe('the claim card opens the claim pop-up', () => {
+	test('the card’s button opens a pop-up rather than leaving the page', async () => {
+		const trigger = await renderBlock();
+
+		expect(trigger.tagName).toBe('BUTTON');
+		expect(trigger.textContent).toContain('Claim this profile');
+		expect(document.querySelector('[data-component="ClaimProfileBlock"] a')).toBeNull();
+		expect(document.querySelector('[role="dialog"]')).toBeNull();
+
+		await click(trigger);
+
+		expect(document.querySelector('[role="dialog"][data-component="ProfileRequestModal"]')).not.toBeNull();
+		expect(dataLayer).toEqual([{ event: 'voter_guide_claim_modal_open', page_path: '/people/example-person', source: 'claim_block' }]);
+	});
+
+	test('the pop-up speaks to the candidate by name and to voters by place', async () => {
+		const { personPledgeLocation } = await import('./personSectionOverrides');
+		const location = personPledgeLocation(await kimByrd());
+		await click(await renderBlock());
+
+		const headings = [...document.querySelectorAll('[role="dialog"] h2')].map(h => h.textContent);
+		expect(headings).toEqual([`Are you a ${location} voter?`, 'Are you Kim Byrd?']);
+		expect(document.querySelector('[role="dialog"]')?.textContent).toContain('Ask Kim Byrd to complete their profile');
+	});
+});
+
+describe('the pop-up hands the candidate to Win sign-up', () => {
+	test('the candidate half is a link to sign-up', async () => {
+		const cta = await openAndFindClaimLink();
+
 		expect(cta.getAttribute('href')).toBe(CLAIM_SIGNUP_HREF);
-		expect(document.querySelector('form')).toBeNull();
+		expect(cta.textContent).toContain('Claim your profile');
 	});
 
 	test('the template copy names the person', async () => {
@@ -197,20 +267,21 @@ describe('the claim block hands the candidate to Win sign-up', () => {
 	 * surface.
 	 */
 	test('clicking it reports a sign-up under the surface’s existing form id', async () => {
-		const cta = await renderBlock();
+		const cta = await openAndFindClaimLink();
+		dataLayer.length = 0;
 
 		await click(cta);
 
 		const signUp = trackedEvents.filter(e => e.name === 'Sign Up Clicked');
 		expect(signUp).toHaveLength(1);
-		expect(signUp[0]?.props).toMatchObject({ href: CLAIM_SIGNUP_HREF, label: 'Claim this profile' });
+		expect(signUp[0]?.props).toMatchObject({ href: CLAIM_SIGNUP_HREF, label: 'Claim your profile' });
 		expect(dataLayer).toEqual([
 			{ event: 'sign_up_click', formId: 'person-claim-owner' },
 			{
 				event: 'voter_guide_claim_profile_click',
 				page_path: '/people/example-person',
 				source: 'claim_block',
-				label: 'Claim this profile',
+				label: 'Claim your profile',
 				href: CLAIM_SIGNUP_HREF,
 				// The profile's claim card is the inset one at the top of the content column.
 				layout: 'inset',
@@ -220,15 +291,11 @@ describe('the claim block hands the candidate to Win sign-up', () => {
 	});
 
 	/**
-	 * Owner-side email capture on this surface is deliberately gone — marketing
-	 * chose the sign-up funnel over the lead. Pinned because a well-meaning
-	 * "restore the lead capture" change would quietly reintroduce a second,
-	 * conflicting owner path and a HubSpot form nobody is watching.
+	 * The candidate's own way in stays sign-up, not an email capture: only the
+	 * voter half posts, and it posts as `notify`.
 	 */
-	test('nothing is posted to the claim-request endpoint from the block', async () => {
-		const cta = await renderBlock();
-
-		await click(cta);
+	test('claiming posts nothing to the claim-request endpoint', async () => {
+		await click(await openAndFindClaimLink());
 
 		expect(fetchCalls).toEqual([]);
 	});
@@ -239,21 +306,22 @@ describe('the claim block hands the candidate to Win sign-up', () => {
 		const { PERSON_PROFILE_SECTIONS, PERSON_SECTION_KEYS } = await import('./personProfileSections');
 		const codeDefault = PERSON_PROFILE_SECTIONS.find(section => section._key === PERSON_SECTION_KEYS.claim);
 		if (!codeDefault) throw new Error('no claim section in the code default');
-		const cta = await renderBlock(codeDefault);
+		const cta = await openAndFindClaimLink(codeDefault);
 
 		expect(cta.getAttribute('href')).toBe(CLAIM_SIGNUP_HREF);
-		expect(document.querySelector('h2')?.textContent).toBe('Are you Kim Byrd? Complete your profile now.');
+		expect(document.querySelector('[data-component="ClaimProfileBlock"] h2')?.textContent).toBe('This profile is incomplete.');
 	});
 
 	// The fallback is the plain sign-up button, which carries no source, so these
 	// visitors see the original sign-up page. That is the safe side to fail on.
 	test('an unusable Studio button still falls back to sign-up under the form id', async () => {
-		const cta = await renderBlock({
+		const cta = await openAndFindClaimLink({
 			...templateSection,
 			ctaAction: { _type: 'ctaActionWithShared', action: null, text: 'Claim this profile' },
 		});
 
 		expect(cta.getAttribute('href')).toBe('https://app.goodparty.org/sign-up');
+		dataLayer.length = 0;
 		await click(cta);
 		expect(dataLayer[0]).toEqual({ event: 'sign_up_click', formId: 'person-claim-owner' });
 	});
@@ -272,5 +340,136 @@ describe('the claim block hands the candidate to Win sign-up', () => {
 		expect(overrides.component_claimProfileBlock?.signupSource).toBe('profile_claim');
 		expect(JSON.stringify(overrides.component_goodPartyOrgPledge)).not.toContain('signup_source');
 		expect(JSON.stringify(overrides.component_goodPartyOrgPledge)).not.toContain('profile_claim');
+	});
+});
+
+/**
+ * The voter half of the pop-up. The form is mounted directly: the submission
+ * path is the same either way, and it keeps these tests off Radix's portal.
+ */
+describe('a voter asks the candidate to complete their profile', () => {
+	const NOTIFY_EVENT = 'Person Profile Notify Submitted';
+	const personId = '11111111-1111-4111-8111-111111111111';
+
+	async function renderForm() {
+		const { ProfileRequestForm } = await import('~/ui/ProfileRequestModal');
+		await render(React.createElement(ProfileRequestForm, { personId, candidateName: 'Kim Byrd' }));
+		return document.querySelector<HTMLFormElement>('form#person-claim-notify')!;
+	}
+
+	async function submit(form: HTMLFormElement, values: Record<string, string>) {
+		await act(async () => {
+			for (const [name, value] of Object.entries(values)) {
+				setInputValue(form.querySelector<HTMLInputElement>(`input[name="${name}"]`)!, value);
+			}
+			await flush();
+		});
+		await act(async () => {
+			form.dispatchEvent(new dom.window.Event('submit', { bubbles: true, cancelable: true }));
+			await flush();
+			await flush();
+		});
+	}
+
+	/**
+	 * HubSpot keys a collected form on the selector built from the form's id AND
+	 * its classes, so one styling class on the `<form>` would file submissions
+	 * under a new form and orphan the workflows on `#person-claim-notify`. The
+	 * input names are the HubSpot contact properties they fill.
+	 */
+	test('HubSpot collects it as #person-claim-notify, with its contact property names', async () => {
+		const form = await renderForm();
+
+		expect(form).not.toBeNull();
+		expect(form.getAttributeNames().sort()).toEqual(['id', 'novalidate']);
+		expect([...form.querySelectorAll('input')].map(i => i.name)).toEqual(['firstname', 'lastname', 'email', 'city']);
+	});
+
+	test('it posts a notify request for the person and reports it once accepted', async () => {
+		const form = await renderForm();
+
+		await submit(form, { firstname: 'Ada', lastname: 'Lovelace', email: 'ada@example.com', city: 'Austin' });
+
+		expect(fetchCalls).toEqual([
+			{ url: '/api/people/claim-request', body: { personId, firstname: 'Ada', email: 'ada@example.com', source: 'notify' } },
+		]);
+		const reported = { personId, claimRequestId: CLAIM_REQUEST_ID, page_path: '/people/example-person' };
+		expect(segmentEvents).toEqual([{ name: NOTIFY_EVENT, props: reported }]);
+		expect(trackedEvents.filter(e => e.name === NOTIFY_EVENT)).toEqual([{ name: NOTIFY_EVENT, props: reported }]);
+		expect(document.querySelector('[role="status"]')?.textContent).toContain('Kim Byrd');
+	});
+
+	test('still reports the ask when the id cannot be read back', async () => {
+		fetchBody = null;
+		const form = await renderForm();
+
+		await submit(form, { email: 'ada@example.com' });
+
+		expect(segmentEvents).toEqual([{ name: NOTIFY_EVENT, props: { personId, claimRequestId: null, page_path: '/people/example-person' } }]);
+	});
+
+	test('stays silent and shows an error when gp-api rejects it', async () => {
+		fetchOk = false;
+		const form = await renderForm();
+
+		await submit(form, { email: 'ada@example.com' });
+
+		expect(fetchCalls).toHaveLength(1);
+		expect(segmentEvents).toEqual([]);
+		expect(document.querySelector('[role="alert"]')?.textContent).toBe('Something went wrong. Please try again.');
+	});
+
+	test('an email is required before anything is sent', async () => {
+		const form = await renderForm();
+
+		await submit(form, { firstname: 'Ada' });
+
+		expect(fetchCalls).toEqual([]);
+		expect(form.textContent).toContain('Email is required');
+	});
+
+	/**
+	 * With a site key the button waits for the tick, and the token rides along to
+	 * the proxy. Google's script never loads under JSDOM, so the test stands in
+	 * for it. One test on purpose: the script load is cached for the process.
+	 */
+	test('with reCAPTCHA on, nothing is sent until the box is ticked', async () => {
+		let tick: ((token: string) => void) | undefined;
+		(window as unknown as { grecaptcha: unknown }).grecaptcha = {
+			ready: (callback: () => void) => callback(),
+			render: (_el: HTMLElement, params: { callback(token: string): void }) => {
+				tick = params.callback;
+				return 0;
+			},
+		};
+		const { ProfileRequestForm } = await import('~/ui/ProfileRequestModal');
+		await render(React.createElement(ProfileRequestForm, { personId, candidateName: 'Kim Byrd', recaptchaSiteKey: 'site-key' }));
+		const form = document.querySelector<HTMLFormElement>('form#person-claim-notify')!;
+		const button = document.querySelector<HTMLButtonElement>('button[form="person-claim-notify"]')!;
+
+		// Google's hidden field must land outside the form HubSpot collects.
+		expect(form.querySelector('[data-component="RecaptchaCheckbox"]')).toBeNull();
+		expect(button.disabled).toBe(true);
+		await submit(form, { email: 'ada@example.com' });
+		expect(fetchCalls).toEqual([]);
+
+		await act(async () => {
+			document.querySelector('script[src*="recaptcha/api.js"]')?.dispatchEvent(new dom.window.Event('load'));
+			await flush();
+		});
+		await act(async () => {
+			tick?.('tok');
+			await flush();
+		});
+		expect(button.disabled).toBe(false);
+
+		await submit(form, {});
+
+		expect(fetchCalls).toEqual([
+			{
+				url: '/api/people/claim-request',
+				body: { personId, firstname: '', email: 'ada@example.com', source: 'notify', recaptchaToken: 'tok' },
+			},
+		]);
 	});
 });

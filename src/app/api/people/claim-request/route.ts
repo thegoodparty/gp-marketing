@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
 import { isClaimRequestSource } from '~/lib/claimRequest';
+import { isRecaptchaConfigured, verifyRecaptchaToken } from '~/lib/recaptcha';
 
 const GP_API_BASE =
 	process.env['GP_API_BASE_URL'] ?? process.env['NEXT_PUBLIC_API_BASE'] ?? 'https://gp-api.goodparty.org';
@@ -14,6 +15,7 @@ type ClaimBody = {
 	firstname?: string;
 	marketingConsent?: boolean;
 	source?: string;
+	recaptchaToken?: string;
 };
 
 /**
@@ -30,13 +32,23 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
 	}
 
-	const { personId, email, firstname, marketingConsent, source } = body;
+	const { personId, email, firstname, marketingConsent, source, recaptchaToken } = body;
 
 	if (!personId || !PERSON_ID_PATTERN.test(personId)) {
 		return NextResponse.json({ error: 'Invalid personId' }, { status: 400 });
 	}
 	if (!email || !EMAIL_PATTERN.test(email)) {
 		return NextResponse.json({ error: 'A valid email is required' }, { status: 400 });
+	}
+
+	// Checked last, so a malformed body is rejected without a call to Google. Off
+	// until the secret is set (see `isRecaptchaConfigured`). This guards gp-api
+	// only: HubSpot collects the form in the browser, before this route runs.
+	if (isRecaptchaConfigured()) {
+		const remoteIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? null;
+		if (typeof recaptchaToken !== 'string' || !(await verifyRecaptchaToken(recaptchaToken, remoteIp))) {
+			return NextResponse.json({ error: 'reCAPTCHA check failed' }, { status: 400 });
+		}
 	}
 
 	const endpoint = `${GP_API_BASE.replace(/\/$/, '')}/v1/public-person-profiles/claim-request`;

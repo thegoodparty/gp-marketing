@@ -434,7 +434,8 @@ describe('a voter asks the candidate to complete their profile', () => {
 	 * for it. One test on purpose: the script load is cached for the process.
 	 */
 	test('with reCAPTCHA on, nothing is sent until the box is ticked', async () => {
-		type WidgetParams = { callback(this: void, token: string): void; 'expired-callback'(this: void): void };
+		type Callback<Args extends unknown[]> = (...args: Args) => void;
+		type WidgetParams = { callback: Callback<[string]>; 'expired-callback': Callback<[]> };
 		const widgets: WidgetParams[] = [];
 		(window as unknown as { grecaptcha: unknown }).grecaptcha = {
 			ready: (callback: () => void) => callback(),

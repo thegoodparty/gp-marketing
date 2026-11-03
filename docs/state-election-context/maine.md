@@ -14,9 +14,9 @@ in [`research/maine.json`](./research/maine.json).
 place pages are towns governed by an elected select board and an annual town
 meeting, and each town sets its own election day, terms and board size. County
 offices are partisan and elected in November of even-numbered years after a
-June party primary, but counties do relatively little. Ranked-choice voting is
-used only for state and federal offices, never for county or town races. And
-our school pages are filed at the state level, not under a county.
+June party primary, but counties do relatively little. State law uses
+ranked-choice voting only for state and federal offices, but a city charter can
+adopt it for local races, and Portland's does. And our school pages are filed at the state level, not under a county.
 
 ## Legislative calendar
 
@@ -39,6 +39,7 @@ two-thirds (art. IV, pt. 3, § 16).
 
 Re-check this doc: July 2027, and again in February 2028 for any bills held
 over to the second session. Last researched: October 2026.
+Reviewed by Emily: 3 November 2026.
 
 ## How elections work in Maine
 
@@ -118,6 +119,13 @@ elections. Never say a county, city, town or school race in Maine is decided by
 ranked-choice voting under state law.
 
 *21-A M.R.S. § 1(27-C) · statutory · read in statute*
+
+**A city charter can adopt it.** Portland's charter uses ranked-choice voting,
+with an instant runoff, for mayor, city council and school board. Other cities
+could do the same, so avoid saying a Maine city race does or does not use
+ranked-choice voting unless race data or the city's charter shows it.
+
+*Portland City Charter art. II, § 3 · varies by place · read in city charter*
 
 Everywhere else the rule is **plurality**: county primaries and county general
 elections, and city elections unless the charter says otherwise. Sheriffs and
@@ -228,8 +236,12 @@ Maine city or town page vary by place.
 `me/cumberland-county/portland`, `me/androscoggin-county/lewiston`,
 `me/penobscot-county/bangor`
 
-Cities are governed by their charters. Their school boards sit on separate pages
+Cities are governed by their charters. Portland's charter elects its mayor, city
+council and school board by ranked-choice voting, with an instant runoff when no
+one has a majority of first choices. Their school boards sit on separate pages
 filed at the state level, such as `me/portland-2309930`, not under the city.
+
+*Portland City Charter art. II, § 3 · statutory · read in city charter*
 
 ### School pages
 
@@ -259,8 +271,10 @@ These are the ways Maine copy goes visibly wrong.
    town. Decide from the offices on the page.
 3. **Do not give a town's election date.** Each town picks its own annual
    meeting. County races are in November of even-numbered years.
-4. **Do not say local races use ranked-choice voting.** State law uses it only
-   for state and federal offices.
+4. **Do not say a Maine local race uses ranked-choice voting, or that it does
+   not,** unless race data or the city charter shows it. State law uses it only
+   for state and federal offices, but Portland's charter uses it for mayor,
+   council and school board.
 5. Do not call Maine primaries closed or open without explaining that
    unenrolled voters may choose one party's primary.
 6. Do not call city or town races partisan or nonpartisan unless race data says
@@ -286,6 +300,10 @@ These are the ways Maine copy goes visibly wrong.
   Read: Title 1 ch. 3; Title 3 ch. 1; Title 20-A ch. 1, 101, 103, 103-A, 105,
   111, 119; Title 21-A ch. 1, 5, 9; Title 30-A ch. 1, 11, 101, 111, 121, 123,
   141, 241, 301-303; the whole constitution.
+- **City charter:** Portland City Charter (revised 1 July 2023), a PDF linked from
+  `https://portlandmaine.gov/1280/Waterfront-Economic-Development` (the page title
+  is wrong; it serves the charter). Text extracted with macOS PDFKit, so its
+  ledger entries are marked manual.
 - **Currency check:** the 2025 and 2026 (PL 2025) amendments in the history of
   every cited chapter. They change petition and polling-place procedure, not the
   claims here.

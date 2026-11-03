@@ -422,5 +422,23 @@
 		"quote": "In municipalities with annual elections, directors shall serve a 3-year term.  In municipalities with biennial elections, directors shall serve a 4-year term",
 		"certainty": "statutory",
 		"verified": "read in statute"
+	},
+	{
+		"claim": "Portland's charter elects its mayor, city councilors and school board members by ranked choice voting",
+		"citation": "Portland City Charter art. II, § 3",
+		"url": "https://portlandmaine.gov/1280/Waterfront-Economic-Development",
+		"quote": "For the positions of mayor, city councilor, and school board member, the city clerk shall implement a ranked choice voting protocol",
+		"certainty": "statutory",
+		"verified": "read in city charter",
+		"manual": true
+	},
+	{
+		"claim": "If no candidate has a majority of first choices, the city clerk runs an instant runoff",
+		"citation": "Portland City Charter art. II, § 3(c)",
+		"url": "https://portlandmaine.gov/1280/Waterfront-Economic-Development",
+		"quote": "If no candidate receives a majority of first choice votes, an instant runoff re-tabulation shall be promptly conducted by the city clerk",
+		"certainty": "statutory",
+		"verified": "read in city charter",
+		"manual": true
 	}
 ]

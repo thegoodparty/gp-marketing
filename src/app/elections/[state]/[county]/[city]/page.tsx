@@ -12,6 +12,7 @@ import {
 	isCityOrTownMtfcc,
 	isCountyElectionDistrictPlace,
 	isDistrictMtfcc,
+	knownCountySlugForCity,
 	resolveCountySlugForPlace,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
@@ -172,6 +173,10 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		resolvedPlaceData = await getElectionsPagePlace({ slug: cityPlace.slug });
 	}
 
+	const knownCountySlug = knownCountySlugForCity(cityPlace.slug);
+	if (knownCountySlug && knownCountySlug !== countySlug) {
+		permanentRedirect(`/elections/${knownCountySlug}/${city.toLowerCase()}`);
+	}
 	if (cityPlace.countyName) {
 		const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, cityPlace.countyName);
 		if (canonicalCountySlug && canonicalCountySlug.toLowerCase() !== countySlug) {

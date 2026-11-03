@@ -5,7 +5,17 @@
 
 import type { MetadataRoute } from 'next';
 import { sanityClient } from '~/sanity/sanityClient';
-import { CITY_MTFCC, hasTownshipRace, isCityOrTownMtfcc, looksLikeDistrictSlug, pairCensusCityTwins, TOWN_MTFCC } from '~/lib/electionsApi';
+import {
+	CITY_MTFCC,
+	hasTownshipRace,
+	holdsOnlyTownClerk,
+	isCityOrTownMtfcc,
+	knownCountySlugForCity,
+	looksLikeDistrictSlug,
+	pairCensusCityTwins,
+	pairCensusTownTwins,
+	TOWN_MTFCC,
+} from '~/lib/electionsApi';
 import {
 	buildElectionPositionHrefFromRaceSlug,
 	resolveElectionPositionFromRaceSlug,
@@ -237,21 +247,38 @@ async function resolveMunicipalPlaces(
 	sweptCities: CityPlace[],
 ): Promise<CityPlace[]> {
 	if (buildCountyLookups(places, sweptCities).citySlugToCountySlug.size > 0) return sweptCities;
-	return [...sweptCities, ...(await fetchMunicipalitiesByCountyWalk(places))];
+	return [...sweptCities, ...(await fetchMunicipalitiesByCountyWalk(places)), ...placeKnownCities(places, sweptCities)];
+}
+
+/**
+ * The swept cities that are no county's child, each given its county's name so
+ * `buildCountyLookups` maps it. Connecticut's cities (`ct/hartford`) are the case; see
+ * `knownCountySlugForCity`. Runs only beside the county walk, so the 50 states whose
+ * sweep maps are untouched.
+ */
+export function placeKnownCities(places: CountyPlace[], sweptCities: CityPlace[]): CityPlace[] {
+	const countyNameBySlug = new Map(places.flatMap(p => (p.slug && p.name ? [[p.slug.toLowerCase(), p.name] as const] : [])));
+	return sweptCities.flatMap(c => {
+		const countyName = countyNameBySlug.get(knownCountySlugForCity(c.slug) ?? '');
+		return countyName ? [{ ...c, countyName }] : [];
+	});
 }
 
 /**
  * The Census filler twins ("Beatrice city") that redirect to their city, so the sitemap
  * and the prerendered params stop listing a page that only redirects. Same rule as the
- * city page: `pairCensusCityTwins`, keeping any twin that holds a township's offices.
+ * city page: `pairCensusCityTwins`, keeping any twin that holds a township's offices, and
+ * `pairCensusTownTwins`, folding a Connecticut town only when it holds just its town clerk.
  * The twin's own position pages are untouched and still listed.
  */
 export function findMergedCityTwinSlugs(cities: CityPlace[], races: RaceEntry[]): Set<string> {
 	const slugs = new Set<string>();
+	const racesOf = (twin: CityPlace) => races.filter(r => r.slug?.toLowerCase().startsWith(`${(twin.slug ?? '').toLowerCase()}/`));
 	for (const { twin } of pairCensusCityTwins(cities)) {
-		const twinSlug = (twin.slug ?? '').toLowerCase();
-		const twinRaces = races.filter(r => r.slug?.toLowerCase().startsWith(`${twinSlug}/`));
-		if (!hasTownshipRace(twinRaces)) slugs.add(twinSlug);
+		if (!hasTownshipRace(racesOf(twin))) slugs.add((twin.slug ?? '').toLowerCase());
+	}
+	for (const { twin } of pairCensusTownTwins(cities)) {
+		if (holdsOnlyTownClerk(racesOf(twin))) slugs.add((twin.slug ?? '').toLowerCase());
 	}
 	return slugs;
 }
@@ -836,9 +863,9 @@ export async function fetchStateElectionSitemapEntries(
 	// county pages link to them. A place carries one mtfcc, so the two queries are
 	// disjoint and concatenating cannot double-count.
 	//
-	// Neither sweep rescues Connecticut, whose state-level municipal queries are both
-	// empty whatever mtfcc you ask for — see fetchMunicipalitiesByCountyWalk, which
-	// picks it up from the counties instead.
+	// Neither sweep places Connecticut, whose municipal rows carry a planning region
+	// for countyName — see fetchMunicipalitiesByCountyWalk, which picks the towns up
+	// from the counties instead, and placeKnownCities for its cities.
 	const cities = await resolveMunicipalPlaces(places, [...cityPlaces, ...townPlaces]);
 
 	const { citySlugToCountySlug } = buildCountyLookups(places, cities);

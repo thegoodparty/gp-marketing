@@ -170,6 +170,14 @@ offices can share a position slug. A twin holding a township office (`hasTownshi
 left alone: those offices belong to a township election-api failed to match, which is a
 data ticket, not a merge. In Nov 2026 this was 174 pairs, 27 of them left alone.
 
+Connecticut has a second kind of twin: a consolidated city and its town ("Bridgeport",
+`ct/bridgeport`, and "Bridgeport Town", `ct/fairfield-county/bridgeport-town`).
+`pairCensusTownTwins` pairs only the cities in `knownCountySlugForCity` with the town of their
+name in their county, and the town folds only when it holds nothing but its town clerk
+(`holdsOnlyTownClerk`). In Nov 2026 that was Bridgeport and Waterbury. Derby's and Naugatuck's
+town rows hold the city government while their city rows hold only the registrar, so they stay
+apart, and Groton is two real governments.
+
 #### Numbered county election districts are not towns
 
 In Mississippi (supervisors districts), Tennessee (civil districts), Virginia (magisterial
@@ -294,14 +302,21 @@ Three things not to "fix" while in here:
 - **Town slugs carry their suffix** (`brattleboro-town`); the bare form 404s, so never
   derive the segment by stripping it.
 - **Connecticut needs the county walk, not a sweep.** Both state-level municipal
-  queries come back empty for CT whatever mtfcc you ask for, so the two-sweep fix did
-  not give it a single municipal URL. The data is there:
+  queries return CT rows, but with a planning region ("Capitol") for `countyName`, so
+  none maps to a county and the two-sweep fix did not give it a single municipal URL.
+  The towns are there:
   `/v1/places?slug=ct/<county>&includeChildren=true` returns the towns with a municipal
   mtfcc, which is how `/elections/ct/fairfield-county` links to 19 towns and why each of
   those pages returns 200. `fetchMunicipalitiesByCountyWalk` picks them up from the
   counties, and it fires **only when the state sweep finds nothing at all** — CT alone
   today, 8 extra requests on that one shard. Do not relax that gate to "the sweep looks
   sparse": walking every county nationwide is roughly 3,255 extra calls per build.
+- **Connecticut's 21 cities are nobody's children.** `ct/hartford` carries a planning
+  region and has the state as its only parent, so neither the sweep nor the walk places
+  it. `knownCountySlugForCity` holds their historical counties, and the sitemap
+  (`placeKnownCities`), county pages (`getCityPlacesByCounty`), search and the city page's
+  wrong-county redirect read it. Until Nov 2026 these pages rendered but nothing linked
+  them.
 - **Upstream sometimes mislabels a town as a county.** `vt/halifax` is tagged county-tier
   while the real page is `/elections/vt/windham-county/halifax-town`, so one place can
   surface at two tiers. `dedupeByUrl` will not collapse that, because the two URLs
@@ -582,7 +597,7 @@ miss be a miss. A genuine county race costs one cached place-list read.
 
 Two fallbacks sit behind the state sweep, both in `getCitySlugToCountySlugMap`
 and `resolveCountySlugForCitySlug`: the county walk for Connecticut, whose
-statewide municipal queries return nothing at all (the same workaround
+statewide municipal queries map to no county (the same workaround
 `sitemap-entries.ts` and `resolvePlace.ts` each carry), and a per-place lookup
 for the scattered cities a healthy state's sweep still misses.
 

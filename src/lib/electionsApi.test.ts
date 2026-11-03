@@ -24,9 +24,12 @@ import {
 	getVoterDensityForDistrict,
 	getCountyElectionDistricts,
 	hasTownshipRace,
+	holdsOnlyTownClerk,
 	isCountyElectionDistrictPlace,
 	isStateIndexDistrictPlace,
+	knownCountySlugForCity,
 	pairCensusCityTwins,
+	pairCensusTownTwins,
 	resolveCountySlugForCitySlug,
 	resolveCountySlugForPlace,
 	resolveRaceElectionHrefs,
@@ -211,6 +214,35 @@ describe('getCountyChildPlaces', () => {
 
 		const result = await getCountyChildPlaces({ state: 'CT', countySlug: 'ct/hartford-county' });
 		expect(slugs(result)).toEqual(['ct/hartford-county/avon-town', 'ct/hartford']);
+	});
+
+	// As election-api returns them (Nov 2026): the county's children are only its towns,
+	// and the cities carry a planning region, so only the known county places them.
+	test('lists a Connecticut city that is no county child under its known county', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=ct%2Ffairfield-county'),
+				body: [
+					{
+						slug: 'ct/fairfield-county',
+						name: 'Fairfield County',
+						mtfcc: 'G4020',
+						children: [{ slug: 'ct/fairfield-county/greenwich-town', name: 'Greenwich Town', mtfcc: 'G4040', countyName: 'Western Connecticut' }],
+					},
+				],
+			},
+			{
+				match: url => url.includes('/v1/elections/places?') && url.includes('state=CT') && url.includes('mtfcc=G4110'),
+				body: [
+					{ slug: 'ct/stamford', name: 'Stamford', mtfcc: 'G4110', countyName: 'Western Connecticut' },
+					{ slug: 'ct/danbury', name: 'Danbury', mtfcc: 'G4110', countyName: 'Western Connecticut' },
+					{ slug: 'ct/hartford', name: 'Hartford', mtfcc: 'G4110', countyName: 'Capitol' },
+				],
+			},
+		]);
+
+		const result = await getCountyChildPlaces({ state: 'CT', countySlug: 'ct/fairfield-county' });
+		expect(slugs(result)).toEqual(['ct/fairfield-county/greenwich-town', 'ct/stamford', 'ct/danbury']);
 	});
 
 	test('falls back to countyName city matching when hierarchy children are empty', async () => {
@@ -445,6 +477,24 @@ describe('getCitySlugToCountySlugMap with walkCountiesWhenEmpty', () => {
 
 		expect(map.get('ct/stamford')).toBe('ct/fairfield-county');
 		expect(map.get('ct/greenwich-town')).toBe('ct/fairfield-county');
+	});
+
+	test('places a Connecticut city the walk cannot reach under its known county', async () => {
+		withFetchMock([
+			...CT_EMPTY_SWEEP,
+			{
+				match: url => url.includes('/v1/elections/places?') && url.includes('state=CT') && url.includes('mtfcc=G4110'),
+				body: [
+					{ slug: 'ct/norwalk', name: 'Norwalk', mtfcc: 'G4110', state: 'CT', countyName: 'Western Connecticut' },
+					{ slug: 'ct/nowhere', name: 'Nowhere', mtfcc: 'G4110', state: 'CT', countyName: 'Western Connecticut' },
+				],
+			},
+		]);
+
+		const map = await getCitySlugToCountySlugMap('CT', { walkCountiesWhenEmpty: true });
+
+		expect(map.get('ct/norwalk')).toBe('ct/fairfield-county');
+		expect(map.has('ct/nowhere')).toBe(false);
 	});
 
 	/** Only municipalities: a school district is not a place the city slot can hold. */
@@ -1291,6 +1341,24 @@ describe('getFeaturedCities', () => {
 		]);
 	});
 
+	// Connecticut's cities carry a planning region and are no county's child, so only the
+	// known county places them in the carousel beside the towns.
+	test('features a Connecticut city under its known county', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=ct%2Fhartford-county'),
+				body: [{ slug: 'ct/hartford-county', name: 'Hartford County', mtfcc: 'G4020', children: [{ ...city('ct/hartford-county/avon-town', 'Avon Town', 1, 'G4040'), countyName: 'Capitol' }] }],
+			},
+			{
+				match: url => url.includes('/v1/elections/places?') && url.includes('mtfcc=G4110'),
+				body: [{ ...city('ct/hartford', 'Hartford', 5), countyName: 'Capitol' }, { ...city('ct/stamford', 'Stamford', 3), countyName: 'Western Connecticut' }],
+			},
+		]);
+
+		const result = await getFeaturedCities({ stateCode: 'CT', countySlug: 'ct/hartford-county' });
+		expect(result.map(card => card.href)).toEqual(['/elections/ct/hartford-county/hartford', '/elections/ct/hartford-county/avon-town']);
+	});
+
 	// Alcorn County, MS featured "District 5, MS" as a city: a supervisors district holding a
 	// school board seat.
 	test('never features a numbered county election district', async () => {
@@ -1627,6 +1695,51 @@ describe('pairCensusCityTwins', () => {
 	test('leaves a -city slug with no plain city alone', () => {
 		expect(pairCensusCityTwins([place('nj/jersey-city', 'Jersey City', 'G4110', 'Hudson')])).toEqual([]);
 		expect(pairCensusCityTwins([place('ne/holt-county/oneill-city', "O'Neill city", 'G4040', 'Holt')])).toEqual([]);
+	});
+});
+
+describe('knownCountySlugForCity', () => {
+	test('places a Connecticut city in its historical county, and nothing else', () => {
+		expect(knownCountySlugForCity('ct/hartford')).toBe('ct/hartford-county');
+		expect(knownCountySlugForCity('CT/Stamford')).toBe('ct/fairfield-county');
+		expect(knownCountySlugForCity('ct/hartford-county/hartford')).toBeUndefined();
+		expect(knownCountySlugForCity('nc/greensboro')).toBeUndefined();
+		expect(knownCountySlugForCity(undefined)).toBeUndefined();
+	});
+});
+
+describe('pairCensusTownTwins', () => {
+	const place = (slug: string, name: string, mtfcc: string, countyName = 'Greater Bridgeport') => ({ slug, name, mtfcc, countyName });
+
+	test('pairs a Connecticut city with the town of its name in its county', () => {
+		const city = place('ct/bridgeport', 'Bridgeport', 'G4110');
+		const twin = place('ct/fairfield-county/bridgeport-town', 'Bridgeport Town', 'G4040');
+		expect(pairCensusTownTwins([city, twin])).toEqual([{ twin, city }]);
+	});
+
+	test('needs the town in the city county, a -town slug and the city name', () => {
+		const city = place('ct/bridgeport', 'Bridgeport', 'G4110');
+		expect(pairCensusTownTwins([city, place('ct/new-haven-county/bridgeport-town', 'Bridgeport Town', 'G4040')])).toEqual([]);
+		expect(pairCensusTownTwins([city, place('ct/fairfield-county/bridgeport-town', 'Bridgeport Town', 'G4110')])).toEqual([]);
+		expect(pairCensusTownTwins([city, place('ct/fairfield-county/bridgeport', 'Bridgeport Town', 'G4040')])).toEqual([]);
+		expect(pairCensusTownTwins([city, place('ct/fairfield-county/bridgeport-town', 'Trumbull Town', 'G4040')])).toEqual([]);
+	});
+
+	// A New York town beside the city of its name is a government of its own.
+	test('never pairs a town with a city outside the known list', () => {
+		const city = place('ny/ithaca', 'Ithaca', 'G4110', 'Tompkins');
+		expect(pairCensusTownTwins([city, place('ny/tompkins-county/ithaca-town', 'Ithaca town', 'G4040', 'Tompkins')])).toEqual([]);
+	});
+});
+
+describe('holdsOnlyTownClerk', () => {
+	test('is true only for a town holding nothing but its town clerk', () => {
+		const clerk = { slug: 'ct/fairfield-county/bridgeport-town/town-clerk-as-separate-from-city-clerk-ct-only' };
+		expect(holdsOnlyTownClerk([clerk])).toBe(true);
+		// Derby's town row holds the city government (Nov 2026), so it never folds.
+		expect(holdsOnlyTownClerk([{ slug: 'ct/new-haven-county/derby-town/city-executive-mayor' }])).toBe(false);
+		expect(holdsOnlyTownClerk([clerk, { slug: 'ct/new-london-county/groton-town/town-meeting-board' }])).toBe(false);
+		expect(holdsOnlyTownClerk([])).toBe(false);
 	});
 });
 

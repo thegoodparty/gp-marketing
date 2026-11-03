@@ -235,8 +235,7 @@ These are the ways Arizona copy goes visibly wrong.
    share a name with an Arizona county, 2 sit in a different county: the town of
    Pima is in Graham County, and the city of Maricopa is in Pinal County. The
    full list is in
-   [`research/places-named-after-another-county.json`](./research/places-named-a
-fter-another-county.json).
+   [`research/places-named-after-another-county.json`](./research/places-named-after-another-county.json).
    Always take the county from the page data.
 2. **Name the tier before saying partisan or nonpartisan.** County races are
    partisan. School board races are not. City races follow state law and, for
@@ -269,9 +268,16 @@ fter-another-county.json).
 
 Do not write copy around these. They are for the data team to fix.
 
-- **`az/pinal-county/maricopa-stanfield` is not a city or town.** It holds a
-  technical education district board, a fire district and county offices. It
-  looks like a district area filed as a place.
+- **`az/pinal-county/maricopa-stanfield` is not a city or town.** It is one
+  board seat of the Central Arizona Valley Institute of Technology (a joint
+  technical education district), elected by the Maricopa and Stanfield area,
+  filed upstream as a "City" level place. Its only race of its own is that board
+  seat; everything else on the page is Pinal County's. The page is in the
+  sitemap and titled "Elections in Maricopa-Stanfield". Neither the Maricopa city
+  page nor the Pinal County page lists the seat, and there is no Stanfield place
+  page (Stanfield is unincorporated). Checked 3 November 2026. Same family as the
+  Mississippi and Louisiana `district-N` pages (PR #536), but with a named slug,
+  so that fix does not catch it.
 - **`az/chevelon-butte-school-district` holds water and sanitary district
   boards** along with its school board.
 - Special districts have no pages of their own. Fire, water, hospital and

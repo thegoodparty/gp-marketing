@@ -1643,6 +1643,8 @@ describe('isCountyElectionDistrictPlace', () => {
 	test('spots a numbered district filed as a town', () => {
 		expect(isCountyElectionDistrictPlace({ slug: 'ms/alcorn-county/district-1', name: 'District 1' })).toBe(true);
 		expect(isCountyElectionDistrictPlace({ slug: 'tn/bradley-county/district-12', name: 'District 12' })).toBe(true);
+		// Louisiana parish constables are elected by ward or district, filed the same way.
+		expect(isCountyElectionDistrictPlace({ slug: 'la/bossier-parish/district-5', name: 'District 5' })).toBe(true);
 	});
 
 	test('leaves real places with district in the name alone', () => {

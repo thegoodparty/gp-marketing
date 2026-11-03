@@ -206,5 +206,140 @@
 		"quote": "to formulate statewide educational policy and appoint the superintendent of education as the chief executive officer of the public school system",
 		"certainty": "statutory",
 		"verified": "read in statute"
+	},
+	{
+		"claim": "Honolulu city elective officers are elected by nonpartisan special elections",
+		"citation": "Revised Charter of Honolulu § 13-116",
+		"url": "https://www.honolulu.gov/cor/wp-content/uploads/sites/17/2025/09/Charter-FINAL-9-11-25.pdf",
+		"quote": "all city elective officers shall be elected by nonpartisan special elections",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "In Honolulu, with three or more candidates, a majority in the first special election elects",
+		"citation": "Revised Charter of Honolulu § 13-116",
+		"url": "https://www.honolulu.gov/cor/wp-content/uploads/sites/17/2025/09/Charter-FINAL-9-11-25.pdf",
+		"quote": "If any candidate receives a majority of votes cast in the first special election for that office, that candidate shall be deemed elected",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Honolulu has nine council members, one per district, four-year terms, two consecutive terms at most",
+		"citation": "Revised Charter of Honolulu § 3-102",
+		"url": "https://www.honolulu.gov/cor/wp-content/uploads/sites/17/2025/09/Charter-FINAL-9-11-25.pdf",
+		"quote": "The council shall consist of nine members. One member shall be elected from each of the nine districts",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Honolulu limits councilmembers to two consecutive four-year terms",
+		"citation": "Revised Charter of Honolulu § 3-102",
+		"url": "https://www.honolulu.gov/cor/wp-content/uploads/sites/17/2025/09/Charter-FINAL-9-11-25.pdf",
+		"quote": "No person shall be elected to the office of councilmember for more than two consecutive four-year terms",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Honolulu's prosecuting attorney is elected for four years",
+		"citation": "Revised Charter of Honolulu § 8-102",
+		"url": "https://www.honolulu.gov/cor/wp-content/uploads/sites/17/2025/09/Charter-FINAL-9-11-25.pdf",
+		"quote": "The term of office of the prosecuting attorney shall be four years",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Hawaii County candidates win outright with a majority in the first special election",
+		"citation": "Hawaii County Charter § 13-27",
+		"url": "https://www.hawaiicounty.gov/home/showpublisheddocument/310928/639247414732130000",
+		"quote": "Any candidate for mayor, prosecuting attorney or council receiving a majority of all votes validly cast for candidates for that office, excluding blank and spoiled ballots, shall be deemed elected",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Hawaii County has nine council districts with two-year terms, at most four consecutive",
+		"citation": "Hawaii County Charter § 3-2",
+		"url": "https://www.hawaiicounty.gov/home/showpublisheddocument/310928/639247414732130000",
+		"quote": "There shall be nine council districts, each of which shall be represented by a resident elected from that district. The terms of the council members shall be two years",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Hawaii County's prosecuting attorney is elected for four years",
+		"citation": "Hawaii County Charter § 9-1",
+		"url": "https://www.hawaiicounty.gov/home/showpublisheddocument/310928/639247414732130000",
+		"quote": "The prosecuting attorney shall be elected for a term of four years",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Maui's council members are elected at large, each from a residency area, and every voter votes on every seat",
+		"citation": "Maui County Charter § 3-1",
+		"url": "https://www.mauicounty.us/wp-content/uploads/2025/08/2025-Charter_202506191830273398.pdf",
+		"quote": "The ballots shall, nevertheless, be prepared to give every voter in the County the right to vote for each and every council seat",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Maui council races with three or more candidates send the top two to the second special election",
+		"citation": "Maui County Charter § 3-2",
+		"url": "https://www.mauicounty.us/wp-content/uploads/2025/08/2025-Charter_202506191830273398.pdf",
+		"quote": "the names of the two candidates receiving the highest number of votes for each council seat in the first special election shall be placed on the ballot for the second special election",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Maui councilmembers serve two-year terms, at most five full terms",
+		"citation": "Maui County Charter § 3-2",
+		"url": "https://www.mauicounty.us/wp-content/uploads/2025/08/2025-Charter_202506191830273398.pdf",
+		"quote": "No councilmember shall serve more than five full terms of office",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Maui's prosecuting attorney is appointed by the mayor",
+		"citation": "Maui County Charter § 8-3.2",
+		"url": "https://www.mauicounty.us/wp-content/uploads/2025/08/2025-Charter_202506191830273398.pdf",
+		"quote": "The prosecuting attorney is appointed by the mayor from a list of nominees presented to the mayor by the independent nomination board",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Kauai county officers are elected by nonpartisan elections",
+		"citation": "Kauai County Charter § 1.03",
+		"url": "https://www.kauai.gov/files/assets/public/v/1/county-council/documents/the-charter-of-the-county-of-kauai-2024.pdf",
+		"quote": "all elective county officers shall be elected by nonpartisan elections",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Kauai sends the top two for mayor and prosecuting attorney to the general election",
+		"citation": "Kauai County Charter § 1.03",
+		"url": "https://www.kauai.gov/files/assets/public/v/1/county-council/documents/the-charter-of-the-county-of-kauai-2024.pdf",
+		"quote": "the names of the two candidates receiving the highest number of votes for these offices in the primary election shall be placed on the ballot for the general election",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Kauai has a seven-member council elected at large",
+		"citation": "Kauai County Charter § 3.02",
+		"url": "https://www.kauai.gov/files/assets/public/v/1/county-council/documents/the-charter-of-the-county-of-kauai-2024.pdf",
+		"quote": "There shall be a council of seven members elected at - large",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
 	}
 ]

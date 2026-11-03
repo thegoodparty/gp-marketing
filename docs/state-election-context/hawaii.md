@@ -76,9 +76,24 @@ nominee's), up to the number of seats.
 
 *HRS § 12-41(b) · statutory · read in statute*
 
-**Watch out:** do not say every county race goes to November. Some are decided in
-the August primary. Exactly how each county decides a race in the primary is set
-by its charter, which was not read for this doc; take the outcome from race data.
+**Each county's charter decides whether the August vote can settle a race.** All
+four hold their county races as nonpartisan "special elections" alongside the
+state primary and general election, but they differ:
+
+| County | Can a candidate win outright in August? |
+| --- | --- |
+| Honolulu | Yes, with a majority of the votes cast, when there are three or more candidates. A race with exactly two candidates appears only in November. |
+| Hawaii | Yes, with a majority of the votes cast. |
+| Maui | No. With three or more candidates the top two go to November; with two or fewer, the race appears only in November. |
+| Kauai | No. The top two for mayor and prosecuting attorney, and two per open council seat, go to November. |
+
+In every county a sole candidate is elected without a contest.
+
+*Revised Charter of Honolulu § 13-116; Hawaii County Charter § 13-27; Maui County Charter §§ 3-2, 7-2; Kauai County Charter § 1.03 · statutory · read in county charter*
+
+**Watch out:** do not say every county race goes to November, and do not say a
+Maui or Kauai race can be won in August. Take each race's outcome from race
+data.
 
 ### Getting on the ballot
 
@@ -98,10 +113,24 @@ Counties alone tax real property, except Kalawao County.
 *Haw. Const. art. VIII, §§ 1, 2, 3, 6 · statutory · read in statute*
 
 Each of the four counties elects a **mayor** and a **county council** (Honolulu's
-are the "City and County" mayor and council). Hawaii, Honolulu and Kauai counties
-also elect a **prosecuting attorney**; our Maui County page has no prosecuting
-attorney race. Council size, terms and districts come from each charter; take
-them from race data.
+are the "City and County" mayor and council). Mayors serve four-year terms,
+limited to two in a row. The councils differ:
+
+| County | Council | How it is elected | Term | Limit |
+| --- | --- | --- | --- | --- |
+| Honolulu | 9 | one per district, by that district's voters | 4 years, staggered | two consecutive terms |
+| Hawaii | 9 | one per district, by that district's voters | 2 years | four consecutive terms |
+| Maui | 9 | every voter votes for every seat; each seat has a residency area (Lanai, Molokai, East Maui, West Maui and others) | 2 years | five full terms |
+| Kauai | 7 | at large | 2 years | four consecutive terms |
+
+Honolulu, Hawaii and Kauai counties also elect a **prosecuting attorney** for four
+years. **Maui's prosecuting attorney is appointed** by the mayor with the
+council's approval, which is why our Maui page has no prosecuting attorney race.
+
+*Revised Charter of Honolulu §§ 3-102, 5-101, 8-102; Hawaii County Charter §§ 3-2, 5-1.1, 5-1.2, 9-1; Maui County Charter §§ 3-1, 3-2, 7-2, 8-3.2; Kauai County Charter §§ 1.03, 3.02, 3.03, 7.01 · statutory · read in county charter*
+
+**Watch out:** a Maui council member represents a residency area but is elected by
+the whole county. Never say only that area's voters choose the seat.
 
 **Kalawao County** has no page in our data. Do not describe it.
 
@@ -141,8 +170,8 @@ These are the ways Hawaii copy goes visibly wrong.
 3. Do not call Hawaii primaries closed. Voters do not declare a party.
 4. Follow race data on whether a county race is partisan, and do not describe
    party nominations for county offices.
-5. Some county races are decided at the August primary; do not say every county
-   race goes to November.
+5. Honolulu and Hawaii County races can be decided at the August primary; Maui
+   and Kauai races cannot. Do not say every county race goes to November.
 6. Write Honolulu as one City and County government. Never describe a separate
    city council and county council.
 7. Never name an officeholder or a candidate.
@@ -162,8 +191,18 @@ These are the ways Hawaii copy goes visibly wrong.
   with `verify-ledger.ts --browser`, run in the in-app browser on
   `www.capitol.hawaii.gov` on 28 October 2026: 26 found, 0 missing, 0 failed. Read:
   HRS chapters 11, 12 and § 50-1; Constitution articles II, III, VIII, X.
-- **County charters** were not read (the counties post them as PDFs); county
-  partisanship and structure are left to race data.
+- **County charters**, read 3 November 2026: the Revised Charter of the City and
+  County of Honolulu (September 2025 edition,
+  `https://www.honolulu.gov/cor/wp-content/uploads/sites/17/2025/09/Charter-FINAL-9-11-25.pdf`),
+  the County of Hawaii Charter (2024-2026 edition, linked from
+  `https://www.hawaiicounty.gov/our-county/legislative/office-of-the-county-clerk/county-charter`),
+  the Maui County Charter (2025 edition,
+  `https://www.mauicounty.us/wp-content/uploads/2025/08/2025-Charter_202506191830273398.pdf`)
+  and the Charter of the County of Kauai (2024 codified version,
+  `https://www.kauai.gov/files/assets/public/v/1/county-council/documents/the-charter-of-the-county-of-kauai-2024.pdf`).
+  Honolulu and Maui download with plain requests and were read with `pdftotext`.
+  Hawaii County and Kauai return 403 to scripts, so they were read in the in-app
+  browser with pdf.js from cdnjs. All charter ledger entries are marked manual.
 - **Currency check:** not separately checked against the 2026 session laws. HRS
   § 12-3 shows a version changing on 1 January 2028; the quote used is in the
   current version.

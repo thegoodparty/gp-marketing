@@ -869,6 +869,36 @@ export async function getMergedCityTwins(places: PlaceItem[]): Promise<{ twin: P
 	);
 }
 
+/**
+ * True for a numbered election district inside a county that election-api files as a
+ * town ("District 1", `ms/alcorn-county/district-1`). The Census county subdivisions in
+ * Mississippi (supervisors districts), Tennessee (civil districts), Virginia (magisterial
+ * districts) and some Louisiana parishes are named this way and have no government of
+ * their own. Their seats (Mississippi county school board members, Tennessee constables)
+ * belong on the county page, so the district is never listed or rendered as a town.
+ */
+export function isCountyElectionDistrictPlace(place: { slug?: string; name?: string }): boolean {
+	const segment = place.slug?.split('/').pop()?.toLowerCase() ?? '';
+	return /^district-\d+[a-z]?$/.test(segment) && /^district \d+[a-z]?$/i.test(place.name?.trim() ?? '');
+}
+
+/**
+ * The county's numbered election districts (see `isCountyElectionDistrictPlace`), each
+ * with its races, read six at a time through the same cached read as the district's own
+ * page. A district whose read fails is left out.
+ */
+export async function getCountyElectionDistricts(places: PlaceItem[]): Promise<{ district: PlaceItem; districtData: PlaceWithFacts }[]> {
+	const districts = places.filter(isCountyElectionDistrictPlace);
+	const out: { district: PlaceItem; districtData: PlaceWithFacts }[] = [];
+	for (let i = 0; i < districts.length; i += 6) {
+		const batch = await Promise.all(
+			districts.slice(i, i + 6).map(async district => ({ district, districtData: await getElectionsPagePlace({ slug: district.slug }) })),
+		);
+		for (const entry of batch) if (entry.districtData) out.push({ district: entry.district, districtData: entry.districtData });
+	}
+	return out;
+}
+
 export async function getCountyChildPlaces(params: { state: string; countySlug: string }): Promise<PlaceItem[]> {
 	const county = await getPlaceBySlug({
 		slug: params.countySlug,
@@ -996,7 +1026,9 @@ export async function getFeaturedCities(params: {
 	const places = await getCityPlacesWithRaces({ state, countySlug: params.countySlug });
 	// Ranked in full rather than to `count`, so a city that turns out to be
 	// unlinkable gives its place up to the next one instead of leaving a gap.
-	const ranked = rankFeaturedCities(places, { count: places.length, excludeSlug: params.citySlug });
+	// A numbered county election district ("District 5") is not a city, however many races it holds.
+	const cityPlaces = places.filter(p => !isCountyElectionDistrictPlace(p));
+	const ranked = rankFeaturedCities(cityPlaces, { count: cityPlaces.length, excludeSlug: params.citySlug });
 
 	const cards: FeaturedCityCard[] = [];
 	for (const { place, openElectionsCount } of ranked) {

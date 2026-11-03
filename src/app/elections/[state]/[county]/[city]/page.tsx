@@ -10,6 +10,7 @@ import {
 	getPlacesByState,
 	getPlaceBySlug,
 	isCityOrTownMtfcc,
+	isCountyElectionDistrictPlace,
 	isDistrictMtfcc,
 	resolveCountySlugForPlace,
 } from '~/lib/electionsApi';
@@ -176,6 +177,12 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		if (canonicalCountySlug && canonicalCountySlug.toLowerCase() !== countySlug) {
 			permanentRedirect(`/elections/${canonicalCountySlug}/${city.toLowerCase()}`);
 		}
+	}
+
+	// A numbered county election district ("District 1") is not a town; its seats are listed on
+	// the county page. See `isCountyElectionDistrictPlace`.
+	if (isCountyElectionDistrictPlace(cityPlace)) {
+		permanentRedirect(`/elections/${countySlug}`);
 	}
 
 	// A Census filler twin of a city ("Beatrice city") folds into that city's page. See

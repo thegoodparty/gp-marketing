@@ -31,7 +31,7 @@ export const PLEDGE_MODAL_COPY = {
 		{
 			icon: 'users-round',
 			iconBg: 'bg-bright-yellow-200',
-			title: 'People-Powered',
+			title: 'People-powered',
 			body: 'They raise most of their funding from individuals, not from political action committees (PACs), lobbyists, unions, or corporations. Once elected, they focus on their constituents’ problems, not on themselves or special interests.',
 		},
 		{

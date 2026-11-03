@@ -61,7 +61,7 @@ states cover the most pages, so they come first.
 | 46 | Alaska | 84 | done, reviewed 3 November 2026 |
 | 47 | Delaware | 76 | done, reviewed 3 November 2026 |
 | 48 | Rhode Island | 74 | done, reviewed 3 November 2026 |
-| 49 | Nevada | 67 | drafted, awaiting review |
+| 49 | Nevada | 67 | done, reviewed 3 November 2026 |
 | 50 | Hawaii | 5 | drafted, awaiting review |
 | 51 | District of Columbia | 3 | drafted, awaiting review |
 
@@ -115,7 +115,7 @@ If a legislature meets year-round, re-check in January and July.
 | Missouri | 6 January 2027 | 30 May | July 2027 | verified |
 | Montana | 4 January 2027, at most 90 legislative days; none in 2028 | April–May | June 2027 | verified |
 | Nebraska | 6 January 2027, 90 legislative days | late May–early June | July 2027 | verified |
-| Nevada | odd years only, February | June | July 2027 | no |
+| Nevada | 1 February 2027, 120 days; none in 2028 | by 31 May | July 2027 | verified |
 | New Hampshire | 6 January 2027, no fixed length | June | August 2027 | verified |
 | New Jersey | year-round; second year begins 12 January 2027, next Legislature 11 January 2028 | — | January and July 2027, then February 2028 | verified |
 | New Mexico | 19 January 2027, 60 days | by 20 March | May 2027 | verified |

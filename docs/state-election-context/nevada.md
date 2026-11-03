@@ -26,6 +26,7 @@ adjournment to veto (art. 4, § 35). Laws take effect on 1 October unless they s
 another date (NRS 218D.330). There is no regular session in 2028.
 
 Re-check this doc: July 2027. Last researched: October 2026.
+Reviewed by Emily: 3 November 2026.
 
 ## How elections work in Nevada
 

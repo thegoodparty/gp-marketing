@@ -122,6 +122,11 @@ domain model, data sources, and what is and is not fixable in this repo:
   `/elections` and the `/people` profiles, on the production host only. The path and
   host gates live in `src/ui/LogRocket.tsx` (path rule in `src/lib/logrocketPaths.ts`);
   the SDK is imported on demand so it is not in the bundle for the rest of the site.
+  Only a random 5% of visits record (`src/lib/logrocketSampling.ts`), decided once per
+  tab session. The LogRocket project also has a 1,000-a-day cap that resets at midnight
+  UTC; without sampling, traffic used it all in the first hour after the reset and
+  nothing was recorded the rest of the day. Change the rate there if traffic or the
+  plan changes.
 - **Sanity revalidation webhook** — every content change in Sanity fires a webhook at
   `POST /api/revalidate`, which busts the Next.js cache tag and paths for that
   document and makes the change live without a deploy. Content can also be written

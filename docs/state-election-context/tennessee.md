@@ -34,6 +34,7 @@ Re-check this doc: July 2027, or a month after the governor's last day to act on
 the session's bills if the session runs late. LexisNexis marks art. VII, § 5 (the
 August election day for county and judicial offices) as subject to a proposed
 amendment: check its status at the re-check. Last researched: October 2026.
+Reviewed by Emily: 3 November 2026.
 
 ## How elections work in Tennessee
 

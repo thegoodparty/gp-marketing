@@ -37,7 +37,7 @@ states cover the most pages, so they come first.
 | 22 | Washington | 618 | done, reviewed 28 October 2026 |
 | 23 | North Dakota | 606 | done, reviewed 2 November 2026 |
 | 24 | Massachusetts | 597 | done, reviewed 2 November 2026 |
-| 25 | Tennessee | 553 | drafted, awaiting review |
+| 25 | Tennessee | 553 | done, reviewed 3 November 2026 |
 | 26 | Florida | 533 | drafted, awaiting review |
 | 27 | Oregon | 481 | drafted, awaiting review |
 | 28 | Mississippi | 449 | drafted, awaiting review |
@@ -129,7 +129,7 @@ If a legislature meets year-round, re-check in January and July.
 | Rhode Island | January | June | July 2027 | no |
 | South Carolina | January | May | June 2027 | no |
 | South Dakota | 12 January 2027, at most 40 legislative days | March | late April 2027 | verified |
-| Tennessee | January | April | May 2027 | no |
+| Tennessee | 12 January 2027 | April | July 2027 | verified |
 | Texas | 12 January 2027, at most 140 days | late May–early June | July 2027 | verified |
 | Utah | January | March | April 2027 | no |
 | Vermont | January | May | June 2027 | no |
@@ -147,13 +147,13 @@ Grouped by month. Within a month, do the states with the most pages first.
   Michigan, New York, Wisconsin, New Jersey, Massachusetts and DC), to catch
   anything passed in late 2026.
 - **April**: New Mexico, South Dakota, Utah, Wyoming.
-- **May**: Kentucky, Tennessee, Idaho, Maryland, Mississippi,
+- **May**: Kentucky, Idaho, Maryland, Mississippi,
   West Virginia.
 - **June**: Iowa, Kansas, Washington, Arkansas, Georgia, Alaska, Colorado, Florida, Hawaii, Montana, North Dakota,
   South Carolina, Vermont.
 - **July**: Pennsylvania, Ohio, Michigan, Minnesota, Indiana, Oklahoma, Texas, New York, Wisconsin, Missouri, Virginia,
   Nebraska, Louisiana, Oregon, Alabama, Arizona, Connecticut, Delaware, Maine,
-  Nevada, New Hampshire, New Jersey, Rhode Island, Massachusetts, DC.
+  Nevada, New Hampshire, New Jersey, Rhode Island, Massachusetts, Tennessee, DC.
 - **October**: Illinois (spring session bills are signed or vetoed by late August), North Carolina.
 - **November**: California.
 

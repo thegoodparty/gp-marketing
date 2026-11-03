@@ -167,9 +167,12 @@ municipality may adopt and amend its own charter.
 
 ## Metro and major-place exceptions
 
-Every municipal page in our data has a slug ending in `-town`, even for a city
-(`ct/fairfield-county/bridgeport-town`, `ct/new-haven-county/waterbury-town`).
-School boards for the biggest cities are on their own pages
+Towns have slugs ending in `-town` (`ct/fairfield-county/greenwich-town`).
+Cities have plain slugs (`ct/hartford-county/hartford`,
+`ct/fairfield-county/bridgeport`) and carry the mayor and council. Bridgeport,
+Waterbury, Derby and Groton have both. In the first three the city and town are
+one government, and the `-town` page holds only the town clerk. Groton is two
+governments: the City of Groton lies inside the Town of Groton. School boards for the biggest cities are on their own pages
 (`ct/bridgeport-school-district`, `ct/new-haven-school-district`,
 `ct/hartford-school-district`, `ct/stamford-school-district`). Take each city's
 offices from race data.
@@ -179,10 +182,16 @@ offices from race data.
 These are problems in our data, noted for the data team. Never write copy around
 them.
 
-- Hartford, New Haven and Stamford have no municipal page; only their school
-  district pages exist.
-- Bridgeport's and Waterbury's municipal pages hold only a town clerk race, with
-  no mayor or council.
+- **Connecticut's cities are hidden.** About 20 city pages work and carry a mayor
+  and council (Hartford, New Haven, Stamford, Bridgeport, Waterbury, Norwalk,
+  Danbury, New Britain, Bristol, Meriden, Milford, West Haven, Middletown,
+  Norwich, New London, Torrington, Shelton, Ansonia and others), but none is in
+  the sitemap or linked from its county page. The sitemap and county pages list
+  only the Census town records (`-town`), because election-api does not hang
+  the city records under a county in Connecticut. Search sends Hartford and New
+  Haven to the county page, Stamford to the state page, and Bridgeport and
+  Waterbury to `-town` pages that hold only the town clerk. Checked 3 November
+  2026.
 - Two probate judge races are filed on school district pages
   (`ct/andover-school-district`, `ct/regional-high-school-district-19`).
   Probate districts are their own geography.

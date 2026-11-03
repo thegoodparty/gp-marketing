@@ -5,7 +5,7 @@
 
 import type { MetadataRoute } from 'next';
 import { sanityClient } from '~/sanity/sanityClient';
-import { CITY_MTFCC, isCityOrTownMtfcc, looksLikeDistrictSlug, TOWN_MTFCC } from '~/lib/electionsApi';
+import { CITY_MTFCC, hasTownshipRace, isCityOrTownMtfcc, looksLikeDistrictSlug, pairCensusCityTwins, TOWN_MTFCC } from '~/lib/electionsApi';
 import {
 	buildElectionPositionHrefFromRaceSlug,
 	resolveElectionPositionFromRaceSlug,
@@ -116,7 +116,7 @@ const GP_API_ELECTIONS_BASE = `${GP_API_BASE.replace(/\/$/, '')}/v1/elections`;
 export const PEOPLE_SITEMAP_CACHE_TAG = 'people-sitemap';
 
 export type CountyPlace = { slug?: string; name?: string; mtfcc?: string };
-export type CityPlace = { slug?: string; countyName?: string };
+export type CityPlace = { slug?: string; countyName?: string; name?: string; mtfcc?: string };
 export type RaceEntry = { slug?: string; positionLevel?: string };
 
 export function normalizeName(name: string): string {
@@ -238,6 +238,22 @@ async function resolveMunicipalPlaces(
 ): Promise<CityPlace[]> {
 	if (buildCountyLookups(places, sweptCities).citySlugToCountySlug.size > 0) return sweptCities;
 	return [...sweptCities, ...(await fetchMunicipalitiesByCountyWalk(places))];
+}
+
+/**
+ * The Census filler twins ("Beatrice city") that redirect to their city, so the sitemap
+ * and the prerendered params stop listing a page that only redirects. Same rule as the
+ * city page: `pairCensusCityTwins`, keeping any twin that holds a township's offices.
+ * The twin's own position pages are untouched and still listed.
+ */
+export function findMergedCityTwinSlugs(cities: CityPlace[], races: RaceEntry[]): Set<string> {
+	const slugs = new Set<string>();
+	for (const { twin } of pairCensusCityTwins(cities)) {
+		const twinSlug = (twin.slug ?? '').toLowerCase();
+		const twinRaces = races.filter(r => r.slug?.toLowerCase().startsWith(`${twinSlug}/`));
+		if (!hasTownshipRace(twinRaces)) slugs.add(twinSlug);
+	}
+	return slugs;
 }
 
 export function buildCountyLookups(
@@ -416,15 +432,15 @@ export async function fetchStateElectionRouteParams(stateCode: string): Promise<
 			state: code,
 			placeColumns: 'slug,mtfcc,name',
 		}),
-		fetchElectionJson<{ slug?: string; countyName?: string }>('v1/places', {
+		fetchElectionJson<CityPlace>('v1/places', {
 			state: code,
 			mtfcc: CITY_MTFCC,
-			placeColumns: 'slug,countyName',
+			placeColumns: 'slug,countyName,name,mtfcc',
 		}),
-		fetchElectionJson<{ slug?: string; countyName?: string }>('v1/places', {
+		fetchElectionJson<CityPlace>('v1/places', {
 			state: code,
 			mtfcc: TOWN_MTFCC,
-			placeColumns: 'slug,countyName',
+			placeColumns: 'slug,countyName,name,mtfcc',
 		}),
 		// A build should not fail on one upstream blip, so this side degrades to no
 		// prerendered position pages for the state; they still render on demand.
@@ -440,6 +456,7 @@ export async function fetchStateElectionRouteParams(stateCode: string): Promise<
 	const cities = await resolveMunicipalPlaces(places, [...cityPlaces, ...townPlaces]);
 
 	const { citySlugToCountySlug } = buildCountyLookups(places, cities);
+	const mergedTwinSlugs = findMergedCityTwinSlugs(cities, races);
 
 	const countyParams: ElectionCountyRouteParam[] = [];
 	const cityParams: ElectionCityRouteParam[] = [];
@@ -470,7 +487,7 @@ export async function fetchStateElectionRouteParams(stateCode: string): Promise<
 
 	for (const c of cities) {
 		const countySlug = citySlugToCountySlug.get(c.slug ?? '');
-		if (!countySlug || !c.slug) continue;
+		if (!countySlug || !c.slug || mergedTwinSlugs.has(c.slug.toLowerCase())) continue;
 		const citySegment = c.slug.split('/').pop();
 		if (!citySegment || looksLikeDistrictSlug(citySegment)) continue;
 		const segs = countySlug.split('/').filter(Boolean);
@@ -798,15 +815,15 @@ export async function fetchStateElectionSitemapEntries(
 			state: code,
 			placeColumns: 'slug,mtfcc,name',
 		}),
-		fetchElectionJson<{ slug?: string; countyName?: string }>('v1/places', {
+		fetchElectionJson<CityPlace>('v1/places', {
 			state: code,
 			mtfcc: CITY_MTFCC,
-			placeColumns: 'slug,countyName',
+			placeColumns: 'slug,countyName,name,mtfcc',
 		}),
-		fetchElectionJson<{ slug?: string; countyName?: string }>('v1/places', {
+		fetchElectionJson<CityPlace>('v1/places', {
 			state: code,
 			mtfcc: TOWN_MTFCC,
-			placeColumns: 'slug,countyName',
+			placeColumns: 'slug,countyName,name,mtfcc',
 		}),
 		fetchAllStateRaces(code),
 	]);
@@ -825,6 +842,7 @@ export async function fetchStateElectionSitemapEntries(
 	const cities = await resolveMunicipalPlaces(places, [...cityPlaces, ...townPlaces]);
 
 	const { citySlugToCountySlug } = buildCountyLookups(places, cities);
+	const mergedTwinSlugs = findMergedCityTwinSlugs(cities, races);
 
 	// The state's own index page. It is not in `places` — the place rows are the
 	// counties, districts and cities *inside* the state — so nothing below emits
@@ -843,7 +861,7 @@ export async function fetchStateElectionSitemapEntries(
 
 	for (const c of cities) {
 		const countySlug = citySlugToCountySlug.get(c.slug ?? '');
-		if (!countySlug || !c.slug) continue;
+		if (!countySlug || !c.slug || mergedTwinSlugs.has(c.slug.toLowerCase())) continue;
 		const citySegment = c.slug.split('/').pop();
 		if (!citySegment || looksLikeDistrictSlug(citySegment)) continue;
 		entries.push(toEntry(baseUrl, `/elections/${countySlug}/${citySegment}`, 0.7, 'weekly'));

@@ -25,7 +25,9 @@ import {
 	buildElectionPositionHrefFromRaceSlug,
 	getStateName,
 } from '~/lib/electionsHelpers';
+import { startOfElectionDay } from '~/lib/electionDay';
 import { classifyParty, classifyPartyFrom, isMajorParty, orderPartyNames, type PartyClass } from '~/lib/party';
+import { toLocalDay } from '~/lib/positionHeroState';
 import { formatPersonName } from '~/lib/personName';
 import { buildPersonSlug, buildPersonSlugFromBase, slugifyName } from '~/lib/personSlug';
 import type { CandidacyItem } from '~/types/elections';
@@ -497,13 +499,15 @@ function candidaciesByRecency(candidacies: PersonCandidacySummary[]): {
 	past: PersonCandidacySummary[];
 	undated: PersonCandidacySummary[];
 } {
-	const now = Date.now();
+	// Compared as calendar days: parsing "2026-11-03" as a timestamp is midnight UTC, which ended election day at 7pm
+	// Eastern the evening BEFORE, so every candidate on that day's ballot read as having already run.
+	const now = startOfElectionDay().getTime();
 	const dated: { candidacy: PersonCandidacySummary; time: number }[] = [];
 	const undated: PersonCandidacySummary[] = [];
 	for (const candidacy of candidacies) {
-		const parsed = candidacy.Race?.electionDate ? Date.parse(candidacy.Race.electionDate) : NaN;
-		if (Number.isNaN(parsed)) undated.push(candidacy);
-		else dated.push({ candidacy, time: parsed });
+		const day = toLocalDay(candidacy.Race?.electionDate);
+		if (!day) undated.push(candidacy);
+		else dated.push({ candidacy, time: day.getTime() });
 	}
 	return {
 		upcoming: dated.filter(x => x.time >= now).sort((a, b) => a.time - b.time).map(x => x.candidacy),

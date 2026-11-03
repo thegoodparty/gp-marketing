@@ -154,6 +154,22 @@ Helpers: `isCityOrTownMtfcc` (city or town), `isDistrictMtfcc`, and the defensiv
 Maine) attach `G54xx` codes to municipality-like slugs, so it re-checks slug depth,
 the county-equivalent tail, and district keywords before trusting the code.
 
+#### Census "X city" twins fold into their city
+
+The Census describes many cities twice: the incorporated place ("Beatrice", G4110) and a
+county subdivision covering the same ground ("Beatrice city", G4040, FUNCSTAT F, a filler
+unit with no government). election-api loads both and hangs some of the city's offices on
+the twin, so the city used to appear twice (`ne/gage-county/beatrice` and
+`.../beatrice-city`). `pairCensusCityTwins` finds these pairs: a G4040 twin in the same state and
+county, whose last slug segment is the city's plus `-city` and whose name is the city's plus
+" city". The twin's slug carries the county (`ne/gage-county/beatrice-city`) while the city's
+does not (`ne/beatrice`), and MA and MI capitalize the descriptor ("Palmer Town City"). A merged twin's
+page 308s to its city, the city page lists the twin's offices, and the county list and
+sitemap drop the twin. The twin's position pages keep their URLs, because two different
+offices can share a position slug. A twin holding a township office (`hasTownshipRace`) is
+left alone: those offices belong to a township election-api failed to match, which is a
+data ticket, not a merge. In Nov 2026 this was 174 pairs, 27 of them left alone.
+
 ### County-equivalents
 
 Not every state calls its counties "counties". `canonicalizeCountyEquivalentName` in
@@ -348,6 +364,19 @@ roles cannot be addressed at all. `buildPlaceRacePositionHref` returns `undefine
 there and `ListOfOfficesBlock` lists the office without a link rather than linking to
 a page that cannot exist. Giving those offices a real page needs a different URL
 shape, which is a separate piece of work.
+
+### When election day ends
+
+Election dates arrive as calendar days (`2026-11-03`), and every "has this race
+happened yet" check compares them to today's date **in Pacific time**, through
+`startOfElectionDay` in `src/lib/electionDay.ts`. A race stays upcoming until
+midnight Pacific, after every state's polls have closed. Never compare an election
+date with `Date.parse` or `Date.now()`: a date-only string parses as midnight UTC,
+which ended election day at 7pm Eastern the evening before and turned every
+candidate on that day's ballot into a past candidate. The servers also run on UTC,
+so "today in local time" on Vercel ends election day at 7pm Eastern while polls are
+still open. The one exception is the election-api "upcoming" query filter, which
+reaches a day back on purpose (`upcomingSinceDateOnly`).
 
 ### Templates: global vs custom, and three-tier resolution
 

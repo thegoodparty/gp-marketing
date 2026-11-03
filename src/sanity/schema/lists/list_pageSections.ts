@@ -412,7 +412,7 @@ export const list_pageSections = {
 			type: 'component_featuredCitiesBlock',
 		},
 		{
-			title: 'GoodParty.org Pledge',
+			title: 'People First Pledge',
 			type: 'component_goodPartyOrgPledge',
 		},
 		{

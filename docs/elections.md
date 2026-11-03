@@ -170,6 +170,19 @@ offices can share a position slug. A twin holding a township office (`hasTownshi
 left alone: those offices belong to a township election-api failed to match, which is a
 data ticket, not a merge. In Nov 2026 this was 174 pairs, 27 of them left alone.
 
+#### Numbered county election districts are not towns
+
+In Mississippi (supervisors districts), Tennessee (civil districts), Virginia (magisterial
+districts) and a few Louisiana parishes, the Census county subdivisions are named "District 1",
+"District 2" and so on. election-api files them as towns under their county
+(`ms/alcorn-county/district-1`) and hangs seats elected by district on them: Mississippi county
+school board members, Tennessee constables and road commissioners. `isCountyElectionDistrictPlace`
+spots them by name and slug together. They are not listed as towns or featured as cities; the
+county page lists their seats with its own offices, each named for its district ("School Board,
+District 1"); the district page 308s to the county; the seat's position page keeps its URL
+under the district but its breadcrumb skips the district. In Nov 2026 this was 466 seat pages:
+MS 214, TN 241, LA 7, VA 4.
+
 ### County-equivalents
 
 Not every state calls its counties "counties". `canonicalizeCountyEquivalentName` in

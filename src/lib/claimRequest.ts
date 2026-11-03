@@ -38,15 +38,18 @@ export type ClaimRequestInput = {
 	 */
 	marketingConsent?: boolean;
 	source: ClaimRequestSource;
+	/** The reCAPTCHA checkbox's token. The proxy checks it with Google and does not forward it. */
+	recaptchaToken?: string;
 };
 
 export function buildClaimRequestBody(input: ClaimRequestInput): string {
-	const { personId, email, firstname, marketingConsent, source } = input;
+	const { personId, email, firstname, marketingConsent, source, recaptchaToken } = input;
 	return JSON.stringify({
 		personId,
 		firstname,
 		email,
 		...(marketingConsent === undefined ? {} : { marketingConsent }),
 		source,
+		...(recaptchaToken === undefined ? {} : { recaptchaToken }),
 	});
 }

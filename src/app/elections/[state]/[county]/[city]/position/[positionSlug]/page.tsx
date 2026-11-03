@@ -8,6 +8,7 @@ import {
 	getPlacesByState,
 	getRaceBySlug,
 	isCityOrTownMtfcc,
+	isCountyElectionDistrictPlace,
 	isDistrictMtfcc,
 	resolveCountySlugForPlace,
 } from '~/lib/electionsApi';
@@ -133,11 +134,14 @@ export default async function Page({
 
 	const cityName = displayPlaceName(cityPlace.name);
 	const isRealCity = isRealPlaceSegment(cityPlace.slug, city);
+	// A numbered county election district ("District 1") still names the seat, but its own page
+	// redirects to the county, so the trail does not link it.
+	const linksCityPage = isRealCity && !isCountyElectionDistrictPlace(cityPlace);
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
 		{ href: `/elections/${state.toLowerCase()}`, label: stateName },
 		{ href: `/elections/${countySlug}`, label: countyPlace!.name },
-		...(isRealCity ? [{ href: `/elections/${fullSlug}`, label: cityName }] : []),
+		...(linksCityPage ? [{ href: `/elections/${fullSlug}`, label: cityName }] : []),
 		{ href: '', label: officeName },
 	];
 

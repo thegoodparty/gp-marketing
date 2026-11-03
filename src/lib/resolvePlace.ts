@@ -7,6 +7,7 @@ import {
 	getPlaceBySlug,
 	getPlacesByState,
 	isCityOrTownMtfcc,
+	knownCountySlugForCity,
 	normalizeName,
 } from '~/lib/electionsApi';
 import { canonicalizeCountyEquivalentName, stripCityTypeSuffix } from '~/lib/electionsHelpers';
@@ -80,9 +81,14 @@ export function resolvePlaceUrl(input: ResolvePlaceInput, data: ResolvePlaceData
 		// Same-named rows can appear twice under an empty-mapping county sweep (the
 		// unmapped sweep row) and the county walk (the same city, correctly mapped).
 		// Prefer whichever candidate actually has a county mapping so the mapped one
-		// is never shadowed by an earlier, unmapped duplicate.
-		const cityMatch = candidates.find(p => data.citySlugToCountySlug.has(p.slug)) ?? candidates[0];
-		const countySlug = cityMatch ? data.citySlugToCountySlug.get(cityMatch.slug) : undefined;
+		// is never shadowed by an earlier, unmapped duplicate. A city placed only by
+		// `knownCountySlugForCity` comes after a mapped town of the same name, because
+		// Derby's and Naugatuck's town rows hold the government their city rows lack.
+		const cityMatch =
+			candidates.find(p => data.citySlugToCountySlug.has(p.slug)) ??
+			candidates.find(p => knownCountySlugForCity(p.slug)) ??
+			candidates[0];
+		const countySlug = cityMatch ? (data.citySlugToCountySlug.get(cityMatch.slug) ?? knownCountySlugForCity(cityMatch.slug)) : undefined;
 		const countyTail = countySlug ? slugTail(countySlug) : undefined;
 		const cityTail = cityMatch ? slugTail(cityMatch.slug) : undefined;
 		if (countyTail && cityTail) {
@@ -123,7 +129,7 @@ export function resolvePlaceUrl(input: ResolvePlaceInput, data: ResolvePlaceData
 
 /**
  * Walks a state's counties for their municipal children. Connecticut's state-level
- * municipal sweeps (CITY_MTFCC and TOWN_MTFCC) come back empty, but
+ * municipal sweeps (CITY_MTFCC and TOWN_MTFCC) carry planning regions, not counties, but
  * `/v1/places?slug=<county>&includeChildren=true` returns its towns, which is why
  * `/elections/ct/fairfield-county` links to 19 towns. Mirrors
  * `fetchMunicipalitiesByCountyWalk` in sitemap-entries.ts. The county is known

@@ -927,6 +927,25 @@ describe('findMergedCityTwinSlugs', () => {
 	});
 });
 
+describe('findMergedCityTwinSlugs: Connecticut town twins', () => {
+	const city: CityPlace = { slug: 'ct/waterbury', countyName: 'Naugatuck Valley', name: 'Waterbury', mtfcc: 'G4110' };
+	const twin: CityPlace = { slug: 'ct/new-haven-county/waterbury-town', countyName: 'Naugatuck Valley', name: 'Waterbury Town', mtfcc: 'G4040' };
+
+	test('folds a town that holds only its town clerk', () => {
+		const races: RaceEntry[] = [{ slug: 'ct/new-haven-county/waterbury-town/town-clerk-as-separate-from-city-clerk-ct-only', positionLevel: 'CITY' }];
+		expect([...findMergedCityTwinSlugs([city, twin], races)]).toEqual(['ct/new-haven-county/waterbury-town']);
+	});
+
+	test('keeps a town that holds any other office, or none', () => {
+		const races: RaceEntry[] = [
+			{ slug: 'ct/new-haven-county/waterbury-town/town-clerk-as-separate-from-city-clerk-ct-only', positionLevel: 'CITY' },
+			{ slug: 'ct/new-haven-county/waterbury-town/city-legislature', positionLevel: 'CITY' },
+		];
+		expect(findMergedCityTwinSlugs([city, twin], races).size).toBe(0);
+		expect(findMergedCityTwinSlugs([city, twin], []).size).toBe(0);
+	});
+});
+
 describe('buildRaceEntries', () => {
 	const BASE = 'https://goodparty.org';
 
@@ -1442,6 +1461,47 @@ describe('fetchStateElectionSitemapEntries', () => {
 		expect(urls).toContain(`${base}/elections/ct/fairfield-county/darien-town`);
 		// The unmappable row is still dropped; it has no county to sit under.
 		expect(urls.some((u) => u.includes('orphan-town'))).toBe(false);
+	});
+
+	// Connecticut's cities (`ct/hartford`) carry a planning region and are no county's
+	// child, so neither the sweep nor the walk placed them: their pages and their
+	// offices' pages were missing from the shard. A town that holds only its town clerk
+	// folds into its city; Derby's town, which holds the city government, does not.
+	test('lists Connecticut cities under their known county and folds town-clerk-only towns', async () => {
+		mockUpstream({
+			places: [
+				{ slug: 'ct/fairfield-county', mtfcc: 'G4020', name: 'Fairfield County' },
+				{ slug: 'ct/new-haven-county', mtfcc: 'G4020', name: 'New Haven County' },
+			],
+			cities: [
+				{ slug: 'ct/bridgeport', countyName: 'Greater Bridgeport', name: 'Bridgeport', mtfcc: 'G4110' },
+				{ slug: 'ct/stamford', countyName: 'Western Connecticut', name: 'Stamford', mtfcc: 'G4110' },
+				{ slug: 'ct/derby', countyName: 'Naugatuck Valley', name: 'Derby', mtfcc: 'G4110' },
+			],
+			towns: [
+				{ slug: 'ct/fairfield-county/bridgeport-town', countyName: 'Greater Bridgeport', name: 'Bridgeport Town', mtfcc: 'G4040' },
+				{ slug: 'ct/new-haven-county/derby-town', countyName: 'Naugatuck Valley', name: 'Derby Town', mtfcc: 'G4040' },
+			],
+			countyChildren: {
+				'ct/fairfield-county': [{ slug: 'ct/fairfield-county/bridgeport-town', mtfcc: 'G4040' }],
+				'ct/new-haven-county': [{ slug: 'ct/new-haven-county/derby-town', mtfcc: 'G4040' }],
+			},
+			races: [
+				{ slug: 'ct/bridgeport/city-executive-mayor', positionLevel: 'CITY' },
+				{ slug: 'ct/fairfield-county/bridgeport-town/town-clerk-as-separate-from-city-clerk-ct-only', positionLevel: 'CITY' },
+				{ slug: 'ct/new-haven-county/derby-town/city-executive-mayor', positionLevel: 'CITY' },
+			],
+		});
+
+		const urls = (await fetchStateElectionSitemapEntries('CT', base)).map((e) => e.url);
+
+		expect(urls).toContain(`${base}/elections/ct/fairfield-county/bridgeport`);
+		expect(urls).toContain(`${base}/elections/ct/fairfield-county/stamford`);
+		expect(urls).toContain(`${base}/elections/ct/new-haven-county/derby`);
+		expect(urls).toContain(`${base}/elections/ct/fairfield-county/bridgeport/position/city-executive-mayor`);
+		expect(urls).not.toContain(`${base}/elections/ct/fairfield-county/bridgeport-town`);
+		expect(urls).toContain(`${base}/elections/ct/new-haven-county/derby-town`);
+		expect(urls.filter((u) => /\/elections\/ct\/[^/]+$/.test(u) && !u.endsWith('-county'))).toHaveLength(0);
 	});
 
 	// The walk costs one request per county, so it must stay off for the 50 states

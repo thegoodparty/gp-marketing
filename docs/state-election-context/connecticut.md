@@ -170,9 +170,12 @@ municipality may adopt and amend its own charter.
 Towns have slugs ending in `-town` (`ct/fairfield-county/greenwich-town`).
 Cities have plain slugs (`ct/hartford-county/hartford`,
 `ct/fairfield-county/bridgeport`) and carry the mayor and council. Bridgeport,
-Waterbury, Derby and Groton have both. In the first three the city and town are
-one government, and the `-town` page holds only the town clerk. Groton is two
-governments: the City of Groton lies inside the Town of Groton. School boards for the biggest cities are on their own pages
+Waterbury, Derby, Naugatuck and Groton have both. In Bridgeport and Waterbury
+the `-town` page holds only the town clerk (PR #538 redirects it to the city).
+In Derby and Naugatuck the data is reversed: the `-town` page holds the mayor
+and council, and the city page only the registrar of voters, so take offices
+from whichever page you are on. Groton is two governments: the City of Groton
+lies inside the Town of Groton. School boards for the biggest cities are on their own pages
 (`ct/bridgeport-school-district`, `ct/new-haven-school-district`,
 `ct/hartford-school-district`, `ct/stamford-school-district`). Take each city's
 offices from race data.

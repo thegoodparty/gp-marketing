@@ -35,6 +35,7 @@ III, § 18). Bills often reach the governor well after the session, so the
 takes effect (`usual case`).
 
 Re-check this doc: August 2027. Last researched: October 2026.
+Reviewed by Emily: 3 November 2026.
 
 ## How elections work in Delaware
 

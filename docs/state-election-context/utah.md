@@ -34,6 +34,7 @@ New laws take effect sixty days after the session adjourns, which falls in early
 May, unless two-thirds of each house set another date (Utah Const. art. VI, § 25).
 
 Re-check this doc: April 2027. Last researched: October 2026.
+Reviewed by Emily: 3 November 2026.
 
 ## How elections work in Utah
 

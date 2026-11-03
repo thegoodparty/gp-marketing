@@ -9,7 +9,7 @@ same ground on every one of the ~48,000 location pages.
 | --- | --- | --- |
 | Alabama | [alabama.md](./alabama.md) | reviewed 3 November 2026 |
 | Alaska | [alaska.md](./alaska.md) | draft, awaiting review |
-| Arizona | [arizona.md](./arizona.md) | draft, awaiting review |
+| Arizona | [arizona.md](./arizona.md) | reviewed 3 November 2026 |
 | Arkansas | [arkansas.md](./arkansas.md) | reviewed 2 November 2026 |
 | California | [california.md](./california.md) | reviewed 28 October 2026 |
 | Colorado | [colorado.md](./colorado.md) | reviewed 3 November 2026 |
@@ -59,7 +59,7 @@ same ground on every one of the ~48,000 location pages.
 | Wisconsin | [wisconsin.md](./wisconsin.md) | reviewed 27 October 2026 |
 | Wyoming | [wyoming.md](./wyoming.md) | draft, awaiting review |
 
-All 50 states and DC are drafted. 33 are reviewed. Each doc is a draft until Emily has reviewed it, and only a doc marked "Reviewed by Emily" should feed the generator.
+All 50 states and DC are drafted. 34 are reviewed. Each doc is a draft until Emily has reviewed it, and only a doc marked "Reviewed by Emily" should feed the generator.
 
 ## What these are, and what they are not
 

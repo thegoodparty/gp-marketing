@@ -30,7 +30,7 @@ New laws usually take effect ninety days after the session closes, unless they
 are emergency measures (Ariz. Const. art. IV, pt. 1, § 1(3)).
 
 Re-check this doc: August 2027, or a month after the session's final adjournment
-if it runs later. Last researched: October 2026.
+if it runs later. Last researched: October 2026. Reviewed by Emily: 3 November 2026.
 
 ## How elections work in Arizona
 

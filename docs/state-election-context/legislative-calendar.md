@@ -58,7 +58,7 @@ states cover the most pages, so they come first.
 | 43 | West Virginia | 186 | done, reviewed 3 November 2026 |
 | 44 | Maryland | 158 | done, reviewed 3 November 2026 |
 | 45 | Wyoming | 155 | done, reviewed 3 November 2026 |
-| 46 | Alaska | 84 | drafted, awaiting review |
+| 46 | Alaska | 84 | done, reviewed 3 November 2026 |
 | 47 | Delaware | 76 | drafted, awaiting review |
 | 48 | Rhode Island | 74 | drafted, awaiting review |
 | 49 | Nevada | 67 | drafted, awaiting review |
@@ -88,7 +88,7 @@ If a legislature meets year-round, re-check in January and July.
 | State | 2027 regular session | Usually ends | Re-check | Verified |
 | --- | --- | --- | --- | --- |
 | Alabama | organizes 12 January 2027, regular session 2 February 2027 | by 17 May | June 2027 | verified |
-| Alaska | January | May | June 2027 | no |
+| Alaska | 19 January 2027, 90 days by statute | mid-April to May | June 2027 | verified |
 | Arizona | 11 January 2027, no fixed length | May–June | August 2027 | verified |
 | Arkansas | 11 January 2027, 60 days unless extended | March–April | June 2027 | verified |
 | California | 7 December 2026, year-round two-year session | 30 November 2028 | November each year | verified |

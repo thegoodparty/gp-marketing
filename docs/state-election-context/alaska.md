@@ -33,7 +33,9 @@ weeks after adjournment, so the last ones are settled in early summer.
 New laws take effect ninety days after enactment unless two-thirds of each house
 set another date (Alaska Const. art. II, § 18; AS 01.10.070).
 
-Re-check this doc: June 2027. Last researched: October 2026.
+Re-check this doc: June 2027, including the result of any 2026 vote on the
+state primary system and the 2026 session laws. Last researched: October 2026.
+Reviewed by Emily: 3 November 2026.
 
 ## How elections work in Alaska
 

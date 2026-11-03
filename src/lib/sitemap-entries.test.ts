@@ -907,23 +907,23 @@ describe('buildCountyLookups', () => {
 
 describe('findMergedCityTwinSlugs', () => {
 	const city: CityPlace = { slug: 'mn/elba', countyName: 'Winona', name: 'Elba', mtfcc: 'G4110' };
-	const twin: CityPlace = { slug: 'mn/elba-city', countyName: 'Winona', name: 'Elba city', mtfcc: 'G4040' };
+	const twin: CityPlace = { slug: 'mn/winona-county/elba-city', countyName: 'Winona', name: 'Elba city', mtfcc: 'G4040' };
 
 	test('merges a twin that holds only city or district offices', () => {
-		const races: RaceEntry[] = [{ slug: 'mn/elba-city/healthcare-district-board-hospital-district-board', positionLevel: 'LOCAL' }];
-		expect([...findMergedCityTwinSlugs([city, twin], races)]).toEqual(['mn/elba-city']);
+		const races: RaceEntry[] = [{ slug: 'mn/winona-county/elba-city/healthcare-district-board-hospital-district-board', positionLevel: 'LOCAL' }];
+		expect([...findMergedCityTwinSlugs([city, twin], races)]).toEqual(['mn/winona-county/elba-city']);
 	});
 
 	// Elba Township's offices sit on the Elba city twin upstream. They belong to a
 	// different government, so the twin keeps its page rather than joining the city.
 	test('keeps a twin that holds a township office', () => {
-		const races: RaceEntry[] = [{ slug: 'mn/elba-city/township-clerk', positionLevel: 'LOCAL' }];
+		const races: RaceEntry[] = [{ slug: 'mn/winona-county/elba-city/township-clerk', positionLevel: 'LOCAL' }];
 		expect(findMergedCityTwinSlugs([city, twin], races).size).toBe(0);
 	});
 
 	test('ignores township offices of other places', () => {
-		const races: RaceEntry[] = [{ slug: 'mn/elba-city-north/township-clerk', positionLevel: 'TOWNSHIP' }];
-		expect([...findMergedCityTwinSlugs([city, twin], races)]).toEqual(['mn/elba-city']);
+		const races: RaceEntry[] = [{ slug: 'mn/winona-county/elba-city-north/township-clerk', positionLevel: 'TOWNSHIP' }];
+		expect([...findMergedCityTwinSlugs([city, twin], races)]).toEqual(['mn/winona-county/elba-city']);
 	});
 });
 
@@ -1273,8 +1273,8 @@ describe('fetchStateElectionSitemapEntries', () => {
 		mockUpstream({
 			places: [{ slug: 'ne/gage-county', mtfcc: 'G4020', name: 'Gage County' }],
 			cities: [{ slug: 'ne/beatrice', countyName: 'Gage', name: 'Beatrice', mtfcc: 'G4110' }],
-			towns: [{ slug: 'ne/beatrice-city', countyName: 'Gage', name: 'Beatrice city', mtfcc: 'G4040' }],
-			races: [{ slug: 'ne/beatrice-city/airport-district-board', positionLevel: 'LOCAL' }],
+			towns: [{ slug: 'ne/gage-county/beatrice-city', countyName: 'Gage', name: 'Beatrice city', mtfcc: 'G4040' }],
+			races: [{ slug: 'ne/gage-county/beatrice-city/airport-district-board', positionLevel: 'LOCAL' }],
 		});
 
 		const urls = (await fetchStateElectionSitemapEntries('NE', base)).map(e => e.url);

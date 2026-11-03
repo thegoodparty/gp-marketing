@@ -816,22 +816,28 @@ type CityTwinCandidate = { slug?: string; name?: string; mtfcc?: string; countyN
  * showed up twice (`ne/gage-county/beatrice` and `ne/gage-county/beatrice-city`), each
  * with part of its offices.
  *
- * Only the lowercase " city" descriptor, the same county, and a slug that is the
- * city's own plus `-city` count, so a real town or township ("Ithaca town",
- * "Lansing charter township") is never paired with the city it shares a name with.
+ * The twin's slug carries its county (`ne/gage-county/beatrice-city`) and the city's does
+ * not (`ne/beatrice`), and MA and MI capitalize the descriptor ("Palmer Town City"). A
+ * pair needs a G4040 twin, the same state and county, a last slug segment that is the
+ * city's plus `-city`, and a name that is the city's plus " city". A real town or
+ * township ("Ithaca town", "Lansing charter township") never matches, and neither does a
+ * city named "... City" with no plain city beside it (Jersey City).
  */
 export function pairCensusCityTwins<T extends CityTwinCandidate>(places: T[]): { twin: T; city: T }[] {
+	const key = (p: T, segment: string) =>
+		`${p.slug?.split('/')[0]?.toLowerCase()}|${normalizeName((p.countyName ?? '').replace(/\s+county$/i, ''))}|${segment}`;
 	const cities = new Map<string, T>();
 	for (const p of places) {
-		if (p.mtfcc === CITY_MTFCC && p.slug) cities.set(p.slug.toLowerCase(), p);
+		const segment = p.slug?.split('/').pop()?.toLowerCase();
+		if (p.mtfcc === CITY_MTFCC && segment) cities.set(key(p, segment), p);
 	}
 	const pairs: { twin: T; city: T }[] = [];
 	for (const twin of places) {
-		const twinSlug = twin.slug?.toLowerCase();
-		if (twin.mtfcc !== TOWN_MTFCC || !twinSlug?.endsWith('-city')) continue;
-		const city = cities.get(twinSlug.slice(0, -'-city'.length));
-		if (!city || twin.name?.trim() !== `${city.name?.trim()} city`) continue;
-		if (twin.countyName && city.countyName && normalizeName(twin.countyName) !== normalizeName(city.countyName)) continue;
+		const segment = twin.slug?.split('/').pop()?.toLowerCase();
+		if (twin.mtfcc !== TOWN_MTFCC || !segment?.endsWith('-city')) continue;
+		const city = cities.get(key(twin, segment.slice(0, -'-city'.length)));
+		const baseName = /^(.+)\s+city$/i.exec(twin.name?.trim() ?? '')?.[1];
+		if (!city || !baseName || baseName !== city.name?.trim()) continue;
 		pairs.push({ twin, city });
 	}
 	return pairs;

@@ -160,8 +160,10 @@ The Census describes many cities twice: the incorporated place ("Beatrice", G411
 county subdivision covering the same ground ("Beatrice city", G4040, FUNCSTAT F, a filler
 unit with no government). election-api loads both and hangs some of the city's offices on
 the twin, so the city used to appear twice (`ne/gage-county/beatrice` and
-`.../beatrice-city`). `pairCensusCityTwins` finds these pairs (G4040, slug is the city's
-plus `-city`, name is the city's plus a lowercase " city", same county). A merged twin's
+`.../beatrice-city`). `pairCensusCityTwins` finds these pairs: a G4040 twin in the same state and
+county, whose last slug segment is the city's plus `-city` and whose name is the city's plus
+" city". The twin's slug carries the county (`ne/gage-county/beatrice-city`) while the city's
+does not (`ne/beatrice`), and MA and MI capitalize the descriptor ("Palmer Town City"). A merged twin's
 page 308s to its city, the city page lists the twin's offices, and the county list and
 sitemap drop the twin. The twin's position pages keep their URLs, because two different
 offices can share a position slug. A twin holding a township office (`hasTownshipRace`) is

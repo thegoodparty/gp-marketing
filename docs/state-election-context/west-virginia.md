@@ -36,6 +36,7 @@ New laws take effect ninety days after passage unless two-thirds of each house
 vote otherwise (W. Va. Const. art. VI, § 30).
 
 Re-check this doc: May 2027. Last researched: October 2026.
+Reviewed by Emily: 3 November 2026.
 
 ## How elections work in West Virginia
 

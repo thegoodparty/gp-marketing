@@ -55,11 +55,11 @@ same ground on every one of the ~48,000 location pages.
 | Vermont | [vermont.md](./vermont.md) | reviewed 3 November 2026 |
 | Virginia | [virginia.md](./virginia.md) | reviewed 2 November 2026 |
 | Washington | [washington.md](./washington.md) | reviewed 28 October 2026 |
-| West Virginia | [west-virginia.md](./west-virginia.md) | draft, awaiting review |
+| West Virginia | [west-virginia.md](./west-virginia.md) | reviewed 3 November 2026 |
 | Wisconsin | [wisconsin.md](./wisconsin.md) | reviewed 27 October 2026 |
 | Wyoming | [wyoming.md](./wyoming.md) | draft, awaiting review |
 
-All 50 states and DC are drafted. 39 are reviewed. Each doc is a draft until Emily has reviewed it, and only a doc marked "Reviewed by Emily" should feed the generator.
+All 50 states and DC are drafted. 40 are reviewed. Each doc is a draft until Emily has reviewed it, and only a doc marked "Reviewed by Emily" should feed the generator.
 
 ## What these are, and what they are not
 

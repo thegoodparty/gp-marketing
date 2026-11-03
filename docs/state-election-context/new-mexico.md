@@ -90,7 +90,18 @@ regular local election or a ranked-choice count on the same ballot.
 
 *NMSA 1978, § 1-22-16(A) · varies by place · read in statute*
 
-**Watch out:** do not mention a runoff for a city race unless race data shows one.
+**Two cities known to use ranked-choice voting:**
+
+- **Santa Fe** elects its mayor, city councilors and municipal judge by
+  ranked-choice voting under its charter, counting rounds until one candidate
+  has a majority.
+- **Las Cruces** chose a ranked-choice count on the same ballot by ordinance,
+  starting with its November 2019 election.
+
+*Santa Fe Municipal Charter § 4.06; Las Cruces Code of Ordinances § 8-15 · varies by place · read in city charter, local government publication*
+
+**Watch out:** do not mention a runoff or ranked-choice voting for any other
+city unless race data shows one. Other cities may adopt either method.
 
 ### Running as an independent
 
@@ -161,6 +172,7 @@ single-member districts. Our data has 89 school district pages.
 `nm/san-juan-county/farmington`, `nm/chaves-county/roswell`, `nm/los-alamos-county`
 
 For each, take the election date, runoff rule and council size from race data.
+Santa Fe and Las Cruces use ranked-choice voting (see Winning an election).
 `nm/los-alamos-county` holds county offices; do not describe it as a city.
 
 ### Data issues
@@ -196,6 +208,11 @@ For each, take the election date, runoff rule and council size from race data.
   navigate that tab away). Every ledger entry is marked manual because the checker
   cannot read PDFs; all 42 quotes were matched against the extracted text with the
   checker's own normalization, 42 found.
+- **City rules:** Santa Fe Municipal Charter (2020 edition, PDF at
+  `https://santafenm.gov/MunicipalCharter2020DIGITALversion.pdf`, § 4.06,
+  extracted with macOS PDFKit) and the Las Cruces Code of Ordinances § 8-15, on
+  the city's code host, Municode (linked from `lascruces.gov`; it renders only
+  in a browser). Both ledger entries are marked manual.
 - **Page data:** goodparty.org sitemap shard 32, 28 October 2026.
 
 Aggregator sites were not used and must not appear in published copy. Statutes

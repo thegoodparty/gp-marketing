@@ -376,5 +376,23 @@
 		"certainty": "statutory",
 		"verified": "read in statute",
 		"manual": true
+	},
+	{
+		"claim": "Santa Fe elects its mayor, city councilors and municipal judge by ranked-choice voting",
+		"citation": "Santa Fe Municipal Charter § 4.06",
+		"url": "https://santafenm.gov/MunicipalCharter2020DIGITALversion.pdf",
+		"quote": "the mayor, city councilors and municipal judge shall be elected using a ranked choice (sometimes called instant runoff) voting system",
+		"certainty": "statutory",
+		"verified": "read in city charter",
+		"manual": true
+	},
+	{
+		"claim": "Las Cruces uses a ranked-choice count on the same ballot, from its November 2019 election",
+		"citation": "Las Cruces Code of Ordinances § 8-15",
+		"url": "https://library.municode.com/nm/las_cruces/codes/code_of_ordinances?nodeId=PTIIMUCO_CH8EL_ARTIICACO_S8-36RE",
+		"quote": "Ranked-choice voting will commence with the regular municipal election in November 2019 and all subsequent elections",
+		"certainty": "statutory",
+		"verified": "local government publication",
+		"manual": true
 	}
 ]

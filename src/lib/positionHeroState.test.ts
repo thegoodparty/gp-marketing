@@ -7,7 +7,8 @@ const race = {
 	electionDate: '2026-11-03T00:00:00.000Z',
 };
 
-const at = (iso: string) => new Date(`${iso}T12:00:00`);
+// Midday Pacific, the calendar the phases are judged on, so the day is the same wherever the tests run.
+const at = (iso: string) => new Date(`${iso}T20:00:00Z`);
 
 describe('resolvePositionHeroState', () => {
 	test('filing is open between the window opening and the deadline', () => {

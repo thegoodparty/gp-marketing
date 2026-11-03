@@ -9,6 +9,7 @@ import type { FactsCardProps } from '~/ui/FactsCard';
 
 import { permanentRedirect } from 'next/navigation';
 import { isCityOrTownMtfcc, looksLikeCountySlugSegment, looksLikeDistrictSlug, resolveCountySlugForPlace } from '~/lib/electionsApi';
+import { startOfElectionDay } from '~/lib/electionDay';
 import { officeDisplayName } from '~/lib/officeDisplayName';
 import { formatPersonName } from '~/lib/personName';
 import { buildPersonSlug } from '~/lib/personSlug';
@@ -428,7 +429,7 @@ function parseElectionDateAsLocal(dateStr: string): Date {
 	return parseDateOnlyAsLocal(dateStr.slice(0, 10));
 }
 
-/** True when the election calendar day is strictly before today (local time). */
+/** True when the election calendar day is strictly before today (Pacific time, see `startOfElectionDay`). */
 export function isElectionDateBeforeToday(
 	dateStr: string | undefined,
 	today: Date = new Date(),
@@ -436,7 +437,7 @@ export function isElectionDateBeforeToday(
 	if (!dateStr) return false;
 	try {
 		const electionDay = startOfLocalDay(parseElectionDateAsLocal(dateStr));
-		const todayDay = startOfLocalDay(today);
+		const todayDay = startOfElectionDay(today);
 		return electionDay < todayDay;
 	} catch {
 		return false;

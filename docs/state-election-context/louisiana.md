@@ -409,12 +409,16 @@ These are the ways Louisiana copy goes visibly wrong.
   have no school district page.
 - LaSalle Parish is spelled two ways: `lasalle-parish` and
   `la-salle-parish-school-district`.
-- Seven constable position pages sit under `district-N` paths that have no
-  location page (`bossier-parish/district-5` and `-6`,
-  `concordia-parish/district-2`, `franklin-parish/district-5`,
-  `madison-parish/district-2`, `st-landry-parish/district-8`,
-  `webster-parish/district-1`), and `la/state-commissioner-of-insurance` is a
-  position path whose parent returns 404.
+- Seven constable races are filed under a fake `district-N` place
+  (`bossier-parish/district-5` and `-6`, `concordia-parish/district-2`,
+  `franklin-parish/district-5`, `madison-parish/district-2`,
+  `st-landry-parish/district-8`, `webster-parish/district-1`). The sitemap lists
+  only their constable position pages, but each `district-N` address also loads
+  as a place page titled "Elections in District 5, Bossier Parish" and repeats
+  the parish's races (checked 3 November 2026). Same pattern as Mississippi's
+  school board districts (PR #536).
+- `la/state-commissioner-of-insurance/position/commissioner-of-securities-joint`
+  loads, but its parent `la/state-commissioner-of-insurance` returns 404.
 - Constable positions use the slug `county-high-bailiff`, though the page title
   correctly says Constable.
 

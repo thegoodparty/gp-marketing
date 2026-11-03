@@ -39,7 +39,7 @@ states cover the most pages, so they come first.
 | 24 | Massachusetts | 597 | done, reviewed 2 November 2026 |
 | 25 | Tennessee | 553 | done, reviewed 3 November 2026 |
 | 26 | Florida | 533 | done, reviewed 3 November 2026 |
-| 27 | Oregon | 481 | drafted, awaiting review |
+| 27 | Oregon | 481 | done, reviewed 3 November 2026 |
 | 28 | Mississippi | 449 | drafted, awaiting review |
 | 29 | Louisiana | 436 | drafted, awaiting review |
 | 30 | Virginia | 428 | done, reviewed 2 November 2026 |
@@ -124,7 +124,7 @@ If a legislature meets year-round, re-check in January and July.
 | North Dakota | 5 January 2027, odd years only, at most 80 days | April–May | June 2027 | verified |
 | Ohio | 4 January 2027, year-round | — | January and July | verified |
 | Oklahoma | organizes 5 January 2027, convenes 1 February 2027 | by 28 May | July 2027 | verified |
-| Oregon | odd-year long session, January | June | July 2027 | no |
+| Oregon | 19 January 2027, at most 160 days; short session 1 February 2028 | by 27 June | September 2027 and May 2028 | verified |
 | Pennsylvania | 5 January 2027, year-round | — | January and July | verified |
 | Rhode Island | January | June | July 2027 | no |
 | South Carolina | January | May | June 2027 | no |
@@ -152,9 +152,10 @@ Grouped by month. Within a month, do the states with the most pages first.
 - **June**: Iowa, Kansas, Washington, Arkansas, Georgia, Alaska, Colorado, Hawaii, Montana, North Dakota,
   South Carolina, Vermont.
 - **July**: Pennsylvania, Ohio, Michigan, Minnesota, Indiana, Oklahoma, Texas, New York, Wisconsin, Missouri, Virginia,
-  Nebraska, Louisiana, Oregon, Alabama, Arizona, Connecticut, Delaware, Maine,
+  Nebraska, Louisiana, Alabama, Arizona, Connecticut, Delaware, Maine,
   Nevada, New Hampshire, New Jersey, Rhode Island, Massachusetts, Tennessee, DC.
 - **August**: Florida (bills reach the governor in batches after the session ends).
+- **September**: Oregon (the governor has until early August to act on bills; re-check again in May 2028 after the short session).
 - **October**: Illinois (spring session bills are signed or vetoed by late August), North Carolina.
 - **November**: California.
 

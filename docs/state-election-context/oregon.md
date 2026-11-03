@@ -40,8 +40,8 @@ emergency (Or. Const. art. IV, § 28).
 
 Re-check this doc: September 2027, and again in May 2028 after the short
 session. Last researched: October 2026 (Oregon Revised Statutes 2025 edition,
-checked against the 2026 session's table of amended sections). Not yet reviewed
-by Emily.
+checked against the 2026 session's table of amended sections). Reviewed by Emily:
+3 November 2026.
 
 ## How elections work in Oregon
 

@@ -47,6 +47,7 @@ takes effect no sooner than 60 days after approval unless it says otherwise
 (Code of Ala. § 1-1-8).
 
 Re-check this doc: June 2027. Last researched: October 2026.
+Reviewed by Emily: 3 November 2026.
 
 ## How elections work in Alabama
 
@@ -112,8 +113,7 @@ unless race data shows a board race.
 *Code of Ala. §§ 16-11-2, 16-11-3; Ala. Const. 2022 §§ 104.01, 104.02 · varies by place · read in statute*
 
 **County superintendents** are appointed by the county board under the general
-law, but some counties elect theirs by local law. 37 of our 67 county pages
-carry an elected superintendent race. Take it from race data.
+law, but some counties elect theirs by local law. Take it from race data.
 
 *Code of Ala. § 16-9-1 · varies by place · read in statute*
 
@@ -222,8 +222,8 @@ how any commission is made up or elected.
 The default commission is the **probate judge as chair plus four elected
 commissioners** serving four-year terms. Local law or a court order overrides
 that in many counties, so commissions differ in size, in whether members run by
-district or countywide, and in who chairs. 17 of our county pages carry a
-separately elected commission chair. Avoid describing a county's commission
+district or countywide, and in who chairs. Some counties elect a separate
+commission chair. Avoid describing a county's commission
 beyond what race data shows.
 
 *Code of Ala. § 11-3-1(a), (c) · varies by place · read in statute*
@@ -240,7 +240,7 @@ Other elected county offices:
 - **Sheriff:** four-year term, in every county.
 - **Circuit clerk:** six-year term.
 - **Tax assessor and tax collector**, or a combined revenue commissioner where
-  local law provides one. 57 of our county pages carry a revenue commissioner.
+  local law provides one.
 - **Coroner:** four-year term, usually.
 - **County treasurer** only in counties over 56,000 where the law provides for
   one, and **constables** in some counties.

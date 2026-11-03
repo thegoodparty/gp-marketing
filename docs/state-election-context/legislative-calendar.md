@@ -44,7 +44,7 @@ states cover the most pages, so they come first.
 | 29 | Louisiana | 436 | done, reviewed 3 November 2026 |
 | 30 | Virginia | 428 | done, reviewed 2 November 2026 |
 | 31 | Montana | 401 | done, reviewed 3 November 2026 |
-| 32 | Alabama | 385 | drafted, awaiting review |
+| 32 | Alabama | 385 | done, reviewed 3 November 2026 |
 | 33 | Colorado | 365 | drafted, awaiting review |
 | 34 | South Carolina | 363 | drafted, awaiting review |
 | 35 | Idaho | 362 | drafted, awaiting review |
@@ -87,7 +87,7 @@ If a legislature meets year-round, re-check in January and July.
 
 | State | 2027 regular session | Usually ends | Re-check | Verified |
 | --- | --- | --- | --- | --- |
-| Alabama | odd-year session, organizes in January | May–June | July 2027 | no |
+| Alabama | organizes 12 January 2027, regular session 2 February 2027 | by 17 May | June 2027 | verified |
 | Alaska | January | May | June 2027 | no |
 | Arizona | January | May–June | July 2027 | no |
 | Arkansas | 11 January 2027, 60 days unless extended | March–April | June 2027 | verified |
@@ -150,9 +150,9 @@ Grouped by month. Within a month, do the states with the most pages first.
 - **May**: Kentucky, Idaho, Maryland,
   West Virginia.
 - **June**: Iowa, Kansas, Washington, Arkansas, Georgia, Alaska, Colorado, Hawaii, Montana, North Dakota,
-  South Carolina, Vermont, Mississippi.
+  South Carolina, Vermont, Mississippi, Alabama.
 - **July**: Pennsylvania, Ohio, Michigan, Minnesota, Indiana, Oklahoma, Texas, New York, Wisconsin, Missouri, Virginia,
-  Nebraska, Alabama, Arizona, Connecticut, Delaware, Maine,
+  Nebraska, Arizona, Connecticut, Delaware, Maine,
   Nevada, New Hampshire, New Jersey, Rhode Island, Massachusetts, Tennessee, DC.
 - **August**: Florida (bills reach the governor in batches after the session ends), Louisiana.
 - **September**: Oregon (the governor has until early August to act on bills; re-check again in May 2028 after the short session).

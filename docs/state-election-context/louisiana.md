@@ -38,6 +38,7 @@ session take effect on 1 August unless the bill sets another date (La. Const.
 art. III, § 19).
 
 Re-check this doc: August 2027. Last researched: October 2026.
+Reviewed by Emily: 3 November 2026.
 
 ## How elections work in Louisiana
 

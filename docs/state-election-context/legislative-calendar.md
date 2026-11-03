@@ -47,7 +47,7 @@ states cover the most pages, so they come first.
 | 32 | Alabama | 385 | done, reviewed 3 November 2026 |
 | 33 | Colorado | 365 | done, reviewed 3 November 2026 |
 | 34 | South Carolina | 363 | done, reviewed 3 November 2026 |
-| 35 | Idaho | 362 | drafted, awaiting review |
+| 35 | Idaho | 362 | done, reviewed 3 November 2026 |
 | 36 | Maine | 329 | drafted, awaiting review |
 | 37 | Arizona | 321 | drafted, awaiting review |
 | 38 | Connecticut | 312 | drafted, awaiting review |
@@ -99,7 +99,7 @@ If a legislature meets year-round, re-check in January and July.
 | Florida | 2 March 2027, at most 60 days | by 30 April | August 2027 | verified |
 | Georgia | 11 January 2027, at most 40 legislative days | late March–April | June 2027 (and November 2026, after the probate judge amendment vote) | verified |
 | Hawaii | January | May | June 2027 | no |
-| Idaho | January | March–April | May 2027 | no |
+| Idaho | 11 January 2027, no fixed length | March–April | May 2027 | verified |
 | Illinois | 13 January 2027, year-round, spring session to 31 May | — | January 2027, then October 2027 | verified |
 | Indiana | organizes 17 November 2026, reconvenes by 25 January 2027 | by 29 April | July 2027 | verified |
 | Iowa | 11 January 2027 | spring | June 2027 | verified |

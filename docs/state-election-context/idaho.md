@@ -34,6 +34,7 @@ later, unless the act declares an emergency (Idaho Code § 67-510; Idaho Const.
 art. III, § 22).
 
 Re-check this doc: May 2027. Last researched: October 2026.
+Reviewed by Emily: 3 November 2026.
 
 ## How elections work in Idaho
 

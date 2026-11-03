@@ -4,7 +4,7 @@ import { getIcon } from '../../utils/getIcon.tsx';
 import { goodPartyOrgPledgeInitialValue } from '../../../lib/goodPartyOrgPledgeDefaults.ts';
 
 export const component_goodPartyOrgPledge = {
-	title: 'GoodParty.org Pledge',
+	title: 'People First Pledge',
 	name: 'component_goodPartyOrgPledge',
 	type: 'object',
 	icon: getIcon('Heart'),
@@ -46,8 +46,8 @@ export const component_goodPartyOrgPledge = {
 				icon: getIcon('Heart'),
 				fallback: {
 					previewTitle: 'summaryInfo.field_title',
-					previewSubTitle: '*GoodParty.org Pledge',
-					title: 'GoodParty.org Pledge',
+					previewSubTitle: '*People First Pledge',
+					title: 'People First Pledge',
 				},
 			};
 			const title = resolveValue('title', component_goodPartyOrgPledge.preview.select, x);

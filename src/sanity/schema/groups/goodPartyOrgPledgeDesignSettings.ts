@@ -3,7 +3,7 @@ import { handleReplacements } from '../../utils/handleReplacements.ts';
 import { getIcon } from '../../utils/getIcon.tsx';
 
 export const goodPartyOrgPledgeDesignSettings = {
-	title: 'GoodParty.org Pledge Design Settings',
+	title: 'People First Pledge Design Settings',
 	name: 'goodPartyOrgPledgeDesignSettings',
 	type: 'object',
 	options: {

@@ -43,7 +43,7 @@ states cover the most pages, so they come first.
 | 28 | Mississippi | 449 | done, reviewed 3 November 2026 |
 | 29 | Louisiana | 436 | done, reviewed 3 November 2026 |
 | 30 | Virginia | 428 | done, reviewed 2 November 2026 |
-| 31 | Montana | 401 | drafted, awaiting review |
+| 31 | Montana | 401 | done, reviewed 3 November 2026 |
 | 32 | Alabama | 385 | drafted, awaiting review |
 | 33 | Colorado | 365 | drafted, awaiting review |
 | 34 | South Carolina | 363 | drafted, awaiting review |
@@ -113,7 +113,7 @@ If a legislature meets year-round, re-check in January and July.
 | Minnesota | 12 January 2027 | by 17 May | July 2027 | verified |
 | Mississippi | 5 January 2027, 90 days | early April | June 2027 | verified |
 | Missouri | 6 January 2027 | 30 May | July 2027 | verified |
-| Montana | odd years only, January | April–May | June 2027 | no |
+| Montana | 4 January 2027, at most 90 legislative days; none in 2028 | April–May | June 2027 | verified |
 | Nebraska | 6 January 2027, 90 legislative days | late May–early June | July 2027 | verified |
 | Nevada | odd years only, February | June | July 2027 | no |
 | New Hampshire | January | June | July 2027 | no |

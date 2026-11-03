@@ -35,6 +35,7 @@ and special session laws on passage, unless the act sets another date
 (MCA 1-2-201).
 
 Re-check this doc: June 2027. Last researched: October 2026.
+Reviewed by Emily: 3 November 2026.
 
 ## How elections work in Montana
 
@@ -194,8 +195,8 @@ six-year terms.
 
 A county may adopt another form by vote, with a commission of a different size,
 different terms and different election methods. Under the commission form,
-elected **community councils** may advise each commissioner; our Fergus County
-page has such a race.
+elected **community councils** may advise each commissioner. Take any such race
+from race data.
 
 *Mont. Const. art. XI, § 3(1); MCA 7-3-417 · varies by place · read in statute*
 
@@ -294,8 +295,8 @@ One consolidated city-county government, led by an elected **chief executive**
 and a council of commissioners elected by district. A consolidated government has
 the status of both a county and a city and replaces both. Do not describe a
 separate city of Butte with a mayor and city council alongside a county
-commission. Our data shows the same government twice (see data issues), so write
-both pages as one government.
+commission. Our data has both a county page and a city page for this one
+government (see Data issues), so write both pages as one government.
 
 *MCA 7-3-1101(1), 7-3-1103(1); Butte-Silver Bow home page · statutory · local government publication*
 
@@ -341,8 +342,8 @@ doc. Take all of it from race data.
 
 ### School district pages
 
-229 of our 401 Montana location pages are school districts: 126 elementary, 43
-high school, 59 K-12 and one other. Montana keeps elementary and high school
+More than half of our Montana location pages are school districts: elementary,
+high school and K-12. Montana keeps elementary and high school
 districts separate even in the same town, and a high school district's board is
 usually the elementary board where the high school stands, plus extra trustees
 for the outlying area. A K-12 district is an elementary district attached to a
@@ -387,6 +388,17 @@ These are the ways Montana copy goes visibly wrong.
 10. Never name an officeholder or a candidate.
 11. Avoid anything that changes within a year: who has filed, whether a race is
     contested, filing deadlines, current ballot measures.
+
+## Data issues (for the data team, not for copy)
+
+- `mt/silver-bow-county/butte-silver-bow` repeats every race on
+  `mt/silver-bow-county` and adds three city rows. One is real: the Butte city
+  judge, which appears only on the city page. The other two, "City Executive"
+  (`city-executive-mayor`) and "City Council" (`city-legislature`), duplicate
+  the consolidated government's chief executive and commission, with a June 2028
+  date and no officeholder. They should be removed upstream. Checked 3 November
+  2026. No page merge is planned: the city page is the only home of the city
+  judge race.
 
 ## Sources
 

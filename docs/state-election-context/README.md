@@ -33,7 +33,7 @@ same ground on every one of the ~48,000 location pages.
 | Minnesota | [minnesota.md](./minnesota.md) | reviewed 27 October 2026 |
 | Mississippi | [mississippi.md](./mississippi.md) | reviewed 3 November 2026 |
 | Missouri | [missouri.md](./missouri.md) | written before the review rule, not yet reviewed |
-| Montana | [montana.md](./montana.md) | draft, awaiting review |
+| Montana | [montana.md](./montana.md) | reviewed 3 November 2026 |
 | Nebraska | [nebraska.md](./nebraska.md) | reviewed 2 November 2026 |
 | Nevada | [nevada.md](./nevada.md) | draft, awaiting review |
 | New Hampshire | [new-hampshire.md](./new-hampshire.md) | draft, awaiting review |
@@ -59,7 +59,7 @@ same ground on every one of the ~48,000 location pages.
 | Wisconsin | [wisconsin.md](./wisconsin.md) | reviewed 27 October 2026 |
 | Wyoming | [wyoming.md](./wyoming.md) | draft, awaiting review |
 
-All 50 states and DC are drafted. 27 are reviewed. Each doc is a draft until Emily has reviewed it, and only a doc marked "Reviewed by Emily" should feed the generator.
+All 50 states and DC are drafted. 28 are reviewed. Each doc is a draft until Emily has reviewed it, and only a doc marked "Reviewed by Emily" should feed the generator.
 
 ## What these are, and what they are not
 

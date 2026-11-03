@@ -803,6 +803,72 @@ function dedupePlacesBySlug(places: PlaceItem[]): PlaceItem[] {
 	return out;
 }
 
+type CityTwinCandidate = { slug?: string; name?: string; mtfcc?: string; countyName?: string };
+
+/**
+ * Pairs each Census filler twin with the city it duplicates.
+ *
+ * The Census describes a city twice: the incorporated place ("Beatrice", G4110) and a
+ * county subdivision covering the same ground ("Beatrice city", G4040). Every "X city"
+ * county subdivision checked (NE, MN, ND, NY, WI, KS, MA, NJ; TIGERweb layer 22, Nov
+ * 2026) has FUNCSTAT F, a filler unit with no government of its own. election-api
+ * loads both as places and hangs a few of the city's offices on the twin, so the city
+ * showed up twice (`ne/gage-county/beatrice` and `ne/gage-county/beatrice-city`), each
+ * with part of its offices.
+ *
+ * The twin's slug carries its county (`ne/gage-county/beatrice-city`) and the city's does
+ * not (`ne/beatrice`), and MA and MI capitalize the descriptor ("Palmer Town City"). A
+ * pair needs a G4040 twin, the same state and county, a last slug segment that is the
+ * city's plus `-city`, and a name that is the city's plus " city". A real town or
+ * township ("Ithaca town", "Lansing charter township") never matches, and neither does a
+ * city named "... City" with no plain city beside it (Jersey City).
+ */
+export function pairCensusCityTwins<T extends CityTwinCandidate>(places: T[]): { twin: T; city: T }[] {
+	const key = (p: T, segment: string) =>
+		`${p.slug?.split('/')[0]?.toLowerCase()}|${normalizeName((p.countyName ?? '').replace(/\s+county$/i, ''))}|${segment}`;
+	const cities = new Map<string, T>();
+	for (const p of places) {
+		const segment = p.slug?.split('/').pop()?.toLowerCase();
+		if (p.mtfcc === CITY_MTFCC && segment) cities.set(key(p, segment), p);
+	}
+	const pairs: { twin: T; city: T }[] = [];
+	for (const twin of places) {
+		const segment = twin.slug?.split('/').pop()?.toLowerCase();
+		if (twin.mtfcc !== TOWN_MTFCC || !segment?.endsWith('-city')) continue;
+		const city = cities.get(key(twin, segment.slice(0, -'-city'.length)));
+		const baseName = /^(.+)\s+city$/i.exec(twin.name?.trim() ?? '')?.[1];
+		if (!city || !baseName || baseName !== city.name?.trim()) continue;
+		pairs.push({ twin, city });
+	}
+	return pairs;
+}
+
+/**
+ * True when a twin holds a township's offices. Those belong to a different government
+ * that election-api failed to match (Elba Township on the Elba city twin, Town of
+ * Brookfield on Brookfield's), so such a twin is left as it is rather than folded into
+ * the city.
+ */
+export function hasTownshipRace(races: { slug?: string; positionLevel?: string }[]): boolean {
+	return races.some(
+		r => r.positionLevel?.toUpperCase() === 'TOWNSHIP' || (r.slug?.split('/').pop() ?? '').toLowerCase().startsWith('township-'),
+	);
+}
+
+/**
+ * The twins among one county's places that fold into their city, each with that city.
+ * Reads each candidate twin's races, which only the ~170 counties with a twin pay for. A
+ * twin whose read fails is left unmerged, since its races cannot be checked.
+ */
+export async function getMergedCityTwins(places: PlaceItem[]): Promise<{ twin: PlaceItem; city: PlaceItem; twinData: PlaceWithFacts }[]> {
+	const pairs = await Promise.all(
+		pairCensusCityTwins(places).map(async pair => ({ ...pair, twinData: await getElectionsPagePlace({ slug: pair.twin.slug }) })),
+	);
+	return pairs.flatMap(pair =>
+		pair.twinData && !hasTownshipRace(pair.twinData.Races ?? []) ? [{ ...pair, twinData: pair.twinData }] : [],
+	);
+}
+
 export async function getCountyChildPlaces(params: { state: string; countySlug: string }): Promise<PlaceItem[]> {
 	const county = await getPlaceBySlug({
 		slug: params.countySlug,

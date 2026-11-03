@@ -154,6 +154,22 @@ Helpers: `isCityOrTownMtfcc` (city or town), `isDistrictMtfcc`, and the defensiv
 Maine) attach `G54xx` codes to municipality-like slugs, so it re-checks slug depth,
 the county-equivalent tail, and district keywords before trusting the code.
 
+#### Census "X city" twins fold into their city
+
+The Census describes many cities twice: the incorporated place ("Beatrice", G4110) and a
+county subdivision covering the same ground ("Beatrice city", G4040, FUNCSTAT F, a filler
+unit with no government). election-api loads both and hangs some of the city's offices on
+the twin, so the city used to appear twice (`ne/gage-county/beatrice` and
+`.../beatrice-city`). `pairCensusCityTwins` finds these pairs: a G4040 twin in the same state and
+county, whose last slug segment is the city's plus `-city` and whose name is the city's plus
+" city". The twin's slug carries the county (`ne/gage-county/beatrice-city`) while the city's
+does not (`ne/beatrice`), and MA and MI capitalize the descriptor ("Palmer Town City"). A merged twin's
+page 308s to its city, the city page lists the twin's offices, and the county list and
+sitemap drop the twin. The twin's position pages keep their URLs, because two different
+offices can share a position slug. A twin holding a township office (`hasTownshipRace`) is
+left alone: those offices belong to a township election-api failed to match, which is a
+data ticket, not a merge. In Nov 2026 this was 174 pairs, 27 of them left alone.
+
 ### County-equivalents
 
 Not every state calls its counties "counties". `canonicalizeCountyEquivalentName` in

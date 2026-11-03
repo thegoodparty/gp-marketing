@@ -56,7 +56,7 @@ states cover the most pages, so they come first.
 | 41 | New Hampshire | 284 | done, reviewed 3 November 2026 |
 | 42 | New Mexico | 230 | done, reviewed 3 November 2026 |
 | 43 | West Virginia | 186 | done, reviewed 3 November 2026 |
-| 44 | Maryland | 158 | drafted, awaiting review |
+| 44 | Maryland | 158 | done, reviewed 3 November 2026 |
 | 45 | Wyoming | 155 | drafted, awaiting review |
 | 46 | Alaska | 84 | drafted, awaiting review |
 | 47 | Delaware | 76 | drafted, awaiting review |
@@ -107,7 +107,7 @@ If a legislature meets year-round, re-check in January and July.
 | Kentucky | 5 January 2027, reconvenes 2 February, 30 legislative days | by 30 March | May 2027 | verified |
 | Louisiana | 12 April 2027, at most 60 calendar days | by 11 June | August 2027 | verified |
 | Maine | 2 December 2026; second session 5 January 2028 | by 16 June 2027 | July 2027 and February 2028 | verified |
-| Maryland | January | April | May 2027 | no |
+| Maryland | 13 January 2027, 90 days | by 12 April | July 2027 | verified |
 | Massachusetts | 6 January 2027, year-round | — | January and July | verified |
 | Michigan | 13 January 2027, year-round | — | January and July | verified |
 | Minnesota | 12 January 2027 | by 17 May | July 2027 | verified |
@@ -147,12 +147,12 @@ Grouped by month. Within a month, do the states with the most pages first.
   Michigan, New York, Wisconsin, New Jersey, Massachusetts and DC), to catch
   anything passed in late 2026.
 - **April**: South Dakota, Utah, Wyoming.
-- **May**: Kentucky, Idaho, Maryland, New Mexico,
+- **May**: Kentucky, Idaho, New Mexico,
   West Virginia.
 - **June**: Iowa, Kansas, Washington, Arkansas, Georgia, Alaska, Hawaii, Montana, North Dakota,
   Mississippi, Alabama.
 - **July**: Pennsylvania, Ohio, Michigan, Minnesota, Indiana, Oklahoma, Texas, New York, Wisconsin, Missouri, Virginia,
-  Nebraska, Colorado, South Carolina, Vermont, Delaware, Maine,
+  Nebraska, Colorado, South Carolina, Vermont, Maryland, Delaware, Maine,
   Nevada, New Jersey, Rhode Island, Massachusetts, Tennessee, DC.
 - **August**: Florida (bills reach the governor in batches after the session ends), Louisiana, Arizona, Connecticut, New Hampshire.
 - **September**: Oregon (the governor has until early August to act on bills; re-check again in May 2028 after the short session).

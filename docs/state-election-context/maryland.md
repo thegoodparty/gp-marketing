@@ -35,6 +35,7 @@ three-fifths (art. XVI, § 2). Most acts set a later date, often 1 October
 (`usual case`).
 
 Re-check this doc: July 2027. Last researched: October 2026.
+Reviewed by Emily: 3 November 2026.
 
 ## How elections work in Maryland
 
@@ -50,9 +51,12 @@ court clerks, registers of wills and orphans' court judges.
 
 *Md. Const. art. XVII, §§ 2, 3 · statutory · read in statute*
 
-**Watch out:** this four-year rule does not apply to elected school boards or
-to Cecil County's commissioners, and Baltimore City's own offices are on the
-presidential cycle (below).
+**Watch out:** this four-year rule does not apply to elected school boards, and
+Baltimore City's own offices are on the presidential cycle (below). The
+constitution also still exempts the Board of County Commissioners for Cecil
+County, but Cecil has since become a charter county with an elected county
+executive and council. Never describe Cecil County commissioners, and take
+Cecil's election years from race data.
 
 *Md. Const. art. XVII, § 7; Md. Code, Elec. Law § 8-201(b) · statutory · read in statute*
 

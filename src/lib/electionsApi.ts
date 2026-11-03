@@ -1058,7 +1058,9 @@ async function getCityPlacesWithRaces(params: { state: string; countySlug?: stri
 	// carousel built from the children alone can omit a city that list still shows.
 	const countyBase = normalizeName(canonicalizeCountyEquivalentName(params.state, countyNameFromSlug(params.countySlug)).baseName);
 	const sweptInCounty = swept.filter(
-		p => p.countyName && normalizeName(canonicalizeCountyEquivalentName(params.state, p.countyName).baseName) === countyBase,
+		p =>
+			knownCountySlugForCity(p.slug) === params.countySlug?.toLowerCase() ||
+			(p.countyName && normalizeName(canonicalizeCountyEquivalentName(params.state, p.countyName).baseName) === countyBase),
 	);
 	// Deduped on the city segment, not the whole slug: the same city arrives as
 	// `tn/franklin` from the state list and `tn/williamson-county/franklin` as a

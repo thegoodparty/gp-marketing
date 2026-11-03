@@ -1341,6 +1341,24 @@ describe('getFeaturedCities', () => {
 		]);
 	});
 
+	// Connecticut's cities carry a planning region and are no county's child, so only the
+	// known county places them in the carousel beside the towns.
+	test('features a Connecticut city under its known county', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=ct%2Fhartford-county'),
+				body: [{ slug: 'ct/hartford-county', name: 'Hartford County', mtfcc: 'G4020', children: [{ ...city('ct/hartford-county/avon-town', 'Avon Town', 1, 'G4040'), countyName: 'Capitol' }] }],
+			},
+			{
+				match: url => url.includes('/v1/elections/places?') && url.includes('mtfcc=G4110'),
+				body: [{ ...city('ct/hartford', 'Hartford', 5), countyName: 'Capitol' }, { ...city('ct/stamford', 'Stamford', 3), countyName: 'Western Connecticut' }],
+			},
+		]);
+
+		const result = await getFeaturedCities({ stateCode: 'CT', countySlug: 'ct/hartford-county' });
+		expect(result.map(card => card.href)).toEqual(['/elections/ct/hartford-county/hartford', '/elections/ct/hartford-county/avon-town']);
+	});
+
 	// Alcorn County, MS featured "District 5, MS" as a city: a supervisors district holding a
 	// school board seat.
 	test('never features a numbered county election district', async () => {

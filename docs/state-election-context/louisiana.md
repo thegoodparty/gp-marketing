@@ -121,17 +121,17 @@ terms. Home rule parishes set their council's terms in their charter.
 **Municipalities:** officers under the Lawrason Act (most towns and villages)
 serve four-year terms and take office on 1 July. Municipal elections are held in
 the spring, but which year depends on the municipality. A municipality may also,
-by an irrevocable plan, move its elections to the fall congressional elections,
-and has until 12 January 2027 to file a plan to move to the fall gubernatorial
-election from 2031.
+by an irrevocable plan, move its elections to the fall congressional or
+gubernatorial elections, so some municipalities will vote in the fall from 2031.
+Take the election date from race data.
 
 *La. R.S. 33:383(A); 18:402(B)(1), (C)(1), (D)(1) · varies by place · read in statute*
 
 **School boards:** parish school board members are elected at the congressional
 elections, in November of even years with a December runoff if needed, for
-four-year terms beginning 1 January. A school board could move to the fall
-gubernatorial election by filing a plan by 1 July 2026, with the first election
-in 2031, so some boards will change cycle then.
+four-year terms beginning 1 January. Some boards have planned a move to the
+fall gubernatorial election, so they will change cycle from 2031. Take the
+election date from race data.
 
 *La. R.S. 17:52(A) · usual case · read in statute*
 
@@ -212,9 +212,8 @@ Any parish may adopt a **home rule charter** by a majority vote of its residents
 whatever its size. The charter sets the government's structure, so its governing
 body is usually a **parish council** and many have an elected **parish
 president**. The legislature cannot change the structure of a charter
-government. Our data shows a parish president on 25 of the 64 parish pages; the
-rest list only the governing body. Take the body's name and the executive from
-race data.
+government. Take the body's name, and whether the parish elects a president,
+from race data.
 
 *La. Const. art. VI, §§ 5(A), (C), (E), 6, 44(1) · varies by place · read in statute*
 
@@ -245,7 +244,7 @@ primary and party labels are flat-assertable for every parish.
 
 Below the parish, the units are wards, not townships. Police jurors,
 justices of the peace and constables are elected by ward or district. Justice of
-the peace and constable races sit on our parish pages (63 and 64 of them).
+the peace and constable races sit on our parish pages.
 
 *La. R.S. 33:1224, 13:2582-2583 · statutory · read in statute*
 
@@ -281,8 +280,7 @@ All serve four-year terms.
 
 Some municipalities appoint their chief of police instead, under laws written for
 them by name or a vote of the town's residents. Never write that every Louisiana
-town elects a police chief: our data has a chief of police or marshal race on
-212 of 304 municipal pages.
+town elects a police chief. Take it from race data.
 
 *La. R.S. 33:381(B)-(C), 33:381.2 · varies by place · read in statute*
 

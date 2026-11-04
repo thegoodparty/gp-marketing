@@ -110,8 +110,12 @@ domain model, data sources, and what is and is not fixable in this repo:
   GA4. The voter guide events, their names and the GTM steps are in `docs/analytics.md`.
 - **Amplitude** — product analytics plus A/B experiments. `src/middleware.ts`
   bootstraps an Amplitude device cookie on page routes so experiments can be resolved
-  server-side. Experiment variants are also modeled as Sanity content
-  (`experiment_variant`). The client loads the plain Amplitude SDK plus the
+  server-side. Variants are resolved only on the server (`src/lib/experimentServer.ts`),
+  using the server deployment named `gp-marketing` in Amplitude Experiment
+  (`AMPLITUDE_EXPERIMENT_DEPLOYMENT_KEY`). Production reads the GoodParty.org
+  Amplitude project; Preview and Development read GoodParty Dev, so experiments on
+  preview deploys follow the Dev project's flags. Experiment variants are also
+  modeled as Sanity content (`experiment_variant`). The client loads the plain Amplitude SDK plus the
   experiment-only script — never the all-in-one `script/<key>.js` build, which
   bundles session replay capture (see `src/ui/Amplitude.tsx`). `ExperimentResolver`
   must be awaited inline on the page, never wrapped in a `<Suspense>` whose fallback
@@ -122,6 +126,11 @@ domain model, data sources, and what is and is not fixable in this repo:
   `/elections` and the `/people` profiles, on the production host only. The path and
   host gates live in `src/ui/LogRocket.tsx` (path rule in `src/lib/logrocketPaths.ts`);
   the SDK is imported on demand so it is not in the bundle for the rest of the site.
+  Only a random 5% of visits record (`src/lib/logrocketSampling.ts`), decided once per
+  tab session. The LogRocket project also has a 1,000-a-day cap that resets at midnight
+  UTC; without sampling, traffic used it all in the first hour after the reset and
+  nothing was recorded the rest of the day. Change the rate there if traffic or the
+  plan changes.
 - **Sanity revalidation webhook** — every content change in Sanity fires a webhook at
   `POST /api/revalidate`, which busts the Next.js cache tag and paths for that
   document and makes the change live without a deploy. Content can also be written

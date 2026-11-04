@@ -133,6 +133,43 @@ describe('resolvePlaceUrl: city match', () => {
 		});
 	});
 
+	// As election-api returns Connecticut (Nov 2026): cities as `ct/hartford` with a
+	// planning region, towns reached only through the county walk.
+	test('a Connecticut city lands on its own page under its known county', () => {
+		const data: ResolvePlaceData = {
+			cityAndTownPlaces: [
+				{ name: 'Hartford', slug: 'ct/hartford', countyName: 'Capitol' },
+				{ name: 'Stamford', slug: 'ct/stamford', countyName: 'Western Connecticut' },
+			],
+			countyPlaces: [{ name: 'Hartford County', slug: 'ct/hartford-county' }],
+			citySlugToCountySlug: new Map(),
+		};
+		expect(resolvePlaceUrl({ city: 'Hartford', state: 'CT' }, data)).toEqual({
+			url: '/elections/ct/hartford-county/hartford',
+			matchedLevel: 'city',
+		});
+		expect(resolvePlaceUrl({ city: 'Stamford', state: 'CT' }, data)).toEqual({
+			url: '/elections/ct/fairfield-county/stamford',
+			matchedLevel: 'city',
+		});
+	});
+
+	// Derby's town row holds its mayor and council; the city row only its registrar.
+	test('a walked town of the same name still wins over a city placed only by the known county', () => {
+		const data: ResolvePlaceData = {
+			cityAndTownPlaces: [
+				{ name: 'Derby', slug: 'ct/derby', countyName: 'Naugatuck Valley' },
+				{ name: 'Derby Town', slug: 'ct/new-haven-county/derby-town', countyName: 'New Haven County' },
+			],
+			countyPlaces: [{ name: 'New Haven County', slug: 'ct/new-haven-county' }],
+			citySlugToCountySlug: new Map([['ct/new-haven-county/derby-town', 'ct/new-haven-county']]),
+		};
+		expect(resolvePlaceUrl({ city: 'Derby', state: 'CT' }, data)).toEqual({
+			url: '/elections/ct/new-haven-county/derby-town',
+			matchedLevel: 'city',
+		});
+	});
+
 	test('falls through to state when a city match has no known county mapping', () => {
 		const data: ResolvePlaceData = {
 			cityAndTownPlaces: [{ name: 'Portland', slug: 'me/portland', countyName: 'Cumberland' }],

@@ -44,6 +44,47 @@ export function isCityOrTownMtfcc(mtfcc?: string): boolean {
 	return mtfcc === CITY_MTFCC || mtfcc === TOWN_MTFCC;
 }
 
+/**
+ * The county of each city that election-api cannot place under one.
+ *
+ * Connecticut's 21 cities come back as `ct/hartford` with a planning region for
+ * `countyName` ("Capitol", "Western Connecticut") and the state as their only parent,
+ * so neither the county name nor the county's children ever reach them. Their pages
+ * rendered, but no sitemap, county page or search led there (Nov 2026). The Census
+ * moved Connecticut to planning regions in 2022 and a region spans counties, so the
+ * region cannot stand in. The eight historical counties still frame the CT pages and
+ * each city lies in one, unchanged since county government ended in 1960. A slug that
+ * election-api does not return is never used, so an entry here cannot invent a page.
+ */
+const CITY_COUNTY_SLUGS: Readonly<Record<string, string>> = {
+	'ct/ansonia': 'ct/new-haven-county',
+	'ct/bridgeport': 'ct/fairfield-county',
+	'ct/bristol': 'ct/hartford-county',
+	'ct/danbury': 'ct/fairfield-county',
+	'ct/derby': 'ct/new-haven-county',
+	'ct/groton': 'ct/new-london-county',
+	'ct/hartford': 'ct/hartford-county',
+	'ct/meriden': 'ct/new-haven-county',
+	'ct/middletown': 'ct/middlesex-county',
+	'ct/milford': 'ct/new-haven-county',
+	'ct/naugatuck': 'ct/new-haven-county',
+	'ct/new-britain': 'ct/hartford-county',
+	'ct/new-haven': 'ct/new-haven-county',
+	'ct/new-london': 'ct/new-london-county',
+	'ct/norwalk': 'ct/fairfield-county',
+	'ct/norwich': 'ct/new-london-county',
+	'ct/shelton': 'ct/fairfield-county',
+	'ct/stamford': 'ct/fairfield-county',
+	'ct/torrington': 'ct/litchfield-county',
+	'ct/waterbury': 'ct/new-haven-county',
+	'ct/west-haven': 'ct/new-haven-county',
+};
+
+/** The county slug for a city in `CITY_COUNTY_SLUGS`, or undefined. */
+export function knownCountySlugForCity(citySlug: string | undefined): string | undefined {
+	return citySlug ? CITY_COUNTY_SLUGS[citySlug.toLowerCase()] : undefined;
+}
+
 /** MTFCC codes for school districts (elementary, secondary, unified). */
 export const DISTRICT_MTFCCS = ['G5400', 'G5410', 'G5420'] as const;
 
@@ -783,8 +824,9 @@ export async function getCityPlacesByCounty(params: { state: string; countySlug:
 	const normalizedCountyBaseName = canonicalizeCountyEquivalentName(params.state, countyName).baseName;
 	return [...allCities, ...allTowns].filter(
 		p =>
+			knownCountySlugForCity(p.slug) === params.countySlug.toLowerCase() ||
 			normalizeName(canonicalizeCountyEquivalentName(params.state, p.countyName ?? '').baseName) ===
-			normalizeName(normalizedCountyBaseName),
+				normalizeName(normalizedCountyBaseName),
 	);
 }
 
@@ -856,17 +898,62 @@ export function hasTownshipRace(races: { slug?: string; positionLevel?: string }
 }
 
 /**
+ * Pairs each Census town that shares its name with a city ("Bridgeport Town",
+ * `ct/fairfield-county/bridgeport-town`, beside "Bridgeport", `ct/bridgeport`).
+ *
+ * In Connecticut a consolidated city and its town are one government, and election-api
+ * loads both, so a few cities had a second page under the town. Pairing alone says
+ * nothing about which side holds the government, though: Derby's and Naugatuck's town
+ * rows hold the mayor and council while the city row holds only the registrar, and
+ * Groton is two real governments. So a pair folds only when the town holds nothing but
+ * its town clerk; see `holdsOnlyTownClerk`. Only a city in `CITY_COUNTY_SLUGS` pairs, with
+ * the town of its name in its county, so a New York or Wisconsin town beside a city of
+ * the same name, a government of its own, is never read or folded.
+ */
+export function pairCensusTownTwins<T extends CityTwinCandidate>(places: T[]): { twin: T; city: T }[] {
+	const cities = new Map<string, T>();
+	for (const p of places) {
+		const countySlug = knownCountySlugForCity(p.slug);
+		const segment = p.slug?.split('/').pop()?.toLowerCase();
+		if (p.mtfcc === CITY_MTFCC && countySlug && segment) cities.set(`${countySlug}/${segment}`, p);
+	}
+	const pairs: { twin: T; city: T }[] = [];
+	for (const twin of places) {
+		const slug = twin.slug?.toLowerCase();
+		if (twin.mtfcc !== TOWN_MTFCC || !slug?.endsWith('-town')) continue;
+		const city = cities.get(slug.slice(0, -'-town'.length));
+		const baseName = /^(.+)\s+town$/i.exec(twin.name?.trim() ?? '')?.[1];
+		if (!city || !baseName || baseName !== city.name?.trim()) continue;
+		pairs.push({ twin, city });
+	}
+	return pairs;
+}
+
+/**
+ * True when every race on a town twin is its town clerk
+ * (`town-clerk-as-separate-from-city-clerk-ct-only`), the one office a consolidated
+ * Connecticut town keeps apart from its city. Bridgeport's and Waterbury's town rows
+ * hold exactly that (Nov 2026).
+ */
+export function holdsOnlyTownClerk(races: { slug?: string }[]): boolean {
+	return races.length > 0 && races.every(r => (r.slug?.split('/').pop() ?? '').toLowerCase().startsWith('town-clerk'));
+}
+
+/**
  * The twins among one county's places that fold into their city, each with that city.
  * Reads each candidate twin's races, which only the ~170 counties with a twin pay for. A
  * twin whose read fails is left unmerged, since its races cannot be checked.
  */
 export async function getMergedCityTwins(places: PlaceItem[]): Promise<{ twin: PlaceItem; city: PlaceItem; twinData: PlaceWithFacts }[]> {
-	const pairs = await Promise.all(
-		pairCensusCityTwins(places).map(async pair => ({ ...pair, twinData: await getElectionsPagePlace({ slug: pair.twin.slug }) })),
-	);
-	return pairs.flatMap(pair =>
-		pair.twinData && !hasTownshipRace(pair.twinData.Races ?? []) ? [{ ...pair, twinData: pair.twinData }] : [],
-	);
+	const read = async (pair: { twin: PlaceItem; city: PlaceItem }) => ({ ...pair, twinData: await getElectionsPagePlace({ slug: pair.twin.slug }) });
+	const [cityTwins, townTwins] = await Promise.all([
+		Promise.all(pairCensusCityTwins(places).map(read)),
+		Promise.all(pairCensusTownTwins(places).map(read)),
+	]);
+	return [
+		...cityTwins.flatMap(pair => (pair.twinData && !hasTownshipRace(pair.twinData.Races ?? []) ? [{ ...pair, twinData: pair.twinData }] : [])),
+		...townTwins.flatMap(pair => (pair.twinData && holdsOnlyTownClerk(pair.twinData.Races ?? []) ? [{ ...pair, twinData: pair.twinData }] : [])),
+	];
 }
 
 /**
@@ -971,7 +1058,9 @@ async function getCityPlacesWithRaces(params: { state: string; countySlug?: stri
 	// carousel built from the children alone can omit a city that list still shows.
 	const countyBase = normalizeName(canonicalizeCountyEquivalentName(params.state, countyNameFromSlug(params.countySlug)).baseName);
 	const sweptInCounty = swept.filter(
-		p => p.countyName && normalizeName(canonicalizeCountyEquivalentName(params.state, p.countyName).baseName) === countyBase,
+		p =>
+			knownCountySlugForCity(p.slug) === params.countySlug?.toLowerCase() ||
+			(p.countyName && normalizeName(canonicalizeCountyEquivalentName(params.state, p.countyName).baseName) === countyBase),
 	);
 	// Deduped on the city segment, not the whole slug: the same city arrives as
 	// `tn/franklin` from the state list and `tn/williamson-county/franklin` as a
@@ -1156,7 +1245,12 @@ export async function getCitySlugToCountySlugMap(
 		if (countySlug) citySlugToCountySlug.set(place.slug, countySlug);
 	}
 	if (citySlugToCountySlug.size > 0 || !options?.walkCountiesWhenEmpty) return citySlugToCountySlug;
-	return walkCountiesForCitySlugMap(counties);
+	const walked = await walkCountiesForCitySlugMap(counties);
+	for (const city of cities) {
+		const countySlug = knownCountySlugForCity(city.slug);
+		if (countySlug) walked.set(city.slug, countySlug);
+	}
+	return walked;
 }
 
 /**

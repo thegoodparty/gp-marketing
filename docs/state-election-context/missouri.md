@@ -36,7 +36,7 @@ New laws usually take effect 90 days after the session adjourns, which is
 § 29).
 
 Re-check this doc: September 2027, after the veto session. Last researched:
-November 2026.
+November 2026. Reviewed by Emily: 4 November 2026.
 
 *Mo. Const. art. III, §§ 20, 20(a), 29, 31, 32 · statutory · read in statute*
 

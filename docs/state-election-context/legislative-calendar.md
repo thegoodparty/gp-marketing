@@ -14,7 +14,7 @@ states cover the most pages, so they come first.
 | # | State | Location pages | Status |
 | --- | --- | ---: | --- |
 | 1 | Illinois | 3,627 | done, reviewed 27 October 2026 |
-| 2 | Pennsylvania | 3,102 | done |
+| 2 | Pennsylvania | 3,102 | done, redone and reviewed 4 November 2026 |
 | 3 | Ohio | 2,922 | done, reviewed 27 October 2026 |
 | 4 | Minnesota | 2,511 | done, reviewed 27 October 2026 |
 | 5 | Iowa | 2,495 | done, redone and reviewed 4 November 2026 |

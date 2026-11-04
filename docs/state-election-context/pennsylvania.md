@@ -7,7 +7,8 @@ offices are actually on this ballot and how many seats, come from our own race
 data, which always beats anything inferred from here.
 
 Source lines read: `citation · how universal · how verified`. See the
-[README](./README.md) for what those mean.
+[README](./README.md) for what those mean. Every claim below has a verbatim quote
+in [`research/pennsylvania.json`](./research/pennsylvania.json).
 
 **The one thing to know first:** Pennsylvania local elections are **partisan**
 at every level, school board included, and the primary is **closed**. A voter
@@ -25,6 +26,7 @@ law with no effective date of its own takes effect 60 days after final enactment
 (1 Pa.C.S. § 1701).
 
 Re-check this doc: January and July each year. Last researched: November 2026.
+Reviewed by Emily: 4 November 2026.
 
 *Pa. Const. art. II, § 4, art. IV, § 15; 1 Pa.C.S. § 1701 · statutory · read in statute*
 

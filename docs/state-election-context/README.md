@@ -22,7 +22,7 @@ same ground on every one of the ~48,000 location pages.
 | Idaho | [idaho.md](./idaho.md) | reviewed 3 November 2026 |
 | Illinois | [illinois.md](./illinois.md) | reviewed 27 October 2026 |
 | Indiana | [indiana.md](./indiana.md) | reviewed 27 October 2026 |
-| Iowa | [iowa.md](./iowa.md) | written before the review rule, not yet reviewed |
+| Iowa | [iowa.md](./iowa.md) | redone 4 November 2026, awaiting review |
 | Kansas | [kansas.md](./kansas.md) | reviewed 28 October 2026 |
 | Kentucky | [kentucky.md](./kentucky.md) | reviewed 2 November 2026 |
 | Louisiana | [louisiana.md](./louisiana.md) | reviewed 3 November 2026 |
@@ -32,7 +32,7 @@ same ground on every one of the ~48,000 location pages.
 | Michigan | [michigan.md](./michigan.md) | reviewed 27 October 2026 |
 | Minnesota | [minnesota.md](./minnesota.md) | reviewed 27 October 2026 |
 | Mississippi | [mississippi.md](./mississippi.md) | reviewed 3 November 2026 |
-| Missouri | [missouri.md](./missouri.md) | written before the review rule, not yet reviewed |
+| Missouri | [missouri.md](./missouri.md) | redone 4 November 2026, awaiting review |
 | Montana | [montana.md](./montana.md) | reviewed 3 November 2026 |
 | Nebraska | [nebraska.md](./nebraska.md) | reviewed 2 November 2026 |
 | Nevada | [nevada.md](./nevada.md) | reviewed 3 November 2026 |
@@ -45,7 +45,7 @@ same ground on every one of the ~48,000 location pages.
 | Ohio | [ohio.md](./ohio.md) | reviewed 27 October 2026 |
 | Oklahoma | [oklahoma.md](./oklahoma.md) | reviewed 27 October 2026 |
 | Oregon | [oregon.md](./oregon.md) | reviewed 3 November 2026 |
-| Pennsylvania | [pennsylvania.md](./pennsylvania.md) | written before the review rule, not yet reviewed |
+| Pennsylvania | [pennsylvania.md](./pennsylvania.md) | redone 4 November 2026, awaiting review |
 | Rhode Island | [rhode-island.md](./rhode-island.md) | reviewed 3 November 2026 |
 | South Carolina | [south-carolina.md](./south-carolina.md) | reviewed 3 November 2026 |
 | South Dakota | [south-dakota.md](./south-dakota.md) | reviewed 2 November 2026 |

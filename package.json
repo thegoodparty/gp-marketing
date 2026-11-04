@@ -42,7 +42,6 @@
     "lint:sitemap": "next lint --file src/app/api/sitemap-index/route.ts --file src/app/sitemap.ts --file src/lib/sitemap-entries.ts"
   },
   "dependencies": {
-    "@amplitude/experiment-js-client": "^1.20.3",
     "@amplitude/experiment-node-server": "^1.13.4",
     "@csstools/postcss-global-data": "^3.1.0",
     "@deck.gl/aggregation-layers": "^9.3.6",

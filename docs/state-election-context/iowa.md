@@ -32,6 +32,7 @@ regular session usually take effect on 1 July following passage (Iowa Code
 § 3.7).
 
 Re-check this doc: July 2027. Last researched: November 2026.
+Reviewed by Emily: 4 November 2026.
 
 *Iowa Code §§ 2.1, 2.10, 3.7; Iowa Const. art. III, §§ 2, 16 · statutory · read in statute*
 

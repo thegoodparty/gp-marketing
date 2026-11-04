@@ -6,10 +6,13 @@ import {
 	getCountyChildPlaces,
 	getFeaturedCities,
 	getElectionsPagePlace,
+	getMergedCityTwins,
 	getPlacesByState,
 	getPlaceBySlug,
 	isCityOrTownMtfcc,
+	isCountyElectionDistrictPlace,
 	isDistrictMtfcc,
+	knownCountySlugForCity,
 	resolveCountySlugForPlace,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
@@ -164,12 +167,38 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		notFound();
 	}
 
+	// A slash in the place name ("Rainy Creek/Cheyenne Township") puts an extra segment in its
+	// slug, so neither slug built from the URL finds it and the page listed none of its races.
+	if (!resolvedPlaceData && cityPlace.slug) {
+		resolvedPlaceData = await getElectionsPagePlace({ slug: cityPlace.slug });
+	}
+
+	const knownCountySlug = knownCountySlugForCity(cityPlace.slug);
+	if (knownCountySlug && knownCountySlug !== countySlug) {
+		permanentRedirect(`/elections/${knownCountySlug}/${city.toLowerCase()}`);
+	}
 	if (cityPlace.countyName) {
 		const canonicalCountySlug = await resolveCountySlugForPlace(stateCode, cityPlace.countyName);
 		if (canonicalCountySlug && canonicalCountySlug.toLowerCase() !== countySlug) {
 			permanentRedirect(`/elections/${canonicalCountySlug}/${city.toLowerCase()}`);
 		}
 	}
+
+	// A numbered county election district ("District 1") is not a town; its seats are listed on
+	// the county page. See `isCountyElectionDistrictPlace`.
+	if (isCountyElectionDistrictPlace(cityPlace)) {
+		permanentRedirect(`/elections/${countySlug}`);
+	}
+
+	// A Census filler twin of a city ("Beatrice city") folds into that city's page. See
+	// `pairCensusCityTwins`; a twin holding township offices stays a page of its own.
+	const cityPlaceSlug = cityPlace.slug?.toLowerCase();
+	const mergedTwins = await getMergedCityTwins(countyChildPlaces);
+	const cityOfThisTwin = mergedTwins.find(pair => pair.twin.slug.toLowerCase() === cityPlaceSlug)?.city;
+	if (cityOfThisTwin) {
+		permanentRedirect(`/elections/${countySlug}/${cityOfThisTwin.slug.split('/').pop()}`);
+	}
+	const twinsOfThisCity = mergedTwins.filter(pair => pair.city.slug.toLowerCase() === cityPlaceSlug);
 
 	// The longest chain on the page, started once the page is known to render so
 	// the date and overlapping-office reads below run alongside it.
@@ -207,23 +236,39 @@ export default async function Page({ params }: { params: Promise<{ state: string
 		console.info('[city-facts] resolved', factsDecisionLog);
 	}
 
-	const cityRaces = (resolvedPlaceData?.Races ?? []).filter(r => {
+	const isCityLevelRace = (r: { positionLevel?: string }) => {
 		const level = r.positionLevel?.toUpperCase();
-		return level === 'LOCAL' || level === 'CITY';
-	});
+		// Township offices carry their own level, and every township page listed none of them.
+		return level === 'LOCAL' || level === 'CITY' || level === 'TOWNSHIP';
+	};
+	const cityRaces = (resolvedPlaceData?.Races ?? []).filter(isCityLevelRace);
+	const twinRaces = twinsOfThisCity.map(pair => (pair.twinData.Races ?? []).filter(isCityLevelRace));
 	// The county and state races this city's voters also vote in. The county place
 	// is already loaded here, but without its races, so this reads it again. That
 	// read and the city's own date refresh are independent, so they run side by side.
 	const [cityResolvedDates, overlapping] = await Promise.all([
-		resolvePlaceRaceElectionDates(cityRaces),
+		resolvePlaceRaceElectionDates([...cityRaces, ...twinRaces.flat()]),
 		buildOverlappingOfficeItems({ stateSlug: state.toLowerCase(), countySlug }),
 	]);
-	const { offices: cityOffices, dataYears } = buildOfficeItemsFromPlaceRaces(cityRaces, cityResolvedDates, {
+	const { offices: ownOffices, dataYears: ownDataYears } = buildOfficeItemsFromPlaceRaces(cityRaces, cityResolvedDates, {
 		type: 'City',
 		level: 'local',
 		placeName: cityPlace.name,
 		buildHref: race => buildPlaceRacePositionHref([state, county, city], race.slug),
 	});
+	// A twin's offices keep their own position pages: two different offices can share a
+	// position slug (Lawrence, MA has a "School Committee" and, on its twin, the "Greater
+	// Lawrence Technical School Board"), so moving them under the city's URL would collide.
+	const twinOfficeLists = twinsOfThisCity.map((pair, i) =>
+		buildOfficeItemsFromPlaceRaces(twinRaces[i] ?? [], cityResolvedDates, {
+			type: 'City',
+			level: 'local',
+			placeName: cityPlace.name,
+			buildHref: race => buildPlaceRacePositionHref([state, county, pair.twin.slug.split('/').pop() ?? ''], race.slug),
+		}),
+	);
+	const cityOffices = mergeOfficeItems(ownOffices, ...twinOfficeLists.map(list => list.offices));
+	const dataYears = [...new Set([...ownDataYears, ...twinOfficeLists.flatMap(list => list.dataYears)])];
 
 	const allYears = [...new Set([...dataYears, ...overlapping.dataYears])].sort((a, b) => a - b);
 	// Own level first so the opening list is populated, the union when the own

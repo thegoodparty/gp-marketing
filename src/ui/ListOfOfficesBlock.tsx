@@ -109,7 +109,7 @@ export interface OfficeItem {
 	/** The election-api race slug behind the row, which is how its candidates are counted. */
 	raceSlug?: string;
 	/**
-	 * How many candidates in the row's race have taken the GoodParty.org Pledge.
+	 * How many candidates in the row's race have taken the People First Pledge.
 	 * Only a count above zero is shown: a zero and an unknown look the same, so a
 	 * row never claims "0 independents" off a flag that may simply be unwritten.
 	 */

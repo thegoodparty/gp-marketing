@@ -70,7 +70,7 @@ export type ElectionsSidebarProps = {
 	/** "Political Affiliation" row value. */
 	politicalAffiliation?: string;
 	/**
-	 * The "Took the GoodParty.org Pledge" row (Voter Guide frames 2156:30664 /
+	 * The "Took the People First Pledge" row (Voter Guide frames 2156:30664 /
 	 * 2178:37826). Present only for someone the pledge rule affirms. `signedOn` is
 	 * the formatted date under the heading; without it the row is the heading and
 	 * the mark alone, which is every profile until election-api carries a date.
@@ -149,7 +149,7 @@ export function ElectionsSidebar(props: ElectionsSidebarProps) {
 					{props.pledge && (
 						<div className={figmaRow()} data-component='ElectionsSidebarPledge'>
 							<Text as='dt' styleType='subtitle-2' className={label()}>
-								Took the GoodParty.org Pledge
+								Took the People First Pledge
 							</Text>
 							<div className={iconValueRow()}>
 								<Logo className='h-[1.125rem] w-6 shrink-0' aria-hidden='true' />

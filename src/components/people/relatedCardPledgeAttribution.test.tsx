@@ -38,9 +38,9 @@ const DOM_GLOBALS = [
 	'MutationObserver',
 ] as const;
 
-const PLEDGED = 'Has taken the GoodParty.org Pledge';
-const NOT_PLEDGED = 'Has not taken the GoodParty.org Pledge';
-const INELIGIBLE = 'Ineligible for the GoodParty.org Pledge due to partisan affiliation';
+const PLEDGED = 'Has taken the People First Pledge';
+const NOT_PLEDGED = 'Has not taken the People First Pledge';
+const INELIGIBLE = 'Ineligible for the People First Pledge due to partisan affiliation';
 const EMPOWERED = 'Empowered by GoodParty.org';
 
 let dom: JSDOM;

@@ -1,86 +1,93 @@
 import { afterEach, beforeEach, describe, expect, spyOn, test } from 'bun:test';
 
-import {
-	__resetElectionApiAuthForTests,
-	electionApiAuthHeaders,
-	getElectionApiToken,
-	gpApiAuthHeaders,
-} from './electionApiAuth';
+import { __resetElectionApiAuthForTests, gpApiAuthHeaders } from './electionApiAuth';
+import { blockVercelOidcToken, fakeVercelOidcToken, saveVercelOidcEnv, setVercelRequestOidcToken } from '~/testing/vercelOidc';
 
-const ORIGINAL_TOKEN = process.env['ELECTION_API_M2M_TOKEN'];
+let restoreVercelOidcEnv: () => void;
 
 beforeEach(() => {
-	process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
+	restoreVercelOidcEnv = saveVercelOidcEnv();
 	__resetElectionApiAuthForTests();
 });
 
 afterEach(() => {
-	if (ORIGINAL_TOKEN === undefined) {
-		delete process.env['ELECTION_API_M2M_TOKEN'];
-	} else {
-		process.env['ELECTION_API_M2M_TOKEN'] = ORIGINAL_TOKEN;
-	}
+	restoreVercelOidcEnv();
 	__resetElectionApiAuthForTests();
 });
 
-describe('getElectionApiToken', () => {
-	test('returns the injected static token', () => {
-		expect(getElectionApiToken()).toBe('static-jwt');
+describe('Vercel OIDC token', () => {
+	test('sends the request-context OIDC token', async () => {
+		const token = fakeVercelOidcToken('request');
+		setVercelRequestOidcToken(token);
+
+		expect(await gpApiAuthHeaders()).toEqual({ Authorization: `Bearer ${token}` });
 	});
 
-	test('re-reads process.env so a rotated value is picked up without a restart', () => {
-		// There is no cache: the value is read straight from the env on every call,
-		// so rotating ELECTION_API_M2M_TOKEN (a new deploy/env update) takes effect
-		// immediately rather than being pinned by a module-level cache.
-		process.env['ELECTION_API_M2M_TOKEN'] = 'rotated-jwt';
-		expect(getElectionApiToken()).toBe('rotated-jwt');
+	test('uses VERCEL_OIDC_TOKEN when there is no request context (a build)', async () => {
+		const token = fakeVercelOidcToken('build');
+		process.env['VERCEL_OIDC_TOKEN'] = token;
+
+		expect(await gpApiAuthHeaders()).toEqual({ Authorization: `Bearer ${token}` });
 	});
 
-	test('returns null and logs exactly once when the token is unset', () => {
-		delete process.env['ELECTION_API_M2M_TOKEN'];
+	test('reads a fresh token on every call rather than caching one', async () => {
+		const first = fakeVercelOidcToken('first');
+		const second = fakeVercelOidcToken('second');
+		setVercelRequestOidcToken(first);
+		expect(await gpApiAuthHeaders()).toEqual({ Authorization: `Bearer ${first}` });
+		setVercelRequestOidcToken(second);
+		expect(await gpApiAuthHeaders()).toEqual({ Authorization: `Bearer ${second}` });
+	});
+
+	test('sends no header, without throwing, and warns once when no OIDC token can be had', async () => {
+		blockVercelOidcToken();
 		const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
 
-		expect(getElectionApiToken()).toBeNull();
-		expect(getElectionApiToken()).toBeNull();
-
-		expect(
-			errorSpy.mock.calls.filter((call) => String(call[0]).includes('ELECTION_API_M2M_TOKEN')),
-		).toHaveLength(1);
+		expect(await gpApiAuthHeaders()).toEqual({});
+		expect(await gpApiAuthHeaders()).toEqual({});
+		expect(errorSpy.mock.calls.filter(call => String(call[0]).includes('No GP_API_SERVICE_TOKEN or Vercel OIDC token'))).toHaveLength(1);
 
 		errorSpy.mockRestore();
 	});
 });
 
-describe('electionApiAuthHeaders', () => {
-	test('returns a Bearer Authorization header when the token is set', () => {
-		expect(electionApiAuthHeaders()).toEqual({ Authorization: 'Bearer static-jwt' });
+describe('GP_API_SERVICE_TOKEN', () => {
+	test('is sent on every gp-api read', async () => {
+		process.env['GP_API_SERVICE_TOKEN'] = 'github-oidc-jwt';
+
+		expect(await gpApiAuthHeaders()).toEqual({ Authorization: 'Bearer github-oidc-jwt' });
 	});
 
-	test('returns an empty object (fail-soft) when the token is unset', () => {
-		delete process.env['ELECTION_API_M2M_TOKEN'];
+	test('wins over a Vercel OIDC token in reach', async () => {
+		process.env['GP_API_SERVICE_TOKEN'] = 'github-oidc-jwt';
+		setVercelRequestOidcToken(fakeVercelOidcToken('request'));
+
+		expect(await gpApiAuthHeaders()).toEqual({ Authorization: 'Bearer github-oidc-jwt' });
+	});
+
+	test('needs no OIDC token and does not warn', async () => {
+		process.env['GP_API_SERVICE_TOKEN'] = 'github-oidc-jwt';
+		blockVercelOidcToken();
 		const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
 
-		expect(electionApiAuthHeaders()).toEqual({});
+		expect(await gpApiAuthHeaders()).toEqual({ Authorization: 'Bearer github-oidc-jwt' });
+		expect(errorSpy).not.toHaveBeenCalled();
 
 		errorSpy.mockRestore();
 	});
-});
 
-describe('gpApiAuthHeaders', () => {
-	test('sends the same static token as a Bearer header', () => {
-		expect(gpApiAuthHeaders()).toEqual({ Authorization: 'Bearer static-jwt' });
+	test('re-reads process.env on every call', async () => {
+		process.env['GP_API_SERVICE_TOKEN'] = 'first';
+		expect(await gpApiAuthHeaders()).toEqual({ Authorization: 'Bearer first' });
+		process.env['GP_API_SERVICE_TOKEN'] = 'second';
+		expect(await gpApiAuthHeaders()).toEqual({ Authorization: 'Bearer second' });
 	});
 
-	test('returns an empty object and warns once when the token is unset', () => {
-		delete process.env['ELECTION_API_M2M_TOKEN'];
-		const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
+	test('an empty value falls through to the Vercel OIDC token', async () => {
+		process.env['GP_API_SERVICE_TOKEN'] = '';
+		const token = fakeVercelOidcToken('request');
+		setVercelRequestOidcToken(token);
 
-		expect(gpApiAuthHeaders()).toEqual({});
-		expect(gpApiAuthHeaders()).toEqual({});
-		expect(
-			errorSpy.mock.calls.filter((call) => String(call[0]).includes('ELECTION_API_M2M_TOKEN')),
-		).toHaveLength(1);
-
-		errorSpy.mockRestore();
+		expect(await gpApiAuthHeaders()).toEqual({ Authorization: `Bearer ${token}` });
 	});
 });

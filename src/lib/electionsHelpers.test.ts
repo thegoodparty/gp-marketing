@@ -38,6 +38,7 @@ import {
 	resolveClaimedCustomIssueText,
 	resolveClaimedTextField,
 	resolveDefaultElectionYear,
+	resolveElectionPositionFromRaceSlug,
 	resolveLocationDefaultYear,
 	resolveLocalityName,
 	resolvePlaceRaceElectionDates,
@@ -170,6 +171,15 @@ describe('buildSubplaceRaceSlug', () => {
 describe('buildPlaceRacePositionHref', () => {
 	test('state office', () => {
 		expect(buildPlaceRacePositionHref(['mt'], 'mt/governor')).toBe('/elections/mt/position/governor');
+	});
+
+	test('office of a place whose name has a slash links under its own page', () => {
+		expect(
+			buildPlaceRacePositionHref(
+				['sd', 'pennington-county', 'cheyenne-township'],
+				'sd/pennington-county/rainy-creek/cheyenne-township/township-supervisor',
+			),
+		).toBe('/elections/sd/pennington-county/cheyenne-township/position/township-supervisor');
 	});
 
 	test('county office', () => {
@@ -1081,6 +1091,25 @@ describe('buildElectionPositionHrefFromRaceSlug', () => {
 		).toBe('/elections/wi/adams-county/adams-town/position/city-clerk');
 	});
 
+	test('routes a place whose name has a slash to its last segment, not a subplace', () => {
+		const sdMap = new Map([['sd/pennington-county/rainy-creek/cheyenne-township', 'sd/pennington-county']]);
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{ slug: 'sd/pennington-county/rainy-creek/cheyenne-township/township-supervisor', positionLevel: 'LOCAL' },
+				{ citySlugToCountySlug: sdMap, skipUnmappedCity: true },
+			),
+		).toBe('/elections/sd/pennington-county/cheyenne-township/position/township-supervisor');
+	});
+
+	test('keeps a 4-part slug that is not a known place at the subplace path', () => {
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{ slug: 'mt/gallatin-county/county-clerk/recorder/surveyor-joint', positionLevel: 'COUNTY' },
+				{ citySlugToCountySlug },
+			),
+		).toBe('/elections/mt/gallatin-county/county-clerk/recorder/position/surveyor-joint');
+	});
+
 	test('skips unmapped CITY 3-part slug when skipUnmappedCity is true', () => {
 		expect(
 			buildElectionPositionHrefFromRaceSlug(
@@ -1134,6 +1163,36 @@ describe('buildElectionPositionHrefFromRaceSlug', () => {
 				{ skipUnmappedCity: true },
 			),
 		).toBeUndefined();
+	});
+
+	test('expands COUNTY-level race keyed to a city through its county', () => {
+		const arMap = new Map([['ar/atkins', 'ar/pope-county']]);
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{ slug: 'ar/atkins/county-constable', positionLevel: 'COUNTY' },
+				{ citySlugToCountySlug: arMap, skipUnmappedCity: true },
+			),
+		).toBe('/elections/ar/pope-county/atkins/position/county-constable');
+	});
+
+	test('keeps COUNTY-level race on a county slug at the county path', () => {
+		const arMap = new Map([['ar/atkins', 'ar/pope-county']]);
+		expect(
+			buildElectionPositionHrefFromRaceSlug(
+				{ slug: 'ar/pope-county/county-constable', positionLevel: 'COUNTY' },
+				{ citySlugToCountySlug: arMap, skipUnmappedCity: true },
+			),
+		).toBe('/elections/ar/pope-county/position/county-constable');
+	});
+
+	test('expands COUNTY-level race keyed to a city in race-param mode too', () => {
+		const arMap = new Map([['ar/pea-ridge', 'ar/benton-county']]);
+		expect(
+			resolveElectionPositionFromRaceSlug(
+				{ slug: 'ar/pea-ridge/county-constable', positionLevel: 'COUNTY' },
+				{ citySlugToCountySlug: arMap, skipUnmappedCity: true },
+			)?.route,
+		).toEqual({ level: 'city', state: 'ar', county: 'benton-county', city: 'pea-ridge', positionSlug: 'county-constable' });
 	});
 });
 

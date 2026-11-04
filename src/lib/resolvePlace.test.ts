@@ -133,6 +133,43 @@ describe('resolvePlaceUrl: city match', () => {
 		});
 	});
 
+	// As election-api returns Connecticut (Nov 2026): cities as `ct/hartford` with a
+	// planning region, towns reached only through the county walk.
+	test('a Connecticut city lands on its own page under its known county', () => {
+		const data: ResolvePlaceData = {
+			cityAndTownPlaces: [
+				{ name: 'Hartford', slug: 'ct/hartford', countyName: 'Capitol' },
+				{ name: 'Stamford', slug: 'ct/stamford', countyName: 'Western Connecticut' },
+			],
+			countyPlaces: [{ name: 'Hartford County', slug: 'ct/hartford-county' }],
+			citySlugToCountySlug: new Map(),
+		};
+		expect(resolvePlaceUrl({ city: 'Hartford', state: 'CT' }, data)).toEqual({
+			url: '/elections/ct/hartford-county/hartford',
+			matchedLevel: 'city',
+		});
+		expect(resolvePlaceUrl({ city: 'Stamford', state: 'CT' }, data)).toEqual({
+			url: '/elections/ct/fairfield-county/stamford',
+			matchedLevel: 'city',
+		});
+	});
+
+	// Derby's town row holds its mayor and council; the city row only its registrar.
+	test('a walked town of the same name still wins over a city placed only by the known county', () => {
+		const data: ResolvePlaceData = {
+			cityAndTownPlaces: [
+				{ name: 'Derby', slug: 'ct/derby', countyName: 'Naugatuck Valley' },
+				{ name: 'Derby Town', slug: 'ct/new-haven-county/derby-town', countyName: 'New Haven County' },
+			],
+			countyPlaces: [{ name: 'New Haven County', slug: 'ct/new-haven-county' }],
+			citySlugToCountySlug: new Map([['ct/new-haven-county/derby-town', 'ct/new-haven-county']]),
+		};
+		expect(resolvePlaceUrl({ city: 'Derby', state: 'CT' }, data)).toEqual({
+			url: '/elections/ct/new-haven-county/derby-town',
+			matchedLevel: 'city',
+		});
+	});
+
 	test('falls through to state when a city match has no known county mapping', () => {
 		const data: ResolvePlaceData = {
 			cityAndTownPlaces: [{ name: 'Portland', slug: 'me/portland', countyName: 'Cumberland' }],
@@ -183,6 +220,51 @@ describe('resolvePlaceUrl: county match', () => {
 		});
 	});
 
+	test('a consolidated city with no page of its own goes to its county', () => {
+		// Emily, 2026-10-27: picking "Indianapolis, IN" landed on /elections/in.
+		const data: ResolvePlaceData = {
+			cityAndTownPlaces: [{ name: 'Lawrence', slug: 'in/lawrence', countyName: 'Marion' }],
+			countyPlaces: [
+				{ name: 'Marion County', slug: 'in/marion-county' },
+				{ name: 'Hamilton County', slug: 'in/hamilton-county' },
+			],
+			citySlugToCountySlug: new Map([['in/lawrence', 'in/marion-county']]),
+		};
+		expect(resolvePlaceUrl({ city: 'Indianapolis', state: 'IN' }, data)).toEqual({
+			url: '/elections/in/marion-county',
+			matchedLevel: 'county',
+		});
+		expect(resolvePlaceUrl({ city: 'Lawrence', state: 'IN' }, data)).toEqual({
+			url: '/elections/in/marion-county/lawrence',
+			matchedLevel: 'city',
+		});
+	});
+
+	test('a consolidated city reaches its own county, not a different county named after it', () => {
+		const data: ResolvePlaceData = {
+			cityAndTownPlaces: [],
+			countyPlaces: [
+				{ name: 'Macon County', slug: 'ga/macon-county' },
+				{ name: 'Bibb County', slug: 'ga/bibb-county' },
+			],
+			citySlugToCountySlug: new Map(),
+		};
+		expect(resolvePlaceUrl({ city: 'Macon', state: 'GA' }, data)).toEqual({ url: '/elections/ga/bibb-county', matchedLevel: 'county' });
+		expect(resolvePlaceUrl({ county: 'Macon County', state: 'GA' }, data)).toEqual({
+			url: '/elections/ga/macon-county',
+			matchedLevel: 'county',
+		});
+	});
+
+	test('a consolidated city name only maps within its own state', () => {
+		const data: ResolvePlaceData = {
+			cityAndTownPlaces: [],
+			countyPlaces: [{ name: 'Fayette County', slug: 'oh/fayette-county' }],
+			citySlugToCountySlug: new Map(),
+		};
+		expect(resolvePlaceUrl({ city: 'Lexington', state: 'OH' }, data)).toEqual({ url: '/elections/oh', matchedLevel: 'state' });
+	});
+
 	test('falls back to the city text as a county query when no county param is given', () => {
 		const data: ResolvePlaceData = { ...guilfordCounty, cityAndTownPlaces: [] };
 		expect(resolvePlaceUrl({ city: 'Guilford County', state: 'NC' }, data)).toEqual({
@@ -220,10 +302,9 @@ describe('resolvePlace', () => {
 	const originalFetch = globalThis.fetch;
 
 	beforeEach(() => {
-		// Fail-soft path: unset the static token so election-api reads go out
-		// unauthenticated (these tests don't assert on auth headers).
-		delete process.env['ELECTION_API_M2M_TOKEN'];
-		__resetElectionApiAuthForTests({ warnedMissingToken: true });
+		// Fail-soft path: no credential, so gp-api reads go out unauthenticated
+		// (these tests don't assert on auth headers).
+		__resetElectionApiAuthForTests({ warnedNoToken: true });
 	});
 
 	afterEach(() => {

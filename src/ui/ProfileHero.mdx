@@ -9,7 +9,7 @@ import * as ProfileHeroStories from './ProfileHero.stories';
 
 ## Overview
 
-The ProfileHero component is the header of a person's profile: persona tag, name, office line, a short intro paragraph about the voter guide, and a pledge callout that states whether the person took the GoodParty.org Pledge, with a "Read the full pledge" link that opens the pledge pop-up. The portrait straddles the dark band and hangs into the content below.
+The ProfileHero component is the header of a person's profile: persona tag, name, office line, a short intro paragraph about the voter guide, and a pledge callout that states whether the person took the People First Pledge, with a "Read the full pledge" link that opens the pledge pop-up. The portrait straddles the dark band and hangs into the content below.
 
 The intro and the callout were added after design feedback on the Voter Guide frames (Emily, 2026-10-06); before that the hero carried a one-line pledge status under the office. The legacy `/candidate` pages still render the older framing: no intro, no callout, and the "Empowered by GoodParty.org" line.
 
@@ -79,9 +79,9 @@ What the hero says about the person. Overrides `isEmpowered` when passed.
 
 The three pledge values render the **pledge callout**: a bordered box under the intro with one sentence and the "Read the full pledge" pop-up link. The `/people` person profiles pass one of them; `personSectionOverrides.pledgeAttribution` decides which from the pledge flag and party evidence, and `pledgeAttributionCopy.test.tsx` pins the wording:
 
-- `pledged` → "This candidate took the GoodParty.org Pledge, promising to serve people first, independent of both major parties and big-money interests." (with the heart-and-star mark beside it)
-- `notPledged` → "This candidate has not yet taken the GoodParty.org Pledge to serve people first, independent of both major parties and big-money interests."
-- `pledgeIneligible` → "This candidate is ineligible for the GoodParty.org Pledge due to partisan affiliation."
+- `pledged` → "This candidate took the People First Pledge, promising to serve people first, independent of both major parties and big-money interests." (with the heart-and-star mark beside it)
+- `notPledged` → "This candidate has not yet taken the People First Pledge to serve people first, independent of both major parties and big-money interests."
+- `pledgeIneligible` → "This candidate is ineligible for the People First Pledge due to partisan affiliation."
 
 `empowered` renders the legacy "Empowered by GoodParty.org" line (the `/candidate` framing); `none` renders nothing.
 
@@ -143,7 +143,7 @@ When a profile image is provided (`profileImageUrl` or `profileImage`):
 
 ## Pledge callout
 
-An 8px-radius box with a hairline border and a faint fill over the band (midnight/200 line, midnight/50 at 10%). The heart-and-star mark sits on the left only when the person took the pledge; on the phone it sits above the sentence. "GoodParty.org Pledge" is set in bold inside the sentence, and "Read the full pledge" is a button that opens `PledgeModal`, the same pop-up the featured candidates and position pages use, because there is no pledge page on the site. Text color adapts to the background variant (white on midnight, dark on cream).
+An 8px-radius box with a hairline border and a faint fill over the band (midnight/200 line, midnight/50 at 10%). The heart-and-star mark sits on the left only when the person took the pledge; on the phone it sits above the sentence. "People First Pledge" is set in bold inside the sentence, and "Read the full pledge" is a button that opens `PledgeModal`, the same pop-up the featured candidates and position pages use, because there is no pledge page on the site. Text color adapts to the background variant (white on midnight, dark on cream).
 
 ## Image Fallback
 

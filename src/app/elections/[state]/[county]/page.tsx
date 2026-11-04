@@ -4,9 +4,12 @@ import { notFound, redirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	getCountyChildPlaces,
+	getCountyElectionDistricts,
 	getFeaturedCities,
 	getElectionsPagePlace,
+	getMergedCityTwins,
 	getPlacesByState,
+	isCountyElectionDistrictPlace,
 	isDistrictMtfcc,
 	TOWN_MTFCC,
 } from '~/lib/electionsApi';
@@ -61,9 +64,15 @@ export default async function Page({
 		? canonicalizeCountyEquivalentName(stateCode, countyPlace.name)
 		: null;
 
-	const cityPlaces = isDistrict
+	const countyChildPlaces = isDistrict
 		? []
 		: await getCountyChildPlaces({ state: stateCode, countySlug: fullSlug });
+	// A Census filler twin ("Beatrice city") redirects to its city, so it is not listed
+	// as a second city of the same name. See `pairCensusCityTwins`.
+	const mergedTwinSlugs = new Set((await getMergedCityTwins(countyChildPlaces)).map(pair => pair.twin.slug.toLowerCase()));
+	// A numbered election district ("District 1") is not a town either: its seats are listed
+	// with the county's offices below. See `isCountyElectionDistrictPlace`.
+	const cityPlaces = countyChildPlaces.filter(c => !mergedTwinSlugs.has(c.slug?.toLowerCase() ?? '') && !isCountyElectionDistrictPlace(c));
 
 	if (!countyPlace && !isDistrict) {
 		await redirectCityPlaceToFourLevelUrl(placeData, stateCode, fullSlug);
@@ -105,18 +114,25 @@ export default async function Page({
 		const level = r.positionLevel?.toUpperCase();
 		return level === 'COUNTY' || level === 'LOCAL';
 	});
+	const electionDistricts = await getCountyElectionDistricts(countyChildPlaces);
+	const districtRaces = electionDistricts.map(({ districtData }) =>
+		(districtData.Races ?? []).filter(r => {
+			const level = r.positionLevel?.toUpperCase();
+			return level !== 'STATE' && level !== 'FEDERAL';
+		}),
+	);
 	// The state races this place's voters also vote in, for the Level dropdown.
 	// A district reached on this route has no county in its path (the slug is the
 	// district itself), so it offers Local and State but not County. Its date
 	// refresh and this place's own are independent, so they run side by side.
 	const [resolvedDates, overlapping] = await Promise.all([
-		resolvePlaceRaceElectionDates(countyRaces),
+		resolvePlaceRaceElectionDates([...countyRaces, ...districtRaces.flat()]),
 		buildOverlappingOfficeItems({ stateSlug: state.toLowerCase() }),
 	]);
 	const officeType = isDistrict ? 'District' : 'County';
 	// A district page is a local ballot, so it opens on Local; a county page on County.
 	const ownLevel = isDistrict ? 'local' : 'county';
-	const { offices: countyOffices, dataYears } = buildOfficeItemsFromPlaceRaces(
+	const { offices: ownOffices, dataYears: ownDataYears } = buildOfficeItemsFromPlaceRaces(
 		countyRaces,
 		resolvedDates,
 		{
@@ -126,6 +142,19 @@ export default async function Page({
 			buildHref: race => buildPlaceRacePositionHref([state, county], race.slug),
 		},
 	);
+	// Each district seat keeps its position page under the district's URL segment, and its
+	// row says which district, since every district holds the same office ("School Board").
+	const districtOfficeLists = electionDistricts.map(({ district }, i) => {
+		const list = buildOfficeItemsFromPlaceRaces(districtRaces[i] ?? [], resolvedDates, {
+			type: officeType,
+			level: ownLevel,
+			placeName: countyPlace?.name ?? placeData?.name,
+			buildHref: race => buildPlaceRacePositionHref([state, county, district.slug.split('/').pop() ?? ''], race.slug),
+		});
+		return { ...list, offices: list.offices.map(o => ({ ...o, position: `${o.position}, ${displayPlaceName(district.name)}` })) };
+	});
+	const countyOffices = mergeOfficeItems(ownOffices, ...districtOfficeLists.map(list => list.offices));
+	const dataYears = [...new Set([...ownDataYears, ...districtOfficeLists.flatMap(list => list.dataYears)])];
 
 	const allYears = [...new Set([...dataYears, ...overlapping.dataYears])].sort((a, b) => a - b);
 	/**
@@ -203,7 +232,7 @@ export async function generateMetadata({
 	]);
 	const countyPlace = counties.find(c => c.slug.toLowerCase() === fullSlug);
 	const isDistrict = placeData != null && isDistrictMtfcc(placeData.mtfcc);
-	const hasCities = cityPlaces.length > 0;
+	const hasCities = cityPlaces.some(c => !isCountyElectionDistrictPlace(c));
 	const normalizedCounty = countyPlace
 		? canonicalizeCountyEquivalentName(stateCode, countyPlace.name)
 		: null;

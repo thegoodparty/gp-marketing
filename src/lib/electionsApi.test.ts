@@ -1,8 +1,11 @@
 import { afterEach, beforeEach, describe, expect, spyOn, test } from 'bun:test';
 import type { PlaceItem } from '~/types/elections';
 import { __resetElectionApiAuthForTests } from './electionApiAuth';
+import { lastCacheCall, resetNextCacheMock } from '~/testing/nextCacheMock';
+import { blockVercelOidcToken, fakeVercelOidcToken, saveVercelOidcEnv, setVercelRequestOidcToken } from '~/testing/vercelOidc';
 import {
 	ELECTION_PAGE_SIZE,
+	findCampaignByRace,
 	getCitySlugToCountySlugMap,
 	getCountyChildPlaces,
 	getDistrictNames,
@@ -12,12 +15,21 @@ import {
 	getPersonMergeSurvivorChain,
 	getPersonMergeSurvivorId,
 	getPersonsByIds,
+	getPersonByPersonId,
 	getCandidacies,
 	getPublicPersonProfileStatus,
 	getPublishedPersonProfileIds,
 	getRaceBySlug,
 	getRemovedPersonIds,
+	getVoterDensityForDistrict,
+	getCountyElectionDistricts,
+	hasTownshipRace,
+	holdsOnlyTownClerk,
+	isCountyElectionDistrictPlace,
 	isStateIndexDistrictPlace,
+	knownCountySlugForCity,
+	pairCensusCityTwins,
+	pairCensusTownTwins,
 	resolveCountySlugForCitySlug,
 	resolveCountySlugForPlace,
 	resolveRaceElectionHrefs,
@@ -30,7 +42,9 @@ type FetchMockResponse = {
 };
 
 const originalFetch = globalThis.fetch;
-const ORIGINAL_M2M_TOKEN = process.env['ELECTION_API_M2M_TOKEN'];
+const ORIGINAL_RUNTIME = process.env['NEXT_RUNTIME'];
+
+let restoreVercelOidcEnv: () => void;
 
 function withFetchMock(responses: FetchMockResponse[]) {
 	globalThis.fetch = (async (input: RequestInfo | URL) => {
@@ -51,20 +65,23 @@ function slugs(items: PlaceItem[]): string[] {
 }
 
 beforeEach(() => {
-	// Fail-soft path: unset the static token so election-api reads go out
-	// unauthenticated (these tests don't assert on auth headers).
-	delete process.env['ELECTION_API_M2M_TOKEN'];
+	// Fail-soft path: no credential, so gp-api reads go out unauthenticated
+	// (these tests don't assert on auth headers).
+	restoreVercelOidcEnv = saveVercelOidcEnv();
+	blockVercelOidcToken();
 	// Skip the warn-once log — these tests intentionally exercise the fail-soft path.
-	__resetElectionApiAuthForTests({ warnedMissingToken: true });
+	__resetElectionApiAuthForTests({ warnedNoToken: true });
 	globalThis.fetch = originalFetch;
+	resetNextCacheMock();
 });
 
 afterEach(() => {
-	if (ORIGINAL_M2M_TOKEN === undefined) {
-		delete process.env['ELECTION_API_M2M_TOKEN'];
+	if (ORIGINAL_RUNTIME === undefined) {
+		delete process.env['NEXT_RUNTIME'];
 	} else {
-		process.env['ELECTION_API_M2M_TOKEN'] = ORIGINAL_M2M_TOKEN;
+		process.env['NEXT_RUNTIME'] = ORIGINAL_RUNTIME;
 	}
+	restoreVercelOidcEnv();
 	__resetElectionApiAuthForTests();
 	globalThis.fetch = originalFetch;
 });
@@ -197,6 +214,35 @@ describe('getCountyChildPlaces', () => {
 
 		const result = await getCountyChildPlaces({ state: 'CT', countySlug: 'ct/hartford-county' });
 		expect(slugs(result)).toEqual(['ct/hartford-county/avon-town', 'ct/hartford']);
+	});
+
+	// As election-api returns them (Nov 2026): the county's children are only its towns,
+	// and the cities carry a planning region, so only the known county places them.
+	test('lists a Connecticut city that is no county child under its known county', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=ct%2Ffairfield-county'),
+				body: [
+					{
+						slug: 'ct/fairfield-county',
+						name: 'Fairfield County',
+						mtfcc: 'G4020',
+						children: [{ slug: 'ct/fairfield-county/greenwich-town', name: 'Greenwich Town', mtfcc: 'G4040', countyName: 'Western Connecticut' }],
+					},
+				],
+			},
+			{
+				match: url => url.includes('/v1/elections/places?') && url.includes('state=CT') && url.includes('mtfcc=G4110'),
+				body: [
+					{ slug: 'ct/stamford', name: 'Stamford', mtfcc: 'G4110', countyName: 'Western Connecticut' },
+					{ slug: 'ct/danbury', name: 'Danbury', mtfcc: 'G4110', countyName: 'Western Connecticut' },
+					{ slug: 'ct/hartford', name: 'Hartford', mtfcc: 'G4110', countyName: 'Capitol' },
+				],
+			},
+		]);
+
+		const result = await getCountyChildPlaces({ state: 'CT', countySlug: 'ct/fairfield-county' });
+		expect(slugs(result)).toEqual(['ct/fairfield-county/greenwich-town', 'ct/stamford', 'ct/danbury']);
 	});
 
 	test('falls back to countyName city matching when hierarchy children are empty', async () => {
@@ -431,6 +477,24 @@ describe('getCitySlugToCountySlugMap with walkCountiesWhenEmpty', () => {
 
 		expect(map.get('ct/stamford')).toBe('ct/fairfield-county');
 		expect(map.get('ct/greenwich-town')).toBe('ct/fairfield-county');
+	});
+
+	test('places a Connecticut city the walk cannot reach under its known county', async () => {
+		withFetchMock([
+			...CT_EMPTY_SWEEP,
+			{
+				match: url => url.includes('/v1/elections/places?') && url.includes('state=CT') && url.includes('mtfcc=G4110'),
+				body: [
+					{ slug: 'ct/norwalk', name: 'Norwalk', mtfcc: 'G4110', state: 'CT', countyName: 'Western Connecticut' },
+					{ slug: 'ct/nowhere', name: 'Nowhere', mtfcc: 'G4110', state: 'CT', countyName: 'Western Connecticut' },
+				],
+			},
+		]);
+
+		const map = await getCitySlugToCountySlugMap('CT', { walkCountiesWhenEmpty: true });
+
+		expect(map.get('ct/norwalk')).toBe('ct/fairfield-county');
+		expect(map.has('ct/nowhere')).toBe(false);
 	});
 
 	/** Only municipalities: a school district is not a place the city slot can hold. */
@@ -936,7 +1000,7 @@ describe('getRemovedPersonIds', () => {
 	});
 });
 
-describe('gp-api person-profile reads carry the M2M token', () => {
+describe('gp-api person-profile reads carry the service credential', () => {
 	const PERSON_ID = 'ab12cd34-0000-0000-0000-000000000001';
 
 	function captureFetch(status: number, body: unknown): Array<{ url: string; init?: RequestInit }> {
@@ -951,7 +1015,7 @@ describe('gp-api person-profile reads carry the M2M token', () => {
 	const authorizationOf = (init?: RequestInit) => new Headers(init?.headers).get('authorization');
 
 	test('the render gate, the removal list, and the published list all send the bearer', async () => {
-		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
+		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
 		const calls = captureFetch(200, []);
 
 		await getPublicPersonProfileStatus(PERSON_ID);
@@ -963,30 +1027,63 @@ describe('gp-api person-profile reads carry the M2M token', () => {
 			'/v1/public-person-profiles/unlisted',
 			'/v1/public-person-profiles/published',
 		]);
-		for (const call of calls) expect(authorizationOf(call.init)).toBe('Bearer static-jwt');
+		for (const call of calls) expect(authorizationOf(call.init)).toBe('Bearer service-token');
 	});
 
-	test('the render gate keeps its per-person cache tag alongside the header', async () => {
-		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
-		const calls = captureFetch(404, {});
+	// The cache lives in a URL-keyed unstable_cache, not the fetch, so the header
+	// never enters the key; the fetch itself is no-store.
+	test('the render gate caches by URL with its per-person tag, and the fetch stays out of the Next fetch cache', async () => {
+		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
+		process.env['NEXT_RUNTIME'] = 'nodejs';
+		const calls = captureFetch(200, {});
 
 		await getPublicPersonProfileStatus(PERSON_ID);
 
-		expect((calls[0]?.init as { next?: { tags?: string[] } }).next?.tags).toEqual([`person:${PERSON_ID}`]);
+		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url, '3600', `person:${PERSON_ID}`]);
+		expect(lastCacheCall.options).toEqual({ revalidate: 3600, tags: [`person:${PERSON_ID}`] });
+		expect(calls[0]?.init?.cache).toBe('no-store');
+		expect((calls[0]?.init as { next?: unknown }).next).toBeUndefined();
 	});
 
-	test('the removal list keeps its removals cache tag alongside the header', async () => {
-		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
+	test('the removal list caches by URL with its removals tag and 5-minute revalidate', async () => {
+		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
+		process.env['NEXT_RUNTIME'] = 'nodejs';
 		const calls = captureFetch(200, []);
 
 		await getRemovedPersonIds();
 
-		expect((calls[0]?.init as { next?: { tags?: string[] } }).next?.tags).toEqual(['people-removals']);
+		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url, '300', 'people-removals']);
+		expect(lastCacheCall.options).toEqual({ revalidate: 300, tags: ['people-removals'] });
+	});
+
+	test('the published list caches by URL with a 5-minute revalidate', async () => {
+		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
+		process.env['NEXT_RUNTIME'] = 'nodejs';
+		const calls = captureFetch(200, []);
+
+		await getPublishedPersonProfileIds();
+
+		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url, '300']);
+		expect(lastCacheCall.options).toEqual({ revalidate: 300 });
+	});
+
+	test('a 410 from the render gate is gone and a 404 is absent', async () => {
+		captureFetch(410, {});
+		expect(await getPublicPersonProfileStatus(PERSON_ID)).toEqual({ status: 'gone' });
+		captureFetch(404, {});
+		expect(await getPublicPersonProfileStatus(PERSON_ID)).toEqual({ status: 'absent' });
+	});
+
+	test('the render gate maps removed and unpublished bodies', async () => {
+		captureFetch(200, { removed: true });
+		expect(await getPublicPersonProfileStatus(PERSON_ID)).toEqual({ status: 'removed' });
+		captureFetch(200, { unpublished: true });
+		expect(await getPublicPersonProfileStatus(PERSON_ID)).toEqual({ status: 'unpublished' });
 	});
 
 	for (const status of [401, 403]) {
 		test(`a ${status} from the render gate fails closed to removed, without retrying`, async () => {
-			process.env['ELECTION_API_M2M_TOKEN'] = 'expired-jwt';
+			process.env['GP_API_SERVICE_TOKEN'] = 'expired-token';
 			const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
 			const calls = captureFetch(status, { message: 'Unauthorized' });
 
@@ -1023,8 +1120,88 @@ describe('gp-api person-profile reads carry the M2M token', () => {
 		await getPublishedPersonProfileIds();
 
 		for (const call of calls) expect(authorizationOf(call.init)).toBeNull();
-		expect(errorSpy.mock.calls.filter(call => String(call[0]).includes('ELECTION_API_M2M_TOKEN is not set'))).toHaveLength(1);
+		expect(errorSpy.mock.calls.filter(call => String(call[0]).includes('No GP_API_SERVICE_TOKEN or Vercel OIDC token'))).toHaveLength(1);
 		errorSpy.mockRestore();
+	});
+});
+
+describe('gp-api voter-density and public-campaigns reads carry the service credential', () => {
+	const PERSON_ID = 'ab12cd34-0000-0000-0000-000000000002';
+	const CAMPAIGN_PARAMS = { raceId: 'race-1', firstName: 'Ada', lastName: 'Lovelace' };
+
+	function captureFetch(status: number, body: unknown): Array<{ url: string; init?: RequestInit }> {
+		const calls: Array<{ url: string; init?: RequestInit }> = [];
+		globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+			calls.push({ url: String(input), init });
+			return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
+		}) as typeof fetch;
+		return calls;
+	}
+
+	const authorizationOf = (init?: RequestInit) => new Headers(init?.headers).get('authorization');
+
+	test('voter-density and public-campaigns both send the bearer', async () => {
+		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
+		const calls = captureFetch(200, {});
+
+		await getVoterDensityForDistrict(PERSON_ID);
+		await findCampaignByRace(CAMPAIGN_PARAMS);
+
+		expect(calls.map(c => new URL(c.url).pathname)).toEqual(['/v1/public-person-profiles/voter-density', '/v1/public-campaigns']);
+		for (const call of calls) expect(authorizationOf(call.init)).toBe('Bearer service-token');
+	});
+
+	test('voter-density caches by URL with its per-person tag and 1-hour revalidate', async () => {
+		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
+		process.env['NEXT_RUNTIME'] = 'nodejs';
+		const calls = captureFetch(404, {});
+
+		expect(await getVoterDensityForDistrict(PERSON_ID)).toBeNull();
+		expect(calls).toHaveLength(1);
+		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url, '3600', `person:${PERSON_ID}`]);
+		expect(lastCacheCall.options).toEqual({ revalidate: 3600, tags: [`person:${PERSON_ID}`] });
+	});
+
+	test('public-campaigns sets no revalidate, so Next does not cache it at runtime', async () => {
+		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
+		const calls = captureFetch(200, {});
+
+		await findCampaignByRace(CAMPAIGN_PARAMS);
+
+		expect((calls[0]?.init as { next?: unknown }).next).toBeUndefined();
+	});
+
+	test('voter-density retries a 5xx', async () => {
+		const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
+		const calls = captureFetch(503, {});
+
+		expect(await getVoterDensityForDistrict(PERSON_ID)).toBeNull();
+		expect(calls).toHaveLength(3);
+		errorSpy.mockRestore();
+	}, 10_000);
+
+	for (const status of [401, 403]) {
+		test(`a ${status} from voter-density or public-campaigns logs an auth failure and resolves to null, without retrying`, async () => {
+			process.env['GP_API_SERVICE_TOKEN'] = 'expired-token';
+			const errorSpy = spyOn(console, 'error').mockImplementation(() => undefined);
+			const calls = captureFetch(status, { message: 'Unauthorized' });
+
+			expect(await getVoterDensityForDistrict(PERSON_ID)).toBeNull();
+			expect(await findCampaignByRace(CAMPAIGN_PARAMS)).toBeNull();
+			expect(calls).toHaveLength(2);
+			expect(errorSpy.mock.calls.filter(call => String(call[0]).includes(`gp-api auth failure ${status}`))).toHaveLength(2);
+			errorSpy.mockRestore();
+		});
+	}
+
+	test('with no token, sends no Authorization header', async () => {
+		const calls = captureFetch(200, {});
+
+		await getVoterDensityForDistrict(PERSON_ID);
+		await findCampaignByRace(CAMPAIGN_PARAMS);
+
+		expect(calls).toHaveLength(2);
+		for (const call of calls) expect(authorizationOf(call.init)).toBeNull();
 	});
 });
 
@@ -1162,6 +1339,45 @@ describe('getFeaturedCities', () => {
 			{ name: 'Nashville', stateAbbreviation: 'TN', openElectionsCount: 4, href: '/elections/tn/davidson-county/nashville', kind: 'city' },
 			{ name: 'Belle Meade', stateAbbreviation: 'TN', openElectionsCount: 1, href: '/elections/tn/davidson-county/belle-meade', kind: 'city' },
 		]);
+	});
+
+	// Connecticut's cities carry a planning region and are no county's child, so only the
+	// known county places them in the carousel beside the towns.
+	test('features a Connecticut city under its known county', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=ct%2Fhartford-county'),
+				body: [{ slug: 'ct/hartford-county', name: 'Hartford County', mtfcc: 'G4020', children: [{ ...city('ct/hartford-county/avon-town', 'Avon Town', 1, 'G4040'), countyName: 'Capitol' }] }],
+			},
+			{
+				match: url => url.includes('/v1/elections/places?') && url.includes('mtfcc=G4110'),
+				body: [{ ...city('ct/hartford', 'Hartford', 5), countyName: 'Capitol' }, { ...city('ct/stamford', 'Stamford', 3), countyName: 'Western Connecticut' }],
+			},
+		]);
+
+		const result = await getFeaturedCities({ stateCode: 'CT', countySlug: 'ct/hartford-county' });
+		expect(result.map(card => card.href)).toEqual(['/elections/ct/hartford-county/hartford', '/elections/ct/hartford-county/avon-town']);
+	});
+
+	// Alcorn County, MS featured "District 5, MS" as a city: a supervisors district holding a
+	// school board seat.
+	test('never features a numbered county election district', async () => {
+		withFetchMock([
+			{
+				match: url => url.includes('/v1/elections/places?') && url.includes('slug=tn%2Fdavidson-county'),
+				body: [
+					{
+						slug: 'tn/davidson-county',
+						name: 'Davidson County',
+						mtfcc: 'G4020',
+						children: [city('tn/davidson-county/district-5', 'District 5', 6, 'G4040'), city('tn/davidson-county/nashville', 'Nashville', 4)],
+					},
+				],
+			},
+		]);
+
+		const result = await getFeaturedCities({ stateCode: 'TN', countySlug: 'tn/davidson-county' });
+		expect(result.map(card => card.name)).toEqual(['Nashville']);
 	});
 
 	test('leaves the page’s own city out of its neighbours', async () => {
@@ -1400,5 +1616,177 @@ describe('election reads go to gp-api', () => {
 		await getDistrictNames({ L2DistrictType: 'City', state: 'wy', electionYear: 2026 });
 
 		expect(urls[0]).toContain('excludeInvalid=false');
+	});
+});
+
+describe('Vercel OIDC token', () => {
+	const PERSON_ID = 'ab12cd34-0000-0000-0000-000000000003';
+
+	test('every gp-api read sends the request OIDC token', async () => {
+		const oidcToken = fakeVercelOidcToken('request');
+		setVercelRequestOidcToken(oidcToken);
+		const calls: Array<{ url: string; init?: RequestInit }> = [];
+		globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+			calls.push({ url: String(input), init });
+			return new Response(JSON.stringify([]), { status: 200, headers: { 'content-type': 'application/json' } });
+		}) as typeof fetch;
+
+		await getPersonByPersonId(PERSON_ID);
+		await getPublicPersonProfileStatus(PERSON_ID);
+		await getRemovedPersonIds();
+		await getPublishedPersonProfileIds();
+		await getVoterDensityForDistrict(PERSON_ID);
+		await findCampaignByRace({ raceId: 'race-1', firstName: 'Ada', lastName: 'Lovelace' });
+
+		expect(calls.map(c => new URL(c.url).pathname)).toEqual([
+			`/v1/elections/persons/${PERSON_ID}`,
+			'/v1/public-person-profiles',
+			'/v1/public-person-profiles/unlisted',
+			'/v1/public-person-profiles/published',
+			'/v1/public-person-profiles/voter-density',
+			'/v1/public-campaigns',
+		]);
+		for (const call of calls) expect(new Headers(call.init?.headers).get('authorization')).toBe(`Bearer ${oidcToken}`);
+	});
+});
+
+describe('pairCensusCityTwins', () => {
+	const place = (slug: string, name: string, mtfcc: string, countyName = 'Gage') => ({ slug, name, mtfcc, countyName });
+
+	// Slug shapes as election-api returns them: the twin's carries the county, the city's does not.
+	test('pairs "X city" county subdivision with the city it duplicates', () => {
+		const city = place('ne/beatrice', 'Beatrice', 'G4110');
+		const twin = place('ne/gage-county/beatrice-city', 'Beatrice city', 'G4040');
+		expect(pairCensusCityTwins([city, twin])).toEqual([{ twin, city }]);
+	});
+
+	test('accepts the capitalized descriptor MA and MI use, and city names ending in City', () => {
+		const palmer = place('ma/palmer-town', 'Palmer Town', 'G4110', 'Hampden');
+		const palmerTwin = place('ma/hampden-county/palmer-town-city', 'Palmer Town City', 'G4040', 'Hampden');
+		const imlay = place('mi/imlay-city', 'Imlay City', 'G4110', 'Lapeer');
+		const imlayTwin = place('mi/lapeer-county/imlay-city-city', 'Imlay City City', 'G4040', 'Lapeer');
+		expect(pairCensusCityTwins([palmer, palmerTwin, imlay, imlayTwin])).toEqual([
+			{ twin: palmerTwin, city: palmer },
+			{ twin: imlayTwin, city: imlay },
+		]);
+	});
+
+	// New York and Wisconsin towns are governments of their own, not filler twins.
+	test('never pairs a town or township with the city of the same name', () => {
+		const city = place('ny/ithaca', 'Ithaca', 'G4110', 'Tompkins');
+		expect(pairCensusCityTwins([city, place('ny/tompkins-county/ithaca-town', 'Ithaca town', 'G4040', 'Tompkins')])).toEqual([]);
+	});
+
+	test('needs a G4040 twin in the same county, the -city slug and the city name', () => {
+		const city = place('ne/beatrice', 'Beatrice', 'G4110');
+		expect(pairCensusCityTwins([city, place('ne/gage-county/beatrice-city', 'Beatrice city', 'G4110')])).toEqual([]);
+		expect(pairCensusCityTwins([city, place('ne/gage-county/beatrice-city', 'Beatrice city', 'G4040', 'Lancaster')])).toEqual([]);
+		expect(pairCensusCityTwins([city, place('ne/gage-county/beatricecity', 'Beatrice city', 'G4040')])).toEqual([]);
+		expect(pairCensusCityTwins([city, place('ne/gage-county/beatrice-city', 'Blue Springs city', 'G4040')])).toEqual([]);
+	});
+
+	test('matches a county name with or without the County suffix', () => {
+		const city = place('ne/beatrice', 'Beatrice', 'G4110', 'Gage County');
+		const twin = place('ne/gage-county/beatrice-city', 'Beatrice city', 'G4040', 'Gage');
+		expect(pairCensusCityTwins([city, twin])).toEqual([{ twin, city }]);
+	});
+
+	// Jersey City is a city with no twin: there is no plain "Jersey" city to fold it into.
+	test('leaves a -city slug with no plain city alone', () => {
+		expect(pairCensusCityTwins([place('nj/jersey-city', 'Jersey City', 'G4110', 'Hudson')])).toEqual([]);
+		expect(pairCensusCityTwins([place('ne/holt-county/oneill-city', "O'Neill city", 'G4040', 'Holt')])).toEqual([]);
+	});
+});
+
+describe('knownCountySlugForCity', () => {
+	test('places a Connecticut city in its historical county, and nothing else', () => {
+		expect(knownCountySlugForCity('ct/hartford')).toBe('ct/hartford-county');
+		expect(knownCountySlugForCity('CT/Stamford')).toBe('ct/fairfield-county');
+		expect(knownCountySlugForCity('ct/hartford-county/hartford')).toBeUndefined();
+		expect(knownCountySlugForCity('nc/greensboro')).toBeUndefined();
+		expect(knownCountySlugForCity(undefined)).toBeUndefined();
+	});
+});
+
+describe('pairCensusTownTwins', () => {
+	const place = (slug: string, name: string, mtfcc: string, countyName = 'Greater Bridgeport') => ({ slug, name, mtfcc, countyName });
+
+	test('pairs a Connecticut city with the town of its name in its county', () => {
+		const city = place('ct/bridgeport', 'Bridgeport', 'G4110');
+		const twin = place('ct/fairfield-county/bridgeport-town', 'Bridgeport Town', 'G4040');
+		expect(pairCensusTownTwins([city, twin])).toEqual([{ twin, city }]);
+	});
+
+	test('needs the town in the city county, a -town slug and the city name', () => {
+		const city = place('ct/bridgeport', 'Bridgeport', 'G4110');
+		expect(pairCensusTownTwins([city, place('ct/new-haven-county/bridgeport-town', 'Bridgeport Town', 'G4040')])).toEqual([]);
+		expect(pairCensusTownTwins([city, place('ct/fairfield-county/bridgeport-town', 'Bridgeport Town', 'G4110')])).toEqual([]);
+		expect(pairCensusTownTwins([city, place('ct/fairfield-county/bridgeport', 'Bridgeport Town', 'G4040')])).toEqual([]);
+		expect(pairCensusTownTwins([city, place('ct/fairfield-county/bridgeport-town', 'Trumbull Town', 'G4040')])).toEqual([]);
+	});
+
+	// A New York town beside the city of its name is a government of its own.
+	test('never pairs a town with a city outside the known list', () => {
+		const city = place('ny/ithaca', 'Ithaca', 'G4110', 'Tompkins');
+		expect(pairCensusTownTwins([city, place('ny/tompkins-county/ithaca-town', 'Ithaca town', 'G4040', 'Tompkins')])).toEqual([]);
+	});
+});
+
+describe('holdsOnlyTownClerk', () => {
+	test('is true only for a town holding nothing but its town clerk', () => {
+		const clerk = { slug: 'ct/fairfield-county/bridgeport-town/town-clerk-as-separate-from-city-clerk-ct-only' };
+		expect(holdsOnlyTownClerk([clerk])).toBe(true);
+		// Derby's town row holds the city government (Nov 2026), so it never folds.
+		expect(holdsOnlyTownClerk([{ slug: 'ct/new-haven-county/derby-town/city-executive-mayor' }])).toBe(false);
+		expect(holdsOnlyTownClerk([clerk, { slug: 'ct/new-london-county/groton-town/town-meeting-board' }])).toBe(false);
+		expect(holdsOnlyTownClerk([])).toBe(false);
+	});
+});
+
+describe('hasTownshipRace', () => {
+	test('spots a township office by level or by position slug', () => {
+		expect(hasTownshipRace([{ slug: 'mn/elba-city/township-clerk', positionLevel: 'LOCAL' }])).toBe(true);
+		expect(hasTownshipRace([{ slug: 'wi/brookfield-city/supervisor', positionLevel: 'TOWNSHIP' }])).toBe(true);
+		expect(hasTownshipRace([{ slug: 'ne/beatrice-city/airport-district-board', positionLevel: 'LOCAL' }])).toBe(false);
+		expect(hasTownshipRace([])).toBe(false);
+	});
+});
+
+describe('isCountyElectionDistrictPlace', () => {
+	test('spots a numbered district filed as a town', () => {
+		expect(isCountyElectionDistrictPlace({ slug: 'ms/alcorn-county/district-1', name: 'District 1' })).toBe(true);
+		expect(isCountyElectionDistrictPlace({ slug: 'tn/bradley-county/district-12', name: 'District 12' })).toBe(true);
+		// Louisiana parish constables are elected by ward or district, filed the same way.
+		expect(isCountyElectionDistrictPlace({ slug: 'la/bossier-parish/district-5', name: 'District 5' })).toBe(true);
+	});
+
+	test('leaves real places with district in the name alone', () => {
+		expect(isCountyElectionDistrictPlace({ slug: 'ms/alcorn-county/kossuth', name: 'Kossuth' })).toBe(false);
+		expect(isCountyElectionDistrictPlace({ slug: 'pa/district-township', name: 'District township' })).toBe(false);
+		expect(isCountyElectionDistrictPlace({ slug: 'ca/district-1-water', name: 'District 1 Water' })).toBe(false);
+		expect(isCountyElectionDistrictPlace({ slug: 'ms/alcorn-county/district-1', name: 'Corinth' })).toBe(false);
+	});
+});
+
+describe('getCountyElectionDistricts', () => {
+	test('reads only the numbered districts, each with its races', async () => {
+		const requested: string[] = [];
+		withFetchMock([
+			{
+				match: url => {
+					if (url.includes('/v1/elections/places?')) requested.push(new URL(url).searchParams.get('slug') ?? '');
+					return url.includes('slug=ms%2Falcorn-county%2Fdistrict-1');
+				},
+				body: [{ slug: 'ms/alcorn-county/district-1', name: 'District 1', Races: [{ slug: 'ms/alcorn-county/district-1/local-school-board' }] }],
+			},
+		]);
+
+		const result = await getCountyElectionDistricts([
+			{ slug: 'ms/alcorn-county/district-1', name: 'District 1', mtfcc: 'G4040' },
+			{ slug: 'ms/alcorn-county/kossuth', name: 'Kossuth', mtfcc: 'G4110' },
+		] as never);
+
+		expect(requested).toEqual(['ms/alcorn-county/district-1']);
+		expect(result.map(r => r.districtData.Races?.map(race => race.slug))).toEqual([['ms/alcorn-county/district-1/local-school-board']]);
 	});
 });

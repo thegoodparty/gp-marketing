@@ -1,3 +1,5 @@
+import { startOfElectionDay } from '~/lib/electionDay';
+
 /**
  * Which of the position page's phases a race is in. Settled with marketing on
  * 2026-09-23 and revised on 2026-10-12 (see docs/election-redesign-components.md):
@@ -66,17 +68,13 @@ export function toLocalDay(value: string | null | undefined): Date | null {
 	return Number.isNaN(day.getTime()) ? null : day;
 }
 
-export function startOfLocalDay(date: Date): Date {
-	return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-}
-
 const MS_PER_DAY = 86_400_000;
 
 /** Whole days from today to `target`, negative once it has passed. */
 export function daysUntil(target: string | null | undefined, now: Date = new Date()): number | null {
 	const day = toLocalDay(target);
 	if (!day) return null;
-	return Math.round((day.getTime() - startOfLocalDay(now).getTime()) / MS_PER_DAY);
+	return Math.round((day.getTime() - startOfElectionDay(now).getTime()) / MS_PER_DAY);
 }
 
 /** The same calendar day `months` away, clamped to the end of a shorter month so Aug 31 minus six months is Feb 28, not March 3. */
@@ -88,7 +86,7 @@ function addMonths(day: Date, months: number): Date {
 }
 
 export function resolvePositionHeroState(input: PositionHeroStateInput): PositionHeroState {
-	const today = startOfLocalDay(input.now ?? new Date());
+	const today = startOfElectionDay(input.now ?? new Date());
 	const election = toLocalDay(input.electionDate);
 	const filingStart = toLocalDay(input.filingDateStart);
 	const filingEnd = toLocalDay(input.filingDateEnd);

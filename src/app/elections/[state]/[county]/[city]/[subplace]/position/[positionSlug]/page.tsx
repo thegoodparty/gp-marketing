@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import { displayPlaceName } from '~/lib/placeDisplayName';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import {
 	COUNTY_MTFCC,
 	getCityPlacesByCounty,
 	getPlacesByState,
 	getSubplaceRaceBySlug,
+	isCityOrTownMtfcc,
 } from '~/lib/electionsApi';
 import { isValidStateCode } from '~/constants/usStateCodes';
 import {
@@ -52,6 +53,17 @@ export default async function Page({
 	if (!race) notFound();
 
 	const countySlug = `${state.toLowerCase()}/${county.toLowerCase()}`;
+
+	// "Rainy Creek/Cheyenne Township" is one place whose slash split its slug, not a city and a
+	// subplace. Its page lives under the last segment; see resolveElectionPositionFromRaceSlug.
+	const racePlaceSlug = race.Place?.slug?.toLowerCase();
+	const splitPlaceSlugs = [
+		`${countySlug}/${city.toLowerCase()}/${subplace.toLowerCase()}`,
+		`${state.toLowerCase()}/${city.toLowerCase()}/${subplace.toLowerCase()}`,
+	];
+	if (isCityOrTownMtfcc(race.Place?.mtfcc) && racePlaceSlug && splitPlaceSlugs.includes(racePlaceSlug)) {
+		permanentRedirect(`/elections/${countySlug}/${subplace.toLowerCase()}/position/${positionSlug}`);
+	}
 	const cityPathSlug = `${countySlug}/${city.toLowerCase()}`;
 	const pathBeforePosition = `${cityPathSlug}/${subplace.toLowerCase()}`;
 

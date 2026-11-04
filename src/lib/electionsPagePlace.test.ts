@@ -5,7 +5,6 @@ import { getFeaturedPeople } from './featuredCandidates';
 import { getNearbyOffices } from './nearbyOffices';
 
 const originalFetch = globalThis.fetch;
-const ORIGINAL_M2M_TOKEN = process.env['ELECTION_API_M2M_TOKEN'];
 
 const COUNTY_SLUG = 'ca/alameda-county';
 
@@ -23,8 +22,7 @@ let requested: string[] = [];
 
 beforeEach(() => {
 	requested = [];
-	delete process.env['ELECTION_API_M2M_TOKEN'];
-	__resetElectionApiAuthForTests({ warnedMissingToken: true });
+	__resetElectionApiAuthForTests({ warnedNoToken: true });
 	globalThis.fetch = (async (input: RequestInfo | URL) => {
 		const url = String(input);
 		requested.push(url);
@@ -39,11 +37,6 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-	if (ORIGINAL_M2M_TOKEN === undefined) {
-		delete process.env['ELECTION_API_M2M_TOKEN'];
-	} else {
-		process.env['ELECTION_API_M2M_TOKEN'] = ORIGINAL_M2M_TOKEN;
-	}
 	__resetElectionApiAuthForTests();
 	globalThis.fetch = originalFetch;
 });

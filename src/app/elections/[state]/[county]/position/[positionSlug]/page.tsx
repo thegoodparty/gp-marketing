@@ -7,6 +7,7 @@ import {
 	formatElectionDateFromApi,
 	formatFilingPeriodFromRace,
 	getStateName,
+	isRealPlaceSegment,
 	redirectCityRaceToFourLevelUrl,
 	resolveLocalityName,
 } from '~/lib/electionsHelpers';
@@ -61,22 +62,26 @@ export default async function Page({
 	const electionDate = formatElectionDateFromApi(race.electionDate);
 	const filingDate = formatFilingPeriodFromRace(race.filingDateStart, race.filingDateEnd);
 
+	// A statewide joint office fills the county slot with an office name
+	// (`ca/state-insurance-commissioner/fire-safety-commissioner-joint`) and the race's place is the
+	// state, so that slot is neither a county crumb nor a second state name in the heading.
+	const isRealCounty = Boolean(countyPlace) || isRealPlaceSegment(race.Place?.slug, county);
 	const localityName = resolveLocalityName(countyPlace, race.Place, countySlug);
 	const breadcrumbs = [
 		{ href: '/elections', label: 'Elections' },
 		{ href: `/elections/${state.toLowerCase()}`, label: stateName },
-		{ href: `/elections/${countySlug}`, label: localityName },
+		...(isRealCounty ? [{ href: `/elections/${countySlug}`, label: localityName }] : []),
 		{ href: '', label: officeName },
 	];
 
 	const pageUrl = toAbsoluteUrl(`/elections/${countySlug}/position/${positionSlug}`);
 
 	return renderElectionsPositionPage({
-		placeSlug: countySlug,
+		placeSlug: isRealCounty ? countySlug : state.toLowerCase(),
 		raceSlug,
 		officeName,
 		stateName,
-		countyName: localityName,
+		countyName: isRealCounty ? localityName : undefined,
 		electionDate,
 		filingDate,
 		breadcrumbs,
@@ -107,9 +112,11 @@ export async function generateMetadata({
 		filingDateEnd: race?.filingDateEnd,
 		electionDate: race?.electionDate,
 	});
+	const isRealCounty = Boolean(countyPlace) || isRealPlaceSegment(race?.Place?.slug, county);
 	const countyDisplayName = resolveLocalityName(countyPlace, race?.Place, countySlug);
+	const placePhrase = isRealCounty ? `${countyDisplayName}, ${stateName}` : stateName;
 	return {
-		...positionPageMetadata(positionState, positionName, `${countyDisplayName}, ${stateName}`, SITE_NAME),
+		...positionPageMetadata(positionState, positionName, placePhrase, SITE_NAME),
 		alternates: { canonical: toAbsoluteUrl(`/elections/${countySlug}/position/${positionSlug}`) },
 	};
 }

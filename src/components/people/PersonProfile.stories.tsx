@@ -38,7 +38,7 @@ function stateStory(state: ProfileState): Story {
 			await expect(canvas.getAllByText('Jane Public').length).toBeGreaterThan(0);
 
 			// Pledge badge appears iff the view is pledged (suppressed on removal).
-			const pledgeBadges = canvas.queryAllByText('Took the GoodParty.org Pledge');
+			const pledgeBadges = canvas.queryAllByText('Took the People First Pledge');
 			await expect(pledgeBadges.length > 0).toBe(view.pledged);
 
 			// Removed profiles (K/L) strip the headshot.

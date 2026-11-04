@@ -18,7 +18,6 @@ const CANDIDACY_SLUG = 'jane-doe-race';
 const ELECTION_DATE = `${new Date().getUTCFullYear() + 1}-11-03`;
 
 const originalFetch = globalThis.fetch;
-const ORIGINAL_M2M_TOKEN = process.env['ELECTION_API_M2M_TOKEN'];
 
 type Place = {
 	slug: string;
@@ -123,16 +122,10 @@ async function viewHrefs(): Promise<string[]> {
 }
 
 beforeEach(() => {
-	delete process.env['ELECTION_API_M2M_TOKEN'];
-	__resetElectionApiAuthForTests({ warnedMissingToken: true });
+	__resetElectionApiAuthForTests({ warnedNoToken: true });
 });
 
 afterEach(() => {
-	if (ORIGINAL_M2M_TOKEN === undefined) {
-		delete process.env['ELECTION_API_M2M_TOKEN'];
-	} else {
-		process.env['ELECTION_API_M2M_TOKEN'] = ORIGINAL_M2M_TOKEN;
-	}
 	__resetElectionApiAuthForTests();
 	globalThis.fetch = originalFetch;
 });

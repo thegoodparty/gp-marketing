@@ -5,7 +5,17 @@
 
 import type { MetadataRoute } from 'next';
 import { sanityClient } from '~/sanity/sanityClient';
-import { CITY_MTFCC, isCityOrTownMtfcc, looksLikeDistrictSlug, TOWN_MTFCC } from '~/lib/electionsApi';
+import {
+	CITY_MTFCC,
+	hasTownshipRace,
+	holdsOnlyTownClerk,
+	isCityOrTownMtfcc,
+	knownCountySlugForCity,
+	looksLikeDistrictSlug,
+	pairCensusCityTwins,
+	pairCensusTownTwins,
+	TOWN_MTFCC,
+} from '~/lib/electionsApi';
 import {
 	buildElectionPositionHrefFromRaceSlug,
 	resolveElectionPositionFromRaceSlug,
@@ -14,8 +24,7 @@ import {
 import { hasText } from '~/lib/peopleProfile';
 import { buildPersonSlugFromBase, personIdSuffix } from '~/lib/personSlug';
 import { FAQ_BASE_PATH, getFaqSitemapEntries } from '~/lib/faqSlugs';
-import { fetchElectionApiJsonCached } from '~/lib/electionApiFetch';
-import { gpApiAuthHeaders } from '~/lib/electionApiAuth';
+import { ElectionApiError, fetchElectionApiJsonCached, fetchGpApiJsonCached } from '~/lib/electionApiFetch';
 import { allFaqsQuery } from '~/sanity/groq';
 
 /** 51 US state/DC codes (50 states + DC) */
@@ -113,20 +122,11 @@ const GP_API_BASE =
 
 const GP_API_ELECTIONS_BASE = `${GP_API_BASE.replace(/\/$/, '')}/v1/elections`;
 
-const CACHE_1H: RequestInit = { next: { revalidate: 3600 } };
-
 /** Next.js data-cache tag for the /people sitemap upstream fetches. Bust via revalidateTag. */
 export const PEOPLE_SITEMAP_CACHE_TAG = 'people-sitemap';
 
-function cacheInit(tags?: readonly string[]): RequestInit {
-	if (tags && tags.length > 0) {
-		return { next: { revalidate: 3600, tags: [...tags] } };
-	}
-	return CACHE_1H;
-}
-
 export type CountyPlace = { slug?: string; name?: string; mtfcc?: string };
-export type CityPlace = { slug?: string; countyName?: string };
+export type CityPlace = { slug?: string; countyName?: string; name?: string; mtfcc?: string };
 export type RaceEntry = { slug?: string; positionLevel?: string };
 
 export function normalizeName(name: string): string {
@@ -247,7 +247,40 @@ async function resolveMunicipalPlaces(
 	sweptCities: CityPlace[],
 ): Promise<CityPlace[]> {
 	if (buildCountyLookups(places, sweptCities).citySlugToCountySlug.size > 0) return sweptCities;
-	return [...sweptCities, ...(await fetchMunicipalitiesByCountyWalk(places))];
+	return [...sweptCities, ...(await fetchMunicipalitiesByCountyWalk(places)), ...placeKnownCities(places, sweptCities)];
+}
+
+/**
+ * The swept cities that are no county's child, each given its county's name so
+ * `buildCountyLookups` maps it. Connecticut's cities (`ct/hartford`) are the case; see
+ * `knownCountySlugForCity`. Runs only beside the county walk, so the 50 states whose
+ * sweep maps are untouched.
+ */
+export function placeKnownCities(places: CountyPlace[], sweptCities: CityPlace[]): CityPlace[] {
+	const countyNameBySlug = new Map(places.flatMap(p => (p.slug && p.name ? [[p.slug.toLowerCase(), p.name] as const] : [])));
+	return sweptCities.flatMap(c => {
+		const countyName = countyNameBySlug.get(knownCountySlugForCity(c.slug) ?? '');
+		return countyName ? [{ ...c, countyName }] : [];
+	});
+}
+
+/**
+ * The Census filler twins ("Beatrice city") that redirect to their city, so the sitemap
+ * and the prerendered params stop listing a page that only redirects. Same rule as the
+ * city page: `pairCensusCityTwins`, keeping any twin that holds a township's offices, and
+ * `pairCensusTownTwins`, folding a Connecticut town only when it holds just its town clerk.
+ * The twin's own position pages are untouched and still listed.
+ */
+export function findMergedCityTwinSlugs(cities: CityPlace[], races: RaceEntry[]): Set<string> {
+	const slugs = new Set<string>();
+	const racesOf = (twin: CityPlace) => races.filter(r => r.slug?.toLowerCase().startsWith(`${(twin.slug ?? '').toLowerCase()}/`));
+	for (const { twin } of pairCensusCityTwins(cities)) {
+		if (!hasTownshipRace(racesOf(twin))) slugs.add((twin.slug ?? '').toLowerCase());
+	}
+	for (const { twin } of pairCensusTownTwins(cities)) {
+		if (holdsOnlyTownClerk(racesOf(twin))) slugs.add((twin.slug ?? '').toLowerCase());
+	}
+	return slugs;
 }
 
 export function buildCountyLookups(
@@ -288,6 +321,8 @@ export function buildCountyLookups(
  * CITY/LOCAL 4-part slugs: the county is already embedded; fall through to the generic
  * branch which emits the URL directly from the prefix.
  * CITY 3-part slugs with no county mapping are skipped (would produce a wrong URL).
+ * Any other level on a 3-part slug whose middle segment is a mapped city (Arkansas
+ * constables, COUNTY-level) also goes through the county, not into the county slot.
  */
 export function buildRaceEntries(
 	races: RaceEntry[],
@@ -424,15 +459,15 @@ export async function fetchStateElectionRouteParams(stateCode: string): Promise<
 			state: code,
 			placeColumns: 'slug,mtfcc,name',
 		}),
-		fetchElectionJson<{ slug?: string; countyName?: string }>('v1/places', {
+		fetchElectionJson<CityPlace>('v1/places', {
 			state: code,
 			mtfcc: CITY_MTFCC,
-			placeColumns: 'slug,countyName',
+			placeColumns: 'slug,countyName,name,mtfcc',
 		}),
-		fetchElectionJson<{ slug?: string; countyName?: string }>('v1/places', {
+		fetchElectionJson<CityPlace>('v1/places', {
 			state: code,
 			mtfcc: TOWN_MTFCC,
-			placeColumns: 'slug,countyName',
+			placeColumns: 'slug,countyName,name,mtfcc',
 		}),
 		// A build should not fail on one upstream blip, so this side degrades to no
 		// prerendered position pages for the state; they still render on demand.
@@ -448,6 +483,7 @@ export async function fetchStateElectionRouteParams(stateCode: string): Promise<
 	const cities = await resolveMunicipalPlaces(places, [...cityPlaces, ...townPlaces]);
 
 	const { citySlugToCountySlug } = buildCountyLookups(places, cities);
+	const mergedTwinSlugs = findMergedCityTwinSlugs(cities, races);
 
 	const countyParams: ElectionCountyRouteParam[] = [];
 	const cityParams: ElectionCityRouteParam[] = [];
@@ -478,7 +514,7 @@ export async function fetchStateElectionRouteParams(stateCode: string): Promise<
 
 	for (const c of cities) {
 		const countySlug = citySlugToCountySlug.get(c.slug ?? '');
-		if (!countySlug || !c.slug) continue;
+		if (!countySlug || !c.slug || mergedTwinSlugs.has(c.slug.toLowerCase())) continue;
 		const citySegment = c.slug.split('/').pop();
 		if (!citySegment || looksLikeDistrictSlug(citySegment)) continue;
 		const segs = countySlug.split('/').filter(Boolean);
@@ -578,9 +614,13 @@ export async function getCachedElectionRouteParams(): Promise<{
  */
 async function fetchGpApiJsonOrThrow<T>(path: string, tags?: readonly string[]): Promise<T[]> {
 	const url = `${GP_API_BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
-	const res = await fetch(url, { ...cacheInit(tags), headers: gpApiAuthHeaders() });
-	if (!res.ok) throw new Error(`[sitemap] gp-api ${res.status} ${url}`);
-	const data: unknown = await res.json();
+	let data: unknown;
+	try {
+		data = await fetchGpApiJsonCached(url, { revalidate: 3600, ...(tags ? { tags } : {}) });
+	} catch (err) {
+		if (err instanceof ElectionApiError) throw new Error(`[sitemap] gp-api ${err.status} ${url}`);
+		throw err;
+	}
 	if (!Array.isArray(data)) throw new Error(`[sitemap] gp-api non-array body ${url}`);
 	return data as T[];
 }
@@ -802,15 +842,15 @@ export async function fetchStateElectionSitemapEntries(
 			state: code,
 			placeColumns: 'slug,mtfcc,name',
 		}),
-		fetchElectionJson<{ slug?: string; countyName?: string }>('v1/places', {
+		fetchElectionJson<CityPlace>('v1/places', {
 			state: code,
 			mtfcc: CITY_MTFCC,
-			placeColumns: 'slug,countyName',
+			placeColumns: 'slug,countyName,name,mtfcc',
 		}),
-		fetchElectionJson<{ slug?: string; countyName?: string }>('v1/places', {
+		fetchElectionJson<CityPlace>('v1/places', {
 			state: code,
 			mtfcc: TOWN_MTFCC,
-			placeColumns: 'slug,countyName',
+			placeColumns: 'slug,countyName,name,mtfcc',
 		}),
 		fetchAllStateRaces(code),
 	]);
@@ -823,12 +863,13 @@ export async function fetchStateElectionSitemapEntries(
 	// county pages link to them. A place carries one mtfcc, so the two queries are
 	// disjoint and concatenating cannot double-count.
 	//
-	// Neither sweep rescues Connecticut, whose state-level municipal queries are both
-	// empty whatever mtfcc you ask for — see fetchMunicipalitiesByCountyWalk, which
-	// picks it up from the counties instead.
+	// Neither sweep places Connecticut, whose municipal rows carry a planning region
+	// for countyName — see fetchMunicipalitiesByCountyWalk, which picks the towns up
+	// from the counties instead, and placeKnownCities for its cities.
 	const cities = await resolveMunicipalPlaces(places, [...cityPlaces, ...townPlaces]);
 
 	const { citySlugToCountySlug } = buildCountyLookups(places, cities);
+	const mergedTwinSlugs = findMergedCityTwinSlugs(cities, races);
 
 	// The state's own index page. It is not in `places` — the place rows are the
 	// counties, districts and cities *inside* the state — so nothing below emits
@@ -847,7 +888,7 @@ export async function fetchStateElectionSitemapEntries(
 
 	for (const c of cities) {
 		const countySlug = citySlugToCountySlug.get(c.slug ?? '');
-		if (!countySlug || !c.slug) continue;
+		if (!countySlug || !c.slug || mergedTwinSlugs.has(c.slug.toLowerCase())) continue;
 		const citySegment = c.slug.split('/').pop();
 		if (!citySegment || looksLikeDistrictSlug(citySegment)) continue;
 		entries.push(toEntry(baseUrl, `/elections/${countySlug}/${citySegment}`, 0.7, 'weekly'));

@@ -2,7 +2,8 @@ import type { SVGProps } from 'react';
 import Link from 'next/link';
 import { normalizeStateCode } from '~/constants/usStateCodes';
 import type { PartyClass } from '~/lib/party';
-import { daysUntil, positionHeroHeading, startOfLocalDay, toLocalDay, type PositionHeroState } from '~/lib/positionHeroState';
+import { startOfElectionDay } from '~/lib/electionDay';
+import { daysUntil, positionHeroHeading, toLocalDay, type PositionHeroState } from '~/lib/positionHeroState';
 import { Logo } from '~/sanity/utils/Logo.tsx';
 import { cn, tv } from './_lib/utils.ts';
 import { Avatar } from './Avatar.tsx';
@@ -54,7 +55,7 @@ export type ElectionsPositionHeroCandidate = {
 	name: string;
 	party: string;
 	partyClass: PartyClass | null;
-	/** Took the GoodParty.org Pledge, by the same rule the candidate cards use. */
+	/** Took the People First Pledge, by the same rule the candidate cards use. */
 	isPledged?: boolean;
 	href?: string;
 	isWinner?: boolean;
@@ -159,7 +160,7 @@ function CheckIcon(props: SVGProps<SVGSVGElement>) {
 
 function PartyMark({ candidate, className }: { candidate: ElectionsPositionHeroCandidate; className: string }) {
 	if (candidate.isPledged) {
-		return <Logo width={27} height={20} aria-label='Took the GoodParty.org Pledge' role='img' />;
+		return <Logo width={27} height={20} aria-label='Took the People First Pledge' role='img' />;
 	}
 	const color =
 		candidate.partyClass === 'democrat'
@@ -249,7 +250,7 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 		const ordered = legs.every((day, i) => i === 0 || day > (legs[i - 1] ?? new Date(0)));
 		if (!end || legs.length < 2 || !ordered) return null;
 		const pending = state.phase === 'midElection' && state.resultsPending;
-		const today = startOfLocalDay(now).getTime();
+		const today = startOfElectionDay(now).getTime();
 		const anchorAt = (index: number) => index / (legs.length - 1);
 		const progress = (() => {
 			if (pending || today >= end.getTime()) return 1;
@@ -329,7 +330,7 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 							</div>
 						)}
 						{winner.isPledged && (
-							<span className='absolute -bottom-1 -right-2' aria-label='Took the GoodParty.org Pledge' role='img'>
+							<span className='absolute -bottom-1 -right-2' aria-label='Took the People First Pledge' role='img'>
 								<Logo width={large ? 43 : 32} height={large ? 32 : 24} />
 							</span>
 						)}
@@ -348,7 +349,7 @@ export function ElectionsPositionHero(props: ElectionsPositionHeroProps) {
 						{winner.seatLabel && <Text styleType='text-sm'>{winner.seatLabel}</Text>}
 						{winner.isPledged && (
 							<Text styleType='text-sm' className='text-neutral-400'>
-								Has taken the GoodParty.org Pledge
+								Has taken the People First Pledge
 							</Text>
 						)}
 					</div>

@@ -69,6 +69,7 @@ describe('officeLevelLabel', () => {
 		expect(officeLevelLabel('COUNTY', 'county')).toBe('County');
 		expect(officeLevelLabel('CITY', 'city')).toBe('Local');
 		expect(officeLevelLabel('LOCAL', 'city')).toBe('Local');
+		expect(officeLevelLabel('TOWNSHIP', 'city')).toBe('Local');
 	});
 
 	test('falls back to the tier when the race has no level', () => {
@@ -119,6 +120,20 @@ describe('selectNearbyOffices', () => {
 		);
 
 		expect(offices).toHaveLength(1);
+		expect(offices[0]?.type).toBe('Local');
+	});
+
+	test('keeps township offices at the city tier, tagged Local', () => {
+		const [townshipTier] = nearbyOfficesTiers('oh/butler-county/west-chester-township') as [NearbyOfficesTier];
+		const offices = selectNearbyOffices(
+			[
+				race('oh/butler-county/west-chester-township/township-trustee-township-council', { positionLevel: 'TOWNSHIP' }),
+				race('oh/butler-county/county-commission', { positionLevel: 'COUNTY' }),
+			],
+			{ tier: townshipTier, today },
+		);
+
+		expect(offices.map(o => o.id)).toEqual(['oh/butler-county/west-chester-township/township-trustee-township-council']);
 		expect(offices[0]?.type).toBe('Local');
 	});
 

@@ -11,6 +11,7 @@ import { ScrollDepthTracker } from '~/ui/ScrollDepthTracker';
 import { OutboundLinkTracker } from '~/ui/OutboundLinkTracker';
 import { PageSchema } from '~/ui/PageSchema';
 import { getBaseUrl, SITE_NAME } from '~/lib/url';
+import { PLEDGE_COPY_TEST_ENABLED, amplitudeCookieName, pledgeCopyHeadScript } from '~/experiments/pledgeCopyTest';
 import { buildOrganizationSchema, buildSchemaGraph, buildWebSiteSchema, resolveSameAs } from '~/lib/schema';
 import { sanityFetch } from '~/sanity/sanityClient';
 import { goodpartyOrg_socialChannelsQuery } from '~/sanity/groq';
@@ -82,6 +83,7 @@ export default async function RootLayout({ children }: Props) {
 	const [socialChannels, navigation] = await Promise.all([getSiteSocialChannels(), fetchNavigation()]);
 	const sameAs = resolveSameAs(socialChannels);
 	const siteSchema = buildSchemaGraph([buildOrganizationSchema({ baseUrl, sameAs }), buildWebSiteSchema({ baseUrl })]);
+	const pledgeCopyCookieName = PLEDGE_COPY_TEST_ENABLED ? amplitudeCookieName(process.env['NEXT_PUBLIC_AMPLITUDE_API_KEY']) : null;
 	return (
 		<html
 			lang='en-US'
@@ -89,6 +91,10 @@ export default async function RootLayout({ children }: Props) {
 		>
 			<head>
 				<VWOScript accountId='757033' />
+				{pledgeCopyCookieName && (
+					// Picks the visitor's pledge copy test arm before first paint (see `~/experiments/pledgeCopyTest`).
+					<script id='pledge-copy-test' dangerouslySetInnerHTML={{ __html: pledgeCopyHeadScript(pledgeCopyCookieName) }} />
+				)}
 			</head>
 			<body className='flex min-h-screen flex-col'>
 				<PageSchema schema={siteSchema ?? undefined} />

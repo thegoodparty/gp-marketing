@@ -81,6 +81,7 @@ export function ClaimProfileBlockSection({ claimProfileOverride, tokens, embedde
 	const block = (
 		<ClaimProfileBlock
 			layout={layout}
+			requestModal={layout === 'inset' ? claimProfileOverride?.requestModal : undefined}
 			backgroundColor={backgroundColor}
 			headline={headline}
 			body={body}

@@ -59,7 +59,7 @@ export function raceBelongsToTier(race: PlaceRace, level: NearbyOfficesTier['lev
 	const raceLevel = race.positionLevel?.toUpperCase();
 	if (level === 'state') return raceLevel === 'STATE';
 	if (level === 'county') return raceLevel === 'COUNTY' || raceLevel === 'LOCAL';
-	return raceLevel === 'CITY' || raceLevel === 'LOCAL';
+	return raceLevel === 'CITY' || raceLevel === 'LOCAL' || raceLevel === 'TOWNSHIP';
 }
 
 const LEVEL_LABELS: Record<string, string> = {
@@ -68,6 +68,7 @@ const LEVEL_LABELS: Record<string, string> = {
 	COUNTY: 'County',
 	CITY: 'Local',
 	LOCAL: 'Local',
+	TOWNSHIP: 'Local',
 };
 
 const TIER_LABELS: Record<NearbyOfficesTier['level'], string> = { state: 'State', county: 'County', city: 'Local' };
@@ -137,7 +138,7 @@ const defaultDeps: NearbyOfficesDeps = { getElectionsPagePlace, resolvePlaceRace
 
 /**
  * Each row's "# of independents running" (Emily, 2026-10-06): the candidates in
- * its race who have taken the GoodParty.org Pledge, by the same `pledgedFromSpine`
+ * its race who have taken the People First Pledge, by the same `pledgedFromSpine`
  * rule the offices list, the candidate cards and the profiles apply, counted once
  * per person. The figure therefore never disagrees with the offices list on a
  * location page or with a person's own profile.

@@ -56,7 +56,7 @@ export function FeaturedCandidateCard(props: FeaturedCandidateCardProps) {
 						{getInitials(props.name)}
 					</div>
 				)}
-				{props.isPledged && <Logo className={badge()} role='img' aria-label='Has taken the GoodParty.org Pledge' />}
+				{props.isPledged && <Logo className={badge()} role='img' aria-label='Has taken the People First Pledge' />}
 			</div>
 			<div className={body()}>
 				<h3 className={name()}>{props.name}</h3>

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 import type { PersonProfileView, PersonPersona, RelatedPersonCard } from '~/lib/peopleProfile';
-import { formatElectionDateFromApi } from '~/lib/electionsHelpers';
+import { formatElectionDateFromApi, getStateName } from '~/lib/electionsHelpers';
 import type { PersonAccomplishment, PersonProfileIssueStatus } from '~/types/people';
 import { mapAttribution, mapStyleUrl } from '~/lib/env';
 import type { SectionOverrides } from '~/PageSections';
@@ -873,6 +873,11 @@ export function buildPersonSectionOverrides(view: PersonProfileView): SectionOve
 			// `PERSON_CLAIM_FORM_ID`).
 			formId: PERSON_CLAIM_FORM_ID,
 			signupSource: PERSON_CLAIM_SIGNUP_SOURCE,
+			// The card's button opens a pop-up: the sign-up button above for the
+			// candidate, and a request form for a voter to ask them to finish the page
+			// (2684:9074, Nov 2026). It brings back the visitor ask removed on
+			// 2026-10-16, filed in HubSpot under the same form id.
+			requestModal: { personId: view.personId, candidateName: view.displayName, locationLabel: personPledgeLocation(view) },
 		},
 		component_profileContentBlock: {
 			contentCards,
@@ -903,4 +908,14 @@ export function buildPersonProfileTokens(view: PersonProfileView): TokenMap {
 		'[candidate name]': view.displayName,
 		'[office name]': view.officeName ?? 'Office',
 	};
+}
+
+/**
+ * The place the pledge pop-up names on a profile ("Want a real choice in
+ * [Location]'s next election?"): the most specific place crumb in the
+ * breadcrumb, which is a slice of the position's own /elections path.
+ */
+export function personPledgeLocation(view: PersonProfileView): string | null {
+	const places = view.breadcrumb.filter(crumb => crumb.href?.startsWith('/elections/') && !crumb.href.includes('/position/'));
+	return places.at(-1)?.label ?? (view.stateLabel ? getStateName(view.stateLabel) : null);
 }

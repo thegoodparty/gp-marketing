@@ -8,6 +8,7 @@ import {
 	fetchPeopleSitemapEntries,
 	fetchStateElectionRouteParams,
 	fetchStateElectionSitemapEntries,
+	findMergedCityTwinSlugs,
 	getSitemapIds,
 	MAX_URLS_PER_SITEMAP,
 	normalizeName,
@@ -24,6 +25,7 @@ import {
 	type CityPlace,
 	type RaceEntry,
 } from './sitemap-entries';
+import { resetNextCacheMock, unstable_cache } from '~/testing/nextCacheMock';
 
 describe('people sitemap shards', () => {
 	const uuid = (hex8: string) => `${hex8}-1111-2222-3333-444444444444`;
@@ -393,9 +395,9 @@ describe('fetchPeopleSitemapEntries', () => {
 		]);
 	});
 
-	test('sends the M2M bearer on the gp-api published and unlisted reads, keeping the sitemap tag', async () => {
-		const originalToken = process.env['ELECTION_API_M2M_TOKEN'];
-		process.env['ELECTION_API_M2M_TOKEN'] = 'static-jwt';
+	test('sends the service token on the gp-api published and unlisted reads, without the fetch cache', async () => {
+		const originalToken = process.env['GP_API_SERVICE_TOKEN'];
+		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
 		try {
 			mockUpstream({ persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }] });
 			const upstream = globalThis.fetch;
@@ -413,12 +415,33 @@ describe('fetchPeopleSitemapEntries', () => {
 				'/v1/public-person-profiles/unlisted',
 			]);
 			for (const call of gpApiCalls) {
-				expect(new Headers(call.init?.headers).get('authorization')).toBe('Bearer static-jwt');
-				expect((call.init as { next?: { tags?: string[] } }).next?.tags).toContain('people-sitemap');
+				expect(new Headers(call.init?.headers).get('authorization')).toBe('Bearer service-token');
+				expect(call.init?.cache).toBe('no-store');
 			}
 		} finally {
-			if (originalToken === undefined) delete process.env['ELECTION_API_M2M_TOKEN'];
-			else process.env['ELECTION_API_M2M_TOKEN'] = originalToken;
+			if (originalToken === undefined) delete process.env['GP_API_SERVICE_TOKEN'];
+			else process.env['GP_API_SERVICE_TOKEN'] = originalToken;
+		}
+	});
+
+	test('caches the gp-api published and unlisted reads by URL under the sitemap tag', async () => {
+		const originalRuntime = process.env['NEXT_RUNTIME'];
+		process.env['NEXT_RUNTIME'] = 'nodejs';
+		resetNextCacheMock();
+		try {
+			mockUpstream({ persons: [{ id: aliceId, slug: 'alice-smith', state: 'WY' }] });
+
+			await fetchPeopleSitemapEntries(base, shardOf(aliceId));
+
+			const gpApiCacheCalls = unstable_cache.mock.calls.filter(([, keyParts]) => (keyParts as string[])[0] === 'gp-api-json');
+			expect(gpApiCacheCalls.map(([, keyParts]) => new URL((keyParts as string[])[1]!).pathname).sort()).toEqual([
+				'/v1/public-person-profiles/published',
+				'/v1/public-person-profiles/unlisted',
+			]);
+			for (const [, , options] of gpApiCacheCalls) expect(options).toEqual({ revalidate: 3600, tags: ['people-sitemap'] });
+		} finally {
+			if (originalRuntime === undefined) delete process.env['NEXT_RUNTIME'];
+			else process.env['NEXT_RUNTIME'] = originalRuntime;
 		}
 	});
 
@@ -882,6 +905,47 @@ describe('buildCountyLookups', () => {
 	});
 });
 
+describe('findMergedCityTwinSlugs', () => {
+	const city: CityPlace = { slug: 'mn/elba', countyName: 'Winona', name: 'Elba', mtfcc: 'G4110' };
+	const twin: CityPlace = { slug: 'mn/winona-county/elba-city', countyName: 'Winona', name: 'Elba city', mtfcc: 'G4040' };
+
+	test('merges a twin that holds only city or district offices', () => {
+		const races: RaceEntry[] = [{ slug: 'mn/winona-county/elba-city/healthcare-district-board-hospital-district-board', positionLevel: 'LOCAL' }];
+		expect([...findMergedCityTwinSlugs([city, twin], races)]).toEqual(['mn/winona-county/elba-city']);
+	});
+
+	// Elba Township's offices sit on the Elba city twin upstream. They belong to a
+	// different government, so the twin keeps its page rather than joining the city.
+	test('keeps a twin that holds a township office', () => {
+		const races: RaceEntry[] = [{ slug: 'mn/winona-county/elba-city/township-clerk', positionLevel: 'LOCAL' }];
+		expect(findMergedCityTwinSlugs([city, twin], races).size).toBe(0);
+	});
+
+	test('ignores township offices of other places', () => {
+		const races: RaceEntry[] = [{ slug: 'mn/winona-county/elba-city-north/township-clerk', positionLevel: 'TOWNSHIP' }];
+		expect([...findMergedCityTwinSlugs([city, twin], races)]).toEqual(['mn/winona-county/elba-city']);
+	});
+});
+
+describe('findMergedCityTwinSlugs: Connecticut town twins', () => {
+	const city: CityPlace = { slug: 'ct/waterbury', countyName: 'Naugatuck Valley', name: 'Waterbury', mtfcc: 'G4110' };
+	const twin: CityPlace = { slug: 'ct/new-haven-county/waterbury-town', countyName: 'Naugatuck Valley', name: 'Waterbury Town', mtfcc: 'G4040' };
+
+	test('folds a town that holds only its town clerk', () => {
+		const races: RaceEntry[] = [{ slug: 'ct/new-haven-county/waterbury-town/town-clerk-as-separate-from-city-clerk-ct-only', positionLevel: 'CITY' }];
+		expect([...findMergedCityTwinSlugs([city, twin], races)]).toEqual(['ct/new-haven-county/waterbury-town']);
+	});
+
+	test('keeps a town that holds any other office, or none', () => {
+		const races: RaceEntry[] = [
+			{ slug: 'ct/new-haven-county/waterbury-town/town-clerk-as-separate-from-city-clerk-ct-only', positionLevel: 'CITY' },
+			{ slug: 'ct/new-haven-county/waterbury-town/city-legislature', positionLevel: 'CITY' },
+		];
+		expect(findMergedCityTwinSlugs([city, twin], races).size).toBe(0);
+		expect(findMergedCityTwinSlugs([city, twin], []).size).toBe(0);
+	});
+});
+
 describe('buildRaceEntries', () => {
 	const BASE = 'https://goodparty.org';
 
@@ -1085,6 +1149,17 @@ describe('buildRaceRouteParams', () => {
 		]);
 	});
 
+	test('a place whose name has a slash maps to cityPositionParams under its last segment', () => {
+		const { cityPositionParams, subplacePositionParams } = buildRaceRouteParams(
+			[{ slug: 'sd/pennington-county/rainy-creek/cheyenne-township/township-clerk', positionLevel: 'LOCAL' }],
+			new Map([['sd/pennington-county/rainy-creek/cheyenne-township', 'sd/pennington-county']]),
+		);
+		expect(cityPositionParams).toEqual([
+			{ state: 'sd', county: 'pennington-county', city: 'cheyenne-township', positionSlug: 'township-clerk' },
+		]);
+		expect(subplacePositionParams).toEqual([]);
+	});
+
 	test('4-part CITY slug maps to cityPositionParams via generic branch', () => {
 		const { cityPositionParams } = params([
 			{ slug: 'wi/adams-county/adams-town/city-clerk', positionLevel: 'CITY' },
@@ -1142,7 +1217,7 @@ describe('fetchStateElectionSitemapEntries', () => {
 	const base = 'https://goodparty.org';
 
 	type MockPlace = { slug: string; mtfcc: string; name: string };
-	type MockCity = { slug: string; countyName: string };
+	type MockCity = { slug: string; countyName: string; name?: string; mtfcc?: string };
 	type MockRace = { slug: string; positionLevel: string };
 
 	/**
@@ -1209,6 +1284,23 @@ describe('fetchStateElectionSitemapEntries', () => {
 		const entries = await fetchStateElectionSitemapEntries('dc', base);
 
 		expect(entries[0]?.url).toBe(`${base}/elections/dc`);
+	});
+
+	// Beatrice, NE was listed twice: the city and its Census filler twin "Beatrice city",
+	// which held only the airport authority board and now redirects to the city.
+	test('drops a Census city twin page but keeps its position pages', async () => {
+		mockUpstream({
+			places: [{ slug: 'ne/gage-county', mtfcc: 'G4020', name: 'Gage County' }],
+			cities: [{ slug: 'ne/beatrice', countyName: 'Gage', name: 'Beatrice', mtfcc: 'G4110' }],
+			towns: [{ slug: 'ne/gage-county/beatrice-city', countyName: 'Gage', name: 'Beatrice city', mtfcc: 'G4040' }],
+			races: [{ slug: 'ne/gage-county/beatrice-city/airport-district-board', positionLevel: 'LOCAL' }],
+		});
+
+		const urls = (await fetchStateElectionSitemapEntries('NE', base)).map(e => e.url);
+
+		expect(urls).toContain(`${base}/elections/ne/gage-county/beatrice`);
+		expect(urls).not.toContain(`${base}/elections/ne/gage-county/beatrice-city`);
+		expect(urls).toContain(`${base}/elections/ne/gage-county/beatrice-city/position/airport-district-board`);
 	});
 
 	test('gives the state a priority at least as high as its counties and cities', async () => {
@@ -1369,6 +1461,47 @@ describe('fetchStateElectionSitemapEntries', () => {
 		expect(urls).toContain(`${base}/elections/ct/fairfield-county/darien-town`);
 		// The unmappable row is still dropped; it has no county to sit under.
 		expect(urls.some((u) => u.includes('orphan-town'))).toBe(false);
+	});
+
+	// Connecticut's cities (`ct/hartford`) carry a planning region and are no county's
+	// child, so neither the sweep nor the walk placed them: their pages and their
+	// offices' pages were missing from the shard. A town that holds only its town clerk
+	// folds into its city; Derby's town, which holds the city government, does not.
+	test('lists Connecticut cities under their known county and folds town-clerk-only towns', async () => {
+		mockUpstream({
+			places: [
+				{ slug: 'ct/fairfield-county', mtfcc: 'G4020', name: 'Fairfield County' },
+				{ slug: 'ct/new-haven-county', mtfcc: 'G4020', name: 'New Haven County' },
+			],
+			cities: [
+				{ slug: 'ct/bridgeport', countyName: 'Greater Bridgeport', name: 'Bridgeport', mtfcc: 'G4110' },
+				{ slug: 'ct/stamford', countyName: 'Western Connecticut', name: 'Stamford', mtfcc: 'G4110' },
+				{ slug: 'ct/derby', countyName: 'Naugatuck Valley', name: 'Derby', mtfcc: 'G4110' },
+			],
+			towns: [
+				{ slug: 'ct/fairfield-county/bridgeport-town', countyName: 'Greater Bridgeport', name: 'Bridgeport Town', mtfcc: 'G4040' },
+				{ slug: 'ct/new-haven-county/derby-town', countyName: 'Naugatuck Valley', name: 'Derby Town', mtfcc: 'G4040' },
+			],
+			countyChildren: {
+				'ct/fairfield-county': [{ slug: 'ct/fairfield-county/bridgeport-town', mtfcc: 'G4040' }],
+				'ct/new-haven-county': [{ slug: 'ct/new-haven-county/derby-town', mtfcc: 'G4040' }],
+			},
+			races: [
+				{ slug: 'ct/bridgeport/city-executive-mayor', positionLevel: 'CITY' },
+				{ slug: 'ct/fairfield-county/bridgeport-town/town-clerk-as-separate-from-city-clerk-ct-only', positionLevel: 'CITY' },
+				{ slug: 'ct/new-haven-county/derby-town/city-executive-mayor', positionLevel: 'CITY' },
+			],
+		});
+
+		const urls = (await fetchStateElectionSitemapEntries('CT', base)).map((e) => e.url);
+
+		expect(urls).toContain(`${base}/elections/ct/fairfield-county/bridgeport`);
+		expect(urls).toContain(`${base}/elections/ct/fairfield-county/stamford`);
+		expect(urls).toContain(`${base}/elections/ct/new-haven-county/derby`);
+		expect(urls).toContain(`${base}/elections/ct/fairfield-county/bridgeport/position/city-executive-mayor`);
+		expect(urls).not.toContain(`${base}/elections/ct/fairfield-county/bridgeport-town`);
+		expect(urls).toContain(`${base}/elections/ct/new-haven-county/derby-town`);
+		expect(urls.filter((u) => /\/elections\/ct\/[^/]+$/.test(u) && !u.endsWith('-county'))).toHaveLength(0);
 	});
 
 	// The walk costs one request per county, so it must stay off for the 50 states

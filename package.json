@@ -39,11 +39,9 @@
     "test:integration:sitemap:batches": "bash scripts/test-sitemap-batches.sh",
     "test:unit": "bun run test:logic",
     "validate:elections": "bun run scripts/validate-election-pages.ts",
-    "rotate:election-token": "bun run scripts/rotate-election-api-token.ts",
     "lint:sitemap": "next lint --file src/app/api/sitemap-index/route.ts --file src/app/sitemap.ts --file src/lib/sitemap-entries.ts"
   },
   "dependencies": {
-    "@amplitude/experiment-js-client": "^1.20.3",
     "@amplitude/experiment-node-server": "^1.13.4",
     "@csstools/postcss-global-data": "^3.1.0",
     "@deck.gl/aggregation-layers": "^9.3.6",
@@ -91,6 +89,7 @@
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.1",
     "@vercel/analytics": "^1.5.0",
+    "@vercel/oidc": "^4.0.4",
     "@vercel/speed-insights": "^1.2.0",
     "babel-plugin-react-compiler": "^1.0.0",
     "chromatic": "^14.0.0--canary.1188.15686730781.0",
@@ -142,7 +141,6 @@
     "vwo-smartcode-nextjs": "^1.4.2"
   },
   "devDependencies": {
-    "@clerk/backend": "^3.16.4",
     "@eslint/eslintrc": "^3.3.1",
     "@next/bundle-analyzer": "^15.5.4",
     "@playwright/test": "^1.49.0",

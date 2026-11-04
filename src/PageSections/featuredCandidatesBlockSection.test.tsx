@@ -70,7 +70,7 @@ describe('FeaturedCandidatesBlockSection', () => {
 		expect(html).not.toContain('Person 2');
 		expect(html).toContain('href="/people/person-1"');
 		expect(html).toContain('Council Member');
-		expect(html).toContain('Has taken the GoodParty.org Pledge');
+		expect(html).toContain('Has taken the People First Pledge');
 		expect(html).toContain('https://img.example/1.jpg');
 	});
 
@@ -142,10 +142,10 @@ describe('FeaturedCandidatesBlockSection', () => {
 			/>,
 		);
 
-		expect(defaults).toContain('Candidates and officials who took the GoodParty.org Pledge');
-		expect(defaults).toContain('Candidates and elected officials near you who have taken the GoodParty.org Pledge.');
+		expect(defaults).toContain('Candidates and officials who took the People First Pledge');
+		expect(defaults).toContain('Candidates and elected officials near you who have taken the People First Pledge.');
 		expect(defaults).toContain('What this symbol means');
-		expect(defaults).toContain('took the <strong>GoodParty.org Pledge</strong>, promising');
+		expect(defaults).toContain('took the <strong>People First Pledge</strong>, promising');
 		expect(defaults).toContain('Read the full pledge');
 	});
 

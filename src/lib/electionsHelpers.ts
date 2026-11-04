@@ -9,6 +9,7 @@ import type { FactsCardProps } from '~/ui/FactsCard';
 
 import { permanentRedirect } from 'next/navigation';
 import { isCityOrTownMtfcc, looksLikeCountySlugSegment, looksLikeDistrictSlug, resolveCountySlugForPlace } from '~/lib/electionsApi';
+import { startOfElectionDay } from '~/lib/electionDay';
 import { officeDisplayName } from '~/lib/officeDisplayName';
 import { formatPersonName } from '~/lib/personName';
 import { buildPersonSlug } from '~/lib/personSlug';
@@ -428,7 +429,7 @@ function parseElectionDateAsLocal(dateStr: string): Date {
 	return parseDateOnlyAsLocal(dateStr.slice(0, 10));
 }
 
-/** True when the election calendar day is strictly before today (local time). */
+/** True when the election calendar day is strictly before today (Pacific time, see `startOfElectionDay`). */
 export function isElectionDateBeforeToday(
 	dateStr: string | undefined,
 	today: Date = new Date(),
@@ -436,7 +437,7 @@ export function isElectionDateBeforeToday(
 	if (!dateStr) return false;
 	try {
 		const electionDay = startOfLocalDay(parseElectionDateAsLocal(dateStr));
-		const todayDay = startOfLocalDay(today);
+		const todayDay = startOfElectionDay(today);
 		return electionDay < todayDay;
 	} catch {
 		return false;
@@ -1237,6 +1238,14 @@ export function resolveElectionPositionFromRaceSlug(
 	// Louisiana), and the place name then lands in the state slot.
 	if (!isValidStateCode(parts[0])) return undefined;
 
+	// A slash in a place name ("Rainy Creek/Cheyenne Township") gives its slug an extra segment,
+	// which would otherwise read as a city plus a subplace. The place's page lives under its last
+	// segment, which is how the sitemap's city loop builds it, so its races must point there too.
+	if (parts.length > 3) {
+		const placeCountySlug = options?.citySlugToCountySlug?.get(parts.join('/'));
+		if (placeCountySlug) return routeFromCountySlug(placeCountySlug, parts.at(-1)!, positionSlug);
+	}
+
 	const level = (race.positionLevel ?? '').toUpperCase();
 	const skipUnmapped = options?.skipUnmappedCity ?? false;
 
@@ -1275,6 +1284,13 @@ export function resolveElectionPositionFromRaceSlug(
 				if (skipUnmapped) return undefined;
 			}
 		}
+	}
+
+	// A county-level office can still be keyed to a city (Arkansas constables: `ar/atkins/county-constable`).
+	// The generic path below would put the city in the county slot, a URL that only works by redirect.
+	if (parts.length === 2) {
+		const countySlug = options?.citySlugToCountySlug?.get(parts.join('/'));
+		if (countySlug) return routeFromCountySlug(countySlug, parts[1]!, positionSlug);
 	}
 
 	const prefix = parts.join('/');

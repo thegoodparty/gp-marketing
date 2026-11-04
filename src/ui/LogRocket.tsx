@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import { isGoodPartyProductionHost } from '~/lib/crawlableHosts';
 import { isLogRocketPath } from '~/lib/logrocketPaths';
+import { isSampledForLogRocket } from '~/lib/logrocketSampling';
 
 const LOGROCKET_APP_ID = 'cicjzw/goodpartyorg';
 
@@ -20,6 +21,9 @@ let initialized = false;
  * `~/lib/crawlableHosts`: preview deploys report `production` while being served
  * on a `*.vercel.app` hostname, and recording those (or local dev) would spend the
  * plan's session quota on nobody.
+ *
+ * Only a sample of visits records, so the daily session cap lasts the whole day; the
+ * rate and the reasoning live in `~/lib/logrocketSampling`.
  */
 export function LogRocket() {
 	const pathname = usePathname();
@@ -28,6 +32,7 @@ export function LogRocket() {
 		if (initialized || !isLogRocketPath(pathname)) return;
 		if (!isGoodPartyProductionHost(window.location.hostname)) return;
 		initialized = true;
+		if (!isSampledForLogRocket()) return;
 		void import('logrocket').then(mod => {
 			// The package ships a CommonJS build typed with `export =`, so TypeScript sees the
 			// namespace as the SDK itself with no `default`, while the bundler hands a dynamic

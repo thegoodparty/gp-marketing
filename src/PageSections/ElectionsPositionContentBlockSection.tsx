@@ -6,7 +6,7 @@ import { resolvePositionHeroState, type PositionHeroState } from '~/lib/position
 import type { TokenMap } from '~/lib/resolveTokens';
 import { resolveSectionText } from '~/lib/resolveSectionText';
 import { POSITION_CONTENT_DEFAULTS, POSITION_CONTENT_LINKS } from '~/sanity/schema/components/component_electionsPositionContentBlock';
-import { ATTRIBUTION_PLEDGE_PHRASE } from '~/ui/_lib/attributionCopy';
+import { ATTRIBUTION_PLEDGE_PHRASE, LEGACY_PLEDGE_PHRASE } from '~/ui/_lib/attributionCopy';
 import { resolveBg } from '~/ui/_lib/resolveBg';
 import { Anchor } from '~/ui/Anchor';
 import {
@@ -98,15 +98,16 @@ function communityLine(copy: string): ReactNode {
 	);
 }
 
-/** The name of the pledge inside a sentence, wrapped by `render`; the rest of the sentence is left as typed. */
+/** The name of the pledge inside a sentence, wrapped by `render`; the rest of the sentence is left as typed, old name included. */
 function withPledgePhrase(copy: string, render: (phrase: string) => ReactNode): ReactNode {
-	const at = copy.indexOf(ATTRIBUTION_PLEDGE_PHRASE);
+	const phrase = copy.includes(ATTRIBUTION_PLEDGE_PHRASE) ? ATTRIBUTION_PLEDGE_PHRASE : LEGACY_PLEDGE_PHRASE;
+	const at = copy.indexOf(phrase);
 	if (at < 0) return <p>{copy}</p>;
 	return (
 		<p>
 			{copy.slice(0, at)}
-			{render(ATTRIBUTION_PLEDGE_PHRASE)}
-			{copy.slice(at + ATTRIBUTION_PLEDGE_PHRASE.length)}
+			{render(phrase)}
+			{copy.slice(at + phrase.length)}
 		</p>
 	);
 }

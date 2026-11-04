@@ -4,7 +4,7 @@ import { getIcon } from '../../utils/getIcon.tsx';
 
 export const LIST_OF_OFFICES_DEFAULT_DESCRIPTION =
 	'Explore offices coming up for election near you. Offices with this symbol [symbol] have candidates on the ballot who have ' +
-	'taken the GoodParty.org Pledge to serve people first, independent of both major parties and big-money interests.';
+	'taken the People First Pledge to serve people first, independent of both major parties and big-money interests.';
 
 export const component_listOfOfficesBlock = {
 	title: 'List of Offices Block',

@@ -28,6 +28,14 @@ places, candidacies, officeholders, persons and districts) comes from
 `/v1/elections/*`; claimed campaigns come from `/v1/public-campaigns` through
 `findCampaignByRace`, and person profiles from `/v1/public-person-profiles`.
 
+The election endpoints used to be a separate service called election-api, and older
+notes, tickets and handoff docs still use that name. They now live inside gp-api, in
+`packages/gp-api/src/electionDb/` in the `thegoodparty/omni` repo, and read their own
+election database. There are no public API docs and this checkout has no token, so to
+learn what an endpoint accepts, read its `*.schema.ts` (the Zod query rules) and
+`*.service.ts` (the query) there, for example
+`gh api repos/thegoodparty/omni/contents/packages/gp-api/src/electionDb/places/places.schema.ts --jq .content | base64 -d`.
+
 gp-api pages every election list and answers only the first 1,000 rows of an
 unpaged read, without saying so. `fetchElectionList` in `electionsApi.ts` and
 `fetchElectionPages` in `src/lib/sitemap-entries.ts` walk lists in pages of 5,000.
@@ -47,10 +55,10 @@ renders more common than the hour suggests. There are about 20,000 city pages, s
 arrivals from the location search land on one nobody has opened lately. And Vercel's
 page cache is per deployment: every production release starts with every programmatic
 page cold (only the 51 state pages are prebuilt). The Data Cache that holds the
-election-api reads does persist across deployments, which is why a cold page right
+election endpoint reads does persist across deployments, which is why a cold page right
 after a release is still faster than a true cold one.
 
-A cold render is a fan-out of a few dozen to about a hundred election-api requests, so
+A cold render is a fan-out of a few dozen to about a hundred election endpoint requests, so
 its time is set by the longest chain of dependent requests, not by the total. Measured
 2026-10-09 on production: cold city pages 1.6 to 3.2 s to first byte, cold county pages
 2.3 to 2.8 s, cold position pages 1.3 to 2.2 s, cold profiles 0.8 to 1.3 s. The
@@ -95,9 +103,10 @@ that chain overlaps the route's own work instead of following it:
   by design.
 
 Raising the candidacy concurrency above six, trimming `FEATURED_RACE_BUDGET`, or a
-place-scoped candidacies endpoint on election-api would each shorten the chain
-further; the first two change what the page shows or how hard it hits election-api
-(the 2026-10-05 outage was election-api CPU), so they are decisions, not cleanups.
+place-scoped candidacies endpoint in gp-api would each shorten the chain
+further; the first two change what the page shows or how hard it hits the election
+endpoints (the 2026-10-05 outage was CPU on what was then election-api), so they are
+decisions, not cleanups.
 
 **`/v1/races` is general-elections-only unless you say otherwise.** The endpoint coerces
 an absent `isPrimary` to `false` instead of leaving it unset, so an unfiltered slug lookup
@@ -109,8 +118,9 @@ position-page URLs in the 2026-09-18 crawl. `getRaceBySlug` therefore retries on
 `isPrimary: true` when the first lookup finds nothing, which costs a second request only on
 the path that would otherwise render a 404. A caller that passes `isPrimary` itself is never
 second-guessed. The fix
-belongs upstream in `election-api`'s `raceFilterSchema`, where the `z.preprocess` around
-`isPrimary`/`isRunoff` turns `undefined` into `false`; until that lands, keep the retry.
+belongs upstream in gp-api's `raceFilterSchema` (`packages/gp-api/src/electionDb/races/races.schema.ts`
+in omni), where the `z.preprocess` around `isPrimary`/`isRunoff` turns `undefined` into
+`false` (still true on 2026-10-27); until that lands, keep the retry.
 
 A slug can also name many race rows. Every California Assembly district is
 `ca/state-representative`, in every election year, and `/v1/races` folds the rows into one
@@ -128,7 +138,7 @@ intentional (Emily, 2026-10-06); this only makes that page describe the current 
 
 ### MTFCC codes
 
-MTFCC codes are US Census geographic-entity codes. election-api tags every place with
+MTFCC codes are US Census geographic-entity codes. The election data tags every place with
 one, and the code decides how the place is treated. The constants live in
 `electionsApi.ts`:
 
@@ -143,6 +153,43 @@ Helpers: `isCityOrTownMtfcc` (city or town), `isDistrictMtfcc`, and the defensiv
 `isStateIndexDistrictPlace`. The last one exists because some API payloads (notably
 Maine) attach `G54xx` codes to municipality-like slugs, so it re-checks slug depth,
 the county-equivalent tail, and district keywords before trusting the code.
+
+#### Census "X city" twins fold into their city
+
+The Census describes many cities twice: the incorporated place ("Beatrice", G4110) and a
+county subdivision covering the same ground ("Beatrice city", G4040, FUNCSTAT F, a filler
+unit with no government). election-api loads both and hangs some of the city's offices on
+the twin, so the city used to appear twice (`ne/gage-county/beatrice` and
+`.../beatrice-city`). `pairCensusCityTwins` finds these pairs: a G4040 twin in the same state and
+county, whose last slug segment is the city's plus `-city` and whose name is the city's plus
+" city". The twin's slug carries the county (`ne/gage-county/beatrice-city`) while the city's
+does not (`ne/beatrice`), and MA and MI capitalize the descriptor ("Palmer Town City"). A merged twin's
+page 308s to its city, the city page lists the twin's offices, and the county list and
+sitemap drop the twin. The twin's position pages keep their URLs, because two different
+offices can share a position slug. A twin holding a township office (`hasTownshipRace`) is
+left alone: those offices belong to a township election-api failed to match, which is a
+data ticket, not a merge. In Nov 2026 this was 174 pairs, 27 of them left alone.
+
+Connecticut has a second kind of twin: a consolidated city and its town ("Bridgeport",
+`ct/bridgeport`, and "Bridgeport Town", `ct/fairfield-county/bridgeport-town`).
+`pairCensusTownTwins` pairs only the cities in `knownCountySlugForCity` with the town of their
+name in their county, and the town folds only when it holds nothing but its town clerk
+(`holdsOnlyTownClerk`). In Nov 2026 that was Bridgeport and Waterbury. Derby's and Naugatuck's
+town rows hold the city government while their city rows hold only the registrar, so they stay
+apart, and Groton is two real governments.
+
+#### Numbered county election districts are not towns
+
+In Mississippi (supervisors districts), Tennessee (civil districts), Virginia (magisterial
+districts) and a few Louisiana parishes, the Census county subdivisions are named "District 1",
+"District 2" and so on. election-api files them as towns under their county
+(`ms/alcorn-county/district-1`) and hangs seats elected by district on them: Mississippi county
+school board members, Tennessee constables and road commissioners. `isCountyElectionDistrictPlace`
+spots them by name and slug together. They are not listed as towns or featured as cities; the
+county page lists their seats with its own offices, each named for its district ("School Board,
+District 1"); the district page 308s to the county; the seat's position page keeps its URL
+under the district but its breadcrumb skips the district. In Nov 2026 this was 466 seat pages:
+MS 214, TN 241, LA 7, VA 4.
 
 ### County-equivalents
 
@@ -255,14 +302,21 @@ Three things not to "fix" while in here:
 - **Town slugs carry their suffix** (`brattleboro-town`); the bare form 404s, so never
   derive the segment by stripping it.
 - **Connecticut needs the county walk, not a sweep.** Both state-level municipal
-  queries come back empty for CT whatever mtfcc you ask for, so the two-sweep fix did
-  not give it a single municipal URL. The data is there:
+  queries return CT rows, but with a planning region ("Capitol") for `countyName`, so
+  none maps to a county and the two-sweep fix did not give it a single municipal URL.
+  The towns are there:
   `/v1/places?slug=ct/<county>&includeChildren=true` returns the towns with a municipal
   mtfcc, which is how `/elections/ct/fairfield-county` links to 19 towns and why each of
   those pages returns 200. `fetchMunicipalitiesByCountyWalk` picks them up from the
   counties, and it fires **only when the state sweep finds nothing at all** — CT alone
   today, 8 extra requests on that one shard. Do not relax that gate to "the sweep looks
   sparse": walking every county nationwide is roughly 3,255 extra calls per build.
+- **Connecticut's 21 cities are nobody's children.** `ct/hartford` carries a planning
+  region and has the state as its only parent, so neither the sweep nor the walk places
+  it. `knownCountySlugForCity` holds their historical counties, and the sitemap
+  (`placeKnownCities`), county pages (`getCityPlacesByCounty`), search and the city page's
+  wrong-county redirect read it. Until Nov 2026 these pages rendered but nothing linked
+  them.
 - **Upstream sometimes mislabels a town as a county.** `vt/halifax` is tagged county-tier
   while the real page is `/elections/vt/windham-county/halifax-town`, so one place can
   surface at two tiers. `dedupeByUrl` will not collapse that, because the two URLs
@@ -338,6 +392,19 @@ roles cannot be addressed at all. `buildPlaceRacePositionHref` returns `undefine
 there and `ListOfOfficesBlock` lists the office without a link rather than linking to
 a page that cannot exist. Giving those offices a real page needs a different URL
 shape, which is a separate piece of work.
+
+### When election day ends
+
+Election dates arrive as calendar days (`2026-11-03`), and every "has this race
+happened yet" check compares them to today's date **in Pacific time**, through
+`startOfElectionDay` in `src/lib/electionDay.ts`. A race stays upcoming until
+midnight Pacific, after every state's polls have closed. Never compare an election
+date with `Date.parse` or `Date.now()`: a date-only string parses as midnight UTC,
+which ended election day at 7pm Eastern the evening before and turned every
+candidate on that day's ballot into a past candidate. The servers also run on UTC,
+so "today in local time" on Vercel ends election day at 7pm Eastern while polls are
+still open. The one exception is the election-api "upcoming" query filter, which
+reaches a day back on purpose (`upcomingSinceDateOnly`).
 
 ### Templates: global vs custom, and three-tier resolution
 
@@ -428,8 +495,8 @@ things then happen on this site, and they are separate:
    the photo, bio and every authored field while keeping a crawlable name.
 2. **Everybody else's page.** A person's photo also travels on their candidacy
    and officeholder records, which is what the "Other Candidates" and "Nearby
-   Officials" cards on *other* profiles read. Those come from election-api,
-   which knows nothing about removals, so the cards are filtered here instead:
+   Officials" cards on *other* profiles read. Those come from gp-api's election
+   endpoints, which know nothing about removals, so the cards are filtered here instead:
    `getRemovedPersonIds` reads gp-api's `/v1/public-person-profiles/unlisted`
    feed and `buildOtherCandidateCards` / `buildNearbyOfficialCards` drop the
    photo for anyone in it.
@@ -530,7 +597,7 @@ miss be a miss. A genuine county race costs one cached place-list read.
 
 Two fallbacks sit behind the state sweep, both in `getCitySlugToCountySlugMap`
 and `resolveCountySlugForCitySlug`: the county walk for Connecticut, whose
-statewide municipal queries return nothing at all (the same workaround
+statewide municipal queries map to no county (the same workaround
 `sitemap-entries.ts` and `resolvePlace.ts` each carry), and a per-place lookup
 for the scattered cities a healthy state's sweep still misses.
 
@@ -554,19 +621,29 @@ Slot-aware matters as much as the check itself: a place name containing a slash
 real city, so in the county slot it resolved — and sent the "Explore Elections"
 band to a different county's towns.
 
+The same slash can give a city or township's own slug an extra segment.
+"Rainy Creek/Cheyenne Township" is `sd/pennington-county/rainy-creek/cheyenne-township`,
+the only such place in all 51 shards (October 2026). Its page lives under its last
+segment (`/elections/sd/pennington-county/cheyenne-township`), so four things look
+it up by the place's own slug: the city page reads its races through it when the URL
+slugs miss, the city position route tries `<place slug>/<position>` last,
+`resolveElectionPositionFromRaceSlug` sends a race whose prefix is a known city slug
+to the city route rather than the subplace one, and the subplace route 308s the old
+split URL to the city-level one.
+
 ### Not fixable here, escalate
 
 Candidate claimed-vs-unclaimed state and any "my profile is wrong" bug is a data
 lineage problem, not a marketing-site code bug. `src/app/candidate/[...slug]/page.tsx`
-calls `buildSectionOverrides`, which stitches together the election-api candidacy
-record, the claimed campaign from gp-api (`findCampaignByRace` ->
+calls `buildSectionOverrides`, which stitches together the candidacy record from
+gp-api's election endpoints, the claimed campaign from gp-api (`findCampaignByRace` ->
 `/v1/public-campaigns`), claimed website content
 (`claimed.website.content.about.bio` and `.issues`), stances, and custom issues. The
 `isClaimed` flag and most of the fallbacks flip based on whether that gp-api lookup
 succeeds. When a candidate page shows the wrong claim state, wrong bio, wrong issues,
 or missing photo, the cause is almost always upstream: the product account, the
-HubSpot company record, or the Candidacy record across gp-api, election-api, and
-HubSpot are not linked or not in sync. Nothing in this repo can correct that.
+HubSpot company record, or the Candidacy record across gp-api's account and
+election data and HubSpot are not linked or not in sync. Nothing in this repo can correct that.
 
 If the agent concludes a bug is in this category, it should not attempt a code fix. It
 should explain in plain language what is happening (for example, "the candidate has

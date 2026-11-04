@@ -75,12 +75,12 @@ describe('ElectionsPositionContentBlockSection', () => {
 		expect(html).toContain('Learn about candidates who have filed to run for City Council Member.');
 		expect(html).not.toContain('Results for City Council Member');
 		expect(html).toContain('What this symbol means');
-		expect(html).toContain('<strong>GoodParty.org Pledge</strong>');
+		expect(html).toContain('<strong>People First Pledge</strong>');
 		expect(html).toContain('Read the full pledge');
 		expect(html).toContain('Who&#x27;s currently in office');
 		expect(html).toContain('Learn about who represents you in Austin.');
 		expect(html).toContain('Independent · Current term 2023 to 2027');
-		expect(html).toContain('Has taken the GoodParty.org Pledge');
+		expect(html).toContain('Has taken the People First Pledge');
 		expect(html).toContain('Explore more races in Austin');
 		expect(html).toContain('See all Austin races');
 		expect(html).toContain('Are you ready for Austin&#x27;s next election?');
@@ -140,7 +140,16 @@ describe('ElectionsPositionContentBlockSection', () => {
 
 	test('the explore card wraps the name of the pledge in the pop-up trigger', () => {
 		const html = render(override, '2026-08-15');
-		expect(html).toMatch(/<button type="button" class="font-medium text-info-500 underline underline-offset-2"[^>]*aria-haspopup="dialog"[^>]*>GoodParty\.org Pledge<\/button>/);
+		expect(html).toMatch(/<button type="button" class="font-medium text-info-500 underline underline-offset-2"[^>]*aria-haspopup="dialog"[^>]*>People First Pledge<\/button>/);
+	});
+
+	test('editor copy written before the rename still gets the bold and the pop-up on the old pledge name', () => {
+		const html = render(override, '2026-08-15', {
+			siderail: { field_exploreBody: 'Find candidates who took the GoodParty.org Pledge.' },
+			pledgeExplainer: { field_body: 'People with this symbol took the GoodParty.org Pledge.' },
+		});
+		expect(html).toContain('<strong>GoodParty.org Pledge</strong>');
+		expect(html).toMatch(/aria-haspopup="dialog"[^>]*>GoodParty\.org Pledge<\/button>/);
 	});
 
 	test('a seat label is drawn as a chip next to the name, not in the meta line', () => {

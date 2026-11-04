@@ -31,7 +31,8 @@ governor has **forty-five days after adjournment**, and must give ten days'
 notice of any intended veto; Saturdays, Sundays and holidays are not counted
 (art. III, § 16). So the session's bills are not settled until about mid-July.
 
-Re-check this doc: August 2027. Last researched: October 2026.
+Re-check this doc: August 2027. Last researched: October 2026 (county charters
+November 2026). Reviewed by Emily: 4 November 2026.
 
 ## How elections work in Hawaii
 

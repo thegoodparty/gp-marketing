@@ -1,0 +1,809 @@
+[
+	{
+		"claim": "Each annual session of the General Assembly begins on the second Monday in January",
+		"citation": "Iowa Code § 2.1",
+		"url": "https://www.legis.iowa.gov/docs/code/2.rtf",
+		"quote": "Each annual session of the general assembly shall commence on the second Monday in January of each year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The constitution sets annual sessions on the second Monday of January",
+		"citation": "Iowa Const. art. III, § 2",
+		"url": "https://www.legis.iowa.gov/docs/publications/ICNST/1022948.pdf",
+		"quote": "assembly shall meet in session on the second Monday of January of each year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Lawmakers' daily expense pay stops after 110 days in the first session and 100 days in the second, which in practice sets the session length",
+		"citation": "Iowa Code § 2.10(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/2.rtf",
+		"quote": "the payments shall be made only for one hundred ten calendar days for the first session and one hundred calendar days for the second session",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Bills presented in the last three days of a session are acted on within thirty days after adjournment",
+		"citation": "Iowa Const. art. III, § 16",
+		"url": "https://www.legis.iowa.gov/docs/publications/ICNST/1022948.pdf",
+		"quote": "shall be deposited by him in the office of the secretary of state, within thirty days after the adjournment",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Acts of a regular session usually take effect on 1 July following passage",
+		"citation": "Iowa Code § 3.7(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/3.rtf",
+		"quote": "shall take effect on the first day of July following their passage, unless some other specified time is provided in an Act or resolution",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is held in November of even-numbered years",
+		"citation": "Iowa Code § 39.1",
+		"url": "https://www.legis.iowa.gov/docs/code/39.rtf",
+		"quote": "The general election shall be held throughout the state on the first Tuesday after the first Monday in November of each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is where county and township officers are chosen",
+		"citation": "Iowa Code § 39.3(7)",
+		"url": "https://www.legis.iowa.gov/docs/code/39.rtf",
+		"quote": "means the biennial election for national or state officers, members of Congress and of the general assembly, county and township officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Auditor and sheriff are elected for four-year terms",
+		"citation": "Iowa Code § 39.17(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/39.rtf",
+		"quote": "an auditor and a sheriff, each to hold office for a term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Treasurer, recorder and county attorney are elected for four-year terms",
+		"citation": "Iowa Code § 39.17(2)",
+		"url": "https://www.legis.iowa.gov/docs/code/39.rtf",
+		"quote": "a treasurer, a recorder, and a county attorney who shall each hold office for a term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Supervisors are elected every two years on staggered four-year terms",
+		"citation": "Iowa Code § 39.18",
+		"url": "https://www.legis.iowa.gov/docs/code/39.rtf",
+		"quote": "There shall be elected biennially in counties, members of the board of supervisors to succeed those whose terms of office will expire",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The supervisor term is four years except for initial terms after a plan change",
+		"citation": "Iowa Code § 39.18",
+		"url": "https://www.legis.iowa.gov/docs/code/39.rtf",
+		"quote": "The term of office of each supervisor shall be four years, except as otherwise provided by",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Hospital trustees, soil and water commissioners, extension council members and township officers are elected nonpartisan at the general election",
+		"citation": "Iowa Code § 39.21",
+		"url": "https://www.legis.iowa.gov/docs/code/39.rtf",
+		"quote": "There shall be elected at each general election, on a nonpartisan basis, the following officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township officers appear on ballots without party affiliation and win by plurality",
+		"citation": "Iowa Code § 39.22(2)(a)",
+		"url": "https://www.legis.iowa.gov/docs/code/39.rtf",
+		"quote": "The election of township officers shall take place at the general election on ballots which shall not reflect a nominee",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A plurality elects township officers",
+		"citation": "Iowa Code § 39.22(2)(a)",
+		"url": "https://www.legis.iowa.gov/docs/code/39.rtf",
+		"quote": "A plurality is sufficient to elect the township officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township trustees serve four-year terms",
+		"citation": "Iowa Code § 39.22(2)(b)",
+		"url": "https://www.legis.iowa.gov/docs/code/39.rtf",
+		"quote": "The term of office of each elected township trustee is four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "One township clerk is elected for a four-year term",
+		"citation": "Iowa Code § 39.22(2)(c)",
+		"url": "https://www.legis.iowa.gov/docs/code/39.rtf",
+		"quote": "in each civil township one township clerk shall be elected who shall hold office for the term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township voters can switch the offices to appointment by the board of supervisors",
+		"citation": "Iowa Code § 39.22(1)(a)",
+		"url": "https://www.legis.iowa.gov/docs/code/39.rtf",
+		"quote": "If the proposition to fill the township offices by appointment is approved by a majority of those voting on the question, the board shall fill the offices by appointment",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a township that includes a city, only voters outside the city elect township officers",
+		"citation": "Iowa Code § 39.22(2)",
+		"url": "https://www.legis.iowa.gov/docs/code/39.rtf",
+		"quote": "In townships which include a city, the officers shall be elected by the voters of the township who reside outside the corporate limits of the city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A township board has three trustees, or five in high-valuation townships",
+		"citation": "Iowa Code § 359.17(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/359.rtf",
+		"quote": "the board of township trustees shall consist of five registered voters of the township",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board directors and community college board members are elected at the school election for four-year terms",
+		"citation": "Iowa Code § 39.24",
+		"url": "https://www.legis.iowa.gov/docs/code/39.rtf",
+		"quote": "Members of boards of directors of community and independent school districts, and boards of directors of merged areas shall be elected at the school election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The regular school election is in November of odd-numbered years",
+		"citation": "Iowa Code § 277.1",
+		"url": "https://www.legis.iowa.gov/docs/code/277.rtf",
+		"quote": "The regular election shall be held biennially on the first Tuesday after the first Monday in November of each odd-numbered year in each school district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every school board candidate is nominated by petition",
+		"citation": "Iowa Code § 277.4(2)(a)",
+		"url": "https://www.legis.iowa.gov/docs/code/277.rtf",
+		"quote": "Each candidate shall be nominated by petition",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School boards may be elected at large or by director district",
+		"citation": "Iowa Code § 275.12(2)",
+		"url": "https://www.legis.iowa.gov/docs/code/275.rtf",
+		"quote": "The method of election of the directors shall be one of the following optional plans",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Community college (merged area) boards are elected by director district",
+		"citation": "Iowa Code § 260C.11(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/260C.rtf",
+		"quote": "composed of one member elected from each director district in the area by the electors of the respective district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City, school and merged area candidates are listed by lot, with no party heading",
+		"citation": "Iowa Code § 49.31(2)(d)",
+		"url": "https://www.legis.iowa.gov/docs/code/49.rtf",
+		"quote": "On the regular and special city election and school election ballots the names of candidates for city, school district, and merged area offices shall be arranged by drawing lots for position",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party names appear on the ballot only for partisan elections",
+		"citation": "Iowa Code § 49.31(1)(a)",
+		"url": "https://www.legis.iowa.gov/docs/code/49.rtf",
+		"quote": "For partisan elections the name of the political party or organization which nominated each candidate shall be listed after or below each candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Area education agency directors are elected by local school board members, not by voters",
+		"citation": "Iowa Code § 273.8(2)",
+		"url": "https://www.legis.iowa.gov/docs/code/273.rtf",
+		"quote": "the board of directors of an area education agency shall be elected by a vote of the members of the boards of directors of the local school districts located within the director district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County public hospital trustees are elected at the general election without party affiliation, by petition",
+		"citation": "Iowa Code § 347.25(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/347.rtf",
+		"quote": "shall take place at the general election on ballots which shall not reflect a nominee",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each soil and water conservation district has five commissioners elected nonpartisan for four-year terms",
+		"citation": "Iowa Code § 161A.5(2)(a)",
+		"url": "https://www.legis.iowa.gov/docs/code/161A.rtf",
+		"quote": "The governing body of each district shall consist of five commissioners elected on a nonpartisan basis for staggered four-year terms",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Soil and water commissioners win by plurality with no primary",
+		"citation": "Iowa Code § 161A.5(3)(d)",
+		"url": "https://www.legis.iowa.gov/docs/code/161A.rtf",
+		"quote": "A plurality is sufficient to elect commissioners, and a primary election for the office shall not be held",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Extension council members are elected at the general election",
+		"citation": "Iowa Code § 176A.6",
+		"url": "https://www.legis.iowa.gov/docs/code/176A.rtf",
+		"quote": "An election shall be held biennially at the time of the general election in each extension district for the election of members of the extension council",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities hold their regular election in November of odd-numbered years, as state law provides",
+		"citation": "Iowa Code § 376.1(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/376.rtf",
+		"quote": "A city shall hold a regular city election on the first Tuesday after the first Monday in November of each odd-numbered year. A city shall hold regular, special, primary, or runoff city elections as provided by state law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City terms default to two years and can be changed to two or four years by petition and election",
+		"citation": "Iowa Code § 376.2(2)",
+		"url": "https://www.legis.iowa.gov/docs/code/376.rtf",
+		"quote": "Except as otherwise provided by state law or the city charter, terms for elective offices are two years. However, the term of an elective office may be changed to two or four years by petition and election",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City candidates are nominated under chapter 376 unless the city chooses chapter 44 or 45 by ordinance",
+		"citation": "Iowa Code § 376.3",
+		"url": "https://www.legis.iowa.gov/docs/code/376.rtf",
+		"quote": ", unless by ordinance a city chooses the provisions of",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A special charter city over 50,000 holds partisan elections unless its voters have chosen otherwise, and may switch back",
+		"citation": "Iowa Code § 376.3",
+		"url": "https://www.legis.iowa.gov/docs/code/376.rtf",
+		"quote": "a city acting under a special charter in 1973 and having a population of over fifty thousand shall continue to hold partisan elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A special charter city that went nonpartisan may resume partisan elections",
+		"citation": "Iowa Code § 376.3",
+		"url": "https://www.legis.iowa.gov/docs/code/376.rtf",
+		"quote": "may choose, in the same manner the original decision was made, to resume holding city elections on a partisan basis",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City candidates get on the ballot by petition",
+		"citation": "Iowa Code § 376.4(1)(a)",
+		"url": "https://www.legis.iowa.gov/docs/code/376.rtf",
+		"quote": "An eligible elector of a city may become a candidate for an elective city office by filing",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Signers for a ward candidate must live in the ward",
+		"citation": "Iowa Code § 376.4(1)(b)",
+		"url": "https://www.legis.iowa.gov/docs/code/376.rtf",
+		"quote": "The petitioners for an individual seeking election from a ward must be residents of the ward at the time of signing the petition",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A person may sign city nomination petitions for more than one candidate for the same office",
+		"citation": "Iowa Code § 376.4(2)(a)",
+		"url": "https://www.legis.iowa.gov/docs/code/376.rtf",
+		"quote": "A person may sign nomination petitions for more than one candidate for the same office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Published city election notices carry no party designations",
+		"citation": "Iowa Code § 376.5",
+		"url": "https://www.legis.iowa.gov/docs/code/376.rtf",
+		"quote": "The published notice must list the names of all candidates, and must not contain any party designations",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city primary is held only when more than twice as many candidates file as there are seats",
+		"citation": "Iowa Code § 376.6(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/376.rtf",
+		"quote": "a primary election must be held for offices for which the number of individuals for whom valid petitions are filed is more than twice the number of positions to be filled",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city council may choose a runoff instead of a primary by ordinance",
+		"citation": "Iowa Code § 376.6(1)(a)",
+		"url": "https://www.legis.iowa.gov/docs/code/376.rtf",
+		"quote": "The council may by ordinance choose to have a runoff election, as provided in",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The city primary is four weeks before the regular city election",
+		"citation": "Iowa Code § 376.7(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/376.rtf",
+		"quote": "If a primary election is necessary, it shall be held on the Tuesday four weeks before the date of the regular city election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In primary cities, the most votes wins the regular city election",
+		"citation": "Iowa Code § 376.8(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/376.rtf",
+		"quote": "In a regular city election following a city primary, the candidates receiving the greatest number of votes cast for each office on the ballot are elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In runoff cities a candidate needs a majority to win outright",
+		"citation": "Iowa Code § 376.8(2)",
+		"url": "https://www.legis.iowa.gov/docs/code/376.rtf",
+		"quote": "no candidate is elected who fails to receive a majority of the votes cast for the office in question",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The city runoff is four weeks after the regular city election",
+		"citation": "Iowa Code § 376.9(2)(a)",
+		"url": "https://www.legis.iowa.gov/docs/code/376.rtf",
+		"quote": "Runoff elections shall be held four weeks after the date of the regular city election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Ranked choice and instant runoff voting are banned in all Iowa elections",
+		"citation": "Iowa Code § 49.93(2)(a)",
+		"url": "https://www.legis.iowa.gov/docs/code/49.rtf",
+		"quote": "An election in this state shall not be conducted using ranked choice voting or instant runoff voting",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The ranked choice ban took effect on 1 January 2026",
+		"citation": "Iowa Code § 49.93, editor note (2025 Acts, ch 123)",
+		"url": "https://www.legis.iowa.gov/docs/code/49.rtf",
+		"quote": "2025 amendment effective January 1, 2026",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Those with the most votes are declared elected",
+		"citation": "Iowa Code § 50.45",
+		"url": "https://www.legis.iowa.gov/docs/code/50.rtf",
+		"quote": "All canvasses of tally lists shall be public, and the persons having the greatest number of votes shall be declared elected",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The party primary is in June of even-numbered years",
+		"citation": "Iowa Code § 43.7",
+		"url": "https://www.legis.iowa.gov/docs/code/43.rtf",
+		"quote": "The primary election by all political parties shall be held at the usual voting places of the several precincts on the first Tuesday after the first Monday in June in each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Supervisors and the elected county officers are nominated in party primaries",
+		"citation": "Iowa Code § 43.6",
+		"url": "https://www.legis.iowa.gov/docs/code/43.rtf",
+		"quote": "shall be nominated in the year preceding the expiration of the term of office of the incumbent",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A primary voter gets only the ballot of the party they are registered with",
+		"citation": "Iowa Code § 43.38",
+		"url": "https://www.legis.iowa.gov/docs/code/43.rtf",
+		"quote": "on the ballot of the party with which the elector is registered as affiliated, and shall receive no other ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any registered voter may change or declare a party at the polls on primary day",
+		"citation": "Iowa Code § 43.42(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/43.rtf",
+		"quote": "Any registered voter may change or declare a party affiliation at the polls on election day and shall be entitled to vote at any primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The change made at the polls is entered on the voter's registration record",
+		"citation": "Iowa Code § 43.42(2)",
+		"url": "https://www.legis.iowa.gov/docs/code/43.rtf",
+		"quote": "shall be reported by the precinct election officials to the county commissioner of registration who shall enter a notation of the change on the registration records",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county nominee needs at least 35 percent of the party's primary vote, or the nomination goes to convention",
+		"citation": "Iowa Code § 43.52(1)(b)",
+		"url": "https://www.legis.iowa.gov/docs/code/43.rtf",
+		"quote": "If no candidate receives thirty-five percent or more of the votes cast by voters of the candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Candidates for whole-county offices may be nominated by petition of county residents",
+		"citation": "Iowa Code § 45.1(6)",
+		"url": "https://www.legis.iowa.gov/docs/code/45.rtf",
+		"quote": "Nominations for candidates for offices filled by the voters of a whole county may be made by nomination petitions signed by eligible electors who are residents of the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Signers must live in the area and may sign for more than one candidate",
+		"citation": "Iowa Code § 45.6(1), (3)",
+		"url": "https://www.legis.iowa.gov/docs/code/45.rtf",
+		"quote": "A signer may sign nomination petitions for more than one candidate for the same office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "All signers must reside in the district the petition is for",
+		"citation": "Iowa Code § 45.6(3)",
+		"url": "https://www.legis.iowa.gov/docs/code/45.rtf",
+		"quote": "of each separate part of a nomination petition, shall reside in the appropriate ward, city, county, school district or school district director district, legislative district, or other district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate placed on the ballot another way cannot be added by petition for the same office",
+		"citation": "Iowa Code § 45.2",
+		"url": "https://www.legis.iowa.gov/docs/code/45.rtf",
+		"quote": "The name of a candidate placed upon the ballot by any other method than by petition shall not be added by petition for the same office in the same election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party primary nominee cannot also be nominated by a nonparty organization for the same office that year",
+		"citation": "Iowa Code § 44.1(2)",
+		"url": "https://www.legis.iowa.gov/docs/code/44.rtf",
+		"quote": "for the same office in the same election year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The board of supervisors has three members unless increased to five",
+		"citation": "Iowa Code § 331.201(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/331.rtf",
+		"quote": "The board shall consist of three members unless the membership is increased to five as provided in",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County voters can increase the board to five",
+		"citation": "Iowa Code § 331.203(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/331.rtf",
+		"quote": "submit to the registered voters of the county at a general election a proposition to increase the number of supervisors to five",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Supervisor representation plan one: at large without district residence",
+		"citation": "Iowa Code § 331.206(1)(a)",
+		"url": "https://www.legis.iowa.gov/docs/code/331.rtf",
+		"quote": "Election at large without district residence requirements for the members",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Supervisor representation plan two: at large with district residence",
+		"citation": "Iowa Code § 331.206(1)(b)",
+		"url": "https://www.legis.iowa.gov/docs/code/331.rtf",
+		"quote": "Election at large but with equal-population district residence requirements for the members",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Supervisor representation plan three: single-member districts",
+		"citation": "Iowa Code § 331.206(1)(c)",
+		"url": "https://www.legis.iowa.gov/docs/code/331.rtf",
+		"quote": "Election from single-member equal-population districts, in which the electors of each district shall elect one member who must reside in that district",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county with the main campus of a state university must elect supervisors from single-member districts",
+		"citation": "Iowa Code § 331.206(2)(a)",
+		"url": "https://www.legis.iowa.gov/docs/code/331.rtf",
+		"quote": "However, a county with the main campus of an institution of higher learning governed by the state board of regents shall use plan",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The regents university rule was set by 2025 Acts ch 15 with a transition for the 2026 general election",
+		"citation": "Iowa Code § 331.206, editor note",
+		"url": "https://www.legis.iowa.gov/docs/code/331.rtf",
+		"quote": "For transition for 2026 general election for counties with the main campus of an institution of higher learning governed by the state board of regents",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The three regents universities are in Iowa City, Ames and Cedar Falls",
+		"citation": "Board of Regents, State of Iowa, Institutions",
+		"url": "https://www.iowaregents.edu/institutions",
+		"quote": "University of Iowa Iowa City, Iowa",
+		"certainty": "statutory",
+		"verified": "state agency publication"
+	},
+	{
+		"claim": "Iowa State University is in Ames and UNI in Cedar Falls",
+		"citation": "Board of Regents, State of Iowa, Institutions",
+		"url": "https://www.iowaregents.edu/institutions",
+		"quote": "Iowa State University Ames, Iowa",
+		"certainty": "statutory",
+		"verified": "state agency publication"
+	},
+	{
+		"claim": "UNI is in Cedar Falls",
+		"citation": "Board of Regents, State of Iowa, Institutions",
+		"url": "https://www.iowaregents.edu/institutions",
+		"quote": "University of Northern Iowa Cedar Falls, Iowa",
+		"certainty": "statutory",
+		"verified": "state agency publication"
+	},
+	{
+		"claim": "A county may combine the duties of elected officers, such as auditor and recorder, by petition and election",
+		"citation": "Iowa Code § 331.323(1)(a)",
+		"url": "https://www.legis.iowa.gov/docs/code/331.rtf",
+		"quote": "A county may combine the duties of two or more of the following county officers and employees",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State law lists alternative forms of county government, including charter and city-county consolidation",
+		"citation": "Iowa Code § 331.231",
+		"url": "https://www.legis.iowa.gov/docs/code/331.rtf",
+		"quote": "Charter government form as provided in",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An alternative county form must keep partisan elections for its officers",
+		"citation": "Iowa Code § 331.238(3)",
+		"url": "https://www.legis.iowa.gov/docs/code/331.rtf",
+		"quote": "An alternative form of county government shall provide for the partisan election of its officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Alternative county forms exercise home rule only consistent with state law",
+		"citation": "Iowa Code § 331.238(2)(a)",
+		"url": "https://www.legis.iowa.gov/docs/code/331.rtf",
+		"quote": "An alternative form of county government shall provide for the exercise of home rule power and authority not inconsistent with state law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County home rule is granted only where not inconsistent with state law",
+		"citation": "Iowa Const. art. III, § 39A",
+		"url": "https://www.legis.iowa.gov/docs/publications/ICNST/1022948.pdf",
+		"quote": "are granted home rule power and authority, not inconsistent",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Municipal home rule is granted only where not inconsistent with state law",
+		"citation": "Iowa Const. art. III, § 38A",
+		"url": "https://www.legis.iowa.gov/docs/publications/ICNST/1022948.pdf",
+		"quote": "Municipal corporations are granted home rule power and authority, not inconsistent with the laws of the general assembly",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A city is a municipal corporation, not a county, township, school district or special district",
+		"citation": "Iowa Code § 362.2(4)",
+		"url": "https://www.legis.iowa.gov/docs/code/362.rtf",
+		"quote": "means a municipal corporation, but not including a county, township, school district, or any special-purpose district or authority",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Iowa offers eight forms of city government",
+		"citation": "Iowa Code § 372.1(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/372.rtf",
+		"quote": "Mayor-council, or mayor-council with appointed manager",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A new city starts as mayor-council and keeps its form until it adopts another",
+		"citation": "Iowa Code § 372.1(2)",
+		"url": "https://www.legis.iowa.gov/docs/code/372.rtf",
+		"quote": "A city when first incorporated has the mayor-council form. A city retains its form of government until it adopts a different form",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters change the form of government by petition and special election",
+		"citation": "Iowa Code § 372.2(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/372.rtf",
+		"quote": "Eligible electors of the city may petition the council to submit to the electors the question of adopting a different form of city government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Mayor-council cities default to a mayor and five council members at large",
+		"citation": "Iowa Code § 372.4(1)(a)",
+		"url": "https://www.legis.iowa.gov/docs/code/372.rtf",
+		"quote": "A city governed by the mayor-council form has a mayor and five council members elected at large",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Smaller mayor-council cities may cut the council to three",
+		"citation": "Iowa Code § 372.4(3)",
+		"url": "https://www.legis.iowa.gov/docs/code/372.rtf",
+		"quote": "submit a proposal at the next regular or special city election to reduce the number of council members to three",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commission form: a mayor and four council members at large",
+		"citation": "Iowa Code § 372.5(2)(a)",
+		"url": "https://www.legis.iowa.gov/docs/code/372.rtf",
+		"quote": "A city governed by the commission form has a council composed of a mayor and four council members elected at large",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commission form cities may elect a treasurer by ordinance",
+		"citation": "Iowa Code § 372.5(5)",
+		"url": "https://www.legis.iowa.gov/docs/code/372.rtf",
+		"quote": "The council may appoint a city treasurer or may, by ordinance, provide for election of that officer",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Council-manager-at-large: five members on four-year terms; the council picks the mayor from its members",
+		"citation": "Iowa Code § 372.6(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/372.rtf",
+		"quote": "the council shall elect one of the council members to serve as mayor, and one to serve as mayor pro tem",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Council-manager-at-large members serve staggered four-year terms",
+		"citation": "Iowa Code § 372.6(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/372.rtf",
+		"quote": "A city governed by the council-manager-at-large form has five council members elected at large for staggered four-year terms",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A council-manager-at-large city may switch to a directly elected mayor on a four-year term",
+		"citation": "Iowa Code § 372.6(2)(a)",
+		"url": "https://www.legis.iowa.gov/docs/code/372.rtf",
+		"quote": "proposing that the city be governed by a mayor elected by the people for a four-year term and four council members elected at large",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Council-manager-ward: a mayor and six council members on four-year staggered terms",
+		"citation": "Iowa Code § 372.7(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/372.rtf",
+		"quote": "The mayor and other council members serve four-year staggered terms",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule charter needs an odd-numbered council of at least five",
+		"citation": "Iowa Code § 372.10(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/372.rtf",
+		"quote": "A council of an odd number of members, not less than five",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule charter sets two-year or staggered four-year terms",
+		"citation": "Iowa Code § 372.10(3)",
+		"url": "https://www.legis.iowa.gov/docs/code/372.rtf",
+		"quote": "Two-year or staggered four-year terms of office for the mayor and council members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The council appoints the city clerk",
+		"citation": "Iowa Code § 372.13(3)",
+		"url": "https://www.legis.iowa.gov/docs/code/372.rtf",
+		"quote": "The council shall appoint a city clerk to maintain city records and perform other duties prescribed by state or city law",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters can change the council representation plan (at large, wards, or a mix) by petition and election",
+		"citation": "Iowa Code § 372.13(11)",
+		"url": "https://www.legis.iowa.gov/docs/code/372.rtf",
+		"quote": "Election of a specified number of members at large and a specified number of members from single-member, equal-population wards",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special charters keep their own rules on electing or appointing a clerk and treasurer",
+		"citation": "Iowa Code § 420.41(1)(d)",
+		"url": "https://www.legis.iowa.gov/docs/code/420.rtf",
+		"quote": "In respect of the election or appointment of a clerk, treasurer, police magistrate and marshal",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Davenport's city election ballot lists candidates with no party labels",
+		"citation": "Scott County Commissioner of Elections, sample ballot, City of Davenport D81, 7 November 2017",
+		"url": "https://elections.scottcountyiowa.gov/files/sample_ballots/20171107_d81_city_of_davenport_77481.pdf",
+		"quote": "For Alderman - At - Large",
+		"certainty": "varies by place",
+		"verified": "local government publication",
+		"manual": true
+	},
+	{
+		"claim": "Davenport's council members are aldermen, elected by ward and at large",
+		"citation": "Scott County Commissioner of Elections, sample ballot, City of Davenport D81, 7 November 2017",
+		"url": "https://elections.scottcountyiowa.gov/files/sample_ballots/20171107_d81_city_of_davenport_77481.pdf",
+		"quote": "For 8th Ward Alderman",
+		"certainty": "varies by place",
+		"verified": "local government publication",
+		"manual": true
+	},
+	{
+		"claim": "The governor has three days, Sundays excepted, to return a bill during the session",
+		"citation": "Iowa Const. art. III, § 16",
+		"url": "https://www.legis.iowa.gov/docs/publications/ICNST/1022948.pdf",
+		"quote": "If any bill shall not be returned within three days after it shall have been presented to him, Sunday excepted",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Four AEA directors are appointed by school superintendents",
+		"citation": "Iowa Code § 273.8(1)(c)",
+		"url": "https://www.legis.iowa.gov/docs/code/273.rtf",
+		"quote": "must be appointed by the majority vote of the superintendents of school districts located within the boundaries of the area education agency",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Precinct caucuses elect delegates to county conventions and party committee members",
+		"citation": "Iowa Code § 43.4(1)",
+		"url": "https://www.legis.iowa.gov/docs/code/43.rtf",
+		"quote": "Delegates to county conventions of political parties and party committee members shall be elected at precinct caucuses",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The city primary sends up to twice the number of seats to the regular election",
+		"citation": "Iowa Code § 376.7(2)",
+		"url": "https://www.legis.iowa.gov/docs/code/376.rtf",
+		"quote": "to the extent of twice the number of unfilled positions, must be placed on the ballot for the regular city election as candidates for that office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special charter cities under the partisan rule elect a mayor and aldermen",
+		"citation": "Iowa Code § 45.1(10)",
+		"url": "https://www.legis.iowa.gov/docs/code/45.rtf",
+		"quote": "For the office of mayor and alderman at large, nominations may be made by nomination papers signed by seventy-five eligible electors residing in the city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

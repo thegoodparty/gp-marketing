@@ -63,7 +63,7 @@ states cover the most pages, so they come first.
 | 48 | Rhode Island | 74 | done, reviewed 3 November 2026 |
 | 49 | Nevada | 67 | done, reviewed 3 November 2026 |
 | 50 | Hawaii | 5 | done, reviewed 4 November 2026 |
-| 51 | District of Columbia | 3 | drafted, awaiting review |
+| 51 | District of Columbia | 3 | done, reviewed 4 November 2026 |
 
 The rest follow the order in the CSV.
 
@@ -95,7 +95,7 @@ If a legislature meets year-round, re-check in January and July.
 | Colorado | 13 January 2027, at most 120 days | by 12 May | July 2027 | verified |
 | Connecticut | 6 January 2027 | by 9 June, then a veto session | August 2027 | verified |
 | Delaware | 12 January 2027 | 30 June | August 2027 | verified |
-| District of Columbia | Council meets year-round | — | January and July | no |
+| District of Columbia | Council meets year-round; new Council 2 January 2027 | — | January and July | verified |
 | Florida | 2 March 2027, at most 60 days | by 30 April | August 2027 | verified |
 | Georgia | 11 January 2027, at most 40 legislative days | late March–April | June 2027 (and November 2026, after the probate judge amendment vote) | verified |
 | Hawaii | 20 January 2027, 60 days | late April or early May | August 2027 | verified |

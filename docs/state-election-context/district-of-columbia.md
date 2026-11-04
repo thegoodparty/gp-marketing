@@ -36,6 +36,7 @@ District directly on any subject at any time (§ 1-206.01).
 
 Re-check this doc: January and July every year, and whenever Congress passes a
 law about DC elections or the Council. Last researched: October 2026.
+Reviewed by Emily: 4 November 2026.
 
 ## How elections work in DC
 

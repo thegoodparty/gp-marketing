@@ -15,7 +15,7 @@ same ground on every one of the ~48,000 location pages.
 | Colorado | [colorado.md](./colorado.md) | reviewed 3 November 2026 |
 | Connecticut | [connecticut.md](./connecticut.md) | reviewed 3 November 2026 |
 | Delaware | [delaware.md](./delaware.md) | reviewed 3 November 2026 |
-| District of Columbia | [district-of-columbia.md](./district-of-columbia.md) | draft, awaiting review |
+| District of Columbia | [district-of-columbia.md](./district-of-columbia.md) | reviewed 4 November 2026 |
 | Florida | [florida.md](./florida.md) | reviewed 3 November 2026 |
 | Georgia | [georgia.md](./georgia.md) | reviewed 2 November 2026 |
 | Hawaii | [hawaii.md](./hawaii.md) | reviewed 4 November 2026 |
@@ -59,7 +59,7 @@ same ground on every one of the ~48,000 location pages.
 | Wisconsin | [wisconsin.md](./wisconsin.md) | reviewed 27 October 2026 |
 | Wyoming | [wyoming.md](./wyoming.md) | reviewed 3 November 2026 |
 
-All 50 states and DC are drafted. 47 are reviewed. Each doc is a draft until Emily has reviewed it, and only a doc marked "Reviewed by Emily" should feed the generator.
+All 50 states and DC are drafted. 48 are reviewed. Each doc is a draft until Emily has reviewed it, and only a doc marked "Reviewed by Emily" should feed the generator.
 
 ## What these are, and what they are not
 

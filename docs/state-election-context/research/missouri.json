@@ -1,0 +1,1098 @@
+[
+	{
+		"claim": "The General Assembly convenes on the first Wednesday after the first Monday in January",
+		"citation": "Mo. Const. art. III, § 20",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=III%20%20%20%2020&constit=y",
+		"quote": "The general assembly shall reconvene on the first Wednesday after the first Monday of January after adjournment at midnight on May thirtieth of the preceding year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The session adjourns at midnight on May 30; bills still on the calendar after 6 p.m. on the first Friday after the second Monday in May are tabled",
+		"citation": "Mo. Const. art. III, § 20(a)",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=III%20%20%20%2020%28a%29&constit=y",
+		"quote": "All bills in either house remaining on the calendar after 6:00 p.m. on the first Friday following the second Monday in May are tabled.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The session adjourns at midnight on May 30",
+		"citation": "Mo. Const. art. III, § 20(a)",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=III%20%20%20%2020%28a%29&constit=y",
+		"quote": "The general assembly shall adjourn at midnight on May thirtieth",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "After adjournment the governor has 45 days to act on bills; an unreturned bill becomes law",
+		"citation": "Mo. Const. art. III, § 31",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=III%20%20%20%2031&constit=y",
+		"quote": "When the general assembly adjourns, or recesses for a period of thirty days or more, the governor shall return within forty-five days any bill",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Vetoed bills can be taken up at a September veto session",
+		"citation": "Mo. Const. art. III, § 32",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=III%20%20%20%2032&constit=y",
+		"quote": "the general assembly shall automatically reconvene on the first Wednesday following the second Monday in September",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Laws take effect ninety days after adjournment unless they carry an emergency clause",
+		"citation": "Mo. Const. art. III, § 29",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=III%20%20%20%2029&constit=y",
+		"quote": "No law passed by the general assembly, except an appropriation act, shall take effect until ninety days after the adjournment of the session",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "General municipal election day, for political subdivision and special district officers, is the first Tuesday after the first Monday in April, every year",
+		"citation": "§ 115.121.3 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.121",
+		"quote": "The election day for the election of political subdivision and special district officers shall be the first Tuesday after the first Monday in April each year, and shall be known as the general municipal election day.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The primary is the first Tuesday after the first Monday in August of even-numbered years",
+		"citation": "§ 115.121.2 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.121",
+		"quote": "The primary election day shall be the first Tuesday after the first Monday in August of even-numbered years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is the first Tuesday after the first Monday in November of even-numbered years",
+		"citation": "§ 115.121.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.121",
+		"quote": "The general election day shall be the first Tuesday after the first Monday in November of even-numbered years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Townships in township organization counties are political subdivisions under the Election Code",
+		"citation": "§ 115.013(20) RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.013",
+		"quote": "\"Political subdivision\" , a county, city, town, village, or township of a township organization county;",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School districts and other taxing districts are special districts under the Election Code",
+		"citation": "§ 115.013 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.013",
+		"quote": "\"Special district\" , any school district, water district, fire protection district, hospital district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "All public elections are on a Tuesday, on one of the listed election days or on another day a city or county charter expressly provides",
+		"citation": "§ 115.123.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.123",
+		"quote": "or on another day expressly provided by city or county charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter city or county that provided for a March primary before August 28, 1999 may keep it",
+		"citation": "§ 115.123.3 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.123",
+		"quote": "Nothing in this section prohibits a charter city or county from having its primary election in March if the charter provided for a March primary before August 28, 1999.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Election Code applies to all public elections, notwithstanding any other law, except property-owner elections",
+		"citation": "§ 115.005 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.005",
+		"quote": "the provisions of this chapter shall apply to all public elections in the state, except elections for which ownership of real property is required by law for voting",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Filing dates for political subdivision and special district offices follow law or charter, with a default window",
+		"citation": "§ 115.127.5 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.127",
+		"quote": "If the opening date for filing a declaration of candidacy for any office in a political subdivision or special district is not required by law or charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An uncontested nonpartisan election in a political subdivision or special district is cancelled and the candidates take office; cities over 2,000 are excluded",
+		"citation": "§ 115.124.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.124",
+		"quote": "no election shall be held, and the candidates shall assume the responsibilities of their offices at the same time and in the same manner as if they had been elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities of 2,000 or fewer may opt in to cancelling uncontested elections by a vote, for six years at a time",
+		"citation": "§ 115.124.3 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.124",
+		"quote": "The governing body of any city, town, or village with two thousand or fewer inhabitants may submit to the voters at any available election, a question to adopt the provisions of subsection 1 of this section for municipal elections.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "At a primary each voter receives the ballot of one party, chosen before receiving the ballot",
+		"citation": "§ 115.397 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.397",
+		"quote": "In each primary election, each voter shall be entitled to receive the ballot of one and only one political party, designated by the voter before receiving his ballot.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter who takes no party ballot can still vote on questions and nonpartisan races at the primary",
+		"citation": "§ 115.397 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.397",
+		"quote": "Each voter who does not wish to participate in a party primary may vote on all questions and for any nonpartisan candidates",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party affiliation on the registration form is optional and voters default to unaffiliated",
+		"citation": "§ 115.155 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.155",
+		"quote": "Political Party Affiliation (OPTIONAL:  You shall be unaffiliated unless you designate an affiliation.)",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party affiliation on the registration form is optional and voters default to unaffiliated",
+		"citation": "§ 115.155.2 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.155",
+		"quote": "If an applicant does not designate an affiliation, the election authority shall mark the applicant's form as unaffiliated.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Candidates for elective office are nominated at a primary election, except as otherwise provided",
+		"citation": "§ 115.339 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.339",
+		"quote": "all candidates for elective office shall be nominated at a primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A primary declaration of candidacy names the party ticket",
+		"citation": "§ 115.349.3 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.349",
+		"quote": "the party ticket on which he or she wishes to be a candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party nomination rules do not apply to special district, township, or city, town and village offices",
+		"citation": "§ 115.308 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.308",
+		"quote": "Sections 115.307 to 115.405 shall not apply to candidates for special district offices; township offices in township organization counties; or city, town, and village offices.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A third class city council may provide for nomination by primary by ordinance",
+		"citation": "§ 77.040 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=77.040",
+		"quote": "the city council may by ordinance provide for the nomination of officers by primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A fourth class city may provide for a primary by ordinance",
+		"citation": "§ 79.035.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=79.035",
+		"quote": "the governing body may provide for a primary election, to be held on one of the days specified in section 115.123 , only by ordinance",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commission-form third class cities nominate by a February primary unless they eliminate it",
+		"citation": "§ 78.090 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=78.090",
+		"quote": "The primary election for such nomination shall be held on the first Tuesday after the first Monday in February preceding the municipal election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commission-form third class cities may eliminate the primary",
+		"citation": "§ 78.090.2 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=78.090",
+		"quote": "may, by order or ordinance, provide for the elimination of the primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "St. Charles County school board candidates may have their party affiliation printed beside their name",
+		"citation": "§ 162.082.4 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=162.082",
+		"quote": "a candidate for election as a school board member may voluntarily designate such candidate's political party affiliation and consent to have that affiliation appear beside the candidate's name on the ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The section applies to districts mostly in a county of 400,000 to 500,000 (St. Charles County, per the Revisor heading)",
+		"citation": "§ 162.082 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=162.082",
+		"quote": "Elections for directors of school district, held when, requirements. (St. Charles County)",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "St. Charles County school board elections move to November of even-numbered years with four-year terms from 2028",
+		"citation": "§ 162.082.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=162.082",
+		"quote": "shall be held on the first Tuesday after the first Monday in November of even-numbered years, and the term of every school board member elected in 2028 and every year thereafter shall be four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Kansas City school board candidates appear without party designation",
+		"citation": "§ 162.492.5 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=162.492",
+		"quote": "The names of all candidates shall appear upon the ballot without party designation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The primary winner is the candidate with the most votes",
+		"citation": "§ 115.343 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.343",
+		"quote": "The person receiving the greatest number of votes at a primary election as a party candidate for an office shall be the only candidate of that party for the office at the general election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A tie for a local office is broken by a special election, or by lot if the tied candidates agree",
+		"citation": "§ 115.517.3, .4 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.517",
+		"quote": "determine the winner of such election by lot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A tie for a local office is broken by a special election",
+		"citation": "§ 115.517.3 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.517",
+		"quote": "issue a proclamation stating the fact and ordering a special election to determine which candidate is elected to the office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters get one vote per open seat and may not rank candidates",
+		"citation": "Mo. Const. art. VIII, § 3.2",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=VIII%20%20%20%203&constit=y",
+		"quote": "Under no circumstance shall a voter be permitted to cast a ballot in a manner that results in the ranking of candidates for a particular office.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters have as many votes as there are open seats",
+		"citation": "Mo. Const. art. VIII, § 3.2",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=VIII%20%20%20%203&constit=y",
+		"quote": "Voters shall have the same number of votes for an office as the number of open seats to be elected to such office at that election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The one-vote rule does not apply to nonpartisan municipal elections in a city whose ordinance in effect on November 5, 2024 allowed more than one vote",
+		"citation": "Mo. Const. art. VIII, § 3.2",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=VIII%20%20%20%203&constit=y",
+		"quote": "this subsection shall not apply to any nonpartisan municipal election held in a city that had an ordinance in effect as of November 5, 2024, that permits voters to cast more than a single vote for each issue or candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Kansas City school board subdistrict and at-large seats are won by plurality",
+		"citation": "§ 162.492.4 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=162.492",
+		"quote": "a majority of the votes are not required to elect but the candidate having a plurality of the votes shall be elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An independent for county office files a petition with the county election authority",
+		"citation": "§ 115.321.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.321",
+		"quote": "Any person desiring to be an independent candidate for any county office shall file a petition with the election authority of the county.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A valid independent petition puts the candidate on the general election ballot",
+		"citation": "§ 115.321.5 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.321",
+		"quote": "shall be placed on the official ballot as an independent candidate for the office at the next general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Petition signers are registered voters of the county and district",
+		"citation": "§ 115.325.3 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.325",
+		"quote": "We, the undersigned, citizens and registered voters of the state of Missouri, ______ County and ______ (district if appropriate), nominate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each petition page holds signatures from one county only",
+		"citation": "§ 115.325.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.325",
+		"quote": "each page shall contain signatures of registered voters from only one county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate cannot file as both a party candidate and an independent for the same office and term without withdrawing",
+		"citation": "§ 115.351 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.351",
+		"quote": "No person who files as a party candidate for nomination or election to an office shall, without withdrawing, file as another party's candidate or an independent candidate for nomination or election to the office for the same term.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate who loses a primary cannot run as a write-in for the same office in November",
+		"citation": "§ 115.453(4) RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.453",
+		"quote": "No candidate who files for nomination to an office and is not nominated at a primary election may file a declaration of intent to be a write-in candidate for the same office at the general election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county without a charter or alternative form elects a three-member county court (now county commission); voters may reduce it to one or two",
+		"citation": "Mo. Const. art. VI, § 7",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=VI%20%20%20%207&constit=y",
+		"quote": "there shall be elected a county court of three members which shall manage all county business as prescribed by law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters may reduce the commission to one or two members",
+		"citation": "Mo. Const. art. VI, § 7",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=VI%20%20%20%207&constit=y",
+		"quote": "The voters of any county may reduce the number of members to one or two as provided by law.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county court is called the county commission, three commissioners, county divided into two districts",
+		"citation": "§ 49.010 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=49.010",
+		"quote": "The county court shall be known as the \"county commission\" and shall be composed of three members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "District commissioners and the presiding commissioner serve four-year terms; the presiding commissioner is elected countywide",
+		"citation": "§ 49.020 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=49.020",
+		"quote": "the presiding commissioner of the county shall be elected by the voters of the county at large",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "District commissioners serve four-year terms",
+		"citation": "§ 49.020 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=49.020",
+		"quote": "the voters of each of the districts shall elect a county commissioner, who shall hold his office for a term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties elect a county clerk at the general election for four years",
+		"citation": "§ 51.020 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=51.020",
+		"quote": "the voters of the county at large in each county in this state shall elect a clerk of the county commission",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties except township counties elect a collector of revenue",
+		"citation": "§ 52.010.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=52.010",
+		"quote": "a collector, to be styled the collector of the revenue, shall be elected in each of the counties of this state, except counties under township organization",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties elect an assessor",
+		"citation": "§ 53.010.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=53.010",
+		"quote": "the qualified voters in each county in this state shall elect a county assessor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties elect a treasurer; township counties elect a collector-treasurer instead",
+		"citation": "§ 54.010.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=54.010",
+		"quote": "There is created in all the counties of this state the office of county treasurer, except that in those counties having adopted the township alternative form of county government the qualified electors shall elect a county collector-treasurer.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties elect a prosecuting attorney",
+		"citation": "§ 56.010 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=56.010",
+		"quote": "there shall be elected in each county of this state a prosecuting attorney",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties elect a sheriff",
+		"citation": "§ 57.010.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=57.010",
+		"quote": "the voters in every county in this state shall elect some suitable person sheriff",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only counties in which a coroner is to be elected elect one",
+		"citation": "§ 58.020 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=58.020",
+		"quote": "in each county in this state in which a coroner is to be elected shall elect a coroner",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A separate recorder is elected only in first and second class counties and third class counties where the circuit clerk and recorder are separate",
+		"citation": "§ 59.020 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=59.020",
+		"quote": "in counties of the third class where the offices of clerk of the circuit court and recorder of deeds are separate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every county except St. Louis City elects a public administrator",
+		"citation": "§ 473.730.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=473.730",
+		"quote": "Every county in this state, except the City of St. Louis, shall elect a public administrator",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties are sorted into classes by assessed valuation",
+		"citation": "§ 48.020.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=48.020",
+		"quote": "All counties having an assessed valuation of nine hundred million dollars and over shall automatically be in the first classification",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Class thresholds rise each year with inflation",
+		"citation": "§ 48.020.2 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=48.020",
+		"quote": "The required assessed valuation for each classification under subsection 1 of this section shall be increased annually by an amount equal to the percentage change in the annual average of the Consumer Price Index",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county over 85,000 people, or one that has been first class for two years, may adopt a charter",
+		"citation": "Mo. Const. art. VI, § 18(a)",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=VI%20%20%20%2018%28a%29&constit=y",
+		"quote": "Any county having more than 85,000 inhabitants, according to the census of the United States, may frame and adopt and amend a charter for its own government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Charter counties form a separate class outside the classification system",
+		"citation": "Mo. Const. art. VI, § 18(a)",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=VI%20%20%20%2018%28a%29&constit=y",
+		"quote": "Counties which adopt or which have adopted a charter or constitutional form of government shall be a separate class of counties outside of the classification system",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county charter sets the form of government and the number, kinds and selection of county officers",
+		"citation": "Mo. Const. art. VI, § 18(b)",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=VI%20%20%20%2018%28b%29&constit=y",
+		"quote": "for the number, kinds, manner of selection, terms of office, and salaries of the county officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Since the August 2026 amendment, a county charter must keep the assessor elected",
+		"citation": "Mo. Const. art. VI, § 18(b)",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=VI%20%20%20%2018%28b%29&constit=y",
+		"quote": "such charter shall require the assessor of the county to be an elected officer",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Section 18(b) was amended on August 4, 2026",
+		"citation": "Mo. Const. art. VI, § 18(b)",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=VI%20%20%20%2018%28b%29&constit=y",
+		"quote": "(Amended August 4, 2026)",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State law provides for free and open elections in charter counties",
+		"citation": "Mo. Const. art. VI, § 18(e)",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=VI%20%20%20%2018%28e%29&constit=y",
+		"quote": "Laws shall be enacted providing for free and open elections in such counties",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Third and fourth class counties may adopt township organization by a county vote",
+		"citation": "§ 65.010 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=65.010",
+		"quote": "Any county of the third and fourth class in this state may adopt this alternative form of county government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township organization takes a countywide vote to adopt and can be abolished by vote",
+		"citation": "§ 65.020 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=65.020",
+		"quote": "The township organization form of county government shall not become operative unless adopted by a vote of the majority of the voters of the county voting upon the question.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each township elects a trustee (who is ex officio treasurer), a clerk and two board members at the biennial election",
+		"citation": "§ 65.110.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=65.110",
+		"quote": "There shall be chosen at the biennial election in each township one trustee, who shall be ex officio treasurer of the township, one township clerk, and two members of the township board.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The legislature classifies cities and towns into no more than four classes",
+		"citation": "Mo. Const. art. VI, § 15",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=VI%20%20%20%2015&constit=y",
+		"quote": "The general assembly shall provide by general laws for the organization and classification of cities and towns.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Third class: cities of 3,000 or more that choose to be third class",
+		"citation": "§ 72.030 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=72.030",
+		"quote": "All cities and towns in this state containing three thousand or more inhabitants, which shall elect to be a city of the third class, shall be cities of the third class.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Fourth class: 500 to under 3,000 that choose it; villages may also vote to become fourth class",
+		"citation": "§ 72.040.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=72.040",
+		"quote": "All cities and towns in this state containing five hundred and less than three thousand inhabitants",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Villages: towns under 500",
+		"citation": "§ 72.050.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=72.050",
+		"quote": "All towns not now incorporated in this state containing less than five hundred inhabitants are hereby declared to be villages.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A village over 200 may vote to become fourth class and keeps that class at its option",
+		"citation": "§ 72.050.2 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=72.050",
+		"quote": "Any village in this state now or hereafter having more than two hundred inhabitants may by majority vote of the voters therein elect to become a city of the fourth class and shall retain such classification at its option.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A place changes class only by a vote of its residents",
+		"citation": "§ 72.070 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=72.070",
+		"quote": "may elect to become a city of the class to which its population would entitle it",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A class change is made by ordinance and an election",
+		"citation": "§ 72.070 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=72.070",
+		"quote": "shall proceed by passing an ordinance or proposition, and submitting the same to the legal voters of such city, town or village",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A village is governed by a board of trustees of five, or nine in a village over 2,500 if voters choose, with two-year terms",
+		"citation": "§ 80.040 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=80.040",
+		"quote": "The corporate powers and duties of every village so incorporated shall be vested in a board of trustees, to consist of five members, unless such town shall contain more than twenty-five hundred inhabitants, in which case such board may consist of nine members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Village trustees serve two-year terms",
+		"citation": "§ 80.040 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=80.040",
+		"quote": "Thereafter all members shall serve for terms of two years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Fourth class cities elect a mayor and board of aldermen for two-year terms",
+		"citation": "§ 79.050.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=79.050",
+		"quote": "shall hold office for the term of two years, except as otherwise provided in this section, and until their successors are elected and qualified, to wit:  mayor and board of aldermen",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A fourth class city may lengthen the mayor's term to up to four years with voter approval",
+		"citation": "§ 79.050.2 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=79.050",
+		"quote": "the term of the mayor shall be two, three, or four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A fourth class city may lengthen aldermen terms to four years with voter approval",
+		"citation": "§ 79.050.3 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=79.050",
+		"quote": "The board of aldermen may provide by ordinance that the term of the board of aldermen shall be four years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A fourth class city has at least two wards, two aldermen per ward, one elected each year",
+		"citation": "§ 79.060.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=79.060",
+		"quote": "divide the city into not less than two wards, and two aldermen shall be elected from each ward",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A fourth class city has at least two wards, two aldermen per ward, one elected each year",
+		"citation": "§ 79.060.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=79.060",
+		"quote": "thereafter each ward shall elect annually one alderman, who shall hold his office for two years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Fourth class cities of 1,000 or fewer may elect aldermen at large",
+		"citation": "§ 79.060.2 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=79.060",
+		"quote": "cities with a population of one thousand or less in the most recent census may, by ordinance, choose to elect aldermen at large",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A third class city has at least four wards with two council members each, or one each by option",
+		"citation": "§ 77.030.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=77.030",
+		"quote": "divide the city into not less than four wards, and two councilmen shall be elected from each of such wards",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Third class council members may serve four-year terms if voters approve",
+		"citation": "§ 77.030.3 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=77.030",
+		"quote": "Council members may serve four-year terms if the two-year terms provided under subsection 1 or 2 of this section have been extended to four years by approval of a majority of the voters voting on the proposal.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Third class cities elect a mayor and certain other officers; the mayor serves four years",
+		"citation": "§ 77.370 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=77.370",
+		"quote": "the following officers shall be elected by the voters of the city: mayor, police judge, attorney, assessor, collector, treasurer",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Third class mayors serve four-year terms",
+		"citation": "§ 77.370.5 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=77.370",
+		"quote": "The term of office for each of the officers is two years except the office of mayor and the marshal which are four-year terms.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A third class council may make offices other than mayor and council appointive",
+		"citation": "§ 77.370.6 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=77.370",
+		"quote": "may provide that any officer of the city except the mayor and the councilmen shall be appointed instead of elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A third class city may adopt the city manager form by vote",
+		"citation": "§ 78.430 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=78.430",
+		"quote": "Shall the city of ______ organize under sections 78.430 to 78.640 , RSMo, providing for the city manager form of government?",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under the city manager form the council has five members serving three-year terms",
+		"citation": "§ 78.460 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=78.460",
+		"quote": "The council shall consist of five members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under the city manager form council terms are three years",
+		"citation": "§ 78.460 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=78.460",
+		"quote": "The term of councilmen shall be three years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special charter cities are those chartered directly by the legislature before 1875",
+		"citation": "§ 81.010 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=81.010",
+		"quote": "All cities and towns of this state operating under charters granted directly and specially by the general assembly prior to the adoption of the constitution of 1875",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city of more than 5,000 may adopt a home rule charter",
+		"citation": "Mo. Const. art. VI, § 19",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=VI%20%20%20%2019&constit=y",
+		"quote": "Any city having more than five thousand inhabitants or any other incorporated city as may be provided by law may frame and adopt a charter for its own government.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Charter cities are constitutional charter cities in statute",
+		"citation": "§ 82.010.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=82.010",
+		"quote": "is hereby defined and declared to be a constitutional charter city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter city has all powers the legislature could grant, unless limited by its charter or by statute",
+		"citation": "Mo. Const. art. VI, § 19(a)",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=VI%20%20%20%2019%28a%29&constit=y",
+		"quote": "shall have all powers which the general assembly of the state of Missouri has authority to confer upon any city, provided such powers are consistent with the constitution of this state and are not limited or denied either by the charter so adopted or by statute",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The legislature cannot create or fix municipal offices for a charter city",
+		"citation": "Mo. Const. art. VI, § 22",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=VI%20%20%20%2022&constit=y",
+		"quote": "No law shall be enacted creating or fixing the powers, duties or compensation of any municipal office or employment, for any city framing or adopting its own charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "St. Louis is both a city and a county",
+		"citation": "Mo. Const. art. VI, § 31",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=VI%20%20%20%2031&constit=y",
+		"quote": "The city of St. Louis, as now existing, is recognized both as a city and as a county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "St. Louis may set its county officers by charter rather than adopting a county charter",
+		"citation": "Mo. Const. art. VI, § 31",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=VI%20%20%20%2031&constit=y",
+		"quote": "As a county, it shall not be required to adopt a county charter but may, except for the office of circuit attorney, amend or revise its present charter to provide for the number, kinds, manner of selection, terms of office and salaries of its county officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "St. Louis charter amendments need three-fifths of voters",
+		"citation": "Mo. Const. art. VI, § 32(a)",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=VI%20%20%20%2032%28a%29&constit=y",
+		"quote": "accepted by three-fifths of the qualified electors voting for or against each of said amendments or revisions so submitted",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "St. Louis City holds its general municipal election in April every two years",
+		"citation": "St. Louis City Charter art. II, § 1",
+		"url": "https://library.municode.com/mo/st._louis/codes/code_of_ordinances?nodeId=CH_ARTIIEL",
+		"quote": "A general municipal election shall be held on the first Tuesday after the first Monday in April, 2005, and every two years thereafter.",
+		"certainty": "statutory",
+		"verified": "read in city charter",
+		"manual": true
+	},
+	{
+		"claim": "The St. Louis mayor and comptroller serve four-year terms",
+		"citation": "St. Louis City Charter art. II, § 2",
+		"url": "https://library.municode.com/mo/st._louis/codes/code_of_ordinances?nodeId=CH_ARTIIEL",
+		"quote": "a mayor and comptroller shall be elected each for a term of four years",
+		"certainty": "statutory",
+		"verified": "read in city charter",
+		"manual": true
+	},
+	{
+		"claim": "The St. Louis charter lets the board of aldermen provide for nonpartisan nominations or preferential voting by ordinance",
+		"citation": "St. Louis City Charter art. II, § 9",
+		"url": "https://library.municode.com/mo/st._louis/codes/code_of_ordinances?nodeId=CH_ARTIIEL",
+		"quote": "may provide by ordinance for nonpartisan nominations, preferential voting or proportional representation",
+		"certainty": "statutory",
+		"verified": "read in city charter",
+		"manual": true
+	},
+	{
+		"claim": "St. Louis elects mayor, comptroller, board president and aldermen in nonpartisan top-two elections",
+		"citation": "St. Louis Revised Code § 2.08.450",
+		"url": "https://library.municode.com/mo/st._louis/codes/code_of_ordinances?nodeId=TIT2EL_CH2.08ELRUPR_2.08.460COMUEL",
+		"quote": "the elections for the offices of Mayor, Comptroller, President of the Board of Aldermen, and Alderman shall be conducted as non-partisan, top-two runoff elections",
+		"certainty": "statutory",
+		"verified": "local government publication",
+		"manual": true
+	},
+	{
+		"claim": "In the St. Louis primary voters approve as many candidates as they like and the top two advance",
+		"citation": "St. Louis Revised Code § 2.08.460",
+		"url": "https://library.municode.com/mo/st._louis/codes/code_of_ordinances?nodeId=TIT2EL_CH2.08ELRUPR_2.08.460COMUEL",
+		"quote": "voters shall select as many candidates as they approve of for each office. The two candidates receiving the most votes for each office shall advance to the general election.",
+		"certainty": "statutory",
+		"verified": "local government publication",
+		"manual": true
+	},
+	{
+		"claim": "St. Louis candidates declare no party affiliation",
+		"citation": "St. Louis Revised Code § 2.08.490",
+		"url": "https://library.municode.com/mo/st._louis/codes/code_of_ordinances?nodeId=TIT2EL_CH2.08ELRUPR_2.08.460COMUEL",
+		"quote": "they shall not declare a party affiliation to the Board of Elections",
+		"certainty": "statutory",
+		"verified": "local government publication",
+		"manual": true
+	},
+	{
+		"claim": "St. Louis has fourteen wards",
+		"citation": "St. Louis Revised Code § 2.12.010",
+		"url": "https://library.municode.com/mo/st._louis/codes/code_of_ordinances?nodeId=TIT2EL_CH2.08ELRUPR_2.08.460COMUEL",
+		"quote": "This City is divided into fourteen (14) wards",
+		"certainty": "statutory",
+		"verified": "local government publication",
+		"manual": true
+	},
+	{
+		"claim": "The city of St. Louis is a single metropolitan school district",
+		"citation": "§ 162.571 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=162.571",
+		"quote": "Every city in this state, not within a county, together with the territory now within its limits, or which may in the future be included by any change thereof, constitutes a single metropolitan school district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "St. Louis school board members are elected citywide",
+		"citation": "§ 162.581.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=162.581",
+		"quote": "The members of the board of education shall be elected from the city, as provided in section 162.601 , on a general ticket",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "St. Louis school board members serve four-year terms, elected at municipal elections",
+		"citation": "§ 162.601.5 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=162.601",
+		"quote": "who shall hold office for four years, and until their successors are elected and qualified",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Kansas City is the home rule city of more than 400,000 located in more than one county",
+		"citation": "§ 162.492.2 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=162.492",
+		"quote": "the charter of a home rule city with more than four hundred thousand inhabitants and located in more than one county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Kansas City council has thirteen members including the mayor: six at-large members (one living in each district) and six district members",
+		"citation": "Kansas City Charter § 201",
+		"url": "https://library.municode.com/mo/kansas_city/codes/code_of_ordinances?nodeId=PTICHKAMI_ARTIIMAMECO_DIV1MACO",
+		"quote": "There will be a City Council of thirteen members, including the Mayor, elected as follows:",
+		"certainty": "statutory",
+		"verified": "read in city charter",
+		"manual": true
+	},
+	{
+		"claim": "Kansas City at-large members reside in each of six districts",
+		"citation": "Kansas City Charter § 201(b)",
+		"url": "https://library.municode.com/mo/kansas_city/codes/code_of_ordinances?nodeId=PTICHKAMI_ARTIIMAMECO_DIV1MACO",
+		"quote": "One member residing in each of the six Council districts elected at-large.",
+		"certainty": "statutory",
+		"verified": "read in city charter",
+		"manual": true
+	},
+	{
+		"claim": "Kansas City elections are nonpartisan",
+		"citation": "Kansas City Charter § 603",
+		"url": "https://library.municode.com/mo/kansas_city/codes/code_of_ordinances?nodeId=PTICHKAMI_ARTVINOEL",
+		"quote": "Elections for any City office will be non-partisan.",
+		"certainty": "statutory",
+		"verified": "read in city charter",
+		"manual": true
+	},
+	{
+		"claim": "Kansas City holds its primary in April every four years and the general eleven weeks later",
+		"citation": "Kansas City Charter § 604(a)",
+		"url": "https://library.municode.com/mo/kansas_city/codes/code_of_ordinances?nodeId=PTICHKAMI_ARTVINOEL",
+		"quote": "The City will hold a primary election on the first Tuesday after the first Monday of April, and a general election eleven weeks after the primary election.",
+		"certainty": "statutory",
+		"verified": "read in city charter",
+		"manual": true
+	},
+	{
+		"claim": "Kansas City regular elections recur every four years",
+		"citation": "Kansas City Charter § 604(a)",
+		"url": "https://library.municode.com/mo/kansas_city/codes/code_of_ordinances?nodeId=PTICHKAMI_ARTVINOEL",
+		"quote": "The next primary election will be held on April 7, 2015, and every four years thereafter.",
+		"certainty": "statutory",
+		"verified": "read in city charter",
+		"manual": true
+	},
+	{
+		"claim": "The top two in the Kansas City primary advance; the most votes wins the general",
+		"citation": "Kansas City Charter § 605(a)(1)",
+		"url": "https://library.municode.com/mo/kansas_city/codes/code_of_ordinances?nodeId=PTICHKAMI_ARTVINOEL",
+		"quote": "who receive the highest number of votes in the primary election for each office, respectively, will be placed on the general election ballot",
+		"certainty": "statutory",
+		"verified": "read in city charter",
+		"manual": true
+	},
+	{
+		"claim": "Kansas City nominating petitions carry no party designation",
+		"citation": "Kansas City Charter § 602(c)(3)",
+		"url": "https://library.municode.com/mo/kansas_city/codes/code_of_ordinances?nodeId=PTICHKAMI_ARTVINOEL",
+		"quote": "A nominating petition shall not include any political party or other designation.",
+		"certainty": "statutory",
+		"verified": "read in city charter",
+		"manual": true
+	},
+	{
+		"claim": "Kansas City school board elections follow the Kansas City charter election date, seven directors (two at large, five by subdistrict)",
+		"citation": "§ 162.492.2 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=162.492",
+		"quote": "Two directors shall be at-large directors and five directors shall represent the subdistricts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Kansas City school board directors serve four-year terms",
+		"citation": "§ 162.492.2 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=162.492",
+		"quote": "Thereafter, all seven directors shall serve a four-year term.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Seven-director school districts elect at municipal elections, except urban districts and St. Charles County districts",
+		"citation": "§ 162.341 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=162.341",
+		"quote": "The annual election in seven-director districts, except urban districts and those school districts described in section 162.082 , shall be held on municipal election days.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Seven-director boards have seven members serving three-year terms",
+		"citation": "§ 162.261.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=162.261",
+		"quote": "is vested in a board of education of seven members, who hold their office for three years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Urban school district elections are held with municipal elections",
+		"citation": "§ 162.481.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=162.481",
+		"quote": "all elections of school directors in urban school districts shall be held biennially at the same times and places as municipal elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Springfield's school district elects annually with three-year terms",
+		"citation": "§ 162.481.3 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=162.481",
+		"quote": "elections in Springfield, post-2000 census urban school districts, St. Charles County, and Buchanan County",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Springfield's school district elects annually with three-year terms",
+		"citation": "§ 162.481.3 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=162.481",
+		"quote": "In any school district in which a majority of the district is located in any home rule city with more than one hundred fifty-five thousand but fewer than two hundred thousand inhabitants, elections shall be held annually at the same times and places as general municipal elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A school board may divide its district into subdistricts",
+		"citation": "§ 162.563.2 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=162.563",
+		"quote": "A school board may divide the school district into seven subdistricts or a combination of subdistricts and at-large districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Write-in votes count only for candidates who filed a declaration of intent",
+		"citation": "§ 115.453(4) RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.453",
+		"quote": "Write-in votes shall be counted only for candidates for election to office who have filed a declaration of intent to be a write-in candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County offices are nominated at a primary on the first Tuesday after the first Monday in August of even-numbered years",
+		"citation": "§ 115.341 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.341",
+		"quote": "a primary election shall be held on the first Tuesday after the first Monday in August of even-numbered years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a third class city the candidate with the most votes in each ward wins",
+		"citation": "§ 77.030.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=77.030",
+		"quote": "the one receiving the highest number of votes in each ward shall hold his office for two years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a fourth class city the candidate with the most votes in each ward wins",
+		"citation": "§ 79.060.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=79.060",
+		"quote": "the person receiving the highest number of votes in each ward shall hold his office for two years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A fourth class city elects a marshal and collector unless voters approve making them appointive",
+		"citation": "§ 79.050.1 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=79.050",
+		"quote": "If the board of aldermen does not provide for the appointment of a chief of police and collector as provided by this section, a city marshal, who shall be twenty-one years of age or older, and collector shall be elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Signing an independent or new party petition does not require voting for the candidate or party",
+		"citation": "§ 115.325 RSMo",
+		"url": "https://revisor.mo.gov/main/OneSection.aspx?section=115.325",
+		"quote": "Form of petition — signing petition, voting for candidate or party not required.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In Kansas City the candidate with the most votes in the general election wins",
+		"citation": "Kansas City Charter § 605(b)",
+		"url": "https://library.municode.com/mo/kansas_city/codes/code_of_ordinances?nodeId=PTICHKAMI_ARTVINOEL",
+		"quote": "who shall receive the greatest number of votes at the regular municipal election for each such office, respectively, shall be declared elected",
+		"certainty": "statutory",
+		"verified": "read in city charter",
+		"manual": true
+	},
+	{
+		"claim": "St. Louis election sections were amended by Ordinance 72075, not yet folded into the published code",
+		"citation": "St. Louis Revised Code § 2.08.460",
+		"url": "https://library.municode.com/mo/st._louis/codes/code_of_ordinances?nodeId=TIT2EL_CH2.08ELRUPR_2.08.460COMUEL",
+		"quote": "Amended by Ordinance No. 72075",
+		"certainty": "usual case",
+		"verified": "local government publication",
+		"manual": true
+	}
+]

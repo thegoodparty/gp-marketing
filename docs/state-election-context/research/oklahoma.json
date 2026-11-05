@@ -1,0 +1,866 @@
+[
+	{
+		"claim": "The Legislature convenes at noon on the first Monday in February each year and must adjourn sine die by 5 p.m. on the last Friday in May",
+		"citation": "Okla. Const. art. V, § 26",
+		"url": "https://www.oklegislature.gov/OKStatutes/CompleteTitles/AllOKConstitutionArticles.rtf",
+		"quote": "The Legislature shall meet in regular session at the seat of government at twelve o'clock noon on the first Monday in February of each year and the regular session shall be finally adjourned sine die not later than five o'clock p.m. on the last Friday in May of each year.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "In odd-numbered years the Legislature also meets for one organizational day on the first Tuesday after the first Monday in January",
+		"citation": "Okla. Const. art. V, § 26",
+		"url": "https://www.oklegislature.gov/OKStatutes/CompleteTitles/AllOKConstitutionArticles.rtf",
+		"quote": "on the first Tuesday after the first Monday in January of each odd numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "During the session the governor has five days, Sundays excepted, to act on a bill or it becomes law without signature",
+		"citation": "Okla. Const. art. VI, § 11",
+		"url": "https://www.oklegislature.gov/OKStatutes/CompleteTitles/AllOKConstitutionArticles.rtf",
+		"quote": "If any bill or resolution shall not be returned by the Governor within five days (Sundays excepted) after it shall have been presented to him, the same shall be a law in like manner as if he had signed it",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "After final adjournment a bill becomes law only if the governor approves it within 15 days",
+		"citation": "Okla. Const. art. VI, § 11",
+		"url": "https://www.oklegislature.gov/OKStatutes/CompleteTitles/AllOKConstitutionArticles.rtf",
+		"quote": "No bill shall become a law after the final adjournment of the Legislature, unless approved by the Governor within fifteen days after such adjournment.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "An act takes effect 90 days after the session adjourns unless two-thirds of each house votes an emergency clause",
+		"citation": "Okla. Const. art. V, § 58",
+		"url": "https://www.oklegislature.gov/OKStatutes/CompleteTitles/AllOKConstitutionArticles.rtf",
+		"quote": "No act shall take effect until ninety days after the adjournment of the session at which it was passed",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "An emergency clause needs two-thirds of all members elected to each house",
+		"citation": "Okla. Const. art. V, § 58",
+		"url": "https://www.oklegislature.gov/OKStatutes/CompleteTitles/AllOKConstitutionArticles.rtf",
+		"quote": "the Legislature, by a vote of two-thirds of all members elected to each House, so directs",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Every election run by a county election board is held on a Tuesday",
+		"citation": "26 O.S. § 3-101(A)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "No election required to be conducted by any county election board shall be scheduled for a day other than Tuesday.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Counties, school districts, municipalities, fire protection districts and other subdivisions may hold regular or special elections only on the dates listed in § 3-101(B)",
+		"citation": "26 O.S. § 3-101(B)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "no regular or special election for any purpose shall be held by any county, school district, technology center school district, municipality, fire protection district, or other political subdivision authorized to call elections except as follows",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The allowed local dates include the second Tuesday of February, first Tuesday of April, third Tuesday of June, fourth Tuesday of August and the November general election date in any year",
+		"citation": "26 O.S. § 3-101(B)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "1. The second Tuesday of February in any year; 2. The first Tuesday of April in any year; 3. The third Tuesday of June in any year; 4. The fourth Tuesday of August in any year;",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A December date is also allowed, but only every fourth year starting December 2025 (2025 amendment)",
+		"citation": "26 O.S. § 3-101(B)(6)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "The second Tuesday of December, beginning in December of 2025, and every four (4) years thereafter.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Municipal elections, including those of home rule charter cities, may be held only on the § 3-101 dates",
+		"citation": "26 O.S. § 13-103(E)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "All municipal elections, including elections for municipalities with home rule charters, shall be held only on dates identified in Section 3-101 of this title.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The general election is the first Tuesday after the first Monday in November of even-numbered years, and county officers whose terms are ending are elected then",
+		"citation": "26 O.S. § 1-101",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "state, district and county officers, whose terms expire before the next succeeding General Election, shall be elected",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The party primary is the third Tuesday in June of each even-numbered year",
+		"citation": "26 O.S. § 1-102",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "A Primary Election shall be held on the third Tuesday in June of each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A party nominee needs a majority in the primary; otherwise the top two meet in a runoff primary on the fourth Tuesday of August",
+		"citation": "26 O.S. § 1-103",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "receives a majority of all votes cast for all candidates of such party for the office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Runoff primary date",
+		"citation": "26 O.S. § 1-103",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "Runoff Primary Election to be held on the fourth Tuesday of August in the same year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Primaries are closed: a voter may vote only in the primary of the party they are registered with",
+		"citation": "26 O.S. § 1-104(A)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "except the political party of which his registration form shows him to be a member",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A recognized party may choose to let voters registered as Independents vote in its primary",
+		"citation": "26 O.S. § 1-104(B)(1)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "A recognized political party may permit registered voters designated as Independents",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "An Independent voter may vote in only one party's primary",
+		"citation": "26 O.S. § 1-104(B)(2)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "A registered voter designated as Independent shall not be permitted to vote in a Primary Election or Runoff Primary Election of more than one party.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A party's decision to admit Independents is made every odd-numbered November and covers the next two calendar years",
+		"citation": "26 O.S. § 1-104(B)(2)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "between November 1 and 30 of every odd-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "An unopposed candidate is deemed nominated or elected and does not appear on the ballot",
+		"citation": "26 O.S. § 6-102",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "Any candidate who is unopposed in any election shall be deemed to have been nominated or elected",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A party candidate for county office must have been registered with that party for six months before filing",
+		"citation": "26 O.S. § 5-105(A)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "must have been a registered voter of that party for the six-month period",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "An independent candidate for county office must have been registered as an Independent for six months before filing",
+		"citation": "26 O.S. § 5-105(B)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "To file as an independent candidate for any state or county office, a person must have been registered to vote as an independent for the six-month period",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "County and state candidates file with either a filing fee or a supporting petition",
+		"citation": "26 O.S. § 5-112(A)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "A declaration of candidacy must be accompanied by",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The petition alternative is a share of registered voters in the district or county (no signature counts in copy)",
+		"citation": "26 O.S. § 5-112(A)(1)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "A petition supporting a candidate's filing signed by not fewer than two percent",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Independent and other non-party candidates appear on the November general election ballot after the party nominees",
+		"citation": "26 O.S. § 6-106",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "followed by independent candidates in lot",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "County nominees are party nominees certified after the primary and runoff",
+		"citation": "26 O.S. § 8-101",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "The county election board shall certify a list of nominees of each political party for county offices",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "District judges and associate district judges are elected without party designation",
+		"citation": "26 O.S. § 11-108",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "district judges and associate district judges shall be without party designation.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "An associate district judge candidate who wins a majority at the June primary is elected outright",
+		"citation": "26 O.S. § 11-113",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "the candidate who received the majority of all votes cast at the Primary Election shall be deemed to have been elected to that office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Oklahoma has 77 counties",
+		"citation": "26 O.S. § 2-110",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "seventy-seven counties of Oklahoma",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Each county is divided into three commissioner districts",
+		"citation": "19 O.S. § 321(A)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os19.pdf",
+		"quote": "Each county shall be divided by the board of county commissioners into three (3) compact districts",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Each commissioner is elected by the voters of their own district",
+		"citation": "19 O.S. § 321(A)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os19.pdf",
+		"quote": "One commissioner shall be elected from each of the districts by the voters of the district",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Commissioners from districts 1 and 3 are elected on the cycle that began in 1990 (governor's-race years), four-year terms",
+		"citation": "19 O.S. § 131(C)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os19.pdf",
+		"quote": "two county commissioners, one from the first county commissioner district and one from the third county commissioner district",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The district 2 commissioner is elected on the cycle that began in 1996 (presidential years), four-year term",
+		"citation": "19 O.S. § 131(C)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os19.pdf",
+		"quote": "one county commissioner from the second county commissioner district, who shall hold office for a term of four (4) years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The court clerk, sheriff and county clerk are elected every four years on the cycle that began in 1976 (presidential years)",
+		"citation": "19 O.S. § 131(A)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os19.pdf",
+		"quote": "At the general election to be held in November 1976, and each four (4) years thereafter, there shall be elected in each county of the state, a court clerk, a county sheriff, and a county clerk",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The county assessor and treasurer are elected every four years on the cycle that began in 1974 (governor's-race years)",
+		"citation": "19 O.S. § 131(B)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os19.pdf",
+		"quote": "there shall be elected in each county of the state, a county assessor and a county treasurer",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Constitution created three county commissioners in each county, subject to change by the Legislature",
+		"citation": "Okla. Const. art. XVII, § 2",
+		"url": "https://www.oklegislature.gov/OKStatutes/CompleteTitles/AllOKConstitutionArticles.rtf",
+		"quote": "three County Commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Only a county under 550,000 people that contains a metro area of 250,000 or more may adopt a County Home Rule Charter",
+		"citation": "19 O.S. § 8.2",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os19.pdf",
+		"quote": "Any county in this state with a population of less than five hundred fifty thousand (550,000)",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Home rule charter population test, second half",
+		"citation": "19 O.S. § 8.2",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os19.pdf",
+		"quote": "which contains a metropolitan area with a population of two hundred fifty thousand (250,000) or more",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A charter county's governing body must be elected, with terms of no more than four years",
+		"citation": "19 O.S. § 8.4(A)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os19.pdf",
+		"quote": "The term for service of the governing body shall not exceed four (4) years.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A county charter may not conflict with state sovereignty and established public policy",
+		"citation": "19 O.S. § 8.5",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os19.pdf",
+		"quote": "contrary to or inconsistent with the sovereignty and established public policies of this state",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Each county may vote to abolish township government",
+		"citation": "Okla. Const. art. V, § 5a",
+		"url": "https://www.oklegislature.gov/OKStatutes/CompleteTitles/AllOKConstitutionArticles.rtf",
+		"quote": "abolish township organization or government",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A municipality is an incorporated city or town",
+		"citation": "11 O.S. § 1-102(5)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "means any incorporated city or town",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A place needs at least 1,000 inhabitants to incorporate as a city",
+		"citation": "11 O.S. § 4-101",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "which population must be one thousand (1,000) inhabitants or more",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A town becomes a city only if its voters approve; growth alone does not change its class",
+		"citation": "11 O.S. § 4-103",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "the question of whether or not the town shall become a city",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A city or town of 2,000 or more may frame a charter",
+		"citation": "11 O.S. § 13-101",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "Any city or town containing a population of two thousand (2,000) inhabitants or more",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Constitutional charter power for cities over 2,000; the charter must be approved by the governor",
+		"citation": "Okla. Const. art. XVIII, § 3(a)",
+		"url": "https://www.oklegislature.gov/OKStatutes/CompleteTitles/AllOKConstitutionArticles.rtf",
+		"quote": "Any city containing a population of more than two thousand inhabitants may frame a charter for its own government",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A charter prevails over conflicting municipal law in force when it was adopted",
+		"citation": "11 O.S. § 13-109",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "the provisions of the charter shall prevail",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The statutory municipal election article does not apply to charter cities, which must still use § 3-101 dates",
+		"citation": "11 O.S. § 16-102(A)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "shall not apply to any municipality which is governed by charter",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "General municipal elections in statutory cities and towns are the first Tuesday in April of odd-numbered years",
+		"citation": "11 O.S. § 16-103",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "General municipal elections shall be held in cities and towns on the first Tuesday in April in each odd-numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "In statutory cities and towns, ward seats are elected by the voters of the whole municipality",
+		"citation": "11 O.S. § 16-104",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "including those from wards as well as at large, shall be elected at large by the registered voters of the entire municipality",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Municipal elections are nonpartisan, with every candidate filing as an independent, unless the municipality has a partisan-primary ordinance",
+		"citation": "11 O.S. § 16-105.1",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "Municipal elections shall be nonpartisan and all candidates shall file as independent candidates unless",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A nonpartisan municipal election has no primary",
+		"citation": "11 O.S. § 16-105.1",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "No primary elections shall be held in a nonpartisan election.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A charter city may provide otherwise on partisanship by charter or ordinance",
+		"citation": "11 O.S. § 16-105.1; 26 O.S. § 13-103(B)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "any municipality which is governed by a charter may provide otherwise by charter or ordinance",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Any municipality may adopt an ordinance making its elections partisan",
+		"citation": "26 O.S. § 13-103(B)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "A municipality may adopt an ordinance requiring its elections to be partisan.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Without notice to the county election board the election defaults to nonpartisan",
+		"citation": "26 O.S. § 13-103(B)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "then the municipal election shall be on a nonpartisan basis",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A partisan municipal primary is the second Tuesday of February in odd-numbered years",
+		"citation": "11 O.S. § 16-107",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "A primary election shall be held in cities and towns on the second Tuesday of February in each odd-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Municipal candidates pay no filing fee and file no petition",
+		"citation": "26 O.S. § 13-104",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "shall not be required to post a filing fee, nor shall they be required to file petitions",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Running in a nonpartisan municipal election does not affect the candidate's party registration",
+		"citation": "11 O.S. § 16-110",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "shall not affect one's party affiliation or regularity",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The default term for an elected municipal official is four years",
+		"citation": "11 O.S. § 8-102",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "the term of office of an elected municipal official shall be four (4) years",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Statutory aldermanic city: mayor elected at large plus one or two councilmembers per ward",
+		"citation": "11 O.S. § 9-102",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "shall consist of the mayor, who is elected at large, and one or two councilmembers from each ward of the city",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Aldermanic voters may switch between one and two councilmembers per ward",
+		"citation": "11 O.S. § 9-102",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "The governing body may submit to the voters the question of whether one or two councilmembers shall be elected from each ward.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Aldermanic cities elect a clerk, marshal, street commissioner and treasurer by default",
+		"citation": "11 O.S. §§ 16-201, 16-203",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "4. The marshal; and 5. The street commissioner.",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Voters may make the aldermanic marshal, street commissioner, clerk or treasurer appointed",
+		"citation": "11 O.S. § 16-207(A)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "of the city marshal, the street commissioner, the city clerk, the city treasurer",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Statutory council-manager city: one councilmember per ward plus one at large",
+		"citation": "11 O.S. § 10-102",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "shall consist of one (1) councilmember from each ward of the city and one (1) councilmember at large",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "In a council-manager city the council chooses the mayor",
+		"citation": "11 O.S. § 10-104",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "The council shall elect from among its members a mayor and a vice-mayor.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Statutory strong-mayor-council city: mayor elected at large and serves as at-large councilmember",
+		"citation": "11 O.S. § 11-102",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "The mayor shall serve as ex officio councilmember at large.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Statutory town: three or five trustees, nominated from wards or at large and elected at large",
+		"citation": "11 O.S. § 12-102",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "The town board of trustees shall consist of either three (3) or five (5) trustees who shall be nominated from wards or at large and elected at large.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Town voters may change the board between three and five trustees",
+		"citation": "11 O.S. § 12-102",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "The governing body may submit to the voters the question of whether the town board shall consist of either three (3) or five (5) trustees.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "In a town the trustees choose the mayor from among themselves",
+		"citation": "11 O.S. § 12-104",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "The board of trustees shall elect from among its members a mayor.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Towns elect a clerk and treasurer by default, on staggered four-year terms",
+		"citation": "11 O.S. § 16-205",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "In a statutory town, the terms of the elected officers shall be staggered",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Town voters may make the clerk or treasurer appointed",
+		"citation": "11 O.S. § 16-207(B)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "the question of providing for the appointment by the board of trustees of the town clerk, the town treasurer",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "At-large town trustees are elected by plurality",
+		"citation": "11 O.S. § 12-103.2(C)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "The candidate who receives a plurality of the votes cast for the office of trustee for the designated term shall be elected",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Non-charter municipalities under 2,000 elect officers at a biennial town meeting unless they opt into county-run elections by ordinance",
+		"citation": "11 O.S. § 16-302(A)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "at biennial town meetings or special town meetings of the voters of each municipality",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Town meeting act applies to non-charter municipalities with fewer than 2,000 residents",
+		"citation": "11 O.S. § 16-302(A)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "all municipalities with fewer than two thousand (2,000) residents",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A small municipality may opt out of town meetings by ordinance",
+		"citation": "11 O.S. § 16-302(A)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "may at any time adopt an ordinance requiring that its officers shall be elected",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The biennial town meeting is the first Tuesday in April of odd-numbered years",
+		"citation": "11 O.S. § 16-303",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "a biennial town meeting of the voters shall be held on the first Tuesday in April in each odd-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A municipality in more than one county has its elections run by the county where its central offices are",
+		"citation": "26 O.S. § 13-110",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "Elections for a municipality which is located in more than one county shall be conducted by the county election board of the county wherein said municipality's central offices are located.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "School districts are independent, elementary or technology center districts",
+		"citation": "70 O.S. § 5-101",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os70.pdf",
+		"quote": "shall be designated only as independent, elementary or technology center school districts",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Elementary districts offer kindergarten through eighth grade",
+		"citation": "70 O.S. § 5-103",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os70.pdf",
+		"quote": "Elementary school districts shall offer grades kindergarten through eight",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "School board general election is the first Tuesday of April every year",
+		"citation": "26 O.S. § 13A-103(A)(1)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "The general election of members of the board of education of every school district and technology center school district shall be conducted on the first Tuesday of April of each year.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "School board primary, when needed, is the second Tuesday in February (moved to the presidential primary date in a year when that is in February)",
+		"citation": "26 O.S. § 13A-103(A)(2)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "shall be conducted on the second Tuesday in February of each year, except in any year when a Presidential Preferential Primary is held in February",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A school board candidate with more than half the primary vote is elected outright; otherwise the top two go to April",
+		"citation": "26 O.S. § 13A-103(A)(4)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "A candidate receiving more than fifty percent (50%) of the votes cast in the board of education primary election shall be elected to the office.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "With only two school board candidates, the race goes straight to April",
+		"citation": "26 O.S. § 13A-103(A)(3)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "If only two candidates qualify to have their names appear on the ballot, the names of both candidates shall appear on the ballot at the board of education general election.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Every registered voter living in the district may vote in a school election (no party ballot)",
+		"citation": "26 O.S. § 13A-106(B)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "To be eligible to vote in a school district election or a technology center school district election, a person must be registered with the county election board at an address located within the geographical boundaries of the district.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "School board candidates file where county candidates file",
+		"citation": "26 O.S. § 13A-105",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os26.pdf",
+		"quote": "shall file declarations of candidacy in the same place and with the same officials as candidates for county office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "An independent district with a five-member board elects members to five-year terms",
+		"citation": "70 O.S. § 5-107A(A)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os70.pdf",
+		"quote": "Districts having a five-member board 5 5",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A seven-member board (four-year terms) may shrink to five members",
+		"citation": "70 O.S. § 5-107A(C)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os70.pdf",
+		"quote": "Any seven-member board shall have the option of reducing its board to a five-member board",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Board members represent board districts, one member per district",
+		"citation": "70 O.S. § 5-107A(B)(2)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os70.pdf",
+		"quote": "One member of the board of education shall be elected by the electors of the school district to represent each such board district.",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Districts under 1,800 students may elect all members at large",
+		"citation": "70 O.S. § 5-107A(B)(1)(b)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os70.pdf",
+		"quote": "may choose not to establish board districts and may nominate and elect all board members at large",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Districts over 10,000 students use a two-step election within each board district",
+		"citation": "70 O.S. § 5-107A(B)(3)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os70.pdf",
+		"quote": "In a school district having more than ten thousand (10,000) children in average daily membership",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A district over 30,000 students may add an at-large board chair elected for four years",
+		"citation": "70 O.S. § 5-107B(A)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os70.pdf",
+		"quote": "may be expanded to add a member who shall be elected at large for a term of four (4) years and who shall serve as chair of the board",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The district attorney is nominated and elected in a district attorney's district, every four years, not by county",
+		"citation": "19 O.S. § 215.20",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os19.pdf",
+		"quote": "there shall be nominated and elected in each and every district attorney's district in the State of Oklahoma, a district attorney",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "\"Township\" in the constitution's county descriptions is a survey line",
+		"citation": "Okla. Const. art. XVII, § 8",
+		"url": "https://www.oklegislature.gov/OKStatutes/CompleteTitles/AllOKConstitutionArticles.rtf",
+		"quote": "Beginning on the township line between townships nineteen and twenty North",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "In a council-manager city the council appoints the city manager",
+		"citation": "11 O.S. § 10-112",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os11.pdf",
+		"quote": "The council shall appoint a city manager",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Elementary district boards have three members on three-year terms",
+		"citation": "70 O.S. § 5-107A(A)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os70.pdf",
+		"quote": "Elementary 3 3",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Seven-member independent district boards serve four-year terms",
+		"citation": "70 O.S. § 5-107A(A)",
+		"url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os70.pdf",
+		"quote": "member board unless an election is conducted pursuant to subsection C of this section 7 4",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	}
+]

@@ -1,0 +1,733 @@
+[
+	{
+		"claim": "The Legislature meets in regular session every year on the Tuesday after the first Monday of January",
+		"citation": "Miss. Const. art. 4, § 36",
+		"url": "https://www.sos.ms.gov/sites/default/files/publications/Mississippi_Constitution.pdf",
+		"quote": "in regular session on the Tuesday after the first Monday of January of the year A.D., 1970, and annually thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Regular sessions run 125 calendar days in 1972 and every fourth year after (2024, 2028), and 90 calendar days in the other years",
+		"citation": "Miss. Const. art. 4, § 36",
+		"url": "https://www.sos.ms.gov/sites/default/files/publications/Mississippi_Constitution.pdf",
+		"quote": "such sessions shall be limited to a period of one hundred twenty-five (125) calendar days for regular 1972 session and every fourth year thereafter, but ninety (90) calendar days for every other regular session thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Each house may extend a session by 30 days with a two-thirds vote, with no limit on extensions",
+		"citation": "Miss. Const. art. 4, § 36",
+		"url": "https://www.sos.ms.gov/sites/default/files/publications/Mississippi_Constitution.pdf",
+		"quote": "may extend such limited session for a period of thirty (30) days with no limit on the number of extensions to each session",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A bill not returned within five days (Sundays excepted) becomes law; if adjournment prevents return, the governor has fifteen days (Sundays excepted) to veto",
+		"citation": "Miss. Const. art. 4, § 72",
+		"url": "https://www.sos.ms.gov/sites/default/files/publications/Mississippi_Constitution.pdf",
+		"quote": "unless the Governor shall veto it within fifteen (15) days (Sundays excepted) after it is presented to him",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A bill not returned within five days (Sundays excepted) of presentment becomes law during the session",
+		"citation": "Miss. Const. art. 4, § 72",
+		"url": "https://www.sos.ms.gov/sites/default/files/publications/Mississippi_Constitution.pdf",
+		"quote": "returned by the Governor within five (5) days (Sundays excepted) after it has been presented to him, it shall become a law in like manner as if he had signed it",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Each act sets its own effective date; this 2025 election act took effect on 1 January 2025 for its new runoff rule",
+		"citation": "Laws 2025, HB 291 (Miss. Code Ann. § 23-15-193)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2025/html/HB/0200-0299/HB0291SG.htm",
+		"quote": "[From and after January 1, 2025, this section shall read as follows:]",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County officers, supervisors, justice court judges and constables are elected at the general state election every four years, beginning 2023, for four-year terms",
+		"citation": "Miss. Code Ann. § 23-15-193(1)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2025/html/HB/0200-0299/HB0291SG.htm",
+		"quote": "At the election in 2023, and every four (4) years thereafter, there shall be elected a Governor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general state election includes circuit and chancery clerks, sheriffs, coroners, assessors, surveyors, supervisors, justice court judges and constables",
+		"citation": "Miss. Code Ann. § 23-15-193(1)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2025/html/HB/0200-0299/HB0291SG.htm",
+		"quote": "clerks of the circuit and chancery courts of the several counties, as well as sheriffs, coroners, assessors, surveyors and members of the boards of supervisors, justice court judges and constables",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Officers elected at the general state election serve four-year terms",
+		"citation": "Miss. Code Ann. § 23-15-193(1)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2025/html/HB/0200-0299/HB0291SG.htm",
+		"quote": "All such officers shall hold their offices for a term of four (4) years, and until their successors are elected and qualified",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Since 1 January 2025 a candidate at the general state election needs a majority to win",
+		"citation": "Miss. Code Ann. § 23-15-193(2) (Laws 2025, HB 291)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2025/html/HB/0200-0299/HB0291SG.htm",
+		"quote": "that receives a majority of votes cast for the office at the general election shall be elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "If no one has a majority, the top two meet in a runoff four weeks later",
+		"citation": "Miss. Code Ann. § 23-15-193(2) (Laws 2025, HB 291)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2025/html/HB/0200-0299/HB0291SG.htm",
+		"quote": "placed on the ballot for the runoff election to be held four (4) weeks later",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Laws 2025, HB 291 was aimed at county and county district officers (title: require all candidates in the state general election to secure a majority)",
+		"citation": "Laws 2025, HB 291 (title)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2025/html/HB/0200-0299/HB0291SG.htm",
+		"quote": "TO REQUIRE ALL CANDIDATES RUNNING IN THE STATE GENERAL ELECTION TO SECURE THE MAJORITY VOTE TO BE ELECTED",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is held on the Tuesday after the first Monday of November",
+		"citation": "Miss. Const. art. 12, § 252",
+		"url": "https://www.sos.ms.gov/sites/default/files/publications/Mississippi_Constitution.pdf",
+		"quote": "A general election for all elective officers shall be held on the Tuesday next after the first Monday of November",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "State and county party primaries are on the first Tuesday after the first Monday of August, with a second primary four weeks later",
+		"citation": "Miss. Code Ann. § 23-15-191 (Laws 2024, SB 2144)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2024/html/SB/2100-2199/SB2144SG.htm",
+		"quote": "The first primary shall be held on the first Tuesday after the first Monday of August preceding any regular or general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Ranked-choice voting is banned in statewide, county, local, municipal and school district elections",
+		"citation": "Laws 2024, SB 2144 (title)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2024/html/SB/2100-2199/SB2144SG.htm",
+		"quote": "TO PROHIBIT RANKED-CHOICE VOTING IN STATEWIDE, COUNTY, LOCAL, MUNICIPAL OR SCHOOL DISTRICT ELECTIONS",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A primary candidate needs a majority; otherwise the top two go to the second primary, where the most votes wins",
+		"citation": "Miss. Code Ann. § 23-15-191",
+		"url": "https://billstatus.ls.state.ms.us/documents/2024/html/SB/2100-2199/SB2144SG.htm",
+		"quote": "The candidate that receives a majority of the votes cast in the election shall be the party nominee",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter may vote in only one party primary on a given day",
+		"citation": "Miss. Code Ann. § 23-15-575",
+		"url": "https://billstatus.ls.state.ms.us/documents/2017/html/HB/0400-0499/HB0467SG.htm",
+		"quote": "No person shall vote or attempt to vote in the primary election of one (1) party when he or she has voted on the same date in the primary election of another party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter who voted in one party first primary may not vote in another party second primary",
+		"citation": "Miss. Code Ann. § 23-15-575",
+		"url": "https://billstatus.ls.state.ms.us/documents/2017/html/HB/0400-0499/HB0467SG.htm",
+		"quote": "No person shall vote or attempt to vote in the second primary election of one (1) party when he or she has voted in the first primary election of another party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Legislature must secure fairness in party primaries",
+		"citation": "Miss. Const. art. 12, § 247",
+		"url": "https://www.sos.ms.gov/sites/default/files/publications/Mississippi_Constitution.pdf",
+		"quote": "The Legislature shall enact laws to secure fairness in party primary elections, conventions, or other methods of naming party candidates",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "County and supervisor-district independents get on the ballot by petition filed with the circuit clerk",
+		"citation": "Miss. Code Ann. § 23-15-359(4)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2025/html/HB/0800-0899/HB0811SG.htm",
+		"quote": "shall be filed with the proper circuit clerk",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An independent appears on the ballot as an independent candidate",
+		"citation": "Miss. Code Ann. § 23-15-359(2)(a)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2025/html/HB/0800-0899/HB0811SG.htm",
+		"quote": "he or she shall be listed on the ballot as an independent candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Independent petitions must be signed by qualified electors of the county or supervisors district",
+		"citation": "Miss. Code Ann. § 23-15-359(1)(f)-(g)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2025/html/HB/0800-0899/HB0811SG.htm",
+		"quote": "For an office elected by the qualified electors of a supervisors district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A general municipal election is held in each city, town or village on the first Tuesday after the first Monday of June, every four years from 1985",
+		"citation": "Miss. Code Ann. § 23-15-173(1)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2017/html/HB/0400-0499/HB0467SG.htm",
+		"quote": "A general municipal election shall be held in each city, town or village on the first Tuesday after the first Monday of June 1985, and every four (4) years thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal primaries are on the first Tuesday in April, with any second primary on the fourth Tuesday in April (moved from May by Laws 2017, HB 467)",
+		"citation": "Miss. Code Ann. § 23-15-171(1)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2017/html/HB/0400-0499/HB0467SG.htm",
+		"quote": "April preceding the general municipal election and, in the event a second primary shall be necessary, such second primary shall be held on the",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal first primaries are on the first Tuesday of the month",
+		"citation": "Miss. Code Ann. § 23-15-171(1)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2017/html/HB/0400-0499/HB0467SG.htm",
+		"quote": "Municipal primary elections shall be held on the first Tuesday in",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The municipal second primary is on the fourth Tuesday in April",
+		"citation": "Miss. Code Ann. § 23-15-171(1)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2017/html/HB/0400-0499/HB0467SG.htm",
+		"quote": "April preceding such general municipal election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A special or private charter municipality that declined the state schedule by 25 June 1952 holds its elections when its charter says",
+		"citation": "Miss. Code Ann. § 23-15-173(3)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2017/html/HB/0400-0499/HB0467SG.htm",
+		"quote": "shall not apply to any municipality operating under a special or private charter where the governing board or authority thereof, on or before June 25, 1952",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In those charter municipalities the primaries and general election are held at the time fixed by the charter",
+		"citation": "Miss. Code Ann. § 23-15-173(3)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2017/html/HB/0400-0499/HB0467SG.htm",
+		"quote": "in which event the primary and general elections shall be held at the time fixed by the charter of the municipality",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal officers take office on the first weekday of July after the election, for four-year terms",
+		"citation": "Miss. Code Ann. § 21-15-1",
+		"url": "https://billstatus.ls.state.ms.us/documents/2010/html/SB/2700-2799/SB2706SG.htm",
+		"quote": "shall hold their offices for a term of four (4) years and until their successors are duly elected and qualified",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal officers start on the first day of July after the general election that is not on a weekend",
+		"citation": "Miss. Code Ann. § 21-15-1",
+		"url": "https://billstatus.ls.state.ms.us/documents/2010/html/SB/2700-2799/SB2706SG.htm",
+		"quote": "enter upon the discharge of their duties on the first day of July after such general election that is not on a weekend",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party nominations for all elective municipal offices are made in primaries",
+		"citation": "Miss. Code Ann. § 23-15-309(1)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2017/html/HB/0400-0499/HB0467SG.htm",
+		"quote": "Nominations for all municipal officers which are elective shall be made at a primary election, or elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipal candidate cannot qualify with a party that has no organized municipal executive committee",
+		"citation": "Miss. Code Ann. § 23-15-309(3)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2017/html/HB/0400-0499/HB0467SG.htm",
+		"quote": "No candidate may attempt to qualify with any political party that does not have a duly organized mun",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal independents get on the ballot by petition filed with the municipal clerk and are listed as independents",
+		"citation": "Miss. Code Ann. § 23-15-361(1)-(2)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2017/html/HB/0400-0499/HB0467SG.htm",
+		"quote": "not having been nominated by a political party, shall have been requested to be a candidate for any office by a petition filed with the clerk of the municipality",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal independents are listed on the ballot as independent candidates",
+		"citation": "Miss. Code Ann. § 23-15-361(2)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2017/html/HB/0400-0499/HB0467SG.htm",
+		"quote": "In the event such candidate qualifies as an independent as herein provided, he or she shall be listed on the ballot as an independent candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal general elections have no runoff (code charter municipalities); special charter municipalities follow their charters",
+		"citation": "Secretary of State, 2026 County Election Handbook, p. 11 n.1",
+		"url": "https://www.sos.ms.gov/content/documents/elections/2026%20County%20Election%20Handbook.revised%2012-30-2025.pdf",
+		"quote": "There are no municipal general election runoffs",
+		"certainty": "statutory",
+		"verified": "Secretary of State publication",
+		"manual": true
+	},
+	{
+		"claim": "Council-manager municipalities elect a mayor and councilmen",
+		"citation": "Miss. Code Ann. § 21-9-19",
+		"url": "https://billstatus.ls.state.ms.us/documents/2017/html/HB/0400-0499/HB0467SG.htm",
+		"quote": "At all elections held to choose a mayor and councilmen",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In council-manager cities the person with the highest number of votes is elected",
+		"citation": "Miss. Code Ann. § 21-9-19",
+		"url": "https://billstatus.ls.state.ms.us/documents/2017/html/HB/0400-0499/HB0467SG.htm",
+		"quote": "deliver to each person receiving the highest number of votes a certificate of election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Judicial offices under the nonpartisan judicial election law include county court judge and justice court judge",
+		"citation": "Miss. Code Ann. § 23-15-975 (Laws 2024, HB 1035)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2024/html/HB/1000-1099/HB1035SG.htm",
+		"quote": "family court judge and justice court judge",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Judicial candidates may not align with any political party during a campaign",
+		"citation": "Miss. Code Ann. § 23-15-973",
+		"url": "https://billstatus.ls.state.ms.us/documents/2024/html/HB/1000-1099/HB1035SG.htm",
+		"quote": "to align himself or herself with any candidate or candidates for any other office or with any political faction or any political party at any time during any primary or general election campaign",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Justice court judges are elected on a nonpartisan basis from single-member districts set by the board of supervisors",
+		"citation": "Miss. Code Ann. § 9-11-2(2) (Laws 2024, HB 1035)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2024/html/HB/1000-1099/HB1035SG.htm",
+		"quote": "single member election districts in the county for the nonpartisan election of each of the justice court judges",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Judicial candidates need a majority at the general election, otherwise there is a runoff",
+		"citation": "Miss. Code Ann. § 23-15-981",
+		"url": "https://billstatus.ls.state.ms.us/documents/2024/html/SB/2100-2199/SB2144SG.htm",
+		"quote": "If any candidate for such an office receives a majority of the votes cast for such office in the general election, he shall be declared elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Judicial candidates go straight to the general election ballot",
+		"citation": "Miss. Code Ann. § 23-15-981",
+		"url": "https://billstatus.ls.state.ms.us/documents/2024/html/SB/2100-2199/SB2144SG.htm",
+		"quote": "If two (2) or more candidates qualify for judicial office, the names of those candidates shall be placed on the general election ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects five election commissioners, one from each supervisors district, for four-year terms",
+		"citation": "Miss. Code Ann. § 23-15-213(1)-(2)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2025/html/HB/0200-0299/HB0289SG.htm",
+		"quote": "shall consist of one (1) person from each supervisor's district of the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "From 2028, Districts One, Three and Five elect commissioners in 2028 and every four years after; Districts Two and Four from 2030",
+		"citation": "Miss. Code Ann. § 23-15-213(2) (from 1 January 2028)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2025/html/HB/0200-0299/HB0289SG.htm",
+		"quote": "At the general election in 2028 and every four (4) years thereafter, the qualified electors of the board of supervisors' Districts One, Three and Five",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Election commissioner candidates qualify by petition and their party affiliation, if any, is shown on the ballot",
+		"citation": "Miss. Code Ann. § 23-15-213(3)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2025/html/HB/0200-0299/HB0289SG.htm",
+		"quote": "All candidates shall declare in writing their party affiliation, if any, to the board of supervisors, and such party affiliation shall be shown on the official ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Election commissioners list party affiliations but do not take part in primaries",
+		"citation": "Secretary of State, 2026 County Election Handbook, p. 11",
+		"url": "https://www.sos.ms.gov/content/documents/elections/2026%20County%20Election%20Handbook.revised%2012-30-2025.pdf",
+		"quote": "do not participate in primaries, and are elected in the November General",
+		"certainty": "statutory",
+		"verified": "Secretary of State publication",
+		"manual": true
+	},
+	{
+		"claim": "School board and school trustee candidates run as nonpartisan candidates in the November general election only",
+		"citation": "Secretary of State, 2026 County Election Handbook, p. 11",
+		"url": "https://www.sos.ms.gov/content/documents/elections/2026%20County%20Election%20Handbook.revised%2012-30-2025.pdf",
+		"quote": "County School Board, Consolidated/Consolidated Line School District Trustee, Municipal",
+		"certainty": "statutory",
+		"verified": "Secretary of State publication",
+		"manual": true
+	},
+	{
+		"claim": "Those candidates have no party designation on the ballot",
+		"citation": "Secretary of State, 2026 County Election Handbook, p. 11",
+		"url": "https://www.sos.ms.gov/content/documents/elections/2026%20County%20Election%20Handbook.revised%2012-30-2025.pdf",
+		"quote": "designation of a political party affiliation on the ballot or otherwise",
+		"certainty": "statutory",
+		"verified": "Secretary of State publication",
+		"manual": true
+	},
+	{
+		"claim": "Municipal primaries were moved from May to April by Laws 2017, HB 467 (the deleted word May is struck in the act)",
+		"citation": "Miss. Code Ann. § 23-15-171(1) (Laws 2017, HB 467)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2017/html/HB/0400-0499/HB0467SG.htm",
+		"quote": "may april preceding the general municipal election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County board of education members are elected by supervisors district",
+		"citation": "Miss. Code Ann. § 37-5-7(1)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2017/html/SB/2400-2499/SB2463SG.htm",
+		"quote": "members of the board from Supervisors Districts Three and Four",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Districts Two and Four elect commissioners in 2030 and every four years after",
+		"citation": "Miss. Code Ann. § 23-15-213(2)(b) (from 1 January 2028)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2025/html/HB/0200-0299/HB0289SG.htm",
+		"quote": "At the general election in 2030 and every four (4) years thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County board of education members are elected for six-year terms at the regular general election in November",
+		"citation": "Miss. Code Ann. § 37-5-7(1)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2017/html/SB/2400-2499/SB2463SG.htm",
+		"quote": "all subsequent members of the board shall be elected for a term of six (6) years at the regular general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School trustee elections are held on the first Tuesday after the first Monday in November of each year, with a runoff four weeks later",
+		"citation": "Miss. Code Ann. § 37-7-215",
+		"url": "https://billstatus.ls.state.ms.us/documents/2024/html/SB/2100-2199/SB2144SG.htm",
+		"quote": "All such elections shall be held on the first Tuesday after the first Monday in November of each year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Since 2024, runoffs for state and county primaries, the general state election, judicial races and school trustee races are four weeks after the first election, not three",
+		"citation": "Miss. Code Ann. § 37-7-215",
+		"url": "https://billstatus.ls.state.ms.us/documents/2024/html/SB/2100-2199/SB2144SG.htm",
+		"quote": "TO REVISE THE TIME FOR HOLDING RUNOFF ELECTIONS TO FOUR WEEKS AFTER THE FIRST ELECTION INSTEAD OF THREE WEEKS",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School trustee candidates qualify by nominating petition filed with the county registrar",
+		"citation": "Miss. Code Ann. § 37-7-225",
+		"url": "https://billstatus.ls.state.ms.us/documents/2025/html/SB/2600-2699/SB2659SG.htm",
+		"quote": "a petition of nomination signed by not less than fifty (50) qualified electors of the school district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal separate school district boards have five members with five-year terms by default",
+		"citation": "Miss. Code Ann. § 37-7-203(1)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2026/html/HB/1100-1199/HB1142SG.htm",
+		"quote": "shall consist of five (5) members, each to be chosen for a term of five (5) years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "By default the city governing authorities choose those trustees; trustees for added territory outside the city are elected",
+		"citation": "Miss. Code Ann. § 37-7-203(1)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2026/html/HB/1100-1199/HB1142SG.htm",
+		"quote": "shall be elected by a majority of the governing authorities of the municipality",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In some mayor-council cities the trustees are appointed by the mayor and confirmed by the council",
+		"citation": "Miss. Code Ann. § 37-7-203(3)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2026/html/HB/1100-1199/HB1142SG.htm",
+		"quote": "to be appointed by the mayor and confirmed by the city council",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county is divided into five districts, each electing one member of the board of supervisors",
+		"citation": "Miss. Const. art. 6, § 170",
+		"url": "https://www.sos.ms.gov/sites/default/files/publications/Mississippi_Constitution.pdf",
+		"quote": "Each county shall be divided into five districts, a resident freeholder of each district shall be selected",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The five members constitute the board of supervisors",
+		"citation": "Miss. Const. art. 6, § 170",
+		"url": "https://www.sos.ms.gov/sites/default/files/publications/Mississippi_Constitution.pdf",
+		"quote": "the five so chosen shall constitute the board of supervisors of the county",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The chancery clerk is the clerk of the board of supervisors",
+		"citation": "Miss. Const. art. 6, § 170",
+		"url": "https://www.sos.ms.gov/sites/default/files/publications/Mississippi_Constitution.pdf",
+		"quote": "The clerk of the chancery court shall be the clerk of the board of supervisors",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Voters of each supervisors district elect one supervisor every four years",
+		"citation": "Miss. Code Ann. § 19-3-1 (Laws 2025, HB 1419)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2025/html/HB/1400-1499/HB1419SG.htm",
+		"quote": "The qualified electors of each district shall elect, at the next general election, and every four (4) years thereafter, in their districts one (1) member of the board of supervisors",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State law itself calls a supervisors district a beat",
+		"citation": "Miss. Code Ann. § 41-13-29 (Laws 2023, SB 2323)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2023/html/SB/2300-2399/SB2323SG.htm",
+		"quote": "Each supervisor of Supervisors Districts One and Two shall nominate and the board of supervisors shall appoint one (1) person from each",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The same section refers to each supervisor district as a beat",
+		"citation": "Miss. Code Ann. § 41-13-29 (Laws 2023, SB 2323)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2023/html/SB/2300-2399/SB2323SG.htm",
+		"quote": "beat for a one-year term",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Constables are elected by beat",
+		"citation": "Miss. Code Ann. § 37-106-39 (Laws 2026, SB 2368)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2026/html/SB/2300-2399/SB2368SG.htm",
+		"quote": "duly elected constables of any beat of any county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The board may redraw supervisors districts by a three-fifths vote",
+		"citation": "Miss. Code Ann. § 19-3-1",
+		"url": "https://billstatus.ls.state.ms.us/documents/2025/html/HB/1400-1499/HB1419SG.htm",
+		"quote": "the board, by a three-fifths (3/5) vote of all members elected, may change the districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county has a sheriff, coroner, assessor, tax collector and surveyor, with four-year terms",
+		"citation": "Miss. Const. art. 5, § 135",
+		"url": "https://www.sos.ms.gov/sites/default/files/publications/Mississippi_Constitution.pdf",
+		"quote": "there shall be a sheriff, coroner, assessor, tax collector and surveyor for each county",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The Legislature may combine these county offices",
+		"citation": "Miss. Const. art. 5, § 135",
+		"url": "https://www.sos.ms.gov/sites/default/files/publications/Mississippi_Constitution.pdf",
+		"quote": "The Legislature may combine any one or more of said offices in any county or counties",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Every county has justice court judges (at least two) and constables",
+		"citation": "Miss. Const. art. 6, § 171",
+		"url": "https://www.sos.ms.gov/sites/default/files/publications/Mississippi_Constitution.pdf",
+		"quote": "A competent number of justice court judges and constables shall be chosen in each county in the manner provided by law, but not less than two (2) such judges in any county",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The number of justice court judges (two to five) follows county population",
+		"citation": "Miss. Code Ann. § 9-11-2(1)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2024/html/HB/1000-1099/HB1035SG.htm",
+		"quote": "In counties with a population, according to the latest federal decennial census, of thirty-five thousand (35,000) and less, there shall be two (2) justice court judges",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County home rule does not let a board of supervisors change county election procedures or create elective offices",
+		"citation": "Miss. Code Ann. § 19-3-40(3)(c)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2012/html/HB/0500-0599/HB0515SG.htm",
+		"quote": "change the requirements, practices or procedures for county elections or establish any new elective office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties have home rule over county affairs not covered by general law",
+		"citation": "Miss. Code Ann. § 19-3-40(1)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2012/html/HB/0500-0599/HB0515SG.htm",
+		"quote": "shall have the power to adopt any orders, resolutions or ordinances with respect to county affairs, property and finances, for which no specific provision has been made by general law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Mississippi has 82 counties, each with its own section of Title 19, Chapter 1, ending with Yazoo County at § 19-1-163",
+		"citation": "Miss. Code Ann. §§ 19-1-1 to 19-1-163",
+		"url": "https://advance.lexis.com/container?config=00JAAzNzhjOTYxNC0wZjRkLTQzNzAtYjJlYS1jNjExZWYxZGFhMGYKAFBvZENhdGFsb2cMlW40w5iIH7toHnTBIEP0",
+		"quote": "§ 19-1-163. Yazoo County.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Mississippi municipalities are cities, towns and villages",
+		"citation": "Miss. Code Ann. § 23-15-173(1)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2017/html/HB/0400-0499/HB0467SG.htm",
+		"quote": "in each city, town or village",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Legislature charters cities and towns under general laws",
+		"citation": "Miss. Const. art. 4, § 88",
+		"url": "https://www.sos.ms.gov/sites/default/files/publications/Mississippi_Constitution.pdf",
+		"quote": "under which cities and towns may be chartered and their charters amended",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Code charter municipalities elect a mayor, aldermen, municipal judge, marshal or chief of police, tax collector and tax assessor",
+		"citation": "Miss. Code Ann. § 21-3-3",
+		"url": "https://billstatus.ls.state.ms.us/documents/2016/html/HB/0100-0199/HB0130SG.htm",
+		"quote": "The elective officers of all municipalities operating under a code charter shall be the mayor, the aldermen, municipal judge, the marshal or chief of police, the tax collector",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "By ordinance, a code charter municipality may make every office except mayor and aldermen appointive",
+		"citation": "Miss. Code Ann. § 21-3-3",
+		"url": "https://billstatus.ls.state.ms.us/documents/2016/html/HB/0100-0199/HB0130SG.htm",
+		"quote": "to provide that all or any of such officers, except those of mayor and aldermen, shall be appointive",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Such an ordinance cannot be adopted within 90 days before a regular municipal election",
+		"citation": "Miss. Code Ann. § 21-3-3",
+		"url": "https://billstatus.ls.state.ms.us/documents/2016/html/HB/0100-0199/HB0130SG.htm",
+		"quote": "no such ordinance shall be adopted within ninety (90) days prior to any regular general election for the election of municipal officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Code charter municipalities under 10,000 have five aldermen, at large or four wards plus one at large",
+		"citation": "Miss. Code Ann. § 21-3-7(1)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2018/html/HB/0300-0399/HB0392SG.htm",
+		"quote": "in all municipalities having a population of less than ten thousand (10,000) according to the latest available federal census, there shall be five (5) aldermen",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities of 10,000 or more have seven aldermen, at large or six wards plus one at large",
+		"citation": "Miss. Code Ann. § 21-3-7(2)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2018/html/HB/0300-0399/HB0392SG.htm",
+		"quote": "there shall be seven (7) aldermen",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every alderman, including ward aldermen, is selected by the whole town electorate",
+		"citation": "Miss. Code Ann. § 21-3-7",
+		"url": "https://billstatus.ls.state.ms.us/documents/2018/html/HB/0300-0399/HB0392SG.htm",
+		"quote": "All aldermen shall be selected by vote of the entire electorate of the municipality",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Ward versus at-large election of aldermen can be put to a vote on a 20% petition",
+		"citation": "Miss. Code Ann. § 21-3-7(1)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2018/html/HB/0300-0399/HB0392SG.htm",
+		"quote": "shall be determined by the vote of the majority of the qualified electors of the municipality voting in a special election called for that purpose",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town of 500 or fewer may cut to three aldermen by a vote of its residents",
+		"citation": "Miss. Code Ann. § 21-3-7(3)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2018/html/HB/0300-0399/HB0392SG.htm",
+		"quote": "In any municipality having a population of five hundred (500) or less according to the latest available federal census, there may be three (3) aldermen",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The alderman count does not apply to special charter cities",
+		"citation": "Miss. Code Ann. § 21-3-7(2)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2018/html/HB/0300-0399/HB0392SG.htm",
+		"quote": "This section in no way affects the number of aldermen, councilmen, or commissioners of any city operating under a special charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Mayor-council municipalities elect a mayor and a council",
+		"citation": "Miss. Code Ann. § 21-8-7(1)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2022/html/HB/1300-1399/HB1341SG.htm",
+		"quote": "Each municipality operating under the mayor-council form of government shall be governed by an elected council and an elected mayor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Mayor-council councils have five, seven or nine members, by ward or ward plus at large",
+		"citation": "Miss. Code Ann. § 21-8-7(4)(a)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2022/html/HB/1300-1399/HB1341SG.htm",
+		"quote": "The council shall consist of five (5), seven (7) or nine (9) members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Mayor-council officers are elected at the regular June municipal election for four-year terms",
+		"citation": "Miss. Code Ann. § 21-8-7(2)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2022/html/HB/1300-1399/HB1341SG.htm",
+		"quote": "shall be elected by the voters of the municipality at a regular municipal election held on the first Tuesday after the first Monday in June",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal home rule does not let a city change municipal election procedures or create elective offices",
+		"citation": "Miss. Code Ann. § 21-17-5(2)(c)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2016/html/SB/2700-2799/SB2799SG.htm",
+		"quote": "change the requirements, practices or procedures for municipal elections or establish any new elective office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities have home rule over municipal affairs not inconsistent with state law",
+		"citation": "Miss. Code Ann. § 21-17-5(1)",
+		"url": "https://billstatus.ls.state.ms.us/documents/2016/html/SB/2700-2799/SB2799SG.htm",
+		"quote": "shall have the power to adopt any orders, resolutions or ordinances with respect to such municipal affairs, property and finances",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

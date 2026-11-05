@@ -1,0 +1,922 @@
+[
+	{
+		"claim": "The Legislature meets in regular session only in odd-numbered years, for no more than 90 legislative days",
+		"citation": "Mont. Const. art. V, § 6",
+		"url": "https://mca.legmt.gov/bills/mca/title_0000/article_0050/part_0010/section_0060/0000-0050-0010-0060.html",
+		"quote": "The legislature shall meet each odd-numbered year in regular session of not more than 90 legislative days",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special sessions may be called by the governor or by a written request of a majority of legislators",
+		"citation": "Mont. Const. art. V, § 6",
+		"url": "https://mca.legmt.gov/bills/mca/title_0000/article_0050/part_0010/section_0060/0000-0050-0010-0060.html",
+		"quote": "The legislature may be convened in special sessions by the governor or at the written request of a majority of the members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Regular sessions convene at noon on the first Monday of January of each odd-numbered year, or the first Wednesday if January 1 is a Monday",
+		"citation": "MCA 5-2-103",
+		"url": "https://mca.legmt.gov/bills/mca/title_0050/chapter_0020/part_0010/section_0030/0050-0020-0010-0030.html",
+		"quote": "at 12 noon on the first Monday of January of each odd-numbered year or, if January 1 is a Monday, on the first Wednesday",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A bill the governor neither signs nor vetoes within 10 days after delivery becomes law",
+		"citation": "Mont. Const. art. VI, § 10(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0000/article_0060/part_0010/section_0100/0000-0060-0010-0100.html",
+		"quote": "If he does not sign or veto the bill within 10 days after its delivery to him, it shall become law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A veto issued after the Legislature adjourns goes to a mail poll of legislators",
+		"citation": "Mont. Const. art. VI, § 10(4)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0000/article_0060/part_0010/section_0100/0000-0060-0010-0100.html",
+		"quote": "The secretary of state shall poll the members of the legislature by mail",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Statutes take effect on 1 October after passage unless the act sets another date",
+		"citation": "MCA 1-2-201(1)(a)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0010/chapter_0020/part_0020/section_0010/0010-0020-0020-0010.html",
+		"quote": "takes effect on the first day of October following its passage and approval unless a different time is prescribed in the enacting legislation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Appropriation statutes take effect on 1 July after passage unless the act sets another date",
+		"citation": "MCA 1-2-201(1)(b)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0010/chapter_0020/part_0020/section_0010/0010-0020-0020-0010.html",
+		"quote": "takes effect on the first day of July following its passage and approval unless a different time is prescribed in the enacting legislation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Statutes enacted in a special session take effect on passage and approval unless the act says otherwise",
+		"citation": "MCA 1-2-201(1)(d)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0010/chapter_0020/part_0020/section_0010/0010-0020-0020-0010.html",
+		"quote": "Every statute enacted during a special session of the legislature takes effect upon passage and approval",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is the first Tuesday after the first Monday in November",
+		"citation": "MCA 13-1-104(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0010/part_0010/section_0040/0130-0010-0010-0040.html",
+		"quote": "A general election must be held throughout the state on the first Tuesday after the first Monday in November.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County officers are elected at the November general election in even-numbered years",
+		"citation": "MCA 13-1-104(2)(b)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0010/part_0010/section_0040/0130-0010-0010-0040.html",
+		"quote": "an election of federal officers, members of the legislature, state officers, multicounty district officers elected at a statewide election, district court judges, and county officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal officers are elected on general election day in odd-numbered years",
+		"citation": "MCA 13-1-104(3)(a)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0010/part_0010/section_0040/0130-0010-0010-0040.html",
+		"quote": "an election of officers for municipalities required by law to hold the election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The even-year primary is the first Tuesday after the first Monday in June",
+		"citation": "MCA 13-1-107(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0010/part_0010/section_0070/0130-0010-0010-0070.html",
+		"quote": "On the first Tuesday after the first Monday in June preceding a general election held in an even-numbered year, a primary election must be held throughout the state.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The odd-year (municipal) primary, if required, is the Tuesday after the second Monday in September",
+		"citation": "MCA 13-1-107(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0010/part_0010/section_0070/0130-0010-0010-0070.html",
+		"quote": "On the Tuesday following the second Monday in September preceding a general election held in an odd-numbered year, a primary election, if required, must be held throughout the state.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Local government elections must fall on the statewide primary or general election day, except funding elections",
+		"citation": "MCA 13-1-405(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0010/part_0040/section_0050/0130-0010-0040-0050.html",
+		"quote": "A local government election must be held on the same day as the primary election day established in",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "For these rules, local government means a county, a consolidated government, or an incorporated city or town",
+		"citation": "MCA 13-1-402(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0010/part_0040/section_0020/0130-0010-0040-0020.html",
+		"quote": "means a county, a consolidated government, or an incorporated city or town",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The regular school election day is the first Tuesday after the first Monday in May, every year",
+		"citation": "MCA 20-20-105(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0200/chapter_0200/part_0010/section_0050/0200-0200-0010-0050.html",
+		"quote": "the first Tuesday after the first Monday in May of each year is the regular school election day",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School trustee elections are held every year on the regular school election day",
+		"citation": "MCA 20-3-301(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0200/chapter_0030/part_0030/section_0010/0200-0030-0030-0010.html",
+		"quote": "a school trustee election must be held annually on the regular school election day",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School trustee terms are three years unless the education title says otherwise",
+		"citation": "MCA 20-3-301(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0200/chapter_0030/part_0030/section_0010/0200-0030-0030-0010.html",
+		"quote": "The term of office for each position must be 3 years unless it is otherwise specifically prescribed by this title.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Trustee terms are staggered so that a majority is not elected on the same day",
+		"citation": "MCA 20-3-302(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0200/chapter_0030/part_0030/section_0020/0200-0030-0030-0020.html",
+		"quote": "the terms of a majority of the trustee positions of any district with elected trustees may not regularly expire and be subject to election on the same regular school election day",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special purpose district offices are filled on the May school election day",
+		"citation": "MCA 13-1-504(1)(b)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0010/part_0050/section_0040/0130-0010-0050-0040.html",
+		"quote": "an election to fill a special purpose district office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special purpose district elections share the regular school election day",
+		"citation": "MCA 13-1-504(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0010/part_0050/section_0040/0130-0010-0050-0040.html",
+		"quote": "must be held on the same day as the regular school election day",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Conservation district elections are on a primary or general election day",
+		"citation": "MCA 13-1-504(2)(b)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0010/part_0050/section_0040/0130-0010-0050-0040.html",
+		"quote": "A conservation district election must be held on a primary or general election day.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Some special districts may elect at an annual meeting where a law specifically allows it",
+		"citation": "MCA 13-1-504(3)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0010/part_0050/section_0040/0130-0010-0050-0040.html",
+		"quote": "If specifically authorized by law, a special purpose district election may be held at the district's annual meeting.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An uncontested local election may be canceled and the only candidate declared elected by acclamation",
+		"citation": "MCA 13-1-403(4)-(5)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0010/part_0040/section_0030/0130-0010-0040-0030.html",
+		"quote": "the governing body of the local government shall declare the candidate elected to the position by acclamation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An uncontested municipal election may be canceled by resolution",
+		"citation": "MCA 7-5-4410(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0050/part_0440/section_0100/0070-0050-0440-0100.html",
+		"quote": "may cancel a general election for the election of a municipal officer by resolution",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An uncontested trustee election may be canceled and candidates declared elected by acclamation",
+		"citation": "MCA 20-3-313(3)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0200/chapter_0030/part_0030/section_0130/0200-0030-0030-0130.html",
+		"quote": "the trustees shall declare elected by acclamation the candidate who filed for the position",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every local government must hold a vote every ten years on whether to review its form of government",
+		"citation": "Mont. Const. art. XI, § 9(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0000/article_0110/part_0010/section_0090/0000-0110-0010-0090.html",
+		"quote": "The legislature shall require an election in each local government to determine whether a local government will undertake a review procedure once every ten years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The decennial review question is on a primary ballot and study commission members are elected at a general election",
+		"citation": "MCA 7-3-174(1)-(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0010/section_0740/0070-0030-0010-0740.html",
+		"quote": "must be held in conjunction with a general election held on the date established in",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Study commission elections are nonpartisan, with no party designation",
+		"citation": "MCA 7-3-176(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0010/section_0760/0070-0030-0010-0760.html",
+		"quote": "The election is nonpartisan, and candidates must be listed without party or other designation or slogan.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Study commission candidates may not be elected officials of the local government",
+		"citation": "MCA 7-3-176(3)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0010/section_0760/0070-0030-0010-0760.html",
+		"quote": "The candidates may not be elected officials of the local government.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Primary ballots are separate for each qualified party",
+		"citation": "MCA 13-10-209(1)(a)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0100/part_0020/section_0090/0130-0100-0020-0090.html",
+		"quote": "there must be separate ballots for each political party entitled to participate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every voter receives every party's primary ballot plus the nonpartisan and ballot issue choices",
+		"citation": "MCA 13-10-209(7)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0100/part_0020/section_0090/0130-0100-0020-0090.html",
+		"quote": "Each elector must receive a set of ballots that includes the party, nonpartisan, and ballot issue choices.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A primary voter votes only one party's ballot",
+		"citation": "MCA 13-10-301(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0100/part_0030/section_0010/0130-0100-0030-0010.html",
+		"quote": "At a primary election, the elector shall cast votes on only one of the party ballots",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan offices on a primary ballot appear on every party's ballot",
+		"citation": "MCA 13-10-209(1)(b)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0100/part_0020/section_0090/0130-0100-0020-0090.html",
+		"quote": "the nonpartisan offices and ballot issues appear on each party's ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Parties whose statewide candidate polled 5% of the governor vote nominate by primary",
+		"citation": "MCA 13-10-601(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0100/part_0060/section_0010/0130-0100-0060-0010.html",
+		"quote": "shall nominate its candidates for public office, except for presidential electors, by a primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate may not seek more than one party's nomination in a partisan election",
+		"citation": "MCA 13-10-201(5)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0100/part_0020/section_0010/0130-0100-0020-0010.html",
+		"quote": "For a partisan election, an elector may not file a declaration for more than one party's nomination.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each alternative form of government chooses partisan or nonpartisan local elections (commission-executive)",
+		"citation": "MCA 7-3-219",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0020/section_0190/0070-0030-0020-0190.html",
+		"quote": "Local government elections shall be conducted on a: (1) partisan basis; or (2) nonpartisan basis.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each alternative form of government chooses partisan or nonpartisan local elections (commission form)",
+		"citation": "MCA 7-3-413",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0040/section_0130/0070-0030-0040-0130.html",
+		"quote": "Local government elections shall be conducted on a: (1) partisan basis; or (2) nonpartisan basis.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each alternative form of government chooses partisan or nonpartisan local elections (commission-manager)",
+		"citation": "MCA 7-3-314",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0030/section_0140/0070-0030-0030-0140.html",
+		"quote": "Local government elections shall be conducted on a: (1) partisan basis; or (2) nonpartisan basis.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities that kept the old statutory council-mayor form are governed by the partisan election suboption",
+		"citation": "MCA 7-3-113(1)(k)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0010/section_0130/0070-0030-0010-0130.html",
+		"quote": "(k) 7-3-219 (1)",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities that kept the old statutory commission-manager form are governed by the nonpartisan election suboption",
+		"citation": "MCA 7-3-114(1)(h)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0010/section_0140/0070-0030-0010-0140.html",
+		"quote": "(h) 7-3-314 (2)",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties that kept the old county manager form are governed by the nonpartisan election suboption",
+		"citation": "MCA 7-3-112(1)(g)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0010/section_0120/0070-0030-0010-0120.html",
+		"quote": "(g) 7-3-314 (2)",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county under the elected county official form may switch between partisan and nonpartisan elections by a vote of residents",
+		"citation": "MCA 7-3-103(4)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0010/section_0030/0070-0030-0010-0030.html",
+		"quote": "from being conducted on a partisan basis to being conducted on a nonpartisan basis or from being conducted on a nonpartisan basis to being conducted on a partisan basis",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter must say whether its legislative body is elected on a partisan or nonpartisan basis",
+		"citation": "MCA 7-3-704(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0070/section_0040/0070-0030-0070-0040.html",
+		"quote": "election on a partisan or nonpartisan basis",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Justices of the peace are elected on the nonpartisan judicial ballot",
+		"citation": "MCA 3-10-201(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0030/chapter_0100/part_0020/section_0010/0030-0100-0020-0010.html",
+		"quote": "A justice of the peace must be nominated and elected on the nonpartisan judicial ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan candidates' declarations may not indicate political affiliation",
+		"citation": "MCA 13-14-112(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0140/part_0010/section_0120/0130-0140-0010-0120.html",
+		"quote": "Declarations may not indicate political affiliation.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School trustee ballots list candidate names only",
+		"citation": "MCA 20-3-306(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0200/chapter_0030/part_0030/section_0060/0200-0030-0030-0060.html",
+		"quote": "List the names of the candidates for a 3-year term with a vacant square in front of each name.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A local nonpartisan primary is skipped unless a race is crowded",
+		"citation": "MCA 13-14-115(2)(a)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0140/part_0010/section_0150/0130-0140-0010-0150.html",
+		"quote": "the election administrator of a political subdivision may determine that a local nonpartisan portion of a primary election need not be held if",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A governing body may require a nonpartisan primary anyway",
+		"citation": "MCA 13-14-115(3)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0140/part_0010/section_0150/0130-0140-0010-0150.html",
+		"quote": "The governing body may require that a primary election be held for a nonpartisan office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Anaconda-Deer Lodge County's chief executive is elected on a nonpartisan ballot for four years, by plurality",
+		"citation": "Anaconda-Deer Lodge County, Chief Executive Officer page",
+		"url": "https://adlc.us/155/Chief-Executive-Officer",
+		"quote": "The CEO is elected by a plurality vote on a non-partisan ballot for a four-year term",
+		"certainty": "varies by place",
+		"verified": "local government publication"
+	},
+	{
+		"claim": "The candidate with the most valid votes is elected or nominated",
+		"citation": "MCA 13-1-103",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0010/part_0010/section_0030/0130-0010-0010-0030.html",
+		"quote": "The individual receiving the highest number of valid votes for any office at an election is elected or nominated to that office.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Ranked-choice voting is banned for local, state and federal offices",
+		"citation": "MCA 13-1-125(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0010/part_0010/section_0250/0130-0010-0010-0250.html",
+		"quote": "may not use a ranked-choice voting method to determine the election or nomination of a candidate to a local, state, or federal office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School elections follow the general election rules of Title 13 unless the education title says otherwise",
+		"citation": "MCA 20-20-102",
+		"url": "https://mca.legmt.gov/bills/mca/title_0200/chapter_0200/part_0010/section_0020/0200-0200-0010-0020.html",
+		"quote": "school elections shall be conducted and canvassed and the results shall be returned in the same manner as provided for general elections in Title 13",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Independent candidates file a declaration, pay the fee and circulate a nomination petition",
+		"citation": "MCA 13-10-501(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0100/part_0050/section_0010/0130-0100-0050-0010.html",
+		"quote": "by filing a declaration of intent and paying the filing fee in accordance with",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Petition signers must be active electors living in the district or political subdivision of the office",
+		"citation": "MCA 13-10-502(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0100/part_0050/section_0020/0130-0100-0050-0020.html",
+		"quote": "residing within the state and district or political subdivision in which the officer or officers are to be elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each petition sheet may hold signatures from only one county",
+		"citation": "MCA 13-10-501(5)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0100/part_0050/section_0010/0130-0100-0050-0010.html",
+		"quote": "Each sheet of a petition must contain signatures of electors residing in only one county.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An independent may not have been associated with a political party in the year before filing the petition",
+		"citation": "MCA 13-10-507(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0100/part_0050/section_0070/0130-0100-0050-0070.html",
+		"quote": "A person seeking office as an independent candidate may not be associated with a political party for 1 year prior to the submission of the person's nomination petition.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Associated with a party means having run as a partisan candidate or held office with a party designation in Montana",
+		"citation": "MCA 13-10-507(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0100/part_0050/section_0070/0130-0100-0050-0070.html",
+		"quote": "having run for office in Montana as a partisan candidate or having held a public office in Montana or a precinct committee representative office in Montana with a political party designation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate who loses a primary may not run for the same office as an independent or write-in in the general",
+		"citation": "MCA 13-10-501(6)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0100/part_0050/section_0010/0130-0100-0050-0010.html",
+		"quote": "An unsuccessful candidate for office at a primary election may not seek nomination by write-in vote or petition for the same office at the general election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The independent petition route does not apply to nonpartisan elections",
+		"citation": "MCA 13-10-505",
+		"url": "https://mca.legmt.gov/bills/mca/title_0130/chapter_0100/part_0050/section_0050/0130-0100-0050-0050.html",
+		"quote": "shall not be used to fill vacancies or to nominate candidates in nonpartisan elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Montana's counties are those that existed when the 1972 constitution was ratified; boundaries change only by vote of each county affected",
+		"citation": "Mont. Const. art. XI, § 2",
+		"url": "https://mca.legmt.gov/bills/mca/title_0000/article_0110/part_0010/section_0020/0000-0110-0010-0020.html",
+		"quote": "The counties of the state are those that exist on the date of ratification of this constitution.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Local governments may adopt, amend or abandon optional forms of government by vote",
+		"citation": "Mont. Const. art. XI, § 3(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0000/article_0110/part_0010/section_0030/0000-0110-0010-0030.html",
+		"quote": "may adopt, amend, or abandon an optional or alternative form by a majority of those voting on the question",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The traditional county form elects three commissioners and a set of county officers",
+		"citation": "Mont. Const. art. XI, § 3(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0000/article_0110/part_0010/section_0030/0000-0110-0010-0030.html",
+		"quote": "One optional form of county government includes, but is not limited to, the election of three county commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County commissioners may consolidate county offices",
+		"citation": "Mont. Const. art. XI, § 3(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0000/article_0110/part_0010/section_0030/0000-0110-0010-0030.html",
+		"quote": "The Board of county commissioners may consolidate two or more such offices.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties may share a joint office with one elected official",
+		"citation": "Mont. Const. art. XI, § 3(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0000/article_0110/part_0010/section_0030/0000-0110-0010-0030.html",
+		"quote": "The Boards of two or more counties may provide for a joint office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A board of county commissioners has three members or another number allowed by an alternative form",
+		"citation": "MCA 7-4-2101",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0040/part_0210/section_0010/0070-0040-0210-0010.html",
+		"quote": "consisting of three members or any other number provided for under any of the forms of government allowed under",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commissioners must live in their district but are elected by the whole county unless a plan or court order says otherwise",
+		"citation": "MCA 7-4-2104(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0040/part_0210/section_0040/0070-0040-0210-0040.html",
+		"quote": "the election of the member or members of the board must be submitted to the entire electorate of the county unless otherwise provided for under",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County commissioner terms are six years unless an adopted plan of government provides otherwise",
+		"citation": "MCA 7-4-2105(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0040/part_0210/section_0050/0070-0040-0210-0050.html",
+		"quote": "The term of office of county commissioners is 6 years unless otherwise provided for under a plan of government",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The elected county official form has a three-member commission with six-year terms and four-year terms for other officers",
+		"citation": "MCA 7-3-111(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0010/section_0110/0070-0030-0010-0110.html",
+		"quote": "This form has terms of 4 years for all elected officials except commissioners who are elected to 6-year terms. The commission consists of three members.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties may elect or appoint a county attorney, clerk of district court, county clerk, sheriff, treasurer and other officers",
+		"citation": "MCA 7-4-2203(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0040/part_0220/section_0030/0070-0040-0220-0030.html",
+		"quote": "There may be elected or appointed the following county officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county officer list ends with superintendent of schools, surveyor, assessor, coroner, public administrator and at least one justice of the peace",
+		"citation": "MCA 7-4-2203(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0040/part_0220/section_0030/0070-0040-0220-0030.html",
+		"quote": "one county superintendent of schools; (h) one county surveyor; (i) one assessor; (j) one coroner; (k) one public administrator; and (l) at least one justice of the peace",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Elected county officers serve four-year terms",
+		"citation": "MCA 7-4-2205(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0040/part_0220/section_0050/0070-0040-0220-0050.html",
+		"quote": "holds the office for the term of 4 years and until a successor is elected and qualified",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County commissioners may consolidate any two or more county offices, except justice of the peace",
+		"citation": "MCA 7-4-2301",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0040/part_0230/section_0010/0070-0040-0230-0010.html",
+		"quote": "may in its discretion consolidate any two or more of the offices named in",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county superintendent of schools is elected in every county without a county manager form",
+		"citation": "MCA 20-3-201(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0200/chapter_0030/part_0020/section_0010/0200-0030-0020-0010.html",
+		"quote": "A county superintendent must be elected in each county of the state unless a county manager form of government has been organized in the county.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under the commission form, elected community councils may advise each commissioner",
+		"citation": "MCA 7-3-417(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0040/section_0170/0070-0030-0040-0170.html",
+		"quote": "community councils of at least three members shall be elected within each district to advise the commissioner from that district",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A commission-form government sets a commission of at least three when voters adopt the form",
+		"citation": "MCA 7-3-417",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0040/section_0170/0070-0030-0040-0170.html",
+		"quote": "The size of the commission, which shall be a number not less than three, shall be established when the form is adopted by the voters",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any local government may adopt a self-government charter by vote of residents",
+		"citation": "Mont. Const. art. XI, § 5(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0000/article_0110/part_0010/section_0050/0000-0110-0010-0050.html",
+		"quote": "frame, adopt, amend, revise, or abandon a self-government charter with the approval of a majority of those voting on the question",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Charter provisions on structure override statutes",
+		"citation": "Mont. Const. art. XI, § 5(3)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0000/article_0110/part_0010/section_0050/0000-0110-0010-0050.html",
+		"quote": "Charter provisions establishing executive, legislative, and administrative structure and organization are superior to statutory provisions.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A self-government charter government may exercise any power not prohibited",
+		"citation": "Mont. Const. art. XI, § 6",
+		"url": "https://mca.legmt.gov/bills/mca/title_0000/article_0110/part_0010/section_0060/0000-0110-0010-0060.html",
+		"quote": "may exercise any power not prohibited by this constitution, law, or charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Self-government units remain subject to all laws regulating the election of local officials",
+		"citation": "MCA 7-1-114(1)(d)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0010/part_0010/section_0140/0070-0010-0010-0140.html",
+		"quote": "all laws regulating the election of local officials",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Those mandatory provisions are a prohibition on acting otherwise",
+		"citation": "MCA 7-1-114(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0010/part_0010/section_0140/0070-0010-0010-0140.html",
+		"quote": "These provisions are a prohibition on the self-government unit acting other than as provided.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every local government has adopted one of six alternative forms, including the charter form",
+		"citation": "MCA 7-3-102",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0010/section_0020/0070-0030-0010-0020.html",
+		"quote": "Each local government in the state shall adopt one of the alternative forms of government provided for in parts 1 through 7",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Changing a form of government cannot be voted on again for three years",
+		"citation": "MCA 7-3-104",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0010/section_0040/0070-0030-0010-0040.html",
+		"quote": "may not vote on the question of changing the form of local government until 3 years after the new alternative form of local government becomes effective",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county and a city or town in it may unite into one consolidated local government",
+		"citation": "MCA 7-3-1101(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0110/section_0010/0070-0030-0110-0010.html",
+		"quote": "A county and a city or town within the county may unite to form a single unit of local government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality is included in a consolidation only if its own study commission takes part and approves",
+		"citation": "MCA 7-3-1101(3)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0110/section_0010/0070-0030-0110-0010.html",
+		"quote": "A municipality may not be included unless the local government study commission of that municipality participates in the cooperative study",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A consolidated government has the status of both a county and a municipality and succeeds both",
+		"citation": "MCA 7-3-1103(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0110/section_0030/0070-0030-0110-0030.html",
+		"quote": "shall have the status of a county and an incorporated municipality for all purposes and shall replace and be the successor of the county and any city or town",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Butte-Silver Bow is a consolidated city-county government led by an elected chief executive",
+		"citation": "Butte-Silver Bow, official home page",
+		"url": "https://www.bsbmt.gov/",
+		"quote": "We are proud to be a consolidated city-county government, led by an elected Chief Executive",
+		"certainty": "statutory",
+		"verified": "local government publication"
+	},
+	{
+		"claim": "Butte-Silver Bow's council of commissioners represents districts",
+		"citation": "Butte-Silver Bow, official home page",
+		"url": "https://www.bsbmt.gov/",
+		"quote": "Council of Commissioners who represent our districts",
+		"certainty": "varies by place",
+		"verified": "local government publication"
+	},
+	{
+		"claim": "A city of 10,000 or more is first class",
+		"citation": "MCA 7-1-4111(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0010/part_0410/section_0110/0070-0010-0410-0110.html",
+		"quote": "Every city having a population of 10,000 or more is a city of the first class.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city of 5,001 to 9,999 is second class",
+		"citation": "MCA 7-1-4111(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0010/part_0410/section_0110/0070-0010-0410-0110.html",
+		"quote": "Every city having a population of less than 10,000 and more than 5,000 is a city of the second class.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city of 1,001 to 4,999 is third class",
+		"citation": "MCA 7-1-4111(3)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0010/part_0410/section_0110/0070-0010-0410-0110.html",
+		"quote": "Every city having a population of less than 5,000 and more than 1,000 is a city of the third class.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality of 301 to 999 is a town",
+		"citation": "MCA 7-1-4111(4)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0010/part_0410/section_0110/0070-0010-0410-0110.html",
+		"quote": "Every municipal corporation having a population of less than 1,000 and more than 300 is a town.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Places in overlap bands may choose between two classes by council resolution",
+		"citation": "MCA 7-1-4112(3)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0010/part_0410/section_0120/0070-0010-0410-0120.html",
+		"quote": "every municipal corporation having a population of more than 1,000 and less than 2,500 may",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city or town whose census population qualifies must be advanced in class",
+		"citation": "MCA 7-1-4114",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0010/part_0410/section_0140/0070-0010-0410-0140.html",
+		"quote": "such city or town must be advanced as provided in",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A first or second class city that loses population must be reduced in class by council resolution",
+		"citation": "MCA 7-1-4118(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0010/part_0410/section_0180/0070-0010-0410-0180.html",
+		"quote": "the council must thereupon, by resolution declare that such city be reduced to a city of the second class or town as the case may be",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A new municipality needs at least 300 inhabitants",
+		"citation": "MCA 7-2-4103(1)(a)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0020/part_0410/section_0030/0070-0020-0410-0030.html",
+		"quote": "the number of inhabitants is 300 or upwards",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A first-class city's officers are a mayor, two council members per ward and a city judge",
+		"citation": "MCA 7-4-4101(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0040/part_0410/section_0010/0070-0040-0410-0010.html",
+		"quote": "one mayor; (b) two city council members from each ward; and (c) one city judge",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town elects a mayor and two council members per ward; its city judge may be elected or appointed",
+		"citation": "MCA 7-4-4103(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0040/part_0410/section_0030/0070-0040-0410-0030.html",
+		"quote": "the officers listed in subsection (1), except for the city judge, must be elected by the qualified electors of the town",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A third-class city decides by ordinance whether its city judge is elected or appointed",
+		"citation": "MCA 7-4-4102(3)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0040/part_0410/section_0020/0070-0040-0410-0020.html",
+		"quote": "The governing body of a city of the third class may by ordinance determine whether the office of city judge must be filled by appointment by the governing body or by election",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The mayor's term is four years",
+		"citation": "MCA 7-4-4302",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0040/part_0430/section_0020/0070-0040-0430-0020.html",
+		"quote": "The mayor shall hold office for a term of 4 years and until the qualification of a successor.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A council member's term is four years, with one member per ward elected at each election",
+		"citation": "MCA 7-4-4402",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0040/part_0440/section_0020/0070-0040-0440-0020.html",
+		"quote": "In the succeeding elections, one city council member from each ward must be elected for a 4-year term.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City judges serve four-year terms",
+		"citation": "MCA 3-11-201(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0030/chapter_0110/part_0020/section_0010/0030-0110-0020-0010.html",
+		"quote": "An elected or appointed city judge shall hold office for a term of 4 years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "First-class cities have 4 to 10 wards",
+		"citation": "MCA 7-5-4401(2)(a)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0050/part_0440/section_0010/0070-0050-0440-0010.html",
+		"quote": "Cities of the first class must be divided into not less than four or more than 10 wards.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Towns have two or three wards, and may reduce to one",
+		"citation": "MCA 7-5-4401(2)(d)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0050/part_0440/section_0010/0070-0050-0440-0010.html",
+		"quote": "the town council may by ordinance reduce the number of wards in a town to only one if it so desires",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under the commission-executive form, the executive (mayor) is elected at large",
+		"citation": "MCA 7-3-201",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0020/section_0010/0070-0030-0020-0010.html",
+		"quote": "one elected executive (who may be referred to as the mayor) who is elected at large",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The old statutory council-mayor form sets four-year terms and a council of up to 20 by ordinance",
+		"citation": "MCA 7-3-113(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0010/section_0130/0070-0030-0010-0130.html",
+		"quote": "The size of the commission shall be established by ordinance, but it may not exceed 20 members.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A commission-executive form may elect its commission at large, by district, or a mix",
+		"citation": "MCA 7-3-218",
+		"url": "https://mca.legmt.gov/bills/mca/title_0070/chapter_0030/part_0020/section_0180/0070-0030-0020-0180.html",
+		"quote": "elected by any combination of districts, in which candidates must reside and which are apportioned by population, and at large",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School districts are organized regardless of county boundaries",
+		"citation": "MCA 20-6-101(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0200/chapter_0060/part_0010/section_0010/0200-0060-0010-0010.html",
+		"quote": "the territory, regardless of county boundaries, organized under the provisions of this title",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "High school districts may cover all or part of one or more elementary districts",
+		"citation": "MCA 20-6-101(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0200/chapter_0060/part_0010/section_0010/0200-0060-0010-0010.html",
+		"quote": "High school districts may encompass all or parts of the territory of one or more elementary districts.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An elementary district may become inactive by attaching to a high school district to form a K-12 district",
+		"citation": "MCA 20-6-101(2)(a)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0200/chapter_0060/part_0010/section_0010/0200-0060-0010-0010.html",
+		"quote": "An elementary district may be inactive if the district attaches to a high school district under the provisions of",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A high school district board is the elementary board where the high school stands plus any additional trustees",
+		"citation": "MCA 20-3-351(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0200/chapter_0030/part_0030/section_0510/0200-0030-0030-0510.html",
+		"quote": "the trustees of the elementary district in which the high school building is located",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county high school has seven trustees",
+		"citation": "MCA 20-3-351(2)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0200/chapter_0030/part_0030/section_0510/0200-0030-0030-0510.html",
+		"quote": "There must be seven trustee positions for each county high school.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A first-class elementary district has seven trustees",
+		"citation": "MCA 20-3-341(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0200/chapter_0030/part_0030/section_0410/0200-0030-0030-0410.html",
+		"quote": "There must be seven trustee positions in a first-class elementary district.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A third-class elementary district has three trustees, or five by board vote",
+		"citation": "MCA 20-3-341(3)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0200/chapter_0030/part_0030/section_0410/0200-0030-0030-0410.html",
+		"quote": "There must be three trustee positions in a third-class elementary district",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A school board may create single-member trustee districts",
+		"citation": "MCA 20-3-337(1)",
+		"url": "https://mca.legmt.gov/bills/mca/title_0200/chapter_0030/part_0030/section_0370/0200-0030-0030-0370.html",
+		"quote": "may establish a procedure for studying the appropriateness of creating single-member trustee districts",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	}
+]

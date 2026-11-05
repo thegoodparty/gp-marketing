@@ -1,0 +1,266 @@
+[
+	{
+		"claim": "The Council has 13 members elected on a partisan basis: a chair and 4 at large, and one from each of 8 wards",
+		"citation": "D.C. Code § 1-204.01(b)(1)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-204.01",
+		"quote": "shall consist of 13 members elected on a partisan basis. The Chairman and 4 members shall be elected at large in the District, and 8 members shall be elected 1 each from the 8 election wards",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Council terms are four years, starting January 2 after the election",
+		"citation": "D.C. Code § 1-204.01(b)(1)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-204.01",
+		"quote": "The term of office of the members of the Council shall be 4 years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party may nominate one fewer at-large candidate than the number of at-large seats up",
+		"citation": "D.C. Code § 1-204.01(b)(2)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-204.01",
+		"quote": "a political party may nominate a number of candidates for the office of at-large member of the Council equal to 1 less than the total number of at-large members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Mayor is elected on a partisan basis for four years",
+		"citation": "D.C. Code § 1-204.21(b)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-204.21",
+		"quote": "shall be elected, on a partisan basis, for a term of 4 years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Attorney General is elected on a partisan basis",
+		"citation": "D.C. Code § 1-204.35(a)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-204.35",
+		"quote": "shall be elected on a partisan basis by the registered qualified electors of the District",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Council holds the District’s legislative power, subject to the Home Rule Act limits",
+		"citation": "D.C. Code § 1-204.04(a)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-204.04",
+		"quote": "the legislative power granted to the District by this chapter is vested in and shall be exercised by the Council",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each act is read twice, at least 13 days apart",
+		"citation": "D.C. Code § 1-204.12(a)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-204.12",
+		"quote": "Each proposed act shall be read twice in substantially the same form, with at least 13 days intervening between each reading",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Emergency acts take effect at once and last up to 90 days",
+		"citation": "D.C. Code § 1-204.12(a)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-204.12",
+		"quote": "such act shall be effective for a period of not to exceed 90 days",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Mayor has 10 working days to approve or veto an act",
+		"citation": "D.C. Code § 1-204.04(e)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-204.04",
+		"quote": "within 10 calendar days (excluding Saturdays, Sundays, and holidays) after the act is presented to him, either approve or disapprove such act",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An act the Mayor does not return in time is deemed approved",
+		"citation": "D.C. Code § 1-204.04(e)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-204.04",
+		"quote": "the Mayor shall be deemed to have approved it",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each act is sent to Congress and takes effect after a 30-day review period (counting only days Congress is in session)",
+		"citation": "D.C. Code § 1-206.02(c)(1)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-206.02",
+		"quote": "such act shall take effect upon the expiration of the 30-calendar-day period",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Acts in the criminal code titles get a 60-day review",
+		"citation": "D.C. Code § 1-206.02(c)(2)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-206.02",
+		"quote": "such act shall take effect at the end of the 60-day period beginning on the day such act is transmitted",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Congress can disapprove an act by joint resolution during review",
+		"citation": "D.C. Code § 1-206.02(c)(2)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-206.02",
+		"quote": "unless, during such 60-day period, there has been enacted into law a joint resolution disapproving such act",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Congress keeps the power to legislate for the District on any subject at any time",
+		"citation": "D.C. Code § 1-206.01",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-206.01",
+		"quote": "the Congress of the United States reserves the right, at any time, to exercise its constitutional authority as legislature for the District",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Primaries for local offices are on the third Tuesday in June of non-presidential even years",
+		"citation": "D.C. Code § 1-1001.10(a)(3)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-1001.10",
+		"quote": "3rd Tuesday in June of each even-numbered non-presidential election year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Primaries are the first Tuesday in June in presidential years and the third Tuesday in June in other even years",
+		"citation": "D.C. Code § 1-1001.10(a)(3)(A)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-1001.10",
+		"quote": "shall be held on the 1st Tuesday in June in a presidential election year and on the 3rd Tuesday in June",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "General elections for local offices are in November of even-numbered years",
+		"citation": "D.C. Code § 1-1001.10(a)(3)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-1001.10",
+		"quote": "general elections for such office shall be held on the Tuesday next after the 1st Monday in November of each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Ranked-choice voting applies from the June 2026 primary to contests with three or more candidates for Mayor, Council, AG, State Board, ANC and others",
+		"citation": "D.C. Code § 1-1001.08a(a)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-1001.08a",
+		"quote": "beginning with the June 2026 primary election and for all subsequent elections thereafter, ranked choice voting as provided for by this section shall be used for each primary, special, and general election involving 3 or more qualified candidates",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "RCV covers ANC and State Board races",
+		"citation": "D.C. Code § 1-1001.08a(a)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-1001.08a",
+		"quote": "members of the State Board of Education, United States Senator, United States Representative, Advisory Neighborhood Commissioner",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters may rank up to five candidates",
+		"citation": "D.C. Code § 1-1001.08a(b)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-1001.08a",
+		"quote": "Each ballot shall allow a voter to rank up to 5 candidates",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party-registered voter cannot be nominated directly (by petition) for Council, Mayor or AG; only those not registered with a primary-holding party can",
+		"citation": "D.C. Code § 1-1001.08(j)(3)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-1001.08",
+		"quote": "No person shall be nominated directly as a candidate in any general election for the office of Delegate, Chairman of the Council, member of the Council, Mayor, Attorney General",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Direct nomination bar applies to voters registered with a party that holds a primary",
+		"citation": "D.C. Code § 1-1001.08(j)(3)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-1001.08",
+		"quote": "who is registered to vote as affiliated with a party qualified to conduct a primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State Board of Education elections are nonpartisan",
+		"citation": "D.C. Code § 1-1001.08(m)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-1001.08",
+		"quote": "The election of the members of the State Board of Education shall be conducted on a nonpartisan basis",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State Board candidates are nominated by petition",
+		"citation": "D.C. Code § 1-1001.08(n)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-1001.08",
+		"quote": "shall be nominated for such office by a nominating petition",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The State Board of Education has 9 elected members: one per ward and one at large",
+		"citation": "D.C. Code § 38-2651(b)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/38-2651",
+		"quote": "the Board shall consist of 9 elected members. One member shall be elected from each of the 8 school election wards created pursuant to",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State Board members serve four-year terms",
+		"citation": "D.C. Code § 38-2651",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/38-2651",
+		"quote": "the term of office of a member of the Board, including the at-large member, shall be 4 years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State Board elections are nonpartisan (education title)",
+		"citation": "D.C. Code § 38-2651(f)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/38-2651",
+		"quote": "The election of the members of the Board shall be conducted on a nonpartisan basis",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "ANC elections are in November of even-numbered years",
+		"citation": "D.C. Code § 1-309.06(a)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-309.06",
+		"quote": "general elections of members of Advisory Neighborhood Commissions shall take place on the 1st Tuesday after the 1st Monday in November of each even-numbered calendar year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "ANC commissioners serve two-year terms",
+		"citation": "D.C. Code § 1-309.06(b)(1)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-309.06",
+		"quote": "Each member of an Advisory Neighborhood Commission shall serve for a term of 2 years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "ANC candidates are nominated by petition of voters in their single-member district",
+		"citation": "D.C. Code § 1-309.05(b)(1)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-309.05",
+		"quote": "Candidates for member of an Advisory Neighborhood Commission shall be nominated by a petition",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An ANC commissioner must live in the single-member district and hold no other elected office",
+		"citation": "D.C. Code § 1-309.05(a)(1)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-309.05",
+		"quote": "Is a registered qualified elector actually residing in the single-member district from which the person was elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "ANC commissioners hold no other elected office",
+		"citation": "D.C. Code § 1-309.05(a)(1)(C)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-309.05",
+		"quote": "Holds no other elected public office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each single-member district has about 2,000 people",
+		"citation": "D.C. Code § 1-309.03(a)",
+		"url": "https://code.dccouncil.gov/us/dc/council/code/sections/1-309.03",
+		"quote": "Each single-member district shall have a population of approximately 2,000 people",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

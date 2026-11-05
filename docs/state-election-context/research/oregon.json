@@ -1,0 +1,682 @@
+[
+	{
+		"claim": "Odd-year regular sessions begin on the Tuesday after the Martin Luther King, Jr. holiday",
+		"citation": "ORS 171.010(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors171.html",
+		"quote": "In the case of an odd-numbered year regular session, on the Tuesday after the holiday for Martin Luther King, Jr.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Even-year regular sessions begin on February 1, or the following Monday if February 1 falls Thursday to Sunday",
+		"citation": "ORS 171.010(2)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors171.html",
+		"quote": "on the first day of February, except that if the first day of February is a Thursday, Friday, Saturday or Sunday, the regular session shall commence on the following Monday",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Legislative Assembly holds annual sessions",
+		"citation": "Or. Const. art. IV, § 10(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/Pages/OrConst.aspx",
+		"quote": "The Legislative Assembly shall hold annual sessions at the Capitol of the State.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An odd-year session may not exceed 160 calendar days",
+		"citation": "Or. Const. art. IV, § 10(1)(a)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/Pages/OrConst.aspx",
+		"quote": "A session beginning in an odd-numbered year may not exceed 160 calendar days in duration",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An even-year session may not exceed 35 calendar days",
+		"citation": "Or. Const. art. IV, § 10(1)(b)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/Pages/OrConst.aspx",
+		"quote": "A session beginning in an even-numbered year may not exceed 35 calendar days in duration",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "During the session the governor has five days, Saturdays and Sundays excepted, to return a bill or it becomes law",
+		"citation": "Or. Const. art. V, § 15b(3)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/Pages/OrConst.aspx",
+		"quote": "If any bill shall not be returned by the Governor within five days (Saturdays and Sundays excepted) after it shall have been presented to the Governor, it shall be a law without signature",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "After adjournment the governor has thirty days, Saturdays and Sundays excepted, to veto a bill; otherwise it becomes law",
+		"citation": "Or. Const. art. V, § 15b(3)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/Pages/OrConst.aspx",
+		"quote": "unless the Governor within thirty days next after the adjournment (Saturdays and Sundays excepted) shall file such bill, with written objections thereto",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Acts take effect on January 1 of the year after passage unless the Act says otherwise",
+		"citation": "ORS 171.022",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors171.html",
+		"quote": "Except as otherwise provided in the Act, an Act of the Legislative Assembly takes effect on January 1 of the year after passage of the Act.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No act takes effect until ninety days after the session ends, except in an emergency",
+		"citation": "Or. Const. art. IV, § 28",
+		"url": "https://www.oregonlegislature.gov/bills_laws/Pages/OrConst.aspx",
+		"quote": "No act shall take effect, until ninety days from the end of the session at which the same shall have been passed, except in case of emergency",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is the first Tuesday after the first Monday in November of each even-numbered year",
+		"citation": "ORS 254.056(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors254.html",
+		"quote": "The general election shall be held on the first Tuesday after the first Monday in November of each even-numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The primary election is the third Tuesday in May of each even-numbered year",
+		"citation": "ORS 254.056(2)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors254.html",
+		"quote": "The primary election shall be held on the third Tuesday in May of each even-numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Major party candidates are nominated at the May primary for offices filled at the general election",
+		"citation": "ORS 254.056(2)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors254.html",
+		"quote": "major political party candidates shall be nominated for offices to be filled at the general election held in that year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "All Oregon elections are conducted by mail",
+		"citation": "ORS 254.465(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors254.html",
+		"quote": "County clerks shall conduct all elections in this state by mail.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County offices and county-referred measures may only be on the March, May, August or November election dates, apart from emergency elections",
+		"citation": "ORS 203.085(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors203.html",
+		"quote": "no election on a county measure referred by the county governing body or for a county office shall be held on any date other than",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City offices and council-referred measures may only be on the March, May, August or November election dates, apart from emergency elections",
+		"citation": "ORS 221.230(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors221.html",
+		"quote": "no election on a city measure referred by the city governing body or for a city office shall be held on any date other than",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities must hold their nominating and regular elections for officers at the same time as the state primary and general elections",
+		"citation": "Or. Const. art. II, § 14a",
+		"url": "https://www.oregonlegislature.gov/bills_laws/Pages/OrConst.aspx",
+		"quote": "Incorporated cities and towns shall hold their nominating and regular elections for their several elective officers at the same time that the primary and general biennial elections for State and county officers are held",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City charter election provisions stay in force except as to the time of holding elections",
+		"citation": "Or. Const. art. II, § 14a",
+		"url": "https://www.oregonlegislature.gov/bills_laws/Pages/OrConst.aspx",
+		"quote": "pertaining to the holding of elections shall continue in full force and effect except so far as they relate to the time of holding",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "All elections for city officers are held at the same time and place as state and county elections",
+		"citation": "ORS 254.035(2)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors254.html",
+		"quote": "All elections for city officers shall be held at the same time and place as elections for state and county officers.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city may skip the May nominating election, in which case candidates file for the November election directly",
+		"citation": "ORS 221.180(2)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors221.html",
+		"quote": "if a city does not hold a nominating election for municipal offices, a nominating petition or declaration of candidacy shall be filed not sooner than",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special district boards, including school boards, are elected at the regular district election on the third Tuesday in May of each odd-numbered year",
+		"citation": "ORS 255.335(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors255.html",
+		"quote": "The election shall be held in each such district in each odd-numbered year on the third Tuesday in May.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A district may not hold more than one election of board members in a year",
+		"citation": "ORS 255.335(2)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors255.html",
+		"quote": "A district shall not conduct more than one election of board members in any year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "District board terms begin July 1 after the election",
+		"citation": "ORS 255.335(4)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors255.html",
+		"quote": "The term of a board member elected at the regular district election shall commence on the first day of July next following the election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A school district is a district for the purposes of the district election chapter",
+		"citation": "ORS 255.012(26)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors255.html",
+		"quote": "(26) A school district.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Rural fire protection districts are districts under the district election chapter",
+		"citation": "ORS 255.012(17)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors255.html",
+		"quote": "A rural fire protection district organized under ORS chapter 478.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special elections called by a district are limited to the March, May, August and November dates, with a narrow exception for disaster repairs",
+		"citation": "ORS 255.345(1)-(2)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors255.html",
+		"quote": "a special election called by a district elections authority shall not be held on any date other than",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "District board candidates are nominated by petition or declaration of candidacy filed with the district elections officer, with no party route",
+		"citation": "ORS 255.235(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors255.html",
+		"quote": "A candidate for election as a member of a district board shall be nominated by filing with the elections officer either",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School director elections are governed by the district election chapter",
+		"citation": "ORS 332.118(1)(a)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors332.html",
+		"quote": "The nomination and election of school directors.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School directors are elected at the regular district election for four-year terms",
+		"citation": "ORS 332.138",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors332.html",
+		"quote": "at each regular district election described in ORS 255.335, school directors shall be elected for a term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The term of a school director is four years",
+		"citation": "ORS 332.018(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors332.html",
+		"quote": "The term of office of director is four years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School boards of districts under 300,000 people have five or seven members",
+		"citation": "ORS 332.011",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors332.html",
+		"quote": "shall consist of five or seven members",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School directors are elected at large unless the board provides for zones",
+		"citation": "ORS 332.124(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors332.html",
+		"quote": "all candidates shall be elected at large in the district unless the district school board provides for election from zones under ORS 332.126",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School, education service and community college districts may change their electoral system to comply with the Oregon voting rights provisions",
+		"citation": "ORS 255.405(1)(b)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors255.html",
+		"quote": "may authorize a change to the electoral system used by the qualifying district in order to comply with ORS 255.400 to 255.424",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Qualifying districts are school districts, education service districts and community college districts",
+		"citation": "ORS 255.400(4)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors255.html",
+		"quote": "An education service district as defined in ORS 334.003",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only voters registered with a major party may vote for that party's candidates at the primary, unless the party has opened its primary to nonaffiliated voters",
+		"citation": "ORS 254.365(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors254.html",
+		"quote": "An elector is not qualified or permitted to vote at any primary election for any candidate of a major political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A major party may admit voters not affiliated with any party to its primary",
+		"citation": "ORS 254.365(1)(b), (3)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors254.html",
+		"quote": "for a primary election that admits electors not affiliated with any political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party member gets only their own party's primary ballot",
+		"citation": "ORS 254.365(2)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors254.html",
+		"quote": "The elector may not be given a ballot of any other political party at that primary election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonaffiliated voters receive a primary ballot limited to the city, county and nonpartisan offices and measures they may vote on",
+		"citation": "ORS 254.470(3)(d)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors254.html",
+		"quote": "the county clerk shall mail to each elector who is not eligible to vote for party candidates a ballot limited to those offices and measures for which the elector is eligible to vote",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate must have been a party member for at least 180 days before the filing deadline to receive that party's nomination",
+		"citation": "ORS 249.046(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors249.html",
+		"quote": "If a candidate has not been a member of the major political party for at least 180 days before the deadline for filing",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate who loses a major party primary may not run as another party's or a nonaffiliated candidate for the same office that November",
+		"citation": "ORS 249.048",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors249.html",
+		"quote": "may not be the candidate of any other political party or a nonaffiliated candidate for the same office at the succeeding general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Statutory nonpartisan offices include county clerk, assessor, surveyor, treasurer, a county judge with judicial functions, sheriff, district attorney, and any office a home rule charter designates nonpartisan",
+		"citation": "ORS 249.002(7)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors249.html",
+		"quote": "county clerk, county assessor, county surveyor, county treasurer, county judge who exercises judicial functions, sheriff, district attorney or any office designated nonpartisan by a home rule charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Justices of the peace and elected Metro offices are nonpartisan",
+		"citation": "ORS 249.002(7)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors249.html",
+		"quote": "any elected office of a metropolitan service district under ORS chapter 268, justice of the peace",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County commissioner and a county judge without judicial functions can be partisan elective offices",
+		"citation": "ORS 236.215(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors236.html",
+		"quote": "When a vacancy occurs in the partisan elective office of county judge who does not exercise judicial functions or county commissioner",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County commissioner and a county judge without judicial functions can also be nonpartisan offices",
+		"citation": "ORS 236.210(2)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors236.html",
+		"quote": "when a vacancy occurs in the nonpartisan office of county judge who does not exercise judicial functions or county commissioner",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan candidates appear on the May nominating ballot without party designation",
+		"citation": "ORS 254.125(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors254.html",
+		"quote": "shall be listed without political party designation on a nominating ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Chapters 249 and 254 govern nominating and electing city officers in all cities",
+		"citation": "ORS 221.180(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors221.html",
+		"quote": "This section and ORS chapters 249 and 254 govern the manner of nominating and electing candidates for municipal offices in all cities.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State law leaves room for a party nomination for city office, recording the nominating party where applicable",
+		"citation": "ORS 254.565(1)(c)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors254.html",
+		"quote": "If applicable, the name of the major political party nominating the candidate.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Candidates for nonpartisan office file a nominating petition or a declaration of candidacy",
+		"citation": "ORS 249.020(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors249.html",
+		"quote": "An eligible elector may become a candidate for nonpartisan office, or for the nomination to an office by the major political party of which the elector is a member, by filing a nominating petition or a declaration of candidacy.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The candidate with the most votes is nominated or elected",
+		"citation": "ORS 254.065(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors254.html",
+		"quote": "When one person is to be nominated for or elected to an office, the person receiving the highest number of votes shall be nominated or elected.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A nonpartisan candidate who wins a majority at the May nominating election is elected outright",
+		"citation": "ORS 249.088(1)(b)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors249.html",
+		"quote": "If a candidate for nonpartisan office receives a majority of votes cast for the office, that candidate is elected.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Without a majority, the top two nonpartisan candidates in May advance to November",
+		"citation": "ORS 249.088(1)(a)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors249.html",
+		"quote": "Unless a candidate for nonpartisan office receives a majority of the votes cast for the office, the two candidates who receive the highest number of votes are nominated.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The May majority rule for nonpartisan offices is subject to a home rule charter",
+		"citation": "ORS 249.088(2)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors249.html",
+		"quote": "(2) The application of this section is subject to the provisions of a home rule charter. [1979 c.190",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "With two or fewer candidates for sheriff, county treasurer or county clerk, they skip the May ballot and go straight to November",
+		"citation": "ORS 249.091(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors249.html",
+		"quote": "The name or names of the candidate or candidates may not be printed on the ballot at the nominating election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "With more than two candidates for sheriff, treasurer or clerk, a May majority makes that candidate the only nominee, not the winner",
+		"citation": "ORS 249.091(2)(b)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors249.html",
+		"quote": "If a candidate receives a majority of the votes cast for the office, that candidate alone is nominated.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Minor parties, assemblies of electors and individual electors may each nominate one candidate per partisan office for the general election",
+		"citation": "ORS 249.705",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors249.html",
+		"quote": "A minor political party, assembly of electors or individual electors may nominate one candidate for each partisan public office to be filled at the general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any voter may sign a nonaffiliated candidate's petition or certificate of nomination",
+		"citation": "ORS 249.076(2)(b)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors249.html",
+		"quote": "A nominating petition or certificate of nomination of any nonaffiliated candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any voter may sign a nonpartisan candidate's nominating petition",
+		"citation": "ORS 249.076(2)(a)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors249.html",
+		"quote": "A nominating petition or certificate of nomination of any candidate for nonpartisan office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter may sign nominating papers for more than one candidate for the same office",
+		"citation": "ORS 249.076(2)(c)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors249.html",
+		"quote": "Nominating petitions or certificates of nomination for more than one candidate for the same office.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only members of the candidate's own party may sign a major party candidate's nominating petition",
+		"citation": "ORS 249.076(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors249.html",
+		"quote": "A person who is not a member of the same major political party as the candidate for nomination by the major political party may not sign the nominating petition of the candidate.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "ORS chapter 201 sets the boundaries of 36 counties, from Baker to Yamhill",
+		"citation": "ORS 201.010 to 201.360",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors201.html",
+		"quote": "201.360 Yamhill County. The boundary of Yamhill County is as follows",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Unless a charter provides otherwise, the county governing body is a county court of the county judge and two commissioners",
+		"citation": "ORS 203.111",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors203.html",
+		"quote": "Unless otherwise provided by county charter, a county court shall be the governing body",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county court consists of the county judge and two county commissioners",
+		"citation": "ORS 203.111",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors203.html",
+		"quote": "shall consist of the county judge and two county commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A noncharter county whose county judge has no judicial function may replace the county judge with a third commissioner",
+		"citation": "ORS 203.230(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors203.html",
+		"quote": "in which the county judge has no judicial function, may order the office of county judge abolished and create in lieu thereof a third county commissioner",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A board of county commissioners has three members unless a charter or ordinance provides otherwise",
+		"citation": "ORS 203.240(1)(b)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors203.html",
+		"quote": "Unless provided otherwise by county charter or ordinance, consist of three county commissioners.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties elect a sheriff, county clerk, county assessor and county treasurer, and county commissioners",
+		"citation": "ORS 204.005(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors204.html",
+		"quote": "The following county officers shall be elected at the primary election or general election",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county surveyor is appointed unless a charter or ordinance provides otherwise",
+		"citation": "ORS 204.005(2)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors204.html",
+		"quote": "Unless an adopted county charter or a county ordinance provides otherwise, the governing body of a county shall appoint a county surveyor.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County officers serve four-year terms",
+		"citation": "ORS 204.010(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors204.html",
+		"quote": "the term of office of each officer mentioned in ORS 204.005 is four years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county commissioner seat is a numbered position",
+		"citation": "ORS 204.013(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors204.html",
+		"quote": "each office of county commissioner shall be designated by number as Position No. 1, Position No. 2 or Position No. 3",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county charter prescribes the organization of county government, including the number, election or appointment and tenure of officers",
+		"citation": "Or. Const. art. VI, § 10",
+		"url": "https://www.oregonlegislature.gov/bills_laws/Pages/OrConst.aspx",
+		"quote": "A county charter shall prescribe the organization of the county government and shall provide directly, or by its authority, for the number, election or appointment, qualifications, tenure, compensation, powers and duties of such officers as the county deems necessary.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county charter cannot change how judges, justices of the peace or district attorneys are selected",
+		"citation": "Or. Const. art. VI, § 10",
+		"url": "https://www.oregonlegislature.gov/bills_laws/Pages/OrConst.aspx",
+		"quote": "a county charter shall not affect the selection, tenure, compensation, powers or duties prescribed by law for judges in their judicial capacity, for justices of the peace or for district attorneys",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County voters adopt, amend or repeal a charter by majority vote",
+		"citation": "ORS 203.720(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors203.html",
+		"quote": "by majority vote of such electors voting on the question at any legally called election, may adopt, amend, revise or repeal a county charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The voters of every city and town may enact and amend their own charter",
+		"citation": "Or. Const. art. XI, § 2",
+		"url": "https://www.oregonlegislature.gov/bills_laws/Pages/OrConst.aspx",
+		"quote": "The legal voters of every city and town are hereby granted power to enact and amend their municipal charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Legislature may not enact or amend a city charter",
+		"citation": "Or. Const. art. XI, § 2",
+		"url": "https://www.oregonlegislature.gov/bills_laws/Pages/OrConst.aspx",
+		"quote": "The Legislative Assembly shall not enact, amend or repeal any charter or act of incorporation for any municipality, city or town.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city incorporated under the general law has five councillors by default",
+		"citation": "ORS 221.110",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors221.html",
+		"quote": "shall be five councillors, a municipal judge and such other officers as the council deems necessary",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a general-law city, three councillors are elected every two years",
+		"citation": "ORS 221.120(1)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors221.html",
+		"quote": "Three councillors shall be elected biennially.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a general-law city, the council chooses the mayor from among its members",
+		"citation": "ORS 221.130(2)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors221.html",
+		"quote": "The council shall appoint a mayor at its first meeting of each odd-numbered year.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City charters are adopted, amended or repealed by simple majority vote",
+		"citation": "ORS 221.210(2)(a)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors221.html",
+		"quote": "the adoption, amendment, revision, repeal or surrender of a city charter shall be decided by simple majority vote",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State election law governs the conduct of all city elections",
+		"citation": "ORS 221.200",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors221.html",
+		"quote": "ORS chapters 246 to 260 govern the conduct of all city elections.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter or ordinance may set the manner of filing for city office",
+		"citation": "ORS 221.180(3)",
+		"url": "https://www.oregonlegislature.gov/bills_laws/ors/ors221.html",
+		"quote": "If the city charter or ordinance provides a manner of filing for nomination, a candidate for any office of that city shall file in that manner.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Portland elects its councilors, mayor and auditor at the general election using ranked choice voting",
+		"citation": "Portland City Charter § 3-102",
+		"url": "https://www.portland.gov/charter/3/all-articles",
+		"quote": "City Councilors, the Mayor and the Auditor are elected in the general election, except as otherwise provided in this Charter, using ranked choice voting.",
+		"certainty": "statutory",
+		"verified": "read in city charter"
+	},
+	{
+		"claim": "Portland elects its mayor and auditor by instant runoff",
+		"citation": "Portland City Charter § 3-102",
+		"url": "https://www.portland.gov/charter/3/all-articles",
+		"quote": "The Mayor and the Auditor are elected at-large using a method of ranked choice voting known as instant runoff voting.",
+		"certainty": "statutory",
+		"verified": "read in city charter"
+	},
+	{
+		"claim": "Portland elects district councilors by single transferable vote",
+		"citation": "Portland City Charter § 3-102",
+		"url": "https://www.portland.gov/charter/3/all-articles",
+		"quote": "Councilors of each district are elected using a proportional method of ranked choice voting known as single transferable vote.",
+		"certainty": "statutory",
+		"verified": "read in city charter"
+	},
+	{
+		"claim": "Portland has four council districts with three councilors each",
+		"citation": "Portland City Charter § 3-107",
+		"url": "https://www.portland.gov/charter/3/all-articles",
+		"quote": "There are four (4) City Council districts. Each district is represented by three (3) City Councilors",
+		"certainty": "statutory",
+		"verified": "read in city charter"
+	},
+	{
+		"claim": "Portland city offices are nonpartisan",
+		"citation": "Portland City Charter § 3-105",
+		"url": "https://www.portland.gov/charter/3/all-articles",
+		"quote": "The elective offices of City Councilors, the Mayor and the Auditor are nonpartisan.",
+		"certainty": "statutory",
+		"verified": "read in city charter"
+	},
+	{
+		"claim": "Portland officers serve four-year terms",
+		"citation": "Portland City Charter § 3-101",
+		"url": "https://www.portland.gov/charter/3/all-articles",
+		"quote": "those elected take office on the January 1 following the general election in which they are elected and hold office for four years",
+		"certainty": "statutory",
+		"verified": "read in city charter"
+	},
+	{
+		"claim": "Portland charter election changes were adopted by voters on November 8, 2022",
+		"citation": "Portland City Charter § 3-102",
+		"url": "https://www.portland.gov/charter/3/all-articles",
+		"quote": "[Section replaced November 8, 2022, effective December 14, 2022.]",
+		"certainty": "statutory",
+		"verified": "read in city charter"
+	}
+]

@@ -1,0 +1,434 @@
+[
+	{
+		"claim": "The Legislature convenes every year at noon on the second Monday of January",
+		"citation": "A.R.S. 41-1101(A)",
+		"url": "https://www.azleg.gov/ars/41/01101.htm",
+		"quote": "The legislature shall assemble at the seat of government at twelve o'clock noon on the second Monday of January each year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A bill not returned within five days of presentment (Sundays excepted) becomes law",
+		"citation": "Ariz. Const. art. V, § 7",
+		"url": "https://www.azleg.gov/const/5/7.htm",
+		"quote": "If any bill be not returned within five days after it shall have been presented to the governor (Sunday excepted)",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "After final adjournment the governor has ten days (Sundays excepted) to file a veto, or the bill becomes law",
+		"citation": "Ariz. Const. art. V, § 7",
+		"url": "https://www.azleg.gov/const/5/7.htm",
+		"quote": "within ten days after such adjournment (Sundays excepted)",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Non-emergency acts take effect ninety days after the session closes",
+		"citation": "Ariz. Const. art. IV, pt. 1, § 1(3)",
+		"url": "https://www.azleg.gov/const/4/1.p1.htm",
+		"quote": "ninety days after the close of the session of the legislature enacting such measure",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The primary is held on the second to last Tuesday in July",
+		"citation": "A.R.S. 16-201",
+		"url": "https://www.azleg.gov/ars/16/00201.htm",
+		"quote": "A primary election shall be held on the second to last Tuesday in July",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is the first Tuesday after the first Monday in November of even-numbered years",
+		"citation": "A.R.S. 16-211",
+		"url": "https://www.azleg.gov/ars/16/00211.htm",
+		"quote": "On the first Tuesday after the first Monday in November of every even-numbered year, a general election shall be held",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties elect a sheriff, county attorney, recorder, treasurer, assessor, school superintendent and at least three supervisors, each for four years",
+		"citation": "Ariz. Const. art. XII, § 3",
+		"url": "https://www.azleg.gov/const/12/3.htm",
+		"quote": "a sheriff, a county attorney, a recorder, a treasurer, an assessor, a superintendent of schools and at least three supervisors, each of whom shall be elected and hold his office for a term of four (4) years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Supervisors are elected at the presidential general election",
+		"citation": "A.R.S. 11-211(A)",
+		"url": "https://www.azleg.gov/ars/11/00211.htm",
+		"quote": "who shall be elected at a general election at which the president of the United States is elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Since 2014, local candidate elections may be held only in even-numbered years, on the July and November dates",
+		"citation": "A.R.S. 16-204(E)",
+		"url": "https://www.azleg.gov/ars/16/00204.htm",
+		"quote": "may only be held on the following dates and only in even-numbered years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A local first or primary election is held on the July date and the general or runoff on the November date",
+		"citation": "A.R.S. 16-204(E)(1)",
+		"url": "https://www.azleg.gov/ars/16/00204.htm",
+		"quote": "the first election shall be held on this date, without regard to whether the political subdivision designates the election a primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The even-year rule applies to cities, towns, counties, school districts and community college districts",
+		"citation": "A.R.S. 16-204(H)",
+		"url": "https://www.azleg.gov/ars/16/00204.htm",
+		"quote": "including a city, town, county, school district or community college district or any other district organized under state law but not including a special taxing district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Legislature reacted to the City of Tucson court ruling on charter city election dates by requiring consolidation after a turnout drop",
+		"citation": "A.R.S. 16-204.01(A)",
+		"url": "https://www.azleg.gov/ars/16/00204-01.htm",
+		"quote": "After consideration of the court's opinion in City of Tucson v. State",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A political subdivision whose off-cycle elections had a significant turnout decrease must move to statewide election dates",
+		"citation": "A.R.S. 16-204.01(B)",
+		"url": "https://www.azleg.gov/ars/16/00204-01.htm",
+		"quote": "A political subdivision shall hold its elections on a statewide election date if its previous elections on a nonstatewide election date resulted in a significant decrease in voter turnout",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Terms are lengthened when a place consolidates its election dates",
+		"citation": "A.R.S. 16-204.02(A)",
+		"url": "https://www.azleg.gov/ars/16/00204-02.htm",
+		"quote": "the terms of office for elected officials of the political subdivision shall be lengthened at the time of consolidation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board regular elections are held with the general election",
+		"citation": "A.R.S. 15-424(A)",
+		"url": "https://www.azleg.gov/ars/15/00424.htm",
+		"quote": "A regular election shall be held for each school district at the time and place, and in the manner, of general elections as provided in title 16",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board members serve four-year terms",
+		"citation": "A.R.S. 15-424(B)",
+		"url": "https://www.azleg.gov/ars/15/00424.htm",
+		"quote": "the term of office for each member shall be four years from January 1 next following the member",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A school district board has three members unless enlarged",
+		"citation": "A.R.S. 15-421(A)",
+		"url": "https://www.azleg.gov/ars/15/00421.htm",
+		"quote": "There shall be three governing board members, except as otherwise provided by this section",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A union high school district board has five members",
+		"citation": "A.R.S. 15-421(B)(2)",
+		"url": "https://www.azleg.gov/ars/15/00421.htm",
+		"quote": "In a union high school district, five members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Fire district boards have three or five members",
+		"citation": "A.R.S. 48-803(A)",
+		"url": "https://www.azleg.gov/ars/48/00803.htm",
+		"quote": "the district board may consist of three or five members",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter registered with a recognized party gets only that party ballot",
+		"citation": "A.R.S. 16-467(B)",
+		"url": "https://www.azleg.gov/ars/16/00467.htm",
+		"quote": "the voter shall be given by the judge of election one ballot only of the party with which the voter is affiliated",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Independent and no-party voters choose one recognized party ballot in the primary",
+		"citation": "A.R.S. 16-467(B)",
+		"url": "https://www.azleg.gov/ars/16/00467.htm",
+		"quote": "the voter shall designate the ballot of only one of the political parties that is entitled to continued representation on the ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Primary nominees are those with the most votes",
+		"citation": "A.R.S. 16-645(A)",
+		"url": "https://www.azleg.gov/ars/16/00645.htm",
+		"quote": "the person having the largest number of votes",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Supervisors are nominated at the primary",
+		"citation": "A.R.S. 11-213(A)",
+		"url": "https://www.azleg.gov/ars/11/00213.htm",
+		"quote": "one supervisor shall be elected from each district from among those nominated at the preceding primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board candidates appear without party designation",
+		"citation": "A.R.S. 15-422(B)",
+		"url": "https://www.azleg.gov/ars/15/00422.htm",
+		"quote": "without partisan or other designation except the title of the office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City and town ballots may not show the source of a candidacy or party support",
+		"citation": "A.R.S. 9-821.01(B)",
+		"url": "https://www.azleg.gov/ars/9/00821-01.htm",
+		"quote": "a city or town shall not hold any election on candidates for which there is any indication on the ballot of the source of the candidacy or of the support of the candidate",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan offices appear in a separate nonpartisan section of the general election ballot",
+		"citation": "A.R.S. 16-502",
+		"url": "https://www.azleg.gov/ars/16/00502.htm",
+		"quote": "Section Two Nonpartisan Ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city may provide that a candidate winning a majority at the primary is elected outright",
+		"citation": "A.R.S. 9-821.01(D)",
+		"url": "https://www.azleg.gov/ars/9/00821-01.htm",
+		"quote": "who receives a majority of all votes cast at that election for that office shall be declared elected to the office",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Council members elected by district are voted on only by that district",
+		"citation": "A.R.S. 9-821.01(C)",
+		"url": "https://www.azleg.gov/ars/9/00821-01.htm",
+		"quote": "only those voters who are qualified electors of the district, ward, precinct or other geographic designation are eligible to vote for that council member candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County and local winners are those with the highest number of votes",
+		"citation": "A.R.S. 16-647",
+		"url": "https://www.azleg.gov/ars/16/00647.htm",
+		"quote": "shall declare elected the person receiving the highest number of votes cast for each office to be filled by the electors of the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board winners are those with the highest number of votes",
+		"citation": "A.R.S. 15-426(B)",
+		"url": "https://www.azleg.gov/ars/15/00426.htm",
+		"quote": "shall declare elected the person receiving the highest number of votes for each office to be filled",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Ties are decided by lot",
+		"citation": "A.R.S. 16-649(A)",
+		"url": "https://www.azleg.gov/ars/16/00649.htm",
+		"quote": "shall determine by lot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter not registered with a recognized party may be nominated by petition instead of primary",
+		"citation": "A.R.S. 16-341(A)",
+		"url": "https://www.azleg.gov/ars/16/00341.htm",
+		"quote": "Any qualified elector who is not a registered member of a political party that is recognized pursuant to this title may be nominated as a candidate for public office otherwise than by primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Independent petitions may be signed only by voters who did not sign a primary petition for the same office",
+		"citation": "A.R.S. 16-341(C)",
+		"url": "https://www.azleg.gov/ars/16/00341.htm",
+		"quote": "The petition shall be signed only by voters who have not signed the nomination petitions of a candidate for the office to be voted for at that primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate who failed to qualify for the primary on signatures cannot then use an independent petition",
+		"citation": "A.R.S. 16-341(B)",
+		"url": "https://www.azleg.gov/ars/16/00341.htm",
+		"quote": "the name of a candidate who has filed a nomination petition in the immediately preceding primary election and has failed to qualify as the result of an insufficient number of valid signatures",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan candidates file nomination papers and petitions",
+		"citation": "A.R.S. 16-311(B)",
+		"url": "https://www.azleg.gov/ars/16/00311.htm",
+		"quote": "Any person desiring to become a candidate at any nonpartisan election and to have the person's name printed on the official ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties of 175,000 or more have five supervisors; smaller counties have three unless they vote to change",
+		"citation": "A.R.S. 11-211(A)",
+		"url": "https://www.azleg.gov/ars/11/00211.htm",
+		"quote": "In each county having a population of less than one hundred seventy-five thousand persons, a board of supervisors shall consist of three members",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Large counties have five supervisors",
+		"citation": "A.R.S. 11-211(A)",
+		"url": "https://www.azleg.gov/ars/11/00211.htm",
+		"quote": "There shall be in each county having a population of one hundred seventy-five thousand or more persons a board of supervisors consisting of five members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Supervisors are nominated and elected by the voters of their own district",
+		"citation": "A.R.S. 11-213(A)",
+		"url": "https://www.azleg.gov/ars/11/00213.htm",
+		"quote": "They shall be nominated and elected by the qualified electors of their respective districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties are divided into three or five supervisorial districts",
+		"citation": "A.R.S. 11-212",
+		"url": "https://www.azleg.gov/ars/11/00212.htm",
+		"quote": "divide the county into three or five supervisorial districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Statutory county officers include the clerk of the board, appointed; the treasurer is ex officio tax collector",
+		"citation": "A.R.S. 11-401",
+		"url": "https://www.azleg.gov/ars/11/00401.htm",
+		"quote": "The county treasurer shall be ex officio tax collector",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county of more than 500,000 people may elect a charter committee and adopt a charter",
+		"citation": "Ariz. Const. art. XII, § 5",
+		"url": "https://www.azleg.gov/const/12/5.htm",
+		"quote": "The board of supervisors of any county with a population of more than five hundred thousand persons as determined by the most recent United States decennial or special census may call for an election to cause a charter committee to be elected",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A community of 1,500 or more may incorporate as a city or town",
+		"citation": "A.R.S. 9-101(A)",
+		"url": "https://www.azleg.gov/ars/9/00101.htm",
+		"quote": "the community incorporated as a city or town",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town council has five or seven members depending on population at incorporation",
+		"citation": "A.R.S. 9-231(B)",
+		"url": "https://www.azleg.gov/ars/9/00231.htm",
+		"quote": "The common council of every town shall consist of five members if the population is fifteen hundred persons or less, or seven members if the population exceeds fifteen hundred persons",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Council members serve two-year terms by default",
+		"citation": "A.R.S. 9-232(B)",
+		"url": "https://www.azleg.gov/ars/9/00232.htm",
+		"quote": "Every member of the council shall hold the office for the term of two years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "By default the council chooses the mayor from among its members",
+		"citation": "A.R.S. 9-232(C)",
+		"url": "https://www.azleg.gov/ars/9/00232.htm",
+		"quote": "choose a mayor from among their number",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters may adopt a district system with council members elected by district and a directly elected mayor",
+		"citation": "A.R.S. 9-232.04",
+		"url": "https://www.azleg.gov/ars/9/00232-04.htm",
+		"quote": "A mayor of the town shall be elected, who is the chief executive officer of the town",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town of 3,000 or more may become a city by vote",
+		"citation": "A.R.S. 9-271(A)",
+		"url": "https://www.azleg.gov/ars/9/00271.htm",
+		"quote": "When a town has acquired a population of three thousand or over and the council shall by resolution so declare, the town may by majority vote of the qualified electors voting thereon assume a city organization",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city of more than 3,500 may adopt a charter",
+		"citation": "Ariz. Const. art. XIII, § 2",
+		"url": "https://www.azleg.gov/const/13/2.htm",
+		"quote": "Any city containing, now or hereafter, a population of more than three thousand five hundred may frame a charter for its own government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Charters must be consistent with state constitution and law",
+		"citation": "Ariz. Const. art. XIII, § 2",
+		"url": "https://www.azleg.gov/const/13/2.htm",
+		"quote": "consistent with, and subject to, the Constitution and the laws of the state",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter prevails over conflicting laws relating to cities",
+		"citation": "A.R.S. 9-284(A)",
+		"url": "https://www.azleg.gov/ars/9/00284.htm",
+		"quote": "the provisions of the charter shall prevail notwithstanding the conflict",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal elections follow the law for county officer elections as nearly as possible",
+		"citation": "A.R.S. 9-821",
+		"url": "https://www.azleg.gov/ars/9/00821.htm",
+		"quote": "shall conform to the provisions of law relating to the general election of county officers as nearly as possible",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The legislature declares consolidated election dates a matter of statewide concern that preempts charters",
+		"citation": "A.R.S. 16-204(A)",
+		"url": "https://www.azleg.gov/ars/16/00204.htm",
+		"quote": "This section preempts all local laws, ordinances and charter provisions to the contrary",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The legislature declares the nonpartisan city ballot and other election rules a matter of statewide concern",
+		"citation": "A.R.S. 9-821.01(A)",
+		"url": "https://www.azleg.gov/ars/9/00821-01.htm",
+		"quote": "The legislature finds that the conduct of elections described in this section is a matter of statewide concern",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The July date applies from 2026",
+		"citation": "A.R.S. 16-204(E)(1)",
+		"url": "https://www.azleg.gov/ars/16/00204.htm",
+		"quote": "Beginning in 2026 and later, the second to last Tuesday in July",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

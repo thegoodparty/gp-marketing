@@ -1,0 +1,338 @@
+[
+	{
+		"claim": "The General Assembly meets on the Wednesday after the first Monday of January in odd-numbered years",
+		"citation": "Conn. Const. art. III, § 2 (as amended by amend. art. III)",
+		"url": "https://portal.ct.gov/sots/register-manual/section-i/constitution-of-the-state-of-connecticut",
+		"quote": "on the Wednesday following the first Monday of January in the odd-numbered years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An odd-year session adjourns by the first Wednesday after the first Monday in June",
+		"citation": "Conn. Const. amend. art. III",
+		"url": "https://portal.ct.gov/sots/register-manual/section-i/constitution-of-the-state-of-connecticut",
+		"quote": "shall adjourn each regular session in the odd-numbered years not later than the first Wednesday after the first Monday in June",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "After adjournment the governor has fifteen days from presentment to veto",
+		"citation": "Conn. Const. art. IV, § 15",
+		"url": "https://portal.ct.gov/sots/register-manual/section-i/constitution-of-the-state-of-connecticut",
+		"quote": "within fifteen calendar days after the same has been presented to him",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "During the session the governor has five days",
+		"citation": "Conn. Const. art. IV, § 15",
+		"url": "https://portal.ct.gov/sots/register-manual/section-i/constitution-of-the-state-of-connecticut",
+		"quote": "within five calendar days, Sundays and legal holidays excepted",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Bills can be presented to the governor after adjournment",
+		"citation": "Conn. Const. art. IV, § 15",
+		"url": "https://portal.ct.gov/sots/register-manual/section-i/constitution-of-the-state-of-connecticut",
+		"quote": "Bills may be presented to the governor after the adjournment of the general assembly",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A veto session is called on the second Monday after the governor's last day to return vetoes",
+		"citation": "Conn. Const. amend. art. III",
+		"url": "https://portal.ct.gov/sots/register-manual/section-i/constitution-of-the-state-of-connecticut",
+		"quote": "the secretary of the state shall reconvene the general assembly on the second Monday after the last day on which the governor is authorized to transmit",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Public acts take effect on 1 October after the session unless the act says otherwise",
+		"citation": "Conn. Gen. Stat. § 2-32",
+		"url": "https://www.cga.ct.gov/current/pub/chap_016.htm",
+		"quote": "shall take effect on the first day of October following the session of the General Assembly at which they are passed",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Since 2022 every municipality holds its regular election biennially in November of odd-numbered years",
+		"citation": "Conn. Gen. Stat. § 9-164(a)(1)(A)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_146.htm",
+		"quote": "there shall be held in each municipality, biennially, a municipal election on the Tuesday after the first Monday of November of the odd-numbered years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality may instead vote on the first Monday of May of odd years by a three-fourths vote of its legislative body",
+		"citation": "Conn. Gen. Stat. § 9-164(a)(1)(A)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_146.htm",
+		"quote": "may be held on the first Monday of May of the odd-numbered years if the legislative body of such municipality so determines by a three-fourths vote",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A May town can move back to November by majority vote",
+		"citation": "Conn. Gen. Stat. § 9-164(a)(1)(B)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_146.htm",
+		"quote": "may subsequently determine by a majority vote to hold such municipal election on the Tuesday after the first Monday of November of the odd-numbered years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Probate judges are elected by district every four years, counting from 1966",
+		"citation": "Conn. Const. art. V, § 4",
+		"url": "https://portal.ct.gov/sots/register-manual/section-i/constitution-of-the-state-of-connecticut",
+		"quote": "Judges of probate shall be elected by the electors residing in their respective districts on the Tuesday after the first Monday of November, 1966, and quadrennially thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Primaries for state offices are on the second Tuesday in August",
+		"citation": "Conn. Gen. Stat. § 9-423(a)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_153.htm",
+		"quote": "shall be held on the second Tuesday in August in the year in which such state election is held",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal primaries are held 56 days before the election",
+		"citation": "Conn. Gen. Stat. § 9-423(b)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_153.htm",
+		"quote": "shall be held on the fifty-sixth day preceding the day of the election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only enrolled party members vote in a party primary, plus unaffiliated voters if the party's rules allow",
+		"citation": "Conn. Gen. Stat. § 9-431(a)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_153.htm",
+		"quote": "he is on the last-completed enrollment list of such party in the municipality or voting district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Unaffiliated voters may vote only if authorized by the party's state rules",
+		"citation": "Conn. Gen. Stat. § 9-431(a)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_153.htm",
+		"quote": "if authorized by the state rules of such party filed pursuant to section",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party-endorsed municipal candidates are chosen by caucus, convention or town committee",
+		"citation": "Conn. Gen. Stat. § 9-390(a)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_153.htm",
+		"quote": "shall be selected, in accordance with the rules of such party, by: (1) The enrolled members of such party in such municipality in caucus",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A primary is held only if someone other than the endorsed candidate files to challenge",
+		"citation": "Conn. Gen. Stat. § 9-415(c)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_153.htm",
+		"quote": "is filed by or on behalf of any person other than a party-endorsed candidate within the applicable time specified in section",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Ballots list candidates by party row, with petitioning candidates after the parties",
+		"citation": "Conn. Gen. Stat. § 9-249a(a)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_147.htm",
+		"quote": "Petitioning candidates with no party designation whose names are contained in petitions approved pursuant to section",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Ballot rows are ordered by the parties' votes for governor",
+		"citation": "Conn. Gen. Stat. § 9-249a(a)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_147.htm",
+		"quote": "The party whose candidate for Governor polled the highest number of votes in the last-preceding election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Winners are decided by plurality",
+		"citation": "Conn. Gen. Stat. § 9-311a",
+		"url": "https://www.cga.ct.gov/current/pub/chap_148.htm",
+		"quote": "when at any such election the plurality of an elected candidate for an office over the vote for a defeated candidate receiving the next highest number of votes",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Minority representation caps how many members of a board may be from one party",
+		"citation": "Conn. Gen. Stat. § 9-167a(a)(1)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_146.htm",
+		"quote": "who may be members of the same political party, shall be as specified in the following table",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Above nine members the cap is two-thirds",
+		"citation": "Conn. Gen. Stat. § 9-167a(a)(1)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_146.htm",
+		"quote": "More than 9",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The cap does not apply to bodies elected by district or to a town meeting",
+		"citation": "Conn. Gen. Stat. § 9-167a(a)(2)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_146.htm",
+		"quote": "whose members are elected wholly or partially on the basis of a geographical division of the state or political subdivision",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Unless a charter says otherwise, a town elects selectmen, town clerk, treasurer, tax collector, constables, registrars and board of education",
+		"citation": "Conn. Gen. Stat. § 9-185",
+		"url": "https://www.cga.ct.gov/current/pub/chap_146.htm",
+		"quote": "Unless otherwise provided by special act or charter, (1) members of boards of assessment appeals, (2) selectmen, (3) town clerks, (4) town treasurers, (5) collectors of taxes, (6) constables, (7) registrars of voters",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town may appoint its clerk, treasurer or tax collector by ordinance instead",
+		"citation": "Conn. Gen. Stat. § 9-185",
+		"url": "https://www.cga.ct.gov/current/pub/chap_146.htm",
+		"quote": "a town clerk, town treasurer or collector of taxes in lieu of the election of such officers",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Unless otherwise provided, a town elects a first selectman and two other selectmen (up to six in towns of 10,000+)",
+		"citation": "Conn. Gen. Stat. § 9-188",
+		"url": "https://www.cga.ct.gov/current/pub/chap_146.htm",
+		"quote": "elect a first selectman, who shall be town agent unless otherwise provided by law, and two other selectmen",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Votes for a losing first selectman candidate count toward a seat on the board",
+		"citation": "Conn. Gen. Stat. § 9-188",
+		"url": "https://www.cga.ct.gov/current/pub/chap_146.htm",
+		"quote": "for an unsuccessful candidate for first selectman shall be counted as votes for him as a member of such board",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters may not vote for more selectmen than one party can elect",
+		"citation": "Conn. Gen. Stat. § 9-188",
+		"url": "https://www.cga.ct.gov/current/pub/chap_146.htm",
+		"quote": "an elector shall not vote for more candidates for the office of selectman than a political party can elect pursuant to section",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal terms default to two years",
+		"citation": "Conn. Gen. Stat. § 9-187(a)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_146.htm",
+		"quote": "when not otherwise prescribed by law, shall be for two years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Chief executives, selectmen and legislative bodies serve two- or four-year terms set by charter or ordinance",
+		"citation": "Conn. Gen. Stat. § 9-187(b)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_146.htm",
+		"quote": "as prescribed by charter or ordinance shall be two years or four years",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A board of education has 3, 6, 9 or 12 members unless a special act provides otherwise",
+		"citation": "Conn. Gen. Stat. § 9-203",
+		"url": "https://www.cga.ct.gov/current/pub/chap_146.htm",
+		"quote": "The board of education in each town shall consist of three, six, nine or twelve residents of such town",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Limited voting: voters choose no more than half (or a bare majority) of the school board seats up",
+		"citation": "Conn. Gen. Stat. § 9-204(a)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_146.htm",
+		"quote": "no elector shall vote for more than half that number",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Connecticut has eight counties, each a list of towns",
+		"citation": "Conn. Gen. Stat. § 6-1",
+		"url": "https://www.cga.ct.gov/current/pub/chap_076.htm",
+		"quote": "There shall be in the state eight counties",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County government ended in 1960; county powers passed to the state",
+		"citation": "Conn. Gen. Stat. § 6-2a(a)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_076.htm",
+		"quote": "all powers and authority of said counties shall be vested in the state",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Home rule: the General Assembly delegates power to towns, cities and boroughs by general law and sets maximum terms",
+		"citation": "Conn. Const. art. X, § 1",
+		"url": "https://portal.ct.gov/sots/register-manual/section-i/constitution-of-the-state-of-connecticut",
+		"quote": "The general assembly shall from time to time by general law determine the maximum terms of office of the various town, city and borough elective offices",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No special acts for a single town, city or borough on its organization or terms of office",
+		"citation": "Conn. Const. art. X, § 1",
+		"url": "https://portal.ct.gov/sots/register-manual/section-i/constitution-of-the-state-of-connecticut",
+		"quote": "the general assembly shall enact no special legislation relative to the powers, organization, terms of elective offices or form of government of any single town, city or borough",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any municipality may adopt and amend its own charter",
+		"citation": "Conn. Gen. Stat. § 7-188(a)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_099.htm",
+		"quote": "adopt and amend a charter which shall be its organic law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter must give the municipality a legislative body: town meeting, representative town meeting, board of selectmen, council, board of directors, aldermen or burgesses",
+		"citation": "Conn. Gen. Stat. § 7-193(a)(1)",
+		"url": "https://www.cga.ct.gov/current/pub/chap_099.htm",
+		"quote": "(A) A town meeting; (B) a representative town meeting; (C) a board of selectmen, council, board of directors, board of aldermen or board of burgesses",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Petition candidates sign on forms warning that only electors may sign",
+		"citation": "Conn. Gen. Stat. § 9-453a",
+		"url": "https://www.cga.ct.gov/current/pub/chap_153.htm",
+		"quote": "YOU MAY NOT SIGN THIS PETITION",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The warning says a signer must be an elector",
+		"citation": "Conn. Gen. Stat. § 9-453a",
+		"url": "https://www.cga.ct.gov/current/pub/chap_153.htm",
+		"quote": "IF YOU ARE NOT AN ELECTOR",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Towns of 10,000 or more may have up to six other selectmen",
+		"citation": "Conn. Gen. Stat. § 9-188",
+		"url": "https://www.cga.ct.gov/current/pub/chap_146.htm",
+		"quote": "in the case of any town having a population of ten thousand or more, not more than six other selectmen",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The constitution's home rule article covers towns, cities and boroughs",
+		"citation": "Conn. Const. art. X, § 1",
+		"url": "https://portal.ct.gov/sots/register-manual/section-i/constitution-of-the-state-of-connecticut",
+		"quote": "relative to the powers, organization, and form of government of such political subdivisions",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

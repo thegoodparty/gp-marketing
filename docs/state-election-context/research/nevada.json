@@ -1,0 +1,266 @@
+[
+	{
+		"claim": "Regular sessions are biennial and begin on the first Monday of February after the Assembly election",
+		"citation": "Nev. Const. art. 4, § 2(1)",
+		"url": "https://www.leg.state.nv.us/Const/NvConst.html",
+		"quote": "shall commence on the 1st Monday of February following the election of members of the Assembly",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The session must end by midnight of its 120th calendar day",
+		"citation": "Nev. Const. art. 4, § 2(2)",
+		"url": "https://www.leg.state.nv.us/Const/NvConst.html",
+		"quote": "at the end of the 120th consecutive calendar day of that session",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The governor has five days, Sundays excepted, to return a bill",
+		"citation": "Nev. Const. art. 4, § 35",
+		"url": "https://www.leg.state.nv.us/Const/NvConst.html",
+		"quote": "If any bill shall not be returned within five days after it shall have been presented to him (Sunday excepted)",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "After final adjournment the governor has ten days, Sundays excepted, to veto",
+		"citation": "Nev. Const. art. 4, § 35",
+		"url": "https://www.leg.state.nv.us/Const/NvConst.html",
+		"quote": "unless the Governor within ten days next after the adjournment (Sundays excepted) shall file such bill with his objections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Laws take effect on 1 October unless the law sets another date",
+		"citation": "NRS 218D.330(1)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-218D.html",
+		"quote": "becomes effective on October 1 following its passage, unless the law or joint resolution specifically prescribes a different effective date",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is in November of even years",
+		"citation": "NRS 293.12755",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-293.html",
+		"quote": "A general election must be held throughout the State on the first Tuesday after the first Monday of November in each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The primary is on the second Tuesday in June of even years",
+		"citation": "NRS 293.175(1)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-293.html",
+		"quote": "The primary election must be held on the second Tuesday in June of each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Major-party partisan candidates and nonpartisan candidates are nominated at the primary",
+		"citation": "NRS 293.175(2)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-293.html",
+		"quote": "Candidates for partisan office of a major political party and candidates for nonpartisan office must be nominated at the primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Statewide primary rules do not cover city officers",
+		"citation": "NRS 293.175(5)(b)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-293.html",
+		"quote": "Do not apply to the nomination of the officers of incorporated cities",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only voters registered with a major party may vote its primary ballot",
+		"citation": "NRS 293.257(3)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-293.html",
+		"quote": "A registered voter may cast a primary ballot for a major political party at a primary election only if the registered voter designated on his or her application to register to vote an affiliation with that major political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan races are on a ballot all registered voters can vote",
+		"citation": "NRS 293.257(2)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-293.html",
+		"quote": "must permit all registered voters to vote on them",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The top vote-getter in a party primary is the nominee",
+		"citation": "NRS 293.260(2)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-293.html",
+		"quote": "the person who receives the highest number of votes at the primary election must be declared the nominee of that major political party for the office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan offices: judicial and school offices, county sheriff, city and town officers, constables, hospital trustees and others",
+		"citation": "NRS 293.195(1)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-293.html",
+		"quote": "Judicial offices, school offices, the office of county sheriff, the Board of Regents of the University of Nevada, city and town officers, the office of constable",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No party label is printed for nonpartisan offices",
+		"citation": "NRS 293.195(2)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-293.html",
+		"quote": "No words designating the party affiliation of a candidate for nonpartisan offices may be printed upon the ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A person who changed party after 31 December before the filing close cannot run as that party's candidate",
+		"citation": "NRS 293.176(1)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-293.html",
+		"quote": "no person may be a candidate of a major political party for partisan office in any election if the person has changed",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Independent candidates for partisan office file a petition of candidacy signed by registered voters",
+		"citation": "NRS 293.200(1)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-293.html",
+		"quote": "An independent candidate for partisan office must file with the appropriate filing officer",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "General law cities in categories one and two hold general elections in November of even years",
+		"citation": "NRS 293C.140(1)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-293C.html",
+		"quote": "A general city election must be held in each city of population categories one and two on the first Tuesday after the first Monday in November of the first even-numbered year after incorporation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Council terms are four years, staggered",
+		"citation": "NRS 293C.140(2)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-293C.html",
+		"quote": "The terms of office of the council members are 4 years, which terms must be staggered",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Category three cities also vote in November of even years, with a mayor and three or five council members",
+		"citation": "NRS 293C.145",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-293C.html",
+		"quote": "There must be one mayor and three or five council members, as the city council shall provide by ordinance",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City primaries are on the second Tuesday in June of even years in category one cities and category two cities that choose them",
+		"citation": "NRS 293C.175(1)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-293C.html",
+		"quote": "on the second Tuesday in June of each even-numbered year, at which time there must be nominated candidates for offices to be voted for at the next general city election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "If only one candidate files for a city office, that candidate is declared elected",
+		"citation": "NRS 293C.180(1)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-293C.html",
+		"quote": "that candidate must be declared elected and no election may be held for that office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "If no more than twice the seats file, names skip the city primary",
+		"citation": "NRS 293C.180(2)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-293C.html",
+		"quote": "the names of those candidates must be omitted from all ballots for a primary city election and placed on all ballots for a general city election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The governing body controls city elections",
+		"citation": "NRS 293C.110(1)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-293C.html",
+		"quote": "the conduct of any city election is under the control of the governing body of the city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "General law cities have home rule, subject to the Legislature's power to alter organization by special act or charter",
+		"citation": "NRS 266.010",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-266.html",
+		"quote": "Subject to the right of the Legislature to create or alter the form of municipal organization by special act or charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "General law city government is vested in a mayor and council",
+		"citation": "NRS 266.015",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-266.html",
+		"quote": "The municipal government of all incorporated cities under this chapter is hereby vested in a mayor and a city council",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties under 100,000 may expand their commission to five by ordinance and vote",
+		"citation": "NRS 244.011(1)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-244.html",
+		"quote": "the board of county commissioners may, by ordinance, provide that the board of county commissioners consists of five members",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties of 100,000 to 700,000 have five commissioners elected from districts",
+		"citation": "NRS 244.014(3)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-244.html",
+		"quote": "The board of county commissioners shall establish five county commissioner election districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties of 700,000 or more have seven commissioners elected from districts",
+		"citation": "NRS 244.016(1)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-244.html",
+		"quote": "In each county whose population is 700,000 or more, the board of county commissioners consists of seven members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Carson City is the consolidated city-county seat of government",
+		"citation": "Nev. Const. art. 4, § 37[A]",
+		"url": "https://www.leg.state.nv.us/Const/NvConst.html",
+		"quote": "the city designated as the seat of government of this state and the county in which such city is situated",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The consolidated municipality has county powers",
+		"citation": "Nev. Const. art. 4, § 37[A]",
+		"url": "https://www.leg.state.nv.us/Const/NvConst.html",
+		"quote": "shall have all the powers conferred upon counties by this constitution or by general law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county school board has 5, 7 or 11 trustees, by enrollment",
+		"citation": "NRS 386.120(1)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-386.html",
+		"quote": "The board of trustees of a county school district consists of 5, 7 or 11 members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In districts with more than 75,000 pupils the 11-member board is partly elected and partly appointed",
+		"citation": "NRS 386.120(1)(a)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-386.html",
+		"quote": "The members of the board must be elected and appointed as provided in NRS",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Trustees are elected at the general election on four-year cycles",
+		"citation": "NRS 386.160(1)",
+		"url": "https://www.leg.state.nv.us/NRS/NRS-386.html",
+		"quote": "At the general election in 1980 and every 4 years thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

@@ -1,0 +1,398 @@
+[
+	{
+		"claim": "Each regular session begins at noon on the third Tuesday of January",
+		"citation": "N.M. Const. art. IV, § 5(A)",
+		"url": "https://nmonesource.com/nmos/c/en/item/5916/index.do",
+		"quote": "Each regular session of the legislature shall begin annually at 12:00 noon on the third Tuesday of January",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Odd-year sessions last up to 60 days, even-year sessions up to 30",
+		"citation": "N.M. Const. art. IV, § 5(A)",
+		"url": "https://nmonesource.com/nmos/c/en/item/5916/index.do",
+		"quote": "convening during an odd-numbered year shall remain in session not to exceed sixty days",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Even-year sessions are limited to budget, governor's messages and vetoed bills",
+		"citation": "N.M. Const. art. IV, § 5(B)",
+		"url": "https://nmonesource.com/nmos/c/en/item/5916/index.do",
+		"quote": "budgets, appropriations and revenue bills",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Bills presented in the last three days must be signed within twenty days after adjournment or they do not become law",
+		"citation": "N.M. Const. art. IV, § 22",
+		"url": "https://nmonesource.com/nmos/c/en/item/5916/index.do",
+		"quote": "Every bill presented to the governor during the last three days of the session shall be approved by him within twenty days after the adjournment",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Unsigned bills from the last three days do not become law",
+		"citation": "N.M. Const. art. IV, § 22",
+		"url": "https://nmonesource.com/nmos/c/en/item/5916/index.do",
+		"quote": "Unless so approved and signed by him such bill shall not become a law",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Laws take effect ninety days after adjournment, except appropriations and emergency acts",
+		"citation": "N.M. Const. art. IV, § 23",
+		"url": "https://nmonesource.com/nmos/c/en/item/5916/index.do",
+		"quote": "Laws shall go into effect ninety days after the adjournment of the legislature enacting them",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "General elections are in November of even-numbered years",
+		"citation": "N.M. Const. art. XX, § 6",
+		"url": "https://nmonesource.com/nmos/c/en/item/5916/index.do",
+		"quote": "General elections shall be held in the state on the Tuesday after the first Monday in November in each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The regular local election is held in November of each odd-numbered year",
+		"citation": "NMSA 1978, § 1-22-3(A)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18502/index.do",
+		"quote": "A regular local election shall be held on the first Tuesday after the first Monday in November of each odd-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The regular local election is nonpartisan, with no party or slate designation on the ballot",
+		"citation": "NMSA 1978, § 1-22-3(B)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18502/index.do",
+		"quote": "A regular local election shall be a nonpartisan election, and the names of all candidates shall be listed on the ballot with no party or slate designation",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Counties are not local governments for the Local Election Act",
+		"citation": "NMSA 1978, § 1-22-2(C)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18502/index.do",
+		"quote": "but does not include a county or a conservancy district",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Municipalities vote on the first Tuesday in March of even years unless they opt in to the November local election",
+		"citation": "NMSA 1978, § 1-22-3.1(A)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18502/index.do",
+		"quote": "which is the first Tuesday in March of even-numbered years, unless the municipality has opted in to the election of its municipal officers at the regular local election",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A municipality opts in by ordinance filed by 30 June of the election year",
+		"citation": "NMSA 1978, § 1-22-3.1(B)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18502/index.do",
+		"quote": "any municipality may by ordinance opt in to the election of its municipal officers in the regular local election",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "After two November elections a municipality may rescind its opt-in",
+		"citation": "NMSA 1978, § 1-22-3.1(B)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18502/index.do",
+		"quote": "may rescind the ordinance opting in to the election of its municipal officers in the regular local election",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A home rule city with its own voter ID rule cannot use the November local election",
+		"citation": "NMSA 1978, § 1-22-3.1(C)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18502/index.do",
+		"quote": "shall not elect its municipal officers at the regular local election",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Municipal runoffs, where a municipality's laws require them, are top-two or ranked-choice",
+		"citation": "NMSA 1978, § 1-22-16(A)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18502/index.do",
+		"quote": "shall be conducted pursuant to this section as a top-two runoff election or as a ranked-choice runoff election",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Local terms begin 1 January after the election",
+		"citation": "NMSA 1978, § 1-22-18",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18502/index.do",
+		"quote": "shall begin on January 1 following the candidate's election",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Primaries are held on the first Tuesday after the first Monday in June of even years",
+		"citation": "NMSA 1978, § 1-8-11",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18502/index.do",
+		"quote": "on the first Tuesday after the first Monday in June of each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Primaries nominate major-party candidates",
+		"citation": "NMSA 1978, § 1-8-12(B)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18502/index.do",
+		"quote": "a primary election for the nomination of general election candidates by each major political party",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Voters vote only in their own party's primary; voters with no party may choose one major party's ballot",
+		"citation": "NMSA 1978, § 1-12-7(B)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18502/index.do",
+		"quote": "a person who has declined to designate a political party affiliation on the person's certificate of registration shall be permitted to choose to affiliate with a major political party in a primary election",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Otherwise a voter may vote only for the candidates of their own party",
+		"citation": "NMSA 1978, § 1-12-7(B)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18502/index.do",
+		"quote": "shall not be permitted to vote for the candidate of any party other than the party designated on the person's current certificate of registration",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "An independent candidate for state or county office must be registered with no qualified party on the proclamation date",
+		"citation": "NMSA 1978, § 1-8-45(A)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18502/index.do",
+		"quote": "whose certificate of voter registration shows affiliation with no qualified political party on the date of the secretary of state's general election proclamation",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "All county elected officials serve four-year terms",
+		"citation": "N.M. Const. art. X, § 2(A)",
+		"url": "https://nmonesource.com/nmos/c/en/item/5916/index.do",
+		"quote": "In every county all elected officials shall serve four-year terms",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Elected county officials include the assessor, sheriff, probate judge, treasurer and clerk",
+		"citation": "N.M. Const. art. X, § 2(B)",
+		"url": "https://nmonesource.com/nmos/c/en/item/5916/index.do",
+		"quote": "the assessor, sheriff and probate judge shall be elected to four-year terms and the treasurer and clerk",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "County officers who serve two consecutive terms must sit out two years before any county office",
+		"citation": "N.M. Const. art. X, § 2(D)",
+		"url": "https://nmonesource.com/nmos/c/en/item/5916/index.do",
+		"quote": "shall be ineligible to hold any county office for two years thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Commission terms are staggered",
+		"citation": "N.M. Const. art. X, § 2(C)",
+		"url": "https://nmonesource.com/nmos/c/en/item/5916/index.do",
+		"quote": "To provide for staggered county commission terms",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A board of county commissioners has three or five members",
+		"citation": "NMSA 1978, § 4-38-2(A)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18505/index.do",
+		"quote": "The board of county commissioners shall consist of either three or five qualified electors",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Larger counties must have five commissioners",
+		"citation": "NMSA 1978, § 4-38-2(B)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18505/index.do",
+		"quote": "having a population of more than one hundred thousand",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A board may grow to five by unanimous ordinance; each commissioner is elected from a district",
+		"citation": "N.M. Const. art. X, § 7",
+		"url": "https://nmonesource.com/nmos/c/en/item/5916/index.do",
+		"quote": "One county commissioner shall reside within and be elected from each county commission district",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "County commissioners serve four-year terms",
+		"citation": "NMSA 1978, § 4-38-6(A)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18505/index.do",
+		"quote": "In each county all county commissioners shall be elected to serve four-year terms",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The legislature provides for combined city-county corporations of at least 50,000 people",
+		"citation": "N.M. Const. art. X, § 4(A)",
+		"url": "https://nmonesource.com/nmos/c/en/item/5916/index.do",
+		"quote": "each of which shall be known as a \"city and county,\"",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Municipal home rule: voters may adopt a charter; a charter municipality may exercise all powers not expressly denied",
+		"citation": "N.M. Const. art. X, § 6(D)",
+		"url": "https://nmonesource.com/nmos/c/en/item/5916/index.do",
+		"quote": "A municipality which adopts a charter may exercise all legislative powers and perform all functions not expressly denied by general law or charter",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Voters may adopt, amend or repeal a charter",
+		"citation": "N.M. Const. art. X, § 6(C)",
+		"url": "https://nmonesource.com/nmos/c/en/item/5916/index.do",
+		"quote": "The registered qualified electors of a municipality may adopt, amend or repeal a charter in the manner provided by law",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "District council members must live in and be elected by their district",
+		"citation": "N.M. Const. art. X, § 6(B)",
+		"url": "https://nmonesource.com/nmos/c/en/item/5916/index.do",
+		"quote": "shall be a resident of, and elected by, the registered qualified electors of that district",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Municipalities are cities, towns and villages, plus incorporated and H class counties",
+		"citation": "NMSA 1978, § 3-1-2(G)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18504/index.do",
+		"quote": "means any incorporated city, town or village, whether incorporated under general act, special act or special charter, incorporated counties and H class counties",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Governing bodies are a city council or commission, or a town or village board of trustees",
+		"citation": "NMSA 1978, § 3-1-2(F)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18504/index.do",
+		"quote": "means the city council or city commission of a city, the board of trustees of a town or village",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Home rule charter procedures override the general mayor-council provisions where they conflict",
+		"citation": "NMSA 1978, § 3-11-1(B)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18504/index.do",
+		"quote": "the municipality's charter shall govern",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A local school board has five members",
+		"citation": "NMSA 1978, § 22-5-1",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18522/index.do",
+		"quote": "A local school board shall be composed of five qualified electors of the state residing within the school district",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Districts over 16,000 people elect board members from single-member districts",
+		"citation": "NMSA 1978, § 22-5-1.1",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18522/index.do",
+		"quote": "shall reside in and be elected from single-member districts",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A board may expand to seven numbered positions by resolution",
+		"citation": "NMSA 1978, § 22-5-3(A)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18522/index.do",
+		"quote": "to be composed of seven qualified electors of the state who reside within the district",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Municipalities voting in March still follow the Local Election Act",
+		"citation": "NMSA 1978, § 1-22-3.1(D)(1)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18502/index.do",
+		"quote": "all provisions of the Local Election Act as supplemented by the Election Code apply, except as provided in this section",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The primary rule for voters without a party was amended in 2025",
+		"citation": "NMSA 1978, § 1-12-7 (history)",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18502/index.do",
+		"quote": "2025, ch. 54, § 4",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Independent candidates file nominating petitions",
+		"citation": "NMSA 1978, § 1-8-51",
+		"url": "https://nmonesource.com/nmos/nmsa-unanno/en/item/18502/index.do",
+		"quote": "Nominating petitions for an independent candidate",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Santa Fe elects its mayor, city councilors and municipal judge by ranked-choice voting",
+		"citation": "Santa Fe Municipal Charter § 4.06",
+		"url": "https://santafenm.gov/MunicipalCharter2020DIGITALversion.pdf",
+		"quote": "the mayor, city councilors and municipal judge shall be elected using a ranked choice (sometimes called instant runoff) voting system",
+		"certainty": "statutory",
+		"verified": "read in city charter",
+		"manual": true
+	},
+	{
+		"claim": "Las Cruces uses a ranked-choice count on the same ballot, from its November 2019 election",
+		"citation": "Las Cruces Code of Ordinances § 8-15",
+		"url": "https://library.municode.com/nm/las_cruces/codes/code_of_ordinances?nodeId=PTIIMUCO_CH8EL_ARTIICACO_S8-36RE",
+		"quote": "Ranked-choice voting will commence with the regular municipal election in November 2019 and all subsequent elections",
+		"certainty": "statutory",
+		"verified": "local government publication",
+		"manual": true
+	}
+]

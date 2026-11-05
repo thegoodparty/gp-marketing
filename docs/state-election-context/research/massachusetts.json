@@ -1,0 +1,866 @@
+[
+	{
+		"claim": "The General Court assembles every year on the first Wednesday in January",
+		"citation": "Mass. Const. amend. art. LXIV, § 3",
+		"url": "https://malegislature.gov/Laws/Constitution",
+		"quote": "The general court shall assemble every year on the first Wednesday in January",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Article LXXII, which had made sessions biennial, was annulled, restoring annual sessions",
+		"citation": "Mass. Const. amend. art. LXXV",
+		"url": "https://malegislature.gov/Laws/Constitution",
+		"quote": "providing for biennial sessions of the general court and a biennial budget is hereby annulled",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A bill not returned by the governor within ten days after presentation becomes law",
+		"citation": "Mass. Const. pt. 2, c. 1, § 1, art. II, as amended by amend. art. XC, § 1",
+		"url": "https://malegislature.gov/Laws/Constitution",
+		"quote": "if any bill or resolve shall not be returned by the governor within ten days after it shall have been presented, the same shall have the force of a law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "If the General Court adjourns within ten days after a bill is laid before the governor and so prevents its return, the bill does not become law",
+		"citation": "Mass. Const. amend. art. I, as replaced by amend. art. XC, § 2",
+		"url": "https://malegislature.gov/Laws/Constitution",
+		"quote": "shall adjourn within ten days after the same shall have been laid before the governor for his approbation, and thereby prevent his returning it with his objections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A law takes effect no earlier than 90 days after it becomes law, except emergency laws and laws not subject to referendum",
+		"citation": "Mass. Const. amend. art. XLVIII, The Referendum, pt. I",
+		"url": "https://malegislature.gov/Laws/Constitution",
+		"quote": "No law passed by the general court shall take effect earlier than ninety days after it has become a law, excepting laws declared to be emergency laws",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An emergency law takes effect as soon as it has the force of law; a law not subject to referendum takes effect on the thirtieth day unless declared an emergency",
+		"citation": "M.G.L. c. 4, § 1",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleI/Chapter4/Section1",
+		"quote": "otherwise on the thirtieth day next after the earliest day on which it has the force of a law as aforesaid",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The biennial state election is the Tuesday after the first Monday in November of even-numbered years",
+		"citation": "M.G.L. c. 54, § 62",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter54/Section62",
+		"quote": "shall be held on the Tuesday next after the first Monday in November in every even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State primaries are held on the seventh Tuesday before the biennial state election",
+		"citation": "M.G.L. c. 53, § 28",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section28",
+		"quote": "State primaries shall be held on the seventh Tuesday preceding biennial state elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City and town primaries are held on the 28th day before the election",
+		"citation": "M.G.L. c. 53, § 28",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section28",
+		"quote": "City and town primaries before all city and town elections shall be held on the twenty-eighth day preceding such elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town's annual meeting (and with it the town election) is held between February and June unless a special law or charter sets another time",
+		"citation": "M.G.L. c. 39, § 9",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter39/Section9",
+		"quote": "the annual meeting of each town shall be held in February, March, April, May or June",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town may hold its election of officers separately from the business meeting, still between February and June",
+		"citation": "M.G.L. c. 39, § 9A",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter39/Section9A",
+		"quote": "the election of town officials and other matters to be determined by ballot shall take place in February, March, April, May or June before or after the annual meeting",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town may move its election or meeting to between 1 February and 31 May when it falls within 30 days of the presidential primary",
+		"citation": "M.G.L. c. 53, § 28",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section28",
+		"quote": "may, by majority vote, establish a date between February first and May thirty-first for holding such preliminary, primary or town election or annual town meeting",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under chapter 43 standard plans, biennial odd-year city elections are held on the day the city already used",
+		"citation": "M.G.L. c. 43, § 15(c)",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section15",
+		"quote": "regular municipal elections thereafter shall take place in every odd-numbered year on the day fixed as aforesaid",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Plan E cities elect on the Tuesday after the first Monday of November in odd-numbered years",
+		"citation": "M.G.L. c. 43, § 109",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section109",
+		"quote": "shall take place on the Tuesday next following the first Monday of November in every odd numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city that holds its election annually or in even years holds it on the third Tuesday of December if its law sets an earlier date",
+		"citation": "M.G.L. c. 54, § 103A",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter54/Section103A",
+		"quote": "the date of such city election shall be said third Tuesday and not such earlier date",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The mayor and aldermen or the selectmen may fix the day of preliminary elections or primaries",
+		"citation": "M.G.L. c. 54, § 103P",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter54/Section103P",
+		"quote": "The mayor and aldermen in cities or selectmen in towns may fix the day of holding preliminary elections or primaries in their cities and towns",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter enrolled in a party may receive only that party's primary ballot",
+		"citation": "M.G.L. c. 53, § 38",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section38",
+		"quote": "No voter enrolled under this section or section thirty-seven shall be allowed to receive the ballot of any political party except that in which he is so enrolled",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An unenrolled voter chooses a party's ballot at the primary and stays unenrolled",
+		"citation": "M.G.L. c. 53, § 37",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section37",
+		"quote": "If the voter was unenrolled before selecting a party ballot, he shall continue to be unenrolled",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter registered in a political designation that is not a party is treated as unenrolled at a primary",
+		"citation": "M.G.L. c. 53, § 38",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section38",
+		"quote": "shall be considered unenrolled for the purpose of the primary and shall be eligible to receive a ballot of a political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Enrollment changes do not take effect for a primary in the 20 days before it",
+		"citation": "M.G.L. c. 53, § 38",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section38",
+		"quote": "no such enrollment, change or cancellation shall take effect for a primary during the twenty days prior to such primary",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party primary candidates for county offices must have been enrolled in the party for the 90 days before the filing deadline",
+		"citation": "M.G.L. c. 53, § 48",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section48",
+		"quote": "certifying that he has been enrolled as a member of the political party whose nomination he seeks throughout the ninety days prior to the last day herein provided for filing nomination papers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Political party definition: 3% of the statewide vote or 1% of registered voters enrolled",
+		"citation": "M.G.L. c. 50, § 1",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter50/Section1",
+		"quote": "Such parties shall be eligible to conduct primary elections at the next following biennial state election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State-election ballots carry each candidate's party or political designation, and Unenrolled when there is none",
+		"citation": "M.G.L. c. 54, § 41",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter54/Section41",
+		"quote": "Failure to make a political designation shall result in the term",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City ballots carry party designations only where the city election is preceded by primaries",
+		"citation": "M.G.L. c. 54, § 41",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter54/Section41",
+		"quote": "To the name of each candidate for a state or city office, except for city elections which are not preceded by primaries, shall be added in the same space his party or political designation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Town ballots carry a political designation only where the town election is preceded by primaries or party caucuses",
+		"citation": "M.G.L. c. 54, § 41",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter54/Section41",
+		"quote": "except for town elections which are not preceded by primaries or political party caucuses, the political designation contained in the certificate of nomination or nomination papers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nomination papers for city or town offices need not include a party designation",
+		"citation": "M.G.L. c. 53, § 8",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section8",
+		"quote": "Certificates of nomination and nomination papers for city or town offices need not include a designation of the party which the candidate represents",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Where a town has not accepted municipal primaries, parties nominating for town office do so by caucus",
+		"citation": "M.G.L. c. 53, § 71",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section71",
+		"quote": "political parties which nominate candidates for elective city or town offices shall do so by direct plurality vote in caucuses, except when city or town charters provide otherwise",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town may instead hold a nonparty town caucus, during which no party caucus may nominate for town office",
+		"citation": "M.G.L. c. 53, § 121",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section121",
+		"quote": "no political or municipal party caucus shall be held therein for the nomination of candidates for town office",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under chapter 43 plan charters, no city primary or caucus is held except under Plan F",
+		"citation": "M.G.L. c. 43, § 16",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section16",
+		"quote": "No primary or caucus for municipal officers shall be held, except in a city under Plan F",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Plan A city ballots carry no party or political designation",
+		"citation": "M.G.L. c. 43, § 49",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section49",
+		"quote": "No ballot used at any annual, biennial or special city election shall have printed thereon any party or political designation or mark",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Plan F nominates mayor and council in party primaries",
+		"citation": "M.G.L. c. 43, § 1",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section1",
+		"quote": "with the mayor and city councillors to be nominated in party primaries",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Plan E (proportional representation) ballots carry no party designation",
+		"citation": "M.G.L. c. 43, § 112",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section112",
+		"quote": "No official ballot used at any regular municipal election shall have printed thereon any party or political designation or mark",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County offices and district attorneys are nominated in party primaries",
+		"citation": "M.G.L. c. 53, § 48",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section48",
+		"quote": "district attorney, clerk of court, register of probate and insolvency, register of deeds, county commissioner, sheriff, or county treasurer, unless a certificate from the registrars of voters",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A state election includes elections for county officers and regional school committee members elected district-wide",
+		"citation": "M.G.L. c. 50, § 1",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter50/Section1",
+		"quote": "shall apply to any election at which a national, state, or county officer or a regional district school committee member elected district-wide is to be chosen by the voters",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "District-wide regional school committee candidates appear with no political designation",
+		"citation": "M.G.L. c. 54, § 42",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter54/Section42",
+		"quote": "No political or other designation shall appear on the ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Charter commission members are elected without party designation",
+		"citation": "Mass. Const. amend. art. LXXXIX, § 3",
+		"url": "https://malegislature.gov/Laws/Constitution",
+		"quote": "who shall be elected at large without party or political designation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Representative town meeting candidates' papers bear no political designation other than incumbency (standard form)",
+		"citation": "M.G.L. c. 43A, § 6",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43A/Section6",
+		"quote": "that he is a candidate for re-election and shall bear no other political designation",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The candidate with the most votes wins",
+		"citation": "M.G.L. c. 50, § 2",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter50/Section2",
+		"quote": "the person receiving the highest number of votes for an office shall be deemed and declared to be elected to such office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city preliminary election sends the top two (or twice the seats) to the final ballot",
+		"citation": "M.G.L. c. 43, § 44F",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section44F",
+		"quote": "The two persons receiving at a preliminary election the highest number of votes for nomination for an office shall",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No preliminary is held when no more than twice the seats file",
+		"citation": "M.G.L. c. 43, § 44G",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section44G",
+		"quote": "not more than twice as many such statements have been filed with the city clerk for an office as are to be elected to such office",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Plan E elects council and school committee at large by proportional representation",
+		"citation": "M.G.L. c. 43, § 1",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section1",
+		"quote": "the members of the city council and the elective members of the school committee to be elected at large by proportional representation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Plan E voters rank candidates with numbers",
+		"citation": "M.G.L. c. 43, § 112",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section112",
+		"quote": "Put the figure 1 opposite your first choice",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Candidates for state-election offices, including county offices, may be nominated by nomination papers",
+		"citation": "M.G.L. c. 53, § 6",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section6",
+		"quote": "Nominations of candidates for any offices to be filled at a state election may be made by nomination papers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An unenrolled candidate needs a certificate of non-enrollment and must not have been enrolled in a party after the party-candidate enrollment cutoff",
+		"citation": "M.G.L. c. 53, § 6",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section6",
+		"quote": "certifying that he is not enrolled as a member of any political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each signer signs in person as registered and gives their registered address",
+		"citation": "M.G.L. c. 53, § 7",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section7",
+		"quote": "Every voter signing a nomination paper shall sign in person as registered or substantially as registered",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only signers who are voters in the city or town and in the district count",
+		"citation": "M.G.L. c. 53, § 7",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section7",
+		"quote": "which are names of voters both in the city or town and in the district for which the nomination is made",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A non-party candidate may not use a party name as their political designation",
+		"citation": "M.G.L. c. 53, § 8",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section8",
+		"quote": "If a candidate is nominated otherwise than by a political party the name of a political party shall not be used in his political designation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Independent cannot be used as a political designation to qualify a party",
+		"citation": "M.G.L. c. 50, § 1",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter50/Section1",
+		"quote": "provided however, that the designation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Middlesex, Hampden, Worcester, Hampshire, Essex and Berkshire county governments are abolished",
+		"citation": "M.G.L. c. 34B, § 1",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVI/Chapter34B/Section1",
+		"quote": "The government of each of the following counties, in this chapter called an",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Berkshire is the last county named in the abolition list",
+		"citation": "M.G.L. c. 34B, § 1",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVI/Chapter34B/Section1",
+		"quote": "and (e) Berkshire county on July 1, 2000",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Abolishing county government does not change county boundaries",
+		"citation": "M.G.L. c. 34B, § 2",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVI/Chapter34B/Section2",
+		"quote": "Nothing in this chapter shall affect the existing county boundaries",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Sheriffs of abolished counties, including Franklin, become state employees but remain elected",
+		"citation": "M.G.L. c. 34B, § 12",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVI/Chapter34B/Section12",
+		"quote": "the sheriff of an abolished county, including Franklin county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Sheriffs remain elected officials",
+		"citation": "M.G.L. c. 34B, § 12",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVI/Chapter34B/Section12",
+		"quote": "The sheriff shall remain an elected official under the provisions of section 159 of chapter 54",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Registers of deeds of abolished counties remain elected officials",
+		"citation": "M.G.L. c. 34B, § 10",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVI/Chapter34B/Section10",
+		"quote": "The registers shall remain elected officials retaining local administrative control",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county except Nantucket and Suffolk elects three county commissioners for four-year terms",
+		"citation": "M.G.L. c. 34, § 4",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVI/Chapter34/Section4",
+		"quote": "Except in Nantucket and Suffolk counties, there shall be elected in each county",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In Nantucket the select board, and in Suffolk the Boston, Chelsea, Revere and Winthrop governments, act as county commissioners",
+		"citation": "M.G.L. c. 34, § 4",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVI/Chapter34/Section4",
+		"quote": "In Nantucket county the selectmen of Nantucket, and in Suffolk county the mayor and city council of Boston",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No two county commissioners may come from the same city or town",
+		"citation": "M.G.L. c. 54, § 158",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter54/Section158",
+		"quote": "Not more than one of the county commissioners shall be chosen from the same city or town",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Sheriffs are elected in each county every sixth year at the state election",
+		"citation": "M.G.L. c. 54, § 159",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter54/Section159",
+		"quote": "and in every sixth year thereafter, a sheriff shall be chosen by the voters in each county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Registers of deeds are elected by registry district every sixth year",
+		"citation": "M.G.L. c. 54, § 157",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter54/Section157",
+		"quote": "a register of deeds shall be chosen by the voters of each district for the registry of deeds, and of each county not divided into districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Registers of probate are elected in each county every sixth year",
+		"citation": "M.G.L. c. 54, § 156",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter54/Section156",
+		"quote": "and in every sixth year thereafter, a register of probate shall be chosen by the voters of each county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Clerks of courts are elected every sixth year; Suffolk elects several clerks",
+		"citation": "M.G.L. c. 54, § 155",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter54/Section155",
+		"quote": "the clerk of the courts in counties other than Suffolk, and in Suffolk the clerk of the supreme judicial court for that county and the clerks of the superior court",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "District attorneys are elected by district every fourth year",
+		"citation": "M.G.L. c. 54, § 154",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter54/Section154",
+		"quote": "a district attorney shall be chosen by the voters in each of the districts into which the commonwealth is divided for the administration of the criminal law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County treasurers are elected every sixth year except in Suffolk and Nantucket",
+		"citation": "M.G.L. c. 54, § 160",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter54/Section160",
+		"quote": "a county treasurer shall be chosen by the voters in each county, except Suffolk and Nantucket",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The treasurer's office in abolished counties expired",
+		"citation": "M.G.L. c. 34B, § 2",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVI/Chapter34B/Section2",
+		"quote": "The office of an abolished county's treasurer shall expire on December 31, 2002",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every county except Barnstable may adopt a charter under chapter 34A",
+		"citation": "M.G.L. c. 34A, § 2",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVI/Chapter34A/Section2",
+		"quote": "Every county, except Barnstable county, shall have the power to adopt a charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every city and town may adopt, revise or amend a charter",
+		"citation": "Mass. Const. amend. art. LXXXIX, § 2",
+		"url": "https://malegislature.gov/Laws/Constitution",
+		"quote": "Any city or town shall have the power to adopt or revise a charter or to amend its existing charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town under 12,000 may not adopt city government; under 6,000 may not adopt representative town meeting",
+		"citation": "Mass. Const. amend. art. LXXXIX, § 2",
+		"url": "https://malegislature.gov/Laws/Constitution",
+		"quote": "No town of fewer than twelve thousand inhabitants shall adopt a city form of government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Home rule does not grant power to regulate elections beyond the charter procedures",
+		"citation": "Mass. Const. amend. art. LXXXIX, § 7",
+		"url": "https://malegislature.gov/Laws/Constitution",
+		"quote": "the power to (1) regulate elections other than those prescribed by sections three and four",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A change to the composition, mode of election or terms of the legislative body, mayor, manager or select board needs a full charter revision",
+		"citation": "Mass. Const. amend. art. LXXXIX, § 4",
+		"url": "https://malegislature.gov/Laws/Constitution",
+		"quote": "any change in a charter relating in any way to the composition, mode of election or appointment, or terms of office of the legislative body",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The General Court acts on a single city or town by special law on that place's petition, or by two-thirds vote on the governor's recommendation",
+		"citation": "Mass. Const. amend. art. LXXXIX, § 8",
+		"url": "https://malegislature.gov/Laws/Constitution",
+		"quote": "on petition filed or approved by the voters of a city or town, or the mayor and city council, or other legislative body, of a city, or the town meeting of a town",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Existing special laws have the force of a charter",
+		"citation": "Mass. Const. amend. art. LXXXIX, § 9",
+		"url": "https://malegislature.gov/Laws/Constitution",
+		"quote": "All special laws relating to individual cities or towns shall remain in effect and have the force of an existing city or town charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special laws for one city or town are deemed to have the force of a charter",
+		"citation": "M.G.L. c. 4, § 7, cl. Fifth",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleI/Chapter4/Section7",
+		"quote": "Special laws enacted by the general court applicable only to one city or town shall be deemed to have the force of a charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In statutes, 'town' includes city",
+		"citation": "M.G.L. c. 4, § 7, cl. Thirty-fourth",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleI/Chapter4/Section7",
+		"quote": "when applied to towns or officers or employees thereof, shall include city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Charters may make an office elected or appointed, but select boards, school committees and open town meeting moderators must be elected",
+		"citation": "M.G.L. c. 43B, § 20(a)",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43B/Section20",
+		"quote": "in any town having a board of selectmen the members of such board shall always be elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School committee members must always be elected where a city or town has one",
+		"citation": "M.G.L. c. 43B, § 20(a)",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43B/Section20",
+		"quote": "in any city or town having a school committee the members of such committee shall always be elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Charters may set term of office and mode of selection of local offices",
+		"citation": "M.G.L. c. 43B, § 20",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43B/Section20",
+		"quote": "the term of office or mode of selection of local offices",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city or town may change its method of electing officers only through the chapter 43B charter procedure",
+		"citation": "M.G.L. c. 43B, § 18",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43B/Section18",
+		"quote": "may change the same in accordance with the procedures for the adoption or amendment of a charter prescribed by this chapter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Towns elect officers at the annual meeting, by ballot, unless law or charter provides otherwise",
+		"citation": "M.G.L. c. 41, § 1",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter41/Section1",
+		"quote": "choose by ballot from its registered voters the following town officers for the following terms of office",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Towns elect three or more selectmen for terms of up to three years",
+		"citation": "M.G.L. c. 41, § 1",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter41/Section1",
+		"quote": "Three or more selectmen for the term of not more than three years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Towns elect three or more school committee members for up to three years",
+		"citation": "M.G.L. c. 41, § 1",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter41/Section1",
+		"quote": "Three or more members of the school committee for terms of not more than three years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Other town officers default to appointment by the selectmen",
+		"citation": "M.G.L. c. 41, § 1",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter41/Section1",
+		"quote": "All other town officers shall be appointed by the selectmen unless other provision is made by law or by vote of the town",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Multi-member town boards elect about one-third each year",
+		"citation": "M.G.L. c. 41, § 1",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter41/Section1",
+		"quote": "as nearly one-third as may be shall be elected annually",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No town officer's term may exceed five years",
+		"citation": "M.G.L. c. 41, § 1",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter41/Section1",
+		"quote": "In no case shall the term of any officer exceed five years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town may make an elected office appointed by town meeting vote plus a ballot vote, except the select board and school committee",
+		"citation": "M.G.L. c. 41, § 1B",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter41/Section1B",
+		"quote": "Any office or board, except the board of selectmen and the school committee, elected under the provisions of section 1 may become an appointed position",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town may elect a moderator to preside at town meetings",
+		"citation": "M.G.L. c. 39, § 14",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter39/Section14",
+		"quote": "elect from the registered voters thereof by ballot a moderator to preside at all town or district meetings",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Representative town meeting members are elected by precinct for three-year terms (standard form)",
+		"citation": "M.G.L. c. 43A, § 4",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43A/Section4",
+		"quote": "elect, for the term of three years, one third of the number of elected town meeting members to which such precinct is entitled",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Districts include fire, water, sewer, light and improvement districts",
+		"citation": "M.G.L. c. 41, § 1A",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter41/Section1A",
+		"quote": "shall mean a fire, water, sewer, water pollution abatement, refuse disposal, light, or improvement district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Chapter 43 offers six standard city plans; Boston cannot adopt them",
+		"citation": "M.G.L. c. 43, § 2",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section2",
+		"quote": "Any city, except Boston, which shall adopt, in the manner hereinafter prescribed, one of the plans of government provided in this chapter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Plan A: mayor and council elected at large",
+		"citation": "M.G.L. c. 43, § 1",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section1",
+		"quote": "a city government and legislative body composed of the mayor and a city council, the councillors being elected at large",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Plan A and Plan F mayors serve two-year terms by default",
+		"citation": "M.G.L. c. 43, § 48",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section48",
+		"quote": "He shall hold office for the term of two years from the first Monday of January following his election",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters in plan or charter cities with a mayor may adopt a four-year mayoral term",
+		"citation": "M.G.L. c. 43, § 17C",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section17C",
+		"quote": "Shall the term of office of mayor of the city of ___ be four years?",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities of 150,000 or more (except Plan E) must have council and school committee seats elected from districts",
+		"citation": "M.G.L. c. 43, § 2",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section2",
+		"quote": "shall apply to all cities of one hundred and fifty thousand or more inhabitants",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A regional school district chooses how its committee is selected: by member town, district-wide at the state election, weighted, or appointed",
+		"citation": "M.G.L. c. 71, § 14E",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXII/Chapter71/Section14E",
+		"quote": "electing members in district-wide elections to be held at the biennial state elections",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Regional committees may instead be appointed by locally elected officials",
+		"citation": "M.G.L. c. 71, § 14E",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXII/Chapter71/Section14E",
+		"quote": "appointing committee members by locally elected officials such as school board members",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "District-wide regional school committee terms are set by the district, up to four years",
+		"citation": "M.G.L. c. 54, § 162",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter54/Section162",
+		"quote": "such terms shall not exceed four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cambridge elects nine councillors and six school committee members at large by PR for two-year terms; council picks the mayor",
+		"citation": "Cambridge Election Commission",
+		"url": "https://www.cambridgema.gov/Departments/electioncommission/cambridgemunicipalelections",
+		"quote": "nine Councillors and six School Committee members elected at large by Proportional Representation (PR) for a two year term",
+		"certainty": "usual case",
+		"verified": "local government publication"
+	},
+	{
+		"claim": "Cambridge adopted a new charter in 2025",
+		"citation": "Cambridge Election Commission",
+		"url": "https://www.cambridgema.gov/Departments/electioncommission/cambridgemunicipalelections",
+		"quote": "In 2025, the City of Cambridge voted to adopt a new charter",
+		"certainty": "usual case",
+		"verified": "local government publication"
+	},
+	{
+		"claim": "Boston City Council: four at-large and nine district councilors, elected every two years",
+		"citation": "City of Boston",
+		"url": "https://www.boston.gov/departments/city-council",
+		"quote": "The council is made up of four at-large councilors that represent the entire City, and nine district councilors",
+		"certainty": "usual case",
+		"verified": "local government publication"
+	},
+	{
+		"claim": "Statute itself calls Agawam a city known as a town",
+		"citation": "M.G.L. c. 34B, § 6(d)(1)",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVI/Chapter34B/Section6",
+		"quote": "in the city known as the town of Agawam",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Plan B: mayor and council elected partly at large and partly by ward",
+		"citation": "M.G.L. c. 43, § 1",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section1",
+		"quote": "the councillors being elected partly at large and partly from districts or wards of the city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Plan D: council with a mayor among its members, and a city manager",
+		"citation": "M.G.L. c. 43, § 1",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section1",
+		"quote": "one of whom shall be mayor and shall be the official head of the city, and an administrative officer, called the city manager",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Plan E: the council elects the mayor from among its members",
+		"citation": "M.G.L. c. 43, § 1",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section1",
+		"quote": "one of whom shall be elected as mayor by and from such members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Plan F mayors serve two-year terms by default",
+		"citation": "M.G.L. c. 43, § 119",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section119",
+		"quote": "He shall hold office for the term of two years from the first Monday in January following his election",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities and towns may exercise by ordinance or by-law any power not denied by state law or their charter",
+		"citation": "Mass. Const. amend. art. LXXXIX, § 6",
+		"url": "https://malegislature.gov/Laws/Constitution",
+		"quote": "exercise any power or function which the general court has power to confer upon it",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every city and town may adopt, revise or amend its charter under chapter 43B",
+		"citation": "M.G.L. c. 43B, § 2",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43B/Section2",
+		"quote": "Every city and town shall have the power to adopt or revise its charter or to amend its existing charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Local by-law and ordinance power is restated in chapter 43B",
+		"citation": "M.G.L. c. 43B, § 13",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43B/Section13",
+		"quote": "which is not denied, either expressly or by clear implication, to the city or town by its charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Representative town meeting is limited to towns of at least 6,000",
+		"citation": "Mass. Const. amend. art. LXXXIX, § 2",
+		"url": "https://malegislature.gov/Laws/Constitution",
+		"quote": "no town of fewer than six thousand inhabitants shall adopt a form of government providing for a town meeting limited to such inhabitants",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities under the standard plans (other than E and F) hold a preliminary election on the fourth Tuesday before the election",
+		"citation": "M.G.L. c. 43, § 44A",
+		"url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter43/Section44A",
+		"quote": "on the fourth Tuesday preceding every regular or special city election",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	}
+]

@@ -1,0 +1,824 @@
+[
+	{
+		"claim": "Regular sessions convene on the first Tuesday after the first Monday in March in odd-numbered years and the second Tuesday after the first Monday in January in even-numbered years",
+		"citation": "Fla. Const. art. III, § 3(b)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "A regular session of the legislature shall convene on the first Tuesday after the first Monday in March of each odd-numbered year, and on the second Tuesday after the first Monday in January of each even-numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A regular session lasts no more than 60 consecutive days unless extended by a three-fifths vote of each house",
+		"citation": "Fla. Const. art. III, § 3(d)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "A regular session of the legislature shall not exceed sixty consecutive days, and a special session shall not exceed twenty consecutive days, unless extended beyond such limit by a three-fifths vote of each house.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Passed bills are signed by the presiding officers during the session or as soon as practicable after adjournment, so they reach the governor on a rolling basis",
+		"citation": "Fla. Const. art. III, § 7",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "during the session or as soon as practicable after its adjournment sine die",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The governor has 7 consecutive days after presentation to veto a bill, or it becomes law",
+		"citation": "Fla. Const. art. III, § 8(a)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "shall become a law if the governor approves and signs it, or fails to veto it within seven consecutive days after presentation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "If the legislature adjourns sine die within that period, the governor has 15 consecutive days from presentation",
+		"citation": "Fla. Const. art. III, § 8(a)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "the governor shall have fifteen consecutive days from the date of presentation to act on the bill",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Laws take effect on the 60th day after sine die adjournment unless the act provides otherwise",
+		"citation": "Fla. Const. art. III, § 9",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "Each law shall take effect on the sixtieth day after adjournment sine die of the session of the legislature in which enacted or as otherwise provided therein.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A special session may be called by the governor by proclamation",
+		"citation": "Fla. Const. art. III, § 3(c)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "The governor, by proclamation stating the purpose, may convene the legislature in special session",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is held on the first Tuesday after the first Monday in November of each even-numbered year",
+		"citation": "Fla. Stat. § 100.031; Fla. Const. art. VI, § 5(a)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0100/0100.html",
+		"quote": "A general election shall be held in each county on the first Tuesday after the first Monday in November of each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The primary election is held on the Tuesday 11 weeks before the general election",
+		"citation": "Fla. Stat. § 100.061",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0100/0100.html",
+		"quote": "a primary election for nomination of candidates of political parties shall be held on the Tuesday 11 weeks prior to the general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The primary nominee is the candidate with the most votes; there is no primary runoff",
+		"citation": "Fla. Stat. § 100.061",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0100/0100.html",
+		"quote": "The candidate receiving the highest number of votes cast in each contest in the primary election shall be declared nominated for such office.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "General elections are decided by plurality",
+		"citation": "Fla. Const. art. VI, § 1",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "General elections shall be determined by a plurality of votes cast.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The person with the most votes in a general or special election is elected",
+		"citation": "Fla. Stat. § 100.181",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0100/0100.html",
+		"quote": "The person receiving the highest number of votes cast in a general or special election for an office shall be elected to the office.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Clerk of the circuit court, sheriff, superintendent of schools, property appraiser and tax collector are elected in presidential years (years divisible by 4)",
+		"citation": "Fla. Stat. § 100.041(1)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0100/0100.html",
+		"quote": "In each county, a clerk of the circuit court, sheriff, superintendent of schools, property appraiser, and tax collector shall be chosen by the qualified electors at the general election in each year the number of which is a multiple of 4.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County commissioners serve staggered four-year terms, odd-numbered districts elected in years divisible by 4 and even-numbered districts in the other even years",
+		"citation": "Fla. Stat. § 100.041(2)(a)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0100/0100.html",
+		"quote": "each county commissioner from an odd-numbered district shall be elected at the general election in each year the number of which is a multiple of 4",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The supervisor of elections is also elected in years divisible by 4, for a four-year term",
+		"citation": "Fla. Stat. § 98.015(1)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0000-0099/0098/0098.html",
+		"quote": "A supervisor of elections shall be elected in each county at the general election in each year the number of which is a multiple of four for a 4-year term",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal elections follow the Election Code only where no special act, charter or ordinance provides otherwise",
+		"citation": "Fla. Stat. § 100.3605(1)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0100/0100.html",
+		"quote": "shall govern the conduct of a municipality’s election in the absence of an applicable special act, charter, or ordinance provision",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city council may move its election date and qualifying dates by ordinance",
+		"citation": "Fla. Stat. § 100.3605(2)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0100/0100.html",
+		"quote": "may, by ordinance, change the dates for qualifying and for the election of members of the governing body of the municipality",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Changing election dates is the one change to the terms and manner of election that does not need a referendum; other changes to terms and how officers are elected need voter approval",
+		"citation": "Fla. Stat. § 166.021(4)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0166/0166.html",
+		"quote": "the terms of elected officers and the manner of their election except for the selection of election dates and qualifying periods for candidates",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal elections are governed by law",
+		"citation": "Fla. Const. art. VI, § 6",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "Registration and elections in municipalities shall, and in other governmental entities created by statute may, be provided by law.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Florida primaries are closed: a voter may vote only the primary ballot of the party in their registration",
+		"citation": "Fla. Stat. § 101.021",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0101/0101.html",
+		"quote": "In a primary election a qualified elector is entitled to vote the official primary election ballot of the political party designated in the elector’s registration, and no other.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "If all candidates share a party and the winner faces no general election opposition, every voter may vote in that primary",
+		"citation": "Fla. Const. art. VI, § 5(b)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "If all candidates for an office have the same party affiliation and the winner will have no opposition in the general election, all qualified electors, regardless of party affiliation, may vote in the primary elections for that office.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A qualified write-in candidate counts as general election opposition and keeps the primary closed",
+		"citation": "Division of Elections, Closed Primary Elections page",
+		"url": "https://dos.fl.gov/elections/for-voters/voter-registration/closed-primary-elections/",
+		"quote": "no write-in candidates have qualified",
+		"certainty": "usual case",
+		"verified": "Secretary of State publication"
+	},
+	{
+		"claim": "Nonpartisan races (judicial, school board, nonpartisan special districts) on the primary ballot are open to every registered voter",
+		"citation": "Division of Elections, Closed Primary Elections page",
+		"url": "https://dos.fl.gov/elections/for-voters/voter-registration/closed-primary-elections/",
+		"quote": "then all registered voters, including those without party affiliation are entitled to vote those races on the ballot",
+		"certainty": "statutory",
+		"verified": "Secretary of State publication"
+	},
+	{
+		"claim": "A party candidate must have been a registered party member for 365 consecutive days before qualifying",
+		"citation": "Fla. Stat. § 99.021(1)(b)2.",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0000-0099/0099/0099.html",
+		"quote": "That the person has been a registered member of the political party for which he or she is seeking nomination as a candidate for at least 365 consecutive days preceding the beginning of qualifying",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A no-party candidate must be registered without party affiliation and not have been a party member for the 365 days before qualifying",
+		"citation": "Fla. Stat. § 99.021(1)(c)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0000-0099/0099/0099.html",
+		"quote": "state in writing that he or she is registered without any party affiliation and that he or she has not",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A no-party candidate pays the qualifying fee or qualifies by petition, and then goes straight to the general election ballot",
+		"citation": "Fla. Stat. § 99.0955(1)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0000-0099/0099/0099.html",
+		"quote": "Upon qualifying, the candidate is entitled to have his or her name placed on the general election ballot.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any candidate may qualify by petition instead of paying the qualifying fee",
+		"citation": "Fla. Stat. § 99.095(1)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0000-0099/0099/0099.html",
+		"quote": "is not required to pay the qualifying fee or party assessment required by this chapter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Petition signers must be registered voters in the area the office represents",
+		"citation": "Fla. Stat. § 99.095(3)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0000-0099/0099/0099.html",
+		"quote": "Each supervisor shall check the signatures on the petitions to verify their status as voters in the county, district, or other geographical area represented by the office sought.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Ballot requirements for no-party and minor-party candidates may not exceed those for the largest party",
+		"citation": "Fla. Const. art. VI, § 1",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "the requirements for a candidate with no party affiliation or for a candidate of a minor party for placement of the candidate’s name on the ballot shall be no greater than the requirements for a candidate of the party having the largest number of registered voters",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A no-party candidate in a partisan race must say so in political advertising",
+		"citation": "Fla. Stat. § 106.143(3)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0106/0106.html",
+		"quote": "any political advertisement of the candidate must state that the candidate has no party affiliation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan office is defined as one where candidates may not campaign or qualify based on party",
+		"citation": "Fla. Stat. § 97.021(24)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0000-0099/0097/0097.html",
+		"quote": "means an office for which a candidate is prohibited from campaigning or qualifying for election or retention in office based on party affiliation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Judicial offices are nonpartisan",
+		"citation": "Fla. Stat. § 105.011(2)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0105/0105.html",
+		"quote": "A judicial office is a nonpartisan office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No party label appears on the ballot for a nonpartisan office",
+		"citation": "Fla. Stat. § 105.041(3)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0105/0105.html",
+		"quote": "No reference to political party affiliation shall appear on any ballot with respect to any nonpartisan office or candidate.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan candidates may not state party affiliation in political advertising",
+		"citation": "Fla. Stat. § 106.143(3)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0106/0106.html",
+		"quote": "A political advertisement of a candidate running for nonpartisan office may not state the candidate’s political party affiliation.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board members are elected in nonpartisan elections to staggered four-year terms, five or more members per district",
+		"citation": "Fla. Const. art. IX, § 4(a)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "chosen by vote of the electors in a nonpartisan election for appropriately staggered terms of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county is a school district",
+		"citation": "Fla. Const. art. IX, § 4(a)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "Each county shall constitute a school district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board members are elected districtwide in a nonpartisan election, notwithstanding any local law or county charter",
+		"citation": "Fla. Stat. § 1001.361",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=1000-1099/1001/1001.html",
+		"quote": "Notwithstanding any provision of local law or any county charter, the election of members of the district school board must be by vote of the qualified electors of the entire district in a nonpartisan election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every voter in the district votes for one candidate from each residence area",
+		"citation": "Fla. Stat. § 1001.361",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=1000-1099/1001/1001.html",
+		"quote": "Each qualified elector of the district is entitled to vote for one candidate from each district school board member residence area.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A school board has at least five members",
+		"citation": "Fla. Stat. § 1001.34(1)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=1000-1099/1001/1001.html",
+		"quote": "Each district school board shall be composed of not less than five members.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board members serve four-year terms and may not be re-elected after 8 consecutive years",
+		"citation": "Fla. Stat. § 1001.35",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=1000-1099/1001/1001.html",
+		"quote": "in that office for 8 consecutive years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A school board candidate who wins a majority in the primary is elected; otherwise the top two meet in November",
+		"citation": "Fla. Stat. § 105.051(1)(b)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0105/0105.html",
+		"quote": "the names of the two candidates receiving the highest number of votes for such office shall be placed on the general election ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A school board primary majority ends the race unless a write-in candidate has qualified",
+		"citation": "Fla. Stat. § 105.051(1)(b)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0105/0105.html",
+		"quote": "shall not appear on any other ballot unless a write-in candidate has qualified for such office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An unopposed school board or judicial candidate does not appear on any ballot",
+		"citation": "Fla. Stat. § 105.051(1)(a)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0105/0105.html",
+		"quote": "The name of an unopposed candidate for the office of circuit judge, county court judge, or member of a school board shall not appear on any ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The superintendent is elected in years divisible by 4 unless the district has made the office appointed by referendum",
+		"citation": "Fla. Const. art. IX, § 5",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "shall be employed by the district school board as provided by general law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Appointed superintendent is adopted by referendum and can be reversed after 4 years",
+		"citation": "Fla. Stat. § 1001.461(3)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=1000-1099/1001/1001.html",
+		"quote": "may after 4 years return to its former status",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A 2023 joint resolution proposed partisan school board elections",
+		"citation": "Senate bill summary, HJR 31 (2023)",
+		"url": "https://www.flsenate.gov/Committees/BillSummaries/2023/html/31",
+		"quote": "require members of a district school board to be elected in a partisan race",
+		"certainty": "statutory",
+		"verified": "state agency publication"
+	},
+	{
+		"claim": "The partisan school board amendment was on the November 2024 ballot",
+		"citation": "Division of Elections results, 5 Nov 2024",
+		"url": "https://results.elections.myflorida.com/SummaryRpt.asp?ElectionDate=11/5/2024&Race=AMD&DATAMODE=",
+		"quote": "Partisan Election of Members of District School Boards",
+		"certainty": "statutory",
+		"verified": "Secretary of State publication"
+	},
+	{
+		"claim": "It received 54.9 percent yes",
+		"citation": "Division of Elections results, 5 Nov 2024",
+		"url": "https://results.elections.myflorida.com/SummaryRpt.asp?ElectionDate=11/5/2024&Race=AMD&DATAMODE=",
+		"quote": "54.9%",
+		"certainty": "statutory",
+		"verified": "Secretary of State publication"
+	},
+	{
+		"claim": "Constitutional amendments need 60 percent to pass",
+		"citation": "Fla. Const. art. XI, § 5(e)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "approved by vote of at least sixty percent of the electors voting on the measure",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special district boards elected by registered voters are nonpartisan unless the district charter says partisan",
+		"citation": "Fla. Stat. § 189.04(2)(c), (3)(b)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0189/0189.html",
+		"quote": "Elections for governing body members elected by registered electors shall be nonpartisan, except when partisan elections are specified by a district’s charter.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Some special district boards are elected on a one-acre/one-vote basis by landowners",
+		"citation": "Fla. Stat. § 189.041",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0189/0189.html",
+		"quote": "one-acre/one-vote basis",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Soil and water conservation supervisors are nonpartisan, elected at the November general election",
+		"citation": "Fla. Stat. § 582.18(1)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0500-0599/0582/0582.html",
+		"quote": "The office of the supervisor of a soil and water conservation district is a nonpartisan office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Soil and water elections are held at the general election",
+		"citation": "Fla. Stat. § 582.18(1)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0500-0599/0582/0582.html",
+		"quote": "The elections shall be held at the time of the general election provided for by s. 100.041.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Soil and water supervisors must have an agricultural connection",
+		"citation": "Fla. Stat. § 582.19(1)(a)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0500-0599/0582/0582.html",
+		"quote": "Is actively engaged in, or retired after 10 years of being engaged in, agriculture",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Community development district boards start out elected by landowners and shift seat by seat to resident voters",
+		"citation": "Fla. Stat. § 190.006(3)(a)2.b.",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0190/0190.html",
+		"quote": "Thereafter, as terms expire, board members shall be qualified electors elected by qualified electors of the district for a term of 4 years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A CDD seat may still be elected by landowners during the transition",
+		"citation": "Fla. Stat. § 190.006(3)(a)2.b.",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0190/0190.html",
+		"quote": "The remaining board member whose term is expiring shall be elected for a 4-year term by the landowners",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "CDD elections by resident voters are nonpartisan and held at the November general election",
+		"citation": "Fla. Stat. § 190.006(3)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0190/0190.html",
+		"quote": "Elections of board members by qualified electors held pursuant to this subsection shall be nonpartisan",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "CDD resident-voter elections are held at the November general election",
+		"citation": "Fla. Stat. § 190.006(3)(a)2.c.",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0190/0190.html",
+		"quote": "the initial and all subsequent elections by the qualified electors of the district shall be held at the general election in November",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Florida has 67 counties, each with boundaries set in chapter 7 (7.01 to 7.67)",
+		"citation": "Fla. Stat. ch. 7",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0000-0099/0007/0007.html",
+		"quote": "The boundary lines of Washington County are as follows",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties are created by law",
+		"citation": "Fla. Const. art. VIII, § 1(a)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "The state shall be divided by law into political subdivisions called counties.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a sheriff, tax collector, property appraiser, supervisor of elections and clerk of the circuit court for four-year terms",
+		"citation": "Fla. Const. art. VIII, § 1(d)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "There shall be elected by the electors of each county, for terms of four years, a sheriff, a tax collector, a property appraiser, a supervisor of elections, and a clerk of the circuit court.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The clerk of the circuit court is also clerk to the commission, auditor, recorder and custodian of county funds unless changed by special law",
+		"citation": "Fla. Const. art. VIII, § 1(d)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "the clerk of the circuit court shall be ex officio clerk of the board of county commissioners, auditor, recorder and custodian of all county funds",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county charter cannot abolish these five offices, change their four-year term or make them anything but elected",
+		"citation": "Fla. Const. art. VIII, § 1(d)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "establish any manner of selection other than by election by the electors of the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Miami-Dade and Broward came under that rule from the 2024 elections",
+		"citation": "Fla. Const. art. VIII, § 6(g)(2)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "For Miami-Dade County and Broward County, the amendment to Section 1 of this article, relating to the selection and duties of county officers, shall take effect January 7, 2025, but shall govern with respect to the qualifying for and the holding of the primary and general elections for county constitutional officers in 2024.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Unless a charter says otherwise, a county is governed by a board of five or seven commissioners on staggered four-year terms, each living in a district",
+		"citation": "Fla. Const. art. VIII, § 1(e)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "the governing body of each county shall be a board of county commissioners composed of five or seven members serving staggered terms of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "By default the five commissioners are elected countywide, one living in each district",
+		"citation": "Fla. Stat. § 124.01(2)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0124/0124.html",
+		"quote": "who shall be elected by the qualified electors of the county, as provided by s. 1(e), Art. VIII of the State Constitution",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters can switch to single-member districts by referendum",
+		"citation": "Fla. Stat. § 124.011(1)(a)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0124/0124.html",
+		"quote": "each commissioner shall be nominated and elected only by the qualified electors who reside in the same county commission district as the commissioner",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The district statute does not apply to Miami-Dade",
+		"citation": "Fla. Stat. § 124.01(5)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0124/0124.html",
+		"quote": "This section shall not apply to Miami-Dade County.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county charter is adopted, amended or repealed only by vote of the county electors",
+		"citation": "Fla. Const. art. VIII, § 1(c)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "a county government may be established by charter which shall be adopted, amended or repealed only upon vote of the electors of the county in a special election called for that purpose",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Charter counties have all powers of self-government not inconsistent with general law",
+		"citation": "Fla. Const. art. VIII, § 1(g)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "Counties operating under county charters shall have all powers of local self-government not inconsistent with general law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Non-charter counties have only the powers given by general or special law",
+		"citation": "Fla. Const. art. VIII, § 1(f)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "Counties not operating under county charters shall have such power of self-government as is provided by general or special law.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county can locally initiate and adopt a home rule charter by majority vote",
+		"citation": "Fla. Stat. § 125.60",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0125/0125.html",
+		"quote": "locally initiate and adopt by a majority vote of the qualified electors of the county a county home rule charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Elections are regulated by state law",
+		"citation": "Fla. Const. art. VI, § 1",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "Registration and elections shall, and political party functions may, be regulated by law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Florida recognizes counties, municipalities and special districts as its local governments; there are no townships",
+		"citation": "Fla. Const. art. VIII, § 6(b)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "the municipalities and special districts of the state, their powers, jurisdiction and government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county and its municipalities may consolidate only by special law approved by voters",
+		"citation": "Fla. Const. art. VIII, § 3",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "The consolidation plan may be proposed only by special law, which shall become effective if approved by vote of the electors of the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The 1885 consolidation provisions remain in effect for each county affected",
+		"citation": "Fla. Const. art. VIII, § 6(e)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "shall remain in full force and effect as to each county affected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The City of Jacksonville extends throughout Duval County in place of the county government",
+		"citation": "Fla. Const. art. VIII, § 6(e) (retaining 1885 Const. art. VIII, § 9)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "a Municipal corporation to be known as the City of Jacksonville, extending territorially throughout the present limits of Duval County",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Jacksonville also carries the duties of a county",
+		"citation": "Fla. Const. art. VIII, § 6(e) (retaining 1885 Const. art. VIII, § 9)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "shall also be recognized as one of the legal political divisions of the State with the duties and obligations of a county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Atlantic Beach, Jacksonville Beach, Neptune Beach and Baldwin remain separate municipalities inside Duval County",
+		"citation": "City of Jacksonville 2045 Comprehensive Plan, Definitions",
+		"url": "https://www.jacksonville.gov/getContentAsset/0df56dc1-40fd-4ec9-a4c8-eaad78a0ad85/135b97c9-84fa-4e82-b956-0fbccec4aa1f/FINAL-ADA_2045-DEFINITIONS_12-2025.pdf?language=en",
+		"quote": "Other Municipalities - The City of Atlantic Beach, City of Jacksonville Beach, City of Neptune Beach, and the Town of Baldwin.",
+		"certainty": "statutory",
+		"verified": "local government publication",
+		"manual": true
+	},
+	{
+		"claim": "The consolidated government has a general services district covering all of Duval County",
+		"citation": "City of Jacksonville 2045 Comprehensive Plan, Definitions",
+		"url": "https://www.jacksonville.gov/getContentAsset/0df56dc1-40fd-4ec9-a4c8-eaad78a0ad85/135b97c9-84fa-4e82-b956-0fbccec4aa1f/FINAL-ADA_2045-DEFINITIONS_12-2025.pdf?language=en",
+		"quote": "The general services district consists of the total territory within Duval County.",
+		"certainty": "statutory",
+		"verified": "local government publication",
+		"manual": true
+	},
+	{
+		"claim": "The Miami-Dade home rule charter is preserved by the Constitution",
+		"citation": "Fla. Const. art. VIII, § 6(e)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "All provisions of the Metropolitan Dade County Home Rule Charter, heretofore or hereafter adopted by the electors of Dade County",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Miami-Dade County may exercise municipal powers",
+		"citation": "Fla. Const. art. VIII, § 6(f)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "the Metropolitan Government of Dade County may exercise all the powers conferred now or hereafter by general law upon municipalities",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities in Miami-Dade amend their own charters by a method the county charter provides, not by the Legislature",
+		"citation": "Fla. Const. art. VIII, § 6(e) (retaining 1885 Const. art. VIII, § 11(1)(g))",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "Shall provide a method by which each municipal corporation in Dade County shall have the power to make, amend or repeal its own charter.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Miami-Dade commission has 13 members, each elected by district",
+		"citation": "Miami-Dade County Home Rule Charter § 1.04",
+		"url": "https://www.miamidade.gov/charter/library/home-rule-charter.pdf",
+		"quote": "The Commission shall consist of thirteen members",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Miami-Dade mayor and commission need a majority, with a runoff at the November general election",
+		"citation": "Miami-Dade County Home Rule Charter § 3.01(B)",
+		"url": "https://www.miamidade.gov/charter/library/home-rule-charter.pdf",
+		"quote": "A candidate for County Commission or Mayor must receive a majority of the votes cast to be elected.",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Miami-Dade mayor and commission elections are nonpartisan under the charter",
+		"citation": "Miami-Dade County Home Rule Charter § 3.03",
+		"url": "https://www.miamidade.gov/charter/library/home-rule-charter.pdf",
+		"quote": "shall be nonpartisan and no ballot shall show the party designation of any candidate",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Miami-Dade mayor and commissioners are limited to two consecutive four-year terms",
+		"citation": "Miami-Dade County Home Rule Charter § 3.01(D)-(E)",
+		"url": "https://www.miamidade.gov/charter/library/home-rule-charter.pdf",
+		"quote": "no person shall be elected as Mayor for more than two consecutive four-year terms",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Every municipal legislative body is elected",
+		"citation": "Fla. Const. art. VIII, § 2(b)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "Each municipal legislative body shall be elective.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities have home rule: any power for municipal purposes except as provided by law",
+		"citation": "Fla. Const. art. VIII, § 2(b)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "may exercise any power for municipal purposes except as otherwise provided by law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities are created and their charters amended by general or special law",
+		"citation": "Fla. Const. art. VIII, § 2(a)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "Municipalities may be established or abolished and their charters amended pursuant to general or special law.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipality is one category with no population classes",
+		"citation": "Fla. Stat. § 165.031(3)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0165/0165.html",
+		"quote": "“Municipality” means a municipality created pursuant to general or special law authorized or recognized pursuant to s. 2 or s. 6, Art. VIII of the State Constitution.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A council by ordinance, or voters by petition, can put a charter amendment to a referendum",
+		"citation": "Fla. Stat. § 166.031(1)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0166/0166.html",
+		"quote": "submit to the electors of said municipality a proposed amendment to its charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter amendment takes effect when a majority of voters approve it",
+		"citation": "Fla. Stat. § 166.031(2)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0166/0166.html",
+		"quote": "Upon adoption of an amendment to the charter of a municipality by a majority of the electors voting in a referendum upon such amendment",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Changing the form of government or the distribution of powers also needs a referendum",
+		"citation": "Fla. Stat. § 166.021(4)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0166/0166.html",
+		"quote": "the distribution of powers among elected officers, matters prescribed by the charter relating to appointive boards, any change in the form of government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No charter or ordinance may exempt a city from Election Code provisions that expressly apply to municipalities",
+		"citation": "Fla. Stat. § 100.3605(1)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0100/0100.html",
+		"quote": "No charter or ordinance provision shall be adopted which conflicts with or exempts a municipality from any provision in the Florida Election Code that expressly applies to municipalities.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal home rule in statute: any power for municipal purposes except when expressly prohibited by law",
+		"citation": "Fla. Stat. § 166.021(1)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0166/0166.html",
+		"quote": "may exercise any power for municipal purposes, except when expressly prohibited by law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "CDD seats begin passing to resident voters 6 years after the board is first appointed (10 for large districts)",
+		"citation": "Fla. Stat. § 190.006(3)(a)2.a.",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0190/0190.html",
+		"quote": "commencing 6 years after the initial appointment of members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board members must live in the residence area they are elected from",
+		"citation": "Fla. Stat. § 1001.34(1)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=1000-1099/1001/1001.html",
+		"quote": "shall be a resident of the district school board member residence area from which she or he is elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A district makes its superintendent appointed by school board resolution or special law approved by voters",
+		"citation": "Fla. Const. art. IX, § 5",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "when provided by resolution of the district school board, or by special law, approved by vote of the electors",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county charter may set up the governing body differently from the default commission",
+		"citation": "Fla. Const. art. VIII, § 1(e)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "Except when otherwise provided by county charter, the governing body of each county shall be a board of county commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Miami-Dade may exercise municipal powers only to the extent not inconsistent with existing municipalities",
+		"citation": "Fla. Const. art. VIII, § 6(f)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "To the extent not inconsistent with the powers of existing municipalities or general law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Charter counties: the charter decides which prevails when county and city ordinances conflict",
+		"citation": "Fla. Const. art. VIII, § 1(g)",
+		"url": "https://www.leg.state.fl.us/statutes/index.cfm?submenu=3",
+		"quote": "The charter shall provide which shall prevail in the event of conflict between county and municipal ordinances.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

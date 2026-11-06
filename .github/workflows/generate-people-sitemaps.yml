@@ -23,9 +23,9 @@ name: Generate and publish people sitemaps
 # step alone as GP_API_SERVICE_TOKEN (src/lib/electionApiAuth.ts).
 #
 # workflow_dispatch with `dev_dry_run` reads from dev gp-api instead, never
-# configures AWS or publishes, sends no Slack alert, and uploads the shards
-# as a workflow artifact. It has its own concurrency group so it can never
-# displace a pending scheduled run.
+# configures AWS or publishes, reports no failure to Grafana, and uploads the
+# shards as a workflow artifact. It has its own concurrency group so it can
+# never displace a pending scheduled run.
 
 on:
   schedule:
@@ -56,11 +56,6 @@ env:
   # keeps that fallback explicit rather than implicit, and keeps the shard
   # emitter's local-host refusal gate (runPeopleShardsOut) meaningful.
   NEXT_PUBLIC_SITE_URL: https://goodparty.org
-  # Job level, not step level: a step's own `env` block is not visible to that
-  # step's `if` condition, so the Slack guard below would always evaluate true
-  # and the step would fail on an unset channel instead of skipping.
-  SLACK_TOKEN: ${{ secrets.GPBOT_SLACK_BOT_TOKEN }}
-  CHANNEL: ${{ vars.BOT_DEV_CHANNEL_ID }}
   # Job level so both `if:` conditions and `run:` steps can read it as a real
   # shell variable ($SHARD) instead of interpolating `${{ inputs.shard }}`
   # directly into script text.
@@ -192,14 +187,19 @@ jobs:
         if: env.DEV_DRY_RUN != 'true' && vars.SITEMAPS_PUBLISHER_ROLE_ARN == ''
         run: echo "::notice::SITEMAPS_PUBLISHER_ROLE_ARN is not set (task 01 pending) -- shards were generated and gate-validated but not published"
 
-      # chat.postMessage answers 200 even when it refuses the message, so -f
-      # proves nothing; the -e check at the end catches a revoked token or a
-      # channel gp_ai_bot was never invited to. Runs regardless of which prior
-      # step failed -- `if: failure()` overrides the default "only run after
-      # success" behavior. A dev dry run never alerts.
-      - name: Alert #bot-dev on failure
-        if: failure() && env.DEV_DRY_RUN != 'true' && env.SLACK_TOKEN != '' && env.CHANNEL != ''
+      # Pushes one error line to Grafana Cloud Loki; a Grafana alert on these
+      # stream labels and fields files a Bugs-board ticket, so keep them stable.
+      # --fail-with-body exits non-zero on any rejected push (a revoked token,
+      # a token without logs:write) and prints Loki's reason. Runs regardless
+      # of which prior step failed -- `if: failure()` overrides the default
+      # "only run after success" behavior. A dev dry run never reports. Until
+      # the Grafana variables and secret are set, it warns and skips instead.
+      - name: Report failure to Grafana
+        if: failure() && env.DEV_DRY_RUN != 'true'
         env:
+          LOKI_URL: ${{ vars.GRAFANA_LOKI_URL }}
+          LOKI_USER: ${{ vars.GRAFANA_LOKI_USER }}
+          LOKI_TOKEN: ${{ secrets.GRAFANA_LOKI_PUSH_TOKEN }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           FAILING_STEP: >-
             ${{
@@ -212,13 +212,20 @@ jobs:
             }}
         run: |
           set -euo pipefail
+          if [ -z "$LOKI_URL" ] || [ -z "$LOKI_USER" ] || [ -z "$LOKI_TOKEN" ]; then
+            echo "::warning::GRAFANA_LOKI_URL, GRAFANA_LOKI_USER or GRAFANA_LOKI_PUSH_TOKEN is not set -- this failure at '${FAILING_STEP}' was not reported to Grafana"
+            exit 0
+          fi
+          line=$(jq -cn \
+            --arg failing_step "$FAILING_STEP" \
+            --arg run_url "$RUN_URL" \
+            '{level: "error", msg: "generate-people-sitemaps failed", failing_step: $failing_step, run_url: $run_url}')
           jq -n \
-            --arg channel "$CHANNEL" \
-            --arg text "generate-people-sitemaps failed at *${FAILING_STEP}*: <${RUN_URL}|${{ github.workflow }} run>. No partial band is ever synced and \`--delete\` is never passed, so the previously published shards keep serving." \
-            '{channel: $channel, text: $text}' \
-            | curl -sSf -X POST https://slack.com/api/chat.postMessage \
-                -H "Authorization: Bearer $SLACK_TOKEN" \
-                -H 'Content-type: application/json; charset=utf-8' \
-                --data @- \
-            | tee /dev/stderr \
-            | jq -e '.ok' > /dev/null
+            --arg ts "$(date +%s%N)" \
+            --arg line "$line" \
+            '{streams: [{stream: {service_name: "gp-marketing", deployment_environment_name: "prod", job: "generate-people-sitemaps"}, values: [[$ts, $line]]}]}' \
+            | curl -sS --fail-with-body --max-time 30 -X POST "${LOKI_URL%/}/loki/api/v1/push" \
+                -u "$LOKI_USER:$LOKI_TOKEN" \
+                -H 'Content-Type: application/json' \
+                --data @-
+          echo "Reported failure at '${FAILING_STEP}' to Grafana Loki"

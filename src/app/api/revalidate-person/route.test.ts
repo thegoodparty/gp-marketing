@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, mock, spyOn, test } from 'bun:test';
-import { PEOPLE_REMOVALS_CACHE_TAG } from '~/lib/electionsApi';
+import { ELECTION_DATA_CACHE_TAG } from '~/lib/electionApiFetch';
+import { PEOPLE_PUBLISHED_CACHE_TAG, PEOPLE_REMOVALS_CACHE_TAG } from '~/lib/electionsApi';
 import { PEOPLE_SITEMAP_CACHE_TAG } from '~/lib/sitemap-entries';
 import { resetNextCacheMock, revalidateTag } from '~/testing/nextCacheMock';
 
@@ -14,7 +15,9 @@ import { resetNextCacheMock, revalidateTag } from '~/testing/nextCacheMock';
  * The request shape asserted here is the contract gp-api sends:
  *   POST /api/revalidate-person
  *   x-revalidate-secret: <MARKETING_REVALIDATE_SECRET>
- *   { "personId": "<uuid>" }
+ *   { "personId": "<uuid>", "listings": ["published" | "unlisted", ...] }
+ * gp-api from before `listings` sends `{ "personId": "<uuid>" }`, which still
+ * has to work while the two deploy at different times.
  *
  * See packages/gp-api/src/personProfiles/services/marketing-revalidation.service.ts
  * in the omni repo. Changing either side without the other breaks revalidation.
@@ -101,13 +104,74 @@ describe('POST /api/revalidate-person', () => {
 		expect(revalidateTag).toHaveBeenCalledWith(PEOPLE_SITEMAP_CACHE_TAG);
 	});
 
+	// Every profile and election page reads both lists, so busting one re-renders
+	// all of them. An edit moves the person into neither, and must leave them be.
+	test('busts no list for an edit', async () => {
+		const res = await post({ personId: PERSON_ID, listings: [] }, SECRET);
+
+		expect(res.status).toBe(200);
+		expect(revalidateTag).toHaveBeenCalledWith(`person:${PERSON_ID}`);
+		expect(revalidateTag).not.toHaveBeenCalledWith(PEOPLE_REMOVALS_CACHE_TAG);
+		expect(revalidateTag).not.toHaveBeenCalledWith(PEOPLE_PUBLISHED_CACHE_TAG);
+	});
+
+	// The published list decides whose own photo a card shows.
+	test('busts only the published list for a publish', async () => {
+		await post({ personId: PERSON_ID, listings: ['published'] }, SECRET);
+
+		expect(revalidateTag).toHaveBeenCalledWith(PEOPLE_PUBLISHED_CACHE_TAG);
+		expect(revalidateTag).not.toHaveBeenCalledWith(PEOPLE_REMOVALS_CACHE_TAG);
+	});
+
 	// The removals tag is the takedown-propagation path: busting it is what drops a
 	// removed person's photo from other people's profile cards. Pinned like its
 	// siblings so a dropped call or misspelled constant fails loudly here.
-	test('also busts the removals tag so takedowns propagate to sibling cards', async () => {
+	test('busts only the removals tag for a takedown so it reaches sibling cards', async () => {
+		await post({ personId: PERSON_ID, listings: ['unlisted'] }, SECRET);
+
+		expect(revalidateTag).toHaveBeenCalledWith(PEOPLE_REMOVALS_CACHE_TAG);
+		expect(revalidateTag).not.toHaveBeenCalledWith(PEOPLE_PUBLISHED_CACHE_TAG);
+	});
+
+	// An older gp-api cannot say what changed, so it gets what every call got
+	// before: both lists.
+	test('busts both lists for a caller that sends no listings', async () => {
 		await post({ personId: PERSON_ID }, SECRET);
 
 		expect(revalidateTag).toHaveBeenCalledWith(PEOPLE_REMOVALS_CACHE_TAG);
+		expect(revalidateTag).toHaveBeenCalledWith(PEOPLE_PUBLISHED_CACHE_TAG);
+	});
+
+	// A list this route does not know may still be one a takedown changed, so
+	// it refreshes too much rather than too little.
+	test('busts both lists and warns for listings it does not recognize', async () => {
+		const warnSpy = spyOn(console, 'warn').mockImplementation(() => undefined);
+
+		const res = await post({ personId: PERSON_ID, listings: ['published', 'toString'] }, SECRET);
+
+		expect(res.status).toBe(200);
+		expect(revalidateTag).toHaveBeenCalledWith(PEOPLE_REMOVALS_CACHE_TAG);
+		expect(revalidateTag).toHaveBeenCalledWith(PEOPLE_PUBLISHED_CACHE_TAG);
+		expect(warnSpy.mock.calls.some(call => String(call[0]).includes('unrecognized listings'))).toBe(true);
+
+		warnSpy.mockRestore();
+	});
+
+	test('refreshes every election-data page for the nightly load, and nothing person-scoped', async () => {
+		const res = await post({ scope: 'election-data' }, SECRET);
+
+		expect(res.status).toBe(200);
+		expect(await res.json()).toEqual({ revalidated: true, tag: ELECTION_DATA_CACHE_TAG });
+		expect(revalidateTag).toHaveBeenCalledTimes(1);
+		expect(revalidateTag).toHaveBeenCalledWith(ELECTION_DATA_CACHE_TAG);
+		expect(fetchCalls).toHaveLength(0);
+	});
+
+	test('rejects an election-data refresh without the secret', async () => {
+		const res = await post({ scope: 'election-data' }, 'not-the-secret');
+
+		expect(res.status).toBe(401);
+		expect(revalidateTag).not.toHaveBeenCalled();
 	});
 
 	// Postgres hands gp-api lowercase uuids today, but the tag is what pairs this

@@ -7,7 +7,7 @@ import { lastCacheCall, resetNextCacheMock, unstable_cache } from '~/testing/nex
 import { fakeVercelOidcToken, saveVercelOidcEnv, setVercelRequestOidcToken } from '~/testing/vercelOidc';
 
 // Imported after the module mock so the dynamic import('next/cache') resolves to it.
-const { fetchElectionApiJsonCached, fetchGpApiJsonCached } = await import('./electionApiFetch');
+const { ELECTION_DATA_CACHE_TAG, fetchElectionApiJsonCached, fetchGpApiJsonCached } = await import('./electionApiFetch');
 
 const ELECTION_URL = 'https://election-api.goodparty.org/v1/elections/positions/1';
 const GP_API_URL = 'https://gp-api.goodparty.org/v1/public-person-profiles/unlisted';
@@ -72,17 +72,19 @@ describe('fetchElectionApiJsonCached', () => {
 		expect(unstable_cache).toHaveBeenCalledTimes(1);
 		expect(lastCacheCall.keyParts).toEqual(['election-api-json', ELECTION_URL]);
 		expect(lastCacheCall.options?.revalidate).toBe(3600);
-		expect(lastCacheCall.options?.tags).toEqual(['person:abc']);
+		expect(lastCacheCall.options?.tags).toEqual([ELECTION_DATA_CACHE_TAG, 'person:abc']);
 		expect(result).toEqual({ status: 200, ok: true, json: OK_BODY });
 	});
 
-	test('inside the Next runtime without tags, omits the tags cache option', async () => {
+	// The nightly load refreshes every page built from election data by busting
+	// this one tag, so a read that missed it would stay stale until its window.
+	test('inside the Next runtime without tags, still tags the read as election data', async () => {
 		process.env['NEXT_RUNTIME'] = 'nodejs';
 
 		await fetchElectionApiJsonCached(ELECTION_URL);
 
 		expect(unstable_cache).toHaveBeenCalledTimes(1);
-		expect(lastCacheCall.options && 'tags' in lastCacheCall.options).toBe(false);
+		expect(lastCacheCall.options?.tags).toEqual([ELECTION_DATA_CACHE_TAG]);
 		expect(lastCacheCall.options?.revalidate).toBe(3600);
 	});
 

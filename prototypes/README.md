@@ -29,6 +29,25 @@ An unclaimed `/people/*` profile through to a published one, and the voter
 - **Marked proposals.** Anything not yet settled — above all the identity
   verification methods — carries a `Proposal` chip.
 
+### Entry point
+
+The entry screen is built against the live `/people/*` page rather than invented:
+a midnight hero band carrying the name, office, location, persona tag and the
+pledge callout, then the two-column content well — a sticky sidebar card
+(Election Date, Political Affiliation, pledge row, Contact) beside a column of
+separate white cards with the cream page showing through the gaps.
+
+Section names, grouping and placeholder copy come from
+`src/components/people/personSectionOverrides.tsx`: `Why I'm Running for Office`
+and `Campaign Issues` share one card, `About Me` and `Recent Experience` share the
+next, and the empty-state lines are the ones marketing wrote ("… has not filled out
+this section yet"). The claim callout is the `lead` slot card, with the same
+radial gradient `ClaimProfileBlock` uses for its `inset` layout.
+
+Note on naming: the pledge is called the **People First Pledge** throughout. It was
+renamed from "GoodParty.org Pledge" in Oct 2026 (see `LEGACY_PLEDGE_PHRASE` in
+`src/ui/_lib/attributionCopy.ts`).
+
 Screens are hash-routed (`#profile`, `#path`, `#account`, `#edit`, `#pledge`,
 `#verify`, `#preview`, `#done`, `#voter-review`, `#voter-sent`), so browser back
 and forward work and nothing typed is lost moving between them.

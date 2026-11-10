@@ -32,6 +32,7 @@
 
 	--gold: hsl(43 81% 51%);
 	--gold-soft: hsl(44 100% 89%);
+	--gold-fg: hsl(39 86% 25%);
 	--gold-border: hsl(44 100% 57%);
 
 	--red: hsl(349 83% 47%);
@@ -45,6 +46,11 @@
 	--lavender-soft: hsl(269 100% 93%);
 	--lavender: hsl(262 71% 55%);
 
+	--claim-g1: hsl(0 0% 100%);
+	--claim-g2: hsl(0 100% 95%);
+	--claim-g3: hsl(213 97% 87%);
+	--claim-border: hsl(214 67% 82%);
+	--claim-fg: hsl(222 47% 11%);
 	--ring: hsl(221 83% 53% / 0.35);
 	--shadow-sm: 0 1px 3px hsl(222 47% 11% / 0.08), 0 1px 2px hsl(222 47% 11% / 0.04);
 	--shadow-md: 0 4px 14px hsl(222 47% 11% / 0.08), 0 2px 4px hsl(222 47% 11% / 0.04);
@@ -82,6 +88,7 @@
 		--on-accent: hsl(222 60% 8%);
 		--gold: hsl(44 90% 62%);
 		--gold-soft: hsl(40 40% 18%);
+	--gold-fg: hsl(44 90% 72%);
 		--gold-border: hsl(42 60% 36%);
 		--red: hsl(352 76% 62%);
 		--red-soft: hsl(350 40% 18%);
@@ -91,7 +98,12 @@
 		--green-border: hsl(162 32% 30%);
 		--lavender-soft: hsl(262 36% 22%);
 		--lavender: hsl(266 90% 78%);
-		--ring: hsl(217 92% 66% / 0.4);
+		--claim-g1: hsl(222 42% 15%);
+	--claim-g2: hsl(350 30% 17%);
+	--claim-g3: hsl(216 45% 22%);
+	--claim-border: hsl(220 40% 34%);
+	--claim-fg: hsl(210 30% 96%);
+	--ring: hsl(217 92% 66% / 0.4);
 		--shadow-sm: 0 1px 3px hsl(0 0% 0% / 0.4);
 		--shadow-md: 0 4px 14px hsl(0 0% 0% / 0.45);
 		--shadow-lg: 0 18px 40px hsl(0 0% 0% / 0.55);
@@ -121,6 +133,7 @@
 	--on-accent: hsl(222 60% 8%);
 	--gold: hsl(44 90% 62%);
 	--gold-soft: hsl(40 40% 18%);
+	--gold-fg: hsl(44 90% 72%);
 	--gold-border: hsl(42 60% 36%);
 	--red: hsl(352 76% 62%);
 	--red-soft: hsl(350 40% 18%);
@@ -130,6 +143,11 @@
 	--green-border: hsl(162 32% 30%);
 	--lavender-soft: hsl(262 36% 22%);
 	--lavender: hsl(266 90% 78%);
+	--claim-g1: hsl(222 42% 15%);
+	--claim-g2: hsl(350 30% 17%);
+	--claim-g3: hsl(216 45% 22%);
+	--claim-border: hsl(220 40% 34%);
+	--claim-fg: hsl(210 30% 96%);
 	--ring: hsl(217 92% 66% / 0.4);
 	--shadow-sm: 0 1px 3px hsl(0 0% 0% / 0.4);
 	--shadow-md: 0 4px 14px hsl(0 0% 0% / 0.45);
@@ -390,33 +408,110 @@ a { color: var(--accent); }
 .tab.is-on { background: var(--surface); color: var(--fg); box-shadow: var(--shadow-sm); }
 
 /* ---------- profile page ---------- */
-.hero { position: relative; background: var(--navy); color: var(--on-navy); border-radius: var(--r-xl); overflow: hidden; }
-.hero::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 70% at 50% 120%, hsl(220 58% 35% / 0.85) 0%, transparent 70%); pointer-events: none; }
-.hero-inner { position: relative; z-index: 1; display: flex; gap: clamp(18px, 4vw, 44px); align-items: center; padding: clamp(22px, 4vw, 40px); flex-wrap: wrap; }
-.hero-avatar { width: clamp(90px, 18vw, 150px); height: clamp(90px, 18vw, 150px); border-radius: 999px; flex: none; display: grid; place-items: center; font-family: var(--font-display); font-size: clamp(30px, 6vw, 48px); font-weight: 600; background: linear-gradient(150deg, var(--navy-3), var(--navy-2)); border: 3px solid hsl(0 0% 100% / 0.2); position: relative; }
-.hero-avatar.has-photo { background: linear-gradient(150deg, var(--gold), hsl(36 90% 56%)); color: var(--navy); border-color: hsl(0 0% 100% / 0.35); }
-.hero-text { min-width: 0; flex: 1 1 280px; display: flex; flex-direction: column; gap: 12px; }
-.hero-name { font-size: clamp(26px, 5vw, 42px); }
-.hero-office { font-family: var(--font-display); font-weight: 500; font-size: clamp(16px, 2.4vw, 20px); color: var(--on-navy); }
-.hero-district { font-size: 15px; color: var(--on-navy-muted); }
-.hero-callout { display: flex; gap: 12px; align-items: center; border: 1px solid hsl(0 0% 100% / 0.22); background: hsl(0 0% 100% / 0.07); border-radius: var(--r-sm); padding: 13px 15px; font-size: 14.5px; color: var(--on-navy); }
+/* The page itself is the cream band; the hero and the cards sit on it. */
+.profile-page { padding-block: 0 72px; }
+
+.hero {
+	position: relative;
+	z-index: 2;
+	background: var(--navy);
+	color: var(--on-navy);
+	border-radius: 0 0 var(--r-xl) var(--r-xl);
+	margin-left: calc(max(16px, env(safe-area-inset-left, 0px)) * -1);
+	margin-right: calc(max(16px, env(safe-area-inset-right, 0px)) * -1);
+	overflow: hidden;
+}
+.hero::after {
+	content: "";
+	position: absolute; inset: 0;
+	background: radial-gradient(ellipse 70% 80% at 50% 118%, hsl(220 58% 35% / 0.9) 0%, transparent 72%);
+	pointer-events: none;
+}
+.hero-inner {
+	position: relative; z-index: 1;
+	max-width: 1180px; margin: 0 auto;
+	display: flex; gap: clamp(18px, 4vw, 48px); align-items: center; flex-wrap: wrap;
+	padding-left: max(16px, env(safe-area-inset-left, 0px));
+	padding-right: max(16px, env(safe-area-inset-right, 0px));
+	padding-block: clamp(24px, 3vw, 36px);
+}
+.hero-avatar {
+	width: clamp(104px, 20vw, 190px); height: clamp(104px, 20vw, 190px);
+	border-radius: 999px; flex: none; display: grid; place-items: center;
+	font-family: var(--font-display); font-size: clamp(34px, 6vw, 60px); font-weight: 600;
+	background: linear-gradient(150deg, var(--navy-3), var(--navy-2));
+	border: 3px solid hsl(0 0% 100% / 0.22);
+}
+.hero-avatar.has-photo { background: linear-gradient(150deg, var(--gold), hsl(36 90% 56%)); color: var(--navy); border-color: hsl(0 0% 100% / 0.4); }
+.hero-text { min-width: 0; flex: 1 1 300px; display: flex; flex-direction: column; gap: 20px; }
+.hero-tag {
+	display: inline-flex; align-items: center; border-radius: 6px;
+	padding: 4px 10px; font-size: 13.5px; font-weight: 500;
+	background: var(--gold-soft); color: var(--gold-fg); border: 1px solid var(--gold-border);
+}
+.hero-name-office { display: flex; flex-direction: column; gap: 3px; }
+.hero-name { font-size: clamp(30px, 5.5vw, 50px); line-height: 1.15; }
+.hero-office { font-family: var(--font-display); font-weight: 500; font-size: clamp(17px, 2.4vw, 22px); line-height: 1.45; }
+.hero-district { font-size: clamp(15px, 1.8vw, 17px); color: var(--on-navy-muted); line-height: 1.45; }
+.hero-callout {
+	display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+	border: 1px solid hsl(0 0% 100% / 0.22); background: hsl(0 0% 100% / 0.07);
+	border-radius: var(--r-sm); padding: 14px 16px; font-size: 15px; line-height: 1.5;
+}
+.hero-callout span:last-child { min-width: 0; flex: 1 1 220px; }
 .hero-callout-mark { flex: none; width: 34px; height: 34px; display: grid; place-items: center; }
 
-.profile-grid { display: grid; grid-template-columns: 300px 1fr; gap: 22px; align-items: start; }
-@media (max-width: 900px) { .profile-grid { grid-template-columns: 1fr; } }
-.side-row { display: flex; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--border); font-size: 14px; align-items: flex-start; }
-.side-row:last-child { border-bottom: none; }
-.side-row dt { color: var(--fg-faint); flex: none; width: 92px; font-size: 13px; }
-.side-row dd { margin: 0; min-width: 0; flex: 1; font-weight: 500; overflow-wrap: anywhere; }
-
-.empty {
-	border: 1.5px dashed var(--border-strong); border-radius: var(--r-md);
-	padding: 24px 20px; text-align: center; color: var(--fg-faint);
-	display: flex; flex-direction: column; gap: 8px; align-items: center;
-	background: var(--surface-2);
+/* Content well: sticky sidebar, then a column of separate white cards. */
+.profile-grid {
+	max-width: 1180px; margin: 0 auto;
+	display: grid; grid-template-columns: 1fr; gap: 24px;
+	padding-block: 28px 0;
 }
-.empty-title { font-family: var(--font-display); font-weight: 600; font-size: 15px; color: var(--fg-muted); }
-.empty-sub { font-size: 13.5px; max-width: 46ch; }
+@media (min-width: 1000px) {
+	.profile-grid { grid-template-columns: minmax(280px, 360px) minmax(0, 1fr); gap: 40px; align-items: start; }
+	.profile-side { position: sticky; top: calc(var(--rail-h) + 24px); }
+}
+.profile-column { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+
+.side-card {
+	margin: 0; background: var(--surface); border: 1px solid var(--border);
+	border-radius: var(--r-lg); padding: 24px;
+	display: flex; flex-direction: column; gap: 20px;
+}
+.side-block { display: flex; flex-direction: column; gap: 6px; }
+.side-label { font-family: var(--font-display); font-weight: 600; font-size: 16px; color: var(--fg); }
+.side-value { margin: 0; display: flex; align-items: center; gap: 9px; font-size: 15px; color: var(--fg-muted); min-width: 0; }
+.side-value svg { flex: none; color: var(--fg-faint); }
+.side-value span { min-width: 0; overflow-wrap: anywhere; }
+
+.profile-card { padding: 0; }
+.profile-section { padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+.profile-section + .profile-section { border-top: 1px solid var(--border); }
+.section-heading { font-size: clamp(24px, 3.4vw, 32px); line-height: 1.35; }
+.section-subheading { font-size: clamp(20px, 2.6vw, 24px); line-height: 1.35; }
+
+.placeholder-prompt { color: var(--fg-faint); font-style: italic; font-size: 16px; }
+.authored-text { white-space: pre-wrap; font-size: 16px; line-height: 1.6; }
+.authored-disclaimer { font-size: 12px; line-height: 1.35; color: var(--fg-faint); margin-top: 4px; }
+
+.issue-list, .experience-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 11px; }
+.issue-list li, .experience-list li { display: flex; gap: 10px; align-items: flex-start; font-size: 16px; min-width: 0; }
+.issue-list svg { flex: none; color: var(--green); margin-top: 3px; }
+.experience-list svg { flex: none; color: var(--fg-faint); margin-top: 3px; }
+.experience-list span { min-width: 0; }
+
+/* The claim callout: the live profile's gradient card, first in the column. */
+.claim-card {
+	display: flex; flex-direction: column; gap: 20px;
+	border-radius: var(--r-xl); padding: clamp(22px, 4vw, 44px);
+	background: radial-gradient(ellipse 139% 115% at 50% 0%, var(--claim-g1) 0%, var(--claim-g2) 50%, var(--claim-g3) 100%);
+	border: 1px solid var(--claim-border);
+	color: var(--claim-fg);
+}
+.claim-text { display: flex; flex-direction: column; gap: 14px; }
+.claim-body { font-size: 16px; line-height: 1.5; }
+.claim-cta { width: 100%; }
+@media (min-width: 620px) { .claim-cta { width: fit-content; } }
 
 .issue-chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: var(--accent-soft); border: 1px solid var(--accent-border); font-size: 14px; font-weight: 600; color: var(--fg); }
 .issue-chip button { background: transparent; border: none; cursor: pointer; color: var(--fg-muted); display: grid; place-items: center; padding: 0; width: 16px; height: 16px; border-radius: 999px; }
@@ -591,7 +686,11 @@ a { color: var(--accent); }
 		plus: '<path d="M12 5v14M5 12h14"/>',
 		x: '<path d="M18 6 6 18M6 6l12 12"/>',
 		save: '<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/>',
-		shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/>'
+		shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/>',
+		calendar: '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+		flag: '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1Z"/><path d="M4 22v-7"/>',
+		briefcase: '<rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+		building: '<rect width="16" height="20" x="4" y="2" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M8 10h.01M16 10h.01M8 14h.01M16 14h.01"/>'
 	};
 
 	function icon(name, size, cls) {
@@ -718,147 +817,206 @@ a { color: var(--accent); }
 
 	/* ---------------- shared partials ---------------- */
 
+	/* ------------------------------------------------------------------ *
+	 * The public profile, rebuilt against the live /people/* page:
+	 * a midnight hero band with the portrait straddling its lower edge,
+	 * then a two-column content well — sticky sidebar on the left, a
+	 * column of separate white cards on the right with the cream page
+	 * showing through the gaps.
+	 * ------------------------------------------------------------------ */
+
 	function heroBlock() {
 		var published = state.publish.published;
-		var callout;
-		if (state.pledge.taken) {
-			callout = '<div class="hero-callout">' +
-				'<span class="hero-callout-mark" style="color: var(--gold)">' + icon('star', 26) + '</span>' +
-				'<span>This candidate took the <b>People First Pledge</b>, promising to serve people first, independent of both major parties and big-money interests.</span></div>';
-		} else {
-			callout = '<div class="hero-callout">' +
-				'<span class="hero-callout-mark" style="color: var(--on-navy-muted)">' + icon('star', 26) + '</span>' +
-				'<span>This candidate has not yet taken the <b>People First Pledge</b> to serve people first, independent of both major parties and big-money interests.</span></div>';
-		}
+		var pledged = state.pledge.taken;
+
+		var calloutText = pledged ?
+			'This candidate took the <b>People First Pledge</b>, promising to serve people first, independent of both major parties and big-money interests.' :
+			'This candidate has not yet taken the <b>People First Pledge</b> to serve people first, independent of both major parties and big-money interests.';
 
 		return '<section class="hero">' +
 			'<div class="hero-inner">' +
 				'<div class="hero-avatar' + (state.draft.photo ? ' has-photo' : '') + '">' + SPINE.initials + '</div>' +
 				'<div class="hero-text">' +
 					'<div class="pill-row">' +
-						'<span class="pill" style="background: hsl(0 0% 100% / 0.12); border-color: hsl(0 0% 100% / 0.25); color: #fff;">Candidate</span>' +
-						'<span class="pill" style="background: hsl(0 0% 100% / 0.12); border-color: hsl(0 0% 100% / 0.25); color: #fff;">' + esc(SPINE.affiliation) + '</span>' +
-						(published ? '<span class="pill pill-green">Claimed profile</span>' : '') +
+						'<span class="hero-tag">Candidate</span>' +
+						(published ? '<span class="pill pill-green">Claimed</span>' : '') +
 					'</div>' +
-					'<div>' +
+					'<div class="hero-name-office">' +
 						'<h1 class="hero-name">' + esc(SPINE.fullName) + '</h1>' +
 						'<p class="hero-office">' + esc(SPINE.office) + '</p>' +
 						'<p class="hero-district">' + esc(SPINE.district) + '</p>' +
 					'</div>' +
-					callout +
+					'<div class="hero-callout">' +
+						'<span class="hero-callout-mark" style="color:' + (pledged ? 'var(--gold)' : 'var(--on-navy-muted)') + '">' + icon('star', 26) + '</span>' +
+						'<span>' + calloutText + '</span>' +
+					'</div>' +
 				'</div>' +
 			'</div>' +
 		'</section>';
 	}
 
+	/* The sidebar's rows, in the order the live profile card lists them:
+	   Election Date, Political Affiliation, then the pledge row. */
 	function sidebarBlock() {
-		var rows = [
-			['Office', SPINE.office],
-			['Seat', SPINE.seat],
-			['District', SPINE.district],
-			['Level', SPINE.level],
-			['Affiliation', SPINE.affiliation],
-			['Election', SPINE.electionDate]
-		];
-		var contact = '';
+		var pledged = state.pledge.taken;
+		var rows = '';
+
+		rows += '<div class="side-block">' +
+			'<dt class="side-label">Election Date</dt>' +
+			'<dd class="side-value">' + icon('calendar', 17) + '<span>' + esc(SPINE.electionDate) + '</span></dd>' +
+		'</div>';
+
+		rows += '<div class="side-block">' +
+			'<dt class="side-label">Political Affiliation</dt>' +
+			'<dd class="side-value">' + icon('flag', 17) + '<span>' + esc(SPINE.affiliation) + '</span></dd>' +
+		'</div>';
+
+		rows += '<div class="side-block">' +
+			'<dt class="side-label">' + (pledged ? 'Took the People First Pledge' : 'People First Pledge') + '</dt>' +
+			'<dd class="side-value">' +
+				'<span style="color:' + (pledged ? 'var(--gold)' : 'var(--fg-faint)') + '">' + icon('star', 17) + '</span>' +
+				'<span' + (pledged ? '' : ' style="color:var(--fg-faint)"') + '>' + (pledged ? 'Signed on November 10, 2026' : 'Not yet taken') + '</span>' +
+			'</dd>' +
+		'</div>';
+
 		if (state.publish.published && (state.draft.website || state.draft.email)) {
-			var bits = [];
-			if (state.draft.website) bits.push(['Website', state.draft.website]);
-			if (state.draft.email) bits.push(['Email', state.draft.email]);
-			contact = '<hr class="divider"><dl style="margin:0">' + bits.map(function (r) {
-				return '<div class="side-row"><dt>' + esc(r[0]) + '</dt><dd>' + esc(r[1]) + '</dd></div>';
-			}).join('') + '</dl>';
+			var links = [];
+			if (state.draft.website) links.push(icon('globe', 17) + '<span>' + esc(state.draft.website) + '</span>');
+			if (state.draft.email) links.push(icon('mail', 17) + '<span>' + esc(state.draft.email) + '</span>');
+			rows += '<div class="side-block"><dt class="side-label">Contact</dt>' +
+				links.map(function (l) { return '<dd class="side-value">' + l + '</dd>'; }).join('') + '</div>';
+		} else {
+			rows += '<div class="side-block"><dt class="side-label">Contact</dt>' +
+				'<dd class="side-value" style="color:var(--fg-faint)">' + icon('mail', 17) + '<span>No contact details yet</span></dd></div>';
 		}
-		return '<aside class="stack">' +
-			'<div class="card">' +
-				'<h2 class="h-sm" style="margin-bottom:6px">Office</h2>' +
-				'<dl style="margin:0">' + rows.map(function (r) {
-					return '<div class="side-row"><dt>' + esc(r[0]) + '</dt><dd>' + esc(r[1]) + '</dd></div>';
-				}).join('') + '</dl>' +
-				contact +
-			'</div>' +
-			'<div class="card">' +
-				'<h2 class="h-sm" style="margin-bottom:10px">District</h2>' +
-				'<div class="map-stub">' + icon('pin', 20) + '<span style="margin-left:6px">' + esc(SPINE.districtShort) + ' voter density</span></div>' +
-				'<p class="faint" style="margin-top:9px">Source: ' + esc(SPINE.source) + '</p>' +
-			'</div>' +
-		'</aside>';
+
+		return '<aside class="profile-side"><dl class="side-card">' + rows + '</dl></aside>';
+	}
+
+	/* A card holding one or two sections. The first heading is the large
+	   one; a second section inside the same card steps down a size, the
+	   way the live profile bundles Why with Campaign Issues. */
+	function profileCard(sections) {
+		return '<article class="card profile-card">' + sections.map(function (sec, i) {
+			return '<section class="profile-section">' +
+				'<h2 class="' + (i === 0 ? 'section-heading' : 'section-subheading') + '">' + esc(sec.heading) + '</h2>' +
+				sec.content +
+			'</section>';
+		}).join('') + '</article>';
+	}
+
+	function placeholder(text) {
+		return '<p class="placeholder-prompt">' + esc(text) + '</p>';
+	}
+
+	function authoredDisclaimer() {
+		return '<p class="authored-disclaimer">These statements come from ' + esc(SPINE.fullName) +
+			' and do not reflect any positions or stances on individual issues held by GoodParty.org.</p>';
 	}
 
 	/* ================================================================== *
-	 * SCREEN 1 — the unclaimed (or claimed) public profile. Entry point
-	 * and the place every path returns to.
+	 * SCREEN 1 — the public candidate profile. Entry point for the whole
+	 * prototype, and the place every path returns to.
 	 * ================================================================== */
 	SCREENS.profile = function () {
 		var published = state.publish.published;
-		var resumable = !published && (state.draft.saved || state.account.loggedIn);
+		var d = state.draft;
+		var resumable = !published && (d.saved || state.account.loggedIn);
 
+		/* ---- the claim callout, first in the card column ---- */
+		var claimCard = '';
+		if (!published) {
+			claimCard = '<article class="claim-card">' +
+				'<div class="claim-text">' +
+					'<h2 class="section-heading">This profile is incomplete.</h2>' +
+					'<p class="claim-body">Are you ' + esc(SPINE.fullName) + '? Claim your profile and share your top priorities with voters. ' +
+					'Not ' + esc(SPINE.fullName) + '? Ask this candidate to complete their profile today.</p>' +
+				'</div>' +
+				'<button class="btn btn-navy btn-lg claim-cta" data-go="path">' +
+					(resumable ? 'Continue where you left off' : 'Get started') + ' ' + icon('ext', 16) +
+				'</button>' +
+			'</article>';
+		} else {
+			claimCard = '<article class="card profile-card"><div class="profile-section">' +
+				'<div class="card-head">' +
+					'<div><h2 class="section-subheading">Your profile</h2>' +
+					'<p class="muted" style="margin-top:4px">You claimed this page. Edits stay private until you publish them.</p></div>' +
+					'<button class="btn btn-outline btn-sm" data-go="edit">' + icon('pencil', 14) + ' Edit profile</button>' +
+				'</div>' +
+			'</div></article>';
+		}
+
+		/* ---- banners ---- */
 		var banner = '';
 		if (published) {
 			banner = '<div class="notice notice-green">' + icon('check', 20, 'notice-ico') +
 				'<div class="notice-body"><b>Your profile is live.</b> Voters in ' + esc(SPINE.district) +
-				' can now see your bio and priorities. You can edit it any time — changes stay private until you publish them.</div></div>';
+				' can now see your profile. Changes you make stay private until you publish them.</div></div>';
 		} else if (resumable) {
 			banner = '<div class="notice notice-gold">' + icon('clock', 20, 'notice-ico') +
-				'<div class="notice-body"><b>You have an unfinished draft.</b> Nothing you have written is public yet. ' +
-				'Pick up where you left off whenever you are ready.</div></div>';
+				'<div class="notice-body"><b>You have an unfinished draft.</b> Nothing you have written is public yet.</div></div>';
 		}
 
-		var bioCard;
-		if (published && state.draft.bio.trim()) {
-			bioCard = '<div class="card"><h2 class="h-md" style="margin-bottom:10px">About ' + esc(SPINE.firstName) + '</h2>' +
-				'<p style="white-space:pre-wrap">' + esc(state.draft.bio) + '</p></div>';
+		/* ---- Why I'm Running + Campaign Issues (one card) ---- */
+		var whyContent = published && d.bio.trim() ?
+			'<p class="authored-text">' + esc(d.bio) + '</p>' :
+			placeholder(SPINE.fullName + ' has not filled out this section yet.');
+
+		var issuesContent;
+		if (published && d.issues.length) {
+			issuesContent = '<ul class="issue-list">' + d.issues.map(function (i) {
+				return '<li>' + icon('check', 16) + '<span>' + esc(i) + '</span></li>';
+			}).join('') + '</ul>' + authoredDisclaimer();
 		} else {
-			bioCard = '<div class="card"><h2 class="h-md" style="margin-bottom:14px">About ' + esc(SPINE.firstName) + '</h2>' +
-				'<div class="empty">' + icon('doc', 22) +
-				'<span class="empty-title">No biography yet</span>' +
-				'<span class="empty-sub">GoodParty.org builds this page from public election filings. ' +
-				'A biography appears once ' + esc(SPINE.firstName) + ' claims the profile and adds one.</span></div></div>';
+			issuesContent = placeholder(SPINE.fullName + ' has not shared their top campaign issues yet.');
 		}
 
-		var issuesCard;
-		if (published && state.draft.issues.length) {
-			issuesCard = '<div class="card"><h2 class="h-md" style="margin-bottom:14px">Top priorities</h2>' +
-				'<div class="pill-row">' + state.draft.issues.map(function (i) {
-					return '<span class="issue-chip">' + esc(i) + '</span>';
-				}).join('') + '</div></div>';
-		} else {
-			issuesCard = '<div class="card"><h2 class="h-md" style="margin-bottom:14px">Top priorities</h2>' +
-				'<div class="empty">' + icon('vote', 22) +
-				'<span class="empty-title">No priorities listed</span>' +
-				'<span class="empty-sub">Voters look here first. This section fills in when the candidate adds the issues they are running on.</span></div></div>';
-		}
+		var platformCard = profileCard([
+			{ heading: 'Why I’m Running for Office', content: whyContent },
+			{ heading: 'Campaign Issues', content: issuesContent }
+		]);
 
-		var claimCard = '';
-		if (!published) {
-			claimCard = '<div class="card pad-lg" style="background: linear-gradient(170deg, var(--surface) 0%, var(--accent-soft) 100%); border-color: var(--accent-border)">' +
-				'<div class="stack">' +
-					'<div>' +
-						'<h2 class="h-lg">This profile is incomplete.</h2>' +
-						'<p class="lede" style="margin-top:8px">Are you ' + esc(SPINE.fullName) + '? Claim your profile and share your top priorities with voters. ' +
-						'Not ' + esc(SPINE.fullName) + '? Ask this candidate to complete their profile today.</p>' +
-					'</div>' +
-					'<div class="btn-row">' +
-						'<button class="btn btn-navy btn-lg" data-go="path">' + (resumable ? 'Continue where you left off' : 'Get started') + ' ' + icon('ext', 16) + '</button>' +
-					'</div>' +
+		/* ---- About Me + Recent Experience (one card) ---- */
+		var aboutContent = placeholder(SPINE.fullName + ' has not filled out this section yet.');
+
+		var experienceContent = '<ul class="experience-list">' +
+			'<li>' + icon('briefcase', 17) +
+				'<span><b>' + esc(SPINE.office) + '</b><br><span class="faint">' + esc(SPINE.district) + ' · ' + esc(SPINE.electionDate) + '</span></span>' +
+			'</li>' +
+		'</ul>';
+
+		var aboutCard = profileCard([
+			{ heading: 'About Me', content: aboutContent },
+			{ heading: 'Recent Experience', content: experienceContent }
+		]);
+
+		/* ---- About this position ---- */
+		var positionCard = profileCard([{
+			heading: 'About This Position',
+			content: '<p class="muted" style="color:var(--fg)">Members of the U.S. House of Representatives serve two-year terms and represent ' +
+				'a single congressional district. ' + esc(SPINE.districtShort) + ' covers Minneapolis and several neighbouring communities.</p>'
+		}]);
+
+		/* ---- District Information ---- */
+		var districtCard = profileCard([{
+			heading: 'District Information',
+			content: '<div class="map-stub">' + icon('pin', 20) + '<span style="margin-left:6px">' + esc(SPINE.districtShort) + ' voter density</span></div>' +
+				'<p class="faint" style="margin-top:10px">Source: ' + esc(SPINE.source) + '</p>'
+		}]);
+
+		return '<div class="page profile-page screen">' +
+			heroBlock() +
+			'<div class="profile-grid">' +
+				sidebarBlock() +
+				'<div class="profile-column">' +
+					(banner ? banner : '') +
+					claimCard +
+					platformCard +
+					aboutCard +
+					positionCard +
+					districtCard +
+					protoNote('Prototype. Jordan Avery is a fictional candidate and this page is not connected to GoodParty.org. Items marked <span class="proposal">Proposal</span> are design suggestions, not confirmed behaviour.') +
 				'</div>' +
-			'</div>';
-		} else {
-			claimCard = '<div class="card"><div class="card-head">' +
-				'<div><h2 class="h-sm">Manage your profile</h2><p class="muted" style="margin-top:4px">You claimed this profile. Edits stay private until you publish them.</p></div>' +
-				'<button class="btn btn-outline btn-sm" data-go="edit">' + icon('pencil', 14) + ' Edit profile</button>' +
-				'</div></div>';
-		}
-
-		return '<div class="page screen">' +
-			'<div class="stack-lg">' +
-				heroBlock() +
-				(banner ? banner : '') +
-				'<div class="profile-grid">' +
-					sidebarBlock() +
-					'<div class="stack">' + claimCard + bioCard + issuesCard + '</div>' +
-				'</div>' +
-				protoNote('Prototype. Jordan Avery is a fictional candidate and this page is not connected to GoodParty.org. Items marked <span class="proposal">Proposal</span> are design suggestions, not confirmed behaviour.') +
 			'</div>' +
 		'</div>';
 	};

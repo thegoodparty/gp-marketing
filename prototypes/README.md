@@ -74,6 +74,37 @@ Single sign-on is a **proposal**. This repo only links out to
 confirms which methods the app actually supports. The one button shown is marked
 as unconfirmed and needs checking against gp-webapp.
 
+### Profile editor
+
+The centre of the flow. Two columns on desktop: a sticky sidebar carrying the
+candidate summary, profile status, a three-step progress indicator and the
+read-only record fields; the three editable sections on the right, all on one
+screen. It stacks to one column on mobile.
+
+The sections match the public profile exactly: **Why I'm Running for Office**
+and **About Me** are long text with guidance and a character counter;
+**Campaign Issues** is a repeatable issue title plus a position, which can be
+added, edited and removed.
+
+Behaviour worth knowing:
+
+- **Nothing is required.** Both `Save and continue` and `I'll do this later` go
+  to the pledge, and both keep the work. Validation only objects to what has
+  actually been entered wrong: an issue with a position but no title, or text
+  over its limit.
+- **Autosave.** Typing shows "Saving…" then "Draft saved" in the sidebar. That
+  indicator is how the screen states the draft is private and already kept,
+  instead of repeating a banner per field.
+- **Public labelling.** Each section carries a `Public` chip, and the notice at
+  the top explains that those sections appear publicly only after publishing.
+- **Read-only spine.** Office, district, election and affiliation sit in the
+  sidebar behind lock icons, with a "Report a problem" link marked as a
+  proposal — no correction process is confirmed.
+
+Nothing is prefilled for Jordan Avery, since an unclaimed profile has no
+authored content; the sections start genuinely empty rather than seeded with
+invented text.
+
 Note on naming: the pledge is called the **People First Pledge** throughout. It was
 renamed from "GoodParty.org Pledge" in Oct 2026 (see `LEGACY_PLEDGE_PHRASE` in
 `src/ui/_lib/attributionCopy.ts`).

@@ -505,6 +505,71 @@ a { color: var(--accent); }
 }
 .link-btn:hover { text-decoration: none; }
 
+/* ---------- profile editor ---------- */
+.edit-grid { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; }
+@media (min-width: 940px) {
+	.edit-grid { grid-template-columns: minmax(250px, 310px) minmax(0, 1fr); gap: 28px; }
+	.edit-side { position: sticky; top: calc(var(--rail-h) + 20px); }
+}
+.edit-side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.edit-main { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+
+.edit-person { display: flex; flex-direction: column; gap: 10px; }
+.edit-district { font-size: 13.5px; color: var(--fg-muted); line-height: 1.4; }
+.edit-status { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid var(--border); }
+
+.edit-progress { display: flex; flex-direction: column; gap: 12px; }
+.prog-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.prog-head .faint { font-variant-numeric: tabular-nums; }
+.prog-bar { height: 6px; border-radius: 999px; background: var(--surface-3); overflow: hidden; }
+.prog-bar span { display: block; height: 100%; border-radius: 999px; background: var(--accent); transition: width 0.35s var(--ease-smooth, cubic-bezier(0.165,0.84,0.44,1)); }
+.prog-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.prog-row { display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--fg-faint); }
+.prog-row.is-on { color: var(--fg); font-weight: 600; }
+.prog-tick {
+	width: 19px; height: 19px; flex: none; border-radius: 999px;
+	display: grid; place-items: center;
+	border: 1.5px solid var(--border-strong); background: var(--surface);
+	color: #fff;
+}
+.prog-row.is-on .prog-tick { background: var(--green); border-color: var(--green); }
+.save-state { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--fg-faint); padding-top: 10px; border-top: 1px solid var(--border); }
+.save-state svg { flex: none; }
+.spinner-xs { width: 11px; height: 11px; border-width: 1.5px; }
+
+.edit-locked { display: flex; flex-direction: column; gap: 12px; }
+.locked-list { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.locked-list > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.locked-list dt { font-size: 12px; color: var(--fg-faint); }
+.locked-list dd { margin: 0; font-size: 13.5px; display: flex; align-items: flex-start; gap: 6px; min-width: 0; overflow-wrap: anywhere; }
+.locked-list dd svg { flex: none; color: var(--fg-faint); margin-top: 3px; }
+
+.edit-section { display: flex; flex-direction: column; gap: 14px; }
+.section-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.public-chip { font-weight: 600; }
+.section-guide { font-size: 14.5px; line-height: 1.55; max-width: 62ch; }
+.textarea-lg { min-height: 170px; }
+.textarea-sm { min-height: 84px; }
+
+.issue-list-edit { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.issue-row {
+	display: flex; flex-direction: column; gap: 12px;
+	border: 1px solid var(--border); border-radius: var(--r-md);
+	padding: 16px; background: var(--surface-2); min-width: 0;
+}
+.issue-row-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.issue-n { font-family: var(--font-display); font-size: 13px; font-weight: 600; color: var(--fg-faint); letter-spacing: 0.04em; text-transform: uppercase; }
+.issue-remove {
+	display: inline-flex; align-items: center; gap: 5px;
+	background: transparent; border: none; cursor: pointer;
+	color: var(--fg-faint); font-size: 13px; font-weight: 600;
+	padding: 4px 8px; border-radius: 6px;
+}
+.issue-remove:hover { color: var(--red); background: var(--red-soft); }
+.issue-add { display: flex; }
+.issue-position { color: var(--fg-muted); font-size: 15px; }
+.edit-actions { padding-top: 4px; }
+
 /* ---------- tabs ---------- */
 .tabs { display: flex; gap: 4px; background: var(--surface-3); padding: 4px; border-radius: 999px; width: fit-content; max-width: 100%; }
 .tab { border: none; background: transparent; border-radius: 999px; padding: 9px 20px; font-size: 14px; font-weight: 600; color: var(--fg-muted); cursor: pointer; transition: background-color 0.18s ease, color 0.18s ease; }
@@ -748,7 +813,7 @@ a { color: var(--accent); }
 		path: null,
 		busy: false,
 		account: { mode: 'signup', firstName: '', lastName: '', email: '', password: '', terms: false, loggedIn: false },
-		draft: { bio: '', issues: [], website: '', email: '', phone: '', photo: false, touched: false, saved: false, skipped: false },
+		draft: { why: '', about: '', issues: [], touched: false, saved: false, skipped: false, savedAt: null },
 		pledge: { agreed: {}, signature: '', taken: false },
 		verify: { method: null, phone: '', doc: '', submitted: false, status: 'unverified' },
 		publish: { published: false, visitedPreview: false },
@@ -842,13 +907,30 @@ a { color: var(--accent); }
 		return { label: 'Unclaimed', cls: '' };
 	}
 
-	function bioWordCount() {
-		var t = state.draft.bio.trim();
-		return t ? t.split(/\s+/).length : 0;
+	var LIMITS = { why: 1000, about: 1500, issueTitle: 70, issuePosition: 300 };
+	var MAX_ISSUES = 6;
+
+	/* An issue row counts only once it has a title; rows left entirely blank
+	   are dropped on save rather than nagged about. */
+	function filledIssues() {
+		return state.draft.issues.filter(function (i) { return i.title.trim(); });
 	}
 
-	function draftComplete() {
-		return bioWordCount() >= 20 && state.draft.issues.length >= 1;
+	function issueRowIsBlank(i) {
+		return !i.title.trim() && !i.position.trim();
+	}
+
+	/* Three sections, each either added or not. Nothing here is required. */
+	function sectionsAdded() {
+		return [!!state.draft.why.trim(), filledIssues().length > 0, !!state.draft.about.trim()];
+	}
+
+	function addedCount() {
+		return sectionsAdded().filter(Boolean).length;
+	}
+
+	function newIssue() {
+		return { id: 'iss-' + (Date.now().toString(36)) + Math.random().toString(36).slice(2, 6), title: '', position: '' };
 	}
 
 	function verifyStatusLabel() {
@@ -865,8 +947,7 @@ a { color: var(--accent); }
 		el.textContent = st.label;
 		el.className = 'rail-status ' + st.cls;
 		var mark = document.getElementById('railMark');
-		mark.textContent = state.draft.photo ? SPINE.initials : SPINE.initials;
-		mark.className = 'rail-mark' + (state.draft.photo ? ' has-photo' : '');
+		mark.textContent = SPINE.initials;
 	}
 
 	var CANDIDATE_STEPS = [
@@ -939,7 +1020,7 @@ a { color: var(--accent); }
 
 		return '<section class="hero">' +
 			'<div class="hero-inner">' +
-				'<div class="hero-avatar' + (state.draft.photo ? ' has-photo' : '') + '">' + SPINE.initials + '</div>' +
+				'<div class="hero-avatar">' + SPINE.initials + '</div>' +
 				'<div class="hero-text">' +
 					'<div class="pill-row">' +
 						'<span class="hero-tag">Candidate</span>' +
@@ -983,16 +1064,8 @@ a { color: var(--accent); }
 			'</dd>' +
 		'</div>';
 
-		if (state.publish.published && (state.draft.website || state.draft.email)) {
-			var links = [];
-			if (state.draft.website) links.push(icon('globe', 17) + '<span>' + esc(state.draft.website) + '</span>');
-			if (state.draft.email) links.push(icon('mail', 17) + '<span>' + esc(state.draft.email) + '</span>');
-			rows += '<div class="side-block"><dt class="side-label">Contact</dt>' +
-				links.map(function (l) { return '<dd class="side-value">' + l + '</dd>'; }).join('') + '</div>';
-		} else {
-			rows += '<div class="side-block"><dt class="side-label">Contact</dt>' +
-				'<dd class="side-value" style="color:var(--fg-faint)">' + icon('mail', 17) + '<span>No contact details yet</span></dd></div>';
-		}
+		rows += '<div class="side-block"><dt class="side-label">Contact</dt>' +
+			'<dd class="side-value" style="color:var(--fg-faint)">' + icon('mail', 17) + '<span>No contact details yet</span></dd></div>';
 
 		return '<aside class="profile-side"><dl class="side-card">' + rows + '</dl></aside>';
 	}
@@ -1062,14 +1135,16 @@ a { color: var(--accent); }
 		}
 
 		/* ---- Why I'm Running + Campaign Issues (one card) ---- */
-		var whyContent = published && d.bio.trim() ?
-			'<p class="authored-text">' + esc(d.bio) + '</p>' :
+		var whyContent = published && d.why.trim() ?
+			'<p class="authored-text">' + esc(d.why) + '</p>' :
 			placeholder(SPINE.fullName + ' has not filled out this section yet.');
 
+		var shownIssues = published ? filledIssues() : [];
 		var issuesContent;
-		if (published && d.issues.length) {
-			issuesContent = '<ul class="issue-list">' + d.issues.map(function (i) {
-				return '<li>' + icon('check', 16) + '<span>' + esc(i) + '</span></li>';
+		if (shownIssues.length) {
+			issuesContent = '<ul class="issue-list">' + shownIssues.map(function (i) {
+				return '<li>' + icon('check', 16) + '<span><b>' + esc(i.title) + '</b>' +
+					(i.position.trim() ? '<br><span class="issue-position">' + esc(i.position) + '</span>' : '') + '</span></li>';
 			}).join('') + '</ul>' + authoredDisclaimer();
 		} else {
 			issuesContent = placeholder(SPINE.fullName + ' has not shared their top campaign issues yet.');
@@ -1081,7 +1156,9 @@ a { color: var(--accent); }
 		]);
 
 		/* ---- About Me + Recent Experience (one card) ---- */
-		var aboutContent = placeholder(SPINE.fullName + ' has not filled out this section yet.');
+		var aboutContent = published && d.about.trim() ?
+			'<p class="authored-text">' + esc(d.about) + '</p>' + authoredDisclaimer() :
+			placeholder(SPINE.fullName + ' has not filled out this section yet.');
 
 		var experienceContent = '<ul class="experience-list">' +
 			'<li>' + icon('briefcase', 17) +
@@ -1324,120 +1401,183 @@ a { color: var(--accent); }
 	};
 
 	/* ================================================================== *
-	 * SCREEN 4 — edit the prefilled profile. Everything already known is
-	 * shown locked rather than asked for again.
+	 * SCREEN 4 — the profile editor. Everything editable sits on one
+	 * screen in three sections. None of it is required to move on.
 	 * ================================================================== */
+
+	/* Set when a re-render should land the caret somewhere specific, so
+	   adding an issue puts you straight in its title field. */
+	var pendingFocus = null;
+
+	function counterEl(id, used, max) {
+		var over = used > max;
+		return '<span class="counter' + (over ? ' over' : '') + '" id="' + id + '">' + used + ' / ' + max + '</span>';
+	}
+
+	function issueEditor(issue, index) {
+		var titleUsed = issue.title.length;
+		var posUsed = issue.position.length;
+		return '<li class="issue-row" data-issue-row="' + issue.id + '">' +
+			'<div class="issue-row-head">' +
+				'<span class="issue-n">Issue ' + (index + 1) + '</span>' +
+				'<button type="button" class="issue-remove" data-remove-issue="' + issue.id + '" aria-label="Remove issue ' + (index + 1) + '">' +
+					icon('x', 14) + '<span>Remove</span>' +
+				'</button>' +
+			'</div>' +
+			'<div class="field">' +
+				'<label class="field-label" for="it-' + issue.id + '">Issue' +
+					counterEl('c-it-' + issue.id, titleUsed, LIMITS.issueTitle) + '</label>' +
+				'<input class="input" id="it-' + issue.id + '" data-issue-title="' + issue.id + '" value="' + esc(issue.title) + '" placeholder="Healthcare costs">' +
+				'<p class="err" id="err-it-' + issue.id + '" hidden></p>' +
+			'</div>' +
+			'<div class="field">' +
+				'<label class="field-label" for="ip-' + issue.id + '">Your position' +
+					counterEl('c-ip-' + issue.id, posUsed, LIMITS.issuePosition) + '</label>' +
+				'<textarea class="textarea textarea-sm" id="ip-' + issue.id + '" data-issue-position="' + issue.id + '" placeholder="What you would do about it.">' + esc(issue.position) + '</textarea>' +
+				'<p class="err" id="err-ip-' + issue.id + '" hidden></p>' +
+			'</div>' +
+		'</li>';
+	}
+
 	SCREENS.edit = function () {
 		var d = state.draft;
-		var words = bioWordCount();
+		var added = sectionsAdded();
+		var count = addedCount();
 
-		var chips = d.issues.length ?
-			'<div class="pill-row" style="margin-bottom:12px">' + d.issues.map(function (i) {
-				return '<span class="issue-chip">' + esc(i) + '<button type="button" data-remove-issue="' + esc(i) + '" aria-label="Remove ' + esc(i) + '">' + icon('x', 13) + '</button></span>';
-			}).join('') + '</div>' :
-			'<div class="empty" style="margin-bottom:12px;padding:18px">' + icon('vote', 20) +
-				'<span class="empty-title">No priorities chosen yet</span>' +
-				'<span class="empty-sub">Pick up to five. Voters see these at the top of your profile.</span></div>';
+		/* ---------------- left: who, status, progress ---------------- */
+		var statusPill = state.publish.published ?
+			'<span class="pill pill-green">Claimed</span>' :
+			'<span class="pill pill-gold">' + icon('lock', 12) + ' Private draft</span>';
 
-		var available = ISSUE_OPTIONS.filter(function (i) { return d.issues.indexOf(i) < 0; });
-		var picker = d.issues.length >= 5 ?
-			'<p class="faint">Five is the maximum. Remove one to add another.</p>' :
-			'<div class="pill-row">' + available.map(function (i) {
-				return '<button type="button" class="pill" data-add-issue="' + esc(i) + '" style="cursor:pointer">' + icon('plus', 12) + ' ' + esc(i) + '</button>';
-			}).join('') + '</div>';
+		var progressRows = [
+			{ label: 'Why I’m Running', on: added[0] },
+			{ label: 'Campaign Issues', on: added[1] },
+			{ label: 'About Me', on: added[2] }
+		].map(function (r) {
+			return '<li class="prog-row' + (r.on ? ' is-on' : '') + '">' +
+				'<span class="prog-tick">' + (r.on ? icon('check', 12) : '') + '</span>' +
+				'<span>' + esc(r.label) + '</span>' +
+			'</li>';
+		}).join('');
+
+		var sidebar = '<aside class="edit-side">' +
+			'<div class="card edit-person">' +
+				'<div class="auth-person">' +
+					'<span class="auth-mark">' + SPINE.initials + '</span>' +
+					'<span class="auth-person-id">' +
+						'<span class="auth-person-name">' + esc(SPINE.fullName) + '</span>' +
+						'<span class="auth-person-office">' + esc(SPINE.office) + '</span>' +
+					'</span>' +
+				'</div>' +
+				'<p class="edit-district">' + esc(SPINE.district) + '</p>' +
+				'<div class="edit-status">' +
+					'<span class="faint">Profile status</span>' + statusPill +
+				'</div>' +
+			'</div>' +
+
+			'<div class="card edit-progress">' +
+				'<div class="prog-head">' +
+					'<h2 class="h-sm">Your progress</h2>' +
+					'<span class="faint">' + count + ' of 3</span>' +
+				'</div>' +
+				'<div class="prog-bar" role="progressbar" aria-valuenow="' + count + '" aria-valuemin="0" aria-valuemax="3" aria-label="Sections added">' +
+					'<span style="width:' + (count / 3 * 100) + '%"></span>' +
+				'</div>' +
+				'<ul class="prog-list">' + progressRows + '</ul>' +
+				'<p class="save-state" id="saveState">' + (d.saved ? icon('check', 13) + '<span>Draft saved</span>' : icon('lock', 13) + '<span>Saved privately as you type</span>') + '</p>' +
+			'</div>' +
+
+			'<div class="card edit-locked">' +
+				'<h2 class="h-sm">From public records</h2>' +
+				'<dl class="locked-list">' +
+					'<div><dt>Office</dt><dd>' + icon('lock', 13) + esc(SPINE.office) + '</dd></div>' +
+					'<div><dt>District</dt><dd>' + icon('lock', 13) + esc(SPINE.district) + '</dd></div>' +
+					'<div><dt>Election</dt><dd>' + icon('lock', 13) + esc(SPINE.electionDate) + '</dd></div>' +
+					'<div><dt>Affiliation</dt><dd>' + icon('lock', 13) + esc(SPINE.affiliation) + '</dd></div>' +
+				'</dl>' +
+				'<p class="faint">Read-only. Corrections are made at the source, not here. ' +
+					'<a href="#edit" data-noop="1">Report a problem</a> <span class="proposal">Proposal</span></p>' +
+			'</div>' +
+		'</aside>';
+
+		/* ---------------- right: the three sections ---------------- */
+		var publicChip = '<span class="pill pill-blue public-chip">' + icon('eye', 12) + ' Public</span>';
+
+		var whySection = '<section class="card pad-lg edit-section" id="section-why">' +
+			'<div class="section-head">' +
+				'<h2 class="h-md">Why I’m Running for Office</h2>' + publicChip +
+			'</div>' +
+			'<p class="muted section-guide">Share what made you decide to run and what you want to change. Voters read this section first. ' +
+				'Two or three short paragraphs is plenty.</p>' +
+			'<div class="field">' +
+				'<label class="field-label" for="why">Your answer' + counterEl('c-why', d.why.length, LIMITS.why) + '</label>' +
+				'<textarea class="textarea textarea-lg" id="why" data-model="draft.why" placeholder="I am running because…">' + esc(d.why) + '</textarea>' +
+				'<p class="err" id="err-why" hidden></p>' +
+			'</div>' +
+		'</section>';
+
+		var issuesBody;
+		if (d.issues.length) {
+			issuesBody = '<ul class="issue-list-edit">' + d.issues.map(issueEditor).join('') + '</ul>';
+		} else {
+			issuesBody = '<div class="empty">' + icon('vote', 22) +
+				'<span class="empty-title">No issues added yet</span>' +
+				'<span class="empty-sub">Add the issues you are running on and say where you stand on each.</span>' +
+			'</div>';
+		}
+
+		var addBtn = d.issues.length >= MAX_ISSUES ?
+			'<p class="faint">' + MAX_ISSUES + ' is the maximum. Remove one to add another.</p>' :
+			'<button type="button" class="btn btn-outline btn-sm" id="addIssue">' + icon('plus', 14) + ' Add an issue</button>';
+
+		var issuesSection = '<section class="card pad-lg edit-section" id="section-issues">' +
+			'<div class="section-head">' +
+				'<h2 class="h-md">Campaign Issues</h2>' + publicChip +
+			'</div>' +
+			'<p class="muted section-guide">Name an issue, then say where you stand on it in a sentence or two. Most candidates list three to five.</p>' +
+			issuesBody +
+			'<p class="err" id="err-issues" hidden></p>' +
+			'<div class="issue-add">' + addBtn + '</div>' +
+		'</section>';
+
+		var aboutSection = '<section class="card pad-lg edit-section" id="section-about">' +
+			'<div class="section-head">' +
+				'<h2 class="h-md">About Me</h2>' + publicChip +
+			'</div>' +
+			'<p class="muted section-guide">Your background, your work, and the experience you bring. Write it the way you would introduce yourself at a community meeting.</p>' +
+			'<div class="field">' +
+				'<label class="field-label" for="about">Your answer' + counterEl('c-about', d.about.length, LIMITS.about) + '</label>' +
+				'<textarea class="textarea textarea-lg" id="about" data-model="draft.about" placeholder="I have spent…">' + esc(d.about) + '</textarea>' +
+				'<p class="err" id="err-about" hidden></p>' +
+			'</div>' +
+		'</section>';
 
 		return '<div class="page mid screen">' +
 			'<div class="stack-lg">' +
 				'<div class="stack-sm">' +
 					'<button class="btn btn-ghost btn-sm" style="align-self:flex-start;margin-left:-14px" data-go="path">' + icon('back', 14) + ' Back</button>' +
-					'<h1 class="h-xl">Fill in your profile</h1>' +
-					'<p class="lede">We have prefilled everything already on record. Add what only you can — your biography and the issues you are running on.</p>' +
+					'<h1 class="h-xl">Complete your profile</h1>' +
+					'<p class="lede">Add or update your information for voters. We’ve filled in what we already know, so you can make changes quickly.</p>' +
 				'</div>' +
 
 				'<div class="notice notice-gold">' + icon('lock', 20, 'notice-ico') +
-					'<div class="notice-body"><b>Private until you publish.</b> Nothing on this screen is visible to voters. ' +
-					'Your profile keeps showing its current public version until you verify your identity and publish.</div></div>' +
+					'<div class="notice-body"><b>This is a private draft.</b> Everything marked ' + publicChip +
+					' appears on your public profile once you publish — and not before. Nothing is required to continue.</div></div>' +
 
-				'<div class="card pad-lg">' +
-					'<h2 class="h-md" style="margin-bottom:4px">From public records</h2>' +
-					'<p class="muted" style="margin-bottom:16px">Sourced from ' + esc(SPINE.source) + '. We do not ask you to re-enter any of it.</p>' +
-					'<div class="grid-2">' +
-						'<div class="field"><span class="field-label">Name</span><div class="locked"><span class="locked-ico">' + icon('lock', 15) + '</span><span class="locked-val">' + esc(SPINE.fullName) + '</span></div></div>' +
-						'<div class="field"><span class="field-label">Office</span><div class="locked"><span class="locked-ico">' + icon('lock', 15) + '</span><span class="locked-val">' + esc(SPINE.office) + '</span></div></div>' +
-						'<div class="field"><span class="field-label">District</span><div class="locked"><span class="locked-ico">' + icon('lock', 15) + '</span><span class="locked-val">' + esc(SPINE.district) + '</span></div></div>' +
-						'<div class="field"><span class="field-label">Affiliation</span><div class="locked"><span class="locked-ico">' + icon('lock', 15) + '</span><span class="locked-val">' + esc(SPINE.affiliation) + '</span></div></div>' +
-					'</div>' +
-					'<p class="faint" style="margin-top:12px">Something wrong here? ' +
-						'<a href="#edit" data-noop="1">Tell us about it</a> — office and district data is corrected at the source, not on this page. ' +
-						'<span class="proposal">Proposal</span></p>' +
-				'</div>' +
-
-				'<div class="card pad-lg">' +
-					'<div class="stack">' +
-						'<div>' +
-							'<h2 class="h-md" style="margin-bottom:4px">Your biography</h2>' +
-							'<p class="muted">Tell voters who you are and why you are running. Plain language works best.</p>' +
-						'</div>' +
-						'<div class="field">' +
-							'<label class="field-label" for="bio">Biography' +
-								'<span class="counter' + (words > 300 ? ' over' : '') + '" id="bioCount">' + words + ' / 300 words</span>' +
-							'</label>' +
-							'<textarea class="textarea" id="bio" data-model="draft.bio" placeholder="I am running for ' + esc(SPINE.office) + ' in ' + esc(SPINE.district) + ' because…">' + esc(d.bio) + '</textarea>' +
-							'<p class="field-hint">At least 20 words. Nothing is prefilled here — we do not write biographies for candidates.</p>' +
-							'<p class="err" id="err-bio" hidden></p>' +
-						'</div>' +
-
-						'<hr class="divider">' +
-
-						'<div>' +
-							'<h2 class="h-md" style="margin-bottom:4px">Top priorities</h2>' +
-							'<p class="muted" style="margin-bottom:12px">Choose one to five issues.</p>' +
-							chips + picker +
-							'<p class="err" id="err-issues" hidden style="margin-top:10px"></p>' +
-						'</div>' +
-
-						'<hr class="divider">' +
-
-						'<div>' +
-							'<h2 class="h-md" style="margin-bottom:4px">Contact and links</h2>' +
-							'<p class="muted" style="margin-bottom:14px">Optional. Shown publicly on your profile.</p>' +
-							'<div class="grid-2">' +
-								'<div class="field">' +
-									'<label class="field-label" for="website">Campaign website</label>' +
-									'<input class="input" id="website" data-model="draft.website" value="' + esc(d.website) + '" placeholder="https://">' +
-									'<p class="err" id="err-website" hidden></p>' +
-								'</div>' +
-								'<div class="field">' +
-									'<label class="field-label" for="pubEmail">Public contact email</label>' +
-									'<input class="input" id="pubEmail" type="email" data-model="draft.email" value="' + esc(d.email) + '" placeholder="hello@campaign.org">' +
-									'<p class="err" id="err-pubEmail" hidden></p>' +
-								'</div>' +
-							'</div>' +
-						'</div>' +
-
-						'<hr class="divider">' +
-
-						'<div>' +
-							'<h2 class="h-md" style="margin-bottom:4px">Headshot</h2>' +
-							'<p class="muted" style="margin-bottom:12px">Profiles with a photo get noticeably more attention from voters.</p>' +
-							'<div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">' +
-								'<span class="rail-mark' + (d.photo ? ' has-photo' : '') + '" style="width:56px;height:56px;font-size:18px">' + SPINE.initials + '</span>' +
-								'<button class="btn btn-outline btn-sm" id="photoBtn">' + (d.photo ? 'Remove photo' : 'Upload a photo') + '</button>' +
-								(d.photo ? '<span class="pill pill-green">' + icon('check', 12) + ' headshot.jpg</span>' : '<span class="faint">No file chosen</span>') +
-							'</div>' +
+				'<div class="edit-grid">' +
+					sidebar +
+					'<div class="edit-main">' +
+						whySection +
+						issuesSection +
+						aboutSection +
+						'<div class="btn-row actions split edit-actions">' +
+							'<button class="btn btn-ghost" id="skipEdit">I’ll do this later</button>' +
+							'<button class="btn btn-primary btn-lg" id="editContinue">Save and continue ' + icon('arrow', 15) + '</button>' +
 						'</div>' +
 					'</div>' +
 				'</div>' +
 
-				'<div class="btn-row actions split">' +
-					'<button class="btn btn-ghost" id="saveLater">' + icon('save', 15) + ' Save and finish later</button>' +
-					'<div class="btn-row">' +
-						'<button class="btn btn-outline" id="skipEdit">Skip for now</button>' +
-						'<button class="btn btn-primary" id="editContinue">Continue to the pledge ' + icon('arrow', 15) + '</button>' +
-					'</div>' +
-				'</div>' +
-
-				protoNote('Uploading a photo is simulated. "Skip for now" moves you forward with an empty profile; "Save and finish later" returns you to the profile with the draft kept.') +
+				protoNote('Prototype. Nothing is saved to GoodParty.org. Both buttons go to the pledge step and keep whatever you have written.') +
 			'</div>' +
 		'</div>';
 	};
@@ -1633,7 +1773,8 @@ a { color: var(--accent); }
 	SCREENS.preview = function () {
 		var d = state.draft;
 		var verified = state.verify.status === 'verified';
-		var hasBio = !!d.bio.trim();
+		var issues = filledIssues();
+		var hasAny = !!d.why.trim() || !!d.about.trim() || issues.length > 0;
 
 		var gate;
 		if (verified) {
@@ -1648,30 +1789,37 @@ a { color: var(--accent); }
 				'<button class="btn btn-sm btn-outline" style="margin-top:9px" data-go="verify">Verify now</button></div></div>';
 		}
 
-		var previewBody = hasBio || d.issues.length ?
+		function previewSection(heading, body) {
+			return '<div><h3 class="h-sm" style="margin-bottom:7px">' + esc(heading) + '</h3>' + body + '</div>';
+		}
+
+		var previewBody = hasAny ?
 			('<div class="stack">' +
-				(hasBio ?
-					'<div><h3 class="h-sm" style="margin-bottom:7px">About ' + esc(SPINE.firstName) + '</h3><p class="muted" style="white-space:pre-wrap;color:var(--fg)">' + esc(d.bio) + '</p></div>' :
-					'<div class="empty" style="padding:18px">' + icon('doc', 20) + '<span class="empty-title">No biography</span><span class="empty-sub">Voters will see this section empty.</span></div>') +
-				(d.issues.length ?
-					'<div><h3 class="h-sm" style="margin-bottom:9px">Top priorities</h3><div class="pill-row">' +
-						d.issues.map(function (i) { return '<span class="issue-chip">' + esc(i) + '</span>'; }).join('') + '</div></div>' :
-					'<div class="empty" style="padding:18px">' + icon('vote', 20) + '<span class="empty-title">No priorities</span><span class="empty-sub">Voters will see this section empty.</span></div>') +
+				previewSection('Why I\u2019m Running for Office', d.why.trim() ?
+					'<p class="authored-text">' + esc(d.why) + '</p>' :
+					'<p class="placeholder-prompt">Voters will see this section empty.</p>') +
+				previewSection('Campaign Issues', issues.length ?
+					'<ul class="issue-list">' + issues.map(function (i) {
+						return '<li>' + icon('check', 16) + '<span><b>' + esc(i.title) + '</b>' +
+							(i.position.trim() ? '<br><span class="issue-position">' + esc(i.position) + '</span>' : '') + '</span></li>';
+					}).join('') + '</ul>' :
+					'<p class="placeholder-prompt">Voters will see this section empty.</p>') +
+				previewSection('About Me', d.about.trim() ?
+					'<p class="authored-text">' + esc(d.about) + '</p>' :
+					'<p class="placeholder-prompt">Voters will see this section empty.</p>') +
 			'</div>') :
 			('<div class="empty">' + icon('pencil', 22) +
 				'<span class="empty-title">Nothing added yet</span>' +
-				'<span class="empty-sub">You skipped profile editing. Publishing now claims the page and adds your pledge, but the biography and priorities stay empty.</span>' +
+				'<span class="empty-sub">You skipped the profile editor. Publishing now claims the page and records your pledge, but all three sections stay empty.</span>' +
 				'<button class="btn btn-outline btn-sm" style="margin-top:6px" data-go="edit">Add your details</button></div>');
 
 		var summary = [
 			['Name', SPINE.fullName + ' <span class="pill" style="margin-left:4px">from records</span>'],
 			['Office', SPINE.office + ' &middot; ' + SPINE.district],
 			['Affiliation', SPINE.affiliation],
-			['Biography', hasBio ? bioWordCount() + ' words' : '<span style="color:var(--fg-faint)">Empty</span>'],
-			['Priorities', d.issues.length ? esc(d.issues.join(', ')) : '<span style="color:var(--fg-faint)">None chosen</span>'],
-			['Website', d.website ? esc(d.website) : '<span style="color:var(--fg-faint)">Not set</span>'],
-			['Contact email', d.email ? esc(d.email) : '<span style="color:var(--fg-faint)">Not set</span>'],
-			['Headshot', d.photo ? '<span class="pill pill-green">' + icon('check', 12) + ' Added</span>' : '<span style="color:var(--fg-faint)">Not added</span>'],
+			['Why I\u2019m Running', d.why.trim() ? d.why.length + ' characters' : '<span style="color:var(--fg-faint)">Empty</span>'],
+			['Campaign Issues', issues.length ? esc(issues.map(function (i) { return i.title; }).join(', ')) : '<span style="color:var(--fg-faint)">None added</span>'],
+			['About Me', d.about.trim() ? d.about.length + ' characters' : '<span style="color:var(--fg-faint)">Empty</span>'],
 			['People First Pledge', state.pledge.taken ? '<span class="pill pill-gold">' + icon('star', 12) + ' Taken</span>' : '<span style="color:var(--fg-faint)">Not taken</span>'],
 			['Identity', verified ? '<span class="pill pill-green">' + icon('check', 12) + ' Verified</span>' :
 				state.verify.status === 'pending' ? '<span class="pill pill-gold">' + icon('clock', 12) + ' In review</span>' :
@@ -1699,7 +1847,7 @@ a { color: var(--accent); }
 					'<div style="padding:clamp(18px,3vw,26px)">' +
 						'<div class="stack">' +
 							'<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">' +
-								'<span class="rail-mark' + (d.photo ? ' has-photo' : '') + '" style="width:64px;height:64px;font-size:21px;border-color:var(--border-strong)">' + SPINE.initials + '</span>' +
+								'<span class="rail-mark" style="width:64px;height:64px;font-size:21px;border-color:var(--border-strong)">' + SPINE.initials + '</span>' +
 								'<div style="min-width:0">' +
 									'<h2 class="h-md">' + esc(SPINE.fullName) + '</h2>' +
 									'<p class="muted">' + esc(SPINE.office) + ' &middot; ' + esc(SPINE.district) + '</p>' +
@@ -1929,6 +2077,62 @@ a { color: var(--accent); }
 		ref[parts[parts.length - 1]] = value;
 	}
 
+	/* ---------------- editor helpers ---------------- */
+
+	function findIssue(id) {
+		for (var i = 0; i < state.draft.issues.length; i++) {
+			if (state.draft.issues[i].id === id) return state.draft.issues[i];
+		}
+		return null;
+	}
+
+	function setCounter(id, used, max) {
+		var el = document.getElementById(id);
+		if (!el) return;
+		el.textContent = used + ' / ' + max;
+		el.className = 'counter' + (used > max ? ' over' : '');
+	}
+
+	/* Keeps the sidebar progress honest while typing, without re-rendering
+	   the form underneath the caret. */
+	function updateProgress() {
+		var count = addedCount();
+		var added = sectionsAdded();
+		var bar = document.querySelector('.prog-bar span');
+		if (bar) bar.style.width = (count / 3 * 100) + '%';
+		var pb = document.querySelector('.prog-bar');
+		if (pb) pb.setAttribute('aria-valuenow', String(count));
+		var head = document.querySelector('.prog-head .faint');
+		if (head) head.textContent = count + ' of 3';
+		document.querySelectorAll('.prog-row').forEach(function (row, i) {
+			row.classList.toggle('is-on', !!added[i]);
+			var tick = row.querySelector('.prog-tick');
+			if (tick) tick.innerHTML = added[i] ? icon('check', 12) : '';
+		});
+	}
+
+	/* Draft autosave. The indicator is the whole point: it is how the screen
+	   says "this is private and already kept" without a banner per field. */
+	var saveTimer = null;
+	function setSaveState(html) {
+		var el = document.getElementById('saveState');
+		if (el) el.innerHTML = html;
+	}
+
+	function commitDraft() {
+		state.draft.saved = true;
+		state.draft.savedAt = Date.now();
+		setSaveState(icon('check', 13) + '<span>Draft saved</span>');
+		updateProgress();
+	}
+
+	function markDirty() {
+		updateProgress();
+		setSaveState('<span class="spinner spinner-xs"></span><span>Saving\u2026</span>');
+		clearTimeout(saveTimer);
+		saveTimer = setTimeout(commitDraft, 650);
+	}
+
 	/* ================================================================== *
 	 * Render + wiring
 	 * ================================================================== */
@@ -1945,6 +2149,11 @@ a { color: var(--accent); }
 		renderSteps();
 		updateRail();
 		wire();
+		if (pendingFocus) {
+			var target = document.getElementById(pendingFocus);
+			pendingFocus = null;
+			if (target) { target.focus(); target.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+		}
 	}
 
 	function wire() {
@@ -1980,11 +2189,11 @@ a { color: var(--accent); }
 			el.addEventListener('input', function () {
 				setPath(state, el.getAttribute('data-model'), el.value);
 				if (el.id) clearErr(el.id);
-				if (el.id === 'bio') {
+				if (el.id === 'why' || el.id === 'about') {
 					state.draft.touched = true;
-					var c = document.getElementById('bioCount');
-					var w = bioWordCount();
-					if (c) { c.textContent = w + ' / 300 words'; c.className = 'counter' + (w > 300 ? ' over' : ''); }
+					var max = el.id === 'why' ? LIMITS.why : LIMITS.about;
+					setCounter('c-' + el.id, el.value.length, max);
+					markDirty();
 				}
 				if (el.id === 'vNote') {
 					var p = document.getElementById('notePreview');
@@ -2054,84 +2263,96 @@ a { color: var(--accent); }
 		});
 
 		// ---- edit ----
-		app.querySelectorAll('[data-add-issue]').forEach(function (b) {
-			b.addEventListener('click', function () {
-				var v = b.getAttribute('data-add-issue');
-				if (state.draft.issues.length >= 5 || state.draft.issues.indexOf(v) >= 0) return;
-				state.draft.issues.push(v);
+		app.querySelectorAll('[data-issue-title]').forEach(function (el) {
+			el.addEventListener('input', function () {
+				var issue = findIssue(el.getAttribute('data-issue-title'));
+				if (!issue) return;
+				issue.title = el.value;
 				state.draft.touched = true;
+				setCounter('c-it-' + issue.id, el.value.length, LIMITS.issueTitle);
+				clearErr('it-' + issue.id);
 				clearErr('issues');
-				render();
-			});
-		});
-		app.querySelectorAll('[data-remove-issue]').forEach(function (b) {
-			b.addEventListener('click', function () {
-				var v = b.getAttribute('data-remove-issue');
-				state.draft.issues = state.draft.issues.filter(function (i) { return i !== v; });
-				state.draft.touched = true;
-				render();
+				updateProgress();
+				markDirty();
 			});
 		});
 
-		var photoBtn = document.getElementById('photoBtn');
-		if (photoBtn) photoBtn.addEventListener('click', function () {
-			if (state.draft.photo) { state.draft.photo = false; render(); return; }
-			var restore = busy(photoBtn, 'Uploading');
-			setTimeout(function () {
-				restore();
-				state.draft.photo = true;
+		app.querySelectorAll('[data-issue-position]').forEach(function (el) {
+			el.addEventListener('input', function () {
+				var issue = findIssue(el.getAttribute('data-issue-position'));
+				if (!issue) return;
+				issue.position = el.value;
 				state.draft.touched = true;
-				toast('Headshot added');
+				setCounter('c-ip-' + issue.id, el.value.length, LIMITS.issuePosition);
+				clearErr('ip-' + issue.id);
+				markDirty();
+			});
+		});
+
+		var addIssue = document.getElementById('addIssue');
+		if (addIssue) addIssue.addEventListener('click', function () {
+			if (state.draft.issues.length >= MAX_ISSUES) return;
+			var issue = newIssue();
+			state.draft.issues.push(issue);
+			state.draft.touched = true;
+			pendingFocus = 'it-' + issue.id;
+			render();
+		});
+
+		app.querySelectorAll('[data-remove-issue]').forEach(function (b) {
+			b.addEventListener('click', function () {
+				var id = b.getAttribute('data-remove-issue');
+				state.draft.issues = state.draft.issues.filter(function (i) { return i.id !== id; });
+				state.draft.touched = true;
+				markDirty();
 				render();
-			}, 900);
+			});
 		});
 
 		function saveDraft(btn, then) {
 			var restore = busy(btn, 'Saving');
 			setTimeout(function () {
 				restore();
-				state.draft.saved = true;
-				toast('Draft saved. It stays private.', 'lock');
+				commitDraft();
 				then();
-			}, 800);
+			}, 700);
 		}
-
-		var saveLater = document.getElementById('saveLater');
-		if (saveLater) saveLater.addEventListener('click', function () {
-			saveDraft(saveLater, function () { go('profile'); });
-		});
-
-		var saveLater2 = document.getElementById('saveLater2');
-		if (saveLater2) saveLater2.addEventListener('click', function () {
-			saveDraft(saveLater2, function () { go('profile'); });
-		});
 
 		var skipEdit = document.getElementById('skipEdit');
 		if (skipEdit) skipEdit.addEventListener('click', function () {
-			state.draft.skipped = true;
-			toast('Skipped for now. You can come back to this.', 'clock');
+			// Skipping still keeps the work: the draft is committed either way.
+			commitDraft();
+			state.draft.skipped = addedCount() < 3;
+			toast('Draft saved. You can finish this any time.', 'lock');
 			go('pledge');
 		});
 
 		var editContinue = document.getElementById('editContinue');
 		if (editContinue) editContinue.addEventListener('click', function () {
-			var d = state.draft, ok = true;
-			var w = bioWordCount();
-			if (!d.bio.trim()) { setErr('bio', 'Add a biography, or choose "Skip for now" to come back to it.'); ok = false; }
-			else if (w < 20) { setErr('bio', 'Write at least 20 words so voters get a real introduction. You have ' + w + '.'); ok = false; }
-			else if (w > 300) { setErr('bio', 'That is ' + w + ' words. Trim it to 300 or fewer.'); ok = false; }
-			if (!d.issues.length) { setErr('issues', 'Choose at least one priority, or skip for now.'); ok = false; }
-			if (d.website.trim() && !/^https?:\/\/.+\..+/.test(d.website.trim())) { setErr('website', 'Start the address with https:// and include a domain.'); ok = false; }
-			if (d.email.trim() && !validEmail(d.email)) { setErr('pubEmail', 'That does not look like an email address.'); ok = false; }
+			var ok = true;
+			if (state.draft.why.length > LIMITS.why) {
+				setErr('why', 'That is ' + state.draft.why.length + ' characters. Trim it to ' + LIMITS.why + ' or fewer.'); ok = false;
+			}
+			if (state.draft.about.length > LIMITS.about) {
+				setErr('about', 'That is ' + state.draft.about.length + ' characters. Trim it to ' + LIMITS.about + ' or fewer.'); ok = false;
+			}
+			state.draft.issues.forEach(function (i) {
+				if (issueRowIsBlank(i)) return;
+				if (!i.title.trim()) { setErr('it-' + i.id, 'Give this issue a name, or remove it.'); ok = false; }
+				else if (i.title.length > LIMITS.issueTitle) { setErr('it-' + i.id, 'Keep the name under ' + LIMITS.issueTitle + ' characters.'); ok = false; }
+				if (i.position.length > LIMITS.issuePosition) { setErr('ip-' + i.id, 'That is ' + i.position.length + ' characters. Trim it to ' + LIMITS.issuePosition + ' or fewer.'); ok = false; }
+			});
 			if (!ok) { focusFirstError(); return; }
 
-			var restore = busy(editContinue, 'Saving draft');
-			setTimeout(function () {
-				restore();
-				state.draft.saved = true;
+			saveDraft(editContinue, function () {
 				state.draft.skipped = false;
 				go('pledge');
-			}, 800);
+			});
+		});
+
+		var saveLater2 = document.getElementById('saveLater2');
+		if (saveLater2) saveLater2.addEventListener('click', function () {
+			saveDraft(saveLater2, function () { go('profile'); });
 		});
 
 		// ---- pledge ----

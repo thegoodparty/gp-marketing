@@ -44,6 +44,15 @@ next, and the empty-state lines are the ones marketing wrote ("… has not fille
 this section yet"). The claim callout is the `lead` slot card, with the same
 radial gradient `ClaimProfileBlock` uses for its `inset` layout.
 
+### Choose a path
+
+The screen after Get started is a selection, not two competing calls to action:
+Jordan Avery's name, office and district sit at the top, then two selectable
+cards ("Claim this profile" / "Ask Jordan Avery to complete this profile") and a
+single Continue button that stays disabled until one is chosen. The cards are
+real radio inputs in a `radiogroup`, so arrow keys move between them, and the
+choice is held in `state.path` and restored when you navigate back.
+
 Note on naming: the pledge is called the **People First Pledge** throughout. It was
 renamed from "GoodParty.org Pledge" in Oct 2026 (see `LEGACY_PLEDGE_PHRASE` in
 `src/ui/_lib/attributionCopy.ts`).

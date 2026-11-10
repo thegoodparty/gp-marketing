@@ -105,6 +105,44 @@ Nothing is prefilled for Jordan Avery, since an unclaimed profile has no
 authored content; the sections start genuinely empty rather than seeded with
 invented text.
 
+### Pledge
+
+Approved language only. The three commitments and their full text come verbatim
+from `PLEDGE_MODAL_COPY` in `src/ui/PledgeModal.tsx`; the one-line summaries on
+the cards are orientation, and the full text is shown in a disclosure before
+anyone agrees. Nothing here invents a binding term.
+
+The screen asks who is claiming before it asks for agreement. A representative
+gets a **candidate-consent-required** state rather than a checkbox, because a
+pledge is a statement GoodParty.org publishes about a named person. An
+eligibility panel states the live rule (a major-party line on any current
+affiliation disqualifies) and links to help.
+
+### Verification
+
+Nothing about the method is settled, and the screen says so. The proposed
+process is behind a `Proposed` chip with an explicit notice that no provider has
+been chosen and no government-ID, EIN or third-party check exists. Four states
+are reviewable — not submitted, pending, approved, more information needed — via
+the inline prototype control or the panel.
+
+### Review and publish
+
+Publishing is gated on **two independent conditions**: the pledge step being
+finished, and profile access being verified. Neither alone is enough, and a
+finished profile is neither. The rendered gate and the click handler read the
+same predicate, so the button can never look available while the handler
+refuses. Pending verification replaces Publish with a waiting state; moderation
+turns it into "Submit updates for review" and the completion screen says the
+updates are in review rather than live.
+
+### Prototype controls
+
+The floating **Prototype** button opens a panel that jumps to any screen and
+forces the states that otherwise take a full play-through: signed in/out, role,
+pledge, verification status, profile content, moderation, published. Labelled as
+presentation aids, not product.
+
 Note on naming: the pledge is called the **People First Pledge** throughout. It was
 renamed from "GoodParty.org Pledge" in Oct 2026 (see `LEGACY_PLEDGE_PHRASE` in
 `src/ui/_lib/attributionCopy.ts`).

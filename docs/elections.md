@@ -502,8 +502,10 @@ things then happen on this site, and they are separate:
    photo for anyone in it.
 
 If that feed cannot be read, every card photo is dropped rather than risking
-republishing one. A takedown propagates immediately because
-`/api/revalidate-person` busts the feed's cache tag as well as the person's own.
+republishing one. A takedown propagates immediately because gp-api tells
+`/api/revalidate-person` that the person's `unlisted` status changed, and the
+route busts the feed's cache tag as well as the person's own. What refreshes
+every other read on these pages is in `docs/page-refresh.md`.
 
 Note this suppresses only what *we* publish. The image itself is usually hosted
 by BallotReady and stays live at its own URL, so a genuine takedown request also

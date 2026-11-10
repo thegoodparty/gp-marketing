@@ -2,6 +2,13 @@ import { gpApiAuthHeaders } from '~/lib/electionApiAuth';
 
 const ELECTION_API_CACHE_SECONDS = 3600;
 
+/**
+ * On every election-data read, so one revalidateTag refreshes every page built
+ * from them once the nightly load has swapped in new data (see
+ * /api/revalidate-person, `scope: 'election-data'`).
+ */
+export const ELECTION_DATA_CACHE_TAG = 'election-data';
+
 export type ElectionApiJsonResult = {
 	status: number;
 	ok: boolean;
@@ -61,7 +68,7 @@ export async function fetchElectionApiJsonCached(
 	const { unstable_cache } = await import('next/cache');
 	return await unstable_cache(run, ['election-api-json', url], {
 		revalidate: ELECTION_API_CACHE_SECONDS,
-		...(tags && tags.length > 0 ? { tags: [...tags] } : {}),
+		tags: [ELECTION_DATA_CACHE_TAG, ...(tags ?? [])],
 	})();
 }
 

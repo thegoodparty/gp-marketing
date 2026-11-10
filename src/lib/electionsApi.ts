@@ -23,7 +23,7 @@ import {
 	PLACE_RACE_COLUMNS,
 	stripCountySuffix,
 } from '~/lib/electionsHelpers';
-import { ElectionApiError, fetchElectionApiJsonCached, fetchGpApiJsonCached } from '~/lib/electionApiFetch';
+import { ELECTION_DATA_CACHE_TAG, ElectionApiError, fetchElectionApiJsonCached, fetchGpApiJsonCached } from '~/lib/electionApiFetch';
 import { gpApiAuthHeaders } from '~/lib/electionApiAuth';
 
 const GP_API_BASE_URL = process.env['GP_API_BASE_URL'] ?? process.env['NEXT_PUBLIC_API_BASE'] ?? 'https://gp-api.goodparty.org';
@@ -472,11 +472,20 @@ function personCacheOptions(personId: string): RequestInit {
 
 /**
  * Cache tag for the set of people whose pages must never be advertised. Busted
- * by /api/revalidate-person alongside the per-person tag, so a fresh takedown
- * reaches the *other* profiles that carry the removed person's photo on a card,
- * not just their own page.
+ * by /api/revalidate-person when gp-api says the person moved into or out of
+ * that set, so a fresh takedown reaches the *other* profiles that carry the
+ * removed person's photo on a card, not just their own page. Every profile
+ * and position page reads the set, so an edit that leaves it alone must not
+ * bust it.
  */
 export const PEOPLE_REMOVALS_CACHE_TAG = 'people-removals';
+
+/**
+ * Cache tag for the set of people with a live profile, which decides whose
+ * own photo a card shows. Busted by /api/revalidate-person on publish,
+ * unpublish and delete, the writes that change the set.
+ */
+export const PEOPLE_PUBLISHED_CACHE_TAG = 'people-published';
 
 /**
  * Person ids gp-api has flagged as removed (a privacy takedown, or an owner who
@@ -664,7 +673,7 @@ export async function getVoterDensityForDistrict(personId: string): Promise<Vote
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles/voter-density?${searchParams}`;
 	for (let attempt = 0; attempt <= FETCH_JSON_MAX_RETRIES; attempt++) {
 		try {
-			return (await fetchGpApiJsonCached(url, { revalidate: 3600, tags: [personCacheTag(personId)] })) as VoterDensity;
+			return (await fetchGpApiJsonCached(url, { revalidate: 3600, tags: [personCacheTag(personId), ELECTION_DATA_CACHE_TAG] })) as VoterDensity;
 		} catch (err) {
 			if (!(err instanceof ElectionApiError)) {
 				console.error(`[electionsApi] attempt ${attempt + 1}`, err);
@@ -761,13 +770,12 @@ export async function getPublicPersonProfileStatus(personId: string): Promise<Pu
 /**
  * Person ids with a live GoodParty.org profile (gp-api `/published`; a few
  * dozen rows). Null when the feed cannot be read, so a caller can tell "nobody"
- * from "unknown". Short cache: a newly published profile should reach the
- * cards within minutes, as its page does.
+ * from "unknown". A publish reaches the cards through PEOPLE_PUBLISHED_CACHE_TAG.
  */
 export async function getPublishedPersonProfileIds(): Promise<Set<string> | null> {
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles/published`;
 	try {
-		const rows = (await fetchGpApiJsonCached(url, { revalidate: 300 })) as Array<{ personId?: string }>;
+		const rows = (await fetchGpApiJsonCached(url, { revalidate: 300, tags: [PEOPLE_PUBLISHED_CACHE_TAG] })) as Array<{ personId?: string }>;
 		if (!Array.isArray(rows)) return null;
 		return new Set(rows.flatMap(row => (row.personId ? [row.personId.toLowerCase()] : [])));
 	} catch (err) {

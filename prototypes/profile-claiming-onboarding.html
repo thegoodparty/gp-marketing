@@ -51,6 +51,8 @@
 	--claim-g3: hsl(213 97% 87%);
 	--claim-border: hsl(214 67% 82%);
 	--claim-fg: hsl(222 47% 11%);
+	--gp-red: hsl(349 83% 47%);
+	--gp-blue: hsl(218 100% 38%);
 	--ring: hsl(221 83% 53% / 0.35);
 	--shadow-sm: 0 1px 3px hsl(222 47% 11% / 0.08), 0 1px 2px hsl(222 47% 11% / 0.04);
 	--shadow-md: 0 4px 14px hsl(222 47% 11% / 0.08), 0 2px 4px hsl(222 47% 11% / 0.04);
@@ -148,6 +150,8 @@
 	--claim-g3: hsl(216 45% 22%);
 	--claim-border: hsl(220 40% 34%);
 	--claim-fg: hsl(210 30% 96%);
+	--gp-red: hsl(349 83% 60%);
+	--gp-blue: hsl(218 92% 68%);
 	--ring: hsl(217 92% 66% / 0.4);
 	--shadow-sm: 0 1px 3px hsl(0 0% 0% / 0.4);
 	--shadow-md: 0 4px 14px hsl(0 0% 0% / 0.45);
@@ -613,6 +617,9 @@ h1:focus, h2:focus { outline: none; }
 .full-pillar-title { display: flex; align-items: center; gap: 9px; font-family: var(--font-display); font-size: 16px; font-weight: 600; margin: 0; }
 .full-pillar p { font-size: 15px; line-height: 1.6; color: var(--fg-muted); }
 
+.heart-star { flex: none; display: block; }
+.full-pledge-head { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+.mark-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .eligibility { background: var(--green-soft); border-color: var(--green-border); }
 .agree-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 .agree-list li { display: flex; gap: 9px; align-items: flex-start; font-size: 14.5px; }
@@ -1035,6 +1042,17 @@ h1:focus, h2:focus { outline: none; }
 		var s = size || 18;
 		return '<svg class="' + (cls || '') + '" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
 			'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>';
+	}
+
+	/* The Heart & Star: GoodParty.org's pledge mark. A red heart outline with
+	   a solid blue star, as the live pledge explainer draws it. */
+	function heartStar(size) {
+		var s = size || 48;
+		return '<svg class="heart-star" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" aria-hidden="true">' +
+			'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" ' +
+				'stroke="var(--gp-red)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>' +
+			'<path d="M12 6 12.86 8.42 15.43 8.49 13.39 10.05 14.12 12.51 12 11.06 9.88 12.51 10.61 10.05 8.57 8.49 11.14 8.42Z" fill="var(--gp-blue)"/>' +
+		'</svg>';
 	}
 
 	function esc(s) {
@@ -1817,6 +1835,7 @@ h1:focus, h2:focus { outline: none; }
 				'<span class="disclosure-chev' + (open ? ' is-open' : '') + '">' + icon('arrow', 15) + '</span>' +
 			'</button>' +
 			'<div class="disclosure-body"' + (open ? '' : ' hidden') + ' id="fullPledgeBody">' +
+				'<div class="full-pledge-head">' + heartStar(44) + '<h3 class="h-md">The People First Pledge</h3></div>' +
 				'<p class="muted">' + esc(PLEDGE_INTRO) + '</p>' +
 				PLEDGE_PILLARS.map(function (x) {
 					return '<section class="full-pillar">' +
@@ -1967,7 +1986,7 @@ h1:focus, h2:focus { outline: none; }
 
 				'<div class="card pad-lg">' +
 					'<div class="stack-sm">' +
-						'<h2 class="h-md">What this shows on your profile</h2>' +
+						'<div class="mark-row">' + heartStar(40) + '<h2 class="h-md">What this shows on your profile</h2></div>' +
 						'<p class="muted">Taking the pledge adds the Heart &amp; Star mark to your public profile and the line ' +
 							'“This candidate took the People First Pledge…”. Leaving it adds nothing — your profile still publishes.</p>' +
 						'<p class="faint">GoodParty.org may remove the mark if a candidate later accepts a major-party endorsement.</p>' +

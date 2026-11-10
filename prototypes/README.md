@@ -143,9 +143,16 @@ forces the states that otherwise take a full play-through: signed in/out, role,
 pledge, verification status, profile content, moderation, published. Labelled as
 presentation aids, not product.
 
-Note on naming: the pledge is called the **People First Pledge** throughout. It was
-renamed from "GoodParty.org Pledge" in Oct 2026 (see `LEGACY_PLEDGE_PHRASE` in
-`src/ui/_lib/attributionCopy.ts`).
+Note on naming: the pledge is called the **People First Pledge** throughout, and
+its second commitment is **People-powered**. Both were confirmed against a
+screenshot of the live pledge explainer (Nov 2026); the prototype's title, intro
+and all three pillar bodies match it word for word. The name was changed from
+"GoodParty.org Pledge" in Oct 2026 (see `LEGACY_PLEDGE_PHRASE` in
+`src/ui/_lib/attributionCopy.ts`), so briefs still using the old name are
+referring to the retired one.
+
+The Heart & Star mark is drawn inline as SVG from brand tokens rather than
+imported, so it follows the theme.
 
 Screens are hash-routed (`#profile`, `#path`, `#account`, `#edit`, `#pledge`,
 `#verify`, `#preview`, `#done`, `#voter-review`, `#voter-sent`), so browser back

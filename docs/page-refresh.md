@@ -44,7 +44,8 @@ person's own photo only after reading their overlay, so they carry the
 | Own profile overlay, `/v1/public-person-profiles?personId=` (`person:<id>`, 3600 s) | Create (`POST /v1/person-profiles`) | `person:<id>` |
 | | Edit, issues, photo upload (`PUT mine`, `PUT mine/issues`, `POST mine/upload-image`), only while live | `person:<id>` |
 | | Publish, unpublish (`POST mine/publish`, `mine/unpublish`) | `person:<id>` + `people-published` |
-| | Owner delete (`DELETE mine`), account delete (`UsersService.deleteUser`) | `person:<id>` + both lists |
+| | Owner delete (`DELETE mine`) | `person:<id>` + `people-removals`, + `people-published` if it was live |
+| | Account delete (`UsersService.deleteUser`; the profile goes with the account) | `person:<id>`, + `people-published` if the profile was live, + `people-removals` if the owner had deleted it |
 | | Takedown set or cleared (`POST` / `DELETE /v1/person-profiles/removals`, gp-admin) | `person:<id>` + `people-removals` |
 | | Person id repointed after a data-team merge (04:00 UTC drift sweep, or on takedown clear) | `person:<id>` for both ids + both lists |
 | | Priority title or description edited (`PUT /v1/priorities/:id`, Chief of Staff tool) | `person:<id>` of each live profile publishing it |

@@ -53,6 +53,27 @@ single Continue button that stays disabled until one is chosen. The cards are
 real radio inputs in a `radiogroup`, so arrow keys move between them, and the
 choice is held in `state.path` and restored when you navigate back.
 
+### Account creation
+
+Two columns on desktop: the profile being claimed on the left (name, office,
+district, affiliation, `Unclaimed` status) above a short "what happens next"
+list, with the form on the right. The summary sticks on scroll, so the profile
+stays attached to the whole account journey. It stacks to one column on mobile,
+summary first.
+
+Sign-up and sign-in switch in place and keep whatever has been typed. Required
+fields and the terms agreement are validated; `Create account` simulates
+authentication and goes straight to the profile editor. Authenticating uses
+`location.replace`, so `#account` leaves the history stack — you cannot go back
+to creating an account once you have one, and Back from the editor lands on the
+path screen instead of bouncing off a screen that would immediately redirect.
+Reaching `#account` while signed in redirects to the editor.
+
+Single sign-on is a **proposal**. This repo only links out to
+`app.goodparty.org/sign-up` and `/login`; it holds no auth UI, so nothing here
+confirms which methods the app actually supports. The one button shown is marked
+as unconfirmed and needs checking against gp-webapp.
+
 Note on naming: the pledge is called the **People First Pledge** throughout. It was
 renamed from "GoodParty.org Pledge" in Oct 2026 (see `LEGACY_PLEDGE_PHRASE` in
 `src/ui/_lib/attributionCopy.ts`).

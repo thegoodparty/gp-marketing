@@ -34,8 +34,9 @@ const LISTING_TAGS: Record<string, string> = {
  * re-rendering too little can keep a takedown's photo on other pages.
  */
 function changedListingTags(listings: unknown): string[] {
-	if (Array.isArray(listings) && listings.every((item): item is string => typeof item === 'string' && Object.hasOwn(LISTING_TAGS, item))) {
-		return [...new Set(listings.map(item => LISTING_TAGS[item] as string))];
+	if (Array.isArray(listings)) {
+		const tags = listings.map(item => (typeof item === 'string' && Object.hasOwn(LISTING_TAGS, item) ? LISTING_TAGS[item] : undefined));
+		if (tags.every((tag): tag is string => tag !== undefined)) return [...new Set(tags)];
 	}
 	if (listings !== undefined) {
 		console.warn('revalidate-person: unrecognized listings, refreshing every list', listings);

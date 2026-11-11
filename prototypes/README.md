@@ -105,6 +105,24 @@ Nothing is prefilled for Jordan Avery, since an unclaimed profile has no
 authored content; the sections start genuinely empty rather than seeded with
 invented text.
 
+### Candidate order
+
+Account → **Pledge** → Profile editor → Verify → Publish. The pledge comes before
+editing because that is how GoodParty.org works today: only candidates who have
+taken the People First Pledge can edit a public profile, and the claim CTA only
+appears for pledge-eligible nonpartisan and third-party candidates (Emily,
+Nov 2026).
+
+The pledge is the only route into the editor. Declining shows a state explaining
+that editing needs the pledge under the current rules, with a way back. A pledge
+already on record is not asked for again — the recorded screen continues straight
+to the editor, and authenticating with one on record skips the step entirely.
+
+A representative cannot pledge for a candidate, so under this order they cannot
+reach the editor either. The screen says so and offers to send the candidate the
+pledge. **That is a real dead end and a question for Bryan**, not a design
+choice: see the summary in the conversation.
+
 ### Pledge
 
 Approved language only. The three commitments and their full text come verbatim

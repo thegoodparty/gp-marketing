@@ -987,7 +987,7 @@ h1:focus, h2:focus { outline: none; }
 		role: null,
 		account: { mode: 'signup', firstName: '', lastName: '', email: '', password: '', terms: false, loggedIn: false },
 		draft: { why: '', about: '', issues: [], touched: false, saved: false, skipped: false, savedAt: null },
-		pledge: { agreed: {}, signature: '', taken: false, takenOn: null, consentRequested: false, fullOpen: false },
+		pledge: { agreed: {}, signature: '', taken: false, takenOn: null, declined: false, consentRequested: false, fullOpen: false },
 		/* status: unverified | pending | approved | more-info */
 		verify: { method: null, phone: '', doc: '', submitted: false, status: 'unverified', note: '' },
 		publish: { published: false, visitedPreview: false, moderation: false, submittedForReview: false },
@@ -1090,7 +1090,7 @@ h1:focus, h2:focus { outline: none; }
 	/* The two gates on publishing, kept separate on purpose: a recorded pledge
 	   is not authorization, and neither is a finished profile. */
 	function pledgeSatisfied() {
-		return state.pledge.taken || state.role === 'rep';
+		return state.pledge.taken;
 	}
 
 	function accessVerified() {
@@ -1155,8 +1155,8 @@ h1:focus, h2:focus { outline: none; }
 
 	var CANDIDATE_STEPS = [
 		{ id: 'account', label: 'Account' },
-		{ id: 'edit', label: 'Profile' },
 		{ id: 'pledge', label: 'Pledge' },
+		{ id: 'edit', label: 'Profile' },
 		{ id: 'verify', label: 'Verify' },
 		{ id: 'preview', label: 'Publish' }
 	];
@@ -1400,7 +1400,8 @@ h1:focus, h2:focus { outline: none; }
 					aboutCard +
 					positionCard +
 					districtCard +
-					protoNote('Prototype. Jordan Avery is a fictional candidate and this page is not connected to GoodParty.org. Items marked <span class="proposal">Proposal</span> are design suggestions, not confirmed behaviour.') +
+					protoNote('Prototype. Jordan Avery is a fictional candidate and this page is not connected to GoodParty.org. Items marked <span class="proposal">Proposal</span> are design suggestions, not confirmed behaviour. ' +
+						'The claim call to action shows because Jordan is nonpartisan: under the current rules it appears only for pledge-eligible nonpartisan and third-party candidates, never for Democratic or Republican ones.') +
 				'</div>' +
 			'</div>' +
 		'</div>';
@@ -1762,7 +1763,7 @@ h1:focus, h2:focus { outline: none; }
 		return '<div class="page mid screen">' +
 			'<div class="stack-lg">' +
 				'<div class="stack-sm">' +
-					'<button class="btn btn-ghost btn-sm" style="align-self:flex-start;margin-left:-14px" data-go="path">' + icon('back', 14) + ' Back</button>' +
+					'<button class="btn btn-ghost btn-sm" style="align-self:flex-start;margin-left:-14px" data-go="pledge">' + icon('back', 14) + ' Back</button>' +
 					'<h1 class="h-xl">Complete your profile</h1>' +
 					'<p class="lede">Add or update your information for voters. We’ve filled in what we already know, so you can make changes quickly.</p>' +
 				'</div>' +
@@ -1854,6 +1855,31 @@ h1:focus, h2:focus { outline: none; }
 	SCREENS.pledge = function () {
 		var p = state.pledge;
 
+		/* ---------- declined: editing is gated on the pledge today ---------- */
+		if (p.declined && !p.taken) {
+			return '<div class="page mid screen">' +
+				'<div class="stack-lg">' +
+					claimingChip() +
+					'<div class="card pad-lg">' +
+						'<div class="stack" style="align-items:flex-start">' +
+							'<span class="pill pill-gold">' + icon('info', 12) + ' Pledge not taken</span>' +
+							'<h1 class="h-lg">Editing a profile needs the pledge</h1>' +
+							'<p class="lede">GoodParty.org works only with candidates who take the People First Pledge, so under the current rules ' +
+								'the pledge comes before editing your profile. Without it you cannot continue to the editor.</p>' +
+							'<div class="notice notice-blue" style="width:100%">' + icon('info', 20, 'notice-ico') +
+								'<div class="notice-body">Nothing is lost by waiting. ' + esc(SPINE.fullName) + '’s profile stays exactly as it is, ' +
+								'and you can come back and take the pledge whenever you are ready.</div></div>' +
+							'<div class="btn-row actions" style="width:100%;justify-content:space-between">' +
+								'<button class="btn btn-ghost" data-go="profile">Back to the profile</button>' +
+								'<button class="btn btn-primary btn-lg" id="reconsiderPledge">Read the pledge again ' + icon('arrow', 15) + '</button>' +
+							'</div>' +
+						'</div>' +
+					'</div>' +
+					protoNote('Prototype. Whether a candidate who declines should still be able to edit privately is a question for Bryan — this screen keeps today’s rule. <span class="proposal">Question</span>') +
+				'</div>' +
+			'</div>';
+		}
+
 		/* ---------- already recorded: show it, do not ask again ---------- */
 		if (p.taken) {
 			return '<div class="page mid screen">' +
@@ -1867,8 +1893,8 @@ h1:focus, h2:focus { outline: none; }
 								'There is nothing to do again here.</p>' +
 							fullPledgeBlock() +
 							'<div class="btn-row actions" style="width:100%;justify-content:space-between">' +
-								'<button class="btn btn-ghost" data-go="edit">' + icon('back', 15) + ' Back to editing</button>' +
-								'<button class="btn btn-primary btn-lg" data-go="verify">Continue ' + icon('arrow', 15) + '</button>' +
+								'<button class="btn btn-ghost" data-go="path">' + icon('back', 15) + ' Back</button>' +
+								'<button class="btn btn-primary btn-lg" data-go="edit">Continue to your profile ' + icon('arrow', 15) + '</button>' +
 							'</div>' +
 						'</div>' +
 					'</div>' +
@@ -1900,7 +1926,7 @@ h1:focus, h2:focus { outline: none; }
 				'<div class="stack-lg">' +
 					claimingChip() +
 					'<div class="stack-sm">' +
-						'<button class="btn btn-ghost btn-sm" style="align-self:flex-start;margin-left:-14px" data-go="edit">' + icon('back', 14) + ' Back</button>' +
+						'<button class="btn btn-ghost btn-sm" style="align-self:flex-start;margin-left:-14px" data-go="path">' + icon('back', 14) + ' Back</button>' +
 						'<h1 class="h-xl">Put people first</h1>' +
 						'<p class="lede">The People First Pledge is a commitment to serve people first, independent of both major political parties and big-money interests.</p>' +
 					'</div>' +
@@ -1918,14 +1944,15 @@ h1:focus, h2:focus { outline: none; }
 				'<div class="stack-lg">' +
 					claimingChip() +
 					'<div class="stack-sm">' +
-						'<button class="btn btn-ghost btn-sm" style="align-self:flex-start;margin-left:-14px" data-go="edit">' + icon('back', 14) + ' Back</button>' +
+						'<button class="btn btn-ghost btn-sm" style="align-self:flex-start;margin-left:-14px" data-go="path">' + icon('back', 14) + ' Back</button>' +
 						'<h1 class="h-xl">Put people first</h1>' +
 						'<p class="lede">The People First Pledge is a commitment to serve people first, independent of both major political parties and big-money interests.</p>' +
 					'</div>' +
 
 					'<div class="notice notice-gold">' + icon('warn', 20, 'notice-ico') +
 						'<div class="notice-body"><b>' + esc(SPINE.firstName) + ' has to take this pledge personally.</b> ' +
-						'You can manage the profile, but nobody can pledge on a candidate’s behalf — it is a statement GoodParty.org publishes about them by name.</div></div>' +
+						'Nobody can pledge on a candidate’s behalf — it is a statement GoodParty.org publishes about them by name. ' +
+						'Because the pledge now comes before editing, the profile cannot be edited until ' + esc(SPINE.firstName) + ' signs.</div></div>' +
 
 					pledgeCards() +
 					fullPledgeBlock() +
@@ -1936,14 +1963,16 @@ h1:focus, h2:focus { outline: none; }
 							(requested ?
 								'<div class="notice notice-green">' + icon('check', 20, 'notice-ico') +
 									'<div class="notice-body">We will ask ' + esc(SPINE.fullName) + ' to review and sign the pledge. ' +
-									'You can carry on without it — the profile simply publishes without the pledge mark.</div></div>' :
+									'Once they have, you can come back and edit the profile.</div></div>' :
 								'<p class="muted">We can send ' + esc(SPINE.firstName) + ' a link to read and sign the pledge themselves. ' +
-								'Your profile edits are unaffected either way. <span class="proposal">Proposal</span></p>') +
+								'Editing opens up once it is signed. <span class="proposal">Proposal</span></p>') +
 							'<div class="btn-row actions" style="width:100%;justify-content:space-between">' +
 								'<button class="btn btn-ghost" id="changeRole">Change who is claiming</button>' +
 								'<div class="btn-row">' +
-									(requested ? '' : '<button class="btn btn-outline" id="requestConsent">Send ' + esc(SPINE.firstName) + ' the pledge</button>') +
-									'<button class="btn btn-primary btn-lg" data-go="verify">Continue without the pledge ' + icon('arrow', 15) + '</button>' +
+									'<button class="btn btn-ghost" data-go="profile">Back to the profile</button>' +
+									(requested ?
+										'<button class="btn btn-lg" disabled style="opacity:0.55">Waiting on ' + esc(SPINE.firstName) + '’s signature</button>' :
+										'<button class="btn btn-primary btn-lg" id="requestConsent">Send ' + esc(SPINE.firstName) + ' the pledge ' + icon('arrow', 15) + '</button>') +
 								'</div>' +
 							'</div>' +
 						'</div>' +
@@ -1962,7 +1991,7 @@ h1:focus, h2:focus { outline: none; }
 			'<div class="stack-lg">' +
 				claimingChip() +
 				'<div class="stack-sm">' +
-					'<button class="btn btn-ghost btn-sm" style="align-self:flex-start;margin-left:-14px" data-go="edit">' + icon('back', 14) + ' Back</button>' +
+					'<button class="btn btn-ghost btn-sm" style="align-self:flex-start;margin-left:-14px" data-go="path">' + icon('back', 14) + ' Back</button>' +
 					'<h1 class="h-xl">Put people first</h1>' +
 					'<p class="lede">The People First Pledge is a commitment to serve people first, independent of both major political parties and big-money interests.</p>' +
 				'</div>' +
@@ -1988,7 +2017,8 @@ h1:focus, h2:focus { outline: none; }
 					'<div class="stack-sm">' +
 						'<div class="mark-row">' + heartStar(40) + '<h2 class="h-md">What this shows on your profile</h2></div>' +
 						'<p class="muted">Taking the pledge adds the Heart &amp; Star mark to your public profile and the line ' +
-							'“This candidate took the People First Pledge…”. Leaving it adds nothing — your profile still publishes.</p>' +
+							'“This candidate took the People First Pledge…”. It is also what opens up profile editing — ' +
+							'GoodParty.org works only with candidates who have taken it.</p>' +
 						'<p class="faint">GoodParty.org may remove the mark if a candidate later accepts a major-party endorsement.</p>' +
 					'</div>' +
 				'</div>' +
@@ -2014,7 +2044,10 @@ h1:focus, h2:focus { outline: none; }
 
 				'<div class="btn-row actions split">' +
 					'<button class="btn btn-ghost" id="changeRole">Change who is claiming</button>' +
-					'<button class="btn btn-primary btn-lg" id="pledgeSubmit">Take the pledge and continue ' + icon('arrow', 15) + '</button>' +
+					'<div class="btn-row">' +
+						'<button class="btn btn-ghost" id="declinePledge">Not right now</button>' +
+						'<button class="btn btn-primary btn-lg" id="pledgeSubmit">Take the pledge and continue ' + icon('arrow', 15) + '</button>' +
+					'</div>' +
 				'</div>' +
 
 				protoNote('Prototype. Nothing is recorded. In the live product a signed pledge is reviewed by GoodParty.org before the mark appears. <span class="proposal">Proposal</span>') +
@@ -2200,7 +2233,7 @@ h1:focus, h2:focus { outline: none; }
 
 		return '<div class="page mid screen">' +
 			'<div class="stack-lg">' +
-				verifyHeader('pledge') +
+				verifyHeader('edit') +
 				verifySummaryCard() +
 				roleBlock +
 
@@ -2703,7 +2736,7 @@ h1:focus, h2:focus { outline: none; }
 		// Already signed in? The account screen has nothing left to ask.
 		// `replace` keeps it out of history so Back never bounces off it.
 		if (state.screen === 'account' && state.account.loggedIn) {
-			location.replace('#edit');
+			location.replace(state.pledge.taken ? '#edit' : '#pledge');
 			return;
 		}
 		var fn = SCREENS[state.screen] || SCREENS.profile;
@@ -2787,7 +2820,7 @@ h1:focus, h2:focus { outline: none; }
 				state.account.loggedIn = true;
 				state.path = 'candidate';
 				toast('Signed in with Google');
-				location.replace('#edit');
+				location.replace(state.pledge.taken ? '#edit' : '#pledge');
 			}, 1100);
 		});
 
@@ -2822,7 +2855,7 @@ h1:focus, h2:focus { outline: none; }
 				toast(a.mode === 'signup' ? 'Account created' : 'Signed in');
 				// Replace, not push: you cannot go back to creating an account
 				// once you have one, so #account leaves the history stack.
-				location.replace('#edit');
+				location.replace(state.pledge.taken ? '#edit' : '#pledge');
 			}, 1100);
 		});
 
@@ -2888,7 +2921,7 @@ h1:focus, h2:focus { outline: none; }
 			commitDraft();
 			state.draft.skipped = addedCount() < 3;
 			toast('Draft saved. You can finish this any time.', 'lock');
-			go('pledge');
+			go('verify');
 		});
 
 		var editContinue = document.getElementById('editContinue');
@@ -2910,7 +2943,7 @@ h1:focus, h2:focus { outline: none; }
 
 			saveDraft(editContinue, function () {
 				state.draft.skipped = false;
-				go('pledge');
+				go('verify');
 			});
 		});
 
@@ -2950,6 +2983,20 @@ h1:focus, h2:focus { outline: none; }
 			clearErr('pledgeAgree');
 		});
 
+		var declinePledge = document.getElementById('declinePledge');
+		if (declinePledge) declinePledge.addEventListener('click', function () {
+			state.pledge.declined = true;
+			focusHeading = true;
+			render();
+		});
+
+		var reconsiderPledge = document.getElementById('reconsiderPledge');
+		if (reconsiderPledge) reconsiderPledge.addEventListener('click', function () {
+			state.pledge.declined = false;
+			focusHeading = true;
+			render();
+		});
+
 		var requestConsent = document.getElementById('requestConsent');
 		if (requestConsent) requestConsent.addEventListener('click', function () {
 			var restore = busy(requestConsent, 'Sending');
@@ -2974,9 +3021,10 @@ h1:focus, h2:focus { outline: none; }
 			setTimeout(function () {
 				restore();
 				state.pledge.taken = true;
+				state.pledge.declined = false;
 				state.pledge.takenOn = 'November 10, 2026';
 				toast('Pledge recorded', 'star');
-				go('verify');
+				go('edit');
 			}, 1100);
 		});
 
@@ -3096,8 +3144,8 @@ h1:focus, h2:focus { outline: none; }
 		['profile', 'Candidate profile (entry)'],
 		['path', 'Choose a path'],
 		['account', 'Create an account'],
-		['edit', 'Profile editor'],
 		['pledge', 'People First Pledge'],
+		['edit', 'Profile editor'],
 		['verify', 'Verify access'],
 		['preview', 'Review and publish'],
 		['done', 'Published'],
@@ -3124,6 +3172,7 @@ h1:focus, h2:focus { outline: none; }
 
 	function setPledge(on) {
 		state.pledge.taken = on;
+		state.pledge.declined = false;
 		state.pledge.takenOn = on ? 'November 10, 2026' : null;
 		setAllPledge(on);
 		state.pledge.signature = on ? SPINE.fullName : '';
